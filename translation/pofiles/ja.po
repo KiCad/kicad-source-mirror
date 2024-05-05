@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-05-04 22:07+0000\n"
+"PO-Revision-Date: 2024-05-06 10:07+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -14920,19 +14920,16 @@ msgid "Action"
 msgstr "アクション"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
-#, fuzzy
 msgid "None:"
-msgstr "なし"
+msgstr "なし:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Shift"
+msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
@@ -15528,9 +15525,9 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "シンボル '%s' が、ライブラリ '%s' のコピーと一致しません"
 
 #: eeschema/erc.cpp:1065
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier."
-msgstr "'%s' は有効なフットプリントではありません。"
+msgstr "'%s' は有効なフットプリント識別子ではありません。"
 
 #: eeschema/erc.cpp:1079 pcbnew/drc/drc_test_provider_library_parity.cpp:849
 #: pcbnew/footprint_editor_utils.cpp:339
@@ -15696,7 +15693,7 @@ msgstr "競合しているネットクラスの割り当て"
 
 #: eeschema/erc_item.cpp:123
 msgid "Overlapping rule areas"
-msgstr ""
+msgstr "重なったルールエリア"
 
 #: eeschema/erc_item.cpp:127
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -20611,14 +20608,12 @@ msgstr ""
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
 #: eeschema/tools/ee_actions.cpp:525 eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Synchronize sheet pins and hierarchical labels"
-msgstr "既存のアイテムを階層ラベルに変更"
+msgstr "シートピンと階層ラベルを同期"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
-#, fuzzy
 msgid "Symbol name"
-msgstr "シンボル名:"
+msgstr "シンボル名"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:34
 #, fuzzy
@@ -20831,9 +20826,8 @@ msgid "Show differences between schematic symbol and its library equivalent"
 msgstr "シンボルがライブラリのものと等しいかをチェック"
 
 #: eeschema/tools/ee_actions.cpp:67
-#, fuzzy
 msgid "Show Bus Syntax Help"
-msgstr "構文ヘルプ"
+msgstr "バス構文のヘルプを表示"
 
 #: eeschema/tools/ee_actions.cpp:74
 msgid "Show simulation window for running SPICE or IBIS simulations."
@@ -21162,7 +21156,7 @@ msgstr "ジャンクションを追加"
 
 #: eeschema/tools/ee_actions.cpp:458
 msgid "Draw junctions"
-msgstr "ジャンクションを描画"
+msgstr "ジャンクションを描く"
 
 #: eeschema/tools/ee_actions.cpp:468 eeschema/tools/sch_drawing_tools.cpp:998
 msgid "Add Wire to Bus Entry"
@@ -21204,7 +21198,7 @@ msgstr "シートを追加"
 
 #: eeschema/tools/ee_actions.cpp:508
 msgid "Draw hierarchical sheets"
-msgstr "階層シートを描画"
+msgstr "階層シートを描く"
 
 #: eeschema/tools/ee_actions.cpp:516 eeschema/tools/sch_drawing_tools.cpp:1631
 msgid "Add Sheet Pin"
@@ -21215,9 +21209,8 @@ msgid "Add sheet pins"
 msgstr "シート ピンを追加"
 
 #: eeschema/tools/ee_actions.cpp:524 eeschema/tools/ee_actions.cpp:532
-#, fuzzy
 msgid "Sync Sheet Pins"
-msgstr "シートピン"
+msgstr "シートピンを同期"
 
 #: eeschema/tools/ee_actions.cpp:542
 msgid "Add Global Label"
@@ -21236,14 +21229,12 @@ msgid "Draw text box items"
 msgstr "テキスト ボックス アイテムを描画"
 
 #: eeschema/tools/ee_actions.cpp:569 pcbnew/tools/pcb_actions.cpp:190
-#, fuzzy
 msgid "Add Table"
-msgstr "ラベルを追加"
+msgstr "表を追加"
 
 #: eeschema/tools/ee_actions.cpp:570 pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Draw table"
-msgstr "線を描画"
+msgstr "表を描く"
 
 #: eeschema/tools/ee_actions.cpp:577 pagelayout_editor/tools/pl_actions.cpp:54
 msgid "Add Rectangle"
@@ -21282,9 +21273,8 @@ msgid "Add Rule Area"
 msgstr "ルールエリアを追加"
 
 #: eeschema/tools/ee_actions.cpp:614
-#, fuzzy
 msgid "Draw rule area"
-msgstr "引出線を描画"
+msgstr "ルールエリアを描く"
 
 #: eeschema/tools/ee_actions.cpp:622 pcbnew/tools/pcb_actions.cpp:400
 msgid "Delete Last Point"
@@ -39682,9 +39672,9 @@ msgid "(%s max length %s; actual %s)"
 msgstr "(%s 最大長さ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min skew %s; actual %s; average net length %s; actual %s)"
-msgstr "(%s 最大遅延 %s; 現状: %s; 平均ネット長 %s; 現状: %s)"
+msgstr "(%s 最小遅延 %s; 現状: %s; 平均ネット長 %s; 現状: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:177
 #, c-format
@@ -40094,15 +40084,13 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1595
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy
 msgid "Errors:\n"
-msgstr "エラー:"
+msgstr "エラー:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1601
 #: pcbnew/exporters/step/step_pcb_model.cpp:1735
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "警告:"
+msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1617
 msgid "shapes"
@@ -40443,14 +40431,14 @@ msgid "Show 3D viewer in own window"
 msgstr "3D ビューアー ウィンドウを表示"
 
 #: pcbnew/footprint_chooser_frame.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "Filter by pin count (%d)"
-msgstr "ピン数でフィルター"
+msgstr "ピン数でフィルター (%d)"
 
 #: pcbnew/footprint_chooser_frame.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Apply footprint filters (%s)"
-msgstr "フットプリント フィルターを適用"
+msgstr "フットプリント フィルターを適用 (%s)"
 
 #: pcbnew/footprint_edit_frame.cpp:116
 msgid "KiCad Footprint Editor"
@@ -43914,9 +43902,9 @@ msgid "Error exporting VRML"
 msgstr "VRMLエクスポートのエラー"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "Actual image size: %dx%d"
-msgstr "実際の大きさ"
+msgstr "実際の画像の大きさ: %dx%d"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:412
 #, fuzzy
@@ -46556,20 +46544,17 @@ msgid "Toggle ratsnest display of selected item(s)"
 msgstr "選択したアイテムのラッツネストの表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1343
-#, fuzzy
 msgid "Show Net Inspector"
 msgstr "ネット インスペクターを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
-#, fuzzy
 msgid "Show/hide the net inspector"
-msgstr "ネット インスペクターを表示"
+msgstr "ネット インスペクターの表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:79
-#, fuzzy
 msgid "Zone Manager"
-msgstr "プロジェクト マネージャー"
+msgstr "ゾーン マネージャー"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 #, fuzzy
