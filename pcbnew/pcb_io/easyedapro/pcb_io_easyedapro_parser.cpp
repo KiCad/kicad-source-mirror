@@ -625,7 +625,9 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
         if( line.at( 14 ).is_number() )
             drill_dir = line.at( 14 );
 
-        if( padHole.at( 0 ) == wxS( "ROUND" ) || padHole.at( 0 ) == wxS( "SLOT" ) )
+        wxString holeShape = padHole.at( 0 );
+
+        if( holeShape == wxS( "ROUND" ) || holeShape == wxS( "SLOT" ) )
         {
             VECTOR2D drill;
             drill.x = padHole.at( 1 );
@@ -636,7 +638,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
             if( std::abs( deg ) >= 45 )
                 std::swap( drill.x, drill.y ); // KiCad doesn't support arbitrary hole direction
 
-            if( padHole.at( 0 ) == wxS( "SLOT" ) )
+            if( holeShape == wxS( "SLOT" ) )
             {
                 pad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
             }
