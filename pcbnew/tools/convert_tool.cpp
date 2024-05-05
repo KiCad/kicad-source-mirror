@@ -235,10 +235,7 @@ CONVERT_TOOL::CONVERT_TOOL() :
     m_menu( nullptr ),
     m_frame( nullptr )
 {
-    m_userSettings.m_Strategy = CENTERLINE;
-    m_userSettings.m_Gap = 0;
-    m_userSettings.m_LineWidth = 0;
-    m_userSettings.m_DeleteOriginals = true;
+    initUserSettings();
 }
 
 
@@ -316,6 +313,15 @@ bool CONVERT_TOOL::Init()
     selToolMenu.AddMenu( m_menu, canCreate, 100 );
 
     return true;
+}
+
+
+void CONVERT_TOOL::initUserSettings()
+{
+    m_userSettings.m_Strategy = CENTERLINE;
+    m_userSettings.m_Gap = 0;
+    m_userSettings.m_LineWidth = 0;
+    m_userSettings.m_DeleteOriginals = true;
 }
 
 
@@ -400,6 +406,8 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             showCopyLineWidth = false;
         }
 
+        CONVERT_SETTINGS previousSettings = m_userSettings;
+
         CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_userSettings, showCopyLineWidth, true, true );
 
         if( dlg.ShowModal() != wxID_OK )
@@ -429,6 +437,8 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                 msg = _( "Objects must form a closed shape" );
 
             DisplayErrorMessage( m_frame, _( "Could not convert selection" ), msg );
+
+            m_userSettings = previousSettings;
             return 0;
         }
 
