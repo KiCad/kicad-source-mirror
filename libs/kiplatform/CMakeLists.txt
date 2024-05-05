@@ -15,6 +15,7 @@ if( APPLE )
         osx/io.mm
         osx/policy.mm
         osx/secrets.mm
+        osx/sysinfo.cpp
         osx/ui.mm
         )
 
@@ -32,6 +33,7 @@ elseif( WIN32 )
         msw/io.cpp
         msw/policy.cpp
         msw/secrets.cpp
+        msw/sysinfo.cpp
         msw/ui.cpp
         )
 
@@ -49,6 +51,7 @@ elseif( UNIX )
         gtk/io.cpp
         gtk/policy.cpp
         gtk/secrets.cpp
+        gtk/sysinfo.cpp
         gtk/ui.cpp
         )
 
