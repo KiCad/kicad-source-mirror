@@ -37,7 +37,7 @@ const int schSettingsSchemaVersion = 1;
 
 
 SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
-        NESTED_SETTINGS( "schematic", schSettingsSchemaVersion, aParent, aPath ),
+        NESTED_SETTINGS( "schematic", schSettingsSchemaVersion, aParent, aPath, false ),
         m_DefaultLineWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS ),
         m_DefaultTextSize( DEFAULT_TEXT_SIZE * schIUScale.IU_PER_MILS ),
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),

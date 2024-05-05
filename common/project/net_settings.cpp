@@ -54,7 +54,7 @@ static int getInSchUnits( const nlohmann::json& aObj, const std::string& aKey, i
 
 
 NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
-        NESTED_SETTINGS( "net_settings", netSettingsSchemaVersion, aParent, aPath )
+        NESTED_SETTINGS( "net_settings", netSettingsSchemaVersion, aParent, aPath, false )
 {
     m_DefaultNetClass = std::make_shared<NETCLASS>( NETCLASS::Default );
     m_DefaultNetClass->SetDescription( _( "This is the default net class." ) );
@@ -298,6 +298,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             {} ) );
 
     registerMigration( 0, 1, std::bind( &NET_SETTINGS::migrateSchema0to1, this ) );
+    registerMigration( 1, 2, std::bind( &NET_SETTINGS::migrateSchema1to2, this ) );
     registerMigration( 2, 3, std::bind( &NET_SETTINGS::migrateSchema2to3, this ) );
 }
 
@@ -356,6 +357,12 @@ bool NET_SETTINGS::migrateSchema0to1()
         }
     }
 
+    return true;
+}
+
+
+bool NET_SETTINGS::migrateSchema1to2()
+{
     return true;
 }
 

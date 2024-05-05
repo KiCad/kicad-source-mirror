@@ -96,6 +96,7 @@ public:
 
 private:
     bool migrateSchema0to1();
+    bool migrateSchema1to2();
     bool migrateSchema2to3();
 
     // TODO: Add diff pairs, bus information, etc.

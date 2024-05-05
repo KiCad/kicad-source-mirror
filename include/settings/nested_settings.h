@@ -32,7 +32,7 @@ class KICOMMON_API NESTED_SETTINGS : public JSON_SETTINGS
 {
 public:
     NESTED_SETTINGS( const std::string& aName, int aSchemaVersion, JSON_SETTINGS* aParent,
-                     const std::string& aPath );
+                     const std::string& aPath, bool aLoadFromFile = true );
 
     virtual ~NESTED_SETTINGS();
 

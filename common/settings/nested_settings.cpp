@@ -26,11 +26,11 @@
 
 
 NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_SETTINGS* aParent,
-                                  const std::string& aPath ) :
+                                  const std::string& aPath, bool aLoadFromFile ) :
         JSON_SETTINGS( aName, SETTINGS_LOC::NESTED, aVersion ),
         m_parent( aParent ), m_path( aPath )
 {
-    SetParent( aParent );
+    SetParent( aParent, aLoadFromFile );
 }
 
 
