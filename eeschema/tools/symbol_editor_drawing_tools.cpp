@@ -312,7 +312,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->SetPosition( VECTOR2I( cursorPos.x, -cursorPos.y ) );
+            item->SetPosition( VECTOR2I( cursorPos.x, cursorPos.y ) );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
