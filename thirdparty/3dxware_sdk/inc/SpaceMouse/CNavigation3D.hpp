@@ -407,7 +407,7 @@ protected:
   /// system X-right, Z-up, Y-in (column-major)</remarks>
   long GetCoordinateSystem(navlib::matrix_t &matrix) const override {
     // Use the right-handed coordinate system X-right, Y-up, Z-out (same as navlib)
-    navlib::matrix_t cs = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+    navlib::matrix_t cs = {{{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}}};
 
     // Use the right-handed coordinate system X-right, Z-up, Y-in (column-major)
     // navlib::matrix_t cs = {1, 0, 0, 0,  0, 0, -1, 0,  0, 1, 0, 0,  0, 0, 0, 1};
@@ -425,7 +425,7 @@ protected:
   /// <remarks>The default is the same as the coordinate system tripod, i.e. the identity
   /// matrix.</remarks>
   long GetFrontView(navlib::matrix_t &matrix) const override {
-    navlib::matrix_t front = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+    navlib::matrix_t front = {{{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}}};
     matrix = front;
     return 0;
   }

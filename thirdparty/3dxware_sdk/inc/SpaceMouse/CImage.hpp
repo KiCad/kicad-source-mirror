@@ -253,7 +253,7 @@ public:
   /// </summary>
   /// <returns>A <see cref="SiImage_t"/>.</returns>
   operator SiImage_t() const {
-    SiImage_t siImage = {sizeof(SiImage_t), m_type, m_id.c_str(), {nullptr, nullptr, nullptr, 0}};
+    SiImage_t siImage = {sizeof(SiImage_t), m_type, m_id.c_str(), {{nullptr, nullptr, nullptr, 0}}};
     switch (m_type) {
     case SiImageType_t::e_image_file:
       siImage.file.file_name = m_source.c_str();

@@ -113,10 +113,8 @@ typedef std::map<std::string, TDx::CCommandTreeNode*> CATEGORY_STORE;
  *
  * @param aCategoryPath is the std::string representation of the category.
  * @param aCategoryStore is the CATEGORY_STORE instance to add to.
- * @return a CATEGORY_STORE::iterator where the category was added.
  */
-static CATEGORY_STORE::iterator add_category( std::string     aCategoryPath,
-                                              CATEGORY_STORE& aCategoryStore )
+static void add_category( const std::string& aCategoryPath, CATEGORY_STORE& aCategoryStore )
 {
     using TDx::SpaceMouse::CCategory;
 
@@ -130,19 +128,17 @@ static CATEGORY_STORE::iterator add_category( std::string     aCategoryPath,
 
         if( parent_iter == aCategoryStore.end() )
         {
-            parent_iter = add_category( parentPath, aCategoryStore );
+            add_category( parentPath, aCategoryStore );
+            parent_iter = aCategoryStore.find( parentPath );
         }
     }
 
-    std::string                name = aCategoryPath.substr( pos + 1 );
-    std::unique_ptr<CCategory> categoryNode =
-            std::make_unique<CCategory>( aCategoryPath.c_str(), name.c_str() );
+    std::string name = aCategoryPath.substr( pos + 1 );
+    auto        categoryNode = std::make_unique<CCategory>( aCategoryPath.c_str(), name.c_str() );
 
-    CATEGORY_STORE::iterator iter = aCategoryStore.insert(
-            aCategoryStore.end(), CATEGORY_STORE::value_type( aCategoryPath, categoryNode.get() ) );
+    aCategoryStore.insert( aCategoryStore.end(), { aCategoryPath, categoryNode.get() } );
 
     parent_iter->second->push_back( std::move( categoryNode ) );
-    return iter;
 }
 
 
@@ -153,9 +149,7 @@ void NL_SCHEMATIC_PLUGIN_IMPL::exportCommandsAndImages()
     std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList();
 
     if( actions.size() == 0 )
-    {
         return;
-    }
 
     using TDx::SpaceMouse::CCommand;
     using TDx::SpaceMouse::CCommandSet;
@@ -182,25 +176,22 @@ void NL_SCHEMATIC_PLUGIN_IMPL::exportCommandsAndImages()
         std::string        label = action->GetMenuLabel().ToStdString();
 
         if( label.empty() )
-        {
             continue;
-        }
 
         std::string name = action->GetName();
 
         // Do no export commands for the 3DViewer app.
 
         if( name.rfind( "3DViewer.", 0 ) == 0 )
-        {
             continue;
-        }
 
         std::string              strCategory = action->GetToolName();
         CATEGORY_STORE::iterator iter = categoryStore.find( strCategory );
 
         if( iter == categoryStore.end() )
         {
-            iter = add_category( std::move( strCategory ), categoryStore );
+            add_category( strCategory, categoryStore );
+            iter = categoryStore.find( strCategory );
         }
 
         std::string description = action->GetDescription().ToStdString();
@@ -243,9 +234,7 @@ void NL_SCHEMATIC_PLUGIN_IMPL::exportCommandsAndImages()
 long NL_SCHEMATIC_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 {
     if( m_view == nullptr )
-    {
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
-    }
 
     m_viewPosition = m_view->GetCenter();
 
@@ -257,7 +246,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 
     // Note: the connexion has been configured as row vectors, the coordinate system is defined in
     // NL_SCHEMATIC_PLUGIN_IMPL::GetCoordinateSystem and the front view in NL_SCHEMATIC_PLUGIN_IMPL::GetFrontView.
-    matrix = { x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, m_viewPosition.x, m_viewPosition.y, 0, 1 };
+    matrix = { { { x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, m_viewPosition.x, m_viewPosition.y, 0, 1 } } };
     return 0;
 }
 
@@ -265,9 +254,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 long NL_SCHEMATIC_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) const
 {
     if( m_view == nullptr )
-    {
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
-    }
 
     VECTOR2D mouse_pointer = m_viewport2D->GetViewControls()->GetMousePosition();
 
@@ -282,21 +269,19 @@ long NL_SCHEMATIC_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) c
 long NL_SCHEMATIC_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
 {
     if( m_view == nullptr )
-    {
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
-    }
 
     double scale = m_viewport2D->GetGAL()->GetWorldScale();
     BOX2D  box = m_view->GetViewport();
 
     m_viewportWidth = box.GetWidth();
 
-    extents = navlib::box_t{ -box.GetWidth() / 2.0,
-                             -box.GetHeight() / 2.0,
-                             m_viewport2D->GetGAL()->GetMinDepth() / scale,
-                             box.GetWidth() / 2.0,
-                             box.GetHeight() / 2.0,
-                             m_viewport2D->GetGAL()->GetMaxDepth() / scale };
+    extents.min_x = -box.GetWidth() / 2.0;
+    extents.min_y = -box.GetHeight() / 2.0;
+    extents.min_z = m_viewport2D->GetGAL()->GetMinDepth() / scale;
+    extents.max_x = box.GetWidth() / 2.0;
+    extents.max_y = box.GetHeight() / 2.0;
+    extents.max_z = m_viewport2D->GetGAL()->GetMaxDepth() / scale;
     return 0;
 }
 
@@ -312,9 +297,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::GetIsViewPerspective( navlib::bool_t& perspective
 long NL_SCHEMATIC_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
 {
     if( m_view == nullptr )
-    {
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
     long     result = 0;
     VECTOR2D viewPos( matrix.m4x4[3][0], matrix.m4x4[3][1] );
@@ -339,16 +322,12 @@ long NL_SCHEMATIC_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
 long NL_SCHEMATIC_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
 {
     if( m_view == nullptr )
-    {
         return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
-    }
 
     long result = 0;
 
     if( m_viewportWidth != m_view->GetViewport().GetWidth() )
-    {
         result = navlib::make_result_code( navlib::navlib_errc::error );
-    }
 
     double width = m_viewportWidth;
     m_viewportWidth = extents.max_x - extents.min_x;
@@ -357,9 +336,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
     m_view->SetScale( scale, m_view->GetCenter() );
 
     if( !equals( m_view->GetScale(), scale, static_cast<double>( FLT_EPSILON ) ) )
-    {
         result = navlib::make_result_code( navlib::navlib_errc::error );
-    }
 
     return result;
 }
@@ -380,9 +357,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::SetViewFrustum( const navlib::frustum_t& frustum 
 long NL_SCHEMATIC_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
 {
     if( m_view == nullptr )
-    {
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
-    }
 
     BOX2I box = static_cast<SCH_BASE_FRAME*>( m_viewport2D->GetParent() )->GetDocumentExtents();
     box.Normalize();
@@ -390,16 +365,14 @@ long NL_SCHEMATIC_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
     double half_depth = 0.1 / m_viewport2D->GetGAL()->GetWorldScale();
 
     if( box.GetWidth() == 0 && box.GetHeight() == 0 )
-    {
         half_depth = 0;
-    }
 
-    extents = { static_cast<double>( box.GetOrigin().x ),
-                static_cast<double>( box.GetOrigin().y ),
-                -half_depth,
-                static_cast<double>( box.GetEnd().x ),
-                static_cast<double>( box.GetEnd().y ),
-                half_depth };
+    extents.min_x = static_cast<double>( box.GetOrigin().x );
+    extents.min_y = static_cast<double>( box.GetOrigin().y );
+    extents.min_z = -half_depth;
+    extents.max_x = static_cast<double>( box.GetEnd().x );
+    extents.max_y = static_cast<double>( box.GetEnd().y );
+    extents.max_z = half_depth;
 
     return 0;
 }
@@ -408,14 +381,14 @@ long NL_SCHEMATIC_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
 long NL_SCHEMATIC_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) const
 {
     // The coordinate system is defined as x to the right, y down and z into the screen.
-    matrix = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
+    matrix = { { { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 } } };
     return 0;
 }
 
 
 long NL_SCHEMATIC_PLUGIN_IMPL::GetFrontView( navlib::matrix_t& matrix ) const
 {
-    matrix = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
+    matrix = { { { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 } } };
     return 0;
 }
 
@@ -437,9 +410,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::GetIsViewRotatable( navlib::bool_t& isRotatable )
 long NL_SCHEMATIC_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 {
     if( commandId.empty() )
-    {
         return 0;
-    }
 
     std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList();
     TOOL_ACTION*            context = nullptr;
@@ -450,9 +421,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
         std::string  nm = action->GetName();
 
         if( commandId == nm )
-        {
             context = action;
-        }
     }
 
     if( context != nullptr )
@@ -478,9 +447,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
             }
 
             if( runAction )
-            {
                 tool_manager->RunAction( *context );
-            }
         }
         else
         {
@@ -509,9 +476,7 @@ long NL_SCHEMATIC_PLUGIN_IMPL::SetMotionFlag( bool value )
 long NL_SCHEMATIC_PLUGIN_IMPL::SetTransaction( long value )
 {
     if( value == 0L )
-    {
         m_viewport2D->ForceRefresh();
-    }
 
     return 0;
 }
