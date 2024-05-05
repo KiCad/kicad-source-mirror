@@ -1053,6 +1053,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
     case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
     case PCB_REFERENCE_IMAGE_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
         {
