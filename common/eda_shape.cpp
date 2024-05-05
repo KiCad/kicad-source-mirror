@@ -1990,13 +1990,13 @@ static struct EDA_SHAPE_DESC
                 .SetAvailableFunc( isNotPolygonOrCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Center X" ),
-                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
+                    &EDA_SHAPE::SetCenterX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_X_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Center Y" ),
-                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
+                    &EDA_SHAPE::SetCenterY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isCircle );
