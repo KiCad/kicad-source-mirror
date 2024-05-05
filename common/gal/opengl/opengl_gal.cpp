@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2024 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -33,6 +33,7 @@
 #endif
 
 #include <advanced_config.h>
+#include <build_version.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
@@ -2693,6 +2694,9 @@ void OPENGL_GAL::init()
     }
 
 #endif // KICAD_USE_EGL
+
+    SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
+                   (const char*) glGetString( GL_VERSION ) );
 
     if( GLEW_OK != err )
         throw std::runtime_error( (const char*) glewGetErrorString( err ) );

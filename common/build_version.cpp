@@ -51,6 +51,19 @@ extern std::string GetCurlLibVersion();
 #include <kicad_build_version.h>
 #undef INCLUDE_KICAD_VERSION
 
+// Remember OpenGL info
+static wxString s_glVendor;
+static wxString s_glRenderer;
+static wxString s_glVersion;
+
+void SetOpenGLInfo( const char* aVendor, const char* aRenderer, const char* aVersion )
+{
+    s_glVendor = wxString::FromUTF8( aVendor );
+    s_glRenderer = wxString::FromUTF8( aRenderer );
+    s_glVersion = wxString::FromUTF8( aVersion );
+}
+
+
 wxString GetPlatformGetBitnessName()
 {
     wxPlatformInfo platform;
@@ -199,6 +212,12 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << ", " << wxGetenv( "XDG_SESSION_DESKTOP" )
          << ", " << wxGetenv( "XDG_SESSION_TYPE" );
 #endif
+
+    if( !s_glVendor.empty() || !s_glRenderer.empty() || !s_glVersion.empty() )
+    {
+        aMsg << eol;
+        aMsg << "OpenGL: " << s_glVendor << ", " << s_glRenderer << ", " << s_glVersion;
+    }
 
     aMsg << eol << eol;
 

@@ -105,6 +105,11 @@ KICOMMON_API const std::tuple<int, int, int>& GetMajorMinorPatchTuple();
 KICOMMON_API bool IsNightlyVersion();
 
 /**
+ * A setter for OpenGL info when it's initialized.
+ */
+KICOMMON_API void SetOpenGLInfo( const char* aRenderer, const char* aVendor, const char* aVersion );
+
+/**
  * Create a version info string for bug reports and the about dialog
  * @param aTitle is the application title to include at the top of the report
  * @param aBrief = true to condense information for the bug report URL

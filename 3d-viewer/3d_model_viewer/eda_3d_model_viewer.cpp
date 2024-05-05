@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include "../3d_cache/3d_cache.h"
 #include <wx/dcclient.h>
 #include <base_units.h>
+#include <build_version.h>
 #include <gal/opengl/gl_context_mgr.h>
 #include <settings/common_settings.h>
 #include <pgm_base.h>
@@ -199,6 +200,9 @@ void EDA_3D_MODEL_VIEWER::ogl_initialize()
         wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using GLEW version %s" ),
                     From_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
     }
+
+    SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
+                   (const char*) glGetString( GL_VERSION ) );
 
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
     glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );

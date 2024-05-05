@@ -33,6 +33,7 @@
 #include <3d_rendering/opengl/render_3d_opengl.h>
 #include <3d_viewer_id.h>
 #include <advanced_config.h>
+#include <build_version.h>
 #include <board.h>
 #include <reporter.h>
 #include <gal/opengl/gl_context_mgr.h>
@@ -228,6 +229,9 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
         wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::initializeOpenGL Using GLEW version %s" ),
                     From_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
     }
+
+    SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
+                   (const char*) glGetString( GL_VERSION ) );
 
     wxString version = From_UTF8( (char *) glGetString( GL_VERSION ) );
 
