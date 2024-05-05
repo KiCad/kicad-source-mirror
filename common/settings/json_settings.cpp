@@ -678,23 +678,25 @@ bool JSON_SETTINGS::Migrate()
         {
             wxLogTrace( traceSettings, wxT( "Migrator missing for %s version %d!" ),
                         typeid( *this ).name(), filever );
-            return false;
-        }
-
-        std::pair<int, std::function<bool()>> pair = m_migrators.at( filever );
-
-        if( pair.second() )
-        {
-            wxLogTrace( traceSettings, wxT( "Migrated %s from %d to %d" ), typeid( *this ).name(),
-                        filever, pair.first );
-            filever = pair.first;
-            m_internals->At( "meta.version" ) = filever;
+            filever++;
         }
         else
         {
-            wxLogTrace( traceSettings, wxT( "Migration failed for %s from %d to %d" ),
-                        typeid( *this ).name(), filever, pair.first );
-            return false;
+            std::pair<int, std::function<bool()>> pair = m_migrators.at( filever );
+
+            if( pair.second() )
+            {
+                wxLogTrace( traceSettings, wxT( "Migrated %s from %d to %d" ),
+                            typeid( *this ).name(), filever, pair.first );
+                filever = pair.first;
+                m_internals->At( "meta.version" ) = filever;
+            }
+            else
+            {
+                wxLogTrace( traceSettings, wxT( "Migration failed for %s from %d to %d" ),
+                            typeid( *this ).name(), filever, pair.first );
+                return false;
+            }
         }
     }
 
