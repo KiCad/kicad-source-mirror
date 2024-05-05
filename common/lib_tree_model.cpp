@@ -92,10 +92,13 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
         if( aNode2.m_Name.StartsWith( wxT( "-- " ) ) )
         {
             // Make sure -- Recently Used is always at the top
-            if( aNode1.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
-                return true;
-            else if( aNode2.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
+            // Start by checking the name of aNode2, because we
+            // want to satisfy the irreflexive property of the
+            // strict weak ordering.
+            if( aNode2.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
                 return false;
+            else if( aNode1.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
+                return true;
 
             return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
         }
