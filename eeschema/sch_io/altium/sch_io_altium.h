@@ -153,6 +153,7 @@ private:
     void ParseHarnessType( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessPort( const ASCH_PORT& aElem );
     void ParseHyperlink( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParsePieChart( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseRectangle( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );

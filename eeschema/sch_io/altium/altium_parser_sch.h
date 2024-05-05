@@ -480,7 +480,7 @@ struct ASCH_ROUND_RECTANGLE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BO
 };
 
 
-struct ASCH_ARC : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_ARC : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE, ASCH_FILL_INTERFACE
 {
     bool     m_IsElliptical;
     VECTOR2I m_Center;
@@ -490,6 +490,12 @@ struct ASCH_ARC : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
     double   m_EndAngle;
 
     explicit ASCH_ARC( const std::map<wxString, wxString>& aProps );
+};
+
+
+struct ASCH_PIECHART : ASCH_ARC
+{
+    explicit ASCH_PIECHART( const std::map<wxString, wxString>& aProps );
 };
 
 
