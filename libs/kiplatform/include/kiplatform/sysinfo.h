@@ -94,7 +94,7 @@ public:
 
 #if defined( _WIN32 )
 #include <kiplatform/sysinfo_windows.h>
-#elif defined( __UNIX__ )
+#elif defined( __unix__ ) || defined( __unix )
 #include <kiplatform/sysinfo_gtk.h>
 #elif defined( __APPLE__ )
 #include <kiplatform/sysinfo_osx.h>
