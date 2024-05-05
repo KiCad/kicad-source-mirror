@@ -11,7 +11,7 @@
 # Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
 # Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023, 2024.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
-# Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023.
+# Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023, 2024.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # magical-obama <maschwaerzler@a1.net>, 2022.
 # Luc <some_physics@live.com>, 2023, 2024.
@@ -25,16 +25,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-19 14:03+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-05-06 10:07+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.3\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15817,7 +15817,7 @@ msgstr "Widersprüchliche Netzklassen-Zuweisungen"
 
 #: eeschema/erc_item.cpp:123
 msgid "Overlapping rule areas"
-msgstr ""
+msgstr "Überlappende Regelbereiche"
 
 #: eeschema/erc_item.cpp:127
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -16628,7 +16628,7 @@ msgstr "Bus-an-Bus-Zugang von %s, %s nach %s, %s"
 #: eeschema/net_navigator.cpp:183
 #, fuzzy, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Globaler Bezeichner '%s' bei (%s, %s)"
+msgstr "Netzklassen-Bezeichner ‚%s‘ bei %s, %s"
 
 #: eeschema/net_navigator.cpp:189
 #, c-format
@@ -18251,7 +18251,7 @@ msgstr "Unterschiedliche Werte für %s%d%s (%s) und %s%d%s (%s)"
 #: eeschema/sch_rule_area.cpp:200
 #, fuzzy
 msgid "Schematic rule area"
-msgstr "Schaltplanmarker"
+msgstr "Schaltplan-Regelbereich"
 
 #: eeschema/sch_screen.cpp:914 eeschema/sch_screen.cpp:1006
 #, c-format
