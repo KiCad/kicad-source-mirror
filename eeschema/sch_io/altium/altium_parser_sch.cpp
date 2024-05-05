@@ -460,7 +460,8 @@ ASCH_ROUND_RECTANGLE::ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& 
 
 ASCH_ARC::ASCH_ARC( const std::map<wxString, wxString>& aProps ) :
         ASCH_OWNER_INTERFACE( aProps ),
-        ASCH_BORDER_INTERFACE( aProps )
+        ASCH_BORDER_INTERFACE( aProps ),
+        ASCH_FILL_INTERFACE( aProps )
 {
     m_IsElliptical = ReadRecord( aProps ) == ALTIUM_SCH_RECORD::ELLIPTICAL_ARC;
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::ARC || m_IsElliptical );
@@ -476,6 +477,11 @@ ASCH_ARC::ASCH_ARC( const std::map<wxString, wxString>& aProps ) :
     m_StartAngle = ALTIUM_PROPS_UTILS::ReadDouble( aProps, "STARTANGLE", 0 );
     m_EndAngle   = ALTIUM_PROPS_UTILS::ReadDouble( aProps, "ENDANGLE", 0 );
 }
+
+
+ASCH_PIECHART::ASCH_PIECHART( const std::map<wxString, wxString>& aProps ) :
+        ASCH_ARC( aProps )
+{}
 
 
 ASCH_ELLIPSE::ASCH_ELLIPSE( const std::map<wxString, wxString>& aProps ) :
