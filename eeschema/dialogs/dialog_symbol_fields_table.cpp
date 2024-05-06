@@ -168,8 +168,10 @@ protected:
 
 
 DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent ) :
-        DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ), m_currentBomPreset( nullptr ),
-        m_lastSelectedBomPreset( nullptr ), m_parent( parent ),
+        DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ),
+        m_currentBomPreset( nullptr ),
+        m_lastSelectedBomPreset( nullptr ),
+        m_parent( parent ),
         m_schSettings( parent->Schematic().Settings() )
 {
     // Get all symbols from the list of schematic sheets
@@ -463,7 +465,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 
     if( selection.GetSize() == 1 )
     {
-        EDA_ITEM*      item = selection.Front();
+        EDA_ITEM* item = selection.Front();
 
         if( item->Type() == SCH_SYMBOL_T )
             symbol = (SCH_SYMBOL*) item;
@@ -571,8 +573,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
     m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
 
     wxVector<wxVariant> fieldsCtrlRow;
-
-    std::string key( aFieldName.ToUTF8() );
+    std::string         key( aFieldName.ToUTF8() );
 
     // Don't change these to emplace_back: some versions of wxWidgets don't support it
     fieldsCtrlRow.push_back( wxVariant( aFieldName ) );
@@ -637,8 +638,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
          m_schSettings.m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
+        {
             AddField( templateFieldname.m_Name, GetTextVars( templateFieldname.m_Name ), false,
                       false );
+        }
     }
 }
 
@@ -689,8 +692,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
     wxString displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
 
-    wxString confirm_msg =
-            wxString::Format( _( "Are you sure you want to remove the field '%s'?" ), displayName );
+    wxString confirm_msg = wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
+                                             displayName );
 
     if( !IsOK( this, confirm_msg ) )
         return;
@@ -750,9 +753,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     // New field name already exists
     if( m_dataModel->GetFieldNameCol( newFieldName ) != -1 )
     {
-         wxString confirm_msg = wxString::Format(
-                 _( "Field name %s already exists. Cannot rename over existing field." ),
-                 newFieldName );
+         wxString confirm_msg = wxString::Format( _( "Field name %s already exists." ),
+                                                  newFieldName );
          DisplayError( this, confirm_msg );
          return;
     }
@@ -818,9 +820,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
     {
     case SHOW_FIELD_COLUMN:
     {
-        bool value = m_fieldsCtrl->GetToggleValue( row, col );
-        int  dataCol = m_dataModel->GetFieldNameCol(
-                m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ) );
+        wxString name = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
+        bool     value = m_fieldsCtrl->GetToggleValue( row, col );
+        int      dataCol = m_dataModel->GetFieldNameCol( name );
 
         m_dataModel->SetShowColumn( dataCol, value );
 
@@ -837,9 +839,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 
     case GROUP_BY_COLUMN:
     {
-        bool value = m_fieldsCtrl->GetToggleValue( row, col );
-        int  dataCol = m_dataModel->GetFieldNameCol(
-                m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ) );
+        wxString name = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
+        bool     value = m_fieldsCtrl->GetToggleValue( row, col );
+        int      dataCol = m_dataModel->GetFieldNameCol( name );
 
         if( m_dataModel->ColIsQuantity( dataCol ) && value )
         {
@@ -1239,11 +1241,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& even
 void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 {
     if( m_dataModel->IsEdited() )
+    {
         if( OKOrCancelDialog( nullptr, _( "Unsaved data" ),
-                              _( "Changes are unsaved. Export unsaved data?" ), "", _( "OK" ),
-                              _( "Cancel" ) )
+                              _( "Changes have not yet been saved. Export unsaved data?" ), "",
+                              _( "OK" ), _( "Cancel" ) )
             == wxID_CANCEL )
+        {
             return;
+        }
+    }
 
     // Create output directory if it does not exist (also transform it in absolute form).
     // Bail if it fails.
@@ -1854,9 +1860,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::ApplyBomFmtPreset( const BOM_FMT_PRESET& aPrese
     else
         m_currentBomFmtPreset = nullptr;
 
-    m_lastSelectedBomFmtPreset = ( m_currentBomFmtPreset && !m_currentBomFmtPreset->readOnly )
-                                         ? m_currentBomFmtPreset
-                                         : nullptr;
+    m_lastSelectedBomFmtPreset = ( m_currentBomFmtPreset
+                                    && !m_currentBomFmtPreset->readOnly ) ? m_currentBomFmtPreset
+                                                                          : nullptr;
 
     updateBomFmtPresetSelection( aPreset.name );
     doApplyBomFmtPreset( aPreset );
@@ -2103,8 +2109,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         return;
     }
 
-    BOM_FMT_PRESET* preset =
-            static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( index ) );
+    auto* preset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( index ) );
     m_currentBomFmtPreset = preset;
 
     m_lastSelectedBomFmtPreset = ( !preset || preset->readOnly ) ? nullptr : preset;
@@ -2243,10 +2248,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch
     for( SCH_ITEM* item : aSchItem )
     {
         if( item->Type() == SCH_SYMBOL_T )
+        {
             m_dataModel->RemoveSymbol( *static_cast<SCH_SYMBOL*>( item ) );
+        }
         else if( item->Type() == SCH_SHEET_T )
+        {
             m_dataModel->RemoveReferences(
                     getSheetSymbolReferences( *static_cast<SCH_SHEET*>( item ) ) );
+        }
     }
 
     DisableSelectionEvents();

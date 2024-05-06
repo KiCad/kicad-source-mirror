@@ -38,10 +38,6 @@ class NGSPICE_SETTINGS;
 
 
 /**
- * These settings were stored in SCH_BASE_FRAME previously.
- * The backing store is currently the project file.
- * They should likely move to a project settings file (JSON) once that framework exists.
- *
  * These are loaded from Eeschema settings but then overwritten by the project settings.
  * All of the values are stored in IU, but the backing file stores in mils.
  */

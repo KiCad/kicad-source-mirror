@@ -130,11 +130,6 @@ private:
     void doApplyBomPreset( const BOM_PRESET& aPreset );
     void loadDefaultBomPresets();
 
-    std::map<wxString, BOM_PRESET> m_bomPresets;
-    BOM_PRESET*                    m_currentBomPreset;
-    BOM_PRESET*                    m_lastSelectedBomPreset;
-    wxArrayString                  m_bomPresetMRU;
-
     void syncBomFmtPresetSelection();
     void rebuildBomFmtPresetsWidget();
     void updateBomFmtPresetSelection( const wxString& aName );
@@ -142,23 +137,29 @@ private:
     void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
     void loadDefaultBomFmtPresets();
 
+    void savePresetsToSchematic();
+
+private:
+    std::map<wxString, BOM_PRESET>     m_bomPresets;
+    BOM_PRESET*                        m_currentBomPreset;
+    BOM_PRESET*                        m_lastSelectedBomPreset;
+    wxArrayString                      m_bomPresetMRU;
+
     std::map<wxString, BOM_FMT_PRESET> m_bomFmtPresets;
     BOM_FMT_PRESET*                    m_currentBomFmtPreset;
     BOM_FMT_PRESET*                    m_lastSelectedBomFmtPreset;
     wxArrayString                      m_bomFmtPresetMRU;
 
-    void savePresetsToSchematic();
+    SCH_EDIT_FRAME*                    m_parent;
+    int                                m_fieldNameColWidth;
+    int                                m_labelColWidth;
+    int                                m_showColWidth;
+    int                                m_groupByColWidth;
 
-    SCH_EDIT_FRAME*                m_parent;
-    int                            m_fieldNameColWidth;
-    int                            m_labelColWidth;
-    int                            m_showColWidth;
-    int                            m_groupByColWidth;
+    SCH_REFERENCE_LIST                 m_symbolsList;
+    FIELDS_EDITOR_GRID_DATA_MODEL*     m_dataModel;
 
-    SCH_REFERENCE_LIST             m_symbolsList;
-    FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
-
-    SCHEMATIC_SETTINGS&            m_schSettings;
+    SCHEMATIC_SETTINGS&                m_schSettings;
 };
 
 #endif /* DIALOG_SYMBOL_FIELDS_TABLE_H */
