@@ -1569,6 +1569,22 @@ PAD* FOOTPRINT::GetPad( const VECTOR2I& aPosition, LSET aLayerMask )
 }
 
 
+std::vector<const PAD*> FOOTPRINT::GetPads( const wxString& aPadNumber, const PAD* aIgnore ) const
+{
+    std::vector<const PAD*> retv;
+
+    for( const PAD* pad : m_pads )
+    {
+        if( aIgnore && aIgnore == pad )
+            continue;
+
+        retv.push_back( pad );
+    }
+
+    return retv;
+}
+
+
 unsigned FOOTPRINT::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
     if( aIncludeNPTH )

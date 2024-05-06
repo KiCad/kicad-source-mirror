@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers.
+ * Copyright (C) 2020, 2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,6 +106,8 @@ class PNS_LOG_VIEWER_OVERLAY : public KIGFX::VIEW_OVERLAY
 {
 public:
     PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal );
+    void AnnotatedPolyset( const SHAPE_POLY_SET& aL, std::string name = "",
+                           bool aShowVertexNumbers = false );
     void AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name,
                             bool aShowVertexNumbers = false );
     void AnnotatedPoint( const VECTOR2I p, int size, std::string name = "",
