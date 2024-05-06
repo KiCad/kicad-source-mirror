@@ -28,10 +28,11 @@
 #include <gestfich.h>
 #include <settings/common_settings.h>
 
-#include <wx/mimetype.h>
-#include <wx/filename.h>
-#include <wx/uri.h>
 #include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/log.h>
+#include <wx/mimetype.h>
+#include <wx/uri.h>
 
 
 //  Mime type extensions (PDF files are not considered here)
@@ -65,27 +66,16 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
     wxString      command;
     bool          success = false;
 
-    // Is an internet url
-    static const std::vector<wxString> url_header =
-    {
-        wxT( "http:" ),
-        wxT( "https:" ),
-        wxT( "ftp:" ),
-        wxT( "www." ),
-        wxT( "file:" )
-    };
-
     // Replace before resolving as we might have a URL in a variable
     docname = ResolveUriByEnvVars( aDocName, aProject );
 
-    for( const wxString& proc : url_header)
+    // We don't want the wx error message about not being able to open the URI
     {
-        if( docname.StartsWith( proc ) )   // looks like an internet url
-        {
-            wxURI uri( docname );
-            wxLaunchDefaultBrowser( uri.BuildURI() );
+        wxURI     uri( docname );
+        wxLogNull logNo; // Disable log messages
+
+        if( uri.HasScheme() && wxLaunchDefaultBrowser( docname ) )
             return true;
-        }
     }
 
 #ifdef __WINDOWS__

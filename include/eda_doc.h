@@ -35,8 +35,8 @@
  * Open a document (file) with the suitable browser.
  *
  * Environmental variables are substituted before the document name is resolved for
- * either browser or file.  If \a aDocName begins with http: or ftp: or www. the
- * default internet browser is launched.
+ * either browser or file.  If \a aDocName has an associated URI handler on the system,
+ * the default handler will be launched.
  *
  * @param aParent main frame.
  * @param aDocName filename of file to open (Full filename or short filename).

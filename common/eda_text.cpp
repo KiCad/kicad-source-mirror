@@ -1083,16 +1083,9 @@ bool EDA_TEXT::ValidateHyperlink( const wxString& aURL )
     if( aURL.IsEmpty() || IsGotoPageHref( aURL ) )
         return true;
 
-    // Limit valid urls to file, http and https for now. Note wxURL doesn't support https
     wxURI uri;
 
-    if( uri.Create( aURL ) && uri.HasScheme() )
-    {
-        const wxString& scheme = uri.GetScheme();
-        return scheme == wxT( "file" )  || scheme == wxT( "http" ) || scheme == wxT( "https" );
-    }
-
-    return false;
+    return( uri.Create( aURL ) && uri.HasScheme() );
 }
 
 double EDA_TEXT::Levenshtein( const EDA_TEXT& aOther ) const
