@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers.
+ * Copyright (C) 2020, 2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,98 @@
 
 #include <geometry/shape_arc.h>
 
+#include <pad.h>
+
 std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> overlay;
+
+
+static inline bool collide( const SHAPE_LINE_CHAIN& aLhs, const SHAPE_LINE_CHAIN& aRhs,
+                            int aClearance, int* aDistance = nullptr, VECTOR2I* aPt1 = nullptr )
+{
+    wxCHECK( aLhs.PointCount() && aRhs.PointCount(), false );
+
+    VECTOR2I pt1;
+    bool retv = false;
+    int dist = std::numeric_limits<int>::max();
+    int tmp = dist;
+
+    SHAPE_LINE_CHAIN lhs( aLhs );
+    SHAPE_LINE_CHAIN rhs( aRhs );
+
+    lhs.SetClosed( false );
+    lhs.Append( lhs.CPoint( 0 ) );
+    rhs.SetClosed( false );
+    rhs.Append( rhs.CPoint( 0 ) );
+
+    for( int i = 0; i < rhs.SegmentCount(); i ++ )
+    {
+        if( lhs.Collide( rhs.CSegment( i ), tmp, &tmp, &pt1 ) )
+        {
+            retv = true;
+
+            if( tmp < dist )
+                dist = tmp;
+
+            if( aDistance )
+                *aDistance = dist;
+
+            if( aPt1 )
+                *aPt1 = pt1;
+        }
+    }
+
+    return retv;
+}
+
+
+static bool collide( const SHAPE_POLY_SET& aLhs, const SHAPE_LINE_CHAIN& aRhs, int aClearance,
+                     int* aDistance = nullptr, VECTOR2I* aPt1 = nullptr )
+{
+    VECTOR2I pt1;
+    bool retv = false;
+    int tmp = std::numeric_limits<int>::max();
+    int dist = tmp;
+
+    for( int i = 0; i < aLhs.OutlineCount(); i++ )
+    {
+        if( collide( aLhs.Outline( i ), aRhs, aClearance, &tmp, &pt1 ) )
+        {
+            retv = true;
+
+            if( tmp < dist )
+            {
+                dist = tmp;
+
+                if( aDistance )
+                    *aDistance = dist;
+
+                if( aPt1 )
+                    *aPt1 = pt1;
+            }
+        }
+
+        for( int j = 0; j < aLhs.HoleCount( i ); i++ )
+        {
+            if( collide( aLhs.CHole( i, j ), aRhs, aClearance, &tmp, &pt1 ) )
+            {
+                retv = true;
+
+                if( tmp < dist )
+                {
+                    dist = tmp;
+
+                    if( aDistance )
+                        *aDistance = dist;
+
+                    if( aPt1 )
+                        *aPt1 = pt1;
+                }
+            }
+        }
+    }
+
+    return retv;
+}
 
 
 bool collideArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, int clearance, SEG& minDistSeg )
@@ -175,12 +266,55 @@ int playground_main_func( int argc, char* argv[] )
             vp.Merge( arc.BBox() );
     }
 
+
+    PAD pad1( nullptr );
+    pad1.SetX( pcbIUScale.mmToIU( 84.0 ) );
+    pad1.SetY( pcbIUScale.mmToIU( 66.0 ) );
+    pad1.SetSizeX( pcbIUScale.mmToIU( 7.0 ) );
+    pad1.SetSizeY( pcbIUScale.mmToIU( 7.0 ) );
+    pad1.SetDrillSizeX( pcbIUScale.mmToIU( 3.5 ) );
+    pad1.SetDrillSizeY( pcbIUScale.mmToIU( 3.5 ) );
+    vp.Merge( pad1.GetBoundingBox() );
+
+    PAD pad2( nullptr );
+    pad2.SetX( pcbIUScale.mmToIU( 87.125 ) );
+    pad2.SetY( pcbIUScale.mmToIU( 66.0 ) );
+    pad2.SetSizeX( pcbIUScale.mmToIU( 0.8 ) );
+    pad2.SetSizeY( pcbIUScale.mmToIU( 0.8 ) );
+    pad2.SetDrillSizeX( pcbIUScale.mmToIU( 0.5 ) );
+    pad2.SetDrillSizeY( pcbIUScale.mmToIU( 0.5 ) );
+    vp.Merge( pad2.GetBoundingBox() );
+
+    SHAPE_POLY_SET pad1Outline;
+    SHAPE_POLY_SET pad1Hole;
+
+    pad1.TransformShapeToPolygon( pad1Outline, UNDEFINED_LAYER, 0, 4, ERROR_OUTSIDE );
+    pad1.TransformHoleToPolygon( pad1Hole, 0, 4, ERROR_INSIDE );
+    pad1Outline.AddHole( pad1Hole.Outline( 0 ), 0 );
+
+    SHAPE_POLY_SET pad2Outline;
+
+    // pad2.TransformShapeToPolygon( pad2Outline, UNDEFINED_LAYER, 0, 4, ERROR_OUTSIDE );
+    pad2.TransformHoleToPolygon( pad2Outline, 0, 4, ERROR_INSIDE );
+
+    SHAPE_POLY_SET xorPad1ToPad2 = pad1Outline;
+
+    xorPad1ToPad2.BooleanXor( pad2Outline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    xorPad1ToPad2.Move( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ) );
+
+    SHAPE_POLY_SET andPad1ToPad2 = pad2Outline;
+
+    andPad1ToPad2.BooleanIntersection( pad1Outline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    andPad1ToPad2.Move( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ) );
+
+    std::shared_ptr<SHAPE_SEGMENT> slot = pad2.GetEffectiveHoleShape();
+
     printf("Read %zu arcs\n", arcs.size() );
 
     LABEL_MANAGER labelMgr( frame->GetPanel()->GetGAL() );
     frame->GetPanel()->GetView()->SetViewport( BOX2D( vp.GetOrigin(), vp.GetSize() ) );
 
-    for(int i = 0; i < arcs.size(); i+= 2)
+    for( int i = 0; i < arcs.size(); i+= 2 )
     {
         SEG closestDist;
         std::vector<VECTOR2I> ips;
@@ -220,6 +354,35 @@ int playground_main_func( int argc, char* argv[] )
         overlay->Arc( arcs[i + 1] );
     }
 
+    overlay->SetLineWidth( 2000 );
+    overlay->SetStrokeColor( CYAN );
+    overlay->AnnotatedPolyset( pad1Outline, "Raw Pads" );
+    overlay->SetStrokeColor( RED );
+    overlay->AnnotatedPolyset( pad2Outline );
+    overlay->SetStrokeColor( CYAN );
+    overlay->AnnotatedPolyset( xorPad1ToPad2, "XOR Pads" );
+    overlay->AnnotatedPolyset( andPad1ToPad2, "AND Pads" );
+
+    wxLogDebug( wxS( "Pad 1 has %d outlines." ),
+                pad1Outline.OutlineCount() );
+
+    wxLogDebug( wxS( "Pad 2 has %d outlines." ),
+                pad2Outline.OutlineCount() );
+
+    VECTOR2I pt1, pt2;
+    int dist = std::numeric_limits<int>::max();
+
+    collide( pad1Outline, pad2Outline.Outline( 0 ), dist, &dist, &pt1 );
+
+    wxLogDebug( wxS( "Nearest distance between pad 1 and pad 2 is %0.6f mm at X=%0.6f mm, "
+                     "Y=%0.6f mm." ),
+                pcbIUScale.IUTomm( dist ), pcbIUScale.IUTomm( pt1.x ),
+                pcbIUScale.IUTomm( pt1.y ) );
+
+    overlay->SetStrokeColor( YELLOW );
+    overlay->SetGlyphSize( { 100000, 100000 } );
+    overlay->BitmapText( wxString::Format( "dist=%0.3f mm", pcbIUScale.IUTomm( dist ) ),
+                         pt1 + VECTOR2I( 0, -56000 ), ANGLE_HORIZONTAL );
 
     overlay = nullptr;
 

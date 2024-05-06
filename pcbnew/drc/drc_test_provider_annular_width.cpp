@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2022, 2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,108 @@
     - check pad holes too.
     - pad stack support (different IAR/OAR values depending on layer)
 */
+
+/**
+ * Find the nearest collision point between two shape line chains.
+ *
+ * @note This collision test only tests the shape line chain segments (outline) by setting the
+ *       shape closed status to false.
+ *
+ * @param aLhs is the left hand shape line chain to run the collision test on.
+ * @param aRhs is the right hand shape line chain the run the collision test against \a aLhs.
+ * @param aClearance is the collision clearance between the two shape line changes.
+ * @param[out] aDistance is an optional pointer to store the nearest collision distance.
+ * @param[out] aPt1 is an optional pointer to store the nearest collision point.
+ * @retrun true if a collision occurs between \a aLhs and \a aRhs otherwise false.
+ */
+static inline bool collide( const SHAPE_LINE_CHAIN& aLhs, const SHAPE_LINE_CHAIN& aRhs,
+                            int aClearance, int* aDistance = nullptr, VECTOR2I* aPt1 = nullptr )
+{
+    wxCHECK( aLhs.PointCount() && aRhs.PointCount(), false );
+
+    VECTOR2I pt1;
+    bool retv = false;
+    int dist = std::numeric_limits<int>::max();
+    int tmp = dist;
+
+    SHAPE_LINE_CHAIN lhs( aLhs );
+    SHAPE_LINE_CHAIN rhs( aRhs );
+
+    lhs.SetClosed( false );
+    lhs.Append( lhs.CPoint( 0 ) );
+    rhs.SetClosed( false );
+    rhs.Append( rhs.CPoint( 0 ) );
+
+    for( int i = 0; i < rhs.SegmentCount(); i ++ )
+    {
+        if( lhs.Collide( rhs.CSegment( i ), tmp, &tmp, &pt1 ) )
+        {
+            retv = true;
+
+            if( tmp < dist )
+                dist = tmp;
+
+            if( aDistance )
+                *aDistance = dist;
+
+            if( aPt1 )
+                *aPt1 = pt1;
+        }
+    }
+
+    return retv;
+}
+
+
+static bool collide( const SHAPE_POLY_SET& aLhs, const SHAPE_LINE_CHAIN& aRhs, int aClearance,
+                     int* aDistance = nullptr, VECTOR2I* aPt1 = nullptr )
+{
+    VECTOR2I pt1;
+    bool retv = false;
+    int tmp = std::numeric_limits<int>::max();
+    int dist = tmp;
+
+    for( int i = 0; i < aLhs.OutlineCount(); i++ )
+    {
+        if( collide( aLhs.Outline( i ), aRhs, aClearance, &tmp, &pt1 ) )
+        {
+            retv = true;
+
+            if( tmp < dist )
+            {
+                dist = tmp;
+
+                if( aDistance )
+                    *aDistance = dist;
+
+                if( aPt1 )
+                    *aPt1 = pt1;
+            }
+        }
+
+        for( int j = 0; j < aLhs.HoleCount( i ); i++ )
+        {
+            if( collide( aLhs.CHole( i, j ), aRhs, aClearance, &tmp, &pt1 ) )
+            {
+                retv = true;
+
+                if( tmp < dist )
+                {
+                    dist = tmp;
+
+                    if( aDistance )
+                        *aDistance = dist;
+
+                    if( aPt1 )
+                        *aPt1 = pt1;
+                }
+            }
+        }
+    }
+
+    return retv;
+}
+
 
 class DRC_TEST_PROVIDER_ANNULAR_WIDTH : public DRC_TEST_PROVIDER
 {
@@ -159,13 +261,25 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     if( !pad->HasHole() || pad->GetAttribute() != PAD_ATTRIB::PTH )
                         return true;
 
+                    std::vector<const PAD*> sameNumPads;
+
+                    const FOOTPRINT* fp = static_cast<const FOOTPRINT*>( pad->GetParent() );
+
+                    if( fp )
+                        sameNumPads = fp->GetPads( pad->GetNumber(), pad );
+
                     if( pad->GetOffset() == VECTOR2I( 0, 0 ) )
                     {
                         switch( pad->GetShape() )
                         {
                         case PAD_SHAPE::CIRCLE:
                             annularWidth = ( pad->GetSizeX() - pad->GetDrillSizeX() ) / 2;
-                            handled = true;
+
+                            // If there are more pads with the same number.  Check to see if the
+                            // pad is embedded inside another pad with the same number below.
+                            if( sameNumPads.empty() )
+                                handled = true;
+
                             break;
 
                         case PAD_SHAPE::CHAMFERED_RECT:
@@ -179,7 +293,12 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         case PAD_SHAPE::ROUNDRECT:
                             annularWidth = std::min( pad->GetSizeX() - pad->GetDrillSizeX(),
                                                      pad->GetSizeY() - pad->GetDrillSizeY() ) / 2;
-                            handled = true;
+
+                            // If there are more pads with the same number.  Check to see if the
+                            // pad is embedded inside another pad with the same number below.
+                            if( sameNumPads.empty() )
+                                handled = true;
+
                             break;
 
                         default:
@@ -190,25 +309,79 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     if( !handled )
                     {
                         // Slow (but general purpose) method.
+                        SEG::ecoord dist_sq;
                         SHAPE_POLY_SET padOutline;
+                        std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
 
                         pad->TransformShapeToPolygon( padOutline, UNDEFINED_LAYER, 0, maxError,
                                                       ERROR_INSIDE );
 
-                        if( !padOutline.Collide( pad->GetPosition() ) )
+                        if( sameNumPads.empty() )
                         {
-                            // Hole outside pad
-                            annularWidth = 0;
+                            if( !padOutline.Collide( pad->GetPosition() ) )
+                            {
+                                // Hole outside pad
+                                annularWidth = 0;
+                            }
+                            else
+                            {
+                                // Disable is-inside test in SquaredDistance
+                                padOutline.Outline( 0 ).SetClosed( false );
+
+                                dist_sq = padOutline.SquaredDistanceToSeg( slot->GetSeg() );
+                                annularWidth = sqrt( dist_sq ) - slot->GetWidth() / 2;
+                            }
                         }
                         else
                         {
-                            std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
+                            SHAPE_POLY_SET otherPadOutline;
+                            SHAPE_POLY_SET slotPolygon;
 
-                            // Disable is-inside test in SquaredDistance
-                            padOutline.Outline( 0 ).SetClosed( false );
+                            slot->TransformToPolygon( slotPolygon, 0, ERROR_INSIDE );
 
-                            SEG::ecoord dist_sq = padOutline.SquaredDistanceToSeg( slot->GetSeg() );
-                            annularWidth = sqrt( dist_sq ) -  slot->GetWidth() / 2;
+                            for( const PAD* sameNumPad : sameNumPads )
+                            {
+                                // Construct the full pad with outline and hole.
+                                sameNumPad->TransformShapeToPolygon( otherPadOutline,
+                                                                     UNDEFINED_LAYER, 0, maxError,
+                                                                     ERROR_OUTSIDE );
+
+                                sameNumPad->TransformHoleToPolygon( otherPadOutline, 0, maxError,
+                                                                    ERROR_INSIDE );
+
+
+                                // If the pad hole under test intersects with another pad outline,
+                                // the annular width calculated above is used.
+                                bool intersects = false;
+
+                                for( int i = 0; i < otherPadOutline.OutlineCount() && !intersects; i++ )
+                                {
+                                    intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.COutline( i ) );
+                                    if( intersects )
+                                        continue;
+
+                                    for( int j = 0; j < otherPadOutline.HoleCount( i ) && !intersects; j++ )
+                                    {
+                                        intersects |= slotPolygon.COutline( 0 ).Intersects( otherPadOutline.CHole( i, j ) );
+                                        if( intersects )
+                                            continue;
+                                    }
+                                }
+
+                                if( intersects )
+                                    continue;
+
+                                // Determine the effective annular width if the pad hole under
+                                // test lies withing the boundary of another pad outline.
+                                int effectiveWidth = std::numeric_limits<int>::max();
+
+                                if( collide( otherPadOutline, slotPolygon.Outline( 0 ),
+                                             effectiveWidth, &effectiveWidth ) )
+                                {
+                                    if( effectiveWidth > annularWidth )
+                                        annularWidth = effectiveWidth;
+                                }
+                            }
                         }
                     }
 
