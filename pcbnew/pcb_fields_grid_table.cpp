@@ -23,7 +23,7 @@
 
 #include <kiway_player.h>
 #include <project.h>
-#include <fp_text_grid_table.h>
+#include <pcb_fields_grid_table.h>
 #include <widgets/grid_combobox.h>
 #include <trigo.h>
 #include <pcb_base_frame.h>
@@ -42,7 +42,7 @@ enum
 wxArrayString g_menuOrientations;
 
 
-FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog ) :
+PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_fieldNameValidator( FIELD_NAME ),
@@ -102,11 +102,11 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDi
 
     m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
-    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PCB_FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
 
 
-FP_TEXT_GRID_TABLE::~FP_TEXT_GRID_TABLE()
+PCB_FIELDS_GRID_TABLE::~PCB_FIELDS_GRID_TABLE()
 {
     m_readOnlyAttr->DecRef();
     m_boolColAttr->DecRef();
@@ -117,11 +117,11 @@ FP_TEXT_GRID_TABLE::~FP_TEXT_GRID_TABLE()
     m_footprintAttr->DecRef();
     m_urlAttr->DecRef();
 
-    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
+    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PCB_FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
 
 
-void FP_TEXT_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
+void PCB_FIELDS_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
 {
     if( GetView() )
         GetView()->ForceRefresh();
@@ -130,51 +130,51 @@ void FP_TEXT_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
 }
 
 
-wxString FP_TEXT_GRID_TABLE::GetColLabelValue( int aCol )
+wxString PCB_FIELDS_GRID_TABLE::GetColLabelValue( int aCol )
 {
     switch( aCol )
     {
-    case FPT_NAME:        return _( "Name" );
-    case FPT_VALUE:       return _( "Value" );
-    case FPT_SHOWN:       return _( "Show" );
-    case FPT_WIDTH:       return _( "Width" );
-    case FPT_HEIGHT:      return _( "Height" );
-    case FPT_THICKNESS:   return _( "Thickness" );
-    case FPT_ITALIC:      return _( "Italic" );
-    case FPT_LAYER:       return _( "Layer" );
-    case FPT_ORIENTATION: return _( "Orientation" );
-    case FPT_UPRIGHT:     return _( "Keep Upright" );
-    case FPT_XOFFSET:     return _( "X Offset" );
-    case FPT_YOFFSET:     return _( "Y Offset" );
-    case FPT_KNOCKOUT:    return _( "Knockout" );
-    case FPT_MIRRORED:    return _( "Mirrored" );
+    case PFC_NAME:        return _( "Name" );
+    case PFC_VALUE:       return _( "Value" );
+    case PFC_SHOWN:       return _( "Show" );
+    case PFC_WIDTH:       return _( "Width" );
+    case PFC_HEIGHT:      return _( "Height" );
+    case PFC_THICKNESS:   return _( "Thickness" );
+    case PFC_ITALIC:      return _( "Italic" );
+    case PFC_LAYER:       return _( "Layer" );
+    case PFC_ORIENTATION: return _( "Orientation" );
+    case PFC_UPRIGHT:     return _( "Keep Upright" );
+    case PFC_XOFFSET:     return _( "X Offset" );
+    case PFC_YOFFSET:     return _( "Y Offset" );
+    case PFC_KNOCKOUT:    return _( "Knockout" );
+    case PFC_MIRRORED:    return _( "Mirrored" );
     default:              wxFAIL; return wxEmptyString;
     }
 }
 
 
-bool FP_TEXT_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
+bool PCB_FIELDS_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
 {
     switch( aCol )
     {
-    case FPT_NAME:
-    case FPT_VALUE:
-    case FPT_WIDTH:
-    case FPT_HEIGHT:
-    case FPT_THICKNESS:
-    case FPT_ORIENTATION:
-    case FPT_XOFFSET:
-    case FPT_YOFFSET:
+    case PFC_NAME:
+    case PFC_VALUE:
+    case PFC_WIDTH:
+    case PFC_HEIGHT:
+    case PFC_THICKNESS:
+    case PFC_ORIENTATION:
+    case PFC_XOFFSET:
+    case PFC_YOFFSET:
         return aTypeName == wxGRID_VALUE_STRING;
 
-    case FPT_SHOWN:
-    case FPT_ITALIC:
-    case FPT_UPRIGHT:
-    case FPT_KNOCKOUT:
-    case FPT_MIRRORED:
+    case PFC_SHOWN:
+    case PFC_ITALIC:
+    case PFC_UPRIGHT:
+    case PFC_KNOCKOUT:
+    case PFC_MIRRORED:
         return aTypeName == wxGRID_VALUE_BOOL;
 
-    case FPT_LAYER:
+    case PFC_LAYER:
         return aTypeName == wxGRID_VALUE_NUMBER;
 
     default:
@@ -184,17 +184,17 @@ bool FP_TEXT_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTyp
 }
 
 
-bool FP_TEXT_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
+bool PCB_FIELDS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
 {
     return CanGetValueAs( aRow, aCol, aTypeName );
 }
 
 
-wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
+wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
 {
     switch( aCol )
     {
-    case FPT_NAME:
+    case PFC_NAME:
         if( aRow < MANDATORY_FIELDS )
         {
             m_readOnlyAttr->IncRef();
@@ -203,7 +203,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 
         return nullptr;
 
-    case FPT_VALUE:
+    case PFC_VALUE:
         if( aRow == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
@@ -227,26 +227,26 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 
         return nullptr;
 
-    case FPT_WIDTH:
-    case FPT_HEIGHT:
-    case FPT_THICKNESS:
-    case FPT_XOFFSET:
-    case FPT_YOFFSET:
+    case PFC_WIDTH:
+    case PFC_HEIGHT:
+    case PFC_THICKNESS:
+    case PFC_XOFFSET:
+    case PFC_YOFFSET:
         return nullptr;
 
-    case FPT_SHOWN:
-    case FPT_ITALIC:
-    case FPT_UPRIGHT:
-    case FPT_KNOCKOUT:
-    case FPT_MIRRORED:
+    case PFC_SHOWN:
+    case PFC_ITALIC:
+    case PFC_UPRIGHT:
+    case PFC_KNOCKOUT:
+    case PFC_MIRRORED:
         m_boolColAttr->IncRef();
         return m_boolColAttr;
 
-    case FPT_LAYER:
+    case PFC_LAYER:
         m_layerColAttr->IncRef();
         return m_layerColAttr;
 
-    case FPT_ORIENTATION:
+    case PFC_ORIENTATION:
         m_orientationColAttr->IncRef();
         return m_orientationColAttr;
 
@@ -257,7 +257,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 }
 
 
-wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
+wxString PCB_FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
 {
     wxGrid*          grid = GetView();
     const PCB_FIELD& field = this->at( (size_t) aRow );
@@ -273,21 +273,21 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 
     switch( aCol )
     {
-    case FPT_NAME:       return field.GetName();
-    case FPT_VALUE:      return field.GetText();
-    case FPT_WIDTH:      return m_frame->StringFromValue( field.GetTextWidth(), true );
-    case FPT_HEIGHT:     return m_frame->StringFromValue( field.GetTextHeight(), true );
-    case FPT_THICKNESS:  return m_frame->StringFromValue( field.GetTextThickness(), true );
-    case FPT_LAYER:      return field.GetLayerName();
+    case PFC_NAME:       return field.GetName();
+    case PFC_VALUE:      return field.GetText();
+    case PFC_WIDTH:      return m_frame->StringFromValue( field.GetTextWidth(), true );
+    case PFC_HEIGHT:     return m_frame->StringFromValue( field.GetTextHeight(), true );
+    case PFC_THICKNESS:  return m_frame->StringFromValue( field.GetTextThickness(), true );
+    case PFC_LAYER:      return field.GetLayerName();
 
-    case FPT_ORIENTATION:
+    case PFC_ORIENTATION:
     {
         EDA_ANGLE angle = field.GetTextAngle() - field.GetParentFootprint()->GetOrientation();
         return m_frame->StringFromValue( angle, true );
     }
 
-    case FPT_XOFFSET:    return m_frame->StringFromValue( field.GetFPRelativePosition().x, true );
-    case FPT_YOFFSET:    return m_frame->StringFromValue( field.GetFPRelativePosition().y, true );
+    case PFC_XOFFSET:    return m_frame->StringFromValue( field.GetFPRelativePosition().x, true );
+    case PFC_YOFFSET:    return m_frame->StringFromValue( field.GetFPRelativePosition().y, true );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
@@ -297,17 +297,17 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 }
 
 
-bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
+bool PCB_FIELDS_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
     PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
-    case FPT_SHOWN:    return field.IsVisible();
-    case FPT_ITALIC:   return field.IsItalic();
-    case FPT_UPRIGHT:  return field.IsKeepUpright();
-    case FPT_KNOCKOUT: return field.IsKnockout();
-    case FPT_MIRRORED: return field.IsMirrored();
+    case PFC_SHOWN:    return field.IsVisible();
+    case PFC_ITALIC:   return field.IsItalic();
+    case PFC_UPRIGHT:  return field.IsKeepUpright();
+    case PFC_KNOCKOUT: return field.IsKnockout();
+    case PFC_MIRRORED: return field.IsMirrored();
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
@@ -316,13 +316,13 @@ bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 }
 
 
-long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
+long PCB_FIELDS_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 {
     PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
-    case FPT_LAYER: return field.GetLayer();
+    case PFC_LAYER: return field.GetLayer();
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a long value" ), aCol ) );
@@ -331,7 +331,7 @@ long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 }
 
 
-void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
+void PCB_FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
     PCB_FIELD& field = this->at( (size_t) aRow );
     VECTOR2I  pos;
@@ -339,11 +339,11 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
     switch( aCol )
     {
-    case FPT_WIDTH:
-    case FPT_HEIGHT:
-    case FPT_THICKNESS:
-    case FPT_XOFFSET:
-    case FPT_YOFFSET:
+    case PFC_WIDTH:
+    case PFC_HEIGHT:
+    case PFC_THICKNESS:
+    case PFC_XOFFSET:
+    case PFC_YOFFSET:
         m_eval->SetDefaultUnits( m_frame->GetUserUnits() );
 
         if( m_eval->Process( value ) )
@@ -360,22 +360,22 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
     switch( aCol )
     {
-    case FPT_NAME:       field.SetName( value );                                       break;
-    case FPT_VALUE:      field.SetText( value );                                       break;
-    case FPT_WIDTH:      field.SetTextWidth( m_frame->ValueFromString( value ) );      break;
-    case FPT_HEIGHT:     field.SetTextHeight( m_frame->ValueFromString( value ) );     break;
-    case FPT_THICKNESS:  field.SetTextThickness( m_frame->ValueFromString( value ) );  break;
+    case PFC_NAME:       field.SetName( value );                                       break;
+    case PFC_VALUE:      field.SetText( value );                                       break;
+    case PFC_WIDTH:      field.SetTextWidth( m_frame->ValueFromString( value ) );      break;
+    case PFC_HEIGHT:     field.SetTextHeight( m_frame->ValueFromString( value ) );     break;
+    case PFC_THICKNESS:  field.SetTextThickness( m_frame->ValueFromString( value ) );  break;
 
-    case FPT_ORIENTATION:
+    case PFC_ORIENTATION:
         field.SetTextAngle( m_frame->AngleValueFromString( value )
                             + field.GetParentFootprint()->GetOrientation() );
         break;
 
-    case FPT_XOFFSET:
-    case FPT_YOFFSET:
+    case PFC_XOFFSET:
+    case PFC_YOFFSET:
         pos = field.GetFPRelativePosition();
 
-        if( aCol == FPT_XOFFSET )
+        if( aCol == PFC_XOFFSET )
             pos.x = m_frame->ValueFromString( value );
         else
             pos.y = m_frame->ValueFromString( value );
@@ -392,17 +392,17 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 }
 
 
-void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
+void PCB_FIELDS_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
     PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
-    case FPT_SHOWN:     field.SetVisible( aValue );      break;
-    case FPT_ITALIC:    field.SetItalic( aValue );       break;
-    case FPT_UPRIGHT:   field.SetKeepUpright( aValue );  break;
-    case FPT_KNOCKOUT:  field.SetIsKnockout( aValue );   break;
-    case FPT_MIRRORED:  field.SetMirrored( aValue );     break;
+    case PFC_SHOWN:     field.SetVisible( aValue );      break;
+    case PFC_ITALIC:    field.SetItalic( aValue );       break;
+    case PFC_UPRIGHT:   field.SetKeepUpright( aValue );  break;
+    case PFC_KNOCKOUT:  field.SetIsKnockout( aValue );   break;
+    case PFC_MIRRORED:  field.SetMirrored( aValue );     break;
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
@@ -411,13 +411,13 @@ void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 }
 
 
-void FP_TEXT_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
+void PCB_FIELDS_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
 {
     PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
-    case FPT_LAYER:
+    case PFC_LAYER:
         field.SetLayer( ToLAYER_ID( (int) aValue ) );
         field.SetMirrored( IsBackLayer( field.GetLayer() ) );
         break;

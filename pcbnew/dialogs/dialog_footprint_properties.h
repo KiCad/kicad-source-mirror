@@ -29,7 +29,7 @@
 
 #include <dialog_footprint_properties_base.h>
 #include <wx/valnum.h>
-#include <fp_text_grid_table.h>
+#include <pcb_fields_grid_table.h>
 #include <footprint.h>
 #include <widgets/unit_binder.h>
 
@@ -82,7 +82,7 @@ private:
 
     static int                       m_page;       // remember the last open page during session
 
-    FP_TEXT_GRID_TABLE*              m_fields;
+    PCB_FIELDS_GRID_TABLE*           m_fields;
     UNIT_BINDER                      m_posX;
     UNIT_BINDER                      m_posY;
     UNIT_BINDER                      m_orientation;

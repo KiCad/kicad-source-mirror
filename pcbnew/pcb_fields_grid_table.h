@@ -33,35 +33,35 @@
 
 class PCB_BASE_FRAME;
 
-enum FP_TEXT_COL_ORDER
+enum PCB_FIELDS_COL_ORDER
 {
-    FPT_NAME,
-    FPT_VALUE,
-    FPT_SHOWN,
-    FPT_WIDTH,
-    FPT_HEIGHT,
-    FPT_THICKNESS,
-    FPT_ITALIC,
-    FPT_LAYER,
-    FPT_ORIENTATION,
-    FPT_UPRIGHT,       // keep text upright when viewed from bottom or right of board
-    FPT_XOFFSET,
-    FPT_YOFFSET,
-    FPT_KNOCKOUT,
-    FPT_MIRRORED,
+    PFC_NAME,
+    PFC_VALUE,
+    PFC_SHOWN,
+    PFC_WIDTH,
+    PFC_HEIGHT,
+    PFC_THICKNESS,
+    PFC_ITALIC,
+    PFC_LAYER,
+    PFC_ORIENTATION,
+    PFC_UPRIGHT,       // keep text upright when viewed from bottom or right of board
+    PFC_XOFFSET,
+    PFC_YOFFSET,
+    PFC_KNOCKOUT,
+    PFC_MIRRORED,
 
-    FPT_COUNT          // keep as last
+    PFC_COUNT          // keep as last
 };
 
 
-class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_FIELD>
+class PCB_FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_FIELD>
 {
 public:
-    FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog );
-    ~FP_TEXT_GRID_TABLE();
+    PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog );
+    ~PCB_FIELDS_GRID_TABLE();
 
     int GetNumberRows() override { return (int) size(); }
-    int GetNumberCols() override { return FPT_COUNT; }
+    int GetNumberCols() override { return PFC_COUNT; }
 
     wxString GetColLabelValue( int aCol ) override;
 

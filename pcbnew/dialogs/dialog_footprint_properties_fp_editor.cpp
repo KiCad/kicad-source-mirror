@@ -142,7 +142,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
     m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
 
-    m_fields = new FP_TEXT_GRID_TABLE( m_frame, this );
+    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this );
     m_privateLayers = new PRIVATE_LAYERS_GRID_TABLE( m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
@@ -361,7 +361,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
         // Adjust the column size.
         int col_size = m_itemsGrid->GetVisibleWidth( col );
 
-        if( col == FPT_LAYER )  // This one's a drop-down.  Check all possible values.
+        if( col == PFC_LAYER )  // This one's a drop-down.  Check all possible values.
         {
             BOARD* board = m_footprint->GetBoard();
 
@@ -435,7 +435,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Fields must have a name." ) );
-            m_delayedFocusColumn = FPT_NAME;
+            m_delayedFocusColumn = PFC_NAME;
             m_delayedFocusRow = i;
 
             return false;
@@ -450,7 +450,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
             m_delayedErrorMessage = wxString::Format( _( "The text width must be between %s and %s." ),
                                                       m_frame->StringFromValue( minSize, true ),
                                                       m_frame->StringFromValue( maxSize, true ) );
-            m_delayedFocusColumn = FPT_WIDTH;
+            m_delayedFocusColumn = PFC_WIDTH;
             m_delayedFocusRow = i;
 
             return false;
@@ -462,7 +462,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
             m_delayedErrorMessage = wxString::Format( _( "The text height must be between %s and %s." ),
                                                       m_frame->StringFromValue( minSize, true ),
                                                       m_frame->StringFromValue( maxSize, true ) );
-            m_delayedFocusColumn = FPT_HEIGHT;
+            m_delayedFocusColumn = PFC_HEIGHT;
             m_delayedFocusRow = i;
 
             return false;
@@ -473,13 +473,13 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
 
         if( field.GetTextThickness() > maxPenWidth )
         {
-            m_itemsGrid->SetCellValue( i, FPT_THICKNESS,
+            m_itemsGrid->SetCellValue( i, PFC_THICKNESS,
                                        m_frame->StringFromValue( maxPenWidth, true ) );
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = _( "The text thickness is too large for the text size.\n"
                                        "It will be clamped." );
-            m_delayedFocusColumn = FPT_THICKNESS;
+            m_delayedFocusColumn = PFC_THICKNESS;
             m_delayedFocusRow = i;
 
             return false;

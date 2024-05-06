@@ -26,7 +26,7 @@
 #define DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_H
 
 #include <vector>
-#include <fp_text_grid_table.h>
+#include <pcb_fields_grid_table.h>
 #include <widgets/unit_binder.h>
 #include <footprint.h>
 #include <dialog_footprint_properties_fp_editor_base.h>
@@ -102,7 +102,7 @@ private:
 
     static NOTEBOOK_PAGES      m_page;       // remember the last open page during session
 
-    FP_TEXT_GRID_TABLE*        m_fields;
+    PCB_FIELDS_GRID_TABLE*     m_fields;
     PRIVATE_LAYERS_GRID_TABLE* m_privateLayers;
 
     UNIT_BINDER                m_netClearance;

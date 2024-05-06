@@ -79,7 +79,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    m_fields = new FP_TEXT_GRID_TABLE( m_frame, this );
+    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusGrid = nullptr;
@@ -346,7 +346,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
         // Adjust the column size.
         int col_size = m_itemsGrid->GetVisibleWidth( col );
 
-        if( col == FPT_LAYER )  // This one's a drop-down.  Check all possible values.
+        if( col == PFC_LAYER )  // This one's a drop-down.  Check all possible values.
         {
             BOARD* board = m_footprint->GetBoard();
 
@@ -388,7 +388,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Fields must have a name." ) );
-            m_delayedFocusColumn = FPT_NAME;
+            m_delayedFocusColumn = PFC_NAME;
             m_delayedFocusRow = i;
 
             return false;
@@ -396,18 +396,18 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
 
         int minSize = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
         int maxSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
-        int width = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_WIDTH ) );
-        int height = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_HEIGHT ) );
+        int width = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, PFC_WIDTH ) );
+        int height = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, PFC_HEIGHT ) );
 
         if( width < minSize )
         {
             wxString min = m_frame->StringFromValue( minSize, true );
 
-            m_itemsGrid->SetCellValue( i, FPT_WIDTH, min );
+            m_itemsGrid->SetCellValue( i, PFC_WIDTH, min );
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Text width must be at least %s." ), min );
-            m_delayedFocusColumn = FPT_WIDTH;
+            m_delayedFocusColumn = PFC_WIDTH;
             m_delayedFocusRow = i;
 
             return false;
@@ -416,11 +416,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         {
             wxString max = m_frame->StringFromValue( maxSize, true );
 
-            m_itemsGrid->SetCellValue( i, FPT_WIDTH, max );
+            m_itemsGrid->SetCellValue( i, PFC_WIDTH, max );
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Text width must be at most %s." ), max );
-            m_delayedFocusColumn = FPT_WIDTH;
+            m_delayedFocusColumn = PFC_WIDTH;
             m_delayedFocusRow = i;
 
             return false;
@@ -430,11 +430,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         {
             wxString min = m_frame->StringFromValue( minSize, true );
 
-            m_itemsGrid->SetCellValue( i, FPT_HEIGHT, min );
+            m_itemsGrid->SetCellValue( i, PFC_HEIGHT, min );
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Text height must be at least %s." ), min );
-            m_delayedFocusColumn = FPT_HEIGHT;
+            m_delayedFocusColumn = PFC_HEIGHT;
             m_delayedFocusRow = i;
 
             return false;
@@ -443,11 +443,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         {
             wxString max = m_frame->StringFromValue( maxSize, true );
 
-            m_itemsGrid->SetCellValue( i, FPT_HEIGHT, max );
+            m_itemsGrid->SetCellValue( i, PFC_HEIGHT, max );
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Text height must be at most %s." ), max );
-            m_delayedFocusColumn = FPT_HEIGHT;
+            m_delayedFocusColumn = PFC_HEIGHT;
             m_delayedFocusRow = i;
 
             return false;
@@ -460,14 +460,14 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         {
             wxString clamped = m_frame->StringFromValue( maxPenWidth, true );
 
-            m_itemsGrid->SetCellValue( i, FPT_THICKNESS, clamped );
+            m_itemsGrid->SetCellValue( i, PFC_THICKNESS, clamped );
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Text thickness is too large for the "
                                                          "text size.\n"
                                                          "It will be clamped at %s." ),
                                                       clamped );
-            m_delayedFocusColumn = FPT_THICKNESS;
+            m_delayedFocusColumn = PFC_THICKNESS;
             m_delayedFocusRow = i;
 
             return false;
