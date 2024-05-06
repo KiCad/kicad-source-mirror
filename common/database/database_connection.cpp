@@ -390,15 +390,14 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
                                         columnsFor( tableName ),
                                         m_quoteChar, tableName, m_quoteChar,
                                         m_quoteChar, columnName, m_quoteChar );
-
-    nanodbc::statement statement( *m_conn );
     nanodbc::string query = fromUTF8( queryStr );
 
     PROF_TIMER timer;
+    nanodbc::statement statement;
 
     try
     {
-        statement.prepare( query );
+        statement.prepare( *m_conn, query );
         statement.bind( 0, aWhere.second.c_str() );
     }
     catch( nanodbc::database_error& e )
