@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,7 +160,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertice
 
     std::unique_ptr<PCB_SHAPE> polygon = std::make_unique<PCB_SHAPE>( m_parent );
     polygon->SetShape( SHAPE_T::POLY );
-    polygon->SetFilled( GetLayer() != Edge_Cuts );
+    polygon->SetFilled( aFilled );
     polygon->SetLayer( GetLayer() );
     polygon->SetPolyPoints( convertedPoints );
 
