@@ -262,6 +262,11 @@ wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
     mantissa *= std::pow( 10, scale - aFormat.Precision + 1 );
 
     wxString res = wxString::FromCDouble( mantissa, std::max( 0, aFormat.Precision - scale - 1 ) );
+
+    // If we have an excessively long number, switch to scientific notation
+    if( ssize_t( res.length() ) > aFormat.Precision + scale + 1 )
+        res = wxString::FromCDouble( mantissa );
+
     return res + range;
 }
 
