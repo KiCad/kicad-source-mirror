@@ -335,6 +335,10 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
         format = is_eeschema ? wxT( "%.6f" ) : wxT( "%.8f" );
         break;
 
+    case EDA_UNITS::DEGREES:
+        format = wxT( "%.4f" );
+        break;
+
     default:
         format = wxT( "%.10f" );
         break;
