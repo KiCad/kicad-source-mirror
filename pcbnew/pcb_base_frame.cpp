@@ -57,6 +57,7 @@
 #include <math/vector2d.h>
 #include <math/vector2wx.h>
 #include <widgets/msgpanel.h>
+#include <wx/fswatcher.h>
 
 #include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>

@@ -20,6 +20,7 @@
 
 #include "command_pcb_export_3d.h"
 #include <cli/exit_codes.h>
+#include <base_units.h>
 #include <kiface_base.h>
 #include <regex>
 #include <string_utils.h>

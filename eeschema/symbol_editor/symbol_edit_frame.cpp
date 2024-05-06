@@ -79,6 +79,7 @@
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
 #include <wx/msgdlg.h>
+#include <wx/log.h>
 
 
 bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;

@@ -57,8 +57,9 @@
 #include <string_utils.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/mstream.h>
 #include <wx/log.h>
+#include <wx/dir.h>
+#include <wx/mstream.h>
 #include <wx/zstream.h>
 #include <wx/wfstream.h>
 #include <magic_enum.hpp>

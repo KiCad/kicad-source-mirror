@@ -26,6 +26,7 @@
 #include <widgets/panel_footprint_chooser.h>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
+#include <wx/log.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>

@@ -31,6 +31,7 @@
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
+#include <wx/log.h>
 
 
 PANEL_GIT_REPOS::PANEL_GIT_REPOS( wxWindow* aParent ) : PANEL_GIT_REPOS_BASE( aParent)

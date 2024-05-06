@@ -78,6 +78,7 @@
 #include <wx_filename.h>
 #include <sch_sheet_path.h>
 #include <wx/filedlg.h>
+#include <wx/log.h>
 #include <wx/treectrl.h>
 #include <wx/msgdlg.h>
 #include "sch_edit_table_tool.h"

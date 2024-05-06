@@ -30,6 +30,7 @@
 #include <pcb_item_containers.h>
 #include <tool/grid_helper.h>
 
+class SHAPE_ARC;
 class TOOL_MANAGER;
 struct MAGNETIC_SETTINGS;
 struct PCB_SELECTION_FILTER_OPTIONS;

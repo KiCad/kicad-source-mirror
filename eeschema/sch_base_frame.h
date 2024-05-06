@@ -35,7 +35,6 @@
 #include <utility>
 #include <vector>
 #include <wx/event.h>
-#include <wx/fswatcher.h>
 #include <wx/datetime.h>
 #include <wx/gdicmn.h>
 #include <wx/string.h>
@@ -58,6 +57,21 @@ class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
 class NL_SCHEMATIC_PLUGIN;
 class PANEL_SCH_SELECTION_FILTER;
+
+#ifdef wxHAS_INOTIFY
+#define wxFileSystemWatcher wxInotifyFileSystemWatcher
+#elif defined( wxHAS_KQUEUE ) && defined( wxHAVE_FSEVENTS_FILE_NOTIFICATIONS )
+#define wxFileSystemWatcher wxFsEventsFileSystemWatcher
+#elif defined( wxHAS_KQUEUE )
+#define wxFileSystemWatcher wxKqueueFileSystemWatcher
+#elif defined( __WINDOWS__ )
+#define wxFileSystemWatcher wxMSWFileSystemWatcher
+#else
+#define wxFileSystemWatcher wxPollingFileSystemWatcher
+#endif
+
+class wxFileSystemWatcher;
+class wxFileSystemWatcherEvent;
 
 /**
  * Load symbol from symbol library table.

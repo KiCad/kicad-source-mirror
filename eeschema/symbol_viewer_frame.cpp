@@ -61,6 +61,7 @@
 #include <tools/ee_inspection_tool.h>
 #include <view/view_controls.h>
 #include <wx/srchctrl.h>
+#include <wx/log.h>
 
 #include <default_values.h>
 #include <string_utils.h>

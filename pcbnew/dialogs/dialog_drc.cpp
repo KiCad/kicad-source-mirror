@@ -41,6 +41,7 @@
 #include <wildcards_and_files_ext.h>
 #include <pcb_marker.h>
 #include <pgm_base.h>
+#include <wx/app.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/wupdlock.h>

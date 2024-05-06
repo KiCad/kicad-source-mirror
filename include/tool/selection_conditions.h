@@ -30,7 +30,8 @@
 #include <functional>
 #include <core/typeinfo.h>
 #include <vector>
-#include <tool/selection.h>
+
+class SELECTION;
 
 ///< Functor type that checks a specific condition for selected items.
 typedef std::function<bool (const SELECTION&)> SELECTION_CONDITION;

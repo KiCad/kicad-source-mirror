@@ -26,10 +26,11 @@
 #ifndef NETLIST_EXPORTER_H
 #define NETLIST_EXPORTER_H
 
-#include <sch_symbol.h>
-#include <sch_label.h>
-#include <sch_sheet.h>
 #include <schematic.h>
+
+class SCH_SYMBOL;
+class LIB_SYMBOL;
+class REPORTER;
 
 /**
  * Track unique wxStrings and is useful in telling if a string has been seen before.

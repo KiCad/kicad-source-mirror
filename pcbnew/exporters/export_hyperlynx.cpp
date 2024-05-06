@@ -38,6 +38,7 @@
 #include <locale_io.h>
 #include <reporter.h>
 #include <exporters/board_exporter_base.h>
+#include <wx/log.h>
 
 static double iu2hyp( double iu )
 {

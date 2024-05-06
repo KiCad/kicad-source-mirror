@@ -43,6 +43,7 @@
 #include <wx/splitter.h>
 #include <wx/timer.h>
 #include <wx/wxhtml.h>
+#include <wx/log.h>
 
 
 wxString PANEL_SYMBOL_CHOOSER::g_symbolSearchString;

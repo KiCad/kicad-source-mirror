@@ -36,6 +36,7 @@
 #include <tools/ee_selection_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <tool/actions.h>
+#include <wx/log.h>
 
 
 /* Functions to undo and redo edit commands.

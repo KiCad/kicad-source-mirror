@@ -39,12 +39,12 @@
 #include <search_stack.h>
 #include <settings/environment.h>
 #include <wx/filename.h>
-#include <wx/snglinst.h>
 
 class wxApp;
 class wxMenu;
 class wxWindow;
 class wxSplashScreen;
+class wxSingleInstanceChecker;
 
 class BACKGROUND_JOBS_MONITOR;
 class NOTIFICATIONS_MANAGER;

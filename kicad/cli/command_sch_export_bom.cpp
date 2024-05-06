@@ -25,6 +25,7 @@
 #include <layer_ids.h>
 #include <string_utils.h>
 #include <wx/crt.h>
+#include <wx/tokenzr.h>
 #include <schematic_settings.h>
 
 #include <macros.h>

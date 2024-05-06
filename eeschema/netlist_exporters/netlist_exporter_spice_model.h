@@ -26,6 +26,8 @@
 
 #include "netlist_exporter_spice.h"
 
+enum LABEL_FLAG_SHAPE : unsigned int;
+
 
 class NETLIST_EXPORTER_SPICE_MODEL : public NETLIST_EXPORTER_SPICE
 {

@@ -29,8 +29,8 @@
 #include <memory>
 #include <math/box2.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/eda_angle.h>
 #include <wx/debug.h>
-#include "../../libs/kimath/include/geometry/eda_angle.h"
 
 #if defined( _MSC_VER )
 #pragma warning( push )

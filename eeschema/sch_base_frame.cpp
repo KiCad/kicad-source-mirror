@@ -49,6 +49,7 @@
 #include <tools/ee_selection_tool.h>
 #include <view/view_controls.h>
 #include <wx/choicdlg.h>
+#include <wx/fswatcher.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
 

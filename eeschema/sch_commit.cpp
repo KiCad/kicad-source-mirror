@@ -35,6 +35,7 @@
 #include <connection_graph.h>
 
 #include <functional>
+#include <wx/log.h>
 
 
 SCH_COMMIT::SCH_COMMIT( TOOL_MANAGER* aToolMgr ) :

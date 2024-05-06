@@ -30,6 +30,8 @@
 #include <wx/wfstream.h>
 #include <wx/stdstream.h>
 #include <wx/debug.h>
+#include <wx/clipbrd.h>
+#include <wx/log.h>
 
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
@@ -50,7 +52,6 @@
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
 #include "kiplatform/app.h"
-#include "wx/clipbrd.h"
 
 
 SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )

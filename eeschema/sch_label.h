@@ -89,7 +89,7 @@ private:
 /*
  * Label and flag shapes used with text objects.
  */
-enum LABEL_FLAG_SHAPE
+enum LABEL_FLAG_SHAPE : unsigned int
 {
     L_INPUT,
     L_OUTPUT,
@@ -107,7 +107,7 @@ enum LABEL_FLAG_SHAPE
 /*
  * Specific enums for property manager (not used elsewhere)
  */
-enum LABEL_SHAPE
+enum LABEL_SHAPE : unsigned int
 {
     LABEL_INPUT    = L_INPUT,
     LABEL_OUTPUT   = L_OUTPUT,
@@ -116,7 +116,7 @@ enum LABEL_SHAPE
     LABEL_PASSIVE  = L_UNSPECIFIED
 };
 
-enum FLAG_SHAPE
+enum FLAG_SHAPE : unsigned int
 {
     FLAG_DOT       = F_DOT,
     FLAG_CIRCLE    = F_ROUND,

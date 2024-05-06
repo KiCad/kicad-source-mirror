@@ -26,6 +26,7 @@
 
 #include <stack>
 #include <wx/filefn.h>
+#include <wx/log.h>
 
 #include <eda_item.h>
 #include <id.h>

@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <tool/conditional_menu.h>
 #include <tool/action_menu.h>
+#include <tool/selection.h>
 #include <kiface_base.h>
 #include <widgets/ui_common.h>
 

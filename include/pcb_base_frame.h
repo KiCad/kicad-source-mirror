@@ -37,7 +37,6 @@
 #include <pcb_screen.h>
 #include <vector>
 
-#include <wx/fswatcher.h>
 #include <wx/datetime.h>
 #include <wx/timer.h>
 
@@ -62,6 +61,21 @@ class FOOTPRINT_EDITOR_SETTINGS;
 struct MAGNETIC_SETTINGS;
 class NL_PCBNEW_PLUGIN;
 class PROGRESS_REPORTER;
+
+#ifdef wxHAS_INOTIFY
+#define wxFileSystemWatcher wxInotifyFileSystemWatcher
+#elif defined( wxHAS_KQUEUE ) && defined( wxHAVE_FSEVENTS_FILE_NOTIFICATIONS )
+#define wxFileSystemWatcher wxFsEventsFileSystemWatcher
+#elif defined( wxHAS_KQUEUE )
+#define wxFileSystemWatcher wxKqueueFileSystemWatcher
+#elif defined( __WINDOWS__ )
+#define wxFileSystemWatcher wxMSWFileSystemWatcher
+#else
+#define wxFileSystemWatcher wxPollingFileSystemWatcher
+#endif
+
+class wxFileSystemWatcher;
+class wxFileSystemWatcherEvent;
 
 wxDECLARE_EVENT( EDA_EVT_BOARD_CHANGED, wxCommandEvent );
 

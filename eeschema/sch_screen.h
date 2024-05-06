@@ -45,12 +45,11 @@
 #include <title_block.h>
 
 #include <lib_id.h>
-#include <sch_symbol.h>         // SCH_SYMBOL_INSTANCE
 #include <sch_reference_list.h>
 #include <sch_rtree.h>
 #include <sch_sheet.h>
 #include <sch_label.h>
-#include <sch_sheet_path.h>
+#include <sch_sheet_path.h>     // SCH_SYMBOL_INSTANCE
 
 class BUS_ALIAS;
 class EDA_ITEM;

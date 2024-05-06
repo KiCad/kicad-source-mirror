@@ -41,6 +41,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <pcb_painter.h>
 #include <wx/msgdlg.h>
+#include <wx/app.h>
 #include <kiplatform/app.h>
 #include "../../scripting/python_scripting.h"
 
