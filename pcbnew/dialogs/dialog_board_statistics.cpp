@@ -342,6 +342,36 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             {
                 for( int j = 0; j < polySet.HoleCount( i ); j++ )
                     m_boardArea -= polySet.Hole( i, j ).Area();
+
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    for( PAD* pad : fp->Pads() )
+                    {
+                        if( !pad->HasHole() )
+                            continue;
+
+                        auto hole = pad->GetEffectiveHoleShape();
+                        const SEG& seg = hole->GetSeg();
+                        double width = hole->GetWidth();
+                        double area = seg.Length() * width;
+
+                        // Each end of the hole is a half-circle, so together, we have one
+                        // full circle.  The area of a circle is pi * r^2, so the area of the
+                        // hole is pi * (d/2)^2 = pi * 1/4 * d^2.
+                        area += M_PI * 0.25 * width * width;
+                        m_boardArea -= area;
+                    }
+                }
+
+                for( PCB_TRACK* track : board->Tracks() )
+                {
+                    if( track->Type() == PCB_VIA_T )
+                    {
+                        PCB_VIA* via = static_cast<PCB_VIA*>( track );
+                        double drill = via->GetDrillValue();
+                        m_boardArea -= M_PI * 0.25 * drill * drill;
+                    }
+                }
             }
         }
 
