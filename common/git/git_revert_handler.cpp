@@ -63,7 +63,8 @@ static int checkout_notify_cb(git_checkout_notify_t why, const char *path,
 void GIT_REVERT_HANDLER::PerformRevert()
 {
     git_object* head_commit = NULL;
-    git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+    git_checkout_options opts;
+    git_checkout_init_options(&opts, GIT_CHECKOUT_OPTIONS_VERSION);
 
     // Get the HEAD commit
     if (git_revparse_single(&head_commit, m_repository, "HEAD") != 0) {

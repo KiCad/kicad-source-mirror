@@ -121,8 +121,6 @@ private:
 
     bool            m_tempRepo;
     wxString        m_tempPath;
-
-    KIGIT_COMMON::GIT_CONN_TYPE m_repoType;
 };
 
 #endif /* DIALOG_GIT_REPOSITORY_H_ */

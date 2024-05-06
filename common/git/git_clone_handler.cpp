@@ -51,7 +51,8 @@ bool GIT_CLONE_HANDLER::PerformClone()
         }
     }
 
-    git_clone_options cloneOptions = GIT_CLONE_OPTIONS_INIT;
+    git_clone_options cloneOptions;
+    git_clone_init_options( &cloneOptions, GIT_CLONE_OPTIONS_VERSION );
     cloneOptions.checkout_opts.checkout_strategy = GIT_CHECKOUT_SAFE;
     cloneOptions.checkout_opts.progress_cb = clone_progress_cb;
     cloneOptions.checkout_opts.progress_payload = this;

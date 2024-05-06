@@ -45,7 +45,8 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
         return PushResult::Error;
     }
 
-    git_remote_callbacks remoteCallbacks = GIT_REMOTE_CALLBACKS_INIT;
+    git_remote_callbacks remoteCallbacks;
+    git_remote_init_callbacks( &remoteCallbacks, GIT_REMOTE_CALLBACKS_VERSION );
     remoteCallbacks.sideband_progress = progress_cb;
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.update_tips = update_cb;
@@ -59,7 +60,8 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
         return PushResult::Error;
     }
 
-    git_push_options pushOptions = GIT_PUSH_OPTIONS_INIT;
+    git_push_options pushOptions;
+    git_push_init_options( &pushOptions, GIT_PUSH_OPTIONS_VERSION );
     pushOptions.callbacks = remoteCallbacks;
 
     if( git_remote_push( remote, nullptr, &pushOptions ) )

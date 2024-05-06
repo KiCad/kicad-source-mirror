@@ -252,7 +252,8 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
 
 
             git_diff*        diff;
-            git_diff_options diff_opts = GIT_DIFF_OPTIONS_INIT;
+            git_diff_options diff_opts;
+            git_diff_init_options( &diff_opts, GIT_DIFF_OPTIONS_VERSION );
 
             if( git_diff_tree_to_tree( &diff, m_repo, parent_tree, tree, &diff_opts ) == GIT_OK )
             {

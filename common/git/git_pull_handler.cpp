@@ -47,7 +47,8 @@ bool GIT_PULL_HANDLER::PerformFetch()
         return false;
     }
 
-    git_remote_callbacks remoteCallbacks = GIT_REMOTE_CALLBACKS_INIT;
+    git_remote_callbacks remoteCallbacks;
+    git_remote_init_callbacks( &remoteCallbacks, GIT_REMOTE_CALLBACKS_VERSION );
     remoteCallbacks.sideband_progress = progress_cb;
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.credentials = credentials_cb;
@@ -60,7 +61,8 @@ bool GIT_PULL_HANDLER::PerformFetch()
         return false;
     }
 
-    git_fetch_options fetchOptions = GIT_FETCH_OPTIONS_INIT;
+    git_fetch_options fetchOptions;
+    git_fetch_init_options( &fetchOptions, GIT_FETCH_OPTIONS_VERSION );
     fetchOptions.callbacks = remoteCallbacks;
 
     if( git_remote_fetch( remote, nullptr, &fetchOptions, nullptr ) )
@@ -188,7 +190,8 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
             return PullResult::Error;
         }
 
-        git_checkout_options checkoutOptions = GIT_CHECKOUT_OPTIONS_INIT;
+        git_checkout_options checkoutOptions;
+        git_checkout_init_options( &checkoutOptions, GIT_CHECKOUT_OPTIONS_VERSION );
         checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
         if( git_checkout_head( m_repo, &checkoutOptions ) )
         {
@@ -239,8 +242,11 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
 PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHeads,
                                           size_t                       aMergeHeadsCount )
 {
-    git_merge_options    merge_opts = GIT_MERGE_OPTIONS_INIT;
-    git_checkout_options checkout_opts = GIT_CHECKOUT_OPTIONS_INIT;
+    git_merge_options    merge_opts;
+    git_merge_options_init( &merge_opts, GIT_MERGE_OPTIONS_VERSION );
+
+    git_checkout_options checkout_opts;
+    git_checkout_init_options( &checkout_opts, GIT_CHECKOUT_OPTIONS_VERSION );
 
     checkout_opts.checkout_strategy = GIT_CHECKOUT_SAFE;
 

@@ -56,7 +56,8 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
         m_tempRepo = true;
         m_tempPath = wxFileName::CreateTempFileName( "kicadtestrepo" );
 
-        git_repository_init_options options = GIT_REPOSITORY_INIT_OPTIONS_INIT;
+        git_repository_init_options options;
+        git_repository_init_init_options( &options, GIT_REPOSITORY_INIT_OPTIONS_VERSION );
         options.flags = GIT_REPOSITORY_INIT_MKPATH | GIT_REPOSITORY_INIT_NO_REINIT;
         git_repository_init_ext( &m_repository, m_tempPath.ToStdString().c_str(), &options );
     }
@@ -260,7 +261,8 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
 void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 {
     git_remote* remote = nullptr;
-    git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
+    git_remote_callbacks callbacks;
+    git_remote_init_callbacks( &callbacks, GIT_REMOTE_CALLBACKS_VERSION );
 
     // We track if we have already tried to connect.
     // If we have, the server may come back to offer another connection

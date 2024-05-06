@@ -712,7 +712,8 @@ bool PROJECT_TREE_PANE::hasChangedFiles()
     if( !repo )
         return false;
 
-    git_status_options opts = GIT_STATUS_OPTIONS_INIT;
+    git_status_options opts;
+    git_status_init_options( &opts, GIT_STATUS_OPTIONS_VERSION );
 
     opts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
     opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_RENAMES_HEAD_TO_INDEX
@@ -1947,7 +1948,8 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         }
     }
 
-    git_status_options status_options = GIT_STATUS_OPTIONS_INIT;
+    git_status_options status_options;
+    git_status_init_options( &status_options, GIT_STATUS_OPTIONS_VERSION );
     status_options.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
     status_options.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
 
@@ -2097,7 +2099,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     git_config_free( config );
 
     // Collect modified files in the repository
-    git_status_options status_options = GIT_STATUS_OPTIONS_INIT;
+    git_status_options status_options;
+    git_status_init_options( &status_options, GIT_STATUS_OPTIONS_VERSION );
     status_options.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
     status_options.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED;
 
