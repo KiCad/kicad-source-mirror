@@ -47,8 +47,8 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( ARG_SIDE )
             .default_value( std::string( "both" ) )
-            .help( UTF8STDSTR( _(
-                    "Valid options: front,back,both. Gerber format only supports \"both\"." ) ) );
+            .help( UTF8STDSTR( _( "Valid options: front,back,both. Gerber format only supports "
+                                  "\"front\" or \"back\"." ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "ascii" ) )
