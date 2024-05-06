@@ -48,6 +48,7 @@ enum FP_TEXT_COL_ORDER
     FPT_XOFFSET,
     FPT_YOFFSET,
     FPT_KNOCKOUT,
+    FPT_MIRRORED,
 
     FPT_COUNT          // keep as last
 };

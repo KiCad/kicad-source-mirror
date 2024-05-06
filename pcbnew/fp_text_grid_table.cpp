@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 #include <kiway_player.h>
 #include <project.h>
 #include <fp_text_grid_table.h>
-#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
 #include <trigo.h>
 #include <pcb_base_frame.h>
@@ -147,6 +146,7 @@ wxString FP_TEXT_GRID_TABLE::GetColLabelValue( int aCol )
     case FPT_XOFFSET:     return _( "X Offset" );
     case FPT_YOFFSET:     return _( "Y Offset" );
     case FPT_KNOCKOUT:    return _( "Knockout" );
+    case FPT_MIRRORED:    return _( "Mirrored" );
     default:              wxFAIL; return wxEmptyString;
     }
 }
@@ -170,6 +170,7 @@ bool FP_TEXT_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTyp
     case FPT_ITALIC:
     case FPT_UPRIGHT:
     case FPT_KNOCKOUT:
+    case FPT_MIRRORED:
         return aTypeName == wxGRID_VALUE_BOOL;
 
     case FPT_LAYER:
@@ -236,6 +237,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
     case FPT_ITALIC:
     case FPT_UPRIGHT:
     case FPT_KNOCKOUT:
+    case FPT_MIRRORED:
         m_boolColAttr->IncRef();
         return m_boolColAttr;
 
@@ -256,7 +258,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 
 wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 {
-    wxGrid*         grid = GetView();
+    wxGrid*          grid = GetView();
     const PCB_FIELD& field = this->at( (size_t) aRow );
 
     if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
@@ -310,6 +312,7 @@ bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
     case FPT_ITALIC:   return field.IsItalic();
     case FPT_UPRIGHT:  return field.IsKeepUpright();
     case FPT_KNOCKOUT: return field.IsKnockout();
+    case FPT_MIRRORED: return field.IsMirrored();
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
@@ -404,13 +407,11 @@ void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 
     switch( aCol )
     {
-    case FPT_SHOWN: field.SetVisible( aValue ); break;
-
-    case FPT_ITALIC: field.SetItalic( aValue ); break;
-
-    case FPT_UPRIGHT: field.SetKeepUpright( aValue ); break;
-
-    case FPT_KNOCKOUT: field.SetIsKnockout( aValue ); break;
+    case FPT_SHOWN:     field.SetVisible( aValue );      break;
+    case FPT_ITALIC:    field.SetItalic( aValue );       break;
+    case FPT_UPRIGHT:   field.SetKeepUpright( aValue );  break;
+    case FPT_KNOCKOUT:  field.SetIsKnockout( aValue );   break;
+    case FPT_MIRRORED:  field.SetMirrored( aValue );     break;
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
