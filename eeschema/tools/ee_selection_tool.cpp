@@ -1450,8 +1450,14 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         }
         else
         {
+
+            if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
+                item->SetFlags( SHOW_ELEC_TYPE );
+
             if( item->HitTest( aPos, 0 ) )
                 exactHits.insert( item );
+
+            item->ClearFlags( SHOW_ELEC_TYPE );
         }
     }
 
