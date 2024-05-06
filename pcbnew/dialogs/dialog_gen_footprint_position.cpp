@@ -178,10 +178,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
     // Output directory
-    if( !projectFile.m_PcbLastPath[ LAST_PATH_POS_FILES ].IsEmpty() )
-        m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[ LAST_PATH_POS_FILES ] );
-    else
-        m_outputDirectoryName->SetValue( cfg->m_PlaceFile.output_directory );
+    m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[ LAST_PATH_POS_FILES ] );
 
     // Update Options
     m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );

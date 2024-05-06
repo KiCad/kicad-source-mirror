@@ -485,8 +485,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "netlist.associate_by_ref_sch",
             &m_NetlistDialog.associate_by_ref_sch, false ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "place_file.output_directory",
-            &m_PlaceFile.output_directory, wxEmptyString ) );
+    /*
+     * place_file.output_directory is only used at run-time; actual data is in project file
+     *
+     * m_params.emplace_back( new PARAM<wxString>( "place_file.output_directory",
+     *                        &m_PlaceFile.output_directory, wxEmptyString ) );
+     */
 
     m_params.emplace_back( new PARAM<int>( "place_file.units",
             &m_PlaceFile.units, 1 ) );
