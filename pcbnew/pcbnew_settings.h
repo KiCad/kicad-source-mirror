@@ -271,7 +271,7 @@ public:
 
     struct DIALOG_PLACE_FILE
     {
-        wxString output_directory;  // legacy; now in project settings
+        wxString output_directory;  // only used at run-time; actual data in project settings
         int      units;
         int      file_options;
         int      file_format;
