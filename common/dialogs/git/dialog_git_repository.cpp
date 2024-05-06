@@ -45,8 +45,7 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
         m_tested( 0 ),
         m_failedTest( false ),
         m_testError( wxEmptyString ),
-        m_tempRepo( false ),
-        m_repoType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
+        m_tempRepo( false )
 {
     m_txtURL->SetFocus();
 
