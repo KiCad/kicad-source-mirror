@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-05-04 16:07+0000\n"
+"PO-Revision-Date: 2024-05-07 02:28+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.5.4-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -20354,7 +20354,7 @@ msgstr "ジャンクションを追加"
 
 #: eeschema/tools/ee_actions.cpp:446
 msgid "Draw junctions"
-msgstr "ジャンクションを描画"
+msgstr "ジャンクションを描く"
 
 #: eeschema/tools/ee_actions.cpp:456 eeschema/tools/sch_drawing_tools.cpp:979
 msgid "Add Wire to Bus Entry"
@@ -20396,7 +20396,7 @@ msgstr "シートを追加"
 
 #: eeschema/tools/ee_actions.cpp:496
 msgid "Draw hierarchical sheets"
-msgstr "階層シートを描画"
+msgstr "階層シートを描く"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Import Sheet Pin"
