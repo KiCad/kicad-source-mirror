@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -167,14 +167,6 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_segmentAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_segmentAngleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_segmentAngleCtrl->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_segmentAngleCtrl->SetMaxLength( 8 );
-	}
-	#else
-	m_segmentAngleCtrl->SetMaxLength( 8 );
-	#endif
 	fgSizer1->Add( m_segmentAngleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_segmentAngleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
