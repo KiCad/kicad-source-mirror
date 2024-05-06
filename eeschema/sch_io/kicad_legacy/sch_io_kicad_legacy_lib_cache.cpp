@@ -1157,11 +1157,16 @@ SCH_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aS
 
     pos += tmp.size() + 1;
 
-    PIN_ORIENTATION orientation = PIN_ORIENTATION::PIN_RIGHT;
-    std::optional<PIN_ORIENTATION> optVal = magic_enum::enum_cast<PIN_ORIENTATION>( tmp[0] );
+    PIN_ORIENTATION orientation;
 
-    if( optVal.has_value() )
-        orientation = optVal.value();
+    switch( static_cast<char>( tmp[0] ) )
+    {
+    case 'U': orientation = PIN_ORIENTATION::PIN_UP; break;
+    case 'D': orientation = PIN_ORIENTATION::PIN_DOWN; break;
+    case 'L': orientation = PIN_ORIENTATION::PIN_LEFT; break;
+    case 'R': /* fall-through */
+    default:  orientation = PIN_ORIENTATION::PIN_RIGHT; break;
+    }
 
     tmp = tokens.GetNextToken();
 
