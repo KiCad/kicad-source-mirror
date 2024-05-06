@@ -539,7 +539,9 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
 
     LIB_FIELD* field;
 
-    if( id >= 0 && id < MANDATORY_FIELDS )
+    // Description was not mandatory until v8.0, so any fields with an index
+    // past this point should be user fields
+    if( id >= 0 && id < DESCRIPTION_FIELD )
     {
         field = aSymbol->GetFieldById( id );
 
@@ -550,6 +552,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
     }
     else
     {
+        id = aSymbol->GetNextAvailableFieldId();
         field = new LIB_FIELD( aSymbol.get(), id );
         aSymbol->AddDrawItem( field, false );
     }
