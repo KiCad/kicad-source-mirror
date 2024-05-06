@@ -63,7 +63,7 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
 
     if( aSvgPlotOptions.m_pageSizeMode == 2 ) // Page is board boundary size
     {
-        BOX2I     bbox = aBoard->ComputeBoundingBox();
+        BOX2I     bbox = aBoard->ComputeBoundingBox( false, false );
         PAGE_INFO currpageInfo = aBoard->GetPageSettings();
 
         currpageInfo.SetWidthMils( bbox.GetWidth() / pcbIUScale.IU_PER_MILS );

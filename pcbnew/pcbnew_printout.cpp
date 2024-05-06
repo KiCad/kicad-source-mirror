@@ -288,7 +288,10 @@ void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 
 BOX2I PCBNEW_PRINTOUT::getBoundingBox()
 {
-    return m_board->ComputeBoundingBox();
+    bool showHiddenText = m_pcbnewSettings.m_AsItemCheckboxes
+                            && m_board->IsElementVisible( LAYER_HIDDEN_TEXT );
+
+    return m_board->ComputeBoundingBox( false, showHiddenText );
 }
 
 

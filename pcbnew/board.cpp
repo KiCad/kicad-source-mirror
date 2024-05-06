@@ -1552,17 +1552,13 @@ unsigned BOARD::GetNodesCount( int aNet ) const
 }
 
 
-BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
+BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly, bool aIncludeHiddenText ) const
 {
     BOX2I bbox;
     LSET  visible = GetVisibleLayers();
-    bool  showHiddenText = IsElementVisible( LAYER_HIDDEN_TEXT );
 
-    if( PgmOrNull() && PgmOrNull()->m_Printing )
-        showHiddenText = false;
-
-    // If the board is just showing a footprint, we want all footprint layers
-    // included in the bounding box
+    // If the board is just showing a footprint, we want all footprint layers included in the
+    // bounding box
     if( IsFootprintHolder() )
         visible.set();
 
@@ -1595,7 +1591,7 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
         else
         {
-            bbox.Merge( footprint->GetBoundingBox( true, showHiddenText ) );
+            bbox.Merge( footprint->GetBoundingBox( true, aIncludeHiddenText ) );
         }
     }
 

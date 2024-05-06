@@ -264,7 +264,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     {
         // Origin = board center:
         BOARD* pcb = GetBoard();
-        BOX2I  bbox = pcb->ComputeBoundingBox( true );
+        BOX2I  bbox = pcb->ComputeBoundingBox( true, false );
         aXRef = pcbIUScale.IUTomm( bbox.GetCenter().x );
         aYRef = pcbIUScale.IUTomm( bbox.GetCenter().y );
     }

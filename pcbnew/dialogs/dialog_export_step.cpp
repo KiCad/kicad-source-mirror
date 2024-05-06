@@ -560,7 +560,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     case STEP_ORIGIN_BOARD_CENTER:
     {
-        BOX2I     bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
+        BOX2I     bbox = m_parent->GetBoard()->ComputeBoundingBox( true, false );
         double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
         double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
         LOCALE_IO dummy;

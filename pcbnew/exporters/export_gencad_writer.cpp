@@ -204,7 +204,7 @@ bool GENCAD_EXPORTER::WriteFile( wxString& aFullFileName )
 
     BOARD*  pcb = m_board;
     // Update some board data, to ensure a reliable gencad export
-    pcb->ComputeBoundingBox();
+    pcb->ComputeBoundingBox( false, false );
 
     /* Temporary modification of footprints that are flipped (i.e. on bottom
      * layer) to convert them to non flipped footprints.
