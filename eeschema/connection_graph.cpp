@@ -2375,9 +2375,6 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                     }
                 }
 
-                if( netclass.IsEmpty() )
-                    return;
-
                 if( !driverSubgraph )
                     driverSubgraph = subgraphs.front();
 
@@ -2387,7 +2384,10 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 {
                     for( const auto& member : driverSubgraph->m_driver_connection->Members() )
                     {
-                        netSettings->m_NetClassLabelAssignments[ member->Name() ] = netclass;
+                        if( netclass.IsEmpty() )
+                            netSettings->m_NetClassLabelAssignments.erase( member->Name() );
+                        else
+                            netSettings->m_NetClassLabelAssignments[member->Name()] = netclass;
 
                         auto ii = m_net_name_to_subgraphs_map.find( member->Name() );
 
@@ -2396,9 +2396,17 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                     }
                 }
 
-                netSettings->m_NetClassLabelAssignments[ netname ] = netclass;
+                if( netclass.IsEmpty() )
+                    netSettings->m_NetClassLabelAssignments.erase( netname );
+                else
+                    netSettings->m_NetClassLabelAssignments[netname] = netclass;
 
-                if( oldAssignments[ netname ] != netclass )
+                if( oldAssignments.count( netname ) )
+                {
+                    if( oldAssignments[netname] != netclass )
+                        dirtySubgraphs( subgraphs );
+                }
+                else if( !netclass.IsEmpty() )
                     dirtySubgraphs( subgraphs );
             };
 
