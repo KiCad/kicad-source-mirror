@@ -1416,6 +1416,7 @@ void PROJECT_TREE_PANE::FileWatcherReset()
             wxLogTrace( tracePathsAndFiles, "%s: failed to add '%s'\n", __func__, TO_UTF8( fn.GetFullPath() ) );
             return;
         }
+    }
 #else
         if( !m_watcher->Add( fn ) )
         {
