@@ -149,6 +149,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         KI_TEST::LoadBoard( m_settingsManager, testName, m_board );
         // Do not refill zones here because this is testing the DRC engine, not the zone filler
 
+        std::vector<PCB_MARKER> markers;
         std::vector<DRC_ITEM>  violations;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
@@ -160,10 +161,13 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         bds.m_DRCEngine->SetViolationHandler(
                 [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
                 {
-                    PCB_MARKER temp( aItem, aPos );
+                    markers.emplace_back( PCB_MARKER( aItem, aPos ) );
 
-                    if( bds.m_DrcExclusions.find( temp.SerializeToString() ) == bds.m_DrcExclusions.end() )
+                    if( bds.m_DrcExclusions.find( markers.back().SerializeToString() )
+                        == bds.m_DrcExclusions.end() )
+                    {
                         violations.push_back( *aItem );
+                    }
                 } );
 
         bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
