@@ -31,6 +31,11 @@ cmake_policy( SET CMP0116 OLD )
 # The current structure requires the add_custom_command to get called twice, the NEW behavior deduplicates it
 cmake_policy( SET CMP0113 OLD )
 
+#  Enable CMAKE_MSVC_DEBUG_INFORMATION_FORMAT to override the cmake pdb flags easily
+if (POLICY CMP0141)
+  cmake_policy(SET CMP0141 NEW)
+endif (POLICY CMP0141)
+
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
 if( DEFINED CMAKE_BUILD_TYPE )
