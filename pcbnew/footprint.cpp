@@ -1575,7 +1575,7 @@ std::vector<const PAD*> FOOTPRINT::GetPads( const wxString& aPadNumber, const PA
 
     for( const PAD* pad : m_pads )
     {
-        if( aIgnore && aIgnore == pad )
+        if( ( aIgnore && aIgnore == pad ) || ( pad->GetNumber() != aPadNumber ) )
             continue;
 
         retv.push_back( pad );
