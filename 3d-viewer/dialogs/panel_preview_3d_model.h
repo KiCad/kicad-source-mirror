@@ -34,6 +34,7 @@
 #include <3d_canvas/eda_3d_canvas.h>
 #include <3d_viewer_id.h>
 #include <3d_rendering/track_ball.h>
+#include <wx/event.h>
 
 // Define min and max parameter values
 #define MAX_SCALE          10000.0
@@ -52,6 +53,7 @@
 #define OFFSET_INCREMENT_MIL       25.0
 #define OFFSET_INCREMENT_MIL_FINE  5.0
 
+wxDECLARE_EVENT( wxCUSTOM_PANEL_SHOWN_EVENT, wxCommandEvent );
 
 // Declared classes to create pointers
 class WX_INFOBAR;
@@ -60,6 +62,7 @@ class FILENAME_RESOLVER;
 class BOARD;
 class BOARD_ADAPTER;
 class FOOTPRINT;
+class NL_FOOTPRINT_PROPERTIES_PLUGIN;
 
 class PANEL_PREVIEW_3D_MODEL: public EDA_3D_BOARD_HOLDER, public TOOLS_HOLDER, public PANEL_PREVIEW_3D_MODEL_BASE
 {
@@ -145,6 +148,7 @@ private:
     void doIncrementOffset( wxSpinEvent& aEvent, double aSign );
 
     void onUnitsChanged( wxCommandEvent& aEvent );
+    void onPanelShownEvent( wxCommandEvent& aEvent );
 
     wxString formatScaleValue( double aValue );
     wxString formatRotationValue( double aValue );
@@ -219,6 +223,8 @@ private:
     bool                     m_bodyStyleShowAll;    /// true if the board body is show
     /// The 3d viewer Render initial settings (must be saved and restored)
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS m_initialRender;
+
+    NL_FOOTPRINT_PROPERTIES_PLUGIN*     m_spaceMouse;
 };
 
 #endif  // PANEL_PREVIEW_3D_MODEL_H

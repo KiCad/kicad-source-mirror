@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 3Dconnexion
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 3Dconnexion
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,6 +27,7 @@
 // KiCAD includes
 #include <tool/action_manager.h>
 #include <tool/tool_manager.h>
+#include <tool/tools_holder.h>
 
 // stdlib
 #include <map>
@@ -72,7 +73,7 @@ bool equals( glm::mat<L, C, T, Q> const& aFirst, glm::mat<L, C, T, Q> const& aSe
 }
 
 
-NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas ) :
+NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas, const std::string& aProfileHint ) :
         NAV_3D( false, false ),
         m_canvas( aCanvas ),
         m_capIsMoving( false ),
@@ -80,12 +81,7 @@ NL_3D_VIEWER_PLUGIN_IMPL::NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas ) :
 {
     m_camera = dynamic_cast<TRACK_BALL*>( m_canvas->GetCamera() );
 
-    PutProfileHint( "KiCAD 3D" );
-
-    EnableNavigation( true );
-    PutFrameTimingSource( TimingSource::SpaceMouse );
-
-    exportCommandsAndImages();
+    PutProfileHint( aProfileHint );
 }
 
 
@@ -101,8 +97,19 @@ void NL_3D_VIEWER_PLUGIN_IMPL::SetFocus( bool aFocus )
     NAV_3D::Write( navlib::focus_k, aFocus );
 }
 
-// temporary store for the categories
-typedef std::map<std::string, TDx::CCommandTreeNode*> CATEGORY_STORE;
+
+EDA_3D_CANVAS* NL_3D_VIEWER_PLUGIN_IMPL::GetCanvas() const
+{
+    return m_canvas;
+}
+
+
+void NL_3D_VIEWER_PLUGIN_IMPL::Connect()
+{
+   EnableNavigation(true);
+   PutFrameTimingSource(TimingSource::SpaceMouse);
+   exportCommandsAndImages();
+}
 
 /**
  * Add a category to the store.
@@ -571,7 +578,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
         if( parent->IsEnabled() )
         {
-            TOOL_MANAGER* tool_manager = static_cast<PCB_BASE_FRAME*>( parent )->GetToolManager();
+            TOOL_MANAGER* tool_manager = dynamic_cast<TOOLS_HOLDER*>( parent )->GetToolManager();
 
             if( tool_manager == nullptr )
             {

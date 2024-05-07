@@ -46,6 +46,8 @@
 #include <eda_3d_viewer_settings.h>
 #include <board_design_settings.h>
 
+#include <3d_navlib/nl_footprint_properties_plugin.h>
+
 PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
                                                 FOOTPRINT* aFootprint,
                                                 std::vector<FP_3DMODEL>* aParentModelList ) :
@@ -128,6 +130,9 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
                                        m_boardAdapter, m_currentCamera,
                                        PROJECT_PCB::Get3DCacheManager( &aFrame->Prj() ) );
 
+    m_spaceMouse = new NL_FOOTPRINT_PROPERTIES_PLUGIN( m_previewPane );
+    m_spaceMouse->SetFocus( true );
+
     m_boardAdapter.SetBoard( m_dummyBoard );
     m_boardAdapter.m_IsBoardView = false;
     m_boardAdapter.m_IsPreviewer = true;   // Force display 3D models, regardless the 3D viewer options
@@ -164,6 +169,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     aFrame->Connect( EDA_EVT_UNITS_CHANGED,
                      wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL::onUnitsChanged ),
                      nullptr, this );
+
+    Bind( wxCUSTOM_PANEL_SHOWN_EVENT, &PANEL_PREVIEW_3D_MODEL::onPanelShownEvent, this );
 }
 
 
@@ -173,6 +180,7 @@ PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
     if( m_boardAdapter.m_Cfg )
         m_boardAdapter.m_Cfg->m_Render = m_initialRender;
 
+    delete m_spaceMouse;
     delete m_dummyBoard;
     delete m_previewPane;
 }
@@ -608,6 +616,17 @@ void PANEL_PREVIEW_3D_MODEL::onUnitsChanged( wxCommandEvent& aEvent )
     xoff->SetValue( formatOffsetValue( xoff_mm ) );
     yoff->SetValue( formatOffsetValue( yoff_mm ) );
     zoff->SetValue( formatOffsetValue( zoff_mm ) );
+
+    aEvent.Skip();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::onPanelShownEvent( wxCommandEvent& aEvent )
+{
+    if( m_spaceMouse != nullptr )
+    {
+        m_spaceMouse->SetFocus( static_cast<bool>( aEvent.GetInt() ) );
+    }
 
     aEvent.Skip();
 }

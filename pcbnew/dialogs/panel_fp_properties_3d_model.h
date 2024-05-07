@@ -88,6 +88,12 @@ private:
 
     void onModify();
 
+    virtual void onDialogActivateEvent( wxActivateEvent& aEvent );
+    virtual void onShowEvent( wxShowEvent& aEvent );
+
+    // Wrapper on creating and posting custom event
+    void postCustomPanelShownEventWithPredicate( bool predicate );
+
 private:
     DIALOG_SHIM*            m_parentDialog;
     PCB_BASE_EDIT_FRAME*    m_frame;

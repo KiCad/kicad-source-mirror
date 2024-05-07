@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 3Dconnexion
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 3Dconnexion
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -42,6 +42,11 @@
 class EDA_3D_CANVAS;
 class TRACK_BALL;
 
+// temporary store for the categories
+typedef std::map<std::string, TDx::CCommandTreeNode*> CATEGORY_STORE;
+
+CATEGORY_STORE::iterator add_category( std::string aCategoryPath, CATEGORY_STORE& aCategoryStore );
+
 // Convenience typedef.
 typedef TDx::SpaceMouse::Navigation3D::CNavigation3D NAV_3D;
 
@@ -56,8 +61,9 @@ public:
      * Initializes a new instance of the NL_3DVIEWER_PLUGIN.
      *
      *  @param aCanvas is the viewport to be navigated.
+     *  @param aProfileHint tells the 3DConnexion UI which profile to use.
      */
-    NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas );
+    NL_3D_VIEWER_PLUGIN_IMPL( EDA_3D_CANVAS* aCanvas, const std::string& aProfileHint );
 
     virtual ~NL_3D_VIEWER_PLUGIN_IMPL();
 
@@ -69,11 +75,21 @@ public:
      */
     void SetFocus( bool aFocus = true );
 
+    /**
+     * Get the m_canvas pointer.
+     */
+    EDA_3D_CANVAS* GetCanvas() const;
+
+    /**
+     * Connect plugin implementation to the driver.
+     */
+    void Connect();
+
 private:
     /**
       * Export the invocable actions and images to the 3Dconnexion UI.
       */
-    void exportCommandsAndImages();
+    virtual void exportCommandsAndImages();
 
     long GetCameraMatrix( navlib::matrix_t& aMatrix ) const override;
     long GetPointerPosition( navlib::point_t& aPosition ) const override;
@@ -110,6 +126,7 @@ private:
     long GetFrontView( navlib::matrix_t& aMatrix ) const override;
     long GetCoordinateSystem( navlib::matrix_t& aMatrix ) const override;
     long GetIsViewRotatable( navlib::bool_t& isRotatable ) const override;
+
 
 private:
     EDA_3D_CANVAS* m_canvas;
