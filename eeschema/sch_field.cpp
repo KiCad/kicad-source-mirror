@@ -643,6 +643,26 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 }
 
 
+void SCH_FIELD::SetEffectiveHorizJustify( GR_TEXT_H_ALIGN_T aJustify )
+{
+    GR_TEXT_H_ALIGN_T actualJustify;
+
+    switch( aJustify )
+    {
+    case GR_TEXT_H_ALIGN_LEFT:
+        actualJustify = IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_RIGHT : GR_TEXT_H_ALIGN_LEFT;
+        break;
+    case GR_TEXT_H_ALIGN_RIGHT:
+        actualJustify = IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_LEFT : GR_TEXT_H_ALIGN_RIGHT;
+        break;
+    default:
+        actualJustify = aJustify;
+    }
+
+    SetHorizJustify( actualJustify );
+}
+
+
 GR_TEXT_H_ALIGN_T SCH_FIELD::GetEffectiveHorizJustify() const
 {
     switch( GetHorizJustify() )
@@ -677,6 +697,26 @@ bool SCH_FIELD::IsVertJustifyFlipped() const
     default:
         return false;
     }
+}
+
+
+void SCH_FIELD::SetEffectiveVertJustify( GR_TEXT_V_ALIGN_T aJustify )
+{
+    GR_TEXT_V_ALIGN_T actualJustify;
+
+    switch( aJustify )
+    {
+    case GR_TEXT_V_ALIGN_TOP:
+        actualJustify = IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_BOTTOM : GR_TEXT_V_ALIGN_TOP;
+        break;
+    case GR_TEXT_V_ALIGN_BOTTOM:
+        actualJustify = IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_TOP : GR_TEXT_V_ALIGN_BOTTOM;
+        break;
+    default:
+        actualJustify = aJustify;
+    }
+
+    SetVertJustify( actualJustify );
 }
 
 
@@ -1592,12 +1632,45 @@ static struct SCH_FIELD_DESC
 {
     SCH_FIELD_DESC()
     {
+        // These are defined in EDA_TEXT as well but initialization order is
+        // not defined, so this needs to be conditional.  Defining in both
+        // places leads to duplicate symbols.
+        auto& h_inst = ENUM_MAP<GR_TEXT_H_ALIGN_T>::Instance();
+
+        if( h_inst.Choices().GetCount() == 0)
+        {
+            h_inst.Map( GR_TEXT_H_ALIGN_LEFT,   _( "Left" ) );
+            h_inst.Map( GR_TEXT_H_ALIGN_CENTER, _( "Center" ) );
+            h_inst.Map( GR_TEXT_H_ALIGN_RIGHT,  _( "Right" ) );
+        }
+
+        auto& v_inst = ENUM_MAP<GR_TEXT_V_ALIGN_T>::Instance();
+
+        if( v_inst.Choices().GetCount() == 0)
+        {
+            v_inst.Map( GR_TEXT_V_ALIGN_TOP,    _( "Top" ) );
+            v_inst.Map( GR_TEXT_V_ALIGN_CENTER, _( "Center" ) );
+            v_inst.Map( GR_TEXT_V_ALIGN_BOTTOM, _( "Bottom" ) );
+        }
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_FIELD );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_FIELD, SCH_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_FIELD, EDA_TEXT> );
         propMgr.InheritsAfter( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ) );
+
+        const wxString textProps = _HKI( "Text Properties" );
+
+        auto horiz = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
+                    &SCH_FIELD::SetEffectiveHorizJustify, &SCH_FIELD::GetEffectiveHorizJustify );
+
+        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ), horiz, textProps );
+
+        auto vert = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
+                    &SCH_FIELD::SetEffectiveVertJustify, &SCH_FIELD::GetEffectiveVertJustify );
+
+        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Vertical Justification" ), vert, textProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Show Field Name" ),
                 &SCH_FIELD::SetNameShown, &SCH_FIELD::IsNameShown ) );
@@ -1610,6 +1683,7 @@ static struct SCH_FIELD_DESC
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+
 
         propMgr.AddProperty( new PROPERTY<SCH_FIELD, int>( _HKI( "Text Size" ),
                 &SCH_FIELD::SetSchTextSize, &SCH_FIELD::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
@@ -1630,3 +1704,7 @@ static struct SCH_FIELD_DESC
                                       isNotNamedVariable );
     }
 } _SCH_FIELD_DESC;
+
+
+DECLARE_ENUM_TO_WXANY( GR_TEXT_H_ALIGN_T )
+DECLARE_ENUM_TO_WXANY( GR_TEXT_V_ALIGN_T )

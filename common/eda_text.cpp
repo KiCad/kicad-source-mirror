@@ -1174,14 +1174,26 @@ static struct EDA_TEXT_DESC
 {
     EDA_TEXT_DESC()
     {
-        ENUM_MAP<GR_TEXT_H_ALIGN_T>::Instance()
-                .Map( GR_TEXT_H_ALIGN_LEFT,   _HKI( "Left" ) )
-                .Map( GR_TEXT_H_ALIGN_CENTER, _HKI( "Center" ) )
-                .Map( GR_TEXT_H_ALIGN_RIGHT,  _HKI( "Right" ) );
-        ENUM_MAP<GR_TEXT_V_ALIGN_T>::Instance()
-                .Map( GR_TEXT_V_ALIGN_TOP,    _HKI( "Top" ) )
-                .Map( GR_TEXT_V_ALIGN_CENTER, _HKI( "Center" ) )
-                .Map( GR_TEXT_V_ALIGN_BOTTOM, _HKI( "Bottom" ) );
+        // These are defined in SCH_FIELD as well but initialization order is
+        // not defined, so this needs to be conditional.  Defining in both
+        // places leads to duplicate symbols.
+        auto& h_inst = ENUM_MAP<GR_TEXT_H_ALIGN_T>::Instance();
+
+        if( h_inst.Choices().GetCount() == 0)
+        {
+            h_inst.Map( GR_TEXT_H_ALIGN_LEFT,   _( "Left" ) );
+            h_inst.Map( GR_TEXT_H_ALIGN_CENTER, _( "Center" ) );
+            h_inst.Map( GR_TEXT_H_ALIGN_RIGHT,  _( "Right" ) );
+        }
+
+        auto& v_inst = ENUM_MAP<GR_TEXT_V_ALIGN_T>::Instance();
+
+        if( v_inst.Choices().GetCount() == 0)
+        {
+            v_inst.Map( GR_TEXT_V_ALIGN_TOP,    _( "Top" ) );
+            v_inst.Map( GR_TEXT_V_ALIGN_CENTER, _( "Center" ) );
+            v_inst.Map( GR_TEXT_V_ALIGN_BOTTOM, _( "Bottom" ) );
+        }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_TEXT );

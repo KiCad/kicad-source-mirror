@@ -202,6 +202,9 @@ public:
     GR_TEXT_H_ALIGN_T GetEffectiveHorizJustify() const;
     GR_TEXT_V_ALIGN_T GetEffectiveVertJustify() const;
 
+    void SetEffectiveHorizJustify( GR_TEXT_H_ALIGN_T );
+    void SetEffectiveVertJustify( GR_TEXT_V_ALIGN_T );
+
     bool IsNameShown() const { return m_showName; }
     void SetNameShown( bool aShown = true ) { m_showName = aShown; }
 
