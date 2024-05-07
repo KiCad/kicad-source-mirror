@@ -193,6 +193,7 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxSt
 SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         SCH_ITEM( aPin ),
         m_libPin( aPin.m_libPin ),
+        m_alternates( aPin.m_alternates ),
         m_position( aPin.m_position ),
         m_length( aPin.m_length ),
         m_orientation( aPin.m_orientation ),
@@ -215,6 +216,7 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
     SCH_ITEM::operator=( aPin );
 
     m_libPin = aPin.m_libPin;
+    m_alternates = aPin.m_alternates;
     m_alt = aPin.m_alt;
     m_name = aPin.m_name;
     m_number = aPin.m_number;
