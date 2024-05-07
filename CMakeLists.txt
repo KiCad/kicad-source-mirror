@@ -531,8 +531,18 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS " /wd4290" )
     # C4800: non-bool is explicitly cast to bool, forcing value of 0 or 1
     string( APPEND CMAKE_CXX_FLAGS " /wd4800" )
-    # /Zi: create PDB
-    string( APPEND CMAKE_CXX_FLAGS " /Zi" )
+    
+    # cmake 3.25 or higher requried for MSVC, should be fine
+    if( USE_CCACHE AND CCACHE_FOUND )
+        # Equivalent to /Z7, ensures cmake doesn't fight over the default
+        # ccache may encounter external PDB file write errors due to paralleism
+        # Using the embedded PDB mode is ok for development use of ccache
+        set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "Embedded")
+    else()
+        # Equivalent to /Zi, ensures cmake doesn't fight over the default
+        set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "ProgramDatabase")
+    endif()
+
     # /Zc:__cplusplus: define this macro according to C++ standard version
     string( APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus" )
     # /GF: enable string pooling
