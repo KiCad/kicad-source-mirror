@@ -242,7 +242,16 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
                     return false;
 
-                int annularWidth = 0;
+                // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
+                auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
+                                                          UNDEFINED_LAYER );
+
+                int  annularWidth = 0;
+                int  v_min = 0;
+                int  v_max = 0;
+                bool fail_min = false;
+                bool fail_max = false;
+
 
                 switch( item->Type() )
                 {
@@ -332,7 +341,8 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                                 annularWidth = sqrt( dist_sq ) - slot->GetWidth() / 2;
                             }
                         }
-                        else
+                        else if( constraint.Value().HasMin()
+                               && ( annularWidth < constraint.Value().Min() ) )
                         {
                             SHAPE_POLY_SET otherPadOutline;
                             SHAPE_POLY_SET slotPolygon;
@@ -391,14 +401,6 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 default:
                     return true;
                 }
-
-                // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
-                auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
-                                                          UNDEFINED_LAYER );
-                int  v_min = 0;
-                int  v_max = 0;
-                bool fail_min = false;
-                bool fail_max = false;
 
                 if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                     return true;
