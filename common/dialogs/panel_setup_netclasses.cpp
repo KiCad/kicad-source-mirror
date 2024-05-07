@@ -504,13 +504,10 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
         wxString netclass = m_assignmentGrid->GetCellValue( row, 1 );
 
         m_netSettings->m_NetClassPatternAssignments.push_back(
-                {
-                    std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ),
-                    netclass
-                } );
-
-        m_netSettings->m_NetClassPatternAssignmentCache.clear();
+                { std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ), netclass } );
     }
+
+    m_netSettings->m_NetClassPatternAssignmentCache.clear();
 
     return true;
 }
