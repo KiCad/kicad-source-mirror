@@ -53,6 +53,9 @@ if( MSVC )
     # This is a workaround borrowed from https://github.com/dotnet/runtime/blob/main/eng/native/configurecompiler.cmake
     # CMake currently cannot handle the fact that "armasm" is used in combination with standard MSVC "cl" for ARM targets
     # So this is basically a hack (incombination with the MSVCAssemblyHelper.cmake) to make this all work
+
+    # This workaround can be removed when https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9326 is finally part of a
+    # cmake release AND when MSVC ships said cmake release
     if(KICAD_BUILD_ARCH_ARM)
         message( "Configuring ARM assembler" )
         # Explicitly specify the assembler to be used for Arm32 compile
