@@ -105,8 +105,17 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	m_rbUnitSelection->SetSelection( 0 );
 	bSizer2->Add( m_rbUnitSelection, 0, wxALL, 5 );
 
+	wxStaticBoxSizer* sbOtherOptions;
+	sbOtherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
-	bSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_cbRemoveDNP = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Ignore 'Do not populate' components"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbOtherOptions->Add( m_cbRemoveDNP, 0, wxALL, 5 );
+
+	m_cbRemoveUnspecified = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Ignore 'Unspecified' components"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbOtherOptions->Add( m_cbRemoveUnspecified, 0, wxALL, 5 );
+
+
+	bSizer2->Add( sbOtherOptions, 1, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 
 	bSizerIDFFile->Add( bSizer2, 1, wxEXPAND, 5 );

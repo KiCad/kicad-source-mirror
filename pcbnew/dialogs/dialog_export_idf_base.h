@@ -26,6 +26,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/radiobox.h>
+#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -50,6 +51,8 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText4;
 		TEXT_CTRL_EVAL* m_IDF_Yref;
 		wxRadioBox* m_rbUnitSelection;
+		wxCheckBox* m_cbRemoveDNP;
+		wxCheckBox* m_cbRemoveUnspecified;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

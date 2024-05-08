@@ -269,7 +269,8 @@ UseBoundingBox:
  * BOARD_OUTLINE section as appropriate,  Compiles data for the PLACEMENT section and compiles
  * data for the library ELECTRICAL section.
  */
-static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard )
+static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard,
+                                  bool aIncludeUnspecified, bool aIncludeDNP )
 {
     // Reference Designator
     std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText( false ) );
@@ -411,6 +412,12 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             }
         }
     }
+
+    if( ( !(aFootprint->GetAttributes() & (FP_THROUGH_HOLE|FP_SMD)) ) && !aIncludeUnspecified )
+        return;
+
+    if( aFootprint->IsDNP() && !aIncludeDNP )
+        return;
 
     // add any valid models to the library item list
     std::string refdes;
@@ -599,7 +606,8 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
  * PCB design.
  */
 bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
-                                  bool aUseThou, double aXRef, double aYRef )
+                                  bool aUseThou, double aXRef, double aYRef,
+                                  bool aIncludeUnspecified, bool aIncludeDNP )
 {
     IDF3_BOARD idfBoard( IDF3::CAD_ELEC );
 
@@ -645,7 +653,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
 
         // Output the drill holes and footprint (library) data.
         for( FOOTPRINT* footprint : aPcb->Footprints() )
-            idf_export_footprint( aPcb, footprint, idfBoard );
+            idf_export_footprint( aPcb, footprint, idfBoard, aIncludeUnspecified, aIncludeDNP );
 
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )
         {

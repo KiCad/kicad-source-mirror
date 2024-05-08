@@ -176,6 +176,8 @@ public:
         double ref_x;
         double ref_y;
         bool   units_mils;
+        bool   no_unspecified;
+        bool   no_dnp;
     };
 
     struct DIALOG_EXPORT_STEP

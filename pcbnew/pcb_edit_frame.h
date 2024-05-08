@@ -525,10 +525,13 @@ public:
      * @param aUseThou set to true if the desired IDF unit is thou (mil).
      * @param aXRef the board Reference Point in mm, X value.
      * @param aYRef the board Reference Point in mm, Y value.
+     * @param aIncludeUnspecified true to include unspecified-type footprint models
+     * @param aIncludeDNP true to include DNP footprint models
      * @return true if OK.
      */
     bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
-                      bool aUseThou, double aXRef, double aYRef );
+                      bool aUseThou, double aXRef, double aYRef,
+                      bool aIncludeUnspecified, bool aIncludeDNP );
 
     /**
      * Export the current BOARD to a STEP assembly.

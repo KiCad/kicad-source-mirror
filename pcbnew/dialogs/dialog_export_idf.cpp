@@ -57,6 +57,9 @@ public:
         m_XRef       = cfg->m_ExportIdf.ref_x;
         m_YRef       = cfg->m_ExportIdf.ref_y;
 
+        m_cbRemoveUnspecified->SetValue( cfg->m_ExportIdf.no_unspecified );
+        m_cbRemoveDNP->SetValue( cfg->m_ExportIdf.no_dnp );
+
         m_cbAutoAdjustOffset->SetValue( m_AutoAdjust );
         m_cbAutoAdjustOffset->Bind( wxEVT_CHECKBOX, &DIALOG_EXPORT_IDF3::OnAutoAdjustOffset, this );
 
@@ -109,6 +112,9 @@ public:
             cfg->m_ExportIdf.ref_units   = m_RefUnits;
             cfg->m_ExportIdf.ref_x       = m_XRef;
             cfg->m_ExportIdf.ref_y       = m_YRef;
+
+            cfg->m_ExportIdf.no_unspecified = m_cbRemoveUnspecified->GetValue();
+            cfg->m_ExportIdf.no_dnp         = m_cbRemoveDNP->GetValue();
         }
     }
 
@@ -135,6 +141,16 @@ public:
     double GetYRef()
     {
         return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_IDF_Yref->GetValue() );
+    }
+
+    bool GetNoUnspecifiedOption()
+    {
+        return m_cbRemoveUnspecified->GetValue();
+    }
+
+    bool GetNoDNPOption()
+    {
+        return m_cbRemoveDNP->GetValue();
     }
 
     bool GetAutoAdjustOffset()
@@ -230,7 +246,8 @@ void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
     wxString fullFilename = dlg.FilePicker()->GetPath();
     SetLastPath( LAST_PATH_IDF, fullFilename );
 
-    if( !Export_IDF3( GetBoard(), fullFilename, thou, aXRef, aYRef ) )
+    if( !Export_IDF3( GetBoard(), fullFilename, thou, aXRef, aYRef, !dlg.GetNoUnspecifiedOption(),
+                      !dlg.GetNoDNPOption() ) )
     {
         wxString msg = wxString::Format( _( "Failed to create file '%s'." ), fullFilename );
         wxMessageBox( msg );
