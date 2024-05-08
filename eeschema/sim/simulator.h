@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Sylwester Kocjan <s.kocjan@o2.pl>
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -59,7 +59,8 @@ public:
      * @return True in case of success, false otherwise.
      */
     virtual bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel,
-                         const wxString& aSimCommand, unsigned aSimOptions, REPORTER& aReporter )
+                         const wxString& aSimCommand, unsigned aSimOptions,
+                         const wxString& aInputPath, REPORTER& aReporter )
     {
         m_simModel = aModel;
         return true;
@@ -87,8 +88,8 @@ public:
     virtual bool IsRunning() = 0;
 
     /**
-     * Cleans simulation data (i.e. all vectors) 
-     * 
+     * Cleans simulation data (i.e. all vectors)
+     *
      */
     virtual void Clean() = 0;
 
