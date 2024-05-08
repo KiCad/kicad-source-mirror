@@ -1445,7 +1445,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             if( transform.x1 < -1 || transform.x1 > 1 )
                 SCH_PARSE_ERROR( "invalid symbol X1 transform value", aReader, line );
 
-            transform.y1 = parseInt( aReader, line, &line );
+            transform.y1 = -parseInt( aReader, line, &line );
 
             if( transform.y1 < -1 || transform.y1 > 1 )
                 SCH_PARSE_ERROR( "invalid symbol Y1 transform value", aReader, line );
@@ -1455,7 +1455,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             if( transform.x2 < -1 || transform.x2 > 1 )
                 SCH_PARSE_ERROR( "invalid symbol X2 transform value", aReader, line );
 
-            transform.y2 = parseInt( aReader, line, &line );
+            transform.y2 = -parseInt( aReader, line, &line );
 
             if( transform.y2 < -1 || transform.y2 > 1 )
                 SCH_PARSE_ERROR( "invalid symbol Y2 transform value", aReader, line );
