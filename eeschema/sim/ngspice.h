@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -60,7 +60,8 @@ public:
 
     ///< @copydoc SPICE_SIMULATOR::Attach()
     bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxString& aSimCommand,
-                 unsigned aSimOptions, REPORTER& aReporter ) override final;
+                 unsigned aSimOptions, const wxString& aInputPath,
+                 REPORTER& aReporter ) override final;
 
     ///< Load a netlist for the simulation
     bool LoadNetlist( const std::string& aNetlist ) override final;
@@ -116,21 +117,24 @@ private:
     // ngspice library functions
     typedef void ( *ngSpice_Init )( SendChar*, SendStat*, ControlledExit*, SendData*, SendInitData*,
                                     BGThreadRunning*, void* );
-    typedef int ( *ngSpice_Circ )( char** circarray );
-    typedef int ( *ngSpice_Command )( char* command );
+
+    typedef int          ( *ngSpice_Circ )( char** circarray );
+    typedef int          ( *ngSpice_Command )( char* command );
     typedef pvector_info ( *ngGet_Vec_Info )( char* vecname );
-    typedef char* ( *ngSpice_CurPlot )( void );
-    typedef char** ( *ngSpice_AllPlots )( void );
-    typedef char** ( *ngSpice_AllVecs )( char* plotname );
-    typedef bool ( *ngSpice_Running )( void );
-    typedef int ( *ngSpice_LockRealloc )( void );
-    typedef int ( *ngSpice_UnlockRealloc )( void );
+    typedef char*        ( *ngCM_Input_Path )( const char* path );
+    typedef char*        ( *ngSpice_CurPlot )( void );
+    typedef char**       ( *ngSpice_AllPlots )( void );
+    typedef char**       ( *ngSpice_AllVecs )( char* plotname );
+    typedef bool         ( *ngSpice_Running )( void );
+    typedef int          ( *ngSpice_LockRealloc )( void );
+    typedef int          ( *ngSpice_UnlockRealloc )( void );
 
     ///< Handle to DLL functions
     ngSpice_Init          m_ngSpice_Init;
     ngSpice_Circ          m_ngSpice_Circ;
     ngSpice_Command       m_ngSpice_Command;
     ngGet_Vec_Info        m_ngGet_Vec_Info;
+    ngCM_Input_Path       m_ngCM_Input_Path;
     ngSpice_CurPlot       m_ngSpice_CurPlot;
     ngSpice_AllPlots      m_ngSpice_AllPlots;
     ngSpice_AllVecs       m_ngSpice_AllVecs;
@@ -167,6 +171,9 @@ private:
 
     ///< Check a few different locations for codemodel files and returns one if it exists.
     std::string findCmPath() const;
+
+    ///< Send additional search path for codemodels to ngspice.
+    bool setCodemodelsInputPath( const std::string& aPath );
 
     ///< Load codemodel files from a directory.
     bool loadCodemodels( const std::string& aPath );

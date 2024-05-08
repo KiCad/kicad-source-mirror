@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -59,6 +59,7 @@ NGSPICE::NGSPICE() :
         m_ngSpice_Circ( nullptr ),
         m_ngSpice_Command( nullptr ),
         m_ngGet_Vec_Info( nullptr ),
+        m_ngCM_Input_Path( nullptr ),
         m_ngSpice_CurPlot( nullptr ),
         m_ngSpice_AllPlots( nullptr ),
         m_ngSpice_AllVecs( nullptr ),
@@ -274,21 +275,23 @@ std::vector<double> NGSPICE::GetPhaseVector( const std::string& aName, int aMaxL
 
 
 bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxString& aSimCommand,
-                      unsigned aSimOptions, REPORTER& aReporter )
+                      unsigned aSimOptions, const wxString& aInputPath, REPORTER& aReporter )
 {
     SPICE_CIRCUIT_MODEL* model = dynamic_cast<SPICE_CIRCUIT_MODEL*>( aModel.get() );
     STRING_FORMATTER     formatter;
 
+    setCodemodelsInputPath( aInputPath.ToStdString() );
+
     if( model && model->GetNetlist( aSimCommand, aSimOptions, &formatter, aReporter ) )
     {
-        SIMULATOR::Attach( aModel, aSimCommand, aSimOptions, aReporter );
+        SIMULATOR::Attach( aModel, aSimCommand, aSimOptions, aInputPath, aReporter );
         updateNgspiceSettings();
         LoadNetlist( formatter.GetString() );
         return true;
     }
     else
     {
-        SIMULATOR::Attach( nullptr, wxEmptyString, 0, aReporter );
+        SIMULATOR::Attach( nullptr, wxEmptyString, 0, wxEmptyString, aReporter );
         return false;
     }
 }
@@ -494,6 +497,7 @@ void NGSPICE::init_dll()
     m_ngSpice_Circ = (ngSpice_Circ) m_dll.GetSymbol( "ngSpice_Circ" );
     m_ngSpice_Command = (ngSpice_Command) m_dll.GetSymbol( "ngSpice_Command" );
     m_ngGet_Vec_Info = (ngGet_Vec_Info) m_dll.GetSymbol( "ngGet_Vec_Info" );
+    m_ngCM_Input_Path = (ngCM_Input_Path) m_dll.GetSymbol( "ngCM_Input_Path" );
     m_ngSpice_CurPlot  = (ngSpice_CurPlot) m_dll.GetSymbol( "ngSpice_CurPlot" );
     m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll.GetSymbol( "ngSpice_AllPlots" );
     m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll.GetSymbol( "ngSpice_AllVecs" );
@@ -631,6 +635,19 @@ std::string NGSPICE::findCmPath() const
     }
 
     return std::string();
+}
+
+
+bool NGSPICE::setCodemodelsInputPath( const std::string& aPath )
+{
+    if( !m_ngCM_Input_Path )
+        return false;
+
+    LOCALE_IO c_locale; // ngspice works correctly only with C locale
+
+    m_ngCM_Input_Path( aPath.c_str() );
+
+    return true;
 }
 
 

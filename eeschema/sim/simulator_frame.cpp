@@ -194,7 +194,7 @@ SIMULATOR_FRAME::~SIMULATOR_FRAME()
 {
     NULL_REPORTER devnull;
 
-    m_simulator->Attach( nullptr, wxEmptyString, 0, devnull );
+    m_simulator->Attach( nullptr, wxEmptyString, 0, wxEmptyString, devnull );
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
 }
@@ -358,7 +358,8 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
         m_schematicFrame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
-    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, reporter ) )
+    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
+                              reporter ) )
     {
         DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + errors );
         return false;
@@ -373,7 +374,8 @@ void SIMULATOR_FRAME::ReloadSimulator( const wxString& aSimCommand, unsigned aSi
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
 
-    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, reporter ) )
+    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
+                              reporter ) )
     {
         DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + errors );
     }
