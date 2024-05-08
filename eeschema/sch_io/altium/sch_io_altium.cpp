@@ -1353,7 +1353,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
 
 
 void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
-                         ASCH_RECORD_ORIENTATION orientation, bool for_lib_item = false )
+                         ASCH_RECORD_ORIENTATION orientation )
 {
     int       vjustify, hjustify;
     EDA_ANGLE angle = ANGLE_HORIZONTAL;
@@ -1407,31 +1407,19 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
     switch( orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        if( for_lib_item )
-            vjustify *= -1;
-
         angle = ANGLE_HORIZONTAL;
         break;
 
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-        if( !for_lib_item )
-            vjustify *= -1;
-
         hjustify *= -1;
         angle = ANGLE_HORIZONTAL;
         break;
 
     case ASCH_RECORD_ORIENTATION::UPWARDS:
-        if( for_lib_item )
-            vjustify *= -1;
-
         angle = ANGLE_VERTICAL;
         break;
 
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-        if( !for_lib_item )
-            vjustify *= -1;
-
         hjustify *= -1;
         angle = ANGLE_VERTICAL;
         break;
@@ -1536,7 +1524,7 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
 
         textItem->SetPosition( pos );
         textItem->SetUnit( std::max( 0, elem.ownerpartid ) );
-        SetTextPositioning( textItem, elem.justification, elem.orientation, true );
+        SetTextPositioning( textItem, elem.justification, elem.orientation );
 
         size_t fontId = elem.fontId;
 
@@ -3343,7 +3331,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );
         valueField->SetTextAngle( ANGLE_VERTICAL );
-        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
 
     case ASCH_RECORD_ORIENTATION::UPWARDS:
@@ -3355,7 +3343,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_270 );
         valueField->SetTextAngle( ANGLE_VERTICAL );
-        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
 
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
@@ -3866,7 +3854,7 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
 
     SCH_FIELD* field = symbol->GetField( REFERENCE_FIELD );
     field->SetPosition( elem.location + m_sheetOffset );
-    SetTextPositioning( field, elem.justification, elem.orientation, true );
+    SetTextPositioning( field, elem.justification, elem.orientation );
 }
 
 
@@ -4008,7 +3996,7 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
         field->SetText( kicadText );
         field->SetPosition( elem.location + m_sheetOffset );
         field->SetVisible( !elem.isHidden );
-        SetTextPositioning( field, elem.justification, elem.orientation, true );
+        SetTextPositioning( field, elem.justification, elem.orientation );
     }
 }
 
@@ -4081,7 +4069,7 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
         field->SetText( kicadText );
 
         field->SetTextPos( elem.location );
-        SetTextPositioning( field, elem.justification, elem.orientation, true );
+        SetTextPositioning( field, elem.justification, elem.orientation );
         field->SetVisible( !elem.isHidden );
 
         if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
