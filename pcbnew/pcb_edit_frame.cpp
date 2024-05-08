@@ -2053,21 +2053,25 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
     }
     else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_EDIT_BOARD_FP )
     {
-        auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
+        if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_EDITOR, true ) )
+        {
+            FOOTPRINT_EDIT_FRAME* fp_editor = static_cast<FOOTPRINT_EDIT_FRAME*>( frame );
 
-        editor->LoadFootprintFromBoard( aFootprint );
-
-        editor->Show( true );
-        editor->Raise();        // Iconize( false );
+            fp_editor->LoadFootprintFromBoard( aFootprint );
+            fp_editor->Show( true );
+            fp_editor->Raise();        // Iconize( false );
+        }
     }
     else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_EDIT_LIBRARY_FP )
     {
-        auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
+        if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_EDITOR, true ) )
+        {
+            FOOTPRINT_EDIT_FRAME* fp_editor = static_cast<FOOTPRINT_EDIT_FRAME*>( frame );
 
-        editor->LoadFootprintFromLibrary( aFootprint->GetFPID() );
-
-        editor->Show( true );
-        editor->Raise();        // Iconize( false );
+            fp_editor->LoadFootprintFromLibrary( aFootprint->GetFPID() );
+            fp_editor->Show( true );
+            fp_editor->Raise();        // Iconize( false );
+        }
     }
     else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_UPDATE_FP )
     {

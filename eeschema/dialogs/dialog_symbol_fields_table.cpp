@@ -109,14 +109,15 @@ protected:
         if( event.GetId() == MYID_SELECT_FOOTPRINT )
         {
             // pick a footprint using the footprint picker.
-            wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
-                                                       FOOTPRINT_FIELD );
-            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg );
+            wxString fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD );
 
-            if( frame->ShowModal( &fpid, m_dlg ) )
-                m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD, fpid );
+            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
+            {
+                if( frame->ShowModal( &fpid, m_dlg ) )
+                    m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD, fpid );
 
-            frame->Destroy();
+                frame->Destroy();
+            }
         }
         else if (event.GetId() == MYID_SHOW_DATASHEET )
         {

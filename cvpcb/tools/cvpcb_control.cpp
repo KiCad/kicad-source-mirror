@@ -176,11 +176,11 @@ int CVPCB_CONTROL::ShowFootprintViewer( const TOOL_EVENT& aEvent )
 
         fpframe = (DISPLAY_FOOTPRINTS_FRAME*) m_frame->Kiway().Player( FRAME_CVPCB_DISPLAY, true,
                                                                        m_frame );
+
+        // If Kiway() cannot create the eeschema frame, it shows a error message, and
+        // frame is null
         if( !fpframe )
-        {
-            wxMessageBox( _( "Unable to create the footprint viewer frame" ) );
             return 0;
-        }
 
         fpframe->Show( true );
     }

@@ -1791,37 +1791,35 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
         else if( retval == SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL )
         {
-            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR,
-                                                                        true );
+            if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true ) )
+            {
+                SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( frame );
 
-            wxCHECK( editor, 0 );
+                if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
+                    blocking_win->Close( true );
 
-            if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
-                blocking_win->Close( true );
+                // The broken library symbol link indicator cannot be edited.
+                if( symbol->IsMissingLibSymbol() )
+                    return 0;
 
-            // The broken library symbol link indicator cannot be edited.
-            if( symbol->IsMissingLibSymbol() )
-                return 0;
-
-            editor->LoadSymbolFromSchematic( symbol );
-
-            editor->Show( true );
-            editor->Raise();
+                editor->LoadSymbolFromSchematic( symbol );
+                editor->Show( true );
+                editor->Raise();
+            }
         }
         else if( retval == SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL )
         {
-            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR,
-                                                                        true );
+            if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true ) )
+            {
+                SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( frame );
 
-            wxCHECK( editor, 0 );
+                if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
+                    blocking_win->Close( true );
 
-            if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
-                blocking_win->Close( true );
-
-            editor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetBodyStyle() );
-
-            editor->Show( true );
-            editor->Raise();
+                editor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetBodyStyle() );
+                editor->Show( true );
+                editor->Raise();
+            }
         }
         else if( retval == SYMBOL_PROPS_WANT_UPDATE_SYMBOL )
         {

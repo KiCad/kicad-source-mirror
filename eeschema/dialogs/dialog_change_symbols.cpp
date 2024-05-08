@@ -248,15 +248,16 @@ void DIALOG_CHANGE_SYMBOLS::launchMatchIdSymbolBrowser( wxCommandEvent& aEvent )
 {
     wxString newName = getLibIdValue( m_specifiedId );
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SYMBOL_CHOOSER, true, this );
-
-    if( frame->ShowModal( &newName, this ) )
+    if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_SYMBOL_CHOOSER, true, this ) )
     {
-        m_specifiedId->SetValue( UnescapeString( newName ) );
-        updateFieldsList();
-    }
+        if( frame->ShowModal( &newName, this ) )
+        {
+            m_specifiedId->SetValue( UnescapeString( newName ) );
+            updateFieldsList();
+        }
 
-    frame->Destroy();
+        frame->Destroy();
+    }
 }
 
 
@@ -264,15 +265,16 @@ void DIALOG_CHANGE_SYMBOLS::launchNewIdSymbolBrowser( wxCommandEvent& aEvent )
 {
     wxString newName = getLibIdValue( m_newId );
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SYMBOL_CHOOSER, true, this );
-
-    if( frame->ShowModal( &newName, this ) )
+    if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_SYMBOL_CHOOSER, true, this ) )
     {
-        m_newId->SetValue( UnescapeString( newName ) );
-        updateFieldsList();
-    }
+        if( frame->ShowModal( &newName, this ) )
+        {
+            m_newId->SetValue( UnescapeString( newName ) );
+            updateFieldsList();
+        }
 
-    frame->Destroy();
+        frame->Destroy();
+    }
 }
 
 
