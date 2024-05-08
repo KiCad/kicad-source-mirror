@@ -34,6 +34,7 @@
 PCB_IO_SOLIDWORKS::PCB_IO_SOLIDWORKS() : PCB_IO( wxS( "Solidworks PCB" ) )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
+    RegisterLayerMappingCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 
 
@@ -121,7 +122,7 @@ BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     try
     {
         // Parse File
-        ALTIUM_PCB pcb( m_board, m_progressReporter, m_reporter );
+        ALTIUM_PCB pcb( m_board, m_progressReporter, m_layer_mapping_handler, m_reporter );
         pcb.Parse( altiumPcbFile, mapping );
     }
     catch( CFB::CFBException& exception )

@@ -43,11 +43,28 @@
 PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() : PCB_IO( wxS( "Altium Designer" ) )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
+
+    RegisterLayerMappingCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 
 
 PCB_IO_ALTIUM_DESIGNER::~PCB_IO_ALTIUM_DESIGNER()
 {
+}
+
+
+std::map<wxString, PCB_LAYER_ID> PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback(
+        const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector )
+{
+    std::map<wxString, PCB_LAYER_ID> retval;
+
+    // Just return a the auto-mapped layers
+    for( INPUT_LAYER_DESC layerDesc : aInputLayerDescriptionVector )
+    {
+        retval.insert( { layerDesc.Name, layerDesc.AutoMapLayer } );
+    }
+
+    return retval;
 }
 
 
@@ -118,7 +135,7 @@ BOARD* PCB_IO_ALTIUM_DESIGNER::LoadBoard( const wxString& aFileName, BOARD* aApp
     try
     {
         // Parse File
-        ALTIUM_PCB pcb( m_board, m_progressReporter, m_reporter );
+        ALTIUM_PCB pcb( m_board, m_progressReporter, m_layer_mapping_handler, m_reporter );
         pcb.Parse( altiumPcbFile, mapping );
     }
     catch( CFB::CFBException& exception )
@@ -280,7 +297,7 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
                 continue;
 
             // Parse File
-            ALTIUM_PCB pcb( m_board, nullptr, m_reporter, aLibraryPath, aFootprintName );
+            ALTIUM_PCB pcb( m_board, nullptr, m_layer_mapping_handler, m_reporter, aLibraryPath, aFootprintName );
             return pcb.ParseFootprint( *altiumLibFile, aFootprintName );
         }
     }

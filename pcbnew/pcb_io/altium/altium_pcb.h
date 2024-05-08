@@ -28,6 +28,8 @@
 #include <functional>
 #include <layer_ids.h>
 #include <vector>
+#include <pcb_io/common/plugin_common_layer_mapping.h>
+
 
 #include <altium_parser_pcb.h>
 
@@ -90,7 +92,6 @@ class ZONE;
 class PCB_DIM_RADIAL;
 class PROGRESS_REPORTER;
 
-
 namespace CFB
 {
 struct COMPOUND_FILE_ENTRY;
@@ -107,6 +108,7 @@ class ALTIUM_PCB
 {
 public:
     explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter,
+                         LAYER_MAPPING_HANDLER& aLayerMappingHandler,
                          REPORTER* aReporter = nullptr,
                          const wxString& aLibrary = wxEmptyString,
                          const wxString& aFootprintName = wxEmptyString);
@@ -239,6 +241,8 @@ private:
 
     FOOTPRINT* HelperGetFootprint( uint16_t aComponent ) const;
 
+    void remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup );
+
     BOARD*                               m_board;
     std::vector<FOOTPRINT*>              m_components;
     std::vector<ZONE*>                   m_polygons;
@@ -247,11 +251,14 @@ private:
     std::map<uint32_t, wxString>         m_unicodeStrings;
     std::vector<int>                     m_altiumToKicadNetcodes;
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map copper layers
+    std::map<ALTIUM_LAYER, wxString>     m_layerNames;
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
     std::map<ALTIUM_RECORD, std::multimap<int, const AEXTENDED_PRIMITIVE_INFORMATION>>
             m_extendedPrimitiveInformationMaps;
 
     std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;
+
+    LAYER_MAPPING_HANDLER   m_layerMappingHandler;
 
     PROGRESS_REPORTER* m_progressReporter;   ///< optional; may be nullptr
     REPORTER*          m_reporter;           ///< optional; may be nullptr

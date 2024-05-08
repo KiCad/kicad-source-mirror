@@ -253,25 +253,32 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
 
     if( klayer == UNDEFINED_LAYER )
     {
-        if( m_reporter )
+        auto it = m_layerNames.find( aAltiumLayer );
+        wxString layerName = it != m_layerNames.end() ? it->second : wxString::Format( wxT( "(%d)" ),
+                                                                                      (int) aAltiumLayer );
+
+        if( m_reporter && altiumLayersWithWarning.insert( aAltiumLayer ).second )
         {
             m_reporter->Report( wxString::Format(
-                    _( "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad "
-                       "layer Eco1_User." ), aAltiumLayer ), RPT_SEVERITY_INFO );
+                    _( "Altium layer %s has no KiCad equivalent. It has been moved to KiCad "
+                       "layer Eco1_User." ), layerName ), RPT_SEVERITY_INFO );
         }
 
         klayer = Eco1_User;
+        m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET( klayer ) );
     }
 
     return { klayer };
 }
 
 
-ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter,
+ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter,
+                        LAYER_MAPPING_HANDLER& aHandler, REPORTER* aReporter,
                         const wxString& aLibrary, const wxString& aFootprintName )
 {
     m_board = aBoard;
     m_progressReporter = aProgressReporter;
+    m_layerMappingHandler = aHandler;
     m_reporter = aReporter;
     m_doneCount = 0;
     m_lastProgressCount = 0;
@@ -1024,6 +1031,8 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         ++it;
     }
 
+    remapUnsureLayers( elem.stackup );
+
     // Set name of all non-cu layers
     for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::TOP_OVERLAY );
          altiumLayerId <= static_cast<size_t>( ALTIUM_LAYER::BOTTOM_SOLDER ); altiumLayerId++ )
@@ -1050,6 +1059,72 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     }
 
     HelperCreateBoardOutline( elem.board_vertices );
+}
+
+
+void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup )
+{
+    LSET enabledLayers        = m_board->GetEnabledLayers();
+    LSET validRemappingLayers = enabledLayers    | LSET::AllBoardTechMask() |
+                                LSET::UserMask() | LSET::UserDefinedLayers();
+
+    std::vector<INPUT_LAYER_DESC> inputLayers;
+    std::map<wxString, ALTIUM_LAYER>  altiumLayerNameMap;
+
+    for( size_t ii = 0; ii < aStackup.size(); ii++ )
+    {
+        ABOARD6_LAYER_STACKUP& curLayer = aStackup[ii];
+        ALTIUM_LAYER           layer_num = static_cast<ALTIUM_LAYER>( ii + 1 );
+        INPUT_LAYER_DESC       iLdesc;
+
+        if( ii > m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
+            && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY
+                   && layer_num <= ALTIUM_LAYER::BOTTOM_SOLDER )
+            && !( layer_num >= ALTIUM_LAYER::MECHANICAL_1
+                   && layer_num <= ALTIUM_LAYER::MECHANICAL_16 ) )
+        {
+            if( layer_num < ALTIUM_LAYER::BOTTOM_LAYER )
+                continue;
+
+            iLdesc.AutoMapLayer = PCB_LAYER_ID::UNDEFINED_LAYER;
+        }
+        else
+        {
+            iLdesc.AutoMapLayer = GetKicadLayer( layer_num );
+        }
+
+        iLdesc.Name            = curLayer.name;
+        iLdesc.PermittedLayers = validRemappingLayers;
+        iLdesc.Required        = ii < m_board->GetCopperLayerCount() || layer_num == ALTIUM_LAYER::BOTTOM_LAYER;
+
+        inputLayers.push_back( iLdesc );
+        altiumLayerNameMap.insert( { curLayer.name, layer_num } );
+        m_layerNames.insert( { layer_num, curLayer.name } );
+    }
+
+    if( inputLayers.size() == 0 )
+        return;
+
+    // Callback:
+    std::map<wxString, PCB_LAYER_ID> reMappedLayers = m_layerMappingHandler( inputLayers );
+    enabledLayers = LSET();
+    m_layermap.clear();
+
+    for( std::pair<wxString, PCB_LAYER_ID> layerPair : reMappedLayers )
+    {
+        if( layerPair.second == PCB_LAYER_ID::UNDEFINED_LAYER )
+        {
+            wxFAIL_MSG( wxT( "Unexpected Layer ID" ) );
+            continue;
+        }
+
+        ALTIUM_LAYER altiumID     = altiumLayerNameMap.at( layerPair.first );
+        m_layermap.insert_or_assign( altiumID, layerPair.second );
+        enabledLayers |= LSET( layerPair.second );
+    }
+
+    m_board->SetEnabledLayers( enabledLayers );
+    m_board->SetVisibleLayers( enabledLayers );
 }
 
 

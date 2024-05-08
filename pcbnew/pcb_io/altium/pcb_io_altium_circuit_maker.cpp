@@ -41,6 +41,7 @@
 
 PCB_IO_ALTIUM_CIRCUIT_MAKER::PCB_IO_ALTIUM_CIRCUIT_MAKER() : PCB_IO( wxS( "Altium Circuit Maker" ) )
 {
+    RegisterLayerMappingCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 
 
@@ -100,7 +101,7 @@ BOARD* PCB_IO_ALTIUM_CIRCUIT_MAKER::LoadBoard( const wxString& aFileName, BOARD*
     try
     {
         // Parse File
-        ALTIUM_PCB pcb( m_board, m_progressReporter, m_reporter );
+        ALTIUM_PCB pcb( m_board, m_progressReporter, m_layer_mapping_handler, m_reporter );
         pcb.Parse( altiumPcbFile, mapping );
     }
     catch( CFB::CFBException& exception )
