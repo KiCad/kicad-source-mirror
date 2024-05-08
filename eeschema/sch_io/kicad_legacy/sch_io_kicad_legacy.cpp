@@ -1285,6 +1285,10 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             VECTOR2I pos;
             pos.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+
+            // Y got inverted in symbol coordinates
+            pos.y = -( pos.y - symbol->GetY() ) + symbol->GetY();
+
             int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             int attributes = parseHex( aReader, line, &line );
 
