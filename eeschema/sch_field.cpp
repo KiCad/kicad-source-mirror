@@ -599,16 +599,7 @@ const BOX2I SCH_FIELD::GetBoundingBox() const
     TRANSFORM transform;
 
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-    {
-        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
-
-        // Due to the Y axis direction, we must mirror the bounding box, relative to the
-        // text position:
-        MIRROR( begin.y, pos.y );
-        MIRROR( end.y,   pos.y );
-
-        transform = parentSymbol->GetTransform();
-    }
+        transform = static_cast<SCH_SYMBOL*>( m_parent )->GetTransform();
 
     bbox.SetOrigin( transform.TransformCoordinate( begin ) );
     bbox.SetEnd( transform.TransformCoordinate( end ) );
