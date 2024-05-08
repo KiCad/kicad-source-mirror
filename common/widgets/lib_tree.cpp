@@ -725,18 +725,6 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
 
     if( m_previewItem.IsOk() )
     {
-        // Scroll checker
-        if( m_tree_ctrl->GetItemRect( m_previewItem ) != m_previewItemRect )
-        {
-            hidePreview();
-
-            m_hoverPos = clientPos;
-            m_hoverItem = item;
-            m_hoverItemRect = m_tree_ctrl->GetItemRect( m_hoverItem );
-            m_hoverTimer.StartOnce( HOVER_TIMER_MILLIS );
-            return;
-        }
-
         if( item != m_previewItem )
         {
 #ifdef __WXGTK__
