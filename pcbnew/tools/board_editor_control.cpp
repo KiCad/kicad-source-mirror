@@ -1591,15 +1591,18 @@ int BOARD_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    auto editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
+    if( KIWAY_PLAYER* frame = editFrame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, true ) )
+    {
+        FOOTPRINT_EDIT_FRAME* fp_editor = static_cast<FOOTPRINT_EDIT_FRAME*>( frame );
 
-    if( aEvent.IsAction( &PCB_ACTIONS::editFpInFpEditor ) )
-        editor->LoadFootprintFromBoard( fp );
-    else if( aEvent.IsAction( &PCB_ACTIONS::editLibFpInFpEditor ) )
-        editor->LoadFootprintFromLibrary( fp->GetFPID() );
+        if( aEvent.IsAction( &PCB_ACTIONS::editFpInFpEditor ) )
+            fp_editor->LoadFootprintFromBoard( fp );
+        else if( aEvent.IsAction( &PCB_ACTIONS::editLibFpInFpEditor ) )
+            fp_editor->LoadFootprintFromLibrary( fp->GetFPID() );
 
-    editor->Show( true );
-    editor->Raise();        // Iconize( false );
+        fp_editor->Show( true );
+        fp_editor->Raise();        // Iconize( false );
+    }
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );

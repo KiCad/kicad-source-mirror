@@ -406,43 +406,44 @@ void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname = m_newID->GetValue();
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, this );
-
-    if( m_currentFootprint )
+    if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, this ) )
     {
-        /*
-         * Symbol netlist format:
-         *   pinNumber pinName <tab> pinNumber pinName...
-         *   fpFilter fpFilter...
-         */
-        wxString netlist;
+        if( m_currentFootprint )
+        {
+            /*
+             * Symbol netlist format:
+             *   pinNumber pinName <tab> pinNumber pinName...
+             *   fpFilter fpFilter...
+             */
+            wxString netlist;
 
-        wxArrayString pins;
+            wxArrayString pins;
 
-        for( const wxString& pad : m_currentFootprint->GetUniquePadNumbers() )
-            pins.push_back( pad + ' ' + wxEmptyString /* leave pinName empty */ );
+            for( const wxString& pad : m_currentFootprint->GetUniquePadNumbers() )
+                pins.push_back( pad + ' ' + wxEmptyString /* leave pinName empty */ );
 
-        if( !pins.IsEmpty() )
-            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+            if( !pins.IsEmpty() )
+                netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
 
-        netlist << wxS( "\r" );
+            netlist << wxS( "\r" );
 
-        netlist << EscapeString( m_currentFootprint->GetFilters(), CTX_LINE ) << wxS( "\r" );
+            netlist << EscapeString( m_currentFootprint->GetFilters(), CTX_LINE ) << wxS( "\r" );
 
-        std::string payload( netlist.ToStdString() );
-        KIWAY_EXPRESS mail( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, payload );
-        frame->KiwayMailIn( mail );
+            std::string payload( netlist.ToStdString() );
+            KIWAY_EXPRESS mail( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, payload );
+            frame->KiwayMailIn( mail );
+        }
+
+        if( frame->ShowModal( &newname, this ) )
+        {
+            if( event.GetEventObject() == m_newIDBrowseButton )
+                m_newID->SetValue( newname );
+            else
+                m_specifiedID->SetValue( newname );
+        }
+
+        frame->Destroy();
     }
-
-    if( frame->ShowModal( &newname, this ) )
-    {
-        if( event.GetEventObject() == m_newIDBrowseButton )
-            m_newID->SetValue( newname );
-        else
-            m_specifiedID->SetValue( newname );
-    }
-
-    frame->Destroy();
 }
 
 

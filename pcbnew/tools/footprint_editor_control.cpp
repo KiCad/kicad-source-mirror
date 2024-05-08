@@ -228,51 +228,54 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
         }
     }
 
-    auto* wizard = (FOOTPRINT_WIZARD_FRAME*) m_frame->Kiway().Player( FRAME_FOOTPRINT_WIZARD,
-                                                                      true, m_frame );
-
-    if( wizard->ShowModal( nullptr, m_frame ) )
+    if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_FOOTPRINT_WIZARD, true, m_frame ) )
     {
-        // Creates the new footprint from python script wizard
-        FOOTPRINT* newFootprint = wizard->GetBuiltFootprint();
+        FOOTPRINT_WIZARD_FRAME* wizard = static_cast<FOOTPRINT_WIZARD_FRAME*>( frame );
 
-        if( newFootprint )    // i.e. if create footprint command is OK
+        if( wizard->ShowModal( nullptr, m_frame ) )
         {
-            m_frame->Clear_Pcb( false );
+            // Creates the new footprint from python script wizard
+            FOOTPRINT* newFootprint = wizard->GetBuiltFootprint();
 
-            canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-            //  Add the new object to board
-            m_frame->AddFootprintToBoard( newFootprint );
-
-            // Initialize data relative to nets and netclasses (for a new footprint the defaults
-            // are used).  This is mandatory to handle and draw pads.
-            board()->BuildListOfNets();
-            newFootprint->SetPosition( VECTOR2I( 0, 0 ) );
-            newFootprint->ClearFlags();
-
-            m_frame->Zoom_Automatique( false );
-            m_frame->GetScreen()->SetContentModified();
-            m_frame->OnModify();
-
-            // If selected from the library tree then go ahead and save it there
-            if( !selected.GetLibNickname().empty() )
+            if( newFootprint )    // i.e. if create footprint command is OK
             {
-                LIB_ID fpid = newFootprint->GetFPID();
-                fpid.SetLibNickname( selected.GetLibNickname() );
-                newFootprint->SetFPID( fpid );
-                m_frame->SaveFootprint( newFootprint );
-                m_frame->ClearModify();
+                m_frame->Clear_Pcb( false );
+
+                canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+                //  Add the new object to board
+                m_frame->AddFootprintToBoard( newFootprint );
+
+                // Initialize data relative to nets and netclasses (for a new footprint the
+                // defaults are used).  This is mandatory to handle and draw pads.
+                board()->BuildListOfNets();
+                newFootprint->SetPosition( VECTOR2I( 0, 0 ) );
+                newFootprint->ClearFlags();
+
+                m_frame->Zoom_Automatique( false );
+                m_frame->GetScreen()->SetContentModified();
+                m_frame->OnModify();
+
+                // If selected from the library tree then go ahead and save it there
+                if( !selected.GetLibNickname().empty() )
+                {
+                    LIB_ID fpid = newFootprint->GetFPID();
+                    fpid.SetLibNickname( selected.GetLibNickname() );
+                    newFootprint->SetFPID( fpid );
+                    m_frame->SaveFootprint( newFootprint );
+                    m_frame->ClearModify();
+                }
+
+                m_frame->UpdateView();
+                canvas()->Refresh();
+                m_frame->Update3DView( true, true );
+
+                m_frame->SyncLibraryTree( false );
             }
-
-            m_frame->UpdateView();
-            canvas()->Refresh();
-            m_frame->Update3DView( true, true );
-
-            m_frame->SyncLibraryTree( false );
         }
+
+        wizard->Destroy();
     }
 
-    wizard->Destroy();
     return 0;
 }
 

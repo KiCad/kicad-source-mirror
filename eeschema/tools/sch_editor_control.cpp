@@ -544,8 +544,8 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL*     picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    SIMULATOR_FRAME* simFrame = (SIMULATOR_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR,
-                                                                            false );
+    KIWAY_PLAYER*    player = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+    SIMULATOR_FRAME* simFrame = static_cast<SIMULATOR_FRAME*>( player );
 
     if( !simFrame )     // Defensive coding; shouldn't happen.
         return 0;

@@ -202,13 +202,15 @@ protected:
         if( rawValue.IsEmpty() )
             rawValue = m_preselect;
 
-        wxString      symbolId = escapeLibId( rawValue );
-        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SYMBOL_CHOOSER, true, m_dlg );
+        wxString symbolId = escapeLibId( rawValue );
 
-        if( frame->ShowModal( &symbolId, m_dlg ) )
-            SetValue( UnescapeString( symbolId ) );
+        if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SYMBOL_CHOOSER, true, m_dlg ) )
+        {
+            if( frame->ShowModal( &symbolId, m_dlg ) )
+                SetValue( UnescapeString( symbolId ) );
 
-        frame->Destroy();
+            frame->Destroy();
+        }
     }
 
     DIALOG_SHIM* m_dlg;
@@ -262,18 +264,20 @@ protected:
         // multiple clicks will cause multiple instances of the footprint loader process to start
         Disable();
 
-        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg );
-
-        if( !m_symbolNetlist.empty() )
+        if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
         {
-            KIWAY_EXPRESS event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, m_symbolNetlist );
-            frame->KiwayMailIn( event );
+            if( !m_symbolNetlist.empty() )
+            {
+                KIWAY_EXPRESS event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, m_symbolNetlist );
+                frame->KiwayMailIn( event );
+            }
+
+            if( frame->ShowModal( &fpid, m_dlg ) )
+                SetValue( fpid );
+
+            frame->Destroy();
         }
 
-        if( frame->ShowModal( &fpid, m_dlg ) )
-            SetValue( fpid );
-
-        frame->Destroy();
         Enable();
     }
 

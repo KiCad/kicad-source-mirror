@@ -918,13 +918,15 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     if( event.GetId() == MYID_SELECT_FOOTPRINT )
     {
         // pick a footprint using the footprint picker.
-        wxString      fpid = m_grid->GetCellValue( FOOTPRINT_FIELD, FDC_VALUE );
-        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg );
+        wxString fpid = m_grid->GetCellValue( FOOTPRINT_FIELD, FDC_VALUE );
 
-        if( frame->ShowModal( &fpid, m_dlg ) )
-            m_grid->SetCellValue( FOOTPRINT_FIELD, FDC_VALUE, fpid );
+        if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
+        {
+            if( frame->ShowModal( &fpid, m_dlg ) )
+                m_grid->SetCellValue( FOOTPRINT_FIELD, FDC_VALUE, fpid );
 
-        frame->Destroy();
+            frame->Destroy();
+        }
     }
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
