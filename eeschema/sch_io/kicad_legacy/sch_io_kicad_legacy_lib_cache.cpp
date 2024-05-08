@@ -877,10 +877,10 @@ SCH_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadArc( LINE_READER& aReader )
     {
         VECTOR2I arcStart, arcEnd;
 
-        arcEnd.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
-        arcEnd.y = -schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
         arcStart.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
         arcStart.y = -schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+        arcEnd.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+        arcEnd.y = -schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
         arc->SetStart( arcStart );
         arc->SetEnd( arcEnd );
@@ -892,10 +892,10 @@ SCH_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadArc( LINE_READER& aReader )
         VECTOR2I arcStart( radius, 0 );
         VECTOR2I arcEnd( radius, 0 );
 
-        RotatePoint( arcStart, EDA_ANGLE( -angle2, EDA_ANGLE_T::TENTHS_OF_A_DEGREE_T ) );
+        RotatePoint( arcStart, EDA_ANGLE( angle1, EDA_ANGLE_T::TENTHS_OF_A_DEGREE_T ) );
         arcStart += arc->GetCenter();
         arc->SetStart( arcStart );
-        RotatePoint( arcEnd, EDA_ANGLE( -angle1, EDA_ANGLE_T::TENTHS_OF_A_DEGREE_T ) );
+        RotatePoint( arcEnd, EDA_ANGLE( angle2, EDA_ANGLE_T::TENTHS_OF_A_DEGREE_T ) );
         arcEnd += arc->GetCenter();
         arc->SetEnd( arcEnd );
     }
@@ -907,7 +907,7 @@ SCH_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadArc( LINE_READER& aReader )
      * these points were stored in the file, so we need to mimic the swapping of start/end
      * points rather than using the stored angles in order to properly map edge cases.
      */
-    if( !MapAnglesV6( &angle1, &angle2 ) )
+    if( MapAnglesV6( &angle1, &angle2 ) )
     {
         VECTOR2I temp = arc->GetEnd();
         arc->SetEnd( arc->GetStart() );
