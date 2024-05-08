@@ -90,7 +90,7 @@ namespace numEval
 
 } // namespace numEval
 
-class NUMERIC_EVALUATOR
+class KICOMMON_API NUMERIC_EVALUATOR
 {
     enum class Unit { Invalid, UM, MM, CM, Inch, Mil, Degrees, SI };
 

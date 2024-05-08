@@ -815,7 +815,7 @@ add_dependencies( pcbcommon delaunator )
 
 # The lemon grammar for the numeric evaluator
 generate_lemon_grammar(
-    common
+    kicommon
     libeval
     libeval/numeric_evaluator.cpp
     libeval/grammar.lemon
@@ -823,7 +823,7 @@ generate_lemon_grammar(
 
 # The lemon grammar for the expression compiler
 generate_lemon_grammar(
-    common
+    kicommon
     libeval_compiler
     libeval_compiler/libeval_compiler.cpp
     libeval_compiler/grammar.lemon

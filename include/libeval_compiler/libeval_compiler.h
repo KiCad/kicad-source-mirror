@@ -27,6 +27,7 @@
 #include <string>
 #include <stack>
 
+#include <kicommon.h>
 #include <base_units.h>
 #include <wx/intl.h>
 
@@ -69,7 +70,7 @@ enum COMPILATION_STAGE
     CST_RUNTIME
 };
 
-struct ERROR_STATUS
+struct KICOMMON_API  ERROR_STATUS
 {
     bool pendingError = false;
 
@@ -107,7 +108,7 @@ class VAR_REF;
 
 typedef std::function<void( CONTEXT*, void* )> FUNC_CALL_REF;
 
-struct T_TOKEN_VALUE
+struct KICOMMON_API  T_TOKEN_VALUE
 {
     wxString* str;
     double    num;
@@ -118,7 +119,7 @@ struct T_TOKEN_VALUE
 constexpr T_TOKEN_VALUE defaultTokenValue = { nullptr, 0.0, 0 };
 
 
-struct T_TOKEN
+struct KICOMMON_API  T_TOKEN
 {
     int           token;
     T_TOKEN_VALUE value;
@@ -128,7 +129,7 @@ struct T_TOKEN
 constexpr T_TOKEN defaultToken = { TR_UNDEFINED, defaultTokenValue };
 
 
-class TREE_NODE
+class KICOMMON_API TREE_NODE
 {
 public:
     T_TOKEN_VALUE value;
@@ -151,7 +152,7 @@ public:
 TREE_NODE* newNode( LIBEVAL::COMPILER* compiler, int op,
                     const T_TOKEN_VALUE& value = defaultTokenValue );
 
-class UNIT_RESOLVER
+class KICOMMON_API UNIT_RESOLVER
 {
 public:
     UNIT_RESOLVER()
@@ -181,7 +182,7 @@ public:
 };
 
 
-class VALUE
+class KICOMMON_API VALUE
 {
 public:
     VALUE() :
@@ -289,7 +290,7 @@ private:
     std::function<wxString()> m_lambdaStr;
 };
 
-class VAR_REF
+class KICOMMON_API VAR_REF
 {
 public:
     VAR_REF() {};
@@ -300,7 +301,7 @@ public:
 };
 
 
-class CONTEXT
+class KICOMMON_API CONTEXT
 {
 public:
     CONTEXT() :
@@ -369,7 +370,7 @@ private:
 };
 
 
-class UCODE
+class KICOMMON_API UCODE
 {
 public:
     virtual ~UCODE();
@@ -398,7 +399,7 @@ protected:
 };
 
 
-class UOP
+class KICOMMON_API UOP
 {
 public:
     UOP( int op, std::unique_ptr<VALUE> value ) :
@@ -436,7 +437,7 @@ private:
     std::unique_ptr<VALUE>   m_value;
 };
 
-class TOKENIZER
+class KICOMMON_API TOKENIZER
 {
 public:
     void Restart( const wxString& aStr )
@@ -487,7 +488,7 @@ private:
 };
 
 
-class COMPILER
+class KICOMMON_API COMPILER
 {
 public:
     COMPILER();
