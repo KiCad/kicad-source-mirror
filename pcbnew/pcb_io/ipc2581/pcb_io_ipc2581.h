@@ -46,7 +46,7 @@ class PROGRESS_REPORTER;
 class SHAPE_POLY_SET;
 class SHAPE_SEGMENT;
 
-class PCB_IO_IPC2581 : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
+class PCB_IO_IPC2581 : public PCB_IO
 {
 public:
     /**
@@ -55,7 +55,6 @@ public:
     */
     PCB_IO_IPC2581() : PCB_IO( wxS( "IPC-2581" ) )
     {
-        m_show_layer_mapping_warnings = false;
         m_total_bytes = 0;
         m_scale = 1.0;
         m_sigfig = 3;
@@ -119,23 +118,6 @@ public:
         return false;
     }
 
-
-    /**
-     * Return the automapped layers.
-     *
-     * @param aInputLayerDescriptionVector
-     * @return Auto-mapped layers
-     */
-    // static std::map<wxString, PCB_LAYER_ID> DefaultLayerMappingCallback(
-    //         const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
-
-    /**
-     * Register a different handler to be called when mapping of IPC2581 to KiCad layers occurs.
-     *
-     * @param aLayerMappingHandler
-     */
-    // void RegisterLayerMappingCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler ) override
-    // {};
 
 private:
 
@@ -285,8 +267,6 @@ private:
 
     bool isValidLayerFor2581( PCB_LAYER_ID aLayer );
 private:
-    LAYER_MAPPING_HANDLER   m_layerMappingHandler;
-    bool                    m_show_layer_mapping_warnings;
 
     size_t                  m_total_bytes;  //<! Total number of bytes to be written
 
