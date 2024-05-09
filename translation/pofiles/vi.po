@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-03-05 10:02+0000\n"
+"PO-Revision-Date: 2024-05-10 08:23+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
-">\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.4-rc\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1392,9 +1392,8 @@ msgstr "Mở tài liệu hiện có"
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:72
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
-#, fuzzy
 msgid "Clear Recent Files"
-msgstr "Tệp dự án: \"%s\""
+msgstr "Xóa các tệp gần đây"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:400
 #: eeschema/tools/sch_drawing_tools.cpp:654
@@ -1409,9 +1408,8 @@ msgid "Image Files"
 msgstr "Các file Ảnh"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Chọn một tệp tin"
+msgstr "Tạo tệp Trang vẽ"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:497
@@ -1601,7 +1599,7 @@ msgstr "Lỗi phân bổ bộ nhớ cho potrace bitmap"
 #: pcbnew/dialogs/dialog_drc_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
-msgstr "Các Lỗi"
+msgstr "Lỗi"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -1640,9 +1638,8 @@ msgid "pixels"
 msgstr "Pixels"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
-#, fuzzy
 msgid "Image PPI:"
-msgstr "Bitmap PPI:"
+msgstr "Hình ảnh PPI:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:228
 #: pcbnew/pcb_reference_image.cpp:256
@@ -4561,14 +4558,12 @@ msgid "Zoom:"
 msgstr "Thu phóng:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:248
-#, fuzzy
 msgid "Pan up/down:"
-msgstr "Pan lên / xuống:"
+msgstr "Xoay lên/xuống:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Pan left/right:"
-msgstr "Pan trái / phải:"
+msgstr "Xoay trái/phải:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
 #, fuzzy
@@ -4584,7 +4579,7 @@ msgstr "Pan trái / phải bằng bàn di chuột ngang hoặc di chuyển con l
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
-"Pan canvas sang trái và phải khi cuộn từ trái sang phải trên bàn di chuột"
+"Xoay khung vẽ sang trái và phải khi cuộn từ trái sang phải trên bàn di chuột"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:316
 #, fuzzy
@@ -4646,9 +4641,8 @@ msgid "Automatically remove uninstalled libraries"
 msgstr "Tự động xoay khi di chuyển đối tượng"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:87
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Tạo Biệt danh:"
+msgstr "Tiền tố biệt danh thư viện:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1948
 #: common/stroke_params.cpp:36
@@ -5147,9 +5141,8 @@ msgstr ""
 "độ lệch: %d"
 
 #: common/dsnlexer.cpp:873
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr "Tên tín hiệu không hợp lệ"
+msgstr "Số thập phân không hợp lệ"
 
 #: common/eda_base_frame.cpp:417 common/tool/actions.cpp:174
 #: pcbnew/dialogs/panel_setup_rules.cpp:123
@@ -5192,15 +5185,14 @@ msgid "Version Control"
 msgstr "Màu sắc lựa chọn"
 
 #: common/eda_base_frame.cpp:1103
-#, fuzzy
 msgid "Data Collection"
-msgstr "Loại bỏ khỏi lựa chọn"
+msgstr "Thu thập dữ liệu"
 
 #: common/eda_base_frame.cpp:1126 common/tool/actions.cpp:869
 #: common/tool/common_tools.cpp:562 eeschema/symbol_editor/symbol_editor.cpp:82
 #: kicad/tools/kicad_manager_actions.cpp:115
 msgid "Symbol Editor"
-msgstr "Trình soạn thảo Symbol"
+msgstr "Trình chỉnh sửa ký hiệu"
 
 #: common/eda_base_frame.cpp:1127 common/eda_base_frame.cpp:1136
 #: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1171
@@ -12970,9 +12962,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Thuộc tính Văn bản"
+msgstr "Chỉnh sửa Thuộc tính Trang"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -19737,9 +19728,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame.cpp:111
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
 #: eeschema/tools/ee_actions.cpp:67
-#, fuzzy
 msgid "Simulator"
-msgstr "Chỉnh sửa Mô hình Spice..."
+msgstr "Trình mô phỏng"
 
 #: eeschema/sim/simulator_frame.cpp:332
 msgid "Spice Simulator"
@@ -40271,9 +40261,8 @@ msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:761
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "Lớp solder mask phía trước"
+msgstr "Đang dựng mặt nạ hàn..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:769
 #, fuzzy
@@ -40291,48 +40280,46 @@ msgid "Checking text dimensions..."
 msgstr "Đang kiểm tra tên trang tính ..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "Chiều rộng Track"
+msgstr "(%s chiều cao tối thiểu %s; thực tế %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "(%s chiều cao tối đa %s; thực tế %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:217
 msgid "(TrueType font characters with insufficient stroke weight)"
-msgstr ""
+msgstr "(Ký tự phông chữ TrueType có độ dày nét không đủ)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "Độ dày lưới:"
+msgstr "(%s độ dày tối thiểu %s; thực tế %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "(%s độ dày tối đa %s; thực tế %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
-#, fuzzy
 msgid "Checking track widths..."
-msgstr "Đang kiểm tra các pin..."
+msgstr "Đang kiểm tra độ rộng đường mạch..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:74
-#, fuzzy
 msgid "Checking via diameters..."
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Đang kiểm tra đường kính via..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s)"
-msgstr "Chiều rộng Track"
+msgstr "(%s đường kính tối thiểu %s; thực tế %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s)"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "(%s đường kính tối đa %s; thực tế %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:222
 #, fuzzy, c-format
@@ -40399,15 +40386,15 @@ msgid "VRML Export Failed:\n"
 msgstr "Xuất VRML thất bại:\n"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "Không thể mở tệp '%s'"
+msgstr "Đã tạo tệp '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:350
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Đã tạo tệp '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:149
 #, fuzzy, c-format
@@ -40420,7 +40407,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:502
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "Xác định dữ liệu PCB\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:505
 #, fuzzy, c-format
@@ -40430,7 +40417,7 @@ msgstr "Độ dày của bo mạch khi xếp chồng: %.3f mm\n"
 #: pcbnew/exporters/step/exporter_step.cpp:519
 #, c-format
 msgid "Build %s data\n"
-msgstr ""
+msgstr "Dựng dữ liệu %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:523
 msgid ""
