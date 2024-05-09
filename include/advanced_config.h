@@ -580,6 +580,16 @@ public:
      * Log IPC API requests and responses
      */
     bool m_EnableAPILogging;
+
+    /**
+     * Maximum number of filesystem watchers to use.
+     *
+     * Setting name: "MaxFilesystemWatchers"
+     * Valid values: 0 to 2147483647
+     * Default value: 16384
+     */
+    int m_MaxFilesystemWatchers;
+
 ///@}
 
 private:

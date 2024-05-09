@@ -1435,8 +1435,9 @@ void PROJECT_TREE_PANE::FileWatcherReset()
     std::stack < wxTreeItemId > subdirs_id;
 
     wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
+    int total_watch_count = 0;
 
-    while( true )
+    while( total_watch_count < ADVANCED_CFG::GetCfg().m_MaxFilesystemWatchers )
     {
         if( !kid.IsOk() )
         {
@@ -1468,6 +1469,7 @@ void PROJECT_TREE_PANE::FileWatcherReset()
             {
                 fn.AssignDir( path );
                 m_watcher->Add( fn );
+                total_watch_count++;
 
                 // if kid is a subdir, push in list to explore it later
                 if( itemData->IsPopulated() && m_TreeProject->GetChildrenCount( kid ) )
@@ -1478,6 +1480,9 @@ void PROJECT_TREE_PANE::FileWatcherReset()
         kid = m_TreeProject->GetNextChild( root_id, cookie );
     }
 #endif
+
+    if( total_watch_count >= ADVANCED_CFG::GetCfg().m_MaxFilesystemWatchers )
+        wxLogTrace( tracePathsAndFiles, "%s: too many directories to watch\n", __func__ );
 
 #if defined(DEBUG) && 1
     wxArrayString paths;

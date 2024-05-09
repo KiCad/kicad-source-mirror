@@ -1185,7 +1185,7 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
 
     wxLogTrace( "KICAD_LIB_WATCH", "Add watch: %s", fn.GetPath() );
 
-    m_watcher->AddTree( fn );
+    m_watcher->Add( fn );
 }
 
 

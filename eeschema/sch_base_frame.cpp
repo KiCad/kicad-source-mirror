@@ -688,7 +688,7 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     fn.AssignDir( m_watcherFileName.GetPath() );
     fn.DontFollowLink();
 
-    m_watcher->AddTree( fn );
+    m_watcher->Add( fn );
 }
 
 
