@@ -215,6 +215,19 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
         }
     }
 
+    auto getOrCreateField =
+            [&aSymbol, &fields]( const wxString& name ) -> SCH_FIELD*
+            {
+                for( SCH_FIELD& field : fields )
+                {
+                    if( field.GetName().IsSameAs( name ) )
+                        return &field;
+                }
+
+                fields.emplace_back( &aSymbol, -1, name );
+                return &fields.back();
+            };
+
     wxString deviceType;
     wxString modelType;
     wxString modelParams;
@@ -225,20 +238,13 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
     if( SIM_MODEL::InferSimModel( aSymbol, &fields, true, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
-        fields.emplace_back( &aSymbol, -1, SIM_DEVICE_FIELD );
-        fields.back().SetText( deviceType );
+        getOrCreateField( SIM_DEVICE_FIELD )->SetText( deviceType );
 
         if( !modelType.IsEmpty() )
-        {
-            fields.emplace_back( &aSymbol, -1, SIM_DEVICE_SUBTYPE_FIELD );
-            fields.back().SetText( modelType );
-        }
+            getOrCreateField( SIM_DEVICE_SUBTYPE_FIELD )->SetText( modelType );
 
-        fields.emplace_back( &aSymbol, -1, SIM_PARAMS_FIELD );
-        fields.back().SetText( modelParams );
-
-        fields.emplace_back( &aSymbol, -1, SIM_PINS_FIELD );
-        fields.back().SetText( pinMap );
+        getOrCreateField( SIM_PARAMS_FIELD )->SetText( modelParams );
+        getOrCreateField( SIM_PINS_FIELD )->SetText( pinMap );
 
         storeInValue = true;
     }

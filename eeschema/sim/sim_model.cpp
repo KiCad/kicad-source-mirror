@@ -1602,6 +1602,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             }
         }
 
+        // Up until 8.0.3 we
+
         return;
     }
 
