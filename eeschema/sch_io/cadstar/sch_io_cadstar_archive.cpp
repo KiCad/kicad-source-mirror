@@ -98,19 +98,8 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
-    // Lets come up with a nice library name
-    wxString libName = aSchematic->Prj().GetProjectName();
-
-    if( libName.IsEmpty() )
-    {
-        wxFileName fn( rootSheet->GetFileName() );
-        libName = fn.GetName();
-    }
-
-    if( libName.IsEmpty() )
-        libName = "noname";
-
-    libName = LIB_ID::FixIllegalChars( libName, true ).wx_str();
+    wxFileName fn = aSchematic->Prj().GetProjectFullName();
+    wxString libName = CADSTAR_SCH_ARCHIVE_LOADER::CreateLibName( fn, nullptr );
 
     wxFileName libFileName( aSchematic->Prj().GetProjectPath(), libName,
                             FILEEXT::KiCadSymbolLibFileExtension );
