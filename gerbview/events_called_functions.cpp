@@ -65,10 +65,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
 
     EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnSelectActiveDCode )
 
-    // Option toolbar
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-                    GERBVIEW_FRAME::OnSelectDisplayMode )
-
     // Auxiliary horizontal toolbar
     EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE, GERBVIEW_FRAME::OnSelectHighlightChoice )
     EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE, GERBVIEW_FRAME::OnSelectHighlightChoice )
@@ -81,8 +77,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnUpdateSelectDCode )
     EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                    GERBVIEW_FRAME::OnUpdateLayerSelectBox )
-    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-                         GERBVIEW_FRAME::OnUpdateDrawMode )
 
     // Drop files event
     EVT_DROP_FILES( GERBVIEW_FRAME::OnDropFiles )
@@ -147,19 +141,6 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
     int dcodeSelected = m_DCodeSelector->GetSelectedDCodeId();
     settings->m_dcodeHighlightValue = dcodeSelected;
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
-    GetCanvas()->Refresh();
-}
-
-
-void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
-{
-    switch( event.GetId() )
-    {
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_0: SetDisplayMode( 0 ); break;
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_1: SetDisplayMode( 1 ); break;
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_2: SetDisplayMode( 2 ); break;
-    }
-
     GetCanvas()->Refresh();
 }
 

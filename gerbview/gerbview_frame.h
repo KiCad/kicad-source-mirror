@@ -95,20 +95,6 @@ public:
     void ApplyDisplaySettingsToGAL();
 
     /**
-     * @return 0 for fast mode (not fully compatible with negative objects)
-     *         1 for exact mode, write mode
-     *         2 for exact mode, OR mode (transparency mode)
-     */
-    int GetDisplayMode() { return m_displayMode; }
-
-    /**
-     * @param aMode =  0 for fast mode
-     *                 1 for exact mode, write mode
-     *                 2 for exact mode, OR mode (transparency mode)
-     */
-    void SetDisplayMode( int aMode ) { m_displayMode = aMode; }
-
-    /**
      * Test whether a given element category is visible. Keep this as an inline function.
      *
      * @param aLayerID is an item id from the enum GERBVIEW_LAYER_ID
@@ -532,16 +518,6 @@ protected:
                                                 // user.
 
 private:
-    int             m_displayMode;      // Gerber images ("layers" in Gerbview) can be drawn:
-                                        // - in fast mode (write mode) but if there are negative
-                                        // items only the last image is correctly drawn (no
-                                        // problem to see only one image or when no negative items)
-                                        // - in "exact" mode (but slower) in write mode:
-                                        // last image covers previous images
-                                        // - in "exact" mode (also slower) in OR mode
-                                        // (transparency mode)
-                                        // m_displayMode = 0, 1 or 2
-
     bool                m_show_layer_manager_tools;
 
     GBR_LAYOUT*         m_gerberLayout;

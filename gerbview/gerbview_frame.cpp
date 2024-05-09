@@ -85,7 +85,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_netText = nullptr;
     m_apertText = nullptr;
     m_dcodeText = nullptr;
-    m_displayMode = 0;
     m_aboutTitle = _HKI( "KiCad Gerber Viewer" );
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include

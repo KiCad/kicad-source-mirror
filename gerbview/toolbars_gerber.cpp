@@ -471,18 +471,6 @@ void GERBVIEW_FRAME::updateAperAttributesSelectBox()
 }
 
 
-void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
-{
-    switch( aEvent.GetId() )
-    {
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_0: aEvent.Check( GetDisplayMode() == 0 ); break;
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_1: aEvent.Check( GetDisplayMode() == 1 ); break;
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_2: aEvent.Check( GetDisplayMode() == 2 ); break;
-    default:                                                                   break;
-    }
-}
-
-
 void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 {
     if( !m_DCodeSelector )
