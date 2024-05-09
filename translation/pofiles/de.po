@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-05-06 10:07+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2024-05-10 02:07+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.5.4-rc\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7435,9 +7435,8 @@ msgid "Line length exceeded"
 msgstr "Zeilenlänge überschritten"
 
 #: common/settings/bom_settings.cpp:124
-#, fuzzy
 msgid "Default Editing"
-msgstr "Standardeinheiten:"
+msgstr "Standardbearbeitung"
 
 #: common/settings/bom_settings.cpp:124 common/settings/bom_settings.cpp:145
 #: common/settings/bom_settings.cpp:164 common/settings/bom_settings.cpp:183
@@ -15055,7 +15054,7 @@ msgstr "Horizontale Bewegung auf Touchpad:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "Jede(r):"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -22856,9 +22855,8 @@ msgstr "SVG-Dateiname"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:365
 #: pcbnew/tools/edit_tool.cpp:2446
-#, fuzzy
 msgid "Hide Field"
-msgstr "Feld hinzufügen"
+msgstr "Feld ausblenden"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:367
 #: pcbnew/tools/edit_tool.cpp:2448
@@ -22918,9 +22916,8 @@ msgid "Rename"
 msgstr "Umbenennen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:398
-#, fuzzy
 msgid "Change name of this sheet"
-msgstr "Name für das Thema"
+msgstr "Seitenname ändern"
 
 #: eeschema/widgets/hierarchy_pane.cpp:417
 #, c-format
@@ -22928,9 +22925,8 @@ msgid "Enter page number for sheet path %s"
 msgstr "Seitennummer für Blattpfad %s eingeben"
 
 #: eeschema/widgets/hierarchy_pane.cpp:488
-#, fuzzy
 msgid "Renaming sheet"
-msgstr "Zeichnungsblatt"
+msgstr "Zeichnungsblatt umbenennen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:551
 #, c-format
@@ -24537,9 +24533,8 @@ msgid "Export zones"
 msgstr "Zonen exportieren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:128
-#, fuzzy
 msgid "Export elements on inner copper layers"
-msgstr "Zonen auf externen Kupferlagen exportieren."
+msgstr "Elemente auf Kupferinnenlagen exportieren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:132
 msgid "Fuse overlapping geometry together"
@@ -32480,9 +32475,8 @@ msgid "Export solder paste graphics."
 msgstr "Lötpaste-Grafiken exportieren."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:196
-#, fuzzy
 msgid "Net filter (supports wildcards):"
-msgstr "Text mit optionalen Platzhaltern"
+msgstr "Netzfilter (unterstützt Platzhalter):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:201
 msgid ""
@@ -40440,9 +40434,9 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:1356
 #: pcbnew/exporters/step/step_pcb_model.cpp:1395
 #: pcbnew/exporters/step/step_pcb_model.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "Modell-Begrenzungsrahmen anzeigen"
+msgstr "z: %g; Begrenzungsrahmen: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1353
 msgid ""
@@ -40485,15 +40479,13 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1595
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Fehler:"
+msgstr "Fehler:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1601
 #: pcbnew/exporters/step/step_pcb_model.cpp:1735
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Warnungen:"
+msgstr "Warnungen:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1617
 msgid "shapes"
@@ -41209,9 +41201,8 @@ msgstr "Abstimmung"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Einen Wert wählen, der abgestimmt werden soll"
+msgstr "Erst eine Leiterbahn wählen, die abgestimmt werden soll."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
