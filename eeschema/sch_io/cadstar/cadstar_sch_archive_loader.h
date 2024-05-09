@@ -72,6 +72,7 @@ public:
         m_designCenter.y = 0;
         m_reporter = aReporter;
         m_progressReporter = aProgressReporter;
+        m_fileName = aFilename;
 
         // Assume that the PCB footprint library name will be the same as the schematic filename
         wxFileName schFilename( Filename );
@@ -97,6 +98,7 @@ public:
      */
     void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet );
 
+    static wxString CreateLibName( const wxFileName& aFileName, const SCH_SHEET* aRootSheet );
 
 private:
     typedef std::pair<BLOCK_ID, TERMINAL_ID> BLOCK_PIN_ID;
@@ -113,6 +115,7 @@ private:
     REPORTER*  m_reporter;
     SCHEMATIC* m_schematic;
     SCH_SHEET* m_rootSheet;
+    wxFileName m_fileName;
     wxString   m_footprintLibName; ///< Name of the footprint library to prepend all footprints with
 
     /**

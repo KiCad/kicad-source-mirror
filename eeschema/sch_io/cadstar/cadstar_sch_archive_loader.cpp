@@ -58,6 +58,26 @@ const wxString PartVersionFieldName = "Part Version";
 const wxString PartAcceptanceFieldName = "Part Acceptance";
 
 
+wxString CADSTAR_SCH_ARCHIVE_LOADER::CreateLibName( const wxFileName& aFileName,
+                                                    const SCH_SHEET* aRootSheet )
+{
+    wxString libName = aFileName.GetName();
+
+    if( libName.IsEmpty() && aRootSheet )
+    {
+        wxFileName fn( aRootSheet->GetFileName() );
+        libName = fn.GetName();
+    }
+
+    if( libName.IsEmpty() )
+        libName = "noname";
+
+    libName = LIB_ID::FixIllegalChars( libName, true ).wx_str();
+
+    return libName;
+}
+
+
 std::vector<LIB_SYMBOL*> CADSTAR_SCH_ARCHIVE_LOADER::LoadPartsLib( const wxString& aFilename )
 {
     if( m_progressReporter )
@@ -2078,8 +2098,11 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
                                                              const LIB_SYMBOL& aKiCadPart,
                                                              EDA_ANGLE& aComponentOrientation )
 {
+    wxString libName = CreateLibName( m_footprintLibName, m_rootSheet );
+
     LIB_ID libId;
     libId.SetLibItemName( aKiCadPart.GetName() );
+    libId.SetLibNickname( libName );
 
     int unit = getKiCadUnitNumberFromGate( aCadstarSymbol.GateID );
 
