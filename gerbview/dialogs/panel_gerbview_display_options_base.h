@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,8 @@
 #include <wx/settings.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
+#include <wx/spinctrl.h>
+#include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/panel.h>
 
@@ -45,13 +47,15 @@ class PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_OptDisplayFlashedItems;
 		wxCheckBox* m_OptDisplayLines;
 		wxCheckBox* m_OptDisplayPolygons;
+		wxStaticText* m_staticTextOpacity;
+		wxSpinCtrlDouble* m_spOpacityCtrl;
 		wxStaticText* m_staticText3;
 		wxStaticLine* m_staticline3;
 		wxRadioBox* m_PageSize;
 
 	public:
 
-		PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 257,534 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE();
 

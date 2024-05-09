@@ -230,18 +230,10 @@ public:
     void OnSelectActiveLayer( wxCommandEvent& event );
 
     /**
-     * Called on a display mode selection.
-     *
-     * Mode selection can be fast display or exact mode with stacked images or with transparency.
-     */
-    void OnSelectDisplayMode( wxCommandEvent& event );
-
-    /**
      * Called on request of application quit.
      */
     void OnQuit( wxCommandEvent& event );
 
-    void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 

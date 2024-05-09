@@ -228,11 +228,11 @@ TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show dcode number" ) )
         .Icon( BITMAPS::show_dcodenumber ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( TOOL_ACTION_ARGS()
-        .Name( "gerbview.Control.toggleDiffMode" )
+TOOL_ACTION GERBVIEW_ACTIONS::toggleForceOpacityMode( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.toggleForceOpacityMode" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show in Differential Mode" ) )
-        .Tooltip( _( "Show layers in differential compare mode" ) )
+        .FriendlyName( _( "Show with Forced Opacity Mode" ) )
+        .Tooltip( _( "Show layers using opacity color forced mode" ) )
         .Icon( BITMAPS::gbr_select_mode1 ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleXORMode( TOOL_ACTION_ARGS()

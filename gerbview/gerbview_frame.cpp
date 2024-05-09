@@ -1146,10 +1146,10 @@ void GERBVIEW_FRAME::setupUIConditions()
             return gvconfig()->m_Appearance.show_dcodes;
         };
 
-    auto diffModeCond =
+    auto forceOpacityModeCond =
         [this] ( const SELECTION& )
         {
-            return gvconfig()->m_Display.m_DiffMode;
+            return gvconfig()->m_Display.m_ForceOpacityMode;
         };
 
     auto xorModeCond =
@@ -1181,7 +1181,7 @@ void GERBVIEW_FRAME::setupUIConditions()
     mgr->SetConditions( GERBVIEW_ACTIONS::polygonsDisplayOutlines, CHECK( polygonsFilledCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::negativeObjectDisplay,   CHECK( negativeObjectsCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::dcodeDisplay,            CHECK( dcodeCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          CHECK( diffModeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::toggleForceOpacityMode,  CHECK( forceOpacityModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleXORMode,           CHECK( xorModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          CHECK( flipGerberCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,                 CHECK( highContrastModeCond ) );

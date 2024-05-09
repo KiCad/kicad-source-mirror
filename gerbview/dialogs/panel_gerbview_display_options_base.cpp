@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,13 +58,34 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 	bDrawingModeSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_OptDisplayFlashedItems = new wxCheckBox( this, wxID_ANY, _("Sketch flashed items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayFlashedItems->SetToolTip( _("Display flashed items (items drawn using standard or macro apertures) in outlines mode") );
+
 	bDrawingModeSizer->Add( m_OptDisplayFlashedItems, 0, wxALL, 5 );
 
 	m_OptDisplayLines = new wxCheckBox( this, wxID_ANY, _("Sketch lines"), wxDefaultPosition, wxDefaultSize, 0 );
 	bDrawingModeSizer->Add( m_OptDisplayLines, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_OptDisplayPolygons = new wxCheckBox( this, wxID_ANY, _("Sketch polygons"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayPolygons->SetValue(true);
+	m_OptDisplayPolygons->SetToolTip( _("Display polygon items in outline mode") );
+
 	bDrawingModeSizer->Add( m_OptDisplayPolygons, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticBoxSizer* sbSizerOpacity;
+	sbSizerOpacity = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Forced Opacity Display Mode") ), wxHORIZONTAL );
+
+	m_staticTextOpacity = new wxStaticText( sbSizerOpacity->GetStaticBox(), wxID_ANY, _("Forced opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOpacity->Wrap( -1 );
+	m_staticTextOpacity->SetToolTip( _("Opacity in forced opacity display mode") );
+
+	sbSizerOpacity->Add( m_staticTextOpacity, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_spOpacityCtrl = new wxSpinCtrlDouble( sbSizerOpacity->GetStaticBox(), wxID_ANY, wxT("0.6"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0.2, 1, 0.600000, 0.1 );
+	m_spOpacityCtrl->SetDigits( 2 );
+	sbSizerOpacity->Add( m_spOpacityCtrl, 0, wxALL, 5 );
+
+
+	bDrawingModeSizer->Add( sbSizerOpacity, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bRightSizer->Add( bDrawingModeSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
@@ -106,7 +127,6 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( wxWind
 
 	this->SetSizer( bDialogSizer );
 	this->Layout();
-	bDialogSizer->Fit( this );
 }
 
 PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE::~PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE()

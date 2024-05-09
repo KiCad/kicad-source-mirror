@@ -56,6 +56,9 @@ GERBVIEW_SETTINGS::GERBVIEW_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_page_limit",
             &m_Display.m_DisplayPageLimits, false ) );
 
+    m_params.emplace_back( new PARAM<double>( "appearance.mode_opacity_value",
+            &m_Display.m_OpacityModeAlphaValue, 0.6 ) );
+
     m_params.emplace_back( new PARAM_LIST<wxString>( "system.drill_file_history",
             &m_DrillFileHistory, {} ) );
 

@@ -40,13 +40,14 @@ public:
     bool    m_DisplayPolygonsFill;      ///< Option to draw polygons (filled/sketch)
     bool    m_DisplayPageLimits;
     bool    m_IsPrinting;               ///< true when printing a page, false when drawing on screen
-    bool    m_DiffMode;                 ///< Display layers in diff mode
+    bool    m_ForceOpacityMode;         ///< Display layers in transparency (alpha channel) forced mode
     bool    m_XORMode;                  ///< Display layers in exclusive-or mode
     bool    m_HighContrastMode;         ///< High contrast mode (dim un-highlighted objects)
     bool    m_FlipGerberView;           ///< Display as a mirror image
     COLOR4D m_NegativeDrawColor;        ///< The color used to draw negative objects, usually the
                                         ///< background color, but not always, when negative objects
                                         ///< must be visible
+    double m_OpacityModeAlphaValue;     ///< the alpha channel (opacity) value in opacity forced mode
 
 public:
     GBR_DISPLAY_OPTIONS()
@@ -57,7 +58,8 @@ public:
         m_DisplayPageLimits = false;
         m_IsPrinting = false;
         m_NegativeDrawColor = COLOR4D( DARKGRAY );
-        m_DiffMode = false;
+        m_ForceOpacityMode = false;
+        m_OpacityModeAlphaValue = 0.6;
         m_XORMode = false;
         m_HighContrastMode = false;
         m_FlipGerberView = false;

@@ -59,6 +59,7 @@ void PANEL_GERBVIEW_DISPLAY_OPTIONS::loadSettings( GERBVIEW_SETTINGS* aCfg )
     m_OptDisplayLines->SetValue( !aCfg->m_Display.m_DisplayLinesFill );
     m_OptDisplayFlashedItems->SetValue( !aCfg->m_Display.m_DisplayFlashedItemsFill );
     m_OptDisplayDCodes->SetValue( aCfg->m_Appearance.show_dcodes );
+    m_spOpacityCtrl->SetValue( aCfg->m_Display.m_OpacityModeAlphaValue );
 
     for( unsigned i = 0;  i < arrayDim( gerberPageSizeList );  ++i )
     {
@@ -98,6 +99,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     cfg->m_Appearance.page_type = gerberPageSizeList[ m_PageSize->GetSelection() ];
     cfg->m_Display.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
+    cfg->m_Display.m_OpacityModeAlphaValue = m_spOpacityCtrl->GetValue();
 
     return true;
 }

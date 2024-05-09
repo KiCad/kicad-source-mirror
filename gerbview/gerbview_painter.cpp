@@ -62,8 +62,8 @@ void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     {
         COLOR4D baseColor = aSettings->GetColor( i );
 
-        if( gvconfig()->m_Display.m_DiffMode )
-            baseColor.a = 0.75;
+        if( gvconfig()->m_Display.m_ForceOpacityMode )
+            baseColor.a = gvconfig()->m_Display.m_OpacityModeAlphaValue;
 
         m_layerColors[i] = baseColor;
         m_layerColorsHi[i] = baseColor.Brightened( 0.5 );

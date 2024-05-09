@@ -256,7 +256,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::negativeObjectDisplay,   ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::dcodeDisplay,            ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleDiffMode,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleForceOpacityMode,  ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleXORMode,           ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::highContrastMode,                 ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::flipGerberView,          ACTION_TOOLBAR::TOGGLE );

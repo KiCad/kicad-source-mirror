@@ -300,11 +300,11 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
     {
         cfg->m_Display.m_HighContrastMode = !cfg->m_Display.m_HighContrastMode;
     }
-    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleDiffMode ) )
+    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleForceOpacityMode ) )
     {
-        cfg->m_Display.m_DiffMode = !cfg->m_Display.m_DiffMode;
+        cfg->m_Display.m_ForceOpacityMode = !cfg->m_Display.m_ForceOpacityMode;
 
-        if( cfg->m_Display.m_DiffMode && cfg->m_Display.m_XORMode )
+        if( cfg->m_Display.m_ForceOpacityMode && cfg->m_Display.m_XORMode )
             cfg->m_Display.m_XORMode = false;
 
         m_frame->UpdateXORLayers();
@@ -313,8 +313,8 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
     {
         cfg->m_Display.m_XORMode = !cfg->m_Display.m_XORMode;
 
-        if( cfg->m_Display.m_XORMode && cfg->m_Display.m_DiffMode )
-            cfg->m_Display.m_DiffMode = false;
+        if( cfg->m_Display.m_XORMode && cfg->m_Display.m_ForceOpacityMode )
+            cfg->m_Display.m_ForceOpacityMode = false;
 
         m_frame->UpdateXORLayers();
     }
@@ -541,7 +541,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastModeCycle.MakeEvent() );
-    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleDiffMode.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleForceOpacityMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleXORMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::flipGerberView.MakeEvent() );
 

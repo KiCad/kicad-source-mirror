@@ -63,7 +63,7 @@ public:
     static TOOL_ACTION polygonsDisplayOutlines;
     static TOOL_ACTION negativeObjectDisplay;
     static TOOL_ACTION dcodeDisplay;
-    static TOOL_ACTION toggleDiffMode;
+    static TOOL_ACTION toggleForceOpacityMode;
     static TOOL_ACTION toggleXORMode;
     static TOOL_ACTION flipGerberView;
 
