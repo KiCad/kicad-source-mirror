@@ -147,7 +147,7 @@ void SIM_MODEL_RAW_SPICE::AssignSymbolPinNumberToModelPin( const std::string& aM
 
     if( pinIndex > 0 )
     {
-        while( m_modelPins.size() < pinIndex )
+        while( (int)m_modelPins.size() < pinIndex )
             m_modelPins.push_back( { fmt::format( "{}", m_modelPins.size() + 1 ), wxEmptyString } );
 
         m_modelPins[ --pinIndex /* convert to 0-based */ ].symbolPinNumber = aSymbolPinNumber;

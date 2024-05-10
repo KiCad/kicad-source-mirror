@@ -304,12 +304,12 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    auto autoSizeCol = [&]( WX_GRID* aGrid, int aCol )
+    auto autoSizeCol = [&]( WX_GRID* aLocGrid, int aCol )
     {
-        int prevWidth = aGrid->GetColSize( aCol );
+        int prevWidth = aLocGrid->GetColSize( aCol );
 
-        aGrid->AutoSizeColumn( aCol, false );
-        aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
+        aLocGrid->AutoSizeColumn( aCol, false );
+        aLocGrid->SetColSize( aCol, std::max( prevWidth, aLocGrid->GetColSize( aCol ) ) );
     };
 
     // Give a bit more room for wxChoice editors
