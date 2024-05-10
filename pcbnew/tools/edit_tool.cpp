@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <macros.h>
 #include <advanced_config.h>
 #include <limits>
 #include <kiplatform/ui.h>
@@ -34,12 +35,9 @@
 #include <pcb_shape.h>
 #include <pcb_group.h>
 #include <pcb_target.h>
-#include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
-#include <pcb_tablecell.h>
 #include <pcb_generator.h>
-#include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>
@@ -58,11 +56,9 @@
 #include <tools/pad_tool.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
-#include <connectivity/connectivity_items.h>
 #include <core/kicad_algo.h>
 #include <fix_board_shape.h>
 #include <bitmaps.h>
-#include <cassert>
 #include <functional>
 using namespace std::placeholders;
 #include "kicad_clipboard.h"
@@ -73,8 +69,6 @@ using namespace std::placeholders;
 #include <dialogs/dialog_tablecell_properties.h>
 #include <dialogs/dialog_table_properties.h>
 #include <dialogs/dialog_unit_entry.h>
-#include <board_commit.h>
-#include <zone_filler.h>
 #include <pcb_reference_image.h>
 
 const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
@@ -249,6 +243,9 @@ bool EDIT_TOOL::Init()
                 {
                     return false;
                 }
+
+                if( SELECTION_CONDITIONS::HasTypes( { PCB_GROUP_T } )( aSelection ) )
+                    return true;
 
                 return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
             };
@@ -2069,7 +2066,25 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         mirrorAroundXaxis = true;
     }
 
+    std::vector<EDA_ITEM*> items;
+
     for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == PCB_GROUP_T )
+        {
+            static_cast<PCB_GROUP*>( item )->RunOnDescendants(
+                    [&]( BOARD_ITEM* descendant )
+                    {
+                        items.push_back( descendant );
+                    } );
+        }
+        else
+        {
+            items.push_back( item );
+        }
+    }
+
+    for( EDA_ITEM* item : items )
     {
         if( !item->IsType( MirrorableItems ) )
             continue;
@@ -2117,9 +2132,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         default:
             // it's likely the commit object is wrong if you get here
-            // Unsure if PCB_GROUP_T needs special attention here.
-            assert( false );
-            break;
+            UNIMPLEMENTED_FOR( item->GetClass() );
         }
     }
 
