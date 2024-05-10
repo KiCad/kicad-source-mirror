@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-24 02:07+0000\n"
+"PO-Revision-Date: 2024-05-11 11:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.4\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3063,6 +3063,8 @@ msgstr "Alternar asignación"
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Eliminar la información de red de todos los elementos conectados antes de "
+"pegar"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3816,7 +3818,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Utilizar colores de fila de forma alternada en las tablas"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "When enabled, use a different color for every other table row"
@@ -10236,9 +10238,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Actualizar/restablecer los atributos de los símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Definido como símbolo de alimentación"
+msgstr "Restablecer símbolos de potencia personalizados"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10491,7 +10492,7 @@ msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
 "La gravedad de la infracción también se puede editar en el diálogo de "
-"Configuración de placa..."
+"Configuración de esquema..."
 
 #: eeschema/dialogs/dialog_erc.cpp:662 pcbnew/dialogs/dialog_drc.cpp:689
 #, c-format
@@ -11284,9 +11285,8 @@ msgid "untitled"
 msgstr "sin título"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Propiedades de la etiqueta"
+msgstr "Editar propiedades de la etiqueta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -12830,9 +12830,8 @@ msgstr ""
 "en Preferencias > Editor de esquemas > Colores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Propiedades de la hoja de pines"
+msgstr "Editar propiedades de la página"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -14259,9 +14258,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:591
 #: pcbnew/dialogs/dialog_text_properties.cpp:536
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Propiedades del texto"
+msgstr "Editar propiedades del texto"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
 msgid "Background fill"
@@ -19925,9 +19923,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Realizar análisis de Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Fase de la señal:"
+msgstr "Copiar nombre de la señal"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:770
@@ -23117,24 +23114,20 @@ msgstr ""
 "ajustados"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -39497,9 +39490,8 @@ msgid "Skew between traces out of range"
 msgstr "Desvío entre pistas fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Demasiadas vías en una conexión"
+msgstr "Demasiadas o muy pocas vías en una conexión"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -40197,14 +40189,13 @@ msgid "Too many vias on a connection"
 msgstr "Demasiadas vías en una conexión"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s recuento máximo %d; real %d)"
+msgstr "(%s recuento mínimo %d; real %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Demasiadas vías en una conexión"
+msgstr "Muy pocas vías en una conexión"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -42842,7 +42833,7 @@ msgstr ""
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 "En la huella %s el pad %s utiliza un apilamiento de pads complejo (todavía "
-"no soportado.)"
+"no soportado)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2961
 #, c-format
@@ -49281,9 +49272,9 @@ msgid "thermal reliefs for PTH"
 msgstr "Alivios térmicos para PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] Error al cargar: línea de entrada demasiado larga\n"
+msgstr "[INFO] error al cargar: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
