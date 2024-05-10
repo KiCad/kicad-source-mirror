@@ -602,7 +602,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                         int modelPinIndex = model.FindModelPinIndex( pin->GetNumber().ToStdString() );
 
-                        if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
+                        if( modelPinIndex != SIM_MODEL_PIN::NOT_CONNECTED )
                         {
                             wxString name = currentNames.at( modelPinIndex );
                             simFrame->AddCurrentTrace( name );

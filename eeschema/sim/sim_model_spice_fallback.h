@@ -32,8 +32,8 @@ class SIM_MODEL_SPICE_FALLBACK : public SIM_MODEL_SPICE
 public:
     SIM_MODEL_SPICE_FALLBACK( TYPE aType, const std::string& aRawSpiceCode = "" );
 
-    void SetPinSymbolPinNumber( const std::string& aPinName,
-                                const std::string& aSymbolPinNumber ) override;
+    void AssignSymbolPinNumberToModelPin( const std::string& aModelPinName,
+                                          const wxString& aSymbolPinNumber ) override;
 
     std::vector<std::string> GetPinNames() const override;
 

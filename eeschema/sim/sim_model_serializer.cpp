@@ -123,29 +123,27 @@ std::string SIM_MODEL_SERIALIZER::GeneratePins() const
 {
     std::string result;
 
-    std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> pins = m_model.GetPins();
+    std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> pins = m_model.GetPins();
 
     // m_model.GetPins() returns pins in the order they appear in the model, but the keys in the
     // key=value pairs we create here are symbol pin numbers, so we sort the pins so that they are
     // ordered by the latter instead.
     std::sort( pins.begin(), pins.end(),
-               []( const SIM_MODEL::PIN& lhs, const SIM_MODEL::PIN& rhs )
+               []( const SIM_MODEL_PIN& lhs, const SIM_MODEL_PIN& rhs )
                {
                    return StrNumCmp( lhs.symbolPinNumber, rhs.symbolPinNumber, true ) < 0;
                } );
 
-    bool isFirst = true;
-
-    for( const SIM_MODEL::PIN& pin : pins )
+    for( const SIM_MODEL_PIN& pin : pins )
     {
-        if( pin.symbolPinNumber != "" )
-        {
-            if( !isFirst )
-                result.append( " " );
-            else
-                isFirst = false;
+        std::string symbolPinNumber( pin.symbolPinNumber.ToUTF8() );
 
-            result.append( fmt::format( "{}={}", pin.symbolPinNumber, pin.name ) );
+        if( symbolPinNumber != "" )
+        {
+            if( !result.empty() )
+                result.append( " " );
+
+            result.append( fmt::format( "{}={}", symbolPinNumber, pin.modelPinName ) );
         }
     }
 
@@ -275,9 +273,9 @@ void SIM_MODEL_SERIALIZER::ParsePins( const std::string& aPins )
         for( const auto& node : root->children )
         {
             std::string symbolPinNumber = node->children.at( 0 )->string();
-            std::string pinName = node->children.at( 1 )->string();
+            std::string modelPinName = node->children.at( 1 )->string();
 
-            m_model.SetPinSymbolPinNumber( pinName, symbolPinNumber );
+            m_model.AssignSymbolPinNumberToModelPin( modelPinName, symbolPinNumber );
         }
     }
     catch( const tao::pegtl::parse_error& e )

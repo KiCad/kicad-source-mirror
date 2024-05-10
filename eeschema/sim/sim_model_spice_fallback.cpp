@@ -38,18 +38,18 @@ SIM_MODEL_SPICE_FALLBACK::SIM_MODEL_SPICE_FALLBACK( TYPE aType, const std::strin
 }
 
 
-void SIM_MODEL_SPICE_FALLBACK::SetPinSymbolPinNumber( const std::string& aPinName,
-                                                      const std::string& aSymbolPinNumber )
+void SIM_MODEL_SPICE_FALLBACK::AssignSymbolPinNumberToModelPin( const std::string& aModelPinName,
+                                                                const wxString& aSymbolPinNumber )
 {
     try
     {
-        SIM_MODEL::SetPinSymbolPinNumber( aPinName, aSymbolPinNumber );
+        SIM_MODEL::AssignSymbolPinNumberToModelPin( aModelPinName, aSymbolPinNumber );
     }
     catch( IO_ERROR& )
     {
         // This is a fall-back, so we won't necessarily know the pin names.  If we didn't find
         // it, then just create a new pin.
-        m_pins.push_back( { aPinName, aSymbolPinNumber } );
+        m_modelPins.push_back( { aModelPinName, aSymbolPinNumber } );
     }
 }
 

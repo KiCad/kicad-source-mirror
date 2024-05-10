@@ -51,8 +51,8 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& 
 {
     std::vector<std::string> currentNames;
 
-    for( const SIM_MODEL::PIN& pin : GetPins() )
-        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.name ) );
+    for( const SIM_MODEL_PIN& pin : GetPins() )
+        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.modelPinName ) );
 
     return currentNames;
 }

@@ -65,7 +65,7 @@ public:
     virtual std::string Preview( const SPICE_ITEM& aItem ) const;
 
 protected:
-    virtual std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const
+    virtual std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> GetPins() const
     {
         return m_model.GetPins();
     }

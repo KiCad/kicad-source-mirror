@@ -59,8 +59,8 @@ std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const SPICE_ITEM&
 {
     std::vector<std::string> currentNames;
 
-    for( const SIM_MODEL::PIN& pin : GetPins() )
-        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.name ) );
+    for( const SIM_MODEL_PIN& pin : GetPins() )
+        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.modelPinName ) );
 
     return currentNames;
 }
@@ -147,7 +147,7 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
     SIM_MODEL::SetBaseModel( aBaseModel );
 
     // Pins aren't constant for subcircuits, so they need to be copied from the base model.
-    for( const PIN& pin : GetBaseModel()->GetPins() )
+    for( const SIM_MODEL_PIN& pin : GetBaseModel()->GetPins() )
         AddPin( pin );
 
     // Same for parameters.

@@ -36,7 +36,7 @@ public:
 
     std::string ItemLine( const SPICE_ITEM& aItem ) const override;
     std::string ItemParams() const override;
-    std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const override;
+    std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> GetPins() const override;
 };
 
 

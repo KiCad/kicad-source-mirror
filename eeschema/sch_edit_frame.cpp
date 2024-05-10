@@ -1573,7 +1573,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 for( const auto& modelPin : model.GetPins() )
                 {
                     SCH_PIN* symbolPin = symbol->GetPin( modelPin.get().symbolPinNumber );
-                    wxString signalName = ref + wxS( ":" ) + modelPin.get().name;
+                    wxString signalName = ref + wxS( ":" ) + modelPin.get().modelPinName;
                     wxString op = m_schematic->GetOperatingPoint( signalName,
                                                                   settings.m_OPO_IPrecision,
                                                                   settings.m_OPO_IRange );

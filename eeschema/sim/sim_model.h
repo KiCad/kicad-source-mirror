@@ -65,13 +65,21 @@ class REPORTER;
 #define SIM_LEGACY_LIBRARY_FIELD wxS( "Spice_Lib_File" )
 
 
+struct SIM_MODEL_PIN
+{
+    const std::string modelPinName;
+    wxString          symbolPinNumber;
+
+    static constexpr auto NOT_CONNECTED = -1;
+};
+
+
 class SIM_MODEL
 {
 public:
     friend class SPICE_GENERATOR;
     friend class NETLIST_EXPORTER_SPICE;
 
-    struct PIN;
     struct PARAM;
 
     // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
@@ -303,15 +311,6 @@ public:
     };
 
 
-    struct PIN
-    {
-        const std::string name;
-        std::string       symbolPinNumber;
-
-        static constexpr auto NOT_CONNECTED = -1;
-    };
-
-
     struct PARAM
     {
         // MS Windows compilers complain about the names IN and OUT, so we prefix them.
@@ -452,7 +451,7 @@ public:
 
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
 
-    void AddPin( const PIN& aPin );
+    void AddPin( const SIM_MODEL_PIN& aPin );
     void ClearPins();
 
     int FindModelPinIndex( const std::string& aSymbolPinNumber );
@@ -469,14 +468,14 @@ public:
 
     virtual std::vector<std::string> GetPinNames() const { return {}; }
 
-    int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
-    const PIN& GetPin( unsigned aIndex ) const { return m_pins.at( aIndex ); }
+    int GetPinCount() const { return static_cast<int>( m_modelPins.size() ); }
+    const SIM_MODEL_PIN& GetPin( unsigned aIndex ) const { return m_modelPins.at( aIndex ); }
 
-    std::vector<std::reference_wrapper<const PIN>> GetPins() const;
+    std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> GetPins() const;
 
-    void SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber );
-    virtual void SetPinSymbolPinNumber( const std::string& aPinName,
-                                        const std::string& aSymbolPinNumber );
+    void AssignSymbolPinNumberToModelPin( int aPinIndex, const wxString& aSymbolPinNumber );
+    virtual void AssignSymbolPinNumberToModelPin( const std::string& aPinName,
+                                                  const wxString& aSymbolPinNumber );
 
 
     int GetParamCount() const { return static_cast<int>( m_params.size() ); }
@@ -539,7 +538,7 @@ private:
 
 protected:
     std::vector<PARAM>                    m_params;
-    std::vector<PIN>                      m_pins;
+    std::vector<SIM_MODEL_PIN>            m_modelPins;
     const SIM_MODEL*                      m_baseModel;
     std::unique_ptr<SIM_MODEL_SERIALIZER> m_serializer;
 

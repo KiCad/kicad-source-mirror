@@ -693,15 +693,15 @@ void SIM_MODEL::SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& 
 SIM_MODEL::~SIM_MODEL() = default;
 
 
-void SIM_MODEL::AddPin( const PIN& aPin )
+void SIM_MODEL::AddPin( const SIM_MODEL_PIN& aPin )
 {
-    m_pins.push_back( aPin );
+    m_modelPins.push_back( aPin );
 }
 
 
 void SIM_MODEL::ClearPins()
 {
-    m_pins.clear();
+    m_modelPins.clear();
 }
 
 
@@ -713,7 +713,7 @@ int SIM_MODEL::FindModelPinIndex( const std::string& aSymbolPinNumber )
             return modelPinIndex;
     }
 
-    return PIN::NOT_CONNECTED;
+    return SIM_MODEL_PIN::NOT_CONNECTED;
 }
 
 
@@ -736,9 +736,9 @@ void SIM_MODEL::SetBaseModel( const SIM_MODEL& aBaseModel )
 }
 
 
-std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() const
+std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> SIM_MODEL::GetPins() const
 {
-    std::vector<std::reference_wrapper<const PIN>> pins;
+    std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> pins;
 
     for( int modelPinIndex = 0; modelPinIndex < GetPinCount(); ++modelPinIndex )
         pins.emplace_back( GetPin( modelPinIndex ) );
@@ -746,19 +746,20 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() c
     return pins;
 }
 
-void SIM_MODEL::SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber )
+void SIM_MODEL::AssignSymbolPinNumberToModelPin( int aModelPinIndex,
+                                                 const wxString& aSymbolPinNumber )
 {
-    if( aPinIndex >= 0 && aPinIndex < (int) m_pins.size() )
-        m_pins.at( aPinIndex ).symbolPinNumber = aSymbolPinNumber;
+    if( aModelPinIndex >= 0 && aModelPinIndex < (int) m_modelPins.size() )
+        m_modelPins.at( aModelPinIndex ).symbolPinNumber = aSymbolPinNumber;
 }
 
 
-void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
-                                       const std::string& aSymbolPinNumber )
+void SIM_MODEL::AssignSymbolPinNumberToModelPin( const std::string& aModelPinName,
+                                                 const wxString& aSymbolPinNumber )
 {
-    for( PIN& pin : m_pins )
+    for( SIM_MODEL_PIN& pin : m_modelPins )
     {
-        if( pin.name == aPinName )
+        if( pin.modelPinName == aModelPinName )
         {
             pin.symbolPinNumber = aSymbolPinNumber;
             return;
@@ -767,12 +768,12 @@ void SIM_MODEL::SetPinSymbolPinNumber( const std::string& aPinName,
 
     // If aPinName wasn't in fact a name, see if it's a raw (1-based) index.  This is required
     // for legacy files which didn't use pin names.
-    int aPinIndex = (int) strtol( aPinName.c_str(), nullptr, 10 );
+    int pinIndex = (int) strtol( aModelPinName.c_str(), nullptr, 10 );
 
-    if( aPinIndex < 1 || aPinIndex > (int) m_pins.size() )
-        THROW_IO_ERROR( wxString::Format( _( "Unknown simulation model pin '%s'" ), aPinName ) );
+    if( pinIndex < 1 || pinIndex > (int) m_modelPins.size() )
+        THROW_IO_ERROR( wxString::Format( _( "Unknown simulation model pin '%s'" ), aModelPinName ) );
 
-    m_pins[ --aPinIndex /* convert to 0-based */ ].symbolPinNumber = aSymbolPinNumber;
+    m_modelPins[ --pinIndex /* convert to 0-based */ ].symbolPinNumber = aSymbolPinNumber;
 }
 
 

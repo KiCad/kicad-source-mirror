@@ -123,8 +123,8 @@ std::string SPICE_GENERATOR::ItemLine( const SPICE_ITEM& aItem ) const
 
     if( item.pinNetNames.empty() )
     {
-        for( const SIM_MODEL::PIN& pin : GetPins() )
-            item.pinNetNames.push_back( pin.name );
+        for( const SIM_MODEL_PIN& pin : GetPins() )
+            item.pinNetNames.push_back( pin.modelPinName );
     }
 
     std::string result;
@@ -151,7 +151,7 @@ std::string SPICE_GENERATOR::ItemPins( const SPICE_ITEM& aItem ) const
     std::string result;
     int ncCounter = 0;
 
-    for( const SIM_MODEL::PIN& pin : GetPins() )
+    for( const SIM_MODEL_PIN& pin : GetPins() )
     {
         auto it = std::find( aItem.pinNumbers.begin(), aItem.pinNumbers.end(),
                              pin.symbolPinNumber );

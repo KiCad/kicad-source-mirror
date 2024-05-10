@@ -182,8 +182,8 @@ BOOST_AUTO_TEST_CASE( Subckts )
             BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.name, "PARAM1" );
             BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.defaultValue, "1" );
             BOOST_REQUIRE_EQUAL( model.GetPinCount(), 2 );
-            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
-            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).modelPinName, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).modelPinName, "2" );
             break;
 
         case 2:
@@ -192,8 +192,8 @@ BOOST_AUTO_TEST_CASE( Subckts )
             BOOST_REQUIRE_EQUAL( model.GetParamCount(), 1 );
             BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.name, "PARAM1" );
             BOOST_CHECK_EQUAL( model.GetParam( 0 ).info.defaultValue, "1.0" );
-            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
-            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).modelPinName, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).modelPinName, "2" );
             break;
 
         case 3:
@@ -205,8 +205,8 @@ BOOST_AUTO_TEST_CASE( Subckts )
             BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.name, "param2" );
             BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.defaultValue, "2.2e+2" );
             BOOST_REQUIRE_EQUAL( model.GetPinCount(), 2 );
-            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
-            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).modelPinName, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).modelPinName, "2" );
             break;
 
         case 4:
@@ -218,8 +218,8 @@ BOOST_AUTO_TEST_CASE( Subckts )
             BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.name, "param2" );
             BOOST_CHECK_EQUAL( model.GetParam( 1 ).info.defaultValue, "2.2E+2" );
             BOOST_REQUIRE_EQUAL( model.GetPinCount(), 2 );
-            BOOST_CHECK_EQUAL( model.GetPin( 0 ).name, "1" );
-            BOOST_CHECK_EQUAL( model.GetPin( 1 ).name, "2" );
+            BOOST_CHECK_EQUAL( model.GetPin( 0 ).modelPinName, "1" );
+            BOOST_CHECK_EQUAL( model.GetPin( 1 ).modelPinName, "2" );
             break;
 
         case 5:

@@ -409,8 +409,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         wxString modelPinName = m_pinAssignmentsGrid->GetCellValue( row, PIN_COLUMN::MODEL );
         wxString symbolPinName = m_sortedPartPins.at( row )->GetShownNumber();
 
-        model.SetPinSymbolPinNumber( getModelPinIndex( modelPinName ),
-                                     std::string( symbolPinName.ToUTF8() ) );
+        model.AssignSymbolPinNumberToModelPin( getModelPinIndex( modelPinName ),
+                                               std::string( symbolPinName.ToUTF8() ) );
     }
 
     removeOrphanedPinAssignments( &model );
@@ -797,7 +797,7 @@ void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments( SIM_MODEL* aModel )
     for( int i = 0; i < aModel->GetPinCount(); ++i )
     {
         if( !m_symbol.GetPin( aModel->GetPin( i ).symbolPinNumber ) )
-            aModel->SetPinSymbolPinNumber( i, "" );
+            aModel->AssignSymbolPinNumberToModelPin( i, "" );
     }
 }
 
@@ -1127,16 +1127,16 @@ wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getModelPinString( SIM_MODEL* aModel, int aModelPinIndex ) const
 {
-    const wxString& pinName = aModel->GetPin( aModelPinIndex ).name;
+    const wxString& modelPinName = aModel->GetPin( aModelPinIndex ).modelPinName;
 
     LOCALE_IO toggle;
 
-    wxString pinNumber = wxString::Format( "%d", aModelPinIndex + 1 );
+    wxString modelPinNumber = wxString::Format( "%d", aModelPinIndex + 1 );
 
-    if( !pinName.IsEmpty() && pinName != pinNumber )
-        pinNumber += wxString::Format( wxT( " (%s)" ), pinName );
+    if( !modelPinName.IsEmpty() && modelPinName != modelPinNumber )
+        modelPinNumber += wxString::Format( wxT( " (%s)" ), modelPinName );
 
-    return pinNumber;
+    return modelPinNumber;
 }
 
 
@@ -1144,7 +1144,7 @@ template <typename T>
 int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) const
 {
     if( aModelPinString == "Not Connected" )
-        return SIM_MODEL::PIN::NOT_CONNECTED;
+        return SIM_MODEL_PIN::NOT_CONNECTED;
 
     int length = aModelPinString.Find( " " );
 
@@ -1423,13 +1423,14 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
     int oldModelPinIndex = getModelPinIndex( oldModelPinName );
     int modelPinIndex = getModelPinIndex( modelPinName );
 
-    if( oldModelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
-        curModel().SetPinSymbolPinNumber( oldModelPinIndex, "" );
+    if( oldModelPinIndex != SIM_MODEL_PIN::NOT_CONNECTED )
+        curModel().AssignSymbolPinNumberToModelPin( oldModelPinIndex, "" );
 
-    if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
+    if( modelPinIndex != SIM_MODEL_PIN::NOT_CONNECTED )
     {
-        curModel().SetPinSymbolPinNumber( modelPinIndex,
-            std::string( m_sortedPartPins.at( symbolPinIndex )->GetShownNumber().ToUTF8() ) );
+        SCH_PIN* symbolPin = m_sortedPartPins.at( symbolPinIndex );
+
+        curModel().AssignSymbolPinNumberToModelPin( modelPinIndex, symbolPin->GetShownNumber() );
     }
 
     updatePinAssignments( &curModel(), FORCE_UPDATE_PINS );

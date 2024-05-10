@@ -1329,7 +1329,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         {
             pin = pin.SubString( 1, -1 );   // Strip ':' from front
 
-            for( const std::reference_wrapper<const SIM_MODEL::PIN>& modelPin : model.GetPins() )
+            for( const std::reference_wrapper<const SIM_MODEL_PIN>& modelPin : model.GetPins() )
             {
                 SCH_PIN* symbolPin = GetPin( modelPin.get().symbolPinNumber );
 
@@ -1341,7 +1341,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
                     }
                     else
                     {
-                        wxString signalName = spiceRef + wxS( ":" ) + modelPin.get().name;
+                        wxString signalName = spiceRef + wxS( ":" ) + modelPin.get().modelPinName;
                         *token = schematic->GetOperatingPoint( signalName, precision, range );
                     }
 

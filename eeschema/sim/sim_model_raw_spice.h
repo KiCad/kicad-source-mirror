@@ -68,8 +68,8 @@ public:
         return m_spiceCode;
     }
 
-    void SetPinSymbolPinNumber( const std::string& aPinName,
-                                const std::string& aSymbolPinNumber ) override;
+    void AssignSymbolPinNumberToModelPin( const std::string& aModelPinName,
+                                          const wxString& aSymbolPinNumber ) override;
 
 private:
     static std::vector<PARAM::INFO> makeParamInfos();

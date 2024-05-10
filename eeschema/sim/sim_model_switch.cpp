@@ -79,7 +79,7 @@ std::string SPICE_GENERATOR_SWITCH::ItemParams() const
 }
 
 
-std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SPICE_GENERATOR_SWITCH::GetPins() const
+std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> SPICE_GENERATOR_SWITCH::GetPins() const
 {
     switch( m_model.GetType() )
     {
