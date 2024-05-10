@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-04-24 02:07+0000\n"
+"PO-Revision-Date: 2024-05-11 11:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v8/es_MX/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.4\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -9823,9 +9823,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Actualizar/restablecer los atributos de los símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Definido como símbolo de alimentación"
+msgstr "Restablecer símbolos de potencia personalizados"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10078,7 +10077,7 @@ msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
 "La gravedad de la infracción también se puede editar en el diálogo de "
-"Configuración de placa..."
+"Configuración de esquema..."
 
 #: eeschema/dialogs/dialog_erc.cpp:628 pcbnew/dialogs/dialog_drc.cpp:679
 #, c-format
@@ -10825,9 +10824,8 @@ msgid "untitled"
 msgstr "sin título"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Propiedades de la etiqueta"
+msgstr "Editar propiedades de la etiqueta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -12397,9 +12395,8 @@ msgstr ""
 "en Preferencias > Editor de esquemas > Colores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Propiedades de la página"
+msgstr "Editar propiedades de la página"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13709,9 +13706,8 @@ msgstr ""
 "una página de este esquema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Propiedades del texto"
+msgstr "Editar propiedades del texto"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19181,9 +19177,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Realizar análisis de Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Fase de la señal:"
+msgstr "Copiar nombre de la señal"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -22130,24 +22125,20 @@ msgstr ""
 "ajustados"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ajustar a valores específicos:"
+msgstr "Limitar a valores de las series E192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -38367,9 +38358,8 @@ msgid "Skew between traces out of range"
 msgstr "Desvío entre pistas fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Demasiadas vías en una conexión"
+msgstr "Demasiadas o muy pocas vías en una conexión"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39075,14 +39065,13 @@ msgid "Too many vias on a connection"
 msgstr "Demasiadas vías en una conexión"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s recuento máximo %d; real %d)"
+msgstr "(%s recuento mínimo %d; real %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Demasiadas vías en una conexión"
+msgstr "Muy pocas vías en una conexión"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -39427,7 +39416,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:857
 #, c-format
 msgid "Wire not done (contour %d, points %d): OCC error %d\n"
-msgstr ""
+msgstr "Cable no hecho (contorno %d, puntos %d): error de OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1005
 #, c-format
@@ -39499,7 +39488,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Se cerrará la placa actual. ¿Continuar?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39508,9 +39496,9 @@ msgid ""
 msgstr ""
 "Si se rellenan las zonas de esta placa, se usará la configuración de margen "
 "de borde de cobre (vea Configuración de placa > Reglas de diseño > "
-"Requerimientos).\n"
+"Restricciones).\n"
 "Esto puede resultar en rellenos diferentes a versiones anteriores de KiCad "
-"que usaban el ancho de línea del borde de la placa en la capa Edge.Cuts."
+"que usaban el ancho de línea del borde de la placa en la capa Edge Cuts."
 
 #: pcbnew/files.cpp:525
 #, c-format
@@ -41639,7 +41627,7 @@ msgstr ""
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 "En la huella %s el pad %s utiliza un apilamiento de pads complejo (todavía "
-"no soportado.)"
+"no soportado)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2927
 #, c-format
@@ -47903,9 +47891,9 @@ msgid "thermal reliefs for PTH"
 msgstr "Alivios térmicos para PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] Error al cargar: línea de entrada demasiado larga\n"
+msgstr "[INFO] error al cargar: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
