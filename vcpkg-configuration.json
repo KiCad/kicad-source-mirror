@@ -16,8 +16,7 @@
         "opencascade",
         "wxpython",
         "wxwidgets",
-        "ngspice",
-        "liblzma"
+        "ngspice"
       ]
     }
   ]
