@@ -440,6 +440,10 @@ void SIMULATOR_FRAME::StartSimulation()
     {
         m_ui->OnSimUpdate();
         m_simulator->Run();
+
+        // Netlist from schematic may have changed; update signals list, measurements list,
+        // etc.
+        m_ui->OnPlotSettingsChanged();
     }
     else
     {
