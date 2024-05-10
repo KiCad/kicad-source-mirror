@@ -952,6 +952,13 @@ void FOOTPRINT_VIEWER_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::HardRedraw()
+{
+    ReCreateLibraryList();
+    ReCreateFootprintList();
+    ReloadFootprint( GetBoard()->GetFirstFootprint() );
+}
+
 void FOOTPRINT_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     switch( mail.Command() )
