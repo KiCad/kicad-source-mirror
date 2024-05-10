@@ -1479,10 +1479,10 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 
         kid = m_TreeProject->GetNextChild( root_id, cookie );
     }
-#endif
 
     if( total_watch_count >= ADVANCED_CFG::GetCfg().m_MaxFilesystemWatchers )
         wxLogTrace( tracePathsAndFiles, "%s: too many directories to watch\n", __func__ );
+#endif
 
 #if defined(DEBUG) && 1
     wxArrayString paths;
