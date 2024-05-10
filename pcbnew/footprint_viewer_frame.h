@@ -85,6 +85,8 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
+    void HardRedraw() override;
+
 protected:
     FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
