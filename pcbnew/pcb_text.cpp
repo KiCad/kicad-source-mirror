@@ -398,7 +398,7 @@ const BOX2I PCB_TEXT::GetBoundingBox() const
         rect.Inflate( getKnockoutMargin() );
 
     if( !angle.IsZero() )
-        rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
+        rect = rect.GetBoundingBoxRotated( GetTextPos(), angle );
 
     return rect;
 }
