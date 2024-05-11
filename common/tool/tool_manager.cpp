@@ -363,7 +363,11 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, const std
 
             while( synchronousControl == STS_RUNNING )
             {
-                wxYield();
+                wxYield();          // Needed to honor mouse (and other) events during editing
+                wxMilliSleep( 1 );  // Needed to avoid 100% use of one cpu core.
+                                    // The sleeping time must be must be small to avoid
+                                    // noticeable lag in mouse and editing events
+                                    // (1 to 5 ms is a good value)
             }
 
             retVal = synchronousControl != STS_CANCELLED;
