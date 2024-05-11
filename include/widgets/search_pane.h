@@ -43,7 +43,7 @@ public:
 
     virtual int Search( const wxString& string ) = 0;
     virtual wxString GetResultCell( int row, int col ) = 0;
-    virtual void Sort( int aCol, bool aAscending ) = 0;
+    virtual void Sort( int aCol, bool aAscending, std::vector<long>* aSelection ) = 0;
 
     virtual void SelectItems( std::vector<long>& aItemRows ) {}
     virtual void ActivateItem( long aItemRow ) {}

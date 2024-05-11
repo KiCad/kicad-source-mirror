@@ -40,7 +40,7 @@ public:
 
     void RefreshColumnNames();
 
-    void Sort();
+    std::vector<long> Sort();
 
 protected:
     wxString OnGetItemText( long item, long column ) const override;

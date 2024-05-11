@@ -42,18 +42,38 @@ void PCB_SEARCH_HANDLER::ActivateItem( long aItemRow )
 }
 
 
-void PCB_SEARCH_HANDLER::Sort( int aCol, bool aAscending )
+void PCB_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* aSelection )
 {
+    std::vector<BOARD_ITEM*> selection;
+
+    for( long i = 0; i < (long) m_hitlist.size(); ++i )
+    {
+        if( alg::contains( *aSelection, i ) )
+            selection.push_back( m_hitlist[i] );
+    }
+
+    int col = std::max( 0, aCol );  // Provide a stable order by sorting on first column if no
+                                    // sort column provided.
+
     std::sort( m_hitlist.begin(), m_hitlist.end(),
             [&]( BOARD_ITEM* a, BOARD_ITEM* b ) -> bool
             {
                 // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
                 // to get the opposite sort.  i.e. ~(a<b) != (a>b)
                 if( aAscending )
-                    return StrNumCmp( getResultCell( a, aCol ), getResultCell( b, aCol ), true ) < 0;
+                    return StrNumCmp( getResultCell( a, col ), getResultCell( b, col ), true ) < 0;
                 else
-                    return StrNumCmp( getResultCell( b, aCol ), getResultCell( a, aCol ), true ) < 0;
+                    return StrNumCmp( getResultCell( b, col ), getResultCell( a, col ), true ) < 0;
             } );
+
+
+    aSelection->clear();
+
+    for( long i = 0; i < (long) m_hitlist.size(); ++i )
+    {
+        if( alg::contains( selection, m_hitlist[i] ) )
+            aSelection->push_back( i );
+    }
 }
 
 

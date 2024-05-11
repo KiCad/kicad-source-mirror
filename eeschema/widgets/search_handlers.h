@@ -60,7 +60,7 @@ public:
     }
 
     void FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET_PATH* )>& aCollector );
-    void Sort( int aCol, bool aAscending ) override;
+    void Sort( int aCol, bool aAscending, std::vector<long>* aSelection ) override;
     void SelectItems( std::vector<long>& aItemRows ) override;
 
 protected:

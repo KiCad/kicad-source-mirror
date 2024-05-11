@@ -50,7 +50,7 @@ public:
         return getResultCell( item, aCol );
     }
 
-    void Sort( int aCol, bool aAscending ) override;
+    void Sort( int aCol, bool aAscending, std::vector<long>* aSelection ) override;
 
     void SelectItems( std::vector<long>& aItemRows ) override;
     void ActivateItem( long aItemRow ) override;

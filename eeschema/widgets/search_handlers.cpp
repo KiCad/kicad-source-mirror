@@ -65,8 +65,16 @@ void SCH_SEARCH_HANDLER::FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET
 }
 
 
-void SCH_SEARCH_HANDLER::Sort( int aCol, bool aAscending )
+void SCH_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* aSelection )
 {
+    std::vector<SCH_ITEM*> selection;
+
+    for( long i = 0; i < (long) m_hitlist.size(); ++i )
+    {
+        if( alg::contains( *aSelection, i ) )
+            selection.push_back( m_hitlist[i].item );
+    }
+
     int col = std::max( 0, aCol );  // Provide a stable order by sorting on first column if no
                                     // sort column provided.
 
@@ -80,6 +88,14 @@ void SCH_SEARCH_HANDLER::Sort( int aCol, bool aAscending )
                 else
                     return StrNumCmp( getResultCell( b, col ), getResultCell( a, col ), true ) < 0;
             } );
+
+    aSelection->clear();
+
+    for( long i = 0; i < (long) m_hitlist.size(); ++i )
+    {
+        if( alg::contains( selection, m_hitlist[i].item ) )
+            aSelection->push_back( i );
+    }
 }
 
 
