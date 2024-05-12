@@ -234,12 +234,12 @@ protected:
 void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 {
     auto autoSizeCol =
-        [&]( WX_GRID* aGrid, int aCol )
+        [&]( WX_GRID* aCurrGrid, int aCol )
         {
-            int prevWidth = aGrid->GetColSize( aCol );
+            int prevWidth = aCurrGrid->GetColSize( aCol );
 
-            aGrid->AutoSizeColumn( aCol, false );
-            aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
+            aCurrGrid->AutoSizeColumn( aCol, false );
+            aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
         };
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
