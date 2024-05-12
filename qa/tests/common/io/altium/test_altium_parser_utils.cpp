@@ -49,6 +49,10 @@ struct SPECIAL_STRINGS_TO_KICAD
     std::map<wxString, wxString> override;
 };
 
+std::ostream & operator<<(std::ostream & strm, SPECIAL_STRINGS_TO_KICAD const & data) {
+    return strm << "[" << data.input << " -> " << data.exp_result << "]";
+}
+
 /**
  * A list of valid test strings and the expected results
  */
@@ -134,19 +138,16 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> sch_special_string_to_kicad_p
 /**
  * Test conversation from Altium Schematic Special String to a KiCad String with variables
  */
-BOOST_AUTO_TEST_CASE( AltiumSchSpecialStringsToKiCadVariablesProperties )
+BOOST_DATA_TEST_CASE( AltiumSchSpecialStringsToKiCadVariablesProperties,
+                      boost::unit_test::data::make(sch_special_string_to_kicad_property),
+                      data )
 {
-    for( const auto& c : sch_special_string_to_kicad_property )
-    {
-        BOOST_TEST_CONTEXT( wxString::Format( wxT( "'%s' -> '%s'" ), c.input, c.exp_result ) )
-        {
-            wxString result = AltiumSchSpecialStringsToKiCadVariables( c.input, c.override );
+    wxString result = AltiumSchSpecialStringsToKiCadVariables( data.input, data.override );
 
-            // These are all valid
-            BOOST_CHECK_EQUAL( result, c.exp_result );
-        }
-    }
+    // These are all valid
+    BOOST_CHECK_EQUAL( result, data.exp_result );
 }
+
 
 /**
  * A list of valid test strings and the expected results
@@ -202,18 +203,14 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> pcb_special_string_to_kicad_p
 /**
  * Test conversation from Altium Board Special String to a KiCad String with variables
  */
-BOOST_AUTO_TEST_CASE( AltiumPcbSpecialStringsToKiCadStringsProperties )
+BOOST_DATA_TEST_CASE( AltiumPcbSpecialStringsToKiCadStringsProperties,
+                      boost::unit_test::data::make(pcb_special_string_to_kicad_property),
+                      data )
 {
-    for( const auto& c : pcb_special_string_to_kicad_property )
-    {
-        BOOST_TEST_CONTEXT( wxString::Format( wxT( "'%s' -> '%s'" ), c.input, c.exp_result ) )
-        {
-            wxString result = AltiumPcbSpecialStringsToKiCadStrings( c.input, c.override );
+    wxString result = AltiumPcbSpecialStringsToKiCadStrings( data.input, data.override );
 
-            // These are all valid
-            BOOST_CHECK_EQUAL( result, c.exp_result );
-        }
-    }
+    // These are all valid
+    BOOST_CHECK_EQUAL( result, data.exp_result );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
