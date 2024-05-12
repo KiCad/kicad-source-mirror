@@ -27,6 +27,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
 
 #include <common/io/altium/altium_parser_utils.h>
 

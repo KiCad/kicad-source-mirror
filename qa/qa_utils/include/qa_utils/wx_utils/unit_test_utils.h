@@ -27,7 +27,6 @@
 #define BOOST_NO_AUTO_PTR
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/data/test_case.hpp>
 #include <turtle/mock.hpp>
 
 #include <qa_utils/wx_utils/wx_assert.h>
