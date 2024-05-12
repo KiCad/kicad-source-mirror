@@ -517,6 +517,9 @@ void DIALOG_SIM_COMMAND::ApplySettings( SIM_TAB* aTab )
     if( !m_saveAllDissipations->GetValue() )
         options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
 
+    if( !m_saveAllEvents->GetValue() )
+        options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
+
     aTab->SetSimOptions( options );
     m_simulatorFrame->ReloadSimulator( m_simCommand, options );
 

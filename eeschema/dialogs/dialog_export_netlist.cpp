@@ -110,6 +110,7 @@ public:
     wxCheckBox*       m_SaveAllVoltages;
     wxCheckBox*       m_SaveAllCurrents;
     wxCheckBox*       m_SaveAllDissipations;
+    wxCheckBox*       m_SaveAllEvents;
     wxCheckBox*       m_RunExternalSpiceCommand;
     wxTextCtrl*       m_CommandStringCtrl;
     wxTextCtrl*       m_TitleStringCtrl;
@@ -208,6 +209,7 @@ enum id_netlist {
     ID_SAVE_ALL_VOLTAGES,
     ID_SAVE_ALL_CURRENTS,
     ID_SAVE_ALL_DISSIPATIONS,
+    ID_SAVE_ALL_EVENTS,
     ID_RUN_SIMULATOR
 };
 
@@ -224,6 +226,7 @@ EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& a
     m_SaveAllVoltages     = nullptr;
     m_SaveAllCurrents     = nullptr;
     m_SaveAllDissipations = nullptr;
+    m_SaveAllEvents       = nullptr;
     m_RunExternalSpiceCommand = nullptr;
     m_custom              = aCustom;
 
@@ -341,6 +344,12 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpice()
     page->m_SaveAllDissipations->SetValue( settings.m_SpiceSaveAllDissipations );
     page->m_LeftBoxSizer->Add( page->m_SaveAllDissipations, 0, wxBOTTOM | wxRIGHT, 5 );
 
+    page->m_SaveAllEvents = new wxCheckBox( page, ID_SAVE_ALL_EVENTS,
+                                            _( "Save all digital event data" ) );
+    page->m_SaveAllEvents->SetToolTip( _( "If not set, write a directive to prevent the saving of digital event data (esave none)" ) );
+    page->m_SaveAllEvents->SetValue( settings.m_SpiceSaveAllEvents );
+    page->m_LeftBoxSizer->Add( page->m_SaveAllEvents, 0, wxBOTTOM | wxRIGHT, 5 );
+
 
     page->m_RunExternalSpiceCommand = new wxCheckBox( page, ID_RUN_SIMULATOR,
                                                       _( "Run external simulator command:" ) );
@@ -448,6 +457,7 @@ bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
     bool saveAllVoltages = m_PanelNetType[ PANELSPICE ]->m_SaveAllVoltages->IsChecked();
     bool saveAllCurrents = m_PanelNetType[ PANELSPICE ]->m_SaveAllCurrents->IsChecked();
     bool saveAllDissipations = m_PanelNetType[ PANELSPICE ]->m_SaveAllDissipations->IsChecked();
+    bool saveAllEvents = m_PanelNetType[ PANELSPICE ]->m_SaveAllEvents->IsChecked();
     wxString spiceCmdString = m_PanelNetType[ PANELSPICE ]->m_CommandStringCtrl->GetValue();
     bool curSheetAsRoot = m_PanelNetType[ PANELSPICE ]->m_CurSheetAsRoot->GetValue();
     bool spiceModelCurSheetAsRoot = m_PanelNetType[ PANELSPICEMODEL ]->m_CurSheetAsRoot->GetValue();
@@ -458,6 +468,7 @@ bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
     changed |= ( settings.m_SpiceSaveAllVoltages != saveAllVoltages );
     changed |= ( settings.m_SpiceSaveAllCurrents != saveAllCurrents );
     changed |= ( settings.m_SpiceSaveAllDissipations != saveAllDissipations );
+    changed |= ( settings.m_SpiceSaveAllEvents != saveAllEvents );
     changed |= ( settings.m_SpiceCommandString != spiceCmdString );
     changed |= ( settings.m_SpiceCurSheetAsRoot != curSheetAsRoot );
     changed |= ( settings.m_SpiceModelCurSheetAsRoot != spiceModelCurSheetAsRoot );
@@ -466,6 +477,7 @@ bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
     settings.m_SpiceSaveAllVoltages     = saveAllVoltages;
     settings.m_SpiceSaveAllCurrents     = saveAllCurrents;
     settings.m_SpiceSaveAllDissipations = saveAllDissipations;
+    settings.m_SpiceSaveAllEvents       = saveAllEvents;
     settings.m_SpiceCommandString       = spiceCmdString;
     settings.m_SpiceCurSheetAsRoot      = curSheetAsRoot;
     settings.m_SpiceModelCurSheetAsRoot = spiceModelCurSheetAsRoot;
@@ -510,6 +522,9 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
 
         if( currPage->m_SaveAllDissipations->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
+
+        if( currPage->m_SaveAllEvents->GetValue() )
+            netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
 
         if( currPage->m_CurSheetAsRoot->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;

@@ -65,6 +65,7 @@ public:
     unsigned GetNetlistOptions() override
     {
         unsigned options = NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS
+                            | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS
                             | NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
 
         if( m_SaveCurrents )

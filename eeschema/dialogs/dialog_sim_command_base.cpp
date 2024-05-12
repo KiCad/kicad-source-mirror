@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -652,6 +652,9 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_saveAllDissipations = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all power dissipations"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer88->Add( m_saveAllDissipations, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	m_saveAllEvents = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all digital event data"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer88->Add( m_saveAllEvents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_compatibilityModeSizer = new wxBoxSizer( wxHORIZONTAL );
 

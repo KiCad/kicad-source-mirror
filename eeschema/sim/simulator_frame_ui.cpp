@@ -1969,7 +1969,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
         for( const nlohmann::json& tab_js : js[ "tabs" ] )
         {
             wxString simCommand;
-            int      simOptions = NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;
+            int      simOptions = NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS
+                                    | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
 
             for( const nlohmann::json& cmd : tab_js[ "commands" ] )
             {
@@ -1981,6 +1982,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                     simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
                 else if( cmd == ".probe allp" )
                     simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
+                else if( cmd == ".kicad esavenone" )
+                    simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
                 else
                     simCommand += wxString( cmd.get<wxString>() ).Trim();
             }
@@ -2168,6 +2171,9 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
         if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
             commands_js.push_back( ".probe allp" );
+
+        if( !( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS ) )
+            commands_js.push_back( ".kicad esavenone" );
 
         nlohmann::json tab_js = nlohmann::json(
                                     { { "analysis", SPICE_SIMULATOR::TypeToName( simType, true ) },

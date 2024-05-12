@@ -287,6 +287,13 @@ bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxS
         SIMULATOR::Attach( aModel, aSimCommand, aSimOptions, aInputPath, aReporter );
         updateNgspiceSettings();
         LoadNetlist( formatter.GetString() );
+
+        if( !( aSimOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS ) )
+        {
+            Command( "echo Command: esave none" );
+            Command( "esave none" );
+        }
+
         return true;
     }
     else

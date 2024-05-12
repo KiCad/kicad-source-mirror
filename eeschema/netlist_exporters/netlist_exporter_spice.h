@@ -58,11 +58,13 @@ public:
         OPTION_SAVE_ALL_DISSIPATIONS = 0x0100,
         OPTION_CUR_SHEET_AS_ROOT     = 0x0200,
         OPTION_SIM_COMMAND           = 0x0400,
+        OPTION_SAVE_ALL_EVENTS       = 0x0800,
         OPTION_DEFAULT_FLAGS =   OPTION_ADJUST_INCLUDE_PATHS
                                | OPTION_ADJUST_PASSIVE_VALS
                                | OPTION_SAVE_ALL_VOLTAGES
                                | OPTION_SAVE_ALL_CURRENTS
                                | OPTION_SAVE_ALL_DISSIPATIONS
+                               | OPTION_SAVE_ALL_EVENTS
     };
 
     NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic, wxWindow* aDialogParent = nullptr );
