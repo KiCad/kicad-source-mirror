@@ -221,8 +221,14 @@ static const std::vector<std::tuple<std::string, std::map<wxString, wxString>>> 
     { "|A=B\0", { { "A", "B" } } },
     { "|A=B|", { { "A", "B" } } },
     { "|A=B|\0", { { "A", "B" } } },
+    { "A=\0", { { "A", "" } } },
+    { "A=B", { { "A", "B" } } },
+    { "A=B\0", { { "A", "B" } } },
+    { "A=B|", { { "A", "B" } } },
+    { "A=B|\0", { { "A", "B" } } },
     // Multiple key-value pairs
     { "|A=B|C=D|\0", { { "A", "B" }, { "C", "D" } } },
+    { "A=B|C=D|\0", { { "A", "B" }, { "C", "D" } } },
     // Same key multiple times
     { "|A=B|A=C\0", { { "A", "B" } } },
     { "|A=B|A=C|A=D|A=E|A=F\0", { { "A", "B" } } },
@@ -235,6 +241,11 @@ static const std::vector<std::tuple<std::string, std::map<wxString, wxString>>> 
     { "|  A=B\0", { { "A", "B" } } },
     { "|A  =B\0", { { "A", "B" } } },
     { "|A=\nB\n\0", { { "A", "\nB" } } },
+    { "A=  B\0", { { "A", "  B" } } },
+    { "A=B  \0", { { "A", "B" } } },
+    { "  A=B\0", { { "A", "B" } } },
+    { "A  =B\0", { { "A", "B" } } },
+    { "A=\nB\n\0", { { "A", "\nB" } } },
     // Escaping and other special cases, TODO: extend
     //{ "|A=||\0", {{"A", "|"}} },
     { "|A==\0", { { "A", "=" } } },
