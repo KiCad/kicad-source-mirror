@@ -41,18 +41,12 @@ struct ALTIUM_BINARY_PARSER_FIXTURE
  */
 BOOST_FIXTURE_TEST_SUITE( AltiumParser, ALTIUM_BINARY_PARSER_FIXTURE )
 
-struct ALTIUM_TO_KICAD_UNIT_CASE
-{
-    int input;
-    int exp_result;
-};
-
 /**
  * A list of valid internal unit conversation factors
  * Rem: altium to kicad importer rounds coordinates to the near 10 nm value
  * when converting altium values in 0.01 mil to pcbnew units (1 nm)
  */
-static const std::vector<ALTIUM_TO_KICAD_UNIT_CASE> altium_to_kicad_unit = {
+static const std::vector<std::tuple<int, int>> altium_to_kicad_unit = {
     // Some simple values
     { 0, 0 },
     { 1, 0 },
@@ -126,30 +120,21 @@ static const std::vector<ALTIUM_TO_KICAD_UNIT_CASE> altium_to_kicad_unit = {
 /**
  * Test conversation from Altium internal units into KiCad internal units
  */
-BOOST_AUTO_TEST_CASE( ConvertToKicadUnit )
+BOOST_DATA_TEST_CASE( ConvertToKicadUnit,
+                      boost::unit_test::data::make(altium_to_kicad_unit),
+                      input_value,
+                      expected_result )
 {
-    for( const auto& c : altium_to_kicad_unit )
-    {
-        BOOST_TEST_CONTEXT( wxString::Format( wxT( "%i -> %i" ), c.input, c.exp_result ) )
-        {
-            int result = ALTIUM_PROPS_UTILS::ConvertToKicadUnit( c.input );
+    int result = ALTIUM_PROPS_UTILS::ConvertToKicadUnit( input_value );
 
-            // These are all valid
-            BOOST_CHECK_EQUAL( result, c.exp_result );
-        }
-    }
+    // These are all valid
+    BOOST_CHECK_EQUAL( result, expected_result );
 }
-
-struct READ_KICAD_UNIT_CASE
-{
-    wxString input;
-    int      exp_result;
-};
 
 /**
  * A list of valid test strings and the expected results
  */
-static const std::vector<READ_KICAD_UNIT_CASE> read_kicad_unit_property = {
+static const std::vector<std::tuple<wxString, int>> read_kicad_unit_property = {
     // Empty (use default)
     { "", 0 },
     // Some simple cases
@@ -200,32 +185,24 @@ static const std::vector<READ_KICAD_UNIT_CASE> read_kicad_unit_property = {
 /**
  * Test conversation from Unit property into KiCad internal units
  */
-BOOST_AUTO_TEST_CASE( PropertiesReadKicadUnit )
+BOOST_DATA_TEST_CASE( PropertiesReadKicadUnit,
+                      boost::unit_test::data::make(read_kicad_unit_property),
+                      input_value,
+                      expected_result )
 {
-    for( const auto& c : read_kicad_unit_property )
-    {
-        BOOST_TEST_CONTEXT( c.input + " -> " + wxString::Format( wxT( "%i" ), c.exp_result ) )
-        {
-            std::map<wxString, wxString> properties = { { "TEST", c.input } };
+    std::map<wxString, wxString> properties = { { "TEST", input_value } };
 
-            int result = ALTIUM_PROPS_UTILS::ReadKicadUnit( properties, "TEST", "0mil" );
+    int result = ALTIUM_PROPS_UTILS::ReadKicadUnit( properties, "TEST", "0mil" );
 
-            // These are all valid
-            BOOST_CHECK_EQUAL( result, c.exp_result );
-        }
-    }
+    // These are all valid
+    BOOST_CHECK_EQUAL( result, expected_result );
 }
 
-struct READ_PROPERTIES_CASE
-{
-    std::string                  input;
-    std::map<wxString, wxString> exp_result;
-};
 
 /**
  * A list of valid test strings and the expected result map
  */
-static const std::vector<READ_PROPERTIES_CASE> read_properties = {
+static const std::vector<std::tuple<std::string, std::map<wxString, wxString>>> read_properties = {
     // Empty
     { "", {} },
     { "\0", {} },
@@ -274,33 +251,27 @@ static const std::vector<READ_PROPERTIES_CASE> read_properties = {
 /**
  * Test conversation from binary to properties
  */
-BOOST_AUTO_TEST_CASE( ReadProperties )
+BOOST_DATA_TEST_CASE( ReadProperties,
+                      boost::unit_test::data::make(read_properties),
+                      input_value,
+                      expected_result )
 {
-    for( const auto& c : read_properties )
-    {
-        BOOST_TEST_CONTEXT( wxString::Format( wxT( "'%s'" ), c.input ) )
-        {
-            size_t                  size = 4 + c.input.size();
-            std::unique_ptr<char[]> content = std::make_unique<char[]>( size );
+    size_t                  size = 4 + input_value.size();
+    std::unique_ptr<char[]> content = std::make_unique<char[]>( size );
 
-            *content.get() = c.input.size();
-            std::memcpy( content.get() + 4, c.input.c_str(), c.input.size() );
+    *content.get() = input_value.size();
+    std::memcpy( content.get() + 4, input_value.c_str(), input_value.size() );
 
-            ALTIUM_BINARY_PARSER parser( content, size );
+    ALTIUM_BINARY_PARSER parser( content, size );
 
-            std::map<wxString, wxString> result = parser.ReadProperties();
+    std::map<wxString, wxString> result = parser.ReadProperties();
 
-            BOOST_CHECK_EQUAL( parser.HasParsingError(), false );
-            BOOST_CHECK_EQUAL( parser.GetRemainingBytes(), 0 );
+    BOOST_CHECK_EQUAL( parser.HasParsingError(), false );
+    BOOST_CHECK_EQUAL( parser.GetRemainingBytes(), 0 );
 
-            BOOST_CHECK_EQUAL( result.size(), c.exp_result.size() );
-            for( const auto& kv : c.exp_result )
-            {
-                BOOST_CHECK_EQUAL( 1, result.count( kv.first ) );
-                BOOST_CHECK_EQUAL( result.at( kv.first ), kv.second );
-            }
-        }
-    }
+    BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(),
+                                   expected_result.begin(), expected_result.end() );
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()

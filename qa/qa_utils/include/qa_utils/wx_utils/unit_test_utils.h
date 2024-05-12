@@ -27,6 +27,7 @@
 #define BOOST_NO_AUTO_PTR
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/data/test_case.hpp>
 #include <turtle/mock.hpp>
 
 #include <qa_utils/wx_utils/wx_assert.h>
@@ -195,7 +196,7 @@ struct print_log_value<std::vector<T>>
 {
     inline void operator()( std::ostream& os, std::vector<T> const& aVec )
     {
-        os << "std::vector size " << aVec.size() << "[";
+        os << "std::vector size " << aVec.size() << " [";
 
         for( const auto& i : aVec )
         {
@@ -203,6 +204,44 @@ struct print_log_value<std::vector<T>>
             print_log_value<T>()( os, i );
         }
 
+        os << "]";
+    }
+};
+
+/**
+ * Boost print helper for generic maps
+ */
+template <typename K, typename V>
+struct print_log_value<std::map<K, V>>
+{
+    inline void operator()( std::ostream& os, std::map<K, V> const& aMap )
+    {
+        os << "std::map size " << aMap.size() << " [";
+
+        for( const auto& [key, value] : aMap )
+        {
+            os << "\n    ";
+            print_log_value<K>()( os, key );
+            os << " = ";
+            print_log_value<K>()( os, value );
+        }
+
+        os << "]";
+    }
+};
+
+/**
+ * Boost print helper for generic pairs
+ */
+template <typename K, typename V>
+struct print_log_value<std::pair<K, V>>
+{
+    inline void operator()( std::ostream& os, std::pair<K, V> const& aPair )
+    {
+        os << "[";
+        print_log_value<K>()( os, aPair.first );
+        os << ", ";
+        print_log_value<K>()( os, aPair.second );
         os << "]";
     }
 };
