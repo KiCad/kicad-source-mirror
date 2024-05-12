@@ -298,7 +298,7 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
         out.Write( wxString::Format( wxT( "%s%c" ), xAxisName, SEPARATOR ) );
 
         for( const auto& [name, trace] : traces )
-            out.Write( wxString::Format( wxT( "%s%c" ), name, SEPARATOR ) );
+            out.Write( wxString::Format( wxT( "%s%c" ), trace->GetDisplayName(), SEPARATOR ) );
 
         out.Write( wxS( "\r\n" ) );
 
