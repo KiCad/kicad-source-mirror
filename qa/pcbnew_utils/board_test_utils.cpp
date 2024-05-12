@@ -319,6 +319,10 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
     }
 
     // TODO: Groups
+
+    // Use FootprintNeedsUpdate as sanity check (which should do the same thing as our manually coded checks)
+    // If we get the reporter working, and COMPARE_FLAGS::DRC is enough for us, we can remove the old code
+    BOOST_CHECK( !const_cast<FOOTPRINT*>(expected)->FootprintNeedsUpdate(fp, BOARD_ITEM::COMPARE_FLAGS::DRC, nullptr) );
 }
 
 
