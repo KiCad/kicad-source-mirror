@@ -104,8 +104,7 @@ namespace SPICE_GRAMMAR
                             one<']'>> {};
 
     struct bracedExpr : seq<one<'{'>,
-                            star<sor<bracedExpr,
-                                     not_one<'}'>>>,
+                            star<not_one<'}'>>,
                             one<'}'>> {};
 
     // Ngspice has some heuristic logic to allow + and - in tokens. We replicate that here.
@@ -123,10 +122,11 @@ namespace SPICE_GRAMMAR
     // Param names cannot be `token` because LTspice models contain spurious values without
     // parameter names, which we need to skip, and because tokens can include a very limited
     // subset of un-braced expressions
+    // Note: we must support lists of both braced expressions and tokens for CPL models.
     struct param : identifier {};
-    struct paramValue : sor<bracedExpr,
+    struct paramValue : sor<list<bracedExpr, sep>,
                             vectorExpr,
-                            token> {};
+                            list<token, sep>> {};
 
     struct paramValuePair : seq<param,
                                 sep,
