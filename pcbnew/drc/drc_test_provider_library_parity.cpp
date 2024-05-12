@@ -284,7 +284,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
         layerSettingsDiffer |= a->GetKeepTopBottom() != b->GetKeepTopBottom();
 
     // Trim layersets to the current board before comparing
-    LSET enabledLayers = a->GetBoard()->GetEnabledLayers();
+    LSET enabledLayers = a->GetBoard() ? a->GetBoard()->GetEnabledLayers() : LSET::AllLayersMask();
     LSET aLayers = a->GetLayerSet() & enabledLayers;
     LSET bLayers = b->GetLayerSet() & enabledLayers;
 
