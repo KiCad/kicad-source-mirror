@@ -6,7 +6,7 @@ build_doxygen_docker:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULED_JOB_NAME == "doxygen"
   tags:
-    - kicad-docker
+    - gitlab-org-docker
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
