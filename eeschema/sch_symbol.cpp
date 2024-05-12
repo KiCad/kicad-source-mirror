@@ -26,12 +26,8 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <core/mirror.h>
-#include <sch_pin.h>
 #include <sch_shape.h>
 #include <pgm_base.h>
-#include <sch_symbol.h>
-#include <sch_sheet_path.h>
-#include <schematic.h>
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
 #include <sim/sim_lib_mgr.h>
@@ -97,7 +93,7 @@ static LIB_SYMBOL* dummy()
 
 
 SCH_SYMBOL::SCH_SYMBOL() :
-    SYMBOL( nullptr, SCH_SYMBOL_T )
+        SYMBOL( nullptr, SCH_SYMBOL_T )
 {
     Init( VECTOR2I( 0, 0 ) );
 }
@@ -157,7 +153,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
 
 
 SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
-    SYMBOL( aSymbol )
+        SYMBOL( aSymbol )
 {
     m_parent      = aSymbol.m_parent;
     m_pos         = aSymbol.m_pos;
@@ -430,7 +426,7 @@ void SCH_SYMBOL::SetBodyStyle( int aBodyStyle )
     {
         m_bodyStyle = aBodyStyle;
 
-        // The convert may have a different pin layout so the update the pin map.
+        // The body style may have a different pin layout so the update the pin map.
         UpdatePins();
     }
 }

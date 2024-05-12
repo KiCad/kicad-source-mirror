@@ -31,14 +31,12 @@
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_line.h>
-#include <sch_label.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <settings/color_settings.h>
 #include <netclass.h>
 #include <trigo.h>
 #include <board_item.h>
-#include <advanced_config.h>
 #include <connection_graph.h>
 #include "sch_painter.h"
 #include "plotters/plotter.h"
@@ -269,11 +267,12 @@ void SCH_BUS_ENTRY_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit,
                                 const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED ) ?
-                    aSettings->GetLayerColor( m_layer ) : GetBusEntryColor();
+    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED )
+                                                            ? aSettings->GetLayerColor( m_layer )
+                                                            : GetBusEntryColor();
     VECTOR2I start = m_pos + aOffset;
     VECTOR2I end = GetEnd() + aOffset;
-    int     penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
+    int      penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
     if( GetLineStyle() <= LINE_STYLE::FIRST_TYPE )
     {
