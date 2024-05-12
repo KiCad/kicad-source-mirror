@@ -428,10 +428,10 @@ void SCH_LABEL_BASE::Move( const VECTOR2I& aMoveVector )
 void SCH_LABEL_BASE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     VECTOR2I pt = GetTextPos();
-    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
     VECTOR2I offset = pt - GetTextPos();
 
-    Rotate90( aRotateCCW );
+    Rotate90( !aRotateCCW );
 
     SetTextPos( GetTextPos() + offset );
 

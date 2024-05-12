@@ -837,12 +837,12 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( !moving )
             commit->Modify( item, m_frame->GetScreen() );
 
-        for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
+        if( item->Type() == SCH_LINE_T )
         {
-            if( item->Type() == SCH_LINE_T )
-            {
-                SCH_LINE* line = (SCH_LINE*) item;
+            SCH_LINE* line = (SCH_LINE*) item;
 
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
+            {
                 // If we are rotating more than one item, we do not have start/end
                 // points separately selected
                 if( item->HasFlag( STARTPOINT ) )
@@ -851,46 +851,46 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 if( item->HasFlag( ENDPOINT ) )
                     line->RotateEnd( rotPoint );
             }
-            else if( item->Type() == SCH_SHEET_PIN_T )
+        }
+        else if( item->Type() == SCH_SHEET_PIN_T )
+        {
+            if( item->GetParent()->IsSelected() )
             {
-                if( item->GetParent()->IsSelected() )
-                {
-                    // parent will rotate us
-                }
-                else
-                {
-                    // rotate within parent
-                    SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
-                    SCH_SHEET*     sheet = pin->GetParent();
-
-                    pin->Rotate( sheet->GetBodyBoundingBox().GetCenter(), false );
-                }
-            }
-            else if( item->Type() == SCH_FIELD_T )
-            {
-                if( item->GetParent()->IsSelected() )
-                {
-                    // parent will rotate us
-                }
-                else
-                {
-                    SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
-
-                    field->Rotate( rotPoint, true );
-
-                    if( field->GetTextAngle().IsHorizontal() )
-                        field->SetTextAngle( ANGLE_VERTICAL );
-                    else
-                        field->SetTextAngle( ANGLE_HORIZONTAL );
-
-                    // Now that we're moving a field, they're no longer autoplaced.
-                    static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
-                }
+                // parent will rotate us
             }
             else
             {
-                item->Rotate( rotPoint, true );
+                // rotate within parent
+                SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
+                SCH_SHEET*     sheet = pin->GetParent();
+
+                pin->Rotate( sheet->GetBodyBoundingBox().GetCenter(), !clockwise );
             }
+        }
+        else if( item->Type() == SCH_FIELD_T )
+        {
+            if( item->GetParent()->IsSelected() )
+            {
+                // parent will rotate us
+            }
+            else
+            {
+                SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+                field->Rotate( rotPoint, !clockwise );
+
+                if( field->GetTextAngle().IsHorizontal() )
+                    field->SetTextAngle( ANGLE_VERTICAL );
+                else
+                    field->SetTextAngle( ANGLE_HORIZONTAL );
+
+                // Now that we're moving a field, they're no longer autoplaced.
+                static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
+            }
+        }
+        else
+        {
+            item->Rotate( rotPoint, !clockwise );
         }
 
         m_frame->UpdateItem( item, false, true );

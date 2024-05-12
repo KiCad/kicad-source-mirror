@@ -258,7 +258,7 @@ void SCH_SHEET_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     VECTOR2I pt = GetTextPos();
     VECTOR2I delta = pt - aCenter;
 
-    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
 
     SHEET_SIDE oldSide = GetSide();
     ConstrainOnEdge( pt, true );

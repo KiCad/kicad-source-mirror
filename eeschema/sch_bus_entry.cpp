@@ -308,8 +308,8 @@ void SCH_BUS_ENTRY_BASE::MirrorHorizontally( int aCenter )
 
 void SCH_BUS_ENTRY_BASE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
-    RotatePoint( &m_size.x, &m_size.y, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
+    RotatePoint( &m_size.x, &m_size.y, aRotateCCW ? ANGLE_90 : ANGLE_270 );
 }
 
 

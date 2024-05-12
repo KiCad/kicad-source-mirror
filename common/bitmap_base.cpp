@@ -455,7 +455,7 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX);
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY);
 
-        m_rotation += ( aRotateCCW ? -ANGLE_90 : ANGLE_90 );
+        m_rotation += ( aRotateCCW ? ANGLE_90 : -ANGLE_90 );
         rebuildBitmap( false );
         UpdateImageDataBuffer();
     }

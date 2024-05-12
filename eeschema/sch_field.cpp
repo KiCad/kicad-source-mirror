@@ -996,7 +996,7 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     VECTOR2I pt = GetPosition();
-    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
     SetPosition( pt );
 
     SetTextAngle( GetTextAngle() != ANGLE_HORIZONTAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
