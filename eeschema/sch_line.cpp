@@ -32,7 +32,6 @@
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
-#include <schematic.h>
 #include <connection_graph.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -666,44 +665,25 @@ bool SCH_LINE::IsConnectable() const
 
 bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
 {
-    if( m_layer == LAYER_WIRE )
+    switch( aItem->Type() )
     {
-        switch( aItem->Type() )
-        {
-        case SCH_JUNCTION_T:
-        case SCH_NO_CONNECT_T:
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_DIRECTIVE_LABEL_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_SYMBOL_T:
-        case SCH_SHEET_T:
-        case SCH_SHEET_PIN_T:
-            return true;
-        default:
-            break;
-        }
-    }
-    else if( m_layer == LAYER_BUS )
-    {
-        switch( aItem->Type() )
-        {
-        case SCH_JUNCTION_T:
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_DIRECTIVE_LABEL_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_SHEET_T:
-        case SCH_SHEET_PIN_T:
-            return true;
-        default:
-            break;
-        }
-    }
+    case SCH_NO_CONNECT_T:
+    case SCH_SYMBOL_T:
+        return IsWire();
 
-    return aItem->GetLayer() == m_layer;
+    case SCH_JUNCTION_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_DIRECTIVE_LABEL_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+    case SCH_SHEET_T:
+    case SCH_SHEET_PIN_T:
+        return IsWire() || IsBus();
+
+    default:
+        return m_layer == aItem->GetLayer();
+    }
 }
 
 
