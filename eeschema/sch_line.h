@@ -211,8 +211,6 @@ public:
     void MirrorVertically( int aCenter ) override;
     void MirrorHorizontally( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override;
-    void RotateStart( const VECTOR2I& aCenter );
-    void RotateEnd( const VECTOR2I& aCenter );
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.

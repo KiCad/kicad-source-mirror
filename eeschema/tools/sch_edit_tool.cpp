@@ -841,16 +841,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
             SCH_LINE* line = (SCH_LINE*) item;
 
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-            {
-                // If we are rotating more than one item, we do not have start/end
-                // points separately selected
-                if( item->HasFlag( STARTPOINT ) )
-                    line->RotateStart( rotPoint );
-
-                if( item->HasFlag( ENDPOINT ) )
-                    line->RotateEnd( rotPoint );
-            }
+            line->Rotate( rotPoint, !clockwise );
         }
         else if( item->Type() == SCH_SHEET_PIN_T )
         {
