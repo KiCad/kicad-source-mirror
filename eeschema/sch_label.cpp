@@ -895,7 +895,7 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowE
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                return ResolveTextVar( aPath, token, aDepth );
+                return ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
