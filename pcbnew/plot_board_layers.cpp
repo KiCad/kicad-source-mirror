@@ -1151,8 +1151,8 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, const PCB_PLOT_PARAMS
  * @return the plotter object if OK, NULL if the file is not created (or has a problem).
  */
 PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
-                         const wxString& aFullFileName, const wxString& aSheetName,
-                         const wxString& aSheetPath )
+                         const wxString& aLayerName, const wxString& aFullFileName,
+                         const wxString& aSheetName, const wxString& aSheetPath )
 {
     // Create the plotter driver and set the few plotter specific options
     PLOTTER*    plotter = nullptr;
@@ -1213,9 +1213,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = new KIGFX::PCB_RENDER_SETTINGS();
     renderSettings->LoadColors( aPlotOpts->ColorSettings() );
     renderSettings->SetDefaultPenWidth( pcbIUScale.mmToIU( 0.0212 ) );  // Hairline at 1200dpi
-
-    if( aLayer >= 0 && aLayer < GAL_LAYER_ID_END )
-        renderSettings->SetLayerName( aBoard->GetLayerName( ToLAYER_ID( aLayer ) ) );
+    renderSettings->SetLayerName( aLayerName );
 
     plotter->SetRenderSettings( renderSettings );
 

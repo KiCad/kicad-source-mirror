@@ -494,8 +494,29 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     plotOpts.SetPlotReference( aDxfJob->m_plotRefDes );
     plotOpts.SetLayerSelection( aDxfJob->m_printMaskLayer );
 
-    DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard(
-            brd, &plotOpts, UNDEFINED_LAYER, aDxfJob->m_outputFile, wxEmptyString, wxEmptyString );
+    PCB_LAYER_ID layer = UNDEFINED_LAYER;
+    wxString     layerName;
+    wxString     sheetName;
+    wxString     sheetPath;
+
+    if( aDxfJob->m_printMaskLayer.size() == 1 )
+    {
+        layer = aDxfJob->m_printMaskLayer.front();
+        layerName = brd->GetLayerName( layer );
+    }
+
+    if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+        layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+    if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+        sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+    if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+        sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+
+    DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
+                                                          aDxfJob->m_outputFile, sheetName,
+                                                          sheetPath );
 
     if( plotter )
     {
@@ -555,8 +576,29 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         case 2: plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
     }
 
-    PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard(
-            brd, &plotOpts, UNDEFINED_LAYER, aPdfJob->m_outputFile, wxEmptyString, wxEmptyString );
+    PCB_LAYER_ID layer = UNDEFINED_LAYER;
+    wxString     layerName;
+    wxString     sheetName;
+    wxString     sheetPath;
+
+    if( aPdfJob->m_printMaskLayer.size() == 1 )
+    {
+        layer = aPdfJob->m_printMaskLayer.front();
+        layerName = brd->GetLayerName( layer );
+    }
+
+    if( aPdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+        layerName = aPdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+    if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+        sheetName = aPdfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+    if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+        sheetPath = aPdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+
+    PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
+                                                          aPdfJob->m_outputFile, sheetName,
+                                                          sheetPath );
 
     if( plotter )
     {
@@ -631,8 +673,11 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         }
 
         // Pick the basename from the board file
-        wxFileName fn( brd->GetFileName() );
-        PCB_LAYER_ID layer = *seq;
+        wxFileName      fn( brd->GetFileName() );
+        PCB_LAYER_ID    layer = *seq;
+        wxString        layerName = brd->GetLayerName( layer );
+        wxString        sheetName;
+        wxString        sheetPath;
         PCB_PLOT_PARAMS plotOpts;
 
         if( aGerberJob->m_useBoardPlotParams )
@@ -645,14 +690,24 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         else
             fileExt = FILEEXT::GerberFileExtension;
 
-        BuildPlotFileName( &fn, aGerberJob->m_outputFile, brd->GetLayerName( layer ), fileExt );
+        BuildPlotFileName( &fn, aGerberJob->m_outputFile, layerName, fileExt );
         wxString fullname = fn.GetFullName();
 
         jobfile_writer.AddGbrFile( layer, fullname );
 
+        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+            layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+            sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+            sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+
         // We are feeding it one layer at the start here to silence a logic check
-        GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard(
-                brd, &plotOpts, layer, fn.GetFullPath(), wxEmptyString, wxEmptyString );
+        GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer,
+                                                                    layerName, fn.GetFullPath(),
+                                                                    sheetName, sheetPath );
 
         if( plotter )
         {
@@ -733,10 +788,30 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
     plotOpts.SetLayerSelection( aGerberJob->m_printMaskLayer );
 
+    PCB_LAYER_ID layer = UNDEFINED_LAYER;
+    wxString     layerName;
+    wxString     sheetName;
+    wxString     sheetPath;
+
+    if( aGerberJob->m_printMaskLayer.size() == 1 )
+    {
+        layer = aGerberJob->m_printMaskLayer.front();
+        layerName = brd->GetLayerName( layer );
+    }
+
+    if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+        layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+    if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+        sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+    if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+        sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+
     // We are feeding it one layer at the start here to silence a logic check
-    GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard(
-            brd, &plotOpts, aGerberJob->m_printMaskLayer.front(), aGerberJob->m_outputFile,
-            wxEmptyString, wxEmptyString );
+    GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
+                                                                aGerberJob->m_outputFile,
+                                                                sheetName, sheetPath );
 
     if( plotter )
     {

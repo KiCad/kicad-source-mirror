@@ -1204,6 +1204,11 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         }
 
         PCB_LAYER_ID layer = *seq;
+        wxString     layerName = board->GetLayerName( layer );
+        //@todo allow controlling the sheet name and path that will be displayed in the title block
+        // Leave blank for now
+        wxString     sheetName;
+        wxString     sheetPath;
 
         // All copper layers that are disabled are actually selected
         // This is due to wonkyness in automatically selecting copper layers
@@ -1222,16 +1227,14 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && m_useGerberExtensions->GetValue() )
             file_ext = GetGerberProtelExtension( layer );
 
-        BuildPlotFileName( &fn, outputDir.GetPath(), board->GetLayerName( layer ), file_ext );
+        BuildPlotFileName( &fn, outputDir.GetPath(), layerName, file_ext );
         wxString fullname = fn.GetFullName();
         jobfile_writer.AddGbrFile( layer, fullname );
 
         LOCALE_IO toggle;
 
-        //@todo allow controlling the sheet name and path that will be displayed in the title block
-        // Leave blank for now
-        PLOTTER* plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(),
-                                           wxEmptyString, wxEmptyString );
+        PLOTTER* plotter = StartPlotBoard( board, &m_plotOpts, layer, layerName, fn.GetFullPath(),
+                                           sheetName, sheetPath );
 
         // Print diags in messages box:
         wxString msg;
