@@ -450,8 +450,10 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat
     outputDirName = ExpandTextVars( outputDirName, &textResolver );
     outputDirName = ExpandEnvVarSubstitutions( outputDirName, nullptr );
 
-    wxFileName outputDir = wxFileName::DirName( outputDirName );
-    wxString   boardFilename = m_board->GetFileName();
+    wxFileName   outputDir = wxFileName::DirName( outputDirName );
+    wxString     boardFilename = m_board->GetFileName();
+    PCB_LAYER_ID layer = ToLAYER_ID( GetLayer() );
+    wxString     layerName = m_board->GetLayerName( layer );
 
     if( EnsureFileDirectoryExists( &outputDir, boardFilename ) )
     {
@@ -471,7 +473,7 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat
         // Build plot filenames from the board name and layer names:
         BuildPlotFileName( &m_plotFile, outputDir.GetPath(), aSuffix, fileExt );
 
-        m_plotter = StartPlotBoard( m_board, &GetPlotOptions(), ToLAYER_ID( GetLayer() ),
+        m_plotter = StartPlotBoard( m_board, &GetPlotOptions(), layer, layerName,
                                     m_plotFile.GetFullPath(), aSheetName, aSheetPath );
     }
 

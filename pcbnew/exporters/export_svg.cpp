@@ -87,12 +87,22 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
 
     plot_opts.SetColorSettings( mgr.GetColorSettings( aSvgPlotOptions.m_colorTheme ) );
 
-    LOCALE_IO toggle;
-
+    LOCALE_IO    toggle;
+    PCB_LAYER_ID layer = UNDEFINED_LAYER;
+    wxString     layerName;
     //@todo allow controlling the sheet name and path that will be displayed in the title block
     // Leave blank for now
-    SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( aBoard, &plot_opts, UNDEFINED_LAYER, outputFile,
-                                                          wxEmptyString, wxEmptyString );
+    wxString     sheetName;
+    wxString     sheetPath;
+
+    if( aSvgPlotOptions.m_printMaskLayer.size() == 1 )
+    {
+        layer = aSvgPlotOptions.m_printMaskLayer.front();
+        layerName = aBoard->GetLayerName( layer );
+    }
+
+    SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( aBoard, &plot_opts, layer, layerName,
+                                                          outputFile, sheetName, sheetPath );
 
     if( plotter )
     {
