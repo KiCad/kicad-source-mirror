@@ -122,11 +122,12 @@ namespace SPICE_GRAMMAR
     // Param names cannot be `token` because LTspice models contain spurious values without
     // parameter names, which we need to skip, and because tokens can include a very limited
     // subset of un-braced expressions
-    // Note: we must support lists of both braced expressions and tokens for CPL models.
+    // Note: we must support lists of both braced expressions and tokens for CPL models...
+    //       ... but lists of tokens breaks cases where we have single-token name/values.
     struct param : identifier {};
     struct paramValue : sor<list<bracedExpr, sep>,
                             vectorExpr,
-                            list<token, sep>> {};
+                            token> {};
 
     struct paramValuePair : seq<param,
                                 sep,
