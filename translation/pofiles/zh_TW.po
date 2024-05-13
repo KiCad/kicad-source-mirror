@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-05-13 00:02+0000\n"
+"PO-Revision-Date: 2024-05-14 14:01+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hant/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.4\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -39,7 +39,7 @@ msgstr "所有檔案"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr "構建電路板外框"
+msgstr "建置電路板邊框"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:542
 msgid "Create layers"
@@ -73,12 +73,12 @@ msgstr "建立區域"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:785
 msgid "Build Tech layers"
-msgstr "構造工藝層"
+msgstr "建置工藝層"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:817
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "構造工藝層 %d"
+msgstr "建置工藝層 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
 msgid "Simplifying copper layer polygons"
@@ -99,7 +99,7 @@ msgstr "簡化通孔輪廓"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1187
 msgid "Build BVH for holes and vias"
-msgstr "為通孔和貫孔構造 BVH (盲埋孔)"
+msgstr "為通孔和貫孔建置 BVH (盲埋孔)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:385
 msgid "OpenGL context creation error"
@@ -433,7 +433,7 @@ msgstr "切換正交投影顯示"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:159
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:197
 msgid "Enable/disable orthographic projection"
-msgstr "啟用/禁用正交投影"
+msgstr "啟用/停用正交投影"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "View Front"
@@ -710,22 +710,22 @@ msgstr "顯示封裝值"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "References"
-msgstr "位號"
+msgstr "參考"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprint references"
-msgstr "顯示封裝位號"
+msgstr "顯示封裝參考"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Footprint Text"
-msgstr "封裝文本"
+msgstr "封裝文字"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show all footprint text"
-msgstr "顯示所有封裝文本"
+msgstr "顯示所有封裝文字"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Off-board Silkscreen"
@@ -1026,7 +1026,7 @@ msgstr "反鋸齒:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
-msgstr "禁用"
+msgstr "停用"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "2x"
@@ -1054,19 +1054,19 @@ msgstr "在移動時"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr "禁用反鋸齒"
+msgstr "停用反鋸齒"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
-msgstr "禁用厚度繪製"
+msgstr "停用厚度繪製"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
-msgstr "禁用貫孔繪製"
+msgstr "停用貫孔繪製"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
-msgstr "禁用通孔繪製"
+msgstr "停用通孔繪製"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -2044,7 +2044,7 @@ msgstr "版權資訊"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr "構建版本資訊"
+msgstr "建置版本資訊"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
@@ -2251,7 +2251,7 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr "為了確保環境變數名稱在所有平臺上都有效, 名稱欄位只接受大寫字母, "
-"數字和下劃線字符。"
+"數字和下劃線字元。"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
@@ -2652,7 +2652,7 @@ msgstr "從先前版本匯入庫配置"
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr "選中後, 先前版本的符號和封裝庫表將匯入到此版本中"
+msgstr "勾選後, 先前版本的符號和封裝庫表將匯入到此版本中"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -2771,7 +2771,7 @@ msgstr "圖紙檔案"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
-msgstr "虛構文本"
+msgstr "虛構文字"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
@@ -2929,24 +2929,24 @@ msgstr "註釋 9:"
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
-msgstr "自動查找重複位號併為其分配新的可用位號。"
+msgstr "尋找任何已存在於設計中的參考位置的下一個可用參考位置。"
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "用 '%s' 替換位號。"
+msgstr "用 '%s' 取代參考位置。"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "自動分配新的位號"
+msgstr "給貼上的符號指定唯一的參考位置"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "保留現有的位號 (無視重複項)"
+msgstr "保留現有的參考位置 (無視重複項)"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "清除所有位號"
+msgstr "清除所有參考位置"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -3169,7 +3169,7 @@ msgstr "調整 X 比例,使輸出繪圖比例更加精確"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
-msgstr "消息文本"
+msgstr "消息文字"
 
 #: common/dialogs/dialog_print_generic_base.cpp:108
 #: eeschema/printing/dialog_print_using_printer_base.cpp:73
@@ -3640,7 +3640,7 @@ msgstr "輔助工具"
 
 #: common/dialogs/panel_common_settings_base.cpp:84
 msgid "Text editor:"
-msgstr "文本編輯器:"
+msgstr "文字編輯器:"
 
 #: common/dialogs/panel_common_settings_base.cpp:103
 msgid "System default PDF viewer"
@@ -3806,7 +3806,7 @@ msgstr "編輯"
 
 #: common/dialogs/panel_common_settings_base.cpp:280
 msgid "Warp mouse to origin of moved object"
-msgstr "將鼠標移動到被移動的對象的原點"
+msgstr "將鼠標移動到被移動的物件的原點"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "First hotkey selects tool"
@@ -3816,8 +3816,7 @@ msgstr "首次按下快捷鍵僅選擇對應工具"
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
-msgstr ""
-"如果未選中, 即使未選擇快捷鍵對應的工具, 按下快捷鍵也將立即執行對應的操作。"
+msgstr "如果未勾選, 即使未選擇快捷鍵對應的工具, 按下快捷鍵也將立即執行對應的操作。"
 
 #: common/dialogs/panel_common_settings_base.cpp:295
 msgid "Session"
@@ -3831,7 +3830,8 @@ msgstr "打開專案時自動打開未關閉的專案檔案"
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
-msgstr "如果選中, 打開專案時會自動打開專案之前未關閉的專案檔案, 例如原理圖和 PCB"
+msgstr "如果勾選，啟動專案時也會啟動諸如原理圖和電路板編輯器等工具，並打開先前打開的"
+"文件"
 
 #: common/dialogs/panel_common_settings_base.cpp:320
 msgid "&Auto save:"
@@ -3842,8 +3842,8 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"在進行更改後, 建立備份檔案的間隔時間。\n"
-"如果設置為 0, 則禁用自動備份"
+"在第一次更改後延遲建立磁碟上的電路板備份檔案。\n"
+"如果設定為 0，則停用自動備份"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 #: common/dialogs/panel_common_settings_base.cpp:417
@@ -3864,7 +3864,7 @@ msgid ""
 "If set to 0, cache clearing is disabled"
 msgstr ""
 "將刪除早於此時間 3D 快取檔案。\n"
-"如果設置為 0, 則禁用快取清除"
+"如果設置為 0, 則停用快取清除"
 
 #: common/dialogs/panel_common_settings_base.cpp:350
 msgid "days"
@@ -3891,7 +3891,7 @@ msgstr "在自動儲存時同時建立備份"
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
-msgstr "啟用自動儲存功能後, 在在自動儲存動作觸發的同時建立一份專案備份。如果未選中, "
+msgstr "啟用自動儲存功能後, 在在自動儲存動作觸發的同時建立一份專案備份。如果未勾選, "
 "則僅在手動儲存檔案時建立備份。"
 
 #: common/dialogs/panel_common_settings_base.cpp:390
@@ -4017,7 +4017,7 @@ msgstr "網格 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:695
 msgid "Grid Overrides"
-msgstr "網格重寫"
+msgstr "網格覆蓋"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
 msgid "Connected items:"
@@ -4043,7 +4043,7 @@ msgstr "貫孔:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:26
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:26
 msgid "Text:"
-msgstr "文本:"
+msgstr "文字:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
 msgid "Graphics:"
@@ -4051,7 +4051,7 @@ msgstr "圖形:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
-msgstr "輸入篩選文本 (操作或快捷鍵名稱)"
+msgstr "輸入篩選文字 (操作或快捷鍵名稱)"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:128
 msgid "Undo All Changes"
@@ -4068,7 +4068,7 @@ msgstr "匯入快捷鍵..."
 #: common/dialogs/panel_hotkeys_editor.cpp:138
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
-msgstr "從外部檔案匯入快捷鍵定義, 替換當前值"
+msgstr "從外部檔案匯入快捷鍵定義, 取代當前值"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:201
 msgid "Import Hotkeys File:"
@@ -4130,7 +4130,7 @@ msgstr "縮放時將遊標移至屏幕中心。"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:43
 msgid "Automatically pan while moving object"
-msgstr "移動對象時自動平移畫布"
+msgstr "移動物件時自動平移畫布"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:44
 msgid ""
@@ -4164,7 +4164,7 @@ msgstr "自動平移速度:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:82
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr "將對象移出屏幕邊緣時的平移速度"
+msgstr "將物件移出屏幕邊緣時的平移速度"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag Gestures"
@@ -4180,11 +4180,11 @@ msgstr "繪製矩形選擇框"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr "如果已選中對象則拖動選中的對象, 否則繪製矩形選擇框"
+msgstr "拖動被選擇的物件, 否則繪製矩形選擇框"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag any object (selected or not)"
-msgstr "拖動任意對象 (無論是否選中)"
+msgstr "拖動任意物件 (無論是否選中)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "Middle button drag:"
@@ -4242,7 +4242,7 @@ msgstr "觸控板滾動手勢或鼠標滾輪動作:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Only one action can be assigned to each column"
-msgstr "每一欄只能指定一個動作"
+msgstr "每一行只能指定一個動作"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:208
 msgid "--"
@@ -4409,7 +4409,7 @@ msgstr "網路類名已被使用。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:538
 msgid "Minimum copper clearance"
-msgstr "最小銅皮間距"
+msgstr "最小銅皮間隙"
 
 #: common/dialogs/panel_setup_netclasses.cpp:539
 msgid "Minimum track width"
@@ -4472,7 +4472,7 @@ msgstr "網路類:"
 #: pcbnew/tools/board_inspection_tool.cpp:539
 #: pcbnew/tools/board_inspection_tool.cpp:1106 pcbnew/zone.cpp:1719
 msgid "Clearance"
-msgstr "銅皮間距"
+msgstr "銅皮間隙"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:172
@@ -4583,7 +4583,7 @@ msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"文本變數已在設置對話框外更改。\n"
+"文字變數已在設置對話框外更改。\n"
 "是否重新載入?"
 
 #: common/dialogs/panel_text_variables.cpp:158
@@ -4597,7 +4597,7 @@ msgstr "變數名"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
-msgstr "文本替換"
+msgstr "文字取代"
 
 #: common/draw_panel_gal.cpp:316 common/draw_panel_gal.cpp:497
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -4655,7 +4655,7 @@ msgstr "無法完整地讀取圖紙 '%s'。"
 #: pcbnew/widgets/search_handlers.cpp:206
 #: pcbnew/widgets/search_handlers.cpp:244
 msgid "Text"
-msgstr "文本"
+msgstr "文字"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:121 common/eda_item.cpp:372
@@ -4732,7 +4732,7 @@ msgstr "註釋"
 #: common/drawing_sheet/ds_draw_item.cpp:236
 #, c-format
 msgid "Text '%s'"
-msgstr "文本 '%s'"
+msgstr "文字 '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:427 eeschema/sch_shape.cpp:445
 #, c-format
@@ -4786,11 +4786,11 @@ msgstr "'%s' 需要一個數字"
 
 #: common/dsnlexer.cpp:695 common/dsnlexer.cpp:756
 msgid "Un-terminated delimited string"
-msgstr "無結尾的分隔字符串"
+msgstr "無結尾的分隔字串"
 
 #: common/dsnlexer.cpp:717
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "字符串分割符號必須為 ' , \" , $ 之一的單字符"
+msgstr "字串分割符號必須為 ' , \" , $ 之一的單字符"
 
 #: common/dsnlexer.cpp:839
 #, c-format
@@ -5134,7 +5134,7 @@ msgstr "生成器"
 #: eeschema/widgets/search_handlers.cpp:281 pcbnew/pcb_textbox.cpp:358
 #: pcbnew/pcb_textbox.h:65
 msgid "Text Box"
-msgstr "文本框"
+msgstr "文字框"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:353 pcbnew/pcb_track.cpp:1058
 msgid "Track"
@@ -5178,7 +5178,7 @@ msgstr "網路資訊"
 
 #: common/eda_item.cpp:365 pcbnew/pcb_group.cpp:382
 msgid "Group"
-msgstr "分組"
+msgstr "群組"
 
 #: common/eda_item.cpp:368 eeschema/sch_junction.cpp:305
 #: eeschema/sch_junction.h:104
@@ -5563,7 +5563,7 @@ msgstr "方向"
 #: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:567
 #: pcbnew/pcb_text.cpp:571
 msgid "Text Properties"
-msgstr "文本屬性"
+msgstr "文字屬性"
 
 #: common/eda_text.cpp:1187
 #: eeschema/dialogs/dialog_label_properties_base.cpp:99
@@ -5962,7 +5962,7 @@ msgstr "無法推送到遠程"
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr "接收到 %u 個 %u 對象"
+msgstr "接收到 %u 個 %u 物件"
 
 #: common/git/kicad_git_common.cpp:446
 #, c-format
@@ -5977,7 +5977,7 @@ msgstr "* [新增] %s %s"
 #: common/git/kicad_git_common.cpp:470
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr "正在寫入對象: %d%% (%d/%d), %d 字節"
+msgstr "正在寫入物件: %d%% (%d/%d), %d 字節"
 
 #: common/git/kicad_git_common.cpp:485
 #, c-format
@@ -6174,11 +6174,11 @@ msgstr "從選區中移除"
 
 #: common/hotkey_store.cpp:53
 msgid "Ignore Grid Snaps"
-msgstr "禁用網格捕獲"
+msgstr "忽略網格鎖點"
 
 #: common/hotkey_store.cpp:54
 msgid "Ignore Other Snaps"
-msgstr "忽略其他吸附"
+msgstr "忽略其他鎖點"
 
 #: common/hotkey_store.cpp:61 common/tool/action_menu.cpp:231
 #: common/tool/action_menu.cpp:247 common/tool/actions.cpp:134
@@ -6235,11 +6235,11 @@ msgstr "不支援 %s。"
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
 msgid "DXF construction lines not currently supported."
-msgstr "目前不支援 DXF 構造線。"
+msgstr "目前不支援 DXF 建構線。"
 
 #: common/import_gfx/dxf_import_plugin.h:467
 msgid "DXF arc-aligned text not currently supported."
-msgstr "目前不支援 DXF 弧形對齊文本。"
+msgstr "目前不支援 DXF 弧形對齊文字。"
 
 #: common/import_gfx/dxf_import_plugin.h:472
 #: common/import_gfx/dxf_import_plugin.h:476
@@ -6499,7 +6499,7 @@ msgstr "接腳名"
 
 #: common/layer_id.cpp:120
 msgid "Symbol references"
-msgstr "符號位號"
+msgstr "符號參考"
 
 #: common/layer_id.cpp:121
 msgid "Symbol values"
@@ -6528,15 +6528,15 @@ msgstr "符號主體填充"
 #: common/layer_id.cpp:127
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
 msgid "Schematic text && graphics"
-msgstr "原理圖文本和圖形"
+msgstr "原理圖文字和圖形"
 
 #: common/layer_id.cpp:128
 msgid "Symbol private text && graphics"
-msgstr "符號私有文本 && 圖形"
+msgstr "符號私有文字 && 圖形"
 
 #: common/layer_id.cpp:129
 msgid "Schematic text && graphics backgrounds"
-msgstr "原理圖文本和圖形背景"
+msgstr "原理圖文字和圖形背景"
 
 #: common/layer_id.cpp:130
 msgid "Pins"
@@ -6667,15 +6667,15 @@ msgstr "封裝背面"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 msgid "Reference designators"
-msgstr "位號"
+msgstr "參考位置"
 
 #: common/layer_id.cpp:163
 msgid "Footprint text"
-msgstr "封裝文本"
+msgstr "封裝文字"
 
 #: common/layer_id.cpp:164
 msgid "Hidden text"
-msgstr "隱藏文本"
+msgstr "隱藏文字"
 
 #: common/layer_id.cpp:165
 msgid "SMD pads front"
@@ -6885,7 +6885,7 @@ msgstr "沒有通知"
 
 #: common/pgm_base.cpp:209
 msgid "No default editor found, you must choose one."
-msgstr "找不到預設的文本編輯器, 必須選擇一個。"
+msgstr "找不到預設的文字編輯器, 必須選擇一個。"
 
 #: common/pgm_base.cpp:229 common/pgm_base.cpp:231
 msgid "Executable file"
@@ -7049,7 +7049,7 @@ msgstr "超出了行長度限制"
 
 #: common/settings/bom_settings.cpp:119
 msgid "Grouped By Value"
-msgstr "按值分組"
+msgstr "按值建立群組"
 
 #: common/settings/bom_settings.cpp:119 common/settings/bom_settings.cpp:137
 #: common/settings/bom_settings.cpp:156
@@ -7059,11 +7059,11 @@ msgstr "按值分組"
 #: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3499
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
-msgstr "位號"
+msgstr "參考"
 
 #: common/settings/bom_settings.cpp:137
 msgid "Grouped By Value and Footprint"
-msgstr "按值和封裝分組"
+msgstr "按值和封裝建立群組"
 
 #: common/settings/bom_settings.cpp:156
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -7304,56 +7304,56 @@ msgstr "顯示/隱藏搜索面板"
 #: eeschema/dialogs/dialog_schematic_find_base.h:82
 #: pcbnew/dialogs/dialog_find.cpp:55
 msgid "Find"
-msgstr "查找"
+msgstr "尋找"
 
 #: common/tool/actions.cpp:306
 msgid "Find text"
-msgstr "查找文本"
+msgstr "尋找文字"
 
 #: common/tool/actions.cpp:314 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr "查找和替換"
+msgstr "尋找和取代"
 
 #: common/tool/actions.cpp:315
 msgid "Find and replace text"
-msgstr "查找和替換文本"
+msgstr "尋找和取代文字"
 
 #: common/tool/actions.cpp:323 pcbnew/dialogs/dialog_find_base.cpp:91
 msgid "Find Next"
-msgstr "查找下一項"
+msgstr "尋找下一項"
 
 #: common/tool/actions.cpp:324
 msgid "Find next match"
-msgstr "查找下一個匹配項"
+msgstr "尋找下一個匹配項"
 
 #: common/tool/actions.cpp:332 pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
-msgstr "查找預覽"
+msgstr "尋找預覽"
 
 #: common/tool/actions.cpp:333
 msgid "Find previous match"
-msgstr "查找上一個匹配項"
+msgstr "尋找上一個匹配項"
 
 #: common/tool/actions.cpp:341
 msgid "Find Next Marker"
-msgstr "查找下一項標記"
+msgstr "尋找下一項標記"
 
 #: common/tool/actions.cpp:347
 msgid "Replace and Find Next"
-msgstr "替換並查找下一項"
+msgstr "取代並尋找下一項"
 
 #: common/tool/actions.cpp:348
 msgid "Replace current match and find next"
-msgstr "替換當前匹配項並查找下一個"
+msgstr "取代當前匹配項並尋找下一個"
 
 #: common/tool/actions.cpp:354
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:128
 msgid "Replace All"
-msgstr "全部替換"
+msgstr "全部取代"
 
 #: common/tool/actions.cpp:355
 msgid "Replace all matches"
-msgstr "替換所有匹配項"
+msgstr "取代所有匹配項"
 
 #: common/tool/actions.cpp:367
 msgid "Previous Marker"
@@ -7390,7 +7390,7 @@ msgstr "自適應縮放"
 
 #: common/tool/actions.cpp:415
 msgid "Zoom to Objects"
-msgstr "縮放至適應對象"
+msgstr "縮放至物件大小"
 
 #: common/tool/actions.cpp:427
 msgid "Zoom In at Cursor"
@@ -7607,7 +7607,7 @@ msgstr "使用 毫米 (mm) 作為單位"
 
 #: common/tool/actions.cpp:750
 msgid "Select Columns..."
-msgstr "選擇列..."
+msgstr "選擇行..."
 
 #: common/tool/actions.cpp:757
 msgid "Switch units"
@@ -7936,7 +7936,7 @@ msgstr ", 或 "
 #: common/validators.cpp:438
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "位號不能包含字符 %s。"
+msgstr "參考設計符號不能包含 %s 個字元。"
 
 #: common/validators.cpp:442
 #, c-format
@@ -7970,7 +7970,7 @@ msgstr "該欄位不能包含字符 %s。"
 
 #: common/validators.cpp:468
 msgid "The reference designator cannot contain text variable references"
-msgstr "位號不能包含文本變數引用"
+msgstr "參考位置不能包含文字變數引用"
 
 #: common/validators.cpp:475
 msgid "Field Validation Error"
@@ -8068,7 +8068,7 @@ msgstr "最小網格間距:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Snap to grid:"
-msgstr "網格捕獲:"
+msgstr "貼齊到網格:"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -8124,7 +8124,7 @@ msgstr "最近搜索"
 
 #: common/widgets/lib_tree.cpp:949
 msgid "Select Columns"
-msgstr "選擇列"
+msgstr "選擇行"
 
 #: common/widgets/mathplot.cpp:1450
 msgid "Zoom in plot view."
@@ -8173,7 +8173,7 @@ msgstr "重置為預設值"
 
 #: common/widgets/paged_dialog.cpp:90
 msgid "Reveal Preferences in Finder"
-msgstr "在查找器中顯示偏好設置"
+msgstr "在尋找器中顯示偏好設置"
 
 #: common/widgets/paged_dialog.cpp:92
 msgid "Open Preferences Directory"
@@ -8187,12 +8187,12 @@ msgstr "重置 %s 為預設值"
 #: common/widgets/properties_panel.cpp:76
 #: common/widgets/properties_panel.cpp:173
 msgid "No objects selected"
-msgstr "未選擇對象"
+msgstr "未選擇物件"
 
 #: common/widgets/properties_panel.cpp:183
 #, c-format
 msgid "%d objects selected"
-msgstr "選擇了 %d 個對象"
+msgstr "選擇了 %d 個物件"
 
 #: common/widgets/properties_panel.cpp:303
 msgid "Basic Properties"
@@ -8500,7 +8500,7 @@ msgstr "IDFv3 封裝檔案"
 
 #: common/wildcards_and_files_ext.cpp:413
 msgid "Text files"
-msgstr "文本檔案"
+msgstr "文字檔案"
 
 #: common/wildcards_and_files_ext.cpp:419
 msgid "Legacy footprint export files"
@@ -8612,7 +8612,7 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"你首次使用新的封裝庫表方法運行 CvPcb 查找封裝。\n"
+"你首次使用新的封裝庫表方法運行 CvPcb 尋找封裝。\n"
 "CvPcb 已經複製了預設表或在你的主資料夾中建立了一個空表。\n"
 "你必須先配置庫表, 以包含 KiCad 中未包含的所有封裝庫。\n"
 "有關更多資訊。請參閱 CvPcb 文件的 \"封裝庫表\" 部分。"
@@ -8671,7 +8671,7 @@ msgstr "接腳數量"
 
 #: cvpcb/cvpcb_mainframe.cpp:824
 msgid "Search Text"
-msgstr "搜索文本"
+msgstr "搜索文字"
 
 #: cvpcb/cvpcb_mainframe.cpp:828
 msgid "No Filtering"
@@ -8729,7 +8729,7 @@ msgstr "專案檔案: '%s'"
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:1000
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "在 KiCad 中未選擇任何文本編輯器, 請選擇一個。"
+msgstr "在 KiCad 中未選擇任何文字編輯器, 請選擇一個。"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:210
 msgid "Footprint Association File"
@@ -8998,7 +8998,7 @@ msgstr "刪除批註"
 #: eeschema/annotate.cpp:259
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "找到並替換 %d 個重複的時間戳。"
+msgstr "找到並取代 %d 個重複的時間戳。"
 
 #: eeschema/annotate.cpp:378
 #, c-format
@@ -9243,7 +9243,7 @@ msgstr "向列表中添加新的 BOM 生成器及其命令行"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
-msgstr "在文本編輯器中編輯腳本檔案"
+msgstr "在文字編輯器中編輯腳本檔案"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:84
 msgid "Remove the current generator script from list"
@@ -9376,8 +9376,8 @@ msgstr ""
 "並可通過 **+** 按鈕添加到列表中。\n"
 "\n"
 "**注意: ** 在 Windows 上, 有一個額外的選項 **顯示控制檯視窗**。"
-"當該選項未被選中時, BOM 生成器在一個隱藏的控制檯視窗中運行, "
-"任何輸出都會被重定向並列印在對話框中。當這個選項被選中時, BOM "
+"當該選項未被勾選時, BOM 生成器在一個隱藏的控制檯視窗中運行, "
+"任何輸出都會被重定向並列印在對話框中。當這個選項被勾選時, BOM "
 "生成器會在一個可見的控制檯視窗中運行。\n"
 "\n"
 "# 3. 自定義生成器和命令行\n"
@@ -9387,7 +9387,7 @@ msgstr ""
 "生成器腳本將中間網表檔案轉換為所需的輸出格式。KiCad 根據在 BOM "
 "對話框底部輸入的命令行運行 BOM 生成器腳本。\n"
 "\n"
-"命令行格式接受檔案名的參數。每個格式化參數都被替換成專案特定的路徑或檔案名。"
+"命令行格式接受檔案名的參數。每個格式化參數都被取代成專案特定的路徑或檔案名。"
 "支援的格式化參數有: \n"
 "\n"
 " * `%I`: 中間網表檔案的絕對路徑和檔案名, 它是 BOM 生成器的輸入。\n"
@@ -9440,7 +9440,7 @@ msgstr "替換已選中的符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching reference designator:"
-msgstr "替換與給定位號相同的符號:"
+msgstr "替換與給定參考位置相同的符號:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:96
 msgid "Change symbols matching value:"
@@ -9464,7 +9464,7 @@ msgstr "如果在新符號中為空, 則重置欄位"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field text"
-msgstr "更新欄位的文本內容"
+msgstr "更新欄位的文字內容"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field visibilities"
@@ -9545,7 +9545,7 @@ msgstr "更新已選中的符號"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:34
 msgid "Update symbols matching reference designator:"
-msgstr "更新與給定位號相同的符號:"
+msgstr "更新與給定參考位置相同的符號:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:40
 msgid "Update symbols matching value:"
@@ -9592,7 +9592,7 @@ msgstr "如果在庫符號中為空, 則重置欄位"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:131
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
 msgid "Update/reset field text"
-msgstr "更新/重置欄位的文本內容"
+msgstr "更新/重置欄位的文字內容"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:134
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -9653,7 +9653,7 @@ msgstr "密碼:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 msgid "Connection String:"
-msgstr "連接字符串(URL):"
+msgstr "連接字串(URL):"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:202
@@ -9772,8 +9772,8 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
-"用新庫中的欄位替換當前符號欄位。\n"
-"警告: 欄位 \"數值\" 和 \"封裝\" 將因此被替換。"
+"用新庫中的欄位取代當前符號欄位。\n"
+"警告: 欄位 \"數值\" 和 \"封裝\" 將因此被取代。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
@@ -10054,7 +10054,7 @@ msgid ""
 msgstr ""
 "輸入命令以運行 SPICE\n"
 "命令一般是 'SPICE 可執行檔案完整路徑 \"%I\"'\n"
-"使用實際網表檔案路徑替換命令中的 %I"
+"使用實際網表檔案路徑取代命令中的 %I"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:401
 msgid "Netlist command:"
@@ -10125,7 +10125,7 @@ msgstr "指令碼生成器屬性"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:361
 msgid "Illegal reference designator value!"
-msgstr "非法位號值!"
+msgstr "非法參考位置值!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:540
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -10136,7 +10136,7 @@ msgstr "圖紙檔案名只能在圖紙屬性對話框中修改。"
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr "圖紙間位號可見性由 原理圖設置 > 通用 > 格式 進行全域控制"
+msgstr "圖紙間參考可見性由 原理圖設置 > 通用 > 格式 進行全域控制"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:78
 #, c-format
@@ -10243,13 +10243,13 @@ msgstr "底部對齊"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:87
 #: eeschema/dialogs/dialog_text_properties_base.cpp:163
 msgid "Horizontal text"
-msgstr "水平文本"
+msgstr "水平文字"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:198
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:92
 #: eeschema/dialogs/dialog_text_properties_base.cpp:168
 msgid "Vertical text"
-msgstr "垂直文本"
+msgstr "垂直文字"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:210
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:198
@@ -10308,11 +10308,11 @@ msgstr "作用於符號的所有圖形符號樣式"
 #: eeschema/dialogs/dialog_field_properties_base.h:101
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:88
 msgid "Text Item Properties"
-msgstr "文本項目屬性"
+msgstr "文字項目屬性"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:597
 msgid "Edit Text and Graphics"
-msgstr "編輯文本與圖形屬性"
+msgstr "編輯文字與圖形屬性"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -10354,7 +10354,7 @@ msgstr "按名稱篩選項目:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 msgid "Filter items by parent reference designator:"
-msgstr "按父級位號篩選項目:"
+msgstr "按父級參考位置篩選項目:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "Filter items by parent symbol library id:"
@@ -10391,7 +10391,7 @@ msgstr "設置為"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:189
 msgid "Text color:"
-msgstr "文本顏色:"
+msgstr "文字顏色:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/lib_pin.cpp:1658 eeschema/pin_type.cpp:96
@@ -10464,7 +10464,7 @@ msgstr "結點顏色:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:127
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:106
 msgid "Edit Text and Graphic Properties"
-msgstr "編輯文本和圖形屬性"
+msgstr "編輯文字和圖形屬性"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:32
 msgid "symbol"
@@ -10610,7 +10610,7 @@ msgstr "標籤:"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:33
 msgid "Enter the text to be used within the schematic"
-msgstr "輸入文本將在原理圖中使用"
+msgstr "輸入文字將在原理圖中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:50
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:159
@@ -10692,7 +10692,7 @@ msgstr "垂直對齊"
 #: eeschema/sch_textbox.cpp:456 eeschema/sch_textbox.cpp:521
 #: pcbnew/tools/board_inspection_tool.cpp:1338
 msgid "Text Size"
-msgstr "文本大小"
+msgstr "文字大小"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:97
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:128
@@ -10831,7 +10831,7 @@ msgstr "圖形樣式"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
 #: eeschema/lib_pin.cpp:1698
 msgid "Number Text Size"
-msgstr "編號文本高度"
+msgstr "編號文字高度"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
@@ -10911,7 +10911,7 @@ msgstr "按名稱分組"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Group Selected"
-msgstr "選中的組"
+msgstr "被選擇的群組"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
@@ -10963,7 +10963,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:60
 msgid "Default reference designator:"
-msgstr "預設位號:"
+msgstr "預設參考位置:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:64
 msgid "U"
@@ -11094,7 +11094,7 @@ msgstr "%s 屬性"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:247
 #: eeschema/dialogs/dialog_symbol_properties.cpp:639
 msgid "References must start with a letter."
-msgstr "位號必須以字母開頭。"
+msgstr "參考必須以字母開頭。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:267
 #: eeschema/dialogs/dialog_sheet_properties.cpp:218
@@ -11198,8 +11198,8 @@ msgid ""
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
 "當所有符號單元具有相同的功能時, 請勾選此選項。\n"
-"例如, 對於四輸入與非門應該選中此選項, 而對於雙三極管 (其中單元 C 為 filament)"
-" 則不應選中此選項。"
+"例如，對於四個 NAND 閘應該勾選此選項，而對於雙三極管 (其中單元 C 為 filament)"
+" 則不應勾選此選項。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 msgid "Has alternate body style (De Morgan)"
@@ -11213,7 +11213,7 @@ msgid ""
 "representation as an OR gate with inverted inputs."
 msgstr ""
 "如果符號具有迪摩根邏輯等價的等效主體樣式, 請勾選此選項。\n"
-"例如, 對於與非門, 應該選中此選項以提供作為具有反轉輸入的或門的等效表示。"
+"例如，對於 NAND 閘，應該勾選此選項以提供具有反相輸入的 OR 閘的替代表示形式。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
 msgid "Define as power symbol"
@@ -11228,12 +11228,12 @@ msgid ""
 msgstr ""
 "勾選此選項, 會使該符號出現在 \"添加電源符號\" 視窗中, 作為一個電源符號使用。"
 "\n"
-"電源符號的數值文本會被鎖定, 以防其在原理圖中被不慎編輯。\n"
+"電源符號的數值文字會被鎖定, 以防其在原理圖中被不慎編輯。\n"
 "電源符號不會在 BOM 中出現, 也不能對電源符號分配封裝。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
-msgstr "接腳文本選項"
+msgstr "接腳文字選項"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:215
 msgid "Show pin number"
@@ -11263,7 +11263,7 @@ msgid ""
 "If not checked pins names and pins numbers are outside."
 msgstr ""
 "如果勾選此選項, 接腳編號會顯示在符號主體外側, 而接腳名稱將顯示在符號內部。\n"
-"如果未選中, 接腳名稱和編號都會在符號主體外側顯示。"
+"如果未勾選, 接腳名稱和編號都會在符號主體外側顯示。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:239
 msgid "Position offset:"
@@ -11314,7 +11314,7 @@ msgstr ""
 "會根據符號的封裝篩選規則, 在所有封裝庫中搜索並顯示與其規則匹配的封裝, "
 "你可以從中\n"
 "選擇一個合適的封裝。\n"
-"篩選欄位可以包含通配符, 如 sm*, 可以匹配所有以 sm 開頭的封裝名稱, "
+"篩選欄位可以包含萬用字元, 如 sm*, 可以匹配所有以 sm 開頭的封裝名稱, "
 "意味著該符號\n"
 "預設可選所有以 sm 開頭的封裝。"
 
@@ -11345,7 +11345,7 @@ msgstr "庫符號屬性"
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:231
 #: eeschema/dialogs/dialog_text_properties.cpp:447
 msgid "Text can not be empty."
-msgstr "文本不能為空。"
+msgstr "文字不能為空。"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:259
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
@@ -11360,7 +11360,7 @@ msgstr "只顯示在符號編輯器中"
 #: eeschema/dialogs/dialog_text_properties.cpp:57
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:101
 msgid "Text Box Properties"
-msgstr "文本框屬性"
+msgstr "文字框屬性"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 msgid "Edit Line"
@@ -11501,11 +11501,11 @@ msgstr "接腳引線長度 (&P):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
 msgid "N&ame text size:"
-msgstr "接腳名稱文本高度 (&A):"
+msgstr "接腳名稱文字高度 (&A):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
 msgid "Number text si&ze:"
-msgstr "接腳編號文本高度 (&Z):"
+msgstr "接腳編號文字高度 (&Z):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
 msgid "Electrical type:"
@@ -11948,11 +11948,11 @@ msgstr "搜索 (&S):"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr "支援包含通配符的文本"
+msgstr "支援包含萬用字元的文字"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
-msgstr "替換 (&W):"
+msgstr "取代 (&W):"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
@@ -11978,7 +11978,7 @@ msgstr "全字匹配"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
 msgid "Wildcards"
-msgstr "通配符"
+msgstr "萬用字元"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
@@ -11998,11 +11998,11 @@ msgstr "僅在當前選區中搜索"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
-msgstr "替換位號中的匹配項"
+msgstr "取代參考位置中的匹配項"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
 msgid "Replace"
-msgstr "替換"
+msgstr "取代"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -12040,7 +12040,7 @@ msgstr "匯流排別名定義"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:122
 #: pcbnew/dialogs/dialog_board_setup.cpp:140
 msgid "Text Variables"
-msgstr "文本變數"
+msgstr "文字變數"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:133
 msgid "Project is missing or read-only. Settings will not be editable."
@@ -12502,7 +12502,7 @@ msgstr "輸出:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:619
 msgid "Find:"
-msgstr "查找:"
+msgstr "尋找:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Poles and Zeros"
@@ -12906,7 +12906,7 @@ msgstr "顯示數據手冊"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:100
 #: eeschema/fields_grid_table.cpp:936
 msgid "Show datasheet in browser"
-msgstr "在瀏覽器中顯示數據書冊"
+msgstr "在瀏覽器中顯示產品規格手冊"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:192
 #: eeschema/sch_label.cpp:1236
@@ -12960,11 +12960,11 @@ msgstr "欄位名稱 %s 已存在, 無法重新命名現有欄位。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
-msgstr "不能對數量列進行分組。"
+msgstr "不能對數量行進行分組。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:857
 msgid "The Item Number column cannot be grouped by."
-msgstr "不能對項目編號列進行分組。"
+msgstr "不能對項目編號行進行分組。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1208
 msgid "Bill of Materials Output File"
@@ -13043,7 +13043,7 @@ msgstr "排除 DNP (不作裝配)"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:106
 msgid "Group symbols"
-msgstr "分組符號"
+msgstr "群組符號"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:108
 msgid "Group symbols together based on common properties"
@@ -13090,7 +13090,7 @@ msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
 msgid "String delimiter:"
-msgstr "字符串分隔符:"
+msgstr "字串分隔符:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
@@ -13098,7 +13098,7 @@ msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
 msgid "Reference delimiter:"
-msgstr "位號分隔符:"
+msgstr "參考分隔符:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
 msgid "Range delimiter:"
@@ -13111,7 +13111,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:243
 msgid "Leave blank to disable ranges."
-msgstr "留空以禁用範圍。"
+msgstr "留空以停用範圍。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:248
 msgid "Keep tabs"
@@ -13305,7 +13305,7 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"此原理圖當前使用專案符號庫表查找載入庫符號的方法。KiCad "
+"此原理圖當前使用專案符號庫表尋找載入庫符號的方法。KiCad "
 "將嘗試映射現有符號以使用新的符號庫表。重新映射將變更某些專案檔案, "
 "原理圖可能與舊版本的 KiCad 不兼容。如果需要還原任何變更, "
 "則所有變更的檔案都將備份到專案資料夾中的  \"rescue_backup \" 資料夾中。"
@@ -13424,7 +13424,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
 msgid "Edit Text Properties"
-msgstr "編輯文本屬性"
+msgstr "編輯文字屬性"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -13432,7 +13432,7 @@ msgstr "鏈接:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:294
 msgid "Make this text item a clickable hyperlink"
-msgstr "使此文本項目變為可點擊的超鏈接"
+msgstr "使此文字項目變為可點擊的超鏈接"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:43
 #: pcbnew/dialogs/dialog_import_netlist.cpp:77
@@ -13448,7 +13448,7 @@ msgstr "更新原理圖"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "根據原理圖的位號將封裝重新鏈接到原理圖符號"
+msgstr "根據原理圖的參考位置將封裝重新鏈接到原理圖符號"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -13456,13 +13456,12 @@ msgid ""
 "Normally footprints are linked to their symbols via their Unique IDs.  "
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
-msgstr ""
-"通常情況下, 封裝通過其唯一 ID 鏈接到其符號。僅當您想要根據參考位號重置封裝鏈"
-"接時, 才選擇此選項。"
+msgstr "通常情況下, 封裝通過其唯一 ID 鏈接到其符號。"
+"僅當您想要根據參考位置重置封裝鏈接時, 才選擇此選項。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr "將原理圖符號位號與 PCB 的修改進行同步。"
+msgstr "將原理圖符號參考與 PCB 的修改進行同步。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -13643,7 +13642,7 @@ msgstr "交叉探測"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:145
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "選擇/高亮 PCB 所選對象"
+msgstr "選擇/高亮 PCB 所選物件"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Highlight symbols corresponding to selected footprints"
@@ -13694,7 +13693,7 @@ msgstr "拖動鼠標時執行拖動 (G) 操作"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
 msgid "If unchecked, mouse drag will perform move (M) operation"
-msgstr "如果未選中, 拖動鼠標時將執行移動 (M) 操作"
+msgstr "如果未勾選, 拖動鼠標時將執行移動 (M) 操作"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:51
 msgid "Automatically start wires on unconnected pins"
@@ -13719,7 +13718,7 @@ msgstr "在選擇工具處於活動狀態時, 按 <ESC> 清除選擇, 接著就�
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
 msgid "Defaults for New Objects"
-msgstr "新對象的預設值"
+msgstr "新物件的預設值"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 msgid "Sheet border:"
@@ -13921,7 +13920,7 @@ msgstr "_1"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:51
 msgid "Default text size:"
-msgstr "預設文本大小:"
+msgstr "預設文字大小:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Overbar offset ratio:"
@@ -13936,7 +13935,7 @@ msgstr "標籤偏移率:"
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
-msgstr "在連線、匯流排或接腳上方 (或下方) 的標籤文本的文字大小百分比"
+msgstr "在連線、匯流排或接腳上方 (或下方) 的標籤文字的文字大小百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
 msgid "Global label margin ratio:"
@@ -13945,7 +13944,7 @@ msgstr "全域標籤邊距比率:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
 msgid "Percentage of the text size to use as space around a global label"
-msgstr "全域標籤周圍的空間佔文本大小的百分比"
+msgstr "全域標籤周圍的空間佔文字大小的百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:122
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:158
@@ -14179,7 +14178,7 @@ msgstr "預設接腳編號大小 (&F):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:84
 msgid "Def&ault pin name size:"
-msgstr "預設接腳名稱文本高度 (&A):"
+msgstr "預設接腳名稱文字高度 (&A):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Show pin &electrical type"
@@ -14192,29 +14191,29 @@ msgstr "重複接腳的間距 (&P):"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:430
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
 msgid "A library table row nickname and path cells are empty."
-msgstr "表格條目的行名稱和庫路徑單元格為空。"
+msgstr "表格條目的列名稱和庫路徑單元格為空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:541
 msgid "A library table row nickname cell is empty."
-msgstr "表格條目的行名稱單元格為空。"
+msgstr "一個庫表格的列別名單元格是空的。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:434
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
 msgid "A library table row path cell is empty."
-msgstr "表格條目的庫路徑單元格為空。"
+msgstr "一個庫表格的列路徑單元格是空的。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:438
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:547
 msgid "Invalid Row Definition"
-msgstr "無效的行定義"
+msgstr "無效的列定義"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:549
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
-msgstr "表格中有空白單元格, 將會移除表格中所有無效的行。"
+msgstr "表格中有空白單元格, 將會移除表格中所有無效的列。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:551
@@ -14302,14 +14301,14 @@ msgstr "選擇一條或多條庫並將其儲存為當前 KiCad 庫格式 (*.kica
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
-msgstr "將 '%s' 另存為當前 KiCad 庫格式 (*.kicad_sym) 並替換表中的舊格式條目?"
+msgstr "將 '%s' 另存為當前 KiCad 庫格式 (*.kicad_sym) 並取代表中的舊格式條目?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:869
 #, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
-msgstr "將 %d 個庫另存為當前 KiCad 版本格式 (*.kicad_sym) 並替換表中的舊條目?"
+msgstr "將 %d 個庫另存為當前 KiCad 版本格式 (*.kicad_sym) 並取代表中的舊條目?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:900
 #: pcbnew/dialogs/dialog_export_step.cpp:409
@@ -14414,7 +14413,7 @@ msgstr "專案專用庫"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:126
 msgid "Add empty row to table"
-msgstr "向表中添加空行"
+msgstr "向表中添加空列"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
@@ -14635,7 +14634,7 @@ msgstr "未連接"
 
 #: eeschema/erc.cpp:289
 msgid "Unresolved text variable in drawing sheet"
-msgstr "圖紙中未解析的文本變數"
+msgstr "圖紙中未解析的文字變數"
 
 #: eeschema/erc.cpp:325
 #, c-format
@@ -14805,7 +14804,7 @@ msgstr "未連接的 '無連接' 標誌"
 
 #: eeschema/erc_item.cpp:87
 msgid "Label not connected to anything"
-msgstr "標籤未連接到任何對象"
+msgstr "標籤未連接到任何東西"
 
 #: eeschema/erc_item.cpp:91
 msgid "Global label not connected anywhere else in the schematic"
@@ -14853,7 +14852,7 @@ msgstr "匯流排和網路項目之間的連接無效"
 
 #: eeschema/erc_item.cpp:135 pcbnew/drc/drc_item.cpp:197
 msgid "Unresolved text variable"
-msgstr "未解析的文本變數"
+msgstr "未解析的文字變數"
 
 #: eeschema/erc_item.cpp:139
 msgid "Undefined netclass"
@@ -14865,7 +14864,7 @@ msgstr "SPICE 模型問題"
 
 #: eeschema/erc_item.cpp:147
 msgid "Wires not connected to anything"
-msgstr "未連接到任何對象的連線"
+msgstr "未連接到任何東西的連線"
 
 #: eeschema/erc_item.cpp:151
 msgid "Library symbol issue"
@@ -14901,7 +14900,7 @@ msgstr "同一符號的單元的值不同"
 
 #: eeschema/erc_item.cpp:183
 msgid "Duplicate reference designators"
-msgstr "重複的位號"
+msgstr "重複的參考位置"
 
 #: eeschema/erc_item.cpp:187
 msgid "Bus Entry needed"
@@ -15098,7 +15097,7 @@ msgid ""
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"此操作將替換當前原理圖的內容, 並且當前原理圖的內容將永久丟失。\n"
+"此操作將取代當前原理圖的內容, 並且當前原理圖的內容將永久丟失。\n"
 "\n"
 "是否繼續?"
 
@@ -15317,7 +15316,7 @@ msgstr "沒有處理此檔案類型的插件。"
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:27
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:32
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
-msgstr "只匯入向量圖。位圖和字體將被忽略。"
+msgstr "只匯入向量圖。點陣圖和字體將被忽略。"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:43
 msgid "Placement"
@@ -15627,7 +15626,7 @@ msgstr "單元 %s"
 #: eeschema/lib_text.cpp:470 eeschema/sch_text.cpp:301
 #, c-format
 msgid "Graphic Text '%s'"
-msgstr "圖形文本 '%s'"
+msgstr "圖形文字 '%s'"
 
 #: eeschema/lib_textbox.cpp:376 eeschema/sch_textbox.cpp:366
 msgid "Graphic Text Box"
@@ -15688,7 +15687,7 @@ msgstr "非 KiCad 原理圖..."
 #: eeschema/menubar.cpp:110
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr "將當前的原理圖圖紙替換為從另一個應用程序匯入的原理圖圖紙"
+msgstr "將當前的原理圖圖紙取代為從另一個應用程序匯入的原理圖圖紙"
 
 #: eeschema/menubar.cpp:115
 msgid "Footprint Assignments..."
@@ -16127,7 +16126,7 @@ msgstr "回到先前選中的圖紙"
 
 #: eeschema/sch_field.cpp:1062 eeschema/sch_label.cpp:249
 msgid "Sheet References"
-msgstr "圖紙位號"
+msgstr "圖紙參考"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:527
 #, c-format
@@ -16175,7 +16174,7 @@ msgstr "在 %2$s 中發現未知或意外記錄 ID %1$d。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1104
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
-msgstr "符號 \"%s\"(位於圖紙 \"%s\", 該圖紙位於索引 %d) 被符號\"%s\"替換。"
+msgstr "符號 \"%s\"(位於圖紙 \"%s\", 該圖紙位於索引 %d) 被符號\"%s\"取代。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1256
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3279
@@ -16223,7 +16222,7 @@ msgstr "電源符號建立名為 '%s' 的全域標籤"
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
-msgstr "Altium 的線束端口 (%s) 被匯入為文本框。請檢查匯入的原理圖。"
+msgstr "Altium 的線束端口 (%s) 被匯入為文字框。請檢查匯入的原理圖。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3400
 #, c-format
@@ -16304,7 +16303,7 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr "CADSTAR 字體不同於 KiCad 中的字體。這可能導致對齊問題。"
-"請仔細檢查匯入的文本元素, 如需要請進行手動更正。"
+"請仔細檢查匯入的文字元素, 如需要請進行手動更正。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:502
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:169
@@ -16406,7 +16405,7 @@ msgstr "文件符號 '%s' 是指庫中不存在的符號定義 ID '%s'。未載�
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1577
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "由於原理圖沒有附加在專案中, 因此無法設置文本變數。"
+msgstr "由於原理圖沒有附加在專案中, 因此無法設置文字變數。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2114
 #, c-format
@@ -16677,7 +16676,7 @@ msgstr "需要 '斜體' 或 '~' 符號"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1356
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "符號欄位文本特性至少要包含 3 個字符"
+msgstr "符號欄位文字特性至少要包含 3 個字符"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2230
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1546
@@ -16822,7 +16821,7 @@ msgstr "無效的替代接腳名稱"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1773
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1835
 msgid "Invalid text string"
-msgstr "無效的文本字符串"
+msgstr "無效的文字字串"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1919
 msgid "Invalid page type"
@@ -18111,7 +18110,7 @@ msgstr "無法為這種矩陣指定帶寬"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1549
 msgid "Invalid row in matrix"
-msgstr "矩陣中的無效行"
+msgstr "矩陣中的無效列"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1579
 msgid "Too much data for this matrix row."
@@ -18144,7 +18143,7 @@ msgstr " 矩陣已經初始化。但是 m_continue 沒有設置 (內部錯誤)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1738
 msgid "Tried to read a row from an undefined matrix"
-msgstr "試圖從未定義的矩陣中讀取一行"
+msgstr "試圖從未定義的矩陣中讀取一列"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1744
 msgid "matrix pointer is null"
@@ -18201,7 +18200,7 @@ msgstr "[接腳] 中缺少參數"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2362
 msgid "Wrong number of columns for pin mapping."
-msgstr "接腳映射的列數錯誤。"
+msgstr "接腳映射的行數錯誤。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2402
 msgid "Incorrect diff pin name"
@@ -19605,7 +19604,7 @@ msgstr "false"
 #: eeschema/tools/backannotate.cpp:387
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "將 '%s' 的位號改為 '%s'。"
+msgstr "將 '%s' 的參考位置改為 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:403
 #, c-format
@@ -19883,7 +19882,7 @@ msgstr "顯示隱藏欄位"
 
 #: eeschema/tools/ee_actions.cpp:321 eeschema/tools/ee_actions.cpp:1104
 msgid "Toggle display of hidden text fields"
-msgstr "切換隱藏的文本欄位的顯示狀態"
+msgstr "切換隱藏的文字欄位的顯示狀態"
 
 #: eeschema/tools/ee_actions.cpp:332
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:288
@@ -19899,23 +19898,23 @@ msgstr "添加接腳"
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:294
 #: pagelayout_editor/tools/pl_actions.cpp:63 pcbnew/tools/pcb_actions.cpp:174
 msgid "Add Text"
-msgstr "添加文本"
+msgstr "添加文字"
 
 #: eeschema/tools/ee_actions.cpp:342 pagelayout_editor/tools/pl_actions.cpp:64
 #: pcbnew/tools/pcb_actions.cpp:175
 msgid "Add a text item"
-msgstr "添加文本項目"
+msgstr "添加文字項目"
 
 #: eeschema/tools/ee_actions.cpp:350 eeschema/tools/ee_actions.cpp:532
 #: eeschema/tools/sch_drawing_tools.cpp:1877
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:474
 #: pcbnew/tools/pcb_actions.cpp:182
 msgid "Add Text Box"
-msgstr "添加文本框"
+msgstr "添加文字框"
 
 #: eeschema/tools/ee_actions.cpp:351
 msgid "Add a text box item"
-msgstr "添加文本框"
+msgstr "添加文字框"
 
 #: eeschema/tools/ee_actions.cpp:358 eeschema/tools/ee_actions.cpp:1315
 msgid "Add Lines"
@@ -20058,11 +20057,11 @@ msgstr "添加全域標籤"
 
 #: eeschema/tools/ee_actions.cpp:525
 msgid "Draw text items"
-msgstr "繪製文本項目"
+msgstr "繪製文字項目"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Draw text box items"
-msgstr "繪製文本框項目"
+msgstr "繪製文字框項目"
 
 #: eeschema/tools/ee_actions.cpp:541 pagelayout_editor/tools/pl_actions.cpp:54
 msgid "Add Rectangle"
@@ -20155,11 +20154,11 @@ msgstr "顯示項目屬性對話框"
 
 #: eeschema/tools/ee_actions.cpp:645
 msgid "Edit Reference Designator..."
-msgstr "編輯位號..."
+msgstr "編輯參考位置..."
 
 #: eeschema/tools/ee_actions.cpp:646
 msgid "Displays reference designator dialog"
-msgstr "顯示位號對話框"
+msgstr "顯示參考位置對話框"
 
 #: eeschema/tools/ee_actions.cpp:654
 msgid "Edit Value..."
@@ -20280,19 +20279,19 @@ msgstr "將現有項目更改為全域標籤"
 
 #: eeschema/tools/ee_actions.cpp:771
 msgid "Change to Text"
-msgstr "更改為文本"
+msgstr "更改為文字"
 
 #: eeschema/tools/ee_actions.cpp:772
 msgid "Change existing item to a text comment"
-msgstr "將現有項目更改為文本註釋"
+msgstr "將現有項目更改為文字註釋"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Change to Text Box"
-msgstr "更改為文本框"
+msgstr "更改為文字框"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Change existing item to a text box"
-msgstr "將現有項目更改為文本框"
+msgstr "將現有項目更改為文字框"
 
 #: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2448
 msgid "Cleanup Sheet Pins"
@@ -20304,11 +20303,11 @@ msgstr "刪除未引用的圖紙接腳"
 
 #: eeschema/tools/ee_actions.cpp:795 pcbnew/tools/pcb_actions.cpp:829
 msgid "Edit Text & Graphics Properties..."
-msgstr "編輯文本與圖形屬性..."
+msgstr "編輯文字與圖形屬性..."
 
 #: eeschema/tools/ee_actions.cpp:796
 msgid "Edit text and graphics properties globally across schematic"
-msgstr "在原理圖中全域編輯文本和圖形屬性"
+msgstr "在原理圖中全域編輯文字和圖形屬性"
 
 #: eeschema/tools/ee_actions.cpp:802
 msgid "Symbol Properties..."
@@ -20517,7 +20516,7 @@ msgstr "批註原理圖..."
 
 #: eeschema/tools/ee_actions.cpp:988
 msgid "Fill in schematic symbol reference designators"
-msgstr "填寫原理圖符號位號"
+msgstr "填寫原理圖符號參考位置"
 
 #: eeschema/tools/ee_actions.cpp:994
 msgid "Schematic Setup..."
@@ -20634,7 +20633,7 @@ msgid ""
 "(if the library already exists it will be replaced)"
 msgstr ""
 "使用原理圖中使用的符號建立一個新的符號庫\n"
-"(如果庫已存在, 它將被替換)"
+"(如果庫已存在, 它將被取代)"
 
 #: eeschema/tools/ee_actions.cpp:1089
 msgid "Select on PCB"
@@ -21282,7 +21281,7 @@ msgstr "無法編輯有損壞的庫符號鏈接的符號。"
 #: pcbnew/tools/footprint_editor_control.cpp:746
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr "已替換 %d 個重複 ID。\n"
+msgstr "已取代 %d 個重複 ID。\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2603
 #: pcbnew/tools/board_editor_control.cpp:618
@@ -21306,7 +21305,7 @@ msgstr "到達圖紙的末尾。"
 
 #: eeschema/tools/sch_find_replace_tool.cpp:339
 msgid "Find again to wrap around to the start."
-msgstr "再次查找到開始。"
+msgstr "再次尋找到開始。"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:102
 msgid "No bus selected"
@@ -21742,7 +21741,7 @@ msgstr "D 碼"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:101
 #: gerbview/widgets/gerbview_layer_widget.cpp:131
 msgid "Negative Objects"
-msgstr "負片對象"
+msgstr "負片物件"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
 #, c-format
@@ -22507,11 +22506,11 @@ msgstr "在輪廓模式下顯示多邊形"
 
 #: gerbview/tools/gerbview_actions.cpp:218
 msgid "Ghost Negative Objects"
-msgstr "顯示負片對象"
+msgstr "鬼影負片物件"
 
 #: gerbview/tools/gerbview_actions.cpp:219
 msgid "Show negative objects in ghost color"
-msgstr "以鬼影顏色顯示負片對象"
+msgstr "以鬼影顏色顯示負片物件"
 
 #: gerbview/tools/gerbview_actions.cpp:227
 msgid "Show DCodes"
@@ -23041,13 +23040,13 @@ msgstr "從層列表生成 DXF"
 #: kicad/cli/command_pcb_export_gerber.cpp:44
 #: kicad/cli/command_pcb_export_pdf.cpp:50
 msgid "Exclude the reference designator text"
-msgstr "排除位號文本"
+msgstr "排除參考位置文字"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:50
 #: kicad/cli/command_pcb_export_gerber.cpp:48
 #: kicad/cli/command_pcb_export_pdf.cpp:54
 msgid "Exclude the value text"
-msgstr "排除值文本"
+msgstr "排除值文字"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:332
@@ -23092,7 +23091,7 @@ msgstr "剔除阻焊開窗中的絲印"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:68
 msgid "Disable aperture macros"
-msgstr "禁用光圈 (Aperture) 宏"
+msgstr "停用光圈 (Aperture) 巨集"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:73
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
@@ -23609,7 +23608,7 @@ msgstr "%d 擴展內容包可更新"
 
 #: kicad/kicad_manager_frame.cpp:759
 msgid "Edit File in Text Editor"
-msgstr "在文本編輯器中編輯"
+msgstr "在文字編輯器中編輯"
 
 #: kicad/kicad_manager_frame.cpp:841
 msgid "[no project loaded]"
@@ -23699,7 +23698,7 @@ msgstr "編輯本地檔案..."
 
 #: kicad/menubar.cpp:202
 msgid "Edit local file in text editor"
-msgstr "在文本編輯器中編輯本地檔案"
+msgstr "在文字編輯器中編輯本地檔案"
 
 #: kicad/menubar.cpp:258
 msgid "Archive all project files"
@@ -24308,15 +24307,15 @@ msgstr "在預設系統檔案管理員中打開目錄"
 
 #: kicad/project_tree_pane.cpp:877
 msgid "Open the file in a Text Editor"
-msgstr "在文本編輯器打開檔案"
+msgstr "在文字編輯器打開檔案"
 
 #: kicad/project_tree_pane.cpp:879
 msgid "Open files in a Text Editor"
-msgstr "在文本編輯器中打開檔案"
+msgstr "在文字編輯器中打開檔案"
 
 #: kicad/project_tree_pane.cpp:881
 msgid "Edit in a Text Editor"
-msgstr "在文本編輯器中編輯"
+msgstr "在文字編輯器中編輯"
 
 #: kicad/project_tree_pane.cpp:889
 msgid "Rename File..."
@@ -24623,11 +24622,11 @@ msgstr "運行擴展內容管理員"
 
 #: kicad/tools/kicad_manager_actions.cpp:193
 msgid "Open Text Editor"
-msgstr "打開文本編輯器"
+msgstr "打開文字編輯器"
 
 #: kicad/tools/kicad_manager_actions.cpp:194
 msgid "Launch preferred text editor"
-msgstr "啟動首選文本編輯器"
+msgstr "啟動首選文字編輯器"
 
 #: kicad/tools/kicad_manager_control.cpp:73
 msgid "Create New Project"
@@ -24838,7 +24837,7 @@ msgstr "預設關鍵字"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:646
 msgid "Texts can include keywords."
-msgstr "文本可以包含關鍵字。"
+msgstr "文字可以包含關鍵字。"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:647
 msgid "Keyword notation is ${keyword}"
@@ -24846,7 +24845,7 @@ msgstr "關鍵字符號為 ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:648
 msgid "Each keyword is replaced by its value"
-msgstr "每個關鍵字被其值替換"
+msgstr "每個關鍵字被其值取代"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:649
 msgid "These build-in keywords are always available:"
@@ -24881,14 +24880,14 @@ msgstr "僅後續頁面"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:195
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:139
 msgid "Text width:"
-msgstr "文本寬度:"
+msgstr "文字寬度:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:172
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:488
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:214
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:155
 msgid "Text height:"
-msgstr "文本高度:"
+msgstr "文字高度:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
 msgid "Maximum width:"
@@ -24897,7 +24896,7 @@ msgstr "最大寬度:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:185
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:198
 msgid "Set to 0 to disable this constraint"
-msgstr "設置為 0 可禁用此約束"
+msgstr "設置為 0 可停用此約束"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:196
 msgid "Maximum height:"
@@ -24938,11 +24937,11 @@ msgstr "個數:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:406
 msgid "Step text:"
-msgstr "步驟文本:"
+msgstr "步驟文字:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:411
 msgid "Number of characters or digits to step text by for each repeat."
-msgstr "每次重複時要按其步進文本的字符數或位數。"
+msgstr "每次重複時要按其步進文字的字符數或位數。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:418
 msgid "Step X:"
@@ -24978,7 +24977,7 @@ msgstr "線寬:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:516
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:232
 msgid "Text thickness:"
-msgstr "文本線寬:"
+msgstr "文字線寬:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:536
 msgid "Set to Default"
@@ -25170,7 +25169,7 @@ msgstr "在預覽模式下顯示標題欄"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 msgid "Text placeholders will be replaced with preview data"
-msgstr "文本佔位符將被替換為預覽數據"
+msgstr "文字佔位符將被取代為預覽數據"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
@@ -25178,11 +25177,11 @@ msgstr "在編輯模式下顯示標題欄"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr "文本佔位符顯示為 ${keyword} 標記"
+msgstr "文字佔位符顯示為 ${keyword} 標記"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
-msgstr "將對象寫入剪貼板時出錯"
+msgstr "將物件寫入剪貼板時出錯"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
 msgid ""
@@ -25314,7 +25313,7 @@ msgstr "線寬"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Minimum clearance"
-msgstr "最小間距"
+msgstr "最小間隙"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diameter - drill)"
@@ -25728,7 +25727,7 @@ msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr "計算間距和爬電距離"
+msgstr "計算間隙和爬電距離"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
 msgid "RMS Voltage:"
@@ -26283,7 +26282,7 @@ msgstr "選擇 PCB 計算器數據檔案"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:174
 msgid "Do you want to load this file and replace current regulator list?"
-msgstr "你要載入該檔案, 並替換穩流器列表嗎?"
+msgstr "你要載入該檔案, 並取代穩流器列表嗎?"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:191
 #, c-format
@@ -26684,7 +26683,7 @@ msgstr "通過 (環形環) 的焊盤直徑"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "間距孔直徑:"
+msgstr "間隙孔直徑:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
@@ -26742,7 +26741,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "警告: \n"
-"貫孔焊盤直徑 >= 間距孔直徑。\n"
+"貫孔焊盤直徑 >= 間隙孔直徑。\n"
 "對於銅箔區域內的貫孔, 有些參數無法計算。"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
@@ -27086,7 +27085,7 @@ msgstr ""
 "\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
 "\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"- 這個計算器可以查找標準 E 系列 (在 10 Ω 和 1 MΩ 之間) "
+"- 這個計算器可以尋找標準 E 系列 (在 10 Ω 和 1 MΩ 之間) "
 "的組合以建立任意的數值。\n"
 "- 您可以輸入0.0025 到 4000 kΩ之間所需的電阻。\n"
 "- 給出了最多使用 4 個元件的解決方案。\n"
@@ -28024,7 +28023,7 @@ msgstr "儲存物料清單"
 
 #: pcbnew/build_BOM_from_board.cpp:109
 msgid "Designator"
-msgstr "位號"
+msgstr "指定符"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Quantity"
@@ -28280,7 +28279,7 @@ msgstr "封裝位置"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:392
 msgid "reference designator location"
-msgstr "位號位置"
+msgstr "參考位置所在處"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:524
 #, c-format
@@ -28292,7 +28291,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"有 %i 種類型的位號。\n"
+"有 %i 種類型的參考位置。\n"
 "**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:538
@@ -28343,7 +28342,7 @@ msgstr "封裝座標"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
 msgid "Reference Designator Coordinates"
-msgstr "位號座標"
+msgstr "參考位置座標"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:573
 #, c-format
@@ -28376,8 +28375,8 @@ msgid ""
 "checked.\n"
 msgstr ""
 "\n"
-"PCB 上有 %d 個空白或無效的位號。\n"
-"建議選中\"檢查 PCB 和原理圖是否一致\"選項, 然後運行 DRC。\n"
+"PCB 上有 %d 個空白或無效的參考位置。\n"
+"建議勾選\"檢查 PCB 和原理圖是否一致\"選項, 然後運行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:614
 #, c-format
@@ -28386,7 +28385,7 @@ msgid ""
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 "\n"
-"參考位號: %s 封裝: %s: %s, 位於 PCB 上的 %s。"
+"參考位置: %s 封裝: %s: %s, 位於 PCB 上的 %s。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:622
 msgid "Reannotate anyway?"
@@ -28467,7 +28466,7 @@ msgstr "基於...位置:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 msgid "Reference Designator"
-msgstr "位號"
+msgstr "參考位置"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:147
 msgid "Round locations to:"
@@ -28502,11 +28501,11 @@ msgstr "底層"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:211
 msgid "Front reference start:"
-msgstr "頂層位號起點:"
+msgstr "頂層參考起點:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:213
 msgid "Starting reference designation for front."
-msgstr "頂層的起始位號。"
+msgstr "頂層的起始參考位置。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:217
 #: pcbnew/dialogs/dialog_create_array_base.cpp:152
@@ -28528,19 +28527,19 @@ msgstr "預設是 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:223
 msgid "Back reference start:"
-msgstr "底層位號起點:"
+msgstr "底層參考起點:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:225
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
-msgstr "不填寫則從頂層位號繼續, 或輸入大於頂層位號最大的數字。"
+msgstr "不填寫則從頂層參考位置繼續, 或輸入大於頂層參考位置最大的數字。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:230
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr "不填寫或為零, 或輸入一個大於頂層位號最大的數字。"
+msgstr "不填寫或為零, 或輸入一個大於頂層參考位置最大的數字。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:235
 msgid "Remove front prefix"
@@ -28551,7 +28550,7 @@ msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
-"如果選中, 將移除頂層位號的前綴\n"
+"如果勾選, 將移除頂層位號的前綴\n"
 "(如果存在)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:240
@@ -28563,7 +28562,7 @@ msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
-"如果選中, 將移除底層位號的前綴\n"
+"如果勾選, 將移除底層位號的前綴\n"
 "(如果存在)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:245
@@ -28573,7 +28572,7 @@ msgstr "頂層前綴:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:247
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:252
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "元件位號的可選前綴 (如: F_)"
+msgstr "元件面參考指定符的可選前綴 (如: F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:256
 msgid "Back prefix:"
@@ -28582,7 +28581,7 @@ msgstr "底層前綴:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:258
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:263
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "元件位號的可選前綴 (例如: B_)"
+msgstr "焊接面參考指定符的可選前綴 (例如: B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:267
 msgid "Exclude locked footprints"
@@ -28594,7 +28593,7 @@ msgstr "鎖定的封裝不會被重新批註"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:272
 msgid "Exclude references:"
-msgstr "排除位號:"
+msgstr "排除參考:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:274
 msgid ""
@@ -28606,7 +28605,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:293
 msgid "Reference Designators"
-msgstr "位號"
+msgstr "參考位置"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:107
 msgid "Geographical Reannotation"
@@ -28643,7 +28642,7 @@ msgstr "阻焊/錫膏"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:120
 msgid "Text & Graphics"
-msgstr "文本與圖形"
+msgstr "文字與圖形"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:127
 msgid "Defaults"
@@ -28922,7 +28921,7 @@ msgstr "清理圖形"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:90
 msgid "Build Changes"
-msgstr "構建更改"
+msgstr "建置更改"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:187
@@ -29025,7 +29024,7 @@ msgstr "建立邊界哈氏槽"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/convert_tool.cpp:134
 msgid "Delete source objects after conversion"
-msgstr "轉換後刪除源對象"
+msgstr "轉換後刪除來源物件"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:236
 msgid "Convert to Copper Zone"
@@ -29149,7 +29148,7 @@ msgstr "電氣特性"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr "與覆銅區域的間距 (設為 0 使用網路類間距)"
+msgstr "與覆銅區域的間隙 (設為 0 使用網路類間隙)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:76
@@ -29189,11 +29188,11 @@ msgstr "緩釋熱焊盤 (花焊盤) 間隙:"
 msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
-msgstr "覆銅區域與緩釋熱焊盤 (花焊盤) 散熱引線的間距。"
+msgstr "覆銅區域與緩釋熱焊盤 (花焊盤) 散熱引線的間隙。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "同一網路中焊盤與填充區域之間的間距。"
+msgstr "同一網路中焊盤與填充區域之間的間隙。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
@@ -29364,7 +29363,7 @@ msgstr "水平間距:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
 msgid "Distance between columns"
-msgstr "列間間距"
+msgstr "行與行之間距"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:81
 msgid "Vertical spacing:"
@@ -29372,7 +29371,7 @@ msgstr "垂直間距:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:83
 msgid "Distance between rows"
-msgstr "行間距離"
+msgstr "列與列之間距"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "Grid Spacing Modifiers"
@@ -29384,7 +29383,7 @@ msgstr "水平偏移:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:107
 msgid "Offset added to the next row position."
-msgstr "下一行位置的偏移量。"
+msgstr "下一列位置的偏移量。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 msgid "Vertical offset:"
@@ -29392,7 +29391,7 @@ msgstr "垂直偏移:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Offset added to the next column position"
-msgstr "下一列位置的偏移量"
+msgstr "下一行位置的偏移量"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
 msgid "Stagger Settings"
@@ -29404,15 +29403,15 @@ msgstr "交錯:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:148
 msgid "Value -1,  0 or 1 disable this option."
-msgstr "設置為 -1, 0 或 1 可禁用該選項。"
+msgstr "設置為 -1, 0 或 1 可停用該選項。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:158
 msgid "Rows"
-msgstr "行"
+msgstr "列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:158
 msgid "Columns"
-msgstr "列"
+msgstr "行"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:160
 msgid "Stagger Type"
@@ -29602,17 +29601,17 @@ msgstr "封裝註釋"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:537
 msgid "Keep existing reference designators"
-msgstr "保留現有的位號"
+msgstr "保留現有的參考位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:540
 msgid "Assign unique reference designators"
-msgstr "分配唯一的位號"
+msgstr "分配唯一的參考位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:542
 msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
-msgstr "這可能與原理圖中尚未與電路板同步的位號相沖突。"
+msgstr "這可能與原理圖中尚未與電路板同步的參考位置相沖突。"
 
 #: pcbnew/dialogs/dialog_create_array_base.h:142
 msgid "Create Array"
@@ -29636,12 +29635,12 @@ msgstr "引線格式"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 msgid "Text frame:"
-msgstr "文本框架:"
+msgstr "文字框架:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:41
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:49
 msgid "Draw a shape around the leader text"
-msgstr "在引線文本週圍繪製形狀"
+msgstr "在引線文字週圍繪製形狀"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:76
@@ -29674,7 +29673,7 @@ msgstr "覆蓋值"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:109
 msgid ""
 "When checked, the actual measurement is ignored and any value can be entered"
-msgstr "選中後, 實際測量值將被忽略, 並且可以輸入任何值"
+msgstr "勾選後, 實際測量值將被忽略, 並且可以輸入任何值"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:116
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:51
@@ -29695,7 +29694,7 @@ msgstr "此測量標註的單位(\"自動\"以遵循編輯器中選擇的單位)
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
 msgid "Text to print before the dimension value"
-msgstr "要在測量標註值之前列印的文本"
+msgstr "要在測量標註值之前列印的文字"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:117
@@ -29725,7 +29724,7 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:162
 msgid "Text to print after the dimension value"
-msgstr "要在測量標註值之後列印的文本"
+msgstr "要在測量標註值之後列印的文字"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:61
@@ -29802,33 +29801,33 @@ msgstr "隱藏尾隨零"
 msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
-msgstr "選中後, 即使精度設置更高, \"0.100\" 也會顯示為 \"0.1\""
+msgstr "勾選後, 即使精度設置更高, \"0.100\" 也會顯示為 \"0.1\""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:209
 msgid "Dimension Text"
-msgstr "測量標註文本"
+msgstr "測量標註文字"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:170
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:141
 msgid "Text width"
-msgstr "文本寬度"
+msgstr "文字寬度"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:288
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:209
 msgid "Text pos X"
-msgstr "文本位置 X"
+msgstr "文字位置 X"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:183
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:157
 msgid "Text height"
-msgstr "文本高度"
+msgstr "文字高度"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:222
 msgid "Text pos Y"
-msgstr "文本位置 Y"
+msgstr "文字位置 Y"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
@@ -29841,13 +29840,13 @@ msgstr "線寬:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:196
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:170
 msgid "Text thickness"
-msgstr "文本線寬"
+msgstr "文字線寬"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:183
 msgid "Text orientation"
-msgstr "文本方向"
+msgstr "文字方向"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:241
@@ -29887,7 +29886,7 @@ msgstr "手動"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:359
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "選擇文本相對於測量標註線的定位方式"
+msgstr "選擇文字相對於測量標註線的定位方式"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
 msgid "Keep aligned with dimension"
@@ -29895,7 +29894,7 @@ msgstr "與測量標註保持對齊"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr "自動設置文本方向以匹配測量標註線"
+msgstr "自動設置文字方向以匹配測量標註線"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 msgid "Dimension Line"
@@ -29997,9 +29996,9 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"如果選中, 則會報告所有針對走線的 DRC 違規。對於複雜的設計來說這可能會很慢。\n"
+"如果勾選, 則會報告所有針對走線的 DRC 違規。對於複雜的設計來說這可能會很慢。\n"
 "\n"
-"如果未選中, 則只會為每個走線報告第一個 DRC 違規。"
+"如果未勾選, 則只會為每個走線報告第一個 DRC 違規。"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:125
 #, c-format
@@ -30049,7 +30048,7 @@ msgstr "替換已選封裝"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change footprints matching reference designator:"
-msgstr "替換此位號對應的封裝:"
+msgstr "替換此參考位置對應的封裝:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change footprints matching value:"
@@ -30061,11 +30060,11 @@ msgstr "替換具有此庫索引值 的封裝:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Update text layers and visibilities"
-msgstr "更新文本層和可見性"
+msgstr "更新文字層和可見性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Update text sizes, styles and positions"
-msgstr "更新文本大小, 樣式和位置"
+msgstr "更新文字大小, 樣式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update fabrication attributes"
@@ -30082,7 +30081,7 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"更新/重置字符串: 在兩種情況下, 這些描述需要涉及: 用戶對 PCB 的封裝進行覆蓋, "
+"更新/重置字串: 在兩種情況下, 這些描述需要涉及: 用戶對 PCB 的封裝進行覆蓋, "
 "並希望將其移除; 或者用戶對庫的封裝進行了變更, 並希望將其傳遞迴PCB。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:354
@@ -30117,7 +30116,7 @@ msgstr "更新選擇的封裝"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:31
 msgid "Update footprints matching reference designator:"
-msgstr "更新此位號對應的封裝:"
+msgstr "更新此參考位置對應的封裝:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:39
 msgid "Update footprints matching value:"
@@ -30133,15 +30132,15 @@ msgstr "新封裝的庫索引值:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Remove text items which are not in library footprint"
-msgstr "移除在來源庫封裝中不存在的文本項目"
+msgstr "移除在來源庫封裝中不存在的文字項目"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:102
 msgid "Update/reset text layers and visibilities"
-msgstr "更新/重置文本層和可見性"
+msgstr "更新/重置文字層和可見性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:105
 msgid "Update/reset text sizes, styles and positions"
-msgstr "更新/重置文本大小, 樣式和位置"
+msgstr "更新/重置文字大小, 樣式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
 msgid "Update/reset fabrication attributes"
@@ -30204,7 +30203,7 @@ msgstr "將輸出壓縮為 'zip' 檔案"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
 msgid "BOM Columns"
-msgstr "BOM 列"
+msgstr "BOM 行"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
 msgid "Internal ID:"
@@ -30230,7 +30229,7 @@ msgstr "製造商 P/N:"
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:117
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
 msgid "Column containing the manufacturer part number"
-msgstr "包含製造商零件編號的列"
+msgstr "包含製造商零件編號的行"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
@@ -30247,7 +30246,7 @@ msgstr "經銷商 P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
-msgstr "包含經銷商零件編號的列"
+msgstr "包含經銷商零件編號的行"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
 msgid "Distributor:"
@@ -30403,7 +30402,7 @@ msgstr "替換命名相似的模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Replace VRML models with STEP models of the same name"
-msgstr "將VRML模型替換為同名的STEP模型"
+msgstr "將VRML模型取代為同名的STEP模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:132
 msgid "Overwrite old file"
@@ -30494,7 +30493,7 @@ msgstr "鬆散 (0.1 mm)"
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
-msgstr "當構建電路板邊框時, 公差設定了兩個被視為聯結的點的距離。"
+msgstr "當建置電路板邊框時, 公差設定了兩個被視為聯結的點的距離。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:93
 msgid "Export STEP / GLTF"
@@ -30640,8 +30639,8 @@ msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
-"如果選中: 將 3D 模型複製到目標資料夾中\n"
-"如果未選中: 在 VRML 板檔案中嵌入 3D 模型"
+"如果勾選: 將 3D 模型複製到目標資料夾中\n"
+"如果未勾選: 在 VRML 板檔案中嵌入 3D 模型"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -30667,7 +30666,7 @@ msgstr "包含封裝 (&F)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:33
 msgid "Include t&ext items"
-msgstr "包含文本項目 (&E)"
+msgstr "包含文字項目 (&E)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:36
 msgid "Include &locked footprints"
@@ -30738,7 +30737,7 @@ msgstr "循環"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
-msgstr "搜索封裝位號"
+msgstr "搜索封裝參考位置"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
@@ -30746,7 +30745,7 @@ msgstr "搜索封裝值"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
 msgid "Search other text items"
-msgstr "搜索其他文本項目"
+msgstr "搜索其他文字項目"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
@@ -30807,28 +30806,28 @@ msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
-msgstr "鎖定的封裝無法在畫布上自由移動和和調整方向, 只有在選擇篩選器中選中 "
+msgstr "鎖定的封裝無法在畫布上自由移動和和調整方向, 只有在選擇篩選器中勾選 "
 "'已鎖定項目' 勾選框時才能選擇。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:392
 #, c-format
 msgid "Text width must be at least %s."
-msgstr "文本寬度必須至少為 %s。"
+msgstr "文字寬度必須至少為 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:405
 #, c-format
 msgid "Text width must be at most %s."
-msgstr "文本寬度不得超過 %s。"
+msgstr "文字寬度不得超過 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:419
 #, c-format
 msgid "Text height must be at least %s."
-msgstr "文本高度必須至少為 %s。"
+msgstr "文字高度必須至少為 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:432
 #, c-format
 msgid "Text height must be at most %s."
-msgstr "文本高度不得超過 %s。"
+msgstr "文字高度不得超過 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:449
 #, c-format
@@ -30836,7 +30835,7 @@ msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
-"文本線寬與高度比例不對。\n"
+"文字線寬與高度比例不對。\n"
 "線寬已被限制為 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:583
@@ -30849,7 +30848,7 @@ msgstr "修改封裝屬性"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:55
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:98
 msgid "Text Items"
-msgstr "文本項目"
+msgstr "文字項目"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:54
@@ -30876,7 +30875,7 @@ msgstr "Y 偏移"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:56
 #: pcbnew/plot_board_layers.cpp:86
 msgid "Reference designator"
-msgstr "位號"
+msgstr "參考位置"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:143
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
@@ -30945,7 +30944,7 @@ msgstr "編輯庫封裝..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:235
 msgid "Clearances"
-msgstr "間距"
+msgstr "間隙"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:269
 msgid "Set values to 0 to use Board Setup values."
@@ -30955,7 +30954,7 @@ msgstr "設定值為 0，使用電路板設定值。"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:949
 msgid "Pad clearance:"
-msgstr "焊盤間距:"
+msgstr "焊盤間隙:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:281
 msgid ""
@@ -30963,7 +30962,7 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"這是該封裝所有焊盤的局部網路間距設置\n"
+"這是該封裝所有焊盤的局部網路間隙設置\n"
 "如果為 0, 即使用網路類值\n"
 "這個值可以被局部值所取代。"
 
@@ -30981,7 +30980,7 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"這是該封裝的焊盤與阻焊之間的局部間距。\n"
+"這是該封裝的焊盤與阻焊之間的局部間隙。\n"
 "這個值可以被焊盤局部值所取代。\n"
 "如果為0時, 使用全域設置值。"
 
@@ -30996,7 +30995,7 @@ msgstr "允許焊盤之間有橋接的阻焊開窗"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:975
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid "Solder paste absolute clearance:"
-msgstr "錫膏絕對間距:"
+msgstr "錫膏絕對間隙:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:310
 msgid ""
@@ -31007,9 +31006,9 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"這是此封裝的焊盤和錫膏之間的局部間距。\n"
+"這是此封裝的焊盤和錫膏之間的局部間隙。\n"
 "此值可由焊盤局部值替代。\n"
-"最終的間距值是該值與間距值比率之和。\n"
+"最終的間隙值是該值與間隙值比率之和。\n"
 "負值表示阻焊尺寸小於焊盤尺寸。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:321
@@ -31017,7 +31016,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:988
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid "Solder paste relative clearance:"
-msgstr "錫膏相對間距:"
+msgstr "錫膏相對間隙:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
 #, c-format
@@ -31031,10 +31030,10 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"這是以此封裝的焊盤寬度和高度的百分比形式應用的局部間距比率。\n"
-"值為 10 表示水平間距值是焊盤寬度的 10%, 垂直間距值是焊盤高度的 10%。\n"
+"這是以此封裝的焊盤寬度和高度的百分比形式應用的局部間隙比率。\n"
+"值為 10 表示水平間隙值是焊盤寬度的 10%, 垂直間隙值是焊盤高度的 10%。\n"
 "該值可由焊盤局部值替代。\n"
-"最終間距值是該值與絕對間距值之和。\n"
+"最終間隙值是該值與絕對間隙值之和。\n"
 "負值表示阻焊尺寸小於焊盤尺寸。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
@@ -31051,7 +31050,7 @@ msgstr "注意: 阻焊和錫膏值僅適用於銅層上的焊盤。"
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr "注意: 添加錫膏間距 (絕對和相對) 以確定最終間距。"
+msgstr "注意: 添加錫膏間隙 (絕對和相對) 以確定最終間隙。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:358
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
@@ -31078,7 +31077,7 @@ msgstr "緩釋熱焊盤 (花焊盤)"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:377
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:399
 msgid "Clearance Overrides and Settings"
-msgstr "間距重寫和設置"
+msgstr "間隙覆蓋和設置"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:390
 msgid ""
@@ -31106,12 +31105,12 @@ msgstr "封裝名稱可能不包含 '%s'。"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:434
 #, c-format
 msgid "The text width must be between %s and %s."
-msgstr "文本寬度範圍必須在 %s 和 %s。"
+msgstr "文字寬度範圍必須在 %s 和 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:446
 #, c-format
 msgid "The text height must be between %s and %s."
-msgstr "文本高度範圍必須在 %s 和 %s。"
+msgstr "文字高度範圍必須在 %s 和 %s。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:464
 #: pcbnew/dialogs/dialog_text_properties.cpp:499
@@ -31120,7 +31119,7 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"文本線寬與高度比例不對。\n"
+"文字線寬與高度比例不對。\n"
 "文字將會被擠壓變形。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
@@ -31154,9 +31153,9 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"這是該封裝所有焊盤的局部網路間距設置\n"
+"這是該封裝所有焊盤的局部網路間隙設置\n"
 "如果為 0, 即使用網路類值\n"
-"在焊盤屬性的局部間距和設置 選項卡中, \n"
+"在焊盤屬性的局部間隙和設置 選項卡中, \n"
 "可以覆蓋此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
@@ -31167,9 +31166,9 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"這是該封裝的焊盤與阻焊之間的局部間距。\n"
+"這是該封裝的焊盤與阻焊之間的局部間隙。\n"
 "如果為 0 時, 使用全域設置值。\n"
-"在焊盤屬性的局部間距和設置 選項卡中, \n"
+"在焊盤屬性的局部間隙和設置 選項卡中, \n"
 "可以覆蓋此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
@@ -31182,10 +31181,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"這是此封裝的焊盤和錫膏之間的局部間距。\n"
-"最終的間距值是該值與間距值比率之和。\n"
+"這是此封裝的焊盤和錫膏之間的局部間隙。\n"
+"最終的間隙值是該值與間隙值比率之和。\n"
 "負值表示錫膏鋼網孔徑小於焊盤尺寸。\n"
-"在焊盤屬性的局部間距和設置選項卡中, 可以覆蓋此值。"
+"在焊盤屬性的局部間隙和設置選項卡中, 可以覆蓋此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
 #, c-format
@@ -31200,11 +31199,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"這是以此焊盤寬度和高度的百分比形式應用的局部間距比率。\n"
-"值為 10 表示水平間距值是焊盤寬度的 10% o, 垂直間距值是焊盤高度的 10% o。\n"
-"最終間距值是該值與絕對間距值之和。\n"
+"這是以此焊盤寬度和高度的百分比形式應用的局部間隙比率。\n"
+"值為 10 表示水平間隙值是焊盤寬度的 10% o, 垂直間隙值是焊盤高度的 10% o。\n"
+"最終間隙值是該值與絕對間隙值之和。\n"
 "負值表示錫膏鋼網孔徑小於焊盤尺寸。\n"
-"在焊盤屬性的局部間距和設置選項卡中, 可以覆蓋此值。"
+"在焊盤屬性的局部間隙和設置選項卡中, 可以覆蓋此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
@@ -31557,12 +31556,12 @@ msgstr "重建全部"
 
 #: pcbnew/dialogs/dialog_generators_base.h:63
 msgid "Generator Objects"
-msgstr "生成對象"
+msgstr "生成物件"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:67
 msgid "Reference designator:"
-msgstr "位號:"
+msgstr "參考位置:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
@@ -31902,7 +31901,7 @@ msgstr "設置淚滴"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:138
 msgid "Other text items"
-msgstr "其他文本項目"
+msgstr "其他文字項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
 msgid "Graphic items"
@@ -31959,7 +31958,7 @@ msgstr "線寬"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
 #: pcbnew/pcb_dimension.cpp:431 pcbnew/pcb_textbox.cpp:369
 msgid "Text Width"
-msgstr "文本寬度"
+msgstr "文字寬度"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:279
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:175
@@ -31967,7 +31966,7 @@ msgstr "文本寬度"
 #: pcbnew/pcb_dimension.cpp:432 pcbnew/pcb_textbox.cpp:370
 #: pcbnew/tools/board_inspection_tool.cpp:331
 msgid "Text Height"
-msgstr "文本高度"
+msgstr "文字高度"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:285
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:176
@@ -31975,7 +31974,7 @@ msgstr "文本高度"
 #: pcbnew/pcb_dimension.cpp:430 pcbnew/pcb_textbox.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:346
 msgid "Text Thickness"
-msgstr "文本線寬"
+msgstr "文字線寬"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:297
 msgid "Upright"
@@ -31992,7 +31991,7 @@ msgstr "設置為板層預設值:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
 msgid "Other footprint text items"
-msgstr "其他封裝文本項目"
+msgstr "其他封裝文字項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Footprint graphic items"
@@ -32008,7 +32007,7 @@ msgstr "PCB 圖形項"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:49
 msgid "PCB text items"
-msgstr "PCB 文本項目"
+msgstr "PCB 文字項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "PCB dimension items"
@@ -32099,19 +32098,19 @@ msgstr "修改分組"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
-msgstr "分組名稱:"
+msgstr "群組名稱:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:41
 msgid "Prevents group from being moved on canvas"
-msgstr "防止組在畫布上被移動"
+msgstr "防止群組在畫布上被移動"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:45
 msgid "Group members:"
-msgstr "分組成員:"
+msgstr "群組成員:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:64 pcbnew/pcb_group.cpp:489
 msgid "Group Properties"
-msgstr "分組屬性"
+msgstr "群組屬性"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:81
 msgid "Load and Test Netlist"
@@ -32143,7 +32142,7 @@ msgstr "讀取網表檔案 '%s'。\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:242
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "使用位號來匹配符號和封裝。\n"
+msgstr "使用參考位置來匹配符號和封裝。\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:244
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
@@ -32159,7 +32158,7 @@ msgstr "使用元件時間戳 (唯一ID) 鏈接封裝"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using reference designators"
-msgstr "使用位號鏈接封裝"
+msgstr "使用參考位置鏈接封裝"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:44
 msgid "Link Method"
@@ -32170,13 +32169,12 @@ msgid ""
 "Select whether to update footprint references to match their currently-"
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
-msgstr ""
-"選擇是否更新封裝位號以匹配其當前關聯的符號, 或者重新封裝位號分配給匹配的符"
-"號。"
+msgstr "選擇是否更新封裝參考以匹配其當前關聯的符號, "
+"或者重新指定封裝給符合目前參考的符號。"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:53
 msgid "Replace footprints with those specified in netlist"
-msgstr "將封裝替換為網表中指定的封裝"
+msgstr "將封裝取代為網表中指定的封裝"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:56
 msgid "Delete footprints with no components in netlist"
@@ -32201,11 +32199,11 @@ msgstr "阻焊/錫膏預設值"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
 msgid "Text && graphics default properties"
-msgstr "文本與圖形預設屬性"
+msgstr "文字與圖形預設屬性"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
 msgid "Text && graphics formatting"
-msgstr "文本與圖形格式"
+msgstr "文字與圖形格式"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 msgid "Design rule constraints"
@@ -32552,19 +32550,19 @@ msgstr "警告: 焊盤孔不會留下銅。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1267
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr "警告: 局部間距值為負將沒有效果。"
+msgstr "警告: 局部間隙值為負將沒有效果。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
-msgstr "警告: 負阻焊間距大於某些形狀原基板。可能產生意料之外的結果。"
+msgstr "警告: 負阻焊間隙大於某些形狀原基板。可能產生意料之外的結果。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1293
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
-msgstr "警告: 阻焊層的負間距大於焊盤。不會產生阻焊層。"
+msgstr "警告: 阻焊層的負間隙大於焊盤。不會產生阻焊層。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1312
 msgid ""
@@ -33000,7 +32998,7 @@ msgstr "引線角度:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:928
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1056
 msgid "Clearance Overrides"
-msgstr "間距重寫"
+msgstr "間隙覆蓋"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:931
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -33009,20 +33007,20 @@ msgstr "設定值為 0，使用父級封裝或網路類值。"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:935
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
-msgstr "正間距指的是比焊盤大的區域 (通常為阻焊間距)。"
+msgstr "正間隙指的是比焊盤大的區域 (通常為阻焊間隙)。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:939
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr "負間距指的是比焊盤小的區域 (通常為錫膏間距)。"
+msgstr "負間隙指的是比焊盤小的區域 (通常為錫膏間隙)。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:951
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"這是此焊盤的局部網路間距。\n"
+"這是此焊盤的局部網路間隙。\n"
 "如果為 0, 則使用封裝局部值或網路類值。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:964
@@ -33030,7 +33028,7 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"這個此焊盤與阻焊間的局部間距。\n"
+"這個此焊盤與阻焊間的局部間隙。\n"
 "如果為 0, 則使用封裝局部值或全域值。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:977
@@ -33041,9 +33039,9 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"這是此焊盤和錫膏之間的局部間距.\n"
+"這是此焊盤和錫膏之間的局部間隙.\n"
 "如果為 0, 則使用封裝值或全域值。\n"
-"最終間距值是該值與間距值比率的總和。\n"
+"最終間隙值是該值與間隙值比率的總和。\n"
 "負值表示比焊盤尺寸更小的阻焊尺寸。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:990
@@ -33055,10 +33053,10 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"這是此焊盤和錫膏之間的局部間距比率 (以百分比表示)。\n"
-"值為 10, 表示間距值是焊盤尺寸的 10％。\n"
+"這是此焊盤和錫膏之間的局部間隙比率 (以百分比表示)。\n"
+"值為 10, 表示間隙值是焊盤尺寸的 10％。\n"
 "如果為 0, 則使用封裝值或全域值。\n"
-"最終間距值是該值與間距值的總和。\n"
+"最終間隙值是該值與間隙值的總和。\n"
 "負值表示比焊盤尺寸更小的阻焊尺寸。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1193
@@ -33157,11 +33155,11 @@ msgstr "繪製封裝值"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
-msgstr "繪製位號"
+msgstr "繪製參考位置"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Plot footprint text"
-msgstr "繪製封裝文本"
+msgstr "繪製封裝文字"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Force plotting of invisible values / refs"
@@ -33169,7 +33167,7 @@ msgstr "強制繪製隱藏的值或參考"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "強制繪製隱藏的封裝值或位號"
+msgstr "強制繪製隱藏的封裝值或參考位置"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Sketch pads on fabrication layers"
@@ -33320,7 +33318,7 @@ msgid ""
 msgstr ""
 "使用 X2 Gerber 檔案格式。\n"
 "主要包括 Gerber 標頭中的 X2 特性。\n"
-"如果未選中, 則使用 X1 格式。\n"
+"如果未勾選, 則使用 X1 格式。\n"
 "在 X1 格式中, 這些特性作為註釋包含在檔案中。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
@@ -33339,14 +33337,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid "Disable aperture macros (not recommended)"
-msgstr "禁用光圈 (Aperture) 宏 (不推薦)"
+msgstr "停用光圈 (Aperture) 巨集 (不推薦)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:238
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"禁用 Gerber 檔案中的 Aperture 宏\n"
+"停用 Gerber 檔案中的 Aperture 巨集\n"
 "僅對有問題的 Gerber 查看器使用。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:252
@@ -33387,7 +33385,7 @@ msgid ""
 msgstr ""
 "為精確寬度 PostScript 輸出設置全域寬度校正。\n"
 "這些寬度校正旨在補償走線寬度以及焊盤和通孔尺寸誤差。\n"
-"合理的寬度校正值必須在 [-(最小走線寬度 - 1),+(最小間距值 - 1)] 範圍內。"
+"合理的寬度校正值必須在 [-(最小走線寬度 - 1),+(最小間隙值 - 1)] 範圍內。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:319
 msgid "Force A4 output"
@@ -33399,7 +33397,7 @@ msgstr "DXF 選項"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Uncheck to plot graphic items using their center lines"
-msgstr "取消選中以使用圖形項目的中心線繪製圖形項"
+msgstr "取消勾選以使用圖形項目的中心線繪製圖形項"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:338
 msgid "Export units:"
@@ -33411,7 +33409,7 @@ msgstr "用於匯出的 DXF 檔案的單位"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:350
 msgid "Use KiCad font to plot text"
-msgstr "使用 KiCad 字體繪製文本"
+msgstr "使用 KiCad 字體繪製文字"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:351
 msgid ""
@@ -33419,7 +33417,7 @@ msgid ""
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
 "勾選來使用 KiCad 筆畫字體\n"
-"取消選中將單列 ASCII 文本繪製為可編輯文本(使用 DXF 字體)"
+"取消勾選將單列 ASCII 文字繪製為可編輯文字(使用 DXF 字體)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:361
 msgid "SVG Options"
@@ -33516,7 +33514,7 @@ msgstr "推擠貫孔"
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
-msgstr "禁用時, 貫孔會被視為不可移動的對象。"
+msgstr "停用時, 貫孔會被視為不可移動的物件。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
@@ -33583,9 +33581,8 @@ msgid ""
 "When enabled, the entire portion of the track that is visible on the screen "
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
-msgstr ""
-"啟用後, 當其中一段走線被拖動時, 屏幕上可見的整個走線部分將被優化和重新佈線。"
-"禁用後, 將只優化被拖動部分附近的走線。"
+msgstr "啟用後, 當其中一段走線被拖動時, 屏幕上可見的整個走線部分將被優化和重新佈線。"
+"停用後, 將只優化被拖動部分附近的走線。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:107
 msgid "Use mouse path to set track posture"
@@ -33606,7 +33603,7 @@ msgid ""
 "When enabled, all track segments will be fixed in place up to the cursor "
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
-msgstr "啟用時, 所有的走線段將被固定在遊標所在的位置。禁用時, 最後一個線段 "
+msgstr "啟用時, 所有的走線段將被固定在遊標所在的位置。停用時, 最後一個線段 "
 "(離遊標最近的)將不受約束並跟隨遊標。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
@@ -33680,7 +33677,7 @@ msgstr "右鍵單擊層以選擇命令。"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:215
 msgid "Print according to objects tab of appearance manager"
-msgstr "通過 \"外觀管理員\" 的 \"對象\" 選項卡進行列印"
+msgstr "通過 \"外觀管理員\" 的 \"物件\" 選項卡進行列印"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:243
 msgid "No drill mark"
@@ -33774,7 +33771,7 @@ msgid ""
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
 msgstr "鎖定的封裝無法在畫布上自由移動和定位, 並且只有當\"已鎖定項目"
-"\"勾選框在選擇篩選器中啟用時才能被選中。"
+"\"勾選框在選擇篩選器中啟用時才能被勾選。"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
 msgid "Associated layer:"
@@ -33961,11 +33958,11 @@ msgstr "目標屬性"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:106
 msgid "Footprint Reference Properties"
-msgstr "封裝位號屬性"
+msgstr "封裝參考屬性"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:107
 msgid "Reference:"
-msgstr "參考編號:"
+msgstr "參考:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:111
 msgid "Footprint Value Properties"
@@ -33977,7 +33974,7 @@ msgstr "封裝欄位屬性"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:126
 msgid "Footprint Text Properties"
-msgstr "封裝文本屬性"
+msgstr "封裝文字屬性"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:308
 #, c-format
@@ -33998,7 +33995,7 @@ msgstr "反顯"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
 msgid "Keep text upright"
-msgstr "保持文本豎直"
+msgstr "保持文字豎直"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:258
 msgid "Parent footprint description"
@@ -34261,16 +34258,15 @@ msgstr "從電路板移除未鏈接到原理圖符號的且未鎖定封裝。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr "用原理圖中指定的封裝替換"
+msgstr "用原理圖中指定的封裝取代"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr ""
-"通常應替換 PCB 上的封裝, 以匹配原理圖中所做的封裝分配變更。僅當您不想替換電路"
-"板上的現有封裝時, 才取消選中此選項。"
+msgstr "通常應替換 PCB 上的封裝, 以匹配原理圖中所做的封裝分配變更。"
+"僅當您不想替換電路板上的現有封裝時, 才取消勾選此選項。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
@@ -34323,7 +34319,7 @@ msgstr "允許自由焊盤"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr "如果選中該選項, 焊盤可相對於封裝的其他部分進行移動。"
+msgstr "如果勾選該選項, 焊盤可相對於封裝的其他部分進行移動。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
@@ -34350,7 +34346,7 @@ msgstr "吸附圖形"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:291
 msgid "Snap to pads:"
-msgstr "捕獲到焊盤:"
+msgstr "貼齊到焊盤:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:293
 #: pcbnew/dialogs/panel_edit_options_base.cpp:301
@@ -34364,7 +34360,7 @@ msgstr "建立新走線時啟用"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:305
 msgid "Snap to tracks:"
-msgstr "捕獲到走線:"
+msgstr "貼齊到走線:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:307
 #: pcbnew/dialogs/panel_edit_options_base.cpp:315
@@ -34373,7 +34369,7 @@ msgstr "當鼠標靠近走線時捕獲遊標"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Snap to graphics:"
-msgstr "捕獲到圖形:"
+msgstr "貼齊到圖形:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:321
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
@@ -34430,7 +34426,7 @@ msgid ""
 "%s: Text size is incorrect.\n"
 "Size must be between %s and %s"
 msgstr ""
-"%s:文本大小不正確。\n"
+"%s:文字大小不正確。\n"
 "必須處於 %s 到 %s 範圍內"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
@@ -34440,7 +34436,7 @@ msgid ""
 "%s: Text thickness is too large.\n"
 "It will be truncated to %s"
 msgstr ""
-"%s: 文本線寬過大。\n"
+"%s: 文字線寬過大。\n"
 "已被限制為 %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:428
@@ -34450,7 +34446,7 @@ msgid ""
 "%s: Text thickness is too small.\n"
 "It will be truncated to %s"
 msgstr ""
-"%s: 文本線寬過小。\n"
+"%s: 文字線寬過小。\n"
 "已被限制為 %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:477
@@ -34460,7 +34456,7 @@ msgstr "參數錯誤"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:518
 msgid "Reference and value are mandatory."
-msgstr "位號和值為必填項。"
+msgstr "參考和值為必填項。"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:23
 msgid "Default field properties for new footprints:"
@@ -34468,7 +34464,7 @@ msgstr "新封裝的預設欄位屬性:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:73
 msgid "Default text items for new footprints:"
-msgstr "新封裝的預設文本項目:"
+msgstr "新封裝的預設文字項目:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:149
 msgid "Default properties for new graphic items:"
@@ -34492,12 +34488,12 @@ msgstr "選擇一行或多行來另存為當前 KiCad 版本格式。"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:818
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr "將 '%s' 另存為當前 KiCad 版本格式並替換表中的舊條目?"
+msgstr "將 '%s' 另存為當前 KiCad 版本格式並取代表中的舊條目?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:824
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
-msgstr "將 %d 箇舊格式庫另存為當前 KiCad 版本格式並替換表中的舊條目?"
+msgstr "將 %d 箇舊格式庫另存為當前 KiCad 版本格式並取代表中的舊條目?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:854
 #, c-format
@@ -34575,11 +34571,11 @@ msgstr "顯示焊盤編號"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:69
 msgid "Clearance Outlines"
-msgstr "輪廓間距"
+msgstr "輪廓間隙"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Do not show clearances"
-msgstr "不再顯示間距"
+msgstr "不再顯示間隙"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing"
@@ -34599,7 +34595,7 @@ msgstr "總是顯示"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:91
 msgid "Show pad clearance"
-msgstr "顯示焊盤間距"
+msgstr "顯示焊盤間隙"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
 msgid "Show all fields when parent footprint is selected"
@@ -34607,7 +34603,7 @@ msgstr "選中父封裝時顯示所有欄位"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "選擇/高亮原理圖選區所對應的的對象"
+msgstr "選擇/高亮物件對應到原理圖所選的部份"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:132
 msgid "Highlight footprints corresponding to selected symbols"
@@ -34711,14 +34707,14 @@ msgstr "選擇屏幕上 Y 軸增加的方向。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
-msgstr "最小間距:"
+msgstr "最小間隙:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:51
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
-msgstr "不屬於同一網路的銅對象之間的最小間距。一旦設置, 這是一個絕對的最小值, "
+msgstr "不屬於同一網路的銅項目之間的最小間隙。一旦設置, 這是一個絕對的最小值, "
 "不能通過網路類、自定義規則或其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
@@ -34764,29 +34760,27 @@ msgstr "最小貫孔直徑。一旦設置, 這是一個絕對的最小值, "
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
-msgstr "銅到孔的間距:"
+msgstr "銅到孔的間隙:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:133
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item.  If "
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
-msgstr ""
-"孔與不相關銅箔項目之間的最小間距。一旦設置, 這是一個絕對的最小值, 不能通過自"
-"定義規則或其他設置減少。"
+msgstr "孔與不相關銅箔項目之間的最小間隙。一旦設置, 這是一個絕對的最小值, "
+"不能通過自定義規則或其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
-msgstr "銅箔到板邊間距:"
+msgstr "銅箔到板邊間隙:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid ""
 "The minimum clearance between the board edge and any copper item.  If set, "
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
-msgstr ""
-"板邊與任意銅箔項目之間的最小間距。一旦設置, 這是一個絕對的最小值, 不能通過自"
-"定義規則或其他設置減少。"
+msgstr "板邊與任意銅箔項目之間的最小間隙。一旦設置, 這是一個絕對的最小值, "
+"不能通過自定義規則或其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
@@ -34805,16 +34799,15 @@ msgstr "最小的通孔尺寸。一旦設置, 這是一個絕對的最小值, "
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
-msgstr "孔到孔的間距:"
+msgstr "孔到孔的間隙:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:206
 msgid ""
 "The minimum clearance between two drilled holes.   If set, this is an "
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
-msgstr ""
-"兩個鑽孔間的最小間距。一旦設置, 這是一個絕對的最小值, 不能通過自定義規則或其"
-"他設置減少。(注: 不適用於銑孔。)"
+msgstr "兩個鑽孔間的最小間隙。一旦設置, 這是一個絕對的最小值, "
+"不能通過自定義規則或其他設置減少。(注: 不適用於銑孔。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
 msgid "uVias"
@@ -34848,24 +34841,23 @@ msgstr "絲印層"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
 msgid "Minimum item clearance:"
-msgstr "最小項目間距:"
+msgstr "最小項目間隙:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:304
 msgid ""
 "Minimum clearance between two items on the same silkscreen layer.  If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
-msgstr ""
-"同一絲印層上兩個項目間的最小間距。設置此值可提高可讀性。(注: 不適用於單個封裝"
-"中的多個形狀。)"
+msgstr "同一絲印層上兩個項目間的最小間隙。設置此值可提高可讀性。(注: "
+"不適用於單個封裝中的多個形狀。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum text height:"
-msgstr "最小文本高度:"
+msgstr "最小文字高度:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Minimum text thickness:"
-msgstr "最小文本線寬:"
+msgstr "最小文字線寬:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:355
 msgid "Arc/circle approximated by segments"
@@ -34923,7 +34915,7 @@ msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr "啟用後, 計算帶貫孔的走線長度時將包括銅層之間的距離。禁用時, "
+msgstr "啟用後, 計算帶貫孔的走線長度時將包括銅層之間的距離。停用時, "
 "貫孔疊層高度將被忽略。"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
@@ -34936,7 +34928,7 @@ msgstr "將電路板預設設置應用於封裝欄位"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:61
 msgid "Apply board defaults to footprint text"
-msgstr "將電路板預設設置應用於封裝文本"
+msgstr "將電路板預設設置應用於封裝文字"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:64
 msgid "Apply board defaults to non-copper footprint shapes"
@@ -35552,14 +35544,14 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"焊盤與阻焊層之間的全域間距。\n"
+"焊盤與阻焊層之間的全域間隙。\n"
 "該值可以被封裝和焊盤中設置的局部值覆蓋。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr "正間距是指比焊盤面積大的區域(通常用於阻焊間距)。"
+msgstr "正間隙是指比焊盤面積大的區域(通常用於阻焊間隙)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
@@ -35573,7 +35565,7 @@ msgid ""
 "Leave at 0 unless you know what you are doing."
 msgstr ""
 "兩個焊盤區域之間最小距離。\n"
-"如兩個焊盤之間的間距小於此值, 焊盤區域繪製時會被合併(沒有阻焊橋)。\n"
+"如兩個焊盤之間的間隙小於此值, 焊盤區域繪製時會被合併(沒有阻焊橋)。\n"
 "這個參數僅用來繪製阻焊層。\n"
 "除非您知道自己在做什麼, 請將其設置為0。"
 
@@ -35585,7 +35577,7 @@ msgstr "阻焊層開窗之間的最小距離。小於此距離的焊盤開窗將
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
 msgid "Solder mask to copper clearance:"
-msgstr "阻焊層到銅的間距:"
+msgstr "阻焊層到銅的間隙:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -35597,15 +35589,15 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"焊盤和錫膏之間的全域間距。\n"
+"焊盤和錫膏之間的全域間隙。\n"
 "該值可以被封裝和焊盤中設置的局部值覆蓋。\n"
-"最終間距值是該值與間距值比率之和。"
+"最終間隙值是該值與間隙值比率之和。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:110
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr "負間距是指比焊盤小的區域 (通常用於錫膏間距)。"
+msgstr "負間隙是指比焊盤小的區域 (通常用於錫膏間隙)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:120
 msgid ""
@@ -35614,20 +35606,20 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"焊盤和錫膏之間的全域間距比(以百分比表示)。\n"
-"值為 10 表示間距值是焊盤大小的 10%。\n"
+"焊盤和錫膏之間的全域間隙比(以百分比表示)。\n"
+"值為 10 表示間隙值是焊盤大小的 10%。\n"
 "此值可以被封裝或焊盤局部值所取代。\n"
-"最終間距值是該值與間距值之和。"
+"最終間隙值是該值與間隙值之和。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:125
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "額外的間距 (以焊盤尺寸的百分比表示)。"
+msgstr "額外的間隙 (以焊盤尺寸的百分比表示)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr "注意: 最終的間距由錫膏的絕對與相對間距相加得到。"
+msgstr "注意: 最終的間隙由錫膏的絕對與相對間隙相加得到。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:105
 msgid "Cancel Changes?"
@@ -36185,7 +36177,7 @@ msgstr ""
 "                              |\n"
 "| `diff_pair_uncoupled`     | max                                            "
 "                                                                        | "
-"檢查差分對正負走線非耦合部分的間距 (例如，差分對從元件扇出，或繞過某一物體 "
+"檢查差分對正負走線非耦合部分的間隙 (例如，差分對從元件扇出，或繞過某一物體 "
 "(如通孔) 的非耦合部分) 。<br>                                                "
 "                                                                             "
 "                                                                            |"
@@ -36301,10 +36293,10 @@ msgstr ""
 "                            |\n"
 "\n"
 "\n"
-"### Items (對象) \n"
+"### Items (項目) \n"
 "\n"
-" * `A` &nbsp;&nbsp; _第一個 (或僅有的) 測試對象_\n"
-" * `B` &nbsp;&nbsp; _第二個測試對象 (對於需要兩個對象的規則) _\n"
+" * `A` &nbsp;&nbsp; _第一個 (或僅有的) 測試項目_\n"
+" * `B` &nbsp;&nbsp; _第二個測試項目 (對於需要兩個項目的規則) _\n"
 " * `L` &nbsp;&nbsp; _測試的層_\n"
 "\n"
 "<br>\n"
@@ -36363,7 +36355,7 @@ msgstr ""
 "\n"
 "### Expression functions (表達式函數) \n"
 "\n"
-"所有的函數參數支援簡單的通配符 (`*` and `?`)。\n"
+"所有的函數參數支援簡單的萬用字元 (`*` and `?`)。\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
@@ -36410,20 +36402,20 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfGroup('<group_name>')\n"
-"若 `A` 是指定分組的成員，則為 True。組名可以包含通配符。\n"
+"若 `A` 是指定群組的成員，則為 True。組名可以包含萬用字元。\n"
 "包含嵌套的分組成員。\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>|<footprint_id>')\n"
-"若 `A` 是給定參考位號或封裝 ID 匹配的封裝的成員，則為 "
-"True。參數可以包含通配符。\n"
+"若 `A` 是給定封裝參考或封裝 ID 匹配的封裝的成員，則為 "
+"True。參數可以包含萬用字元。\n"
 "\n"
 "注意：如果需要與封裝ID 匹配，參數中必須包含 ':'。\n"
 "\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
-"若 `A` 是給定路徑的原理圖的成員，則為 True。原理圖路徑可以包含通配符。\n"
+"若 `A` 是給定路徑的原理圖的成員，則為 True。原理圖路徑可以包含萬用字元。\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
@@ -36488,12 +36480,12 @@ msgstr ""
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # 為給定的差分對定義最優的 (opt) 的間距\n"
+"    # 為給定的差分對定義最優的 (opt) 的間隙\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # 為任意差分對與周圍對象定義一個更大的間距\n"
+"    # 為任意差分對與周圍對象定義一個更大的間隙\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
@@ -36620,11 +36612,11 @@ msgstr "尺寸接近的走線無需淚滴。"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphics and text:"
-msgstr "新建圖形或文本對象的預設屬性:"
+msgstr "新建圖形或文字的預設屬性:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
-msgstr "新的測量標註對象的預設屬性:"
+msgstr "新的測量標註物件的預設屬性:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:98
 msgid ""
@@ -36641,11 +36633,11 @@ msgstr "測量標註文字相對於測量標註線的位置"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "Keep text aligned"
-msgstr "保持文本對齊"
+msgstr "保持文字對齊"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:128
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr "選中後, 測量標註文本將與測量標註線保持對齊"
+msgstr "勾選後, 測量標註文字將與測量標註線保持對齊"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:140
 msgid "How many digits of precision to show"
@@ -36655,7 +36647,7 @@ msgstr "要顯示多少位精度"
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
-msgstr "選中後, 即使精度設置為顯示更多位數, \"1.2300\" 也會呈現為 \"1.23\""
+msgstr "勾選後, 即使精度設置為顯示更多位數, \"1.2300\" 也會呈現為 \"1.23\""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -36720,11 +36712,11 @@ msgstr "電路板設置中的 \"絲印\" 約束"
 
 #: pcbnew/drc/drc_engine.cpp:183
 msgid "board setup constraints silk text height"
-msgstr "電路板設置中的 \"絲印文本高度\" 約束"
+msgstr "電路板設置中的 \"絲印文字高度\" 約束"
 
 #: pcbnew/drc/drc_engine.cpp:189
 msgid "board setup constraints silk text thickness"
-msgstr "電路板設置中的 \"絲印文本線寬\" 約束"
+msgstr "電路板設置中的 \"絲印文字線寬\" 約束"
 
 #: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup constraints hole"
@@ -36780,18 +36772,18 @@ msgstr "焊盤不是通孔焊盤; 連接將是: %s。"
 #: pcbnew/drc/drc_engine.cpp:759 pcbnew/drc/drc_engine.cpp:769
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "%s 上的局部覆蓋; 間距: %s。"
+msgstr "%s 上的局部覆蓋; 間隙: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:784 pcbnew/drc/drc_engine.cpp:1392
 #: pcbnew/drc/drc_engine.cpp:1408
 msgid "board minimum"
-msgstr "電路板最小間距"
+msgstr "最小電路板"
 
 #: pcbnew/drc/drc_engine.cpp:787 pcbnew/drc/drc_engine.cpp:1386
 #: pcbnew/drc/drc_engine.cpp:1402
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "電路板最小間距: %s。"
+msgstr "電路板最小間隙: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:796
 msgid "board minimum hole"
@@ -36800,7 +36792,7 @@ msgstr "電路板最小孔"
 #: pcbnew/drc/drc_engine.cpp:799
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "電路板最小孔間距: %s。"
+msgstr "電路板最小孔間隙: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:818
 #, c-format
@@ -36838,7 +36830,7 @@ msgstr "---> 斷言失敗。<--"
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "檢查 %s 間距: %s。"
+msgstr "檢查 %s 間隙: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:911
 #, c-format
@@ -36938,7 +36930,7 @@ msgstr "正檢查 %s: 最小 %s; 最優 %s; 最大 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1091
 msgid "Netclass clearances apply only between copper items."
-msgstr "網類間距僅適用於銅箔項目之間。"
+msgstr "網類間隙僅適用於銅箔項目之間。"
 
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
 #, c-format
@@ -37016,7 +37008,7 @@ msgstr "條件不滿足; 忽略規則。"
 #: pcbnew/drc/drc_engine.cpp:1342 pcbnew/drc/drc_engine.cpp:1364
 #, c-format
 msgid "Local clearance on %s: %s."
-msgstr "%s 上的局部間距: %s。"
+msgstr "%s 上的局部間隙: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1423
 #, c-format
@@ -37082,11 +37074,11 @@ msgstr "不允許的項目"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "Edge.Cuts 層上的文本 (或標註)"
+msgstr "Edge.Cuts 層上的文字 (或標註)"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Clearance violation"
-msgstr "間距違規"
+msgstr "間隙違規"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Tracks crossing"
@@ -37094,7 +37086,7 @@ msgstr "走線交叉"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Board edge clearance violation"
-msgstr "電路板邊緣間距違規"
+msgstr "電路板邊緣間隙違規"
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Copper zones intersect"
@@ -37118,7 +37110,7 @@ msgstr "走線末端懸空"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr "孔間距違規"
+msgstr "孔間隙違規"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
@@ -37178,7 +37170,7 @@ msgstr "NPTH 在元件外框內"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Item on a disabled copper layer"
-msgstr "禁用銅層上的對象"
+msgstr "停用銅層上的項目"
 
 #: pcbnew/drc/drc_item.cpp:165
 msgid "Board has malformed outline"
@@ -37242,7 +37234,7 @@ msgstr "文字高度超出範圍"
 
 #: pcbnew/drc/drc_item.cpp:229
 msgid "Text thickness out of range"
-msgstr "文本線寬超出範圍"
+msgstr "文字線寬超出範圍"
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Trace length out of range"
@@ -37445,15 +37437,15 @@ msgstr "正在檢查網路連接..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:141
 msgid "Checking track & via clearances..."
-msgstr "正在檢查走線和貫孔間距..."
+msgstr "正在檢查走線和貫孔間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:148
 msgid "Checking hole clearances..."
-msgstr "正在檢查孔間距..."
+msgstr "正在檢查孔間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:156
 msgid "Checking pad clearances..."
-msgstr "正在檢查焊盤間距..."
+msgstr "正在檢查焊盤間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:164
 msgid "Checking pads..."
@@ -37461,11 +37453,11 @@ msgstr "正在檢查焊盤..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
 msgid "Checking copper graphic clearances..."
-msgstr "檢查銅層間距..."
+msgstr "檢查銅層間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
-msgstr "檢查覆銅區間距..."
+msgstr "檢查覆銅區間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:268
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:572
@@ -37498,12 +37490,12 @@ msgstr "(網路 %s 和 %s)"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:298
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s 間距 %s; 實際 %s)"
+msgstr "(%s 間隙 %s; 實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:339
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s 間距 %s; 實際 < 0)"
+msgstr "(%s 間隙 %s; 實際 < 0)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -37538,11 +37530,11 @@ msgstr "正在檢查 keepouts 和 disallow 約束..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:150
 msgid "Checking copper to board edge clearances..."
-msgstr "正在檢查銅層到板邊緣間距..."
+msgstr "正在檢查銅層到板邊緣間隙..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:155
 msgid "Checking silk to board edge clearances..."
-msgstr "正在檢查 silk 到板邊緣間距..."
+msgstr "正在檢查 silk 到板邊緣間隙..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -37572,7 +37564,7 @@ msgstr "(%s 最大寬度 %s; 實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
-msgstr "正在檢查通孔到通孔間距..."
+msgstr "正在檢查通孔到通孔間隙..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:313
 #, c-format
@@ -37587,43 +37579,43 @@ msgstr "焊盤 %s"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:200
 #, c-format
 msgid "%s has clearance override."
-msgstr "%s 存在 '間距'重寫。"
+msgstr "%s 存在 '間隙'覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:202
 #, c-format
 msgid "%s has solder mask expansion override."
-msgstr "%s 存在 '阻焊擴展' 重寫。"
+msgstr "%s 存在 '阻焊擴展' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:204
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:206
 #, c-format
 msgid "%s has solder paste clearance override."
-msgstr "%s 存在 '錫膏間距' 重寫。"
+msgstr "%s 存在 '錫膏間隙' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:209
 #, c-format
 msgid "%s has zone connection override."
-msgstr "%s 存在 '區域連接' 重寫。"
+msgstr "%s 存在 '區域連接' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:211
 #, c-format
 msgid "%s has thermal relief gap override."
-msgstr "%s 存在 '散熱間隙' 重寫。"
+msgstr "%s 存在 '散熱間隙' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:213
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s 存在 '緩釋熱焊盤 (花焊盤) 散熱引線寬度' 重寫。"
+msgstr "%s 存在 '緩釋熱焊盤 (花焊盤) 散熱引線寬度' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:215
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s 存在 '緩釋熱焊盤 (花焊盤) 散熱引線角度' 重寫。"
+msgstr "%s 存在 '緩釋熱焊盤 (花焊盤) 散熱引線角度' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:217
 #, c-format
 msgid "%s has zone knockout setting override."
-msgstr "%s 存在 '區域 knockout 設置' 重寫。"
+msgstr "%s 存在 '區域 knockout 設置' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:228
 #, c-format
@@ -37764,7 +37756,7 @@ msgstr "%s 個 '焊盤連接屬性' 差異。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:455
 #, c-format
 msgid "%s local clearance differs."
-msgstr "%s 個 '局部間距' 差異。"
+msgstr "%s 個 '局部間隙' 差異。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:457
 #, c-format
@@ -37867,15 +37859,15 @@ msgstr "忽略封裝外框要求"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:598
 msgid "Pad clearance overridden."
-msgstr "'焊盤間距' 重寫。"
+msgstr "'焊盤間隙' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:600
 msgid "Solder mask expansion overridden."
-msgstr "'阻焊擴展' 重寫。"
+msgstr "'阻焊擴展' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:602
 msgid "Solder paste absolute clearance overridden."
-msgstr "'錫膏絕對間距' 重寫。"
+msgstr "'錫膏絕對間隙' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:604
 msgid "Solder paste relative clearance overridden."
@@ -37883,20 +37875,20 @@ msgstr "焊膏相對間隙被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:607
 msgid "Zone connection overridden."
-msgstr "'區域連接' 重寫。"
+msgstr "'區域連接' 被覆蓋。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:611
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
 msgid "Net tie pad groups differ."
-msgstr "'網路連接點焊盤組' 差異。"
+msgstr "'網路連接點焊盤組不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:693
 msgid "Pad count differs."
-msgstr "'焊盤數量' 差異。"
+msgstr "'焊盤數量不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:714
 msgid "Rule area count differs."
-msgstr "'規則區域數量' 差異。"
+msgstr "'規則區域數量不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:733
 msgid "No project loaded, skipping library parity tests."
@@ -37994,11 +37986,11 @@ msgstr "正在檢查電路板邊框..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:387
 msgid "Checking disabled layers..."
-msgstr "正在檢查禁用的層..."
+msgstr "正在檢查停用的層..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:395
 msgid "Checking text variables..."
-msgstr "正在檢查文本變數..."
+msgstr "正在檢查文字變數..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:403
 msgid "Checking assertions..."
@@ -38010,12 +38002,12 @@ msgstr "正在收集物理項目..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:183
 msgid "Checking physical clearances..."
-msgstr "檢查物理間距..."
+msgstr "檢查物理間隙..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:531
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "內部間距違規 (%s 間距 %s; 實際 %s)"
+msgstr "內部間隙違規 (%s 間隙 %s; 實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -38079,11 +38071,11 @@ msgstr "底層阻焊開窗區域與不同網路的項目相連"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:761
 msgid "Building solder mask..."
-msgstr "正在構造阻焊層..."
+msgstr "正在建置阻焊層..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:769
 msgid "Checking solder mask to silk clearance..."
-msgstr "正在檢查阻焊層與絲印的間距..."
+msgstr "正在檢查阻焊層與絲印的間隙..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:774
 msgid "Checking solder mask web integrity..."
@@ -38091,7 +38083,7 @@ msgstr "正在檢查阻焊層網路的完整性..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:87
 msgid "Checking text dimensions..."
-msgstr "正在檢查文本尺寸..."
+msgstr "正在檢查文字尺寸..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:107
 #, c-format
@@ -38228,7 +38220,7 @@ msgstr "電路板疊層厚度: %.3f mm\n"
 #: pcbnew/exporters/step/exporter_step.cpp:519
 #, c-format
 msgid "Build %s data\n"
-msgstr "構建 %s 數據\n"
+msgstr "建置 %s 數據\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:523
 msgid ""
@@ -38236,7 +38228,7 @@ msgid ""
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
 "\n"
-"** 構建 STEP 板模型時出錯。匯出中止。**\n"
+"** 建置 STEP 板模型時出錯。匯出中止。**\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:527
 #, c-format
@@ -38298,7 +38290,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:1005
 #, c-format
 msgid "Build holes for %s\n"
-msgstr "構造孔洞 %s\n"
+msgstr "建置孔洞給 %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1010
 #, c-format
@@ -38539,7 +38531,7 @@ msgstr "<無>"
 
 #: pcbnew/footprint.cpp:1729
 msgid "<no reference designator>"
-msgstr "< 無位號 >"
+msgstr "< 無參考位置 >"
 
 #: pcbnew/footprint.cpp:1731
 #, c-format
@@ -38608,15 +38600,15 @@ msgstr "覆蓋"
 
 #: pcbnew/footprint.cpp:3536 pcbnew/pad.cpp:2022
 msgid "Clearance Override"
-msgstr "間距重寫"
+msgstr "間隙覆蓋"
 
 #: pcbnew/footprint.cpp:3540 pcbnew/pad.cpp:2030
 msgid "Solderpaste Margin Override"
-msgstr "錫膏邊距重寫"
+msgstr "錫膏邊距覆蓋"
 
 #: pcbnew/footprint.cpp:3545 pcbnew/pad.cpp:2034
 msgid "Solderpaste Margin Ratio Override"
-msgstr "錫膏邊距比例重寫"
+msgstr "錫膏邊距比例覆蓋"
 
 #: pcbnew/footprint.cpp:3550 pcbnew/pad.cpp:2039
 msgid "Zone Connection Style"
@@ -38834,7 +38826,7 @@ msgstr "封裝 %s 已存在於 %s 中。"
 #: pcbnew/footprint_libraries_utils.cpp:1156
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "封裝 '%s' 在 '%s' 中被替換"
+msgstr "封裝 '%s' 在 '%s' 中被取代"
 
 #: pcbnew/footprint_libraries_utils.cpp:1157
 #, c-format
@@ -39090,23 +39082,23 @@ msgstr "放置在:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:98
 msgid "If not checked: use interactive placement."
-msgstr "如果未選中: 使用交互式放置。"
+msgstr "如果未勾選: 使用交互式放置。"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:142
 msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
-"如果選中, 則在此對話框中使用所選層\n"
-"如果未選中, 則使用 '電路板編輯器' 活動層"
+"如果勾選, 則在此對話框中使用所選層\n"
+"如果未勾選, 則使用 '電路板編輯器' 活動層"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 msgid "Group imported items"
-msgstr "組合匯入的對象"
+msgstr "群組匯入的項目"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:160
 msgid "Add all imported items to a new group"
-msgstr "將所有匯入的項目添加到新的分組中"
+msgstr "將所有匯入的項目添加到新的群組中"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Fix discontinuities"
@@ -39285,7 +39277,7 @@ msgid ""
 "(if the library already exists it will be replaced)"
 msgstr ""
 "建立一個新的封裝庫, 包含板上使用的封裝。\n"
-"(如果庫已存在, 它將被替換)"
+"(如果庫已存在, 它將被取代)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
 msgid "Fabrication Outputs"
@@ -39443,12 +39435,12 @@ msgstr "已將 %s 的封裝從 '%s' 替換為 '%s'。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:277
 #, c-format
 msgid "Change %s reference designator to %s."
-msgstr "更改 %s 的位號為 %s。"
+msgstr "更改 %s 的參考位置為 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:283
 #, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "已將 %s 的位號更改為 %s。"
+msgstr "已將 %s 的參考位置更改為 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:299
 #, c-format
@@ -39729,7 +39721,7 @@ msgstr "無法解析網表的元件部分的封裝名稱。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:138
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "無法解析網路列表的元件部分的位號。"
+msgstr "無法解析網路列表的元件部分的參考位置。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:148
 msgid "Cannot parse value in symbol section of netlist."
@@ -39839,7 +39831,7 @@ msgstr "孔 X / Y"
 #: pcbnew/zone.cpp:645
 #, c-format
 msgid "Min Clearance: %s"
-msgstr "最小間距: %s"
+msgstr "最小間隙: %s"
 
 #: pcbnew/pad.cpp:1234
 msgid "Trap"
@@ -39973,7 +39965,7 @@ msgstr "前綴"
 
 #: pcbnew/pcb_dimension.cpp:402 pcbnew/pcb_dimension.cpp:1457
 msgid "Override Text"
-msgstr "覆蓋文本"
+msgstr "覆蓋文字"
 
 #: pcbnew/pcb_dimension.cpp:420 pcbnew/pcb_dimension.cpp:1453
 msgid "Suffix"
@@ -40018,7 +40010,7 @@ msgstr "引線長度"
 
 #: pcbnew/pcb_dimension.cpp:1635
 msgid "Text Frame"
-msgstr "文本框"
+msgstr "文字框"
 
 #: pcbnew/pcb_edit_frame.cpp:212
 msgid "KiCad PCB Editor"
@@ -40090,7 +40082,7 @@ msgstr "違規報告"
 
 #: pcbnew/pcb_edit_frame.cpp:2508
 msgid "Clearance Report"
-msgstr "間距報告"
+msgstr "間隙報告"
 
 #: pcbnew/pcb_edit_frame.cpp:2518
 msgid "Constraints Report"
@@ -40107,7 +40099,7 @@ msgstr "用戶欄位"
 #: pcbnew/pcb_field.cpp:102
 #, c-format
 msgid "Reference '%s'"
-msgstr "位號 '%s'"
+msgstr "參考 '%s'"
 
 #: pcbnew/pcb_field.cpp:106
 #, c-format
@@ -40163,12 +40155,12 @@ msgstr "Altium 層 '%s' 的未知映射。"
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:184
 #, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr "未知模式字符串: '%s'。"
+msgstr "未知模式字串: '%s'。"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:211
 #, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr "未知的記錄名字符串: '%s'。"
+msgstr "未知的記錄名字串: '%s'。"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:225
 #, c-format
@@ -40518,11 +40510,11 @@ msgstr "載入走線中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3481
 msgid "Loading unicode strings..."
-msgstr "正在載入 unicode 字符串..."
+msgstr "正在載入 unicode 字串..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3495
 msgid "Loading text..."
-msgstr "載入文本中..."
+msgstr "載入文字中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3524
 #, c-format
@@ -40617,7 +40609,7 @@ msgid ""
 "elements carefully and correct manually if required."
 msgstr ""
 "CADSTAR 字體不同於 KiCad 中的字體。這可能導致對齊問題, 這些問題也許會導致 "
-"DRC 錯誤。請仔細檢查匯入的文本元素, 如果需要請手動進行更正。"
+"DRC 錯誤。請仔細檢查匯入的文字元素, 如果需要請手動進行更正。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:240
 #, c-format
@@ -40737,7 +40729,7 @@ msgid ""
 "internal dimension style instead."
 msgstr ""
 "測量標註 ID %s 在 CADSTAR 中具有 '外部' 樣式。KiCad "
-"尚未支援外部測量標註樣式。軟體使用內部測量標註樣式匯入了該標註對象。"
+"尚未支援外部測量標註樣式。軟體使用內部測量標註樣式匯入了該標註物件。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1540
 #, c-format
@@ -40749,7 +40741,7 @@ msgstr "錯誤的測量標註類型 (ID%s)。未被匯入。"
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "測量標註 %s 是一個角度測量標註, 但在 KiCad 中沒有對應的等效項。對象未被匯入。"
+msgstr "測量標註 %s 是一個角度測量標註, 但在 KiCad 中沒有對應的等效項。物件未被匯入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1715
 #, c-format
@@ -40770,12 +40762,12 @@ msgstr "CADSTAR 設計包含 '%s' 區, 但在 KiCad 中沒有對應的等效項�
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1751
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr "無法在庫中查找元件 '%s' (符號定義 ID: '%s')"
+msgstr "無法在庫中尋找元件 '%s' (符號定義 ID: '%s')"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1875
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr "無法在庫中查找文件符號 (符號定義 ID: '%s')"
+msgstr "無法在庫中尋找文件符號 (符號定義 ID: '%s')"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1944
 #, c-format
@@ -40884,7 +40876,7 @@ msgstr "網路 '%s' 引用了不存在的焊盤索引 '%d' 在元件 '%s' 中。
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2474
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr "由於未載入任何項目, 因此無法設置文本變數。"
+msgstr "由於未載入任何項目, 因此無法設置文字變數。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2559
 msgid ""
@@ -41034,7 +41026,7 @@ msgstr ""
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2062
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr "忽略文本, 因為 Eagle 層 '%s' (%d) 未映射"
+msgstr "忽略文字, 因為 Eagle 層 '%s' (%d) 未映射"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2212
 #, c-format
@@ -41108,12 +41100,12 @@ msgstr "EasyEDA (嘉立創 EDA) 專業版專案"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:249
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr "未知  FABMASTER  部分 %s:%s, 位於行 %zu。"
+msgstr "未知  FABMASTER  部分 %s:%s, 位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:266
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
-msgstr "J 行 %zu 中的行大小無效。預計有 11 個元素, 但發現了 %zu 個。"
+msgstr "J 行 %zu 中的列大小無效。預計有 11 個元素, 但發現了 %zu 個。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:289
 msgid "Could not find units value, defaulting to mils."
@@ -41122,7 +41114,7 @@ msgstr "找不到單元值, 預設為 Mils。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:313
 #, c-format
 msgid "Could not find column label %s."
-msgstr "無法找到列標籤 %s。"
+msgstr "無法找到行標籤 %s。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:357
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:440
@@ -41136,37 +41128,37 @@ msgstr "無法找到列標籤 %s。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1733
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr "%zu 行中的行大小無效。應有 %zu 個元素, 但實際找到了 %zu 個。"
+msgstr "%zu 列中的列大小無效。應有 %zu 個元素, 但實際找到了 %zu 個。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:492
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
-msgstr "預期鑽頭尺寸值, 但找到了 %s!%s!%s, 位於行 %zu。"
+msgstr "預期鑽頭尺寸值, 但找到了 %s!%s!%s, 位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:540
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "期望焊盤尺寸值, 但找到了%s : %s, 位於行 %zu。"
+msgstr "期望焊盤尺寸值, 但找到了%s : %s, 位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:562
 #, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "行 %zu 上無效的焊盤尺寸。"
+msgstr "列 %zu 上無效的焊盤尺寸。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:597
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
-msgstr "期望焊盤偏移值, 但找到了%s : %s, 位於行 %zu。"
+msgstr "期望焊盤偏移值, 但找到了%s : %s, 位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:642
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "未知的焊盤形狀名 '%s', 位於層 '%s' 的行 %zu。"
+msgstr "未知的焊盤形狀名 '%s', 位於層 '%s' 的列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:964
 #, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
-msgstr "ID 字符串 '%s' 的無效格式, 位於自定義焊盤行 %zu。"
+msgstr "ID 字串 '%s' 的無效格式, 位於自定義焊盤列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1005
 #, c-format
@@ -41176,7 +41168,7 @@ msgstr "無法將圖形項目 %d 插入焊盤壓層 '%s'。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1012
 #, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
-msgstr "未識別的焊盤形狀基元 '%s', 位於行 %zu。"
+msgstr "未識別的焊盤形狀基元 '%s', 位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1123
 #, c-format
@@ -41187,23 +41179,23 @@ msgstr "無效的 token 數量。應為 8, 但實際找到了 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1447
 #, c-format
 msgid "Invalid format for record_tag string '%s' in row %zu."
-msgstr "這個 record_tag 字符串 '%s' 的無效格式位於行 %zu。"
+msgstr "這個 record_tag 字串 '%s' 的無效格式位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1418
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr "%zu 行中的行大小無效。應有 %zu 個元素, 但實際找到了 %zu 個。"
+msgstr "%zu 列中的列大小無效。應有 %zu 個元素, 但實際找到了 %zu 個。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1457
 #, c-format
 msgid "Unhandled graphic item '%s' in row %zu."
-msgstr "未處理圖形項 '%s', 位於行 %zu。"
+msgstr "未處理圖形項 '%s', 位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1488
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1503
 #, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
-msgstr "ID %d 和序列 %d 的重複項位於行 %zu。"
+msgstr "ID %d 和序列 %d 的重複項位於列 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2254
 #, c-format
@@ -41224,7 +41216,7 @@ msgstr "找不到自定義焊盤 '%s'。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2609
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
-msgstr "期望蝕刻數據在銅層上。在層 '%s' 上找到行"
+msgstr "期望蝕刻數據在銅層上。在層 '%s' 上找到列"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
@@ -41534,7 +41526,7 @@ msgstr "未定義層警告"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1210
 #, c-format
 msgid "Cannot create generated object of type '%s'"
-msgstr "無法建立 '%s' 類型的生成對象"
+msgstr "無法建立 '%s' 類型的生成物件"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1347
 #, c-format
@@ -41573,7 +41565,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3160
 #, c-format
 msgid "Cannot handle footprint text type %s"
-msgstr "無法處理封裝文本類型 %s"
+msgstr "無法處理封裝文字類型 %s"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3929
 #, c-format
@@ -41781,7 +41773,7 @@ msgstr "PCB 目標"
 
 #: pcbnew/pcb_text.cpp:226
 msgid "PCB Text"
-msgstr "PCB 文本"
+msgstr "PCB 文字"
 
 #: pcbnew/pcb_text.cpp:235
 msgid "Display"
@@ -41790,12 +41782,12 @@ msgstr "顯示"
 #: pcbnew/pcb_text.cpp:386
 #, c-format
 msgid "Footprint Text '%s' of %s"
-msgstr "%2$s 上的封裝文本 '%1$s'"
+msgstr "%2$s 上的封裝文字 '%1$s'"
 
 #: pcbnew/pcb_text.cpp:390
 #, c-format
 msgid "PCB Text '%s' on %s"
-msgstr "%2$s 上的 PCB文本 '%1$s'"
+msgstr "%2$s 上的 PCB文字 '%1$s'"
 
 #: pcbnew/pcb_textbox.cpp:468
 #, c-format
@@ -41906,7 +41898,7 @@ msgstr "無法識別的層 '%s'"
 #: pcbnew/pcbexpr_functions.cpp:244
 #, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "缺少 %s 的封裝參數 (A, B或位號)。"
+msgstr "缺少 %s 的封裝參數 (A, B或參考位置)。"
 
 #: pcbnew/pcbexpr_functions.cpp:478
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -41938,7 +41930,7 @@ msgstr "缺少 %s 的層名參數。"
 #: pcbnew/pcbexpr_functions.cpp:896
 #, c-format
 msgid "Missing footprint argument (reference designator) to %s."
-msgstr "缺少 %s 的封裝參數 (位號)。"
+msgstr "缺少 %s 的封裝參數 (參考位置)。"
 
 #: pcbnew/pcbexpr_functions.cpp:1013
 #, c-format
@@ -42121,7 +42113,7 @@ msgstr "無法找到互補差分對網路進行長度調整。請確保屬於差
 #: pcbnew/router/pns_kicad_iface.cpp:657 pcbnew/router/pns_kicad_iface.cpp:747
 #: pcbnew/router/router_tool.cpp:798
 msgid "board minimum clearance"
-msgstr "板最小間距"
+msgstr "板最小間隙"
 
 #: pcbnew/router/pns_kicad_iface.cpp:671 pcbnew/router/pns_kicad_iface.cpp:746
 #: pcbnew/router/router_tool.cpp:760 pcbnew/router/router_tool.cpp:785
@@ -42184,7 +42176,7 @@ msgstr "規則區域不允許存在走線。"
 
 #: pcbnew/router/pns_router.cpp:269
 msgid "Cannot start routing from a text item."
-msgstr "無法從一個文本項目開始佈線。"
+msgstr "無法從一個文字項目開始佈線。"
 
 #: pcbnew/router/pns_router.cpp:315 pcbnew/router/pns_router.cpp:380
 msgid "The routing start point violates DRC."
@@ -42469,12 +42461,12 @@ msgstr "無法匯出, 請修正錯誤後再試"
 #: pcbnew/specctra_import_export/specctra_export.cpp:1095
 #, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "帶 '%s' 值的封裝有空位號。"
+msgstr "帶 '%s' 值的封裝有空參考位置。"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1105
 #, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "多個封裝有位號 '%s'。"
+msgstr "多個封裝有參考位置 '%s'。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:72
 msgid ""
@@ -42528,7 +42520,7 @@ msgstr "會話檔案缺少 \"library_out\" 部分"
 #: pcbnew/specctra_import_export/specctra_import.cpp:391
 #, c-format
 msgid "Reference '%s' not found."
-msgstr "找不到位號 '%s'。"
+msgstr "找不到參考 '%s'。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:520
 #, c-format
@@ -42719,7 +42711,7 @@ msgstr "解析完成的最大未耦合長度: %s。"
 #: pcbnew/tools/board_inspection_tool.cpp:332
 #: pcbnew/tools/board_inspection_tool.cpp:1339
 msgid "Text height resolution for:"
-msgstr "文本高度解析:"
+msgstr "文字高度解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:340
 #, c-format
@@ -42729,7 +42721,7 @@ msgstr "解析完成的高度約束: 最小 %s; 最大 %s。"
 #: pcbnew/tools/board_inspection_tool.cpp:347
 #: pcbnew/tools/board_inspection_tool.cpp:1355
 msgid "Text thickness resolution for:"
-msgstr "文本線寬解析:"
+msgstr "文字線寬解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:355
 #, c-format
@@ -42805,17 +42797,17 @@ msgstr "解析完成的高度約束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 msgid "Hole Clearance"
-msgstr "孔間距"
+msgstr "孔間隙"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:1039
 msgid "Hole clearance resolution for:"
-msgstr "孔間距解析:"
+msgstr "孔間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:445
 #: pcbnew/tools/board_inspection_tool.cpp:548
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "項目屬於同一網路。間距為 0。"
+msgstr "項目屬於同一網路。間隙為 0。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:454
 #: pcbnew/tools/board_inspection_tool.cpp:474
@@ -42835,12 +42827,12 @@ msgstr "項目屬於同一網路。間距為 0。"
 #: pcbnew/tools/board_inspection_tool.cpp:1211
 #, c-format
 msgid "Resolved min clearance: %s."
-msgstr "解析完成的間距: %s。"
+msgstr "解析完成的間隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1194
 msgid "Physical hole clearance resolution for:"
-msgstr "物理孔間距解析:"
+msgstr "物理孔間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 #: pcbnew/tools/board_inspection_tool.cpp:1206
@@ -42854,26 +42846,26 @@ msgstr "孔到孔"
 #: pcbnew/tools/board_inspection_tool.cpp:481
 #: pcbnew/tools/board_inspection_tool.cpp:1068
 msgid "Hole-to-hole clearance resolution for:"
-msgstr "孔到孔間距解析:"
+msgstr "孔到孔間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:495
 msgid "Edge Clearance"
-msgstr "板邊間距"
+msgstr "板邊間隙"
 
 #: pcbnew/tools/board_inspection_tool.cpp:496
 #: pcbnew/tools/board_inspection_tool.cpp:1107
 msgid "Edge clearance resolution for:"
-msgstr "板邊間距解析:"
+msgstr "板邊間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:540
 #: pcbnew/tools/board_inspection_tool.cpp:852
 msgid "Clearance resolution for:"
-msgstr "間距解析:"
+msgstr "間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:563
 #: pcbnew/tools/board_inspection_tool.cpp:1128
 msgid "Physical clearance resolution for:"
-msgstr "物理間距解析:"
+msgstr "物理間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:572
 #: pcbnew/tools/board_inspection_tool.cpp:1140
@@ -42892,12 +42884,12 @@ msgstr "斷言:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:615
 msgid "Select two items for a clearance resolution report."
-msgstr "為間距解析報告選擇兩個對象。"
+msgstr "選擇兩個項目以生成間隙解析報告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #: pcbnew/tools/board_inspection_tool.cpp:643
 msgid "Cannot generate clearance report on empty group."
-msgstr "無法為空的組合生成間距報告。"
+msgstr "無法為空群組生成間隙報告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
 msgid "Cannot generate clearance report on footprint with no pads."
@@ -42924,7 +42916,7 @@ msgstr "解析完成的緩釋熱焊盤 (花焊盤) 間隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "緩釋熱焊盤 (花焊盤) 間距寬度:"
+msgstr "緩釋熱焊盤 (花焊盤) 間隙寬度:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
 #, c-format
@@ -42933,7 +42925,7 @@ msgstr "解析完成的緩釋熱焊盤 (花焊盤) 引線寬度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "緩釋熱焊盤 (花焊盤) 最小引線寬度間距:"
+msgstr "緩釋熱焊盤 (花焊盤) 最小引線寬度間隙:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:774
 #, c-format
@@ -42943,35 +42935,35 @@ msgstr "解析完成的最小緩釋熱焊盤 (花焊盤) 引線數量: %d。"
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Zone clearance resolution for:"
-msgstr "覆銅間距解析:"
+msgstr "覆銅間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:787
 #, c-format
 msgid "Zone clearance: %s."
-msgstr "覆銅間距: %s。"
+msgstr "覆銅間隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:797
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "被來自 %s 的較大物理間距重寫; 間距: %s。"
+msgstr "被來自 %s 的較大物理間隙覆蓋; 間隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:813
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "被來自 %s 的較大物理孔間距重寫; 間距: %s。"
+msgstr "被來自 %s 的較大物理孔間隙覆蓋; 間隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:857
 msgid "Items belong to the same net. Min clearance is 0."
-msgstr "項目屬於同一網路。最小間距為 0。"
+msgstr "項目屬於同一網路。最小間隙為 0。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:872
 msgid "Min clearance is 0."
-msgstr "最小間距為 0。"
+msgstr "最小間隙為 0。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:876
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "已解決的間距問題: %s; 不被測試的間距。"
+msgstr "已解決的間隙問題: %s; 間隙將不被測試。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:899
 msgid "Diff Pair"
@@ -42997,28 +42989,28 @@ msgstr "未定義 'diff_pair_uncoupled' 約束。"
 #: pcbnew/tools/board_inspection_tool.cpp:950
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "注意: %s 被綠油覆蓋; 間距僅適用於貫孔。"
+msgstr "注意: %s 被綠油覆蓋; 間隙僅適用於貫孔。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:967
 msgid "Silkscreen clearance resolution for:"
-msgstr "絲印層間距解析:"
+msgstr "絲印層間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:995
 msgid "Courtyard clearance resolution for:"
-msgstr "元件外框間距解析:"
+msgstr "元件外框間隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1123
 msgid "Physical Clearances"
-msgstr "物理間距"
+msgstr "物理間隙"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1238
 msgid "Select an item for a constraints resolution report."
-msgstr "為約束解析報告選一個對象。"
+msgstr "為約束解析報告選一個項目。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1270
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "解析完成的間距約束: 最小 %s; 最優 %s; 最大 %s。"
+msgstr "解析完成的間隙約束: 最小 %s; 最優 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1290
 #, c-format
@@ -43037,12 +43029,12 @@ msgstr "解析完成的環形寬度約束: 最小 %s; 最優 %s; 最大 %s。"
 #: pcbnew/tools/board_inspection_tool.cpp:1328
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "解析完成的間距約束: 最小 %s; 最優 %s; 最大 %s。"
+msgstr "解析完成的間隙約束: 最小 %s; 最優 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1347
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "解析完成的間距約束: 最小 %s; 最優 %s; 最大 %s。"
+msgstr "解析完成的間隙約束: 最小 %s; 最優 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, c-format
@@ -43069,7 +43061,7 @@ msgstr "運行 DRC 進行全面分析。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1391
 msgid "Item <b>disallowed</b> at current location."
-msgstr "當前位置 <b>不允許</b> 對象。"
+msgstr "當前位置 <b>不允許</b> 項目。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1393
 msgid "Item allowed at current location."
@@ -43094,7 +43086,7 @@ msgstr "管理封裝庫"
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Copy line width of first object"
-msgstr "複製第一個對象的行寬"
+msgstr "複製第一個物件的行寬"
 
 #: pcbnew/tools/convert_tool.cpp:263
 msgid "Create from Selection"
@@ -43106,7 +43098,7 @@ msgstr "無法轉換選區"
 
 #: pcbnew/tools/convert_tool.cpp:424
 msgid "Objects must form a closed shape"
-msgstr "對象不是閉合的形狀"
+msgstr "物件必須形成閉合的形狀"
 
 #: pcbnew/tools/convert_tool.cpp:535
 msgid "Convert to Polygon"
@@ -43219,7 +43211,7 @@ msgstr "繪製線"
 
 #: pcbnew/tools/drawing_tool.cpp:426
 msgid "Draw Text Box"
-msgstr "繪製文本框"
+msgstr "繪製文字框"
 
 #: pcbnew/tools/drawing_tool.cpp:426 pcbnew/tools/pcb_actions.cpp:119
 msgid "Draw Rectangle"
@@ -43239,7 +43231,7 @@ msgstr "放置圖片"
 
 #: pcbnew/tools/drawing_tool.cpp:964
 msgid "Place Text"
-msgstr "放置文本"
+msgstr "放置文字"
 
 #: pcbnew/tools/drawing_tool.cpp:1294
 msgid "Draw Dimension"
@@ -43669,7 +43661,7 @@ msgstr "增大間距"
 
 #: pcbnew/tools/pcb_actions.cpp:193
 msgid "Increase tuning pattern spacing by one step."
-msgstr "將間距增加一級。"
+msgstr "將調整模式的間距增加一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:201
 msgid "Decrease Spacing"
@@ -43677,23 +43669,23 @@ msgstr "減小間距"
 
 #: pcbnew/tools/pcb_actions.cpp:202
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "將間距降低一級。"
+msgstr "將調整模式的間距減少一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:210
 msgid "Increase Amplitude"
-msgstr "增大幅度"
+msgstr "增大振幅"
 
 #: pcbnew/tools/pcb_actions.cpp:211
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "將幅度增加一級。"
+msgstr "將調整模式的振幅增加一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:219
 msgid "Decrease Amplitude"
-msgstr "減小幅度"
+msgstr "減小振幅"
 
 #: pcbnew/tools/pcb_actions.cpp:220
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "將幅度降低一級。"
+msgstr "將調整模式的振幅減少一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:229
 msgid "Add Aligned Dimension"
@@ -43809,27 +43801,27 @@ msgstr "切換弧線模式"
 
 #: pcbnew/tools/pcb_actions.cpp:372
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "只捕獲活動層上的對象"
+msgstr "只貼齊活動層上的物件"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Enables snapping to objects on the active layer only"
-msgstr "僅對活動層上的對象啟用捕獲功能"
+msgstr "僅對活動層上的物件啟用貼齊功能"
 
 #: pcbnew/tools/pcb_actions.cpp:378
 msgid "Snap to Objects on All Layers"
-msgstr "捕獲所有層上的對象"
+msgstr "貼齊所有層上的物件"
 
 #: pcbnew/tools/pcb_actions.cpp:379
 msgid "Enables snapping to objects on all visible layers"
-msgstr "可在所有可見層上捕獲對象"
+msgstr "啟用在所有可見層上貼齊到物件"
 
 #: pcbnew/tools/pcb_actions.cpp:385
 msgid "Toggle Snapping Between Active and All Layers"
-msgstr "在活動層和所有層之間切換捕獲"
+msgstr "切換在活動層和所有層之間鎖點"
 
 #: pcbnew/tools/pcb_actions.cpp:386
 msgid "Toggles between snapping on all visible layers and only the active area"
-msgstr "切換捕獲模式(對所有可見層進行捕獲/僅對活動層進行捕獲)"
+msgstr "切換在所有可見圖層和僅活動區域之間進行鎖點"
 
 #: pcbnew/tools/pcb_actions.cpp:392
 msgid "Delete Last Point"
@@ -43863,7 +43855,7 @@ msgstr "在封裝編輯器中打開選擇的封裝"
 msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
-msgstr "按位號選擇封裝, 並將其放置在遊標下以進行移動"
+msgstr "按參考位置選擇封裝, 並將其放置在遊標下以進行移動"
 
 #: pcbnew/tools/pcb_actions.cpp:457
 msgid "Move Individually"
@@ -44155,7 +44147,7 @@ msgstr "交換層..."
 
 #: pcbnew/tools/pcb_actions.cpp:816
 msgid "Move tracks or drawings from one layer to another"
-msgstr "將走線或其它繪製對象從一層移到另一層"
+msgstr "將走線或其它繪製物件從一層移到另一層"
 
 #: pcbnew/tools/pcb_actions.cpp:822
 msgid "Edit Track & Via Properties..."
@@ -44167,7 +44159,7 @@ msgstr "編輯電路板全域走線和貫孔屬性"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Edit Text and graphics properties globally across board"
-msgstr "全域編輯文本和圖形屬性"
+msgstr "全域編輯文字和圖形屬性"
 
 #: pcbnew/tools/pcb_actions.cpp:836
 msgid "Edit Teardrops..."
@@ -44255,7 +44247,7 @@ msgstr "將預設焊盤屬性粘貼到選定項"
 
 #: pcbnew/tools/pcb_actions.cpp:921
 msgid "Replace the current pad's properties with those copied earlier"
-msgstr "用之前複製的屬性替換當前焊盤的屬性"
+msgstr "用之前複製的屬性取代當前焊盤的屬性"
 
 #: pcbnew/tools/pcb_actions.cpp:927
 msgid "Push Pad Properties to Other Pads..."
@@ -44520,7 +44512,7 @@ msgstr "進入組合"
 
 #: pcbnew/tools/pcb_actions.cpp:1210
 msgid "Enter the group to edit items"
-msgstr "進入組合編輯對象"
+msgstr "進入群組以編輯項目"
 
 #: pcbnew/tools/pcb_actions.cpp:1216
 msgid "Leave Group"
@@ -44667,11 +44659,11 @@ msgstr "在輪廓模式下顯示圖形項目"
 
 #: pcbnew/tools/pcb_actions.cpp:1405
 msgid "Sketch Text Items"
-msgstr "草圖文本項目"
+msgstr "草圖文字項目"
 
 #: pcbnew/tools/pcb_actions.cpp:1406
 msgid "Show footprint texts in line mode"
-msgstr "在直線模式下顯示封裝文本"
+msgstr "在直線模式下顯示封裝文字"
 
 #: pcbnew/tools/pcb_actions.cpp:1412
 msgid "Show Pad Numbers"
@@ -44879,12 +44871,12 @@ msgstr "顯示電路板統計資訊"
 
 #: pcbnew/tools/pcb_actions.cpp:1827
 msgid "Clearance Resolution"
-msgstr "間距解析"
+msgstr "間隙解析"
 
 #: pcbnew/tools/pcb_actions.cpp:1828
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
-msgstr "顯示活動層上兩個選定對象之間的間距解析"
+msgstr "顯示活動層上兩個選定物件之間的間隙解析"
 
 #: pcbnew/tools/pcb_actions.cpp:1834
 msgid "Constraints Resolution"
@@ -44892,7 +44884,7 @@ msgstr "約束解析"
 
 #: pcbnew/tools/pcb_actions.cpp:1835
 msgid "Show constraints resolution for the selected object"
-msgstr "顯示所選對象的約束解析"
+msgstr "顯示所選物件的約束解析"
 
 #: pcbnew/tools/pcb_actions.cpp:1842
 msgid "Show differences between board footprint and its library equivalent"
@@ -45044,11 +45036,11 @@ msgstr "選擇連接或將現有選擇擴展到結點、焊盤或整個連接"
 
 #: pcbnew/tools/pcb_actions.cpp:2051
 msgid "Unroute Selected"
-msgstr "取消選中對象的佈線"
+msgstr "取消選中物件的佈線"
 
 #: pcbnew/tools/pcb_actions.cpp:2052
 msgid "Unroutes selected items to the nearest pad."
-msgstr "取消所選對象到距離最近的焊盤的佈線。"
+msgstr "取消所選項目到距離最近的焊盤的佈線。"
 
 #: pcbnew/tools/pcb_actions.cpp:2066
 msgid "Select All Tracks in Net"
@@ -45423,7 +45415,7 @@ msgstr "所有層"
 
 #: pcbnew/tools/pcb_control.cpp:1474
 msgid "Object Snapping"
-msgstr "對象捕獲"
+msgstr "物件貼齊"
 
 #: pcbnew/tools/pcb_control.cpp:1550
 #, c-format
@@ -45432,31 +45424,31 @@ msgstr "DP 間隙約束: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1591
 msgid "Resolved clearance"
-msgstr "已解析的間距"
+msgstr "已解析的間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1601
 msgid "Actual clearance"
-msgstr "實際間距"
+msgstr "實際間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1644
 msgid "Resolved hole clearance"
-msgstr "已解析的孔間距"
+msgstr "已解析的孔間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1649
 msgid "Actual hole clearance"
-msgstr "實際孔間距"
+msgstr "實際孔間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1682
 msgid "Resolved edge clearance"
-msgstr "已解析的邊緣間距"
+msgstr "已解析的邊緣間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1687
 msgid "Resolved margin clearance"
-msgstr "已解析的邊界層間距"
+msgstr "已解析的邊界層間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1698
 msgid "Selected Items"
-msgstr "選中項"
+msgstr "被選項目"
 
 #: pcbnew/tools/pcb_point_editor.cpp:677
 #, fuzzy
@@ -45517,7 +45509,7 @@ msgstr "相對位置"
 
 #: pcbnew/tools/position_relative_tool.cpp:166
 msgid "Click on reference item..."
-msgstr "單擊位號項..."
+msgstr "點擊參考項目..."
 
 #: pcbnew/tools/zone_create_helper.cpp:197
 msgid "Add Zone Cutout"
@@ -45682,11 +45674,11 @@ msgstr "顯示通孔焊盤"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Hidden Text"
-msgstr "隱藏文本"
+msgstr "隱藏文字"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show text marked as hidden"
-msgstr "顯示隱藏的封裝文本標記"
+msgstr "顯示隱藏的封裝文字標記"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show unconnected nets as a ratsnest"
@@ -45966,7 +45958,7 @@ msgstr "雙擊或中鍵更改顏色, 右鍵單擊查看更多操作"
 #: pcbnew/widgets/appearance_controls.cpp:1026
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
-msgstr "對象"
+msgstr "物件"
 
 #: pcbnew/widgets/appearance_controls.cpp:1564
 msgid "Double click or middle click for color change, right click for menu"
@@ -46227,7 +46219,7 @@ msgstr "優先"
 
 #: pcbnew/widgets/search_handlers.cpp:246
 msgid "Textbox"
-msgstr "文本框"
+msgstr "文字框"
 
 #: pcbnew/widgets/search_handlers.cpp:274
 #: pcbnew/widgets/search_handlers.cpp:353
@@ -46396,7 +46388,7 @@ msgstr "檢查覆銅填充..."
 
 #: pcbnew/zone_filler.cpp:107
 msgid "Building zone fills..."
-msgstr "構造覆銅填充..."
+msgstr "建置覆銅填充..."
 
 #: pcbnew/zone_filler.cpp:521
 msgid "Removing isolated copper islands..."
