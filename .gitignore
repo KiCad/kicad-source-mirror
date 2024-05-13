@@ -17,8 +17,6 @@ include/fp_lib_table_lexer.h
 include/lib_table_lexer.h
 include/netlist_lexer.h
 include/page_layout_reader_lexer.h
-eeschema/cmp_library_lexer.h
-eeschema/cmp_library_keywords.*
 eeschema/dialogs/dialog_bom_cfg_keywords.cpp
 eeschema/dialogs/dialog_bom_cfg_lexer.h
 common/template_fieldnames_keywords.cpp

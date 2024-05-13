@@ -707,16 +707,6 @@ if( KICAD_WIN32_INSTALL_PDBS )
     install(FILES $<TARGET_PDB_FILE:eeschema_kiface> DESTINATION ${KICAD_KIFACE})
 endif()
 
-# auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
-# library format.
-make_lexer(
-    eeschema_kiface_objects
-    cmp_library.keywords
-    cmp_library_lexer.h
-    cmp_library_keywords.cpp
-    TLIB_T
-    )
-
 make_lexer(
     eeschema_kiface_objects
     dialogs/dialog_bom_cfg.keywords
