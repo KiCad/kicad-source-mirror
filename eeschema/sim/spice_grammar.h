@@ -125,7 +125,7 @@ namespace SPICE_GRAMMAR
     // Note: we must support lists of both braced expressions and tokens for CPL models...
     //       ... but lists of tokens breaks cases where we have single-token name/values.
     struct param : identifier {};
-    struct paramValue : sor<list<bracedExpr, sep>,
+    struct paramValue : sor<list<bracedExpr, opt<one<' '>>>,
                             vectorExpr,
                             token> {};
 
