@@ -39,10 +39,10 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
     {
         switch( aSvgPlotOptions.m_drillShapeOption )
         {
-            default:
-            case 0:  plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
-            case 1:  plot_opts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
-            case 2:  plot_opts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
+        default:
+        case 0:  plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
+        case 1:  plot_opts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
+        case 2:  plot_opts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
         }
     }
     else
@@ -78,7 +78,7 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
     {
         wxFileName fn = aBoard->GetFileName();
         fn.SetName( fn.GetName() );
-        fn.SetExt( wxS("svg") );
+        fn.SetExt( wxS( "svg" ) );
 
         outputFile = fn.GetFullName();
     }
@@ -97,8 +97,7 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
     if( plotter )
     {
         plotter->SetColorMode( !aSvgPlotOptions.m_blackAndWhite );
-        PlotBoardLayers( aBoard, plotter, aSvgPlotOptions.m_printMaskLayer,
-                         plot_opts );
+        PlotBoardLayers( aBoard, plotter, aSvgPlotOptions.m_printMaskLayer, plot_opts );
         plotter->EndPlot();
     }
 
