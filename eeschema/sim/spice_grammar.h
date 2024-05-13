@@ -122,10 +122,8 @@ namespace SPICE_GRAMMAR
     // Param names cannot be `token` because LTspice models contain spurious values without
     // parameter names, which we need to skip, and because tokens can include a very limited
     // subset of un-braced expressions
-    // Note: we must support lists of both braced expressions and tokens for CPL models...
-    //       ... but lists of tokens breaks cases where we have single-token name/values.
     struct param : identifier {};
-    struct paramValue : sor<list<bracedExpr, opt<one<' '>>>,
+    struct paramValue : sor<bracedExpr,
                             vectorExpr,
                             token> {};
 
@@ -133,6 +131,16 @@ namespace SPICE_GRAMMAR
                                 sep,
                                 paramValue> {};
     struct paramValuePairs : list<paramValuePair, sep> {};
+
+    struct cplSep : opt<one<' '>> {};
+    struct cplParamValue : sor<list<bracedExpr, cplSep>,
+                               vectorExpr,
+                               list<token, cplSep>> {};
+    struct cplParamValuePair : seq<param,
+                                   sep,
+                                   cplParamValue> {};
+    struct cplParamValuePairs : list<cplParamValuePair, sep> {};
+
     struct dotModelAko : seq<opt<sep>,
                              if_must<seq<TAO_PEGTL_ISTRING( ".model" ),
                                          sep,
@@ -158,6 +166,17 @@ namespace SPICE_GRAMMAR
                                       paramValuePairs>,
                                   opt<sep>,
                                   newline>> {};
+
+    struct dotModelCPL : seq<opt<sep>,
+                         if_must<TAO_PEGTL_ISTRING( ".model" ),
+                                 sep,
+                                 modelName,
+                                 sep,
+                                 TAO_PEGTL_ISTRING( "CPL" ),
+                                 opt<sep,
+                                     cplParamValuePairs>,
+                                 opt<sep>,
+                                 newline>> {};
                                      
 
 
