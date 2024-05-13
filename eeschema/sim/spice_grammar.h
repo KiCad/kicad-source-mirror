@@ -156,6 +156,17 @@ namespace SPICE_GRAMMAR
                                      opt<sep>,
                                      newline>> {};
 
+    struct dotModelCPL : seq<opt<sep>,
+                             if_must<seq<TAO_PEGTL_ISTRING( ".model" ),
+                                         sep,
+                                         modelName,
+                                         sep,
+                                         TAO_PEGTL_ISTRING( "CPL" )>,
+                                     opt<sep,
+                                         cplParamValuePairs>,
+                                     opt<sep>,
+                                     newline>> {};
+
     struct dotModel : seq<opt<sep>,
                           if_must<TAO_PEGTL_ISTRING( ".model" ),
                                   sep,
@@ -166,19 +177,6 @@ namespace SPICE_GRAMMAR
                                       paramValuePairs>,
                                   opt<sep>,
                                   newline>> {};
-
-    struct dotModelCPL : seq<opt<sep>,
-                         if_must<TAO_PEGTL_ISTRING( ".model" ),
-                                 sep,
-                                 modelName,
-                                 sep,
-                                 TAO_PEGTL_ISTRING( "CPL" ),
-                                 opt<sep,
-                                     cplParamValuePairs>,
-                                 opt<sep>,
-                                 newline>> {};
-                                     
-
 
     struct dotSubcktParamValuePair : seq<param,
                                          // TODO: Check if these `star<space>`s match Ngspice's
@@ -216,6 +214,7 @@ namespace SPICE_GRAMMAR
 
     struct modelUnit : seq<star<commentLine>,
                            sor<dotModelAko,
+                               dotModelCPL,
                                dotModel,
                                dotSubckt>> {};
 
@@ -305,7 +304,9 @@ namespace SPICE_GRAMMAR
             "";
     template <> inline constexpr auto errorMessage<opt<sep, paramValuePairs>> = 
             "";
-    template <> inline constexpr auto errorMessage<opt<sep, dotSubcktPinSequence>> = 
+    template <> inline constexpr auto errorMessage<opt<sep, cplParamValuePairs>> =
+            "";
+    template <> inline constexpr auto errorMessage<opt<sep, dotSubcktPinSequence>> =
             "";
     template <> inline constexpr auto errorMessage<opt<sep, dotSubcktParams>> = 
             "";
