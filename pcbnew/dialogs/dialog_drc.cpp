@@ -61,10 +61,11 @@
 // Use default column widths instead.
 static int DEFAULT_SINGLE_COL_WIDTH = 660;
 
-static BOARD*                g_lastDRCBoard = nullptr;
-static bool                  g_lastDRCRun = false;
-static bool                  g_lastFootprintTestsRun = false;
-static std::vector<wxString> g_lastIgnored;
+static BOARD*  g_lastDRCBoard = nullptr;
+static bool    g_lastDRCRun = false;
+static bool    g_lastFootprintTestsRun = false;
+
+static std::vector<std::pair<wxString, int>> g_lastIgnored;
 
 
 DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
@@ -119,8 +120,15 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_drcRun = g_lastDRCRun;
         m_footprintTestsRun = g_lastFootprintTestsRun;
 
-        for( const wxString& str : g_lastIgnored )
-            m_ignoredList->InsertItem( m_ignoredList->GetItemCount(), str );
+        for( const auto& [ str, code ] : g_lastIgnored )
+        {
+            wxListItem listItem;
+            listItem.SetId( m_ignoredList->GetItemCount() );
+            listItem.SetText( str );
+            listItem.SetData( code );
+
+            m_ignoredList->InsertItem( listItem );
+        }
     }
 
     m_Notebook->SetSelection( 0 );
@@ -163,7 +171,10 @@ DIALOG_DRC::~DIALOG_DRC()
     g_lastIgnored.clear();
 
     for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
-        g_lastIgnored.push_back( m_ignoredList->GetItemText( ii ) );
+    {
+        g_lastIgnored.push_back( { m_ignoredList->GetItemText( ii ),
+                                   m_ignoredList->GetItemData( ii ) } );
+    }
 
     PCBNEW_SETTINGS* cfg = nullptr;
 
@@ -315,8 +326,12 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     {
         if( bds().GetSeverity( item.get().GetErrorCode() ) == RPT_SEVERITY_IGNORE )
         {
-            m_ignoredList->InsertItem( m_ignoredList->GetItemCount(),
-                                       wxT( " • " ) + item.get().GetErrorText() );
+            wxListItem listItem;
+            listItem.SetId( m_ignoredList->GetItemCount() );
+            listItem.SetText( wxT( " • " ) + item.get().GetErrorText() );
+            listItem.SetData( item.get().GetErrorCode() );
+
+            m_ignoredList->InsertItem( listItem );
         }
     }
 
@@ -866,8 +881,12 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
-        m_ignoredList->InsertItem( m_ignoredList->GetItemCount(),
-                                   wxT( " • " ) + rcItem->GetErrorText() );
+        wxListItem listItem;
+        listItem.SetId( m_ignoredList->GetItemCount() );
+        listItem.SetText( wxT( " • " ) + rcItem->GetErrorText() );
+        listItem.SetData( rcItem->GetErrorCode() );
+
+        m_ignoredList->InsertItem( listItem );
 
         BOARD* board = m_frame->GetBoard();
 
@@ -906,6 +925,33 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         updateDisplayedCounts();
         refreshEditor();
         m_frame->OnModify();
+    }
+}
+
+
+void DIALOG_DRC::OnIgnoredItemRClick( wxListEvent& event )
+{
+    int    errorCode = (int) event.m_item.GetData();
+    wxMenu menu;
+
+    menu.Append( RPT_SEVERITY_ERROR,   _( "Error" ),   wxEmptyString, wxITEM_CHECK );
+    menu.Append( RPT_SEVERITY_WARNING, _( "Warning" ), wxEmptyString, wxITEM_CHECK );
+    menu.Append( RPT_SEVERITY_IGNORE,  _( "Ignore" ),  wxEmptyString, wxITEM_CHECK );
+
+    menu.Check( bds().GetSeverity( errorCode ), true );
+
+    int severity = GetPopupMenuSelectionFromUser( menu );
+
+    if( severity > 0 )
+    {
+        if( bds().m_DRCSeverities[ errorCode ] != severity )
+        {
+            bds().m_DRCSeverities[ errorCode ] = (SEVERITY) severity;
+
+            updateDisplayedCounts();
+            refreshEditor();
+            m_frame->OnModify();
+        }
     }
 }
 

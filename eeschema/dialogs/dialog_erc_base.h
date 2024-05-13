@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,6 +86,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		virtual void OnERCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnIgnoredItemRClick( wxListEvent& event ) { event.Skip(); }
 		virtual void OnEditViolationSeverities( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }

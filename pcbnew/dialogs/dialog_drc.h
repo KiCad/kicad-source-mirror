@@ -79,6 +79,7 @@ private:
     void OnDRCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnDRCItemDClick( wxDataViewEvent& aEvent ) override;
     void OnDRCItemRClick( wxDataViewEvent& aEvent ) override;
+    void OnIgnoredItemRClick( wxListEvent& event ) override;
     void OnEditViolationSeverities( wxHyperlinkEvent& aEvent ) override;
 
     void OnSeverity( wxCommandEvent& aEvent ) override;
