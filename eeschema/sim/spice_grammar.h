@@ -176,7 +176,8 @@ namespace SPICE_GRAMMAR
     struct dotSubcktPinName : seq<not_at<dotSubcktParams>,
                                   plus<not_at<space>, any>> {};
     struct dotSubcktPinSequence : list<dotSubcktPinName, sep> {};
-    struct dotSubcktEnd : seq<TAO_PEGTL_ISTRING( ".ends" ),
+    struct dotSubcktEnd : seq<opt<sep>,
+                              TAO_PEGTL_ISTRING( ".ends" ),
                               until<newline>> {};
     struct spiceUnit;
     struct dotSubckt : seq<opt<sep>,
