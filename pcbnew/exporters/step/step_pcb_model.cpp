@@ -220,6 +220,9 @@ static VECTOR2D CircleCenterFrom3Points( const VECTOR2D& p1, const VECTOR2D& p2,
 }
 
 
+#define APPROX_DBG( stmt )
+//#define APPROX_DBG( stmt ) stmt
+
 static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aSrc )
 {
     // An algo that takes 3 points, calculates a circle center,
@@ -228,7 +231,12 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
     static const double c_radiusDeviation = 1000.0;
     static const double c_arcCenterDeviation = 1000.0;
     static const double c_relLengthDeviation = 0.8;
-    static const int    c_last_none = -1000; // Meaning no arc cannot be constructed
+    static const int    c_last_none = -1000; // Meaning the arc cannot be constructed
+    // Allow larger angles for segments below this size
+    static const double c_smallSize = pcbIUScale.mmToIU( 0.1 );
+    static const double c_circleCloseGap = pcbIUScale.mmToIU( 1.0 );
+
+    APPROX_DBG( std::cout << std::endl );
 
     if( aSrc.PointCount() < 4 )
         return aSrc;
@@ -249,6 +257,10 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
         VECTOR2D p1 = aSrc.CPoint( i - 2 );
         VECTOR2D p2 = aSrc.CPoint( i - 1 );
 
+        APPROX_DBG( std::cout << i << " " << aSrc.CPoint( i ) << " " << ( i - 3 ) << " "
+                              << VECTOR2I( p0 ) << " " << ( i - 2 ) << " " << VECTOR2I( p1 ) << " "
+                              << ( i - 1 ) << " " << VECTOR2I( p2 ) << std::endl );
+
         VECTOR2D v01 = p1 - p0;
         VECTOR2D v12 = p2 - p1;
 
@@ -267,38 +279,64 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
             EDA_ANGLE a12( v12 );
 
             double a_diff = ( a01 - a12 ).Normalize180().AsDegrees();
-
             defective |= std::abs( a_diff ) < 0.1;
 
             // Larger angles are allowed for smaller geometry
-            if( d01 < pcbIUScale.mmToIU( 1.0 ) )
-                defective |= std::abs( a_diff ) >= 46.0;
-            else
-                defective |= std::abs( a_diff ) >= 30.0;
+            double maxAngleDiff = std::max( d01, d12 ) < c_smallSize ? 46.0 : 30.0;
+            defective |= std::abs( a_diff ) >= maxAngleDiff;
         }
 
         if( !defective )
         {
             // Find last point lying on the circle created from 3 first points
-            VECTOR2D center = CircleCenterFrom3Points( p0, p1, p2 );
-            double   radius = ( p0 - center ).EuclideanNorm();
-            VECTOR2D p_prev = p2;
+            VECTOR2D  center = CircleCenterFrom3Points( p0, p1, p2 );
+            double    radius = ( p0 - center ).EuclideanNorm();
+            VECTOR2D  p_prev = p2;
+            EDA_ANGLE a_prev( v12 );
 
             for( int j = i; j <= jEndIdx; j++ )
             {
                 VECTOR2D p_test = aSrc.CPoint( j );
 
-                double rad_test = ( p_test - center ).EuclideanNorm();
-                double d_tl = ( p_test - p_prev ).EuclideanNorm();
+                EDA_ANGLE a_test( p_test - p_prev );
+                double    rad_test = ( p_test - center ).EuclideanNorm();
+                double    d_tl = ( p_test - p_prev ).EuclideanNorm();
+                double    rad_dev = std::abs( radius - rad_test );
 
-                if( std::abs( radius - rad_test ) > c_radiusDeviation )
+                APPROX_DBG( std::cout << " " << j << " " << aSrc.CPoint( j ) << " rad "
+                                      << int64_t( rad_test ) << " ref " << int64_t( radius )
+                                      << std::endl );
+
+                if( rad_dev > c_radiusDeviation )
+                {
+                    APPROX_DBG( std::cout << "  " << j
+                                          << " Radius deviation too large: " << int64_t( rad_dev )
+                                          << " > " << c_radiusDeviation << std::endl );
                     break;
+                }
+
+                // Larger angles are allowed for smaller geometry
+                double maxAngleDiff =
+                        std::max( std::max( d01, d12 ), d_tl ) < c_smallSize ? 46.0 : 30.0;
+
+                double a_diff_test = ( a_prev - a_test ).Normalize180().AsDegrees();
+                if( std::abs( a_diff_test ) >= maxAngleDiff )
+                {
+                    APPROX_DBG( std::cout << "  " << j << " Angles differ too much " << a_diff_test
+                                          << std::endl );
+                    break;
+                }
 
                 if( std::abs( d_tl - d01 ) > ( std::max( d_tl, d01 ) * c_relLengthDeviation ) )
+                {
+                    APPROX_DBG( std::cout << "  " << j << " Lengths differ too much " << d_tl
+                                          << "; " << d01 << std::endl );
                     break;
+                }
 
                 last = j;
                 p_prev = p_test;
+                a_prev = a_test;
             }
         }
 
@@ -308,10 +346,22 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
             SHAPE_ARC arc( aSrc.CPoint( first ), aSrc.CPoint( ( first + last ) / 2 ),
                            aSrc.CPoint( last ), 0 );
 
+            if( last > aSrc.PointCount() - 3 && !dst.IsArcSegment( 0 ) )
+            {
+                // If we've found an arc at the end, but already added segments at the start, remove them.
+                int toRemove = last - ( aSrc.PointCount() - 3 );
+
+                while( toRemove )
+                {
+                    dst.RemoveShape( 0 );
+                    toRemove--;
+                }
+            }
+
             SHAPE_LINE_CHAIN testChain = dst;
 
             testChain.Append( arc );
-            testChain.Append( aSrc.Slice( last, -3 ) );
+            testChain.Append( aSrc.Slice( last, std::max( last, aSrc.PointCount() - 3 ) ) );
             testChain.SetClosed( aSrc.IsClosed() );
 
             if( !testChain.SelfIntersectingWithArcs() )
@@ -319,12 +369,17 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
                 // Add arc
                 dst.Append( arc );
 
+                APPROX_DBG( std::cout << " Add arc start " << arc.GetP0() << " mid "
+                                      << arc.GetArcMid() << " end " << arc.GetP1() << std::endl );
+
                 i = last + 3;
             }
             else
             {
                 // Self-interference
                 last = c_last_none;
+
+                APPROX_DBG( std::cout << " Self-intersection check failed" << std::endl );
             }
         }
 
@@ -335,6 +390,7 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
 
             // Add point
             dst.Append( p0 );
+            APPROX_DBG( std::cout << " Add pt " << VECTOR2I( p0 ) << std::endl );
         }
     }
 
@@ -346,6 +402,8 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
 
     if( iarc0 != -1 && iarc1 != -1 )
     {
+        APPROX_DBG( std::cout << "Final arcs " << iarc0 << " " << iarc1 << std::endl );
+
         if( iarc0 == iarc1 )
         {
             SHAPE_ARC arc = dst.Arc( iarc0 );
@@ -354,7 +412,7 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
             VECTOR2D p1 = arc.GetP1();
 
             // If we have only one arc and the gap is small, make it a circle
-            if( ( p1 - p0 ).EuclideanNorm() < pcbIUScale.mmToIU( 1.0 ) )
+            if( ( p1 - p0 ).EuclideanNorm() < c_circleCloseGap )
             {
                 dst.Clear();
                 dst.Append( SHAPE_ARC( arc.GetCenter(), arc.GetP0(), ANGLE_360 ) );
