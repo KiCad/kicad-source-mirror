@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-05-13 17:36+0000\n"
+"PO-Revision-Date: 2024-05-15 05:12+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -41,7 +41,7 @@ msgstr "所有檔案"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr "構建電路板外框"
+msgstr "建置電路板邊框"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:542
 msgid "Create layers"
@@ -75,12 +75,12 @@ msgstr "建立區域"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:794
 msgid "Build Tech layers"
-msgstr "構造工藝層"
+msgstr "建置工藝層"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:826
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "構造工藝層 %d"
+msgstr "建置工藝層 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1050
 msgid "Simplifying copper layer polygons"
@@ -101,7 +101,7 @@ msgstr "簡化通孔輪廓"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1204
 msgid "Build BVH for holes and vias"
-msgstr "為通孔和貫孔構造 BVH (盲埋孔)"
+msgstr "為通孔和貫孔建置 BVH (盲埋孔)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:385
 msgid "OpenGL context creation error"
@@ -2080,7 +2080,7 @@ msgstr "版權資訊"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr "構建版本資訊"
+msgstr "建置版本資訊"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
@@ -6443,7 +6443,7 @@ msgstr "不支援 %s。"
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
 msgid "DXF construction lines not currently supported."
-msgstr "目前不支援 DXF 構造線。"
+msgstr "目前不支援 DXF 建構線。"
 
 #: common/import_gfx/dxf_import_plugin.h:467
 msgid "DXF arc-aligned text not currently supported."
@@ -29940,7 +29940,7 @@ msgstr "將要應用的變更:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:90
 msgid "Build Changes"
-msgstr "構建更改"
+msgstr "建置更改"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:187
@@ -31559,7 +31559,7 @@ msgstr "鬆散 (0.1 mm)"
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
-msgstr "當構建電路板邊框時, 公差設定了兩個被視為聯結的點的距離。"
+msgstr "當建置電路板邊框時, 公差設定了兩個被視為聯結的點的距離。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:98
 msgid "Export STEP / BREP / XAO / GLTF"
@@ -38995,7 +38995,7 @@ msgstr "底層阻焊開窗區域與不同網路的項目相連"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:761
 msgid "Building solder mask..."
-msgstr "正在構造阻焊層..."
+msgstr "正在建置阻焊層..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:769
 msgid "Checking solder mask to silk clearance..."
@@ -39139,7 +39139,7 @@ msgstr "確定 PCB 數據\n"
 #: pcbnew/exporters/step/exporter_step.cpp:530
 #, c-format
 msgid "Build %s data\n"
-msgstr "構建 %s 數據\n"
+msgstr "建置 %s 數據\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:534
 msgid ""
@@ -39147,7 +39147,7 @@ msgid ""
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
 "\n"
-"** 構建 STEP 板模型時出錯。匯出中止。**\n"
+"** 建置 STEP 板模型時出錯。匯出中止。**\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:538
 #, c-format
@@ -39250,7 +39250,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
 #, c-format
 msgid "Build holes for %s\n"
-msgstr "構造孔洞 %s\n"
+msgstr "建置孔洞給 %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1569
 #, c-format
@@ -47508,7 +47508,7 @@ msgstr "檢查覆銅填充..."
 
 #: pcbnew/zone_filler.cpp:109
 msgid "Building zone fills..."
-msgstr "構造覆銅填充..."
+msgstr "建置覆銅填充..."
 
 #: pcbnew/zone_filler.cpp:523
 msgid "Removing isolated copper islands..."
