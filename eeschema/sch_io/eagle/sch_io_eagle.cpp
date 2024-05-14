@@ -1836,9 +1836,7 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
     SCH_FIELD* valueField = symbol->GetField( VALUE_FIELD );
     bool       userValue = m_userValue.at( libIdSymbolName );
 
-    valueField->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
-
-    if( !userValue && epart->value )
+    if( epart->value )
     {
         valueField->SetText( *epart->value );
     }
@@ -2047,6 +2045,8 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY
                 // with a hash character to mute netlist updater complaints
                 reference->SetText( edevice.package ? prefix : '#' + prefix );
             }
+
+            libSymbol->GetFieldById( VALUE_FIELD )->SetVisible( true );
 
             int  gateindex = 1;
             bool ispower   = false;
@@ -2272,11 +2272,8 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
         currentNode = currentNode->GetNext();
     }
 
-    if( !showRefDes )
-        aSymbol->GetFieldById( REFERENCE_FIELD )->SetVisible( false );
-
-    if( !showValue )
-        aSymbol->GetFieldById( VALUE_FIELD )->SetVisible( false );
+    aSymbol->GetFieldById( REFERENCE_FIELD )->SetVisible( showRefDes );
+    aSymbol->GetFieldById( VALUE_FIELD )->SetVisible( showValue );
 
     return pincount == 1 ? ispower : false;
 }
@@ -2346,7 +2343,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( wxXmlNode* aWireNode, int aGateNumber )
     if( ewire.curve )
     {
         SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE );
-        VECTOR2I   center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
+        VECTOR2I   center = ConvertArcCenter( begin, end, *ewire.curve * - 1 );
         double     radius = sqrt( ( ( center.x - begin.x ) * ( center.x - begin.x ) ) +
                                   ( ( center.y - begin.y ) * ( center.y - begin.y ) ) );
 
@@ -2366,7 +2363,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( wxXmlNode* aWireNode, int aGateNumber )
 
         arc->SetCenter( center );
         arc->SetStart( begin );
-        arc->SetArcAngleAndEnd( EDA_ANGLE( *ewire.curve, DEGREES_T ), true );
+        arc->SetArcAngleAndEnd( EDA_ANGLE( *ewire.curve * - 1, DEGREES_T ), true );
         arc->SetUnit( aGateNumber );
 
         return arc;
