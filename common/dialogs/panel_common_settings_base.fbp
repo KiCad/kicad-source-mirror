@@ -4036,7 +4036,7 @@
                       <property name="border">5</property>
                       <property name="colspan">1</property>
                       <property name="column">0</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT</property>
+                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT</property>
                       <property name="row">2</property>
                       <property name="rowspan">1</property>
                       <object class="wxStaticText" expanded="false">
@@ -4232,7 +4232,7 @@
                       <property name="border">5</property>
                       <property name="colspan">1</property>
                       <property name="column">1</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
+                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                       <property name="row">3</property>
                       <property name="rowspan">1</property>
                       <object class="wxSpinCtrl" expanded="false">
@@ -4494,7 +4494,7 @@
                       <property name="border">5</property>
                       <property name="colspan">1</property>
                       <property name="column">0</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT</property>
                       <property name="row">5</property>
                       <property name="rowspan">1</property>
                       <object class="wxStaticText" expanded="false">

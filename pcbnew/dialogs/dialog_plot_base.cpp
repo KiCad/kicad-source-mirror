@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
 	m_plotFormatOpt->SetSelection( 0 );
-	bupperSizer->Add( m_plotFormatOpt, 0, wxALL, 6 );
+	bupperSizer->Add( m_plotFormatOpt, 0, wxALIGN_CENTER_VERTICAL|wxALL, 6 );
 
 
 	bupperSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -87,7 +87,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_plotFootprintText = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot footprint text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotFootprintText->SetValue(true);
-	gbSizer1->Add( m_plotFootprintText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), 0, 5 );
+	gbSizer1->Add( m_plotFootprintText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_plotInvisibleText = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Force plotting of invisible values / refs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotInvisibleText->SetToolTip( _("Force plot invisible footprint values and reference designators") );
@@ -156,7 +156,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_SizerSolderMaskAlert = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_CMN_DIALOG ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxASCII_STR(wxART_WARNING), wxASCII_STR(wxART_CMN_DIALOG) ), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizerSolderMaskAlert->Add( m_bitmapAlert, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerWarningText;
