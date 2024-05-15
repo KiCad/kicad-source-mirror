@@ -923,8 +923,8 @@ TOOL_ACTION ACTIONS::toggleCursor( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + MD_SHIFT + 'X' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         .LegacyHotkeyName( "Toggle Cursor Display (Modern Toolset only)" )
-        .FriendlyName( _( "Always Show Cursor" ) )
-        .Tooltip( _( "Display crosshairs even in selection tool" ) )
+        .FriendlyName( _( "Always Show Crosshairs" ) )
+        .Tooltip( _( "Display crosshairs even when not drawing objects" ) )
         .Icon( BITMAPS::cursor ) );
 
 TOOL_ACTION ACTIONS::toggleCursorStyle( TOOL_ACTION_ARGS()
