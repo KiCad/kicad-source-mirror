@@ -81,8 +81,6 @@ BOARD::BOARD() :
         m_project( nullptr ),
         m_userUnits( EDA_UNITS::MILLIMETRES ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
-        m_skipMaxClearanceCacheUpdate( false ),
-        m_maxClearanceValue( 0 ),
         m_NetInfo( this )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
@@ -134,8 +132,6 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    m_skipMaxClearanceCacheUpdate = true;
-
     // Untangle group parents before doing any deleting
     for( PCB_GROUP* group : m_groups )
     {
@@ -250,8 +246,6 @@ void BOARD::IncrementTimeStamp()
 {
     m_timeStamp++;
 
-    UpdateMaxClearanceCache();
-
     if( !m_IntersectsAreaCache.empty()
         || !m_EnclosedByAreaCache.empty()
         || !m_IntersectsCourtyardCache.empty()
@@ -259,7 +253,8 @@ void BOARD::IncrementTimeStamp()
         || !m_IntersectsBCourtyardCache.empty()
         || !m_LayerExpressionCache.empty()
         || !m_ZoneBBoxCache.empty()
-        || m_CopperItemRTreeCache )
+        || m_CopperItemRTreeCache
+        || m_maxClearanceValue.has_value() )
     {
         std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
 
@@ -282,6 +277,8 @@ void BOARD::IncrementTimeStamp()
         m_DRCCopperZones.clear();
         m_ZoneIsolatedIslandsMap.clear();
         m_CopperZoneRTreeCache.clear();
+
+        m_maxClearanceValue.reset();
     }
 }
 
@@ -800,33 +797,36 @@ BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 }
 
 
-void BOARD::UpdateMaxClearanceCache()
+int BOARD::GetMaxClearanceValue() const
 {
-    // in destructor or otherwise reasonable to skip
-    if( m_skipMaxClearanceCacheUpdate )
-        return;
-
-    int worstClearance = m_designSettings->GetBiggestClearanceValue();
-
-    for( ZONE* zone : m_zones )
-        worstClearance = std::max( worstClearance, zone->GetLocalClearance().value() );
-
-    for( FOOTPRINT* footprint : m_footprints )
+    if( !m_maxClearanceValue.has_value() )
     {
-        for( PAD* pad : footprint->Pads() )
-        {
-            std::optional<int> override = pad->GetClearanceOverrides( nullptr );
+        std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
 
-            if( override.has_value() )
-                worstClearance = std::max( worstClearance, override.value() );
+        int worstClearance = m_designSettings->GetBiggestClearanceValue();
+
+        for( ZONE* zone : m_zones )
+            worstClearance = std::max( worstClearance, zone->GetLocalClearance().value() );
+
+        for( FOOTPRINT* footprint : m_footprints )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                std::optional<int> override = pad->GetClearanceOverrides( nullptr );
+
+                if( override.has_value() )
+                    worstClearance = std::max( worstClearance, override.value() );
+            }
+
+            for( ZONE* zone : footprint->Zones() )
+                worstClearance = std::max( worstClearance, zone->GetLocalClearance().value() );
         }
 
-        for( ZONE* zone : footprint->Zones() )
-            worstClearance = std::max( worstClearance, zone->GetLocalClearance().value() );
+        m_maxClearanceValue = worstClearance;
     }
 
-    m_maxClearanceValue = worstClearance;
-}
+    return m_maxClearanceValue.value_or( 0 );
+};
 
 
 void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<ZONE*>& aZones )
@@ -1276,8 +1276,6 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 
 void BOARD::DeleteAllFootprints()
 {
-    m_skipMaxClearanceCacheUpdate = true;
-
     for( FOOTPRINT* footprint : m_footprints )
     {
         m_itemByIdCache.erase( footprint->m_Uuid );
@@ -1285,8 +1283,7 @@ void BOARD::DeleteAllFootprints()
     }
 
     m_footprints.clear();
-    m_skipMaxClearanceCacheUpdate = false;
-    UpdateMaxClearanceCache();
+    IncrementTimeStamp();
 }
 
 
