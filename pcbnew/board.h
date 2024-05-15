@@ -1133,10 +1133,7 @@ public:
      * the clearances from board design settings as well as embedded clearances in footprints,
      * pads and zones.  Includes electrical, physical, hole and edge clearances.
     */
-    int GetMaxClearanceValue() const
-    {
-        return m_maxClearanceValue;
-    };
+    int GetMaxClearanceValue() const;
 
     /**
      * Map all nets in the given board to nets with the same name (if any) in the destination
@@ -1229,6 +1226,7 @@ public:
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
     };
 
+public:
     // ------------ Run-time caches -------------
     mutable std::shared_mutex                             m_CachesMutex;
     std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsCourtyardCache;
@@ -1240,6 +1238,7 @@ public:
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
     std::shared_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
     mutable std::unordered_map<const ZONE*, BOX2I>        m_ZoneBBoxCache;
+    mutable std::optional<int>                            m_maxClearanceValue;
 
     // ------------ DRC caches -------------
     std::vector<ZONE*>    m_DRCZones;
@@ -1263,14 +1262,10 @@ private:
             ( l->*aFunc )( std::forward<Args>( args )... );
     }
 
-
-    void UpdateMaxClearanceCache();
-
     friend class PCB_EDIT_FRAME;
 
-
     /// the max distance between 2 end point to see them connected when building the board outlines
-    int m_outlinesChainingEpsilon;
+    int                 m_outlinesChainingEpsilon;
 
     /// What is this board being used for
     BOARD_USE           m_boardUse;
@@ -1319,9 +1314,6 @@ private:
      * properties).  If this flag is set, then auto-teardrop-generation will be disabled.
      */
     bool                         m_legacyTeardrops = false;
-
-    bool                         m_deleting;        // inside destructor
-    int                          m_maxClearanceValue;  // cached value
 
     NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
 
