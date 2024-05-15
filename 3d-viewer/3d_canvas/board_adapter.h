@@ -430,6 +430,8 @@ public:
     SFVEC4F           m_ECO1Color;
     SFVEC4F           m_ECO2Color;
 
+    std::map<int, COLOR4D> m_ColorOverrides;  ///< allows to override color scheme colors
+
 private:
     BOARD*            m_board;
     S3D_CACHE*        m_3dModelManager;

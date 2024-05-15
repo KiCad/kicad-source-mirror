@@ -698,6 +698,10 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
     }
 
     colors[ LAYER_3D_COPPER_BOTTOM ] = colors[ LAYER_3D_COPPER_TOP ];
+
+    for( const auto& [layer, val] : m_ColorOverrides )
+        colors[layer] = val;
+
     return colors;
 }
 

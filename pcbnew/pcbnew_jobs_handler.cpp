@@ -252,23 +252,15 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     BOARD* brd = LoadBoard( aRenderJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
-    BOARD_ADAPTER m_boardAdapter;
+    BOARD_ADAPTER boardAdapter;
 
-    m_boardAdapter.SetBoard( brd );
-    m_boardAdapter.m_IsBoardView = false;
-    m_boardAdapter.m_IsPreviewer =
+    boardAdapter.SetBoard( brd );
+    boardAdapter.m_IsBoardView = false;
+    boardAdapter.m_IsPreviewer =
             true; // Force display 3D models, regardless the 3D viewer options
 
     EDA_3D_VIEWER_SETTINGS* cfg =
             Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
-
-    if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
-        || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
-             && aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ) )
-    {
-        BOARD_ADAPTER::g_DefaultBackgroundTop = COLOR4D( 1.0, 1.0, 1.0, 0.0 );
-        BOARD_ADAPTER::g_DefaultBackgroundBot = COLOR4D( 1.0, 1.0, 1.0, 0.0 );
-    }
 
     if( aRenderJob->m_quality == JOB_PCB_RENDER::QUALITY::BASIC )
     {
@@ -309,9 +301,17 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     }
 
     cfg->m_CurrentPreset = aRenderJob->m_colorPreset;
-    m_boardAdapter.m_Cfg = cfg;
+    boardAdapter.m_Cfg = cfg;
 
-    m_boardAdapter.Set3dCacheManager( PROJECT_PCB::Get3DCacheManager( brd->GetProject() ) );
+    if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
+        || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
+             && aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ) )
+    {
+        boardAdapter.m_ColorOverrides[LAYER_3D_BACKGROUND_TOP] = COLOR4D( 1.0, 1.0, 1.0, 0.0 );
+        boardAdapter.m_ColorOverrides[LAYER_3D_BACKGROUND_BOTTOM] = COLOR4D( 1.0, 1.0, 1.0, 0.0 );
+    }
+
+    boardAdapter.Set3dCacheManager( PROJECT_PCB::Get3DCacheManager( brd->GetProject() ) );
 
     static std::map<JOB_PCB_RENDER::SIDE, VIEW3D_TYPE> s_viewCmdMap = {
         { JOB_PCB_RENDER::SIDE::TOP, VIEW3D_TYPE::VIEW3D_TOP },
@@ -331,14 +331,14 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     camera.SetProjection( projection );
     camera.SetCurWindowSize( windowSize );
 
-    RENDER_3D_RAYTRACE_RAM raytrace( m_boardAdapter, camera );
+    RENDER_3D_RAYTRACE_RAM raytrace( boardAdapter, camera );
     raytrace.SetCurWindowSize( windowSize );
 
     for( bool first = true; raytrace.Redraw( false, m_reporter, m_reporter ); first = false )
     {
         if( first )
         {
-            const float cmTo3D = m_boardAdapter.BiuTo3dUnits() * pcbIUScale.mmToIU( 10.0 );
+            const float cmTo3D = boardAdapter.BiuTo3dUnits() * pcbIUScale.mmToIU( 10.0 );
 
             // First redraw resets lookat point to the board center, so set up the camera here
             camera.ViewCommand_T1( s_viewCmdMap[aRenderJob->m_side] );
