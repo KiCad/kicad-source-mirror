@@ -992,8 +992,19 @@ void CVPCB_MAINFRAME::BuildLibrariesList()
     COMMON_SETTINGS*   cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&      project = Kiway().Prj().GetProjectFile();
     FP_LIB_TABLE*      tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-    std::set<wxString> pinnedMatches;
-    std::set<wxString> otherMatches;
+
+    // Use same sorting algorithm as LIB_TREE_NODE::AssignIntrinsicRanks
+    struct library_sort
+    {
+        bool operator()( const wxString& lhs, const wxString& rhs ) const
+        {
+            return StrNumCmp( lhs, rhs, true ) < 0;
+        }
+    };
+
+    std::set<wxString, library_sort> pinnedMatches;
+    std::set<wxString, library_sort> otherMatches;
+
     m_librariesListBox->ClearList();
 
     auto process =
