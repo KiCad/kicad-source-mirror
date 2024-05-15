@@ -98,13 +98,12 @@ public:
     };
 
     FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
-    ~FOOTPRINTS_LISTBOX();
+    ~FOOTPRINTS_LISTBOX() override {};
 
     int      GetCount();
     void     SetSelection( int aIndex, bool aState = true );
     void     SetSelectedFootprint( const LIB_ID& aFPID );
     void     SetString( unsigned linecount, const wxString& text );
-    void     AppendLine( const wxString& text );
 
     /**
      * Populate the wxListCtrl with the footprints from \a aList that meet the filter
@@ -144,7 +143,7 @@ class LIBRARY_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
     LIBRARY_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
-    ~LIBRARY_LISTBOX();
+    ~LIBRARY_LISTBOX() override {};
 
     int      GetCount();
     void     SetSelection( int index, bool State = true );

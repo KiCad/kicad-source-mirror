@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,29 +30,25 @@
 
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
-#include <listboxes.h>
 #include <tools/cvpcb_actions.h>
 
 FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
-    ITEMS_LISTBOX_BASE( parent, id, wxDefaultPosition, wxDefaultSize, wxLC_SINGLE_SEL|wxNO_BORDER )
-{
-}
-
-
-FOOTPRINTS_LISTBOX::~FOOTPRINTS_LISTBOX()
+        ITEMS_LISTBOX_BASE( parent, id, wxDefaultPosition, wxDefaultSize,
+                            wxLC_SINGLE_SEL | wxNO_BORDER )
 {
 }
 
 
 int FOOTPRINTS_LISTBOX::GetCount()
 {
-    return m_footprintList.Count();
+    return (int) m_footprintList.Count();
 }
 
 
 void FOOTPRINTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
     unsigned count = m_footprintList.Count();
+
     if( count > 0 )
     {
         if( linecount >= count )
@@ -60,6 +56,7 @@ void FOOTPRINTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
 
         m_footprintList[linecount] = text;
     }
+
     UpdateWidth( linecount );
 }
 
@@ -81,15 +78,6 @@ wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
 }
 
 
-void FOOTPRINTS_LISTBOX::AppendLine( const wxString& text )
-{
-    m_footprintList.Add( text );
-    int lines = m_footprintList.Count();
-    SetItemCount( lines );
-    UpdateWidth( lines - 1 );
-}
-
-
 wxString FOOTPRINTS_LISTBOX::OnGetItemText( long item, long column ) const
 {
     if( item < 0 || item >= (long)m_footprintList.GetCount() )
@@ -104,7 +92,7 @@ void FOOTPRINTS_LISTBOX::SetSelection( int aIndex, bool aState )
     if( aIndex >= GetCount() )
         aIndex = GetCount() - 1;
 
-    if(( aIndex >= 0) && ( GetCount() > 0) )
+    if( aIndex >= 0 && GetCount() > 0)
     {
         Select( aIndex, aState );
         EnsureVisible( aIndex );
@@ -249,7 +237,8 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
         }
 
         for( ; jj < text.Len(); jj++ )
-        {   // skip blanks
+        {
+            // skip blanks
             if( text[jj] != ' ' )
                 break;
         }

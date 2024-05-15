@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file library_listbox.cpp
- * class to display used library and selecting it
- */
-
 #include <trace_helpers.h>
 
 #include <cvpcb_mainframe.h>
-#include <listboxes.h>
 #include <cvpcb_id.h>
 #include <wx/log.h>
 #include "lib_tree_model_adapter.h"
@@ -40,25 +34,21 @@
 /***************************************/
 
 LIBRARY_LISTBOX::LIBRARY_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
-    ITEMS_LISTBOX_BASE( parent, id, wxDefaultPosition, wxDefaultSize, wxLC_SINGLE_SEL )
-{
-}
-
-
-LIBRARY_LISTBOX::~LIBRARY_LISTBOX()
+        ITEMS_LISTBOX_BASE( parent, id, wxDefaultPosition, wxDefaultSize, wxLC_SINGLE_SEL )
 {
 }
 
 
 int LIBRARY_LISTBOX::GetCount()
 {
-    return m_libraryList.Count();
+    return (int) m_libraryList.Count();
 }
 
 
 void LIBRARY_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
     unsigned count = m_libraryList.Count();
+
     if( count > 0 )
     {
         if( linecount >= count )
@@ -129,10 +119,12 @@ void LIBRARY_LISTBOX::Finish()
     }
 }
 
+
 void LIBRARY_LISTBOX::ClearList()
 {
     m_libraryList.clear();
 }
+
 
 BEGIN_EVENT_TABLE( LIBRARY_LISTBOX, ITEMS_LISTBOX_BASE )
     EVT_CHAR( LIBRARY_LISTBOX::OnChar )
@@ -180,7 +172,8 @@ void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
         }
 
         for( ; jj < text.Len(); jj++ )
-        {   // skip blanks
+        {
+            // skip blanks
             if( text[jj] != ' ' )
                 break;
         }
