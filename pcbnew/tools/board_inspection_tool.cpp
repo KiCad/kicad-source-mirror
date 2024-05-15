@@ -1765,7 +1765,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     const std::set<int>& netcodes = settings->GetHighlightNetCodes();
 
     // Toggle highlight when the same net was picked
-    if( netcodes.count( net ) )
+    if( !aUseSelection && netcodes.size() == 1 && netcodes.contains( net ) )
         enableHighlight = !settings->IsHighlightEnabled();
 
     if( enableHighlight != settings->IsHighlightEnabled() || !netcodes.count( net ) )
