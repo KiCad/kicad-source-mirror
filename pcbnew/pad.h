@@ -567,7 +567,7 @@ public:
     // For property system
     void SetThermalSpokeAngleDegrees( double aAngle )
     {
-        m_padStack.ThermalSpokeAngle() = EDA_ANGLE( aAngle, DEGREES_T );
+        m_padStack.SetThermalSpokeAngle( EDA_ANGLE( aAngle, DEGREES_T ) );
     }
     double GetThermalSpokeAngleDegrees() const
     {
