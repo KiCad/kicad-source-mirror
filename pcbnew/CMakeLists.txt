@@ -218,6 +218,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_svg.cpp
     exporters/step/exporter_step.cpp
     exporters/step/step_pcb_model.cpp
+    exporters/step/KI_XCAFDoc_AssemblyGraph.cxx
     exporters/exporter_vrml.cpp
     exporters/place_file_exporter.cpp
     exporters/gen_drill_report_files.cpp
