@@ -1507,14 +1507,23 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
                                 const BOM_PRESET& preset = aPair.second;
 
                                 // Check the simple settings first
-                                if( !( preset.sortField == current.sortField
-                                       && preset.sortAsc == current.sortAsc
+                                if( !( preset.sortAsc == current.sortAsc
                                        && preset.filterString == current.filterString
                                        && preset.groupSymbols == current.groupSymbols
                                        && preset.excludeDNP == current.excludeDNP ) )
                                 {
                                     return false;
                                 }
+
+                                // We should compare preset.name and current.name.
+                                // unfortunately current.name is empty because
+                                // m_dataModel->GetBomSettings() does not store the .name member
+                                // So use sortField member as a (not very efficient) auxiliary filter.
+                                // sortField can be translated in m_bomPresets list,
+                                // so current.sortField needs to be translated
+                                // Probably this not efficient and error prone test should be removed (JPC).
+                                if( preset.sortField != wxGetTranslation( current.sortField ) )
+                                    return false;
 
                                 // Only compare shown or grouped fields
                                 std::vector<BOM_FIELD> A, B;
@@ -1540,7 +1549,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
         // but these items are translated if they are predefined items.
         bool     do_translate = it->second.readOnly;
         wxString text = do_translate ? wxGetTranslation( it->first ) : it->first;
-
         m_cbBomPresets->SetStringSelection( text );
     }
     else
