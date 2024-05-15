@@ -1846,12 +1846,15 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
     SCH_FIELD* referenceField = symbol->GetField( REFERENCE_FIELD );
     referenceField->SetText( reference );
-    referenceField->SetVisible( part->GetFieldById( REFERENCE_FIELD )->IsVisible() );
 
     SCH_FIELD* valueField = symbol->GetField( VALUE_FIELD );
     bool       userValue = m_userValue.at( libIdSymbolName );
 
-    valueField->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
+    if( part->GetUnitCount() > 1 )
+    {
+        getEagleSymbolFieldAttributes( aInstance, wxS( ">NAME" ), referenceField );
+        getEagleSymbolFieldAttributes( aInstance, wxS( ">VALUE" ), valueField );
+    }
 
     if( epart->value && !epart->value.CGet().IsEmpty() )
     {
@@ -1941,7 +1944,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             int reldegrees = ( absdegrees - rotation + 360.0 );
             reldegrees %= 360;
 
-            eagleToKicadAlignment( (EDA_TEXT*) field, align, reldegrees, mirror, spin, absdegrees );
+            eagleToKicadAlignment( field, align, reldegrees, mirror, spin, absdegrees );
         }
     }
 
@@ -2029,7 +2032,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
             int  gateindex = 1;
             bool ispower   = false;
 
-            for( const std::unique_ptr<EGATE>& egate : edeviceset->gates )
+            for( const auto& [gateName, egate] : edeviceset->gates )
             {
                 const auto it = aLibrary->symbols.find( egate->symbol );
 
@@ -2303,9 +2306,9 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     VECTOR2I begin, end;
 
     begin.x = aWire->x1.ToSchUnits();
-    begin.y = aWire->y1.ToSchUnits();
+    begin.y = -aWire->y1.ToSchUnits();
     end.x   = aWire->x2.ToSchUnits();
-    end.y   = aWire->y2.ToSchUnits();
+    end.y   = -aWire->y2.ToSchUnits();
 
     if( begin == end )
         return nullptr;
@@ -2337,7 +2340,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
         arc->SetCenter( center );
         arc->SetStart( begin );
-        arc->SetArcAngleAndEnd( EDA_ANGLE( *aWire->curve, DEGREES_T ), true );
+        arc->SetArcAngleAndEnd( EDA_ANGLE( *aWire->curve * -1, DEGREES_T ), true );
         arc->SetUnit( aGateNumber );
 
         return arc;
@@ -2483,7 +2486,7 @@ SCH_TEXT* SCH_IO_EAGLE::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
     libtext->SetParent( aSymbol.get() );
     libtext->SetUnit( aGateNumber );
-    libtext->SetPosition( VECTOR2I( aText->x.ToSchUnits(), aText->y.ToSchUnits() ) );
+    libtext->SetPosition( VECTOR2I( aText->x.ToSchUnits(), -aText->y.ToSchUnits() ) );
 
     const wxString&   eagleText = aText->text;
     wxString          adjustedText;
@@ -3420,4 +3423,71 @@ wxString SCH_IO_EAGLE::translateEagleBusName( const wxString& aEagleName ) const
     ret << wxT( "}" );
 
     return ret;
+}
+
+
+const ESYMBOL* SCH_IO_EAGLE::getEagleSymbol( const std::unique_ptr<EINSTANCE>& aInstance )
+{
+    wxCHECK( m_eagleDoc && m_eagleDoc->drawing && m_eagleDoc->drawing->schematic && aInstance,
+             nullptr );
+
+    std::unique_ptr<EPART>& epart = m_eagleDoc->drawing->schematic->parts[aInstance->part];
+
+    if( !epart || epart->deviceset.IsEmpty() )
+        return nullptr;
+
+    std::unique_ptr<ELIBRARY>& elibrary = m_eagleDoc->drawing->schematic->libraries[epart->library];
+
+    if( !elibrary )
+        return nullptr;
+
+    std::unique_ptr<EDEVICE_SET>& edeviceset = elibrary->devicesets[epart->deviceset];
+
+    if( !edeviceset )
+        return nullptr;
+
+    std::unique_ptr<EGATE>& egate = edeviceset->gates[aInstance->gate];
+
+    if( !egate )
+        return nullptr;
+
+    std::unique_ptr<ESYMBOL>& esymbol = elibrary->symbols[egate->symbol];
+
+    if( esymbol )
+        return esymbol.get();
+
+    return nullptr;
+}
+
+
+void SCH_IO_EAGLE::getEagleSymbolFieldAttributes( const std::unique_ptr<EINSTANCE>& aInstance,
+                                                  const wxString& aEagleFieldName,
+                                                  SCH_FIELD* aField )
+{
+    wxCHECK( aField && !aEagleFieldName.IsEmpty(), /* void */ );
+
+    const ESYMBOL* esymbol = getEagleSymbol( aInstance );
+
+    if( esymbol )
+    {
+        for( const std::unique_ptr<ETEXT>& text : esymbol->texts )
+        {
+            if( text->text == aEagleFieldName )
+            {
+                aField->SetVisible( true );
+                VECTOR2I pos( text->x.ToSchUnits() + aInstance->x.ToSchUnits(),
+                              -text->y.ToSchUnits() - aInstance->y.ToSchUnits() );
+
+                bool mirror = text->rot ? text->rot->mirror : false;
+
+                if( aInstance->rot && aInstance->rot->mirror )
+                    mirror = !mirror;
+
+                if( mirror )
+                    pos.y = -aInstance->y.ToSchUnits() + text->y.ToSchUnits();
+
+                aField->SetPosition( pos );
+            }
+        }
+    }
 }

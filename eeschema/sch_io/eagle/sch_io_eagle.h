@@ -217,6 +217,11 @@ private:
 
     bool netHasPowerDriver( SCH_LINE* aLine, const wxString& aNetName ) const;
 
+    void getEagleSymbolFieldAttributes( const std::unique_ptr<EINSTANCE>& aInstance,
+                                        const wxString& aEagleFieldName,
+                                        SCH_FIELD* aField );
+    const ESYMBOL* getEagleSymbol( const std::unique_ptr<EINSTANCE>& aInstance );
+
     SCH_SHEET* getCurrentSheet();
     SCH_SCREEN* getCurrentScreen();
 

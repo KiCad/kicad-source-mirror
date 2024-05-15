@@ -1600,10 +1600,10 @@ struct EDEVICE_SET : public EAGLE_BASE
     opt_int      library_version;
     opt_bool     library_locally_modified;
 
-    std::optional<EDESCRIPTION>           description;
-    std::vector<std::unique_ptr<EGATE>>   gates;
-    std::vector<std::unique_ptr<EDEVICE>> devices;
-    std::optional<ESPICE>                 spice;
+    std::optional<EDESCRIPTION>                description;
+    std::map<wxString, std::unique_ptr<EGATE>> gates;
+    std::vector<std::unique_ptr<EDEVICE>>      devices;
+    std::optional<ESPICE>                      spice;
 
     EDEVICE_SET( wxXmlNode* aDeviceSet, IO_BASE* aIo = nullptr );
 };

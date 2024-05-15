@@ -1739,7 +1739,10 @@ EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet, IO_BASE* aIo ) :
         else if( child->GetName() == "gates" )
         {
             for( wxXmlNode* gate = child->GetChildren(); gate; gate = gate->GetNext() )
-                gates.emplace_back( std::make_unique<EGATE>( gate, aIo ) );
+            {
+                std::unique_ptr<EGATE> tmp = std::make_unique<EGATE>( gate, aIo );
+                gates[tmp->name] = std::move( tmp );
+            }
 
             AdvanceProgressPhase();
         }
