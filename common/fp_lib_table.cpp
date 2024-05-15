@@ -320,10 +320,7 @@ void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
 
 const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname, bool aCheckIfEnabled )
 {
-    // Do not optimize this code.  Is done this way specifically to fix a runtime
-    // error with clang 4.0.1.
-    LIB_TABLE_ROW* ltrow = findRow( aNickname, aCheckIfEnabled );
-    FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( ltrow );
+    FP_LIB_TABLE_ROW* row = static_cast<FP_LIB_TABLE_ROW*>( findRow( aNickname, aCheckIfEnabled ) );
 
     if( !row )
     {
@@ -333,9 +330,8 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname, bool a
         THROW_IO_ERROR( msg );
     }
 
-    // We've been 'lazy' up until now, but it cannot be deferred any longer,
-    // instantiate a PCB_IO of the proper kind if it is not already in this
-    // FP_LIB_TABLE_ROW.
+    // We've been 'lazy' up until now, but it cannot be deferred any longer; instantiate a
+    // PCB_IO of the proper kind if it is not already in this FP_LIB_TABLE_ROW.
     if( !row->plugin )
         row->setPlugin( PCB_IO_MGR::PluginFind( row->type ) );
 
