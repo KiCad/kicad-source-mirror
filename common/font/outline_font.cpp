@@ -259,6 +259,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 struct GLYPH_CACHE_KEY {
     FT_Face        face;
     hb_codepoint_t codepoint;
+    double         scaler;
     bool           fakeItalic;
     bool           fakeBold;
     bool           mirror;
@@ -266,7 +267,7 @@ struct GLYPH_CACHE_KEY {
 
     bool operator==(const GLYPH_CACHE_KEY& rhs ) const
     {
-        return face == rhs.face && codepoint == rhs.codepoint
+        return face == rhs.face && codepoint == rhs.codepoint && scaler == rhs.scaler
                    && fakeItalic == rhs.fakeItalic && fakeBold == rhs.fakeBold
                    && mirror == rhs.mirror && angle == rhs.angle;
     }
@@ -280,6 +281,7 @@ namespace std
         std::size_t operator()( const GLYPH_CACHE_KEY& k ) const
         {
             return hash<const void*>()( k.face ) ^ hash<unsigned>()( k.codepoint )
+                        ^ hash<double>()( k.scaler )
                         ^ hash<int>()( k.fakeItalic ) ^ hash<int>()( k.fakeBold )
                         ^ hash<int>()( k.mirror ) ^ hash<int>()( k.angle.AsTenthsOfADegree() );
         }
@@ -339,7 +341,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
         if( aGlyphs )
         {
-            GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, m_fakeItal, m_fakeBold,
+            GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, scaler, m_fakeItal, m_fakeBold,
                                     aMirror, aAngle };
             GLYPH_DATA&     glyphData = s_glyphCache[ key ];
 
