@@ -66,24 +66,17 @@
 #include <Standard_Version.hxx>
 #include <TCollection_ExtendedString.hxx>
 #include <TDocStd_Document.hxx>
-#include <TDocStd_XLinkTool.hxx>
 #include <TDataStd_Name.hxx>
 #include <TDataStd_TreeNode.hxx>
 #include <TDF_LabelSequence.hxx>
-#include <TDF_Tool.hxx>
+#include <TDF_ChildIterator.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <XCAFApp_Application.hxx>
 #include <XCAFDoc.hxx>
-#include <XCAFDoc_AssemblyTool.hxx>
 #include <XCAFDoc_DocumentTool.hxx>
 #include <XCAFDoc_ColorTool.hxx>
 #include <XCAFDoc_ShapeTool.hxx>
-#include <XCAFDoc_Area.hxx>
-#include <XCAFDoc_AssemblyGraph.hxx>
-#include <XCAFDoc_Centroid.hxx>
-#include <XCAFDoc_Location.hxx>
-#include <XCAFDoc_Volume.hxx>
 
 #include <BRep_Tool.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
@@ -482,119 +475,6 @@ static TopoDS_Shape getOneShape( Handle( XCAFDoc_ShapeTool ) aShapeTool )
         aShape = aCompound;
 
     return aShape;
-}
-
-
-// Apply scaling to shapes within theLabel.
-// Based on XCAFDoc_Editor::RescaleGeometry
-static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& aScale )
-{
-    if( theLabel.IsNull() )
-    {
-        Message::SendFail( "Null label." );
-        return Standard_False;
-    }
-
-    if( Abs( aScale.X() ) <= gp::Resolution() || Abs( aScale.Y() ) <= gp::Resolution()
-        || Abs( aScale.Z() ) <= gp::Resolution() )
-    {
-        Message::SendFail( "Scale factor is too small." );
-        return Standard_False;
-    }
-
-    Handle( XCAFDoc_ShapeTool ) aShapeTool = XCAFDoc_DocumentTool::ShapeTool( theLabel );
-    if( aShapeTool.IsNull() )
-    {
-        Message::SendFail( "Couldn't find XCAFDoc_ShapeTool attribute." );
-        return Standard_False;
-    }
-
-    Handle( XCAFDoc_AssemblyGraph ) aG = new XCAFDoc_AssemblyGraph( theLabel );
-    if( aG.IsNull() )
-    {
-        Message::SendFail( "Couldn't create assembly graph." );
-        return Standard_False;
-    }
-
-    Standard_Boolean anIsDone = Standard_True;
-
-    // clang-format off
-    gp_GTrsf aTrsf;
-    aTrsf.SetVectorialPart( gp_Mat( aScale.X(), 0, 0,
-                                    0, aScale.Y(), 0,
-                                    0, 0, aScale.Z() ) );
-    // clang-format on
-
-    BRepBuilderAPI_GTransform aBRepTrsf( aTrsf );
-
-    XCAFDoc_AssemblyTool::Traverse(
-            aG,
-            []( const Handle( XCAFDoc_AssemblyGraph ) & theGraph,
-                const Standard_Integer theNode ) -> Standard_Boolean
-            {
-                const XCAFDoc_AssemblyGraph::NodeType aNodeType = theGraph->GetNodeType( theNode );
-                return ( aNodeType == XCAFDoc_AssemblyGraph::NodeType_Part )
-                       || ( aNodeType == XCAFDoc_AssemblyGraph::NodeType_Occurrence );
-            },
-            [&]( const Handle( XCAFDoc_AssemblyGraph ) & theGraph,
-                 const Standard_Integer theNode ) -> Standard_Boolean
-            {
-                const TDF_Label&                      aLabel = theGraph->GetNode( theNode );
-                const XCAFDoc_AssemblyGraph::NodeType aNodeType = theGraph->GetNodeType( theNode );
-
-                if( aNodeType == XCAFDoc_AssemblyGraph::NodeType_Part )
-                {
-                    const TopoDS_Shape aShape = aShapeTool->GetShape( aLabel );
-                    aBRepTrsf.Perform( aShape, Standard_True );
-                    if( !aBRepTrsf.IsDone() )
-                    {
-                        Standard_SStream        aSS;
-                        TCollection_AsciiString anEntry;
-                        TDF_Tool::Entry( aLabel, anEntry );
-                        aSS << "Shape " << anEntry << " is not scaled!";
-                        Message::SendFail( aSS.str().c_str() );
-                        anIsDone = Standard_False;
-                        return Standard_False;
-                    }
-                    TopoDS_Shape aScaledShape = aBRepTrsf.Shape();
-                    aShapeTool->SetShape( aLabel, aScaledShape );
-
-                    // Update sub-shapes
-                    TDF_LabelSequence aSubshapes;
-                    aShapeTool->GetSubShapes( aLabel, aSubshapes );
-                    for( TDF_LabelSequence::Iterator anItSs( aSubshapes ); anItSs.More();
-                         anItSs.Next() )
-                    {
-                        const TDF_Label&   aLSs = anItSs.Value();
-                        const TopoDS_Shape aSs = aShapeTool->GetShape( aLSs );
-                        const TopoDS_Shape aSs1 = aBRepTrsf.ModifiedShape( aSs );
-                        aShapeTool->SetShape( aLSs, aSs1 );
-                    }
-
-                    // These attributes will be recomputed eventually, but clear them just in case
-                    aLabel.ForgetAttribute( XCAFDoc_Area::GetID() );
-                    aLabel.ForgetAttribute( XCAFDoc_Centroid::GetID() );
-                    aLabel.ForgetAttribute( XCAFDoc_Volume::GetID() );
-                }
-                else if( aNodeType == XCAFDoc_AssemblyGraph::NodeType_Occurrence )
-                {
-                    TopLoc_Location aLoc = aShapeTool->GetLocation( aLabel );
-                    gp_Trsf         aTrsf = aLoc.Transformation();
-                    aTrsf.SetTranslationPart( aTrsf.TranslationPart().Multiplied( aScale ) );
-                    XCAFDoc_Location::Set( aLabel, aTrsf );
-                }
-
-                return Standard_True;
-            } );
-
-    if( !anIsDone )
-    {
-        return Standard_False;
-    }
-
-    aShapeTool->UpdateAssemblies();
-
-    return anIsDone;
 }
 
 
@@ -2630,46 +2510,141 @@ bool STEP_PCB_MODEL::readSTEP( Handle( TDocStd_Document )& doc, const char* fnam
 }
 
 
-TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
-                                         Handle( TDocStd_Document ) & dest, VECTOR3D aScale )
+TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document )& source,
+                                   Handle( TDocStd_Document )& dest, VECTOR3D aScale )
 {
     // transfer data from Source into a top level component of Dest
+    gp_GTrsf scale_transform;
+    scale_transform.SetVectorialPart( gp_Mat( aScale.x, 0, 0,
+                                              0, aScale.y, 0,
+                                              0, 0, aScale.z ) );
+    BRepBuilderAPI_GTransform brep( scale_transform );
+
     // s_assy = shape tool for the source
-    Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( source->Main() );
+    Handle(XCAFDoc_ShapeTool) s_assy = XCAFDoc_DocumentTool::ShapeTool( source->Main() );
 
     // retrieve all free shapes within the assembly
     TDF_LabelSequence frshapes;
     s_assy->GetFreeShapes( frshapes );
 
     // d_assy = shape tool for the destination
-    Handle( XCAFDoc_ShapeTool ) d_assy = XCAFDoc_DocumentTool::ShapeTool( dest->Main() );
+    Handle( XCAFDoc_ShapeTool ) d_assy = XCAFDoc_DocumentTool::ShapeTool ( dest->Main() );
 
     // create a new shape within the destination and set the assembly tool to point to it
-    TDF_Label d_targetLabel = d_assy->NewShape();
+    TDF_Label component = d_assy->NewShape();
 
-    if( frshapes.Size() == 1 )
+    int nshapes = frshapes.Length();
+    int id = 1;
+    Handle( XCAFDoc_ColorTool ) scolor = XCAFDoc_DocumentTool::ColorTool( source->Main() );
+    Handle( XCAFDoc_ColorTool ) dcolor = XCAFDoc_DocumentTool::ColorTool( dest->Main() );
+    TopExp_Explorer dtop;
+    TopExp_Explorer stop;
+
+    while( id <= nshapes )
     {
-        TDocStd_XLinkTool link;
-        link.Copy( d_targetLabel, frshapes.First() );
-    }
-    else
-    {
-        // Rare case
-        for( TDF_Label& s_shapeLabel : frshapes )
+        const TDF_Label& s_shapeLabel = frshapes.Value( id );
+        TopoDS_Shape     shape = s_assy->GetShape( s_shapeLabel );
+
+        if( !shape.IsNull() )
         {
-            TDF_Label d_component = d_assy->NewShape();
+            Handle( TDataStd_Name ) s_nameAttr;
+            s_shapeLabel.FindAttribute( TDataStd_Name::GetID(), s_nameAttr );
 
-            TDocStd_XLinkTool link;
-            link.Copy( d_component, s_shapeLabel );
+            TCollection_ExtendedString s_labelName =
+                    s_nameAttr ? s_nameAttr->Get() : TCollection_ExtendedString();
 
-            d_assy->AddComponent( d_targetLabel, d_component, TopLoc_Location() );
+            TopoDS_Shape scaled_shape( shape );
+
+            if( aScale.x != 1.0 || aScale.y != 1.0 || aScale.z != 1.0 )
+            {
+                brep.Perform( shape, Standard_False );
+
+                if( brep.IsDone() )
+                {
+                    scaled_shape = brep.Shape();
+                }
+                else
+                {
+                    ReportMessage( wxT( "  * transfertModel(): failed to scale model\n" ) );
+
+                    scaled_shape = shape;
+                }
+            }
+
+            TDF_Label d_shapeLabel = d_assy->AddShape( scaled_shape, Standard_False );
+
+            if( s_labelName.Length() > 0 )
+                TDataStd_Name::Set( d_shapeLabel, s_labelName );
+
+            TDF_Label niulab = d_assy->AddComponent( component, d_shapeLabel, TopLoc_Location() );
+
+            // check for per-surface colors
+            stop.Init( shape, TopAbs_FACE );
+            dtop.Init( d_assy->GetShape( niulab ), TopAbs_FACE );
+
+            while( stop.More() && dtop.More() )
+            {
+                Quantity_Color face_color;
+
+                TDF_Label tl;
+
+                // give priority to the base shape's color
+                if( s_assy->FindShape( stop.Current(), tl ) )
+                {
+                    if( scolor->GetColor( tl, XCAFDoc_ColorSurf, face_color )
+                        || scolor->GetColor( tl, XCAFDoc_ColorGen, face_color )
+                        || scolor->GetColor( tl, XCAFDoc_ColorCurv, face_color ) )
+                    {
+                        dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorSurf );
+                    }
+                }
+                else if( scolor->GetColor( stop.Current(), XCAFDoc_ColorSurf, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorGen, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorCurv, face_color ) )
+                {
+                    dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorSurf );
+                }
+
+                stop.Next();
+                dtop.Next();
+            }
+
+            // check for per-solid colors
+            stop.Init( shape, TopAbs_SOLID );
+            dtop.Init( d_assy->GetShape( niulab ), TopAbs_SOLID, TopAbs_FACE );
+
+            while( stop.More() && dtop.More() )
+            {
+                Quantity_Color face_color;
+
+                TDF_Label tl;
+
+                // give priority to the base shape's color
+                if( s_assy->FindShape( stop.Current(), tl ) )
+                {
+                    if( scolor->GetColor( tl, XCAFDoc_ColorSurf, face_color )
+                        || scolor->GetColor( tl, XCAFDoc_ColorGen, face_color )
+                        || scolor->GetColor( tl, XCAFDoc_ColorCurv, face_color ) )
+                    {
+                        dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorGen );
+                    }
+                }
+                else if( scolor->GetColor( stop.Current(), XCAFDoc_ColorSurf, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorGen, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorCurv, face_color ) )
+                {
+                    dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorSurf );
+                }
+
+                stop.Next();
+                dtop.Next();
+            }
         }
-    }
 
-    if( aScale.x != 1.0 || aScale.y != 1.0 || aScale.z != 1.0 )
-        rescaleShapes( d_targetLabel, gp_XYZ( aScale.x, aScale.y, aScale.z ) );
+        ++id;
+    };
 
-    return d_targetLabel;
+    return component;
 }
 
 
