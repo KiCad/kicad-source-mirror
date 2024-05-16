@@ -118,6 +118,7 @@
 #include <GC_MakeCircle.hxx>
 
 #include <RWGltf_CafWriter.hxx>
+#include <VrmlAPI_CafReader.hxx>
 
 #include <macros.h>
 
@@ -587,6 +588,46 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
     }
 
     aShapeTool->UpdateAssemblies();
+
+    return anIsDone;
+}
+
+
+// Sets names in assembly to <aPrefix> (<old name>), or to <aPrefix>
+static Standard_Boolean prefixNames( const TDF_Label&                  aLabel,
+                                     const TCollection_ExtendedString& aPrefix )
+{
+    Handle( KI_XCAFDoc_AssemblyGraph ) aG = new KI_XCAFDoc_AssemblyGraph( aLabel );
+
+    if( aG.IsNull() )
+    {
+        Message::SendFail( "Couldn't create assembly graph." );
+        return Standard_False;
+    }
+
+    Standard_Boolean anIsDone = Standard_True;
+
+    for( Standard_Integer idx = 1; idx <= aG->NbNodes(); idx++ )
+    {
+        const TDF_Label& lbl = aG->GetNode( idx );
+        Handle( TDataStd_Name ) nameHandle;
+
+        if( lbl.FindAttribute( TDataStd_Name::GetID(), nameHandle ) )
+        {
+            TCollection_ExtendedString name;
+
+            name += aPrefix;
+            name += " (";
+            name += nameHandle->Get();
+            name += ")";
+
+            TDataStd_Name::Set( lbl, name );
+        }
+        else
+        {
+            TDataStd_Name::Set( lbl, aPrefix );
+        }
+    }
 
     return anIsDone;
 }
@@ -2436,7 +2477,22 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
                 }
             }
 
-            return false; // No replacement model found
+            // VRML models only work when exporting to glTF
+            // Also OCCT < 7.9.0 fail to load most VRML 2.0 models because of Switch nodes
+            if( readVRML( doc, aFileNameUTF8.c_str() ) )
+            {
+                Handle( XCAFDoc_ShapeTool ) shapeTool =
+                        XCAFDoc_DocumentTool::ShapeTool( doc->Main() );
+
+                prefixNames( shapeTool->Label(),
+                             TCollection_ExtendedString( baseName.c_str().AsChar() ) );
+            }
+            else
+            {
+                ReportMessage( wxString::Format( wxT( "readVRML() failed on filename '%s'.\n" ),
+                                                 fileName ) );
+                return false;
+            }
         }
         else // Substitution is not allowed
         {
@@ -2619,6 +2675,21 @@ bool STEP_PCB_MODEL::readSTEP( Handle( TDocStd_Document )& doc, const char* fnam
 
         return false;
     }
+
+    return true;
+}
+
+
+bool STEP_PCB_MODEL::readVRML( Handle( TDocStd_Document ) & doc, const char* fname )
+{
+    VrmlAPI_CafReader                reader;
+    RWMesh_CoordinateSystemConverter conv;
+    conv.SetInputLengthUnit( 2.54 );
+    reader.SetCoordinateSystemConverter( conv );
+    reader.SetDocument( doc );
+
+    if( !reader.Perform( TCollection_AsciiString( fname ), Message_ProgressRange() ) )
+        return false;
 
     return true;
 }

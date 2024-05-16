@@ -223,8 +223,9 @@ private:
     bool getModelLocation( bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
                            VECTOR3D aOrientation, TopLoc_Location& aLocation );
 
-    bool readIGES( Handle( TDocStd_Document )& m_doc, const char* fname );
-    bool readSTEP( Handle( TDocStd_Document )& m_doc, const char* fname );
+    bool readIGES( Handle( TDocStd_Document ) & aDoc, const char* aFname );
+    bool readSTEP( Handle( TDocStd_Document ) & aDoc, const char* aFname );
+    bool readVRML( Handle( TDocStd_Document ) & aDoc, const char* aFname );
 
     TDF_Label transferModel( Handle( TDocStd_Document )& source, Handle( TDocStd_Document ) & dest,
                              VECTOR3D aScale );
