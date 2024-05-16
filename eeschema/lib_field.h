@@ -161,6 +161,9 @@ public:
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
+    int  GetLibTextSize() const { return GetTextWidth(); }
+    void SetLibTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
+
     SCH_LAYER_ID GetDefaultLayer() const;
 
     void BeginEdit( const VECTOR2I& aStartPoint ) override;

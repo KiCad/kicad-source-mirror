@@ -664,6 +664,11 @@ static struct LIB_FIELD_DESC
         propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
         propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
 
+        propMgr.AddProperty( new PROPERTY<LIB_FIELD, int>(
+                                     _HKI( "Text Size" ), &LIB_FIELD::SetLibTextSize,
+                                     &LIB_FIELD::GetLibTextSize, PROPERTY_DISPLAY::PT_SIZE ),
+                             _HKI( "Text Properties" ) );
+
         propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
     }
 } _LIB_FIELD_DESC;
