@@ -1600,22 +1600,45 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
     }
     else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
     {
-        // Do not fill the shape in B&W print mode, to avoid to visible items inside the shape
-        if( aShape->IsFilled() && !m_schSettings.PrintBlackAndWhiteReq() )
+        switch( aShape->GetFillMode() )
         {
-            if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
+        case FILL_T::NO_FILL:
+            break;
 
+        case FILL_T::FILLED_SHAPE:
+            // Fill in the foreground layer
+            break;
+
+        case FILL_T::FILLED_WITH_COLOR:
+        case FILL_T::FILLED_WITH_BG_BODYCOLOR:
+            // Do not fill the shape in B&W print mode, to avoid to visible items inside the shape
+            if( !m_schSettings.PrintBlackAndWhiteReq() )
+            {
+                if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                    color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
+
+                m_gal->SetIsFill( true );
+                m_gal->SetIsStroke( false );
+                m_gal->SetFillColor( color );
+
+                drawShape( aShape );
+            }
+            break;
+        }
+    }
+    else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES || aLayer == LAYER_PRIVATE_NOTES
+             || aLayer == LAYER_RULE_AREAS )
+    {
+        // Shapes filled with the device colour must be filled in the foreground
+        if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE )
+        {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
             m_gal->SetFillColor( color );
 
             drawShape( aShape );
         }
-    }
-    else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES || aLayer == LAYER_PRIVATE_NOTES
-             || aLayer == LAYER_RULE_AREAS )
-    {
+
         float lineWidth = getLineWidth( aShape, drawingShadows );
 
         if( lineWidth > 0 )
