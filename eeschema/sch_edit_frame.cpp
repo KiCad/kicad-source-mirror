@@ -1097,7 +1097,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( !Schematic().GetFileName().IsEmpty() && !Schematic().RootScreen()->IsEmpty() )
         UpdateFileHistory( fileName );
 
-    Schematic().RootScreen()->Clear();
+    Schematic().RootScreen()->Clear( true );
 
     // all sub sheets are deleted, only the main sheet is usable
     GetCurrentSheet().clear();
