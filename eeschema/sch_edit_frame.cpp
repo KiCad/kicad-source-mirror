@@ -1055,7 +1055,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
     // Make sure local settings are persisted
     SaveProjectLocalSettings();
 
-    Schematic().RootScreen()->Clear();
+    Schematic().RootScreen()->Clear( true );
 
     // all sub sheets are deleted, only the main sheet is usable
     GetCurrentSheet().clear();
