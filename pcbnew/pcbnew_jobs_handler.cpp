@@ -300,13 +300,13 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         layerName = brd->GetLayerName( layer );
     }
 
-    if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+    if( aJob->GetVarOverrides().count( wxT( "LAYER" ) ) > 0 )
         layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
-    if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+    if( aJob->GetVarOverrides().count( wxT( "SHEETNAME" ) ) > 0 )
         sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
 
-    if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+    if( aJob->GetVarOverrides().count( wxT( "SHEETPATH" ) ) > 0 )
         sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
     DXF_PLOTTER* plotter = (DXF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
@@ -390,13 +390,13 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         layerName = brd->GetLayerName( layer );
     }
 
-    if( aPdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+    if( aPdfJob->GetVarOverrides().count( wxT( "LAYER" ) ) > 0 )
         layerName = aPdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
-    if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+    if( aPdfJob->GetVarOverrides().count( wxT( "SHEETNAME" ) ) > 0 )
         sheetName = aPdfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
 
-    if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+    if( aPdfJob->GetVarOverrides().count( wxT( "SHEETPATH" ) ) > 0 )
         sheetPath = aPdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
     PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
@@ -498,13 +498,13 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
         jobfile_writer.AddGbrFile( layer, fullname );
 
-        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+        if( aJob->GetVarOverrides().count( wxT( "LAYER" ) ) > 0 )
             layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+        if( aJob->GetVarOverrides().count( wxT( "SHEETNAME" ) ) > 0 )
             sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
 
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+        if( aJob->GetVarOverrides().count( wxT( "SHEETPATH" ) ) > 0 )
             sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
         // We are feeding it one layer at the start here to silence a logic check
@@ -602,13 +602,13 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         layerName = brd->GetLayerName( layer );
     }
 
-    if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+    if( aJob->GetVarOverrides().count( wxT( "LAYER" ) ) > 0 )
         layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
-    if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+    if( aJob->GetVarOverrides().count( wxT( "SHEETNAME" ) ) > 0 )
         sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
 
-    if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+    if( aJob->GetVarOverrides().count( wxT( "SHEETPATH" ) ) > 0 )
         sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
     // We are feeding it one layer at the start here to silence a logic check
