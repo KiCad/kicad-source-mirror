@@ -118,7 +118,10 @@
 #include <GC_MakeCircle.hxx>
 
 #include <RWGltf_CafWriter.hxx>
+
+#if OCC_VERSION_HEX >= 0x070700
 #include <VrmlAPI_CafReader.hxx>
+#endif
 
 #include <macros.h>
 
@@ -2682,6 +2685,7 @@ bool STEP_PCB_MODEL::readSTEP( Handle( TDocStd_Document )& doc, const char* fnam
 
 bool STEP_PCB_MODEL::readVRML( Handle( TDocStd_Document ) & doc, const char* fname )
 {
+#if OCC_VERSION_HEX >= 0x070700
     VrmlAPI_CafReader                reader;
     RWMesh_CoordinateSystemConverter conv;
     conv.SetInputLengthUnit( 2.54 );
@@ -2692,6 +2696,9 @@ bool STEP_PCB_MODEL::readVRML( Handle( TDocStd_Document ) & doc, const char* fna
         return false;
 
     return true;
+#else
+    return false;
+#endif
 }
 
 
