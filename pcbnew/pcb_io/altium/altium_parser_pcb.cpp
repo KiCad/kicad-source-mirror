@@ -462,6 +462,9 @@ AMODEL::AMODEL( ALTIUM_BINARY_PARSER& aReader )
     rotation.y = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "ROTY" ), 0. );
     rotation.z = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "ROTZ" ), 0. );
 
+    z_offset = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "DZ" ), 0. );
+    checksum = ALTIUM_PROPS_UTILS::ReadInt( properties, wxT( "CHECKSUM" ), 0 );
+
     if( aReader.HasParsingError() )
         THROW_IO_ERROR( wxT( "Model stream was not parsed correctly" ) );
 }
@@ -704,7 +707,7 @@ ACOMPONENTBODY6::ACOMPONENTBODY6( ALTIUM_BINARY_PARSER& aReader )
 
     rotation = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "MODEL.2D.ROTATION" ), 0. );
 
-    bodyOpacity = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "BODYOPACITY3D" ), 1. );
+    body_opacity_3d = ALTIUM_PROPS_UTILS::ReadDouble( properties, wxT( "BODYOPACITY3D" ), 1. );
 
     aReader.SkipSubrecord();
 

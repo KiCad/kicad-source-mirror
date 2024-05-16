@@ -25,35 +25,39 @@
  */
 #include <magic_enum.hpp>
 
-#include <core/mirror.h>
-#include <confirm.h>
-#include <refdes_utils.h>
-#include <bitmaps.h>
 #include <unordered_set>
-#include <string_utils.h>
-#include <pcb_edit_frame.h>
+
+#include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <confirm.h>
+#include <convert_basic_shapes_to_polygon.h>
+#include <convert_shape_list_to_polygon.h>
+#include <core/mirror.h>
+#include <drc/drc_item.h>
+#include <embedded_files.h>
+#include <font/font.h>
+#include <font/outline_font.h>
+#include <footprint.h>
+#include <geometry/convex_hull.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_simple.h>
+#include <i18n_utility.h>
 #include <lset.h>
 #include <macros.h>
 #include <pad.h>
-#include <pcb_marker.h>
-#include <pcb_group.h>
-#include <pcb_track.h>
 #include <pcb_dimension.h>
+#include <pcb_edit_frame.h>
+#include <pcb_field.h>
+#include <pcb_group.h>
+#include <pcb_marker.h>
 #include <pcb_reference_image.h>
 #include <pcb_textbox.h>
-#include <pcb_field.h>
-#include <footprint.h>
-#include <zone.h>
+#include <pcb_track.h>
+#include <refdes_utils.h>
+#include <string_utils.h>
 #include <view/view.h>
-#include <i18n_utility.h>
-#include <drc/drc_item.h>
-#include <geometry/shape_segment.h>
-#include <geometry/shape_simple.h>
-#include <convert_shape_list_to_polygon.h>
-#include <geometry/convex_hull.h>
-#include "convert_basic_shapes_to_polygon.h"
+#include <zone.h>
 
 #include <google/protobuf/any.pb.h>
 #include <api/board/board_types.pb.h>
@@ -79,6 +83,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_lastEditTime = 0;
     m_zoneConnection          = ZONE_CONNECTION::INHERITED;
     m_fileFormatVersionAtLoad = 0;
+    m_embedFonts = false;
 
     // These are the mandatory fields for the editor to work
     for( int i = 0; i < MANDATORY_FIELDS; i++ )
@@ -118,6 +123,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_lastEditTime = aFootprint.m_lastEditTime;
     m_link         = aFootprint.m_link;
     m_path         = aFootprint.m_path;
+    m_embedFonts   = aFootprint.m_embedFonts;
 
     m_cachedBoundingBox              = aFootprint.m_cachedBoundingBox;
     m_boundingBoxCacheTimeStamp      = aFootprint.m_boundingBoxCacheTimeStamp;
@@ -197,6 +203,9 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
                 newGroup->AddItem( ptrMap[ member ] );
         }
     }
+
+    for( auto& [ name, file ] : aFootprint.EmbeddedFileMap() )
+        AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
 
     // Copy auxiliary data
     m_3D_Drawings   = aFootprint.m_3D_Drawings;
@@ -3699,6 +3708,39 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
 
     for( const PCB_TEXT* text : texts )
         text->TransformTextToPolySet( aBuffer, aClearance, aError, aErrorLoc );
+}
+
+
+void FOOTPRINT::EmbedFonts()
+{
+    using OUTLINE_FONT = KIFONT::OUTLINE_FONT;
+    using EMBEDDING_PERMISSION = OUTLINE_FONT::EMBEDDING_PERMISSION;
+
+    std::set<OUTLINE_FONT*> fonts;
+
+    for( BOARD_ITEM* item : GraphicalItems() )
+    {
+        if( auto* text = dynamic_cast<EDA_TEXT*>( item ) )
+        {
+            if( auto* font = text->GetFont(); font && !font->IsStroke() )
+            {
+                auto* outline = static_cast<OUTLINE_FONT*>( font );
+                auto permission = outline->GetEmbeddingPermission();
+
+                if( permission == EMBEDDING_PERMISSION::EDITABLE
+                    || permission == EMBEDDING_PERMISSION::INSTALLABLE )
+                {
+                    fonts.insert( outline );
+                }
+            }
+        }
+    }
+
+    for( auto* font : fonts )
+    {
+        auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
+        file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
+    }
 }
 
 

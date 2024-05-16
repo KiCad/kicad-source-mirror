@@ -36,6 +36,7 @@
 
 class PCB_EDIT_FRAME;
 class PANEL_FP_PROPERTIES_3D_MODEL;
+class PANEL_EMBEDDED_FILES;
 
 class DIALOG_FOOTPRINT_PROPERTIES: public DIALOG_FOOTPRINT_PROPERTIES_BASE
 {
@@ -106,6 +107,7 @@ private:
 
     wxSize                           m_gridSize;
     wxSize                           m_lastRequestedSize;
+    PANEL_EMBEDDED_FILES*            m_embeddedFiles;
 };
 
 

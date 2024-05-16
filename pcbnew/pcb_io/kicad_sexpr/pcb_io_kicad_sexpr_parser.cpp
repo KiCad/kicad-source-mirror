@@ -37,6 +37,8 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <embedded_files.h>
+#include <font/fontconfig.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_reference_image.h>
@@ -72,6 +74,7 @@
 // base64 code. Needed for PCB_REFERENCE_IMAGE
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
+#include <wx/log.h>
 #include <wx/mstream.h>
 
 // We currently represent board units as integers.  Any values that are
@@ -580,8 +583,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
             if( !faceName.IsEmpty() )
             {
-                aText->SetFont( KIFONT::FONT::GetFont( faceName, aText->IsBold(),
-                                                       aText->IsItalic() ) );
+                m_fontTextMap[aText] = { faceName, aText->IsBold(), aText->IsItalic() };
             }
 
             break;
@@ -865,6 +867,17 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
+    // Assign the fonts after we have parsed any potential embedded fonts from the board
+    // or footprint.  This also ensures that the embedded fonts are cached
+    for( auto& [text, params] : m_fontTextMap )
+    {
+        const std::vector<wxString>* embeddedFonts = item->GetEmbeddedFiles()->UpdateFontFiles();
+
+        text->SetFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
+                                              std::get<2>( params ),
+                                              embeddedFonts ) );
+    }
+
     resolveGroups( item );
 
     return item;
@@ -1073,6 +1086,31 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             bulkAddedItems.push_back( item );
             break;
 
+        case T_embedded_fonts:
+        {
+            m_board->GetEmbeddedFiles()->SetAreFontsEmbedded( parseBool() );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_embedded_files:
+        {
+            EMBEDDED_FILES_PARSER embeddedFilesParser( reader );
+            embeddedFilesParser.SyncLineReaderWith( *this );
+
+            try
+            {
+                embeddedFilesParser.ParseEmbedded( m_board->GetEmbeddedFiles() );
+            }
+            catch( const PARSE_ERROR& e )
+            {
+                wxLogError( e.What() );
+            }
+
+            SyncLineReaderWith( embeddedFilesParser );
+            break;
+        }
+
         default:
             wxString err;
             err.Printf( _( "Unknown token '%s'" ), FromUTF8() );
@@ -1183,6 +1221,9 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             z->SetLayerSet( z->GetLayerSet() & layers );
         }
     }
+
+    // Ensure all footprints have their embedded data from the board
+    m_board->FixupEmbeddedData();
 
     return m_board;
 }
@@ -4675,13 +4716,38 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             parseGROUP( footprint.get() );
             break;
 
+        case T_embedded_fonts:
+        {
+            footprint->GetEmbeddedFiles()->SetAreFontsEmbedded( parseBool() );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_embedded_files:
+        {
+            EMBEDDED_FILES_PARSER embeddedFilesParser( reader );
+            embeddedFilesParser.SyncLineReaderWith( *this );
+
+            try
+            {
+                embeddedFilesParser.ParseEmbedded( footprint->GetEmbeddedFiles() );
+            }
+            catch( const PARSE_ERROR& e )
+            {
+                wxLogError( e.What() );
+            }
+
+            SyncLineReaderWith( embeddedFilesParser );
+            break;
+        }
+
         default:
-            Expecting( "locked, placed, tedit, tstamp, uuid, at, descr, tags, path, "
-                       "autoplace_cost90, autoplace_cost180, solder_mask_margin, "
-                       "solder_paste_margin, solder_paste_margin_ratio, clearance, "
-                       "zone_connect, thermal_gap, attr, fp_text, "
-                       "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, fp_rect, pad, "
-                       "zone, group, generator, version or model" );
+            Expecting( "at, descr, locked, placed, tedit, tstamp, uuid, "
+                       "autoplace_cost90, autoplace_cost180, attr, clearance, "
+                       "embedded_files, fp_arc, fp_circle, fp_curve, fp_line, fp_poly, "
+                       "fp_rect, fp_text, pad, group, generator, model, path, solder_mask_margin, "
+                       "solder_paste_margin, solder_paste_margin_ratio, tags, thermal_gap, "
+                       "version, zone, or zone_connect" );
         }
     }
 

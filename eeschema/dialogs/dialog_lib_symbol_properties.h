@@ -32,6 +32,7 @@
 
 class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL;
+class PANEL_EMBEDDED_FILES;
 class WX_GRID;
 
 
@@ -92,6 +93,8 @@ public:
 
     std::bitset<64>    m_shownColumns;
     wxSize             m_size;
+
+    PANEL_EMBEDDED_FILES* m_embeddedFiles;
 
 private:
     static int m_lastOpenedPage;    // To remember the last notebook selection

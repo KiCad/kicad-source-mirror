@@ -406,6 +406,8 @@ private:
     TIME_PT             m_lastProgressTime;  ///< for progress reporting
     unsigned            m_lineCount;         ///< for progress reporting
 
+    std::map<EDA_TEXT*, std::tuple<wxString, bool, bool>> m_fontTextMap;
+
     std::vector<GROUP_INFO>     m_groupInfos;
     std::vector<GENERATOR_INFO> m_generatorInfos;
 

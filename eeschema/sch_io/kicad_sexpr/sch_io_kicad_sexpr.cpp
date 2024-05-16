@@ -372,6 +372,14 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
     wxCHECK( screen, /* void */ );
 
+    // If we've requested to embed the fonts in the schematic, do so.
+    // Otherwise, clear the embedded fonts from the schematic.  Embedded
+    // fonts will be used if available
+    if( m_schematic->GetAreFontsEmbedded() )
+        m_schematic->EmbedFonts();
+    else
+        m_schematic->GetEmbeddedFiles()->ClearEmbeddedFonts();
+
     m_out->Print( 0, "(kicad_sch (version %d) (generator \"eeschema\") (generator_version \"%s\")\n\n",
                   SEXPR_SCHEMATIC_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
@@ -477,7 +485,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         case SCH_SHAPE_T:
             saveShape( static_cast<SCH_SHAPE*>( item ), 1 );
             break;
-        
+
         case SCH_RULE_AREA_T:
             saveRuleArea( static_cast<SCH_RULE_AREA*>( item ), 1 );
             break;
@@ -509,6 +517,13 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
         instances.emplace_back( aSheet->GetRootInstance() );
         saveInstances( instances, 1 );
+
+        m_out->Print( 1, "(embedded_fonts %s)\n",
+                      m_schematic->GetAreFontsEmbedded() ? "yes" : "no" );
+
+        // Save any embedded files
+        if( !m_schematic->GetEmbeddedFiles()->IsEmpty() )
+            m_schematic->WriteEmbeddedFiles( *m_out, 1, true );
     }
 
     m_out->Print( 0, ")\n" );
@@ -526,6 +541,14 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
 
     m_schematic = &aSchematic;
     m_out = aFormatter;
+
+    // If we've requested to embed the fonts in the schematic, do so.
+    // Otherwise, clear the embedded fonts from the schematic.  Embedded
+    // fonts will be used if available
+    if( m_schematic->GetAreFontsEmbedded() )
+        m_schematic->EmbedFonts();
+    else
+        m_schematic->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
     size_t                          i;
     SCH_ITEM*                       item;
@@ -564,7 +587,7 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
         for( const std::pair<const wxString, LIB_SYMBOL*>& libSymbol : libSymbols )
         {
             SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( libSymbol.second, *m_out, 1,
-                                                      libSymbol.first );
+                                                      libSymbol.first, false );
         }
 
         m_out->Print( 0, ")\n\n" );

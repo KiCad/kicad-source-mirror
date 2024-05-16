@@ -195,6 +195,8 @@ target_link_libraries( kicommon
     nlohmann_json
     fmt::fmt
     CURL::libcurl
+    picosha2
+    zstd
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}
 
@@ -267,6 +269,7 @@ target_include_directories( kicommon
         $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:expected,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:picosha2,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 add_dependencies( kicommon pegtl version_header )
@@ -304,6 +307,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_configure_paths_base.cpp
     dialogs/dialog_display_html_text_base.cpp
     dialogs/dialog_edit_library_tables.cpp
+    dialogs/dialog_embed_files.cpp
     dialogs/dialog_global_lib_table_config.cpp
     dialogs/dialog_global_lib_table_config_base.cpp
     dialogs/dialog_grid_settings.cpp
@@ -338,6 +342,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
+    dialogs/panel_embedded_files.cpp
+    dialogs/panel_embedded_files_base.cpp
     dialogs/panel_gal_display_options.cpp
     dialogs/panel_hotkeys_editor.cpp
     dialogs/panel_image_editor.cpp
@@ -534,6 +540,7 @@ set( COMMON_SRCS
     eda_shape.cpp
     eda_text.cpp
     eda_tools.cpp
+    embedded_files.cpp
     env_paths.cpp
     executable_names.cpp
     filename_resolver.cpp
@@ -589,6 +596,7 @@ set( COMMON_SRCS
     tool/edit_constraints.cpp
     tool/edit_points.cpp
     tool/editor_conditions.cpp
+    tool/embed_tool.cpp
     tool/grid_helper.cpp
     tool/grid_menu.cpp
     tool/picker_tool.cpp
@@ -920,6 +928,17 @@ make_lexer_export(
     KICOMMON_API
     kicommon.h
     )
+
+# auto-generate embedded files lexer and keywords
+make_lexer_export(
+    kicommon
+    embedded_files.keywords
+    embedded_files_lexer.h
+    embedded_files_keywords.cpp
+    EMBEDDED_FILES_T
+    KICOMMON_API
+    kicommon.h
+)
 
 # This one gets made only when testing.
 # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp

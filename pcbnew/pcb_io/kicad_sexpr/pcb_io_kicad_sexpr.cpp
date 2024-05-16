@@ -112,6 +112,14 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
         if( aFootprint && aFootprint != it->second->GetFootprint() )
             continue;
 
+        // If we've requested to embed the fonts in the footprint, do so.
+        // Otherwise, clear the embedded fonts from the footprint.  Embedded
+        // fonts will be used if available
+        if( aFootprint->GetAreFontsEmbedded() )
+            aFootprint->EmbedFonts();
+        else
+            aFootprint->GetEmbeddedFiles()->ClearEmbeddedFonts();
+
         WX_FILENAME fn = it->second->GetFileName();
 
         wxString tempFileName =
@@ -320,6 +328,13 @@ void PCB_IO_KICAD_SEXPR::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     init( aProperties );
 
     m_board = aBoard;       // after init()
+
+    // If the user wants fonts embedded, make sure that they are added to the board.  Otherwise,
+    // remove any fonts that were previously embedded.
+    if( m_board->GetAreFontsEmbedded() )
+        m_board->EmbedFonts();
+    else
+        m_board->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
     // Prepare net mapping that assures that net codes saved in a file are consecutive integers
     m_mapping->SetBoard( aBoard );
@@ -860,6 +875,31 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard, int aNestLevel ) const
     // Save the generators
     for( BOARD_ITEM* gen : sorted_generators )
         Format( gen, aNestLevel );
+
+    // Save any embedded files
+    // Consolidate the embedded models in footprints into a single map
+    // to avoid duplicating the same model in the board file.
+    EMBEDDED_FILES files_to_write;
+
+    for( auto& file : aBoard->GetEmbeddedFiles()->EmbeddedFileMap() )
+        files_to_write.AddFile( file.second );
+
+    for( BOARD_ITEM* item : sorted_footprints )
+    {
+        FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+
+        for( auto& file : fp->GetEmbeddedFiles()->EmbeddedFileMap() )
+            files_to_write.AddFile( file.second );
+    }
+
+    m_out->Print( aNestLevel + 1, "(embedded_fonts %s)\n",
+                  aBoard->GetEmbeddedFiles()->GetAreFontsEmbedded() ? "yes" : "no" );
+
+    if( !files_to_write.IsEmpty() )
+        files_to_write.WriteEmbeddedFiles( *m_out, aNestLevel + 1, ( m_ctl & CTL_FOR_BOARD ) );
+
+    // Remove the files so that they are not freed in the DTOR
+    files_to_write.ClearEmbeddedFiles( false );
 }
 
 
@@ -1340,6 +1380,14 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, int aNestLevel ) c
     // Save groups.
     for( BOARD_ITEM* group : sorted_groups )
         Format( group, aNestLevel + 1 );
+
+    m_out->Print( aNestLevel + 1, "(embedded_fonts %s)\n",
+                  aFootprint->GetEmbeddedFiles()->GetAreFontsEmbedded() ? "yes" : "no" );
+
+    if( !aFootprint->GetEmbeddedFiles()->IsEmpty() )
+    {
+        aFootprint->WriteEmbeddedFiles( *m_out, aNestLevel + 1, !( m_ctl & CTL_FOR_BOARD ) );
+    }
 
     // Save 3D info.
     auto bs3D = aFootprint->Models().begin();

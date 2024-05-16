@@ -20,6 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "tool/embed_tool.h"
 #include "tools/convert_tool.h"
 #include "tools/drawing_tool.h"
 #include "tools/edit_tool.h"
@@ -1117,6 +1118,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
+    m_toolManager->RegisterTool( new EMBED_TOOL );
 
     for( TOOL_BASE* tool : m_toolManager->Tools() )
     {
@@ -1281,6 +1283,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
     CURRENT_EDIT_TOOL( ACTIONS::measureTool );
+    CURRENT_EDIT_TOOL( ACTIONS::embeddedFiles );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placePad );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLine );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRectangle );

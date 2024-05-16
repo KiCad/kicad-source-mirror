@@ -26,9 +26,9 @@
 #include <schematic.h>
 #include <eeschema_settings.h>
 
-DIALOG_EESCHEMA_PAGE_SETTINGS::DIALOG_EESCHEMA_PAGE_SETTINGS( EDA_DRAW_FRAME* aParent,
+DIALOG_EESCHEMA_PAGE_SETTINGS::DIALOG_EESCHEMA_PAGE_SETTINGS( EDA_DRAW_FRAME* aParent, EMBEDDED_FILES* aEmbeddedFiles,
                                                               VECTOR2I        aMaxUserSizeMils ) :
-        DIALOG_PAGES_SETTINGS( aParent, schIUScale.IU_PER_MILS, aMaxUserSizeMils )
+        DIALOG_PAGES_SETTINGS( aParent, aEmbeddedFiles, schIUScale.IU_PER_MILS, aMaxUserSizeMils )
 {
 }
 

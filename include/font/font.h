@@ -141,7 +141,7 @@ public:
     virtual bool IsItalic() const  { return false; }
 
     static FONT* GetFont( const wxString& aFontName = wxEmptyString, bool aBold = false,
-                          bool aItalic = false );
+                          bool aItalic = false, const std::vector<wxString>* aEmbeddedFiles = nullptr );
     static bool IsStroke( const wxString& aFontName );
 
     const wxString& GetName() const { return m_fontName; };

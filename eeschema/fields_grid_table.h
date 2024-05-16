@@ -31,22 +31,25 @@
 
 class SCH_BASE_FRAME;
 class DIALOG_SHIM;
+class EMBEDDED_FILES;
 class SCH_LABEL_BASE;
 
 
 class FIELDS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_GRID_TRICKS( WX_GRID* aGrid, DIALOG_SHIM* aDialog,
+    FIELDS_GRID_TRICKS( WX_GRID* aGrid, DIALOG_SHIM* aDialog, EMBEDDED_FILES* aFiles,
                         std::function<void( wxCommandEvent& )> aAddHandler ) :
         GRID_TRICKS( aGrid, std::move( aAddHandler ) ),
-        m_dlg( aDialog )
+        m_dlg( aDialog ),
+        m_files( aFiles )
     {}
 
 protected:
     void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
     void doPopupSelection( wxCommandEvent& event ) override;
     DIALOG_SHIM* m_dlg;
+    EMBEDDED_FILES* m_files;
 };
 
 

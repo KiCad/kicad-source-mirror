@@ -145,33 +145,3 @@ DS_DATA_ITEM* DS_DATA_MODEL::GetItem( unsigned aIdx ) const
         return nullptr;
 }
 
-
-const wxString DS_DATA_MODEL::ResolvePath( const wxString& aPath, const wxString& aProjectPath )
-{
-    wxString fullFileName = ExpandEnvVarSubstitutions( aPath, nullptr );
-
-    if( fullFileName.IsEmpty() )
-        return fullFileName;
-
-    wxFileName fn = fullFileName;
-
-    if( fn.IsAbsolute() )
-        return fullFileName;
-
-    // the path is not absolute: search it in project path, and then in kicad valid paths
-    if( !aProjectPath.IsEmpty() )
-    {
-        fn.MakeAbsolute( aProjectPath );
-
-        if( wxFileExists( fn.GetFullPath() ) )
-            return fn.GetFullPath();
-    }
-
-    fn = fullFileName;
-    wxString name = Kiface().KifaceSearch().FindValidPath( fn.GetFullName() );
-
-    if( !name.IsEmpty() )
-        fullFileName = name;
-
-    return fullFileName;
-}

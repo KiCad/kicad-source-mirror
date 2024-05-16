@@ -91,7 +91,6 @@ set(3D-VIEWER_SRCS
     common_ogl/ogl_utils.cpp
     3d_fastmath.cpp
     3d_math.cpp
-    dialogs/3d_cache_dialogs.cpp
     dialogs/appearance_controls_3D.cpp
     dialogs/appearance_controls_3D_base.cpp
     dialogs/dialog_select_3d_model_base.cpp

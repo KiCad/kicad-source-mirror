@@ -90,7 +90,7 @@ int PL_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 {
     m_frame->SaveCopyInUndoList();
 
-    DIALOG_PAGES_SETTINGS dlg( m_frame, drawSheetIUScale.IU_PER_MILS,
+    DIALOG_PAGES_SETTINGS dlg( m_frame, nullptr, drawSheetIUScale.IU_PER_MILS,
                                VECTOR2I( MAX_PAGE_SIZE_EESCHEMA_MILS,
                                          MAX_PAGE_SIZE_EESCHEMA_MILS ) );
     dlg.SetWksFileName( m_frame->GetCurrentFileName() );

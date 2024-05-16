@@ -51,6 +51,7 @@
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/editor_conditions.h>
+#include <tool/embed_tool.h>
 #include <tool/library_editor_control.h>
 #include <tool/picker_tool.h>
 #include <tool/properties_tool.h>
@@ -395,6 +396,7 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new LIBRARY_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
+    m_toolManager->RegisterTool( new EMBED_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

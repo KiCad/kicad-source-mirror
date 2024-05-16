@@ -159,6 +159,11 @@ public:
      */
     bool LoadProjectSettings();
 
+    /**
+     * Load the drawing sheet file.
+     */
+    void LoadDrawingSheet();
+
     void ShowSchematicSetupDialog( const wxString& aInitialPage = wxEmptyString );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;

@@ -35,6 +35,7 @@
 class wxGrid;
 class WX_GRID;
 class DIALOG_SHIM;
+class EMBEDDED_FILES;
 
 
 class GRID_CELL_TEXT_BUTTON : public wxGridCellEditor
@@ -118,8 +119,9 @@ protected:
 class GRID_CELL_URL_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_URL_EDITOR( DIALOG_SHIM* aParent, SEARCH_STACK* aSearchStack = nullptr ) :
-            m_dlg( aParent ), m_searchStack( aSearchStack )
+    GRID_CELL_URL_EDITOR( DIALOG_SHIM* aParent, SEARCH_STACK* aSearchStack = nullptr,
+                          EMBEDDED_FILES* aFiles = nullptr ) :
+            m_dlg( aParent ), m_searchStack( aSearchStack ), m_files( aFiles )
     { }
 
     wxGridCellEditor* Clone() const override
@@ -132,6 +134,7 @@ public:
 protected:
     DIALOG_SHIM* m_dlg;
     SEARCH_STACK* m_searchStack;
+    EMBEDDED_FILES* m_files;
 };
 
 

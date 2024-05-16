@@ -491,6 +491,13 @@ public:
     void AddLibSymbol( LIB_SYMBOL* aLibSymbol );
 
     /**
+     * After loading a file from disk, the library symbols do not yet contain the full
+     * data for their embedded files, only a reference.  This iterates over all lib symbols
+     * in the schematic and updates the library symbols with the full data.
+    */
+    void FixupEmbeddedData();
+
+    /**
      * Add a bus alias definition (and transfers ownership of the pointer).
      */
     void AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );

@@ -517,6 +517,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
         }
 
+        // After the schematic is successfully loaded, we load the drawing sheet.
+        // This allows us to use the drawing sheet embedded in the schematic (if any)
+        // instead of the default one.
+        LoadDrawingSheet();
+
         schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), sheetList );
         schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), sheetList );
 

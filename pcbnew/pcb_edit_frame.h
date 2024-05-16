@@ -220,6 +220,11 @@ public:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
+     * Load the drawing sheet file.
+     */
+    void LoadDrawingSheet();
+
+    /**
      * Get the last path for a particular type.
      *
      * @return the absolute path and file name of the last file successfully read.

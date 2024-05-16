@@ -496,6 +496,7 @@ int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
     wxString datasheet;
+    EMBEDDED_FILES* files = nullptr;
 
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -505,6 +506,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         datasheet = symbol->GetDatasheetField().GetText();
+        files = symbol;
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) )
     {
@@ -514,6 +516,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         datasheet = entry->GetDatasheetField().GetText();
+        files = entry;
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {
@@ -528,6 +531,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         // Use GetShownText() to resolve any text variables, but don't allow adding extra text
         // (ie: the field name)
         datasheet = field->GetShownText( &symbol->Schematic()->CurrentSheet(), false );
+        files = symbol->Schematic();
     }
 
     if( datasheet.IsEmpty() || datasheet == wxS( "~" ) )
@@ -537,7 +541,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     else
     {
         GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj(),
-                               PROJECT_SCH::SchSearchS( &m_frame->Prj() ) );
+                               PROJECT_SCH::SchSearchS( &m_frame->Prj() ), files );
     }
 
     return 0;

@@ -92,6 +92,12 @@ public:
      */
     void UpdateDummyFootprint( bool aRelaodRequired = true );
 
+    /**
+     * Get the dummy footprint that is used for previewing the 3D model.
+     * We use this to hold the temporary 3D model shapes.
+     */
+    FOOTPRINT* GetDummyFootprint() const { return m_dummyFootprint; }
+
 private:
     /**
      * Load 3D relevant settings from the user configuration

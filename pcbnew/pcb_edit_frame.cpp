@@ -62,6 +62,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/embed_tool.h>
 #include <tool/properties_tool.h>
 #include <tool/selection.h>
 #include <tool/zoom_tool.h>
@@ -705,6 +706,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new GENERATOR_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
+    m_toolManager->RegisterTool( new EMBED_TOOL );
     m_toolManager->InitTools();
 
     for( TOOL_BASE* tool : m_toolManager->Tools() )
@@ -992,6 +994,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
                                                            .Enable( isDRCIdle ) )
 
     // These tools edit the board, so they must be disabled during some operations
+    CURRENT_EDIT_TOOL( ACTIONS::embeddedFiles );
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeFootprint );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);

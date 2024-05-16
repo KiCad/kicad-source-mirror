@@ -32,6 +32,7 @@
 #include <board_item_container.h>
 #include <board_item.h>
 #include <collectors.h>
+#include <embedded_files.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
 #include <lib_id.h>
@@ -103,7 +104,7 @@ public:
 };
 
 
-class FOOTPRINT : public BOARD_ITEM_CONTAINER
+class FOOTPRINT : public BOARD_ITEM_CONTAINER, public EMBEDDED_FILES
 {
 public:
     FOOTPRINT( BOARD* parent );
@@ -967,6 +968,18 @@ public:
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
+
+    EMBEDDED_FILES* GetEmbeddedFiles() override
+    {
+        return static_cast<EMBEDDED_FILES*>( this );
+    }
+
+    const EMBEDDED_FILES* GetEmbeddedFiles() const
+    {
+        return static_cast<const EMBEDDED_FILES*>( this );
+    }
+
+    void EmbedFonts() override;
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 

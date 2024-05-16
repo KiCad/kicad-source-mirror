@@ -460,6 +460,8 @@ struct AMODEL
     bool     isEmbedded;
 
     VECTOR3D rotation;
+    double   z_offset;
+    int32_t  checksum;
 
     explicit AMODEL( ALTIUM_BINARY_PARSER& aReader );
 };
@@ -592,14 +594,37 @@ struct ACOMPONENTBODY6
 {
     uint16_t             component;
 
-    wxString             modelName;
+    wxString             body_name;
+    int                  kind;
+    int                  subpolyindex;
+    int                  unionindex;
+    int                  arc_resolution;
+    bool                 is_shape_based;
+    int                  cavity_height;
+    int                  standoff_height;
+    int                  overall_height;
+    int                  body_projection;
+    int                  body_color_3d;
+    int                  body_opacity_3d;
+    wxString             identifier;
+    wxString             texture;
+    int                  texture_center_x;
+    int                  texture_center_y;
+    int                  texture_size_x;
+    int                  texture_size_y;
+    int                  texture_rotation;
+
     wxString             modelId;
+    wxString             modelChecksum;
     bool                 modelIsEmbedded;
+    wxString             modelName;
+    int                  modelType;
+    int                  modelSource;
+    int                  modelSnapCount;
 
     VECTOR3D             modelPosition;
     VECTOR3D             modelRotation;
     double               rotation;
-    double               bodyOpacity;
 
     explicit ACOMPONENTBODY6( ALTIUM_BINARY_PARSER& aReader );
 };

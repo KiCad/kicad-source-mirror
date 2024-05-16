@@ -48,6 +48,7 @@
 #include <plotters/plotters_pslike.h>
 #include <tool/tool_manager.h>
 #include <tools/drc_tool.h>
+#include <filename_resolver.h>
 #include <gerber_jobfile_writer.h>
 #include "gerber_placefile_writer.h"
 #include <gendrill_Excellon_writer.h>
@@ -1552,8 +1553,13 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
             [&]( const wxString& path ) -> bool
             {
                 BASE_SCREEN::m_DrawingSheetFileName = path;
-                wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                                aBrd->GetProject()->GetProjectPath() );
+                FILENAME_RESOLVER resolver;
+                resolver.SetProject( aBrd->GetProject() );
+                resolver.SetProgramBase( &Pgm() );
+
+                wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                          aBrd->GetProject()->GetProjectPath(),
+                                                          aBrd->GetEmbeddedFiles() );
                 wxString msg;
 
                 if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )

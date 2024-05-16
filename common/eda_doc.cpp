@@ -25,6 +25,7 @@
 #include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
+#include <embedded_files.h>
 #include <gestfich.h>
 #include <settings/common_settings.h>
 
@@ -58,7 +59,8 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject, SEARCH_STACK* aPaths )
+bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject,
+                            SEARCH_STACK* aPaths, EMBEDDED_FILES* aFiles )
 {
     wxString      docname;
     wxString      fullfilename;
@@ -74,8 +76,48 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
         wxURI     uri( docname );
         wxLogNull logNo; // Disable log messages
 
-        if( uri.HasScheme() && wxLaunchDefaultBrowser( docname ) )
-            return true;
+        if( uri.HasScheme() )
+        {
+            wxString scheme = uri.GetScheme().Lower();
+
+            if( scheme != FILEEXT::KiCadUriPrefix )
+            {
+                if( wxLaunchDefaultBrowser( docname ) )
+                    return true;
+            }
+            else
+            {
+                if( !aFiles )
+                {
+                    wxLogTrace( wxT( "KICAD_EMBED" ),
+                                wxT( "No EMBEDDED_FILES object provided for kicad_embed URI" ) );
+                    return false;
+                }
+
+                if( !docname.starts_with( FILEEXT::KiCadUriPrefix + "://" ) )
+                {
+                    wxLogTrace( wxT( "KICAD_EMBED" ),
+                                wxT( "Invalid kicad_embed URI '%s'" ), docname );
+                    return false;
+                }
+
+                docname = docname.Mid( 14 );
+
+                wxFileName temp_file = aFiles->GetTempFileName( docname );
+
+                if( !temp_file.IsOk() )
+                {
+                    wxLogTrace( wxT( "KICAD_EMBED" ),
+                                wxT( "Failed to get temp file '%s' for kicad_embed URI" ), docname );
+                    return false;
+                }
+
+                wxLogTrace( wxT( "KICAD_EMBED" ),
+                            wxT( "Opening embedded file '%s' as '%s'" ),
+                            docname, temp_file.GetFullPath() );
+                docname = temp_file.GetFullPath();
+            }
+        }
     }
 
 #ifdef __WINDOWS__

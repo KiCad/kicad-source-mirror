@@ -22,11 +22,13 @@
 
 #include <dialogs/dialog_page_settings.h>
 
+class EMBEDDED_FILES;
+
 
 class DIALOG_EESCHEMA_PAGE_SETTINGS : public DIALOG_PAGES_SETTINGS
 {
 public:
-    DIALOG_EESCHEMA_PAGE_SETTINGS( EDA_DRAW_FRAME* aParent, VECTOR2I aMaxUserSizeMils );
+    DIALOG_EESCHEMA_PAGE_SETTINGS( EDA_DRAW_FRAME* aParent, EMBEDDED_FILES* aEmbeddedFiles, VECTOR2I aMaxUserSizeMils );
     virtual ~DIALOG_EESCHEMA_PAGE_SETTINGS();
 
 private:

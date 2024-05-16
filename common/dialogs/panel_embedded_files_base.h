@@ -1,0 +1,64 @@
+///////////////////////////////////////////////////////////////////////////
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// http://www.wxformbuilder.org/
+//
+// PLEASE DO *NOT* EDIT THIS FILE!
+///////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+class WX_GRID;
+
+#include <wx/colour.h>
+#include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/font.h>
+#include <wx/grid.h>
+#include <wx/gdicmn.h>
+#include <wx/sizer.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
+#include <wx/panel.h>
+
+///////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class PANEL_EMBEDDED_FILES_BASE
+///////////////////////////////////////////////////////////////////////////////
+class PANEL_EMBEDDED_FILES_BASE : public wxPanel
+{
+	private:
+
+	protected:
+		WX_GRID* m_files_grid;
+		STD_BITMAP_BUTTON* m_browse_button;
+		STD_BITMAP_BUTTON* m_delete_button;
+		wxButton* m_export;
+		wxStaticLine* m_staticline1;
+		wxCheckBox* m_cbEmbedFonts;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void onSize( wxSizeEvent& event ) { event.Skip(); }
+		virtual void onGridRightClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onAddEmbeddedFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDeleteEmbeddedFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onExportFiles( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
+		~PANEL_EMBEDDED_FILES_BASE();
+
+};
+

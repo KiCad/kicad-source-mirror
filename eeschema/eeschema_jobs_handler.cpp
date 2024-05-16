@@ -37,6 +37,7 @@
 #include <memory>
 #include <connection_graph.h>
 #include "eeschema_helpers.h"
+#include <filename_resolver.h>
 #include <kiway.h>
 #include <sch_painter.h>
 #include <locale_io.h>
@@ -111,9 +112,14 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
     auto loadSheet =
             [&]( const wxString& path ) -> bool
             {
-                wxString absolutePath = DS_DATA_MODEL::ResolvePath( path,
-                                                                    aSch->Prj().GetProjectPath() );
                 wxString msg;
+                FILENAME_RESOLVER resolve;
+                resolve.SetProject( &aSch->Prj() );
+                resolve.SetProgramBase( &Pgm() );
+
+                wxString absolutePath = resolve.ResolvePath( path,
+                                                            wxGetCwd(),
+                                                            aSch->GetEmbeddedFiles() );
 
                 if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
                 {

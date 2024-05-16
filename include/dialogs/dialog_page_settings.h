@@ -29,6 +29,8 @@
 class DS_DATA_MODEL;
 class EDA_DRAW_FRAME;
 class BASE_SCREEN;
+class EMBEDDED_FILES;
+class FILENAME_RESOLVER;
 
 /*!
  * DIALOG_PAGES_SETTINGS class declaration
@@ -37,8 +39,8 @@ class BASE_SCREEN;
 class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 {
 public:
-    DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aIuPerMils,
-                           const VECTOR2D& aMaxUserSizeMils );
+    DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, EMBEDDED_FILES* aEmbeddedFiles,
+                           double aIuPerMils, const VECTOR2D& aMaxUserSizeMils );
     virtual ~DIALOG_PAGES_SETTINGS();
 
     const wxString GetWksFileName()
@@ -130,7 +132,9 @@ protected:
     TITLE_BLOCK     m_tb;                    /// Temporary title block (basic inscriptions).
     DS_DATA_MODEL*  m_drawingSheet; // the alternate and temporary drawing sheet shown by the
                                     // dialog when the initial one is replaced by a new one
-    double          m_iuPerMils;
+    double             m_iuPerMils;
+    EMBEDDED_FILES*    m_embeddedFiles; // the embedded files reference from the parent
+    FILENAME_RESOLVER* m_filenameResolver;
 
 private:
     UNIT_BINDER m_customSizeX;

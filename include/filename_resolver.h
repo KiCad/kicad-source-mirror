@@ -36,6 +36,7 @@
 
 class PROJECT;
 class PGM_BASE;
+class EMBEDDED_FILES;
 
 struct SEARCH_PATH
 {
@@ -99,8 +100,10 @@ public:
      *
      * @param aFileName The configured file path to resolve
      * @param aWorkingPath The current working path for relative path resolutions
+     * @param aFiles The embedded files object to use for embedded file resolution
      */
-    wxString ResolvePath( const wxString& aFileName, const wxString& aWorkingPath );
+    wxString ResolvePath( const wxString& aFileName, const wxString& aWorkingPath,
+                          const EMBEDDED_FILES* aFiles );
 
     /**
      * Produce a relative path based on the existing search directories or returns the same path

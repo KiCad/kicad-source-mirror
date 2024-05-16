@@ -275,7 +275,8 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     // Regnerate font names
     std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
+                             aBoard->GetFontFiles() );
 
     fonts.Add( KICAD_FONT_NAME, -1 );
 

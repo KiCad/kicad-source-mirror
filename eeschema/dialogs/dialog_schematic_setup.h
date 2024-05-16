@@ -56,6 +56,7 @@ protected:
     size_t                    m_busesPage;
     size_t                    m_severitiesPage;
     size_t                    m_netclassesPage;
+    size_t                    m_embeddedFilesPage;
 };
 
 

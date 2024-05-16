@@ -27,10 +27,12 @@
 #include <sstream>
 
 #include <wx/log.h>
+#include <wx/uri.h>
 #include <pgm_base.h>
 #include <trace_helpers.h>
 
 #include <common.h>
+#include <embedded_files.h>
 #include <env_vars.h>
 #include <filename_resolver.h>
 #include <confirm.h>
@@ -241,7 +243,8 @@ bool FILENAME_RESOLVER::UpdatePathList( const std::vector< SEARCH_PATH >& aPathL
 }
 
 
-wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxString& aWorkingPath )
+wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxString& aWorkingPath,
+                                         const EMBEDDED_FILES* aFiles )
 {
     std::lock_guard<std::mutex> lock( mutex_resolver );
 
@@ -259,6 +262,32 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
     // then we will have a race condition since wxWidgets does not assure a threadsafe wrapper
     // for getenv().
     tname = ExpandEnvVarSubstitutions( tname, m_project );
+
+    // Check to see if the file is a URI for an embedded file.
+    if( tname.StartsWith( FILEEXT::KiCadUriPrefix + "://" ) )
+    {
+        if( !aFiles )
+        {
+            wxLogTrace( wxT( "KICAD_EMBED" ),
+                        wxT( "No EMBEDDED_FILES object provided for kicad_embed URI" ) );
+            return wxEmptyString;
+        }
+
+        wxString path = tname.Mid( 14 );
+        wxFileName temp_file = aFiles->GetTempFileName( path );
+
+        if( !temp_file.IsOk() )
+        {
+            wxLogTrace( wxT( "KICAD_EMBED" ),
+                        wxT( "Failed to get temp file '%s' for kicad_embed URI" ), path );
+            return wxEmptyString;
+        }
+
+        wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Opening embedded file '%s' as '%s'" ),
+                    tname, temp_file.GetFullPath() );
+
+        return temp_file.GetFullPath();
+    }
 
     wxFileName tmpFN( tname );
 
@@ -688,10 +717,22 @@ bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAl
     //    ALIAS:relative/path
     // 2. ALIAS is a UTF string excluding wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" )
     // 3. The relative path must be a valid relative path for the platform
+    // 4. We allow a URI for embedded files, but only if it has a name
+
     hasAlias = false;
 
     if( aFileName.empty() )
         return false;
+
+    if( aFileName.StartsWith( wxT( "file://" ) )
+        || aFileName.StartsWith( FILEEXT::KiCadUriPrefix + "://" ) )
+    {
+        size_t prefixLength = aFileName.StartsWith( wxT( "file://" ) ) ? 7 : 14;
+        if( aFileName.length() > prefixLength && aFileName[prefixLength] != '/' )
+            return true;
+        else
+            return false;
+    }
 
     wxString filename = aFileName;
     wxString lpath;

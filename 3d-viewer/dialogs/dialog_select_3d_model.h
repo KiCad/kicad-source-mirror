@@ -44,6 +44,11 @@ public:
     void SetRootDir( wxCommandEvent& event ) override;
     void Cfg3DPaths( wxCommandEvent& event ) override;
 
+    bool IsEmbedded3DModel() const
+    {
+        return m_EmbedModelCb->IsChecked();
+    }
+
 private:
     void updateDirChoiceList( void );
 

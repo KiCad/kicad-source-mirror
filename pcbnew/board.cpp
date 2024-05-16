@@ -38,6 +38,7 @@
 #include <connectivity/connectivity_data.h>
 #include <convert_shape_list_to_polygon.h>
 #include <footprint.h>
+#include <font/outline_font.h>
 #include <lset.h>
 #include <pcb_base_frame.h>
 #include <pcb_track.h>
@@ -82,7 +83,8 @@ BOARD::BOARD() :
         m_project( nullptr ),
         m_userUnits( EDA_UNITS::MILLIMETRES ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
-        m_NetInfo( this )
+        m_NetInfo( this ),
+        m_embedFonts( false )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
     // A too large value do not allow safely connecting 2 shapes like very short segments.
@@ -952,6 +954,26 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
                 aReporter->KeepRefreshing();
 
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+    }
+}
+
+
+void BOARD::FixupEmbeddedData()
+{
+    for( FOOTPRINT* footprint : m_footprints )
+    {
+        for( auto& [filename, embeddedFile] : footprint->EmbeddedFileMap() )
+        {
+            EMBEDDED_FILES::EMBEDDED_FILE* file = GetEmbeddedFile( filename );
+
+            if( file )
+            {
+                embeddedFile->compressedEncodedData = file->compressedEncodedData;
+                embeddedFile->decompressedData = file->decompressedData;
+                embeddedFile->data_sha = file->data_sha;
+                embeddedFile->is_valid = file->is_valid;
+            }
         }
     }
 }
@@ -2495,6 +2517,56 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     return success;
+}
+
+
+EMBEDDED_FILES* BOARD::GetEmbeddedFiles()
+{
+    if( IsFootprintHolder() )
+        return static_cast<EMBEDDED_FILES*>( GetFirstFootprint() );
+
+    return static_cast<EMBEDDED_FILES*>( this );
+}
+
+
+const EMBEDDED_FILES* BOARD::GetEmbeddedFiles() const
+{
+    if( IsFootprintHolder() )
+        return static_cast<const EMBEDDED_FILES*>( GetFirstFootprint() );
+
+    return static_cast<const EMBEDDED_FILES*>( this );
+}
+
+
+void BOARD::EmbedFonts()
+{
+    std::set<KIFONT::OUTLINE_FONT*> fonts;
+
+    for( BOARD_ITEM* item : Drawings() )
+    {
+        if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
+        {
+            KIFONT::FONT* font = text->GetFont();
+
+            if( !font || font->IsStroke() )
+                continue;
+
+            using EMBEDDING_PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
+            auto* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+
+            if( outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::EDITABLE
+                || outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::INSTALLABLE )
+            {
+                fonts.insert( outline );
+            }
+        }
+    }
+
+    for( KIFONT::OUTLINE_FONT* font : fonts )
+    {
+        auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
+        file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
+    }
 }
 
 

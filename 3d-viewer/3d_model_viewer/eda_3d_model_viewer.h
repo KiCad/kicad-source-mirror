@@ -66,7 +66,9 @@ public:
     /**
      * Set this model to be displayed.
      *
-     * @param aModelPathName 3D model path name.
+     * N.B. This will not load a model from the internal cache.  Only from on disk.
+     *
+     * @param aModelPathName 3D model path name.  Must be a file on disk.
      */
     void Set3DModel( const wxString& aModelPathName );
 

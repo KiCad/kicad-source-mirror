@@ -27,6 +27,7 @@
 #include <macros.h>
 #include <cstdint>
 #include <reporter.h>
+#include <embedded_files.h>
 
 #ifdef __WIN32__
 #define WIN32_LEAN_AND_MEAN
@@ -196,13 +197,24 @@ std::string FONTCONFIG::getFamilyStringByLang( FONTCONFIG_PAT& aPat, const wxStr
 }
 
 
-FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString &aFontFile,
-                                            int& aFaceIndex, bool aBold, bool aItalic )
+FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile,
+                                            int& aFaceIndex, bool aBold, bool aItalic,
+                                            const std::vector<wxString>* aEmbeddedFiles )
 {
     FF_RESULT retval = FF_RESULT::FF_ERROR;
 
     if( !g_fcInitSuccess )
         return retval;
+
+    FcConfig* config = FcConfigGetCurrent();
+
+    if( aEmbeddedFiles )
+    {
+        for( const auto& file : *aEmbeddedFiles )
+        {
+            FcConfigAppFontAddFile( config, (const FcChar8*) file.c_str().AsChar() );
+        }
+    }
 
     wxString qualifiedFontName = aFontName;
 
@@ -218,11 +230,11 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
 
     FcPatternAddString( pat, FC_FAMILY, (FcChar8*) fcBuffer.data() );
 
-    FcConfigSubstitute( nullptr, pat, FcMatchPattern );
+    FcConfigSubstitute( config, pat, FcMatchPattern );
     FcDefaultSubstitute( pat );
 
     FcResult   r = FcResultNoMatch;
-    FcPattern* font = FcFontMatch( nullptr, pat, &r );
+    FcPattern* font = FcFontMatch( config, pat, &r );
 
     wxString fontName;
 
@@ -342,18 +354,29 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
 }
 
 
-void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string& aDesiredLang )
+void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string& aDesiredLang,
+                            const std::vector<wxString>* aEmbeddedFiles, bool aForce )
 {
     if( !g_fcInitSuccess )
         return;
 
     // be sure to cache bust if the language changed
-    if( m_fontInfoCache.empty() || m_fontCacheLastLang != aDesiredLang )
+    if( m_fontInfoCache.empty() || m_fontCacheLastLang != aDesiredLang || aForce )
     {
+        FcConfig* config = FcConfigGetCurrent();
+
+        if( aEmbeddedFiles )
+        {
+            for( const auto& file : *aEmbeddedFiles )
+            {
+                FcConfigAppFontAddFile( config, (const FcChar8*) file.c_str().AsChar() );
+            }
+        }
+
         FcPattern*   pat = FcPatternCreate();
         FcObjectSet* os = FcObjectSetBuild( FC_FAMILY, FC_FAMILYLANG, FC_STYLE, FC_LANG, FC_FILE,
                                             FC_OUTLINE, nullptr );
-        FcFontSet*   fs = FcFontList( nullptr, pat, os );
+        FcFontSet*   fs = FcFontList( config, pat, os );
 
         for( int i = 0; fs && i < fs->nfont; ++i )
         {

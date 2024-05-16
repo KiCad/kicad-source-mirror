@@ -31,6 +31,7 @@
 #include <font/fontconfig.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
+#include <altium_pcb_compound_file.h>
 #include <io/io_utils.h>
 #include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
@@ -135,7 +136,7 @@ BOARD* PCB_IO_ALTIUM_DESIGNER::LoadBoard( const wxString& aFileName, BOARD* aApp
     };
     // clang-format on
 
-    ALTIUM_COMPOUND_FILE altiumPcbFile( aFileName );
+    ALTIUM_PCB_COMPOUND_FILE altiumPcbFile( aFileName );
 
     try
     {
@@ -187,18 +188,24 @@ void PCB_IO_ALTIUM_DESIGNER::loadAltiumLibrary( const wxString& aLibraryPath )
         if( aLibraryPath.Lower().EndsWith( wxS( ".pcblib" ) ) )
         {
             m_fplibFiles[aLibraryPath].emplace_back(
-                    std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath ) );
+                    std::make_unique<ALTIUM_PCB_COMPOUND_FILE>( aLibraryPath ) );
         }
         else if( aLibraryPath.Lower().EndsWith( wxS( ".intlib" ) ) )
         {
-            std::unique_ptr<ALTIUM_COMPOUND_FILE> intCom =
-                    std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath );
+            std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE> intCom =
+                    std::make_unique<ALTIUM_PCB_COMPOUND_FILE>( aLibraryPath );
 
             std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> pcbLibFiles =
                     intCom->EnumDir( L"PCBLib" );
-
             for( const auto& [pcbLibName, pcbCfe] : pcbLibFiles )
-                m_fplibFiles[aLibraryPath].push_back( intCom->DecodeIntLibStream( *pcbCfe ) );
+            {
+                auto decodedStream = intCom->DecodeIntLibStream( *pcbCfe );
+                m_fplibFiles[aLibraryPath].push_back(
+                    std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>(
+                        static_cast<ALTIUM_PCB_COMPOUND_FILE*>(decodedStream.release())
+                    )
+                );
+            }
         }
     }
     catch( CFB::CFBException& exception )
@@ -296,8 +303,9 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
 
     try
     {
-        for( std::unique_ptr<ALTIUM_COMPOUND_FILE>& altiumLibFile : it->second )
+        for( std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>& altiumLibFile : it->second )
         {
+            altiumLibFile->CacheLibModels();
             auto [dirName, fpCfe] = altiumLibFile->FindLibFootprintDirName( aFootprintName );
 
             if( dirName.IsEmpty() )

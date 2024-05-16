@@ -26,6 +26,7 @@
 #include <kiway.h>
 #include <symbol_edit_frame.h>
 #include <dialogs/panel_gal_display_options.h>
+#include <filename_resolver.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
@@ -69,14 +70,6 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
 
     BASE_SCREEN::m_DrawingSheetFileName = settings.m_SchDrawingSheetFileName;
 
-    // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
-    // If empty, or not existing, the default drawing sheet is loaded.
-    wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                    Prj().GetProjectPath() );
-
-    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, nullptr ) )
-        ShowInfoBarError( _( "Error loading drawing sheet." ), true );
-
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
     EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
@@ -84,6 +77,26 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     m_selectionFilterPanel->SetCheckboxesFromFilter( localSettings.m_SchSelectionFilter );
 
     return true;
+}
+
+
+void SCH_EDIT_FRAME::LoadDrawingSheet()
+{
+    // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
+    // If empty, or not existing, the default drawing sheet is loaded.
+
+    SCHEMATIC_SETTINGS& settings = Schematic().Settings();
+    FILENAME_RESOLVER resolver;
+    resolver.SetProject( &Prj() );
+    resolver.SetProgramBase( &Pgm() );
+
+    wxString filename = resolver.ResolvePath( settings.m_SchDrawingSheetFileName,
+                                              Prj().GetProjectPath(),
+                                              Schematic().GetEmbeddedFiles() );
+    wxString msg;
+
+    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
+        ShowInfoBarError( msg, true );
 }
 
 
@@ -177,15 +190,20 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 
     if( !BASE_SCREEN::m_DrawingSheetFileName.IsEmpty() )
     {
-        wxFileName layoutfn( DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                         Prj().GetProjectPath() ) );
+        FILENAME_RESOLVER resolve;
+        resolve.SetProject( &Prj() );
+        resolve.SetProgramBase( &Pgm() );
+
+        wxFileName layoutfn( resolve.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                  Prj().GetProjectPath(),
+                                                  Schematic().GetEmbeddedFiles() ) );
 
         bool success = true;
 
         if( !layoutfn.IsAbsolute() )
             success = layoutfn.MakeAbsolute( Prj().GetProjectPath() );
 
-        if( success && layoutfn.IsOk() && !layoutfn.FileExists() )
+        if( success && layoutfn.IsOk() && !layoutfn.FileExists() && layoutfn.HasName() )
         {
             if( layoutfn.DirExists() && layoutfn.IsDirWritable() )
                 DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetFullPath() );

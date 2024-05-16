@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <embedded_files.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <dialog_shim.h>
@@ -238,8 +239,16 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
     fpIdEditor->SetValidator( m_nonUrlValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
 
+    EMBEDDED_FILES* files = nullptr;
+
+    if( m_frame->GetFrameType() == FRAME_SCH )
+        files = m_frame->GetScreen()->Schematic();
+    else if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+        files = m_part;
+
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, PROJECT_SCH::SchSearchS( &m_frame->Prj() ) );
+    GRID_CELL_URL_EDITOR* urlEditor =
+            new GRID_CELL_URL_EDITOR( m_dialog, PROJECT_SCH::SchSearchS( &m_frame->Prj() ), files );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
@@ -292,6 +301,9 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
     wxArrayString   existingNetclasses;
 
+    wxArrayString            fonts;
+    std::vector<std::string> fontNames;
+
     if( editFrame )
     {
         // Load the combobox with existing existingNetclassNames
@@ -302,14 +314,29 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
 
         for( const auto& [ name, netclass ] : settings->m_NetClasses )
             existingNetclasses.push_back( name );
+
+        // We don't need to re-cache the embedded fonts when looking at symbols in the schematic editor
+        // because the fonts are all available in the schematic.
+        const std::vector<wxString>* fontFiles = nullptr;
+
+        if( m_frame->GetScreen() && m_frame->GetScreen()->Schematic() )
+            fontFiles = m_frame->GetScreen()->Schematic()->GetEmbeddedFiles()->GetFontFiles();
+
+        Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
+                                fontFiles, false );
+    }
+    else
+    {
+        const std::vector<wxString>* fontFiles = m_part->GetEmbeddedFiles()->UpdateFontFiles();
+
+        // If there are font files embedded, we want to re-cache our fonts for each symbol that we
+        // are looking at in the symbol editor.
+        Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
+                                fontFiles, !fontFiles->empty() );
     }
 
     m_netclassAttr = new wxGridCellAttr;
     m_netclassAttr->SetEditor( new GRID_CELL_COMBOBOX( existingNetclasses ) );
-
-    wxArrayString            fonts;
-    std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
 
     for( const std::string& name : fontNames )
         fonts.Add( wxString( name ) );
@@ -931,8 +958,9 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
         wxString datasheet_uri = m_grid->GetCellValue( DATASHEET_FIELD, FDC_VALUE );
+
         GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(),
-                               PROJECT_SCH::SchSearchS( &m_dlg->Prj() ) );
+                               PROJECT_SCH::SchSearchS( &m_dlg->Prj() ), m_files );
     }
     else
     {

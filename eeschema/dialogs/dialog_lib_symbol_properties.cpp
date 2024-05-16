@@ -40,6 +40,7 @@
 
 #include <dialog_sim_model.h>
 
+#include <panel_embedded_files.h>
 #include <dialog_lib_symbol_properties.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
@@ -63,11 +64,14 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_delayedFocusColumn( -1 ),
     m_delayedFocusPage( -1 )
 {
+    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry );
+    m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
+
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry );
     m_grid->SetTable( m_fields );
-    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this,
+    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, aLibEntry,
                                                       [&]( wxCommandEvent& aEvent )
                                                       {
                                                           OnAddField( aEvent );
@@ -79,7 +83,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) ) );
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), aLibEntry ) );
     m_grid->SetAttr( DATASHEET_FIELD, FDC_VALUE, attr );
 
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
@@ -256,6 +260,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     }
 
     m_NoteBook->SetSelection( (unsigned) m_lastOpenedPage );
+
+    m_embeddedFiles->TransferDataToWindow();
 
     return true;
 }
@@ -469,6 +475,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // occurs.
     m_Parent->SetShowDeMorgan( m_hasAlternateBodyStyles->GetValue() );
 
+    m_embeddedFiles->TransferDataFromWindow();
     return true;
 }
 

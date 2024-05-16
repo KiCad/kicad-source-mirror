@@ -1247,8 +1247,6 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
 
             // Get the list of model files for this model
             S3D_CACHE* cacheMgr = m_boardAdapter.Get3dCacheManager();
-            auto       sM       = fp->Models().begin();
-            auto       eM       = fp->Models().end();
 
             wxString                libraryName = fp->GetFPID().GetLibNickname();
 
@@ -1271,44 +1269,38 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
                 }
             }
 
-            while( sM != eM )
+            for( FP_3DMODEL& model : fp->Models() )
             {
-                if( ( static_cast<float>( sM->m_Opacity ) > FLT_EPSILON )
-                  && ( sM->m_Show && !sM->m_Filename.empty() ) )
+                // get it from cache
+                const S3DMODEL* modelPtr =
+                        cacheMgr->GetModel( model.m_Filename, footprintBasePath, fp );
+
+                // only add it if the return is not NULL.
+                if( modelPtr )
                 {
-                    // get it from cache
-                    const S3DMODEL* modelPtr =
-                            cacheMgr->GetModel( sM->m_Filename, footprintBasePath );
+                    glm::mat4 modelMatrix = fpMatrix;
 
-                    // only add it if the return is not NULL.
-                    if( modelPtr )
-                    {
-                        glm::mat4 modelMatrix = fpMatrix;
+                    modelMatrix = glm::translate( modelMatrix,
+                            SFVEC3F( model.m_Offset.x, model.m_Offset.y, model.m_Offset.z ) );
 
-                        modelMatrix = glm::translate( modelMatrix,
-                                SFVEC3F( sM->m_Offset.x, sM->m_Offset.y, sM->m_Offset.z ) );
+                    modelMatrix = glm::rotate( modelMatrix,
+                            (float) -( model.m_Rotation.z / 180.0f ) * glm::pi<float>(),
+                            SFVEC3F( 0.0f, 0.0f, 1.0f ) );
 
-                        modelMatrix = glm::rotate( modelMatrix,
-                                (float) -( sM->m_Rotation.z / 180.0f ) * glm::pi<float>(),
-                                SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+                    modelMatrix = glm::rotate( modelMatrix,
+                            (float) -( model.m_Rotation.y / 180.0f ) * glm::pi<float>(),
+                            SFVEC3F( 0.0f, 1.0f, 0.0f ) );
 
-                        modelMatrix = glm::rotate( modelMatrix,
-                                (float) -( sM->m_Rotation.y / 180.0f ) * glm::pi<float>(),
-                                SFVEC3F( 0.0f, 1.0f, 0.0f ) );
+                    modelMatrix = glm::rotate( modelMatrix,
+                            (float) -( model.m_Rotation.x / 180.0f ) * glm::pi<float>(),
+                            SFVEC3F( 1.0f, 0.0f, 0.0f ) );
 
-                        modelMatrix = glm::rotate( modelMatrix,
-                                (float) -( sM->m_Rotation.x / 180.0f ) * glm::pi<float>(),
-                                SFVEC3F( 1.0f, 0.0f, 0.0f ) );
+                    modelMatrix = glm::scale( modelMatrix,
+                            SFVEC3F( model.m_Scale.x, model.m_Scale.y, model.m_Scale.z ) );
 
-                        modelMatrix = glm::scale( modelMatrix,
-                                SFVEC3F( sM->m_Scale.x, sM->m_Scale.y, sM->m_Scale.z ) );
-
-                        addModels( aDstContainer, modelPtr, modelMatrix, (float) sM->m_Opacity,
-                                   aSkipMaterialInformation, boardItem );
-                    }
+                    addModels( aDstContainer, modelPtr, modelMatrix, (float) model.m_Opacity,
+                               aSkipMaterialInformation, boardItem );
                 }
-
-                ++sM;
             }
         }
     }

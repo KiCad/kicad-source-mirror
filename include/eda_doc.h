@@ -31,6 +31,8 @@
 #ifndef __INCLUDE__EDA_DOC_H__
 #define __INCLUDE__EDA_DOC_H__ 1
 
+class EMBEDDED_FILES;
+
 /**
  * Open a document (file) with the suitable browser.
  *
@@ -43,7 +45,7 @@
  * @param aPaths Additional paths to search for local disk datasheet files
 */
 bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject,
-                            SEARCH_STACK* aPaths = nullptr );
+                            SEARCH_STACK* aPaths = nullptr, EMBEDDED_FILES* aFiles = nullptr );
 
 
 #endif /* __INCLUDE__EDA_DOC_H__ */

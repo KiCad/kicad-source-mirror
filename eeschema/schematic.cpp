@@ -24,18 +24,21 @@
 #include <core/kicad_algo.h>
 #include <ee_collectors.h>
 #include <erc/erc_settings.h>
-#include <sch_marker.h>
+#include <font/outline_font.h>
+#include <netlist_exporter_spice.h>
 #include <project.h>
-#include <project/project_file.h>
 #include <project/net_settings.h>
+#include <project/project_file.h>
 #include <schematic.h>
 #include <sch_junction.h>
+#include <sch_label.h>
 #include <sch_line.h>
+#include <sch_marker.h>
 #include <sch_screen.h>
 #include <sim/spice_settings.h>
-#include <sch_label.h>
 #include <sim/spice_value.h>
-#include <netlist_exporter_spice.h>
+
+#include <wx/log.h>
 
 bool SCHEMATIC::m_IsSchematicExists = false;
 
@@ -844,5 +847,61 @@ void SCHEMATIC::ResolveERCExclusionsPostUpdate()
             errorPath.LastScreen()->Append( marker );
         else
             RootScreen()->Append( marker );
+    }
+}
+
+
+EMBEDDED_FILES* SCHEMATIC::GetEmbeddedFiles()
+{
+    return static_cast<EMBEDDED_FILES*>( this );
+}
+
+
+const EMBEDDED_FILES* SCHEMATIC::GetEmbeddedFiles() const
+{
+    return static_cast<const EMBEDDED_FILES*>( this );
+}
+
+
+void SCHEMATIC::EmbedFonts()
+{
+    std::set<KIFONT::OUTLINE_FONT*> fonts;
+
+    SCH_SHEET_LIST sheetList = BuildUnorderedSheetList();
+
+    for( const SCH_SHEET_PATH& sheet : sheetList )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+        {
+            if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
+            {
+                KIFONT::FONT* font = text->GetFont();
+
+                if( !font || font->IsStroke() )
+                    continue;
+
+                using EMBEDDING_PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
+                auto* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+
+                if( outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::EDITABLE
+                    || outline->GetEmbeddingPermission() == EMBEDDING_PERMISSION::INSTALLABLE )
+                {
+                    fonts.insert( outline );
+                }
+            }
+        }
+    }
+
+    for( KIFONT::OUTLINE_FONT* font : fonts )
+    {
+        auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
+
+        if( !file )
+        {
+            wxLogTrace( "EMBED", "Failed to add font file: %s", font->GetFileName() );
+            continue;
+        }
+
+        file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
     }
 }

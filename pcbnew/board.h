@@ -27,6 +27,7 @@
 
 #include <board_item_container.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <embedded_files.h>
 #include <common.h> // Needed for stl hash extensions
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <hash.h>
@@ -284,7 +285,7 @@ enum class BOARD_USE
 /**
  * Information pertinent to a Pcbnew printed circuit board.
  */
-class BOARD : public BOARD_ITEM_CONTAINER
+class BOARD : public BOARD_ITEM_CONTAINER, public EMBEDDED_FILES
 {
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
@@ -425,6 +426,13 @@ public:
      * for listeners.
      */
     void FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems );
+
+    /**
+     * After loading a file from disk, the footprints do not yet contain the full
+     * data for their embedded files, only a reference.  This iterates over all footprints
+     * in the board and updates them with the full embedded data.
+    */
+    void FixupEmbeddedData();
 
     void CacheTriangulation( PROGRESS_REPORTER* aReporter = nullptr,
                              const std::vector<ZONE*>& aZones = {} );
@@ -1246,6 +1254,14 @@ public:
     bool LegacyTeardrops() const { return m_legacyTeardrops; }
     void SetLegacyTeardrops( bool aFlag ) { m_legacyTeardrops = aFlag; }
 
+    EMBEDDED_FILES* GetEmbeddedFiles() override;
+    const EMBEDDED_FILES* GetEmbeddedFiles() const;
+
+    /**
+     * Finds all fonts used in the board and embeds them in the file if permissions allow
+    */
+    void EmbedFonts() override;
+
     // --------- Item order comparators ---------
 
     struct cmp_items
@@ -1359,6 +1375,8 @@ private:
     NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
 
     std::vector<BOARD_LISTENER*> m_listeners;
+
+    bool                         m_embedFonts;
 };
 
 

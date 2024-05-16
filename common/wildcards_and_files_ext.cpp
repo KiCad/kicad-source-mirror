@@ -202,6 +202,8 @@ const std::string FILEEXT::XaoFileExtension( "xao" );
 
 const wxString FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 
+const std::string FILEEXT::KiCadUriPrefix( "kicad-embed" );
+
 
 bool FILEEXT::IsGerberFileExtension( const wxString& ext )
 {

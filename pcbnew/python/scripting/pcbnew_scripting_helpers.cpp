@@ -44,8 +44,10 @@
 #include <core/ignore.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <string_utils.h>
+#include <filename_resolver.h>
 #include <macros.h>
 #include <pcbnew_scripting_helpers.h>
+#include <pgm_base.h>
 #include <project.h>
 #include <project_pcb.h>
 #include <project/net_settings.h>
@@ -179,18 +181,28 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSet
 
     BASE_SCREEN::m_DrawingSheetFileName = project->GetProjectFile().m_BoardDrawingSheetFile;
 
-    // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
-    // If empty, or not existing, the default drawing sheet is loaded.
-    wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                    project->GetProjectPath() );
-
-    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, nullptr ) )
-        wxFprintf( stderr, _( "Error loading drawing sheet." ) );
-
     BOARD* brd = PCB_IO_MGR::Load( aFormat, aFileName );
 
     if( brd )
     {
+        // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
+        // If empty, or not existing, the default drawing sheet is loaded.
+        FILENAME_RESOLVER resolver;
+        resolver.SetProject( project );
+        resolver.SetProgramBase( &Pgm() );
+
+        wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                              project->GetProjectPath(),
+                                              brd->GetEmbeddedFiles() );
+
+        wxString msg;
+
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
+        {
+            wxFprintf( stderr, _( "Error loading drawing sheet '%s': %s" ),
+                       BASE_SCREEN::m_DrawingSheetFileName, msg );
+        }
+
         // JEY TODO: move this global to the board
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 

@@ -27,6 +27,7 @@
 #ifndef LIB_SYMBOL_H
 #define LIB_SYMBOL_H
 
+#include <embedded_files.h>
 #include <symbol.h>
 #include <sch_field.h>
 #include <sch_pin.h>
@@ -73,7 +74,7 @@ struct LIB_SYMBOL_UNIT
  * A library symbol object is typically saved and loaded in a symbol library file (.lib).
  * Library symbols are different from schematic symbols.
  */
-class LIB_SYMBOL : public SYMBOL, public LIB_TREE_ITEM
+class LIB_SYMBOL : public SYMBOL, public LIB_TREE_ITEM, public EMBEDDED_FILES
 {
 public:
     LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
@@ -332,6 +333,11 @@ public:
     {
         return GetValueField().GetText();
     }
+
+    EMBEDDED_FILES* GetEmbeddedFiles() override;
+    const EMBEDDED_FILES* GetEmbeddedFiles() const;
+
+    void EmbedFonts() override;
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 

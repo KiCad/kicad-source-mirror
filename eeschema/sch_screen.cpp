@@ -1488,6 +1488,28 @@ void SCH_SCREEN::AddLibSymbol( LIB_SYMBOL* aLibSymbol )
 }
 
 
+void SCH_SCREEN::FixupEmbeddedData()
+{
+    SCHEMATIC* schematic = Schematic();
+
+    for( auto& [name, libSym] : m_libSymbols )
+    {
+        for( auto& [filename, embeddedFile] : libSym->EmbeddedFileMap() )
+        {
+            EMBEDDED_FILES::EMBEDDED_FILE* file = schematic->GetEmbeddedFile( filename );
+
+            if( file )
+            {
+                embeddedFile->compressedEncodedData = file->compressedEncodedData;
+                embeddedFile->decompressedData = file->decompressedData;
+                embeddedFile->data_sha = file->data_sha;
+                embeddedFile->is_valid = file->is_valid;
+            }
+        }
+    }
+}
+
+
 void SCH_SCREEN::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 {
     m_aliases.insert( aAlias );

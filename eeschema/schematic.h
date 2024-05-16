@@ -21,6 +21,7 @@
 #define KICAD_SCHEMATIC_H
 
 #include <eda_item.h>
+#include <embedded_files.h>
 #include <sch_sheet_path.h>
 #include <schematic_settings.h>
 
@@ -71,7 +72,7 @@ public:
  * Right now, Eeschema can have only one schematic open at a time, but this could change.
  * Please keep this possibility in mind when adding to this object.
  */
-class SCHEMATIC : public SCHEMATIC_IFACE, public EDA_ITEM
+class SCHEMATIC : public SCHEMATIC_IFACE, public EDA_ITEM, public EMBEDDED_FILES
 {
 public:
     SCHEMATIC( PROJECT* aPrj );
@@ -160,6 +161,9 @@ public:
     ERC_SETTINGS& ErcSettings() const;
 
     std::vector<SCH_MARKER*> ResolveERCExclusions();
+
+    EMBEDDED_FILES* GetEmbeddedFiles() override;
+    const EMBEDDED_FILES* GetEmbeddedFiles() const;
 
     /**
      * Return a pointer to a bus alias object for the given label, or null if one
@@ -304,6 +308,11 @@ public:
      * Remove all listeners
      */
     void RemoveAllListeners();
+
+    /**
+     * Embed fonts in the schematic
+     */
+    void EmbedFonts() override;
 
     /**
      * True if a SCHEMATIC exists, false if not

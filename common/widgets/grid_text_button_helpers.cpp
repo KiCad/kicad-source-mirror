@@ -22,12 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/checkbox.h>
 #include <wx/combo.h>
 #include <wx/filedlg.h>
 #include <wx/dirdlg.h>
 #include <wx/textctrl.h>
 
 #include <bitmaps.h>
+#include <embedded_files.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <kiway_express.h>
@@ -37,6 +39,7 @@
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <widgets/wx_grid.h>
+#include <widgets/filedlg_open_embed_file.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <eda_doc.h>
 
@@ -323,16 +326,25 @@ void GRID_CELL_FPID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 class TEXT_BUTTON_URL : public wxComboCtrl
 {
 public:
-    TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack ) :
+    TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack, EMBEDDED_FILES* aFiles ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
-            m_searchStack( aSearchStack )
+            m_searchStack( aSearchStack ),
+            m_files( aFiles )
     {
-        SetButtonBitmaps( KiBitmapBundle( BITMAPS::www ) );
+        UpdateButtonBitmaps();
 
         // win32 fix, avoids drawing the "native dropdown caret"
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
+
+        // Bind event to handle text changes
+        Bind(wxEVT_TEXT, &TEXT_BUTTON_URL::OnTextChange, this);
+    }
+
+    ~TEXT_BUTTON_URL()
+    {
+        Unbind(wxEVT_TEXT, &TEXT_BUTTON_URL::OnTextChange, this);
     }
 
 protected:
@@ -345,19 +357,59 @@ protected:
     {
         wxString filename = GetValue();
 
-        if( !filename.IsEmpty() && filename != wxT( "~" ) )
-            GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack );
+        if (filename.IsEmpty() || filename == wxT("~"))
+        {
+            FILEDLG_OPEN_EMBED_FILE customize;
+            wxFileDialog openFileDialog( this, _( "Open file" ), "", "", "All files (*.*)|*.*",
+                                         wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+            openFileDialog.SetCustomizeHook( customize );
+
+            if( openFileDialog.ShowModal() == wxID_OK )
+            {
+                filename = openFileDialog.GetPath();
+                wxFileName fn( filename );
+
+                if( customize.GetEmbed() )
+                {
+                    EMBEDDED_FILES::EMBEDDED_FILE* result = m_files->AddFile( fn, false );
+                    SetValue( result->GetLink() );
+                }
+                else
+                {
+                    SetValue( "file://" + filename );
+                }
+            }
+        }
+        else
+        {
+            GetAssociatedDocument(m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack, m_files);
+        }
+    }
+
+    void OnTextChange(wxCommandEvent& event)
+    {
+        UpdateButtonBitmaps();
+        event.Skip(); // Ensure that other handlers can process this event too
+    }
+
+    void UpdateButtonBitmaps()
+    {
+        if (GetValue().IsEmpty())
+            SetButtonBitmaps(KiBitmapBundle(BITMAPS::small_folder));
+        else
+            SetButtonBitmaps(KiBitmapBundle(BITMAPS::www));
     }
 
     DIALOG_SHIM* m_dlg;
     SEARCH_STACK* m_searchStack;
+    EMBEDDED_FILES* m_files;
 };
 
 
 void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                    wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack );
+    m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack, m_files );
     WX_GRID::CellEditorSetMargins( Combo() );
 
 #if wxUSE_VALIDATORS

@@ -154,7 +154,7 @@ class WX_GRID_ALT_ROW_COLOR_PROVIDER : public wxGridCellAttrProvider
 {
 public:
     WX_GRID_ALT_ROW_COLOR_PROVIDER( const wxColor& aBaseColor ) : wxGridCellAttrProvider(),
-        m_attrOdd( new wxGridCellAttr() )
+        m_attrEven( new wxGridCellAttr() )
     {
         UpdateColors( aBaseColor );
     }
@@ -165,7 +165,7 @@ public:
         // Choose the default color, taking into account if the dark mode theme is enabled
         wxColor rowColor = aBaseColor.ChangeLightness( KIPLATFORM::UI::IsDarkTheme() ? 105 : 95 );
 
-        m_attrOdd->SetBackgroundColour( rowColor );
+        m_attrEven->SetBackgroundColour( rowColor );
     }
 
 
@@ -174,20 +174,20 @@ public:
     {
         wxGridCellAttrPtr cellAttr( wxGridCellAttrProvider::GetAttr( row, col, kind ) );
 
-        // Just pass through the cell attribute on even rows
-        if( row % 2 )
+        // Just pass through the cell attribute on odd rows (start normal to allow for the header row)
+        if( !( row % 2 ) )
             return cellAttr.release();
 
         if( !cellAttr )
         {
-            cellAttr = m_attrOdd;
+            cellAttr = m_attrEven;
         }
         else
         {
             if( !cellAttr->HasBackgroundColour() )
             {
                 cellAttr = cellAttr->Clone();
-                cellAttr->SetBackgroundColour( m_attrOdd->GetBackgroundColour() );
+                cellAttr->SetBackgroundColour( m_attrEven->GetBackgroundColour() );
             }
         }
 
@@ -195,7 +195,7 @@ public:
     }
 
 private:
-    wxGridCellAttrPtr m_attrOdd;
+    wxGridCellAttrPtr m_attrEven;
 };
 
 

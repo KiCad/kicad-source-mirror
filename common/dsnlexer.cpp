@@ -276,6 +276,9 @@ const char* DSNLEXER::Syntax( int aTok )
     case DSN_EOF:
         ret = "end of input";
         break;
+    case DSN_BAR:
+        ret = "|";
+        break;
     default:
         ret = "???";
     }
@@ -379,6 +382,15 @@ void DSNLEXER::NeedRIGHT()
 }
 
 
+void DSNLEXER::NeedBAR()
+{
+    int tok = NextTok();
+
+    if( tok != DSN_BAR )
+        Expecting( DSN_BAR );
+}
+
+
 int DSNLEXER::NeedSYMBOL()
 {
     int tok = NextTok();
@@ -452,7 +464,7 @@ inline bool isDigit( char cc )
 ///< @return true if @a cc is an s-expression separator character.
 inline bool isSep( char cc )
 {
-    return isSpace( cc ) || cc=='(' || cc==')';
+    return isSpace( cc ) || cc == '(' || cc == ')' || cc == '|';
 }
 
 
@@ -593,6 +605,14 @@ L_read:
     {
         curText = *cur;
         curTok = DSN_RIGHT;
+        head = cur+1;
+        goto exit;
+    }
+
+    if( *cur == '|' )
+    {
+        curText = *cur;
+        curTok = DSN_BAR;
         head = cur+1;
         goto exit;
     }

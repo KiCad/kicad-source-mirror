@@ -143,7 +143,7 @@ FONT* FONT::getDefaultFont()
 }
 
 
-FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
+FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic, const std::vector<wxString>* aEmbeddedFiles )
 {
     if( aFontName.empty() || aFontName.StartsWith( KICAD_FONT_NAME ) )
         return getDefaultFont();
@@ -156,7 +156,7 @@ FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
         font = s_fontMap[key];
 
     if( !font )
-        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic );
+        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic, aEmbeddedFiles );
 
     if( !font )
         font = getDefaultFont();

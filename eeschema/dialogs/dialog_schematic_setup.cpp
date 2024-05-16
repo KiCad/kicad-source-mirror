@@ -30,6 +30,7 @@
 #include <erc/erc_item.h>
 #include <panel_text_variables.h>
 #include <panel_bom_presets.h>
+#include <panel_embedded_files.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
@@ -120,6 +121,16 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
             {
                 return new PANEL_TEXT_VARIABLES( aParent, &Prj() );
             }, _( "Text Variables" ) );
+
+
+    m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Schematic Data" ) );
+
+    m_embeddedFilesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_EMBEDDED_FILES( aParent, &m_frame->Schematic() );
+            }, _( "Embedded Files" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );

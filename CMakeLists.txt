@@ -810,6 +810,11 @@ include_directories( SYSTEM ${GLM_INCLUDE_DIR} )
 find_package(ZLIB REQUIRED)
 
 #
+# Find Zstd library, required
+#
+find_package(ZSTD REQUIRED)
+
+#
 # Find libcurl, required
 #
 find_package( CURL REQUIRED )

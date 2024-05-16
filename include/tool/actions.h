@@ -228,6 +228,11 @@ public:
     // API
     static TOOL_ACTION pluginsReload;
 
+    // Embedding Files
+    static TOOL_ACTION embeddedFiles;
+    static TOOL_ACTION extractFile;
+    static TOOL_ACTION removeFile;
+
     ///< Cursor control event types
     enum CURSOR_EVENT_TYPE
     {

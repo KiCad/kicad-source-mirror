@@ -66,6 +66,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/embed_tool.h>
 #include <tool/picker_tool.h>
 #include <tool/properties_tool.h>
 #include <tool/selection.h>
@@ -368,6 +369,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     LoadProjectSettings();
+    LoadDrawingSheet();
 
     view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
     view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
@@ -524,6 +526,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->RegisterTool( new SCH_NAVIGATE_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
+    m_toolManager->RegisterTool( new EMBED_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

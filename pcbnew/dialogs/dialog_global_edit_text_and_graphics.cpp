@@ -397,7 +397,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
                 if( !text->GetFontName().IsEmpty() )
                 {
                     text->SetFont( KIFONT::FONT::GetFont( text->GetFontName(), text->IsBold(),
-                                                          text->IsItalic() ) );
+                                                          text->IsItalic(),
+                                                          m_parent->GetBoard()->GetEmbeddedFiles()->GetFontFiles() ) );
                 }
             }
 

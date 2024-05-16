@@ -106,6 +106,8 @@ edge_connector
 edge_plating
 edge_width
 effects
+embedded_fonts
+embedded_files
 enabled
 end
 epsilon_r

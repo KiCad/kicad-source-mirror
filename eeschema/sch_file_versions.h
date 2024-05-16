@@ -49,7 +49,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Symbol unit display names.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Don't save property ID
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20230620   // ki_description -> Description Field
-#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20231120   // generator_version; V8 cleanups
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20231120   // generator_version; V8 cleanups
+#define  SEXPR_SYMBOL_LIB_FILE_VERSION  20240529   // Embedded Files
 
 /**
  * Schematic file version.
@@ -105,4 +106,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20231120  // generator_version; V8 cleanups
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240101  // Tables.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240417  // Rule areas
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20240602  // Sheet attributes
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20240602  // Sheet attributes
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20240620  // Embedded Files

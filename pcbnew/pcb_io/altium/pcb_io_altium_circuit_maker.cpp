@@ -32,6 +32,7 @@
 #include <pcb_io_altium_circuit_maker.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
+#include <altium_pcb_compound_file.h>
 #include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
 #include <reporter.h>
@@ -101,7 +102,7 @@ BOARD* PCB_IO_ALTIUM_CIRCUIT_MAKER::LoadBoard( const wxString& aFileName, BOARD*
     };
     // clang-format on
 
-    ALTIUM_COMPOUND_FILE altiumPcbFile( aFileName );
+    ALTIUM_PCB_COMPOUND_FILE altiumPcbFile( aFileName );
 
     try
     {

@@ -29,9 +29,9 @@
 #include "project.h"
 #include "3d_cache/3d_info.h"
 #include "3d_cache/3d_cache.h"
-#include "3d_cache_dialogs.h"
 #include <3d_model_viewer/eda_3d_model_viewer.h>
 #include <common_ogl/ogl_attr_list.h>
+#include <dialogs/dialog_configure_paths.h>
 #include <filename_resolver.h>
 #include <pcbnew/footprint.h>
 #include <wx_filename.h>
@@ -197,7 +197,9 @@ void DIALOG_SELECT_3DMODEL::SetRootDir( wxCommandEvent& event )
 
 void DIALOG_SELECT_3DMODEL::Cfg3DPaths( wxCommandEvent& event )
 {
-    if( S3D::Configure3DPaths( this, m_resolver ) )
+    DIALOG_CONFIGURE_PATHS dlg( this );
+
+    if( dlg.ShowQuasiModal() == wxID_OK )
         updateDirChoiceList();
 }
 

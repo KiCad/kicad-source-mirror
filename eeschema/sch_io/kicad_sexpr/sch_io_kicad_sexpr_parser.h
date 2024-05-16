@@ -244,6 +244,8 @@ private:
 
     std::set<KIID>     m_uuids;
 
+    std::map<EDA_TEXT*, std::tuple<wxString, bool, bool>> m_fontTextMap;
+
     PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
     const LINE_READER* m_lineReader;        // for progress reporting
     unsigned           m_lastProgressLine;

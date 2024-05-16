@@ -149,30 +149,6 @@ ALTIUM_COMPOUND_FILE::DecodeIntLibStream( const CFB::COMPOUND_FILE_ENTRY& cfe )
 }
 
 
-std::map<wxString, wxString> ALTIUM_COMPOUND_FILE::ListLibFootprints()
-{
-    if( m_libFootprintDirNameCache.empty() )
-        cacheLibFootprintNames();
-
-    return m_libFootprintDirNameCache;
-}
-
-
-std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*>
-ALTIUM_COMPOUND_FILE::FindLibFootprintDirName( const wxString& aFpUnicodeName )
-{
-    if( m_libFootprintNameCache.empty() )
-        cacheLibFootprintNames();
-
-    auto it = m_libFootprintNameCache.find( aFpUnicodeName );
-
-    if( it == m_libFootprintNameCache.end() )
-        return { wxEmptyString, nullptr };
-
-    return { it->first, it->second };
-}
-
-
 const CFB::COMPOUND_FILE_ENTRY*
 ALTIUM_COMPOUND_FILE::FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEntry,
                                              const std::string aName, const bool aIsStream ) const
@@ -330,53 +306,6 @@ const CFB::COMPOUND_FILE_ENTRY*
 ALTIUM_COMPOUND_FILE::FindStream( const std::vector<std::string>& aStreamPath ) const
 {
     return FindStream( nullptr, aStreamPath );
-}
-
-
-void ALTIUM_COMPOUND_FILE::cacheLibFootprintNames()
-{
-    m_libFootprintDirNameCache.clear();
-    m_libFootprintNameCache.clear();
-
-    if( !m_reader )
-        return;
-
-    const CFB::COMPOUND_FILE_ENTRY* root = m_reader->GetRootEntry();
-
-    if( !root )
-        return;
-
-    m_reader->EnumFiles( root, 1,
-                        [this]( const CFB::COMPOUND_FILE_ENTRY* tentry, const CFB::utf16string& dir,
-                            int level ) -> int
-                        {
-                            if( m_reader->IsStream( tentry ) )
-                                return 0;
-
-                            m_reader->EnumFiles( tentry, 1,
-                                        [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string&, int ) -> int
-                                        {
-                                            std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
-
-                                            if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
-                                            {
-                                                ALTIUM_BINARY_PARSER                parametersReader( *this, entry );
-                                                std::map<wxString, wxString> parameterProperties =
-                                                        parametersReader.ReadProperties();
-
-                                                wxString key = ALTIUM_PROPS_UTILS::ReadString(
-                                                        parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
-                                                wxString fpName = ALTIUM_PROPS_UTILS::ReadUnicodeString(
-                                                        parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
-
-                                                m_libFootprintDirNameCache[key] = fpName;
-                                                m_libFootprintNameCache[fpName] = tentry;
-                                            }
-
-                                            return 0;
-                                        } );
-                            return 0;
-                         } );
 }
 
 

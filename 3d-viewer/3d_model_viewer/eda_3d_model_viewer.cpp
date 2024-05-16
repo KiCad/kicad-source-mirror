@@ -156,7 +156,7 @@ void EDA_3D_MODEL_VIEWER::Set3DModel( const wxString& aModelPathName)
 
     if( m_cacheManager )
     {
-        const S3DMODEL* model = m_cacheManager->GetModel( aModelPathName, wxEmptyString );
+        const S3DMODEL* model = m_cacheManager->GetModel( aModelPathName, wxEmptyString, nullptr );
 
         if( model )
             Set3DModel( (const S3DMODEL &)*model );

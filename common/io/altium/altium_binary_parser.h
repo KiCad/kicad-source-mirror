@@ -38,6 +38,7 @@
 #include <wx/mstream.h>
 #include <wx/zstream.h>
 #include <math/vector2d.h>
+#include <math/vector3.h>
 
 namespace CFB
 {
@@ -63,8 +64,11 @@ public:
     const CFB::COMPOUND_FILE_ENTRY* m_pinsSymbolLineWidth;
 };
 
+
 class ALTIUM_COMPOUND_FILE
 {
+    friend class ALTIUM_PCB_COMPOUND_FILE;
+
 public:
     /**
      * Open a CFB file. Constructor might throw an IO_ERROR.
@@ -90,10 +94,6 @@ public:
 
     std::unique_ptr<ALTIUM_COMPOUND_FILE> DecodeIntLibStream( const CFB::COMPOUND_FILE_ENTRY& cfe );
 
-    std::map<wxString, wxString> ListLibFootprints();
-
-    std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> FindLibFootprintDirName( const wxString& aFpUnicodeName );
-
     const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::vector<std::string>& aStreamPath ) const;
 
     const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::COMPOUND_FILE_ENTRY* aStart, const std::vector<std::string>& aStreamPath ) const;
@@ -108,13 +108,8 @@ public:
 
 private:
 
-    void cacheLibFootprintNames();
-
     std::unique_ptr<CFB::CompoundFileReader> m_reader;
     std::vector<char>                        m_buffer;
-
-    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> m_libFootprintNameCache;
-    std::map<wxString, wxString>                        m_libFootprintDirNameCache;
 };
 
 

@@ -4,6 +4,7 @@
 set( ALTIUM2PCBNEW_SRCS
     altium_parser_pcb.cpp
     altium_pcb.cpp
+    altium_pcb_compound_file.cpp
     altium_rule_transformer.cpp
     pcb_io_altium_circuit_maker.cpp
     pcb_io_altium_circuit_studio.cpp

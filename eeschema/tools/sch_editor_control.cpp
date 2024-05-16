@@ -200,7 +200,7 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     undoCmd.SetDescription( _( "Page Settings" ) );
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS, false, false );
 
-    DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, VECTOR2I( MAX_PAGE_SIZE_EESCHEMA_MILS,
+    DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, m_frame->Schematic().GetEmbeddedFiles(), VECTOR2I( MAX_PAGE_SIZE_EESCHEMA_MILS,
                                                           MAX_PAGE_SIZE_EESCHEMA_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 

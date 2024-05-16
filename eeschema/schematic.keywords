@@ -16,6 +16,7 @@ bus_alias
 bus_entry
 cells
 center
+checksum
 circle
 clock
 clock_low
@@ -38,12 +39,15 @@ do_not_autoplace
 dot
 edge_clock_high
 effects
+embedded_fonts
+embedded_files
 end
 extends
 external
 exclude_from_sim
 face
 fields_autoplaced
+file
 fill
 font
 footprint

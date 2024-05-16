@@ -333,7 +333,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
             continue;
 
         std::vector<wxString> searchedPaths;
-        wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath );
+        wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath, aFootprint );
 
 
         if( mname.empty() || !wxFileName::FileExists( mname ) )

@@ -36,6 +36,7 @@ set( QA_COMMON_SRCS
     test_coroutine.cpp
     test_eda_shape.cpp
     test_eda_text.cpp
+    test_embedded_file_compress.cpp
     test_lib_table.cpp
     test_markup_parser.cpp
     test_kicad_string.cpp

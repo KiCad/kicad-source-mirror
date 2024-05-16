@@ -57,7 +57,8 @@ struct KICOMMON_API KEYWORD
  */
 enum DSN_SYNTAX_T
 {
-    DSN_NONE         = -11,
+    DSN_NONE         = -12,
+    DSN_BAR          = -11, // Also called pipe '|'
     DSN_COMMENT      = -10,
     DSN_STRING_QUOTE = -9,
     DSN_QUOTE_DEF    = -8,
@@ -380,6 +381,13 @@ public:
      * @throw IO_ERROR if the next token is not a #DSN_RIGHT
      */
     void NeedRIGHT();
+
+    /**
+     * Call #NextTok() and then verifies that the token read in is a #DSN_BAR.
+     *
+     * @throw IO_ERROR if the next token is not a #DSN_BAR
+     */
+    void NeedBAR();
 
     /**
      * Return the C string representation of a #DSN_T value.

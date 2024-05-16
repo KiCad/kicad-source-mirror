@@ -130,13 +130,22 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                               int aNestLevel, const wxString& aLibName )
+                                               int aNestLevel, const wxString& aLibName, bool aIncludeData )
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
 
     // The current locale must use period as the decimal point.
     wxCHECK2( wxLocale::GetInfo( wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER ) == ".",
               LOCALE_IO toggle );
+
+
+    // If we've requested to embed the fonts in the symbol, do so.
+    // Otherwise, clear the embedded fonts from the symbol.  Embedded
+    // fonts will be used if available
+    if( aSymbol->GetAreFontsEmbedded() )
+        aSymbol->EmbedFonts();
+    else
+        aSymbol->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
     int nextFreeFieldId = MANDATORY_FIELDS;
     std::vector<SCH_FIELD*> fields;
@@ -262,6 +271,12 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
             aFormatter.Print( aNestLevel + 1, ")\n" );
         }
+
+        aFormatter.Print( aNestLevel + 1, "(embedded_fonts %s)\n",
+                          aSymbol->GetAreFontsEmbedded() ? "yes" : "no" );
+
+        if( !aSymbol->EmbeddedFileMap().empty() )
+            aSymbol->WriteEmbeddedFiles( aFormatter, aNestLevel + 1, aIncludeData );
     }
     else
     {

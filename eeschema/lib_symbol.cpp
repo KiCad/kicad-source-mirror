@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <font/outline_font.h>
 #include <sch_draw_panel.h>
 #include <plotters/plotter.h>
 #include <sch_screen.h>
@@ -1871,4 +1872,51 @@ double LIB_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
         similarity *= 0.9;
 
     return similarity;
+}
+
+
+EMBEDDED_FILES* LIB_SYMBOL::GetEmbeddedFiles()
+{
+    return static_cast<EMBEDDED_FILES*>( this );
+}
+
+
+const EMBEDDED_FILES* LIB_SYMBOL::GetEmbeddedFiles() const
+{
+    return static_cast<const EMBEDDED_FILES*>( this );
+}
+
+
+void LIB_SYMBOL::EmbedFonts()
+{
+    using OUTLINE_FONT = KIFONT::OUTLINE_FONT;
+    using EMBEDDING_PERMISSION = OUTLINE_FONT::EMBEDDING_PERMISSION;
+
+    std::set<OUTLINE_FONT*> fonts;
+
+    for( SCH_ITEM& item : m_drawings )
+    {
+        if( item.Type() == SCH_TEXT_T )
+        {
+            auto* text = static_cast<SCH_TEXT*>( &item );
+
+            if( auto* font = text->GetFont(); font && !font->IsStroke() )
+            {
+                auto* outline = static_cast<OUTLINE_FONT*>( font );
+                auto permission = outline->GetEmbeddingPermission();
+
+                if( permission == EMBEDDING_PERMISSION::EDITABLE
+                    || permission == EMBEDDING_PERMISSION::INSTALLABLE )
+                {
+                    fonts.insert( outline );
+                }
+            }
+        }
+    }
+
+    for( auto* font : fonts )
+    {
+        auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
+        file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
+    }
 }

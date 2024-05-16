@@ -192,6 +192,8 @@ public:
 
     static const wxString GerberFileExtensionsRegex;
 
+    static const std::string KiCadUriPrefix;
+
     /**
      * @}
      */

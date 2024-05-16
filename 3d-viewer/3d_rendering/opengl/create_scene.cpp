@@ -974,7 +974,7 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
                 {
                     // It is not present, try get it from cache
                     const S3DMODEL* modelPtr =
-                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename, footprintBasePath );
+                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename, footprintBasePath, footprint );
 
                     // only add it if the return is not NULL
                     if( modelPtr )

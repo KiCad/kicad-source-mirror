@@ -30,6 +30,8 @@
 #include <properties/property_mgr.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
+#include <symbol_edit_frame.h>
+#include <symbol_viewer_frame.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
@@ -218,10 +220,31 @@ void SCH_PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
 void SCH_PROPERTIES_PANEL::updateFontList()
 {
     wxPGChoices fonts;
+    const std::vector<wxString>* fontFiles = nullptr;
+
+    if( m_frame->GetFrameType() == FRAME_SCH && m_frame->GetScreen() && m_frame->GetScreen()->Schematic() )
+    {
+        fontFiles = m_frame->GetScreen()->Schematic()->GetEmbeddedFiles()->GetFontFiles();
+    }
+    else if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
+    {
+        SYMBOL_EDIT_FRAME* symbolFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+        if( symbolFrame->GetCurSymbol() )
+            fontFiles = symbolFrame->GetCurSymbol()->GetEmbeddedFiles()->UpdateFontFiles();
+    }
+    else if( m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+    {
+        SYMBOL_VIEWER_FRAME* symbolFrame = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame );
+
+        if( symbolFrame->GetSelectedSymbol() )
+            fontFiles = symbolFrame->GetSelectedSymbol()->GetEmbeddedFiles()->UpdateFontFiles();
+    }
 
     // Regnerate font names
     std::vector<std::string> fontNames;
-    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
+                             fontFiles );
 
     fonts.Add( _( "Default Font" ), -1 );
     fonts.Add( KICAD_FONT_NAME, -2 );

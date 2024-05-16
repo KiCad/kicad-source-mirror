@@ -52,6 +52,7 @@ enum class INSPECT_RESULT
 class UNITS_PROVIDER;
 class EDA_DRAW_FRAME;
 class MSG_PANEL_ITEM;
+class EMBEDDED_FILES;
 
 namespace google { namespace protobuf { class Any; } }
 
@@ -439,6 +440,8 @@ public:
     virtual const BOX2I ViewBBox() const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
+    virtual EMBEDDED_FILES* GetEmbeddedFiles() { return nullptr; }
 
 #if defined(DEBUG)
 

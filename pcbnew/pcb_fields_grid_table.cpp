@@ -21,13 +21,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiway_player.h>
-#include <project.h>
-#include <pcb_fields_grid_table.h>
-#include <widgets/grid_combobox.h>
-#include <trigo.h>
-#include <pcb_base_frame.h>
+#include <board.h>
 #include <footprint.h>
+#include <footprint_edit_frame.h>
+#include <kiway.h>
+#include <kiway_player.h>
+#include <pcb_fields_grid_table.h>
+#include <pcb_base_frame.h>
+#include <pcb_edit_frame.h>
+#include <project.h>
+#include <trigo.h>
+#include <widgets/grid_combobox.h>
+
 #include "grid_layer_box_helpers.h"
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/grid_text_helpers.h>
@@ -95,8 +100,36 @@ PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHI
     fpIdEditor->SetValidator( m_nonUrlValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
 
+    EMBEDDED_FILES* files = nullptr;
+
+    // In the case of the footprint editor, we need to distinguish between the footprint
+    // in the library where the embedded files are stored with the footprint and the footprint
+    // from the board where the embedded files are stored with the board.
+    if( m_frame->GetFrameType() == FRAME_FOOTPRINT_EDITOR )
+    {
+        FOOTPRINT_EDIT_FRAME* fpFrame = static_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
+
+        if( fpFrame->IsCurrentFPFromBoard() )
+        {
+            PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_PCB_EDITOR, false );
+
+            if( pcbframe != nullptr )       // happens when the board editor is not active (or closed)
+            {
+                files = pcbframe->GetBoard();
+            }
+        }
+        else
+        {
+            files = fpFrame->GetBoard()->GetFirstFootprint();
+        }
+    }
+    else if( m_frame->GetFrameType() == FRAME_PCB_EDITOR )
+    {
+        files = static_cast<PCB_EDIT_FRAME*>( m_frame )->GetBoard();
+    }
+
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, nullptr, files );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 

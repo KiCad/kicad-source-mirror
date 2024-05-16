@@ -31,6 +31,7 @@
 #include <fmt/format.h>
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
+#include <wx/log.h>
 #include <wx/mstream.h>
 #include <wx/tokenzr.h>
 
@@ -39,6 +40,8 @@
 #include <sch_pin.h>
 #include <math/util.h>                           // KiROUND, Clamp
 #include <font/font.h>
+#include <font/fontconfig.h>
+#include <pgm_base.h>
 #include <string_utils.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -272,6 +275,13 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMa
                                              GetTokenString( CurTok() ) );
             THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
         }
+    }
+
+    for( auto& [text, params] : m_fontTextMap )
+    {
+        text->SetFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
+                                              std::get<2>( params ),
+                                              newSymbol->GetEmbeddedFiles()->UpdateFontFiles() ) );
     }
 
     return newSymbol;
@@ -534,6 +544,31 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             symbol->AddDrawItem( item, false );
             break;
 
+        case T_embedded_fonts:
+        {
+            symbol->SetAreFontsEmbedded( parseBool() );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_embedded_files:
+        {
+            EMBEDDED_FILES_PARSER embeddedFilesParser( reader );
+            embeddedFilesParser.SyncLineReaderWith( *this );
+
+            try
+            {
+                embeddedFilesParser.ParseEmbedded( symbol->GetEmbeddedFiles() );
+            }
+            catch( const IO_ERROR& e )
+            {
+                wxLogError( e.What() );
+            }
+
+            SyncLineReaderWith( embeddedFilesParser );
+            break;
+        }
+
         default:
             Expecting( "pin_names, pin_numbers, arc, bezier, circle, pin, polyline, "
                        "rectangle, or text" );
@@ -742,7 +777,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
             }
 
             if( !faceName.IsEmpty() )
-                aText->SetFont( KIFONT::FONT::GetFont( faceName, bold, italic ) );
+                m_fontTextMap[aText] = { faceName, bold, italic };
 
             break;
 
@@ -2755,10 +2790,48 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
             parseBusAlias( screen );
             break;
 
+        case T_embedded_fonts:
+        {
+            SCHEMATIC* schematic = aSheet->Schematic();
+
+            if( !schematic )
+                THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
+                                   CurLineNumber(), CurOffset() );
+
+            schematic->GetEmbeddedFiles()->SetAreFontsEmbedded( parseBool() );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_embedded_files:
+        {
+            SCHEMATIC* schematic = aSheet->Schematic();
+
+            if( !schematic )
+                THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
+                                   CurLineNumber(), CurOffset() );
+
+            EMBEDDED_FILES_PARSER embeddedFilesParser( reader );
+            embeddedFilesParser.SyncLineReaderWith( *this );
+
+            try
+            {
+                embeddedFilesParser.ParseEmbedded( schematic->GetEmbeddedFiles() );
+            }
+            catch( const PARSE_ERROR& e )
+            {
+                wxLogError( e.What() );
+            }
+
+            SyncLineReaderWith( embeddedFilesParser );
+            break;
+        }
+
+
         default:
-            Expecting( "symbol, paper, page, title_block, bitmap, sheet, junction, no_connect, "
-                       "bus_entry, line, bus, text, label, class_label, global_label, "
-                       "hierarchical_label, symbol_instances, rule_area, or bus_alias" );
+            Expecting( "bitmap, bus, bus_alias, bus_entry, class_label, embedded_files, global_label, "
+                       "hierarchical_label, junction, label, line, no_connect, page, paper, rule_area, "
+                       "sheet, symbol, symbol_instances, text, title_block" );
         }
     }
 
@@ -2771,6 +2844,26 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
     }
 
     screen->UpdateLocalLibSymbolLinks();
+    screen->FixupEmbeddedData();
+
+    SCHEMATIC* schematic = aSheet->Schematic();
+
+    if( !schematic )
+        THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
+                            CurLineNumber(), CurOffset() );
+
+    for( auto& [text, params] : m_fontTextMap )
+    {
+        text->SetFont( KIFONT::FONT::GetFont( std::get<0>( params ), std::get<1>( params ),
+                                              std::get<2>( params ),
+                                              schematic->GetEmbeddedFiles()->UpdateFontFiles() ) );
+    }
+
+    // When loading the schematic, take a moment to cache the fonts so that the font
+    // picker can show the embedded fonts immediately.
+    std::vector<std::string> fontNames;
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
+                             schematic->GetEmbeddedFiles()->GetFontFiles(), true );
 
     if( m_requiredVersion < 20200828 )
         screen->SetLegacySymbolInstanceData();

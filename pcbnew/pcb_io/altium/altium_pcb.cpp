@@ -24,6 +24,7 @@
 
 #include "altium_pcb.h"
 #include "altium_parser_pcb.h"
+#include <altium_pcb_compound_file.h>
 #include <io/altium/altium_binary_parser.h>
 #include <io/altium/altium_parser_utils.h>
 
@@ -313,114 +314,114 @@ void ALTIUM_PCB::checkpoint()
     }
 }
 
-void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFile,
+void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumPcbFile,
                         const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
 {
     // this vector simply declares in which order which functions to call.
     const std::vector<std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>> parserOrder = {
         { true, ALTIUM_PCB_DIR::FILE_HEADER,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseFileHeader( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::BOARD6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseBoard6Data( aFile, fileHeader );
           } },
         { false, ALTIUM_PCB_DIR::EXTENDPRIMITIVEINFORMATION,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseExtendedPrimitiveInformationData( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::COMPONENTS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseComponents6Data( aFile, fileHeader );
           } },
         { false, ALTIUM_PCB_DIR::MODELS,
-          [this, aFileMapping]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this, aFileMapping]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               std::vector<std::string> dir{ aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) };
               this->ParseModelsData( aFile, fileHeader, dir );
           } },
         { true, ALTIUM_PCB_DIR::COMPONENTBODIES6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseComponentsBodies6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::NETS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseNets6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::CLASSES6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseClasses6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::RULES6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseRules6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::DIMENSIONS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseDimensions6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::POLYGONS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParsePolygons6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::ARCS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseArcs6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::PADS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParsePads6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::VIAS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseVias6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::TRACKS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseTracks6Data( aFile, fileHeader );
           } },
         { false, ALTIUM_PCB_DIR::WIDESTRINGS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseWideStrings6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::TEXTS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseTexts6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::FILLS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseFills6Data( aFile, fileHeader );
           } },
         { false, ALTIUM_PCB_DIR::BOARDREGIONS,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseBoardRegionsData( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseShapeBasedRegions6Data( aFile, fileHeader );
           } },
         { true, ALTIUM_PCB_DIR::REGIONS6,
-          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
               this->ParseRegions6Data( aFile, fileHeader );
           } }
@@ -654,8 +655,8 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
 }
 
 
-FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
-                                       const wxString&             aFootprintName )
+FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
+                                       const wxString&       aFootprintName )
 {
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
@@ -675,7 +676,8 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
     //        ParseWideStrings6Data( altiumLibFile, unicodeStringsData );
     //    }
 
-    std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> ret = altiumLibFile.FindLibFootprintDirName(aFootprintName);
+    std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> ret =
+            altiumLibFile.FindLibFootprintDirName( aFootprintName );
 
     wxString fpDirName = std::get<0>( ret );
     const CFB::COMPOUND_FILE_ENTRY* footprintStream = std::get<1>( ret );
@@ -803,7 +805,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
         case ALTIUM_RECORD::MODEL:
         {
             ACOMPONENTBODY6 componentBody( parser );
-            // Won't be supported for now, as we would need to extract the model
+            ConvertComponentBody6ToFootprintItem( altiumLibFile, footprint.get(), componentBody );
             break;
         }
         default:
@@ -909,7 +911,7 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
     return nullptr;
 }
 
-void ALTIUM_PCB::ParseFileHeader( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseFileHeader( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
@@ -927,7 +929,7 @@ void ALTIUM_PCB::ParseFileHeader( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
 }
 
 
-void ALTIUM_PCB::ParseExtendedPrimitiveInformationData( const ALTIUM_COMPOUND_FILE& aAltiumPcbFile,
+void ALTIUM_PCB::ParseExtendedPrimitiveInformationData( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPcbFile,
                                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -949,7 +951,7 @@ void ALTIUM_PCB::ParseExtendedPrimitiveInformationData( const ALTIUM_COMPOUND_FI
 }
 
 
-void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1201,7 +1203,7 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
 }
 
 
-void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1253,7 +1255,7 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
 }
 
 
-void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1315,7 +1317,85 @@ double normalizeAngleDegrees( double Angle, double aMin, double aMax )
 }
 
 
-void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPcbFile,
+                                                       FOOTPRINT* aFootprint,
+                                                       const ACOMPONENTBODY6& aElem )
+{
+    if( m_progressReporter )
+        m_progressReporter->Report( _( "Loading component 3D models..." ) );
+
+    if( !aElem.modelIsEmbedded )
+        return;
+
+    auto model = aAltiumPcbFile.GetLibModel( aElem.modelId );
+
+    if( !model )
+    {
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format( wxT( "Model %s not found for footprint %s" ),
+                                                  aElem.modelId, aFootprint->GetReference() ),
+                                RPT_SEVERITY_ERROR );
+        }
+
+        return;
+    }
+
+    const VECTOR2I& fpPosition = aFootprint->GetPosition();
+
+    EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
+    file->name = aElem.modelName;
+    // Decompress the model data before assigning
+    std::vector<char> decompressedData;
+    wxMemoryInputStream compressedStream(model->second.data(), model->second.size());
+    wxZlibInputStream zlibStream(compressedStream);
+
+    decompressedData.reserve(model->second.size() * 2); // Reserve some space, assuming decompressed data is larger
+    while (!zlibStream.Eof()) {
+        size_t currentSize = decompressedData.size();
+        decompressedData.resize(currentSize + 4096); // Increase buffer size
+        zlibStream.Read(decompressedData.data() + currentSize, 4096);
+        size_t bytesRead = zlibStream.LastRead();
+        decompressedData.resize(currentSize + bytesRead); // Resize to actual read size
+    }
+
+    file->decompressedData = std::move( decompressedData );
+    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;
+
+    EMBEDDED_FILES::CompressAndEncode( *file );
+    aFootprint->GetEmbeddedFiles()->AddFile( file );
+
+    FP_3DMODEL modelSettings;
+
+    modelSettings.m_Filename = aFootprint->GetEmbeddedFiles()->GetEmbeddedFileLink( *file );
+
+    modelSettings.m_Offset.x = pcbIUScale.IUTomm((int) aElem.modelPosition.x - fpPosition.x );
+    modelSettings.m_Offset.y = -pcbIUScale.IUTomm((int) aElem.modelPosition.y - fpPosition.y );
+    modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) aElem.modelPosition.z + model->first.z_offset );
+
+    EDA_ANGLE orientation = aFootprint->GetOrientation();
+
+    if( aFootprint->IsFlipped() )
+    {
+        modelSettings.m_Offset.y = -modelSettings.m_Offset.y;
+        orientation              = -orientation;
+    }
+
+    RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
+
+    modelSettings.m_Rotation.x = normalizeAngleDegrees( -aElem.modelRotation.x + model->first.rotation.x, -180, 180 );
+    modelSettings.m_Rotation.y = normalizeAngleDegrees( -aElem.modelRotation.y + model->first.rotation.y, -180, 180 );
+    modelSettings.m_Rotation.z = normalizeAngleDegrees( -aElem.modelRotation.z + aElem.rotation
+                                                                               + orientation.AsDegrees()
+                                                                               + model->first.rotation.z,
+                                                                                 -180, 180 );
+    modelSettings.m_Opacity = aElem.body_opacity_3d;
+
+    aFootprint->Models().push_back( modelSettings );
+}
+
+
+void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                              const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1326,7 +1406,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAl
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         checkpoint();
-        ACOMPONENTBODY6 elem( reader ); // TODO: implement
+        ACOMPONENTBODY6 elem( reader );
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
             continue; // TODO: we do not support components for the board yet
@@ -1334,7 +1414,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAl
         if( m_components.size() <= elem.component )
         {
             THROW_IO_ERROR( wxString::Format( wxT( "ComponentsBodies6 stream tries to access "
-                                                   "component id %d of %d existing components" ),
+                                                   "component id %d of %zu existing components" ),
                                               elem.component,
                                               m_components.size() ) );
         }
@@ -1342,9 +1422,9 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAl
         if( !elem.modelIsEmbedded )
             continue;
 
-        auto modelTuple = m_models.find( elem.modelId );
+        auto modelTuple = m_EmbeddedModels.find( elem.modelId );
 
-        if( modelTuple == m_models.end() )
+        if( modelTuple == m_EmbeddedModels.end() )
         {
             if( m_reporter )
             {
@@ -1357,34 +1437,36 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAl
             continue;
         }
 
-        FOOTPRINT*     footprint  = m_components.at( elem.component );
-        const VECTOR2I& fpPosition = footprint->GetPosition();
+        FOOTPRINT*      footprint  = m_components.at( elem.component );
+
+        EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
+        file->name = modelTuple->second.m_modelname;
+
+        wxMemoryInputStream compressedStream(modelTuple->second.m_data.data(), modelTuple->second.m_data.size());
+        wxZlibInputStream zlibStream(compressedStream);
+        wxMemoryOutputStream decompressedStream;
+        zlibStream.Read(decompressedStream);
+        file->decompressedData.resize(decompressedStream.GetSize());
+        decompressedStream.CopyTo(file->decompressedData.data(), file->decompressedData.size());
+
+        EMBEDDED_FILES::CompressAndEncode( *file );
+        m_board->GetEmbeddedFiles()->AddFile( file );
 
         FP_3DMODEL modelSettings;
 
-        modelSettings.m_Filename = modelTuple->second;
+        modelSettings.m_Filename = footprint->GetEmbeddedFiles()->GetEmbeddedFileLink( *file );
 
-        modelSettings.m_Offset.x = pcbIUScale.IUTomm((int) elem.modelPosition.x - fpPosition.x );
-        modelSettings.m_Offset.y = -pcbIUScale.IUTomm((int) elem.modelPosition.y - fpPosition.y );
-        modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) elem.modelPosition.z );
+        modelSettings.m_Offset.x = pcbIUScale.IUTomm((int) elem.modelPosition.x );
+        modelSettings.m_Offset.y = -pcbIUScale.IUTomm((int) elem.modelPosition.y );
+        modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) elem.modelPosition.z + modelTuple->second.m_z_offset );
 
-        EDA_ANGLE orientation = footprint->GetOrientation();
-
-        if( footprint->IsFlipped() )
-        {
-            modelSettings.m_Offset.y = -modelSettings.m_Offset.y;
-            orientation              = -orientation;
-        }
-
-        RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
-
-        modelSettings.m_Rotation.x = normalizeAngleDegrees( -elem.modelRotation.x, -180, 180 );
-        modelSettings.m_Rotation.y = normalizeAngleDegrees( -elem.modelRotation.y, -180, 180 );
+        modelSettings.m_Rotation.x = normalizeAngleDegrees( -elem.modelRotation.x + modelTuple->second.m_rotation.x, -180, 180 );
+        modelSettings.m_Rotation.y = normalizeAngleDegrees( -elem.modelRotation.y + modelTuple->second.m_rotation.y, -180, 180 );
         modelSettings.m_Rotation.z = normalizeAngleDegrees( -elem.modelRotation.z
                                                                         + elem.rotation
-                                                                        + orientation.AsDegrees(),
+                                                                        + modelTuple->second.m_rotation.z,
                                                             -180, 180 );
-        modelSettings.m_Opacity = elem.bodyOpacity;
+        modelSettings.m_Opacity = elem.body_opacity_3d;
 
         footprint->Models().push_back( modelSettings );
     }
@@ -1756,7 +1838,7 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 }
 
 
-void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1840,7 +1922,7 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
 }
 
 
-void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseModelsData( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry,
                                   const std::vector<std::string>& aRootDir )
 {
@@ -1851,37 +1933,6 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
 
     if( reader.GetRemainingBytes() == 0 )
         return;
-
-    wxString projectPath = wxPathOnly( m_board->GetFileName() );
-    // TODO: set KIPRJMOD always after import (not only when loading project)?
-    wxSetEnv( PROJECT_VAR_NAME, projectPath );
-
-    // TODO: make this path configurable?
-    const wxString altiumModelDir = wxT( "ALTIUM_EMBEDDED_MODELS" );
-
-    wxFileName altiumModelsPath = wxFileName::DirName( projectPath );
-    wxString   kicadModelPrefix = wxT( "${KIPRJMOD}/" ) + altiumModelDir + wxT( "/" );
-
-    if( !altiumModelsPath.AppendDir( altiumModelDir ) )
-        THROW_IO_ERROR( wxT( "Cannot construct directory path for step models" ) );
-
-    // Create dir if it does not exist
-    if( !altiumModelsPath.DirExists() )
-    {
-        if( !altiumModelsPath.Mkdir() )
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Failed to create folder '%s'." ) + wxS( " " )
-                          + _( "No 3D-models will be imported." ),
-                            altiumModelsPath.GetFullPath() );
-                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            }
-
-            return;
-        }
-    }
 
     int      idx = 0;
     wxString invalidChars = wxFileName::GetForbiddenChars();
@@ -1898,7 +1949,6 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
                                    wxString::npos == elem.name.find_first_of( invalidChars );
         wxString       storageName = !validName ? wxString::Format( wxT( "model_%d" ), idx )
                                                 : elem.name;
-        wxFileName     storagePath( altiumModelsPath.GetPath(), storageName );
 
         idx++;
 
@@ -1924,40 +1974,9 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         aAltiumPcbFile.GetCompoundFileReader().ReadFile( stepEntry, 0, stepContent.data(),
                                                          stepSize );
 
-        if( !storagePath.IsDirWritable() )
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Insufficient permissions to save file '%s'." ),
-                            storagePath.GetFullPath() );
-                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            }
-
-            continue;
-        }
-
-        wxMemoryInputStream stepStream( stepContent.data(), stepSize );
-        wxZlibInputStream   zlibInputStream( stepStream );
-
-        wxFFileOutputStream outputStream( storagePath.GetFullPath() );
-
-        if( !outputStream.IsOk() )
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Unable to write file '%s'." ), storagePath.GetFullPath() );
-                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            }
-
-            continue;
-        }
-
-        outputStream.Write( zlibInputStream );
-        outputStream.Close();
-
-        m_models.insert( { elem.id, kicadModelPrefix + storageName } );
+        m_EmbeddedModels.insert( std::make_pair(
+                elem.id, ALTIUM_EMBEDDED_MODEL_DATA( storageName, elem.rotation, elem.z_offset,
+                                                     std::move( stepContent ) ) ) );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1965,7 +1984,7 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
 }
 
 
-void ALTIUM_PCB::ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseNets6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1991,7 +2010,7 @@ void ALTIUM_PCB::ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
         THROW_IO_ERROR( wxT( "Nets6 stream is not fully parsed" ) );
 }
 
-void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                      const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -2158,7 +2177,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         THROW_IO_ERROR( wxT( "Polygons6 stream is not fully parsed" ) );
 }
 
-void ALTIUM_PCB::ParseRules6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseRules6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -2226,7 +2245,7 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         THROW_IO_ERROR( wxT( "Rules6 stream is not fully parsed" ) );
 }
 
-void ALTIUM_PCB::ParseBoardRegionsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseBoardRegionsData( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -2246,7 +2265,7 @@ void ALTIUM_PCB::ParseBoardRegionsData( const ALTIUM_COMPOUND_FILE&     aAltiumP
         THROW_IO_ERROR( wxT( "BoardRegions stream is not fully parsed" ) );
 }
 
-void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -2680,7 +2699,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
 }
 
 
-void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -2755,7 +2774,7 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
 }
 
 
-void ALTIUM_PCB::ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseArcs6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -3001,7 +3020,7 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, cons
 }
 
 
-void ALTIUM_PCB::ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParsePads6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -3710,7 +3729,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
 }
 
 
-void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -3785,7 +3804,7 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
         THROW_IO_ERROR( wxT( "Vias6 stream is not fully parsed" ) );
 }
 
-void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -4002,7 +4021,7 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, co
 }
 
 
-void ALTIUM_PCB::ParseWideStrings6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseWideStrings6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -4016,7 +4035,7 @@ void ALTIUM_PCB::ParseWideStrings6Data( const ALTIUM_COMPOUND_FILE&     aAltiumP
         THROW_IO_ERROR( wxT( "WideStrings6 stream is not fully parsed" ) );
 }
 
-void ALTIUM_PCB::ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseTexts6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -4324,7 +4343,7 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT& 
 }
 
 
-void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+void ALTIUM_PCB::ParseFills6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )

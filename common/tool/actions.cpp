@@ -1184,6 +1184,26 @@ TOOL_ACTION ACTIONS::pluginsReload( TOOL_ACTION_ARGS()
         .Tooltip( _( "Reload all python plugins and refresh plugin menus" ) )
         .Icon( BITMAPS::reload ) );
 
+// Embedding Files
+
+TOOL_ACTION ACTIONS::embeddedFiles( TOOL_ACTION_ARGS()
+        .Name( "common.Embed.embededFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Embedded Files" ) )
+        .Tooltip( _( "Manage embedded files" ) ) );
+
+TOOL_ACTION ACTIONS::removeFile( TOOL_ACTION_ARGS()
+        .Name( "common.Embed.removeFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Remove File" ) )
+        .Tooltip( _( "Remove an embedded file" ) ) );
+
+TOOL_ACTION ACTIONS::extractFile( TOOL_ACTION_ARGS()
+        .Name( "common.Embed.extractFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Extract File" ) )
+        .Tooltip( _( "Extract an embedded file" ) ) );
+
 // System-wide selection Events
 
 const TOOL_EVENT EVENTS::PointSelectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.pointSelected" );
