@@ -36,7 +36,7 @@ class FOOTPRINT_EDIT_FRAME;
 class PANEL_FP_PROPERTIES_3D_MODEL;
 
 
-class PRIVATE_LAYERS_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_LAYER_ID>
+class PRIVATE_LAYERS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<PCB_LAYER_ID>
 {
 public:
     PRIVATE_LAYERS_GRID_TABLE( PCB_BASE_FRAME* aFrame );
@@ -47,7 +47,7 @@ public:
 
     bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
     bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
-    wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
     wxString GetValue( int aRow, int aCol ) override;
     long GetValueAsLong( int aRow, int aCol ) override;

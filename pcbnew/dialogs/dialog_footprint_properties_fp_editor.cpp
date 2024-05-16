@@ -85,10 +85,10 @@ bool PRIVATE_LAYERS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxStrin
 
 
 wxGridCellAttr* PRIVATE_LAYERS_GRID_TABLE::GetAttr( int aRow, int aCol,
-                                                    wxGridCellAttr::wxAttrKind  )
+                                                    wxGridCellAttr::wxAttrKind aKind  )
 {
     m_layerColAttr->IncRef();
-    return m_layerColAttr;
+    return enhanceAttr( m_layerColAttr, aRow, aCol, aKind );
 }
 
 

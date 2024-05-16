@@ -54,7 +54,7 @@ enum PCB_FIELDS_COL_ORDER
 };
 
 
-class PCB_FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_FIELD>
+class PCB_FIELDS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<PCB_FIELD>
 {
 public:
     PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog );
@@ -72,7 +72,7 @@ public:
 
     bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
     bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
-    wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
     wxString GetValue( int aRow, int aCol ) override;
     bool GetValueAsBool( int aRow, int aCol ) override;

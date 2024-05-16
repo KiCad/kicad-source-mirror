@@ -190,7 +190,8 @@ bool PCB_FIELDS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& a
 }
 
 
-wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
+wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
+                                                wxGridCellAttr::wxAttrKind aKind  )
 {
     switch( aCol )
     {
@@ -198,41 +199,41 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAt
         if( aRow < MANDATORY_FIELDS )
         {
             m_readOnlyAttr->IncRef();
-            return m_readOnlyAttr;
+            return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );
         }
 
-        return nullptr;
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     case PFC_VALUE:
         if( aRow == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
-            return m_referenceAttr;
+            return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
         else if( aRow == VALUE_FIELD )
         {
             m_valueAttr->IncRef();
-            return m_valueAttr;
+            return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
         }
         else if( aRow == FOOTPRINT_FIELD )
         {
             m_footprintAttr->IncRef();
-            return m_footprintAttr;
+            return enhanceAttr( m_footprintAttr, aRow, aCol, aKind );
         }
         else if( aRow == DATASHEET_FIELD )
         {
             m_urlAttr->IncRef();
-            return m_urlAttr;
+            return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
         }
 
-        return nullptr;
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     case PFC_WIDTH:
     case PFC_HEIGHT:
     case PFC_THICKNESS:
     case PFC_XOFFSET:
     case PFC_YOFFSET:
-        return nullptr;
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     case PFC_SHOWN:
     case PFC_ITALIC:
@@ -240,19 +241,19 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAt
     case PFC_KNOCKOUT:
     case PFC_MIRRORED:
         m_boolColAttr->IncRef();
-        return m_boolColAttr;
+        return enhanceAttr( m_boolColAttr, aRow, aCol, aKind );
 
     case PFC_LAYER:
         m_layerColAttr->IncRef();
-        return m_layerColAttr;
+        return enhanceAttr( m_layerColAttr, aRow, aCol, aKind );
 
     case PFC_ORIENTATION:
         m_orientationColAttr->IncRef();
-        return m_orientationColAttr;
+        return enhanceAttr( m_orientationColAttr, aRow, aCol, aKind );
 
     default:
         wxFAIL;
-        return nullptr;
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
     }
 }
 

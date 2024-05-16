@@ -65,7 +65,7 @@ enum PIN_TABLE_COL_ORDER
 };
 
 
-class SCH_PIN_TABLE_DATA_MODEL : public wxGridTableBase, public std::vector<SCH_PIN>
+class SCH_PIN_TABLE_DATA_MODEL : public WX_GRID_TABLE_BASE, public std::vector<SCH_PIN>
 {
 public:
     SCH_PIN_TABLE_DATA_MODEL() :
@@ -197,53 +197,24 @@ public:
 
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override
     {
-        // This is needed to support alternating row colors
-        auto enhanceAttr = [this, &aRow, &aCol,
-                            &aKind]( wxGridCellAttr* aInputAttr ) -> wxGridCellAttr*
-        {
-            if( aInputAttr == nullptr )
-                return nullptr;
-
-            wxGridCellAttr* attr = aInputAttr;
-
-            if( wxGridCellAttrProvider* provider = GetAttrProvider() )
-            {
-                wxGridCellAttr* providerAttr = provider->GetAttr( aRow, aCol, aKind );
-
-                if( providerAttr )
-                {
-                    attr = new wxGridCellAttr;
-                    attr->SetKind( wxGridCellAttr::Merged );
-
-                    attr->MergeWith( aInputAttr );
-                    aInputAttr->DecRef();
-
-                    attr->MergeWith( providerAttr );
-                    providerAttr->DecRef();
-                }
-            }
-
-            return attr;
-        };
-
         switch( aCol )
         {
         case COL_NUMBER:
         case COL_BASE_NAME:
             m_readOnlyAttr->IncRef();
-            return enhanceAttr( m_readOnlyAttr );
+            return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );
 
         case COL_ALT_NAME:
             m_nameAttrs[ aRow ]->IncRef();
-            return enhanceAttr( m_nameAttrs[ aRow ] );
+            return enhanceAttr( m_nameAttrs[ aRow ], aRow, aCol, aKind );
 
         case COL_TYPE:
             m_typeAttr->IncRef();
-            return enhanceAttr( m_typeAttr );
+            return enhanceAttr( m_typeAttr, aRow, aCol, aKind );
 
         case COL_SHAPE:
             m_shapeAttr->IncRef();
-            return enhanceAttr( m_shapeAttr );
+            return enhanceAttr( m_shapeAttr, aRow, aCol, aKind );
 
         default:
             wxFAIL;

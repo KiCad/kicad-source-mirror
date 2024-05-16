@@ -422,7 +422,7 @@ bool FIELDS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& aType
 }
 
 
-wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
+wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind  )
 {
     wxGridCellAttr* tmp;
 
@@ -433,24 +433,24 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
         {
             tmp = m_fieldNameAttr->Clone();
             tmp->SetReadOnly( true );
-            return tmp;
+            return enhanceAttr( tmp, aRow, aCol, aKind );
         }
         else
         {
             m_fieldNameAttr->IncRef();
-            return m_fieldNameAttr;
+            return enhanceAttr( m_fieldNameAttr, aRow, aCol, aKind );
         }
 
     case FDC_VALUE:
         if( m_parentType == SCH_SYMBOL_T && aRow == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
-            return m_referenceAttr;
+            return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
         else if( m_parentType == SCH_SYMBOL_T && aRow == VALUE_FIELD )
         {
             m_valueAttr->IncRef();
-            return m_valueAttr;
+            return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
         }
         else if( m_parentType == SCH_SYMBOL_T && aRow == FOOTPRINT_FIELD )
         {
@@ -460,34 +460,34 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
             if( m_part && m_part->IsPower() )
             {
                 m_readOnlyAttr->IncRef();
-                return m_readOnlyAttr;
+                return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );
             }
             else
             {
                 m_footprintAttr->IncRef();
-                return m_footprintAttr;
+                return enhanceAttr( m_footprintAttr, aRow, aCol, aKind );
             }
         }
         else if( m_parentType == SCH_SYMBOL_T && aRow == DATASHEET_FIELD )
         {
             m_urlAttr->IncRef();
-            return m_urlAttr;
+            return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
         }
         else if( m_parentType == SCH_SHEET_T && aRow == SHEETNAME )
         {
             m_referenceAttr->IncRef();
-            return m_referenceAttr;
+            return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
         else if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
         {
             m_filepathAttr->IncRef();
-            return m_filepathAttr;
+            return enhanceAttr( m_filepathAttr, aRow, aCol, aKind );
         }
         else if( ( m_parentType == SCH_LABEL_LOCATE_ANY_T )
                 && this->at( (size_t) aRow ).GetCanonicalName() == wxT( "Netclass" ) )
         {
             m_netclassAttr->IncRef();
-            return m_netclassAttr;
+            return enhanceAttr( m_netclassAttr, aRow, aCol, aKind );
         }
         else
         {
@@ -501,31 +501,31 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
             if( templateFn && templateFn->m_URL )
             {
                 m_urlAttr->IncRef();
-                return m_urlAttr;
+                return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
             }
             else
             {
                 m_nonUrlAttr->IncRef();
-                return m_nonUrlAttr;
+                return enhanceAttr( m_nonUrlAttr, aRow, aCol, aKind );
             }
         }
 
     case FDC_TEXT_SIZE:
     case FDC_POSX:
     case FDC_POSY:
-        return nullptr;
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     case FDC_H_ALIGN:
         m_hAlignAttr->IncRef();
-        return m_hAlignAttr;
+        return enhanceAttr( m_hAlignAttr, aRow, aCol, aKind );
 
     case FDC_V_ALIGN:
         m_vAlignAttr->IncRef();
-        return m_vAlignAttr;
+        return enhanceAttr( m_vAlignAttr, aRow, aCol, aKind );
 
     case FDC_ORIENTATION:
         m_orientationAttr->IncRef();
-        return m_orientationAttr;
+        return enhanceAttr( m_orientationAttr, aRow, aCol, aKind );
 
     case FDC_SHOWN:
     case FDC_SHOW_NAME:
@@ -533,19 +533,19 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
     case FDC_BOLD:
     case FDC_ALLOW_AUTOPLACE:
         m_boolAttr->IncRef();
-        return m_boolAttr;
+        return enhanceAttr( m_boolAttr, aRow, aCol, aKind );
 
     case FDC_FONT:
         m_fontAttr->IncRef();
-        return m_fontAttr;
+        return enhanceAttr( m_fontAttr, aRow, aCol, aKind );
 
     case FDC_COLOR:
         m_colorAttr->IncRef();
-        return m_colorAttr;
+        return enhanceAttr( m_colorAttr, aRow, aCol, aKind );
 
     default:
         wxFAIL;
-        return nullptr;
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
     }
 }
 

@@ -38,6 +38,36 @@
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 
+
+wxGridCellAttr* WX_GRID_TABLE_BASE::enhanceAttr( wxGridCellAttr* aInputAttr, int aRow, int aCol,
+                                                 wxGridCellAttr::wxAttrKind aKind  )
+{
+    wxGridCellAttr* attr = aInputAttr;
+
+    if( wxGridCellAttrProvider* provider = GetAttrProvider() )
+    {
+        wxGridCellAttr* providerAttr = provider->GetAttr( aRow, aCol, aKind );
+
+        if( providerAttr )
+        {
+            attr = new wxGridCellAttr;
+            attr->SetKind( wxGridCellAttr::Merged );
+
+            if( aInputAttr )
+            {
+                attr->MergeWith( aInputAttr );
+                aInputAttr->DecRef();
+            }
+
+            attr->MergeWith( providerAttr );
+            providerAttr->DecRef();
+        }
+    }
+
+    return attr;
+}
+
+
 #define MIN_GRIDCELL_MARGIN FromDIP( 3 )
 
 

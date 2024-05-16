@@ -37,6 +37,14 @@
 class wxTextEntryBase;
 
 
+class WX_GRID_TABLE_BASE : public wxGridTableBase
+{
+protected:
+    wxGridCellAttr* enhanceAttr( wxGridCellAttr* aInputAttr, int aRow, int aCol,
+                                 wxGridCellAttr::wxAttrKind aKind  );
+};
+
+
 class WX_GRID : public wxGrid
 {
 public:
