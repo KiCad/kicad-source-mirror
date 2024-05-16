@@ -264,6 +264,10 @@ VECTOR2<T>::VECTOR2( T aX, T aY )
 template <class T>
 T VECTOR2<T>::EuclideanNorm() const
 {
+    // 45° are common in KiCad, so we can optimize the calculation
+    if( std::abs( x ) == std::abs( y ) )
+        return static_cast<T>( std::abs( x ) * M_SQRT2 );
+
     return static_cast<T>( sqrt( (extended_type) x * x + (extended_type) y * y ) );
 }
 
@@ -352,12 +356,22 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
     if( x == 0 && y == 0 )
         return VECTOR2<T> ( 0, 0 );
 
-    extended_type x_sq = (extended_type) x * x;
-    extended_type y_sq = (extended_type) y * y;
-    extended_type l_sq = x_sq + y_sq;
-    extended_type newLength_sq = (extended_type) aNewLength * aNewLength;
-    double newX = std::sqrt( rescale( newLength_sq, x_sq, l_sq ) );
-    double newY = std::sqrt( rescale( newLength_sq, y_sq, l_sq ) );
+    double newX;
+    double newY;
+
+    if( std::abs( x ) == std::abs( y ) )
+    {
+        newX = newY = std::abs( aNewLength ) * M_SQRT1_2;
+    }
+    else
+    {
+        extended_type x_sq = (extended_type) x * x;
+        extended_type y_sq = (extended_type) y * y;
+        extended_type l_sq = x_sq + y_sq;
+        extended_type newLength_sq = (extended_type) aNewLength * aNewLength;
+        newX = std::sqrt( rescale( newLength_sq, x_sq, l_sq ) );
+        newY = std::sqrt( rescale( newLength_sq, y_sq, l_sq ) );
+    }
 
     if( std::is_integral<T>::value )
     {
