@@ -234,7 +234,6 @@ public:
     void          SetFPID( const LIB_ID& aFPID )
     {
         m_fpid = aFPID;
-        Footprint().SetText( aFPID.Format() );
     }
 
     wxString GetFPIDAsString() const { return m_fpid.Format(); }
