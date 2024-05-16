@@ -64,6 +64,8 @@
 #include <view/view_controls.h>
 #include <wx/log.h>
 
+#include "symb_transforms_utils.h"
+
 
 SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = []( const SELECTION& aSel )
 {
@@ -381,7 +383,18 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             SCH_PIN* pin = dynamic_cast<SCH_PIN*>( aItem );
 
             if( pin )
-                return pin->GetOrientation();
+            {
+                const SCH_SYMBOL* parent = dynamic_cast<const SCH_SYMBOL*>( pin->GetParentSymbol() );
+
+                if( !parent )
+                    return pin->GetOrientation();
+                else
+                {
+                    SCH_PIN dummy( *pin );
+                    RotateAndMirrorPin( dummy, parent->GetOrientation() );
+                    return dummy.GetOrientation();
+                }
+            }
 
             SCH_SHEET_PIN* sheetPin = dynamic_cast<SCH_SHEET_PIN*>( aItem );
 

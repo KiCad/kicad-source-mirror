@@ -198,9 +198,19 @@ public:
 
     VECTOR2I GetPinRoot() const;
 
+    /**
+     * these transforms have effect only if the pin has a LIB_SYMBOL as parent
+     */
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
+
+    /**
+     * these transforms have always effects
+     */
+    void MirrorHorizontallyPin( int aCenter );
+    void MirrorVerticallyPin( int aCenter );
+    void RotatePin( const VECTOR2I& aCenter, bool aRotateCCW = true );
 
     /**
      * Plot the pin name and number.

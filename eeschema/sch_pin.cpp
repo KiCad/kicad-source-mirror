@@ -1451,34 +1451,73 @@ void SCH_PIN::Move( const VECTOR2I& aOffset )
 }
 
 
+void SCH_PIN::MirrorHorizontallyPin( int aCenter )
+{
+    m_position.x -= aCenter;
+    m_position.x *= -1;
+    m_position.x += aCenter;
+
+    if( m_orientation == PIN_ORIENTATION::PIN_RIGHT )
+        m_orientation = PIN_ORIENTATION::PIN_LEFT;
+    else if( m_orientation == PIN_ORIENTATION::PIN_LEFT )
+        m_orientation = PIN_ORIENTATION::PIN_RIGHT;
+}
+
+
 void SCH_PIN::MirrorHorizontally( int aCenter )
 {
     if( dynamic_cast<LIB_SYMBOL*>( GetParentSymbol() ) )
-    {
-        m_position.x -= aCenter;
-        m_position.x *= -1;
-        m_position.x += aCenter;
+        MirrorHorizontallyPin( aCenter );
+}
 
-        if( m_orientation == PIN_ORIENTATION::PIN_RIGHT )
-            m_orientation = PIN_ORIENTATION::PIN_LEFT;
-        else if( m_orientation == PIN_ORIENTATION::PIN_LEFT )
-            m_orientation = PIN_ORIENTATION::PIN_RIGHT;
-    }
+
+void SCH_PIN::MirrorVerticallyPin( int aCenter )
+{
+    m_position.y -= aCenter;
+    m_position.y *= -1;
+    m_position.y += aCenter;
+
+    if( m_orientation == PIN_ORIENTATION::PIN_UP )
+        m_orientation = PIN_ORIENTATION::PIN_DOWN;
+    else if( m_orientation == PIN_ORIENTATION::PIN_DOWN )
+        m_orientation = PIN_ORIENTATION::PIN_UP;
 }
 
 
 void SCH_PIN::MirrorVertically( int aCenter )
 {
     if( dynamic_cast<LIB_SYMBOL*>( GetParentSymbol() ) )
-    {
-        m_position.y -= aCenter;
-        m_position.y *= -1;
-        m_position.y += aCenter;
+        MirrorVerticallyPin( aCenter );
+}
 
-        if( m_orientation == PIN_ORIENTATION::PIN_UP )
-            m_orientation = PIN_ORIENTATION::PIN_DOWN;
-        else if( m_orientation == PIN_ORIENTATION::PIN_DOWN )
-            m_orientation = PIN_ORIENTATION::PIN_UP;
+
+void SCH_PIN::RotatePin( const VECTOR2I& aCenter, bool aRotateCCW )
+{
+    if( aRotateCCW )
+    {
+        RotatePoint( m_position, aCenter, ANGLE_90 );
+
+        switch( GetOrientation() )
+        {
+        default:
+        case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_UP;    break;
+        case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
+        case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
+        case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
+        }
+    }
+    else
+    {
+        RotatePoint( m_position, aCenter, -ANGLE_90 );
+
+        switch( GetOrientation() )
+        {
+        default:
+        case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
+        case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
+        case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_UP;    break;
+        case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
+        }
     }
 }
 
@@ -1486,34 +1525,7 @@ void SCH_PIN::MirrorVertically( int aCenter )
 void SCH_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     if( dynamic_cast<LIB_SYMBOL*>( GetParentSymbol() ) )
-    {
-        if( aRotateCCW )
-        {
-            RotatePoint( m_position, aCenter, ANGLE_90 );
-
-            switch( GetOrientation() )
-            {
-            default:
-            case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_UP;    break;
-            case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
-            case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
-            case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
-            }
-        }
-        else
-        {
-            RotatePoint( m_position, aCenter, -ANGLE_90 );
-
-            switch( GetOrientation() )
-            {
-            default:
-            case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
-            case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
-            case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_UP;    break;
-            case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
-            }
-        }
-    }
+        RotatePin( aCenter, aRotateCCW );
 }
 
 

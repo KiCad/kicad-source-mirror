@@ -61,6 +61,7 @@
 #include "sch_painter.h"
 #include "common.h"
 
+#include "symb_transforms_utils.h"
 
 namespace KIGFX
 {
@@ -2160,56 +2161,6 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
 }
 
 
-static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
-{
-    struct ORIENT
-    {
-        int flag;
-        int n_rots;
-        int mirror_x;
-        int mirror_y;
-    }
-    orientations[] =
-    {
-        { SYM_ORIENT_0,                  0, 0, 0 },
-        { SYM_ORIENT_90,                 1, 0, 0 },
-        { SYM_ORIENT_180,                2, 0, 0 },
-        { SYM_ORIENT_270,                3, 0, 0 },
-        { SYM_MIRROR_X + SYM_ORIENT_0,   0, 1, 0 },
-        { SYM_MIRROR_X + SYM_ORIENT_90,  1, 1, 0 },
-        { SYM_MIRROR_Y,                  0, 0, 1 },
-        { SYM_MIRROR_X + SYM_ORIENT_270, 3, 1, 0 },
-        { SYM_MIRROR_Y + SYM_ORIENT_0,   0, 0, 1 },
-        { SYM_MIRROR_Y + SYM_ORIENT_90,  1, 0, 1 },
-        { SYM_MIRROR_Y + SYM_ORIENT_180, 2, 0, 1 },
-        { SYM_MIRROR_Y + SYM_ORIENT_270, 3, 0, 1 }
-    };
-
-    ORIENT o = orientations[ 0 ];
-
-    for( ORIENT& i : orientations )
-    {
-        if( i.flag == orientation )
-        {
-            o = i;
-            break;
-        }
-    }
-
-    for( SCH_ITEM& item : symbol->GetDrawItems() )
-    {
-        for( int i = 0; i < o.n_rots; i++ )
-            item.Rotate( VECTOR2I( 0, 0 ), true );
-
-        if( o.mirror_x )
-            item.MirrorVertically( 0 );
-
-        if( o.mirror_y )
-            item.MirrorHorizontally( 0 );
-    }
-}
-
-
 wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText,
                                              const SCH_SYMBOL* aSymbolContext )
 {
@@ -2259,7 +2210,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
 
-    orientSymbol( &tempSymbol, aSymbol->GetOrientation() );
+    OrientAndMirrorSymbolItems( &tempSymbol, aSymbol->GetOrientation() );
 
     for( SCH_ITEM& tempItem : tempSymbol.GetDrawItems() )
     {
