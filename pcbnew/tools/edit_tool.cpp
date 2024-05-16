@@ -472,16 +472,9 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForFreePads( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
 
-                if( aCollector.GetCount() > 1 )
-                    sTool->GuessSelectionCandidates( aCollector, aPt );
-
-                /*
-                 * If we have a knee between two segments, or a via attached to two segments,
-                 * then drop the selection to a single item.
-                 */
-
                 std::vector<PCB_TRACK*> tracks;
                 std::vector<PCB_TRACK*> vias;
+                std::vector<FOOTPRINT*> footprints;
 
                 for( EDA_ITEM* item : aCollector )
                 {
@@ -492,28 +485,50 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                         else
                             tracks.push_back( track );
                     }
-                }
-
-                auto connected = []( PCB_TRACK* track, const VECTOR2I& pt )
-                                 {
-                                     return track->GetStart() == pt || track->GetEnd() == pt;
-                                 };
-
-                if( tracks.size() == 2 && vias.size() == 0 )
-                {
-                    if( connected( tracks[0], tracks[1]->GetStart() )
-                            || connected( tracks[0], tracks[1]->GetEnd() ) )
+                    else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
                     {
-                        aCollector.Remove( tracks[1] );
+                        footprints.push_back( footprint );
                     }
                 }
-                else if( tracks.size() == 2 && vias.size() == 1 )
+
+                if( footprints.size() == (unsigned) aCollector.GetCount() )
                 {
-                    if( connected( tracks[0], vias[0]->GetPosition() )
-                            && connected( tracks[1], vias[0]->GetPosition() ) )
+                    // We can drag multiple footprints; no need to whittle down selection.
+                }
+                else if( tracks.size() || vias.size() )
+                {
+                    /*
+                     * First trim down selection to active layer, tracks vs zones, etc.
+                     */
+                    if( aCollector.GetCount() > 1 )
+                        sTool->GuessSelectionCandidates( aCollector, aPt );
+
+                    /*
+                     * If we have a knee between two tracks, or a via attached to two tracks,
+                     * then drop the selection to a single item.  We don't want a selection
+                     * disambiguation menu when it doesn't matter which items is picked.
+                     */
+                    auto connected = []( PCB_TRACK* track, const VECTOR2I& pt )
+                                     {
+                                         return track->GetStart() == pt || track->GetEnd() == pt;
+                                     };
+
+                    if( tracks.size() == 2 && vias.size() == 0 )
                     {
-                        aCollector.Remove( tracks[0] );
-                        aCollector.Remove( tracks[1] );
+                        if( connected( tracks[0], tracks[1]->GetStart() )
+                                || connected( tracks[0], tracks[1]->GetEnd() ) )
+                        {
+                            aCollector.Remove( tracks[1] );
+                        }
+                    }
+                    else if( tracks.size() == 2 && vias.size() == 1 )
+                    {
+                        if( connected( tracks[0], vias[0]->GetPosition() )
+                                && connected( tracks[1], vias[0]->GetPosition() ) )
+                        {
+                            aCollector.Remove( tracks[0] );
+                            aCollector.Remove( tracks[1] );
+                        }
                     }
                 }
             },
