@@ -150,6 +150,20 @@ private:
 };
 
 
+/**
+ * Settings for bus unfolding that are persistent across invocations of the tool
+ */
+struct BUS_UNFOLD_PERSISTENT_SETTINGS
+{
+    SPIN_STYLE label_spin_style;
+};
+
+
+static BUS_UNFOLD_PERSISTENT_SETTINGS busUnfoldPersistentSettings = {
+    SPIN_STYLE::RIGHT,
+};
+
+
 SCH_LINE_WIRE_BUS_TOOL::SCH_LINE_WIRE_BUS_TOOL() :
     EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawingLineWireBus" ),
     m_inDrawingTool( false )
@@ -370,7 +384,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTO
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->GetEnd(), aNet );
     m_busUnfold.label->SetTextSize( VECTOR2I( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
-    m_busUnfold.label->SetSpinStyle( SPIN_STYLE::RIGHT );
+    m_busUnfold.label->SetSpinStyle( busUnfoldPersistentSettings.label_spin_style );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVING );
 
@@ -992,6 +1006,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
             if( m_busUnfold.in_progress )
             {
                 m_busUnfold.label->Rotate90( evt->IsAction( &EE_ACTIONS::rotateCW ) );
+                busUnfoldPersistentSettings.label_spin_style = m_busUnfold.label->GetSpinStyle();
+
                 m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
             else
