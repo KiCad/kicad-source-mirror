@@ -665,19 +665,23 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
     for( size_t i = 0; i < ArcCount(); i++ )
     {
         const SHAPE_ARC& arc = Arc( i );
-        int              dist = 0;
+        int              dist = std::numeric_limits<int>::max();
+        VECTOR2I         pos;
 
         // The arcs in the chain should have zero width
         wxASSERT_MSG( arc.GetWidth() == 0, wxT( "Invalid arc width - should be zero" ) );
 
         if( arc.Collide( aSeg, aClearance, aActual || aLocation ? &dist : nullptr,
-                         aLocation ? &nearest : nullptr ) )
+                         aLocation ? &pos : nullptr ) )
         {
             if( !aActual )
                 return true;
 
             if( dist < closest_dist )
+            {
                 closest_dist = dist;
+                nearest = pos;
+            }
         }
     }
 
