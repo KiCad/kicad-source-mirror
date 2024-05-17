@@ -2956,7 +2956,24 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
     else
     {
         PCB_GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
-        aSelection.SetReferencePoint( grid.BestSnapAnchor( aSelection.GetCenter(), nullptr ) );
+        VECTOR2I        refPt = aSelection.GetCenter();
+
+        // Exclude text in the footprint editor if there's anything else selected
+        if( m_isFootprintEditor )
+        {
+            BOX2I nonFieldsBBox;
+
+            for( EDA_ITEM* item : aSelection.Items() )
+            {
+                if( !item->IsType( { PCB_TEXT_T, PCB_FIELD_T } )  )
+                    nonFieldsBBox.Merge( item->GetBoundingBox() );
+            }
+
+            if( nonFieldsBBox.IsValid() )
+                refPt = nonFieldsBBox.GetCenter();
+        }
+
+        aSelection.SetReferencePoint( grid.BestSnapAnchor( refPt, nullptr ) );
     }
 
     return true;

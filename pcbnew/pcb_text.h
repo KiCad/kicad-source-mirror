@@ -73,7 +73,7 @@ public:
     /**
      * Called when rotating the parent footprint.
      */
-    void KeepUpright( const EDA_ANGLE& aNewOrientation );
+    void KeepUpright();
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
