@@ -120,6 +120,8 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
 
 SCHEMATIC::~SCHEMATIC()
 {
+    PROPERTY_MANAGER::Instance().UnregisterListeners( TYPE_HASH( SCH_FIELD ) );
+
     delete m_currentSheet;
     delete m_connectionGraph;
 }
