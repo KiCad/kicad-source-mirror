@@ -109,6 +109,8 @@ BOOST_AUTO_TEST_CASE( WireTee )
     const POINT_INFO info = AnalyzePoint( items, { 0, 0 }, false );
 
     BOOST_CHECK( info.isJunction );
+    BOOST_CHECK( !info.hasBusEntry );
+    BOOST_CHECK( !info.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( BusEntryOnBus )
@@ -139,6 +141,8 @@ BOOST_AUTO_TEST_CASE( BusEntryOnBus )
     const POINT_INFO info_end = AnalyzePoint( items, { BE_SIZE, BE_SIZE }, false );
     BOOST_CHECK( !info_end.isJunction );
     BOOST_CHECK( info_end.hasBusEntry );
+    // There is no wire here
+    BOOST_CHECK( !info_end.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( BusEntryToWire )
@@ -155,6 +159,8 @@ BOOST_AUTO_TEST_CASE( BusEntryToWire )
     const POINT_INFO info = AnalyzePoint( items, { BE_SIZE, BE_SIZE }, false );
     BOOST_CHECK( !info.isJunction );
     BOOST_CHECK( info.hasBusEntry );
+    // This is a single wire to a bus entry, not multiple
+    BOOST_CHECK( !info.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( WireDirectToBus )
@@ -169,6 +175,8 @@ BOOST_AUTO_TEST_CASE( WireDirectToBus )
     const POINT_INFO info = AnalyzePoint( items, { 0, 0 }, false );
     BOOST_CHECK( !info.isJunction );
     BOOST_CHECK( !info.hasBusEntry );
+    // It's a single wire, and not a bus entry
+    BOOST_CHECK( !info.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( WireCrossingBus )
@@ -188,13 +196,14 @@ BOOST_AUTO_TEST_CASE( WireCrossingBus )
     // Two wires and two buses meet, which isn't a junction
     BOOST_CHECK( !info.isJunction );
     BOOST_CHECK( !info.hasBusEntry );
+    BOOST_CHECK( !info.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( WireToBusEntryRoot )
 {
     /*
-     *   /--- <-- not a junction (also an ERC error!)
-     * ______________
+     *   /--- <-- not a junction
+     *  _____________
      * ||\
      * || \
      * ||  \
@@ -206,6 +215,8 @@ BOOST_AUTO_TEST_CASE( WireToBusEntryRoot )
     const POINT_INFO info = AnalyzePoint( items, { 0, 0 }, false );
     BOOST_CHECK( !info.isJunction );
     BOOST_CHECK( info.hasBusEntry );
+    // The bus/bus-entry point isn't valid
+    BOOST_CHECK( !info.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( WireCrossingBusEntryRoot )
@@ -228,6 +239,8 @@ BOOST_AUTO_TEST_CASE( WireCrossingBusEntryRoot )
     // Three buses meet here, so this is a junction
     BOOST_CHECK( info.isJunction );
     BOOST_CHECK( info.hasBusEntry );
+    // There are multiple wires but they don't count here
+    BOOST_CHECK( !info.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( WireCornerToBusEntry )
@@ -250,6 +263,31 @@ BOOST_AUTO_TEST_CASE( WireCornerToBusEntry )
     const POINT_INFO info = AnalyzePoint( items, { BE_SIZE, BE_SIZE }, false );
     BOOST_CHECK( info.isJunction );
     BOOST_CHECK( info.hasBusEntry );
+    BOOST_CHECK( info.hasBusEntryToMultipleWires );
+}
+
+BOOST_AUTO_TEST_CASE( WireTeeToBusEntry )
+{
+    /*
+    *  ||
+     * ||
+     * ||  |
+     *   \ |  /--- junction here
+     *    \| /
+     *     O-------------
+     *     |
+     *     |
+     */
+    items.insert( make_bus( { 0, 0 }, { 0, BE_SIZE } ) );
+    items.insert( make_wire( { BE_SIZE, BE_SIZE }, { 2 * BE_SIZE, BE_SIZE } ) ); // right
+    items.insert( make_wire( { BE_SIZE, BE_SIZE }, { BE_SIZE, 0 } ) );           //up
+    items.insert( make_wire( { BE_SIZE, BE_SIZE }, { BE_SIZE, 2 * BE_SIZE } ) ); // down
+    items.insert( new SCH_BUS_WIRE_ENTRY( { 0, 0 }, false ) );
+
+    const POINT_INFO info = AnalyzePoint( items, { BE_SIZE, BE_SIZE }, false );
+    BOOST_CHECK( info.isJunction );
+    BOOST_CHECK( info.hasBusEntry );
+    BOOST_CHECK( info.hasBusEntryToMultipleWires );
 }
 
 BOOST_AUTO_TEST_CASE( SheetPinToOneWire )

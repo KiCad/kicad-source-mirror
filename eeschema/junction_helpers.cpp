@@ -13,10 +13,11 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
         BUSES
     };
 
-    POINT_INFO info {};
+    POINT_INFO info{};
     info.hasBusEntry = false;
     info.hasExplicitJunctionDot = false;
     info.isJunction = false;
+    info.hasBusEntryToMultipleWires = false;
 
     bool                         breakLines[2] = { false };
     std::unordered_set<int>      exitAngles[2];
@@ -106,6 +107,17 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
         }
     }
 
+    if( info.hasBusEntry )
+    {
+        // The bus entry and one wire is 2 wires, and the one entry is exactly one bus
+        // Any more wires must be multiple wires, but any more buses means a wire
+        // crossing at the bus entry root.
+        info.hasBusEntryToMultipleWires =
+                exitAngles[WIRES].size() > 2 && exitAngles[BUSES].size() == 1;
+    }
+
+    // Any three things of the same type is a junction of some sort
     info.isJunction = exitAngles[WIRES].size() >= 3 || exitAngles[BUSES].size() >= 3;
+
     return info;
 }

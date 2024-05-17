@@ -10,9 +10,14 @@ namespace JUNCTION_HELPERS
 */
 struct POINT_INFO
 {
+    ///< True if the point has 3+ wires and/or 3+ buses meeting there
     bool isJunction;
+    ///< True if there is already junction dot at the point
     bool hasExplicitJunctionDot;
+    ///< True if there is a bus entry at the point (either end)
     bool hasBusEntry;
+    ///< True if there is a bus entry at the point and it connects to more than one wire
+    bool hasBusEntryToMultipleWires;
 };
 
 /**

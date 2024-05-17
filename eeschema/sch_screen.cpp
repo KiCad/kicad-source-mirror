@@ -488,7 +488,7 @@ bool SCH_SCREEN::IsExplicitJunction( const VECTOR2I& aPosition ) const
     const JUNCTION_HELPERS::POINT_INFO info =
             JUNCTION_HELPERS::AnalyzePoint( Items(), aPosition, false );
 
-    return info.isJunction && !info.hasBusEntry;
+    return info.isJunction && ( !info.hasBusEntry || info.hasBusEntryToMultipleWires );
 }
 
 
@@ -497,7 +497,8 @@ bool SCH_SCREEN::IsExplicitJunctionNeeded( const VECTOR2I& aPosition ) const
     const JUNCTION_HELPERS::POINT_INFO info =
             JUNCTION_HELPERS::AnalyzePoint( Items(), aPosition, false );
 
-    return info.isJunction && !info.hasBusEntry && !info.hasExplicitJunctionDot;
+    return info.isJunction && ( !info.hasBusEntry || info.hasBusEntryToMultipleWires )
+           && !info.hasExplicitJunctionDot;
 }
 
 
@@ -506,7 +507,7 @@ bool SCH_SCREEN::IsExplicitJunctionAllowed( const VECTOR2I& aPosition ) const
     const JUNCTION_HELPERS::POINT_INFO info =
             JUNCTION_HELPERS::AnalyzePoint( Items(), aPosition, true );
 
-    return info.isJunction && !info.hasBusEntry;
+    return info.isJunction && (!info.hasBusEntry || info.hasBusEntryToMultipleWires );
 }
 
 
