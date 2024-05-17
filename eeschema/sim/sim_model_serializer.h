@@ -62,9 +62,9 @@ namespace SIM_MODEL_SERIALIZER_GRAMMAR
                               quotedStringContent,
                               one<'"'>> {};
 
-    struct flagParam : sor<TAO_PEGTL_ISTRING( "off" ),          // VDMOS
-                           TAO_PEGTL_ISTRING( "thermal" ),      // VDMOS
-                           TAO_PEGTL_ISTRING( "xpart" )> {};    // BSIM1
+    struct flagParam : sor<seq<TAO_PEGTL_ISTRING( "off" ),     not_at<alnum>>,       // VDMOS
+                           seq<TAO_PEGTL_ISTRING( "thermal" ), not_at<alnum>>,       // VDMOS
+                           seq<TAO_PEGTL_ISTRING( "xpart" ),   not_at<alnum>>> {};   // BSIM1
 
     struct fieldParamValuePair : sor<flagParam,
                                      if_must<param,
