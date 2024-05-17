@@ -203,6 +203,8 @@ private:
 
     void getLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos, double& aThickness );
 
+    void getCopperLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos, double& aThickness );
+
     void getBoardBodyZPlacement( double& aZPos, double& aThickness );
 
     /**

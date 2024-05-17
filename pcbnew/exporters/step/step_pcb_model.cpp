@@ -917,20 +917,68 @@ bool STEP_PCB_MODEL::AddTrackSegment( const PCB_TRACK* aTrack, const VECTOR2D& a
 void STEP_PCB_MODEL::getLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos,
                                          double& aThickness )
 {
+    // Offsets above copper in mm
+    static const double c_silkscreenAboveCopper = 0.04;
+    static const double c_soldermaskAboveCopper = 0.015;
+
+    if( IsCopperLayer( aLayer ) )
+    {
+        getCopperLayerZPlacement( aLayer, aZPos, aThickness );
+    }
+    else if( IsFrontLayer( aLayer ) )
+    {
+        double f_pos, f_thickness;
+        getCopperLayerZPlacement( F_Cu, f_pos, f_thickness );
+        double top = std::max( f_pos, f_pos + f_thickness );
+
+        if( aLayer == F_SilkS )
+            aZPos = top + c_silkscreenAboveCopper;
+        else
+            aZPos = top + c_soldermaskAboveCopper;
+
+        aThickness = 0.0; // Normal points up
+    }
+    else if( IsBackLayer( aLayer ) )
+    {
+        double b_pos, b_thickness;
+        getCopperLayerZPlacement( B_Cu, b_pos, b_thickness );
+        double bottom = std::min( b_pos, b_pos + b_thickness );
+
+        if( aLayer == B_SilkS )
+            aZPos = bottom - c_silkscreenAboveCopper;
+        else
+            aZPos = bottom - c_soldermaskAboveCopper;
+
+        aThickness = -0.0; // Normal points down
+    }
+}
+
+
+void STEP_PCB_MODEL::getCopperLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos,
+                                               double& aThickness )
+{
     int  z = 0;
     int  thickness = 0;
     bool wasPrepreg = false;
 
     const std::vector<BOARD_STACKUP_ITEM*>& materials = m_stackup.GetList();
 
+    // Iterate from bottom to top
     for( auto it = materials.rbegin(); it != materials.rend(); ++it )
     {
         const BOARD_STACKUP_ITEM* item = *it;
 
         if( item->GetType() == BS_ITEM_TYPE_COPPER )
         {
+            if( aLayer == B_Cu )
+            {
+                // This is the first encountered layer
+                thickness = -item->GetThickness();
+                break;
+            }
+
             // Inner copper position is usually inside prepreg
-            if( ( wasPrepreg || aLayer == B_Cu ) && aLayer != F_Cu )
+            if( wasPrepreg && item->GetBrdLayerId() != F_Cu )
                 thickness = -item->GetThickness();
             else
                 thickness = item->GetThickness();
@@ -938,7 +986,8 @@ void STEP_PCB_MODEL::getLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPo
             if( item->GetBrdLayerId() == aLayer )
                 break;
 
-            z += thickness;
+            if( item->GetBrdLayerId() != B_Cu )
+                z += item->GetThickness();
         }
         else if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
         {
@@ -946,8 +995,11 @@ void STEP_PCB_MODEL::getLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPo
 
             // Dielectric can have sub-layers. Layer 0 is the main layer
             // Not frequent, but possible
+            thickness = 0;
             for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
-                z += item->GetThickness( idx );
+                thickness += item->GetThickness( idx );
+
+            z += thickness;
         }
     }
 
