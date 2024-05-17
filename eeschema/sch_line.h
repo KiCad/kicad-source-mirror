@@ -28,6 +28,7 @@
 #include <sch_item.h>
 #include <wx/pen.h>     // for wxPenStyle
 #include <list>         // for std::list
+#include <geometry/seg.h>
 
 class NETLIST_OBJECT_LIST;
 
@@ -139,6 +140,14 @@ public:
 
     VECTOR2I GetEndPoint() const { return m_end; }
     void     SetEndPoint( const VECTOR2I& aPosition ) { m_end = aPosition; }
+
+    /**
+     * Get the geometric aspect of the wire as a SEG
+     */
+    SEG GetSeg() const
+    {
+        return SEG{ m_start, m_end };
+    }
 
     void SetLastResolvedState( const SCH_ITEM* aItem ) override
     {

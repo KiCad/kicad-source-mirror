@@ -61,12 +61,20 @@
 #include <ee_selection.h>
 #include <ee_selection_tool.h>
 
+
+using BUS_GETTER = std::function<SCH_LINE*()>;
+
 class BUS_UNFOLD_MENU : public ACTION_MENU
 {
 public:
-    BUS_UNFOLD_MENU() :
+    /**
+     * @param aBusGetter Function to get the bus to unfold, which will probably
+     *                   be looking for a likely bus in a selection.
+    */
+    BUS_UNFOLD_MENU( BUS_GETTER aBusGetter ) :
         ACTION_MENU( true ),
-        m_showTitle( false )
+        m_showTitle( false ),
+        m_busGetter( aBusGetter )
     {
         SetIcon( BITMAPS::add_line2bus );
         SetTitle( _( "Unfold from Bus" ) );
@@ -82,21 +90,16 @@ public:
 protected:
     ACTION_MENU* create() const override
     {
-        return new BUS_UNFOLD_MENU();
+        return new BUS_UNFOLD_MENU( m_busGetter );
     }
 
 private:
     void update() override
     {
-        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
-        SCH_LINE*          bus = (SCH_LINE*) selection.Front();
-
+        SCH_LINE* bus = m_busGetter();
         Clear();
-
         // Pick up the pointer again because it may have been changed by SchematicCleanUp
-        selection = selTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
-        bus = (SCH_LINE*) selection.Front();
+        bus = m_busGetter();
 
         if( !bus )
         {
@@ -147,6 +150,7 @@ private:
     }
 
     bool m_showTitle;
+    BUS_GETTER m_busGetter;
 };
 
 
@@ -182,11 +186,17 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
-    std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
+    const auto busGetter = [this]()
+    {
+        return getBusForUnfolding();
+    };
+
+    std::shared_ptr<BUS_UNFOLD_MENU>
+            busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>( busGetter );
     busUnfoldMenu->SetTool( this );
     m_menu.RegisterSubMenu( busUnfoldMenu );
 
-    std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
+    std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>( busGetter );
     selBusUnfoldMenu->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().RegisterSubMenu( selBusUnfoldMenu );
 
@@ -321,7 +331,11 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     }
     else
     {
-        BUS_UNFOLD_MENU unfoldMenu;
+        const auto busGetter = [this]()
+                {
+                    return getBusForUnfolding();
+                };
+        BUS_UNFOLD_MENU unfoldMenu( busGetter );
         unfoldMenu.SetTool( this );
         unfoldMenu.SetShowTitle();
 
@@ -366,15 +380,36 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 }
 
 
-SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTOR2I& aPos )
+SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::getBusForUnfolding()
+{
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
+    return static_cast<SCH_LINE*>( selection.Front() );
+}
+
+
+SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString&                aNet,
+                                               const std::optional<VECTOR2I>& aPos )
 {
     SCHEMATIC_SETTINGS& cfg = getModel<SCHEMATIC>()->Settings();
     SCH_SCREEN*         screen = m_frame->GetScreen();
+    // use the same function as the menu selector, so we choose the same bus segment
+    SCH_LINE* const     bus = getBusForUnfolding();
 
-    VECTOR2I pos = aPos;
+    if ( bus == nullptr )
+    {
+        wxASSERT_MSG( false,
+                      wxString::Format( "Couldn't find the originating bus line (but had a net: %s )",
+                                        aNet ) );
+        return nullptr;
+    }
 
-    if( aPos == VECTOR2I( 0, 0 ) )
-        pos = static_cast<VECTOR2I>( getViewControls()->GetCursorPosition() );
+    VECTOR2I pos = aPos.value_or( static_cast<VECTOR2I>( getViewControls()->GetCursorPosition() ) );
+
+    // It is possible for the position to be near the bus, but not exactly on it, but
+    // we need the bus entry to be on the bus exactly to connect.
+    // If the bus segment is H or V, this will be on the selection grid, if it's not,
+    // it might not be, but it won't be a broken connection (and the user asked for it!)
+    pos = bus->GetSeg().NearestPoint( pos );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 

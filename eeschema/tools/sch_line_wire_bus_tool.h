@@ -100,7 +100,20 @@ private:
 
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos, SCH_LINE* aSegment = nullptr );
 
-    SCH_LINE* doUnfoldBus( const wxString& aNet, const VECTOR2I& aPos = VECTOR2I( 0, 0 ) );
+    /**
+     * Choose a bus to unfold based on the current tool selection.
+    */
+    SCH_LINE* getBusForUnfolding();
+
+    /**
+     * Unfold the given bus from the given position.
+     *
+     * @param aNet The name of the net to unfold
+     * @param aPos The position to unfold the bus from, which will be the cursor if
+     *            not provided, and will then be snapped to the selected bus segment.
+    */
+    SCH_LINE* doUnfoldBus( const wxString&                aNet,
+                           const std::optional<VECTOR2I>& aPos = std::nullopt );
 
     void finishSegments();
 
