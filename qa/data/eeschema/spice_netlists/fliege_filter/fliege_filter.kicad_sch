@@ -855,7 +855,7 @@
     (property "Reference" "V1" (at 118.11 93.345 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "V" (at 118.11 95.885 0)
+    (property "Value" "" (at 118.11 95.885 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 114.3 95.25 0)
@@ -875,7 +875,7 @@
     (instances
       (project "fliege_filter"
         (path "/1bb7f68e-09b1-4448-8403-97b70f8d3680"
-          (reference "V1") (unit 1) (value "V") (footprint "")
+          (reference "V1") (unit 1) (value "") (footprint "")
         )
       )
     )
