@@ -277,6 +277,11 @@ public:
         m_listeners[aType].emplace_back( aListenerFunc );
     }
 
+    void UnregisterListeners( TYPE_ID aType )
+    {
+        m_listeners[aType].clear();
+    }
+
 private:
     PROPERTY_MANAGER() :
             m_dirty( false ),
