@@ -356,11 +356,12 @@ set( EESCHEMA_SRCS
     files-io.cpp
     generate_alias_info.cpp
     gfx_import_utils.cpp
-    picksymbol.cpp
+    junction_helpers.cpp
     lib_symbol.cpp
     libarch.cpp
     menubar.cpp
     net_navigator.cpp
+    picksymbol.cpp
     pin_numbers.cpp
     pin_type.cpp
     project_sch.cpp

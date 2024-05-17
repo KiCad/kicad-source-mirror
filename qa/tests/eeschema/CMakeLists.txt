@@ -60,6 +60,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_rule_areas.cpp
 
     test_eagle_plugin.cpp
+    test_junction_helpers.cpp
     test_lib_part.cpp
     test_netlist_exporter_kicad.cpp
     test_ee_item.cpp
@@ -116,4 +117,3 @@ target_compile_definitions( qa_eeschema
 )
 
 kicad_add_boost_test( qa_eeschema qa_eeschema )
-
