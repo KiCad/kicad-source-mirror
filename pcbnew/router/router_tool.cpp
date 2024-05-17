@@ -1814,12 +1814,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             updateStartItem( *evt );
 
             if( evt->HasPosition() )
-            {
-                if( evt->Modifier( MD_SHIFT ) )
-                    performDragging( PNS::DM_ANY );
-                else
-                    performRouting();
-            }
+                performRouting();
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
