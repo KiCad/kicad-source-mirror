@@ -433,6 +433,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             BOARD_ITEM*           item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM_CONTAINER* parent = GetBoard();
+            PCB_GROUP*            parentGroup = item->GetParentGroup();
 
             if( item->GetParentFootprint() )
             {
@@ -445,6 +446,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
 
             view->Remove( item );
+
+            if( parentGroup )
+                parentGroup->RemoveItem( item );
+
             parent->Remove( item );
 
             item->SwapItemData( image );
@@ -463,6 +468,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             view->Add( item );
             view->Hide( item, false );
             parent->Add( item );
+
+            if( parentGroup )
+                parentGroup->AddItem( item );
+
             update_item_change_state( item, ITEM_CHANGE_TYPE::CHANGED );
             break;
         }
