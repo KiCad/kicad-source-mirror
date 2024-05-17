@@ -3452,7 +3452,6 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
             while( (token = NextTok() ) != T_RIGHT )
                 parseOutlinePoints( aTextBox->GetPolyShape().Outline( 0 ) );
 
-            NeedRIGHT();
             break;
         }
 
