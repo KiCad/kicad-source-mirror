@@ -276,6 +276,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::edgeClearance,
             DRC_ITEM::holeClearance,
             DRC_ITEM::holeNearHole,
+            DRC_ITEM::holesCoLocated,
             DRC_ITEM::trackWidth,
             DRC_ITEM::annularWidth,
             DRC_ITEM::drillTooSmall,
