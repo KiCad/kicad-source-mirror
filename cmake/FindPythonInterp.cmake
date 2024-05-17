@@ -37,7 +37,7 @@ unset(_Python_NAMES)
 
 set(_PYTHON1_VERSIONS 1.6 1.5)
 set(_PYTHON2_VERSIONS 2.7 2.6 2.5 2.4 2.3 2.2 2.1 2.0)
-set(_PYTHON3_VERSIONS 3.12 3.11 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
+set(_PYTHON3_VERSIONS 3.13 3.12 3.11 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
 
 # Disabling the "search every possible place" code for now
 # see https://gitlab.com/kicad/code/kicad/-/issues/8553
