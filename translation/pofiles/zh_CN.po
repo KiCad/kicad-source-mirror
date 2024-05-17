@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-30 10:07+0000\n"
-"Last-Translator: zly20129 <zly20129@icloud.com>\n"
+"PO-Revision-Date: 2024-05-18 08:01+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6733,9 +6733,8 @@ msgid "Net class references"
 msgstr "网络类参考"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Rule areas"
-msgstr "规则区域"
+msgstr "规则区"
 
 #: common/layer_id.cpp:126
 msgid "Symbol body outlines"
@@ -7270,6 +7269,7 @@ msgid "Line length exceeded"
 msgstr "超出了行长度限制"
 
 #: common/settings/bom_settings.cpp:124
+#, fuzzy
 msgid "Default Editing"
 msgstr "默认单位"
 
@@ -15304,9 +15304,8 @@ msgid "Checking conflicts..."
 msgstr "正在检查冲突..."
 
 #: eeschema/erc.cpp:1339
-#, fuzzy
 msgid "Checking rule areas..."
-msgstr "检查规则 %s。"
+msgstr "检查规则区..."
 
 #: eeschema/erc.cpp:1347
 msgid "Checking units..."
@@ -16214,7 +16213,7 @@ msgstr "从 %s, %s 到 %s, %s 的总线到总线入口"
 #: eeschema/net_navigator.cpp:183
 #, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "在%s，%s处的全局标签“%s”"
+msgstr "%2$s, %3$s 处的全局标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:189
 #, c-format
@@ -17759,9 +17758,8 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "不同的值: %s%d%s (%s) 和 %s%d%s (%s)"
 
 #: eeschema/sch_rule_area.cpp:200
-#, fuzzy
 msgid "Schematic rule area"
-msgstr "原理图标记"
+msgstr "原理图规则区"
 
 #: eeschema/sch_screen.cpp:914 eeschema/sch_screen.cpp:1006
 #, c-format
@@ -20861,9 +20859,8 @@ msgid "Add Rule Area"
 msgstr "添加规则区域"
 
 #: eeschema/tools/ee_actions.cpp:614
-#, fuzzy
 msgid "Draw rule area"
-msgstr "绘制引线"
+msgstr "绘制规则区"
 
 #: eeschema/tools/ee_actions.cpp:622 pcbnew/tools/pcb_actions.cpp:400
 msgid "Delete Last Point"
@@ -21881,9 +21878,8 @@ msgid "Add Corner"
 msgstr "添加拐角"
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
-#, fuzzy
 msgid "Draw Rule Area"
-msgstr "规则区域"
+msgstr "绘制规则区"
 
 #: eeschema/tools/sch_drawing_tools.cpp:304
 msgid "Press <ESC> to cancel symbol creation."
@@ -22225,19 +22221,17 @@ msgstr "SVG 文件名称"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:365
 #: pcbnew/tools/edit_tool.cpp:2446
-#, fuzzy
 msgid "Hide Field"
-msgstr "添加字段"
+msgstr "隐藏字段"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:367
 #: pcbnew/tools/edit_tool.cpp:2448
-#, fuzzy
 msgid "Hide Fields"
-msgstr "显示隐藏字段"
+msgstr "隐藏字段"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:369
 msgid "Use the Symbol Properties dialog to remove fields."
-msgstr "使用“符号属性”对话框删除字段。"
+msgstr "使用 \"符号属性\" 对话框删除字段。"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Edit Pins"
@@ -22286,9 +22280,8 @@ msgid "Rename"
 msgstr "重命名"
 
 #: eeschema/widgets/hierarchy_pane.cpp:398
-#, fuzzy
 msgid "Change name of this sheet"
-msgstr "主题名称"
+msgstr "修改图纸名称"
 
 #: eeschema/widgets/hierarchy_pane.cpp:417
 #, c-format
@@ -22296,9 +22289,8 @@ msgid "Enter page number for sheet path %s"
 msgstr "输入图纸路径 %s 的页码"
 
 #: eeschema/widgets/hierarchy_pane.cpp:488
-#, fuzzy
 msgid "Renaming sheet"
-msgstr "图纸"
+msgstr "重命名图纸"
 
 #: eeschema/widgets/hierarchy_pane.cpp:551
 #, c-format
@@ -23819,9 +23811,8 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "导出组件 (Gerber, 钻孔, 坐标文件等)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:72
-#, fuzzy
 msgid "Output file format, options: step, brep, xao, glb (binary glTF)"
-msgstr "输出文件格式, 可选: step, glb (binary glTF)"
+msgstr "输出文件格式, 可选: step, brep, xao, glb (binary glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:76
 msgid "Overwrite output file"
@@ -23853,14 +23844,12 @@ msgid "Only generate a board with no components"
 msgstr "仅生成没有元件的电路板"
 
 #: kicad/cli/command_pcb_export_3d.cpp:112
-#, fuzzy
 msgid "Exclude board body"
-msgstr "不在 PCB 中进行绘制"
+msgstr "排除电路板主体"
 
 #: kicad/cli/command_pcb_export_3d.cpp:116
-#, fuzzy
 msgid "Exclude 3D models for components"
-msgstr "排除被设置了 'DNP (不作装配)' 特性的元件的 3D 模型"
+msgstr "排除部件的 3D 模型"
 
 #: kicad/cli/command_pcb_export_3d.cpp:120
 msgid "Export tracks"
@@ -23873,17 +23862,18 @@ msgstr "导出区域"
 
 #: kicad/cli/command_pcb_export_3d.cpp:128
 msgid "Export elements on inner copper layers"
-msgstr "导出外部铜层上区域"
+msgstr "导出内部铜层中的元素"
 
 #: kicad/cli/command_pcb_export_3d.cpp:132
 msgid "Fuse overlapping geometry together"
-msgstr "将重叠的几何形状合并"
+msgstr "融合重叠的图形"
 
 #: kicad/cli/command_pcb_export_3d.cpp:138
 msgid "Minimum distance between points to treat them as separate ones"
 msgstr "点之间最短相距多少才被视作分开的点"
 
 #: kicad/cli/command_pcb_export_3d.cpp:144
+#, fuzzy
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr "只包括与此通配符匹配网络的铜"
 
@@ -24627,14 +24617,12 @@ msgid "Export STEP"
 msgstr "导出 STEP"
 
 #: kicad/kicad_cli.cpp:115
-#, fuzzy
 msgid "Export BREP"
-msgstr "导出 STEP"
+msgstr "导出 BREP"
 
 #: kicad/kicad_cli.cpp:116
-#, fuzzy
 msgid "Export XAO"
-msgstr "导出 DXF"
+msgstr "导出 XAO"
 
 #: kicad/kicad_cli.cpp:117
 msgid "Export VRML"
@@ -31547,14 +31535,12 @@ msgstr ""
 "将所有形状合并为一个复合形状。可以便于使用其他软件根据形状名称删除重复数据。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:154
-#, fuzzy
 msgid "Export board body"
-msgstr "导出电路板"
+msgstr "导出电路板主体"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:157
-#, fuzzy
 msgid "Export components"
-msgstr "没有元件"
+msgstr "导出元件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid "Export tracks, pads and vias"
@@ -31569,9 +31555,8 @@ msgid "Export zones on external copper layers."
 msgstr "导出外部铜层上区域。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
-#, fuzzy
 msgid "Export inner copper layers"
-msgstr "内部铜层"
+msgstr "导出内部铜层"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:173
 msgid "Fuse shapes (time consuming)"
@@ -31607,9 +31592,10 @@ msgstr "导出锡膏图形。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:196
 msgid "Net filter (supports wildcards):"
-msgstr "支持包含通配符的文本："
+msgstr "网络过滤器 (支持通配符):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:201
+#, fuzzy
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr "只包括与此通配符网络相匹配的铜。"
@@ -31637,9 +31623,8 @@ msgid ""
 msgstr "容差用于设定在构造电路板外框时, 两个被视为连结点的最小距离值。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:98
-#, fuzzy
 msgid "Export STEP / BREP / XAO / GLTF"
-msgstr "导出 STEP / GLTF"
+msgstr "导出 STEP / BREP / XAO / GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
@@ -39264,12 +39249,12 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:591
 #: pcbnew/exporters/step/step_pcb_model.cpp:1760
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr "** “ShapeUpgrade_UnifySameDomain”产生了一个空形状 **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain 产生了一个空形状 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1338
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
-msgstr "导线未完成（轮廓点%d）：OCC错误%d\n"
+msgstr "走线未完成 (轮廓点%d): OCC错误 %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1342
 #: pcbnew/exporters/step/step_pcb_model.cpp:1356
@@ -39277,7 +39262,7 @@ msgstr "导线未完成（轮廓点%d）：OCC错误%d\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1410
 #, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "z： %g；显示模型边框：%s\n"
+msgstr "z: %g; 显示模型边框: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1353
 msgid ""
@@ -39285,7 +39270,7 @@ msgid ""
 "Wire self-interference check failed\n"
 msgstr ""
 "\n"
-"导线自干扰检查失败\n"
+"线路自干扰检查失败\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1384
 msgid "Using non-simplified polygon.\n"
@@ -39297,7 +39282,7 @@ msgid ""
 "** Outline skipped **\n"
 msgstr ""
 "\n"
-"** 跳过大纲 **\n"
+"** 跳过 Outline **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1408
 msgid ""
@@ -39324,17 +39309,17 @@ msgid ""
 "** Got problems while cutting %s number %d **\n"
 msgstr ""
 "\n"
-"** 在切割%s数量%d时遇到问题 **\n"
+"** 切割 %s 数量 %d 时遇到问题 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1595
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
 msgid "Errors:\n"
-msgstr "错误：\n"
+msgstr "错误:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1601
 #: pcbnew/exporters/step/step_pcb_model.cpp:1735
 msgid "Warnings:\n"
-msgstr "警告：\n"
+msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1617
 msgid "shapes"
@@ -39354,7 +39339,7 @@ msgstr "区域"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1725
 msgid "** Got problems while fusing shapes **\n"
-msgstr "** 在融合图形时遇到问题 **\n"
+msgstr "** 融合图形时遇到问题 **\n"
 
 #: pcbnew/files.cpp:146
 msgid "All KiCad Board Files"
@@ -40033,7 +40018,7 @@ msgstr "调整"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
 msgid "Select a track to tune first."
-msgstr "选择要调整的值。"
+msgstr "首先选择一条要调整的走线。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -40268,12 +40253,12 @@ msgstr "导出 IDF 3D 电路板表示"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / BREP / XAO..."
-msgstr "STEP或BREP或XAO..."
+msgstr "STEP / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 #, fuzzy
 msgid "Export STEP / BREP / XAO 3D board representation"
-msgstr "导出 STEP 3D 电路板表示"
+msgstr "导出 STEP / BREP / XAO 3D 电路板表示"
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "SVG..."
@@ -42846,7 +42831,7 @@ msgstr "%2$s 上的封装文本 '%1$s'"
 #: pcbnew/pcb_text.cpp:498
 #, c-format
 msgid "PCB Text '%s' on %s"
-msgstr "%2$s 上的 PCB文本 '%1$s'"
+msgstr "%2$s 上的 PCB 文本 '%1$s'"
 
 #: pcbnew/pcb_textbox.cpp:482
 #, c-format
@@ -44432,7 +44417,7 @@ msgstr "换面 / 翻转"
 
 #: pcbnew/tools/edit_tool.cpp:2450
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr "使用“封装属性”对话框删除字段。"
+msgstr "使用 \"封装属性\" 对话框删除字段。"
 
 #: pcbnew/tools/edit_tool.cpp:2608
 msgid "Move Exactly"
