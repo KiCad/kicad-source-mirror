@@ -263,12 +263,12 @@ void PCB_TEXT::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
 }
 
 
-void PCB_TEXT::KeepUpright( const EDA_ANGLE& aNewOrientation )
+void PCB_TEXT::KeepUpright()
 {
     if( !IsKeepUpright() )
         return;
 
-    EDA_ANGLE newAngle = GetTextAngle() + aNewOrientation;
+    EDA_ANGLE newAngle = GetTextAngle();
     newAngle.Normalize();
 
     bool needsFlipped = newAngle >= ANGLE_180;
@@ -276,6 +276,7 @@ void PCB_TEXT::KeepUpright( const EDA_ANGLE& aNewOrientation )
     if( needsFlipped )
     {
         SetHorizJustify( static_cast<GR_TEXT_H_ALIGN_T>( -GetHorizJustify() ) );
+        SetVertJustify( static_cast<GR_TEXT_V_ALIGN_T>( -GetVertJustify() ) );
         SetTextAngle( GetTextAngle() + ANGLE_180 );
     }
 }

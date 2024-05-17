@@ -1982,12 +1982,12 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     SetOrientation( newOrientation );
 
     for( PCB_FIELD* field : m_fields )
-        field->KeepUpright( newOrientation );
+        field->KeepUpright();
 
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_TEXT_T )
-            static_cast<PCB_TEXT*>( item )->KeepUpright( newOrientation );
+            static_cast<PCB_TEXT*>( item )->KeepUpright();
     }
 
     m_boundingBoxCacheTimeStamp = 0;
