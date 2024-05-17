@@ -39,6 +39,7 @@
 #include <tools/board_editor_control.h>
 #include <tools/pad_tool.h>
 #include <footprint.h>
+#include <zone.h>
 #include <pcb_group.h>
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
@@ -599,6 +600,13 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                     parentGroup->RemoveItem( aFootprint );
             };
 
+    auto resetZones =
+            []( FOOTPRINT* aFootprint )
+            {
+                for( ZONE* zone : aFootprint->Zones() )
+                    zone->Move( -aFootprint->GetPosition() );
+            };
+
     if( !aStoreInNewLib )
     {
         // The footprints are saved in an existing .pretty library in the fp lib table
@@ -627,6 +635,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                     // Reset reference designator and group membership before saving
                     resetReference( fpCopy );
                     resetGroup( fpCopy );
+                    resetZones( fpCopy );
 
                     tbl->FootprintSave( nickname, fpCopy, true );
 
@@ -683,6 +692,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                     // Reset reference designator and group membership before saving
                     resetReference( fpCopy );
                     resetGroup( fpCopy );
+                    resetZones( fpCopy );
 
                     pi->FootprintSave( libPath, fpCopy );
 
