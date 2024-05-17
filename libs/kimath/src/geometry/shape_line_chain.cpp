@@ -662,12 +662,13 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
     for( size_t i = 0; i < ArcCount(); i++ )
     {
         const SHAPE_ARC& arc = Arc( i );
+        VECTOR2I pos;
 
         // The arcs in the chain should have zero width
         wxASSERT_MSG( arc.GetWidth() == 0, wxT( "Invalid arc width - should be zero" ) );
 
         if( arc.Collide( aSeg, aClearance, aActual || aLocation ? &dist : nullptr,
-                         aLocation ? &nearest : nullptr ) )
+                         aLocation ? &pos : nullptr ) )
         {
             if( !aActual )
                 return true;
@@ -675,17 +676,18 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
             if( dist < closest_dist )
             {
                 closest_dist = dist;
+                nearest = pos;
             }
         }
     }
 
-    if( closest_dist_sq == 0 || closest_dist_sq < clearance_sq )
+    if( closest_dist == 0 || closest_dist < aClearance )
     {
         if( aLocation )
             *aLocation = nearest;
 
         if( aActual )
-            *aActual = sqrt( closest_dist_sq );
+            *aActual = closest_dist;
 
         return true;
     }
