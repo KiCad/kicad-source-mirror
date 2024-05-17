@@ -234,6 +234,12 @@ static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTE
             if( aFunc( fp ) )
                 return true;
         }
+        else if( aArg.Contains( ':' )
+                 && fp->GetFPIDAsString().Matches( aArg ) )
+        {
+            if( aFunc( fp ) )
+                return true;
+        }
     }
 
     return false;
