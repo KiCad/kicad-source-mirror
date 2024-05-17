@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-28 14:08+0000\n"
+"PO-Revision-Date: 2024-05-18 08:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.1\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -7358,9 +7358,8 @@ msgid "Line length exceeded"
 msgstr "Radens längd överskriden"
 
 #: common/settings/bom_settings.cpp:124
-#, fuzzy
 msgid "Default Editing"
-msgstr "Standard måttenheter:"
+msgstr "Förinställning för redigering"
 
 #: common/settings/bom_settings.cpp:124 common/settings/bom_settings.cpp:145
 #: common/settings/bom_settings.cpp:164 common/settings/bom_settings.cpp:183
