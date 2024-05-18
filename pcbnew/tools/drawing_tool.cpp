@@ -2848,7 +2848,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( !( item->GetLayerSet() & lset ).any() )
                     continue;
 
-                if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+                if( item->Type() == PCB_TRACE_T )
                 {
                     PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
@@ -2857,6 +2857,13 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     {
                         possible_tracks.push_back( track );
                     }
+                }
+                else if( item->Type() == PCB_ARC_T )
+                {
+                    PCB_ARC* arc = static_cast<PCB_ARC*>( item );
+
+                    if( arc->HitTest( position, aVia->GetWidth() / 2 ) )
+                        possible_tracks.push_back( arc );
                 }
             }
 
