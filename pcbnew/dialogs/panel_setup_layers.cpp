@@ -506,11 +506,11 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                 BOARD_ITEM* item = collector[i];
 
                 // Do not remove/change an item owned by a footprint
-                if( dynamic_cast<FOOTPRINT*>( item->GetParentFootprint() ) )
+                if( item->GetParentFootprint() )
                     continue;
 
                 // Do not remove footprints
-                if( dynamic_cast<FOOTPRINT*>( item ) )
+                if( item->Type() == PCB_FOOTPRINT_T )
                     continue;
 
                 LSET        layers = item->GetLayerSet();
@@ -530,6 +530,9 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                 }
             }
         }
+
+        // Undo state may have copies of pointers deleted above
+        m_frame->ClearUndoRedoList();
     }
 
     m_enabledLayers = GetUILayerMask();
