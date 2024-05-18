@@ -30,6 +30,7 @@
 #include <project.h>
 
 class SIM_LIBRARY_KIBIS;
+class REPORTER;
 
 
 class SPICE_GENERATOR_KIBIS : public SPICE_GENERATOR
@@ -42,7 +43,7 @@ public:
     std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
 
     std::string IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
-                            const wxString& aCacheDir ) const;
+                            const wxString& aCacheDir, REPORTER& aReporter ) const;
 
 protected:
     std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const override;
