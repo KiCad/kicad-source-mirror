@@ -694,13 +694,6 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     gp_Pnt start = toPoint( aPt0 );
                     gp_Pnt end = toPoint( aPt1 );
 
-                    // Do not export too short segments: they create broken shape because OCC thinks
-                    // start point and end point are at the same place
-                    double seg_len = std::hypot( end.X() - start.X(), end.Y() - start.Y() );
-
-                    if( seg_len <= m_mergeOCCMaxDist )
-                        return false;
-
                     BRepBuilderAPI_MakeEdge mkEdge( start, end );
 
                     if( !mkEdge.IsDone() || mkEdge.Edge().IsNull() )
@@ -826,8 +819,14 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     isFirstShape = false;
                 }
 
-                if( lastPt != firstPt )
-                    addSegment( lastPt, firstPt );
+                if( lastPt != firstPt && !addSegment( lastPt, firstPt ) )
+                {
+                    ReportMessage( wxString::Format(
+                            wxT( "** Failed to close wire at %d, %d -> %d, %d **\n" ), lastPt.x,
+                            lastPt.y, firstPt.x, firstPt.y ) );
+
+                    return false;
+                }
             }
             catch( const Standard_Failure& e )
             {
@@ -895,6 +894,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         else
         {
             wxASSERT( false );
+            return false;
         }
     }
 
