@@ -99,6 +99,7 @@ public:
     ///< Supported item types
     enum PnsKind
     {
+        INVALID_T   =    0,
         SOLID_T     =    1,
         LINE_T      =    2,
         JOINT_T     =    4,
