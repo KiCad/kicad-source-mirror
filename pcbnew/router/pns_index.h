@@ -142,6 +142,8 @@ int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor ) const
 {
     int total = 0;
 
+    wxCHECK( aItem->Kind() != ITEM::INVALID_T, 0 );
+
     const LAYER_RANGE& layers = aItem->Layers();
 
     for( int i = layers.Start(); i <= layers.End(); ++i )

@@ -196,6 +196,8 @@ const ITEM_SET DRAGGER::findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& h
     if( !jt )
         return rv;
 
+    bool foundVia = false;
+
     for( ITEM* item : jt->LinkList() )
     {
         if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
@@ -211,7 +213,11 @@ const ITEM_SET DRAGGER::findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& h
         }
         else if( item->OfKind( ITEM::VIA_T ) )
         {
-            rv.Add( item );
+            if( !foundVia )
+            {
+                rv.Add( item );
+                foundVia = true;
+            }
         }
     }
 
