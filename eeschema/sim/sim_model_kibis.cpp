@@ -59,7 +59,8 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& 
 
 
 std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
-                                               const wxString& aCacheDir ) const
+                                               const wxString& aCacheDir,
+                                               REPORTER&       aReporter ) const
 {
     std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD  );
@@ -71,6 +72,7 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
 
     KIBIS kibis( std::string( path.c_str() ) );
     kibis.m_cacheDir = std::string( aCacheDir.c_str() );
+    kibis.m_reporter = &aReporter;
 
     if( !kibis.m_valid )
         THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS file '%s'" ), ibisLibFilename ) );
@@ -167,10 +169,10 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
         KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR( &kibis );
 
         if( const SIM_MODEL::PARAM* ton = m_model.FindParam( "ton" ) )
-            waveform->m_ton = SIM_VALUE::ToDouble( ton->value, 1 );
+            waveform->m_ton = SIM_VALUE::ToDouble( ton->value, 0 );
 
         if( const SIM_MODEL::PARAM* toff = m_model.FindParam( "toff" ) )
-            waveform->m_toff = SIM_VALUE::ToDouble( toff->value, 1 );
+            waveform->m_toff = SIM_VALUE::ToDouble( toff->value, 0 );
 
         if( const SIM_MODEL::PARAM* td = m_model.FindParam( "td" ) )
             waveform->m_delay = SIM_VALUE::ToDouble( td->value, 0 );

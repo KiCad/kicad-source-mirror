@@ -61,6 +61,11 @@
 #include <memory>
 
 
+// Reporter is stored by pointer in KIBIS, so keep this here to avoid crashes
+static wxString           s_errors;
+static WX_STRING_REPORTER s_reporter( &s_errors );
+
+
 class SIM_THREAD_REPORTER : public SIMULATOR_REPORTER
 {
 public:
@@ -338,8 +343,7 @@ void SIMULATOR_FRAME::UpdateTitle()
 
 bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
 {
-    wxString           errors;
-    WX_STRING_REPORTER reporter( &errors );
+    s_errors.clear();
 
     if( !m_schematicFrame->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
         return false;
@@ -349,9 +353,9 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
         m_schematicFrame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
     if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
-                              reporter ) )
+                              s_reporter ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + errors );
+        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + s_errors );
         return false;
     }
 
@@ -361,13 +365,10 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
 
 void SIMULATOR_FRAME::ReloadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
 {
-    wxString           errors;
-    WX_STRING_REPORTER reporter( &errors );
-
     if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
-                              reporter ) )
+                              s_reporter ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + errors );
+        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + s_errors );
     }
 }
 
@@ -550,17 +551,17 @@ bool SIMULATOR_FRAME::EditAnalysis()
 {
     SIM_TAB*           simTab = m_ui->GetCurrentSimTab();
     DIALOG_SIM_COMMAND dlg( this, m_circuitModel, m_simulator->Settings() );
-    wxString           errors;
-    WX_STRING_REPORTER reporter( &errors );
+
+    s_errors.clear();
 
     if( !simTab )
         return false;
 
     if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
-                                                    reporter ) )
+                                                    s_reporter ) )
     {
         DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" )
-                                   + errors );
+                                   + s_errors );
     }
 
     dlg.SetSimCommand( simTab->GetSimCommand() );
