@@ -2783,6 +2783,9 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
         if( klayer == UNDEFINED_LAYER )
             return; // Just skip it for now. Users can fill it themselves.
 
+        if( !zone->HasFilledPolysForLayer( klayer ) )
+            return;
+
         SHAPE_POLY_SET* fill = zone->GetFill( klayer );
 
         // This is not the actual board item. We can use it to create the polygon for the region
@@ -3714,6 +3717,9 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
 
         if( klayer == UNDEFINED_LAYER )
             return; // Just skip it for now. Users can fill it themselves.
+
+        if( !zone->HasFilledPolysForLayer( klayer ) )
+            return;
 
         SHAPE_POLY_SET* fill = zone->GetFill( klayer );
 
