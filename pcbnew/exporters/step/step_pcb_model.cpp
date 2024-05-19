@@ -667,6 +667,20 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 }
 
 
+static wxString formatBBox( const BOX2I& aBBox )
+{
+    wxString       str;
+    UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
+
+    str << "x0: " << up.StringFromValue( aBBox.GetLeft(), false ) << "; ";
+    str << "y0: " << up.StringFromValue( aBBox.GetTop(), false ) << "; ";
+    str << "x1: " << up.StringFromValue( aBBox.GetRight(), false ) << "; ";
+    str << "y1: " << up.StringFromValue( aBBox.GetBottom(), false );
+
+    return str;
+}
+
+
 bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
                                  double aThickness, double aZposition, const VECTOR2D& aOrigin )
 {
@@ -678,6 +692,8 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         return gp_Pnt( pcbIUScale.IUTomm( aKiCoords.x - aOrigin.x ),
                        -pcbIUScale.IUTomm( aKiCoords.y - aOrigin.y ), aZposition );
     };
+
+    gp_Pln basePlane( gp_Pnt( 0.0, 0.0, aZposition ), gp::DZ() );
 
     for( const SHAPE_POLY_SET::POLYGON& polygon : simplified.CPolygons() )
     {
@@ -850,7 +866,13 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                 if( !makeWireFromChain( mkWire, contour ) )
                     continue;
 
-                if( !mkWire.IsDone() )
+                TopoDS_Wire wire;
+
+                if( mkWire.IsDone() )
+                {
+                    wire = mkWire.Wire();
+                }
+                else
                 {
                     ReportMessage( wxString::Format(
                             _( "Wire not done (contour %d, points %d): OCC error %d\n" ),
@@ -860,15 +882,37 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                 if( contId == 0 ) // Outline
                 {
-                    if( mkWire.IsDone() )
-                        mkFace = BRepBuilderAPI_MakeFace( mkWire.Wire() );
+                    if( !wire.IsNull() )
+                    {
+                        mkFace = BRepBuilderAPI_MakeFace( basePlane, wire );
+                    }
                     else
-                        continue;
+                    {
+                        ReportMessage( wxString::Format( wxT( "\n** Outline skipped **\n" ) ) );
+
+                        ReportMessage( wxString::Format( wxT( "z: %g; bounding box: %s\n" ),
+                                                         aZposition,
+                                                         formatBBox( polygon[contId].BBox() ) ) );
+
+                        break;
+                    }
                 }
                 else // Hole
                 {
-                    if( mkWire.IsDone() )
-                        mkFace.Add( mkWire );
+                    if( !wire.IsNull() )
+                    {
+                        wire.Reverse();
+
+                        mkFace.Add( wire );
+                    }
+                    else
+                    {
+                        ReportMessage( wxString::Format( wxT( "\n** Hole skipped **\n" ) ) );
+
+                        ReportMessage( wxString::Format( wxT( "z: %g; bounding box: %s\n" ),
+                                                         aZposition,
+                                                         formatBBox( polygon[contId].BBox() ) ) );
+                    }
                 }
             }
             catch( const Standard_Failure& e )
@@ -919,7 +963,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     // Support for more than one main outline (more than one board)
     ReportMessage( wxString::Format( wxT( "Build board outlines (%d outlines) with %d points.\n" ),
                                      aOutline.OutlineCount(), aOutline.FullPointCount() ) );
-#if 0
+#if 1
     // This code should work, and it is working most of time
     // However there are issues if the main outline is a circle with holes:
     // holes from vias and pads are not working
