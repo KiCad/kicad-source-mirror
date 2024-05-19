@@ -1429,6 +1429,8 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                        -pcbIUScale.IUTomm( aKiCoords.y - aOrigin.y ), aZposition );
     };
 
+    gp_Pln basePlane( gp_Pnt( 0.0, 0.0, aZposition ), gp::DZ() );
+
     for( const SHAPE_POLY_SET::POLYGON& polygon : simplified.CPolygons() )
     {
         auto makeWireFromChain = [&]( BRepLib_MakeWire&       aMkWire,
@@ -1654,27 +1656,33 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                 if( contId == 0 ) // Outline
                 {
                     if( !wire.IsNull() )
-                        mkFace = BRepBuilderAPI_MakeFace( wire );
+                    {
+                        mkFace = BRepBuilderAPI_MakeFace( basePlane, wire );
+                    }
                     else
                     {
-                        ReportMessage( wxString::Format( _( "\n** Outline skipped **\n" ) ) );
+                        ReportMessage( wxString::Format( wxT( "\n** Outline skipped **\n" ) ) );
 
-                        ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ),
+                        ReportMessage( wxString::Format( wxT( "z: %g; bounding box: %s\n" ),
                                                          aZposition,
                                                          formatBBox( polygon[contId].BBox() ) ) );
 
-                        continue;
+                        break;
                     }
                 }
                 else // Hole
                 {
                     if( !wire.IsNull() )
+                    {
+                        wire.Reverse();
+
                         mkFace.Add( wire );
+                    }
                     else
                     {
-                        ReportMessage( wxString::Format( _( "\n** Hole skipped **\n" ) ) );
+                        ReportMessage( wxString::Format( wxT( "\n** Hole skipped **\n" ) ) );
 
-                        ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ),
+                        ReportMessage( wxString::Format( wxT( "z: %g; bounding box: %s\n" ),
                                                          aZposition,
                                                          formatBBox( polygon[contId].BBox() ) ) );
                     }
@@ -1739,7 +1747,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     double boardZPos;
     getBoardBodyZPlacement( boardZPos, boardThickness );
 
-#if 0
+#if 1
     // This code should work, and it is working most of time
     // However there are issues if the main outline is a circle with holes:
     // holes from vias and pads are not working
