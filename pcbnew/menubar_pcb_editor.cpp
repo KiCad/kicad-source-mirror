@@ -133,7 +133,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
                         ID_GEN_EXPORT_FILE_VRML, BITMAPS::export3d );
     submenuExport->Add( _( "IDFv3..." ), _( "Export IDF 3D board representation" ),
                         ID_GEN_EXPORT_FILE_IDF3, BITMAPS::export_idf );
-    submenuExport->Add( _( "STEP / BREP / XAO..." ), _( "Export STEP / BREP / XAO 3D board representation" ),
+    submenuExport->Add( _( "STEP / GLB / BREP / XAO..." ),
+                        _( "Export STEP / GLB / BREP / XAO 3D board representation" ),
                         ID_GEN_EXPORT_FILE_STEP, BITMAPS::export_step );
     submenuExport->Add( _( "SVG..." ), _( "Export SVG board representation" ),
                         ID_GEN_PLOT_SVG, BITMAPS::export_svg );

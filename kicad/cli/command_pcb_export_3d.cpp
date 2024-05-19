@@ -41,8 +41,11 @@
 #define ARG_NO_BOARD_BODY "--no-board-body"
 #define ARG_NO_COMPONENTS "--no-components"
 #define ARG_INCLUDE_TRACKS "--include-tracks"
+#define ARG_INCLUDE_PADS "--include-pads"
 #define ARG_INCLUDE_ZONES "--include-zones"
 #define ARG_INCLUDE_INNER_COPPER "--include-inner-copper"
+#define ARG_INCLUDE_SILKSCREEN "--include-silkscreen"
+#define ARG_INCLUDE_SOLDERMASK "--include-soldermask"
 #define ARG_FUSE_SHAPES "--fuse-shapes"
 #define ARG_NO_OPTIMIZE_STEP "--no-optimize-step"
 #define ARG_NET_FILTER "--net-filter"
@@ -118,7 +121,11 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .flag();
 
         m_argParser.add_argument( ARG_INCLUDE_TRACKS )
-                .help( UTF8STDSTR( _( "Export tracks" ) ) )
+                .help( UTF8STDSTR( _( "Export tracks and vias" ) ) )
+                .flag();
+
+        m_argParser.add_argument( ARG_INCLUDE_PADS )
+                .help( UTF8STDSTR( _( "Export pads" ) ) )
                 .flag();
 
         m_argParser.add_argument( ARG_INCLUDE_ZONES )
@@ -127,6 +134,14 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 
         m_argParser.add_argument( ARG_INCLUDE_INNER_COPPER )
                 .help( UTF8STDSTR( _( "Export elements on inner copper layers" ) ) )
+                .flag();
+
+        m_argParser.add_argument( ARG_INCLUDE_SILKSCREEN )
+                .help( UTF8STDSTR( _( "Export silkscreen graphics as a set of flat faces" ) ) )
+                .flag();
+
+        m_argParser.add_argument( ARG_INCLUDE_SOLDERMASK )
+                .help( UTF8STDSTR( _( "Export soldermask layers as a set of flat faces" ) ) )
                 .flag();
 
         m_argParser.add_argument( ARG_FUSE_SHAPES )
@@ -192,8 +207,11 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         step->m_exportBoardBody = !m_argParser.get<bool>( ARG_NO_BOARD_BODY );
         step->m_exportComponents = !m_argParser.get<bool>( ARG_NO_COMPONENTS );
         step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
+        step->m_exportPads = m_argParser.get<bool>( ARG_INCLUDE_PADS );
         step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
         step->m_exportInnerCopper = m_argParser.get<bool>( ARG_INCLUDE_INNER_COPPER );
+        step->m_exportSilkscreen = m_argParser.get<bool>( ARG_INCLUDE_SILKSCREEN );
+        step->m_exportSoldermask = m_argParser.get<bool>( ARG_INCLUDE_SOLDERMASK );
         step->m_fuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
         step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
         step->m_netFilter = From_UTF8( m_argParser.get<std::string>( ARG_NET_FILTER ).c_str() );

@@ -81,36 +81,34 @@ public:
     STEP_PCB_MODEL( const wxString& aPcbName );
     virtual ~STEP_PCB_MODEL();
 
-    // add a pad hole or slot (must be in final position)
-    bool AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin );
-
     // add a pad shape (must be in final position)
     bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia );
 
-    // add a via shape
-    bool AddViaShape( const PCB_VIA* aVia, const VECTOR2D& aOrigin );
+    // add a pad hole or slot (must be in final position)
+    bool AddHole( const SHAPE_SEGMENT& aShape, int aPlatingThickness, PCB_LAYER_ID aLayerTop,
+                  PCB_LAYER_ID aLayerBot, bool aVia, const VECTOR2D& aOrigin );
 
-    // add a track segment shape (do not use it for track arcs)
-    bool AddTrackSegment( const PCB_TRACK* aTrack, const VECTOR2D& aOrigin );
+    // add a plated hole shape (without the hole)
+    bool AddBarrel( const SHAPE_SEGMENT& aShape, PCB_LAYER_ID aLayerTop, PCB_LAYER_ID aLayerBot,
+                    bool aVia, const VECTOR2D& aOrigin );
 
-    // add a set of polygons (must be in final position) on top or bottom of the board as copper
-    bool AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
-                                 const VECTOR2D& aOrigin, bool aTrack );
+    // add a set of polygons (must be in final position)
+    bool AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
+                           const VECTOR2D& aOrigin );
 
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
                        VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
                        VECTOR3D aOrientation, VECTOR3D aScale, bool aSubstituteModels = true );
 
-    void SetBoardColor( double r, double g, double b );
     void SetCopperColor( double r, double g, double b );
+    void SetPadColor( double r, double g, double b );
 
     void SetEnabledLayers( const LSET& aLayers );
-
     void SetFuseShapes( bool aValue );
-
+    void SetSimplifyShapes( bool aValue );
+    void SetAddVisMaterials( bool aValue );
     void SetStackup( const BOARD_STACKUP& aStackup );
-
     void SetNetFilter( const wxString& aFilter );
 
     // Set the max distance (in mm) to consider 2 points have the same coordinates
@@ -123,11 +121,11 @@ public:
     bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool aPushBoardBody );
 
     /**
-     * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms)
+     * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms, or flat faces)
      * @param aShapes is the TopoDS_Shape list to append to
      * @param aPolySet is a polygon set
      * @param aConvertToArcs set to approximate with arcs
-     * @param aThickness is the height of the created prism
+     * @param aThickness is the height of the created prism, or 0.0: flat face pointing up, -0.0: down.
      * @param aOrigin is the origin of the coordinates
      * @return true if success
      */
@@ -136,27 +134,13 @@ public:
                      const VECTOR2D& aOrigin );
 
     /**
-     * Convert a SHAPE_LINE_CHAIN containing only one 360 deg arc to a TopoDS_Shape
-     * ( vertical cylinder)
-     * it is a specialized version of MakeShape()
-     * @param aShape is the TopoDS_Shape to initialize (must be empty)
-     * @param aChain is a closed SHAPE_LINE_CHAIN, image of a circle: containing one 360 deg arc
-     * @param aThickness is the height of the created cylinder
-     * @param aOrigin is the origin of the coordinates
-     * @return true if success
-     */
-    bool MakeShapeAsCylinder( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
-                              double aThickness, double aZposition, const VECTOR2D& aOrigin );
-
-    /**
-     * Convert a SHAPE_LINE_CHAIN containing only one 360 deg arc to a TopoDS_Shape
-     * ( vertical cylinder)
-     * it is a specialized version of MakeShape()
+     * Make a segment shape based on start and end point. If they're too close, make a cylinder.
+     * It is a specialized version of MakeShape()
      * @param aShape is the TopoDS_Shape to initialize (must be empty)
      * @param aStartPoint is the start point of the segment
      * @param aEndPoint is the end point of the segment
      * @param aWidth is the width of the segment
-     * @param aThickness is the height of the created cylinder
+     * @param aThickness is the height of the created segment, or 0.0: flat face pointing up, -0.0: down.
      * @param aOrigin is the origin of the coordinates
      * @return true if success
      */
@@ -237,15 +221,15 @@ private:
     Handle( XCAFDoc_ShapeTool )     m_assy;
     TDF_Label                       m_assy_label;
     bool                            m_hasPCB;           // set true if CreatePCB() has been invoked
+    bool                            m_simplifyShapes;   // convert parts of outlines to arcs where possible
     bool                            m_fuseShapes;       // fuse geometry together
-    int                             m_platingThickness; // plating thickness for TH pads/vias
     std::vector<TDF_Label>          m_pcb_labels;       // labels for the PCB model (one by main outline)
     MODEL_MAP                       m_models;           // map of file names to model labels
     int                             m_components;       // number of successfully loaded components;
     double                          m_precision;        // model (length unit) numeric precision
     double                          m_angleprec;        // angle numeric precision
-    double                          m_boardColor[3];    // board body, RGB values
     double                          m_copperColor[3];   // copper, RGB values
+    double                          m_padColor[3];      // pads, RGB values
     BOARD_STACKUP                   m_stackup;          // board stackup
     LSET                            m_enabledLayers;    // a set of layers enabled for export
     wxString                        m_netFilter;        // remove nets not matching this wildcard
@@ -260,10 +244,12 @@ private:
 
     // Main outlines (more than one board)
     std::vector<TopoDS_Shape> m_board_outlines;
-    std::vector<TopoDS_Shape> m_board_copper_zones;
-    std::vector<TopoDS_Shape> m_board_copper_tracks;
+    std::vector<TopoDS_Shape> m_board_copper;
     std::vector<TopoDS_Shape> m_board_copper_pads;
+    std::vector<TopoDS_Shape> m_board_copper_vias;
     std::vector<TopoDS_Shape> m_board_copper_fused;
+    std::vector<TopoDS_Shape> m_board_silkscreen;
+    std::vector<TopoDS_Shape> m_board_soldermask;
 
     // Data for pads
     std::map<wxString, std::pair<gp_Pnt, TopoDS_Shape>> m_pad_points;

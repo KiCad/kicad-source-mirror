@@ -66,8 +66,11 @@ public:
     bool                      m_exportBoardBody;
     bool                      m_exportComponents;
     bool                      m_exportTracks;
+    bool                      m_exportPads;
     bool                      m_exportZones;
     bool                      m_exportInnerCopper;
+    bool                      m_exportSilkscreen;
+    bool                      m_exportSoldermask;
     bool                      m_fuseShapes;
     JOB_EXPORT_PCB_3D::FORMAT m_format;
 

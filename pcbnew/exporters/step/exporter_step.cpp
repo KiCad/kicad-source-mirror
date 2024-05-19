@@ -28,6 +28,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
 #include <pad.h>
@@ -149,8 +150,15 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_board( aBoard ),
     m_pcbModel( nullptr )
 {
-    m_solderMaskColor = COLOR4D( 0.08, 0.20, 0.14, 0.83 );
     m_copperColor = COLOR4D( 0.7, 0.61, 0.0, 1.0 );
+
+    if( m_params.m_exportComponents )
+        m_padColor = COLOR4D( 0.50, 0.50, 0.50, 1.0 );
+    else
+        m_padColor = m_copperColor;
+
+    // TODO: make configurable
+    m_platingThickness = pcbIUScale.mmToIU( 0.025 );
 
     // Init m_pcbBaseName to the board short filename (no path, no ext)
     // m_pcbName is used later to identify items in step file
@@ -177,61 +185,99 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 {
     bool              hasdata = false;
     std::vector<PAD*> padsMatchingNetFilter;
+    int               maxError = m_board->GetDesignSettings().m_MaxError;
 
     // Dump the pad holes into the PCB
     for( PAD* pad : aFootprint->Pads() )
     {
-        if( m_pcbModel->AddPadHole( pad, aOrigin ) )
-            hasdata = true;
+        std::shared_ptr<SHAPE_SEGMENT> holeShape = pad->GetEffectiveHoleShape();
+
+        SHAPE_POLY_SET holePoly;
+        holeShape->TransformToPolygon( holePoly, maxError, ERROR_INSIDE );
+
+        for( PCB_LAYER_ID pcblayer : pad->GetLayerSet().Seq() )
+        {
+            if( pad->IsOnLayer( pcblayer ) )
+                m_poly_holes[pcblayer].Append( holePoly );
+        }
+
+        if( pad->HasHole() )
+        {
+            int platingThickness = pad->GetAttribute() == PAD_ATTRIB::PTH ? m_platingThickness : 0;
+
+            if( m_pcbModel->AddHole( *holeShape, platingThickness, F_Cu, B_Cu, false, aOrigin ) )
+                hasdata = true;
+
+            //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
+            //if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
+            //{
+            //    m_poly_holes[F_SilkS].Append( holePoly );
+            //    m_poly_holes[B_SilkS].Append( holePoly );
+            //}
+        }
 
         if( !m_params.m_netFilter.IsEmpty() && !pad->GetNetname().Matches( m_params.m_netFilter ) )
             continue;
 
-        if( m_params.m_exportTracksVias )
+        if( m_params.m_exportPads )
         {
             if( m_pcbModel->AddPadShape( pad, aOrigin, false ) )
                 hasdata = true;
+
+            if( m_params.m_exportSoldermask )
+            {
+                for( PCB_LAYER_ID pcblayer : pad->GetLayerSet().Seq() )
+                {
+                    if( pcblayer != F_Mask && pcblayer != B_Mask )
+                        continue;
+
+                    SHAPE_POLY_SET poly;
+
+                    pad->TransformShapeToPolygon( poly, pcblayer, pad->GetSolderMaskExpansion(),
+                                                  maxError, ERROR_INSIDE );
+
+                    m_poly_shapes[pcblayer].Append( poly );
+                }
+            }
         }
 
         padsMatchingNetFilter.push_back( pad );
     }
 
-    // Build 3D shapes of the footprint graphic items on external layers:
-    if( m_params.m_exportTracksVias )
+    // Build 3D shapes of the footprint graphic items:
+    for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
     {
-        int maxError = m_board->GetDesignSettings().m_MaxError;
+        if( IsCopperLayer( pcblayer ) && !m_params.m_exportTracksVias )
+            continue;
 
-        for( PCB_LAYER_ID pcblayer : LSET( aFootprint->GetLayerSet() & LSET::AllCuMask() ).Seq() )
+        SHAPE_POLY_SET buffer;
+
+        aFootprint->TransformFPShapesToPolySet( buffer, pcblayer, 0, maxError, ERROR_INSIDE,
+                                                true, /* include text */
+                                                true, /* include shapes */
+                                                false /* include private items */ );
+
+        if( m_params.m_netFilter.IsEmpty() || !IsCopperLayer( pcblayer ) )
         {
-            SHAPE_POLY_SET buffer;
-
-            aFootprint->TransformFPShapesToPolySet( buffer, pcblayer, 0, maxError, ERROR_INSIDE,
-                                                    false, /* include text */
-                                                    true,  /* include shapes */
-                                                    false /* include private items */ );
-
-            if( m_params.m_netFilter.IsEmpty() )
+            m_poly_shapes[pcblayer].Append( buffer );
+        }
+        else
+        {
+            // Only add shapes colliding with any matching pads
+            for( const SHAPE_POLY_SET::POLYGON& poly : buffer.CPolygons() )
             {
-                m_poly_copper_shapes[pcblayer].Append( buffer );
-            }
-            else
-            {
-                // Only add shapes colliding with any matching pads
-                for( const SHAPE_POLY_SET::POLYGON& poly : buffer.CPolygons() )
+                for( PAD* pad : padsMatchingNetFilter )
                 {
-                    for( PAD* pad : padsMatchingNetFilter )
+                    if( !pad->IsOnLayer( pcblayer ) )
+                        continue;
+
+                    std::shared_ptr<SHAPE_POLY_SET> padPoly = pad->GetEffectivePolygon();
+                    SHAPE_POLY_SET                  gfxPoly( poly );
+
+                    if( padPoly->Collide( &gfxPoly ) )
                     {
-                        if( !pad->IsOnLayer( pcblayer ) )
-                            continue;
-
-                        std::shared_ptr<SHAPE_POLY_SET> padPoly = pad->GetEffectivePolygon();
-                        SHAPE_POLY_SET                  gfxPoly( poly );
-
-                        if( padPoly->Collide( &gfxPoly ) )
-                        {
-                            m_poly_copper_shapes[pcblayer].Append( gfxPoly );
-                            break;
-                        }
+                        m_poly_shapes[pcblayer].Append( gfxPoly );
+                        break;
                     }
                 }
             }
@@ -340,25 +386,50 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
     if( !m_params.m_netFilter.IsEmpty() && !aTrack->GetNetname().Matches( m_params.m_netFilter ) )
         return true;
 
+    int maxError = m_board->GetDesignSettings().m_MaxError;
+
     if( aTrack->Type() == PCB_VIA_T )
     {
-        return m_pcbModel->AddViaShape( static_cast<const PCB_VIA*>( aTrack ), aOrigin );
+        PCB_VIA* via = static_cast<PCB_VIA*>( aTrack );
+
+        std::shared_ptr<SHAPE_SEGMENT> holeShape = via->GetEffectiveHoleShape();
+        SHAPE_POLY_SET                 holePoly;
+        holeShape->TransformToPolygon( holePoly, maxError, ERROR_INSIDE );
+
+        LSET layers( via->GetLayerSet() & m_layersToExport );
+
+        for( PCB_LAYER_ID pcblayer : layers.Seq() )
+        {
+            const std::shared_ptr<SHAPE>& shape = via->GetEffectiveShape( pcblayer );
+
+            SHAPE_POLY_SET poly;
+            shape->TransformToPolygon( poly, maxError, ERROR_INSIDE );
+            m_poly_shapes[pcblayer].Append( poly );
+            m_poly_holes[pcblayer].Append( holePoly );
+        }
+
+        //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
+        //if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
+        //{
+        //    m_poly_holes[F_SilkS].Append( holePoly );
+        //    m_poly_holes[B_SilkS].Append( holePoly );
+        //}
+
+        PCB_LAYER_ID top_layer, bot_layer;
+        via->LayerPair( &top_layer, &bot_layer );
+
+        m_pcbModel->AddHole( *holeShape, m_platingThickness, top_layer, bot_layer, true, aOrigin );
+        m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin );
+
+        return true;
     }
 
     PCB_LAYER_ID pcblayer = aTrack->GetLayer();
 
-    if( !IsCopperLayer( pcblayer ) )
+    if( !m_layersToExport.Contains( pcblayer ) )
         return false;
 
-    if( aTrack->Type() == PCB_ARC_T )
-    {
-        int maxError = m_board->GetDesignSettings().m_MaxError;
-
-        aTrack->TransformShapeToPolygon( m_poly_copper_shapes[pcblayer], pcblayer, 0, maxError,
-                                         ERROR_INSIDE );
-    }
-    else
-        m_pcbModel->AddTrackSegment( aTrack, aOrigin );
+    aTrack->TransformShapeToPolygon( m_poly_shapes[pcblayer], pcblayer, 0, maxError, ERROR_INSIDE );
 
     return true;
 }
@@ -368,19 +439,23 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
 {
     for( ZONE* zone : m_board->Zones() )
     {
-        if( !m_params.m_netFilter.IsEmpty() && !zone->GetNetname().Matches( m_params.m_netFilter ) )
-            continue;
+        LSET layers = zone->GetLayerSet();
 
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().CuStack() )
+        if( ( layers & LSET::AllCuMask() ).count() && !m_params.m_netFilter.IsEmpty()
+            && !zone->GetNetname().Matches( m_params.m_netFilter ) )
         {
-            SHAPE_POLY_SET copper_shape;
-            zone->TransformSolidAreasShapesToPolygon( layer, copper_shape );
-            copper_shape.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            continue;
+        }
 
-            copper_shape.SimplifyOutlines(
-                    ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
+        for( PCB_LAYER_ID layer : layers.Seq() )
+        {
+            SHAPE_POLY_SET fill_shape;
+            zone->TransformSolidAreasShapesToPolygon( layer, fill_shape );
+            fill_shape.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-            m_pcbModel->AddCopperPolygonShapes( &copper_shape, layer, aOrigin, false );
+            fill_shape.SimplifyOutlines( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
+
+            m_poly_shapes[layer].Append( fill_shape );
         }
     }
 }
@@ -388,23 +463,53 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
 
 bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
 {
-    PCB_SHAPE* graphic = dynamic_cast<PCB_SHAPE*>( aItem );
+    PCB_LAYER_ID pcblayer = aItem->GetLayer();
 
-    if( !graphic )
-        return false;
-
-    if( !m_params.m_netFilter.IsEmpty() && !graphic->GetNetname().Matches( m_params.m_netFilter ) )
-        return true;
-
-    PCB_LAYER_ID pcblayer = graphic->GetLayer();
-
-    if( !IsCopperLayer( pcblayer ) )
+    if( !m_layersToExport.Contains( pcblayer ) )
         return false;
 
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
-    graphic->TransformShapeToPolygon( m_poly_copper_shapes[pcblayer], pcblayer, 0, maxError,
-                                      ERROR_INSIDE );
+    switch( aItem->Type() )
+    {
+    case PCB_SHAPE_T:
+    {
+        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
+
+        if( IsCopperLayer( pcblayer ) && !m_params.m_netFilter.IsEmpty()
+            && !graphic->GetNetname().Matches( m_params.m_netFilter ) )
+        {
+            return true;
+        }
+
+        graphic->TransformShapeToPolygon( m_poly_shapes[pcblayer], pcblayer, 0, maxError,
+                                          ERROR_INSIDE );
+
+        break;
+    }
+
+    case PCB_TEXT_T:
+    {
+        PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
+
+        text->TransformTextToPolySet( m_poly_shapes[pcblayer], 0, maxError, ERROR_INSIDE );
+        break;
+    }
+
+    case PCB_TEXTBOX_T:
+    {
+        PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
+
+        textbox->TransformTextToPolySet( m_poly_shapes[pcblayer], 0, maxError, ERROR_INSIDE );
+        break;
+    }
+
+    case PCB_TABLE_T:
+        // JEY TODO: tables
+        break;
+
+    default: wxFAIL_MSG( "buildGraphic3DShape: unhandled item type" );
+    }
 
     return true;
 }
@@ -424,13 +529,6 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
     }
 
-    LSET layersToExport = LSET::ExternalCuMask();
-
-    if( m_params.m_exportInnerCopper )
-        layersToExport |= LSET::InternalCuMask();
-
-    layersToExport &= m_board->GetEnabledLayers();
-
     VECTOR2D origin;
 
     // Determine the coordinate system reference:
@@ -444,12 +542,11 @@ bool EXPORTER_STEP::buildBoard3DShapes()
 
     m_pcbModel = std::make_unique<STEP_PCB_MODEL>( m_pcbBaseName );
 
-    // TODO: Handle when top & bottom soldermask colours are different...
-    m_pcbModel->SetBoardColor( m_solderMaskColor.r, m_solderMaskColor.g, m_solderMaskColor.b );
     m_pcbModel->SetCopperColor( m_copperColor.r, m_copperColor.g, m_copperColor.b );
+    m_pcbModel->SetPadColor( m_padColor.r, m_padColor.g, m_padColor.b );
 
     m_pcbModel->SetStackup( m_board->GetStackupOrDefault() );
-    m_pcbModel->SetEnabledLayers( layersToExport );
+    m_pcbModel->SetEnabledLayers( m_layersToExport );
     m_pcbModel->SetFuseShapes( m_params.m_fuseShapes );
     m_pcbModel->SetNetFilter( m_params.m_netFilter );
 
@@ -473,15 +570,45 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     {
         for( PCB_TRACK* track : m_board->Tracks() )
             buildTrack3DShape( track, origin );
-
-        for( BOARD_ITEM* item : m_board->Drawings() )
-            buildGraphic3DShape( item, origin );
     }
 
-    for( PCB_LAYER_ID pcblayer : layersToExport.Seq() )
+    for( BOARD_ITEM* item : m_board->Drawings() )
+        buildGraphic3DShape( item, origin );
+
+    SHAPE_POLY_SET pcbOutlinesNoArcs = pcbOutlines;
+    pcbOutlinesNoArcs.ClearArcs();
+
+    for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
     {
-        m_pcbModel->AddCopperPolygonShapes( &m_poly_copper_shapes[pcblayer], pcblayer, origin,
-                                            true );
+        SHAPE_POLY_SET poly = m_poly_shapes[pcblayer];
+        poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+        poly.SimplifyOutlines( pcbIUScale.mmToIU( 0.003 ) );
+        poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+        SHAPE_POLY_SET holes = m_poly_holes[pcblayer];
+        holes.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+        // Mask layer is negative
+        if( pcblayer == F_Mask || pcblayer == B_Mask )
+        {
+            SHAPE_POLY_SET mask = pcbOutlinesNoArcs;
+
+            mask.BooleanSubtract( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            mask.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            poly = mask;
+        }
+        else
+        {
+            // Subtract holes
+            poly.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            // Clip to board outline
+            poly.BooleanIntersection( pcbOutlinesNoArcs, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        }
+
+        m_pcbModel->AddPolygonShapes( &poly, pcblayer, origin );
     }
 
     if( m_params.m_exportZones )
@@ -524,6 +651,25 @@ bool EXPORTER_STEP::Export()
 
         m_params.m_outputFile = fn.GetFullName();
     }
+
+    m_layersToExport = LSET::ExternalCuMask();
+
+    if( m_params.m_exportInnerCopper )
+        m_layersToExport |= LSET::InternalCuMask();
+
+    if( m_params.m_exportSilkscreen )
+    {
+        m_layersToExport.set( F_SilkS );
+        m_layersToExport.set( B_SilkS );
+    }
+
+    if( m_params.m_exportSoldermask )
+    {
+        m_layersToExport.set( F_Mask );
+        m_layersToExport.set( B_Mask );
+    }
+
+    m_layersToExport &= m_board->GetEnabledLayers();
 
     try
     {

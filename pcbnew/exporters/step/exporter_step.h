@@ -58,8 +58,11 @@ public:
             m_exportBoardBody( true ),
             m_exportComponents( true ),
             m_exportTracksVias( false ),
+            m_exportPads( false ),
             m_exportZones( false ),
             m_exportInnerCopper( false ),
+            m_exportSilkscreen( false ),
+            m_exportSoldermask( false ),
             m_fuseShapes( false ),
             m_optimizeStep( true ),
             m_format( FORMAT::STEP )
@@ -89,8 +92,11 @@ public:
     bool     m_exportBoardBody;
     bool     m_exportComponents;
     bool     m_exportTracksVias;
+    bool     m_exportPads;
     bool     m_exportZones;
     bool     m_exportInnerCopper;
+    bool     m_exportSilkscreen;
+    bool     m_exportSoldermask;
     bool     m_fuseShapes;
     bool     m_optimizeStep;
     FORMAT   m_format;
@@ -135,10 +141,15 @@ private:
     /// used to identify items in step file
     wxString        m_pcbBaseName;
 
-    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_poly_copper_shapes;
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_poly_shapes;
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_poly_holes;
 
-    KIGFX::COLOR4D  m_solderMaskColor;
-    KIGFX::COLOR4D  m_copperColor;
+    LSET m_layersToExport;
+
+    KIGFX::COLOR4D m_copperColor;
+    KIGFX::COLOR4D m_padColor;
+
+    int m_platingThickness; // plating thickness for TH pads/vias
 };
 
 #endif

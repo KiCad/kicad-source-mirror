@@ -47,7 +47,22 @@
 #include <widgets/text_ctrl_eval.h>
 #include <wildcards_and_files_ext.h>
 #include <filename_resolver.h>
+#include <core/map_helpers.h>
 #include <settings/settings_manager.h>
+
+
+// Maps m_choiceFormat selection to extension (and kicad-cli command)
+static const std::vector<wxString> c_formatCommand = { FILEEXT::StepFileExtension,
+                                                       FILEEXT::GltfBinaryFileExtension,
+                                                       FILEEXT::XaoFileExtension,
+                                                       FILEEXT::BrepFileExtension };
+
+// Maps file extensions to m_choiceFormat selection
+static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFileExtension, 0 },
+                                                             { FILEEXT::StepFileAbrvExtension, 0 },
+                                                             { FILEEXT::GltfBinaryFileExtension, 1 },
+                                                             { FILEEXT::XaoFileExtension, 2 },
+                                                             { FILEEXT::BrepFileExtension, 3 } };
 
 
 class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
@@ -71,6 +86,7 @@ protected:
     void onUpdateXPos( wxUpdateUIEvent& aEvent ) override;
     void onUpdateYPos( wxUpdateUIEvent& aEvent ) override;
     void onExportButton( wxCommandEvent& aEvent ) override;
+    void onFormatChoice( wxCommandEvent& event ) override;
 
     int GetOrgUnitsChoice() const
     {
@@ -118,25 +134,33 @@ private:
     bool               m_noUnspecified;  // remember last preference for No Unspecified Component
     bool               m_noDNP;          // remember last preference for No DNP Component
     static bool        m_optimizeStep;   // remember last preference for Optimize STEP file (stored only for the session)
-    static bool        m_exportBoardBody;     // remember last preference to export board body (stored only for the session)
+    static bool        m_exportBoardBody;  // remember last preference to export board body (stored only for the session)
     static bool        m_exportComponents; // remember last preference to export components (stored only for the session)
-    static bool        m_exportTracks;   // remember last preference to export tracks (stored only for the session)
+    static bool        m_exportTracks;   // remember last preference to export tracks and vias (stored only for the session)
+    static bool        m_exportPads;     // remember last preference to export pads (stored only for the session)
     static bool        m_exportZones;    // remember last preference to export zones (stored only for the session)
-    static bool        m_fuseShapes;     // remember last preference to fuse shapes (stored only for the session)
     static bool        m_exportInnerCopper; // remember last preference to export inner layers (stored only for the session)
+    static bool        m_exportSilkscreen;  // remember last preference to export silkscreen (stored only for the session)
+    static bool        m_exportSoldermask;  // remember last preference to export soldermask (stored only for the session)
+    static bool        m_fuseShapes;     // remember last preference to fuse shapes (stored only for the session)
     wxString           m_netFilter;      // filter copper nets
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
+    static int         m_formatLastChoice; // Store format option during a session
 };
 
 
 int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
+int  DIALOG_EXPORT_STEP::m_formatLastChoice = -1;    // Use default
 bool DIALOG_EXPORT_STEP::m_optimizeStep = true;
 bool DIALOG_EXPORT_STEP::m_exportBoardBody = true;
 bool DIALOG_EXPORT_STEP::m_exportComponents = true;
 bool DIALOG_EXPORT_STEP::m_exportTracks = false;
+bool DIALOG_EXPORT_STEP::m_exportPads = false;
 bool DIALOG_EXPORT_STEP::m_exportZones = false;
 bool DIALOG_EXPORT_STEP::m_exportInnerCopper = false;
+bool DIALOG_EXPORT_STEP::m_exportSilkscreen = false;
+bool DIALOG_EXPORT_STEP::m_exportSoldermask = false;
 bool DIALOG_EXPORT_STEP::m_fuseShapes = false;
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
@@ -192,8 +216,11 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_cbExportBody->SetValue( m_exportBoardBody );
     m_cbExportComponents->SetValue( m_exportComponents );
     m_cbExportTracks->SetValue( m_exportTracks );
+    m_cbExportPads->SetValue( m_exportPads );
     m_cbExportZones->SetValue( m_exportZones );
     m_cbExportInnerCopper->SetValue( m_exportInnerCopper );
+    m_cbExportSilkscreen->SetValue( m_exportSilkscreen );
+    m_cbExportSoldermask->SetValue( m_exportSoldermask );
     m_cbFuseShapes->SetValue( m_fuseShapes );
     m_cbRemoveUnspecified->SetValue( m_noUnspecified );
     m_cbRemoveDNP->SetValue( m_noDNP );
@@ -247,6 +274,9 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     if( m_toleranceLastChoice >= 0 )
         m_choiceTolerance->SetSelection( m_toleranceLastChoice );
 
+    if( m_formatLastChoice >= 0 )
+        m_choiceFormat->SetSelection( m_formatLastChoice );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -288,12 +318,16 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 
     m_netFilter = m_txtNetFilter->GetValue();
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
+    m_formatLastChoice = m_choiceFormat->GetSelection();
     m_optimizeStep = m_cbOptimizeStep->GetValue();
     m_exportBoardBody = m_cbExportBody->GetValue();
     m_exportComponents = m_cbExportComponents->GetValue();
     m_exportTracks = m_cbExportTracks->GetValue();
+    m_exportPads = m_cbExportPads->GetValue();
     m_exportZones = m_cbExportZones->GetValue();
     m_exportInnerCopper = m_cbExportInnerCopper->GetValue();
+    m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
+    m_exportSoldermask = m_cbExportSoldermask->GetValue();
     m_fuseShapes = m_cbFuseShapes->GetValue();
 }
 
@@ -374,22 +408,51 @@ void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
 
 void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
 {
+    // clang-format off
     wxString filter = _( "STEP files" )
                       + AddFileExtListToFilter( { FILEEXT::StepFileExtension, FILEEXT::StepFileAbrvExtension } ) + "|"
                       + _( "Binary glTF files" )
-                      + AddFileExtListToFilter( { FILEEXT::GltfBinaryFileExtension } );
+                      + AddFileExtListToFilter( { FILEEXT::GltfBinaryFileExtension } ) + "|"
+                      + _( "XAO files" )
+                      + AddFileExtListToFilter( { FILEEXT::XaoFileExtension} ) + "|"
+                      + _( "BREP (OCCT) files" )
+                      + AddFileExtListToFilter( { FILEEXT::BrepFileExtension } );
+    // clang-format on
 
     // Build the absolute path of current output directory to preselect it in the file browser.
     wxString   path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
     wxFileName fn( Prj().AbsolutePath( path ) );
 
-    wxFileDialog dlg( this, _( "STEP Output File" ), fn.GetPath(), fn.GetFullName(), filter,
+    wxFileDialog dlg( this, _( "3D Model Output File" ), fn.GetPath(), fn.GetFullName(), filter,
                       wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_outputFileName->SetValue( dlg.GetPath() );
+    path = dlg.GetPath();
+    m_outputFileName->SetValue( path );
+
+    fn = wxFileName( path );
+
+    if( auto formatChoice = get_opt( c_formatExtToChoice, fn.GetExt().Lower() ) )
+        m_choiceFormat->SetSelection( *formatChoice );
+}
+
+
+void DIALOG_EXPORT_STEP::onFormatChoice( wxCommandEvent& event )
+{
+    wxString newExt = c_formatCommand[m_choiceFormat->GetSelection()];
+    wxString path = m_outputFileName->GetValue();
+
+    int sepIdx = std::max( path.Find( '/', true ), path.Find( '\\', true ) );
+    int dotIdx = path.Find( '.', true );
+
+    if( dotIdx == -1 || dotIdx < sepIdx )
+        path << '.' << newExt;
+    else
+        path = path.Mid( 0, dotIdx ) << '.' << newExt;
+
+    m_outputFileName->SetValue( path );
 }
 
 
@@ -419,12 +482,16 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     double tolerance;   // default value in mm
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
+    m_formatLastChoice = m_choiceFormat->GetSelection();
     m_optimizeStep = m_cbOptimizeStep->GetValue();
     m_exportBoardBody = m_cbExportBody->GetValue();
     m_exportComponents = m_cbExportComponents->GetValue();
     m_exportTracks = m_cbExportTracks->GetValue();
+    m_exportPads = m_cbExportPads->GetValue();
     m_exportZones = m_cbExportZones->GetValue();
     m_exportInnerCopper = m_cbExportInnerCopper->GetValue();
+    m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
+    m_exportSoldermask = m_cbExportSoldermask->GetValue();
     m_fuseShapes = m_cbFuseShapes->GetValue();
 
     switch( m_choiceTolerance->GetSelection() )
@@ -494,14 +561,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     cmdK2S.Append( wxT( " pcb" ) );
     cmdK2S.Append( wxT( " export" ) );
 
-    if( fn.GetExt() == FILEEXT::GltfBinaryFileExtension )
-        cmdK2S.Append( wxT( " glb" ) );
-    else if( fn.GetExt() == FILEEXT::BrepFileExtension )
-        cmdK2S.Append( wxT( " brep" ) );
-    else if( fn.GetExt() == FILEEXT::XaoFileExtension )
-        cmdK2S.Append( wxT( " xao" ) );
-    else
-        cmdK2S.Append( wxT( " step" ) );
+    cmdK2S.Append( wxT( " " ) );
+    cmdK2S.Append( c_formatCommand[m_choiceFormat->GetSelection()] );
 
     if( GetNoUnspecifiedOption() )
         cmdK2S.Append( wxT( " --no-unspecified" ) );
@@ -524,11 +585,20 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     if( m_exportTracks )
         cmdK2S.Append( wxT( " --include-tracks" ) );
 
+    if( m_exportPads )
+        cmdK2S.Append( wxT( " --include-pads" ) );
+
     if( m_exportZones )
         cmdK2S.Append( wxT( " --include-zones" ) );
 
     if( m_exportInnerCopper )
         cmdK2S.Append( wxT( " --include-inner-copper" ) );
+
+    if( m_exportSilkscreen )
+        cmdK2S.Append( wxT( " --include-silkscreen" ) );
+
+    if( m_exportSoldermask )
+        cmdK2S.Append( wxT( " --include-soldermask" ) );
 
     if( m_fuseShapes )
         cmdK2S.Append( wxT( " --fuse-shapes" ) );
@@ -607,5 +677,4 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     DIALOG_EXPORT_STEP_LOG* log = new DIALOG_EXPORT_STEP_LOG( this, cmdK2S );
     log->ShowModal();
-    Close();
 }
