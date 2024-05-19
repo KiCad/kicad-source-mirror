@@ -1615,7 +1615,6 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             if( !wire.IsNull() )
             {
                 BRepAlgoAPI_Check check( wire, false, true );
-                check.Perform();
 
                 if( !check.IsValid() )
                 {
