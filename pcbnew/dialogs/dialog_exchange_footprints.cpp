@@ -55,6 +55,7 @@ int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 bool g_removeExtraTextItems[2]  = { false,  false  };
 bool g_resetTextItemLayers[2]   = { false,  true   };
 bool g_resetTextItemEffects[2]  = { false,  true   };
+bool g_resetTextItemContent[2]  = { false,  true   };
 bool g_resetFabricationAttrs[2] = { false,  true   };
 bool g_reset3DModels[2]         = { true,   true   };
 
@@ -78,6 +79,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         m_matchSpecifiedID->SetLabel( _( "Change footprints with library id:" ) );
         m_resetTextItemLayers->SetLabel( _( "Update text layers and visibilities" ) );
         m_resetTextItemEffects->SetLabel( _( "Update text sizes, styles and positions" ) );
+        m_resetTextItemContent->SetLabel( _( "Update text content" ) );
         m_resetFabricationAttrs->SetLabel( _( "Update fabrication attributes" ) );
         m_reset3DModels->SetLabel( _( "Update 3D models" ) );
     }
@@ -142,6 +144,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_removeExtraBox->SetValue( g_removeExtraTextItems[ m_updateMode ? 0 : 1 ] );
     m_resetTextItemLayers->SetValue( g_resetTextItemLayers[ m_updateMode ? 0 : 1 ] );
     m_resetTextItemEffects->SetValue( g_resetTextItemEffects[ m_updateMode ? 0 : 1 ] );
+    m_resetTextItemContent->SetValue( g_resetTextItemContent[ m_updateMode ? 0 : 1 ] );
     m_resetFabricationAttrs->SetValue( g_resetFabricationAttrs[ m_updateMode ? 0 : 1 ] );
     m_reset3DModels->SetValue( g_reset3DModels[ m_updateMode ? 0 : 1 ] );
 
@@ -167,6 +170,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::~DIALOG_EXCHANGE_FOOTPRINTS()
     g_removeExtraTextItems[ m_updateMode ? 0 : 1 ]  = m_removeExtraBox->GetValue();
     g_resetTextItemLayers[ m_updateMode ? 0 : 1 ]   = m_resetTextItemLayers->GetValue();
     g_resetTextItemEffects[ m_updateMode ? 0 : 1 ]  = m_resetTextItemEffects->GetValue();
+    g_resetTextItemContent[ m_updateMode ? 0 : 1 ]  = m_resetTextItemContent->GetValue();
     g_resetFabricationAttrs[ m_updateMode ? 0 : 1 ] = m_resetFabricationAttrs->GetValue();
     g_reset3DModels[ m_updateMode ? 0 : 1 ]         = m_reset3DModels->GetValue();
 }
@@ -379,6 +383,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
                                  m_removeExtraBox->GetValue(),
                                  m_resetTextItemLayers->GetValue(),
                                  m_resetTextItemEffects->GetValue(),
+                                 m_resetTextItemContent->GetValue(),
                                  m_resetFabricationAttrs->GetValue(),
                                  m_reset3DModels->GetValue(),
                                  &updated );

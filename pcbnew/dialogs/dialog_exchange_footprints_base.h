@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,6 +64,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_removeExtraBox;
 		wxCheckBox* m_resetTextItemLayers;
 		wxCheckBox* m_resetTextItemEffects;
+		wxCheckBox* m_resetTextItemContent;
 		wxCheckBox* m_resetFabricationAttrs;
 		wxCheckBox* m_reset3DModels;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -104,6 +104,9 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 
 	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text sizes, styles and positions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetTextItemEffects, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_resetTextItemContent = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text content"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateOptionsSizer->Add( m_resetTextItemContent, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFabricationAttrs, 0, wxBOTTOM|wxRIGHT, 5 );

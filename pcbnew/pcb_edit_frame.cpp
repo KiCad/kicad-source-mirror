@@ -2244,8 +2244,8 @@ static PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint 
 void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                                         BOARD_COMMIT& aCommit, bool deleteExtraTexts,
                                         bool resetTextLayers, bool resetTextEffects,
-                                        bool resetFabricationAttrs, bool reset3DModels,
-                                        bool* aUpdated )
+                                        bool resetTextContent, bool resetFabricationAttrs,
+                                        bool reset3DModels, bool* aUpdated )
 {
     PCB_GROUP* parentGroup = aExisting->GetParentGroup();
     bool       dummyBool   = false;
@@ -2334,8 +2334,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
             if( destItem )
             {
-                processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects,
-                                 aUpdated );
+                processTextItem( *srcItem, *destItem, resetTextContent, resetTextLayers,
+                                 resetTextEffects, aUpdated );
             }
             else if( !deleteExtraTexts )
             {
@@ -2373,7 +2373,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         }
         else
         {
-            processTextItem( *field, *newField, false, resetTextLayers, resetTextEffects, aUpdated );
+            processTextItem( *field, *newField, resetTextContent, resetTextLayers, resetTextEffects,
+                             aUpdated );
         }
 
     }
