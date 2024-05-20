@@ -656,16 +656,13 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
         return true;
     }
 
-    int closest_dist = std::numeric_limits<int>::max();
-
-    if( closest_dist_sq < VECTOR2I::ECOORD_MAX )
-        closest_dist = sqrt( closest_dist_sq );
+    int         dist = std::numeric_limits<int>::max();
+    SEG::ecoord closest_dist = sqrt( closest_dist_sq );
 
     // Collide arc segments
     for( size_t i = 0; i < ArcCount(); i++ )
     {
         const SHAPE_ARC& arc = Arc( i );
-        int              dist = std::numeric_limits<int>::max();
         VECTOR2I         pos;
 
         // The arcs in the chain should have zero width
