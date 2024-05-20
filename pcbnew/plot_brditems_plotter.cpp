@@ -920,23 +920,23 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VE
 
 void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
-    /* If small drills marks were requested prepare a clamp value to pass
-       to the helper function */
-    int smallDrill = GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE
-                    ? pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) : 0;
+    bool onCopperLayer = ( LSET::AllCuMask() & m_layerMask ).any();
+    int  smallDrill =  0;
 
-    /* In the filled trace mode drill marks are drawn white-on-black to scrape
-       the underlying pad. This works only for drivers supporting color change,
-       obviously... it means that:
+    if( GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
+        smallDrill = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize );
+
+    /* In the filled trace mode drill marks are drawn white-on-black to knock-out the underlying
+       pad.  This works only for drivers supporting color change, obviously... it means that:
        - PS, SVG and PDF output is correct (i.e. you have a 'donut' pad)
        - In HPGL you can't see them
-       - In gerbers you can't see them, too. This is arguably the right thing to
-         do since having drill marks and high speed drill stations is a sure
-         recipe for broken tools and angry manufacturers. If you *really* want them
-         you could start a layer with negative polarity to scrape the film.
+       - In gerbers you can't see them, too. This is arguably the right thing to do since having
+         drill marks and high speed drill stations is a sure recipe for broken tools and angry
+         manufacturers. If you *really* want them you could start a layer with negative polarity
+         to knock-out the film.
        - In DXF they go into the 'WHITE' layer. This could be useful.
      */
-    if( GetPlotMode() == FILLED )
+    if( GetPlotMode() == FILLED && onCopperLayer )
          m_plotter->SetColor( WHITE );
 
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -967,6 +967,6 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         }
     }
 
-    if( GetPlotMode() == FILLED )
+    if( GetPlotMode() == FILLED && onCopperLayer )
         m_plotter->SetColor( BLACK );
 }
