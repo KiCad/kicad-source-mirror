@@ -82,6 +82,17 @@ protected:
     wxString getResultCell( const SCH_SEARCH_HIT& aHit, int aCol ) override;
 };
 
+class POWER_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
+{
+public:
+    POWER_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame );
+
+    int Search( const wxString& aQuery ) override;
+
+protected:
+    wxString getResultCell( const SCH_SEARCH_HIT& aHit, int aCol ) override;
+};
+
 class TEXT_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
 {
 public:

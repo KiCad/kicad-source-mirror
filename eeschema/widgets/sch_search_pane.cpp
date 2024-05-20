@@ -47,6 +47,7 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
     m_notebook->SetFont( infoFont );
 
     AddSearcher( new SYMBOL_SEARCH_HANDLER( aFrame ) );
+    AddSearcher( new POWER_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new TEXT_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new LABEL_SEARCH_HANDLER( aFrame ) );
 }

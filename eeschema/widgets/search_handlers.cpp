@@ -226,6 +226,70 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
 }
 
 
+POWER_SEARCH_HANDLER::POWER_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
+        SCH_SEARCH_HANDLER( _HKI( "Power" ), aFrame )
+{
+    m_columns.emplace_back( _HKI( "Reference" ),   2,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Value" ),       6,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Page" ),        1,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),            3,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),            3,  wxLIST_FORMAT_CENTER );
+}
+
+
+int POWER_SEARCH_HANDLER::Search( const wxString& aQuery )
+{
+    m_hitlist.clear();
+
+    SCH_SEARCH_DATA frp;
+    frp.findString = aQuery;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
+    frp.searchCurrentSheetOnly = false;
+
+    auto search =
+            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
+            {
+                if( item && item->Type() == SCH_SYMBOL_T )
+                {
+                    SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+
+                    // IsPower depends on non-missing lib symbol association
+                    return !sym->IsMissingLibSymbol() && sym->IsPower();
+                }
+
+                return false;
+            };
+
+    FindAll( search );
+
+    return (int) m_hitlist.size();
+}
+
+
+wxString POWER_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCol )
+{
+    SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( aHit.item );
+
+    if( !sym )
+        return wxEmptyString;
+
+    if( aCol == 0 )
+        return sym->GetRef( aHit.sheetPath, true );
+    else if( aCol == 1 )
+        return sym->GetField( VALUE_FIELD )->GetShownText( aHit.sheetPath, false );
+    else if( aCol == 2 )
+        return aHit.sheetPath->GetPageNumber();
+    else if( aCol == 3 )
+        return m_frame->MessageTextFromValue( sym->GetPosition().x );
+    else if( aCol == 4 )
+        return m_frame->MessageTextFromValue( sym->GetPosition().y );
+
+    return wxEmptyString;
+}
+
+
 TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
         SCH_SEARCH_HANDLER( _HKI( "Text" ), aFrame )
 {
