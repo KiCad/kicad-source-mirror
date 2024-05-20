@@ -422,9 +422,10 @@ void SCH_SYMBOL::UpdatePins()
 
 void SCH_SYMBOL::SetBodyStyle( int aBodyStyle )
 {
-    if( m_bodyStyle != aBodyStyle )
+    if( HasAlternateBodyStyle() && m_bodyStyle != aBodyStyle )
     {
-        m_bodyStyle = aBodyStyle;
+        m_bodyStyle = ( m_bodyStyle == BODY_STYLE::BASE ) ? BODY_STYLE::DEMORGAN
+                                                          : BODY_STYLE::BASE;
 
         // The body style may have a different pin layout so the update the pin map.
         UpdatePins();
@@ -2799,6 +2800,32 @@ static struct SCH_SYMBOL_DESC
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Keywords" ),
                     NO_SETTER( SCH_SYMBOL, wxString ), &SCH_SYMBOL::GetKeyWords ),
                     groupFields );
+
+        auto multiUnit =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                        return symbol->IsMulti();
+
+                    return false;
+                };
+
+        auto multiBodyStyle =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                        return symbol->HasAlternateBodyStyle();
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Unit" ),
+                    &SCH_SYMBOL::SetUnitProp, &SCH_SYMBOL::GetUnitProp ) )
+                .SetAvailableFunc( multiUnit );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Body Style" ),
+                    &SCH_SYMBOL::SetBodyStyleProp, &SCH_SYMBOL::GetBodyStyleProp ) )
+                .SetAvailableFunc( multiBodyStyle );
 
         const wxString groupAttributes = _HKI( "Attributes" );
 

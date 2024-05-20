@@ -548,6 +548,29 @@ public:
     {
         SetValueFieldText( aRef );
     }
+    int GetUnitProp() const
+    {
+        return GetUnitSelection( &Schematic()->CurrentSheet() );
+    }
+    void SetUnitProp( int aUnit )
+    {
+        if( aUnit < 1 )
+            return;
+
+        if( aUnit > GetUnitCount() )
+            aUnit = GetUnitCount();
+
+        SetUnitSelection( &Schematic()->CurrentSheet(), aUnit );
+        SetUnit( aUnit );
+    }
+    int GetBodyStyleProp() const
+    {
+        return GetBodyStyle();
+    }
+    void SetBodyStyleProp( int aBodyStyle )
+    {
+        SetBodyStyle( aBodyStyle );
+    }
 
     /**
      * Restore fields to the original library values.
