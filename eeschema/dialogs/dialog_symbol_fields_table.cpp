@@ -2220,6 +2220,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
+            // Don't add power symbols
+            if( !symbol->IsMissingLibSymbol() && symbol->IsPower() )
+                continue;
+
             // Add all fields again in case this symbol has a new one
             for( SCH_FIELD& field : symbol->GetFields() )
                 AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
@@ -2286,6 +2290,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            // Don't add power symbols
+            if( !symbol->IsMissingLibSymbol() && symbol->IsPower() )
+                continue;
 
             // Add all fields again in case this symbol has a new one
             for( SCH_FIELD& field : symbol->GetFields() )
