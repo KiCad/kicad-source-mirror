@@ -656,7 +656,7 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
     }
 
     int dist = 0;
-    int closest_dist = sqrt( closest_dist_sq );
+    SEG::ecoord closest_dist = sqrt( closest_dist_sq );
 
     // Collide arc segments
     for( size_t i = 0; i < ArcCount(); i++ )
