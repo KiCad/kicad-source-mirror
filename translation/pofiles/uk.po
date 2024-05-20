@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-02-27 08:04+0000\n"
+"PO-Revision-Date: 2024-05-21 16:35+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -407,7 +407,7 @@ msgstr "Початковий вид"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Перекреслити у вихідному положенні і масштабі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -1724,9 +1724,8 @@ msgid "Export to Clipboard"
 msgstr "Експорт до буфера обміну"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Показувати ідентифікатори D кодів"
+msgstr "Модифікація за допомогою API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -1987,16 +1986,14 @@ msgid "Additional Contributions By"
 msgstr "Додаткові внески в проект"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Документація"
+msgstr "Команда по документації"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "Розробники бібліотек"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
 msgstr "3D моделі"
 
@@ -2020,9 +2017,8 @@ msgid "Footprints"
 msgstr "Посадкові місця"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Іконка"
+msgstr "Іконки"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -2505,9 +2501,8 @@ msgid "Name:"
 msgstr "Ім’я:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(необов'язково; початковий 0)"
+msgstr "(опціонально)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2596,9 +2591,8 @@ msgid "unit"
 msgstr "одиниці вимірювання"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Посилання:"
+msgstr "Повязано"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
