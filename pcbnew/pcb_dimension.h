@@ -225,6 +225,9 @@ public:
     bool GetKeepTextAligned() const { return m_keepTextAligned; }
     void SetKeepTextAligned( bool aKeepAligned ) { m_keepTextAligned = aKeepAligned; }
 
+    void SetTextAngleDegreesProp( double aDegrees );
+    void SetKeepTextAlignedProp( bool aKeepAligned );
+
     void SetTextPositionMode( DIM_TEXT_POSITION aMode ) { m_textPosition = aMode; }
     DIM_TEXT_POSITION GetTextPositionMode() const { return m_textPosition; }
 

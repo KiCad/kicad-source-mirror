@@ -313,6 +313,22 @@ void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 }
 
 
+void PCB_DIMENSION_BASE::SetTextAngleDegreesProp( const double aDegrees )
+{
+    SetTextAngleDegrees( aDegrees );
+    // Create or repair any knockouts
+    Update();
+}
+
+
+void PCB_DIMENSION_BASE::SetKeepTextAlignedProp( bool aKeepAligned )
+{
+    SetKeepTextAligned( aKeepAligned );
+    // Re-align the text and repair any knockouts
+    Update();
+}
+
+
 void PCB_DIMENSION_BASE::Move( const VECTOR2I& offset )
 {
     PCB_TEXT::Offset( offset );
@@ -1433,6 +1449,8 @@ static struct DIMENSION_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( EDA_TEXT ) );
 
+        propMgr.Mask( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
+
         const wxString groupDimension = _HKI( "Dimension Properties" );
 
         auto isLeader =
@@ -1481,6 +1499,26 @@ static struct DIMENSION_DESC
                 &PCB_DIMENSION_BASE::ChangeSuppressZeroes, &PCB_DIMENSION_BASE::GetSuppressZeroes ),
                 groupDimension )
                 .SetAvailableFunc( isNotLeader );
+
+        const wxString groupText = _HKI( "Text Properties" );
+
+        const auto isTextOrientationWriteable =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    return !static_cast<PCB_DIMENSION_BASE*>( aItem )->GetKeepTextAligned();
+                };
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, bool>( _HKI( "Keep Aligned with Dimension" ),
+                &PCB_DIM_ALIGNED::SetKeepTextAlignedProp,
+                &PCB_DIM_ALIGNED::GetKeepTextAligned ),
+                groupText );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, double>( _HKI( "Orientation" ),
+                &PCB_DIM_ALIGNED::SetTextAngleDegreesProp,
+                &PCB_DIM_ALIGNED::GetTextAngleDegrees,
+                PROPERTY_DISPLAY::PT_DEGREE ),
+                groupText )
+                .SetWriteableFunc( isTextOrientationWriteable );
     }
 } _DIMENSION_DESC;
 
@@ -1691,5 +1729,3 @@ static struct CENTER_DIMENSION_DESC
                                       []( INSPECTABLE* aItem ) { return false; } );
     }
 } CENTER_DIMENSION_DESC;
-
-
