@@ -325,6 +325,14 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 
     pos = GetClampedCoords( pos, COORDS_PADDING );
 
+    if( aEvent.Modifier( MD_CTRL ) && aEvent.Modifier( MD_SHIFT ) )
+    {
+        m_startItem = nullptr;
+        m_startSnapPoint = controls()->GetMousePosition();
+        controls()->ForceCursorPosition( true, m_startSnapPoint );
+        return;
+    }
+
     controls()->ForceCursorPosition( false );
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
