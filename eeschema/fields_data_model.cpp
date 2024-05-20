@@ -53,11 +53,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
 void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol,
                                                                 const wxString&   aFieldName )
 {
-    if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
-    else if( isAttribute( aFieldName ) )
+    if( isAttribute( aFieldName ) )
         m_dataStore[aSymbol.m_Uuid][aFieldName] = getAttributeValue( aSymbol, aFieldName );
-
+    else if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
+        m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
     // Handle fields with variables as names that are not present in the symbol
     // by giving them the correct value
     else if( IsTextVar( aFieldName ) )
