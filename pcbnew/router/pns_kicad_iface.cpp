@@ -1352,9 +1352,14 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
             std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
             if( aItem->GetLayer() == Edge_Cuts || aItem->GetLayer() == Margin )
+            {
                 solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+                solid->SetRoutable( false );
+            }
             else
+            {
                 solid->SetLayer( aItem->GetLayer() );
+            }
 
             if( aItem->GetLayer() == Edge_Cuts )
             {
