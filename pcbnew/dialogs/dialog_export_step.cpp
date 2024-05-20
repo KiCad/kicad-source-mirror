@@ -47,6 +47,7 @@
 #include <widgets/text_ctrl_eval.h>
 #include <wildcards_and_files_ext.h>
 #include <filename_resolver.h>
+#include <settings/settings_manager.h>
 
 
 class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
@@ -299,6 +300,9 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
 {
     wxFileName brdFile = GetBoard()->GetFileName();
 
+    // The project filename (.kicad_pro) of the auto saved board filename, if it is created
+    wxFileName autosaveProjFile;
+
     if( GetScreen()->IsContentModified() || brdFile.GetFullPath().empty() )
     {
         if( !doAutoSave() )
@@ -308,12 +312,26 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
             return;
         }
 
+        wxString autosaveFileName = GetAutoSaveFilePrefix() + brdFile.GetName();
+
+        // Create a dummy .kicad_pro file for this auto saved board file.
+        // this is useful to use some settings (like project path and name)
+        // Because doAutoSave() works, the target directory exists and is writable
+        autosaveProjFile = brdFile;
+        autosaveProjFile.SetName( autosaveFileName );
+        autosaveProjFile.SetExt( "kicad_pro" );
+
         // Use auto-saved board for export
-        brdFile.SetName( GetAutoSaveFilePrefix() + brdFile.GetName() );
+        GetSettingsManager()->SaveProjectCopy( autosaveProjFile.GetFullPath(), GetBoard()->GetProject() );
+        brdFile.SetName( autosaveFileName );
     }
 
     DIALOG_EXPORT_STEP dlg( this, brdFile.GetFullPath() );
     dlg.ShowModal();
+
+    // If a dummy .kicad_pro file is created, delete it now it is useless.
+    if( !autosaveProjFile.GetFullPath().IsEmpty() )
+        wxRemoveFile( autosaveProjFile.GetFullPath() );
 }
 
 
