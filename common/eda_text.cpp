@@ -542,10 +542,13 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
 }
 
 
-void EDA_TEXT::SetupRenderCache( const wxString& aResolvedText, const EDA_ANGLE& aAngle )
+void EDA_TEXT::SetupRenderCache( const wxString& aResolvedText, const KIFONT::FONT* aFont,
+                                 const EDA_ANGLE& aAngle, const VECTOR2I& aOffset )
 {
     m_render_cache_text = aResolvedText;
+    m_render_cache_font = aFont;
     m_render_cache_angle = aAngle;
+    m_render_cache_offset = aOffset;
     m_render_cache.clear();
 }
 
@@ -553,6 +556,7 @@ void EDA_TEXT::SetupRenderCache( const wxString& aResolvedText, const EDA_ANGLE&
 void EDA_TEXT::AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly )
 {
     m_render_cache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( aPoly ) );
+    static_cast<KIFONT::OUTLINE_GLYPH*>( m_render_cache.back().get() )->CacheTriangulation();
 }
 
 

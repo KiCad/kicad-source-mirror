@@ -1591,7 +1591,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
             if( font != wxS( "default" ) )
             {
                 text->SetFont( KIFONT::FONT::GetFont( font ) );
-                //text->SetupRenderCache( text->GetShownText(), EDA_ANGLE( angle, DEGREES_T ) );
+                //text->SetupRenderCache( text->GetShownText(), text->GetFont(), EDA_ANGLE( angle, DEGREES_T ) );
 
                 //text->AddRenderCacheGlyph();
                 // TODO: import geometry cache

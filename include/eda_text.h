@@ -348,7 +348,8 @@ public:
                     const VECTOR2I& aOffset = { 0, 0 } ) const;
 
     // Support for reading the cache from disk.
-    void SetupRenderCache( const wxString& aResolvedText, const EDA_ANGLE& aAngle );
+    void SetupRenderCache( const wxString& aResolvedText, const KIFONT::FONT* aFont,
+                           const EDA_ANGLE& aAngle, const VECTOR2I& aOffset );
     void AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly );
 
     int Compare( const EDA_TEXT* aOther ) const;
