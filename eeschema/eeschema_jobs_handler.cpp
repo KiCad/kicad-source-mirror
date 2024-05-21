@@ -733,7 +733,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
             }
 
             // Get the symbol bounding box to fit the plot page to it
-            BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle, false );
+            BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle, !aSvgJob->m_includeHiddenFields );
             PAGE_INFO pageInfo( PAGE_INFO::Custom );
             pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
             pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
@@ -743,7 +743,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
             plotter->SetPageSettings( pageInfo );
             plotter->SetColorMode( !aSvgJob->m_blackAndWhite );
 
-            VECTOR2I     plot_offset;
+            VECTOR2I     plot_offset = symbolBB.GetCenter();
             const double scale = 1.0;
 
             // Currently, plot units are in decimal
