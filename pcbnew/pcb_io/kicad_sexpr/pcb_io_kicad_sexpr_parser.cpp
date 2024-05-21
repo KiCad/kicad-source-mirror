@@ -640,7 +640,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseRenderCache( EDA_TEXT* text )
     wxString  cacheText = From_UTF8( CurText() );
     EDA_ANGLE cacheAngle( parseDouble( "render cache angle" ), DEGREES_T );
 
-    text->SetupRenderCache( cacheText, cacheAngle );
+    text->SetupRenderCache( cacheText, text->GetFont(), cacheAngle, { 0, 0 } );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
