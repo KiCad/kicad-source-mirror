@@ -122,6 +122,7 @@ void GRID_CELL_LAYER_SELECTOR::Create( wxWindow* aParent, wxWindowID aId,
                     wxDefaultPosition, wxDefaultSize, 0, nullptr,
                     wxCB_READONLY | wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxBORDER_NONE );
 
+    LayerBox()->SetLayersHotkeys( false );
     LayerBox()->SetBoardFrame( m_frame );
     LayerBox()->SetNotAllowedLayerSet( m_mask );
 
