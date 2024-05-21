@@ -353,8 +353,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
             for( PCB_LAYER_ID layer : board->GetEnabledLayers().Seq() )
                 col_size = std::max( col_size, GetTextExtent( board->GetLayerName( layer ) ).x );
 
-            // And the swatch:
-            col_size += 20;
+            // Swatch and gaps:
+            col_size += 26;
         }
 
         if( m_itemsGrid->IsColShown( col ) )
