@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-18 08:01+0000\n"
+"PO-Revision-Date: 2024-05-21 21:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24131,7 +24131,7 @@ msgstr "Radera kolumn"
 #: include/widgets/filedlg_import_non_kicad.h:36
 #, fuzzy
 msgid "Show import issues"
-msgstr "Visa eller dölj %s"
+msgstr "Visa problem med import"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24615,12 +24615,12 @@ msgid "Generate Position File"
 msgstr "Skapa positionsfil"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Giltiga alternativ: front,back,both. Gerber-formatet stödjer bara \"both\"."
+"Giltiga alternativ: front,back,both. Gerber-formatet stödjer bara \"front\" "
+"eller \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -25008,6 +25008,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Ignorerar uppdateringsnotisen för den angivna nya versionen. Ytterligare "
+"uppdateringsnotiser kommer att visas för nyare versioner."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -25018,10 +25020,13 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Stäng denna uppdateringsnotis. Uppdateringsnotisen kommer att visas igen när "
+"du startar KiCad på nytt."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
+#, fuzzy
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Öppna en webläsare och visa"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -25029,7 +25034,7 @@ msgstr "Öppna nedladdningssidan"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Gå till för operativsystemsplattformen tillämplig nedladdningssida."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -39560,9 +39565,9 @@ msgid "%s rounded corners differ."
 msgstr "%s rundade hörn är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s fasade hörn är olika."
+msgstr "%s fasade hörns storlek är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
 #, c-format
@@ -42255,9 +42260,8 @@ msgid "Loading dimension drawings..."
 msgstr "Läser in måttritningar..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade vinkelmåttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
 #, fuzzy
@@ -42270,14 +42274,12 @@ msgid "Ignored Baseline dimension (not yet supported)."
 msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade linjär måttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade radiell måttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -45216,7 +45218,7 @@ msgstr "Skapa från markering"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Resulterande polygon skulle vara tom"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -47570,7 +47572,7 @@ msgstr "Inställningar för ledarlängdsjustering..."
 
 #: pcbnew/tools/pcb_actions.cpp:2478
 msgid "Displays tuning pattern properties dialog"
-msgstr "Visar dialogrutan för längdjusteringsmönstrens egenskaper"
+msgstr "Visar dialogrutan för längdjusteringsmönsters egenskaper"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
