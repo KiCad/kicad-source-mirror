@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-11 18:58+0000\n"
+"PO-Revision-Date: 2024-05-21 21:01+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.4\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -8104,14 +8104,12 @@ msgid "Reset Local Coordinates"
 msgstr "Nollaa Paikalliset Koordinaatit"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "Näytä aina hiusristikot"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Näytä hiusristikko jopa valintatyökalussa"
+msgstr "Näytä hiusristikko, vaikka ei piirretä esineitä"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -10122,14 +10120,12 @@ msgid "Update Options"
 msgstr "Päivitysasetukset"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Päivitä symbolin kentät"
+msgstr "Päivitä symbolin muoto ja nastat"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Päivitä %s jalanjälkisuodattimet arvoon %s."
+msgstr "Päivitä avainsanat ja jalanjälkisuodattimet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10156,9 +10152,8 @@ msgid "Update/reset field visibilities"
 msgstr "Päivitä/Nollaa kentän näkyvyydet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "Päivitä/nollaa kenttien koot ja tyylit"
+msgstr "Päivitä/nollaa kentän tekstin koot ja tyylit"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -10166,9 +10161,8 @@ msgid "Update/reset field positions"
 msgstr "Päivitä/nollaa kenttien sijainnit"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "Päivitä/Nollaa kentän näkyvyydet"
+msgstr "Päivitä/nollaa kentän näkyvyydet nastan nimissä/numeroissa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10652,13 +10646,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Tallenna kaikki digitaaliset tapahtumatiedot"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Jos ei ole asetettu, kirjoita käsky estääksesi digitaalisten "
+"tapahtumatietojen tallentamisen (ei tallenna)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -13570,9 +13566,9 @@ msgid "Rename Field"
 msgstr "Nimeä kenttä uudelleen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "Tiedosto %s on jo olemassa."
+msgstr "Nimikenttä %s on jo olemassa."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
@@ -13604,7 +13600,6 @@ msgid "Unsaved data"
 msgstr "Tallentamaton tieto"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1247
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "Muutokset ovat tallentamatta. Viedäänkö tallentamaton data?"
 
@@ -15103,14 +15098,11 @@ msgstr "Lisää joka tapauksessa"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:846
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1062
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Tämä poistaa olemassa olevat selitteet eikä sitä voi perua."
+"Tämä toiminto nollaa yleisen kirjastotaulukon levyllä, eikä sitä voi kumota."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:915
 msgid ""
@@ -15255,9 +15247,8 @@ msgstr "Poista kirjasto taulukosta"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Valitse kirjasto"
+msgstr "Nollaa kirjastot"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
@@ -15521,9 +15512,9 @@ msgid "Netclass %s is not defined"
 msgstr "Verkkoluokkaa %s ei ole määritetty"
 
 #: eeschema/erc/erc.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Ei voitu muodostaa yhteyttä kohteeseen '%s' "
+msgstr "Neljä kohdetta yhdistetty %d, %d"
 
 #: eeschema/erc/erc.cpp:720
 msgid "Pin with 'no connection' type is connected"
@@ -15642,9 +15633,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "Tarkistetaan verkosta irti olevia anturoita ja johtimia..."
 
 #: eeschema/erc/erc.cpp:1496
-#, fuzzy
 msgid "Checking for four way junctions..."
-msgstr "Tarkastetaan sisäpihan määritelmiä ..."
+msgstr "Tarkistetaan nelisuuntaisia risteyksiä..."
 
 #: eeschema/erc/erc.cpp:1504
 msgid "Checking for undefined netclasses..."
@@ -15691,7 +15681,7 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:79
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "Neljä liitoskohtaa on liitetty yhteen"
 
 #: eeschema/erc/erc_item.cpp:83
 msgid "A pin with a \"no connection\" flag is connected"
@@ -17114,9 +17104,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium kytkentäkaavio tai Integroitu kirjasto"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "Valittu tiedosto ei näytä olevan CADSTAR-osien kirjastotiedosto"
+msgstr "Tiedosto ei näytä olevan CADSTAR-osien kirjastotiedosto"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -20982,7 +20971,7 @@ msgstr "Piilota Symbolipuu"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Focus Symbol Tree Search Field"
-msgstr ""
+msgstr "Kohdista symbolipuun hakukenttä"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Export View as PNG..."
@@ -23123,6 +23112,8 @@ msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
 msgstr ""
+"Näytä vilkkuvat kohteet (kohteet, jotka on piirretty käyttämällä vakio- tai "
+"makroaukkoa) ääriviivatilassa"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -23133,23 +23124,20 @@ msgid "Sketch polygons"
 msgstr "Piirrä monikulmioita"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
-msgstr "Näytä monikulmioita ääriviivatilassa"
+msgstr "Näytä monikulmiokohteet ääriviivatilassa"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
-#, fuzzy
 msgid "Forced Opacity Display Mode"
-msgstr "Tavallisen kontrastin näyttöasetus"
+msgstr "Pakotettu peittävyys näyttötila"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "Peittävyys:"
+msgstr "Pakotettu peittävyys:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "Peittävyys pakotetussa peittävyysnäyttötilassa"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -23908,9 +23896,8 @@ msgid "Show with Forced Opacity Mode"
 msgstr "Näytä otsikkolohko muokkaustilassa"
 
 #: gerbview/tools/gerbview_actions.cpp:235
-#, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "Näytä viivat luonnoksena"
+msgstr "Näytä tasot käyttämällä peittävyysvärin pakotettua tilaa"
 
 #: gerbview/tools/gerbview_actions.cpp:241
 msgid "Show in XOR Mode"
@@ -24122,9 +24109,8 @@ msgid "Delete Column"
 msgstr "Poista sarake"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Näytä tai piilota %s"
+msgstr "Näytä tuontiongelmat"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24615,13 +24601,12 @@ msgid "Generate Position File"
 msgstr "Luo sijaintitiedosto"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Hyväksytyt vaihtoehdot: edessä, takana, molemmat. Gerber-muoto tukee vain "
-"\"molempia\"."
+"Hyväksytyt vaihtoehdot: edestä, takaa, molemmat. Gerber-muoto tukee vain "
+"\"edestä\" tai \"takaa\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -25008,6 +24993,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Jättää huomiotta ilmoitetun uuden version päivitysilmoituksen. Lisää "
+"päivityshuomautuksia näytetään uudemmille versioille."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -25018,10 +25005,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Sulje tämä päivitysilmoitus. Päivitysilmoitus näytetään uudelleen, kun "
+"käynnistät KiCadin uudelleen."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Avaa verkkoselaimen julkaisutiedotussivulle."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -25029,7 +25018,7 @@ msgstr "Avaa lataussivu"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Siirry alustalle sopivalle lataussivulle."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -31814,9 +31803,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "Päivitä tekstin koot, tyylit ja sijainnit"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text content"
-msgstr "Päivitä kentän tekstit"
+msgstr "Päivitä tekstisisältö"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update fabrication attributes"
@@ -31897,9 +31885,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "Päivitä/nollaa tekstin koot, tyylit ja sijainnit"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "Päivitä/nollaa kentän teksti"
+msgstr "Päivitä/nollaa tekstin sisältö"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -33841,9 +33828,8 @@ msgid "Set to specified values:"
 msgstr "Aseta määritettyihin arvoihin:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "Näytettävien suodatin:"
+msgstr "Näkyy  (vain teksti)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -34354,9 +34340,8 @@ msgid "Warning: BGA property is for SMD pads."
 msgstr "Varoitus: BGA ominaisuus on SMD anturoille."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1447
-#, fuzzy
 msgid "Warning: Mechanical property is for PTH pads."
-msgstr "Varoitus: Uritettu ominaisuus on PTH anturoille."
+msgstr "Varoitus: Mekaaninen ominaisuus on PTH-anturoille."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1456
 msgid "Error: Negative corner size."
@@ -38772,7 +38757,7 @@ msgstr "Tunnistamaton kohde ”%s”.| Odotettu lainattu lauseke."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "'kerroksen' avainsana on jo olemassa."
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -39094,7 +39079,7 @@ msgid "%s rounded corners differ."
 msgstr "%s pyöristetyt kulmat eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
 msgstr "%s viistetyt kulmat eroaa."
 
@@ -41400,14 +41385,12 @@ msgid "Castellated pad"
 msgstr "Uritettu antura"
 
 #: pcbnew/pad.cpp:2111
-#, fuzzy
 msgid "Mechanical pad"
-msgstr "Mekaaninen"
+msgstr "Mekaaninen antura"
 
 #: pcbnew/pad.cpp:2129
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "Alku, Loppu, ja yhdistetyt kerrokset"
+msgstr "Edestä, takaa ja yhdistetyt kerrokset"
 
 #: pcbnew/pad.cpp:2169
 msgid "Pad Type"
@@ -41507,9 +41490,8 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Tukahduta lopussa olevat nollat"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Keep Aligned with Dimension"
-msgstr "Pysy kohdistettuna mittasuhteiden mukaan"
+msgstr "Pidä kohdistettuna mittasuhteiden mukaan"
 
 #: pcbnew/pcb_dimension.cpp:1547
 msgid "Crossbar Height"
@@ -41691,12 +41673,12 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6-virrassa on odottamattoman pituinen subrecord 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Altium-kerroksella (%d) ei ole KiCad-vastinetta. Se on siirretty KiCad-"
+"Altium-kerroksella %s ei ole KiCad-vastinetta. Se on siirretty KiCad-"
 "kerrokseen Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:458
@@ -41786,29 +41768,24 @@ msgid "Loading dimension drawings..."
 msgstr "Ladataan piirustuksen mittoja..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu Kulmamitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu Datum-mitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu perusmitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu Lineaarinen mitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu säteittäsmitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -43307,14 +43284,15 @@ msgid "P-Cad 200x ASCII PCB files"
 msgstr "P-Cad 200x ASCII PCB tiedostot"
 
 #: pcbnew/pcb_io/pcb_io.cpp:121
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported.\n"
 "To load all footprints, add it as a library using Preferences -> Manage "
 "Footprint Libraries..."
 msgstr ""
-"Valittu tiedosto sisältää useita jalanjälkiä. Vain ensimmäinen tuodaan."
+"Valittu tiedosto sisältää useita jalanjälkiä. Vain ensimmäinen tuodaan.\n"
+"Lataa kaikki jalanjäljet lisäämällä se kirjastoksi valitsemalla Asetukset -> "
+"Hallitse jalanjälkikirjastoja..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:181
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -44746,7 +44724,7 @@ msgstr "Luo Valinnasta"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Tuloksena oleva polygoni olisi tyhjä"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -44999,18 +44977,16 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Niiden laajentamiseksi on valittava täsmälleen kaksi riviä."
 
 #: pcbnew/tools/edit_tool.cpp:1509
-#, fuzzy
 msgid "Simplify Shapes"
-msgstr "Monimutkainen Muoto"
+msgstr "Yksinkertaista muotoja"
 
 #: pcbnew/tools/edit_tool.cpp:1509 pcbnew/tools/edit_tool.cpp:1578
 msgid "Tolerance value:"
 msgstr "Toleranssiarvo:"
 
 #: pcbnew/tools/edit_tool.cpp:1543 pcbnew/tools/pcb_actions.cpp:628
-#, fuzzy
 msgid "Simplify Polygons"
-msgstr "Yksinkertaistetaan monikulmioita F_Cu-tasolla"
+msgstr "Yksinkertaista monikulmiot"
 
 #: pcbnew/tools/edit_tool.cpp:1578 pcbnew/tools/edit_tool.cpp:1615
 #: pcbnew/tools/pcb_actions.cpp:634
@@ -45638,7 +45614,7 @@ msgstr "Leikkaa kulmat pois valittujen viivojen välistä"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Yksinkertaista monikulmion ääriviivoja poistamalla tarpeettomat pisteet"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid ""
@@ -45692,9 +45668,8 @@ msgid "Hide Footprint Tree"
 msgstr "Piilota Jalanjälkipuu"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Focus the Footprint Tree Search Field"
-msgstr "Kierrä kenttää"
+msgstr "Keskitä Jalanjälkipuu-hakukenttä"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "New Footprint..."
@@ -46673,56 +46648,52 @@ msgstr ""
 "Tasaa valitut kohteet kohdistimen alla olevan kohteen vaakasuoraan keskelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "Levitä Vaakasuorassa"
+msgstr "Jaa vaakasuunnassa keskuksien mukaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1949
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
 msgstr ""
 "Jakaa valitut kohteet vasemmanpuoleisimman ja oikeanpuoleisimman kohteen "
-"kesken"
+"kesken niin, että kohdekeskukset jakautuvat tasaisesti"
 
 #: pcbnew/tools/pcb_actions.cpp:1956
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "Levitä Vaakasuorassa"
+msgstr "Levitä vaakasuoraan tasaisin välein"
 
 #: pcbnew/tools/pcb_actions.cpp:1957
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
 msgstr ""
 "Jakaa valitut kohteet vasemmanpuoleisimman ja oikeanpuoleisimman kohteen "
-"kesken"
+"kesken niin, että kohteiden väliset raot ovat yhtä suuret"
 
 #: pcbnew/tools/pcb_actions.cpp:1964
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "Levitä Pystysuunnassa"
+msgstr "Levitä pystysuunnassa tasaisin välein"
 
 #: pcbnew/tools/pcb_actions.cpp:1965
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
-msgstr "Jakaa valitut kohteet ylimmän ja alimman kohteen välillä"
+msgstr ""
+"Jakaa valitut kohteet ylimmän ja alimman kohteen välillä siten, että "
+"kohteiden välit ovat yhtä suuret"
 
 #: pcbnew/tools/pcb_actions.cpp:1972
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "Levitä Pystysuunnassa"
+msgstr "Jaa pystysuunnassa keskuksien mukaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1973
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
-msgstr "Jakaa valitut kohteet ylimmän ja alimman kohteen välillä"
+msgstr ""
+"Jakaa valitut kohteet ylimmän ja alimman kohteen kesken siten, että kohteen "
+"keskipisteet jakautuvat tasaisesti"
 
 #: pcbnew/tools/pcb_actions.cpp:1988
 msgid "Create a corner"
@@ -47112,7 +47083,7 @@ msgstr "Pituudensäätöasetukset ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2478
 msgid "Displays tuning pattern properties dialog"
-msgstr "Näyttää virityskuvion ominaisuuksien valintaikkunan"
+msgstr "Näyttää virityskuvion ominaisuusikkunan"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
