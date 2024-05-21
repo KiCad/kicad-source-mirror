@@ -24,10 +24,10 @@
  */
 
 #include <core/kicad_algo.h>
-#include <geometry/circle.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape_arc.h>
+#include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
@@ -243,11 +243,25 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndCenter( const VECTOR2I& aStart, const
 
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
-    if( aSeg.A == aSeg.B )
-        return Collide( aSeg.A, aClearance, aActual, aLocation );
-
     VECTOR2I center = GetCenter();
-    CIRCLE   circle( center, GetRadius() );
+    double   radius = ( center - m_start ).EuclideanNorm();
+    SHAPE_CIRCLE circle( center, radius );
+    ecoord   clearance_sq = SEG::Square( aClearance );
+
+    // Circle or at least an arc with less space remaining than the clearance
+    if( GetCentralAngle().AsDegrees() > 180.0
+        && ( m_start - m_end ).SquaredEuclideanNorm() < clearance_sq )
+    {
+        ecoord   a_dist_sq = ( aSeg.A - center ).SquaredEuclideanNorm();
+        ecoord   b_dist_sq = ( aSeg.B - center ).SquaredEuclideanNorm();
+        ecoord   radius_sq = SEG::Square( radius - aClearance );
+
+        if( a_dist_sq < radius_sq && b_dist_sq < radius_sq )
+            return false;
+
+
+        return circle.Collide( aSeg, aClearance, aActual, aLocation );
+    }
 
     // Possible points of the collision are:
     // 1. Intersetion of the segment with the full circle
@@ -255,7 +269,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     // 3. Closest point on the segment to the end points of the arc
     // 4. End points of the segment
 
-    std::vector<VECTOR2I> candidatePts = circle.Intersect( aSeg );
+    std::vector<VECTOR2I> candidatePts = circle.GetCircle().Intersect( aSeg );
 
     candidatePts.push_back( aSeg.NearestPoint( center ) );
     candidatePts.push_back( aSeg.NearestPoint( m_start ) );
@@ -421,16 +435,24 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
     if( !bbox.Contains( aP ) )
         return false;
 
-    CIRCLE   fullCircle( GetCenter(), GetRadius() );
-    VECTOR2I nearestPt = fullCircle.NearestPoint( aP );
+    VECTOR2I  center = GetCenter();
+    double    radius = ( center - m_start ).EuclideanNorm();
+    CIRCLE    fullCircle( center, radius );
+    VECTOR2I  nearestPt = fullCircle.NearestPoint( aP );
+    int       dist = ( nearestPt - aP ).EuclideanNorm();
+    EDA_ANGLE angleToPt( aP - fullCircle.Center ); // Angle from center to the point
 
-    int dist = ( nearestPt - aP ).EuclideanNorm();
+    if( !dist )
+    {
+        dist = radius - ( aP - center ).EuclideanNorm();
+        nearestPt = center + VECTOR2I( radius, 0 );
+        RotatePoint( nearestPt, center, angleToPt );
+    }
 
     // If not a 360 degree arc, need to use arc angles to decide if point collides
     if( m_start != m_end )
     {
         bool   ccw = GetCentralAngle() > ANGLE_0;
-        EDA_ANGLE angleToPt( aP - fullCircle.Center ); // Angle from center to the point
         EDA_ANGLE rotatedPtAngle = ( angleToPt.Normalize() - GetStartAngle() ).Normalize();
         EDA_ANGLE rotatedEndAngle = ( GetEndAngle() - GetStartAngle() ).Normalize();
 
@@ -439,7 +461,17 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
         {
             int distStartpt = ( aP - m_start ).EuclideanNorm();
             int distEndpt = ( aP - m_end ).EuclideanNorm();
-            dist = std::min( distStartpt, distEndpt );
+
+            if( distStartpt < distEndpt )
+            {
+                dist = distStartpt;
+                nearestPt = m_start;
+            }
+            else
+            {
+                dist = distEndpt;
+                nearestPt = m_end;
+            }
         }
     }
 
