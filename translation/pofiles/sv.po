@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-04-28 03:51+0000\n"
+"PO-Revision-Date: 2024-05-21 21:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.1\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -23153,7 +23153,7 @@ msgstr "Lämna oförändrad"
 #: include/widgets/filedlg_import_non_kicad.h:36
 #, fuzzy
 msgid "Show import issues"
-msgstr "Visa eller dölj %s"
+msgstr "Visa problem med import"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23620,12 +23620,12 @@ msgid "Generate Position File"
 msgstr "Skapa positionsfil"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Giltiga alternativ: front,back,both. Gerber-formatet stödjer bara \"both\"."
+"Giltiga alternativ: front,back,both. Gerber-formatet stödjer bara \"front\" "
+"eller \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -23922,6 +23922,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Ignorerar uppdateringsnotisen för den angivna nya versionen. Ytterligare "
+"uppdateringsnotiser kommer att visas för nyare versioner."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -23932,10 +23934,13 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Stäng denna uppdateringsnotis. Uppdateringsnotisen kommer att visas igen när "
+"du startar KiCad på nytt."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
+#, fuzzy
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Öppna en webläsare och visa"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -23943,7 +23948,7 @@ msgstr "Öppna nedladdningssidan"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Gå till för operativsystemsplattformen tillämplig nedladdningssida."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -38499,9 +38504,9 @@ msgid "%s rounded corners differ."
 msgstr "%s rundade hörn är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s fasade hörn är olika."
+msgstr "%s fasade hörns storlek är olika."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39190,7 +39195,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Aktuellt mönsterkort kommer att stängas. Vill du fortsätta?"
 
 #: pcbnew/files.cpp:492
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39198,11 +39202,11 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Om zonerna på det här mönsterkortet återfylls kommer inställningen för "
-"koppar till kant-avstånd att användas (se Mönsterkortsinställningar > "
-"Designregler > Begränsningar).\n"
-"Detta kan resultera i fyllningar som skiljer sig från tidigare Kicad-"
-"versioner som använde linjetjockleken för mönsterkortskanten på Edge Cuts-"
-"lagret."
+"frigång koppar till mönsterkortskant att användas (se "
+"Mönsterkortsinställningar > Designregler > Begränsningar).\n"
+"Detta kan resultera i fyllningar som skiljer sig från motsvarande i tidigare "
+"Kicad-versioner, som använde linjetjockleken för mönsterkortskanten på Edge "
+"Cuts-lagret."
 
 #: pcbnew/files.cpp:538
 #, c-format
@@ -39841,9 +39845,8 @@ msgstr "Ställ in"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Välj ett värde att ställa in"
+msgstr "Välj först en ledare att justera längden på."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -41132,9 +41135,8 @@ msgid "Loading dimension drawings..."
 msgstr "Läser in måttritningar..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade vinkelmåttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
 #, fuzzy
@@ -41147,14 +41149,12 @@ msgid "Ignored Baseline dimension (not yet supported)."
 msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade linjär måttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade radiell måttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -44102,7 +44102,7 @@ msgstr "Skapa från markering"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Resulterande polygon skulle vara tom"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -46415,9 +46415,8 @@ msgid "Length Tuning Settings..."
 msgstr "Inställningar för ledarlängdsjustering..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Visar dialogrutan för objektegenskaper"
+msgstr "Visar dialogrutan för längdjusteringsmönsters egenskaper"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
