@@ -64,13 +64,24 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize
 }
 
 
-const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalkaroundThickness )
+const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aArc, int aClearance, int aWalkaroundThickness )
 {
-    int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2
-            + SHAPE_ARC::DefaultAccuracyForPCB();
+    int cl = aClearance + ( aWalkaroundThickness + 1 ) / 2;
+
+    // If we can't route through the arc, we might as well treat it as a circle
+    if( aArc.GetCentralAngle().AsDegrees() > 180.0 && aArc.GetChord().Length() < cl )
+    {
+        int r = aArc.GetRadius();
+        return OctagonalHull( aArc.GetCenter() - VECTOR2I( r, r ),
+                              VECTOR2I( 2 * r, 2 * r ),
+                              cl,
+                              2.0 * ( 1.0 - M_SQRT1_2 ) * ( r + cl ) );
+    }
+
+    int d = aArc.GetWidth() / 2 + cl + SHAPE_ARC::DefaultAccuracyForPCB();
     int x = (int) ( 2.0 / ( 1.0 + M_SQRT2 ) * d ) / 2;
 
-    auto line = aSeg.ConvertToPolyline();
+    auto line = aArc.ConvertToPolyline( ARC_LOW_DEF );
 
     SHAPE_LINE_CHAIN s;
     s.SetClosed( true );
@@ -134,7 +145,6 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalk
         s.Append( reverse_line[i] );
 
     // make sure the hull outline is always clockwise
-    // make sure the hull outline is always clockwise
     if( s.CSegment( 0 ).Side( line.Segment( 0 ).A ) < 0 )
         return s.Reverse();
     else
@@ -148,10 +158,10 @@ static bool IsSegment45Degree( const SEG& aS )
 
     if( std::abs( dir.x ) <= 1 )
         return true;
-    
+
     if( std::abs( dir.y ) <= 1 )
         return true;
-    
+
     int delta = std::abs(dir.x) - std::abs(dir.y);
 
     if( delta >= -1 && delta <= 1)
