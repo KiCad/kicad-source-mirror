@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-05-13 00:01+0000\n"
+"PO-Revision-Date: 2024-05-21 21:01+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.4\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -23154,9 +23154,8 @@ msgid "Leave unchanged"
 msgstr "Jätä muuttamatta"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Näytä tai piilota %s"
+msgstr "Näytä tuontiongelmat"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23628,13 +23627,12 @@ msgid "Generate Position File"
 msgstr "Luo sijaintitiedosto"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Hyväksytyt vaihtoehdot: edessä, takana, molemmat. Gerber-muoto tukee vain "
-"\"molempia\"."
+"Hyväksytyt vaihtoehdot: edestä, takaa, molemmat. Gerber-muoto tukee vain "
+"\"edestä\" tai \"takaa\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -23930,6 +23928,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Jättää huomiotta ilmoitetun uuden version päivitysilmoituksen. Lisää "
+"päivityshuomautuksia näytetään uudemmille versioille."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -23940,10 +23940,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Sulje tämä päivitysilmoitus. Päivitysilmoitus näytetään uudelleen, kun "
+"käynnistät KiCadin uudelleen."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Avaa verkkoselaimen julkaisutiedotussivulle."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -23951,7 +23953,7 @@ msgstr "Avaa lataussivu"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Siirry alustalle sopivalle lataussivulle."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -38044,7 +38046,7 @@ msgid "%s rounded corners differ."
 msgstr "%s pyöristetyt kulmat eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
 msgstr "%s viistetyt kulmat eroaa."
 
@@ -39383,9 +39385,8 @@ msgstr "Virittää"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Valitse viritettävä arvo"
+msgstr "Valitse ensin viritettävä johdinraita."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -40672,29 +40673,24 @@ msgid "Loading dimension drawings..."
 msgstr "Ladataan piirustuksen mittoja..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu Kulmamitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu Datum-mitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu perusmitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu Lineaarinen mitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Mitta tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr "Ohitettu säteittäsmitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -43639,7 +43635,7 @@ msgstr "Luo Valinnasta"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Tuloksena oleva polygoni olisi tyhjä"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -45963,9 +45959,8 @@ msgid "Length Tuning Settings..."
 msgstr "Pituudensäätöasetukset ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Näyttää kohteen ominaisuudet -valintaikkunan"
+msgstr "Näyttää virityskuvion ominaisuusikkunan"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
