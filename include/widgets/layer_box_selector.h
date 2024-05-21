@@ -81,9 +81,6 @@ public:
     // Virtual pure function because GerbView uses its own functions in a derived class
     virtual void Resync() = 0;
 
-    // Reload the Layers bitmaps colors
-    void ResyncBitmapOnly();
-
 private:
 #ifdef __WXMAC__
     void onKeyDown( wxKeyEvent& aEvent );

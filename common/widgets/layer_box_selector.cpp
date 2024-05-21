@@ -80,9 +80,6 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const w
         wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),
         LAYER_SELECTOR()
 {
-    if( choices != nullptr )
-        ResyncBitmapOnly();
-
 #ifdef __WXMAC__
     GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ),
                           nullptr, this );
@@ -129,19 +126,6 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
     // Not Found
     SetSelection( -1 );
     return -1;
-}
-
-
-void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
-{
-    DPI_SCALING_COMMON dpi( nullptr, this );
-    int size = static_cast<int>( dpi.GetScaleFactor() * 14 );
-
-    for( int i = 0; i < (int) GetCount(); ++i )
-    {
-        wxBitmap layerbmp( size, size );
-        DrawColorSwatch( layerbmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( i ) );
-    }
 }
 
 
