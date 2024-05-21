@@ -49,9 +49,9 @@ namespace Clipper2Lib
 
   // error codes (2^n)
   const int precision_error_i   = 1;  // non-fatal
-  const int scale_error_i       = 2;  // non-fatal 
-  const int non_pair_error_i    = 4;  // non-fatal 
-  const int undefined_error_i   = 32; // fatal 
+  const int scale_error_i       = 2;  // non-fatal
+  const int non_pair_error_i    = 4;  // non-fatal
+  const int undefined_error_i   = 32; // fatal
   const int range_error_i       = 64;
 
 #ifndef PI
@@ -136,7 +136,7 @@ namespace Clipper2Lib
     }
 
     template <typename T2>
-    explicit Point<T>(const Point<T2>& p)
+    explicit Point(const Point<T2>& p)
     {
       Init(p.x, p.y, p.z);
     }
@@ -178,7 +178,7 @@ namespace Clipper2Lib
     Point(const T2 x_, const T2 y_) { Init(x_, y_); }
 
     template <typename T2>
-    explicit Point<T>(const Point<T2>& p) { Init(p.x, p.y); }
+    explicit Point(const Point<T2>& p) { Init(p.x, p.y); }
 
     Point operator * (const double scale) const
     {
@@ -327,7 +327,7 @@ namespace Clipper2Lib
     };
 
     bool operator==(const Rect<T>& other) const {
-      return left == other.left && right == other.right && 
+      return left == other.left && right == other.right &&
         top == other.top && bottom == other.bottom;
     }
 
@@ -361,8 +361,8 @@ namespace Clipper2Lib
   }
 
   static const Rect64 InvalidRect64 = Rect64(
-    (std::numeric_limits<int64_t>::max)(), 
-    (std::numeric_limits<int64_t>::max)(), 
+    (std::numeric_limits<int64_t>::max)(),
+    (std::numeric_limits<int64_t>::max)(),
     (std::numeric_limits<int64_t>::lowest)(),
     (std::numeric_limits<int64_t>::lowest)());
   static const RectD InvalidRectD = RectD(
@@ -429,7 +429,7 @@ namespace Clipper2Lib
 
 
   template <typename T1, typename T2>
-  inline Path<T1> ScalePath(const Path<T2>& path, 
+  inline Path<T1> ScalePath(const Path<T2>& path,
     double scale_x, double scale_y, int& error_code)
   {
     Path<T1> result;
@@ -445,11 +445,11 @@ namespace Clipper2Lib
     result.reserve(path.size());
 #ifdef USINGZ
     std::transform(path.begin(), path.end(), back_inserter(result),
-      [scale_x, scale_y](const auto& pt) 
+      [scale_x, scale_y](const auto& pt)
       { return Point<T1>(pt.x * scale_x, pt.y * scale_y, pt.z); });
 #else
     std::transform(path.begin(), path.end(), back_inserter(result),
-      [scale_x, scale_y](const auto& pt) 
+      [scale_x, scale_y](const auto& pt)
       { return Point<T1>(pt.x * scale_x, pt.y * scale_y); });
 #endif
     return result;
@@ -463,7 +463,7 @@ namespace Clipper2Lib
   }
 
   template <typename T1, typename T2>
-  inline Paths<T1> ScalePaths(const Paths<T2>& paths, 
+  inline Paths<T1> ScalePaths(const Paths<T2>& paths,
     double scale_x, double scale_y, int& error_code)
   {
     Paths<T1> result;
@@ -476,7 +476,7 @@ namespace Clipper2Lib
         (r.right * scale_x) > max_coord ||
         (r.top * scale_y) < min_coord ||
         (r.bottom * scale_y) > max_coord)
-      { 
+      {
         error_code |= range_error_i;
         DoError(range_error_i);
         return result; // empty path
@@ -491,7 +491,7 @@ namespace Clipper2Lib
   }
 
   template <typename T1, typename T2>
-  inline Paths<T1> ScalePaths(const Paths<T2>& paths, 
+  inline Paths<T1> ScalePaths(const Paths<T2>& paths,
     double scale, int& error_code)
   {
     return ScalePaths<T1, T2>(paths, scale, scale, error_code);
@@ -679,16 +679,16 @@ namespace Clipper2Lib
   template <typename T>
   inline bool IsPositive(const Path<T>& poly)
   {
-    // A curve has positive orientation [and area] if a region 'R' 
+    // A curve has positive orientation [and area] if a region 'R'
     // is on the left when traveling around the outside of 'R'.
     //https://mathworld.wolfram.com/CurveOrientation.html
     //nb: This statement is premised on using Cartesian coordinates
     return Area<T>(poly) >= 0;
   }
-  
+
   inline bool GetIntersectPoint(const Point64& ln1a, const Point64& ln1b,
     const Point64& ln2a, const Point64& ln2b, Point64& ip)
-  {  
+  {
     // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
     double dx1 = static_cast<double>(ln1b.x - ln1a.x);
     double dy1 = static_cast<double>(ln1b.y - ln1a.y);
@@ -768,7 +768,7 @@ namespace Clipper2Lib
       return PointInPolygonResult::IsOutside;
 
     bool is_above = first->y < pt.y, starting_above = is_above;
-    curr = first +1; 
+    curr = first +1;
     while (true)
     {
       if (curr == cend)
@@ -777,7 +777,7 @@ namespace Clipper2Lib
         cend = first;
         curr = cbegin;
       }
-      
+
       if (is_above)
       {
         while (curr != cend && curr->y < pt.y) ++curr;
@@ -789,14 +789,14 @@ namespace Clipper2Lib
         if (curr == cend) continue;
       }
 
-      if (curr == cbegin) 
+      if (curr == cbegin)
         prev = polygon.cend() - 1; //nb: NOT cend (since might equal first)
-      else  
+      else
         prev = curr - 1;
 
       if (curr->y == pt.y)
       {
-        if (curr->x == pt.x || 
+        if (curr->x == pt.x ||
           (curr->y == prev->y &&
             ((pt.x < prev->x) != (pt.x < curr->x))))
               return PointInPolygonResult::IsOn;
@@ -820,7 +820,7 @@ namespace Clipper2Lib
       is_above = !is_above;
       ++curr;
     }
-    
+
     if (is_above != starting_above)
     {
       cend = polygon.cend();
