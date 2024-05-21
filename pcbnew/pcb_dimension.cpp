@@ -313,7 +313,7 @@ void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 }
 
 
-void PCB_DIMENSION_BASE::SetTextAngleDegreesProp( const double aDegrees )
+void PCB_DIMENSION_BASE::SetTextAngleDegreesProp( double aDegrees )
 {
     SetTextAngleDegrees( aDegrees );
     // Create or repair any knockouts
