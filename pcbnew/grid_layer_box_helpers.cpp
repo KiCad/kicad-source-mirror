@@ -76,7 +76,9 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     LAYER_SELECTOR::DrawColorSwatch( bitmap,
                                      cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
                                      cs->GetColor( ToLAYER_ID( value ) ) );
-    aDC.DrawBitmap( bitmap, rect.GetLeft() + 4, rect.GetTop() + 3, true );
+
+    aDC.DrawBitmap( bitmap, rect.GetLeft() + 4,
+                    rect.GetTop() + ( rect.GetHeight() - bitmap.GetHeight() ) / 2, true );
 
     // draw the text
     PCB_LAYER_ID layer = ToLAYER_ID( value );
