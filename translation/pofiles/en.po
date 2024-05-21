@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-26 19:52-0700\n"
+"POT-Creation-Date: 2024-05-21 09:37-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5781,9 +5781,6 @@ msgstr "Filter footprint list by library"
 
 msgid "Delete all associations?"
 msgstr "Delete all associations?"
-
-msgid "Unable to create the footprint viewer frame"
-msgstr "Unable to create the footprint viewer frame"
 
 msgid "Delete Annotation"
 msgstr "Delete Annotation"
@@ -12102,9 +12099,6 @@ msgstr "Do not show this message again."
 msgid "Create New Sheet"
 msgstr "Create New Sheet"
 
-msgid "Discard New Sheet"
-msgstr "Discard New Sheet"
-
 msgid "Dimension of matrices should be >= 1."
 msgstr "Dimension of matrices should be >= 1."
 
@@ -15742,6 +15736,9 @@ msgstr "Reset all hotkeys to the built-in KiCad defaults"
 msgid "Leave unchanged"
 msgstr "Leave unchanged"
 
+msgid "Show import issues"
+msgstr "Show import issues"
+
 msgid "Reset all settings on this page to their default"
 msgstr "Reset all settings on this page to their default"
 
@@ -16075,8 +16072,12 @@ msgstr ""
 msgid "Generate Position File"
 msgstr "Generate Position File"
 
-msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
-msgstr "Valid options: front,back,both. Gerber format only supports \"both\"."
+msgid ""
+"Valid options: front,back,both. Gerber format only supports \"front\" or "
+"\"back\"."
+msgstr ""
+"Valid options: front,back,both. Gerber format only supports \"front\" or "
+"\"back\"."
 
 msgid "Valid options: ascii,csv,gerber"
 msgstr "Valid options: ascii,csv,gerber"
@@ -16293,11 +16294,31 @@ msgstr "A new version of KiCad is available!"
 msgid "Skip this version"
 msgstr "Skip this version"
 
+msgid ""
+"Ignores the update notice for the announced new version. Additional update "
+"notes will be displayed for newer versions."
+msgstr ""
+"Ignores the update notice for the announced new version. Additional update "
+"notes will be displayed for newer versions."
+
 msgid "Remind me later"
 msgstr "Remind me later"
 
+msgid ""
+"Close this update notice. The update notice will be shown again when you "
+"relaunch KiCad."
+msgstr ""
+"Close this update notice. The update notice will be shown again when you "
+"relaunch KiCad."
+
+msgid "Launch a web browser to the release announcements page."
+msgstr "Launch a web browser to the release announcements page."
+
 msgid "Open Downloads Page"
 msgstr "Open Downloads Page"
+
+msgid "Go to the platform appropriate downloads page."
+msgstr "Go to the platform appropriate downloads page."
 
 msgid "Update Available"
 msgstr "Update Available"
@@ -27020,6 +27041,10 @@ msgid "%s rounded corners differ."
 msgstr "%s rounded corners differ."
 
 #, c-format
+msgid "%s chamfered corner sizes differ."
+msgstr "%s chamfered corner sizes differ."
+
+#, c-format
 msgid "%s chamfered corners differ."
 msgstr "%s chamfered corners differ."
 
@@ -28039,6 +28064,9 @@ msgstr "Unable to tune segments inside other tuning patterns."
 msgid "Tune"
 msgstr "Tune"
 
+msgid "Select a track to tune first."
+msgstr "Select a track to tune first."
+
 msgid "Single track"
 msgstr "Single track"
 
@@ -28586,10 +28614,6 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Total warnings: %d, errors: %d."
 
 #, c-format
-msgid "Cannot find component with ref '%s' in netlist."
-msgstr "Cannot find component with ref '%s' in netlist."
-
-#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -29034,6 +29058,21 @@ msgstr ""
 
 msgid "Loading dimension drawings..."
 msgstr "Loading dimension drawings..."
+
+msgid "Ignored Angular dimension (not yet supported)."
+msgstr "Ignored Angular dimension (not yet supported)."
+
+msgid "Ignored Datum dimension (not yet supported)."
+msgstr "Ignored Datum dimension (not yet supported)."
+
+msgid "Ignored Baseline dimension (not yet supported)."
+msgstr "Ignored Baseline dimension (not yet supported)."
+
+msgid "Ignored Linear dimension (not yet supported)."
+msgstr "Ignored Linear dimension (not yet supported)."
+
+msgid "Ignored Radial dimension (not yet supported)."
+msgstr "Ignored Radial dimension (not yet supported)."
 
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
@@ -31319,11 +31358,14 @@ msgstr "Copy line width of first object"
 msgid "Create from Selection"
 msgstr "Create from Selection"
 
-msgid "Could not convert selection"
-msgstr "Could not convert selection"
+msgid "Resulting polygon would be empty"
+msgstr "Resulting polygon would be empty"
 
 msgid "Objects must form a closed shape"
 msgstr "Objects must form a closed shape"
+
+msgid "Could not convert selection"
+msgstr "Could not convert selection"
 
 msgid "Convert to Polygon"
 msgstr "Convert to Polygon"
@@ -33050,6 +33092,12 @@ msgstr "Generators Manager"
 msgid "Show a manager dialog for Generator objects"
 msgstr "Show a manager dialog for Generator objects"
 
+msgid "Length Tuning Settings..."
+msgstr "Length Tuning Settings…"
+
+msgid "Displays tuning pattern properties dialog"
+msgstr "Displays tuning pattern properties dialog"
+
 msgid "Don't show again"
 msgstr "Don't show again"
 
@@ -33968,6 +34016,21 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Unable to create the footprint viewer frame"
+#~ msgstr "Unable to create the footprint viewer frame"
+
+#~ msgid "Discard New Sheet"
+#~ msgstr "Discard New Sheet"
+
+#~ msgid ""
+#~ "Valid options: front,back,both. Gerber format only supports \"both\"."
+#~ msgstr ""
+#~ "Valid options: front,back,both. Gerber format only supports \"both\"."
+
+#, c-format
+#~ msgid "Cannot find component with ref '%s' in netlist."
+#~ msgstr "Cannot find component with ref '%s' in netlist."
 
 #~ msgid ""
 #~ "If the zones on this board are refilled the Copper Edge Clearance setting "
@@ -37925,9 +37988,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Add bitmap image"
 #~ msgstr "Add bitmap image"
-
-#~ msgid "Length Tuning Settings..."
-#~ msgstr "Length Tuning Settings…"
 
 #~ msgid "Sets the length tuning parameters for currently routed item."
 #~ msgstr "Sets the length tuning parameters for currently routed item."
