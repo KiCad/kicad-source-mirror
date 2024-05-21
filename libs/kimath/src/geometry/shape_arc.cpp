@@ -444,7 +444,9 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
 
     if( !dist )
     {
-        dist = radius - ( aP - center ).EuclideanNorm();
+        // Be sure to keep the sqrt of the squared distance instead of allowing a EuclideanNorm
+        // because this trucates the distance to an integer before subtracting
+        dist = KiROUND( radius - sqrt( ( aP - center ).SquaredEuclideanNorm() ) );
         nearestPt = center + VECTOR2I( radius, 0 );
         RotatePoint( nearestPt, center, angleToPt );
     }
