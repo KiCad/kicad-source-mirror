@@ -225,6 +225,7 @@ public:
     bool GetKeepTextAligned() const { return m_keepTextAligned; }
     void SetKeepTextAligned( bool aKeepAligned ) { m_keepTextAligned = aKeepAligned; }
 
+    double GetTextAngleDegreesProp() const { return GetTextAngleDegrees(); }
     void SetTextAngleDegreesProp( double aDegrees );
     void SetKeepTextAlignedProp( bool aKeepAligned );
 

@@ -1513,12 +1513,12 @@ static struct DIMENSION_DESC
                 &PCB_DIMENSION_BASE::GetKeepTextAligned ),
                 groupText );
 
-        // propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, double>( _HKI( "Orientation" ),
-        //         &PCB_DIMENSION_BASE::SetTextAngleDegreesProp,
-        //         &PCB_DIMENSION_BASE::GetTextAngleDegrees,
-        //         PROPERTY_DISPLAY::PT_DEGREE ),
-        //         groupText )
-        //         .SetWriteableFunc( isTextOrientationWriteable );
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, double>( _HKI( "Orientation" ),
+                &PCB_DIMENSION_BASE::SetTextAngleDegreesProp,
+                &PCB_DIMENSION_BASE::GetTextAngleDegreesProp,
+                PROPERTY_DISPLAY::PT_DEGREE ),
+                groupText )
+                .SetWriteableFunc( isTextOrientationWriteable );
     }
 } _DIMENSION_DESC;
 
