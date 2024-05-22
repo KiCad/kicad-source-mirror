@@ -760,14 +760,14 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                             DRC_CONSTRAINT c = m_drcEngine->EvalRules( CONNECTION_WIDTH_CONSTRAINT,
                                                                        item1, item2, aLayer );
 
-                            if( c.Value().Min() == aMinWidth )
+                            if( c.Value().Min() == aMinWidth + board->GetDesignSettings().GetDRCEpsilon() )
                             {
                                 auto     drce = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
                                 wxString msg;
 
                                 msg = formatMsg( _( "(%s minimum connection width %s; actual %s)" ),
                                                  c.GetName(),
-                                                 aMinWidth,
+                                                 c.Value().Min(),
                                                  dist );
 
                                 msg += wxS( " " ) + layerDesc( aLayer );
