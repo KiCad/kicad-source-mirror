@@ -428,7 +428,7 @@ public:
      */
     CONNECTION_SUBGRAPH* FindFirstSubgraphByName( const wxString& aNetName );
 
-    CONNECTION_SUBGRAPH* GetSubgraphForItem( SCH_ITEM* aItem );
+    CONNECTION_SUBGRAPH* GetSubgraphForItem( SCH_ITEM* aItem ) const;
 
     const std::vector<CONNECTION_SUBGRAPH*> GetAllSubgraphs( const wxString& aNetName ) const;
 
