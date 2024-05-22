@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney at ieee dot org>
- * Copyright (C) 2020-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,6 +134,9 @@ protected:
     void OnLeftButtonUp( wxMouseEvent& aEvent );
     void OnLeftButtonDown( wxMouseEvent& aEvent );
     void OnPaint( wxPaintEvent& aEvent );
+    void OnDPIChanged( wxDPIChangedEvent& aEvent );
+
+    virtual wxSize DoGetBestSize() const override;
 
     void setFlag( int aFlag )
     {
