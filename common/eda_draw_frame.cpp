@@ -118,7 +118,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
                                                 // BLACK for Pcbnew, BLACK or WHITE for Eeschema
     m_colorSettings       = nullptr;
-    m_msgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight( this );
     m_polarCoords         = false;
     m_findReplaceData     = std::make_unique<EDA_SEARCH_DATA>();
     m_hotkeyPopup         = nullptr;
@@ -175,15 +174,16 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         stsbar->SetFont( KIUI::GetStatusFont( this ) );
     }
 
+    m_messagePanel = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_frameSize.y ), wxDefaultSize );
+    m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
+    m_msgFrameHeight = m_messagePanel->GetBestSize().y;
+
     // Create child subwindows.
     GetClientSize( &m_frameSize.x, &m_frameSize.y );
     m_framePos.x   = m_framePos.y = 0;
     m_frameSize.y -= m_msgFrameHeight;
 
-    m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_frameSize.y ),
-                                         wxSize( m_frameSize.x, m_msgFrameHeight ) );
-
-    m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
+    m_messagePanel->SetSize( m_frameSize.x, m_msgFrameHeight );
 
     Bind( wxEVT_DPI_CHANGED,
           [&]( wxDPIChangedEvent& )
@@ -195,11 +195,13 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
               // especially important even for first launches as the constructor of the window
               // here usually doesn't have the correct dpi awareness yet
               m_frameSize.y += m_msgFrameHeight;
-              m_msgFrameHeight = EDA_MSG_PANEL::GetRequiredHeight( this );
+              m_msgFrameHeight = m_messagePanel->GetBestSize().y;
               m_frameSize.y -= m_msgFrameHeight;
 
               m_messagePanel->SetPosition( wxPoint( 0, m_frameSize.y ) );
               m_messagePanel->SetSize( m_frameSize.x, m_msgFrameHeight );
+
+              // Don't skip, otherwise the frame gets too big
           } );
 }
 

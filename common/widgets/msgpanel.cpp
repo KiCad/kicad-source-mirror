@@ -34,6 +34,7 @@
 
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
+    EVT_DPI_CHANGED( EDA_MSG_PANEL::OnDPIChanged )
     EVT_PAINT( EDA_MSG_PANEL::OnPaint )
 END_EVENT_TABLE()
 
@@ -50,7 +51,9 @@ EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId, const wxPoint& aPositi
 
     m_last_x = 0;
 
-    m_fontSize = GetTextExtent( wxT( "W" ) );
+    updateFontSize();
+
+    InvalidateBestSize();
 }
 
 
@@ -59,16 +62,31 @@ EDA_MSG_PANEL::~EDA_MSG_PANEL()
 }
 
 
-int EDA_MSG_PANEL::GetRequiredHeight( wxWindow* aWindow )
+void EDA_MSG_PANEL::updateFontSize()
 {
-    wxSize     fontSizeInPixels;
-    wxWindowDC dc( aWindow );
+    wxFont font = KIUI::GetControlFont( this );
+    GetTextExtent( wxT( "W" ), &m_fontSize.x, &m_fontSize.y, 0, 0, &font );
+}
 
-    dc.SetFont( KIUI::GetControlFont( aWindow ) );
-    dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
 
-    // make space for two rows of text plus a number of pixels between them.
-    return 2 * fontSizeInPixels.y + 0;
+wxSize EDA_MSG_PANEL::DoGetBestSize() const
+{
+    return wxSize( wxDefaultCoord, 2 * m_fontSize.y + 0 );
+}
+
+
+wxSize EDA_MSG_PANEL::DoGetBestClientSize() const
+{
+    return wxPanel::DoGetBestClientSize();
+}
+
+
+void EDA_MSG_PANEL::OnDPIChanged( wxDPIChangedEvent& aEvent )
+{
+    updateFontSize();
+    InvalidateBestSize();
+
+    aEvent.Skip();
 }
 
 
