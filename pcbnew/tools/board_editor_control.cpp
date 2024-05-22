@@ -477,6 +477,7 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
         }
 
         nlohmann::ordered_map<wxString, wxString> fields;
+
         for( PCB_FIELD* field : footprint->Fields() )
             fields[field->GetCanonicalName()] = field->GetText();
 
@@ -1636,12 +1637,12 @@ int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     Activate();
 
     picker->SetClickHandler(
-        [this] ( const VECTOR2D& pt ) -> bool
-        {
-            m_frame->SaveCopyInUndoList( m_placeOrigin.get(), UNDO_REDO::DRILLORIGIN );
-            DoSetDrillOrigin( getView(), m_frame, m_placeOrigin.get(), pt );
-            return false;   // drill origin is a one-shot; don't continue with tool
-        } );
+            [this] ( const VECTOR2D& pt ) -> bool
+            {
+                m_frame->SaveCopyInUndoList( m_placeOrigin.get(), UNDO_REDO::DRILLORIGIN );
+                DoSetDrillOrigin( getView(), m_frame, m_placeOrigin.get(), pt );
+                return false;   // drill origin is a one-shot; don't continue with tool
+            } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
@@ -1670,9 +1671,11 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
 
-    if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_frame &&
-        m_frame->GetExportNetlistAction() )
+    if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_frame
+            && m_frame->GetExportNetlistAction() )
+    {
         Go( &BOARD_EDITOR_CONTROL::ExportNetlist, m_frame->GetExportNetlistAction()->MakeEvent() );
+    }
 
     Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );

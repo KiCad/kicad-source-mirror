@@ -220,9 +220,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Must be created before the menus are created.
     if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist )
+    {
         m_exportNetlistAction = new TOOL_ACTION( "pcbnew.EditorControl.exportNetlist",
                                                  AS_GLOBAL, 0, "", _( "Netlist..." ),
                                                  _( "Export netlist used to update schematics" ) );
+    }
 
     // Create GAL canvas
     auto canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
