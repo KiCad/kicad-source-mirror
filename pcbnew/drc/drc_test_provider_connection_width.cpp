@@ -503,12 +503,7 @@ private:
         // z-order range for the current point ± limit bounding box
         const int32_t     maxZ = zOrder( aPt->x + m_limit, aPt->y + m_limit );
         const int32_t     minZ = zOrder( aPt->x - m_limit, aPt->y - m_limit );
-
-        // Subtract 1 to account for rounding inaccuracies in SquaredEuclideanNorm()
-        // below.  We would usually test for rounding in the final value but since we
-        // are working in squared integers here, we allow the 1nm slop rather than
-        // force a separate calculation
-        const SEG::ecoord limit2 = SEG::Square( m_limit - 1 );
+        const SEG::ecoord limit2 = SEG::Square( m_limit );
 
         // first look for points in increasing z-order
         Vertex* p = aPt->nextZ;
@@ -521,7 +516,7 @@ private:
             VECTOR2D diff( p->x - aPt->x, p->y - aPt->y );
             SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
 
-            if( delta_i > 1 && dist2 < limit2 && dist2 < min_dist && dist2 > 0.0
+            if( delta_i > 1 && dist2 < limit2 && dist2 < min_dist && dist2 > 0
                     && locallyInside( p, aPt ) && isSubstantial( p, aPt ) && isSubstantial( aPt, p ) )
             {
                 min_dist = dist2;
@@ -539,7 +534,7 @@ private:
             VECTOR2D diff( p->x - aPt->x, p->y - aPt->y );
             SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
 
-            if( delta_i > 1 && dist2 < limit2 && dist2 < min_dist && dist2 > 0.0
+            if( delta_i > 1 && dist2 < limit2 && dist2 < min_dist && dist2 > 0
                     && locallyInside( p, aPt ) && isSubstantial( p, aPt ) && isSubstantial( aPt, p ) )
             {
                 min_dist = dist2;
@@ -856,11 +851,17 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
     returns.clear();
     returns.reserve( dataset.size() * distinctMinWidths.size() );
+    int epsilon = board->GetDesignSettings().GetDRCEpsilon();
 
     for( const auto& [ netLayer, itemsPoly ] : dataset )
     {
         for( int minWidth : distinctMinWidths )
+        {
+            if( ( minWidth -= epsilon ) <= 0 )
+                continue;
+
             returns.emplace_back( tp.submit( min_checker, itemsPoly, netLayer.Layer, minWidth ) );
+        }
     }
 
     for( std::future<size_t>& ret : returns )
