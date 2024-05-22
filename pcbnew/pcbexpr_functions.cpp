@@ -621,6 +621,31 @@ bool searchAreas( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
 }
 
 
+class SCOPED_LAYERSET
+{
+public:
+    SCOPED_LAYERSET( BOARD_ITEM* aItem )
+    {
+        m_item = aItem;
+        m_layers = aItem->GetLayerSet();
+    }
+
+    ~SCOPED_LAYERSET()
+    {
+        m_item->SetLayerSet( m_layers );
+    }
+
+    void Add( PCB_LAYER_ID aLayer )
+    {
+        m_item->SetLayerSet( m_item->GetLayerSet().set( aLayer ) );
+    }
+
+private:
+    BOARD_ITEM* m_item;
+    LSET        m_layers;
+};
+
+
 #define MISSING_AREA_ARG( f ) \
     wxString::Format( _( "Missing rule-area argument (A, B, or rule-area name) to %s." ), f )
 
@@ -659,6 +684,18 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                         {
                             if( !aArea || aArea == item || aArea->GetParent() == item )
                                 return false;
+
+                            SCOPED_LAYERSET scopedLayerSet( aArea );
+
+                            if( context->GetConstraint() == SILK_CLEARANCE_CONSTRAINT )
+                            {
+                                // Silk clearance tests are run across layer pairs
+                                if(    ( aArea->IsOnLayer( F_SilkS ) && IsFrontLayer( aLayer ) )
+                                    || ( aArea->IsOnLayer( B_SilkS ) && IsBackLayer( aLayer ) ) )
+                                {
+                                    scopedLayerSet.Add( aLayer );
+                                }
+                            }
 
                             LSET commonLayers = aArea->GetLayerSet() & item->GetLayerSet();
 
