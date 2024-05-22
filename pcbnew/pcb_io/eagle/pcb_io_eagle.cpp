@@ -753,19 +753,24 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                     }
                     else if( degrees == 180 )
                     {
-                        BOX2I bbox = pcbtxt->GetBoundingBox();
-                        VECTOR2I pos = pcbtxt->GetTextPos();
-                        pos.x -= sign * bbox.GetWidth();
-                        pcbtxt->SetTextPos( pos );
+                        if( sign < 0 )
+                        {
+                            BOX2I bbox = pcbtxt->GetBoundingBox();
+                            VECTOR2I pos = pcbtxt->GetTextPos();
+                            pos.x -= sign * bbox.GetWidth();
+                            pcbtxt->SetTextPos( pos );
+                        }
 
                         switch( align )
                         {
                         case ETEXT::TOP_CENTER:    align = ETEXT::BOTTOM_CENTER; break;
-                        case ETEXT::TOP_LEFT:      align = ETEXT::BOTTOM_LEFT;   break;
-                        case ETEXT::TOP_RIGHT:     align = ETEXT::BOTTOM_RIGHT;  break;
+                        case ETEXT::TOP_LEFT:      align = ETEXT::BOTTOM_RIGHT;  break;
+                        case ETEXT::TOP_RIGHT:     align = ETEXT::BOTTOM_LEFT;   break;
                         case ETEXT::BOTTOM_CENTER: align = ETEXT::TOP_CENTER;    break;
-                        case ETEXT::BOTTOM_LEFT:   align = ETEXT::TOP_LEFT;      break;
-                        case ETEXT::BOTTOM_RIGHT:  align = ETEXT::TOP_RIGHT;     break;
+                        case ETEXT::BOTTOM_LEFT:   align = ETEXT::TOP_RIGHT;     break;
+                        case ETEXT::BOTTOM_RIGHT:  align = ETEXT::TOP_LEFT;      break;
+                        case ETEXT::CENTER_LEFT:   align = ETEXT::CENTER_RIGHT;  break;
+                        case ETEXT::CENTER_RIGHT:  align = ETEXT::CENTER_LEFT;   break;
                         }
                     }
                     else if( degrees == 270 )
@@ -774,7 +779,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                         {
                             BOX2I bbox = pcbtxt->GetBoundingBox();
                             VECTOR2I pos = pcbtxt->GetTextPos();
-                            pos.y -=  sign * bbox.GetWidth();   // yes, width; bbox is unrotated
+                            pos.y -= sign * bbox.GetWidth();   // yes, width; bbox is unrotated
                             pcbtxt->SetTextPos( pos );
                         }
 
@@ -783,36 +788,34 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                         switch( align )
                         {
                         case ETEXT::TOP_CENTER:    align = ETEXT::BOTTOM_CENTER; break;
-                        case ETEXT::TOP_LEFT:      align = ETEXT::BOTTOM_LEFT;   break;
-                        case ETEXT::TOP_RIGHT:     align = ETEXT::BOTTOM_RIGHT;  break;
+                        case ETEXT::TOP_LEFT:      align = ETEXT::BOTTOM_RIGHT;  break;
+                        case ETEXT::TOP_RIGHT:     align = ETEXT::BOTTOM_LEFT;   break;
                         case ETEXT::BOTTOM_CENTER: align = ETEXT::TOP_CENTER;    break;
-                        case ETEXT::BOTTOM_LEFT:   align = ETEXT::TOP_LEFT;      break;
-                        case ETEXT::BOTTOM_RIGHT:  align = ETEXT::TOP_RIGHT;     break;
+                        case ETEXT::BOTTOM_LEFT:   align = ETEXT::TOP_RIGHT;     break;
+                        case ETEXT::BOTTOM_RIGHT:  align = ETEXT::TOP_LEFT;      break;
+                        case ETEXT::CENTER_LEFT:   align = ETEXT::CENTER_RIGHT;  break;
+                        case ETEXT::CENTER_RIGHT:  align = ETEXT::CENTER_LEFT;   break;
+                        }
+                    }
+                    else if( degrees > 90 && degrees < 270 )
+                    {
+                        pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( degrees + 180 ), DEGREES_T ) );
+
+                        switch( align )
+                        {
+                        case ETEXT::TOP_CENTER:    align = ETEXT::BOTTOM_CENTER; break;
+                        case ETEXT::TOP_LEFT:      align = ETEXT::BOTTOM_RIGHT;  break;
+                        case ETEXT::TOP_RIGHT:     align = ETEXT::BOTTOM_LEFT;   break;
+                        case ETEXT::BOTTOM_CENTER: align = ETEXT::TOP_CENTER;    break;
+                        case ETEXT::BOTTOM_LEFT:   align = ETEXT::TOP_RIGHT;     break;
+                        case ETEXT::BOTTOM_RIGHT:  align = ETEXT::TOP_LEFT;      break;
+                        case ETEXT::CENTER_LEFT:   align = ETEXT::CENTER_RIGHT;  break;
+                        case ETEXT::CENTER_RIGHT:  align = ETEXT::CENTER_LEFT;   break;
                         }
                     }
                     else
                     {
-                        // Ok so text is not at 90,180 or 270 so do some funny stuff to get
-                        // placement right.
-                        if( ( degrees > 0 ) &&  ( degrees < 90 ) )
-                        {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
-                        }
-                        else if( ( degrees > 90 ) && ( degrees < 180 ) )
-                        {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( degrees + 180 ), DEGREES_T ) );
-                            align = ETEXT::TOP_RIGHT;
-                        }
-                        else if( ( degrees > 180 ) && ( degrees < 270 ) )
-                        {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( degrees - 180 ), DEGREES_T ) );
-                            align = ETEXT::TOP_RIGHT;
-                        }
-                        else if( ( degrees > 270 ) && ( degrees < 360 ) )
-                        {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
-                            align = ETEXT::BOTTOM_LEFT;
-                        }
+                        pcbtxt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
                     }
                 }
 
