@@ -225,20 +225,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
     commit.Push( _( "Annotate" ) );
 
-    m_MessageWindow->Flush( true );             // Now update to show all messages
-
-    m_sdbSizer1Cancel->SetDefault();
-
-    // Don't close dialog if there are things the user needs to address
-    if( reporter.HasMessage() )
-        return;
-
-    if( m_infoBar->IsShown() )
-    {
-        // Close the dialog by calling the default handler for a wxID_OK event
-        event.SetId( wxID_OK );
-        event.Skip();
-    }
+    m_MessageWindow->Flush( true ); // Now update to show all messages
 }
 
 
