@@ -248,14 +248,11 @@ void CONNECTIVITY_DATA::internalRecalculateRatsnest( BOARD_COMMIT* aCommit  )
 
     const std::vector<std::shared_ptr<CN_CLUSTER>>& clusters = m_connAlgo->GetClusters();
 
-    int dirtyNets = 0;
-
     for( int net = 0; net < lastNet; net++ )
     {
         if( m_connAlgo->IsNetDirty( net ) )
         {
             m_nets[net]->Clear();
-            dirtyNets++;
         }
     }
 
