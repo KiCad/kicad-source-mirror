@@ -674,7 +674,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection );
+            m_selectionTool->GetToolMenu().ShowContextMenu( selection );
         }
         else if( evt->IsAction( &ACTIONS::undo ) || evt->IsAction( &ACTIONS::doDelete ) )
         {
