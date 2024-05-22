@@ -957,18 +957,24 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
         }
     }
 
-    // Add .PROBE directives
+    // Add .SAVE and .PROBE directives
     for( const wxString& directive : circuitModel()->GetDirectives() )
     {
-        wxStringTokenizer tokenizer( directive, wxT( "\r\n" ), wxTOKEN_STRTOK );
+        wxStringTokenizer directivesTokenizer( directive, wxT( "\r\n" ), wxTOKEN_STRTOK );
 
-        while( tokenizer.HasMoreTokens() )
+        while( directivesTokenizer.HasMoreTokens() )
         {
-            wxString line = tokenizer.GetNextToken();
+            wxString line = directivesTokenizer.GetNextToken().Upper();
             wxString directiveParams;
 
-            if( line.Upper().StartsWith( wxS( ".PROBE" ), &directiveParams ) )
-                addSignal( directiveParams.Trim( true ).Trim( false ) );
+            if( line.StartsWith( wxS( ".SAVE" ), &directiveParams )
+                    || line.StartsWith( wxS( ".PROBE" ), &directiveParams ) )
+            {
+                wxStringTokenizer paramsTokenizer( directiveParams, wxT( " \t" ), wxTOKEN_STRTOK );
+
+                while( paramsTokenizer.HasMoreTokens() )
+                    addSignal( paramsTokenizer.GetNextToken() );
+            }
         }
     }
 }
