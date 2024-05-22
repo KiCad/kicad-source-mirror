@@ -2703,19 +2703,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     // Most footprint children can only be selected in the footprint editor.
     if( aItem->GetParentFootprint() && !m_isFootprintEditor && !checkVisibilityOnly )
     {
-        if( aItem->Type() == PCB_TEXT_T )
-        {
-            text = static_cast<const PCB_TEXT*>( aItem );
-
-            // Special case for version 8 until we have a consistent way to convert these text
-            // to fields
-            if( !text->GetText().Contains( wxT( "${REFERENCE}" ) )
-                && !text->GetText().Contains( wxT( "${VALUE}" ) ) )
-            {
-                return false;
-            }
-        }
-        else if( aItem->Type() != PCB_FIELD_T && aItem->Type() != PCB_PAD_T )
+        if( aItem->Type() != PCB_FIELD_T && aItem->Type() != PCB_PAD_T
+            && aItem->Type() != PCB_TEXT_T )
         {
             return false;
         }
