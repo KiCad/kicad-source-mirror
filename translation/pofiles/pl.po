@@ -17,17 +17,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-04-28 14:08+0000\n"
+"PO-Revision-Date: 2024-05-22 19:37+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5.1\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -8119,14 +8119,12 @@ msgid "Reset Local Coordinates"
 msgstr "Zresetuj lokalne współrzędne"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
-msgstr "Zawsze pokazuj nitki celownicze"
+msgstr "Zawsze wyświetlaj kursor krzyżowy"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Wyświetla krzyżowy kursora nawet w trybie narzędzia wyboru"
+msgstr "Zawsze wyświetla kursor krzyżowy nawet bez wybranego narzędzia"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -10151,14 +10149,12 @@ msgid "Update Options"
 msgstr "Opcje aktualizacji"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Aktualizacja pól symbolu"
+msgstr "Aktualizacja kształtu symbolu oraz wyprowadzeń"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Uaktualnij %s filtrów footprintów do '%s'."
+msgstr "Aktualizacja słów kluczowych oraz filtrów footprintów"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10185,7 +10181,6 @@ msgid "Update/reset field visibilities"
 msgstr "Uaktualnij/zresetuj widoczność pól"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
 msgstr "Uaktualnij/zresetuj rozmiary oraz styl tekstów pól"
 
@@ -10195,9 +10190,8 @@ msgid "Update/reset field positions"
 msgstr "Uaktualnij/zresetuj pozycje pól"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "Uaktualnij/zresetuj widoczność pól"
+msgstr "Uaktualnij/zresetuj widoczność nazw/numerów wyprowadzeń"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10682,13 +10676,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Zapisz wszystkie dane cyfrowe dotyczące wydarzeń"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Jeśli nie jest zaznaczone, nadpisuje dyrektywę uniemożliwiającą zapisywanie "
+"danych cyfrowych o wydarzeniach (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -13616,9 +13612,9 @@ msgid "Rename Field"
 msgstr "Zmień nazwę pola"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "Plik %s już istnieje."
+msgstr "Nazwa pola %s już istnieje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
@@ -13650,9 +13646,8 @@ msgid "Unsaved data"
 msgstr "Dane nie zapisane"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1247
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
-msgstr "Zmiany nie są zapisane. Eksportować mimo to?"
+msgstr "Zmiany nie zostały jeszcze zapisane. Eksportować mimo to?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1271
 msgid "No filename specified in exporter"
@@ -15159,14 +15154,12 @@ msgstr "Dodaj mimo to"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:846
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1062
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Ta operacja zmieni istniejącą numerację i nie może zostać cofnięta."
+"Ta operacja zresetuje Twoją globalną tabelę bibliotek na dysku i nie będzie "
+"można jej cofnąć."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:915
 msgid ""
@@ -15311,9 +15304,8 @@ msgstr "Usuwa bibliotekę z tabeli"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Biblioteki"
+msgstr "Zresetuj biblioteki"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
@@ -15582,9 +15574,9 @@ msgid "Netclass %s is not defined"
 msgstr "Klasa sieci %s nie została zdefiniowana"
 
 #: eeschema/erc/erc.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Nie można połączyć się z '%s' "
+msgstr "Połączono pięć elementów na pozycji %d, %d"
 
 #: eeschema/erc/erc.cpp:720
 msgid "Pin with 'no connection' type is connected"
@@ -15703,9 +15695,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "Sprawdzanie czy piny lub połączenia nie znajdują się poza siatką..."
 
 #: eeschema/erc/erc.cpp:1496
-#, fuzzy
 msgid "Checking for four way junctions..."
-msgstr "Sprawdzam definicje pól zajętości footprintów..."
+msgstr "Sprawdzanie istnienia poczwórnych łącz..."
 
 #: eeschema/erc/erc.cpp:1504
 msgid "Checking for undefined netclasses..."
@@ -15752,7 +15743,7 @@ msgstr "Niezgodność pomiędzy etykietami hierarchicznymi a pinami arkusza"
 
 #: eeschema/erc/erc_item.cpp:79
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "Poczwórne łącza zostały połączone w jeden"
 
 #: eeschema/erc/erc_item.cpp:83
 msgid "A pin with a \"no connection\" flag is connected"
@@ -17189,9 +17180,8 @@ msgstr ""
 "Pliki bibliotek schematowych lub biblioteki zintegrowane programu Altium"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "Wybrany plik nie wydaje się być plikiem biblioteki programu CADSTAR"
+msgstr "Plik nie wydaje się być plikiem biblioteki programu CADSTAR"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -21094,7 +21084,7 @@ msgstr "Ukryj drzewo zawartości biblioteki symboli"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Focus Symbol Tree Search Field"
-msgstr ""
+msgstr "Wyróżnij pole wyszukiwania w drzewie symboli"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Export View as PNG..."
@@ -23243,6 +23233,8 @@ msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
 msgstr ""
+"Wyświetlaj elementy błyskowe (narysowane przy użyciu apertur standardowych "
+"lub makr) w trybie konturu"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -23253,22 +23245,20 @@ msgid "Sketch polygons"
 msgstr "Zarysy stref"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
-msgstr "Pokaż strefy jako zarys"
+msgstr "Wyświetlaj elementy stref w trybie konspektu"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
 msgid "Forced Opacity Display Mode"
-msgstr ""
+msgstr "Tryb wyświetlania z wymuszonym przezroczystością"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "Przeźroczystość:"
+msgstr "Wymuszona przeźroczystość:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "Nieprzezroczystość w trybie wyświetlania z wymuszonym przezroczystością"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
