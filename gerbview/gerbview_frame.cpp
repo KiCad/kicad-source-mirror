@@ -877,7 +877,10 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
         UpdateXORLayers();
 
     if( doLayerWidgetUpdate )
+    {
         m_LayersManager->SelectLayer( aLayer );
+        m_LayersManager->OnLayerSelected();
+    }
 
     UpdateTitleAndInfo();
 
