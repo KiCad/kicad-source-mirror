@@ -359,6 +359,7 @@ void ACTION_TOOLBAR::UpdateControlWidth( int aID )
     wxASSERT_MSG( control, wxString::Format( "No control located in toolbar item with ID %d", aID ) );
 
     // Update the size the item has stored using the best size of the control
+    control->InvalidateBestSize();
     wxSize bestSize = control->GetBestSize();
     item->SetMinSize( bestSize );
 
