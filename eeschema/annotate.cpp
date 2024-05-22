@@ -58,7 +58,8 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 }
 
 
-void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive )
+void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive,
+                                       REPORTER& aReporter )
 {
 
     SCH_SHEET_LIST sheets = Schematic().GetSheets();
@@ -72,7 +73,26 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
             commit.Modify( aItem, aScreen );
 
-            symbol->ClearAnnotation( aSheet, aResetPrefixes );
+            // aSheet == nullptr means all sheets
+            if( !aSheet || symbol->IsAnnotated( aSheet ) )
+            {
+                wxString msg;
+
+                if( symbol->GetUnitCount() > 1 )
+                {
+                    msg.Printf( _( "Cleared annotation for %s (unit %s)." ),
+                                symbol->GetValue( true, aSheet, false ),
+                                symbol->SubReference( symbol->GetUnit(), false ) );
+                }
+                else
+                {
+                    msg.Printf( _( "Cleared annotation for %s." ),
+                                symbol->GetValue( true, aSheet, false ) );
+                }
+
+                symbol->ClearAnnotation( aSheet, aResetPrefixes );
+                aReporter.Report( msg, RPT_SEVERITY_ACTION );
+            }
         };
 
     auto clearSheetAnnotation =

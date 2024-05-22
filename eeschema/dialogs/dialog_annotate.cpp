@@ -244,7 +244,10 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
 void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 {
-    m_Parent->DeleteAnnotation( GetScope(), GetRecursive() );
+    m_MessageWindow->Clear();
+    m_Parent->DeleteAnnotation( GetScope(), GetRecursive(), m_MessageWindow->Reporter() );
+
+    m_MessageWindow->Flush( true ); // Now update to show all messages
 }
 
 

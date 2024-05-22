@@ -360,9 +360,11 @@ public:
     /**
      * Clear the current symbol annotation.
      *
-     * @param aCurrentSheetOnly Where to clear the annotation. See #ANNOTATE_SCOPE_T
+     * @param aAnnotateScope See #ANNOTATE_SCOPE_T
+     * @param aRecursive  Annotation should descend into and annotate subsheets
+     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
      */
-    void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive );
+    void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive, REPORTER& aReporter );
 
     /**
      * Annotate the symbols in the schematic that are not currently annotated. Multi-unit symbols
