@@ -754,6 +754,20 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
                             item->GetTypeDesc() );
                 items.push_back( item );
                 dirty_items.insert( item );
+
+                // Add any symbol dirty pins to the dirty_items list
+                if( item->Type() == SCH_SYMBOL_T )
+                {
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                    for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
+                    {
+                        if( pin->IsConnectivityDirty() )
+                        {
+                            dirty_items.insert( pin );
+                        }
+                    }
+                }
             }
             // If the symbol isn't dirty, look at the pins
             // TODO: remove symbols from connectivity graph and only use pins
@@ -936,6 +950,9 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
     }
 
     removeSubgraphs( subgraphs );
+
+    for( const auto& [path, item] : retvals )
+        alg::delete_matching( m_items, item );
 
     return retvals;
 }
@@ -3047,7 +3064,7 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindFirstSubgraphByName( const wxString& 
 }
 
 
-CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem )
+CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem ) const
 {
     auto                 it  = m_item_to_subgraph_map.find( aItem );
     CONNECTION_SUBGRAPH* ret = it != m_item_to_subgraph_map.end() ? it->second : nullptr;
