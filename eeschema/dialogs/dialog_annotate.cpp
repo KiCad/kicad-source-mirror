@@ -52,7 +52,7 @@ private:
     void OnClearAnnotationClick( wxCommandEvent& event ) override;
     void OnCloseClick( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
-    void OnApplyClick( wxCommandEvent& event ) override;
+    void OnAnnotateClick( wxCommandEvent& event ) override;
 
     // User functions:
     bool GetResetItems();
@@ -212,7 +212,7 @@ void DIALOG_ANNOTATE::OnClose( wxCloseEvent& event )
 }
 
 
-void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
+void DIALOG_ANNOTATE::OnAnnotateClick( wxCommandEvent& event )
 {
     SCH_COMMIT commit( m_Parent );
 
