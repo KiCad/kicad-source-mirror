@@ -366,8 +366,13 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
                 if( !isSymbolChild || shape->GetFillColor() != COLOR4D::UNSPECIFIED )
                     color = shape->GetFillColor();
 
-                if( isSymbolChild && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
-                    color = shape->GetStroke().GetColor();
+                if( isSymbolChild )
+                {
+                    if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
+                        color = shape->GetStroke().GetColor();
+                    else if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                        color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
+                }
             }
             else
             {
@@ -1615,9 +1620,6 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             // Do not fill the shape in B&W print mode, to avoid to visible items inside the shape
             if( !m_schSettings.PrintBlackAndWhiteReq() )
             {
-                if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                    color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
-
                 m_gal->SetIsFill( true );
                 m_gal->SetIsStroke( false );
                 m_gal->SetFillColor( color );
