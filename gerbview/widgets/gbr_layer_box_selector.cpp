@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2016 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,11 +50,21 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
         if ( images.GetGbrImage( layerid ) == nullptr )
             continue;
 
-        // Prepare Bitmap
-        wxBitmap bmp( size, size );
-        DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
+        // Prepare Bitmaps
+        wxVector<wxBitmap> bitmaps;
 
-        Append( getLayerName( layerid ), bmp, (void*)(intptr_t) layerid );
+        for( int scale = 1; scale <= 3; scale++ )
+        {
+            wxBitmap bmp( size * scale, size * scale );
+            bmp.SetScaleFactor( scale );
+
+            DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
+
+            bitmaps.push_back( bmp );
+        }
+
+        Append( getLayerName( layerid ), wxBitmapBundle::FromBitmaps( bitmaps ),
+                (void*) (intptr_t) layerid );
     }
 
     // Ensure the size of the widget is enough to show the text and the icon

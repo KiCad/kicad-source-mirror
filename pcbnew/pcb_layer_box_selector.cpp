@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2015 Jean-Pierre Charras <jean-pierre.charras@ujf-grenoble.fr>
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,8 +58,17 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         else
             layerstatus.Empty();
 
-        wxBitmap bmp( size, size );
-        DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
+        wxVector<wxBitmap> bitmaps;
+
+        for( int scale = 1; scale <= 3; scale++ )
+        {
+            wxBitmap bmp( size * scale, size * scale );
+            bmp.SetScaleFactor( scale );
+
+            DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
+
+            bitmaps.push_back( bmp );
+        }
 
         wxString layername = getLayerName( layerid ) + layerstatus;
 
@@ -71,7 +80,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
                 layername = AddHotkeyName( layername, action->GetHotKey(), IS_COMMENT );
         }
 
-        Append( layername, bmp, (void*)(intptr_t) layerid );
+        Append( layername, wxBitmapBundle::FromBitmaps( bitmaps ), (void*) (intptr_t) layerid );
     }
 
     if( !m_undefinedLayerName.IsEmpty() )
