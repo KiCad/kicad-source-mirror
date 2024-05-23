@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-22 19:37+0000\n"
+"PO-Revision-Date: 2024-05-24 09:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -24013,14 +24013,12 @@ msgid "Show dcode number"
 msgstr "Pokaż numery D-kodów"
 
 #: gerbview/tools/gerbview_actions.cpp:234
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "Pokaż bloczek tytułowy w trybie edycji"
+msgstr "Pokaż z wymuszonym trybem przeźroczystości"
 
 #: gerbview/tools/gerbview_actions.cpp:235
-#, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "Pokazuje warstwy w trybie wyłączoności, jako porównawczym"
+msgstr "Pokaż warstwy, korzystając z trybu wymuszonego pokrycia kolorów"
 
 #: gerbview/tools/gerbview_actions.cpp:241
 msgid "Show in XOR Mode"
@@ -24233,9 +24231,8 @@ msgid "Delete Column"
 msgstr "Usuń kolumnę"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Pokaż lub ukryj %s"
+msgstr "Pokaż problemy z importem"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24718,12 +24715,12 @@ msgid "Generate Position File"
 msgstr "Generowanie plików położeń footprintów"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Prawidłowe opcje: front,back,both. Format Gerber obsługuje tylko \"both\"."
+"Prawidłowe opcje: front,back,both. Format Gerber obsługuje tylko \"front\" "
+"lub \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -25109,6 +25106,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Ignoruje powiadomienie o aktualizacji do nowej wersji. W przypadku nowszych "
+"wersji zostaną wyświetlone dodatkowe uwagi dotyczące aktualizacji."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -25119,10 +25118,14 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Zamyka tą informację o aktualizacji. Informacja ta pojawi się ponownie gdy "
+"KiCad zostanie uruchomiony ponownie."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
 msgstr ""
+"Uruchamia przeglądarkę internetową, aby wyświetlić stronę z informacjami o "
+"wydaniach."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -25130,7 +25133,7 @@ msgstr "Otwórz folder pobierania"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Przenosi na stronę pobierania zależną od działającej platformy."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -31942,9 +31945,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "Uaktualnij rozmiary tekstu, style oraz pozycje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text content"
-msgstr "Uaktualnij tekst pola"
+msgstr "Uaktualnij tekst"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update fabrication attributes"
@@ -32025,9 +32027,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "Uaktualnij/zresetuj rozmiary tekstu, style oraz pozycje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "Uaktualnij/zresetuj tekst pola"
+msgstr "Uaktualnij/zresetuj tekst"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -33979,9 +33980,8 @@ msgid "Set to specified values:"
 msgstr "Ustaw na wartość:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "(tylko edytor symboli)"
+msgstr "Widoczność  (tylko tekst)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -34500,9 +34500,8 @@ msgid "Warning: BGA property is for SMD pads."
 msgstr "Ostrzeżenie: Właściwość BGA jest używana tylko dla pół SMD."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1447
-#, fuzzy
 msgid "Warning: Mechanical property is for PTH pads."
-msgstr "Ostrzeżenie: Właściwość Kastelacja jest używana tylko dla pól PTH."
+msgstr "Ostrzeżenie: Właściwość Mechaniczne jest używana tylko dla pól PTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1456
 msgid "Error: Negative corner size."
@@ -34773,7 +34772,6 @@ msgid "Fabrication property:"
 msgstr "Właściwości produkcyjne:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -34790,11 +34788,12 @@ msgstr ""
 "Atrybut BGA dotyczy pól w footprintach BGA\n"
 "Lokalny fiducial jest fiducialem dla footprintu nadrzędnego\n"
 "Globalny fiducial to fiducial dla całej płytki\n"
-"Pole testowe przydaje się do określania punktów testowych w plikach Gerber\n"
+"Punkt testowy określa miejsce przyłożenia sondy testowej\n"
 "Pole radiatorowe określa pole termiczne do odprowadzania ciepła\n"
 "Pole z kastelacją określa ścięte pola z otworami znajdującymi się na "
 "krawędzi płytki\n"
-"Te właściwości są określone w plikach Gerber X2."
+"Mechaniczne określa pole z otworem, które jest używane dla mechanicznych "
+"wsporników"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2105
 msgid "BGA pad"
@@ -39408,7 +39407,7 @@ msgstr "Nierozpoznany element \"%s\".| Oczekiwano cytowanego wyrażenia."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "Słowo kluczowe 'layer' już występuje."
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -39730,9 +39729,9 @@ msgid "%s rounded corners differ."
 msgstr "%s różnic w zaokrągleniach narożników."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s różnic w ścięciach narożników."
+msgstr "%s różnic w rozmiarach ścięć narożników."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
 #, c-format
@@ -41098,7 +41097,7 @@ msgstr "Dostrajanie"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2403
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2429
 msgid "Select a track to tune first."
-msgstr "Najpierw wybierz ścieżkę, która ma być dostrajana."
+msgstr "Wybierz ścieżkę, która ma być dostrajana."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2471
 msgid "Single track"
@@ -42041,14 +42040,12 @@ msgid "Castellated pad"
 msgstr "Pole z kastelacją"
 
 #: pcbnew/pad.cpp:2111
-#, fuzzy
 msgid "Mechanical pad"
-msgstr "Mechaniczne"
+msgstr "Pole mechaniczne"
 
 #: pcbnew/pad.cpp:2129
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "Początek, koniec, oraz połączone warstwy"
+msgstr "Górna, dolna oraz połączone warstwy"
 
 #: pcbnew/pad.cpp:2169
 msgid "Pad Type"
@@ -42148,7 +42145,6 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Pomiń zera końcowe"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Keep Aligned with Dimension"
 msgstr "Trzymaj wyrównanie razem z wymiarowaniem"
 
@@ -42332,12 +42328,12 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Ciąg pól lutowniczych ma nieoczekiwaną długość dla podrekordu 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Warstwa programu Altium (%d) nie ma odpowiednika w programie KiCad. Zamiast "
+"Warstwa programu Altium %s nie ma odpowiednika w programie KiCad. Zamiast "
 "tego umieszczono ją na Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:458
@@ -42428,29 +42424,24 @@ msgid "Loading dimension drawings..."
 msgstr "Wczytywanie wymiarowania..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Zignorowano wymiar typu %d (obecnie nie wspierany)."
+msgstr "Zignorowano wymiar typu Angular (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Zignorowano wymiar typu %d (obecnie nie wspierany)."
+msgstr "Zignorowano wymiar typu Datum (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Zignorowano wymiar typu %d (obecnie nie wspierany)."
+msgstr "Zignorowano wymiar typu Baseline (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Zignorowano wymiar typu %d (obecnie nie wspierany)."
+msgstr "Zignorowano wymiar typu Linear (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Zignorowano wymiar typu %d (obecnie nie wspierany)."
+msgstr "Zignorowano wymiar typu Radial (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -43983,7 +43974,6 @@ msgid "P-Cad 200x ASCII PCB files"
 msgstr "Pliki PCB programu P-Cad 200x formatu ASCII"
 
 #: pcbnew/pcb_io/pcb_io.cpp:121
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported.\n"
@@ -43991,7 +43981,9 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Wybrany plik zawiera wiele footrprintów. Zaimportowany zostanie tylko "
-"pierwszy z nich."
+"pierwszy z nich.\n"
+"Aby załadować wszystkie footprinty, dodaj je jako bibliotekę, korzystając z "
+"opcji Ustawienia -> Zarządzanie bibliotekami footprintów..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:181
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -45443,7 +45435,7 @@ msgstr "Utwórz z zaznaczenia"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Wielokąt docelowy będzie pusty"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -45697,18 +45689,16 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Muszą być wybrane dokładnie dwa odcinki linii."
 
 #: pcbnew/tools/edit_tool.cpp:1509
-#, fuzzy
 msgid "Simplify Shapes"
-msgstr "Kształt złożony"
+msgstr "Uprość kształty"
 
 #: pcbnew/tools/edit_tool.cpp:1509 pcbnew/tools/edit_tool.cpp:1578
 msgid "Tolerance value:"
 msgstr "Wartość tolerancji:"
 
 #: pcbnew/tools/edit_tool.cpp:1543 pcbnew/tools/pcb_actions.cpp:628
-#, fuzzy
 msgid "Simplify Polygons"
-msgstr "Upraszczanie poligonów na warstwie górnej"
+msgstr "Uprość wielokąty"
 
 #: pcbnew/tools/edit_tool.cpp:1578 pcbnew/tools/edit_tool.cpp:1615
 #: pcbnew/tools/pcb_actions.cpp:634
@@ -46336,7 +46326,7 @@ msgstr "Obetnij rogi między wybranymi liniami"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Upraszcza kontury wielokątów, usuwając niepotrzebne punkty"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid ""
@@ -46389,9 +46379,8 @@ msgid "Hide Footprint Tree"
 msgstr "Ukryj drzewo wyszukiwania footprintów"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Focus the Footprint Tree Search Field"
-msgstr "Przesuń punkt zaczepienia footprintu"
+msgstr "Wyróżnij pole wyszukiwania w drzewie footprintów"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "New Footprint..."
@@ -47382,60 +47371,56 @@ msgstr ""
 "znajdującego się pod kursorem"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "Rozłóż poziomo"
+msgstr "Rozłóż poziomo na postawie punktów centralnych"
 
 #: pcbnew/tools/pcb_actions.cpp:1949
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
 msgstr ""
 "Rozkłada wybrane elementy między elementem znajdującym się najbardziej na "
-"lewo a elementem znajdującym się najbardziej na prawo"
+"lewo a elementem znajdującym się najbardziej na prawo, tak by punkty "
+"centralne były równo rozłożone"
 
 #: pcbnew/tools/pcb_actions.cpp:1956
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "Rozłóż poziomo"
+msgstr "Rozłóż poziomo z wykorzystaniem równych luk"
 
 #: pcbnew/tools/pcb_actions.cpp:1957
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
 msgstr ""
 "Rozkłada wybrane elementy między elementem znajdującym się najbardziej na "
-"lewo a elementem znajdującym się najbardziej na prawo"
+"lewo a elementem znajdującym się najbardziej na prawo, tak by luka między "
+"elementami była równomierna"
 
 #: pcbnew/tools/pcb_actions.cpp:1964
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "Rozłóż pionowo"
+msgstr "Rozłóż pionowo z wykorzystaniem równych luk"
 
 #: pcbnew/tools/pcb_actions.cpp:1965
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
 msgstr ""
 "Rozkłada wybrane elementy między elementem znajdującym się najbardziej na "
-"górze a elementem znajdującym się najbardziej na dole"
+"górze a elementem znajdującym się najbardziej na dole, tak by luka między "
+"elementami była równomierna"
 
 #: pcbnew/tools/pcb_actions.cpp:1972
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "Rozłóż pionowo"
+msgstr "Rozłóż pionowo na podstawie punktów centralnych"
 
 #: pcbnew/tools/pcb_actions.cpp:1973
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
 msgstr ""
 "Rozkłada wybrane elementy między elementem znajdującym się najbardziej na "
-"górze a elementem znajdującym się najbardziej na dole"
+"górze a elementem znajdującym się najbardziej na dole, tak by punkty "
+"centralne były równo rozłożone"
 
 #: pcbnew/tools/pcb_actions.cpp:1988
 msgid "Create a corner"
@@ -47832,7 +47817,7 @@ msgstr "Ustawienia dostrajania długości ścieżek..."
 
 #: pcbnew/tools/pcb_actions.cpp:2478
 msgid "Displays tuning pattern properties dialog"
-msgstr "Wyświetla okno z opcjami dostrajania"
+msgstr "Wyświetla okno dialogowe z opcjami dostrajania ścieżek"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
