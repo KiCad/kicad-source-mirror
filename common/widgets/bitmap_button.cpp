@@ -30,7 +30,6 @@
 #include <wx/dcclient.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
-#include <iostream>
 
 #define wxCONTROL_SEPARATOR wxCONTROL_SPECIAL
 
