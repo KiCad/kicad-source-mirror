@@ -493,8 +493,9 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         if( aDrawingShadows )
             color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
     }
-    else if( aItem->IsSelected()
-                && ( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND ) )
+    else if( aItem->IsSelected() && ( aLayer == LAYER_DEVICE_BACKGROUND
+                                   || aLayer == LAYER_SHEET_BACKGROUND
+                                   || aLayer == LAYER_NOTES_BACKGROUND ) )
     {
         // Selected items will be painted over all other items, so make backgrounds translucent so
         // that non-selected overlapping objects are visible
