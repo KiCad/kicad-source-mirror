@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -37,6 +37,15 @@
 #include <gal/opengl/vertex_item.h>
 #include <confirm.h>
 #include <wx/log.h>
+
+
+/**
+ * Flag to enable #VERTEX_MANAGER debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceVertexManager[] = wxT( "KICAD_VERTEX_MANAGER" );
+
 
 using namespace KIGFX;
 
@@ -73,7 +82,7 @@ bool VERTEX_MANAGER::Reserve( unsigned int aSize )
         return true;
 
     if( m_reservedSpace != 0 || m_reserved )
-        wxLogDebug( wxT( "Did not use all previous vertices allocated" ) );
+        wxLogTrace( traceVertexManager, wxS( "Did not use all previous vertices allocated" ) );
 
     // flag to avoid hanging by calling DisplayError too many times:
     static bool show_err = true;
@@ -173,7 +182,7 @@ void VERTEX_MANAGER::SetItem( VERTEX_ITEM& aItem ) const
 void VERTEX_MANAGER::FinishItem() const
 {
     if( m_reservedSpace != 0 || m_reserved )
-        wxLogDebug( wxT( "Did not use all previous vertices allocated" ) );
+        wxLogTrace( traceVertexManager, wxS( "Did not use all previous vertices allocated" ) );
 
     m_container->FinishItem();
 }
@@ -294,6 +303,7 @@ void VERTEX_MANAGER::putVertex( VERTEX& aTarget, GLfloat aX, GLfloat aY, GLfloat
         aTarget.shader[j] = m_shader[j];
     }
 }
+
 
 void VERTEX_MANAGER::EnableDepthTest( bool aEnabled )
 {

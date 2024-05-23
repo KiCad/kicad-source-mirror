@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,6 +44,14 @@
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
+
+
+/**
+ * Flag to enable PCM debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar tracePcm[] = wxT( "KICAD_PCM" );
 
 
 const std::tuple<int, int, int> PLUGIN_CONTENT_MANAGER::m_kicad_version =
@@ -558,7 +566,7 @@ void PLUGIN_CONTENT_MANAGER::updateInstalledPackagesMetadata( const wxString& aR
     }
     catch( ... )
     {
-        wxLogDebug( "Invalid/Missing repository " + aRepositoryId );
+        wxLogTrace( tracePcm, wxS( "Invalid/Missing repository " ) + aRepositoryId );
         return;
     }
 
@@ -1100,7 +1108,6 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
     if( m_updateThread.joinable() )
         return;
 
-
     m_updateBackgroundJob = Pgm().GetBackgroundJobMonitor().Create( _( "PCM Update" ) );
 
     m_updateThread = std::thread(
@@ -1177,6 +1184,7 @@ void PLUGIN_CONTENT_MANAGER::StopBackgroundUpdate()
     {
         if( m_updateBackgroundJob )
             m_updateBackgroundJob->m_reporter->Cancel();
+
         m_updateThread.join();
     }
 }

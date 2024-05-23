@@ -65,6 +65,15 @@
 #include <magic_enum.hpp>
 #include "sch_io_altium.h"
 
+
+/**
+ * Flag to enable Altium schematic debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceAltiumSch[] = wxT( "KICAD_ALTIUM_SCH" );
+
+
 // Harness port object itself does not contain color information about itself
 // It seems altium is drawing harness ports using these colors
 #define HARNESS_PORT_COLOR_DEFAULT_BACKGROUND COLOR4D( 0.92941176470588238, \
@@ -469,7 +478,8 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         }
         catch( const std::exception& exc )
         {
-            wxLogDebug( wxT( "Unhandled exception in Altium schematic parsers: %s." ), exc.what() );
+            wxLogTrace( traceAltiumSch, wxS( "Unhandled exception in Altium schematic "
+                                             "parsers: %s." ), exc.what() );
             throw;
         }
     }

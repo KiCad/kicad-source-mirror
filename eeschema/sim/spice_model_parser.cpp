@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,14 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+
+
+/**
+ * Flag to enable SPICE model parser debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceSpiceModelParser[] = wxT( "KICAD_SPICE_MODEL_PARSER" );
 
 
 namespace SIM_MODEL_SPICE_PARSER
@@ -67,7 +75,7 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        wxLogDebug( "%s", e.what() );
+        wxLogTrace( traceSpiceModelParser, wxS( "%s" ), e.what() );
         return SIM_MODEL::TYPE::NONE;
     }
 
@@ -137,7 +145,9 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
             return ReadTypeFromSpiceStrings( typeString, level, version, false );
         }
         else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotSubckt>() )
+        {
             return SIM_MODEL::TYPE::SUBCKT;
+        }
         else
         {
             wxFAIL_MSG( "Unhandled parse tree node" );

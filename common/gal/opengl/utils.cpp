@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -170,13 +170,18 @@ static void GLAPIENTRY debugMsgCallback( GLenum aSource, GLenum aType, GLuint aI
 {
     switch( aSeverity )
     {
-    case GL_DEBUG_SEVERITY_HIGH:   wxLogDebug( "OpenGL ERROR: " );   break;
-    case GL_DEBUG_SEVERITY_MEDIUM: wxLogDebug( "OpenGL WARNING: " ); break;
-    case GL_DEBUG_SEVERITY_LOW:    wxLogDebug( "OpenGL INFO: " );    break;
-    case GL_DEBUG_SEVERITY_NOTIFICATION: return;
+    case GL_DEBUG_SEVERITY_HIGH:
+        wxLogTrace( traceGalOpenGlError, wxS( "OpenGL ERROR: %s" ), aMessage );
+        break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+        wxLogTrace( traceGalOpenGlError, wxS( "OpenGL WARNING: %s" ), aMessage );
+        break;
+    case GL_DEBUG_SEVERITY_LOW:
+        wxLogTrace( traceGalOpenGlError, wxS( "OpenGL INFO: %s" ), aMessage );
+        break;
+    case GL_DEBUG_SEVERITY_NOTIFICATION:
+        return;
     }
-
-    wxLogDebug( "%s\n", aMessage );
 }
 
 

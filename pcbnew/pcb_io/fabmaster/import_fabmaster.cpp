@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 BeagleBoard Foundation
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Seth Hillbrand <hillbrand@kipro-pcb.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -54,6 +54,14 @@
 #include <progress_reporter.h>
 #include <math/util.h>
 #include <wx/filename.h>
+
+
+/**
+ * Flag to enable #FABMASTER plugin debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceFabmaster[] = wxT( "KICAD_FABMASTER" );
 
 
 void FABMASTER::checkpoint()
@@ -181,9 +189,11 @@ bool FABMASTER::Read( const std::string& aFile )
     return true;
 }
 
+
 FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
 {
     single_row row;
+
     try
     {
         row = rows.at( aOffset );
@@ -203,7 +213,8 @@ FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
     std::string row2 = row[2];
     std::string row3{};
 
-    /// We strip the underscores from all column names as some export variants use them and some do not
+    /// We strip the underscores from all column names as some export variants use them and
+    // some do not
     alg::delete_if( row1, []( char c ){ return c == '_'; } );
     alg::delete_if( row2, []( char c ){ return c == '_'; } );
 
@@ -254,6 +265,7 @@ FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
 
 }
 
+
 double FABMASTER::processScaleFactor( size_t aRow )
 {
     double retval = 0.0;
@@ -292,6 +304,7 @@ double FABMASTER::processScaleFactor( size_t aRow )
 
     return retval;
 }
+
 
 int FABMASTER::getColFromName( size_t aRow, const std::string& aStr )
 {
@@ -505,8 +518,8 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 
             pad->drill = true;
 
-            /// This is to account for broken fabmaster outputs where circle drill hits don't actually get the
-            /// drill hit value.
+            // This is to account for broken fabmaster outputs where circle drill hits don't
+            // actually get the drill hit value.
             if( drill_x == drill_y )
             {
                 pad->drill_size_x = drill_hit;
@@ -983,9 +996,9 @@ size_t FABMASTER::processCustomPads( size_t aRow )
             custom_pad.refdes = pad_refdes;
         }
 
-        // At this point we extract the individual graphical elements for processing the complex pad.  The
-        // coordinates are in board origin format, so we'll need to fix the offset later when we assign them
-        // to the modules.
+        // At this point we extract the individual graphical elements for processing the complex
+        // pad.  The coordinates are in board origin format, so we'll need to fix the offset later
+        // when we assign them to the modules.
 
         auto gr_item = std::unique_ptr<GRAPHIC_ITEM>( processGraphic( gr_data, scale_factor ) );
 
@@ -996,7 +1009,8 @@ size_t FABMASTER::processCustomPads( size_t aRow )
             gr_item->seq = seq;
             gr_item->subseq = 0;
 
-            /// emplace may fail here, in which case, it returns the correct position to use for the existing map
+            // emplace may fail here, in which case, it returns the correct position to use for
+            // the existing map
             auto pad_it = custom_pad.elements.emplace( id, graphic_element{} );
             auto retval = pad_it.first->second.insert( std::move(gr_item ) );
 
@@ -1019,7 +1033,8 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 }
 
 
-FABMASTER::GRAPHIC_LINE* FABMASTER::processLine( const FABMASTER::GRAPHIC_DATA& aData, double aScale )
+FABMASTER::GRAPHIC_LINE* FABMASTER::processLine( const FABMASTER::GRAPHIC_DATA& aData,
+                                                 double aScale )
 {
     GRAPHIC_LINE* new_line = new GRAPHIC_LINE ;
 
@@ -1032,6 +1047,7 @@ FABMASTER::GRAPHIC_LINE* FABMASTER::processLine( const FABMASTER::GRAPHIC_DATA& 
 
     return new_line;
 }
+
 
 FABMASTER::GRAPHIC_ARC* FABMASTER::processArc( const FABMASTER::GRAPHIC_DATA& aData, double aScale )
 {
@@ -1083,7 +1099,9 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processArc( const FABMASTER::GRAPHIC_DATA& aD
     return new_arc;
 }
 
-FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAPHIC_DATA& aData, double aScale )
+
+FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAPHIC_DATA& aData,
+                                                           double aScale )
 {
     GRAPHIC_RECTANGLE* new_rect = new GRAPHIC_RECTANGLE;
 
@@ -1098,7 +1116,9 @@ FABMASTER::GRAPHIC_RECTANGLE* FABMASTER::processRectangle( const FABMASTER::GRAP
     return new_rect;
 }
 
-FABMASTER::GRAPHIC_TEXT* FABMASTER::processText( const FABMASTER::GRAPHIC_DATA& aData, double aScale )
+
+FABMASTER::GRAPHIC_TEXT* FABMASTER::processText( const FABMASTER::GRAPHIC_DATA& aData,
+                                                 double aScale )
 {
     GRAPHIC_TEXT* new_text = new GRAPHIC_TEXT;
 
@@ -1454,7 +1474,7 @@ size_t FABMASTER::processTraces( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogDebug( _( "Unhandled graphic item '%s' in row %zu." ),
+            wxLogTrace( traceFabmaster,  _( "Unhandled graphic item '%s' in row %zu." ),
                         gr_data.graphic_dataname.c_str(),
                         rownum );
             continue;
@@ -1538,6 +1558,7 @@ FABMASTER::COMPCLASS FABMASTER::parseCompClass( const std::string& aCmpClass )
 
     return COMPCLASS_NONE;
 }
+
 
 /**
  * A!REFDES!COMP_CLASS!COMP_PART_NUMBER!COMP_HEIGHT!COMP_DEVICE_LABEL!COMP_INSERTION_CODE!SYM_TYPE!
@@ -1626,7 +1647,8 @@ size_t FABMASTER::processFootprints( size_t aRow )
 
 
 /**
- * A!SYM_NAME!SYM_MIRROR!PIN_NAME!PIN_NUMBER!PIN_X!PIN_Y!PAD_STACK_NAME!REFDES!PIN_ROTATION!TEST_POINT!
+ * A!SYM_NAME!SYM_MIRROR!PIN_NAME!PIN_NUMBER!PIN_X!PIN_Y!PAD_STACK_NAME!REFDES!PIN_ROTATION!
+ * TEST_POINT!
  */
 size_t FABMASTER::processPins( size_t aRow )
 {
@@ -1686,7 +1708,8 @@ size_t FABMASTER::processPins( size_t aRow )
 
         if( map_it == pins.end() )
         {
-            auto retval = pins.insert( std::make_pair( pin->refdes, std::set<std::unique_ptr<PIN>, PIN::BY_NUM>{} ) );
+            auto retval = pins.insert( std::make_pair( pin->refdes, std::set<std::unique_ptr<PIN>,
+                                                       PIN::BY_NUM>{} ) );
             map_it = retval.first;
         }
 
@@ -2002,7 +2025,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             fp->SetOrientationDegrees( -src->rotate );
 
             // KiCad netlisting requires parts to have non-digit + digit annotation.
-            // If the reference begins with a number, we prepend 'UNK' (unknown) for the source designator
+            // If the reference begins with a number, we prepend 'UNK' (unknown) for the source
+            // designator
             wxString reference = src->refdes;
 
             if( !std::isalpha( src->refdes[0] ) )
@@ -2026,7 +2050,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     if( !IsPcbLayer( layer ) )
                     {
-                        wxLogDebug("The layer %s is not mapped?\n", ref->layer.c_str() );
+                        wxLogTrace( traceFabmaster, wxS( "The layer %s is not mapped?" ),
+                                                         ref->layer.c_str() );
                         continue;
                     }
 
@@ -2038,12 +2063,14 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     if( src->mirror )
                     {
                         txt->SetLayer( FlipLayer( layer ) );
-                        txt->SetTextPos( VECTOR2I( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
+                        txt->SetTextPos( VECTOR2I( lsrc->start_x,
+                                                   2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
                     }
                     else
                     {
                         txt->SetLayer( layer );
-                        txt->SetTextPos( VECTOR2I( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
+                        txt->SetTextPos( VECTOR2I( lsrc->start_x,
+                                                   lsrc->start_y - lsrc->height / 2 ) );
                     }
 
                     txt->SetText( lsrc->text );
@@ -2189,12 +2216,14 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         if( src->mirror )
                         {
                             txt->SetLayer( FlipLayer( layer ) );
-                            txt->SetTextPos( VECTOR2I( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
+                            txt->SetTextPos( VECTOR2I( lsrc->start_x,
+                                                       2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
                         }
                         else
                         {
                             txt->SetLayer( layer );
-                            txt->SetTextPos( VECTOR2I( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
+                            txt->SetTextPos( VECTOR2I( lsrc->start_x,
+                                                       lsrc->start_y - lsrc->height / 2 ) );
                         }
 
                         txt->SetText( lsrc->text );
@@ -2204,8 +2233,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         txt->SetTextWidth( lsrc->width );
                         txt->SetHorizJustify( lsrc->orient );
 
-                        // FABMASTER doesn't have visibility flags but layers that are not silk should be hidden
-                        // by default to prevent clutter.
+                        // FABMASTER doesn't have visibility flags but layers that are not silk
+                        // should be hidden by default to prevent clutter.
                         if( txt->GetLayer() != F_SilkS && txt->GetLayer() != B_SilkS )
                             txt->SetVisible( false );
 
@@ -2224,7 +2253,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             {
                 for( auto& pin : pin_it->second )
                 {
-                    auto pin_net_it = pin_nets.find( std::make_pair( pin->refdes, pin->pin_number ) );
+                    auto pin_net_it = pin_nets.find( std::make_pair( pin->refdes,
+                                                                     pin->pin_number ) );
                     auto padstack = pads.find( pin->padstack );
                     std::string netname = "";
 
@@ -2269,7 +2299,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                             newpad->SetSize( VECTOR2I( pad_size / 2, pad_size / 2 ) );
 
-                            std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" + pin->pin_number;
+                            std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" +
+                                                      pin->pin_number;
                             auto custom_it = pad_shapes.find( custom_name );
 
                             if( custom_it != pad_shapes.end() )
@@ -2285,7 +2316,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 // that are a list of graphical polygons
                                 for( const auto& el : (*custom_it).second.elements )
                                 {
-                                    // For now, we are only processing the custom pad for the top layer
+                                    // For now, we are only processing the custom pad for the
+                                    // top layer
                                     // TODO: Use full padstacks when implementing in KiCad
                                     PCB_LAYER_ID primary_layer = src->mirror ? B_Cu : F_Cu;
 
@@ -2305,9 +2337,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                             const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
                                             if( poly_outline.VertexCount( 0, hole_idx ) == 0 )
-                                                poly_outline.Append( src->start_x, src->start_y, 0, hole_idx );
+                                                poly_outline.Append( src->start_x, src->start_y,
+                                                                     0, hole_idx );
 
-                                            poly_outline.Append( src->end_x, src->end_y, 0, hole_idx );
+                                            poly_outline.Append( src->end_x, src->end_y, 0,
+                                                                 hole_idx );
                                         }
                                         else if( seg->shape == GR_SHAPE_ARC )
                                         {
@@ -2335,12 +2369,15 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                                     if( src->mirror )
                                     {
-                                        poly_outline.Mirror( false, true, VECTOR2I( 0, ( pin->pin_y - src->y ) ) );
-                                        poly_outline.Rotate( EDA_ANGLE( src->rotate - pin->rotation, DEGREES_T ) );
+                                        poly_outline.Mirror( false, true,
+                                                             VECTOR2I( 0, ( pin->pin_y - src->y ) ) );
+                                        poly_outline.Rotate( EDA_ANGLE( src->rotate - pin->rotation,
+                                                                        DEGREES_T ) );
                                     }
                                     else
                                     {
-                                        poly_outline.Rotate( EDA_ANGLE( -src->rotate + pin->rotation, DEGREES_T ) );
+                                        poly_outline.Rotate( EDA_ANGLE( -src->rotate + pin->rotation,
+                                                                        DEGREES_T ) );
                                     }
 
                                     newpad->AddPrimitivePoly( poly_outline, 0, true );
@@ -2364,7 +2401,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             }
                         }
                         else
+                        {
                             newpad->SetSize( VECTOR2I( pad.width, pad.height ) );
+                        }
 
                         if( pad.drill )
                         {
@@ -2398,9 +2437,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     }
 
                     if( src->mirror )
-                        newpad->SetOrientation( EDA_ANGLE( -src->rotate + pin->rotation, DEGREES_T ) );
+                        newpad->SetOrientation( EDA_ANGLE( -src->rotate + pin->rotation,
+                                                           DEGREES_T ) );
                     else
-                        newpad->SetOrientation( EDA_ANGLE( src->rotate - pin->rotation, DEGREES_T ) );
+                        newpad->SetOrientation( EDA_ANGLE( src->rotate - pin->rotation,
+                                                           DEGREES_T ) );
 
                     if( newpad->GetSizeX() > 0 || newpad->GetSizeY() > 0 )
                     {
@@ -2519,7 +2560,7 @@ bool FABMASTER::loadNets( BOARD* aBoard )
 }
 
 
-bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
+bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine )
 {
     const NETNAMES_MAP& netinfo = aBoard->GetNetInfo().NetsByName();
     auto net_it = netinfo.find( aLine->netname );
@@ -2795,7 +2836,8 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     {
         if( seg->subseq > 0 && seg->subseq != last_subseq )
         {
-            /// Don't knock holes in the BOUNDARY systems.  These are the outer layers for zone fills.
+            // Don't knock holes in the BOUNDARY systems.  These are the outer layers for
+            // zone fills.
             if( aLine->lclass == "BOUNDARY" )
                 break;
 

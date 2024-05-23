@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,15 @@
 #include <wx/log.h>
 #include <wx/textctrl.h>
 #include <wx/statusbr.h>
+
+
+/**
+ * Flag to enable reporter debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceReporter[] = wxT( "KICAD_REPORTER" );
+
 
 REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
 {
@@ -186,14 +195,14 @@ REPORTER& WXLOG_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 {
     switch( aSeverity )
     {
-    case RPT_SEVERITY_ERROR:     wxLogError( aMsg );   break;
-    case RPT_SEVERITY_WARNING:   wxLogWarning( aMsg ); break;
-    case RPT_SEVERITY_UNDEFINED: wxLogMessage( aMsg ); break;
-    case RPT_SEVERITY_INFO:      wxLogInfo( aMsg );    break;
-    case RPT_SEVERITY_ACTION:    wxLogInfo( aMsg );    break;
-    case RPT_SEVERITY_DEBUG:     wxLogDebug( aMsg );   break;
-    case RPT_SEVERITY_EXCLUSION:                       break;
-    case RPT_SEVERITY_IGNORE:                          break;
+    case RPT_SEVERITY_ERROR:     wxLogError( aMsg );                  break;
+    case RPT_SEVERITY_WARNING:   wxLogWarning( aMsg );                break;
+    case RPT_SEVERITY_UNDEFINED: wxLogMessage( aMsg );                break;
+    case RPT_SEVERITY_INFO:      wxLogInfo( aMsg );                   break;
+    case RPT_SEVERITY_ACTION:    wxLogInfo( aMsg );                   break;
+    case RPT_SEVERITY_DEBUG:     wxLogTrace( traceReporter, aMsg );   break;
+    case RPT_SEVERITY_EXCLUSION:                                      break;
+    case RPT_SEVERITY_IGNORE:                                         break;
     }
 
     return *this;

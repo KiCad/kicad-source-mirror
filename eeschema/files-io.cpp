@@ -269,10 +269,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             {
                 wxBusyCursor busy;
                 Schematic().SetRoot( pi->LoadSchematicFile( fullFileName, &Schematic() ) );
+
                 // Make ${SHEETNAME} work on the root sheet until we properly support
                 // naming the root sheet
                 Schematic().Root().SetName( _( "Root" ) );
-                wxLogDebug( "Loaded schematic with root sheet UUID %s", Schematic().Root().m_Uuid.AsString() );
+                wxLogTrace( tracePathsAndFiles, wxS( "Loaded schematic with root sheet UUID %s" ),
+                            Schematic().Root().m_Uuid.AsString() );
             }
 
             if( !pi->GetError().IsEmpty() )
@@ -1388,9 +1390,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
         try
         {
-            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
-            DIALOG_HTML_REPORTER              errorReporter( this );
-            WX_PROGRESS_REPORTER              progressReporter( this, _( "Importing Schematic" ), 1 );
+            IO_RELEASER<SCH_IO>  pi( SCH_IO_MGR::FindPlugin( fileType ) );
+            DIALOG_HTML_REPORTER errorReporter( this );
+            WX_PROGRESS_REPORTER progressReporter( this, _( "Importing Schematic" ), 1 );
 
             PROJECT_CHOOSER_PLUGIN* projectChooserPlugin =
                     dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() );
@@ -1422,8 +1424,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                     errorReporter.ShowModal();
                 }
 
-                // Non-KiCad schematics do not use a drawing-sheet (or if they do, it works differently
-                // to KiCad), so set it to an empty one
+                // Non-KiCad schematics do not use a drawing-sheet (or if they do, it works
+                // differently to KiCad), so set it to an empty one.
                 DS_DATA_MODEL& drawingSheet = DS_DATA_MODEL::GetTheInstance();
                 drawingSheet.SetEmptyLayout();
                 BASE_SCREEN::m_DrawingSheetFileName = "empty.kicad_wks";

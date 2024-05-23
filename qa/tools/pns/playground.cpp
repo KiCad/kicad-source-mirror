@@ -35,6 +35,14 @@
 
 #include <pad.h>
 
+/**
+ * Flag to enable PNS playground debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar tracePnsPlayground[] = wxT( "KICAD_PNS_PLAYGROUND" );
+
+
 std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> overlay;
 
 
@@ -363,19 +371,17 @@ int playground_main_func( int argc, char* argv[] )
     overlay->AnnotatedPolyset( xorPad1ToPad2, "XOR Pads" );
     overlay->AnnotatedPolyset( andPad1ToPad2, "AND Pads" );
 
-    wxLogDebug( wxS( "Pad 1 has %d outlines." ),
-                pad1Outline.OutlineCount() );
+    wxLogTrace( tracePnsPlayground, wxS( "Pad 1 has %d outlines." ), pad1Outline.OutlineCount() );
 
-    wxLogDebug( wxS( "Pad 2 has %d outlines." ),
-                pad2Outline.OutlineCount() );
+    wxLogTrace( tracePnsPlayground, wxS( "Pad 2 has %d outlines." ), pad2Outline.OutlineCount() );
 
     VECTOR2I pt1, pt2;
     int dist = std::numeric_limits<int>::max();
 
     collide( pad1Outline, pad2Outline.Outline( 0 ), dist, &dist, &pt1 );
 
-    wxLogDebug( wxS( "Nearest distance between pad 1 and pad 2 is %0.6f mm at X=%0.6f mm, "
-                     "Y=%0.6f mm." ),
+    wxLogDebug( tracePnsPlayground, wxS( "Nearest distance between pad 1 and pad 2 is %0.6f mm "
+                                         "at X=%0.6f mm,  Y=%0.6f mm." ),
                 pcbIUScale.IUTomm( dist ), pcbIUScale.IUTomm( pt1.x ),
                 pcbIUScale.IUTomm( pt1.y ) );
 

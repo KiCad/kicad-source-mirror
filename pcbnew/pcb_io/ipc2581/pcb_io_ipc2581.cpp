@@ -1,7 +1,7 @@
 /**
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software: you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -54,6 +54,15 @@
 #include <wx/numformatter.h>
 #include <wx/mstream.h>
 #include <wx/xml/xml.h>
+
+
+/**
+ * Flag to enable IPC-2581 debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceIpc2581[] = wxT( "KICAD_IPC_2581" );
+
 
 PCB_IO_IPC2581::~PCB_IO_IPC2581()
 {
@@ -298,14 +307,17 @@ wxXmlNode* PCB_IO_IPC2581::generateXmlHeader()
     addAttribute( xmlHeaderNode, "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
 
     if( m_version == 'B' )
-        addAttribute( xmlHeaderNode, "xsi:schemaLocation", "http://webstds.ipc.org/2581 http://webstds.ipc.org/2581/IPC-2581B1.xsd");
+        addAttribute( xmlHeaderNode, "xsi:schemaLocation",
+                      "http://webstds.ipc.org/2581 http://webstds.ipc.org/2581/IPC-2581B1.xsd" );
     else
-        addAttribute( xmlHeaderNode, "xsi:schemaLocation", "http://webstds.ipc.org/2581 http://webstds.ipc.org/2581/IPC-2581C.xsd");
+        addAttribute( xmlHeaderNode, "xsi:schemaLocation",
+                      "http://webstds.ipc.org/2581 http://webstds.ipc.org/2581/IPC-2581C.xsd" );
 
-    m_xml_doc->SetRoot(xmlHeaderNode);
+    m_xml_doc->SetRoot( xmlHeaderNode );
 
     return xmlHeaderNode;
 }
+
 
 wxXmlNode* PCB_IO_IPC2581::generateContentSection()
 {
@@ -332,27 +344,27 @@ wxXmlNode* PCB_IO_IPC2581::generateContentSection()
     {
         contentNode->AddChild( color_node );
         m_line_node = appendNode( contentNode, "DictionaryLineDesc" );
-        addAttribute( m_line_node,  "units", m_units_str );
+        addAttribute( m_line_node, "units", m_units_str );
 
         wxXmlNode* fillNode = appendNode( contentNode, "DictionaryFillDesc" );
-        addAttribute( fillNode,  "units", m_units_str );
+        addAttribute( fillNode, "units", m_units_str );
 
         m_shape_std_node = appendNode( contentNode, "DictionaryStandard" );
-        addAttribute( m_shape_std_node,  "units", m_units_str );
+        addAttribute( m_shape_std_node, "units", m_units_str );
 
         m_shape_user_node = appendNode( contentNode, "DictionaryUser" );
-        addAttribute( m_shape_user_node,  "units", m_units_str );
+        addAttribute( m_shape_user_node, "units", m_units_str );
     }
     else
     {
         m_shape_std_node = appendNode( contentNode, "DictionaryStandard" );
-        addAttribute( m_shape_std_node,  "units", m_units_str );
+        addAttribute( m_shape_std_node, "units", m_units_str );
 
         m_shape_user_node = appendNode( contentNode, "DictionaryUser" );
-        addAttribute( m_shape_user_node,  "units", m_units_str );
+        addAttribute( m_shape_user_node, "units", m_units_str );
 
         m_line_node = appendNode( contentNode, "DictionaryLineDesc" );
-        addAttribute( m_line_node,  "units", m_units_str );
+        addAttribute( m_line_node, "units", m_units_str );
 
         contentNode->AddChild( color_node );
     }
@@ -366,6 +378,7 @@ void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, double aX, double aY )
     wxXmlNode* location_node = appendNode( aNode, "Location" );
     addXY( location_node, VECTOR2I( aX, aY ) );
 }
+
 
 void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PAD& aPad, bool aRelative )
 {
@@ -422,6 +435,7 @@ size_t PCB_IO_IPC2581::lineHash( int aWidth, LINE_STYLE aDashType )
 
     return hash;
 }
+
 
 size_t PCB_IO_IPC2581::shapeHash( const PCB_SHAPE& aShape )
 {
@@ -482,9 +496,12 @@ wxXmlNode* PCB_IO_IPC2581::generateContentStackup( wxXmlNode* aContentNode )
                                                         // not in standard color list.
             {
                 COLOR4D layer_color( colorName );
-                addAttribute( color,  "r", wxString::Format( "%d", KiROUND( layer_color.r * 255 ) ) );
-                addAttribute( color,  "g", wxString::Format( "%d", KiROUND( layer_color.g * 255 ) ) );
-                addAttribute( color,  "b", wxString::Format( "%d", KiROUND( layer_color.b * 255 ) ) );
+                addAttribute( color,  "r", wxString::Format( "%d",
+                                                             KiROUND( layer_color.r * 255 ) ) );
+                addAttribute( color,  "g", wxString::Format( "%d",
+                                                             KiROUND( layer_color.g * 255 ) ) );
+                addAttribute( color,  "b", wxString::Format( "%d",
+                                                             KiROUND( layer_color.b * 255 ) ) );
             }
             else
             {
@@ -563,25 +580,26 @@ void PCB_IO_IPC2581::addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDash
 
     switch( aDashType )
     {
-        case LINE_STYLE::DOT:
-            addAttribute( line_node,  "lineProperty", "DOTTED" );
-            break;
-        case LINE_STYLE::DASH:
-            addAttribute( line_node,  "lineProperty", "DASHED" );
-            break;
-        case LINE_STYLE::DASHDOT:
-            addAttribute( line_node,  "lineProperty", "CENTER" );
-            break;
-        case LINE_STYLE::DASHDOTDOT:
-            addAttribute( line_node,  "lineProperty", "PHANTOM" );
-            break;
-        default:
-            break;
+    case LINE_STYLE::DOT:
+        addAttribute( line_node,  "lineProperty", "DOTTED" );
+        break;
+    case LINE_STYLE::DASH:
+        addAttribute( line_node,  "lineProperty", "DASHED" );
+        break;
+    case LINE_STYLE::DASHDOT:
+        addAttribute( line_node,  "lineProperty", "CENTER" );
+        break;
+    case LINE_STYLE::DASHDOTDOT:
+        addAttribute( line_node,  "lineProperty", "PHANTOM" );
+        break;
+    default:
+        break;
     }
 }
 
 
-void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KIFONT::METRICS& aFontMetrics )
+void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
+                              const KIFONT::METRICS& aFontMetrics )
 {
     if( !aText->IsVisible() )
             return;
@@ -631,6 +649,7 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KI
             }
 
         }
+
         addLineDesc( line_node, attrs.m_StrokeWidth, LINE_STYLE::SOLID );
         pts.clear();
     };
@@ -689,7 +708,8 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KI
 
     //TODO: handle knockout text and multiline
 
-    font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetTextPos(), attrs, aFontMetrics );
+    font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetTextPos(), attrs,
+                aFontMetrics );
 
     if( !pts.empty() )
         push_pts();
@@ -957,7 +977,8 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
         LINE_STYLE dash = aShape.GetStroke().GetLineStyle();
 
         wxXmlNode* rect_node = appendNode( special_node, "RectRound" );
-        addLineDesc( rect_node, aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle(), true );
+        addLineDesc( rect_node, aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle(),
+                     true );
 
         if( aShape.GetFillMode() == FILL_T::NO_FILL )
         {
@@ -1094,7 +1115,8 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
 {
     wxXmlNode* slotNode = appendNode( aNode, "SlotCavity" );
     addAttribute( slotNode,  "name", aName );
-    addAttribute( slotNode,  "platingStatus", aPad.GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
+    addAttribute( slotNode,  "platingStatus",
+                  aPad.GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
     addAttribute( slotNode,  "plusTol", "0.0" );
     addAttribute( slotNode,  "minusTol", "0.0" );
 
@@ -1156,6 +1178,7 @@ wxXmlNode* PCB_IO_IPC2581::generateHistorySection()
     return historyNode;
 }
 
+
 wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 {
     if( m_progressReporter )
@@ -1168,6 +1191,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         bool     m_populate;
         wxString m_layer;
     };
+
     struct BOM_ENTRY
     {
         BOM_ENTRY()
@@ -1192,8 +1216,11 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         std::map<wxString, wxString>* m_props;
     };
 
-    std::set<std::unique_ptr<struct BOM_ENTRY>, std::function<bool( const std::unique_ptr<struct BOM_ENTRY>&, const std::unique_ptr<struct BOM_ENTRY>& )>> bom_entries(
-            []( const std::unique_ptr<struct BOM_ENTRY>& a, const std::unique_ptr<struct BOM_ENTRY>& b )
+    std::set<std::unique_ptr<struct BOM_ENTRY>,
+             std::function<bool( const std::unique_ptr<struct BOM_ENTRY>&,
+                                 const std::unique_ptr<struct BOM_ENTRY>& )>> bom_entries(
+            []( const std::unique_ptr<struct BOM_ENTRY>& a,
+                const std::unique_ptr<struct BOM_ENTRY>& b )
             {
                 return a->m_OEMDesignRef < b->m_OEMDesignRef;
             } );
@@ -1214,7 +1241,8 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 
         if( iter == m_footprint_dict.end() )
         {
-            wxLogError( "Footprint %s not found in dictionary", fp->GetFPID().GetLibItemName().wx_str() );
+            wxLogError( "Footprint %s not found in dictionary",
+                        fp->GetFPID().GetLibItemName().wx_str() );
             continue;
         }
 
@@ -1228,7 +1256,8 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         }
         else
         {
-            wxLogError( "Footprint %s not found in OEMRef dictionary", fp->GetFPID().GetLibItemName().wx_str() );
+            wxLogError( "Footprint %s not found in OEMRef dictionary",
+                        fp->GetFPID().GetLibItemName().wx_str() );
         }
 
         entry->m_OEMDesignRef = genString( entry->m_OEMDesignRef, "REF" );
@@ -1458,7 +1487,8 @@ void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
                     ly_name = m_board->GetLayerName( stackup_item->GetBrdLayerId() );
 
                 if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-                    ly_name = wxString::Format( "DIELECTRIC_%d", stackup_item->GetDielectricLayerId() );
+                    ly_name = wxString::Format( "DIELECTRIC_%d",
+                                                stackup_item->GetDielectricLayerId() );
             }
 
             ly_name = genString( ly_name, "LAYER" );
@@ -1536,8 +1566,10 @@ void PCB_IO_IPC2581::generateDrillLayers( wxXmlNode* aCadLayerNode )
         addAttribute( drillNode,  "side", "ALL" );
 
         wxXmlNode* spanNode = appendNode( drillNode, "Span" );
-        addAttribute( spanNode,  "fromLayer", genString( m_board->GetLayerName( layer_pair.first ), "LAYER" ) );
-        addAttribute( spanNode,  "toLayer", genString( m_board->GetLayerName( layer_pair.second ), "LAYER" ) );
+        addAttribute( spanNode,  "fromLayer",
+                      genString( m_board->GetLayerName( layer_pair.first ), "LAYER" ) );
+        addAttribute( spanNode,  "toLayer", genString( m_board->GetLayerName( layer_pair.second ),
+                                                       "LAYER" ) );
     }
 
     for( const auto& [layer_pair, vec] : m_slot_holes )
@@ -1552,8 +1584,10 @@ void PCB_IO_IPC2581::generateDrillLayers( wxXmlNode* aCadLayerNode )
         addAttribute( drillNode,  "side", "ALL" );
 
         wxXmlNode* spanNode = appendNode( drillNode, "Span" );
-        addAttribute( spanNode,  "fromLayer", genString( m_board->GetLayerName( layer_pair.first ), "LAYER" ) );
-        addAttribute( spanNode,  "toLayer", genString( m_board->GetLayerName( layer_pair.second ), "LAYER" ) );
+        addAttribute( spanNode,  "fromLayer",
+                      genString( m_board->GetLayerName( layer_pair.first ), "LAYER" ) );
+        addAttribute( spanNode,  "toLayer",
+                      genString( m_board->GetLayerName( layer_pair.second ), "LAYER" ) );
     }
 }
 
@@ -1577,7 +1611,8 @@ void PCB_IO_IPC2581::generateStepSection( wxXmlNode* aCadNode )
     m_last_padstack = insertNode( stepNode, "NonstandardAttribute" );
     addAttribute( m_last_padstack,  "name", "FOOTPRINT_COUNT" );
     addAttribute( m_last_padstack,  "type", "INTEGER" );
-    addAttribute( m_last_padstack,  "value", wxString::Format( "%zu", m_board->Footprints().size() ) );
+    addAttribute( m_last_padstack,  "value",
+                  wxString::Format( "%zu", m_board->Footprints().size() ) );
 
     generateLayerFeatures( stepNode );
     generateLayerSetDrill( stepNode );
@@ -1613,6 +1648,7 @@ void PCB_IO_IPC2581::addPad( wxXmlNode* aContentNode, const PAD* aPad, PCB_LAYER
     }
 }
 
+
 void PCB_IO_IPC2581::addVia( wxXmlNode* aContentNode, const PCB_VIA* aVia, PCB_LAYER_ID aLayer )
 {
     if( !aVia->FlashLayer( aLayer ) )
@@ -1631,6 +1667,7 @@ void PCB_IO_IPC2581::addVia( wxXmlNode* aContentNode, const PCB_VIA* aVia, PCB_L
 
     addShape( padNode, dummy, aLayer );
 }
+
 
 void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
 {
@@ -1659,7 +1696,8 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
                                 aPad->GetDrillSizeX(), aPad->GetDrillSizeY() ) );
 
         addAttribute( padStackHoleNode,  "diameter", floatVal( m_scale * aPad->GetDrillSizeX() ) );
-        addAttribute( padStackHoleNode,  "platingStatus", aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
+        addAttribute( padStackHoleNode,  "platingStatus",
+                      aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
         addAttribute( padStackHoleNode,  "plusTol", "0.0" );
         addAttribute( padStackHoleNode,  "minusTol", "0.0" );
         addXY( padStackHoleNode, aPad->GetOffset() );
@@ -1692,6 +1730,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         }
     }
 }
+
 
 void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 {
@@ -1794,7 +1833,8 @@ bool PCB_IO_IPC2581::addPolygonNode( wxXmlNode* aParentNode,
 }
 
 
-bool PCB_IO_IPC2581::addPolygonCutouts( wxXmlNode* aParentNode, const SHAPE_POLY_SET::POLYGON& aPolygon )
+bool PCB_IO_IPC2581::addPolygonCutouts( wxXmlNode* aParentNode,
+                                        const SHAPE_POLY_SET::POLYGON& aPolygon )
 {
     for( size_t ii = 1; ii < aPolygon.size(); ++ii )
     {
@@ -1820,7 +1860,8 @@ bool PCB_IO_IPC2581::addPolygonCutouts( wxXmlNode* aParentNode, const SHAPE_POLY
 }
 
 
-bool PCB_IO_IPC2581::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SET& aPolySet, int aWidth, LINE_STYLE aDashType )
+bool PCB_IO_IPC2581::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SET& aPolySet,
+                                     int aWidth, LINE_STYLE aDashType )
 {
     if( aPolySet.OutlineCount() == 0 )
         return false;
@@ -1832,7 +1873,7 @@ bool PCB_IO_IPC2581::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
         wxCHECK2( aPolySet.Outline( ii ).PointCount() >= 3, continue );
 
         if( !addPolygonNode( outlineNode, aPolySet.Polygon( ii ) ) )
-            wxLogDebug( "Failed to add polygon to outline" );
+            wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to outline" ) );
     }
 
     if( !outlineNode->GetChildren() )
@@ -1885,9 +1926,10 @@ void PCB_IO_IPC2581::generateProfile( wxXmlNode* aStepNode )
     }
 
     wxXmlNode* profileNode = appendNode( aStepNode, "Profile" );
+
     if( !addPolygonNode( profileNode, board_outline.Polygon( 0 ) ) )
     {
-        wxLogDebug( "Failed to add polygon to profile" );
+        wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to profile" ) );
         aStepNode->RemoveChild( profileNode );
         delete profileNode;
     }
@@ -1904,7 +1946,6 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         fp->Flip( fp->GetPosition(), false );
 
     fp->SetOrientation( ANGLE_0 );
-
 
     size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
     wxString name = genString( wxString::Format( "%s_%zu", fp->GetFPID().GetLibItemName().wx_str(),
@@ -1953,7 +1994,8 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     if( courtyard_back.OutlineCount() > 0 )
     {
         otherSideViewNode = appendNode( packageNode, "OtherSideView" );
-        addOutlineNode( otherSideViewNode, courtyard_back, courtyard_back.Outline( 0 ).Width(), LINE_STYLE::SOLID );
+        addOutlineNode( otherSideViewNode, courtyard_back, courtyard_back.Outline( 0 ).Width(),
+                        LINE_STYLE::SOLID );
     }
 
     if( !courtyard.OutlineCount() && !courtyard_back.OutlineCount() )
@@ -2117,7 +2159,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         }
     }
 
-    for( auto&[layer, bbox] : layer_bbox)
+    for( auto&[layer, bbox] : layer_bbox )
     {
         if( bbox.GetWidth() > 0 )
         {
@@ -2172,8 +2214,8 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         addLocationNode( pinNode, *pad, true );
         addShape( pinNode, *pad, pad->GetLayer() );
 
-        // We just need the padstack, we don't need the reference here.  The reference will be created
-        // in the LayerFeature set
+        // We just need the padstack, we don't need the reference here.  The reference will be
+        // created in the LayerFeature set
         wxXmlNode dummy;
         addPadStack( &dummy, pad );
     }
@@ -2235,7 +2277,8 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
             wxXmlNode* xformNode = appendNode( componentNode, "Xform" );
 
             if( fp->GetOrientation() != ANGLE_0 )
-                addAttribute( xformNode,  "rotation", floatVal( fp->GetOrientation().Normalize().AsDegrees() ) );
+                addAttribute( xformNode,  "rotation",
+                              floatVal( fp->GetOrientation().Normalize().AsDegrees() ) );
 
             if( fp->GetLayer() != F_Cu )
                 addAttribute( xformNode,  "mirror", "true" );
@@ -2259,12 +2302,14 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         aStepNode->AddChild( cmp );
 }
 
+
 void PCB_IO_IPC2581::generateLogicalNets( wxXmlNode* aStepNode )
 {
     for( auto& [ net, pin_pair] : m_net_pin_dict )
     {
         wxXmlNode* netNode = appendNode( aStepNode, "LogicalNet" );
-        addAttribute( netNode,  "name", genString( m_board->GetNetInfo().GetNetItem( net )->GetNetname(), "NET" ) ) ;
+        addAttribute( netNode,  "name",
+                      genString( m_board->GetNetInfo().GetNetItem( net )->GetNetname(), "NET" ) ) ;
 
         for( auto& [cmp, pin] : pin_pair )
         {
@@ -2394,6 +2439,7 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
 void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
 {
     int hole_count = 1;
+
     for( const auto& [layer_pair, vec] : m_drill_layers )
     {
         wxXmlNode* layerNode = appendNode( aLayerNode, "LayerFeature" );
@@ -2430,7 +2476,6 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 addAttribute( holeNode,  "minusTol", "0.0" );
                 addXY( holeNode, via->GetPosition() );
             }
-
             else if( item->Type() == PCB_PAD_T )
             {
                 PAD* pad = static_cast<PAD*>( item );
@@ -2451,7 +2496,8 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 wxXmlNode* holeNode = appendNode( padNode, "Hole" );
                 addAttribute( holeNode,  "name", wxString::Format( "H%d", hole_count++ ) );
                 addAttribute( holeNode,  "diameter", floatVal( m_scale * pad->GetDrillSizeX() ) );
-                addAttribute( holeNode,  "platingStatus", pad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
+                addAttribute( holeNode,  "platingStatus",
+                              pad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
                 addAttribute( holeNode,  "plusTol", "0.0" );
                 addAttribute( holeNode,  "minusTol", "0.0" );
                 addXY( holeNode, pad->GetPosition() );
@@ -2460,6 +2506,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
     }
 
     hole_count = 1;
+
     for( const auto& [layer_pair, vec] : m_slot_holes )
     {
         wxXmlNode* layerNode = appendNode( aLayerNode, "LayerFeature" );
@@ -2476,7 +2523,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
             if( pad->GetNetCode() > 0 )
                 addAttribute( padNode,  "net", genString( pad->GetNetname(), "NET" ) );
 
-            addSlotCavity( padNode, *pad, wxString::Format( "SLOT%d", hole_count++ )  );
+            addSlotCavity( padNode, *pad, wxString::Format( "SLOT%d", hole_count++ ) );
         }
     }
 }
@@ -2500,11 +2547,13 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
     wxXmlNode* teardropLayerSetNode = nullptr;
     wxXmlNode* teardropFeatureSetNode = nullptr;
 
-    if( BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( *it ); IsCopperLayer( aLayer ) && item )
+    if( BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( *it );
+        IsCopperLayer( aLayer ) && item )
     {
         if( item->GetNetCode() > 0 )
             addAttribute( layerSetNode,  "net", genString( item->GetNetname(), "NET" ) );
     }
+
     auto add_track = [&]( PCB_TRACK* track )
     {
         if( track->Type() == PCB_TRACE_T )
@@ -2559,7 +2608,8 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                 addAttribute( teardropLayerSetNode,  "geometryUsage", "TEARDROP" );
 
                 if( zone->GetNetCode() > 0 )
-                    addAttribute( teardropLayerSetNode,  "net", genString( zone->GetNetname(), "NET" ) );
+                    addAttribute( teardropLayerSetNode,  "net",
+                                  genString( zone->GetNetname(), "NET" ) );
 
                 wxXmlNode* new_teardrops = appendNode( teardropLayerSetNode, "Features" );
                 addLocationNode( new_teardrops, 0.0, 0.0 );
@@ -2605,7 +2655,8 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
 
             addShape( tempFeature, *shape );
         }
-        else if( shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::RECTANGLE || shape->GetShape() == SHAPE_T::POLY )
+        else if( shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::RECTANGLE
+               || shape->GetShape() == SHAPE_T::POLY )
         {
             wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
 
@@ -2726,7 +2777,7 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
             break;
 
         default:
-            wxLogDebug( "Unhandled type %s",
+            wxLogTrace( traceIpc2581, wxS( "Unhandled type %s" ),
                         ENUM_MAP<KICAD_T>::Instance().ToString( item->Type() ) );
         }
     }
@@ -2950,5 +3001,4 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     }
 
     size_t size = out_stream.GetSize();
-
 }

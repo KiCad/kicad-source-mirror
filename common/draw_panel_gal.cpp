@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2013-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -54,6 +54,15 @@
 
 #include <pgm_base.h>
 #include <confirm.h>
+
+
+/**
+ * Flag to enable drawing panel debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceDrawPanel[] = wxT( "KICAD_DRAW_PANEL" );
+
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
@@ -236,6 +245,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
     bool isDirty = false;
 
     cntTotal.Start();
+
     try
     {
         cntUpd.Start();
@@ -248,9 +258,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
         {
             // Don't do anything here but don't fail
             // This can happen when we don't catch `at()` calls
-            wxString msg;
-            msg.Printf( wxT( "Out of Range error: %s" ), err.what() );
-            wxLogDebug( msg );
+            wxLogTrace( traceDrawPanel, wxS( "Out of Range error: %s" ), err.what() );
         }
 
         cntUpd.Stop();

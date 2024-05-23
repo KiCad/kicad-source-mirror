@@ -3,7 +3,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016-2018 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -84,7 +84,7 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
 void CN_ITEM::Dump()
 {
-    wxLogDebug("    valid: %d, connected: \n", !!Valid());
+    wxLogDebug( "    valid: %d, connected: \n", !!Valid() );
 
     for( CN_ITEM* i : m_connected )
     {
@@ -146,7 +146,7 @@ void CN_ITEM::RemoveInvalidRefs()
 
 
 CN_ITEM* CN_LIST::Add( PAD* pad )
- {
+{
     if( !pad->IsOnCopperLayer() )
          return nullptr;
 

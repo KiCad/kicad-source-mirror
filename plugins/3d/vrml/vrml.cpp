@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2015, 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020, 2021, 2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,14 +204,15 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
             }
             catch( std::runtime_error& e )
             {
-                wxLogDebug( wxT( " * [INFO] wrz load failed: %s" ), wxString::FromUTF8Unchecked( e.what() ) );
+                wxLogTrace( traceVrmlPlugin, wxS( " * [INFO] wrz load failed: %s" ),
+                            wxString::FromUTF8Unchecked( e.what() ) );
 
                 delete[] buffer;
                 return nullptr;
             }
             catch( ... )
             {
-                wxLogDebug( wxT( " * [INFO] wrz load failed: unknown error" ) );
+                wxLogTrace( traceVrmlPlugin, wxS( " * [INFO] wrz load failed: unknown error" ) );
 
                 delete[] buffer;
                 return nullptr;

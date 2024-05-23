@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2023, 2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,14 +26,19 @@
 #include <wx/log.h>
 #include <wx/string.h>
 
+#include <trace_helpers.h>
+
+
 GIT_REVERT_HANDLER::GIT_REVERT_HANDLER( git_repository* aRepository )
 {
     m_repository = aRepository;
 }
 
+
 GIT_REVERT_HANDLER::~GIT_REVERT_HANDLER()
 {
 }
+
 
 bool GIT_REVERT_HANDLER::Revert( const wxString& aFilePath )
 {
@@ -41,33 +46,37 @@ bool GIT_REVERT_HANDLER::Revert( const wxString& aFilePath )
     return true;
 }
 
-static void checkout_progress_cb(const char *path, size_t cur, size_t tot, void *payload)
+
+static void checkout_progress_cb( const char *path, size_t cur, size_t tot, void *payload )
 {
-    wxLogDebug( "checkout_progress_cb: %s %zu/%zu", path, cur, tot );
+    wxLogTrace( traceGit, wxS( "checkout_progress_cb: %s %zu/%zu" ), path, cur, tot );
 }
 
 
-static int checkout_notify_cb(git_checkout_notify_t why, const char *path,
-                              const git_diff_file *baseline,
-                              const git_diff_file *target,
-                              const git_diff_file *workdir, void *payload)
+static int checkout_notify_cb( git_checkout_notify_t why, const char *path,
+                               const git_diff_file *baseline,
+                               const git_diff_file *target,
+                               const git_diff_file *workdir, void *payload )
 {
     GIT_REVERT_HANDLER* handler = static_cast<GIT_REVERT_HANDLER*>(payload);
 
-    if( why & ( GIT_CHECKOUT_NOTIFY_CONFLICT | GIT_CHECKOUT_NOTIFY_IGNORED | GIT_CHECKOUT_NOTIFY_UPDATED ) )
+    if( why & ( GIT_CHECKOUT_NOTIFY_CONFLICT | GIT_CHECKOUT_NOTIFY_IGNORED
+              | GIT_CHECKOUT_NOTIFY_UPDATED ) )
         handler->PushFailedFile( path );
 
     return 0;
 }
 
+
 void GIT_REVERT_HANDLER::PerformRevert()
 {
     git_object* head_commit = NULL;
     git_checkout_options opts;
-    git_checkout_init_options(&opts, GIT_CHECKOUT_OPTIONS_VERSION);
+    git_checkout_init_options( &opts, GIT_CHECKOUT_OPTIONS_VERSION );
 
     // Get the HEAD commit
-    if (git_revparse_single(&head_commit, m_repository, "HEAD") != 0) {
+    if( git_revparse_single( &head_commit, m_repository, "HEAD" ) != 0 )
+    {
         // Handle error. If we cannot get the HEAD, then there's no point proceeding.
         return;
     }
@@ -86,15 +95,16 @@ void GIT_REVERT_HANDLER::PerformRevert()
     opts.paths = arr;
     opts.progress_cb = checkout_progress_cb;
     opts.notify_cb = checkout_notify_cb;
-    opts.notify_payload = static_cast<void*>(this);
+    opts.notify_payload = static_cast<void*>( this );
 
     // Attempt to checkout the file(s)
-    if (git_checkout_tree(m_repository, head_commit, &opts) != 0)
+    if( git_checkout_tree(m_repository, head_commit, &opts ) != 0 )
     {
         const git_error *e = git_error_last();
-        if (e)
+
+        if( e )
         {
-            wxLogError( "Checkout failed: %d: %s", e->klass, e->message );
+            wxLogTrace( traceGit, wxS( "Checkout failed: %d: %s" ), e->klass, e->message );
         }
     }
 
@@ -104,6 +114,6 @@ void GIT_REVERT_HANDLER::PerformRevert()
 
     delete[] paths;
 
-    git_object_free(head_commit);
+    git_object_free( head_commit );
 }
 

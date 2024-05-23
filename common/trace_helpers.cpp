@@ -56,6 +56,7 @@ const wxChar* const traceEnvVars = wxT( "KICAD_ENV_VARS" );
 const wxChar* const traceGalProfile = wxT( "KICAD_GAL_PROFILE" );
 const wxChar* const traceKiCad2Step = wxT( "KICAD2STEP" );
 const wxChar* const traceUiProfile = wxT( "KICAD_UI_PROFILE" );
+const wxChar* const traceGit = wxT( "KICAD_GIT" );
 
 
 wxString dump( const wxArrayString& aArray )
