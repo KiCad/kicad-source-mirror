@@ -494,11 +494,13 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     // Search cache (used for actual board items)
     auto it = m_clearanceCache.find( key );
+
     if( it != m_clearanceCache.end() )
         return it->second;
 
     // Search cache (used for temporary items within an algorithm)
     it = m_tempClearanceCache.find( key );
+
     if( it != m_tempClearanceCache.end() )
         return it->second;
 
@@ -567,14 +569,17 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     if( aUseClearanceEpsilon && rv > 0 )
         rv = std::max( 0, rv - m_clearanceEpsilon );
 
-
-/* It makes no sense to put items that have no owning NODE in the cache - they can be allocated on stack
-   and we can't really invalidate them in the cache when they are destroyed. Probably a better idea would be
-   to use a static unique counter in PNS::ITEM constructor to generate the cache keys.  */
-/* However, algorithms DO greatly benefit from using the cache, so ownerless items need to be cached.
-   In order to easily clear those only, a temporary cache is created. If this doesn't seem nice, an alternative
-   is clearing the full cache once it reaches a certain size. Also not pretty, but VERY effective
-   to keep things interactive. */
+    /*
+     * It makes no sense to put items that have no owning NODE in the cache - they can be
+     * allocated on stack and we can't really invalidate them in the cache when they are
+     * destroyed.  Probably a better idea would be to use a static unique counter in PNS::ITEM
+     * constructor to generate the cache keys.
+     *
+     * However, algorithms DO greatly benefit from using the cache, so ownerless items need to be
+     * cached.  In order to easily clear those only, a temporary cache is created. If this doesn't
+     * seem nice, an alternative is clearing the full cache once it reaches a certain size. Also
+     * not pretty, but VERY effective to keep things interactive.
+     */
     if( aA && aB )
     {
         if ( aA->Owner() && aB->Owner() )
