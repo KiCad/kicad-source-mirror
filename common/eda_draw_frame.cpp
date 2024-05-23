@@ -132,46 +132,10 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     {
         CreateStatusBar( 8 )->SetDoubleBuffered( true );
 
-    // set the size of the status bar subwindows:
+        GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
 
-        wxWindow* stsbar = GetStatusBar();
-        int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
-
-        int dims[] =
-        {
-            // remainder of status bar on far left is set to a default or whatever is left over.
-            -1,
-
-            // When using GetTextSize() remember the width of character '1' is not the same
-            // as the width of '0' unless the font is fixed width, and it usually won't be.
-
-            // zoom:
-            KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x,
-
-            // cursor coords
-            KIUI::GetTextSize( wxT( "X 1234.1234  Y 1234.1234" ), stsbar ).x,
-
-            // delta distances
-            KIUI::GetTextSize( wxT( "dx 1234.1234  dy 1234.1234  dist 1234.1234" ), stsbar ).x,
-
-            // grid size
-            KIUI::GetTextSize( wxT( "grid X 1234.1234  Y 1234.1234" ), stsbar ).x,
-
-            // units display, Inches is bigger than mm
-            KIUI::GetTextSize( _( "Inches" ), stsbar ).x,
-
-            // Size for the "Current Tool" panel; longest string from SetTool()
-            KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x,
-
-            // constraint mode
-            KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x
-        };
-
-        for( size_t ii = 1; ii < arrayDim( dims ); ii++ )
-            dims[ii] += spacer;
-
-        SetStatusWidths( arrayDim( dims ), dims );
-        stsbar->SetFont( KIUI::GetStatusFont( this ) );
+        // set the size of the status bar subwindows:
+        updateStatusBarWidths();
     }
 
     m_messagePanel = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_frameSize.y ), wxDefaultSize );
@@ -188,6 +152,9 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     Bind( wxEVT_DPI_CHANGED,
           [&]( wxDPIChangedEvent& )
           {
+              if( ( GetWindowStyle() & wxFRAME_NO_TASKBAR ) == 0 )
+                  updateStatusBarWidths();
+
               wxMoveEvent dummy;
               OnMove( dummy );
 
@@ -687,6 +654,47 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
     m_frameSize = GetClientSize( );
 
     SizeEv.Skip();
+}
+
+
+void EDA_DRAW_FRAME::updateStatusBarWidths()
+{
+    wxWindow* stsbar = GetStatusBar();
+    int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+
+    int dims[] = {
+        // remainder of status bar on far left is set to a default or whatever is left over.
+        -1,
+
+        // When using GetTextSize() remember the width of character '1' is not the same
+        // as the width of '0' unless the font is fixed width, and it usually won't be.
+
+        // zoom:
+        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x,
+
+        // cursor coords
+        KIUI::GetTextSize( wxT( "X 1234.1234  Y 1234.1234" ), stsbar ).x,
+
+        // delta distances
+        KIUI::GetTextSize( wxT( "dx 1234.1234  dy 1234.1234  dist 1234.1234" ), stsbar ).x,
+
+        // grid size
+        KIUI::GetTextSize( wxT( "grid X 1234.1234  Y 1234.1234" ), stsbar ).x,
+
+        // units display, Inches is bigger than mm
+        KIUI::GetTextSize( _( "Inches" ), stsbar ).x,
+
+        // Size for the "Current Tool" panel; longest string from SetTool()
+        KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x,
+
+        // constraint mode
+        KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x
+    };
+
+    for( size_t ii = 1; ii < arrayDim( dims ); ii++ )
+        dims[ii] += spacer;
+
+    SetStatusWidths( arrayDim( dims ), dims );
 }
 
 

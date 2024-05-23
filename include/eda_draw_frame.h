@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,6 +508,8 @@ protected:
     void unitsChangeRefresh() override;
 
     void setupUnits( APP_SETTINGS_BASE* aCfg );
+
+    void updateStatusBarWidths();
 
     std::vector<wxWindow*> findDialogs();
 
