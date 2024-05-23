@@ -874,7 +874,8 @@ TRACE* SIM_PLOT_TAB::GetOrAddTrace( const wxString& aVectorName, int aType )
 }
 
 
-void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vector<double>& aY )
+void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vector<double>& aY,
+                                 int aSweepCount, size_t aSweepSize )
 {
     if( dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x ) )
     {
@@ -905,6 +906,8 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vec
     }
 
     trace->SetData( aX, aY );
+    trace->SetSweepCount( aSweepCount );
+    trace->SetSweepSize( aSweepSize );
 
     if( ( trace->GetType() & SPT_AC_PHASE ) || ( trace->GetType() & SPT_CURRENT ) )
         trace->SetScale( m_axis_x, m_axis_y2 );

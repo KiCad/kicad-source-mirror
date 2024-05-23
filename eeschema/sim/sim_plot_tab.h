@@ -351,7 +351,8 @@ public:
 
     TRACE* GetOrAddTrace( const wxString& aVectorName, int aType );
 
-    void SetTraceData( TRACE* aTrace, std::vector<double>& aX, std::vector<double>& aY );
+    void SetTraceData( TRACE* aTrace, std::vector<double>& aX, std::vector<double>& aY,
+                       int aSweepCount, size_t aSweepSize );
 
     bool DeleteTrace( const wxString& aVectorName, int aTraceType );
     void DeleteTrace( TRACE* aTrace );

@@ -550,6 +550,7 @@ public:
      *  Override this function in your implementation.
      */
     virtual void Rewind() = 0;
+    virtual void SetSweepWindow( int aSweepIdx ) { Rewind(); }
 
     /** Get locus value for next N.
      *  Override this function in your implementation.
@@ -559,6 +560,7 @@ public:
     virtual bool GetNextXY( double& x, double& y ) = 0;
 
     virtual size_t GetCount() const = 0;
+    virtual int GetSweepCount() const { return 1; }
 
     /** Layer plot handler.
      *  This implementation will plot the locus in the visible area and put a label according to
@@ -1419,6 +1421,9 @@ public:
      */
     virtual void SetData( const std::vector<double>& xs, const std::vector<double>& ys );
 
+    void SetSweepCount( int aSweepCount ) { m_sweepCount = aSweepCount; }
+    void SetSweepSize( size_t aSweepSize ) { m_sweepSize = aSweepSize; }
+
     /** Clears all the data, leaving the layer empty.
      * @sa SetData
      */
@@ -1429,18 +1434,20 @@ protected:
      */
     std::vector<double> m_xs, m_ys;
 
-    /** The internal counter for the "GetNextXY" interface
-     */
-    size_t m_index;
+    size_t m_index;           // internal counter for the "GetNextXY" interface
+    size_t m_sweepWindow;     // last m_index of the current sweep
 
     /** Loaded at SetData
      */
     double m_minX, m_maxX, m_minY, m_maxY;
+    int    m_sweepCount = 1;                                   // sweeps to split data into
+    size_t m_sweepSize = std::numeric_limits<size_t>::max();   // data-points in each sweep
 
     /** Rewind value enumeration with mpFXY::GetNextXY.
      *  Overridden in this implementation.
      */
     void Rewind() override;
+    void SetSweepWindow( int aSweepIdx ) override;
 
     /** Get locus value for next N.
      *  Overridden in this implementation.
@@ -1449,7 +1456,8 @@ protected:
      */
     bool GetNextXY( double& x, double& y ) override;
 
-    size_t GetCount() const override;
+    size_t GetCount() const override { return m_xs.size(); }
+    int GetSweepCount() const override { return m_sweepCount; }
 
 public:
     /** Returns the actual minimum X data (loaded in SetData).
