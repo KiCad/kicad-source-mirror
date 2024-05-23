@@ -1718,46 +1718,24 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
         wxFAIL_MSG( wxT( "Unhandled plot type" ) );
     }
 
-    // If we did a two-source DC analysis, we need to split the resulting vector and add traces
-    // for each input step
     SPICE_DC_PARAMS source1, source2;
+    int             sweepCount = 1;
+    size_t          sweepSize = std::numeric_limits<size_t>::max();
 
     if( simType == ST_DC
             && circuitModel()->ParseDCCommand( aPlotTab->GetSimCommand(), &source1, &source2 )
             && !source2.m_source.IsEmpty() )
     {
-        // Source 1 is the inner loop, so lets add traces for each Source 2 (outer loop) step
-        SPICE_VALUE v = source2.m_vstart;
+        SPICE_VALUE v = ( source2.m_vend - source2.m_vstart ) / source2.m_vincrement;
 
-        size_t offset = 0;
-        size_t outer = ( size_t )( ( source2.m_vend - v ) / source2.m_vincrement ).ToDouble();
-        size_t inner = aDataX->size() / ( outer + 1 );
-
-        wxASSERT( aDataX->size() % ( outer + 1 ) == 0 );
-
-        for( size_t idx = 0; idx <= outer; idx++ )
-        {
-            if( TRACE* trace = aPlotTab->GetOrAddTrace( aVectorName, aTraceType ) )
-            {
-                if( data_y.size() >= size )
-                {
-                    std::vector<double> sub_x( aDataX->begin() + offset,
-                                               aDataX->begin() + offset + inner );
-                    std::vector<double> sub_y( data_y.begin() + offset,
-                                               data_y.begin() + offset + inner );
-
-                    aPlotTab->SetTraceData( trace, sub_x, sub_y );
-                }
-            }
-
-            v = v + source2.m_vincrement;
-            offset += inner;
-        }
+        sweepCount = KiROUND( v.ToDouble() ) + 1;
+        sweepSize = aDataX->size() / sweepCount;
     }
-    else if( TRACE* trace = aPlotTab->GetOrAddTrace( aVectorName, aTraceType ) )
+
+    if( TRACE* trace = aPlotTab->GetOrAddTrace( aVectorName, aTraceType ) )
     {
         if( data_y.size() >= size )
-            aPlotTab->SetTraceData( trace, *aDataX, data_y );
+            aPlotTab->SetTraceData( trace, *aDataX, data_y, sweepCount, sweepSize );
     }
 }
 
