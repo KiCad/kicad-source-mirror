@@ -444,10 +444,15 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementScale( wxSpinEvent& event, double aSign 
     else if( spinCtrl == m_spinZscale )
         textCtrl = zscale;
 
+    double step = SCALE_INCREMENT;
+
+    if( wxGetMouseState().ShiftDown( ) )
+        step = SCALE_INCREMENT_FINE;
+
     double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::UNSCALED,
                                                                    textCtrl->GetValue() );
 
-    curr_value += ( SCALE_INCREMENT * aSign );
+    curr_value += ( step * aSign );
     curr_value = std::max( 1/MAX_SCALE, curr_value );
     curr_value = std::min( curr_value, MAX_SCALE );
 
@@ -465,10 +470,15 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aS
     else if( spinCtrl == m_spinZrot )
         textCtrl = zrot;
 
+    double step = ROTATION_INCREMENT;
+
+    if( wxGetMouseState().ShiftDown( ) )
+        step = ROTATION_INCREMENT_FINE;
+
     double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::DEGREES,
                                                                    textCtrl->GetValue() );
 
-    curr_value += ( ROTATION_INCREMENT * aSign );
+    curr_value += ( step * aSign );
     curr_value = std::max( -MAX_ROTATION, curr_value );
     curr_value = std::min( curr_value, MAX_ROTATION );
 
@@ -488,15 +498,21 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
         textCtrl = zoff;
 
     double step_mm = OFFSET_INCREMENT_MM;
-    double curr_value_mm =
-            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
-                                                       textCtrl->GetValue() )
-            / pcbIUScale.IU_PER_MM;
+
+    if( wxGetMouseState().ShiftDown( ) )
+        step_mm = OFFSET_INCREMENT_MM_FINE;
 
     if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::INCHES )
     {
         step_mm = 25.4*OFFSET_INCREMENT_MIL/1000;
+
+        if( wxGetMouseState().ShiftDown( ) )
+            step_mm = 25.4*OFFSET_INCREMENT_MIL_FINE/1000;;
     }
+
+    double curr_value_mm = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                      textCtrl->GetValue() )
+                           / pcbIUScale.IU_PER_MM;
 
     curr_value_mm += ( step_mm * aSign );
     curr_value_mm = std::max( -MAX_OFFSET, curr_value_mm );
@@ -533,10 +549,10 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
-    double step = ROTATION_INCREMENT_WHEEL;
+    double step = ROTATION_INCREMENT;
 
     if( event.ShiftDown( ) )
-        step = ROTATION_INCREMENT_WHEEL_FINE;
+        step = ROTATION_INCREMENT_FINE;
 
     if( event.GetWheelRotation() >= 0 )
         step = -step;
