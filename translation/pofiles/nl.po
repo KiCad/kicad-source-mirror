@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-04-30 10:07+0000\n"
+"PO-Revision-Date: 2024-05-24 09:09+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -557,7 +557,7 @@ msgstr "Modelbegrenzingen weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "3D-modelbegrenzingen weergeven in de realtime renderer"
+msgstr "3D-modelbegrenzingsvakken weergeven in de realtime renderer"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
@@ -1024,7 +1024,7 @@ msgstr "Renderopties"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Modelbegrenzingen weergeven"
+msgstr "Modelbegrenzingsvaken weergeven"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
@@ -7012,7 +7012,7 @@ msgstr "Meldingen"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr "Er zijn geen notificaties beschikbaar"
+msgstr "Er zijn geen meldingen beschikbaar"
 
 #: common/pgm_base.cpp:208
 msgid "No default editor found, you must choose one."
@@ -9652,7 +9652,7 @@ msgstr "Tekstvelden bijwerken"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field visibilities"
-msgstr "Veldzichtbaarheden bijwerken"
+msgstr "Veldzichtbaarheid bijwerken"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update field sizes and styles"
@@ -9782,7 +9782,7 @@ msgstr "Tekstvelden bijwerken/terugzetten"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:134
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
 msgid "Update/reset field visibilities"
-msgstr "Veldzichtbaarheden bijwerken/terugzetten"
+msgstr "Veldzichtbaarheid bijwerken/terugzetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
@@ -12390,7 +12390,7 @@ msgstr "'%s'-link wijzigen van '%s' naar '%s'?"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:558
 #: eeschema/dialogs/dialog_sheet_properties.cpp:575
 msgid "This action cannot be undone."
-msgstr "Deze actie kan niet ongedaan worden."
+msgstr "Deze actie kan niet ongedaan gemaakt worden."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:570
 #, c-format
@@ -13217,7 +13217,7 @@ msgstr "Wijzigingen niet opgeslagen. Onopgeslagen data exporteren?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1263
 msgid "No filename specified in exporter"
-msgstr "Geen bestandsnaam opgegeven in exporteerder"
+msgstr "Geen bestandsnaam opgegeven voor exporteren"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1277
 #, c-format
@@ -15384,7 +15384,7 @@ msgid ""
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
-"Deze bewerking kan niet ongedaan worden gemaakt.\n"
+"Deze bewerking kan niet ongedaan gemaakt worden.\n"
 "\n"
 "Wilt u het huidige document opslaan voordat u verder gaat?"
 
@@ -16886,8 +16886,8 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
-"Fout bij het lezen van Eagle-bestand. Kan instantie '%s' niet vinden, maar "
-"er wordt naar verwezen in het schema."
+"Fout bij lezen van Eagle-bestand. Kan instantie '%s' niet vinden, maar er "
+"wordt naar verwezen in het schema."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1780
 #, c-format
@@ -22979,7 +22979,7 @@ msgstr "Lijnen schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:193
 msgid "Show lines in outline mode"
-msgstr "Lijnen weergeven in overzichtsmodus"
+msgstr "Lijnen weergeven in omtrekmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
@@ -22987,7 +22987,7 @@ msgstr "Geflitste items schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "Geflitste items weergeven in overzichtsmodus"
+msgstr "Geflitste items weergeven in omtrekmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -22995,7 +22995,7 @@ msgstr "Polygonen schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:211
 msgid "Show polygons in outline mode"
-msgstr "Polygonen weergeven in overzichtsmodus"
+msgstr "Polygonen weergeven in omtrekmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:218
 msgid "Ghost Negative Objects"
@@ -23216,9 +23216,8 @@ msgid "Leave unchanged"
 msgstr "Laat ongewijzigd"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "%s tonen of verbergen"
+msgstr "Importeerproblemen weergeven"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23687,13 +23686,12 @@ msgid "Generate Position File"
 msgstr "Genereer positiebestand"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
 "Geldige opties: front,back,both. De Gerber-indeling ondersteunt alleen "
-"\"both\"."
+"\"front\" of \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -23889,7 +23887,7 @@ msgstr "Symbool en symboolbibliotheken"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Exporteer het symbool of hele symboolbibliotheek naar SVG"
+msgstr "Exporteert symbool of hele symboolbibliotheek naar SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
 msgid "Color theme to use (will default to symbol editor settings)"
@@ -23987,6 +23985,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Updatemelding voor de aangekondigde nieuwe versie negeren. Updatemeldingen "
+"voor nieuwere versies zullen wel worden weergegeven."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -23997,10 +23997,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Updatemelding sluiten. De updatemelding zal de volgende keer dat KiCad wordt "
+"geopend opnieuw worden weergegeven."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Uitgaveaankondigingen openen in een webbrowser."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -24008,7 +24010,7 @@ msgstr "Downloadspagina openen"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Downloadpagina voor uw platform bezoeken."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -24485,9 +24487,8 @@ msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with 'Update All' button."
 msgstr ""
-"Vastgepinde pakketten hebben geen invloed op de beschikbare-"
-"updatesnotificatie en zullen niet bijgewerkt worden met de 'Alles bijwerken'-"
-"knop."
+"Vastgepinde pakketten worden niet meegenomen in de melding van beschikbare "
+"updates en zullen niet bijgewerkt worden met de 'Alles bijwerken'-knop."
 
 #: kicad/pcm/dialogs/panel_package.cpp:134
 msgid "Install Pending"
@@ -29793,7 +29794,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
 msgid "Outline display:"
-msgstr "Overzichtsweergave:"
+msgstr "Omtrekweergave:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -29811,7 +29812,7 @@ msgstr "Volledig gearceerd"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:126
 msgid "Outline hatch pitch:"
-msgstr "Afstand grensarcering:"
+msgstr "Afstand omtrekarcering:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
@@ -31322,7 +31323,7 @@ msgstr "Bordranden afdrukken op alle pagina’s"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:76
 msgid "Export SVG File"
-msgstr "Exporteer SVG-bestand"
+msgstr "SVG-bestand exporteren"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:193
 msgid "Are you sure you want to overwrite the existing file?"
@@ -33263,7 +33264,7 @@ msgstr "Omzetten naar niet-koperzone"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
-msgstr "Grensstijl:"
+msgstr "Omtrekstijl:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
 msgid "degree"
@@ -34257,7 +34258,7 @@ msgid ""
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"Dit getal bepaalt hoeveel cijfers achter de komma worden geexporteerd onder "
+"Dit getal bepaalt hoeveel cijfers achter de komma worden geëxporteerd onder "
 "de 1 mm.\n"
 "Gebruikers-eenheid is 10^-<N> mm\n"
 "Kies 4 als u het niet zeker weet."
@@ -35859,7 +35860,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Er zijn items gevonden op verwijderde lagen. Deze bewerking verwijdert alle "
-"items uit verwijderde lagen en kan niet ongedaan worden gemaakt.\n"
+"items uit verwijderde lagen en kan niet ongedaan gemaakt worden.\n"
 "Wilt u doorgaan?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:688
@@ -38613,9 +38614,9 @@ msgid "%s rounded corners differ."
 msgstr "%s afgeronde hoeken verschillen."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s afgeschuinde hoeken verschillen."
+msgstr "%s afgeschuinde hoekmaten verschillen."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39093,7 +39094,7 @@ msgstr "Wijzig zone-eigenschappen"
 
 #: pcbnew/exporters/export_d356.cpp:380
 msgid "Export D-356 Test File"
-msgstr "Exporteer D-356-testbestand"
+msgstr "D-356-testbestand exporteren"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -39104,9 +39105,9 @@ msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
-"Bestand bevat pad-vormen die niet worden ondersteund door de Hyperlynx-"
-"exporteerder (ondersteunde vormen zijn ovaal, rechthoek, afgeronde "
-"rechthoek, en cirkel)."
+"Bestand bevat padvormen die niet worden ondersteund door de Hyperlynx-"
+"exportering (ondersteunde vormen zijn ovaal, rechthoek, afgeronde rechthoek, "
+"en cirkel)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:173
 msgid "They have been exported as oval pads."
@@ -39956,9 +39957,8 @@ msgstr "Afstemmen"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Waarde selecteren om af te stemmen"
+msgstr "Selecteer eerst een spoor om af te stemmen."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -40080,8 +40080,8 @@ msgstr ""
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr ""
-"Het huidige bord gaat verloren en deze bewerking kan niet ongedaan worden "
-"gemaakt. Doorgaan met?"
+"Het huidige bord gaat verloren en deze bewerking kan niet ongedaan gemaakt "
+"worden. Doorgaan?"
 
 #: pcbnew/initpcb.cpp:115 pcbnew/tools/footprint_editor_control.cpp:200
 msgid "The current footprint has been modified.  Save changes?"
@@ -40180,7 +40180,7 @@ msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Export GenCAD board representation"
-msgstr "Exporteer GenCAD-bordvertegenwoordiging"
+msgstr "GenCAD-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
@@ -40188,7 +40188,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
-msgstr "Exporteer VRML 3D-bordweergave"
+msgstr "VRML 3D-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
@@ -40196,7 +40196,7 @@ msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
-msgstr "Exporteer IDF 3D-bordweergave"
+msgstr "IDF 3D-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP..."
@@ -40212,7 +40212,7 @@ msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "Export SVG board representation"
-msgstr "Exporteer SVG-bordweergave"
+msgstr "SVG-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Footprint Association (.cmp) File..."
@@ -40221,7 +40221,7 @@ msgstr "Footprintassociatiebestand (.cmp)..."
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Exporteer footprint-associatiebestand (*.cmp) voor terugannotatie van schema"
+"Footprint-associatiebestand (*.cmp) exporteren voor terugannotatie van schema"
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
@@ -41248,29 +41248,24 @@ msgid "Loading dimension drawings..."
 msgstr "Maatlijntekeningen laden..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Hoekmaatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Datummaatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Basismaatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Lineaire maatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Radiale maatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -43054,7 +43049,7 @@ msgstr "Bord laden\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:164
 #, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "VRML succesvol geexporteerd naar %s"
+msgstr "VRML succesvol geëxporteerd naar %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:169
 msgid "Error exporting VRML"
@@ -44221,7 +44216,7 @@ msgstr "Creëer uit selectie"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Resulterende polygoon zou leeg zijn"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -46562,9 +46557,8 @@ msgid "Length Tuning Settings..."
 msgstr "Instellingen voor lengteafstemming ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Scherm voor itemeigenschappen weergeven"
+msgstr "Scherm voor eigenschappen afstemmingspatroon weergeven"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
@@ -47009,7 +47003,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:466
 msgid "Filter nets"
-msgstr "Filter netten"
+msgstr "Netten filteren"
 
 #: pcbnew/widgets/appearance_controls.cpp:613
 #: pcbnew/widgets/appearance_controls.cpp:1777
