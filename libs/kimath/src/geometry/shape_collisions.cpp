@@ -651,9 +651,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aC
                                            aA.TypeName(),
                                            aB.TypeName() ) );
 
-    const SHAPE_LINE_CHAIN lc( aA );
-
-    bool rv = Collide( lc, aB, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+    bool rv = aA.Collide( aB.GetSeg(), aClearance + aA.GetWidth() / 2 + aB.GetWidth() / 2,
+                          aActual, aLocation );
 
     if( rv && aActual )
         *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
