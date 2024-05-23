@@ -536,7 +536,9 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                     rv = constraint.m_Value.Min();
             }
         }
-        else if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+
+        // No 'else'; plated holes get both HOLE_CLEARANCE and CLEARANCE
+        if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
             {
