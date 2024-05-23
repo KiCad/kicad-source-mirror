@@ -1495,6 +1495,11 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         BOX2I bbox = item->GetBoundingBox();
         int   dist = INT_MAX / 4;
 
+        // A dominating item is one that would unfairly win distance tests
+        // and mask out other items. For example, a filled rectangle "wins"
+        // with a zero distance over anything inside it.
+        bool dominating = false;
+
         if( exactHits.contains( item ) )
         {
             if( item->Type() == SCH_PIN_T || item->Type() == SCH_JUNCTION_T )
@@ -1551,6 +1556,9 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
                     delete s;
                 }
+
+                // Filled shapes win hit tests anywhere inside them
+                dominating = shape->IsFilled();
             }
             else if( symbol )
             {
@@ -1574,15 +1582,21 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             rect.Collide( poss, collector.m_Threshold, &dist );
         }
 
-        if( dist == closestDist )
+        // Don't promote dominating items to be the closest item
+        // (they'll always win) - they'll still be available for selection, but they
+        // won't boot out worthy competitors.
+        if ( !dominating )
         {
-            if( item->GetParent() == closest )
+            if( dist == closestDist )
+            {
+                if( item->GetParent() == closest )
+                    closest = item;
+            }
+            else if( dist < closestDist )
+            {
+                closestDist = dist;
                 closest = item;
-        }
-        else if( dist < closestDist )
-        {
-            closestDist = dist;
-            closest = item;
+            }
         }
     }
 
