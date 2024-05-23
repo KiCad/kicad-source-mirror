@@ -72,7 +72,9 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     }
 
     // draw the swatch
-    wxBitmap bitmap( 14, 14 );
+    int      size = KiROUND( 14 * aDC.GetContentScaleFactor() );
+    wxBitmap bitmap( size, size );
+
     LAYER_SELECTOR::DrawColorSwatch( bitmap,
                                      cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
                                      cs->GetColor( ToLAYER_ID( value ) ) );

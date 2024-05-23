@@ -369,7 +369,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
                 col_size = std::max( col_size, GetTextExtent( board->GetLayerName( layer ) ).x );
 
             // Swatch and gaps:
-            col_size += 26;
+            col_size += KiROUND( 14 * GetDPIScaleFactor() ) + 12;
         }
 
         if( m_itemsGrid->IsColShown( col ) )
