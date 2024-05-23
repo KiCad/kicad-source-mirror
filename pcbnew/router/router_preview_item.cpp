@@ -256,6 +256,7 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
 void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) const
 {
     bool holeDrawn = false;
+    bool showClearance = m_showClearance || ( m_flags | PNS_COLLISION ) > 0;
 
     switch( aShape->Type() )
     {
@@ -263,7 +264,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
     {
         const SHAPE_LINE_CHAIN_BASE* l = (const SHAPE_LINE_CHAIN_BASE*) aShape;
 
-        if( m_showClearance && m_clearance > 0 )
+        if( showClearance && m_clearance > 0 )
         {
             gal->SetLineWidth( m_width + 2 * m_clearance );
             drawLineChain( l, gal );
@@ -282,7 +283,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) aShape;
         const int               w = m_width;
 
-        if( m_showClearance && m_clearance > 0 )
+        if( showClearance && m_clearance > 0 )
         {
             gal->SetLineWidth( w + 2 * m_clearance );
             drawLineChain( l, gal );
@@ -303,7 +304,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
         gal->SetIsStroke( false );
 
-        if( m_showClearance && m_clearance > 0 )
+        if( showClearance && m_clearance > 0 )
         {
             gal->SetLineWidth( w + 2 * m_clearance );
             gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
@@ -321,7 +322,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         const SHAPE_CIRCLE* c = static_cast<const SHAPE_CIRCLE*>( aShape );
         gal->SetStrokeColor( m_color );
 
-        if( m_showClearance && m_clearance > 0 )
+        if( showClearance && m_clearance > 0 )
         {
             gal->SetIsStroke( false );
             gal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
@@ -357,7 +358,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         const SHAPE_RECT* r = (const SHAPE_RECT*) aShape;
         gal->SetFillColor( m_color );
 
-        if( m_showClearance && m_clearance > 0 )
+        if( showClearance && m_clearance > 0 )
         {
             VECTOR2I p0( r->GetPosition() ), s( r->GetSize() );
             gal->SetIsStroke( true );
@@ -389,7 +390,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
         gal->SetFillColor( m_color );
 
-        if( m_showClearance && m_clearance > 0 )
+        if( showClearance && m_clearance > 0 )
         {
             gal->SetIsStroke( true );
             gal->SetLineWidth( 2 * m_clearance );
@@ -417,7 +418,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         gal->SetIsFill( false );
         gal->SetIsStroke( true );
 
-        if( m_showClearance && m_clearance > 0 )
+        if( showClearance && m_clearance > 0 )
         {
             gal->SetLineWidth( w + 2 * m_clearance );
             gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, angle );
