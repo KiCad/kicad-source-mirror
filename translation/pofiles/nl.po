@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-04-30 10:07+0000\n"
+"PO-Revision-Date: 2024-05-24 09:09+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -563,7 +563,7 @@ msgstr "Modelbegrenzingen weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "3D-modelbegrenzingen weergeven in de realtime renderer"
+msgstr "3D-modelbegrenzingsvakken weergeven in de realtime renderer"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
@@ -1031,7 +1031,7 @@ msgstr "Renderopties"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Modelbegrenzingen weergeven"
+msgstr "Modelbegrenzingsvaken weergeven"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
@@ -1745,9 +1745,8 @@ msgid "Export to Clipboard"
 msgstr "Naar klembord exporteren"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Vormaanpassing"
+msgstr "Wijziging door API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -6851,7 +6850,6 @@ msgid "Net class references"
 msgstr "Netklassereferenties"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Rule areas"
 msgstr "Regelgebieden"
 
@@ -7220,7 +7218,7 @@ msgstr "Meldingen"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr "Er zijn geen notificaties beschikbaar"
+msgstr "Er zijn geen meldingen beschikbaar"
 
 #: common/pgm_base.cpp:215
 msgid "No default editor found, you must choose one."
@@ -7390,9 +7388,8 @@ msgid "Line length exceeded"
 msgstr "Lijnlengte overschreden"
 
 #: common/settings/bom_settings.cpp:124
-#, fuzzy
 msgid "Default Editing"
-msgstr "Standaard eenheden:"
+msgstr "Standaard bewerken"
 
 #: common/settings/bom_settings.cpp:124 common/settings/bom_settings.cpp:145
 #: common/settings/bom_settings.cpp:164 common/settings/bom_settings.cpp:183
@@ -8124,14 +8121,12 @@ msgid "Reset Local Coordinates"
 msgstr "Lokale coördinaten opnieuw instellen"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "Altijd kruislijnen weergeven"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Kruislijnen weergeven, zelfs in het selectiegereedschap"
+msgstr "Kruislijnen weergeven zelfs wanneer geen objecten worden getekend"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -10038,7 +10033,7 @@ msgstr "Tekstvelden bijwerken"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field visibilities"
-msgstr "Veldzichtbaarheden bijwerken"
+msgstr "Veldzichtbaarheid bijwerken"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update field sizes and styles"
@@ -10146,14 +10141,12 @@ msgid "Update Options"
 msgstr "Bijwerkopties"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Symboolvelden bijwerken"
+msgstr "Symboolvorm en -pinnen bijwerken"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "%s footprintfilters bijwerken naar '%s'."
+msgstr "Trefwoorden en footprintfilters bijwerken"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10178,12 +10171,11 @@ msgstr "Tekstvelden bijwerken/terugzetten"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
 msgid "Update/reset field visibilities"
-msgstr "Veldzichtbaarheden bijwerken/terugzetten"
+msgstr "Veldzichtbaarheid bijwerken/terugzetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "Veldmaten en -stijlen bijwerken/terugzetten"
+msgstr "Veldtekstmaten en -stijlen bijwerken/terugzetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -10191,9 +10183,8 @@ msgid "Update/reset field positions"
 msgstr "Veldposities bijwerken/terugzetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "Veldzichtbaarheden bijwerken/terugzetten"
+msgstr "Pinnaamzichtbaarheid bijwerken/terugzetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10679,13 +10670,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Alle digitale gebeurtenisdata opslaan"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Indien niet aangevinkt schrijft dit een richtlijn welke het opslaan van "
+"digitale gebeurtenisdata voorkomt (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -12808,7 +12801,7 @@ msgstr "'%s'-link wijzigen van '%s' naar '%s'?"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:559
 #: eeschema/dialogs/dialog_sheet_properties.cpp:576
 msgid "This action cannot be undone."
-msgstr "Deze actie kan niet ongedaan worden."
+msgstr "Deze actie kan niet ongedaan gemaakt worden."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:571
 #, c-format
@@ -13598,9 +13591,9 @@ msgid "Rename Field"
 msgstr "Veld hernoemen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "Bestand %s bestaat al."
+msgstr "Veldnaam %s bestaat al."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
@@ -13631,13 +13624,12 @@ msgid "Unsaved data"
 msgstr "Onopgeslagen gegevens"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1247
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
-msgstr "Wijzigingen niet opgeslagen. Onopgeslagen data exporteren?"
+msgstr "Wijzigingen zijn nog niet opgeslagen. Onopgeslagen data exporteren?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1271
 msgid "No filename specified in exporter"
-msgstr "Geen bestandsnaam opgegeven in exporteerder"
+msgstr "Geen bestandsnaam opgegeven voor exporteren"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1285
 #, c-format
@@ -13688,9 +13680,8 @@ msgid "Exclude DNP"
 msgstr "DNP weglaten"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
-#, fuzzy
 msgid "Show 'Exclude from BOM'"
-msgstr "Weggelaten van stuklijst"
+msgstr "‘Weglaten van stuklijst’ weergeven"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -14955,9 +14946,8 @@ msgstr "Verticaal zoomen"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
-#, fuzzy
 msgid "Modifier"
-msgstr "Gewijzigd"
+msgstr "Modificatietoets"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -14985,13 +14975,12 @@ msgid "Alt:"
 msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal touchpad movement:"
-msgstr "Aantal horizontaal:"
+msgstr "Horizontale touchpadbeweging:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "Elke:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -15141,14 +15130,12 @@ msgstr "Toch toevoegen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:846
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1062
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Deze opdracht wijzigt huidige annotatie en kan niet ongedaan gemaakt worden."
+"Deze actie zal de globale bibliotheektabel op disk opnieuw instellen en kan "
+"niet ongedaan gemaakt worden."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:915
 msgid ""
@@ -15293,9 +15280,8 @@ msgstr "Bibliotheek verwijderen uit tabel"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Selecteer Bibliotheek"
+msgstr "Bibliotheken opnieuw instellen"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
@@ -15558,9 +15544,9 @@ msgid "Netclass %s is not defined"
 msgstr "Netklasse %s is niet gedefinieerd"
 
 #: eeschema/erc/erc.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Kan niet verbinden met '%s' "
+msgstr "Viervoudige verbinding op %d, %d"
 
 #: eeschema/erc/erc.cpp:720
 msgid "Pin with 'no connection' type is connected"
@@ -15635,9 +15621,8 @@ msgid "Checking conflicts..."
 msgstr "Controle conflicten..."
 
 #: eeschema/erc/erc.cpp:1393
-#, fuzzy
 msgid "Checking rule areas..."
-msgstr "Controle labels..."
+msgstr "Controle regelgebieden..."
 
 #: eeschema/erc/erc.cpp:1401
 msgid "Checking units..."
@@ -15681,9 +15666,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "Controle op pinnen en draden die niet op raster liggen..."
 
 #: eeschema/erc/erc.cpp:1496
-#, fuzzy
 msgid "Checking for four way junctions..."
-msgstr "Controle definities van footprintafbakening..."
+msgstr "Controle op viervoudige knooppunten..."
 
 #: eeschema/erc/erc.cpp:1504
 msgid "Checking for undefined netclasses..."
@@ -15728,7 +15712,7 @@ msgstr "Hiërarchische labels en bladpinnen komen niet overeen"
 
 #: eeschema/erc/erc_item.cpp:79
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "Viervoudige verbinding op knooppunt"
 
 #: eeschema/erc/erc_item.cpp:83
 msgid "A pin with a \"no connection\" flag is connected"
@@ -15751,9 +15735,8 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Labels zijn vergelijkbaar (alleen kleine-/hoofdletters verschillen)"
 
 #: eeschema/erc/erc_item.cpp:103
-#, fuzzy
 msgid "Global label only appears once in the schematic"
-msgstr "Globaal label nergens anders in het schema verbonden"
+msgstr "Globaal label komt maar één keer voor in schema"
 
 #: eeschema/erc/erc_item.cpp:107
 msgid "Different footprint assigned in another unit of the symbol"
@@ -15779,7 +15762,7 @@ msgstr "Conflicterende toewijzingen netklassen"
 
 #: eeschema/erc/erc_item.cpp:127
 msgid "Overlapping rule areas"
-msgstr ""
+msgstr "Overlappende regelgebieden"
 
 #: eeschema/erc/erc_item.cpp:131
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -16050,7 +16033,7 @@ msgid ""
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
-"Deze bewerking kan niet ongedaan worden gemaakt.\n"
+"Deze bewerking kan niet ongedaan gemaakt worden.\n"
 "\n"
 "Wilt u het huidige document opslaan voordat u verder gaat?"
 
@@ -16559,9 +16542,9 @@ msgid "Junction at %s, %s"
 msgstr "Knooppunt op %s, %s"
 
 #: eeschema/net_navigator.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Geen-Verbindingen"
+msgstr "Niet-verbinden op %s, %s"
 
 #: eeschema/net_navigator.cpp:159
 #, c-format
@@ -16574,9 +16557,9 @@ msgid "Bus to bus entry from %s, %s to %s, %s"
 msgstr "Bus naar busverbinding van %s, %s naar %s, %s"
 
 #: eeschema/net_navigator.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Globaal label '%s' op %s, %s"
+msgstr "Netklasselabel '%s' op %s, %s"
 
 #: eeschema/net_navigator.cpp:189
 #, c-format
@@ -16609,9 +16592,9 @@ msgid "Could not open file '%s' to write IBIS model"
 msgstr "Kan bestand '%s' niet openen om IBIS-model weg te schrijven"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Error in parsing model '%s', error: '%s'"
-msgstr "Fout bij laden bord '%s': %s"
+msgstr "Fout bij lezen model '%s', fout: '%s'"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:564
 #, c-format
@@ -16619,6 +16602,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
+"Fout bij lezen model '%s', aantal nodes '?' in Sim.NodesFormat komt niet "
+"overeen met verbindingen"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:600
 #, c-format
@@ -17154,10 +17139,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium-schemabibliotheek of geïntegreerde bibliotheek"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr ""
-"Het geselecteerde bestand lijkt geen CADSTAR onderdeelbibliotheek te zijn"
+msgstr "Bestand lijkt geen CADSTAR onderdeelbibliotheek te zijn"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -17463,8 +17446,8 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
-"Fout bij het lezen van Eagle-bestand. Kan instantie '%s' niet vinden, maar "
-"er wordt naar verwezen in het schema."
+"Fout bij lezen van Eagle-bestand. Kan instantie '%s' niet vinden, maar er "
+"wordt naar verwezen in het schema."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1776
 #, c-format
@@ -18182,9 +18165,8 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Verschillende waarden voor %s%d%s (%s) en %s%d%s (%s)"
 
 #: eeschema/sch_rule_area.cpp:200
-#, fuzzy
 msgid "Schematic rule area"
-msgstr "Schematische markering"
+msgstr "Schemaregelgebied"
 
 #: eeschema/sch_screen.cpp:811 eeschema/sch_screen.cpp:903
 #, c-format
@@ -21054,7 +21036,7 @@ msgstr "Symboolboom verbergen"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Focus Symbol Tree Search Field"
-msgstr ""
+msgstr "Focussen op zoekveld symboolboom"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Export View as PNG..."
@@ -21330,9 +21312,8 @@ msgid "Add Rule Area"
 msgstr "Regelgebied toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:613
-#, fuzzy
 msgid "Draw rule area"
-msgstr "Teken een leider"
+msgstr "Regelgebied tekenen"
 
 #: eeschema/tools/ee_actions.cpp:621 pcbnew/tools/pcb_actions.cpp:400
 msgid "Delete Last Point"
@@ -22369,9 +22350,8 @@ msgid "Add Corner"
 msgstr "Hoek toevoegen"
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
-#, fuzzy
 msgid "Draw Rule Area"
-msgstr "Regelgebied"
+msgstr "Regelgebied tekenen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:305
 msgid "Press <ESC> to cancel symbol creation."
@@ -22716,19 +22696,17 @@ msgstr "SVG-bestandsnaam"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:366
 #: pcbnew/tools/edit_tool.cpp:2548
-#, fuzzy
 msgid "Hide Field"
-msgstr "Veld toevoegen"
+msgstr "Veld verbergen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:368
 #: pcbnew/tools/edit_tool.cpp:2550
-#, fuzzy
 msgid "Hide Fields"
-msgstr "Verborgen velden weergeven"
+msgstr "Velden verbergen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:370
 msgid "Use the Symbol Properties dialog to remove fields."
-msgstr ""
+msgstr "Gebruik het symbooleigenschappen-scherm om velden te verwijderen."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:665
 msgid "Edit Pins"
@@ -22777,9 +22755,8 @@ msgid "Rename"
 msgstr "Naam wijzigen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:398
-#, fuzzy
 msgid "Change name of this sheet"
-msgstr "Alle symbolen in schema wijzigen"
+msgstr "Bladnaam wijzigen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:417
 #, c-format
@@ -22787,9 +22764,8 @@ msgid "Enter page number for sheet path %s"
 msgstr "Voer paginanummer in voor bladpad %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:488
-#, fuzzy
 msgid "Renaming sheet"
-msgstr "Tekenblad"
+msgstr "Blad hernoemen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:551
 #, c-format
@@ -23206,6 +23182,8 @@ msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
 msgstr ""
+"Geflitste items (items getekend met standaard- of macro-openingen) weergeven "
+"in omtrekmodus"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -23216,23 +23194,20 @@ msgid "Sketch polygons"
 msgstr "Polygonen schetsen"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
-msgstr "Polygonen weergeven in overzichtsmodus"
+msgstr "Polygoonitems weergeven in omtrekmodus"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
-#, fuzzy
 msgid "Forced Opacity Display Mode"
-msgstr "Weergave: normaal contrast"
+msgstr "Weergavemodus aangepaste opaciteit"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "Doorschijnendheid:"
+msgstr "Aangepaste opaciteit:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "Opaciteit in weergavemodus aangepaste opaciteit"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -23950,7 +23925,7 @@ msgstr "Lijnen schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:193
 msgid "Show lines in outline mode"
-msgstr "Lijnen weergeven in overzichtsmodus"
+msgstr "Lijnen weergeven in omtrekmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
@@ -23958,7 +23933,7 @@ msgstr "Geflitste items schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "Geflitste items weergeven in overzichtsmodus"
+msgstr "Geflitste items weergeven in omtrekmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -23966,7 +23941,7 @@ msgstr "Polygonen schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:211
 msgid "Show polygons in outline mode"
-msgstr "Polygonen weergeven in overzichtsmodus"
+msgstr "Polygonen weergeven in omtrekmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:218
 msgid "Ghost Negative Objects"
@@ -23985,14 +23960,12 @@ msgid "Show dcode number"
 msgstr "Dcode-nummer weergeven"
 
 #: gerbview/tools/gerbview_actions.cpp:234
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "Titelblok in bewerkingsmodus weergeven"
+msgstr "Weergeven in modus aangepaste opaciteit"
 
 #: gerbview/tools/gerbview_actions.cpp:235
-#, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "Lijnen tonen in Schets Modus"
+msgstr "Lagen weergeven in modus met aangepaste kleuropaciteit"
 
 #: gerbview/tools/gerbview_actions.cpp:241
 msgid "Show in XOR Mode"
@@ -24206,9 +24179,8 @@ msgid "Delete Column"
 msgstr "Kolom verwijderen"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "%s tonen of verbergen"
+msgstr "Importeerproblemen weergeven"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24368,9 +24340,8 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Exporteerhulpmiddelen (Gerbers, drill, positiebestanden, etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:73
-#, fuzzy
 msgid "Output file format, options: step, brep, xao, glb (binary glTF)"
-msgstr "Uitvoerbestandsindeling, opties: step, glb (binaire glTF)"
+msgstr "Uitvoerbestandsindeling, opties: step, brep, xao, glb (binaire glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:77
 msgid "Overwrite output file"
@@ -24403,14 +24374,12 @@ msgid "Only generate a board with no components"
 msgstr "Alleen bord genereren zonder componenten"
 
 #: kicad/cli/command_pcb_export_3d.cpp:113
-#, fuzzy
 msgid "Exclude board body"
-msgstr "Weglaten van bord"
+msgstr "Bordlichaam weglaten"
 
 #: kicad/cli/command_pcb_export_3d.cpp:117
-#, fuzzy
 msgid "Exclude 3D models for components"
-msgstr "3D-modellen weglaten voor componenten met 'niet plaatsen'-attribuut"
+msgstr "3D-modellen van componenten weglaten"
 
 #: kicad/cli/command_pcb_export_3d.cpp:121
 msgid "Export tracks"
@@ -24422,13 +24391,12 @@ msgid "Export zones"
 msgstr "Zones exporteren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:129
-#, fuzzy
 msgid "Export elements on inner copper layers"
-msgstr "Zones op externe koperlagen exporteren."
+msgstr "Elementen op binnenste koperlagen exporteren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:133
 msgid "Fuse overlapping geometry together"
-msgstr ""
+msgstr "Voeg overlappende geometrie samen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:139
 msgid "Minimum distance between points to treat them as separate ones"
@@ -24437,6 +24405,8 @@ msgstr "Minimumafstand tussen punten om ze als afzonderlijke te beschouwen"
 #: kicad/cli/command_pcb_export_3d.cpp:145
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
+"Alleen koperitems behorende bij netten die overeenkomen met dit patroon "
+"worden inbegrepen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:151
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -24697,13 +24667,12 @@ msgid "Generate Position File"
 msgstr "Genereer positiebestand"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
 "Geldige opties: front,back,both. De Gerber-indeling ondersteunt alleen "
-"\"both\"."
+"\"front\" of \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -24778,7 +24747,7 @@ msgstr "Geen tekenblad"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "3D-weergave PCB renderen naar PNG of JPEG-afbeelding"
 
 #: kicad/cli/command_pcb_render.cpp:173
 msgid "Image width"
@@ -24789,78 +24758,80 @@ msgid "Image height"
 msgstr "Afbeeldingshoogte"
 
 #: kicad/cli/command_pcb_render.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Render from side. Options: %s"
-msgstr "Renderopties"
+msgstr "Renderzijde. Opties: %s"
 
 #: kicad/cli/command_pcb_render.cpp:190
 msgid ""
 "Image background. Options: transparent, opaque. Default: transparent for "
 "PNG, opaque for JPEG"
 msgstr ""
+"Afbeeldingsachtergrond. Opties: transparent, opaque. Standaard: transparent "
+"voor PNG, opaque voor JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Render quality. Options: %s"
-msgstr "Algemene Opties"
+msgstr "Renderkwaliteit. Opties: %s"
 
 #: kicad/cli/command_pcb_render.cpp:204
 #, c-format
 msgid "Color preset. Options: %s, %s, %s, ..."
-msgstr "Kleurvoorinstelling. Opties: %s, %s, %s, …"
+msgstr "Kleurvoorinstelling. Opties: %s, %s, %s, ..."
 
 #: kicad/cli/command_pcb_render.cpp:210
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "preset"
 msgstr ""
+"Vloer, schaduwen en post-processing inschakelen, zelfs als uitgeschakeld in "
+"kwaliteitsvoorinstelling"
 
 #: kicad/cli/command_pcb_render.cpp:215
 msgid "Use perspective projection instead of orthogonal"
 msgstr "Perspectieve projectie gebruiken in plaats van orthogonale"
 
 #: kicad/cli/command_pcb_render.cpp:221
-#, fuzzy
 msgid "Camera zoom"
-msgstr "Camera-opties"
+msgstr "Camerazoom"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "Schuif camera, notatie 'X,Y,Z' bijv.: '3,0,0'"
 
 #: kicad/cli/command_pcb_render.cpp:231
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
+"Draaipunt relatief tot het midden van het bord in centimeters, notatie "
+"'X,Y,Z' bijv.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:238
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
+"Roteer bord, notatie 'X,Y,Z' bijv.: '-45,0,45' voor isometrische weergave"
 
 #: kicad/cli/command_pcb_render.cpp:262
 msgid "Invalid background\n"
 msgstr "Ongeldige achtergrond\n"
 
 #: kicad/cli/command_pcb_render.cpp:268
-#, fuzzy
 msgid "Invalid rotation format\n"
-msgstr "Ongeldige rapportindeling\n"
+msgstr "Ongeldige rotatienotatie\n"
 
 #: kicad/cli/command_pcb_render.cpp:274
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "Ongeldig indeling\n"
+msgstr "Ongeldige schuifnotatie\n"
 
 #: kicad/cli/command_pcb_render.cpp:280
-#, fuzzy
 msgid "Invalid pivot format\n"
-msgstr "Ongeldige rapportindeling\n"
+msgstr "Ongeldige draaipuntnotatie\n"
 
 #: kicad/cli/command_pcb_render.cpp:295
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "Ongeldig indeling\n"
+msgstr "Ongeldig afbeeldingstype\n"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -24928,13 +24899,12 @@ msgid "Export a netlist"
 msgstr "Netlijst exporteren"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
-#, fuzzy
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
 "Uitvoerindeling netlijst, geldige opties: kicadsexpr, kicadxml, cadstar, "
-"orcadpcb2, spice, spicemodel"
+"orcadpcb2, spice, spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:65
 msgid "Color theme to use (will default to schematic settings)"
@@ -24990,7 +24960,7 @@ msgstr "Symbool en symboolbibliotheken"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Exporteer het symbool of hele symboolbibliotheek naar SVG"
+msgstr "Exporteert symbool of hele symboolbibliotheek naar SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
 msgid "Color theme to use (will default to symbol editor settings)"
@@ -25088,6 +25058,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Updatemelding voor de aangekondigde nieuwe versie negeren. Updatemeldingen "
+"voor nieuwere versies zullen wel worden weergegeven."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -25098,10 +25070,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Updatemelding sluiten. De updatemelding zal de volgende keer dat KiCad wordt "
+"geopend opnieuw worden weergegeven."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Uitgaveaankondigingen openen in een webbrowser."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -25109,7 +25083,7 @@ msgstr "Downloadspagina openen"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Downloadpagina voor uw platform bezoeken."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -25256,14 +25230,12 @@ msgid "Export STEP"
 msgstr "STEP exporteren"
 
 #: kicad/kicad_cli.cpp:115
-#, fuzzy
 msgid "Export BREP"
-msgstr "STEP exporteren"
+msgstr "BREP exporteren"
 
 #: kicad/kicad_cli.cpp:116
-#, fuzzy
 msgid "Export XAO"
-msgstr "DXF exporteren"
+msgstr "XAP exporteren"
 
 #: kicad/kicad_cli.cpp:117
 msgid "Export VRML"
@@ -25589,9 +25561,8 @@ msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with 'Update All' button."
 msgstr ""
-"Vastgepinde pakketten hebben geen invloed op de beschikbare-"
-"updatesnotificatie en zullen niet bijgewerkt worden met de 'Alles bijwerken'-"
-"knop."
+"Vastgepinde pakketten worden niet meegenomen in de melding van beschikbare "
+"updates en zullen niet bijgewerkt worden met de 'Alles bijwerken'-knop."
 
 #: kicad/pcm/dialogs/panel_package.cpp:134
 msgid "Install Pending"
@@ -28049,7 +28020,7 @@ msgstr "Vref ingesteld op 0!"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:414
 msgid "Vref must VrefMin < VrefTyp < VrefMax"
-msgstr ""
+msgstr "Vref vereist VrefMin < VrefTyp < VrefMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:420
 msgid "Incorrect value for R1 R2"
@@ -28057,7 +28028,7 @@ msgstr "Onjuiste waarde voor R1 R2"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:435
 msgid "Iadj must IadjTyp < IadjMax"
-msgstr ""
+msgstr "Iadj vereist IadjTyp < IadjMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
@@ -28134,9 +28105,8 @@ msgstr ""
 "Een item verwijderen uit de huidige lijst met beschikbare spanningsregelaars"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
-#, fuzzy
 msgid "typ"
-msgstr "Aantal"
+msgstr "typ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
@@ -28179,14 +28149,12 @@ msgstr ""
 "Alleen voor spanningsregelaars met 3 aansluitpinnen, de pinstroom aanpassen."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
-#, fuzzy
 msgid "Overall tolerance:"
-msgstr "Thermische ontruiming:"
+msgstr "Algehele tolerantie:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
-#, fuzzy
 msgid "Resistor tolerance:"
-msgstr "Weerstand:"
+msgstr "Weerstandtolerantie:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:217
@@ -28204,9 +28172,8 @@ msgid "1"
 msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
-#, fuzzy
 msgid "Power Comment:"
-msgstr "Opmerking:"
+msgstr "Spanningsspecificatie:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
 msgid "Copy to Clipboard"
@@ -28656,7 +28623,7 @@ msgstr "Fout in gegevensbestand."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (min/typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
@@ -28664,7 +28631,7 @@ msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
-msgstr ""
+msgstr "Iadj (typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -30929,7 +30896,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:55
 msgid "Outline display:"
-msgstr "Overzichtsweergave:"
+msgstr "Omtrekweergave:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -30950,7 +30917,7 @@ msgstr "Volledig gearceerd"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:126
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:65
 msgid "Outline hatch pitch:"
-msgstr "Afstand grensarcering:"
+msgstr "Afstand omtrekarcering:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
@@ -31939,9 +31906,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "Update tekstgroottes, stijlen en posities"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text content"
-msgstr "Tekstvelden bijwerken"
+msgstr "Tekstinhoud bijwerken"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update fabrication attributes"
@@ -32022,9 +31988,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "Tekstgroottes, stijlen en posities bijwerken/terugzetten"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "Tekstvelden bijwerken/terugzetten"
+msgstr "Tekstinhoud bijwerken/terugzetten"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -32325,14 +32290,12 @@ msgstr ""
 "applicaties die dedupliceren op basis van vormnamen."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:154
-#, fuzzy
 msgid "Export board body"
-msgstr "Exporteer bord"
+msgstr "Bordlichaam exporteren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:157
-#, fuzzy
 msgid "Export components"
-msgstr "Exporteer component"
+msgstr "Componenten exporteren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid "Export tracks, pads and vias"
@@ -32347,9 +32310,8 @@ msgid "Export zones on external copper layers."
 msgstr "Zones op externe koperlagen exporteren."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
-#, fuzzy
 msgid "Export inner copper layers"
-msgstr "Binnenste koperlaag"
+msgstr "Binnenste koperlagen exporteren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:173
 msgid "Fuse shapes (time consuming)"
@@ -32384,14 +32346,15 @@ msgid "Export solder paste graphics."
 msgstr "Soldeerpastatekeningen exporteren."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:196
-#, fuzzy
 msgid "Net filter (supports wildcards):"
-msgstr "Tekst met optionele jokertekens"
+msgstr "Netfilter (ondersteunt jokertekens):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:201
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr ""
+"Alleen koperitems behorende bij netten die overeenkomen met dit filter "
+"worden geëxporteerd."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:205
 msgid "Board outline chaining tolerance:"
@@ -32418,9 +32381,8 @@ msgstr ""
 "worden beschouwd bij het bouwen van de bordgrenzen."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:98
-#, fuzzy
 msgid "Export STEP / BREP / XAO / GLTF"
-msgstr "STEP / GLTF exporteren"
+msgstr "STEP / BREP / XAP / GLTF exporteren"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
@@ -32514,7 +32476,7 @@ msgstr "Bordranden afdrukken op alle pagina’s"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:76
 msgid "Export SVG File"
-msgstr "Exporteer SVG-bestand"
+msgstr "SVG-bestand exporteren"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:214
 msgid "Are you sure you want to overwrite the existing file?"
@@ -33972,9 +33934,8 @@ msgid "Set to specified values:"
 msgstr "Instellen op de volgende waardes:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "Orientatie Filter"
+msgstr "Zichtbaar  (alleen tekst)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -34330,7 +34291,7 @@ msgstr "Omzetten naar niet-koperzone"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
-msgstr "Grensstijl:"
+msgstr "Omtrekstijl:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
 msgid "degree"
@@ -34482,9 +34443,8 @@ msgid "Warning: BGA property is for SMD pads."
 msgstr "Waarschuwing: BGA-eigenschap is alleen voor SMD-pads."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1447
-#, fuzzy
 msgid "Warning: Mechanical property is for PTH pads."
-msgstr "Waarschuwing: Gekanteeld-eigenschap is bedoeld voor PTH-pads."
+msgstr "Waarschuwing: Mechanisch-eigenschap is bedoeld voor PTH-pads."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1456
 msgid "Error: Negative corner size."
@@ -34755,7 +34715,6 @@ msgid "Fabrication property:"
 msgstr "Fabricage-eigenschap:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -34768,14 +34727,14 @@ msgid ""
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
 "Optionele eigenschap om een speciale functie of beperking in "
-"fabricagebestanden op te geven:\n"
+"fabricagebestanden aan te geven:\n"
 "BGA is een attribuut voor pads in BGA-footprints\n"
 "Fiducial lokaal is een ijkpunt voor de bijbehorende footprint\n"
 "Fiducial globaal is een ijkpunt voor het hele bord\n"
-"Testpunt-pad is nuttig om testpunten in Gerber-bestanden te specificeren\n"
-"Koellichaam-pad specificeert een thermische pad\n"
-"Gekanteeld specificeert gekanteelde doorsteekgaten op een bordrand\n"
-"Deze eigenschappen zijn gespecificeerd in Gerber X2-bestanden."
+"Testpunt specificeert een elektrisch testpunt\n"
+"Koellichaam specificeert een thermische pad\n"
+"Gekanteeld specificeert een doorsteekgat op de bordrand\n"
+"Mechanisch specificeert een doorsteekgat voor mechanische ondersteuning"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2105
 msgid "BGA pad"
@@ -34802,9 +34761,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "Gekanteelde pad (alleen voor doorsteekpads)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1211
-#, fuzzy
 msgid "Mechanical"
-msgstr "NPTH, mechanisch"
+msgstr "Mechanisch"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:346
@@ -35341,7 +35299,7 @@ msgid ""
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"Dit getal bepaalt hoeveel cijfers achter de komma worden geexporteerd onder "
+"Dit getal bepaalt hoeveel cijfers achter de komma worden geëxporteerd onder "
 "de 1 mm.\n"
 "Gebruikers-eenheid is 10^-<N> mm\n"
 "Kies 4 als u het niet zeker weet."
@@ -36935,7 +36893,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Er zijn items gevonden op verwijderde lagen. Deze bewerking verwijdert alle "
-"items uit verwijderde lagen en kan niet ongedaan worden gemaakt.\n"
+"items uit verwijderde lagen en kan niet ongedaan gemaakt worden.\n"
 "Wilt u doorgaan?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:689
@@ -37644,7 +37602,6 @@ msgid "Check rule syntax"
 msgstr "Controleer de syntaxis van de regel"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -38125,168 +38082,193 @@ msgstr ""
 "\n"
 "### Beperkingen\n"
 "\n"
-"| Beperkingstype            | "
-"Argumenttype                                                                                                           "
-"| "
-"Description                                                                                                                                                                                                                                                                                                                                                                                                                                             "
-"|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Controleert de breedte van annulusringen op vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                   "
-"|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                      "
-"| Controleert op de gegeven expressie."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Specificeert de **elektrische** vrije afstand tussen koperobjecten van "
+"| Beperkingstype            | Argumenttype                                   "
+"                                                                        | Des"
+"cription                                                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                    |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"----------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | "
+"Controleert de breedte van annulusringen op vias.<br>                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `assertion`               | \"&lt;expression>\"                            "
+"                                                                          | "
+"Controleert op de gegeven expressie.<br>                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `clearance`               | min                                            "
+"                                                                        | "
+"Specificeert de **elektrische** vrije afstand tussen koperobjecten van "
 "verschillende netten.  (Zie `physical_clearance` als u de vrije afstand "
 "tussen objecten ongeacht het net wilt specificeren.)<br><br>Maak om "
 "koperobjecten te laten overlappen (botsen) een `clearance`-beperking met een "
-"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`)."
-"<br>                                                                                                   "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Controleert de vrije afstand tussen footprint-afbakeningen en genereert "
-"een fout als twee afbakeningen dichter bij elkaar zijn dan de `min`-"
-"afstand.  Als een footprint geen afbakeningsvorm heeft worden er geen "
-"foutmeldingen gegenereerd door deze beperking."
-"<br>                                                                                                                                                                                    "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Controleert de tussenruimte tussen gekoppelde sporen in een differentieel "
+"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`).<br>                        "
+"                                                                           |"
+"\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen footprint-afbakeningen en genereert een "
+"fout als twee afbakeningen dichter bij elkaar zijn dan de `min`-afstand.  "
+"Als een footprint geen afbakeningsvorm heeft worden er geen foutmeldingen "
+"gegenereerd door deze beperking.<br>                                         "
+"                                                                             "
+"                                                              |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"Controleert de tussenruimte tussen gekoppelde sporen in een differentieel "
 "paar.  Gekoppelde sporen zijn segmenten die parallel aan elkaar lopen.  De "
 "tussenruimte van differentiele paren wordt niet getest op ongekoppelde delen "
-"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component)."
-"<br>                                                                                                                                      "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Controleert de afstand waar een differentieel paar ongekoppeld is "
-"gerouteerd van het andere polariteitsspoor in het paar (bijvoorbeeld waar "
-"het paar uitwaaiert van een component, of ongekoppeld wordt om een ander "
-"object zoals een via te passeren)."
-"<br>                                                                                                                                                                                             "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Geef één of meer objecttypes om te verbieden, gescheiden door spaties.  "
+"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component).<"
+"br>                                                                          "
+"                                                            |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"Controleert de afstand waar een differentieel paar ongekoppeld is gerouteerd "
+"van het andere polariteitsspoor in het paar (bijvoorbeeld waar het paar "
+"uitwaaiert van een component, of ongekoppeld wordt om een ander object zoals "
+"een via te passeren).<br>                                                    "
+"                                                                             "
+"                                                            |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Geef één of meer objecttypes om te verbieden, gescheiden door spaties.  "
 "Bijvoorbeeld, `(constraint disallow track)` of `(constraint disallow track "
 "via pad)`.  Als een object van dit type overeen komt met de regelvoorwaarde "
 "wordt een DRC-fout aangemaakt.<br><br>Deze beperking is in essentie "
 "hetzelfde als een weerregelgebied, maar kan gebruikt worden om meer "
-"specifieke weerbeperkingen te creëren."
-"<br>                                       |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Controleert de vrije afstand tussen objecten en de bordrand.<br><br>Dit "
-"kan ook beschouwd worden als de “freestolerantie” aangezien de bordrand alle "
+"specifieke weerbeperkingen te "
+"creëren.<br>                                       |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Controleert de vrije afstand tussen objecten en de bordrand.<br><br>Dit kan "
+"ook beschouwd worden als de “freestolerantie” aangezien de bordrand alle "
 "grafische items op de `Edge.Cuts`-laag zal omvatten, evenals eventuele "
-"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de "
-"boortolerantie.)<br>                                                                                                                                              "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Controleert de totale gerouteerde lengte voor de netten die overeenkomen "
-"met de regelvoorwaarde en genereert een fout voor elk net dat onder de `min`-"
+"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de boortolerantie.)<br"
+">                                                                            "
+"                                                                  |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"Controleert de totale gerouteerde lengte voor de netten die overeenkomen met "
+"de regelvoorwaarde en genereert een fout voor elk net dat onder de `min`-"
 "waarde (als opgegeven) of boven de `max`-waarde (als opgegeven) van de "
-"beperking ligt."
-"<br>                                                                                                                                                                                                        "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Controleert de grootte (diameter) van een boorgat in een pad of via.  Voor "
+"beperking ligt.<br>                                                          "
+"                                                                             "
+"                                                                 |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"Controleert de grootte (diameter) van een boorgat in een pad of via.  Voor "
 "ovale gaten zal de kleinere (minore) diameter worden getest tegen de `min`-"
 "waarde (als opgegeven) en de grotere (majore) diameter zal worden getest "
-"tegen de `max`-waarde (als opgegeven)."
-"<br>                                                                                                                                                                               "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Controleert de vrije afstand tussen een boorgat in een pad of via en "
+"tegen de `max`-waarde (als opgegeven).<br>                                   "
+"                                                                             "
+"                                                               |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen een boorgat in een pad of via en "
 "koperobjecten op een ander net.  De vrije afstand wordt gemeten vanaf de "
-"diameter van het gat, niet vanuit het midden."
-"<br>                                                                                                                                                                                                                                                         "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Controleert de vrije afstand tussen mechanisch geboorde gaten in pads en "
-"via’s.  De vrije afstand wordt gemeten tussen de diameters van de gaten, "
-"niet tussen hun middelpunten.<br><br>Deze beperking bestaat puur ter "
-"bescherming van boorbitjes. De vrije afstand tussen **lasergeboorde** "
-"(microvia’s) gaten wordt niet gecontroleerd, noch de vrije afstand tussen "
-"**gefreesde** (ovaalvormige) gaten en andere niet-mechanisch geboorde gaten."
-"<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Controleert de vrije afstand tussen twee objecten op een gegeven laag "
-"(inclusief niet-koperlagen).<br><br>Hoewel dit meer algemene controles kan "
-"uitvoeren dan `clearance` is het veel langzamer.  Gebruik `clearance` waar "
-"mogelijk."
-"<br>                                                                                                                                                                                                               "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Controleert de vrije afstand tussen een boorgat in een pad of via en een "
+"diameter van het gat, niet vanuit het midden.<br>                            "
+"                                                                             "
+"                                                                             "
+"                                                                   |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen mechanisch geboorde gaten in pads en via’"
+"s.  De vrije afstand wordt gemeten tussen de diameters van de gaten, niet "
+"tussen hun middelpunten.<br><br>Deze beperking bestaat puur ter bescherming "
+"van boorbitjes. De vrije afstand tussen **lasergeboorde** (microvia’s) gaten "
+"wordt niet gecontroleerd, noch de vrije afstand tussen **gefreesde** "
+"(ovaalvormige) gaten en andere niet-mechanisch geboorde gaten.<br> |\n"
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen twee objecten op een gegeven laag ("
+"inclusief niet-koperlagen).<br><br>Hoewel dit meer algemene controles kan "
+"uitvoeren dan `clearance` is het veel langzamer.  Gebruik `clearance` waar mo"
+"gelijk.<br>                                                                  "
+"                                                                             "
+"                                                                |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen een boorgat in een pad of via en een "
 "ander object, ongeacht het net. De vrije afstand wordt gemeten vanaf de "
 "diameter van het gat, niet het midden.<br><br>Dit kan ook worden beschouwd "
 "als de “boortolerantie” aangezien het alleen **ronde** gaten omvat (zie "
-"`edge_clearance` voor de freestolerantie)."
-"<br>                                                                                                      "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Controleert de vrije afstand tussen objecten op silkscreenlagen en andere "
-"objecten."
-"<br>                                                                                                                                                                                                                                                                                                                                                                 "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Controleert de totale scheeftrekking voor de netten die met de "
+"`edge_clearance` voor de freestolerantie).<br>                               "
+"                                                                       |\n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Controleert de vrije afstand tussen objecten op silkscreenlagen en andere obj"
+"ecten.<br>                                                                   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `skew`                    | max                                            "
+"                                                                        | "
+"Controleert de totale scheeftrekking voor de netten die met de "
 "regelvoorwaarde overeenkomen. Dat wil zeggen, het verschil tussen de lengte "
 "van elk net en het gemiddelde van alle lengtes van elk net dat overeenkomt "
 "met de regel.  Als de absolute waarde van het verschil tussen dat gemiddelde "
 "en de lengte van eender net boven de `max`-waarde van de beperking ligt, "
-"wordt een fout gegenereerd.<br>                                             "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Geeft de breedte van de tussenruimte tussen een pad en een zone met een "
-"thermische ontlastingsverbinding."
-"<br>                                                                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Geeft de breedte van de spaken die een pad met een zone verbinden via een "
-"thermische ontlastingsverbinding."
-"<br>                                                                                                                                                                                                                                                                                                                                         "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Cotroleert de breedte van spoor- en boogsegmenten.  Voor elk segment dat "
-"een breedte onder de `min`-waarde (als opgegeven) of boven de `max`-waarde "
-"(als opgegeven) heeft wordt een fout gegenereerd."
-"<br>                                                                                                                                                                                                                                               "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Telt het aantal via’s op elk net wat aan de regelvoorwaarde voldoet.  Als "
+"wordt een fout gegenereerd.<br>                                             |"
+"\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"Geeft de breedte van de tussenruimte tussen een pad en een zone met een "
+"thermische ontlastingsverbinding.<br>                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                            |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"Geeft de breedte van de spaken die een pad met een zone verbinden via een "
+"thermische ontlastingsverbinding.<br>                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                          |\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"Cotroleert de breedte van spoor- en boogsegmenten.  Voor elk segment dat een "
+"breedte onder de `min`-waarde (als opgegeven) of boven de `max`-waarde (als "
+"opgegeven) heeft wordt een fout gegenereerd.<br>                             "
+"                                                                             "
+"                                                                             "
+"                                                        |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"Telt het aantal via’s op elk net wat aan de regelvoorwaarde voldoet.  Als "
 "het aantal de `max`-waarde van de beperking overschrijft op eender van de "
-"overeenkomende netten, wordt er een fout gegenereerd voor dat net."
-"<br>                                                                                                                                                                                                                              "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Specificeert de verbinding die moet worden gemaakt tussen een zone en een "
-"pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
+"overeenkomende netten, wordt er een fout gegenereerd voor dat net.<br>       "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"Specificeert de verbinding die moet worden gemaakt tussen een zone en een pad"
+".<br>                                                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
 "\n"
 "\n"
 "### Items\n"
@@ -38411,7 +38393,7 @@ msgstr ""
 "Genest lidmaatschap is inbegrepen.\n"
 "<br><br>\n"
 "\n"
-"    A.memberOfFootprint('<footprint_referentie>')\n"
+"    A.memberOfFootprint('<footprint_referentie>|<footprint_id>')\n"
 "Waar als `A` lid is van een footprint met de gegeven referentieaanduiding of "
 "footprint-ID.\n"
 "De parameter kan jokertekens bevatten.\n"
@@ -38457,13 +38439,13 @@ msgstr ""
 "\n"
 "    (rule \"Afstand tussen via’s van verschillende netten\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Vrije afstand tussen pads van verschillende netten\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Vrije afstand tussen via-gat en spoor\"\n"
@@ -39377,7 +39359,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "'layer'-sleutelwoord is al aanwezig."
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -39699,9 +39681,9 @@ msgid "%s rounded corners differ."
 msgstr "%s afgeronde hoeken verschillen."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s afgeschuinde hoeken verschillen."
+msgstr "%s afgeschuinde hoekmaten verschillen."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
 #, c-format
@@ -40171,7 +40153,7 @@ msgstr "Zoneeigenschappen bewerken"
 
 #: pcbnew/exporters/export_d356.cpp:380
 msgid "Export D-356 Test File"
-msgstr "Exporteer D-356-testbestand"
+msgstr "D-356-testbestand exporteren"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -40182,9 +40164,9 @@ msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
-"Bestand bevat pad-vormen die niet worden ondersteund door de Hyperlynx-"
-"exporteerder (ondersteunde vormen zijn ovaal, rechthoek, afgeronde "
-"rechthoek, en cirkel)."
+"Bestand bevat padvormen die niet worden ondersteund door de Hyperlynx-"
+"exportering (ondersteunde vormen zijn ovaal, rechthoek, afgeronde rechthoek, "
+"en cirkel)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:174
 msgid "They have been exported as oval pads."
@@ -40306,28 +40288,30 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:807
 #: pcbnew/exporters/step/step_pcb_model.cpp:2035
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr ""
+msgstr "** ShapeUpgrade_UnifySameDomain heeft een nul-vorm geproduceerd **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1607
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
-msgstr ""
+msgstr "Draad niet voltooid (omtrekpunten %d): OCC-fout %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1611
 #: pcbnew/exporters/step/step_pcb_model.cpp:1624
-#, fuzzy, c-format
+#, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "Modelbegrenzingen weergeven"
+msgstr "z: %g; begrenzingsvak: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1621
 msgid ""
 "\n"
 "Wire self-interference check failed\n"
 msgstr ""
+"\n"
+"Zelf-interferentiecontrole draad gefaald\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1652
 msgid "Using non-simplified polygon.\n"
-msgstr ""
+msgstr "Gebruikt niet-gesimplificeerd polygoon.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1839
 #, c-format
@@ -40345,18 +40329,18 @@ msgid ""
 "\n"
 "** Got problems while cutting %s number %d **\n"
 msgstr ""
+"\n"
+"** Problemen tijdens snijden %s nummer %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1870
 #: pcbnew/exporters/step/step_pcb_model.cpp:2004
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Fout"
+msgstr "Foutmeldingen:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1876
 #: pcbnew/exporters/step/step_pcb_model.cpp:2010
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Waarschuwing"
+msgstr "Waarschuwingen:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1892
 msgid "shapes"
@@ -40376,7 +40360,7 @@ msgstr "zones"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2000
 msgid "** Got problems while fusing shapes **\n"
-msgstr ""
+msgstr "** Problemen tijdens samenvoegen vormen **\n"
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -40694,9 +40678,8 @@ msgid "Footprint Chooser"
 msgstr "Footprintkiezer"
 
 #: pcbnew/footprint_chooser_frame.cpp:152
-#, fuzzy
 msgid "Show 3D viewer in own window"
-msgstr "3D-viewervenster weergeven"
+msgstr "3D-viewer in eigen venster weergeven"
 
 #: pcbnew/footprint_chooser_frame.cpp:420
 #, c-format
@@ -41065,9 +41048,8 @@ msgstr "Afstemmen"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2387
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2403
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2429
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Waarde selecteren om af te stemmen"
+msgstr "Selecteer eerst een spoor om af te stemmen."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2471
 msgid "Single track"
@@ -41189,8 +41171,8 @@ msgstr ""
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr ""
-"Het huidige bord gaat verloren en deze bewerking kan niet ongedaan worden "
-"gemaakt. Doorgaan met?"
+"Het huidige bord gaat verloren en deze bewerking kan niet ongedaan gemaakt "
+"worden. Doorgaan?"
 
 #: pcbnew/initpcb.cpp:115 pcbnew/tools/footprint_editor_control.cpp:220
 msgid "The current footprint has been modified.  Save changes?"
@@ -41289,7 +41271,7 @@ msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Export GenCAD board representation"
-msgstr "Exporteer GenCAD-bordvertegenwoordiging"
+msgstr "GenCAD-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
@@ -41297,7 +41279,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
-msgstr "Exporteer VRML 3D-bordweergave"
+msgstr "VRML 3D-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
@@ -41305,16 +41287,15 @@ msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
-msgstr "Exporteer IDF 3D-bordweergave"
+msgstr "IDF 3D-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / BREP / XAO..."
-msgstr ""
+msgstr "STEP / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Export STEP / BREP / XAO 3D board representation"
-msgstr "Exporteer STEP 3D-bordweergave"
+msgstr "STEP / BREP / XAO 3D-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "SVG..."
@@ -41322,7 +41303,7 @@ msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "Export SVG board representation"
-msgstr "Exporteer SVG-bordweergave"
+msgstr "SVG-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Footprint Association (.cmp) File..."
@@ -41331,7 +41312,7 @@ msgstr "Footprintassociatiebestand (.cmp)..."
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Exporteer footprint-associatiebestand (*.cmp) voor terugannotatie van schema"
+"Footprint-associatiebestand (*.cmp) exporteren voor terugannotatie van schema"
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
@@ -42016,14 +41997,12 @@ msgid "Castellated pad"
 msgstr "Gekanteelde pad"
 
 #: pcbnew/pad.cpp:2111
-#, fuzzy
 msgid "Mechanical pad"
-msgstr "NPTH, mechanisch"
+msgstr "Mechanisch pad"
 
 #: pcbnew/pad.cpp:2129
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "Start, eind, en verbonden lagen"
+msgstr "Voor, achter, en verbonden lagen"
 
 #: pcbnew/pad.cpp:2169
 msgid "Pad Type"
@@ -42123,9 +42102,8 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Onderdruk volgnullen"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Keep Aligned with Dimension"
-msgstr "Blijf in lijn met de maatlijn"
+msgstr "Uitgelijnd houden met maatlijn"
 
 #: pcbnew/pcb_dimension.cpp:1547
 msgid "Crossbar Height"
@@ -42307,12 +42285,12 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 stream heeft een onverwachtte lengte voor subrecord 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Altium-laag (%d) heeft geen KiCad-equivalent. Het is verplaatst naar KiCad-"
+"Altium-laag %s heeft geen KiCad-equivalent. Het is verplaatst naar KiCad-"
 "laag Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:458
@@ -42402,29 +42380,24 @@ msgid "Loading dimension drawings..."
 msgstr "Maatlijntekeningen laden..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Hoekmaatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Datummaatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Basismaatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Lineaire maatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
+msgstr "Radiale maatlijn genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -43926,7 +43899,6 @@ msgid "P-Cad 200x ASCII PCB files"
 msgstr "P-Cad 200x ASCII PCB-bestanden"
 
 #: pcbnew/pcb_io/pcb_io.cpp:121
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported.\n"
@@ -43934,7 +43906,9 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Het geselecteerde bestand bevat meerdere footprints. Alleen de eerste zal "
-"worden geïmporteerd."
+"worden geïmporteerd.\n"
+"Om alle footprints in te laden, voeg hem toe als bibliotheek in Voorkeuren -"
+"> Footprintbibliotheken beheren..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:181
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -44200,7 +44174,7 @@ msgstr "Bord laden\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:182
 #, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "VRML succesvol geexporteerd naar %s"
+msgstr "VRML succesvol geëxporteerd naar %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:188
 msgid "Error exporting VRML"
@@ -44212,14 +44186,12 @@ msgid "Actual image size: %dx%d"
 msgstr "Werkelijke grootte afbeelding: %d×%d"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:412
-#, fuzzy
 msgid "Successfully created 3D render image"
-msgstr "SVG-bestand succesvol gemaakt"
+msgstr "3D-renderafbeelding succesvol gemaakt"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:415
-#, fuzzy
 msgid "Error creating 3D render image"
-msgstr "Fout bij maken SVG-bestand"
+msgstr "Fout bij maken 3D-renderafbeelding"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:450
 msgid "Successfully created svg file"
@@ -45370,7 +45342,7 @@ msgstr "Creëer uit selectie"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Resulterende polygoon zou leeg zijn"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -45622,18 +45594,16 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Er moeten exact twee lijnen zijn geselecteerd om ze te verlengen."
 
 #: pcbnew/tools/edit_tool.cpp:1509
-#, fuzzy
 msgid "Simplify Shapes"
-msgstr "Complexe vorm"
+msgstr "Vormen vereenvoudigen"
 
 #: pcbnew/tools/edit_tool.cpp:1509 pcbnew/tools/edit_tool.cpp:1578
 msgid "Tolerance value:"
 msgstr "Tolerantiewaarde:"
 
 #: pcbnew/tools/edit_tool.cpp:1543 pcbnew/tools/pcb_actions.cpp:628
-#, fuzzy
 msgid "Simplify Polygons"
-msgstr "Vereenvoudig polygonen op koperlaag F_Cu"
+msgstr "Polygonen vereenvoudigen"
 
 #: pcbnew/tools/edit_tool.cpp:1578 pcbnew/tools/edit_tool.cpp:1615
 #: pcbnew/tools/pcb_actions.cpp:634
@@ -45646,7 +45616,7 @@ msgstr "Omkeren"
 
 #: pcbnew/tools/edit_tool.cpp:2552
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr ""
+msgstr "Gebruik het footprinteigenschappen-scherm om velden te verwijderen."
 
 #: pcbnew/tools/edit_tool.cpp:2710
 msgid "Move Exactly"
@@ -46261,7 +46231,7 @@ msgstr "Hoeken tussen geselecteerde lijnen wegsnijden"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Vereenvoudig polygoonomtrek door overbodige punten te verwijderen"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid ""
@@ -46315,9 +46285,8 @@ msgid "Hide Footprint Tree"
 msgstr "Footprintboom verbergen"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Focus the Footprint Tree Search Field"
-msgstr "Terugvertaalde footprint velden"
+msgstr "Focussen op zoekveld footprintboom"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "New Footprint..."
@@ -47309,54 +47278,52 @@ msgstr ""
 "de cursor"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "Verdeel horizontaal"
+msgstr "Horizontaal verdelen op middelpunten"
 
 #: pcbnew/tools/pcb_actions.cpp:1949
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
 msgstr ""
-"Verdeelt geselecteerde items tussen het meest linkse en meeste rechtse item"
+"Geselecteerde items tussen het meest linkse en meeste rechtse item verdelen "
+"zodat de middelpunten op gelijke afstand staan"
 
 #: pcbnew/tools/pcb_actions.cpp:1956
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "Verdeel horizontaal"
+msgstr "Horizontaal verdelen met gelijke tussenruimte"
 
 #: pcbnew/tools/pcb_actions.cpp:1957
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
 msgstr ""
-"Verdeelt geselecteerde items tussen het meest linkse en meeste rechtse item"
+"Geselecteerde items tussen het meest linkse en meeste rechtse item verdelen "
+"zodat de tussenruimte gelijk is"
 
 #: pcbnew/tools/pcb_actions.cpp:1964
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "Verdeel verticaal"
+msgstr "Verticaal verdelen met gelijke tussenruimte"
 
 #: pcbnew/tools/pcb_actions.cpp:1965
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
-msgstr "Verdeelt geselecteerde items tussen het bovenste en onderste item"
+msgstr ""
+"Geselecteerde items tussen het bovenste en onderste item verdelen zodat de "
+"tussenruimte gelijk is"
 
 #: pcbnew/tools/pcb_actions.cpp:1972
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "Verdeel verticaal"
+msgstr "Verticaal verdelen op middelpunten"
 
 #: pcbnew/tools/pcb_actions.cpp:1973
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
-msgstr "Verdeelt geselecteerde items tussen het bovenste en onderste item"
+msgstr ""
+"Geselecteerde items tussen het bovenste en onderste item verdelen zodat de "
+"middelpunten op gelijke afstand staan"
 
 #: pcbnew/tools/pcb_actions.cpp:1988
 msgid "Create a corner"
@@ -47752,9 +47719,8 @@ msgid "Length Tuning Settings..."
 msgstr "Instellingen voor lengteafstemming ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2478
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Scherm voor itemeigenschappen weergeven"
+msgstr "Scherm voor eigenschappen afstemmingspatroon weergeven"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
@@ -48195,7 +48161,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:467
 msgid "Filter nets"
-msgstr "Filter netten"
+msgstr "Netten filteren"
 
 #: pcbnew/widgets/appearance_controls.cpp:617
 #: pcbnew/widgets/appearance_controls.cpp:1796
