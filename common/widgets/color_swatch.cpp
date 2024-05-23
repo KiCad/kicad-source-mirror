@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,8 +149,10 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, m_size,
-                                                m_checkerboardSize, m_checkerboardBg );
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, m_size, m_checkerboardSize,
+                                                m_checkerboardBg );
+
+    bitmap.SetScaleFactor( GetDPIScaleFactor() );
     m_swatch = new wxStaticBitmap( this, aID, bitmap );
 
     sizer->Add( m_swatch, 0, 0 );
@@ -181,6 +183,8 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aP
 
     wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( COLOR4D::UNSPECIFIED, COLOR4D::UNSPECIFIED,
                                                 m_size, m_checkerboardSize, m_checkerboardBg );
+
+    bitmap.SetScaleFactor( GetDPIScaleFactor() );
     m_swatch = new wxStaticBitmap( this, aID, bitmap );
 
     sizer->Add( m_swatch, 0, 0 );
@@ -256,6 +260,8 @@ void COLOR_SWATCH::SetSwatchColor( const COLOR4D& aColor, bool aSendEvent )
     m_color = aColor;
 
     wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
+
+    bm.SetScaleFactor( GetDPIScaleFactor() );
     m_swatch->SetBitmap( bm );
 
     if( aSendEvent )
@@ -273,6 +279,8 @@ void COLOR_SWATCH::SetSwatchBackground( const COLOR4D& aBackground )
 {
     m_background = aBackground;
     wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
+
+    bm.SetScaleFactor( GetDPIScaleFactor() );
     m_swatch->SetBitmap( bm );
 }
 
@@ -306,6 +314,8 @@ void COLOR_SWATCH::GetNewSwatchColor()
 
             wxBitmap bm = MakeBitmap( newColor, m_background, m_size, m_checkerboardSize,
                                       m_checkerboardBg );
+
+            bm.SetScaleFactor( GetDPIScaleFactor() );
             m_swatch->SetBitmap( bm );
 
             sendSwatchChangeEvent( *this );
@@ -318,5 +328,7 @@ void COLOR_SWATCH::OnDarkModeToggle()
 {
     m_checkerboardBg = m_parent->GetBackgroundColour();
     wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
+
+    bm.SetScaleFactor( GetDPIScaleFactor() );
     m_swatch->SetBitmap( bm );
 }
