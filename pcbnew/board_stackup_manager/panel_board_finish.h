@@ -44,6 +44,8 @@ public:
     // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
 
+    bool TransferDataFromWindow( BOARD_STACKUP& aStackup );
+
 private:
     void synchronizeWithBoard();
 

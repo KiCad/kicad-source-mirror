@@ -80,23 +80,31 @@ bool PANEL_SETUP_BOARD_FINISH::TransferDataFromWindow()
 {
     BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
-    wxArrayString finish_list = GetStandardCopperFinishes( false );
-    int finish = m_choiceFinish->GetSelection() >= 0 ? m_choiceFinish->GetSelection() : 0;
-    bool modified = brd_stackup.m_FinishType == finish_list[finish];
-    brd_stackup.m_FinishType = finish_list[finish];
-
-    int edge = m_choiceEdgeConn->GetSelection();
-    modified |= brd_stackup.m_EdgeConnectorConstraints == (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
-    brd_stackup.m_EdgeConnectorConstraints = (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
-
-    brd_stackup.m_CastellatedPads = m_cbCastellatedPads->GetValue();
-    modified |= brd_stackup.m_EdgePlating == m_cbEgdesPlated->GetValue();
-    brd_stackup.m_EdgePlating = m_cbEgdesPlated->GetValue();
-
-    if( modified )
+    if( TransferDataFromWindow( brd_stackup ) )
         m_frame->OnModify();
 
     return true;
+}
+
+
+bool PANEL_SETUP_BOARD_FINISH::TransferDataFromWindow( BOARD_STACKUP& aStackup )
+{
+    wxArrayString finish_list = GetStandardCopperFinishes( false );
+    int finish = m_choiceFinish->GetSelection() >= 0 ? m_choiceFinish->GetSelection() : 0;
+    bool modified = aStackup.m_FinishType != finish_list[finish];
+    aStackup.m_FinishType = finish_list[finish];
+
+    int edge = m_choiceEdgeConn->GetSelection();
+    modified |= aStackup.m_EdgeConnectorConstraints != (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
+    aStackup.m_EdgeConnectorConstraints = (BS_EDGE_CONNECTOR_CONSTRAINTS) edge;
+
+    modified |= aStackup.m_CastellatedPads != m_cbCastellatedPads->GetValue();
+    aStackup.m_CastellatedPads = m_cbCastellatedPads->GetValue();
+
+    modified |= aStackup.m_EdgePlating != m_cbEgdesPlated->GetValue();
+    aStackup.m_EdgePlating = m_cbEgdesPlated->GetValue();
+
+    return modified;
 }
 
 
