@@ -37,6 +37,7 @@
 
 class wxBitmapComboBox;
 class PANEL_SETUP_LAYERS;
+class PANEL_SETUP_BOARD_FINISH;
 
 
 // A helper class to handle UI items managed by m_fgGridSizer
@@ -90,7 +91,8 @@ class PANEL_SETUP_BOARD_STACKUP : public PANEL_SETUP_BOARD_STACKUP_BASE
 {
 public:
     PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
-                               PANEL_SETUP_LAYERS* aPanelLayers );
+                               PANEL_SETUP_LAYERS* aPanelLayers,
+                               PANEL_SETUP_BOARD_FINISH* aPanelFinish );
     ~PANEL_SETUP_BOARD_STACKUP();
 
     void ImportSettingsFrom( BOARD* aBoard );
@@ -234,6 +236,7 @@ private:
                                             //   to allowed layers in stackup.  (When this doesn't
                                             //   match the enabled layers in PANEL_SETUP_LAYERS the
                                             //   stackup is not up to date.)
+    PANEL_SETUP_BOARD_FINISH* m_panelFinish;
 
     DIELECTRIC_SUBSTRATE_LIST              m_delectricMatList;    // List of currently available
                                                                   //   dielectric materials

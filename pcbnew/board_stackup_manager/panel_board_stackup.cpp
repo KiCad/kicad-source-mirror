@@ -38,6 +38,7 @@
 #include <math/util.h>      // for KiROUND
 
 #include "panel_board_stackup.h"
+#include "panel_board_finish.h"
 #include <panel_setup_layers.h>
 #include "board_stackup_reporter.h"
 #include <bitmaps.h>
@@ -73,7 +74,8 @@ static void drawBitmap( wxBitmap& aBitmap, wxColor aColor );
 
 PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow,
                                                       PCB_EDIT_FRAME* aFrame,
-                                                      PANEL_SETUP_LAYERS* aPanelLayers ):
+                                                      PANEL_SETUP_LAYERS* aPanelLayers,
+                                                      PANEL_SETUP_BOARD_FINISH* aPanelFinish ):
         PANEL_SETUP_BOARD_STACKUP_BASE( aParentWindow ),
         m_delectricMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_DIELECTRIC ),
         m_solderMaskMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SOLDERMASK ),
@@ -83,6 +85,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow,
         m_lastUnits( aFrame->GetUserUnits() )
 {
     m_panelLayers = aPanelLayers;
+    m_panelFinish = aPanelFinish;
     m_brdSettings = &m_board->GetDesignSettings();
 
     m_panel1->SetBorders( false, false, true, true );
@@ -422,6 +425,8 @@ void PANEL_SETUP_BOARD_STACKUP::onExportToClipboard( wxCommandEvent& event )
 {
     if( !transferDataFromUIToStackup() )
         return;
+
+    m_panelFinish->TransferDataFromWindow( m_stackup );
 
     // Build a ASCII representation of stackup and copy it in the clipboard
     wxString report = BuildStackupReport( m_stackup, m_frame->GetUserUnits() );

@@ -52,6 +52,7 @@ protected:
 
     PCB_EDIT_FRAME*            m_frame;
     PANEL_SETUP_LAYERS*        m_layers;
+    PANEL_SETUP_BOARD_FINISH*  m_boardFinish;
     PANEL_SETUP_BOARD_STACKUP* m_physicalStackup;
 
 public:
