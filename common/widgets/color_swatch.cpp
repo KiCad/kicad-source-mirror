@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kiplatform/ui.h>
 #include <widgets/color_swatch.h>
 #include <wx/dcmemory.h>
 
@@ -146,6 +147,12 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
     m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
     m_checkerboardBg = aParent->GetBackgroundColour();
 
+#ifdef __WXMAC__
+    // Adjust for Retina
+    m_size *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
+    m_checkerboardSize *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
+#endif
+
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
@@ -175,6 +182,16 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aP
 
     m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
     m_checkerboardBg = aParent->GetBackgroundColour();
+
+#ifdef __WXMAC__
+    // Adjust for border
+    m_size.x -= 2;
+    m_size.y -= 2;
+
+    // Adjust for Retina
+    m_size *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
+    m_checkerboardSize *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
+#endif
 
     SetSize( m_size );
 

@@ -153,6 +153,8 @@ protected:
         return m_buttonState & aFlag;
     }
 
+    void invalidateBestSize();
+
 private:
     wxBitmapBundle m_normalBitmap;
     wxBitmapBundle m_disabledBitmap;

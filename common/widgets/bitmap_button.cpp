@@ -92,7 +92,21 @@ BITMAP_BUTTON::~BITMAP_BUTTON()
 
 wxSize BITMAP_BUTTON::DoGetBestSize() const
 {
+    if( hasFlag( wxCONTROL_SEPARATOR ) )
+        return wxSize( m_unadjustedMinSize.x + m_padding * 2, wxButton::GetDefaultSize().y );
+
     return m_unadjustedMinSize + wxSize( m_padding * 2, m_padding * 2 );
+}
+
+
+void BITMAP_BUTTON::invalidateBestSize()
+{
+#ifdef __WXMAC__
+    // InvalidateBestSize() doesn't appear to work on Mac: DoGetBestSize() is never called.
+    SetMinSize( DoGetBestSize() );
+#else
+    InvalidateBestSize();
+#endif
 }
 
 
@@ -100,7 +114,7 @@ void BITMAP_BUTTON::SetPadding( int aPadding )
 {
     m_padding = aPadding;
 
-    InvalidateBestSize();
+    invalidateBestSize();
 }
 
 
@@ -123,7 +137,7 @@ void BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 #endif
     }
 
-    InvalidateBestSize();
+    invalidateBestSize();
 }
 
 
@@ -261,7 +275,7 @@ void BITMAP_BUTTON::OnDPIChanged( wxDPIChangedEvent& aEvent )
     if( newBmSize != m_unadjustedMinSize )
     {
         m_unadjustedMinSize = newBmSize;
-        InvalidateBestSize();
+        invalidateBestSize();
     }
 
     aEvent.Skip();
@@ -414,7 +428,7 @@ void BITMAP_BUTTON::SetIsSeparator()
 {
     setFlag( wxCONTROL_SEPARATOR | wxCONTROL_DISABLED );
 
-    InvalidateBestSize();
+    invalidateBestSize();
 }
 
 
