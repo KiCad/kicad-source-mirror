@@ -105,6 +105,10 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( SCH_EDIT_FRAME* aFrame, SCH_TA
     m_borderStyleCombo->Append( DEFAULT_STYLE );
     m_separatorsStyleCombo->Append( DEFAULT_STYLE );
 
+    KIGFX::COLOR4D canvas = aFrame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_borderColorSwatch->SetSwatchBackground( canvas );
+    m_separatorsColorSwatch->SetSwatchBackground( canvas );
+
     if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
         m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
 

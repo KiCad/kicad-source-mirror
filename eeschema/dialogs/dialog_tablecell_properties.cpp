@@ -68,6 +68,10 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
     m_vAlignBottom->SetIsRadioButton();
     m_vAlignBottom->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_bottom ) );
 
+    KIGFX::COLOR4D canvas = aFrame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_textColorSwatch->SetSwatchBackground( canvas );
+    m_fillColorSwatch->SetSwatchBackground( canvas );
+
     SetupStandardButtons();
     Layout();
 
