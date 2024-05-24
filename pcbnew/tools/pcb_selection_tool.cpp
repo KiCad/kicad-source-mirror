@@ -1579,6 +1579,21 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
         }
     }
 
+    // Promote generated members to their PCB_GENERATOR parents
+    for( EDA_ITEM* item : m_selection )
+    {
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+        PCB_GROUP*  parent = boardItem ? boardItem->GetParentGroup() : nullptr;
+
+        if( parent && parent->Type() == PCB_GENERATOR_T )
+        {
+            unselect( item );
+
+            if( !parent->IsSelected() )
+                select( parent );
+        }
+    }
+
     for( BOARD_CONNECTED_ITEM* item : cleanupItems )
         item->ClearFlags( SKIP_STRUCT );
 }
