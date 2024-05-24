@@ -161,7 +161,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
         m_plotAllLayersList->SetClientObject( list_idx, new PCB_LAYER_ID_CLIENT_DATA( layer_id ) );
     }
 
-	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND, 3 );
+	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND | wxFIXED_MINSIZE, 3 );
 
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );

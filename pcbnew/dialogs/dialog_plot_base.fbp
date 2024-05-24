@@ -437,7 +437,7 @@
                 <property name="permission">protected</property>
                 <object class="sizeritem" expanded="true">
                   <property name="border">3</property>
-                  <property name="flag">wxALL|wxEXPAND</property>
+                  <property name="flag">wxALL|wxEXPAND|wxFIXED_MINSIZE</property>
                   <property name="proportion">1</property>
                   <object class="wxCheckListBox" expanded="true">
                     <property name="BottomDockable">1</property>
