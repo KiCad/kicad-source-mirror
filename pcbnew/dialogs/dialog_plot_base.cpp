@@ -57,7 +57,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_layerCheckListBox = new wxCheckListBox( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
 	m_layerCheckListBox->SetMinSize( wxSize( 150,-1 ) );
 
-	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND, 3 );
+	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND|wxFIXED_MINSIZE, 3 );
 
 
 	bmiddleSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 5 );
