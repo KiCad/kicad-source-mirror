@@ -34,6 +34,7 @@ class BOARD;
 class BOARD_ITEM;
 class CN_ITEM;
 class PCB_TRACK;
+class EDA_COMBINED_MATCHER;
 
 /**
  * Net inspection panel for pcbnew
@@ -284,7 +285,7 @@ private:
 
     int m_num_copper_layers = 0;
 
-    std::vector<wxString> m_custom_group_rules;
+    std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>> m_custom_group_rules;
 
     /**
      * CSV output control

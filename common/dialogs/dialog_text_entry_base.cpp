@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -15,17 +15,16 @@ WX_TEXT_ENTRY_DIALOG_BASE::WX_TEXT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 
 	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizerContent;
-	bSizerContent = new wxBoxSizer( wxVERTICAL );
+	m_ContentSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_label = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_label->Wrap( -1 );
-	bSizerContent->Add( m_label, 0, wxALL|wxEXPAND, 5 );
+	m_ContentSizer->Add( m_label, 0, wxALL|wxEXPAND, 5 );
 
 	m_textCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrl->SetMinSize( wxSize( 300,-1 ) );
 
-	bSizerContent->Add( m_textCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_ContentSizer->Add( m_textCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
@@ -44,10 +43,10 @@ WX_TEXT_ENTRY_DIALOG_BASE::WX_TEXT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 	bSizer3->Add( m_choice, 3, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerContent->Add( bSizer3, 1, wxEXPAND, 5 );
+	m_ContentSizer->Add( bSizer3, 1, wxEXPAND, 5 );
 
 
-	m_mainSizer->Add( bSizerContent, 1, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_ContentSizer, 1, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

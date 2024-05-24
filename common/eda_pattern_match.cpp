@@ -401,6 +401,12 @@ EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern,
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_SUBSTR>() );
         break;
 
+    case CTX_NET:
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX>() );
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD>() );
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_SUBSTR>() );
+        break;
+
     case CTX_NETCLASS:
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX_ANCHORED>() );
         AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD_ANCHORED>() );

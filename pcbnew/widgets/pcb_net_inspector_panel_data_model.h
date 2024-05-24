@@ -20,6 +20,9 @@
 #ifndef PCB_NET_INSPECTOR_PANEL_DATA_MODEL
 #define PCB_NET_INSPECTOR_PANEL_DATA_MODEL
 
+#include <eda_pattern_match.h>
+
+
 /**
  * Primary data item for entries in the Net Inspector list.
  * 
@@ -36,13 +39,17 @@ public:
     };
 
     LIST_ITEM( unsigned int aGroupNumber, const wxString& aGroupName, GROUP_TYPE aGroupType ) :
-            m_group_type( aGroupType ), m_group_number( aGroupNumber ), m_net_name( aGroupName )
+            m_group_type( aGroupType ),
+            m_group_number( aGroupNumber ),
+            m_net_name( aGroupName )
     {
         m_group_name = aGroupName;
         m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + MAX_CU_LAYERS, 0 );
     }
 
-    LIST_ITEM( NETINFO_ITEM* aNet ) : m_group_type( GROUP_TYPE::NONE ), m_net( aNet )
+    LIST_ITEM( NETINFO_ITEM* aNet ) :
+            m_group_type( GROUP_TYPE::NONE ),
+            m_net( aNet )
     {
         wxASSERT( aNet );
         m_net_name = UnescapeString( aNet->GetNetname() );
@@ -195,8 +202,11 @@ public:
         wxCHECK_RET( aLayer < m_layer_wire_length.size(), wxT( "Invalid layer specified" ) );
 
         if( m_parent )
-            m_parent->SetLayerWireLength(
-                    m_parent->GetBoardWireLength() - m_layer_wire_length[aLayer] + aValue, aLayer );
+        {
+            m_parent->SetLayerWireLength( m_parent->GetBoardWireLength()
+                                              - m_layer_wire_length[aLayer] + aValue,
+                                          aLayer );
+        }
 
         m_column_changed[COLUMN_BOARD_LENGTH] |= ( m_layer_wire_length[aLayer] != aValue );
         m_layer_wire_length[aLayer] = aValue;
@@ -280,8 +290,8 @@ public:
 
             m_parent->SubPadDieLength( GetPadDieLength() );
 
-            m_parent->m_children.erase(
-                    std::find( m_parent->m_children.begin(), m_parent->m_children.end(), this ) );
+            m_parent->m_children.erase( std::find( m_parent->m_children.begin(),
+                                                   m_parent->m_children.end(), this ) );
         }
 
         m_parent = aParent;
@@ -400,8 +410,10 @@ public:
         for( std::unique_ptr<LIST_ITEM>& item : m_items )
         {
             if( item->GetIsGroup() )
-                ret.push_back(
-                        std::make_pair( item->GetGroupName(), wxDataViewItem( item.get() ) ) );
+            {
+                ret.push_back( std::make_pair( item->GetGroupName(),
+                                               wxDataViewItem( item.get() ) ) );
+            }
         }
 
         return ret;
@@ -454,8 +466,8 @@ public:
         if( group == groupsEnd )
         {
             int                        dist = std::distance( groupsBegin, groupsEnd );
-            std::unique_ptr<LIST_ITEM> groupItem =
-                    std::make_unique<LIST_ITEM>( dist, groupName, groupType );
+            std::unique_ptr<LIST_ITEM> groupItem = std::make_unique<LIST_ITEM>( dist, groupName,
+                                                                                groupType );
             group = m_items.insert( groupsEnd, std::move( groupItem ) );
             ItemAdded( wxDataViewItem( ( *group )->Parent() ), wxDataViewItem( &**group ) );
         }
@@ -476,11 +488,11 @@ public:
         {
             wxString searchName = aItem->GetNetName().Upper();
 
-            for( const wxString& groupName : m_parent.m_custom_group_rules )
+            for( const std::unique_ptr<EDA_COMBINED_MATCHER>& rule : m_parent.m_custom_group_rules )
             {
-                if( searchName.Find( groupName.Upper() ) != wxNOT_FOUND )
+                if( rule->Find( searchName.Upper() ) )
                 {
-                    aItem->SetParent( m_custom_group_map[groupName] );
+                    aItem->SetParent( m_custom_group_map[ rule->GetPattern() ] );
                     groupMatched = true;
                     break;
                 }
@@ -573,11 +585,11 @@ public:
         m_custom_group_map.clear();
         int groupId = 0;
 
-        for( const wxString& groupName : m_parent.m_custom_group_rules )
+        for( const std::unique_ptr<EDA_COMBINED_MATCHER>& rule : m_parent.m_custom_group_rules )
         {
             std::unique_ptr<LIST_ITEM>& group = m_items.emplace_back( std::make_unique<LIST_ITEM>(
-                    groupId, groupName, LIST_ITEM::GROUP_TYPE::USER_DEFINED ) );
-            m_custom_group_map[groupName] = group.get();
+                    groupId, rule->GetPattern(), LIST_ITEM::GROUP_TYPE::USER_DEFINED ) );
+            m_custom_group_map[ rule->GetPattern() ] = group.get();
             ItemAdded( wxDataViewItem( group->Parent() ), wxDataViewItem( group.get() ) );
             ++groupId;
         }
@@ -674,6 +686,7 @@ protected:
             if( i->GetIsGroup() )
             {
                 if( aCol == COLUMN_NAME )
+                {
                     switch( i->GetGroupType() )
                     {
                     case LIST_ITEM::GROUP_TYPE::NETCLASS:
@@ -682,11 +695,15 @@ protected:
                     case LIST_ITEM::GROUP_TYPE::USER_DEFINED:
                         aOutValue = _( "Custom" ) + ": " + i->GetGroupName();
                         break;
-                    default: aOutValue = i->GetGroupName(); break;
+                    default:
+                        aOutValue = i->GetGroupName();
+                        break;
                     }
-
+                }
                 else
+                {
                     aOutValue = "";
+                }
             }
 
             else if( aCol == COLUMN_NAME )
@@ -714,8 +731,7 @@ protected:
                 aOutValue = m_parent.formatLength( i->GetTotalLength() );
 
             else if( aCol > COLUMN_LAST_STATIC_COL && aCol <= m_parent.m_columns.size() )
-                aOutValue = m_parent.formatLength(
-                        i->GetLayerWireLength( m_parent.m_columns[aCol].layer ) );
+                aOutValue = m_parent.formatLength( i->GetLayerWireLength( m_parent.m_columns[aCol].layer ) );
 
             else
                 aOutValue = "";
