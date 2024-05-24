@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-21 21:01+0000\n"
+"PO-Revision-Date: 2024-05-24 09:09+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -25024,9 +25024,8 @@ msgstr ""
 "du startar KiCad på nytt."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
-#, fuzzy
 msgid "Launch a web browser to the release announcements page."
-msgstr "Öppna en webläsare och visa"
+msgstr "Öppna en webläsare och visa leveransmeddelandesidan."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
