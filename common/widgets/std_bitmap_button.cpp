@@ -41,19 +41,9 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
 {
     if( aSize == wxDefaultSize )
     {
-#ifndef __WXMSW__
         wxSize defaultSize = wxButton::GetDefaultSize( aParent );
+#ifndef __WXMSW__
         defaultSize.IncBy( 1 );
-#else
-        // wxButton::GetDefaultSize does not work on Windows, it's based on some archiac
-        // ascii text size logic that does not hold true in modern Windows at hi dpi scaling
-        // instead spawn a button, grab it's size and then toss it :D
-        wxButton* dummyButton = new wxButton( this, wxID_ANY );
-        dummyButton->SetLabelText( "Z" );
-
-        wxSize defaultSize = dummyButton->GetSize();
-        dummyButton->Hide();
-        delete dummyButton;
 #endif
         SetMinSize( defaultSize );
     }
