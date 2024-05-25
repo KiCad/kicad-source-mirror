@@ -353,22 +353,23 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         auto mapLibItemPosition =
                 []( const VECTOR2I& aLibPosition ) -> VECTOR2I
                 {
-                    return VECTOR2I( aLibPosition.x, -aLibPosition.y );
+                    // Currently, the mapping is a no-op.
+                    return VECTOR2I( aLibPosition.x, aLibPosition.y );
                 };
 
         LIB_SYMBOL* symbol = new LIB_SYMBOL( wxEmptyString );
-        VECTOR2I p( 2625, -1600 );
+        VECTOR2I p( 2625, 1600 );
 
         SCH_FIELD& ref = symbol->GetReferenceField();
 
         ref.SetText( wxT( "U1" ) );
-        ref.SetPosition( MILS_POINT( p.x + 30, p.y + 260 ) );
+        ref.SetPosition( MILS_POINT( p.x + 30, p.y - 260 ) );
         ref.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
         SCH_FIELD& value = symbol->GetValueField();
 
         value.SetText( wxT( "OPA604" ) );
-        value.SetPosition( MILS_POINT( p.x + 30, p.y + 180 ) );
+        value.SetPosition( MILS_POINT( p.x + 30, p.y - 180 ) );
         value.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
         symbol->SetShowPinNames( true );
@@ -391,7 +392,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         SCH_PIN* pin = new SCH_PIN( symbol );
 
-        pin->SetPosition( MILS_POINT( p.x - 300, p.y + 100 ) );
+        pin->SetPosition( MILS_POINT( p.x - 300, p.y - 100 ) );
         pin->SetLength( schIUScale.MilsToIU( 100 ) );
         pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
@@ -405,7 +406,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         pin = new SCH_PIN( symbol );
 
-        pin->SetPosition( MILS_POINT( p.x - 300, p.y - 100 ) );
+        pin->SetPosition( MILS_POINT( p.x - 300, p.y + 100 ) );
         pin->SetLength( schIUScale.MilsToIU( 100 ) );
         pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
