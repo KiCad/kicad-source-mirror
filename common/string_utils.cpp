@@ -907,11 +907,12 @@ bool ApplyModifier( double& value, const wxString& aString )
     }
 
     if( units.length()
-            && !units.CmpNoCase( wxT( "F" ) )
-            && !units.CmpNoCase( wxT( "hz" ) )
-            && !units.CmpNoCase( wxT( "W" ) )
-            && !units.CmpNoCase( wxT( "V" ) )
-            && !units.CmpNoCase( wxT( "H" ) ) )
+            && !units.IsSameAs( wxT( "F" ), false )
+            && !units.IsSameAs( wxT( "hz" ), false )
+            && !units.IsSameAs( wxT( "W" ), false )
+            && !units.IsSameAs( wxT( "V" ), false )
+            && !units.IsSameAs( wxT( "A" ), false )
+            && !units.IsSameAs( wxT( "H" ), false ) )
     {
         return false;
     }
