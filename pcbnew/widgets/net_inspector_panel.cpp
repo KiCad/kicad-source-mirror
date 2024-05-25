@@ -33,8 +33,8 @@ NET_INSPECTOR_PANEL::NET_INSPECTOR_PANEL( wxWindow* parent, EDA_BASE_FRAME* aFra
     m_sizerOuter->SetFlexibleDirection( wxBOTH );
     m_sizerOuter->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_searchCtrl =
-            new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                     wxDefaultSize, 0 );
 #ifndef __WXMAC__
     m_searchCtrl->ShowSearchButton( true );
 #endif
@@ -48,8 +48,8 @@ NET_INSPECTOR_PANEL::NET_INSPECTOR_PANEL( wxWindow* parent, EDA_BASE_FRAME* aFra
     m_configureBtn->SetPadding( 2 );
     m_sizerOuter->Add( m_configureBtn, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), 0, 5 );
 
-    m_netsList =
-            new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
+    m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                     wxDV_MULTIPLE );
     m_netsList->SetFont( KIUI::GetDockedPaneFont( this ) );
     m_sizerOuter->Add( m_netsList, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 

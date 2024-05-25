@@ -102,7 +102,7 @@ PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
     m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_ACTIVATED,
                         &PCB_NET_INSPECTOR_PANEL::OnNetsListItemActivated, this );
     m_netsList->Unbind( wxEVT_DATAVIEW_COLUMN_SORTED,
-                      &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
+                        &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
 }
 
 
@@ -524,17 +524,16 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
 
         for( wxString& groupName : cfg->expanded_rows )
         {
-            auto pred = [&groupName]( const std::pair<wxString, wxDataViewItem>& item )
-            {
-                return groupName == item.first;
-            };
+            auto pred =
+                    [&groupName]( const std::pair<wxString, wxDataViewItem>& item )
+                    {
+                        return groupName == item.first;
+                    };
 
             auto tableItem = std::find_if( groupItems.begin(), groupItems.end(), pred );
 
             if( tableItem != groupItems.end() )
-            {
                 m_netsList->Expand( tableItem->second );
-            }
         }
 
         m_row_expanding = false;
@@ -643,8 +642,9 @@ PCB_NET_INSPECTOR_PANEL::buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCoun
         BOARD_CONNECTED_ITEM* item = ( *i )->Parent();
 
         if( item->Type() == PCB_PAD_T )
+        {
             new_item->AddPadDieLength( static_cast<PAD*>( item )->GetPadToDieLength() );
-
+        }
         else if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
         {
             new_item->AddLayerWireLength( track->GetLength(),
@@ -766,8 +766,8 @@ void PCB_NET_INSPECTOR_PANEL::updateNet( NETINFO_ITEM* aNet )
         return;
     }
 
-    std::unique_ptr<LIST_ITEM> new_list_item =
-            buildNewItem( aNet, node_count, relevantConnectivityItems() );
+    std::unique_ptr<LIST_ITEM> new_list_item = buildNewItem( aNet, node_count,
+                                                             relevantConnectivityItems() );
 
     if( !cur_net_row )
     {
@@ -827,9 +827,9 @@ wxString PCB_NET_INSPECTOR_PANEL::formatCount( unsigned int aValue ) const
 
 wxString PCB_NET_INSPECTOR_PANEL::formatLength( int64_t aValue ) const
 {
-    return m_frame->MessageTextFromValue(
-            static_cast<long long int>( aValue ),
-            !m_in_reporting /* Don't include unit label in the string when reporting */ );
+    return m_frame->MessageTextFromValue( static_cast<long long int>( aValue ),
+                                          // don't include unit label in the string when reporting
+                                          !m_in_reporting);
 }
 
 
@@ -1201,8 +1201,8 @@ void PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu( wxDataViewEvent& event )
 
     menu.AppendSeparator();
 
-    wxMenuItem* addNet =
-            new wxMenuItem( &menu, ID_ADD_NET, _( "Add Net" ), wxEmptyString, wxITEM_NORMAL );
+    wxMenuItem* addNet = new wxMenuItem( &menu, ID_ADD_NET, _( "Add Net" ),
+                                         wxEmptyString, wxITEM_NORMAL );
     menu.Append( addNet );
 
     if( !selItem && !multipleSelections )
@@ -1223,15 +1223,13 @@ void PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu( wxDataViewEvent& event )
 
     menu.AppendSeparator();
 
-    wxMenuItem* removeSelectedGroup =
-            new wxMenuItem( &menu, ID_REMOVE_SELECTED_GROUP, _( "Remove Selected Custom Group" ),
-                            wxEmptyString, wxITEM_NORMAL );
+    wxMenuItem* removeSelectedGroup = new wxMenuItem( &menu, ID_REMOVE_SELECTED_GROUP,
+                                                      _( "Remove Selected Custom Group" ),
+                                                      wxEmptyString, wxITEM_NORMAL );
     menu.Append( removeSelectedGroup );
 
     if( !selItem || !selItem->GetIsGroup() )
-    {
         removeSelectedGroup->Enable( false );
-    }
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED, &PCB_NET_INSPECTOR_PANEL::onSettingsMenu, this );
 
@@ -1346,8 +1344,9 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     //groupConstraint->Check( m_group_by_constraint );
     //menu.Append( groupConstraint );
 
-    wxMenuItem* groupNetclass = new wxMenuItem(
-            &menu, ID_GROUP_BY_NETCLASS, _( "Group by Netclass" ), wxEmptyString, wxITEM_CHECK );
+    wxMenuItem* groupNetclass = new wxMenuItem( &menu, ID_GROUP_BY_NETCLASS,
+                                                _( "Group by Netclass" ),
+                                                wxEmptyString, wxITEM_CHECK );
     groupNetclass->Check( m_group_by_netclass );
     menu.Append( groupNetclass );
 
@@ -1363,9 +1362,7 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     menu.Append( removeSelectedGroup );
 
     if( !selItem || !selItem->GetIsGroup() )
-    {
         removeSelectedGroup->Enable( false );
-    }
 
     wxMenuItem* removeCustomGroups = new wxMenuItem( &menu, ID_REMOVE_GROUPS,
                                                      _( "Remove All Custom Groups" ),
