@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-04-18 07:23+0000\n"
+"PO-Revision-Date: 2024-05-26 16:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23146,9 +23146,8 @@ msgid "Leave unchanged"
 msgstr "Не изменять"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Показать или скрыть %s"
+msgstr "Выводить проблемы с импортом"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23609,13 +23608,12 @@ msgid "Generate Position File"
 msgstr "Сформировать файл позиций"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
 "Возможные варианты: front,back,both. Формат Gerber поддерживает только "
-"\"both\"."
+"\"front\" или \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -23908,6 +23906,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Пропускает уведомление об обновлении для этой новой версии. Для других новых "
+"версий будут показаны дополнительные уведомления об обновлениях."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -23918,10 +23918,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Закрыть это уведомление об обновлении. При повторном запуске KiCad оно "
+"появится снова."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Открыть страницу анонса релиза в веб-браузере."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -23929,7 +23931,7 @@ msgstr "Открыть страницу загрузки"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Перейти на страницу загрузки, соответствующую данной платформе."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -38503,9 +38505,9 @@ msgid "%s rounded corners differ."
 msgstr "Закругленные углы %s отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "Скошенные углы %s отличаются."
+msgstr "Размеры скошенных углов %s отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39125,7 +39127,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:878
 #, c-format
 msgid "Wire not done (contour %d, points %d): OCC error %d\n"
-msgstr ""
+msgstr "Wire не готов (контур %d, точек %d): ошибка OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1049
 #, c-format
@@ -39194,7 +39196,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Текущая плата будет закрыта. Продолжить?"
 
 #: pcbnew/files.cpp:492
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39847,9 +39848,8 @@ msgstr "Настроить"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Выбрать значение для подстройки"
+msgstr "Сначала выберите дорожку для настройки длины."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -41139,29 +41139,24 @@ msgid "Loading dimension drawings..."
 msgstr "Загрузка размерных линий..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Проигнорирована размерная линия типа %d (пока не поддерживается)."
+msgstr "Проигнорирован угловой размер (пока не поддерживается)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Проигнорирована размерная линия типа %d (пока не поддерживается)."
+msgstr "Проигнорирован размер Datum (пока не поддерживается)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Проигнорирована размерная линия типа %d (пока не поддерживается)."
+msgstr "Проигнорирован размер Baseline (пока не поддерживается)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Проигнорирована размерная линия типа %d (пока не поддерживается)."
+msgstr "Проигнорирован линейный размер (пока не поддерживается)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Проигнорирована размерная линия типа %d (пока не поддерживается)."
+msgstr "Проигнорирован радиальный размер (пока не поддерживается)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -44114,7 +44109,7 @@ msgstr "Создать из выделенного"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Полученный полигон оказался бы пустым"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -46425,9 +46420,8 @@ msgid "Length Tuning Settings..."
 msgstr "Параметры подстройки длины..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Отобразить диалоговое окно свойств элемента"
+msgstr "Отобразить диалог свойств паттерна настройки длины"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
