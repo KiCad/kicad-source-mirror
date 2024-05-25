@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -167,13 +167,7 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
     }
 
     if( bmp.IsOk() )
-    {
-#ifdef __WXMSW__
-        // Optimization - see https://github.com/wxWidgets/wxWidgets/issues/23841
-        aDc.GetAsBitmap().ConvertToDIB();
-#endif
         aDc.DrawBitmap( bmp, bmpX, bmpY, true );
-    }
 
     // set the item's text color based on if it is disabled
     aDc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
