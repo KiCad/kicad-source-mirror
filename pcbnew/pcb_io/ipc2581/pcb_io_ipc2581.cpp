@@ -598,6 +598,23 @@ void PCB_IO_IPC2581::addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDash
 }
 
 
+void PCB_IO_IPC2581::addKnockoutText( wxXmlNode* aContentNode, PCB_TEXT* aText )
+{
+    // If we are stroking a polygon, we need two contours.  This is only allowed inside a
+    // "UserSpecial" shape
+    wxXmlNode* special_node = appendNode( aContentNode, "UserSpecial" );
+
+    SHAPE_POLY_SET finalPoly;
+
+    aText->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
+                                   ERROR_INSIDE );
+    finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
+        addContourNode( special_node, finalPoly, ii, FILL_T::FILLED_SHAPE, 0, LINE_STYLE::SOLID );
+}
+
+
 void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
                               const KIFONT::METRICS& aFontMetrics )
 {
@@ -707,7 +724,7 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
                 addXY( point_node, pts.front() );
             } );
 
-    //TODO: handle knockout text and multiline
+    //TODO: handle multiline text
 
     font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetTextPos(), attrs,
                 aFontMetrics );
@@ -2117,7 +2134,12 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                 case PCB_TEXT_T:
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-                    addText( output_node, text, text->GetFontMetrics() );
+
+                    if( text->IsKnockout() )
+                        addKnockoutText( output_node, text );
+                    else
+                        addText( output_node, text, text->GetFontMetrics() );
+
                     break;
                 }
 
@@ -2708,7 +2730,11 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
 
                 wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
                 addLocationNode( tempFeature, 0.0, 0.0 );
-                addText( tempFeature, text_item, text->GetFontMetrics() );
+
+                if( text->Type() == PCB_TEXT_T && static_cast<PCB_TEXT*>( text )->IsKnockout() )
+                    addKnockoutText( tempFeature, static_cast<PCB_TEXT*>( text ) );
+                else
+                    addText( tempFeature, text_item, text->GetFontMetrics() );
 
                 if( text->Type() == PCB_TEXTBOX_T )
                 {
