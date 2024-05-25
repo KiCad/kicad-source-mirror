@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,7 +33,10 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_RgbBitmap = new wxStaticBitmap( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 264,264 ), 0 );
 	m_RgbBitmap->SetMinSize( wxSize( 264,264 ) );
 
-	sbSizerViewRGB->Add( m_RgbBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizerViewRGB->Add( m_RgbBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND|wxSHAPED, 5 );
+
+
+	sbSizerViewRGB->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerRGB;
 	fgSizerRGB = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -68,18 +71,18 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	sbSizerViewRGB->Add( fgSizerRGB, 0, wxEXPAND, 5 );
 
 
-	bSizerPanels->Add( sbSizerViewRGB, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerPanels->Add( sbSizerViewRGB, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizerViewHSV;
-	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, _("HSV") ), wxHORIZONTAL );
-
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxVERTICAL );
+	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, _("HSV") ), wxVERTICAL );
 
 	m_HsvBitmap = new wxStaticBitmap( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 264,264 ), 0 );
 	m_HsvBitmap->SetMinSize( wxSize( 264,264 ) );
 
-	bSizer10->Add( m_HsvBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizerViewHSV->Add( m_HsvBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND|wxSHAPED, 5 );
+
+
+	sbSizerViewHSV->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerHSV;
 	fgSizerHSV = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -103,26 +106,23 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	fgSizerHSV->Add( m_spinCtrlSaturation, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer10->Add( fgSizerHSV, 0, wxEXPAND, 5 );
+	sbSizerViewHSV->Add( fgSizerHSV, 0, wxEXPAND, 5 );
 
 
-	sbSizerViewHSV->Add( bSizer10, 0, wxEXPAND, 5 );
+	bSizerPanels->Add( sbSizerViewHSV, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBright;
 	bSizerBright = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextBright = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBright = new wxStaticText( m_panelFreeColors, wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBright->Wrap( -1 );
 	bSizerBright->Add( m_staticTextBright, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_sliderBrightness = new wxSlider( sbSizerViewHSV->GetStaticBox(), wxID_ANY, 255, 0, 255, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
+	m_sliderBrightness = new wxSlider( m_panelFreeColors, wxID_ANY, 255, 0, 255, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
 	bSizerBright->Add( m_sliderBrightness, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxTOP, 5 );
 
 
-	sbSizerViewHSV->Add( bSizerBright, 0, wxEXPAND, 5 );
-
-
-	bSizerPanels->Add( sbSizerViewHSV, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bSizerPanels->Add( bSizerBright, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerUpperFreeColors->Add( bSizerPanels, 1, wxEXPAND, 5 );
@@ -153,7 +153,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_SizerDefinedColors->Fit( m_panelDefinedColors );
 	m_notebook->AddPage( m_panelDefinedColors, _("Defined Colors"), false );
 
-	bSizerUpperMain->Add( m_notebook, 0, wxEXPAND | wxALL, 5 );
+	bSizerUpperMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 
 	m_SizerTransparency = new wxBoxSizer( wxVERTICAL );
 
@@ -171,35 +171,29 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	bSizerUpperMain->Add( m_SizerTransparency, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerUpperMain->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerMain->Add( bSizerUpperMain, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerUpperMain, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticTextOldColor = new wxStaticText( this, wxID_ANY, _("Preview (old/new):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOldColor->Wrap( -1 );
-	bButtonsSizer->Add( m_staticTextOldColor, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bButtonsSizer->Add( m_staticTextOldColor, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_OldColorRect = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_OldColorRect->SetMinSize( wxSize( 24,24 ) );
 
-	bButtonsSizer->Add( m_OldColorRect, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bButtonsSizer->Add( m_OldColorRect, 0, wxALIGN_CENTER_VERTICAL|wxSHAPED, 5 );
 
 	m_NewColorRect = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NewColorRect->SetMinSize( wxSize( 24,24 ) );
 
-	bButtonsSizer->Add( m_NewColorRect, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bButtonsSizer->Add( 10, 0, 0, wxEXPAND, 5 );
+	bButtonsSizer->Add( m_NewColorRect, 0, wxALIGN_CENTER_VERTICAL|wxSHAPED, 5 );
 
 	m_colorValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorValue->SetMinSize( wxSize( 176,-1 ) );
 
-	bButtonsSizer->Add( m_colorValue, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bButtonsSizer->Add( m_colorValue, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -217,7 +211,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	bButtonsSizer->Add( m_sdbSizer, 1, wxALL, 5 );
 
 
-	bSizerMain->Add( bButtonsSizer, 1, wxEXPAND|wxLEFT, 10 );
+	bSizerMain->Add( bButtonsSizer, 0, wxEXPAND|wxLEFT, 10 );
 
 
 	this->SetSizer( bSizerMain );
@@ -234,6 +228,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_spinCtrlBlue->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditBlue ), NULL, this );
 	m_HsvBitmap->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseClick ), NULL, this );
 	m_HsvBitmap->Connect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseDrag ), NULL, this );
+	m_HsvBitmap->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_COLOR_PICKER_BASE::onSize ), NULL, this );
 	m_spinCtrlHue->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditHue ), NULL, this );
 	m_spinCtrlSaturation->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditSat ), NULL, this );
 	m_sliderBrightness->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
@@ -268,6 +263,7 @@ DIALOG_COLOR_PICKER_BASE::~DIALOG_COLOR_PICKER_BASE()
 	m_spinCtrlBlue->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditBlue ), NULL, this );
 	m_HsvBitmap->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseClick ), NULL, this );
 	m_HsvBitmap->Disconnect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseDrag ), NULL, this );
+	m_HsvBitmap->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_COLOR_PICKER_BASE::onSize ), NULL, this );
 	m_spinCtrlHue->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditHue ), NULL, this );
 	m_spinCtrlSaturation->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditSat ), NULL, this );
 	m_sliderBrightness->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,6 +81,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		virtual void OnChangeEditBlue( wxSpinEvent& event ) { event.Skip(); }
 		virtual void onHSVMouseClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onHSVMouseDrag( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnChangeEditHue( wxSpinEvent& event ) { event.Skip(); }
 		virtual void OnChangeEditSat( wxSpinEvent& event ) { event.Skip(); }
 		virtual void OnChangeBrightness( wxScrollEvent& event ) { event.Skip(); }
