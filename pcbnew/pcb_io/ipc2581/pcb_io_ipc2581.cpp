@@ -602,7 +602,7 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
                               const KIFONT::METRICS& aFontMetrics )
 {
     if( !aText->IsVisible() )
-            return;
+        return;
 
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = aText->GetFont();
@@ -619,40 +619,41 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
 
     std::list<VECTOR2I> pts;
 
-    auto push_pts = [&]()
-    {
-        if( pts.size() < 2 )
-            return;
-
-        wxXmlNode* line_node = nullptr;
-
-        // Polylines are only allowed for more than 3 points (in version B).
-        // Otherwise, we have to use a line
-        if( pts.size() < 3 )
-        {
-            line_node = appendNode( text_node, "Line" );
-            addXY( line_node, pts.front(), "startX", "startY" );
-            addXY( line_node, pts.back(), "endX", "endY" );
-        }
-        else
-        {
-            line_node = appendNode( text_node, "Polyline" );
-            wxXmlNode* point_node = appendNode( line_node, "PolyBegin" );
-            addXY( point_node, pts.front() );
-
-            auto iter = pts.begin();
-
-            for( ++iter; iter != pts.end(); ++iter )
+    auto push_pts =
+            [&]()
             {
-                wxXmlNode* point_node = appendNode( line_node, "PolyStepSegment" );
-                addXY( point_node, *iter );
-            }
+                if( pts.size() < 2 )
+                    return;
 
-        }
+                wxXmlNode* line_node = nullptr;
 
-        addLineDesc( line_node, attrs.m_StrokeWidth, LINE_STYLE::SOLID );
-        pts.clear();
-    };
+                // Polylines are only allowed for more than 3 points (in version B).
+                // Otherwise, we have to use a line
+                if( pts.size() < 3 )
+                {
+                    line_node = appendNode( text_node, "Line" );
+                    addXY( line_node, pts.front(), "startX", "startY" );
+                    addXY( line_node, pts.back(), "endX", "endY" );
+                }
+                else
+                {
+                    line_node = appendNode( text_node, "Polyline" );
+                    wxXmlNode* point_node = appendNode( line_node, "PolyBegin" );
+                    addXY( point_node, pts.front() );
+
+                    auto iter = pts.begin();
+
+                    for( ++iter; iter != pts.end(); ++iter )
+                    {
+                        wxXmlNode* point_node = appendNode( line_node, "PolyStepSegment" );
+                        addXY( point_node, *iter );
+                    }
+
+                }
+
+                addLineDesc( line_node, attrs.m_StrokeWidth, LINE_STYLE::SOLID );
+                pts.clear();
+            };
 
     CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
@@ -1949,7 +1950,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
 
     size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
     wxString name = genString( wxString::Format( "%s_%zu", fp->GetFPID().GetLibItemName().wx_str(),
-                             m_footprint_dict.size() + 1 ) );
+                               m_footprint_dict.size() + 1 ) );
 
     auto [ iter, success ] = m_footprint_dict.emplace( hash, name );
     addAttribute( aContentNode,  "packageRef", iter->second );
@@ -2035,38 +2036,40 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         elements[item->GetLayer()][is_abs].push_back( item );
     }
 
-    auto add_base_node = [&]( PCB_LAYER_ID aLayer ) -> wxXmlNode*
-    {
-        wxXmlNode* parent = packageNode;
-        bool is_back = aLayer == B_SilkS || aLayer == B_Fab;
+    auto add_base_node =
+            [&]( PCB_LAYER_ID aLayer ) -> wxXmlNode*
+            {
+                wxXmlNode* parent = packageNode;
+                bool is_back = aLayer == B_SilkS || aLayer == B_Fab;
 
-        if( is_back )
-        {
-            if( !otherSideViewNode )
-                otherSideViewNode = new wxXmlNode( wxXML_ELEMENT_NODE, "OtherSideView" );
+                if( is_back )
+                {
+                    if( !otherSideViewNode )
+                        otherSideViewNode = new wxXmlNode( wxXML_ELEMENT_NODE, "OtherSideView" );
 
-            parent = otherSideViewNode;
-        }
+                    parent = otherSideViewNode;
+                }
 
-        wxString name;
+                wxString name;
 
-        if( aLayer == F_SilkS || aLayer == B_SilkS )
-            name = "SilkScreen";
-        else if( aLayer == F_Fab || aLayer == B_Fab )
-            name = "AssemblyDrawing";
-        else
-            wxASSERT( false );
+                if( aLayer == F_SilkS || aLayer == B_SilkS )
+                    name = "SilkScreen";
+                else if( aLayer == F_Fab || aLayer == B_Fab )
+                    name = "AssemblyDrawing";
+                else
+                    wxASSERT( false );
 
-        wxXmlNode* new_node = appendNode( parent, name );
-        return new_node;
-    };
+                wxXmlNode* new_node = appendNode( parent, name );
+                return new_node;
+            };
 
-    auto add_marking_node = [&]( wxXmlNode* aNode ) -> wxXmlNode*
-    {
-        wxXmlNode* marking_node = appendNode( aNode, "Marking" );
-        addAttribute( marking_node,  "markingUsage", "NONE" );
-        return marking_node;
-    };
+    auto add_marking_node =
+            [&]( wxXmlNode* aNode ) -> wxXmlNode*
+            {
+                wxXmlNode* marking_node = appendNode( aNode, "Marking" );
+                addAttribute( marking_node,  "markingUsage", "NONE" );
+                return marking_node;
+            };
 
     std::map<PCB_LAYER_ID, wxXmlNode*> layer_nodes;
     std::map<PCB_LAYER_ID, BOX2I> layer_bbox;
@@ -2554,189 +2557,194 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
             addAttribute( layerSetNode,  "net", genString( item->GetNetname(), "NET" ) );
     }
 
-    auto add_track = [&]( PCB_TRACK* track )
-    {
-        if( track->Type() == PCB_TRACE_T )
-        {
-            PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
-            shape.SetStart( track->GetStart() );
-            shape.SetEnd( track->GetEnd() );
-            shape.SetWidth( track->GetWidth() );
-            addShape( specialNode, shape );
-        }
-        else if( track->Type() == PCB_ARC_T )
-        {
-            PCB_ARC* arc = static_cast<PCB_ARC*>( track );
-            PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
-            shape.SetArcGeometry( arc->GetStart(), arc->GetMid(), arc->GetEnd() );
-            shape.SetWidth( arc->GetWidth() );
-            addShape( specialNode, shape );
-        }
-        else
-        {
-            if( !viaSetNode )
+    auto add_track =
+            [&]( PCB_TRACK* track )
             {
-                if( !has_pad )
+                if( track->Type() == PCB_TRACE_T )
                 {
-                    viaSetNode = layerSetNode;
-                    has_via = true;
+                    PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+                    shape.SetStart( track->GetStart() );
+                    shape.SetEnd( track->GetEnd() );
+                    shape.SetWidth( track->GetWidth() );
+                    addShape( specialNode, shape );
+                }
+                else if( track->Type() == PCB_ARC_T )
+                {
+                    PCB_ARC* arc = static_cast<PCB_ARC*>( track );
+                    PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
+                    shape.SetArcGeometry( arc->GetStart(), arc->GetMid(), arc->GetEnd() );
+                    shape.SetWidth( arc->GetWidth() );
+                    addShape( specialNode, shape );
                 }
                 else
                 {
-                    viaSetNode = appendNode( layerSetNode, "Set" );
+                    if( !viaSetNode )
+                    {
+                        if( !has_pad )
+                        {
+                            viaSetNode = layerSetNode;
+                            has_via = true;
+                        }
+                        else
+                        {
+                            viaSetNode = appendNode( layerSetNode, "Set" );
 
-                    if( track->GetNetCode() > 0 )
-                        addAttribute( viaSetNode,  "net", genString( track->GetNetname(), "NET" ) );
+                            if( track->GetNetCode() > 0 )
+                                addAttribute( viaSetNode,  "net", genString( track->GetNetname(), "NET" ) );
+                        }
+
+                        addAttribute( viaSetNode,  "padUsage", "VIA" );
+                    }
+
+                    addVia( viaSetNode, static_cast<PCB_VIA*>( track ), aLayer );
+                }
+            };
+
+    auto add_zone =
+            [&]( ZONE* zone )
+            {
+                wxXmlNode* zoneFeatureNode = specialNode;
+
+                if( zone->IsTeardropArea() && m_version > 'B' )
+                {
+                    if( !teardropFeatureSetNode )
+                    {
+                        teardropLayerSetNode = appendNode( aLayerNode, "Set" );
+                        addAttribute( teardropLayerSetNode,  "geometryUsage", "TEARDROP" );
+
+                        if( zone->GetNetCode() > 0 )
+                            addAttribute( teardropLayerSetNode,  "net",
+                                          genString( zone->GetNetname(), "NET" ) );
+
+                        wxXmlNode* new_teardrops = appendNode( teardropLayerSetNode, "Features" );
+                        addLocationNode( new_teardrops, 0.0, 0.0 );
+                        teardropFeatureSetNode = appendNode( new_teardrops, "UserSpecial" );
+                    }
+
+                    zoneFeatureNode = teardropFeatureSetNode;
+                }
+                else
+                {
+                    if( FOOTPRINT* fp = zone->GetParentFootprint() )
+                    {
+                        wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
+                        wxString refDes = componentName( zone->GetParentFootprint() );
+                        addAttribute( tempSetNode,  "componentRef", refDes );
+                        wxXmlNode* newFeatures = appendNode( tempSetNode, "Features" );
+                        addLocationNode( newFeatures, 0.0, 0.0 );
+                        zoneFeatureNode = appendNode( newFeatures, "UserSpecial" );
+                    }
                 }
 
-                addAttribute( viaSetNode,  "padUsage", "VIA" );
-            }
+                SHAPE_POLY_SET& zone_shape = *zone->GetFilledPolysList( aLayer );
 
-            addVia( viaSetNode, static_cast<PCB_VIA*>( track ), aLayer );
-        }
-    };
+                for( int ii = 0; ii < zone_shape.OutlineCount(); ++ii )
+                    addContourNode( zoneFeatureNode, zone_shape, ii );
+            };
 
-    auto add_zone = [&]( ZONE* zone )
-    {
-        wxXmlNode* zoneFeatureNode = specialNode;
-
-        if( zone->IsTeardropArea() && m_version > 'B' )
-        {
-            if( !teardropFeatureSetNode )
+    auto add_shape =
+            [&] ( PCB_SHAPE* shape )
             {
-                teardropLayerSetNode = appendNode( aLayerNode, "Set" );
-                addAttribute( teardropLayerSetNode,  "geometryUsage", "TEARDROP" );
+                FOOTPRINT* fp = shape->GetParentFootprint();
 
-                if( zone->GetNetCode() > 0 )
-                    addAttribute( teardropLayerSetNode,  "net",
-                                  genString( zone->GetNetname(), "NET" ) );
+                if( fp )
+                {
+                    wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
 
-                wxXmlNode* new_teardrops = appendNode( teardropLayerSetNode, "Features" );
-                addLocationNode( new_teardrops, 0.0, 0.0 );
-                teardropFeatureSetNode = appendNode( new_teardrops, "UserSpecial" );
-            }
+                    if( m_version > 'B' )
+                        addAttribute( tempSetNode,  "geometryUsage", "GRAPHIC" );
 
-            zoneFeatureNode = teardropFeatureSetNode;
-        }
-        else
-        {
-            if( FOOTPRINT* fp = zone->GetParentFootprint() )
+                    addAttribute( tempSetNode,  "componentRef", componentName( fp ) );
+
+                    wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
+                    addLocationNode( tempFeature, *shape );
+
+                    addShape( tempFeature, *shape );
+                }
+                else if( shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::RECTANGLE
+                       || shape->GetShape() == SHAPE_T::POLY )
+                {
+                    wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
+
+                    if( shape->GetNetCode() > 0 )
+                        addAttribute( tempSetNode,  "net", genString( shape->GetNetname(), "NET" ) );
+
+                    wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
+                    addLocationNode( tempFeature, *shape );
+                    addShape( tempFeature, *shape );
+                }
+                else
+                {
+                    addShape( specialNode, *shape );
+                }
+            };
+
+    auto add_text =
+            [&] ( BOARD_ITEM* text )
             {
+                EDA_TEXT* text_item;
+                FOOTPRINT* fp = text->GetParentFootprint();
+
+                if( PCB_TEXT* tmp_text = dynamic_cast<PCB_TEXT*>( text ) )
+                    text_item = static_cast<EDA_TEXT*>( tmp_text );
+                else if( PCB_TEXTBOX* tmp_text = dynamic_cast<PCB_TEXTBOX*>( text ) )
+                    text_item = static_cast<EDA_TEXT*>( tmp_text );
+
+                if( !text_item->IsVisible() || text_item->GetShownText( false ).empty() )
+                    return;
+
                 wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
-                wxString refDes = componentName( zone->GetParentFootprint() );
-                addAttribute( tempSetNode,  "componentRef", refDes );
-                wxXmlNode* newFeatures = appendNode( tempSetNode, "Features" );
-                addLocationNode( newFeatures, 0.0, 0.0 );
-                zoneFeatureNode = appendNode( newFeatures, "UserSpecial" );
-            }
-        }
 
-        SHAPE_POLY_SET& zone_shape = *zone->GetFilledPolysList( aLayer );
+                if( m_version > 'B' )
+                    addAttribute( tempSetNode,  "geometryUsage", "TEXT" );
 
-        for( int ii = 0; ii < zone_shape.OutlineCount(); ++ii )
-            addContourNode( zoneFeatureNode, zone_shape, ii );
-    };
+                if( fp )
+                    addAttribute( tempSetNode, "componentRef", componentName( fp ) );
 
-    auto add_shape = [&] ( PCB_SHAPE* shape )
-    {
-        FOOTPRINT* fp = shape->GetParentFootprint();
+                wxXmlNode* nonStandardAttributeNode = appendNode( tempSetNode, "NonstandardAttribute" );
+                addAttribute( nonStandardAttributeNode,  "name", "TEXT" );
+                addAttribute( nonStandardAttributeNode,  "value", text_item->GetShownText( false ) );
+                addAttribute( nonStandardAttributeNode,  "type", "STRING" );
 
-        if( fp )
-        {
-            wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
+                wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
+                addLocationNode( tempFeature, 0.0, 0.0 );
+                addText( tempFeature, text_item, text->GetFontMetrics() );
 
-            if( m_version > 'B' )
-                addAttribute( tempSetNode,  "geometryUsage", "GRAPHIC" );
+                if( text->Type() == PCB_TEXTBOX_T )
+                {
+                    PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( text );
 
-            addAttribute( tempSetNode,  "componentRef", componentName( fp ) );
+                    if( textbox->IsBorderEnabled() )
+                        addShape( tempFeature, *static_cast<PCB_SHAPE*>( textbox ) );
+                }
+            };
 
-            wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
-            addLocationNode( tempFeature, *shape );
-
-            addShape( tempFeature, *shape );
-        }
-        else if( shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::RECTANGLE
-               || shape->GetShape() == SHAPE_T::POLY )
-        {
-            wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
-
-            if( shape->GetNetCode() > 0 )
-                addAttribute( tempSetNode,  "net", genString( shape->GetNetname(), "NET" ) );
-
-            wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
-            addLocationNode( tempFeature, *shape );
-            addShape( tempFeature, *shape );
-        }
-        else
-        {
-            addShape( specialNode, *shape );
-        }
-    };
-
-    auto add_text = [&] ( BOARD_ITEM* text )
-    {
-        EDA_TEXT* text_item;
-        FOOTPRINT* fp = text->GetParentFootprint();
-
-        if( PCB_TEXT* tmp_text = dynamic_cast<PCB_TEXT*>( text ) )
-            text_item = static_cast<EDA_TEXT*>( tmp_text );
-        else if( PCB_TEXTBOX* tmp_text = dynamic_cast<PCB_TEXTBOX*>( text ) )
-            text_item = static_cast<EDA_TEXT*>( tmp_text );
-
-        if( !text_item->IsVisible() || text_item->GetShownText( false ).empty() )
-            return;
-
-        wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
-
-        if( m_version > 'B' )
-            addAttribute( tempSetNode,  "geometryUsage", "TEXT" );
-
-        if( fp )
-            addAttribute( tempSetNode, "componentRef", componentName( fp ) );
-
-        wxXmlNode* nonStandardAttributeNode = appendNode( tempSetNode, "NonstandardAttribute" );
-        addAttribute( nonStandardAttributeNode,  "name", "TEXT" );
-        addAttribute( nonStandardAttributeNode,  "value", text_item->GetShownText( false ) );
-        addAttribute( nonStandardAttributeNode,  "type", "STRING" );
-
-        wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
-        addLocationNode( tempFeature, 0.0, 0.0 );
-        addText( tempFeature, text_item, text->GetFontMetrics() );
-
-        if( text->Type() == PCB_TEXTBOX_T )
-        {
-            PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( text );
-
-            if( textbox->IsBorderEnabled() )
-                addShape( tempFeature, *static_cast<PCB_SHAPE*>( textbox ) );
-        }
-    };
-
-    auto add_pad = [&]( PAD* pad )
-    {
-        if( !padSetNode )
-        {
-            if( !has_via )
+    auto add_pad =
+            [&]( PAD* pad )
             {
-                padSetNode = layerSetNode;
-                has_pad = true;
-            }
-            else
-            {
-                padSetNode = appendNode( aLayerNode, "Set" );
+                if( !padSetNode )
+                {
+                    if( !has_via )
+                    {
+                        padSetNode = layerSetNode;
+                        has_pad = true;
+                    }
+                    else
+                    {
+                        padSetNode = appendNode( aLayerNode, "Set" );
 
-                if( pad->GetNetCode() > 0 )
-                    addAttribute( padSetNode,  "net", genString( pad->GetNetname(), "NET" ) );
-            }
-        }
+                        if( pad->GetNetCode() > 0 )
+                            addAttribute( padSetNode,  "net", genString( pad->GetNetname(), "NET" ) );
+                    }
+                }
 
-        FOOTPRINT* fp = pad->GetParentFootprint();
+                FOOTPRINT* fp = pad->GetParentFootprint();
 
-        if( fp && fp->IsFlipped() )
-            addPad( padSetNode, pad, FlipLayer( aLayer ) );
-        else
-            addPad( padSetNode, pad, aLayer );
-    };
+                if( fp && fp->IsFlipped() )
+                    addPad( padSetNode, pad, FlipLayer( aLayer ) );
+                else
+                    addPad( padSetNode, pad, aLayer );
+            };
 
     for( BOARD_ITEM* item : aItems )
     {

@@ -1304,30 +1304,31 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
     props["dist"] = dlg.GetDist();
     props["distpn"] = dlg.GetDistPN();
 
-    auto saveFile = [&]() -> bool
-    {
-        try
-        {
-            IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
-            pi->SetProgressReporter( &reporter );
-            pi->SaveBoard( tempFile, GetBoard(), &props );
-            return true;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayError( this, wxString::Format( _( "Error generating IPC2581 file '%s'.\n%s" ),
-                                                  pcbFileName.GetFullPath(), ioe.What() ) );
+    auto saveFile =
+            [&]() -> bool
+            {
+                try
+                {
+                    IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
+                    pi->SetProgressReporter( &reporter );
+                    pi->SaveBoard( tempFile, GetBoard(), &props );
+                    return true;
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    DisplayError( this, wxString::Format( _( "Error generating IPC2581 file '%s'.\n%s" ),
+                                                          pcbFileName.GetFullPath(), ioe.What() ) );
 
-            lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile );
+                    lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile );
 
-            SetMsgPanel( upperTxt, lowerTxt );
+                    SetMsgPanel( upperTxt, lowerTxt );
 
-            // In case we started a file but didn't fully write it, clean up
-            wxRemoveFile( tempFile );
+                    // In case we started a file but didn't fully write it, clean up
+                    wxRemoveFile( tempFile );
 
-            return false;
-        }
-    };
+                    return false;
+                }
+            };
 
     thread_pool& tp = GetKiCadThreadPool();
     auto ret = tp.submit( saveFile );
@@ -1346,7 +1347,7 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
         if( !ret.get() )
             return;
     }
-    catch(const std::exception& e)
+    catch( const std::exception& e )
     {
         wxLogError( "Exception in IPC2581 generation: %s", e.what() );
         GetScreen()->SetContentModified( false );

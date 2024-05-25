@@ -49,10 +49,6 @@ class SHAPE_SEGMENT;
 class PCB_IO_IPC2581 : public PCB_IO
 {
 public:
-    /**
-     * @brief PCB_IO_IPC2581
-     *
-    */
     PCB_IO_IPC2581() : PCB_IO( wxS( "IPC-2581" ) )
     {
         m_total_bytes = 0;
@@ -73,14 +69,12 @@ public:
 
     ~PCB_IO_IPC2581() override;
 
-    /**
-     *
-    */
     // BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-    //              const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+    //                   const STRING_UTF8_MAP* aProperties = nullptr,
+    //                   PROJECT* aProject = nullptr ) override;
 
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
@@ -123,52 +117,50 @@ private:
 
     /**
      * Frees the memory allocated for the loaded footprints in #m_loaded_footprints.
-     *
-    */
+     */
     void clearLoadedFootprints();
 
     /**
      * Creates the XML header for IPC-2581
-     *
-    */
+     */
     wxXmlNode* generateXmlHeader();
 
     /**
      * Creates the Content section of the XML file.  This holds the overview of
      * the rest of the board data.  Includes references to the step, bom, and layers
      * as well as the content dictionaries
-    */
+     */
     wxXmlNode* generateContentSection();
 
     /**
      * Creates the logistical data header.  This section defines the organization and person
      * creating the file.  Can be used for contact information and config management
-    */
+     */
     wxXmlNode* generateLogisticSection();
 
     /**
      * Creates the history section.  This section defines the history of the file, the revision
      * number, and the date of the revision as well as software used to create the file.  Optionally,
      * the data could include information about the git revision and tag
-    */
+     */
     wxXmlNode* generateHistorySection();
 
     /**
      * Creates the BOM section.  This section defines the BOM data for the board.  This includes
      * the part number, manufacturer, and distributor information for each component on the board.
-    */
+     */
     wxXmlNode* generateBOMSection( wxXmlNode* aEcadNode );
 
     /**
      * Creates the ECAD section.  This describes the layout, layers, and design as well as
      * component placement and netlist information
-    */
+     */
     wxXmlNode* generateEcadSection();
 
     /**
      * Creates the Approved Vendor List section.  If the user chooses, this will associate
      * BOM items with vendor numbers and names.
-    */
+     */
     wxXmlNode* generateAvlSection();
 
     void generateCadLayers( wxXmlNode* aCadLayerNode );
