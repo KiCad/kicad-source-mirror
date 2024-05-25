@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -156,6 +156,8 @@ private:
 	void onHSVMouseClick( wxMouseEvent& event ) override;
 	void onHSVMouseDrag( wxMouseEvent& event ) override;
 
+    void onSize( wxSizeEvent& event ) override;
+
     void OnColorValueText( wxCommandEvent& event ) override;
 
     ///< Event handler for the reset button press
@@ -186,6 +188,8 @@ private:
      * If aPredefinedColors is nullptr, a internal predefined list will be used.
      */
     void initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColors );
+
+    void updateHandleSize();
 
     // convert double value 0 ... 1 to int 0 ... aValMax
     int normalizeToInt( double aValue, int aValMax = 255 )
