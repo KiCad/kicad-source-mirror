@@ -18,6 +18,7 @@
  */
 
 
+#include <kiplatform/ui.h>
 #include <dialogs/dialog_color_picker.h>
 #include <cmath>
 #include <algorithm>
@@ -123,8 +124,16 @@ DIALOG_COLOR_PICKER::~DIALOG_COLOR_PICKER()
 
 void DIALOG_COLOR_PICKER::updatePreview( wxStaticBitmap* aStaticBitmap, COLOR4D& aColor4D )
 {
-    wxBitmap newBm = COLOR_SWATCH::MakeBitmap( aColor4D, COLOR4D::WHITE, aStaticBitmap->GetSize(),
-                                               ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ),
+    wxSize  swatchSize = aStaticBitmap->GetSize();
+    wxSize  checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+
+#ifdef __WXMAC__
+    // Adjust for Retina
+    swatchSize *= KIPLATFORM::UI::GetPixelScaleFactor( this );
+    checkerboardSize *= KIPLATFORM::UI::GetPixelScaleFactor( this );
+#endif
+
+    wxBitmap newBm = COLOR_SWATCH::MakeBitmap( aColor4D, COLOR4D::WHITE, swatchSize, checkerboardSize,
                                                aStaticBitmap->GetParent()->GetBackgroundColour() );
 
     newBm.SetScaleFactor( GetDPIScaleFactor() );
@@ -173,6 +182,12 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
     wxSize  swatchSize = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );
     wxSize  checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
     COLOR4D checkboardBackground = m_OldColorRect->GetParent()->GetBackgroundColour();
+
+#ifdef __WXMAC__
+    // Adjust for Retina
+    swatchSize *= KIPLATFORM::UI::GetPixelScaleFactor( this );
+    checkerboardSize *= KIPLATFORM::UI::GetPixelScaleFactor( this );
+#endif
 
     auto addSwatch =
             [&]( int aId, COLOR4D aColor, const wxString& aColorName )
@@ -324,7 +339,15 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
 
     delete m_bitmapRGB;
     m_bitmapRGB = new wxBitmap( img, 24 );
-    m_bitmapRGB->SetScaleFactor( m_RgbBitmap->GetDPIScaleFactor() );
+
+    double scaleFactor = m_HsvBitmap->GetDPIScaleFactor();
+
+#ifdef __WXMAC__
+    // Adjust for Retina
+    scaleFactor /= KIPLATFORM::UI::GetPixelScaleFactor( this );
+#endif
+
+    m_bitmapRGB->SetScaleFactor( scaleFactor );
     m_RgbBitmap->SetBitmap( *m_bitmapRGB );
 }
 
@@ -389,7 +412,15 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
 
     delete m_bitmapHSV;
     m_bitmapHSV = new wxBitmap( img, 24 );
-    m_bitmapHSV->SetScaleFactor( m_HsvBitmap->GetDPIScaleFactor() );
+
+    double scaleFactor = m_HsvBitmap->GetDPIScaleFactor();
+
+#ifdef __WXMAC__
+    // Adjust for Retina
+    scaleFactor /= KIPLATFORM::UI::GetPixelScaleFactor( this );
+#endif
+
+    m_bitmapHSV->SetScaleFactor( scaleFactor );
     m_HsvBitmap->SetBitmap( *m_bitmapHSV );
 }
 
@@ -424,7 +455,7 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
     bitmapDC.SetBrush( brush );
     int half_csize = m_cursorsSize / 2;
 
-    double slope = SLOPE_AXIS / ( half_size );
+    double slope = SLOPE_AXIS / half_size;
 
     // Red axis cursor (Z 3Daxis):
     m_cursorBitmapRed.x = 0;
@@ -495,9 +526,8 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
     bitmapDC.SetPen( pen );
     bitmapDC.SetBrush( brush );
 
-    int half_csize = m_cursorsSize/2;
-    bitmapDC.DrawRectangle( m_cursorBitmapHSV.x- half_csize,
-                            m_cursorBitmapHSV.y-half_csize,
+    bitmapDC.DrawRectangle( m_cursorBitmapHSV.x - ( m_cursorsSize / 2 ),
+                            m_cursorBitmapHSV.y - ( m_cursorsSize / 2 ),
                             m_cursorsSize, m_cursorsSize );
 
     m_HsvBitmap->SetBitmap( newBm );
