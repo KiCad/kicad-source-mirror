@@ -45,7 +45,7 @@
 #include <wx/log.h>
 
 #ifdef __WXMSW__
-    #define USE_MOUSE_CAPTURE
+   #define USE_MOUSE_CAPTURE
 #endif
 
 using namespace KIGFX;
@@ -694,7 +694,11 @@ void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
     // Note: for some reason, m_parentPanel->HasCapture() can be false even if CaptureMouse()
     // was called (i.e. mouse was captured, so when need to test m_MouseCapturedLost to be
     // sure a wxEVT_MOUSE_CAPTURE_LOST event was fired before. Otherwise wxMSW complains
-    if( aEnabled && !m_parentPanel->HasCapture() && m_parentPanel->m_MouseCapturedLost )
+    // The IsModalDialogFocused is checked because it's possible to start a capture
+    // due to event ordering while a modal dialog was just opened, the mouse capture steels focus
+    // from the modal and causes odd behavior
+    if( aEnabled && !m_parentPanel->HasCapture() && m_parentPanel->m_MouseCapturedLost
+        && !KIUI::IsModalDialogFocused() )
     {
         m_parentPanel->CaptureMouse();
 
