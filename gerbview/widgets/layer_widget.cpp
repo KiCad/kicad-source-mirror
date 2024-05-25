@@ -489,7 +489,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_smallestLayerString( wxT( "M...M" ) )
 {
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
-    m_IconProvider = new ROW_ICON_PROVIDER( indicatorSize );
+    m_IconProvider = new ROW_ICON_PROVIDER( indicatorSize, this );
 
     int pointSize = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
     int screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );

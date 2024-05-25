@@ -142,7 +142,7 @@ public:
      * @param aAlt false: normal icons (blue arrow/blank), true:
      * alternative icons (blue arrow/green diamond)
      */
-    ROW_ICON_PROVIDER( int aSize );
+    ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow );
 
     ///< @copydoc INDICATOR_ICON::ICON_PROVIDER::GetIndicatorIcon()
     const wxBitmap& GetIndicatorIcon( INDICATOR_ICON::ICON_ID aIconId ) const override;

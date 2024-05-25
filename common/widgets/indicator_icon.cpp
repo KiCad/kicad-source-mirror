@@ -92,7 +92,7 @@ wxImage createBlankImage( int size )
 
 // Create an arrow icon of a particular size, colour and direction.  0 points up, 1 points
 // right, and so forth.
-wxBitmap createArrow( int size, int aDirection, wxColour aColour )
+wxBitmap createArrow( int size, double aScaleFactor, int aDirection, wxColour aColour )
 {
     wxImage image = createBlankImage( size );
 
@@ -117,12 +117,14 @@ wxBitmap createArrow( int size, int aDirection, wxColour aColour )
     for( int i = 0; i < aDirection; ++i )
         image = image.Rotate90();
 
-    return wxBitmap( image );
+    wxBitmap bmp( image );
+    bmp.SetScaleFactor( aScaleFactor );
+    return bmp;
 }
 
 
 // Create a diamond icon of a particular size and colour.
-wxBitmap createDiamond( int size, wxColour aColour )
+wxBitmap createDiamond( int size, double aScaleFactor, wxColour aColour )
 {
     wxImage image = createBlankImage( size );
 
@@ -152,17 +154,29 @@ wxBitmap createDiamond( int size, wxColour aColour )
         }
     }
 
-    return wxBitmap( image );
+    wxBitmap bmp( image );
+    bmp.SetScaleFactor( aScaleFactor );
+    return bmp;
 }
 
 
-ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( int aSize )
+ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow )
 {
-    m_blankBitmap = wxBitmap( createBlankImage( aSize ) );
-    m_rightArrowBitmap = createArrow( aSize, 1, wxColour( 64, 72, 255 ) );
-    m_upArrowBitmap = createArrow( aSize - 2, 0, wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW ) );
-    m_downArrowBitmap = createArrow( aSize - 2, 2, wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW ) );
-    m_dotBitmap = createDiamond( aSize, wxColour( 128, 144, 255 ) );
+    auto toPhys = [&]( int dip )
+    {
+        return aWindow->ToPhys( aWindow->FromDIP( dip ) );
+    };
+
+    double   scale = aWindow->GetDPIScaleFactor();
+    wxColour shadowColor = wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW );
+
+    m_blankBitmap = wxBitmap( createBlankImage( toPhys( aSizeDIP ) ) );
+    m_blankBitmap.SetScaleFactor( scale );
+
+    m_rightArrowBitmap = createArrow( toPhys( aSizeDIP ), scale, 1, wxColour( 64, 72, 255 ) );
+    m_upArrowBitmap = createArrow( toPhys( aSizeDIP - 2 ), scale, 0, shadowColor );
+    m_downArrowBitmap = createArrow( toPhys( aSizeDIP - 2 ), scale, 2, shadowColor );
+    m_dotBitmap = createDiamond( toPhys( aSizeDIP ), scale, wxColour( 128, 144, 255 ) );
 }
 
 

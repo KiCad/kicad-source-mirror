@@ -175,7 +175,7 @@ public:
             m_dlg( aParentDlg ),
             m_preselect( aPreselect )
     {
-        SetButtonBitmaps( KiBitmap( BITMAPS::small_library ) );
+        SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_library ) );
 
         // win32 fix, avoids drawing the "native dropdown caret"
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
@@ -239,7 +239,7 @@ public:
             m_preselect( aPreselect ),
             m_symbolNetlist( aSymbolNetlist.ToStdString() )
     {
-        SetButtonBitmaps( KiBitmap( BITMAPS::small_library ) );
+        SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_library ) );
 
         // win32 fix, avoids drawing the "native dropdown caret"
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
@@ -321,7 +321,7 @@ public:
             m_dlg( aParentDlg ),
             m_searchStack( aSearchStack )
     {
-        SetButtonBitmaps( KiBitmap( BITMAPS::www ) );
+        SetButtonBitmaps( KiBitmapBundle( BITMAPS::www ) );
 
         // win32 fix, avoids drawing the "native dropdown caret"
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
@@ -380,7 +380,7 @@ public:
             m_normalizeBasePath( aNormalizeBasePath ),
             m_fileFilter( aFileFilter )
     {
-        SetButtonBitmaps( KiBitmap( BITMAPS::small_folder ) );
+        SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_folder ) );
 
         // win32 fix, avoids drawing the "native dropdown caret"
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
@@ -400,7 +400,7 @@ public:
             m_normalizeBasePath( aNormalizeBasePath ),
             m_fileFilterFn( std::move( aFileFilterFn ) )
     {
-        SetButtonBitmaps( KiBitmap( BITMAPS::small_folder ) );
+        SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_folder ) );
 
         // win32 fix, avoids drawing the "native dropdown caret"
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
