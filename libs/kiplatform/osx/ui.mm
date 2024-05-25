@@ -184,6 +184,11 @@ void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 }
 
 
+void KIPLATFORM::UI::ImeNotifyCancelComposition( wxWindow* aWindow )
+{
+}
+
+
 bool KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 {
     return true;

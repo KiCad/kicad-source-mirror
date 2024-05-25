@@ -184,6 +184,14 @@ void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 }
 
 
+void KIPLATFORM::UI::ImeNotifyCancelComposition( wxWindow* aWindow )
+{
+    const HIMC himc = ImmGetContext( aWindow->GetHWND() );
+    ImmNotifyIME( himc, NI_COMPOSITIONSTR, CPS_CANCEL, 0 );
+    ImmReleaseContext( aWindow->GetHWND(), himc );
+}
+
+
 bool KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 {
     return true;

@@ -321,6 +321,11 @@ void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 }
 
 
+void KIPLATFORM::UI::ImeNotifyCancelComposition( wxWindow* aWindow )
+{
+}
+
+
 void KIPLATFORM::UI::SetFloatLevel( wxWindow* aWindow )
 {
 }

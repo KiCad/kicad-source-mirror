@@ -186,6 +186,7 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
 void EDA_DRAW_PANEL_GAL::SetFocus()
 {
+    KIPLATFORM::UI::ImeNotifyCancelComposition( this );
     wxScrolledCanvas::SetFocus();
     m_lostFocus = false;
 }

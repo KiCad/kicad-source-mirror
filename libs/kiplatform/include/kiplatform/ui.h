@@ -159,6 +159,11 @@ namespace KIPLATFORM
         void ImmControl( wxWindow* aWindow, bool aEnable );
 
         /**
+         * Asks the IME to cancel
+         */
+        void ImeNotifyCancelComposition( wxWindow* aWindow );
+
+        /**
          * On Wayland, restricts the pointer movement to a rectangle slightly bigger than the given `wxWindow`.
          * This way, the cursor doesn't exit the (bigger) application window and we retain control on it.
          * Required to make the infinite mouse-drag work with fast movement.
