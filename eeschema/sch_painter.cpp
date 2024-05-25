@@ -440,8 +440,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
     }
     else if( aItem->IsSelected() && aDrawingShadows )
     {
-        if( aDrawingShadows )
-            color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
+        color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
     }
     else if( aItem->IsSelected() && ( aLayer == LAYER_DEVICE_BACKGROUND
                                    || aLayer == LAYER_SHEET_BACKGROUND
@@ -727,94 +726,6 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
             continue;
 
         draw( &item, aLayer, aDimmed );
-    }
-}
-
-
-bool SCH_PAINTER::setDeviceColors( const SCH_ITEM* aItem, int aLayer, bool aDimmed )
-{
-    COLOR4D          bg = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
-    const EDA_SHAPE* shape = dynamic_cast<const EDA_SHAPE*>( aItem );
-
-    switch( aLayer )
-    {
-    case LAYER_SELECTION_SHADOWS:
-        if( aItem->IsBrightened() || aItem->IsSelected() )
-        {
-            m_gal->SetIsFill( false );
-            m_gal->SetIsStroke( true );
-            m_gal->SetLineWidth( getLineWidth( aItem, true ) );
-            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, true, aDimmed ) );
-            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, true, aDimmed ) );
-            return true;
-        }
-
-        return false;
-
-    case LAYER_NOTES_BACKGROUND:
-    case LAYER_DEVICE_BACKGROUND:
-        if( shape )
-        {
-            if( shape->GetFillMode() != FILL_T::FILLED_WITH_BG_BODYCOLOR )
-            {
-                return false;   // FILLED_SHAPE and FILLED_WITH_COLOR rendered below on
-                                // LAYER_NOTES or LAYER_DEVICE
-            }
-
-            m_gal->SetIsFill( true );
-            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false, aDimmed ) );
-            m_gal->SetIsStroke( false );
-            return true;
-        }
-
-        return false;
-
-    case LAYER_NOTES:
-    case LAYER_PRIVATE_NOTES:
-    case LAYER_DEVICE:
-        m_gal->SetIsFill( shape && (   shape->GetFillMode() == FILL_T::FILLED_SHAPE
-                                    || shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR ) );
-
-        if( shape && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
-        {
-            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false, aDimmed ) );
-        }
-        else if( shape && shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
-        {
-            COLOR4D fillColour = shape->GetFillColor();
-            double  transparency = aItem->GetForcedTransparency();
-
-            if( transparency > 0.0 )
-                fillColour = fillColour.WithAlpha( fillColour.a * ( 1.0 - transparency ) );
-
-            if( m_schSettings.m_OverrideItemColors )
-            {
-                fillColour = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false, aDimmed );
-            }
-            else if( aDimmed )
-            {
-                fillColour = fillColour.Mix( bg, 0.5f );
-                fillColour.Desaturate();
-            }
-
-            m_gal->SetFillColor( fillColour );
-        }
-
-        if( aItem->GetPenWidth() >= 0 || !shape || !shape->IsFilled() )
-        {
-            m_gal->SetIsStroke( true );
-            m_gal->SetLineWidth( getLineWidth( aItem, false ) );
-            m_gal->SetStrokeColor( getRenderColor( aItem, aLayer, false, aDimmed ) );
-        }
-        else
-        {
-            m_gal->SetIsStroke( false );
-        }
-
-        return true;
-
-    default:
-        return false;
     }
 }
 
@@ -1333,6 +1244,31 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     default:
         wxFAIL_MSG( "Unknown pin orientation" );
     }
+}
+
+
+// Draw anchor indicating the anchor position of text objects, local labels, or fields.
+void SCH_PAINTER::drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows )
+{
+    if( m_schSettings.IsPrinting() )
+        return;
+
+    // In order for the anchors to be visible but unobtrusive, their size must factor in the
+    // current zoom level.
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
+    int radius = KiROUND( std::fabs( matrix.GetScale().x * TEXT_ANCHOR_SIZE ) / 25 )
+                     + schIUScale.MilsToIU( TEXT_ANCHOR_SIZE );
+
+    COLOR4D color = aDrawingShadows ? m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS )
+                                    : m_schSettings.GetLayerColor( LAYER_SCHEMATIC_ANCHOR );
+
+    m_gal->SetStrokeColor( color );
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth( false )
+                                         : m_schSettings.GetDanglingIndicatorThickness() );
+
+    m_gal->DrawLine( aPos - VECTOR2I( radius, 0 ), aPos + VECTOR2I( radius, 0 ) );
+    m_gal->DrawLine( aPos - VECTOR2I( 0, radius ), aPos + VECTOR2I( 0, radius ) );
 }
 
 
@@ -1886,6 +1822,39 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             const_cast<SCH_TEXT*>( aText )->ClearFlags( IS_SHOWN_AS_BITMAP );
         }
     }
+
+    // Draw anchor
+    if( aText->IsSelected() )
+    {
+        bool showAnchor;
+
+        switch( aText->Type() )
+        {
+        case SCH_TEXT_T:
+            showAnchor = true;
+            break;
+
+        case SCH_LABEL_T:
+            // Don't clutter things up if we're already showing a dangling indicator
+            showAnchor = !static_cast<const SCH_LABEL*>( aText )->IsDangling();
+            break;
+
+        case SCH_DIRECTIVE_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_SHEET_PIN_T:
+            // These all have shapes and so don't need anchors
+            showAnchor = false;
+            break;
+
+        default:
+            showAnchor = false;
+            break;
+        }
+
+        if( showAnchor )
+            drawAnchor( aText->GetPosition(), drawingShadows );
+    }
 }
 
 
@@ -1943,7 +1912,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 }
                 else
                 {
-                    strokeText( shownText, aTextBox->GetDrawPos(), attrs, aTextBox->GetFontMetrics() );
+                    strokeText( shownText, aTextBox->GetDrawPos(), attrs,
+                                aTextBox->GetFontMetrics() );
                 }
             };
 
@@ -2444,14 +2414,18 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
         }
     }
 
-    // Draw the umbilical line
+    // Draw anchor or umbilical line
     if( aField->IsMoving() && m_schematic )
     {
         VECTOR2I parentPos = aField->GetParentPosition();
 
         m_gal->SetLineWidth( m_schSettings.GetOutlineWidth() );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
-        m_gal->DrawLine( bbox.Centre(), parentPos );
+        m_gal->DrawLine( aField->GetPosition(), parentPos );
+    }
+    else if( aField->IsSelected() )
+    {
+        drawAnchor( aField->GetPosition(), drawingShadows );
     }
 }
 

@@ -32,6 +32,9 @@
 ///< The size of the rectangle indicating a connected, unselected wire end
 #define UNSELECTED_END_SIZE 4
 
+///< The size of the rectangle indicating the anchor of a text object (including fields)
+#define TEXT_ANCHOR_SIZE 8
+
 ///< The default pin len value when creating pins(can be changed in preference menu)
 #define DEFAULT_PIN_LENGTH 100
 
