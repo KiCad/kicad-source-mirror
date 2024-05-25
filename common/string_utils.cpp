@@ -826,8 +826,10 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreC
 bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
                         bool case_sensitive )
 {
-    const wxChar* cp = nullptr, * mp = nullptr;
-    const wxChar* wild, * str;
+    const wxChar* cp = nullptr;
+    const wxChar* mp = nullptr;
+    const wxChar* wild = nullptr;
+    const wxChar* str = nullptr;
     wxString      _pattern, _string_to_tst;
 
     if( case_sensitive )
@@ -841,7 +843,7 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
         _pattern.MakeUpper();
         _string_to_tst = string_to_tst;
         _string_to_tst.MakeUpper();
-        wild   = _pattern.GetData();
+        wild = _pattern.GetData();
         str = _string_to_tst.GetData();
     }
 
@@ -859,7 +861,8 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
         if( *wild == '*' )
         {
             if( !*++wild )
-                return 1;
+                return true;
+
             mp = wild;
             cp = str + 1;
         }
