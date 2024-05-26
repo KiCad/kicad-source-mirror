@@ -45,7 +45,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         m_padding( 0 ),
         m_isToolbarButton( false ),
         m_acceptDraggedInClicks( false ),
-        m_centerBitmap( false )
+        m_centerBitmap( true )
 {
     m_badgeFont = GetFont().Smaller().MakeBold();
 
@@ -64,7 +64,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap&
         m_padding( 5 ),
         m_isToolbarButton( false ),
         m_acceptDraggedInClicks( false ),
-        m_centerBitmap( false )
+        m_centerBitmap( true )
 {
     m_badgeFont = GetFont().Smaller().MakeBold();
 
@@ -351,10 +351,8 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
 
     if( m_centerBitmap )
     {
-        // dont let it go negative if bmp is larger than the button
-        int x = std::max( ( rect.width - bmSize.x ) / 2, 0 );
-        int y = std::max( ( rect.height - bmSize.y ) / 2, 0 );
-        drawBmpPos = wxPoint( x, y );
+        drawBmpPos.x = ( rect.width - bmSize.x ) / 2;
+        drawBmpPos.y = ( rect.height - bmSize.y ) / 2;
     }
 
     // Draw the bitmap with the upper-left corner offset by the padding
