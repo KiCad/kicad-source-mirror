@@ -2515,6 +2515,8 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         }
     }
 
+    coveredRegion.BooleanIntersection( footprintRegion, SHAPE_POLY_SET::PM_FAST );
+
     double footprintRegionArea = polygonArea( footprintRegion );
     double uncoveredRegionArea = footprintRegionArea - polygonArea( coveredRegion );
     double coveredArea = footprintRegionArea - uncoveredRegionArea;
