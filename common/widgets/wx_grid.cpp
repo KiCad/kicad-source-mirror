@@ -68,7 +68,7 @@ wxGridCellAttr* WX_GRID_TABLE_BASE::enhanceAttr( wxGridCellAttr* aInputAttr, int
 }
 
 
-#define MIN_GRIDCELL_MARGIN FromDIP( 3 )
+#define MIN_GRIDCELL_MARGIN FromDIP( 2 )
 
 
 void WX_GRID::CellEditorSetMargins( wxTextEntryBase* aEntry )
@@ -210,9 +210,6 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     SetDefaultCellFont( KIUI::GetControlFont( this ) );
     SetLabelFont( KIUI::GetControlFont( this ) );
 
-    if( GetColLabelSize() > 0 )
-        SetColLabelSize( GetColLabelSize() + FromDIP( 4 ) );
-
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
     Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
     Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
@@ -232,6 +229,12 @@ WX_GRID::~WX_GRID()
 
 void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
 {
+    CallAfter(
+            [&]()
+            {
+                wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
+            } );
+
     /// This terrible hack is a way to avoid the incredibly disruptive resizing of grids that happens on Macs
     /// when moving a window between monitors of different DPIs.
 #ifndef __WXMAC__
@@ -242,14 +245,15 @@ void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
 
 void WX_GRID::SetColLabelSize( int aHeight )
 {
-    if( aHeight == 0 )
+    if( aHeight == 0 || aHeight == wxGRID_AUTOSIZE )
     {
-        wxGrid::SetColLabelSize( 0 );
+        wxGrid::SetColLabelSize( aHeight );
         return;
     }
 
     // Correct wxFormBuilder height for large fonts
-    int minHeight = GetLabelFont().GetPixelSize().y + 2 * MIN_GRIDCELL_MARGIN;
+    int minHeight = GetCharHeight() + 2 * MIN_GRIDCELL_MARGIN;
+
     wxGrid::SetColLabelSize( std::max( aHeight, minHeight ) );
 }
 
