@@ -119,7 +119,15 @@ void PROJECT_TREE::LoadIcons()
     delete m_imageList;
 
     // Make an image list containing small icons
-    int size = 24;
+    int    size = 24;
+    double scale = GetContentScaleFactor() * GetDPIScaleFactor();
+
+    if( scale >= 2.5 )
+        size = 64;
+    else if( scale >= 2.0 )
+        size = 48;
+    else if( scale >= 1.5 )
+        size = 32;
 
     m_imageList = new wxImageList( size, size, true,
                                    static_cast<int>( TREE_FILE_TYPE::MAX ) );
