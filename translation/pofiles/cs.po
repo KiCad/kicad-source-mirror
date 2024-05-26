@@ -19,16 +19,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-04-21 22:07+0000\n"
+"PO-Revision-Date: 2024-05-27 14:09+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -6226,9 +6226,8 @@ msgid "Added"
 msgstr "Přidal"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Soubor archivu nelze otevřít."
+msgstr "Nelze vyhledat vzdálený vklad"
 
 #: common/git/git_push_handler.cpp:59
 #, fuzzy
@@ -15346,9 +15345,9 @@ msgid "Unknown netlist format.\n"
 msgstr "Neznámý formát netlistu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "BOM preset '%s' not found"
-msgstr "Soubor '%s' nenalezen"
+msgstr "Předvolba BOM '%s' nenalezena"
 
 #: eeschema/eeschema_jobs_handler.cpp:545
 #: eeschema/eeschema_jobs_handler.cpp:757
@@ -15357,9 +15356,9 @@ msgid "Unable to open destination '%s'"
 msgstr "Nelze otevřít cíl '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "Pouzdro '%s' nenalezeno."
+msgstr "Předvolba formátu BOM '%s' nenalezena"
 
 #: eeschema/eeschema_jobs_handler.cpp:720
 #, c-format
@@ -15513,9 +15512,9 @@ msgstr ""
 "Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
 
 #: eeschema/erc/erc.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "Nástroj %d není definován"
+msgstr "Třída spojů %s není definována"
 
 #: eeschema/erc/erc.cpp:648
 #, fuzzy, c-format
@@ -15523,9 +15522,8 @@ msgid "Four items connected at %d, %d"
 msgstr "Nemohu se připojit k '%s' "
 
 #: eeschema/erc/erc.cpp:720
-#, fuzzy
 msgid "Pin with 'no connection' type is connected"
-msgstr "Vývody typu \"nepřipojeno\" jsou připojeny"
+msgstr "Vývod typu 'bez připojení' je připojen"
 
 #: eeschema/erc/erc.cpp:833
 #, c-format
@@ -15647,9 +15645,8 @@ msgid "Checking for four way junctions..."
 msgstr "Kontrola definice pole pouzdra..."
 
 #: eeschema/erc/erc.cpp:1504
-#, fuzzy
 msgid "Checking for undefined netclasses..."
-msgstr "Kontrola nevyřešených proměnných ..."
+msgstr "Kontrola nedefinovaných tříd sítí..."
 
 #: eeschema/erc/erc_item.cpp:43
 msgid "Conflicts"
@@ -15759,9 +15756,8 @@ msgid "Unresolved text variable"
 msgstr "Nevyřešená textová proměnná"
 
 #: eeschema/erc/erc_item.cpp:147
-#, fuzzy
 msgid "Undefined netclass"
-msgstr "Analyzované třídy sítí"
+msgstr "Nedefinovaná třída sítě"
 
 #: eeschema/erc/erc_item.cpp:151
 msgid "SPICE model issue"
@@ -16950,9 +16946,8 @@ msgid "Highlighted net: %s"
 msgstr "Zvýrazněná síť: %s"
 
 #: eeschema/sch_edit_frame.cpp:2316
-#, fuzzy
 msgid "Save Symbol to Schematic"
-msgstr "Přidat symbol do schématu"
+msgstr "Uložit symbol do schématu"
 
 #: eeschema/sch_edit_frame.cpp:2421 eeschema/tools/ee_actions.cpp:60
 #, fuzzy
@@ -17003,9 +16998,8 @@ msgstr "Soubor úložiště nebyl plně analyzován (zbývající %d bajty)."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:665
 #: eeschema/sch_io/altium/sch_io_altium.cpp:760
-#, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "Soubory schématu Altium"
+msgstr "Očekávaný soubor Altium Schematic verze 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:864
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -17424,9 +17418,8 @@ msgid "Eagle XML schematic files"
 msgstr "Eagle XML soubory schématu"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:90
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Soubory knihoven Eagle ver. 6.x XML"
+msgstr "Soubory knihoven Eagle XML"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:147
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:321
@@ -17768,18 +17761,16 @@ msgid "Extra data found on line %d in file %s"
 msgstr "Další data nalezená na řádku %d v souboru %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:415
-#, fuzzy
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr "Očekávám 0, 1, 2 nebo 3"
+msgstr "Očekávám 0, 1, 2,3 nebo 4"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:429
 msgid "Expecting NORMAL or WIDE"
 msgstr "Očekávám NORMAL nebo WIDE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:447
-#, fuzzy
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr "Očekávám I, O, B nebo OUT"
+msgstr "Očekávám I, O, B, IN, OUT nebo BIDIR"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:468
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
@@ -18319,9 +18310,8 @@ msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2764
-#, fuzzy
 msgid "Mirror X"
-msgstr "Zrcadlit Y"
+msgstr "Zrcadlit X"
 
 #: eeschema/sch_symbol.cpp:2766
 msgid "Mirror Y"
@@ -18339,17 +18329,14 @@ msgid "Library Description"
 msgstr "Popis"
 
 #: eeschema/sch_symbol.cpp:2832
-#, fuzzy
 msgid "Exclude From Board"
 msgstr "Vyloučit z desky"
 
 #: eeschema/sch_symbol.cpp:2835
-#, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Vyloučit ze simulace"
 
 #: eeschema/sch_symbol.cpp:2838 pcbnew/footprint.cpp:3793
-#, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Vyloučit z rozpisky materiálu"
 
@@ -19635,7 +19622,6 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:581
-#, fuzzy
 msgid "Amplitude"
 msgstr "Amplituda"
 
@@ -19988,9 +19974,8 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' není platná hodnota Spice."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:173
-#, fuzzy
 msgid "&Simulation"
-msgstr "Simulace"
+msgstr "&Simulace"
 
 #: eeschema/sim/user_defined_signals_help_md.h:2
 msgid ""
@@ -20647,9 +20632,8 @@ msgid "(failed to load)"
 msgstr "(selhalo načítání)"
 
 #: eeschema/symbol_viewer_frame.cpp:111
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "Prohlížeč knihoven symbolů"
+msgstr "Prohlížeč knihoven symbolů KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:1103 pcbnew/footprint_viewer_frame.cpp:1023
 #: pcbnew/footprint_viewer_frame.cpp:1028
@@ -20837,9 +20821,9 @@ msgid "Cannot find %s pin '%s'."
 msgstr "Nelze najít %s vývod '%s'."
 
 #: eeschema/tools/backannotate.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Change field '%s' value to '%s'."
-msgstr "Změnit označení \"%s\" na \"%s\"."
+msgstr "Změnit hodnotu pole '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
@@ -20847,9 +20831,9 @@ msgid "Add field '%s' with value '%s'."
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field '%s.'"
-msgstr "Smazat pole"
+msgstr "Smazat pole '%s.'"
 
 #: eeschema/tools/backannotate.cpp:704
 #, c-format
