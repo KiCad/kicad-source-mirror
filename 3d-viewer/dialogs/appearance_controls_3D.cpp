@@ -100,8 +100,6 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
 {
     DPI_SCALING_COMMON dpi( nullptr, m_frame );
 
-    const int c_indicatorSizeDIP = 10;
-
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
     m_pointSize       = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
 
@@ -154,7 +152,7 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
                                                  KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ),
                                                  KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ) ) );
 
-    if( screenHeight <= 900 && m_pointSize >= FromDIP( c_indicatorSizeDIP ) )
+    if( screenHeight <= 900 && m_pointSize >= FromDIP( KIUI::c_IndicatorSizeDIP ) )
         m_pointSize = m_pointSize * 8 / 10;
 
     m_cbLayerPresets->Bind( wxEVT_CHOICE, &APPEARANCE_CONTROLS_3D::onLayerPresetChanged, this );

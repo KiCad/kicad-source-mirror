@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kiplatform/ui.h>
 #include <widgets/indicator_icon.h>
 #include <wx/event.h>
 #include <wx/settings.h>
@@ -75,9 +76,12 @@ wxImage createBlankImage( int size )
     wxImage image( size, size );
 
     image.InitAlpha();
+
     for( int y = 0; y < size; ++y )
+    {
         for( int x = 0; x < size; ++x )
             image.SetAlpha( x, y, wxIMAGE_ALPHA_TRANSPARENT );
+    }
 
 #ifdef __WXMSW__
     // wxWidgets on Windows chokes on an empty fully transparent bitmap and draws it
@@ -162,13 +166,19 @@ wxBitmap createDiamond( int size, double aScaleFactor, wxColour aColour )
 
 ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow )
 {
-    auto toPhys = [&]( int dip )
-    {
-        return aWindow->ToPhys( aWindow->FromDIP( dip ) );
-    };
+    auto toPhys =
+            [&]( int dip )
+            {
+                return aWindow->ToPhys( aWindow->FromDIP( dip ) );
+            };
 
     double   scale = aWindow->GetDPIScaleFactor();
     wxColour shadowColor = wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW );
+
+#ifdef __WXMAC__
+    // Adjust for Retina
+    scale /= KIPLATFORM::UI::GetPixelScaleFactor( aWindow );
+#endif
 
     m_blankBitmap = wxBitmap( createBlankImage( toPhys( aSizeDIP ) ) );
     m_blankBitmap.SetScaleFactor( scale );

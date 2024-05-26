@@ -413,10 +413,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     // Correct the min size from wxformbuilder not using fromdip
     SetMinSize( FromDIP( GetMinSize() ) );
 
-    const int c_indicatorSizeDIP = 10;
-
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
-    m_iconProvider    = new ROW_ICON_PROVIDER( c_indicatorSizeDIP, this );
+    m_iconProvider    = new ROW_ICON_PROVIDER( KIUI::c_IndicatorSizeDIP, this );
     m_pointSize       = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
 
     m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
@@ -465,7 +463,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     m_txtNetFilter->SetHint( _( "Filter nets" ) );
 
-    if( screenHeight <= 900 && m_pointSize >= FromDIP( c_indicatorSizeDIP ) )
+    if( screenHeight <= 900 && m_pointSize >= FromDIP( KIUI::c_IndicatorSizeDIP ) )
         m_pointSize = m_pointSize * 8 / 10;
 
     wxFont font = m_notebook->GetFont();
