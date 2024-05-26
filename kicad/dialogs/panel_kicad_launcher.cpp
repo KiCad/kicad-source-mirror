@@ -61,12 +61,12 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
     wxFont helpFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     helpFont.SetStyle( wxFONTSTYLE_ITALIC );
 
-    auto addLauncher =
-        [&]( const TOOL_ACTION& aAction, const wxBitmap& aBitmap, const wxString& aHelpText, bool enabled = true )
+    auto addLauncher = [&]( const TOOL_ACTION& aAction, BITMAPS aBitmaps,
+                            const wxString& aHelpText, bool enabled = true )
         {
             BITMAP_BUTTON* btn = new BITMAP_BUTTON( this, wxID_ANY );
-            btn->SetBitmap( aBitmap );
-            btn->SetDisabledBitmap( wxBitmap( aBitmap.ConvertToImage().ConvertToGreyscale() ) );
+            btn->SetBitmap( KiBitmapBundle( aBitmaps ) );
+            btn->SetDisabledBitmap( KiDisabledBitmapBundle( aBitmaps ) );
             btn->SetPadding( 5 );
             btn->SetToolTip( aAction.GetTooltip() );
 
@@ -125,42 +125,33 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             return btn;
     };
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editSchematic,
-                 KiScaledBitmap( BITMAPS::icon_eeschema, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, BITMAPS::icon_eeschema,
                  _( "Edit the project schematic" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editSymbols,
-                 KiScaledBitmap( BITMAPS::icon_libedit, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editSymbols, BITMAPS::icon_libedit,
                  _( "Edit global and/or project schematic symbol libraries" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editPCB,
-                 KiScaledBitmap( BITMAPS::icon_pcbnew, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editPCB, BITMAPS::icon_pcbnew,
                  _( "Edit the project PCB design" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editFootprints,
-                 KiScaledBitmap( BITMAPS::icon_modedit, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editFootprints, BITMAPS::icon_modedit,
                  _( "Edit global and/or project PCB footprint libraries" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers,
-                 KiScaledBitmap( BITMAPS::icon_gerbview, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers, BITMAPS::icon_gerbview,
                  _( "Preview Gerber files" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::convertImage,
-                 KiScaledBitmap( BITMAPS::icon_bitmap2component, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::convertImage, BITMAPS::icon_bitmap2component,
                  _( "Convert bitmap images to schematic symbols or PCB footprints" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::showCalculator,
-                 KiScaledBitmap( BITMAPS::icon_pcbcalculator, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::showCalculator, BITMAPS::icon_pcbcalculator,
                  _( "Show tools for calculating resistance, current capacity, etc." ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editDrawingSheet,
-                 KiScaledBitmap( BITMAPS::icon_pagelayout_editor, this, 48, true ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editDrawingSheet, BITMAPS::icon_pagelayout_editor,
                  _( "Edit drawing sheet borders and title blocks for use in schematics and PCB "
                     "designs" ) );
 
     BITMAP_BUTTON* bb =
-            addLauncher( KICAD_MANAGER_ACTIONS::showPluginManager,
-                         KiScaledBitmap( BITMAPS::icon_pcm, this, 48, true ),
+            addLauncher( KICAD_MANAGER_ACTIONS::showPluginManager, BITMAPS::icon_pcm,
                          _( "Manage downloadable packages from KiCad and 3rd party repositories" ),
                          ( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM )
                            != KIPLATFORM::POLICY::PBOOL::DISABLED ) );
