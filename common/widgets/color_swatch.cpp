@@ -49,6 +49,17 @@ wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackgr
 }
 
 
+wxBitmap COLOR_SWATCH::makeBitmap()
+{
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( m_color, m_background,
+                                                ToPhys( m_size ), ToPhys( m_checkerboardSize ),
+                                                m_checkerboardBg );
+
+    bitmap.SetScaleFactor( GetDPIScaleFactor() );
+    return bitmap;
+}
+
+
 void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
                                const KIGFX::COLOR4D& aBackground, const wxRect& aRect,
                                const wxSize&         aCheckerboardSize,
@@ -147,20 +158,10 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
     m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
     m_checkerboardBg = aParent->GetBackgroundColour();
 
-#ifdef __WXMAC__
-    // Adjust for Retina
-    m_size *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
-    m_checkerboardSize *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
-#endif
-
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, m_size, m_checkerboardSize,
-                                                m_checkerboardBg );
-
-    bitmap.SetScaleFactor( GetDPIScaleFactor() );
-    m_swatch = new wxStaticBitmap( this, aID, bitmap );
+    m_swatch = new wxStaticBitmap( this, aID, makeBitmap() );
 
     sizer->Add( m_swatch, 0, 0 );
 
@@ -187,10 +188,6 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aP
     // Adjust for border
     m_size.x -= 2;
     m_size.y -= 2;
-
-    // Adjust for Retina
-    m_size *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
-    m_checkerboardSize *= KIPLATFORM::UI::GetPixelScaleFactor( aParent );
 #endif
 
     SetSize( m_size );
@@ -198,11 +195,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aP
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( COLOR4D::UNSPECIFIED, COLOR4D::UNSPECIFIED,
-                                                m_size, m_checkerboardSize, m_checkerboardBg );
-
-    bitmap.SetScaleFactor( GetDPIScaleFactor() );
-    m_swatch = new wxStaticBitmap( this, aID, bitmap );
+    m_swatch = new wxStaticBitmap( this, aID, makeBitmap() );
 
     sizer->Add( m_swatch, 0, 0 );
 
@@ -276,10 +269,7 @@ void COLOR_SWATCH::SetSwatchColor( const COLOR4D& aColor, bool aSendEvent )
 {
     m_color = aColor;
 
-    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
-
-    bm.SetScaleFactor( GetDPIScaleFactor() );
-    m_swatch->SetBitmap( bm );
+    m_swatch->SetBitmap( makeBitmap() );
 
     if( aSendEvent )
         sendSwatchChangeEvent( *this );
@@ -295,10 +285,8 @@ void COLOR_SWATCH::SetDefaultColor( const COLOR4D& aColor )
 void COLOR_SWATCH::SetSwatchBackground( const COLOR4D& aBackground )
 {
     m_background = aBackground;
-    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
 
-    bm.SetScaleFactor( GetDPIScaleFactor() );
-    m_swatch->SetBitmap( bm );
+    m_swatch->SetBitmap( makeBitmap() );
 }
 
 
@@ -329,11 +317,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
         {
             m_color = newColor;
 
-            wxBitmap bm = MakeBitmap( newColor, m_background, m_size, m_checkerboardSize,
-                                      m_checkerboardBg );
-
-            bm.SetScaleFactor( GetDPIScaleFactor() );
-            m_swatch->SetBitmap( bm );
+            m_swatch->SetBitmap( makeBitmap() );
 
             sendSwatchChangeEvent( *this );
         }
@@ -344,8 +328,6 @@ void COLOR_SWATCH::GetNewSwatchColor()
 void COLOR_SWATCH::OnDarkModeToggle()
 {
     m_checkerboardBg = m_parent->GetBackgroundColour();
-    wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
 
-    bm.SetScaleFactor( GetDPIScaleFactor() );
-    m_swatch->SetBitmap( bm );
+    m_swatch->SetBitmap( makeBitmap() );
 }
