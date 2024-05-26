@@ -131,7 +131,10 @@ void PROJECT_TREE::LoadIcons()
     else
         physSize = 24;
 
-    double bmpsf = physSize / logicSize;
+    logicSize = std::min( logicSize, physSize );
+    int bmpsf = std::max( 1, physSize / logicSize );
+
+    logicSize = physSize / bmpsf;
 
     auto toBitmap = [&]( BITMAPS aBmps )
     {
