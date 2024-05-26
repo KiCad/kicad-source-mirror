@@ -1659,17 +1659,6 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         {
             TopoDS_Shape faceShape = mkFace.Shape();
 
-            wxString fn = wxString( "S:\\SProjects\\KiBugs\\step\\kicad-step-holes-bug\\kicad-step-"
-                                    "holes-bug\\f2_" )
-                          << "_shape_" << aPolySet.Centre().x << "_" << aPolySet.Centre().y
-                          << ".brep";
-
-            wxFFileOutputStream ffStream( fn );
-            wxStdOutputStream   stdStream( ffStream );
-
-            BRepTools::Write( faceShape, stdStream, false, false,
-                              TopTools_FormatVersion_VERSION_1 );
-
             if( aThickness != 0.0 )
             {
                 TopoDS_Shape prism = BRepPrimAPI_MakePrism( faceShape, gp_Vec( 0, 0, aThickness ) );
