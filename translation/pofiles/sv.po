@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-24 09:09+0000\n"
+"PO-Revision-Date: 2024-05-27 14:09+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -42263,14 +42263,12 @@ msgid "Ignored Angular dimension (not yet supported)."
 msgstr "Ignorerade vinkelmåttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade referensmåttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
+msgstr "Ignorerade baslinjemåttsättning (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
 msgid "Ignored Linear dimension (not yet supported)."
