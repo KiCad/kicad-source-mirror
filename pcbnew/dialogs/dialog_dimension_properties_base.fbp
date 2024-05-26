@@ -2118,7 +2118,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2191,7 +2191,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2265,7 +2265,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2338,7 +2338,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2411,7 +2411,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2485,7 +2485,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2559,7 +2559,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2633,7 +2633,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2706,7 +2706,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
@@ -2779,7 +2779,7 @@
                                                 <property name="pressed"></property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
-                                                <property name="size">21,21</property>
+                                                <property name="size"></property>
                                                 <property name="style">wxBORDER_NONE</property>
                                                 <property name="subclass">BITMAP_BUTTON; widgets/bitmap_button.h; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -91,22 +91,22 @@ DIALOG_SHEET_PIN_PROPERTIES_BASE::DIALOG_SHEET_PIN_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* formattingSizer;
 	formattingSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_separator1 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator1 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator1->Enable( false );
 
 	formattingSizer->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_bold = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_bold = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_bold->SetToolTip( _("Bold") );
 
 	formattingSizer->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_italic = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_italic = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_italic->SetToolTip( _("Italic") );
 
 	formattingSizer->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_separator2 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator2 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator2->Enable( false );
 
 	formattingSizer->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
 
@@ -89,45 +89,45 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* formattingSizer;
 	formattingSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bold = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_bold = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_bold->SetToolTip( _("Bold") );
 
 	formattingSizer->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_italic = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_italic = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_italic->SetToolTip( _("Italic") );
 
 	formattingSizer->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_separator2 = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator2 = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator2->Enable( false );
 
 	formattingSizer->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_alignLeft = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_alignLeft = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	formattingSizer->Add( m_alignLeft, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_alignCenter = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_alignCenter = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	formattingSizer->Add( m_alignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_alignRight = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_alignRight = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	formattingSizer->Add( m_alignRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_separator3 = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator3 = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator3->Enable( false );
 
 	formattingSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_vAlignTop = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_vAlignTop = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	formattingSizer->Add( m_vAlignTop, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_vAlignMiddle = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_vAlignMiddle = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	formattingSizer->Add( m_vAlignMiddle, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_vAlignBottom = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_vAlignBottom = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	formattingSizer->Add( m_vAlignBottom, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_separator4 = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator4 = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator4->Enable( false );
 
 	formattingSizer->Add( m_separator4, 0, wxALIGN_CENTER_VERTICAL, 5 );
