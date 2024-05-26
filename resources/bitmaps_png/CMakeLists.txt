@@ -325,9 +325,17 @@ set( BMAPS_MID
     hole_to_hole_clearance
     hole_to_copper_clearance
     hv45mode
+    icon_bitmap2component_24
     icon_cvpcb_24
+    icon_eeschema_24
     icon_footprint_browser
     icon_gerbview_24
+    icon_kicad_24
+    icon_libedit_24
+    icon_modedit_24
+    icon_pagelayout_editor_24
+    icon_pcbcalculator_24
+    icon_pcbnew_24
     icon_pcm_24
     import3d
     image
@@ -561,15 +569,6 @@ set( BMAPS_MID
 
 # 24 x 24 for internal icons
 set( BMAPS_24
-    icon_bitmap2component_24
-    icon_eeschema_24
-    icon_gerbview_24
-    icon_kicad_24
-    icon_libedit_24
-    icon_modedit_24
-    icon_pagelayout_editor_24
-    icon_pcbcalculator_24
-    icon_pcbnew_24
     )
 
 # 32 x 32 for icon sets
