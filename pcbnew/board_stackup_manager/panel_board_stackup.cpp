@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,9 +94,9 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow,
 
     m_enabledLayers = m_board->GetEnabledLayers() & BOARD_STACKUP::StackupAllowedBrdLayers();
 
-    // Calculates a good size for color swatches (icons) in this dialog
-    m_colorSwatchesSize = GetTextExtent( wxT( "XX" ) );
-    m_colorIconsSize = GetTextExtent( wxT( "XXXX" ) );
+    // Use a good size for color swatches (icons) in this dialog
+    m_colorSwatchesSize = wxSize( 14, 14 );
+    m_colorIconsSize = wxSize( 24, 14 );
 
     // Calculates a good size for wxTextCtrl to enter Epsilon R and Loss tan
     // ("0.0000000" + margins)
@@ -110,7 +110,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow,
 
     // The grid column containing the lock checkbox is kept to a minimal
     // size. So we use a wxStaticBitmap: set the bitmap itself
-    m_bitmapLockThickness->SetBitmap( KiScaledBitmap( BITMAPS::locked, aFrame ) );
+    m_bitmapLockThickness->SetBitmap( KiBitmapBundle( BITMAPS::locked ) );
 
     // Gives a minimal size of wxTextCtrl showing dimensions+units
     m_tcCTValue->SetMinSize( m_numericTextCtrlSize );
@@ -912,7 +912,10 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
             wxCheckBox* cb_box = new wxCheckBox( m_scGridWin, ID_ITEM_THICKNESS_LOCKED+row,
                                                  wxEmptyString );
             cb_box->SetValue( item->IsThicknessLocked( sublayerIdx ) );
-            m_fgGridSizer->Insert( aPos++, cb_box, 0, wxALIGN_CENTER_VERTICAL, 2 );
+
+            m_fgGridSizer->Insert( aPos++, cb_box, 0,
+                                   wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 2 );
+
             ui_row_item.m_ThicknessLockCtrl = cb_box;
         }
         else
