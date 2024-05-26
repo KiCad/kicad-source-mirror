@@ -39,7 +39,7 @@ INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider,
 
     const wxBitmap& icon = m_iconProvider.GetIndicatorIcon( m_currentId );
 
-    m_bitmap = new wxStaticBitmap( this, aID, icon, wxDefaultPosition, icon.GetSize() );
+    m_bitmap = new wxStaticBitmap( this, aID, icon, wxDefaultPosition, icon.GetLogicalSize() );
 
     sizer->Add( m_bitmap, 0, 0 );
 
@@ -174,11 +174,6 @@ ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( int aSizeDIP, wxWindow* aWindow )
 
     double   scale = aWindow->GetDPIScaleFactor();
     wxColour shadowColor = wxSystemSettings().GetColour( wxSYS_COLOUR_3DDKSHADOW );
-
-#ifdef __WXMAC__
-    // Adjust for Retina
-    scale /= KIPLATFORM::UI::GetPixelScaleFactor( aWindow );
-#endif
 
     m_blankBitmap = wxBitmap( createBlankImage( toPhys( aSizeDIP ) ) );
     m_blankBitmap.SetScaleFactor( scale );

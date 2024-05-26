@@ -48,11 +48,7 @@ class wxMenu;
 namespace KIUI
 {
 
-#ifdef __WXMAC__
-    const int c_IndicatorSizeDIP = 6;
-#else
-    const int c_IndicatorSizeDIP = 10;
-#endif
+const int c_IndicatorSizeDIP = 10;
 
 
 /**
