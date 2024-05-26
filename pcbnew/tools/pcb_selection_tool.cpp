@@ -1476,9 +1476,13 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
     for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
     {
-        // Track starting pads
+        // Register starting pads
         if( startItem->Type() == PCB_PAD_T )
             startPadSet.insert( static_cast<PAD*>( startItem ) );
+
+        // Select any starting track items
+        if( startItem->IsType( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+            select( startItem );
     }
 
     for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
