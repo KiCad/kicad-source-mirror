@@ -106,7 +106,11 @@ PANEL_EESCHEMA_COLOR_SETTINGS::~PANEL_EESCHEMA_COLOR_SETTINGS()
     delete m_currentSettings;
 
     for( EDA_ITEM* item : m_previewItems )
+    {
+        // Avoid referencing items after they are deleted (we don't control order)
+        item->SetParent( nullptr );
         delete item;
+    }
 }
 
 
