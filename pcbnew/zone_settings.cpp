@@ -259,7 +259,9 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     if( aFpEditorMode )
         aLayers.set( In1_Cu );
 
-    wxDataViewColumn* checkColumn = aList->AppendToggleColumn( wxEmptyString );
+    wxDataViewColumn* checkColumn = aList->AppendToggleColumn(
+            wxEmptyString, wxDATAVIEW_CELL_ACTIVATABLE, wxCOL_WIDTH_DEFAULT, wxALIGN_CENTER );
+
     wxDataViewColumn* layerColumn = aList->AppendIconTextColumn( wxEmptyString );
     wxDataViewColumn* layerIDColumn = aList->AppendTextColumn( wxEmptyString );
     layerIDColumn->SetHidden( true );
@@ -293,22 +295,13 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
             aList->SetToggleValue( true, (unsigned) aList->GetItemCount() - 1, 0 );
     }
 
-    int checkColSize = 22;
-    int layerColSize = textWidth + LAYER_BITMAP_SIZE.x + 15;
-
-#ifdef __WXMAC__
-    // TODO: something in wxWidgets 3.1.x pads checkbox columns with extra space.  (It used to
-    // also be that the width of the column would get set too wide (to 30), but that's patched in
-    // our local wxWidgets fork.)
-    int checkColMargins = 40;
-#else
-    int checkColMargins = 0;
-#endif
+    int checkColSize = aList->FromDIP( 22 );
+    int layerColSize = textWidth + LAYER_BITMAP_SIZE.x + aList->FromDIP( 15 );
 
     // You'd think the fact that m_layers is a list would encourage wxWidgets not to save room
     // for the tree expanders... but you'd be wrong.  Force indent to 0.
     aList->SetIndent( 0 );
-    aList->SetMinClientSize( wxSize( checkColSize + checkColMargins + layerColSize,
+    aList->SetMinClientSize( wxSize( checkColSize + layerColSize,
                                      aList->GetMinClientSize().y ) );
 
     checkColumn->SetWidth( checkColSize );
