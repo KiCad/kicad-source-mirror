@@ -628,6 +628,7 @@ set( BMAPS_64
     icon_pagelayout_editor
     icon_bitmap2component
     icon_pcbcalculator
+    icon_pcm
     )
 
 # 128 x 128 for icon sets
@@ -643,6 +644,7 @@ set( BMAPS_128
     icon_pagelayout_editor
     icon_bitmap2component
     icon_pcbcalculator
+    icon_pcm
     )
 
 # 256 x 256 for icon sets (windows namely)
@@ -658,6 +660,7 @@ set( BMAPS_256
     icon_pagelayout_editor
     icon_bitmap2component
     icon_pcbcalculator
+    icon_pcm
     )
 
 # Teardrop images (275x130 native size) for teardrop dialogs
