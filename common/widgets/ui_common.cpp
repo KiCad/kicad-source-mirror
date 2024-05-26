@@ -355,7 +355,7 @@ void KIUI::Disable( wxWindow* aWindow )
 }
 
 
-void KIUI::AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmap& aImage )
+void KIUI::AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmapBundle& aImage )
 {
     // Retrieve the global application show icon option:
     bool useImagesInMenus = Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus;
@@ -369,8 +369,8 @@ void KIUI::AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmap& aImage )
 }
 
 
-wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText, const wxBitmap& aImage,
-                               wxItemKind aType )
+wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
+                               const wxBitmapBundle& aImage, wxItemKind aType )
 {
     wxMenuItem* item = new wxMenuItem( aMenu, aId, aText, wxEmptyString, aType );
     AddBitmapToMenuItem( item, aImage );
@@ -381,8 +381,9 @@ wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText, co
 }
 
 
-wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText, const wxString& aHelpText,
-                               const wxBitmap& aImage, wxItemKind aType )
+wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
+                               const wxString& aHelpText, const wxBitmapBundle& aImage,
+                               wxItemKind aType )
 {
     wxMenuItem* item = new wxMenuItem( aMenu, aId, aText, aHelpText, aType );
     AddBitmapToMenuItem( item, aImage );
@@ -394,7 +395,7 @@ wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText, co
 
 
 wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId, const wxString& aText,
-                               const wxBitmap& aImage )
+                               const wxBitmapBundle& aImage )
 {
     wxMenuItem* item = new wxMenuItem( aMenu, aId, aText );
     item->SetSubMenu( aSubMenu );
@@ -407,7 +408,7 @@ wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId, const w
 
 
 wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId, const wxString& aText,
-                               const wxString& aHelpText, const wxBitmap& aImage )
+                               const wxString& aHelpText, const wxBitmapBundle& aImage )
 {
     wxMenuItem* item = new wxMenuItem( aMenu, aId, aText, aHelpText );
     item->SetSubMenu( aSubMenu );
