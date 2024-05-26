@@ -62,8 +62,10 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, const COLOR4D& aCur
 
     updateHandleSize();
 
-    m_OldColorRect->SetMinSize( FromDIP( wxSize( 24, 24 ) ) );
-    m_NewColorRect->SetMinSize( FromDIP( wxSize( 24, 24 ) ) );
+    m_OldColorRect->SetMinSize( FromDIP( wxSize( 20, 20 ) ) );
+    m_NewColorRect->SetMinSize( FromDIP( wxSize( 20, 20 ) ) );
+
+    m_colorValue->SetMinSize( wxSize( GetTextExtent( wxS( "#DDDDDDDD" ) ).x + FromDIP( 8 ), -1 ) );
 
     if( !m_allowOpacityCtrl )
     {
