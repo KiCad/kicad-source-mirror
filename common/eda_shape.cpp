@@ -185,6 +185,32 @@ void EDA_SHAPE::SetLength( const double& aLength )
     }
 }
 
+void EDA_SHAPE::SetRectangleHeight( const int& aHeight )
+{
+    switch ( m_shape )
+    {
+    case SHAPE_T::RECTANGLE:
+        m_rectangleHeight = aHeight;
+        SetEndY( GetStartY() + m_rectangleHeight );
+        break;
+
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
+
+void EDA_SHAPE::SetRectangleWidth( const int& aWidth )
+{
+    switch ( m_shape )
+    {
+    case SHAPE_T::RECTANGLE:
+        m_rectangleWidth = aWidth;
+        SetEndX( GetStartX() + m_rectangleWidth );
+        break;
+
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
+
 void EDA_SHAPE::SetRectangle( const long long int& aHeight, const long long int& aWidth )
 {
     switch ( m_shape )
@@ -1972,6 +1998,15 @@ static struct EDA_SHAPE_DESC
             return false;
         };
 
+        auto isRectangle = []( INSPECTABLE* aItem ) -> bool
+        {
+            // Polygons, unlike other shapes, have no meaningful start or end coordinates
+            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                return shape->GetShape() == SHAPE_T::RECTANGLE;
+
+            return false;
+        };
+
         const wxString shapeProps = _HKI( "Shape Properties" );
 
         auto shape = new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
@@ -2018,6 +2053,18 @@ static struct EDA_SHAPE_DESC
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isNotPolygonOrCircle );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Width" ),
+                    &EDA_SHAPE::SetRectangleWidth, &EDA_SHAPE::GetRectangleWidth, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    shapeProps )
+                .SetAvailableFunc( isRectangle );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Height" ),
+                    &EDA_SHAPE::SetRectangleHeight, &EDA_SHAPE::GetRectangleHeight, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    shapeProps )
+                .SetAvailableFunc( isRectangle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ),

@@ -322,6 +322,10 @@ public:
 
     void SetLength( const double& aLength );
 
+    void SetRectangleHeight( const int& aHeight );
+
+    void SetRectangleWidth( const int& aWidth );
+
     void SetRectangle( const long long int& aHeight, const long long int& aWidth );
 
     void SetSegmentAngle( const EDA_ANGLE& aAngle );
