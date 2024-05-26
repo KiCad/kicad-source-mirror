@@ -600,18 +600,15 @@ void PCB_IO_IPC2581::addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDash
 
 void PCB_IO_IPC2581::addKnockoutText( wxXmlNode* aContentNode, PCB_TEXT* aText )
 {
-    // If we are stroking a polygon, we need two contours.  This is only allowed inside a
-    // "UserSpecial" shape
-    wxXmlNode* special_node = appendNode( aContentNode, "UserSpecial" );
-
+    wxXmlNode*     text_node = appendNode( aContentNode, "UserStandard" );
     SHAPE_POLY_SET finalPoly;
 
     aText->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
                                    ERROR_INSIDE );
     finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
-        addContourNode( special_node, finalPoly, ii, FILL_T::FILLED_SHAPE, 0, LINE_STYLE::SOLID );
+    addContourNode( text_node, finalPoly );
+
 }
 
 
