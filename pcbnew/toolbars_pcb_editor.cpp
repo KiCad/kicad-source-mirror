@@ -552,7 +552,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
                                        "Width' feature is enabled." ) );
 
     m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
-                                 KiScaledBitmap( BITMAPS::auto_track_width, this ),
+                                 KiBitmapBundle( BITMAPS::auto_track_width ),
                                  _( "When routing from an existing track use its width instead "
                                     "of the current width setting" ),
                                  wxITEM_CHECK );
