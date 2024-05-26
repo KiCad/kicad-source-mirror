@@ -31,59 +31,18 @@
 static bool sort_by_pin_number( const SCH_PIN* ref, const SCH_PIN* tst );
 
 static void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
-                                     EDA_DRAW_FRAME* aUnitsProvider );
+                                    UNITS_PROVIDER* aUnitsProvider );
 
-/**
- * Check a lib symbol to find incorrect settings
- * Pins not on a valid grid
- * Pins duplicated
- * Conflict with pins at same location
- * Incorrect Power Symbols
- * illegal reference prefix (cannot ends by a digit or a '?')
- * @param aSymbol is the library symbol to check
- * @param aMessages is a room to store error messages
- * @param aGridForPins (in IU) is the grid to test pin positions ( >= 25 mils )
- * should be 25, 50 or 100 mils (convered to IUs)
- * @param aUnitsProvider a frame to format coordinates in messages
- */
-void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
-                     int aGridForPins, EDA_DRAW_FRAME* aUnitsProvider )
+void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
+                         UNITS_PROVIDER* aUnitsProvider )
 {
-    if( !aSymbol )
-        return;
-
-    wxString msg;
-
-    // Test reference prefix validity:
-    // if the symbol is saved in a library, the prefix should not ends by a digit or a '?'
-    // but it is acceptable if the symbol is saved to aschematic
-    wxString reference_base = aSymbol->GetReferenceField().GetText();
-    wxString illegal_end( wxT( "0123456789?" ) );
-    wxUniChar last_char = reference_base.Last();
-
-    if( illegal_end.Find( last_char ) != wxNOT_FOUND )
-    {
-        msg.Printf( _( "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create"
-                       " issues if saved in a symbol library" ),
-                    illegal_end );
-        msg += wxT( "<br><br>" );
-        aMessages.push_back( msg );
-    }
-
+    wxString              msg;
     std::vector<SCH_PIN*> pinList = aSymbol->GetPins();
 
     // Test for duplicates:
     // Sort pins by pin num, so 2 duplicate pins
     // (pins with the same number) will be consecutive in list
     sort( pinList.begin(), pinList.end(), sort_by_pin_number );
-
-    // The minimal grid size allowed to place a pin is 25 mils
-    // the best grid size is 50 mils, but 25 mils is still usable
-    // this is because all aSymbols are using a 50 mils grid to place pins, and therefore
-    // the wires must be on the 50 mils grid
-    // So raise an error if a pin is not on a 25 (or bigger :50 or 100) mils grid
-    const int min_grid_size = schIUScale.MilsToIU( 25 );
-    const int clamped_grid_size = ( aGridForPins < min_grid_size ) ? min_grid_size : aGridForPins;
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )
     {
@@ -181,6 +140,58 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         msg += wxT( "<br><br>" );
         aMessages.push_back( msg );
     }
+}
+
+
+/**
+ * Check a lib symbol to find incorrect settings
+ * Pins not on a valid grid
+ * Pins duplicated
+ * Conflict with pins at same location
+ * Incorrect Power Symbols
+ * illegal reference prefix (cannot ends by a digit or a '?')
+ * @param aSymbol is the library symbol to check
+ * @param aMessages is a room to store error messages
+ * @param aGridForPins (in IU) is the grid to test pin positions ( >= 25 mils )
+ * should be 25, 50 or 100 mils (convered to IUs)
+ * @param aUnitsProvider a frame to format coordinates in messages
+ */
+void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
+                     int aGridForPins, UNITS_PROVIDER* aUnitsProvider )
+{
+    if( !aSymbol )
+        return;
+
+    wxString msg;
+
+    // Test reference prefix validity:
+    // if the symbol is saved in a library, the prefix should not ends by a digit or a '?'
+    // but it is acceptable if the symbol is saved to aschematic
+    wxString reference_base = aSymbol->GetReferenceField().GetText();
+    wxString illegal_end( wxT( "0123456789?" ) );
+    wxUniChar last_char = reference_base.Last();
+
+    if( illegal_end.Find( last_char ) != wxNOT_FOUND )
+    {
+        msg.Printf( _( "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create"
+                       " issues if saved in a symbol library" ),
+                    illegal_end );
+        msg += wxT( "<br><br>" );
+        aMessages.push_back( msg );
+    }
+
+    CheckDuplicatePins( aSymbol, aMessages, aUnitsProvider );
+
+    std::vector<SCH_PIN*> pinList = aSymbol->GetPins();
+    sort( pinList.begin(), pinList.end(), sort_by_pin_number );
+
+    // The minimal grid size allowed to place a pin is 25 mils
+    // the best grid size is 50 mils, but 25 mils is still usable
+    // this is because all aSymbols are using a 50 mils grid to place pins, and therefore
+    // the wires must be on the 50 mils grid
+    // So raise an error if a pin is not on a 25 (or bigger :50 or 100) mils grid
+    const int min_grid_size = schIUScale.MilsToIU( 25 );
+    const int clamped_grid_size = ( aGridForPins < min_grid_size ) ? min_grid_size : aGridForPins;
 
     // Test for a valid power aSymbol.
     // A valid power aSymbol has only one unit, no alternate body styles and one pin.
@@ -353,7 +364,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
 
 
 void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
-                             EDA_DRAW_FRAME* aUnitsProvider )
+                             UNITS_PROVIDER* aUnitsProvider )
 {
     if( !aSymbol )
         return;

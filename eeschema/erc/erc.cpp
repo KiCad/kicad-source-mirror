@@ -131,6 +131,9 @@ const std::set<ELECTRICAL_PINTYPE> DrivenPinTypes =
             ELECTRICAL_PINTYPE::PT_POWER_IN
         };
 
+extern void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
+                                UNITS_PROVIDER* aUnitsProvider );
+
 int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 {
     SCH_SCREEN* screen;
@@ -1063,17 +1066,34 @@ int ERC_TESTER::TestLibSymbolIssues()
             std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
             constexpr int flags = SCH_ITEM::COMPARE_FLAGS::EQUALITY | SCH_ITEM::COMPARE_FLAGS::ERC;
 
-            if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH )
-                && flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
+            if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_MISMATCH );
-                ercItem->SetItems( symbol );
-                msg.Printf( _( "Symbol '%s' doesn't match copy in library '%s'" ),
-                            UnescapeString( symbolName ),
-                            UnescapeString( libName ) );
-                ercItem->SetErrorMessage( msg );
+                // We have to check for duplicate pins first as they will cause Compare() to fail.
+                std::vector<wxString> messages;
+                UNITS_PROVIDER        unitsProvider( schIUScale, EDA_UNITS::MILS );
+                CheckDuplicatePins( libSymbolInSchematic, messages, &unitsProvider );
 
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                if( !messages.empty() )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_PIN_ERROR );
+                    ercItem->SetItems( symbol );
+                    msg.Printf( _( "Symbol '%s' has multiple pins with the same pin number" ),
+                                UnescapeString( symbolName ) );
+                    ercItem->SetErrorMessage( msg );
+
+                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                }
+                else if( flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_MISMATCH );
+                    ercItem->SetItems( symbol );
+                    msg.Printf( _( "Symbol '%s' doesn't match copy in library '%s'" ),
+                                UnescapeString( symbolName ),
+                                UnescapeString( libName ) );
+                    ercItem->SetErrorMessage( msg );
+
+                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                }
             }
         }
 

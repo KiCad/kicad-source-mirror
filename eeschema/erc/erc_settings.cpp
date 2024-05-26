@@ -241,10 +241,16 @@ ERC_SETTINGS::~ERC_SETTINGS()
 
 SEVERITY ERC_SETTINGS::GetSeverity( int aErrorCode ) const
 {
+    // Special-case duplicate pin error.  Unique pin names are required by KiCad, so this
+    // is always an error.
+    if( aErrorCode == ERCE_DUPLICATE_PIN_ERROR )
+    {
+        return RPT_SEVERITY_ERROR;
+    }
     // Special-case pin-to-pin errors:
     // Ignore-or-not is controlled by ERCE_PIN_TO_PIN_WARNING (for both)
     // Warning-or-error is controlled by which errorCode it is
-    if( aErrorCode == ERCE_PIN_TO_PIN_ERROR )
+    else if( aErrorCode == ERCE_PIN_TO_PIN_ERROR )
     {
         wxASSERT( m_ERCSeverities.count( ERCE_PIN_TO_PIN_WARNING ) );
 

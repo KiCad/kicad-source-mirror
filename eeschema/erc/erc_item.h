@@ -188,6 +188,7 @@ private:
     static ERC_ITEM pinNotConnected;
     static ERC_ITEM pinNotDriven;
     static ERC_ITEM powerpinNotDriven;
+    static ERC_ITEM duplicatePinError;
     static ERC_ITEM pinTableWarning;
     static ERC_ITEM pinTableError;
     static ERC_ITEM hierLabelMismatch;

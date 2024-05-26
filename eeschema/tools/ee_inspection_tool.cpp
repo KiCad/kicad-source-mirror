@@ -293,7 +293,7 @@ int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 
 
 extern void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
-                           int aGridForPins, EDA_DRAW_FRAME* aUnitsProvider );
+                            int aGridForPins, UNITS_PROVIDER* aUnitsProvider );
 
 int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 {
