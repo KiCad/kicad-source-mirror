@@ -101,12 +101,10 @@ wxSize BITMAP_BUTTON::DoGetBestSize() const
 
 void BITMAP_BUTTON::invalidateBestSize()
 {
-#ifdef __WXMAC__
-    // InvalidateBestSize() doesn't appear to work on Mac: DoGetBestSize() is never called.
-    SetMinSize( DoGetBestSize() );
-#else
+    // Uncomment to override wxFB sizes
+    // SetMinSize( DoGetBestSize() );
+
     InvalidateBestSize();
-#endif
 }
 
 
