@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-15 21:35+0000\n"
+"PO-Revision-Date: 2024-05-28 12:07+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -7986,14 +7986,12 @@ msgid "Reset Local Coordinates"
 msgstr "重置局部座標"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
-msgstr "始終顯示十字遊標"
+msgstr "始終顯示十字線"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "即使在選擇工具中也顯示十字線"
+msgstr "即使不在繪製物件時也顯示十字線"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -9952,14 +9950,12 @@ msgid "Update Options"
 msgstr "更新選項"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "更新符號欄位"
+msgstr "更新符號形狀和接腳"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "將 %s 封裝篩選器更新為 '%s'。"
+msgstr "更新關鍵字和封裝過濾器"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -9986,9 +9982,8 @@ msgid "Update/reset field visibilities"
 msgstr "更新/重置欄位可見性設置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "更新/重置欄位大小和樣式"
+msgstr "更新/重置欄位文字大小和樣式。"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -9996,9 +9991,8 @@ msgid "Update/reset field positions"
 msgstr "更新/重置欄位位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "更新/重置欄位可見性設置"
+msgstr "更新/重置接腳名稱/編號的可見性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10475,13 +10469,13 @@ msgstr "要儲存所有元件的消耗功率, 請使用以下指令: (.probe p(<
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "儲存所有數位事件資料"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
-msgstr ""
+msgstr "如果未設置，編寫指示以防止保存數位事件數據 (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -13365,9 +13359,9 @@ msgid "Rename Field"
 msgstr "重命名欄位"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "檔案 \"%s\" 已存在。"
+msgstr "欄位名稱 %s 已存在。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
