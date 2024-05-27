@@ -118,6 +118,12 @@ public:
 
                     doc += ch;
                 }
+
+                // Trim trailing punctuation
+                static wxString punct = wxS( ".,:;" );
+
+                if( punct.find( doc.Last() ) >= 0 )
+                    doc = doc.Left( doc.Length() - 1 );
             }
 
             wxString esc_desc = EscapeHTML( UnescapeString( desc ) );
