@@ -431,6 +431,15 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return IsSymbolEditable() && !IsSymbolAlias();
             };
 
+    auto isEditableInAliasCond =
+            [this]( const SELECTION& )
+            {
+                // Less restrictive than isEditableCond
+                // Symbols fields (root symbols and aliases) from the new s-expression libraries
+                // or in the schematic are editable.
+                return IsSymbolEditable();
+            };
+
     auto symbolModifiedCondition =
             [this]( const SELECTION& sel )
             {
@@ -482,8 +491,10 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( haveSymbolCond ) );
 
-    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( isEditableCond ) );
-    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( isEditableCond ) );
+    // These actions in symbol editor when editing alias field rotations are allowed.
+    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( isEditableInAliasCond ) );
+    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( isEditableInAliasCond ) );
+
     mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( isEditableCond ) );
     mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( isEditableCond ) );
 
