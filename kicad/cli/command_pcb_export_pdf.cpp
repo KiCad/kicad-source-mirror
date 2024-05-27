@@ -26,12 +26,7 @@
 #include <string_utils.h>
 #include <wx/crt.h>
 
-#include <macros.h>
-#include <wx/tokenzr.h>
-
 #include <locale_io.h>
-
-#define ARG_DRILL_SHAPE_OPTION "--drill-shape-opt"
 
 
 CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "pdf" )
@@ -58,6 +53,10 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Include the border and title block" ) ) )
             .flag();
 
+    m_argParser.add_argument( "--sp", ARG_SKETCH_PADS_ON_FAB_LAYERS )
+            .help( UTF8STDSTR( _( ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC ) ) )
+            .flag();
+
     m_argParser.add_argument( ARG_NEGATIVE_SHORT, ARG_NEGATIVE )
             .help( UTF8STDSTR( _( ARG_NEGATIVE_DESC ) ) )
             .flag();
@@ -72,8 +71,7 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .metavar( "THEME_NAME" );
 
     m_argParser.add_argument( ARG_DRILL_SHAPE_OPTION )
-            .help( UTF8STDSTR( _( "Set pad/via drill shape option (0 = no shape, 1 = "
-                                  "small shape, 2 = actual shape)" ) ) )
+            .help( UTF8STDSTR( _( ARG_DRILL_SHAPE_OPTION_DESC ) ) )
             .scan<'i', int>()
             .default_value( 2 );
 }
@@ -109,6 +107,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     pdfJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
 
+    pdfJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
     pdfJob->m_drillShapeOption = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
 
     pdfJob->m_printMaskLayer = m_selectedLayers;

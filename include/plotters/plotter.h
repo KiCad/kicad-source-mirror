@@ -34,6 +34,7 @@
 #include <gal/color4d.h>
 #include <stroke_params.h>
 #include <render_settings.h>
+#include <font/font.h>
 
 
 class COLOR_SETTINGS;
@@ -441,8 +442,8 @@ public:
                            const COLOR4D&         aColor,
                            const wxString&        aText,
                            const TEXT_ATTRIBUTES& aAttributes,
-                           KIFONT::FONT*          aFont,
-                           const KIFONT::METRICS& aFontMetrics,
+                           KIFONT::FONT*          aFont = nullptr,
+                           const KIFONT::METRICS& aFontMetrics = KIFONT::METRICS::Default(),
                            void*                  aData = nullptr );
     /**
      * Create a clickable hyperlink with a rectangular click area

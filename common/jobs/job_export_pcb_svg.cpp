@@ -33,6 +33,7 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG( bool aIsCli ) :
     m_plotDrawingSheet( true ),
     m_pageSizeMode( 0 ),
     m_printMaskLayer(),
+    m_sketchPadsOnFabLayers( false ),
     m_drillShapeOption( 2 )
 {
 }

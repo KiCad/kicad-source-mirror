@@ -72,6 +72,73 @@ COLOR4D BRDITEMS_PLOTTER::getColor( int aLayer ) const
 }
 
 
+void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
+{
+    wxString padNumber = UnescapeString( aPad->GetNumber() );
+
+    if( padNumber.IsEmpty() )
+        return;
+
+    BOX2I    padBBox = aPad->GetBoundingBox();
+    VECTOR2I position = padBBox.Centre();
+    VECTOR2I padsize = padBBox.GetSize();
+
+    if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
+    {
+        // See if we have a number box
+        for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
+        {
+            if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::RECTANGLE )
+            {
+                position = primitive->GetCenter();
+                RotatePoint( position, aPad->GetOrientation() );
+                position += aPad->ShapePos();
+
+                padsize.x = abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
+                padsize.y = abs( primitive->GetBotRight().y - primitive->GetTopLeft().y );
+
+                break;
+            }
+        }
+    }
+
+    if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
+    {
+        // Don't allow a 45° rotation to bloat a pad's bounding box unnecessarily
+        int limit = KiROUND( std::min( aPad->GetSize().x, aPad->GetSize().y ) * 1.1 );
+
+        if( padsize.x > limit && padsize.y > limit )
+        {
+            padsize.x = limit;
+            padsize.y = limit;
+        }
+    }
+
+    TEXT_ATTRIBUTES textAttrs;
+
+    if( padsize.x < ( padsize.y * 0.95 ) )
+    {
+        textAttrs.m_Angle = ANGLE_90;
+        std::swap( padsize.x, padsize.y );
+    }
+
+    // approximate the size of the pad number text:
+    // We use a size for at least 3 chars, to give a good look even for short numbers
+    int tsize = KiROUND( padsize.x / std::max( PrintableCharCount( padNumber ), 3 ) );
+    tsize = std::min( tsize, padsize.y );
+
+    // enforce a max size
+    tsize = std::min( tsize, pcbIUScale.mmToIU( 5.0 ) );
+
+    textAttrs.m_Size = VECTOR2I( tsize, tsize );
+
+    // use a somewhat spindly font to go with the outlined pads
+    textAttrs.m_StrokeWidth = KiROUND( tsize / 12.0 );
+
+    m_plotter->PlotText( position, aColor, padNumber, textAttrs );
+}
+
+
 void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_MODE aPlotMode )
 {
     VECTOR2I     shape_pos = aPad->ShapePos();

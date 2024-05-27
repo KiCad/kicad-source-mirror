@@ -71,6 +71,9 @@ public:
     void        SetPlotMode( OUTLINE_MODE aPlotMode ) { m_plotMode = aPlotMode; }
     OUTLINE_MODE GetPlotMode() const { return m_plotMode; }
 
+    void        SetPlotPadNumbers( bool aFlag ) { m_plotPadNumbers = aFlag; }
+    bool        GetPlotPadNumbers() const { return m_plotPadNumbers; }
+
     void        SetDXFPlotPolygonMode( bool aFlag ) { m_DXFPolygonMode = aFlag; }
     bool        GetDXFPlotPolygonMode() const { return m_DXFPolygonMode; }
 
@@ -203,6 +206,7 @@ private:
 
     bool            m_skipNPTH_Pads;    /// Used to disable NPTH pads plotting on copper layers
     OUTLINE_MODE    m_plotMode;         /// FILLED or SKETCH for filled objects.
+    bool            m_plotPadNumbers;   /// Plot pad numbers when sketching pads on fab layers
     DRILL_MARKS     m_drillMarks;       /// Holes can be not plotted, have a small mark, or be
                                         ///   plotted in actual size
     PLOT_TEXT_MODE  m_textMode;

@@ -102,6 +102,8 @@ public:
      */
     void PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_MODE aPlotMode );
 
+    void PlotPadNumber( const PAD* aPad, const COLOR4D& aColor );
+
     /**
      * Plot items like text and graphics but not tracks and footprints.
      */

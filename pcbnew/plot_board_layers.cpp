@@ -333,6 +333,14 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
             }
 
+            if( sketchPads &&
+                    ( ( onFrontFab && pad->GetLayerSet().Contains( F_Cu ) ) ||
+                      ( onBackFab && pad->GetLayerSet().Contains( B_Cu ) ) ) )
+            {
+                if( aPlotOpt.GetPlotPadNumbers() )
+                    itemplotter.PlotPadNumber( pad, color );
+            }
+
             VECTOR2I margin;
             int width_adj = 0;
 

@@ -438,6 +438,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_pageSizeMode = aSvgJob->m_pageSizeMode;
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
     svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
+    svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
     svgPlotOptions.m_drillShapeOption = aSvgJob->m_drillShapeOption;
 
     if( aJob->IsCli() )
@@ -570,6 +571,12 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     plotOpts.SetMirror( aPdfJob->m_mirror );
     plotOpts.SetBlackAndWhite( aPdfJob->m_blackAndWhite );
     plotOpts.SetNegative( aPdfJob->m_negative );
+
+    if( aPdfJob->m_sketchPadsOnFabLayers )
+    {
+        plotOpts.SetSketchPadsOnFabLayers( true );
+        plotOpts.SetPlotPadNumbers( true );
+    }
 
     switch( aPdfJob->m_drillShapeOption )
     {
@@ -1246,11 +1253,11 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     svgPlotOptions.m_mirror = false;
     svgPlotOptions.m_pageSizeMode = 2; // board bounding box
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
+    svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
     svgPlotOptions.m_plotFrame = false;
 
     if( !EXPORT_SVG::Plot( brd.get(), svgPlotOptions ) )
         m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
-
 
     return CLI::EXIT_CODES::OK;
 }

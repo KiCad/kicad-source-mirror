@@ -106,6 +106,7 @@ std::string g_previewBoard =
         "      (plotreference true)\n"
         "      (plotvalue true)\n"
         "      (plotinvisibletext false)\n"
+        "      (plotpadnumbers false)\n"
         "      (sketchpadsonfab false)\n"
         "      (subtractmaskfromsilk false)\n"
         "      (outputformat 1)\n"

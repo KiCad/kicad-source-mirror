@@ -29,6 +29,12 @@ namespace CLI
 #define ARG_BLACKANDWHITE "--black-and-white"
 #define ARG_BLACKANDWHITE_DESC "Black and white only"
 
+#define ARG_SKETCH_PADS_ON_FAB_LAYERS "--sketch-pads-on-fab-layers"
+#define ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC "Draw pad outlines and their numbers on front and back fab layers"
+
+#define ARG_DRILL_SHAPE_OPTION "--drill-shape-opt"
+#define ARG_DRILL_SHAPE_OPTION_DESC "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual shape)"
+
 #define ARG_NEGATIVE "--negative"
 #define ARG_NEGATIVE_SHORT "-n"
 #define ARG_NEGATIVE_DESC "Plot as negative (useful for directly etching from the export)"

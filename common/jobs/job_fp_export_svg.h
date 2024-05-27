@@ -39,6 +39,7 @@ public:
     wxString m_colorTheme;
 
     bool m_blackAndWhite;
+    bool m_sketchPadsOnFabLayers;
     LSEQ m_printMaskLayer;
 };
 

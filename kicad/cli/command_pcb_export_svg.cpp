@@ -29,12 +29,9 @@
 #include <regex>
 #include <wx/crt.h>
 
-#include <macros.h>
-#include <wx/tokenzr.h>
 
 #define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_PAGE_SIZE "--page-size-mode"
-#define ARG_DRILL_SHAPE_OPTION "--drill-shape-opt"
 
 
 CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
@@ -62,6 +59,10 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
             .flag();
 
+    m_argParser.add_argument( "--sp", ARG_SKETCH_PADS_ON_FAB_LAYERS )
+            .help( UTF8STDSTR( _( ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC ) ) )
+            .flag();
+
     m_argParser.add_argument( ARG_PAGE_SIZE )
             .help( UTF8STDSTR( _( "Set page sizing mode (0 = page with frame and title block, 1 = "
                                 "current page size, 2 = board area only)" ) ) )
@@ -74,8 +75,7 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .flag();
 
     m_argParser.add_argument( ARG_DRILL_SHAPE_OPTION )
-            .help( UTF8STDSTR( _( "Set pad/via drill shape option (0 = no shape, 1 = "
-                                  "small shape, 2 = actual shape)" ) ) )
+            .help( UTF8STDSTR( _( ARG_DRILL_SHAPE_OPTION_DESC ) ) )
             .scan<'i', int>()
             .default_value( 2 )
             .metavar( "SHAPE_OPTION" );
@@ -94,6 +94,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_pageSizeMode = m_argParser.get<int>( ARG_PAGE_SIZE );
     svgJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
+    svgJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
     svgJob->m_drillShapeOption = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
     svgJob->m_drawingSheet = m_argDrawingSheet;
 

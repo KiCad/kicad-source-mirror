@@ -34,6 +34,7 @@ struct PCB_PLOT_SVG_OPTIONS
     int m_pageSizeMode;
 
     LSEQ m_printMaskLayer;
+    bool m_sketchPadsOnFabLayers;
 
     // How holes in pads/vias are plotted:
     // 0 = no hole, 1 = small shape, 2 = actual shape

@@ -20,7 +20,6 @@
 
 #include "board.h"
 #include "locale_io.h"
-#include "pcb_plot_params.h"
 #include "export_svg.h"
 #include "pcbplot.h"
 #include "pgm_base.h"
@@ -33,6 +32,12 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
     wxString        outputFile = aSvgPlotOptions.m_outputFile;
 
     plot_opts.SetPlotFrameRef( aSvgPlotOptions.m_plotFrame );
+
+    if( aSvgPlotOptions.m_sketchPadsOnFabLayers )
+    {
+        plot_opts.SetSketchPadsOnFabLayers( true );
+        plot_opts.SetPlotPadNumbers( true );
+    }
 
     // Adding drill marks, for copper layers
     if( ( LSET( aSvgPlotOptions.m_printMaskLayer ) & LSET::AllCuMask() ).any() )

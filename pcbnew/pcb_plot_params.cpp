@@ -118,6 +118,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotFPText                 = true;
     m_plotInvisibleText          = false;
     m_sketchPadsOnFabLayers      = false;
+    m_plotPadNumbers             = false;
     m_subtractMaskFromSilk       = false;
     m_format                     = PLOT_FORMAT::GERBER;
     m_mirror                     = false;
@@ -244,12 +245,10 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotreference", m_plotReference );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotvalue", m_plotValue );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotfptext", m_plotFPText );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotinvisibletext",
-                              m_plotInvisibleText );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchpadsonfab",
-                              m_sketchPadsOnFabLayers );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "subtractmaskfromsilk",
-                              m_subtractMaskFromSilk );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotinvisibletext", m_plotInvisibleText );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchpadsonfab", m_sketchPadsOnFabLayers );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotpadnumbers", m_plotPadNumbers );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "subtractmaskfromsilk", m_subtractMaskFromSilk );
     aFormatter->Print( aNestLevel+1, "(outputformat %d)\n", static_cast<int>( m_format ) );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "mirror", m_mirror );
     aFormatter->Print( aNestLevel+1, "(drillshape %d)\n", (int)m_drillMarks );
@@ -357,6 +356,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_sketchPadsOnFabLayers != aPcbPlotParams.m_sketchPadsOnFabLayers )
+        return false;
+
+    if( m_plotPadNumbers != aPcbPlotParams.m_plotPadNumbers )
         return false;
 
     if( m_subtractMaskFromSilk != aPcbPlotParams.m_subtractMaskFromSilk )
@@ -628,6 +630,10 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_sketchpadsonfab:
             aPcbPlotParams->m_sketchPadsOnFabLayers= parseBool();
+            break;
+
+        case T_plotpadnumbers:
+            aPcbPlotParams->m_plotPadNumbers = parseBool();
             break;
 
         case T_subtractmaskfromsilk:

@@ -26,6 +26,7 @@ JOB_FP_EXPORT_SVG::JOB_FP_EXPORT_SVG( bool aIsCli ) :
     m_libraryPath(),
     m_footprint(),
     m_outputDirectory(),
-    m_blackAndWhite( false )
+    m_blackAndWhite( false ),
+    m_sketchPadsOnFabLayers( false )
 {
 }
