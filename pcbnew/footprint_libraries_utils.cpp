@@ -925,6 +925,28 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
                 fixUuid( const_cast<KIID&>( aChild->m_Uuid ) );
             } );
 
+    // Right now, we only show the "Unconnected" net in the footprint editor, but this is still
+    // referenced in the footprint.  So we need to update the net pointers in the footprint to
+    // point to the nets in the main board.
+    newFootprint->RunOnDescendants(
+            [&]( BOARD_ITEM* aChild )
+            {
+                if( BOARD_CONNECTED_ITEM* conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( aChild ) )
+                {
+                    NETINFO_ITEM* net = conn->GetNet();
+                    auto& netmap = mainpcb->GetNetInfo().NetsByName();
+
+                    if( net )
+                    {
+                        auto it = netmap.find( net->GetNetname() );
+
+                        if( it != netmap.end() )
+                            conn->SetNet( it->second );
+                    }
+
+                }
+            } );
+
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
     newFootprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText,
