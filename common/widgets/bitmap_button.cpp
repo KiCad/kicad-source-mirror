@@ -344,7 +344,7 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
     else if( bmp.IsOk() )
     {
         bmpImg = bmp.GetBitmap( ToPhys( m_unadjustedMinSize ) );
-        bmSize = bmpImg.GetSize();
+        bmSize = bmpImg.GetLogicalSize();
     }
 
     if( m_centerBitmap )
