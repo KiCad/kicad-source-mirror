@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-27 14:09+0000\n"
+"PO-Revision-Date: 2024-05-28 12:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -8103,14 +8103,12 @@ msgid "Reset Local Coordinates"
 msgstr "Återställ lokala koordinater"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "Visa alltid hårkors"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Visa hårkors även i markeringsverktyget"
+msgstr "Visa hårkors även när man inte ritar objekt"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -10124,14 +10122,12 @@ msgid "Update Options"
 msgstr "Uppdateringsalternativ"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Uppdatera symbolfält"
+msgstr "Uppdatera symbolens form och stift"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Uppdatera %s fotavtrycksfilter till '%s'."
+msgstr "Uppdatera nyckelord och fotavtrycksfilter"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10158,9 +10154,8 @@ msgid "Update/reset field visibilities"
 msgstr "Uppdatera/återställ fältens synlighet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "Uppdatera/återställ fältens storlekar och stilar"
+msgstr "Uppdatera/återställ fältens textstorlekar och -stilar"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -10168,9 +10163,8 @@ msgid "Update/reset field positions"
 msgstr "Uppdatera/återställ fältens placering"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "Uppdatera/återställ fältens synlighet"
+msgstr "Uppdatera/återställ synlighet för stiftnamn/-nummer"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10654,13 +10648,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Spara all digital händelsedata"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Om ej satt, skriv ett direktiv för att förhindra sparande av digital "
+"händelsedata (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -13570,9 +13566,9 @@ msgid "Rename Field"
 msgstr "Byt namn på fält"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "Filen %s finns redan."
+msgstr "Fältnamn %s finns redan."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
@@ -13604,9 +13600,8 @@ msgid "Unsaved data"
 msgstr "Data som ej sparats"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1247
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
-msgstr "Ändringar har inte sparats. Exportera data som ej sparats?"
+msgstr "Ändringar har inte sparats ännu. Exportera data som ej sparats?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1271
 msgid "No filename specified in exporter"
@@ -14052,9 +14047,8 @@ msgstr "Yttre kontur"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
-#, fuzzy
 msgid "Header border"
-msgstr "Arkkontur"
+msgstr "Huvudfältets ram"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
@@ -15112,6 +15106,8 @@ msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
+"Denna åtgärd kommer att återställa din globala bibliotekstabell på disk och "
+"kan ej ångras."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:915
 msgid ""
@@ -15256,9 +15252,8 @@ msgstr "Ta bort biblioteket från tabellen"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Välj bibliotek"
+msgstr "Återställ bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
@@ -15520,9 +15515,9 @@ msgid "Netclass %s is not defined"
 msgstr "Nätklass %s ej definierad"
 
 #: eeschema/erc/erc.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Kunde inte ansluta till '%s' "
+msgstr "Fyra objekt anslutna vid %d, %d"
 
 #: eeschema/erc/erc.cpp:720
 msgid "Pin with 'no connection' type is connected"
@@ -15643,9 +15638,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "Kontrollerar om stift eller ledningar missar rutnätet..."
 
 #: eeschema/erc/erc.cpp:1496
-#, fuzzy
 msgid "Checking for four way junctions..."
-msgstr "Kontrollerar fotavtrycks gårdsplaners definitioner..."
+msgstr "Kontrollerar om fyrvägsanslutningar existerar..."
 
 #: eeschema/erc/erc.cpp:1504
 msgid "Checking for undefined netclasses..."
@@ -15692,7 +15686,7 @@ msgstr "Hierarkiska etiketter och arkstift överensstämmer inte"
 
 #: eeschema/erc/erc_item.cpp:79
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "Fyra anslutningar sammankopplade"
 
 #: eeschema/erc/erc_item.cpp:83
 msgid "A pin with a \"no connection\" flag is connected"
@@ -23146,23 +23140,20 @@ msgid "Sketch polygons"
 msgstr "Skissa polygoner"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
-msgstr "Visa polygoner i konturläge"
+msgstr "Visa polygonobjekt i konturläge"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
-#, fuzzy
 msgid "Forced Opacity Display Mode"
-msgstr "3D-perspektiv"
+msgstr "Visningsläge tvingad opacitet"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "Opacitet:"
+msgstr "Tvingad opacitet:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "Opacitet i visningsläge med tvingad opacitet"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -23912,14 +23903,12 @@ msgid "Show dcode number"
 msgstr "Visa kodnummer"
 
 #: gerbview/tools/gerbview_actions.cpp:234
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "Visa namnruta i redigeringsläge"
+msgstr "Visa i läge med tvingad opacitet"
 
 #: gerbview/tools/gerbview_actions.cpp:235
-#, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "Visa lager i exklusivt-eller jämförande läge"
+msgstr "Visa lager i läge med tvingad opacitetsfärg"
 
 #: gerbview/tools/gerbview_actions.cpp:241
 msgid "Show in XOR Mode"
@@ -24129,7 +24118,6 @@ msgid "Delete Column"
 msgstr "Radera kolumn"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
 msgstr "Visa problem med import"
 
@@ -31843,9 +31831,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "Uppdatera textstorlekar, stilar och positioner"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text content"
-msgstr "Uppdatera fälttext"
+msgstr "Uppdatera textinnehåll"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update fabrication attributes"
@@ -31926,9 +31913,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "Uppdatera / återställ textstorlekar, stilar och positioner"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "Uppdatera/återställ fälttext"
+msgstr "Uppdatera/återställ textinnehåll"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -33866,9 +33852,8 @@ msgid "Set to specified values:"
 msgstr "Ställ in till angivna värden:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "(endast symbolredigeraren)"
+msgstr "Synlig  (endast text)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -34377,9 +34362,8 @@ msgid "Warning: BGA property is for SMD pads."
 msgstr "Varning: BGA-egenskapen kan bara användas på lödytor för ytmontering."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1447
-#, fuzzy
 msgid "Warning: Mechanical property is for PTH pads."
-msgstr "Varning: Egenskapen krenelerad lödyta kan endast användas på PTH-hål."
+msgstr "Varning: Mekanisk egenskap är för hålmonteringslödytor."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1456
 msgid "Error: Negative corner size."
@@ -34648,7 +34632,6 @@ msgid "Fabrication property:"
 msgstr "Tillverkningsegenskap:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -34665,11 +34648,11 @@ msgstr ""
 "BGA-attributet är för lödytor i BGA-fotavtryck\n"
 "Lokal referenspunkt är en referenspunkt för det överordnade fotavtrycket\n"
 "Global referenspunkt är en referenspunkt för hela mönsterkortet\n"
-"Testpunkt är användbart för att specificera testpunkter i Gerber-filer\n"
-"Heatsink pad anger en termisk lödyta för värmeavledning\n"
-"Krenelerad lödyta specificerar krenelerade hålmonteringshål (\"halva hål\") "
-"på en mönsterkortskant\n"
-"Dessa egenskaper anges i Gerber X2-filer."
+"Testpunkt specificerar en elektrisk testpunkt\n"
+"Kylelement anger en termisk lödyta\n"
+"Krenelerad specificerar ett hålmonteringshål (\"halvt hål\") på en "
+"mönsterkortskant\n"
+"Mekanisk specificerar en hålmonteringsyta som används för mekaniskt stöd"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2105
 msgid "BGA pad"
@@ -39242,7 +39225,7 @@ msgstr "Okänt objekt '%s'. | Förväntat citerat uttryck."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "'lager'-nyckelordet finns redan."
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -40187,7 +40170,6 @@ msgid "z: %g; bounding box: %s\n"
 msgstr "z: %g; avgränsningslåda: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1621
-#, fuzzy
 msgid ""
 "\n"
 "Wire self-interference check failed\n"
@@ -41873,14 +41855,12 @@ msgid "Castellated pad"
 msgstr "Krenelerad lödyta"
 
 #: pcbnew/pad.cpp:2111
-#, fuzzy
 msgid "Mechanical pad"
-msgstr "Mekaniska"
+msgstr "Mekanisk yta"
 
 #: pcbnew/pad.cpp:2129
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "Början, slut och anslutna lager"
+msgstr "Framsida, baksida och anslutna lager"
 
 #: pcbnew/pad.cpp:2169
 msgid "Pad Type"
@@ -42164,12 +42144,12 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6-ström har oväntad längd för subrecord 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Altium-lager (%d) saknar motsvarighet i KiCad. Det har flyttats till KiCad-"
+"Altium-lager %s saknar motsvarighet i KiCad. Det har flyttats till KiCad-"
 "lager Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:458
@@ -43764,7 +43744,6 @@ msgid "P-Cad 200x ASCII PCB files"
 msgstr "P-Cad 200x ASCII PCB-filer"
 
 #: pcbnew/pcb_io/pcb_io.cpp:121
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported.\n"
@@ -43772,7 +43751,9 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Den valda filen innehåller flera fotavtryck. Endast det första kommer att "
-"importeras."
+"importeras.\n"
+"För att läsa in alla fotavtryck, lägg till filen som ett bibliotek med hjälp "
+"av Inställningar -> Hantera symbolbibliotek..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:181
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -45469,18 +45450,16 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Exakt två linjer måste vara valda för att förlänga dem."
 
 #: pcbnew/tools/edit_tool.cpp:1509
-#, fuzzy
 msgid "Simplify Shapes"
-msgstr "Komplex form"
+msgstr "Förenkla former"
 
 #: pcbnew/tools/edit_tool.cpp:1509 pcbnew/tools/edit_tool.cpp:1578
 msgid "Tolerance value:"
 msgstr "Toleransvärde:"
 
 #: pcbnew/tools/edit_tool.cpp:1543 pcbnew/tools/pcb_actions.cpp:628
-#, fuzzy
 msgid "Simplify Polygons"
-msgstr "Förenklar polygoner på F_Cu"
+msgstr "Förenkla polygoner"
 
 #: pcbnew/tools/edit_tool.cpp:1578 pcbnew/tools/edit_tool.cpp:1615
 #: pcbnew/tools/pcb_actions.cpp:634
@@ -46106,7 +46085,7 @@ msgstr "Fasa av hörn mellan valda linjer"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Förenkla polygonkonturer genom att ta bort onödiga punkter"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid ""
@@ -47135,56 +47114,52 @@ msgid ""
 msgstr "Justerar valda objekt horisontellt centrum av objektet under pekaren"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "Distribuera horisontellt"
+msgstr "Fördela horisontellt enligt mittpunkter"
 
 #: pcbnew/tools/pcb_actions.cpp:1949
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
 msgstr ""
 "Fördelar valda objekt mellan objektet längst till vänster och objektet "
-"längst till höger"
+"längst till höger, så att objektens mittpunkter är jämnt fördelade"
 
 #: pcbnew/tools/pcb_actions.cpp:1956
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "Distribuera horisontellt"
+msgstr "Distribuera horisontellt med lika mellanrum"
 
 #: pcbnew/tools/pcb_actions.cpp:1957
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
 msgstr ""
 "Fördelar valda objekt mellan objektet längst till vänster och objektet "
-"längst till höger"
+"längst till höger, så att deras mellanrum är lika"
 
 #: pcbnew/tools/pcb_actions.cpp:1964
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "Distribuera vertikalt"
+msgstr "Fördela vertikalt med lika mellanrum"
 
 #: pcbnew/tools/pcb_actions.cpp:1965
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
-msgstr "Fördelar valda objekt mellan det översta och nedersta objektet"
+msgstr ""
+"Fördelar valda objekt mellan det översta och nedersta objektet, så att deras "
+"mellanrum är lika"
 
 #: pcbnew/tools/pcb_actions.cpp:1972
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "Distribuera vertikalt"
+msgstr "Fördela vertikalt enligt mittpunkter"
 
 #: pcbnew/tools/pcb_actions.cpp:1973
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
-msgstr "Fördelar valda objekt mellan det översta och nedersta objektet"
+msgstr ""
+"Fördelar valda objekt mellan det översta och nedersta objektet, så att "
+"objektens mittpunkter är jämnt fördelade"
 
 #: pcbnew/tools/pcb_actions.cpp:1988
 msgid "Create a corner"
