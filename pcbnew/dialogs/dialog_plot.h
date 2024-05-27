@@ -45,29 +45,30 @@ public:
 
 private:
     // Event called functions
-    void        Plot( wxCommandEvent& event ) override;
-    void        OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
-    void        OnRightClickLayers( wxMouseEvent& event );
-    void        OnRightClickAllLayers( wxMouseEvent& event );
-    void        SetPlotFormat( wxCommandEvent& event ) override;
-    void        OnChangeDXFPlotMode( wxCommandEvent& event ) override;
-    void        OnSetScaleOpt( wxCommandEvent& event ) override;
-    void        CreateDrillFile( wxCommandEvent& event ) override;
-    void        OnGerberX2Checked( wxCommandEvent& event ) override;
-    void        onRunDRC( wxCommandEvent& event ) override;
-    void        onBoardSetup( wxHyperlinkEvent& aEvent ) override;
+    void Plot( wxCommandEvent& event ) override;
+    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void OnRightClickLayers( wxMouseEvent& event );
+    void OnRightClickAllLayers( wxMouseEvent& event );
+    void SetPlotFormat( wxCommandEvent& event ) override;
+    void OnChangeDXFPlotMode( wxCommandEvent& event ) override;
+    void OnSetScaleOpt( wxCommandEvent& event ) override;
+    void CreateDrillFile( wxCommandEvent& event ) override;
+    void OnGerberX2Checked( wxCommandEvent& event ) override;
+    void onRunDRC( wxCommandEvent& event ) override;
+    void onBoardSetup( wxHyperlinkEvent& aEvent ) override;
 
-    void        onPlotAllListMoveUp( wxCommandEvent& aEvent );
-    void        onPlotAllListMoveDown( wxCommandEvent& aEvent );
+    void onPlotAllListMoveUp( wxCommandEvent& aEvent );
+    void onPlotAllListMoveDown( wxCommandEvent& aEvent );
 
-    void        onPlotFPValues( wxCommandEvent& aEvent ) override;
-    void        onPlotFPRefs( wxCommandEvent& aEvent ) override;
-    void        onPlotFPText( wxCommandEvent& aEvent ) override;
+    void onPlotFPValues( wxCommandEvent& aEvent ) override;
+    void onPlotFPRefs( wxCommandEvent& aEvent ) override;
+    void onPlotFPText( wxCommandEvent& aEvent ) override;
+    void onSketchPads( wxCommandEvent& event ) override;
 
     // other functions
-    void        init_Dialog();      // main initialization
-    void        reInitDialog();     // initialization after calling drill dialog
-    void        applyPlotSettings();
+    void init_Dialog();      // main initialization
+    void reInitDialog();     // initialization after calling drill dialog
+    void applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
 
     void setPlotModeChoiceSelection( OUTLINE_MODE aPlotMode )

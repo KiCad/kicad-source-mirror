@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -99,8 +99,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	gbSizer1->Add( m_sketchPadsOnFabLayers, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_plotPadNumbers = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Include pad numbers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotPadNumbers->SetValue(true);
+	gbSizer1->Add( m_plotPadNumbers, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 25 );
+
 	m_zoneFillCheck = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Check zone fills before plotting"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_tentVias = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_tentVias->SetToolTip( _("Tented vias: not plotted on soldermask layer\nNot tented: vias are plotted on soldermask layer\n(Solder mask is a negative layer)") );
@@ -156,7 +160,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_SizerSolderMaskAlert = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxASCII_STR(wxART_WARNING), wxASCII_STR(wxART_CMN_DIALOG) ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_CMN_DIALOG ), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizerSolderMaskAlert->Add( m_bitmapAlert, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerWarningText;
@@ -478,6 +482,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotFootprintValues->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPValues ), NULL, this );
 	m_plotFootprintRefs->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPRefs ), NULL, this );
 	m_plotFootprintText->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPText ), NULL, this );
+	m_sketchPadsOnFabLayers->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onSketchPads ), NULL, this );
 	m_scaleOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
 	m_boardSetup->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_PLOT_BASE::onBoardSetup ), NULL, this );
 	m_useGerberX2Format->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );
@@ -496,6 +501,7 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_plotFootprintValues->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPValues ), NULL, this );
 	m_plotFootprintRefs->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPRefs ), NULL, this );
 	m_plotFootprintText->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPText ), NULL, this );
+	m_sketchPadsOnFabLayers->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onSketchPads ), NULL, this );
 	m_scaleOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
 	m_boardSetup->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_PLOT_BASE::onBoardSetup ), NULL, this );
 	m_useGerberX2Format->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );

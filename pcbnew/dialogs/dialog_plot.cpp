@@ -323,6 +323,8 @@ void DIALOG_PLOT::init_Dialog()
 
     // Option to exclude pads from silkscreen layers
     m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
+    m_plotPadNumbers->SetValue( m_plotOpts.GetPlotPadNumbers() );
+    m_plotPadNumbers->Enable( m_plotOpts.GetSketchPadsOnFabLayers() );
 
     // Option to tent vias
     m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
@@ -898,6 +900,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
     tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );
+    tempOptions.SetPlotPadNumbers( m_plotPadNumbers->GetValue() );
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
     tempOptions.SetPlotValue( m_plotFootprintValues->GetValue() );
     tempOptions.SetPlotReference( m_plotFootprintRefs->GetValue() );
@@ -1359,4 +1362,9 @@ void DIALOG_PLOT::onPlotFPText( wxCommandEvent& aEvent )
         m_plotFootprintRefs->SetValue( false );
         m_plotFootprintValues->SetValue( false );
     }
+}
+
+void DIALOG_PLOT::onSketchPads( wxCommandEvent& aEvent )
+{
+    m_plotPadNumbers->Enable( aEvent.IsChecked() );
 }

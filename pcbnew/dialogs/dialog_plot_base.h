@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,6 +71,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotFootprintText;
 		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_sketchPadsOnFabLayers;
+		wxCheckBox* m_plotPadNumbers;
 		wxCheckBox* m_zoneFillCheck;
 		wxCheckBox* m_tentVias;
 		wxStaticText* drillMarksLabel;
@@ -141,6 +142,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void onPlotFPValues( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlotFPRefs( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlotFPText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSketchPads( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
