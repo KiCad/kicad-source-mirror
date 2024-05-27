@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-18 08:01+0000\n"
+"PO-Revision-Date: 2024-05-27 14:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -8008,14 +8008,12 @@ msgid "Reset Local Coordinates"
 msgstr "重置局部坐标"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "始终显示十字光标"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "即使在选择工具中也显示十字线"
+msgstr "没有进行对象绘制时也显示十字光标"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -9974,14 +9972,12 @@ msgid "Update Options"
 msgstr "更新选项"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "更新符号字段"
+msgstr "更新符号形状和引脚"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "将 %s 封装筛选器更新为 '%s'。"
+msgstr "更新关键字和封装过滤器"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10008,9 +10004,8 @@ msgid "Update/reset field visibilities"
 msgstr "更新/重置字段可见性设置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "更新/重置字段大小和样式"
+msgstr "更新/重置字段文本大小和样式"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -10018,9 +10013,8 @@ msgid "Update/reset field positions"
 msgstr "更新/重置字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "更新/重置字段可见性设置"
+msgstr "更新/重置引脚名称/编号的可见性设置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -13387,9 +13381,9 @@ msgid "Rename Field"
 msgstr "重命名字段"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "文件 \"%s\" 已存在。"
+msgstr "名称为 %s 的字段已存在。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
@@ -15034,9 +15028,8 @@ msgstr "从表中移除库"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "库"
+msgstr "重置库"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
@@ -22747,23 +22740,23 @@ msgid "Sketch polygons"
 msgstr "多边形草图"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
-msgstr "在轮廓模式下显示多边形"
+msgstr "在轮廓模式下显示多边形项目"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
 #, fuzzy
 msgid "Forced Opacity Display Mode"
-msgstr "Gerber 线显示模式"
+msgstr "强制非透明显示模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
 #, fuzzy
 msgid "Forced opacity:"
-msgstr "不透明度:"
+msgstr "强制不透明度:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
+#, fuzzy
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "强制非透明度显示模式下的不透明度"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -23515,7 +23508,7 @@ msgstr "显示 D 码编号"
 #: gerbview/tools/gerbview_actions.cpp:234
 #, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "在编辑模式下显示标题栏"
+msgstr "在强制非透明显示模式下显示"
 
 #: gerbview/tools/gerbview_actions.cpp:235
 #, fuzzy
@@ -23729,9 +23722,8 @@ msgid "Delete Column"
 msgstr "删除列"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "显示或隐藏 %s"
+msgstr "显示导入问题"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -31256,9 +31248,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "更新文本大小, 样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text content"
-msgstr "更新字段的文本内容"
+msgstr "更新文本内容"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update fabrication attributes"
@@ -31337,9 +31328,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "更新/重置文本大小, 样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "更新/重置字段的文本内容"
+msgstr "更新/重置文本内容"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -33234,9 +33224,8 @@ msgid "Set to specified values:"
 msgstr "设置为指定值:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "(仅符号编辑器)"
+msgstr "可视 (仅文本)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -40131,7 +40120,7 @@ msgstr "调整"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2403
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2429
 msgid "Select a track to tune first."
-msgstr "首先选择一条要调整的走线。"
+msgstr "先选择一条要调整的走线。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2471
 msgid "Single track"
@@ -44552,18 +44541,16 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "必须选择至少两条才能扩展。"
 
 #: pcbnew/tools/edit_tool.cpp:1509
-#, fuzzy
 msgid "Simplify Shapes"
-msgstr "复合样式"
+msgstr "简化形状"
 
 #: pcbnew/tools/edit_tool.cpp:1509 pcbnew/tools/edit_tool.cpp:1578
 msgid "Tolerance value:"
 msgstr "容差值:"
 
 #: pcbnew/tools/edit_tool.cpp:1543 pcbnew/tools/pcb_actions.cpp:628
-#, fuzzy
 msgid "Simplify Polygons"
-msgstr "简化 F_Cu 上的多边形"
+msgstr "简化多边形"
 
 #: pcbnew/tools/edit_tool.cpp:1578 pcbnew/tools/edit_tool.cpp:1615
 #: pcbnew/tools/pcb_actions.cpp:634
