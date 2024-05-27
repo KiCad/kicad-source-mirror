@@ -236,7 +236,7 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
                 char const* cp = pp->GetFileFilter( i );
 
                 if( cp )
-                    addFilterString( wxString::FromUTF8Unchecked( cp ) );
+                    addFilterString( cp );
             }
 
             addExtensionMap( pp );
@@ -328,7 +328,7 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
         ++bl;
     }
 
-    // prevent loading non-plugin dlls 
+    // prevent loading non-plugin dlls
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
         if( !path.GetName().StartsWith( "s3d_plugin" )
@@ -416,7 +416,7 @@ void S3D_PLUGIN_MANAGER::addExtensionMap( KICAD_PLUGIN_LDR_3D* aPlugin )
         wxString ws;
 
         if( cp )
-            ws = wxString::FromUTF8Unchecked( cp );
+            ws = wxString( cp );
 
         if( !ws.empty() )
         {
