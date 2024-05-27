@@ -58,8 +58,30 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
 {
     wxCHECK( aBoard && aPlotter && aLayers.size(), /* void */ );
 
+    // if a drill mark must be plotted, the copper layer needs to be plotted
+    // after other layers because the drill mark must be plotted as a filled
+    // white shape *after* all other shapes are plotted
+    bool plot_mark = aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE;
+
     for( LSEQ seq = aLayers; seq; ++seq )
+    {
+        // copper layers with drill marks will be plotted after all other layers
+        if( *seq <= B_Cu && plot_mark )
+            continue;
+
         PlotOneBoardLayer( aBoard, aPlotter, *seq, aPlotOptions );
+    }
+
+    if( !plot_mark )
+        return;
+
+    for( LSEQ seq = aLayers; seq; ++seq )
+    {
+        if( *seq > B_Cu )   // already plotted
+            continue;
+
+        PlotOneBoardLayer( aBoard, aPlotter, *seq, aPlotOptions );
+    }
 }
 
 
