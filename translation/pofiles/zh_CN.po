@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-05-18 08:01+0000\n"
+"PO-Revision-Date: 2024-05-28 14:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -22764,9 +22764,8 @@ msgid "Leave unchanged"
 msgstr "保持不变"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "显示或隐藏 %s"
+msgstr "显示导入问题"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23201,11 +23200,10 @@ msgid "Generate Position File"
 msgstr "生成定位文件"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
-msgstr "有效选项: front、back、both。Gerber 格式仅支持\"both\"。"
+msgstr "有效选项: front、back、both。Gerber 格式仅支持 \"front\" 或 \"back\"。"
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -23475,7 +23473,7 @@ msgstr "跳过此版本"
 msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
-msgstr ""
+msgstr "忽略新版本发布的更新通知。 将显示额外的更新说明。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -23485,11 +23483,11 @@ msgstr "稍后提醒我"
 msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
-msgstr ""
+msgstr "关闭更新通知。 重新启动 KiCad 后将再次显示更新通知。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "在浏览器中打开发布公告页面。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -23497,7 +23495,7 @@ msgstr "打开下载页面"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "转到下载页面。"
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -37729,9 +37727,9 @@ msgid "%s rounded corners differ."
 msgstr "%s 个 '圆角' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s 个 '倒角' 差异。"
+msgstr "%s 个 '倒角' 尺寸差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39059,9 +39057,8 @@ msgstr "调整"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "选择要调整的值"
+msgstr "先选择一条要调整的走线。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -40329,29 +40326,24 @@ msgid "Loading dimension drawings..."
 msgstr "正加载测量标注图形..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了 Angular 测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了 Datum 测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了基线测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了线性测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了 Radial 测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -43196,7 +43188,7 @@ msgstr "从选区创建"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "结果将为空的多边形"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
