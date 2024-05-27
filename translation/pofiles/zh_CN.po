@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-27 14:09+0000\n"
+"PO-Revision-Date: 2024-05-28 12:07+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -10491,13 +10491,13 @@ msgstr "要保存所有元件的耗散功率, 请使用以下指令: (.probe p(<
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "保存所有数字事件 (digital event) 数据"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
-msgstr ""
+msgstr "如果未设置, 则写入指令 (esave none) 以防止保存数字事件 (digital event) 数据"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -13413,7 +13413,6 @@ msgid "Unsaved data"
 msgstr "未保存的数据"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1247
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "更改未保存。导出未保存的数据?"
 
@@ -13470,9 +13469,8 @@ msgid "Exclude DNP"
 msgstr "排除 DNP (不作装配)"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
-#, fuzzy
 msgid "Show 'Exclude from BOM'"
-msgstr "从 BOM 中移除"
+msgstr "显示 '从 BOM 中移除'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -14883,14 +14881,10 @@ msgstr "仍然添加"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:846
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1062
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
-msgstr ""
-"\n"
-"\n"
-"该操作将改变当前标注并且不可撤销。"
+msgstr "此操作将重置磁盘中的全局库表, 且无法撤销。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:915
 msgid ""
@@ -15286,7 +15280,7 @@ msgstr "网络类 %s 未定义"
 #: eeschema/erc/erc.cpp:648
 #, fuzzy, c-format
 msgid "Four items connected at %d, %d"
-msgstr "无法连接到 '%s' "
+msgstr "%d, %d 处连接了四个项目"
 
 #: eeschema/erc/erc.cpp:720
 msgid "Pin with 'no connection' type is connected"
@@ -15407,7 +15401,7 @@ msgstr "检查偏离栅格的引脚与走线..."
 #: eeschema/erc/erc.cpp:1496
 #, fuzzy
 msgid "Checking for four way junctions..."
-msgstr "正在检查封装外框定义..."
+msgstr "正在检查四通路结点..."
 
 #: eeschema/erc/erc.cpp:1504
 msgid "Checking for undefined netclasses..."
@@ -16279,7 +16273,7 @@ msgstr "从 %s, %s 到 %s, %s 的总线到总线入口"
 #: eeschema/net_navigator.cpp:183
 #, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "%2$s, %3$s 处的全局标签 '%1$s'"
+msgstr "%2$s, %3$s 处的网络类标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:189
 #, c-format
@@ -16843,9 +16837,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium 原理图库或集成库"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "所选文件似乎不是 CADSTAR 元件库文件"
+msgstr "文件似乎不是 CADSTAR 元件库文件"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -23513,7 +23506,7 @@ msgstr "在强制非透明显示模式下显示"
 #: gerbview/tools/gerbview_actions.cpp:235
 #, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "在堆叠模式中显示图层"
+msgstr "使用强制非透明显示模式显示图层"
 
 #: gerbview/tools/gerbview_actions.cpp:241
 msgid "Show in XOR Mode"
@@ -23930,9 +23923,8 @@ msgid "Minimum distance between points to treat them as separate ones"
 msgstr "点之间最短相距多少才被视作分开的点"
 
 #: kicad/cli/command_pcb_export_3d.cpp:145
-#, fuzzy
 msgid "Only include copper items belonging to nets matching this wildcard"
-msgstr "只包括与此通配符匹配网络的铜"
+msgstr "只包括属于与此通配符匹配的网络的铜箔项目"
 
 #: kicad/cli/command_pcb_export_3d.cpp:151
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -24175,11 +24167,10 @@ msgid "Generate Position File"
 msgstr "生成定位文件"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
-msgstr "有效选项: front、back、both。Gerber 格式仅支持\"both\"。"
+msgstr "有效选项: front、back、both。Gerber 格式仅支持 \"front\" 或 \"back\"。"
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -24535,7 +24526,7 @@ msgstr "跳过此版本"
 msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
-msgstr ""
+msgstr "忽略新版本发布的更新通知。 将显示额外的更新说明。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -24545,11 +24536,11 @@ msgstr "稍后提醒我"
 msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
-msgstr ""
+msgstr "关闭更新通知。 重新启动 KiCad 后将再次显示更新通知。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "在浏览器中打开发布公告页面。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -24557,7 +24548,7 @@ msgstr "打开下载页面"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "转到下载页面。"
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -31686,10 +31677,9 @@ msgid "Net filter (supports wildcards):"
 msgstr "网络过滤器 (支持通配符):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:201
-#, fuzzy
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
-msgstr "只包括与此通配符网络相匹配的铜。"
+msgstr "只导出与此过滤器匹配的网络中的铜箔项目。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:205
 msgid "Board outline chaining tolerance:"
@@ -33719,7 +33709,7 @@ msgstr "警告: BGA 属性适用于贴片焊盘。"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1447
 #, fuzzy
 msgid "Warning: Mechanical property is for PTH pads."
-msgstr "警告: 半孔焊盘(Castellated) 属性仅适用于 PTH 焊盘。"
+msgstr "警告: 机械 (Mechanical) 属性仅适用于 PTH 焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1456
 msgid "Error: Negative corner size."
@@ -34001,14 +33991,14 @@ msgid ""
 "Castellated specifies a through hole pad on a board edge\n"
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
-"在制造文件中指定特殊用途或约束的可选属性: \n"
+"用于在制造文件中指定特殊用途或约束的可选特性:\n"
 "BGA 特性用于 BGA 封装中的焊盘\n"
-"局部基准点 属性是父级封装的基准\n"
-"全局基准点 是整个电路板的基准\n"
-"测试点焊盘 (Test Point) 可用于在 Gerber 文件中指定测试点\n"
+"局部基准点 特性作为父级封装的基准\n"
+"全局基准点 特性作为整个电路板的基准\n"
+"测试点焊盘 (Test Point) 指定电气测试点\n"
 "散热焊盘 (Heatsink) 指定热焊盘\n"
 "半孔焊盘 (Castellated) 指定板边缘金属化半孔焊盘\n"
-"此属性在 Gerber X2 文件中指定。"
+"机械 (Mechanical) 指定用于机械支持的通孔焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2105
 msgid "BGA pad"
@@ -38445,7 +38435,7 @@ msgstr "无法识别的项目 '%s'。| 应为带引号的表达式。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "'layer' 关键字经存在。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -38767,9 +38757,9 @@ msgid "%s rounded corners differ."
 msgstr "%s 个 '圆角' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s 个 '倒角' 差异。"
+msgstr "%s 个 '倒角' 尺寸差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
 #, c-format
@@ -41047,12 +41037,11 @@ msgstr "半孔焊盘"
 #: pcbnew/pad.cpp:2111
 #, fuzzy
 msgid "Mechanical pad"
-msgstr "机械"
+msgstr "机械焊盘"
 
 #: pcbnew/pad.cpp:2129
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "启动、结束和连接层"
+msgstr "正面, 背面连接层"
 
 #: pcbnew/pad.cpp:2169
 msgid "Pad Type"
@@ -41152,7 +41141,6 @@ msgid "Suppress Trailing Zeroes"
 msgstr "抑制尾随零"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Keep Aligned with Dimension"
 msgstr "与测量标注保持对齐"
 
@@ -41334,12 +41322,11 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 stream 中的 subrecord 6 数据的长度非法: %d。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
-msgstr ""
-"Altium 层 ( %d ) 在 KiCad 中没有对应的等效项。已将其移至 KiCad 的 Eco1_User "
+msgstr "Altium 层 ( %s ) 在 KiCad 中没有对应的等效项。已将其移至 KiCad 的 Eco1_User "
 "层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:458
@@ -41427,29 +41414,24 @@ msgid "Loading dimension drawings..."
 msgstr "正加载测量标注图形..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了 Angular 测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了 Datum 测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了基线测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了线性测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
+msgstr "忽略了 Radial 测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -42880,13 +42862,14 @@ msgid "P-Cad 200x ASCII PCB files"
 msgstr "P-Cad 200x ASCII PCB 文件"
 
 #: pcbnew/pcb_io/pcb_io.cpp:121
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported.\n"
 "To load all footprints, add it as a library using Preferences -> Manage "
 "Footprint Libraries..."
-msgstr "所选文件包含多个封装。将只导入第一个。"
+msgstr ""
+"所选文件包含多个封装。将只导入第一个。\n"
+"要加载所有封装, 请到 偏好设置 -> 管理封装库 中将其添加为库..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:181
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -44289,7 +44272,7 @@ msgstr "从选区创建"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "结果将为空的多边形"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -45170,7 +45153,7 @@ msgstr "剪切掉所选线条之间的角"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "简化多边形轮廓, 去除多余的形状节点"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid ""
