@@ -600,14 +600,14 @@ void PCB_IO_IPC2581::addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDash
 
 void PCB_IO_IPC2581::addKnockoutText( wxXmlNode* aContentNode, PCB_TEXT* aText )
 {
-    wxXmlNode*     text_node = appendNode( aContentNode, "UserStandard" );
     SHAPE_POLY_SET finalPoly;
 
-    aText->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
+    aText->TransformTextToPolySet( finalPoly, 0, ARC_HIGH_DEF,
                                    ERROR_INSIDE );
     finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    addContourNode( text_node, finalPoly );
+    for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
+        addContourNode( aContentNode, finalPoly, ii );
 
 }
 
