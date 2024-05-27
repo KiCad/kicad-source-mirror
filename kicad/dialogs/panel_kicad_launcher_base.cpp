@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -14,17 +14,17 @@ PANEL_KICAD_LAUNCHER_BASE::PANEL_KICAD_LAUNCHER_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
-	m_mainSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_toolsSizer = new wxGridBagSizer( 0, 10 );
+	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_scrolledWindow->SetScrollRate( 5, 5 );
+	m_toolsSizer = new wxFlexGridSizer( 0, 2, 2, 10 );
 	m_toolsSizer->SetFlexibleDirection( wxBOTH );
-	m_toolsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+	m_toolsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	m_mainSizer->Add( m_toolsSizer, 0, wxALL|wxEXPAND, 5 );
-
-
-	bSizer2->Add( m_mainSizer, 1, wxALL|wxEXPAND, 5 );
+	m_scrolledWindow->SetSizer( m_toolsSizer );
+	m_scrolledWindow->Layout();
+	m_toolsSizer->Fit( m_scrolledWindow );
+	bSizer2->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 5 );
 
 
 	this->SetSizer( bSizer2 );
