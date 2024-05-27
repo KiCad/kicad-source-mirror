@@ -159,7 +159,6 @@ public:
 
             m_tree[aTargetLayer]->Insert( mmin, mmax, itemShape );
             m_count++;
-
         }
     }
 

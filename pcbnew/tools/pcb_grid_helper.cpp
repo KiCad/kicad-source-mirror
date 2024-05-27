@@ -652,8 +652,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 }
                 }
 
-                if (aPad->HasHole()) {
-
+                if( aPad->HasHole() )
+                {
                     // Holes are at the pad centre (it's the shape that may be offset)
                     const VECTOR2I hole_pos = aPad->GetPosition();
                     const VECTOR2I hole_size = aPad->GetDrillSize();

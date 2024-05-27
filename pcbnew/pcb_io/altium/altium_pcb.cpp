@@ -3289,7 +3289,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     {
         // KiCad likes NPTH pads to be the same size & shape as their holes
         pad->SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE ? PAD_SHAPE::CIRCLE
-                                                                      : PAD_SHAPE::OVAL );
+                                                                       : PAD_SHAPE::OVAL );
         pad->SetSize( pad->GetDrillSize() );
     }
 
