@@ -884,8 +884,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
     VECTOR2D text_pos_dev = userToDeviceCoordinates( text_pos );
     VECTOR2D sz_dev = userToDeviceSize( text_size );
 
-    // Output the text as a string for search (and for screen readers that fail to pay attention
-    // to <desc> tags).
+    // Output the text as a string for WYSIWYG search and for those who want to edit the file.
     {
         if( !aOrient.IsZero() )
         {
@@ -925,7 +924,8 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
             fputs( "</g>\n", m_outputFile );
     }
 
-    // Output the text again as graphics (with a <desc> tag for "proper" screen readers)
+    // Output the text again as graphics with a <desc> tag (for non-WYSIWYG search and for
+    // screen readers)
     {
         fprintf( m_outputFile,
                  "<g class=\"stroked-text\"><desc>%s</desc>\n",
