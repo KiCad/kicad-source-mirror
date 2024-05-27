@@ -461,8 +461,7 @@ public:
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckShortingPads( const std::function<void( const PAD*,
-                                                      const PAD*,
+    void CheckShortingPads( const std::function<void( const PAD*, const PAD*, int aErrorCode,
                                                       const VECTOR2I& )>& aErrorHandler );
 
     /**

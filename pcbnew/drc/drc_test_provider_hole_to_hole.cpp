@@ -78,15 +78,18 @@ private:
 
 static std::shared_ptr<SHAPE_CIRCLE> getDrilledHoleShape( BOARD_ITEM* aItem )
 {
-    if( aItem->Type() == PCB_VIA_T )
+    if( aItem->HasDrilledHole() )
     {
-        PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-        return std::make_shared<SHAPE_CIRCLE>( via->GetCenter(), via->GetDrillValue() / 2 );
-    }
-    else if( aItem->Type() == PCB_PAD_T )
-    {
-        PAD* pad = static_cast<PAD*>( aItem );
-        return std::make_shared<SHAPE_CIRCLE>( pad->GetPosition(), pad->GetDrillSize().x / 2 );
+        if( aItem->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+            return std::make_shared<SHAPE_CIRCLE>( via->GetCenter(), via->GetDrillValue() / 2 );
+        }
+        else if( aItem->Type() == PCB_PAD_T )
+        {
+            PAD* pad = static_cast<PAD*>( aItem );
+            return std::make_shared<SHAPE_CIRCLE>( pad->GetPosition(), pad->GetDrillSize().x / 2 );
+        }
     }
 
     return std::make_shared<SHAPE_CIRCLE>( VECTOR2I( 0, 0 ), 0 );
@@ -219,7 +222,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                 return false;   // DRC cancelled
 
             // We only care about drilled (ie: round) holes
-            if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
+            if( pad->HasDrilledHole() )
             {
                 std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( pad );
 

@@ -1112,7 +1112,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Flush();
         }
 
-        if( a->HasHole() && b->HasHole() )
+        if( a->HasDrilledHole() && b->HasDrilledHole() )
         {
             if( !pageAdded )
             {

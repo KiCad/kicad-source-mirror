@@ -1563,10 +1563,10 @@ void PCB_IO_IPC2581::generateDrillLayers( wxXmlNode* aCadLayerNode )
     {
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->HasHole() && pad->GetDrillSizeX() != pad->GetDrillSizeY() )
-                m_slot_holes[std::make_pair( F_Cu, B_Cu )].push_back( pad );
-            else if( pad->HasHole() )
+            if( pad->HasDrilledHole() )
                 m_drill_layers[std::make_pair( F_Cu, B_Cu )].push_back( pad );
+            else if( pad->HasHole() )
+                m_slot_holes[std::make_pair( F_Cu, B_Cu )].push_back( pad );
         }
     }
 
@@ -1703,7 +1703,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
 
     // Only handle round holes here because IPC2581 does not support non-round holes
     // These will be handled in a slot layer
-    if( aPad->HasHole() && aPad->GetDrillSizeX() == aPad->GetDrillSizeY() )
+    if( aPad->HasDrilledHole() )
     {
         wxXmlNode* padStackHoleNode = appendNode( padStackDefNode, "PadstackHoleDef" );
         padStackHoleNode->AddAttribute( "name", wxString::Format( "%s%d_%d",

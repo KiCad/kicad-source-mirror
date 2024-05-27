@@ -649,29 +649,6 @@ DRC_CONSTRAINT DRC_ENGINE::EvalZoneConnection( const BOARD_ITEM* a, const BOARD_
 }
 
 
-bool hasDrilledHole( const BOARD_ITEM* aItem )
-{
-    if( !aItem->HasHole() )
-        return false;
-
-    switch( aItem->Type() )
-    {
-    case PCB_VIA_T:
-        return true;
-
-    case PCB_PAD_T:
-    {
-        const PAD* pad = static_cast<const PAD*>( aItem );
-
-        return pad->GetDrillSizeX() == pad->GetDrillSizeY();
-    }
-
-    default:
-        return false;
-    }
-}
-
-
 DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BOARD_ITEM* a,
                                       const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
                                       REPORTER* aReporter )
@@ -1212,12 +1189,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
                 }
                 else if( c->constraint.m_Type == HOLE_TO_HOLE_CONSTRAINT
-                        && ( !hasDrilledHole( a ) || !hasDrilledHole( b ) ) )
+                        && ( !a->HasDrilledHole() || !b->HasDrilledHole() ) )
                 {
                     // Report non-drilled-holes as an implicit condition
                     if( aReporter )
                     {
-                        const BOARD_ITEM* x = !hasDrilledHole( a ) ? a : b;
+                        const BOARD_ITEM* x = !a->HasDrilledHole() ? a : b;
 
                         REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
                                                   x->GetItemDescription( this ) ) )

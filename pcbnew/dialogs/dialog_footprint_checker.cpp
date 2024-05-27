@@ -158,10 +158,9 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
             } );
 
     footprint->CheckShortingPads(
-            [&]( const PAD* aPadA, const PAD* aPadB, const VECTOR2I& aPosition )
+            [&]( const PAD* aPadA, const PAD* aPadB, int aErrorCode, const VECTOR2I& aPosition )
             {
-                errorHandler( aPadA, aPadB, nullptr, DRCE_SHORTING_ITEMS, wxEmptyString,
-                              aPosition );
+                errorHandler( aPadA, aPadB, nullptr, aErrorCode, wxEmptyString, aPosition );
             } );
 
     if( footprint->IsNetTie() )

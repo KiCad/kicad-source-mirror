@@ -105,6 +105,11 @@ public:
         return GetDrillSizeX() > 0 && GetDrillSizeY() > 0;
     }
 
+    bool HasDrilledHole() const override
+    {
+        return HasHole() && GetDrillSizeX() == GetDrillSizeY();
+    }
+
     bool IsLocked() const override;
 
     /**

@@ -420,6 +420,11 @@ public:
         return true;
     }
 
+    bool HasDrilledHole() const override
+    {
+        return m_viaType == VIATYPE::THROUGH;
+    }
+
     std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;
 
     MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const override;

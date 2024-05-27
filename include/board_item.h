@@ -158,6 +158,11 @@ public:
         return false;
     }
 
+    virtual bool HasDrilledHole() const
+    {
+        return false;
+    }
+
     virtual bool IsTented() const
     {
         return false;

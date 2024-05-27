@@ -3110,6 +3110,7 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
 
 
 void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const PAD*,
+                                                             int aErrorCode,
                                                              const VECTOR2I& )>& aErrorHandler )
 {
     std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
@@ -3120,13 +3121,7 @@ void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const P
 
         for( PAD* other : Pads() )
         {
-            if( other == pad || pad->SameLogicalPadAs( other ) )
-                continue;
-
-            if( alg::contains( netTiePads, other ) )
-                continue;
-
-            if( !( ( pad->GetLayerSet() & other->GetLayerSet() ) & LSET::AllCuMask() ).any() )
+            if( other == pad )
                 continue;
 
             // store canonical order so we don't collide in both directions (a:b and b:a)
@@ -3140,6 +3135,30 @@ void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const P
             {
                 checkedPairs[ { a, b } ] = 1;
 
+                if( pad->HasDrilledHole() && other->HasDrilledHole() )
+                {
+                    VECTOR2I pos = pad->GetPosition();
+
+                    if( pad->GetPosition() == other->GetPosition() )
+                    {
+                        aErrorHandler( pad, other, DRCE_DRILLED_HOLES_COLOCATED, pos );
+                    }
+                    else
+                    {
+                        std::shared_ptr<SHAPE_SEGMENT> holeA = pad->GetEffectiveHoleShape();
+                        std::shared_ptr<SHAPE_SEGMENT> holeB = other->GetEffectiveHoleShape();
+
+                        if( holeA->Collide( holeB->GetSeg(), 0 ) )
+                            aErrorHandler( pad, other, DRCE_DRILLED_HOLES_TOO_CLOSE, pos );
+                    }
+                }
+
+                if( pad->SameLogicalPadAs( other ) || alg::contains( netTiePads, other ) )
+                    continue;
+
+                if( !( ( pad->GetLayerSet() & other->GetLayerSet() ) & LSET::AllCuMask() ).any() )
+                    continue;
+
                 if( pad->GetBoundingBox().Intersects( other->GetBoundingBox() ) )
                 {
                     VECTOR2I pos;
@@ -3147,7 +3166,7 @@ void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const P
                     SHAPE*   otherShape = other->GetEffectiveShape().get();
 
                     if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
-                        aErrorHandler( pad, other, pos );
+                        aErrorHandler( pad, other, DRCE_SHORTING_ITEMS, pos );
                 }
             }
         }

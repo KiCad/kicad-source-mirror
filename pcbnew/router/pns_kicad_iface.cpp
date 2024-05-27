@@ -298,15 +298,13 @@ static bool isEdge( const PNS::ITEM* aItem )
 
 bool PNS_PCBNEW_RULE_RESOLVER::IsDrilledHole( const PNS::ITEM* aItem )
 {
-    if( !isHole( aItem ) )
-        return false;
+    if( isHole( aItem ) )
+    {
+        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem->Parent() ) )
+            return item->HasDrilledHole();
+    }
 
-    if( PAD* pad = dynamic_cast<PAD*>( aItem->Parent() ) )
-        return pad->GetDrillSizeX() && pad->GetDrillSizeX() == pad->GetDrillSizeY();
-
-    // Via holes are (currently) always round
-
-    return true;
+    return false;
 }
 
 
