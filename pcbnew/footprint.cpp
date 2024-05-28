@@ -2792,8 +2792,15 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
     {
         if( pad->GetAttribute() == PAD_ATTRIB::PTH ||  pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            if( pad->GetDrillSizeX() < 1 || pad->GetDrillSizeY() < 1 )
-                (aErrorHandler)( pad, DRCE_PAD_TH_WITH_NO_HOLE, wxEmptyString );
+            // Ensure the drill size can be handled in next calculations.
+            // Use min size = 4 IU to be able to build a polygon from a hole shape
+            const int min_drill_size = 4;
+
+            if( pad->GetDrillSizeX() <= min_drill_size || pad->GetDrillSizeY() <= min_drill_size )
+            {
+                (aErrorHandler)( pad, DRCE_PAD_TH_WITH_NO_HOLE,
+                                 _( "(PTH pad's hole size is very small or null)" ) );
+            }
         }
 
         if( pad->GetAttribute() == PAD_ATTRIB::PTH )
@@ -2804,6 +2811,8 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
             }
             else
             {
+                // Ensure the pad has a copper area.
+                // min drill size is already tested and converting shapes to polygon can be made
                 LSET           lset = pad->GetLayerSet() & LSET::AllCuMask();
                 PCB_LAYER_ID   layer = lset.Seq().at( 0 );
                 SHAPE_POLY_SET padOutline;
@@ -2814,12 +2823,23 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
                 SHAPE_POLY_SET                 holeOutline;
 
                 TransformOvalToPolygon( holeOutline, hole->GetSeg().A, hole->GetSeg().B,
-                                        hole->GetWidth(), ARC_HIGH_DEF, ERROR_INSIDE );
+                                        hole->GetWidth(), ARC_HIGH_DEF, ERROR_OUTSIDE );
 
+                // Test if there is copper area outside hole
+                SHAPE_POLY_SET padOutlineCopy = padOutline;
                 padOutline.BooleanSubtract( holeOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
                 if( padOutline.IsEmpty() )
                     aErrorHandler( pad, DRCE_PADSTACK, _( "(PTH pad's hole leaves no copper)" ) );
+                else
+                {
+                    // Test if the pad hole is fully inside the copper area
+                    holeOutline.BooleanSubtract( padOutlineCopy, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+                    if( !holeOutline.IsEmpty() )
+                        aErrorHandler( pad, DRCE_PADSTACK,
+                                      _( "(PTH pad's hole non fully inside copper)" ) );
+                }
             }
         }
 
