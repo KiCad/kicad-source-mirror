@@ -632,7 +632,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         {
             std::string del = ",";
             std::string paramStr = payload.substr( prefix.size() );
-            int         modeEnd = paramStr.find( del );
+            size_t      modeEnd = paramStr.find( del );
             bool        selectConnections = false;
 
             try
@@ -651,13 +651,9 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             m_probingSchToPcb = true; // recursion guard
 
             if( selectConnections )
-            {
                 GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, &items );
-            }
             else
-            {
                 GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, &items );
-            }
 
             // Update 3D viewer highlighting
             Update3DView( false, GetPcbNewSettings()->m_Display.m_Live3DRefresh );

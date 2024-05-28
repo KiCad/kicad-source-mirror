@@ -78,8 +78,8 @@ namespace SEXPR
         return str;
     }
 
-    std::unique_ptr<SEXPR> PARSER::parseString(
-            const std::string& aString, std::string::const_iterator& it )
+    std::unique_ptr<SEXPR> PARSER::parseString( const std::string& aString,
+                                                std::string::const_iterator& it )
     {
         for( ; it != aString.end(); ++it )
         {
@@ -101,7 +101,7 @@ namespace SEXPR
                     if( *it == '\n' )
                         m_lineNumber++;
 
-                    if( whitespaceCharacters.find(*it) != std::string::npos )
+                    if( whitespaceCharacters.find( *it ) != std::string::npos )
                     {
                         std::advance( it, 1 );
                         continue;
