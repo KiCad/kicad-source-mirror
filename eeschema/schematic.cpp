@@ -316,6 +316,12 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
     {
         SCH_MARKER* testMarker = SCH_MARKER::DeserializeFromString( this, *it );
 
+        if( !testMarker )
+        {
+            it = settings.m_ErcExclusions.erase( it );
+            continue;
+        }
+
         if( testMarker->IsLegacyMarker() )
         {
             const wxString settingsKey = testMarker->GetRCItem()->GetSettingsKey();
