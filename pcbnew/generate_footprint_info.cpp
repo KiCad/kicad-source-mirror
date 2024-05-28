@@ -93,12 +93,12 @@ public:
             wxString doc;
 
             // It is currently common practice to store a documentation link in the description.
-            int idx = desc.find( wxT( "http:" ) );
+            size_t idx = desc.find( wxT( "http:" ) );
 
-            if( idx < 0 )
+            if( idx == wxString::npos )
                 idx = desc.find( wxT( "https:" ) );
 
-            if( idx >= 0 )
+            if( idx != wxString::npos )
             {
                 int nesting = 0;
 
@@ -122,7 +122,7 @@ public:
                 // Trim trailing punctuation
                 static wxString punct = wxS( ".,:;" );
 
-                if( punct.find( doc.Last() ) >= 0 )
+                if( punct.find( doc.Last() ) != wxString::npos )
                     doc = doc.Left( doc.Length() - 1 );
             }
 

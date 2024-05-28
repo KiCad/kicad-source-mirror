@@ -903,7 +903,7 @@ bool WRLPROC::ReadSFInt( int& aSFInt32 )
         return false;
     }
 
-    if( std::string::npos != tmp.find( "0x" ) )
+    if( tmp.find( "0x" ) != std::string::npos )
     {
         // Rules: "0x" + "0-9, A-F" - VRML is case sensitive but in
         // this instance we do no enforce case.

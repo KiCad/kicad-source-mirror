@@ -1097,9 +1097,9 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY::loadText( LINE_READER& aReader )
 
     for( ; ; )
     {
-        int i = val.find( wxT( "\\n" ) );
+        size_t i = val.find( wxT( "\\n" ) );
 
-        if( i == wxNOT_FOUND )
+        if( i == wxString::npos )
             break;
 
         val.erase( i, 2 );

@@ -244,7 +244,7 @@ void DIALOG_BOARD_REANNOTATE::FilterPrefix( wxTextCtrl* aPrefix )
     if( isalnum( (int) lastc ) )
         return;
 
-    if( std::string::npos != tmps.find( lastc ) )
+    if( tmps.find( lastc ) != std::string::npos )
         return;
 
     tmps = aPrefix->GetValue();
@@ -894,7 +894,7 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<REFDES_INFO>& aFootp
 
         if( change.Action == UPDATE_REFDES )
         {
-            prefixpresent = ( 0 == fpData.RefDesType.find( aPrefix ) );
+            prefixpresent = ( fpData.RefDesType.find( aPrefix ) == 0 );
 
             if( addprefix && !prefixpresent )
                 fpData.RefDesType.insert( 0, aPrefix ); // Add prefix once only

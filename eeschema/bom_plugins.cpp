@@ -154,15 +154,15 @@ wxString BOM_GENERATOR_HANDLER::readHeader( const wxString& aEndSection )
     const wxString header( wxS( "@package" ) );
 
     // Extract substring between @package and endsection
-    int strstart = data.Find( header );
+    size_t strstart = data.find( header );
 
-    if( strstart == wxNOT_FOUND )
+    if( strstart == wxString::npos )
         return wxEmptyString;
 
     strstart += header.Length();
-    int strend = data.find( aEndSection, strstart );
+    size_t strend = data.find( aEndSection, strstart );
 
-    if( strend == wxNOT_FOUND )
+    if( strend == wxString::npos )
         return wxEmptyString;
 
     // Remove empty line if any
@@ -179,15 +179,15 @@ wxString BOM_GENERATOR_HANDLER::getOutputExtension( const wxString& aHeader )
     // looks for output argument of the form `"%O.extension"`
     const wxString outputarg( wxS( "\"%O" ) );
 
-    int strstart = aHeader.Find( outputarg );
+    size_t strstart = aHeader.find( outputarg );
 
-    if( strstart == wxNOT_FOUND )
+    if( strstart == wxString::npos )
         return wxEmptyString;
 
     strstart += outputarg.Length();
-    int strend = aHeader.find( wxS( "\"" ), strstart );
+    size_t strend = aHeader.find( wxS( "\"" ), strstart );
 
-    if( strend == wxNOT_FOUND )
+    if( strend == wxString::npos )
         return wxEmptyString;
 
     return aHeader.SubString( strstart, strend - 1 );
