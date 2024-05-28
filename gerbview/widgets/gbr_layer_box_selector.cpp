@@ -56,10 +56,10 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
         for( int scale = 1; scale <= 3; scale++ )
         {
             wxBitmap bmp( size * scale, size * scale );
-            bmp.SetScaleFactor( scale );
 
             DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
 
+            bmp.SetScaleFactor( scale );
             bitmaps.push_back( bmp );
         }
 
