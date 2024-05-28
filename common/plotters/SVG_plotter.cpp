@@ -884,7 +884,9 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
     VECTOR2D text_pos_dev = userToDeviceCoordinates( text_pos );
     VECTOR2D sz_dev = userToDeviceSize( text_size );
 
-    // Output the text as a string for WYSIWYG search and for those who want to edit the file.
+    // Output the text as a hidden string (opacity = 0).  This allows WYSIWYG search to highlight
+    // a selection in approximately the right area.  It also makes it easier for those that need
+    // to edit the text (as text) in subsequent processes.
     {
         if( !aOrient.IsZero() )
         {
