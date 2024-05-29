@@ -432,7 +432,8 @@ public:
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckPads( const std::function<void( const PAD*, int, const wxString& )>& aErrorHandler );
+    void CheckPads( UNITS_PROVIDER* aUnitsProvider,
+                    const std::function<void( const PAD*, int, const wxString& )>& aErrorHandler );
 
     /**
      * Check for overlapping, different-numbered, non-net-tie pads.

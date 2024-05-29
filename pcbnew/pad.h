@@ -721,6 +721,10 @@ public:
         m_zoneLayerOverrides.at( aLayer ) = aOverride;
     }
 
+    void CheckPad( UNITS_PROVIDER* aUnitsProvider,
+                   const std::function<void( int aErrorCode,
+                                             const wxString& aMsg )>& aErrorHandler ) const;
+
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
     bool operator==( const BOARD_ITEM& aOther ) const override;

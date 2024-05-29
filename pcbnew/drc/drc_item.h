@@ -57,6 +57,7 @@ enum PCB_DRC_CODE {
     DRCE_DRILL_OUT_OF_RANGE,             // Too small via or pad drill
     DRCE_VIA_DIAMETER,                   // Via diameter checks (min/max)
     DRCE_PADSTACK,                       // something is wrong with a pad or via stackup
+    DRCE_PADSTACK_INVALID,               // something is invalid with a pad or via stackup
     DRCE_MICROVIA_DRILL_OUT_OF_RANGE,    // Too small micro via drill
     DRCE_OVERLAPPING_FOOTPRINTS,         // footprint courtyards overlap
     DRCE_MISSING_COURTYARD,              // footprint has no courtyard defined
@@ -176,6 +177,7 @@ private:
     static DRC_ITEM drillTooSmall;
     static DRC_ITEM viaDiameter;
     static DRC_ITEM padstack;
+    static DRC_ITEM padstackInvalid;
     static DRC_ITEM microviaDrillTooSmall;
     static DRC_ITEM courtyardsOverlap;
     static DRC_ITEM missingCourtyard;

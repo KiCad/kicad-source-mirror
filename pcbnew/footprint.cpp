@@ -2782,7 +2782,8 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
 }
 
 
-void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
+void FOOTPRINT::CheckPads( UNITS_PROVIDER* aUnitsProvider,
+                           const std::function<void( const PAD*, int,
                                                      const wxString& )>& aErrorHandler )
 {
     if( aErrorHandler == nullptr )
@@ -2790,6 +2791,11 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
 
     for( PAD* pad: Pads() )
     {
+        pad->CheckPad( aUnitsProvider,
+                [&]( int errorCode, const wxString& msg )
+                {
+                    aErrorHandler( pad, errorCode, msg );
+                } );
         if( pad->GetAttribute() == PAD_ATTRIB::PTH ||  pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
             // Ensure the drill size can be handled in next calculations.
