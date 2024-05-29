@@ -76,18 +76,18 @@ SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxBoxSizer* frameSizer = new wxBoxSizer( wxVERTICAL );
 
     std::vector<PICKED_SYMBOL> dummyAlreadyPlaced;
-    m_chooserPanel =
-            new PANEL_SYMBOL_CHOOSER( this, this, nullptr /* no filter */, s_SymbolHistoryList,
-                                      dummyAlreadyPlaced, false, false,
-                                      [this]()
-                                      {
-                                          wxCommandEvent dummy;
-                                          OnOK( dummy );
-                                      },
-                                      [this]()
-                                      {
-                                          DismissModal( false );
-                                      } );
+    m_chooserPanel = new PANEL_SYMBOL_CHOOSER( this, this, nullptr /* no filter */,
+                                               s_SymbolHistoryList,
+                                               dummyAlreadyPlaced, false, false,
+                                               [this]()
+                                               {
+                                                   wxCommandEvent dummy;
+                                                   OnOK( dummy );
+                                               },
+                                               [this]()
+                                               {
+                                                   DismissModal( false );
+                                               } );
 
 
     frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
