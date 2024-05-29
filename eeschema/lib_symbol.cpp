@@ -737,6 +737,107 @@ wxString LIB_SYMBOL::LetterSubReference( int aUnit, int aFirstId )
 }
 
 
+bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
+{
+    wxString footprint;
+
+    for( const SCH_ITEM& item : m_drawings )
+    {
+        if( item.Type() == SCH_FIELD_T )
+        {
+            const SCH_FIELD& field = static_cast<const SCH_FIELD&>( item );
+
+            if( field.GetId() == FOOTPRINT_FIELD )
+                footprint = field.GetShownText( nullptr, false, aDepth + 1 );
+
+            if( token->IsSameAs( field.GetCanonicalName().Upper() )
+               || token->IsSameAs( field.GetName(), false ) )
+            {
+                *token = field.GetShownText( nullptr, false, aDepth + 1 );
+                return true;
+            }
+        }
+    }
+
+    // Consider missing simulation fields as empty, not un-resolved
+    if( token->IsSameAs( wxT( "SIM.DEVICE" ) )
+            || token->IsSameAs( wxT( "SIM.TYPE" ) )
+            || token->IsSameAs( wxT( "SIM.PINS" ) )
+            || token->IsSameAs( wxT( "SIM.PARAMS" ) )
+            || token->IsSameAs( wxT( "SIM.LIBRARY" ) )
+            || token->IsSameAs( wxT( "SIM.NAME" ) ) )
+    {
+        *token = wxEmptyString;
+        return true;
+    }
+
+    if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
+    {
+        wxArrayString parts = wxSplit( footprint, ':' );
+
+        if( parts.Count() > 0 )
+            *token = parts[ 0 ];
+        else
+            *token = wxEmptyString;
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
+    {
+        wxArrayString parts = wxSplit( footprint, ':' );
+
+        if( parts.Count() > 1 )
+            *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
+        else
+            *token = wxEmptyString;
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_LIBRARY" ) ) )
+    {
+        *token = m_libId.GetUniStringLibNickname();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_NAME" ) ) )
+    {
+        *token = m_libId.GetUniStringLibItemName();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )
+    {
+        *token = GetDescription();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
+    {
+        *token = GetKeyWords();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
+    {
+        *token = this->GetExcludedFromBOM() ? _( "Excluded from BOM" ) : wxString( "" );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
+    {
+        *token = this->GetExcludedFromBoard() ? _( "Excluded from board" ) : wxString( "" );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_SIM" ) ) )
+    {
+        *token = this->GetExcludedFromSim() ? _( "Excluded from simulation" ) : wxString( "" );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "DNP" ) ) )
+    {
+        *token = this->GetDNP() ? _( "DNP" ) : wxString( "" );
+        return true;
+    }
+
+    return false;
+}
+
+
 void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                         const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {

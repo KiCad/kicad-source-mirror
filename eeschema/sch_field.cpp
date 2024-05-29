@@ -197,6 +197,13 @@ wxString SCH_FIELD::GetShownName() const
 wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
                                   int aDepth ) const
 {
+    std::function<bool( wxString* )> libSymbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( m_parent );
+                return symbol->ResolveTextVar( token, aDepth + 1 );
+            };
+
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
@@ -207,6 +214,9 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     std::function<bool( wxString* )> schematicResolver =
             [&]( wxString* token ) -> bool
             {
+                if( !aPath )
+                    return false;
+
                 if( SCHEMATIC* schematic = Schematic() )
                     return schematic->ResolveTextVar( aPath, token, aDepth + 1 );
 
@@ -216,6 +226,9 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     std::function<bool( wxString* )> sheetResolver =
             [&]( wxString* token ) -> bool
             {
+                if( !aPath )
+                    return false;
+
                 SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
 
                 SCHEMATIC* schematic = Schematic();
@@ -233,6 +246,9 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     std::function<bool( wxString* )> labelResolver =
             [&]( wxString* token ) -> bool
             {
+                if( !aPath )
+                    return false;
+
                 SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
                 return label->ResolveTextVar( aPath, token, aDepth + 1 );
             };
@@ -242,19 +258,16 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
 
-    if( !aPath )
-        return text;
-
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
-    {
         text = wxS( "" );
-    }
 
     for( int ii = 0; ii < 10 && text.Contains( wxT( "${" ) ); ++ii )
     {
         if( aDepth < 10 )
         {
-            if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+            if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+                text = ExpandTextVars( text, &libSymbolResolver );
+            else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
                 text = ExpandTextVars( text, &symbolResolver );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
                 text = ExpandTextVars( text, &sheetResolver );
@@ -275,7 +288,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     {
         SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
-        if( m_id == REFERENCE_FIELD )
+        if( m_id == REFERENCE_FIELD && aPath )
         {
             // For more than one part per package, we must add the part selection
             // A, B, ... or 1, 2, .. to the reference.

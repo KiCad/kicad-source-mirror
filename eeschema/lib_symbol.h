@@ -346,6 +346,13 @@ public:
 
     int GetNextAvailableFieldId() const;
 
+    /**
+     * Resolve any references to system tokens supported by the symbol.
+     *
+     * @param aDepth a counter to limit recursion and circular references.
+     */
+    bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
+
     void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                 const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
 
