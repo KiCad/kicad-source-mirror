@@ -112,6 +112,7 @@ bool BOM_PRESET::operator==( const BOM_PRESET& rhs ) const
         && this->fieldsOrdered == rhs.fieldsOrdered
         && this->sortField == rhs.sortField
         && this->sortAsc == rhs.sortAsc
+        && this->filterString == rhs.filterString
         && this->groupSymbols == rhs.groupSymbols
         && this->excludeDNP == rhs.excludeDNP
         && this->includeExcludedFromBOM == rhs.includeExcludedFromBOM;
