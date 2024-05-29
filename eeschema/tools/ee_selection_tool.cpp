@@ -631,9 +631,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     // drag_is_move option exists only in schematic editor, not in symbol editor
                     // (m_frame->eeconfig() returns nullptr in Symbol Editor)
                     if( m_isSymbolEditor || m_frame->eeconfig()->m_Input.drag_is_move )
-                        m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, nullptr );
+                        m_toolMgr->RunAction( EE_ACTIONS::move );
                     else
-                        m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, nullptr );
+                        m_toolMgr->RunAction( EE_ACTIONS::drag );
                 }
                 else
                 {
