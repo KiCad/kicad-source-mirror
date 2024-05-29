@@ -416,8 +416,7 @@ wxDataViewColumn* LIB_TREE_MODEL_ADAPTER::doAddColumn( const wxString& aHeader, 
 
     wxDataViewColumn* col = new wxDataViewColumn(
             translatedHeader, new LIB_TREE_RENDERER(), index, m_colWidths[aHeader], wxALIGN_NOT,
-            wxDATAVIEW_CELL_INERT | static_cast<int>( wxDATAVIEW_COL_RESIZABLE )
-                    | static_cast<int>( wxDATAVIEW_COL_SORTABLE ) );
+            wxDATAVIEW_CELL_INERT | static_cast<int>( wxDATAVIEW_COL_RESIZABLE ) );
     m_widget->AppendColumn( col );
 
     col->SetMinWidth( headerMinWidth.x );
