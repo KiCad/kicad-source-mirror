@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-10 02:07+0000\n"
+"PO-Revision-Date: 2024-05-30 02:02+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.4-rc\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -16375,9 +16375,9 @@ msgid "Netclass %s is not defined"
 msgstr "Netclass %s chưa được xác định"
 
 #: eeschema/erc/erc.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Không thể kết nối với '%s' "
+msgstr "Bốn mục được kết nối tại %d, %d"
 
 #: eeschema/erc/erc.cpp:720
 msgid "Pin with 'no connection' type is connected"
@@ -17289,9 +17289,8 @@ msgid "Errors occurred creating symbol library %s."
 msgstr "Đã xảy ra lỗi khi tạo thư viện biểu tượng %s."
 
 #: eeschema/menubar.cpp:97
-#, fuzzy
 msgid "Insert Schematic Sheet Content..."
-msgstr "Lưu vào Sơ đồ mạch"
+msgstr "Chèn nội dung trang sơ đồ..."
 
 #: eeschema/menubar.cpp:98
 msgid ""
@@ -17305,14 +17304,13 @@ msgid "Import"
 msgstr "Báo cáo"
 
 #: eeschema/menubar.cpp:109
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Lưu vào Sơ đồ mạch"
+msgstr "Sơ đồ không từ KiCad..."
 
 #: eeschema/menubar.cpp:110
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr ""
+msgstr "Thay thế trang sơ đồ hiện tại bằng trang được nhập từ ứng dụng khác"
 
 #: eeschema/menubar.cpp:115
 #, fuzzy
@@ -17337,33 +17335,31 @@ msgid "Netlist..."
 msgstr "Nhập vào các phím nóng ..."
 
 #: eeschema/menubar.cpp:129
-#, fuzzy
 msgid "Symbols to Library..."
-msgstr "Thư viện Footprint"
+msgstr "Ký hiệu tới Thư viện..."
 
 #: eeschema/menubar.cpp:131
-#, fuzzy
 msgid "Symbols to New Library..."
-msgstr "Thư viện Footprint"
+msgstr "Ký hiệu tới Thư viện mới..."
 
 #: eeschema/menubar.cpp:352
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:173
 #: pagelayout_editor/menubar.cpp:153 pcbnew/menubar_footprint_editor.cpp:238
 #: pcbnew/menubar_pcb_editor.cpp:467
 msgid "&Place"
-msgstr ""
+msgstr "&Đặt"
 
 #: eeschema/menubar.cpp:353
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:174
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:239
 #: pcbnew/menubar_pcb_editor.cpp:469
 msgid "&Inspect"
-msgstr ""
+msgstr "&Kiểm tra"
 
 #: eeschema/menubar.cpp:354 gerbview/menubar.cpp:233 kicad/menubar.cpp:224
 #: pcbnew/menubar_footprint_editor.cpp:240 pcbnew/menubar_pcb_editor.cpp:470
 msgid "&Tools"
-msgstr ""
+msgstr "&Công cụ"
 
 #: eeschema/menubar.cpp:355
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:175
@@ -17371,7 +17367,7 @@ msgstr ""
 #: pcbnew/menubar_pcb_editor.cpp:471
 #, fuzzy
 msgid "P&references"
-msgstr "&Tùy chỉnh"
+msgstr "T&ùy chọn"
 
 #: eeschema/net_navigator.cpp:59
 #, c-format
@@ -17419,9 +17415,9 @@ msgid "Junction at %s, %s"
 msgstr "Junction tại %s, %s"
 
 #: eeschema/net_navigator.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Cờ Không Kết nối"
+msgstr "Không Kết nối tại %s, %s"
 
 #: eeschema/net_navigator.cpp:159
 #, c-format
@@ -17493,7 +17489,7 @@ msgstr ""
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:163
 msgid "Success."
-msgstr ""
+msgstr "Thành công."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:212
 msgid "Error: duplicate sheet names. Continue?"
@@ -17517,18 +17513,16 @@ msgid "Change Body Style"
 msgstr "Kiểu cách Đường thẳng"
 
 #: eeschema/picksymbol.cpp:178
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "Chọn Dấu chân ..."
+msgstr "Đặt chức năng chân"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:62
 msgid "none"
-msgstr ""
+msgstr "không"
 
 #: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2224
-#, fuzzy
 msgid "Free"
-msgstr "Sheet Pin"
+msgstr "Tự do"
 
 #: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2225
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:189
@@ -17538,63 +17532,56 @@ msgid "Unspecified"
 msgstr "Không có footprint nào được chỉ định"
 
 #: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2226
-#, fuzzy
 msgid "Power input"
-msgstr "Biểu tượng nguồn điện"
+msgstr "Nguồn vào"
 
 #: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2227
-#, fuzzy
 msgid "Power output"
-msgstr "Biểu tượng nguồn điện"
+msgstr "Nguồn ra"
 
 #: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2228
 msgid "Open collector"
-msgstr ""
+msgstr "Hở collector"
 
 #: eeschema/pin_type.cpp:95 eeschema/sch_pin.cpp:2229
-#, fuzzy
 msgid "Open emitter"
-msgstr "Mở thư mục chủ đề"
+msgstr "Hở emitter"
 
 #: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2230
-#, fuzzy
 msgid "Unconnected"
-msgstr "Không kết nối"
+msgstr "Không được kết nối"
 
 #: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2238
-#, fuzzy
 msgid "Inverted"
-msgstr "Chuyển đổi hình ảnh"
+msgstr "Đảo ngược"
 
 #: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2239
 msgid "Clock"
-msgstr ""
+msgstr "Xung nhịp"
 
 #: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2240
 msgid "Inverted clock"
-msgstr ""
+msgstr "Đảo xung nhịp"
 
 #: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2241
-#, fuzzy
 msgid "Input low"
-msgstr "Tệp Zip"
+msgstr "Đầu vào thấp"
 
 #: eeschema/pin_type.cpp:105 eeschema/sch_pin.cpp:2242
 msgid "Clock low"
-msgstr ""
+msgstr "Xung nhịp thấp"
 
 #: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2243
-#, fuzzy
 msgid "Output low"
-msgstr "Đầu ra"
+msgstr "Đầu ra thấp"
 
 #: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2244
 msgid "Falling edge clock"
-msgstr ""
+msgstr "Xung nhịp cạnh xuống"
 
 #: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2245
 msgid "NonLogic"
-msgstr ""
+msgstr "Phi logic"
 
 #: eeschema/printing/dialog_print_using_printer.cpp:384
 msgid "Print Schematic"
@@ -17669,19 +17656,17 @@ msgid "Error occurred saving project specific symbol library table."
 msgstr "Lỗi tải bảng thư viện footprint trong dự án"
 
 #: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:129
-#, fuzzy
 msgid "Not Found"
-msgstr "không tìm thấy tệp tin \"%s\"."
+msgstr "không tìm thấy"
 
 #: eeschema/project_sch.cpp:115
-#, fuzzy
 msgid "The following libraries were not found:"
-msgstr "Footprint \"%s\" không tìm thấy."
+msgstr "Không tìm thấy các thư viện sau:"
 
 #: eeschema/project_sch.cpp:168 eeschema/sheet.cpp:399
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "Lỗi khi tải bảng thư viện biểu tượng '%s'."
+msgstr "Lỗi khi tải bảng thư viện ký hiệu '%s'."
 
 #: eeschema/sch_base_frame.cpp:235
 #, c-format
@@ -17689,7 +17674,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"Lỗi khi lưu bảng thư viện biểu tượng toàn cục:\n"
+"Lỗi khi lưu bảng thư viện ký hiệu toàn cục:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:251
@@ -17698,7 +17683,7 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"Lỗi khi lưu bảng thư viện biểu tượng dành riêng cho dự án:\n"
+"Lỗi khi lưu bảng thư viện ký hiệu dành riêng cho dự án:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:270 pcbnew/footprint_libraries_utils.cpp:413
@@ -17712,36 +17697,31 @@ msgstr "Cấu hình Bảng Thư viện Toàn cục"
 
 #: eeschema/sch_base_frame.cpp:281 eeschema/widgets/search_handlers.cpp:433
 #: pcbnew/footprint_libraries_utils.cpp:424
-#, fuzzy
 msgid "Global"
-msgstr "Global Label"
+msgstr "Toàn cục"
 
 #: eeschema/sch_base_frame.cpp:284 pcbnew/footprint_libraries_utils.cpp:427
-#, fuzzy
 msgid "Choose the Library Table to add the library to:"
-msgstr "Giữ thư viện ở đầu danh sách"
+msgstr "Chọn Bảng Thư viện để thêm thư viện vào:"
 
 #: eeschema/sch_base_frame.cpp:285 pcbnew/footprint_libraries_utils.cpp:428
-#, fuzzy
 msgid "Add To Library Table"
-msgstr "Thêm Thư viện..."
+msgstr "Thêm vào Bảng Thư viện"
 
 #: eeschema/sch_base_frame.cpp:570
-#, fuzzy
 msgid "No symbol libraries are loaded."
-msgstr "Không có symbol nào được chọn"
+msgstr "Không có thư viện ký hiệu nào được tải."
 
 #: eeschema/sch_base_frame.cpp:615
-#, fuzzy
 msgid "Select Symbol Library"
-msgstr "Tạo Thư viện Symbol"
+msgstr "Chọn Thư viện Ký hiệu"
 
 #: eeschema/sch_base_frame.cpp:730
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
 msgstr ""
-"Thư viện chứa biểu tượng hiện tại đã thay đổi.\n"
+"Thư viện chứa Ký hiệu hiện tại đã thay đổi.\n"
 "Bạn có muốn tải lại thư viện không?"
 
 #: eeschema/sch_bus_entry.cpp:448
@@ -17800,9 +17780,8 @@ msgid "Schematic Hierarchy"
 msgstr "Đánh dấu Schematic"
 
 #: eeschema/sch_edit_frame.cpp:409
-#, fuzzy
 msgid "New schematic file is unsaved"
-msgstr "không tìm thấy tệp tin \"%s\"."
+msgstr "Tệp sơ đồ mới chưa được lưu"
 
 #: eeschema/sch_edit_frame.cpp:990
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:612
@@ -17848,14 +17827,13 @@ msgstr "Không thể mở CvPcb"
 #: eeschema/sch_edit_frame.cpp:1687 eeschema/sim/simulator_frame.cpp:342
 #: kicad/kicad_manager_frame.cpp:837 pcbnew/footprint_edit_frame.cpp:979
 #: pcbnew/pcb_edit_frame.cpp:1712
-#, fuzzy
 msgid "[Read Only]"
-msgstr "Chỉ đọc"
+msgstr "[Chỉ đọc]"
 
 #: eeschema/sch_edit_frame.cpp:1690 eeschema/sim/simulator_frame.cpp:345
 #: pcbnew/footprint_edit_frame.cpp:988 pcbnew/pcb_edit_frame.cpp:1715
 msgid "[Unsaved]"
-msgstr ""
+msgstr "[Chưa lưu]"
 
 #: eeschema/sch_edit_frame.cpp:1694
 #, fuzzy
@@ -17931,9 +17909,8 @@ msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:665
 #: eeschema/sch_io/altium/sch_io_altium.cpp:760
-#, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "Tệp sơ đồ mạch Altium"
+msgstr "Mong đợi tệp sơ đồ Altium phiên bản 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:864
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -47803,9 +47780,8 @@ msgid "Hide Footprint Tree"
 msgstr "Văn bản trên Footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Focus the Footprint Tree Search Field"
-msgstr "Tệp footprint  KiCad"
+msgstr "Tập trung vào trường tìm kiếm Footprint Tree"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 #, fuzzy
