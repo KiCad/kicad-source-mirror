@@ -1510,7 +1510,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
                                 if( !( preset.sortAsc == current.sortAsc
                                        && preset.filterString == current.filterString
                                        && preset.groupSymbols == current.groupSymbols
-                                       && preset.excludeDNP == current.excludeDNP ) )
+                                       && preset.excludeDNP == current.excludeDNP
+                                       && preset.includeExcludedFromBOM
+                                                  == current.includeExcludedFromBOM ) )
                                 {
                                     return false;
                                 }

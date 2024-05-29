@@ -871,6 +871,7 @@ BOM_PRESET FIELDS_EDITOR_GRID_DATA_MODEL::GetBomSettings()
     current.filterString = GetFilter();
     current.groupSymbols = GetGroupingEnabled();
     current.excludeDNP = GetExcludeDNP();
+    current.includeExcludedFromBOM = GetIncludeExcludedFromBOM();
 
     return current;
 }
