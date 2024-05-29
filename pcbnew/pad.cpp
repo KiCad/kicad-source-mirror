@@ -58,6 +58,7 @@
 #include <memory>
 #include <macros.h>
 #include <magic_enum.hpp>
+#include <drc/drc_item.h>
 #include "kiface_base.h"
 #include "pcbnew_settings.h"
 
@@ -1897,6 +1898,250 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         wxFAIL_MSG( wxT( "PAD::TransformShapeToPolygon no implementation for " )
                     + wxString( std::string( magic_enum::enum_name( GetShape() ) ) ) );
         break;
+    }
+}
+
+
+void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
+                    const std::function<void( int aErrorCode,
+                                              const wxString& aMsg )>& aErrorHandler ) const
+{
+    VECTOR2I pad_size = GetSize();
+    VECTOR2I drill_size = GetDrillSize();
+    wxString msg;
+
+    if( GetShape() == PAD_SHAPE::CUSTOM )
+        pad_size = GetBoundingBox().GetSize();
+    else if( pad_size.x <= 0 || ( pad_size.y <= 0 && GetShape() != PAD_SHAPE::CIRCLE ) )
+        aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Pad must have a positive size)" ) );
+
+    // Test hole against pad shape
+    if( IsOnCopperLayer() && GetDrillSize().x > 0 )
+    {
+        // Ensure the drill size can be handled in next calculations.
+        // Use min size = 4 IU to be able to build a polygon from a hole shape
+        const int min_drill_size = 4;
+
+        if( GetDrillSizeX() <= min_drill_size || GetDrillSizeY() <= min_drill_size )
+        {
+            msg.Printf( _( "(PTH pad hole size must be larger than %s)" ),
+                        aUnitsProvider->StringFromValue( min_drill_size, true ) );
+            aErrorHandler( DRCE_PADSTACK_INVALID, msg );
+        }
+
+        int            maxError = GetBoard()->GetDesignSettings().m_MaxError;
+        SHAPE_POLY_SET padOutline;
+
+        TransformShapeToPolygon( padOutline, UNDEFINED_LAYER, 0, maxError, ERROR_INSIDE );
+
+        if( !padOutline.Collide( GetPosition() ) )
+        {
+            aErrorHandler( DRCE_PADSTACK, _( "Pad hole not inside pad shape" ) );
+        }
+        else if( GetAttribute() == PAD_ATTRIB::PTH )
+        {
+            std::shared_ptr<SHAPE_SEGMENT> slot = GetEffectiveHoleShape();
+            SHAPE_POLY_SET                 slotOutline;
+
+            TransformOvalToPolygon( slotOutline, slot->GetSeg().A, slot->GetSeg().B,
+                                    slot->GetWidth(), maxError, ERROR_OUTSIDE );
+
+            padOutline.BooleanSubtract( slotOutline, SHAPE_POLY_SET::PM_FAST );
+
+            if( padOutline.IsEmpty() )
+                aErrorHandler( DRCE_PADSTACK, _( "Pad hole will leave no copper" ) );
+        }
+    }
+
+    if( GetLocalClearance().value_or( 0 ) < 0 )
+        aErrorHandler( DRCE_PADSTACK, _( "Negative local clearance values have no effect" ) );
+
+    // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
+    // However the negative solder mask clearance must not create negative mask size
+    // Therefore test for minimal acceptable negative value
+    std::optional<int> solderMaskMargin = GetLocalSolderMaskMargin();
+
+    if( solderMaskMargin.has_value() && solderMaskMargin.value() < 0 )
+    {
+        int absMargin = abs( solderMaskMargin.value() );
+
+        if( GetShape() == PAD_SHAPE::CUSTOM )
+        {
+            for( const std::shared_ptr<PCB_SHAPE>& shape : GetPrimitives() )
+            {
+                BOX2I shapeBBox = shape->GetBoundingBox();
+
+                if( absMargin > shapeBBox.GetWidth() || absMargin > shapeBBox.GetHeight() )
+                {
+                    aErrorHandler( DRCE_PADSTACK, _( "Negative solder mask clearance is larger "
+                                                     "than some shape primitives; results may be "
+                                                     "surprising" ) );
+
+                    break;
+                }
+            }
+        }
+        else if( absMargin > pad_size.x || absMargin > pad_size.y )
+        {
+            aErrorHandler( DRCE_PADSTACK, _( "Negative solder mask clearance is larger than pad; "
+                                             "no solder mask will be generated" ) );
+        }
+    }
+
+    // Some pads need a positive solder paste clearance (mainly for BGA with small pads)
+    // However, a positive value can create issues if the resulting shape is too big.
+    // (like a solder paste creating a solder paste area on a neighbor pad or on the solder mask)
+    // So we could ask for user to confirm the choice
+    // For now we just check for disappearing paste
+    wxSize paste_size;
+    int    paste_margin = GetLocalSolderPasteMargin().value_or( 0 );
+    double paste_ratio = GetLocalSolderPasteMarginRatio().value_or( 0 );
+
+    paste_size.x = pad_size.x + paste_margin + KiROUND( pad_size.x * paste_ratio );
+    paste_size.y = pad_size.y + paste_margin + KiROUND( pad_size.y * paste_ratio );
+
+    if( paste_size.x <= 0 || paste_size.y <= 0 )
+    {
+        aErrorHandler( DRCE_PADSTACK, _( "Negative solder paste margin is larger than pad; "
+                                         "no solder paste mask will be generated" ) );
+    }
+
+    LSET padlayers_mask = GetLayerSet();
+
+    if( padlayers_mask == 0 )
+        aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Pad has no layer)" ) );
+
+    if( GetAttribute() == PAD_ATTRIB::PTH && !IsOnCopperLayer() )
+        aErrorHandler( DRCE_PADSTACK, _( "PTH pad has no copper layers" ) );
+
+    if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
+    {
+        if( ( drill_size.x || drill_size.y ) && GetAttribute() != PAD_ATTRIB::NPTH )
+        {
+            aErrorHandler( DRCE_PADSTACK, _( "Plated through holes normally have a copper pad on "
+                                             "at least one layer" ) );
+        }
+    }
+
+    switch( GetAttribute() )
+    {
+    case PAD_ATTRIB::NPTH:   // Not plated, but through hole, a hole is expected
+    case PAD_ATTRIB::PTH:    // Pad through hole, a hole is also expected
+        if( drill_size.x <= 0
+            || ( drill_size.y <= 0 && GetDrillShape() == PAD_DRILL_SHAPE::OBLONG ) )
+        {
+            aErrorHandler( DRCE_PAD_TH_WITH_NO_HOLE, wxEmptyString );
+        }
+        break;
+
+    case PAD_ATTRIB::CONN:      // Connector pads are smd pads, just they do not have solder paste.
+        if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
+        {
+            aErrorHandler( DRCE_PADSTACK, _( "Connector pads normally have no solder paste; use a "
+                                             "SMD pad instead" ) );
+        }
+        KI_FALLTHROUGH;
+
+    case PAD_ATTRIB::SMD:       // SMD and Connector pads (One external copper layer only)
+    {
+        if( drill_size.x > 0 || drill_size.y > 0 )
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(SMD pad has a hole)" ) );
+
+        LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
+
+        if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )
+        {
+            aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper on both sides of the board" ) );
+        }
+        else if( IsOnLayer( F_Cu ) )
+        {
+            if( IsOnLayer( B_Mask ) )
+            {
+                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and mask layers on different "
+                                                 "sides of the board" ) );
+            }
+            else if( IsOnLayer( B_Paste ) )
+            {
+                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and paste layers on different "
+                                                 "sides of the board" ) );
+            }
+        }
+        else if( IsOnLayer( B_Cu ) )
+        {
+            if( IsOnLayer( F_Mask ) )
+            {
+                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and mask layers on different "
+                                                 "sides of the board" ) );
+            }
+            else if( IsOnLayer( F_Paste ) )
+            {
+                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and paste layers on different "
+                                                 "sides of the board" ) );
+            }
+        }
+        else if( innerlayers_mask.count() != 0 )
+        {
+            aErrorHandler( DRCE_PADSTACK, _( "SMD pad has no outer layers" ) );
+        }
+
+        break;
+    }
+    }
+
+    if( ( GetProperty() == PAD_PROP::FIDUCIAL_GLBL || GetProperty() == PAD_PROP::FIDUCIAL_LOCAL )
+            && GetAttribute() == PAD_ATTRIB::NPTH )
+    {
+        aErrorHandler( DRCE_PADSTACK, _( "Fiducial property makes no sense on NPTH pads" ) );
+    }
+
+    if( GetProperty() == PAD_PROP::TESTPOINT && GetAttribute() == PAD_ATTRIB::NPTH )
+        aErrorHandler( DRCE_PADSTACK, _( "Testpoint property makes no sense on NPTH pads" ) );
+
+    if( GetProperty() == PAD_PROP::HEATSINK && GetAttribute() == PAD_ATTRIB::NPTH )
+        aErrorHandler( DRCE_PADSTACK, _( "Heatsink property makes no sense of NPTH pads" ) );
+
+    if( GetProperty() == PAD_PROP::CASTELLATED && GetAttribute() != PAD_ATTRIB::PTH )
+        aErrorHandler( DRCE_PADSTACK, _( "Castellated property is for PTH pads" ) );
+
+    if( GetProperty() == PAD_PROP::BGA && GetAttribute() != PAD_ATTRIB::SMD )
+        aErrorHandler( DRCE_PADSTACK, _( "BGA property is for SMD pads" ) );
+
+    if( GetProperty() == PAD_PROP::MECHANICAL && GetAttribute() != PAD_ATTRIB::PTH )
+        aErrorHandler( DRCE_PADSTACK, _( "Mechanical property is for PTH pads" ) );
+
+    if( GetShape() == PAD_SHAPE::ROUNDRECT )
+    {
+        if( GetRoundRectRadiusRatio() < 0.0 )
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Negative corner radius is not allowed)" ) );
+        else if( GetRoundRectRadiusRatio() > 50.0 )
+            aErrorHandler( DRCE_PADSTACK, _( "Corner size will make pad circular" ) );
+    }
+    else if( GetShape() == PAD_SHAPE::CHAMFERED_RECT )
+    {
+        if( GetChamferRectRatio() < 0.0 )
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Negative corner chamfer is not allowed)" ) );
+        else if( GetChamferRectRatio() > 50.0 )
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Corner chamfer is too large)" ) );
+    }
+    else if( GetShape() == PAD_SHAPE::TRAPEZOID )
+    {
+        if(    ( GetDelta().x < 0 && GetDelta().x < -GetSize().y )
+            || ( GetDelta().x > 0 && GetDelta().x > GetSize().y )
+            || ( GetDelta().y < 0 && GetDelta().y < -GetSize().x )
+            || ( GetDelta().y > 0 && GetDelta().y > GetSize().x ) )
+        {
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Trapazoid delta is too large)" ) );
+        }
+    }
+
+    // PADSTACKS TODO: this will need to check each layer in the pad...
+    if( GetShape() == PAD_SHAPE::CUSTOM )
+    {
+        SHAPE_POLY_SET mergedPolygon;
+        MergePrimitivesAsPolygon( &mergedPolygon );
+
+        if( mergedPolygon.OutlineCount() > 1 )
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Custom pad shape must resolve to a single polygon)" ) );
     }
 }
 

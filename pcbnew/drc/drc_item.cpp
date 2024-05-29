@@ -130,8 +130,12 @@ DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
         wxT( "via_diameter" ) );
 
 DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
-        _( "Padstack is not valid" ),
+        _( "" ),
         wxT( "padstack" ) );
+
+DRC_ITEM DRC_ITEM::padstackInvalid( DRCE_PADSTACK_INVALID,
+        _( "Padstack is not valid" ),
+        wxT( "padstack_invalid" ) );
 
 DRC_ITEM DRC_ITEM::microviaDrillTooSmall( DRCE_MICROVIA_DRILL_OUT_OF_RANGE,
         _( "Micro via hole size out of range" ),
@@ -317,6 +321,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::isolatedCopper,
             DRC_ITEM::footprint,
             DRC_ITEM::padstack,
+            // Do not include padstackInvalid; it flags invalid states so must always be an error
+            // DRC_ITEM::padStackInvalid;
             DRC_ITEM::pthInsideCourtyard,
             DRC_ITEM::npthInsideCourtyard,
             DRC_ITEM::itemOnDisabledLayer,
@@ -354,6 +360,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DRILL_OUT_OF_RANGE:       return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );
+    case DRCE_PADSTACK_INVALID:         return std::make_shared<DRC_ITEM>( padstackInvalid );
     case DRCE_MICROVIA_DRILL_OUT_OF_RANGE: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );
     case DRCE_OVERLAPPING_FOOTPRINTS:   return std::make_shared<DRC_ITEM>( courtyardsOverlap );
     case DRCE_MISSING_COURTYARD:        return std::make_shared<DRC_ITEM>( missingCourtyard );

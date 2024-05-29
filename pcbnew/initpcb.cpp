@@ -153,7 +153,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
         drcSeverities[ DRCE_DRILLED_HOLES_TOO_CLOSE ] = RPT_SEVERITY_WARNING;
 
         drcSeverities[ DRCE_PADSTACK ] = RPT_SEVERITY_WARNING;
-    
+
         drcSeverities[ DRCE_FOOTPRINT_TYPE_MISMATCH ] = RPT_SEVERITY_WARNING;
 
         // clear filename, to avoid overwriting an old file

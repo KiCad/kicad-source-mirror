@@ -151,7 +151,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                               { 0, 0 } );
             } );
 
-    footprint->CheckPads(
+    footprint->CheckPads( m_frame,
             [&]( const PAD* aPad, int aErrorCode, const wxString& aMsg )
             {
                 errorHandler( aPad, nullptr, nullptr, aErrorCode, aMsg, aPad->GetPosition() );

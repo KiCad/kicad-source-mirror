@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <drc/drc_item.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board_commit.h>
@@ -1258,216 +1259,21 @@ void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 
 bool DIALOG_PAD_PROPERTIES::padValuesOK()
 {
-    bool error = !transferDataToPad( m_previewPad );
+    transferDataToPad( m_previewPad );
 
     wxArrayString error_msgs;
     wxArrayString warning_msgs;
-    VECTOR2I      pad_size = m_previewPad->GetSize();
-    VECTOR2I      drill_size = m_previewPad->GetDrillSize();
 
-    if( m_previewPad->GetShape() == PAD_SHAPE::CUSTOM )
-    {
-        pad_size = m_previewPad->GetBoundingBox().GetSize();
-    }
-    else if( m_previewPad->GetShape() == PAD_SHAPE::CIRCLE )
-    {
-        if( pad_size.x <= 0 )
-            error_msgs.Add( _( "Error: Pad must have a positive size." ) );
-    }
-    else
-    {
-        if( pad_size.x <= 0 || pad_size.y <= 0 )
-            error_msgs.Add( _( "Error: Pad must have a positive size." ) );
-    }
-
-    // Test hole against pad shape
-    if( m_previewPad->IsOnCopperLayer() && m_previewPad->GetDrillSize().x > 0 )
-    {
-        int            maxError = m_board->GetDesignSettings().m_MaxError;
-        SHAPE_POLY_SET padOutline;
-
-        m_previewPad->TransformShapeToPolygon( padOutline, UNDEFINED_LAYER, 0, maxError,
-                                             ERROR_INSIDE );
-
-        if( !padOutline.Collide( m_previewPad->GetPosition() ) )
-        {
-            warning_msgs.Add( _( "Warning: Pad hole not inside pad shape." ) );
-        }
-        else if( m_previewPad->GetAttribute() == PAD_ATTRIB::PTH )
-        {
-            std::shared_ptr<SHAPE_SEGMENT> slot = m_previewPad->GetEffectiveHoleShape();
-            SHAPE_POLY_SET                 slotOutline;
-
-            TransformOvalToPolygon( slotOutline, slot->GetSeg().A, slot->GetSeg().B,
-                                    slot->GetWidth(), maxError, ERROR_INSIDE );
-
-            padOutline.BooleanSubtract( slotOutline, SHAPE_POLY_SET::PM_FAST );
-
-            if( padOutline.IsEmpty() )
-                warning_msgs.Add( _( "Warning: Pad hole will leave no copper." ) );
-        }
-    }
-
-    if( m_previewPad->GetLocalClearance().value_or( 0 ) < 0 )
-        warning_msgs.Add( _( "Warning: Negative local clearance values will have no effect." ) );
-
-    // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
-    // However the negative solder mask clearance must not create negative mask size
-    // Therefore test for minimal acceptable negative value
-    std::optional<int> solderMaskMargin = m_previewPad->GetLocalSolderMaskMargin();
-
-    if( solderMaskMargin.has_value() && solderMaskMargin.value() < 0 )
-    {
-        int absMargin = abs( solderMaskMargin.value() );
-
-        if( m_previewPad->GetShape() == PAD_SHAPE::CUSTOM )
-        {
-            for( const std::shared_ptr<PCB_SHAPE>& shape : m_previewPad->GetPrimitives() )
+    m_previewPad->CheckPad( m_parentFrame,
+            [&]( int errorCode, const wxString& msg )
             {
-                BOX2I shapeBBox = shape->GetBoundingBox();
-
-                if( absMargin > shapeBBox.GetWidth() || absMargin > shapeBBox.GetHeight() )
-                {
-                    warning_msgs.Add( _( "Warning: Negative solder mask clearances larger than "
-                                         "some shape primitives. Results may be surprising." ) );
-
-                    break;
-                }
-            }
-        }
-        else if( absMargin > pad_size.x || absMargin > pad_size.y )
-        {
-            warning_msgs.Add( _( "Warning: Negative solder mask clearance larger than pad. No "
-                                 "solder mask will be generated." ) );
-        }
-    }
-
-    // Some pads need a positive solder paste clearance (mainly for BGA with small pads)
-    // However, a positive value can create issues if the resulting shape is too big.
-    // (like a solder paste creating a solder paste area on a neighbor pad or on the solder mask)
-    // So we could ask for user to confirm the choice
-    // For now we just check for disappearing paste
-    wxSize paste_size;
-    int    paste_margin = m_previewPad->GetLocalSolderPasteMargin().value_or( 0 );
-    double paste_ratio = m_previewPad->GetLocalSolderPasteMarginRatio().value_or( 0 );
-
-    paste_size.x = pad_size.x + paste_margin + KiROUND( pad_size.x * paste_ratio );
-    paste_size.y = pad_size.y + paste_margin + KiROUND( pad_size.y * paste_ratio );
-
-    if( paste_size.x <= 0 || paste_size.y <= 0 )
-    {
-        warning_msgs.Add( _( "Warning: Negative solder paste margins larger than pad. No solder "
-                             "paste mask will be generated." ) );
-    }
-
-    LSET padlayers_mask = m_previewPad->GetLayerSet();
-
-    if( padlayers_mask == 0 )
-        error_msgs.Add( _( "Error: pad has no layer." ) );
-
-    if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
-    {
-        if( ( drill_size.x || drill_size.y ) && m_previewPad->GetAttribute() != PAD_ATTRIB::NPTH )
-        {
-            warning_msgs.Add( _( "Warning: Plated through holes should normally have a copper pad "
-                                 "on at least one layer." ) );
-        }
-    }
-
-    if( error )
-        error_msgs.Add(  _( "Error: Trapazoid delta is too large." ) );
-
-    switch( m_previewPad->GetAttribute() )
-    {
-    case PAD_ATTRIB::NPTH:   // Not plated, but through hole, a hole is expected
-    case PAD_ATTRIB::PTH:    // Pad through hole, a hole is also expected
-        if( drill_size.x <= 0
-            || ( drill_size.y <= 0 && m_previewPad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG ) )
-        {
-            error_msgs.Add( _( "Error: Through hole pad has no hole." ) );
-        }
-        break;
-
-    case PAD_ATTRIB::CONN:      // Connector pads are smd pads, just they do not have solder paste.
-        if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
-        {
-            warning_msgs.Add( _( "Warning: Connector pads normally have no solder paste. Use a "
-                                 "SMD pad instead." ) );
-        }
-        KI_FALLTHROUGH;
-
-    case PAD_ATTRIB::SMD:       // SMD and Connector pads (One external copper layer only)
-    {
-        if( drill_size.x > 0 || drill_size.y > 0 )
-        {
-            error_msgs.Add( _( "Error: SMD pad has a hole." ) );
-        }
-
-        LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
-
-        if( ( padlayers_mask[F_Cu] && padlayers_mask[B_Cu] ) || innerlayers_mask.count() != 0 )
-            warning_msgs.Add( _( "Warning: SMD pad has no outer layers." ) );
-    }
-        break;
-    }
-
-    if( ( m_previewPad->GetProperty() == PAD_PROP::FIDUCIAL_GLBL || m_previewPad->GetProperty() == PAD_PROP::FIDUCIAL_LOCAL )
-            && m_previewPad->GetAttribute() == PAD_ATTRIB::NPTH )
-    {
-        warning_msgs.Add(  _( "Warning: Fiducial property makes no sense on NPTH pads." ) );
-    }
-
-    if( m_previewPad->GetProperty() == PAD_PROP::TESTPOINT
-            && m_previewPad->GetAttribute() == PAD_ATTRIB::NPTH )
-    {
-        warning_msgs.Add(  _( "Warning: Testpoint property makes no sense on NPTH pads." ) );
-    }
-
-    if( m_previewPad->GetProperty() == PAD_PROP::HEATSINK
-            && m_previewPad->GetAttribute() == PAD_ATTRIB::NPTH )
-    {
-        warning_msgs.Add(  _( "Warning: Heatsink property makes no sense of NPTH pads." ) );
-    }
-
-    if( m_previewPad->GetProperty() == PAD_PROP::CASTELLATED
-            && m_previewPad->GetAttribute() != PAD_ATTRIB::PTH )
-    {
-        warning_msgs.Add(  _( "Warning: Castellated property is for PTH pads." ) );
-    }
-
-    if( m_previewPad->GetProperty() == PAD_PROP::BGA
-            && m_previewPad->GetAttribute() != PAD_ATTRIB::SMD )
-    {
-        warning_msgs.Add(  _( "Warning: BGA property is for SMD pads." ) );
-    }
-
-    if( m_previewPad->GetProperty() == PAD_PROP::MECHANICAL
-            && m_previewPad->GetAttribute() != PAD_ATTRIB::PTH )
-    {
-        warning_msgs.Add(  _( "Warning: Mechanical property is for PTH pads." ) );
-    }
-
-    if( m_previewPad->GetShape() == PAD_SHAPE::ROUNDRECT
-            || m_previewPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT )
-    {
-        wxASSERT( m_cornerRatio.GetDoubleValue() == m_mixedCornerRatio.GetDoubleValue() );
-
-        if( m_cornerRatio.GetDoubleValue() < 0.0 )
-            error_msgs.Add( _( "Error: Negative corner size." ) );
-        else if( m_cornerRatio.GetDoubleValue() > 50.0 )
-            warning_msgs.Add( _( "Warning: Corner size will make pad circular." ) );
-    }
-
-    // PADSTACKS TODO: this will need to check each layer in the pad...
-    if( m_previewPad->GetShape() == PAD_SHAPE::CUSTOM )
-    {
-        SHAPE_POLY_SET mergedPolygon;
-        m_previewPad->MergePrimitivesAsPolygon( &mergedPolygon );
-
-        if( mergedPolygon.OutlineCount() > 1 )
-            error_msgs.Add( _( "Error: Custom pad shape must resolve to a single polygon." ) );
-    }
-
+                if( errorCode == DRCE_PADSTACK_INVALID )
+                    error_msgs.Add( _( "Error: " ) + msg );
+                else if( errorCode == DRCE_PADSTACK )
+                    warning_msgs.Add( _( "Warning: " ) + msg );
+                else if( errorCode == DRCE_PAD_TH_WITH_NO_HOLE )
+                    error_msgs.Add( _( "Error: Through hole pad has no hole." ) );
+            } );
 
     if( error_msgs.GetCount() || warning_msgs.GetCount() )
     {

@@ -34,6 +34,7 @@
     - DRCE_OVERLAPPING_PADS,
     - DRCE_PAD_TH_WITH_NO_HOLE,
     - DRCE_PADSTACK,
+    - DRCE_PADSTACK_INVALID,
     - DRCE_FOOTPRINT (unknown or duplicate pads in net-tie pad groups),
     - DRCE_SHORTING_ITEMS
 */
@@ -97,7 +98,7 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
         if( !m_drcEngine->IsErrorLimitExceeded( DRCE_PAD_TH_WITH_NO_HOLE )
                 || !m_drcEngine->IsErrorLimitExceeded( DRCE_PADSTACK ) )
         {
-            footprint->CheckPads(
+            footprint->CheckPads( m_drcEngine,
                     [&]( const PAD* aPad, int aErrorCode, const wxString& aMsg )
                     {
                         if( !m_drcEngine->IsErrorLimitExceeded( aErrorCode ) )
