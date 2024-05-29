@@ -547,6 +547,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     BOARD* brd = LoadBoard( aPdfJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aPdfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     if( aPdfJob->m_outputFile.IsEmpty() )
     {
