@@ -1229,9 +1229,6 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::setActiveState( TOOL_STATE* aState )
 {
-    if( m_activeState == aState )
-        return;
-
     if( m_activeState && m_viewControls )
         saveViewControls( m_activeState );
 
