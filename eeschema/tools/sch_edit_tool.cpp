@@ -1293,7 +1293,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                 // Clear out the filename so that the user can pick a new one
                 sheet->SetFileName( wxEmptyString );
                 sheet->GetScreen()->SetFileName( wxEmptyString );
-                restore_state = !m_frame->EditSheetProperties( sheet, currentSheet, nullptr );
+                restore_state = !m_frame->EditSheetProperties( sheet, currentSheet );
             }
         }
 
@@ -1864,8 +1864,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_SHEET_T:
     {
         SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( curr_item );
-        bool           doClearAnnotation;
-        bool           doRefresh = false;
+        bool           isUndoable = false;
+        bool           doClearAnnotation = false;
+        bool           okPressed = false;
         bool           updateHierarchyNavigator = false;
 
         // Keep track of existing sheet paths. EditSheet() can modify this list.
@@ -1873,8 +1874,22 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // we've got a valid hierarchy to begin with.
         SCH_SHEET_LIST originalHierarchy( &m_frame->Schematic().Root(), true );
 
-        doRefresh = m_frame->EditSheetProperties( sheet, &m_frame->GetCurrentSheet(),
+        SCH_COMMIT commit( m_toolMgr );
+        commit.Modify( sheet, m_frame->GetScreen() );
+        okPressed = m_frame->EditSheetProperties( sheet, &m_frame->GetCurrentSheet(), &isUndoable,
                                                   &doClearAnnotation, &updateHierarchyNavigator );
+
+        if( okPressed )
+        {
+            if( isUndoable )
+                commit.Push( _( "Edit Sheet Properties" ) );
+        }
+        else
+        {
+            // If we are renaming files, the undo/redo list becomes invalid and must be cleared.
+            m_frame->ClearUndoRedoList();
+            m_frame->OnModify();
+        }
 
         // If the sheet file is changed and new sheet contents are loaded then we have to
         // clear the annotations on the new content (as it may have been set from some other
@@ -1892,7 +1907,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             sheet->GetScreen()->ClearAnnotation( &m_frame->GetCurrentSheet(), false );
         }
 
-        if( doRefresh )
+        if( okPressed )
             m_frame->GetCanvas()->Refresh();
 
         if( updateHierarchyNavigator )

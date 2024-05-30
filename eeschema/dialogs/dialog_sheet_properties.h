@@ -37,14 +37,13 @@ class SCH_EDIT_FRAME;
 class DIALOG_SHEET_PROPERTIES : public DIALOG_SHEET_PROPERTIES_BASE
 {
 public:
-    DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
-                             bool* aClearAnnotationNewItems,
-                             bool* aUpdateHierarchyNavigator );
+    DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet, bool* aIsUndoable,
+                             bool* aClearAnnotationNewItems, bool* aUpdateHierarchyNavigator );
 
     ~DIALOG_SHEET_PROPERTIES() override;
 
 private:
-    bool onSheetFilenameChanged( const wxString& aNewFilename, bool* aIsUndoable );
+    bool onSheetFilenameChanged( const wxString& aNewFilename );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -66,6 +65,7 @@ private:
 private:
     SCH_EDIT_FRAME*    m_frame;
     SCH_SHEET*         m_sheet;
+    bool*              m_isUndoable;
     bool*              m_clearAnnotationNewItems;
     bool*              m_updateHierarchyNavigator;
 

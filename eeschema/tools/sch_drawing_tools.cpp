@@ -2585,7 +2585,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             getViewControls()->CaptureCursor( false );
 
             if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),
-                                              &m_frame->GetCurrentSheet(), nullptr ) )
+                                              &m_frame->GetCurrentSheet() ) )
             {
                 m_view->ClearPreview();
 

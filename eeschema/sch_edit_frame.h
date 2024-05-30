@@ -573,6 +573,8 @@ public:
      *
      * @param aSheet is the sheet to edit
      * @param aHierarchy is the current hierarchy containing aSheet
+     * @param aIsUndoable is a reference to a bool to know if this operation must clear
+     * the undo-redo list, since the operation is not reversible.
      * @param aClearAnnotationNewItems is a reference to a bool to know if the items managed by
      * this sheet need to have their annotation cleared i.e. when an existing item list is used.
      * it can happens when the edited sheet used an existing file, or becomes a new instance
@@ -581,7 +583,7 @@ public:
      *                                  the hierarchy navigator panel to be updated.
      */
     bool EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
-                              bool* aClearAnnotationNewItems,
+                              bool* aIsUndoable = nullptr, bool* aClearAnnotationNewItems = nullptr,
                               bool* aUpdateHierarchyNavigator = nullptr );
 
     void InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename );

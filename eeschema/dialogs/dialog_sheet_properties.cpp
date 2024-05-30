@@ -47,10 +47,11 @@
 #include "wx/dcclient.h"
 
 DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
-                                                  bool* aClearAnnotationNewItems,
+                                                  bool* aIsUndoable, bool* aClearAnnotationNewItems,
                                                   bool* aUpdateHierarchyNavigator ) :
     DIALOG_SHEET_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
+    m_isUndoable( aIsUndoable ),
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
     m_updateHierarchyNavigator( aUpdateHierarchyNavigator ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
@@ -275,7 +276,8 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     commit.Modify( m_sheet, m_frame->GetScreen() );
 
-    bool isUndoable = true;
+    if( m_isUndoable )
+        *m_isUndoable = true;
 
     // Sheet file names can be relative or absolute.
     wxString sheetFileName = m_fields->at( SHEETFILENAME ).GetText();
@@ -345,7 +347,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
             }
         }
 
-        if( !onSheetFilenameChanged( newRelativeFilename, &isUndoable ) )
+        if( !onSheetFilenameChanged( newRelativeFilename ) )
         {
             if( clearFileName )
                 currentScreen->SetFileName( wxEmptyString );
@@ -436,26 +438,12 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_SHEET_T ) )
         m_frame->UpdateItem( item );
 
-    if( isUndoable )
-    {
-        commit.Push( _( "Edit Sheet Properties" ) );
-    }
-    else
-    {
-        // If we are renaming files, the undo/redo list becomes invalid and must be cleared.
-        m_frame->ClearUndoRedoList();
-        m_frame->OnModify();
-    }
-
     return true;
 }
 
 
-bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename,
-                                                      bool* aIsUndoable )
+bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename )
 {
-    wxCHECK( aIsUndoable, false );
-
     wxString       msg;
     wxFileName     sheetFileName( EnsureFileExtension( aNewFilename,
                                                        FILEEXT::KiCadSchematicFileExtension ) );
@@ -553,7 +541,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         if( newAbsoluteFilename.Cmp( oldAbsoluteFilename ) != 0 )
         {
             // Sheet file name changes cannot be undone.
-            *aIsUndoable = false;
+            if( m_isUndoable )
+                *m_isUndoable = false;
 
             if( useScreen || loadFromFile )           // Load from existing file.
             {
