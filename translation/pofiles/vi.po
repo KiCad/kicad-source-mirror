@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-30 02:02+0000\n"
+"PO-Revision-Date: 2024-05-30 17:31+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -410,7 +410,7 @@ msgstr "Trang chính"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Vẽ lại ở vị trí ban đầu và phóng to"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -818,7 +818,7 @@ msgstr "Nhấp đúp chuột trái hoặc nhấp chuột giữa để thay đổ
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:490
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "Bỏ chọn 'Sử dụng màu xếp chồng bảng' để cho phép chỉnh sửa màu."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:540
 #: pcbnew/widgets/appearance_controls.cpp:2195
@@ -2581,14 +2581,12 @@ msgstr "Kích thước lưới Y nằm ngoài phạm vi."
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1020
-#, fuzzy
 msgid "Name:"
 msgstr "Tên:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "Tùy chọn"
+msgstr "(tùy chọn)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2673,9 +2671,8 @@ msgstr "Tùy chọn"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:306
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:320
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:336
-#, fuzzy
 msgid "unit"
-msgstr "Đơn vị"
+msgstr "đơn vị"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
 msgid "Linked"
@@ -2690,9 +2687,8 @@ msgid "Hotkey List"
 msgstr "Danh sách phím nóng"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr "Quản lý dự án"
+msgstr "Tên dự án"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1209
@@ -2716,14 +2712,12 @@ msgstr ""
 "Chọn cái nào sẽ được nhập vào KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Tệp dự án KiCad"
+msgstr "Chọn dự án để nhập"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "Đối tượng Bị khóa"
+msgstr "Bỏ qua đối tượng bị khóa"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
@@ -2779,7 +2773,7 @@ msgstr "Thoát khỏi KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:58
 #: common/dialogs/dialog_migrate_settings_base.cpp:23
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s!"
 msgstr "Chào mừng bạn đến với KiCad %s!"
 
@@ -2808,9 +2802,8 @@ msgid "The selected path does not contain valid KiCad settings!"
 msgstr "Đường dẫn đã chọn không chứa cài đặt KiCad hợp lệ!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Nhập vào các cài đặt từ phiên bản trước (không tìm thấy)"
+msgstr "Nhập cấu hình thư viện từ phiên bản trước"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -3182,9 +3175,8 @@ msgid "Options for Library '%s'"
 msgstr "Các tùy chọn với Thư viện '%s'"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
-#, fuzzy
 msgid "Plugin Options"
-msgstr "Tùy chọn văn bản Pin"
+msgstr "Tùy chọn Plugin"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:43
 #: common/dialogs/panel_mouse_settings.cpp:47
@@ -3243,7 +3235,6 @@ msgstr "<<    Nối tùy chọn đã chọn"
 #: common/dialogs/dialog_print_generic_base.h:77
 #: eeschema/printing/dialog_print_using_printer.cpp:126
 #: eeschema/printing/dialog_print_using_printer_base.h:61
-#, fuzzy
 msgid "Print"
 msgstr "In"
 
@@ -3251,7 +3242,7 @@ msgstr "In"
 #: common/dialogs/dialog_print_generic.cpp:247
 #: eeschema/printing/dialog_print_using_printer.cpp:127
 msgid "Print Preview"
-msgstr "Xem thử trước bản in"
+msgstr "Xem trước bản in"
 
 #: common/dialogs/dialog_print_generic.cpp:97 common/hotkey_store.cpp:59
 #: common/tool/action_menu.cpp:212 common/tool/action_menu.cpp:217
@@ -3281,7 +3272,6 @@ msgstr "Xem thử trước bản in"
 #: pcbnew/dialogs/dialog_gendrill.cpp:78
 #: pcbnew/dialogs/dialog_import_netlist.cpp:84
 #: pcbnew/dialogs/dialog_plot.cpp:191 pcbnew/dialogs/dialog_update_pcb.cpp:61
-#, fuzzy
 msgid "Close"
 msgstr "Đóng"
 
@@ -17451,9 +17441,8 @@ msgid "Nets"
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không tạo được thư mục 'thiết bị'."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:409
 #, c-format
@@ -17466,9 +17455,9 @@ msgid "Could not open file '%s' to write IBIS model"
 msgstr "Không thể mở tệp '%s' để ghi mô hình IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Error in parsing model '%s', error: '%s'"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi khi phân tích mô hình '%s', lỗi: '%s'"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:564
 #, c-format
@@ -17496,9 +17485,8 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "Lỗi: tên sheet trùng lặp. Tiếp tục?"
 
 #: eeschema/picksymbol.cpp:121
-#, fuzzy
 msgid "Change Unit"
-msgstr "Thay đổi phương pháp chỉnh sửa"
+msgstr "Thay đổi đơn vị"
 
 #: eeschema/picksymbol.cpp:138
 #, fuzzy, c-format
@@ -25945,9 +25933,9 @@ msgid "Image height"
 msgstr "Chiều cao"
 
 #: kicad/cli/command_pcb_render.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Render from side. Options: %s"
-msgstr "Các Tùy chọn Render"
+msgstr "Kết xuất từ bên cạnh. Tùy chọn: %s"
 
 #: kicad/cli/command_pcb_render.cpp:190
 msgid ""
@@ -25956,9 +25944,9 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Render quality. Options: %s"
-msgstr "Các Tùy chọn Render"
+msgstr "Kết xuất chất lượng. Tùy chọn: %s"
 
 #: kicad/cli/command_pcb_render.cpp:204
 #, c-format
@@ -39969,22 +39957,21 @@ msgstr "Đang kiểm tra nhãn..."
 #: pcbnew/drc/drc_engine.cpp:195
 #, fuzzy
 msgid "board setup constraints hole"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "cài đặt các ràng buộc cho lỗ bo mạch"
 
 #: pcbnew/drc/drc_engine.cpp:200
 #, fuzzy
 msgid "board setup constraints edge"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "cài đặt các ràng buộc cho cạnh bo mạch"
 
 #: pcbnew/drc/drc_engine.cpp:205
 #, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "cài đặt các ràng buộc cho đường bao linh kiện bo mạch"
 
 #: pcbnew/drc/drc_engine.cpp:212
-#, fuzzy
 msgid "board setup micro-via constraints"
-msgstr "Đang kiểm tra nhãn..."
+msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:246 pcbnew/drc/drc_engine.cpp:325
 #, c-format
@@ -40010,7 +39997,7 @@ msgstr "Tạo các lớp"
 #: pcbnew/drc/drc_engine.cpp:430
 #, fuzzy, c-format
 msgid "keepout area '%s'"
-msgstr "Vùng Rule %s\t"
+msgstr "Vùng tránh xa '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:624
 #, fuzzy, c-format
