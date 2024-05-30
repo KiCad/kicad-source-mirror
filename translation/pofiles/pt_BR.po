@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:38-0700\n"
-"PO-Revision-Date: 2024-05-24 09:09+0000\n"
+"PO-Revision-Date: 2024-05-30 17:31+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -6445,7 +6445,7 @@ msgstr "Sem erro"
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:130
 #: pcbnew/tools/edit_tool.cpp:2543
 msgid "Cut"
-msgstr "Corte"
+msgstr "Cortar"
 
 #: common/grid_tricks.cpp:356
 msgid "Clear selected cells placing original contents on clipboard"
@@ -6456,22 +6456,22 @@ msgstr ""
 #: common/grid_tricks.cpp:357 common/tool/actions.cpp:211
 #: eeschema/tools/ee_actions.cpp:223 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
-msgstr "Copie"
+msgstr "Copiar"
 
 #: common/grid_tricks.cpp:358
 msgid "Copy selected cells to clipboard"
-msgstr "Copie as células selecionadas para a área de transferência"
+msgstr "Copia as células selecionadas para a área de transferência"
 
 #: common/grid_tricks.cpp:359 common/tool/actions.cpp:222
 #: eeschema/tools/sch_editor_control.cpp:2191
 #: eeschema/tools/symbol_editor_edit_tool.cpp:877
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1091
 msgid "Paste"
-msgstr "Cole"
+msgstr "Colar"
 
 #: common/grid_tricks.cpp:360
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "Cole as células para a matriz da célula em uso"
+msgstr "Colar as células para a matriz da célula em uso"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:267
 #: eeschema/tools/sch_edit_tool.cpp:1460
@@ -7608,11 +7608,11 @@ msgstr "Refaça a última edição"
 
 #: common/tool/actions.cpp:201
 msgid "Cut selected item(s) to clipboard"
-msgstr "Recorte o(s) item(s) selecionado(s) para a área de transferência"
+msgstr "Recorta o(s) item(s) selecionado(s) para a área de transferência"
 
 #: common/tool/actions.cpp:212
 msgid "Copy selected item(s) to clipboard"
-msgstr "Copie o(s) item(s) selecionado(s) para a área de transferência"
+msgstr "Copia o(s) item(s) selecionado(s) para a área de transferência"
 
 #: common/tool/actions.cpp:223
 msgid "Paste item(s) from clipboard"
@@ -48980,7 +48980,7 @@ msgstr "Nenhuma rede"
 
 #: pcbnew/zone.cpp:542
 msgid "Cutout"
-msgstr "Recorte"
+msgstr "Recortar"
 
 #: pcbnew/zone.cpp:551
 msgid "No vias"
