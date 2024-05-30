@@ -1552,10 +1552,9 @@ EDA_ANGLE PCB_ARC::GetAngle() const
 
 EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 {
-    VECTOR2I pos( GetPosition() );
-    VECTOR2D dir( (double) m_Start.x - pos.x, (double) m_Start.y - pos.y );
+    VECTOR2I  pos( GetPosition() );
+    EDA_ANGLE angleStart( m_Start - pos );
 
-    EDA_ANGLE angleStart( dir );
     return angleStart.Normalize();
 }
 
@@ -1563,10 +1562,9 @@ EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 // Note: used in python tests.  Ignore CLion's claim that it's unused....
 EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
 {
-    VECTOR2I pos( GetPosition() );
-    VECTOR2D dir( (double) m_End.x - pos.x, (double) m_End.y - pos.y );
+    VECTOR2I  pos( GetPosition() );
+    EDA_ANGLE angleEnd( m_End - pos );
 
-    EDA_ANGLE angleEnd( dir );
     return angleEnd.Normalize();
 }
 
