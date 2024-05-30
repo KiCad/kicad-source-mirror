@@ -259,10 +259,7 @@ public:
         return v1.Cross( v2 ) > 0;
     }
 
-    bool IsClockwise() const
-    {
-    return !IsCCW();
-}
+    bool IsClockwise() const { return !IsCCW(); }
 
 private:
     void update_values();

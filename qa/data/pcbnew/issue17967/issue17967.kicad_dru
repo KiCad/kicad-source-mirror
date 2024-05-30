@@ -1,0 +1,28 @@
+(version 1)
+(rule "csi_outer"
+	(layer outer)
+	(condition "(A.NetClass == 'csi_diff100R')")
+	(constraint track_width (opt 0.065mm))
+	(constraint diff_pair_gap (min "0.065mm") (opt 0.15mm) (max "0.35mm"))
+	(constraint diff_pair_uncoupled (max 15mm))
+)
+(rule "csi_clearance"
+	(layer outer)
+	(condition "(A.NetClass == 'csi_diff100R' && !AB.isCoupledDiffPair() && A.Type == 'Track' && B.Type == 'Track')")
+	(constraint clearance (min 0.3mm))
+)
+
+(rule "csi_GND_clearance"
+	(layer outer)
+	(condition "A.NetClass == 'csi_diff100R' && B.NetName == 'GND'")
+	(constraint clearance (min 0.15mm))
+)
+
+(rule "connector_clearance"
+	(condition "(A.Type == 'Pad' || A.Type == 'Via') && ( A.insideCourtyard('J1') || A.insideCourtyard('J2') || A.insideCourtyard('J3')) ")
+	(constraint clearance (min 0.15mm))
+)
+
+
+
+
