@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,7 @@ GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BI
 void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                                          const wxRect& aRect, int aRow, int aCol, bool isSelected )
 {
-    wxString value  = aGrid.GetCellValue( aRow, aCol );
-    wxBitmap bitmap;
+    wxString value = aGrid.GetCellValue( aRow, aCol );
 
     wxRect rect = aRect;
     rect.Inflate( -1 );
@@ -55,19 +54,38 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     // note that the set of icons might be smaller than the set of labels if the last
     // label is <...>.
     int position = m_names.Index( value );
+    int leftCut = aDC.FromDIP( 4 );
 
     if( position < (int) m_icons.size() && position != wxNOT_FOUND )
     {
-        bitmap = KiBitmap( m_icons[ position ] );
-        aDC.DrawBitmap( bitmap, rect.GetLeft() + 3, rect.GetTop() + 2, true );
+        wxBitmapBundle bundle = KiBitmapBundle( m_icons[position] );
+
+        wxBitmap bitmap = bundle.GetBitmap(
+                bundle.GetPreferredBitmapSizeAtScale( aDC.GetContentScaleFactor() ) );
+
+        aDC.DrawBitmap( bitmap,
+                        rect.GetLeft() + leftCut,
+                        rect.GetTop() + ( rect.GetHeight() - bitmap.GetLogicalHeight() ) / 2,
+                        true );
+
+        leftCut += bitmap.GetLogicalWidth();
     }
     else    // still need a bitmap to fetch the width
     {
-        bitmap = KiBitmap( m_icons[ 0 ] );
+        wxBitmapBundle bundle = KiBitmapBundle( m_icons[0] );
+
+        wxBitmap bitmap = bundle.GetBitmap(
+                bundle.GetPreferredBitmapSizeAtScale( aDC.GetContentScaleFactor() ) );
+
+        leftCut += bitmap.GetLogicalWidth();
     }
 
+    leftCut += aDC.FromDIP( 4 );
+
+    rect.x += leftCut;
+    rect.width -= leftCut;
+
     // draw the text
-    rect.SetLeft( rect.GetLeft() + bitmap.GetWidth() + 7 );
     SetTextColoursAndFont( aGrid, aAttr, aDC, isSelected );
     aGrid.DrawTextRectangle( aDC, value, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
 }
@@ -75,11 +93,16 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
 wxSize GRID_CELL_ICON_TEXT_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                                   int row, int col )
 {
-    wxBitmap bitmap = KiBitmap( m_icons[ row ] );
+    int            bmpIdx = ( row < (int) m_icons.size() && row >= 0 ) ? row : 0;
+    wxBitmapBundle bundle = KiBitmapBundle( m_icons[bmpIdx] );
+
+    wxBitmap bitmap =
+            bundle.GetBitmap( bundle.GetPreferredBitmapSizeAtScale( dc.GetContentScaleFactor() ) );
+
     wxString text = grid.GetCellValue( row, col );
     wxSize   size = wxGridCellStringRenderer::DoGetBestSize( attr, dc, text );
 
-    size.x += bitmap.GetWidth() + 6;
+    size.x += bitmap.GetLogicalWidth() + dc.FromDIP( 8 );
 
     return size;
 }
