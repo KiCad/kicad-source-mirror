@@ -146,53 +146,56 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 
     for( const auto& [testName, expectedErrors] : tests )
     {
-        KI_TEST::LoadBoard( m_settingsManager, testName, m_board );
-        // Do not refill zones here because this is testing the DRC engine, not the zone filler
+        BOOST_TEST_CONTEXT( testName )
+        {
+            KI_TEST::LoadBoard( m_settingsManager, testName, m_board );
+            // Do not refill zones here because this is testing the DRC engine, not the zone filler
 
-        std::vector<PCB_MARKER> markers;
-        std::vector<DRC_ITEM>  violations;
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+            std::vector<PCB_MARKER> markers;
+            std::vector<DRC_ITEM>   violations;
+            BOARD_DESIGN_SETTINGS&  bds = m_board->GetDesignSettings();
 
-        // Disable DRC tests not useful in this testcase
-        bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
+            // Disable DRC tests not useful in this testcase
+            bds.m_DRCSeverities[DRCE_COPPER_SLIVER] = SEVERITY::RPT_SEVERITY_IGNORE;
+            bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_ISSUES] = SEVERITY::RPT_SEVERITY_IGNORE;
+            bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_MISMATCH] = SEVERITY::RPT_SEVERITY_IGNORE;
 
-        bds.m_DRCEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
-                {
-                    markers.emplace_back( PCB_MARKER( aItem, aPos ) );
-
-                    if( bds.m_DrcExclusions.find( markers.back().SerializeToString() )
-                        == bds.m_DrcExclusions.end() )
+            bds.m_DRCEngine->SetViolationHandler(
+                    [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
                     {
-                        violations.push_back( *aItem );
-                    }
-                } );
+                        markers.emplace_back( PCB_MARKER( aItem, aPos ) );
 
-        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+                        if( bds.m_DrcExclusions.find( markers.back().SerializeToString() )
+                            == bds.m_DrcExclusions.end() )
+                        {
+                            violations.push_back( *aItem );
+                        }
+                    } );
 
-        if( violations.size() == expectedErrors )
-        {
-            BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-            BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, passed", testName ) );
-        }
-        else
-        {
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+            bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
-
-            for( const DRC_ITEM& item : violations )
+            if( violations.size() == expectedErrors )
             {
-                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                     itemMap ) );
+                BOOST_CHECK_EQUAL( 1, 1 ); // quiet "did not check any assertions" warning
+                BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, passed", testName ) );
             }
+            else
+            {
+                UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
 
-            BOOST_CHECK_EQUAL( violations.size(), expectedErrors );
+                std::map<KIID, EDA_ITEM*> itemMap;
+                m_board->FillItemMap( itemMap );
 
-            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", testName ) );
+                for( const DRC_ITEM& item : violations )
+                {
+                    BOOST_TEST_MESSAGE(
+                            item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+                }
+
+                BOOST_CHECK_EQUAL( violations.size(), expectedErrors );
+
+                BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", testName ) );
+            }
         }
     }
 }
