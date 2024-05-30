@@ -18,7 +18,7 @@
   stage: test
   when: on_success
   variables:
-    BOOST_TEST_LOGGER: 'JUNIT,warning,test_results.${TEST}.xml:HRF,warning'
+    BOOST_TEST_LOGGER: 'JUNIT,warning,test_results.${TEST}.xml:HRF,message'
     CTEST_OUTPUT_ON_FAILURE: 1
   script:
     - cd build/linux/qa
