@@ -121,6 +121,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
     BOARD* brd = LoadBoard( aStepJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     if( aStepJob->m_outputFile.IsEmpty() )
     {
@@ -254,6 +255,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
 
     BOARD* brd = LoadBoard( aRenderJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     BOARD_ADAPTER boardAdapter;
 
@@ -447,6 +449,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     BOARD* brd = LoadBoard( aSvgJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     if( aJob->IsCli() )
     {
@@ -473,6 +476,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     BOARD* brd = LoadBoard( aDxfJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     if( aDxfJob->m_outputFile.IsEmpty() )
     {
@@ -638,6 +642,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     BOARD* brd = LoadBoard( aGerberJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     PCB_PLOT_PARAMS       boardPlotOptions = brd->GetPlotOptions();
     LSET                  plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
@@ -785,6 +790,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     BOARD* brd = LoadBoard( aGerberJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     if( aGerberJob->m_outputFile.IsEmpty() )
     {
@@ -1215,6 +1221,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     std::unique_ptr<BOARD> brd;
     brd.reset( CreateEmptyBoard() );
     brd->GetProject()->ApplyTextVars( aSvgJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aFootprint->Clone() );
 
@@ -1276,6 +1283,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     BOARD* brd = LoadBoard( drcJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    brd->SynchronizeProperties();
 
     if( drcJob->m_outputFile.IsEmpty() )
     {
