@@ -242,17 +242,17 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
                     [&] ( BOARD_ITEM *aItem )
                     {
                         if( aItem == bestCoupled->parentN || aItem == bestCoupled->parentP )
-                        {
                             return false;
-                        }
 
                         if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_VIA_T )
                         {
-                            auto bci = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+                            BOARD_CONNECTED_ITEM* bci = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
                             if( bci->GetNetCode() == bestCoupled->parentN->GetNetCode()
-                            ||  bci->GetNetCode() == bestCoupled->parentP->GetNetCode() )
+                                    ||  bci->GetNetCode() == bestCoupled->parentP->GetNetCode() )
+                            {
                                 return false;
+                            }
                         }
 
                         return true;
