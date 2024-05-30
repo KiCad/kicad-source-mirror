@@ -258,6 +258,25 @@ private:
 
     void update_bbox();
 
+    /**
+     * @return true if the arc is counter-clockwise.
+     */
+    bool IsCCW() const
+    {
+        VECTOR2L mid = m_mid;
+        VECTOR2L v1 = m_end - mid;
+        VECTOR2L v2 = m_start - mid;
+
+        return v1.Cross( v2 ) > 0;
+    }
+
+    /**
+     * @return true if the arc is clockwise.
+     */
+    bool IsClockwise() const { return !IsCCW(); }
+
+private:
+
     bool sliceContainsPoint( const VECTOR2I& p ) const;
 
 private:
