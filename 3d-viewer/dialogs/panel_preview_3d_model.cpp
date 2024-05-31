@@ -163,6 +163,14 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     aFrame->Connect( EDA_EVT_UNITS_CHANGED,
                      wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL::onUnitsChanged ),
                      nullptr, this );
+
+    Bind( wxEVT_DPI_CHANGED,
+          [&]( wxDPIChangedEvent& aEvt )
+          {
+              const DPI_SCALING_COMMON dpi{ Pgm().GetCommonSettings(), this };
+              m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
+              aEvt.Skip();
+          } );
 }
 
 
