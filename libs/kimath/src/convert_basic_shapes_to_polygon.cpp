@@ -163,7 +163,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
     }
 
     EDA_ANGLE delta_angle( endp );
-    int       seg_len = KiROUND( EuclideanNorm( endp ) );
+    int       seg_len = endp.EuclideanNorm();
 
     // Compute the outlines of the segment, and creates a polygon
     // Note: the polygonal shape is built from the equivalent horizontal

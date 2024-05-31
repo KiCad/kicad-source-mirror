@@ -106,48 +106,6 @@ public:
         }
     }
 
-    explicit EDA_ANGLE( const VECTOR2I& aVector )
-    {
-        /* gcc is surprisingly smart in optimizing these conditions in a tree! */
-
-        if( aVector.x == 0 && aVector.y == 0 )
-        {
-            m_value = 0;
-        }
-        else if( aVector.y == 0 )
-        {
-            if( aVector.x >= 0 )
-                m_value = 0.0;
-            else
-                m_value = -180.0;
-        }
-        else if( aVector.x == 0 )
-        {
-            if( aVector.y >= 0 )
-                m_value = 90.0;
-            else
-                m_value = -90.0;
-        }
-        else if( aVector.x == aVector.y )
-        {
-            if( aVector.x >= 0 )
-                m_value = 45.0;
-            else
-                m_value = -180.0 + 45.0;
-        }
-        else if( aVector.x == -aVector.y )
-        {
-            if( aVector.x >= 0 )
-                m_value = -45.0;
-            else
-                m_value = 180.0 - 45.0;
-        }
-        else
-        {
-            *this = EDA_ANGLE( atan2( (double) aVector.y, (double) aVector.x ), RADIANS_T );
-        }
-    }
-
     EDA_ANGLE() :
             m_value( 0.0 )
     {}

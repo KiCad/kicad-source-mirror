@@ -128,12 +128,12 @@ double EDA_SHAPE::GetLength() const
     {
     case SHAPE_T::BEZIER:
         for( size_t ii = 1; ii < m_bezierPoints.size(); ++ii )
-            length += GetLineLength( m_bezierPoints[ ii - 1], m_bezierPoints[ii] );
+            length += m_bezierPoints[ ii - 1].Distance( m_bezierPoints[ii] );
 
         return length;
 
     case SHAPE_T::SEGMENT:
-        return GetLineLength( GetStart(), GetEnd() );
+        return GetStart().Distance( GetEnd() );
 
     case SHAPE_T::POLY:
         for( int ii = 0; ii < m_poly.COutline( 0 ).SegmentCount(); ii++ )
@@ -623,11 +623,11 @@ int EDA_SHAPE::GetRadius() const
     switch( m_shape )
     {
     case SHAPE_T::ARC:
-        radius = GetLineLength( m_arcCenter, m_start );
+        radius = m_arcCenter.Distance( m_start );
         break;
 
     case SHAPE_T::CIRCLE:
-        radius = GetLineLength( m_start, m_end );
+        radius = m_start.Distance( m_end );
         break;
 
     default:
@@ -796,7 +796,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     case SHAPE_T::SEGMENT:
     {
         aList.emplace_back( _( "Length" ),
-                            aFrame->MessageTextFromValue( GetLineLength( GetStart(), GetEnd() ) ));
+                            aFrame->MessageTextFromValue( GetStart().Distance( GetEnd() ) ));
 
         // angle counter-clockwise from 3'o-clock
         EDA_ANGLE angle( atan2( (double)( GetStart().y - GetEnd().y ),
@@ -869,19 +869,17 @@ const BOX2I EDA_SHAPE::getBoundingBox() const
 
 bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    int maxdist = aAccuracy;
+    double maxdist = aAccuracy;
 
     if( GetWidth() > 0 )
-        maxdist += GetWidth() / 2;
+        maxdist += GetWidth() / 2.0;
 
     switch( m_shape )
     {
     case SHAPE_T::CIRCLE:
     {
-        int radius = GetRadius();
-
-        VECTOR2I::extended_type dist = KiROUND<double, VECTOR2I::extended_type>(
-                EuclideanNorm( aPosition - getCenter() ) );
+        double radius = GetRadius();
+        double dist = aPosition.Distance( getCenter() );
 
         if( IsFilled() )
             return dist <= radius + maxdist;          // Filled circle hit-test
@@ -891,17 +889,15 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
     case SHAPE_T::ARC:
     {
-        if( EuclideanNorm( aPosition - m_start ) <= maxdist )
+        if( aPosition.Distance( m_start ) <= maxdist )
             return true;
 
-        if( EuclideanNorm( aPosition - m_end ) <= maxdist )
+        if( aPosition.Distance( m_end ) <= maxdist )
             return true;
 
-        VECTOR2I relPos = aPosition - getCenter();
-        int      radius = GetRadius();
-
-        VECTOR2I::extended_type dist =
-                KiROUND<double, VECTOR2I::extended_type>( EuclideanNorm( relPos ) );
+        double radius = GetRadius();
+        VECTOR2D relPos( VECTOR2D( aPosition ) - getCenter() );
+        double dist = relPos.EuclideanNorm();
 
         if( IsFilled() )
         {
@@ -1491,14 +1487,14 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
         case 1:
             m_end = aPosition;
-            radius = sqrt( sq( GetLineLength( m_start, m_end ) ) / 2.0 );
+            radius = m_start.Distance( m_end ) * M_SQRT1_2;
             break;
 
         case 2:
         case 3:
         {
             VECTOR2I v = m_start - m_end;
-            double chordBefore = sq( v.x ) + sq( v.y );
+            double chordBefore = v.SquaredEuclideanNorm();
 
             if( m_editState == 2 )
                 m_start = aPosition;
@@ -1507,7 +1503,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
             v = m_start - m_end;
 
-            double chordAfter = sq( v.x ) + sq( v.y );
+            double chordAfter = v.SquaredEuclideanNorm();
             double ratio = 0.0;
 
             if( chordBefore > 0 )
@@ -1520,8 +1516,8 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
         case 4:
         {
-            double radialA = GetLineLength( m_start, aPosition );
-            double radialB = GetLineLength( m_end, aPosition );
+            double radialA = m_start.Distance( aPosition );
+            double radialB = m_end.Distance( aPosition );
             radius = ( radialA + radialB ) / 2.0;
         }
             break;
@@ -1534,9 +1530,9 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         // Calculate center based on start, end, and radius
         //
         // Let 'l' be the length of the chord and 'm' the middle point of the chord
-        double   l = GetLineLength( m_start, m_end );
+        double   l = m_start.Distance( m_end );
         VECTOR2D m = ( m_start + m_end ) / 2;
-        double   sqRadDiff = sq( radius ) - sq( l / 2 );
+        double   sqRadDiff = ( radius * radius ) - 0.25;
 
         // Calculate 'd', the vector from the chord midpoint to the center
         VECTOR2D d;
@@ -1575,7 +1571,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
         case 4:
             // Pick the one closer to the mouse position
-            m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
+            m_arcCenter = c1.Distance( aPosition ) < c2.Distance( aPosition ) ? c1 : c2;
             break;
         }
     }

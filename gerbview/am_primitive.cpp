@@ -460,7 +460,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( APERTURE_MACRO* aApertMacro,
         VECTOR2I end =
                 mapPt( m_Params[4].GetValueFromMacro( aApertMacro ), m_Params[5].GetValueFromMacro( aApertMacro ), m_GerbMetric );
         VECTOR2I delta = end - start;
-        int     len   = KiROUND( EuclideanNorm( delta ) );
+        int     len   = delta.EuclideanNorm();
 
         // To build the polygon, we must create a horizontal polygon starting to "start"
         // and rotate it to have the end point to "end"

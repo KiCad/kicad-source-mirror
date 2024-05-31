@@ -1264,9 +1264,9 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
             {
                 SCH_LINE* line = (SCH_LINE*) aCollector[i];
 
-                if( HitTestPoints( line->GetStartPoint(), aWhere, aCollector.m_Threshold ) )
+                if( line->GetStartPoint().Distance( aWhere ) <= aCollector.m_Threshold )
                     flags = STARTPOINT;
-                else if( HitTestPoints( line->GetEndPoint(), aWhere, aCollector.m_Threshold ) )
+                else if( line->GetEndPoint().Distance( aWhere ) <= aCollector.m_Threshold )
                     flags = ENDPOINT;
                 else
                     flags = STARTPOINT | ENDPOINT;
@@ -1516,8 +1516,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
             if( line )
             {
-                dist = KiROUND( DistanceLinePoint( line->GetStartPoint(),
-                                                   line->GetEndPoint(), aPos ) );
+                dist = line->GetSeg().Distance( aPos );
             }
             else if( field )
             {
@@ -1567,13 +1566,13 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                 SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
 
                 if( bbox.Contains( aPos ) )
-                    dist = KiROUND( EuclideanNorm( bbox.GetCenter() - aPos ) );
+                    dist = bbox.GetCenter().Distance( aPos );
                 else
                     rect.Collide( poss, closestDist, &dist );
             }
             else
             {
-                dist = KiROUND( EuclideanNorm( bbox.GetCenter() - aPos ) );
+                dist = bbox.GetCenter().Distance( aPos );
             }
         }
         else

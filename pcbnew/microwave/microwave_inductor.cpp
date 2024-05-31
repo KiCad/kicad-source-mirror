@@ -50,9 +50,9 @@
 static void gen_arc( std::vector<VECTOR2I>& aBuffer, const VECTOR2I& aStartPoint,
                      const VECTOR2I& aCenter, const EDA_ANGLE& a_ArcAngle )
 {
-    auto first_point = aStartPoint - aCenter;
-    auto radius = KiROUND( EuclideanNorm( first_point ) );
-    int  seg_count = GetArcToSegmentCount( radius, ARC_HIGH_DEF, a_ArcAngle );
+    VECTOR2D first_point = VECTOR2D( aStartPoint ) - aCenter;
+    double   radius = first_point.EuclideanNorm();
+    int      seg_count = GetArcToSegmentCount( radius, ARC_HIGH_DEF, a_ArcAngle );
 
     double increment_angle = a_ArcAngle.AsRadians() / seg_count;
 
@@ -140,7 +140,7 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& 
 
     auto      pt  = aEndPoint - aStartPoint;
     EDA_ANGLE angle( pt );
-    int       min_len = KiROUND( EuclideanNorm( pt ) );
+    int       min_len = pt.EuclideanNorm();
     int       segm_len = 0;       // length of segments
     int       full_len;           // full len of shape (sum of length of all segments + arcs)
 
@@ -358,7 +358,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
     VECTOR2I pt = aInductorPattern.m_End - aInductorPattern.m_Start;
-    int     min_len = KiROUND( EuclideanNorm( pt ) );
+    int      min_len = pt.EuclideanNorm();
     aInductorPattern.m_Length = min_len;
 
     // Enter the desired length.

@@ -297,7 +297,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     case GBR_CIRCLE:
     {
         isFilled = gvconfig()->m_Display.m_DisplayLinesFill;
-        double radius = GetLineLength( aItem->m_Start, aItem->m_End );
+        double radius = aItem->m_Start.Distance( aItem->m_End );
         m_gal->DrawCircle( start, radius );
         break;
     }
@@ -313,7 +313,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
         // Gerber arcs are 3-point (start, center, end)
         // GAL needs center, radius, start angle, end angle
-        double   radius = GetLineLength( arcStart, aItem->m_ArcCentre );
+        double   radius = arcStart.Distance( aItem->m_ArcCentre );
         VECTOR2D center = aItem->GetABPosition( aItem->m_ArcCentre );
         VECTOR2D startVec = VECTOR2D( aItem->GetABPosition( arcStart ) ) - center;
         VECTOR2D endVec = VECTOR2D( aItem->GetABPosition( arcEnd ) ) - center;

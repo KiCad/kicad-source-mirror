@@ -557,7 +557,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             VECTOR2I padPos( ( x1 + x2 ) / 2, ( y1 + y2 ) / 2 );
 
-            pad->SetSize( VECTOR2I( KiROUND( EuclideanNorm( delta ) ) + width, width ) );
+            pad->SetSize( VECTOR2I( delta.EuclideanNorm() + width, width ) );
 
             padPos += footprint->GetPosition();
             pad->SetPosition( padPos );

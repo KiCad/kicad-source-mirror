@@ -105,8 +105,8 @@ void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
             VECTOR2I arcStart = vertex.center + arcStartOffset;
             VECTOR2I arcEnd   = vertex.center + arcEndOffset;
 
-            if( GetLineLength( arcStart, vertex.position )
-                    < GetLineLength( arcEnd, vertex.position ) )
+            if( arcStart.Distance( vertex.position )
+                    < arcEnd.Distance( vertex.position ) )
             {
                 aLine.Append( SHAPE_ARC( vertex.center, arcStart, -angle ) );
             }
@@ -1413,7 +1413,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
         dimension->SetEnd( *intersection );
 
-        int height = static_cast<int>( EuclideanNorm( direction ) );
+        int height = direction.EuclideanNorm();
 
         if( ( direction.x > 0 || direction.y < 0 ) != ( aElem.angle >= 180.0 ) )
             height = -height;
@@ -1603,7 +1603,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 
             if( dirVec.x != 0 || dirVec.y != 0 )
             {
-                double   scaling = EuclideanNorm( dirVec ) / aElem.arrowsize;
+                double   scaling = dirVec.EuclideanNorm() / aElem.arrowsize;
                 VECTOR2I arrVec =
                         VECTOR2I( KiROUND( dirVec.x / scaling ), KiROUND( dirVec.y / scaling ) );
                 RotatePoint( arrVec, EDA_ANGLE( 20.0, DEGREES_T ) );

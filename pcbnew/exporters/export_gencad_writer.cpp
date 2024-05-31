@@ -1196,7 +1196,7 @@ void GENCAD_EXPORTER::FootprintWriteShape( FOOTPRINT* aFootprint, const wxString
 
             case SHAPE_T::CIRCLE:
             {
-                int radius = KiROUND( GetLineLength( end, start ) );
+                int radius = KiROUND( end.Distance( start ) );
 
                 fprintf( m_file, "CIRCLE %g %g %g\n",
                          start.x / SCALE_FACTOR,

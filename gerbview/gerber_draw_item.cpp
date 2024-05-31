@@ -285,7 +285,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
 
     case GBR_CIRCLE:
     {
-        double radius = GetLineLength( m_Start, m_End );
+        double radius = m_Start.Distance( m_End );
         bbox.Inflate( radius, radius );
         break;
     }
@@ -490,7 +490,7 @@ void GERBER_DRAW_ITEM::Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OP
         break;
 
     case GBR_CIRCLE:
-        radius = KiROUND( GetLineLength( m_Start, m_End ) );
+        radius = KiROUND( m_Start.Distance( m_End ) );
 
         halfPenWidth = m_Size.x >> 1;
 
@@ -867,7 +867,7 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
 
     case GBR_ARC:
     {
-        double radius = GetLineLength( m_Start, m_ArcCentre );
+        double radius = m_Start.Distance( m_ArcCentre );
         VECTOR2D test_radius = VECTOR2D( ref_pos ) - VECTOR2D( m_ArcCentre );
 
         int size = ( ( m_Size.x < MIN_HIT_TEST_RADIUS ) ? MIN_HIT_TEST_RADIUS : m_Size.x );
@@ -922,7 +922,7 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
         radius = MIN_HIT_TEST_RADIUS;
 
     if( m_Flashed )
-        return HitTestPoints( m_Start, ref_pos, radius );
+        return m_Start.Distance( ref_pos ) <= radius;
     else
         return TestSegmentHit( ref_pos, m_Start, m_End, radius );
 }
@@ -995,7 +995,7 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             break;
 
         case GBR_ARC:
-            size = GetLineLength( m_Start, m_ArcCentre );
+            size = m_Start.Distance( m_ArcCentre );
             break;
 
         default:

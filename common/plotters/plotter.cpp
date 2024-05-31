@@ -491,7 +491,7 @@ void PLOTTER::segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int aWi
     EDA_ANGLE orient( size );
     orient = -orient;       // this is due to our Y axis orientation
 
-    size.x = KiROUND( EuclideanNorm( size ) ) + aWidth;
+    size.x = size.EuclideanNorm() + aWidth;
     size.y = aWidth;
 
     FlashPadOval( center, size, orient, aTraceMode, nullptr );

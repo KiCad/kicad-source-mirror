@@ -726,12 +726,12 @@ static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aPoint )
     {
         PCB_TRACK* track = static_cast<PCB_TRACK*>( aItem );
 
-        return std::min( GetLineLength( track->GetStart(), aPoint ),
-                         GetLineLength( track->GetEnd(), aPoint ) );
+        return std::min( track->GetStart().Distance(aPoint ),
+                         track->GetEnd().Distance( aPoint ) );
     }
 
     default:
-        return GetLineLength( aItem->GetPosition(), aPoint );
+        return aItem->GetPosition().Distance( aPoint );
     }
 }
 

@@ -253,8 +253,9 @@ public:
      */
     bool IsCCW() const
     {
-        VECTOR2I v1 = m_end - m_mid;
-        VECTOR2I v2 = m_start - m_mid;
+        VECTOR2L mid = m_mid;
+        VECTOR2L v1 = m_end - mid;
+        VECTOR2L v2 = m_start - mid;
 
         return v1.Cross( v2 ) > 0;
     }

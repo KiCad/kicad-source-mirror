@@ -180,6 +180,12 @@ public:
      */
     extended_type Dot( const VECTOR2<T>& aVector ) const;
 
+    /**
+     * Compute the distance between two vectors.  This is a double precision
+     * value because the distance is frequently non-integer.
+     */
+    double Distance( const VECTOR2<extended_type>& aVector ) const;
+
 
     // Operators
 
@@ -267,8 +273,15 @@ T VECTOR2<T>::EuclideanNorm() const
     // 45° are common in KiCad, so we can optimize the calculation
     if( std::abs( x ) == std::abs( y ) )
         return static_cast<T>( std::abs( x ) * M_SQRT2 );
+    if( x == 0 )
+        return static_cast<T>( std::abs( y ) );
+    if( y == 0 )
+        return static_cast<T>( std::abs( x ) );
 
-    return static_cast<T>( sqrt( (extended_type) x * x + (extended_type) y * y ) );
+    if( std::is_integral<T>::value )
+        return KiROUND<double, T>( std::hypot( x, y ) );
+
+    return static_cast<T>( std::hypot( x, y ) );
 }
 
 
@@ -482,6 +495,13 @@ typename VECTOR2<T>::extended_type VECTOR2<T>::Dot( const VECTOR2<T>& aVector ) 
            (extended_type) y * (extended_type) aVector.y;
 }
 
+template <class T>
+double VECTOR2<T>::Distance( const VECTOR2<extended_type>& aVector ) const
+{
+    VECTOR2<double> diff( aVector.x - x, aVector.y - y );
+    return diff.EuclideanNorm();
+}
+
 
 template <class T>
 bool VECTOR2<T>::operator<( const VECTOR2<T>& aVector ) const
@@ -598,9 +618,9 @@ std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector )
 }
 
 /* Default specializations */
-typedef VECTOR2<double>        VECTOR2D;
-typedef VECTOR2<int>           VECTOR2I;
-typedef VECTOR2<long long int> VECTOR2L;
+typedef VECTOR2<double>  VECTOR2D;
+typedef VECTOR2<int32_t> VECTOR2I;
+typedef VECTOR2<int64_t> VECTOR2L;
 
 /* KiROUND specialization for vectors */
 inline VECTOR2I KiROUND( const VECTOR2D& vec )

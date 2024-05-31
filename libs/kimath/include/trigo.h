@@ -125,54 +125,6 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
 const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
                            bool aMinArcAngle = true );
 
-inline double EuclideanNorm( const VECTOR2I& vector )
-{
-    // this is working with doubles
-    return hypot( vector.x, vector.y );
-}
-
-/**
- * Compute the distance between a line and a reference point.
- *
- * Reference: http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
- *
- * @param linePointA Point on line.
- * @param linePointB Point on line.
- * @param referencePoint Reference point.
- */
-inline double DistanceLinePoint( const VECTOR2I& linePointA, const VECTOR2I& linePointB,
-                                 const VECTOR2I& referencePoint )
-{
-    // Some of the multiple double casts are redundant. However in the previous definition
-    // the cast was (implicitly) done too late, just before the division (EuclideanNorm gives
-    // a double so from int it would be promoted); that means that the whole expression were
-    // vulnerable to overflow during int multiplications
-    return fabs( ( static_cast<double>( linePointB.x - linePointA.x ) *
-                   static_cast<double>( linePointA.y - referencePoint.y ) -
-                   static_cast<double>( linePointA.x  - referencePoint.x ) *
-                   static_cast<double>( linePointB.y - linePointA.y) )
-            / EuclideanNorm( linePointB - linePointA ) );
-}
-
-/**
- * Test if two points are near each other.
- *
- * @param pointA First point.
- * @param pointB Second point.
- * @param threshold The maximum distance.
- * @return true if \a pointA is within \a threshold of \a pointB otherwise false.
- */
-inline bool HitTestPoints( const VECTOR2I& pointA, const VECTOR2I& pointB, double threshold )
-{
-    VECTOR2I vectorAB = pointB - pointA;
-
-    // Compare the distances squared. The double is needed to avoid overflow during int
-    // multiplication
-    double sqdistance = (double)vectorAB.x * vectorAB.x + (double)vectorAB.y * vectorAB.y;
-
-    return sqdistance < threshold * threshold;
-}
-
 /**
  * Test if \a aRefPoint is with \a aDistance on the line defined by \a aStart and \a aEnd..
  *
@@ -183,18 +135,6 @@ inline bool HitTestPoints( const VECTOR2I& pointA, const VECTOR2I& pointB, doubl
 */
 bool TestSegmentHit( const VECTOR2I& aRefPoint, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                      int aDist );
-
-/**
- * Return the length of a line segment defined by \a aPointA and \a aPointB.
- *
- * See also EuclideanNorm and Distance for the single vector or four scalar versions.
- *
- * @return Length of a line (as double)
- */
-inline double GetLineLength( const VECTOR2I& aPointA, const VECTOR2I& aPointB )
-{
-    return hypot( (double) aPointA.x - aPointB.x, (double) aPointA.y - aPointB.y );
-}
 
 // These are the usual degrees <-> radians conversion routines
 inline double DEG2RAD( double deg ) { return deg * M_PI / 180.0; }

@@ -1097,7 +1097,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                     }
                     else
                     {
-                        int offset = GetLineLength( pt3, pt1 );
+                        int offset = KiROUND( pt3.Distance( pt1 ) );
 
                         if( pt1.y > pt2.y )
                             dimension->SetHeight( offset );

@@ -675,8 +675,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     auto isTrackStartClosestToArcStart =
             [&]( PCB_TRACK* aTrack ) -> bool
             {
-                double trackStartToArcStart = GetLineLength( aTrack->GetStart(), theArc->GetStart() );
-                double trackEndToArcStart = GetLineLength( aTrack->GetEnd(), theArc->GetStart() );
+                double trackStartToArcStart = aTrack->GetStart().Distance( theArc->GetStart() );
+                double trackEndToArcStart = aTrack->GetEnd().Distance( theArc->GetStart() );
 
                 return trackStartToArcStart < trackEndToArcStart;
             };

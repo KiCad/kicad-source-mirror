@@ -429,7 +429,7 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
     if( !bbox.Contains( aP ) )
         return false;
 
-    VECTOR2I  center = GetCenter();
+    VECTOR2L  center = GetCenter();
     double    radius = ( center - m_start ).EuclideanNorm();
     CIRCLE    fullCircle( center, radius );
     VECTOR2I  nearestPt = fullCircle.NearestPoint( aP );
@@ -488,14 +488,16 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
 
 EDA_ANGLE SHAPE_ARC::GetStartAngle() const
 {
-    EDA_ANGLE angle( m_start - GetCenter() );
+    VECTOR2L center = GetCenter();
+    EDA_ANGLE angle( m_start - center );
     return angle.Normalize();
 }
 
 
 EDA_ANGLE SHAPE_ARC::GetEndAngle() const
 {
-    EDA_ANGLE angle( m_end - GetCenter() );
+    VECTOR2L center = GetCenter();
+    EDA_ANGLE angle( m_end - center );
     return angle.Normalize();
 }
 
@@ -523,7 +525,7 @@ EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
     if( m_start == m_end )
         return ANGLE_360;
 
-    VECTOR2I  center = GetCenter();
+    VECTOR2L  center = GetCenter();
     EDA_ANGLE angle1 = EDA_ANGLE( m_mid - center ) - EDA_ANGLE( m_start - center );
     EDA_ANGLE angle2 = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_mid - center );
 

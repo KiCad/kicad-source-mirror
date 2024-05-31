@@ -1231,8 +1231,8 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
     for( unsigned i = 0; i < numPoints; ++i )
     {
-        int distance = (int) DistanceLinePoint( poly.CPoint( i ),
-                                                poly.CPoint( i + 1 ), cursor );
+        SEG seg = poly.GetSegment( i );
+        int distance = seg.Distance( cursor );
 
         if( distance < currentMinDistance )
         {

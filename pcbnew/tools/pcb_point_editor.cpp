@@ -1473,7 +1473,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         case PAD_SHAPE::CIRCLE:
         {
             VECTOR2I end = m_editPoints->Point( 0 ).GetPosition();
-            int      diameter = (int) EuclideanNorm( end - pad->GetPosition() ) * 2;
+            int      diameter = ( end - pad->GetPosition() ).SquaredEuclideanNorm();
 
             pad->SetSize( VECTOR2I( diameter, diameter ) );
             break;

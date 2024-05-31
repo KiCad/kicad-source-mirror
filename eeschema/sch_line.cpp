@@ -241,7 +241,7 @@ const BOX2I SCH_LINE::GetBoundingBox() const
 
 double SCH_LINE::GetLength() const
 {
-    return GetLineLength( m_start, m_end );
+    return m_start.Distance( m_end );
 }
 
 
@@ -768,7 +768,7 @@ wxString SCH_LINE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
     }
 
     return wxString::Format( txtfmt,
-                             aUnitsProvider->MessageTextFromValue( EuclideanNorm( m_start - m_end ) ) );
+                             aUnitsProvider->MessageTextFromValue( m_start.Distance( m_end ) ) );
 }
 
 

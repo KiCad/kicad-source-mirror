@@ -589,14 +589,14 @@ EDA_ITEM_FLAGS PCB_TRACK::IsPointOnEnds( const VECTOR2I& point, int min_dist ) c
     }
     else
     {
-        double dist = GetLineLength( m_Start, point );
+        double dist = m_Start.Distance( point );
 
-        if( min_dist >= KiROUND( dist ) )
+        if( min_dist >= dist )
             result |= STARTPOINT;
 
-        dist = GetLineLength( m_End, point );
+        dist = m_End.Distance( point );
 
-        if( min_dist >= KiROUND( dist ) )
+        if( min_dist >= dist )
             result |= ENDPOINT;
     }
 
@@ -651,7 +651,7 @@ const BOX2I PCB_TRACK::GetBoundingBox() const
 
 double PCB_TRACK::GetLength() const
 {
-    return GetLineLength( m_Start, m_End );
+    return m_Start.Distance( m_End );
 }
 
 
@@ -742,8 +742,9 @@ void PCB_ARC::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 bool PCB_ARC::IsCCW() const
 {
-    VECTOR2I start_end = m_End - m_Start;
-    VECTOR2I start_mid = m_Mid - m_Start;
+    VECTOR2L start = m_Start;
+    VECTOR2L start_end = m_End - start;
+    VECTOR2L start_mid = m_Mid - start;
 
     return start_end.Cross( start_mid ) < 0;
 }
@@ -1399,18 +1400,17 @@ bool PCB_TRACK::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 bool PCB_ARC::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    int max_dist = aAccuracy + ( m_Width / 2 );
+    double max_dist = aAccuracy + ( m_Width / 2.0 );
 
     // Short-circuit common cases where the arc is connected to a track or via at an endpoint
-    if( EuclideanNorm( GetStart() - aPosition ) <= max_dist ||
-            EuclideanNorm( GetEnd() - aPosition ) <= max_dist )
+    if( GetStart().Distance( aPosition ) <= max_dist || GetEnd().Distance( aPosition ) <= max_dist )
     {
         return true;
     }
 
-    VECTOR2I center = GetPosition();
-    VECTOR2I relpos = aPosition - center;
-    double dist = EuclideanNorm( relpos );
+    VECTOR2L center = GetPosition();
+    VECTOR2L relpos = aPosition - center;
+    int64_t dist = relpos.EuclideanNorm();
     double radius = GetRadius();
 
     if( std::abs( dist - radius ) > max_dist )
@@ -1536,13 +1536,13 @@ VECTOR2I PCB_ARC::GetPosition() const
 double PCB_ARC::GetRadius() const
 {
     auto center = CalcArcCenter( m_Start, m_Mid , m_End );
-    return GetLineLength( center, m_Start );
+    return center.Distance( m_Start );
 }
 
 
 EDA_ANGLE PCB_ARC::GetAngle() const
 {
-    VECTOR2I  center = GetPosition();
+    VECTOR2D  center = GetPosition();
     EDA_ANGLE angle1 = EDA_ANGLE( m_Mid - center ) - EDA_ANGLE( m_Start - center );
     EDA_ANGLE angle2 = EDA_ANGLE( m_End - center ) - EDA_ANGLE( m_Mid - center );
 
@@ -1552,7 +1552,7 @@ EDA_ANGLE PCB_ARC::GetAngle() const
 
 EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 {
-    VECTOR2I  pos( GetPosition() );
+    VECTOR2D  pos( GetPosition() );
     EDA_ANGLE angleStart( m_Start - pos );
 
     return angleStart.Normalize();
@@ -1562,7 +1562,7 @@ EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 // Note: used in python tests.  Ignore CLion's claim that it's unused....
 EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
 {
-    VECTOR2I  pos( GetPosition() );
+    VECTOR2D  pos( GetPosition() );
     EDA_ANGLE angleEnd( m_End - pos );
 
     return angleEnd.Normalize();
