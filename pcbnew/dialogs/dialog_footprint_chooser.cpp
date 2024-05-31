@@ -28,7 +28,6 @@
 #include <pcb_base_frame.h>
 #include <widgets/panel_footprint_chooser.h>
 #include <3d_canvas/eda_3d_canvas.h>
-#include <common_ogl/ogl_attr_list.h>
 #include <board.h>
 #include <project_pcb.h>
 #include <board_design_settings.h>
@@ -130,14 +129,14 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
 
     // Connect Events
     m_grButton3DView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
-                         wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::on3DviewReq ),
-                         NULL, this );
+                               wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::on3DviewReq ),
+                               nullptr, this );
     m_grButtonFpView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
-                             wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpViewReq ),
-                             NULL, this );
+                               wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpViewReq ),
+                               nullptr, this );
 
-    this->Connect( FP_SELECTION_EVENT,      // custom event fired by a PANEL_FOOTPRINT_CHOOSER
-                   wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpChanged ), NULL, this );
+    Connect( FP_SELECTION_EVENT, wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpChanged ),
+             nullptr, this );
 }
 
 
@@ -148,12 +147,14 @@ DIALOG_FOOTPRINT_CHOOSER::~DIALOG_FOOTPRINT_CHOOSER()
 
     // Disconnect Events
     m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                            wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::on3DviewReq ), NULL, this );
+                                  wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::on3DviewReq ),
+                                  nullptr, this );
     m_grButtonFpView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpViewReq ), NULL, this );
+                                  wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpViewReq ),
+                                  nullptr, this );
 
-    this->Disconnect( FP_SELECTION_EVENT,
-                      wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpChanged ), NULL, this );
+    Disconnect( FP_SELECTION_EVENT, wxCommandEventHandler( DIALOG_FOOTPRINT_CHOOSER::onFpChanged ),
+                nullptr, this );
 }
 
 
