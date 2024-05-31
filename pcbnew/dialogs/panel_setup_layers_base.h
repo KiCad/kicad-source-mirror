@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -148,14 +148,15 @@
 #define ID_FABBACKCHOICE 1115
 #define ID_CRTYDBACKCHOICE 1116
 #define ID_PCBEDGESCHOICE 1117
-#define ID_ECO2CHOICE 1118
-#define ID_ECO2CHECKBOX 1119
-#define ID_ECO1CHECKBOX 1120
-#define ID_ECO1CHOICE 1121
-#define ID_COMMENTSCHECKBOX 1122
-#define ID_COMMENTSCHOICE 1123
-#define ID_DRAWINGSCHECKBOX 1124
-#define ID_DRAWINGSCHOICE 1125
+#define ID_MARGINCHECKBOX 1118
+#define ID_ECO2CHOICE 1119
+#define ID_ECO2CHECKBOX 1120
+#define ID_ECO1CHECKBOX 1121
+#define ID_ECO1CHOICE 1122
+#define ID_COMMENTSCHECKBOX 1123
+#define ID_COMMENTSCHOICE 1124
+#define ID_DRAWINGSCHECKBOX 1125
+#define ID_DRAWINGSCHOICE 1126
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_LAYERS_BASE
@@ -301,6 +302,7 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 		wxStaticText* m_CrtYdBackStaticText;
 		wxTextCtrl* m_PCBEdgesName;
 		wxStaticText* m_PCBEdgesStaticText;
+		wxCheckBox* m_MarginCheckBox;
 		wxTextCtrl* m_MarginName;
 		wxStaticText* m_MarginStaticText;
 		wxCheckBox* m_Eco1CheckBox;

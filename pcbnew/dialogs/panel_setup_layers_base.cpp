@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -659,8 +659,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_PCBEdgesStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_PCBEdgesStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-
-	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_MarginCheckBox = new wxCheckBox( m_LayersListPanel, ID_MARGINCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_MarginCheckBox, 0, wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_MarginName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Margin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_MarginName, 0, wxEXPAND|wxRIGHT, 5 );
@@ -861,6 +861,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_SoldPBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_FabBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_MarginCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_Eco1CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_Eco2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_CommentsCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
@@ -922,6 +923,7 @@ PANEL_SETUP_LAYERS_BASE::~PANEL_SETUP_LAYERS_BASE()
 	m_SoldPBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_FabBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
+	m_MarginCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_Eco1CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_Eco2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_CommentsCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );

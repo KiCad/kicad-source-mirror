@@ -192,7 +192,7 @@ PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( int aLayerNumber )
     case B_CrtYd:      RETURN_MANDATORY( m_CrtYdBack );
 
     case Edge_Cuts:    RETURN_MANDATORY( m_PCBEdges );
-    case Margin:       RETURN_MANDATORY( m_Margin );
+    case Margin:       RETURN_AUX( m_Margin );
     case Eco2_User:    RETURN_AUX( m_Eco2 );
     case Eco1_User:    RETURN_AUX( m_Eco1 );
     case Cmts_User:    RETURN_AUX( m_Comments );
