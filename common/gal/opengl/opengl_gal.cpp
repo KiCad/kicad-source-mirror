@@ -507,13 +507,6 @@ bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
         refresh = true;
     }
 
-    if( m_options.m_scaleFactor != GetScaleFactor() )
-    {
-        SetScaleFactor( m_options.m_scaleFactor );
-        m_gridLineWidth = m_options.m_scaleFactor * ( m_options.m_gridLineWidth + 0.25 );
-        refresh = true;
-    }
-
     if( super::updatedGalDisplayOptions( aOptions ) || refresh )
     {
         Refresh();

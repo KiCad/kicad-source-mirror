@@ -210,9 +210,6 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    const DPI_SCALING_COMMON dpi{ settings, this };
-    m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
-
     // TODO(JE) use all control options
     m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
 
