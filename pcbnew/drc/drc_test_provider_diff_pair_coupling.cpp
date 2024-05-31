@@ -132,13 +132,13 @@ static bool commonParallelProjection( const PCB_ARC& p, const PCB_ARC& n, SHAPE_
     VECTOR2I p_start( p.GetStart() );
     VECTOR2I p_end( p.GetEnd() );
 
-    if( p.IsCCW() )
+    if( !p.IsCCW() )
         std::swap( p_start, p_end );
 
     VECTOR2I n_start( n.GetStart() );
     VECTOR2I n_end( n.GetEnd() );
 
-    if( n.IsCCW() )
+    if( !n.IsCCW() )
         std::swap( n_start, n_end );
 
     SHAPE_ARC p_arc( p_start, p.GetMid(), p_end, 0 );
@@ -179,14 +179,18 @@ static bool commonParallelProjection( const PCB_ARC& p, const PCB_ARC& n, SHAPE_
             clip_total_angle = p_end_angle - n_start_angle;
     }
 
+    // One arc starts exactly where the other ends
+    if( clip_total_angle == ANGLE_0 )
+        return false;
+
     VECTOR2I n_start_pt = n_center + VECTOR2I( KiROUND( n_radius ), 0 );
     VECTOR2I p_start_pt = p_center + VECTOR2I( KiROUND( p_radius ), 0 );
 
     RotatePoint( n_start_pt, n_center, clip_start_angle );
     RotatePoint( p_start_pt, p_center, clip_start_angle );
 
-    pClip = SHAPE_ARC( p_center, p_start_pt, clip_start_angle );
-    nClip = SHAPE_ARC( n_center, n_start_pt, clip_start_angle );
+    pClip = SHAPE_ARC( p_center, p_start_pt, clip_total_angle );
+    nClip = SHAPE_ARC( n_center, n_start_pt, clip_total_angle );
 
     return true;
 }
