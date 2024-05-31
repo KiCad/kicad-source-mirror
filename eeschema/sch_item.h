@@ -119,14 +119,6 @@ public:
             && GetParent() == aB.GetParent();
     }
 
-    bool operator!=( const DANGLING_END_ITEM& aB ) const
-    {
-        return GetItem() != aB.GetItem()
-                || GetPosition() != aB.GetPosition()
-                || GetType() != aB.GetType()
-                || GetParent() != aB.GetParent();;
-    }
-
     bool operator<( const DANGLING_END_ITEM& rhs ) const
     {
         return( m_pos.x < rhs.m_pos.x || ( m_pos.x == rhs.m_pos.x && m_pos.y < rhs.m_pos.y )

@@ -1830,12 +1830,12 @@ bool LIB_SYMBOL::operator==( const LIB_SYMBOL& aOther ) const
     for( auto it1 = thisPinList.begin(), it2 = otherPinList.begin();
          it1 != thisPinList.end(); ++it1, ++it2 )
     {
-        if( !( **it1 == **it2 ) )
+        if( **it1 != **it2 )
             return false;
     }
     for( size_t ii = 0; ii < thisPinList.size(); ++ii )
     {
-        if( !( *thisPinList[ii] == *otherPinList[ii] ) )
+        if( *thisPinList[ii] != *otherPinList[ii] )
             return false;
     }
 

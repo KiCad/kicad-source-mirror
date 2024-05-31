@@ -2028,63 +2028,58 @@ wxString SCH_PIN::getItemDescription( ALT* aAlt ) const
 }
 
 
-bool SCH_PIN::operator==( const SCH_ITEM& aOther ) const
+bool SCH_PIN::operator==( const SCH_PIN& aOther ) const
 {
-    if( aOther.Type() != SCH_PIN_T )
+    if( m_number != aOther.m_number )
         return false;
 
-    const SCH_PIN* other = static_cast<const SCH_PIN*>( &aOther );
-
-    if( m_number != other->m_number )
-        return false;
-
-    if( m_position != other->m_position )
+    if( m_position != aOther.m_position )
         return false;
 
     if( dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
     {
-        if( m_libPin != other->m_libPin )
+        if( m_libPin != aOther.m_libPin )
             return false;
 
-        if( m_alt != other->m_alt )
+        if( m_alt != aOther.m_alt )
             return false;
     }
 
     if( dynamic_cast<const LIB_SYMBOL*>( GetParentSymbol() ) )
     {
-        if( m_length != other->m_length )
+        if( m_length != aOther.m_length )
             return false;
 
-        if( m_orientation != other->m_orientation )
+        if( m_orientation != aOther.m_orientation )
             return false;
 
-        if( m_shape != other->m_shape )
+        if( m_shape != aOther.m_shape )
             return false;
 
-        if( m_type != other->m_type )
+        if( m_type != aOther.m_type )
             return false;
 
-        if( m_name != other->m_name )
+        if( m_name != aOther.m_name )
             return false;
 
-        if( m_hidden != other->m_hidden )
+        if( m_hidden != aOther.m_hidden )
             return false;
 
-        if( m_numTextSize != other->m_numTextSize )
+        if( m_numTextSize != aOther.m_numTextSize )
             return false;
 
-        if( m_nameTextSize != other->m_nameTextSize )
+        if( m_nameTextSize != aOther.m_nameTextSize )
             return false;
 
-        if( m_alternates.size() != other->m_alternates.size() )
+        if( m_alternates.size() != aOther.m_alternates.size() )
             return false;
 
         auto lhsItem = m_alternates.begin();
-        auto rhsItem = other->m_alternates.begin();
+        auto rhsItem = aOther.m_alternates.begin();
 
         while( lhsItem != m_alternates.end() )
         {
-            if( rhsItem == other->m_alternates.end() )
+            if( rhsItem == aOther.m_alternates.end() )
                 return false;
 
             const ALT& lhsAlt = lhsItem->second;
@@ -2103,7 +2098,7 @@ bool SCH_PIN::operator==( const SCH_ITEM& aOther ) const
             ++rhsItem;
         }
 
-        if( rhsItem != other->m_alternates.end() )
+        if( rhsItem != aOther.m_alternates.end() )
             return false;
     }
 

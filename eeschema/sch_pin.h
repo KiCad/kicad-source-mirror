@@ -285,8 +285,7 @@ public:
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
-    bool operator==( const SCH_ITEM& aOther ) const override;
-    bool operator!=( const SCH_ITEM& aOther ) const { return !operator==( aOther ); }
+    bool operator==( const SCH_PIN& aOther ) const;
     bool operator<( const SCH_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) < 0; }
     bool operator>( const SCH_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
 
