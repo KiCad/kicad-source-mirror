@@ -1001,20 +1001,12 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    WX_UNIT_ENTRY_DIALOG dlg( frame(), _( "Fillet Tracks" ), _( "Enter fillet radius:" ),
-                              filletRadius );
+    WX_UNIT_ENTRY_DIALOG dlg( frame(), _( "Fillet Tracks" ), _( "Radius:" ), filletRadius );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == 0 )
         return 0;
 
     filletRadius = dlg.GetValue();
-
-    if( filletRadius == 0 )
-    {
-        frame()->ShowInfoBarMsg( _( "A radius of zero was entered.\n"
-                                    "The fillet operation was not performed." ) );
-        return 0;
-    }
 
     struct FILLET_OP
     {
@@ -1180,6 +1172,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 /**
  * Prompt the user for the fillet radius and return it.
  *
@@ -1193,23 +1186,16 @@ static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame, wxString
     // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
     static int filletRadius = 0;
 
-    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Fillet Lines" ), _( "Enter fillet radius:" ),
-                              filletRadius );
+    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Fillet Lines" ), _( "Radius:" ), filletRadius );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == 0 )
         return std::nullopt;
 
     filletRadius = dlg.GetValue();
 
-    if( filletRadius == 0 )
-    {
-        aErrorMsg = _( "A radius of zero was entered.\n"
-                       "The fillet operation was not performed." );
-        return std::nullopt;
-    }
-
     return filletRadius;
 }
+
 
 /**
  * Prompt the user for chamfer parameters
@@ -1227,27 +1213,20 @@ static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFra
     // Store last used setback to allow pressing "enter" if repeat chamfer is required
     static CHAMFER_PARAMS params{ default_setback, default_setback };
 
-    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Chamfer Lines" ), _( "Enter chamfer setback:" ),
+    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Chamfer Lines" ), _( "Chamfer setback:" ),
                               params.m_chamfer_setback_a );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == 0 )
         return std::nullopt;
 
     params.m_chamfer_setback_a = dlg.GetValue();
-    // It's hard to easily specify an asymmetric chamfer (which line gets the longer
-    // setbeck?), so we just use the same setback for each
+    // It's hard to easily specify an asymmetric chamfer (which line gets the longer setback?),
+    // so we just use the same setback for each
     params.m_chamfer_setback_b = params.m_chamfer_setback_a;
-
-    // Some technically-valid chamfers are not useful to actually do
-    if( params.m_chamfer_setback_a == 0 )
-    {
-        aErrorMsg = _( "A setback of zero was entered.\n"
-                       "The chamfer operation was not performed." );
-        return std::nullopt;
-    }
 
     return params;
 }
+
 
 int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 {
