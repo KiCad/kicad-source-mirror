@@ -103,11 +103,6 @@ EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const wxGLAttribute
     m_BiuTo3dUnits = 1.0;
 
     m_glRC = nullptr;
-
-    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
-
-    const DPI_SCALING_COMMON dpi{ settings, this };
-    SetScaleFactor( dpi.GetScaleFactor() );
 }
 
 

@@ -55,11 +55,6 @@ public:
     wxPoint GetNativePosition( const wxPoint& aPoint ) const;
 
     /**
-     * Set the canvas scale factor, probably for a hi-DPI display.
-     */
-    void SetScaleFactor( double aFactor );
-
-    /**
      * Get the current scale factor
      */
     double GetScaleFactor() const;
@@ -69,12 +64,6 @@ public:
 protected:
     ///< Current VIEW_CONTROLS settings.
     KIGFX::VC_SETTINGS m_settings;
-
-private:
-    /**
-     * The current scale factor (e.g. for hi-DPI displays)
-     */
-    double m_scale_factor;
 };
 
 #endif // HIDPI_GL_CANVAS_H

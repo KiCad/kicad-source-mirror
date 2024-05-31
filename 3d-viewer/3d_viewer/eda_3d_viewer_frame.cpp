@@ -194,14 +194,6 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
         wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
     }
 
-    Bind( wxEVT_DPI_CHANGED,
-              [&]( wxDPIChangedEvent& aEvt )
-              {
-                  const DPI_SCALING_COMMON dpi{ Pgm().GetCommonSettings(), this };
-                  m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
-                  aEvt.Skip();
-              } );
-
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on
     // the canvas before it will respond to mouse wheel events.
@@ -818,9 +810,6 @@ void EDA_3D_VIEWER_FRAME::loadCommonSettings()
     wxCHECK_RET( m_canvas, wxT( "Cannot load settings to null canvas" ) );
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
-
-    const DPI_SCALING_COMMON dpi{ settings, this };
-    m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
 
     // TODO(JE) use all control options
     m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;

@@ -34,8 +34,7 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow*
                                   const wxPoint& aPos, const wxSize& aSize, long aStyle,
                                   const wxString& aName, const wxPalette& aPalette ) :
         wxGLCanvas( aParent, aGLAttribs, aId, aPos, aSize, aStyle, aName, aPalette ),
-        m_settings( aSettings ),
-        m_scale_factor( DPI_SCALING::GetDefaultScaleFactor() )
+        m_settings( aSettings )
 {
 }
 
@@ -64,13 +63,7 @@ wxPoint HIDPI_GL_CANVAS::GetNativePosition( const wxPoint& aPoint ) const
 }
 
 
-void HIDPI_GL_CANVAS::SetScaleFactor( double aNewScaleFactor )
-{
-    m_scale_factor = aNewScaleFactor;
-}
-
-
 double HIDPI_GL_CANVAS::GetScaleFactor() const
 {
-    return m_scale_factor;
+    return GetContentScaleFactor();
 }

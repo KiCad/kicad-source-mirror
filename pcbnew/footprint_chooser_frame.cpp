@@ -191,14 +191,6 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     Connect( FP_SELECTION_EVENT,  // custom event fired by a PANEL_FOOTPRINT_CHOOSER
              wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), nullptr, this );
 
-    Bind( wxEVT_DPI_CHANGED,
-          [&]( wxDPIChangedEvent& aEvt )
-          {
-              const DPI_SCALING_COMMON dpi{ Pgm().GetCommonSettings(), this };
-              m_preview3DCanvas->SetScaleFactor( dpi.GetScaleFactor() );
-              aEvt.Skip();
-          } );
-
     // Needed on Linux to fix the position of widgets in bottomPanel
     PostSizeEvent();
 }
