@@ -1168,7 +1168,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
  * @return std::optional<int> the fillet radius or std::nullopt if no
  * valid fillet specified
  */
-static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame, wxString& aErrorMsg )
+static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame )
 {
     // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
     static int filletRadius = 0;
@@ -1181,13 +1181,6 @@ static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame, wxString
 
     filletRadius = dlg.GetValue();
 
-    if( filletRadius == 0 )
-    {
-        aErrorMsg = _( "A radius of zero was entered.\n"
-                       "The fillet operation was not performed." );
-        return std::nullopt;
-    }
-
     return filletRadius;
 }
 
@@ -1199,8 +1192,7 @@ static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame, wxString
  * @return std::optional<int> the chamfer parameters or std::nullopt if no
  * valid fillet specified
  */
-static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFrame,
-                                                       wxString&            aErrorMsg )
+static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFrame )
 {
     // Non-zero and the KLC default for Fab layer chamfers
     const int default_setback = pcbIUScale.mmToIU( 1 );
@@ -1210,21 +1202,13 @@ static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFra
     WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Chamfer Lines" ), _( "Enter chamfer setback:" ),
                               params.m_chamfer_setback_a );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == 0 )
         return std::nullopt;
 
     params.m_chamfer_setback_a = dlg.GetValue();
-    // It's hard to easily specify an asymmetric chamfer (which line gets the longer
-    // setbeck?), so we just use the same setback for each
+    // It's hard to easily specify an asymmetric chamfer (which line gets the longer setback?),
+    // so we just use the same setback for each
     params.m_chamfer_setback_b = params.m_chamfer_setback_a;
-
-    // Some technically-valid chamfers are not useful to actually do
-    if( params.m_chamfer_setback_a == 0 )
-    {
-        aErrorMsg = _( "A setback of zero was entered.\n"
-                       "The chamfer operation was not performed." );
-        return std::nullopt;
-    }
 
     return params;
 }
@@ -1305,19 +1289,45 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( PCB_SHAPE* item : lines_to_add )
-        selection.Add( item );
+    int segmentCount = selection.CountType( PCB_SHAPE_LOCATE_SEGMENT_T ) + lines_to_add.size();
 
-    for( PCB_SHAPE* item : items_to_remove )
-        selection.Remove( item );
-
-    if( selection.CountType( PCB_SHAPE_LOCATE_SEGMENT_T ) < 2 )
+    if( aEvent.IsAction( &PCB_ACTIONS::extendLines ) && segmentCount != 2 )
     {
-        frame()->ShowInfoBarMsg( _( "A shape with least two lines must be selected." ) );
+        frame()->ShowInfoBarMsg( _( "Exactly two lines must be selected to extend them." ) );
+
+        for( PCB_SHAPE* line : lines_to_add )
+            delete line;
+
+        return 0;
+    }
+    else if( segmentCount < 2 )
+    {
+        frame()->ShowInfoBarMsg( _( "A shape with at least two lines must be selected." ) );
+
+        for( PCB_SHAPE* line : lines_to_add )
+            delete line;
+
         return 0;
     }
 
-    BOARD_COMMIT commit{ this };
+    BOARD_COMMIT commit( this );
+
+    // Items created like lines from a rectangle
+    for( PCB_SHAPE* item : lines_to_add )
+    {
+        commit.Add( item );
+        selection.Add( item );
+    }
+
+    // Remove items like rectangles that we decomposed into lines
+    for( PCB_SHAPE* item : items_to_remove )
+    {
+        selection.Remove( item );
+        commit.Remove( item );
+    }
+
+    for( EDA_ITEM* item : selection )
+        item->ClearFlags( STRUCT_DELETED );
 
     // List of thing to select at the end of the operation
     // (doing it as we go will invalidate the iterator)
@@ -1347,13 +1357,15 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         commit.Add( aItem.release() );
     };
 
-    bool       any_items_removed = !items_to_remove.empty();
-    const auto item_removal_handler = [&]( PCB_SHAPE& aItem )
-    {
-        any_items_removed = true;
-        items_to_deselect_on_success.push_back( &aItem );
-        commit.Remove( &aItem );
-    };
+    bool any_items_removed = !items_to_remove.empty();
+    auto item_removal_handler =
+            [&]( PCB_SHAPE& aItem )
+            {
+                aItem.SetFlags( STRUCT_DELETED );
+                any_items_removed = true;
+                items_to_deselect_on_success.push_back( &aItem );
+                commit.Remove( &aItem );
+            };
 
     // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
     ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
@@ -1361,11 +1373,10 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     // Construct an appropriate tool
     std::unique_ptr<PAIRWISE_LINE_ROUTINE> pairwise_line_routine;
-    wxString                               error_message;
 
     if( aEvent.IsAction( &PCB_ACTIONS::filletLines ) )
     {
-        const std::optional<int> filletRadiusIU = GetFilletParams( *frame(), error_message );
+        std::optional<int> filletRadiusIU = GetFilletParams( *frame() );
 
         if( filletRadiusIU.has_value() )
         {
@@ -1375,8 +1386,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::chamferLines ) )
     {
-        const std::optional<CHAMFER_PARAMS> chamfer_params =
-                GetChamferParams( *frame(), error_message );
+        std::optional<CHAMFER_PARAMS> chamfer_params = GetChamferParams( *frame() );
 
         if( chamfer_params.has_value() )
         {
@@ -1386,23 +1396,14 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::extendLines ) )
     {
-        if( selection.CountType( PCB_SHAPE_LOCATE_SEGMENT_T ) != 2 )
-        {
-            error_message = _( "Exactly two lines must be selected to extend them." );
-        }
-        else
-        {
-            pairwise_line_routine =
-                    std::make_unique<LINE_EXTENSION_ROUTINE>( frame()->GetModel(), change_handler );
-        }
+        pairwise_line_routine = std::make_unique<LINE_EXTENSION_ROUTINE>( frame()->GetModel(),
+                                                                          change_handler );
     }
 
     if( !pairwise_line_routine )
     {
-        // Didn't construct any mofication routine - could be an error or cancellation
-        if( !error_message.empty() )
-            frame()->ShowInfoBarMsg( error_message );
-
+        // Didn't construct any mofication routine - user must have cancelled
+        commit.Revert();
         return 0;
     }
 
@@ -1410,27 +1411,15 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     alg::for_all_pairs( selection.begin(), selection.end(),
                         [&]( EDA_ITEM* a, EDA_ITEM* b )
                         {
-                            PCB_SHAPE* line_a = static_cast<PCB_SHAPE*>( a );
-                            PCB_SHAPE* line_b = static_cast<PCB_SHAPE*>( b );
+                            if( ( a->GetFlags() & STRUCT_DELETED ) == 0
+                                && ( b->GetFlags() & STRUCT_DELETED ) == 0 )
+                            {
+                                PCB_SHAPE* line_a = static_cast<PCB_SHAPE*>( a );
+                                PCB_SHAPE* line_b = static_cast<PCB_SHAPE*>( b );
 
-                            pairwise_line_routine->ProcessLinePair( *line_a, *line_b );
+                                pairwise_line_routine->ProcessLinePair( *line_a, *line_b );
+                            }
                         } );
-
-    // Items created like lines from a rectangle
-    // Some of these might have been changed by the tool, but we need to
-    // add *all* of them to the selection and commit them
-    for( PCB_SHAPE* item : lines_to_add )
-    {
-        m_selectionTool->AddItemToSel( item, true );
-        commit.Add( item );
-    }
-
-    // Remove items like rectangles that we decomposed into lines
-    for( PCB_SHAPE* item : items_to_remove )
-    {
-        commit.Remove( item );
-        m_selectionTool->RemoveItemFromSel( item, true );
-    }
 
     // Select added and modified items
     for( PCB_SHAPE* item : items_to_select_on_success )
