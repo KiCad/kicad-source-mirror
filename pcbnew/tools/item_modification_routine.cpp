@@ -43,6 +43,7 @@ bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aLine
     wxASSERT_MSG( aLine.GetShape() == SHAPE_T::SEGMENT, "Can only modify segments" );
 
     const bool removed = aSeg.Length() == 0;
+
     if( !removed )
     {
         // Mark modified, then change it
@@ -55,6 +56,7 @@ bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aLine
         // The line has become zero length - delete it
         GetHandler().DeleteItem( aLine );
     }
+
     return removed;
 }
 
