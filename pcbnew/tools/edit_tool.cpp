@@ -1349,31 +1349,34 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     // Handle modifications to existing items by the routine
     // How to deal with this depends on whether we're in the footprint editor or not
     // and whether the item was conjured up by decomposing a polygon or rectangle
-    const auto item_modification_handler = [&]( PCB_SHAPE& aItem )
-    {
-        // If the item was "conjured up" it will be added later separately
-        if( !alg::contains( lines_to_add, &aItem ) )
-        {
-            commit.Modify( &aItem );
-            items_to_select_on_success.push_back( &aItem );
-        }
-    };
+    auto item_modification_handler =
+            [&]( PCB_SHAPE& aItem )
+            {
+                // If the item was "conjured up" it will be added later separately
+                if( !alg::contains( lines_to_add, &aItem ) )
+                {
+                    commit.Modify( &aItem );
+                    items_to_select_on_success.push_back( &aItem );
+                }
+            };
 
-    bool       any_items_created = !lines_to_add.empty();
-    const auto item_creation_handler = [&]( std::unique_ptr<PCB_SHAPE> aItem )
-    {
-        any_items_created = true;
-        items_to_select_on_success.push_back( aItem.get() );
-        commit.Add( aItem.release() );
-    };
+    bool any_items_created = !lines_to_add.empty();
+    auto item_creation_handler =
+            [&]( std::unique_ptr<PCB_SHAPE> aItem )
+            {
+                any_items_created = true;
+                items_to_select_on_success.push_back( aItem.get() );
+                commit.Add( aItem.release() );
+            };
 
-    bool       any_items_removed = !items_to_remove.empty();
-    const auto item_removal_handler = [&]( PCB_SHAPE& aItem )
-    {
-        any_items_removed = true;
-        items_to_deselect_on_success.push_back( &aItem );
-        commit.Remove( &aItem );
-    };
+    bool any_items_removed = !items_to_remove.empty();
+    auto item_removal_handler =
+            [&]( PCB_SHAPE& aItem )
+            {
+                any_items_removed = true;
+                items_to_deselect_on_success.push_back( &aItem );
+                commit.Remove( &aItem );
+            };
 
     // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
     ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
@@ -1385,23 +1388,24 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::filletLines ) )
     {
-        const std::optional<int> filletRadiusIU = GetFilletParams( *frame(), error_message );
+        std::optional<int> filletRadiusIU = GetFilletParams( *frame(), error_message );
 
         if( filletRadiusIU.has_value() )
         {
-            pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>(
-                    frame()->GetModel(), change_handler, *filletRadiusIU );
+            pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>( frame()->GetModel(),
+                                                                           change_handler,
+                                                                           *filletRadiusIU );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::chamferLines ) )
     {
-        const std::optional<CHAMFER_PARAMS> chamfer_params =
-                GetChamferParams( *frame(), error_message );
+        std::optional<CHAMFER_PARAMS> chamfer_params = GetChamferParams( *frame(), error_message );
 
         if( chamfer_params.has_value() )
         {
-            pairwise_line_routine = std::make_unique<LINE_CHAMFER_ROUTINE>(
-                    frame()->GetModel(), change_handler, *chamfer_params );
+            pairwise_line_routine = std::make_unique<LINE_CHAMFER_ROUTINE>( frame()->GetModel(),
+                                                                            change_handler,
+                                                                            *chamfer_params );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::extendLines ) )
@@ -1412,8 +1416,8 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         }
         else
         {
-            pairwise_line_routine =
-                    std::make_unique<LINE_EXTENSION_ROUTINE>( frame()->GetModel(), change_handler );
+            pairwise_line_routine = std::make_unique<LINE_EXTENSION_ROUTINE>( frame()->GetModel(),
+                                                                              change_handler );
         }
     }
 
@@ -1471,9 +1475,8 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     commit.Push( pairwise_line_routine->GetCommitDescription() );
 
-    if (const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage()) {
+    if( const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage() )
         frame()->ShowInfoBarMsg( *msg );
-    }
 
     return 0;
 }
@@ -1653,6 +1656,7 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
 
     // Gather or construct polygon source shapes to merge
     std::vector<PCB_SHAPE*> items_to_process;
+
     for( EDA_ITEM* item : selection )
     {
         items_to_process.push_back( static_cast<PCB_SHAPE*>( item ) );
@@ -1661,30 +1665,32 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
         // so it can be used as the property donor and as the basis for the
         // boolean operation
         if( item == last_item )
-        {
             std::swap( items_to_process.back(), items_to_process.front() );
-        }
     }
 
     BOARD_COMMIT commit{ this };
 
     // Handle modifications to existing items by the routine
-    const auto item_modification_handler = [&]( PCB_SHAPE& aItem )
-    {
-        commit.Modify( &aItem );
-    };
+    auto item_modification_handler =
+            [&]( PCB_SHAPE& aItem )
+            {
+                commit.Modify( &aItem );
+            };
 
     std::vector<PCB_SHAPE*> items_to_select_on_success;
-    const auto              item_creation_handler = [&]( std::unique_ptr<PCB_SHAPE> aItem )
-    {
-        items_to_select_on_success.push_back( aItem.get() );
-        commit.Add( aItem.release() );
-    };
 
-    const auto item_removal_handler = [&]( PCB_SHAPE& aItem )
-    {
-        commit.Remove( &aItem );
-    };
+    auto item_creation_handler =
+            [&]( std::unique_ptr<PCB_SHAPE> aItem )
+            {
+                items_to_select_on_success.push_back( aItem.get() );
+                commit.Add( aItem.release() );
+            };
+
+    auto item_removal_handler =
+            [&]( PCB_SHAPE& aItem )
+            {
+                commit.Remove( &aItem );
+            };
 
     // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
     ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
@@ -1694,18 +1700,18 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
     std::unique_ptr<POLYGON_BOOLEAN_ROUTINE> boolean_routine;
     if( aEvent.IsAction( &PCB_ACTIONS::mergePolygons ) )
     {
-        boolean_routine =
-                std::make_unique<POLYGON_MERGE_ROUTINE>( frame()->GetModel(), change_handler );
+        boolean_routine = std::make_unique<POLYGON_MERGE_ROUTINE>( frame()->GetModel(),
+                                                                   change_handler );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::subtractPolygons ) )
     {
-        boolean_routine =
-                std::make_unique<POLYGON_SUBTRACT_ROUTINE>( frame()->GetModel(), change_handler );
+        boolean_routine = std::make_unique<POLYGON_SUBTRACT_ROUTINE>( frame()->GetModel(),
+                                                                      change_handler );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::intersectPolygons ) )
     {
-        boolean_routine =
-                std::make_unique<POLYGON_INTERSECT_ROUTINE>( frame()->GetModel(), change_handler );
+        boolean_routine = std::make_unique<POLYGON_INTERSECT_ROUTINE>( frame()->GetModel(),
+                                                                       change_handler );
     }
     else
     {
@@ -1715,15 +1721,11 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
 
     // Perform the operation on each polygon
     for( PCB_SHAPE* shape : items_to_process )
-    {
         boolean_routine->ProcessShape( *shape );
-    }
 
     // Select new items
     for( PCB_SHAPE* item : items_to_select_on_success )
-    {
         m_selectionTool->AddItemToSel( item, true );
-    }
 
     // Notify other tools of the changes
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
@@ -1731,9 +1733,7 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
     commit.Push( boolean_routine->GetCommitDescription() );
 
     if( const std::optional<wxString> msg = boolean_routine->GetStatusMessage() )
-    {
         frame()->ShowInfoBarMsg( *msg );
-    }
 
     return 0;
 }
