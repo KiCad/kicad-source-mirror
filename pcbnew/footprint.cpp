@@ -1220,6 +1220,21 @@ BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
 }
 
 
+bool FOOTPRINT::TextOnly() const
+{
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( m_privateLayers.test( item->GetLayer() ) )
+            continue;
+
+        if( item->Type() != PCB_FIELD_T && item->Type() != PCB_TEXT_T )
+            return false;
+    }
+
+    return true;
+}
+
+
 const BOX2I FOOTPRINT::GetBoundingBox() const
 {
     return GetBoundingBox( true, true );

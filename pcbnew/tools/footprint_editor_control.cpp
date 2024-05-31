@@ -171,9 +171,9 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 
 int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 {
-    LIB_ID     selected = m_frame->GetTreeFPID();
+    LIB_ID     selected = m_frame->GetTargetFPID();
     wxString   libraryName = selected.GetUniStringLibNickname();
-    FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName, false );
+    FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName );
 
     if( !newFootprint )
         return 0;

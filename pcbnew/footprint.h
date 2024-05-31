@@ -171,6 +171,8 @@ public:
      */
     SHAPE_POLY_SET GetBoundingHull() const;
 
+    bool TextOnly() const;
+
     // Virtual function
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;

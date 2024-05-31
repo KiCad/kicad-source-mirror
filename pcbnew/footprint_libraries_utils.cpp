@@ -26,7 +26,6 @@
 #include <kiface_base.h>
 #include <confirm.h>
 #include <kidialog.h>
-#include <string_utils.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <eda_list_dialog.h>
@@ -41,10 +40,8 @@
 #include <footprint.h>
 #include <zone.h>
 #include <pcb_group.h>
-#include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <pcb_io/kicad_legacy/pcb_io_kicad_legacy.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <env_paths.h>
 #include <paths.h>
@@ -1229,97 +1226,45 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 }
 
 
-class NEW_FP_DIALOG : public WX_TEXT_ENTRY_DIALOG
+FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wxString& aLibName )
 {
-public:
-    NEW_FP_DIALOG( PCB_BASE_FRAME* aParent, const wxString& aName, int aFootprintType,
-                   std::function<bool( wxString newName )> aValidator ) :
-            WX_TEXT_ENTRY_DIALOG( aParent, _( "Enter footprint name:" ), _( "New Footprint" ),
-                                  aName, _( "Footprint type:" ),
-                                  { _( "Through hole" ), _( "SMD" ), _( "Other" ) },
-                                  aFootprintType ),
-            m_validator( std::move( aValidator ) )
-    { }
+    if( aFootprintName.IsEmpty() )
+        aFootprintName = _( "Untitled" );
 
-    wxString GetFPName()
+    int footprintAttrs = FP_SMD;
+
+    if( !aLibName.IsEmpty() )
     {
-        wxString name = m_textCtrl->GetValue();
-        name.Trim( true ).Trim( false );
-        return name;
-    }
+        FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+        wxArrayString fpnames;
+        wxString      baseName = aFootprintName;
+        int           idx = 1;
 
-protected:
-    bool TransferDataFromWindow() override
-    {
-        return m_validator( GetFPName() );
-    }
+        // Make sure the name is unique
+        while( tbl->FootprintExists( aLibName, aFootprintName ) )
+            aFootprintName = baseName + wxString::Format( wxS( "_%d" ), idx++ );
 
-private:
-    std::function<bool( wxString newName )> m_validator;
-};
-
-
-FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName,
-                                               const wxString& aLibName, bool aQuiet )
-{
-    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-    wxString      footprintName = aFootprintName;
-    wxString      msg;
-
-    // Static to store user preference for a session
-    static int footprintType = 1;
-    int footprintTranslated = FP_SMD;
-
-    // Ask for the new footprint name
-    if( footprintName.IsEmpty() && !aQuiet )
-    {
-        NEW_FP_DIALOG dlg( this, footprintName, footprintType,
-                [&]( wxString newName )
-                {
-                    if( newName.IsEmpty() )
-                    {
-                        wxMessageBox( _( "Footprint must have a name." ) );
-                        return false;
-                    }
-
-                    if( !aLibName.IsEmpty() && tbl->FootprintExists( aLibName, newName ) )
-                    {
-                        msg = wxString::Format( _( "Footprint '%s' already exists in library '%s'." ),
-                                                newName, aLibName );
-
-                        KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
-                                           wxOK | wxCANCEL | wxICON_WARNING );
-                        errorDlg.SetOKLabel( _( "Overwrite" ) );
-
-                        return errorDlg.ShowModal() == wxID_OK;
-                    }
-
-                    return true;
-                } );
-
-        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &footprintName ) );
-
-        if( dlg.ShowModal() != wxID_OK )
-            return nullptr;    //Aborted by user
-
-        footprintName = dlg.GetFPName();
-        footprintType = dlg.GetChoice();
-
-        switch( footprintType )
+        // Try to infer the footprint attributes from an existing footprint in the library
+        try
         {
-        case 0:  footprintTranslated = FP_THROUGH_HOLE; break;
-        case 1:  footprintTranslated = FP_SMD;          break;
-        default: footprintTranslated = 0;               break;
+            tbl->FootprintEnumerate( fpnames, aLibName, true );
+
+            if( !fpnames.empty() )
+                footprintAttrs = tbl->FootprintLoad( aLibName, fpnames.Last() )->GetAttributes();
+        }
+        catch( ... )
+        {
+            // best efforts
         }
     }
 
-    // Creates the new footprint and add it to the head of the linked list of footprints
+    // Create the new footprint and add it to the head of the linked list of footprints
     FOOTPRINT* footprint = new FOOTPRINT( GetBoard() );
 
     // Update its name in lib
-    footprint->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
+    footprint->SetFPID( LIB_ID( wxEmptyString, aFootprintName ) );
 
-    footprint->SetAttributes( footprintTranslated );
+    footprint->SetAttributes( footprintAttrs );
 
     PCB_LAYER_ID txt_layer;
     VECTOR2I     default_pos;
@@ -1355,10 +1300,10 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName,
     }
 
     if( footprint->GetReference().IsEmpty() )
-        footprint->SetReference( footprintName );
+        footprint->SetReference( aFootprintName );
 
     if( footprint->GetValue().IsEmpty() )
-        footprint->SetValue( footprintName );
+        footprint->SetValue( aFootprintName );
 
     footprint->RunOnDescendants(
             [&]( BOARD_ITEM* aChild )

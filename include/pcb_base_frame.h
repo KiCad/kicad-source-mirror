@@ -267,10 +267,8 @@ public:
      *
      * @param aFootprintName is the name of the new footprint in library.
      * @param aLibName optional, if specified is the library for the new footprint
-     * @param aQuiet prevents user dialogs from being shown
      */
-    FOOTPRINT* CreateNewFootprint( const wxString& aFootprintName, const wxString& aLibName,
-                                   bool aQuiet );
+    FOOTPRINT* CreateNewFootprint( wxString aFootprintName, const wxString& aLibName );
 
     /**
      * Places \a aFootprint at the current cursor position and updates footprint coordinates

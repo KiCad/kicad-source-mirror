@@ -143,7 +143,8 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
 
 void FOOTPRINT_PREVIEW_PANEL::fitToCurrentFootprint()
 {
-    BOX2I bbox = m_currentFootprint->GetBoundingBox( false, false );
+    bool  includeText = m_currentFootprint->TextOnly();
+    BOX2I bbox = m_currentFootprint->GetBoundingBox( includeText, false );
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
     {

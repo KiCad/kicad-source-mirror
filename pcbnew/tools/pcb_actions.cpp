@@ -708,7 +708,7 @@ TOOL_ACTION PCB_ACTIONS::newFootprint( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + 'N' )
         .LegacyHotkeyName( "New" )
-        .FriendlyName( _( "New Footprint..." ) )
+        .FriendlyName( _( "New Footprint" ) )
         .Tooltip( _( "Create a new, empty footprint" ) )
         .Icon( BITMAPS::new_footprint ) );
 
