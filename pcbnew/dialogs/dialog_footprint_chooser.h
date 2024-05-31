@@ -63,17 +63,20 @@ protected:
 
 protected:
     PANEL_FOOTPRINT_CHOOSER* m_chooserPanel;
-    bool    m_showFpMode;   // True to show the footprint, false for the 3D model
+    bool                     m_showFpMode;   // True to show the footprint, false for the 3D model
 
 private:
-    PCB_BASE_FRAME* m_parent;
-    BOARD_ADAPTER m_boardAdapter;
-    EDA_3D_CANVAS* m_preview3DCanvas;
-    CAMERA&     m_currentCamera;
-    TRACK_BALL  m_trackBallCamera;
-    BOARD*      m_dummyBoard;
-    BITMAP_BUTTON* m_grButtonFpView;
-    BITMAP_BUTTON* m_grButton3DView;
+    PCB_BASE_FRAME*          m_parent;
+    BOARD_ADAPTER            m_boardAdapter;
+    EDA_3D_CANVAS*           m_preview3DCanvas;
+    CAMERA&                  m_currentCamera;
+    TRACK_BALL               m_trackBallCamera;
+    BOARD*                   m_dummyBoard;
+    BITMAP_BUTTON*           m_grButtonFpView;
+    BITMAP_BUTTON*           m_grButton3DView;
+
+    /// The 3d viewer Render initial settings (must be saved and restored)
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS m_initialRender;
 };
 
 #endif /* DIALOG_FOOTPRINT_CHOOSER_H */
