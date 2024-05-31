@@ -330,8 +330,8 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow* aParent, const wxData
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, /* void */ );
 
-    FOOTPRINT_PREVIEW_PANEL* preview = dynamic_cast<FOOTPRINT_PREVIEW_PANEL*>(
-            wxWindow::FindWindowByName( c_previewName, aParent ) );
+    wxWindow* previewWindow = wxWindow::FindWindowByName( c_previewName, aParent );
+    FOOTPRINT_PREVIEW_PANEL* preview = dynamic_cast<FOOTPRINT_PREVIEW_PANEL*>( previewWindow );
 
     if( !preview )
     {

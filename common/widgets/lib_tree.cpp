@@ -731,9 +731,7 @@ void LIB_TREE::hidePreview()
     m_previewItem = wxDataViewItem();
 
     if( m_previewWindow )
-    {
         m_previewWindow->Hide();
-    }
 }
 
 
