@@ -51,7 +51,7 @@ const wxChar* const traceHiDpi = wxT( "KICAD_TRACE_HIGH_DPI" );
 static std::optional<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aConfig )
 {
     std::optional<double> scale;
-    double      canvas_scale = aConfig.m_Appearance.canvas_scale;
+    double                canvas_scale = aConfig.m_Appearance.canvas_scale;
 
     if( canvas_scale > 0.0 )
     {
@@ -70,8 +70,8 @@ static std::optional<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aCo
  */
 static std::optional<double> getEnvironmentScale()
 {
-    const wxPortId port_id = wxPlatformInfo::Get().GetPortId();
-    std::optional<double>    scale;
+    const wxPortId        port_id = wxPlatformInfo::Get().GetPortId();
+    std::optional<double> scale;
 
     if( port_id == wxPORT_GTK )
     {
@@ -83,8 +83,9 @@ static std::optional<double> getEnvironmentScale()
 }
 
 
-DPI_SCALING_COMMON::DPI_SCALING_COMMON( COMMON_SETTINGS* aConfig, const wxWindow* aWindow )
-        : m_config( aConfig ), m_window( aWindow )
+DPI_SCALING_COMMON::DPI_SCALING_COMMON( COMMON_SETTINGS* aConfig, const wxWindow* aWindow ) :
+        m_config( aConfig ),
+        m_window( aWindow )
 {
 }
 
