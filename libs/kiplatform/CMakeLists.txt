@@ -9,13 +9,13 @@ set( PLATFORM_COMPILE_DEFS "" )
 # Add port-specific files and definitions
 if( KICAD_WX_PORT STREQUAL osx )
     set( PLATFORM_SRCS
-        port/wxosx/ui.cpp
+        port/wxosx/ui.mm
         )
 elseif( KICAD_WX_PORT STREQUAL msw )
     set( PLATFORM_SRCS
         port/wxmsw/ui.cpp
         )
-elseif( KICAD_WX_PORT STREQUAL gtk3 )
+elseif( KICAD_WX_PORT STREQUAL gtk )
     set( PLATFORM_SRCS
         port/wxgtk/ui.cpp
         )
