@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 09:37-0700\n"
+"POT-Creation-Date: 2024-05-31 17:41-0700\n"
 "PO-Revision-Date: 2024-05-28 14:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -3153,7 +3153,7 @@ msgstr "输出模式:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:98
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
-#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_text.cpp:563
+#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_text.cpp:564
 #: pcbnew/pcb_textbox.cpp:677 pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "颜色"
@@ -4676,7 +4676,7 @@ msgstr "无法完整地读取图纸 '%s'。"
 #: pcbnew/pcb_dimension.cpp:1462 pcbnew/pcb_dimension.cpp:1521
 #: pcbnew/pcb_dimension.cpp:1557 pcbnew/pcb_dimension.cpp:1598
 #: pcbnew/pcb_dimension.cpp:1643 pcbnew/pcb_dimension.cpp:1680
-#: pcbnew/pcb_field.cpp:226 pcbnew/pcb_text.cpp:224 pcbnew/pcb_text.cpp:378
+#: pcbnew/pcb_field.cpp:226 pcbnew/pcb_text.cpp:224 pcbnew/pcb_text.cpp:379
 #: pcbnew/widgets/panel_selection_filter.cpp:187
 #: pcbnew/widgets/panel_selection_filter_base.cpp:33
 #: pcbnew/widgets/search_handlers.cpp:203
@@ -5590,8 +5590,8 @@ msgstr "方向"
 #: eeschema/lib_field.cpp:670 eeschema/lib_textbox.cpp:565
 #: eeschema/sch_field.cpp:1410 eeschema/sch_text.cpp:501
 #: eeschema/sch_textbox.cpp:524 pcbnew/dialogs/dialog_text_properties.cpp:154
-#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:567
-#: pcbnew/pcb_text.cpp:571
+#: pcbnew/dialogs/dialog_text_properties_base.h:111 pcbnew/pcb_text.cpp:568
+#: pcbnew/pcb_text.cpp:572
 msgid "Text Properties"
 msgstr "文本属性"
 
@@ -5647,7 +5647,7 @@ msgstr "镜像"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94 pcbnew/pcb_dimension.cpp:1518
 #: pcbnew/pcb_dimension.cpp:1554 pcbnew/pcb_dimension.cpp:1595
 #: pcbnew/pcb_dimension.cpp:1640 pcbnew/pcb_dimension.cpp:1677
-#: pcbnew/pcb_text.cpp:583 pcbnew/pcb_textbox.cpp:676
+#: pcbnew/pcb_text.cpp:584 pcbnew/pcb_textbox.cpp:676
 msgid "Visible"
 msgstr "可见"
 
@@ -5666,7 +5666,7 @@ msgstr "垂直对齐"
 #: eeschema/sch_field.cpp:1402 eeschema/sch_label.cpp:2177
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
-#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_text.cpp:589
+#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_text.cpp:590
 msgid "Hyperlink"
 msgstr "超链接"
 
@@ -30922,8 +30922,8 @@ msgstr "文本项目"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:54
-#: pcbnew/fp_text_grid_table.cpp:145 pcbnew/pcb_text.cpp:569
-#: pcbnew/pcb_text.cpp:586
+#: pcbnew/fp_text_grid_table.cpp:145 pcbnew/pcb_text.cpp:570
+#: pcbnew/pcb_text.cpp:587
 msgid "Keep Upright"
 msgstr "保持竖直"
 
@@ -34066,7 +34066,7 @@ msgstr "修改文本属性"
 #: pcbnew/fp_text_grid_table.cpp:148 pcbnew/pcb_dimension.cpp:1530
 #: pcbnew/pcb_dimension.cpp:1566 pcbnew/pcb_dimension.cpp:1607
 #: pcbnew/pcb_dimension.cpp:1652 pcbnew/pcb_dimension.cpp:1689
-#: pcbnew/pcb_text.cpp:565
+#: pcbnew/pcb_text.cpp:566
 msgid "Knockout"
 msgstr "反显"
 
@@ -37471,11 +37471,11 @@ msgstr "(%s 最小孔环宽度 %s; 实际 %s)"
 msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s 最大孔环宽度 %s; 实际 %s)"
 
-#: pcbnew/drc/drc_test_provider_connection_width.cpp:630
+#: pcbnew/drc/drc_test_provider_connection_width.cpp:625
 msgid "Checking nets for minimum connection width..."
 msgstr "正检查网络的最小连接宽度..."
 
-#: pcbnew/drc/drc_test_provider_connection_width.cpp:773
+#: pcbnew/drc/drc_test_provider_connection_width.cpp:768
 #, c-format
 msgid "(%s minimum connection width %s; actual %s)"
 msgstr "(%s 最小连接宽度 %s; 实际 %s)"
@@ -41866,12 +41866,12 @@ msgstr "PCB 文本"
 msgid "Display"
 msgstr "显示"
 
-#: pcbnew/pcb_text.cpp:386
+#: pcbnew/pcb_text.cpp:387
 #, c-format
 msgid "Footprint Text '%s' of %s"
 msgstr "%2$s 上的封装文本 '%1$s'"
 
-#: pcbnew/pcb_text.cpp:390
+#: pcbnew/pcb_text.cpp:391
 #, c-format
 msgid "PCB Text '%s' on %s"
 msgstr "%2$s 上的 PCB 文本 '%1$s'"
@@ -43464,15 +43464,15 @@ msgstr "精确移动"
 msgid "Duplicated %d item(s)"
 msgstr "复制 %d 项"
 
-#: pcbnew/tools/edit_tool.cpp:2840
+#: pcbnew/tools/edit_tool.cpp:2857
 msgid "Select reference point for the copy..."
 msgstr "为副本选择参考点..."
 
-#: pcbnew/tools/edit_tool.cpp:2841 pcbnew/tools/edit_tool.cpp:2858
+#: pcbnew/tools/edit_tool.cpp:2858 pcbnew/tools/edit_tool.cpp:2875
 msgid "Selection copied"
 msgstr "选区已复制"
 
-#: pcbnew/tools/edit_tool.cpp:2842
+#: pcbnew/tools/edit_tool.cpp:2859
 msgid "Copy canceled"
 msgstr "已取消复制"
 
