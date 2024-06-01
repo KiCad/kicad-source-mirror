@@ -1532,7 +1532,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         // Let 'l' be the length of the chord and 'm' the middle point of the chord
         double   l = m_start.Distance( m_end );
         VECTOR2D m = ( m_start + m_end ) / 2;
-        double   sqRadDiff = ( radius * radius ) - 0.25;
+        double   sqRadDiff = ( radius * radius ) - ( l * l ) / 4.0;
 
         // Calculate 'd', the vector from the chord midpoint to the center
         VECTOR2D d;
