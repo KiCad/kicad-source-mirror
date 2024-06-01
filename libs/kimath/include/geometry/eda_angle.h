@@ -174,6 +174,10 @@ public:
 
         if( test.m_value == 0.0 || test.m_value == 180.0 )
             return 0.0;
+        else if( test.m_value == 45.0 || test.m_value == 135.0 )
+            return M_SQRT1_2; // sqrt(2)/2
+        else if( test.m_value == 225.0 || test.m_value == 315.0 )
+            return -M_SQRT1_2;
         else if( test.m_value == 90.0 )
             return 1.0;
         else if( test.m_value == 270.0 )
@@ -193,6 +197,10 @@ public:
             return -1.0;
         else if( test.m_value == 90.0 || test.m_value == 270.0 )
             return 0.0;
+        else if( test.m_value == 45.0 || test.m_value == 315.0 )
+            return M_SQRT1_2; // sqrt(2)/2
+        else if( test.m_value == 135.0 || test.m_value == 225.0 )
+            return -M_SQRT1_2;
         else
             return cos( AsRadians() );
     }
