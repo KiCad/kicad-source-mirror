@@ -57,6 +57,11 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    bool IsFilledForHitTesting() const override
+    {
+        return false;
+    }
+
     virtual std::vector<SHAPE*> MakeEffectiveShapes( bool aEdgeOnly = false ) const override;
 
     virtual void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,

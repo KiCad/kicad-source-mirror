@@ -881,7 +881,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         double radius = GetRadius();
         double dist = aPosition.Distance( getCenter() );
 
-        if( IsFilled() )
+        if( IsFilledForHitTesting() )
             return dist <= radius + maxdist;          // Filled circle hit-test
         else
             return abs( radius - dist ) <= maxdist;   // Ring hit-test
@@ -899,7 +899,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         VECTOR2D relPos( VECTOR2D( aPosition ) - getCenter() );
         double dist = relPos.EuclideanNorm();
 
-        if( IsFilled() )
+        if( IsFilledForHitTesting() )
         {
             // Check distance from arc center
             if( dist > radius + maxdist )
@@ -944,7 +944,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         return TestSegmentHit( aPosition, GetStart(), GetEnd(), maxdist );
 
     case SHAPE_T::RECTANGLE:
-        if( IsProxyItem() || IsFilled() )               // Filled rect hit-test
+        if( IsProxyItem() || IsFilledForHitTesting() )   // Filled rect hit-test
         {
             SHAPE_POLY_SET poly;
             poly.NewOutline();
@@ -965,7 +965,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         }
 
     case SHAPE_T::POLY:
-        if( IsFilled() )
+        if( IsFilledForHitTesting() )
         {
             if( !m_poly.COutline( 0 ).IsClosed() )
             {

@@ -93,6 +93,11 @@ public:
         return GetFillMode() != FILL_T::NO_FILL;
     }
 
+    virtual bool IsFilledForHitTesting() const
+    {
+        return IsFilled();
+    }
+
     void SetFilled( bool aFlag )
     {
         setFilled( aFlag );
