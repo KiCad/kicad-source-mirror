@@ -62,12 +62,12 @@ public:
     /**
      * Get the SCH_PIN for this context.
      */
-    SCH_PIN* Pin();
+    SCH_PIN* Pin() const;
 
     /**
      * Get the #SCH_SHEET_PATH context for the paired #SCH_PIN.
      */
-    SCH_SHEET_PATH& Sheet();
+    const SCH_SHEET_PATH& Sheet() const;
 
     /**
      * Test two pin contexts for equality based on the deterministic hash.
