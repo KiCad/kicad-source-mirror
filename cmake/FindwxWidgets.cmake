@@ -523,6 +523,8 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
     if(BUILD_SHARED_LIBS)
       find_path(wxWidgets_LIB_DIR
       NAMES
+        qtu/wx/setup.h
+        qtud/wx/setup.h
         msw/wx/setup.h
         mswd/wx/setup.h
         mswu/wx/setup.h
@@ -540,6 +542,8 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
     else()
       find_path(wxWidgets_LIB_DIR
       NAMES
+        qtu/wx/setup.h
+        qtud/wx/setup.h
         msw/wx/setup.h
         mswd/wx/setup.h
         mswu/wx/setup.h
@@ -571,7 +575,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
       endif()
 
       # Search for available configuration types.
-      foreach(CFG mswunivud mswunivd mswud mswd mswunivu mswuniv mswu msw)
+      foreach(CFG mswunivud mswunivd mswud mswd mswunivu mswuniv mswu msw qt qtd qtu qtud)
         set(WX_${CFG}_FOUND FALSE)
         if(EXISTS ${WX_LIB_DIR}/${CFG})
           list(APPEND WX_CONFIGURATION_LIST ${CFG})
