@@ -23,6 +23,7 @@
 
 #include "git_add_to_index_handler.h"
 
+#include <iterator>
 
 #include <wx/string.h>
 #include <wx/log.h>
