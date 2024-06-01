@@ -30,13 +30,13 @@
 #include <erc_sch_pin_context.h>
 
 
-SCH_PIN* ERC_SCH_PIN_CONTEXT::Pin()
+SCH_PIN* ERC_SCH_PIN_CONTEXT::Pin() const
 {
     return m_pin;
 }
 
 
-SCH_SHEET_PATH& ERC_SCH_PIN_CONTEXT::Sheet()
+const SCH_SHEET_PATH& ERC_SCH_PIN_CONTEXT::Sheet() const
 {
     return m_sheet;
 }
