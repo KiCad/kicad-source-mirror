@@ -1611,7 +1611,7 @@ void EDA_BASE_FRAME::onIconize( wxIconizeEvent& aEvent )
 }
 
 
-#ifdef _WIN32
+#ifdef __WXMSW__
 WXLRESULT EDA_BASE_FRAME::MSWWindowProc( WXUINT message, WXWPARAM wParam, WXLPARAM lParam )
 {
     // This will help avoid the menu keeping focus when the alt key is released

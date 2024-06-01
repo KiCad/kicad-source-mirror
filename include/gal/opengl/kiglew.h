@@ -36,7 +36,7 @@
 // includes since they transitively include the OpenGL headers.
 #define GL_SILENCE_DEPRECATION 1
 
-#ifdef __WXGTK__
+#if defined( __unix__ ) and not defined( __APPLE__ )
 
     #ifdef KICAD_USE_EGL
 
@@ -58,12 +58,12 @@
 
     #endif  // KICAD_USE_EGL
 
-#else   // __WXGTK__
+#else   // defined( __unix__ ) and not defined( __APPLE__ )
 
     // Non-GTK platforms only need the normal GLEW include
     #include <GL/glew.h>
 
-#endif  // __WXGTK__
+#endif  // defined( __unix__ ) and not defined( __APPLE__ )
 
 #ifdef _WIN32
 

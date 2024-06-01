@@ -177,7 +177,7 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 }
 
 
-#ifdef __WXMSW__
+#ifdef _WIN32
 /**
  * Gets the stock (install) data path, which is the base path for things like scripting, etc
  */
@@ -485,7 +485,7 @@ wxString PATHS::GetOSXKicadDataDir()
 #endif
 
 
-#ifdef __WXMSW__
+#ifdef _WIN32
 wxString PATHS::GetWindowsFontConfigDir()
 {
     wxFileName fn;

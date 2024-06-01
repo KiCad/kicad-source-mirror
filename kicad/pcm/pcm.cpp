@@ -672,13 +672,11 @@ void PLUGIN_CONTENT_MANAGER::PreparePackage( PCM_PACKAGE& aPackage )
             && parse_version_tuple( *ver.kicad_version_max, 999 ) < m_kicad_version )
             ver.compatible = false;
 
-#ifdef __WXMSW__
+#if defined( _WIN32 )
         wxString platform = wxT( "windows" );
-#endif
-#ifdef __WXOSX__
+#elif defined( __APPLE__ )
         wxString platform = wxT( "macos" );
-#endif
-#ifdef __WXGTK__
+#else
         wxString platform = wxT( "linux" );
 #endif
 

@@ -90,7 +90,7 @@ void PYTHON_MANAGER::Execute( const wxString& aArgs,
 
 wxString PYTHON_MANAGER::FindPythonInterpreter()
 {
-#ifdef __WXMSW__
+#ifdef _WIN32
     // TODO(JE) where
 #else
     wxArrayString output;

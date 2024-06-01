@@ -112,19 +112,11 @@ void NUMBER_BADGE::SetTextSize( int aSize )
 
 // OSX has prevalent badges in the application bar at the bottom of the screen so we try to
 // match those.  Other platforms may also need tweaks to spacing, fontweight, etc.
-#ifdef __WXMAC__
+#if defined( __WXMAC__ )
 #define BADGE_FONTWEIGHT wxFONTWEIGHT_NORMAL
 #define PLATFORM_FUDGE_X 0.92
 #define PLATFORM_FUDGE_Y 1.6
-#endif
-
-#ifdef __WXGTK__
-#define BADGE_FONTWEIGHT wxFONTWEIGHT_BOLD
-#define PLATFORM_FUDGE_X 1.0
-#define PLATFORM_FUDGE_Y 1.0
-#endif
-
-#ifdef __WXMSW__
+#else
 #define BADGE_FONTWEIGHT wxFONTWEIGHT_BOLD
 #define PLATFORM_FUDGE_X 1.0
 #define PLATFORM_FUDGE_Y 1.0

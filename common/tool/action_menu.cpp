@@ -653,7 +653,7 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     // On Windows, for Checkable Menu items, adding a bitmap adds also
     // our predefined checked alternate bitmap
     // On other OS, wxITEM_CHECK and wxITEM_RADIO Menu items do not use custom bitmaps.
-#if defined( _WIN32 )
+#if defined( __WXMSW__ )
     // On Windows, AddBitmapToMenuItem() uses the unchecked bitmap for wxITEM_CHECK and
     // wxITEM_RADIO menuitems and autoamtically adds a checked bitmap.
     // For other menuitrms, use the "checked" bitmap.

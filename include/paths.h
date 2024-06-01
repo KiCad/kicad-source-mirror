@@ -182,7 +182,7 @@ public:
     static wxString GetOSXKicadDataDir();
 #endif
 
-#ifdef __WXMSW__
+#ifdef _WIN32
     /**
      * @return The directory the font config support files can be found
      */
@@ -234,7 +234,7 @@ private:
      */
     static void getUserDocumentPath( wxFileName& aPath );
 
-#ifdef __WXMSW__
+#ifdef _WIN32
     /**
      * Gets the root of the kicad install on Windows specifically.
      * KiCad on Windows has a pseudo posix folder structure contained in its installed folder
