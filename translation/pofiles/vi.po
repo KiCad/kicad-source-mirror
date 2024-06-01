@@ -3,6 +3,7 @@
 # Bế Trọng Nghĩa <benghia1st@gmail.com>, 2022.
 # Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>, 2023, 2024.
 # Phạm Minh Tấn <masterminhtan@gmail.com>, 2023.
+# Nguyen Van Dien <nvdien@tuta.io>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
@@ -574,9 +575,8 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Lớp đồng/chuẩn cho bề mặt bản mạch:"
+msgstr "Lớp đồng/chuẩn cho bề mặt bản mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "B.Cu"
@@ -585,27 +585,25 @@ msgstr "B.Cu"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Lớp đồng/chuẩn cho bề mặt bản mạch:"
+msgstr "Lớp đồng/chuẩn cho bề mặt bản mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "Lớp keo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
 msgid "Show adhesive"
-msgstr "Hiển thị các lớp adhesive"
+msgstr "Hiện lớp keo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Solder Paste"
+msgstr "Kem hàn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Hiển thị các lớp solder mask"
+msgstr "Hiện lớp kem hàn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 #, fuzzy
@@ -717,7 +715,7 @@ msgstr "Hiện thị hộp bao khung"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Values"
-msgstr "Giá trị"
+msgstr "Các giá trị"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:338
@@ -757,9 +755,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Không kẹp các lớp lụa vào đường viền bo mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "3D Axis"
-msgstr "Hiện Trục 3D"
+msgstr "Hệ tọa độ trong không gian 3 chiều"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 #, fuzzy
@@ -777,9 +774,8 @@ msgid "Background End"
 msgstr "Nền"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Lớp nền trên cùng:"
+msgstr "Lớp nền trên cùng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:209
@@ -852,7 +848,7 @@ msgstr "Xóa chế độ xem ..."
 #: pcbnew/widgets/appearance_controls.cpp:2680
 #, fuzzy
 msgid "Layer preset name:"
-msgstr "Tên thành viên"
+msgstr "Tên thành viên:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:727
 #: pcbnew/widgets/appearance_controls.cpp:2681
@@ -5975,12 +5971,12 @@ msgstr "Bắt đầu Y"
 #: common/eda_shape.cpp:2023
 #, fuzzy
 msgid "Center X"
-msgstr "Giữa"
+msgstr "Căn giữa X"
 
 #: common/eda_shape.cpp:2029
 #, fuzzy
 msgid "Center Y"
-msgstr "Giữa"
+msgstr "Căn giữa Y"
 
 #: common/eda_shape.cpp:2041 eeschema/sch_tablecell.cpp:192
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2490 pcbnew/pcb_tablecell.cpp:194
@@ -6005,7 +6001,7 @@ msgstr "Chiều rộng đường nét"
 #: pcbnew/pcb_shape.cpp:902 pcbnew/pcb_tablecell.cpp:199
 #, fuzzy
 msgid "Line Color"
-msgstr "Màu sắc đường kẻ:"
+msgstr "Màu sắc đường kẻ"
 
 #: common/eda_shape.cpp:2120 eeschema/sch_shape.cpp:688
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
