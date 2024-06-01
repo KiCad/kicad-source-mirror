@@ -1058,6 +1058,25 @@ find_package( wxWidgets ${wxWidgets_REQ_VERSION} COMPONENTS gl aui adv html core
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
 
+# Detect wxWidgets port being used
+if( wxWidgets_FIND_STYLE STREQUAL "win32" )
+    string(REGEX MATCH "^[msw|qt|gtk]*" KICAD_WX_PORT "${WX_CONFIGURATION}")
+
+    if( KICAD_WX_PORT STREQUAL "qt" )
+        add_compile_definitions( __WXQT__ )
+    elseif( KICAD_WX_PORT STREQUAL "gtk" )
+        add_compile_definitions( __WXGTK__ )
+    endif()
+elseif( _wx_selected_config )
+    string(REGEX MATCH "^[msw|qt|gtk|osx]*" KICAD_WX_PORT "${_wx_selected_config}")
+endif()
+
+if( KICAD_WX_PORT )
+    message( STATUS "Detected wxWidgets port: ${KICAD_WX_PORT}")
+else()
+    message( FATAL_ERROR "Unable to detect wxWidgets port")
+endif()
+
 if( NOT MSVC )
     if( ${wxWidgets_VERSION_STRING} VERSION_LESS 3.2 )
         message( FATAL_ERROR "wxWidgets 3.2.0 or greater is required" )
