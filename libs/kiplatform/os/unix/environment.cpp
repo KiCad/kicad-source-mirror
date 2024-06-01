@@ -20,7 +20,6 @@
 
 #include <glib.h>
 #include <gio/gio.h>
-#include <gdk/gdk.h>
 #include <kiplatform/environment.h>
 #include <wx/filename.h>
 #include <wx/utils.h>
