@@ -23,6 +23,8 @@
  */
 
 #include <pcb_generator.h>
+#include <core/mirror.h>
+#include <board.h>
 
 
 PCB_GENERATOR::PCB_GENERATOR( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer ) :
@@ -126,6 +128,24 @@ void PCB_GENERATOR::Move( const VECTOR2I& aMoveVector )
     PCB_GROUP::Move( aMoveVector );
 }
 
+void PCB_GENERATOR::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
+{
+    RotatePoint( m_origin, aRotCentre, aAngle );
+
+    PCB_GROUP::Rotate( aRotCentre, aAngle );
+}
+
+void PCB_GENERATOR::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+{
+    if( aFlipLeftRight )
+        MIRROR( m_origin.x, aCentre.x );
+    else
+        MIRROR( m_origin.y, aCentre.y );
+
+    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+
+    PCB_GROUP::Flip( aCentre, aFlipLeftRight );
+}
 
 bool PCB_GENERATOR::AddItem( BOARD_ITEM* aItem )
 {
