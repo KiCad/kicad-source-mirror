@@ -168,8 +168,7 @@ bool PCB_TEXT::Deserialize( const google::protobuf::Any &aContainer )
 
         attrs.m_Angle = EDA_ANGLE( text.attributes().angle().value_degrees(), DEGREES_T );
         attrs.m_LineSpacing = text.attributes().line_spacing();
-        SetTextThickness( text.attributes().stroke_width().value_nm() );
-
+        attrs.m_StrokeWidth = text.attributes().stroke_width().value_nm();
         attrs.m_Halign = FromProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>(
                 text.attributes().horizontal_alignment() );
 

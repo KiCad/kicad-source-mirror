@@ -355,7 +355,7 @@ public:
     /**
      * Return the rotation angle of the pad.
      */
-    EDA_ANGLE GetOrientation() const { return m_orient; }
+    EDA_ANGLE GetOrientation() const { return m_padStack.GetOrientation(); }
     EDA_ANGLE GetFPRelativeOrientation() const;
 
     // For property system
@@ -365,7 +365,7 @@ public:
     }
     double GetOrientationDegrees() const
     {
-        return m_orient.AsDegrees();
+        return m_padStack.GetOrientation().AsDegrees();
     }
 
     void SetDrillShape( PAD_DRILL_SHAPE aShape )
@@ -866,8 +866,6 @@ private:
     PAD_ATTRIB  m_attribute = PAD_ATTRIB::PTH;
 
     PAD_PROP    m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
-
-    EDA_ANGLE   m_orient;
 
     int         m_lengthPadToDie;   // Length net from pad to die, inside the package
 

@@ -54,6 +54,8 @@ void testProtoFromKiCadObject( KiCadClass* aInput )
         google::protobuf::Any any;
         BOOST_REQUIRE_NO_THROW( aInput->Serialize( any ) );
 
+        BOOST_TEST_MESSAGE( "Input: " << any.Utf8DebugString() );
+
         ProtoClass proto;
         BOOST_REQUIRE_MESSAGE( any.UnpackTo( &proto ),
                                "Any message did not unpack into the requested type" );
@@ -67,18 +69,16 @@ void testProtoFromKiCadObject( KiCadClass* aInput )
         // This round-trip checks that we can create an equivalent protobuf
         google::protobuf::Any outputAny;
         BOOST_REQUIRE_NO_THROW( output.Serialize( outputAny ) );
+        BOOST_TEST_MESSAGE( "Output: " << outputAny.Utf8DebugString() );
+
         if( !( outputAny.SerializeAsString() == any.SerializeAsString() ) )
         {
-            BOOST_TEST_MESSAGE( "Input: " << any.Utf8DebugString() );
-            BOOST_TEST_MESSAGE( "Output: " << outputAny.Utf8DebugString() );
             BOOST_TEST_FAIL( "Round-tripped protobuf does not match" );
         }
 
         // This round-trip checks that we can create an equivalent KiCad object
         if( !( output == *aInput ) )
         {
-            if( ( output == *aInput ) )
-                BOOST_TEST_MESSAGE("ha");
             BOOST_TEST_FAIL( "Round-tripped object does not match" );
         }
     }
@@ -116,6 +116,28 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     // Not yet
 //    for( ZONE* zone : m_board->Zones() )
 //        testProtoFromKiCadObject<kiapi::board::types::Zone>( zone );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "padstacks", m_board );
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        switch( track->Type() )
+        {
+        case PCB_VIA_T:
+            testProtoFromKiCadObject<kiapi::board::types::Via>( static_cast<PCB_VIA*>( track ) );
+            break;
+
+        default:
+            wxFAIL;
+        }
+    }
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+        testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

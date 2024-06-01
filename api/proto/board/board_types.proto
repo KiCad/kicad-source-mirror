@@ -132,11 +132,19 @@ message Arc
   Net                            net    = 8;
 }
 
+// What copper layer shape mode the padstack uses
 enum PadStackType
 {
-  PST_UNKNOWN      = 0;
-  PST_THROUGH      = 1;  // Through all layers; same shape on all layers
-  PST_BLIND_BURIED = 2;  // From a start layer to end layer (inclusive); same shape on all included layers
+  PST_UNKNOWN = 0;
+
+  // The same shape is used on all copper layers
+  PST_NORMAL = 1;
+
+  // The padstack uses up to three different shapes (F_Cu, inner layers, B_Cu)
+  PST_TOP_INNER_BOTTOM = 2;
+
+  // The padstack's shape may differ on arbitrary copper layers
+  PST_CUSTOM = 3;
 }
 
 enum UnconnectedLayerRemoval
@@ -189,11 +197,11 @@ message PadStackLayer
 
   // How much to round the corners of the shape by, as a fraction of min(size.x, size.y)
   // Only used for PSS_ROUNDRECT or PSS_CHAMFEREDRECT
-  float corner_rounding_ratio = 4;
+  double corner_rounding_ratio = 4;
 
   // How much to round the corners of the shape by, as a fraction of min(size.x, size.y)
   // Only used for PSS_CHAMFEREDRECT
-  float chamfer_ratio = 5;
+  double chamfer_ratio = 5;
 
   ChamferedRectCorners chamfered_corners = 6;
 
@@ -225,6 +233,21 @@ message PadStack
   kiapi.common.types.Angle angle = 7;
 }
 
+enum ViaType
+{
+  VT_UNKNOWN = 0;
+
+  // Through vias always start on F_Cu and end on B_Cu
+  VT_THROUGH = 1;
+
+  // Blind/buried vias can have arbitrary start and end layers
+  VT_BLIND_BURIED = 2;
+
+  // Microvias, blind/buried vias, can have arbitrary start and end layers, but also have different
+  // size defaults and design rules
+  VT_MICRO = 3;
+}
+
 // Represents a via
 message Via
 {
@@ -234,12 +257,14 @@ message Via
   // The location of the via's center point
   kiapi.common.types.Vector2  position = 2;
 
-  // The pad stack definition for this via.  The via's VIATYPE (blind/buried/normal) is inferred from this.
+  // The pad stack definition for this via.
   PadStack pad_stack = 3;
 
   kiapi.common.types.LockedState locked = 4;
 
   Net net = 5;
+
+  ViaType type = 6;
 }
 
 message GraphicSegmentAttributes

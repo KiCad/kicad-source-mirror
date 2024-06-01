@@ -90,7 +90,13 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     Padstack().Drill().end = B_Cu;
     SetDrillDefault();
 
-    Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+    m_padStack.SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+
+    // Until vias support custom padstack; their layer set should always be cleared
+    m_padStack.LayerSet().reset();
+
+    // For now, vias are always circles
+    m_padStack.SetShape( PAD_SHAPE::CIRCLE );
 
     m_zoneLayerOverrides.fill( ZLO_NONE );
 
@@ -375,31 +381,19 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     via.mutable_position()->set_x_nm( GetPosition().x );
     via.mutable_position()->set_y_nm( GetPosition().y );
 
-    const PADSTACK& stack = Padstack();
+    PADSTACK padstack = Padstack();
 
-    kiapi::board::types::PadStack* padstack = via.mutable_pad_stack();
-    padstack->set_type( GetViaType() == VIATYPE::BLIND_BURIED
-                        ? kiapi::board::types::PadStackType::PST_BLIND_BURIED
-                        : kiapi::board::types::PadStackType::PST_THROUGH );
-    padstack->set_start_layer(
-            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( stack.Drill().start ) );
-    padstack->set_end_layer(
-            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( stack.Drill().end ) );
-    kiapi::common::PackVector2( *padstack->mutable_drill_diameter(),
-                                { GetDrillValue(), GetDrillValue() } );
+    // Via width is currently stored in PCB_TRACK::m_Width rather than in the
+    // padstack object; so hack it in here unless/until that changes
+    padstack.Size() = { m_Width, m_Width };
 
-    kiapi::board::types::PadStackLayer* stackLayer = padstack->add_layers();
-    kiapi::board::PackLayerSet( *stackLayer->mutable_layers(), GetLayerSet() );
-    kiapi::common::PackVector2( *stackLayer->mutable_size(),
-                                { GetWidth(), GetWidth() } );
+    google::protobuf::Any padStackWrapper;
+    padstack.Serialize( padStackWrapper );
+    padStackWrapper.UnpackTo( via.mutable_pad_stack() );
 
-    // TODO: Microvia status is ignored here.  Do we still need it?
 
-    padstack->set_unconnected_layer_removal(
-            ToProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE,
-                        kiapi::board::types::UnconnectedLayerRemoval>(
-                    Padstack().UnconnectedLayerMode() ) );
 
+    via.set_type( ToProtoEnum<VIATYPE, kiapi::board::types::ViaType>( GetViaType() ) );
     via.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
     via.mutable_net()->mutable_code()->set_value( GetNetCode() );
@@ -421,42 +415,15 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     SetEnd( GetStart() );
     SetDrill( via.pad_stack().drill_diameter().x_nm() );
 
-    const kiapi::board::types::PadStack& padstack = via.pad_stack();
+    google::protobuf::Any padStackWrapper;
+    padStackWrapper.PackFrom( via.pad_stack() );
+
+    if( !m_padStack.Deserialize( padStackWrapper ) )
+        return false;
 
     // We don't yet support complex padstacks for vias
-    if( padstack.layers_size() == 1 )
-    {
-        const kiapi::board::types::PadStackLayer& layer = padstack.layers( 0 );
-        SetWidth( layer.size().x_nm() );
-    }
-
-    switch( padstack.type() )
-    {
-    case kiapi::board::types::PadStackType::PST_BLIND_BURIED:
-        SetViaType( VIATYPE::BLIND_BURIED );
-        break;
-
-    default:
-        SetViaType( VIATYPE::THROUGH );
-        break;
-    }
-
-    if( GetViaType() != VIATYPE::THROUGH )
-    {
-        Padstack().Drill().start = FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
-                padstack.start_layer() );
-
-        Padstack().Drill().end = FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
-                padstack.end_layer() );
-    }
-    else
-    {
-        Padstack().Drill().start = F_Cu;
-        Padstack().Drill().end = B_Cu;
-    }
-    Padstack().SetUnconnectedLayerMode( FromProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE>(
-            padstack.unconnected_layer_removal() ) );
-
+    SetWidth( m_padStack.Size().x );
+    SetViaType( FromProtoEnum<VIATYPE>( via.type() ) );
     SetNetCode( via.net().code().value() );
     SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 

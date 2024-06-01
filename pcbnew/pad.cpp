@@ -73,7 +73,6 @@ PAD::PAD( FOOTPRINT* parent ) :
     VECTOR2I& size = m_padStack.Size();
     size.x = size.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ); // Default pad size 60 mils.
     drill.x = drill.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 30 );       // Default drill size 30 mils.
-    m_orient              = ANGLE_0;
     m_lengthPadToDie      = 0;
 
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
@@ -133,7 +132,8 @@ PAD& PAD::operator=( const PAD &aOther )
 
 void PAD::Serialize( google::protobuf::Any &aContainer ) const
 {
-    kiapi::board::types::Pad pad;
+    using namespace kiapi::board::types;
+    Pad pad;
 
     pad.mutable_id()->set_value( m_Uuid.AsStdString() );
     kiapi::common::PackVector2( *pad.mutable_position(), GetPosition() );
@@ -141,29 +141,13 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
     pad.mutable_net()->mutable_code()->set_value( GetNetCode() );
     pad.mutable_net()->set_name( GetNetname() );
+    pad.set_type( ToProtoEnum<PAD_ATTRIB, PadType>( GetAttribute() ) );
 
-    kiapi::board::types::PadStack* padstack = pad.mutable_pad_stack();
-    padstack->set_type( kiapi::board::types::PadStackType::PST_THROUGH );
-    padstack->set_start_layer(
-            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( m_layer ) );
-    padstack->set_end_layer(
-            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( FlipLayer( m_layer ) ) );
-    kiapi::common::PackVector2( *padstack->mutable_drill_diameter(),
-                                { GetDrillSizeX(), GetDrillSizeY() } );
-    padstack->mutable_angle()->set_value_degrees( GetOrientationDegrees() );
+    google::protobuf::Any padStackMsg;
+    m_padStack.Serialize( padStackMsg );
+    padStackMsg.UnpackTo( pad.mutable_pad_stack() );
 
-    kiapi::board::types::PadStackLayer* stackLayer = padstack->add_layers();
-    kiapi::board::PackLayerSet( *stackLayer->mutable_layers(), GetLayerSet() );
-    kiapi::common::PackVector2( *stackLayer->mutable_size(),
-                                { GetSizeX(), GetSizeY() } );
-    stackLayer->set_shape(
-            ToProtoEnum<PAD_SHAPE, kiapi::board::types::PadStackShape>( GetShape() ) );
-
-    padstack->set_unconnected_layer_removal(
-        ToProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE,
-                    kiapi::board::types::UnconnectedLayerRemoval>( GetUnconnectedLayerMode() ) );
-
-    kiapi::board::types::DesignRuleOverrides* overrides = pad.mutable_overrides();
+    DesignRuleOverrides* overrides = pad.mutable_overrides();
 
     if( GetLocalClearance().has_value() )
         overrides->mutable_clearance()->set_value_nm( *GetLocalClearance() );
@@ -178,10 +162,9 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
         overrides->mutable_solder_paste_margin_ratio()->set_value( *GetLocalSolderPasteMarginRatio() );
 
     overrides->set_zone_connection(
-            ToProtoEnum<ZONE_CONNECTION,
-                        kiapi::board::types::ZoneConnectionStyle>( GetLocalZoneConnection() ) );
+            ToProtoEnum<ZONE_CONNECTION, ZoneConnectionStyle>( GetLocalZoneConnection() ) );
 
-    kiapi::board::types::ThermalSpokeSettings* thermals = pad.mutable_thermal_spokes();
+    ThermalSpokeSettings* thermals = pad.mutable_thermal_spokes();
 
     thermals->set_width( GetThermalSpokeWidth() );
     thermals->set_gap( GetThermalGap() );
@@ -202,26 +185,13 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     SetPosition( kiapi::common::UnpackVector2( pad.position() ) );
     SetNetCode( pad.net().code().value() );
     SetLocked( pad.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    SetAttribute( FromProtoEnum<PAD_ATTRIB>( pad.type() ) );
 
-    const kiapi::board::types::PadStack& padstack = pad.pad_stack();
+    google::protobuf::Any padStackWrapper;
+    padStackWrapper.PackFrom( pad.pad_stack() );
+    m_padStack.Deserialize( padStackWrapper );
 
-    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
-            padstack.start_layer() ) );
-
-    SetDrillSize( kiapi::common::UnpackVector2( padstack.drill_diameter() ) );
-    SetOrientationDegrees( padstack.angle().value_degrees() );
-
-    // We don't yet support complex padstacks
-    if( padstack.layers_size() == 1 )
-    {
-        const kiapi::board::types::PadStackLayer& layer = padstack.layers( 0 );
-        SetSize( kiapi::common::UnpackVector2( layer.size() ) );
-        SetLayerSet( kiapi::board::UnpackLayerSet( layer.layers() ) );
-        SetShape( FromProtoEnum<PAD_SHAPE>( layer.shape() ) );
-    }
-
-    SetUnconnectedLayerMode(
-        FromProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE>( padstack.unconnected_layer_removal() ) );
+    SetLayer( m_padStack.StartLayer() );
 
     const kiapi::board::types::DesignRuleOverrides& overrides = pad.overrides();
 
@@ -584,7 +554,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
             VECTOR2I half_size = size / 2;
             int     half_width = std::min( half_size.x, half_size.y );
             VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
-            RotatePoint( half_len, m_orient );
+            RotatePoint( half_len, GetOrientation() );
             add( new SHAPE_SEGMENT( shapePos - half_len, shapePos + half_len, half_width * 2 ) );
         }
 
@@ -624,7 +594,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
         corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
-        corners.Rotate( m_orient );
+        corners.Rotate( GetOrientation() );
         corners.Move( shapePos );
 
         // GAL renders rectangles faster than 4-point polygons so it's worth checking if our
@@ -669,7 +639,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     {
         SHAPE_POLY_SET outline;
 
-        TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(), m_orient,
+        TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(), GetOrientation(),
                                               GetRoundRectCornerRadius(), GetChamferRectRatio(),
                                               GetChamferPositions(), 0, maxError, ERROR_INSIDE );
 
@@ -691,7 +661,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
             {
                 for( SHAPE* shape : primitive->MakeEffectiveShapes() )
                 {
-                    shape->Rotate( m_orient );
+                    shape->Rotate( GetOrientation() );
                     shape->Move( shapePos );
                     add( shape );
                 }
@@ -706,7 +676,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     int      half_width = std::min( half_size.x, half_size.y );
     VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
 
-    RotatePoint( half_len, m_orient );
+    RotatePoint( half_len, GetOrientation() );
 
     m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len, m_pos + half_len,
                                                             half_width * 2 );
@@ -827,9 +797,7 @@ void PAD::SetProperty( PAD_PROP aProperty )
 
 void PAD::SetOrientation( const EDA_ANGLE& aAngle )
 {
-    m_orient = aAngle;
-    m_orient.Normalize();
-
+    m_padStack.SetOrientation( aAngle );
     SetDirty();
 }
 
@@ -928,7 +896,7 @@ VECTOR2I PAD::ShapePos() const
 
     VECTOR2I loc_offset = m_padStack.Offset();
 
-    RotatePoint( loc_offset, m_orient );
+    RotatePoint( loc_offset, GetOrientation() );
 
     VECTOR2I shape_pos = m_pos + loc_offset;
 
@@ -1426,9 +1394,7 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
 void PAD::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     RotatePoint( m_pos, aRotCentre, aAngle );
-
-    m_orient += aAngle;
-    m_orient.Normalize();
+    m_padStack.SetOrientation( m_padStack.GetOrientation() + aAngle );
 
     SetDirty();
 }
@@ -1828,7 +1794,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
             int      half_width = std::min( dx, dy );
             VECTOR2I delta( dx - half_width, dy - half_width );
 
-            RotatePoint( delta, m_orient );
+            RotatePoint( delta, GetOrientation() );
 
             TransformOvalToPolygon( aBuffer, padShapePos - delta, padShapePos + delta,
                                     ( half_width + aClearance ) * 2, aMaxError, aErrorLoc,
@@ -1844,8 +1810,8 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_padStack.TrapezoidDeltaSize().y / 2 : 0;
 
         SHAPE_POLY_SET outline;
-        TransformTrapezoidToPolygon( outline, padShapePos, m_padStack.Size(), m_orient, ddx, ddy, aClearance,
-                                     aMaxError, aErrorLoc );
+        TransformTrapezoidToPolygon( outline, padShapePos, m_padStack.Size(), GetOrientation(), ddx,
+                                     ddy, aClearance, aMaxError, aErrorLoc );
         aBuffer.Append( outline );
         break;
     }
@@ -1856,8 +1822,8 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         bool doChamfer = GetShape() == PAD_SHAPE::CHAMFERED_RECT;
 
         SHAPE_POLY_SET outline;
-        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_padStack.Size(), m_orient,
-                                              GetRoundRectCornerRadius(),
+        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_padStack.Size(),
+                                              GetOrientation(), GetRoundRectCornerRadius(),
                                               doChamfer ? GetChamferRectRatio() : 0,
                                               doChamfer ? GetChamferPositions() : 0,
                                               aClearance, aMaxError, aErrorLoc );
@@ -1869,7 +1835,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
     {
         SHAPE_POLY_SET outline;
         MergePrimitivesAsPolygon( &outline, aErrorLoc );
-        outline.Rotate( m_orient );
+        outline.Rotate( GetOrientation() );
         outline.Move( VECTOR2I( padShapePos ) );
 
         if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )

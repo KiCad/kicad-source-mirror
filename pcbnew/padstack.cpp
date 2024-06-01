@@ -20,10 +20,15 @@
 
 #include <convert_basic_shapes_to_polygon.h> // RECT_CHAMFER_POSITIONS
 #include "padstack.h"
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/api_pcb_utils.h>
+#include <api/board/board_types.pb.h>
 
 
 PADSTACK::PADSTACK() :
         m_mode( MODE::NORMAL ),
+        m_orientation( ANGLE_0 ),
         m_unconnectedLayerMode( UNCONNECTED_LAYER_MODE::KEEP_ALL ),
         m_customShapeInZoneMode( CUSTOM_SHAPE_ZONE_MODE::OUTLINE )
 {
@@ -83,12 +88,83 @@ bool PADSTACK::operator==( const PADSTACK& aOther ) const
 
 bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
 {
-    return false;
+    using namespace kiapi::board::types;
+    PadStack padstack;
+
+    if( !aContainer.UnpackTo( &padstack ) )
+        return false;
+
+    m_mode = FromProtoEnum<MODE>( padstack.type() );
+
+    // TODO
+    m_layerSet.reset();
+
+    m_orientation = EDA_ANGLE( padstack.angle().value_degrees(), DEGREES_T );
+
+    Drill().size = kiapi::common::UnpackVector2( padstack.drill_diameter() );
+    Drill().start = FromProtoEnum<PCB_LAYER_ID>( padstack.start_layer() );
+    Drill().end = FromProtoEnum<PCB_LAYER_ID>( padstack.end_layer() );
+
+    // We don't yet support complex padstacks
+    if( padstack.layers_size() == 1 )
+    {
+        const PadStackLayer& layer = padstack.layers( 0 );
+        Size() = kiapi::common::UnpackVector2( layer.size() );
+        SetLayerSet( kiapi::board::UnpackLayerSet( layer.layers() ) );
+        SetShape( FromProtoEnum<PAD_SHAPE>( layer.shape() ) );
+
+        SHAPE_PROPS& props = CopperLayerDefaults().shape;
+        props.chamfered_rect_ratio = layer.chamfer_ratio();
+        props.round_rect_radius_ratio = layer.corner_rounding_ratio();
+
+        if( layer.chamfered_corners().top_left() )
+            props.chamfered_rect_positions |= RECT_CHAMFER_TOP_LEFT;
+
+        if( layer.chamfered_corners().top_right() )
+            props.chamfered_rect_positions |= RECT_CHAMFER_TOP_RIGHT;
+
+        if( layer.chamfered_corners().bottom_left() )
+            props.chamfered_rect_positions |= RECT_CHAMFER_BOTTOM_LEFT;
+
+        if( layer.chamfered_corners().bottom_right() )
+            props.chamfered_rect_positions |= RECT_CHAMFER_BOTTOM_RIGHT;
+    }
+
+    SetUnconnectedLayerMode(
+        FromProtoEnum<UNCONNECTED_LAYER_MODE>( padstack.unconnected_layer_removal() ) );
+
+    return true;
 }
 
 
 void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
 {
+    using namespace kiapi::board::types;
+    PadStack padstack;
+
+    padstack.set_type( ToProtoEnum<MODE, PadStackType>( m_mode ) );
+    padstack.set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( StartLayer() ) );
+    padstack.set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( EndLayer() ) );
+    kiapi::common::PackVector2( *padstack.mutable_drill_diameter(), Drill().size );
+    padstack.mutable_angle()->set_value_degrees( m_orientation.AsDegrees() );
+
+    PadStackLayer* stackLayer = padstack.add_layers();
+    kiapi::board::PackLayerSet( *stackLayer->mutable_layers(), LayerSet() );
+    kiapi::common::PackVector2( *stackLayer->mutable_size(), Size() );
+    stackLayer->set_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( Shape() ) );
+    stackLayer->set_chamfer_ratio( CopperLayerDefaults().shape.chamfered_rect_ratio );
+    stackLayer->set_corner_rounding_ratio( CopperLayerDefaults().shape.round_rect_radius_ratio );
+
+    const int& corners = CopperLayerDefaults().shape.chamfered_rect_positions;
+    stackLayer->mutable_chamfered_corners()->set_top_left( corners & RECT_CHAMFER_TOP_LEFT );
+    stackLayer->mutable_chamfered_corners()->set_top_right( corners & RECT_CHAMFER_TOP_RIGHT );
+    stackLayer->mutable_chamfered_corners()->set_bottom_left( corners & RECT_CHAMFER_BOTTOM_LEFT );
+    stackLayer->mutable_chamfered_corners()->set_bottom_right( corners & RECT_CHAMFER_BOTTOM_RIGHT );
+
+    padstack.set_unconnected_layer_removal(
+        ToProtoEnum<UNCONNECTED_LAYER_MODE, UnconnectedLayerRemoval>( m_unconnectedLayerMode ) );
+
+    aContainer.PackFrom( padstack );
 }
 
 
@@ -96,6 +172,18 @@ wxString PADSTACK::Name() const
 {
     // TODO
     return wxEmptyString;
+}
+
+
+PCB_LAYER_ID PADSTACK::StartLayer() const
+{
+    return m_drill.start;
+}
+
+
+PCB_LAYER_ID PADSTACK::EndLayer() const
+{
+    return m_drill.end;
 }
 
 

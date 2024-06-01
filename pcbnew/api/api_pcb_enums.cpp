@@ -24,9 +24,43 @@
 #include <wx/wx.h>
 
 #include <padstack.h>
+#include <pcb_track.h>
 #include <zones.h>
 
 using namespace kiapi::board;
+
+template<>
+types::PadType ToProtoEnum( PAD_ATTRIB aValue )
+{
+    switch( aValue )
+    {
+    case PAD_ATTRIB::PTH:   return types::PadType::PT_PTH;
+    case PAD_ATTRIB::SMD:   return types::PadType::PT_SMD;
+    case PAD_ATTRIB::CONN:  return types::PadType::PT_EDGE_CONNECTOR;
+    case PAD_ATTRIB::NPTH:  return types::PadType::PT_NPTH;
+
+    default:
+        wxCHECK_MSG( false, types::PadType::PT_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PAD_ATTRIB>");
+    }
+}
+
+
+template<>
+PAD_ATTRIB FromProtoEnum( types::PadType aValue )
+{
+    switch( aValue )
+    {
+    case types::PadType::PT_PTH:            return PAD_ATTRIB::PTH;
+    case types::PadType::PT_SMD:            return PAD_ATTRIB::SMD;
+    case types::PadType::PT_EDGE_CONNECTOR: return PAD_ATTRIB::CONN;
+    case types::PadType::PT_NPTH:           return PAD_ATTRIB::NPTH;
+
+    default:
+        wxCHECK_MSG( false,  PAD_ATTRIB::PTH,
+                     "Unhandled case in FromProtoEnum<types::PadType>" );
+    }
+}
 
 template<>
 types::PadStackShape ToProtoEnum( PAD_SHAPE aValue )
@@ -64,6 +98,70 @@ PAD_SHAPE FromProtoEnum( types::PadStackShape aValue )
     default:
         wxCHECK_MSG( false, PAD_SHAPE::CIRCLE,
                      "Unhandled case in FromProtoEnum<types::PadStackShape>" );
+    }
+}
+
+
+template<>
+types::PadStackType ToProtoEnum( PADSTACK::MODE aValue )
+{
+    switch( aValue )
+    {
+    case PADSTACK::MODE::NORMAL:           return types::PadStackType::PST_NORMAL;
+    case PADSTACK::MODE::TOP_INNER_BOTTOM: return types::PadStackType::PST_TOP_INNER_BOTTOM;
+    case PADSTACK::MODE::CUSTOM:           return types::PadStackType::PST_CUSTOM;
+
+    default:
+        wxCHECK_MSG( false, types::PadStackType::PST_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PADSTACK::MODE>");
+    }
+}
+
+
+template<>
+PADSTACK::MODE FromProtoEnum( types::PadStackType aValue )
+{
+    switch( aValue )
+    {
+    case types::PadStackType::PST_NORMAL:           return PADSTACK::MODE::NORMAL;
+    case types::PadStackType::PST_TOP_INNER_BOTTOM: return PADSTACK::MODE::TOP_INNER_BOTTOM;
+    case types::PadStackType::PST_CUSTOM:           return PADSTACK::MODE::CUSTOM;
+
+    default:
+        wxCHECK_MSG( false, PADSTACK::MODE::NORMAL,
+                     "Unhandled case in FromProtoEnum<types::PadStackType>" );
+    }
+}
+
+
+template<>
+types::ViaType ToProtoEnum( VIATYPE aValue )
+{
+    switch( aValue )
+    {
+    case VIATYPE::THROUGH:      return types::ViaType::VT_THROUGH;
+    case VIATYPE::BLIND_BURIED: return types::ViaType::VT_BLIND_BURIED;
+    case VIATYPE::MICROVIA:     return types::ViaType::VT_MICRO;
+
+    default:
+        wxCHECK_MSG( false, types::ViaType::VT_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<VIATYPE>");
+    }
+}
+
+
+template<>
+VIATYPE FromProtoEnum( types::ViaType aValue )
+{
+    switch( aValue )
+    {
+    case types::ViaType::VT_THROUGH:      return VIATYPE::THROUGH;
+    case types::ViaType::VT_BLIND_BURIED: return VIATYPE::BLIND_BURIED;
+    case types::ViaType::VT_MICRO:        return VIATYPE::MICROVIA;
+
+    default:
+        wxCHECK_MSG( false,  VIATYPE::THROUGH,
+                     "Unhandled case in FromProtoEnum<types::ViaType>" );
     }
 }
 

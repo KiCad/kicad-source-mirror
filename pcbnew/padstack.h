@@ -241,8 +241,21 @@ public:
     LSET& LayerSet() { return m_layerSet; }
     void SetLayerSet( const LSET& aSet ) { m_layerSet = aSet; }
 
+    PCB_LAYER_ID StartLayer() const;
+    PCB_LAYER_ID EndLayer() const;
+
+    MODE Mode() const { return m_mode; }
+    void SetMode( MODE aMode ) { m_mode = aMode; }
+
     ///! Returns the name of this padstack in IPC-7351 format
     wxString Name() const;
+
+    EDA_ANGLE GetOrientation() const { return m_orientation; }
+    void SetOrientation( EDA_ANGLE aAngle )
+    {
+        m_orientation = aAngle;
+        m_orientation.Normalize();
+    }
 
     DRILL_PROPS& Drill() { return m_drill; }
     const DRILL_PROPS& Drill() const { return m_drill; }
@@ -328,6 +341,9 @@ private:
 
     ///! An override for the IPC-7351 padstack name
     wxString m_customName;
+
+    ///! The rotation of the pad relative to an outer reference frame
+    EDA_ANGLE m_orientation;
 
     ///! The properties applied to copper layers if they aren't overridden
     COPPER_LAYER_PROPS m_defaultCopperProps;
