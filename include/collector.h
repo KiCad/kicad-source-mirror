@@ -50,14 +50,14 @@ public:
     COLLECTOR() :
             m_Threshold( 0 ),
             m_MenuCancelled( false ),
-            m_scanTypes( {} ),
-            // Inspect() is virtual so calling it from a class common inspector preserves
-            // polymorphism.
-            m_inspector( [this]( EDA_ITEM* aItem, void* aTestData )
-                         {
-                             return this->Inspect( aItem, aTestData );
-                         } )
+            m_scanTypes( {} )
     {
+        // Inspect() is virtual so calling it from a class common inspector preserves
+        // polymorphism.
+        m_inspector = [this]( EDA_ITEM* aItem, void* aTestData )
+        {
+            return this->Inspect( aItem, aTestData );
+        };
     }
 
     virtual ~COLLECTOR() {}
