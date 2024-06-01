@@ -2192,6 +2192,7 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
     }
 
     aDest.SetLocked( aSrc.IsLocked() );
+    const_cast<KIID&>( aDest.m_Uuid ) = aSrc.m_Uuid;
 }
 
 
@@ -2278,78 +2279,75 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     aNew->SetLocked( aExisting->IsLocked() );
 
     // Now transfer the net info from "old" pads to the new footprint
-    for( PAD* pad : aNew->Pads() )
+    for( PAD* newPad : aNew->Pads() )
     {
-        PAD* pad_model = nullptr;
+        PAD* oldPad = nullptr;
 
-        // Pads with no copper are never connected to a net
-        if( !pad->IsOnCopperLayer() )
+        // Pads with no numbers can't be matched.  (Then again, they're never connected to a
+        // net either, so it's just the UUID retention that we can't perform.)
+        if( newPad->GetNumber().IsEmpty() )
         {
-            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            newPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
         }
 
-        // Pads with no numbers are never connected to a net
-        if( pad->GetNumber().IsEmpty() )
-        {
-            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-            continue;
-        }
-
-        // Search for a similar pad on a copper layer, to reuse net info
+        // Search for a similar pad to reuse UUID and net info
         PAD* last_pad = nullptr;
 
         while( true )
         {
-            pad_model = aExisting->FindPadByNumber( pad->GetNumber(), last_pad );
+            oldPad = aExisting->FindPadByNumber( newPad->GetNumber(), last_pad );
 
-            if( !pad_model )
+            if( !oldPad )
                 break;
 
-            if( pad_model->IsOnCopperLayer() )     // a candidate is found
+            if( newPad->IsOnCopperLayer() == oldPad->IsOnCopperLayer() )  // a candidate is found
                 break;
 
-            last_pad = pad_model;
+            last_pad = oldPad;
         }
 
-        if( pad_model )
+        if( oldPad )
         {
-            pad->SetLocalRatsnestVisible( pad_model->GetLocalRatsnestVisible() );
-            pad->SetPinFunction( pad_model->GetPinFunction() );
-            pad->SetPinType( pad_model->GetPinType() );
+            const_cast<KIID&>( newPad->m_Uuid ) = oldPad->m_Uuid;
+            newPad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
+            newPad->SetPinFunction( oldPad->GetPinFunction() );
+            newPad->SetPinType( oldPad->GetPinType() );
         }
 
-        pad->SetNetCode( pad_model ? pad_model->GetNetCode() : NETINFO_LIST::UNCONNECTED );
+        if( newPad->IsOnCopperLayer() )
+            newPad->SetNetCode( oldPad ? oldPad->GetNetCode() : NETINFO_LIST::UNCONNECTED );
+        else
+            newPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
-    for( BOARD_ITEM* item : aExisting->GraphicalItems() )
+    for( BOARD_ITEM* oldItem : aExisting->GraphicalItems() )
     {
-        PCB_TEXT* srcItem = dynamic_cast<PCB_TEXT*>( item );
+        PCB_TEXT* oldTextItem = dynamic_cast<PCB_TEXT*>( oldItem );
 
-        if( srcItem )
+        if( oldTextItem )
         {
             // Dimensions have PCB_TEXT base but are not treated like texts in the updater
-            if( dynamic_cast<PCB_DIMENSION_BASE*>( srcItem ) )
+            if( dynamic_cast<PCB_DIMENSION_BASE*>( oldTextItem ) )
                 continue;
 
-            PCB_TEXT* destItem = getMatchingTextItem( srcItem, aNew );
+            PCB_TEXT* newTextItem = getMatchingTextItem( oldTextItem, aNew );
 
-            if( destItem )
+            if( newTextItem )
             {
-                processTextItem( *srcItem, *destItem, resetTextContent, resetTextLayers,
+                processTextItem( *oldTextItem, *newTextItem, resetTextContent, resetTextLayers,
                                  resetTextEffects, aUpdated );
             }
             else if( !deleteExtraTexts )
             {
-                aNew->Add( static_cast<BOARD_ITEM*>( srcItem->Clone() ) );
+                aNew->Add( static_cast<BOARD_ITEM*>( oldTextItem->Clone() ) );
             }
         }
     }
 
     // Copy reference. The initial text is always used, never resetted
-    processTextItem( aExisting->Reference(), aNew->Reference(),
-                     false,
-                     resetTextLayers, resetTextEffects, aUpdated );
+    processTextItem( aExisting->Reference(), aNew->Reference(), false, resetTextLayers,
+                     resetTextEffects, aUpdated );
 
     // Copy value
     processTextItem( aExisting->Value(), aNew->Value(),
@@ -2359,24 +2357,24 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                      resetTextLayers, resetTextEffects, aUpdated );
 
     // Copy fields in accordance with the reset* flags
-    for( PCB_FIELD* field : aExisting->GetFields() )
+    for( PCB_FIELD* oldField : aExisting->GetFields() )
     {
         // Reference and value are already handled
-        if( field->IsReference() || field->IsValue() )
+        if( oldField->IsReference() || oldField->IsValue() )
             continue;
 
-        PCB_FIELD* newField = aNew->GetFieldByName( field->GetName() );
+        PCB_FIELD* newField = aNew->GetFieldByName( oldField->GetName() );
 
         if( !newField )
         {
-            newField = new PCB_FIELD( *field );
+            newField = new PCB_FIELD( *oldField );
             aNew->Add( newField );
-            processTextItem( *field, *newField, true, true, true, aUpdated );
+            processTextItem( *oldField, *newField, true, true, true, aUpdated );
         }
         else
         {
-            processTextItem( *field, *newField, resetTextContent, resetTextLayers, resetTextEffects,
-                             aUpdated );
+            processTextItem( *oldField, *newField, resetTextContent, resetTextLayers,
+                             resetTextEffects, aUpdated );
         }
 
     }
