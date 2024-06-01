@@ -6,53 +6,18 @@ mark_as_advanced( KICAD_SHOW_GTK_MESSAGES )
 
 set( PLATFORM_COMPILE_DEFS "" )
 
-# Add the appropriate source files
-if( APPLE )
+# Add port-specific files and definitions
+if( KICAD_WX_PORT STREQUAL osx )
     set( PLATFORM_SRCS
-        osx/app.mm
-        osx/drivers.mm
-        osx/environment.mm
-        osx/io.mm
-        osx/policy.mm
-        osx/secrets.mm
-        osx/sysinfo.cpp
-        osx/ui.mm
+        port/wxosx/ui.cpp
         )
-
-    set( PLATFORM_LIBS
-        "-framework Cocoa"
-        "-framework AppKit"
-        "-framework CoreData"
-        "-framework Foundation"
-        )
-elseif( WIN32 )
+elseif( KICAD_WX_PORT STREQUAL msw )
     set( PLATFORM_SRCS
-        msw/app.cpp
-        msw/drivers.cpp
-        msw/environment.cpp
-        msw/io.cpp
-        msw/policy.cpp
-        msw/secrets.cpp
-        msw/sysinfo.cpp
-        msw/ui.cpp
+        port/wxmsw/ui.cpp
         )
-
-    set( PLATFORM_LIBS
-        "Shlwapi"
-        "winhttp"
-        "wintrust"
-        "Imm32"
-        )
-elseif( UNIX )
+elseif( KICAD_WX_PORT STREQUAL gtk3 )
     set( PLATFORM_SRCS
-        gtk/app.cpp
-        gtk/drivers.cpp
-        gtk/environment.cpp
-        gtk/io.cpp
-        gtk/policy.cpp
-        gtk/secrets.cpp
-        gtk/sysinfo.cpp
-        gtk/ui.cpp
+        port/wxgtk/ui.cpp
         )
 
     find_package(PkgConfig REQUIRED)
@@ -67,6 +32,61 @@ elseif( UNIX )
     link_directories( ${GTK3_LIBRARY_DIRS} )
     add_definitions( ${GTK3_CFLAGS_OTHER} )
 
+    # Add the definition to show the GTK error messages if desired (they are hidden
+    # by us by default)
+    if( KICAD_SHOW_GTK_MESSAGES )
+        message( STATUS "Configuring KiCad not to hide any GTK error messages" )
+        string( APPEND PLATFORM_COMPILE_DEFS "-DKICAD_SHOW_GTK_MESSAGES" )
+    endif()
+endif()
+
+
+# Add OS-specific files and definitions
+if( APPLE )
+    list( APPEND PLATFORM_SRCS
+        os/apple/app.mm
+        os/apple/drivers.mm
+        os/apple/environment.mm
+        os/apple/io.mm
+        os/apple/policy.mm
+        os/apple/secrets.mm
+        os/apple/sysinfo.cpp
+        )
+
+    set( PLATFORM_LIBS
+        "-framework Cocoa"
+        "-framework AppKit"
+        "-framework CoreData"
+        "-framework Foundation"
+        )
+elseif( WIN32 )
+    list( APPEND PLATFORM_SRCS
+        os/windows/app.cpp
+        os/windows/drivers.cpp
+        os/windows/environment.cpp
+        os/windows/io.cpp
+        os/windows/policy.cpp
+        os/windows/secrets.cpp
+        os/windows/sysinfo.cpp
+        )
+
+    set( PLATFORM_LIBS
+        "Shlwapi"
+        "winhttp"
+        "wintrust"
+        "Imm32"
+        )
+elseif( UNIX )
+    list( APPEND PLATFORM_SRCS
+        os/unix/app.cpp
+        os/unix/drivers.cpp
+        os/unix/environment.cpp
+        os/unix/io.cpp
+        os/unix/policy.cpp
+        os/unix/secrets.cpp
+        os/unix/sysinfo.cpp
+        )
+
     # Detect the secret library and configure it
     pkg_check_modules(secret REQUIRED libsecret-1)
     include_directories( SYSTEM ${secret_INCLUDE_DIRS} )
@@ -77,13 +97,6 @@ elseif( UNIX )
 
         list( APPEND PLATFORM_SRCS gtk/wayland-pointer-constraints-unstable-v1.c )
         list( APPEND PLATFORM_LIBS Wayland::Client  )
-    endif()
-
-    # Add the definition to show the GTK error messages if desired (they are hidden
-    # by us by default)
-    if( KICAD_SHOW_GTK_MESSAGES )
-        message( STATUS "Configuring KiCad not to hide any GTK error messages" )
-        string( APPEND PLATFORM_COMPILE_DEFS "-DKICAD_SHOW_GTK_MESSAGES" )
     endif()
 endif()
 
