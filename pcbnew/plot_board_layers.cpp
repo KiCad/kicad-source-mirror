@@ -689,6 +689,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     for( const ZONE* zone : aBoard->Zones() )
     {
+        if( zone->GetIsRuleArea() )
+            continue;
+
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             if( !aLayerMask[layer] )
@@ -980,6 +983,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         for( ZONE* zone : aBoard->Zones() )
         {
+            if( zone->GetIsRuleArea() )
+                continue;
+
             if( !zone->IsOnLayer( layer ) )
                 continue;
 
