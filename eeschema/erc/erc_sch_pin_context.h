@@ -40,9 +40,15 @@
 class ERC_SCH_PIN_CONTEXT
 {
 public:
-    ERC_SCH_PIN_CONTEXT() : m_pin( nullptr ), m_sheet(), m_hash( 0 ) {}
+    ERC_SCH_PIN_CONTEXT() :
+            m_pin( nullptr ),
+            m_sheet(),
+            m_hash( 0 )
+    {}
 
-    ERC_SCH_PIN_CONTEXT( SCH_PIN* pin, SCH_SHEET_PATH sheet ) : m_pin( pin ), m_sheet( sheet )
+    ERC_SCH_PIN_CONTEXT( SCH_PIN* pin, SCH_SHEET_PATH sheet ) :
+            m_pin( pin ),
+            m_sheet( sheet )
     {
         rehash();
     }
