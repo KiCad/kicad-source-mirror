@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 09:38-0700\n"
+"POT-Creation-Date: 2024-05-31 17:41-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3172,12 +3172,6 @@ msgstr "Documentation file '%s' not found."
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Unknown MIME type for documentation file '%s'"
 
-msgid "Inches"
-msgstr "Inches"
-
-msgid "Constrain to H, V, 45"
-msgstr "Constrain to H, V, 45"
-
 msgid "Edit Grids..."
 msgstr "Edit Grids..."
 
@@ -3200,6 +3194,12 @@ msgstr "mils"
 
 msgid "Units"
 msgstr "Units"
+
+msgid "Inches"
+msgstr "Inches"
+
+msgid "Constrain to H, V, 45"
+msgstr "Constrain to H, V, 45"
 
 msgid "Select Library"
 msgstr "Select Library"
@@ -5991,6 +5991,14 @@ msgstr "Filter footprint list by library"
 
 msgid "Delete all associations?"
 msgstr "Delete all associations?"
+
+#, c-format
+msgid "Cleared annotation for %s (unit %s)."
+msgstr "Cleared annotation for %s (unit %s)."
+
+#, c-format
+msgid "Cleared annotation for %s."
+msgstr "Cleared annotation for %s."
 
 msgid "Delete Annotation"
 msgstr "Delete Annotation"
@@ -10027,6 +10035,10 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbol '%s' not found in symbol library '%s'"
 
 #, c-format
+msgid "Symbol '%s' has multiple pins with the same pin number"
+msgstr "Symbol '%s' has multiple pins with the same pin number"
+
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Symbol '%s' doesn't match copy in library '%s'"
 
@@ -10115,6 +10127,9 @@ msgstr "Input pin not driven by any Output pins"
 
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Input Power pin not driven by any Output Power pins"
+
+msgid "Multiple pins with the same pin numbers"
+msgstr "Multiple pins with the same pin numbers"
 
 msgid "Conflict problem between pins"
 msgstr "Conflict problem between pins"
@@ -10639,6 +10654,18 @@ msgstr "Exclude from board settings differ."
 #, c-format
 msgid "Unit %s"
 msgstr "Unit %s"
+
+msgid "Excluded from BOM"
+msgstr "Excluded from BOM"
+
+msgid "Excluded from board"
+msgstr "Excluded from board"
+
+msgid "Excluded from simulation"
+msgstr "Excluded from simulation"
+
+msgid "DNP"
+msgstr "DNP"
 
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
@@ -11999,18 +12026,6 @@ msgstr "(Deleted Item)"
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchical Sheet Pin %s"
-
-msgid "Excluded from BOM"
-msgstr "Excluded from BOM"
-
-msgid "Excluded from board"
-msgstr "Excluded from board"
-
-msgid "Excluded from simulation"
-msgstr "Excluded from simulation"
-
-msgid "DNP"
-msgstr "DNP"
 
 msgid "Simulation"
 msgstr "Simulation"
@@ -13421,14 +13436,6 @@ msgstr ""
 
 #, c-format
 msgid ""
-"<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
-"if saved in a symbol library"
-msgstr ""
-"<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
-"if saved in a symbol library"
-
-#, c-format
-msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
@@ -13458,6 +13465,14 @@ msgid ""
 msgstr ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
+
+#, c-format
+msgid ""
+"<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
+"if saved in a symbol library"
+msgstr ""
+"<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
+"if saved in a symbol library"
 
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -16502,14 +16517,23 @@ msgstr "Exclude board body"
 msgid "Exclude 3D models for components"
 msgstr "Exclude 3D models for components"
 
-msgid "Export tracks"
-msgstr "Export tracks"
+msgid "Export tracks and vias"
+msgstr "Export tracks and vias"
+
+msgid "Export pads"
+msgstr "Export pads"
 
 msgid "Export zones"
 msgstr "Export zones"
 
 msgid "Export elements on inner copper layers"
 msgstr "Export elements on inner copper layers"
+
+msgid "Export silkscreen graphics as a set of flat faces"
+msgstr "Export silkscreen graphics as a set of flat faces"
+
+msgid "Export soldermask layers as a set of flat faces"
+msgstr "Export soldermask layers as a set of flat faces"
 
 msgid "Fuse overlapping geometry together"
 msgstr "Fuse overlapping geometry together"
@@ -16685,13 +16709,6 @@ msgstr "Mirror the board (useful for trying to show bottom layers)"
 
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Color theme to use (will default to PCB Editor settings)"
-
-msgid ""
-"Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
-"shape)"
-msgstr ""
-"Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
-"shape)"
 
 msgid "Generate Position File"
 msgstr "Generate Position File"
@@ -22171,8 +22188,14 @@ msgstr "STEP files"
 msgid "Binary glTF files"
 msgstr "Binary glTF files"
 
-msgid "STEP Output File"
-msgstr "STEP Output File"
+msgid "XAO files"
+msgstr "XAO files"
+
+msgid "BREP (OCCT) files"
+msgstr "BREP (OCCT) files"
+
+msgid "3D Model Output File"
+msgstr "3D Model Output File"
 
 msgid "No filename for output file"
 msgstr "No filename for output file"
@@ -22187,6 +22210,97 @@ msgstr ""
 
 msgid "STEP/GLTF Export"
 msgstr "STEP/GLTF Export"
+
+msgid "Format:"
+msgstr "Format:"
+
+msgid "STEP"
+msgstr "STEP"
+
+msgid "GLB (Binary glTF)"
+msgstr "GLB (Binary glTF)"
+
+msgid "XAO"
+msgstr "XAO"
+
+msgid "BREP (OCCT)"
+msgstr "BREP (OCCT)"
+
+msgid "Export as Compound shape"
+msgstr "Export as Compound shape"
+
+msgid ""
+"Merges all shapes into a single Compound shape. Useful for external software "
+"that does de-duplication based on shape names."
+msgstr ""
+"Merges all shapes into a single Compound shape. Useful for external software "
+"that does de-duplication based on shape names."
+
+msgid "Export board body"
+msgstr "Export board body"
+
+msgid "Export components"
+msgstr "Export components"
+
+msgid "Export tracks and vias on external copper layers."
+msgstr "Export tracks and vias on external copper layers."
+
+msgid "Export zones on external copper layers."
+msgstr "Export zones on external copper layers."
+
+msgid "Export inner copper layers"
+msgstr "Export inner copper layers"
+
+msgid "Export silkscreen"
+msgstr "Export silkscreen"
+
+msgid "Export silkscreen graphics as a set of flat faces."
+msgstr "Export silkscreen graphics as a set of flat faces."
+
+msgid "Export solder mask"
+msgstr "Export solder mask"
+
+msgid "Export solder mask layers as a set of flat faces."
+msgstr "Export solder mask layers as a set of flat faces."
+
+msgid "Fuse shapes (time consuming)"
+msgstr "Fuse shapes (time consuming)"
+
+msgid "Combine intersecting geometry into one shape."
+msgstr "Combine intersecting geometry into one shape."
+
+msgid "Export solder paste"
+msgstr "Export solder paste"
+
+msgid "Export solder paste graphics."
+msgstr "Export solder paste graphics."
+
+msgid "Net filter (supports wildcards):"
+msgstr "Net filter (supports wildcards):"
+
+msgid ""
+"Only copper items belonging to nets matching this filter will be exported."
+msgstr ""
+"Only copper items belonging to nets matching this filter will be exported."
+
+msgid "Board outline chaining tolerance:"
+msgstr "Board outline chaining tolerance:"
+
+msgid "Tight (0.001 mm)"
+msgstr "Tight (0.001 mm)"
+
+msgid "Standard (0.01 mm)"
+msgstr "Standard (0.01 mm)"
+
+msgid "Loose (0.1 mm)"
+msgstr "Loose (0.1 mm)"
+
+msgid ""
+"Tolerance sets the distance between two points that are considered joined "
+"when building the board outlines."
+msgstr ""
+"Tolerance sets the distance between two points that are considered joined "
+"when building the board outlines."
 
 msgid "Coordinates"
 msgstr "Coordinates"
@@ -22231,87 +22345,8 @@ msgstr ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
 
-msgid "Export as Compound shape"
-msgstr "Export as Compound shape"
-
-msgid ""
-"Merges all shapes into a single Compound shape. Useful for external software "
-"that does de-duplication based on shape names."
-msgstr ""
-"Merges all shapes into a single Compound shape. Useful for external software "
-"that does de-duplication based on shape names."
-
-msgid "Export board body"
-msgstr "Export board body"
-
-msgid "Export components"
-msgstr "Export components"
-
-msgid "Export tracks, pads and vias"
-msgstr "Export tracks, pads and vias"
-
-msgid "Export tracks, pads and vias on external copper layers."
-msgstr "Export tracks, pads and vias on external copper layers."
-
-msgid "Export zones on external copper layers."
-msgstr "Export zones on external copper layers."
-
-msgid "Export inner copper layers"
-msgstr "Export inner copper layers"
-
-msgid "Fuse shapes (time consuming)"
-msgstr "Fuse shapes (time consuming)"
-
-msgid "Combine intersecting geometry into one shape."
-msgstr "Combine intersecting geometry into one shape."
-
-msgid "Export silkscreen"
-msgstr "Export silkscreen"
-
-msgid "Export silkscreen graphics."
-msgstr "Export silkscreen graphics."
-
-msgid "Export solder mask"
-msgstr "Export solder mask"
-
-msgid "Export solder mask graphics."
-msgstr "Export solder mask graphics."
-
-msgid "Export solder paste"
-msgstr "Export solder paste"
-
-msgid "Export solder paste graphics."
-msgstr "Export solder paste graphics."
-
-msgid "Net filter (supports wildcards):"
-msgstr "Net filter (supports wildcards):"
-
-msgid ""
-"Only copper items belonging to nets matching this filter will be exported."
-msgstr ""
-"Only copper items belonging to nets matching this filter will be exported."
-
-msgid "Board outline chaining tolerance:"
-msgstr "Board outline chaining tolerance:"
-
-msgid "Tight (0.001 mm)"
-msgstr "Tight (0.001 mm)"
-
-msgid "Standard (0.01 mm)"
-msgstr "Standard (0.01 mm)"
-
-msgid "Loose (0.1 mm)"
-msgstr "Loose (0.1 mm)"
-
-msgid ""
-"Tolerance sets the distance between two points that are considered joined "
-"when building the board outlines."
-msgstr ""
-"Tolerance sets the distance between two points that are considered joined "
-"when building the board outlines."
-
-msgid "Export STEP / BREP / XAO / GLTF"
-msgstr "Export STEP / BREP / XAO / GLTF"
+msgid "Export 3D Model"
+msgstr "Export 3D Model"
 
 #, c-format
 msgid "Process failed with exit code %d"
@@ -23651,92 +23686,8 @@ msgstr "Connected layers only"
 msgid "%s and %s"
 msgstr "%s and %s"
 
-msgid "Error: Pad must have a positive size."
-msgstr "Error: Pad must have a positive size."
-
-msgid "Warning: Pad hole not inside pad shape."
-msgstr "Warning: Pad hole not inside pad shape."
-
-msgid "Warning: Pad hole will leave no copper."
-msgstr "Warning: Pad hole will leave no copper."
-
-msgid "Warning: Negative local clearance values will have no effect."
-msgstr "Warning: Negative local clearance values will have no effect."
-
-msgid ""
-"Warning: Negative solder mask clearances larger than some shape primitives. "
-"Results may be surprising."
-msgstr ""
-"Warning: Negative solder mask clearances larger than some shape primitives. "
-"Results may be surprising."
-
-msgid ""
-"Warning: Negative solder mask clearance larger than pad. No solder mask will "
-"be generated."
-msgstr ""
-"Warning: Negative solder mask clearance larger than pad. No solder mask will "
-"be generated."
-
-msgid ""
-"Warning: Negative solder paste margins larger than pad. No solder paste mask "
-"will be generated."
-msgstr ""
-"Warning: Negative solder paste margins larger than pad. No solder paste mask "
-"will be generated."
-
-msgid "Error: pad has no layer."
-msgstr "Error: pad has no layer."
-
-msgid ""
-"Warning: Plated through holes should normally have a copper pad on at least "
-"one layer."
-msgstr ""
-"Warning: Plated through holes should normally have a copper pad on at least "
-"one layer."
-
-msgid "Error: Trapazoid delta is too large."
-msgstr "Error: Trapazoid delta is too large."
-
 msgid "Error: Through hole pad has no hole."
 msgstr "Error: Through hole pad has no hole."
-
-msgid ""
-"Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-msgstr ""
-"Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-
-msgid "Error: SMD pad has a hole."
-msgstr "Error: SMD pad has a hole."
-
-msgid "Warning: SMD pad has no outer layers."
-msgstr "Warning: SMD pad has no outer layers."
-
-msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "Warning: Fiducial property makes no sense on NPTH pads."
-
-msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr "Warning: Testpoint property makes no sense on NPTH pads."
-
-msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "Warning: Heatsink property makes no sense of NPTH pads."
-
-msgid "Warning: Castellated property is for PTH pads."
-msgstr "Warning: Castellated property is for PTH pads."
-
-msgid "Warning: BGA property is for SMD pads."
-msgstr "Warning: BGA property is for SMD pads."
-
-msgid "Warning: Mechanical property is for PTH pads."
-msgstr "Warning: Mechanical property is for PTH pads."
-
-msgid "Error: Negative corner size."
-msgstr "Error: Negative corner size."
-
-msgid "Warning: Corner size will make pad circular."
-msgstr "Warning: Corner size will make pad circular."
-
-msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr "Error: Custom pad shape must resolve to a single polygon."
 
 msgid "Pad Properties Errors"
 msgstr "Pad Properties Errors"
@@ -24159,6 +24110,9 @@ msgstr "Sketch pads on fabrication layers"
 
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "Include pad outlines on F.Fab and B.Fab layers when plotting"
+
+msgid "Include pad numbers"
+msgstr "Include pad numbers"
 
 msgid "Check zone fills before plotting"
 msgstr "Check zone fills before plotting"
@@ -28148,6 +28102,15 @@ msgstr ""
 "\n"
 "Export time %.3f s\n"
 
+msgid "** Got problems while fusing shapes **\n"
+msgstr "** Got problems while fusing shapes **\n"
+
+msgid "Errors:\n"
+msgstr "Errors:\n"
+
+msgid "Warnings:\n"
+msgstr "Warnings:\n"
+
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
 msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
 
@@ -28169,6 +28132,12 @@ msgstr ""
 msgid "Using non-simplified polygon.\n"
 msgstr "Using non-simplified polygon.\n"
 
+msgid "Failed to create a prismatic shape\n"
+msgstr "Failed to create a prismatic shape\n"
+
+msgid "** Face skipped **\n"
+msgstr "** Face skipped **\n"
+
 #, c-format
 msgid "Build holes for %s\n"
 msgstr "Build holes for %s\n"
@@ -28185,26 +28154,14 @@ msgstr ""
 "\n"
 "** Got problems while cutting %s number %d **\n"
 
-msgid "Errors:\n"
-msgstr "Errors:\n"
-
-msgid "Warnings:\n"
-msgstr "Warnings:\n"
-
 msgid "shapes"
 msgstr "shapes"
 
 msgid "pads"
 msgstr "pads"
 
-msgid "tracks"
-msgstr "tracks"
-
-msgid "zones"
-msgstr "zones"
-
-msgid "** Got problems while fusing shapes **\n"
-msgstr "** Got problems while fusing shapes **\n"
+msgid "vias"
+msgstr "vias"
 
 msgid "All KiCad Board Files"
 msgstr "All KiCad Board Files"
@@ -28393,11 +28350,17 @@ msgstr "(expected 'Through hole'; actual '%s')"
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(expected 'SMD'; actual '%s')"
 
+msgid "(PTH pad's hole size is very small or null)"
+msgstr "(PTH pad's hole size is very small or null)"
+
 msgid "(PTH pad has no copper layers)"
 msgstr "(PTH pad has no copper layers)"
 
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(PTH pad's hole leaves no copper)"
+
+msgid "(PTH pad's hole non fully inside copper)"
+msgstr "(PTH pad's hole non fully inside copper)"
 
 msgid "(SMD pad appears on both front and back copper)"
 msgstr "(SMD pad appears on both front and back copper)"
@@ -28605,15 +28568,8 @@ msgstr "Footprint '%s' replaced in '%s'"
 msgid "Footprint '%s' added to '%s'"
 msgstr "Footprint '%s' added to '%s'"
 
-msgid "Enter footprint name:"
-msgstr "Enter footprint name:"
-
-msgid "New Footprint"
-msgstr "New Footprint"
-
-#, c-format
-msgid "Footprint '%s' already exists in library '%s'."
-msgstr "Footprint '%s' already exists in library '%s'."
+msgid "Untitled"
+msgstr "Untitled"
 
 msgid "KiCad Footprint Library Browser"
 msgstr "KiCad Footprint Library Browser"
@@ -28906,11 +28862,11 @@ msgstr "IDFv3..."
 msgid "Export IDF 3D board representation"
 msgstr "Export IDF 3D board representation"
 
-msgid "STEP / BREP / XAO..."
-msgstr "STEP / BREP / XAO..."
+msgid "STEP / GLB / BREP / XAO..."
+msgstr "STEP / GLB / BREP / XAO..."
 
-msgid "Export STEP / BREP / XAO 3D board representation"
-msgstr "Export STEP / BREP / XAO 3D board representation"
+msgid "Export STEP / GLB / BREP / XAO 3D board representation"
+msgstr "Export STEP / GLB / BREP / XAO 3D board representation"
 
 msgid "SVG..."
 msgstr "SVG..."
@@ -29438,6 +29394,106 @@ msgstr "NPTH of %s"
 #, c-format
 msgid "PTH pad %s %s of %s"
 msgstr "PTH pad %s %s of %s"
+
+msgid "(Pad must have a positive size)"
+msgstr "(Pad must have a positive size)"
+
+#, c-format
+msgid "(PTH pad hole size must be larger than %s)"
+msgstr "(PTH pad hole size must be larger than %s)"
+
+msgid "Pad hole not inside pad shape"
+msgstr "Pad hole not inside pad shape"
+
+msgid "Pad hole will leave no copper"
+msgstr "Pad hole will leave no copper"
+
+msgid "Negative local clearance values have no effect"
+msgstr "Negative local clearance values have no effect"
+
+msgid ""
+"Negative solder mask clearance is larger than some shape primitives; results "
+"may be surprising"
+msgstr ""
+"Negative solder mask clearance is larger than some shape primitives; results "
+"may be surprising"
+
+msgid ""
+"Negative solder mask clearance is larger than pad; no solder mask will be "
+"generated"
+msgstr ""
+"Negative solder mask clearance is larger than pad; no solder mask will be "
+"generated"
+
+msgid ""
+"Negative solder paste margin is larger than pad; no solder paste mask will "
+"be generated"
+msgstr ""
+"Negative solder paste margin is larger than pad; no solder paste mask will "
+"be generated"
+
+msgid "(Pad has no layer)"
+msgstr "(Pad has no layer)"
+
+msgid "PTH pad has no copper layers"
+msgstr "PTH pad has no copper layers"
+
+msgid "Plated through holes normally have a copper pad on at least one layer"
+msgstr "Plated through holes normally have a copper pad on at least one layer"
+
+msgid "Connector pads normally have no solder paste; use a SMD pad instead"
+msgstr "Connector pads normally have no solder paste; use a SMD pad instead"
+
+msgid "(SMD pad has a hole)"
+msgstr "(SMD pad has a hole)"
+
+msgid "SMD pad has copper on both sides of the board"
+msgstr "SMD pad has copper on both sides of the board"
+
+msgid "SMD pad has copper and mask layers on different sides of the board"
+msgstr "SMD pad has copper and mask layers on different sides of the board"
+
+msgid "SMD pad has copper and paste layers on different sides of the board"
+msgstr "SMD pad has copper and paste layers on different sides of the board"
+
+msgid "SMD pad has no outer layers"
+msgstr "SMD pad has no outer layers"
+
+msgid "Fiducial property makes no sense on NPTH pads"
+msgstr "Fiducial property makes no sense on NPTH pads"
+
+msgid "Testpoint property makes no sense on NPTH pads"
+msgstr "Testpoint property makes no sense on NPTH pads"
+
+msgid "Heatsink property makes no sense of NPTH pads"
+msgstr "Heatsink property makes no sense of NPTH pads"
+
+msgid "Castellated property is for PTH pads"
+msgstr "Castellated property is for PTH pads"
+
+msgid "BGA property is for SMD pads"
+msgstr "BGA property is for SMD pads"
+
+msgid "Mechanical property is for PTH pads"
+msgstr "Mechanical property is for PTH pads"
+
+msgid "(Negative corner radius is not allowed)"
+msgstr "(Negative corner radius is not allowed)"
+
+msgid "Corner size will make pad circular"
+msgstr "Corner size will make pad circular"
+
+msgid "(Negative corner chamfer is not allowed)"
+msgstr "(Negative corner chamfer is not allowed)"
+
+msgid "(Corner chamfer is too large)"
+msgstr "(Corner chamfer is too large)"
+
+msgid "(Trapazoid delta is too large)"
+msgstr "(Trapazoid delta is too large)"
+
+msgid "(Custom pad shape must resolve to a single polygon)"
+msgstr "(Custom pad shape must resolve to a single polygon)"
 
 msgid "Edge connector"
 msgstr "Edge connector"
@@ -32193,15 +32249,8 @@ msgstr "At least two straight track segments must be selected."
 msgid "Fillet Tracks"
 msgstr "Fillet Tracks"
 
-msgid "Enter fillet radius:"
-msgstr "Enter fillet radius:"
-
-msgid ""
-"A radius of zero was entered.\n"
-"The fillet operation was not performed."
-msgstr ""
-"A radius of zero was entered.\n"
-"The fillet operation was not performed."
+msgid "Radius:"
+msgstr "Radius:"
 
 msgid "Unable to fillet the selected track segments."
 msgstr "Unable to fillet the selected track segments."
@@ -32215,21 +32264,14 @@ msgstr "Fillet Lines"
 msgid "Chamfer Lines"
 msgstr "Chamfer Lines"
 
-msgid "Enter chamfer setback:"
-msgstr "Enter chamfer setback:"
-
-msgid ""
-"A setback of zero was entered.\n"
-"The chamfer operation was not performed."
-msgstr ""
-"A setback of zero was entered.\n"
-"The chamfer operation was not performed."
-
-msgid "A shape with least two lines must be selected."
-msgstr "A shape with least two lines must be selected."
+msgid "Chamfer setback:"
+msgstr "Chamfer setback:"
 
 msgid "Exactly two lines must be selected to extend them."
 msgstr "Exactly two lines must be selected to extend them."
+
+msgid "A shape with at least two lines must be selected."
+msgstr "A shape with at least two lines must be selected."
 
 msgid "Simplify Shapes"
 msgstr "Simplify Shapes"
@@ -32288,6 +32330,10 @@ msgstr "_copy"
 
 msgid "Change Footprint Name"
 msgstr "Change Footprint Name"
+
+#, c-format
+msgid "Footprint '%s' already exists in library '%s'."
+msgstr "Footprint '%s' already exists in library '%s'."
 
 msgid "No footprint problems found."
 msgstr "No footprint problems found."
@@ -32756,8 +32802,8 @@ msgstr "Hide Footprint Tree"
 msgid "Focus the Footprint Tree Search Field"
 msgstr "Focus the Footprint Tree Search Field"
 
-msgid "New Footprint..."
-msgstr "New Footprint..."
+msgid "New Footprint"
+msgstr "New Footprint"
 
 msgid "Create a new, empty footprint"
 msgstr "Create a new, empty footprint"
@@ -34484,8 +34530,14 @@ msgstr "Delete Selected Nets"
 msgid "Remove Selected Custom Group"
 msgstr "Remove Selected Custom Group"
 
+msgid "Group name / pattern:"
+msgstr "Group name / pattern:"
+
 msgid "New Group"
 msgstr "New Group"
+
+msgid "(Use /.../ to indicate a regular expression.)"
+msgstr "(Use /.../ to indicate a regular expression.)"
 
 msgid "Filter by Net Name"
 msgstr "Filter by Net Name"
@@ -34830,6 +34882,161 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Export tracks"
+#~ msgstr "Export tracks"
+
+#~ msgid ""
+#~ "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
+#~ "shape)"
+#~ msgstr ""
+#~ "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
+#~ "shape)"
+
+#~ msgid "STEP Output File"
+#~ msgstr "STEP Output File"
+
+#~ msgid "Export tracks, pads and vias"
+#~ msgstr "Export tracks, pads and vias"
+
+#~ msgid "Export tracks, pads and vias on external copper layers."
+#~ msgstr "Export tracks, pads and vias on external copper layers."
+
+#~ msgid "Export silkscreen graphics."
+#~ msgstr "Export silkscreen graphics."
+
+#~ msgid "Export solder mask graphics."
+#~ msgstr "Export solder mask graphics."
+
+#~ msgid "Export STEP / BREP / XAO / GLTF"
+#~ msgstr "Export STEP / BREP / XAO / GLTF"
+
+#~ msgid "Error: Pad must have a positive size."
+#~ msgstr "Error: Pad must have a positive size."
+
+#~ msgid "Warning: Pad hole not inside pad shape."
+#~ msgstr "Warning: Pad hole not inside pad shape."
+
+#~ msgid "Warning: Pad hole will leave no copper."
+#~ msgstr "Warning: Pad hole will leave no copper."
+
+#~ msgid "Warning: Negative local clearance values will have no effect."
+#~ msgstr "Warning: Negative local clearance values will have no effect."
+
+#~ msgid ""
+#~ "Warning: Negative solder mask clearances larger than some shape "
+#~ "primitives. Results may be surprising."
+#~ msgstr ""
+#~ "Warning: Negative solder mask clearances larger than some shape "
+#~ "primitives. Results may be surprising."
+
+#~ msgid ""
+#~ "Warning: Negative solder mask clearance larger than pad. No solder mask "
+#~ "will be generated."
+#~ msgstr ""
+#~ "Warning: Negative solder mask clearance larger than pad. No solder mask "
+#~ "will be generated."
+
+#~ msgid ""
+#~ "Warning: Negative solder paste margins larger than pad. No solder paste "
+#~ "mask will be generated."
+#~ msgstr ""
+#~ "Warning: Negative solder paste margins larger than pad. No solder paste "
+#~ "mask will be generated."
+
+#~ msgid "Error: pad has no layer."
+#~ msgstr "Error: pad has no layer."
+
+#~ msgid ""
+#~ "Warning: Plated through holes should normally have a copper pad on at "
+#~ "least one layer."
+#~ msgstr ""
+#~ "Warning: Plated through holes should normally have a copper pad on at "
+#~ "least one layer."
+
+#~ msgid "Error: Trapazoid delta is too large."
+#~ msgstr "Error: Trapazoid delta is too large."
+
+#~ msgid ""
+#~ "Warning: Connector pads normally have no solder paste. Use a SMD pad "
+#~ "instead."
+#~ msgstr ""
+#~ "Warning: Connector pads normally have no solder paste. Use a SMD pad "
+#~ "instead."
+
+#~ msgid "Error: SMD pad has a hole."
+#~ msgstr "Error: SMD pad has a hole."
+
+#~ msgid "Warning: SMD pad has no outer layers."
+#~ msgstr "Warning: SMD pad has no outer layers."
+
+#~ msgid "Warning: Fiducial property makes no sense on NPTH pads."
+#~ msgstr "Warning: Fiducial property makes no sense on NPTH pads."
+
+#~ msgid "Warning: Testpoint property makes no sense on NPTH pads."
+#~ msgstr "Warning: Testpoint property makes no sense on NPTH pads."
+
+#~ msgid "Warning: Heatsink property makes no sense of NPTH pads."
+#~ msgstr "Warning: Heatsink property makes no sense of NPTH pads."
+
+#~ msgid "Warning: Castellated property is for PTH pads."
+#~ msgstr "Warning: Castellated property is for PTH pads."
+
+#~ msgid "Warning: BGA property is for SMD pads."
+#~ msgstr "Warning: BGA property is for SMD pads."
+
+#~ msgid "Warning: Mechanical property is for PTH pads."
+#~ msgstr "Warning: Mechanical property is for PTH pads."
+
+#~ msgid "Error: Negative corner size."
+#~ msgstr "Error: Negative corner size."
+
+#~ msgid "Warning: Corner size will make pad circular."
+#~ msgstr "Warning: Corner size will make pad circular."
+
+#~ msgid "Error: Custom pad shape must resolve to a single polygon."
+#~ msgstr "Error: Custom pad shape must resolve to a single polygon."
+
+#~ msgid "tracks"
+#~ msgstr "tracks"
+
+#~ msgid "zones"
+#~ msgstr "zones"
+
+#~ msgid "Enter footprint name:"
+#~ msgstr "Enter footprint name:"
+
+#~ msgid "STEP / BREP / XAO..."
+#~ msgstr "STEP / BREP / XAO..."
+
+#~ msgid "Export STEP / BREP / XAO 3D board representation"
+#~ msgstr "Export STEP / BREP / XAO 3D board representation"
+
+#~ msgid "Enter fillet radius:"
+#~ msgstr "Enter fillet radius:"
+
+#~ msgid ""
+#~ "A radius of zero was entered.\n"
+#~ "The fillet operation was not performed."
+#~ msgstr ""
+#~ "A radius of zero was entered.\n"
+#~ "The fillet operation was not performed."
+
+#~ msgid "Enter chamfer setback:"
+#~ msgstr "Enter chamfer setback:"
+
+#~ msgid ""
+#~ "A setback of zero was entered.\n"
+#~ "The chamfer operation was not performed."
+#~ msgstr ""
+#~ "A setback of zero was entered.\n"
+#~ "The chamfer operation was not performed."
+
+#~ msgid "A shape with least two lines must be selected."
+#~ msgstr "A shape with least two lines must be selected."
+
+#~ msgid "New Footprint..."
+#~ msgstr "New Footprint..."
 
 #~ msgid "Always Show Cursor"
 #~ msgstr "Always Show Cursor"
@@ -41477,9 +41684,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Vertical center:"
 #~ msgstr "Vertical center:"
-
-#~ msgid "Radius:"
-#~ msgstr "Radius:"
 
 #~ msgid "STEP Export"
 #~ msgstr "STEP Export"
@@ -63019,9 +63223,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "PostScript (.ps file)"
 #~ msgstr "PostScript (.ps file)"
-
-#~ msgid "Format:"
-#~ msgstr "Format:"
 
 #~ msgid "Image Options:"
 #~ msgstr "Image Options:"
