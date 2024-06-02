@@ -1261,7 +1261,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     STRING_UTF8_MAP props;
     props["units"] =
             job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm" : "inch";
-    props["sigfig"] = wxString::Format( "%d", job->m_units );
+    props["sigfig"] = wxString::Format( "%d", job->m_precision );
     props["version"] = job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
     props["OEMRef"] = job->m_colInternalId;
     props["mpn"] = job->m_colMfgPn;
