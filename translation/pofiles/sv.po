@@ -17146,9 +17146,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium kretsschemabibliotek eller integrerat bibliotek"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "Den valda filen verkar inte vara en CADSTAR komponentbiblioteksfil"
+msgstr "Filen verkar inte vara en CADSTAR komponentbiblioteksfil"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -21004,7 +21003,7 @@ msgstr "Göm symbolträd"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Focus Symbol Tree Search Field"
-msgstr ""
+msgstr "Fokusera symbolträdets sökfält"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Export View as PNG..."
@@ -23152,6 +23151,8 @@ msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
 msgstr ""
+"Visa exponerade objekt (objekt ritade med hjälp av standard- eller "
+"makroblädnare) i konturläge"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -42094,9 +42095,8 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Undertryck avslutande nollor"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Keep Aligned with Dimension"
-msgstr "Håll i linje med måttet"
+msgstr "Behåll uppriktad längs måttsättning"
 
 #: pcbnew/pcb_dimension.cpp:1547
 msgid "Crossbar Height"
@@ -46264,9 +46264,8 @@ msgid "Hide Footprint Tree"
 msgstr "Göm biblioteksträd för fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Focus the Footprint Tree Search Field"
-msgstr "Flytta fotavtryckets referensankare"
+msgstr "Fokusera sökfältet för fotavtrycksträdet"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "New Footprint"
