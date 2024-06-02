@@ -27,12 +27,14 @@
 
 
 //NOTE - Is recording in the setting file needed ?
-static bool RepourOnClose = false;
+static bool s_refillOnClose = false;
+
 
 bool ZONE_MANAGER_PREFERENCE::GetRepourOnClose()
 {
-    return RepourOnClose;
+    return s_refillOnClose;
 }
+
 
 wxColour ZONE_MANAGER_PREFERENCE::GetCanvasBackgroundColor()
 {
@@ -42,6 +44,7 @@ wxColour ZONE_MANAGER_PREFERENCE::GetCanvasBackgroundColor()
     return wxColour( 238, 243, 243 );
 }
 
+
 wxColour ZONE_MANAGER_PREFERENCE::GetBoundBoundingFillColor()
 {
     if( KIPLATFORM::UI::IsDarkTheme() )
@@ -49,7 +52,9 @@ wxColour ZONE_MANAGER_PREFERENCE::GetBoundBoundingFillColor()
 
     return wxColour( 84, 84, 84, 40 );
 }
-void ZONE_MANAGER_PREFERENCE::SetRepourOnClose( bool aRepour )
+
+
+void ZONE_MANAGER_PREFERENCE::SetRefillOnClose( bool aRepour )
 {
-    RepourOnClose = aRepour;
+    s_refillOnClose = aRepour;
 }

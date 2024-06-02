@@ -45,7 +45,7 @@ public:
      * @brief Should all the zones be re-poured on dialog close
      *
      */
-    static void SetRepourOnClose( bool aRepour );
+    static void SetRefillOnClose( bool aRepour );
 
     static bool GetRepourOnClose();
 };

@@ -42,7 +42,7 @@ ZONES_CONTAINER::ZONES_CONTAINER( BOARD* aBoard ) : m_originalZoneList( aBoard->
         {
             std::shared_ptr<ZONE> zone_clone =
                     std::shared_ptr<ZONE>( static_cast<ZONE*>( zone->Clone() ) );
-            m_zonesColoneMap.try_emplace( zone, zone_clone );
+            m_zonesCloneMap.try_emplace( zone, zone_clone );
             m_clonedZoneList.push_back( zone_clone.get() );
             clonedZones.push_back( std::move( zone_clone ) );
         }
@@ -84,10 +84,8 @@ void ZONES_CONTAINER::OnUserConfirmChange()
     FlushZoneSettingsChange();
     FlushPriorityChange();
 
-    for( auto& [c, v] : m_zonesColoneMap )
-    {
-        *c = *v;
-    }
+    for( auto& [ zone, zoneClone ] : m_zonesCloneMap )
+        *zone = *zoneClone;
 }
 
 void ZONES_CONTAINER::FlushZoneSettingsChange()
@@ -115,9 +113,7 @@ bool ZONES_CONTAINER::FlushPriorityChange()
     if( priorityChanged )
     {
         for( std::shared_ptr<ZONE_PRIORITY_CONTAINER>& c : m_zonesPriorityContainer )
-        {
             c->OnUserConfirmChange();
-        }
     }
 
     return priorityChanged;

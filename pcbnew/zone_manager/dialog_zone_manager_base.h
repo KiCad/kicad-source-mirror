@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,18 +10,22 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include "dialog_shim.h"
-#include <wx/dataview.h>
+#include <wx/string.h>
+#include <wx/srchctrl.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include "widgets/std_bitmap_button.h"
 #include <wx/checkbox.h>
-#include <wx/srchctrl.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/dataview.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -38,23 +42,22 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		enum
 		{
 			ID_DIALOG_COPPER_ZONE_BASE = 1000,
-			VIEW_ZONE_TABLE,
-			BTN_MOVE_UP,
-			BTN_MOVE_DOWN,
 			CHECK_NAME,
-			CHECK_NET
+			CHECK_NET,
+			VIEW_ZONE_TABLE
 		};
 
 		wxBoxSizer* m_MainBoxSizer;
 		wxBoxSizer* m_sizerTop;
+		wxSearchCtrl* m_filterCtrl;
+		wxCheckBox* m_checkName;
+		wxCheckBox* m_checkNet;
 		wxDataViewCtrl* m_viewZonesOverview;
 		wxBoxSizer* m_sizerZoneOP;
 		STD_BITMAP_BUTTON* m_btnMoveUp;
 		STD_BITMAP_BUTTON* m_btnMoveDown;
-		wxCheckBox* m_checkName;
-		wxCheckBox* m_checkNet;
-		wxSearchCtrl* m_filterCtrl;
-		wxStaticBoxSizer* m_sizerProperties;
+		wxBoxSizer* m_sizerProperties;
+		wxBoxSizer* m_sizerBottom;
 		wxCheckBox* m_checkRepour;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -63,14 +66,16 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onDialogResize( wxSizeEvent& event ) { event.Skip(); }
-		virtual void OnTableChar( wxKeyEvent& event ) { event.Skip(); }
-		virtual void OnTableCharHook( wxKeyEvent& event ) { event.Skip(); }
-		virtual void OnDataViewCtrlSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
-		virtual void OnViewZonesOverviewOnLeftUp( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterCtrlCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterCtrlSearch( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterCtrlTextChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterCtrlEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTableChar( wxKeyEvent& event ) { event.Skip(); }
+		virtual void OnTableCharHook( wxKeyEvent& event ) { event.Skip(); }
+		virtual void OnDataViewCtrlSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnViewZonesOverviewOnLeftUp( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnMoveUpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveDownClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRepourCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonApplyClick( wxCommandEvent& event ) { event.Skip(); }
 

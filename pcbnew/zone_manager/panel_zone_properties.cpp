@@ -24,7 +24,6 @@
  */
 
 #include "panel_zone_properties.h"
-#include "zone_manager/panel_zone_properties_base.h"
 #include "zone_manager/zones_container.h"
 
 #include <wx/radiobut.h>
@@ -33,13 +32,9 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <wx/string.h>
-#include <zones.h>
 #include <widgets/unit_binder.h>
-#include <zone.h>
 #include <pad.h>
-#include <board.h>
 #include <trigo.h>
-#include <eda_pattern_match.h>
 
 #include <dialog_copper_zones_base.h>
 #include <string_utils.h>
@@ -49,7 +44,8 @@ wxDEFINE_EVENT( EVT_ZONE_NAME_UPDATE, wxCommandEvent );
 PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aPCB_FRAME,
                                               ZONES_CONTAINER& aZoneContainer ) :
         PANEL_ZONE_PROPERTIES_BASE( aParent ),
-        m_ZoneContainer( aZoneContainer ), m_PCB_Frame( aPCB_FRAME ),
+        m_ZoneContainer( aZoneContainer ),
+        m_PCB_Frame( aPCB_FRAME ),
         m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
         m_outlineHatchPitch( aPCB_FRAME, m_stBorderHatchPitchText, m_outlineHatchPitchCtrl,
                              m_outlineHatchUnits ),
@@ -97,6 +93,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
 {
     if( !m_settings )
         return false;
+
     m_cbLocked->SetValue( m_settings->m_Locked );
     m_cornerSmoothingChoice->SetSelection( m_settings->GetCornerSmoothingType() );
     m_cornerRadius.SetValue( m_settings->GetCornerRadius() );
@@ -210,6 +207,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsFromWindow()
 {
     if( !m_settings )
         return false;
+
     if( m_GridStyleCtrl->GetSelection() > 0 )
         m_settings->m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
     else
@@ -217,9 +215,10 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsFromWindow()
 
     if( !AcceptOptions() )
         return false;
+
     m_settings->m_HatchOrientation = m_gridStyleRotation.GetAngleValue();
-    m_settings->m_HatchThickness = m_gridStyleThickness.GetValue();
-    m_settings->m_HatchGap = m_gridStyleGap.GetValue();
+    m_settings->m_HatchThickness = m_gridStyleThickness.GetIntValue();
+    m_settings->m_HatchGap = m_gridStyleGap.GetIntValue();
     m_settings->m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
     m_settings->m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
@@ -245,7 +244,7 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
     if( m_settings->m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
     {
-        int minThickness = m_minThickness.GetValue();
+        int minThickness = m_minThickness.GetIntValue();
 
         if( !m_gridStyleThickness.Validate( minThickness, INT_MAX ) )
             return false;
@@ -273,17 +272,17 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
                                        pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
         return false;
 
-    m_settings->m_BorderHatchPitch = m_outlineHatchPitch.GetValue();
+    m_settings->m_BorderHatchPitch = m_outlineHatchPitch.GetIntValue();
 
-    m_settings->m_ZoneClearance = m_clearance.GetValue();
-    m_settings->m_ZoneMinThickness = m_minThickness.GetValue();
+    m_settings->m_ZoneClearance = m_clearance.GetIntValue();
+    m_settings->m_ZoneMinThickness = m_minThickness.GetIntValue();
 
     m_settings->SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
 
-    m_settings->SetCornerRadius( m_settings->GetCornerSmoothingType()
-                                                 == ZONE_SETTINGS::SMOOTHING_NONE
-                                         ? 0
-                                         : m_cornerRadius.GetValue() );
+    if( m_settings->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_NONE )
+        m_settings->SetCornerRadius( 0 );
+    else
+        m_settings->SetCornerRadius( m_cornerRadius.GetIntValue() );
 
     m_settings->m_Locked = m_cbLocked->GetValue();
 

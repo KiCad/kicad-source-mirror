@@ -55,6 +55,7 @@ class ZONE_FILLER;
 class COMMIT;
 class PANEL_ZONE_GAL;
 enum class ZONE_INDEX_MOVEMENT;
+
 class DIALOG_ZONE_MANAGER : public DIALOG_ZONE_MANAGER_BASE
 {
     enum
@@ -76,57 +77,40 @@ protected:
     void OnViewZonesOverviewOnLeftUp( wxMouseEvent& aEvent ) override;
 	void onDialogResize( wxSizeEvent& event ) override;
 
-
     void OnOk( wxCommandEvent& aEvt );
 
-
 #if wxUSE_DRAG_AND_DROP
-
     void OnBeginDrag( wxDataViewEvent& aEvent );
-
     void OnDropPossible( wxDataViewEvent& aEvent );
-
     void OnDrop( wxDataViewEvent& aEvent );
-
 #endif // wxUSE_DRAG_AND_DROP
 
     void OnZoneNameUpdate( wxCommandEvent& aEvent );
-
     void OnZonesTableRowCountChange( wxCommandEvent& aEvent );
-
     void OnCheckBoxClicked( wxCommandEvent& aEvent );
 
     void MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT aMove );
 
-    void OnMoveUpClick( wxCommandEvent& aEvent );
-
-    void OnMoveDownClick( wxCommandEvent& aEvent );
-
+    void OnMoveUpClick( wxCommandEvent& aEvent ) override;
+    void OnMoveDownClick( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlCancel( wxCommandEvent& aEvent ) override;
-
     void OnFilterCtrlSearch( wxCommandEvent& aEvent ) override;
-
     void OnFilterCtrlTextChange( wxCommandEvent& aEvent ) override;
-
     void OnFilterCtrlEnter( wxCommandEvent& aEvent ) override;
-
     void OnRepourCheck( wxCommandEvent& aEvent ) override;
-
     void OnButtonApplyClick( wxCommandEvent& aEvent ) override;
 
     void PostProcessZoneViewSelectionChange( wxDataViewItem const& item );
 
     void OnTableChar( wxKeyEvent& event ) override;
-
     void OnTableCharHook( wxKeyEvent& event ) override;
 
 private:
     void GenericProcessChar( wxKeyEvent& event );
 
-    void OnIDle( wxIdleEvent& aEvent );
+    void OnIdle( wxIdleEvent& aEvent );
 
     void FitCanvasToScreen();
-
 
 private:
     PCB_BASE_FRAME*                             m_pcbFrame;

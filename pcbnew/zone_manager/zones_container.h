@@ -73,7 +73,7 @@ public:
     void OnUserConfirmChange() override;
 
 private:
-    std::unordered_map<ZONE*, std::shared_ptr<ZONE>>          m_zonesColoneMap;
+    std::unordered_map<ZONE*, std::shared_ptr<ZONE>>          m_zonesCloneMap;
     std::unordered_map<ZONE*, std::shared_ptr<ZONE_SETTINGS>> m_zoneSettings;
     std::vector<std::shared_ptr<ZONE_PRIORITY_CONTAINER>>     m_zonesPriorityContainer;
     std::vector<ZONE*>                                        m_clonedZoneList;

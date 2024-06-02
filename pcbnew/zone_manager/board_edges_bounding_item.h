@@ -30,12 +30,11 @@ class BOARD_EDGES_BOUNDING_ITEM : public KIGFX::VIEW_ITEM
 {
 public:
     BOARD_EDGES_BOUNDING_ITEM( BOX2I aBox );
-    ~BOARD_EDGES_BOUNDING_ITEM() override;
+    ~BOARD_EDGES_BOUNDING_ITEM() override {};
 
     const BOX2I ViewBBox() const override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
-
 
 private:
     BOX2I m_box;

@@ -26,18 +26,17 @@
 #include "layer_ids.h"
 
 
-BOARD_EDGES_BOUNDING_ITEM::BOARD_EDGES_BOUNDING_ITEM( BOX2I box ) : m_box( std::move( box ) )
+BOARD_EDGES_BOUNDING_ITEM::BOARD_EDGES_BOUNDING_ITEM( BOX2I box ) :
+        m_box( std::move( box ) )
 {
 }
 
-BOARD_EDGES_BOUNDING_ITEM::~BOARD_EDGES_BOUNDING_ITEM()
-{
-}
 
 const BOX2I BOARD_EDGES_BOUNDING_ITEM::ViewBBox() const
 {
     return m_box;
 }
+
 
 void BOARD_EDGES_BOUNDING_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {

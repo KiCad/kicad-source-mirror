@@ -28,23 +28,17 @@
 #include <wx/debug.h>
 #include <wx/event.h>
 #include <wx/gdicmn.h>
-#include <wx/radiobut.h>
 #include <kiface_base.h>
-#include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <wx/string.h>
-#include <zones.h>
 #include <board_commit.h>
-#include <widgets/unit_binder.h>
+#include <widgets/std_bitmap_button.h>
 #include <zone.h>
 #include <pad.h>
 #include <board.h>
-#include <trigo.h>
 #include <bitmaps.h>
-#include <eda_pattern_match.h>
 #include <string_utils.h>
-#include <bitmaps.h>
 #include <zone_filler.h>
 
 #include "dialog_zone_manager_base.h"
@@ -61,14 +55,89 @@
 #include "zone_manager_preference.h"
 
 
-inline void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
+DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo ) :
+        DIALOG_ZONE_MANAGER_BASE( aParent ),
+        m_pcbFrame( aParent ),
+        m_zoneInfo( aZoneInfo ),
+        m_zonesContainer( std::make_unique<ZONES_CONTAINER>( aParent->GetBoard() ) ),
+        m_priorityDragIndex( {} ),
+        m_needZoomGAL( true ),
+        m_isFillingZones( false ),
+        m_zoneFillComplete( false )
+{
+#ifdef __APPLE__
+    m_sizerZoneOP->InsertSpacer( m_sizerZoneOP->GetItemCount(), 5 );
+#endif
+
+    m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+
+    m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( this, aParent, *m_zonesContainer );
+    m_sizerProperties->Add( m_panelZoneProperties, 1, wxTOP | wxEXPAND, 5 );
+
+    m_zoneViewer = new PANE_ZONE_VIEWER( this, aParent );
+    m_sizerTop->Add( m_zoneViewer, 1, wxBOTTOM | wxLEFT | wxEXPAND, 10 );
+
+    m_checkRepour->SetValue( ZONE_MANAGER_PREFERENCE::GetRepourOnClose() );
+    m_zoneViewer->SetId( ZONE_VIEWER );
+
+    for( const auto& [k, v] : MODEL_ZONES_OVERVIEW_TABLE::GetColumnNames() )
+    {
+        if( k == MODEL_ZONES_OVERVIEW_TABLE::LAYERS )
+            m_viewZonesOverview->AppendIconTextColumn( v, k );
+        else
+            m_viewZonesOverview->AppendTextColumn( v, k );
+    }
+
+    m_modelZoneOverviewTable = new MODEL_ZONES_OVERVIEW_TABLE( m_zonesContainer->GetZonesPriorityContainers(),
+                                                               aParent->GetBoard(), aParent, this );
+    m_viewZonesOverview->AssociateModel( m_modelZoneOverviewTable.get() );
+
+#if wxUSE_DRAG_AND_DROP
+    m_viewZonesOverview->EnableDragSource( wxDF_UNICODETEXT );
+    m_viewZonesOverview->EnableDropTarget( wxDF_UNICODETEXT );
+
+    Bind( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, &DIALOG_ZONE_MANAGER::OnBeginDrag, this,
+          VIEW_ZONE_TABLE );
+    Bind( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, &DIALOG_ZONE_MANAGER::OnDropPossible, this,
+          VIEW_ZONE_TABLE );
+    Bind( wxEVT_DATAVIEW_ITEM_DROP, &DIALOG_ZONE_MANAGER::OnDrop, this, VIEW_ZONE_TABLE );
+#endif // wxUSE_DRAG_AND_DROP
+
+    Bind( wxEVT_BUTTON, &DIALOG_ZONE_MANAGER::OnOk, this, wxID_OK );
+    Bind( EVT_ZONE_NAME_UPDATE, &DIALOG_ZONE_MANAGER::OnZoneNameUpdate, this );
+    Bind( EVT_ZONES_OVERVIEW_COUNT_CHANGE, &DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange, this );
+    Bind( wxEVT_CHECKBOX, &DIALOG_ZONE_MANAGER::OnCheckBoxClicked, this );
+    Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
+    Bind( wxEVT_BOOKCTRL_PAGE_CHANGED,
+            [this]( wxNotebookEvent& aEvent )
+            {
+                Layout();
+            },
+            ZONE_VIEWER );
+
+    if( m_modelZoneOverviewTable->GetCount() )
+        SelectZoneTableItem( m_modelZoneOverviewTable->GetItem( 0 ) );
+
+    Layout();
+    m_MainBoxSizer->Fit( this );
+
+    //NOTE - Works on Windows and MacOS , need further handling in IDLE on Ubuntu
+    FitCanvasToScreen();
+}
+
+
+DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
+
+
+void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
 {
     if( PANEL_ZONE_GAL* canvas = m_zoneViewer->GetZoneGAL() )
         canvas->ZoomFitScreen();
 }
 
 
-inline void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelectionChange( wxDataViewItem const& aItem )
+void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelectionChange( wxDataViewItem const& aItem )
 {
     bool textCtrlHasFocus = m_filterCtrl->HasFocus();
     long filterInsertPos = m_filterCtrl->GetInsertionPoint();
@@ -101,14 +170,12 @@ inline void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelectionChange( wxDataViewI
 }
 
 
-inline void DIALOG_ZONE_MANAGER::GenericProcessChar( wxKeyEvent& aEvent )
+void DIALOG_ZONE_MANAGER::GenericProcessChar( wxKeyEvent& aEvent )
 {
     aEvent.Skip();
 
     if( aEvent.GetKeyCode() == WXK_DOWN || aEvent.GetKeyCode() == WXK_UP )
-    {
-        Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIDle, this );
-    }
+        Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
 }
 
 
@@ -124,105 +191,17 @@ void DIALOG_ZONE_MANAGER::OnTableCharHook( wxKeyEvent& aEvent )
 }
 
 
-void DIALOG_ZONE_MANAGER::OnIDle( wxIdleEvent& aEvent )
+void DIALOG_ZONE_MANAGER::OnIdle( wxIdleEvent& aEvent )
 {
     WXUNUSED( aEvent )
     m_viewZonesOverview->SetFocus();
-    Unbind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIDle, this );
+    Unbind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
 
     if( !m_needZoomGAL )
         return;
 
     m_needZoomGAL = false;
     FitCanvasToScreen();
-}
-
-
-DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo ) :
-        DIALOG_ZONE_MANAGER_BASE( aParent ), m_pcbFrame( aParent ), m_zoneInfo( aZoneInfo ),
-        m_zonesContainer( std::make_unique<ZONES_CONTAINER>( aParent->GetBoard() ) ),
-        m_panelZoneProperties( new PANEL_ZONE_PROPERTIES( this, aParent, *m_zonesContainer ) ),
-        m_modelZoneOverviewTable(
-                new MODEL_ZONES_OVERVIEW_TABLE( m_zonesContainer->GetZonesPriorityContainers(),
-                                                aParent->GetBoard(), aParent, this ) ),
-        m_zoneViewer( new PANE_ZONE_VIEWER( this, aParent ) ), m_priorityDragIndex( {} ),
-        m_needZoomGAL( true ), m_isFillingZones( false ), m_zoneFillComplete( false )
-{
-#ifdef __APPLE__
-    m_sizerZoneOP->InsertSpacer( m_sizerZoneOP->GetItemCount(), 5 );
-#endif
-
-    m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
-    m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
-    m_sizerProperties->Add( m_panelZoneProperties, 1, wxALL | wxEXPAND );
-    m_sizerTop->Add( m_zoneViewer, 1, wxBOTTOM | wxTOP | wxRIGHT | wxEXPAND, 5 );
-    m_checkRepour->SetValue( ZONE_MANAGER_PREFERENCE::GetRepourOnClose() );
-    m_zoneViewer->SetId( ZONE_VIEWER );
-
-    for( const auto& [k, v] : MODEL_ZONES_OVERVIEW_TABLE::GetColumnNames() )
-    {
-        if( k == MODEL_ZONES_OVERVIEW_TABLE::LAYERS )
-            m_viewZonesOverview->AppendIconTextColumn( v, k );
-        else
-            m_viewZonesOverview->AppendTextColumn( v, k );
-    }
-
-    m_viewZonesOverview->AssociateModel( m_modelZoneOverviewTable.get() );
-
-#if wxUSE_DRAG_AND_DROP
-
-    m_viewZonesOverview->EnableDragSource( wxDF_UNICODETEXT );
-    m_viewZonesOverview->EnableDropTarget( wxDF_UNICODETEXT );
-
-    Bind( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, &DIALOG_ZONE_MANAGER::OnBeginDrag, this,
-          VIEW_ZONE_TABLE );
-    Bind( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, &DIALOG_ZONE_MANAGER::OnDropPossible, this,
-          VIEW_ZONE_TABLE );
-    Bind( wxEVT_DATAVIEW_ITEM_DROP, &DIALOG_ZONE_MANAGER::OnDrop, this, VIEW_ZONE_TABLE );
-
-#endif // wxUSE_DRAG_AND_DROP
-
-    Bind( wxEVT_BUTTON, &DIALOG_ZONE_MANAGER::OnOk, this, wxID_OK );
-    Bind( EVT_ZONE_NAME_UPDATE, &DIALOG_ZONE_MANAGER::OnZoneNameUpdate, this );
-    Bind( EVT_ZONES_OVERVIEW_COUNT_CHANGE, &DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange, this );
-    Bind( wxEVT_CHECKBOX, &DIALOG_ZONE_MANAGER::OnCheckBoxClicked, this );
-    Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIDle, this );
-    Bind( wxEVT_BUTTON, &DIALOG_ZONE_MANAGER::OnMoveUpClick, this, BTN_MOVE_UP );
-    Bind( wxEVT_BUTTON, &DIALOG_ZONE_MANAGER::OnMoveDownClick, this, BTN_MOVE_DOWN );
-    Bind(
-            wxEVT_BOOKCTRL_PAGE_CHANGED,
-            [this]( wxNotebookEvent& aEvent )
-            {
-                Layout();
-            },
-            ZONE_VIEWER );
-
-    bool foundZone = m_modelZoneOverviewTable->GetCount();
-
-    if( foundZone )
-        SelectZoneTableItem( m_modelZoneOverviewTable->GetItem( 0 ) );
-
-    Layout();
-    m_MainBoxSizer->Fit( this );
-
-    //NOTE - Works on Windows and MacOS , need further handling in IDLE on Ubuntu
-    FitCanvasToScreen();
-}
-
-
-DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
-
-
-int InvokeZonesManager( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aZoneInfo )
-{
-    DIALOG_ZONE_MANAGER dlg( aCaller, aZoneInfo );
-
-    const int res = dlg.ShowQuasiModal();
-
-    if( res == wxID_OK && ZONE_MANAGER_PREFERENCE::GetRepourOnClose() )
-        return ZONE_MANAGER_REPOUR;
-
-    return res;
 }
 
 
@@ -247,7 +226,7 @@ void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
 
 void DIALOG_ZONE_MANAGER::OnViewZonesOverviewOnLeftUp( wxMouseEvent& aEvent )
 {
-    Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIDle, this );
+    Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
 }
 
 
@@ -286,6 +265,12 @@ void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
 }
 
 
+void DIALOG_ZONE_MANAGER::OnRepourCheck( wxCommandEvent& aEvent )
+{
+    ZONE_MANAGER_PREFERENCE::SetRefillOnClose( m_checkRepour->IsChecked() );
+}
+
+
 #if wxUSE_DRAG_AND_DROP
 
 void DIALOG_ZONE_MANAGER::OnBeginDrag( wxDataViewEvent& aEvent )
@@ -304,12 +289,6 @@ void DIALOG_ZONE_MANAGER::OnBeginDrag( wxDataViewEvent& aEvent )
 void DIALOG_ZONE_MANAGER::OnDropPossible( wxDataViewEvent& aEvent )
 {
     aEvent.SetDropEffect( wxDragMove ); // check 'move' drop effect
-}
-
-
-void DIALOG_ZONE_MANAGER::OnRepourCheck( wxCommandEvent& aEvent )
-{
-    ZONE_MANAGER_PREFERENCE::SetRepourOnClose( m_checkRepour->IsChecked() );
 }
 
 
@@ -349,14 +328,12 @@ void DIALOG_ZONE_MANAGER::OnDrop( wxDataViewEvent& aEvent )
 
 void DIALOG_ZONE_MANAGER::OnMoveUpClick( wxCommandEvent& aEvent )
 {
-    WXUNUSED( aEvent );
     MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_UP );
 }
 
 
 void DIALOG_ZONE_MANAGER::OnMoveDownClick( wxCommandEvent& aEvent )
 {
-    WXUNUSED( aEvent );
     MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_DOWN );
 }
 
@@ -422,7 +399,7 @@ void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
     board->BuildConnectivity();
     const_cast<ZONES&>( board->Zones() ) = m_zonesContainer->GetOriginalZoneList();
 
-    if( auto gal = m_zoneViewer->GetZoneGAL() )
+    if( PANEL_ZONE_GAL* gal = m_zoneViewer->GetZoneGAL() )
     {
         gal->RedrawRatsnest();
         gal->GetView()->UpdateItems();

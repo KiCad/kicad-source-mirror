@@ -197,7 +197,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bMiddleColumn->Add( sbSizer5, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizerMiddle->Add( bMiddleColumn, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerMiddle->Add( bMiddleColumn, 1, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizerZoneStyle;
 	sbSizerZoneStyle = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fill") ), wxVERTICAL );

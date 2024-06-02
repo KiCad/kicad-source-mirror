@@ -43,11 +43,13 @@ wxDECLARE_EVENT( EVT_ZONES_OVERVIEW_COUNT_CHANGE, wxCommandEvent );
 
 using ZONE_PRIORITY_CONTAINER_LIST = std::vector<std::shared_ptr<ZONE_PRIORITY_CONTAINER>>;
 
+
 enum class ZONE_INDEX_MOVEMENT
 {
     MOVE_UP,
     MOVE_DOWN
 };
+
 
 class MODEL_ZONES_OVERVIEW_TABLE : public wxDataViewVirtualListModel
 {
@@ -64,10 +66,7 @@ public:
     enum WIDTH_SETTING
     {
         NAME_WIDTH = 128,
-        LAYER_BAR_WIDTH = 16,
-        //NOTE - Prevent the hor scroll bar
-        RESERVED = 10,
-        MINIMAL_WIDTH = NAME_WIDTH + LAYER_BAR_WIDTH + RESERVED
+        LAYER_BAR_WIDTH = 16
     };
 
 
@@ -75,9 +74,9 @@ public:
     {
         //NOTE - Build the column name dynamicly in case the display language changed
         const std::map<int, wxString> ColNames = std::map<int, wxString>{
-            std::make_pair( NAME, _( "Name" ) ), std::make_pair( NET, _( "Net" ) ),
+            std::make_pair( NAME, _( "Name" ) ),
+            std::make_pair( NET, _( "Net" ) ),
             std::make_pair( LAYERS, _( "Layers" ) )
-
         };
         return ColNames;
     }
@@ -139,7 +138,6 @@ private:
     void SortZoneContainers();
 
     void OnRowCountChange();
-
 
 private:
     ZONE_PRIORITY_CONTAINER_LIST m_allZoneContainers;

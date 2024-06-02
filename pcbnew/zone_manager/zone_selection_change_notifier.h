@@ -56,7 +56,6 @@ public:
 protected:
     virtual void ActivateSelectedZone( ZONE* new_zone ) = 0;
 
-
 private:
     ZONE* m_zone{};
 };

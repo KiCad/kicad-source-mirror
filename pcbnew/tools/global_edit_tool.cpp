@@ -21,10 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <zone_manager/dialog_zone_manager.h>
 #include <footprint.h>
 #include <pcb_track.h>
-#include <zone.h>
-#include <zones.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/edit_tool.h>
@@ -33,10 +32,9 @@
 #include <dialogs/dialog_swap_layers.h>
 #include <dialogs/dialog_unused_pad_layers.h>
 #include <tools/global_edit_tool.h>
-#include <board_commit.h>
 #include <dialogs/dialog_cleanup_graphics.h>
-#include <tools/pcb_actions.h>
 #include <board_design_settings.h>
+#include <zone_manager/zone_manager_preference.h>
 
 
 GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
@@ -230,15 +228,19 @@ int GLOBAL_EDIT_TOOL::RemoveUnusedPads( const TOOL_EVENT& aEvent )
 int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-
-    BOARD_COMMIT      commit( editFrame );
-    BOARD*            board = editFrame->GetBoard();
+    BOARD_COMMIT    commit( editFrame );
+    BOARD*          board = editFrame->GetBoard();
 
     for( ZONE* zone : board->Zones() )
         commit.Modify( zone );
 
-    ZONE_SETTINGS zoneInfo = board->GetDesignSettings().GetDefaultZoneSettings();
-    int           dialogResult = InvokeZonesManager( editFrame, &zoneInfo );
+    ZONE_SETTINGS       zoneInfo = board->GetDesignSettings().GetDefaultZoneSettings();
+    DIALOG_ZONE_MANAGER dlg( editFrame, &zoneInfo );
+
+    int dialogResult = dlg.ShowQuasiModal();
+
+    if( dialogResult == wxID_OK && ZONE_MANAGER_PREFERENCE::GetRepourOnClose() )
+        dialogResult = ZONE_MANAGER_REPOUR;
 
     if( dialogResult == wxID_CANCEL )
         return 0;

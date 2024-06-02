@@ -40,28 +40,25 @@ class ZONE_PRIORITY_CONTAINER : public ZONE_MANAGEMENT_BASE
 
 public:
     ZONE_PRIORITY_CONTAINER( std::shared_ptr<ZONE> aZone, unsigned aInitialIndex ) :
-            m_zone( std::move( aZone ) ), m_initialPriority( aInitialIndex ),
+            m_zone( std::move( aZone ) ),
+            m_initialPriority( aInitialIndex ),
             m_currentPriority( aInitialIndex )
     {
     }
+
     ZONE_PRIORITY_CONTAINER() = delete;
 
     ~ZONE_PRIORITY_CONTAINER() override = default;
 
     bool PriorityChanged() const { return m_initialPriority != m_currentPriority; }
 
-    void SetCurrentPriority( unsigned aPriority ) { m_currentPriority = aPriority; }
-
     unsigned GetCurrentPriority() const { return m_currentPriority; }
-
-    unsigned GetInitialPriority() const { return m_initialPriority; }
 
     void OnUserConfirmChange() override { m_zone->SetAssignedPriority( m_currentPriority ); }
 
     ZONE const& GetZone() const { return *m_zone; }
 
     ZONE& GetZone() { return *m_zone; }
-
 
 private:
     std::shared_ptr<ZONE> m_zone;

@@ -107,14 +107,4 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
 int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
                           CONVERT_SETTINGS* aConvertSettings = nullptr );
 
-/**
- * Function InvokeZonesManager
- * invokes up a modal dialog window for zones manager.
- *
- * @param aCaller is the PCB_BASE_FRAME calling parent window for the modal dialog,
- *                and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
- * @return int - tells if user aborted, or edited the zones
- */
-int InvokeZonesManager( PCB_BASE_FRAME* aCall, ZONE_SETTINGS* aSettings );
-
 #endif  // ZONES_H_
