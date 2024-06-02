@@ -6174,9 +6174,8 @@ msgid "Could not read 'FETCH_HEAD'"
 msgstr "Nelze přečíst 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:100
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Nelze otevřít CvPcb"
+msgstr "Nelze vyhledat komit"
 
 #: common/git/git_pull_handler.cpp:110
 msgid "Could not analyze merge"
@@ -6200,9 +6199,8 @@ msgid "Failed to perform checkout operation."
 msgstr "Provedení kontrolní operace se nezdařilo."
 
 #: common/git/git_pull_handler.cpp:215
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Nelze načíst obrázek z '%s'."
+msgstr "Nelze vyhledat komit '{}'"
 
 #: common/git/git_pull_handler.cpp:255
 msgid "Could not merge commits"
@@ -6229,14 +6227,12 @@ msgid "Could not lookup remote"
 msgstr "Nelze vyhledat vzdálený vklad"
 
 #: common/git/git_push_handler.cpp:59
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Soubor archivu nelze otevřít."
+msgstr "Nelze se připojit ke vzdálenému repozitáři"
 
 #: common/git/git_push_handler.cpp:70
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Nelze použít OpenGL"
+msgstr "Nelze odeslat na vzdálený repozitář"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -10203,9 +10199,8 @@ msgid "Reload Configuration"
 msgstr "Znovu načíst konfiguraci"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "Načíst soubor nastavení klávesových zkratek"
+msgstr "Znovu načíst soubor s nastavením databáze knihoven"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
 msgid "Caching"
@@ -10397,10 +10392,9 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "U všech porušení „%s“ změňte závažnost na chybu"
 
 #: eeschema/dialogs/dialog_erc.cpp:674 eeschema/dialogs/dialog_erc.cpp:681
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "Závažnost porušení lze také upravit v Nastavení desky... dialog"
+msgstr "Závažnost porušení lze také upravit v Nastavení schématu... dialog"
 
 #: eeschema/dialogs/dialog_erc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:706
 #, c-format
@@ -11196,9 +11190,8 @@ msgid "untitled"
 msgstr "nepojmenováno"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Vlastnosti označení"
+msgstr "pravit Vlastnosti označení"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -13567,13 +13560,12 @@ msgid "BOM Output File"
 msgstr "Výstupní soubor BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1232
-#, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
 "Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru "
-"desky)!"
+"schématu)!"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1246
 msgid "Unsaved data"
@@ -13589,19 +13581,19 @@ msgid "No filename specified in exporter"
 msgstr "Nezadaný název souboru v exportéru"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1285
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "Nelze vytvořit soubor \"%s\"."
+msgstr "Nelze otevřít/vytvořit cestu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1294
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "Nelze zapsat výstup BOM do '%s'."
+msgstr "Nelze vytvořit výstup BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1303
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "Nelze zapsat výstup BOM do '%s'."
+msgstr "Nelze zapsat výstup BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1309
 #, c-format
