@@ -457,7 +457,7 @@ int SCH_SYMBOL::GetUnitCount() const
 }
 
 
-wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit )
+wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit ) const
 {
     wxCHECK( m_part, ( wxString::Format( _( "Unit %s" ), SubReference( aUnit ) ) ) );
 
@@ -465,7 +465,7 @@ wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit )
 }
 
 
-bool SCH_SYMBOL::HasUnitDisplayName( int aUnit )
+bool SCH_SYMBOL::HasUnitDisplayName( int aUnit ) const
 {
     wxCHECK( m_part, false );
 

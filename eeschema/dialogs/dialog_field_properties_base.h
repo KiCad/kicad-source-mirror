@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,9 +29,9 @@ class STD_BITMAP_BUTTON;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/gbsizer.h>
 #include <wx/dialog.h>
@@ -50,6 +50,8 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_TextCtrl;
 		wxStyledTextCtrl* m_StyledTextCtrl;
 		STD_BITMAP_BUTTON* m_TextValueSelectButton;
+		wxStaticText* m_unitLabel;
+		wxChoice* m_unitChoice;
 		wxStaticText* m_note;
 		wxCheckBox* m_visible;
 		wxCheckBox* m_nameVisible;

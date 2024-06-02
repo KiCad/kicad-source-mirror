@@ -256,14 +256,14 @@ public:
      *
      * @return true if the display name of a unit is set, otherwise false.
      */
-    bool HasUnitDisplayName( int aUnit );
+    bool HasUnitDisplayName( int aUnit ) const;
 
     /**
      * Return the display name for a given unit \a aUnit.
      *
      * @return the display name of a unit if set, or the ordinal name of the unit otherwise.
      */
-    wxString GetUnitDisplayName( int aUnit );
+    wxString GetUnitDisplayName( int aUnit ) const;
 
     void SetBodyStyle( int aBodyStyle ) override;
 

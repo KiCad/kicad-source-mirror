@@ -67,9 +67,6 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_note->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_note->Show( false );
 
-    // The field ID is initialized in the derived object's ctor.
-    m_fieldId = VALUE_FIELD;
-
     m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, wxT( "{}" ), true,
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
@@ -156,6 +153,8 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     if( aField->GetParent() && aField->GetParent()->Type() == LIB_SYMBOL_T )
     {
         const LIB_SYMBOL* symbol = static_cast<const LIB_SYMBOL*>( aField->GetParentSymbol() );
+
+        m_fieldId = aField->GetId();
 
         /*
          * Symbol netlist format:
@@ -301,6 +300,15 @@ void DIALOG_FIELD_PROPERTIES::init()
         m_TextCtrl->Show( false );
     }
 
+    // Show the unit selector for reference fields on multi-unit symbols
+    bool showUnitSelector = m_fieldId == REFERENCE_FIELD
+                            && m_field->GetParentSymbol()
+                            && m_field->GetParentSymbol()->Type() == SCH_SYMBOL_T
+                            && m_field->GetParentSymbol()->IsMulti();
+
+    m_unitLabel->Show( showUnitSelector );
+    m_unitChoice->Show( showUnitSelector );
+
     // Show the footprint selection dialog if this is the footprint field.
     m_TextValueSelectButton->SetBitmap( KiBitmapBundle( BITMAPS::small_library ) );
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT_FIELD );
@@ -423,6 +431,22 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
     {
         m_StyledTextCtrl->SetValue( EscapeString( m_text, CTX_LINE ) );
         m_StyledTextCtrl->EmptyUndoBuffer();
+    }
+
+    if( m_unitChoice->IsShown() )
+    {
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_field->GetParentSymbol() );
+
+        for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
+        {
+            if( symbol->HasUnitDisplayName( ii ) )
+                m_unitChoice->Append( symbol->GetUnitDisplayName( ii ) );
+            else
+                m_unitChoice->Append( symbol->SubReference( ii, false ) );
+        }
+
+        if( symbol->GetUnit() <= ( int )m_unitChoice->GetCount() )
+            m_unitChoice->SetSelection( symbol->GetUnit() - 1 );
     }
 
     m_fontCtrl->SetFontSelection( m_font );
@@ -570,6 +594,14 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
             symbol->SetValueFieldText( m_text );
         else if( fieldType == FOOTPRINT_FIELD )
             symbol->SetFootprintFieldText( m_text );
+
+        // Set the unit selection in multiple units per package
+        if( m_unitChoice->IsShown() )
+        {
+            int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;
+            symbol->SetUnitSelection( aSheetPath, unit_selection );
+            symbol->SetUnit( unit_selection );
+        }
     }
     else if( parent && parent->Type() == SCH_GLOBAL_LABEL_T )
     {

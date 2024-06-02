@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,6 +71,15 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_TextValueSelectButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bTextValueBoxSizer->Add( m_TextValueSelectButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_unitLabel = new wxStaticText( this, wxID_ANY, _("Unit:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabel->Wrap( -1 );
+	bTextValueBoxSizer->Add( m_unitLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+
+	wxArrayString m_unitChoiceChoices;
+	m_unitChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitChoiceChoices, 0 );
+	m_unitChoice->SetSelection( 0 );
+	bTextValueBoxSizer->Add( m_unitChoice, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bUpperBoxSizer->Add( bTextValueBoxSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
