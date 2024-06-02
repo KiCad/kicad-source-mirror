@@ -79,6 +79,7 @@ public:
     LIB_SYMBOL*        m_libEntry;
 
     FIELDS_GRID_TABLE* m_fields;
+    std::set<wxString> m_addedTemplateFields;
 
     UNIT_BINDER        m_pinNameOffset;
 

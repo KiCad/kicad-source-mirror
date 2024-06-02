@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
+#include <eeschema_settings.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>
@@ -153,6 +155,32 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     // Push a copy of each field into m_updateFields
     m_libEntry->GetFields( *m_fields );
+
+    std::set<wxString> defined;
+
+    for( SCH_FIELD& field : *m_fields )
+        defined.insert( field.GetName() );
+
+    // Add in any template fieldnames not yet defined:
+    // Read global fieldname templates
+    if( EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>() )
+    {
+        TEMPLATES templateMgr;
+
+        if( !cfg->m_Drawing.field_names.IsEmpty() )
+            templateMgr.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+
+        for( const TEMPLATE_FIELDNAME& templateFieldname : templateMgr.GetTemplateFieldNames() )
+        {
+            if( defined.count( templateFieldname.m_Name ) <= 0 )
+            {
+                SCH_FIELD field( VECTOR2I( 0, 0 ), -1, m_libEntry, templateFieldname.m_Name );
+                field.SetVisible( templateFieldname.m_Visible );
+                m_fields->push_back( field );
+                m_addedTemplateFields.insert( templateFieldname.m_Name );
+            }
+        }
+    }
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign for editing
@@ -363,10 +391,15 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         SCH_FIELD&      field = m_fields->at( ii );
         const wxString& fieldName = field.GetCanonicalName();
 
-        if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
-            m_fields->erase( m_fields->begin() + ii );
+        if( field.GetText().IsEmpty() )
+        {
+            if( fieldName.IsEmpty() || m_addedTemplateFields.contains( fieldName ) )
+                m_fields->erase( m_fields->begin() + ii );
+        }
         else if( fieldName.IsEmpty() )
+        {
             field.SetName( _( "untitled" ) );
+        }
     }
 
     m_libEntry->SetFields( *m_fields );
