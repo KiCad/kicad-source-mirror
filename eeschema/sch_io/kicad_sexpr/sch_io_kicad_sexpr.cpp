@@ -1012,6 +1012,11 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                        aSheet->GetSize().y ).c_str() );
 
+    m_out->Print( 0, " (exclude_from_sim %s)", ( aSheet->GetExcludedFromSim() ) ? "yes" : "no" );
+    m_out->Print( 0, " (in_bom %s)", ( aSheet->GetExcludedFromBOM() ) ? "no" : "yes" );
+    m_out->Print( 0, " (on_board %s)", ( aSheet->GetExcludedFromBoard() ) ? "no" : "yes" );
+    m_out->Print( 0, " (dnp %s)", ( aSheet->GetDNP() ) ? "yes" : "no" );
+
     if( aSheet->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
         m_out->Print( 0, " (fields_autoplaced yes)" );
 

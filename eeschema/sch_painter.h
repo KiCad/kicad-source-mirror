@@ -92,7 +92,7 @@ private:
     void draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed );
     void draw( const SCH_LABEL* aLabel, int aLayer );
     void draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer );
-    void draw( const SCH_HIERLABEL* aLabel, int aLayer );
+    void draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed );
     void draw( const SCH_GLOBALLABEL* aLabel, int aLayer );
     void draw( const SCH_SHEET* aSheet, int aLayer );
     void draw( const SCH_NO_CONNECT* aNC, int aLayer );

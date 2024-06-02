@@ -104,4 +104,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230819  // Allow multiple library symbol inheritance depth.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20231120  // generator_version; V8 cleanups
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240101  // Tables.
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20240417  // Rule areas
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20240417  // Rule areas
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20240602  // Sheet attributes

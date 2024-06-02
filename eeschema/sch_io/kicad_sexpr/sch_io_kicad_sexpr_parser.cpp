@@ -3288,6 +3288,26 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
             break;
         }
 
+        case T_exclude_from_sim:
+            sheet->SetExcludedFromSim( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_in_bom:
+            sheet->SetExcludedFromBOM( !parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_on_board:
+            sheet->SetExcludedFromBoard( !parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_dnp:
+            sheet->SetDNP( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_fields_autoplaced:
             if( parseMaybeAbsentBool( true ) )
                 sheet->SetFieldsAutoplaced();

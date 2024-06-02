@@ -261,6 +261,54 @@ SCH_SCREEN* SCH_SHEET_PATH::LastScreen() const
 }
 
 
+bool SCH_SHEET_PATH::GetExcludedFromSim() const
+{
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetExcludedFromSim() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_PATH::GetExcludedFromBOM() const
+{
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetExcludedFromBOM() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_PATH::GetExcludedFromBoard() const
+{
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetExcludedFromBoard() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_PATH::GetDNP() const
+{
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetDNP() )
+            return true;
+    }
+
+    return false;
+}
+
+
 wxString SCH_SHEET_PATH::PathAsString() const
 {
     wxString s;

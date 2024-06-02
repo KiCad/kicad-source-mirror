@@ -292,13 +292,17 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
         for( EDA_ITEM* item : ordered_symbols )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
+            bool        forBOM = aCtl & GNL_OPT_BOM;
+            bool        forBoard = aCtl & GNL_OPT_KICAD;
 
-            if( !symbol
-               || ( ( aCtl & GNL_OPT_BOM ) && symbol->GetExcludedFromBOM() )
-               || ( ( aCtl & GNL_OPT_KICAD ) && symbol->GetExcludedFromBoard() ) )
-            {
+            if( !symbol )
                 continue;
-            }
+
+            if( forBOM && ( sheet.GetExcludedFromBOM() || symbol->GetExcludedFromBOM() ) )
+                continue;
+
+            if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->GetExcludedFromBoard() ) )
+                continue;
 
             // Output the symbol's elements in order of expected access frequency. This may
             // not always look best, but it will allow faster execution under XSL processing
@@ -730,13 +734,17 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                 {
                     SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
                     SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
+                    bool        forBOM = aCtl & GNL_OPT_BOM;
+                    bool        forBoard = aCtl & GNL_OPT_KICAD;
 
-                    if( !symbol
-                       || ( ( aCtl & GNL_OPT_BOM ) && symbol->GetExcludedFromBOM() )
-                       || ( ( aCtl & GNL_OPT_KICAD ) && symbol->GetExcludedFromBoard() ) )
-                    {
+                    if( !symbol )
                         continue;
-                    }
+
+                    if( forBOM && ( sheet.GetExcludedFromBOM() || symbol->GetExcludedFromBOM() ) )
+                        continue;
+
+                    if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->GetExcludedFromBoard() ) )
+                        continue;
 
                     net_record->m_Nodes.emplace_back( pin, sheet );
                 }

@@ -1521,6 +1521,9 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
     //
     for( SCH_ITEM* item : GetScreen()->Items() )
     {
+        if( GetCurrentSheet().GetExcludedFromSim() )
+            continue;
+
         if( item->Type() == SCH_LINE_T )
         {
             SCH_LINE* line = static_cast<SCH_LINE*>( item );
@@ -1599,6 +1602,9 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             {
                 SCH_LINE* longestWire = nullptr;
                 double    length = 0.0;
+
+                if( subgraph->GetSheet().GetExcludedFromSim() )
+                    continue;
 
                 for( SCH_ITEM* item : subgraph->GetItems() )
                 {

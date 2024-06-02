@@ -204,6 +204,9 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     for( SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
+        if( sheet.GetExcludedFromSim() )
+            continue;
+
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
@@ -326,6 +329,9 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
     for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
+        if( sheet.GetExcludedFromSim() )
+            continue;
+
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
             if( item->GetExcludedFromSim() )

@@ -198,6 +198,11 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 
     m_pageNumberTextCtrl->ChangeValue( pageNumber );
 
+    m_cbExcludeFromSim->SetValue( m_sheet->GetExcludedFromSim() );
+    m_cbExcludeFromBom->SetValue( m_sheet->GetExcludedFromBOM() );
+    m_cbExcludeFromBoard->SetValue( m_sheet->GetExcludedFromBoard() );
+    m_cbDNP->SetValue( m_sheet->GetDNP() );
+
     return true;
 }
 
@@ -389,7 +394,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     m_sheet->SetFields( *m_fields );
 
-    m_sheet->SetBorderWidth( m_borderWidth.GetValue() );
+    m_sheet->SetBorderWidth( m_borderWidth.GetIntValue() );
 
     COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
 
@@ -413,6 +418,11 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     m_sheet->SetBorderColor( m_borderSwatch->GetSwatchColor() );
     m_sheet->SetBackgroundColor( m_backgroundSwatch->GetSwatchColor() );
+
+    m_sheet->SetExcludedFromSim( m_cbExcludeFromSim->GetValue() );
+    m_sheet->SetExcludedFromBOM( m_cbExcludeFromBom->GetValue() );
+    m_sheet->SetExcludedFromBoard( m_cbExcludeFromBoard->GetValue() );
+    m_sheet->SetDNP( m_cbDNP->GetValue() );
 
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
 
@@ -446,18 +456,16 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 {
     wxCHECK( aIsUndoable, false );
 
-    wxString   msg;
-    wxFileName sheetFileName(
-            EnsureFileExtension( aNewFilename, FILEEXT::KiCadSchematicFileExtension ) );
-
+    wxString       msg;
+    wxFileName     sheetFileName( EnsureFileExtension( aNewFilename,
+                                                       FILEEXT::KiCadSchematicFileExtension ) );
     // Sheet file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.  Screen file names are always absolute.
-    SCHEMATIC&                             schematic = m_frame->Schematic();
-    SCH_SHEET_LIST                         fullHierarchy = schematic.GetFullHierarchy();
-    wxFileName                             screenFileName( sheetFileName );
-    wxFileName                             tmp( sheetFileName );
-
-    SCH_SCREEN* currentScreen = m_frame->GetCurrentSheet().LastScreen();
+    SCHEMATIC&     schematic = m_frame->Schematic();
+    SCH_SHEET_LIST fullHierarchy = schematic.GetFullHierarchy();
+    wxFileName     screenFileName( sheetFileName );
+    wxFileName     tmp( sheetFileName );
+    SCH_SCREEN*    currentScreen = m_frame->GetCurrentSheet().LastScreen();
 
     wxCHECK( currentScreen, false );
 

@@ -218,7 +218,7 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
             draw( static_cast<const SCH_FIELD*>( aItem ), aLayer, aDimmed );
             break;
         case SCH_HIER_LABEL_T:
-            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer );
+            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer, aDimmed );
             break;
         case SCH_GLOBAL_LABEL_T:
             draw( static_cast<const SCH_GLOBALLABEL*>( aItem ), aLayer );
@@ -227,7 +227,7 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
             draw( static_cast<const SCH_SHEET*>( aItem ), aLayer );
             break;
         case SCH_SHEET_PIN_T:
-            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer );
+            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer, aDimmed );
             break;
         case SCH_NO_CONNECT_T:
             draw( static_cast<const SCH_NO_CONNECT*>( aItem ), aLayer );
@@ -2532,7 +2532,7 @@ void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2553,7 +2553,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer )
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows );
+    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows, aDimmed );
 
     if( drawingDangling )
     {
@@ -2575,7 +2575,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer )
             conn = aLabel->Connection();
 
         if( conn && conn->IsBus() )
-            color = getRenderColor( aLabel, LAYER_BUS, drawingShadows );
+            color = getRenderColor( aLabel, LAYER_BUS, drawingShadows, aDimmed );
     }
 
     std::vector<VECTOR2I> pts;
@@ -2675,10 +2675,10 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSheet->GetFields() )
-            draw( &field, aLayer, false );
+            draw( &field, aLayer, aSheet->GetDNP() );
 
         for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
-            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer );
+            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer, aSheet->GetDNP() );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2709,6 +2709,33 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->SetIsFill( false );
 
         m_gal->DrawRectangle( pos, pos + size );
+    }
+
+    if( aSheet->GetDNP() )
+    {
+        BOX2I    bbox = aSheet->GetBodyBoundingBox();
+        BOX2I    pins = aSheet->GetBoundingBox();
+        VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
+                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+
+        margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
+        margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
+        bbox.Inflate( KiROUND( margins.x ), KiROUND( margins.y ) );
+
+        VECTOR2I pt1 = bbox.GetOrigin();
+        VECTOR2I pt2 = bbox.GetEnd();
+
+        m_gal->PushDepth();
+        m_gal->AdvanceDepth();
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( true );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
+
+        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        std::swap( pt1.x, pt2.x );
+        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        m_gal->PopDepth();
     }
 }
 

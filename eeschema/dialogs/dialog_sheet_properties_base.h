@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,6 +32,7 @@ class WX_INFOBAR;
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,15 +53,21 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_bpMoveUp;
 		STD_BITMAP_BUTTON* m_bpMoveDown;
 		STD_BITMAP_BUTTON* m_bpDelete;
+		wxStaticText* m_pageNumberStaticText;
+		wxTextCtrl* m_pageNumberTextCtrl;
+		wxCheckBox* m_cbExcludeFromSim;
+		wxCheckBox* m_cbExcludeFromBom;
+		wxCheckBox* m_cbExcludeFromBoard;
+		wxCheckBox* m_cbDNP;
+		wxStaticText* m_borderLabel;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;
 		wxStaticText* m_borderWidthUnits;
 		wxStaticText* m_borderColorLabel;
 		COLOR_SWATCH* m_borderSwatch;
+		wxStaticText* m_fillLabel;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundSwatch;
-		wxStaticText* m_pageNumberStaticText;
-		wxTextCtrl* m_pageNumberTextCtrl;
 		wxBoxSizer* m_sizerBottom;
 		wxStaticText* m_hierarchicalPathLabel;
 		wxStaticText* m_hierarchicalPath;
@@ -76,6 +83,7 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

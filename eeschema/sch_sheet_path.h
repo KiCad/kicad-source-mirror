@@ -263,6 +263,11 @@ public:
     ///< @copydoc SCH_SHEET_PATH::LastScreen()
     SCH_SCREEN* LastScreen() const;
 
+    bool GetExcludedFromSim() const;
+    bool GetExcludedFromBOM() const;
+    bool GetExcludedFromBoard() const;
+    bool GetDNP() const;
+
     /**
      * Fetch a SCH_ITEM by ID.
      */

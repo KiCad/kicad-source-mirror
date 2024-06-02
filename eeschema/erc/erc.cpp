@@ -1278,6 +1278,9 @@ int ERC_TESTER::TestSimModelIssues()
 
     for( SCH_SHEET_PATH& sheet : sheets )
     {
+        if( sheet.GetExcludedFromSim() )
+            continue;
+
         std::vector<SCH_MARKER*> markers;
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )

@@ -363,6 +363,30 @@ public:
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
+    /**
+     * Set or clear the exclude from simulation flag.
+     */
+    void SetExcludedFromSim( bool aExcludeFromSim ) override { m_excludedFromSim = aExcludeFromSim; }
+    bool GetExcludedFromSim() const override { return m_excludedFromSim; }
+
+    /**
+     * Set or clear the exclude from schematic bill of materials flag.
+     */
+    void SetExcludedFromBOM( bool aExcludeFromBOM ) { m_excludedFromBOM = aExcludeFromBOM; }
+    bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
+
+    /**
+     * Set or clear exclude from board netlist flag.
+     */
+    void SetExcludedFromBoard( bool aExcludeFromBoard ) { m_excludedFromBoard = aExcludeFromBoard; }
+    bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
+
+    /**
+     * Set or clear the 'Do Not Populate' flaga
+     */
+    bool GetDNP() const { return m_DNP; }
+    void SetDNP( bool aDNP ) { m_DNP = aDNP; }
+
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
@@ -516,6 +540,11 @@ private:
 
     std::vector<SCH_SHEET_PIN*> m_pins;         // The list of sheet connection points.
     std::vector<SCH_FIELD>      m_fields;
+
+    bool                        m_excludedFromSim;
+    bool                        m_excludedFromBOM;
+    bool                        m_excludedFromBoard;
+    bool                        m_DNP;
 
     VECTOR2I                    m_pos;          // The position of the sheet.
     VECTOR2I                    m_size;         // The size of the sheet.

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -124,69 +124,129 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Style") ), wxHORIZONTAL );
-
-	m_borderWidthLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_borderWidthLabel->Wrap( -1 );
-	sbSizer2->Add( m_borderWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
-
-	m_borderWidthCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_borderWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_borderWidthUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_borderWidthUnits->Wrap( -1 );
-	sbSizer2->Add( m_borderWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
-
-
-	sbSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_borderColorLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Border color:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_borderColorLabel->Wrap( -1 );
-	sbSizer2->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_borderSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_borderSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_borderSwatch->SetMinSize( wxSize( 48,24 ) );
-
-	sbSizer2->Add( m_borderSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	sbSizer2->Add( 40, 0, 1, wxEXPAND, 5 );
-
-	m_backgroundColorLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Background fill:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_backgroundColorLabel->Wrap( -1 );
-	sbSizer2->Add( m_backgroundColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_backgroundSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_backgroundSwatch->SetMinSize( wxSize( 48,24 ) );
-
-	sbSizer2->Add( m_backgroundSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizer5->Add( sbSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
-
-
-	m_longForm->Add( bSizer5, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	mainSizer->Add( m_longForm, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* sbAttributes;
+	sbAttributes = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Attributes") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_pageNumberStaticText = new wxStaticText( this, wxID_ANY, _("Page number:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pageNumberStaticText = new wxStaticText( sbAttributes->GetStaticBox(), wxID_ANY, _("Page number:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pageNumberStaticText->Wrap( -1 );
 	bSizer6->Add( m_pageNumberStaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_pageNumberTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_pageNumberTextCtrl = new wxTextCtrl( sbAttributes->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer6->Add( m_pageNumberTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizer6->Add( 0, 0, 3, wxEXPAND, 5 );
 
 
-	mainSizer->Add( bSizer6, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	sbAttributes->Add( bSizer6, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 10 );
+
+	m_cbExcludeFromSim = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbAttributes->Add( m_cbExcludeFromSim, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	sbAttributes->Add( 0, 10, 0, wxEXPAND, 5 );
+
+	m_cbExcludeFromBom = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
+
+	sbAttributes->Add( m_cbExcludeFromBom, 0, wxALL, 5 );
+
+	m_cbExcludeFromBoard = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExcludeFromBoard->SetToolTip( _("This is useful for adding symbols that only get exported to the bill of materials but\nnot required to layout the board such as mechanical fasteners and enclosures") );
+
+	sbAttributes->Add( m_cbExcludeFromBoard, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbDNP = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Do not populate"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbAttributes->Add( m_cbDNP, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizer5->Add( sbAttributes, 0, wxEXPAND|wxRIGHT, 5 );
+
+	wxStaticBoxSizer* sbSizer2;
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Style") ), wxVERTICAL );
+
+	wxBoxSizer* bStyleColumns;
+	bStyleColumns = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bBorderSizer;
+	bBorderSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_borderLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderLabel->Wrap( -1 );
+	bBorderSizer->Add( m_borderLabel, 0, wxBOTTOM|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_borderWidthLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderWidthLabel->Wrap( -1 );
+	bSizer10->Add( m_borderWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+
+	m_borderWidthCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer10->Add( m_borderWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_borderWidthUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderWidthUnits->Wrap( -1 );
+	bSizer10->Add( m_borderWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+
+
+	bSizer10->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_borderColorLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderColorLabel->Wrap( -1 );
+	bSizer10->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+
+	m_borderSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	m_borderSwatch->SetMinSize( wxSize( 48,24 ) );
+
+	bSizer10->Add( m_borderSwatch, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bBorderSizer->Add( bSizer10, 1, wxEXPAND, 5 );
+
+
+	bStyleColumns->Add( bBorderSizer, 2, wxEXPAND, 5 );
+
+	wxBoxSizer* bFillSizer;
+	bFillSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_fillLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Fill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fillLabel->Wrap( -1 );
+	bFillSizer->Add( m_fillLabel, 0, wxBOTTOM, 5 );
+
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_backgroundColorLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backgroundColorLabel->Wrap( -1 );
+	bSizer11->Add( m_backgroundColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+
+	m_backgroundSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_backgroundSwatch->SetMinSize( wxSize( 48,24 ) );
+
+	bSizer11->Add( m_backgroundSwatch, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bFillSizer->Add( bSizer11, 1, wxEXPAND, 5 );
+
+
+	bStyleColumns->Add( bFillSizer, 1, wxEXPAND, 5 );
+
+
+	sbSizer2->Add( bStyleColumns, 0, wxEXPAND, 5 );
+
+
+	bSizer5->Add( sbSizer2, 1, wxEXPAND|wxLEFT, 10 );
+
+
+	m_longForm->Add( bSizer5, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	mainSizer->Add( m_longForm, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_sizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
@@ -223,6 +283,9 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnDeleteField ), NULL, this );
+	m_cbExcludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_cbExcludeFromBom->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_cbExcludeFromBoard->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 }
 
 DIALOG_SHEET_PROPERTIES_BASE::~DIALOG_SHEET_PROPERTIES_BASE()
@@ -235,5 +298,8 @@ DIALOG_SHEET_PROPERTIES_BASE::~DIALOG_SHEET_PROPERTIES_BASE()
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnDeleteField ), NULL, this );
+	m_cbExcludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_cbExcludeFromBom->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_cbExcludeFromBoard->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 
 }
