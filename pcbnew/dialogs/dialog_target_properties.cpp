@@ -98,11 +98,11 @@ bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
     bool pushCommit = ( m_Target->GetEditFlags() == 0 );
 
     if( m_Target->GetEditFlags() != 0 )         // other edit in progress (MOVE, NEW ..)
-        m_Target->SetFlags( IN_EDIT );          // set flag in edit to force
-    // undo/redo/abort proper operation
+        m_Target->SetFlags( IN_EDIT );          //   set flag IN_EDIT to force
+                                                //   undo/redo/abort proper operation
 
-    m_Target->SetWidth( m_Thickness.GetValue() );
-    m_Target->SetSize( m_Size.GetValue() );
+    m_Target->SetWidth( m_Thickness.GetIntValue() );
+    m_Target->SetSize( m_Size.GetIntValue() );
     m_Target->SetShape( m_TargetShape->GetSelection() ? 1 : 0 );
 
     if( pushCommit )

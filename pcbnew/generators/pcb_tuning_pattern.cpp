@@ -323,6 +323,7 @@ public:
         if( !this->HasFlag( IN_EDIT ) )
         {
             PCB_GENERATOR::Flip( aCentre, aFlipLeftRight );
+
             if( aFlipLeftRight )
                 MIRROR( m_end.x, aCentre.x );
             else
