@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 17:41-0700\n"
-"PO-Revision-Date: 2024-05-26 16:09+0000\n"
+"POT-Creation-Date: 2024-05-21 09:37-0700\n"
+"PO-Revision-Date: 2024-06-03 13:09+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
@@ -5961,9 +5961,8 @@ msgid "Could not read 'FETCH_HEAD'"
 msgstr "Nelze přečíst 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Nelze otevřít CvPcb"
+msgstr "Nelze vyhledat komit"
 
 #: common/git/git_pull_handler.cpp:108
 msgid "Could not analyze merge"
@@ -5987,9 +5986,8 @@ msgid "Failed to perform checkout operation."
 msgstr "Provedení kontrolní operace se nezdařilo."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Nelze načíst obrázek z '%s'."
+msgstr "Nelze vyhledat komit '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 msgid "Could not merge commits"
@@ -6016,14 +6014,12 @@ msgid "Could not lookup remote"
 msgstr "Nelze vyhledat vzdálený vklad"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Soubor archivu nelze otevřít."
+msgstr "Nelze se připojit ke vzdálenému repozitáři"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Nelze použít OpenGL"
+msgstr "Nelze odeslat na vzdálený repozitář"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
@@ -9766,9 +9762,8 @@ msgid "Reload Configuration"
 msgstr "Znovu načíst konfiguraci"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "Načíst soubor nastavení klávesových zkratek"
+msgstr "Znovu načíst soubor s nastavením databáze knihoven"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
 msgid "Caching"
@@ -9960,10 +9955,9 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "U všech porušení „%s“ změňte závažnost na chybu"
 
 #: eeschema/dialogs/dialog_erc.cpp:627 eeschema/dialogs/dialog_erc.cpp:633
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "Závažnost porušení lze také upravit v Nastavení desky... dialog"
+msgstr "Závažnost porušení lze také upravit v Nastavení schématu... dialog"
 
 #: eeschema/dialogs/dialog_erc.cpp:631 pcbnew/dialogs/dialog_drc.cpp:685
 #, c-format
@@ -10702,9 +10696,8 @@ msgid "untitled"
 msgstr "nepojmenováno"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Vlastnosti označení"
+msgstr "pravit Vlastnosti označení"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -13098,13 +13091,12 @@ msgid "BOM Output File"
 msgstr "Výstupní soubor BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1228
-#, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
 "Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru "
-"desky)!"
+"schématu)!"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1241
 msgid "Unsaved data"
@@ -13119,19 +13111,19 @@ msgid "No filename specified in exporter"
 msgstr "Nezadaný název souboru v exportéru"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1277
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "Nelze vytvořit soubor \"%s\"."
+msgstr "Nelze otevřít/vytvořit cestu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1286
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "Nelze zapsat výstup BOM do '%s'."
+msgstr "Nelze vytvořit výstup BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1295
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "Nelze zapsat výstup BOM do '%s'."
+msgstr "Nelze zapsat výstup BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1301
 #, c-format
