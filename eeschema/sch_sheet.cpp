@@ -120,6 +120,11 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_fieldsAutoplaced = aSheet.m_fieldsAutoplaced;
     m_screen = aSheet.m_screen;
 
+    m_excludedFromSim = aSheet.m_excludedFromSim;
+    m_excludedFromBOM = aSheet.m_excludedFromBOM;
+    m_excludedFromBoard = aSheet.m_excludedFromBoard;
+    m_DNP = aSheet.m_DNP;
+
     m_borderWidth = aSheet.m_borderWidth;
     m_borderColor = aSheet.m_borderColor;
     m_backgroundColor = aSheet.m_backgroundColor;
@@ -233,6 +238,10 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
     add( wxT( "#" ) );
     add( wxT( "##" ) );
     add( wxT( "SHEETPATH" ) );
+    add( wxT( "EXCLUDE_FROM_BOM" ) );
+    add( wxT( "EXCLUDE_FROM_BOARD" ) );
+    add( wxT( "EXCLUDE_FROM_SIM" ) );
+    add( wxT( "DNP" ) );
 
     m_screen->GetTitleBlock().GetContextualTextVars( aVars );
 }
@@ -296,6 +305,42 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
         *token = aPath->PathHumanReadable();
         return true;
     }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
+    {
+        *token = wxEmptyString;
+
+        if( aPath->GetExcludedFromBOM() || this->GetExcludedFromBOM() )
+            *token = _( "Excluded from BOM" );
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
+    {
+        *token = wxEmptyString;
+
+        if( aPath->GetExcludedFromBoard() || this->GetExcludedFromBoard() )
+            *token = _( "Excluded from board" );
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_SIM" ) ) )
+    {
+        *token = wxEmptyString;
+
+        if( aPath->GetExcludedFromSim() || this->GetExcludedFromSim() )
+            *token = _( "Excluded from simulation" );
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "DNP" ) ) )
+    {
+        *token = wxEmptyString;
+
+        if( aPath->GetDNP() || this->GetDNP() )
+            *token = _( "DNP" );
+
+        return true;
+    }
 
     // See if parent can resolve it (these will recurse to ancestors)
 
@@ -345,6 +390,11 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 
     for( SCH_FIELD& field : sheet->m_fields )
         field.SetParent( sheet );
+
+    std::swap( m_excludedFromSim, sheet->m_excludedFromSim );
+    std::swap( m_excludedFromBOM, sheet->m_excludedFromBOM );
+    std::swap( m_excludedFromBoard, sheet->m_excludedFromBoard );
+    std::swap( m_DNP, sheet->m_DNP );
 
     std::swap( m_borderWidth, sheet->m_borderWidth );
     std::swap( m_borderColor, sheet->m_borderColor );
@@ -820,6 +870,27 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( _( "File Name" ),
                         KIUI::EllipsizeStatusText( aFrame, m_fields[ SHEETFILENAME ].GetText() ) );
+
+    wxArrayString msgs;
+    wxString      msg;
+
+    if( GetExcludedFromSim() )
+        msgs.Add( _( "Simulation" ) );
+
+    if( GetExcludedFromBOM() )
+        msgs.Add( _( "BOM" ) );
+
+    if( GetExcludedFromBoard() )
+        msgs.Add( _( "Board" ) );
+
+    if( GetDNP() )
+        msgs.Add( _( "DNP" ) );
+
+    msg = wxJoin( msgs, '|' );
+    msg.Replace( '|', wxS( ", " ) );
+
+    if( !msg.empty() )
+        aList.emplace_back( _( "Exclude from" ), msg );
 }
 
 
@@ -1475,6 +1546,18 @@ bool SCH_SHEET::operator==( const SCH_ITEM& aOther ) const
     if( m_size != other->m_size )
         return false;
 
+    if( GetExcludedFromSim() != other->GetExcludedFromSim() )
+        return false;
+
+    if( GetExcludedFromBOM() != other->GetExcludedFromBOM() )
+        return false;
+
+    if( GetExcludedFromBoard() != other->GetExcludedFromBoard() )
+        return false;
+
+    if( GetDNP() != other->GetDNP() )
+        return false;
+
     if( GetBorderColor() != other->GetBorderColor() )
         return false;
 
@@ -1550,5 +1633,20 @@ static struct SCH_SHEET_DESC
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, COLOR4D>( _HKI( "Background Color" ),
                              &SCH_SHEET::SetBackgroundColor, &SCH_SHEET::GetBackgroundColor ) );
+
+        const wxString groupAttributes = _HKI( "Attributes" );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Board" ),
+                    &SCH_SHEET::SetExcludedFromBoard, &SCH_SHEET::GetExcludedFromBoard ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Simulation" ),
+                    &SCH_SHEET::SetExcludedFromSim, &SCH_SHEET::GetExcludedFromSim ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Bill of Materials" ),
+                    &SCH_SHEET::SetExcludedFromBOM, &SCH_SHEET::GetExcludedFromBOM ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Do not Populate" ),
+                    &SCH_SHEET::SetDNP, &SCH_SHEET::GetDNP ),
+                    groupAttributes );
     }
 } _SCH_SHEET_DESC;
