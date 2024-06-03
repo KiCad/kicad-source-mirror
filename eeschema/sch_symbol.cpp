@@ -2744,7 +2744,7 @@ bool SCH_SYMBOL::operator==( const SCH_ITEM& aOther ) const
 
     for( unsigned i = 0; i < m_pins.size(); ++i )
     {
-        if( *m_pins[i] == *symbol.m_pins[i] )
+        if( *m_pins[i] != *symbol.m_pins[i] )
             return false;
     }
 
