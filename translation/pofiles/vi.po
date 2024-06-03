@@ -907,7 +907,7 @@ msgstr "Xóa chế độ xem ..."
 #: pcbnew/widgets/appearance_controls.cpp:2910
 #, fuzzy
 msgid "Viewport name:"
-msgstr "Net name"
+msgstr "Tên khung nhìn:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:878
 #: pcbnew/widgets/appearance_controls.cpp:2910
@@ -940,9 +940,8 @@ msgstr "Cài đặt trước (Ctrl+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "Net name"
+msgstr "Khung nhìn (Alt+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
@@ -1070,9 +1069,8 @@ msgid "Highlight items on rollover"
 msgstr "Phần tử được tô sáng"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Khử răng cưa"
+msgstr "Khử răng cưa:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
@@ -1095,9 +1093,8 @@ msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr "3D-Viewer phải được đóng và mở lại để áp dụng cài đặt này"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
-#, fuzzy
 msgid "Selection color:"
-msgstr "Màu sắc lựa chọn"
+msgstr "Màu chọn:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
@@ -6780,9 +6777,8 @@ msgid "Select all cells"
 msgstr "Chọn tất cả các ô"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Gán Chú thích hoàn tất."
+msgstr "Chấp nhận Tự động hoàn thành"
 
 #: common/hotkey_store.cpp:45
 #, fuzzy
@@ -7393,9 +7389,8 @@ msgid "Tracks"
 msgstr "Tracks"
 
 #: common/layer_id.cpp:170
-#, fuzzy
 msgid "Through vias"
-msgstr "Via xuyên lỗ"
+msgstr ""
 
 #: common/layer_id.cpp:171
 #, fuzzy
@@ -21307,7 +21302,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1291
 msgid "Power Symbol"
-msgstr ""
+msgstr "Ký hiệu Nguồn điện"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1298
 msgid "Datasheet"
@@ -45186,7 +45181,7 @@ msgid ""
 msgstr ""
 "net ID không hợp lệ trong\n"
 "tệp: %s\n"
-"dòng: %d offset: %d."
+"dòng: %d offset: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4914
 #, fuzzy, c-format
