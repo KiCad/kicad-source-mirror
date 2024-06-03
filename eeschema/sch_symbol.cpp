@@ -542,9 +542,16 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
 
     if( m_DNP )
     {
-        BOX2I bbox = GetBodyAndPinsBoundingBox();
-        wxDC* DC = localRenderSettings.GetPrintDC();
-        COLOR4D dnp_color = localRenderSettings.GetLayerColor( LAYER_DNP_MARKER );
+        wxDC*    DC = localRenderSettings.GetPrintDC();
+        BOX2I    bbox = GetBodyBoundingBox();
+        BOX2I    pins = GetBodyAndPinsBoundingBox();
+        COLOR4D  dnp_color = localRenderSettings.GetLayerColor( LAYER_DNP_MARKER );
+        VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
+                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+
+        margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
+        margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
+        bbox.Inflate( KiROUND( margins.x ), KiROUND( margins.y ) );
 
         GRFilledSegment( DC, bbox.GetOrigin(), bbox.GetEnd(),
                              3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
@@ -2547,8 +2554,17 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
 {
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-    BOX2I           bbox = GetBodyAndPinsBoundingBox();
+    BOX2I           bbox = GetBodyBoundingBox();
+    BOX2I           pins = GetBodyAndPinsBoundingBox();
+    VECTOR2D        margins( std::max( bbox.GetX() - pins.GetX(),
+                                       pins.GetEnd().x - bbox.GetEnd().x ),
+                             std::max( bbox.GetY() - pins.GetY(),
+                                       pins.GetEnd().y - bbox.GetEnd().y ) );
     int             strokeWidth = 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
+
+    margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
+    margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
+    bbox.Inflate( KiROUND( margins.x ), KiROUND( margins.y ) );
 
     aPlotter->SetColor( colors->GetColor( LAYER_DNP_MARKER ) );
 
