@@ -432,8 +432,8 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
     VECTOR2L  center = GetCenter();
     double    radius = ( center - m_start ).EuclideanNorm();
     CIRCLE    fullCircle( center, radius );
-    VECTOR2I  nearestPt = fullCircle.NearestPoint( aP );
-    int       dist = ( nearestPt - aP ).EuclideanNorm();
+    VECTOR2D  nearestPt = fullCircle.NearestPoint( VECTOR2D( aP ) );
+    int       dist = nearestPt.Distance( aP );
     EDA_ANGLE angleToPt( aP - fullCircle.Center ); // Angle from center to the point
 
     if( !dist )

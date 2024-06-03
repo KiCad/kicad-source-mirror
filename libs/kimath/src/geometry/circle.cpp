@@ -206,6 +206,18 @@ VECTOR2I CIRCLE::NearestPoint( const VECTOR2I& aP ) const
 }
 
 
+VECTOR2D CIRCLE::NearestPoint( const VECTOR2D& aP ) const
+{
+    VECTOR2D vec = aP - Center;
+
+    // Handle special case where aP is equal to this circle's center
+    if( vec.x == 0 && vec.y == 0 )
+        vec.x = 1; // Arbitrary, to ensure the return value is always on the circumference
+
+    return vec.Resize( Radius ) + Center;
+}
+
+
 std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
 {
     // From https://mathworld.wolfram.com/Circle-CircleIntersection.html
