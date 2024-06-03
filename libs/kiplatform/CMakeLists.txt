@@ -95,7 +95,7 @@ elseif( UNIX )
     if( KICAD_WAYLAND )
         find_package(Wayland 1.20 COMPONENTS Client REQUIRED)
 
-        list( APPEND PLATFORM_SRCS gtk/wayland-pointer-constraints-unstable-v1.c )
+        list( APPEND PLATFORM_SRCS port/wxgtk/wayland-pointer-constraints-unstable-v1.c )
         list( APPEND PLATFORM_LIBS Wayland::Client  )
     endif()
 endif()
