@@ -590,6 +590,15 @@ public:
      */
     int m_MaxFilesystemWatchers;
 
+    /**
+     * Set the number of items in a schematic graph for it to be considered "minor"
+     *
+     * Setting name: "MinorSchematicGraphSize"
+     * Valid values: 0 to 2147483647
+     * Default value: 10000
+     */
+    int m_MinorSchematicGraphSize;
+
 ///@}
 
 private:

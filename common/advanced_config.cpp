@@ -112,6 +112,7 @@ static const wxChar TriangulateMinimumArea[] = wxT( "TriangulateMinimumArea" );
 static const wxChar EnableCacheFriendlyFracture[] = wxT( "EnableCacheFriendlyFracture" );
 static const wxChar EnableAPILogging[] = wxT( "EnableAPILogging" );
 static const wxChar MaxFileSystemWatchers[] = wxT( "MaxFileSystemWatchers" );
+static const wxChar MinorSchematicGraphSize[] = wxT( "MinorSchematicGraphSize" );
 } // namespace KEYS
 
 
@@ -267,6 +268,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableCacheFriendlyFracture = true;
 
     m_MaxFilesystemWatchers = 16384;
+
+    m_MinorSchematicGraphSize = 10000;
 
     loadFromConfigFile();
 }
@@ -492,6 +495,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MaxFileSystemWatchers,
                                                   &m_MaxFilesystemWatchers, m_MaxFilesystemWatchers,
+                                                  0, 2147483647 ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MinorSchematicGraphSize,
+                                                  &m_MinorSchematicGraphSize, m_MinorSchematicGraphSize,
                                                   0, 2147483647 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately

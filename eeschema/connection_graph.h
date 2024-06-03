@@ -30,6 +30,7 @@
 #include <sch_connection.h>
 #include <sch_item.h>
 #include <wx/treectrl.h>
+#include <advanced_config.h>
 
 
 #ifdef DEBUG
@@ -481,7 +482,8 @@ public:
     */
     bool IsMinor() const
     {
-        return m_items.size() < 10000;
+        return static_cast<ssize_t>( m_items.size() )
+               < ADVANCED_CFG::GetCfg().m_MinorSchematicGraphSize;
     }
 
 private:
