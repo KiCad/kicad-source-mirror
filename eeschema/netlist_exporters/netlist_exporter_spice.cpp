@@ -204,9 +204,6 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     for( SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
-        if( sheet.GetExcludedFromSim() )
-            continue;
-
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
@@ -329,9 +326,6 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
     for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
-        if( sheet.GetExcludedFromSim() )
-            continue;
-
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
             if( item->GetExcludedFromSim() )
@@ -733,9 +727,19 @@ std::string NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const std::string& a
 
 SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::GetSheets( unsigned aNetlistOptions ) const
 {
+    SCH_SHEET_LIST sheets;
+
     if( aNetlistOptions & OPTION_CUR_SHEET_AS_ROOT )
-        return SCH_SHEET_LIST( m_schematic->CurrentSheet().Last() );
+        sheets = SCH_SHEET_LIST( m_schematic->CurrentSheet().Last() );
     else
-        return m_schematic->GetSheets();
+        sheets = SCH_SHEET_LIST( m_schematic->GetSheets() );
+
+    alg::delete_if( sheets,
+                    [&]( const SCH_SHEET_PATH& sheet )
+                    {
+                        return sheet.GetExcludedFromSim();
+                    } );
+
+    return sheets;
 }
 
