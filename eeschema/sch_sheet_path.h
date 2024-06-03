@@ -451,10 +451,6 @@ struct SHEET_PATH_CMP
 };
 
 
-typedef std::vector< SCH_SHEET_PATH >            SCH_SHEET_PATHS;
-typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
-
-
 /**
  * A container for handling #SCH_SHEET_PATH objects in a flattened hierarchy.
  *
@@ -463,7 +459,7 @@ typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
  * be shared between these sheets and symbol references are specific to a sheet path.
  * When a sheet is entered, symbol references and sheet page number are updated.
  */
-class SCH_SHEET_LIST : public SCH_SHEET_PATHS
+class SCH_SHEET_LIST : public std::vector<SCH_SHEET_PATH>
 {
 public:
     /**
@@ -538,7 +534,8 @@ public:
      * @param aReferences List of sheets to populate.
      * @param aSheetPath Path to return sheets from
      */
-    void GetSheetsWithinPath( SCH_SHEET_PATHS& aSheets, const SCH_SHEET_PATH& aSheetPath ) const;
+    void GetSheetsWithinPath( std::vector<SCH_SHEET_PATH>& aSheets,
+                              const SCH_SHEET_PATH& aSheetPath ) const;
 
 
     /**

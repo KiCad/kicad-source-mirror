@@ -142,7 +142,7 @@ void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
     m_virtualPageNumber = aOther.m_virtualPageNumber;
     m_current_hash      = aOther.m_current_hash;
 
-    // Note: don't copy m_recursion_test_cache as it is slow and we want SCH_SHEET_PATHS to be
+    // Note: don't copy m_recursion_test_cache as it is slow and we want std::vector<SCH_SHEET_PATH> to be
     // very fast to construct for use in the connectivity algorithm.
 }
 
@@ -1018,7 +1018,7 @@ void SCH_SHEET_LIST::GetSymbolsWithinPath( SCH_REFERENCE_LIST&   aReferences,
 }
 
 
-void SCH_SHEET_LIST::GetSheetsWithinPath( SCH_SHEET_PATHS&      aSheets,
+void SCH_SHEET_LIST::GetSheetsWithinPath( std::vector<SCH_SHEET_PATH>& aSheets,
                                           const SCH_SHEET_PATH& aSheetPath ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
@@ -1050,7 +1050,7 @@ std::optional<SCH_SHEET_PATH> SCH_SHEET_LIST::GetSheetPathByKIIDPath( const KIID
 void SCH_SHEET_LIST::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                           bool aIncludePowerSymbols ) const
 {
-    for( SCH_SHEET_PATHS::const_iterator it = begin(); it != end(); ++it )
+    for( auto it = begin(); it != end(); ++it )
     {
         SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
         ( *it ).GetMultiUnitSymbols( tempMap, aIncludePowerSymbols );

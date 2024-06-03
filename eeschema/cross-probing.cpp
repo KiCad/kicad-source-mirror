@@ -620,7 +620,7 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
     const SCH_SHEET_LIST allSheetsList = aSchematic.GetSheets();
 
     // In orderedSheets, the current sheet comes first.
-    SCH_SHEET_PATHS orderedSheets;
+    std::vector<SCH_SHEET_PATH> orderedSheets;
     orderedSheets.reserve( allSheetsList.size() );
     orderedSheets.push_back( aSchematic.CurrentSheet() );
 
