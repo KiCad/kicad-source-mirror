@@ -13612,7 +13612,7 @@ msgstr "Tallentamaton tieto"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1247
 msgid "Changes have not yet been saved. Export unsaved data?"
-msgstr "Muutokset ovat tallentamatta. Viedäänkö tallentamaton data?"
+msgstr "Muutokset ovat tallentamatta. Viedäänkö tallentamaton tieto?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1271
 msgid "No filename specified in exporter"
@@ -23913,9 +23913,8 @@ msgid "Show dcode number"
 msgstr "Näytä Dkoodi numero"
 
 #: gerbview/tools/gerbview_actions.cpp:234
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "Näytä otsikkolohko muokkaustilassa"
+msgstr "Näytä pakotetulla peittävyystilalla"
 
 #: gerbview/tools/gerbview_actions.cpp:235
 msgid "Show layers using opacity color forced mode"
