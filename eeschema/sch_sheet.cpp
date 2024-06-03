@@ -76,7 +76,11 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
 
 SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
                       FIELDS_AUTOPLACED aAutoplaceFields ) :
-        SCH_ITEM( aParent, SCH_SHEET_T )
+        SCH_ITEM( aParent, SCH_SHEET_T ),
+        m_excludedFromSim( false ),
+        m_excludedFromBOM( false ),
+        m_excludedFromBoard( false ),
+        m_DNP( false )
 {
     m_layer = LAYER_SHEET;
     m_pos = aPos;
