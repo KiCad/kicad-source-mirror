@@ -69,6 +69,7 @@ public:
         bool show_hidden_pins;
         bool show_hidden_fields;
         bool show_directive_labels;
+        bool mark_sim_exclusions;
         bool show_erc_warnings;
         bool show_erc_errors;
         bool show_erc_exclusions;

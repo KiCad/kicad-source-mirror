@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,6 +47,7 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_checkShowERCErrors;
 		wxCheckBox* m_checkShowERCWarnings;
 		wxCheckBox* m_checkShowERCExclusions;
+		wxCheckBox* m_cbMarkSimExclusions;
 		wxCheckBox* m_checkShowOPVoltages;
 		wxCheckBox* m_checkShowOPCurrents;
 		wxCheckBox* m_checkPageLimits;

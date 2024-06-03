@@ -203,6 +203,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_erc_exclusions",
             &m_Appearance.show_erc_exclusions, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.mark_sim_exclusions",
+            &m_Appearance.mark_sim_exclusions, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_op_voltages",
             &m_Appearance.show_op_voltages, true ) );
 

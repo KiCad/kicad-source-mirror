@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,6 +64,10 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 
 	m_checkShowERCExclusions = new wxCheckBox( this, wxID_ANY, _("Show ERC exclusions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowERCExclusions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbMarkSimExclusions = new wxCheckBox( this, wxID_ANY, _("Mark items which are excluded from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbMarkSimExclusions->SetValue(true);
+	bAppearanceSizer->Add( m_cbMarkSimExclusions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkShowOPVoltages = new wxCheckBox( this, wxID_ANY, _("Show OP voltages"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowOPVoltages, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );

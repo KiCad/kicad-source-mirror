@@ -229,6 +229,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( EE_ACTIONS::toggleERCErrors,       ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleERCWarnings,     ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleERCExclusions,   ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::markSimExclusions,     ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleOPVoltages,      ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleOPCurrents,      ACTION_MENU::CHECK );
 

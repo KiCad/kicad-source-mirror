@@ -1185,6 +1185,12 @@ TOOL_ACTION EE_ACTIONS::toggleERCExclusions( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Show ERC Exclusions" ) )
         .Tooltip( _( "Show markers for excluded electrical rules checker violations" ) ) );
 
+TOOL_ACTION EE_ACTIONS::markSimExclusions( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.markSimExclusions" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Mark items excluded from simulation" ) )
+        .Tooltip( _( "Draw 'X's over items which have been excluded from simulation" ) ) );
+
 TOOL_ACTION EE_ACTIONS::toggleOPVoltages( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showOperatingPointVoltages" )
         .Scope( AS_GLOBAL )

@@ -136,6 +136,7 @@ public:
     int ToggleERCWarnings( const TOOL_EVENT& aEvent );
     int ToggleERCErrors( const TOOL_EVENT& aEvent );
     int ToggleERCExclusions( const TOOL_EVENT& aEvent );
+    int MarkSimExclusions( const TOOL_EVENT& aEvent );
     int ToggleOPVoltages( const TOOL_EVENT& aEvent );
     int ToggleOPCurrents( const TOOL_EVENT& aEvent );
     int ChangeLineMode( const TOOL_EVENT& aEvent );

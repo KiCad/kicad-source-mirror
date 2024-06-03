@@ -1014,6 +1014,17 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                 {
                     int flags = 0;
 
+                    auto invalidateTextVars =
+                            [&flags]( EDA_TEXT* text )
+                            {
+                                if( text->HasTextVars() )
+                                {
+                                    text->ClearRenderCache();
+                                    text->ClearBoundingBoxCache();
+                                    flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                                }
+                            };
+
                     // Netclass coloured items
                     //
                     if( dynamic_cast<SCH_LINE*>( aItem ) )
@@ -1028,30 +1039,18 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                     if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem ) )
                     {
                         item->RunOnChildren(
-                                [&flags]( SCH_ITEM* aChild )
+                                [&invalidateTextVars]( SCH_ITEM* aChild )
                                 {
-                                    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild );
-
-                                    if( text && text->HasTextVars() )
-                                    {
-                                        text->ClearRenderCache();
-                                        text->ClearBoundingBoxCache();
-                                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
-                                    }
+                                    if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild ) )
+                                        invalidateTextVars( text );
                                 } );
-
-                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-                        if( text && text->HasTextVars() )
-                        {
-                            text->ClearRenderCache();
-                            text->ClearBoundingBoxCache();
-                            flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
-                        }
 
                         if( flags & KIGFX::GEOMETRY )
                             m_frame->GetScreen()->Update( item, false );   // Refresh RTree
                     }
+
+                    if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
+                        invalidateTextVars( text );
 
                     return flags;
                 } );
@@ -2473,7 +2472,52 @@ int SCH_EDITOR_CONTROL::ToggleERCExclusions( const TOOL_EVENT& aEvent )
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
     cfg->m_Appearance.show_erc_exclusions = !cfg->m_Appearance.show_erc_exclusions;
 
-    getView()->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
+    m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::MarkSimExclusions( const TOOL_EVENT& aEvent )
+{
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    cfg->m_Appearance.mark_sim_exclusions = !cfg->m_Appearance.mark_sim_exclusions;
+
+    m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
+            {
+                int flags = 0;
+
+                auto invalidateTextVars =
+                        [&flags]( EDA_TEXT* text )
+                        {
+                            if( text->HasTextVars() )
+                            {
+                                text->ClearRenderCache();
+                                text->ClearBoundingBoxCache();
+                                flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                            }
+                        };
+
+                if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem ) )
+                {
+                    item->RunOnChildren(
+                            [&invalidateTextVars]( SCH_ITEM* aChild )
+                            {
+                                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild ) )
+                                    invalidateTextVars( text );
+                            } );
+
+                    if( item->GetExcludedFromSim() )
+                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                }
+
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
+                    invalidateTextVars( text );
+
+                return flags;
+            } );
+
     m_frame->GetCanvas()->Refresh();
 
     return 0;
@@ -2741,6 +2785,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ToggleERCWarnings,     EE_ACTIONS::toggleERCWarnings.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleERCErrors,       EE_ACTIONS::toggleERCErrors.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleERCExclusions,   EE_ACTIONS::toggleERCExclusions.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::MarkSimExclusions,     EE_ACTIONS::markSimExclusions.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleOPVoltages,      EE_ACTIONS::toggleOPVoltages.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleOPCurrents,      EE_ACTIONS::toggleOPCurrents.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineModeFree.MakeEvent() );

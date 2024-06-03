@@ -137,6 +137,7 @@ wxString LayerName( int aLayer )
     case LAYER_SHEETLABEL:              return _( "Sheet pins" );
     case LAYER_NOCONNECT:               return _( "No-connect symbols" );
     case LAYER_DNP_MARKER:              return _( "DNP markers" );
+    case LAYER_EXCLUDED_FROM_SIM:       return _( "Excluded-from-simulation markers" );
     case LAYER_ERC_WARN:                return _( "ERC warnings" );
     case LAYER_ERC_ERR:                 return _( "ERC errors" );
     case LAYER_ERC_EXCLUSION:           return _( "ERC exclusions" );

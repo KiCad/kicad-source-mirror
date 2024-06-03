@@ -2150,6 +2150,9 @@ wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText,
 void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool DNP = aSymbol->GetDNP();
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
+                                && aSymbol->GetExcludedFromSim();
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;
@@ -2157,7 +2160,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSymbol->GetFields() )
-            draw( &field, aLayer, aSymbol->GetDNP() );
+            draw( &field, aLayer, DNP || markExclusion );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2228,7 +2231,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->SetOperatingPoint( symbolPin->GetOperatingPoint() );
     }
 
-    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetBodyStyle(), aSymbol->GetDNP() );
+    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetBodyStyle(),
+          DNP || markExclusion );
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {
@@ -2241,12 +2245,14 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
                                                         // IS_SHOWN_AS_BITMAP
     }
 
-    if( aSymbol->GetDNP() )
+    if( DNP || markExclusion )
     {
+        int      layer = DNP ? LAYER_DNP_MARKER : LAYER_EXCLUDED_FROM_SIM;
         BOX2I    bbox = aSymbol->GetBodyBoundingBox();
         BOX2I    pins = aSymbol->GetBodyAndPinsBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
                           std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+        int      strokeWidth = 3 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
         margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
         margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
@@ -2259,12 +2265,12 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
-        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ) );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ) );
 
-        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        m_gal->DrawSegment( pt1, pt2, strokeWidth );
         std::swap( pt1.x, pt2.x );
-        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        m_gal->DrawSegment( pt1, pt2, strokeWidth );
         m_gal->PopDepth();
     }
 }
@@ -2668,6 +2674,9 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer )
 void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool DNP = aSheet->GetDNP();
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions 
+                                && aSheet->GetExcludedFromSim();
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;
@@ -2675,10 +2684,10 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSheet->GetFields() )
-            draw( &field, aLayer, aSheet->GetDNP() );
+            draw( &field, aLayer, DNP || markExclusion );
 
         for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
-            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer, aSheet->GetDNP() );
+            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer, DNP || markExclusion );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2711,12 +2720,14 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->DrawRectangle( pos, pos + size );
     }
 
-    if( aSheet->GetDNP() )
+    if( DNP || markExclusion )
     {
+        int      layer = DNP ? LAYER_DNP_MARKER : LAYER_EXCLUDED_FROM_SIM;
         BOX2I    bbox = aSheet->GetBodyBoundingBox();
         BOX2I    pins = aSheet->GetBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
                           std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+        int      strokeWidth = 3 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
         margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
         margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
@@ -2729,12 +2740,12 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
-        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ) );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ) );
 
-        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        m_gal->DrawSegment( pt1, pt2, strokeWidth );
         std::swap( pt1.x, pt2.x );
-        m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
+        m_gal->DrawSegment( pt1, pt2, strokeWidth );
         m_gal->PopDepth();
     }
 }
