@@ -1809,7 +1809,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 // Ignore symbols from a non-existant library.
                 if( libSymbol )
                 {
-                    SCH_REFERENCE schReference( symbol, libSymbol, sheetPath );
+                    SCH_REFERENCE schReference( symbol, sheetPath );
                     schReference.SetSheetNumber( sheetPath.GetVirtualPageNumber() );
                     pastedSymbols[sheetPath].AddItem( schReference );
                 }

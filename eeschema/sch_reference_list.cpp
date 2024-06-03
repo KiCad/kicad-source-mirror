@@ -795,14 +795,11 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 }
 
 
-SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
-                              const SCH_SHEET_PATH& aSheetPath )
+SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath )
 {
     wxASSERT( aSymbol != nullptr );
 
     m_rootSymbol = aSymbol;
-    m_libPart    = aLibSymbol;     // Warning: can be nullptr for orphan symbols
-                                   // (i.e. with a symbol library not found)
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
     m_footprint  = aSymbol->GetFootprintFieldText( true, &aSheetPath, false );
     m_sheetPath  = aSheetPath;

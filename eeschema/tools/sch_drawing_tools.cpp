@@ -196,7 +196,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 // Then we need to annotate all instances by sheet
                 for( SCH_SHEET_PATH& instance : newInstances )
                 {
-                    SCH_REFERENCE newReference( symbol, symbol->GetLibSymbolRef().get(), instance );
+                    SCH_REFERENCE newReference( symbol, instance );
                     SCH_REFERENCE_LIST refs;
                     refs.AddItem( newReference );
 
@@ -373,8 +373,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 annotate();
 
                 // Update the list of references for the next symbol placement.
-                SCH_REFERENCE placedSymbolReference( symbol, symbol->GetLibSymbolRef().get(),
-                                                     m_frame->GetCurrentSheet() );
+                SCH_REFERENCE placedSymbolReference( symbol, m_frame->GetCurrentSheet() );
                 existingRefs.AddItem( placedSymbolReference );
                 existingRefs.SortByReferenceOnly();
 
@@ -436,9 +435,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         annotate();
 
                         // Update the list of references for the next symbol placement.
-                        SCH_REFERENCE placedSymbolReference( symbol,
-                                                             symbol->GetLibSymbolRef().get(),
-                                                             m_frame->GetCurrentSheet() );
+                        SCH_REFERENCE placedSymbolReference( symbol, m_frame->GetCurrentSheet() );
                         existingRefs.AddItem( placedSymbolReference );
                         existingRefs.SortByReferenceOnly();
                     }
