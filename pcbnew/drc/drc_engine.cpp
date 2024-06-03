@@ -1189,16 +1189,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
                 }
                 else if( c->constraint.m_Type == HOLE_TO_HOLE_CONSTRAINT
-                        && ( !a->HasDrilledHole() || !b->HasDrilledHole() ) )
+                        && ( !a->HasDrilledHole() && !b->HasDrilledHole() ) )
                 {
                     // Report non-drilled-holes as an implicit condition
-                    if( aReporter )
-                    {
-                        const BOARD_ITEM* x = !a->HasDrilledHole() ? a : b;
-
-                        REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
-                                                  x->GetItemDescription( this ) ) )
-                    }
+                    REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
+                                              a->GetItemDescription( this ) ) )
                 }
                 else if( !c->condition || c->condition->GetExpression().IsEmpty() )
                 {

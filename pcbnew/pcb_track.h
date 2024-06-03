@@ -422,7 +422,7 @@ public:
 
     bool HasDrilledHole() const override
     {
-        return m_viaType == VIATYPE::THROUGH;
+        return m_viaType == VIATYPE::THROUGH || m_viaType == VIATYPE::BLIND_BURIED;
     }
 
     std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;
