@@ -1710,7 +1710,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
             };
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
-            || m_undoList.m_CommandsList.empty() )
+            || m_undoList.m_CommandsList.empty()|| Schematic().ConnectionGraph()->IsMinor() )
     {
         Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
     }

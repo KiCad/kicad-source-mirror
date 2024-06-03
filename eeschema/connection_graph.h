@@ -466,6 +466,18 @@ public:
     */
     void ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem );
 
+    /**
+     * We modify how we handle the connectivity graph for small graphs vs large
+     * graphs.  Partially this is to avoid unneeded complexity for small graphs,
+     * where the performance of the graph is not a concern.  This is considered
+     * a temporary solution until the connectivity graph is refactored with an
+     * eye toward partial updates
+    */
+    bool IsMinor() const
+    {
+        return m_items.size() < 10000;
+    }
+
 private:
     /**
      * Update the graphical connectivity between items (i.e. where they touch)
