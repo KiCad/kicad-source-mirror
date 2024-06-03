@@ -1779,7 +1779,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
             };
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
-            || m_undoList.m_CommandsList.empty() )
+            || m_undoList.m_CommandsList.empty()|| Schematic().ConnectionGraph()->IsMinor() )
     {
         // Update all rule areas so we can cascade implied connectivity changes
         std::unordered_set<SCH_SCREEN*> all_screens;
