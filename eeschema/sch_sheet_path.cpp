@@ -434,11 +434,9 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* 
     // affects power symbols.
     if( aIncludePowerSymbols || aSymbol->GetRef( this )[0] != wxT( '#' ) )
     {
-        LIB_SYMBOL* symbol = aSymbol->GetLibSymbolRef().get();
-
-        if( symbol || aForceIncludeOrphanSymbols )
+        if( aSymbol->GetLibSymbolRef() || aForceIncludeOrphanSymbols )
         {
-            SCH_REFERENCE schReference( aSymbol, symbol, *this );
+            SCH_REFERENCE schReference( aSymbol, *this );
 
             schReference.SetSheetNumber( m_virtualPageNumber );
             aReferences.AddItem( schReference );
@@ -471,7 +469,7 @@ void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefLi
 
     if( symbol && symbol->GetUnitCount() > 1 )
     {
-        SCH_REFERENCE schReference = SCH_REFERENCE( aSymbol, symbol, *this );
+        SCH_REFERENCE schReference = SCH_REFERENCE( aSymbol, *this );
         schReference.SetSheetNumber( m_virtualPageNumber );
         wxString reference_str = schReference.GetRef();
 
@@ -946,7 +944,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 
             if( libSymbol && libSymbol->IsPower() )
             {
-                SCH_REFERENCE schReference( symbol, libSymbol, sheet );
+                SCH_REFERENCE schReference( symbol, sheet );
                 references.AddItem( schReference );
             }
         }

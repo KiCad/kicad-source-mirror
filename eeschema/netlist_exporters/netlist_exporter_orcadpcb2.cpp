@@ -84,8 +84,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             if( symbol->GetLibSymbolRef()
                   && symbol->GetLibSymbolRef()->GetFPFilters().GetCount() != 0  )
             {
-                cmpList.push_back( SCH_REFERENCE( symbol, symbol->GetLibSymbolRef().get(),
-                                                  sheet ) );
+                cmpList.push_back( SCH_REFERENCE( symbol, sheet ) );
             }
 
             footprint = symbol->GetFootprintFieldText( true, &sheet, false );
