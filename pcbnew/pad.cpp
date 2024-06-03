@@ -1777,7 +1777,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
         }
     }
 
-    if( GetLocalClearance().value_or( 0 ) < 0 )
+    if( GetLocalClearance() < 0 )
         aErrorHandler( DRCE_PADSTACK, _( "Negative local clearance values have no effect" ) );
 
     // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
@@ -1818,8 +1818,8 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
     // So we could ask for user to confirm the choice
     // For now we just check for disappearing paste
     wxSize paste_size;
-    int    paste_margin = GetLocalSolderPasteMargin().value_or( 0 );
-    double paste_ratio = GetLocalSolderPasteMarginRatio().value_or( 0 );
+    int    paste_margin = GetLocalSolderPasteMargin();
+    double paste_ratio = GetLocalSolderPasteMarginRatio();
 
     paste_size.x = pad_size.x + paste_margin + KiROUND( pad_size.x * paste_ratio );
     paste_size.y = pad_size.y + paste_margin + KiROUND( pad_size.y * paste_ratio );
@@ -1852,7 +1852,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
     case PAD_ATTRIB::NPTH:   // Not plated, but through hole, a hole is expected
     case PAD_ATTRIB::PTH:    // Pad through hole, a hole is also expected
         if( drill_size.x <= 0
-            || ( drill_size.y <= 0 && GetDrillShape() == PAD_DRILL_SHAPE::OBLONG ) )
+            || ( drill_size.y <= 0 && GetDrillShape() == PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG ) )
         {
             aErrorHandler( DRCE_PAD_TH_WITH_NO_HOLE, wxEmptyString );
         }
@@ -1929,9 +1929,6 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 
     if( GetProperty() == PAD_PROP::BGA && GetAttribute() != PAD_ATTRIB::SMD )
         aErrorHandler( DRCE_PADSTACK, _( "BGA property is for SMD pads" ) );
-
-    if( GetProperty() == PAD_PROP::MECHANICAL && GetAttribute() != PAD_ATTRIB::PTH )
-        aErrorHandler( DRCE_PADSTACK, _( "Mechanical property is for PTH pads" ) );
 
     if( GetShape() == PAD_SHAPE::ROUNDRECT )
     {
