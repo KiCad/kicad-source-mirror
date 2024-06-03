@@ -102,7 +102,7 @@ DRC_ITEM DRC_ITEM::holeClearance( DRCE_HOLE_CLEARANCE,
         wxT( "hole_clearance" ) );
 
 DRC_ITEM DRC_ITEM::holeNearHole( DRCE_DRILLED_HOLES_TOO_CLOSE,
-        _( "Drilled holes too close together" ),
+        _( "Drilled hole too close to other hole" ),
         wxT( "hole_near_hole" ) );
 
 DRC_ITEM DRC_ITEM::holesCoLocated( DRCE_DRILLED_HOLES_COLOCATED,
