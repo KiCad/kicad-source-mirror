@@ -317,7 +317,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     }
 
     // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->size() );
+    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, (int) m_fields->size() );
     m_grid->ProcessTableMessage( msg );
     AdjustGridColumns( m_grid->GetRect().GetWidth() );
 
@@ -549,9 +549,9 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
-        static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->SetPinLength( m_textSize.GetValue() );
-    else if( m_currentLabel->GetTextWidth() != m_textSize.GetValue() )
-        m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
+        static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->SetPinLength( m_textSize.GetIntValue() );
+    else if( m_currentLabel->GetTextWidth() != m_textSize.GetIntValue() )
+        m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
 
     // Must come after SetTextSize()
     m_currentLabel->SetBold( m_bold->IsChecked() );
@@ -678,7 +678,10 @@ void DIALOG_LABEL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
     m_grid->CommitPendingChanges( true /* quiet mode */ );
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
+    selectedRows.Sort( []( int* first, int* second )
+                       {
+                           return *second - *first;
+                       } );
 
     for( int row : selectedRows )
     {

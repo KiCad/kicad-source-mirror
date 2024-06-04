@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,7 +71,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_grid->SetColSize( 0, 72 );
 	m_grid->SetColSize( 1, 84 );
 	m_grid->SetColSize( 2, 48 );
-	m_grid->SetColSize( 3, 84 );
+	m_grid->SetColSize( 3, 48 );
 	m_grid->SetColSize( 4, 70 );
 	m_grid->SetColSize( 5, 70 );
 	m_grid->SetColSize( 6, 48 );
