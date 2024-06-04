@@ -41,8 +41,7 @@ struct LEGACY_POWER_SYMBOLS_TEST_FIXTURE
 
             // Fix pre-8.0 legacy power symbols with invisible pins
             // that have mismatched pin names and value fields
-            if( symbol->GetLibSymbolRef()
-                && symbol->GetLibSymbolRef()->IsPower()
+            if( symbol->GetLibSymbolRef().IsPower()
                 && symbol->GetAllLibPins().size() > 0
                 && symbol->GetAllLibPins()[0]->IsGlobalPower()
                 && !symbol->GetAllLibPins()[0]->IsVisible() )

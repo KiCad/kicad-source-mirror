@@ -63,40 +63,7 @@ std::string toUTFTildaText( const wxString& txt )
 }
 
 
-/**
- * Used to draw a dummy shape when a LIB_SYMBOL is not found in library
- *
- * This symbol is a 400 mils square with the text "??"
- */
-static LIB_SYMBOL* dummy()
-{
-    static LIB_SYMBOL* symbol;
-
-    if( !symbol )
-    {
-        symbol = new LIB_SYMBOL( wxEmptyString );
-
-        SCH_SHAPE* square = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
-
-        square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
-        square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
-        symbol->AddDrawItem( square );
-
-        SCH_TEXT* text = new SCH_TEXT( { 0, 0 }, wxT( "??"), LAYER_DEVICE );
-
-        text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
-        symbol->AddDrawItem( text );
-    }
-
-    return symbol;
-}
-
-
-SCH_SYMBOL::SCH_SYMBOL() :
-        SYMBOL( nullptr, SCH_SYMBOL_T )
-{
-    Init( VECTOR2I( 0, 0 ) );
-}
+SCH_SYMBOL::SCH_SYMBOL() : SCH_SYMBOL( *LIB_SYMBOL::Dummy(), LIB_ID(), nullptr, 0 ) { }
 
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
@@ -104,17 +71,13 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
                         const VECTOR2I& aPosition, EDA_ITEM* aParent ) :
         SYMBOL( aParent, SCH_SYMBOL_T )
 {
+    SetLibSymbol( &aSymbol );
     Init( aPosition );
 
     m_unit      = aUnit;
     m_bodyStyle = aBodyStyle;
     m_lib_id    = aLibId;
 
-    std::unique_ptr< LIB_SYMBOL > part;
-
-    part = aSymbol.Flatten();
-    part->SetParent();
-    SetLibSymbol( part.release() );
 
     // Copy fields from the library symbol
     UpdateFields( aSheet,
@@ -155,6 +118,8 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
 SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
         SYMBOL( aSymbol )
 {
+    SetLibSymbol( &aSymbol.GetLibSymbolRef() );
+
     m_parent      = aSymbol.m_parent;
     m_pos         = aSymbol.m_pos;
     m_unit        = aSymbol.m_unit;
@@ -182,9 +147,6 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
         m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
         m_pins.back()->SetParent( this );
     }
-
-    if( aSymbol.m_part )
-        SetLibSymbol( new LIB_SYMBOL( *aSymbol.m_part ) );
 
     m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
     m_schLibSymbolName = aSymbol.m_schLibSymbolName;
@@ -230,12 +192,6 @@ EDA_ITEM* SCH_SYMBOL::Clone() const
 }
 
 
-bool SCH_SYMBOL::IsMissingLibSymbol() const
-{
-    return m_part == nullptr;
-}
-
-
 bool SCH_SYMBOL::IsMovableFromAnchorPoint() const
 {
     // If a symbol's anchor is not grid-aligned to its pins then moving from the anchor is
@@ -272,39 +228,31 @@ wxString SCH_SYMBOL::GetSchSymbolLibraryName() const
 }
 
 
-void SCH_SYMBOL::SetLibSymbol( LIB_SYMBOL* aLibSymbol )
+void SCH_SYMBOL::SetLibSymbol( const LIB_SYMBOL* aLibSymbol )
 {
-    wxCHECK2( !aLibSymbol || aLibSymbol->IsRoot(), aLibSymbol = nullptr );
+    wxASSERT_MSG( aLibSymbol, wxT( "SCH_SYMBOL::SetLibSymbol() called with NULL pointer" ) );
 
-    m_part.reset( aLibSymbol );
+    m_part.reset( aLibSymbol->Flatten().release() );
+    m_part->SetParent();
     UpdatePins();
 }
 
 
 wxString SCH_SYMBOL::GetDescription() const
 {
-    if( m_part )
-        return m_part->GetDescription();
-
-    return wxEmptyString;
+    return m_part->GetDescription();
 }
 
 
 wxString SCH_SYMBOL::GetKeyWords() const
 {
-    if( m_part )
-        return m_part->GetKeyWords();
-
-    return wxEmptyString;
+    return m_part->GetKeyWords();
 }
 
 
 wxString SCH_SYMBOL::GetDatasheet() const
 {
-    if( m_part )
-        return m_part->GetDatasheetField().GetText();
-
-    return wxEmptyString;
+    return m_part->GetDatasheetField().GetText();
 }
 
 
@@ -328,9 +276,6 @@ void SCH_SYMBOL::UpdatePins()
     }
 
     m_pinMap.clear();
-
-    if( !m_part )
-        return;
 
     for( SCH_PIN* libPin : m_part->GetAllLibPins() )
     {
@@ -435,10 +380,7 @@ void SCH_SYMBOL::SetBodyStyle( int aBodyStyle )
 
 bool SCH_SYMBOL::HasAlternateBodyStyle() const
 {
-    if( m_part )
-        return m_part->HasAlternateBodyStyle();
-
-    return false;
+    return m_part->HasAlternateBodyStyle();
 }
 
 
@@ -450,25 +392,18 @@ void SCH_SYMBOL::SetTransform( const TRANSFORM& aTransform )
 
 int SCH_SYMBOL::GetUnitCount() const
 {
-    if( m_part )
-        return m_part->GetUnitCount();
-
-    return 0;
+    return m_part->GetUnitCount();
 }
 
 
 wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit ) const
 {
-    wxCHECK( m_part, ( wxString::Format( _( "Unit %s" ), SubReference( aUnit ) ) ) );
-
     return m_part->GetUnitDisplayName( aUnit );
 }
 
 
 bool SCH_SYMBOL::HasUnitDisplayName( int aUnit ) const
 {
-    wxCHECK( m_part, false );
-
     return m_part->HasUnitDisplayName( aUnit );
 }
 
@@ -476,8 +411,6 @@ bool SCH_SYMBOL::HasUnitDisplayName( int aUnit ) const
 void SCH_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                                   const VECTOR2I& aOffset, bool aDimmed )
 {
-    wxCHECK( m_part, /* void */ );
-
     SCH_RENDER_SETTINGS localRenderSettings( *aSettings );
     localRenderSettings.m_Transform = m_transform;
     localRenderSettings.m_ShowVisibleFields = false;
@@ -501,41 +434,34 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
     if( m_DNP )
         aDimmed = true;
 
-    if( m_part )
+    std::vector<SCH_PIN*> libPins = m_part->GetPins( m_unit, m_bodyStyle );
+    LIB_SYMBOL            tempSymbol( *m_part );
+    std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( m_unit, m_bodyStyle );
+
+    // Copy the pin info from the symbol to the temp pins
+    for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
-        std::vector<SCH_PIN*> libPins = m_part->GetPins( m_unit, m_bodyStyle );
-        LIB_SYMBOL            tempSymbol( *m_part );
-        std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( m_unit, m_bodyStyle );
+        SCH_PIN* symbolPin = GetPin( libPins[ i ] );
+        SCH_PIN* tempPin = tempPins[ i ];
 
-        // Copy the pin info from the symbol to the temp pins
-        for( unsigned i = 0; i < tempPins.size(); ++ i )
-        {
-            SCH_PIN* symbolPin = GetPin( libPins[ i ] );
-            SCH_PIN* tempPin = tempPins[ i ];
-
-            tempPin->SetName( symbolPin->GetShownName() );
-            tempPin->SetType( symbolPin->GetType() );
-            tempPin->SetShape( symbolPin->GetShape() );
-        }
-
-        for( SCH_ITEM& item : tempSymbol.GetDrawItems() )
-        {
-            if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
-            {
-                // Use SCH_FIELD's text resolver
-                SCH_FIELD dummy( this, -1 );
-                dummy.SetText( text->GetText() );
-                text->SetText( dummy.GetShownText( false ) );
-            }
-        }
-
-        tempSymbol.Print( &localRenderSettings, m_unit, m_bodyStyle, m_pos + aOffset, false,
-                          aDimmed );
+        tempPin->SetName( symbolPin->GetShownName() );
+        tempPin->SetType( symbolPin->GetType() );
+        tempPin->SetShape( symbolPin->GetShape() );
     }
-    else    // Use dummy() part if the actual cannot be found.
+
+    for( SCH_ITEM& item : tempSymbol.GetDrawItems() )
     {
-        dummy()->Print( &localRenderSettings, 0, 0, m_pos + aOffset, aForceNoFill, aDimmed );
+        if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
+        {
+            // Use SCH_FIELD's text resolver
+            SCH_FIELD dummy( this, -1 );
+            dummy.SetText( text->GetText() );
+            text->SetText( dummy.GetShownText( false ) );
+        }
     }
+
+    tempSymbol.Print( &localRenderSettings, m_unit, m_bodyStyle, m_pos + aOffset, false,
+                      aDimmed );
 
     for( SCH_FIELD& field : m_fields )
         field.Print( &localRenderSettings, m_unit, m_bodyStyle, aOffset, aForceNoFill, aDimmed );
@@ -1025,66 +951,63 @@ SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefau
 void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, bool aUpdateRef,
                                bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields )
 {
-    if( m_part )
+    std::vector<SCH_FIELD*> fields;
+    m_part->GetFields( fields );
+
+    for( const SCH_FIELD* libField : fields )
     {
-        std::vector<SCH_FIELD*> fields;
-        m_part->GetFields( fields );
+        int        id = libField->GetId();
+        SCH_FIELD* schField;
 
-        for( const SCH_FIELD* libField : fields )
+        if( libField->IsMandatory() )
         {
-            int        id = libField->GetId();
-            SCH_FIELD* schField;
+            schField = GetFieldById( id );
+        }
+        else
+        {
+            schField = FindField( libField->GetCanonicalName() );
 
-            if( libField->IsMandatory() )
+            if( !schField )
             {
-                schField = GetFieldById( id );
+                wxString  fieldName = libField->GetCanonicalName();
+                SCH_FIELD newField( VECTOR2I( 0, 0 ), GetFieldCount(), this, fieldName );
+                schField = AddField( newField );
             }
-            else
-            {
-                schField = FindField( libField->GetCanonicalName() );
+        }
 
-                if( !schField )
-                {
-                    wxString  fieldName = libField->GetCanonicalName();
-                    SCH_FIELD newField( VECTOR2I( 0, 0 ), GetFieldCount(), this, fieldName );
-                    schField = AddField( newField );
-                }
-            }
+        if( aUpdateStyle )
+        {
+            schField->ImportValues( *libField );
+            schField->SetTextPos( m_pos + libField->GetTextPos() );
+        }
 
-            if( aUpdateStyle )
-            {
-                schField->ImportValues( *libField );
-                schField->SetTextPos( m_pos + libField->GetTextPos() );
-            }
-
-            if( id == REFERENCE_FIELD && aPath )
-            {
-                if( aResetRef )
-                    SetRef( aPath, m_part->GetReferenceField().GetText() );
-                else if( aUpdateRef )
-                    SetRef( aPath, libField->GetText() );
-            }
-            else if( id == VALUE_FIELD )
-            {
-                SetValueFieldText( UnescapeString( libField->GetText() ) );
-            }
-            else if( id == FOOTPRINT_FIELD )
-            {
-                if( aResetOtherFields || aUpdateOtherFields )
-                    SetFootprintFieldText( libField->GetText() );
-            }
-            else if( id == DATASHEET_FIELD )
-            {
-                if( aResetOtherFields )
-                    schField->SetText( GetDatasheet() ); // alias-specific value
-                else if( aUpdateOtherFields )
-                    schField->SetText( libField->GetText() );
-            }
-            else
-            {
-                if( aResetOtherFields || aUpdateOtherFields )
-                    schField->SetText( libField->GetText() );
-            }
+        if( id == REFERENCE_FIELD && aPath )
+        {
+            if( aResetRef )
+                SetRef( aPath, m_part->GetReferenceField().GetText() );
+            else if( aUpdateRef )
+                SetRef( aPath, libField->GetText() );
+        }
+        else if( id == VALUE_FIELD )
+        {
+            SetValueFieldText( UnescapeString( libField->GetText() ) );
+        }
+        else if( id == FOOTPRINT_FIELD )
+        {
+            if( aResetOtherFields || aUpdateOtherFields )
+                SetFootprintFieldText( libField->GetText() );
+        }
+        else if( id == DATASHEET_FIELD )
+        {
+            if( aResetOtherFields )
+                schField->SetText( GetDatasheet() ); // alias-specific value
+            else if( aUpdateOtherFields )
+                schField->SetText( libField->GetText() );
+        }
+        else
+        {
+            if( aResetOtherFields || aUpdateOtherFields )
+                schField->SetText( libField->GetText() );
         }
     }
 }
@@ -1137,19 +1060,13 @@ const SCH_PIN* SCH_SYMBOL::GetPin( const VECTOR2I& aPos ) const
 
 std::vector<SCH_PIN*> SCH_SYMBOL::GetLibPins() const
 {
-    if( m_part )
-        return m_part->GetPins( m_unit, m_bodyStyle );
-
-    return std::vector<SCH_PIN*>();
+    return m_part->GetPins( m_unit, m_bodyStyle );
 }
 
 
 std::vector<SCH_PIN*> SCH_SYMBOL::GetAllLibPins() const
 {
-    if( m_part )
-        return m_part->GetAllLibPins();
-
-    return std::vector<SCH_PIN*>();
+    return m_part->GetAllLibPins();
 }
 
 
@@ -1839,11 +1756,7 @@ BOX2I SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) con
 {
     BOX2I    bBox;
 
-    if( m_part )
-        bBox = m_part->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
-    else
-        bBox = dummy()->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
-
+    bBox = m_part->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
     bBox = m_transform.TransformCoordinate( bBox );
     bBox.Normalize();
 
@@ -1921,87 +1834,64 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
                     aList.emplace_back( _( "Exclude from" ), msg );
             };
 
-    // part and alias can differ if alias is not the root
-    if( m_part )
+    if( !m_part->IsDummy() )
     {
-        if( m_part.get() != dummy() )
+        if( m_part->IsPower() )
         {
-            if( m_part->IsPower() )
-            {
-                // Don't use GetShownText(); we want to see the variable references here
-                aList.emplace_back( _( "Power symbol" ),
-                                    KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
-            }
-            else
-            {
-                aList.emplace_back( _( "Reference" ),
-                                    UnescapeString( GetRef( currentSheet ) ) );
+            // Don't use GetShownText(); we want to see the variable references here
+            aList.emplace_back( _( "Power symbol" ),
+                                KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
+        }
+        else
+        {
+            aList.emplace_back( _( "Reference" ),
+                                UnescapeString( GetRef( currentSheet ) ) );
 
-                // Don't use GetShownText(); we want to see the variable references here
-                aList.emplace_back( _( "Value" ),
-                                    KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
-                addExcludes();
-                aList.emplace_back( _( "Name" ),
-                                    KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
-            }
+            // Don't use GetShownText(); we want to see the variable references here
+            aList.emplace_back( _( "Value" ),
+                                KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
+            addExcludes();
+            aList.emplace_back( _( "Name" ),
+                                KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
+        }
 
 #if 0       // Display symbol flags, for debug only
-            aList.emplace_back( _( "flags" ), wxString::Format( "%X", GetEditFlags() ) );
+        aList.emplace_back( _( "flags" ), wxString::Format( "%X", GetEditFlags() ) );
 #endif
 
-            if( !m_part->IsRoot() )
-            {
-                msg = _( "Missing parent" );
+        if( !m_part->IsRoot() )
+        {
+            msg = _( "Missing parent" );
 
-                std::shared_ptr< LIB_SYMBOL > parent = m_part->GetParent().lock();
+            std::shared_ptr< LIB_SYMBOL > parent = m_part->GetParent().lock();
 
-                if( parent )
-                    msg = parent->GetName();
+            if( parent )
+                msg = parent->GetName();
 
-                aList.emplace_back( _( "Derived from" ), UnescapeString( msg ) );
-            }
-            else if( !m_lib_id.GetLibNickname().empty() )
-            {
-                aList.emplace_back( _( "Library" ), m_lib_id.GetLibNickname() );
-            }
-            else
-            {
-                aList.emplace_back( _( "Library" ), _( "Undefined!!!" ) );
-            }
-
-            // Display the current associated footprint, if exists.
-            // Don't use GetShownText(); we want to see the variable references here
-            msg = KIUI::EllipsizeStatusText( aFrame, GetField( FOOTPRINT_FIELD )->GetText() );
-
-            if( msg.IsEmpty() )
-                msg = _( "<Unknown>" );
-
-            aList.emplace_back( _( "Footprint" ), msg );
-
-            // Display description of the symbol, and keywords found in lib
-            aList.emplace_back( _( "Description" ) + wxT( ": " )
-                                        + GetField( DESCRIPTION_FIELD )->GetText(),
-                                _( "Keywords" ) + wxT( ": " ) + m_part->GetKeyWords() );
+            aList.emplace_back( _( "Derived from" ), UnescapeString( msg ) );
         }
-    }
-    else
-    {
-        aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
-        // Don't use GetShownText(); we want to see the variable references here
-        aList.emplace_back( _( "Value" ),
-                            KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
-        addExcludes();
-        aList.emplace_back( _( "Name" ),
-                            KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
-
-        wxString libNickname = GetLibId().GetLibNickname();
-
-        if( libNickname.empty() )
-            msg = _( "No library defined!" );
+        else if( !m_lib_id.GetLibNickname().empty() )
+        {
+            aList.emplace_back( _( "Library" ), m_lib_id.GetLibNickname() );
+        }
         else
-            msg.Printf( _( "Symbol not found in %s!" ), libNickname );
+        {
+            aList.emplace_back( _( "Library" ), _( "Undefined!!!" ) );
+        }
 
-        aList.emplace_back( _( "Library" ), msg );
+        // Display the current associated footprint, if exists.
+        // Don't use GetShownText(); we want to see the variable references here
+        msg = KIUI::EllipsizeStatusText( aFrame, GetField( FOOTPRINT_FIELD )->GetText() );
+
+        if( msg.IsEmpty() )
+            msg = _( "<Unknown>" );
+
+        aList.emplace_back( _( "Footprint" ), msg );
+
+        // Display description of the symbol, and keywords found in lib
+        aList.emplace_back( _( "Description" ) + wxT( ": " )
+                                    + GetField( DESCRIPTION_FIELD )->GetText(),
+                            _( "Keywords" ) + wxT( ": " ) + m_part->GetKeyWords() );
     }
 }
 
@@ -2221,15 +2111,10 @@ std::vector<VECTOR2I> SCH_SYMBOL::GetConnectionPoints() const
 
 SCH_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 {
-    if( m_part )
-    {
-        // Calculate the position relative to the symbol.
-        VECTOR2I libPosition = aPosition - m_pos;
+    // Calculate the position relative to the symbol.
+    VECTOR2I libPosition = aPosition - m_pos;
 
-        return m_part->LocateDrawItem( m_unit, m_bodyStyle, aType, libPosition, m_transform );
-    }
-
-    return nullptr;
+    return m_part->LocateDrawItem( m_unit, m_bodyStyle, aType, libPosition, m_transform );
 }
 
 
@@ -2460,94 +2345,91 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
     if( aBackground )
         return;
 
-    if( m_part )
+    std::vector<SCH_PIN*> libPins = m_part->GetPins( GetUnit(), GetBodyStyle() );
+
+    // Copy the source so we can re-orient and translate it.
+    LIB_SYMBOL            tempSymbol( *m_part );
+    std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( GetUnit(), GetBodyStyle() );
+
+    // Copy the pin info from the symbol to the temp pins
+    for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
-        std::vector<SCH_PIN*> libPins = m_part->GetPins( GetUnit(), GetBodyStyle() );
+        SCH_PIN* symbolPin = GetPin( libPins[ i ] );
+        SCH_PIN* tempPin = tempPins[ i ];
 
-        // Copy the source so we can re-orient and translate it.
-        LIB_SYMBOL            tempSymbol( *m_part );
-        std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( GetUnit(), GetBodyStyle() );
+        tempPin->SetName( symbolPin->GetShownName() );
+        tempPin->SetType( symbolPin->GetType() );
+        tempPin->SetShape( symbolPin->GetShape() );
 
-        // Copy the pin info from the symbol to the temp pins
-        for( unsigned i = 0; i < tempPins.size(); ++ i )
-        {
-            SCH_PIN* symbolPin = GetPin( libPins[ i ] );
-            SCH_PIN* tempPin = tempPins[ i ];
-
-            tempPin->SetName( symbolPin->GetShownName() );
-            tempPin->SetType( symbolPin->GetType() );
-            tempPin->SetShape( symbolPin->GetShape() );
-
-            if( symbolPin->IsDangling() )
-                tempPin->SetFlags( IS_DANGLING );
-        }
-
-        for( SCH_ITEM& item : tempSymbol.GetDrawItems() )
-        {
-            if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
-            {
-                // Use SCH_FIELD's text resolver
-                SCH_FIELD dummy( this, -1 );
-                dummy.SetText( text->GetText() );
-                text->SetText( dummy.GetShownText( false ) );
-            }
-        }
-
-        SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
-        TRANSFORM            savedTransform = renderSettings->m_Transform;
-        renderSettings->m_Transform = GetTransform();
-        aPlotter->StartBlock( nullptr );
-
-        for( bool local_background : { true, false } )
-        {
-            tempSymbol.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(),
-                             m_pos, GetDNP() );
-
-            for( SCH_FIELD field : m_fields )
-            {
-                field.ClearRenderCache();
-                field.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(),
-                            m_pos, GetDNP() );
-            }
-        }
-
-        if( m_DNP )
-            PlotDNP( aPlotter );
-
-        SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
-
-        // Plot attributes to a hypertext menu
-        if( aPlotOpts.m_PDFPropertyPopups )
-        {
-            std::vector<wxString> properties;
-
-            for( const SCH_FIELD& field : GetFields() )
-            {
-                wxString text_field = field.GetShownText( sheet, false);
-
-                if( text_field.IsEmpty() )
-                    continue;
-
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           field.GetName(), text_field ) );
-            }
-
-            if( !m_part->GetKeyWords().IsEmpty() )
-            {
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           _( "Keywords" ),
-                                                           m_part->GetKeyWords() ) );
-            }
-
-            aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
-        }
-
-        aPlotter->EndBlock( nullptr );
-        renderSettings->m_Transform = savedTransform;
-
-        if( !m_part->IsPower() )
-            aPlotter->Bookmark( GetBoundingBox(), GetRef( sheet ), _( "Symbols" ) );
+        if( symbolPin->IsDangling() )
+            tempPin->SetFlags( IS_DANGLING );
     }
+
+    for( SCH_ITEM& item : tempSymbol.GetDrawItems() )
+    {
+        if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
+        {
+            // Use SCH_FIELD's text resolver
+            SCH_FIELD dummy( this, -1 );
+            dummy.SetText( text->GetText() );
+            text->SetText( dummy.GetShownText( false ) );
+        }
+    }
+
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    TRANSFORM            savedTransform = renderSettings->m_Transform;
+    renderSettings->m_Transform = GetTransform();
+    aPlotter->StartBlock( nullptr );
+
+    for( bool local_background : { true, false } )
+    {
+        tempSymbol.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(),
+                         m_pos, GetDNP() );
+
+        for( SCH_FIELD field : m_fields )
+        {
+            field.ClearRenderCache();
+            field.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(),
+                        m_pos, GetDNP() );
+        }
+    }
+
+    if( m_DNP )
+        PlotDNP( aPlotter );
+
+    SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+
+    // Plot attributes to a hypertext menu
+    if( aPlotOpts.m_PDFPropertyPopups )
+    {
+        std::vector<wxString> properties;
+
+        for( const SCH_FIELD& field : GetFields() )
+        {
+            wxString text_field = field.GetShownText( sheet, false);
+
+            if( text_field.IsEmpty() )
+                continue;
+
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       field.GetName(), text_field ) );
+        }
+
+        if( !m_part->GetKeyWords().IsEmpty() )
+        {
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       _( "Keywords" ),
+                                                       m_part->GetKeyWords() ) );
+        }
+
+        aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
+    }
+
+    aPlotter->EndBlock( nullptr );
+    renderSettings->m_Transform = savedTransform;
+
+    if( !m_part->IsPower() )
+        aPlotter->Bookmark( GetBoundingBox(), GetRef( sheet ), _( "Symbols" ) );
 }
 
 
@@ -2578,33 +2460,30 @@ void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
 
 void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
 {
-    if( m_part )
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    TRANSFORM            savedTransform = renderSettings->m_Transform;
+    renderSettings->m_Transform = GetTransform();
+
+    std::vector<SCH_PIN*> libPins = m_part->GetPins( GetUnit(), GetBodyStyle() );
+
+    // Copy the source to stay const
+    LIB_SYMBOL            tempSymbol( *m_part );
+    std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( GetUnit(), GetBodyStyle() );
+    SCH_PLOT_OPTS         plotOpts;
+
+    // Copy the pin info from the symbol to the temp pins
+    for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
-        SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
-        TRANSFORM            savedTransform = renderSettings->m_Transform;
-        renderSettings->m_Transform = GetTransform();
+        SCH_PIN* symbolPin = GetPin( libPins[ i ] );
+        SCH_PIN* tempPin = tempPins[ i ];
 
-        std::vector<SCH_PIN*> libPins = m_part->GetPins( GetUnit(), GetBodyStyle() );
-
-        // Copy the source to stay const
-        LIB_SYMBOL            tempSymbol( *m_part );
-        std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( GetUnit(), GetBodyStyle() );
-        SCH_PLOT_OPTS         plotOpts;
-
-        // Copy the pin info from the symbol to the temp pins
-        for( unsigned i = 0; i < tempPins.size(); ++ i )
-        {
-            SCH_PIN* symbolPin = GetPin( libPins[ i ] );
-            SCH_PIN* tempPin = tempPins[ i ];
-
-            tempPin->SetName( symbolPin->GetShownName() );
-            tempPin->SetType( symbolPin->GetType() );
-            tempPin->SetShape( symbolPin->GetShape() );
-            tempPin->Plot( aPlotter, false, plotOpts, GetUnit(), GetBodyStyle(), m_pos, GetDNP() );
-        }
-
-        renderSettings->m_Transform = savedTransform;
+        tempPin->SetName( symbolPin->GetShownName() );
+        tempPin->SetType( symbolPin->GetType() );
+        tempPin->SetShape( symbolPin->GetShape() );
+        tempPin->Plot( aPlotter, false, plotOpts, GetUnit(), GetBodyStyle(), m_pos, GetDNP() );
     }
+
+    renderSettings->m_Transform = savedTransform;
 }
 
 
@@ -2686,7 +2565,7 @@ bool SCH_SYMBOL::IsSymbolLikePowerGlobalLabel() const
     // It is a Power symbol
     // It has only one pin type Power input
 
-    if( !GetLibSymbolRef() || !GetLibSymbolRef()->IsPower() )
+    if( !GetLibSymbolRef().IsPower() )
         return false;
 
     std::vector<SCH_PIN*> pin_list = GetAllLibPins();
@@ -2700,16 +2579,12 @@ bool SCH_SYMBOL::IsSymbolLikePowerGlobalLabel() const
 
 bool SCH_SYMBOL::IsPower() const
 {
-    wxCHECK( m_part, false );
-
     return m_part->IsPower();
 }
 
 
 bool SCH_SYMBOL::IsNormal() const
 {
-    wxCHECK( m_part, false );
-
     return m_part->IsNormal();
 }
 
@@ -2798,22 +2673,11 @@ static struct SCH_SYMBOL_DESC
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror Y" ),
                     &SCH_SYMBOL::SetMirrorY, &SCH_SYMBOL::GetMirrorY ) );
 
-        auto hasLibPart =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
-                        return symbol->GetLibSymbolRef() != nullptr;
-
-                    return false;
-                };
-
         propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin numbers" ),
-                    &SYMBOL::SetShowPinNumbers, &SYMBOL::GetShowPinNumbers ) )
-                .SetAvailableFunc( hasLibPart );
+                    &SYMBOL::SetShowPinNumbers, &SYMBOL::GetShowPinNumbers ) );
 
         propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin names" ),
-                    &SYMBOL::SetShowPinNames, &SYMBOL::GetShowPinNames ) )
-                .SetAvailableFunc( hasLibPart );
+                    &SYMBOL::SetShowPinNames, &SYMBOL::GetShowPinNames ) );
 
         const wxString groupFields = _HKI( "Fields" );
 

@@ -160,16 +160,16 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
-            if( symbol->GetLibSymbolRef() )
+            if( symbol->GetLibSymbolRef().IsDummy() )
             {
-                symbol->GetLibSymbolRef()->GetDrawItems().sort();
+                symbol->GetLibSymbolRef().GetDrawItems().sort();
 
                 auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
                 if( it == m_libSymbols.end() || !it->second )
                 {
                     m_libSymbols[symbol->GetSchSymbolLibraryName()] =
-                            new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
+                            new LIB_SYMBOL( symbol->GetLibSymbolRef() );
                 }
                 else
                 {
@@ -181,7 +181,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 
                     foundSymbol->GetDrawItems().sort();
 
-                    if( *foundSymbol != *symbol->GetLibSymbolRef() )
+                    if( *foundSymbol != symbol->GetLibSymbolRef() )
                     {
                         wxString newName;
                         std::vector<wxString> matches;
@@ -200,20 +200,20 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 
                             wxCHECK2( foundSymbol, continue );
 
-                            wxString tmp = symbol->GetLibSymbolRef()->GetName();
+                            wxString tmp = symbol->GetLibSymbolRef().GetName();
 
                             // Temporarily update the new symbol library symbol name so it
                             // doesn't fail on the name comparison below.
-                            symbol->GetLibSymbolRef()->SetName( foundSymbol->GetName() );
+                            symbol->GetLibSymbolRef().SetName( foundSymbol->GetName() );
 
-                            if( *foundSymbol == *symbol->GetLibSymbolRef() )
+                            if( *foundSymbol == symbol->GetLibSymbolRef() )
                             {
                                 newName = libSymbolName;
-                                symbol->GetLibSymbolRef()->SetName( tmp );
+                                symbol->GetLibSymbolRef().SetName( tmp );
                                 break;
                             }
 
-                            symbol->GetLibSymbolRef()->SetName( tmp );
+                            symbol->GetLibSymbolRef().SetName( tmp );
                             foundSymbol = nullptr;
                         }
 
@@ -243,11 +243,11 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
                             // Update the schematic symbol library link as this symbol does not
                             // exist in any symbol library.
                             LIB_ID newLibId( wxEmptyString, newName );
-                            LIB_SYMBOL* newLibSymbol = new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
+                            LIB_SYMBOL* newLibSymbol = new LIB_SYMBOL( symbol->GetLibSymbolRef() );
 
                             newLibSymbol->SetLibId( newLibId );
                             newLibSymbol->SetName( newName );
-                            symbol->SetLibSymbol( newLibSymbol->Flatten().release() );
+                            symbol->SetLibSymbol( newLibSymbol );
                             m_libSymbols[newName] = newLibSymbol;
                         }
                     }
@@ -815,8 +815,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                 aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
             }
 
-            // Internal library symbols are already flattened so just make a copy.
-            symbol->SetLibSymbol( new LIB_SYMBOL( *it->second ) );
+            symbol->SetLibSymbol( it->second );
             continue;
         }
 
@@ -919,7 +918,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
         }
 
         if( libSymbol.get() )   // Only change the old link if the new link exists
-            symbol->SetLibSymbol( libSymbol.release() );
+            symbol->SetLibSymbol( libSymbol.get() );
     }
 
     // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
@@ -946,9 +945,7 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
         LIB_SYMBOL* libSymbol = nullptr;
 
         if( it != m_libSymbols.end() )
-            libSymbol = new LIB_SYMBOL( *it->second );
-
-        symbol->SetLibSymbol( libSymbol );
+            symbol->SetLibSymbol( it->second );
 
         m_rtree.insert( symbol );
     }
@@ -1130,9 +1127,6 @@ SCH_PIN* SCH_SCREEN::GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol,
         if( aEndPointOnly )
         {
             pin = nullptr;
-
-            if( !candidate->GetLibSymbolRef() )
-                continue;
 
             for( SCH_PIN* test_pin : candidate->GetLibPins() )
             {
@@ -1514,8 +1508,7 @@ void SCH_SCREEN::FixLegacyPowerSymbolMismatches()
 
         // Fix pre-8.0 legacy power symbols with invisible pins
         // that have mismatched pin names and value fields
-        if( symbol->GetLibSymbolRef()
-            && symbol->GetLibSymbolRef()->IsPower()
+        if( symbol->GetLibSymbolRef().IsPower()
             && symbol->GetAllLibPins().size() > 0
             && symbol->GetAllLibPins()[0]->IsGlobalPower()
             && !symbol->GetAllLibPins()[0]->IsVisible() )

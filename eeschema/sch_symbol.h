@@ -146,21 +146,6 @@ public:
         return wxT( "SCH_SYMBOL" );
     }
 
-    /**
-     * Check to see if the library symbol is set to the dummy library symbol.
-     *
-     * When the library symbol is missing (which technically should not happen now that the
-     * library symbols are cached in the schematic file), a dummy library symbol is substituted
-     * for the missing symbol as an indicator that something is amiss.  The dummy symbol cannot
-     * be edited so a check for this symbol must be performed before attempting to edit the
-     * library symbol with the library editor or it will crash KiCad.
-     *
-     * @see dummy()
-     *
-     * @return true if the library symbol is missing or false if it is valid.
-     */
-    bool IsMissingLibSymbol() const;
-
     const std::vector<SCH_SYMBOL_INSTANCE>& GetInstances() const
     {
         return m_instanceReferences;
@@ -210,26 +195,18 @@ public:
     wxString GetSchSymbolLibraryName() const;
     bool UseLibIdLookup() const { return m_schLibSymbolName.IsEmpty(); }
 
-    std::unique_ptr< LIB_SYMBOL >& GetLibSymbolRef() { return m_part; }
-    const std::unique_ptr< LIB_SYMBOL >& GetLibSymbolRef() const { return m_part; }
+    LIB_SYMBOL&       GetLibSymbolRef() { return *m_part; }
+    const LIB_SYMBOL& GetLibSymbolRef() const { return *m_part; }
 
     /**
-     * Set this schematic symbol library symbol reference to \a aLibSymbol
+     * Set this schematic symbol library symbol to \a aLibSymbol
      *
-     * The schematic symbol object owns \a aLibSymbol and the pin list will be updated
-     * accordingly.  The #LIB_SYMBOL object can be null to clear the library symbol link
-     * as well as the pin map.  If the #LIB_SYMBOL object is not null, it must be a root
-     * symbol.  Otherwise an assertion will be raised in debug builds and the library
-     * symbol will be cleared.  The new file format will no longer require a cache
-     * library so all library symbols must be valid.
-     *
-     * @note This is the only way to publicly set the library symbol for a schematic
-     *       symbol except for the ctors that take a LIB_SYMBOL reference.  All previous
-     *       public resolvers have been deprecated.
+     * The schematic symbol object will copy and flatten \a aLibSymbol and the pin list will
+     * be updated accordingly.  The #LIB_SYMBOL object must not be null.
      *
      * @param aLibSymbol is the library symbol to associate with this schematic symbol.
      */
-    void SetLibSymbol( LIB_SYMBOL* aLibSymbol );
+    void SetLibSymbol( const LIB_SYMBOL* aLibSymbol );
 
     /**
      * @return the associated LIB_SYMBOL's description field (or wxEmptyString).

@@ -362,7 +362,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->BuildUnorderedSheetList().GetSymbols( referenceList, false, false );
+    sch->BuildUnorderedSheetList().GetSymbols( referenceList, false );
 
     if( referenceList.GetCount() > 0 )
     {

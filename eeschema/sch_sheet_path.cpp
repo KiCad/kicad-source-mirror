@@ -416,33 +416,27 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 }
 
 
-
-void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
-                                 bool aForceIncludeOrphanSymbols ) const
+void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols ) const
 {
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        AppendSymbol( aReferences, symbol, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+        AppendSymbol( aReferences, symbol, aIncludePowerSymbols );
     }
 }
 
 
 void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* aSymbol,
-                                   bool aIncludePowerSymbols,
-                                   bool aForceIncludeOrphanSymbols ) const
+                                   bool aIncludePowerSymbols ) const
 {
     // Skip pseudo-symbols, which have a reference starting with #.  This mainly
     // affects power symbols.
     if( aIncludePowerSymbols || aSymbol->GetRef( this )[0] != wxT( '#' ) )
     {
-        if( aSymbol->GetLibSymbolRef() || aForceIncludeOrphanSymbols )
-        {
-            SCH_REFERENCE schReference( aSymbol, *this );
+        SCH_REFERENCE schReference( aSymbol, *this );
 
-            schReference.SetSheetNumber( m_virtualPageNumber );
-            aReferences.AddItem( schReference );
-        }
+        schReference.SetSheetNumber( m_virtualPageNumber );
+        aReferences.AddItem( schReference );
     }
 }
 
@@ -462,14 +456,14 @@ void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefLi
                                             SCH_SYMBOL* aSymbol,
                                             bool aIncludePowerSymbols ) const
 {
+    wxCHECK( aSymbol, /* void */ );
+
     // Skip pseudo-symbols, which have a reference starting with #.  This mainly
     // affects power symbols.
     if( !aIncludePowerSymbols && aSymbol->GetRef( this )[0] == wxT( '#' ) )
         return;
 
-    LIB_SYMBOL* symbol = aSymbol->GetLibSymbolRef().get();
-
-    if( symbol && symbol->GetUnitCount() > 1 )
+    if( aSymbol->GetLibSymbolRef().GetUnitCount() > 1 )
     {
         SCH_REFERENCE schReference = SCH_REFERENCE( aSymbol, *this );
         schReference.SetSheetNumber( m_virtualPageNumber );
@@ -944,9 +938,8 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get();
 
-            if( libSymbol && libSymbol->IsPower() )
+            if( symbol->GetLibSymbolRef().IsPower() )
             {
                 SCH_REFERENCE schReference( symbol, sheet );
                 references.AddItem( schReference );
@@ -999,23 +992,21 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 }
 
 
-void SCH_SHEET_LIST::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
-                                 bool aForceIncludeOrphanSymbols ) const
+void SCH_SHEET_LIST::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
-        sheet.GetSymbols( aReferences, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+        sheet.GetSymbols( aReferences, aIncludePowerSymbols );
 }
 
 
 void SCH_SHEET_LIST::GetSymbolsWithinPath( SCH_REFERENCE_LIST&   aReferences,
                                            const SCH_SHEET_PATH& aSheetPath,
-                                           bool                  aIncludePowerSymbols,
-                                           bool                  aForceIncludeOrphanSymbols ) const
+                                           bool                  aIncludePowerSymbols ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
         if( sheet.IsContainedWithin( aSheetPath ) )
-            sheet.GetSymbols( aReferences, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+            sheet.GetSymbols( aReferences, aIncludePowerSymbols );
     }
 }
 

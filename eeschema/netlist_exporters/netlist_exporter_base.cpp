@@ -140,16 +140,8 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     if( ( ref[0] == wxChar( '#' ) ) || aSymbol->IsPower() )
         return pins;
 
-    // if( aSymbol->m_FlagControlMulti == 1 )
-    //    continue;                                      /* yes */
-    // removed because with multiple instances of one schematic (several sheets pointing to
-    // 1 screen), this will be erroneously be toggled.
-
-    if( !aSymbol->GetLibSymbolRef() )
-        return pins;
-
     // If symbol is a "multi parts per package" type
-    if( aSymbol->GetLibSymbolRef()->GetUnitCount() > 1 )
+    if( aSymbol->GetLibSymbolRef().GetUnitCount() > 1 )
     {
         // Collect all pins for this reference designator by searching the entire design for
         // other parts with the same reference designator.
@@ -191,7 +183,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     eraseDuplicatePins( pins );
 
     // record the usage of this library symbol
-    m_libParts.insert( aSymbol->GetLibSymbolRef().get() ); // rejects non-unique pointers
+    m_libParts.insert( &aSymbol->GetLibSymbolRef() ); // rejects non-unique pointers
 
     return pins;
 }

@@ -623,25 +623,23 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         if( symbol_change_info.m_LibId != symbol->GetLibId() )
             symbol->SetLibId( symbol_change_info.m_LibId );
 
-        LIB_SYMBOL*                 libSymbol = frame->GetLibSymbol( symbol_change_info.m_LibId );
-        std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
-        SCH_SCREEN*                 screen = symbol_change_info.m_Instances[0].LastScreen();
+        SCH_SCREEN* screen = symbol_change_info.m_Instances[0].LastScreen();
 
-        symbol->SetLibSymbol( flattenedSymbol.release() );
+        symbol->SetLibSymbol( frame->GetLibSymbol( symbol_change_info.m_LibId ) );
 
         if( m_resetAttributes->GetValue() )
         {
             // Fetch the attributes from the *flattened* library symbol.  They are not supported
             // in derived symbols.
-            symbol->SetExcludedFromSim( symbol->GetLibSymbolRef()->GetExcludedFromSim() );
-            symbol->SetExcludedFromBOM( symbol->GetLibSymbolRef()->GetExcludedFromBOM() );
-            symbol->SetExcludedFromBoard( symbol->GetLibSymbolRef()->GetExcludedFromBoard() );
+            symbol->SetExcludedFromSim( symbol->GetLibSymbolRef().GetExcludedFromSim() );
+            symbol->SetExcludedFromBOM( symbol->GetLibSymbolRef().GetExcludedFromBOM() );
+            symbol->SetExcludedFromBoard( symbol->GetLibSymbolRef().GetExcludedFromBoard() );
         }
 
         if( m_resetPinTextVisibility->GetValue() )
         {
-            symbol->SetShowPinNames( symbol->GetLibSymbolRef()->GetShowPinNames() );
-            symbol->SetShowPinNumbers( symbol->GetLibSymbolRef()->GetShowPinNumbers() );
+            symbol->SetShowPinNames( symbol->GetLibSymbolRef().GetShowPinNames() );
+            symbol->SetShowPinNumbers( symbol->GetLibSymbolRef().GetShowPinNumbers() );
         }
 
         bool removeExtras = m_removeExtraBox->GetValue();
@@ -660,9 +658,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                 continue;
 
             if( i < MANDATORY_FIELDS )
-                libField = symbol->GetLibSymbolRef()->GetFieldById( (int) i );
+                libField = symbol->GetLibSymbolRef().GetFieldById( (int) i );
             else
-                libField = symbol->GetLibSymbolRef()->FindField( field.GetName() );
+                libField = symbol->GetLibSymbolRef().FindField( field.GetName() );
 
             if( libField )
             {
@@ -732,7 +730,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         }
 
         std::vector<SCH_FIELD*> libFields;
-        symbol->GetLibSymbolRef()->GetFields( libFields );
+        symbol->GetLibSymbolRef().GetFields( libFields );
 
         for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
         {

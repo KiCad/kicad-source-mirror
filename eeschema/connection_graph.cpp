@@ -582,7 +582,7 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
         if( sch_pin->IsGlobalPower() )
             return PRIORITY::POWER_PIN;
         else if( !sym || sym->GetExcludedFromBoard()
-               || sym->GetLibSymbolRef()->GetReferenceField().GetText().StartsWith( '#' ) )
+                 || sym->GetLibSymbolRef().GetReferenceField().GetText().StartsWith( '#' ) )
             return PRIORITY::NONE;
         else
             return PRIORITY::PIN;

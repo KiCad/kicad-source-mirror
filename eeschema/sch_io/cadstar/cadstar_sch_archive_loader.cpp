@@ -2159,8 +2159,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
         for( auto& term : termNumMap )
         {
             wxString pinNum = term.second;
-            pinNumToLibPinMap.insert( { pinNum,
-                                        symbol->GetLibSymbolRef()->GetPin( term.second ) } );
+            pinNumToLibPinMap.insert( { pinNum, symbol->GetLibSymbolRef().GetPin( term.second ) } );
         }
 
         auto replacePinNumber =

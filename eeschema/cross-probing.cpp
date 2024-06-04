@@ -472,7 +472,7 @@ bool findSymbolsAndPins(
 
     SCH_REFERENCE_LIST references;
 
-    aSheetPath.GetSymbols( references, false, true );
+    aSheetPath.GetSymbols( references, false );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {
@@ -559,7 +559,7 @@ bool sheetContainsOnlyWantedItems(
     }
 
     SCH_REFERENCE_LIST references;
-    aSheetPath.GetSymbols( references, false, true );
+    aSheetPath.GetSymbols( references, false );
 
     if( references.GetCount() == 0 )    // Empty sheet, obviously do not contain wanted items
     {

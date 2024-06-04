@@ -175,6 +175,43 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
 }
 
 
+/**
+ * Used when a LIB_SYMBOL is not found in library to draw a dummy shape.
+ * This symbol is a 400 mils square with the text "??"
+ *
+ *   DEF DUMMY U 0 40 Y Y 1 0 N
+ *     F0 "U" 0 -350 60 H V
+ *     F1 "DUMMY" 0 350 60 H V
+ *     DRAW
+ *       T 0 0 0 150 0 0 0 ??
+ *       S -200 200 200 -200 0 1 0
+ *     ENDDRAW
+ *   ENDDEF
+ */
+LIB_SYMBOL* LIB_SYMBOL::Dummy()
+{
+    static LIB_SYMBOL* symbol;
+
+    if( !symbol )
+    {
+        symbol = new LIB_SYMBOL( wxEmptyString );
+
+        SCH_SHAPE* square = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
+
+        square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
+        square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
+        symbol->AddDrawItem( square );
+
+        SCH_TEXT* text = new SCH_TEXT( { 0, 0 }, wxT( "??" ), LAYER_DEVICE );
+
+        text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
+        symbol->AddDrawItem( text );
+    }
+
+    return symbol;
+}
+
+
 const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 {
     if( &aSymbol == this )

@@ -322,16 +322,16 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
         currentSheet.GetSymbols( references );
 
         if( aRecursive )
-            subSheets.GetSymbolsWithinPath( references, currentSheet, false, true );
+            subSheets.GetSymbolsWithinPath( references, currentSheet, false );
 
         break;
 
     case ANNOTATE_SELECTION:
         for( SCH_SYMBOL* symbol : selectedSymbols )
-            currentSheet.AppendSymbol( references, symbol, false, true );
+            currentSheet.AppendSymbol( references, symbol, false );
 
         if( aRecursive )
-            selectedSheets.GetSymbolsWithinPath( references, currentSheet, false, true );
+            selectedSheets.GetSymbolsWithinPath( references, currentSheet, false );
 
         break;
     }
@@ -502,7 +502,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
         EE_SELECTION&      selection = selTool->RequestSelection();
 
         for( SCH_SYMBOL* symbol : getInferredSymbols( selection ) )
-            GetCurrentSheet().AppendSymbol( referenceList, symbol, false, true );
+            GetCurrentSheet().AppendSymbol( referenceList, symbol, false );
 
         if( aRecursive )
         {

@@ -2221,7 +2221,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             // Don't add power symbols
-            if( !symbol->IsMissingLibSymbol() && symbol->IsPower() )
+            if( symbol->IsPower() )
                 continue;
 
             // Add all fields again in case this symbol has a new one
@@ -2290,7 +2290,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             // Don't add power symbols
-            if( !symbol->IsMissingLibSymbol() && symbol->IsPower() )
+            if( symbol->IsPower() )
                 continue;
 
             // Add all fields again in case this symbol has a new one
@@ -2399,7 +2399,7 @@ SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHE
                 subSheets.push_back( sheetPath );
                 allSheets.GetSheetsWithinPath( subSheets, sheetPath );
 
-                subSheets.GetSymbolsWithinPath( sheetRefs, sheetPath, false, false );
+                subSheets.GetSymbolsWithinPath( sheetRefs, sheetPath, false );
                 break;
             }
         }

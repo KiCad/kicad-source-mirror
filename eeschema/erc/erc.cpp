@@ -419,9 +419,9 @@ int ERC_TESTER::TestMissingUnits()
         // Reference unit
         SCH_REFERENCE& base_ref = refList.GetItem( 0 );
         SCH_SYMBOL* unit = base_ref.GetSymbol();
-        LIB_SYMBOL* libSymbol = base_ref.GetLibPart();
+        LIB_SYMBOL& libSymbol = base_ref.GetSymbol()->GetLibSymbolRef();
 
-        if( static_cast<ssize_t>( refList.GetCount() ) == libSymbol->GetUnitCount() )
+        if( static_cast<ssize_t>( refList.GetCount() ) == libSymbol.GetUnitCount() )
             continue;
 
         std::set<int> lib_units;
@@ -443,7 +443,7 @@ int ERC_TESTER::TestMissingUnits()
                             break;
                         }
 
-                        missing_pin_units += libSymbol->GetUnitDisplayName( missing_unit ) + ", " ;
+                        missing_pin_units += libSymbol.GetUnitDisplayName( missing_unit ) + ", " ;
                     }
 
                     missing_pin_units.Truncate( missing_pin_units.length() - 2 );
@@ -461,7 +461,7 @@ int ERC_TESTER::TestMissingUnits()
                     ++errors;
                 };
 
-        for( int ii = 1; ii <= libSymbol->GetUnitCount(); ++ii )
+        for( int ii = 1; ii <= libSymbol.GetUnitCount(); ++ii )
             lib_units.insert( lib_units.end(), ii );
 
         for( size_t ii = 0; ii < refList.GetCount(); ++ii )
@@ -494,7 +494,7 @@ int ERC_TESTER::TestMissingUnits()
                 }
             }
 
-            for( SCH_PIN* pin : libSymbol->GetPins( missing_unit, bodyStyle ) )
+            for( SCH_PIN* pin : libSymbol.GetPins( missing_unit, bodyStyle ) )
             {
                 switch( pin->GetType() )
                 {
@@ -996,9 +996,7 @@ int ERC_TESTER::TestLibSymbolIssues()
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            LIB_SYMBOL* libSymbolInSchematic = symbol->GetLibSymbolRef().get();
-
-            wxCHECK2( libSymbolInSchematic, continue );
+            LIB_SYMBOL& libSymbolInSchematic = symbol->GetLibSymbolRef();
 
             wxString       libName = symbol->GetLibId().GetLibNickname();
             LIB_TABLE_ROW* libTableRow = libTable->FindRow( libName, true );
@@ -1062,7 +1060,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 // We have to check for duplicate pins first as they will cause Compare() to fail.
                 std::vector<wxString> messages;
                 UNITS_PROVIDER        unitsProvider( schIUScale, EDA_UNITS::MILS );
-                CheckDuplicatePins( libSymbolInSchematic, messages, &unitsProvider );
+                CheckDuplicatePins( &libSymbolInSchematic, messages, &unitsProvider );
 
                 if( !messages.empty() )
                 {
@@ -1074,7 +1072,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
                     markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
                 }
-                else if( flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
+                else if( flattenedSymbol->Compare( libSymbolInSchematic, flags ) != 0 )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_MISMATCH );
                     ercItem->SetItems( symbol );

@@ -74,7 +74,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = []( const SELECTION& aSel )
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return !symbol->GetLibSymbolRef() || !symbol->GetLibSymbolRef()->IsPower();
+            return !symbol->GetLibSymbolRef().IsPower();
     }
 
     return false;
@@ -94,7 +94,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = []( const SELECTION& a
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->HasAlternateBodyStyle();
+            return symbol->GetLibSymbolRef().HasAlternateBodyStyle();
     }
 
     return false;
@@ -108,7 +108,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = []( const SELECTION& 
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->GetUnitCount() >= 2;
+            return symbol->GetLibSymbolRef().GetUnitCount() >= 2;
     }
 
     return false;

@@ -1628,7 +1628,7 @@ SELECTION& SYMBOL_EDIT_FRAME::GetCurrentSelection()
 
 void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 {
-    std::unique_ptr<LIB_SYMBOL> symbol = aSymbol->GetLibSymbolRef()->Flatten();
+    std::unique_ptr<LIB_SYMBOL> symbol = aSymbol->GetLibSymbolRef().Flatten();
     wxCHECK( symbol, /* void */ );
 
     // Take in account the symbol orientation and mirroring. to calculate the field

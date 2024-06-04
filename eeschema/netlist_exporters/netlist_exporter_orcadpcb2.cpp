@@ -77,8 +77,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
             std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet, true );
 
-            if( symbol->GetLibSymbolRef()
-                  && symbol->GetLibSymbolRef()->GetFPFilters().GetCount() != 0  )
+            if( symbol->GetLibSymbolRef().GetFPFilters().GetCount() != 0 )
             {
                 cmpList.push_back( SCH_REFERENCE( symbol, sheet ) );
             }

@@ -310,25 +310,15 @@ protected:
 DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
                                                     SCH_SYMBOL* aSymbol ) :
         DIALOG_SYMBOL_PROPERTIES_BASE( aParent ),
-        m_symbol( nullptr ),
-        m_part( nullptr ),
+        m_symbol( aSymbol ),
+        m_part( aSymbol->GetLibSymbolRef() ),
         m_fieldsSize( 0, 0 ),
         m_lastRequestedFieldsSize( 0, 0 ),
         m_lastRequestedPinsSize( 0, 0 ),
         m_editorShown( false ),
-        m_fields( nullptr ),
+        m_fields( new FIELDS_GRID_TABLE( this, aParent, m_fieldsGrid, m_symbol ) ),
         m_dataModel( nullptr )
 {
-    m_symbol = aSymbol;
-    m_part = m_symbol->GetLibSymbolRef().get();
-
-    // GetLibSymbolRef() now points to the cached part in the schematic, which should always be
-    // there for usual cases, but can be null when opening old schematics not storing the part
-    // so we need to handle m_part == nullptr
-    // wxASSERT( m_part );
-
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_fieldsGrid, m_symbol );
-
     // Give a bit more room for combobox editors
     m_fieldsGrid->SetDefaultRowSize( m_fieldsGrid->GetDefaultRowSize() + 4 );
     m_pinGrid->SetDefaultRowSize( m_pinGrid->GetDefaultRowSize() + 4 );
@@ -348,7 +338,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_shownColumns = m_fieldsGrid->GetShownColumns();
     }
 
-    if( m_part && m_part->HasAlternateBodyStyle() )
+    if( m_part.HasAlternateBodyStyle() )
     {
         // DeMorgan conversions are a subclass of alternate pin assignments, so don't allow
         // free-form alternate assignments as well.  (We won't know how to map the alternates
@@ -371,7 +361,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_pinGrid->SetTable( m_dataModel );
     }
 
-    if( m_part && m_part->IsPower() )
+    if( m_part.IsPower() )
         m_spiceFieldsButton->Hide();
 
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
@@ -499,7 +489,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_unitChoice->Enable( false );
     }
 
-    if( m_part && m_part->HasAlternateBodyStyle() )
+    if( m_part.HasAlternateBodyStyle() )
     {
         if( m_symbol->GetBodyStyle() > BODY_STYLE::BASE )
             m_cbAlternateSymbol->SetValue( true );
@@ -535,11 +525,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_cbExcludeFromBoard->SetValue( m_symbol->GetExcludedFromBoard() );
     m_cbDNP->SetValue( m_symbol->GetDNP() );
 
-    if( m_part )
-    {
-        m_ShowPinNumButt->SetValue( m_part->GetShowPinNumbers() );
-        m_ShowPinNameButt->SetValue( m_part->GetShowPinNames() );
-    }
+    m_ShowPinNumButt->SetValue( m_part.GetShowPinNumbers() );
+    m_ShowPinNameButt->SetValue( m_part.GetShowPinNames() );
 
     // Set the symbol's library name.
     m_tcLibraryID->SetValue( UnescapeString( m_symbol->GetLibId().Format() ) );
@@ -1282,12 +1269,12 @@ void DIALOG_SYMBOL_PROPERTIES::OnUnitChoice( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::onUpdateEditSymbol( wxUpdateUIEvent& event )
 {
-    event.Enable( m_symbol && m_symbol->GetLibSymbolRef() );
+    event.Enable( m_symbol );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::onUpdateEditLibrarySymbol( wxUpdateUIEvent& event )
 {
-    event.Enable( m_symbol && m_symbol->GetLibSymbolRef() );
+    event.Enable( m_symbol );
 }
 

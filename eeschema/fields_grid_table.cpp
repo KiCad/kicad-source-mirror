@@ -62,7 +62,7 @@ enum
 
 static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 {
-    wxCHECK( aSymbol && aSymbol->GetLibSymbolRef(), wxEmptyString );
+    wxCHECK( aSymbol, wxEmptyString );
 
     /*
      * Symbol netlist format:
@@ -81,7 +81,7 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 
     netlist << wxS( "\r" );
 
-    wxArrayString fpFilters = aSymbol->GetLibSymbolRef()->GetFPFilters();
+    wxArrayString fpFilters = aSymbol->GetLibSymbolRef().GetFPFilters();
 
     if( !fpFilters.IsEmpty() )
         netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
@@ -146,7 +146,7 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
-        m_part( aSymbol->GetLibSymbolRef().get() ),
+        m_part( &aSymbol->GetLibSymbolRef() ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( REFERENCE_FIELD ),
