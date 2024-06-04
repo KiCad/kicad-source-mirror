@@ -3844,14 +3844,14 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     const SCH_SHEET_PATH& sheet    = aSubgraph->m_sheet;
     ERC_SETTINGS&         settings = m_schematic->ErcSettings();
     bool                  ok       = true;
-    int                   pinCount = 0;
+    size_t                pinCount = 0;
     bool                  has_nc   = !!aSubgraph->m_no_connect;
 
     std::map<KICAD_T, std::vector<SCH_TEXT*>> label_map;
 
 
     auto hasPins =
-            []( const CONNECTION_SUBGRAPH* aLocSubgraph ) -> int
+            []( const CONNECTION_SUBGRAPH* aLocSubgraph ) -> size_t
             {
                 return std::count_if( aLocSubgraph->m_items.begin(), aLocSubgraph->m_items.end(),
                                       []( const SCH_ITEM* item )
@@ -3962,7 +3962,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
         for( SCH_TEXT* text : label_vec )
         {
-            int allPins = pinCount;
+            size_t allPins = pinCount;
 
             auto it = m_net_name_to_subgraphs_map.find( netName );
 
