@@ -14,8 +14,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2024-05-31 17:41-0700\n"
 "PO-Revision-Date: 2024-05-24 09:09+0000\n"
+=======
+"POT-Creation-Date: 2024-05-21 09:37-0700\n"
+"PO-Revision-Date: 2024-06-05 17:09+0000\n"
+>>>>>>> efda77eae7 (Translated using Weblate (Dutch))
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -1024,7 +1029,7 @@ msgstr "Renderopties"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Modelbegrenzingsvaken weergeven"
+msgstr "Modelbegrenzingsvakken weergeven"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
@@ -24487,8 +24492,8 @@ msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with 'Update All' button."
 msgstr ""
-"Vastgepinde pakketten worden niet meegenomen in de melding van beschikbare "
-"updates en zullen niet bijgewerkt worden met de 'Alles bijwerken'-knop."
+"Vastgepinde pakketten krijgen geen meldingen van beschikbare updates en "
+"zullen niet door de 'Alles bijwerken'-knop worden bijgewerkt."
 
 #: kicad/pcm/dialogs/panel_package.cpp:134
 msgid "Install Pending"
