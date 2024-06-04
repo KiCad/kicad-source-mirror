@@ -139,6 +139,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue12109", 8 },        // Pads fail annular width test
         { "issue14334", 2 },        // Thermal spoke to otherwise unconnected island
         { "issue16566", 6 },        // Pad_Shape vs Shape property
+        { "issue18142", 1 },        // blind/buried via to micro-via hole-to-hole
         { "reverse_via", 3 },       // Via/track ordering
         { "intersectingzones", 1 }, // zones are too close to each other
         { "fill_bad",   1 },        // zone max BBox was too small

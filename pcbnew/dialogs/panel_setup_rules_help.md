@@ -298,11 +298,18 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     (rule "Plated through-hole size"
         (constraint hole_size (min 0.2mm) (max 6.35mm))
         (condition "A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y"))
-
     (rule "Plated slot size"
         (constraint hole_size (min 0.5mm))
         (condition "A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y"))
 
+
+    # Allow blind/buried to micro-via hole-to-hole violations when it is known that
+    # the fab will mechanically drill blind/buried via holes -before- laser drilling 
+    # micro-vias.
+    (rule hole_to_hole_uvia_exclusion
+        (condition "A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'")
+        (constraint hole_to_hole)
+        (severity ignore))
 
 ### Documentation
 
