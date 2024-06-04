@@ -591,7 +591,7 @@ int ERC_TESTER::TestMissingNetclasses()
 
                             if( field->GetCanonicalName() == wxT( "Netclass" ) )
                             {
-                                wxString netclass = field->GetText();
+                                wxString netclass = field->GetShownText( &sheet, false );
 
                                 if( !netclass.IsSameAs( defaultNetclass )
                                         && settings->m_NetClasses.count( netclass ) == 0 )

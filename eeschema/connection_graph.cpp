@@ -469,10 +469,10 @@ CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem, bool returnAll ) c
 
                     if( field->GetCanonicalName() == wxT( "Netclass" ) )
                     {
-                        wxString netclass = field->GetText();
+                        wxString netclass = field->GetShownText( &m_sheet, false );
 
                         if( netclass != wxEmptyString )
-                            foundNetclasses.push_back( { field->GetText(), aItem } );
+                            foundNetclasses.push_back( { netclass, aItem } );
 
                         return returnAll;
                     }
@@ -1602,9 +1602,10 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
 
             SCH_CONNECTION dummy( item, subgraph->m_sheet );
             dummy.SetGraph( this );
-            dummy.ConfigureFromLabel( label->GetText() );
+            dummy.ConfigureFromLabel( label->GetShownText( &subgraph->m_sheet, false ) );
 
-            wxLogTrace( ConnTrace, wxS( "new bus label (%s)" ), label->GetText() );
+            wxLogTrace( ConnTrace, wxS( "new bus label (%s)" ),
+                        label->GetShownText( &subgraph->m_sheet, false ) );
 
             for( const auto& conn : dummy.Members() )
             {
@@ -2317,14 +2318,14 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
                     if( SCH_SHEET* sheet = pin->GetParent() )
                     {
-                        wxString    pinText = pin->GetText();
+                        wxString    pinText = pin->GetShownText( false );
                         SCH_SCREEN* screen  = sheet->GetScreen();
 
                         for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
                         {
                             SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
 
-                            if( label->GetText() == pinText )
+                            if( label->GetShownText( &subgraph->m_sheet, false ) == pinText )
                             {
                                 SCH_SHEET_PATH path = subgraph->m_sheet;
                                 path.push_back( sheet );

@@ -523,10 +523,11 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
+        SCH_FIELD*  field = symbol->GetField( DATASHEET_FIELD );
 
         // Use GetShownText() to resolve any text variables, but don't allow adding extra text
         // (ie: the field name)
-        datasheet = symbol->GetField( DATASHEET_FIELD )->GetShownText( false );
+        datasheet = field->GetShownText( &symbol->Schematic()->CurrentSheet(), false );
     }
 
     if( datasheet.IsEmpty() || datasheet == wxS( "~" ) )

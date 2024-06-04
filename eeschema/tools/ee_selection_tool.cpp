@@ -1033,7 +1033,7 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
         {
             SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
             SCH_CONNECTION  possibleConnection( label->Schematic()->ConnectionGraph() );
-            possibleConnection.ConfigureFromLabel( label->GetText() );
+            possibleConnection.ConfigureFromLabel( label->GetShownText( false ) );
 
             if( possibleConnection.IsBus() )
                 newEvt = EE_ACTIONS::drawBus.MakeEvent();

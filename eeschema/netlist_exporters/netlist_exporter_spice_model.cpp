@@ -97,10 +97,10 @@ void NETLIST_EXPORTER_SPICE_MODEL::readPorts( unsigned aNetlistOptions )
 
             if( SCH_CONNECTION* conn = label->Connection( &sheet ) )
             {
-                m_ports.insert( { std::string( conn->Name().ToUTF8() ),
-                                  PORT_INFO{ std::string( label->GetText().ToUTF8() ),
-                                             label->GetShape()
-                                           }
+                wxString labelText = label->GetShownText( &sheet, false );
+                m_ports.insert( {
+                                  std::string( conn->Name().ToUTF8() ),
+                                  PORT_INFO{ std::string( labelText.ToUTF8() ), label->GetShape() }
                                 } );
             }
         }
