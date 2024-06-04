@@ -111,10 +111,6 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
                                        const EDA_ANGLE& aAngle, const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( m_parent );
-    arc->SetShape( SHAPE_T::ARC );
-    arc->SetLayer( GetLayer() );
-
     /**
      * We need to perform the rotation/conversion here while still using floating point values
      * to avoid rounding errors when operating in integer space in pcbnew
@@ -124,8 +120,6 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 
     RotatePoint( end, aCenter, -aAngle );
     RotatePoint( mid, aCenter, -aAngle / 2.0 );
-
-    arc->SetArcGeometry( MapCoordinate( aStart ), MapCoordinate( mid ), MapCoordinate( end ) );
 
     // Ensure the arc can be handled by Pcbnew. Arcs with a too big radius cannot.
     // The criteria used here is radius < MAX_INT / 2.
@@ -142,6 +136,11 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
         return;
     }
 
+    std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( m_parent );
+    arc->SetShape( SHAPE_T::ARC );
+    arc->SetLayer( GetLayer() );
+
+    arc->SetArcGeometry( MapCoordinate( aStart ), MapCoordinate( mid ), MapCoordinate( end ) );
     arc->SetStroke( MapStrokeParams( aStroke ) );
 
     addItem( std::move( arc ) );
