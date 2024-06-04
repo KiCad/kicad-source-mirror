@@ -253,6 +253,10 @@ wxString PANEL_PREVIEW_3D_MODEL::formatScaleValue( double aValue )
 
 wxString PANEL_PREVIEW_3D_MODEL::formatRotationValue( double aValue )
 {
+    // Sigh.  Did we really need differentiated +/- 0.0?
+    if( aValue == -0.0 )
+        aValue = 0.0;
+
     return wxString::Format( wxT( "%.2f%s" ),
                              aValue,
                              EDA_UNIT_UTILS::GetText( EDA_UNITS::DEGREES ) );
@@ -286,9 +290,11 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
         yscale->ChangeValue( formatScaleValue( modelInfo.m_Scale.y ) );
         zscale->ChangeValue( formatScaleValue( modelInfo.m_Scale.z ) );
 
-        xrot->ChangeValue( formatRotationValue( modelInfo.m_Rotation.x ) );
-        yrot->ChangeValue( formatRotationValue( modelInfo.m_Rotation.y ) );
-        zrot->ChangeValue( formatRotationValue( modelInfo.m_Rotation.z ) );
+        // Rotation is stored in the file as postive-is-CW, but we use postive-is-CCW in the GUI
+        // to match the rest of KiCad
+        xrot->ChangeValue( formatRotationValue( -modelInfo.m_Rotation.x ) );
+        yrot->ChangeValue( formatRotationValue( -modelInfo.m_Rotation.y ) );
+        zrot->ChangeValue( formatRotationValue( -modelInfo.m_Rotation.z ) );
 
         xoff->ChangeValue( formatOffsetValue( modelInfo.m_Offset.x ) );
         yoff->ChangeValue( formatOffsetValue( modelInfo.m_Offset.y ) );
@@ -331,9 +337,11 @@ void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
         modelInfo->m_Scale.z = EDA_UNIT_UTILS::UI::DoubleValueFromString(
                 pcbIUScale, EDA_UNITS::UNSCALED, zscale->GetValue() );
 
-        modelInfo->m_Rotation.x = rotationFromString( xrot->GetValue() );
-        modelInfo->m_Rotation.y = rotationFromString( yrot->GetValue() );
-        modelInfo->m_Rotation.z = rotationFromString( zrot->GetValue() );
+        // Rotation is stored in the file as postive-is-CW, but we use postive-is-CCW in the GUI
+        // to match the rest of KiCad
+        modelInfo->m_Rotation.x = -rotationFromString( xrot->GetValue() );
+        modelInfo->m_Rotation.y = -rotationFromString( yrot->GetValue() );
+        modelInfo->m_Rotation.z = -rotationFromString( zrot->GetValue() );
 
         modelInfo->m_Offset.x = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
                                                                            xoff->GetValue() )
