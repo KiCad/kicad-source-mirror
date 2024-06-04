@@ -642,10 +642,6 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
     if( startAngle > endAngle )
         endAngle += ANGLE_360;
 
-    // Angles are relative to major axis
-    startAngle -= EDA_ANGLE( major );
-    endAngle -= EDA_ANGLE( major );
-
     if( aData.ratio == 1.0 )
     {
         double radius = major.EuclideanNorm();
@@ -658,6 +654,10 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
         }
         else
         {
+            // Angles are relative to major axis
+            startAngle -= EDA_ANGLE( major );
+            endAngle -= EDA_ANGLE( major );
+
             DL_ArcData arc( aData.cx, aData.cy, aData.cz, radius, startAngle.AsDegrees(),
                             endAngle.AsDegrees() );
             addArc( arc );
