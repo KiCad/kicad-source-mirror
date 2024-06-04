@@ -969,7 +969,7 @@ void SCH_IO_EAGLE::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     ReplaceIllegalFileNameChars( &filename );
     replace( filename.begin(), filename.end(), ' ', '_' );
 
-    wxFileName fn( m_filename );
+    wxFileName fn( m_schematic->Prj().GetProjectPath() );
     fn.SetName( filename );
     fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
