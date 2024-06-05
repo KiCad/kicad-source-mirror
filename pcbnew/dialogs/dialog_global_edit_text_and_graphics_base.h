@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,9 +47,10 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 	protected:
 		wxCheckBox* m_references;
 		wxCheckBox* m_values;
-		wxCheckBox* m_otherFields;
+		wxCheckBox* m_footprintFields;
 		wxCheckBox* m_footprintGraphics;
 		wxCheckBox* m_footprintDimensions;
+		wxCheckBox* m_otherFootprintTexts;
 		wxCheckBox* m_boardGraphics;
 		wxCheckBox* m_boardText;
 		wxCheckBox* m_boardDimensions;

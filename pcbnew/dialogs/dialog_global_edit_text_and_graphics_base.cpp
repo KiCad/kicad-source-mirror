@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,14 +31,21 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_values = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Values"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_values, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
-	m_otherFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other footprint text items"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_otherFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	m_footprintFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_footprintFields->SetToolTip( _("Footprint fields that are not the reference designator or value field") );
+
+	sbScope->Add( m_footprintFields, 0, wxALL, 5 );
 
 	m_footprintGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_footprintGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 	m_footprintDimensions = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint dimension items"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_footprintDimensions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+
+	m_otherFootprintTexts = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other footprint text items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_otherFootprintTexts->SetToolTip( _("Footprint text items not associated with a field") );
+
+	sbScope->Add( m_otherFootprintTexts, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 
 	sbScope->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
