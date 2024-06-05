@@ -649,6 +649,7 @@ public:
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
+    bool operator==( const PCB_VIA& aOther ) const;
     bool operator==( const BOARD_ITEM& aOther ) const override;
 
     void Serialize( google::protobuf::Any &aContainer ) const override;

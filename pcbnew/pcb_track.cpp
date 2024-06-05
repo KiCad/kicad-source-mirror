@@ -251,10 +251,15 @@ bool PCB_VIA::operator==( const BOARD_ITEM& aOther ) const
 
     const PCB_VIA& other = static_cast<const PCB_VIA&>( aOther );
 
-    return m_Start == other.m_Start && m_End == other.m_End && m_layer == other.m_layer &&
-           m_padStack == other.m_padStack && m_Width == other.m_Width &&
-           m_viaType == other.m_viaType &&
-           m_zoneLayerOverrides == other.m_zoneLayerOverrides;
+    return *this == other;
+}
+
+
+bool PCB_VIA::operator==( const PCB_VIA& aOther ) const
+{
+    return m_Start == aOther.m_Start && m_End == aOther.m_End && m_layer == aOther.m_layer
+           && m_padStack == aOther.m_padStack && m_Width == aOther.m_Width
+           && m_viaType == aOther.m_viaType && m_zoneLayerOverrides == aOther.m_zoneLayerOverrides;
 }
 
 
