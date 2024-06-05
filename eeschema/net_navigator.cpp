@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Rivos
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -263,6 +263,9 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 {
     wxCHECK( m_netNavigator, /* void */ );
 
+    if( !m_netNavigator->IsShown() )
+        return;
+
     size_t     nodeCnt = 0;
 
     m_netNavigator->Freeze();
@@ -457,6 +460,8 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 void SCH_EDIT_FRAME::onNetNavigatorSelChanging( wxTreeEvent& aEvent )
 {
     wxCHECK( m_netNavigator, /* void */ );
+
+    aEvent.Skip();
 }
 
 
@@ -489,6 +494,15 @@ void SCH_EDIT_FRAME::ToggleNetNavigator()
     }
     else
     {
+        NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
+
+        wxTreeItemId selection = m_netNavigator->GetSelection();
+
+        if( selection.IsOk() )
+            itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
+
+        RefreshNetNavigator( itemData );
+
         if( netNavigatorPane.IsFloating() )
         {
             cfg->m_AuiPanels.net_nav_panel_float_size  = netNavigatorPane.floating_size;

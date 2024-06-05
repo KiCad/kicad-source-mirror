@@ -117,11 +117,11 @@ public:
         if( cnt < 1e3 )
             aStream << cnt << "ns";
         else if( cnt < 1e6 )
-            aStream << cnt / 1e3 << "µs";
+            aStream << ( cnt / 1e3 ) << "µs";
         else if( cnt < 1e9 )
-            aStream << cnt / 1e6 << "ms";
+            aStream << ( cnt / 1e6 ) << "ms";
         else
-            aStream << cnt / 1e9 << "s";
+            aStream << ( cnt / 1e9 ) << "s";
 
         aStream << std::endl;
     }
@@ -154,6 +154,10 @@ public:
 
     std::string to_string()
     {
+        using DURATION = std::chrono::duration<double, std::nano>;
+
+        const auto   duration = SinceStart<DURATION>();
+        const double cnt = duration.count();
         std::string retv;
 
         if( !m_name.empty() )
@@ -161,9 +165,16 @@ public:
 
         std::stringstream time;
 
-        Show( time );
+        if( cnt < 1e3 )
+            time << cnt << "ns";
+        else if( cnt < 1e6 )
+            time << ( cnt / 1e3 ) << "µs";
+        else if( cnt < 1e9 )
+            time << ( cnt / 1e6 ) << "ms";
+        else
+            time << ( cnt / 1e9 ) << "s";
 
-        retv += time.get();
+        retv += time.str();
 
         return retv;
     }
