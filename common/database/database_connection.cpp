@@ -627,7 +627,6 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
             }
         }
 
-        m_cache->Put( aTable, cacheEntry );
         wxASSERT( result.count( aKey ) );
         std::string keyStr = std::any_cast<std::string>( result.at( aKey ) );
         cacheEntry[keyStr] = result;
