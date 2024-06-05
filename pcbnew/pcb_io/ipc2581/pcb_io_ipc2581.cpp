@@ -606,13 +606,11 @@ void PCB_IO_IPC2581::addKnockoutText( wxXmlNode* aContentNode, PCB_TEXT* aText )
 {
     SHAPE_POLY_SET finalPoly;
 
-    aText->TransformTextToPolySet( finalPoly, 0, ARC_HIGH_DEF,
-                                   ERROR_INSIDE );
+    aText->TransformTextToPolySet( finalPoly, 0, ARC_HIGH_DEF, ERROR_INSIDE );
     finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
     for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
         addContourNode( aContentNode, finalPoly, ii );
-
 }
 
 
