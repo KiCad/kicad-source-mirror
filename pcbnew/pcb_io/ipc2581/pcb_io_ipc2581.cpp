@@ -570,7 +570,20 @@ void PCB_IO_IPC2581::addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDash
 }
 
 
-void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KIFONT::METRICS& aFontMetrics )
+void PCB_IO_IPC2581::addKnockoutText( wxXmlNode* aContentNode, PCB_TEXT* aText )
+{
+    SHAPE_POLY_SET finalPoly;
+
+    aText->TransformTextToPolySet( finalPoly, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+    finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
+        addContourNode( aContentNode, finalPoly, ii );
+}
+
+
+void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
+                              const KIFONT::METRICS& aFontMetrics )
 {
     if( !aText->IsVisible() )
             return;
@@ -590,39 +603,41 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KI
 
     std::list<VECTOR2I> pts;
 
-    auto push_pts = [&]()
-    {
-        if( pts.size() < 2 )
-            return;
-
-        wxXmlNode* line_node = nullptr;
-
-        // Polylines are only allowed for more than 3 points (in version B).
-        // Otherwise, we have to use a line
-        if( pts.size() < 3 )
-        {
-            line_node = appendNode( text_node, "Line" );
-            addXY( line_node, pts.front(), "startX", "startY" );
-            addXY( line_node, pts.back(), "endX", "endY" );
-        }
-        else
-        {
-            line_node = appendNode( text_node, "Polyline" );
-            wxXmlNode* point_node = appendNode( line_node, "PolyBegin" );
-            addXY( point_node, pts.front() );
-
-            auto iter = pts.begin();
-
-            for( ++iter; iter != pts.end(); ++iter )
+    auto push_pts =
+            [&]()
             {
-                wxXmlNode* point_node = appendNode( line_node, "PolyStepSegment" );
-                addXY( point_node, *iter );
-            }
+                if( pts.size() < 2 )
+                    return;
 
-        }
-        addLineDesc( line_node, attrs.m_StrokeWidth, LINE_STYLE::SOLID );
-        pts.clear();
-    };
+                wxXmlNode* line_node = nullptr;
+
+                // Polylines are only allowed for more than 3 points (in version B).
+                // Otherwise, we have to use a line
+                if( pts.size() < 3 )
+                {
+                    line_node = appendNode( text_node, "Line" );
+                    addXY( line_node, pts.front(), "startX", "startY" );
+                    addXY( line_node, pts.back(), "endX", "endY" );
+                }
+                else
+                {
+                    line_node = appendNode( text_node, "Polyline" );
+                    wxXmlNode* point_node = appendNode( line_node, "PolyBegin" );
+                    addXY( point_node, pts.front() );
+
+                    auto iter = pts.begin();
+
+                    for( ++iter; iter != pts.end(); ++iter )
+                    {
+                        wxXmlNode* point_node = appendNode( line_node, "PolyStepSegment" );
+                        addXY( point_node, *iter );
+                    }
+
+                }
+
+                addLineDesc( line_node, attrs.m_StrokeWidth, LINE_STYLE::SOLID );
+                pts.clear();
+            };
 
     CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
@@ -676,9 +691,10 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KI
                 addXY( point_node, pts.front() );
             } );
 
-    //TODO: handle knockout text and multiline
+    //TODO: handle multiline text
 
-    font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetTextPos(), attrs, aFontMetrics );
+    font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetTextPos(), attrs,
+                aFontMetrics );
 
     if( !pts.empty() )
         push_pts();
@@ -1982,38 +1998,40 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         elements[item->GetLayer()][is_abs].push_back( item );
     }
 
-    auto add_base_node = [&]( PCB_LAYER_ID aLayer ) -> wxXmlNode*
-    {
-        wxXmlNode* parent = packageNode;
-        bool is_back = aLayer == B_SilkS || aLayer == B_Fab;
+    auto add_base_node =
+            [&]( PCB_LAYER_ID aLayer ) -> wxXmlNode*
+            {
+                wxXmlNode* parent = packageNode;
+                bool is_back = aLayer == B_SilkS || aLayer == B_Fab;
 
-        if( is_back )
-        {
-            if( !otherSideViewNode )
-                otherSideViewNode = appendNode( packageNode, "OtherSideView" );
+                if( is_back )
+                {
+                    if( !otherSideViewNode )
+                        otherSideViewNode = new wxXmlNode( wxXML_ELEMENT_NODE, "OtherSideView" );
 
-            parent = otherSideViewNode;
-        }
+                    parent = otherSideViewNode;
+                }
 
-        wxString name;
+                wxString name;
 
-        if( aLayer == F_SilkS || aLayer == B_SilkS )
-            name = "SilkScreen";
-        else if( aLayer == F_Fab || aLayer == B_Fab )
-            name = "AssemblyDrawing";
-        else
-            wxASSERT( false );
+                if( aLayer == F_SilkS || aLayer == B_SilkS )
+                    name = "SilkScreen";
+                else if( aLayer == F_Fab || aLayer == B_Fab )
+                    name = "AssemblyDrawing";
+                else
+                    wxASSERT( false );
 
-        wxXmlNode* new_node = appendNode( parent, name );
-        return new_node;
-    };
+                wxXmlNode* new_node = appendNode( parent, name );
+                return new_node;
+            };
 
-    auto add_marking_node = [&]( wxXmlNode* aNode ) -> wxXmlNode*
-    {
-        wxXmlNode* marking_node = appendNode( aNode, "Marking" );
-        addAttribute( marking_node,  "markingUsage", "NONE" );
-        return marking_node;
-    };
+    auto add_marking_node =
+            [&]( wxXmlNode* aNode ) -> wxXmlNode*
+            {
+                wxXmlNode* marking_node = appendNode( aNode, "Marking" );
+                addAttribute( marking_node,  "markingUsage", "NONE" );
+                return marking_node;
+            };
 
     std::map<PCB_LAYER_ID, wxXmlNode*> layer_nodes;
     std::map<PCB_LAYER_ID, BOX2I> layer_bbox;
@@ -2061,7 +2079,12 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                 case PCB_TEXT_T:
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-                    addText( output_node, text, text->GetFontMetrics() );
+
+                    if( text->IsKnockout() )
+                        addKnockoutText( output_node, text );
+                    else
+                        addText( output_node, text, text->GetFontMetrics() );
+
                     break;
                 }
 
