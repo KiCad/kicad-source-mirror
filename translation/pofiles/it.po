@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-31 17:41-0700\n"
-"PO-Revision-Date: 2024-04-15 19:50+0200\n"
+"PO-Revision-Date: 2024-06-05 12:08+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -23331,9 +23331,8 @@ msgid "Leave unchanged"
 msgstr "Lascia non modificato"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Mostra o nascondi %s"
+msgstr "Mostra problemi di importazione"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23801,12 +23800,10 @@ msgid "Generate Position File"
 msgstr "Genera file posizione"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
-msgstr ""
-"Opzioni valide: front, back, both. Il formato gerber supporta solo \"both\"."
+msgstr "Opzioni valide: front, back, both. Il formato gerber supporta solo \"front\" o \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -24097,7 +24094,7 @@ msgstr "Salta questa versione"
 msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
-msgstr ""
+msgstr "Ignora l'avviso di aggiornamento per la nuova versione annunciata. Ulteriori note di aggiornamento verranno visualizzate per le prossime versioni."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -24107,11 +24104,11 @@ msgstr "Ricordamelo più avanti"
 msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
-msgstr ""
+msgstr "Chiudi questa nota di aggiornamento. La nota di aggiornamento verrà mostrata di nuovo quando si riavvierà KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Avvia un browser Web per la pagina degli annunci di rilascio."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -24119,7 +24116,7 @@ msgstr "Apri pagina scaricamento"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Va alla pagina dei download appropriata alla piattaforma."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -26257,7 +26254,7 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -31861,7 +31858,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -31872,16 +31869,11 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Questo è il rapporto distanza locale applicato come percentuale tra la "
-"larghezza e l'altezza piazzola per questa impronta.\n"
-"Il valore 10 indica che la distanza orizzontale sarà pari al 10% della "
-"larghezza della piazzola, e la distanza verticale al 10% dell'altezza della "
-"piazzola.\n"
+"Questo è il rapporto distanza locale applicato come percentuale tra la larghezza e l'altezza piazzola per questa impronta.\n"
+"Il valore 10 indica che la distanza orizzontale sarà pari al 10% della larghezza della piazzola, e la distanza verticale al 10% dell'altezza della piazzola.\n"
 "Questo valore può essere superato da un valore locale della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di "
-"distanza assoluto.\n"
-"Un valore negativo indica una dimensione di apertura dalla maschera "
-"(stencil) minore rispetto alla dimensione della piazzola."
+"La distanza finale sarà data dalla somma di questo valore e il valore di distanza assoluto.\n"
+"Un valore negativo indica una dimensione di apertura dalla maschera (stencil) minore rispetto alla dimensione della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -32045,7 +32037,7 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32057,17 +32049,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Questo è il locale rapporto di distanza in percentuale alla larghezza e "
-"altezza per questa impronta.\n"
-"Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della "
-"larghezza della piazzola, e il valore di distanza verticale al "
-"10% dell'altezza della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di "
-"distanza assoluto.\n"
-"Un valore negativo indica un valore di apertura dalla maschera (stencil) "
-"minore rispetto alla dimensione della piazzola.\n"
-"Questo valore può essere scavalcato, piazzola per piazzola, dal valore di "
-"Distanza locale e Impostazioni nella scheda delle proprietà della piazzola."
+"Questo è il locale rapporto di distanza in percentuale alla larghezza e altezza della piazzola per questa impronta.\n"
+"Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della larghezza della piazzola, e il valore di distanza verticale al 10% dell'altezza della piazzola.\n"
+"La distanza finale sarà data dalla somma di questo valore e il valore di distanza assoluto.\n"
+"Un valore negativo indica un valore di apertura dalla maschera (stencil) minore rispetto alla dimensione della piazzola.\n"
+"Questo valore può essere scavalcato, piazzola per piazzola, nella scheda Distanza locale e Impostazioni delle proprietà della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
@@ -38704,9 +38690,9 @@ msgid "%s rounded corners differ."
 msgstr "%s angoli arrotondati diversi."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s angoli smussati diversi."
+msgstr "%s dimensioni angoli smussati diverse."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39328,7 +39314,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:878
 #, c-format
 msgid "Wire not done (contour %d, points %d): OCC error %d\n"
-msgstr ""
+msgstr "Filo non fatto (contorno %d, punti %d): errore OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1049
 #, c-format
@@ -39398,18 +39384,14 @@ msgid "Current Board will be closed. Continue?"
 msgstr "La scheda corrente verrà chiusa. Continuare?"
 
 #: pcbnew/files.cpp:492
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Se le zone su questa scheda vengono ri-riempite, verranno usate le "
-"impostazioni sulla distanza dal bordo rame (vedere Impostazioni scheda > "
-"Regole di progettazione > Vincoli).\n"
-"Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che "
-"usavano lo spessore linea del bordo scheda sullo strato Edge Cuts."
+"Se le zone su questa scheda vengono ri-riempite, verranno usate le impostazioni sulla distanza dal bordo rame (vedere Impostazioni scheda > Regole di progettazione > Vincoli).\n"
+"Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che usavano lo spessore linea del bordo scheda sullo strato Edge Cuts."
 
 #: pcbnew/files.cpp:538
 #, c-format
@@ -40054,9 +40036,8 @@ msgstr "Regola"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Seleziona un parametro da regolare"
+msgstr "Seleziona prima una pista da regolare."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -41356,29 +41337,24 @@ msgid "Loading dimension drawings..."
 msgstr "Caricamento disegni quote..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione angolare (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione datum (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione baseline (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione lineare (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione radiale (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -44348,7 +44324,7 @@ msgstr "Crea dalla selezione"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Il poligono risultante verrebbe vuoto"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -46699,14 +46675,12 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Mostra una finestra di gestione per gli oggetti generatori"
 
 #: pcbnew/tools/pcb_actions.cpp:2434
-#, fuzzy
 msgid "Length Tuning Settings..."
-msgstr "Modelli di regolazione lunghezze"
+msgstr "Impostazioni regolazione lunghezze..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Mostra la finestra delle proprietà dell'elemento"
+msgstr "Mostra la finestra delle proprietà della regolazione lunghezze"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
@@ -47948,13 +47922,3 @@ msgstr "Simbolo schema di KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Foglo di disegno KiCad"
-
-#~ msgid "Unable to create the footprint viewer frame"
-#~ msgstr "Impossibile creare la finestra di visualizzazione impronta"
-
-#~ msgid "Discard New Sheet"
-#~ msgstr "Abbandona il nuovo foglio"
-
-#, c-format
-#~ msgid "Cannot find component with ref '%s' in netlist."
-#~ msgstr "Impossibile trovare il componente con rif \"%s\" nella netlist."
