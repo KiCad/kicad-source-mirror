@@ -291,7 +291,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 }
             }
 
-            if( boardItem->Type() == PCB_GROUP_T )
+            if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
                 addedGroup = static_cast<PCB_GROUP*>( boardItem );
 
             if( autofillZones && boardItem->Type() != PCB_MARKER_T )
@@ -351,24 +351,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_MARKER_T:           // a marker used to show something
             case PCB_ZONE_T:
             case PCB_FOOTPRINT_T:
-                if( view )
-                    view->Remove( boardItem );
-
-                if( !( changeFlags & CHT_DONE ) )
-                {
-                    if( parentFP )
-                    {
-                        parentFP->Remove( boardItem );
-                    }
-                    else
-                    {
-                        board->Remove( boardItem, REMOVE_MODE::BULK );
-                        bulkRemovedItems.push_back( boardItem );
-                    }
-                }
-
-                break;
-
             case PCB_GROUP_T:
                 if( view )
                     view->Remove( boardItem );

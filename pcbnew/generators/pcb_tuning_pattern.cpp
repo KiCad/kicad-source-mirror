@@ -1454,17 +1454,16 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
 
         for( BOARD_ITEM* item : routerAddedItems )
         {
+            aCommit->Add( item );
+
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
             {
                 if( bounds.PointInside( track->GetStart(), epsilon )
                     && bounds.PointInside( track->GetEnd(), epsilon ) )
                 {
-                    AddItem( item );
                     aCommit->Stage( item, CHT_GROUP );
                 }
             }
-
-            aCommit->Add( item );
         }
     }
 
