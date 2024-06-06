@@ -176,7 +176,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         m_schSettings( parent->Schematic().Settings() )
 {
     // Get all symbols from the list of schematic sheets
-    m_parent->Schematic().GetSheets().GetSymbols( m_symbolsList, false );
+    m_parent->Schematic().GetUnorderedSheets().GetSymbols( m_symbolsList, false );
 
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_bRefreshPreview->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
@@ -2211,7 +2211,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
                                                   std::vector<SCH_ITEM*>& aSchItem )
 {
-    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetUnorderedSheets();
     SCH_REFERENCE_LIST allRefs;
 
     allSheets.GetSymbols( allRefs );
@@ -2282,7 +2282,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch,
                                                     std::vector<SCH_ITEM*>& aSchItem )
 {
-    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetUnorderedSheets();
     SCH_REFERENCE_LIST allRefs;
 
     allSheets.GetSymbols( allRefs );
@@ -2363,7 +2363,7 @@ SCH_REFERENCE_LIST
 DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL*         aSymbol,
                                                  SCH_REFERENCE_LIST& aCachedRefs )
 {
-    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetUnorderedSheets();
     SCH_REFERENCE_LIST symbolRefs;
 
     for( size_t i = 0; i < aCachedRefs.GetCount(); i++ )
@@ -2383,7 +2383,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL*         aSymbol,
 
 SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHEET& aSheet )
 {
-    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetUnorderedSheets();
     SCH_REFERENCE_LIST sheetRefs;
 
     // We need to operate on all instances of the sheet
