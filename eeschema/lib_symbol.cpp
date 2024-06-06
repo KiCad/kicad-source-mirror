@@ -641,6 +641,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetExcludedFromBoard( parent->GetExcludedFromBoard() );
 
         retv->UpdateFieldOrdinals();
+        retv->m_parent.reset();
     }
     else
     {
