@@ -136,12 +136,9 @@ extern void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMes
 
 int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 {
-    SCH_SCREEN* screen;
-    int         err_count = 0;
+    int err_count = 0;
 
-    SCH_SCREENS screenList( m_schematic->Root() );
-
-    for( screen = screenList.GetFirst(); screen != nullptr; screen = screenList.GetNext() )
+    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
     {
         std::vector<SCH_SHEET*> list;
 
@@ -202,7 +199,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock() );
     }
 
-    for( SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
@@ -305,13 +302,11 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
 int ERC_TESTER::TestConflictingBusAliases()
 {
-    wxString    msg;
-    int         err_count = 0;
+    wxString                                msg;
+    int                                     err_count = 0;
+    std::vector<std::shared_ptr<BUS_ALIAS>> aliases;
 
-    SCH_SCREENS screens( m_schematic->Root() );
-    std::vector< std::shared_ptr<BUS_ALIAS> > aliases;
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
     {
         const auto& screen_aliases = screen->GetBusAliases();
 
@@ -352,13 +347,9 @@ int ERC_TESTER::TestConflictingBusAliases()
 
 int ERC_TESTER::TestMultiunitFootprints()
 {
-    SCH_SHEET_LIST sheets = m_schematic->GetSheets();
-
     int errors = 0;
-    SCH_MULTI_UNIT_REFERENCE_MAP refMap;
-    sheets.GetMultiUnitSymbols( refMap, true );
 
-    for( std::pair<const wxString, SCH_REFERENCE_LIST>& symbol : refMap )
+    for( std::pair<const wxString, SCH_REFERENCE_LIST>& symbol : m_refMap )
     {
         SCH_REFERENCE_LIST& refList = symbol.second;
 
@@ -417,14 +408,9 @@ int ERC_TESTER::TestMultiunitFootprints()
 
 int ERC_TESTER::TestMissingUnits()
 {
-    ERC_SETTINGS&  settings = m_schematic->ErcSettings();
-    SCH_SHEET_LIST sheets = m_schematic->GetSheets();
-
     int errors = 0;
-    SCH_MULTI_UNIT_REFERENCE_MAP refMap;
-    sheets.GetMultiUnitSymbols( refMap, true );
 
-    for( std::pair<const wxString, SCH_REFERENCE_LIST>& symbol : refMap )
+    for( std::pair<const wxString, SCH_REFERENCE_LIST>& symbol : m_refMap )
     {
         SCH_REFERENCE_LIST& refList = symbol.second;
 
@@ -442,38 +428,38 @@ int ERC_TESTER::TestMissingUnits()
         std::set<int> instance_units;
         std::set<int> missing_units;
 
-        auto report_missing = [&]( std::set<int>& aMissingUnits, wxString aErrorMsg,
-                                   int aErrorCode )
-        {
-            wxString msg;
-            wxString missing_pin_units = wxS( "[ " );
-            int ii = 0;
-
-            for( int missing_unit : aMissingUnits )
-            {
-                if( ii++ == 3 )
+        auto report_missing =
+                [&]( std::set<int>& aMissingUnits, wxString aErrorMsg, int aErrorCode )
                 {
-                    missing_pin_units += wxS( "....." );
-                    break;
-                }
+                    wxString msg;
+                    wxString missing_pin_units = wxS( "[ " );
+                    int ii = 0;
 
-                missing_pin_units += libSymbol->GetUnitDisplayName( missing_unit ) + ", " ;
-            }
+                    for( int missing_unit : aMissingUnits )
+                    {
+                        if( ii++ == 3 )
+                        {
+                            missing_pin_units += wxS( "....." );
+                            break;
+                        }
 
-            missing_pin_units.Truncate( missing_pin_units.length() - 2 );
-            missing_pin_units += wxS( " ]" );
+                        missing_pin_units += libSymbol->GetUnitDisplayName( missing_unit ) + ", " ;
+                    }
 
-            msg.Printf( aErrorMsg, symbol.first, missing_pin_units );
+                    missing_pin_units.Truncate( missing_pin_units.length() - 2 );
+                    missing_pin_units += wxS( " ]" );
 
-            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aErrorCode );
-            ercItem->SetErrorMessage( msg );
-            ercItem->SetItems( unit );
+                    msg.Printf( aErrorMsg, symbol.first, missing_pin_units );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, unit->GetPosition() );
-            base_ref.GetSheetPath().LastScreen()->Append( marker );
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aErrorCode );
+                    ercItem->SetErrorMessage( msg );
+                    ercItem->SetItems( unit );
 
-            ++errors;
-        };
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, unit->GetPosition() );
+                    base_ref.GetSheetPath().LastScreen()->Append( marker );
+
+                    ++errors;
+                };
 
         for( int ii = 1; ii <= libSymbol->GetUnitCount(); ++ii )
             lib_units.insert( lib_units.end(), ii );
@@ -485,7 +471,7 @@ int ERC_TESTER::TestMissingUnits()
                              instance_units.begin(), instance_units.end(),
                              std::inserter( missing_units, missing_units.begin() ) );
 
-        if( !missing_units.empty() && settings.IsTestEnabled( ERCE_MISSING_UNIT ) )
+        if( !missing_units.empty() && m_settings.IsTestEnabled( ERCE_MISSING_UNIT ) )
         {
             report_missing( missing_units, _( "Symbol %s has unplaced units %s" ),
                             ERCE_MISSING_UNIT );
@@ -530,21 +516,21 @@ int ERC_TESTER::TestMissingUnits()
             }
         }
 
-        if( !missing_power.empty() && settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN ) )
+        if( !missing_power.empty() && m_settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN ) )
         {
             report_missing( missing_power,
                             _( "Symbol %s has input power pins in units %s that are not placed." ),
                             ERCE_MISSING_POWER_INPUT_PIN );
         }
 
-        if( !missing_input.empty() && settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN ) )
+        if( !missing_input.empty() && m_settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN ) )
         {
            report_missing( missing_input,
                            _( "Symbol %s has input pins in units %s that are not placed." ),
                            ERCE_MISSING_INPUT_PIN );
         }
 
-        if( !missing_bidi.empty() && settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
+        if( !missing_bidi.empty() && m_settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
         {
             report_missing( missing_bidi,
                             _( "Symbol %s has bidirectional pins in units %s that are not "
@@ -578,7 +564,7 @@ int ERC_TESTER::TestMissingNetclasses()
                 sheet.LastScreen()->Append( marker );
             };
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
@@ -614,7 +600,7 @@ int ERC_TESTER::TestFourWayJunction()
 {
     int err_count = 0;
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
         std::map<VECTOR2I, std::vector<SCH_ITEM*>> connMap;
         SCH_SCREEN* screen = sheet.LastScreen();
@@ -668,7 +654,7 @@ int ERC_TESTER::TestNoConnectPins()
 {
     int err_count = 0;
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
         std::map<VECTOR2I, std::vector<SCH_ITEM*>> pinMap;
 
@@ -735,12 +721,9 @@ int ERC_TESTER::TestNoConnectPins()
 
 int ERC_TESTER::TestPinToPin()
 {
-    ERC_SETTINGS&  settings = m_schematic->ErcSettings();
-    const NET_MAP& nets     = m_schematic->ConnectionGraph()->GetNetMap();
-
     int errors = 0;
 
-    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
         std::vector<ERC_SCH_PIN_CONTEXT>           pins;
         std::unordered_map<EDA_ITEM*, SCH_SCREEN*> pinToScreenMap;
@@ -836,9 +819,9 @@ int ERC_TESTER::TestPinToPin()
                 else
                     hasDriver |= DrivingPinTypes.contains( testType );
 
-                PIN_ERROR erc = settings.GetPinMapValue( refType, testType );
+                PIN_ERROR erc = m_settings.GetPinMapValue( refType, testType );
 
-                if( erc != PIN_ERROR::OK && settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) )
+                if( erc != PIN_ERROR::OK && m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem =
                             ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING :
@@ -863,7 +846,7 @@ int ERC_TESTER::TestPinToPin()
         {
             int err_code = ispowerNet ? ERCE_POWERPIN_NOT_DRIVEN : ERCE_PIN_NOT_DRIVEN;
 
-            if( settings.IsTestEnabled( err_code ) )
+            if( m_settings.IsTestEnabled( err_code ) )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
 
@@ -884,13 +867,11 @@ int ERC_TESTER::TestPinToPin()
 
 int ERC_TESTER::TestMultUnitPinConflicts()
 {
-    const NET_MAP& nets = m_schematic->ConnectionGraph()->GetNetMap();
-
     int errors = 0;
 
     std::unordered_map<wxString, std::pair<wxString, SCH_PIN*>> pinToNetMap;
 
-    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
         const wxString& netName = net.first.Name;
 
@@ -943,13 +924,11 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 
 int ERC_TESTER::TestSimilarLabels()
 {
-    const NET_MAP& nets = m_schematic->ConnectionGraph()->GetNetMap();
-
     int errors = 0;
 
     std::unordered_map<wxString, std::pair<SCH_LABEL_BASE*, SCH_SHEET_PATH>> labelMap;
 
-    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
@@ -1006,14 +985,11 @@ int ERC_TESTER::TestLibSymbolIssues()
 {
     wxCHECK( m_schematic, 0 );
 
-    ERC_SETTINGS&     settings = m_schematic->ErcSettings();
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     wxString          msg;
     int               err_count = 0;
 
-    SCH_SCREENS screens( m_schematic->Root() );
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
     {
         std::vector<SCH_MARKER*> markers;
 
@@ -1029,7 +1005,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             if( !libTableRow )
             {
-                if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+                if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                     ercItem->SetItems( symbol );
@@ -1044,7 +1020,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             }
             else if( !libTable->HasLibrary( libName, true ) )
             {
-                if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+                if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                     ercItem->SetItems( symbol );
@@ -1063,7 +1039,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             if( libSymbol == nullptr )
             {
-                if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+                if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                     ercItem->SetItems( symbol );
@@ -1081,7 +1057,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
             constexpr int flags = SCH_ITEM::COMPARE_FLAGS::EQUALITY | SCH_ITEM::COMPARE_FLAGS::ERC;
 
-            if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
+            if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
             {
                 // We have to check for duplicate pins first as they will cause Compare() to fail.
                 std::vector<wxString> messages;
@@ -1134,7 +1110,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
 
     TESTER_FN_PTR linkTester = (TESTER_FN_PTR) aCvPcb->IfaceOrAddress( KIFACE_TEST_FOOTPRINT_LINK );
 
-    for( SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    for( SCH_SHEET_PATH& sheet : m_sheetList )
     {
         std::vector<SCH_MARKER*> markers;
 
@@ -1206,11 +1182,9 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
 int ERC_TESTER::TestOffGridEndpoints()
 {
     const int gridSize = m_schematic->Settings().m_ConnectionGridSize;
+    int       err_count = 0;
 
-    SCH_SCREENS screens( m_schematic->Root() );
-    int         err_count = 0;
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
     {
         std::vector<SCH_MARKER*> markers;
 
@@ -1272,11 +1246,10 @@ int ERC_TESTER::TestSimModelIssues()
 {
     wxString           msg;
     WX_STRING_REPORTER reporter( &msg );
-    SCH_SHEET_LIST     sheets = m_schematic->GetSheets();
     int                err_count = 0;
     SIM_LIB_MGR        libMgr( &m_schematic->Prj() );
 
-    for( SCH_SHEET_PATH& sheet : sheets )
+    for( SCH_SHEET_PATH& sheet : m_sheetList )
     {
         if( sheet.GetExcludedFromSim() )
             continue;
@@ -1324,17 +1297,14 @@ int ERC_TESTER::TestSimModelIssues()
 
 int ERC_TESTER::RunRuleAreaERC()
 {
-    int           numErrors = 0;
-    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+    int numErrors = 0;
 
-    if( !settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
+    if( !m_settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
         return 0;
 
     std::map<SCH_SCREEN*, std::vector<SCH_RULE_AREA*>> allScreenRuleAreas;
 
-    SCH_SCREENS screens( m_schematic->Root() );
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
     {
         for( SCH_ITEM* item : screen->Items().OfType( SCH_RULE_AREA_T ) )
         {
@@ -1342,7 +1312,7 @@ int ERC_TESTER::RunRuleAreaERC()
         }
     }
 
-    if( settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
+    if( m_settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
         numErrors += TestRuleAreaOverlappingRuleAreasERC( allScreenRuleAreas );
 
     return numErrors;
@@ -1365,6 +1335,7 @@ int ERC_TESTER::TestRuleAreaOverlappingRuleAreasERC(
             for( std::size_t j = i + 1; j < ruleAreas.size(); ++j )
             {
                 SHAPE_POLY_SET polySecond = ruleAreas[j]->GetPolyShape();
+
                 if( polyFirst.Collide( &polySecond ) )
                 {
                     numErrors++;
