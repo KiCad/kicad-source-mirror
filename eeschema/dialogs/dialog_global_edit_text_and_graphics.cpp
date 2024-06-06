@@ -580,7 +580,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     SCH_COMMIT     commit( m_parent );
 
     // Go through sheets
-    for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().GetSheets() )
+    for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().GetUnorderedSheets() )
     {
         SCH_SCREEN* screen = sheetPath.LastScreen();
 

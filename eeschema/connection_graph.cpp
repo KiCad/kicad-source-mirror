@@ -1367,11 +1367,9 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
     // Recache all bus aliases for later use
     wxCHECK_RET( m_schematic, wxS( "Connection graph cannot be built without schematic pointer" ) );
 
-    SCH_SHEET_LIST all_sheets = m_schematic->GetSheets();
-
-    for( unsigned i = 0; i < all_sheets.size(); i++ )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->GetUnorderedSheets() )
     {
-        for( const std::shared_ptr<BUS_ALIAS>& alias : all_sheets[i].LastScreen()->GetBusAliases() )
+        for( const std::shared_ptr<BUS_ALIAS>& alias : sheet.LastScreen()->GetBusAliases() )
             m_bus_alias_cache[ alias->GetName() ] = alias;
     }
 
@@ -2086,11 +2084,9 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     // Recache all bus aliases for later use
     wxCHECK_RET( m_schematic, wxT( "Connection graph cannot be built without schematic pointer" ) );
 
-    SCH_SHEET_LIST all_sheets = m_schematic->GetSheets();
-
-    for( unsigned i = 0; i < all_sheets.size(); i++ )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->GetUnorderedSheets() )
     {
-        for( const std::shared_ptr<BUS_ALIAS>& alias : all_sheets[i].LastScreen()->GetBusAliases() )
+        for( const std::shared_ptr<BUS_ALIAS>& alias : sheet.LastScreen()->GetBusAliases() )
             m_bus_alias_cache[ alias->GetName() ] = alias;
     }
 

@@ -284,14 +284,12 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
     wxCHECK( frame, /* void */ );
 
-    SCH_SHEET_LIST  hierarchy = frame->Schematic().GetSheets();
-
     // Load non-mandatory fields from all matching symbols and their library symbols
     std::vector<SCH_FIELD*> fields;
     std::vector<SCH_FIELD*> libFields;
     std::set<wxString>      fieldNames;
 
-    for( SCH_SHEET_PATH& instance : hierarchy )
+    for( SCH_SHEET_PATH& instance : frame->Schematic().GetUnorderedSheets() )
     {
         SCH_SCREEN* screen = instance.LastScreen();
 
@@ -798,7 +796,7 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol,
 
     wxCHECK( parent, msg );
 
-    SCH_SHEET_LIST sheets = parent->Schematic().GetSheets();
+    SCH_SHEET_LIST sheets = parent->Schematic().GetUnorderedSheets();
 
     for( const SCH_SYMBOL_INSTANCE& instance : aSymbol.GetInstances() )
     {

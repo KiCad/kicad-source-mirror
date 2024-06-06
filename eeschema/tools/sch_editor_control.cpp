@@ -2627,7 +2627,7 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
     // Symbol IDs are the most important, so give them the first crack at "claiming" a
     // particular KIID.
 
-    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetUnorderedSheets() )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
@@ -2640,7 +2640,7 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetUnorderedSheets() )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 

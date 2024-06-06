@@ -290,18 +290,16 @@ void ERC_SETTINGS::ResetPinMap()
 
 void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER* )> aVisitor ) const
 {
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-
     std::set<SCH_SCREEN*> seenScreens;
 
-    for( unsigned i = 0; i < sheetList.size(); i++ )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->GetUnorderedSheets() )
     {
-        bool firstTime = seenScreens.count( sheetList[i].LastScreen() ) == 0;
+        bool firstTime = seenScreens.count( sheet.LastScreen() ) == 0;
 
         if( firstTime )
-            seenScreens.insert( sheetList[i].LastScreen() );
+            seenScreens.insert( sheet.LastScreen() );
 
-        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
 
@@ -314,7 +312,7 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER*
             // Only show sheet-specific markers on the owning sheet
             if( ercItem->IsSheetSpecific() )
             {
-                if( ercItem->GetSpecificSheetPath() != sheetList[i] )
+                if( ercItem->GetSpecificSheetPath() != sheet )
                     continue;
             }
 
