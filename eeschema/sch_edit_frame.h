@@ -866,7 +866,8 @@ public:
     void RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 
     void MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
-                               const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
+                               const NET_NAVIGATOR_ITEM_DATA* aSelection,
+                               bool aSingleSheetSchematic );
 
     void SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 

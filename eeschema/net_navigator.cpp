@@ -171,7 +171,8 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
 
 
 void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
-                                           const NET_NAVIGATOR_ITEM_DATA* aSelection )
+                                           const NET_NAVIGATOR_ITEM_DATA* aSelection,
+                                           bool aSingleSheetSchematic )
 {
     wxCHECK( !aNetName.IsEmpty(), /* void */ );
     wxCHECK( m_schematic, /* void */ );
@@ -206,7 +207,7 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
             m_netNavigator->SelectItem( sheetId );
 
         // If there is only one sheet in the schematic, always expand the sheet tree.
-        if( Schematic().GetSheets().size() == 1 )
+        if( aSingleSheetSchematic )
             expandId = sheetId;
 
         for( const SCH_ITEM* item : subGraph->GetItems() )
@@ -243,6 +244,8 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     if( m_netNavigator->IsEmpty() && m_highlightedConn.IsEmpty() )
         return;
 
+    bool   singleSheetSchematic = m_schematic->GetUnorderedSheets().size() == 1;
+
     if( !m_netNavigator->IsEmpty() && m_highlightedConn.IsEmpty() )
     {
         m_netNavigator->DeleteAllItems();
@@ -259,7 +262,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
             wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
-            MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection );
+            MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, singleSheetSchematic );
         }
         else
         {
@@ -273,14 +276,14 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
             m_netNavigator->DeleteAllItems();
             wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
-            MakeNetNavigatorNode( m_highlightedConn, rootId, itemData );
+            MakeNetNavigatorNode( m_highlightedConn, rootId, itemData, singleSheetSchematic );
         }
     }
     else
     {
         wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
-        MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection );
+        MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, singleSheetSchematic );
     }
 }
 

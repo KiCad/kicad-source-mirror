@@ -740,11 +740,10 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
             }
             else
             {
-                SCH_SHEET_LIST     sheets = schematic->GetSheets();
                 SCH_REFERENCE_LIST refs;
                 SCH_SYMBOL*        refSymbol = nullptr;
 
-                sheets.GetSymbols( refs );
+                schematic->GetUnorderedSheets().GetSymbols( refs );
 
                 for( size_t jj = 0; jj < refs.GetCount(); jj++ )
                 {

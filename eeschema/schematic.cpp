@@ -72,7 +72,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
                 int      unit = symbol->GetUnit();
                 LIB_ID   libId = symbol->GetLibId();
 
-                for( SCH_SHEET_PATH& sheet : GetSheets() )
+                for( SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
                 {
                     std::vector<SCH_SYMBOL*> otherUnits;
 
@@ -314,7 +314,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     for( auto it = settings.m_ErcExclusions.begin(); it != settings.m_ErcExclusions.end(); )
     {
-        SCH_MARKER* testMarker = SCH_MARKER::Deserialize( this, *it );
+        SCH_MARKER* testMarker = SCH_MARKER::Deserialize( sheetList, *it );
 
         if( testMarker->IsLegacyMarker() )
         {
@@ -361,7 +361,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     for( const wxString& serialized : settings.m_ErcExclusions )
     {
-        SCH_MARKER* marker = SCH_MARKER::Deserialize( this, serialized );
+        SCH_MARKER* marker = SCH_MARKER::Deserialize( sheetList, serialized );
 
         if( marker )
         {
@@ -378,7 +378,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
 std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) const
 {
-    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
     {
         for( const std::shared_ptr<BUS_ALIAS>& alias : sheet.LastScreen()->GetBusAliases() )
         {
@@ -412,11 +412,10 @@ std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 
 bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
 {
-    SCH_SHEET_LIST sheetList = GetSheets();
     wxString       remainder;
     wxString       ref = token->BeforeFirst( ':', &remainder );
     SCH_SHEET_PATH sheetPath;
-    SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &sheetPath );
+    SCH_ITEM*      refItem = GetItem( KIID( ref ), &sheetPath );
 
     if( refItem && refItem->Type() == SCH_SYMBOL_T )
     {
@@ -449,7 +448,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetNamesMap() const
 {
     std::map<int, wxString> namesMap;
 
-    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
     {
         if( sheet.size() == 1 )
             namesMap[sheet.GetVirtualPageNumber()] = _( "<root sheet>" );
@@ -465,7 +464,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetPagesMap() const
 {
     std::map<int, wxString> pagesMap;
 
-    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
         pagesMap[sheet.GetVirtualPageNumber()] = sheet.GetPageNumber();
 
     return pagesMap;
@@ -509,12 +508,11 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
 
             if( isCrossRef )
             {
-                SCH_SHEET_LIST     sheetList = GetSheets();
                 wxString           remainder;
                 wxString           ref = token.BeforeFirst( ':', &remainder );
                 SCH_REFERENCE_LIST references;
 
-                sheetList.GetSymbols( references );
+                GetUnorderedSheets().GetSymbols( references );
 
                 for( size_t jj = 0; jj < references.GetCount(); jj++ )
                 {
@@ -565,12 +563,11 @@ wxString SCHEMATIC::ConvertKIIDsToRefs( const wxString& aSource ) const
 
             if( isCrossRef )
             {
-                SCH_SHEET_LIST sheetList = GetSheets();
-                wxString       remainder;
-                wxString       ref = token.BeforeFirst( ':', &remainder );
+                wxString remainder;
+                wxString ref = token.BeforeFirst( ':', &remainder );
 
                 SCH_SHEET_PATH refSheetPath;
-                SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &refSheetPath );
+                SCH_ITEM* refItem = GetItem( KIID( ref ), &refSheetPath );
 
                 if( refItem && refItem->Type() == SCH_SYMBOL_T )
                 {
@@ -739,10 +736,10 @@ wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
 
 void SCHEMATIC::FixupJunctions()
 {
-    for( const SCH_SHEET_PATH& sheet : GetSheets() )
-    {
-        SCH_SCREEN* screen = sheet.LastScreen();
+    SCH_SCREENS screens( Root() );
 
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
         std::deque<EDA_ITEM*> allItems;
 
         for( auto item : screen->Items() )
@@ -836,7 +833,7 @@ void SCHEMATIC::RecordERCExclusions()
 
 void SCHEMATIC::ResolveERCExclusionsPostUpdate()
 {
-    SCH_SHEET_LIST sheetList = GetSheets();
+    SCH_SHEET_LIST sheetList = GetUnorderedSheets();
 
     for( SCH_MARKER* marker : ResolveERCExclusions() )
     {

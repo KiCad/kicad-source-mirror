@@ -201,7 +201,7 @@ bool SCH_NAVIGATE_TOOL::CanGoPrevious()
 bool SCH_NAVIGATE_TOOL::CanGoNext()
 {
     return m_frame->GetCurrentSheet().GetVirtualPageNumber()
-           < (int) m_frame->Schematic().GetSheets().size();
+           < (int) m_frame->Schematic().GetUnorderedSheets().size();
 }
 
 

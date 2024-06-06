@@ -1075,7 +1075,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         // File doesn't exist yet; true if we just imported something
         updateFileHistory = true;
     }
-    else if( !Schematic().GetSheets().IsModified() )
+    else if( !IsContentModified() )
     {
         return true;
     }

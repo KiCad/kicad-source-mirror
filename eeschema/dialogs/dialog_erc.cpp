@@ -513,7 +513,7 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
 {
     const KIID&     itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
     SCH_SHEET_PATH  sheet;
-    SCH_ITEM*       item = m_parent->Schematic().GetSheets().GetItem( itemID, &sheet );
+    SCH_ITEM*       item = m_parent->Schematic().GetItem( itemID, &sheet );
 
     if( m_centerMarkerOnIdle )
     {

@@ -54,7 +54,7 @@ public:
     void SwapData( SCH_ITEM* aItem ) override;
 
     wxString Serialize() const;
-    static SCH_MARKER* Deserialize( SCHEMATIC* schematic, const wxString& data );
+    static SCH_MARKER* Deserialize( const SCH_SHEET_LIST& aSheetList, const wxString& data );
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

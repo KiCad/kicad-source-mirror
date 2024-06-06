@@ -150,7 +150,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
 
     m_separator5->SetIsSeparator();
 
-    SCH_SHEET_LIST sheetList = m_frame->Schematic().GetSheets();
+    SCH_SHEET_LIST sheetList = m_frame->Schematic().GetUnorderedSheets();
     sheetList.SortByPageNumbers( false );
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
