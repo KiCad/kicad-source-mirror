@@ -283,7 +283,7 @@ msgstr "重新載入電路板"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr "複製 3D 圖像到剪貼板"
+msgstr "複製 3D 影像到剪貼簿"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 msgid "Render current view using Raytracing"
@@ -362,7 +362,7 @@ msgstr "錯誤"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:781
 msgid "Failed to copy image to clipboard"
-msgstr "無法將圖像複製到剪貼板"
+msgstr "無法將影像複製到剪貼簿"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:792
 msgid "Can't save file"
@@ -739,7 +739,7 @@ msgstr "板外絲印層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Do not clip silk layers to board outline"
-msgstr "避免板邊裁剪絲印層"
+msgstr "不要讓絹印層裁切到邊框"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "3D Axis"
@@ -1534,7 +1534,7 @@ msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:513
 msgid "Unable to export to the Clipboard"
-msgstr "無法匯出到剪貼板"
+msgstr "無法匯出到剪貼簿"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:540
 msgid "Error allocating memory for potrace bitmap"
@@ -1720,7 +1720,7 @@ msgstr "匯出到檔案"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:178
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
 msgid "Export to Clipboard"
-msgstr "匯出到剪貼板"
+msgstr "匯出到剪貼簿"
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -2049,11 +2049,11 @@ msgstr "授權"
 
 #: common/dialog_about/dialog_about.cpp:258
 msgid "Could not open clipboard to write version information."
-msgstr "無法打開剪貼板寫入版本資訊。"
+msgstr "無法開啟剪貼簿以寫入版本資訊。"
 
 #: common/dialog_about/dialog_about.cpp:259
 msgid "Clipboard Error"
-msgstr "剪貼板錯誤"
+msgstr "剪貼簿錯誤"
 
 #: common/dialog_about/dialog_about.cpp:268
 msgid "Copied..."
@@ -2081,7 +2081,7 @@ msgstr "複製版本資訊 (&C)"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr "複製 KiCad 版本資訊到剪貼板"
+msgstr "複製 KiCad 版本資訊到剪貼簿"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
@@ -4924,7 +4924,7 @@ msgstr "頁面限制"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
-msgstr "剪貼板"
+msgstr "剪貼簿"
 
 #: common/dsnlexer.cpp:328
 #, c-format
@@ -6293,11 +6293,11 @@ msgstr "沒有錯誤"
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:130
 #: pcbnew/tools/edit_tool.cpp:2526
 msgid "Cut"
-msgstr "剪切"
+msgstr "剪下"
 
 #: common/grid_tricks.cpp:356
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr "剪切所選單元格內容到剪貼板"
+msgstr "將原始內容儲存到剪貼簿並清除所選單元格"
 
 #: common/grid_tricks.cpp:357 common/tool/actions.cpp:211
 #: eeschema/tools/ee_actions.cpp:223 pcbnew/dialogs/panel_setup_rules.cpp:131
@@ -6306,7 +6306,7 @@ msgstr "複製"
 
 #: common/grid_tricks.cpp:358
 msgid "Copy selected cells to clipboard"
-msgstr "複製所選單元格內容到剪貼板"
+msgstr "複製選中的單元格到剪貼簿"
 
 #: common/grid_tricks.cpp:359 common/tool/actions.cpp:222
 #: eeschema/tools/sch_editor_control.cpp:2191
@@ -6317,7 +6317,7 @@ msgstr "粘貼"
 
 #: common/grid_tricks.cpp:360
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "粘貼剪貼板內容到當前單元格"
+msgstr "將剪貼簿內容貼上到當前單元格位置"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:267
 #: eeschema/tools/sch_edit_tool.cpp:1460
@@ -7445,15 +7445,15 @@ msgstr "重做上次編輯"
 
 #: common/tool/actions.cpp:201
 msgid "Cut selected item(s) to clipboard"
-msgstr "剪切所選項目到剪貼板"
+msgstr "將所選項目剪下到剪貼簿"
 
 #: common/tool/actions.cpp:212
 msgid "Copy selected item(s) to clipboard"
-msgstr "複製所選項目到剪貼板"
+msgstr "將所選項目複製到剪貼簿"
 
 #: common/tool/actions.cpp:223
 msgid "Paste item(s) from clipboard"
-msgstr "從剪貼板粘貼項目"
+msgstr "從剪貼簿貼上項目"
 
 #: common/tool/actions.cpp:233
 msgid "Select all items on screen"
@@ -16193,7 +16193,7 @@ msgstr "圖形..."
 
 #: eeschema/menubar.cpp:126
 msgid "Drawing to Clipboard"
-msgstr "繪圖到剪貼板"
+msgstr "繪圖到剪貼簿"
 
 #: eeschema/menubar.cpp:127 pcbnew/menubar_pcb_editor.cpp:114
 #: pcbnew/pcb_edit_frame.cpp:225
@@ -21362,11 +21362,11 @@ msgstr "將舊原理圖中的庫符號引用重新映射到符號庫表"
 
 #: eeschema/tools/ee_actions.cpp:1079
 msgid "Export Drawing to Clipboard"
-msgstr "將繪圖匯出到剪貼板"
+msgstr "將繪圖匯出到剪貼簿"
 
 #: eeschema/tools/ee_actions.cpp:1080
 msgid "Export drawing of current sheet to clipboard"
-msgstr "將當前圖紙的繪圖匯出到剪貼板"
+msgstr "將當前圖紙的繪圖匯出到剪貼簿"
 
 #: eeschema/tools/ee_actions.cpp:1088 pcbnew/tools/pcb_actions.cpp:337
 msgid "Import Graphics..."
@@ -21739,7 +21739,7 @@ msgstr "匯出當前繪圖為 CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1490
 msgid "Export Current Plot to Clipboard"
-msgstr "將當前繪圖匯出到剪貼板"
+msgstr "將當前繪圖匯出到剪貼簿"
 
 #: eeschema/tools/ee_actions.cpp:1496
 msgid "Export Current Plot to Schematic"
@@ -26327,7 +26327,7 @@ msgstr "文字佔位符顯示為 ${keyword} 標記"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:532
 msgid "Error writing objects to clipboard"
-msgstr "將物件寫入剪貼板時出錯"
+msgstr "將物件寫入剪貼簿時出錯"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
 msgid ""
@@ -27603,7 +27603,7 @@ msgstr "電源註釋:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
 msgid "Copy to Clipboard"
-msgstr "複製到剪貼板"
+msgstr "複製到剪貼簿"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, c-format
@@ -39375,7 +39375,7 @@ msgstr "建置孔洞給 %s\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1852
 #, c-format
 msgid "Cutting %d/%d %s\n"
-msgstr "剪切 %d/%d %s\n"
+msgstr "切割 %d/%d %s中\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1873
 #, c-format
@@ -40189,7 +40189,7 @@ msgstr "修復不連續問題"
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:174
 msgid ""
 "Trim/extend open shapes or add segments to make vertices of shapes coincide"
-msgstr "修剪/延伸未閉合的圖形或添加線段, 使圖形閉合"
+msgstr "修剪/延伸未閉合的圖形或添加線段以使圖形閉合"
 
 #: pcbnew/initpcb.cpp:48
 msgid ""
@@ -40202,7 +40202,7 @@ msgstr "當前封裝已被修改。是否儲存變更?"
 
 #: pcbnew/kicad_clipboard.cpp:566
 msgid "Clipboard content is not KiCad compatible"
-msgstr "剪貼板內容與 KiCad 不相容"
+msgstr "剪貼簿內容與 KiCad 不相容"
 
 #: pcbnew/load_select_footprint.cpp:285
 #, c-format
@@ -45168,7 +45168,7 @@ msgstr "帶參考點複製"
 
 #: pcbnew/tools/pcb_actions.cpp:484
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr "將選定項目及指定的起始點複製到剪貼板"
+msgstr "將選定項目及指定的起始點複製到剪貼簿"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 msgid "Duplicate and Increment"
@@ -45262,7 +45262,7 @@ msgstr "倒角線..."
 
 #: pcbnew/tools/pcb_actions.cpp:622
 msgid "Cut away corners between selected lines"
-msgstr "剪切掉所選線條之間的角"
+msgstr "切去所選線段之間的角落"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Simplify polygon outlines, removing superfluous points"
@@ -45368,7 +45368,7 @@ msgstr "從庫中刪除封裝"
 
 #: pcbnew/tools/pcb_actions.cpp:753
 msgid "Cut Footprint"
-msgstr "剪切封裝"
+msgstr "剪下封裝"
 
 #: pcbnew/tools/pcb_actions.cpp:759
 msgid "Copy Footprint"
@@ -46731,7 +46731,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1084
 msgid "Invalid clipboard contents"
-msgstr "無效的剪貼板內容"
+msgstr "無效的剪貼簿內容"
 
 #: pcbnew/tools/pcb_control.cpp:1361
 #, c-format
