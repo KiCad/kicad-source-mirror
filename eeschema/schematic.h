@@ -102,6 +102,18 @@ public:
         return SCH_SHEET_LIST( m_rootSheet );
     }
 
+    SCH_SHEET_LIST GetUnorderedSheets() const
+    {
+        SCH_SHEET_LIST sheets;
+        sheets.BuildSheetList( m_rootSheet, false );
+        return sheets;
+    }
+
+    SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr ) const
+    {
+        return GetUnorderedSheets().GetItem( aID, aPathOut );
+    }
+
     SCH_SHEET& Root() const
     {
         return *m_rootSheet;

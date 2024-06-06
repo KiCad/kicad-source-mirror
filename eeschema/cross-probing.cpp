@@ -907,7 +907,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         KIID           uuid( payload );
         SCH_SHEET_PATH path;
 
-        if( SCH_ITEM* item = m_schematic->GetSheets().GetItem( uuid, &path ) )
+        if( SCH_ITEM* item = m_schematic->GetItem( uuid, &path ) )
         {
             if( item->Type() == SCH_SHEET_T )
                 payload = static_cast<SCH_SHEET*>( item )->GetShownName( false );

@@ -297,8 +297,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     }
     else if( token->IsSameAs( wxT( "##" ) ) )
     {
-        SCH_SHEET_LIST sheetList = schematic->GetSheets();
-        *token = wxString::Format( wxT( "%d" ), (int) sheetList.size() );
+        *token = wxString::Format( wxT( "%d" ), (int) schematic->GetUnorderedSheets().size() );
         return true;
     }
     else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )

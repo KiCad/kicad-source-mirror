@@ -239,11 +239,10 @@ void DIALOG_TABLE_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
 {
     if( !aCrossRef.IsEmpty() )
     {
-        SCH_SHEET_LIST     sheets = m_frame->Schematic().GetSheets();
         SCH_REFERENCE_LIST refs;
         SCH_SYMBOL*        refSymbol = nullptr;
 
-        sheets.GetSymbols( refs );
+        m_frame->Schematic().GetUnorderedSheets().GetSymbols( refs );
 
         for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
         {

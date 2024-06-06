@@ -165,7 +165,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
     if( SCH_EDIT_FRAME* schematicEditor = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
     {
         SCH_SHEET_LIST sheetList = schematicEditor->Schematic().GetSheets();
-        sheetList.SortByPageNumbers( false );
 
         for( const SCH_SHEET_PATH& sheet : sheetList )
         {
