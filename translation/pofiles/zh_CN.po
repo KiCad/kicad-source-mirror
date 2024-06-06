@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 17:41-0700\n"
-"PO-Revision-Date: 2024-05-28 14:09+0000\n"
+"POT-Creation-Date: 2024-05-21 09:37-0700\n"
+"PO-Revision-Date: 2024-06-07 06:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -21809,7 +21809,7 @@ msgstr "绘图模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "Flashing 项目草图"
+msgstr "flashed 项目草图"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:63
 msgid "Sketch lines"
@@ -22536,11 +22536,11 @@ msgstr "在轮廓模式下显示线"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
-msgstr "项目快速草图"
+msgstr "Flashed 草图项目"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "在轮廓模式下显示焊盘"
+msgstr "在轮廓模式下 flashed 项目"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -23142,7 +23142,7 @@ msgstr "剔除阻焊开窗中的丝印"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:68
 msgid "Disable aperture macros"
-msgstr "禁用光圈 (Aperture) 宏"
+msgstr "禁用光圈宏 (Aperture macros)"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:73
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
@@ -33411,14 +33411,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid "Disable aperture macros (not recommended)"
-msgstr "禁用光圈 (Aperture) 宏 (不推荐)"
+msgstr "禁用光圈宏 (Aperture macros) (不推荐)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:238
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"禁用 Gerber 文件中的 Aperture 宏\n"
+"禁用 Gerber 文件中的光圈宏 (Aperture macros)\n"
 "仅对有问题的 Gerber 查看器使用。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:252
@@ -45453,9 +45453,8 @@ msgid "Length Tuning Settings..."
 msgstr "长度调整设置..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "显示项目属性对话框"
+msgstr "显示调整模式属性对话框"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
