@@ -563,12 +563,43 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
     for( std::pair<const ALTIUM_LAYER, ZONE*>& zone : m_outer_plane )
         zone.second->SetAssignedPriority( 0 );
 
-    // Simplify and fracture zone fills in case we constructed them from tracks (hatched fill)
+    // Change zone fills in case we constructed them from tracks (hatched fill)
+    int zone_to_refill = 0;
+    int zone_converted = 0;
+
     for( ZONE* zone : m_polygons )
     {
         if( !zone )
             continue;
 
+        if( zone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+        {
+            // Keep the hatch fill pattern only if the thickness and gap have a not too
+            // small value, especially if zone->GetHatchGap() is very small or null.
+            // Otherwise the refill calculation time can be **really big**
+            const int hatch_thickness_min_value = zone->GetMinThickness();
+
+            // If the gap is too small, the Hatch is similar to a solid filled area
+            // and trying to rebuild the hatch can look like hanging.
+            const int hatch_gap_min_value = pcbIUScale.mmToIU( 0.1 );   //arbitrary small value
+
+            if( zone->GetHatchGap() < hatch_gap_min_value )
+            {
+                zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+                zone_converted++;
+            }
+
+            //if( zone->GetHatchThickness() < hatch_thickness_min_value )
+
+            // Remove the Altium fill solid areas, they are very different from Pcbnew
+            // that does not have a "painted" fill mode since a long time,
+            // and cannot be used as this. They must be rebuilt
+            zone->UnFill();
+            zone_to_refill++;
+        }
+
+        #if 0
+        // Probably this section of code makes no sense.
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             if( !zone->HasFilledPolysForLayer( layer ) )
@@ -576,6 +607,22 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
 
             zone->GetFilledPolysList( layer )->Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         }
+        #endif
+    }
+
+    if( m_reporter && zone_converted )
+    {
+        m_reporter->Report( wxString::Format(
+                            _( "%d hatched zones with very small gap converted to solid" ),
+                            zone_converted ),
+                            RPT_SEVERITY_INFO );
+    }
+
+    if( m_reporter && zone_to_refill )
+    {
+        m_reporter->Report( wxString::Format( _( "%d hatched or converted zones found. They need refill" ),
+                                              zone_to_refill ),
+                            RPT_SEVERITY_INFO );
     }
 
     // Altium doesn't appear to store either the dimension value nor the dimensioned object in
@@ -2078,6 +2125,10 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         if( elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::SOLID
                 && elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN )
         {
+            // We can set the hach fill pattern only if the thickness and gap have a
+            // not too small value. Otherwise the refill calculation time can be
+            // **really big**
+            // The hatch option validity will be checked later, after all zones are built
             zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
             zone->SetHatchThickness( elem.trackwidth );
 
