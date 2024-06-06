@@ -6901,7 +6901,6 @@ msgid "Net class references"
 msgstr "Netzklassenbezüge"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Rule areas"
 msgstr "Regelbereiche"
 
@@ -8178,14 +8177,12 @@ msgid "Reset Local Coordinates"
 msgstr "Lokale Koordinaten zurücksetzen"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "Fadenkreuz immer anzeigen"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Fadenkreuz auch im Auswahlwerkzeug anzeigen"
+msgstr "Fadenkreuz auch anzeigen, wenn keine Objekte gezeichnet werden"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -10236,14 +10233,12 @@ msgid "Update Options"
 msgstr "Aktualisierungsoptionen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Symbolfelder aktualisieren"
+msgstr "Symbolform und Pins aktualisieren"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Aktualisiere %s Footprint-Filter auf \"%s\"."
+msgstr "Schlüsselwörter und Footprint-Filter aktualisieren"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10272,7 +10267,6 @@ msgid "Update/reset field visibilities"
 msgstr "Feld-Sichtbarkeiten aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
 msgstr "Textgrößen und -stile aktualisieren/zurücksetzen"
 
@@ -10282,9 +10276,8 @@ msgid "Update/reset field positions"
 msgstr "Feld-Positionen aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "Feld-Sichtbarkeiten aktualisieren/zurücksetzen"
+msgstr "Sichtbarkeit von Pinnamen/-nummern aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10769,13 +10762,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Alle digitalen Ereignisdaten speichern"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Wenn nicht gesetzt, eine Anweisung schreiben, um das Speichern von digitalen "
+"Ereignisdaten zu verhindern (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -13705,9 +13700,9 @@ msgid "Rename Field"
 msgstr "Feld umbenennen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "Datei \"%s\" existiert bereits."
+msgstr "Feldname %s ist bereits vorhanden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
 msgid "The Quantity column cannot be grouped by."
@@ -13739,10 +13734,9 @@ msgid "Unsaved data"
 msgstr "Nicht gespeicherte Daten"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1247
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr ""
-"Änderungen sind nicht gespeichert. Nicht gespeicherte Daten exportieren?"
+"Änderungen wurden noch nicht gespeichert. Ungespeicherte Daten exportieren?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1271
 msgid "No filename specified in exporter"
@@ -13797,9 +13791,8 @@ msgid "Exclude DNP"
 msgstr "Unbestückte ausschließen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
-#, fuzzy
 msgid "Show 'Exclude from BOM'"
-msgstr "Von Bauteilliste ausgeschlossen"
+msgstr "Zeige 'Von Stückliste ausschl.'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -15402,9 +15395,8 @@ msgstr "Bibliothek aus der Tabelle entfernen"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Bibliotheken"
+msgstr "Bibliotheken zurücksetzen"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
@@ -15670,7 +15662,7 @@ msgstr "Netzklasse %s ist nicht definiert"
 #: eeschema/erc/erc.cpp:651
 #, fuzzy, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Konnte nicht mit \"%s\" verbinden "
+msgstr "Vier Elemente an %d, %d verbunden"
 
 #: eeschema/erc/erc.cpp:723
 msgid "Pin with 'no connection' type is connected"
@@ -15755,7 +15747,7 @@ msgstr "Prüfe Konflikte ..."
 #: eeschema/erc/erc.cpp:1413
 #, fuzzy
 msgid "Checking rule areas..."
-msgstr "Prüfe Bezeichner ..."
+msgstr "Prüfe Regelbereiche ..."
 
 #: eeschema/erc/erc.cpp:1421
 msgid "Checking units..."
@@ -15801,7 +15793,7 @@ msgstr "Prüfe auf Pins und Verbindungen außerhalb des Rasters ..."
 #: eeschema/erc/erc.cpp:1516
 #, fuzzy
 msgid "Checking for four way junctions..."
-msgstr "Prüfe Footprint-Abstandsflächendefinitionen ..."
+msgstr "Prüfe auf Vierfach-Verbindungspunkte..."
 
 #: eeschema/erc/erc.cpp:1524
 msgid "Checking for undefined netclasses..."
@@ -15852,7 +15844,7 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:83
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "Vier Verbindungspunkte sind verbunden"
 
 #: eeschema/erc/erc_item.cpp:87
 msgid "A pin with a \"no connection\" flag is connected"
@@ -16732,9 +16724,9 @@ msgid "Bus to bus entry from %s, %s to %s, %s"
 msgstr "Bus-an-Bus-Zugang von %s, %s nach %s, %s"
 
 #: eeschema/net_navigator.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Netzklassen-Bezeichner ‚%s‘ bei %s, %s"
+msgstr "Netzklassen-Bezeichner %s‘ bei %s, %s"
 
 #: eeschema/net_navigator.cpp:189
 #, c-format
@@ -17316,9 +17308,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium Schaltplan-Bibliothek oder integrierte Bibliothek"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "Die ausgewählte Datei scheint keine CADSTAR Teilebibliothek zu sein"
+msgstr "Datei scheint keine CADSTAR Teilebibliothek zu sein"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -18351,7 +18342,6 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Unterschiedliche Werte für %s%d%s (%s) und %s%d%s (%s)"
 
 #: eeschema/sch_rule_area.cpp:200
-#, fuzzy
 msgid "Schematic rule area"
 msgstr "Schaltplan-Regelbereich"
 
@@ -21018,7 +21008,7 @@ msgstr "Füge Feld \"%s\" mit Wert \"%s\" hinzu."
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
 msgid "Delete field '%s.'"
-msgstr "Lösche Feld \"%s\"."
+msgstr "Lösche Feld \"%s.\""
 
 #: eeschema/tools/backannotate.cpp:704
 #, c-format
@@ -21226,7 +21216,7 @@ msgstr "Symbolbaum verbergen"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Focus Symbol Tree Search Field"
-msgstr ""
+msgstr "Symbolbaum Suchfeld fokussieren"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Export View as PNG..."
@@ -21502,9 +21492,8 @@ msgid "Add Rule Area"
 msgstr "Regelbereich hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:613
-#, fuzzy
 msgid "Draw rule area"
-msgstr "Hinweislinie zeichnen"
+msgstr "Regelbereich zeichen"
 
 #: eeschema/tools/ee_actions.cpp:621 pcbnew/tools/pcb_actions.cpp:400
 msgid "Delete Last Point"
@@ -22551,9 +22540,8 @@ msgid "Add Corner"
 msgstr "Ecke hinzufügen"
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
-#, fuzzy
 msgid "Draw Rule Area"
-msgstr "Regelbereich"
+msgstr "Regelbereich zeichnen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:305
 msgid "Press <ESC> to cancel symbol creation."
@@ -22911,11 +22899,11 @@ msgstr "Feld ausblenden"
 #: pcbnew/tools/edit_tool.cpp:2533
 #, fuzzy
 msgid "Hide Fields"
-msgstr "Verborgene Felder anzeigen"
+msgstr "Felder verbergen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:370
 msgid "Use the Symbol Properties dialog to remove fields."
-msgstr ""
+msgstr "Verwenden Sie den Dialog Symboleigenschaften, um Felder zu entfernen."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:665
 msgid "Edit Pins"
@@ -23402,23 +23390,20 @@ msgid "Sketch polygons"
 msgstr "Skizzieren der Polygone"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
 msgstr "Polygone als Umriss darstellen"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
-#, fuzzy
 msgid "Forced Opacity Display Mode"
-msgstr "Anzeigemodus Leiterzüge"
+msgstr "Anzeigemodus erzwungene Deckkraft"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "Deckkraft:"
+msgstr "Erzwungene Deckkraft:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "Deckkraft im Anzeigemodus mit erzwungener Deckkraft"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -24175,9 +24160,8 @@ msgid "Show dcode number"
 msgstr "DCode-Nummern anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:234
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "Schriftfeld im Bearbeitungsmodus anzeigen"
+msgstr "Im Anzeigemodus erzwungene Deckkraft anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:235
 #, fuzzy
@@ -24634,7 +24618,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:148
 msgid "Fuse overlapping geometry together"
-msgstr ""
+msgstr "Überlappende Geometrie zusammenfügen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:154
 msgid "Minimum distance between points to treat them as separate ones"
@@ -24643,6 +24627,8 @@ msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
 #: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
+"Nur Kupferelemente einbeziehen, die zu Netzen gehören, die auf dieser "
+"Wildcard passen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:166
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -25289,6 +25275,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Ignoriert den Aktualisierungshinweis für die angekündigte neue Version. Für "
+"neuere Versionen werden zusätzliche Aktualisierungshinweise angezeigt."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -25299,10 +25287,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Diesen Aktualisierungshinweis schließen. Der Hinweis wird erneut angezeigt, "
+"wenn KiCad neugestartet wird."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Die Seite mit den Versionsankündigungen in einem Webbrowser aufrufen."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -25310,7 +25300,7 @@ msgstr "Download-Seite öffnen"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Zur plattformspezifischen Downloadseite gehen."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -26368,7 +26358,7 @@ msgstr "Remote abrufen"
 
 #: kicad/project_tree_pane.cpp:1739
 msgid "Failed to push project"
-msgstr "Konnte Projekt nicht übertragen (push)."
+msgstr "Konnte Projekt nicht übertragen (push)"
 
 #: kicad/project_tree_pane.cpp:1801
 #, c-format
@@ -34913,7 +34903,6 @@ msgid "Fabrication property:"
 msgstr "Fertigungseigenschaft:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -34933,7 +34922,8 @@ msgstr ""
 "Testpad ist nützlich, um Testpunkte in Gerber-Dateien anzugeben\n"
 "Kühlkörperpad gibt ein Thermopad an\n"
 "Halbloch-Pads spezifiziert castellated Pads an einer Platinenkante\n"
-"Diese Eigenschaften werden in Gerber X2-Dateien definiert."
+"Mechanisch spezifiziert ein Durchkontaktierungspad zur mechanischen "
+"Versteifung verwendet wird"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2350
 msgid "BGA pad"
@@ -39572,7 +39562,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "Schlüsselwort 'layer' bereits vorhanden."
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -39894,9 +39884,9 @@ msgid "%s rounded corners differ."
 msgstr "%s abgerundete Kanten weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s angefaste Kanten weichen ab."
+msgstr "%s angefaste Kantengrößen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
 #, c-format
@@ -40518,12 +40508,12 @@ msgstr "Warnungen:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr ""
+msgstr "** ShapeUpgrade_UnifySameDomain erzeugte eine null shape **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1567
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
-msgstr ""
+msgstr "Verbindung nicht fertiggestellt (Konturpunkte %d): OCC-Fehler %d\n"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: pcbnew/exporters/step/step_pcb_model.cpp:1571
@@ -40537,10 +40527,12 @@ msgid ""
 "\n"
 "Wire self-interference check failed\n"
 msgstr ""
+"\n"
+"Prüfung auf Selbststörung der Verbindung fehlgeschlagen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1604
 msgid "Using non-simplified polygon.\n"
-msgstr ""
+msgstr "Verwende nicht vereinfachtes Polygon.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1669
 #, fuzzy
@@ -40567,6 +40559,8 @@ msgid ""
 "\n"
 "** Got problems while cutting %s number %d **\n"
 msgstr ""
+"\n"
+"** Probleme beim Schneiden von %s Nummer %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1900
 msgid "shapes"
@@ -42687,12 +42681,12 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6-Stream hat unerwartete Länge für Unter-Datensatz 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Altium-Lage (%d) hat kein KiCad-Äquivalent. Er wurde auf die KiCad-Lage "
+"Altium-Lage (%s) hat kein KiCad-Äquivalent. Er wurde auf die KiCad-Lage "
 "Eco1_User verschoben."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:458
@@ -42783,29 +42777,24 @@ msgid "Loading dimension drawings..."
 msgstr "Lade Maßzeichnungen ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Bemaßung vom Typ %d wird ignoriert (noch nicht unterstützt)."
+msgstr "Winkelbemaßung ignoriert (noch nicht unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Bemaßung vom Typ %d wird ignoriert (noch nicht unterstützt)."
+msgstr "Bezugsgröße ignoriert (noch nicht unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Bemaßung vom Typ %d wird ignoriert (noch nicht unterstützt)."
+msgstr "Grundlinienbemaßung ignoriert (noch nicht unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Bemaßung vom Typ %d wird ignoriert (noch nicht unterstützt)."
+msgstr "Längenmaß ignoriert (noch nicht unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Bemaßung vom Typ %d wird ignoriert (noch nicht unterstützt)."
+msgstr "Radialbemaßung ignoriert (noch nicht unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -44392,7 +44381,7 @@ msgstr "(nicht aktiviert)"
 #: pcbnew/pcb_marker.cpp:267
 #, c-format
 msgid "Marker (%s)"
-msgstr "Marker (%s)"
+msgstr "Markierung (%s)"
 
 #: pcbnew/pcb_reference_image.cpp:347
 msgid "Associated Layer"
@@ -45812,7 +45801,7 @@ msgstr "Aus Auswahl erzeugen"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Resultierendes Polygon wäre leer"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -46076,7 +46065,7 @@ msgstr "Seite wechseln / spiegeln"
 
 #: pcbnew/tools/edit_tool.cpp:2535
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr ""
+msgstr "Dialog Footprint-Eigenschaften verwenden, um Felder zu entfernen."
 
 #: pcbnew/tools/edit_tool.cpp:2693
 msgid "Move Exactly"
@@ -46706,7 +46695,7 @@ msgstr "Ecken zwischen ausgewählten Linien wegschneiden"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Vereinfachen von Polygonumrissen, Entfernen überflüssiger Punkte"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid ""
@@ -48207,9 +48196,8 @@ msgid "Length Tuning Settings..."
 msgstr "Einstellungen für Tuning von Leiterbahnlängen..."
 
 #: pcbnew/tools/pcb_actions.cpp:2478
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Anzeige der Elementeigenschaften"
+msgstr "Dialogfeld mit Abstimmmustereigenschaften anzeigen"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
