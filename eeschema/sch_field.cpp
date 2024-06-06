@@ -1154,7 +1154,11 @@ void SCH_FIELD::SetText( const wxString& aText )
     if( m_isNamedVariable )
         return;
 
-    EDA_TEXT::SetText( aText );
+    // Mandatory fields should not have leading or trailing whitespace.
+    if( IsMandatory() )
+        EDA_TEXT::SetText( aText.Strip( wxString::both ) );
+    else
+        EDA_TEXT::SetText( aText );
 }
 
 
