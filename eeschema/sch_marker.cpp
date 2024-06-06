@@ -109,7 +109,7 @@ wxString SCH_MARKER::SerializeToString() const
 }
 
 
-SCH_MARKER* SCH_MARKER::DeserializeFromString( SCHEMATIC* schematic, const wxString& data )
+SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST aSheetList, const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
     VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
@@ -132,13 +132,11 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( SCHEMATIC* schematic, const wxStr
     {
         isLegacyMarker = false;
 
-        SCH_SHEET_LIST sheetPaths = schematic->GetSheets();
-
         if( !props[5].IsEmpty() )
         {
             KIID_PATH                     sheetSpecificKiidPath( props[5] );
             std::optional<SCH_SHEET_PATH> sheetSpecificPath =
-                    sheetPaths.GetSheetPathByKIIDPath( sheetSpecificKiidPath, true );
+                    aSheetList.GetSheetPathByKIIDPath( sheetSpecificKiidPath, true );
             if( sheetSpecificPath.has_value() )
                 ercItem->SetSheetSpecificPath( sheetSpecificPath.value() );
         }
@@ -147,7 +145,7 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( SCHEMATIC* schematic, const wxStr
         {
             KIID_PATH                     mainItemKiidPath( props[6] );
             std::optional<SCH_SHEET_PATH> mainItemPath =
-                    sheetPaths.GetSheetPathByKIIDPath( mainItemKiidPath, true );
+                    aSheetList.GetSheetPathByKIIDPath( mainItemKiidPath, true );
             if( mainItemPath.has_value() )
             {
                 if( props[7].IsEmpty() )
@@ -158,7 +156,7 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( SCHEMATIC* schematic, const wxStr
                 {
                     KIID_PATH                     auxItemKiidPath( props[7] );
                     std::optional<SCH_SHEET_PATH> auxItemPath =
-                            sheetPaths.GetSheetPathByKIIDPath( auxItemKiidPath, true );
+                            aSheetList.GetSheetPathByKIIDPath( auxItemKiidPath, true );
 
                     if( auxItemPath.has_value() )
                         ercItem->SetItemsSheetPaths( mainItemPath.value(), auxItemPath.value() );

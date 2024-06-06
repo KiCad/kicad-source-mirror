@@ -324,7 +324,6 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
-                SCH_SHEET_LIST    sheets = m_frame->Schematic().GetSheets();
                 SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
                 SYMBOL_LIB*       cache = PROJECT_SCH::SchLibs( &m_frame->Prj() )->GetCacheLibrary();
 
@@ -336,13 +335,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 std::set<LIB_SYMBOL*, decltype( compareByLibID )> part_list( compareByLibID );
 
-                for( SCH_SHEET_PATH& sheet : sheets )
+                for( SCH_SHEET_PATH& sheet : hierarchy )
                 {
-                    for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+                    for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
                     {
-                        if( item->Type() != SCH_SYMBOL_T )
-                            continue;
-
                         SCH_SYMBOL* s = static_cast<SCH_SYMBOL*>( item );
                         LIB_SYMBOL* libSymbol = SchGetLibSymbol( s->GetLibId(), libs, cache );
 

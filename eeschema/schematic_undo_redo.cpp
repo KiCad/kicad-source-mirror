@@ -274,6 +274,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     bool                   dirtyConnectivity = false;
     bool                   rebuildHierarchyNavigator = false;
     SCH_CLEANUP_FLAGS      connectivityCleanUp = NO_CLEANUP;
+    SCH_SHEET_LIST         sheets;
 
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
@@ -371,7 +372,11 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
-            SCH_SHEET_PATH undoSheet = m_schematic->GetSheets().FindSheetForScreen( screen );
+            // Lazy eval of sheet list; this is expensive even when unsorted
+            if( sheets.empty() )
+                sheets = m_schematic->GetUnorderedSheets();
+
+            SCH_SHEET_PATH undoSheet = sheets.FindSheetForScreen( screen );
 
             if( GetCurrentSheet() != undoSheet )
             {
@@ -428,7 +433,11 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                     if( field->GetId() == REFERENCE_FIELD )
                     {
-                        SCH_SHEET_PATH sheet = m_schematic->GetSheets().FindSheetForScreen( screen );
+                        // Lazy eval of sheet list; this is expensive even when unsorted
+                        if( sheets.empty() )
+                            sheets = m_schematic->GetUnorderedSheets();
+
+                        SCH_SHEET_PATH sheet = sheets.FindSheetForScreen( screen );
                         symbol->SetRef( &sheet, field->GetText() );
                     }
 

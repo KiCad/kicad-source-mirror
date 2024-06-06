@@ -486,6 +486,7 @@ void SCH_COMMIT::Revert()
     KIGFX::VIEW*       view = m_toolMgr->GetView();
     SCH_EDIT_FRAME*    frame = dynamic_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_SHEET_LIST     sheets;
 
     if( m_changes.empty() )
         return;
@@ -564,7 +565,11 @@ void SCH_COMMIT::Revert()
 
                 if( field->GetId() == REFERENCE_FIELD )
                 {
-                    SCH_SHEET_PATH sheet = schematic->GetSheets().FindSheetForScreen( screen );
+                    // Lazy eval of sheet list; this is expensive even when unsorted
+                    if( sheets.empty() )
+                        sheets = schematic->GetUnorderedSheets();
+
+                    SCH_SHEET_PATH sheet = sheets.FindSheetForScreen( screen );
                     symbol->SetRef( &sheet, field->GetText() );
                 }
             }
