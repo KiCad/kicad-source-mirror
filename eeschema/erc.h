@@ -27,9 +27,10 @@
 #define ERC_H
 
 #include <erc_settings.h>
+#include <sch_screen.h>
+#include <connection_graph.h>
 
 
-class SCH_SHEET_LIST;
 class SCHEMATIC;
 class DS_PROXY_VIEW_ITEM;
 class SCH_EDIT_FRAME;
@@ -47,8 +48,13 @@ class ERC_TESTER
 public:
 
     ERC_TESTER( SCHEMATIC* aSchematic ) :
-            m_schematic( aSchematic )
+            m_schematic( aSchematic ),
+            m_settings( aSchematic->ErcSettings() ),
+            m_sheetList( aSchematic->GetSheets() ),
+            m_screens( aSchematic->Root() ),
+            m_nets( aSchematic->ConnectionGraph()->GetNetMap() )
     {
+        m_sheetList.GetMultiUnitSymbols( m_refMap, true );
     }
 
     /**
@@ -139,8 +145,12 @@ public:
                    KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );
 
 private:
-
-    SCHEMATIC* m_schematic;
+    SCHEMATIC*                   m_schematic;
+    ERC_SETTINGS&                m_settings;
+    SCH_SHEET_LIST               m_sheetList;
+    SCH_SCREENS                  m_screens;
+    SCH_MULTI_UNIT_REFERENCE_MAP m_refMap;
+    const NET_MAP&               m_nets;
 };
 
 
