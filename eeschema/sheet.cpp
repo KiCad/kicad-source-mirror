@@ -53,8 +53,8 @@ bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
     wxASSERT( aSheet && aCurrentSheet );
 
     wxString msg;
-    SCH_SHEET_LIST hierarchy = Schematic().GetSheets();  // The full schematic sheet hierarchy.
-    SCH_SHEET_LIST sheetHierarchy( aSheet );  // This is the hierarchy of the loaded file.
+    SCH_SHEET_LIST schematicSheets = Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST loadedSheets( aSheet );  // This is the schematicSheets of the loaded file.
 
     wxString destFilePath = aCurrentSheet->LastScreen()->GetFileName();
 
@@ -68,11 +68,11 @@ bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
     // something is seriously broken.
     wxASSERT( wxFileName( destFilePath ).IsAbsolute() );
 
-    if( hierarchy.TestForRecursion( sheetHierarchy, destFilePath ) )
+    if( schematicSheets.TestForRecursion( loadedSheets, destFilePath ) )
     {
         msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
                        "has the sheet '%s' or one of its subsheets as a parent somewhere in the "
-                       "schematic hierarchy." ),
+                       "schematic schematicSheets." ),
                     destFilePath );
         DisplayError( this, msg );
         return true;
@@ -275,8 +275,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
         }
     }
 
-    SCH_SHEET_LIST sheetHierarchy( tmpSheet.get() );    // This is the hierarchy of the loaded file.
-    SCH_SHEET_LIST hierarchy = Schematic().GetSheets(); // This is the schematic sheet hierarchy.
+    SCH_SHEET_LIST loadedSheets( tmpSheet.get() );
+    SCH_SHEET_LIST schematicSheets = Schematic().BuildUnorderedSheetList();
 
     // Make sure any new sheet changes do not cause any recursion issues.
     if( CheckSheetForRecursion( tmpSheet.get(), aCurrentSheet )
@@ -565,17 +565,17 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
         {
             // If the loaded schematic is a root sheet for another project, update the symbol
             // instances.
-            sheetHierarchy.UpdateSymbolInstanceData( newScreen->GetSymbolInstances());
+            loadedSheets.UpdateSymbolInstanceData( newScreen->GetSymbolInstances());
         }
     }
 
     newScreen->MigrateSimModels();
 
     // Attempt to create new symbol instances using the instance data loaded above.
-    sheetHierarchy.AddNewSymbolInstances( *aCurrentSheet, Prj().GetProjectName() );
+    loadedSheets.AddNewSymbolInstances( *aCurrentSheet, Prj().GetProjectName() );
 
     // Add new sheet instance data.
-    sheetHierarchy.AddNewSheetInstances( *aCurrentSheet, hierarchy.GetLastVirtualPageNumber() );
+    loadedSheets.AddNewSheetInstances( *aCurrentSheet, schematicSheets.GetLastVirtualPageNumber() );
 
     // It is finally safe to add or append the imported schematic.
     if( aSheet->GetScreen() == nullptr )
@@ -692,9 +692,9 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
 bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aOldName, const wxString& aSchematicFileName )
 {
-    wxString msg;
-    SCH_SHEET_LIST sheets( &Schematic().Root() );
-    wxFileName fn = aSchematicFileName;
+    wxString       msg;
+    SCH_SHEET_LIST sheets = Schematic().BuildUnorderedSheetList();
+    wxFileName     fn = aSchematicFileName;
 
     wxCHECK( fn.IsAbsolute(), false );
 

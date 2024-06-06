@@ -55,13 +55,11 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
     // Create netlist footprints section
     m_referencesAlreadyFound.Clear();
 
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->BuildSheetListSortedByPageNumbers() )
     {
-        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            symbol = findNextSymbol( item, &sheetList[ i ] );
+            symbol = findNextSymbol( item, sheet );
 
             if( !symbol )
                 continue;
@@ -69,7 +67,7 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
             if( symbol->GetExcludedFromBoard() )
                 continue;
 
-            footprint = symbol->GetFootprintFieldText( true, &sheetList[ i ], false );
+            footprint = symbol->GetFootprintFieldText( true, &sheet, false );
 
             footprint = footprint.Trim( true );
             footprint = footprint.Trim( false );
@@ -78,13 +76,13 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
             if( footprint.IsEmpty() )
             {
                 // fall back to value field
-                footprint = symbol->GetValue( true, &sheetList[i], false );
+                footprint = symbol->GetValue( true, &sheet, false );
                 footprint.Replace( wxT( " " ), wxT( "_" ) );
                 footprint = footprint.Trim( true );
                 footprint = footprint.Trim( false );
             }
 
-            msg = symbol->GetRef( &sheetList[i] );
+            msg = symbol->GetRef( &sheet );
             ret |= fprintf( f, "%-16s %s\n", TO_UTF8( msg ), TO_UTF8( footprint ) );
         }
     }

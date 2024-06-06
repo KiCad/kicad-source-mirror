@@ -858,7 +858,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
                 SCH_REFERENCE_LIST refs;
                 SCH_SYMBOL*        refSymbol = nullptr;
 
-                schematic->GetUnorderedSheets().GetSymbols( refs );
+                schematic->BuildUnorderedSheetList().GetSymbols( refs );
 
                 for( size_t jj = 0; jj < refs.GetCount(); jj++ )
                 {

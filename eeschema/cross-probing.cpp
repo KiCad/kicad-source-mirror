@@ -52,7 +52,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
     if( !aSearchHierarchy )
         sheetList.push_back( m_frame->GetCurrentSheet() );
     else
-        sheetList = m_frame->Schematic().GetSheets();
+        sheetList = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
 
     for( SCH_SHEET_PATH& sheet : sheetList )
     {
@@ -460,13 +460,8 @@ bool findSymbolsAndPins(
     if( aRecursive )
     {
         // Iterate over children
-        for( const SCH_SHEET_PATH& candidate : aSchematic.GetSheets() )
-        {
-            if( candidate == aSheetPath || !candidate.IsContainedWithin( aSheetPath ) )
-                continue;
-
-            findSymbolsAndPins( aSchematic, candidate, aSyncSymMap, aSyncPinMap, aRecursive );
-        }
+        for( const SCH_SHEET_PATH& sheet : SCH_SHEET_LIST( aSheetPath.Last() ) )
+            findSymbolsAndPins( aSchematic, sheet, aSyncSymMap, aSyncPinMap, aRecursive );
     }
 
     SCH_REFERENCE_LIST references;
@@ -542,12 +537,9 @@ bool sheetContainsOnlyWantedItems(
         return cacheIt->second;
 
     // Iterate over children
-    for( const SCH_SHEET_PATH& candidate : aSchematic.GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : SCH_SHEET_LIST( aSheetPath.Last() ) )
     {
-        if( candidate == aSheetPath || !candidate.IsContainedWithin( aSheetPath ) )
-            continue;
-
-        bool childRet = sheetContainsOnlyWantedItems( aSchematic, candidate, aSyncSymMap,
+        bool childRet = sheetContainsOnlyWantedItems( aSchematic, sheet, aSyncSymMap,
                                                       aSyncPinMap, aCache );
 
         if( !childRet )
@@ -617,7 +609,7 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
     std::optional<std::pair<wxString, wxString>>               focusPin;
     std::unordered_map<SCH_SHEET_PATH, std::vector<SCH_ITEM*>> focusItemResults;
 
-    const SCH_SHEET_LIST allSheetsList = aSchematic.GetSheets();
+    const SCH_SHEET_LIST allSheetsList = aSchematic.BuildSheetListSortedByPageNumbers();
 
     // In orderedSheets, the current sheet comes first.
     std::vector<SCH_SHEET_PATH> orderedSheets;

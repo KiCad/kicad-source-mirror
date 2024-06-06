@@ -567,7 +567,7 @@ void SCH_COMMIT::Revert()
                 {
                     // Lazy eval of sheet list; this is expensive even when unsorted
                     if( sheets.empty() )
-                        sheets = schematic->GetUnorderedSheets();
+                        sheets = schematic->BuildUnorderedSheetList();
 
                     SCH_SHEET_PATH sheet = sheets.FindSheetForScreen( screen );
                     symbol->SetRef( &sheet, field->GetText() );

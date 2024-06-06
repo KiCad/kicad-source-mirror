@@ -67,7 +67,7 @@ BOOST_FIXTURE_TEST_CASE( RemoveAddItems, INCREMENTAL_NETLIST_TEST_FIXTURE )
     {
         KI_TEST::LoadSchematic( m_settingsManager, test, m_schematic );
 
-        SCH_SHEET_LIST sheets = m_schematic->GetSheets();
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
         for( const SCH_SHEET_PATH& path : sheets )
         {

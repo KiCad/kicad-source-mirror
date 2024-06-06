@@ -69,7 +69,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
 
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
-    SCH_SHEET_LIST sheetList = m_parent->Schematic().GetSheets();
+    SCH_SHEET_LIST sheetList = m_parent->Schematic().BuildSheetListSortedByPageNumbers();
 
     wxCHECK_MSG( page >= 1 && page <= (int)sheetList.size(), false,
                  wxT( "Cannot print invalid page number." ) );

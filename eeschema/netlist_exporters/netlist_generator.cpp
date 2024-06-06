@@ -50,7 +50,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
                                        unsigned aNetlistOptions, REPORTER* aReporter )
 {
     // Ensure all power symbols have a valid reference
-    Schematic().GetSheets().AnnotatePowerSymbols();
+    Schematic().BuildSheetListSortedByPageNumbers().AnnotatePowerSymbols();
 
     if( !ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
         return false;
@@ -192,7 +192,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage )
 {
     // Ensure all power symbols have a valid reference
-    Schematic().GetSheets().AnnotatePowerSymbols();
+    Schematic().BuildSheetListSortedByPageNumbers().AnnotatePowerSymbols();
 
     // Symbols must be annotated
     if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )

@@ -359,8 +359,9 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
     bool createNew = aEvent.IsAction( &EE_ACTIONS::exportSymbolsToNewLibrary );
 
+    SCH_SHEET_LIST     sheets = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
     SCH_REFERENCE_LIST symbols;
-    m_frame->Schematic().GetSheets().GetSymbols( symbols, savePowerSymbols );
+    sheets.GetSymbols( symbols, savePowerSymbols );
 
     std::map<LIB_ID, LIB_SYMBOL*> libSymbols;
     std::map<LIB_ID, std::vector<SCH_SYMBOL*>> symbolMap;
@@ -519,7 +520,6 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     if( append )
     {
         std::set<SCH_SCREEN*> processedScreens;
-        SCH_SHEET_LIST        sheets = m_frame->Schematic().GetSheets();
 
         for( SCH_SHEET_PATH& sheet : sheets )
         {
@@ -1344,7 +1344,6 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
 
     STRING_FORMATTER   formatter;
     SCH_IO_KICAD_SEXPR plugin;
-    SCH_SHEET_LIST     hierarchy = schematic.GetSheets();
     SCH_SHEET_PATH     selPath = m_frame->GetCurrentSheet();
 
     plugin.Format( &selection, &selPath, schematic, &formatter, true );
@@ -1676,7 +1675,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     EDA_ITEMS              loadedItems;
     std::vector<SCH_ITEM*> sortedLoadedItems;
     bool                   sheetsPasted = false;
-    SCH_SHEET_LIST         hierarchy = m_frame->Schematic().GetSheets();
+    SCH_SHEET_LIST         hierarchy = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
     SCH_SHEET_PATH&        pasteRoot = m_frame->GetCurrentSheet();
     wxFileName             destFn = pasteRoot.Last()->GetFileName();
 
@@ -1838,7 +1837,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             // Update hierarchy to include any other sheets we already added, avoiding
             // duplicate sheet names
-            hierarchy = m_frame->Schematic().GetSheets();
+            hierarchy = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
 
             //@todo: it might be better to just iterate through the sheet names
             // in this screen instead of the whole hierarchy.
@@ -1988,7 +1987,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         // Get a version with correct sheet numbers since we've pasted sheets,
         // we'll need this when annotating next
-        hierarchy = m_frame->Schematic().GetSheets();
+        hierarchy = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
     }
 
     std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST> annotatedSymbols;
@@ -2077,12 +2076,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // schematic file.
     prunePastedSymbolInstances();
 
-    SCH_SCREENS allScreens( m_frame->Schematic().Root() );
+    SCH_SHEET_LIST sheets = m_frame->Schematic().BuildUnorderedSheetList();
+    SCH_SCREENS    allScreens( m_frame->Schematic().Root() );
 
-    allScreens.PruneOrphanedSymbolInstances( m_frame->Prj().GetProjectName(),
-                                             m_frame->Schematic().GetSheets() );
-    allScreens.PruneOrphanedSheetInstances( m_frame->Prj().GetProjectName(),
-                                            m_frame->Schematic().GetSheets() );
+    allScreens.PruneOrphanedSymbolInstances( m_frame->Prj().GetProjectName(), sheets );
+    allScreens.PruneOrphanedSheetInstances( m_frame->Prj().GetProjectName(), sheets );
 
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
@@ -2610,6 +2608,8 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
     std::map<KIID, EDA_ITEM*> ids;
     int                       duplicates = 0;
 
+    SCH_SHEET_LIST sheets = m_frame->Schematic().BuildUnorderedSheetList();
+
     auto processItem =
             [&]( EDA_ITEM* aItem )
             {
@@ -2627,7 +2627,7 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
     // Symbol IDs are the most important, so give them the first crack at "claiming" a
     // particular KIID.
 
-    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : sheets )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
@@ -2640,7 +2640,7 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : sheets )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 

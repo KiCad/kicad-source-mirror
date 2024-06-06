@@ -136,18 +136,16 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
     m_referencesAlreadyFound.Clear();
     m_libParts.clear();
 
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-
-    for( unsigned ii = 0; ii < sheetList.size(); ii++ )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->BuildSheetListSortedByPageNumbers() )
     {
-        SCH_SHEET_PATH sheet = sheetList[ii];
         m_schematic->SetCurrentSheet( sheet );
 
-        auto cmp = [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
-                   {
-                       return ( StrNumCmp( a->GetRef( &sheet, false ),
-                                           b->GetRef( &sheet, false ), true ) < 0 );
-                   };
+        auto cmp =
+                [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
+                {
+                    return ( StrNumCmp( a->GetRef( &sheet, false ),
+                                        b->GetRef( &sheet, false ), true ) < 0 );
+                };
 
         std::set<SCH_SYMBOL*, decltype( cmp )> ordered_symbols( cmp );
         std::multiset<SCH_SYMBOL*, decltype( cmp )> extra_units( cmp );
@@ -174,7 +172,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 
         for( EDA_ITEM* item : ordered_symbols )
         {
-            SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
 
             if( !symbol || symbol->GetExcludedFromBoard() )
                 continue;

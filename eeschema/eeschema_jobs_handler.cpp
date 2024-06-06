@@ -249,7 +249,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->GetSheets().GetSymbols( referenceList );
+    sch->BuildUnorderedSheetList().GetSymbols( referenceList );
 
     if( referenceList.GetCount() > 0 )
     {
@@ -362,7 +362,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->GetSheets().GetSymbols( referenceList, false, false );
+    sch->BuildUnorderedSheetList().GetSymbols( referenceList, false, false );
 
     if( referenceList.GetCount() > 0 )
     {
@@ -618,7 +618,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->GetSheets().GetSymbols( referenceList );
+    sch->BuildUnorderedSheetList().GetSymbols( referenceList );
 
     if( referenceList.GetCount() > 0 )
     {

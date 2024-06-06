@@ -363,7 +363,8 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
             currentScreen->SetFileName( wxEmptyString );
 
         // One last validity check (and potential repair) just to be sure to be sure
-        SCH_SHEET_LIST repairedList( &m_frame->Schematic().Root(), true );
+        SCH_SHEET_LIST repairedList;
+        repairedList.BuildSheetList( &m_frame->Schematic().Root(), true );
     }
 
     wxString newSheetname = m_fields->at( SHEETNAME ).GetText();

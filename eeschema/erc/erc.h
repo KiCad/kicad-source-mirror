@@ -55,7 +55,7 @@ public:
     ERC_TESTER( SCHEMATIC* aSchematic ) :
             m_schematic( aSchematic ),
             m_settings( aSchematic->ErcSettings() ),
-            m_sheetList( aSchematic->GetSheets() ),
+            m_sheetList( aSchematic->BuildSheetListSortedByPageNumbers() ),
             m_screens( aSchematic->Root() ),
             m_nets( aSchematic->ConnectionGraph()->GetNetMap() )
     {

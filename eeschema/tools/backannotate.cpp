@@ -80,7 +80,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 
     getPcbModulesFromString( aNetlist );
 
-    SCH_SHEET_LIST sheets = m_frame->Schematic().GetSheets();
+    SCH_SHEET_LIST sheets = m_frame->Schematic().BuildUnorderedSheetList();
     sheets.GetSymbols( m_refs, false );
     sheets.GetMultiUnitSymbols( m_multiUnitsRefs );
 

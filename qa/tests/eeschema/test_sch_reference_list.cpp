@@ -80,10 +80,8 @@ void TEST_SCH_REFERENCE_LIST_FIXTURE::loadTestCase( wxString aSchematicRelativeP
 SCH_SYMBOL* TEST_SCH_REFERENCE_LIST_FIXTURE::getSymbolByKIID( wxString        aKIID,
                                                               SCH_SHEET_PATH* aSymbolPath )
 {
-    SCH_SHEET_LIST sheets = m_schematic.GetSheets();
-
     KIID        symKIID( aKIID );
-    SCH_ITEM*   foundItem = sheets.GetItem( symKIID, aSymbolPath );
+    SCH_ITEM*   foundItem = m_schematic.GetItem( symKIID, aSymbolPath );
     SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( foundItem );
 
     return symbol;
@@ -95,7 +93,7 @@ SCH_REFERENCE_LIST TEST_SCH_REFERENCE_LIST_FIXTURE::getAdditionalRefs()
     // Build List of additional references to pass into Annotate()
     SCH_REFERENCE_LIST allRefs, additionalRefs;
 
-    m_schematic.GetSheets().GetSymbols( allRefs );
+    m_schematic.BuildSheetListSortedByPageNumbers().GetSymbols( allRefs );
 
     for( size_t i = 0; i < allRefs.GetCount(); ++i )
     {

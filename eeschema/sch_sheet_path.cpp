@@ -711,15 +711,10 @@ void SCH_SHEET_PATH::MakeFilePathRelativeToParentSheet()
 }
 
 
-SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
+SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 {
     if( aSheet != nullptr )
-    {
-        BuildSheetList( aSheet, aCheckIntegrity );
-
-        if( aSheet->IsRootSheet() )
-            SortByPageNumbers();
-    }
+        BuildSheetList( aSheet, false );
 }
 
 

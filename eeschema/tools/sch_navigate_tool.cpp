@@ -42,7 +42,7 @@ void SCH_NAVIGATE_TOOL::ResetHistory()
 
 void SCH_NAVIGATE_TOOL::CleanHistory()
 {
-    SCH_SHEET_LIST sheets = m_frame->Schematic().GetSheets();
+    SCH_SHEET_LIST sheets = m_frame->Schematic().BuildUnorderedSheetList();
 
     // Search through our history, and removing any entries
     // that the no longer point to a sheet on the schematic
@@ -69,7 +69,7 @@ void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& href )
     }
     else if( EDA_TEXT::IsGotoPageHref( href, &destPage ) && !destPage.IsEmpty() )
     {
-        for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
+        for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().BuildSheetListSortedByPageNumbers() )
         {
             if( sheet.GetPageNumber() == destPage )
             {
@@ -147,7 +147,7 @@ int SCH_NAVIGATE_TOOL::Previous( const TOOL_EVENT& aEvent )
     if( CanGoPrevious() )
     {
         int targetSheet = m_frame->GetCurrentSheet().GetVirtualPageNumber() - 1;
-        changeSheet( m_frame->Schematic().GetSheets().at( targetSheet - 1 ) );
+        changeSheet( m_frame->Schematic().BuildSheetListSortedByPageNumbers().at( targetSheet - 1 ) );
     }
     else
     {
@@ -163,7 +163,7 @@ int SCH_NAVIGATE_TOOL::Next( const TOOL_EVENT& aEvent )
     if( CanGoNext() )
     {
         int targetSheet = m_frame->GetCurrentSheet().GetVirtualPageNumber() + 1;
-        changeSheet( m_frame->Schematic().GetSheets().at( targetSheet - 1 ) );
+        changeSheet( m_frame->Schematic().BuildSheetListSortedByPageNumbers().at( targetSheet - 1 ) );
     }
     else
     {
@@ -201,7 +201,7 @@ bool SCH_NAVIGATE_TOOL::CanGoPrevious()
 bool SCH_NAVIGATE_TOOL::CanGoNext()
 {
     return m_frame->GetCurrentSheet().GetVirtualPageNumber()
-           < (int) m_frame->Schematic().GetUnorderedSheets().size();
+           < (int) m_frame->Schematic().BuildUnorderedSheetList().size();
 }
 
 

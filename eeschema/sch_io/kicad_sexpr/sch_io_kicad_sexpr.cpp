@@ -362,6 +362,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET* object." );
     wxCHECK_RET( m_schematic != nullptr, "NULL SCHEMATIC* object." );
 
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
     SCH_SCREEN* screen = aSheet->GetScreen();
 
     wxCHECK( screen, /* void */ );
@@ -426,7 +427,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         {
         case SCH_SYMBOL_T:
             m_out->Print( 0, "\n" );
-            saveSymbol( static_cast<SCH_SYMBOL*>( item ), *m_schematic, 1, false );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), *m_schematic, sheets, 1, false );
             break;
 
         case SCH_BITMAP_T:
@@ -435,7 +436,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
         case SCH_SHEET_T:
             m_out->Print( 0, "\n" );
-            saveSheet( static_cast<SCH_SHEET*>( item ), 1 );
+            saveSheet( static_cast<SCH_SHEET*>( item ), sheets, 1 );
             break;
 
         case SCH_JUNCTION_T:
@@ -516,7 +517,7 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
     wxCHECK( aSelection && aSelectionPath && aFormatter, /* void */ );
 
     LOCALE_IO toggle;
-    SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
+    SCH_SHEET_LIST sheets = aSchematic.BuildSheetListSortedByPageNumbers();
 
     m_schematic = &aSchematic;
     m_out = aFormatter;
@@ -580,7 +581,7 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
             break;
 
         case SCH_SHEET_T:
-            saveSheet( static_cast< SCH_SHEET* >( item ), 0 );
+            saveSheet( static_cast< SCH_SHEET* >( item ), sheets, 0 );
             break;
 
         case SCH_JUNCTION_T:
@@ -647,6 +648,7 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
 
 
 void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic,
+                                     const SCH_SHEET_LIST& aSheetList,
                                      int aNestLevel, bool aForClipboard,
                                      const SCH_SHEET_PATH* aRelativePath )
 {
@@ -711,9 +713,8 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
     // The symbol unit is always set to the first instance regardless of the current sheet
     // instance to prevent file churn.
-    int unit = ( aSymbol->GetInstances().size() == 0 ) ?
-               aSymbol->GetUnit() :
-               aSymbol->GetInstances()[0].m_Unit;
+    int unit = ( aSymbol->GetInstances().size() == 0 ) ? aSymbol->GetUnit()
+                                                       : aSymbol->GetInstances()[0].m_Unit;
 
     if( aForClipboard && aRelativePath )
     {
@@ -819,7 +820,6 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
         wxString projectName;
         KIID lastProjectUuid;
         KIID rootSheetUuid = aSchematic.Root().m_Uuid;
-        SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
 
         for( const SCH_SYMBOL_INSTANCE& inst : aSymbol->GetInstances() )
         {
@@ -830,7 +830,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
             // current project from accumulating in the schematic files.
             bool isOrphaned = ( inst.m_Path[0] == rootSheetUuid )
-                              && !fullHierarchy.GetSheetPathByKIIDPath( inst.m_Path );
+                              && !aSheetList.GetSheetPathByKIIDPath( inst.m_Path );
 
             // Keep all instance data when copying to the clipboard.  They may be needed on paste.
             if( !aForClipboard && isOrphaned )
@@ -998,7 +998,8 @@ void SCH_IO_KICAD_SEXPR::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
 }
 
 
-void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
+void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSheetList,
+                                    int aNestLevel )
 {
     wxCHECK_RET( aSheet != nullptr && m_out != nullptr, "" );
 
@@ -1081,7 +1082,6 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
         KIID lastProjectUuid;
         KIID rootSheetUuid = m_schematic->Root().m_Uuid;
-        SCH_SHEET_LIST fullHierarchy = m_schematic->GetSheets();
         bool project_open = false;
 
         for( size_t i = 0; i < sheetInstances.size(); i++ )
@@ -1092,7 +1092,7 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
             //
             // Keep all instance data when copying to the clipboard.  It may be needed on paste.
             if( ( sheetInstances[i].m_Path[0] == rootSheetUuid )
-              && !fullHierarchy.GetSheetPathByKIIDPath( sheetInstances[i].m_Path, false ) )
+              && !aSheetList.GetSheetPathByKIIDPath( sheetInstances[i].m_Path, false ) )
             {
                 if( project_open && ( ( i + 1 == sheetInstances.size() )
                   || lastProjectUuid != sheetInstances[i+1].m_Path[0] ) )

@@ -1872,7 +1872,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Keep track of existing sheet paths. EditSheet() can modify this list.
         // Note that we use the validity checking/repairing version here just to make sure
         // we've got a valid hierarchy to begin with.
-        SCH_SHEET_LIST originalHierarchy( &m_frame->Schematic().Root(), true );
+        SCH_SHEET_LIST originalHierarchy;
+        originalHierarchy.BuildSheetList( &m_frame->Schematic().Root(), true );
 
         SCH_COMMIT commit( m_toolMgr );
         commit.Modify( sheet, m_frame->GetScreen() );

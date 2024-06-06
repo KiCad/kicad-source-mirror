@@ -93,7 +93,8 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
 
 
 void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
-                                            SCH_SHEET_PATH* aSheet )
+                                            const SCH_SHEET_PATH& aSheet,
+                                            const SCH_SHEET_LIST& aSheetList )
 {
     wxString                     value;
     wxString                     footprint;
@@ -111,41 +112,40 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         // any non blank fields in all units and use the first non-blank field
         // for each unique field name.
 
-        wxString ref = aSymbol->GetRef( aSheet );
+        wxString ref = aSymbol->GetRef( &aSheet );
 
-        SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-        int minUnit = aSymbol->GetUnitSelection( aSheet );
+        int minUnit = aSymbol->GetUnitSelection( &aSheet );
 
-        for( unsigned i = 0;  i < sheetList.size();  i++ )
+        for( const SCH_SHEET_PATH& sheet : aSheetList )
         {
-            for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
             {
                 SCH_SYMBOL* symbol2 = static_cast<SCH_SYMBOL*>( item );
 
-                wxString ref2 = symbol2->GetRef( &sheetList[i] );
+                wxString ref2 = symbol2->GetRef( &sheet );
 
                 if( ref2.CmpNoCase( ref ) != 0 )
                     continue;
 
-                int unit = symbol2->GetUnitSelection( aSheet );
+                int unit = symbol2->GetUnitSelection( &aSheet );
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
 
                 // Value
-                candidate = symbol2->GetValue( m_resolveTextVars, &sheetList[i], false );
+                candidate = symbol2->GetValue( m_resolveTextVars, &sheet, false );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
                     value = candidate;
 
                 // Footprint
-                candidate = symbol2->GetFootprintFieldText( m_resolveTextVars, &sheetList[i], false );
+                candidate = symbol2->GetFootprintFieldText( m_resolveTextVars, &sheet, false );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
                     footprint = candidate;
 
                 // Datasheet
                 candidate = m_resolveTextVars
-                                ? symbol2->GetField( DATASHEET_FIELD )->GetShownText( &sheetList[i], false )
+                                ? symbol2->GetField( DATASHEET_FIELD )->GetShownText( &sheet, false )
                                 : symbol2->GetField( DATASHEET_FIELD )->GetText();
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
@@ -153,7 +153,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
 
                 // Description
                 candidate = m_resolveTextVars
-                                ? symbol2->GetField( DESCRIPTION_FIELD )->GetShownText( &sheetList[i], false )
+                                ? symbol2->GetField( DESCRIPTION_FIELD )->GetShownText( &sheet, false )
                                 : symbol2->GetField( DESCRIPTION_FIELD )->GetText();
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || description.IsEmpty() ) )
@@ -167,7 +167,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                     if( unit < minUnit || fields.count( f.GetName() ) == 0 )
                     {
                         if( m_resolveTextVars )
-                            fields[f.GetName()] = f.GetShownText( aSheet, false );
+                            fields[f.GetName()] = f.GetShownText( &aSheet, false );
                         else
                             fields[f.GetName()] = f.GetText();
                     }
@@ -179,21 +179,21 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     }
     else
     {
-        value = aSymbol->GetValue( m_resolveTextVars, aSheet, false );
-        footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars, aSheet, false );
+        value = aSymbol->GetValue( m_resolveTextVars, &aSheet, false );
+        footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars, &aSheet, false );
 
         SCH_FIELD* datasheetField = aSymbol->GetField( DATASHEET_FIELD );
         SCH_FIELD* descriptionField = aSymbol->GetField( DESCRIPTION_FIELD );
 
         // Datasheet
         if( m_resolveTextVars )
-            datasheet = datasheetField->GetShownText( aSheet, false );
+            datasheet = datasheetField->GetShownText( &aSheet, false );
         else
             datasheet = datasheetField->GetText();
 
         // Description
         if( m_resolveTextVars )
-            description = descriptionField->GetShownText( aSheet, false );
+            description = descriptionField->GetShownText( &aSheet, false );
         else
             description = descriptionField->GetText();
 
@@ -202,7 +202,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
             const SCH_FIELD& f = aSymbol->GetFields()[ ii ];
 
             if( m_resolveTextVars )
-                fields[f.GetName()] = f.GetShownText( aSheet, false );
+                fields[f.GetName()] = f.GetShownText( &aSheet, false );
             else
                 fields[f.GetName()] = f.GetText();
         }
@@ -246,25 +246,24 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     m_referencesAlreadyFound.Clear();
     m_libParts.clear();
 
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
+    SCH_SHEET_LIST sheetList = m_schematic->BuildSheetListSortedByPageNumbers();
 
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
 
-    for( unsigned ii = 0; ii < sheetList.size(); ii++ )
+    for( const SCH_SHEET_PATH& sheet : sheetList )
     {
-        SCH_SHEET_PATH sheet = sheetList[ii];
-
         // Change schematic CurrentSheet in each iteration to allow hierarchical
         // resolution of text variables in sheet fields.
         m_schematic->SetCurrentSheet( sheet );
 
-        auto cmp = [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
-                   {
-                       return ( StrNumCmp( a->GetRef( &sheet, false ),
-                                           b->GetRef( &sheet, false ), true ) < 0 );
-                   };
+        auto cmp =
+                [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
+                {
+                    return ( StrNumCmp( a->GetRef( &sheet, false ),
+                                        b->GetRef( &sheet, false ), true ) < 0 );
+                };
 
         std::set<SCH_SYMBOL*, decltype( cmp )> ordered_symbols( cmp );
         std::multiset<SCH_SYMBOL*, decltype( cmp )> extra_units( cmp );
@@ -291,7 +290,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
         for( EDA_ITEM* item : ordered_symbols )
         {
-            SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
             bool        forBOM = aCtl & GNL_OPT_BOM;
             bool        forBoard = aCtl & GNL_OPT_KICAD;
 
@@ -312,7 +311,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             xcomps->AddChild( xcomp = node( wxT( "comp" ) ) );
 
             xcomp->AddAttribute( wxT( "ref" ), symbol->GetRef( &sheet ) );
-            addSymbolFields( xcomp, symbol, &sheet );
+            addSymbolFields( xcomp, symbol, sheet, sheetList );
 
             XNODE*  xlibsource;
             xcomp->AddChild( xlibsource = node( wxT( "libsource" ) ) );
@@ -476,21 +475,19 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
     /*
      *  Export the sheets information
      */
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
+    unsigned sheetIndex = 1;     // Human readable index
 
-    for( unsigned i = 0;  i < sheetList.size();  i++ )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->BuildSheetListSortedByPageNumbers() )
     {
-        screen = sheetList[i].LastScreen();
+        screen = sheet.LastScreen();
 
         xdesign->AddChild( xsheet = node( wxT( "sheet" ) ) );
 
         // get the string representation of the sheet index number.
-        // Note that sheet->GetIndex() is zero index base and we need to increment the
-        // number by one to make it human readable
-        sheetTxt.Printf( wxT( "%u" ), i + 1 );
+        sheetTxt.Printf( wxT( "%u" ), sheetIndex++ );
         xsheet->AddAttribute( wxT( "number" ), sheetTxt );
-        xsheet->AddAttribute( wxT( "name" ), sheetList[i].PathHumanReadable() );
-        xsheet->AddAttribute( wxT( "tstamps" ), sheetList[i].PathAsString() );
+        xsheet->AddAttribute( wxT( "name" ), sheet.PathHumanReadable() );
+        xsheet->AddAttribute( wxT( "tstamps" ), sheet.PathAsString() );
 
         TITLE_BLOCK tb = screen->GetTitleBlock();
         PROJECT*    prj = &m_schematic->Prj();

@@ -53,7 +53,7 @@ wxString ERC_REPORT::GetTextReport()
     int            err_count = 0;
     int            warn_count = 0;
     int            total_count = 0;
-    SCH_SHEET_LIST sheetList = m_sch->GetSheets();
+    SCH_SHEET_LIST sheetList = m_sch->BuildSheetListSortedByPageNumbers();
 
     sheetList.FillItemMap( itemMap );
 
@@ -124,7 +124,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     int            err_count = 0;
     int            warn_count = 0;
     int            total_count = 0;
-    SCH_SHEET_LIST sheetList = m_sch->GetSheets();
+    SCH_SHEET_LIST sheetList = m_sch->BuildSheetListSortedByPageNumbers();
     sheetList.FillItemMap( itemMap );
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();

@@ -329,7 +329,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // It's possible the schematic parser fixed errors due to bugs so warn the user
         // that the schematic has been fixed (modified).
-        SCH_SHEET_LIST sheetList = Schematic().GetSheets();
+        SCH_SHEET_LIST sheetList = Schematic().BuildSheetListSortedByPageNumbers();
 
         if( sheetList.IsModified() )
         {
@@ -513,8 +513,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
         }
 
-        schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), Schematic().GetSheets() );
-        schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), Schematic().GetSheets() );
+        schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), sheetList );
+        schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), sheetList );
 
         Schematic().ConnectionGraph()->Reset();
 
@@ -1074,7 +1074,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         }
 
         // Attempt to make sheet file name paths relative to the new root schematic path.
-        for( SCH_SHEET_PATH& sheet : Schematic().GetUnorderedSheets() )
+        for( SCH_SHEET_PATH& sheet : Schematic().BuildUnorderedSheetList() )
         {
             if( !sheet.Last()->IsRootSheet() )
                 sheet.MakeFilePathRelativeToParentSheet();
@@ -1237,7 +1237,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     std::vector<FILE_INFO_PAIR>& sheets = Prj().GetProjectFile().GetSheets();
     sheets.clear();
 
-    for( SCH_SHEET_PATH& sheetPath : Schematic().GetSheets() )
+    for( SCH_SHEET_PATH& sheetPath : Schematic().BuildUnorderedSheetList() )
     {
         SCH_SHEET* sheet = sheetPath.Last();
 
@@ -1365,7 +1365,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 {
     wxFileName             filename( aFileName );
     wxFileName             newfilename;
-    SCH_SHEET_LIST         sheetList = Schematic().GetSheets();
     SCH_IO_MGR::SCH_FILE_T fileType = (SCH_IO_MGR::SCH_FILE_T) aFileType;
 
     wxCommandEvent changingEvt( EDA_EVT_SCHEMATIC_CHANGING );

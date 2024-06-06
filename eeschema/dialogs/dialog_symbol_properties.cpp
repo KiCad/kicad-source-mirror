@@ -785,7 +785,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         int      unit = m_symbol->GetUnit();
         LIB_ID   libId = m_symbol->GetLibId();
 
-        for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().GetUnorderedSheets() )
+        for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().BuildUnorderedSheetList() )
         {
             SCH_SCREEN*              screen = sheet.LastScreen();
             std::vector<SCH_SYMBOL*> otherUnits;

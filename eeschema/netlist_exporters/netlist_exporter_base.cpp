@@ -79,10 +79,10 @@ wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
 }
 
 
-SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
+SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem,
+                                                   const SCH_SHEET_PATH& aSheetPath )
 {
     wxCHECK( aItem, nullptr );
-    wxCHECK( aSheetPath, nullptr );
 
     wxString ref;
 
@@ -94,12 +94,12 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
 
     // Power symbols and other symbols which have the reference starting with "#" are not
     // included in netlist (pseudo or virtual symbols)
-    ref = symbol->GetRef( aSheetPath );
+    ref = symbol->GetRef( &aSheetPath );
 
     if( ref[0] == wxChar( '#' ) )
         return nullptr;
 
-    SCH_SCREEN* screen = aSheetPath->LastScreen();
+    SCH_SCREEN* screen = aSheetPath.LastScreen();
 
     wxCHECK( screen, nullptr );
 
@@ -126,14 +126,14 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
 
 
 std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
-                                                            SCH_SHEET_PATH* aSheetPath,
+                                                            const SCH_SHEET_PATH& aSheetPath,
                                                             bool aKeepUnconnectedPins )
 {
     std::vector<PIN_INFO> pins;
 
     wxCHECK( aSymbol, pins );
 
-    wxString              ref( aSymbol->GetRef( aSheetPath ) );
+    wxString ref( aSymbol->GetRef( &aSheetPath ) );
 
     // Power symbols and other symbols which have the reference starting with "#" are not
     // included in netlist (pseudo or virtual symbols)
@@ -161,15 +161,15 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     {
         CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
 
-        for( const SCH_PIN* pin : aSymbol->GetPins( aSheetPath ) )
+        for( const SCH_PIN* pin : aSymbol->GetPins( &aSheetPath ) )
         {
-            if( SCH_CONNECTION* conn = pin->Connection( aSheetPath ) )
+            if( SCH_CONNECTION* conn = pin->Connection( &aSheetPath ) )
             {
                 const wxString& netName = conn->Name();
 
                 if( !aKeepUnconnectedPins )     // Skip unconnected pins if requested
                 {
-                    CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, *aSheetPath );
+                    CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, aSheetPath );
 
                     if( !sg || sg->GetNoConnect() || sg->GetItems().size() < 2 )
                         continue;
@@ -231,21 +231,18 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
 
 
 void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
-                                                  SCH_SHEET_PATH* aSheetPath,
+                                                  const SCH_SHEET_PATH& aSheetPath,
                                                   std::vector<PIN_INFO>& aPins,
                                                   bool aKeepUnconnectedPins )
 {
-    wxString    ref = aSchSymbol->GetRef( aSheetPath );
-    wxString    ref2;
+    wxString ref = aSchSymbol->GetRef( &aSheetPath );
+    wxString ref2;
 
-    SCH_SHEET_LIST    sheetList = m_schematic->GetSheets();
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
 
-    for( unsigned i = 0;  i < sheetList.size();  i++ )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->BuildSheetListSortedByPageNumbers() )
     {
-        SCH_SHEET_PATH& sheet = sheetList[i];
-
-        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* comp2 = static_cast<SCH_SYMBOL*>( item );
 

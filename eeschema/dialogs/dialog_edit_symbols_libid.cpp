@@ -391,13 +391,13 @@ void DIALOG_EDIT_SYMBOLS_LIBID::initDlg()
     // In complex hierarchies, the same symbol is in fact duplicated, but
     // it is listed with different references (one by sheet instance)
     // the list is larger and looks like it contains all symbols.
-    const SCH_SHEET_LIST& sheets = GetParent()->Schematic().GetSheets();
     SCH_REFERENCE_LIST references;
 
     // build the full list of symbols including symbol having no symbol in loaded libs
     // (orphan symbols)
-    sheets.GetSymbols( references, /* include power symbols */ true,
-                       /* include orphan symbols */ true );
+    GetParent()->Schematic().BuildUnorderedSheetList().GetSymbols( references,
+                                                                   true /* include power symbols */,
+                                                                   true /* include orphan symbols */ );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {

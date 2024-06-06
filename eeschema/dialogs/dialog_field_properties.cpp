@@ -672,7 +672,7 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
             int      unit = symbol->GetUnit();
             LIB_ID   libId = symbol->GetLibId();
 
-            for( SCH_SHEET_PATH& sheet : editFrame->Schematic().GetUnorderedSheets() )
+            for( SCH_SHEET_PATH& sheet : editFrame->Schematic().BuildUnorderedSheetList() )
             {
                 SCH_SCREEN*              screen = sheet.LastScreen();
                 std::vector<SCH_SYMBOL*> otherUnits;

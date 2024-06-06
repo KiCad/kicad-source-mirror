@@ -61,7 +61,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->UpdateLocalLibSymbolLinks();
 
-    SCH_SHEET_LIST sheets = m_schematic.GetSheets();
+    SCH_SHEET_LIST sheets = m_schematic.BuildSheetListSortedByPageNumbers();
 
     // Restore all of the loaded symbol instances from the root sheet screen.
     if( m_schematic.RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )

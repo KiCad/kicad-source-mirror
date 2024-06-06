@@ -72,7 +72,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
                 int      unit = symbol->GetUnit();
                 LIB_ID   libId = symbol->GetLibId();
 
-                for( SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
+                for( SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
                 {
                     std::vector<SCH_SYMBOL*> otherUnits;
 
@@ -302,7 +302,7 @@ ERC_SETTINGS& SCHEMATIC::ErcSettings() const
 
 std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 {
-    SCH_SHEET_LIST sheetList = GetSheets();
+    SCH_SHEET_LIST sheetList = BuildUnorderedSheetList();
     ERC_SETTINGS&  settings  = ErcSettings();
 
     // Migrate legacy marker exclusions to new format to ensure exclusion matching functions across
@@ -384,7 +384,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
 std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) const
 {
-    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
     {
         for( const std::shared_ptr<BUS_ALIAS>& alias : sheet.LastScreen()->GetBusAliases() )
         {
@@ -454,7 +454,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetNamesMap() const
 {
     std::map<int, wxString> namesMap;
 
-    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
     {
         if( sheet.size() == 1 )
             namesMap[sheet.GetVirtualPageNumber()] = _( "<root sheet>" );
@@ -470,7 +470,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetPagesMap() const
 {
     std::map<int, wxString> pagesMap;
 
-    for( const SCH_SHEET_PATH& sheet : GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
         pagesMap[sheet.GetVirtualPageNumber()] = sheet.GetPageNumber();
 
     return pagesMap;
@@ -518,7 +518,7 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
                 wxString           ref = token.BeforeFirst( ':', &remainder );
                 SCH_REFERENCE_LIST references;
 
-                GetUnorderedSheets().GetSymbols( references );
+                BuildUnorderedSheetList().GetSymbols( references );
 
                 for( size_t jj = 0; jj < references.GetCount(); jj++ )
                 {
@@ -641,7 +641,7 @@ void SCHEMATIC::SetSheetNumberAndCount()
 
     // @todo Remove all pseudo page number system is left over from prior to real page number
     //       implementation.
-    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : BuildSheetListSortedByPageNumbers() )
     {
         if( sheet.Path() == current_sheetpath ) // Current sheet path found
             break;
@@ -664,7 +664,7 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
 
     pageRefsMap.clear();
 
-    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : BuildSheetListSortedByPageNumbers() )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
         {
@@ -802,7 +802,8 @@ void SCHEMATIC::RemoveAllListeners()
 
 void SCHEMATIC::RecordERCExclusions()
 {
-    SCH_SHEET_LIST sheetList = GetSheets();
+    // Use a sorted sheetList to reduce file churn
+    SCH_SHEET_LIST sheetList = BuildSheetListSortedByPageNumbers();
     ERC_SETTINGS&  ercSettings = ErcSettings();
 
     ercSettings.m_ErcExclusions.clear();
@@ -827,7 +828,7 @@ void SCHEMATIC::RecordERCExclusions()
 
 void SCHEMATIC::ResolveERCExclusionsPostUpdate()
 {
-    SCH_SHEET_LIST sheetList = GetUnorderedSheets();
+    SCH_SHEET_LIST sheetList = BuildUnorderedSheetList();
 
     for( SCH_MARKER* marker : ResolveERCExclusions() )
     {

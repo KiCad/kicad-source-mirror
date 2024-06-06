@@ -292,7 +292,7 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER*
 {
     std::set<SCH_SCREEN*> seenScreens;
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->GetUnorderedSheets() )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->BuildUnorderedSheetList() )
     {
         bool firstTime = seenScreens.count( sheet.LastScreen() ) == 0;
 

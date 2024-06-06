@@ -147,7 +147,7 @@ protected:
      * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
      * but usually we need all pins in netlists.
      */
-    std::vector<PIN_INFO> CreatePinList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
+    std::vector<PIN_INFO> CreatePinList( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath,
                                          bool aKeepUnconnectedPins );
 
     /**
@@ -159,7 +159,7 @@ protected:
      * @param aSheetPath is the sheet to check the symbol for
      * @return the symbol if it should be processed, or nullptr
      */
-    SCH_SYMBOL* findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_SYMBOL* findNextSymbol( EDA_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath );
 
     /**
      * Erase duplicate pins.
@@ -181,7 +181,7 @@ protected:
      * if aKeepUnconnectedPins = false, unconnected pins will be removed from list
      * but usually we need all pins in netlists.
      */
-    void findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, SCH_SHEET_PATH* aSheetPath,
+    void findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, const SCH_SHEET_PATH& aSheetPath,
                                std::vector<PIN_INFO>& aPins, bool aKeepUnconnectedPins );
 
     /// Used for "multiple symbols per package" symbols to avoid processing a lib symbol more than

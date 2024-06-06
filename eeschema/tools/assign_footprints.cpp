@@ -44,12 +44,11 @@
 void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfReferences )
 {
     // Build a flat list of symbols in schematic:
-    SCH_REFERENCE_LIST  refs;
-    SCH_SHEET_LIST      sheets    = m_frame->Schematic().GetSheets();
-    bool                isChanged = false;
-    bool                appendToUndoList = false;
+    SCH_REFERENCE_LIST refs;
+    bool               isChanged = false;
+    bool               appendToUndoList = false;
 
-    sheets.GetSymbols( refs, false );
+    m_frame->Schematic().BuildUnorderedSheetList().GetSymbols( refs, false );
 
     DSNLEXER lexer( aChangedSetOfReferences, From_UTF8( __func__ ) );
     PTREE    doc;
@@ -128,10 +127,8 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                                                         bool aVisibilityState )
 {
     // Build a flat list of symbols in schematic:
-    SCH_REFERENCE_LIST  referencesList;
-    SCH_SHEET_LIST      sheetList = m_frame->Schematic().GetSheets();
-
-    sheetList.GetSymbols( referencesList, false );
+    SCH_REFERENCE_LIST referencesList;
+    m_frame->Schematic().BuildUnorderedSheetList().GetSymbols( referencesList, false );
 
     FILE* cmpFile = wxFopen( aFullFilename, wxT( "rt" ) );
 

@@ -43,7 +43,7 @@ public:
     virtual ~SCHEMATIC_IFACE() {};
 
     virtual CONNECTION_GRAPH* ConnectionGraph() const = 0;
-    virtual SCH_SHEET_LIST GetSheets() const = 0;
+    virtual SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const = 0;
     virtual void SetCurrentSheet( const SCH_SHEET_PATH& aPath ) = 0;
     virtual SCH_SHEET_PATH& CurrentSheet() const = 0;
     virtual wxString GetFileName() const = 0;
@@ -92,17 +92,12 @@ public:
 
     const std::map<wxString, wxString>* GetProperties() { return &m_properties; }
 
-    /**
-     * Builds and returns an updated schematic hierarchy
-     * TODO: can this be cached?
-     * @return a SCH_SHEET_LIST containing the schematic hierarchy
-     */
-    SCH_SHEET_LIST GetSheets() const override
+    SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const override
     {
         return SCH_SHEET_LIST( m_rootSheet );
     }
 
-    SCH_SHEET_LIST GetUnorderedSheets() const
+    SCH_SHEET_LIST BuildUnorderedSheetList() const
     {
         SCH_SHEET_LIST sheets;
         sheets.BuildSheetList( m_rootSheet, false );
@@ -111,7 +106,7 @@ public:
 
     SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr ) const
     {
-        return GetUnorderedSheets().GetItem( aID, aPathOut );
+        return BuildUnorderedSheetList().GetItem( aID, aPathOut );
     }
 
     SCH_SHEET& Root() const

@@ -1363,11 +1363,11 @@ int ERC_TESTER::TestRuleAreaOverlappingRuleAreasERC(
 void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                            KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
-    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+    m_sheetList.AnnotatePowerSymbols();
 
     // Test duplicate sheet names inside a given sheet.  While one can have multiple references
     // to the same file, each must have a unique name.
-    if( settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
+    if( m_settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking sheet names..." ) );
@@ -1375,7 +1375,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestDuplicateSheetNames( true );
     }
 
-    if( settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
+    if( m_settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking bus conflicts..." ) );
@@ -1401,7 +1401,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     if( aProgressReporter )
         aProgressReporter->AdvancePhase( _( "Checking rule areas..." ) );
 
-    if( settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
+    if( m_settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
     {
         RunRuleAreaERC();
     }
@@ -1410,7 +1410,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         aProgressReporter->AdvancePhase( _( "Checking units..." ) );
 
     // Test is all units of each multiunit symbol have the same footprint assigned.
-    if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
+    if( m_settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking footprints..." ) );
@@ -1418,10 +1418,10 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestMultiunitFootprints();
     }
 
-    if( settings.IsTestEnabled( ERCE_MISSING_UNIT )
-        || settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN )
-        || settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN )
-        || settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
+    if( m_settings.IsTestEnabled( ERCE_MISSING_UNIT )
+        || m_settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN )
+        || m_settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN )
+        || m_settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
     {
         TestMissingUnits();
     }
@@ -1429,20 +1429,20 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     if( aProgressReporter )
         aProgressReporter->AdvancePhase( _( "Checking pins..." ) );
 
-    if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
+    if( m_settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
         TestMultUnitPinConflicts();
 
     // Test pins on each net against the pin connection table
-    if( settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
-        || settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
-        || settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
+    if( m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
+        || m_settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
+        || m_settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
     {
         TestPinToPin();
     }
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)
-    if( settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
+    if( m_settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking labels..." ) );
@@ -1450,7 +1450,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestSimilarLabels();
     }
 
-    if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
+    if( m_settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for unresolved variables..." ) );
@@ -1458,7 +1458,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestTextVars( aDrawingSheet );
     }
 
-    if( settings.IsTestEnabled( ERCE_SIMULATION_MODEL ) )
+    if( m_settings.IsTestEnabled( ERCE_SIMULATION_MODEL ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking SPICE models..." ) );
@@ -1466,7 +1466,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestSimModelIssues();
     }
 
-    if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
+    if( m_settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking no connect pins for connections..." ) );
@@ -1474,8 +1474,8 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestNoConnectPins();
     }
 
-    if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES )
-        || settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
+    if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES )
+        || m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for library symbol issues..." ) );
@@ -1483,7 +1483,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestLibSymbolIssues();
     }
 
-    if( settings.IsTestEnabled( ERCE_FOOTPRINT_LINK_ISSUES ) && aCvPcb )
+    if( m_settings.IsTestEnabled( ERCE_FOOTPRINT_LINK_ISSUES ) && aCvPcb )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for footprint link issues..." ) );
@@ -1491,7 +1491,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestFootprintLinkIssues( aCvPcb, aProject );
     }
 
-    if( settings.IsTestEnabled( ERCE_ENDPOINT_OFF_GRID ) )
+    if( m_settings.IsTestEnabled( ERCE_ENDPOINT_OFF_GRID ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for off grid pins and wires..." ) );
@@ -1499,7 +1499,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestOffGridEndpoints();
     }
 
-    if( settings.IsTestEnabled( ERCE_FOUR_WAY_JUNCTION ) )
+    if( m_settings.IsTestEnabled( ERCE_FOUR_WAY_JUNCTION ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for four way junctions..." ) );
@@ -1507,7 +1507,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestFourWayJunction();
     }
 
-    if( settings.IsTestEnabled( ERCE_UNDEFINED_NETCLASS ) )
+    if( m_settings.IsTestEnabled( ERCE_UNDEFINED_NETCLASS ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for undefined netclasses..." ) );

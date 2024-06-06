@@ -431,7 +431,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     }
     else
     {
-        SCH_SHEET_LIST allSheets = m_frame->Schematic().GetUnorderedSheets();
+        SCH_SHEET_LIST allSheets = m_frame->Schematic().BuildUnorderedSheetList();
         SCH_SCREENS    screens( m_frame->Schematic().Root() );
 
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )

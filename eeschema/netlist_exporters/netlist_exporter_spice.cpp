@@ -202,17 +202,17 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
         wxRemoveFile( thisFile.GetFullPath() );
     }
 
-    for( SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
+    for( SCH_SHEET_PATH& sheet : BuildSheetList( aNetlistOptions ) )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
 
             if( !symbol || symbol->GetExcludedFromSim() )
                 continue;
 
             SPICE_ITEM            spiceItem;
-            std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );
+            std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet, true );
 
             for( const SCH_FIELD& field : symbol->GetFields() )
             {
@@ -324,7 +324,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 
     m_directives.clear();
 
-    for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
+    for( const SCH_SHEET_PATH& sheet : BuildSheetList( aNetlistOptions ) )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
@@ -725,14 +725,14 @@ std::string NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const std::string& a
 }
 
 
-SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::GetSheets( unsigned aNetlistOptions ) const
+SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::BuildSheetList( unsigned aNetlistOptions ) const
 {
     SCH_SHEET_LIST sheets;
 
     if( aNetlistOptions & OPTION_CUR_SHEET_AS_ROOT )
         sheets = SCH_SHEET_LIST( m_schematic->CurrentSheet().Last() );
     else
-        sheets = SCH_SHEET_LIST( m_schematic->GetSheets() );
+        sheets = m_schematic->BuildSheetListSortedByPageNumbers();
 
     alg::delete_if( sheets,
                     [&]( const SCH_SHEET_PATH& sheet )

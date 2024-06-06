@@ -74,7 +74,9 @@ BOOST_FIXTURE_TEST_CASE( ERCRuleAreaNetClasseDirectives, ERC_REGRESSION_TEST_FIX
             allScreens.insert( screen );
 
         SCH_RULE_AREA::UpdateRuleAreasInScreens( allScreens, nullptr );
-        m_schematic->ConnectionGraph()->Recalculate( m_schematic->GetSheets(), true );
+
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+        m_schematic->ConnectionGraph()->Recalculate( sheets, true );
         m_schematic->ConnectionGraph()->RunERC();
 
         errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
@@ -117,12 +119,13 @@ BOOST_FIXTURE_TEST_CASE( ERCRuleAreaOverlaps, ERC_REGRESSION_TEST_FIXTURE )
         SCH_SCREENS                     screens( m_schematic->Root() );
         screens.BuildClientSheetPathList();
 
-        for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr;
-             screen = screens.GetNext() )
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
             allScreens.insert( screen );
 
         SCH_RULE_AREA::UpdateRuleAreasInScreens( allScreens, nullptr );
-        m_schematic->ConnectionGraph()->Recalculate( m_schematic->GetSheets(), true );
+
+        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+        m_schematic->ConnectionGraph()->Recalculate( sheets, true );
 
         ERC_TESTER tester( m_schematic.get() );
         tester.RunRuleAreaERC();

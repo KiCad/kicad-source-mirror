@@ -143,7 +143,7 @@ protected:
     /**
      * Return the paths of exported sheets (either all or the current one).
      */
-    SCH_SHEET_LIST GetSheets( unsigned aNetlistOptions = 0 ) const;
+    SCH_SHEET_LIST BuildSheetList( unsigned aNetlistOptions = 0 ) const;
 
 private:
     void readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,

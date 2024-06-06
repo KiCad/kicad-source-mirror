@@ -142,11 +142,12 @@ private:
     void loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SCH_SHEET* aSheet );
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
-    void saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic, int aNestLevel,
+    void saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic,
+                     const SCH_SHEET_LIST& aSheetList, int aNestLevel,
                      bool aForClipboard, const SCH_SHEET_PATH* aRelativePath = nullptr );
     void saveField( SCH_FIELD* aField, int aNestLevel );
     void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );
-    void saveSheet( SCH_SHEET* aSheet, int aNestLevel );
+    void saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSheetList, int aNestLevel );
     void saveJunction( SCH_JUNCTION* aJunction, int aNestLevel );
     void saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLevel );
     void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLevel );

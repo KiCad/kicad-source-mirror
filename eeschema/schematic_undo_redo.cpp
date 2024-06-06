@@ -374,7 +374,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             // Lazy eval of sheet list; this is expensive even when unsorted
             if( sheets.empty() )
-                sheets = m_schematic->GetUnorderedSheets();
+                sheets = m_schematic->BuildUnorderedSheetList();
 
             SCH_SHEET_PATH undoSheet = sheets.FindSheetForScreen( screen );
 
@@ -435,7 +435,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     {
                         // Lazy eval of sheet list; this is expensive even when unsorted
                         if( sheets.empty() )
-                            sheets = m_schematic->GetUnorderedSheets();
+                            sheets = m_schematic->BuildUnorderedSheetList();
 
                         SCH_SHEET_PATH sheet = sheets.FindSheetForScreen( screen );
                         symbol->SetRef( &sheet, field->GetText() );

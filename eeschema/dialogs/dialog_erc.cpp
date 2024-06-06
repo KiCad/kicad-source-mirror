@@ -430,8 +430,6 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     m_deleteAllMarkers->Enable( false );
     m_saveReport->Enable( false );
 
-    sch->GetSheets().AnnotatePowerSymbols();
-
     int itemsNotAnnotated = m_parent->CheckAnnotate(
             []( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA, SCH_REFERENCE* aItemB )
             {

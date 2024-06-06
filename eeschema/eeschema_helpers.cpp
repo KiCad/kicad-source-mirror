@@ -151,7 +151,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
         return nullptr;
     }
 
-    SCH_SHEET_LIST sheetList = schematic->GetSheets();
+    SCH_SHEET_LIST sheetList = schematic->BuildSheetListSortedByPageNumbers();
     SCH_SCREENS    screens( schematic->Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )

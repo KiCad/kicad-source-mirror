@@ -149,7 +149,7 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->UpdateLocalLibSymbolLinks();
 
-    SCH_SHEET_LIST sheets = aSchematic->GetSheets();
+    SCH_SHEET_LIST sheets = aSchematic->BuildSheetListSortedByPageNumbers();
 
     // Restore all of the loaded symbol instances from the root sheet screen.
     sheets.UpdateSymbolInstanceData( aSchematic->RootScreen()->GetSymbolInstances() );

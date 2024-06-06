@@ -33,9 +33,8 @@ BOOST_AUTO_TEST_CASE( TestSubsheetNetclass )
 {
     LoadSchematic( "issue14494" );
 
-    SCH_SHEET_LIST sheets = m_schematic.GetSheets();
-    SCH_SHEET_PATH path = sheets.at( 1 );
-    SCH_SCREEN *screen = path.GetSheet( 1 )->GetScreen();
+    SCH_SHEET_PATH path = m_schematic.BuildSheetListSortedByPageNumbers().at( 1 );
+    SCH_SCREEN*    screen = path.GetSheet( 1 )->GetScreen();
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
     {

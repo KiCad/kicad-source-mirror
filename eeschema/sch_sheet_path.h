@@ -471,7 +471,7 @@ public:
      *
      * If aSheet == NULL, then this is an empty hierarchy which the user can populate.
      */
-    SCH_SHEET_LIST( SCH_SHEET* aSheet = nullptr, bool aCheckIntegrity = false );
+    SCH_SHEET_LIST( SCH_SHEET* aSheet = nullptr );
 
     ~SCH_SHEET_LIST() {}
 
@@ -595,7 +595,7 @@ public:
      *
      * If \a aSheet is the root sheet, the full sheet path and sheet list are built.
      *
-     * The list will be ordered as per #SCH_SCREEN::GetSheets which results in sheets being ordered
+     * The list will be ordered as per #SCH_SCREEN::BuildSheetList which results in sheets being ordered
      * in the legacy way of using the X and Y positions of the sheets.
      *
      * @see #SortByPageNumbers to sort by page numbers

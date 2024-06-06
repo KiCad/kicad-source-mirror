@@ -89,7 +89,7 @@ std::string NETLIST_EXPORTER_SPICE_MODEL::GenerateItemPinNetName( const std::str
 
 void NETLIST_EXPORTER_SPICE_MODEL::readPorts( unsigned aNetlistOptions )
 {
-    for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
+    for( const SCH_SHEET_PATH& sheet : BuildSheetList( aNetlistOptions ) )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
         {

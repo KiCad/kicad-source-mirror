@@ -145,7 +145,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
     // First we need to get all instances of this sheet so we can annotate
     // whatever symbols we place on all copies
-    SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetSheets();
+    SCH_SHEET_LIST hierarchy = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
     SCH_SHEET_LIST newInstances =
             hierarchy.FindAllSheetsForScreen( m_frame->GetCurrentSheet().LastScreen() );
     newInstances.SortByPageNumbers();

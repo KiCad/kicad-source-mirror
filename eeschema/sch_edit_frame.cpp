@@ -178,7 +178,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // NB: also links the schematic to the loaded project
     CreateScreens();
-    SetCurrentSheet( Schematic().GetSheets()[0] );
+
+    SCH_SHEET_PATH root;
+    root.push_back( &Schematic().Root() );
+    SetCurrentSheet( root );
 
     setupTools();
     setupUIConditions();
@@ -714,20 +717,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return navigateTool && navigateTool->CanGoUp();
             };
 
-    auto navSchematicHasPreviousSheet =
-            [this]( const SELECTION& aSel )
-            {
-                SCH_NAVIGATE_TOOL* navigateTool = m_toolManager->GetTool<SCH_NAVIGATE_TOOL>();
-                return navigateTool && navigateTool->CanGoPrevious();
-            };
-
-    auto navSchematicHasNextSheet =
-            [this]( const SELECTION& aSel )
-            {
-                SCH_NAVIGATE_TOOL* navigateTool = m_toolManager->GetTool<SCH_NAVIGATE_TOOL>();
-                return navigateTool && navigateTool->CanGoNext();
-            };
-
     mgr->SetConditions( EE_ACTIONS::leaveSheet,            ENABLE( belowRootSheetCondition ) );
 
     /* Some of these are bound by default to arrow keys which will get a different action if we
@@ -738,8 +727,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::navigateBack,          ENABLE( navHistoryHsBackward ) );
      */
 
-    mgr->SetConditions( EE_ACTIONS::navigatePrevious,      ENABLE( navSchematicHasPreviousSheet ) );
-    mgr->SetConditions( EE_ACTIONS::navigateNext,          ENABLE( navSchematicHasNextSheet ) );
     mgr->SetConditions( EE_ACTIONS::remapSymbols,          ENABLE( remapSymbolsCondition ) );
     mgr->SetConditions( EE_ACTIONS::toggleHiddenPins,      CHECK( showHiddenPinsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleHiddenFields,    CHECK( showHiddenFieldsCond ) );
@@ -1011,7 +998,7 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SCH_EDIT_FRAME::doCloseWindow()
 {
-    SCH_SHEET_LIST sheetlist = Schematic().GetUnorderedSheets();
+    SCH_SHEET_LIST sheetlist = Schematic().BuildUnorderedSheetList();
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -1723,7 +1710,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     wxString            highlightedConn = GetHighlightedConnection();
     bool                hasHighlightedConn = !highlightedConn.IsEmpty();
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
-    SCH_SHEET_LIST      list = Schematic().GetSheets();
+    SCH_SHEET_LIST      list = Schematic().BuildSheetListSortedByPageNumbers();
     SCH_COMMIT          localCommit( m_toolManager );
 
     if( !aCommit )
@@ -2199,7 +2186,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 
 bool SCH_EDIT_FRAME::IsContentModified() const
 {
-    return Schematic().GetUnorderedSheets().IsModified();
+    return Schematic().BuildUnorderedSheetList().IsModified();
 }
 
 
@@ -2271,7 +2258,8 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                                             const KIID& aSchematicSymbolUUID )
 {
     SCH_SHEET_PATH principalPath;
-    SCH_ITEM*      item = Schematic().GetSheets().GetItem( aSchematicSymbolUUID, &principalPath );
+    SCH_SHEET_LIST sheets = Schematic().BuildUnorderedSheetList();
+    SCH_ITEM*      item = sheets.GetItem( aSchematicSymbolUUID, &principalPath );
     SCH_SYMBOL*    principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
     SCH_COMMIT     commit( m_toolManager );
 
@@ -2285,7 +2273,7 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
 
     std::vector< std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> > allUnits;
 
-    for( const SCH_SHEET_PATH& path : Schematic().GetSheets() )
+    for( const SCH_SHEET_PATH& path : sheets )
     {
         for( SCH_ITEM* candidate : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
