@@ -1223,7 +1223,25 @@ bool SCH_LABEL_BASE::HasConnectivityChanges( const SCH_ITEM* aItem,
     if( GetPosition() != label->GetPosition() )
         return true;
 
-    return GetShownText( aInstance ) != label->GetShownText( aInstance );
+    if( GetShownText( aInstance ) != label->GetShownText( aInstance ) )
+        return true;
+
+    std::vector<wxString> netclasses;
+    std::vector<wxString> otherNetclasses;
+
+    for( const SCH_FIELD& field : m_fields )
+    {
+        if( field.GetCanonicalName() == wxT( "Netclass" ) )
+            netclasses.push_back( field.GetText() );
+    }
+
+    for( const SCH_FIELD& field : label->m_fields )
+    {
+        if( field.GetCanonicalName() == wxT( "Netclass" ) )
+            otherNetclasses.push_back( field.GetText() );
+    }
+
+    return netclasses != otherNetclasses;
 }
 
 
