@@ -253,50 +253,39 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 
     if( !item && searchAllSheets )
     {
-        SCH_SCREENS                  screens( m_frame->Schematic().Root() );
-        std::vector<SCH_SHEET_PATH*> paths;
+        SCH_SCREENS    screens( m_frame->Schematic().Root() );
+        SCH_SHEET_LIST paths;
 
         screens.BuildClientSheetPathList();
 
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         {
             for( SCH_SHEET_PATH& sheet : screen->GetClientSheetPaths() )
-                paths.push_back( &sheet );
+                paths.push_back( sheet );
         }
 
-        std::sort( paths.begin(), paths.end(), [] ( const SCH_SHEET_PATH* lhs,
-                                                    const SCH_SHEET_PATH* rhs ) -> bool
-                {
-                    int retval = lhs->ComparePageNum( *rhs );
-
-                    if( retval < 0 )
-                        return true;
-                    else if( retval > 0 )
-                        return false;
-                    else /// Enforce strict ordering.  If the page numbers are the same, use UUIDs
-                        return lhs->GetCurrentHash() < rhs->GetCurrentHash();
-                } );
+        paths.SortByPageNumbers( false );
 
         if( isReversed )
             std::reverse( paths.begin(), paths.end() );
 
-        for( SCH_SHEET_PATH* sheet : paths )
+        for( SCH_SHEET_PATH& sheet : paths )
         {
             if( afterSheet )
             {
-                if( afterSheet->GetCurrentHash() == sheet->GetCurrentHash() )
+                if( afterSheet->GetCurrentHash() == sheet.GetCurrentHash() )
                     afterSheet = nullptr;
 
                 continue;
             }
 
-            item = nextMatch( sheet->LastScreen(), sheet, nullptr, data, isReversed );
+            item = nextMatch( sheet.LastScreen(), &sheet, nullptr, data, isReversed );
 
             if( item )
             {
-                if( m_frame->Schematic().CurrentSheet() != *sheet )
+                if( m_frame->Schematic().CurrentSheet() != sheet )
                 {
-                    m_frame->Schematic().SetCurrentSheet( *sheet );
+                    m_frame->Schematic().SetCurrentSheet( sheet );
                     m_frame->DisplayCurrentSheet();
                 }
 
@@ -442,7 +431,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     }
     else
     {
-        SCH_SHEET_LIST allSheets = m_frame->Schematic().GetSheets();
+        SCH_SHEET_LIST allSheets = m_frame->Schematic().GetUnorderedSheets();
         SCH_SCREENS    screens( m_frame->Schematic().Root() );
 
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )

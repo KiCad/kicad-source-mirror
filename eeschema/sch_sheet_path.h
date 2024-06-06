@@ -233,6 +233,9 @@ public:
      */
     int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
+    void CachePageNumber() const { m_cached_page_number = GetPageNumber(); }
+    wxString GetCachedPageNumber() const { return m_cached_page_number; }
+
     /**
      * Compare sheets by their page number. If the actual page number is equal, use virtual page
      * numbers to compare.
@@ -415,9 +418,10 @@ private:
     void initFromOther( const SCH_SHEET_PATH& aOther );
 
 protected:
-    std::vector< SCH_SHEET* > m_sheets;
+    std::vector<SCH_SHEET*> m_sheets;
 
-    size_t m_current_hash;
+    size_t                  m_current_hash;
+    mutable wxString        m_cached_page_number;
 
     int m_virtualPageNumber;           /// Page numbers are maintained by the sheet load order.
 

@@ -449,40 +449,34 @@ protected:
      * in the list, do nothing.  Sheet instances allow for the sharing in complex hierarchies
      * which allows for per instance data such as page number for sheets to stored.
      *
-     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
-     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
-     *          will raise an assertion on debug builds and silently fail and return false
-     *          on release builds.
+     * @warning The #KIID_PATH object must be a full hierarchical path which means the sheet
+     *          at index 0 must be the root sheet.
      *
      * @param[in] aInstance is the #SCH_SHEET_PATH of the sheet instance to the instance list.
      * @return false if the instance already exists, true if the instance was added.
      */
-    bool addInstance( const SCH_SHEET_PATH& aInstance );
+    bool addInstance( const KIID_PATH& aInstance );
 
     /**
      * Return the sheet page number for \a aInstance.
      *
-     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
-     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
-     *          will raise an assertion on debug builds and silently fail and return an empty
-     *          page number on release builds.
+     * @warning The #KIID_PATH object must be a full hierarchical path which means the sheet
+     *          at index 0 must be the root sheet.
      *
      * @return the page number for the requested sheet instance.
      */
-    wxString getPageNumber( const SCH_SHEET_PATH& aInstance ) const;
+    wxString getPageNumber( const KIID_PATH& aInstance ) const;
 
     /**
      * Set the page number for the sheet instance \a aInstance.
      *
-     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
-     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
-     *          will raise an assertion on debug builds and silently fail and return on release
-     *          builds.
+     * @warning The #KIID_PATH object must be a full hierarchical path which means the sheet
+     *          at index 0 must be the root sheet.
      *
      * @param[in] aInstance is the hierarchical path of the sheet.
      * @param[in] aReference is the new page number for the sheet.
      */
-    void setPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber );
+    void setPageNumber( const KIID_PATH& aInstance, const wxString& aPageNumber );
 
     bool getInstance( SCH_SHEET_INSTANCE& aInstance, const KIID_PATH& aSheetPath,
                       bool aTestFromEnd = false ) const;

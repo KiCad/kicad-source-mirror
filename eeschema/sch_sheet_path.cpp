@@ -149,9 +149,10 @@ SCH_SHEET_PATH SCH_SHEET_PATH::operator+( const SCH_SHEET_PATH& aOther )
 
 void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
 {
-    m_sheets            = aOther.m_sheets;
-    m_virtualPageNumber = aOther.m_virtualPageNumber;
-    m_current_hash      = aOther.m_current_hash;
+    m_sheets             = aOther.m_sheets;
+    m_virtualPageNumber  = aOther.m_virtualPageNumber;
+    m_current_hash       = aOther.m_current_hash;
+    m_cached_page_number = aOther.m_cached_page_number;
 
     // Note: don't copy m_recursion_test_cache as it is slow and we want SCH_SHEET_PATHS to be
     // very fast to construct for use in the connectivity algorithm.
@@ -290,6 +291,7 @@ wxString SCH_SHEET_PATH::PathAsString() const
 KIID_PATH SCH_SHEET_PATH::Path() const
 {
     KIID_PATH path;
+    path.reserve( m_sheets.size() );
 
     for( const SCH_SHEET* sheet : m_sheets )
         path.push_back( sheet->m_Uuid );
@@ -537,8 +539,7 @@ wxString SCH_SHEET_PATH::GetPageNumber() const
 
     wxCHECK( sheet, wxEmptyString );
 
-    SCH_SHEET_PATH tmpPath = *this;
-
+    KIID_PATH tmpPath = Path();
     tmpPath.pop_back();
 
     return sheet->getPageNumber( tmpPath );
@@ -551,7 +552,7 @@ void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
 
     wxCHECK( sheet, /* void */ );
 
-    SCH_SHEET_PATH tmpPath = *this;
+    KIID_PATH tmpPath = Path();
 
     tmpPath.pop_back();
 
@@ -739,17 +740,27 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
 
 void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
 {
+    for( const SCH_SHEET_PATH& path : *this )
+        path.CachePageNumber();
+
     std::sort( begin(), end(),
-        []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool
+        []( const SCH_SHEET_PATH& a, const SCH_SHEET_PATH& b ) -> bool
         {
-            int retval = a.ComparePageNum( b );
+            int retval = SCH_SHEET::ComparePageNum( a.GetCachedPageNumber(),
+                                                    b.GetCachedPageNumber() );
 
             if( retval < 0 )
                 return true;
             else if( retval > 0 )
                 return false;
-            else /// Enforce strict ordering.  If the page numbers are the same, use UUIDs
-                return a.GetCurrentHash() < b.GetCurrentHash();
+
+            if( a.GetVirtualPageNumber() < b.GetVirtualPageNumber() )
+                return true;
+            else if( a.GetVirtualPageNumber() > b.GetVirtualPageNumber() )
+                return false;
+
+            /// Enforce strict ordering.  If the page numbers are the same, use UUIDs
+            return a.GetCurrentHash() < b.GetCurrentHash();
         } );
 
     if( aUpdateVirtualPageNums )
@@ -757,9 +768,7 @@ void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
         int virtualPageNum = 1;
 
         for( SCH_SHEET_PATH& sheet : *this )
-        {
             sheet.SetVirtualPageNumber( virtualPageNum++ );
-        }
     }
 }
 
@@ -1284,7 +1293,7 @@ void SCH_SHEET_LIST::AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPat
 
     for( SCH_SHEET_PATH& sheetPath : *this )
     {
-        SCH_SHEET_PATH tmp( sheetPath );
+        KIID_PATH tmp = sheetPath.Path();
         SCH_SHEET_PATH newSheetPath( aPrefixSheetPath );
 
         // Prefix the new hierarchical path.
@@ -1302,10 +1311,10 @@ void SCH_SHEET_LIST::AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPat
         SCH_SHEET_INSTANCE instance;
 
         // Add the instance if it doesn't already exist
-        if( !sheet->getInstance( instance, tmp.Path(), true ) )
+        if( !sheet->getInstance( instance, tmp, true ) )
         {
             sheet->addInstance( tmp );
-            sheet->getInstance( instance, tmp.Path(), true );
+            sheet->getInstance( instance, tmp, true );
         }
 
         // Get a new page number if we don't have one

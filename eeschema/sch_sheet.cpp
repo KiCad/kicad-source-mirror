@@ -1306,25 +1306,22 @@ void SCH_SHEET::AddInstance( const SCH_SHEET_INSTANCE& aInstance )
 }
 
 
-bool SCH_SHEET::addInstance( const SCH_SHEET_PATH& aSheetPath )
+bool SCH_SHEET::addInstance( const KIID_PATH& aPath )
 {
-    wxCHECK( aSheetPath.IsFullPath(), false );
-    wxCHECK( !aSheetPath.Last() || ( aSheetPath.Last()->m_Uuid != m_Uuid ), false );
-
     for( const SCH_SHEET_INSTANCE& instance : m_instances )
     {
         // if aSheetPath is found, nothing to do:
-        if( instance.m_Path == aSheetPath.Path() )
+        if( instance.m_Path == aPath )
             return false;
     }
 
     wxLogTrace( traceSchSheetPaths, wxT( "Adding instance `%s` to sheet `%s`." ),
-                aSheetPath.Path().AsString(),
+                aPath.AsString(),
                 ( GetName().IsEmpty() ) ? wxString( wxT( "root" ) ) : GetName() );
 
     SCH_SHEET_INSTANCE instance;
 
-    instance.m_Path = aSheetPath.Path();
+    instance.m_Path = aPath;
 
     // This entry does not exist: add it with an empty page number.
     m_instances.emplace_back( instance );
@@ -1384,17 +1381,13 @@ const SCH_SHEET_INSTANCE& SCH_SHEET::GetRootInstance() const
 }
 
 
-wxString SCH_SHEET::getPageNumber( const SCH_SHEET_PATH& aSheetPath ) const
+wxString SCH_SHEET::getPageNumber( const KIID_PATH& aPath ) const
 {
-    wxCHECK( aSheetPath.IsFullPath(), wxEmptyString );
-    wxCHECK( !aSheetPath.Last() || ( aSheetPath.Last()->m_Uuid != m_Uuid ), wxEmptyString );
-
     wxString pageNumber;
-    KIID_PATH path = aSheetPath.Path();
 
     for( const SCH_SHEET_INSTANCE& instance : m_instances )
     {
-        if( instance.m_Path == path )
+        if( instance.m_Path == aPath )
         {
             pageNumber = instance.m_PageNumber;
             break;
@@ -1405,16 +1398,11 @@ wxString SCH_SHEET::getPageNumber( const SCH_SHEET_PATH& aSheetPath ) const
 }
 
 
-void SCH_SHEET::setPageNumber( const SCH_SHEET_PATH& aSheetPath, const wxString& aPageNumber )
+void SCH_SHEET::setPageNumber( const KIID_PATH& aPath, const wxString& aPageNumber )
 {
-    wxCHECK( aSheetPath.IsFullPath(), /* void */ );
-    wxCHECK( !aSheetPath.Last() || ( aSheetPath.Last()->m_Uuid != m_Uuid ), /* void */ );
-
-    KIID_PATH path = aSheetPath.Path();
-
     for( SCH_SHEET_INSTANCE& instance : m_instances )
     {
-        if( instance.m_Path == path )
+        if( instance.m_Path == aPath )
         {
             instance.m_PageNumber = aPageNumber;
             break;
