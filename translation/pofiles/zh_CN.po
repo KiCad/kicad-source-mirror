@@ -7277,9 +7277,8 @@ msgid "Line length exceeded"
 msgstr "超出了行长度限制"
 
 #: common/settings/bom_settings.cpp:124
-#, fuzzy
 msgid "Default Editing"
-msgstr "默认单位"
+msgstr "编辑默认值"
 
 #: common/settings/bom_settings.cpp:124 common/settings/bom_settings.cpp:145
 #: common/settings/bom_settings.cpp:164 common/settings/bom_settings.cpp:183
@@ -15468,7 +15467,7 @@ msgstr "层次标签和图纸引脚不匹配"
 
 #: eeschema/erc/erc_item.cpp:83
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "四个连接点被连接在一起"
 
 #: eeschema/erc/erc_item.cpp:87
 msgid "A pin with a \"no connection\" flag is connected"
@@ -20626,7 +20625,7 @@ msgstr "隐藏符号工作区"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Focus Symbol Tree Search Field"
-msgstr ""
+msgstr "聚焦符号树搜索字段"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Export View as PNG..."
@@ -22738,13 +22737,13 @@ msgstr "绘图模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "Flashing 项目草图"
+msgstr "flashed 项目草图"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:61
 msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
-msgstr ""
+msgstr "在轮廓模式下显示 flashed 项目 (使用标准或光圈宏 (Aperture macros) 绘制的项目)"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -22759,19 +22758,16 @@ msgid "Display polygon items in outline mode"
 msgstr "在轮廓模式下显示多边形项目"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
-#, fuzzy
 msgid "Forced Opacity Display Mode"
-msgstr "强制非透明显示模式"
+msgstr "强制不透明度显示模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
 msgstr "强制不透明度:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
-#, fuzzy
 msgid "Opacity in forced opacity display mode"
-msgstr "强制非透明度显示模式下的不透明度"
+msgstr "强制不透明度显示模式下的不透明度"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -23490,11 +23486,11 @@ msgstr "在轮廓模式下显示线"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
-msgstr "项目快速草图"
+msgstr "Flashed 草图项目"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "在轮廓模式下显示焊盘"
+msgstr "在轮廓模式下 flashed 项目"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -23521,14 +23517,12 @@ msgid "Show dcode number"
 msgstr "显示 D 码编号"
 
 #: gerbview/tools/gerbview_actions.cpp:234
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "在强制非透明显示模式下显示"
+msgstr "以强制不透明度模式显示"
 
 #: gerbview/tools/gerbview_actions.cpp:235
-#, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "使用强制非透明显示模式显示图层"
+msgstr "使用强制不透明度颜色模式显示层"
 
 #: gerbview/tools/gerbview_actions.cpp:241
 msgid "Show in XOR Mode"
@@ -24148,7 +24142,7 @@ msgstr "剔除阻焊开窗中的丝印"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:68
 msgid "Disable aperture macros"
-msgstr "禁用光圈 (Aperture) 宏"
+msgstr "禁用光圈宏 (Aperture macros)"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:73
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
@@ -33949,7 +33943,6 @@ msgid "Fabrication property:"
 msgstr "制造属性:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -33961,14 +33954,14 @@ msgid ""
 "Castellated specifies a through hole pad on a board edge\n"
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
-"用于在制造文件中指定特殊用途或约束的可选特性:\n"
+"用于在制造文件中指定特殊用途或约束的可选属性:\n"
 "BGA 特性用于 BGA 封装中的焊盘\n"
 "局部基准点 特性作为父级封装的基准\n"
 "全局基准点 特性作为整个电路板的基准\n"
 "测试点焊盘 (Test Point) 指定电气测试点\n"
 "散热焊盘 (Heatsink) 指定热焊盘\n"
 "半孔焊盘 (Castellated) 指定板边缘金属化半孔焊盘\n"
-"机械 (Mechanical) 指定用于机械支持的通孔焊盘"
+"机械 (Mechanical) 指定用于机械支撑的通孔焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2350
 msgid "BGA pad"
@@ -34414,14 +34407,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid "Disable aperture macros (not recommended)"
-msgstr "禁用光圈 (Aperture) 宏 (不推荐)"
+msgstr "禁用光圈宏 (Aperture macros) (不推荐)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:242
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"禁用 Gerber 文件中的 Aperture 宏\n"
+"禁用 Gerber 文件中的光圈宏 (Aperture macros)\n"
 "仅对有问题的 Gerber 查看器使用。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
@@ -45332,9 +45325,8 @@ msgid "Hide Footprint Tree"
 msgstr "隐藏封装树"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Focus the Footprint Tree Search Field"
-msgstr "旋转封装字段"
+msgstr "聚焦封装树搜索字段"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "New Footprint"
@@ -46290,52 +46282,44 @@ msgid ""
 msgstr "将所选项目与光标下项目水平居中对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "水平分布"
+msgstr "沿中心水平分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1949
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
-msgstr "将所选项目在最左侧项目和最右侧项目之间水平分布"
+msgstr "在最左侧项目和最右侧项目之间分布选定项目, 以使项目能够沿中心均匀分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1956
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "水平分布"
+msgstr "水平均匀间隔分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1957
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
-msgstr "将所选项目在最左侧项目和最右侧项目之间水平分布"
+msgstr "在最左侧项目和最右侧项目之间分布选定项目, 以使项目之间的间隙相等"
 
 #: pcbnew/tools/pcb_actions.cpp:1964
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "垂直分布"
+msgstr "垂直均匀间隔分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1965
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
-msgstr "将所选项目在最上侧项目和最下侧项目之间垂直分布"
+msgstr "在最顶部项目和最底部项目之间分布选定项目, 以使项目之间的间隙相等"
 
 #: pcbnew/tools/pcb_actions.cpp:1972
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "垂直分布"
+msgstr "沿中心垂直分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1973
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
-msgstr "将所选项目在最上侧项目和最下侧项目之间垂直分布"
+msgstr "在最顶部项目和最底部项目之间分布选定项目, 以使项目能够沿中心均匀分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1988
 msgid "Create a corner"
@@ -46702,9 +46686,8 @@ msgid "Length Tuning Settings..."
 msgstr "长度调整设置..."
 
 #: pcbnew/tools/pcb_actions.cpp:2478
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "显示项目属性对话框"
+msgstr "显示调整模式属性对话框"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
