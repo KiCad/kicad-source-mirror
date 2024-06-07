@@ -192,12 +192,6 @@ public:
     /// Assignment operator
     VECTOR2<T>& operator=( const VECTOR2<T>& aVector );
 
-    /// Vector addition operator
-    VECTOR2<T> operator+( const VECTOR2<T>& aVector ) const;
-
-    /// Scalar addition operator
-    VECTOR2<T> operator+( const T& aScalar ) const;
-
     /// Compound assignment operator
     VECTOR2<T>& operator+=( const VECTOR2<T>& aVector );
 
@@ -209,12 +203,6 @@ public:
     /// Compound assignment operator
     VECTOR2<T>& operator+=( const T& aScalar );
 
-    /// Vector subtraction operator
-    VECTOR2<T> operator-( const VECTOR2<T>& aVector ) const;
-
-    /// Scalar subtraction operator
-    VECTOR2<T> operator-( const T& aScalar ) const;
-
     /// Compound assignment operator
     VECTOR2<T>& operator-=( const VECTOR2<T>& aVector );
 
@@ -223,12 +211,6 @@ public:
 
     /// Negate Vector operator
     VECTOR2<T> operator-();
-
-    /// Scalar product operator
-    extended_type operator*( const VECTOR2<T>& aVector ) const;
-
-    /// Multiplication with a factor
-    VECTOR2<T> operator*( const T& aFactor ) const;
 
     /// Division with a factor
     VECTOR2<T> operator/( double aFactor ) const;
@@ -418,31 +400,31 @@ const std::string VECTOR2<T>::Format() const
 }
 
 
-template <class T>
-VECTOR2<T> VECTOR2<T>::operator+( const VECTOR2<T>& aVector ) const
+template <class T, class U>
+VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
 {
-    return VECTOR2<T> ( x + aVector.x, y + aVector.y );
+    return VECTOR2<std::common_type_t<T, U>>( aLHS.x + aRHS.x, aLHS.y + aRHS.y );
 }
 
 
-template <class T>
-VECTOR2<T> VECTOR2<T>::operator+( const T& aScalar ) const
+template <class T, class U>
+VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
-    return VECTOR2<T> ( x + aScalar, y + aScalar );
+    return VECTOR2<std::common_type_t<T, U>>( aLHS.x + aScalar, aLHS.y + aScalar );
 }
 
 
-template <class T>
-VECTOR2<T> VECTOR2<T>::operator-( const VECTOR2<T>& aVector ) const
+template <class T, class U>
+VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
 {
-    return VECTOR2<T> ( x - aVector.x, y - aVector.y );
+    return VECTOR2<std::common_type_t<T, U>>( aLHS.x - aRHS.x, aLHS.y - aRHS.y );
 }
 
 
-template <class T>
-VECTOR2<T> VECTOR2<T>::operator-( const T& aScalar ) const
+template <class T, class U>
+VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
 {
-    return VECTOR2<T> ( x - aScalar, y - aScalar );
+    return VECTOR2<std::common_type_t<T, U>>( aLHS.x - aScalar, aLHS.y - aScalar );
 }
 
 
@@ -453,18 +435,29 @@ VECTOR2<T> VECTOR2<T>::operator-()
 }
 
 
-template <class T>
-typename VECTOR2<T>::extended_type VECTOR2<T>::operator*( const VECTOR2<T>& aVector ) const
+template <class T, class U>
+#ifdef SWIG
+double operator*( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
+#else
+auto operator*( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
+#endif
 {
-    return (extended_type)aVector.x * x + (extended_type)aVector.y * y;
+    using extended_type = typename VECTOR2<std::common_type_t<T, U>>::extended_type;
+    return (extended_type)aLHS.x * aRHS.x + (extended_type)aLHS.y * aRHS.y;
 }
 
 
-template <class T>
-VECTOR2<T> VECTOR2<T>::operator*( const T& aFactor ) const
+template <class T, class U>
+VECTOR2<std::common_type_t<T, U>> operator*( const VECTOR2<T>& aLHS, const U& aScalar )
 {
-    VECTOR2<T> vector( x * aFactor, y * aFactor );
-    return vector;
+    return VECTOR2<std::common_type_t<T, U>>( aLHS.x * aScalar, aLHS.y * aScalar );
+}
+
+
+template <class T, class U>
+VECTOR2<std::common_type_t<T, U>> operator*( const T& aScalar, const VECTOR2<U>& aVector )
+{
+    return VECTOR2<std::common_type_t<T, U>>( aScalar * aVector.x, aScalar * aVector.y );
 }
 
 
@@ -475,14 +468,6 @@ VECTOR2<T> VECTOR2<T>::operator/( double aFactor ) const
         return VECTOR2<T>( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );
     else
         return VECTOR2<T>( static_cast<T>( x / aFactor ), static_cast<T>( y / aFactor ) );
-}
-
-
-template <class T>
-VECTOR2<T> operator*( const T& aFactor, const VECTOR2<T>& aVector )
-{
-    VECTOR2<T> vector( aVector.x * aFactor, aVector.y * aFactor );
-    return vector;
 }
 
 
