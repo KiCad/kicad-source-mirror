@@ -53,11 +53,11 @@
     },
     {
       "name": "wxwidgets",
-      "version": "3.2.4#1"
+      "version": "3.2.5#0"
     },
     {
       "name": "wxpython",
-      "version": "4.2.0#15"
+      "version": "4.2.0#16"
     },
     {
       "name": "ngspice",
