@@ -566,6 +566,10 @@ set( BMAPS_MID
     zoom_center_on_screen
     zoom_in
     zoom_out
+    zoom_in_horizontally
+    zoom_out_horizontally
+    zoom_in_vertically
+    zoom_out_vertically
     zoom_selection
     )
 
