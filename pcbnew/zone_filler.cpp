@@ -875,6 +875,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     ZONE_CONNECTION        connection;
     DRC_CONSTRAINT         constraint;
     int                    padClearance;
+    std::shared_ptr<SHAPE> padShape;
     int                    holeClearance;
     SHAPE_POLY_SET         holes;
 
@@ -916,21 +917,22 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 connection = constraint.m_ZoneConnection;
             }
 
+            if( connection == ZONE_CONNECTION::THERMAL && !pad->CanFlashLayer( aLayer ) )
+                connection = ZONE_CONNECTION::NONE;
+
             switch( connection )
             {
             case ZONE_CONNECTION::THERMAL:
-                constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
-                                                         aLayer );
-                padClearance = constraint.GetValue().Min();
+                padShape = pad->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
 
-                if( pad->CanFlashLayer( aLayer ) )
+                if( aFill.Collide( padShape.get(), 0 ) )
                 {
+                    constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad,
+                                                             aZone, aLayer );
+                    padClearance = constraint.GetValue().Min();
+
                     aThermalConnectionPads.push_back( pad );
                     addKnockout( pad, aLayer, padClearance, holes );
-                }
-                else if( pad->GetDrillSize().x > 0 )
-                {
-                    pad->TransformHoleToPolygon( holes, padClearance, m_maxError, ERROR_OUTSIDE );
                 }
 
                 break;
