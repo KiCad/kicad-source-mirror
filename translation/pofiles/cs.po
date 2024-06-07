@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-06-07 09:53+0000\n"
+"PO-Revision-Date: 2024-06-08 11:09+0000\n"
 "Last-Translator: ivit VT <st17ivito@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
@@ -7378,7 +7378,7 @@ msgstr "Přepíná režim edice oblouku"
 
 #: common/tool/actions.cpp:289
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Přepnout na jiný způsob úpravy oblouků"
 
 #: common/tool/actions.cpp:296
 msgid "Show Search Panel"
@@ -7513,7 +7513,7 @@ msgstr "Vrátit zpět poslední přiblížení"
 
 #: common/tool/actions.cpp:475 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
-msgstr ""
+msgstr "Návrat k úrovni přiblížení před poslední akcí přiblížení"
 
 #: common/tool/actions.cpp:481 common/widgets/mathplot.cpp:1448
 msgid "Redo Last Zoom"
@@ -7521,7 +7521,7 @@ msgstr "Znovu poslední přiblížení"
 
 #: common/tool/actions.cpp:482 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
+msgstr "Návrat k úrovni přiblížení před posledním zrušením přiblížení"
 
 #: common/tool/actions.cpp:499
 msgid "Cursor Up"
@@ -7647,6 +7647,8 @@ msgstr "Zobrazit mřížku pozadí v okně úprav"
 #: common/tool/actions.cpp:696
 msgid "Enables item-specific grids that override the current grid"
 msgstr ""
+"Povoluje mřížky specifické pro jednotlivé položky, které přepisují aktuální "
+"mřížku"
 
 #: common/tool/actions.cpp:703
 msgid "Edit grid definitions"
@@ -7916,7 +7918,7 @@ msgstr "Hlášení chyb"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr ""
+msgstr "Nelze přepnout na správce projektu v samostatném režimu."
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -9799,7 +9801,7 @@ msgstr "Velikost mezipaměti:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
 msgid "How many database queries to cache"
-msgstr ""
+msgstr "Kolik databázových dotazů uložit do mezipaměti"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
 msgid "Cache timeout:"
@@ -9809,6 +9811,7 @@ msgstr "Časový limit mezipaměti:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
 msgstr ""
+"Doba v sekundách, po kterou budou databázové dotazy ukládány do mezipaměti"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 msgid "Database Library Settings"
@@ -10203,10 +10206,12 @@ msgstr "externí simulátor nenalezen"
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Poznámka: příkazový řádek je obvykle: <tt>&lt;cesta k SPICE binárnímu "
+"souboru&gt; \"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:613
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "externí simulátor má nesprávný formát nebo architekturu"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:618
 msgid "permission denied"
