@@ -24544,7 +24544,7 @@ msgstr "Export-Werkzeuge (Gerber-, Bohr-, Positionsdateien, etc.)"
 #: kicad/cli/command_pcb_export_3d.cpp:76
 #, fuzzy
 msgid "Output file format, options: step, brep, xao, glb (binary glTF)"
-msgstr "Ausgabedateiformat, Optionen: step, glb (binäres glTF)"
+msgstr "Ausgabedateiformat, Optionen: step, brep, xao, glb (binäres glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:80
 msgid "Overwrite output file"
@@ -24579,12 +24579,12 @@ msgstr "Nur Platine ohne Bauteile ausgeben"
 #: kicad/cli/command_pcb_export_3d.cpp:116
 #, fuzzy
 msgid "Exclude board body"
-msgstr "Von Platine ausschließen"
+msgstr "Platinenkörper ausschl."
 
 #: kicad/cli/command_pcb_export_3d.cpp:120
 #, fuzzy
 msgid "Exclude 3D models for components"
-msgstr "3D-Modelle von Bauteilen mit Attribut 'Nicht bestücken' ausschließen"
+msgstr "3D-Modelle von Komponenten ausschl."
 
 #: kicad/cli/command_pcb_export_3d.cpp:124
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
@@ -25451,14 +25451,12 @@ msgid "Export STEP"
 msgstr "STEP exportieren"
 
 #: kicad/kicad_cli.cpp:115
-#, fuzzy
 msgid "Export BREP"
-msgstr "STEP exportieren"
+msgstr "BREP exportieren"
 
 #: kicad/kicad_cli.cpp:116
-#, fuzzy
 msgid "Export XAO"
-msgstr "DXF exportieren"
+msgstr "XAO exportieren"
 
 #: kicad/kicad_cli.cpp:117
 msgid "Export VRML"
@@ -28405,9 +28403,8 @@ msgid "1"
 msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
-#, fuzzy
 msgid "Power Comment:"
-msgstr "Kommentar:"
+msgstr "Versorgungskommentar:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
 msgid "Copy to Clipboard"
@@ -32151,9 +32148,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "Textgrößen, -stile und -positionen aktualisieren"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text content"
-msgstr "Feldtexte aktualisieren"
+msgstr "Texte aktualisieren"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update fabrication attributes"
@@ -32231,9 +32227,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "Textgrößen, -stile und -positionen aktualisieren/zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "Feldtexte aktualisieren/zurücksetzen"
+msgstr "Texte aktualisieren/zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -32510,12 +32505,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:61
 #, fuzzy
 msgid "Export board body"
-msgstr "Platinenkörper anzeigen"
+msgstr "Platinenkörper exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:64
 #, fuzzy
 msgid "Export components"
-msgstr "Keine Bauteile"
+msgstr "Bauteile exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 #, fuzzy
@@ -32529,7 +32524,7 @@ msgstr "Zonen auf externen Kupferlagen exportieren."
 #: pcbnew/dialogs/dialog_export_step_base.cpp:80
 #, fuzzy
 msgid "Export inner copper layers"
-msgstr "Innere Kupferlage"
+msgstr "Kupferinnnenlagen exportiern"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:83
 msgid "Export silkscreen"
@@ -32573,6 +32568,8 @@ msgstr "Netzfilter (unterstützt Platzhalter):"
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr ""
+"Nur Kupferelemente, die zu Netzen gehören, die diesem Filter entsprechen, "
+"werden exportiert."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:113
 msgid "Board outline chaining tolerance:"
@@ -34220,9 +34217,8 @@ msgid "Set to specified values:"
 msgstr "Auf eingestellte Werte setzen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "(nur Symboleditor)"
+msgstr "Sichtbar  (nur Text)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -42391,12 +42387,12 @@ msgstr "Castellated Pad (Halbloch)"
 #: pcbnew/pad.cpp:2356
 #, fuzzy
 msgid "Mechanical pad"
-msgstr "Mechanisch"
+msgstr "Mechanisches Pad"
 
 #: pcbnew/pad.cpp:2374
 #, fuzzy
 msgid "Front, back and connected layers"
-msgstr "Start, Ende und verbundene Lagen"
+msgstr "Vorderseite, Rückseite und verbundene Lagen"
 
 #: pcbnew/pad.cpp:2414
 msgid "Pad Type"
@@ -42496,9 +42492,8 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Nullen am Ende unterdrücken"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Keep Aligned with Dimension"
-msgstr "An der Bemaßung ausgerichtet bleiben"
+msgstr "An Bemaßung ausrichten"
 
 #: pcbnew/pcb_dimension.cpp:1547
 msgid "Crossbar Height"
@@ -46043,7 +46038,7 @@ msgstr "Es muss eine Form mit mindestens zwei Linien ausgewählt werden."
 #: pcbnew/tools/edit_tool.cpp:1495
 #, fuzzy
 msgid "Simplify Shapes"
-msgstr "Komplexe Form"
+msgstr "Formen vereinfachen"
 
 #: pcbnew/tools/edit_tool.cpp:1495 pcbnew/tools/edit_tool.cpp:1564
 msgid "Tolerance value:"
@@ -46052,7 +46047,7 @@ msgstr "Toleranzwert:"
 #: pcbnew/tools/edit_tool.cpp:1529 pcbnew/tools/pcb_actions.cpp:628
 #, fuzzy
 msgid "Simplify Polygons"
-msgstr "Polygone auf F_Cu vereinfachen"
+msgstr "Polygone vereinfachen"
 
 #: pcbnew/tools/edit_tool.cpp:1564 pcbnew/tools/edit_tool.cpp:1601
 #: pcbnew/tools/pcb_actions.cpp:634
@@ -47753,9 +47748,8 @@ msgstr ""
 "ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "Horizontal verteilen"
+msgstr "Horizontal verteilen anhand der Mittelpunkte"
 
 #: pcbnew/tools/pcb_actions.cpp:1949
 #, fuzzy
