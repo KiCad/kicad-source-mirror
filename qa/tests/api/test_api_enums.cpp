@@ -34,6 +34,7 @@
 
 // Board-specific
 #include <padstack.h>
+#include <pcb_track.h>
 #include <zones.h>
 
 using namespace kiapi::common;
@@ -160,9 +161,26 @@ BOOST_AUTO_TEST_CASE( ZoneConnectionStyle )
     testEnums<ZONE_CONNECTION, kiapi::board::types::ZoneConnectionStyle>();
 }
 
+BOOST_AUTO_TEST_CASE( PadType )
+{
+    testEnums<PAD_ATTRIB, kiapi::board::types::PadType>();
+}
+
+BOOST_AUTO_TEST_CASE( PadStackType )
+{
+    testEnums<PADSTACK::MODE, kiapi::board::types::PadStackType>();
+}
+
 BOOST_AUTO_TEST_CASE( UnconnectedLayerRemoval )
 {
     testEnums<PADSTACK::UNCONNECTED_LAYER_MODE, kiapi::board::types::UnconnectedLayerRemoval>();
 }
+
+BOOST_AUTO_TEST_CASE( ViaType )
+{
+    // VIATYPE::NOT_DEFINED is not mapped
+    testEnums<VIATYPE, kiapi::board::types::ViaType>( true );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -57,7 +57,7 @@ void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aF
         item->SetPolyShape( poly_outline );
         item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
         item->SetParent( this );
-        m_editPrimitives.emplace_back( item );
+        m_padStack.AddPrimitive( item );
     }
 
     SetDirty();
@@ -71,7 +71,7 @@ void PAD::AddPrimitivePoly( const std::vector<VECTOR2I>& aPoly, int aThickness, 
     item->SetPolyPoints( aPoly );
     item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
     item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
+    m_padStack.AddPrimitive( item );
     SetDirty();
 }
 
@@ -102,7 +102,7 @@ void PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrim
 void PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
 {
     aPrimitive->SetParent( this );
-    m_editPrimitives.emplace_back( aPrimitive );
+    m_padStack.AddPrimitive( aPrimitive );
 
     SetDirty();
 }
@@ -111,8 +111,7 @@ void PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
 // clear the basic shapes list and associated data
 void PAD::DeletePrimitivesList()
 {
-    m_editPrimitives.clear();
-
+    m_padStack.ClearPrimitives();
     SetDirty();
 }
 
@@ -122,7 +121,7 @@ void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
 {
     SHAPE_POLY_SET polyset;
 
-    for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
+    for( const std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives() )
     {
         if( !primitive->IsProxyItem() )
             primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, aError, aErrorLoc );

@@ -32,6 +32,7 @@
 #include <properties/property.h>
 #include <zones.h>
 
+class BOARD_ITEM;
 class PCB_SHAPE;
 
 
@@ -196,6 +197,10 @@ public:
         std::optional<int> thermal_gap;
         std::optional<int> clearance;
 
+        /*
+         * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
+         * to m_Pos (NOT shapePos) at orient 0.
+         */
         std::vector<std::shared_ptr<PCB_SHAPE>> custom_shapes;
 
         bool operator==( const COPPER_LAYER_PROPS& aOther ) const;
@@ -226,7 +231,7 @@ public:
     };
 
 public:
-    PADSTACK();
+    PADSTACK( BOARD_ITEM* aParent );
     virtual ~PADSTACK() = default;
     PADSTACK( const PADSTACK& aOther );
     PADSTACK& operator=( const PADSTACK &aOther );
@@ -332,8 +337,40 @@ public:
     EDA_ANGLE ThermalSpokeAngle( PCB_LAYER_ID aLayer = F_Cu ) const;
     void SetThermalSpokeAngle( EDA_ANGLE aAngle, PCB_LAYER_ID aLayer = F_Cu );
 
-private:
+    std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer = F_Cu );
+    const std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer = F_Cu ) const;
 
+    /**
+     * Adds a custom shape primitive to the padstack.
+     * @param aShape is a shape to add as a custom primitive. Ownership is passed to this PADSTACK.
+     * @param aLayer is the padstack layer to add to.
+     */
+    void AddPrimitive( PCB_SHAPE* aShape, PCB_LAYER_ID aLayer = F_Cu );
+
+    /**
+     * Appends a copy of each shape in the given list to this padstack's custom shape list
+     * @param aPrimitivesList is a list of shapes to add copies of to this PADSTACK
+     * @param aLayer is the padstack layer to add to.
+     */
+    void AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
+                           PCB_LAYER_ID aLayer = F_Cu );
+
+    /**
+     * Clears the existing primitive list (freeing the owned shapes) and adds copies of the given
+     * shapes to the padstack for the given layer.
+     * @param aPrimitivesList is a list of shapes to add copies of to this PADSTACK
+     * @param aLayer is the padstack layer to add to.
+     */
+    void ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
+                            PCB_LAYER_ID aLayer = F_Cu );
+
+    void ClearPrimitives( PCB_LAYER_ID aLayer = F_Cu );
+
+private:
+    ///! The BOARD_ITEM this PADSTACK belongs to; will be used as the parent for owned shapes
+    BOARD_ITEM* m_parent;
+
+    ///! The copper layer variation mode this padstack is in
     MODE m_mode;
 
     ///! The board layers that this padstack is active on

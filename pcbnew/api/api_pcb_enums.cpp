@@ -160,7 +160,7 @@ VIATYPE FromProtoEnum( types::ViaType aValue )
     case types::ViaType::VT_MICRO:        return VIATYPE::MICROVIA;
 
     default:
-        wxCHECK_MSG( false,  VIATYPE::THROUGH,
+        wxCHECK_MSG( false, VIATYPE::THROUGH,
                      "Unhandled case in FromProtoEnum<types::ViaType>" );
     }
 }

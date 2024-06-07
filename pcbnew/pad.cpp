@@ -67,7 +67,8 @@ using KIGFX::PCB_RENDER_SETTINGS;
 
 
 PAD::PAD( FOOTPRINT* parent ) :
-    BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
+    BOARD_CONNECTED_ITEM( parent, PCB_PAD_T ),
+    m_padStack( this )
 {
     VECTOR2I& drill = m_padStack.Drill().size;
     VECTOR2I& size = m_padStack.Size();
@@ -105,7 +106,8 @@ PAD::PAD( FOOTPRINT* parent ) :
 
 
 PAD::PAD( const PAD& aOther ) :
-    BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T )
+    BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T ),
+    m_padStack( this )
 {
     PAD::operator=( aOther );
 
@@ -655,7 +657,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
     if( GetShape() == PAD_SHAPE::CUSTOM )
     {
-        for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
+        for( const std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives() )
         {
             if( !primitive->IsProxyItem() )
             {
@@ -882,7 +884,7 @@ void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 void PAD::FlipPrimitives( bool aFlipLeftRight )
 {
-    for( std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
+    for( std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives() )
         primitive->Flip( VECTOR2I( 0, 0 ), aFlipLeftRight );
 
     SetDirty();
@@ -1363,8 +1365,8 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
     if( ( diff = aPadRef->m_padStack.ChamferRatio() - aPadCmp->m_padStack.ChamferRatio() ) != 0 )
         return diff;
 
-    if( ( diff = static_cast<int>( aPadRef->m_editPrimitives.size() ) -
-          static_cast<int>( aPadCmp->m_editPrimitives.size() ) ) != 0 )
+    if( ( diff = static_cast<int>( aPadRef->m_padStack.Primitives().size() ) -
+          static_cast<int>( aPadCmp->m_padStack.Primitives().size() ) ) != 0 )
         return diff;
 
     // @todo: Compare custom pad primitives for pads that have the same number of primitives
@@ -2175,7 +2177,7 @@ bool PAD::operator==( const BOARD_ITEM& aOther ) const
 
     for( size_t ii = 0; ii < GetPrimitives().size(); ii++ )
     {
-        if( GetPrimitives()[ii] != other.GetPrimitives()[ii] )
+        if( *GetPrimitives()[ii] != *other.GetPrimitives()[ii] )
             return false;
     }
 

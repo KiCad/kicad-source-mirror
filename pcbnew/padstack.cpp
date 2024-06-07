@@ -24,9 +24,11 @@
 #include <api/api_utils.h>
 #include <api/api_pcb_utils.h>
 #include <api/board/board_types.pb.h>
+#include <pcb_shape.h>
 
 
-PADSTACK::PADSTACK() :
+PADSTACK::PADSTACK( BOARD_ITEM* aParent ) :
+        m_parent( aParent ),
         m_mode( MODE::NORMAL ),
         m_orientation( ANGLE_0 ),
         m_unconnectedLayerMode( UNCONNECTED_LAYER_MODE::KEEP_ALL ),
@@ -112,6 +114,7 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
         Size() = kiapi::common::UnpackVector2( layer.size() );
         SetLayerSet( kiapi::board::UnpackLayerSet( layer.layers() ) );
         SetShape( FromProtoEnum<PAD_SHAPE>( layer.shape() ) );
+        SetAnchorShape( FromProtoEnum<PAD_SHAPE>( layer.custom_anchor_shape() ) );
 
         SHAPE_PROPS& props = CopperLayerDefaults().shape;
         props.chamfered_rect_ratio = layer.chamfer_ratio();
@@ -128,6 +131,18 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
 
         if( layer.chamfered_corners().bottom_right() )
             props.chamfered_rect_positions |= RECT_CHAMFER_BOTTOM_RIGHT;
+
+        ClearPrimitives();
+        google::protobuf::Any a;
+
+        for( const GraphicShape& shapeProto : layer.custom_shapes() )
+        {
+            a.PackFrom( shapeProto );
+            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_parent );
+
+            if( shape->Deserialize( a ) )
+                AddPrimitive( shape.release() );
+        }
     }
 
     SetUnconnectedLayerMode(
@@ -152,8 +167,18 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
     kiapi::board::PackLayerSet( *stackLayer->mutable_layers(), LayerSet() );
     kiapi::common::PackVector2( *stackLayer->mutable_size(), Size() );
     stackLayer->set_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( Shape() ) );
+    stackLayer->set_custom_anchor_shape( ToProtoEnum<PAD_SHAPE, PadStackShape>( AnchorShape() ) );
     stackLayer->set_chamfer_ratio( CopperLayerDefaults().shape.chamfered_rect_ratio );
     stackLayer->set_corner_rounding_ratio( CopperLayerDefaults().shape.round_rect_radius_ratio );
+
+    google::protobuf::Any a;
+
+    for( const std::shared_ptr<PCB_SHAPE>& shape : Primitives() )
+    {
+        shape->Serialize( a );
+        GraphicShape* s = stackLayer->add_custom_shapes();
+        a.UnpackTo( s );
+    }
 
     const int& corners = CopperLayerDefaults().shape.chamfered_rect_positions;
     stackLayer->mutable_chamfered_corners()->set_top_left( corners & RECT_CHAMFER_TOP_LEFT );
@@ -465,6 +490,48 @@ EDA_ANGLE PADSTACK::ThermalSpokeAngle( PCB_LAYER_ID aLayer ) const
 void PADSTACK::SetThermalSpokeAngle( EDA_ANGLE aAngle, PCB_LAYER_ID aLayer )
 {
     CopperLayerDefaults().thermal_spoke_angle = aAngle;
+}
+
+
+std::vector<std::shared_ptr<PCB_SHAPE>>& PADSTACK::Primitives( PCB_LAYER_ID aLayer )
+{
+    return CopperLayerDefaults().custom_shapes;
+}
+
+
+const std::vector<std::shared_ptr<PCB_SHAPE>>& PADSTACK::Primitives( PCB_LAYER_ID aLayer ) const
+{
+    return CopperLayerDefaults().custom_shapes;
+}
+
+
+void PADSTACK::AddPrimitive( PCB_SHAPE* aShape, PCB_LAYER_ID aLayer )
+{
+    CopperLayerDefaults().custom_shapes.emplace_back( aShape );
+}
+
+
+void PADSTACK::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
+                                 PCB_LAYER_ID aLayer )
+{
+    for( const std::shared_ptr<PCB_SHAPE>& prim : aPrimitivesList )
+        AddPrimitive( new PCB_SHAPE( *prim ) );
+}
+
+
+void PADSTACK::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
+                                  PCB_LAYER_ID aLayer )
+{
+    ClearPrimitives( aLayer );
+
+    if( aPrimitivesList.size() )
+        AppendPrimitives( aPrimitivesList, aLayer );
+}
+
+
+void PADSTACK::ClearPrimitives( PCB_LAYER_ID aLayer )
+{
+    CopperLayerDefaults().custom_shapes.clear();
 }
 
 

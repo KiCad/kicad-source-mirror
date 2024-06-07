@@ -316,7 +316,7 @@ public:
      */
     const std::vector<std::shared_ptr<PCB_SHAPE>>& GetPrimitives() const
     {
-        return m_editPrimitives;
+        return m_padStack.Primitives();
     }
 
     void Flip( const VECTOR2I& VECTOR2I, bool aFlipLeftRight ) override;
@@ -842,11 +842,6 @@ private:
     VECTOR2I      m_pos; // Pad Position on board
 
     PADSTACK      m_padStack;
-    /*
-     * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
-     * to m_Pos (NOT shapePos) at orient 0.
-     */
-    std::vector<std::shared_ptr<PCB_SHAPE>>   m_editPrimitives;
 
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     mutable bool                              m_shapesDirty;

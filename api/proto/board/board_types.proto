@@ -206,6 +206,9 @@ message PadStackLayer
   ChamferedRectCorners chamfered_corners = 6;
 
   repeated GraphicShape custom_shapes = 7;
+
+  // If shape == PSS_CUSTOM, defines the shape of the anchor (only PSS_CIRCLE and PSS_RECTANGLE supported at present)
+  PadStackShape custom_anchor_shape = 8;
 }
 
 // A pad stack definition for a multilayer pad or via.

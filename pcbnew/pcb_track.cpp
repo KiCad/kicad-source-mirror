@@ -83,7 +83,8 @@ EDA_ITEM* PCB_ARC::Clone() const
 
 
 PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
-        PCB_TRACK( aParent, PCB_VIA_T )
+        PCB_TRACK( aParent, PCB_VIA_T ),
+        m_padStack( this )
 {
     SetViaType( VIATYPE::THROUGH );
     Padstack().Drill().start = F_Cu;
@@ -105,7 +106,8 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
 
 
 PCB_VIA::PCB_VIA( const PCB_VIA& aOther ) :
-        PCB_TRACK( aOther.GetParent(), PCB_VIA_T )
+        PCB_TRACK( aOther.GetParent(), PCB_VIA_T ),
+        m_padStack( this )
 {
     PCB_VIA::operator=( aOther );
 
