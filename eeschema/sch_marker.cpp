@@ -109,7 +109,7 @@ wxString SCH_MARKER::SerializeToString() const
 }
 
 
-SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST aSheetList, const wxString& data )
+SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList, const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
     VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
