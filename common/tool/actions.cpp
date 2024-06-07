@@ -572,28 +572,28 @@ TOOL_ACTION ACTIONS::zoomInHorizontally( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomInHorizontally" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Zoom In Horizontally" ) )
-        .Tooltip( _( "Zoom In Horizontally" ) )
+        .Tooltip( _( "Zoom in horizontally the plot area" ) )
         .Icon( BITMAPS::zoom_in_horizontally ) );
 
 TOOL_ACTION ACTIONS::zoomOutHorizontally( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomOutHorizontally" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Zoom Out Horizontally" ) )
-        .Tooltip( _( "Zoom Out Horizontally" ) )
+        .Tooltip( _( "Zoom out horizontally the plot area" ) )
         .Icon( BITMAPS::zoom_out_horizontally ) );
 
 TOOL_ACTION ACTIONS::zoomInVertically( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomInVertically" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Zoom In Vertically" ) )
-        .Tooltip( _( "Zoom In Vertically" ) )
+        .Tooltip( _( "Zoom in vertically the plot area" ) )
         .Icon( BITMAPS::zoom_in_vertically ) );
 
 TOOL_ACTION ACTIONS::zoomOutVertically( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomOutVertically" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Zoom Out Vertically" ) )
-        .Tooltip( _( "Zoom Out Vertically" ) )
+        .Tooltip( _( "Zoom out vertically the plot area" ) )
         .Icon( BITMAPS::zoom_out_vertically ) );
 
 TOOL_ACTION ACTIONS::zoomCenter( TOOL_ACTION_ARGS()
