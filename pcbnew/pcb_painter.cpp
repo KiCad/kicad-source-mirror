@@ -843,6 +843,14 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     EDA_ANGLE start_angle = aArc->GetArcAngleStart();
     EDA_ANGLE angle = aArc->GetAngle();
 
+    if( std::abs( center.x ) > std::numeric_limits<int>::max() / 2
+        || std::abs( center.y ) > std::numeric_limits<int>::max() / 2 )
+    {
+        const PCB_TRACK* track = static_cast<const PCB_TRACK*>( aArc );
+        draw( track, aLayer );
+        return;
+    }
+
     if( IsNetnameLayer( aLayer ) )
     {
         // Ummm, yeah.  Anyone fancy implementing text on a path?
