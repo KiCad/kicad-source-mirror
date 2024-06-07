@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-06-03 13:09+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2024-06-07 09:53+0000\n"
+"Last-Translator: ivit VT <st17ivito@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -299,16 +299,15 @@ msgstr "Vzhled"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:603
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Editor DPS"
+msgstr "Nastav dle editoru DPS"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:604
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Nastavení filtru"
+msgstr "Nastav dle Nastavení pro vykreslování DPS"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:582
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:629
@@ -417,7 +416,7 @@ msgstr "Základní pohled"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Překreslit na domovské pozici a přiblížit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -734,7 +733,7 @@ msgstr "Potisk mimo desku"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "Nepřipínat sítotiskové vrstvy k obrysu desky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "3D Axis"
@@ -769,6 +768,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"Uložit a obnovit kombinace barev a viditelnosti.\n"
+"Pomocí %s+Tab aktivujte selektor.\n"
+"Opakovanými stisky klávesy Tab při stisknutém tlačítku %s procházíte "
+"předvolby ve vyskakovacím okně."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:149
 #, c-format
@@ -778,6 +781,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Uložit a obnovit pozici kamery a přiblížit.\n"
+"Pomocí %s+Tab aktivujte selektor.\n"
+"Opakovanými stisky klávesy Tab při stisknutém tlačítku %s procházíte "
+"viewporty ve vyskakovacím okně."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:469
 msgid "Left double click or middle click to change color"
@@ -786,6 +793,8 @@ msgstr "Dvojklik levým nebo prostředním tlačítkem pro změnu barvy"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:479
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Zrušte zaškrtnutí políčka ‚Použít barvy ze struktury vrstev‘, abyste mohli "
+"upravovat barvy."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:529
 #: pcbnew/widgets/appearance_controls.cpp:2176
@@ -1290,6 +1299,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"Zobrazit nebo skrýt tělo desky\n"
+"Pokud je skryto, zobrazí se pouze vrstvy mědi a sítotisku."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -2131,6 +2142,8 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Poznámka: kompletní přiřazení třídy spojů lze upravit v nabídce Nastavení "
+"schématu > Projekt."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
@@ -2575,6 +2588,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Tento projekt obsahuje více kombinací DPS+Schéma.\n"
+"Zvolte, která má být importována do KiCadu."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
@@ -3709,12 +3724,17 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
 msgstr ""
+"Zobrazit vyskakovací ukazatel při přepínání nastavení pomocí klávesových "
+"zkratek"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Pokud je tato funkce povolena, u některých klávesových zkratek, které "
+"přepínají mezi nastaveními, se krátce zobrazí vyskakovací indikátor, který "
+"upozorňuje na změnu v nastavení."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -4628,12 +4648,16 @@ msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Závažnosti porušení byly změněny mimo dialogové okno Nastavení.\n"
+"Chcete je znovu načíst?"
 
 #: common/dialogs/panel_text_variables.cpp:104
 msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Textové proměnné byly změněny mimo dialogové okno Nastavení.\n"
+"Chcete je znovu načíst?"
 
 #: common/dialogs/panel_text_variables.cpp:158
 #: common/dialogs/panel_text_variables.cpp:186
@@ -6073,7 +6097,7 @@ msgstr "Vzdálený repozitář nenalezen."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Ověření pro vzdálené úložiště se nezdařilo."
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Branch not found."
@@ -6089,15 +6113,15 @@ msgstr "Nepodařilo se smazat větev."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Soubor nebyl nalezen během operace odhlášení."
 
 #: common/git/kicad_git_errors.cpp:58
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Vyskytl se konflikt při slučování (při Merge)."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Vyskytl se konflikt při obnovení databáze (při Rebase)."
 
 #: common/git/kicad_git_errors.cpp:62
 msgid "Failed to pull changes from remote repository."
@@ -6109,7 +6133,7 @@ msgstr "Selhalo push změn do vzdáleného repozitáře."
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "Není nakonfigurována žádná upstreamová větev."
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "Failed to establish connection with remote repository."
@@ -6205,9 +6229,8 @@ msgid "Cancel Autocomplete"
 msgstr "Zrušit automatické dokončování"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Přepnout zámek"
+msgstr "Přepnout zaškrtávací políčko"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -6829,7 +6852,7 @@ msgstr "Stín na uzamčeném prvku"
 
 #: common/layer_id.cpp:192
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Stín kolize obsazených oblastí"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -6946,7 +6969,7 @@ msgstr "Oznámení"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Nejsou k dispozici žádná oznámení"
 
 #: common/pgm_base.cpp:208
 msgid "No default editor found, you must choose one."
@@ -16218,8 +16241,9 @@ msgstr "Typ vstupu na sběrnici"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2043 pcbnew/pad.cpp:1030
 #: pcbnew/pcb_track.cpp:1163 pcbnew/tools/pcb_control.cpp:1721
 #: pcbnew/zone.cpp:580
+#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Analyzované třídy sítě"
+msgstr "Analyzovaná třída spojů"
 
 #: eeschema/sch_connection.cpp:435
 msgid "Connection Name"
@@ -17261,8 +17285,9 @@ msgid "Net"
 msgstr "Síť"
 
 #: eeschema/sch_label.cpp:1360 eeschema/sch_line.cpp:934
+#, fuzzy
 msgid "Resolved netclass"
-msgstr "Analyzované třídy sítí"
+msgstr "Analyzovaná třída spojů"
 
 #: eeschema/sch_label.cpp:1377
 msgid "Hierarchical Labels"
@@ -21695,7 +21720,7 @@ msgstr "Nevybrána žádná síť."
 
 #: eeschema/tools/sch_editor_control.cpp:939
 msgid "Net must be labeled to assign a netclass."
-msgstr "Síť musí být označena k přiřazení třídy sítě."
+msgstr "Spoje musí být označeny k přiřazení třídy spojů."
 
 #: eeschema/tools/sch_editor_control.cpp:1740
 #, c-format
@@ -23603,6 +23628,8 @@ msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
+"Vykresli více Gerberů pro DPS, včetně možnosti použít uložená nastavení "
+"vykreslování DPS"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:49
 msgid ""
@@ -29714,7 +29741,7 @@ msgstr "Elektrické vlastnosti"
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
 "Izolační mezera mědi pro tuto zónu (nastavit na 0 pro použití izolační "
-"mezery třídy sítě)"
+"mezery z třídy spojů)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:76
@@ -30266,7 +30293,7 @@ msgstr "Jednotky:"
 msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
-msgstr ""
+msgstr "Jednotky rozměru (\"automatické\" pro jednotky zvolené v editoru)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
@@ -30776,7 +30803,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:63
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:68
 msgid "The number of values following the decimal separator"
-msgstr ""
+msgstr "Počet čísel následujících za desetinným oddělovačem"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
 #, fuzzy
@@ -31588,8 +31615,8 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"Toto je místní izolační mezera sítě pro všechny plošky tohoto pouzdra\n"
-"Je-li 0, budou použity hodnoty třídy sítě\n"
+"Toto je místní izolační mezera spojů pro všechny plošky tohoto pouzdra\n"
+"Je-li 0, budou použity hodnoty třídy spojů\n"
 "Tato hodnota může být nahrazena místní hodnotou plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
@@ -31783,10 +31810,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Toto je místní izolační mezera sítě pro všechny plošky tohoto pouzdra\n"
-"Je-li 0, budou použity hodnoty třídy sítě\n"
-"Tuto hodnotu lze pro každou podložku nahradit hodnotou definovanou\n"
-"ve vlastnostech podložky v záložce Izolace a Místní možnosti."
+"Toto je místní izolační mezera spojů pro všechny plošky tohoto pouzdra\n"
+"Je-li 0, budou použity hodnoty třídy spojů.\n"
+"Tato hodnota může být nahrazena na základě nastavení plošky\n"
+"v záložce Místní izolační mezery a nastavení ve Vlastnostech plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid ""
@@ -33723,8 +33750,8 @@ msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"To je místní izolační mezera plošky.\n"
-"Pokud je 0, je použita místní hodnota pouzdra nebo třídy sítě."
+"To je místní izolační mezera pro tuto plošku.\n"
+"Pokud je 0, je použita místní hodnota pouzdra nebo třídy spojů."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:964
 msgid ""
@@ -34325,6 +34352,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"Pokud je tato funkce povolena, všechny segmenty stopy se zafixují na místě "
+"až po umístění kurzoru.  Když je vypnuto, poslední segment (nejblíže kurzoru)"
+" zůstane volný a bude následovat kurzor."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -35475,8 +35505,8 @@ msgid ""
 "netclasses, custom rules, or other settings."
 msgstr ""
 "Minimální izolační mezera mezi měděnými prvky, které nepatří do stejné "
-"sítě.  Je-li definován, jedná se o absolutní minimum, které nelze snížit "
-"třídou spojů, vlastními pravidly nebo jinými parametry."
+"sítě.  Je-li definována, jedná se o absolutní minimum, které nelze snížit "
+"třídou spojů, vlastními pravidly nebo jinými nastaveními."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -35487,9 +35517,8 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minimální šířka spoje.  Pokud je to nastaveno, jedná se o absolutní minimum "
-"a nelze jej snížit pomocí Tříd spojů, vlastních pravidel nebo jiných "
-"nastavení."
+"Minimální šířka spoje.  Pokud je nastavena, jedná se o absolutní minimum a "
+"nelze ji snížit pomocí Třídy spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 msgid "Minimum connection width:"
@@ -35508,8 +35537,8 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minimální šířka prstence.  Je-li nastaveno, jedná se o absolutní minimum a "
-"nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných nastavení."
+"Minimální šířka prstence.  Je-li nastavena, jedná se o absolutní minimum a "
+"nelze ji snížit pomocí třídy spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -35520,8 +35549,9 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minimální průměr prokovu.  Je-li nastaveno, jedná se o absolutní minimum a "
-"nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných nastavení."
+"Minimální průměr prokovu.  Je-li nastaven, jedná se o absolutní minimum a "
+"nelze jej snížit pomocí třídy spojů, vlastních pravidel nebo jiných "
+"nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
@@ -35564,8 +35594,8 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
-"Minimální velikost průchozí díry.  Je-li nastaveno, jedná se o absolutní "
-"minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných "
+"Minimální velikost průchozí díry.  Je-li nastavena, jedná se o absolutní "
+"minimum a nelze ji snížit pomocí třídy spojů, vlastních pravidel nebo jiných "
 "nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
@@ -35595,9 +35625,9 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minimální průměr pro mikro-prokovy.  Je-li nastaveno, jedná se o absolutní "
-"minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel nebo jiných "
-"nastavení."
+"Minimální průměr pro mikro-prokovy.  Je-li nastaven, jedná se o absolutní "
+"minimum a nelze jej snížit pomocí třídy spojů, vlastních pravidel nebo "
+"jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia hole:"
@@ -35608,8 +35638,8 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minimální velikost otvoru mikro-prokovu.  Je-li nastaveno, jedná se o "
-"absolutní minimum a nelze jej snížit pomocí tříd spojů, vlastních pravidel "
+"Minimální velikost otvoru mikro-prokovu.  Je-li nastavena, jedná se o "
+"absolutní minimum a nelze ji snížit pomocí tříd spojů, vlastních pravidel "
 "nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
@@ -37108,9 +37138,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr "třída spojů '%s' (diff pár)"
 
 #: pcbnew/drc/drc_engine.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "třída spojů '%s' (diff pár)"
+msgstr "třída spojů '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:428
 msgid "keepout area"
@@ -37291,9 +37321,8 @@ msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Kontrola %s: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:1091
-#, fuzzy
 msgid "Netclass clearances apply only between copper items."
-msgstr "Barvy sítí a třídy spojů nejsou zobrazeny"
+msgstr "Izolační mezery třídy spojů se uplatňují pouze mezi položkami mědi."
 
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
 #, fuzzy, c-format
@@ -40709,7 +40738,7 @@ msgstr "Načítání dat desky..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1099
 msgid "Loading netclasses..."
-msgstr "Načítání tříd sítí..."
+msgstr "Načítání tříd spojů..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1128
 #, c-format
@@ -40717,6 +40746,8 @@ msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
 msgstr ""
+"Nalezena více než jedna Altium třída spojů se jménem '%s'. Bude importována "
+"jen ta první."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1151
 msgid "Loading components..."
@@ -42877,7 +42908,7 @@ msgstr "Zadejte vlastní spoje a velikosti prokovu"
 
 #: pcbnew/router/router_tool.cpp:261
 msgid "Track netclass width"
-msgstr "Třída spojů šířka"
+msgstr "Šířka spoje z Třídy spojů"
 
 #: pcbnew/router/router_tool.cpp:263
 #, c-format
@@ -42886,7 +42917,7 @@ msgstr "Spoj %s"
 
 #: pcbnew/router/router_tool.cpp:277
 msgid "Via netclass values"
-msgstr "Prokov hodnoty třídy sítě"
+msgstr "Hodnoty prokovu z třídy spojů"
 
 #: pcbnew/router/router_tool.cpp:282 pcbnew/tools/drawing_tool.cpp:120
 #, c-format
@@ -42978,7 +43009,7 @@ msgstr "Propojení dif. páru: %s"
 #: pcbnew/router/router_tool.cpp:2649 pcbnew/router/router_tool.cpp:2659
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Izolační mezera zóny: %s."
+msgstr "Vyřešená třída spojů: %s"
 
 #: pcbnew/router/router_tool.cpp:2656
 #, c-format
@@ -43155,7 +43186,7 @@ msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:660
 msgid "Track: use netclass width"
-msgstr "Spoj: použít šířku třídy spojů"
+msgstr "Spoj: použít šířku z třídy spojů"
 
 #: pcbnew/toolbars_pcb_editor.cpp:666
 #, c-format
@@ -43168,7 +43199,7 @@ msgstr "Upravit předdefinované velikosti..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:714
 msgid "Via: use netclass sizes"
-msgstr "Prokov: použít velikosti třídy spojů"
+msgstr "Prokov: použít velikosti z třídy spojů"
 
 #: pcbnew/toolbars_pcb_editor.cpp:737
 #, c-format
@@ -45405,10 +45436,13 @@ msgid "Net Color Mode (3-state)"
 msgstr "Režim zobrazení jedné vrstvy (3-stavový)"
 
 #: pcbnew/tools/pcb_actions.cpp:1370
+#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
+"Procházet mezi použitím barev spojů a barev třídy spojů pro všechny spoje, "
+"jen naznačených spojů a žádných spojů"
 
 #: pcbnew/tools/pcb_actions.cpp:1377
 msgid "Sketch Tracks"
@@ -46721,24 +46755,22 @@ msgstr "Barva sítě:"
 #: pcbnew/widgets/appearance_controls.cpp:707
 #: pcbnew/widgets/appearance_controls.cpp:2480
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "Zvolte kdy zobrazit barvy spojů a tříd spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:2483
-#, fuzzy
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "Barvy sítí a třídy spojů nejsou zobrazeny"
+msgstr "Barvy spojů a třídy spojů nejsou zobrazeny pro všechny položky mědi"
 
 #: pcbnew/widgets/appearance_controls.cpp:724
 #: pcbnew/widgets/appearance_controls.cpp:2486
-#, fuzzy
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "Barvy sítí a třídy spojů nejsou zobrazeny"
+msgstr "Barvy spojů a třídy spojů jsou zobrazeny jen pro naznačené spoje"
 
 #: pcbnew/widgets/appearance_controls.cpp:731
 #: pcbnew/widgets/appearance_controls.cpp:2489
 msgid "Net and netclass colors are not shown"
-msgstr "Barvy sítí a třídy spojů nejsou zobrazeny"
+msgstr "Barvy spojů a třídy spojů nejsou zobrazeny"
 
 #: pcbnew/widgets/appearance_controls.cpp:742
 #: pcbnew/widgets/appearance_controls.cpp:2494
@@ -47019,7 +47051,7 @@ msgstr "Zobrazit všechny třídy spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:2347
 msgid "Hide All Other Netclasses"
-msgstr "Skrýt všechny ostatní třídy sítí"
+msgstr "Skrýt všechny ostatní třídy spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:2408
 #, c-format
