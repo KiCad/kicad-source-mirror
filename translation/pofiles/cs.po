@@ -7588,41 +7588,39 @@ msgstr "Odstranit položky, na které jste klikli"
 #: pcbnew/tools/edit_tool.cpp:2208
 #, fuzzy
 msgid "Left Justify"
-msgstr "Zarovnat do bloku"
+msgstr "Zarovnat vlevo"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "Zarovnat pole a textové položky vlevo"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2544
 #: pcbnew/tools/edit_tool.cpp:2210
 #, fuzzy
 msgid "Center Justify"
-msgstr "Zarovnat svisle"
+msgstr "Zarovnat na střed"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "Zarovnat pole a textové položky na střed"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2546
 #: pcbnew/tools/edit_tool.cpp:2212
 #, fuzzy
 msgid "Right Justify"
-msgstr "Srovnat horizontálně"
+msgstr "Zarovnat vpravo"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "Zarovnat pole a textové položky vpravo"
 
 #: common/tool/actions.cpp:304
-#, fuzzy
 msgid "Expand All"
-msgstr "Aktualizovat vše"
+msgstr "Rozbalit vše"
 
 #: common/tool/actions.cpp:310
-#, fuzzy
 msgid "Collapse All"
-msgstr "Nahradit vše"
+msgstr "Sbalit vše"
 
 #: common/tool/actions.cpp:316
 #, fuzzy
@@ -7632,105 +7630,92 @@ msgstr "Vybrat sloupce"
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
 msgstr ""
+"Vybrat celý sloupec (sloupce) obsahující aktuální vybranou buňku (buňky)"
 
 #: common/tool/actions.cpp:323
-#, fuzzy
 msgid "Select Row(s)"
-msgstr "Vybrat položku(y)"
+msgstr "Vybrat řádek (řádky)"
 
 #: common/tool/actions.cpp:324
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Vybrat celý řádek (řádky) obsahující aktuální vybranou buňku (buňky)"
 
 #: common/tool/actions.cpp:330
-#, fuzzy
 msgid "Select Table"
-msgstr "Vybrat vše"
+msgstr "Vybrat tabulku"
 
 #: common/tool/actions.cpp:331
-#, fuzzy
 msgid "Select parent table of selected cell(s)"
-msgstr "Vymazat obsah vybraných buněk"
+msgstr "Vybrat nadřazené tabulky vybraných buněk"
 
 #: common/tool/actions.cpp:337 include/tool/edit_table_tool_base.h:161
-#, fuzzy
 msgid "Add Row Above"
-msgstr "Přidat napájení"
+msgstr "Přidat řádek nad"
 
 #: common/tool/actions.cpp:338
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Nelze zaokrouhlit vybrané segmenty spoje."
+msgstr "Vložit nový řádek tabulky nad vybranou buňku (buňky)"
 
 #: common/tool/actions.cpp:344 include/tool/edit_table_tool_base.h:213
-#, fuzzy
 msgid "Add Row Below"
-msgstr "Přidat napájení"
+msgstr "Přidat řádek pod"
 
 #: common/tool/actions.cpp:345
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "Vložit nový řádek tabulky pod vybranou buňku (buňky)"
 
 #: common/tool/actions.cpp:351 include/tool/edit_table_tool_base.h:264
-#, fuzzy
 msgid "Add Column Before"
-msgstr "Přidat napájení"
+msgstr "Přidat sloupec před"
 
 #: common/tool/actions.cpp:352
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "Vložit nový sloupec tabulky před vybranou buňku (buňky)"
 
 #: common/tool/actions.cpp:358 include/tool/edit_table_tool_base.h:315
-#, fuzzy
 msgid "Add Column After"
-msgstr "Přidat napájení"
+msgstr "Přidat sloupec za"
 
 #: common/tool/actions.cpp:359
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Nelze zaokrouhlit vybrané segmenty spoje."
+msgstr "Vložit nový sloupec tabulky za vybranou buňku (buňky)"
 
 #: common/tool/actions.cpp:365
-#, fuzzy
 msgid "Delete Row(s)"
-msgstr "Smazat zóny"
+msgstr "Smazat řádek (řádky)"
 
 #: common/tool/actions.cpp:366
-#, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
-msgstr "Vymazat obsah vybraných buněk"
+msgstr "Vymazat řádky obsahující právě označenou buňku (buňky)"
 
 #: common/tool/actions.cpp:372
-#, fuzzy
 msgid "Delete Column(s)"
-msgstr "Vybrat sloupce"
+msgstr "Vymazat sloupce"
 
 #: common/tool/actions.cpp:373
 msgid "Delete columns containing the currently selected cell(s)"
-msgstr ""
+msgstr "Vymazat sloupce obsahující právě označenou buňku (buňky)"
 
 #: common/tool/actions.cpp:379 include/tool/edit_table_tool_base.h:537
-#, fuzzy
 msgid "Merge Cells"
-msgstr "Sloučit zóny"
+msgstr "Sloučit buňky"
 
 #: common/tool/actions.cpp:380
 msgid "Turn selected table cells into a single cell"
-msgstr ""
+msgstr "Přeměnit vybrané buňky tabulky na jednu buňku"
 
 #: common/tool/actions.cpp:386 include/tool/edit_table_tool_base.h:578
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Rozdělit buňky"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Přeměnit sloučené buňky tabulky zpět na oddělené buňky."
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:388
 #: pcbnew/dialogs/dialog_table_properties.cpp:371
-#, fuzzy
 msgid "Edit Table"
-msgstr "Upravit označení"
+msgstr "Upravit tabulku"
 
 #: common/tool/actions.cpp:405
 msgid "Cycle Arc Editing Mode"
@@ -7738,7 +7723,7 @@ msgstr "Přepíná režim edice oblouku"
 
 #: common/tool/actions.cpp:406
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Přepnout na jiný způsob úpravy oblouků"
 
 #: common/tool/actions.cpp:413
 msgid "Show Search Panel"
@@ -7860,24 +7845,20 @@ msgid "Zoom Out"
 msgstr "Zmenšit"
 
 #: common/tool/actions.cpp:574 common/tool/actions.cpp:575
-#, fuzzy
 msgid "Zoom In Horizontally"
-msgstr "Zrcadlit horizontálně"
+msgstr "Vodorovně přiblížit"
 
 #: common/tool/actions.cpp:581 common/tool/actions.cpp:582
-#, fuzzy
 msgid "Zoom Out Horizontally"
-msgstr "Zrcadlit horizontálně"
+msgstr "Vodorovně oddálit"
 
 #: common/tool/actions.cpp:588 common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "Zrcadlit vertikálně"
+msgstr "Svisle přiblížit"
 
 #: common/tool/actions.cpp:595 common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "Zrcadlit vertikálně"
+msgstr "Svisle oddálit"
 
 #: common/tool/actions.cpp:604 common/widgets/mathplot.cpp:1385
 msgid "Center on Cursor"
@@ -7893,7 +7874,7 @@ msgstr "Vrátit zpět poslední přiblížení"
 
 #: common/tool/actions.cpp:620 common/widgets/mathplot.cpp:1380
 msgid "Return zoom to level prior to last zoom action"
-msgstr ""
+msgstr "Návrat k úrovni přiblížení před poslední akcí přiblížení"
 
 #: common/tool/actions.cpp:626 common/widgets/mathplot.cpp:1381
 msgid "Redo Last Zoom"
@@ -7901,7 +7882,7 @@ msgstr "Znovu poslední přiblížení"
 
 #: common/tool/actions.cpp:627 common/widgets/mathplot.cpp:1381
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
+msgstr "Návrat k úrovni přiblížení před posledním zrušením přiblížení"
 
 #: common/tool/actions.cpp:644
 msgid "Cursor Up"
@@ -8027,6 +8008,8 @@ msgstr "Zobrazit mřížku pozadí v okně úprav"
 #: common/tool/actions.cpp:841
 msgid "Enables item-specific grids that override the current grid"
 msgstr ""
+"Povoluje mřížky specifické pro jednotlivé položky, které přepisují aktuální "
+"mřížku"
 
 #: common/tool/actions.cpp:848
 msgid "Edit grid definitions"
@@ -8099,14 +8082,12 @@ msgid "Reset Local Coordinates"
 msgstr "Vynulovat místní souřadnice"
 
 #: common/tool/actions.cpp:926
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "Vždy zobrazit nitkový kříž"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Zobrazit nitkový kříž i v nástroji pro výběr"
+msgstr "Zobrazit nitkový kříž, i když nekreslíte objekty"
 
 #: common/tool/actions.cpp:933
 msgid "Full-Window Crosshairs"
@@ -8306,7 +8287,7 @@ msgstr "Znovu načíst všechny pluginy pythonu a aktualizovat nabídky pluginů
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr ""
+msgstr "Nelze přepnout na správce projektu v samostatném režimu."
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -8908,9 +8889,8 @@ msgid "Allegro netlist files"
 msgstr "Soubory netlistu Allegro"
 
 #: common/wildcards_and_files_ext.cpp:302
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "Soubor netlistu SPICE"
+msgstr "Soubory netlistu PADS"
 
 #: common/wildcards_and_files_ext.cpp:308
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -9539,12 +9519,11 @@ msgstr "Očíslování dokončeno."
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
 msgid "Added items via API"
-msgstr ""
+msgstr "Přidané položky přes rozhraní API"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
-#, fuzzy
 msgid "Created items via API"
-msgstr "Vytvořit čáru"
+msgstr "Vytvořené položky přes rozhraní API"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -10112,14 +10091,12 @@ msgid "Update Options"
 msgstr "Možnosti aktualizace"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Aktualizovat pole součástky"
+msgstr "Aktualizovat tvar symbolu a vývody"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Aktualizovat pouzdro %s z '%s' na '%s'"
+msgstr "Aktualizovat klíčová slova a filtry pouzder"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10146,9 +10123,8 @@ msgid "Update/reset field visibilities"
 msgstr "Aktualizace/reset viditelnosti pole"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "Aktualizace/reset velikostí a stylů polí"
+msgstr "Aktualizovat/resetovat velikosti a styly textových polí"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -10156,9 +10132,8 @@ msgid "Update/reset field positions"
 msgstr "Aktualizace/reset pozice polí"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "Aktualizace/reset viditelnosti pole"
+msgstr "Aktualizovat/resetovat viditelnost jmen/čísel vývodů"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10232,7 +10207,7 @@ msgstr "Velikost mezipaměti:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
 msgid "How many database queries to cache"
-msgstr ""
+msgstr "Kolik databázových dotazů uložit do mezipaměti"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
 msgid "Cache timeout:"
@@ -10242,6 +10217,7 @@ msgstr "Časový limit mezipaměti:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
 msgstr ""
+"Doba v sekundách, po kterou budou databázové dotazy ukládány do mezipaměti"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 msgid "Database Library Settings"
@@ -10382,9 +10358,8 @@ msgid "appropriate"
 msgstr "odpovídající"
 
 #: eeschema/dialogs/dialog_erc.cpp:644 pcbnew/dialogs/dialog_drc.cpp:660
-#, fuzzy
 msgid "Edit exclusion comment..."
-msgstr "Upravit simulační model..."
+msgstr "Upravit komentář vyloučení..."
 
 #: eeschema/dialogs/dialog_erc.cpp:647 pcbnew/dialogs/dialog_drc.cpp:663
 msgid "Remove exclusion for this violation"
@@ -10396,9 +10371,8 @@ msgid "It will be placed back in the %s list"
 msgstr "Bude vráceno zpět do seznamu %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:653 pcbnew/dialogs/dialog_drc.cpp:677
-#, fuzzy
 msgid "Exclude this violation..."
-msgstr "Vyloučit toto porušení"
+msgstr "Vyloučit toto porušení..."
 
 #: eeschema/dialogs/dialog_erc.cpp:654 pcbnew/dialogs/dialog_drc.cpp:678
 #, c-format
@@ -10448,15 +10422,13 @@ msgstr "Upravit velikost spojovací mřížky..."
 
 #: eeschema/dialogs/dialog_erc.cpp:718 eeschema/dialogs/dialog_erc.cpp:749
 #: pcbnew/dialogs/dialog_drc.cpp:728 pcbnew/dialogs/dialog_drc.cpp:776
-#, fuzzy
 msgid "Optional comment:"
-msgstr "Počet horizontálně:"
+msgstr "Nepovinný komentář:"
 
 #: eeschema/dialogs/dialog_erc.cpp:718 eeschema/dialogs/dialog_erc.cpp:749
 #: pcbnew/dialogs/dialog_drc.cpp:728 pcbnew/dialogs/dialog_drc.cpp:776
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "Vyloučení"
+msgstr "Komentář o vyloučení"
 
 #: eeschema/dialogs/dialog_erc.cpp:834
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -10572,29 +10544,24 @@ msgid "Electrical Rules Checker"
 msgstr "Kontrola pravidel elektrického návrhu"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:266
-#, fuzzy
 msgid "Export netlist in legacy KiCad format"
-msgstr "Exportovat data ve formátu Pcbnew"
+msgstr "Exportovat netlist ve starším formátu KiCadu (Pcbnew)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:271
-#, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Exportovat data ve formátu Pcbnew"
+msgstr "Exportovat netlist ve formátu OrcadPCB2"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "Exportovat data ve formátu Pcbnew"
+msgstr "Exportovat netlist ve formátu Allegro"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:281
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "Exportovat ve formátu GenCAD"
+msgstr "Exportovat netlist ve formátu PADS"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:286
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "Exportovat ve formátu GenCAD"
+msgstr "Exportovat netlist ve formátu CadStar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:294
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
@@ -10602,9 +10569,8 @@ msgid "Export Netlist"
 msgstr "Exportovat Netlist"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "Exportovat data ve formátu Pcbnew"
+msgstr "Exportovat netlist ve formátu SPICE"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:324
 #: eeschema/dialogs/dialog_export_netlist.cpp:383
@@ -10648,13 +10614,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Uložit všechna data digitálních událostí"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Pokud není nastaveno, zapište direktivu, která zabrání ukládání dat "
+"digitálních událostí (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -10672,7 +10640,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:379
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "Exportovat netlist jako model SPICE .subckt"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:433
 msgid "Netlist command:"
@@ -10700,10 +10668,12 @@ msgstr "externí simulátor nenalezen"
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Poznámka: příkazový řádek je obvykle: <tt>&lt;cesta k SPICE binárnímu "
+"souboru&gt; \"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:654
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "externí simulátor má nesprávný formát nebo architekturu"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:659
 msgid "permission denied"
@@ -10722,24 +10692,20 @@ msgid "You must provide a netlist generator title"
 msgstr "Musíte poskytnout název generátoru netlistu"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:50
-#, fuzzy
 msgid "Add Exporter..."
-msgstr "Export..."
+msgstr "Přidat exportér..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:53
-#, fuzzy
 msgid "Remove Exporter"
-msgstr "Smazat roh"
+msgstr "Smazat exportér"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:101
-#, fuzzy
 msgid "Command line to run the exporter:"
-msgstr "Příkazový řádek pro spuštění generátoru:"
+msgstr "Příkazový řádek pro spuštění exportéru:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "Procházet generátory..."
+msgstr "Procházet skripty..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
