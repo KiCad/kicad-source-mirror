@@ -1733,9 +1733,8 @@ msgid "Export to Clipboard"
 msgstr "Export do schránky"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Otočení tvaru:"
+msgstr "Modifikace z API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -1981,16 +1980,14 @@ msgid "Additional Contributions By"
 msgstr "Další příspěvky od"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Dokumentace"
+msgstr "Dokumentační tým"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "Tým knihoven"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
 msgstr "3D modely"
 
@@ -2014,9 +2011,8 @@ msgid "Footprints"
 msgstr "Pouzdra"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Ikona"
+msgstr "Ikony"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -2622,6 +2618,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Tento projekt obsahuje více kombinací DPS+Schéma.\n"
+"Zvolte, která má být importována do KiCadu."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
@@ -3026,13 +3024,14 @@ msgid "Reference Designators"
 msgstr "Reference schématu"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "Alternativní přiřazení"
+msgstr "Vymazat přiřazení spojů"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Odstranit informace o spojích ze všech propojených položek před jejich "
+"vložením"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3775,20 +3774,25 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
 msgstr ""
+"Zobrazit vyskakovací ukazatel při přepínání nastavení pomocí klávesových "
+"zkratek"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Pokud je tato funkce povolena, u některých klávesových zkratek, které "
+"přepínají mezi nastaveními, se krátce zobrazí vyskakovací indikátor, který "
+"upozorňuje na změnu v nastavení."
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Použít střídající se barvy řádků v tabulkách"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "When enabled, use a different color for every other table row"
-msgstr ""
+msgstr "Pokud je povoleno, použijte pro každý další řádek tabulky jinou barvu"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Icon theme:"
@@ -4485,82 +4489,87 @@ msgstr "Předpona přezdívky knihovny:"
 #: common/dialogs/panel_plugin_settings.cpp:103
 #, fuzzy, c-format
 msgid "Listening at %s"
-msgstr "Existující cesta:"
+msgstr "Naslouchání na %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Tato instalace KiCad nemá povolenou podporu API."
 
 #: common/dialogs/panel_plugin_settings.cpp:120
 msgid "KiCad API is not enabled; external Python plugins will not be available"
-msgstr ""
+msgstr "KiCad API není poveleno; externí pluginy Pythonu nebudou k dispozici"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Nebyl zvolen platný interpret jazyka Python; externí zásuvné moduly jazyka "
+"Python nebudou k dispozici"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "Pole %s"
+msgstr "Nalezeno %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Neplatný interpret jazyka Python 3"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Je-li povoleno rozhraní KiCad API, mohou se ke KiCadu připojit pluginy a "
+"další software spuštěný v tomto počítači."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Povolit KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"Povolit rozhraní KiCad API.  Tím umožníte softwaru třetích stran spuštěnému "
+"na vašem počítači přístup ke KiCadu."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Interpret jazyka Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Cesta k interpretu jazyka Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Smaže poslední bod přidaný k současné položce"
+msgstr "Vybrat cestu k interpretu jazyka Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Automatické očíslování"
+msgstr "Detekovat automaticky"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Není zvolen interpret jazyka Python; externí pluginy Pythonu nebudou k "
+"dispozici"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Status interpretu jazyka Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1969
 #: common/stroke_params.cpp:37
@@ -4609,9 +4618,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Čárka-tečka-tečka"
 
 #: common/dialogs/panel_setup_netclasses.cpp:179
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "Nastavte barvu k průhledn pro použití výchozích barev KiCadu."
+msgstr "Nastavte barvu na průhlednou pro použití výchozí barvy vrstvy."
 
 #: common/dialogs/panel_setup_netclasses.cpp:372
 msgid ""
@@ -4733,9 +4741,8 @@ msgid "DP Gap"
 msgstr "Mezera DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Kurzor na DPS"
+msgstr "Barva DPS"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4780,9 +4787,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Nastavte barvu k průhledn pro použití výchozích barev KiCadu."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:99
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Sonda z schématu"
+msgstr "Importovat barvy ze schématu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:116
 msgid "Netclass assignments:"
@@ -4814,12 +4820,16 @@ msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Závažnosti porušení byly změněny mimo dialogové okno Nastavení.\n"
+"Chcete je znovu načíst?"
 
 #: common/dialogs/panel_text_variables.cpp:105
 msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Textové proměnné byly změněny mimo dialogové okno Nastavení.\n"
+"Chcete je znovu načíst?"
 
 #: common/dialogs/panel_text_variables.cpp:159
 #: common/dialogs/panel_text_variables.cpp:187
@@ -5211,9 +5221,8 @@ msgid "Packages and Updates"
 msgstr "Balíčky a aktualizace"
 
 #: common/eda_base_frame.cpp:1256
-#, fuzzy
 msgid "Plugins"
-msgstr "Zásuvné moduly:"
+msgstr "Pluginy"
 
 #: common/eda_base_frame.cpp:1339
 #, c-format
@@ -6299,7 +6308,7 @@ msgstr "Vzdálený repozitář nenalezen."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Ověření pro vzdálené úložiště se nezdařilo."
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Branch not found."
@@ -6315,15 +6324,15 @@ msgstr "Nepodařilo se smazat větev."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Soubor nebyl nalezen během operace odhlášení."
 
 #: common/git/kicad_git_errors.cpp:58
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Vyskytl se konflikt při slučování (při Merge)."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Vyskytl se konflikt při obnovení databáze (při Rebase)."
 
 #: common/git/kicad_git_errors.cpp:62
 msgid "Failed to pull changes from remote repository."
@@ -6335,7 +6344,7 @@ msgstr "Selhalo push změn do vzdáleného repozitáře."
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "Není nakonfigurována žádná upstreamová větev."
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "Failed to establish connection with remote repository."
@@ -6431,9 +6440,8 @@ msgid "Cancel Autocomplete"
 msgstr "Zrušit automatické dokončování"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Přepnout zámek"
+msgstr "Přepnout zaškrtávací políčko"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -6797,9 +6805,8 @@ msgid "Net class references"
 msgstr "Reference třídy spojů"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Rule areas"
-msgstr "Pravidla oblastí"
+msgstr "Oblasti pravidel"
 
 #: common/layer_id.cpp:126
 msgid "Symbol body outlines"
@@ -7049,7 +7056,7 @@ msgstr "Stín na uzamčeném prvku"
 
 #: common/layer_id.cpp:193
 msgid "Courtyard collision shadow"
-msgstr ""
+msgstr "Stín kolize obsazených oblastí"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -7166,7 +7173,7 @@ msgstr "Oznámení"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Nejsou k dispozici žádná oznámení"
 
 #: common/pgm_base.cpp:215
 msgid "No default editor found, you must choose one."
@@ -7337,9 +7344,8 @@ msgid "Line length exceeded"
 msgstr "Délka čáry překročena"
 
 #: common/settings/bom_settings.cpp:124
-#, fuzzy
 msgid "Default Editing"
-msgstr "Výchozí jednotky:"
+msgstr "Výchozí úpravy"
 
 #: common/settings/bom_settings.cpp:124 common/settings/bom_settings.cpp:145
 #: common/settings/bom_settings.cpp:164 common/settings/bom_settings.cpp:183
@@ -7582,7 +7588,7 @@ msgstr "Odstranit položky, na které jste klikli"
 #: pcbnew/tools/edit_tool.cpp:2208
 #, fuzzy
 msgid "Left Justify"
-msgstr "Zarovnat svisle"
+msgstr "Zarovnat do bloku"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
