@@ -209,6 +209,8 @@ public:
      */
     void ImportValues( const LIB_FIELD& aSource );
 
+    bool IsMandatory() const;
+
     int GetPenWidth() const override;
 
     void ClearCaches() override;

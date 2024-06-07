@@ -1295,6 +1295,15 @@ VECTOR2I SCH_FIELD::GetParentPosition() const
 }
 
 
+bool SCH_FIELD::IsMandatory() const
+{
+    if( m_parent && m_parent->Type() == SCH_SHEET_T )
+        return m_id >= 0 && m_id < SHEET_MANDATORY_FIELDS;
+    else
+        return m_id >= 0 && m_id < MANDATORY_FIELDS;
+}
+
+
 bool SCH_FIELD::operator <( const SCH_ITEM& aItem ) const
 {
     if( Type() != aItem.Type() )
