@@ -387,7 +387,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             [&]( EDA_ITEM* item, const VECTOR2I& delta )
             {
                 commit.Modify( item, m_frame->GetScreen() );
-                static_cast<LIB_ITEM*>( item )->Offset( mapCoords( delta ) );
+                static_cast<LIB_ITEM*>( item )->Offset( delta );
                 updateItem( item, true );
             };
 
