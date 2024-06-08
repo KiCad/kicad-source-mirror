@@ -1379,6 +1379,9 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #endif
 
+    Bind( wxEVT_GESTURE_ZOOM, &CAIRO_GAL::skipGestureEvent, this );
+    Bind( wxEVT_GESTURE_PAN, &CAIRO_GAL::skipGestureEvent, this );
+
     SetSize( aParent->GetClientSize() );
 
     m_isInitialized = false;
@@ -1660,6 +1663,14 @@ void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
 void CAIRO_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 {
     // Post the mouse event to the event listener registered in constructor, if any
+    if( m_mouseListener )
+        wxPostEvent( m_mouseListener, aEvent );
+}
+
+
+void CAIRO_GAL::skipGestureEvent( wxGestureEvent& aEvent )
+{
+    // Post the gesture event to the event listener registered in constructor, if any
     if( m_mouseListener )
         wxPostEvent( m_mouseListener, aEvent );
 }

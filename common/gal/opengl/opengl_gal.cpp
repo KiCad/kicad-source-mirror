@@ -391,6 +391,9 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 
+    Bind( wxEVT_GESTURE_ZOOM, &OPENGL_GAL::skipGestureEvent, this );
+    Bind( wxEVT_GESTURE_PAN, &OPENGL_GAL::skipGestureEvent, this );
+
     SetSize( aParent->GetClientSize() );
     m_screenSize = ToVECTOR2I( GetNativePixelSize() );
 
@@ -2615,6 +2618,14 @@ void OPENGL_GAL::onPaint( wxPaintEvent& aEvent )
 void OPENGL_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 {
     // Post the mouse event to the event listener registered in constructor, if any
+    if( m_mouseListener )
+        wxPostEvent( m_mouseListener, aEvent );
+}
+
+
+void OPENGL_GAL::skipGestureEvent( wxGestureEvent& aEvent )
+{
+    // Post the gesture event to the event listener registered in constructor, if any
     if( m_mouseListener )
         wxPostEvent( m_mouseListener, aEvent );
 }

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -62,6 +62,8 @@ public:
     void onEnter( wxMouseEvent& WXUNUSED( aEvent ) );
     void onLeave( wxMouseEvent& WXUNUSED( aEvent ) );
     void onTimer( wxTimerEvent& WXUNUSED( aEvent ) );
+    void onZoomGesture( wxZoomGestureEvent& aEvent );
+    void onPanGesture( wxPanGestureEvent& aEvent );
     void onScroll( wxScrollWinEvent& aEvent );
     void onCaptureLost( wxMouseEvent& WXUNUSED( aEvent ) );
 
@@ -205,6 +207,10 @@ private:
 
     ///< A #ZOOM_CONTROLLER that determines zoom steps. This is platform-specific.
     std::unique_ptr<ZOOM_CONTROLLER> m_zoomController;
+
+    ///< Used to track gesture events.
+    double   m_gestureLastZoomFactor;
+    VECTOR2D m_gestureLastPos;
 };
 } // namespace KIGFX
 

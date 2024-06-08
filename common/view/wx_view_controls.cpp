@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -82,7 +82,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
 #endif
         m_cursorPos( 0, 0 ),
         m_updateCursor( true ),
-        m_infinitePanWorks( false )
+        m_infinitePanWorks( false ),
+        m_gestureLastZoomFactor( 1.0 )
 {
     LoadSettings();
 
@@ -131,6 +132,18 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
     m_parentPanel->Connect( wxEVT_MOUSE_CAPTURE_LOST,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onCaptureLost ), nullptr, this );
 #endif
+
+    if( m_parentPanel->EnableTouchEvents( wxTOUCH_ZOOM_GESTURE | wxTOUCH_PAN_GESTURES ) )
+    {
+        wxLogDebug( "EnableTouchEvents Successful!!" );
+        m_parentPanel->Connect( wxEVT_GESTURE_ZOOM,
+                                wxZoomGestureEventHandler( WX_VIEW_CONTROLS::onZoomGesture ),
+                                nullptr, this );
+
+        m_parentPanel->Connect( wxEVT_GESTURE_PAN,
+                                wxPanGestureEventHandler( WX_VIEW_CONTROLS::onPanGesture ), nullptr,
+                                this );
+    }
 
     m_cursorWarped = false;
 
@@ -606,6 +619,39 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     case DRAG_ZOOMING:
         break;
     }
+}
+
+
+void WX_VIEW_CONTROLS::onZoomGesture( wxZoomGestureEvent& aEvent )
+{
+    if( aEvent.IsGestureStart() )
+    {
+        m_gestureLastZoomFactor = 1.0;
+        m_gestureLastPos = VECTOR2D( aEvent.GetPosition().x, aEvent.GetPosition().y );
+    }
+
+    VECTOR2D evtPos( aEvent.GetPosition().x, aEvent.GetPosition().y );
+    VECTOR2D deltaWorld = m_view->ToWorld( evtPos - m_gestureLastPos, false );
+
+    m_view->SetCenter( m_view->GetCenter() - deltaWorld );
+
+    m_view->SetScale( m_view->GetScale() * aEvent.GetZoomFactor() / m_gestureLastZoomFactor,
+                      m_view->ToWorld( evtPos ) );
+
+    m_gestureLastZoomFactor = aEvent.GetZoomFactor();
+    m_gestureLastPos = evtPos;
+
+    m_parentPanel->Refresh();
+}
+
+
+void WX_VIEW_CONTROLS::onPanGesture( wxPanGestureEvent& aEvent )
+{
+    VECTOR2I screenDelta( aEvent.GetDelta().x, aEvent.GetDelta().y );
+    VECTOR2D deltaWorld = m_view->ToWorld( screenDelta, false );
+
+    m_view->SetCenter( m_view->GetCenter() - deltaWorld );
+    m_parentPanel->Refresh();
 }
 
 

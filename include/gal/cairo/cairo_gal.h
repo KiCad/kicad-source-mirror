@@ -488,6 +488,13 @@ protected:
     void skipMouseEvent( wxMouseEvent& aEvent );
 
     /**
+     * Skip the gesture event to the parent.
+     *
+     * @param aEvent is the gesture event.
+     */
+    void skipGestureEvent( wxGestureEvent& aEvent );
+
+    /**
      * Give the correct cursor image when the native widget asks for it.
      *
      * @param aEvent is the cursor event to plac the cursor into.
