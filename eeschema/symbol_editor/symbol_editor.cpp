@@ -510,7 +510,7 @@ void SYMBOL_EDIT_FRAME::Save()
 {
     wxString libName;
 
-    if( IsSymbolTreeShown() )
+    if( IsLibraryTreeShown() )
         libName = GetTreeLIBID().GetUniStringLibNickname();
 
     if( libName.empty() )
@@ -531,7 +531,7 @@ void SYMBOL_EDIT_FRAME::Save()
         saveLibrary( libName, false );
     }
 
-    if( IsSymbolTreeShown() )
+    if( IsLibraryTreeShown() )
         m_treePane->GetLibTree()->RefreshLibTree();
 
     UpdateTitle();

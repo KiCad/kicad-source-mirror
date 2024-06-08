@@ -444,11 +444,7 @@ public:
     static TOOL_ACTION showPythonConsole;
     static TOOL_ACTION zonesManager;
 
-    // Module editor tools
-
-    static TOOL_ACTION showFootprintTree;
-    static TOOL_ACTION hideFootprintTree;
-    static TOOL_ACTION footprintTreeSearch;
+    // Footprint editor tools
 
     // We don't use ACTION::new here because we need to distinguish between New Library
     // and New Footprint.
@@ -466,7 +462,6 @@ public:
     static TOOL_ACTION pasteFootprint;
     static TOOL_ACTION importFootprint;
     static TOOL_ACTION exportFootprint;
-    static TOOL_ACTION openWithTextEditor;
 
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;

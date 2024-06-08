@@ -236,13 +236,6 @@ TOOL_ACTION EE_ACTIONS::importSymbol( TOOL_ACTION_ARGS()
         .Tooltip( _( "Import a symbol to the current library" ) )
         .Icon( BITMAPS::import_part ) );
 
-TOOL_ACTION EE_ACTIONS::openWithTextEditor( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.openWithTextEditor" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Edit in a Text Editor..." ) )
-        .Tooltip( _( "Open a library file with a text editor" ) )
-        .Icon( BITMAPS::editor ) );
-
 TOOL_ACTION EE_ACTIONS::updateSymbolFields( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.updateSymbolFields" )
         .Scope( AS_GLOBAL )
@@ -276,24 +269,6 @@ TOOL_ACTION EE_ACTIONS::showPinNumbers( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Show Pin Numbers" ) )
         .Tooltip( _( "Annotate pins with their numbers" ) )
         .Icon( BITMAPS::pin ) );
-
-TOOL_ACTION EE_ACTIONS::showSymbolTree( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.showSymbolTree" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Symbol Tree" ) )
-        .Icon( BITMAPS::search_tree ) );
-
-TOOL_ACTION EE_ACTIONS::hideSymbolTree( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.hideSymbolTree" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Hide Symbol Tree" ) )
-        .Icon( BITMAPS::search_tree ) );
-
-TOOL_ACTION EE_ACTIONS::symbolTreeSearch( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.symbolTreeSearch" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Focus Symbol Tree Search Field" ) )
-        .DefaultHotkey( MD_CTRL + 'L' ) );
 
 TOOL_ACTION EE_ACTIONS::exportSymbolView( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.exportSymbolView" )

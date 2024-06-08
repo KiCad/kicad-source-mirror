@@ -41,8 +41,6 @@ public:
         EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SymbolLibraryControl" )
     { }
 
-    virtual ~SYMBOL_EDITOR_CONTROL() { }
-
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
@@ -56,7 +54,6 @@ public:
     int CutCopyDelete( const TOOL_EVENT& aEvent );
     int DuplicateSymbol( const TOOL_EVENT& aEvent );
     int RenameSymbol( const TOOL_EVENT& newName );
-    int ExportSymbol( const TOOL_EVENT& aEvent );
     int OpenWithTextEditor( const TOOL_EVENT& aEvent );
     int ExportView( const TOOL_EVENT& aEvent );
     int ExportSymbolAsSVG( const TOOL_EVENT& aEvent );
@@ -66,10 +63,6 @@ public:
 
     int ShowElectricalTypes( const TOOL_EVENT& aEvent );
     int ShowPinNumbers( const TOOL_EVENT& aEvent );
-    int PinLibrary( const TOOL_EVENT& aEvent );
-    int UnpinLibrary( const TOOL_EVENT& aEvent );
-    int ToggleSymbolTree( const TOOL_EVENT& aEvent );
-    int SymbolTreeSearch( const TOOL_EVENT& aEvent );
     int ToggleProperties( const TOOL_EVENT& aEvent );
     int ToggleSyncedPinsMode( const TOOL_EVENT& aEvent );
 

@@ -2253,11 +2253,8 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
             symbolEditor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(),
                                       symbol->GetBodyStyle() );
 
-            if( !symbolEditor->IsSymbolTreeShown() )
-            {
-                wxCommandEvent evt;
-                symbolEditor->OnToggleSymbolTree( evt );
-            }
+            if( !symbolEditor->IsLibraryTreeShown() )
+                symbolEditor->ToggleLibraryTree();
         }
     }
 

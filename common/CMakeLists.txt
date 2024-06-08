@@ -582,6 +582,7 @@ set( COMMON_SRCS
     tool/action_toolbar.cpp
     tool/actions.cpp
     tool/common_control.cpp
+    tool/library_editor_control.cpp
     tool/common_tools.cpp
     tool/conditional_menu.cpp
     tool/edit_constraints.cpp

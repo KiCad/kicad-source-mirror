@@ -685,24 +685,6 @@ TOOL_ACTION PCB_ACTIONS::properties( TOOL_ACTION_ARGS()
 
 // FOOTPRINT_EDITOR_CONTROL
 //
-TOOL_ACTION PCB_ACTIONS::showFootprintTree( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ModuleEditor.showFootprintTree" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Footprint Tree" ) )
-        .Icon( BITMAPS::search_tree ) );
-
-TOOL_ACTION PCB_ACTIONS::hideFootprintTree( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ModuleEditor.hideFootprintTree" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Hide Footprint Tree" ) )
-        .Icon( BITMAPS::search_tree ) );
-
-TOOL_ACTION PCB_ACTIONS::footprintTreeSearch( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ModuleEditor.footprintTreeSearch" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Focus the Footprint Tree Search Field" ) )
-        .DefaultHotkey( MD_CTRL + 'L' ) );
-
 TOOL_ACTION PCB_ACTIONS::newFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.newFootprint" )
         .Scope( AS_GLOBAL )
@@ -778,13 +760,6 @@ TOOL_ACTION PCB_ACTIONS::exportFootprint( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Export Current Footprint..." ) )
         .Tooltip( _( "Export edited footprint to file" ) )
         .Icon( BITMAPS::export_module ) );
-
-TOOL_ACTION PCB_ACTIONS::openWithTextEditor( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ModuleEditor.openWithTextEditor" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Edit in a Text Editor..." ) )
-        .Tooltip( _( "Open a library file with a text editor" ) )
-        .Icon( BITMAPS::editor ) );
 
 TOOL_ACTION PCB_ACTIONS::footprintProperties( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.footprintProperties" )

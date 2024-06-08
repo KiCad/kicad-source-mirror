@@ -165,8 +165,8 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
         ReCreateMenuBar();
         ReCreateHToolbar();
 
-        if( IsSearchTreeShown() )
-            ToggleSearchTree();
+        if( IsLibraryTreeShown() )
+            ToggleLibraryTree();
     }
 
     Update3DView( true, true );

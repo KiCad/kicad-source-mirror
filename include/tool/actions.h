@@ -58,6 +58,7 @@ public:
     static TOOL_ACTION plot;
     static TOOL_ACTION quit;
     static TOOL_ACTION ddAddLibrary;    // for drag and drop lib
+    static TOOL_ACTION openWithTextEditor;
 
     // Generic edit actions
     static TOOL_ACTION cancelInteractive;
@@ -139,6 +140,9 @@ public:
 
     static TOOL_ACTION pinLibrary;
     static TOOL_ACTION unpinLibrary;
+    static TOOL_ACTION showLibraryTree;
+    static TOOL_ACTION hideLibraryTree;
+    static TOOL_ACTION libraryTreeSearch;
 
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;

@@ -41,15 +41,12 @@
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <footprint_info_impl.h>
-#include <footprint_tree_pane.h>
 #include <fp_lib_table.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway.h>
 #include <macros.h>
-#include <pcb_draw_panel_gal.h>
-#include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -60,6 +57,7 @@
 #include <tool/common_tools.h>
 #include <tool/properties_tool.h>
 #include <tool/selection.h>
+#include <tool/library_editor_control.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
@@ -379,12 +377,12 @@ void FOOTPRINT_EDIT_FRAME::HardRedraw()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::ToggleSearchTree()
+void FOOTPRINT_EDIT_FRAME::ToggleLibraryTree()
 {
     wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
-    treePane.Show( !IsSearchTreeShown() );
+    treePane.Show( !IsLibraryTreeShown() );
 
-    if( IsSearchTreeShown() )
+    if( IsLibraryTreeShown() )
     {
         // SetAuiPaneSize also updates m_auimgr
         SetAuiPaneSize( m_auimgr, treePane, m_editorSettings->m_LibWidth, -1 );
@@ -397,7 +395,7 @@ void FOOTPRINT_EDIT_FRAME::ToggleSearchTree()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::FocusSearchTreeInput()
+void FOOTPRINT_EDIT_FRAME::FocusLibraryTreeInput()
 {
     m_treePane->FocusSearchFieldIfExists();
 }
@@ -426,7 +424,7 @@ void FOOTPRINT_EDIT_FRAME::ToggleLayersManager()
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::IsSearchTreeShown() const
+bool FOOTPRINT_EDIT_FRAME::IsLibraryTreeShown() const
 {
     return const_cast<wxAuiManager&>( m_auimgr ).GetPane( m_treePane ).IsShown();
 }
@@ -438,24 +436,12 @@ BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 }
 
 
-LIB_ID FOOTPRINT_EDIT_FRAME::GetTreeFPID() const
-{
-    return m_treePane->GetLibTree()->GetSelectedLibId();
-}
-
-
-LIB_TREE_NODE* FOOTPRINT_EDIT_FRAME::GetCurrentTreeNode() const
-{
-    return m_treePane->GetLibTree()->GetCurrentTreeNode();
-}
-
-
 LIB_ID FOOTPRINT_EDIT_FRAME::GetTargetFPID() const
 {
     LIB_ID id;
 
-    if( IsSearchTreeShown() )
-        id = GetTreeFPID();
+    if( IsLibraryTreeShown() )
+        id = GetLibTree()->GetSelectedLibId();
 
     if( id.GetLibNickname().empty() )
         id = GetLoadedFPID();
@@ -638,7 +624,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
         m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
 
-        m_treePane->GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) cfg->m_LibrarySortMode );
+        GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) cfg->m_LibrarySortMode );
     }
 }
 
@@ -682,7 +668,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             cfg->m_AuiPanels.properties_splitter    = m_propertiesPanel->SplitterProportion();
         }
 
-        cfg->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
+        cfg->m_LibrarySortMode = GetLibTree()->GetSortMode();
 
         if( m_appearancePanel )
         {
@@ -924,7 +910,7 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     tree_pane_info.Show( tree_shown );
     m_auimgr.Update();
 
-    m_treePane->GetLibTree()->ShowChangedLanguage();
+    GetLibTree()->ShowChangedLanguage();
 
     UpdateTitle();
 }
@@ -934,7 +920,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
     Update3DView( true, true );
-    m_treePane->GetLibTree()->RefreshLibTree();
+    GetLibTree()->RefreshLibTree();
 
     if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
@@ -1040,7 +1026,7 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     FP_LIB_TABLE* fpTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
     auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
     LIB_ID        target = GetTargetFPID();
-    bool          targetSelected = ( target == m_treePane->GetLibTree()->GetSelectedLibId() );
+    bool          targetSelected = ( target == GetLibTree()->GetSelectedLibId() );
 
     // Sync FOOTPRINT_INFO list to the libraries on disk
     if( aProgress )
@@ -1057,48 +1043,37 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     // Sync the LIB_TREE to the FOOTPRINT_INFO list
     adapter->Sync( fpTable );
 
-    m_treePane->GetLibTree()->Unselect();
-    m_treePane->GetLibTree()->Regenerate( true );
+    GetLibTree()->Unselect();
+    GetLibTree()->Regenerate( true );
 
     if( target.IsValid() )
     {
         if( adapter->FindItem( target ) )
         {
             if( targetSelected )
-                m_treePane->GetLibTree()->SelectLibId( target );
+                GetLibTree()->SelectLibId( target );
             else
-                m_treePane->GetLibTree()->CenterLibId( target );
+                GetLibTree()->CenterLibId( target );
         }
         else
         {
             // Try to focus on parent
             target.SetLibItemName( wxEmptyString );
-            m_treePane->GetLibTree()->CenterLibId( target );
+            GetLibTree()->CenterLibId( target );
         }
     }
 }
 
 
-void FOOTPRINT_EDIT_FRAME::RegenerateLibraryTree()
-{
-    LIB_ID target = GetTargetFPID();
-
-    m_treePane->GetLibTree()->Regenerate( true );
-
-    if( target.IsValid() )
-        m_treePane->GetLibTree()->CenterLibId( target );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::RefreshLibraryTree()
 {
-    m_treePane->GetLibTree()->RefreshLibTree();
+    GetLibTree()->RefreshLibTree();
 }
 
 
 void FOOTPRINT_EDIT_FRAME::FocusOnLibID( const LIB_ID& aLibID )
 {
-    m_treePane->GetLibTree()->SelectLibId( aLibID );
+    GetLibTree()->SelectLibId( aLibID );
 }
 
 
@@ -1129,6 +1104,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new PCB_POINT_EDITOR );
     m_toolManager->RegisterTool( new PCB_CONTROL );            // copy/paste
+    m_toolManager->RegisterTool( new LIBRARY_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new FOOTPRINT_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new PCB_PICKER_TOOL );
@@ -1242,10 +1218,10 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return GetCanvas() && GetCanvas()->GetView()->IsMirroredX();
             };
 
-    auto footprintTreeCond =
+    auto libraryTreeCond =
             [this](const SELECTION& )
             {
-                return IsSearchTreeShown();
+                return IsLibraryTreeShown();
             };
 
     auto layerManagerCond =
@@ -1265,7 +1241,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,       CHECK( cond.BoundingBoxes() ) );
 
-    mgr->SetConditions( PCB_ACTIONS::showFootprintTree,     CHECK( footprintTreeCond ) );
+    mgr->SetConditions( ACTIONS::showLibraryTree,           CHECK( libraryTreeCond ) );
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,     CHECK( layerManagerCond ) );
     mgr->SetConditions( PCB_ACTIONS::showProperties,        CHECK( propertiesCond ) );
 

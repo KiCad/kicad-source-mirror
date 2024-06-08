@@ -51,6 +51,7 @@
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/editor_conditions.h>
+#include <tool/library_editor_control.h>
 #include <tool/picker_tool.h>
 #include <tool/properties_tool.h>
 #include <tool/selection.h>
@@ -69,7 +70,6 @@
 #include <view/view_controls.h>
 #include <widgets/app_progress_dialog.h>
 #include <widgets/wx_infobar.h>
-#include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/panel_sch_selection_filter.h>
 #include <widgets/sch_properties_panel.h>
@@ -201,7 +201,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Bottom().Layer( 6 ) );
 
     // Columns; layers 1 - 3
-    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "SymbolTree" )
+    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "LibraryTree" )
                       .Left().Layer( 3 )
                       .TopDockable( false ).BottomDockable( false )
                       .Caption( _( "Libraries" ) )
@@ -237,7 +237,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     selTool->GetFilter() = GetSettings()->m_SelectionFilter;
 
     if( m_settings->m_LibWidth > 0 )
-        SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "SymbolTree" ), m_settings->m_LibWidth, -1 );
+        SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "LibraryTree" ), m_settings->m_LibWidth, -1 );
 
     Raise();
     Show( true );
@@ -310,9 +310,7 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
     }
 
     if( cfg )
-    {
         Pgm().GetSettingsManager().Save( cfg );
-    }
 
     delete m_libMgr;
 }
@@ -345,7 +343,7 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     m_settings->m_LibWidth = m_treePane->GetSize().x;
 
-    m_settings->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
+    m_settings->m_LibrarySortMode = GetLibTree()->GetSortMode();
 
     m_settings->m_AuiPanels.properties_splitter = m_propertiesPanel->SplitterProportion();
     bool prop_shown = m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
@@ -394,6 +392,7 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_MOVE_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_EDIT_TOOL );
+    m_toolManager->RegisterTool( new LIBRARY_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->InitTools();
@@ -519,10 +518,10 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenFields;
             };
 
-    auto showCompTreeCond =
+    auto showLibraryTreeCond =
             [this]( const SELECTION& )
             {
-                return IsSymbolTreeShown();
+                return IsLibraryTreeShown();
             };
 
     auto propertiesCond =
@@ -533,7 +532,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
-    mgr->SetConditions( EE_ACTIONS::showSymbolTree,      CHECK( showCompTreeCond ) );
+    mgr->SetConditions( ACTIONS::showLibraryTree,        CHECK( showLibraryTreeCond ) );
     mgr->SetConditions( ACTIONS::showProperties,         CHECK( propertiesCond ) );
     mgr->SetConditions( EE_ACTIONS::showHiddenPins,      CHECK( hiddenPinCond ) );
     mgr->SetConditions( EE_ACTIONS::showHiddenFields,    CHECK( hiddenFieldCond ) );
@@ -708,24 +707,24 @@ void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
 }
 
 
-void SYMBOL_EDIT_FRAME::OnToggleSymbolTree( wxCommandEvent& event )
+void SYMBOL_EDIT_FRAME::ToggleLibraryTree()
 {
     wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
-    treePane.Show( !IsSymbolTreeShown() );
+    treePane.Show( !IsLibraryTreeShown() );
     updateSelectionFilterVisbility();
     m_auimgr.Update();
 }
 
 
-bool SYMBOL_EDIT_FRAME::IsSymbolTreeShown() const
+bool SYMBOL_EDIT_FRAME::IsLibraryTreeShown() const
 {
     return const_cast<wxAuiManager&>( m_auimgr ).GetPane( m_treePane ).IsShown();
 }
 
 
-void SYMBOL_EDIT_FRAME::FocusSearchTreeInput()
+void SYMBOL_EDIT_FRAME::FocusLibraryTreeInput()
 {
-    m_treePane->GetLibTree()->FocusSearchFieldIfExists();
+    GetLibTree()->FocusSearchFieldIfExists();
 }
 
 
@@ -829,9 +828,9 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 
     // select the current symbol in the tree widget
     if( !IsSymbolFromSchematic() && m_symbol )
-        m_treePane->GetLibTree()->SelectLibId( m_symbol->GetLibId() );
+        GetLibTree()->SelectLibId( m_symbol->GetLibId() );
     else
-        m_treePane->GetLibTree()->Unselect();
+        GetLibTree()->Unselect();
 
     wxString symbolName = m_symbol ? m_symbol->GetName() : wxString();
 
@@ -942,7 +941,7 @@ void SYMBOL_EDIT_FRAME::OnModify()
     if( !IsSymbolFromSchematic() )
         storeCurrentSymbol();
 
-    m_treePane->GetLibTree()->RefreshLibTree();
+    GetLibTree()->RefreshLibTree();
 
     if( !GetTitle().StartsWith( "*" ) )
         UpdateTitle();
@@ -1051,24 +1050,24 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
 
 LIB_ID SYMBOL_EDIT_FRAME::GetTreeLIBID( int* aUnit ) const
 {
-    return m_treePane->GetLibTree()->GetSelectedLibId( aUnit );
+    return GetLibTree()->GetSelectedLibId( aUnit );
 }
 
 
 int SYMBOL_EDIT_FRAME::GetTreeSelectionCount() const
 {
-    return m_treePane->GetLibTree()->GetSelectionCount();
+    return GetLibTree()->GetSelectionCount();
 }
 
 int SYMBOL_EDIT_FRAME::GetTreeLIBIDs( std::vector<LIB_ID>& aSelection ) const
 {
-    return m_treePane->GetLibTree()->GetSelectedLibIds( aSelection );
+    return GetLibTree()->GetSelectedLibIds( aSelection );
 }
 
 
 LIB_SYMBOL* SYMBOL_EDIT_FRAME::getTargetSymbol() const
 {
-    if( IsSymbolTreeShown() )
+    if( IsLibraryTreeShown() )
     {
         LIB_ID libId = GetTreeLIBID();
 
@@ -1084,7 +1083,7 @@ LIB_ID SYMBOL_EDIT_FRAME::GetTargetLibId() const
 {
     LIB_ID id;
 
-    if( IsSymbolTreeShown() )
+    if( IsLibraryTreeShown() )
         id = GetTreeLIBID();
 
     if( id.GetLibNickname().empty() && m_symbol )
@@ -1102,12 +1101,6 @@ std::vector<LIB_ID> SYMBOL_EDIT_FRAME::GetSelectedLibIds() const
 }
 
 
-LIB_TREE_NODE* SYMBOL_EDIT_FRAME::GetCurrentTreeNode() const
-{
-    return m_treePane->GetLibTree()->GetCurrentTreeNode();
-}
-
-
 wxString SYMBOL_EDIT_FRAME::getTargetLib() const
 {
     return GetTargetLibId().GetLibNickname();
@@ -1120,7 +1113,7 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
     LIB_ID selected;
 
     if( m_treePane )
-        selected = m_treePane->GetLibTree()->GetSelectedLibId();
+        selected = GetLibTree()->GetSelectedLibId();
 
     if( aShowProgress )
     {
@@ -1153,10 +1146,10 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
             found = m_libMgr->GetAdapter()->FindItem( selected );
 
             if( !found )
-                m_treePane->GetLibTree()->Unselect();
+                GetLibTree()->Unselect();
         }
 
-        m_treePane->GetLibTree()->Regenerate( true );
+        GetLibTree()->Regenerate( true );
 
         // Try to select the parent library, in case the symbol is not found
         if( !found && selected.IsValid() )
@@ -1165,39 +1158,28 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
             found = m_libMgr->GetAdapter()->FindItem( selected );
 
             if( found )
-                m_treePane->GetLibTree()->SelectLibId( selected );
+                GetLibTree()->SelectLibId( selected );
         }
 
         // If no selection, see if there's a current symbol to centre
         if( !selected.IsValid() && m_symbol )
         {
             LIB_ID current( GetCurLib(), m_symbol->GetName() );
-            m_treePane->GetLibTree()->CenterLibId( current );
+            GetLibTree()->CenterLibId( current );
         }
     }
 }
 
 
-void SYMBOL_EDIT_FRAME::RegenerateLibraryTree()
-{
-    LIB_ID target = GetTargetLibId();
-
-    m_treePane->GetLibTree()->Regenerate( true );
-
-    if( target.IsValid() )
-        m_treePane->GetLibTree()->CenterLibId( target );
-}
-
-
 void SYMBOL_EDIT_FRAME::RefreshLibraryTree()
 {
-    m_treePane->GetLibTree()->RefreshLibTree();
+    GetLibTree()->RefreshLibTree();
 }
 
 
 void SYMBOL_EDIT_FRAME::FocusOnLibId( const LIB_ID& aLibID )
 {
-    m_treePane->GetLibTree()->SelectLibId( aLibID );
+    GetLibTree()->SelectLibId( aLibID );
 }
 
 
@@ -1207,7 +1189,7 @@ void SYMBOL_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem, LIB_
                              // from file therefore not yet in tree.
     {
         static_cast<LIB_TREE_NODE_ITEM*>( aTreeItem.GetID() )->Update( aSymbol );
-        m_treePane->GetLibTree()->RefreshLibTree();
+        GetLibTree()->RefreshLibTree();
     }
 }
 
@@ -1254,7 +1236,7 @@ bool SYMBOL_EDIT_FRAME::IsCurrentSymbol( const LIB_ID& aLibId ) const
 
 void SYMBOL_EDIT_FRAME::emptyScreen()
 {
-    m_treePane->GetLibTree()->Unselect();
+    GetLibTree()->Unselect();
     SetCurLib( wxEmptyString );
     SetCurSymbol( nullptr, false );
     SetScreen( m_dummyScreen );
@@ -1311,7 +1293,7 @@ void SYMBOL_EDIT_FRAME::ShowChangedLanguage()
     tree_pane_info.Show( tree_shown );
     m_auimgr.Update();
 
-    m_treePane->GetLibTree()->ShowChangedLanguage();
+    GetLibTree()->ShowChangedLanguage();
 
     // status bar
     UpdateMsgPanel();
@@ -1387,8 +1369,7 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
         int width = schIUScale.mmToIU( 50 );
         int height = schIUScale.mmToIU( 30 );
 
-        return BOX2I( VECTOR2I( -width/2, -height/2 ),
-                      VECTOR2I( width, height ) );
+        return BOX2I( VECTOR2I( -width/2, -height/2 ), VECTOR2I( width, height ) );
     }
     else
     {
@@ -1485,9 +1466,9 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             if( m_treePane )
             {
                 LIB_ID id( libNickname, wxEmptyString );
-                m_treePane->GetLibTree()->SelectLibId( id );
-                m_treePane->GetLibTree()->ExpandLibId( id );
-                m_treePane->GetLibTree()->CenterLibId( id );
+                GetLibTree()->SelectLibId( id );
+                GetLibTree()->ExpandLibId( id );
+                GetLibTree()->CenterLibId( id );
             }
         }
 
@@ -1727,11 +1708,8 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     ReCreateMenuBar();
     ReCreateHToolbar();
 
-    if( IsSymbolTreeShown() )
-    {
-        wxCommandEvent evt;
-        OnToggleSymbolTree( evt );
-    }
+    if( IsLibraryTreeShown() )
+        ToggleLibraryTree();
 
     UpdateTitle();
     RebuildSymbolUnitsList();

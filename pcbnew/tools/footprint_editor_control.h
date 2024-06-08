@@ -40,7 +40,6 @@ class FOOTPRINT_EDITOR_CONTROL : public PCB_TOOL_BASE
 {
 public:
     FOOTPRINT_EDITOR_CONTROL();
-    ~FOOTPRINT_EDITOR_CONTROL() override;
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
@@ -65,10 +64,6 @@ public:
     int ExportFootprint( const TOOL_EVENT& aEvent );
     int OpenWithTextEditor( const TOOL_EVENT& aEvent );
 
-    int PinLibrary( const TOOL_EVENT& aEvent );
-    int UnpinLibrary( const TOOL_EVENT& aEvent );
-    int ToggleFootprintTree( const TOOL_EVENT& aEvent );
-    int FootprintTreeSearch( const TOOL_EVENT& aEvent );
     int ToggleLayersManager( const TOOL_EVENT& aEvent );
     int ToggleProperties( const TOOL_EVENT& aEvent );
     int Properties( const TOOL_EVENT& aEvent );

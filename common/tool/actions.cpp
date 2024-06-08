@@ -69,6 +69,13 @@ TOOL_ACTION ACTIONS::open( TOOL_ACTION_ARGS()
         .Tooltip( _( "Open existing document" ) )
         .Icon( BITMAPS::directory_open ) );
 
+TOOL_ACTION ACTIONS::openWithTextEditor( TOOL_ACTION_ARGS()
+        .Name( "common.Control.openWithTextEditor" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Edit in a Text Editor..." ) )
+        .Tooltip( _( "Open a library file with a text editor" ) )
+        .Icon( BITMAPS::editor ) );
+
 TOOL_ACTION ACTIONS::save( TOOL_ACTION_ARGS()
         .Name( "common.Control.save" )
         .Scope( AS_GLOBAL )
@@ -737,6 +744,24 @@ TOOL_ACTION ACTIONS::unpinLibrary( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Unpin Library" ) )
         .Tooltip( _( "No longer keep the library at the top of the list" ) ) );
+
+TOOL_ACTION ACTIONS::showLibraryTree( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showLibraryTree" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Library Tree" ) )
+        .Icon( BITMAPS::search_tree ) );
+
+TOOL_ACTION ACTIONS::hideLibraryTree( TOOL_ACTION_ARGS()
+        .Name( "common.Control.hideLibraryTree" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Hide Library Tree" ) )
+        .Icon( BITMAPS::search_tree ) );
+
+TOOL_ACTION ACTIONS::libraryTreeSearch( TOOL_ACTION_ARGS()
+        .Name( "common.Control.libraryTreeSearch" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Focus Library Tree Search Field" ) )
+        .DefaultHotkey( MD_CTRL + 'L' ) );
 
 TOOL_ACTION ACTIONS::panUp( TOOL_ACTION_ARGS()
         .Name( "common.Control.panUp" )

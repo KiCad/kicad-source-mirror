@@ -31,12 +31,12 @@
 #include <sch_base_frame.h>
 #include <sch_screen.h>
 #include <ee_collectors.h>
+#include <symbol_tree_pane.h>
 #include <optional>
 
 class SCH_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
 class LIB_SYMBOL;
-class SYMBOL_TREE_PANE;
 class LIB_TREE_NODE;
 class LIB_ID;
 class LIB_SYMBOL_LIBRARY_MANAGER;
@@ -88,7 +88,7 @@ public:
      */
     wxString SetCurLib( const wxString& aLibNickname );
 
-    LIB_TREE_NODE* GetCurrentTreeNode() const;
+    LIB_TREE* GetLibTree() const override { return m_treePane->GetLibTree(); }
 
     /**
      * Return the LIB_ID of the library or symbol selected in the symbol tree.
@@ -180,12 +180,11 @@ public:
 
     void OnSelectUnit( wxCommandEvent& event );
 
-    void OnToggleSymbolTree( wxCommandEvent& event );
-
     void ToggleProperties() override;
 
-    bool IsSymbolTreeShown() const;
-    void FocusSearchTreeInput();
+    void ToggleLibraryTree() override;
+    bool IsLibraryTreeShown() const override;
+    void FocusLibraryTreeInput() override;
     void FreezeLibraryTree();
     void ThawLibraryTree();
 
@@ -335,13 +334,6 @@ public:
                         const wxString& aForceRefresh = wxEmptyString );
 
     /**
-     * Filter, sort, and redisplay the library tree.
-     *
-     * Does NOT synchronize it with libraries in disk.
-     */
-    void RegenerateLibraryTree();
-
-    /**
      * Redisplay the library tree.  Used after changing modified states, descriptions, etc.
      */
     void RefreshLibraryTree();
@@ -355,7 +347,7 @@ public:
      * Return either the symbol selected in the symbol tree (if context menu is active) or the
      * symbol on the editor canvas.
      */
-    LIB_ID GetTargetLibId() const;
+    LIB_ID GetTargetLibId() const override;
 
     /**
      * @return a list of selected items in the symbol tree

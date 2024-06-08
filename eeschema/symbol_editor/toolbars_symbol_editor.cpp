@@ -175,7 +175,7 @@ void SYMBOL_EDIT_FRAME::ReCreateOptToolbar()
         m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( EE_ACTIONS::showSymbolTree,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::showLibraryTree,        ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::showProperties,         ACTION_TOOLBAR::TOGGLE );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();

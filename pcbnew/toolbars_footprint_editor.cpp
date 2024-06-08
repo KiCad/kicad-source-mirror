@@ -249,7 +249,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
         m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::showFootprintTree,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::showLibraryTree,         ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,   ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::showProperties,      ACTION_TOOLBAR::TOGGLE );
 
