@@ -135,7 +135,6 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
 
     if( m_parentPanel->EnableTouchEvents( wxTOUCH_ZOOM_GESTURE | wxTOUCH_PAN_GESTURES ) )
     {
-        wxLogDebug( "EnableTouchEvents Successful!!" );
         m_parentPanel->Connect( wxEVT_GESTURE_ZOOM,
                                 wxZoomGestureEventHandler( WX_VIEW_CONTROLS::onZoomGesture ),
                                 nullptr, this );
