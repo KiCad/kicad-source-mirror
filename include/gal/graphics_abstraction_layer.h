@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) - base class
  *
@@ -1038,7 +1038,8 @@ protected:
     UTIL::LINK           m_observerLink;
 
     std::stack<double>   m_depthStack;         ///< Stored depth values
-    VECTOR2I             m_screenSize;         ///< Screen size in screen coordinates
+    VECTOR2I             m_screenSize;         ///< Screen size in screen (wx logical) coordinates
+    VECTOR2I             m_bitmapSize;         ///< Bitmap size, in physical pixels
 
     double               m_worldUnitLength;    ///< The unit length of the world coordinates [inch]
     double               m_screenDPI;          ///< The dots per inch of the screen

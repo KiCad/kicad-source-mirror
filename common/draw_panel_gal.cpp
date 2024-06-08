@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2013-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2024, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -281,20 +281,10 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
             m_gal->SetGridColor( settings->GetGridColor() );
             m_gal->SetCursorColor( settings->GetCursorColor() );
 
-            // TODO: find why ClearScreen() must be called here in opengl mode
-            // and only if m_view->IsDirty() in Cairo mode to avoid display artifacts
-            // when moving the mouse cursor
-            if( m_backend == GAL_TYPE_OPENGL )
-                m_gal->ClearScreen();
+            m_gal->ClearScreen();
 
             if( m_view->IsDirty() )
             {
-                if( m_backend != GAL_TYPE_OPENGL  // Already called in opengl
-                        && m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
-                {
-                    m_gal->ClearScreen();
-                }
-
                 m_view->ClearTargets();
 
                 // Grid has to be redrawn only when the NONCACHED target is redrawn
