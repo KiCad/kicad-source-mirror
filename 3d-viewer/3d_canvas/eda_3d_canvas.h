@@ -237,6 +237,10 @@ private:
     void OnResize( wxSizeEvent& event );
     void OnTimerTimeout_Redraw( wxTimerEvent& event );
 
+    void OnZoomGesture( wxZoomGestureEvent& event );
+    void OnPanGesture( wxPanGestureEvent& event );
+    void OnRotateGesture( wxRotateGestureEvent& event );
+
     DECLARE_EVENT_TABLE()
 
     /**
@@ -323,6 +327,10 @@ private:
 
     bool    m_render3dmousePivot = false; // Render the 3dmouse pivot
     SFVEC3F m_3dmousePivotPos;            // The position of the 3dmouse pivot
+
+    ///< Used to track gesture events.
+    double   m_gestureLastZoomFactor = 1.0;
+    double   m_gestureLastAngle = 0.0;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

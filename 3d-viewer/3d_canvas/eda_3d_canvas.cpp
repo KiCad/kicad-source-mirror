@@ -73,6 +73,11 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, HIDPI_GL_3D_CANVAS )
     EVT_MOTION( EDA_3D_CANVAS::OnMouseMove )
     EVT_MAGNIFY( EDA_3D_CANVAS::OnMagnify )
 
+    // touch gesture events
+    EVT_GESTURE_ZOOM( wxID_ANY, EDA_3D_CANVAS::OnZoomGesture )
+    EVT_GESTURE_PAN( wxID_ANY, EDA_3D_CANVAS::OnPanGesture )
+    EVT_GESTURE_ROTATE( wxID_ANY, EDA_3D_CANVAS::OnRotateGesture )
+
     // other events
     EVT_ERASE_BACKGROUND( EDA_3D_CANVAS::OnEraseBackground )
     EVT_CUSTOM(wxEVT_REFRESH_CUSTOM_COMMAND, ID_CUSTOM_EVENT_1, EDA_3D_CANVAS::OnRefreshRequest )
@@ -143,6 +148,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttrib
 
     wxASSERT( a3DCachePointer != nullptr );
     m_boardAdapter.Set3dCacheManager( a3DCachePointer );
+
+    EnableTouchEvents( wxTOUCH_ZOOM_GESTURE | wxTOUCH_PAN_GESTURES | wxTOUCH_ROTATE_GESTURE );
 
     const wxEventType events[] =
     {
@@ -625,6 +632,75 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
     float magnification = ( event.GetMagnification() + 1.0f );
 
     m_camera.Zoom( magnification );
+
+    DisplayStatus();
+    Request_refresh();
+}
+
+
+void EDA_3D_CANVAS::OnZoomGesture( wxZoomGestureEvent& aEvent )
+{
+    SetFocus();
+
+    if( aEvent.IsGestureStart() )
+    {
+        m_gestureLastZoomFactor = 1.0;
+        m_camera.SetCurMousePosition( aEvent.GetPosition() );
+    }
+
+    if( m_camera_is_moving )
+        return;
+
+    restart_editingTimeOut_Timer();
+
+    m_camera.Pan( aEvent.GetPosition() );
+    m_camera.SetCurMousePosition( aEvent.GetPosition() );
+
+    m_camera.Zoom( aEvent.GetZoomFactor() / m_gestureLastZoomFactor );
+
+    m_gestureLastZoomFactor = aEvent.GetZoomFactor();
+
+    DisplayStatus();
+    Request_refresh();
+}
+
+
+void EDA_3D_CANVAS::OnPanGesture( wxPanGestureEvent& aEvent )
+{
+    SetFocus();
+
+    if( aEvent.IsGestureStart() )
+        m_camera.SetCurMousePosition( aEvent.GetPosition() );
+
+    if( m_camera_is_moving )
+        return;
+
+    m_camera.Pan( aEvent.GetPosition() );
+    m_camera.SetCurMousePosition( aEvent.GetPosition() );
+
+    DisplayStatus();
+    Request_refresh();
+}
+
+
+void EDA_3D_CANVAS::OnRotateGesture( wxRotateGestureEvent& aEvent )
+{
+    SetFocus();
+
+    if( aEvent.IsGestureStart() )
+    {
+        m_gestureLastAngle = 0;
+        m_camera.SetCurMousePosition( aEvent.GetPosition() );
+
+        // We don't want to process the first angle
+        return;
+    }
+
+    if( m_camera_is_moving )
+        return;
+
+    m_camera.RotateScreen( m_gestureLastAngle - aEvent.GetRotationAngle() );
+    m_gestureLastAngle = aEvent.GetRotationAngle();
 
     DisplayStatus();
     Request_refresh();

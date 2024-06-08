@@ -236,6 +236,11 @@ public:
 
     bool ViewCommand_T1( VIEW3D_TYPE aRequestedView );
 
+    /**
+     * Rotates the camera in screen plane.
+     */
+    void RotateScreen( float aAngleInRadians );
+
     void RotateX( float aAngleInRadians );
     void RotateY( float aAngleInRadians );
     void RotateZ( float aAngleInRadians );

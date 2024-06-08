@@ -647,6 +647,14 @@ bool CAMERA::Zoom_T1( float aFactor )
 }
 
 
+void CAMERA::RotateScreen( float aAngleInRadians )
+{
+    glm::mat4 matrix = GetRotationMatrix();
+    SetRotationMatrix( glm::rotate( matrix, aAngleInRadians, GetDir() ) );
+    updateRotationMatrix();
+}
+
+
 void CAMERA::RotateX( float aAngleInRadians )
 {
     m_rotate_aux.x += aAngleInRadians;
