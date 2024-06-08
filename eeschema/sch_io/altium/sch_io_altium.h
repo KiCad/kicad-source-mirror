@@ -35,7 +35,7 @@
 
 #include "altium_parser_sch.h"
 
-
+class SYMBOL;
 class SCH_SYMBOL;
 class SCH_SHEET;
 class TITLE_BLOCK;
@@ -182,6 +182,8 @@ private:
 
     void doEnumerateSymbolLib( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties,
                                std::function<void(const wxString&, LIB_SYMBOL*)> aInserter );
+
+    void fixupSymbolPinNameNumbers( SYMBOL* aSymbol );
 
 private:
     SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..

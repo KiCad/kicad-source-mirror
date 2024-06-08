@@ -482,7 +482,9 @@ ASCH_ELLIPSE::ASCH_ELLIPSE( const std::map<wxString, wxString>& aProps ) :
         ASCH_FILL_INTERFACE( aProps ),
         ASCH_BORDER_INTERFACE( aProps )
 {
-    wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::ELLIPSE );
+    ALTIUM_SCH_RECORD record = ReadRecord( aProps );
+
+    wxASSERT( record == ALTIUM_SCH_RECORD::ELLIPSE || record == ALTIUM_SCH_RECORD::ELLIPTICAL_ARC );
 
     Center = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                        -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
