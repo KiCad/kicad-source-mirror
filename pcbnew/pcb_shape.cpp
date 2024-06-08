@@ -798,6 +798,17 @@ bool PCB_SHAPE::operator==( const BOARD_ITEM& aOther ) const
 
     const PCB_SHAPE& other = static_cast<const PCB_SHAPE&>( aOther );
 
+    return *this == other;
+}
+
+
+bool PCB_SHAPE::operator==( const PCB_SHAPE& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_SHAPE& other = static_cast<const PCB_SHAPE&>( aOther );
+
     if( m_layer != other.m_layer )
         return false;
 
