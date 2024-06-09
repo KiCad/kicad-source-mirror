@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-06-08 11:09+0000\n"
-"Last-Translator: ivit VT <st17ivito@gmail.com>\n"
+"PO-Revision-Date: 2024-06-10 13:09+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -2007,7 +2007,7 @@ msgstr "O programu"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:90
 msgid "Version"
-msgstr "Verze"
+msgstr "esVerze"
 
 #: common/dialog_about/dialog_about.cpp:157
 msgid "Developers"
@@ -25945,14 +25945,12 @@ msgid "Lines width"
 msgstr "Šířka spoje"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
-#, fuzzy
 msgid "Minimum clearance"
-msgstr "Min. izolační mezera:"
+msgstr "Min. izolační mezera"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
-#, fuzzy
 msgid "Via: (diameter - drill)"
-msgstr "Prokov: (prům. - vrt.)"
+msgstr "Prokov: (průměr - vrtání)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 #, fuzzy
@@ -26173,14 +26171,12 @@ msgid "Ampacity:"
 msgstr "Proud:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Current density"
-msgstr "Aktuální klávesa:"
+msgstr "Proudová hustota"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
-#, fuzzy
 msgid "A/mm^2"
-msgstr "mm^2"
+msgstr "A/mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:167
 msgid "Application"
@@ -26336,9 +26332,8 @@ msgid "OVC IV"
 msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
-#, fuzzy
 msgid "Impulse voltage:"
-msgstr "Konečné napětí:"
+msgstr "Impulsní napětí:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
 msgid ""
@@ -26350,9 +26345,8 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:160
-#, fuzzy
 msgid "kV"
-msgstr "V"
+msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 #, fuzzy
@@ -26360,18 +26354,16 @@ msgid "Compute the clearance and creepage distances"
 msgstr "Zadat tloušťku izolační mezery (v jednotkách)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
-#, fuzzy
 msgid "RMS Voltage:"
-msgstr "Napětí"
+msgstr "RMS napětí:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
-#, fuzzy
 msgid "Transient overvoltage:"
-msgstr "Přechodný šum"
+msgstr "Přechodné přepětí:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:136
 msgid ""
@@ -26387,9 +26379,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:149
-#, fuzzy
 msgid "Recurring peak voltage:"
-msgstr "Rozsah (napětí):"
+msgstr "Opakované špičkové napětí:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:151
 msgid ""
@@ -26401,9 +26392,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
-#, fuzzy
 msgid "Type of insulation:"
-msgstr "Orientace textu"
+msgstr "Typ izolace:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:166
 msgid ""
@@ -26418,18 +26408,16 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
-#, fuzzy
 msgid "Functional"
-msgstr "Propojení"
+msgstr "Funkční"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Reinforced"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:179
-#, fuzzy
 msgid "Pollution Degree:"
-msgstr "Otočení 90 stupňů"
+msgstr "Stupeň znečištění:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
 msgid ""
@@ -26444,29 +26432,24 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD1"
-msgstr "PDF"
+msgstr "PD1"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD2"
-msgstr "PDF"
+msgstr "PD2"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD3"
-msgstr "PDF"
+msgstr "PD3"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD4"
-msgstr "PDF"
+msgstr "PD4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:194
-#, fuzzy
 msgid "Material group:"
-msgstr "Vlastnosti materiálu:"
+msgstr "Skupina materiálů:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:196
 msgid ""
@@ -26480,9 +26463,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
-#, fuzzy
 msgid "II"
-msgstr "I"
+msgstr "II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
@@ -26493,9 +26475,8 @@ msgid "IIIb"
 msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
-#, fuzzy
 msgid "PCB material:"
-msgstr "Společné materiály:"
+msgstr "Materiál DPS:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:211
 msgid ""
@@ -26504,9 +26485,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:221
-#, fuzzy
 msgid "Max altitude:"
-msgstr "Max amplituda (Amax):"
+msgstr "Max. nadmořská výška:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:223
 msgid ""
@@ -26792,18 +26772,16 @@ msgid "Threshold voltage:"
 msgstr "Prahové napětí :"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "Materiál"
+msgstr "Názvy materiálů:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 msgid "Chemical symbols"
 msgstr "Chemické symboly"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:95
-#, fuzzy
 msgid "Names"
-msgstr "Název"
+msgstr "Jména"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:64
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:148
@@ -26811,9 +26789,9 @@ msgid "Exact"
 msgstr "Přesně"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect required resistance value: %s"
-msgstr "Nesprávná hodnota velikosti rohu"
+msgstr "Nesprávná požadovaná hodnota odporu: %s"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:156
 msgid "Not worth using"
@@ -27553,9 +27531,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
-#, fuzzy
 msgid "KiCad Calculator Tools"
-msgstr "Nástroje kalkulačky"
+msgstr "Nástroje kalkulačky KiCadu"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:164
 msgid "General system design"
@@ -27566,9 +27543,8 @@ msgid "Regulators"
 msgstr "Regulátory"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:167
-#, fuzzy
 msgid "Resistor Calculator"
-msgstr "Kalkulačka odporu E-Série"
+msgstr "Kalkulačka odporu"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:169
 msgid "Power, current and isolation"
@@ -28198,9 +28174,8 @@ msgid "Best Length Ratio"
 msgstr "Nejlepší délka:"
 
 #: pcbnew/board_connected_item.cpp:250
-#, fuzzy
 msgid "Max Length"
-msgstr "Max délka:"
+msgstr "Max délka"
 
 #: pcbnew/board_connected_item.cpp:256
 #, fuzzy
@@ -30771,9 +30746,8 @@ msgid "Update Footprints from Library"
 msgstr "Aktualizovat pouzdro z knihovny"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:75
-#, fuzzy
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr "Soubory CSV (*.csv)|*."
+msgstr "IPC-2581 soubory (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:76
 #, fuzzy
@@ -30786,9 +30760,8 @@ msgid "Export IPC-2581 File"
 msgstr "Export do souboru"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:136
-#, fuzzy
 msgid "manufacturer"
-msgstr "Vybrat výrobce"
+msgstr "výrobce"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:144
 #, fuzzy
@@ -30811,9 +30784,8 @@ msgid "The number of values following the decimal separator"
 msgstr "Počet čísel následujících za desetinným oddělovačem"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
-#, fuzzy
 msgid "Version:"
-msgstr "Verze"
+msgstr "Verze:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
 msgid "Compress output"
@@ -30829,9 +30801,8 @@ msgid "BOM Columns"
 msgstr "Sloupce"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:102
-#, fuzzy
 msgid "Internal ID:"
-msgstr "Vnitřní"
+msgstr "Interní ID:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:104
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:112
@@ -30876,14 +30847,12 @@ msgid "Column containing the distributor part number"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:154
-#, fuzzy
 msgid "Distributor:"
-msgstr "Zarovnat/Distribuovat"
+msgstr "Distributor:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.h:81
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "Export do STEP"
+msgstr "Export IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:173
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
@@ -30975,9 +30944,8 @@ msgstr ""
 "Spusťte DRC pro úplnou analýzu."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:430
-#, fuzzy
 msgid "STEP/GLTF Export"
-msgstr "STEP export"
+msgstr "Export STEP/GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:43
 msgid "Coordinates"
@@ -31142,9 +31110,8 @@ msgstr ""
 "spojené. Standard je 0,001 mm."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:93
-#, fuzzy
 msgid "Export STEP / GLTF"
-msgstr "Export do STEP"
+msgstr "Export STEP/GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
@@ -31161,9 +31128,8 @@ msgid "Command line:\n"
 msgstr "Příkazová řádka:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
-#, fuzzy
 msgid "3D Export"
-msgstr "Export"
+msgstr "Export 3D"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:246
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:212
@@ -31418,9 +31384,8 @@ msgid "Footprint: "
 msgstr "Pouzdro: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
-#, fuzzy
 msgid "Symbol:"
-msgstr "Symbol"
+msgstr "Symbol:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
 msgid "Sheet: "
@@ -31974,9 +31939,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
-#, fuzzy
 msgid "Gerber X3"
-msgstr "Gerber X2"
+msgstr "Gerber X3"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
@@ -32373,14 +32337,12 @@ msgid "Edit Teardrops"
 msgstr "Přidat označení"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
-#, fuzzy
 msgid "PTH pads"
-msgstr "NPTH ploška z %s"
+msgstr "NPTH plošky"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
-#, fuzzy
 msgid "SMD pads"
-msgstr "SMD plošky dole"
+msgstr "SMD plošky"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:39
 #, fuzzy
@@ -32518,9 +32480,8 @@ msgstr "Nejlepší délka:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:455
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:497
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:550
-#, fuzzy
 msgid "%("
-msgstr "%"
+msgstr "%("
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:238
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:285
@@ -32535,9 +32496,8 @@ msgstr "%"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:80
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:122
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:180
-#, fuzzy
 msgid "d"
-msgstr "%d"
+msgstr "d"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:244
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:291
@@ -32598,9 +32558,8 @@ msgstr "Oblouk"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:324
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:805
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:550
-#, fuzzy
 msgid "Points:"
-msgstr "Body"
+msgstr "Body:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:112
 #, fuzzy
@@ -33156,9 +33115,9 @@ msgid "Report file"
 msgstr "Soubor hlášení"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2312
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
-msgstr "%s%s (%s)"
+msgstr "%s (%s)"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:30
 msgid "Net name filter:"
@@ -33830,12 +33789,10 @@ msgid "Deselect All Copper Layers"
 msgstr "Odznačit všechny vrstvy mědi"
 
 #: pcbnew/dialogs/dialog_plot.cpp:481 pcbnew/dialogs/dialog_plot.cpp:546
-#, fuzzy
 msgid "Select All Layers"
 msgstr "Vybrat všechny vrstvy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:482 pcbnew/dialogs/dialog_plot.cpp:547
-#, fuzzy
 msgid "Deselect All Layers"
 msgstr "Odznačit všechny vrstvy"
 
@@ -34822,14 +34779,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:76
-#, fuzzy
 msgid "Start X:"
-msgstr "Začátek X"
+msgstr "Začátek X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:94
-#, fuzzy
 msgid "End X:"
-msgstr "Konec X"
+msgstr "Konec X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:220
@@ -34970,9 +34925,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:367
-#, fuzzy
 msgid "Corner style:"
-msgstr "Styl rohu"
+msgstr "Styl rohu:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
@@ -35334,9 +35288,8 @@ msgid "3D Model(s)"
 msgstr "3D model(y)"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:49
-#, fuzzy
 msgid "Net names:"
-msgstr "Názvy sítí"
+msgstr "Názvy sítí:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Do not show"
@@ -37055,9 +37008,8 @@ msgid "Hole"
 msgstr "Díra"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "Diferenciální páry"
+msgstr "Diferenciální páry:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -37689,9 +37641,9 @@ msgid "Local override"
 msgstr "Místní přepsání"
 
 #: pcbnew/drc/drc_rule.h:156
-#, fuzzy, c-format
+#, c-format
 msgid "rule '%s'"
-msgstr "pravidlo %s"
+msgstr "pravidlo '%s'"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
@@ -37988,9 +37940,9 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s min %s; aktuální %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s"
-msgstr "Ploška %s\t"
+msgstr "Ploška %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:200
 #, fuzzy, c-format
@@ -40628,9 +40580,9 @@ msgid "Datasheet '%s' of %s"
 msgstr "Hodnota '%s' z %s"
 
 #: pcbnew/pcb_field.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' of %s"
-msgstr "Pole %s %s"
+msgstr "Pole '%s' z %s"
 
 #: pcbnew/pcb_generator.cpp:187 pcbnew/pcb_generator.cpp:224
 #, fuzzy
