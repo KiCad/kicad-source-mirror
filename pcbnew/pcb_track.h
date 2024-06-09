@@ -70,6 +70,13 @@ enum class VIATYPE : int
     NOT_DEFINED  = 0  /* not yet used */
 };
 
+enum class TENTING_MODE
+{
+    FROM_RULES = 0,
+    TENTED = 1,
+    NOT_TENTED = 2
+};
+
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
 // Used for tracks and vias for algorithmic safety, not to enforce constraints
@@ -406,6 +413,9 @@ public:
 
     MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const override;
     MINOPTMAX<int> GetDrillConstraint( wxString* aSource = nullptr ) const;
+
+    void SetTentingMode( TENTING_MODE aMode );
+    TENTING_MODE TentingMode() const;
 
     bool IsTented() const override;
     int GetSolderMaskExpansion() const;

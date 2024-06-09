@@ -663,11 +663,6 @@ public:
 
     BOARD_STACKUP GetStackupOrDefault() const;
 
-    // Tented vias are vias covered by solder mask. So because the solder mask is a negative
-    // layer, tented vias are NOT plotted on solder mask layers
-    bool GetTentVias() const            { return !m_plotOptions.GetPlotViaOnMaskLayer(); }
-    void SetTentVias( bool aFlag )      { m_plotOptions.SetPlotViaOnMaskLayer( !aFlag ); }
-
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
 

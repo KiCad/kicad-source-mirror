@@ -875,14 +875,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // Add via tech layers
-            if( ( layer == F_Mask || layer == B_Mask ) && !m_board->GetTentVias() )
+            if( ( layer == F_Mask || layer == B_Mask ) )
             {
                 int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
 
                 for( PCB_TRACK* track : m_board->Tracks() )
                 {
                     if( track->Type() == PCB_VIA_T
-                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
+                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )
+                            && !static_cast<const PCB_VIA*>( track )->IsTented() )
                     {
                         createViaWithMargin( track, layerContainer, maskExpansion );
                     }
@@ -966,14 +967,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // NON-TENTED VIAS
-            if( ( layer == F_Mask || layer == B_Mask ) && !m_board->GetTentVias() )
+            if( ( layer == F_Mask || layer == B_Mask ) )
             {
                 int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
 
                 for( PCB_TRACK* track : m_board->Tracks() )
                 {
                     if( track->Type() == PCB_VIA_T
-                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
+                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )
+                            && !static_cast<const PCB_VIA*>( track )->IsTented() )
                     {
                         track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
                                                         ERROR_INSIDE );

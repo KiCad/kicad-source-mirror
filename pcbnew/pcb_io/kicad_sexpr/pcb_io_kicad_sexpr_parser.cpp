@@ -2316,6 +2316,21 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_tenting:
+        {
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                // TODO support tenting top or bottom individually
+                if( token == T_front || token == T_back )
+                    bds.m_TentVias = true;
+                else if( token == T_none )
+                    bds.m_TentVias = false;
+                else
+                    Expecting( "front, back, or none" );
+            }
+            break;
+        }
+
         case T_aux_axis_origin:
         {
             int x = parseBoardUnits( "auxiliary origin X" );
@@ -2378,6 +2393,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             SyncLineReaderWith( parser );
 
             m_board->SetPlotOptions( plotParams );
+
+            if( plotParams.GetLegacyPlotViaOnMaskLayer().has_value() )
+                m_board->GetDesignSettings().m_TentVias = !*plotParams.GetLegacyPlotViaOnMaskLayer();
+
             break;
         }
 
@@ -5814,6 +5833,22 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
         case T_teardrops:
             parseTEARDROP_PARAMETERS( &via->GetTeardropParams() );
             break;
+
+        case T_tenting:
+        {
+            // If the via has a tenting token, it means this individual via has a tenting override
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                // TODO support tenting top or bottom individually
+                if( token == T_front || token == T_back )
+                    via->Padstack().OuterLayerDefaults().has_solder_mask = true;
+                else if( token == T_none )
+                    via->Padstack().OuterLayerDefaults().has_solder_mask = false;
+                else
+                    Expecting( "front, back, or none" );
+            }
+            break;
+        }
 
         case T_tstamp:
         case T_uuid:

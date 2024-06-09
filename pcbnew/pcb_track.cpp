@@ -769,12 +769,39 @@ std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape() const
 }
 
 
+void PCB_VIA::SetTentingMode( TENTING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case TENTING_MODE::FROM_RULES: m_padStack.OuterLayerDefaults().has_solder_mask.reset();  break;
+    case TENTING_MODE::TENTED:     m_padStack.OuterLayerDefaults().has_solder_mask = true;   break;
+    case TENTING_MODE::NOT_TENTED: m_padStack.OuterLayerDefaults().has_solder_mask = false;  break;
+    }
+}
+
+
+TENTING_MODE PCB_VIA::TentingMode() const
+{
+    if( m_padStack.OuterLayerDefaults().has_solder_mask.has_value() )
+    {
+        return *m_padStack.OuterLayerDefaults().has_solder_mask ?
+            TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
+    }
+
+    return TENTING_MODE::FROM_RULES;
+}
+
+
 bool PCB_VIA::IsTented() const
 {
+    // TODO support tenting top or bottom individually
+    if( m_padStack.OuterLayerDefaults().has_solder_mask.has_value() )
+        return *m_padStack.OuterLayerDefaults().has_solder_mask;
+
     if( const BOARD* board = GetBoard() )
-        return board->GetTentVias();
-    else
-        return true;
+        return board->GetDesignSettings().m_TentVias;
+
+    return true;
 }
 
 
@@ -1640,6 +1667,12 @@ static struct TRACK_VIA_DESC
             .Map( VIATYPE::BLIND_BURIED, _HKI( "Blind/buried" ) )
             .Map( VIATYPE::MICROVIA,     _HKI( "Micro" ) );
 
+        ENUM_MAP<TENTING_MODE>::Instance()
+            .Undefined( TENTING_MODE::FROM_RULES )
+            .Map( TENTING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+            .Map( TENTING_MODE::TENTED,     _HKI( "Tented" ) )
+            .Map( TENTING_MODE::NOT_TENTED, _HKI( "Not tented" ) );
+
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
         if( layerEnum.Choices().GetCount() == 0 )
@@ -1697,7 +1730,10 @@ static struct TRACK_VIA_DESC
             &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, VIATYPE>( _HKI( "Via Type" ),
             &PCB_VIA::SetViaType, &PCB_VIA::GetViaType ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Tenting" ),
+            &PCB_VIA::SetTentingMode, &PCB_VIA::TentingMode ), groupVia );
     }
 } _TRACK_VIA_DESC;
 
 ENUM_TO_WXANY( VIATYPE );
+ENUM_TO_WXANY( TENTING_MODE );

@@ -116,8 +116,7 @@ public:
     void        SetNegative( bool aFlag ) { m_negative = aFlag; }
     bool        GetNegative() const { return m_negative; }
 
-    void        SetPlotViaOnMaskLayer( bool aFlag ) { m_plotViaOnMaskLayer = aFlag; }
-    bool        GetPlotViaOnMaskLayer() const { return m_plotViaOnMaskLayer; }
+    std::optional<bool> GetLegacyPlotViaOnMaskLayer() const { return m_plotViaOnMaskLayer; }
 
     void        SetPlotFrameRef( bool aFlag ) { m_plotDrawingSheet = aFlag; }
     bool        GetPlotFrameRef() const { return m_plotDrawingSheet; }
@@ -224,9 +223,8 @@ private:
     bool       m_blackAndWhite;         /// Plot in black and white only
     bool       m_plotDrawingSheet;
 
+    std::optional<bool> m_plotViaOnMaskLayer;    /// Deprecated; only used for reading legacy files
 
-    bool       m_plotViaOnMaskLayer;    /// True if vias are drawn on Mask layer (ie untented,
-                                        ///   *exposed* by mask)
     bool       m_subtractMaskFromSilk;  /// On gerbers 'scrape' away the solder mask from
                                         ///   silkscreen (trim silks)
 

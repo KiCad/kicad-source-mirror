@@ -926,6 +926,9 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
             plot_opts.Parse( &parser );
 
             m_board->SetPlotOptions( plot_opts );
+
+            if( plot_opts.GetLegacyPlotViaOnMaskLayer().has_value() )
+                m_board->GetDesignSettings().m_TentVias = *plot_opts.GetLegacyPlotViaOnMaskLayer();
         }
 
         else if( TESTLINE( "AuxiliaryAxisOrg" ) )

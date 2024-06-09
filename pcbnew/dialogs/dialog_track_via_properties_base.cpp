@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -321,7 +321,19 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
 	m_annularRingsCtrl->SetSelection( 1 );
-	fgSizer4->Add( m_annularRingsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer4->Add( m_annularRingsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
+
+	m_tentingLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Tenting:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_tentingLabel->Wrap( -1 );
+	fgSizer4->Add( m_tentingLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	wxString m_tentingCtrlChoices[] = { _("From design rules"), _("Tented"), _("Not tented") };
+	int m_tentingCtrlNChoices = sizeof( m_tentingCtrlChoices ) / sizeof( wxString );
+	m_tentingCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_tentingCtrlNChoices, m_tentingCtrlChoices, 0 );
+	m_tentingCtrl->SetSelection( 0 );
+	m_tentingCtrl->SetToolTip( _("Whether to tent (cover with soldermask) this via") );
+
+	fgSizer4->Add( m_tentingCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	viaRightColumn->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM, 3 );

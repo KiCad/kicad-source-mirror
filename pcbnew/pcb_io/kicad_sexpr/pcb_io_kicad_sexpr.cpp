@@ -587,6 +587,12 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard, int aNestLevel ) cons
     KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "allow_soldermask_bridges_in_footprints",
                               dsnSettings.m_AllowSoldermaskBridgesInFPs );
 
+    // TODO support tenting top or bottom individually
+    if( dsnSettings.m_TentVias )
+        m_out->Print( 0, " (tenting front back)" );
+    else
+        m_out->Print( 0, " (tenting none)" );
+
     VECTOR2I origin = dsnSettings.GetAuxOrigin();
 
     if( origin != VECTOR2I( 0, 0 ) )
@@ -2232,6 +2238,15 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             }
 
             m_out->Print( 0, ")" );
+        }
+
+        if( via->Padstack().OuterLayerDefaults().has_solder_mask.has_value() )
+        {
+            // TODO support tenting top or bottom individually
+            if( *via->Padstack().OuterLayerDefaults().has_solder_mask )
+                m_out->Print( 0, " (tenting top bottom)" );
+            else
+                m_out->Print( 0, " (tenting none)" );
         }
 
         if( !isDefaultTeardropParameters( via->GetTeardropParams() ) )

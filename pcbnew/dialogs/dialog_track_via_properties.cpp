@@ -124,6 +124,20 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 }
             };
 
+    auto getTentingSelection =
+            []( const PCB_VIA* via ) -> int
+            {
+                if( via->Padstack().OuterLayerDefaults().has_solder_mask.has_value() )
+                {
+                    if( *via->Padstack().OuterLayerDefaults().has_solder_mask )
+                        return 1;   // Tented
+
+                    return 2;   // Not tented
+                }
+
+                return 0;   // From design rules
+            };
+
     // Look for values that are common for every item that is selected
     for( EDA_ITEM* item : m_items )
     {
@@ -197,6 +211,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     viaType = v->GetViaType();
                     m_viaNotFree->SetValue( !v->GetIsFree() );
                     m_annularRingsCtrl->SetSelection( getAnnularRingSelection( v ) );
+                    m_tentingCtrl->SetSelection( getTentingSelection( v ) );
                     selection_first_layer = v->TopLayer();
                     selection_last_layer = v->BottomLayer();
 
@@ -663,6 +678,14 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     break;
                 default:
                     break;
+                }
+
+                switch( m_tentingCtrl->GetSelection() )
+                {
+                default:
+                case 0: v->Padstack().OuterLayerDefaults().has_solder_mask.reset();  break;
+                case 1: v->Padstack().OuterLayerDefaults().has_solder_mask = true;   break;
+                case 2: v->Padstack().OuterLayerDefaults().has_solder_mask = false;  break;
                 }
 
                 v->SanitizeLayers();

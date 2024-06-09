@@ -103,7 +103,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
     m_plotDrawingSheet           = false;
-    m_plotViaOnMaskLayer         = false;
     m_plotMode                   = FILLED;
     m_DXFPolygonMode = true;
     m_DXFUnits = DXF_UNITS::INCHES;
@@ -209,7 +208,6 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(svgprecision %d)\n", m_svgPrecision );
 
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotframeref", m_plotDrawingSheet );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "viasonmask", m_plotViaOnMaskLayer );
     aFormatter->Print( aNestLevel+1, "(mode %d)\n", GetPlotMode() == SKETCH ? 2 : 1 );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "useauxorigin", m_useAuxOrigin );
 
@@ -299,9 +297,6 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_plotDrawingSheet != aPcbPlotParams.m_plotDrawingSheet )
-        return false;
-
-    if( m_plotViaOnMaskLayer != aPcbPlotParams.m_plotViaOnMaskLayer )
         return false;
 
     if( m_plotMode != aPcbPlotParams.m_plotMode )
