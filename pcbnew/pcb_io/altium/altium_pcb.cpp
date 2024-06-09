@@ -3996,8 +3996,8 @@ void ALTIUM_PCB::ConvertFills6ToBoardItem( const AFILL6& aElem )
 
         if( aElem.rotation != 0. )
         {
-            VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2,
-                             ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+            VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2,
+                             aElem.pos1.y / 2 + aElem.pos2.y / 2 );
             shape.Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
         }
 
@@ -4027,8 +4027,8 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
 
         if( aElem.rotation != 0. )
         {
-            VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2,
-                             ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+            VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2,
+                             aElem.pos1.y / 2 + aElem.pos2.y / 2 );
             shape.Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
         }
 
@@ -4069,7 +4069,8 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER
     if( aElem.rotation != 0. )
     {
         // TODO: Do we need SHAPE_T::POLY for non 90° rotations?
-        VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2, ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+        VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2,
+                         aElem.pos1.y / 2 + aElem.pos2.y / 2 );
         fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
     }
 
@@ -4092,7 +4093,8 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     if( aElem.rotation != 0. )
     {
         // TODO: Do we need SHAPE_T::POLY for non 90° rotations?
-        VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2, ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+        VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2,
+                         aElem.pos1.y / 2 + aElem.pos2.y / 2 );
         fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
     }
 
