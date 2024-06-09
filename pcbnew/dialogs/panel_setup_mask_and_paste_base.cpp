@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	bMessages->Add( 4, 0, 0, wxEXPAND, 5 );
 
-	m_bitmapWarning = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmapWarning = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxASCII_STR(wxART_WARNING), wxASCII_STR(wxART_OTHER) ), wxDefaultPosition, wxDefaultSize, 0 );
 	bMessages->Add( m_bitmapWarning, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer4;
@@ -95,10 +95,25 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_allowBridges = new wxCheckBox( this, wxID_ANY, _("Allow bridged solder mask apertures between pads within footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_allowBridges, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 
-	m_tentVias = new wxCheckBox( this, wxID_ANY, _("Tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tentVias->SetToolTip( _("Tented vias: not plotted on soldermask layer\nNot tented: vias are plotted on soldermask layer\n(Solder mask is a negative layer)") );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
-	gbSizer1->Add( m_tentVias, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_stTenting = new wxStaticText( this, wxID_ANY, _("Tenting:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stTenting->Wrap( -1 );
+	bSizer6->Add( m_stTenting, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT, 5 );
+
+	m_tentViasFront = new wxCheckBox( this, wxID_ANY, _("Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_tentViasFront->SetToolTip( _("Tented vias: not plotted on soldermask layer\nNot tented: vias are plotted on soldermask layer\n(Solder mask is a negative layer)") );
+
+	bSizer6->Add( m_tentViasFront, 0, wxALL, 5 );
+
+	m_tentViasBack = new wxCheckBox( this, wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_tentViasBack->SetToolTip( _("Tented vias: not plotted on soldermask layer\nNot tented: vias are plotted on soldermask layer\n(Solder mask is a negative layer)") );
+
+	bSizer6->Add( m_tentViasBack, 0, wxALL, 5 );
+
+
+	gbSizer1->Add( bSizer6, wxGBPosition( 4, 0 ), wxGBSpan( 0, 2 ), wxEXPAND, 5 );
 
 	m_pasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pasteMarginLabel->Wrap( -1 );

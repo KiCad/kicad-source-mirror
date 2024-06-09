@@ -56,7 +56,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
     m_maskExpansion.SetValue( m_BrdSettings->m_SolderMaskExpansion );
     m_maskMinWidth.SetValue( m_BrdSettings->m_SolderMaskMinWidth );
     m_maskToCopperClearance.SetValue( m_BrdSettings->m_SolderMaskToCopperClearance );
-    m_tentVias->SetValue( m_BrdSettings->m_TentVias );
+    m_tentViasFront->SetValue( m_BrdSettings->m_TentViasFront );
+    m_tentViasBack->SetValue( m_BrdSettings->m_TentViasBack );
 
     m_pasteMargin.SetValue( m_BrdSettings->m_SolderPasteMargin );
     m_pasteMarginRatio.SetDoubleValue( m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );
@@ -73,7 +74,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
     m_BrdSettings->m_SolderMaskExpansion = m_maskExpansion.GetValue();
     m_BrdSettings->m_SolderMaskMinWidth = m_maskMinWidth.GetValue();
     m_BrdSettings->m_SolderMaskToCopperClearance = m_maskToCopperClearance.GetValue();
-    m_BrdSettings->m_TentVias = m_tentVias->GetValue();
+    m_BrdSettings->m_TentViasFront = m_tentViasFront->GetValue();
+    m_BrdSettings->m_TentViasBack = m_tentViasBack->GetValue();
 
     m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetValue();
     m_BrdSettings->m_SolderPasteMarginRatio = m_pasteMarginRatio.GetDoubleValue() / 100.0;

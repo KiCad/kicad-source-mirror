@@ -2320,11 +2320,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
         {
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-                // TODO support tenting top or bottom individually
-                if( token == T_front || token == T_back )
-                    bds.m_TentVias = true;
+                if( token == T_front )
+                    bds.m_TentViasFront = true;
+                else if( token == T_back )
+                    bds.m_TentViasBack = true;
                 else if( token == T_none )
-                    bds.m_TentVias = false;
+                    bds.m_TentViasFront = bds.m_TentViasBack = false;
                 else
                     Expecting( "front, back, or none" );
             }
@@ -2395,7 +2396,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             m_board->SetPlotOptions( plotParams );
 
             if( plotParams.GetLegacyPlotViaOnMaskLayer().has_value() )
-                m_board->GetDesignSettings().m_TentVias = !*plotParams.GetLegacyPlotViaOnMaskLayer();
+            {
+                bool tent = *plotParams.GetLegacyPlotViaOnMaskLayer();
+                m_board->GetDesignSettings().m_TentViasFront = tent;
+                m_board->GetDesignSettings().m_TentViasBack = tent;
+            }
 
             break;
         }
@@ -5836,17 +5841,23 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
 
         case T_tenting:
         {
+            bool front = false;
+            bool back = false;
+
             // If the via has a tenting token, it means this individual via has a tenting override
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
-                // TODO support tenting top or bottom individually
-                if( token == T_front || token == T_back )
-                    via->Padstack().OuterLayerDefaults().has_solder_mask = true;
-                else if( token == T_none )
-                    via->Padstack().OuterLayerDefaults().has_solder_mask = false;
-                else
+                if( token == T_front )
+                    front = true;
+                else if( token == T_back )
+                    back = true;
+                else if( token != T_none )
                     Expecting( "front, back, or none" );
             }
+
+            via->Padstack().FrontOuterLayers().has_solder_mask = front;
+            via->Padstack().BackOuterLayers().has_solder_mask = back;
+
             break;
         }
 

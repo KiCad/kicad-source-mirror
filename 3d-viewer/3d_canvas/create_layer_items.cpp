@@ -883,7 +883,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     if( track->Type() == PCB_VIA_T
                             && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )
-                            && !static_cast<const PCB_VIA*>( track )->IsTented() )
+                            && !static_cast<const PCB_VIA*>( track )->IsTented( layer ) )
                     {
                         createViaWithMargin( track, layerContainer, maskExpansion );
                     }
@@ -975,7 +975,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     if( track->Type() == PCB_VIA_T
                             && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )
-                            && !static_cast<const PCB_VIA*>( track )->IsTented() )
+                            && !static_cast<const PCB_VIA*>( track )->IsTented( layer ) )
                     {
                         track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
                                                         ERROR_INSIDE );

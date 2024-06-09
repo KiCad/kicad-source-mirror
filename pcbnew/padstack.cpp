@@ -61,11 +61,10 @@ PADSTACK& PADSTACK::operator=( const PADSTACK &aOther )
     m_layerSet             = aOther.m_layerSet;
     m_customName           = aOther.m_customName;
     m_defaultCopperProps   = aOther.m_defaultCopperProps;
-    m_defaultOuterProps    = aOther.m_defaultOuterProps;
+    m_frontMaskProps       = aOther.m_frontMaskProps;
+    m_backMaskProps        = aOther.m_backMaskProps;
     m_unconnectedLayerMode = aOther.m_unconnectedLayerMode;
     m_copperOverrides      = aOther.m_copperOverrides;
-    m_topOverrides         = aOther.m_topOverrides;
-    m_bottomOverrides      = aOther.m_bottomOverrides;
     m_drill                = aOther.m_drill;
     m_secondaryDrill       = aOther.m_secondaryDrill;
     return *this;
@@ -78,11 +77,10 @@ bool PADSTACK::operator==( const PADSTACK& aOther ) const
             && m_layerSet == aOther.m_layerSet
             && m_customName == aOther.m_customName
             && m_defaultCopperProps == aOther.m_defaultCopperProps
-            && m_defaultOuterProps == aOther.m_defaultOuterProps
+            && m_frontMaskProps == aOther.m_frontMaskProps
+            && m_backMaskProps == aOther.m_backMaskProps
             && m_unconnectedLayerMode == aOther.m_unconnectedLayerMode
             && m_copperOverrides == aOther.m_copperOverrides
-            && m_topOverrides == aOther.m_topOverrides
-            && m_bottomOverrides == aOther.m_bottomOverrides
             && m_drill == aOther.m_drill
             && m_secondaryDrill == aOther.m_secondaryDrill;
 }
@@ -243,7 +241,7 @@ bool PADSTACK::COPPER_LAYER_PROPS::operator==( const COPPER_LAYER_PROPS& aOther 
 }
 
 
-bool PADSTACK::OUTER_LAYER_PROPS::operator==( const OUTER_LAYER_PROPS& aOther ) const
+bool PADSTACK::MASK_LAYER_PROPS::operator==( const MASK_LAYER_PROPS& aOther ) const
 {
     return solder_mask_margin == aOther.solder_mask_margin
             && solder_paste_margin == aOther.solder_paste_margin
@@ -405,38 +403,42 @@ const std::optional<int>& PADSTACK::Clearance( PCB_LAYER_ID aLayer ) const
 
 std::optional<int>& PADSTACK::SolderMaskMargin( PCB_LAYER_ID aLayer )
 {
-    return OuterLayerDefaults().solder_mask_margin;
+    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_mask_margin
+                                  : m_backMaskProps.solder_mask_margin;
 }
 
 
 const std::optional<int>& PADSTACK::SolderMaskMargin( PCB_LAYER_ID aLayer ) const
 {
-    return OuterLayerDefaults().solder_mask_margin;
+    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_mask_margin
+                                  : m_backMaskProps.solder_mask_margin;
 }
 
 
 std::optional<int>& PADSTACK::SolderPasteMargin( PCB_LAYER_ID aLayer )
 {
-    return OuterLayerDefaults().solder_paste_margin;
+    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin
+                                  : m_backMaskProps.solder_paste_margin;
 }
 
 
 const std::optional<int>& PADSTACK::SolderPasteMargin( PCB_LAYER_ID aLayer ) const
 {
-    return OuterLayerDefaults().solder_paste_margin;
-}
+    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin
+                                  : m_backMaskProps.solder_paste_margin;}
 
 
 std::optional<double>& PADSTACK::SolderPasteMarginRatio( PCB_LAYER_ID aLayer )
 {
-    return OuterLayerDefaults().solder_paste_margin_ratio;
+    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin_ratio
+                                  : m_backMaskProps.solder_paste_margin_ratio;
 }
 
 
 const std::optional<double>& PADSTACK::SolderPasteMarginRatio( PCB_LAYER_ID aLayer ) const
 {
-    return OuterLayerDefaults().solder_paste_margin_ratio;
-}
+    return IsFrontLayer( aLayer ) ? m_frontMaskProps.solder_paste_margin_ratio
+                                  : m_backMaskProps.solder_paste_margin_ratio;}
 
 
 std::optional<ZONE_CONNECTION>& PADSTACK::ZoneConnection( PCB_LAYER_ID aLayer )
@@ -532,6 +534,18 @@ void PADSTACK::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>&
 void PADSTACK::ClearPrimitives( PCB_LAYER_ID aLayer )
 {
     CopperLayerDefaults().custom_shapes.clear();
+}
+
+
+std::optional<bool> PADSTACK::IsTented( PCB_LAYER_ID aSide ) const
+{
+    if( IsFrontLayer( aSide ) )
+        return m_frontMaskProps.has_solder_mask;
+
+    if( IsBackLayer( aSide ) )
+        return m_backMaskProps.has_solder_mask;
+
+    wxCHECK_MSG( false, std::nullopt, "IsTented expects a front or back layer" );
 }
 
 

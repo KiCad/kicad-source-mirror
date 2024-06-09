@@ -769,22 +769,22 @@ std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape() const
 }
 
 
-void PCB_VIA::SetTentingMode( TENTING_MODE aMode )
+void PCB_VIA::SetFrontTentingMode( TENTING_MODE aMode )
 {
     switch( aMode )
     {
-    case TENTING_MODE::FROM_RULES: m_padStack.OuterLayerDefaults().has_solder_mask.reset();  break;
-    case TENTING_MODE::TENTED:     m_padStack.OuterLayerDefaults().has_solder_mask = true;   break;
-    case TENTING_MODE::NOT_TENTED: m_padStack.OuterLayerDefaults().has_solder_mask = false;  break;
+    case TENTING_MODE::FROM_RULES: m_padStack.FrontOuterLayers().has_solder_mask.reset();  break;
+    case TENTING_MODE::TENTED:     m_padStack.FrontOuterLayers().has_solder_mask = true;   break;
+    case TENTING_MODE::NOT_TENTED: m_padStack.FrontOuterLayers().has_solder_mask = false;  break;
     }
 }
 
 
-TENTING_MODE PCB_VIA::TentingMode() const
+TENTING_MODE PCB_VIA::GetFrontTentingMode() const
 {
-    if( m_padStack.OuterLayerDefaults().has_solder_mask.has_value() )
+    if( m_padStack.FrontOuterLayers().has_solder_mask.has_value() )
     {
-        return *m_padStack.OuterLayerDefaults().has_solder_mask ?
+        return *m_padStack.FrontOuterLayers().has_solder_mask ?
             TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
     }
 
@@ -792,14 +792,47 @@ TENTING_MODE PCB_VIA::TentingMode() const
 }
 
 
-bool PCB_VIA::IsTented() const
+void PCB_VIA::SetBackTentingMode( TENTING_MODE aMode )
 {
-    // TODO support tenting top or bottom individually
-    if( m_padStack.OuterLayerDefaults().has_solder_mask.has_value() )
-        return *m_padStack.OuterLayerDefaults().has_solder_mask;
+    switch( aMode )
+    {
+    case TENTING_MODE::FROM_RULES: m_padStack.BackOuterLayers().has_solder_mask.reset();  break;
+    case TENTING_MODE::TENTED:     m_padStack.BackOuterLayers().has_solder_mask = true;   break;
+    case TENTING_MODE::NOT_TENTED: m_padStack.BackOuterLayers().has_solder_mask = false;  break;
+    }
+}
+
+
+TENTING_MODE PCB_VIA::GetBackTentingMode() const
+{
+    if( m_padStack.BackOuterLayers().has_solder_mask.has_value() )
+    {
+        return *m_padStack.BackOuterLayers().has_solder_mask ?
+            TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
+    }
+
+    return TENTING_MODE::FROM_RULES;
+}
+
+
+bool PCB_VIA::IsTented( PCB_LAYER_ID aLayer ) const
+{
+    wxCHECK_MSG( IsFrontLayer( aLayer ) || IsBackLayer( aLayer ), true,
+                 "Invalid layer passed to IsTented" );
+
+    bool front = IsFrontLayer( aLayer );
+
+    if( front && m_padStack.FrontOuterLayers().has_solder_mask.has_value() )
+        return *m_padStack.FrontOuterLayers().has_solder_mask;
+
+    if( !front && m_padStack.BackOuterLayers().has_solder_mask.has_value() )
+        return *m_padStack.BackOuterLayers().has_solder_mask;
 
     if( const BOARD* board = GetBoard() )
-        return board->GetDesignSettings().m_TentVias;
+    {
+        return front ? board->GetDesignSettings().m_TentViasFront
+                     : board->GetDesignSettings().m_TentViasBack;
+    }
 
     return true;
 }
@@ -824,13 +857,10 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
     if( aLayer >= Padstack().Drill().start && aLayer <= Padstack().Drill().end )
         return true;
 
-    if( !IsTented() )
-    {
-        if( aLayer == F_Mask )
-            return IsOnLayer( F_Cu );
-        else if( aLayer == B_Mask )
-            return IsOnLayer( B_Cu );
-    }
+    if( aLayer == F_Mask )
+        return !IsTented( F_Mask );
+    else if( aLayer == B_Mask )
+        return !IsTented( B_Mask );
 
     return false;
 }
@@ -864,14 +894,11 @@ LSET PCB_VIA::GetLayerSet() const
     for( int id = Padstack().Drill().start; id <= Padstack().Drill().end; ++id )
         layermask.set( id );
 
-    if( !IsTented() )
-    {
-        if( layermask.test( F_Cu ) )
-            layermask.set( F_Mask );
+    if( !IsTented( F_Mask ) && layermask.test( F_Cu ) )
+        layermask.set( F_Mask );
 
-        if( layermask.test( B_Cu ) )
-            layermask.set( B_Mask );
-    }
+    if( !IsTented( B_Mask ) && layermask.test( B_Cu ) )
+        layermask.set( B_Mask );
 
     return layermask;
 }
@@ -1730,8 +1757,10 @@ static struct TRACK_VIA_DESC
             &PCB_VIA::SetBottomLayer, &PCB_VIA::BottomLayer ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, VIATYPE>( _HKI( "Via Type" ),
             &PCB_VIA::SetViaType, &PCB_VIA::GetViaType ), groupVia );
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Tenting" ),
-            &PCB_VIA::SetTentingMode, &PCB_VIA::TentingMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Front tenting" ),
+            &PCB_VIA::SetFrontTentingMode, &PCB_VIA::GetFrontTentingMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Back tenting" ),
+            &PCB_VIA::SetBackTentingMode, &PCB_VIA::GetBackTentingMode ), groupVia );
     }
 } _TRACK_VIA_DESC;
 

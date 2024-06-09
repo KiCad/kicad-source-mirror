@@ -726,8 +726,8 @@ public:
     double     m_SolderPasteMarginRatio;      // Solder mask margin ratio value of pad size
                                               // The final margin is the sum of these 2 values
     bool       m_AllowSoldermaskBridgesInFPs;
-    bool       m_TentVias;                    // The default tenting option if not overridden on an
-                                              // individual via
+    bool       m_TentViasFront;               // The default tenting option if not overridden on an
+    bool       m_TentViasBack;                // individual via
 
     std::shared_ptr<NET_SETTINGS> m_NetSettings;
 

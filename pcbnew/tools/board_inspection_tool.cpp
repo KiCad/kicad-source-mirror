@@ -1006,7 +1006,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 if( aItem->IsOnLayer( correspondingMask ) )
                     return true;
 
-                if( aItem->IsTented() && aItem->IsOnLayer( correspondingCopper ) )
+                if( aItem->IsTented( correspondingMask ) && aItem->IsOnLayer( correspondingCopper ) )
                 {
                     *aWarning = wxString::Format( _( "Note: %s is tented; clearance will only be "
                                                      "applied to holes." ),

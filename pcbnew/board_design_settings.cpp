@@ -210,7 +210,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_SolderPasteMarginRatio = DEFAULT_SOLDERPASTE_RATIO;
 
     m_AllowSoldermaskBridgesInFPs = false;
-    m_TentVias = true;
+    m_TentViasFront = true;
+    m_TentViasBack = true;
 
     // Layer thickness for 3D viewer
     m_boardThickness = pcbIUScale.mmToIU( DEFAULT_BOARD_THICKNESS_MM );
@@ -956,7 +957,8 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_SolderPasteMargin           = aOther.m_SolderPasteMargin;
     m_SolderPasteMarginRatio      = aOther.m_SolderPasteMarginRatio;
     m_AllowSoldermaskBridgesInFPs = aOther.m_AllowSoldermaskBridgesInFPs;
-    m_TentVias                    = aOther.m_TentVias;
+    m_TentViasFront               = aOther.m_TentViasFront;
+    m_TentViasBack                = aOther.m_TentViasBack;
     m_DefaultFPTextItems          = aOther.m_DefaultFPTextItems;
 
     std::copy( std::begin( aOther.m_LineThickness ), std::end( aOther.m_LineThickness ),
@@ -1045,7 +1047,8 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_SolderPasteMargin           != aOther.m_SolderPasteMargin ) return false;
     if( m_SolderPasteMarginRatio      != aOther.m_SolderPasteMarginRatio ) return false;
     if( m_AllowSoldermaskBridgesInFPs != aOther.m_AllowSoldermaskBridgesInFPs ) return false;
-    if( m_TentVias                    != aOther.m_TentVias ) return false;
+    if( m_TentViasFront               != aOther.m_TentViasFront ) return false;
+    if( m_TentViasBack                != aOther.m_TentViasBack ) return false;
     if( m_DefaultFPTextItems          != aOther.m_DefaultFPTextItems ) return false;
 
     if( !std::equal( std::begin( m_LineThickness ), std::end( m_LineThickness ),

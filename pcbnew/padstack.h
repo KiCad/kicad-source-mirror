@@ -208,7 +208,7 @@ public:
 
     ///! The features of a padstack that can vary on outer layers.
     ///! All parameters are optional; leaving them un-set means "use parent/rule defaults"
-    struct OUTER_LAYER_PROPS
+    struct MASK_LAYER_PROPS
     {
         std::optional<int> solder_mask_margin;
         std::optional<int> solder_paste_margin;
@@ -216,7 +216,7 @@ public:
         std::optional<bool> has_solder_mask;   ///< True if this outer layer has mask (is not tented)
         std::optional<bool> has_solder_paste;  ///< True if this outer layer has solder paste
 
-        bool operator==( const OUTER_LAYER_PROPS& aOther ) const;
+        bool operator==( const MASK_LAYER_PROPS& aOther ) const;
     };
 
     ///! The properties of a padstack drill.  Drill position is always the pad position (origin).
@@ -274,8 +274,19 @@ public:
     COPPER_LAYER_PROPS& CopperLayerDefaults() { return m_defaultCopperProps; }
     const COPPER_LAYER_PROPS& CopperLayerDefaults() const { return m_defaultCopperProps; }
 
-    OUTER_LAYER_PROPS& OuterLayerDefaults() { return m_defaultOuterProps; }
-    const OUTER_LAYER_PROPS& OuterLayerDefaults() const { return m_defaultOuterProps; }
+    MASK_LAYER_PROPS& FrontOuterLayers() { return m_frontMaskProps; }
+    const MASK_LAYER_PROPS& FrontOuterLayers() const { return m_frontMaskProps; }
+
+    MASK_LAYER_PROPS& BackOuterLayers() { return m_backMaskProps; }
+    const MASK_LAYER_PROPS& BackOuterLayers() const { return m_backMaskProps; }
+
+    /**
+     * Checks if this padstack is tented (covered in soldermask) on the given side
+     * @param aSide is a front or back layer (any will do)
+     * @return true or false if this padstack contains a tenting override on the given layer, or
+     *         std::nullopt if there is no override (meaning design rules should be used)
+     */
+    std::optional<bool> IsTented( PCB_LAYER_ID aSide ) const;
 
     CUSTOM_SHAPE_ZONE_MODE CustomShapeInZoneMode() const { return m_customShapeInZoneMode; }
     void SetCustomShapeInZoneMode( CUSTOM_SHAPE_ZONE_MODE aM ) { m_customShapeInZoneMode = aM; }
@@ -385,8 +396,11 @@ private:
     ///! The properties applied to copper layers if they aren't overridden
     COPPER_LAYER_PROPS m_defaultCopperProps;
 
-    ///! The properties applied to outer technical layers if they aren't overridden
-    OUTER_LAYER_PROPS m_defaultOuterProps;
+    ///! The overrides applied to front outer technical layers
+    MASK_LAYER_PROPS m_frontMaskProps;
+
+    ///! The overrides applied to back outer technical layers
+    MASK_LAYER_PROPS m_backMaskProps;
 
     UNCONNECTED_LAYER_MODE m_unconnectedLayerMode;
 
@@ -402,12 +416,6 @@ private:
     ///!        keys in this map that are used are F_Cu, In1_Cu, and B_Cu.
     ///! If m_mode == MODE::NORMAL, this map is ignored.
     std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> m_copperOverrides;
-
-    ///! Any non-null optional values here override the mask/paste settings for the top layers
-    OUTER_LAYER_PROPS m_topOverrides;
-
-    ///! Any non-null optional values here override the mask/paste settings for bottom layers
-    OUTER_LAYER_PROPS m_bottomOverrides;
 
     ///! The primary drill parameters, which also define the start and end layers for through-hole
     ///! vias and pads (F_Cu to B_Cu for normal holes; a subset of layers for blind/buried vias)

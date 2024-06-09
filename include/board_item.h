@@ -163,7 +163,14 @@ public:
         return false;
     }
 
-    virtual bool IsTented() const
+    /**
+     * Checks if the given object is tented (its copper shape is covered by solder mask) on a given
+     * side of the board.
+     * @param aLayer is the layer to check tenting mode for: F_Cu and F_Mask are treated identically
+     *               as are B_Cu and B_Mask
+     * @return true if the object is tented on the given side
+     */
+    virtual bool IsTented( PCB_LAYER_ID aLayer ) const
     {
         return false;
     }

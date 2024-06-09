@@ -190,7 +190,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( isInvisibleText( refItem ) || isInvisibleText( testItem ) )
                     return true;
 
-                if( testItem->IsTented() )
+                if( testItem->IsTented( aLayers.first ) )
                 {
                     if( testItem->HasHole() )
                     {

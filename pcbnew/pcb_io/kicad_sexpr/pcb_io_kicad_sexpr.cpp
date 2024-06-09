@@ -587,11 +587,21 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard, int aNestLevel ) cons
     KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "allow_soldermask_bridges_in_footprints",
                               dsnSettings.m_AllowSoldermaskBridgesInFPs );
 
-    // TODO support tenting top or bottom individually
-    if( dsnSettings.m_TentVias )
-        m_out->Print( 0, " (tenting front back)" );
+    m_out->Print( 0, " (tenting " );
+
+    if( dsnSettings.m_TentViasFront || dsnSettings.m_TentViasBack )
+    {
+        if( dsnSettings.m_TentViasFront )
+            m_out->Print( 0, "front " );
+        if( dsnSettings.m_TentViasBack )
+            m_out->Print( 0, "back " );
+
+        m_out->Print( 0, ")" );
+    }
     else
-        m_out->Print( 0, " (tenting none)" );
+    {
+        m_out->Print( 0, " none)" );
+    }
 
     VECTOR2I origin = dsnSettings.GetAuxOrigin();
 
@@ -2240,13 +2250,23 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             m_out->Print( 0, ")" );
         }
 
-        if( via->Padstack().OuterLayerDefaults().has_solder_mask.has_value() )
+        bool front = via->Padstack().FrontOuterLayers().has_solder_mask.value_or( false );
+        bool back = via->Padstack().BackOuterLayers().has_solder_mask.value_or( false );
+
+        if( front || back )
         {
-            // TODO support tenting top or bottom individually
-            if( *via->Padstack().OuterLayerDefaults().has_solder_mask )
-                m_out->Print( 0, " (tenting top bottom)" );
-            else
-                m_out->Print( 0, " (tenting none)" );
+            m_out->Print( 0, " (tenting " );
+
+            if( via->Padstack().FrontOuterLayers().has_solder_mask.value_or( false ) )
+                m_out->Print( 0, " front" );
+            if( via->Padstack().BackOuterLayers().has_solder_mask.value_or( false ) )
+                m_out->Print( 0, " back" );
+
+            m_out->Print( 0, ")" );
+        }
+        else
+        {
+            m_out->Print( 0, " (tenting none)" );
         }
 
         if( !isDefaultTeardropParameters( via->GetTeardropParams() ) )

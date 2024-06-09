@@ -525,12 +525,12 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
 
                 if( pad )
                     clearance += pad->GetSolderMaskExpansion();
-                else if( via && !via->IsTented() )
+                else if( via && !via->IsTented( aRefLayer ) )
                     clearance += via->GetSolderMaskExpansion();
 
                 if( otherPad )
                     clearance += otherPad->GetSolderMaskExpansion();
-                else if( otherVia && !otherVia->IsTented() )
+                else if( otherVia && !otherVia->IsTented( aRefLayer ) )
                     clearance += otherVia->GetSolderMaskExpansion();
 
                 if( itemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )

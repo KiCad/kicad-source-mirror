@@ -414,10 +414,12 @@ public:
     MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const override;
     MINOPTMAX<int> GetDrillConstraint( wxString* aSource = nullptr ) const;
 
-    void SetTentingMode( TENTING_MODE aMode );
-    TENTING_MODE TentingMode() const;
+    void SetFrontTentingMode( TENTING_MODE aMode );
+    TENTING_MODE GetFrontTentingMode() const;
+    void SetBackTentingMode( TENTING_MODE aMode );
+    TENTING_MODE GetBackTentingMode() const;
 
-    bool IsTented() const override;
+    bool IsTented( PCB_LAYER_ID aLayer ) const override;
     int GetSolderMaskExpansion() const;
 
     PCB_LAYER_ID GetLayer() const override;

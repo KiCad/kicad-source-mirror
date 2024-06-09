@@ -98,6 +98,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_ViaEndLayer->SetBoardFrame( aParent );
     m_ViaEndLayer->Resync();
 
+    m_btnLinkTenting->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_btnLinkTenting->SetValue( true );
+    m_tentingBackCtrl->Disable();
+    m_tentingBackLabel->Disable();
+
     bool nets = false;
     int  net = 0;
     bool hasLocked = false;
@@ -125,11 +130,13 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             };
 
     auto getTentingSelection =
-            []( const PCB_VIA* via ) -> int
+            []( const PCB_VIA* via, PCB_LAYER_ID aLayer ) -> int
             {
-                if( via->Padstack().OuterLayerDefaults().has_solder_mask.has_value() )
+                std::optional<bool> tentingOverride = via->Padstack().IsTented( aLayer );
+
+                if( tentingOverride.has_value() )
                 {
-                    if( *via->Padstack().OuterLayerDefaults().has_solder_mask )
+                    if( *tentingOverride )
                         return 1;   // Tented
 
                     return 2;   // Not tented
@@ -211,7 +218,17 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     viaType = v->GetViaType();
                     m_viaNotFree->SetValue( !v->GetIsFree() );
                     m_annularRingsCtrl->SetSelection( getAnnularRingSelection( v ) );
-                    m_tentingCtrl->SetSelection( getTentingSelection( v ) );
+
+                    m_tentingFrontCtrl->SetSelection( getTentingSelection( v, F_Mask ) );
+                    m_tentingBackCtrl->SetSelection( getTentingSelection( v, B_Mask ) );
+
+                    bool link = m_tentingFrontCtrl->GetSelection()
+                                == m_tentingBackCtrl->GetSelection();
+
+                    m_btnLinkTenting->SetValue( link );
+                    m_tentingBackCtrl->Enable( !link );
+                    m_tentingBackLabel->Enable( !link );
+
                     selection_first_layer = v->TopLayer();
                     selection_last_layer = v->BottomLayer();
 
@@ -680,12 +697,20 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     break;
                 }
 
-                switch( m_tentingCtrl->GetSelection() )
+                switch( m_tentingFrontCtrl->GetSelection() )
                 {
                 default:
-                case 0: v->Padstack().OuterLayerDefaults().has_solder_mask.reset();  break;
-                case 1: v->Padstack().OuterLayerDefaults().has_solder_mask = true;   break;
-                case 2: v->Padstack().OuterLayerDefaults().has_solder_mask = false;  break;
+                case 0: v->Padstack().FrontOuterLayers().has_solder_mask.reset();  break;
+                case 1: v->Padstack().FrontOuterLayers().has_solder_mask = true;   break;
+                case 2: v->Padstack().FrontOuterLayers().has_solder_mask = false;  break;
+                }
+
+                switch( m_tentingBackCtrl->GetSelection() )
+                {
+                default:
+                case 0: v->Padstack().BackOuterLayers().has_solder_mask.reset();  break;
+                case 1: v->Padstack().BackOuterLayers().has_solder_mask = true;   break;
+                case 2: v->Padstack().BackOuterLayers().has_solder_mask = false;  break;
                 }
 
                 v->SanitizeLayers();
@@ -890,6 +915,29 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
     }
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onFrontTentingChanged( wxCommandEvent& event )
+{
+    if( m_btnLinkTenting->GetValue() )
+        m_tentingBackCtrl->SetSelection( m_tentingFrontCtrl->GetSelection() );
+
+    event.Skip();
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onTentingLinkToggle( wxCommandEvent& event )
+{
+    bool link = m_btnLinkTenting->GetValue();
+
+    m_tentingBackCtrl->Enable( !link );
+    m_tentingBackLabel->Enable( !link );
+
+    if( link )
+        m_tentingBackCtrl->SetSelection( m_tentingFrontCtrl->GetSelection() );
+
+    event.Skip();
 }
 
 
