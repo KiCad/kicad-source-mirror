@@ -22737,7 +22737,6 @@ msgid "Sketch polygons"
 msgstr "多邊形草圖"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
 msgstr "在輪廓模式下顯示多邊形"
 
