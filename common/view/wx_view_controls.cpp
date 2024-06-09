@@ -640,7 +640,7 @@ void WX_VIEW_CONTROLS::onZoomGesture( wxZoomGestureEvent& aEvent )
     m_gestureLastZoomFactor = aEvent.GetZoomFactor();
     m_gestureLastPos = evtPos;
 
-    m_parentPanel->Refresh();
+    refreshMouse( true );
 }
 
 
@@ -650,7 +650,8 @@ void WX_VIEW_CONTROLS::onPanGesture( wxPanGestureEvent& aEvent )
     VECTOR2D deltaWorld = m_view->ToWorld( screenDelta, false );
 
     m_view->SetCenter( m_view->GetCenter() - deltaWorld );
-    m_parentPanel->Refresh();
+
+    refreshMouse( true );
 }
 
 
