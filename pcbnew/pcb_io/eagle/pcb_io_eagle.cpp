@@ -728,6 +728,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                 int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
                 pcbtxt->SetTextThickness( textThickness );
                 pcbtxt->SetTextSize( kicad_fontsize( t.size, textThickness ) );
+                pcbtxt->SetKeepUpright( false );
 
                 // Eagle's anchor is independent of text justification; KiCad's is not.
                 VECTOR2I eagleAnchor( kicad_x( t.x ), kicad_y( t.y ) );
@@ -2080,6 +2081,7 @@ void PCB_IO_EAGLE::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     textItem->SetTextThickness( textThickness );
     textItem->SetTextSize( kicad_fontsize( t.size, textThickness ) );
+    textItem->SetKeepUpright( false );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
