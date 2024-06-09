@@ -32,7 +32,7 @@
     (stroke (width 0.127) (type solid)) (layer "F.Fab") (tstamp 652f73f6-ac6f-4832-94ba-2bed0706eddf))
   (fp_line (start 4 1) (end 4 -1)
     (stroke (width 0.127) (type solid)) (layer "F.Fab") (tstamp eba590a3-2fab-4033-bd06-a366648ae192))
-  (fp_text user "152111" (at 0 0 0) (layer "F.Fab") (tstamp 43f500f3-835c-450f-9c64-750dc218d7d1)
+  (fp_text user "152111" (at 0 0 0 unlocked) (layer "F.Fab") (tstamp 43f500f3-835c-450f-9c64-750dc218d7d1)
     (effects (font (size 0.560832 0.560832) (thickness 0.048768)))
   )
   (pad "NC" smd rect (at 4 0) (size 1 2) (layers "F.Cu" "F.Paste" "F.Mask")

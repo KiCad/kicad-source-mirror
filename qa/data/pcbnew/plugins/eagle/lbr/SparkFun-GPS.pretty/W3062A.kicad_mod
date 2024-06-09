@@ -51,7 +51,7 @@
       (xy 2.49 -0.68)
     )
     (stroke (width 0) (type default)) (fill solid) (layer "F.Fab") (tstamp 6dbfd633-47ee-4bd6-8190-3ae9aebf09ac))
-  (fp_text user "Reversible\nAntenna" (at 0 0 0) (layer "F.Fab") (tstamp 30d298c9-0727-447f-8da5-abc683b4a210)
+  (fp_text user "Reversible\nAntenna" (at 0 0 0 unlocked) (layer "F.Fab") (tstamp 30d298c9-0727-447f-8da5-abc683b4a210)
     (effects (font (size 0.184 0.184) (thickness 0.016)))
   )
   (pad "FEED" smd rect (at 3 0) (size 1.25 1.61) (layers "F.Cu" "F.Paste" "F.Mask")

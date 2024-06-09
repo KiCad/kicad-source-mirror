@@ -59,7 +59,7 @@
     (stroke (width 0.0762) (type solid)) (fill none) (layer "F.Fab") (tstamp 6d0f4e06-bc80-4a59-9b5d-37d950b39fcb))
   (fp_circle (center -4.8 -4.7) (end -4.4 -4.7)
     (stroke (width 0.0762) (type solid)) (fill none) (layer "F.Fab") (tstamp 39011f12-cb78-4c1d-919a-a078a5a25d9d))
-  (fp_text user "1" (at -4.6 -2.9 0) (layer "F.Fab") (tstamp a1f916ee-1774-4290-a6f5-f30cacf810dd)
+  (fp_text user "1" (at -4.6 -2.9 0 unlocked) (layer "F.Fab") (tstamp a1f916ee-1774-4290-a6f5-f30cacf810dd)
     (effects (font (size 1.0795 1.0795) (thickness 0.1905)) (justify left bottom))
   )
   (pad "1" smd rect (at -6.25 -3) (size 2 0.6) (layers "F.Cu" "F.Paste" "F.Mask")
