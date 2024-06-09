@@ -575,6 +575,11 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     for( BOARD_ITEM* item : m_board->Drawings() )
         buildGraphic3DShape( item, origin );
 
+    if( m_params.m_exportZones )
+    {
+        buildZones3DShape( origin );
+    }
+
     SHAPE_POLY_SET pcbOutlinesNoArcs = pcbOutlines;
     pcbOutlinesNoArcs.ClearArcs();
 
@@ -609,11 +614,6 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         }
 
         m_pcbModel->AddPolygonShapes( &poly, pcblayer, origin );
-    }
-
-    if( m_params.m_exportZones )
-    {
-        buildZones3DShape( origin );
     }
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );
