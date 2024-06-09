@@ -171,6 +171,10 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
 
     // add right rounded end:
 
+    // Right arc start:
+    corner = VECTOR2I( seg_len, radius );
+    polyshape.Append( corner.x, corner.y );
+
     for( EDA_ANGLE angle = delta / 2; angle < ANGLE_180; angle += delta )
     {
         corner = VECTOR2I( 0, radius );
@@ -179,8 +183,12 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
         polyshape.Append( corner.x, corner.y );
     }
 
-    // Finish arc:
+    // Finish right arc:
     corner = VECTOR2I( seg_len, -radius );
+    polyshape.Append( corner.x, corner.y );
+
+    // Left arc start:
+    corner = VECTOR2I( 0, -radius );
     polyshape.Append( corner.x, corner.y );
 
     // add left rounded end:
@@ -191,7 +199,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
         polyshape.Append( corner.x, corner.y );
     }
 
-    // Finish arc:
+    // Finish left arc:
     corner = VECTOR2I( 0, radius );
     polyshape.Append( corner.x, corner.y );
 
