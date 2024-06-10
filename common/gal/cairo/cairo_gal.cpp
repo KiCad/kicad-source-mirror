@@ -190,7 +190,7 @@ static double roundp( double x )
 
 const VECTOR2D CAIRO_GAL_BASE::roundp( const VECTOR2D& v )
 {
-    if( m_lineWidthIsOdd && m_isStrokeEnabled )
+    if( m_lineWidthIsOdd )
         return VECTOR2D( ::roundp( v.x ), ::roundp( v.y ) );
     else
         return VECTOR2D( floor( v.x + 0.5 ), floor( v.y + 0.5 ) );
@@ -352,13 +352,18 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
 
     double r = xform( aRadius );
 
-    // N.B. This is backwards. We set this because we want to adjust the center
-    // point that changes both endpoints.  In the worst case, this is twice as far.
-    // We cannot adjust radius or center based on the other because this causes the
-    // whole arc to change position/size
-    m_lineWidthIsOdd = !( static_cast<int>( aRadius ) % 2 );
+    // Adjust center and radius slightly to better match the rounding of endpoints.
+    VECTOR2D mid = roundp( xform( aCenterPoint ) );
 
-    auto mid = roundp( xform( aCenterPoint ) );
+    VECTOR2D startPointS = VECTOR2D( r, 0.0 );
+    VECTOR2D endPointS = VECTOR2D( r, 0.0 );
+    RotatePoint( startPointS, -EDA_ANGLE( startAngle, RADIANS_T ) );
+    RotatePoint( endPointS, -EDA_ANGLE( endAngle, RADIANS_T ) );
+
+    VECTOR2D refStart = roundp( xform( aCenterPoint ) + startPointS );
+    VECTOR2D refEnd = roundp( xform( aCenterPoint ) + endPointS );
+
+    r = ( ( refStart - mid ).EuclideanNorm() + ( refEnd - mid ).EuclideanNorm() ) / 2.0;
 
     cairo_set_line_width( m_currentContext, m_lineWidthInPixels );
     cairo_new_sub_path( m_currentContext );
@@ -403,13 +408,7 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
 
     double r = xform( aRadius );
 
-    // N.B. This is backwards. We set this because we want to adjust the center
-    // point that changes both endpoints.  In the worst case, this is twice as far.
-    // We cannot adjust radius or center based on the other because this causes the
-    // whole arc to change position/size
-    m_lineWidthIsOdd = !( static_cast<int>( aRadius ) % 2 );
-
-    VECTOR2D mid = roundp( xform( aCenterPoint ) );
+    VECTOR2D mid = xform( aCenterPoint );
     double   width = xform( aWidth / 2.0 );
     VECTOR2D startPointS = VECTOR2D( r, 0.0 );
     VECTOR2D endPointS = VECTOR2D( r, 0.0 );
