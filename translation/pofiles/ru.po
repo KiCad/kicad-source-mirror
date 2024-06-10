@@ -1752,9 +1752,8 @@ msgid "Export to Clipboard"
 msgstr "Экспорт в буфер обмена"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Изменение фигур"
+msgstr "Изменение из API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -2001,18 +2000,16 @@ msgid "Additional Contributions By"
 msgstr "Внесли свой вклад в проект"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Документация"
+msgstr "Документаторы"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "Команда библиотекарей"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
-msgstr "3D-модели"
+msgstr "3D модели"
 
 #: common/dialog_about/AboutDialog_main.cpp:844
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
@@ -2034,9 +2031,8 @@ msgid "Footprints"
 msgstr "Посад.места"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Иконка"
+msgstr "Иконки"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -3059,13 +3055,13 @@ msgid "Reference Designators"
 msgstr "Обозначение"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "Альтернативная функция"
+msgstr "Очистить назначенные цепи"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Удалить информацию о цепях из всех подключаемых элементов перед вставкой"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
