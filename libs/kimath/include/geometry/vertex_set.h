@@ -211,7 +211,7 @@ class VERTEX
         } while( p != this && p != aEnd );
 
         if( p != this )
-            a += ( p->x + aEnd->x ) * ( aEnd->y - p->y );
+            a += ( p->x + x ) * ( y - p->y );
 
         return a / 2;
     }
