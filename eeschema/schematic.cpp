@@ -706,10 +706,10 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
 wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
                                        const wxString& aRange )
 {
-    std::string spiceNetName( aNetName.Lower().ToStdString() );
-    NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( spiceNetName );
+    wxString spiceNetName( aNetName.Lower() );
+    NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &spiceNetName );
 
-    if( spiceNetName == "gnd" || spiceNetName == "0" )
+    if( spiceNetName == wxS( "gnd" ) || spiceNetName == wxS( "0" ) )
         return wxEmptyString;
 
     auto it = m_operatingPoints.find( spiceNetName );

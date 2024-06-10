@@ -102,12 +102,12 @@ public:
     /**
      * Remove formatting wrappers and replace illegal spice net name characters with underscores.
      */
-    static void ConvertToSpiceMarkup( std::string& aNetName );
+    static void ConvertToSpiceMarkup( wxString* aNetName );
 
     /**
      * Return the list of nets.
      */
-    std::set<std::string> GetNets() const { return m_nets; }
+    std::set<wxString> GetNets() const { return m_nets; }
 
     /**
      * Return name of Spice device corresponding to a schematic symbol.
@@ -118,7 +118,7 @@ public:
      * corresponds to the assigned device model type or a reference prefixed with a character
      * defining the device model type.
      */
-    std::string GetItemName( const std::string& aRefName ) const;
+    wxString GetItemName( const wxString& aRefName ) const;
 
     /**
      * Return the list of items representing schematic symbols in the Spice world.
@@ -128,7 +128,7 @@ public:
     /**
      * Find and return the item corresponding to \a aRefName.
      */
-    const SPICE_ITEM* FindItem( const std::string& aRefName ) const;
+    const SPICE_ITEM* FindItem( const wxString& aRefName ) const;
 
     const std::vector<wxString>& GetDirectives() { return m_directives; }
 
@@ -137,8 +137,7 @@ protected:
     virtual void WriteDirectives( const wxString& aSimCommand, unsigned aSimOptions,
                                   OUTPUTFORMATTER& candidate ) const;
 
-    virtual std::string GenerateItemPinNetName( const std::string& aNetName,
-                                                int& aNcCounter ) const;
+    virtual wxString GenerateItemPinNetName( const wxString& aNetName, int& aNcCounter ) const;
 
     /**
      * Return the paths of exported sheets (either all or the current one).
@@ -167,11 +166,9 @@ private:
     SIM_LIB_MGR             m_libMgr;             ///< Holds libraries and models
     NAME_GENERATOR          m_modelNameGenerator; ///< Generates unique model names
 
-    ///< Generates unique net names (only unique for NC nets for now)
-    NAME_GENERATOR          m_netNameGenerator;
     std::vector<wxString>   m_directives;         ///< Spice directives found in the schematic sheet
     std::set<wxString>      m_rawIncludes;        ///< include directives found in symbols
-    std::set<std::string>   m_nets;
+    std::set<wxString>      m_nets;
 
     ///< Items representing schematic symbols in Spice world.
     std::list<SPICE_ITEM>   m_items;

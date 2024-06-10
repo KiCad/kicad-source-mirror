@@ -108,7 +108,7 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
     // NoiseRef is optional
     m_noiseRef->Append( wxEmptyString );
 
-    for( const std::string& net : m_circuitModel->GetNets() )
+    for( const wxString& net : m_circuitModel->GetNets() )
     {
         m_pzInput->Append( net );
         m_pzInputRef->Append( net );
@@ -287,7 +287,7 @@ wxString DIALOG_SIM_COMMAND::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl
 
     // pick device name from exporter when something different than temperature is selected
     if( dcSource.Cmp( "TEMP" ) )
-        dcSource = m_circuitModel->GetItemName( std::string( dcSource.ToUTF8() ) );
+        dcSource = m_circuitModel->GetItemName( dcSource );
 
     return wxString::Format( "%s %s %s %s", dcSource,
                              SPICE_VALUE( aDcStart->GetValue() ).ToSpiceString(),
@@ -423,10 +423,7 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         }
 
         if( !ref.IsEmpty() )
-        {
-            ref = wxS( "," )
-                  + wxString( m_circuitModel->GetItemName( std::string( ref.ToUTF8() ) ) );
-        }
+            ref = wxS( "," ) + m_circuitModel->GetItemName( ref );
 
         m_simCommand.Printf( ".noise v(%s%s) %s %s %s %s %s %s",
                              output,

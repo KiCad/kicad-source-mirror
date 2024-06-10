@@ -618,8 +618,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 {
                     if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
                     {
-                        std::string spiceNet = UnescapeString( conn->Name() ).ToStdString();
-                        NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( spiceNet );
+                        wxString spiceNet = UnescapeString( conn->Name() );
+                        NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &spiceNet );
 
                         simFrame->AddVoltageTrace( wxString::Format( "V(%s)", spiceNet ) );
                     }

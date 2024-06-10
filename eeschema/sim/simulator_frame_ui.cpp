@@ -884,10 +884,11 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
     if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
             && ( simType == ST_TRAN || simType == ST_DC || simType == ST_AC || simType == ST_FFT) )
     {
-        for( const std::string& net : circuitModel()->GetNets() )
+        for( const wxString& net : circuitModel()->GetNets() )
         {
             // netnames are escaped (can contain "{slash}" for '/') Unscape them:
             wxString netname = UnescapeString( net );
+            NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &netname );
 
             if( netname == "GND" || netname == "0" || netname.StartsWith( unconnected ) )
                 continue;
@@ -1425,7 +1426,7 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
             return;
     }
 
-    const SPICE_ITEM* item = GetExporter()->FindItem( std::string( ref.ToUTF8() ) );
+    const SPICE_ITEM* item = GetExporter()->FindItem( ref );
 
     // Do nothing if the symbol is not tunable.
     if( !item || !item->model->GetTunerParam() )
@@ -1874,7 +1875,7 @@ void SIMULATOR_FRAME_UI::applyTuners()
             continue;
         }
 
-        const SPICE_ITEM* item = GetExporter()->FindItem( tuner->GetSymbolRef().ToStdString() );
+        const SPICE_ITEM* item = GetExporter()->FindItem( tuner->GetSymbolRef() );
 
         if( !item || !item->model->GetTunerParam() )
         {

@@ -50,7 +50,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
         m_value( 0.0 ),
         m_frame( aFrame )
 {
-    const SPICE_ITEM* item = m_frame->GetExporter()->FindItem( std::string( m_ref.ToUTF8() ) );
+    const SPICE_ITEM* item = m_frame->GetExporter()->FindItem( m_ref );
 
     if( !item )
         throw KI_PARAM_ERROR( wxString::Format( _( "%s not found" ), m_ref ) );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus.
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 
 #include "netlist_exporter_spice_model.h"
 #include <sch_screen.h>
-#include <sch_label.h>
 #include <string_utils.h>
 
 
@@ -37,22 +36,19 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,
 
     for( auto const& [key, port] : m_ports )
     {
-        std::string portDir;
+        wxString portDir;
 
-        switch( port.dir )
+        switch( port.m_dir )
         {
-            case L_INPUT:       portDir = "input";      break;
-            case L_OUTPUT:      portDir = "output";     break;
-            case L_BIDI:        portDir = "inout";      break;
-            case L_TRISTATE:    portDir = "tristate";   break;
-            case L_UNSPECIFIED: portDir = "passive";    break;
-
-            default:
-                wxFAIL_MSG( "Invalid port direction" );
-                break;
+            case L_INPUT:       portDir = "input";                      break;
+            case L_OUTPUT:      portDir = "output";                     break;
+            case L_BIDI:        portDir = "inout";                      break;
+            case L_TRISTATE:    portDir = "tristate";                   break;
+            case L_UNSPECIFIED: portDir = "passive";                    break;
+            default:            wxFAIL_MSG( "Invalid port direction" ); break;
         }
 
-        aFormatter.Print( 0, "+       %s ; %s\n", port.name.c_str(), portDir.c_str() );
+        aFormatter.Print( 0, "+       %s ; %s\n", TO_UTF8( port.m_name ), TO_UTF8( portDir ) );
     }
 
     aFormatter.Print( 0, "\n\n" );
@@ -75,13 +71,13 @@ bool NETLIST_EXPORTER_SPICE_MODEL::ReadSchematicAndLibraries( unsigned aNetlistO
 }
 
 
-std::string NETLIST_EXPORTER_SPICE_MODEL::GenerateItemPinNetName( const std::string& aNetName,
-                                                                  int& aNcCounter ) const
+wxString NETLIST_EXPORTER_SPICE_MODEL::GenerateItemPinNetName( const wxString& aNetName,
+                                                               int& aNcCounter ) const
 {
-    std::string netName = aNetName;
+    wxString netName = aNetName;
 
     if( m_ports.count( netName ) )
-        netName = m_ports.at( netName ).name;
+        netName = m_ports.at( netName).m_name;
 
     return NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( netName, aNcCounter );
 }
@@ -98,10 +94,7 @@ void NETLIST_EXPORTER_SPICE_MODEL::readPorts( unsigned aNetlistOptions )
             if( SCH_CONNECTION* conn = label->Connection( &sheet ) )
             {
                 wxString labelText = label->GetShownText( &sheet, false );
-                m_ports.insert( {
-                                  std::string( conn->Name().ToUTF8() ),
-                                  PORT_INFO{ std::string( labelText.ToUTF8() ), label->GetShape() }
-                                } );
+                m_ports.insert( { conn->Name(), PORT_INFO{ labelText, label->GetShape() } } );
             }
         }
     }
