@@ -21,19 +21,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_KIBIS_H
-#define SIM_MODEL_KIBIS_H
+#ifndef SIM_MODEL_IBIS_H
+#define SIM_MODEL_IBIS_H
 
 #include <sim/kibis/kibis.h>
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
 #include <project.h>
 
-class SIM_LIBRARY_KIBIS;
+class SIM_LIBRARY_IBIS;
 class REPORTER;
 
 
-class SPICE_GENERATOR_KIBIS : public SPICE_GENERATOR
+class SPICE_GENERATOR_IBIS : public SPICE_GENERATOR
 {
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
@@ -49,16 +49,16 @@ protected:
     std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const override;
 };
 
-class SIM_MODEL_KIBIS : public SIM_MODEL
+class SIM_MODEL_IBIS : public SIM_MODEL
 {
-    friend class SIM_LIBRARY_KIBIS;
+    friend class SIM_LIBRARY_IBIS;
 
 public:
-    SIM_MODEL_KIBIS( TYPE aType );
+    SIM_MODEL_IBIS( TYPE aType );
 
     // @brief Special copy constructor
     // creates a a model with aType, but tries to match parameters from aSource.
-    SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource );
+    SIM_MODEL_IBIS( TYPE aType, const SIM_MODEL_IBIS& aSource );
 
     std::vector<std::pair<std::string, std::string>> GetIbisPins() const
     {
@@ -81,7 +81,7 @@ public:
     /** 
      * @brief update the list of available models based on the pin number.
      */
-    bool ChangePin( const SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber );
+    bool ChangePin( const SIM_LIBRARY_IBIS& aLib, std::string aPinNumber );
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
@@ -97,7 +97,7 @@ private:
     static std::vector<PARAM::INFO> makeRectWaveformParamInfos();
     static std::vector<PARAM::INFO> makePrbsWaveformParamInfos();
 
-    const SIM_MODEL_KIBIS*                           m_sourceModel;
+    const SIM_MODEL_IBIS*                            m_sourceModel;
     std::vector<std::string>                         m_ibisModels;
     std::vector<std::pair<std::string, std::string>> m_ibisPins;
     std::string                                      m_componentName;

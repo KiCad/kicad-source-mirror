@@ -21,15 +21,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_library_kibis.h>
-#include <sim/sim_model_kibis.h>
+#include <sim/sim_library_ibis.h>
+#include <sim/sim_model_ibis.h>
 #include <ki_exception.h>
 #include <locale_io.h>
 #include <pegtl/contrib/parse_tree.hpp>
 #include <sch_pin.h>
 
 
-void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER& aReporter )
+void SIM_LIBRARY_IBIS::ReadFile( const wxString& aFilePath, REPORTER& aReporter )
 {
     SIM_LIBRARY::ReadFile( aFilePath, aReporter );
     m_kibis = KIBIS( aFilePath.ToStdString(), &aReporter );
@@ -52,7 +52,7 @@ void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER& aReporter
         m_models.push_back( SIM_MODEL::Create( SIM_MODEL::TYPE::KIBIS_DEVICE, pins, aReporter ) );
         m_modelNames.emplace_back( kcomp.m_name );
 
-        SIM_MODEL_KIBIS* libcomp = dynamic_cast<SIM_MODEL_KIBIS*>( m_models.back().get() );
+        SIM_MODEL_IBIS* libcomp = dynamic_cast<SIM_MODEL_IBIS*>( m_models.back().get() );
 
         if ( libcomp )
             InitModel( *libcomp, kcomp.m_name );
@@ -60,7 +60,7 @@ void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER& aReporter
 }
 
 
-bool SIM_LIBRARY_KIBIS::InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName )
+bool SIM_LIBRARY_IBIS::InitModel( SIM_MODEL_IBIS& aModel, wxString aCompName )
 {
     for( KIBIS_COMPONENT& kcomp : m_kibis.m_components )
     {
@@ -83,7 +83,7 @@ bool SIM_LIBRARY_KIBIS::InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName )
 }
 
 
-bool SIM_LIBRARY_KIBIS::isPinDiff( const std::string& aComp, const std::string& aPinNumber ) const
+bool SIM_LIBRARY_IBIS::isPinDiff( const std::string& aComp, const std::string& aPinNumber ) const
 {
     for( std::pair<std::string, std::string> aInfo : m_diffPins )
     {

@@ -32,7 +32,7 @@
 
 #include <sim/sim_model.h>
 #include <sim/sim_library.h>
-#include <sim/sim_library_kibis.h>
+#include <sim/sim_library_ibis.h>
 #include <sch_symbol.h>
 
 
@@ -118,7 +118,7 @@ private:
 
     void adjustParamGridColumns( int aWidth, bool aForce );
 
-    bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() ); }
+    bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_IBIS*>( library() ); }
 
 private:
     EDA_BASE_FRAME*         m_frame;

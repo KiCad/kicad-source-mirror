@@ -22,32 +22,32 @@
  */
 
 #include <sim/kibis/kibis.h>
-#include <sim/sim_model_kibis.h>
-#include <sim/sim_library_kibis.h>
+#include <sim/sim_model_ibis.h>
+#include <sim/sim_library_ibis.h>
 #include <fmt/core.h>
 #include <wx/filename.h>
 #include <kiway.h>
 #include "sim_lib_mgr.h"
 
-std::string SPICE_GENERATOR_KIBIS::ModelName( const SPICE_ITEM& aItem ) const
+std::string SPICE_GENERATOR_IBIS::ModelName( const SPICE_ITEM& aItem ) const
 {
     return fmt::format( "{}.{}", aItem.refName, aItem.baseModelName );
 }
 
 
-std::string SPICE_GENERATOR_KIBIS::ModelLine( const SPICE_ITEM& aItem ) const
+std::string SPICE_GENERATOR_IBIS::ModelLine( const SPICE_ITEM& aItem ) const
 {
     return "";
 }
 
-std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SPICE_GENERATOR_KIBIS::GetInstanceParams() const
+std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SPICE_GENERATOR_IBIS::GetInstanceParams() const
 {
     std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> vec;
     return vec;
 }
 
 
-std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& aItem ) const
+std::vector<std::string> SPICE_GENERATOR_IBIS::CurrentNames( const SPICE_ITEM& aItem ) const
 {
     std::vector<std::string> currentNames;
 
@@ -58,15 +58,15 @@ std::vector<std::string> SPICE_GENERATOR_KIBIS::CurrentNames( const SPICE_ITEM& 
 }
 
 
-std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
-                                               const wxString& aCacheDir,
-                                               REPORTER&       aReporter ) const
+std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
+                                              const wxString& aCacheDir,
+                                              REPORTER&       aReporter ) const
 {
     std::string ibisLibFilename = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string ibisCompName    = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY::NAME_FIELD  );
-    std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::PIN_FIELD );
-    std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
-    bool        diffMode        = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    std::string ibisPinName     = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::PIN_FIELD );
+    std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::MODEL_FIELD );
+    bool        diffMode        = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1";
 
     wxString path = SIM_LIB_MGR::ResolveLibraryPath( ibisLibFilename, &aProject );
 
@@ -220,8 +220,8 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
 }
 
 
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
-        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_KIBIS>( *this ) ),
+SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType ) :
+        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_IBIS>( *this ) ),
         m_enableDiff( false ),
         m_sourceModel( nullptr )
 {
@@ -251,7 +251,7 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType ) :
 }
 
 
-void SIM_MODEL_KIBIS::SwitchSingleEndedDiff( bool aDiff )
+void SIM_MODEL_IBIS::SwitchSingleEndedDiff( bool aDiff )
 {
     ClearPins();
 
@@ -268,8 +268,8 @@ void SIM_MODEL_KIBIS::SwitchSingleEndedDiff( bool aDiff )
     }
 }
 
-SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) :
-        SIM_MODEL_KIBIS( aType )
+SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType, const SIM_MODEL_IBIS& aSource ) :
+        SIM_MODEL_IBIS( aType )
 {
     for( PARAM& param1 : m_params )
     {
@@ -291,7 +291,7 @@ SIM_MODEL_KIBIS::SIM_MODEL_KIBIS( TYPE aType, const SIM_MODEL_KIBIS& aSource ) :
 }
 
 
-bool SIM_MODEL_KIBIS::ChangePin( const SIM_LIBRARY_KIBIS& aLib, std::string aPinNumber )
+bool SIM_MODEL_IBIS::ChangePin( const SIM_LIBRARY_IBIS& aLib, std::string aPinNumber )
 {
     KIBIS_COMPONENT* kcomp = aLib.m_kibis.GetComponent( std::string( GetComponentName() ) );
 
@@ -312,17 +312,17 @@ bool SIM_MODEL_KIBIS::ChangePin( const SIM_LIBRARY_KIBIS& aLib, std::string aPin
 }
 
 
-void SIM_MODEL_KIBIS::SetBaseModel( const SIM_MODEL& aBaseModel )
+void SIM_MODEL_IBIS::SetBaseModel( const SIM_MODEL& aBaseModel )
 {
     // Actual base models can only be of the same type, which is not the case here, as in addition
     // to IBIS device model type we have multiple types of drivers available for the same sourced
     // model. And we don't want to inherit the default values anyway. So we just store these models
     // and use the only for Spice code generation.
-    m_sourceModel = dynamic_cast<const SIM_MODEL_KIBIS*>( &aBaseModel );
+    m_sourceModel = dynamic_cast<const SIM_MODEL_IBIS*>( &aBaseModel );
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeParamInfos( TYPE aType )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_IBIS::makeParamInfos( TYPE aType )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO              paramInfo;
@@ -396,7 +396,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeParamInfos( TYPE aType 
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeDcWaveformParamInfos()
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_IBIS::makeDcWaveformParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO              paramInfo;
@@ -414,7 +414,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeDcWaveformParamInfos()
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeRectWaveformParamInfos()
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_IBIS::makeRectWaveformParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO              paramInfo;
@@ -455,7 +455,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makeRectWaveformParamInfos(
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_KIBIS::makePrbsWaveformParamInfos()
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_IBIS::makePrbsWaveformParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO              paramInfo;

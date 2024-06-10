@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <pgm_base.h>
 #include <env_paths.h>
-#include <sim/sim_library_kibis.h>
+#include <sim/sim_library_ibis.h>
 #include <sim/sim_xspice_parser.h>
 #include <sch_screen.h>
 #include <sch_textbox.h>
@@ -428,7 +428,7 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
         if( !path.IsEmpty() )
             m_rawIncludes.insert( path );
     }
-    else if( auto kibisModel = dynamic_cast<const SIM_MODEL_KIBIS*>( aItem.model ) )
+    else if( auto ibisModel = dynamic_cast<const SIM_MODEL_IBIS*>( aItem.model ) )
     {
         wxFileName cacheFn;
         cacheFn.AssignDir( PATHS::GetUserCachePath() );
@@ -443,10 +443,11 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
                         cacheFn.GetFullPath() );
         }
 
-        auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
-        std::string modelData = spiceGenerator.IbisDevice(
-                aItem, m_schematic->Prj(),
-                cacheFn.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR ), aReporter );
+        auto spiceGenerator = static_cast<const SPICE_GENERATOR_IBIS&>( ibisModel->SpiceGenerator() );
+
+        wxString    cacheFilepath = cacheFn.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );
+        std::string modelData = spiceGenerator.IbisDevice( aItem, m_schematic->Prj(),
+                                                           cacheFilepath, aReporter );
 
         cacheFile.Write( wxString( modelData ) );
         m_rawIncludes.insert( cacheFn.GetFullPath() );

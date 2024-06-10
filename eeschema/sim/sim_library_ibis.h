@@ -21,16 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_LIBRARY_KIBIS_H
-#define SIM_LIBRARY_KIBIS_H
+#ifndef SIM_LIBRARY_IBIS_H
+#define SIM_LIBRARY_IBIS_H
 
 #include <sim/kibis/kibis.h>
 #include <sim/sim_library.h>
-#include <sim/sim_model_kibis.h>
+#include <sim/sim_model_ibis.h>
 
-class SIM_LIBRARY_KIBIS : public SIM_LIBRARY
+class SIM_LIBRARY_IBIS : public SIM_LIBRARY
 {
-    friend class SIM_MODEL_KIBIS;
+    friend class SIM_MODEL_IBIS;
 
 public:
     static constexpr auto PIN_FIELD = "Sim.Ibis.Pin";
@@ -40,7 +40,7 @@ public:
     // @copydoc SIM_LIBRARY::ReadFile()
     void ReadFile( const wxString& aFilePath, REPORTER& aReporter ) override;
 
-    bool InitModel( SIM_MODEL_KIBIS& aModel, wxString aCompName );
+    bool InitModel( SIM_MODEL_IBIS& aModel, wxString aCompName );
     bool isPinDiff( const std::string& aComp, const std::string& aPinNumber ) const;
 
 protected:
@@ -48,4 +48,4 @@ protected:
     std::vector<std::pair<std::string, std::string>> m_diffPins;
 };
 
-#endif // SIM_LIBRARY_SPICE_H
+#endif // SIM_LIBRARY_IBIS_H

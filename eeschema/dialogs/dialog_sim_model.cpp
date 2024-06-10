@@ -26,9 +26,9 @@
 #include <dialog_ibis_parser_reporter.h>
 #include <dialog_sim_model.h>
 #include <sim/sim_property.h>
-#include <sim/sim_library_kibis.h>
+#include <sim/sim_library_ibis.h>
 #include <sim/sim_model.h>
-#include <sim/sim_model_kibis.h>
+#include <sim/sim_model_ibis.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_spice_fallback.h>
 #include <sim/sim_model_subckt.h>
@@ -251,43 +251,43 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         if( isIbisLoaded() && ( m_modelNameChoice->GetSelection() >= 0 ) )
         {
             int  idx = m_modelNameChoice->GetSelection();
-            auto kibismodel = dynamic_cast<SIM_MODEL_KIBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
+            auto ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
 
-            if( kibismodel )
+            if( ibismodel )
             {
                 onModelNameChoice( dummyEvent ); // refresh list of pins
 
                 int i = 0;
 
-                for( const std::pair<std::string, std::string>& strs : kibismodel->GetIbisPins() )
+                for( const std::pair<std::string, std::string>& strs : ibismodel->GetIbisPins() )
                 {
-                    if( strs.first == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD ) )
+                    if( strs.first == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD ) )
                     {
-                        auto kibisLibrary = static_cast<const SIM_LIBRARY_KIBIS*>( library() );
+                        auto ibisLibrary = static_cast<const SIM_LIBRARY_IBIS*>( library() );
 
-                        kibismodel->ChangePin( *kibisLibrary, strs.first );
+                        ibismodel->ChangePin( *ibisLibrary, strs.first );
                         m_pinCombobox->SetSelection( static_cast<int>( i ) );
                         break;
                     }
                     i++;
                 }
 
-                if( i < static_cast<int>( kibismodel->GetIbisPins().size() ) )
+                if( i < static_cast<int>( ibismodel->GetIbisPins().size() ) )
                 {
                     onPinCombobox( dummyEvent ); // refresh list of models
 
                     m_pinModelCombobox->SetStringSelection(
-                            SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD ) );
+                            SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD ) );
                 }
 
-                if( SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1" )
+                if( SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1" )
                 {
-                    kibismodel->SwitchSingleEndedDiff( true );
+                    ibismodel->SwitchSingleEndedDiff( true );
                     m_differentialCheckbox->SetValue( true );
                 }
                 else
                 {
-                    kibismodel->SwitchSingleEndedDiff( false );
+                    ibismodel->SwitchSingleEndedDiff( false );
                     m_differentialCheckbox->SetValue( false );
                 }
             }
@@ -372,7 +372,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     if( isIbisLoaded() )
     {
-        SIM_MODEL_KIBIS* ibismodel = static_cast<SIM_MODEL_KIBIS*>(
+        SIM_MODEL_IBIS* ibismodel = static_cast<SIM_MODEL_IBIS*>(
                 &m_libraryModelsMgr.GetModels().at( m_modelNameChoice->GetSelection() ).get() );
 
         if( ibismodel )
@@ -387,9 +387,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
             if( ibismodel->CanDifferential() && m_differentialCheckbox->GetValue() )
                 differential = "1";
 
-            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::PIN_FIELD, pins );
-            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD, modelName );
-            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_KIBIS::DIFF_FIELD, differential );
+            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_IBIS::PIN_FIELD, pins );
+            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD, modelName );
+            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD, differential );
         }
     }
 
@@ -474,8 +474,8 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updateIbisWidgets( SIM_MODEL* aModel )
 {
-    SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( aModel )
-                                                 : nullptr;
+    SIM_MODEL_IBIS* modelibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_IBIS*>( aModel )
+                                               : nullptr;
 
     m_pinLabel->Show( isIbisLoaded() );
     m_pinCombobox->Show( isIbisLoaded() );
@@ -510,7 +510,7 @@ void DIALOG_SIM_MODEL<T>::updateIbisWidgets( SIM_MODEL* aModel )
         }
     }
 
-    m_differentialCheckbox->Show( isIbisLoaded() && modelkibis && modelkibis->CanDifferential() );
+    m_differentialCheckbox->Show( isIbisLoaded() && modelibis && modelibis->CanDifferential() );
     m_modelNameLabel->SetLabel( isIbisLoaded() ? _( "Component:" ) : _( "Model:" ) );
 }
 
@@ -1244,7 +1244,7 @@ void DIALOG_SIM_MODEL<T>::onModelNameChoice( wxCommandEvent& aEvent )
     if( isIbisLoaded() )
     {
         wxArrayString    pinLabels;
-        SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+        SIM_MODEL_IBIS* modelkibis = dynamic_cast<SIM_MODEL_IBIS*>( &curModel() );
 
         wxCHECK2( modelkibis, return );
 
@@ -1267,12 +1267,12 @@ void DIALOG_SIM_MODEL<T>::onPinCombobox( wxCommandEvent& aEvent )
 {
     wxArrayString modelLabels;
 
-    SIM_MODEL_KIBIS& ibisModel = static_cast<SIM_MODEL_KIBIS&>( curModel() );
+    SIM_MODEL_IBIS& ibisModel = static_cast<SIM_MODEL_IBIS&>( curModel() );
 
     std::vector<std::pair<std::string, std::string>> strs = ibisModel.GetIbisPins();
     std::string pinNumber = strs.at( m_pinCombobox->GetSelection() ).first;
 
-    const SIM_LIBRARY_KIBIS* ibisLibrary = dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() );
+    const SIM_LIBRARY_IBIS* ibisLibrary = dynamic_cast<const SIM_LIBRARY_IBIS*>( library() );
 
     ibisModel.ChangePin( *ibisLibrary, pinNumber );
 
@@ -1317,12 +1317,12 @@ void DIALOG_SIM_MODEL<T>::onPinModelComboboxTextEnter( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
 {
-    SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+    SIM_MODEL_IBIS* modelibis = dynamic_cast<SIM_MODEL_IBIS*>( &curModel() );
 
-    wxCHECK( modelkibis, /* void */ );
+    wxCHECK( modelibis, /* void */ );
 
-    bool             diff = m_differentialCheckbox->GetValue() && modelkibis->CanDifferential();
-    modelkibis->SwitchSingleEndedDiff( diff );
+    bool diff = m_differentialCheckbox->GetValue() && modelibis->CanDifferential();
+    modelibis->SwitchSingleEndedDiff( diff );
 
     updateWidgets();
 }
@@ -1362,9 +1362,9 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
         {
             int idx = m_modelNameChoice->GetSelection();
 
-            auto& baseModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
+            auto& baseModel = static_cast<SIM_MODEL_IBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
 
-            m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, baseModel ) );
+            m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_IBIS>( type, baseModel ) );
 
             try
             {

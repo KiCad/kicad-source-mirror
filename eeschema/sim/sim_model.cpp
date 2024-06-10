@@ -33,7 +33,7 @@
 #include <sim/sim_model_l_mutual.h>
 #include <sim/sim_model_ngspice.h>
 #include <sim/sim_model_r_pot.h>
-#include <sim/sim_model_kibis.h>
+#include <sim/sim_model_ibis.h>
 #include <sim/sim_model_source.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_subckt.h>
@@ -41,7 +41,7 @@
 #include <sim/sim_model_tline.h>
 #include <sim/sim_model_xspice.h>
 #include <sim/sim_lib_mgr.h>
-#include <sim/sim_library_kibis.h>
+#include <sim/sim_library_ibis.h>
 
 #include <boost/algorithm/string.hpp>
 #include <fmt/core.h>
@@ -423,7 +423,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPOR
 void SIM_MODEL::ReadDataFields( const std::vector<SCH_FIELD>* aFields,
                                 const std::vector<SCH_PIN*>& aPins )
 {
-    bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
+    bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1";
     SwitchSingleEndedDiff( diffMode );
 
     m_serializer->ParseEnable( GetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7 ) );
@@ -944,7 +944,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::KIBIS_DRIVER_DC:
     case TYPE::KIBIS_DRIVER_RECT:
     case TYPE::KIBIS_DRIVER_PRBS:
-        return std::make_unique<SIM_MODEL_KIBIS>( aType );
+        return std::make_unique<SIM_MODEL_IBIS>( aType );
 
     case TYPE::RAWSPICE:
         return std::make_unique<SIM_MODEL_RAW_SPICE>();
