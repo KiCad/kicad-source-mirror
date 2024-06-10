@@ -1879,6 +1879,22 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
             continue;
         }
 
+        // Altium polygon outlines have thickness, convert it to KiCad's representation.
+        SHAPE_POLY_SET outline( linechain );
+        outline.Inflate( elem.trackwidth / 2, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, ARC_HIGH_DEF,
+                         true );
+
+        if( outline.OutlineCount() != 1 && m_reporter )
+        {
+            wxString msg;
+            msg.Printf( _( "Polygon outline count is %d, expected 1.", outline.OutlineCount() ) );
+
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        }
+
+        if( outline.OutlineCount() == 0 )
+            continue;
+
         ZONE* zone = new ZONE( m_board );
         m_board->Add( zone, ADD_MODE::APPEND );
         m_polygons.emplace_back( zone );
@@ -1887,7 +1903,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         zone->SetPosition( elem.vertices.at( 0 ).position );
         zone->SetLocked( elem.locked );
         zone->SetAssignedPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
-        zone->Outline()->AddOutline( linechain );
+        zone->Outline()->AddOutline( outline.Outline( 0 ) );
 
         HelperSetZoneLayers( zone, elem.layer );
 
