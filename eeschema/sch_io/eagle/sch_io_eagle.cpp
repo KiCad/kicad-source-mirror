@@ -433,7 +433,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
     // If the attribute is found, store the Eagle version;
     // otherwise, store the dummy "0.0" version.
-    m_version = ( m_eagleDoc->version.IsEmpty() ) ? wxS( "0.0" ) : m_eagleDoc->version;
+    m_version = ( m_eagleDoc->version.IsEmpty() ) ? wxString( wxS( "0.0" ) ) : m_eagleDoc->version;
 
     // Load drawing
     loadDrawing( m_eagleDoc->drawing );
@@ -546,7 +546,7 @@ void SCH_IO_EAGLE::ensureLoadedLibrary( const wxString& aLibraryPath )
 
     // If the attribute is found, store the Eagle version;
     // otherwise, store the dummy "0.0" version.
-    m_version = ( doc->version.IsEmpty() ) ? wxS( "0.0" ) : doc->version;
+    m_version = ( doc->version.IsEmpty() ) ? wxString( wxS( "0.0" ) ) : doc->version;
 
     // Load drawing
     loadDrawing( doc->drawing );
@@ -2503,7 +2503,8 @@ SCH_TEXT* SCH_IO_EAGLE::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         adjustedText += tmp;
     }
 
-    libtext->SetText( adjustedText.IsEmpty() ? wxS( "~" ) : adjustedText );
+    libtext->SetText( adjustedText.IsEmpty() ? wxString( wxS( "~" ) ) : adjustedText );
+
     loadTextAttributes( libtext.get(), aText );
 
     return libtext.release();
@@ -2531,7 +2532,9 @@ SCH_TEXT* SCH_IO_EAGLE::loadPlainText( const std::unique_ptr<ETEXT>& aText )
         adjustedText += tmp;
     }
 
-    schtext->SetText( adjustedText.IsEmpty() ? wxS( "\" \"" ) : escapeName( adjustedText ) );
+    schtext->SetText( adjustedText.IsEmpty() ? wxString( wxS( "\" \"" ) )
+                                             : escapeName( adjustedText ) );
+
     schtext->SetPosition( VECTOR2I( aText->x.ToSchUnits(), -aText->y.ToSchUnits() ) );
     loadTextAttributes( schtext.get(), aText );
     schtext->SetItalic( false );
