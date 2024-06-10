@@ -1891,7 +1891,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         if( outline.OutlineCount() != 1 && m_reporter )
         {
             wxString msg;
-            msg.Printf( _( "Polygon outline count is %d, expected 1.", outline.OutlineCount() ) );
+            msg.Printf( _( "Polygon outline count is %d, expected 1." ), outline.OutlineCount() );
 
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }
