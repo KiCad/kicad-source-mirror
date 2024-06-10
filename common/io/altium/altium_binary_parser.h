@@ -27,17 +27,17 @@
 
 #include "altium_props_utils.h"
 
+#include <charconv>
 #include <map>
 #include <memory>
 #include <numeric>
+#include <string>
+#include <stdexcept>
+#include <vector>
 
 #include <wx/mstream.h>
 #include <wx/zstream.h>
 #include <math/vector2d.h>
-#include <vector>
-
-#include <string>
-#include <stdexcept>
 
 namespace CFB
 {
@@ -52,6 +52,16 @@ struct COMPOUND_FILE_ENTRY;
  */
 std::string FormatPath( const std::vector<std::string>& aVectorPath );
 
+
+class ALTIUM_SYMBOL_DATA
+{
+public:
+    const CFB::COMPOUND_FILE_ENTRY* m_symbol;
+    const CFB::COMPOUND_FILE_ENTRY* m_pinsFrac;
+    const CFB::COMPOUND_FILE_ENTRY* m_pinsWideText;
+    const CFB::COMPOUND_FILE_ENTRY* m_pinsTextData;
+    const CFB::COMPOUND_FILE_ENTRY* m_pinsSymbolLineWidth;
+};
 
 class ALTIUM_COMPOUND_FILE
 {
@@ -94,7 +104,7 @@ public:
 
     std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> EnumDir( const std::wstring& aDir ) const;
 
-    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) const;
+    std::map<wxString, ALTIUM_SYMBOL_DATA> GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) const;
 
 private:
 
@@ -359,9 +369,21 @@ public:
         return value;
     }
 
-    std::string ReadPascalString()
+    std::string ReadShortPascalString()
     {
         uint8_t length = ReadByte();
+
+        if( m_position + length > m_data.size() )
+            throw std::out_of_range( "ALTIUM_BINARY_READER: out of range" );
+
+        std::string pascalString( &m_data[m_position], &m_data[m_position + length] );
+        m_position += length;
+        return pascalString;
+    }
+
+    std::string ReadFullPascalString()
+    {
+        uint32_t length = ReadInt32();
 
         if( m_position + length > m_data.size() )
             throw std::out_of_range( "ALTIUM_BINARY_READER: out of range" );
@@ -382,40 +404,34 @@ public:
     ALTIUM_COMPRESSED_READER( const std::string& aData ) : ALTIUM_BINARY_READER( aData )
     {}
 
-    std::pair<int, std::string> ReadCompressedString()
+    std::pair<int, std::string*> ReadCompressedString()
     {
-        std::string result;
+        std::string* result;
         int id = -1;
 
-        while( true )
-        {
-            uint8_t byte = ReadByte();
-            if( byte != 0xD0 )
-                throw std::runtime_error( "ALTIUM_COMPRESSED_READER: invalid compressed string" );
+        uint8_t byte = ReadByte();
+        if( byte != 0xD0 )
+            throw std::runtime_error( "ALTIUM_COMPRESSED_READER: invalid compressed string" );
 
-            std::string str = ReadPascalString();
+        std::string str = ReadShortPascalString();
+        std::from_chars( str.data(), str.data() + str.size(), id );
 
-            id = std::stoi( str );
-
-            std::string data = ReadPascalString();
-
-            result = decompressData( data );
-        }
+        std::string data = ReadFullPascalString();
+        result = decompressData( data );
 
         return std::make_pair( id, result );
     }
 
 private:
-    std::string decompressData( std::string& aData )
+    std::string decompressedData;
+
+    std::string* decompressData( std::string& aData )
     {
         // Create a memory input stream with the buffer
         wxMemoryInputStream memStream( (void*) aData.data(), aData.length() );
 
         // Create a zlib input stream with the memory input stream
         wxZlibInputStream zStream( memStream );
-
-        // Prepare a string to hold decompressed data
-        std::string decompressedData;
 
         // Read decompressed data from the zlib input stream
         while( !zStream.Eof() )
@@ -426,7 +442,7 @@ private:
             decompressedData.append( buffer, bytesRead );
         }
 
-        return decompressedData;
+        return &decompressedData;
     }
 };
 

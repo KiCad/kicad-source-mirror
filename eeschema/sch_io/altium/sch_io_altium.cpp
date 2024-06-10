@@ -4278,15 +4278,54 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
 {
     std::map<wxString,LIB_SYMBOL*> ret;
     std::vector<int> fontSizes;
+    struct SYMBOL_PIN_FRAC
+    {
+        int x_frac;
+        int y_frac;
+        int len_frac;
+    };
 
     ParseLibHeader( aAltiumLibFile, fontSizes );
 
-    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> syms = aAltiumLibFile.GetLibSymbols( nullptr );
+    std::map<wxString, ALTIUM_SYMBOL_DATA> syms = aAltiumLibFile.GetLibSymbols( nullptr );
 
     for( auto& [name, entry] : syms )
     {
-        ALTIUM_BINARY_PARSER reader( aAltiumLibFile, entry );
+
+        std::map<int, SYMBOL_PIN_FRAC> pinFracs;
+
+        if( entry.m_pinsFrac )
+        {
+            auto parse_binary_pin_frac =
+                    [&]( const std::string& binaryData ) -> std::map<wxString, wxString>
+            {
+                std::map<wxString, wxString> result;
+                ALTIUM_COMPRESSED_READER     cmpreader( binaryData );
+
+                std::pair<int, std::string*> pinFracData = cmpreader.ReadCompressedString();
+
+                ALTIUM_BINARY_READER binreader( *pinFracData.second );
+                SYMBOL_PIN_FRAC      pinFrac;
+
+                pinFrac.x_frac = binreader.ReadInt32();
+                pinFrac.y_frac = binreader.ReadInt32();
+                pinFrac.len_frac = binreader.ReadInt32();
+                pinFracs.insert( { pinFracData.first, pinFrac } );
+
+                return result;
+            };
+
+            ALTIUM_BINARY_PARSER       reader( aAltiumLibFile, entry.m_pinsFrac );
+
+            while( reader.GetRemainingBytes() > 0 )
+            {
+                reader.ReadProperties( parse_binary_pin_frac );
+            }
+        }
+
+        ALTIUM_BINARY_PARSER reader( aAltiumLibFile, entry.m_symbol );
         std::vector<LIB_SYMBOL*> symbols;
+        int pin_index = 0;
 
         if( reader.GetRemainingBytes() <= 0 )
         {
@@ -4304,10 +4343,9 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
             symbols = ParseLibComponent( properties );
         }
 
-        auto handleBinaryDataLambda =
-                []( const std::string& binaryData ) -> std::map<wxString, wxString>
+        auto handleBinaryPinLambda =
+                [&]( const std::string& binaryData ) -> std::map<wxString, wxString>
                 {
-
                     std::map<wxString, wxString> result;
 
                     ALTIUM_BINARY_READER binreader( binaryData );
@@ -4325,7 +4363,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
                     result["SYMBOL_OUTEREDGE"] = wxString::Format( "%d",  binreader.ReadByte() );
                     result["SYMBOL_INNER"] = wxString::Format( "%d",  binreader.ReadByte() );
                     result["SYMBOL_OUTER"] = wxString::Format( "%d",  binreader.ReadByte() );
-                    result["TEXT"] = binreader.ReadPascalString();
+                    result["TEXT"] = binreader.ReadShortPascalString();
                     binreader.ReadByte(); // unknown
                     result["ELECTRICAL"] = wxString::Format( "%d",  binreader.ReadByte() );
                     result["PINCONGLOMERATE"] = wxString::Format( "%d",  binreader.ReadByte() );
@@ -4333,12 +4371,19 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
                     result["LOCATION.X"] = wxString::Format( "%d",  binreader.ReadInt16() );
                     result["LOCATION.Y"] = wxString::Format( "%d",  binreader.ReadInt16() );
                     result["COLOR"] = wxString::Format( "%d",  binreader.ReadInt32() );
-                    result["NAME"] = binreader.ReadPascalString();
-                    result["DESIGNATOR"] = binreader.ReadPascalString();
-                    result["SWAPIDGROUP"] = binreader.ReadPascalString();
+                    result["NAME"] = binreader.ReadShortPascalString();
+                    result["DESIGNATOR"] = binreader.ReadShortPascalString();
+                    result["SWAPIDGROUP"] = binreader.ReadShortPascalString();
 
 
-                    std::string partSeq = binreader.ReadPascalString(); // This is 'part|&|seq'
+                    if( auto it = pinFracs.find( pin_index ); it != pinFracs.end() )
+                    {
+                        result["LOCATION.X_FRAC"] = wxString::Format( "%d", it->second.x_frac );
+                        result["LOCATION.Y_FRAC"] = wxString::Format( "%d", it->second.y_frac );
+                        result["PINLENGTH_FRAC"] = wxString::Format( "%d", it->second.len_frac );
+                    }
+
+                    std::string partSeq = binreader.ReadShortPascalString(); // This is 'part|&|seq'
                     std::vector<std::string> partSeqSplit = split( partSeq, "|" );
 
                     if( partSeqSplit.size() == 3 )
@@ -4352,7 +4397,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
 
         while( reader.GetRemainingBytes() > 0 )
         {
-            std::map<wxString, wxString> properties = reader.ReadProperties( handleBinaryDataLambda );
+            std::map<wxString, wxString> properties = reader.ReadProperties( handleBinaryPinLambda );
 
             if( properties.empty() )
                 continue;
@@ -4362,7 +4407,12 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
 
             switch( record )
             {
-            case ALTIUM_SCH_RECORD::PIN: ParsePin( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::PIN:
+            {
+                ParsePin( properties, symbols );
+                pin_index++;
+                break;
+            }
 
             case ALTIUM_SCH_RECORD::LABEL: ParseLabel( properties, symbols, fontSizes ); break;
 

@@ -26,6 +26,7 @@
 #include "altium_parser_utils.h"
 
 #include <compoundfilereader.h>
+#include <charconv>
 #include <ki_exception.h>
 #include <math/util.h>
 #include <numeric>
@@ -204,7 +205,7 @@ ALTIUM_COMPOUND_FILE::FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEn
 }
 
 
-std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*>
+std::map<wxString, ALTIUM_SYMBOL_DATA>
 ALTIUM_COMPOUND_FILE::GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) const
 {
     const CFB::COMPOUND_FILE_ENTRY* root = aStart ? aStart : m_reader->GetRootEntry();
@@ -212,7 +213,7 @@ ALTIUM_COMPOUND_FILE::GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) co
     if( !root )
         return {};
 
-    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> folders;
+    std::map<wxString, ALTIUM_SYMBOL_DATA> folders;
 
     m_reader->EnumFiles( root, 1, [&]( const CFB::COMPOUND_FILE_ENTRY* tentry, const CFB::utf16string&, int ) -> int
     {
@@ -227,7 +228,16 @@ ALTIUM_COMPOUND_FILE::GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) co
                         std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
 
                         if( m_reader->IsStream( entry ) && fileName == L"Data" )
-                            folders[dirName] = entry;
+                            folders[dirName].m_symbol = entry;
+
+                        if( m_reader->IsStream( entry ) && fileName == L"PinFrac" )
+                            folders[dirName].m_pinsFrac = entry;
+
+                        if( m_reader->IsStream( entry ) && fileName == L"PinWideText" )
+                            folders[dirName].m_pinsWideText = entry;
+
+                        if( m_reader->IsStream( entry ) && fileName == L"PinTextData" )
+                            folders[dirName].m_pinsTextData = entry;
 
                         return 0;
                     } );
@@ -420,7 +430,7 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
     // Both the 'l' and the null-byte are missing, which looks like Altium swallowed two bytes.
     bool hasNullByte = m_pos[length - 1] == '\0';
 
-    if( !hasNullByte )
+    if( !hasNullByte && !isBinary )
     {
         wxLogError( _( "Missing null byte at end of property list. Imported data might be "
                        "malformed or missing." ) );
@@ -501,4 +511,3 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
 
     return kv;
 }
-
