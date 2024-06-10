@@ -2334,6 +2334,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Prj().GetProjectFile().m_NetSettings;
     std::map<wxString, wxString>   oldAssignments = netSettings->m_NetClassLabelAssignments;
+    std::set<wxString>             affectedNetclassNetAssignments;
 
     netSettings->m_NetClassLabelAssignments.clear();
 
@@ -2404,10 +2405,16 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 if( oldAssignments.count( netname ) )
                 {
                     if( oldAssignments[netname] != netclass )
+                    {
+                        affectedNetclassNetAssignments.insert( netname );
                         dirtySubgraphs( subgraphs );
+                    }
                 }
                 else if( !netclass.IsEmpty() )
+                {
+                    affectedNetclassNetAssignments.insert( netname );
                     dirtySubgraphs( subgraphs );
+                }
             };
 
     for( const auto& [ netname, subgraphs ] : m_net_name_to_subgraphs_map )
@@ -2417,8 +2424,11 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     {
         for( auto& [ netname, netclass ] : oldAssignments )
         {
-            if( netSettings->m_NetClassLabelAssignments.count( netname ) )
+            if( netSettings->m_NetClassLabelAssignments.count( netname )
+                || affectedNetclassNetAssignments.count( netname ) )
+            {
                 continue;
+            }
 
             netSettings->m_NetClassLabelAssignments[ netname ] = netclass;
         }
