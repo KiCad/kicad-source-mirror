@@ -28,17 +28,13 @@
 #include <sim/spice_circuit_model.h>
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
-#include <sim/sim_model_ideal.h>
 #include <common.h>
 #include <confirm.h>
 #include <pgm_base.h>
 #include <env_paths.h>
-#include <sim/sim_library.h>
 #include <sim/sim_library_kibis.h>
-#include <sim/sim_model_kibis.h>
 #include <sim/sim_xspice_parser.h>
 #include <sch_screen.h>
-#include <sch_text.h>
 #include <sch_textbox.h>
 #include <string_utils.h>
 
@@ -50,54 +46,22 @@
 #include <locale_io.h>
 #include "markup_parser.h"
 
-#if 0
-
-#include <pegtl.hpp>
-#include <pegtl/contrib/parse_tree.hpp>
-
-namespace NETLIST_EXPORTER_SPICE_PARSER
-{
-    using namespace SPICE_GRAMMAR;
-
-    struct textGrammar : must<spiceSource> {};
-
-    template <typename Rule> struct textSelector : std::false_type {};
-    template <> struct textSelector<modelUnit> : std::true_type {};
-
-    template <> struct textSelector<dotControl> : std::true_type {};
-
-    template <> struct textSelector<dotTitle> : std::true_type {};
-    template <> struct textSelector<dotTitleTitle> : std::true_type {};
-
-    template <> struct textSelector<dotInclude> : std::true_type {};
-    template <> struct textSelector<dotIncludePathWithoutQuotes> : std::true_type {};
-    template <> struct textSelector<dotIncludePathWithoutApostrophes> : std::true_type {};
-    template <> struct textSelector<dotIncludePath> : std::true_type {};
-
-    template <> struct textSelector<kLine> : std::true_type {};
-
-    template <> struct textSelector<dotLine> : std::true_type {};
-}
-#endif
-
 
 std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
 {
     std::string name = aProposedName;
     int         ii = 1;
 
-    while( m_names.count( name ) )
+    while( m_names.contains( name ) )
         name = fmt::format( "{}#{}", aProposedName, ii++ );
 
     return name;
 }
 
 
-NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic,
-                                                wxWindow* aDialogParent ) :
+NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) :
     NETLIST_EXPORTER_BASE( aSchematic ),
-    m_libMgr( &aSchematic->Prj() ),
-    m_dialogParent( aDialogParent )
+    m_libMgr( &aSchematic->Prj() )
 {
 }
 
@@ -475,9 +439,8 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
 
         if( !cacheFile.IsOpened() )
         {
-            DisplayErrorMessage( m_dialogParent, wxString::Format( _( "Could not open file '%s' "
-                                                                      "to write IBIS model" ),
-                                                                   cacheFn.GetFullPath() ) );
+            wxLogError( _( "Could not open file '%s' to write IBIS model" ),
+                        cacheFn.GetFullPath() );
         }
 
         auto spiceGenerator = static_cast<const SPICE_GENERATOR_KIBIS&>( kibisModel->SpiceGenerator() );
@@ -601,9 +564,7 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
 
         if( fullPath.IsEmpty() )
         {
-            DisplayErrorMessage( m_dialogParent, wxString::Format( _( "Could not find library file "
-                                                                      "'%s'" ),
-                                                                   expandedPath ) );
+            wxLogError( _( "Could not find library file '%s'" ), expandedPath );
             fullPath = expandedPath;
         }
         else if( wxFileName::GetPathSeparator() == '\\' )
