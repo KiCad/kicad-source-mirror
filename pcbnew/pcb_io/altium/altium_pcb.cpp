@@ -1879,10 +1879,14 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
             continue;
         }
 
-        // Altium polygon outlines have thickness, convert it to KiCad's representation.
         SHAPE_POLY_SET outline( linechain );
-        outline.Inflate( elem.trackwidth / 2, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, ARC_HIGH_DEF,
-                         true );
+
+        if( elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::SOLID )
+        {
+            // Altium "Hatched" or "None" polygon outlines have thickness, convert it to KiCad's representation.
+            outline.Inflate( elem.trackwidth / 2, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS,
+                             ARC_HIGH_DEF, true );
+        }
 
         if( outline.OutlineCount() != 1 && m_reporter )
         {
