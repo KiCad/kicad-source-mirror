@@ -98,7 +98,7 @@ public:
     COLOR4D GetColor( const BOARD_ITEM* aItem, int aLayer ) const;
 
     ///< nullptr version
-    COLOR4D GetColor( nullptr_t, int aLayer ) const
+    COLOR4D GetColor( std::nullptr_t, int aLayer ) const
     {
         return GetColor( static_cast<const BOARD_ITEM*>( nullptr ), aLayer );
     }
