@@ -1345,78 +1345,6 @@ EDA_ITEM* SCH_PIN::Clone() const
 }
 
 
-int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
-{
-    wxASSERT( aOther.Type() == SCH_PIN_T );
-
-    const SCH_PIN* tmp = (SCH_PIN*) &aOther;
-
-    // When comparing units, we do not compare the part numbers.  If everything else is
-    // identical, then we can just renumber the parts for the inherited symbol.
-    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_number != tmp->m_number )
-        return m_number.Cmp( tmp->m_number );
-
-    int result = m_name.Cmp( tmp->m_name );
-
-    if( result )
-        return result;
-
-    if( m_position.x != tmp->m_position.x )
-        return m_position.x - tmp->m_position.x;
-
-    if( m_position.y != tmp->m_position.y )
-        return m_position.y - tmp->m_position.y;
-
-    if( m_length != tmp->m_length )
-        return m_length.value_or( 0 ) - tmp->m_length.value_or( 0 );
-
-    if( m_orientation != tmp->m_orientation )
-        return static_cast<int>( m_orientation ) - static_cast<int>( tmp->m_orientation );
-
-    if( m_shape != tmp->m_shape )
-        return static_cast<int>( m_shape ) - static_cast<int>( tmp->m_shape );
-
-    if( m_type != tmp->m_type )
-        return static_cast<int>( m_type ) - static_cast<int>( tmp->m_type );
-
-    if( m_hidden != tmp->m_hidden )
-        return m_hidden.value_or( false ) - tmp->m_hidden.value_or( false );
-
-    if( m_numTextSize != tmp->m_numTextSize )
-        return m_numTextSize.value_or( 0 ) - tmp->m_numTextSize.value_or( 0 );
-
-    if( m_nameTextSize != tmp->m_nameTextSize )
-        return m_nameTextSize.value_or( 0 ) - tmp->m_nameTextSize.value_or( 0 );
-
-    if( m_alternates.size() != tmp->m_alternates.size() )
-        return static_cast<int>( m_alternates.size() - tmp->m_alternates.size() );
-
-    auto lhsItem = m_alternates.begin();
-    auto rhsItem = tmp->m_alternates.begin();
-
-    while( lhsItem != m_alternates.end() )
-    {
-        const ALT& lhsAlt = lhsItem->second;
-        const ALT& rhsAlt = rhsItem->second;
-
-        int retv = lhsAlt.m_Name.Cmp( rhsAlt.m_Name );
-
-        if( retv )
-            return retv;
-
-        if( lhsAlt.m_Type != rhsAlt.m_Type )
-            return static_cast<int>( lhsAlt.m_Type ) - static_cast<int>( rhsAlt.m_Type );
-
-        if( lhsAlt.m_Shape != rhsAlt.m_Shape )
-            return static_cast<int>( lhsAlt.m_Shape ) - static_cast<int>( rhsAlt.m_Shape );
-
-        ++lhsItem;
-        ++rhsItem;
-    }
-
-    return 0;
-}
-
 void SCH_PIN::ChangeLength( int aLength )
 {
     int lengthChange = GetLength() - aLength;
@@ -2028,81 +1956,158 @@ wxString SCH_PIN::getItemDescription( ALT* aAlt ) const
 }
 
 
-bool SCH_PIN::operator==( const SCH_PIN& aOther ) const
-{
-    if( m_number != aOther.m_number )
-        return false;
 
-    if( m_position != aOther.m_position )
-        return false;
+
+int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
+{
+    // Ignore the UUID here.
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags | SCH_ITEM::COMPARE_FLAGS::EQUALITY );
+
+    if( retv )
+        return retv;
+
+    const SCH_PIN* tmp = static_cast<const SCH_PIN*>( &aOther );
+
+    wxCHECK( tmp, -1 );
+
+    // When comparing units, we do not compare the part numbers.  If everything else is
+    // identical, then we can just renumber the parts for the inherited symbol.
+    // if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_number != tmp->m_number )
+    //     return m_number.Cmp( tmp->m_number );
+
+    // int result = m_name.Cmp( tmp->m_name );
+
+    // if( result )
+    //     return result;
+
+    // if( m_position.x != tmp->m_position.x )
+    //     return m_position.x - tmp->m_position.x;
+
+    // if( m_position.y != tmp->m_position.y )
+    //     return m_position.y - tmp->m_position.y;
+
+    // if( m_length != tmp->m_length )
+    //     return m_length.value_or( 0 ) - tmp->m_length.value_or( 0 );
+
+    // if( m_orientation != tmp->m_orientation )
+    //     return static_cast<int>( m_orientation ) - static_cast<int>( tmp->m_orientation );
+
+    // if( m_shape != tmp->m_shape )
+    //     return static_cast<int>( m_shape ) - static_cast<int>( tmp->m_shape );
+
+    // if( m_type != tmp->m_type )
+    //     return static_cast<int>( m_type ) - static_cast<int>( tmp->m_type );
+
+    // if( m_hidden != tmp->m_hidden )
+    //     return m_hidden.value_or( false ) - tmp->m_hidden.value_or( false );
+
+    // if( m_numTextSize != tmp->m_numTextSize )
+    //     return m_numTextSize.value_or( 0 ) - tmp->m_numTextSize.value_or( 0 );
+
+    // if( m_nameTextSize != tmp->m_nameTextSize )
+    //     return m_nameTextSize.value_or( 0 ) - tmp->m_nameTextSize.value_or( 0 );
+
+    // if( m_alternates.size() != tmp->m_alternates.size() )
+    //     return static_cast<int>( m_alternates.size() - tmp->m_alternates.size() );
+
+    // auto lhsItem = m_alternates.begin();
+    // auto rhsItem = tmp->m_alternates.begin();
+
+    // while( lhsItem != m_alternates.end() )
+    // {
+    //     const ALT& lhsAlt = lhsItem->second;
+    //     const ALT& rhsAlt = rhsItem->second;
+
+    //     int retv = lhsAlt.m_Name.Cmp( rhsAlt.m_Name );
+
+    //     if( retv )
+    //         return retv;
+
+    //     if( lhsAlt.m_Type != rhsAlt.m_Type )
+    //         return static_cast<int>( lhsAlt.m_Type ) - static_cast<int>( rhsAlt.m_Type );
+
+    //     if( lhsAlt.m_Shape != rhsAlt.m_Shape )
+    //         return static_cast<int>( lhsAlt.m_Shape ) - static_cast<int>( rhsAlt.m_Shape );
+
+    //     ++lhsItem;
+    //     ++rhsItem;
+    // }
+
+    if( m_number != tmp->m_number )
+        return m_number.Cmp( tmp->m_number );
+
+    if( m_position.x != tmp->m_position.x )
+        return m_position.x - tmp->m_position.x;
+
+    if( m_position.y != tmp->m_position.y )
+        return m_position.y - tmp->m_position.y;
 
     if( dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
     {
-        if( m_libPin != aOther.m_libPin )
-            return false;
+        wxCHECK( m_libPin && tmp->m_libPin, -1 );
 
-        if( m_alt != aOther.m_alt )
-            return false;
+        retv = m_libPin->compare( *tmp->m_libPin );
+
+        if( retv )
+            return retv;
+
+        retv = m_alt.Cmp( tmp->m_alt );
+
+        if( retv )
+            return retv;
     }
 
     if( dynamic_cast<const LIB_SYMBOL*>( GetParentSymbol() ) )
     {
-        if( m_length != aOther.m_length )
-            return false;
+        if( m_length != tmp->m_length )
+            return m_length.value_or( 0 ) - tmp->m_length.value_or( 0 );
 
-        if( m_orientation != aOther.m_orientation )
-            return false;
+        if( m_orientation != tmp->m_orientation )
+            return static_cast<int>( m_orientation ) - static_cast<int>( tmp->m_orientation );
 
-        if( m_shape != aOther.m_shape )
-            return false;
+        if( m_shape != tmp->m_shape )
+            return static_cast<int>( m_shape ) - static_cast<int>( tmp->m_shape );
 
-        if( m_type != aOther.m_type )
-            return false;
+        if( m_type != tmp->m_type )
+            return static_cast<int>( m_type ) - static_cast<int>( tmp->m_type );
 
-        if( m_name != aOther.m_name )
-            return false;
+        if( m_hidden != tmp->m_hidden )
+            return m_hidden.value_or( false ) - tmp->m_hidden.value_or( false );
 
-        if( m_hidden != aOther.m_hidden )
-            return false;
+        if( m_numTextSize != tmp->m_numTextSize )
+            return m_numTextSize.value_or( 0 ) - tmp->m_numTextSize.value_or( 0 );
 
-        if( m_numTextSize != aOther.m_numTextSize )
-            return false;
+        if( m_nameTextSize != tmp->m_nameTextSize )
+            return m_nameTextSize.value_or( 0 ) - tmp->m_nameTextSize.value_or( 0 );
 
-        if( m_nameTextSize != aOther.m_nameTextSize )
-            return false;
-
-        if( m_alternates.size() != aOther.m_alternates.size() )
-            return false;
+        if( m_alternates.size() != tmp->m_alternates.size() )
+            return static_cast<int>( m_alternates.size() - tmp->m_alternates.size() );
 
         auto lhsItem = m_alternates.begin();
-        auto rhsItem = aOther.m_alternates.begin();
+        auto rhsItem = tmp->m_alternates.begin();
 
         while( lhsItem != m_alternates.end() )
         {
-            if( rhsItem == aOther.m_alternates.end() )
-                return false;
-
             const ALT& lhsAlt = lhsItem->second;
             const ALT& rhsAlt = rhsItem->second;
 
-            if( lhsAlt.m_Name != rhsAlt.m_Name )
-                return false;
+            retv = lhsAlt.m_Name.Cmp( rhsAlt.m_Name );
+
+            if( retv )
+                return retv;
 
             if( lhsAlt.m_Type != rhsAlt.m_Type )
-                return false;
+                return static_cast<int>( lhsAlt.m_Type ) - static_cast<int>( rhsAlt.m_Type );
 
             if( lhsAlt.m_Shape != rhsAlt.m_Shape )
-                return false;
+                return static_cast<int>( lhsAlt.m_Shape ) - static_cast<int>( rhsAlt.m_Shape );
 
             ++lhsItem;
             ++rhsItem;
         }
-
-        if( rhsItem != aOther.m_alternates.end() )
-            return false;
     }
 
-    return true;
+    return 0;
 }
 
 

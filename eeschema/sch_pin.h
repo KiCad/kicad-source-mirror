@@ -285,9 +285,7 @@ public:
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
-    bool operator==( const SCH_PIN& aOther ) const;
-    bool operator<( const SCH_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) < 0; }
-    bool operator>( const SCH_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
+    bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
 
 protected:
     wxString getItemDescription( ALT* aAlt ) const;
@@ -330,13 +328,20 @@ protected:
 
 private:
     /**
-     * @copydoc SCH_ITEM::compare()
-     *
      * The pin specific sort order is as follows:
-     *      - Pin number.
-     *      - Pin name, case insensitive compare.
-     *      - Pin horizontal (X) position.
-     *      - Pin vertical (Y) position.
+     *      - The result of #SCH_ITEM::compare()
+     *      - Number
+     *      - Name, case sensitive compare
+     *      - Horizontal (X) position
+     *      - Vertical (Y) position
+     *      - Length
+     *      - Orientation
+     *      - Shape
+     *      - Electrical type
+     *      - Visibility (true > false)
+     *      - Number text size
+     *      - Name text size
+     *      - Alternates, name, type shape
      */
     int compare( const SCH_ITEM& aOther, int aCompareFlags = 0 ) const override;
 

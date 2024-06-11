@@ -578,13 +578,6 @@ public:
     int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = 0,
                  REPORTER* aReporter = nullptr ) const;
 
-    bool operator==( const LIB_SYMBOL* aSymbol ) const { return this == aSymbol; }
-    bool operator==( const LIB_SYMBOL& aSymbol ) const;
-    bool operator!=( const LIB_SYMBOL& aSymbol ) const
-    {
-        return Compare( aSymbol, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) != 0;
-    }
-
     const LIB_SYMBOL& operator=( const LIB_SYMBOL& aSymbol );
 
     /**
@@ -630,6 +623,14 @@ public:
 private:
     // We create a different set parent function for this class, so we hide the inherited one.
     using EDA_ITEM::SetParent;
+
+    /**
+     * The library symbol specific sort order is as follows:
+     *
+     *   - The result of #SCH_ITEM::compare()
+     */
+    int compare( const SCH_ITEM& aOther,
+                 int aCompareFlags = SCH_ITEM::COMPARE_FLAGS::EQUALITY ) const override;
 
     void deleteAllFields();
 

@@ -942,8 +942,6 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 
         auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
-        LIB_SYMBOL* libSymbol = nullptr;
-
         if( it != m_libSymbols.end() )
             symbol->SetLibSymbol( it->second );
 
