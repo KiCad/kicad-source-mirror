@@ -213,49 +213,27 @@ public:
     }
 
     /**
-     * Get last used LOD for the track net name.
-     *
-     * @return LOD from ViewGetLOD()
+     * @return last viewport used to render track net names.
      */
-    double GetCachedLOD()
+    BOX2D GetCachedViewport()
     {
-        return m_CachedLOD;
+        return m_CachedViewport;
     }
 
     /**
-     * Set the cached LOD.
+     * Set the cached viewport used to render track net names.
      *
-     * @param aLOD value from ViewGetLOD() or 0.0 to always display.
+     * @param aViewport
      */
-    void SetCachedLOD( double aLOD )
+    void SetCachedViewport( const BOX2D& aViewport )
     {
-        m_CachedLOD = aLOD;
-    }
-
-    /**
-     * Get last used zoom scale for the track net name.
-     *
-     * @return scale from GetScale()
-     */
-    double GetCachedScale()
-    {
-        return m_CachedScale;
+        m_CachedViewport = aViewport;
     }
 
     virtual double Similarity( const BOARD_ITEM& aOther ) const override;
 
     virtual bool operator==( const BOARD_ITEM& aOther ) const override;
     virtual bool operator==( const PCB_TRACK& aOther ) const;
-
-    /**
-     * Set the cached scale.
-     *
-     * @param aScale value from GetScale()
-     */
-    void SetCachedScale( double aScale )
-    {
-        m_CachedScale = aScale;
-    }
 
     struct cmp_tracks
     {
@@ -276,12 +254,11 @@ protected:
                                      std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 protected:
-    int      m_Width;        ///< Thickness of track, or via diameter
-    VECTOR2I m_Start;        ///< Line start point
-    VECTOR2I m_End;          ///< Line end point
+    int      m_Width;           ///< Thickness of track, or via diameter
+    VECTOR2I m_Start;           ///< Line start point
+    VECTOR2I m_End;             ///< Line end point
 
-    double   m_CachedLOD;    ///< Last LOD used to draw this track's net
-    double   m_CachedScale;  ///< Last zoom scale used to draw this track's net.
+    BOX2D    m_CachedViewport;  ///> Last viewport used to draw this track's net
 };
 
 

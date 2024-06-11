@@ -138,9 +138,18 @@ wxString BOARD_CONNECTED_ITEM::GetShortNetname() const
 }
 
 
-wxString BOARD_CONNECTED_ITEM::GetUnescapedShortNetname() const
+wxString BOARD_CONNECTED_ITEM::GetDisplayNetname() const
 {
-    return m_netinfo ? m_netinfo->GetUnescapedShortNetname() : wxString();
+    if( !m_netinfo )
+        return wxString();
+
+    if( const BOARD* board = GetBoard() )
+    {
+        if( board->GetNetInfo().m_DisplayNetnamesDirty )
+            board->GetNetInfo().RebuildDisplayNetnames();
+    }
+
+    return m_netinfo->GetDisplayNetname();
 }
 
 

@@ -56,8 +56,6 @@ PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
     m_Width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
-    m_CachedScale = -1.0;                   // Set invalid to force update
-    m_CachedLOD = 0.0;                      // Set to always display
 }
 
 
@@ -123,8 +121,7 @@ PCB_VIA& PCB_VIA::operator=( const PCB_VIA &aOther )
     m_Width = aOther.m_Width;
     m_Start = aOther.m_Start;
     m_End = aOther.m_End;
-    m_CachedLOD = aOther.m_CachedLOD;
-    m_CachedScale = aOther.m_CachedScale;
+    m_CachedViewport = aOther.m_CachedViewport;
 
     m_viaType = aOther.m_viaType;
     m_padStack = aOther.m_padStack;
@@ -1066,7 +1063,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         }
 
         // Pick the approximate size of the netname (square chars)
-        wxString netName = GetUnescapedShortNetname();
+        wxString netName = GetDisplayNetname();
         size_t  num_chars = netName.size();
 
         if( GetLength() < num_chars * GetWidth() )
@@ -1080,9 +1077,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
         ClipLine( &clipBox, start.x, start.y, end.x, end.y );
 
-        VECTOR2I line = ( end - start );
-
-        if( line.EuclideanNorm() == 0 )
+        if( VECTOR2I( end - start ).SquaredEuclideanNorm() == 0 )
             return HIDE;
 
         // Netnames will be shown only if zoom is appropriate

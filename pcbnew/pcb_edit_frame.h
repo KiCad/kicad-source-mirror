@@ -821,7 +821,7 @@ protected:
 
     int inferLegacyEdgeClearance( BOARD* aBoard, bool aShowUserMsg = true );
 
-    void redrawNetnames( wxTimerEvent& aEvent );
+    void redrawNetnames();
 
     void saveProjectSettings() override;
 
@@ -869,8 +869,7 @@ private:
     /**
      * Keep track of viewport so that track net labels can be adjusted when it changes.
      */
-    BOX2D        m_lastViewport;
-    wxTimer      m_redrawNetnamesTimer;
+    BOX2D        m_lastNetnamesViewport;
 
     wxTimer*     m_eventCounterTimer;
 

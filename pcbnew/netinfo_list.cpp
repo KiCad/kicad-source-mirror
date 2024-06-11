@@ -110,7 +110,10 @@ void NETINFO_LIST::RemoveNet( NETINFO_ITEM* aNet )
     }
 
     if( removed )
+    {
         m_newNetCode = std::min( m_newNetCode, aNet->m_netCode - 1 );
+        m_DisplayNetnamesDirty = true;
+    }
 }
 
 
@@ -129,9 +132,12 @@ void NETINFO_LIST::RemoveUnusedNets( BOARD_COMMIT* aCommit )
             m_netNames.insert( std::make_pair( netInfo->GetNetname(), netInfo ) );
             m_netCodes.insert( std::make_pair( netCode, netInfo ) );
         }
-        else if( aCommit )
+        else
         {
-            aCommit->Removed( netInfo );
+            m_DisplayNetnamesDirty = true;
+
+            if( aCommit )
+                aCommit->Removed( netInfo );
         }
     }
 }
@@ -162,6 +168,8 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
     // add an entry for fast look up by a net name using a map
     m_netNames.insert( std::make_pair( aNewElement->GetNetname(), aNewElement ) );
     m_netCodes.insert( std::make_pair( aNewElement->GetNetCode(), aNewElement ) );
+
+    m_DisplayNetnamesDirty = true;
 }
 
 
@@ -173,6 +181,25 @@ void NETINFO_LIST::buildListOfNets()
 
     m_parent->SynchronizeNetsAndNetClasses( false );
     m_parent->SetAreasNetCodesFromNetNames();
+}
+
+
+void NETINFO_LIST::RebuildDisplayNetnames() const
+{
+    std::map<wxString, int> shortNames;
+
+    for( NETINFO_ITEM* net : *this )
+        shortNames[net->m_shortNetname]++;
+
+    for( NETINFO_ITEM* net : *this )
+    {
+        if( shortNames[net->m_shortNetname] == 1 )
+            net->m_displayNetname = UnescapeString( net->m_shortNetname );
+        else
+            net->m_displayNetname = UnescapeString( net->m_netname );
+    }
+
+    m_DisplayNetnamesDirty = false;
 }
 
 

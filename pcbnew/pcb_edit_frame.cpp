@@ -398,20 +398,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // to calculate the wrong zoom size.  See PCB_EDIT_FRAME::onSize().
     Bind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
 
-    // Redraw netnames (so that they fall within the current viewport) after the viewport
-    // has stopped changing.  Redrawing them without the timer moves them smoothly with scrolling,
-    // making it look like the tracks are being dragged -- which we don't want.
-    m_redrawNetnamesTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_EDIT_FRAME::redrawNetnames ), nullptr, this );
-
     Bind( wxEVT_IDLE,
             [this]( wxIdleEvent& aEvent )
             {
-                if( GetCanvas()->GetView()->GetViewport() != m_lastViewport )
-                {
-                    m_lastViewport = GetCanvas()->GetView()->GetViewport();
-                    m_redrawNetnamesTimer.StartOnce( 500 );
-                }
+                if( GetCanvas()->GetView()->GetViewport() != m_lastNetnamesViewport )
+                    redrawNetnames();
 
                 // Do not forget to pass the Idle event to other clients:
                 aEvent.Skip();
@@ -585,16 +576,9 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 }
 
 
-void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
+void PCB_EDIT_FRAME::redrawNetnames()
 {
     bool needs_refresh = false;
-
-    // Don't stomp on the auto-save timer event.
-    if( aEvent.GetId() == ID_AUTO_SAVE_TIMER )
-    {
-        aEvent.Skip();
-        return;
-    }
 
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -602,21 +586,28 @@ void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
         return;
 
     KIGFX::VIEW* view = GetCanvas()->GetView();
-    double scale = view->GetScale();
+    BOX2D        viewport = view->GetViewport();
+    int          maxCount = 200;
+    int          count = 0;
 
     for( PCB_TRACK* track : GetBoard()->Tracks() )
     {
-        double lod = track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view );
-
-        if( lod < scale )
-            continue;
-
-        if( lod != track->GetCachedLOD() || scale != track->GetCachedScale() )
+        if( track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view ) < view->GetScale() )
         {
-            view->Update( track, KIGFX::REPAINT );
-            needs_refresh = true;
-            track->SetCachedLOD( lod );
-            track->SetCachedScale( scale );
+            if( viewport != track->GetCachedViewport() )
+            {
+                if( ++count > maxCount )
+                {
+                    // We've used up enough time for now.  Zero out m_lastNetnamesViewport so
+                    // the idle handler will give us another crack at it.
+                    m_lastNetnamesViewport = BOX2D();
+                    break;
+                }
+
+                view->Update( track, KIGFX::REPAINT );
+                needs_refresh = true;
+                track->SetCachedViewport( viewport );
+            }
         }
     }
 
