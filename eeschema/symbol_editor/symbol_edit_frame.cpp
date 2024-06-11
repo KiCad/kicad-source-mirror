@@ -713,6 +713,7 @@ void SYMBOL_EDIT_FRAME::ToggleLibraryTree()
     treePane.Show( !IsLibraryTreeShown() );
     updateSelectionFilterVisbility();
     m_auimgr.Update();
+    Refresh();
 }
 
 
