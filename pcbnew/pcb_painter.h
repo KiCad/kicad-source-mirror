@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -93,6 +93,15 @@ public:
 
     /// @copydoc RENDER_SETTINGS::GetColor()
     COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
+
+    ///< Board-specific version
+    COLOR4D GetColor( const BOARD_ITEM* aItem, int aLayer ) const;
+
+    ///< nullptr version
+    COLOR4D GetColor( nullptr_t, int aLayer ) const
+    {
+        return GetColor( static_cast<const BOARD_ITEM*>( nullptr ), aLayer );
+    }
 
     bool GetShowPageLimits() const override;
 

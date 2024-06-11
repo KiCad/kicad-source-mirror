@@ -194,15 +194,14 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
 
 COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
-    const BOARD_ITEM*           item = dynamic_cast<const BOARD_ITEM*>( aItem );
-    const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
-    int                         netCode = -1;
-    int                         originalLayer = aLayer;
+    return GetColor( dynamic_cast<const BOARD_ITEM*>( aItem ), aLayer );
+}
 
-    // Some graphic objects are BOARD_CONNECTED_ITEM, but they are seen here as
-    // actually board connected objects only if on a copper layer
-    if( conItem && !conItem->IsOnCopperLayer() )
-        conItem = nullptr;
+
+COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) const
+{
+    int netCode = -1;
+    int originalLayer = aLayer;
 
     // Marker shadows
     if( aLayer == LAYER_MARKER_SHADOWS )
@@ -212,8 +211,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     {
         // Careful that we don't end up with the same colour for the annular ring and the hole
         // when printing in B&W.
-        const PAD*     pad = dynamic_cast<const PAD*>( item );
-        const PCB_VIA* via = dynamic_cast<const PCB_VIA*>( item );
+        const PAD*     pad = dynamic_cast<const PAD*>( aItem );
+        const PCB_VIA* via = dynamic_cast<const PCB_VIA*>( aItem );
         int            holeLayer = aLayer;
         int            annularRingLayer = UNDEFINED_LAYER;
 
@@ -234,7 +233,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Zones should pull from the copper layer
-    if( item && item->Type() == PCB_ZONE_T )
+    if( aItem && aItem->Type() == PCB_ZONE_T )
     {
         if( IsZoneFillLayer( aLayer ) )
             aLayer = aLayer - LAYER_ZONE_START;
@@ -249,11 +248,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     // Show via mask layers if appropriate
     if( aLayer == LAYER_VIA_THROUGH && !m_isPrinting )
     {
-        if( item && item->GetBoard() )
+        if( aItem && aItem->GetBoard() )
         {
-            LSET visibleLayers = item->GetBoard()->GetVisibleLayers()
-                                 & item->GetBoard()->GetEnabledLayers()
-                                 & item->GetLayerSet();
+            LSET visibleLayers = aItem->GetBoard()->GetVisibleLayers()
+                                 & aItem->GetBoard()->GetEnabledLayers()
+                                 & aItem->GetLayerSet();
 
             if( GetActiveLayer() == F_Mask && visibleLayers.test( F_Mask ) )
                 aLayer = F_Mask;
@@ -270,23 +269,30 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     // Normal path: get the layer base color
     COLOR4D color = m_layerColors[aLayer];
 
-    if( !item )
+    if( !aItem )
         return m_layerColors[aLayer];
 
     // Selection disambiguation
-    if( item->IsBrightened() )
+    if( aItem->IsBrightened() )
         return color.Brightened( m_selectFactor ).WithAlpha( 0.8 );
 
     // Normal selection
-    if( item->IsSelected() )
+    if( aItem->IsSelected() )
         color = m_layerColorsSel[aLayer];
 
-    // Try to obtain the netcode for the item
+    // Some graphic objects are BOARD_CONNECTED_ITEM, but they are seen here as
+    // actually board connected objects only if on a copper layer
+    const BOARD_CONNECTED_ITEM* conItem =
+            aItem->IsConnected() && aItem->IsOnCopperLayer()
+                    ? static_cast<const BOARD_CONNECTED_ITEM*>( aItem )
+                    : nullptr;
+
+    // Try to obtain the netcode for the aItem
     if( conItem )
         netCode = conItem->GetNetCode();
 
     bool highlighted = m_highlightEnabled && m_highlightNetcodes.count( netCode );
-    bool selected    = item->IsSelected();
+    bool selected    = aItem->IsSelected();
 
     // Apply net color overrides
     if( conItem && m_netColorMode == NET_COLOR_MODE::ALL && IsNetCopperLayer( aLayer ) )
@@ -345,7 +351,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         case LAYER_PADS_SMD_BK:
         case LAYER_PADS_TH:
         {
-            const PAD* pad = static_cast<const PAD*>( item );
+            const PAD* pad = static_cast<const PAD*>( aItem );
 
             if( pad->IsOnLayer( primary ) && !pad->FlashLayer( primary ) )
             {
@@ -364,7 +370,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         case LAYER_VIA_BBLIND:
         case LAYER_VIA_MICROVIA:
         {
-            const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
 
             // Target graphic is active if the via crosses the primary layer
             if( via->GetLayerSet().test( primary ) == 0 )
@@ -378,7 +384,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
         case LAYER_VIA_THROUGH:
         {
-            const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
 
             if( !via->FlashLayer( primary ) )
             {
@@ -403,7 +409,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         case LAYER_VIA_HOLES:
         case LAYER_VIA_HOLEWALLS:
         {
-            const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
 
             if( via->GetViaType() == VIATYPE::BLIND_BURIED
                     || via->GetViaType() == VIATYPE::MICROVIA )
@@ -446,14 +452,14 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
                 // Reference images can't have their color mixed so just reduce the opacity a bit
                 // so they show through less
-                if( item->Type() == PCB_REFERENCE_IMAGE_T )
+                if( aItem->Type() == PCB_REFERENCE_IMAGE_T )
                     color.a *= m_hiContrastFactor;
             }
         }
     }
     else if( originalLayer == LAYER_VIA_BBLIND || originalLayer == LAYER_VIA_MICROVIA )
     {
-        const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
         const BOARD*   board = via->GetBoard();
         LSET           visibleLayers = board->GetVisibleLayers() & board->GetEnabledLayers();
 
@@ -463,23 +469,23 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Apply per-type opacity overrides
-    if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+    if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
         color.a *= m_trackOpacity;
-    else if( item->Type() == PCB_VIA_T )
+    else if( aItem->Type() == PCB_VIA_T )
         color.a *= m_viaOpacity;
-    else if( item->Type() == PCB_PAD_T )
+    else if( aItem->Type() == PCB_PAD_T )
         color.a *= m_padOpacity;
-    else if( item->Type() == PCB_ZONE_T && static_cast<const ZONE*>( item )->IsTeardropArea() )
+    else if( aItem->Type() == PCB_ZONE_T && static_cast<const ZONE*>( aItem )->IsTeardropArea() )
         color.a *= m_trackOpacity;
-    else if( item->Type() == PCB_ZONE_T )
+    else if( aItem->Type() == PCB_ZONE_T )
         color.a *= m_zoneOpacity;
-    else if( item->Type() == PCB_REFERENCE_IMAGE_T )
+    else if( aItem->Type() == PCB_REFERENCE_IMAGE_T )
         color.a *= m_imageOpacity;
-    else if( item->Type() == PCB_SHAPE_T && item->IsOnCopperLayer() )
+    else if( aItem->Type() == PCB_SHAPE_T && aItem->IsOnCopperLayer() )
         color.a *= m_trackOpacity;
 
-    if( item->GetForcedTransparency() > 0.0 )
-        color = color.WithAlpha( color.a * ( 1.0 - item->GetForcedTransparency() ) );
+    if( aItem->GetForcedTransparency() > 0.0 )
+        color = color.WithAlpha( color.a * ( 1.0 - aItem->GetForcedTransparency() ) );
 
     // No special modifiers enabled
     return color;
@@ -975,7 +981,11 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         int bottomLayer = std::min( aVia->BottomLayer() + 1, board->GetCopperLayerCount() );
 
         wxString layerIds;
-        layerIds.Printf( wxT( "%d-%d" ), topLayer, bottomLayer );
+#if wxUSE_UNICODE_WCHAR
+        layerIds << std::to_wstring( topLayer ) << L'-' << std::to_wstring( bottomLayer );
+#else
+        layerIds << std::to_string( topLayer ) << '-' << std::to_string( bottomLayer );
+#endif
 
         // a good size is set room for at least 6 chars, to be able to print 2 lines of text,
         // or at least 3 chars for only the netname
