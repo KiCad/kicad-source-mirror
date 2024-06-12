@@ -39,6 +39,7 @@
 #include <math/box2.h>       // for BOX2I
 #include <math/util.h>       // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
+#include <math/box2_minmax.h>
 #include <trigo.h>           // for RotatePoint
 
 class SHAPE;
@@ -1825,53 +1826,6 @@ const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfInters
 
     return std::optional<SHAPE_LINE_CHAIN::INTERSECTION>();
 }
-
-
-struct BOX2I_MINMAX
-{
-    BOX2I_MINMAX() : m_Left( 0 ), m_Top( 0 ), m_Right( 0 ), m_Bottom( 0 ) {}
-
-    BOX2I_MINMAX( int aLeft, int aTop, int aRight, int aBottom ) :
-            m_Left( aLeft ), m_Top( aTop ), m_Right( aRight ), m_Bottom( aBottom )
-    {
-    }
-
-    BOX2I_MINMAX( const BOX2I& aBox ) :
-            m_Left( aBox.GetLeft() ), m_Top( aBox.GetTop() ), m_Right( aBox.GetRight() ),
-            m_Bottom( aBox.GetBottom() )
-    {
-    }
-
-    BOX2I_MINMAX( const SHAPE_ARC& aArc ) : BOX2I_MINMAX( aArc.BBox() ) {}
-
-    BOX2I_MINMAX( const SEG& aSeg )
-    {
-        m_Left = std::min( aSeg.A.x, aSeg.B.x );
-        m_Right = std::max( aSeg.A.x, aSeg.B.x );
-        m_Top = std::min( aSeg.A.y, aSeg.B.y );
-        m_Bottom = std::max( aSeg.A.y, aSeg.B.y );
-    }
-
-    inline bool Intersects( const BOX2I_MINMAX& aOther ) const
-    {
-        // calculate the left common area coordinate:
-        int left = std::max( m_Left, aOther.m_Left );
-        // calculate the right common area coordinate:
-        int right = std::min( m_Right, aOther.m_Right );
-        // calculate the upper common area coordinate:
-        int top = std::max( m_Top, aOther.m_Top );
-        // calculate the lower common area coordinate:
-        int bottom = std::min( m_Bottom, aOther.m_Bottom );
-
-        // if a common area exists, it must have a positive (null accepted) size
-        return left <= right && top <= bottom;
-    }
-
-    int m_Left;
-    int m_Top;
-    int m_Right;
-    int m_Bottom;
-};
 
 
 struct SHAPE_KEY
