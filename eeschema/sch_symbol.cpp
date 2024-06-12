@@ -35,7 +35,6 @@
 #include <trigo.h>
 #include <refdes_utils.h>
 #include <wx/log.h>
-#include <wx/debug.h>
 #include <settings/settings_manager.h>
 #include <sch_plotter.h>
 #include <string_utils.h>
@@ -231,11 +230,7 @@ wxString SCH_SYMBOL::GetSchSymbolLibraryName() const
 
 void SCH_SYMBOL::SetLibSymbol( const LIB_SYMBOL* aLibSymbol )
 {
-    if( !aLibSymbol )
-    {
-        wxFAIL_MSG( "SCH_SYMBOL::SetLibSymbol() called with NULL pointer" );
-        aLibSymbol = LIB_SYMBOL::Dummy();
-    }
+    wxASSERT_MSG( aLibSymbol, wxT( "SCH_SYMBOL::SetLibSymbol() called with NULL pointer" ) );
 
     m_part.reset( aLibSymbol->Flatten().release() );
     m_part->SetParent();
