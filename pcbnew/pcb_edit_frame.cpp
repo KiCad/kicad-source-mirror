@@ -106,6 +106,7 @@
 #include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
 #include <core/profile.h>
+#include <math/box2_minmax.h>
 #include <view/wx_view_controls.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_chooser_frame.h>
@@ -588,8 +589,24 @@ void PCB_EDIT_FRAME::redrawNetnames()
     int          maxCount = 200;
     int          count = 0;
 
+    // Inflate to catch most of the track width
+    BOX2I_MINMAX clipbox( BOX2ISafe( viewport.Inflate( pcbIUScale.mmToIU( 2.0 ) ) ) );
+
+    PCB_LAYER_ID activeLayer =
+            GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL
+                    ? GetActiveLayer()
+                    : UNDEFINED_LAYER;
+
     for( PCB_TRACK* track : GetBoard()->Tracks() )
     {
+        // Don't need to update vias
+        if( track->Type() == PCB_VIA_T )
+            continue;
+
+        // Don't update invisible tracks
+        if( !clipbox.Intersects( BOX2I_MINMAX( track->GetStart(), track->GetEnd() ) ) )
+            continue;
+
         if( track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view ) < view->GetScale() )
         {
             if( viewport != track->GetCachedViewport() )
@@ -604,7 +621,6 @@ void PCB_EDIT_FRAME::redrawNetnames()
 
                 view->Update( track, KIGFX::REPAINT );
                 track->SetCachedViewport( viewport );
-                GetCanvas()->RequestRefresh();
             }
         }
     }
