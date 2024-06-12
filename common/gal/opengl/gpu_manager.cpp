@@ -113,25 +113,29 @@ void GPU_CACHED_MANAGER::BeginDrawing()
 }
 
 
-void GPU_CACHED_MANAGER::DrawIndices( const VERTEX_ITEM *aItem )
+void GPU_CACHED_MANAGER::DrawIndices( const VERTEX_ITEM* aItem )
 {
-    wxASSERT( m_isDrawing );
+    // Hot path: don't use wxASSERT
+    assert( m_isDrawing );
 
     unsigned int offset = aItem->GetOffset();
     unsigned int size = aItem->GetSize();
 
-    if( size > 1000 )
+    if( size == 0 )
+        return;
+
+    if( size <= 1000 )
+    {
+        m_totalNormal += size;
+        m_vranges.emplace_back( offset, offset + size - 1, false );
+        m_curVrangeSize += size;
+    }
+    else
     {
         m_totalHuge += size;
         m_vranges.emplace_back( offset, offset + size - 1, true );
         m_indexBufSize = std::max( m_curVrangeSize, m_indexBufSize );
         m_curVrangeSize = 0;
-    }
-    else if ( size > 0 )
-    {
-        m_totalNormal += size;
-        m_vranges.emplace_back( offset, offset + size - 1, false );
-        m_curVrangeSize += size;
     }
 }
 
