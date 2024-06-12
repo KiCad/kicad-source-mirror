@@ -1620,8 +1620,15 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return ( double ) pcbIUScale.mmToIU( 5 ) / divisor;
     }
 
-    // Passed all tests; show.
-    return 0.0;
+    VECTOR2L padSize =
+            GetShape() != PAD_SHAPE::CUSTOM ? VECTOR2L( GetSize() ) : GetBoundingBox().GetSize();
+
+    int64_t minSide = std::min( padSize.x, padSize.y );
+
+    if( minSide > 0 )
+        return std::min( (double) pcbIUScale.mmToIU( 0.2 ) / minSide, 3.5 );
+    else
+        return 0;
 }
 
 
