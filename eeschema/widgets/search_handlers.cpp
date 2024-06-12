@@ -174,7 +174,8 @@ int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
                 {
                     SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
 
-                    if( sym->IsPower() )
+                    // IsPower depends on non-missing lib symbol association
+                    if( !sym->IsMissingLibSymbol() && sym->IsPower() )
                         return false;
 
                     for( SCH_FIELD& field : sym->GetFields() )
@@ -254,7 +255,8 @@ int POWER_SEARCH_HANDLER::Search( const wxString& aQuery )
                 {
                     SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
 
-                    return sym->IsPower();
+                    // IsPower depends on non-missing lib symbol association
+                    return !sym->IsMissingLibSymbol() && sym->IsPower();
                 }
 
                 return false;

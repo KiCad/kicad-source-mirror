@@ -2297,7 +2297,7 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
         if( !unit->IsNew() )
             commit.Modify( unit, path.LastScreen() );
 
-        unit->SetLibSymbol( &aSymbol );
+        unit->SetLibSymbol( aSymbol.Flatten().release() );
         unit->UpdateFields( &GetCurrentSheet(),
                             true, /* update style */
                             true, /* update ref */

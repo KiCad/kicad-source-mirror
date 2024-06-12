@@ -1204,8 +1204,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     m_libSymbols.insert( { aIndex, ksymbol } );
 
     // each component has its own symbol for now
-    SCH_SYMBOL* symbol =
-            new SCH_SYMBOL( *ksymbol, libId, &m_sheetPath, std::max( 0, elem.currentpartid ) );
+    SCH_SYMBOL* symbol = new SCH_SYMBOL();
 
     symbol->SetPosition( elem.location + m_sheetOffset );
 
@@ -1214,6 +1213,8 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
 
     // TODO: keep it simple for now, and only set position.
     // component->SetOrientation( elem.orientation );
+    symbol->SetLibId( libId );
+    symbol->SetUnit( std::max( 0, elem.currentpartid ) );
     symbol->GetField( DESCRIPTION_FIELD )->SetText( elem.componentdescription );
 
     SCH_SCREEN* screen = getCurrentScreen();
@@ -3397,10 +3398,12 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     wxCHECK( screen, /* void */ );
 
     // each symbol has its own powerSymbolIt for now
-    SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &m_sheetPath, 0 );
+    SCH_SYMBOL* symbol = new SCH_SYMBOL();
     symbol->SetRef( &m_sheetPath, "#PWR?" );
     symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
     symbol->SetValueFieldText( elem.text );
+    symbol->SetLibId( libId );
+    symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
 
     SCH_FIELD* valueField = symbol->GetField( VALUE_FIELD );
     valueField->SetVisible( elem.showNetName );

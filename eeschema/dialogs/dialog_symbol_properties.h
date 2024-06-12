@@ -100,7 +100,7 @@ private:
 
 private:
     SCH_SYMBOL*               m_symbol;
-    const LIB_SYMBOL&         m_part;
+    LIB_SYMBOL*               m_part;
 
     wxSize                    m_fieldsSize;
     wxSize                    m_lastRequestedFieldsSize;

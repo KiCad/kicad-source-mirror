@@ -412,7 +412,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         footprintText = footprintText.AfterLast( ':' );
 
         wxArrayString footprintAlt;
-        wxArrayString footprintArray = sym->GetLibSymbolRef().GetFPFilters();
+        wxArrayString footprintArray = sym->GetLibSymbolRef()->GetFPFilters();
 
         for( const wxString& fp : footprintArray )
         {
@@ -440,7 +440,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         fprintf( d, "PACKAGE '%s'\n", TO_UTF8( formatDevice( footprintText ) ) );
         fprintf( d, "CLASS IC\n" );
 
-        std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef().GetAllLibPins();
+        std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef()->GetAllLibPins();
 
         /*
          * We must erase redundant Pins references in pinList
@@ -651,7 +651,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
 
         for( const wxString& field : aFieldArray )
         {
-            if( SCH_FIELD* fld = sym->GetLibSymbolRef().FindField( field, true ) )
+            if( SCH_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true ) )
             {
                 wxString fieldText = fld->GetShownText( false, 0 );
 

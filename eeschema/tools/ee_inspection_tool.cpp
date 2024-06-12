@@ -404,7 +404,7 @@ void EE_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
     else
     {
         std::unique_ptr<LIB_SYMBOL> flattenedLibSymbol;
-        std::unique_ptr<LIB_SYMBOL> flattenedSchSymbol = symbol->GetLibSymbolRef().Flatten();
+        std::unique_ptr<LIB_SYMBOL> flattenedSchSymbol = symbol->GetLibSymbolRef()->Flatten();
 
         try
         {

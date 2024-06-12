@@ -91,7 +91,7 @@ public:
 
     SCH_SYMBOL* GetSymbol() const           { return m_rootSymbol; }
 
-    LIB_SYMBOL& GetLibSymbolRef() const          { return m_rootSymbol->GetLibSymbolRef(); }
+    LIB_SYMBOL* GetLibPart() const          { return m_rootSymbol->GetLibSymbolRef().get(); }
 
     const SCH_SHEET_PATH& GetSheetPath() const { return m_sheetPath; }
 
@@ -99,7 +99,7 @@ public:
 
     int GetUnit() const                        { return m_unit; }
     void SetUnit( int aUnit )                  { m_unit = aUnit; }
-    bool IsMultiUnit() const                   { return GetLibSymbolRef().GetUnitCount() > 1; }
+    bool IsMultiUnit() const                   { return GetLibPart()->GetUnitCount() > 1; }
 
     const wxString GetValue() const            { return m_value; }
     void SetValue( const wxString& aValue )    { m_value = aValue; }
@@ -188,7 +188,7 @@ public:
 
         // To avoid a risk of duplicate, for power symbols the ref number is 0nnn instead of nnn.
         // Just because sometimes only power symbols are annotated
-        if( GetLibSymbolRef().IsPower() )
+        if( GetLibPart() && GetLibPart()->IsPower() )
             ref = wxT( "0" );
 
         return ref << m_numRef;
@@ -225,7 +225,10 @@ public:
 
     bool IsUnitsLocked()
     {
-        return GetLibSymbolRef().UnitsLocked();
+        if( GetLibPart() )
+            return GetLibPart()->UnitsLocked();
+        else
+            return true; // Assume units locked when we don't have a library
     }
 
 private:

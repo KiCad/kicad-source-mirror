@@ -369,17 +369,17 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     for( size_t i = 0; i < symbols.GetCount(); ++i )
     {
         SCH_SYMBOL* symbol = symbols[i].GetSymbol();
-        LIB_SYMBOL& libSymbol = symbol->GetLibSymbolRef();
-        LIB_ID      id = libSymbol.GetLibId();
+        LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get();
+        LIB_ID id = libSymbol->GetLibId();
 
         if( libSymbols.count( id ) )
         {
-            wxASSERT_MSG( libSymbols[id]->Compare( libSymbol, SCH_ITEM::COMPARE_FLAGS::ERC ) == 0,
+            wxASSERT_MSG( libSymbols[id]->Compare( *libSymbol, SCH_ITEM::COMPARE_FLAGS::ERC ) == 0,
                           "Two symbols have the same LIB_ID but are different!" );
         }
         else
         {
-            libSymbols[id] = &libSymbol;
+            libSymbols[id] = libSymbol;
         }
 
         symbolMap[id].emplace_back( symbol );
@@ -827,7 +827,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
                 if( item->Type() == SCH_FIELD_T )
                     symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParent() );
 
-                if( symbol && symbol->GetLibSymbolRef().IsPower() )
+                if( symbol && symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
                 {
                     std::vector<SCH_PIN*> pins = symbol->GetPins();
 
@@ -2228,6 +2228,13 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 
     if( symbol->GetEditFlags() != 0 )
         return 0;
+
+    if( symbol->IsMissingLibSymbol() )
+    {
+        m_frame->ShowInfoBarError( _( "Symbols with broken library symbol links cannot "
+                                      "be edited." ) );
+        return 0;
+    }
 
     m_toolMgr->RunAction( ACTIONS::showSymbolEditor );
     symbolEditor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );

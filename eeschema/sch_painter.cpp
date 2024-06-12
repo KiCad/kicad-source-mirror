@@ -94,6 +94,43 @@ std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
 };
 
 
+/**
+ * Used when a LIB_SYMBOL is not found in library to draw a dummy shape.
+ * This symbol is a 400 mils square with the text "??"
+ *
+ *   DEF DUMMY U 0 40 Y Y 1 0 N
+ *     F0 "U" 0 -350 60 H V
+ *     F1 "DUMMY" 0 350 60 H V
+ *     DRAW
+ *       T 0 0 0 150 0 0 0 ??
+ *       S -200 200 200 -200 0 1 0
+ *     ENDDRAW
+ *   ENDDEF
+ */
+static LIB_SYMBOL* dummy()
+{
+    static LIB_SYMBOL* symbol;
+
+    if( !symbol )
+    {
+        symbol = new LIB_SYMBOL( wxEmptyString );
+
+        SCH_SHAPE* square = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
+
+        square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
+        square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
+        symbol->AddDrawItem( square );
+
+        SCH_TEXT* text = new SCH_TEXT( { 0, 0 }, wxT( "??" ), LAYER_DEVICE );
+
+        text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
+        symbol->AddDrawItem( text );
+    }
+
+    return symbol;
+}
+
+
 SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
         KIGFX::PAINTER( aGal ),
         m_schematic( nullptr )
@@ -2138,10 +2175,13 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     int unit = aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() );
     int bodyStyle = aSymbol->GetBodyStyle();
 
-    std::vector<SCH_PIN*> originalPins = aSymbol->GetLibSymbolRef().GetPins( unit, bodyStyle );
+    // Use dummy symbol if the actual couldn't be found (or couldn't be locked).
+    LIB_SYMBOL* originalSymbol = aSymbol->GetLibSymbolRef() ? aSymbol->GetLibSymbolRef().get()
+                                                            : dummy();
+    std::vector<SCH_PIN*> originalPins = originalSymbol->GetPins( unit, bodyStyle );
 
     // Copy the source so we can re-orient and translate it.
-    LIB_SYMBOL            tempSymbol( aSymbol->GetLibSymbolRef() );
+    LIB_SYMBOL            tempSymbol( *originalSymbol );
     std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( unit, bodyStyle );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
@@ -2635,7 +2675,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool DNP = aSheet->GetDNP();
-    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions 
                                 && aSheet->GetExcludedFromSim();
 
     if( m_schSettings.IsPrinting() && drawingShadows )

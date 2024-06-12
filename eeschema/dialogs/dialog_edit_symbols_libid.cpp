@@ -393,10 +393,11 @@ void DIALOG_EDIT_SYMBOLS_LIBID::initDlg()
     // the list is larger and looks like it contains all symbols.
     SCH_REFERENCE_LIST references;
 
-    // build the full list of symbols
+    // build the full list of symbols including symbol having no symbol in loaded libs
+    // (orphan symbols)
     GetParent()->Schematic().BuildUnorderedSheetList().GetSymbols( references,
-                                                                   true /* include power symbols */ );
-
+                                                                   true /* include power symbols */,
+                                                                   true /* include orphan symbols */ );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {
@@ -762,7 +763,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
                 candidate.m_Symbol->SetValueFieldText( getName( id ) );
 
             candidate.m_Symbol->SetLibId( id );
-            candidate.m_Symbol->SetLibSymbol( symbol );
+            candidate.m_Symbol->SetLibSymbol( symbol->Flatten().release() );
             candidate.m_Screen->Append( candidate.m_Symbol );
             candidate.m_Screen->SetContentModified();
 

@@ -104,7 +104,7 @@ private:
 
         int  unit = symbol->GetUnit();
 
-        for( int ii = 0; ii < symbol->GetLibSymbolRef().GetUnitCount(); ii++ )
+        for( int ii = 0; ii < symbol->GetLibSymbolRef()->GetUnitCount(); ii++ )
         {
             wxString num_unit;
             num_unit.Printf( _( "Unit %s" ), symbol->SubReference( ii + 1, false ) );
@@ -1823,6 +1823,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
                 if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
                     blocking_win->Close( true );
+
+                // The broken library symbol link indicator cannot be edited.
+                if( symbol->IsMissingLibSymbol() )
+                    return 0;
 
                 editor->LoadSymbolFromSchematic( symbol );
                 editor->Show( true );

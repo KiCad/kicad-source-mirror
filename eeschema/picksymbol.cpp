@@ -125,15 +125,15 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 
 void SCH_EDIT_FRAME::FlipBodyStyle( SCH_SYMBOL* aSymbol )
 {
-    if( !aSymbol )
+    if( !aSymbol || !aSymbol->GetLibSymbolRef() )
         return;
 
     SCH_COMMIT commit( m_toolManager );
     wxString   msg;
 
-    if( !aSymbol->GetLibSymbolRef().HasAlternateBodyStyle() )
+    if( !aSymbol->GetLibSymbolRef()->HasAlternateBodyStyle() )
     {
-        LIB_ID id = aSymbol->GetLibSymbolRef().GetLibId();
+        LIB_ID id = aSymbol->GetLibSymbolRef()->GetLibId();
 
         msg.Printf( _( "No alternate body style found for symbol '%s' in library '%s'." ),
                     id.GetLibItemName().wx_str(),

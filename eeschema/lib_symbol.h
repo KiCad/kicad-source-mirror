@@ -84,10 +84,6 @@ public:
     virtual ~LIB_SYMBOL()
     {}
 
-    static LIB_SYMBOL* Dummy();
-
-    bool IsDummy() { return this == Dummy(); }
-
     ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
     LIB_SYMBOL_SPTR SharedPtr() const { return m_me; }
 

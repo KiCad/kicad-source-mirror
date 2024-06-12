@@ -313,17 +313,25 @@ public:
      * @param aReferences List of references to populate.
      * @param aSymbol A symbol to add to aReferences
      * @param aIncludePowerSymbols set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
      */
     void AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* aSymbol,
-                       bool aIncludePowerSymbols = true ) const;
+                       bool aIncludePowerSymbols = true,
+                       bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Adds #SCH_REFERENCE object to \a aReferences for each symbol in the sheet.
      *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
      */
-    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true ) const;
+    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+                     bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Append a #SCH_REFERENCE_LIST object to \a aRefList based on \a aSymbol,
@@ -501,8 +509,12 @@ public:
      *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols Set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
      */
-    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true ) const;
+    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+                     bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Add a #SCH_REFERENCE object to \a aReferences for each symbol in the list of sheets that are
@@ -511,9 +523,13 @@ public:
      * @param aReferences List of references to populate.
      * @param aSheetPath Path to return symbols from
      * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols Set to true to include symbols having no symbol found
+     *                                   in lib.   The normal option is false, and set to true
+     *                                   only to build the full list of symbols.
      */
     void GetSymbolsWithinPath( SCH_REFERENCE_LIST& aReferences, const SCH_SHEET_PATH& aSheetPath,
-                               bool aIncludePowerSymbols = true ) const;
+                               bool aIncludePowerSymbols = true,
+                               bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Add a #SCH_SHEET_PATH object to \a aSheets for each sheet in the list that are

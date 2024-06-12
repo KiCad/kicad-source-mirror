@@ -386,25 +386,26 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
             }
 
-            const LIB_SYMBOL& part = symbol->GetLibSymbolRef();
-
-            if( part.GetKeyWords().size() )
+            if( const std::unique_ptr<LIB_SYMBOL>& part = symbol->GetLibSymbolRef() )
             {
-                xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
-                xproperty->AddAttribute( wxT( "name" ), wxT( "ki_keywords" ) );
-                xproperty->AddAttribute( wxT( "value" ), part.GetKeyWords() );
-            }
+                if( part->GetKeyWords().size() )
+                {
+                    xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
+                    xproperty->AddAttribute( wxT( "name" ), wxT( "ki_keywords" ) );
+                    xproperty->AddAttribute( wxT( "value" ), part->GetKeyWords() );
+                }
 
-            if( !part.GetFPFilters().IsEmpty() )
-            {
-                wxString filters;
+                if( !part->GetFPFilters().IsEmpty() )
+                {
+                    wxString filters;
 
-                for( const wxString& filter : part.GetFPFilters() )
-                    filters += ' ' + filter;
+                    for( const wxString& filter : part->GetFPFilters() )
+                        filters += ' ' + filter;
 
-                xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
-                xproperty->AddAttribute( wxT( "name" ), wxT( "ki_fp_filters" ) );
-                xproperty->AddAttribute( wxT( "value" ), filters.Trim( false ) );
+                    xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
+                    xproperty->AddAttribute( wxT( "name" ), wxT( "ki_fp_filters" ) );
+                    xproperty->AddAttribute( wxT( "value" ), filters.Trim( false ) );
+                }
             }
 
             XNODE* xsheetpath;
