@@ -23,6 +23,7 @@
 
 #include <dialog_shim.h>
 #include <wx/panel.h>
+#include <widgets/wx_infobar.h>
 
 
 class DIALOG_EDIT_LIBRARY_TABLES : public DIALOG_SHIM
@@ -39,8 +40,20 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false,
+                           WX_INFOBAR::MESSAGE_TYPE aType = WX_INFOBAR::MESSAGE_TYPE::GENERIC )
+    {
+        m_infoBar->RemoveAllButtons();
+
+        if( aShowCloseButton )
+            m_infoBar->AddCloseButton();
+
+        m_infoBar->ShowMessageFor( aErrorMsg, 8000, wxICON_ERROR, aType );
+    }
+
 protected:
-    wxPanel* m_contentPanel;
+    WX_INFOBAR* m_infoBar;
+    wxPanel*    m_contentPanel;
 };
 
 

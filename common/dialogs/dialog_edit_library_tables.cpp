@@ -43,6 +43,9 @@ void DIALOG_EDIT_LIBRARY_TABLES::InstallPanel( wxPanel* aPanel )
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
 
+    m_infoBar = new WX_INFOBAR( this );
+    mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
+
     mainSizer->Add( m_contentPanel, 1, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 5 );
     m_contentPanel->SetMinSize( FromDIP( wxSize( 1000, 600 ) ) );
 

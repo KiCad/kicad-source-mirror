@@ -218,7 +218,8 @@ class FP_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
     FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
-            LIB_TABLE_GRID_TRICKS( aGrid ), m_dialog( aParent )
+            LIB_TABLE_GRID_TRICKS( aGrid ),
+            m_dialog( aParent )
     { }
 
 protected:
@@ -297,6 +298,18 @@ protected:
             m_grid->AutoSizeColumns( false );
         }
     }
+
+
+    bool toggleCell( int aRow, int aCol, bool aPreserveSelection ) override
+    {
+        if( aCol == COL_VISIBLE )
+        {
+            m_dialog->ShowInfoBarError( _( "Hidden footprint libraries are not yet supported." ) );
+            return true;
+        }
+
+        return LIB_TABLE_GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
+    }
 };
 
 
@@ -349,6 +362,10 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
     aGrid->SetColAttr( COL_ENABLED, attr );
 
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    aGrid->SetColAttr( COL_VISIBLE, attr );
     // No visibility control for footprint libraries yet; this feature is primarily
     // useful for database libraries and it's only implemented for schematic symbols
     // at the moment.

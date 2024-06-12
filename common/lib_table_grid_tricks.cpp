@@ -21,7 +21,8 @@
 #include "lib_table_grid.h"
 
 
-LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) : GRID_TRICKS( aGrid )
+LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) :
+        GRID_TRICKS( aGrid )
 {
 }
 
@@ -65,11 +66,14 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     if( showDeactivate )
         menu.Append( LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED, _( "Deactivate selected" ) );
 
-    if( showSetVisible )
-        menu.Append( LIB_TABLE_GRID_TRICKS_SET_VISIBLE, _( "Set visible flag" ) );
+    if( supportsVisibilityColumn() )
+    {
+        if( showSetVisible )
+            menu.Append( LIB_TABLE_GRID_TRICKS_SET_VISIBLE, _( "Set visible flag" ) );
 
-    if( showUnsetVisible )
-        menu.Append( LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE, _( "Unset visible flag" ) );
+        if( showUnsetVisible )
+            menu.Append( LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE, _( "Unset visible flag" ) );
+    }
 
     bool showSettings = false;
 
