@@ -226,6 +226,11 @@ protected:
             m_grid->AutoSizeColumns( false );
         }
     }
+
+    bool supportsVisibilityColumn() override
+    {
+        return true;
+    }
 };
 
 

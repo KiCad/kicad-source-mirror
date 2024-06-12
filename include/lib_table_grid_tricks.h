@@ -42,4 +42,6 @@ public:
 protected:
     virtual void optionsEditor( int aRow ) = 0;
     bool handleDoubleClick( wxGridEvent& aEvent ) override;
+
+    virtual bool supportsVisibilityColumn() { return false; }
 };

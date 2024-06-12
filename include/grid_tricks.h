@@ -114,7 +114,7 @@ protected:
     bool isCheckbox( int aRow, int aCol );
     bool isReadOnly( int aRow, int aCol );
 
-    bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false );
+    virtual bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false );
     bool showEditor( int aRow, int aCol );
 
     virtual void paste_clipboard();
