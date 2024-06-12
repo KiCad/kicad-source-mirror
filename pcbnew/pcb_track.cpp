@@ -1230,8 +1230,17 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         else if( LSET::BackTechMask().Contains( highContrastLayer ) )
             highContrastLayer = B_Cu;
 
-        if( !GetLayerSet().Contains( highContrastLayer ) )
+        if( !IsCopperLayer( highContrastLayer ) )
             return HIDE;
+
+        if( GetViaType() != VIATYPE::THROUGH )
+        {
+            if( highContrastLayer < Padstack().Drill().start
+                || highContrastLayer > Padstack().Drill().end )
+            {
+                return HIDE;
+            }
+        }
     }
 
     if( IsHoleLayer( aLayer ) )
@@ -1248,6 +1257,9 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             if( !( visible & LSET::PhysicalLayersMask() ).any() )
                 return HIDE;
         }
+
+        // The hole won't be visible anyway at this scale
+        return (double) pcbIUScale.mmToIU( 0.25 ) / GetDrillValue();
     }
     else if( IsNetnameLayer( aLayer ) )
     {
@@ -1268,8 +1280,10 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return m_Width == 0 ? HIDE : ( (double)pcbIUScale.mmToIU( 10 ) / m_Width );
     }
 
-    // Passed all tests; show.
-    return 0.0;
+    if( IsCopperLayer( aLayer ) )
+        return (double) pcbIUScale.mmToIU( 1 ) / m_Width;
+    else
+        return (double) pcbIUScale.mmToIU( 0.6 ) / m_Width;
 }
 
 
