@@ -1137,14 +1137,12 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
     wxString error_msg;
     bool success = true;
     double value;
-    int row = 0;
 
     for( BOARD_STACKUP_ROW_UI_ITEM& ui_item : m_rowUiItemsList )
     {
         // Skip stackup items useless for the current board
         if( !ui_item.m_isEnabled )
         {
-            row++;
             continue;
         }
 
@@ -1262,8 +1260,6 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
                     item->SetColor( GetStandardColorName( item->GetType(), idx ), sub_item );
             }
         }
-
-        row++;
     }
 
     if( !success )

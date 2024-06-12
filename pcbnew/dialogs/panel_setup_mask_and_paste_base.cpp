@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -113,7 +113,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	bSizer6->Add( m_tentViasBack, 0, wxALL, 5 );
 
 
-	gbSizer1->Add( bSizer6, wxGBPosition( 4, 0 ), wxGBSpan( 0, 2 ), wxEXPAND, 5 );
+	gbSizer1->Add( bSizer6, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 
 	m_pasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pasteMarginLabel->Wrap( -1 );
