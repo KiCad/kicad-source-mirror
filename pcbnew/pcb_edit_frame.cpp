@@ -589,6 +589,8 @@ void PCB_EDIT_FRAME::redrawNetnames()
     int          maxCount = 200;
     int          count = 0;
 
+    m_lastNetnamesViewport = viewport;
+
     // Inflate to catch most of the track width
     BOX2I_MINMAX clipbox( BOX2ISafe( viewport.Inflate( pcbIUScale.mmToIU( 2.0 ) ) ) );
 
