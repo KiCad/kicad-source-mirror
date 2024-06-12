@@ -98,7 +98,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_stTenting = new wxStaticText( this, wxID_ANY, _("Tenting:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stTenting = new wxStaticText( this, wxID_ANY, _("Tent vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTenting->Wrap( -1 );
 	bSizer6->Add( m_stTenting, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT, 5 );
 
