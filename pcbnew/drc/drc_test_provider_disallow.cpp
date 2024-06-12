@@ -134,16 +134,21 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                     if( zoneRTree )
                     {
-                        for( PCB_LAYER_ID layer : ruleArea->GetLayerSet().Seq() )
+                        for( size_t ii = 0; ii < ruleArea->GetLayerSet().size(); ++ii )
                         {
-                            if( zoneRTree->QueryColliding( areaBBox, &areaPoly, layer ) )
+                            if( ruleArea->GetLayerSet().test( ii ) )
                             {
-                                isInside = true;
-                                break;
-                            }
+                                PCB_LAYER_ID layer = PCB_LAYER_ID( ii );
 
-                            if( m_drcEngine->IsCancelled() )
-                                return 0;
+                                if( zoneRTree->QueryColliding( areaBBox, &areaPoly, layer ) )
+                                {
+                                    isInside = true;
+                                    break;
+                                }
+
+                                if( m_drcEngine->IsCancelled() )
+                                    return 0;
+                            }
                         }
                     }
                 }
@@ -217,7 +222,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
                     DRC_RULE*                 rule = constraint.GetParentRule();
                     VECTOR2I                  pos = item->GetPosition();
-                    PCB_LAYER_ID              layer = UNDEFINED_LAYER;
+                    PCB_LAYER_ID              layer = item->GetLayerSet().ExtractLayer();
                     wxString                  msg;
 
                     msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ), constraint.GetName() );
@@ -225,9 +230,6 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( rule );
-
-                    if( item->GetLayerSet().count() )
-                        layer = item->GetLayerSet().Seq().front();
 
                     if( rule->m_Implicit )
                     {

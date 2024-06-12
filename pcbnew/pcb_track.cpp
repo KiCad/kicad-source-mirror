@@ -908,20 +908,21 @@ void PCB_VIA::SetLayerSet( LSET aLayerSet )
 {
     bool first = true;
 
-    for( PCB_LAYER_ID layer : aLayerSet.Seq() )
-    {
-        // m_layer and m_bottomLayer are copper layers, so consider only copper layers in aLayerSet
-        if( !IsCopperLayer( layer ) )
-            continue;
+    aLayerSet.RunOnLayers(
+            [&]( PCB_LAYER_ID layer )
+            {
+                // m_layer and m_bottomLayer are copper layers, so consider only copper layers
+                if( IsCopperLayer( layer ) )
+                {
+                    if( first )
+                    {
+                        Padstack().Drill().start = layer;
+                        first = false;
+                    }
 
-        if( first )
-        {
-            Padstack().Drill().start = layer;
-            first = false;
-        }
-
-        Padstack().Drill().end = layer;
-    }
+                    Padstack().Drill().end = layer;
+                }
+            } );
 }
 
 
@@ -995,10 +996,15 @@ void PCB_VIA::SanitizeLayers()
 
 bool PCB_VIA::FlashLayer( LSET aLayers ) const
 {
-    for( PCB_LAYER_ID layer : aLayers.Seq() )
+    for( size_t ii = 0; ii < aLayers.size(); ++ii )
     {
-        if( FlashLayer( layer ) )
-            return true;
+        if( aLayers.test( ii ) )
+        {
+            PCB_LAYER_ID layer = PCB_LAYER_ID( ii );
+
+            if( FlashLayer( layer ) )
+                return true;
+        }
     }
 
     return false;
@@ -1116,18 +1122,16 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
                 return HIDE;
         }
 
-        // Pick the approximate size of the netname (square chars)
-        wxString netName = GetDisplayNetname();
-        size_t  num_chars = netName.size();
-
-        if( GetLength() < num_chars * GetWidth() )
-            return HIDE;
-
-        // When drawing netnames, clip the track to the viewport
         VECTOR2I start( GetStart() );
         VECTOR2I end( GetEnd() );
-        BOX2D    viewport = aView->GetViewport();
-        BOX2I    clipBox = BOX2ISafe( viewport );
+
+        // Calc the approximate size of the netname (assume square chars)
+        SEG::ecoord nameSize = GetDisplayNetname().size() * GetWidth();
+
+        if( VECTOR2I( end - start ).SquaredEuclideanNorm() < nameSize * nameSize )
+            return HIDE;
+
+        BOX2I clipBox = BOX2ISafe( aView->GetViewport() );
 
         ClipLine( &clipBox, start.x, start.y, end.x, end.y );
 

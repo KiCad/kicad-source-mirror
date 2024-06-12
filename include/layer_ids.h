@@ -816,6 +816,18 @@ public:
     LSEQ SeqStackupForPlotting() const;
 
     /**
+     * Execute a function on each layer of the LSET.
+     */
+    void RunOnLayers( const std::function<void( PCB_LAYER_ID )>& aFunction ) const
+    {
+        for( size_t ii = 0; ii < size(); ++ii )
+        {
+            if( test( ii ) )
+                aFunction( PCB_LAYER_ID( ii ) );
+        }
+    }
+
+    /**
      * Return a hex string showing contents of this LSEQ.
      */
     std::string FmtHex() const;

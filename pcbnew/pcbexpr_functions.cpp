@@ -528,12 +528,17 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
 
         if( zoneRTree )
         {
-            for( PCB_LAYER_ID layer : aArea->GetLayerSet().Seq() )
+            for( size_t ii = 0; ii < aArea->GetLayerSet().size(); ++ii )
             {
-                if( aCtx->GetLayer() == layer || aCtx->GetLayer() == UNDEFINED_LAYER )
+                if( aArea->GetLayerSet().test( ii ) )
                 {
-                    if( zoneRTree->QueryColliding( areaBBox, &areaOutline, layer ) )
-                        return true;
+                    PCB_LAYER_ID layer = PCB_LAYER_ID( ii );
+
+                    if( aCtx->GetLayer() == layer || aCtx->GetLayer() == UNDEFINED_LAYER )
+                    {
+                        if( zoneRTree->QueryColliding( areaBBox, &areaOutline, layer ) )
+                            return true;
+                    }
                 }
             }
         }

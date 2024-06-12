@@ -102,11 +102,12 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     }
     else
     {
-        for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
-        {
-            if( aView->IsLayerVisible( layer ) )
-                visibleLayers.set( layer );
-        }
+        LSET::AllCuMask().RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    if( aView->IsLayerVisible( layer ) )
+                        visibleLayers.set( layer );
+                } );
     }
 
     auto adjustColor =

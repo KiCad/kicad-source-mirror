@@ -572,7 +572,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
             {
                 // For single-layer objects, exclude all layers including ancillary layers
                 // such as holes, netnames, etc.
-                PCB_LAYER_ID singleLayer = item->GetLayerSet().Seq()[0];
+                PCB_LAYER_ID singleLayer = item->GetLayerSet().ExtractLayer();
 
                 if( parentFP->GetPrivateLayers().test( singleLayer ) )
                     return false;

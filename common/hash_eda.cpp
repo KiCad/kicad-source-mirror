@@ -83,8 +83,11 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         hash_combine( ret, via->TopLayer() );
         hash_combine( ret, via->BottomLayer() );
 
-        for( PCB_LAYER_ID layer : via->GetLayerSet().Seq() )
-            hash_combine( ret, via->FlashLayer( layer ) );
+        via->GetLayerSet().RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    hash_combine( ret, via->FlashLayer( layer ) );
+                } );
 
         break;
     }
@@ -102,8 +105,11 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
             hash_combine( ret, pad->GetDrillSizeX(), pad->GetDrillSizeY() );
             hash_combine( ret, pad->GetDrillShape() );
 
-            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
-                hash_combine( ret, pad->FlashLayer( layer ) );
+            pad->GetLayerSet().RunOnLayers(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        hash_combine( ret, pad->FlashLayer( layer ) );
+                    } );
         }
 
         hash_combine( ret, pad->GetSize().x, pad->GetSize().y );

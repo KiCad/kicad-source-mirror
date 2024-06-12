@@ -111,11 +111,11 @@ bool DRC_CACHE_GENERATOR::Run()
                         copperLayers = boardCopperLayers;
                 }
 
-                for( PCB_LAYER_ID layer : copperLayers.Seq() )
-                {
-                    if( IsCopperLayer( layer ) )
-                        m_board->m_CopperItemRTreeCache->Insert( item, layer, largestClearance );
-                }
+                copperLayers.RunOnLayers(
+                        [&]( PCB_LAYER_ID layer )
+                        {
+                            m_board->m_CopperItemRTreeCache->Insert( item, layer, largestClearance );
+                        } );
 
                 done.fetch_add( 1 );
                 return true;
@@ -179,11 +179,12 @@ bool DRC_CACHE_GENERATOR::Run()
                 {
                    std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
 
-                   for( PCB_LAYER_ID layer : aZone->GetLayerSet().Seq() )
-                   {
-                       if( IsCopperLayer( layer ) )
-                           rtree->Insert( aZone, layer );
-                   }
+                   aZone->GetLayerSet().RunOnLayers(
+                           [&]( PCB_LAYER_ID layer )
+                           {
+                               if( IsCopperLayer( layer ) )
+                                   rtree->Insert( aZone, layer );
+                           } );
 
                    {
                        std::unique_lock<std::shared_mutex> writeLock( m_board->m_CachesMutex );
@@ -218,8 +219,11 @@ bool DRC_CACHE_GENERATOR::Run()
     {
         if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() )
         {
-            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-                m_board->m_ZoneIsolatedIslandsMap[ zone ][ layer ] = ISOLATED_ISLANDS();
+            zone->GetLayerSet().RunOnLayers(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        m_board->m_ZoneIsolatedIslandsMap[ zone ][ layer ] = ISOLATED_ISLANDS();
+                    } );
         }
     }
 

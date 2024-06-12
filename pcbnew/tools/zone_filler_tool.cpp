@@ -246,8 +246,11 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 
     for( ZONE* zone : toFill )
     {
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-            pts += zone->GetFilledPolysList( layer )->FullPointCount();
+        zone->GetLayerSet().RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    pts += zone->GetFilledPolysList( layer )->FullPointCount();
+                } );
 
         if( pts > 1000 )
         {

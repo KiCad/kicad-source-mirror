@@ -150,18 +150,19 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     delete m_CornerSelection;
     m_CornerSelection         = nullptr;
 
-    for( PCB_LAYER_ID layer : aZone.GetLayerSet().Seq() )
-    {
-        std::shared_ptr<SHAPE_POLY_SET> fill = aZone.m_FilledPolysList.at( layer );
+    aZone.GetLayerSet().RunOnLayers(
+            [&]( PCB_LAYER_ID layer )
+            {
+                std::shared_ptr<SHAPE_POLY_SET> fill = aZone.m_FilledPolysList.at( layer );
 
-        if( fill )
-            m_FilledPolysList[layer] = std::make_shared<SHAPE_POLY_SET>( *fill );
-        else
-            m_FilledPolysList[layer] = std::make_shared<SHAPE_POLY_SET>();
+                if( fill )
+                    m_FilledPolysList[layer] = std::make_shared<SHAPE_POLY_SET>( *fill );
+                else
+                    m_FilledPolysList[layer] = std::make_shared<SHAPE_POLY_SET>();
 
-        m_filledPolysHash[layer]  = aZone.m_filledPolysHash.at( layer );
-        m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
-    }
+                m_filledPolysHash[layer]  = aZone.m_filledPolysHash.at( layer );
+                m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
+            } );
 
     m_borderStyle             = aZone.m_borderStyle;
     m_borderHatchPitch        = aZone.m_borderHatchPitch;
@@ -279,12 +280,13 @@ void ZONE::SetLayerSet( LSET aLayerSet )
         m_filledPolysHash.clear();
         m_insulatedIslands.clear();
 
-        for( PCB_LAYER_ID layer : aLayerSet.Seq() )
-        {
-            m_FilledPolysList[layer]  = std::make_shared<SHAPE_POLY_SET>();
-            m_filledPolysHash[layer]  = {};
-            m_insulatedIslands[layer] = {};
-        }
+        aLayerSet.RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    m_FilledPolysList[layer]  = std::make_shared<SHAPE_POLY_SET>();
+                    m_filledPolysHash[layer]  = {};
+                    m_insulatedIslands[layer] = {};
+                } );
     }
 
     m_layerSet = aLayerSet;
@@ -294,13 +296,13 @@ void ZONE::SetLayerSet( LSET aLayerSet )
 void ZONE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 0;
-    LSEQ layers = m_layerSet.Seq();
 
-    for( PCB_LAYER_ID layer : m_layerSet.Seq() )
-    {
-        aLayers[ aCount++ ] = layer;                     // For outline (always full opacity)
-        aLayers[ aCount++ ] = layer + static_cast<int>( LAYER_ZONE_START );  // For fill (obeys global zone opacity)
-    }
+    m_layerSet.RunOnLayers(
+            [&]( PCB_LAYER_ID layer )
+            {
+                aLayers[ aCount++ ] = layer;
+                aLayers[ aCount++ ] = layer + static_cast<int>( LAYER_ZONE_START );
+            } );
 
     if( IsConflicting() )
         aLayers[ aCount++ ] = LAYER_CONFLICTS_SHADOW;
