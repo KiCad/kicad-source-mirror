@@ -146,6 +146,11 @@ public:
     void ForceRefresh();
 
     /**
+     * Make sure a refresh gets done on the next idle event if it hasn't already.
+     */
+    void RequestRefresh();
+
+    /**
      * Set a dispatcher that processes events and forwards them to tools.
      *
      * #DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event

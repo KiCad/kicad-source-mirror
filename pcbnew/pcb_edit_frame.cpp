@@ -578,8 +578,6 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 
 void PCB_EDIT_FRAME::redrawNetnames()
 {
-    bool needs_refresh = false;
-
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( !cfg || cfg->m_Display.m_NetNames < 2 )
@@ -605,14 +603,11 @@ void PCB_EDIT_FRAME::redrawNetnames()
                 }
 
                 view->Update( track, KIGFX::REPAINT );
-                needs_refresh = true;
                 track->SetCachedViewport( viewport );
+                GetCanvas()->RequestRefresh();
             }
         }
     }
-
-    if( needs_refresh )
-        GetCanvas()->Refresh();
 }
 
 

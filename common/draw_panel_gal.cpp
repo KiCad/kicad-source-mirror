@@ -381,10 +381,16 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 }
 
 
+void EDA_DRAW_PANEL_GAL::RequestRefresh()
+{
+    m_needIdleRefresh = true;
+}
+
+
 void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     if( !DoRePaint() )
-        m_needIdleRefresh = true;
+        RequestRefresh();
 }
 
 
@@ -588,7 +594,7 @@ void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
     if( endDelta > timeLimit )
         Refresh();
     else
-        m_needIdleRefresh = true;
+        RequestRefresh();
 }
 
 
