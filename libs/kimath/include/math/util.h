@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -34,6 +34,7 @@
 #define UTIL_H
 
 #include <config.h>
+#include <cassert>
 #include <cmath>
 #include <cstdint>
 #include <limits>
@@ -63,6 +64,8 @@ void kimathLogOverflow( double v, const char* aTypeName );
  */
 template <typename T> inline constexpr T Clamp( const T& lower, const T& value, const T& upper )
 {
+    assert( upper >= lower );
+
     if( value < lower )
         return lower;
     else if( upper < value )
