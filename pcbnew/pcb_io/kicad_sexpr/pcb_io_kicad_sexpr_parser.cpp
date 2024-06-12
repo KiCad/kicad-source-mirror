@@ -2397,7 +2397,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
             if( plotParams.GetLegacyPlotViaOnMaskLayer().has_value() )
             {
-                bool tent = *plotParams.GetLegacyPlotViaOnMaskLayer();
+                bool tent = !( *plotParams.GetLegacyPlotViaOnMaskLayer() );
                 m_board->GetDesignSettings().m_TentViasFront = tent;
                 m_board->GetDesignSettings().m_TentViasBack = tent;
             }
