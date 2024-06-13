@@ -1244,29 +1244,22 @@ int PCB_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 
 int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-
-    // hold all visible items
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-
-    // Filter the view items based on the selection box
-    BOX2I selectionBox;
-
-    // Intermediate step to allow filtering against hierarchy
     GENERAL_COLLECTOR collection;
+    BOX2I             selectionBox;
 
     selectionBox.SetMaximum();
-    view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
-    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& item_pair : selectedItems )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item_pair.first );
+    getView()->Query( selectionBox,
+            [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
 
-        if( !item || !Selectable( item ) || !itemPassesFilter( item, true ) )
-            continue;
+                if( !item || !Selectable( item ) || !itemPassesFilter( item, true ) )
+                    return true;
 
-        collection.Append( item );
-    }
+                collection.Append( item );
+                return true;
+            } );
 
     FilterCollectorForHierarchy( collection, true );
 
@@ -1283,26 +1276,21 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
 int PCB_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-
-    // hold all visible items
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-
-    // Filter the view items based on the selection box
     BOX2I selectionBox;
 
     selectionBox.SetMaximum();
-    view->Query( selectionBox, selectedItems ); // Get the list of selected items
 
-    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& item_pair : selectedItems )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item_pair.first );
+    getView()->Query( selectionBox,
+            [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
 
-        if( !item || !Selectable( item ) )
-            continue;
+                if( !item || !Selectable( item ) )
+                    return true;
 
-        unselect( item );
-    }
+                unselect( item );
+                return true;
+            } );
 
     m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 

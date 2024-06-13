@@ -399,34 +399,18 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
 }
 
 
-// stupid C++... python lambda would do this in one line
-template <class CONTAINER>
-struct QUERY_VISITOR
-{
-    typedef typename CONTAINER::value_type item_type;
-
-    QUERY_VISITOR( CONTAINER& aCont, int aLayer ) :
-        m_cont( aCont ), m_layer( aLayer )
-    {
-    }
-
-    bool operator()( VIEW_ITEM* aItem )
-    {
-        if( aItem->viewPrivData()->GetFlags() & VISIBLE )
-            m_cont.push_back( VIEW::LAYER_ITEM_PAIR( aItem, m_layer ) );
-
-        return true;
-    }
-
-    CONTAINER&  m_cont;
-    int         m_layer;
-};
-
-
 int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const
 {
     if( m_orderedLayers.empty() )
         return 0;
+
+    int  layer = UNDEFINED_LAYER;
+    auto visitor =
+            [&]( VIEW_ITEM* item ) -> bool
+            {
+                aResult.push_back( VIEW::LAYER_ITEM_PAIR( item, layer ) );
+                return true;
+            };
 
     std::vector<VIEW_LAYER*>::const_reverse_iterator i;
 
@@ -438,11 +422,27 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) con
         if( ( *i )->displayOnly || !( *i )->visible )
             continue;
 
-        QUERY_VISITOR<std::vector<LAYER_ITEM_PAIR> > visitor( aResult, ( *i )->id );
+        layer = ( *i )->id;
         ( *i )->items->Query( aRect, visitor );
     }
 
     return aResult.size();
+}
+
+
+void VIEW::Query( const BOX2I& aRect, const std::function<bool( VIEW_ITEM* )>& aFunc ) const
+{
+    if( m_orderedLayers.empty() )
+        return;
+
+    for( const auto& i : m_orderedLayers )
+    {
+        // ignore layers that do not contain actual items (i.e. the selection box, menus, floats)
+        if( i->displayOnly || !i->visible )
+            continue;
+
+        i->items->Query( aRect, aFunc );
+    }
 }
 
 

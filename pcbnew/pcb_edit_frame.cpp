@@ -579,6 +579,15 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 
 void PCB_EDIT_FRAME::redrawNetnames()
 {
+    /*
+     * While new items being scrolled into the view will get painted, they will only get
+     * annotated with netname instances currently within the view.  Subsequent panning will not
+     * draw newly-visible netname instances because the item has already been drawn.
+     *
+     * This routine, fired on idle if the viewport has changed, looks for visible items that
+     * might have multiple netname instances and redraws them.  (It does not need to handle pads
+     * and vias because they only ever have a single netname instance drawn on them.)
+     */
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( !cfg || cfg->m_Display.m_NetNames < 2 )
@@ -586,46 +595,24 @@ void PCB_EDIT_FRAME::redrawNetnames()
 
     KIGFX::VIEW* view = GetCanvas()->GetView();
     BOX2D        viewport = view->GetViewport();
-    int          maxCount = 200;
-    int          count = 0;
+    double       scale = view->GetScale();
 
     m_lastNetnamesViewport = viewport;
 
-    // Inflate to catch most of the track width
-    BOX2I_MINMAX clipbox( BOX2ISafe( viewport.Inflate( pcbIUScale.mmToIU( 2.0 ) ) ) );
-
-    PCB_LAYER_ID activeLayer =
-            GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL
-                    ? GetActiveLayer()
-                    : UNDEFINED_LAYER;
-
-    for( PCB_TRACK* track : GetBoard()->Tracks() )
-    {
-        // Don't need to update vias
-        if( track->Type() == PCB_VIA_T )
-            continue;
-
-        // Don't update invisible tracks
-        if( !clipbox.Intersects( BOX2I_MINMAX( track->GetStart(), track->GetEnd() ) ) )
-            continue;
-
-        if( track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view ) < view->GetScale() )
-        {
-            if( viewport != track->GetCachedViewport() )
+    view->Query( BOX2ISafe( viewport ),
+            [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
             {
-                if( ++count > maxCount )
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
+
+                if( item->IsConnected()
+                        && ( item->Type() == PCB_TRACE_T || item->Type() == PCB_SHAPE_T )
+                        && item->ViewGetLOD( GetNetnameLayer( item->GetLayer() ), view ) < scale )
                 {
-                    // We've used up enough time for now.  Zero out m_lastNetnamesViewport so
-                    // the idle handler will give us another crack at it.
-                    m_lastNetnamesViewport = BOX2D();
-                    break;
+                    view->Update( item, KIGFX::REPAINT );
                 }
 
-                view->Update( track, KIGFX::REPAINT );
-                track->SetCachedViewport( viewport );
-            }
-        }
-    }
+                return true;
+            } );
 }
 
 

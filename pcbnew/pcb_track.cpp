@@ -121,7 +121,6 @@ PCB_VIA& PCB_VIA::operator=( const PCB_VIA &aOther )
     m_Width = aOther.m_Width;
     m_Start = aOther.m_Start;
     m_End = aOther.m_End;
-    m_CachedViewport = aOther.m_CachedViewport;
 
     m_viaType = aOther.m_viaType;
     m_padStack = aOther.m_padStack;

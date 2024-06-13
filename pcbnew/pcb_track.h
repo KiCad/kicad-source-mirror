@@ -219,24 +219,6 @@ public:
         return true;
     }
 
-    /**
-     * @return last viewport used to render track net names.
-     */
-    BOX2D GetCachedViewport()
-    {
-        return m_CachedViewport;
-    }
-
-    /**
-     * Set the cached viewport used to render track net names.
-     *
-     * @param aViewport
-     */
-    void SetCachedViewport( const BOX2D& aViewport )
-    {
-        m_CachedViewport = aViewport;
-    }
-
     virtual double Similarity( const BOARD_ITEM& aOther ) const override;
 
     virtual bool operator==( const BOARD_ITEM& aOther ) const override;
@@ -261,11 +243,9 @@ protected:
                                      std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 protected:
-    int      m_Width;           ///< Thickness of track, or via diameter
-    VECTOR2I m_Start;           ///< Line start point
-    VECTOR2I m_End;             ///< Line end point
-
-    BOX2D    m_CachedViewport;  ///> Last viewport used to draw this track's net
+    int      m_Width;        ///< Thickness of track, or via diameter
+    VECTOR2I m_Start;        ///< Line start point
+    VECTOR2I m_End;          ///< Line end point
 };
 
 
