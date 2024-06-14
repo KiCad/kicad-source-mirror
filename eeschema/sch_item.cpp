@@ -123,6 +123,11 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 
 SCHEMATIC* SCH_ITEM::Schematic() const
 {
+    if( !SCHEMATIC::m_IsSchematicExists )
+    {
+        return nullptr;
+    }
+
     EDA_ITEM* parent = GetParent();
 
     while( parent )
