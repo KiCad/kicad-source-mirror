@@ -540,10 +540,10 @@ void PADSTACK::ClearPrimitives( PCB_LAYER_ID aLayer )
 std::optional<bool> PADSTACK::IsTented( PCB_LAYER_ID aSide ) const
 {
     if( IsFrontLayer( aSide ) )
-        return m_frontMaskProps.has_solder_mask;
+        return !m_frontMaskProps.has_solder_mask;
 
     if( IsBackLayer( aSide ) )
-        return m_backMaskProps.has_solder_mask;
+        return !m_backMaskProps.has_solder_mask;
 
     wxCHECK_MSG( false, std::nullopt, "IsTented expects a front or back layer" );
 }
