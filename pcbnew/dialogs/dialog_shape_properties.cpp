@@ -151,16 +151,24 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     m_netSelector->SetBoard( aParent->GetBoard() );
     m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
 
-    int net = aShape->GetNetCode();
-
-    if( net >= 0 )
+    if( m_parent->GetFrameType() == FRAME_FOOTPRINT_EDITOR )
     {
-        m_netSelector->SetSelectedNetcode( net );
+        m_netLabel->Hide();
+        m_netSelector->Hide();
     }
     else
     {
-        m_netSelector->SetIndeterminateString( INDETERMINATE_STATE );
-        m_netSelector->SetIndeterminate();
+        int net = aShape->GetNetCode();
+
+        if( net >= 0 )
+        {
+            m_netSelector->SetSelectedNetcode( net );
+        }
+        else
+        {
+            m_netSelector->SetIndeterminateString( INDETERMINATE_STATE );
+            m_netSelector->SetIndeterminate();
+        }
     }
 
     if( m_item->GetShape() == SHAPE_T::POLY )

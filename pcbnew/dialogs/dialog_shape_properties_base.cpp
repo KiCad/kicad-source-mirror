@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -219,10 +219,10 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	gbSizer2->SetEmptyCellSize( wxSize( -1,4 ) );
 
 	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_locked, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), 0, 5 );
+	gbSizer2->Add( m_locked, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
 
 	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Filled shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_filledCtrl, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), 0, 5 );
+	gbSizer2->Add( m_filledCtrl, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxLEFT, 5 );
 
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
