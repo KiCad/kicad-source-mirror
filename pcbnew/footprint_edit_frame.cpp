@@ -1040,10 +1040,13 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
         GFootprintList.ReadFootprintFiles( fpTable, nullptr, nullptr );
     }
 
+    // Unselect before syncing to avoid null reference in the adapter
+    // if a selected item is removed during the sync
+    GetLibTree()->Unselect();
+
     // Sync the LIB_TREE to the FOOTPRINT_INFO list
     adapter->Sync( fpTable );
 
-    GetLibTree()->Unselect();
     GetLibTree()->Regenerate( true );
 
     if( target.IsValid() )
