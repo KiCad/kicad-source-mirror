@@ -2701,7 +2701,10 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
     wxString msg;
 
     if( aFinal )
+    {
         applyUserDefinedSignals();
+        updateSignalsGrid();
+    }
 
     // If there are any signals plotted, update them
     if( SIM_TAB::IsPlottable( simType ) )
