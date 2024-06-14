@@ -2171,10 +2171,20 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
             auto findSignalName =
                     [&]( const wxString& aVectorName ) -> wxString
                     {
+                        wxString vectorName;
+                        wxString suffix;
+
+                        if( aVectorName.EndsWith( _( " (phase)" ) ) )
+                            suffix = _( " (phase)" );
+                        else if( aVectorName.EndsWith( _( " (gain)" ) ) )
+                            suffix = _( " (gain)" );
+
+                        vectorName = aVectorName.Left( aVectorName.Length() - suffix.Length() );
+
                         for( const auto& [ id, signal ] : m_userDefinedSignals )
                         {
-                            if( aVectorName == vectorNameFromSignalId( id ) )
-                                return signal;
+                            if( vectorName == vectorNameFromSignalId( id ) )
+                                return signal + suffix;
                         }
 
                         return aVectorName;
@@ -2184,7 +2194,7 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
             {
                 nlohmann::json trace_js = nlohmann::json(
                             { { "trace_type", (int) trace->GetType() },
-                              { "signal",     findSignalName( trace->GetName() ) },
+                              { "signal",     findSignalName( trace->GetDisplayName() ) },
                               { "color",      COLOR4D( trace->GetTraceColour() ).ToCSSString() } } );
 
                 if( CURSOR* cursor = trace->GetCursor( 1 ) )
