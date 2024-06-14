@@ -548,7 +548,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     // two distinct nets.
                     if( isMaskAperture( aItem ) )
                     {
-                        if( checkMaskAperture( aItem, other, aRefLayer, otherNet, &colliding ) )
+                        if( checkMaskAperture( aItem, other, aTargetLayer, otherNet, &colliding ) )
                         {
                             auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
@@ -560,7 +560,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     }
                     else if( isMaskAperture( other ) )
                     {
-                        if( checkMaskAperture( other, aItem, aRefLayer, itemNet, &colliding ) )
+                        if( checkMaskAperture( other, aItem, aTargetLayer, itemNet, &colliding ) )
                         {
                             auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
