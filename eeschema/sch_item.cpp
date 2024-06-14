@@ -116,6 +116,11 @@ SCH_ITEM::~SCH_ITEM()
     for( const auto& it : m_connection_map )
         delete it.second;
 
+    // Do not try to modify SCHEMATIC::ConnectionGraph()
+    // if the schematic does not exist
+    if( !SCHEMATIC::m_IsSchematicExists )
+        return;
+
     SCHEMATIC* sch = Schematic();
 
     if( sch != nullptr )
@@ -144,11 +149,6 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 
 SCHEMATIC* SCH_ITEM::Schematic() const
 {
-    if( !SCHEMATIC::m_IsSchematicExists )
-    {
-        return nullptr;
-    }
-
     EDA_ITEM* parent = GetParent();
 
     while( parent )
