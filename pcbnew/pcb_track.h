@@ -219,49 +219,9 @@ public:
         return true;
     }
 
-    /**
-     * Get last used LOD for the track net name.
-     *
-     * @return LOD from ViewGetLOD()
-     */
-    double GetCachedLOD()
-    {
-        return m_CachedLOD;
-    }
-
-    /**
-     * Set the cached LOD.
-     *
-     * @param aLOD value from ViewGetLOD() or 0.0 to always display.
-     */
-    void SetCachedLOD( double aLOD )
-    {
-        m_CachedLOD = aLOD;
-    }
-
-    /**
-     * Get last used zoom scale for the track net name.
-     *
-     * @return scale from GetScale()
-     */
-    double GetCachedScale()
-    {
-        return m_CachedScale;
-    }
-
     virtual double Similarity( const BOARD_ITEM& aOther ) const override;
 
     virtual bool operator==( const BOARD_ITEM& aOther ) const override;
-
-    /**
-     * Set the cached scale.
-     *
-     * @param aScale value from GetScale()
-     */
-    void SetCachedScale( double aScale )
-    {
-        m_CachedScale = aScale;
-    }
 
     struct cmp_tracks
     {
@@ -282,9 +242,6 @@ protected:
     int      m_Width;        ///< Thickness of track, or via diameter
     VECTOR2I m_Start;        ///< Line start point
     VECTOR2I m_End;          ///< Line end point
-
-    double   m_CachedLOD;    ///< Last LOD used to draw this track's net
-    double   m_CachedScale;  ///< Last zoom scale used to draw this track's net.
 };
 
 

@@ -108,13 +108,19 @@ public:
     /**
      * Find all visible items that touch or are within the rectangle \a aRect.
      *
-     * @param aRect area to search for items
      * @param aResult result of the search, containing VIEW_ITEMs associated with their layers.
      *                Sorted according to the rendering order (items that are on top of the
      *                rendering stack as first).
      * @return Number of found items.
      */
-    virtual int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
+    int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
+
+    /**
+     * Run a function on all visible items that touch or are within the rectangle \a aRect.
+     *
+     * @param aFunc the function to be executed; return true to continue, false to end query.
+     */
+    void Query( const BOX2I& aRect, const std::function<bool( VIEW_ITEM* )>& aFunc ) const;
 
     /**
      * Set the item visibility.

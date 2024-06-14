@@ -124,12 +124,12 @@ public:
     /**
      * @return the short netname.
      */
-    wxString GetShortNetname() const;
+    const wxString& GetShortNetname() const;
 
     /**
      * @return the unescaped short netname.
      */
-    wxString GetUnescapedShortNetname() const;
+    const wxString& GetDisplayNetname() const;
 
     /**
      * Return an item's "own" clearance in internal units.

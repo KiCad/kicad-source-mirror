@@ -51,8 +51,6 @@ PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
     m_Width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
-    m_CachedScale = -1.0;                   // Set invalid to force update
-    m_CachedLOD = 0.0;                      // Set to always display
 }
 
 
@@ -110,8 +108,6 @@ PCB_VIA& PCB_VIA::operator=( const PCB_VIA &aOther )
     m_Width = aOther.m_Width;
     m_Start = aOther.m_Start;
     m_End = aOther.m_End;
-    m_CachedLOD = aOther.m_CachedLOD;
-    m_CachedScale = aOther.m_CachedScale;
 
     m_bottomLayer = aOther.m_bottomLayer;
     m_viaType = aOther.m_viaType;
@@ -788,10 +784,15 @@ void PCB_VIA::SanitizeLayers()
 
 bool PCB_VIA::FlashLayer( LSET aLayers ) const
 {
-    for( PCB_LAYER_ID layer : aLayers.Seq() )
+    for( size_t ii = 0; ii < aLayers.size(); ++ii )
     {
-        if( FlashLayer( layer ) )
-            return true;
+        if( aLayers.test( ii ) )
+        {
+            PCB_LAYER_ID layer = PCB_LAYER_ID( ii );
+
+            if( FlashLayer( layer ) )
+                return true;
+        }
     }
 
     return false;
@@ -893,24 +894,20 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
                 return HIDE;
         }
 
-        // Pick the approximate size of the netname (square chars)
-        wxString netName = GetUnescapedShortNetname();
-        size_t  num_chars = netName.size();
-
-        if( GetLength() < num_chars * GetWidth() )
-            return HIDE;
-
-        // When drawing netnames, clip the track to the viewport
         VECTOR2I start( GetStart() );
         VECTOR2I end( GetEnd() );
-        BOX2D    viewport = aView->GetViewport();
-        BOX2I    clipBox( viewport.GetOrigin(), viewport.GetSize() );
+
+        // Calc the approximate size of the netname (assume square chars)
+        SEG::ecoord nameSize = GetDisplayNetname().size() * GetWidth();
+
+        if( VECTOR2I( end - start ).SquaredEuclideanNorm() < nameSize * nameSize )
+            return HIDE;
+
+        BOX2I clipBox = BOX2ISafe( aView->GetViewport() );
 
         ClipLine( &clipBox, start.x, start.y, end.x, end.y );
 
-        VECTOR2I line = ( end - start );
-
-        if( line.EuclideanNorm() == 0 )
+        if( VECTOR2I( end - start ).SquaredEuclideanNorm() == 0 )
             return HIDE;
 
         // Netnames will be shown only if zoom is appropriate

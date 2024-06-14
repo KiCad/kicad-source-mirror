@@ -705,15 +705,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
             return;
 
         SHAPE_SEGMENT trackShape( { aTrack->GetStart(), aTrack->GetEnd() }, aTrack->GetWidth() );
-        wxString netname = aTrack->GetUnescapedShortNetname();
-
-        for( const auto& netinfo : aTrack->GetBoard()->GetNetInfo() )
-        {
-            if( netinfo->GetUnescapedShortNetname() == netname )
-                netname = UnescapeString( aTrack->GetNetname() );
-        }
-
-        renderNetNameForSegment( trackShape, color, netname );
+        renderNetNameForSegment( trackShape, color, aTrack->GetDisplayNetname() );
         return;
     }
     else if( IsCopperLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
@@ -761,17 +753,13 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
     viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
     viewport.Normalize();
 
-    BOX2I clipBox( viewport.GetOrigin(), viewport.GetSize() );
-    SEG   visibleSeg( aSeg.GetSeg().A, aSeg.GetSeg().B );
-
-    ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
-
-    size_t  num_char = aNetName.size();
+    int num_char = aNetName.size();
 
     // Check if the track is long enough to have a netname displayed
-    int seg_minlength = aSeg.GetWidth() * num_char;
+    int         seg_minlength = aSeg.GetWidth() * num_char;
+    SEG::ecoord seg_minlength_sq = seg_minlength * seg_minlength;
 
-    if( visibleSeg.Length() < seg_minlength )
+    if( aSeg.GetSeg().SquaredLength() < seg_minlength_sq )
         return;
 
     double    textSize = aSeg.GetWidth();
@@ -781,27 +769,25 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
 
     VECTOR2I start = aSeg.GetSeg().A;
     VECTOR2I end   = aSeg.GetSeg().B;
+    VECTOR2D segV  = end - start;
 
     if( end.y == start.y ) // horizontal
     {
         textOrientation = ANGLE_HORIZONTAL;
-        num_names = std::max( num_names,
-                static_cast<int>( aSeg.GetSeg().Length() / viewport.GetWidth() ) );
+        num_names = std::max( num_names, KiROUND( aSeg.GetSeg().Length() / viewport.GetWidth() ) );
     }
     else if( end.x == start.x ) // vertical
     {
         textOrientation = ANGLE_VERTICAL;
-        num_names = std::max( num_names,
-                static_cast<int>( aSeg.GetSeg().Length() / viewport.GetHeight() ) );
+        num_names = std::max( num_names, KiROUND( aSeg.GetSeg().Length() / viewport.GetHeight() ) );
     }
     else
     {
-        textOrientation = -EDA_ANGLE( visibleSeg.B - visibleSeg.A );
+        textOrientation = -EDA_ANGLE( segV );
         textOrientation.Normalize90();
 
         double min_size = std::min( viewport.GetWidth(), viewport.GetHeight() );
-        num_names = std::max( num_names,
-                static_cast<int>( aSeg.GetSeg().Length() / ( M_SQRT2 * min_size ) ) );
+        num_names = std::max( num_names, KiROUND( aSeg.GetSeg().Length() / ( M_SQRT2 * min_size ) ) );
     }
 
     m_gal->SetIsStroke( true );
@@ -816,13 +802,13 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
     m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
     m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
 
-    for( int ii = 0; ii < num_names; ++ii )
-    {
-        VECTOR2I textPosition =
-                  VECTOR2D( start ) * static_cast<double>( num_names - ii ) / ( num_names + 1 )
-                + VECTOR2D( end ) * static_cast<double>( ii + 1 ) / ( num_names + 1 );
+    int divisions = num_names + 1;
 
-        if( clipBox.Contains( textPosition ) )
+    for( int ii = 1; ii < divisions; ++ii )
+    {
+        VECTOR2I textPosition = start + segV * ( (double) ii / divisions );
+
+        if( viewport.Contains( textPosition ) )
             m_gal->BitmapText( aNetName, textPosition, textOrientation );
     }
 }
@@ -955,7 +941,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         // the netname
         VECTOR2D textpos( 0.0, 0.0 );
 
-        wxString netname = aVia->GetUnescapedShortNetname();
+        wxString netname = aVia->GetDisplayNetname();
 
         int topLayer = aVia->TopLayer() + 1;
         int bottomLayer = std::min( aVia->BottomLayer() + 1, board->GetCopperLayerCount() );
@@ -1156,7 +1142,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         if( displayOpts && !dynamic_cast<CVPCB_SETTINGS*>( viewer_settings() ) )
         {
             if( displayOpts->m_NetNames == 1 || displayOpts->m_NetNames == 3 )
-                netname = aPad->GetUnescapedShortNetname();
+                netname = aPad->GetDisplayNetname();
 
             if( aPad->IsNoConnectPad() )
                 netname = wxT( "x" );
@@ -1166,12 +1152,6 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( netname.IsEmpty() && padNumber.IsEmpty() )
             return;
-
-        for( const auto& netinfo : board->GetNetInfo() )
-        {
-            if( netinfo->GetUnescapedShortNetname() == netname )
-                netname = UnescapeString( aPad->GetNetname() );
-        }
 
         BOX2I    padBBox = aPad->GetBoundingBox();
         VECTOR2D position = padBBox.Centre();
@@ -1720,7 +1700,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         if( aShape->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
             return;
 
-        wxString netname = aShape->GetUnescapedShortNetname();
+        wxString netname = aShape->GetDisplayNetname();
 
         if( netname.IsEmpty() )
             return;

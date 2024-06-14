@@ -863,4 +863,50 @@ typedef BOX2<VECTOR2D>    BOX2D;
 typedef std::optional<BOX2I> OPT_BOX2I;
 
 
+inline BOX2I BOX2ISafe( const BOX2D& aInput )
+{
+    constexpr double high = std::numeric_limits<int>::max();
+    constexpr double low = -std::numeric_limits<int>::max();
+
+    int left = (int) std::clamp( aInput.GetLeft(), low, high );
+    int top = (int) std::clamp( aInput.GetTop(), low, high );
+
+    int64_t right = (int64_t) std::clamp( aInput.GetRight(), low, high );
+    int64_t bottom = (int64_t) std::clamp( aInput.GetBottom(), low, high );
+
+    return BOX2I( VECTOR2I( left, top ), VECTOR2L( right - left, bottom - top ) );
+}
+
+
+inline BOX2I BOX2ISafe( const VECTOR2D& aPos, const VECTOR2D& aSize )
+{
+    constexpr double high = std::numeric_limits<int>::max();
+    constexpr double low = -std::numeric_limits<int>::max();
+
+    int left = (int) std::clamp( aPos.x, low, high );
+    int top = (int) std::clamp( aPos.y, low, high );
+
+    int64_t right = (int64_t) std::clamp( aPos.x + aSize.x, low, high );
+    int64_t bottom = (int64_t) std::clamp( aPos.y + aSize.y, low, high );
+
+    return BOX2I( VECTOR2I( left, top ), VECTOR2L( right - left, bottom - top ) );
+}
+
+
+template <typename S, std::enable_if_t<std::is_integral<S>::value, int> = 0>
+inline BOX2I BOX2ISafe( const VECTOR2I& aPos, const VECTOR2<S>& aSize )
+{
+    constexpr int64_t high = std::numeric_limits<int>::max();
+    constexpr int64_t low = -std::numeric_limits<int>::max();
+
+    int64_t ext_right = int64_t( aPos.x ) + aSize.x;
+    int64_t ext_bottom = int64_t( aPos.y ) + aSize.y;
+
+    int64_t right = std::clamp( ext_right, low, high );
+    int64_t bottom = std::clamp( ext_bottom, low, high );
+
+    return BOX2I( aPos, VECTOR2L( right - aPos.x, bottom - aPos.y ) );
+}
+
+
 #endif

@@ -44,7 +44,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
         m_netCode( aNetCode ),
         m_netname( aNetName ),
         m_shortNetname( m_netname.AfterLast( '/' ) ),
-        m_unescapedShortNetname( UnescapeString( m_shortNetname ) ),
+        m_displayNetname( UnescapeString( m_shortNetname ) ),
         m_isCurrent( true )
 {
     m_parent = aParent;

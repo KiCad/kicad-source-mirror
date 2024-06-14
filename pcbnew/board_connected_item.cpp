@@ -132,15 +132,28 @@ wxString BOARD_CONNECTED_ITEM::GetNetnameMsg() const
 }
 
 
-wxString BOARD_CONNECTED_ITEM::GetShortNetname() const
+const wxString& BOARD_CONNECTED_ITEM::GetShortNetname() const
 {
-    return m_netinfo ? m_netinfo->GetShortNetname() : wxString();
+    static wxString emptyString;
+
+    return m_netinfo ? m_netinfo->GetShortNetname() : emptyString;
 }
 
 
-wxString BOARD_CONNECTED_ITEM::GetUnescapedShortNetname() const
+const wxString& BOARD_CONNECTED_ITEM::GetDisplayNetname() const
 {
-    return m_netinfo ? m_netinfo->GetUnescapedShortNetname() : wxString();
+    static wxString emptyString;
+
+    if( !m_netinfo )
+        return emptyString;
+
+    if( const BOARD* board = GetBoard() )
+    {
+        if( board->GetNetInfo().m_DisplayNetnamesDirty )
+            board->GetNetInfo().RebuildDisplayNetnames();
+    }
+
+    return m_netinfo->GetDisplayNetname();
 }
 
 

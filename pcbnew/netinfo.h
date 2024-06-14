@@ -121,7 +121,7 @@ public:
     /**
      * @return the unescaped short netname.
      */
-    const wxString& GetUnescapedShortNetname() const { return m_unescapedShortNetname; }
+    const wxString& GetDisplayNetname() const { return m_displayNetname; }
 
     /**
      * @return true if the net was not labelled by the user.
@@ -145,7 +145,7 @@ public:
         else
             m_shortNetname = aNewName;
 
-        m_unescapedShortNetname = UnescapeString( m_shortNetname );
+        m_displayNetname = UnescapeString( m_shortNetname );
     }
 
     bool IsCurrent() const { return m_isCurrent; }
@@ -189,10 +189,14 @@ protected:
 private:
     friend class NETINFO_LIST;
 
-    int         m_netCode;               ///< A number equivalent to the net name.
-    wxString    m_netname;               ///< Full net name like /sheet/subsheet/vout used by Eeschema.
-    wxString    m_shortNetname;          ///< Short net name, like vout from /sheet/subsheet/vout.
-    wxString    m_unescapedShortNetname; ///< Unescaped short net name.
+    int         m_netCode;         ///< A number equivalent to the net name.
+    wxString    m_netname;         ///< Full net name like /sheet/subsheet/vout used by Eeschema.
+    wxString    m_shortNetname;    ///< Short net name, like vout from /sheet/subsheet/vout.
+
+    wxString    m_displayNetname;  ///< Unescaped netname for display.  Usually the short netname,
+                                   ///< but will be the full netname if disambiguation required.
+                                   ///< The NETINFO_LIST is repsonsible for the management of when
+                                   ///< these need to be updated/disambiguated.
 
     std::shared_ptr<NETCLASS> m_netClass;
 
@@ -370,6 +374,8 @@ public:
     /// Return the netcode map, at least for python.
     const NETCODES_MAP& NetsByNetcode() const   { return m_netCodes; }
 
+    void RebuildDisplayNetnames() const;
+
     /// Constant that holds the "unconnected net" number (typically 0)
     /// all items "connected" to this net are actually not connected items
     static const int UNCONNECTED;
@@ -490,6 +496,10 @@ private:
      */
     int getFreeNetCode();
 
+public:
+    mutable bool m_DisplayNetnamesDirty;
+
+private:
     BOARD*       m_parent;
 
     NETNAMES_MAP m_netNames;        ///< map of <wxString, NETINFO_ITEM*>, is NETINFO_ITEM owner

@@ -376,20 +376,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // to calculate the wrong zoom size.  See PCB_EDIT_FRAME::onSize().
     Bind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
 
-    // Redraw netnames (so that they fall within the current viewport) after the viewport
-    // has stopped changing.  Redrawing them without the timer moves them smoothly with scrolling,
-    // making it look like the tracks are being dragged -- which we don't want.
-    m_redrawNetnamesTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_EDIT_FRAME::redrawNetnames ), nullptr, this );
-
     Bind( wxEVT_IDLE,
             [this]( wxIdleEvent& aEvent )
             {
-                if( GetCanvas()->GetView()->GetViewport() != m_lastViewport )
-                {
-                    m_lastViewport = GetCanvas()->GetView()->GetViewport();
-                    m_redrawNetnamesTimer.StartOnce( 500 );
-                }
+                if( GetCanvas()->GetView()->GetViewport() != m_lastNetnamesViewport )
+                    redrawNetnames();
 
                 // Do not forget to pass the Idle event to other clients:
                 aEvent.Skip();
@@ -547,43 +538,42 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 }
 
 
-void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
+void PCB_EDIT_FRAME::redrawNetnames()
 {
-    bool needs_refresh = false;
-
-    // Don't stomp on the auto-save timer event.
-    if( aEvent.GetId() == ID_AUTO_SAVE_TIMER )
-    {
-        aEvent.Skip();
-        return;
-    }
-
+    /*
+     * While new items being scrolled into the view will get painted, they will only get
+     * annotated with netname instances currently within the view.  Subsequent panning will not
+     * draw newly-visible netname instances because the item has already been drawn.
+     *
+     * This routine, fired on idle if the viewport has changed, looks for visible items that
+     * might have multiple netname instances and redraws them.  (It does not need to handle pads
+     * and vias because they only ever have a single netname instance drawn on them.)
+     */
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( !cfg || cfg->m_Display.m_NetNames < 2 )
         return;
 
     KIGFX::VIEW* view = GetCanvas()->GetView();
-    double scale = view->GetScale();
+    BOX2D        viewport = view->GetViewport();
+    double       scale = view->GetScale();
 
-    for( PCB_TRACK* track : GetBoard()->Tracks() )
-    {
-        double lod = track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view );
+    m_lastNetnamesViewport = viewport;
 
-        if( lod < scale )
-            continue;
+    view->Query( BOX2ISafe( viewport ),
+            [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
 
-        if( lod != track->GetCachedLOD() || scale != track->GetCachedScale() )
-        {
-            view->Update( track, KIGFX::REPAINT );
-            needs_refresh = true;
-            track->SetCachedLOD( lod );
-            track->SetCachedScale( scale );
-        }
-    }
+                if( item->IsConnected()
+                        && ( item->Type() == PCB_TRACE_T || item->Type() == PCB_SHAPE_T )
+                        && item->ViewGetLOD( GetNetnameLayer( item->GetLayer() ), view ) < scale )
+                {
+                    view->Update( item, KIGFX::REPAINT );
+                }
 
-    if( needs_refresh )
-        GetCanvas()->Refresh();
+                return true;
+            } );
 }
 
 
