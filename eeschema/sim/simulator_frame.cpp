@@ -344,7 +344,7 @@ void SIMULATOR_FRAME::UpdateTitle()
     if( unsaved )
         title += wxS( " " ) + _( "[Unsaved]" );
 
-    title += wxT( " \u2014 " ) + _( "Spice Simulator" );
+    title += wxT( " \u2014 " ) + _( "SPICE Simulator" );
 
     SetTitle( title );
 }

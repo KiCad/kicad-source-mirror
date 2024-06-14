@@ -91,7 +91,7 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceInfo( DEVICE_T aDeviceType )
 
     case DEVICE_T::SUBCKT:    return { "SUBCKT",  "Subcircuit",                   false };
     case DEVICE_T::XSPICE:    return { "XSPICE",  "XSPICE Code Model",            true  };
-    case DEVICE_T::SPICE:     return { "SPICE",   "Raw Spice Element",            true  };
+    case DEVICE_T::SPICE:     return { "SPICE",   "Raw SPICE Element",            true  };
 
     default:    wxFAIL;       return {};
     }

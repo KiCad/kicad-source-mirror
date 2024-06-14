@@ -55,7 +55,7 @@ bool init_unit_test()
 {
     SetPgm( new MOCK_PGM_BASE() );
     KIPLATFORM::APP::Init();
-    boost::unit_test::framework::master_test_suite().p_name.value = "Common spice integration tests";
+    boost::unit_test::framework::master_test_suite().p_name.value = "Common SPICE integration tests";
 
     wxApp::SetInstance( new wxAppConsole );
 

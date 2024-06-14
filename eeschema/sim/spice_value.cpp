@@ -406,7 +406,7 @@ bool SPICE_VALIDATOR::Validate( wxWindow* aParent )
     }
     catch( ... )
     {
-        DisplayError( aParent, wxString::Format( _( "'%s' is not a valid Spice value." ),
+        DisplayError( aParent, wxString::Format( _( "'%s' is not a valid SPICE value." ),
                                                  text->GetValue() ) );
 
         return false;

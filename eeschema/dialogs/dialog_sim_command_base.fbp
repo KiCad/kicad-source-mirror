@@ -335,7 +335,7 @@
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">1</property>
-                    <object class="wxSimplebook" expanded="false">
+                    <object class="wxSimplebook" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -387,7 +387,7 @@
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <object class="simplebookpage" expanded="false">
+                      <object class="simplebookpage" expanded="true">
                         <property name="label">a page</property>
                         <property name="select">0</property>
                         <object class="wxPanel" expanded="false">
@@ -6160,10 +6160,10 @@
                           </object>
                         </object>
                       </object>
-                      <object class="simplebookpage" expanded="false">
+                      <object class="simplebookpage" expanded="true">
                         <property name="label">a page</property>
                         <property name="select">0</property>
-                        <object class="wxPanel" expanded="false">
+                        <object class="wxPanel" expanded="true">
                           <property name="BottomDockable">1</property>
                           <property name="LeftDockable">1</property>
                           <property name="RightDockable">1</property>
@@ -6215,7 +6215,7 @@
                           <property name="window_extra_style"></property>
                           <property name="window_name"></property>
                           <property name="window_style">wxTAB_TRAVERSAL</property>
-                          <object class="wxBoxSizer" expanded="false">
+                          <object class="wxBoxSizer" expanded="true">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer2</property>
                             <property name="orient">wxVERTICAL</property>
@@ -6253,7 +6253,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Spice directives:</property>
+                                <property name="label">SPICE directives:</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>

@@ -155,7 +155,7 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
         }
     }
 
-    wxFAIL_MSG( "Could not derive type from Spice code" );
+    wxFAIL_MSG( "Could not derive type from SPICE code" );
     return SIM_MODEL::TYPE::NONE;
 }
 

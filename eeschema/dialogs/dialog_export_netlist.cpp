@@ -313,7 +313,7 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
 void DIALOG_EXPORT_NETLIST::InstallPageSpice()
 {
     EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICE] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE, false );
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE" ), NET_TYPE_SPICE, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
@@ -372,7 +372,7 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpice()
 void DIALOG_EXPORT_NETLIST::InstallPageSpiceModel()
 {
     EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICEMODEL] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Spice Model" ), NET_TYPE_SPICE_MODEL, false );
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE Model" ), NET_TYPE_SPICE_MODEL, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 

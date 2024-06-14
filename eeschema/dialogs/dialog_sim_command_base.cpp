@@ -535,7 +535,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText18 = new wxStaticText( m_pgCustom, wxID_ANY, _("Spice directives:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18 = new wxStaticText( m_pgCustom, wxID_ANY, _("SPICE directives:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
 	bSizer2->Add( m_staticText18, 0, wxRIGHT|wxLEFT, 5 );
 
