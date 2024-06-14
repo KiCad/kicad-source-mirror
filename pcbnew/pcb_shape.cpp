@@ -699,18 +699,47 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
 wxString PCB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
+    FOOTPRINT* parentFP = nullptr;
+
+    if( EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aUnitsProvider ) )
+    {
+        if( frame->GetName() == PCB_EDIT_FRAME_NAME )
+            parentFP = GetParentFootprint();
+    }
+
     if( IsOnCopperLayer() )
     {
-        return wxString::Format( _( "%s %s on %s" ),
-                                 GetFriendlyName(),
-                                 GetNetnameMsg(),
-                                 GetLayerName() );
+        if( parentFP )
+        {
+            return wxString::Format( _( "%s %s of %s on %s" ),
+                                     GetFriendlyName(),
+                                     GetNetnameMsg(),
+                                     parentFP->GetReference(),
+                                     GetLayerName() );
+        }
+        else
+        {
+            return wxString::Format( _( "%s %s on %s" ),
+                                     GetFriendlyName(),
+                                     GetNetnameMsg(),
+                                     GetLayerName() );
+        }
     }
     else
     {
-        return wxString::Format( _( "%s on %s" ),
-                                 GetFriendlyName(),
-                                 GetLayerName() );
+        if( parentFP )
+        {
+            return wxString::Format( _( "%s of %s on %s" ),
+                                     GetFriendlyName(),
+                                     parentFP->GetReference(),
+                                     GetLayerName() );
+        }
+        else
+        {
+            return wxString::Format( _( "%s on %s" ),
+                                     GetFriendlyName(),
+                                     GetLayerName() );
+        }
     }
 }
 

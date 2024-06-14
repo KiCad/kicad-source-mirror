@@ -1433,46 +1433,90 @@ wxString PAD::ShowPadAttr() const
 
 wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    if( GetNumber().IsEmpty() )
+    FOOTPRINT* parentFP = nullptr;
+
+    if( EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aUnitsProvider ) )
     {
-        if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
+        if( frame->GetName() == PCB_EDIT_FRAME_NAME )
+            parentFP = GetParentFootprint();
+    }
+
+    if( GetAttribute() == PAD_ATTRIB::NPTH )
+    {
+        if( parentFP )
         {
-            return wxString::Format( _( "Pad %s of %s on %s" ),
-                                     GetNetnameMsg(),
-                                     GetParentFootprint()->GetReference(),
-                                     layerMaskDescribe() );
-        }
-        else if( GetAttribute() == PAD_ATTRIB::NPTH )
-        {
-            return wxString::Format( _( "NPTH pad of %s" ), GetParentFootprint()->GetReference() );
+            return wxString::Format( _( "NPTH pad of %s" ),
+                                     parentFP->GetReference() );
         }
         else
         {
-            return wxString::Format( _( "PTH pad %s of %s" ),
-                                     GetNetnameMsg(),
-                                     GetParentFootprint()->GetReference() );
+            return _( "NPTH pad" );
+        }
+    }
+    else if( GetNumber().IsEmpty() )
+    {
+        if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
+        {
+            if( parentFP )
+            {
+                return wxString::Format( _( "Pad %s of %s on %s" ),
+                                         GetNetnameMsg(),
+                                         parentFP->GetReference(),
+                                         layerMaskDescribe() );
+            }
+            else
+            {
+                return wxString::Format( _( "Pad on %s" ),
+                                         layerMaskDescribe() );
+            }
+        }
+        else
+        {
+            if( parentFP )
+            {
+                return wxString::Format( _( "PTH pad %s of %s" ),
+                                         GetNetnameMsg(),
+                                         parentFP->GetReference() );
+            }
+            else
+            {
+                return _( "PTH pad" );
+            }
         }
     }
     else
     {
         if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         {
-            return wxString::Format( _( "Pad %s %s of %s on %s" ),
-                                     GetNumber(),
-                                     GetNetnameMsg(),
-                                     GetParentFootprint()->GetReference(),
-                                     layerMaskDescribe() );
-        }
-        else if( GetAttribute() == PAD_ATTRIB::NPTH )
-        {
-            return wxString::Format( _( "NPTH of %s" ), GetParentFootprint()->GetReference() );
+            if( parentFP )
+            {
+                return wxString::Format( _( "Pad %s %s of %s on %s" ),
+                                         GetNumber(),
+                                         GetNetnameMsg(),
+                                         parentFP->GetReference(),
+                                         layerMaskDescribe() );
+            }
+            else
+            {
+                return wxString::Format( _( "Pad %s on %s" ),
+                                         GetNumber(),
+                                         layerMaskDescribe() );
+            }
         }
         else
         {
-            return wxString::Format( _( "PTH pad %s %s of %s" ),
-                                     GetNumber(),
-                                     GetNetnameMsg(),
-                                     GetParentFootprint()->GetReference() );
+            if( parentFP )
+            {
+                return wxString::Format( _( "PTH pad %s %s of %s" ),
+                                         GetNumber(),
+                                         GetNetnameMsg(),
+                                         parentFP->GetReference() );
+            }
+            else
+            {
+                return wxString::Format( _( "PTH pad %s" ),
+                                         GetNumber() );
+            }
         }
     }
 }
