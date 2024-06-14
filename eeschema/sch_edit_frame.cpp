@@ -442,6 +442,11 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     if( m_schematic )
         m_schematic->RemoveAllListeners();
 
+    // Delete all items not in draw list before deleting schematic
+    // to avoid dangling pointers stored in these items
+    ClearUndoRedoList();
+    ClearRepeatItemsList();
+
     delete m_schematic;
     m_schematic = nullptr;
 

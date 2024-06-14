@@ -305,6 +305,11 @@ public:
      */
     void RemoveAllListeners();
 
+    /**
+     * True if a SCHEMATIC exists, false if not
+     */
+    static bool m_IsSchematicExists;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif

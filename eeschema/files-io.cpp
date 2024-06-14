@@ -147,6 +147,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // unload current project file before loading new
     {
         ClearUndoRedoList();
+        ClearRepeatItemsList();
         SetScreen( nullptr );
         m_toolManager->GetTool<EE_INSPECTION_TOOL>()->Reset( TOOL_BASE::SUPERMODEL_RELOAD );
         CreateScreens();
@@ -748,6 +749,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     // Don't leave dangling pointers to previously-opened document.
     m_toolManager->GetTool<EE_SELECTION_TOOL>()->ClearSelection();
     ClearUndoRedoList();
+    ClearRepeatItemsList();
 
     if( setProject )
     {
@@ -1472,6 +1474,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         }
 
         ClearUndoRedoList();
+        ClearRepeatItemsList();
 
         initScreenZoom();
         SetSheetNumberAndCount();
