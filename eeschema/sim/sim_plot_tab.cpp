@@ -545,7 +545,7 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
                 m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
                 m_plotWin->AddLayer( m_axis_x );
 
-                m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dBV" ), mpALIGN_LEFT );
+                m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dB" ), mpALIGN_LEFT );
                 m_axis_y1->SetNameAlign( mpALIGN_LEFT );
                 m_plotWin->AddLayer( m_axis_y1 );
 

@@ -50,7 +50,7 @@ DIALOG_SIM_FORMAT_VALUE::DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, SPICE_VALUE
         m_units = aFormat->Range.Right( 2 );
         SetTitle( wxString::Format( GetTitle(), _( "Frequency" ) ) );
     }
-    else if( aFormat->Range.EndsWith( wxS( "dBV" ) ) )
+    else if( aFormat->Range.EndsWith( wxS( "dB" ) ) )
     {
         m_units = aFormat->Range.Right( 3 );
         SetTitle( wxString::Format( GetTitle(), _( "Gain" ) ) );
