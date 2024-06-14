@@ -818,11 +818,18 @@ void SIM_PLOT_TAB::OnLanguageChanged()
 void SIM_PLOT_TAB::UpdateTraceStyle( TRACE* trace )
 {
     int        type = trace->GetType();
-    wxPenStyle penStyle = ( ( ( type & SPT_AC_PHASE ) || ( type & SPT_CURRENT ) ) && m_dotted_cp )
-                                  ? wxPENSTYLE_DOT
-                                  : wxPENSTYLE_SOLID;
-    trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
+    wxPenStyle penStyle;
 
+    if( ( type & SPT_AC_GAIN ) > 0 )
+        penStyle = wxPENSTYLE_SOLID;
+    else if( ( type & SPT_AC_PHASE ) > 0 )
+        penStyle = m_dotted_cp ? wxPENSTYLE_DOT : wxPENSTYLE_SOLID;
+    else if( ( type & SPT_CURRENT ) > 0 )
+        penStyle = m_dotted_cp ? wxPENSTYLE_DOT : wxPENSTYLE_SOLID;
+    else
+        penStyle = wxPENSTYLE_SOLID;
+
+    trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
     m_sessionTraceColors[ trace->GetName() ] = trace->GetTraceColour();
 }
 

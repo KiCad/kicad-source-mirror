@@ -2456,23 +2456,43 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
     auto getUnitsY =
             [&]( TRACE* aTrace ) -> wxString
             {
-                if( ( aTrace->GetType() & SPT_AC_PHASE ) || ( aTrace->GetType() & SPT_CURRENT ) )
-                    return plotTab->GetUnitsY2();
-                else if( aTrace->GetType() & SPT_POWER )
-                    return plotTab->GetUnitsY3();
+                if( plotTab->GetSimType() == ST_AC )
+                {
+                    if( aTrace->GetType() & SPT_AC_PHASE )
+                        return plotTab->GetUnitsY2();
+                    else
+                        return plotTab->GetUnitsY1();
+                }
                 else
-                    return plotTab->GetUnitsY1();
+                {
+                    if( aTrace->GetType() & SPT_POWER )
+                        return plotTab->GetUnitsY3();
+                    else if( aTrace->GetType() & SPT_CURRENT )
+                        return plotTab->GetUnitsY2();
+                    else
+                        return plotTab->GetUnitsY1();
+                }
             };
 
     auto getNameY =
             [&]( TRACE* aTrace ) -> wxString
             {
-                if( ( aTrace->GetType() & SPT_AC_PHASE ) || ( aTrace->GetType() & SPT_CURRENT ) )
-                    return plotTab->GetLabelY2();
-                else if( aTrace->GetType() & SPT_POWER )
-                    return plotTab->GetLabelY3();
+                if( plotTab->GetSimType() == ST_AC )
+                {
+                    if( aTrace->GetType() & SPT_AC_PHASE )
+                        return plotTab->GetLabelY2();
+                    else
+                        return plotTab->GetLabelY1();
+                }
                 else
-                    return plotTab->GetLabelY1();
+                {
+                    if( aTrace->GetType() & SPT_POWER )
+                        return plotTab->GetLabelY3();
+                    else if( aTrace->GetType() & SPT_CURRENT )
+                        return plotTab->GetLabelY2();
+                    else
+                        return plotTab->GetLabelY1();
+                }
             };
 
     auto formatValue =
