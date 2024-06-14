@@ -225,8 +225,16 @@ wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
 
     if( range.StartsWith( wxS( "~" ) ) )
     {
-        Normalize();
-        range = si_prefix( m_prefix ) + range.Right( range.Length() - 1 );
+        // Don't use SI prefixes with degrees unless they specifically ask for it.
+        if( range.EndsWith( wxS( "°" ) ) )
+        {
+            range = range.Right( range.Length() - 1 );
+        }
+        else
+        {
+            Normalize();
+            range = si_prefix( m_prefix ) + range.Right( range.Length() - 1 );
+        }
     }
     else
     {
