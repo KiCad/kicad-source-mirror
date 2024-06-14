@@ -3738,6 +3738,14 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
         // we need VIATYPE set!
         via->SetLayerPair( start_klayer, end_klayer );
 
+        if( elem.soldermask_expansion_manual )
+        {
+            via->SetFrontTentingMode( elem.is_tent_top ? TENTING_MODE::TENTED
+                                                       : TENTING_MODE::NOT_TENTED );
+            via->SetBackTentingMode( elem.is_tent_bottom ? TENTING_MODE::TENTED
+                                                         : TENTING_MODE::NOT_TENTED );
+        }
+
         m_board->Add( via.release(), ADD_MODE::APPEND );
     }
 
