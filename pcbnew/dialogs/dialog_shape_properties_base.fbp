@@ -2942,7 +2942,7 @@
                   <property name="border">5</property>
                   <property name="colspan">1</property>
                   <property name="column">0</property>
-                  <property name="flag"></property>
+                  <property name="flag">wxLEFT</property>
                   <property name="row">0</property>
                   <property name="rowspan">1</property>
                   <object class="wxCheckBox" expanded="false">
@@ -3010,7 +3010,7 @@
                   <property name="border">5</property>
                   <property name="colspan">2</property>
                   <property name="column">0</property>
-                  <property name="flag"></property>
+                  <property name="flag">wxLEFT</property>
                   <property name="row">1</property>
                   <property name="rowspan">1</property>
                   <object class="wxCheckBox" expanded="false">

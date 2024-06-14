@@ -699,14 +699,18 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
 wxString PCB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    if( GetNetCode() > 0 )
+    if( IsOnCopperLayer() )
     {
-        return wxString::Format( _( "%s %s on %s" ), GetFriendlyName(), GetNetnameMsg(),
+        return wxString::Format( _( "%s %s on %s" ),
+                                 GetFriendlyName(),
+                                 GetNetnameMsg(),
                                  GetLayerName() );
     }
     else
     {
-        return wxString::Format( _( "%s on %s" ), GetFriendlyName(), GetLayerName() );
+        return wxString::Format( _( "%s on %s" ),
+                                 GetFriendlyName(),
+                                 GetLayerName() );
     }
 }
 
