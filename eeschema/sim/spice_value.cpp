@@ -35,6 +35,7 @@
 #include <confirm.h>
 #include <common.h>
 #include <locale_io.h>
+#include <geometry/eda_angle.h>
 
 
 void SPICE_VALUE_FORMAT::FromString( const wxString& aString )
@@ -223,18 +224,17 @@ wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
 {
     wxString range( aFormat.Range );
 
+    if( range.EndsWith( wxS( "°" ) ) )
+    {
+        EDA_ANGLE angle( m_base * std::pow( 10, (int) m_prefix ), DEGREES_T );
+        angle.Normalize180();
+        return wxString::FromCDouble( angle.AsDegrees(), aFormat.Precision ) + wxS( "°" );
+    }
+
     if( range.StartsWith( wxS( "~" ) ) )
     {
-        // Don't use SI prefixes with degrees unless they specifically ask for it.
-        if( range.EndsWith( wxS( "°" ) ) )
-        {
-            range = range.Right( range.Length() - 1 );
-        }
-        else
-        {
-            Normalize();
-            range = si_prefix( m_prefix ) + range.Right( range.Length() - 1 );
-        }
+        Normalize();
+        range = si_prefix( m_prefix ) + range.Right( range.Length() - 1 );
     }
     else
     {
