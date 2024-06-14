@@ -354,7 +354,9 @@ void LIB_TREE::CenterLibId( const LIB_ID& aLibId )
 
 void LIB_TREE::Unselect()
 {
+    m_tree_ctrl->Freeze();
     m_tree_ctrl->UnselectAll();
+    m_tree_ctrl->Thaw();
 }
 
 
