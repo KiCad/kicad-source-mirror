@@ -35,6 +35,7 @@
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <core/profile.h>
+#include <pad_shapes.h>
 #include <string_utils.h>
 #include <zone.h>
 
@@ -764,7 +765,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
         case ALTIUM_RECORD::VIA:
         {
             AVIA6 via( parser );
-            // TODO: implement
+            ConvertVias6ToFootprintItem( footprint.get(), via );
             break;
         }
         case ALTIUM_RECORD::TRACK:
@@ -2902,6 +2903,48 @@ void ALTIUM_PCB::ConvertPads6ToBoardItem( const APAD6& aElem )
 
         m_board->Add( footprint, ADD_MODE::APPEND );
     }
+}
+
+
+void ALTIUM_PCB::ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6& aElem )
+{
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
+
+    pad->SetNumber( "" );
+    pad->SetNetCode( GetNetCode( aElem.net ) );
+
+    pad->SetPosition( aElem.position );
+    pad->SetSize( VECTOR2I( aElem.diameter, aElem.diameter ) );
+    pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) );
+    pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+    pad->SetShape( PAD_SHAPE::CIRCLE );
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+
+    // Pads are always through holes in KiCad
+    pad->SetLayerSet( LSET().AllCuMask() );
+
+    if( aElem.is_tent_top )
+        pad->SetLayerSet( pad->GetLayerSet().reset( F_Mask ) );
+    else
+        pad->SetLayerSet( pad->GetLayerSet().set( F_Mask ) );
+
+    if( aElem.is_tent_bottom )
+        pad->SetLayerSet( pad->GetLayerSet().reset( B_Mask ) );
+    else
+        pad->SetLayerSet( pad->GetLayerSet().set( B_Mask ) );
+
+
+    if( aElem.is_locked )
+        pad->SetLocked( true );
+
+    if( aElem.soldermask_expansion_manual )
+    {
+        pad->SetLocalSolderMaskMargin(
+                std::max( aElem.soldermask_expansion_front, aElem.soldermask_expansion_back ) );
+    }
+
+
+    aFootprint->Add( pad.release(), ADD_MODE::APPEND );
 }
 
 

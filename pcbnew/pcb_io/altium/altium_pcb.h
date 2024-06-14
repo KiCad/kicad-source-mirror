@@ -170,6 +170,7 @@ private:
     void ConvertPads6ToFootprintItemOnNonCopper( FOOTPRINT* aFootprint, const APAD6& aElem );
     void ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6& aElem );
     void ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                            const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPrimitiveIndex );
