@@ -37,6 +37,8 @@
 #include <sim/spice_value.h>
 #include <netlist_exporter_spice.h>
 
+bool SCHEMATIC::m_IsSchematicExists = false;
+
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
           EDA_ITEM( nullptr, SCHEMATIC_T ),
           m_project( nullptr ),
@@ -44,6 +46,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
 {
     m_currentSheet    = new SCH_SHEET_PATH();
     m_connectionGraph = new CONNECTION_GRAPH( this );
+    m_IsSchematicExists = true;
 
     SetProject( aPrj );
 
@@ -124,6 +127,8 @@ SCHEMATIC::~SCHEMATIC()
 
     delete m_currentSheet;
     delete m_connectionGraph;
+
+    m_IsSchematicExists = false;
 }
 
 

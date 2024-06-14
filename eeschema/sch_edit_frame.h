@@ -710,6 +710,15 @@ public:
         return m_items_to_repeat;
     }
 
+    /**
+     * Clear the list of items which are to be repeated with the insert key.
+     * These objects are owned by this container.
+     */
+    void ClearRepeatItemsList()
+    {
+        m_items_to_repeat.clear();
+    }
+
     EDA_ITEM* GetItem( const KIID& aId ) const override;
 
     /**
