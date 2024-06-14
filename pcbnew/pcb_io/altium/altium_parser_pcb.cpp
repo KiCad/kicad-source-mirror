@@ -883,7 +883,6 @@ AVIA6::AVIA6( ALTIUM_BINARY_PARSER& aReader )
     size_t subrecord1 = aReader.ReadAndSetSubrecordLength();
 
     aReader.Skip( 1 );
-
     uint8_t flags1  = aReader.Read<uint8_t>();
     is_test_fab_top = ( flags1 & 0x80 ) != 0;
     is_tent_bottom  = ( flags1 & 0x40 ) != 0;
@@ -908,8 +907,41 @@ AVIA6::AVIA6( ALTIUM_BINARY_PARSER& aReader )
     }
     else
     {
-        aReader.Skip( 43 );
+        uint8_t temp_byte = aReader.Read<uint8_t>(); // Unknown.
+
+        thermal_relief_airgap = aReader.ReadKicadUnit();
+        thermal_relief_conductorcount = aReader.Read<uint8_t>();
+        aReader.Skip( 1 ); // Unknown.
+
+        thermal_relief_conductorwidth = aReader.ReadKicadUnit();
+
+        aReader.ReadKicadUnit(); // Unknown.  20mil?
+        aReader.ReadKicadUnit(); // Unknown.  20mil?
+
+        aReader.Skip( 4 );
+        soldermask_expansion_front = aReader.ReadKicadUnit();
+        aReader.Skip( 8 );
+
+        temp_byte = aReader.Read<uint8_t>();
+        soldermask_expansion_manual = temp_byte & 0x02;
+
+        aReader.Skip( 7 );
+
         viamode = static_cast<ALTIUM_PAD_MODE>( aReader.Read<uint8_t>() );
+
+        for( int ii = 0; ii < 32; ++ii )
+        {
+            diameter_by_layer[ii] = aReader.ReadKicadUnit();
+        }
+
+        aReader.Skip( 38 );
+        soldermask_expansion_linked = aReader.Read<uint8_t>() & 0x01;
+        soldermask_expansion_back = aReader.ReadKicadUnit();
+
+        aReader.Skip( 45 );
+
+        pos_tolerance = aReader.ReadKicadUnit();
+        neg_tolerance = aReader.ReadKicadUnit();
     }
 
     aReader.SkipSubrecord();

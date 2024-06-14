@@ -670,12 +670,28 @@ struct AVIA6
     uint16_t net;
 
     VECTOR2I position;
+    uint32_t pos_tolerance; // 2147483640 is N/A
+    uint32_t neg_tolerance; // 2147483640 is N/A
     uint32_t diameter;
     uint32_t holesize;
+
+    int32_t thermal_relief_airgap;
+    uint32_t thermal_relief_conductorcount;
+    uint32_t thermal_relief_conductorwidth;
+
+    int32_t soldermask_expansion_front;
+    int32_t soldermask_expansion_back;
+    bool    soldermask_expansion_manual;
+    bool    soldermask_expansion_linked;
 
     ALTIUM_LAYER    layer_start;
     ALTIUM_LAYER    layer_end;
     ALTIUM_PAD_MODE viamode;
+
+    // In PAD_MODE::SIMPLE, this is the same as the diameter
+    // In PAD_MODE::TOP_MIDDLE_BOTTOM, layer 0 is top, layer 1 is middle, layer 31 is bottom
+    // In PAD_MODE::FULL_STACK, layers correspond to the layer number
+    uint32_t diameter_by_layer[32];
 
     explicit AVIA6( ALTIUM_BINARY_PARSER& aReader );
 };

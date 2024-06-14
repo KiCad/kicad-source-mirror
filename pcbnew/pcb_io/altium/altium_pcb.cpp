@@ -771,7 +771,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
         case ALTIUM_RECORD::VIA:
         {
             AVIA6 via( parser );
-            // TODO: implement
+            ConvertVias6ToFootprintItem( footprint.get(), via );
             break;
         }
         case ALTIUM_RECORD::TRACK:
@@ -3016,6 +3016,75 @@ void ALTIUM_PCB::ConvertPads6ToBoardItem( const APAD6& aElem )
 
         m_board->Add( footprint.release(), ADD_MODE::APPEND );
     }
+}
+
+
+void ALTIUM_PCB::ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6& aElem )
+{
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
+
+    pad->SetNumber( "" );
+    pad->SetNetCode( GetNetCode( aElem.net ) );
+
+    pad->SetPosition( aElem.position );
+    pad->SetSize( VECTOR2I( aElem.diameter, aElem.diameter ) );
+    pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) );
+    pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
+    pad->SetShape( PAD_SHAPE::CIRCLE );
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+
+    // Pads are always through holes in KiCad
+    pad->SetLayerSet( LSET().AllCuMask() );
+
+    if( aElem.viamode == ALTIUM_PAD_MODE::SIMPLE )
+        pad->Padstack().SetMode( PADSTACK::MODE::NORMAL );
+    else if( aElem.viamode == ALTIUM_PAD_MODE::TOP_MIDDLE_BOTTOM )
+    {
+        pad->Padstack().SetMode( PADSTACK::MODE::TOP_INNER_BOTTOM );
+        pad->Padstack().Size( In2_Cu ) = VECTOR2I( aElem.diameter_by_layer[1], aElem.diameter_by_layer[1] );
+    }
+    else
+    {
+        pad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
+
+        for( int ii = 0; ii < 32; ++ii )
+        {
+            VECTOR2I size( aElem.diameter_by_layer[ii], aElem.diameter_by_layer[ii] );
+            pad->Padstack().Size( static_cast<PCB_LAYER_ID>( F_Cu + ii ) ) = size;
+        }
+    }
+
+    if( aElem.is_tent_top )
+    {
+        pad->Padstack().FrontOuterLayers().has_solder_mask = true;
+    }
+    else
+    {
+        pad->Padstack().FrontOuterLayers().has_solder_mask = false;
+        pad->SetLayerSet( pad->GetLayerSet().set( F_Mask ) );
+    }
+
+    if( aElem.is_tent_bottom )
+    {
+        pad->Padstack().BackOuterLayers().has_solder_mask = true;
+    }
+    else
+    {
+        pad->Padstack().BackOuterLayers().has_solder_mask = false;
+        pad->SetLayerSet( pad->GetLayerSet().set( B_Mask ) );
+    }
+
+    if( aElem.is_locked )
+        pad->SetLocked( true );
+
+    if( aElem.soldermask_expansion_manual )
+    {
+        pad->Padstack().FrontOuterLayers().solder_mask_margin = aElem.soldermask_expansion_front;
+        pad->Padstack().BackOuterLayers().solder_mask_margin = aElem.soldermask_expansion_back;
+    }
+
+
+    aFootprint->Add( pad.release(), ADD_MODE::APPEND );
 }
 
 
