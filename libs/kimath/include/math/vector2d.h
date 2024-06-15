@@ -425,6 +425,13 @@ const std::string VECTOR2<T>::Format() const
 }
 
 
+template <class T>
+concept FloatingPoint = std::is_floating_point<T>::value;
+
+template <class T>
+concept Integral = std::is_integral<T>::value;
+
+
 template <class T, class U>
 VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
 {
@@ -432,27 +439,26 @@ VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS, const VECTO
 }
 
 
-template <class T, class U>
-VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
+template <FloatingPoint T, class U>
+VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
-    return VECTOR2<std::common_type_t<T, U>>( aLHS.x + aScalar, aLHS.y + aScalar );
+    return VECTOR2<T>( aLHS.x + aScalar, aLHS.y + aScalar );
 }
 
 
-// SWIG doesn't handle this template correctly
-#ifndef SWIG
-template <class T>
-VECTOR2<T> operator+( const VECTOR2<T>& aVector, std::unsigned_integral auto aScalar )
+template <Integral T, Integral U>
+VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
-    return VECTOR2<T>( aVector.x + aScalar, aVector.y + aScalar );
+    return VECTOR2<T>( aLHS.x + aScalar, aLHS.y + aScalar );
 }
-#else
-template <class T>
-VECTOR2<T> operator+( const VECTOR2<T>& aVector, unsigned aScalar )
+
+
+template <Integral T, FloatingPoint U>
+VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
-    return VECTOR2<T>( aVector.x + aScalar, aVector.y + aScalar );
+    return VECTOR2<T>( KiROUND( aLHS.x + aScalar ), KiROUND( aLHS.y + aScalar ) );
 }
-#endif
+
 
 template <class T, class U>
 VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
@@ -461,25 +467,25 @@ VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const VECTO
 }
 
 
-template <class T, class U>
-VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
+template <FloatingPoint T, class U>
+VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
 {
-    return VECTOR2<std::common_type_t<T, U>>( aLHS.x - aScalar, aLHS.y - aScalar );
+    return VECTOR2<T>( aLHS.x - aScalar, aLHS.y - aScalar );
 }
 
-#ifndef SWIG
-template <class T>
-VECTOR2<T> operator-( const VECTOR2<T>& aVector, std::unsigned_integral auto aScalar )
+
+template <Integral T, Integral U>
+VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
 {
-    return VECTOR2<T>( aVector.x - aScalar, aVector.y - aScalar );
+    return VECTOR2<T>( aLHS.x - aScalar, aLHS.y - aScalar );
 }
-#else
-template <class T>
-VECTOR2<T> operator-( const VECTOR2<T>& aVector, unsigned aScalar )
+
+
+template <Integral T, FloatingPoint U>
+VECTOR2<T> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
 {
-    return VECTOR2<T>( aVector.x - aScalar, aVector.y - aScalar );
+    return VECTOR2<T>( KiROUND( aLHS.x - aScalar ), KiROUND( aLHS.y - aScalar ) );
 }
-#endif
 
 
 template <class T>

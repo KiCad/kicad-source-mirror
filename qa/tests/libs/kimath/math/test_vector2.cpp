@@ -136,23 +136,26 @@ BOOST_AUTO_TEST_CASE( test_casting )
     BOOST_CHECK_EQUAL( vdouble, VECTOR2D( -3.0, -4.0 ) );
     BOOST_CHECK_EQUAL( vlong, VECTOR2L( -3, -4 ) );
     BOOST_CHECK_EQUAL( vfloat, VECTOR2<float>( -3.0f, -4.0f ) );
-    BOOST_CHECK_EQUAL( vunsigned, VECTOR2<unsigned>( 0, 0 ) ); // unsigned can't be negative, so we clamp
+    BOOST_CHECK_EQUAL( vunsigned, VECTOR2<unsigned>( 4294967293, 4294967292 ) ); // roll over unsigned when explicitly subtracting.
 
     // Check that negative initial values are handled correctly
     vint = VECTOR2I( -4, -3 );
     vdouble = VECTOR2D( -4.0, -3.0 );
     vlong = VECTOR2L( -4, -3 );
     vfloat = VECTOR2<float>( -4.0f, -3.0f );
+    vunsigned = VECTOR2<unsigned>( -4, -3 );
 
     vint = vint - 1;
     vdouble = vdouble - 1;
     vlong = vlong - 1;
     vfloat = vfloat - 1;
+    vunsigned = vunsigned - 1;
 
     BOOST_CHECK_EQUAL( vint, VECTOR2I( -5, -4 ) );
     BOOST_CHECK_EQUAL( vdouble, VECTOR2D( -5.0, -4.0 ) );
     BOOST_CHECK_EQUAL( vlong, VECTOR2L( -5, -4 ) );
     BOOST_CHECK_EQUAL( vfloat, VECTOR2<float>( -5.0f, -4.0f ) );
+    BOOST_CHECK_EQUAL( vunsigned, VECTOR2<unsigned>( 4294967291, 4294967292 ) );
 
     vint = vint - 1u;
     vdouble = vdouble - 1u;
