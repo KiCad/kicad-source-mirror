@@ -439,6 +439,13 @@ VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS, const U& aS
 }
 
 
+template <class T>
+VECTOR2<T> operator+( const VECTOR2<T>& aVector, std::unsigned_integral auto aScalar )
+{
+    return VECTOR2<T>( aVector.x + aScalar, aVector.y + aScalar );
+}
+
+
 template <class T, class U>
 VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
 {
@@ -450,6 +457,12 @@ template <class T, class U>
 VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<std::common_type_t<T, U>>( aLHS.x - aScalar, aLHS.y - aScalar );
+}
+
+template <class T>
+VECTOR2<T> operator-( const VECTOR2<T>& aVector, std::unsigned_integral auto aScalar )
+{
+    return VECTOR2<T>( aVector.x - aScalar, aVector.y - aScalar );
 }
 
 

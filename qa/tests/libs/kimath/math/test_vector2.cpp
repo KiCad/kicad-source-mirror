@@ -154,12 +154,22 @@ BOOST_AUTO_TEST_CASE( test_casting )
     BOOST_CHECK_EQUAL( vlong, VECTOR2L( -5, -4 ) );
     BOOST_CHECK_EQUAL( vfloat, VECTOR2<float>( -5.0f, -4.0f ) );
 
+    vint = vint - 1u;
+    vdouble = vdouble - 1u;
+    vlong = vlong - 1u;
+    vfloat = vfloat - 1u;
+
+    BOOST_CHECK_EQUAL( vint, VECTOR2I( -6, -5 ) );
+    BOOST_CHECK_EQUAL( vdouble, VECTOR2D( -6.0, -5.0 ) );
+    BOOST_CHECK_EQUAL( vlong, VECTOR2L( -6, -5 ) );
+    BOOST_CHECK_EQUAL( vfloat, VECTOR2<float>( -6.0f, -5.0f ) );
+
     auto add = vint + vdouble;
-    BOOST_CHECK_EQUAL( add, VECTOR2D( -10.0, -8.0 ) );
+    BOOST_CHECK_EQUAL( add, VECTOR2D( -12.0, -10.0 ) );
 
     auto sub = vint - 2 * vlong;
-    BOOST_CHECK_EQUAL( sub.x, 5 );
-    BOOST_CHECK_EQUAL( sub.y, 4 );
+    BOOST_CHECK_EQUAL( sub.x, 6 );
+    BOOST_CHECK_EQUAL( sub.y, 5 );
 
     vunsigned = VECTOR2<unsigned>( std::numeric_limits<unsigned>::max(), std::numeric_limits<unsigned>::max() );
     vint = VECTOR2I( vunsigned );
