@@ -772,8 +772,15 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             SHAPE_POLY_SET itemShape;
                             bool           enclosedByArea;
 
-                            item->TransformShapeToPolygon( itemShape, layer, 0, maxError,
-                                                           ERROR_OUTSIDE );
+                            if( item->Type() == PCB_ZONE_T )
+                            {
+                                itemShape = *static_cast<ZONE*>( item )->Outline();
+                            }
+                            else
+                            {
+                                item->TransformShapeToPolygon( itemShape, layer, 0, maxError,
+                                                               ERROR_OUTSIDE );
+                            }
 
                             if( itemShape.IsEmpty() )
                             {
