@@ -1536,11 +1536,13 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         }*/
     }
 
+    #if 0   // No longer in use
     auto toPoint = [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
     {
         return gp_Pnt( pcbIUScale.IUTomm( aKiCoords.x - aOrigin.x ),
                        -pcbIUScale.IUTomm( aKiCoords.y - aOrigin.y ), aZposition );
     };
+    #endif
 
     gp_Pln basePlane( gp_Pnt( 0.0, 0.0, aZposition ),
                       std::signbit( aThickness ) ? -gp::DZ() : gp::DZ() );

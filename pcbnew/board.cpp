@@ -87,6 +87,9 @@ BOARD::BOARD() :
     // A too large value do not allow safely connecting 2 shapes like very short segments.
     m_outlinesChainingEpsilon = pcbIUScale.mmToIU( DEFAULT_CHAINING_EPSILON_MM );
 
+    m_DRCMaxClearance = 0;
+    m_DRCMaxPhysicalClearance = 0;
+
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 

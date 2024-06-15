@@ -769,7 +769,7 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
 
     // Check if the track is long enough to have a netname displayed
     int         seg_minlength = aSeg.GetWidth() * num_char;
-    SEG::ecoord seg_minlength_sq = seg_minlength * seg_minlength;
+    SEG::ecoord seg_minlength_sq = (SEG::ecoord)seg_minlength * seg_minlength;
 
     if( aSeg.GetSeg().SquaredLength() < seg_minlength_sq )
         return;

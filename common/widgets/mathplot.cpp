@@ -2539,6 +2539,7 @@ mpFXYVector::mpFXYVector( const wxString& name, int flags ) :
         mpFXY( name, flags )
 {
     m_index = 0;
+    m_sweepWindow = 0;
     m_minX  = -1;
     m_maxX  = 1;
     m_minY  = -1;

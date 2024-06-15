@@ -1038,7 +1038,7 @@ SCH_SHEET* SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>&
         portExtWire->SetEndPoint( portExtWireEndpoint );
         currentScreen->Append( portExtWire );
 
-        LABEL_FLAG_SHAPE pinType;
+        LABEL_FLAG_SHAPE pinType = LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 
         if( port->direction )
         {
