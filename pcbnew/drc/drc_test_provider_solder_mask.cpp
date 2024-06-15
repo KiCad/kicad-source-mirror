@@ -364,6 +364,8 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
     if( aTestLayer == B_Mask && !aTestItem->IsOnLayer( B_Cu ) )
         return false;
 
+    PCB_LAYER_ID maskLayer = IsFrontLayer( aTestLayer ) ? F_Mask : B_Mask;
+
     FOOTPRINT* fp = aMaskItem->GetParentFootprint();
 
     if( fp && ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
@@ -372,7 +374,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
         return false;
     }
 
-    PTR_LAYER_CACHE_KEY key = { aMaskItem, aTestLayer };
+    PTR_LAYER_CACHE_KEY key = { aMaskItem, maskLayer };
 
     auto ii = m_maskApertureNetMap.find( key );
 
@@ -384,22 +386,48 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
         return false;
     }
 
-    if( ii->second.second == aTestNet && aTestNet > 0 )
+    auto& [cacheKey, cacheEntry] = *ii;
+    auto& [alreadyEncounteredItem, encounteredItemNet] = cacheEntry;
+
+    if( encounteredItemNet == aTestNet && aTestNet >= 0 )
     {
         // Same net; still no bridge...
         return false;
     }
 
-    if( fp && ii->second.first->Type() == PCB_PAD_T && aTestItem->Type() == PCB_PAD_T )
+    if( fp && fp->IsNetTie() && aTestItem->GetParentFootprint() == fp )
     {
-        PAD* alreadyEncounteredPad = static_cast<PAD*>( ii->second.first );
-        PAD* thisPad = static_cast<PAD*>( aTestItem );
+        std::map<wxString, int> padToNetTieGroupMap = fp->MapPadNumbersToNetTieGroups();
+        PAD*                    padA = nullptr;
+        PAD*                    padB = nullptr;
 
-        if( alreadyEncounteredPad->SharesNetTieGroup( thisPad ) )
-            return false;
+        if( alreadyEncounteredItem->Type() == PCB_PAD_T )
+            padA = static_cast<PAD*>( alreadyEncounteredItem );
+
+        if( aTestItem->Type() == PCB_PAD_T )
+            padB = static_cast<PAD*>( aTestItem );
+
+        if( padA && padB )
+        {
+            int netTieGroupA = padToNetTieGroupMap[padA->GetNumber()];
+            int netTieGroupB = padToNetTieGroupMap[padB->GetNumber()];
+
+            if( netTieGroupA >= 0 && netTieGroupA == netTieGroupB )
+                return false;
+        }
+        else if( padA && aTestItem->Type() == PCB_SHAPE_T )
+        {
+            if( padToNetTieGroupMap.contains( padA->GetNumber() ) )
+                return false;
+        }
+        else if( padB && alreadyEncounteredItem->Type() == PCB_SHAPE_T )
+        {
+            if( padToNetTieGroupMap.contains( padB->GetNumber() ) )
+                return false;
+        }
     }
 
-    *aCollidingItem = ii->second.first;
+    *aCollidingItem = alreadyEncounteredItem;
     return true;
 }
 
@@ -440,8 +468,10 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
         itemNet = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
 
     BOARD_DESIGN_SETTINGS& bds = aItem->GetBoard()->GetDesignSettings();
-    PAD*                   pad = dynamic_cast<PAD*>( aItem );
-    PCB_VIA*               via = dynamic_cast<PCB_VIA*>( aItem );
+    PAD*                   pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem )
+                                                            : nullptr;
+    PCB_VIA*               via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem )
+                                                            : nullptr;
     std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aRefLayer );
 
     m_itemTree->QueryColliding( aItem, aRefLayer, aTargetLayer,
@@ -449,7 +479,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             [&]( BOARD_ITEM* other ) -> bool
             {
                 FOOTPRINT* itemFP = aItem->GetParentFootprint();
-                PAD*       otherPad = dynamic_cast<PAD*>( other );
+                PAD*       otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other )
+                                                                 : nullptr;
                 int        otherNet = -1;
 
                 if( other->IsConnected() )
@@ -500,8 +531,10 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             // Visitor:
             [&]( BOARD_ITEM* other ) -> bool
             {
-                PAD*     otherPad = dynamic_cast<PAD*>( other );
-                PCB_VIA* otherVia = dynamic_cast<PCB_VIA*>( other );
+                PAD*     otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other )
+                                                               : nullptr;
+                PCB_VIA* otherVia = other->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( other )
+                                                               : nullptr;
                 auto     otherShape = other->GetEffectiveShape( aTargetLayer );
                 int      otherNet = -1;
 
@@ -548,7 +581,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     // two distinct nets.
                     if( isMaskAperture( aItem ) )
                     {
-                        if( checkMaskAperture( aItem, other, aTargetLayer, otherNet, &colliding ) )
+                        if( checkMaskAperture( aItem, other, aRefLayer, otherNet, &colliding ) )
                         {
                             auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
@@ -560,7 +593,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     }
                     else if( isMaskAperture( other ) )
                     {
-                        if( checkMaskAperture( other, aItem, aTargetLayer, itemNet, &colliding ) )
+                        if( checkMaskAperture( other, aItem, aRefLayer, itemNet, &colliding ) )
                         {
                             auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
