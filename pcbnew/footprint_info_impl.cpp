@@ -66,6 +66,13 @@ void FOOTPRINT_INFO_IMPL::load()
 }
 
 
+void FOOTPRINT_LIST_IMPL::Clear()
+{
+    m_list.clear();
+    m_list_timestamp = 0;
+}
+
+
 bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
 {
     try

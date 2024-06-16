@@ -191,10 +191,7 @@ public:
     /**
      * @return Clears the footprint info cache
      */
-    void Clear()
-    {
-        m_list.clear();
-    }
+    virtual void Clear() = 0;
 
     /**
      * Get info for a footprint by id.

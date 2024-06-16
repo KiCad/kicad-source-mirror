@@ -93,6 +93,8 @@ public:
     bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
+    void Clear() override;
+
 protected:
     void loadLibs();
     void loadFootprints();
