@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 17:41-0700\n"
-"PO-Revision-Date: 2024-03-18 12:01+0000\n"
+"POT-Creation-Date: 2024-05-21 09:37-0700\n"
+"PO-Revision-Date: 2024-06-17 04:09+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v8/el/>\n"
 "Language: el\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -5509,9 +5509,8 @@ msgid "Bezier"
 msgstr "Μπεζιέ"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Ιδιότητες Φύλλου"
+msgstr "Ιδιότητες Σχήματος"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6280,19 +6279,17 @@ msgid "Select all cells"
 msgstr "Επιλογή όλων των κελιών"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Η ανανέωση ολοκληρώθηκε"
+msgstr "Αποδοχή Αυτόματης Συμπλήρωσης"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Η ανανέωση ολοκληρώθηκε"
+msgstr "Ακύρωση Αυτόματης Συμπλήρωσης"
 
 #: common/hotkey_store.cpp:46
 #, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Εναλλαγή κλειδώματος"
+msgstr "Εναλλαγή Checkbox"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -9842,9 +9839,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Ενημέρωση/επαναφορά ιδιοτήτων συμβόλου"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Ορισμός ως σύμβολο ισχύος"
+msgstr "Επαναφορά προσαρμοσμένων συμβόλων ισχύος"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10846,9 +10842,8 @@ msgid "untitled"
 msgstr "χωρίς όνομα"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Ιδιότητες Ετικέτας"
+msgstr "Επεξεργασία Ιδιοτήτων Ετικέτας"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -12418,9 +12413,8 @@ msgstr ""
 "στις Προτιμήσεις> Επεξεργαστής Σχηματικού > Χρώματα."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Ιδιότητες Φύλλου"
+msgstr "Επεξεργασία Ιδιοτήτων Φύλλου"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13734,9 +13728,8 @@ msgstr ""
 "υπερσύνδεσμο σε μια σελίδα σε αυτό το σχηματικό."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Ιδιότητες Κειμένου"
+msgstr "Επεξεργασία Ιδιοτήτων Κειμένου"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19187,9 +19180,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Εκτέλεση Ανάλυσης Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Φάση σήματος:"
+msgstr "Αντιγραφή Ονομασίας Σήματος"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -22135,24 +22127,20 @@ msgstr ""
 "μπορούν να συντονιστούν"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -23351,9 +23339,8 @@ msgid "Leave unchanged"
 msgstr "Μένει ως έχει"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Προβολή ή απόκρυψη %s"
+msgstr "Εμφάνιση προβλημάτων εισαγωγής"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23823,12 +23810,12 @@ msgid "Generate Position File"
 msgstr "Δημιουργία Αρχείου Θέσης"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Έγκυρες επιλογές: front,back,both. Η μορφή gerber υποστηρίζει μόνο \"both\"."
+"Έγκυρες επιλογές: front,back,both. Η μορφή gerber υποστηρίζει μόνο \"front\" "
+"ή \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -24125,6 +24112,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Αγνοεί την ειδοποίηση ενημέρωσης για την νέα έκδοση. Θα εμφανιστεί εκ νέου "
+"για νεότερες εκδόσεις."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -24135,10 +24124,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Κλείσιμο αυτής της ειδοποίησης ενημέρωσης. Θα εμφανιστεί ξανά μετά από "
+"επανεκκίνηση του KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Εκκίνηση περιηγητή ιστού στην ιστοσελίδα ανακοινώσεων έκδοσης."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -24146,7 +24137,7 @@ msgstr "Άνοιγμα Σελίδας Λήψεις"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Μετάβαση στην κατάλληλη σελίδα λήψεων της πλατφόρμας."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -38394,9 +38385,8 @@ msgid "Skew between traces out of range"
 msgstr "Απόκλιση ανάμεσα σε διαδρόμους εκτός εμβέλειας"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
+msgstr "Πολλαπλές ή ελλιπείς διελεύσεις σε μια σύνδεση"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39107,14 +39097,13 @@ msgid "Too many vias on a connection"
 msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s μέγιστο πλήθος: %d; πραγματικό: %d)"
+msgstr "(%s ελάχιστο πλήθος %d; πραγματικό %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
+msgstr "Ελλιπείς διελεύσεις σε μια σύνδεση"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -40184,9 +40173,8 @@ msgstr "Συντόνισε"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Επιλογή τιμής προς ρύθμιση"
+msgstr "Επιλογή πρώτου διαδρόμου προς ρύθμιση."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -41488,29 +41476,26 @@ msgid "Loading dimension drawings..."
 msgstr "Φόρτωση σχεδίων διαστάσεων..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Γωνιακής διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
 #, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη διάστασης Αναφοράς (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1674
 #, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Baseline διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Γραμμικής διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Ακτινικής διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -41679,14 +41664,14 @@ msgid ""
 msgstr ""
 "Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
 "Το αποτύπωμα %s με έδρα %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
-"οποία δεν υποστηρίζεται ακόμη.)"
+"οποία δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3108
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 "Το αποτύπωμα %s με έδρα %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
-"οποία δεν υποστηρίζεται ακόμη.)"
+"οποία δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3154
 #, c-format
@@ -44502,7 +44487,7 @@ msgstr "Δημιουργία από το Επιλεγμένο"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Θα προέκυπτε κενό πολύγωνο"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -47950,9 +47935,9 @@ msgid "thermal reliefs for PTH"
 msgstr "θερμικές εκτονώσεις για PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "Αποτυχία φόρτωσης [INFO]: η γραμμή εισαγωγής είναι πολύ μεγάλη\n"
+msgstr "Αποτυχία φόρτωσης [INFO]: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
