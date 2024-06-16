@@ -4084,7 +4084,7 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
     pcbText->SetText(kicadText);
     pcbText->SetLayer( aLayer );
     pcbText->SetPosition( aElem.position );
-    pcbText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+    pcbText->SetIsKnockout( aElem.isInverted );
 
     ConvertTexts6ToEdaTextSettings( aElem, *pcbText );
 
@@ -4125,7 +4125,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     fpText->SetKeepUpright( false );
     fpText->SetLayer( aLayer );
     fpText->SetPosition( aElem.position );
-    fpText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+    fpText->SetIsKnockout( aElem.isInverted );
 
     ConvertTexts6ToEdaTextSettings( aElem, *fpText );
 }
@@ -4154,12 +4154,11 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT& 
     aEdaText.SetBoldFlag( aElem.isBold );
     aEdaText.SetItalic( aElem.isItalic );
     aEdaText.SetMirrored( aElem.isMirrored );
+    aEdaText.SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
 
-    // Altium position always specifies the bottom left corner
     aEdaText.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     aEdaText.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
-    // TODO: correct the position and set proper justification
 }
 
 

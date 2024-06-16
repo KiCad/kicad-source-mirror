@@ -718,6 +718,14 @@ struct ATRACK6
 
 struct ATEXT6
 {
+    enum class STROKE_FONT_TYPE
+    {
+        DEFAULT = 1,
+        SANSSERIF = 2,
+        SERIF = 3
+    };
+
+
     ALTIUM_LAYER layer;
     uint16_t     component;
 
@@ -725,12 +733,23 @@ struct ATEXT6
     uint32_t             height;
     double               rotation;
     uint32_t             strokewidth;
-    ALTIUM_TEXT_POSITION textposition;
+    STROKE_FONT_TYPE     strokefonttype;
 
     bool isBold;
     bool isItalic;
     bool isMirrored;
     bool isInverted;
+    bool isInvertedRect;
+    uint32_t inverted_borderwidth;
+    uint32_t inverted_rect_width;
+    uint32_t inverted_rect_height;
+    uint32_t inverted_rect_offset;
+
+    // Justification only applies when there is a text box size specified
+    // Then, the text is justified within the box
+    ALTIUM_TEXT_POSITION inverted_rect_justification;
+
+    uint32_t widestring_index;
 
     bool isComment;
     bool isDesignator;
