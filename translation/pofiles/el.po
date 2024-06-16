@@ -12,14 +12,14 @@ msgstr ""
 "POT-Creation-Date: 2024-05-31 17:41-0700\n"
 "PO-Revision-Date: 2024-03-22 01:36+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -1741,9 +1741,8 @@ msgid "Export to Clipboard"
 msgstr "Εξαγωγή στο Πρόχειρο"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Τροποποίηση Σχήματος"
+msgstr "Τροποποίηση από API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -1995,18 +1994,16 @@ msgid "Additional Contributions By"
 msgstr "Πρόσθετες Συνεισφορές Από"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Τεκμηρίωση"
+msgstr "Ομάδα Τεκμηρίωσης"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "Ομάδα Βιβλιοθηκάριων"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
-msgstr "3Δ Μοντέλα"
+msgstr "3Δ μοντέλα"
 
 #: common/dialog_about/AboutDialog_main.cpp:844
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
@@ -2028,9 +2025,8 @@ msgid "Footprints"
 msgstr "Αποτυπώματα"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Εικονίδιο"
+msgstr "Εικονίδια"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -3051,13 +3047,15 @@ msgid "Reference Designators"
 msgstr "Προσδιορισμοί Αναφοράς"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "Εναλλακτική ανάθεση"
+msgstr "Εκκαθάριση Ανάθεσης Δικτύων"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
+#, fuzzy
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Αφαίρεση πληροφοριών δικτύου από όλα τα συνδεδεμένα στοιχεία πριν την "
+"επικόλληση"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3812,12 +3810,16 @@ msgstr ""
 "θα έχουν μια σύντομη οπτική ένδειξη κάποιας αλλαγής."
 
 #: common/dialogs/panel_common_settings_base.cpp:162
+#, fuzzy
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Χρήση εναλλασσόμενων χρωμάτων σειρών στους πίνακες"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
+#, fuzzy
 msgid "When enabled, use a different color for every other table row"
 msgstr ""
+"Όταν είναι ενεργοποιημένο, χρησιμοποιήστε διαφορετικό χρώμα για κάθε επόμενη "
+"γραμμή πίνακα"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Icon theme:"
@@ -4534,82 +4536,98 @@ msgstr "Πρόθεμα ψευδωνύμου βιβλιοθήκης:"
 #: common/dialogs/panel_plugin_settings.cpp:103
 #, fuzzy, c-format
 msgid "Listening at %s"
-msgstr "Υπάρχουσα διαδρομή:"
+msgstr "Ακούγοντας στο %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
 msgstr ""
+"Αυτή η εγκατάσταση του KiCad δεν έχει ενεργοποιημένη την υποστήριξη API."
 
 #: common/dialogs/panel_plugin_settings.cpp:120
+#, fuzzy
 msgid "KiCad API is not enabled; external Python plugins will not be available"
 msgstr ""
+"Το KiCad API δεν είναι ενεργοποιημένο. Τα εξωτερικά πρόσθετα Python δεν θα "
+"είναι διαθέσιμα"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
+#, fuzzy
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Δεν έχει επιλεγεί έγκυρος διερμηνέας Python. Τα εξωτερικά πρόσθετα Python "
+"δεν θα είναι διαθέσιμα"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
 #, fuzzy, c-format
 msgid "Found %s"
-msgstr "Το αρχείο δεν βρέθηκε %s."
+msgstr "Βρέθηκε %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Μη έγκυρος διερμηνέας Python 3"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
+#, fuzzy
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Όταν το KiCad API είναι ενεργοποιημένο, προσθήκες και άλλο λογισμικό σε "
+"αυτόν τον υπολογιστή μπορούν να συνδεθούν στο KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
+#, fuzzy
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Ενεργοποίηση KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
+#, fuzzy
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"Ενεργοποιήστε το KiCad API. Κάτι τέτοιο θα επιτρέψει σε λογισμικό τρίτων "
+"κατασκευαστών που εκτελείται στον υπολογιστή σας να έχει πρόσβαση στο KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Διερμηνέας Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Διαδρομή τοποθεσίας διερμηνέα Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 #, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Διαγραφή του τελευταίου σημείου που προστέθηκε στο τρέχον αντικείμενο"
+msgstr "Επιλογή διαδρομής τοποθεσίας διερμηνέα Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Αυτόματη Ονοματοδοσία"
+msgstr "Αυτόματος Εντοπισμός"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
+#, fuzzy
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Δεν επιλέχθηκε διερμηνέας Python. Τα εξωτερικά πρόσθετα Python δεν θα είναι "
+"διαθέσιμα"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
+#, fuzzy
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Κατάσταση διερμηνέα Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1969
 #: common/stroke_params.cpp:37
@@ -5265,9 +5283,8 @@ msgid "Packages and Updates"
 msgstr "Πακέτα και Ενημερώσεις"
 
 #: common/eda_base_frame.cpp:1256
-#, fuzzy
 msgid "Plugins"
-msgstr "Πρόσθετα (%d)"
+msgstr "Πρόσθετα"
 
 #: common/eda_base_frame.cpp:1339
 #, c-format
@@ -5710,7 +5727,7 @@ msgstr "Μπεζιέ"
 #: common/eda_shape.cpp:2006 eeschema/sch_shape.cpp:695
 #, fuzzy
 msgid "Shape Properties"
-msgstr "Ιδιότητες Φύλλου"
+msgstr "Ιδιότητες Σχήματος"
 
 #: common/eda_shape.cpp:2012 eeschema/sch_table.cpp:604
 #: eeschema/sch_tablecell.cpp:190 pcbnew/pcb_table.cpp:490
@@ -6488,19 +6505,17 @@ msgid "Select all cells"
 msgstr "Επιλογή όλων των κελιών"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Η ανανέωση ολοκληρώθηκε"
+msgstr "Αποδοχή Αυτόματης Συμπλήρωσης"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Η ανανέωση ολοκληρώθηκε"
+msgstr "Ακύρωση Αυτόματης Συμπλήρωσης"
 
 #: common/hotkey_store.cpp:46
 #, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Εναλλαγή κλειδώματος"
+msgstr "Εναλλαγή Checkbox"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -6873,7 +6888,7 @@ msgstr "Αναφορές κλάσης δικτύου"
 #: common/layer_id.cpp:125
 #, fuzzy
 msgid "Rule areas"
-msgstr "Περιοχές Κανόνα"
+msgstr "Περιοχές κανόνα"
 
 #: common/layer_id.cpp:126
 msgid "Symbol body outlines"
@@ -7416,7 +7431,7 @@ msgstr "Υπέρβαση του μήκους γραμμής"
 #: common/settings/bom_settings.cpp:124
 #, fuzzy
 msgid "Default Editing"
-msgstr "Προκαθορισμένες μονάδες μέτρησης:"
+msgstr "Προκαθορισμένεη Επεξεργασία"
 
 #: common/settings/bom_settings.cpp:124 common/settings/bom_settings.cpp:145
 #: common/settings/bom_settings.cpp:164 common/settings/bom_settings.cpp:183
@@ -8968,9 +8983,8 @@ msgid "Allegro netlist files"
 msgstr "Αρχεία λίστας δικτύων Allegro"
 
 #: common/wildcards_and_files_ext.cpp:302
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "Αρχείο λίστας δικτύων SPICE"
+msgstr "Αρχεία λίστας δικτύων PADS"
 
 #: common/wildcards_and_files_ext.cpp:308
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -9611,13 +9625,14 @@ msgid "Annotation complete."
 msgstr "Η ονοματοδοσία ολοκληρώθηκε."
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
+#, fuzzy
 msgid "Added items via API"
-msgstr ""
+msgstr "Προστέθηκαν αντικείμενα μέσω API"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
 #, fuzzy
 msgid "Created items via API"
-msgstr "Δημιουργία Γραμμών"
+msgstr "Δημιουργήθηκαν αντικείμενα μέσω API"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -10202,12 +10217,11 @@ msgstr "Ενημέρωση Επιλογών"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
 #, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Ανανέωση Πεδίων Συμβόλων"
+msgstr "Ενημέρωση σχήματος και ακροδεκτών συμβόλου"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Ενημέρωση φίλτρων αποτυπώματος %s σε '%s'."
+msgstr "Ενημέρωση λέξεων κλειδιών και φίλτρων αποτυπώματος"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 msgid "Remove fields if not in library symbol"
@@ -10237,7 +10251,7 @@ msgstr "Ενημέρωση/επαναφορά ορατότητας πεδίων"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
 #, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "Ενημέρωση/επαναφορά μεγέθους και στυλ πεδίων"
+msgstr "Ενημέρωση/επαναφορά μεγέθους και στυλ κειμένου πεδίων"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -10247,16 +10261,15 @@ msgstr "Ενημέρωση/επαναφορά θέσεων πεδίου"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
 #, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "Ενημέρωση/επαναφορά ορατότητας πεδίων"
+msgstr "Ενημέρωση/επαναφορά ορατότητας ονομάτων/αριθμών ακροδεκτών"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
 msgstr "Ενημέρωση/επαναφορά ιδιοτήτων συμβόλου"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:169
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Ορισμός ως σύμβολο ισχύος"
+msgstr "Επαναφορά προσαρμοσμένων συμβόλων ισχύος"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:103
 msgid "Update Symbols from Library"
@@ -10670,24 +10683,20 @@ msgid "Export netlist in legacy KiCad format"
 msgstr "Εξαγωγή των δεδομένων σε μορφή Pcbnew"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:271
-#, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Εξαγωγή των δεδομένων σε μορφή Pcbnew"
+msgstr "Εξαγωγή λίστας δικτύων σε μορφή OrcadPCB2"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:276
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "Εξαγωγή των δεδομένων σε μορφή Pcbnew"
+msgstr "Εξαγωγή λίστας δικτύων σε μορφή Allegro"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:281
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "Εξαγωγή μορφής GenCAD"
+msgstr "Εξαγωγή λίστας δικτύων σε μορφή PADS"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:286
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "Εξαγωγή μορφής GenCAD"
+msgstr "Εξαγωγή λίστας δικτύων σε μορφή CadStar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:294
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
@@ -10695,9 +10704,8 @@ msgid "Export Netlist"
 msgstr "Εξαγωγή Λίστας Δικτύων"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "Εξαγωγή των δεδομένων σε μορφή Pcbnew"
+msgstr "Εξαγωγή λίστας δικτύων σε μορφή SPICE"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:324
 #: eeschema/dialogs/dialog_export_netlist.cpp:383
@@ -10741,8 +10749,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
+#, fuzzy
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Αποθήκευση όλων των δεδομένων ψηφιακών συμβάντων"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid ""
@@ -10765,8 +10774,9 @@ msgstr ""
 "Το %I θα αντικατασταθεί από την διαδρομή τοποθεσίας στη λίστα δικτύων"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:379
+#, fuzzy
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "Εξαγωγή λίστας δικτύων ως .subckt μοντέλο SPICE"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:433
 msgid "Netlist command:"
@@ -12855,9 +12865,8 @@ msgstr ""
 "στις Προτιμήσεις> Επεξεργαστής Σχηματικού > Χρώματα."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:431
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Επεξεργασία Ιδιοτήτων Ακροδέκτη Φύλλου"
+msgstr "Επεξεργασία Ιδιοτήτων Φύλλου"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:470
 #, c-format
@@ -15250,10 +15259,8 @@ msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Αυτή η λειτουργία θα αλλάξει τις τρέχουσες ονομασίες και δεν μπορεί να "
-"αναιρεθεί."
+"Αυτή η ενέργεια θα επαναφέρει τον καθολικό κατάλογο βιβλιοθήκης στο δίσκο "
+"και δεν μπορεί να αναιρεθεί."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:915
 msgid ""
@@ -15675,7 +15682,7 @@ msgstr "Κλάση δικτύου %s δεν έχει οριστεί"
 #: eeschema/erc/erc.cpp:651
 #, fuzzy, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Αδυναμία σύνδεσης σε '%s' "
+msgstr "Τέσσερα αντικείμενα συνδεδεμένα στο %d, %d"
 
 #: eeschema/erc/erc.cpp:723
 msgid "Pin with 'no connection' type is connected"
@@ -19956,9 +19963,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Εκτέλεση Ανάλυσης Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:173
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Φάση σήματος:"
+msgstr "Αντιγραφή Ονομασίας Σήματος"
 
 #: eeschema/sim/simulator_frame_ui.cpp:217
 #: eeschema/sim/simulator_frame_ui.cpp:771
@@ -23097,24 +23103,20 @@ msgstr ""
 "μπορούν να συντονιστούν"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ορισμός σε συγκεκριμένες τιμές:"
+msgstr "Περιορισμός τιμών από σειρά Ε192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -24390,9 +24392,8 @@ msgid "Delete Column"
 msgstr "Διαγραφή Στήλης"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Προβολή ή απόκρυψη %s"
+msgstr "Εμφάνιση προβλημάτων εισαγωγής"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24890,12 +24891,12 @@ msgid "Generate Position File"
 msgstr "Δημιουργία Αρχείου Θέσης"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Έγκυρες επιλογές: front,back,both. Η μορφή gerber υποστηρίζει μόνο \"both\"."
+"Έγκυρες επιλογές: front,back,both. Η μορφή gerber υποστηρίζει μόνο \"front\" "
+"ή \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -25286,6 +25287,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Αγνοεί την ειδοποίηση ενημέρωσης για την νέα έκδοση. Θα εμφανιστεί εκ νέου "
+"για νεότερες εκδόσεις."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -25296,10 +25299,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Κλείσιμο αυτής της ειδοποίησης ενημέρωσης. Θα εμφανιστεί ξανά μετά από "
+"επανεκκίνηση του KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Εκκίνηση περιηγητή ιστού στην ιστοσελίδα ανακοινώσεων έκδοσης."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -25307,7 +25312,7 @@ msgstr "Άνοιγμα Σελίδας Λήψεις"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Μετάβαση στην κατάλληλη σελίδα λήψεων της πλατφόρμας."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -40188,7 +40193,7 @@ msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
 #, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s μέγιστο πλήθος %d; πραγματικό %d)"
+msgstr "(%s ελάχιστο πλήθος %d; πραγματικό %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
 msgid "Too few vias on a connection"
@@ -41300,9 +41305,8 @@ msgstr "Συντόνισε"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2387
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2403
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2429
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Επιλογή τιμής προς ρύθμιση"
+msgstr "Επιλογή πρώτου διαδρόμου προς ρύθμιση."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2471
 msgid "Single track"
@@ -42813,29 +42817,26 @@ msgid "Loading dimension drawings..."
 msgstr "Φόρτωση σχεδίων διαστάσεων..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Γωνιακής διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
 #, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη διάστασης Αναφοράς (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
 #, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Baseline διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Γραμμικής διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Παράβλεψη Ακτινικής διάστασης (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -43009,14 +43010,14 @@ msgid ""
 msgstr ""
 "Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
 "Το αποτύπωμα %s με έδρα %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
-"οποία δεν υποστηρίζεται ακόμη.)"
+"οποία δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3220
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 "Το αποτύπωμα %s με έδρα %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
-"οποία δεν υποστηρίζεται ακόμη.)"
+"οποία δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3266
 #, c-format
@@ -45823,7 +45824,7 @@ msgstr "Δημιουργία από το Επιλεγμένο"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Θα προέκυπτε κενό πολύγωνο"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -49480,7 +49481,7 @@ msgstr "θερμικές εκτονώσεις για PTH"
 #: plugins/3d/vrml/vrml.cpp:239
 #, fuzzy, c-format
 msgid "[INFO] load failed: %s"
-msgstr "Αποτυχία φόρτωσης [INFO]: η γραμμή εισαγωγής είναι πολύ μεγάλη\n"
+msgstr "Αποτυχία φόρτωσης [INFO]: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
