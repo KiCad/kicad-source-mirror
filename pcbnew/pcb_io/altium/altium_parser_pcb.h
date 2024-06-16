@@ -718,6 +718,14 @@ struct ATRACK6
 
 struct ATEXT6
 {
+    enum class STROKE_FONT_TYPE
+    {
+        DEFAULT = 1,
+        SANSSERIF = 2,
+        SERIF = 3
+    };
+
+
     ALTIUM_LAYER layer;
     uint16_t     component;
 
@@ -725,7 +733,7 @@ struct ATEXT6
     uint32_t             height;
     double               rotation;
     uint32_t             strokewidth;
-    ALTIUM_TEXT_POSITION textposition;
+    STROKE_FONT_TYPE     strokefonttype;
 
     bool isBold;
     bool isItalic;

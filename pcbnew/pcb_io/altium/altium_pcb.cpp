@@ -2914,6 +2914,7 @@ void ALTIUM_PCB::ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6
     pad->SetNumber( "" );
     pad->SetNetCode( GetNetCode( aElem.net ) );
 
+    pad->SetKeepTopBottom( false );
     pad->SetPosition( aElem.position );
     pad->SetSize( VECTOR2I( aElem.diameter, aElem.diameter ) );
     pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) );
@@ -3935,6 +3936,7 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
         { "PRINT_DATE", "CURRENT_DATE"},
     };
 
+
     wxString    kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
     BOARD_ITEM* item = pcbText.get();
     EDA_TEXT*   text = pcbText.get();
@@ -3947,7 +3949,7 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
         item = pcbTextbox.get();
         text = pcbTextbox.get();
         pcbTextbox->SetPosition( aElem.position );
-        pcbTextbox->SetRectangle( -aElem.textbox_rect_height, aElem.textbox_rect_width );
+        pcbTextbox->SetRectangle( aElem.textbox_rect_height, aElem.textbox_rect_width );
 
         switch( aElem.textbox_rect_justification )
         {
@@ -4046,10 +4048,11 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 
     wxString  kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
 
-    text->SetText(kicadText);
-    text->SetKeepUpright( false );
-    item->SetLayer( aLayer );
-    item->SetIsKnockout( aElem.isInverted );
+    fpText->SetText(kicadText);
+    fpText->SetKeepUpright( false );
+    fpText->SetLayer( aLayer );
+    fpText->SetPosition( aElem.position );
+    fpText->SetIsKnockout( aElem.isInverted );
 
     if( isTextbox )
     {
@@ -4099,7 +4102,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         field->SetPosition( aElem.position );
     }
 
-    ConvertTexts6ToEdaTextSettings( aElem, *text );
+    ConvertTexts6ToEdaTextSettings( aElem, text );
 
     if( toAdd )
     {
@@ -4138,6 +4141,9 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
     aEdaText->SetItalic( aElem.isItalic );
     aEdaText->SetMirrored( aElem.isMirrored );
     aEdaText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+
+    aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 }
 
 
