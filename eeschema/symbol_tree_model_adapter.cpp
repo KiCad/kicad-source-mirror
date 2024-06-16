@@ -27,13 +27,10 @@
 #include <project/project_file.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialogs/html_message_box.h>
-#include <eda_pattern_match.h>
 #include <generate_alias_info.h>
 #include <sch_base_frame.h>
 #include <locale_io.h>
-#include <lib_symbol.h>
 #include <symbol_async_loader.h>
-#include <symbol_lib_table.h>
 #include <symbol_tree_model_adapter.h>
 #include <string_utils.h>
 
@@ -161,8 +158,11 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
                     wxString desc = row->GetSubLibraryDescription( lib );
 
                     if( !parentDesc.IsEmpty() )
-                        desc = wxString::Format( wxT( "%s (%s)" ), parentDesc,
-                                                 ( desc.IsEmpty() ) ? lib : desc );
+                    {
+                        desc = wxString::Format( wxT( "%s (%s)" ),
+                                                 parentDesc,
+                                                 desc.IsEmpty() ? lib : desc );
+                    }
 
                     UTF8 utf8Lib( lib );
 

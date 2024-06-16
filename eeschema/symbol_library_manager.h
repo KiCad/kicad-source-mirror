@@ -71,9 +71,8 @@ public:
 
 private:
     std::unique_ptr<SCH_SCREEN> m_screen;
-
-    LIB_SYMBOL* m_symbol;   // Working copy
-    LIB_SYMBOL* m_original; // Initial state of the symbol
+    LIB_SYMBOL*                 m_symbol;   // Working copy
+    LIB_SYMBOL*                 m_original; // Initial state of the symbol
 };
 
 
@@ -81,7 +80,10 @@ private:
 class LIB_BUFFER
 {
 public:
-    LIB_BUFFER( const wxString& aLibrary ) : m_libName( aLibrary ), m_hash( 1 ) {}
+    LIB_BUFFER( const wxString& aLibrary ) :
+            m_libName( aLibrary ),
+            m_hash( 1 )
+    {}
 
     bool IsModified() const
     {
@@ -160,11 +162,11 @@ private:
      */
     int removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER>& aSymbolBuf );
 
+private:
     std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_symbols;
-
-    ///< Buffer for deleted symbols until library is saved.
-    std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_deleted;
-    const wxString                             m_libName; // Buffered library name
+    std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_deleted;   ///< Buffer for deleted symbols until
+                                                            ///<   library is saved.
+    const wxString                             m_libName;   ///< Buffered library name
     int                                        m_hash;
 };
 
@@ -391,11 +393,10 @@ protected:
      */
     LIB_BUFFER& getLibraryBuffer( const wxString& aLibrary );
 
-    ///< The library buffers
-    std::map<wxString, LIB_BUFFER> m_libs;
-
-    SCH_BASE_FRAME&    m_frame;        ///< Parent frame
-    LIB_LOGGER*        m_logger;
+protected:
+    std::map<wxString, LIB_BUFFER> m_libs;       ///< The library buffers
+    SCH_BASE_FRAME&                m_frame;      ///< Parent frame
+    LIB_LOGGER*                    m_logger;
 };
 
 #endif /* SYMBOL_LIBRARY_MANAGER_H */

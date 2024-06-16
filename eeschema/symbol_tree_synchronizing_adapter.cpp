@@ -207,8 +207,7 @@ SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::ite
 {
     LIB_TREE_NODE* node = aLibNodeIt->get();
     m_libHashes.erase( node->m_Name );
-    auto it = m_tree.m_Children.erase( aLibNodeIt );
-    return it;
+    return m_tree.m_Children.erase( aLibNodeIt );
 }
 
 
