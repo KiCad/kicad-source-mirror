@@ -1019,6 +1019,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
 
     if( subrecord1 < 123 )
     {
+        fonttype = ALTIUM_TEXT_TYPE::STROKE;
         aReader.SkipSubrecord();
         return;
     }
