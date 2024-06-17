@@ -731,6 +731,17 @@ struct ATEXT6
     bool isItalic;
     bool isMirrored;
     bool isInverted;
+    bool isInvertedRect;
+    uint32_t inverted_borderwidth;
+    uint32_t textbox_rect_width;
+    uint32_t textbox_rect_height;
+    uint32_t textbox_rect_offset;
+
+    // Justification only applies when there is a text box size specified
+    // Then, the text is justified within the box
+    ALTIUM_TEXT_POSITION textbox_rect_justification;
+
+    uint32_t widestring_index;
 
     bool isComment;
     bool isDesignator;

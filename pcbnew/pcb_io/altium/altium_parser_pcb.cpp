@@ -1035,9 +1035,13 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     if( subrecord1 <= 230 )
         textposition = ALTIUM_TEXT_POSITION::LEFT_BOTTOM;
 
-    aReader.Skip( 27 );
-    fonttype = static_cast<ALTIUM_TEXT_TYPE>( aReader.Read<uint8_t>() );
+    // An inverted rect in Altium is like a text box with the text inverted.
+    isInvertedRect = aReader.Read<uint8_t>() != 0;
 
+    textbox_rect_width = aReader.ReadKicadUnit();
+    textbox_rect_height = aReader.ReadKicadUnit();
+    textbox_rect_justification = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
+    textbox_rect_offset = aReader.ReadKicadUnit();
     aReader.SkipSubrecord();
 
     // Subrecord 2 - Legacy 8bit string, max 255 chars, unknown codepage
