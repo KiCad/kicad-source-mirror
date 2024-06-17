@@ -1040,14 +1040,13 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     widestring_index = aReader.Read<uint32_t>();
     aReader.Skip( 4 );
 
-    // An inverted rect in Altium is like a text box with the text inverted.  The box has a defined
-    // width and height, justification and offet (indent).  This is not currently supported in KiCad.
+    // An inverted rect in Altium is like a text box with the text inverted.
     isInvertedRect = aReader.Read<uint8_t>() != 0;
-    inverted_rect_width = aReader.ReadKicadUnit();
-    inverted_rect_height = aReader.ReadKicadUnit();
-    inverted_rect_justification = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
-    inverted_rect_offset = aReader.ReadKicadUnit();
 
+    textbox_rect_width = aReader.ReadKicadUnit();
+    textbox_rect_height = aReader.ReadKicadUnit();
+    textbox_rect_justification = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
+    textbox_rect_offset = aReader.ReadKicadUnit();
     aReader.SkipSubrecord();
 
     // Subrecord 2 - Legacy 8bit string, max 255 chars, unknown codepage
