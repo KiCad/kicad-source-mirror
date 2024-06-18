@@ -1078,7 +1078,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
                                              aShape.GetBezierC2(), aShape.GetEnd() };
         BEZIER_POLY converter( ctrlPoints );
         std::vector<VECTOR2I> points;
-        converter.GetPoly( points, aShape.GetStroke().GetWidth() );
+        converter.GetPoly( points, ARC_HIGH_DEF );
 
         wxXmlNode* point_node = appendNode( polyline_node, "PolyBegin" );
         addXY( point_node, points[0] );

@@ -266,7 +266,7 @@ EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data, int aArcMinSegLen, b
             BEZIER_POLY           converter( ctrlPoints );
 
             std::vector<VECTOR2I> bezierPoints;
-            converter.GetPoly( bezierPoints, aArcMinSegLen, 16 );
+            converter.GetPoly( bezierPoints, aArcMinSegLen );
 
             chain.Append( bezierPoints );
 

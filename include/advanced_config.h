@@ -509,14 +509,14 @@ public:
     double m_PcbSelectionVisibilityRatio;
 
     /**
-     * Length of the minimum segment for the outline decomposer.  This is in IU, so
-     * it is nm in pcbnew and 100nm in eeschema.
+     * Deviation between font's bezier curve ideal and the poligonized curve.  This
+     * is 1/16 of the font's internal units.
      *
-     * Setting name: "MinimumSegmentLength"
-     * Valid values: 10 to 1000
-     * Default value: 50
+     * Setting name: "FontErrorSize"
+     * Valid values: 0.01 to 100
+     * Default value: 8
      */
-    int m_MinimumSegmentLength;
+    double m_FontErrorSize;
 
     /**
      * OCE (STEP/IGES) 3D Plugin Tesselation Linear Deflection

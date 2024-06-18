@@ -95,7 +95,7 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName, int aFaceIndex )
         // m_face = handle to face object
         // 0 = char width in 1/64th of points ( 0 = same as char height )
         // faceSize() = char height in 1/64th of points
-        // GLYPH_RESOLUTION = horizontal device resolution (288dpi, 4x default)
+        // GLYPH_RESOLUTION = horizontal device resolution (1152dpi, 16x default)
         // 0 = vertical device resolution ( 0 = same as horizontal )
         FT_Set_Char_Size( m_face, 0, faceSize(), GLYPH_RESOLUTION, 0 );
     }

@@ -462,8 +462,6 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
     SHAPE_LINE_CHAIN result;
     VECTOR2D         prevPt;
 
-    double bezierMinSegLen = polyData.size() < 300 ? aArcAccuracy : aArcAccuracy * 10;
-
     for( int i = 0; i < polyData.size(); i++ )
     {
         nlohmann::json val = polyData.at( i );
@@ -554,7 +552,7 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
                 BEZIER_POLY           converter( ctrlPoints );
 
                 std::vector<VECTOR2I> bezierPoints;
-                converter.GetPoly( bezierPoints, bezierMinSegLen, 16 );
+                converter.GetPoly( bezierPoints, aArcAccuracy );
 
                 result.Append( bezierPoints );
 

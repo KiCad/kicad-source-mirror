@@ -40,12 +40,6 @@
 namespace KIFONT
 {
 
-constexpr int GLYPH_DEFAULT_DPI = 72;  ///< FreeType default
-// The FreeType default of 72 DPI is not enough for outline decomposition;
-// so we'll use something larger than that.
-constexpr int GLYPH_RESOLUTION  = 288;
-constexpr double GLYPH_SIZE_SCALER = GLYPH_DEFAULT_DPI / (double) GLYPH_RESOLUTION;
-
 
 class GAL_API GLYPH
 {

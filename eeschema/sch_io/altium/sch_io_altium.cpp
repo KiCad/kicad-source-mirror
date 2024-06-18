@@ -1947,6 +1947,7 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
                 }
 
                 bezier->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
+                bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() / 2 );
             }
         }
     }
@@ -2350,7 +2351,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             schbezier->SetBezierC2( bezier.C2 );
             schbezier->SetEnd( bezier.End );
             schbezier->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
-            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth );
+            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth / 2 );
 
             currentScreen->Append( schbezier );
         }
@@ -2413,7 +2414,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             }
 
             SetLibShapeLine( elem, schbezier, ALTIUM_SCH_RECORD::ELLIPTICAL_ARC );
-            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth );
+            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth / 2 );
         }
     }
 }

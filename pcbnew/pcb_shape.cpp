@@ -267,6 +267,7 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
         SetBezierC1( kiapi::common::UnpackVector2( msg.bezier().control1() ) );
         SetBezierC2( kiapi::common::UnpackVector2( msg.bezier().control2() ) );
         SetEnd( kiapi::common::UnpackVector2( msg.bezier().end() ) );
+        RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
     }
 
     return true;
@@ -568,7 +569,7 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
             std::swap( m_start, m_end );
 
         if( GetShape() == SHAPE_T::BEZIER )
-            RebuildBezierToSegmentsPointsList( GetWidth() );
+            RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
 
         break;
 

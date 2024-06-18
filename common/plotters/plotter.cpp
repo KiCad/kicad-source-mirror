@@ -244,7 +244,7 @@ void PLOTTER::BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
     BEZIER_POLY bezier_converter( ctrlPoints );
 
     std::vector<VECTOR2I> approxPoints;
-    bezier_converter.GetPoly( approxPoints, minSegLen );
+    bezier_converter.GetPoly( approxPoints, aTolerance );
 
     SetCurrentLineWidth( aLineThickness );
     MoveTo( aStart );

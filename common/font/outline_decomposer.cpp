@@ -111,7 +111,8 @@ int OUTLINE_DECOMPOSER::cubicTo( const FT_Vector* aFirstControlPoint,
     bezier.push_back( toVector2D( aEndPoint ) );
 
     std::vector<VECTOR2D> result;
-    decomposer->approximateBezierCurve( result, bezier );
+    BEZIER_POLY           converter( bezier );
+    converter.GetPoly( result, ADVANCED_CFG::GetCfg().m_FontErrorSize );
 
     for( const VECTOR2D& p : result )
         decomposer->addContourPoint( p );
@@ -144,63 +145,6 @@ bool OUTLINE_DECOMPOSER::OutlineToSegments( std::vector<CONTOUR>* aContours )
         c.m_Winding = winding( c.m_Points );
 
     return true;
-}
-
-
-// use converter in kimath
-bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( std::vector<VECTOR2D>&       aResult,
-                                                          const std::vector<VECTOR2D>& aBezier ) const
-{
-    wxASSERT( aBezier.size() == 3 );
-
-    // BEZIER_POLY only handles cubic Bezier curves, even though the
-    // comments say otherwise...
-    //
-    // Quadratic to cubic Bezier conversion:
-    // cpn = Cubic Bezier control points (n = 0..3, 4 in total)
-    // qpn = Quadratic Bezier control points (n = 0..2, 3 in total)
-    // cp0 = qp0, cp1 = qp0 + 2/3 * (qp1 - qp0), cp2 = qp2 + 2/3 * (qp1 - qp2), cp3 = qp2
-
-    std::vector<VECTOR2D> cubic;
-    cubic.reserve( 4 );
-
-    cubic.push_back( aBezier[0] );                                           // cp0
-    cubic.push_back( aBezier[0] + ( ( aBezier[1] - aBezier[0] ) * 2 / 3 ) ); // cp1
-    cubic.push_back( aBezier[2] + ( ( aBezier[1] - aBezier[2] ) * 2 / 3 ) ); // cp2
-    cubic.push_back( aBezier[2] );                                           // cp3
-
-    return approximateCubicBezierCurve( aResult, cubic );
-}
-
-
-bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( std::vector<VECTOR2D>&       aResult,
-                                                      const std::vector<VECTOR2D>& aCubicBezier ) const
-{
-    wxASSERT( aCubicBezier.size() == 4 );
-
-    static int minimumSegmentLength = ADVANCED_CFG::GetCfg().m_MinimumSegmentLength;
-    BEZIER_POLY   converter( aCubicBezier );
-    converter.GetPoly( aResult, minimumSegmentLength );
-
-    return true;
-}
-
-
-bool OUTLINE_DECOMPOSER::approximateBezierCurve( std::vector<VECTOR2D>&       aResult,
-                                                 const std::vector<VECTOR2D>& aBezier ) const
-{
-    switch( aBezier.size() )
-    {
-    case 4: // cubic
-        return approximateCubicBezierCurve( aResult, aBezier );
-
-    case 3: // quadratic
-        return approximateQuadraticBezierCurve( aResult, aBezier );
-
-    default:
-        // error, only 3 and 4 are acceptable values
-        return false;
-    }
 }
 
 

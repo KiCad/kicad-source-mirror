@@ -250,7 +250,7 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
 
     std::vector<VECTOR2I> curve_pts;
     curve_pts.reserve( aParams.m_CurveSegCount );
-    BEZIER_POLY( pts[1], tangentB, tangentC, pts[2] ).GetPoly( curve_pts, 0, aParams.m_CurveSegCount );
+    BEZIER_POLY( pts[1], tangentB, tangentC, pts[2] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
@@ -258,7 +258,7 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
     aPoly.push_back( pts[3] );
 
     curve_pts.clear();
-    BEZIER_POLY( pts[4], tangentE, tangentA, pts[0] ).GetPoly( curve_pts, 0, aParams.m_CurveSegCount );
+    BEZIER_POLY( pts[4], tangentE, tangentA, pts[0] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
@@ -319,7 +319,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     ctrl2.x += bias.x;
     ctrl2.y += bias.y;
 
-    BEZIER_POLY( aPts[1], ctrl1, ctrl2, aPts[2] ).GetPoly( curve_pts, 0, aParams.m_CurveSegCount );
+    BEZIER_POLY( aPts[1], ctrl1, ctrl2, aPts[2] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
@@ -347,7 +347,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     ctrl2.x += bias.x;
     ctrl2.y += bias.y;
 
-    BEZIER_POLY( aPts[4], ctrl1, ctrl2, aPts[0] ).GetPoly( curve_pts, 0, aParams.m_CurveSegCount );
+    BEZIER_POLY( aPts[4], ctrl1, ctrl2, aPts[0] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );

@@ -1407,7 +1407,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
             else if( isModified( m_editPoints->Point( BEZIER_END ) ) )
                 shape->SetEnd( m_editPoints->Point( BEZIER_END ).GetPosition() );
 
-            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
+            shape->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
             break;
 
         default:        // suppress warnings

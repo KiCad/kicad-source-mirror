@@ -513,7 +513,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     m_item->SetLayer( ToLAYER_ID( layer ) );
 
-    m_item->RebuildBezierToSegmentsPointsList( m_item->GetWidth() );
+    m_item->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
 
     if( m_item->IsOnCopperLayer() )
         m_item->SetNetCode( m_netSelector->GetSelectedNetcode() );

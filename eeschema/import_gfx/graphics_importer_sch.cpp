@@ -207,7 +207,7 @@ void GRAPHICS_IMPORTER_SCH::AddSpline( const VECTOR2D& aStart,
     spline->SetBezierC1( MapCoordinate( aBezierControl1 ) );
     spline->SetBezierC2( MapCoordinate( aBezierControl2 ) );
     spline->SetEnd( MapCoordinate( aEnd ) );
-    spline->RebuildBezierToSegmentsPointsList( aStroke.GetWidth() );
+    spline->RebuildBezierToSegmentsPointsList( aStroke.GetWidth() / 2 );
 
     // If the spline is degenerated (i.e. a segment) add it as segment or discard it if
     // null (i.e. very small) length

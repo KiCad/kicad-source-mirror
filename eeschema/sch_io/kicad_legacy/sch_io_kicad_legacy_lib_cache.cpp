@@ -1381,7 +1381,7 @@ SCH_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadBezier( LINE_READER& aReader )
     pt.y = -schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     bezier->SetEnd( pt );
 
-    bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() );
+    bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() / 2 );
 
     if( *line != 0 )
         bezier->SetFillMode( parseFillMode( aReader, line, &line ) );

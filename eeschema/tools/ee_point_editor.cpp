@@ -739,7 +739,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
             shape->SetBezierC2( m_editPoints->Point( BEZIER_CTRL_PT2 ).GetPosition() );
             shape->SetEnd( m_editPoints->Point( BEZIER_END ).GetPosition() );
 
-            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
+            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() / 2 );
             break;
 
         default:

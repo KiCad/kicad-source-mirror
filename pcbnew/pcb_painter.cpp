@@ -1937,22 +1937,27 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 pointCtrl.push_back( aShape->GetEnd() );
 
                 BEZIER_POLY converter( pointCtrl );
-                converter.GetPoly( output, thickness );
+                converter.GetPoly( output, m_maxError );
 
-                m_gal->DrawSegmentChain( output, thickness );
+                m_gal->DrawSegmentChain( aShape->GetBezierPoints(), thickness );
             }
             else
             {
-            m_gal->SetIsFill( aShape->IsFilled() );
-            m_gal->SetIsStroke( thickness > 0 );
-            m_gal->SetLineWidth( thickness );
+                m_gal->SetIsFill( aShape->IsFilled() );
+                m_gal->SetIsStroke( thickness > 0 );
+                m_gal->SetLineWidth( thickness );
 
-                // Use thickness as filter value to convert the curve to polyline when the curve
-                // is not supported
-                m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
-                                  VECTOR2D( aShape->GetBezierC1() ),
-                                  VECTOR2D( aShape->GetBezierC2() ),
-                                  VECTOR2D( aShape->GetEnd() ), thickness );
+                if( aShape->GetBezierPoints().size() > 2 )
+                {
+                    m_gal->DrawPolygon( aShape->GetBezierPoints() );
+                }
+                else
+                {
+                    m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
+                                      VECTOR2D( aShape->GetBezierC1() ),
+                                      VECTOR2D( aShape->GetBezierC2() ),
+                                      VECTOR2D( aShape->GetEnd() ), m_maxError );
+                }
             }
 
             break;

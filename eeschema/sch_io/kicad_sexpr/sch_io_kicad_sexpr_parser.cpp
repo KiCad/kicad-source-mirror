@@ -1315,7 +1315,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolBezier()
         }
     }
 
-    bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() );
+    bezier->RebuildBezierToSegmentsPointsList( bezier->GetPenWidth() / 2 );
 
     return bezier.release();
 }

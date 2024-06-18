@@ -104,7 +104,7 @@ static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
 static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
 static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibilityRatio" );
-static const wxChar MinimumSegmentLength[] = wxT( "MinimumSegmentLength" );
+static const wxChar FontErrorSize[] = wxT( "FontErrorSize" );
 static const wxChar OcePluginLinearDeflection[] = wxT( "OcePluginLinearDeflection" );
 static const wxChar OcePluginAngularDeflection[] = wxT( "OcePluginAngularDeflection" );
 static const wxChar TriangulateSimplificationLevel[] = wxT( "TriangulateSimplificationLevel" );
@@ -257,7 +257,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_PcbSelectionVisibilityRatio = 1.0;
 
-    m_MinimumSegmentLength      = 50;
+    m_FontErrorSize             = 16;
 
     m_OcePluginLinearDeflection = 0.14;
     m_OcePluginAngularDeflection = 30;
@@ -469,9 +469,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                   &m_PcbSelectionVisibilityRatio,
                                                   m_PcbSelectionVisibilityRatio, 0.0, 1.0 ) );
 
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MinimumSegmentLength,
-                                                  &m_MinimumSegmentLength,
-                                                  m_MinimumSegmentLength, 10, 1000 ) );
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::FontErrorSize,
+                                                  &m_FontErrorSize,
+                                                  m_FontErrorSize, 0.01, 100 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::OcePluginLinearDeflection,
                                                     &m_OcePluginLinearDeflection,

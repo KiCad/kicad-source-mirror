@@ -52,15 +52,32 @@ public:
      * Convert a Bezier curve to a polygon.
      *
      * @param aOutput will be used as an output vector storing polygon points.
-     * @param aMinSegLen is the min dist between 2 successive points.
-     * It can be used to reduce the number of points.
-     * (the last point is always generated)
-     * aMaxSegCount is the max number of segments created
+     * @param aMaxError maximum error in IU between the curve and the polygon.
      */
-    void GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen = 0, int aMaxSegCount = 32 );
-    void GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen = 0.0, int aMaxSegCount = 32 );
+    void GetPoly( std::vector<VECTOR2I>& aOutput, int aMaxError = 10 );
+    void GetPoly( std::vector<VECTOR2D>& aOutput, double aMaxError = 10.0 );
 
 private:
+
+    void getQuadPoly( std::vector<VECTOR2D>& aOutput, double aMaxError );
+    void getCubicPoly( std::vector<VECTOR2D>& aOutput, double aMaxError );
+
+    int findInflectionPoints( double& aT1, double& aT2 );
+    int numberOfInflectionPoints();
+
+    double thirdControlPointDeviation();
+
+    void subdivide( double aT, BEZIER_POLY& aLeft, BEZIER_POLY& aRight );
+    void recursiveSegmentation( std::vector<VECTOR2D>& aOutput, double aMaxError );
+
+    void cubicParabolicApprox( std::vector<VECTOR2D>& aOutput, double aMaxError );
+
+    bool isNaN() const;
+
+    bool isFlat( double aMaxError ) const;
+
+    VECTOR2D eval( double t );
+
     double m_minSegLen;
 
     ///< Control points

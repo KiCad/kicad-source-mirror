@@ -395,11 +395,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                     }
 
                     // Ensure the approximated Bezier shape is built
-                    // a good value is between (Bezier curve width / 2) and (Bezier curve width)
-                    // ( and at least 0.05 mm to avoid very small segments)
-                    int min_segm_length = std::max( pcbIUScale.mmToIU( 0.05 ),
-                                                    graphic->GetWidth() );
-                    graphic->RebuildBezierToSegmentsPointsList( min_segm_length );
+                    graphic->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
 
                     if( reverse )
                     {
