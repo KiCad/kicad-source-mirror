@@ -57,7 +57,6 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
 
 KIWAY_PLAYER::~KIWAY_PLAYER() throw()
 {
-
     // socket server must be destructed before we complete
     // destructing the frame or else we could crash
     // as the socket server holds a reference to this frame
@@ -69,6 +68,20 @@ KIWAY_PLAYER::~KIWAY_PLAYER() throw()
         delete m_socketServer;
         m_socketServer = nullptr;
     }
+
+    // remove active sockets as well
+    for( wxSocketBase* socket : m_sockets )
+    {
+        if( !socket )
+            continue;
+
+        // ensure any event handling stops
+        socket->Notify( false );
+
+        delete socket;
+    }
+
+    m_sockets.clear();
 }
 
 
