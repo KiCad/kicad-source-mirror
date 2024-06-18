@@ -2250,23 +2250,26 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             m_out->Print( 0, ")" );
         }
 
-        bool front = via->Padstack().FrontOuterLayers().has_solder_mask.value_or( false );
-        bool back = via->Padstack().BackOuterLayers().has_solder_mask.value_or( false );
+        std::optional<bool> front = via->Padstack().FrontOuterLayers().has_solder_mask;
+        std::optional<bool> back = via->Padstack().BackOuterLayers().has_solder_mask;
 
-        if( front || back )
+        if( front.has_value() || back.has_value() )
         {
-            m_out->Print( 0, " (tenting " );
+            if( front.value_or( false ) || back.value_or( false ) )
+            {
+                m_out->Print( 0, " (tenting " );
 
-            if( via->Padstack().FrontOuterLayers().has_solder_mask.value_or( false ) )
-                m_out->Print( 0, " front" );
-            if( via->Padstack().BackOuterLayers().has_solder_mask.value_or( false ) )
-                m_out->Print( 0, " back" );
+                if( front.value_or( false ) )
+                    m_out->Print( 0, " front" );
+                if( back.value_or( false ) )
+                    m_out->Print( 0, " back" );
 
-            m_out->Print( 0, ")" );
-        }
-        else
-        {
-            m_out->Print( 0, " (tenting none)" );
+                m_out->Print( 0, ")" );
+            }
+            else
+            {
+                m_out->Print( 0, " (tenting none)" );
+            }
         }
 
         if( !isDefaultTeardropParameters( via->GetTeardropParams() ) )
