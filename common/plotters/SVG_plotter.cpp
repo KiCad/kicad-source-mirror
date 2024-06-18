@@ -914,7 +914,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
 
         fprintf( m_outputFile,
                  "textLength=\"%.*f\" font-size=\"%.*f\" lengthAdjust=\"spacingAndGlyphs\"\n"
-                 "text-anchor=\"%s\" opacity=\"0\">%s</text>\n",
+                 "text-anchor=\"%s\" opacity=\"0\" stroke-opacity=\"0\">%s</text>\n",
                  m_precision,
                  sz_dev.x,
                  m_precision,
