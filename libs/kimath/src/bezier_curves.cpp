@@ -180,7 +180,7 @@ static double approx_int( double x )
     return x / ( 1.0 - d + std::pow( d4 + x * x * 0.25, 0.25 ) );
 }
 
-static constexpr double approx_inv_int( double x )
+static double approx_inv_int( double x )
 {
     const double p = 0.39538816;
     return x * ( 1.0 - p + std::sqrt( p * p + 0.25 * x * x ) );
