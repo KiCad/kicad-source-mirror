@@ -646,6 +646,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         ID_REMOVE_EXCLUSION,
         ID_REMOVE_EXCLUSION_ALL,
         ID_ADD_EXCLUSION,
+        ID_ADD_EXCLUSION_WITH_COMMENT,
         ID_ADD_EXCLUSION_ALL,
         ID_INSPECT_VIOLATION,
         ID_SET_SEVERITY_TO_ERROR,
@@ -656,12 +657,12 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     if( rcItem->GetParent()->IsExcluded() )
     {
-        menu.Append( ID_EDIT_EXCLUSION_COMMENT,
-                     _( "Edit exclusion comment..." ) );
-
         menu.Append( ID_REMOVE_EXCLUSION,
                      _( "Remove exclusion for this violation" ),
                      wxString::Format( _( "It will be placed back in the %s list" ), listName ) );
+
+        menu.Append( ID_EDIT_EXCLUSION_COMMENT,
+                     _( "Edit exclusion comment..." ) );
 
         if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
         {
@@ -674,7 +675,11 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     else
     {
         menu.Append( ID_ADD_EXCLUSION,
-                     _( "Exclude this violation..." ),
+                     _( "Exclude this violation" ),
+                     wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
+
+        menu.Append( ID_ADD_EXCLUSION_WITH_COMMENT,
+                     _( "Exclude with comment..." ),
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
 
         if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
@@ -719,13 +724,14 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
                  _( "Open the Board Setup... dialog" ) );
 
     bool modified = false;
+    int  command = GetPopupMenuSelectionFromUser( menu );
 
-    switch( GetPopupMenuSelectionFromUser( menu ) )
+    switch( command )
     {
     case ID_EDIT_EXCLUSION_COMMENT:
         if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() ) )
         {
-            WX_TEXT_ENTRY_DIALOG dlg( this, _( "Optional comment:" ), _( "Exclusion Comment" ),
+            WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
                                       marker->GetComment(), true );
 
             if( dlg.ShowModal() == wxID_CANCEL )
@@ -771,19 +777,27 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case ID_ADD_EXCLUSION:
+    case ID_ADD_EXCLUSION_WITH_COMMENT:
         if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() ) )
         {
-            WX_TEXT_ENTRY_DIALOG dlg( this, _( "Optional comment:" ), _( "Exclusion Comment" ),
-                                      wxEmptyString, true );
+            wxString comment;
 
-            if( dlg.ShowModal() == wxID_CANCEL )
-                break;
+            if( command == ID_ADD_EXCLUSION_WITH_COMMENT )
+            {
+                WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
+                                          wxEmptyString, true );
 
-            marker->SetExcluded( true, dlg.GetValue() );
+                if( dlg.ShowModal() == wxID_CANCEL )
+                    break;
+
+                comment = dlg.GetValue();
+            }
+
+            marker->SetExcluded( true, comment );
 
             wxString serialized = marker->SerializeToString();
             m_frame->GetDesignSettings().m_DrcExclusions.insert( serialized );
-            m_frame->GetDesignSettings().m_DrcExclusionComments[ serialized ] = dlg.GetValue();
+            m_frame->GetDesignSettings().m_DrcExclusionComments[ serialized ] = comment;
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {

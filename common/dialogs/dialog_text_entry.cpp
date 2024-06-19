@@ -31,7 +31,11 @@ WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent,
                                             bool aExtraWidth ) :
     WX_TEXT_ENTRY_DIALOG_BASE( aParent, wxID_ANY, aCaption, wxDefaultPosition, wxDefaultSize )
 {
-    m_label->SetLabel( aFieldLabel );
+    if( aFieldLabel.IsEmpty() )
+        m_label->Hide();
+    else
+        m_label->SetLabel( aFieldLabel );
+
     m_textCtrl->SetValue( aDefaultValue );
     m_textCtrl->SetMinSize( FromDIP( aExtraWidth ? wxSize( 700, -1 ) : wxSize( 300, -1 ) ) );
 

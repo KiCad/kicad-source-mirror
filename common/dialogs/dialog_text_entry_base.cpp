@@ -19,12 +19,12 @@ WX_TEXT_ENTRY_DIALOG_BASE::WX_TEXT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 
 	m_label = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_label->Wrap( -1 );
-	m_ContentSizer->Add( m_label, 0, wxALL|wxEXPAND, 5 );
+	m_ContentSizer->Add( m_label, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_textCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrl->SetMinSize( wxSize( 300,-1 ) );
 
-	m_ContentSizer->Add( m_textCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_ContentSizer->Add( m_textCtrl, 0, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );

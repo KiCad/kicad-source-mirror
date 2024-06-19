@@ -626,6 +626,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         ID_REMOVE_EXCLUSION,
         ID_REMOVE_EXCLUSION_ALL,
         ID_ADD_EXCLUSION,
+        ID_ADD_EXCLUSION_WITH_COMMENT,
         ID_ADD_EXCLUSION_ALL,
         ID_INSPECT_VIOLATION,
         ID_EDIT_PIN_CONFLICT_MAP,
@@ -638,17 +639,21 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     if( rcItem->GetParent()->IsExcluded() )
     {
-        menu.Append( ID_EDIT_EXCLUSION_COMMENT,
-                     _( "Edit exclusion comment..." ) );
-
         menu.Append( ID_REMOVE_EXCLUSION,
                      _( "Remove exclusion for this violation" ),
                      wxString::Format( _( "It will be placed back in the %s list" ), listName ) );
+
+        menu.Append( ID_EDIT_EXCLUSION_COMMENT,
+                     _( "Edit exclusion comment..." ) );
     }
     else
     {
         menu.Append( ID_ADD_EXCLUSION,
-                     _( "Exclude this violation..." ),
+                     _( "Exclude this violation" ),
+                     wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
+
+        menu.Append( ID_ADD_EXCLUSION_WITH_COMMENT,
+                     _( "Exclude with comment..." ),
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
     }
 
@@ -707,13 +712,14 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     }
 
     bool modified = false;
+    int  command = GetPopupMenuSelectionFromUser( menu );
 
-    switch( GetPopupMenuSelectionFromUser( menu ) )
+    switch( command )
     {
     case ID_EDIT_EXCLUSION_COMMENT:
         if( SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() ) )
         {
-            WX_TEXT_ENTRY_DIALOG dlg( this, _( "Optional comment:" ), _( "Exclusion Comment" ),
+            WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
                                       marker->GetComment(), true );
 
             if( dlg.ShowModal() == wxID_CANCEL )
@@ -742,15 +748,23 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case ID_ADD_EXCLUSION:
+    case ID_ADD_EXCLUSION_WITH_COMMENT:
         if( SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() ) )
         {
-            WX_TEXT_ENTRY_DIALOG dlg( this, _( "Optional comment:" ), _( "Exclusion Comment" ),
-                                      wxEmptyString, true );
+            wxString comment;
 
-            if( dlg.ShowModal() == wxID_CANCEL )
-                break;
+            if( command == ID_ADD_EXCLUSION_WITH_COMMENT )
+            {
+                WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
+                                          wxEmptyString, true );
 
-            marker->SetExcluded( true, dlg.GetValue() );
+                if( dlg.ShowModal() == wxID_CANCEL )
+                    break;
+
+                comment = dlg.GetValue();
+            }
+
+            marker->SetExcluded( true, comment );
 
             m_parent->GetCanvas()->GetView()->Update( marker );
 

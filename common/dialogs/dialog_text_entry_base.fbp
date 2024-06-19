@@ -73,7 +73,7 @@
             <property name="permission">public</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALL|wxEXPAND</property>
+              <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxStaticText" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -135,7 +135,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
+              <property name="flag">wxEXPAND|wxALL</property>
               <property name="proportion">0</property>
               <object class="wxTextCtrl" expanded="false">
                 <property name="BottomDockable">1</property>
