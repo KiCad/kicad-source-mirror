@@ -244,7 +244,7 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndCenter( const VECTOR2I& aStart, const
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
     VECTOR2I center = GetCenter();
-    double   radius = ( center - m_start ).EuclideanNorm();
+    double   radius = VECTOR2D( center - m_start ).EuclideanNorm();
     SHAPE_CIRCLE circle( center, radius );
     ecoord   clearance_sq = SEG::Square( aClearance );
 
@@ -430,7 +430,7 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
         return false;
 
     VECTOR2L  center = GetCenter();
-    double    radius = ( center - m_start ).EuclideanNorm();
+    double    radius = VECTOR2D( center - m_start ).EuclideanNorm();
     CIRCLE    fullCircle( center, radius );
     VECTOR2D  nearestPt = fullCircle.NearestPoint( VECTOR2D( aP ) );
     int       dist = KiROUND( nearestPt.Distance( aP ) );

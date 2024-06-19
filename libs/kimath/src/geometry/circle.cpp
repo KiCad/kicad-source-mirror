@@ -149,7 +149,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         VECTOR2I hTanLineB = aLineB.LineProject( hSolution.Center );
 
         // To minimise errors, use the furthest away tangent point from aP
-        if( ( hTanLineA - aP ).EuclideanNorm() > ( hTanLineB - aP ).EuclideanNorm() )
+        if( ( hTanLineA - aP ).SquaredEuclideanNorm() > ( hTanLineB - aP ).SquaredEuclideanNorm() )
         {
             // Find the tangent at line A by homothetic inversion
             SEG          hT( hTanLineA, hSelected );
@@ -187,7 +187,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
 
 bool CIRCLE::Contains( const VECTOR2I& aP ) const
 {
-    int distance = ( aP - Center ).EuclideanNorm();
+    int64_t distance = VECTOR2L( aP - Center ).EuclideanNorm();
 
     return distance <= ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU )
            && distance >= ( (int64_t) Radius - SHAPE::MIN_PRECISION_IU );
@@ -244,7 +244,7 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
     std::vector<VECTOR2I> retval;
 
     VECTOR2I vecCtoC = aCircle.Center - Center;
-    int64_t  d = vecCtoC.EuclideanNorm();
+    int64_t  d = VECTOR2L( vecCtoC ).EuclideanNorm();
     int64_t  r1 = Radius;
     int64_t  r2 = aCircle.Radius;
 
@@ -324,7 +324,7 @@ std::vector<VECTOR2I> CIRCLE::IntersectLine( const SEG& aLine ) const
     //
 
     VECTOR2I m = aLine.LineProject( Center );    // O projected perpendicularly to the line
-    int64_t  omDist = ( m - Center ).EuclideanNorm();
+    int64_t  omDist = VECTOR2L( m - Center ).EuclideanNorm();
 
     if( omDist > ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU ) )
     {
