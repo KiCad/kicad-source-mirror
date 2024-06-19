@@ -22,6 +22,7 @@
  */
 
 #include <pcb_edit_frame.h>
+#include <footprint.h>
 #include <pcb_table.h>
 #include <board.h>
 #include <geometry/shape_simple.h>
@@ -52,6 +53,7 @@ PCB_TABLE::PCB_TABLE( const PCB_TABLE& aTable ) :
     m_strokeColumns = aTable.m_strokeColumns;
     m_separatorsStroke = aTable.m_separatorsStroke;
 
+    m_orientation = aTable.m_orientation;
     m_colCount = aTable.m_colCount;
     m_colWidths = aTable.m_colWidths;
     m_rowHeights = aTable.m_rowHeights;
@@ -86,6 +88,7 @@ void PCB_TABLE::swapData( BOARD_ITEM* aImage )
     std::swap( m_strokeColumns, table->m_strokeColumns );
     std::swap( m_separatorsStroke, table->m_separatorsStroke );
 
+    std::swap( m_orientation, table->m_orientation );
     std::swap( m_colCount, table->m_colCount );
     std::swap( m_colWidths, table->m_colWidths );
     std::swap( m_rowHeights, table->m_rowHeights );
@@ -128,13 +131,37 @@ VECTOR2I PCB_TABLE::GetEnd() const
 
 void PCB_TABLE::Normalize()
 {
-    // JEY TODO: pukes on rotated tables...
+    VECTOR2I  origin = GetPosition();
 
-    int y = GetPosition().y;
+    auto setCellStart =
+            [&]( PCB_TABLECELL* cell, VECTOR2I pt )
+            {
+                RotatePoint( pt, origin, m_orientation );
+
+                if( cell->GetPosition() != pt )
+                {
+                    cell->SetPosition( pt );
+                    cell->ClearRenderCache();
+                }
+            };
+
+    auto setCellEnd =
+            [&]( PCB_TABLECELL* cell, VECTOR2I pt )
+            {
+                RotatePoint( pt, origin, m_orientation );
+
+                if( cell->GetEnd() != pt )
+                {
+                    cell->SetEnd( pt );
+                    cell->ClearRenderCache();
+                }
+            };
+
+    int y = origin.y;
 
     for( int row = 0; row < GetRowCount(); ++row )
     {
-        int x = GetPosition().x;
+        int x = origin.x;
         int rowHeight = m_rowHeights[ row ];
 
         for( int col = 0; col < GetColCount(); ++col )
@@ -144,13 +171,9 @@ void PCB_TABLE::Normalize()
             PCB_TABLECELL* cell = GetCell( row, col );
             VECTOR2I       pos( x, y );
 
-            if( cell->GetPosition() != pos )
-            {
-                cell->SetPosition( pos );
-                cell->ClearRenderCache();
-            }
+            setCellStart( cell, pos );
 
-            VECTOR2I end = cell->GetStart() + VECTOR2I( colWidth, rowHeight );
+            VECTOR2I end = pos + VECTOR2I( colWidth, rowHeight );
 
             if( cell->GetColSpan() > 1 || cell->GetRowSpan() > 1 )
             {
@@ -161,12 +184,7 @@ void PCB_TABLE::Normalize()
                     end.y += m_rowHeights[ii];
             }
 
-            if( cell->GetEnd() != end )
-            {
-                cell->SetEnd( end );
-                cell->ClearRenderCache();
-            }
-
+            setCellEnd( cell, end );
             x += colWidth;
         }
 
@@ -184,6 +202,8 @@ void PCB_TABLE::Move( const VECTOR2I& aMoveVector )
 
 void PCB_TABLE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
+    m_orientation = ( m_orientation + aAngle ).Normalized();
+
     for( PCB_TABLECELL* cell : m_cells )
         cell->Rotate( aRotCentre, aAngle );
 
@@ -428,6 +448,27 @@ bool PCB_TABLE::operator==( const BOARD_ITEM& aOther ) const
     if( m_cells.size() != other.m_cells.size() )
         return false;
 
+    if( m_strokeExternal != other.m_strokeExternal )
+        return false;
+
+    if( m_strokeHeader != other.m_strokeHeader )
+        return false;
+
+    if( m_borderStroke != other.m_borderStroke )
+        return false;
+
+    if( m_strokeRows != other.m_strokeRows )
+        return false;
+
+    if( m_strokeColumns != other.m_strokeColumns )
+        return false;
+
+    if( m_separatorsStroke != other.m_separatorsStroke )
+        return false;
+
+    if( m_orientation != other.m_orientation )
+        return false;
+
     if( m_colWidths != other.m_colWidths )
         return false;
 
@@ -455,6 +496,33 @@ double PCB_TABLE::Similarity( const BOARD_ITEM& aOther ) const
         return 0.1;
 
     double similarity = 1.0;
+
+    if( m_strokeExternal != other.m_strokeExternal )
+        similarity *= 0.9;
+
+    if( m_strokeHeader != other.m_strokeHeader )
+        similarity *= 0.9;
+
+    if( m_borderStroke != other.m_borderStroke )
+        similarity *= 0.9;
+
+    if( m_strokeRows != other.m_strokeRows )
+        similarity *= 0.9;
+
+    if( m_strokeColumns != other.m_strokeColumns )
+        similarity *= 0.9;
+
+    if( m_separatorsStroke != other.m_separatorsStroke )
+        similarity *= 0.9;
+
+    if( m_orientation != other.m_orientation )
+        similarity *= 0.9;
+
+    if( m_colWidths != other.m_colWidths )
+        similarity *= 0.9;
+
+    if( m_rowHeights != other.m_rowHeights )
+        similarity *= 0.9;
 
     for( int ii = 0; ii < (int) m_cells.size(); ++ii )
         similarity *= m_cells[ii]->Similarity( *other.m_cells[ii] );
@@ -493,6 +561,10 @@ static struct PCB_TABLE_DESC
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start Y" ),
                     &PCB_TABLE::SetPositionY, &PCB_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, EDA_ANGLE>( _HKI( "Orientation" ),
+                    &PCB_TABLE::SetOrientation, &PCB_TABLE::GetOrientation,
+                    PROPERTY_DISPLAY::PT_DEGREE ) );
 
         const wxString tableProps = _( "Table Properties" );
 

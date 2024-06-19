@@ -154,7 +154,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20240201  // Use nullable properties for overrides
 //#define SEXPR_BOARD_FILE_VERSION    20240202  // Tables
 //#define SEXPR_BOARD_FILE_VERSION    20240225  // Rationalization of solder_paste_margin
-#define SEXPR_BOARD_FILE_VERSION      20240609  // Add 'tenting' keyword
+//#define SEXPR_BOARD_FILE_VERSION    20240609  // Add 'tenting' keyword
+#define SEXPR_BOARD_FILE_VERSION      20240617  // Table angles
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

@@ -97,6 +97,9 @@ public:
     int GetPositionX() const   { return GetPosition().x; }
     int GetPositionY() const   { return GetPosition().y; }
 
+    void SetOrientation( const EDA_ANGLE& aAngle ) { m_orientation = aAngle; }
+    EDA_ANGLE GetOrientation() const { return m_orientation; }
+
     void SetColCount( int aCount ) { m_colCount = aCount; }
     int GetColCount() const { return m_colCount; }
 
@@ -245,6 +248,7 @@ protected:
     bool                        m_strokeColumns;
     STROKE_PARAMS               m_separatorsStroke;
 
+    EDA_ANGLE                   m_orientation;
     int                         m_colCount;
     std::map<int, int>          m_colWidths;
     std::map<int, int>          m_rowHeights;

@@ -1190,26 +1190,27 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
 void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
 {
-    auto getItem = [&]( const KIID& aId )
-    {
-        BOARD_ITEM* aItem = nullptr;
+    auto getItem =
+            [&]( const KIID& aId )
+            {
+                BOARD_ITEM* aItem = nullptr;
 
-        if( BOARD* board = dynamic_cast<BOARD*>( aParent ) )
-        {
-            aItem = board->GetItem( aId );
-        }
-        else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aParent ) )
-        {
-            footprint->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        if( child->m_Uuid == aId )
-                            aItem = child;
-                    } );
-        }
+                if( BOARD* board = dynamic_cast<BOARD*>( aParent ) )
+                {
+                    aItem = board->GetItem( aId );
+                }
+                else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aParent ) )
+                {
+                    footprint->RunOnChildren(
+                            [&]( BOARD_ITEM* child )
+                            {
+                                if( child->m_Uuid == aId )
+                                    aItem = child;
+                            } );
+                }
 
-        return aItem;
-    };
+                return aItem;
+            };
 
     // Now that we've parsed the other Uuids in the file we can resolve the uuids referred
     // to in the group declarations we saw.
@@ -3081,7 +3082,7 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
     shape->SetStroke( stroke );
 
-    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent ) )
+    if( FOOTPRINT* parentFP = shape->GetParentFootprint() )
     {
         shape->Rotate( { 0, 0 }, parentFP->GetOrientation() );
         shape->Move( parentFP->GetPosition() );
@@ -3568,7 +3569,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
         aTextBox->SetMarginBottom( margin );
     }
 
-    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aTextBox->GetParent() ) )
+    if( FOOTPRINT* parentFP = aTextBox->GetParentFootprint() )
     {
         aTextBox->Rotate( { 0, 0 }, parentFP->GetOrientation() );
         aTextBox->Move( parentFP->GetPosition() );
@@ -3588,12 +3589,6 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
-        if( token == T_locked )
-        {
-            table->SetLocked( true );
-            token = NextTok();
-        }
-
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
@@ -3603,6 +3598,16 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
         {
         case T_column_count:
             table->SetColCount( parseInt( "column count" ) );
+            NeedRIGHT();
+            break;
+
+        case T_locked:
+            table->SetLocked( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_angle:
+            table->SetOrientation( EDA_ANGLE( parseDouble( "table angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 
@@ -3732,6 +3737,9 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                        "cells" );
         }
     }
+
+    if( FOOTPRINT* parentFP = table->GetParentFootprint() )
+        table->SetOrientation( table->GetOrientation() + parentFP->GetOrientation() );
 
     return table.release();
 }

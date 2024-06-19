@@ -1982,13 +1982,26 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable, int aNestLevel ) const
 {
     wxCHECK_RET( aTable != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( aNestLevel, "(table (column_count %d)\n",
+    m_out->Print( aNestLevel, "(table (column_count %d)",
                   aTable->GetColCount() );
 
     if( aTable->IsLocked() )
-        KICAD_FORMAT::FormatBool( m_out, aNestLevel, "locked", aTable->IsLocked() );
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", aTable->IsLocked() );
+
+    EDA_ANGLE angle = aTable->GetOrientation();
+
+    if( FOOTPRINT* parentFP = aTable->GetParentFootprint() )
+    {
+        angle -= parentFP->GetOrientation();
+        angle.Normalize720();
+    }
+
+    if( !angle.IsZero() )
+        m_out->Print( 0, " (angle %s)", EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
 
     formatLayer( aTable->GetLayer() );
+
+    m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel + 1, "(border (external %s) (header %s)",
                   aTable->StrokeExternal() ? "yes" : "no",

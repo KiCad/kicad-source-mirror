@@ -2301,8 +2301,9 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
     for( PCB_TABLECELL* cell : aTable->GetCells() )
         draw( static_cast<PCB_TEXTBOX*>( cell ), aLayer );
 
-    VECTOR2I pos = aTable->GetPosition();
-    VECTOR2I end = aTable->GetEnd();
+    VECTOR2I  pos = aTable->GetPosition();
+    VECTOR2I  end = aTable->GetEnd();
+    EDA_ANGLE drawOrientation = aTable->GetOrientation();
 
     // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
     // so we just get the "normal" (un-selected/un-brightened) color for the borders.
@@ -2326,8 +2327,11 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
             [&]( const SHAPE& shape )
             {
                 STROKE_PARAMS::Stroke( &shape, lineStyle, lineWidth, &m_pcbSettings,
-                        [&]( const VECTOR2I& a, const VECTOR2I& b )
+                        [&]( VECTOR2I a, VECTOR2I b )
                         {
+                            RotatePoint( a, pos, drawOrientation );
+                            RotatePoint( b, pos, drawOrientation );
+
                             // DrawLine has problem with 0 length lines so enforce minimum
                             if( a == b )
                                 m_gal->DrawLine( a+1, b );
@@ -2337,8 +2341,11 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
             };
 
     auto strokeLine =
-            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
+            [&]( VECTOR2I ptA, VECTOR2I ptB )
             {
+                RotatePoint( ptA, pos, drawOrientation );
+                RotatePoint( ptB, pos, drawOrientation );
+
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
                     m_gal->DrawLine( ptA, ptB );
@@ -2351,8 +2358,11 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
             };
 
     auto strokeRect =
-            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
+            [&]( VECTOR2I ptA, VECTOR2I ptB )
             {
+                RotatePoint( ptA, pos, drawOrientation );
+                RotatePoint( ptB, pos, drawOrientation );
+
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
                     m_gal->DrawRectangle( ptA, ptB );
@@ -2370,31 +2380,47 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
 
         if( aTable->StrokeColumns() )
         {
+            int x = pos.x;
+
             for( int col = 0; col < aTable->GetColCount() - 1; ++col )
             {
+                int y = pos.y;
+
                 for( int row = 0; row < aTable->GetRowCount(); ++row )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
+                    int            rowHeight = aTable->GetRowHeight( row );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( topRight, cell->GetEnd() );
+                        strokeLine( VECTOR2I( x, y ), VECTOR2I( x, y + rowHeight ) );
+
+                    y += rowHeight;
                 }
+
+                x += aTable->GetColWidth( col );
             }
         }
 
         if( aTable->StrokeRows() )
         {
+            int y = pos.y;
+
             for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
             {
+                int x = pos.x;
+
                 for( int col = 0; col < aTable->GetColCount(); ++col )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
+                    int            colWidth = aTable->GetColWidth( col );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( botLeft, cell->GetEnd() );
+                        strokeLine( VECTOR2I( x, y ), VECTOR2I( x + colWidth, y ) );
+
+                    x += colWidth;
                 }
+
+                y += aTable->GetRowHeight( row );
             }
         }
     }
@@ -2405,8 +2431,9 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
 
         if( aTable->StrokeHeader() )
         {
-            PCB_TABLECELL* cell = aTable->GetCell( 0, 0 );
-            strokeLine( VECTOR2I( pos.x, cell->GetEndY() ), VECTOR2I( end.x, cell->GetEndY() ) );
+            int headerBottom = pos.y + aTable->GetRowHeight( 0 );
+
+            strokeLine( VECTOR2I( pos.x, headerBottom ), VECTOR2I( end.x, headerBottom ) );
         }
 
         if( aTable->StrokeExternal() )

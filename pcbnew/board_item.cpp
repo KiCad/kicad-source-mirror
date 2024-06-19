@@ -249,7 +249,7 @@ FOOTPRINT* BOARD_ITEM::GetParentFootprint() const
 {
     BOARD_ITEM_CONTAINER* ancestor = GetParent();
 
-    while( ancestor && ancestor->Type() == PCB_GROUP_T )
+    while( ancestor && ancestor->IsType( { PCB_GROUP_T, PCB_GENERATOR_T, PCB_TABLE_T } ) )
         ancestor = ancestor->GetParent();
 
     if( ancestor && ancestor->Type() == PCB_FOOTPRINT_T )
