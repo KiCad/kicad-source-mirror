@@ -402,8 +402,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( wxEVT_IDLE,
             [this]( wxIdleEvent& aEvent )
             {
-                if( GetCanvas()->GetView()->GetViewport() != m_lastNetnamesViewport )
+                BOX2D viewport = GetCanvas()->GetView()->GetViewport();
+
+                if( viewport != m_lastNetnamesViewport )
+                {
                     redrawNetnames();
+                    m_lastNetnamesViewport = viewport;
+                }
 
                 // Do not forget to pass the Idle event to other clients:
                 aEvent.Skip();
@@ -595,24 +600,23 @@ void PCB_EDIT_FRAME::redrawNetnames()
 
     KIGFX::VIEW* view = GetCanvas()->GetView();
     BOX2D        viewport = view->GetViewport();
-    double       scale = view->GetScale();
 
-    m_lastNetnamesViewport = viewport;
+    // Inflate to catch most of the track width
+    BOX2I_MINMAX clipbox( BOX2ISafe( viewport.Inflate( pcbIUScale.mmToIU( 2.0 ) ) ) );
 
-    view->Query( BOX2ISafe( viewport ),
-            [&]( KIGFX::VIEW_ITEM* viewItem ) -> bool
-            {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( viewItem );
+    for( PCB_TRACK* track : GetBoard()->Tracks() )
+    {
+        // Don't need to update vias
+        if( track->Type() == PCB_VIA_T )
+            continue;
 
-                if( item->IsConnected()
-                        && ( item->Type() == PCB_TRACE_T || item->Type() == PCB_SHAPE_T )
-                        && item->ViewGetLOD( GetNetnameLayer( item->GetLayer() ), view ) < scale )
-                {
-                    view->Update( item, KIGFX::REPAINT );
-                }
+        // Don't update invisible tracks
+        if( !clipbox.Intersects( BOX2I_MINMAX( track->GetStart(), track->GetEnd() ) ) )
+            continue;
 
-                return true;
-            } );
+        if( track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view ) < view->GetScale() )
+            view->Update( track, KIGFX::REPAINT );
+    }
 }
 
 
