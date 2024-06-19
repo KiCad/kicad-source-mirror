@@ -4130,7 +4130,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     }
     else
     {
-        field->SetPosition( aElem.position );
+        text->SetTextPos( aElem.position );
     }
 
     ConvertTexts6ToEdaTextSettings( aElem, text );
