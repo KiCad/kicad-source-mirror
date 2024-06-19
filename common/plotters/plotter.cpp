@@ -231,7 +231,6 @@ void PLOTTER::BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
                            int aTolerance, int aLineThickness )
 {
     // Generic fallback: Quadratic Bezier curve plotted as a polyline
-    int minSegLen = aLineThickness;  // The segment min length to approximate a bezier curve
 
     std::vector<VECTOR2I> ctrlPoints;
     ctrlPoints.reserve( 4 );
