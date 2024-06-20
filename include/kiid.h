@@ -126,8 +126,6 @@ public:
 
 private:
     boost::uuids::uuid m_uuid;
-
-    timestamp_t m_cached_timestamp;
 };
 
 
