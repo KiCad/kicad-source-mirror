@@ -1404,9 +1404,6 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     // Check footprints
     for( FOOTPRINT* footprint : m_footprints )
     {
-        if( !( footprint->GetLayerSet() & visible ).any() )
-            continue;
-
         if( aBoardEdgesOnly )
         {
             for( const BOARD_ITEM* edge : footprint->GraphicalItems() )
@@ -1415,7 +1412,7 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
                     bbox.Merge( edge->GetBoundingBox() );
             }
         }
-        else
+        else if( ( footprint->GetLayerSet() & visible ).any() )
         {
             bbox.Merge( footprint->GetBoundingBox( true, showHiddenText ) );
         }
