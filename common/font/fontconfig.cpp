@@ -26,6 +26,7 @@
 #include <string_utils.h>
 #include <macros.h>
 #include <cstdint>
+#include <reporter.h>
 
 #ifdef __WIN32__
 #define WIN32_LEAN_AND_MEAN
@@ -36,6 +37,8 @@ using namespace fontconfig;
 
 static FONTCONFIG* g_config = nullptr;
 static bool        g_fcInitSuccess = false;
+
+REPORTER* FONTCONFIG::s_reporter = nullptr;
 
 /**
  * A simple wrapper to avoid exporing fontconfig in the header
@@ -55,6 +58,12 @@ wxString FONTCONFIG::Version()
 FONTCONFIG::FONTCONFIG()
 {
 };
+
+
+void fontconfig::FONTCONFIG::SetReporter( REPORTER* aReporter )
+{
+    s_reporter = aReporter;
+}
 
 
 /**
@@ -317,12 +326,15 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
 
     if( retval == FF_RESULT::FF_ERROR )
     {
-        wxLogWarning( _( "Error loading font '%s'." ), qualifiedFontName );
+        if( s_reporter )
+            s_reporter->Report( wxString::Format( _( "Error loading font '%s'." ), qualifiedFontName ) );
     }
     else if( retval == FF_RESULT::FF_SUBSTITUTE )
     {
         fontName.Replace( ':', ' ' );
-        wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), qualifiedFontName, fontName );
+
+        if( s_reporter )
+            s_reporter->Report( wxString::Format( _( "Font '%s' not found; substituting '%s'." ), qualifiedFontName, fontName ) );
     }
 
     FcPatternDestroy( pat );

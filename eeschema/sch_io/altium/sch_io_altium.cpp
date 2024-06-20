@@ -53,6 +53,7 @@
 
 #include <bezier_curves.h>
 #include <compoundfilereader.h>
+#include <font/fontconfig.h>
 #include <geometry/ellipse.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
@@ -389,6 +390,9 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     wxFileName fileName( aFileName );
     fileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
     m_schematic = aSchematic;
+
+    // Show the font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
     std::unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
@@ -4513,6 +4517,9 @@ long long SCH_IO_ALTIUM::getLibraryTimestamp( const wxString& aLibraryPath ) con
 void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString&        aLibraryPath,
                                          const STRING_UTF8_MAP* aProperties )
 {
+    // Suppress font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     if( m_libCache.count( aLibraryPath ) )
     {
         wxCHECK( m_timestamps.count( aLibraryPath ), /*void*/ );

@@ -22,6 +22,7 @@
 #include <sch_io/cadstar/sch_io_cadstar_archive.h>
 #include <io/cadstar/cadstar_parts_lib_parser.h>
 
+#include <font/fontconfig.h>
 #include <lib_symbol.h>
 #include <progress_reporter.h>
 #include <project_sch.h>
@@ -67,6 +68,9 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
                                                       const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
+
+    // Show the font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     SCH_SHEET* rootSheet = nullptr;
 
@@ -239,6 +243,9 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
 {
     wxFileName csafn;
     wxString   fplibname = "cadstarpcblib";
+
+    // Suppress font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
 
     if( aProperties && aProperties->count( "csa" ) )
     {

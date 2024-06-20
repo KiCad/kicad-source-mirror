@@ -28,11 +28,14 @@
 
 #include <wx/string.h>
 
+#include <font/fontconfig.h>
+
 #include <pcb_io_altium_circuit_studio.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
 #include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
+#include <reporter.h>
 
 #include <board.h>
 
@@ -66,6 +69,8 @@ BOARD* PCB_IO_ALTIUM_CIRCUIT_STUDIO::LoadBoard( const wxString& aFileName, BOARD
     m_props = aProperties;
 
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
+
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )

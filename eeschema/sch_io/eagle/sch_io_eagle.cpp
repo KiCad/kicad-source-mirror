@@ -36,29 +36,30 @@
 #include <wx/txtstrm.h>
 #include <wx/xml/xml.h>
 
+#include <font/fontconfig.h>
 #include <io/eagle/eagle_parser.h>
-#include <string_utils.h>
 #include <lib_id.h>
+#include <progress_reporter.h>
 #include <project.h>
+#include <project/net_settings.h>
 #include <project_sch.h>
 #include <sch_bus_entry.h>
-#include <sch_symbol.h>
-#include <project/net_settings.h>
 #include <sch_edit_frame.h>
-#include <sch_junction.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
+#include <sch_junction.h>
+#include <sch_label.h>
 #include <sch_marker.h>
-#include <sch_screen.h>
 #include <sch_pin.h>
+#include <sch_screen.h>
 #include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
-#include <sch_label.h>
+#include <sch_symbol.h>
 #include <schematic.h>
+#include <string_utils.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
-#include <progress_reporter.h>
 
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
@@ -344,6 +345,9 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     wxASSERT( !aFileName || aSchematic != nullptr );
     LOCALE_IO toggle; // toggles on, then off, the C locale.
 
+    // Show the font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+
     m_filename = aFileName;
     m_schematic = aSchematic;
 
@@ -520,6 +524,9 @@ long long SCH_IO_EAGLE::getLibraryTimestamp( const wxString& aLibraryPath ) cons
 
 void SCH_IO_EAGLE::ensureLoadedLibrary( const wxString& aLibraryPath )
 {
+    // Suppress font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     if( m_eagleLibs.find( m_libName ) != m_eagleLibs.end() )
     {
         wxCHECK( m_timestamps.count( m_libName ), /*void*/ );

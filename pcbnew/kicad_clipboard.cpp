@@ -29,6 +29,7 @@
 #include <board.h>
 #include <build_version.h>
 #include <core/ignore.h>
+#include <font/fontconfig.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
@@ -507,6 +508,8 @@ BOARD* CLIPBOARD_IO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     std::string result;
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
 
     auto clipboard = wxTheClipboard;
     wxClipboardLocker clipboardLock( clipboard );

@@ -29,10 +29,12 @@
 #include <pcb_io/pcb_io.h>
 
 #include <board.h>
+#include <font/fontconfig.h>
 #include <footprint.h>
 #include <progress_reporter.h>
 #include <common.h>
 #include <macros.h>
+#include <reporter.h>
 
 #include <fstream>
 #include <wx/txtstrm.h>
@@ -107,6 +109,8 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     // Give the filename to the board if it's new
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
+
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     if( m_progressReporter )
     {
@@ -312,6 +316,8 @@ FOOTPRINT* PCB_IO_EASYEDAPRO::FootprintLoad( const wxString& aLibraryPath,
                                              const wxString& aFootprintName, bool aKeepUUID,
                                              const STRING_UTF8_MAP* aProperties )
 {
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     PCB_IO_EASYEDAPRO_PARSER parser( nullptr, nullptr );
     FOOTPRINT*            footprint = nullptr;
 

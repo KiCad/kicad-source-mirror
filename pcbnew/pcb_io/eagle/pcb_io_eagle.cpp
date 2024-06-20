@@ -61,6 +61,7 @@ Load() TODO's
 #include <wx/window.h>
 
 #include <convert_basic_shapes_to_polygon.h>
+#include <font/fontconfig.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <string_utf8_map.h>
@@ -77,6 +78,7 @@ Load() TODO's
 #include <padstack.h>
 #include <pcb_text.h>
 #include <pcb_dimension.h>
+#include <reporter.h>
 
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/eagle/pcb_io_eagle.h>
@@ -325,6 +327,8 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 {
     LOCALE_IO       toggle;     // toggles on, then off, the C locale.
     wxXmlNode*      doc;
+
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     init( aProperties );
 
@@ -3152,6 +3156,8 @@ wxDateTime PCB_IO_EAGLE::getModificationTime( const wxString& aPath )
 
 void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
 {
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     try
     {
         wxDateTime  modtime = getModificationTime( aLibPath );

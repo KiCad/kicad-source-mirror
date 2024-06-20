@@ -32,6 +32,7 @@
 #include <math/util.h>      // for KiROUND
 
 #include <board.h>
+#include <font/fontconfig.h>
 #include <footprint.h>
 #include <pad.h>
 #include <locale_io.h>
@@ -39,6 +40,7 @@
 #include <pcb_text.h>
 #include <pcb_shape.h>
 #include <pcb_io/geda/pcb_io_geda.h>
+#include <reporter.h>
 #include <wx_filename.h>
 
 #include <wx/dir.h>
@@ -933,6 +935,8 @@ FOOTPRINT* PCB_IO_GEDA::FootprintLoad( const wxString& aLibraryPath,
                                        bool  aKeepUUID,
                                        const STRING_UTF8_MAP* aProperties )
 {
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
 
     if( footprint )
