@@ -268,8 +268,9 @@ bool SEG::Contains( const VECTOR2I& aP ) const
 
 const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
 {
-    VECTOR2I d = B - A;
-    ecoord   l_squared = d.Dot( d );
+    // Inlined for performance reasons
+    VECTOR2L d( B.x - A.x, B.y - A.y );
+    ecoord   l_squared( d.x * d.x + d.y * d.y );
 
     if( l_squared == 0 )
         return A;
