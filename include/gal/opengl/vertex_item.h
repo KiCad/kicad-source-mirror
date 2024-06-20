@@ -48,7 +48,7 @@ public:
     friend class VERTEX_MANAGER;
 
     explicit VERTEX_ITEM( const VERTEX_MANAGER& aManager );
-    virtual ~VERTEX_ITEM();
+    ~VERTEX_ITEM();
 
     /**
      * Return information about number of vertices stored.
