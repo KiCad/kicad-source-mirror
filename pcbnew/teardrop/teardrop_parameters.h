@@ -48,14 +48,14 @@ class TEARDROP_PARAMETERS
 {
 public:
     TEARDROP_PARAMETERS():
-            m_Enabled( false ),
-            m_AllowUseTwoTracks( true ),
             m_TdMaxLen( pcbIUScale.mmToIU( 1.0 ) ),
             m_TdMaxWidth( pcbIUScale.mmToIU( 2.0 ) ),
             m_BestLengthRatio( 0.5),
             m_BestWidthRatio( 1.0 ),
-            m_CurveSegCount( 0 ),
             m_WidthtoSizeFilterRatio( 0.9 ),
+            m_CurveSegCount( 0 ),
+            m_Enabled( false ),
+            m_AllowUseTwoTracks( true ),
             m_TdOnPadsInZones( false )
     {
     }
@@ -111,9 +111,6 @@ public:
     }
 
 public:
-    bool    m_Enabled;
-    /// True to create teardrops using 2 track segments if the first in too small
-    bool    m_AllowUseTwoTracks;
     /// max allowed length for teardrops in IU. <= 0 to disable
     int     m_TdMaxLen;
     /// max allowed height for teardrops in IU. <= 0 to disable
@@ -122,14 +119,19 @@ public:
     double  m_BestLengthRatio;
     /// The height of a teardrop as ratio between height and size of pad/via
     double  m_BestWidthRatio;
-    /// number of segments to build the curved sides of a teardrop area
-    /// must be > 2. for values <= 2 a straight line is used
-    int     m_CurveSegCount;
     /// The ratio (H/D) between the via/pad size and the track width max value to create a teardrop
     /// 1.0 (100 %) always creates a teardrop, 0.0 (0%) never create a teardrop
     double  m_WidthtoSizeFilterRatio;
+    /// number of segments to build the curved sides of a teardrop area
+    /// must be > 2. for values <= 2 a straight line is used
+    int m_CurveSegCount;
+
+    /// Flag to enable teardrops
+    bool m_Enabled;
+    /// True to create teardrops using 2 track segments if the first in too small
+    bool m_AllowUseTwoTracks;
     /// A filter to exclude pads inside zone fills
-    bool    m_TdOnPadsInZones;
+    bool m_TdOnPadsInZones;
 };
 
 
