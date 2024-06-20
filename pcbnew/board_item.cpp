@@ -247,9 +247,24 @@ std::shared_ptr<SHAPE_SEGMENT> BOARD_ITEM::GetEffectiveHoleShape() const
 
 FOOTPRINT* BOARD_ITEM::GetParentFootprint() const
 {
+    // EDA_ITEM::IsType is too slow here.
+    auto isContainer = []( BOARD_ITEM_CONTAINER* aTest )
+    {
+        switch( aTest->Type() )
+        {
+        case PCB_GROUP_T:
+        case PCB_GENERATOR_T:
+        case PCB_TABLE_T:
+            return true;
+
+        default:
+            return false;
+        }
+    };
+
     BOARD_ITEM_CONTAINER* ancestor = GetParent();
 
-    while( ancestor && ancestor->IsType( { PCB_GROUP_T, PCB_GENERATOR_T, PCB_TABLE_T } ) )
+    while( ancestor && isContainer( ancestor ) )
         ancestor = ancestor->GetParent();
 
     if( ancestor && ancestor->Type() == PCB_FOOTPRINT_T )
