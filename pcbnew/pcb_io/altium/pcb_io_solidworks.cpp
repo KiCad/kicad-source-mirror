@@ -19,6 +19,7 @@
 
 #include <wx/string.h>
 
+#include <font/fontconfig.h>
 #include <pcb_io_solidworks.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
@@ -57,6 +58,8 @@ BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     m_props = aProperties;
 
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
+
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )

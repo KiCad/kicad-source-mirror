@@ -28,15 +28,25 @@
 #include <wx/base64.h>
 #include <wx/log.h>
 #include <wx/mstream.h>
+#include <boost/algorithm/string/join.hpp>
+
 #include <advanced_config.h>
 #include <base_units.h>
 #include <build_version.h>
-#include <trace_helpers.h>
+#include <ee_selection.h>
+#include <font/fontconfig.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <locale_io.h>
+#include <progress_reporter.h>
+#include <schematic.h>
+#include <schematic_lexer.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
-#include <sch_symbol.h>
 #include <sch_edit_frame.h>       // SYMBOL_ORIENTATION_T
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_common.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_shape.h>
@@ -62,9 +72,9 @@
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definition.
 #include <ee_selection.h>
 #include <string_utils.h>
+#include <symbol_lib_table.h>  // for PropPowerSymsOnly definition.
+#include <trace_helpers.h>
 #include <wx_filename.h>       // for ::ResolvePossibleSymlinks()
-#include <progress_reporter.h>
-#include <boost/algorithm/string/join.hpp>
 
 using namespace TSCHEMATIC_T;
 
@@ -108,6 +118,9 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
     SCH_SHEET*  sheet;
 
     wxFileName fn = aFileName;
+
+    // Show the font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     // Unfortunately child sheet file names the legacy schematic file format are not fully
     // qualified and are always appended to the project path.  The aFileName attribute must
@@ -1416,6 +1429,9 @@ void SCH_IO_KICAD_SEXPR::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& a
 void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
                                    const STRING_UTF8_MAP* aProperties )
 {
+    // Suppress font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
         // a spectacular episode in memory management:

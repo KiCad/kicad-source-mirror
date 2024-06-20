@@ -25,14 +25,14 @@
 #include "sch_easyeda_parser.h"
 #include "sch_io_easyeda.h"
 
-#include <schematic.h>
-#include <sch_sheet.h>
-#include <sch_screen.h>
+#include <font/fontconfig.h>
 #include <kiplatform/environment.h>
 #include <project_sch.h>
-#include <wildcards_and_files_ext.h>
+#include <sch_screen.h>
+#include <sch_sheet.h>
+#include <schematic.h>
 #include <string_utils.h>
-
+#include <wildcards_and_files_ext.h>
 #include <wx/log.h>
 #include <wx/stdstream.h>
 #include <wx/zipstrm.h>
@@ -308,6 +308,9 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
                                          const STRING_UTF8_MAP* aProperties )
 {
     std::map<wxString, int> namesCounter;
+
+    // Suppress font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
 
     try
     {
@@ -611,6 +614,9 @@ SCH_SHEET* SCH_IO_EASYEDA::LoadSchematicFile( const wxString& aFileName, SCHEMAT
                                               const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
+
+    // Show the font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     SCH_SHEET* rootSheet = nullptr;
 

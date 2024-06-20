@@ -25,6 +25,7 @@
 #include "sch_easyedapro_parser.h"
 #include "sch_io_easyedapro.h"
 
+#include <font/fontconfig.h>
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
@@ -422,6 +423,9 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
                                                  const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
+
+    // Show the font substitution warnings
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     SCH_SHEET* rootSheet = nullptr;
 

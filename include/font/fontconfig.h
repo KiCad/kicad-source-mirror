@@ -30,6 +30,7 @@
 #include <unordered_map>
 #include <font/fontinfo.h>
 
+class REPORTER;
 namespace fontconfig
 {
 
@@ -67,9 +68,17 @@ public:
      */
     void ListFonts( std::vector<std::string>& aFonts, const std::string& aDesiredLang );
 
+    /**
+     * Set the reporter to use for reporting font substitution warnings.
+     *
+     * @param aReporter The reporter to use for reporting font substitution warnings.
+     */
+    static void SetReporter( REPORTER* aReporter );
+
 private:
     std::map<std::string, FONTINFO> m_fontInfoCache;
     wxString                        m_fontCacheLastLang;
+    static REPORTER*                s_reporter;
 
     /**
      * Matches the two rfc 3306 language entries, used for when searching for matching family names

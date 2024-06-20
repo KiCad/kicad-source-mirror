@@ -27,12 +27,14 @@
 #include <pcb_io/easyeda/pcb_io_easyeda_parser.h>
 #include <pcb_io/pcb_io.h>
 
+#include <font/fontconfig.h>
 #include <progress_reporter.h>
 #include <common.h>
 #include <macros.h>
 #include <board.h>
 #include <footprint.h>
 #include <board_design_settings.h>
+#include <reporter.h>
 
 #include <wx/log.h>
 #include <wx/wfstream.h>
@@ -139,6 +141,8 @@ BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
+
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )
@@ -379,6 +383,8 @@ FOOTPRINT* PCB_IO_EASYEDA::FootprintLoad( const wxString& aLibraryPath,
                                           const wxString& aFootprintName, bool aKeepUUID,
                                           const STRING_UTF8_MAP* aProperties )
 {
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     PCB_IO_EASYEDA_PARSER parser( nullptr );
 
     m_loadedFootprints.clear();

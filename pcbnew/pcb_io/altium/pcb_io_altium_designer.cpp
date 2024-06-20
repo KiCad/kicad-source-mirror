@@ -28,6 +28,7 @@
 
 #include <wx/string.h>
 
+#include <font/fontconfig.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
 #include <io/io_utils.h>
@@ -79,9 +80,12 @@ bool PCB_IO_ALTIUM_DESIGNER::CanReadLibrary( const wxString& aFileName ) const
 BOARD* PCB_IO_ALTIUM_DESIGNER::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                           const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
+
     m_props = aProperties;
 
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
+
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )
@@ -153,6 +157,8 @@ long long PCB_IO_ALTIUM_DESIGNER::GetLibraryTimestamp( const wxString& aLibraryP
 
 void PCB_IO_ALTIUM_DESIGNER::loadAltiumLibrary( const wxString& aLibraryPath )
 {
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     try
     {
         auto it = m_fplibFiles.find( aLibraryPath );

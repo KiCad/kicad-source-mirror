@@ -22,47 +22,50 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+// base64 code. Needed for PCB_REFERENCE_IMAGE
+#define wxUSE_BASE64 1
+#include <wx/base64.h>
+#include <wx/dir.h>
+#include <wx/ffile.h>
+#include <wx/log.h>
+#include <wx/msgdlg.h>
+#include <wx/mstream.h>
+
 #include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <callback_gal.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
-#include <string_utils.h>
+#include <fmt/core.h>
+#include <font/fontconfig.h>
+#include <footprint.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <kiface_base.h>
 #include <locale_io.h>
 #include <macros.h>
-#include <fmt/core.h>
-#include <callback_gal.h>
 #include <pad.h>
-#include <footprint.h>
-#include <pcb_group.h>
-#include <pcb_generator.h>
-#include <pcb_shape.h>
 #include <pcb_dimension.h>
+#include <pcb_generator.h>
+#include <pcb_group.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <pcb_reference_image.h>
+#include <pcb_shape.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
-#include <zone.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
-#include <io/kicad/kicad_io_utils.h>
-#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
-#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
-#include <trace_helpers.h>
 #include <progress_reporter.h>
+#include <reporter.h>
+#include <string_utils.h>
+#include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/dir.h>
-#include <wx/ffile.h>
-#include <wx/log.h>
-#include <build_version.h>
+#include <zone.h>
 
-// For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
-// base64 code. Needed for PCB_REFERENCE_IMAGE
-#define wxUSE_BASE64 1
-#include <wx/base64.h>
-#include <wx/mstream.h>
+#include <build_version.h>
 #include <filter_reader.h>
 
 
@@ -2425,6 +2428,8 @@ BOARD* PCB_IO_KICAD_SEXPR::LoadBoard( const wxString& aFileName, BOARD* aAppendT
 
     unsigned lineCount = 0;
 
+    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+
     if( m_progressReporter )
     {
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
@@ -2494,6 +2499,8 @@ void PCB_IO_KICAD_SEXPR::init( const STRING_UTF8_MAP* aProperties )
 
 void PCB_IO_KICAD_SEXPR::validateCache( const wxString& aLibraryPath, bool checkModified )
 {
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     if( !m_cache || !m_cache->IsPath( aLibraryPath ) || ( checkModified && m_cache->IsModified() ) )
     {
         // a spectacular episode in memory management:
@@ -2591,6 +2598,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR::ImportFootprint( const wxString& aFootprintPath, 
     wxString fcontents;
     wxFFile  f( aFootprintPath );
 
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     if( !f.IsOpened() )
         return nullptr;
 
@@ -2607,6 +2616,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR::FootprintLoad( const wxString& aLibraryPath,
                                       bool  aKeepUUID,
                                       const STRING_UTF8_MAP* aProperties )
 {
+    fontconfig::FONTCONFIG::SetReporter( nullptr );
+
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
 
     if( footprint )
