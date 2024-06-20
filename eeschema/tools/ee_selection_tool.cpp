@@ -1035,8 +1035,12 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
             wxCHECK( pin, OPT_TOOL_EVENT() );
 
             if( !pin->IsVisible()
+<<<<<<< HEAD
                 && !( m_frame->eeconfig()->m_Appearance.show_hidden_pins
                       || m_frame->GetRenderSettings()->m_ShowHiddenLibPins ) )
+=======
+                && !( m_frame->eeconfig()->m_Appearance.show_hidden_pins ) )
+>>>>>>> 763cabad43 (Fix cherry-pick for v8)
             {
                 return OPT_TOOL_EVENT();
             }
