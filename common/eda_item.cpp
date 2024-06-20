@@ -46,7 +46,7 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
         m_structType( idType ),
         m_flags( 0 ),
         m_parent( nullptr ),
-        m_forceVisible( false ),
+        m_forceVisible( false )
 { }
 
 
