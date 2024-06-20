@@ -484,17 +484,17 @@ protected:
 public:
     const KIID  m_Uuid;
 
-protected:
-    EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct)
-    bool           m_forceVisible;
-    EDA_ITEM_FLAGS m_flags;
-
 private:
     /**
      * Run time identification, _keep private_ so it can never be changed after a ctor
      * sets it.  See comment near SetType() regarding virtual functions.
      */
-    KICAD_T       m_structType;
+    KICAD_T        m_structType;
+
+protected:
+    EDA_ITEM_FLAGS m_flags;
+    EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct)
+    bool           m_forceVisible;
 };
 
 
