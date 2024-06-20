@@ -986,7 +986,6 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
     std::vector<PCB_TEXT*> texts;
     const BOARD* board = GetBoard();
     bool         isFPEdit = board && board->IsFootprintHolder();
-    PCB_LAYER_ID footprintSide = GetSide();
 
     if( board )
     {
@@ -1009,6 +1008,9 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
 
     BOX2I bbox( m_pos );
     bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) );   // Give a min size to the bbox
+
+    // Calculate the footprint side
+    PCB_LAYER_ID footprintSide = GetSide();
 
     for( BOARD_ITEM* item : m_drawings )
     {
