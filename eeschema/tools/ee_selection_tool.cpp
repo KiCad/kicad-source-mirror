@@ -198,6 +198,22 @@ static std::vector<KICAD_T> connectedTypes =
     SCH_JUNCTION_T
 };
 
+static std::vector<KICAD_T> connectedLineTypes =
+{
+    SCH_ITEM_LOCATE_WIRE_T,
+    SCH_ITEM_LOCATE_BUS_T
+};
+
+static std::vector<KICAD_T> crossProbingTypes =
+{
+    SCH_SYMBOL_T,
+    SCH_PIN_T,
+    SCH_SHEET_T
+};
+
+static std::vector<KICAD_T> lineTypes = { SCH_LINE_T };
+static std::vector<KICAD_T> sheetTypes = { SCH_SHEET_T };
+static std::vector<KICAD_T> tableCellTypes = { SCH_TABLECELL_T };
 
 bool EE_SELECTION_TOOL::Init()
 {
@@ -217,16 +233,12 @@ bool EE_SELECTION_TOOL::Init()
         m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
 
-    auto linesSelection =        E_C::MoreThan( 0 ) &&
-                                 E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
-                                                   SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
-    auto wireOrBusSelection =    E_C::Count( 1 ) &&
-                                 E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T,
-                                                   SCH_ITEM_LOCATE_BUS_T } );
+    auto linesSelection =        E_C::MoreThan( 0 ) && E_C::OnlyTypes( lineTypes );
+    auto wireOrBusSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( connectedLineTypes );
     auto connectedSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( connectedTypes );
-    auto sheetSelection =        E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_SHEET_T } );
-    auto crossProbingSelection = E_C::MoreThan( 0 ) && E_C::HasTypes( { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T } );
-    auto tableCellSelection =    E_C::MoreThan( 0 ) && E_C::OnlyTypes( { SCH_TABLECELL_T } );
+    auto sheetSelection =        E_C::Count( 1 )    && E_C::OnlyTypes( sheetTypes );
+    auto crossProbingSelection = E_C::MoreThan( 0 ) && E_C::HasTypes( crossProbingTypes );
+    auto tableCellSelection =    E_C::MoreThan( 0 ) && E_C::OnlyTypes( tableCellTypes );
 
     auto schEditSheetPageNumberCondition =
             [&] ( const SELECTION& aSel )
@@ -234,7 +246,7 @@ bool EE_SELECTION_TOOL::Init()
                 if( m_isSymbolEditor || m_isSymbolViewer )
                     return false;
 
-                return E_C::LessThan( 2 )( aSel ) && E_C::OnlyTypes( { SCH_SHEET_T } )( aSel );
+                return E_C::LessThan( 2 )( aSel ) && E_C::OnlyTypes( sheetTypes )( aSel );
             };
 
     auto schEditCondition =

@@ -419,6 +419,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
         }
     }
 
+    static const std::vector<KICAD_T> wireLabelTypes = { SCH_LABEL_LOCATE_WIRE_T };
+    static const std::vector<KICAD_T> busLabelTypes = { SCH_LABEL_LOCATE_BUS_T };
+
     switch( aItem->Type() )
     {
     case SCH_SYMBOL_T:
@@ -508,10 +511,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
-        if( m_wires->GetValue() && aItem->IsType( { SCH_LABEL_LOCATE_WIRE_T } ) )
+        if( m_wires->GetValue() && aItem->IsType( wireLabelTypes ) )
             processItem( aCommit, aSheetPath, aItem );
 
-        if( m_buses->GetValue() && aItem->IsType( { SCH_LABEL_LOCATE_BUS_T } ) )
+        if( m_buses->GetValue() && aItem->IsType( busLabelTypes ) )
             processItem( aCommit, aSheetPath, aItem );
 
         if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )

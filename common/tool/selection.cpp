@@ -92,7 +92,8 @@ bool SELECTION::Contains( EDA_ITEM* aItem ) const
 /// Returns the center point of the selection area bounding box.
 VECTOR2I SELECTION::GetCenter() const
 {
-    bool hasOnlyText = true;
+    static const std::vector<KICAD_T> textTypes = { SCH_TEXT_T, SCH_LABEL_LOCATE_ANY_T };
+    bool                              hasOnlyText = true;
 
     // If the selection contains only texts calculate the center as the mean of all positions
     // instead of using the center of the total bounding box. Otherwise rotating the selection will
@@ -100,7 +101,7 @@ VECTOR2I SELECTION::GetCenter() const
 
     for( EDA_ITEM* item : m_items )
     {
-        if( !item->IsType( { SCH_TEXT_T, SCH_LABEL_LOCATE_ANY_T } ) )
+        if( !item->IsType( textTypes ) )
         {
             hasOnlyText = false;
             break;

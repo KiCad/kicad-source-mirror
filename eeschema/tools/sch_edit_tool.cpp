@@ -243,7 +243,9 @@ bool SCH_EDIT_TOOL::Init()
                 return false;
             };
 
-    auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_SHEET_T } );
+    static const std::vector<KICAD_T> sheetTypes = { SCH_SHEET_T };
+
+    auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyTypes( sheetTypes );
 
     auto haveHighlight =
             [&]( const SELECTION& sel )
@@ -378,61 +380,74 @@ bool SCH_EDIT_TOOL::Init()
 
     // allTextTypes does not include SCH_SHEET_PIN_T because one cannot convert other
     // types to/from this type, living only in a SHEET
-    static std::vector<KICAD_T> allTextTypes = { SCH_LABEL_T,
-                                                 SCH_DIRECTIVE_LABEL_T,
-                                                 SCH_GLOBAL_LABEL_T,
-                                                 SCH_HIER_LABEL_T,
-                                                 SCH_TEXT_T,
-                                                 SCH_TEXTBOX_T };
+    static const std::vector<KICAD_T> allTextTypes = { SCH_LABEL_T,
+                                                       SCH_DIRECTIVE_LABEL_T,
+                                                       SCH_GLOBAL_LABEL_T,
+                                                       SCH_HIER_LABEL_T,
+                                                       SCH_TEXT_T,
+                                                       SCH_TEXTBOX_T };
 
     auto toChangeCondition = ( E_C::OnlyTypes( allTextTypes ) );
 
-    auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_DIRECTIVE_LABEL_T,
-                                                                   SCH_GLOBAL_LABEL_T,
-                                                                   SCH_HIER_LABEL_T,
-                                                                   SCH_TEXT_T,
-                                                                   SCH_TEXTBOX_T } ) )
+    static const std::vector<KICAD_T> toLabelTypes = { SCH_DIRECTIVE_LABEL_T,
+                                                       SCH_GLOBAL_LABEL_T,
+                                                       SCH_HIER_LABEL_T,
+                                                       SCH_TEXT_T,
+                                                       SCH_TEXTBOX_T };
+
+    auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    auto toCLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
-                                                                    SCH_HIER_LABEL_T,
-                                                                    SCH_GLOBAL_LABEL_T,
-                                                                    SCH_TEXT_T,
-                                                                    SCH_TEXTBOX_T } ) )
+    static const std::vector<KICAD_T> toCLabelTypes = { SCH_LABEL_T,
+                                                        SCH_HIER_LABEL_T,
+                                                        SCH_GLOBAL_LABEL_T,
+                                                        SCH_TEXT_T,
+                                                        SCH_TEXTBOX_T };
+
+    auto toCLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toCLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
-                                                                    SCH_DIRECTIVE_LABEL_T,
-                                                                    SCH_GLOBAL_LABEL_T,
-                                                                    SCH_TEXT_T,
-                                                                    SCH_TEXTBOX_T } ) )
+    static const std::vector<KICAD_T> toHLabelTypes = { SCH_LABEL_T,
+                                                        SCH_DIRECTIVE_LABEL_T,
+                                                        SCH_GLOBAL_LABEL_T,
+                                                        SCH_TEXT_T,
+                                                        SCH_TEXTBOX_T };
+
+    auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toHLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
-                                                                    SCH_DIRECTIVE_LABEL_T,
-                                                                    SCH_HIER_LABEL_T,
-                                                                    SCH_TEXT_T,
-                                                                    SCH_TEXTBOX_T } ) )
+    static const std::vector<KICAD_T> toGLabelTypes = { SCH_LABEL_T,
+                                                        SCH_DIRECTIVE_LABEL_T,
+                                                        SCH_HIER_LABEL_T,
+                                                        SCH_TEXT_T,
+                                                        SCH_TEXTBOX_T };
+
+    auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toGLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    auto toTextCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
-                                                                  SCH_DIRECTIVE_LABEL_T,
-                                                                  SCH_GLOBAL_LABEL_T,
-                                                                  SCH_HIER_LABEL_T,
-                                                                  SCH_TEXTBOX_T } ) )
+    static const std::vector<KICAD_T> toTextTypes = { SCH_LABEL_T,
+                                                      SCH_DIRECTIVE_LABEL_T,
+                                                      SCH_GLOBAL_LABEL_T,
+                                                      SCH_HIER_LABEL_T,
+                                                      SCH_TEXTBOX_T };
+
+    auto toTextCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    auto toTextBoxCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
-                                                                     SCH_DIRECTIVE_LABEL_T,
-                                                                     SCH_GLOBAL_LABEL_T,
-                                                                     SCH_HIER_LABEL_T,
-                                                                     SCH_TEXT_T } ) )
+    static const std::vector<KICAD_T> toTextBoxTypes = { SCH_LABEL_T,
+                                                         SCH_DIRECTIVE_LABEL_T,
+                                                         SCH_GLOBAL_LABEL_T,
+                                                         SCH_HIER_LABEL_T,
+                                                         SCH_TEXT_T };
+
+    auto toTextBoxCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextBoxTypes ) )
                                    || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( { SCH_BUS_WIRE_ENTRY_T,
-                                                                  SCH_BUS_BUS_ENTRY_T} );
+    static const std::vector<KICAD_T> busEntryTypes = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T};
 
-    auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_SHEET_T } );
+    auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( busEntryTypes );
+
+    auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyTypes( sheetTypes );
 
     auto makeSymbolUnitMenu =
             [&]( TOOL_INTERACTIVE* tool )

@@ -40,9 +40,15 @@ using namespace std::placeholders;
 #include <sch_sheet.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
-#include <sch_tablecell.h>
-#include <sch_shape.h>
-#include <symbol_edit_frame.h>
+
+
+static const std::vector<KICAD_T> pointEditorTypes = { SCH_SHAPE_T,
+                                                       SCH_RULE_AREA_T,
+                                                       SCH_TEXTBOX_T,
+                                                       SCH_TABLECELL_T,
+                                                       SCH_SHEET_T,
+                                                       SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
+                                                       SCH_BITMAP_T };
 
 
 // Few constants to avoid using bare numbers for point indices
@@ -380,13 +386,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     const EE_SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 || !selection.Front()->IsType( { SCH_SHAPE_T,
-                                                               SCH_RULE_AREA_T,
-                                                               SCH_TEXTBOX_T,
-                                                               SCH_TABLECELL_T,
-                                                               SCH_SHEET_T,
-                                                               SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
-                                                               SCH_BITMAP_T } ) )
+    if( selection.Size() != 1 || !selection.Front()->IsType( pointEditorTypes ) )
     {
         return 0;
     }

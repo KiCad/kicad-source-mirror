@@ -531,7 +531,7 @@ void CONNECTIVITY_DATA::ClearRatsnest()
 
 const std::vector<BOARD_CONNECTED_ITEM*>
 CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem,
-                                      const std::initializer_list<KICAD_T>& aTypes,
+                                      const std::vector<KICAD_T>& aTypes,
                                       bool aIgnoreNetcodes ) const
 {
     std::vector<BOARD_CONNECTED_ITEM*> rv;
@@ -562,7 +562,7 @@ CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem,
 
 
 const std::vector<BOARD_CONNECTED_ITEM*>
-CONNECTIVITY_DATA::GetNetItems( int aNetCode, const std::initializer_list<KICAD_T>& aTypes ) const
+CONNECTIVITY_DATA::GetNetItems( int aNetCode, const std::vector<KICAD_T>& aTypes ) const
 {
     std::vector<BOARD_CONNECTED_ITEM*> items;
     items.reserve( 32 );
@@ -877,7 +877,7 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, bool aIgno
 const std::vector<BOARD_CONNECTED_ITEM*>
 CONNECTIVITY_DATA::GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem,
                                               const VECTOR2I& aAnchor,
-                                              const std::initializer_list<KICAD_T>& aTypes,
+                                              const std::vector<KICAD_T>& aTypes,
                                               const int& aMaxError ) const
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY& entry = m_connAlgo->ItemEntry( aItem );

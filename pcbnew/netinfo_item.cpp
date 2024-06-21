@@ -151,14 +151,18 @@ bool NETINFO_ITEM::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 
 const BOX2I NETINFO_ITEM::GetBoundingBox() const
 {
+    static const std::vector<KICAD_T> netItemTypes = { PCB_TRACE_T,
+                                                       PCB_ARC_T,
+                                                       PCB_VIA_T,
+                                                       PCB_ZONE_T,
+                                                       PCB_PAD_T,
+                                                       PCB_SHAPE_T };
+
     std::shared_ptr<CONNECTIVITY_DATA> conn = GetBoard()->GetConnectivity();
     BOX2I                              bbox;
 
-    for( BOARD_ITEM* item : conn->GetNetItems( m_netCode, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
-                                                            PCB_ZONE_T, PCB_PAD_T } ) )
-    {
+    for( BOARD_ITEM* item : conn->GetNetItems( m_netCode, netItemTypes ) )
         bbox.Merge( item->GetBoundingBox() );
-    }
 
     return bbox;
 }

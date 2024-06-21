@@ -560,14 +560,16 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
 const std::vector<BOARD_CONNECTED_ITEM*>& TRACKS_CLEANER::getConnectedItems( PCB_TRACK* aTrack )
 {
+    static const std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
+                                                         PCB_ARC_T,
+                                                         PCB_VIA_T,
+                                                         PCB_PAD_T,
+                                                         PCB_ZONE_T };
+
     const std::shared_ptr<CONNECTIVITY_DATA>& connectivity = m_brd->GetConnectivity();
 
     if( m_connectedItemsCache.count( aTrack ) == 0 )
-    {
-        m_connectedItemsCache[ aTrack ] =
-                connectivity->GetConnectedItems( aTrack, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
-                                                           PCB_PAD_T, PCB_ZONE_T } );
-    }
+        m_connectedItemsCache[ aTrack ] = connectivity->GetConnectedItems( aTrack, connectedTypes );
 
     return m_connectedItemsCache[ aTrack ];
 }

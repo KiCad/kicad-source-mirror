@@ -259,43 +259,52 @@ bool CONVERT_TOOL::Init()
     m_menu->SetIcon( BITMAPS::convert );
     m_menu->SetTitle( _( "Create from Selection" ) );
 
-    auto shapes = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_RECT_T,
-                                    PCB_SHAPE_LOCATE_CIRCLE_T, PCB_SHAPE_LOCATE_ARC_T,
-                                    PCB_SHAPE_LOCATE_BEZIER_T,
-                                    PCB_FIELD_T, PCB_TEXT_T } )
-                                && P_S_C::SameLayer();
+    static const std::vector<KICAD_T> padTypes =     { PCB_PAD_T };
+    static const std::vector<KICAD_T> segmentTypes = { PCB_TRACE_T,
+                                                       PCB_SHAPE_LOCATE_SEGMENT_T };
+    static const std::vector<KICAD_T> shapeTypes =   { PCB_SHAPE_LOCATE_SEGMENT_T,
+                                                       PCB_SHAPE_LOCATE_RECT_T,
+                                                       PCB_SHAPE_LOCATE_CIRCLE_T,
+                                                       PCB_SHAPE_LOCATE_ARC_T,
+                                                       PCB_SHAPE_LOCATE_BEZIER_T,
+                                                       PCB_FIELD_T,
+                                                       PCB_TEXT_T };
+    static const std::vector<KICAD_T> trackTypes =   { PCB_TRACE_T,
+                                                       PCB_ARC_T,
+                                                       PCB_VIA_T };
+    static const std::vector<KICAD_T> toTrackTypes = { PCB_SHAPE_LOCATE_SEGMENT_T,
+                                                       PCB_SHAPE_LOCATE_ARC_T };
+    static const std::vector<KICAD_T> polyTypes =   { PCB_ZONE_T,
+                                                      PCB_SHAPE_LOCATE_POLY_T,
+                                                      PCB_SHAPE_LOCATE_RECT_T };
 
-    auto graphicToTrack = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T } );
+    auto shapes          = S_C::OnlyTypes( shapeTypes ) && P_S_C::SameLayer();
+    auto graphicToTrack  = S_C::OnlyTypes( toTrackTypes );
+    auto anyTracks       = S_C::MoreThan( 0 ) && S_C::OnlyTypes( trackTypes ) && P_S_C::SameLayer();
+    auto anyPolys        = S_C::OnlyTypes( polyTypes );
+    auto anyPads         = S_C::OnlyTypes( padTypes );
 
-    auto anyTracks = S_C::MoreThan( 0 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )
-                            && P_S_C::SameLayer();
-
-    auto anyPolys = S_C::OnlyTypes( { PCB_ZONE_T, PCB_SHAPE_LOCATE_POLY_T, PCB_SHAPE_LOCATE_RECT_T } );
-
-    auto anyPads = S_C::OnlyTypes( { PCB_PAD_T } );
-
-    auto canCreateArcs     = S_C::Count( 1 )
-                                && S_C::OnlyTypes( { PCB_TRACE_T, PCB_SHAPE_LOCATE_SEGMENT_T } );
-    auto canCreateArray    = S_C::MoreThan( 0 );
-    auto canCreatePolyType = shapes || anyPolys || anyTracks;
+    auto canCreateArcs   = S_C::Count( 1 ) && S_C::OnlyTypes( segmentTypes );
+    auto canCreateArray  = S_C::MoreThan( 0 );
+    auto canCreatePoly   = shapes || anyPolys || anyTracks;
 
     if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
-        canCreatePolyType = shapes || anyPolys || anyTracks || anyPads;
+        canCreatePoly = shapes || anyPolys || anyTracks || anyPads;
 
     auto canCreateLines    = anyPolys;
     auto canCreateTracks   = anyPolys || graphicToTrack;
-    auto canCreate         = canCreatePolyType
+    auto canCreate         = canCreatePoly
                                 || canCreateLines
                                 || canCreateTracks
                                 || canCreateArcs
                                 || canCreateArray;
 
-    m_menu->AddItem( PCB_ACTIONS::convertToPoly, canCreatePolyType );
+    m_menu->AddItem( PCB_ACTIONS::convertToPoly, canCreatePoly );
 
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )
-        m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePolyType );
+        m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePoly );
 
-    m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePolyType );
+    m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePoly );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, canCreateLines );
     m_menu->AppendSeparator();
 

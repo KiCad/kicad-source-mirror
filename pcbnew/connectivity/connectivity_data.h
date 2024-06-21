@@ -211,8 +211,7 @@ public:
      */
     const std::vector<BOARD_CONNECTED_ITEM*>
     GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor,
-                               const std::initializer_list<KICAD_T>& aTypes,
-                               const int& aMaxError = 0 ) const;
+                               const std::vector<KICAD_T>& aTypes, const int& aMaxError = 0 ) const;
 
     void RunOnUnconnectedEdges( std::function<bool( CN_EDGE& )> aFunc );
 
@@ -248,8 +247,7 @@ public:
      * @param aTypes allows one to filter by item types.
      */
     const std::vector<BOARD_CONNECTED_ITEM*>
-    GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
-                       const std::initializer_list<KICAD_T>& aTypes,
+    GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const std::vector<KICAD_T>& aTypes,
                        bool aIgnoreNetcodes = false ) const;
 
     /**
@@ -259,7 +257,7 @@ public:
      * @param aTypes allows one to filter by item types.
      */
     const std::vector<BOARD_CONNECTED_ITEM*>
-    GetNetItems( int aNetCode, const std::initializer_list<KICAD_T>& aTypes ) const;
+    GetNetItems( int aNetCode, const std::vector<KICAD_T>& aTypes ) const;
 
     void BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
 

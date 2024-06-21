@@ -84,6 +84,8 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
 
 bool PAD_TOOL::Init()
 {
+    static const std::vector<KICAD_T> padTypes = { PCB_PAD_T };
+
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     if( selTool )
@@ -93,7 +95,7 @@ bool PAD_TOOL::Init()
 
         SELECTION_CONDITION padSel = SELECTION_CONDITIONS::HasType( PCB_PAD_T );
         SELECTION_CONDITION singlePadSel = SELECTION_CONDITIONS::Count( 1 ) &&
-                                           SELECTION_CONDITIONS::OnlyTypes( { PCB_PAD_T } );
+                                           SELECTION_CONDITIONS::OnlyTypes( padTypes );
 
         auto explodeCondition =
                 [&]( const SELECTION& aSel )

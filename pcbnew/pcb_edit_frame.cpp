@@ -744,41 +744,41 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
+// clang-format off
 
-    mgr->SetConditions( ACTIONS::save, ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( ACTIONS::undo, ENABLE( undoCond ) );
-    mgr->SetConditions( ACTIONS::redo, ENABLE( cond.RedoAvailable() ) );
+    mgr->SetConditions( ACTIONS::save,         ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( ACTIONS::undo,         ENABLE( undoCond ) );
+    mgr->SetConditions( ACTIONS::redo,         ENABLE( cond.RedoAvailable() ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid, CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::togglePolarCoords, CHECK( cond.PolarCoordinates() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits, CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits, CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits, CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::togglePolarCoords,   CHECK( cond.PolarCoordinates() ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,    CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::cut, ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::copy, ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::paste,
-                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::pasteSpecial,
-                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::selectAll, ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::unselectAll, ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::doDelete, ENABLE( cond.HasItems() ) );
-    mgr->SetConditions( ACTIONS::duplicate, ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::cut,          ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::copy,         ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::paste,        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial, ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::selectAll,    ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::unselectAll,  ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::doDelete,     ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::duplicate,    ENABLE( cond.HasItems() ) );
 
-    mgr->SetConditions( PCB_ACTIONS::group, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( PCB_ACTIONS::ungroup, ENABLE( SELECTION_CONDITIONS::HasTypes(
-                                                      { PCB_GROUP_T, PCB_GENERATOR_T } ) ) );
-    mgr->SetConditions( PCB_ACTIONS::lock, ENABLE( PCB_SELECTION_CONDITIONS::HasUnlockedItems ) );
-    mgr->SetConditions( PCB_ACTIONS::unlock, ENABLE( PCB_SELECTION_CONDITIONS::HasLockedItems ) );
+    static const std::vector<KICAD_T> groupTypes = { PCB_GROUP_T, PCB_GENERATOR_T };
 
-    mgr->SetConditions( PCB_ACTIONS::padDisplayMode, CHECK( !cond.PadFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::viaDisplayMode, CHECK( !cond.ViaFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::group,    ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( PCB_ACTIONS::ungroup,  ENABLE( SELECTION_CONDITIONS::HasTypes( groupTypes ) ) );
+    mgr->SetConditions( PCB_ACTIONS::lock,     ENABLE( PCB_SELECTION_CONDITIONS::HasUnlockedItems ) );
+    mgr->SetConditions( PCB_ACTIONS::unlock,   ENABLE( PCB_SELECTION_CONDITIONS::HasLockedItems ) );
+
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,   CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::viaDisplayMode,   CHECK( !cond.ViaFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::trackDisplayMode, CHECK( !cond.TrackFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::graphicsOutlines, CHECK( !cond.GraphicsFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::textOutlines, CHECK( !cond.TextFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,     CHECK( !cond.TextFillDisplay() ) );
 
     if( SCRIPTING::IsWxAvailable() )
         mgr->SetConditions( PCB_ACTIONS::showPythonConsole, CHECK( cond.ScriptingConsoleVisible() ) );
@@ -945,23 +945,24 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::highlightNet,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( PCB_ACTIONS::highlightNetSelection, ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
 
-    mgr->SetConditions( PCB_ACTIONS::selectNet,
-                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
-    mgr->SetConditions( PCB_ACTIONS::deselectNet,
-                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
-    mgr->SetConditions( PCB_ACTIONS::selectUnconnected,
-                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T, PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
-    mgr->SetConditions( PCB_ACTIONS::selectSameSheet,
-                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) ) );
-    mgr->SetConditions( PCB_ACTIONS::selectOnSchematic,
-                        ENABLE( SELECTION_CONDITIONS::HasTypes( { PCB_PAD_T, PCB_FOOTPRINT_T, PCB_GROUP_T } ) ) );
+    static const std::vector<KICAD_T> trackTypes =      { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T };
+    static const std::vector<KICAD_T> padOwnerTypes =   { PCB_FOOTPRINT_T, PCB_PAD_T };
+    static const std::vector<KICAD_T> footprintTypes =  { PCB_FOOTPRINT_T };
+    static const std::vector<KICAD_T> crossProbeTypes = { PCB_PAD_T, PCB_FOOTPRINT_T, PCB_GROUP_T };
+    static const std::vector<KICAD_T> zoneTypes =       { PCB_ZONE_T };
+
+    mgr->SetConditions( PCB_ACTIONS::selectNet,         ENABLE( SELECTION_CONDITIONS::OnlyTypes( trackTypes ) ) );
+    mgr->SetConditions( PCB_ACTIONS::deselectNet,       ENABLE( SELECTION_CONDITIONS::OnlyTypes( trackTypes ) ) );
+    mgr->SetConditions( PCB_ACTIONS::selectUnconnected, ENABLE( SELECTION_CONDITIONS::OnlyTypes( padOwnerTypes ) ) );
+    mgr->SetConditions( PCB_ACTIONS::selectSameSheet,   ENABLE( SELECTION_CONDITIONS::OnlyTypes( footprintTypes ) ) );
+    mgr->SetConditions( PCB_ACTIONS::selectOnSchematic, ENABLE( SELECTION_CONDITIONS::HasTypes( crossProbeTypes ) ) );
 
 
     SELECTION_CONDITION singleZoneCond = SELECTION_CONDITIONS::Count( 1 )
-                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T } );
+                                    && SELECTION_CONDITIONS::OnlyTypes( zoneTypes );
 
     SELECTION_CONDITION zoneMergeCond = SELECTION_CONDITIONS::MoreThan( 1 )
-                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T } );
+                                    && SELECTION_CONDITIONS::OnlyTypes( zoneTypes );
 
     mgr->SetConditions( PCB_ACTIONS::zoneDuplicate,   ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::drawZoneCutout,  ENABLE( singleZoneCond ) );
@@ -977,7 +978,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( ACTIONS::measureTool );
     CURRENT_TOOL( ACTIONS::selectionTool );
     CURRENT_TOOL( PCB_ACTIONS::localRatsnestTool );
-
 
     auto isDRCIdle =
             [this] ( const SELECTION& )
@@ -1028,6 +1028,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
 #undef CURRENT_EDIT_TOOL
 #undef ENABLE
 #undef CHECK
+// clang-format on
 }
 
 

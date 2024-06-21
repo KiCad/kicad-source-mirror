@@ -376,7 +376,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aJunction )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
-        if( line->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } )
+        if( ( line->IsWire() || line->IsBus() )
                 && line->IsEndPoint( aJunction->GetPosition() )
                 && !( line->GetEditFlags() & STRUCT_DELETED ) )
         {

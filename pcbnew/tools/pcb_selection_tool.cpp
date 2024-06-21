@@ -172,6 +172,8 @@ bool PCB_SELECTION_TOOL::Init()
     selectMenu->SetTool( this );
     m_menu.RegisterSubMenu( selectMenu );
 
+    static const std::vector<KICAD_T> tableCellTypes = { PCB_TABLECELL_T };
+
     auto& menu = m_menu.GetMenu();
 
     auto activeToolCondition =
@@ -198,7 +200,7 @@ bool PCB_SELECTION_TOOL::Init()
             };
 
     auto tableCellSelection = SELECTION_CONDITIONS::MoreThan( 0 )
-                                && SELECTION_CONDITIONS::OnlyTypes( { PCB_TABLECELL_T } );
+                                && SELECTION_CONDITIONS::OnlyTypes( tableCellTypes );
 
     if( frame && frame->IsType( FRAME_PCB_EDITOR ) )
     {

@@ -73,6 +73,34 @@ using namespace std::placeholders;
 
 const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
+static const std::vector<KICAD_T> padTypes = { PCB_PAD_T };
+
+static const std::vector<KICAD_T> footprintTypes = { PCB_FOOTPRINT_T };
+
+static const std::vector<KICAD_T> groupTypes = { PCB_GROUP_T };
+
+static const std::vector<KICAD_T> trackTypes = { PCB_TRACE_T,
+                                                 PCB_ARC_T,
+                                                 PCB_VIA_T };
+
+static const std::vector<KICAD_T> baseConnectedTypes = { PCB_PAD_T,
+                                                         PCB_VIA_T,
+                                                         PCB_TRACE_T,
+                                                         PCB_ARC_T };
+
+static const std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
+                                                     PCB_ARC_T,
+                                                     PCB_VIA_T,
+                                                     PCB_PAD_T,
+                                                     PCB_ZONE_T };
+
+static const std::vector<KICAD_T> unroutableTypes = { PCB_TRACE_T,
+                                                      PCB_ARC_T,
+                                                      PCB_VIA_T,
+                                                      PCB_PAD_T,
+                                                      PCB_FOOTPRINT_T };
+
+
 EDIT_TOOL::EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
         m_selectionTool( nullptr ),
@@ -239,18 +267,18 @@ bool EDIT_TOOL::Init()
             [ this ]( const SELECTION& aSelection )
             {
                 if( !m_isFootprintEditor
-                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_PAD_T } )( aSelection ) )
+                    && SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
                 {
                     return false;
                 }
 
-                if( SELECTION_CONDITIONS::HasTypes( { PCB_GROUP_T } )( aSelection ) )
+                if( SELECTION_CONDITIONS::HasTypes( groupTypes )( aSelection ) )
                     return true;
 
                 return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
             };
 
-    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } )
+    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyTypes( footprintTypes )
                                         && SELECTION_CONDITIONS::Count( 1 );
 
     auto multipleFootprintsCondition =
@@ -296,22 +324,6 @@ bool EDIT_TOOL::Init()
                 return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
             };
 
-    static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
-                                                   PCB_ARC_T,
-                                                   PCB_VIA_T,
-                                                   PCB_PAD_T,
-                                                   PCB_ZONE_T };
-
-    static std::vector<KICAD_T> unroutableTypes = { PCB_TRACE_T,
-                                                    PCB_ARC_T,
-                                                    PCB_VIA_T,
-                                                    PCB_PAD_T,
-                                                    PCB_FOOTPRINT_T };
-
-    static std::vector<KICAD_T> trackTypes = { PCB_TRACE_T,
-                                               PCB_ARC_T,
-                                               PCB_VIA_T };
-
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
@@ -331,7 +343,7 @@ bool EDIT_TOOL::Init()
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems ) );
     menu.AddItem( PCB_ACTIONS::dragFreeAngle,     SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
-                                                      && !SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) );
+                                                      && !SELECTION_CONDITIONS::OnlyTypes( footprintTypes ) );
     menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
@@ -613,8 +625,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                 for( int i = 0; i < 3; i++ )
                 {
                     itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor,
-                                                                     { PCB_PAD_T, PCB_VIA_T,
-                                                                       PCB_TRACE_T, PCB_ARC_T },
+                                                                     baseConnectedTypes,
                                                                      allowedDeviation );
                     allowedDeviation /= 2;
 
@@ -1029,9 +1040,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 VECTOR2I anchor = aStartPoint ? aTrack->GetStart() : aTrack->GetEnd();
                 std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
 
-                itemsOnAnchor = c->GetConnectedItemsAtAnchor( aTrack, anchor,
-                                                              { PCB_PAD_T, PCB_VIA_T,
-                                                                PCB_TRACE_T, PCB_ARC_T } );
+                itemsOnAnchor = c->GetConnectedItemsAtAnchor( aTrack, anchor, baseConnectedTypes );
 
                 if( itemsOnAnchor.size() > 0
                         && selection.Contains( itemsOnAnchor.at( 0 ) )

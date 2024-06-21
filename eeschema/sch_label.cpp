@@ -259,6 +259,9 @@ const wxString SCH_LABEL_BASE::GetDefaultFieldName( const wxString& aName, bool 
 
 bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
 {
+    static const std::vector<KICAD_T> wireAndPinTypes = { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T };
+    static const std::vector<KICAD_T> busTypes = { SCH_ITEM_LOCATE_BUS_T };
+
     if( SCH_TEXT::IsType( aScanTypes ) )
         return true;
 
@@ -283,7 +286,7 @@ bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
         {
             for( SCH_ITEM* connection : item_set )
             {
-                if( connection->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T } ) )
+                if( connection->IsType( wireAndPinTypes ) )
                     return true;
             }
         }
@@ -292,7 +295,7 @@ bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
         {
             for( SCH_ITEM* connection : item_set )
             {
-                if( connection->IsType( { SCH_ITEM_LOCATE_BUS_T } ) )
+                if( connection->IsType( busTypes ) )
                     return true;
             }
         }

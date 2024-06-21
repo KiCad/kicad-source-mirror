@@ -226,8 +226,7 @@ public:
     bool Remove( BOARD_ITEM* aItem );
     bool Add( BOARD_ITEM* aItem );
 
-    const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode,
-                                   const std::initializer_list<KICAD_T>& aTypes,
+    const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vector<KICAD_T>& aTypes,
                                    int aSingleNet, CN_ITEM* rootItem = nullptr );
     const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode );
 

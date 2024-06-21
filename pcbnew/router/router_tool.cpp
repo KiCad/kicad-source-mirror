@@ -2104,7 +2104,7 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
     if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
     {
         // Footprints cannot be dragged freely.
-        if( item->IsType( { PCB_FOOTPRINT_T } ) )
+        if( item->Type() == PCB_FOOTPRINT_T )
             return !( aDragMode & PNS::DM_FREE_ANGLE );
         else
             return true;

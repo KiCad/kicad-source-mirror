@@ -52,6 +52,9 @@
 #include <font/outline_font.h>
 #include "sim/sim_lib_mgr.h"
 
+static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
+
+
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
         SCH_ITEM( aParent, SCH_FIELD_T ),
@@ -173,7 +176,7 @@ void SCH_FIELD::SetId( int aId )
         default:              SetLayer( LAYER_FIELDS );        break;
         }
     }
-    else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+    else if( m_parent && m_parent->IsType( labelTypes ) )
     {
         // We can't use defined IDs for labels because there can be multiple net class
         // assignments.
@@ -271,7 +274,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 text = ExpandTextVars( text, &symbolResolver );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
                 text = ExpandTextVars( text, &sheetResolver );
-            else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+            else if( m_parent && m_parent->IsType( labelTypes ) )
                 text = ExpandTextVars( text, &labelResolver );
             else if( Schematic() )
             {
@@ -1178,7 +1181,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
         else if( m_name.IsEmpty() && aUseDefaultName )
             return SCH_SHEET::GetDefaultFieldName( m_id );
     }
-    else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+    else if( m_parent && m_parent->IsType( labelTypes ) )
     {
         return SCH_LABEL_BASE::GetDefaultFieldName( m_name, aUseDefaultName );
     }
@@ -1201,7 +1204,7 @@ wxString SCH_FIELD::GetCanonicalName() const
         else if( m_id == SHEETFILENAME )
             return wxT( "Sheetfile" );
     }
-    else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+    else if( m_parent && m_parent->IsType( labelTypes ) )
     {
         // These should be stored in canonical format, but just in case:
         if( m_name == _( "Net Class" ) || m_name == wxT( "Net Class" ) )

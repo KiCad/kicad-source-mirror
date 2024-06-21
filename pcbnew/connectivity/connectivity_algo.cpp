@@ -317,26 +317,26 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
-    if( aMode == CSM_PROPAGATE )
-    {
-        return SearchClusters( aMode,
-                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T,
-                                 PCB_SHAPE_T },
-                               -1 );
-    }
-    else
-    {
-        return SearchClusters( aMode,
-                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T,
-                                 PCB_FOOTPRINT_T, PCB_SHAPE_T },
-                               -1 );
-    }
+    static const std::vector<KICAD_T> withoutZones = { PCB_TRACE_T,
+                                                       PCB_ARC_T,
+                                                       PCB_PAD_T,
+                                                       PCB_VIA_T,
+                                                       PCB_FOOTPRINT_T,
+                                                       PCB_SHAPE_T };
+    static const std::vector<KICAD_T> withZones = { PCB_TRACE_T,
+                                                    PCB_ARC_T,
+                                                    PCB_PAD_T,
+                                                    PCB_VIA_T,
+                                                    PCB_ZONE_T,
+                                                    PCB_FOOTPRINT_T,
+                                                    PCB_SHAPE_T };
+
+    return SearchClusters( aMode, aMode == CSM_PROPAGATE ? withoutZones : withZones, -1 );
 }
 
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS
-CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode,
-                                      const std::initializer_list<KICAD_T>& aTypes,
+CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vector<KICAD_T>& aTypes,
                                       int aSingleNet, CN_ITEM* rootItem )
 {
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
