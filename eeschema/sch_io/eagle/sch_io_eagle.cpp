@@ -1619,18 +1619,18 @@ SCH_TEXT* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
         else
         {
             label = std::make_unique<SCH_LABEL>();
-            label->SetText( escapeName( aLabel->netname ) );
+            label->SetText( escapeName( aNetName ) );
         }
     }
     else if( global )
     {
         label = std::make_unique<SCH_GLOBALLABEL>();
-        label->SetText( escapeName( aLabel->netname ) );
+        label->SetText( escapeName( aNetName ) );
     }
     else
     {
         label = std::make_unique<SCH_LABEL>();
-        label->SetText( escapeName( aLabel->netname ) );
+        label->SetText( escapeName( aNetName ) );
     }
 
     label->SetPosition( elabelpos );

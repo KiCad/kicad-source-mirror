@@ -679,12 +679,7 @@ struct ELABEL : public EAGLE_BASE
 
     // TODO Add grouprefs
 
-    wxString     netname;
-
-    ELABEL( wxXmlNode* aLabel, const wxString& aNetName, IO_BASE* aIo = nullptr );
     ELABEL( wxXmlNode* aLabel, IO_BASE* aIo = nullptr );
-
-    void Parse( wxXmlNode* aLabel );
 };
 
 

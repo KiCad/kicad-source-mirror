@@ -624,22 +624,8 @@ EJUNCTION::EJUNCTION( wxXmlNode* aJunction, IO_BASE* aIo ) :
 }
 
 
-ELABEL::ELABEL( wxXmlNode* aLabel, const wxString& aNetName, IO_BASE* aIo ) :
-    EAGLE_BASE( aIo )
-{
-    Parse( aLabel );
-    netname = aNetName;
-}
-
-
 ELABEL::ELABEL( wxXmlNode* aLabel, IO_BASE* aIo ) :
     EAGLE_BASE( aIo )
-{
-    Parse( aLabel );
-}
-
-
-void ELABEL::Parse( wxXmlNode* aLabel )
 {
     /*
      * <!ELEMENT label EMPTY>
