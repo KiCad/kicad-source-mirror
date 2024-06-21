@@ -140,7 +140,8 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
 }
 
 
-nlohmann::json EASYEDAPRO::ReadProjectOrDeviceFile( const wxString& aZipFileName )
+nlohmann::json EASYEDAPRO::FindJsonFile( const wxString&           aZipFileName,
+                                         const std::set<wxString>& aFileNames )
 {
     std::shared_ptr<wxZipEntry> entry;
     wxFFileInputStream          in( aZipFileName );
@@ -152,7 +153,7 @@ nlohmann::json EASYEDAPRO::ReadProjectOrDeviceFile( const wxString& aZipFileName
 
         try
         {
-            if( name == wxS( "project.json" ) || name == wxS( "device.json" ) )
+            if( aFileNames.find( name ) != aFileNames.end() )
             {
                 wxMemoryOutputStream memos;
                 memos << zip;
@@ -174,6 +175,20 @@ nlohmann::json EASYEDAPRO::ReadProjectOrDeviceFile( const wxString& aZipFileName
             THROW_IO_ERROR( wxString::Format( _( "Error reading '%s': %s" ), name, e.what() ) );
         }
     }
+
+    return nlohmann::json{};
+}
+
+
+nlohmann::json EASYEDAPRO::ReadProjectOrDeviceFile( const wxString& aZipFileName )
+{
+    static const std::set<wxString> c_files = { wxS( "project.json" ), wxS( "device.json" ),
+                                                wxS( "footprint.json" ), wxS( "symbol.json" ) };
+
+    nlohmann::json j = FindJsonFile( aZipFileName, c_files );
+
+    if( !j.is_null() )
+        return j;
 
     THROW_IO_ERROR( wxString::Format(
             _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro "
