@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #include <confirm.h>
 #include <kidialog.h>
 #include <common.h>
+#include <io/eagle/eagle_parser.h>
 #include <symbol_lib_table.h>
 #include <symbol_edit_frame.h>
 #include <symbol_library.h>
@@ -107,6 +108,12 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
     {
         msg.Printf( _( "Cannot import symbol library '%s'." ), fn.GetFullPath() );
         DisplayErrorMessage( this, msg, ioe.What() );
+        return;
+    }
+    catch( const XML_PARSER_ERROR& ioe )
+    {
+        msg.Printf( _( "Cannot import symbol library '%s'." ), fn.GetFullPath() );
+        DisplayErrorMessage( this, msg, ioe.what() );
         return;
     }
 

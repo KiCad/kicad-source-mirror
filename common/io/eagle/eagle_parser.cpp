@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -1461,7 +1461,7 @@ ELAYER::ELAYER( wxXmlNode* aLayer, IO_BASE* aIo ) :
     number  = parseRequiredAttribute<int>( aLayer, "number" );
     name    = parseRequiredAttribute<wxString>( aLayer, "name" );
     color   = parseRequiredAttribute<int>( aLayer, "color" );
-    fill    = 1;    // Temporary value.
+    fill    = parseRequiredAttribute<int>( aLayer, "fill" );
     visible = parseOptionalAttribute<bool>( aLayer, "visible" );
     active  = parseOptionalAttribute<bool>( aLayer, "active" );
 
@@ -2424,8 +2424,18 @@ ELIBRARY::ELIBRARY( wxXmlNode* aLibrary, IO_BASE* aIo ) :
      *           <!-- name: Only in libraries used inside boards or schematics -->
      *           <!-- urn: Only in online libraries used inside boards or schematics -->
      */
-    name = parseRequiredAttribute<wxString>( aLibrary, "name" );
-    urn = parseOptionalAttribute<wxString>( aLibrary, "urn" );
+
+    // The name and urn attributes are only valid in schematic and board files.
+    wxString parentNodeName;
+
+    if( aLibrary->GetParent() )
+        parentNodeName = aLibrary->GetParent()->GetName();
+
+    if( parentNodeName == "libraries" )
+    {
+        name = parseRequiredAttribute<wxString>( aLibrary, "name" );
+        urn = parseOptionalAttribute<wxString>( aLibrary, "urn" );
+    }
 
     for( wxXmlNode* child = aLibrary->GetChildren(); child; child = child->GetNext() )
     {
@@ -2673,14 +2683,20 @@ EDRAWING::EDRAWING( wxXmlNode* aDrawing, IO_BASE* aIo ) :
         else if( child->GetName() == "filters" )
         {
             for( wxXmlNode* filter = child->GetChildren(); filter; filter = filter->GetNext() )
-                filters.emplace_back( std::make_unique<EFILTER>( filter, aIo ) );
+            {
+                if( filter->GetName() == "filter" )
+                    filters.emplace_back( std::make_unique<EFILTER>( filter, aIo ) );
+            }
 
             AdvanceProgressPhase();
         }
         else if( child->GetName() == "layers" )
         {
             for( wxXmlNode* layer = child->GetChildren(); layer; layer = layer->GetNext() )
-                layers.emplace_back( std::make_unique<ELAYER>( layer, aIo ) );
+            {
+                if( layer->GetName() == "layer" )
+                    layers.emplace_back( std::make_unique<ELAYER>( layer, aIo ) );
+            }
 
             AdvanceProgressPhase();
         }
