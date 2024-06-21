@@ -2273,8 +2273,8 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymb
     SCH_SHAPE* rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
     rectangle->SetParent( aSymbol.get() );
-    rectangle->SetPosition( VECTOR2I( aRectangle->x1.ToSchUnits(), aRectangle->y1.ToSchUnits() ) );
-    rectangle->SetEnd( VECTOR2I( aRectangle->x2.ToSchUnits(), aRectangle->y2.ToSchUnits() ) );
+    rectangle->SetPosition( VECTOR2I( aRectangle->x1.ToSchUnits(), -aRectangle->y1.ToSchUnits() ) );
+    rectangle->SetEnd( VECTOR2I( aRectangle->x2.ToSchUnits(), -aRectangle->y2.ToSchUnits() ) );
 
     if( aRectangle->rot )
     {
