@@ -392,7 +392,9 @@ T parseRequiredAttribute( wxXmlNode* aNode, const wxString& aAttribute )
     if( aNode->GetAttribute( aAttribute, &value ) )
         return Convert<T>( value );
     else
-        throw XML_PARSER_ERROR( "The required attribute " + aAttribute + " is missing." );
+        throw XML_PARSER_ERROR( "The required attribute " + aAttribute + " is missing at "
+                                "line " + wxString::Format( "%d", aNode->GetLineNumber() ) +
+                                "." );
 }
 
 
@@ -1294,8 +1296,8 @@ EMODEL::EMODEL( wxXmlNode* aModel, IO_BASE* aIo ) :
      *           name          %String;       #REQUIRED
      *           >
      */
-    model = aModel->GetNodeContent();
     name = parseRequiredAttribute<wxString>( aModel, "name" );
+    model = aModel->GetNodeContent();
 
     AdvanceProgressPhase();
 }
@@ -1352,7 +1354,9 @@ ESPICE::ESPICE( wxXmlNode* aSpice, IO_BASE* aIo ) :
      * <!ELEMENT spice (pinmapping, model)>
      */
     pinmapping = std::move( std::make_unique<EPINMAPPING>( aSpice ) );
-    model = std::move( std::make_unique<EMODEL>( aSpice ) );
+
+    if( aSpice->GetName() == "model" )
+        model = std::move( std::make_unique<EMODEL>( aSpice ) );
 
     AdvanceProgressPhase();
 }
@@ -1481,8 +1485,13 @@ EPART::EPART( wxXmlNode* aPart, IO_BASE* aIo ) :
      */
     name = parseRequiredAttribute<wxString>( aPart, "name" );
     library = parseRequiredAttribute<wxString>( aPart, "library" );
+    libraryUrn = parseOptionalAttribute<wxString>( aPart, "library_urn" );
     deviceset = parseRequiredAttribute<wxString>( aPart, "deviceset" );
     device = parseRequiredAttribute<wxString>( aPart, "device" );
+    package3d_urn = parseOptionalAttribute<wxString>( aPart, "package3d_urn" );
+    override_package3d_urn = parseOptionalAttribute<wxString>( aPart, "override_package3d_urn" );
+    override_package_urn = parseOptionalAttribute<wxString>( aPart, "override_package_urn" );
+    override_locally_modified = parseOptionalAttribute<bool>( aPart, "override_locally_modified" );
     technology = parseOptionalAttribute<wxString>( aPart, "technology" );
     value = parseOptionalAttribute<wxString>( aPart, "value" );
 
@@ -2311,8 +2320,8 @@ EPACKAGE3D::EPACKAGE3D( wxXmlNode* aPackage3d, IO_BASE* aIo ) :
     name = parseRequiredAttribute<wxString>( aPackage3d, "name" );
     urn = parseRequiredAttribute<wxString>( aPackage3d, "urn" );
     type = parseRequiredAttribute<wxString>( aPackage3d, "type" );
-    library_version = parseRequiredAttribute<int>( aPackage3d, "alibrary_version" );
-    library_locally_modified = parseRequiredAttribute<bool>( aPackage3d,
+    library_version = parseOptionalAttribute<int>( aPackage3d, "library_version" );
+    library_locally_modified = parseOptionalAttribute<bool>( aPackage3d,
                                                              "library_locally_modified" );
 
     for( wxXmlNode* child = aPackage3d->GetChildren(); child; child = child->GetNext() )
@@ -2650,8 +2659,6 @@ EDRAWING::EDRAWING( wxXmlNode* aDrawing, IO_BASE* aIo ) :
      */
     for( wxXmlNode* child = aDrawing->GetChildren(); child; child = child->GetNext() )
     {
-        wxLogDebug( wxS( "Eagle 'drawing' child node '%s'." ), child->GetName() );
-
         if( child->GetName() == "settings" )
         {
             for( wxXmlNode* setting = child->GetChildren(); setting; setting = setting->GetNext() )
