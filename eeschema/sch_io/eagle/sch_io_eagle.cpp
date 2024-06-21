@@ -1883,7 +1883,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         if( attr->value )
             newField.SetText( *attr->value );
 
-        newField.SetVisible( ( attr->display == "off" ) ? false : true );
+        newField.SetVisible( ( attr->display == EATTR::Off ) ? false : true );
 
         symbol->AddField( newField );
     }
