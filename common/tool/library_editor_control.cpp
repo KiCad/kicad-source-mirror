@@ -44,14 +44,14 @@ void LIBRARY_EDITOR_CONTROL::AddContextMenuItems( CONDITIONAL_MENU* aMenu )
             {
                 LIB_TREE*      libTree = m_frame->GetLibTree();
                 LIB_TREE_NODE* current = libTree ? libTree->GetCurrentTreeNode() : nullptr;
-                return current && current->m_Type == LIB_TREE_NODE::LIBRARY && current->m_Pinned;
+                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY && current->m_Pinned;
             };
     auto unpinnedLibSelectedCondition =
             [this](const SELECTION& aSel )
             {
                 LIB_TREE*      libTree = m_frame->GetLibTree();
                 LIB_TREE_NODE* current = libTree ? libTree->GetCurrentTreeNode() : nullptr;
-                return current && current->m_Type == LIB_TREE_NODE::LIBRARY && !current->m_Pinned;
+                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY && !current->m_Pinned;
             };
 
     aMenu->AddItem( ACTIONS::pinLibrary,        unpinnedLibSelectedCondition, 1 );

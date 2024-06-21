@@ -29,7 +29,7 @@
  */
 enum KIFACE_ADDR_ID : int
 {
-    INVALID,
+    KIFACE_ID_INVALID,
 
     /**
      * Return a pointer to the global instance of FOOTPRINT_LIST from pcbnew.

@@ -468,7 +468,7 @@ int LIB_TREE_MODEL_ADAPTER::GetUnitFor( const wxDataViewItem& aSelection ) const
 LIB_TREE_NODE::TYPE LIB_TREE_MODEL_ADAPTER::GetTypeFor( const wxDataViewItem& aSelection ) const
 {
     const LIB_TREE_NODE* node = ToNode( aSelection );
-    return node ? node->m_Type : LIB_TREE_NODE::INVALID;
+    return node ? node->m_Type : LIB_TREE_NODE::TYPE::INVALID;
 }
 
 
@@ -526,7 +526,7 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
     unsigned int         count = 0;
 
     if( node->m_Type == LIB_TREE_NODE::TYPE::ROOT
-            || node->m_Type == LIB_TREE_NODE::LIBRARY
+            || node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY
             || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::ITEM ) )
     {
         for( std::unique_ptr<LIB_TREE_NODE> const& child: node->m_Children )
@@ -701,7 +701,7 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    if( node->m_Type == LIB_TREE_NODE::ITEM )
+    if( node->m_Type == LIB_TREE_NODE::TYPE::ITEM )
     {
         if( !node->m_IsRoot && aCol == 0 )
         {
@@ -762,7 +762,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                     if( n->m_Name.StartsWith( "-- " ) )
                         return -1; // Skip this node and its children
 
-                    if( n->m_Type == LIB_TREE_NODE::ITEM
+                    if( n->m_Type == LIB_TREE_NODE::TYPE::ITEM
                               && ( n->m_Children.empty() || !m_preselect_unit )
                               && m_preselect_lib_id == n->m_LibId )
                     {
@@ -770,7 +770,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                         m_widget->ExpandAncestors( ToItem( n ) );
                         return 0;
                     }
-                    else if( n->m_Type == LIB_TREE_NODE::UNIT
+                    else if( n->m_Type == LIB_TREE_NODE::TYPE::UNIT
                               && ( m_preselect_unit && m_preselect_unit == n->m_Unit )
                               && m_preselect_lib_id == n->m_Parent->m_LibId )
                     {

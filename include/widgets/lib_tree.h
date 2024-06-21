@@ -51,7 +51,7 @@ public:
     ///< Flags to select extra widgets and options
     enum FLAGS
     {
-        NONE        = 0x00,
+        FLAGS_NONE  = 0x00,
         SEARCH      = 0x01,
         FILTERS     = 0x02,
         DETAILS     = 0x04,

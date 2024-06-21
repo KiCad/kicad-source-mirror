@@ -49,7 +49,7 @@ public:
     bool   m_valid;
 };
 
-enum KIBIS_WAVEFORM_TYPE
+enum class KIBIS_WAVEFORM_TYPE
 {
     NONE = 0, // Used for three state
     PRBS,

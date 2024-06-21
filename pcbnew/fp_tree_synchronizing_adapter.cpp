@@ -64,7 +64,7 @@ TOOL_INTERACTIVE* FP_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
 bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 {
     const LIB_TREE_NODE* node = ToNode( aItem );
-    return node ? node->m_Type == LIB_TREE_NODE::LIBRARY : true;
+    return node ? node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY : true;
 }
 
 
@@ -229,7 +229,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         {
             node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetLibDescription();
         }
-        else if( node->m_Type == LIB_TREE_NODE::LIBRARY )
+        else if( node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
         {
             try
             {
@@ -277,7 +277,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
 
     switch( node->m_Type )
     {
-    case LIB_TREE_NODE::LIBRARY:
+    case LIB_TREE_NODE::TYPE::LIBRARY:
         if( node->m_Name == m_frame->GetLoadedFPID().GetLibNickname().wx_str() )
         {
             // mark the current library if it's collapsed
@@ -293,7 +293,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
         }
         break;
 
-    case LIB_TREE_NODE::ITEM:
+    case LIB_TREE_NODE::TYPE::ITEM:
         if( node->m_LibId == m_frame->GetLoadedFPID() )
         {
             // mark the current (on-canvas) part
@@ -319,7 +319,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem )
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    return node->m_Type == LIB_TREE_NODE::ITEM && node->m_LibId != m_frame->GetLoadedFPID();
+    return node->m_Type == LIB_TREE_NODE::TYPE::ITEM && node->m_LibId != m_frame->GetLoadedFPID();
 }
 
 

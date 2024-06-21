@@ -635,7 +635,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     if( !sel.IsOk() )
         sel = m_adapter->GetCurrentDataViewItem();
 
-    LIB_TREE_NODE::TYPE type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
+    LIB_TREE_NODE::TYPE type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::TYPE::INVALID;
 
     switch( aKeyStroke.GetKeyCode() )
     {
@@ -652,7 +652,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     case WXK_ADD:
         updateRecentSearchMenu();
 
-        if( type == LIB_TREE_NODE::LIBRARY )
+        if( type == LIB_TREE_NODE::TYPE::LIBRARY )
             m_tree_ctrl->Expand( sel );
 
         break;
@@ -660,7 +660,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     case WXK_SUBTRACT:
         updateRecentSearchMenu();
 
-        if( type == LIB_TREE_NODE::LIBRARY )
+        if( type == LIB_TREE_NODE::TYPE::LIBRARY )
             m_tree_ctrl->Collapse( sel );
 
         break;
@@ -671,7 +671,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
         if( GetSelectedLibId().IsValid() )
             postSelectEvent();
-        else if( type == LIB_TREE_NODE::LIBRARY )
+        else if( type == LIB_TREE_NODE::TYPE::LIBRARY )
             toggleExpand( sel );
 
         break;
@@ -954,7 +954,7 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
     {
         LIB_TREE_NODE* current = GetCurrentTreeNode();
 
-        if( current && current->m_Type == LIB_TREE_NODE::LIBRARY )
+        if( current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
         {
             ACTION_MENU menu( true, nullptr );
 

@@ -63,7 +63,7 @@ TOOL_INTERACTIVE* SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
 bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 {
     const LIB_TREE_NODE* node = ToNode( aItem );
-    return node ? node->m_Type == LIB_TREE_NODE::LIBRARY : true;
+    return node ? node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY : true;
 }
 
 
@@ -244,12 +244,12 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
             aVariant = UnescapeString( node->m_Name );
 
         // mark modified items with an asterisk
-        if( node->m_Type == LIB_TREE_NODE::LIBRARY )
+        if( node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
         {
             if( m_libMgr->IsLibraryModified( node->m_Name ) )
                 aVariant = aVariant.GetString() + " *";
         }
-        else if( node->m_Type == LIB_TREE_NODE::ITEM )
+        else if( node->m_Type == LIB_TREE_NODE::TYPE::ITEM )
         {
             if( m_libMgr->IsSymbolModified( node->m_Name, node->m_Parent->m_Name ) )
                 aVariant = aVariant.GetString() + " *";
@@ -260,7 +260,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
     default:
         if( m_colIdxMap.count( aCol ) )
         {
-            if( node->m_Type == LIB_TREE_NODE::LIBRARY )
+            if( node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
             {
                 LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
                 SYMBOL_LIB_TABLE_ROW*   lib = libMgr.GetLibrary( node->m_LibId.GetLibNickname() );
@@ -307,7 +307,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     wxCHECK( node, false );
 
     // Mark both columns of unloaded libraries using grey text color (to look disabled)
-    if( node->m_Type == LIB_TREE_NODE::LIBRARY && !m_libMgr->IsLibraryLoaded( node->m_Name ) )
+    if( node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY && !m_libMgr->IsLibraryLoaded( node->m_Name ) )
     {
         aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT  ) );
         return true;
@@ -321,7 +321,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
 
     switch( node->m_Type )
     {
-    case LIB_TREE_NODE::LIBRARY:
+    case LIB_TREE_NODE::TYPE::LIBRARY:
         // mark modified libs with bold font
         aAttr.SetBold( m_libMgr->IsLibraryModified( node->m_Name ) );
 
@@ -336,7 +336,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         }
         break;
 
-    case LIB_TREE_NODE::ITEM:
+    case LIB_TREE_NODE::TYPE::ITEM:
         // mark modified part with bold font
         aAttr.SetBold( m_libMgr->IsSymbolModified( node->m_Name, node->m_Parent->m_Name ) );
 
@@ -364,7 +364,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem 
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    return node->m_Type == LIB_TREE_NODE::ITEM && node->m_LibId != m_frame->GetTargetLibId();
+    return node->m_Type == LIB_TREE_NODE::TYPE::ITEM && node->m_LibId != m_frame->GetTargetLibId();
 }
 
 

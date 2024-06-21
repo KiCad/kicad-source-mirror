@@ -130,7 +130,7 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
 
 LIB_TREE_NODE::LIB_TREE_NODE()
     : m_Parent( nullptr ),
-      m_Type( INVALID ),
+      m_Type( TYPE::INVALID ),
       m_IntrinsicRank( 0 ),
       m_Score( 0 ),
       m_Pinned( false ),
@@ -154,7 +154,7 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
     }
 
     m_Parent = aParent;
-    m_Type = UNIT;
+    m_Type = TYPE::UNIT;
 
     m_Unit = aUnit;
     m_LibId = aParent->m_LibId;
@@ -189,7 +189,7 @@ void LIB_TREE_NODE_UNIT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxSt
 
 LIB_TREE_NODE_ITEM::LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
 {
-    m_Type = ITEM;
+    m_Type = TYPE::ITEM;
     m_Parent = aParent;
 
     m_LibId.SetLibNickname( aItem->GetLibNickname() );
@@ -277,7 +277,7 @@ void LIB_TREE_NODE_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxSt
 LIB_TREE_NODE_LIBRARY::LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE* aParent, wxString const& aName,
                                               wxString const& aDesc )
 {
-    m_Type = LIBRARY;
+    m_Type = TYPE::LIBRARY;
     m_Name = aName;
     m_Desc = aDesc;
     m_Parent = aParent;
@@ -343,7 +343,7 @@ void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const w
 
 LIB_TREE_NODE_ROOT::LIB_TREE_NODE_ROOT()
 {
-    m_Type = ROOT;
+    m_Type = TYPE::ROOT;
 }
 
 

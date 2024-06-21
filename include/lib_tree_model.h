@@ -111,7 +111,7 @@ public:
     LIB_TREE_NODE();
     virtual ~LIB_TREE_NODE() {}
 
-    enum TYPE
+    enum class TYPE
     {
         ROOT,
         LIBRARY,
