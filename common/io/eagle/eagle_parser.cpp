@@ -1339,10 +1339,10 @@ ESPICE::ESPICE( wxXmlNode* aSpice, IO_BASE* aIo ) :
     /*
      * <!ELEMENT spice (pinmapping, model)>
      */
-    pinmapping = std::move( std::make_unique<EPINMAPPING>( aSpice ) );
+    pinmapping = std::make_unique<EPINMAPPING>( aSpice );
 
     if( aSpice->GetName() == "model" )
-        model = std::move( std::make_unique<EMODEL>( aSpice ) );
+        model = std::make_unique<EMODEL>( aSpice );
 
     AdvanceProgressPhase();
 }
