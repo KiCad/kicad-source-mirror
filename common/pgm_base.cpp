@@ -1018,7 +1018,7 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
     {
         static std::set<SENTRY_ASSERT_CACHE_KEY> assertCache;
 
-        SENTRY_ASSERT_CACHE_KEY key = { aFile, aLine, aFunc, aCond, aMsg };
+        SENTRY_ASSERT_CACHE_KEY key = { aFile, aLine, aFunc, aCond };
 
         if( assertCache.find( key ) == assertCache.end() )
         {
