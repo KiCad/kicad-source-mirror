@@ -897,7 +897,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
         }
     }
 
-    if( aProject.is_object() )
+    if( aProject.is_object() && aProject.contains( "devices" ) )
     {
         std::map<wxString, EASYEDAPRO::PRJ_DEVICE> devicesMap = aProject.at( "devices" );
         std::map<wxString, wxString>               compAttrs;

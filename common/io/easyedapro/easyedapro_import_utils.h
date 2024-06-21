@@ -25,6 +25,7 @@
 #ifndef EASYEDAPRO_IMPORT_UTILS_H_
 #define EASYEDAPRO_IMPORT_UTILS_H_
 
+#include <set>
 #include <wx/stream.h>
 #include <wx/string.h>
 #include <lib_id.h>
@@ -45,6 +46,8 @@ LIB_ID ToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
 std::vector<IMPORT_PROJECT_DESC> ProjectToSelectorDialog( const nlohmann::json& aProject,
                                                           bool                  aPcbOnly = false,
                                                           bool                  aSchOnly = false );
+
+nlohmann::json FindJsonFile( const wxString& aZipFileName, const std::set<wxString>& aFileNames );
 
 nlohmann::json ReadProjectOrDeviceFile( const wxString& aZipFileName );
 

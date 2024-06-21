@@ -143,8 +143,14 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
         || libFname.GetExt() == wxS( "zip" ) )
     {
         std::map<wxString, EASYEDAPRO::PRJ_SYMBOL>    prjSymbols = project.at( "symbols" );
-        std::map<wxString, EASYEDAPRO::PRJ_FOOTPRINT> prjFootprints = project.at( "footprints" );
-        std::map<wxString, EASYEDAPRO::PRJ_DEVICE>    prjDevices = project.at( "devices" );
+        std::map<wxString, EASYEDAPRO::PRJ_FOOTPRINT> prjFootprints;
+        std::map<wxString, EASYEDAPRO::PRJ_DEVICE>    prjDevices;
+
+        if( project.contains( "footprints" ) )
+            prjFootprints = project.at( "footprints" );
+
+        if( project.contains( "devices" ) )
+            prjDevices = project.at( "devices" );
 
         auto prjSymIt = std::find_if( prjSymbols.begin(), prjSymbols.end(),
                                       [&]( const auto& pair )
