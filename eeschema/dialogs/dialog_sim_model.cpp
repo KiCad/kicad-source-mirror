@@ -1081,16 +1081,16 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
     {
         int sel = m_modelNameChoice->GetSelection();
 
-        if( sel >= 0 && sel < (int) m_libraryModelsMgr.GetModels().size() )
+        if( sel >= 0 && sel < static_cast<int>( m_libraryModelsMgr.GetModels().size() ) )
             return m_libraryModelsMgr.GetModels().at( sel ).get();
     }
     else
     {
-        if( (int) m_curModelType < (int) m_builtinModelsMgr.GetModels().size() )
-            return m_builtinModelsMgr.GetModels().at( (int) m_curModelType );
+        if( static_cast<int>( m_curModelType ) < static_cast<int>( m_builtinModelsMgr.GetModels().size() ) )
+            return m_builtinModelsMgr.GetModels().at( static_cast<int>( m_curModelType ) );
     }
 
-    return m_builtinModelsMgr.GetModels().at( (int) SIM_MODEL::TYPE::NONE );
+    return m_builtinModelsMgr.GetModels().at( static_cast<int>( SIM_MODEL::TYPE::NONE ) );
 }
 
 
@@ -1167,25 +1167,16 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibrarayPathText( wxCommandEvent& aEvent )
-{
-    m_rbLibraryModel->SetValue( true );
-    updateWidgets();
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onLibraryPathText( wxCommandEvent& aEvent )
 {
     if( m_rbLibraryModel->GetValue() )
     {
         wxString path = m_libraryPathText->GetValue();
 
-        if( !path.IsEmpty() )
+        if( loadLibrary( path, true ) )
         {
             try
             {
-                loadLibrary( path );
                 updateWidgets();
             }
             catch( const IO_ERROR& )
@@ -1194,6 +1185,13 @@ void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
             }
         }
     }
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
+{
+    m_rbLibraryModel->SetValue( true );
 }
 
 
