@@ -94,7 +94,7 @@ private:
     int getModelPinIndex( const wxString& aModelPinString ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
-    void onLibrarayPathText( wxCommandEvent& aEvent ) override;
+    void onLibraryPathText( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextEnter( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;

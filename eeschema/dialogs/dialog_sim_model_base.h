@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,7 +42,6 @@ class WX_GRID;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SIM_MODEL_BASE
@@ -91,7 +90,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onRadioButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathTextKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void onLibrarayPathText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLibraryPathText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLibraryPathTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
