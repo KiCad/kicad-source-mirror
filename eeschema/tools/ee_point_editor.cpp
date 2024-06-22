@@ -115,9 +115,9 @@ public:
             switch( shape->GetShape() )
             {
             case SHAPE_T::ARC:
-                points->AddPoint( shape->GetPosition() );
                 points->AddPoint( shape->GetStart() );
                 points->AddPoint( shape->GetEnd() );
+                points->AddPoint( shape->GetPosition() );
                 break;
 
             case SHAPE_T::CIRCLE:
@@ -649,12 +649,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            if( getEditedPointIndex() == ARC_CENTER )
-            {
-                shape->SetEditState( 4 );
-                shape->CalcEdit( m_editPoints->Point( ARC_CENTER ).GetPosition() );
-            }
-            else if( getEditedPointIndex() == ARC_START )
+            if( getEditedPointIndex() == ARC_START )
             {
                 shape->SetEditState( 2 );
                 shape->CalcEdit( m_editPoints->Point( ARC_START ).GetPosition() );
@@ -663,6 +658,11 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
             {
                 shape->SetEditState( 3 );
                 shape->CalcEdit( m_editPoints->Point( ARC_END ).GetPosition() );
+            }
+            else if( getEditedPointIndex() == ARC_CENTER )
+            {
+                shape->SetEditState( 4 );
+                shape->CalcEdit( m_editPoints->Point( ARC_CENTER ).GetPosition() );
             }
             break;
 
@@ -994,9 +994,9 @@ void EE_POINT_EDITOR::updatePoints()
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            m_editPoints->Point( ARC_CENTER ).SetPosition( shape->GetPosition() );
             m_editPoints->Point( ARC_START ).SetPosition( shape->GetStart() );
             m_editPoints->Point( ARC_END ).SetPosition( shape->GetEnd() );
+            m_editPoints->Point( ARC_CENTER ).SetPosition( shape->GetPosition() );
             break;
 
         case SHAPE_T::CIRCLE:
