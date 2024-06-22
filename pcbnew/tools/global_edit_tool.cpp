@@ -60,10 +60,11 @@ bool GLOBAL_EDIT_TOOL::Init()
 
 int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
-    PCB_SELECTION& selection = m_selectionTool->GetSelection();
-    FOOTPRINT*     footprint = nullptr;
-    bool           updateMode = false;
-    bool           currentMode = false;
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    PCB_SELECTION&  selection = m_selectionTool->GetSelection();
+    FOOTPRINT*      footprint = nullptr;
+    bool            updateMode = false;
+    bool            currentMode = false;
 
     if( aEvent.HasPosition() )
         selection = m_selectionTool->RequestSelection( EDIT_TOOL::FootprintFilter );
@@ -96,12 +97,8 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
         wxFAIL_MSG( wxT( "ExchangeFootprints: unexpected action" ) );
     }
 
-    // invoke the exchange dialog process
-    {
-        PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-        DIALOG_EXCHANGE_FOOTPRINTS dialog( editFrame, footprint, updateMode, currentMode );
-        dialog.ShowQuasiModal();
-    }
+    DIALOG_EXCHANGE_FOOTPRINTS dialog( editFrame, footprint, updateMode, currentMode );
+    dialog.ShowQuasiModal();
 
     return 0;
 }

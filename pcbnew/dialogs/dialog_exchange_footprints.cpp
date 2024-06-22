@@ -36,6 +36,8 @@
 #include <pcbnew_settings.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/std_bitmap_button.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_selection_tool.h>
 
 
 #define ID_MATCH_FP_ALL      4200
@@ -292,19 +294,21 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& event )
 
 void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& event )
 {
-    wxBusyCursor dummy;
+    PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    wxBusyCursor        dummy;
 
     m_MessageWindow->Clear();
     m_MessageWindow->Flush( false );
 
+    m_newFootprints.clear();
     processMatchingFootprints();
-
-    m_parent->Compile_Ratsnest( true );
-    m_parent->GetCanvas()->Refresh();
+    m_commit.Push( m_updateMode ? _( "Update Footprint" ) : _( "Change Footprint" ) );
+    selTool->AddItemsToSel( &m_newFootprints );
 
     m_MessageWindow->Flush( false );
 
-    m_commit.Push( wxT( "Changed footprint" ) );
+    WINDOW_THAWER thawer( m_parent );
+    m_parent->GetCanvas()->Refresh();
 }
 
 
@@ -387,6 +391,9 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
 
     if( aFootprint == m_currentFootprint )
         m_currentFootprint = newFootprint;
+
+    if( newFootprint )
+        m_newFootprints.push_back( newFootprint );
 
     if( m_updateMode && !updated )
     {
