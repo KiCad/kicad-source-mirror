@@ -56,9 +56,11 @@ private:
     void processMatchingFootprints();
     void processFootprint( FOOTPRINT* aFootprint, const LIB_ID& aNewFPID );
 
+private:
     BOARD_COMMIT    m_commit;
     PCB_EDIT_FRAME* m_parent;
     FOOTPRINT*      m_currentFootprint;
+    EDA_ITEMS       m_newFootprints;
     bool            m_updateMode;
     int*            m_matchMode;
 };
