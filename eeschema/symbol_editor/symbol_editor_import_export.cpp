@@ -35,6 +35,7 @@
 #include <wx/filename.h>
 #include <wx/filedlg.h>
 #include <string_utils.h>
+#include <io/eagle/eagle_parser.h>
 
 
 void SYMBOL_EDIT_FRAME::ImportSymbol()

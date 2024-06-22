@@ -1951,11 +1951,8 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     // Use the instance attribute to determine the reference and value field visibility.
     if( aInstance->smashed && aInstance->smashed.Get() )
     {
-        if( !valueAttributeFound )
-            symbol->GetField( VALUE_FIELD )->SetVisible( false );
-
-        if( !nameAttributeFound )
-            symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
+        symbol->GetField( VALUE_FIELD )->SetVisible( valueAttributeFound );
+        symbol->GetField( REFERENCE_FIELD )->SetVisible( nameAttributeFound );
     }
 
     symbol->AddHierarchicalReference( m_sheetPath.Path(), reference, unit );
