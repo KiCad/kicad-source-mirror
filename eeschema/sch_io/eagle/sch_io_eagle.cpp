@@ -1842,7 +1842,7 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
 
     valueField->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
 
-    if( !userValue && epart->value )
+    if( epart->value )
     {
         valueField->SetText( *epart->value );
     }
@@ -1954,11 +1954,8 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
     // Use the instance attribute to determine the reference and value field visibility.
     if( einstance.smashed && einstance.smashed.Get() )
     {
-        if( !valueAttributeFound )
-            symbol->GetField( VALUE_FIELD )->SetVisible( false );
-
-        if( !nameAttributeFound )
-            symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
+        symbol->GetField( VALUE_FIELD )->SetVisible( valueAttributeFound );
+        symbol->GetField( REFERENCE_FIELD )->SetVisible( nameAttributeFound );
     }
 
     symbol->AddHierarchicalReference( m_sheetPath.Path(), reference, unit );
