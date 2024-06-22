@@ -2191,8 +2191,8 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
         std::deque<VECTOR2D> dpts;
 
-        for( size_t ii = 0; ii < pts.size(); ++ii )
-            dpts.push_back( VECTOR2D( pts[ii] ) );
+        for( const VECTOR2I& pt : pts )
+            dpts.push_back( VECTOR2D( pt ) );
 
         dpts.push_back( VECTOR2D( pts[0] ) );
 

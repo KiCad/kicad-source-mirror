@@ -154,7 +154,8 @@ int EDA_SHAPE::GetRectangleHeight() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::RECTANGLE: return GetEndY() - GetStartY();
+    case SHAPE_T::RECTANGLE:
+        return GetEndY() - GetStartY();
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -166,7 +167,8 @@ int EDA_SHAPE::GetRectangleWidth() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::RECTANGLE: return GetEndX() - GetStartX();
+    case SHAPE_T::RECTANGLE:
+        return GetEndX() - GetStartX();
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -178,7 +180,8 @@ void EDA_SHAPE::SetLength( const double& aLength )
 {
     switch( m_shape )
     {
-    case SHAPE_T::SEGMENT: m_segmentLength = aLength; break;
+    case SHAPE_T::SEGMENT:
+        m_segmentLength = aLength; break;
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -194,7 +197,8 @@ void EDA_SHAPE::SetRectangleHeight( const int& aHeight )
         SetEndY( GetStartY() + m_rectangleHeight );
         break;
 
-    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -207,7 +211,8 @@ void EDA_SHAPE::SetRectangleWidth( const int& aWidth )
         SetEndX( GetStartX() + m_rectangleWidth );
         break;
 
-    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -220,7 +225,8 @@ void EDA_SHAPE::SetRectangle( const long long int& aHeight, const long long int&
         m_rectangleWidth = aWidth;
         break;
 
-    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -229,9 +235,12 @@ void EDA_SHAPE::SetSegmentAngle( const EDA_ANGLE& aAngle )
 {
     switch( m_shape )
     {
-    case SHAPE_T::SEGMENT: m_segmentAngle = aAngle; break;
+    case SHAPE_T::SEGMENT:
+        m_segmentAngle = aAngle;
+        break;
 
-    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -2052,14 +2061,14 @@ static struct EDA_SHAPE_DESC
                 .SetAvailableFunc( isNotPolygonOrCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Width" ),
-                    &EDA_SHAPE::SetRectangleWidth, &EDA_SHAPE::GetRectangleWidth, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    &EDA_SHAPE::SetRectangleWidth, &EDA_SHAPE::GetRectangleWidth,
+                    PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isRectangle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Height" ),
-                    &EDA_SHAPE::SetRectangleHeight, &EDA_SHAPE::GetRectangleHeight, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    &EDA_SHAPE::SetRectangleHeight, &EDA_SHAPE::GetRectangleHeight,
+                    PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isRectangle );
 
