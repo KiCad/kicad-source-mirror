@@ -185,7 +185,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         CreateScreens();
     }
 
-    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
+    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName, KICTL_KICAD_ONLY );
 
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
     {
@@ -235,7 +235,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( schFileType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
         {
-            msg.Printf( _( "Unsupported schematic file '%s'." ), fullFileName );
+            msg.Printf( _( "'%s' is not a KiCad schematic file.\nUse File -> Import for "
+                           "non-KiCad schematic files." ),
+                        fullFileName );
+
             progressReporter.Hide();
             DisplayErrorMessage( this, msg );
         }
