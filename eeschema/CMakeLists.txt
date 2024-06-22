@@ -86,6 +86,9 @@ set( EESCHEMA_SCH_IO
     # EasyEDA Pro IO plugin
     sch_io/easyedapro/sch_easyedapro_parser.cpp
     sch_io/easyedapro/sch_io_easyedapro.cpp
+
+    # Autodesk Fusion IO plugin
+    sch_io/fusion/sch_io_fusion.cpp
     )
 
 set( EESCHEMA_DLGS

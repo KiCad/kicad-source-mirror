@@ -1380,6 +1380,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case SCH_IO_MGR::SCH_LTSPICE:
     case SCH_IO_MGR::SCH_EASYEDA:
     case SCH_IO_MGR::SCH_EASYEDAPRO:
+    case SCH_IO_MGR::SCH_FUSION:
     {
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
         wxCHECK_MSG( filename.IsAbsolute(), false,

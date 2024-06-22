@@ -1352,7 +1352,7 @@ ESPICE::ESPICE( wxXmlNode* aSpice, IO_BASE* aIo ) :
      * <!ELEMENT spice (pinmapping, model)>
      */
     pinmapping = std::move( std::make_unique<EPINMAPPING>( aSpice ) );
-    model = std::move( std::make_unique<EMODEL>( aSpice ) );
+    //model = std::move( std::make_unique<EMODEL>( aSpice ) );
 
     AdvanceProgressPhase();
 }
@@ -1456,7 +1456,13 @@ ELAYER::ELAYER( wxXmlNode* aLayer, IO_BASE* aIo ) :
 
     number  = parseRequiredAttribute<int>( aLayer, "number" );
     name    = parseRequiredAttribute<wxString>( aLayer, "name" );
-    color   = parseRequiredAttribute<int>( aLayer, "color" );
+
+    auto old_color = parseOptionalAttribute<int>( aLayer, "color" );
+    if (old_color) {
+        color = old_color.Get();
+    } else {
+        color   = parseOptionalAttribute<int>( aLayer, "coloredcolor" ); // Autodesk fusion
+    }
     fill    = 1;    // Temporary value.
     visible = parseOptionalAttribute<bool>( aLayer, "visible" );
     active  = parseOptionalAttribute<bool>( aLayer, "active" );
@@ -2311,8 +2317,8 @@ EPACKAGE3D::EPACKAGE3D( wxXmlNode* aPackage3d, IO_BASE* aIo ) :
     name = parseRequiredAttribute<wxString>( aPackage3d, "name" );
     urn = parseRequiredAttribute<wxString>( aPackage3d, "urn" );
     type = parseRequiredAttribute<wxString>( aPackage3d, "type" );
-    library_version = parseRequiredAttribute<int>( aPackage3d, "alibrary_version" );
-    library_locally_modified = parseRequiredAttribute<bool>( aPackage3d,
+    library_version = parseOptionalAttribute<int>( aPackage3d, "alibrary_version" );
+    library_locally_modified = parseOptionalAttribute<bool>( aPackage3d,
                                                              "library_locally_modified" );
 
     for( wxXmlNode* child = aPackage3d->GetChildren(); child; child = child->GetNext() )
