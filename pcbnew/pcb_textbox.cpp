@@ -238,12 +238,18 @@ std::vector<VECTOR2I> PCB_TEXTBOX::GetAnchorAndOppositeCorner() const
 
 VECTOR2I PCB_TEXTBOX::GetDrawPos() const
 {
+    return GetDrawPos( false );
+}
+
+
+VECTOR2I PCB_TEXTBOX::GetDrawPos( bool aIsFlipped ) const
+{
     std::vector<VECTOR2I> corners = GetAnchorAndOppositeCorner();
     GR_TEXT_H_ALIGN_T     effectiveAlignment = GetHorizJustify();
     VECTOR2I              textAnchor;
     VECTOR2I              offset;
 
-    if( IsMirrored() )
+    if( IsMirrored() != aIsFlipped )
     {
         switch( GetHorizJustify() )
         {

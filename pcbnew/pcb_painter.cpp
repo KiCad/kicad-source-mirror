@@ -2061,9 +2061,10 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         return;
     }
 
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-    const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
-    bool           outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
+    const KIFONT::METRICS& metrics = aText->GetFontMetrics();
+    TEXT_ATTRIBUTES        attrs = aText->GetAttributes();
+    const COLOR4D&         color = m_pcbSettings.GetColor( aText, aLayer );
+    bool                   outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
 
     KIFONT::FONT* font = aText->GetFont();
 
@@ -2096,8 +2097,18 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
         if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::SideSpecificMask() ).any() )
         {
+            VECTOR2I textPos = aText->GetTextPos();
+            VECTOR2I textWidth = VECTOR2I( aText->GetTextBox().GetWidth(), 0 );
+            RotatePoint( textWidth, textPos, aText->GetDrawRotation() );
+
+            if( attrs.m_Mirrored )
+                textPos -= textWidth;
+            else
+                textPos += textWidth;
+
             attrs.m_Mirrored = !attrs.m_Mirrored;
-            attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
+            strokeText( resolvedText, textPos, attrs, metrics );
+            return;
         }
 
         std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
@@ -2112,7 +2123,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         }
         else
         {
-            strokeText( resolvedText, aText->GetTextPos(), attrs, aText->GetFontMetrics() );
+            strokeText( resolvedText, aText->GetTextPos(), attrs, metrics );
         }
     }
 
@@ -2204,18 +2215,6 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         }
     }
 
-    if( resolvedText.Length() == 0 )
-        return;
-
-    TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
-    attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
-
-    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::SideSpecificMask() ).any() )
-    {
-        attrs.m_Mirrored = !attrs.m_Mirrored;
-        attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
-    }
-
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // For now, the textbox is a filled shape.
@@ -2232,6 +2231,20 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         #endif
     }
 
+    if( resolvedText.Length() == 0 )
+        return;
+
+    const KIFONT::METRICS& metrics = aTextBox->GetFontMetrics();
+    TEXT_ATTRIBUTES        attrs = aTextBox->GetAttributes();
+    attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
+
+    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::SideSpecificMask() ).any() )
+    {
+        attrs.m_Mirrored = !attrs.m_Mirrored;
+        strokeText( resolvedText, aTextBox->GetDrawPos( true ), attrs, metrics );
+        return;
+    }
+
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
     if( font->IsOutline() )
@@ -2244,7 +2257,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     }
     else
     {
-        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs, aTextBox->GetFontMetrics() );
+        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs, metrics );
     }
 }
 

@@ -77,6 +77,7 @@ public:
     int GetTextMargin() const;
 
     VECTOR2I GetDrawPos() const override;
+    VECTOR2I GetDrawPos( bool aIsFlipped ) const;
 
     void SetTextAngle( const EDA_ANGLE& aAngle ) override;
 
