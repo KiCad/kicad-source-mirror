@@ -65,6 +65,9 @@ public:
     void SetDrawSpecificUnit( bool aSpecific ) { m_drawSpecificUnit = aSpecific; }
     bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
 
+    KIID GetLastPin() { return g_lastPin; }
+    void SetLastPin( KIID aPin ) { g_lastPin = aPin; }
+
 private:
     int doDrawShape( const TOOL_EVENT& aEvent, std::optional<SHAPE_T> aDrawingShape );
 
@@ -84,6 +87,9 @@ private:
     ///< Re-entrancy guards
     bool              m_inDrawShape;
     bool              m_inTwoClickPlace;
+
+private:
+    static KIID       g_lastPin;
 };
 
 #endif /* SYMBOL_EDITOR_DRAWING_TOOLS_H */

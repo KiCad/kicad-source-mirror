@@ -43,7 +43,8 @@
 #include <import_gfx/dialog_import_gfx_sch.h>
 #include "dialog_lib_textbox_properties.h"
 
-static void* g_lastPinWeakPtr;
+
+KIID SYMBOL_EDITOR_DRAWING_TOOLS::g_lastPin;
 
 
 SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
@@ -214,7 +215,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 case LIB_PIN_T:
                 {
                     item = pinTool->CreatePin( VECTOR2I( cursorPos.x, -cursorPos.y ), symbol );
-                    g_lastPinWeakPtr = item;
+                    g_lastPin = item->m_Uuid;
                     break;
                 }
                 case LIB_TEXT_T:
@@ -830,12 +831,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    // See if we have a pin matching our weak ptr
     std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
 
     for( LIB_PIN* test : pins )
     {
-        if( (void*) test == g_lastPinWeakPtr )
+        if( test->m_Uuid == g_lastPin )
         {
             sourcePin = test;
             break;
@@ -845,7 +845,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( sourcePin )
     {
         LIB_PIN* pin = pinTool->RepeatPin( sourcePin );
-        g_lastPinWeakPtr = pin;
+        g_lastPin = pin->m_Uuid;
 
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
