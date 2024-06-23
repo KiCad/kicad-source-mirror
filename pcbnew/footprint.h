@@ -926,6 +926,13 @@ public:
     const SHAPE_POLY_SET& GetCourtyard( PCB_LAYER_ID aLayer ) const;
 
     /**
+     * Return the cached courtyard area. No checks are performed.
+     *
+     * @return the cached courtyard polygon.
+     */
+    const SHAPE_POLY_SET& GetCachedCourtyard( PCB_LAYER_ID aLayer ) const;
+
+    /**
      * Build complex polygons of the courtyard areas from graphic items on the courtyard layers.
      *
      * @note Set the #MALFORMED_F_COURTYARD and #MALFORMED_B_COURTYARD status flags if the given
