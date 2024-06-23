@@ -2838,6 +2838,12 @@ const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
         const_cast<FOOTPRINT*>( this )->BuildCourtyardCaches();
     }
 
+    return GetCachedCourtyard( aLayer );
+}
+
+
+const SHAPE_POLY_SET& FOOTPRINT::GetCachedCourtyard( PCB_LAYER_ID aLayer ) const
+{
     if( IsBackLayer( aLayer ) )
         return m_courtyard_cache_back;
     else

@@ -32,6 +32,19 @@
 
 void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 {
+    std::vector<BOX2I> fpBBBoxes( m_FpInMove.size() );
+    std::vector<BOX2I> frontBBBoxes( m_FpInMove.size() );
+    std::vector<BOX2I> backBBBoxes( m_FpInMove.size() );
+
+    // GetCourtyard updates courtyard caches if needed
+    for( size_t i = 0; i < m_FpInMove.size(); i++ )
+    {
+        FOOTPRINT* fpB = m_FpInMove[i];
+        fpBBBoxes[i] = fpB->GetBoundingBox();
+        frontBBBoxes[i] = fpB->GetCourtyard( F_CrtYd ).BBoxFromCaches();
+        backBBBoxes[i] = fpB->GetCourtyard( B_CrtYd ).BBoxFromCaches();
+    }
+
     for( FOOTPRINT* fpA: m_board->Footprints() )
     {
         if( fpA->IsSelected() )
@@ -44,29 +57,31 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
              // No courtyards defined and no hole testing against other footprint's courtyards
             continue;
 
-        BOX2I frontBBox = frontA.BBoxFromCaches();
-        BOX2I backBBox = backA.BBoxFromCaches();
+        BOX2I frontABBox = frontA.BBoxFromCaches();
+        BOX2I backABBox = backA.BBoxFromCaches();
 
-        frontBBox.Inflate( m_largestCourtyardClearance );
-        backBBox.Inflate( m_largestCourtyardClearance );
+        frontABBox.Inflate( m_largestCourtyardClearance );
+        backABBox.Inflate( m_largestCourtyardClearance );
 
         BOX2I fpABBox = fpA->GetBoundingBox();
 
-        for( FOOTPRINT* fpB : m_FpInMove )
+        for( size_t inMoveId = 0; inMoveId < m_FpInMove.size(); inMoveId++ )
         {
-            BOX2I                 fpBBBox = fpB->GetBoundingBox();
-            const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );
-            const SHAPE_POLY_SET& backB = fpB->GetCourtyard( B_CrtYd );
-            DRC_CONSTRAINT        constraint;
+            FOOTPRINT*            fpB = m_FpInMove[inMoveId];
+            const SHAPE_POLY_SET& frontB = fpB->GetCachedCourtyard( F_CrtYd );
+            const SHAPE_POLY_SET& backB = fpB->GetCachedCourtyard( B_CrtYd );
+            const BOX2I           fpBBBox = fpBBBoxes[inMoveId];
+            const BOX2I           frontBBBox = frontBBBoxes[inMoveId];
+            const BOX2I           backBBBox = backBBBoxes[inMoveId];
             int                   clearance;
             int                   actual;
             VECTOR2I              pos;
 
             if( frontA.OutlineCount() > 0 && frontB.OutlineCount() > 0
-                    && frontBBox.Intersects( frontB.BBoxFromCaches() ) )
+                    && frontABBox.Intersects( frontBBBox ) )
             {
                 // Currently, do not use DRC engine for calculation time reasons
-                // constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
+                // DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
                 // constraint.GetValue().Min();
                 clearance = 0;
 
@@ -78,10 +93,10 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
             }
 
             if( backA.OutlineCount() > 0 && backB.OutlineCount() > 0
-                    && backBBox.Intersects( backB.BBoxFromCaches() ) )
+                    && backABBox.Intersects( backBBBox ) )
             {
                 // Currently, do not use DRC engine for calculation time reasons
-                // constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
+                // DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
                 // constraint.GetValue().Min();
                 clearance = 0;
 
@@ -100,8 +115,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
                         if( pad->HasHole() )
                         {
                             std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
-                            const SHAPE_POLY_SET& front = footprint->GetCourtyard( F_CrtYd );
-                            const SHAPE_POLY_SET& back = footprint->GetCourtyard( B_CrtYd );
+                            const SHAPE_POLY_SET& front = footprint->GetCachedCourtyard( F_CrtYd );
+                            const SHAPE_POLY_SET& back = footprint->GetCachedCourtyard( B_CrtYd );
 
                             if( front.OutlineCount() > 0 && front.Collide( hole.get(), 0 ) )
                                 return true;
@@ -114,8 +129,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 
             bool skipNextCmp = false;
 
-            if( ( frontA.OutlineCount() > 0 && frontA.BBoxFromCaches().Intersects( fpBBBox ) )
-                || ( backA.OutlineCount() > 0 && backA.BBoxFromCaches().Intersects( fpBBBox ) ) )
+            if( ( frontA.OutlineCount() > 0 && frontABBox.Intersects( fpBBBox ) )
+                || ( backA.OutlineCount() > 0 && backABBox.Intersects( fpBBBox ) ) )
             {
                 for( const PAD* padB : fpB->Pads() )
                 {
@@ -132,8 +147,8 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
             if( skipNextCmp )
                 continue;       // fpA and fpB are already in list
 
-            if( ( frontB.OutlineCount() > 0 && frontB.BBoxFromCaches().Intersects( fpABBox ) )
-                || ( backB.OutlineCount() > 0 && backB.BBoxFromCaches().Intersects( fpABBox ) ) )
+            if( ( frontB.OutlineCount() > 0 && frontBBBox.Intersects( fpABBox ) )
+                || ( backB.OutlineCount() > 0 && backBBBox.Intersects( fpABBox ) ) )
             {
                 for( const PAD* padA : fpA->Pads() )
                 {
