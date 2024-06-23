@@ -200,7 +200,18 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
     // Copy picker list:
     if( !commandToUndo->GetCount() )
+    {
         commandToUndo->CopyList( aItemsList );
+
+        for( const std::unique_ptr<SCH_ITEM>& item : GetRepeatItems() )
+        {
+            EDA_ITEM* repeatItemClone = item->Clone();
+            repeatItemClone->SetFlags( UR_TRANSIENT );
+
+            ITEM_PICKER repeatItemPicker( nullptr, repeatItemClone, UNDO_REDO::REPEAT_ITEM );
+            commandToUndo->PushItem( repeatItemPicker );
+        }
+    }
     else
     {
         // Unless we are appending, in which case, get the picker items
@@ -242,6 +253,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         case UNDO_REDO::NEWITEM:
         case UNDO_REDO::DELETED:
         case UNDO_REDO::PAGESETTINGS:
+        case UNDO_REDO::REPEAT_ITEM:
             break;
 
         default:
@@ -275,6 +287,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     bool                   rebuildHierarchyNavigator = false;
     SCH_CLEANUP_FLAGS      connectivityCleanUp = NO_CLEANUP;
     SCH_SHEET_LIST         sheets;
+    bool                   clearedRepeatItems = false;
 
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
@@ -284,8 +297,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         UNDO_REDO   status = aList->GetPickedItemStatus( ii );
         EDA_ITEM*   eda_item = aList->GetPickedItem( ii );
         SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( aList->GetScreenForItem( ii ) );
-
-        wxCHECK( screen, /* void */ );
 
         eda_item->SetFlags( aList->GetPickerFlags( ii ) );
         eda_item->ClearEditFlags();
@@ -389,6 +400,17 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             DS_PROXY_UNDO_ITEM* item = static_cast<DS_PROXY_UNDO_ITEM*>( eda_item );
             item->Restore( this );
             *item = std::move( alt_item );
+        }
+        else if( status == UNDO_REDO::REPEAT_ITEM )
+        {
+            if( !clearedRepeatItems )
+            {
+                ClearRepeatItemsList();
+                clearedRepeatItems = true;
+            }
+
+            if( schItem )
+                AddCopyForRepeatItem( schItem );
         }
         else if( schItem )
         {

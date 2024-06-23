@@ -70,7 +70,8 @@ enum class UNDO_REDO {
     PAGESETTINGS,       // page settings or title block changes
     REGROUP,            // new group of items created (NB: can't use GROUP because of collision
                         // with a header on msys2)
-    UNGROUP             // existing group destroyed (items not destroyed)
+    UNGROUP,            // existing group destroyed (items not destroyed)
+    REPEAT_ITEM         // storage entry for the editor's global repeatItems list
 };
 
 
