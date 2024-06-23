@@ -41,7 +41,8 @@
 #include <wx/msgdlg.h>
 #include <import_gfx/dialog_import_gfx_sch.h>
 
-static void* g_lastPinWeakPtr;
+
+KIID SYMBOL_EDITOR_DRAWING_TOOLS::g_lastPin;
 
 
 SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
@@ -212,7 +213,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 case SCH_PIN_T:
                 {
                     item = pinTool->CreatePin( cursorPos, symbol );
-                    g_lastPinWeakPtr = item;
+                    g_lastPin = item->m_Uuid;
                     break;
                 }
                 case SCH_TEXT_T:
@@ -831,10 +832,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    // See if we have a pin matching our weak ptr
     for( SCH_PIN* test : symbol->GetAllLibPins() )
     {
-        if( (void*) test == g_lastPinWeakPtr )
+        if( test->m_Uuid == g_lastPin )
         {
             sourcePin = test;
             break;
@@ -844,7 +844,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( sourcePin )
     {
         SCH_PIN* pin = pinTool->RepeatPin( sourcePin );
-        g_lastPinWeakPtr = pin;
+        g_lastPin = pin->m_Uuid;
 
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
