@@ -1491,17 +1491,22 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                 case SHAPE_T::POLY:
                 {
                     const std::vector<SHAPE*> polySegments = shape->MakeEffectiveShapes( true );
-                    std::deque<VECTOR2D> pts;
 
-                    for( SHAPE* polySegment : polySegments )
-                        pts.push_back( static_cast<SHAPE_SEGMENT*>( polySegment )->GetSeg().A );
+                    if( !polySegments.empty() )
+                    {
+                        std::deque<VECTOR2D> pts;
 
-                    pts.push_back( static_cast<SHAPE_SEGMENT*>( polySegments.back() )->GetSeg().B );
+                        for( SHAPE* polySegment : polySegments )
+                            pts.push_back( static_cast<SHAPE_SEGMENT*>( polySegment )->GetSeg().A );
 
-                    for( SHAPE* polySegment : polySegments )
-                        delete polySegment;
+                        pts.push_back(
+                                static_cast<SHAPE_SEGMENT*>( polySegments.back() )->GetSeg().B );
 
-                    m_gal->DrawPolygon( pts );
+                        for( SHAPE* polySegment : polySegments )
+                            delete polySegment;
+
+                        m_gal->DrawPolygon( pts );
+                    }
                     break;
                 }
 
@@ -2675,7 +2680,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool DNP = aSheet->GetDNP();
-    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions 
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
                                 && aSheet->GetExcludedFromSim();
 
     if( m_schSettings.IsPrinting() && drawingShadows )
