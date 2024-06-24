@@ -44,11 +44,11 @@
     // Other compilers
 #else // defined(_MSC_VER)
     #define FORCE_INLINE inline __attribute__( ( always_inline ) )
-    inline uint64_t rotl64( uint64_t x, int8_t r )
+    inline uint64_t mmh3_rotl64( uint64_t x, int8_t r )
     {
         return ( x << r ) | ( x >> ( 64 - r ) );
     }
-    #define ROTL64( x, y ) rotl64( x, y )
+    #define ROTL64( x, y ) mmh3_rotl64( x, y )
     #define BIG_CONSTANT( x ) ( x##LLU )
 #endif // !defined(_MSC_VER)
 
