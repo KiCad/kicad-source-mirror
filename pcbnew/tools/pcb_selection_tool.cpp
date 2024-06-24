@@ -72,6 +72,7 @@ using namespace std::placeholders;
 #include <wx/event.h>
 #include <wx/timer.h>
 #include <wx/log.h>
+#include <wx/debug.h>
 #include <core/profile.h>
 #include <math/vector2wx.h>
 
@@ -3251,11 +3252,9 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
         {
             footprint->GetBoundingHull().Collide( loc, aMaxDistance, &distance );
         }
-        catch( const std::exception& exc )
+        catch( const std::exception& e )
         {
-            // This may be overkill and could be an assertion but we are more likely to find
-            // any clipper errors this way.
-            wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+            wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ), e.what() ) );
         }
 
         // Consider footprints larger than the viewport only as a last resort
@@ -3580,7 +3579,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
             }
             catch( const std::exception& e )
             {
-                wxLogError( wxT( "A clipper exception %s was detected." ), e.what() );
+                wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ), e.what() ) );
             }
         }
 

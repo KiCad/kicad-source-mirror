@@ -610,11 +610,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
 {
     SCH_SCREEN* screen = GetScreen();
 
-    if( !screen )
-    {
-        wxLogError( wxS( "Document not ready, cannot import" ) );
-        return false;
-    }
+    wxCHECK( screen, false );
 
     // open file chooser dialog
     wxString path = wxPathOnly( Prj().GetProjectFullName() );

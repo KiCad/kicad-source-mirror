@@ -71,7 +71,7 @@
 #include <widgets/search_pane.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
-#include <wx/msgdlg.h>
+#include <wx/debug.h>
 #include <wx/socket.h>
 
 #include <wx/snglinst.h>
@@ -1015,10 +1015,10 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
         {
             GetCanvas()->GetView()->SetCenter( aPos, dialogScreenRects );
         }
-        catch( const ClipperLib::clipperException& exc )
+        catch( const ClipperLib::clipperException& e )
         {
-            wxLogError( wxT( "Clipper library error '%s' occurred centering object." ),
-                        exc.what() );
+            wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred centering object: %s" ),
+                                          e.what() ) );
         }
     }
 

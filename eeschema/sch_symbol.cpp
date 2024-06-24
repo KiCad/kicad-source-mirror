@@ -1868,11 +1868,9 @@ BOX2I SCH_SYMBOL::GetBodyBoundingBox() const
     {
         return doGetBoundingBox( false, false );
     }
-    catch( const boost::bad_pointer& exc )
+    catch( const boost::bad_pointer& e )
     {
-        // This may be overkill and could be an assertion but we are more likely to
-        // find any boost pointer container errors this way.
-        wxLogError( wxT( "Boost bad pointer exception '%s' occurred." ), exc.what() );
+        wxFAIL_MSG( wxString::Format( wxT( "Boost pointer exception occurred: %s" ), e.what() ) );
         return BOX2I();
     }
 }

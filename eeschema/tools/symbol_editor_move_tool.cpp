@@ -30,7 +30,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_shape.h>
 #include <sch_commit.h>
-#include <wx/log.h>
+#include <wx/debug.h>
 #include <view/view_controls.h>
 #include "symbol_editor_move_tool.h"
 #include "symbol_editor_pin_tool.h"
@@ -343,7 +343,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 catch( const boost::bad_pointer& e )
                 {
                     restore_state = true;
-                    wxLogError( "Boost pointer exception occurred: \"%s\"", e.what() );
+                    wxFAIL_MSG( wxString::Format( wxT( "Boost pointer exception occurred: %s" ),
+                                                  e.what() ) );
                 }
             }
 

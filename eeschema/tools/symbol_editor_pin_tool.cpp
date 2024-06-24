@@ -31,7 +31,7 @@
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <pgm_base.h>
-#include <wx/log.h>
+#include <wx/debug.h>
 #include "symbol_editor_pin_tool.h"
 
 
@@ -357,8 +357,8 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_PIN* aPin )
         }
         catch( const boost::bad_pointer& e )
         {
-            wxLogError( "Cannot add new pin to symbol.  Boost pointer error %s occurred.",
-                        e.what() );
+            wxFAIL_MSG( wxString::Format( wxT( "Boost pointer exception occurred: %s" ),
+                                          e.what() ));
             delete newPin;
             return;
         }

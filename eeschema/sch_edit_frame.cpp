@@ -40,7 +40,6 @@
 #include <geometry/shape_segment.h>
 #include <gestfich.h>
 #include <dialogs/html_message_box.h>
-#include <core/ignore.h>
 #include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiface_base.h>
@@ -56,10 +55,8 @@
 #include <sch_edit_frame.h>
 #include <symbol_chooser_frame.h>
 #include <sch_painter.h>
-#include <sch_sheet.h>
 #include <sch_marker.h>
 #include <sch_sheet_pin.h>
-#include <schematic.h>
 #include <sch_commit.h>
 #include <sch_rule_area.h>
 #include <settings/settings_manager.h>
@@ -78,7 +75,6 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_point_editor.h>
-#include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_edit_table_tool.h>
@@ -99,6 +95,7 @@
 #include <wx/app.h>
 #include <wx/filedlg.h>
 #include <wx/socket.h>
+#include <wx/debug.h>
 #include <widgets/panel_sch_selection_filter.h>
 #include <widgets/wx_aui_utils.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -457,11 +454,9 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
         {
             GetSettingsManager()->UnloadProject( &Prj(), false );
         }
-        catch( const nlohmann::detail::type_error& exc )
+        catch( const nlohmann::detail::type_error& e )
         {
-            // This may be overkill and could be an assertion but we are more likely to
-            // find any settings manager errors this way.
-            wxLogError( wxT( "Settings exception '%s' occurred." ), exc.what() );
+            wxFAIL_MSG( wxString::Format( wxT( "Settings exception occurred: %s" ), e.what() ) );
         }
     }
 

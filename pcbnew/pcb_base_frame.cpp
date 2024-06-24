@@ -321,11 +321,9 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
         }
-        catch( const std::exception& exc )
+        catch( const std::exception& e )
         {
-            // This may be overkill and could be an assertion but we are more likely to
-            // find any clipper errors this way.
-            wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+            wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ), e.what() ) );
         }
     }
 
@@ -361,11 +359,10 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                 {
                     itemPoly = static_cast<FOOTPRINT*>( item )->GetBoundingHull();
                 }
-                catch( const std::exception& exc )
+                catch( const std::exception& e )
                 {
-                    // This may be overkill and could be an assertion but we are more likely to
-                    // find any clipper errors this way.
-                    wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+                    wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ),
+                                                  e.what() ) );
                 }
 
                 break;
@@ -430,11 +427,9 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             {
                 clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
             }
-            catch( const std::exception& exc )
+            catch( const std::exception& e )
             {
-                // This may be overkill and could be an assertion but we are more likely to
-                // find any clipper errors this way.
-                wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+                wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ), e.what() ) );
             }
 
             if( !clippedPoly.IsEmpty() )
@@ -457,11 +452,9 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             itemPoly.Deflate( step, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
         }
-        catch( const std::exception& exc )
+        catch( const std::exception& e )
         {
-            // This may be overkill and could be an assertion but we are more likely to
-            // find any clipper errors this way.
-            wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+            wxFAIL_MSG( wxString::Format( wxT( "Clipper exception occurred: %s" ), e.what() ) );
         }
     }
 
