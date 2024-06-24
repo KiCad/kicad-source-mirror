@@ -602,7 +602,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         }
     }
 
-    commit.Push( wxT( "Edit text and graphics properties" ) );
+    commit.Push( _( "Edit Text and Graphics" ) );
     m_parent->GetCanvas()->Refresh();
 
     return true;

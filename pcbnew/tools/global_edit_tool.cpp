@@ -179,7 +179,7 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
     if( hasChanges )
     {
         frame()->OnModify();
-        m_commit->Push( wxT( "Swap Layers" ) );
+        m_commit->Push( _( "Swap Layers" ) );
         frame()->GetCanvas()->Refresh();
     }
 

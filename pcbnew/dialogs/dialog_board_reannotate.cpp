@@ -639,7 +639,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
         m_frame->GetCanvas()->GetView()->Update( footprint ); // Touch the footprint
     }
 
-    commit.Push( wxT( "Geographic reannotation" ) );
+    commit.Push( _( "Annotation" ) );
     return true;
 }
 

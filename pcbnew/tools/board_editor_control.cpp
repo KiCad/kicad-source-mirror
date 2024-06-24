@@ -749,7 +749,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
             }
         }
 
-        commit.Push( wxT( "Increase Track Width" ) );
+        commit.Push( _( "Increase Track Width" ) );
         return 0;
     }
 
@@ -831,7 +831,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
             }
         }
 
-        commit.Push( wxT( "Decrease Track Width" ) );
+        commit.Push( _( "Decrease Track Width" ) );
         return 0;
     }
 
@@ -915,7 +915,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
             }
         }
 
-        commit.Push( wxT( "Increase Via Size" ) );
+        commit.Push( _( "Increase Via Size" ) );
     }
     else
     {
@@ -1406,7 +1406,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
     {
         if( mergeZones( m_frame, commit, toMerge, merged ) )
         {
-            commit.Push( wxT( "Merge Zones" ) );
+            commit.Push( _( "Merge Zones" ) );
 
             for( EDA_ITEM* item : merged )
                 m_toolMgr->RunAction( PCB_ACTIONS::selectItem, item );

@@ -345,7 +345,7 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
             commit.Stage( boardItem, CHT_UNGROUP );
     }
 
-    commit.Push( wxT( "Remove Group Items" ) );
+    commit.Push( _( "Remove Group Items" ) );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();

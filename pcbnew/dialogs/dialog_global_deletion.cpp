@@ -255,7 +255,7 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
         }
     }
 
-    commit.Push( wxT( "Global delete" ) );
+    commit.Push( _( "Global Delete" ) );
 
     if( m_delMarkers->GetValue() )
         board->DeleteMARKERs();

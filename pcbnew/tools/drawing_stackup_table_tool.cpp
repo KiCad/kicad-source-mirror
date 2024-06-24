@@ -528,7 +528,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
         for( BOARD_ITEM* item : objects )
             commit.Add( item );
 
-        commit.Push( wxT( "Board Characteristics" ) );
+        commit.Push( _( "Board Characteristics" ) );
     }
 
     tableSize->x = tableSize2.x;
@@ -661,7 +661,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
                         } );
             }
 
-            commit.Push( wxT( "Placing items" ) );
+            commit.Push( _( "Place Items" ) );
             m_frame->PopTool( aEvent );
 
             break;
