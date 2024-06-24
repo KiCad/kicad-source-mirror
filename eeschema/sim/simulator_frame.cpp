@@ -340,6 +340,22 @@ void SIMULATOR_FRAME::UpdateTitle()
 }
 
 
+// Don't let the dialog grow too tall: you may not be able to get to the OK button
+#define MAX_MESSAGES 20
+
+void SIMULATOR_FRAME::showNetlistErrors( const wxString& aErrors )
+{
+    wxArrayString lines = wxSplit( aErrors, '\n' );
+
+    if( lines.size() > MAX_MESSAGES )
+    {
+        lines.RemoveAt( MAX_MESSAGES, lines.size() - MAX_MESSAGES );
+        lines.Add( wxS( "..." ) );
+    }
+
+    DisplayErrorMessage( this, _( "Errors during netlist generation." ), wxJoin( lines, '\n' ) );
+}
+
 
 bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
 {
@@ -355,7 +371,7 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
     if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
                               s_reporter ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + s_errors );
+        showNetlistErrors( s_errors );
         return false;
     }
 
@@ -365,10 +381,12 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
 
 void SIMULATOR_FRAME::ReloadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
 {
+    s_errors.clear();
+
     if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
                               s_reporter ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + s_errors );
+        showNetlistErrors( s_errors );
     }
 }
 
@@ -560,8 +578,7 @@ bool SIMULATOR_FRAME::EditAnalysis()
     if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
                                                     s_reporter ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" )
-                                   + s_errors );
+        showNetlistErrors( s_errors );
     }
 
     dlg.SetSimCommand( simTab->GetSimCommand() );
