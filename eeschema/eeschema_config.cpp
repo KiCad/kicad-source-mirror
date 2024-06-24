@@ -74,7 +74,7 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
                                                     Prj().GetProjectPath() );
 
-    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
+    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, nullptr ) )
         ShowInfoBarError( _( "Error loading drawing sheet." ), true );
 
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();

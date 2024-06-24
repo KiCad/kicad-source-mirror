@@ -149,9 +149,10 @@ public:
      * @param aFullFileName is the custom drawing sheet file. If empty, load the file defined by
      *                      KICAD_WKSFILE and if its not defined, the default internal drawing
      *                      sheet.
-     * @param Append if true: do not delete old layout, and load only \a aFullFileName.
+     * @param aMsg [optional] if non-null, will be filled with any error messages.
+     * @param aAppend if true: do not delete old layout, and load only \a aFullFileName.
      */
-    bool LoadDrawingSheet( const wxString& aFullFileName = wxEmptyString, bool Append = false );
+    bool LoadDrawingSheet( const wxString& aFullFileName, wxString* aMsg, bool aAppend = false );
 
     /**
      * Populate the list from a S expr description stored in a string.

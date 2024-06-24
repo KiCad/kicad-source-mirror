@@ -184,7 +184,7 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSet
     wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
                                                     project->GetProjectPath() );
 
-    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
+    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, nullptr ) )
         wxFprintf( stderr, _( "Error loading drawing sheet." ) );
 
     BOARD* brd = PCB_IO_MGR::Load( aFormat, aFileName );

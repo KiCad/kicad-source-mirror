@@ -1553,11 +1553,13 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
                 BASE_SCREEN::m_DrawingSheetFileName = path;
                 wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
                                                                 aBrd->GetProject()->GetProjectPath() );
+                wxString msg;
 
-                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
+                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
                 {
-                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ) + wxS( "\n" ),
-                                                          path ),
+                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
+                                                          path )
+                                            + wxS( "\n" ) + msg + wxS( "\n" ),
                                         RPT_SEVERITY_ERROR );
                     return false;
                 }

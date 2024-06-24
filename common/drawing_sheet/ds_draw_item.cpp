@@ -552,7 +552,7 @@ void DS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
 
     // Build the basic layout shape, if the layout list is empty
     if( model.GetCount() == 0 && !model.VoidListAllowed() )
-        model.LoadDrawingSheet();
+        model.LoadDrawingSheet( wxEmptyString, nullptr );
 
     model.SetupDrawEnvironment( aPageInfo, GetMilsToIUfactor() );
 

@@ -959,30 +959,34 @@ void DS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const w
 }
 
 
-bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append )
+bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, wxString* aMsg, bool aAppend )
 {
-    wxString fullFileName = aFullFileName;
-
-    if( !Append )
+    if( !aAppend )
     {
-        if( fullFileName.IsEmpty() )
+        if( aFullFileName.IsEmpty() )
         {
             SetDefaultLayout();
             return true; // we assume its fine / default init
         }
 
-        if( !wxFileExists( fullFileName ) )
+        if( !wxFileExists( aFullFileName ) )
         {
+            if( aMsg )
+                *aMsg = _( "File not found." );
+
             SetDefaultLayout();
             return false;
         }
     }
 
-    wxFFile wksFile( fullFileName, wxS( "rb" ) );
+    wxFFile wksFile( aFullFileName, wxS( "rb" ) );
 
     if( ! wksFile.IsOpened() )
     {
-        if( !Append )
+        if( aMsg )
+            *aMsg = _( "File could not be opened." );
+
+        if( !aAppend )
             SetDefaultLayout();
 
         return false;
@@ -993,23 +997,36 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
 
     if( wksFile.Read( buffer.get(), filelen ) != filelen )
     {
+        if( aMsg )
+            *aMsg = _( "Drawing sheet was not fully read." );
+
         return false;
     }
     else
     {
         buffer[filelen]=0;
 
-        if( ! Append )
+        if( ! aAppend )
             ClearList();
 
-        DRAWING_SHEET_PARSER parser( buffer.get(), fullFileName );
+        DRAWING_SHEET_PARSER parser( buffer.get(), aFullFileName );
 
         try
         {
             parser.Parse( this );
         }
-        catch( ... )
+        catch( const IO_ERROR& ioe )
         {
+            if( aMsg )
+                *aMsg = ioe.What();
+
+            return false;
+        }
+        catch( const std::bad_alloc& )
+        {
+            if( aMsg )
+                *aMsg = _( "Ran out of memory." );
+
             return false;
         }
     }

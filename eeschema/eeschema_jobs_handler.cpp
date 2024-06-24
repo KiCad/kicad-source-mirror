@@ -113,11 +113,13 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
             {
                 wxString absolutePath = DS_DATA_MODEL::ResolvePath( path,
                                                                     aSch->Prj().GetProjectPath() );
+                wxString msg;
 
-                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath ) )
+                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
                 {
                     m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
-                                                          path ),
+                                                          path )
+                                            + wxS( "\n" ) + msg + wxS( "\n" ),
                                         RPT_SEVERITY_ERROR );
                     return false;
                 }

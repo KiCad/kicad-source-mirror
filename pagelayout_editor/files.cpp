@@ -235,13 +235,14 @@ bool PL_EDITOR_FRAME::LoadDrawingSheetFile( const wxString& aFullFileName )
 {
     if( wxFileExists( aFullFileName ) )
     {
-        bool loaded = false;
+        wxString msg;
 
-        loaded = DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName );
-
-        if( !loaded )
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName, &msg ) )
         {
-            ShowInfoBarError( _( "Error reading drawing sheet" ), true );
+            DisplayErrorMessage( this,
+                                 wxString::Format( _( "Error loading drawing sheet '%s'." ),
+                                                   aFullFileName ),
+                                 msg );
             return false;
         }
 
@@ -282,7 +283,7 @@ bool PL_EDITOR_FRAME::InsertDrawingSheetFile( const wxString& aFullFileName )
     {
         const bool append = true;
         SaveCopyInUndoList();
-        DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName, append );
+        DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName, nullptr, append );
         return true;
     }
 

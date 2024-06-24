@@ -216,7 +216,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     DS_DATA_MODEL::GetTheInstance().AllowVoidList( true );
     DS_DATA_MODEL::GetTheInstance().ClearList();
 #else       // start with the default KiCad layout
-    DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet();
+    DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( wxEmptyString, nullptr );
 #endif
     OnNewDrawingSheet();
 

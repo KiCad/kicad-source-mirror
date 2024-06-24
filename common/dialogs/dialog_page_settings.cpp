@@ -43,6 +43,7 @@
 #include <wx/filedlg.h>
 #include <wx/dcmemory.h>
 #include <wx/msgdlg.h>
+#include <confirm.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
 
@@ -460,24 +461,24 @@ void DIALOG_PAGES_SETTINGS::OnDateApplyClick( wxCommandEvent& event )
 
 bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 {
-    bool success = false;
-
+    bool     success = false;
+    wxString msg;
     wxString fileName = GetWksFileName();
 
     if( fileName != BASE_SCREEN::m_DrawingSheetFileName )
     {
         wxString fullFileName = DS_DATA_MODEL::ResolvePath( fileName, m_projectPath );
 
-        if( !fullFileName.IsEmpty() && !wxFileExists( fullFileName ) )
+        BASE_SCREEN::m_DrawingSheetFileName = fileName;
+
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( fullFileName, &msg ) )
         {
-            wxString msg;
-            msg.Printf( _( "Drawing sheet file '%s' not found." ), fullFileName );
-            wxMessageBox( msg );
-            return false;
+            DisplayErrorMessage( this,
+                                 wxString::Format( _( "Error loading drawing sheet '%s'." ),
+                                                   fullFileName ),
+                                 msg );
         }
 
-        BASE_SCREEN::m_DrawingSheetFileName = fileName;
-        DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( fullFileName );
         m_localPrjConfigChanged = true;
     }
 
@@ -774,8 +775,9 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 {
     wxFileName fn = GetWksFileName();
-    wxString name = fn.GetFullName();
-    wxString path;
+    wxString   name = fn.GetFullName();
+    wxString   path;
+    wxString   msg;
 
     if( fn.IsAbsolute() )
     {
@@ -785,7 +787,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     {
         wxFileName expanded( ExpandEnvVarSubstitutions( GetWksFileName(), &m_parentFrame->Prj() ) );
 
-         if( expanded.IsAbsolute() )
+        if( expanded.IsAbsolute() )
             path = expanded.GetPath();
         else
             path = m_projectPath;
@@ -817,15 +819,21 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 
     std::unique_ptr<DS_DATA_MODEL> ws = std::make_unique<DS_DATA_MODEL>();
 
-    if( ws->LoadDrawingSheet( fileName ) )
+    if( !ws->LoadDrawingSheet( fileName, &msg ) )
     {
-        delete m_drawingSheet;
-
-        m_drawingSheet = ws.release();
-
-        SetWksFileName( shortFileName );
-
-        GetPageLayoutInfoFromDialog();
-        UpdateDrawingSheetExample();
+        DisplayErrorMessage( this,
+                             wxString::Format( _( "Error loading drawing sheet '%s'.\n%s" ),
+                                               fileName ),
+                             msg );
+        return;
     }
+
+    delete m_drawingSheet;
+
+    m_drawingSheet = ws.release();
+
+    SetWksFileName( shortFileName );
+
+    GetPageLayoutInfoFromDialog();
+    UpdateDrawingSheetExample();
 }
