@@ -603,8 +603,7 @@ void DRAWING_SHEET_PARSER::readPngdata( DS_DATA_ITEM_BITMAP * aItem )
     wxString msg;
     STRING_LINE_READER str_reader( tmp, wxT("Png kicad_wks data") );
 
-    if( ! aItem->m_ImageBitmap->LoadLegacyData( str_reader, msg ) )
-        wxLogMessage(msg);
+    aItem->m_ImageBitmap->LoadLegacyData( str_reader, msg );
 }
 
 
@@ -616,7 +615,7 @@ void DRAWING_SHEET_PARSER::readOption( DS_DATA_ITEM * aItem )
         {
         case T_page1only:  aItem->SetPage1Option( FIRST_PAGE_ONLY );  break;
         case T_notonpage1: aItem->SetPage1Option( SUBSEQUENT_PAGES ); break;
-        default:           Unexpected( CurText() ); break;
+        default:           Unexpected( CurText() );                   break;
         }
     }
 }
@@ -627,7 +626,9 @@ void DRAWING_SHEET_PARSER::parseGraphic( DS_DATA_ITEM * aItem )
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
         if( token == T_LEFT )
+        {
             token = NextTok();
+        }
         else
         {
             // If another token than T_LEFT is read here, this is an error
@@ -951,13 +952,9 @@ void DS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const w
     {
         parser.Parse( this );
     }
-    catch( const IO_ERROR& ioe )
+    catch( ... )
     {
-        wxLogMessage( ioe.What() );
-    }
-    catch( const std::bad_alloc& )
-    {
-        wxLogMessage( wxS( "Memory exhaustion reading drawing sheet" ) );
+        // best efforts
     }
 }
 
@@ -976,7 +973,6 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
 
         if( !wxFileExists( fullFileName ) )
         {
-            wxLogMessage( _( "Drawing sheet '%s' not found." ), fullFileName );
             SetDefaultLayout();
             return false;
         }
@@ -986,8 +982,6 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
 
     if( ! wksFile.IsOpened() )
     {
-        wxLogMessage( _( "Drawing sheet '%s' could not be opened." ), fullFileName );
-
         if( !Append )
             SetDefaultLayout();
 
@@ -999,7 +993,6 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
 
     if( wksFile.Read( buffer.get(), filelen ) != filelen )
     {
-        wxLogMessage( _( "Drawing sheet '%s' was not fully read." ), fullFileName.GetData() );
         return false;
     }
     else
@@ -1015,14 +1008,8 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         {
             parser.Parse( this );
         }
-        catch( const IO_ERROR& ioe )
+        catch( ... )
         {
-            wxLogMessage( ioe.What() );
-            return false;
-        }
-        catch( const std::bad_alloc& )
-        {
-            wxLogMessage( wxS( "Memory exhaustion reading drawing sheet" ) );
             return false;
         }
     }
