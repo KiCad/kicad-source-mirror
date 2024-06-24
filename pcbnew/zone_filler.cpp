@@ -92,7 +92,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
 
     std::vector<std::pair<ZONE*, PCB_LAYER_ID>>               toFill;
-    std::map<std::pair<ZONE*, PCB_LAYER_ID>, MD5_HASH>        oldFillHashes;
+    std::map<std::pair<ZONE*, PCB_LAYER_ID>, HASH_128>        oldFillHashes;
     std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>> isolatedIslandsMap;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();

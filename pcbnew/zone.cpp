@@ -406,7 +406,7 @@ void ZONE::SetCornerRadius( unsigned int aRadius )
 static SHAPE_POLY_SET g_nullPoly;
 
 
-MD5_HASH ZONE::GetHashValue( PCB_LAYER_ID aLayer )
+HASH_128 ZONE::GetHashValue( PCB_LAYER_ID aLayer )
 {
     if( !m_filledPolysHash.count( aLayer ) )
         return g_nullPoly.GetHash();

@@ -47,7 +47,7 @@
 #include <geometry/shape_line_chain.h>
 #include <math/box2.h>                  // for BOX2I
 #include <math/vector2d.h>              // for VECTOR2I
-#include <md5_hash.h>
+#include <hash_128.h>
 
 
 /**
@@ -552,7 +552,7 @@ public:
     }
     bool IsTriangulationUpToDate() const;
 
-    MD5_HASH GetHash() const;
+    HASH_128 GetHash() const;
 
     virtual bool HasIndexableSubshapes() const override;
 
@@ -1568,7 +1568,7 @@ private:
     /// Return true if the polygon set has any holes that touch share a vertex.
     bool hasTouchingHoles( const POLYGON& aPoly ) const;
 
-    MD5_HASH checksum() const;
+    HASH_128 checksum() const;
 
 protected:
     std::vector<POLYGON>                               m_polys;
@@ -1578,7 +1578,8 @@ protected:
     std::mutex  m_triangulationMutex;
 
 private:
-    MD5_HASH m_hash;
+    HASH_128 m_hash;
+    bool     m_hashValid = false;
 };
 
 #endif // __SHAPE_POLY_SET_H

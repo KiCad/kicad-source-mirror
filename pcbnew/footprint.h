@@ -1061,8 +1061,8 @@ private:
 
     SHAPE_POLY_SET   m_courtyard_cache_front; // Note that a footprint can have both front and back
     SHAPE_POLY_SET   m_courtyard_cache_back;  // courtyards populated.
-    mutable MD5_HASH m_courtyard_cache_front_hash;
-    mutable MD5_HASH m_courtyard_cache_back_hash;
+    mutable HASH_128   m_courtyard_cache_front_hash;
+    mutable HASH_128   m_courtyard_cache_back_hash;
     mutable std::mutex m_courtyard_cache_mutex;
 };
 

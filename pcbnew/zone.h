@@ -782,7 +782,7 @@ public:
     /**
      * @return the hash value previously calculated by BuildHashValue().
      */
-    MD5_HASH GetHashValue( PCB_LAYER_ID aLayer );
+    HASH_128 GetHashValue( PCB_LAYER_ID aLayer );
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
@@ -904,7 +904,7 @@ protected:
     LSET                                   m_fillFlags;
 
     /// A hash value used in zone filling calculations to see if the filled areas are up to date
-    std::map<PCB_LAYER_ID, MD5_HASH>       m_filledPolysHash;
+    std::map<PCB_LAYER_ID, HASH_128>       m_filledPolysHash;
 
     ZONE_BORDER_DISPLAY_STYLE m_borderStyle;       // border display style, see enum above
     int                       m_borderHatchPitch;  // for DIAGONAL_EDGE, distance between 2 lines

@@ -53,8 +53,8 @@
 #include <math/box2.h>                       // for BOX2I
 #include <math/util.h>                       // for KiROUND, rescale
 #include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
-#include <md5_hash.h>
 #include <hash.h>
+#include <mmh3_hash.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 
@@ -111,12 +111,14 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
         }
 
         m_hash = aOther.GetHash();
+        m_hashValid = true;
         m_triangulationValid = true;
     }
     else
     {
         m_triangulationValid = false;
-        m_hash = MD5_HASH();
+        m_hash.Clear();
+        m_hashValid = false;
         m_triangulatedPolys.clear();
     }
 }
@@ -127,7 +129,8 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, DROP_TRIANGULATION
     m_polys( aOther.m_polys )
 {
     m_triangulationValid = false;
-    m_hash = MD5_HASH();
+    m_hash.Clear();
+    m_hashValid = false;
     m_triangulatedPolys.clear();
 }
 
@@ -2523,7 +2526,10 @@ void SHAPE_POLY_SET::DeletePolygonAndTriangulationData( int aIdx, bool aUpdateHa
         }
 
         if( aUpdateHash )
+        {
             m_hash = checksum();
+            m_hashValid = true;
+        }
     }
 }
 
@@ -2531,6 +2537,7 @@ void SHAPE_POLY_SET::DeletePolygonAndTriangulationData( int aIdx, bool aUpdateHa
 void SHAPE_POLY_SET::UpdateTriangulationDataHash()
 {
     m_hash = checksum();
+    m_hashValid = true;
 }
 
 
@@ -2723,6 +2730,7 @@ void SHAPE_POLY_SET::Move( const VECTOR2I& aVector )
         tri->Move( aVector );
 
     m_hash = checksum();
+    m_hashValid = true;
 }
 
 
@@ -3131,15 +3139,16 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
     }
 
     m_hash = aOther.m_hash;
+    m_hashValid = aOther.m_hashValid;
     m_triangulationValid = aOther.m_triangulationValid.load();
 
     return *this;
 }
 
 
-MD5_HASH SHAPE_POLY_SET::GetHash() const
+HASH_128 SHAPE_POLY_SET::GetHash() const
 {
-    if( !m_hash.IsValid() )
+    if( !m_hashValid )
         return checksum();
 
     return m_hash;
@@ -3151,10 +3160,10 @@ bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
     if( !m_triangulationValid )
         return false;
 
-    if( !m_hash.IsValid() )
+    if( !m_hashValid )
         return false;
 
-    MD5_HASH hash = checksum();
+    HASH_128 hash = checksum();
 
     return hash == m_hash;
 }
@@ -3234,7 +3243,7 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
 {
     std::unique_lock<std::mutex> lock( m_triangulationMutex );
 
-    if( m_triangulationValid && m_hash.IsValid() )
+    if( m_triangulationValid && m_hashValid )
     {
         if( m_hash == checksum() )
             return;
@@ -3242,7 +3251,7 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
 
     // Invalidate, in case anything goes wrong below
     m_triangulationValid = false;
-    m_hash.SetValid( false );
+    m_hashValid = false;
 
     auto triangulate =
             []( SHAPE_POLY_SET& polySet, int forOutline,
@@ -3334,6 +3343,7 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
             else
             {
                 m_hash = checksum();
+                m_hashValid = true;
                 // Set valid flag only after everything has been updated
                 m_triangulationValid = true;
             }
@@ -3354,6 +3364,7 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
         else
         {
             m_hash = checksum();
+            m_hashValid = true;
             // Set valid flag only after everything has been updated
             m_triangulationValid = true;
         }
@@ -3361,31 +3372,31 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
 }
 
 
-MD5_HASH SHAPE_POLY_SET::checksum() const
+HASH_128 SHAPE_POLY_SET::checksum() const
 {
-    MD5_HASH hash;
+    MMH3_HASH hash( 0x68AF835D ); // Arbitrary seed
 
-    hash.Hash( m_polys.size() );
+    hash.add( m_polys.size() );
 
     for( const POLYGON& outline : m_polys )
     {
-        hash.Hash( outline.size() );
+        hash.add( outline.size() );
 
         for( const SHAPE_LINE_CHAIN& lc : outline )
         {
-            hash.Hash( lc.PointCount() );
+            hash.add( lc.PointCount() );
 
             for( int i = 0; i < lc.PointCount(); i++ )
             {
-                hash.Hash( lc.CPoint( i ).x );
-                hash.Hash( lc.CPoint( i ).y );
+                VECTOR2I pt = lc.CPoint( i );
+
+                hash.add( pt.x );
+                hash.add( pt.y );
             }
         }
     }
 
-    hash.Finalize();
-
-    return hash;
+    return hash.digest();
 }
 
 
