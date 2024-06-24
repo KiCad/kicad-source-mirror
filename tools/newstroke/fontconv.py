@@ -10,8 +10,7 @@ from typing import Any, NamedTuple
 import re
 import sys
 
-# fontconv.awk only performed duplicate removal within a source glyph
-global_duplicate_point_removal = False
+global_duplicate_point_removal = True
 
 input_fonts = ['symbol', 'font', 'hiragana',
                'katakana', 'half_full', 'CJK_symbol',
