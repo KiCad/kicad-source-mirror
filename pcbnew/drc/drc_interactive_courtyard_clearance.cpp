@@ -33,21 +33,27 @@
 void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 {
     std::vector<BOX2I> fpBBBoxes( m_FpInMove.size() );
-    std::vector<BOX2I> frontBBBoxes( m_FpInMove.size() );
-    std::vector<BOX2I> backBBBoxes( m_FpInMove.size() );
+    BOX2I              movingBBox;
 
-    // GetCourtyard updates courtyard caches if needed
     for( size_t i = 0; i < m_FpInMove.size(); i++ )
     {
         FOOTPRINT* fpB = m_FpInMove[i];
-        fpBBBoxes[i] = fpB->GetBoundingBox();
-        frontBBBoxes[i] = fpB->GetCourtyard( F_CrtYd ).BBoxFromCaches();
-        backBBBoxes[i] = fpB->GetCourtyard( B_CrtYd ).BBoxFromCaches();
+
+        BOX2I bbox = fpB->GetBoundingBox( true, false );
+        movingBBox.Merge( bbox );
+        fpBBBoxes[i] = bbox;
     }
+
+    movingBBox.Inflate( m_largestCourtyardClearance );
 
     for( FOOTPRINT* fpA: m_board->Footprints() )
     {
         if( fpA->IsSelected() )
+            continue;
+
+        BOX2I fpABBox = fpA->GetBoundingBox( true, false );
+
+        if( !movingBBox.Intersects( fpABBox ) )
             continue;
 
         const SHAPE_POLY_SET& frontA = fpA->GetCourtyard( F_CrtYd );
@@ -63,19 +69,19 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
         frontABBox.Inflate( m_largestCourtyardClearance );
         backABBox.Inflate( m_largestCourtyardClearance );
 
-        BOX2I fpABBox = fpA->GetBoundingBox();
-
         for( size_t inMoveId = 0; inMoveId < m_FpInMove.size(); inMoveId++ )
         {
             FOOTPRINT*            fpB = m_FpInMove[inMoveId];
-            const SHAPE_POLY_SET& frontB = fpB->GetCachedCourtyard( F_CrtYd );
-            const SHAPE_POLY_SET& backB = fpB->GetCachedCourtyard( B_CrtYd );
-            const BOX2I           fpBBBox = fpBBBoxes[inMoveId];
-            const BOX2I           frontBBBox = frontBBBoxes[inMoveId];
-            const BOX2I           backBBBox = backBBBoxes[inMoveId];
-            int                   clearance;
-            int                   actual;
-            VECTOR2I              pos;
+            const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );
+            const SHAPE_POLY_SET& backB = fpB->GetCourtyard( B_CrtYd );
+
+            const BOX2I fpBBBox = fpBBBoxes[inMoveId];
+            const BOX2I frontBBBox = frontB.BBoxFromCaches();
+            const BOX2I backBBBox = backB.BBoxFromCaches();
+
+            int      clearance;
+            int      actual;
+            VECTOR2I pos;
 
             if( frontA.OutlineCount() > 0 && frontB.OutlineCount() > 0
                     && frontABBox.Intersects( frontBBBox ) )
