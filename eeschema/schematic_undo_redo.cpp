@@ -305,54 +305,53 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( eda_item );
 
         // Set connectable object connectivity status.
-        auto updateConnectivityFlag = [&, this]()
-        {
-            if( schItem )
-            {
-                if( schItem->IsConnectable() )
+        auto updateConnectivityFlag =
+                [&]()
                 {
-                    schItem->SetConnectivityDirty();
-
-                    if( schItem->Type() == SCH_SYMBOL_T )
+                    if( schItem->IsConnectable() )
                     {
-                        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
+                        schItem->SetConnectivityDirty();
 
-                        wxCHECK( symbol, /* void */ );
+                        if( schItem->Type() == SCH_SYMBOL_T )
+                        {
+                            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
 
-                        for( SCH_PIN* pin : symbol->GetPins() )
-                            pin->SetConnectivityDirty();
+                            wxCHECK( symbol, /* void */ );
+
+                            for( SCH_PIN* pin : symbol->GetPins() )
+                                pin->SetConnectivityDirty();
+                        }
+                        else if( schItem->Type() == SCH_SHEET_T )
+                        {
+                            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( schItem );
+
+                            wxCHECK( sheet, /* void */ );
+
+                            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                                pin->SetConnectivityDirty();
+                        }
+
+                        m_highlightedConnChanged = true;
+                        dirtyConnectivity = true;
+
+                        // Do a local clean up if there are any connectable objects in the commit
+                        if( connectivityCleanUp == NO_CLEANUP )
+                            connectivityCleanUp = LOCAL_CLEANUP;
+
+                        // Do a full rebauild of the connectivity if there is a sheet in the commit
+                        if( schItem->Type() == SCH_SHEET_T )
+                            connectivityCleanUp = GLOBAL_CLEANUP;
                     }
-                    else if( schItem->Type() == SCH_SHEET_T )
+                    else if( schItem->Type() == SCH_RULE_AREA_T )
                     {
-                        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( schItem );
-
-                        wxCHECK( sheet, /* void */ );
-
-                        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                            pin->SetConnectivityDirty();
+                        dirtyConnectivity = true;
                     }
-
-                    m_highlightedConnChanged = true;
-                    dirtyConnectivity = true;
-
-                    // Do a local clean up if there are any connectable objects in the commit.
-                    if( connectivityCleanUp == NO_CLEANUP )
-                        connectivityCleanUp = LOCAL_CLEANUP;
-
-                    // Do a full rebauild of the connectivity if there is a sheet in the commit.
-                    if( schItem->Type() == SCH_SHEET_T )
-                        connectivityCleanUp = GLOBAL_CLEANUP;
-                }
-                else if( schItem->Type() == SCH_RULE_AREA_T )
-                {
-                    dirtyConnectivity = true;
-                }
-            }
-        };
+                };
 
         if( status == UNDO_REDO::NEWITEM )
         {
-            updateConnectivityFlag();
+            if( schItem )
+                updateConnectivityFlag();
 
             // If we are removing the current sheet, get out first
             if( eda_item->Type() == SCH_SHEET_T )
@@ -373,7 +372,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( eda_item->Type() == SCH_SHEET_T )
                 rebuildHierarchyNavigator = true;
 
-            updateConnectivityFlag();
+            if( schItem )
+                updateConnectivityFlag();
 
             // deleted items are re-inserted on undo
             AddToScreen( eda_item, screen );
