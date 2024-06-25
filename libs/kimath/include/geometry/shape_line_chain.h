@@ -81,11 +81,10 @@ struct CLIPPER_Z_VALUE
  */
 class SHAPE_LINE_CHAIN : public SHAPE_LINE_CHAIN_BASE
 {
-private:
+public:
     typedef std::vector<VECTOR2I>::iterator point_iter;
     typedef std::vector<VECTOR2I>::const_iterator point_citer;
 
-public:
     /**
      * Represent an intersection between two line segments
      */
@@ -217,6 +216,40 @@ public:
      */
     virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                           VECTOR2I* aLocation = nullptr ) const override;
+
+    /**
+     * Finds closest points between this and the other line chain. Doesn't test segments or arcs.
+     *
+     * @param aOther the line chain to test against.
+     * @param aPt0 closest point on this line chain (output).
+     * @param aPt1 closest point on the other line chain (output).
+     * @param aDistance distance between points (output).
+     * @return true, if the operation was successful.
+     */
+    bool ClosestPoints( const SHAPE_LINE_CHAIN& aOther, VECTOR2I& aPt0, VECTOR2I& aPt1 ) const;
+
+    static bool ClosestPoints( const point_citer& aMyStart, const point_citer& aMyEnd,
+                               const point_citer& aOtherStart, const point_citer& aOtherEnd,
+                               VECTOR2I& aPt0, VECTOR2I& aPt1, int64_t& aDistSq );
+
+    static bool ClosestSegments( const VECTOR2I& aMyPrevPt, const point_citer& aMyStart,
+                                 const point_citer& aMyEnd, const VECTOR2I& aOtherPrevPt,
+                                 const point_citer& aOtherStart, const point_citer& aOtherEnd,
+                                 VECTOR2I& aPt0, VECTOR2I& aPt1, int64_t& aDistSq );
+
+    /**
+     * Finds closest points between segments of this and the other line chain. Doesn't guarantee
+     * that the points are the absolute closest (use ClosestSegments for that) as there might
+     * be edge cases, but it is much faster.
+     *
+     * @param aOther the line chain to test against.
+     * @param aPt0 closest point on this line chain (output).
+     * @param aPt1 closest point on the other line chain (output).
+     * @param aDistance distance between points (output).
+     * @return true, if the operation was successful.
+     */
+    bool ClosestSegmentsFast( const SHAPE_LINE_CHAIN& aOther, VECTOR2I& aPt0,
+                              VECTOR2I& aPt1 ) const;
 
     SHAPE_LINE_CHAIN& operator=( const SHAPE_LINE_CHAIN& ) = default;
 
