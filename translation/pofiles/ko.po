@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-06-25 08:36+0000\n"
+"PO-Revision-Date: 2024-06-25 10:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -38130,9 +38130,9 @@ msgid "%s rounded corners differ."
 msgstr "%s 둥근 모서리가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s 모따기된 모서리가 다름."
+msgstr "%s 모따기된 모서리 크가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -38748,7 +38748,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:878
 #, c-format
 msgid "Wire not done (contour %d, points %d): OCC error %d\n"
-msgstr ""
+msgstr "배선이 완료되지 않음(윤곽선 %d, 점 %d): OCC 오류 %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1049
 #, c-format
@@ -38817,7 +38817,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "현재 기판이 닫힙니다. 계속하시겠습니까?"
 
 #: pcbnew/files.cpp:492
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -38825,9 +38824,9 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "기판의 영역이 다시 채워질 때, 동박 모서리 공간거리가 사용됩니다 (기판 설정 > "
-"디자인 규칙 > 제약 을 참조하세요).\n"
-"이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 다"
-"른 채움 결과를 내보낼 것입니다."
+"디자인 규칙 > 제약 을 참조).\n"
+"이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 "
+"다른 채움 결과를 내보낼 것입니다."
 
 #: pcbnew/files.cpp:538
 #, c-format
@@ -40748,29 +40747,24 @@ msgid "Loading dimension drawings..."
 msgstr "치수 도면 로드 중..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "각도 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1665
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "데이텀 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "기준선 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1685
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "선형 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1693
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "래디얼 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
 #, c-format
@@ -45967,9 +45961,8 @@ msgid "Length Tuning Settings..."
 msgstr "길이 조절 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "개체 속성 대화창 표시"
+msgstr "튜닝 패턴 속성 대화상자 표시"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
