@@ -111,9 +111,10 @@ DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS( wxWindow* aParent,
         }
     }
 
-    m_sizerMain->Layout();
-    m_sizerMain->Fit( this );
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SYNC_SHEET_PINS::OnClose, this );
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    finishDialogSettings();
 }
 
 
