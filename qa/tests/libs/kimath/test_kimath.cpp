@@ -320,7 +320,7 @@ BOOST_AUTO_TEST_CASE( TestInterceptsNegativeX )
 
 BOOST_AUTO_TEST_CASE( TestHash128 )
 {
-    const HASH_128 zero;
+    const HASH_128 zero{};
 
     for( size_t i = 0; i < 16; i++ )
         BOOST_CHECK( zero.Value8[i] == 0 );
