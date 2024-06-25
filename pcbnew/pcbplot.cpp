@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,6 +273,17 @@ static wxString& makeStringCompatX1( wxString& aText, bool aUseX1CompatibilityMo
 }
 
 
+// A helper function to replace reserved chars (separators in gerber fields)
+// in a gerber string field.
+// reserved chars are replaced by _ (for ,) or an escaped sequence (for * and %)
+static void replaceReservedCharsField( wxString& aMsg )
+{
+    aMsg.Replace( wxT( "," ), wxT( "_" ) );         // can be replaced by \\u002C
+    aMsg.Replace( wxT( "*" ), wxT( "\\u002A" ) );
+    aMsg.Replace( wxT( "%" ), wxT( "\\u0025" ) );
+}
+
+
 void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1CompatibilityMode )
 {
     wxString text;
@@ -303,13 +314,13 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1Compa
     wxString guid = GbrMakeProjectGUIDfromString( msg );
 
     // build the <project id> string: this is the board short filename (without ext)
-    // and all non ASCII chars and comma are replaced by '_'
+    // and all non ASCII chars and reserved chars (, * % ) are replaced by '_'
     msg = fn.GetName();
-    msg.Replace( wxT( "," ), wxT( "_" ) );
+    replaceReservedCharsField( msg );
 
-    // build the <revision id> string. All non ASCII chars and comma are replaced by '_'
+    // build the <revision id> string. All non ASCII chars and reserved chars are replaced by '_'
     wxString rev = ExpandTextVars( aBoard->GetTitleBlock().GetRevision(), aBoard->GetProject() );
-    rev.Replace( wxT( "," ), wxT( "_" ) );
+    replaceReservedCharsField( rev );
 
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
