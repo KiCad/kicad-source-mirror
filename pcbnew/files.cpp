@@ -598,8 +598,16 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // it knows what consequences that will have on other KIFACEs running and using
     // this same PROJECT.  It can be very harmful if that calling code is stupid.
     SETTINGS_MANAGER* mgr = GetSettingsManager();
+    bool              setProject;
 
-    if( pro.GetFullPath() != mgr->Prj().GetProjectFullName() )
+    if( Kiface().IsSingle() || !( aCtl & KICTL_NONKICAD_ONLY ) )
+        setProject = pro.GetFullPath() != mgr->Prj().GetProjectFullName();
+    else
+        setProject = Prj().GetProjectFullName().IsEmpty();
+
+    wxString path = wxPathOnly( Prj().GetProjectFullName() );
+
+    if( setProject )
     {
         // calls SaveProject
         SaveProjectLocalSettings();
@@ -901,10 +909,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     {
-        wxFileName fn = fullFileName;
+        wxFileName fn;
 
-        if( converted )
-            fn.SetExt( FILEEXT::PcbFileExtension );
+        fn.SetPath( Prj().GetProjectPath() );
+        fn.SetName( Prj().GetProjectName() );
+        fn.SetExt( FILEEXT::KiCadPcbFileExtension );
 
         wxString fname = fn.GetFullPath();
 
