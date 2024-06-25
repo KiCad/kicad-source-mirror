@@ -934,12 +934,15 @@ AVIA6::AVIA6( ALTIUM_BINARY_PARSER& aReader )
         }
     }
 
-    if( subrecord1 > 209 )
+    if( subrecord1 >= 246 )
     {
         aReader.Skip( 38 );
         soldermask_expansion_linked = aReader.Read<uint8_t>() & 0x01;
         soldermask_expansion_back = aReader.ReadKicadUnit();
+    }
 
+    if( subrecord1 >= 307 )
+    {
         aReader.Skip( 45 );
 
         pos_tolerance = aReader.ReadKicadUnit();
