@@ -30985,9 +30985,8 @@ msgid "Grid Array"
 msgstr "그리드 배열"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:287
-#, fuzzy
 msgid "Reference Position"
-msgstr "참조 지정자"
+msgstr "참조 위치"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
 msgid "Position of the selected item (or  group) to duplicate"
