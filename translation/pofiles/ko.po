@@ -31562,9 +31562,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "텍스트 크기, 스타일 및 위치 업데이트"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update text content"
-msgstr "필드 텍스트 수정"
+msgstr "텍스트 내용 업데이트"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update fabrication attributes"
@@ -31644,9 +31643,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "텍스트 크기, 스타일 및 위치 업데이트/초기화"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "필드 텍스트 업데이트 / 초기화"
+msgstr "텍스트 내용 업데이트/재설정"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -31921,12 +31919,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:61
 #, fuzzy
 msgid "Export board body"
-msgstr "보드 내보내기"
+msgstr "보드 본체 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:64
 #, fuzzy
 msgid "Export components"
-msgstr "부품 가져오기"
+msgstr "부품 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 #, fuzzy
@@ -31940,7 +31938,7 @@ msgstr "외부 구리 층의 영역을 내보냅니다."
 #: pcbnew/dialogs/dialog_export_step_base.cpp:80
 #, fuzzy
 msgid "Export inner copper layers"
-msgstr "내부 구리 레이어"
+msgstr "내부 구리층 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:83
 msgid "Export silkscreen"
@@ -33598,9 +33596,8 @@ msgid "Set to specified values:"
 msgstr "지정된 값으로 설정:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "(심볼 편집기만 해당)"
+msgstr "표시  (텍스트만)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -39131,9 +39128,9 @@ msgid "%s rounded corners differ."
 msgstr "%s 둥근 모서리가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s 모따기된 모서리가 다름."
+msgstr "%s 모따기된 모서리 크가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
 #, c-format
@@ -39856,7 +39853,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "현재 기판이 닫힙니다. 계속하시겠습니까?"
 
 #: pcbnew/files.cpp:493
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39864,9 +39860,9 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "기판의 영역이 다시 채워질 때, 동박 모서리 공간거리가 사용됩니다 (기판 설정 > "
-"디자인 규칙 > 제약 을 참조하세요).\n"
-"이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 다"
-"른 채움 결과를 내보낼 것입니다."
+"디자인 규칙 > 제약 조건 참조).\n"
+" 이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 "
+"다른 채움이 적용될 수 있습니다."
 
 #: pcbnew/files.cpp:539
 #, c-format
@@ -40140,9 +40136,8 @@ msgid "Footprint Chooser"
 msgstr "풋프린트 선택기"
 
 #: pcbnew/footprint_chooser_frame.cpp:152
-#, fuzzy
 msgid "Show 3D viewer in own window"
-msgstr "3D 뷰어 창 표시"
+msgstr "3D 뷰어를 자체 창에 표시"
 
 #: pcbnew/footprint_chooser_frame.cpp:420
 #, c-format
@@ -41593,12 +41588,12 @@ msgstr "카스텔레이티드 패드"
 #: pcbnew/pad.cpp:2356
 #, fuzzy
 msgid "Mechanical pad"
-msgstr "기계적인"
+msgstr "기계식 패드"
 
 #: pcbnew/pad.cpp:2374
 #, fuzzy
 msgid "Front, back and connected layers"
-msgstr "시작, 끝 그리고 연결된 레이어"
+msgstr "전면, 후면, 연결된 레이어"
 
 #: pcbnew/pad.cpp:2414
 msgid "Pad Type"
@@ -41698,7 +41693,6 @@ msgid "Suppress Trailing Zeroes"
 msgstr "뒷자리 0 표시하지 않음"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Keep Aligned with Dimension"
 msgstr "치수선을 따라 정렬하기"
 
@@ -41977,29 +41971,24 @@ msgid "Loading dimension drawings..."
 msgstr "치수 도면 로드 중..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1749
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "각도 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1763
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "데이텀 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1772
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "기준선 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "선형 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1791
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
+msgstr "래디얼 치수가 무시됨(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1799
 #, c-format
@@ -42016,9 +42005,9 @@ msgid "File not found: '%s'. 3D-model not imported."
 msgstr "파일을 찾을 수 없음: '%s'. 3D 모델을 가져올 수 없습니다."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1918
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write file '%s'."
-msgstr "파일 '%s'을(를) 읽을 수 없습니다."
+msgstr "파일 '%s'를 쓸 수 없음."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1940
 msgid "Loading nets..."
@@ -43779,12 +43768,12 @@ msgstr "실제 이미지 크기: %dx%d"
 #: pcbnew/pcbnew_jobs_handler.cpp:417
 #, fuzzy
 msgid "Successfully created 3D render image"
-msgstr "성공적으로 svg 파일을 생성함"
+msgstr "3D 렌더링 이미지 생성 성공"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:420
 #, fuzzy
 msgid "Error creating 3D render image"
-msgstr "svg 파일 생성 오류"
+msgstr "3D 렌더링 이미지 생성 오류"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:457
 msgid "Successfully created svg file"
@@ -45159,7 +45148,7 @@ msgstr "두 개 이상의 선이 있는 도형을 선택해야 합니다."
 #: pcbnew/tools/edit_tool.cpp:1495
 #, fuzzy
 msgid "Simplify Shapes"
-msgstr "복합적인 형상"
+msgstr "도형 간소화"
 
 #: pcbnew/tools/edit_tool.cpp:1495 pcbnew/tools/edit_tool.cpp:1564
 msgid "Tolerance value:"
@@ -45168,7 +45157,7 @@ msgstr "공차 값:"
 #: pcbnew/tools/edit_tool.cpp:1529 pcbnew/tools/pcb_actions.cpp:628
 #, fuzzy
 msgid "Simplify Polygons"
-msgstr "F_Cu 다각형 단순화"
+msgstr "다각형 간소화"
 
 #: pcbnew/tools/edit_tool.cpp:1564 pcbnew/tools/edit_tool.cpp:1601
 #: pcbnew/tools/pcb_actions.cpp:634
@@ -45845,9 +45834,8 @@ msgid "Hide Footprint Tree"
 msgstr "풋프린트 트리 숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Focus the Footprint Tree Search Field"
-msgstr "필드 회전"
+msgstr "풋프린트 트리 검색 필드에 초점 맞추기"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "New Footprint"
@@ -46401,14 +46389,12 @@ msgid "Toggle ratsnest display of selected item(s)"
 msgstr "선택한 개체에 대해 연결선 표시 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
-#, fuzzy
 msgid "Show Net Inspector"
 msgstr "네트 검사기 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1356
-#, fuzzy
 msgid "Show/hide the net inspector"
-msgstr "네트 검사기 표시"
+msgstr "네트 검사기 표시/숨김"
 
 #: pcbnew/tools/pcb_actions.cpp:1361
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:80
@@ -46808,52 +46794,48 @@ msgid ""
 msgstr "선택한 항목을 커서 아래 항목의 가로 중앙에 정렬"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "수평 배치"
+msgstr "센터 기준 수평 분산 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1949
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
-msgstr "선택한 항목을 가장 왼쪽 항목과 가장 오른쪽 항목 사이에 배치함"
+msgstr "선택한 항목을 가장 왼쪽 항목과 가장 오른쪽 항목 사이에 분배하여 항목을 "
+"중심으로 균등하게 배치함"
 
 #: pcbnew/tools/pcb_actions.cpp:1956
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "수평 배치"
+msgstr "간격을 두고 수평으로 분산 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1957
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
-msgstr "선택한 항목을 가장 왼쪽 항목과 가장 오른쪽 항목 사이에 배치함"
+msgstr "선택한 항목을 가장 왼쪽 항목과 가장 오른쪽 항목 사이에 배치하여 항목 간 "
+"간격이 동일하도록 배치함"
 
 #: pcbnew/tools/pcb_actions.cpp:1964
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "수직 배치"
+msgstr "간격을 두고 수직으로 분산 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1965
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
-msgstr "선택한 항목을 최상위 항목과 최하위 항목 사이에 배치함"
+msgstr "선택한 항목을 최상위 항목과 최하위 항목 사이에 분배하여 항목 간 간격이 "
+"동일하도록 배치함"
 
 #: pcbnew/tools/pcb_actions.cpp:1972
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "수직 배치"
+msgstr "센터 기준으로 수직 분산 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1973
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
-msgstr "선택한 항목을 최상위 항목과 최하위 항목 사이에 배치함"
+msgstr "선택한 항목을 최상위 항목과 최하위 항목 사이에 분배하여 항목 중심이 균등하게 "
+"분산 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1988
 msgid "Create a corner"
@@ -47225,9 +47207,8 @@ msgid "Length Tuning Settings..."
 msgstr "길이 조절 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:2478
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "개체 속성 대화창 표시"
+msgstr "튜닝 패턴 속성 대화상자 표시"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
@@ -48065,9 +48046,8 @@ msgstr "경로의 앞에 풋프린트 UUID를 붙이지 않습니다."
 
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
-#, fuzzy
 msgid "Configure netlist inspector"
-msgstr "네트 클래스 설정"
+msgstr "네트리스트 검사기 구성"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:339
 msgid "No footprint selected"
@@ -48120,33 +48100,33 @@ msgstr "선택한 네트 강조"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1194
 #, fuzzy
 msgid "Rename Selected Net"
-msgstr "선택 항목 재생성"
+msgstr "선택한 네트 이름 변경"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1198
 #, fuzzy
 msgid "Delete Selected Net"
-msgstr "선택한 항목 삭제"
+msgstr "선택한 네트 삭제"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1204
 #, fuzzy
 msgid "Add Net"
-msgstr "텍스트 추가"
+msgstr "네트 추가"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1218
 #, fuzzy
 msgid "Highlight Selected Nets"
-msgstr "선택한 네트 강조"
+msgstr "선택된 네트 강조 표시"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1220
 #, fuzzy
 msgid "Delete Selected Nets"
-msgstr "선택한 항목 삭제"
+msgstr "선택한 네트 삭제"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1227
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1360
 #, fuzzy
 msgid "Remove Selected Custom Group"
-msgstr "그룹에서 항목 제거"
+msgstr "선택한 사용자 지정 그룹 제거"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1252
 #, fuzzy
@@ -48156,7 +48136,7 @@ msgstr "그룹 이름:"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1252
 #, fuzzy
 msgid "New Group"
-msgstr "그룹"
+msgstr "새 그룹"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1254
 msgid "(Use /.../ to indicate a regular expression.)"
@@ -48165,7 +48145,7 @@ msgstr ""
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1327
 #, fuzzy
 msgid "Filter by Net Name"
-msgstr "필터 네트"
+msgstr "네트 이름으로 필터링"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1333
 #, fuzzy
@@ -48175,42 +48155,42 @@ msgstr "네트클래스로 필터링"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1348
 #, fuzzy
 msgid "Group by Netclass"
-msgstr "이름으로 그룹화"
+msgstr "네트클래스로 그룹화"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1355
 #, fuzzy
 msgid "Add Custom Group"
-msgstr "사용자 정의 규칙"
+msgstr "사용자 지정 그룹 추가"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
 #, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "그룹에서 항목 제거"
+msgstr "모든 사용자 지정 그룹 제거"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1376
 #, fuzzy
 msgid "Show Zero Pad Nets"
-msgstr "패드가 0개인 네트 표시"
+msgstr "제로 패드 네트 표시"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1382
 #, fuzzy
 msgid "Show Unconnected Nets"
-msgstr "연결되지 않음"
+msgstr "미연결 네트 표시"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1391
 #, fuzzy
 msgid "Save Net Inspector Report"
-msgstr "네트 검사기"
+msgstr "네트 검사기 보고서 저장"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1400
 #, fuzzy
 msgid "Show / Hide Columns"
-msgstr "숨은 핀 표시"
+msgstr "열 표시/숨김"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1549
 #, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "보고서 파일 저장"
+msgstr "네트 검사기 보고서 파일 저장"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1550
 msgid "Report file"
