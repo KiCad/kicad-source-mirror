@@ -42,6 +42,10 @@ struct BOX2I_MINMAX
     {
     }
 
+    BOX2I_MINMAX( const VECTOR2I& aPt ) : BOX2I_MINMAX( aPt.x, aPt.y ) {}
+
+    BOX2I_MINMAX( int aX, int aY ) : m_Left( aX ), m_Top( aY ), m_Right( aX ), m_Bottom( aY ) {}
+
     BOX2I_MINMAX( const BOX2I& aBox ) :
             m_Left( aBox.GetLeft() ), m_Top( aBox.GetTop() ), m_Right( aBox.GetRight() ),
             m_Bottom( aBox.GetBottom() )
@@ -79,6 +83,31 @@ struct BOX2I_MINMAX
 
         // if a common area exists, it must have a positive (null accepted) size
         return left <= right && top <= bottom;
+    }
+
+    void Merge( const VECTOR2I& aPt )
+    {
+        m_Left = std::min( m_Left, aPt.x );
+        m_Right = std::max( m_Right, aPt.x );
+        m_Top = std::min( m_Top, aPt.y );
+        m_Bottom = std::max( m_Bottom, aPt.y );
+    }
+
+    VECTOR2I GetCenter() const
+    {
+        int cx = ( (int64_t) m_Left + m_Right ) / 2;
+        int cy = ( (int64_t) m_Top + m_Bottom ) / 2;
+
+        return VECTOR2I( cx, cy );
+    }
+
+    double GetDiameter() const
+    {
+        VECTOR2L start( m_Left, m_Top );
+        VECTOR2L end( m_Right, m_Bottom );
+        VECTOR2L d = end - start;
+
+        return std::hypot( d.x, d.y );
     }
 
     int m_Left;

@@ -374,47 +374,111 @@ void RN_NET::OptimizeRNEdges()
     auto optimizeZoneToZoneAnchors =
             [&]( const std::shared_ptr<const CN_ANCHOR>& a,
                  const std::shared_ptr<const CN_ANCHOR>& b,
-                 const std::function<void(const std::shared_ptr<const CN_ANCHOR>&)>& setOptimizedATo,
-                 const std::function<void(const std::shared_ptr<const CN_ANCHOR>&)>& setOptimizedBTo )
+                 const std::function<void( const std::shared_ptr<const CN_ANCHOR>& )>&
+                         setOptimizedATo,
+                 const std::function<void( const std::shared_ptr<const CN_ANCHOR>& )>&
+                         setOptimizedBTo )
+    {
+        struct CENTER
+        {
+            VECTOR2I pt;
+            bool     valid = false;
+        };
+
+        struct DIST_PAIR
+        {
+            DIST_PAIR( int64_t aDistSq, size_t aIdA, size_t aIdB )
+                    : dist_sq( aDistSq ), idA( aIdA ), idB( aIdB )
+            {}
+
+            int64_t dist_sq;
+            size_t  idA;
+            size_t  idB;
+        };
+
+        const std::vector<CN_ITEM*>& connectedItemsA = a->Item()->ConnectedItems();
+        const std::vector<CN_ITEM*>& connectedItemsB = b->Item()->ConnectedItems();
+
+        std::vector<CENTER> centersA( connectedItemsA.size() );
+        std::vector<CENTER> centersB( connectedItemsB.size() );
+
+        for( size_t i = 0; i < connectedItemsA.size(); i++ )
+        {
+            CN_ITEM*       itemA = connectedItemsA[i];
+            CN_ZONE_LAYER* zoneLayerA = dynamic_cast<CN_ZONE_LAYER*>( itemA );
+
+            if( !zoneLayerA )
+                continue;
+
+            const SHAPE_LINE_CHAIN& shapeA = zoneLayerA->GetOutline();
+            centersA[i].pt = shapeA.BBox().GetCenter();
+            centersA[i].valid = true;
+        }
+
+        for( size_t i = 0; i < connectedItemsB.size(); i++ )
+        {
+            CN_ITEM*       itemB = connectedItemsB[i];
+            CN_ZONE_LAYER* zoneLayerB = dynamic_cast<CN_ZONE_LAYER*>( itemB );
+
+            if( !zoneLayerB )
+                continue;
+
+            const SHAPE_LINE_CHAIN& shapeB = zoneLayerB->GetOutline();
+            centersB[i].pt = shapeB.BBox().GetCenter();
+            centersB[i].valid = true;
+        }
+
+        std::vector<DIST_PAIR> pairsToTest;
+
+        for( size_t ia = 0; ia < centersA.size(); ia++ )
+        {
+            for( size_t ib = 0; ib < centersB.size(); ib++ )
             {
-                for( CN_ITEM* itemA : a->Item()->ConnectedItems() )
-                {
-                    CN_ZONE_LAYER* zoneLayerA = dynamic_cast<CN_ZONE_LAYER*>( itemA );
+                const CENTER& ca = centersA[ia];
+                const CENTER& cb = centersB[ib];
 
-                    if( !zoneLayerA )
-                        continue;
+                if( !ca.valid || !cb.valid )
+                    continue;
 
-                    for( CN_ITEM* itemB : b->Item()->ConnectedItems() )
-                    {
-                        CN_ZONE_LAYER* zoneLayerB = dynamic_cast<CN_ZONE_LAYER*>( itemB );
+                VECTOR2L pA( ca.pt );
+                VECTOR2L pB( cb.pt );
 
-                        if( !zoneLayerB || zoneLayerB == zoneLayerA )
-                            continue;
+                int64_t dist_sq = ( pB - pA ).SquaredEuclideanNorm();
+                pairsToTest.emplace_back( dist_sq, ia, ib );
+            }
+        }
 
-                        if( zoneLayerB->Layer() == zoneLayerA->Layer() )
-                        {
-                            // Process the first matching layer.  We don't really care if it's
-                            // the "best" layer or not, as anything will be better than the
-                            // original anchors (which are connected to the zone and so certainly
-                            // don't look like they should have ratsnest lines coming off them).
+        std::sort( pairsToTest.begin(), pairsToTest.end(),
+                   []( const DIST_PAIR& a, const DIST_PAIR& b )
+                   {
+                       return a.dist_sq < b.dist_sq;
+                   } );
 
-                            VECTOR2I     startA = zoneLayerA->GetOutline().GetPoint( 0 );
-                            VECTOR2I     startB = zoneLayerB->GetOutline().GetPoint( 0 );
-                            const SHAPE* shapeA = &zoneLayerA->GetOutline();
-                            const SHAPE* shapeB = &zoneLayerB->GetOutline();
-                            int          startDist = ( startA - startB ).EuclideanNorm();
+        const int c_polyPairsLimit = 3;
 
-                            VECTOR2I ptA;
-                            shapeA->Collide( shapeB, startDist + 10, nullptr, &ptA );
-                            setOptimizedATo( std::make_shared<CN_ANCHOR>( ptA, zoneLayerA ) );
+        for( size_t i = 0; i < pairsToTest.size() && i < c_polyPairsLimit; i++ )
+        {
+            const DIST_PAIR& pair = pairsToTest[i];
 
-                            VECTOR2I ptB;
-                            shapeB->Collide( shapeA, startDist + 10, nullptr, &ptB );
-                            setOptimizedBTo( std::make_shared<CN_ANCHOR>( ptB, zoneLayerB ) );
-                        }
-                    }
-                }
-            };
+            CN_ZONE_LAYER* zoneLayerA = static_cast<CN_ZONE_LAYER*>( connectedItemsA[pair.idA] );
+            CN_ZONE_LAYER* zoneLayerB = static_cast<CN_ZONE_LAYER*>( connectedItemsB[pair.idB] );
+
+            if( zoneLayerA == zoneLayerB )
+                continue;
+
+            const SHAPE_LINE_CHAIN& shapeA = zoneLayerA->GetOutline();
+            const SHAPE_LINE_CHAIN& shapeB = zoneLayerB->GetOutline();
+
+            VECTOR2I ptA;
+            VECTOR2I ptB;
+
+            if( shapeA.ClosestSegmentsFast( shapeB, ptA, ptB ) )
+            {
+                setOptimizedATo( std::make_shared<CN_ANCHOR>( ptA, zoneLayerA ) );
+                setOptimizedBTo( std::make_shared<CN_ANCHOR>( ptB, zoneLayerB ) );
+            }
+        }
+    };
 
     for( CN_EDGE& edge : m_rnEdges )
     {

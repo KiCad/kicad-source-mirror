@@ -147,6 +147,64 @@ const VECTOR2I SEG::NearestPoint( const SEG& aSeg ) const
 }
 
 
+bool SEG::NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const
+{
+    if( OPT_VECTOR2I p = Intersect( aSeg ) )
+    {
+        aPtA = aPtB = *p;
+        aDistSq = 0;
+
+        return true;
+    }
+
+    const VECTOR2I pts_origin[4] =
+    {
+        aSeg.NearestPoint( A ),
+        aSeg.NearestPoint( B ),
+        NearestPoint( aSeg.A ),
+        NearestPoint( aSeg.B )
+    };
+
+    const VECTOR2I* pts_a_out[4] =
+    {
+        &A,
+        &B,
+        &pts_origin[2],
+        &pts_origin[3]
+    };
+
+    const VECTOR2I* pts_b_out[4] =
+    {
+        &pts_origin[0],
+        &pts_origin[1],
+        &aSeg.A,
+        &aSeg.B
+    };
+
+    const ecoord pts_dist[4] =
+    {
+        ( pts_origin[0] - A ).SquaredEuclideanNorm(),
+        ( pts_origin[1] - B ).SquaredEuclideanNorm(),
+        ( pts_origin[2] - aSeg.A ).SquaredEuclideanNorm(),
+        ( pts_origin[3] - aSeg.B ).SquaredEuclideanNorm()
+    };
+
+    int min_i = 0;
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if( pts_dist[i] < pts_dist[min_i] )
+            min_i = i;
+    }
+
+    aPtA = *pts_a_out[min_i];
+    aPtB = *pts_b_out[min_i];
+    aDistSq = pts_dist[min_i];
+
+    return true;
+}
+
+
 bool SEG::intersects( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines, VECTOR2I* aPt ) const
 {
     const VECTOR2<ecoord> e = VECTOR2<ecoord>( B ) - A;

@@ -181,6 +181,16 @@ public:
     const VECTOR2I NearestPoint( const SEG &aSeg ) const;
 
     /**
+      * Compute closest points between this segment and \a aSeg.
+      *
+      * @param aPtA point on this segment (output)
+      * @param aPtB point on the other segment (output)
+      * @param aDistSq squared distance between points (output)
+      * @return true if the operation was successful
+      */
+    bool NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const;
+
+    /**
       * Reflect a point using this segment as axis.
       *
       * @return the reflected point

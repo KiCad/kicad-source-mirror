@@ -549,6 +549,262 @@ void SHAPE_LINE_CHAIN::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter 
 }
 
 
+bool SHAPE_LINE_CHAIN::ClosestSegmentsFast( const SHAPE_LINE_CHAIN& aOther, VECTOR2I& aPt0,
+                                            VECTOR2I& aPt1 ) const
+{
+    const std::vector<VECTOR2I>& myPts = m_points;
+    const std::vector<VECTOR2I>& otherPts = aOther.m_points;
+
+    const int c_maxBoxes = 100;
+    const int c_minPtsPerBox = 20;
+
+    int myPointsPerBox = std::max( c_minPtsPerBox, int( myPts.size() / c_maxBoxes ) + 1 );
+    int otherPointsPerBox = std::max( c_minPtsPerBox, int( otherPts.size() / c_maxBoxes ) + 1 );
+
+    int myNumBoxes = ( myPts.size() + myPointsPerBox - 1 ) / myPointsPerBox;
+    int otherNumBoxes = ( otherPts.size() + otherPointsPerBox - 1 ) / otherPointsPerBox;
+
+    struct BOX
+    {
+        BOX2I_MINMAX bbox;
+        VECTOR2I     center;
+        int          radius;
+        bool         valid = false;
+    };
+
+    std::vector<BOX> myBoxes( myNumBoxes );
+    std::vector<BOX> otherBoxes( otherNumBoxes );
+
+    // Calculate bounding boxes
+    for( size_t i = 0; i < myPts.size(); i++ )
+    {
+        const VECTOR2I pt = myPts[i];
+        BOX&           box = myBoxes[i / myPointsPerBox];
+
+        if( box.valid )
+        {
+            box.bbox.Merge( pt );
+        }
+        else
+        {
+            box.bbox = BOX2I_MINMAX( pt );
+            box.valid = true;
+        }
+    }
+
+    for( size_t i = 0; i < otherPts.size(); i++ )
+    {
+        const VECTOR2I pt = otherPts[i];
+        BOX&           box = otherBoxes[i / otherPointsPerBox];
+
+        if( box.valid )
+        {
+            box.bbox.Merge( pt );
+        }
+        else
+        {
+            box.bbox = BOX2I_MINMAX( pt );
+            box.valid = true;
+        }
+    }
+
+    // Store centers and radiuses
+    for( BOX& box : myBoxes )
+    {
+        box.center = box.bbox.GetCenter();
+        box.radius = int( box.bbox.GetDiameter() / 2 );
+    }
+
+    for( BOX& box : otherBoxes )
+    {
+        box.center = box.bbox.GetCenter();
+        box.radius = int( box.bbox.GetDiameter() / 2 );
+    }
+
+    // Find closest pairs
+    struct DIST_PAIR
+    {
+        DIST_PAIR( int64_t aDistSq, size_t aIdA, size_t aIdB ) :
+                dist( aDistSq ), idA( aIdA ), idB( aIdB )
+        {
+        }
+
+        int64_t dist;
+        size_t  idA;
+        size_t  idB;
+    };
+
+    std::vector<DIST_PAIR> pairsToTest;
+
+    for( size_t ia = 0; ia < myBoxes.size(); ia++ )
+    {
+        for( size_t ib = 0; ib < otherBoxes.size(); ib++ )
+        {
+            const BOX& ca = myBoxes[ia];
+            const BOX& cb = otherBoxes[ib];
+
+            if( !ca.valid || !cb.valid )
+                continue;
+
+            VECTOR2L pA( ca.center );
+            VECTOR2L pB( cb.center );
+
+            int64_t dist = ( pB - pA ).EuclideanNorm();
+
+            dist -= ca.radius;
+            dist -= cb.radius;
+
+            pairsToTest.emplace_back( dist, ia, ib );
+        }
+    }
+
+    std::sort( pairsToTest.begin(), pairsToTest.end(),
+               []( const DIST_PAIR& a, const DIST_PAIR& b )
+               {
+                   return a.dist < b.dist;
+               } );
+
+    const int c_polyPairsLimit = 5;
+
+    // Find closest segments in tested pairs
+    int64_t total_closest_dist_sq = VECTOR2I::ECOORD_MAX;
+
+    for( size_t pairId = 0; pairId < pairsToTest.size() && pairId < c_polyPairsLimit; pairId++ )
+    {
+        const DIST_PAIR& pair = pairsToTest[pairId];
+
+        VECTOR2I ptA;
+        VECTOR2I ptB;
+        int64_t  dist_sq;
+
+        size_t myStartId = pair.idA * myPointsPerBox;
+        size_t myEndId = myStartId + myPointsPerBox;
+
+        if( myEndId > myPts.size() )
+            myEndId = myPts.size();
+
+        VECTOR2I myPrevPt = myPts[myStartId == 0 ? myPts.size() - 1 : myStartId - 1];
+
+        size_t otherStartId = pair.idB * otherPointsPerBox;
+        size_t otherEndId = otherStartId + otherPointsPerBox;
+
+        if( otherEndId > otherPts.size() )
+            otherEndId = otherPts.size();
+
+        VECTOR2I otherPrevPt = otherPts[otherStartId == 0 ? otherPts.size() - 1 : otherStartId - 1];
+
+        if( ClosestSegments( myPrevPt, myPts.begin() + myStartId, myPts.begin() + myEndId,
+                             otherPrevPt, otherPts.begin() + otherStartId,
+                             otherPts.begin() + otherEndId, ptA, ptB, dist_sq ) )
+        {
+            if( dist_sq < total_closest_dist_sq )
+            {
+                total_closest_dist_sq = dist_sq;
+                aPt0 = ptA;
+                aPt1 = ptB;
+            }
+        }
+    }
+
+    return total_closest_dist_sq != VECTOR2I::ECOORD_MAX;
+}
+
+
+bool SHAPE_LINE_CHAIN::ClosestSegments( const VECTOR2I& aMyPrevPt, const point_citer& aMyStart,
+                                        const point_citer& aMyEnd, const VECTOR2I& aOtherPrevPt,
+                                        const point_citer& aOtherStart,
+                                        const point_citer& aOtherEnd, VECTOR2I& aPt0,
+                                        VECTOR2I& aPt1, int64_t& aDistSq )
+{
+    if( aMyStart == aMyEnd )
+        return false;
+
+    if( aOtherStart == aOtherEnd )
+        return false;
+
+    int64_t  closest_dist_sq = VECTOR2I::ECOORD_MAX;
+    VECTOR2I lastPtA = aMyPrevPt;
+
+    for( point_citer itA = aMyStart; itA != aMyEnd; itA++ )
+    {
+        const VECTOR2I& ptA = *itA;
+        VECTOR2I        lastPtB = aOtherPrevPt;
+
+        for( point_citer itB = aOtherStart; itB != aOtherEnd; itB++ )
+        {
+            const VECTOR2I& ptB = *itB;
+
+            SEG segA( lastPtA, ptA );
+            SEG segB( lastPtB, ptB );
+
+            VECTOR2I nearestA, nearestB;
+
+            int64_t dist_sq;
+
+            if( segA.NearestPoints( segB, nearestA, nearestB, dist_sq ) )
+            {
+                if( dist_sq < closest_dist_sq )
+                {
+                    closest_dist_sq = dist_sq;
+                    aPt0 = nearestA;
+                    aPt1 = nearestB;
+                }
+            }
+
+            lastPtB = ptB;
+        }
+
+        lastPtA = ptA;
+    }
+
+    aDistSq = closest_dist_sq;
+    return closest_dist_sq != VECTOR2I::ECOORD_MAX;
+}
+
+
+bool SHAPE_LINE_CHAIN::ClosestPoints( const point_citer& aMyStart, const point_citer& aMyEnd,
+                                      const point_citer& aOtherStart, const point_citer& aOtherEnd,
+                                      VECTOR2I& aPt0, VECTOR2I& aPt1, int64_t& aDistSq )
+{
+    int64_t closest_dist_sq = VECTOR2I::ECOORD_MAX;
+
+    for( point_citer itA = aMyStart; itA != aMyEnd; itA++ )
+    {
+        const VECTOR2I& ptA = *itA;
+
+        for( point_citer itB = aOtherStart; itB != aOtherEnd; itB++ )
+        {
+            const VECTOR2I& ptB = *itB;
+
+            ecoord dx = (ecoord) ptB.x - ptA.x;
+            ecoord dy = (ecoord) ptB.y - ptA.y;
+
+            SEG::ecoord dist_sq = dx * dx + dy * dy;
+
+            if( dist_sq < closest_dist_sq )
+            {
+                closest_dist_sq = dist_sq;
+                aPt0 = ptA;
+                aPt1 = ptB;
+            }
+        }
+    }
+
+    aDistSq = closest_dist_sq;
+    return closest_dist_sq != VECTOR2I::ECOORD_MAX;
+}
+
+
+bool SHAPE_LINE_CHAIN::ClosestPoints( const SHAPE_LINE_CHAIN& aOther, VECTOR2I& aPt0,
+                                      VECTOR2I& aPt1 ) const
+{
+    ecoord dist_sq;
+
+    return ClosestPoints( m_points.cbegin(), m_points.cend(), aOther.m_points.cbegin(),
+                          aOther.m_points.cend(), aPt0, aPt1, dist_sq );
+}
+
+
 bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActual,
                                      VECTOR2I* aLocation ) const
 {
