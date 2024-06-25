@@ -34,7 +34,7 @@
 
 class ALTIUM_COMPOUND_FILE;
 
-class PCB_IO_ALTIUM_DESIGNER : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
+class PCB_IO_ALTIUM_DESIGNER : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
 public:
     // -----<PUBLIC PCB_IO API>--------------------------------------------------

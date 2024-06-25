@@ -32,10 +32,11 @@
 #include <compoundfilereader.h>
 #include <utf.h>
 
-PCB_IO_SOLIDWORKS::PCB_IO_SOLIDWORKS() : PCB_IO( wxS( "Solidworks PCB" ) )
+PCB_IO_SOLIDWORKS::PCB_IO_SOLIDWORKS() :
+        PCB_IO( wxS( "Solidworks PCB" ) )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
-    RegisterLayerMappingCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
+    RegisterCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 
 

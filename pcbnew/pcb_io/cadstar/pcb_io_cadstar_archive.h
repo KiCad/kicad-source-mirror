@@ -29,7 +29,7 @@
 #include <memory>
 
 
-class PCB_IO_CADSTAR_ARCHIVE : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
+class PCB_IO_CADSTAR_ARCHIVE : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
 public:
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
@@ -62,7 +62,7 @@ public:
      *
      * @param aLayerMappingHandler
      */
-    void RegisterLayerMappingCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler ) override;
+    void RegisterCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr ) override;

@@ -38,13 +38,13 @@ public:
      * @param aProjectDesc are project descriptors.
      */
     static std::vector<IMPORT_PROJECT_DESC>
-    GetSelectionsModal( wxWindow* aParent, const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc );
+    RunModal( wxWindow* aParent, const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc );
 
     void onItemActivated( wxListEvent& event ) override;
 
     void onClose( wxCloseEvent& event ) override;
 
-    std::vector<IMPORT_PROJECT_DESC> GetProjectSelections();
+    std::vector<IMPORT_PROJECT_DESC> GetProjects();
 
 private:
     std::vector<IMPORT_PROJECT_DESC> m_project_desc;

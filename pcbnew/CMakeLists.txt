@@ -107,7 +107,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_import_settings.cpp
     dialogs/dialog_import_settings_base.cpp
     dialogs/dialog_imported_layers_base.cpp
-    dialogs/dialog_imported_layers.cpp
+        dialogs/dialog_map_layers.cpp
     dialogs/dialog_rule_area_properties.cpp
     dialogs/dialog_rule_area_properties_base.cpp
     dialogs/dialog_layer_selection_base.cpp

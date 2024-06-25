@@ -1390,14 +1390,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
             DIALOG_HTML_REPORTER errorReporter( this );
             WX_PROGRESS_REPORTER progressReporter( this, _( "Importing Schematic" ), 1 );
 
-            PROJECT_CHOOSER_PLUGIN* projectChooserPlugin =
-                    dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() );
-
-            if( projectChooserPlugin )
+            if( PROJECT_CHOOSER_PLUGIN* c_pi = dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() ) )
             {
-                projectChooserPlugin->RegisterChooseProjectCallback(
-                        std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal, this,
-                                   std::placeholders::_1 ) );
+                c_pi->RegisterCallback( std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::RunModal,
+                                                   this, std::placeholders::_1 ) );
             }
 
             if( eeconfig()->m_System.show_import_issues )

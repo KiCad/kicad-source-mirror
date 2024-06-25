@@ -63,7 +63,7 @@
 #include <pcb_io/cadstar/pcb_io_cadstar_archive.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <dialogs/dialog_export_2581.h>
-#include <dialogs/dialog_imported_layers.h>
+#include <dialogs/dialog_map_layers.h>
 #include <dialogs/dialog_import_choose_project.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
@@ -525,10 +525,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !lock->Valid() && lock->IsLockedByMe() )
     {
-        // If we cannot acquire the lock but we appear to be the one who
-        // locked it, check to see if there is another KiCad instance running.
-        // If there is not, then we can override the lock.  This could happen if
-        // KiCad crashed or was interrupted
+        // If we cannot acquire the lock but we appear to be the one who locked it, check to
+        // see if there is another KiCad instance running.  If not, then we can override the
+        // lock.  This could happen if KiCad crashed or was interrupted.
 
         if( !Pgm().SingleInstance()->IsAnotherRunning() )
             lock->OverrideLock();
@@ -536,8 +535,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !lock->Valid() )
     {
-        msg.Printf( _( "PCB '%s' is already open by '%s' at '%s'." ), wx_filename.GetFullName(),
-                lock->GetUsername(), lock->GetHostname() );
+        msg.Printf( _( "PCB '%s' is already open by '%s' at '%s'." ),
+                    wx_filename.GetFullName(),
+                    lock->GetUsername(),
+                    lock->GetHostname() );
 
         if( !AskOverrideLock( this, msg ) )
             return false;
@@ -562,7 +563,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     bool is_new = !wxFileName::IsFileReadable( fullFileName );
 
-    // If its a non-existent schematic and caller thinks it exists
+    // If its a non-existent PCB and caller thinks it exists
     if( is_new && !( aCtl & KICTL_CREATE ) )
     {
         // notify user that fullFileName does not exist, ask if user wants to create it.
@@ -609,9 +610,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         mgr->LoadProject( pro.GetFullPath() );
 
         // Do not allow saving a project if one doesn't exist.  This normally happens if we are
-        // standalone and opening a board that has been moved from its project folder.
-        // For converted projects, we don't want to set the read-only flag because we want a project
-        // to be saved for the new file in case things like netclasses got migrated.
+        // opening a board that has been moved from its project folder.
+        // For converted projects, we don't want to set the read-only flag because we want a
+        // project to be saved for the new file in case things like netclasses got migrated.
         Prj().SetReadOnly( !pro.Exists() && !converted );
     }
 
@@ -632,21 +633,17 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         BOARD*              loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( pluginType ) );
 
-        LAYER_REMAPPABLE_PLUGIN* layerRemappableIO = dynamic_cast<LAYER_REMAPPABLE_PLUGIN*>( pi.get() );
-
-        if( layerRemappableIO )
+        if( LAYER_MAPPABLE_PLUGIN* mappable_pi = dynamic_cast<LAYER_MAPPABLE_PLUGIN*>( pi.get() ) )
         {
-            layerRemappableIO->RegisterLayerMappingCallback(
-                    std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, std::placeholders::_1 ) );
+            mappable_pi->RegisterCallback( std::bind( DIALOG_MAP_LAYERS::RunModal,
+                                                      this, std::placeholders::_1 ) );
         }
 
-        PROJECT_CHOOSER_PLUGIN* projectChooserIO = dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() );
-
-        if( projectChooserIO )
+        if( PROJECT_CHOOSER_PLUGIN* chooser_pi = dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() ) )
         {
-            projectChooserIO->RegisterChooseProjectCallback(
-                    std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal, this,
-                               std::placeholders::_1 ) );
+            chooser_pi->RegisterCallback( std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::RunModal,
+                                                     this,
+                                                     std::placeholders::_1 ) );
         }
 
         if( ( aCtl & KICTL_REVERT ) )

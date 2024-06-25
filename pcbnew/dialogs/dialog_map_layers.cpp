@@ -20,18 +20,18 @@
 
 
 #include <layer_ids.h>
-#include <dialog_imported_layers.h>
+#include <dialog_map_layers.h>
 
 #include <wx/msgdlg.h>
 
 
-wxString DIALOG_IMPORTED_LAYERS::WrapRequired( const wxString& aLayerName )
+wxString DIALOG_MAP_LAYERS::WrapRequired( const wxString& aLayerName )
 {
     return aLayerName + wxT( " *" );
 }
 
 
-wxString DIALOG_IMPORTED_LAYERS::UnwrapRequired( const wxString& aLayerName )
+wxString DIALOG_MAP_LAYERS::UnwrapRequired( const wxString& aLayerName )
 {
     if( !aLayerName.EndsWith( wxT( " *" ) ) )
         return aLayerName;
@@ -40,8 +40,7 @@ wxString DIALOG_IMPORTED_LAYERS::UnwrapRequired( const wxString& aLayerName )
 }
 
 
-const INPUT_LAYER_DESC* DIALOG_IMPORTED_LAYERS::GetLayerDescription(
-        const wxString& aLayerName ) const
+const INPUT_LAYER_DESC* DIALOG_MAP_LAYERS::GetLayerDescription( const wxString& aLayerName ) const
 {
     wxString layerName = UnwrapRequired( aLayerName );
 
@@ -55,7 +54,7 @@ const INPUT_LAYER_DESC* DIALOG_IMPORTED_LAYERS::GetLayerDescription(
 }
 
 
-PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
+PCB_LAYER_ID DIALOG_MAP_LAYERS::GetSelectedLayerID()
 {
     // First check if there is a KiCad element selected
     wxString selectedKiCadLayerName;
@@ -86,10 +85,11 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
 }
 
 
-PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetAutoMatchLayerID( const wxString& aInputLayerName )
+PCB_LAYER_ID DIALOG_MAP_LAYERS::GetAutoMatchLayerID( const wxString& aInputLayerName )
 {
     wxString pureInputLayerName = UnwrapRequired( aInputLayerName );
-    for( INPUT_LAYER_DESC inputLayerDesc : m_input_layers )
+
+    for( const INPUT_LAYER_DESC& inputLayerDesc : m_input_layers )
     {
         if( inputLayerDesc.Name == pureInputLayerName
                 && inputLayerDesc.AutoMapLayer != PCB_LAYER_ID::UNSELECTED_LAYER )
@@ -102,7 +102,7 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetAutoMatchLayerID( const wxString& aInput
 }
 
 
-void DIALOG_IMPORTED_LAYERS::AddMappings()
+void DIALOG_MAP_LAYERS::AddMappings()
 {
     PCB_LAYER_ID selectedKiCadLayerID = GetSelectedLayerID();
 
@@ -148,7 +148,7 @@ void DIALOG_IMPORTED_LAYERS::AddMappings()
 }
 
 
-void DIALOG_IMPORTED_LAYERS::RemoveMappings( int aStatus )
+void DIALOG_MAP_LAYERS::RemoveMappings( int aStatus )
 {
     wxArrayInt rowsToDelete;
     int        itemIndex = -1;
@@ -173,17 +173,14 @@ void DIALOG_IMPORTED_LAYERS::RemoveMappings( int aStatus )
 }
 
 
-void DIALOG_IMPORTED_LAYERS::DeleteListItems( const wxArrayInt& aRowsToDelete,
-                                              wxListCtrl* aListCtrl )
+void DIALOG_MAP_LAYERS::DeleteListItems( const wxArrayInt& aRowsToDelete, wxListCtrl* aListCtrl )
 {
-    for( long n = ( aRowsToDelete.GetCount() - 1 ); 0 <= n; n-- )
-    {
+    for( long n = (long) aRowsToDelete.GetCount() - 1; 0 <= n; n-- )
         aListCtrl->DeleteItem( aRowsToDelete[n] );
-    }
 }
 
 
-void DIALOG_IMPORTED_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
+void DIALOG_MAP_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
 {
     // Iterate through each selected layer in the unmatched layers list
     int        itemIndex = -1;
@@ -225,14 +222,14 @@ void DIALOG_IMPORTED_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
 }
 
 
-DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
-                                                const std::vector<INPUT_LAYER_DESC>& aLayerDesc ) :
+DIALOG_MAP_LAYERS::DIALOG_MAP_LAYERS( wxWindow* aParent,
+                                      const std::vector<INPUT_LAYER_DESC>& aLayerDesc ) :
         DIALOG_IMPORTED_LAYERS_BASE( aParent )
 {
     LSET kiCadLayers;
 
     // Read in the input layers
-    for( INPUT_LAYER_DESC inLayer : aLayerDesc )
+    for( const INPUT_LAYER_DESC& inLayer : aLayerDesc )
     {
         m_input_layers.push_back( inLayer );
         wxString layerName = inLayer.Required ? WrapRequired( inLayer.Name ) : inLayer.Name;
@@ -269,7 +266,7 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
     // Load the input layer list to unmatched layers
     int row = 0;
 
-    for( wxString importedLayerName : m_unmatched_layer_names )
+    for( const wxString& importedLayerName : m_unmatched_layer_names )
     {
         wxListItem item;
         item.SetId( row );
@@ -306,7 +303,7 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
 }
 
 
-std::vector<wxString> DIALOG_IMPORTED_LAYERS::GetUnmappedRequiredLayers() const
+std::vector<wxString> DIALOG_MAP_LAYERS::GetUnmappedRequiredLayers() const
 {
     std::vector<wxString> unmappedLayers;
 
@@ -324,11 +321,10 @@ std::vector<wxString> DIALOG_IMPORTED_LAYERS::GetUnmappedRequiredLayers() const
 
 
 std::map<wxString, PCB_LAYER_ID>
-        DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* aParent,
-                                             const std::vector<INPUT_LAYER_DESC>& aLayerDesc )
+DIALOG_MAP_LAYERS::RunModal( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc )
 {
-    DIALOG_IMPORTED_LAYERS dlg( aParent, aLayerDesc );
-    bool                   dataOk = false;
+    DIALOG_MAP_LAYERS dlg( aParent, aLayerDesc );
+    bool              dataOk = false;
 
     while( !dataOk )
     {

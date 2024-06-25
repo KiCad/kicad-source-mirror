@@ -184,9 +184,7 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler()
                 EASYEDAPRO::ProjectToSelectorDialog( project, false, false );
 
         if( toImport.size() > 1 )
-        {
-            toImport = DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal( m_frame, toImport );
-        }
+            toImport = DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( m_frame, toImport );
 
         if( toImport.size() == 1 )
         {

@@ -41,11 +41,12 @@
 #include <compoundfilereader.h>
 #include <utf.h>
 
-PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() : PCB_IO( wxS( "Altium Designer" ) )
+PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() :
+        PCB_IO( wxS( "Altium Designer" ) )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
 
-    RegisterLayerMappingCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
+    RegisterCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 
 

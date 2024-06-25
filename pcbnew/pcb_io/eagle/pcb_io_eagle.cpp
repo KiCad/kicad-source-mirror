@@ -222,7 +222,8 @@ void ERULES::parse( wxXmlNode* aRules, std::function<void()> aCheckpoint )
 }
 
 
-PCB_IO_EAGLE::PCB_IO_EAGLE() : PCB_IO( wxS( "Eagle" ) ),
+PCB_IO_EAGLE::PCB_IO_EAGLE() :
+        PCB_IO( wxS( "Eagle" ) ),
         m_rules( new ERULES() ),
         m_xpath( new XPATH() ),
         m_progressReporter( nullptr ),
@@ -235,8 +236,7 @@ PCB_IO_EAGLE::PCB_IO_EAGLE() : PCB_IO( wxS( "Eagle" ) ),
 
     init( nullptr );
     clear_cu_map();
-    RegisterLayerMappingCallback( std::bind( &PCB_IO_EAGLE::DefaultLayerMappingCallback,
-                                             this, _1 ) );
+    RegisterCallback( std::bind( &PCB_IO_EAGLE::DefaultLayerMappingCallback, this, _1 ) );
 }
 
 

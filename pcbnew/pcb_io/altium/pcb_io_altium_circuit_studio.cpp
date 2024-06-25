@@ -42,9 +42,10 @@
 #include <compoundfilereader.h>
 #include <utf.h>
 
-PCB_IO_ALTIUM_CIRCUIT_STUDIO::PCB_IO_ALTIUM_CIRCUIT_STUDIO() : PCB_IO( wxS( "Altium Circuit Studio" ) )
+PCB_IO_ALTIUM_CIRCUIT_STUDIO::PCB_IO_ALTIUM_CIRCUIT_STUDIO() :
+        PCB_IO( wxS( "Altium Circuit Studio" ) )
 {
-    RegisterLayerMappingCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
+    RegisterCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 
 

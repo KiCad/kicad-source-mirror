@@ -60,7 +60,7 @@ public:
      * The function is marked as virtual, so the plugins can implement extra
      * logic (e.g., enable warnings or checks)
      */
-    virtual void RegisterChooseProjectCallback( CHOOSE_PROJECT_HANDLER aChooseProjectHandler )
+    virtual void RegisterCallback( CHOOSE_PROJECT_HANDLER aChooseProjectHandler )
     {
         m_choose_project_handler = aChooseProjectHandler;
     }

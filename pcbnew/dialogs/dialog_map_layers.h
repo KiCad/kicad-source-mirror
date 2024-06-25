@@ -25,10 +25,10 @@
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
 
-class DIALOG_IMPORTED_LAYERS : public DIALOG_IMPORTED_LAYERS_BASE
+class DIALOG_MAP_LAYERS : public DIALOG_IMPORTED_LAYERS_BASE
 {
 public:
-    DIALOG_IMPORTED_LAYERS( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
+    DIALOG_MAP_LAYERS( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
 
     /**
      * Return a list of layers names that are required, but they are not mapped.
@@ -43,8 +43,8 @@ public:
      * @param aLayerDesc
      * @return Mapped layers
      */
-    static std::map<wxString, PCB_LAYER_ID> GetMapModal( wxWindow* aParent,
-                                  const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
+    static std::map<wxString, PCB_LAYER_ID> RunModal( wxWindow* aParent,
+                                                      const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
 
 private:
     //Helper functions

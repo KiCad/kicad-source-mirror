@@ -23,8 +23,8 @@
 #include <wx/listctrl.h>
 
 
-DIALOG_IMPORT_CHOOSE_PROJECT::DIALOG_IMPORT_CHOOSE_PROJECT(
-        wxWindow* aParent, const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc ) :
+DIALOG_IMPORT_CHOOSE_PROJECT::DIALOG_IMPORT_CHOOSE_PROJECT( wxWindow* aParent,
+                                                            const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc ) :
         DIALOG_IMPORT_CHOOSE_PROJECT_BASE( aParent )
 {
     m_project_desc = aProjectDesc;
@@ -49,8 +49,7 @@ DIALOG_IMPORT_CHOOSE_PROJECT::DIALOG_IMPORT_CHOOSE_PROJECT(
     {
         m_listCtrl->InsertItem( row, convertName( desc.ComboName, desc.ComboId ) );
         m_listCtrl->SetItem( row, pcbNameColId, convertName( desc.PCBName, desc.PCBId ) );
-        m_listCtrl->SetItem( row, schNameColId,
-                             convertName( desc.SchematicName, desc.SchematicId ) );
+        m_listCtrl->SetItem( row, schNameColId, convertName( desc.SchematicName, desc.SchematicId ) );
 
         ++row;
     }
@@ -81,7 +80,7 @@ void DIALOG_IMPORT_CHOOSE_PROJECT::onClose( wxCloseEvent& event )
 }
 
 
-std::vector<IMPORT_PROJECT_DESC> DIALOG_IMPORT_CHOOSE_PROJECT::GetProjectSelections()
+std::vector<IMPORT_PROJECT_DESC> DIALOG_IMPORT_CHOOSE_PROJECT::GetProjects()
 {
     std::vector<IMPORT_PROJECT_DESC> result;
 
@@ -100,13 +99,14 @@ std::vector<IMPORT_PROJECT_DESC> DIALOG_IMPORT_CHOOSE_PROJECT::GetProjectSelecti
 }
 
 
-std::vector<IMPORT_PROJECT_DESC> DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal(
-        wxWindow* aParent, const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc )
+std::vector<IMPORT_PROJECT_DESC>
+DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( wxWindow* aParent,
+                                        const std::vector<IMPORT_PROJECT_DESC>& aProjectDesc )
 {
     DIALOG_IMPORT_CHOOSE_PROJECT dlg( aParent, aProjectDesc );
 
     if( dlg.ShowModal() != wxID_OK )
         return {};
 
-    return dlg.GetProjectSelections();
+    return dlg.GetProjects();
 }

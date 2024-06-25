@@ -29,7 +29,7 @@
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
-class PCB_IO_ALTIUM_CIRCUIT_STUDIO : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
+class PCB_IO_ALTIUM_CIRCUIT_STUDIO : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
 public:
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override

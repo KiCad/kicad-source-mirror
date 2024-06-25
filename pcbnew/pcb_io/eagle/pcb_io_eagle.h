@@ -128,7 +128,7 @@ struct ERULES
  * Works with Eagle 6.x XML board files and footprints to implement the Pcbnew #PLUGIN API
  * or a portion of it.
  */
-class PCB_IO_EAGLE : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
+class PCB_IO_EAGLE : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
 public:
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override

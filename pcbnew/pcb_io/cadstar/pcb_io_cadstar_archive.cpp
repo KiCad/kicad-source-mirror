@@ -49,10 +49,9 @@ std::map<wxString, PCB_LAYER_ID> PCB_IO_CADSTAR_ARCHIVE::DefaultLayerMappingCall
 }
 
 
-void PCB_IO_CADSTAR_ARCHIVE::RegisterLayerMappingCallback(
-        LAYER_MAPPING_HANDLER aLayerMappingHandler )
+void PCB_IO_CADSTAR_ARCHIVE::RegisterCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler )
 {
-    LAYER_REMAPPABLE_PLUGIN::RegisterLayerMappingCallback( aLayerMappingHandler );
+    LAYER_MAPPABLE_PLUGIN::RegisterCallback( aLayerMappingHandler );
     m_show_layer_mapping_warnings = false; // only show warnings with default callback
 }
 
@@ -60,8 +59,7 @@ void PCB_IO_CADSTAR_ARCHIVE::RegisterLayerMappingCallback(
 PCB_IO_CADSTAR_ARCHIVE::PCB_IO_CADSTAR_ARCHIVE() : PCB_IO( wxS( "CADSTAR PCB Archive" ) )
 {
     m_show_layer_mapping_warnings = true;
-    LAYER_REMAPPABLE_PLUGIN::RegisterLayerMappingCallback(
-        PCB_IO_CADSTAR_ARCHIVE::DefaultLayerMappingCallback );
+    LAYER_MAPPABLE_PLUGIN::RegisterCallback( PCB_IO_CADSTAR_ARCHIVE::DefaultLayerMappingCallback );
 }
 
 

@@ -58,7 +58,7 @@ using LAYER_MAPPING_HANDLER = std::function<std::map<wxString, PCB_LAYER_ID>( co
 /**
  * @brief Plugin class for import plugins that support remappable layers
  */
-class LAYER_REMAPPABLE_PLUGIN
+class LAYER_MAPPABLE_PLUGIN
 {
 public:
     /**
@@ -70,12 +70,12 @@ public:
      *
      * @param aLayerMappingHandler
      */
-    virtual void RegisterLayerMappingCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler )
+    virtual void RegisterCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler )
     {
         m_layer_mapping_handler = aLayerMappingHandler;
     }
 
-    virtual ~LAYER_REMAPPABLE_PLUGIN() = default;
+    virtual ~LAYER_MAPPABLE_PLUGIN() = default;
 protected:
     LAYER_MAPPING_HANDLER m_layer_mapping_handler; ///< Callback to get layer mapping
 };
