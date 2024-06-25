@@ -673,9 +673,12 @@ static TopoDS_Compound makeCompound( auto& aInputShapes )
 
 
 // Try to fuse shapes. If that fails, just add them to a compound
-static TopoDS_Shape fuseShapesOrCompound( auto& aInputShapes )
+static TopoDS_Shape fuseShapesOrCompound( TopTools_ListOfShape& aInputShapes )
 {
     TopoDS_Shape outShape;
+
+    if( aInputShapes.Size() == 1 )
+        return aInputShapes.First();
 
     if( fuseShapes( aInputShapes, outShape ) )
         return outShape;
