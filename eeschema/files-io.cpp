@@ -1404,8 +1404,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             pi->SetProgressReporter( &progressReporter );
 
-            SCH_SHEET* loadedSheet =
-                    pi->LoadSchematicFile( aFileName, &Schematic(), nullptr, aProperties );
+            SCH_SHEET* loadedSheet = pi->LoadSchematicFile( aFileName, &Schematic(), nullptr,
+                                                            aProperties );
 
             if( loadedSheet )
             {
