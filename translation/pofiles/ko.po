@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 17:41-0700\n"
-"PO-Revision-Date: 2024-03-29 09:01+0000\n"
+"POT-Creation-Date: 2024-05-21 09:37-0700\n"
+"PO-Revision-Date: 2024-06-25 08:36+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -5445,9 +5445,8 @@ msgid "Bezier"
 msgstr "베지어"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "시트 속성"
+msgstr "도형 속성"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6205,19 +6204,16 @@ msgid "Select all cells"
 msgstr "모든 셀 선택"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "업데이트 설정"
+msgstr "자동 완성 수락"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "업데이트 설정"
+msgstr "자동 완성 취소"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "잠금 토글"
+msgstr "체크박스 토글"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -9716,9 +9712,8 @@ msgid "Update/reset symbol attributes"
 msgstr "심볼 속성 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "전원 심볼으로 정의"
+msgstr "사용자 정의 전원 심볼 재설정하기"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10701,9 +10696,8 @@ msgid "untitled"
 msgstr "제목 없음"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "라벨 속성"
+msgstr "라벨 속성 편집"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -12248,9 +12242,8 @@ msgstr ""
 "환경 설정 > 회로도 편집기 > 색상."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "시트 속성"
+msgstr "시트 속성 편집"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13549,9 +13542,8 @@ msgstr ""
 "십시오."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "텍스트 속성"
+msgstr "텍스트 속성 편집"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -18894,9 +18886,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "푸리에 분석 수행..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "신호 펄스:"
+msgstr "신호 이름 복사"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -21784,24 +21775,20 @@ msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr "%s에 '%s %s' 유형의 시뮬레이션 모델이 있음; RLC 수동부품만 조정됨"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "지정된 값으로 설정:"
+msgstr "E24 시리즈 값으로 제한."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "지정된 값으로 설정:"
+msgstr "E48 시리즈 값으로 제한."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "지정된 값으로 설정:"
+msgstr "E96 계열 값으로 제한"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "지정된 값으로 설정:"
+msgstr "E192 계열 값으로 제한"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -22994,9 +22981,8 @@ msgid "Leave unchanged"
 msgstr "변경하지 않고 그대로 두기"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "%s 표시 또는 숨기기"
+msgstr "가져오기 문제 보기"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23438,11 +23424,11 @@ msgid "Generate Position File"
 msgstr "배치 파일 생성"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
-msgstr "유효한 옵션: 전면, 후면, 양면. Gerber 형식은 \"양면\"만 지원합니다."
+msgstr "유효한 옵션: 전면, 후면, 양면. Gerber 형식은 \"전면\"과 \"후면\"만 "
+"지원합니다."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -23721,7 +23707,8 @@ msgstr "이 버전 건너뛰기"
 msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
-msgstr ""
+msgstr "발표된 새 버전에 대한 업데이트 알림을 무시합니다. 이후 버전에 대해서는 추가 "
+"업데이트 노트가 표시됨."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -23731,11 +23718,12 @@ msgstr "나중에 알림"
 msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
-msgstr ""
+msgstr "이 업데이트 알림을 닫습니다. KiCad를 다시 시작하면 업데이트 알림이 다시 "
+"표시됨."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "웹 브라우저를 실행하여 배포 공지 페이지로 이동합니다."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -23743,7 +23731,7 @@ msgstr "다운로드 페이지 열기"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "해당 플랫폼에 맞는 다운로드 페이지로 이동합니다."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -37713,9 +37701,8 @@ msgid "Skew between traces out of range"
 msgstr "배선 간 스큐가 허용 범위 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "연결에 비아 너무 많음"
+msgstr "연결된 비아가 너무 많거나 적음"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -38421,14 +38408,13 @@ msgid "Too many vias on a connection"
 msgstr "연결에 비아 너무 많음"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s 최대 개수 %d; 실제 값 %d)"
+msgstr "(%s 최소 개수 %d; 실제 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "연결에 비아 너무 많음"
+msgstr "연결된 비아가 너무 적음"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -39481,9 +39467,8 @@ msgstr "조정"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "조정하고 싶은 값을 선택하세요"
+msgstr "먼저 조정할 트랙을 선택합니다."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -43709,7 +43694,7 @@ msgstr "선택 항목 생성"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "생성된 다각형이 비어 있음"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -47061,9 +47046,9 @@ msgid "thermal reliefs for PTH"
 msgstr "PTH용 단열판"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] 불러오기 실패: 입력 행이 너무 깁니다\n"
+msgstr "[정보] 로드 실패: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
