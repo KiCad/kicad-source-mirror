@@ -1,11 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Modifications Copyright (C) 2018-2024 KiCad Developers
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * or you may search the http://www.gnu.org website for the version 3 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
@@ -54,16 +54,18 @@
 #include <clipper.hpp>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/vertex_set.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 
 #include <wx/log.h>
 
 #define TRIANGULATE_TRACE "triangulate"
-class POLYGON_TRIANGULATION
+class POLYGON_TRIANGULATION : public VERTEX_SET
 {
 public:
     POLYGON_TRIANGULATION( SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult ) :
+        VERTEX_SET( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel ),
         m_vertices_original_size( 0 ), m_result( aResult )
     {};
 
@@ -80,6 +82,9 @@ public:
         /// and check for lists that have only 0, 1 or 2 elements and
         /// therefore cannot be polygons
         VERTEX* firstVertex = createList( aPoly );
+
+        for( const VECTOR2I& pt : aPoly.CPoints() )
+            m_result.AddVertex( pt );
 
         if( !firstVertex || firstVertex->prev == firstVertex->next )
             return true;
@@ -114,228 +119,6 @@ public:
     }
 
 private:
-    struct VERTEX
-    {
-        VERTEX( size_t aIndex, double aX, double aY, POLYGON_TRIANGULATION* aParent ) :
-                i( aIndex ),
-                x( aX ),
-                y( aY ),
-                parent( aParent )
-        {
-        }
-
-        VERTEX& operator=( const VERTEX& ) = delete;
-        VERTEX& operator=( VERTEX&& ) = delete;
-
-        bool operator==( const VERTEX& rhs ) const
-        {
-            return this->x == rhs.x && this->y == rhs.y;
-        }
-        bool operator!=( const VERTEX& rhs ) const { return !( *this == rhs ); }
-
-
-        /**
-         * Split the referenced polygon between the reference point and
-         * vertex b, assuming they are in the same polygon.  Notes that while we
-         * create a new vertex pointer for the linked list, we maintain the same
-         * vertex index value from the original polygon.  In this way, we have
-         * two polygons that both share the same vertices.
-         *
-         * @return the newly created vertex in the polygon that does not include the
-         *         reference vertex.
-         */
-        VERTEX* split( VERTEX* b )
-        {
-            parent->m_vertices.emplace_back( i, x, y, parent );
-            VERTEX* a2 = &parent->m_vertices.back();
-            parent->m_vertices.emplace_back( b->i, b->x, b->y, parent );
-            VERTEX* b2 = &parent->m_vertices.back();
-            VERTEX* an = next;
-            VERTEX* bp = b->prev;
-
-            next = b;
-            b->prev = this;
-
-            a2->next = an;
-            an->prev = a2;
-
-            b2->next = a2;
-            a2->prev = b2;
-
-            bp->next = b2;
-            b2->prev = bp;
-
-            return b2;
-        }
-
-        /**
-         * Remove the node from the linked list and z-ordered linked list.
-         */
-        void remove()
-        {
-            next->prev = prev;
-            prev->next = next;
-
-            if( prevZ )
-                prevZ->nextZ = nextZ;
-
-            if( nextZ )
-                nextZ->prevZ = prevZ;
-
-            next = nullptr;
-            prev = nullptr;
-            nextZ = nullptr;
-            prevZ = nullptr;
-        }
-
-        void updateOrder()
-        {
-            if( !z )
-                z = parent->zOrder( x, y );
-        }
-
-        /**
-         * After inserting or changing nodes, this function should be called to
-         * remove duplicate vertices and ensure z-ordering is correct.
-         */
-        void updateList()
-        {
-            VERTEX* p = next;
-
-            while( p != this )
-            {
-                /**
-                 * Remove duplicates
-                 */
-                if( *p == *p->next )
-                {
-                    p = p->prev;
-                    p->next->remove();
-
-                    if( p == p->next )
-                        break;
-                }
-
-                p->updateOrder();
-                p = p->next;
-            };
-
-            updateOrder();
-            zSort();
-        }
-
-        /**
-         * Sort all vertices in this vertex's list by their Morton code.
-         */
-        void zSort()
-        {
-            std::deque<VERTEX*> queue;
-
-            queue.push_back( this );
-
-            for( auto p = next; p && p != this; p = p->next )
-                queue.push_back( p );
-
-            std::sort( queue.begin(), queue.end(), []( const VERTEX* a, const VERTEX* b )
-            {
-                if( a->z != b->z )
-                    return a->z < b->z;
-
-                if( a->x != b->x )
-                    return a->x < b->x;
-
-                if( a->y != b->y )
-                    return a->y < b->y;
-
-                return a->i < b->i;
-            } );
-
-            VERTEX* prev_elem = nullptr;
-
-            for( auto elem : queue )
-            {
-                if( prev_elem )
-                    prev_elem->nextZ = elem;
-
-                elem->prevZ = prev_elem;
-                prev_elem = elem;
-            }
-
-            prev_elem->nextZ = nullptr;
-        }
-
-
-        /**
-         * Check to see if triangle surrounds our current vertex
-         */
-        bool inTriangle( const VERTEX& a, const VERTEX& b, const VERTEX& c )
-        {
-            return     ( c.x - x ) * ( a.y - y ) - ( a.x - x ) * ( c.y - y ) >= 0
-                    && ( a.x - x ) * ( b.y - y ) - ( b.x - x ) * ( a.y - y ) >= 0
-                    && ( b.x - x ) * ( c.y - y ) - ( c.x - x ) * ( b.y - y ) >= 0;
-        }
-
-        /**
-         * Returns the signed area of the polygon connected to the current vertex,
-         * optionally ending at a specified vertex.
-         */
-        double area( const VERTEX* aEnd = nullptr ) const
-        {
-            const VERTEX* p = this;
-            double a = 0.0;
-
-            do
-            {
-                a += ( p->x + p->next->x ) * ( p->next->y - p->y );
-                p = p->next;
-            } while( p != this && p != aEnd );
-
-            if( p != this )
-                a += ( p->x + aEnd->x ) * ( aEnd->y - p->y );
-
-            return a / 2;
-        }
-
-        const size_t i;
-        double x;
-        double y;
-        POLYGON_TRIANGULATION* parent;
-
-        // previous and next vertices nodes in a polygon ring
-        VERTEX* prev = nullptr;
-        VERTEX* next = nullptr;
-
-        // z-order curve value
-        int32_t z = 0;
-
-        // previous and next nodes in z-order
-        VERTEX* prevZ = nullptr;
-        VERTEX* nextZ = nullptr;
-    };
-
-    /**
-     * Calculate the Morton code of the Vertex
-     * http://www.graphics.stanford.edu/~seander/bithacks.html#InterleaveBMN
-     *
-     */
-    int32_t zOrder( const double aX, const double aY ) const
-    {
-        int32_t x = static_cast<int32_t>( 32767.0 * ( aX - m_bbox.GetX() ) / m_bbox.GetWidth() );
-        int32_t y = static_cast<int32_t>( 32767.0 * ( aY - m_bbox.GetY() ) / m_bbox.GetHeight() );
-
-        x = ( x | ( x << 8 ) ) & 0x00FF00FF;
-        x = ( x | ( x << 4 ) ) & 0x0F0F0F0F;
-        x = ( x | ( x << 2 ) ) & 0x33333333;
-        x = ( x | ( x << 1 ) ) & 0x55555555;
-
-        y = ( y | ( y << 8 ) ) & 0x00FF00FF;
-        y = ( y | ( y << 4 ) ) & 0x0F0F0F0F;
-        y = ( y | ( y << 2 ) ) & 0x33333333;
-        y = ( y | ( y << 1 ) ) & 0x55555555;
-
-        return x | ( y << 1 );
-    }
-
 
     /**
      * Outputs a list of vertices that have not yet been triangulated.
@@ -508,57 +291,6 @@ private:
         wxLogTrace( TRIANGULATE_TRACE, "Removed %zu NULL triangles", count );
 
         return retval;
-    }
-
-    /**
-     * Take a #SHAPE_LINE_CHAIN and links each point into a circular, doubly-linked list.
-     */
-    VERTEX* createList( const SHAPE_LINE_CHAIN& points )
-    {
-        wxLogTrace( TRIANGULATE_TRACE, "Creating list from %d points", points.PointCount() );
-
-        VERTEX* tail = nullptr;
-        double sum = 0.0;
-
-        // Check for winding order
-        for( int i = 0; i < points.PointCount(); i++ )
-        {
-            VECTOR2D p1 = points.CPoint( i );
-            VECTOR2D p2 = points.CPoint( i + 1 );
-
-            sum += ( ( p2.x - p1.x ) * ( p2.y + p1.y ) );
-        }
-
-        VECTOR2I last_pt{ std::numeric_limits<int>::max(), std::numeric_limits<int>::max() };
-        VECTOR2I::extended_type sq_dist = ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel;
-        sq_dist *= sq_dist;
-
-        auto addVertex = [&]( int i )
-        {
-            const VECTOR2I& pt = points.CPoint( i );
-            VECTOR2I diff = pt - last_pt;
-            if( diff.SquaredEuclideanNorm() > sq_dist )
-            {
-                tail = insertVertex( pt, tail );
-                last_pt = pt;
-            }
-        };
-
-        if( sum > 0.0 )
-        {
-            for( int i = points.PointCount() - 1; i >= 0; i-- )
-                addVertex( i );
-        }
-        else
-        {
-            for( int i = 0; i < points.PointCount(); i++ )
-                addVertex( i );
-        }
-
-        if( tail && ( *tail == *tail->next ) )
-            tail->next->remove();
-
-        return tail;
     }
 
     /**
@@ -823,7 +555,7 @@ private:
             {
                 double x = a->x * ( 1.0 - step * i ) + b->x * ( step * i );
                 double y = a->y * ( 1.0 - step * i ) + b->y * ( step * i );
-                last = insertVertex( VECTOR2I( x, y ), last );
+                last = insertTriVertex( VECTOR2I( x, y ), last );
             }
         }
 
@@ -956,14 +688,6 @@ private:
 
     }
 
-    /**
-     * Return the twice the signed area of the triangle formed by vertices p, q, and r.
-     */
-    double area( const VERTEX* p, const VERTEX* q, const VERTEX* r ) const
-    {
-        return ( q->y - p->y ) * ( r->x - q->x ) - ( q->x - p->x ) * ( r->y - q->y );
-    }
-
 
     constexpr int sign( double aVal ) const
     {
@@ -1036,75 +760,18 @@ private:
     }
 
     /**
-     * Check whether the segment from vertex a -> vertex b is inside the polygon
-     * around the immediate area of vertex a.
-     *
-     * We don't define the exact area over which the segment is inside but it is guaranteed to
-     * be inside the polygon immediately adjacent to vertex a.
-     *
-     * @return true if the segment from a->b is inside a's polygon next to vertex a.
-     */
-    bool locallyInside( const VERTEX* a, const VERTEX* b ) const
-    {
-        if( area( a->prev, a, a->next ) < 0 )
-            return area( a, b, a->next ) >= 0 && area( a, a->prev, b ) >= 0;
-        else
-            return area( a, b, a->prev ) < 0 || area( a, a->next, b ) < 0;
-    }
-
-    /**
-     * Check to see if the segment halfway point between a and b is inside the polygon
-    */
-    bool middleInside( const VERTEX* a, const VERTEX* b ) const
-    {
-        const VERTEX* p = a;
-        bool          inside = false;
-        double        px = ( a->x + b->x ) / 2;
-        double        py = ( a->y + b->y ) / 2;
-
-        do
-        {
-            if( ( ( p->y > py ) != ( p->next->y > py ) )
-                && ( px < ( p->next->x - p->x ) * ( py - p->y ) / ( p->next->y - p->y ) + p->x ) )
-                inside = !inside;
-
-            p = p->next;
-        } while( p != a );
-
-        return inside;
-    }
-
-    /**
      * Create an entry in the vertices lookup and optionally inserts the newly created vertex
      * into an existing linked list.
      *
      * @return a pointer to the newly created vertex.
      */
-    VERTEX* insertVertex( const VECTOR2I& pt, VERTEX* last )
+    VERTEX* insertTriVertex( const VECTOR2I& pt, VERTEX* last )
     {
         m_result.AddVertex( pt );
-        m_vertices.emplace_back( m_result.GetVertexCount() - 1, pt.x, pt.y, this );
-
-        VERTEX* p = &m_vertices.back();
-
-        if( !last )
-        {
-            p->prev = p;
-            p->next = p;
-        }
-        else
-        {
-            p->next = last->next;
-            p->prev = last;
-            last->next->prev = p;
-            last->next = p;
-        }
-        return p;
+        return insertVertex( m_result.GetVertexCount() - 1, pt, nullptr );
     }
 
 private:
-    BOX2I                                 m_bbox;
-    std::deque<VERTEX>                    m_vertices;
     size_t                                m_vertices_original_size;
     SHAPE_POLY_SET::TRIANGULATED_POLYGON& m_result;
 };

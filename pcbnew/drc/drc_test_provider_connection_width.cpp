@@ -40,6 +40,7 @@
 #include <footprint.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/vertex_set.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 #include <pcb_shape.h>
@@ -111,10 +112,11 @@ private:
 };
 
 
-class POLYGON_TEST
+class POLYGON_TEST : public VERTEX_SET
 {
 public:
     POLYGON_TEST( int aLimit ) :
+        VERTEX_SET( 0 ),
         m_limit( aLimit )
     {
     };
@@ -129,12 +131,12 @@ public:
 
         m_vertices.front().updateList();
 
-        Vertex* p = m_vertices.front().next;
-        std::set<Vertex*> all_hits;
+        VERTEX* p = m_vertices.front().next;
+        std::set<VERTEX*> all_hits;
 
         while( p != &m_vertices.front() )
         {
-            Vertex* match = nullptr;
+            VERTEX* match = nullptr;
 
             // Only run the expensive search if we don't already have a match for the point
             if( ( all_hits.empty() || all_hits.count( p ) == 0 ) && ( match = getKink( p ) ) != nullptr )
@@ -162,222 +164,6 @@ public:
     }
 
 
-private:
-    struct Vertex
-    {
-        Vertex( int aIndex, double aX, double aY, POLYGON_TEST* aParent ) :
-                i( aIndex ),
-                x( aX ),
-                y( aY ),
-                parent( aParent )
-        {
-        }
-
-        Vertex& operator=( const Vertex& ) = delete;
-        Vertex& operator=( Vertex&& ) = delete;
-
-        bool operator==( const Vertex& rhs ) const
-        {
-            return this->x == rhs.x && this->y == rhs.y;
-        }
-        bool operator!=( const Vertex& rhs ) const { return !( *this == rhs ); }
-
-        /**
-         * Remove the node from the linked list and z-ordered linked list.
-         */
-        void remove()
-        {
-            next->prev = prev;
-            prev->next = next;
-
-            if( prevZ )
-                prevZ->nextZ = nextZ;
-
-            if( nextZ )
-                nextZ->prevZ = prevZ;
-
-            next = nullptr;
-            prev = nullptr;
-            nextZ = nullptr;
-            prevZ = nullptr;
-        }
-
-        void updateOrder()
-        {
-            if( !z )
-                z = parent->zOrder( x, y );
-        }
-
-        /**
-         * After inserting or changing nodes, this function should be called to
-         * remove duplicate vertices and ensure z-ordering is correct.
-         */
-        void updateList()
-        {
-            Vertex* p = next;
-
-            while( p != this )
-            {
-                /**
-                 * Remove duplicates
-                 */
-                if( *p == *p->next )
-                {
-                    p = p->prev;
-                    p->next->remove();
-
-                    if( p == p->next )
-                        break;
-                }
-
-                p->updateOrder();
-                p = p->next;
-            };
-
-            updateOrder();
-            zSort();
-        }
-
-        /**
-         * Sort all vertices in this vertex's list by their Morton code.
-         */
-        void zSort()
-        {
-            std::deque<Vertex*> queue;
-
-            queue.push_back( this );
-
-            for( Vertex* p = next; p && p != this; p = p->next )
-                queue.push_back( p );
-
-            std::sort( queue.begin(), queue.end(), []( const Vertex* a, const Vertex* b )
-            {
-                if( a->z != b->z )
-                    return a->z < b->z;
-
-                if( a->x != b->x )
-                    return a->x < b->x;
-
-                if( a->y != b->y )
-                    return a->y < b->y;
-
-                return a->i < b->i;
-            } );
-
-            Vertex* prev_elem = nullptr;
-
-            for( Vertex* elem : queue )
-            {
-                if( prev_elem )
-                    prev_elem->nextZ = elem;
-
-                elem->prevZ = prev_elem;
-                prev_elem = elem;
-            }
-
-            prev_elem->nextZ = nullptr;
-        }
-
-        const int    i;
-        const double x;
-        const double y;
-        POLYGON_TEST* parent;
-
-        // previous and next vertices nodes in a polygon ring
-        Vertex* prev = nullptr;
-        Vertex* next = nullptr;
-
-        // z-order curve value
-        int32_t z = 0;
-
-        // previous and next nodes in z-order
-        Vertex* prevZ = nullptr;
-        Vertex* nextZ = nullptr;
-    };
-
-    /**
-     * Calculate the Morton code of the Vertex
-     * http://www.graphics.stanford.edu/~seander/bithacks.html#InterleaveBMN
-     *
-     */
-    int32_t zOrder( const double aX, const double aY ) const
-    {
-        int32_t x = static_cast<int32_t>( 32767.0 * ( aX - m_bbox.GetX() ) / m_bbox.GetWidth() );
-        int32_t y = static_cast<int32_t>( 32767.0 * ( aY - m_bbox.GetY() ) / m_bbox.GetHeight() );
-
-        x = ( x | ( x << 8 ) ) & 0x00FF00FF;
-        x = ( x | ( x << 4 ) ) & 0x0F0F0F0F;
-        x = ( x | ( x << 2 ) ) & 0x33333333;
-        x = ( x | ( x << 1 ) ) & 0x55555555;
-
-        y = ( y | ( y << 8 ) ) & 0x00FF00FF;
-        y = ( y | ( y << 4 ) ) & 0x0F0F0F0F;
-        y = ( y | ( y << 2 ) ) & 0x33333333;
-        y = ( y | ( y << 1 ) ) & 0x55555555;
-
-        return x | ( y << 1 );
-    }
-
-    constexpr bool same_point( const Vertex* aA, const Vertex* aB ) const
-    {
-        return aA && aB && aA->x == aB->x && aA->y == aB->y;
-    }
-
-    Vertex* getNextOutlineVertex( const Vertex* aPt ) const
-    {
-        Vertex* nz = aPt->nextZ;
-        Vertex* pz = aPt->prevZ;
-
-        // If we hit a fracture point, we want to continue around the
-        // edge we are working on and not switch to the pair edge
-        // However, this will depend on which direction the initial
-        // fracture hit is.  If we find that we skip directly to
-        // a new fracture point, then we know that we are proceeding
-        // in the wrong direction from the fracture and should
-        // fall through to the next point
-        if( same_point( aPt, nz ) && same_point( aPt->next, nz->prev )
-                && aPt->y == aPt->next->y )
-        {
-            return nz->next;
-        }
-
-        if( same_point( aPt, pz ) && same_point( aPt->next, pz->prev )
-                && aPt->y == aPt->next->y )
-        {
-            return pz->next;
-        }
-
-        return aPt->next;
-    }
-
-    Vertex* getPrevOutlineVertex( const Vertex* aPt ) const
-    {
-        Vertex* nz = aPt->nextZ;
-        Vertex* pz = aPt->prevZ;
-
-        // If we hit a fracture point, we want to continue around the
-        // edge we are working on and not switch to the pair edge
-        // However, this will depend on which direction the initial
-        // fracture hit is.  If we find that we skip directly to
-        // a new fracture point, then we know that we are proceeding
-        // in the wrong direction from the fracture and should
-        // fall through to the next point
-        if( same_point( aPt, nz )
-                && aPt->y == aPt->prev->y)
-        {
-            return nz->prev;
-        }
-
-        if( same_point( aPt, pz )
-                && aPt->y == aPt->prev->y )
-        {
-            return pz->prev;
-        }
-
-        return aPt->prev;
-
-    }
-
     /**
      * Checks to see if there is a "substantial" protrusion in each polygon produced by the cut from
      * aA to aB.  Substantial in this case means that the polygon bulges out to a wider cross-section
@@ -386,7 +172,7 @@ private:
      * @param aB Ending point in the polygon
      * @return True if the two polygons are both "substantial"
      */
-    bool isSubstantial( const Vertex* aA, const Vertex* aB ) const
+    bool isSubstantial( const VERTEX* aA, const VERTEX* aB ) const
     {
         bool x_change = false;
         bool y_change = false;
@@ -396,8 +182,8 @@ private:
         size_t checked = 0;
         size_t total_pts = m_vertices.size();
 
-        const Vertex* p0 = aA;
-        const Vertex* p = getNextOutlineVertex( p0 );
+        const VERTEX* p0 = aA;
+        const VERTEX* p = getNextOutlineVertex( p0 );
 
         while( !same_point( p, aB )             // We've reached the other inflection point
                 && !same_point( p, aA )         // We've gone around in a circle
@@ -458,43 +244,8 @@ private:
         return ( same_point( p, aA ) || ( x_change && y_change ) );
     }
 
-    /**
-     * Take a #SHAPE_LINE_CHAIN and links each point into a circular, doubly-linked list.
-     */
-    Vertex* createList( const SHAPE_LINE_CHAIN& points )
-    {
-        Vertex* tail = nullptr;
-        double sum = 0.0;
 
-        // Check for winding order
-        for( int i = 0; i < points.PointCount(); i++ )
-        {
-            VECTOR2D p1 = points.CPoint( i );
-            VECTOR2D p2 = points.CPoint( i + 1 );
-
-            sum += ( ( p2.x - p1.x ) * ( p2.y + p1.y ) );
-        }
-
-        if( sum > 0.0 )
-        {
-            for( int i = points.PointCount() - 1; i >= 0; i--)
-                tail = insertVertex( i, points.CPoint( i ), tail );
-        }
-        else
-        {
-            for( int i = 0; i < points.PointCount(); i++ )
-                tail = insertVertex( i, points.CPoint( i ), tail );
-        }
-
-        if( tail && ( *tail == *tail->next ) )
-        {
-            tail->next->remove();
-        }
-
-        return tail;
-    }
-
-    Vertex* getKink( Vertex* aPt ) const
+    VERTEX* getKink( VERTEX* aPt ) const
     {
         // The point needs to be at a concave surface
         if( locallyInside( aPt->prev, aPt->next ) )
@@ -506,9 +257,9 @@ private:
         const SEG::ecoord limit2 = SEG::Square( m_limit );
 
         // first look for points in increasing z-order
-        Vertex* p = aPt->nextZ;
+        VERTEX* p = aPt->nextZ;
         SEG::ecoord min_dist = std::numeric_limits<SEG::ecoord>::max();
-        Vertex* retval = nullptr;
+        VERTEX* retval = nullptr;
 
         while( p && p->z <= maxZ )
         {
@@ -546,67 +297,8 @@ private:
         return retval;
     }
 
-
-    /**
-     * Return the twice the signed area of the triangle formed by vertices p, q, and r.
-     */
-    double area( const Vertex* p, const Vertex* q, const Vertex* r ) const
-    {
-        return ( q->y - p->y ) * ( r->x - q->x ) - ( q->x - p->x ) * ( r->y - q->y );
-    }
-
-
-    /**
-     * Check whether the segment from vertex a -> vertex b is inside the polygon
-     * around the immediate area of vertex a.
-     *
-     * We don't define the exact area over which the segment is inside but it is guaranteed to
-     * be inside the polygon immediately adjacent to vertex a.
-     *
-     * @return true if the segment from a->b is inside a's polygon next to vertex a.
-     */
-    bool locallyInside( const Vertex* a, const Vertex* b ) const
-    {
-        const Vertex* an = getNextOutlineVertex( a );
-        const Vertex* ap = getPrevOutlineVertex( a );
-
-        if( area( ap, a, an ) < 0 )
-            return area( a, b, an ) >= 0 && area( a, ap, b ) >= 0;
-        else
-            return area( a, b, ap ) < 0 || area( a, an, b ) < 0;
-    }
-
-    /**
-     * Create an entry in the vertices lookup and optionally inserts the newly created vertex
-     * into an existing linked list.
-     *
-     * @return a pointer to the newly created vertex.
-     */
-    Vertex* insertVertex( int aIndex, const VECTOR2I& pt, Vertex* last )
-    {
-        m_vertices.emplace_back( aIndex, pt.x, pt.y, this );
-
-        Vertex* p = &m_vertices.back();
-
-        if( !last )
-        {
-            p->prev = p;
-            p->next = p;
-        }
-        else
-        {
-            p->next = last->next;
-            p->prev = last;
-            last->next->prev = p;
-            last->next = p;
-        }
-        return p;
-    }
-
 private:
     int                             m_limit;
-    BOX2I                           m_bbox;
-    std::deque<Vertex>              m_vertices;
     std::set<std::pair<int, int>>   m_hits;
 };
 

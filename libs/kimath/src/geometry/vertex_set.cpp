@@ -1,0 +1,206 @@
+#include <geometry/vertex_set.h>
+
+void VERTEX_SET::SetBoundingBox( const BOX2I& aBBox ) { m_bbox = aBBox; }
+
+
+/**
+ * Take a #SHAPE_LINE_CHAIN and links each point into a circular, doubly-linked list.
+ */
+VERTEX* VERTEX_SET::createList( const SHAPE_LINE_CHAIN& points )
+{
+    VERTEX* tail = nullptr;
+    double sum = 0.0;
+
+    // Check for winding order
+    for( int i = 0; i < points.PointCount(); i++ )
+    {
+        VECTOR2D p1 = points.CPoint( i );
+        VECTOR2D p2 = points.CPoint( i + 1 );
+
+        sum += ( ( p2.x - p1.x ) * ( p2.y + p1.y ) );
+    }
+
+    VECTOR2I last_pt{ std::numeric_limits<int>::max(), std::numeric_limits<int>::max() };
+
+    auto addVertex = [&]( int i )
+    {
+        const VECTOR2I& pt = points.CPoint( i );
+        VECTOR2I diff = pt - last_pt;
+        if( diff.SquaredEuclideanNorm() > m_simplificationLevel )
+        {
+            tail = insertVertex( i, pt, tail );
+            last_pt = pt;
+        }
+    };
+
+    if( sum > 0.0 )
+    {
+        for( int i = points.PointCount() - 1; i >= 0; i-- )
+            addVertex( i );
+    }
+    else
+    {
+        for( int i = 0; i < points.PointCount(); i++ )
+            addVertex( i );
+    }
+
+    if( tail && ( *tail == *tail->next ) )
+    {
+        tail->next->remove();
+    }
+
+    return tail;
+}
+
+
+/**
+ * Calculate the Morton code of the VERTEX
+ * http://www.graphics.stanford.edu/~seander/bithacks.html#InterleaveBMN
+ *
+ */
+int32_t VERTEX_SET::zOrder( const double aX, const double aY ) const
+{
+    int32_t x = static_cast<int32_t>( 32767.0 * ( aX - m_bbox.GetX() ) / m_bbox.GetWidth() );
+    int32_t y = static_cast<int32_t>( 32767.0 * ( aY - m_bbox.GetY() ) / m_bbox.GetHeight() );
+
+    x = ( x | ( x << 8 ) ) & 0x00FF00FF;
+    x = ( x | ( x << 4 ) ) & 0x0F0F0F0F;
+    x = ( x | ( x << 2 ) ) & 0x33333333;
+    x = ( x | ( x << 1 ) ) & 0x55555555;
+
+    y = ( y | ( y << 8 ) ) & 0x00FF00FF;
+    y = ( y | ( y << 4 ) ) & 0x0F0F0F0F;
+    y = ( y | ( y << 2 ) ) & 0x33333333;
+    y = ( y | ( y << 1 ) ) & 0x55555555;
+
+    return x | ( y << 1 );
+}
+
+
+/**
+ * Return the twice the signed area of the triangle formed by vertices p, q, and r.
+ */
+double VERTEX_SET::area( const VERTEX* p, const VERTEX* q, const VERTEX* r ) const
+{
+    return ( q->y - p->y ) * ( r->x - q->x ) - ( q->x - p->x ) * ( r->y - q->y );
+}
+
+
+bool VERTEX_SET::same_point( const VERTEX* aA, const VERTEX* aB ) const
+{
+    return aA && aB && aA->x == aB->x && aA->y == aB->y;
+}
+
+VERTEX* VERTEX_SET::getNextOutlineVertex( const VERTEX* aPt ) const
+{
+    VERTEX* nz = aPt->nextZ;
+    VERTEX* pz = aPt->prevZ;
+
+    // If we hit a fracture point, we want to continue around the
+    // edge we are working on and not switch to the pair edge
+    // However, this will depend on which direction the initial
+    // fracture hit is.  If we find that we skip directly to
+    // a new fracture point, then we know that we are proceeding
+    // in the wrong direction from the fracture and should
+    // fall through to the next point
+    if( same_point( aPt, nz ) && same_point( aPt->next, nz->prev )
+            && aPt->y == aPt->next->y )
+    {
+        return nz->next;
+    }
+
+    if( same_point( aPt, pz ) && same_point( aPt->next, pz->prev )
+            && aPt->y == aPt->next->y )
+    {
+        return pz->next;
+    }
+
+    return aPt->next;
+}
+
+VERTEX* VERTEX_SET::getPrevOutlineVertex( const VERTEX* aPt ) const
+{
+    VERTEX* nz = aPt->nextZ;
+    VERTEX* pz = aPt->prevZ;
+
+    // If we hit a fracture point, we want to continue around the
+    // edge we are working on and not switch to the pair edge
+    // However, this will depend on which direction the initial
+    // fracture hit is.  If we find that we skip directly to
+    // a new fracture point, then we know that we are proceeding
+    // in the wrong direction from the fracture and should
+    // fall through to the next point
+    if( same_point( aPt, nz )
+            && aPt->y == aPt->prev->y)
+    {
+        return nz->prev;
+    }
+
+    if( same_point( aPt, pz )
+            && aPt->y == aPt->prev->y )
+    {
+        return pz->prev;
+    }
+
+    return aPt->prev;
+
+}
+
+
+bool VERTEX_SET::locallyInside( const VERTEX* a, const VERTEX* b ) const
+{
+    const VERTEX* an = getNextOutlineVertex( a );
+    const VERTEX* ap = getPrevOutlineVertex( a );
+
+    if( area( ap, a, an ) < 0 )
+        return area( a, b, an ) >= 0 && area( a, ap, b ) >= 0;
+    else
+        return area( a, b, ap ) < 0 || area( a, an, b ) < 0;
+}
+
+
+bool VERTEX_SET::middleInside( const VERTEX* a, const VERTEX* b ) const
+{
+    const VERTEX* p = a;
+    bool          inside = false;
+    double        px = ( a->x + b->x ) / 2;
+    double        py = ( a->y + b->y ) / 2;
+
+    do
+    {
+        if( ( ( p->y > py ) != ( p->next->y > py ) )
+            && ( px < ( p->next->x - p->x ) * ( py - p->y ) / ( p->next->y - p->y ) + p->x ) )
+            inside = !inside;
+
+        p = p->next;
+    } while( p != a );
+
+    return inside;
+}
+
+/**
+ * Create an entry in the vertices lookup and optionally inserts the newly created vertex
+ * into an existing linked list.
+ *
+ * @return a pointer to the newly created vertex.
+ */
+VERTEX* VERTEX_SET::insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last )
+{
+    m_vertices.emplace_back( aIndex, pt.x, pt.y, this );
+
+    VERTEX* p = &m_vertices.back();
+
+    if( !last )
+    {
+        p->prev = p;
+        p->next = p;
+    }
+    else
+    {
+        p->next = last->next;
+        p->prev = last;
+        last->next->prev = p;
+        last->next = p;
+    }
+    return p;
+}
