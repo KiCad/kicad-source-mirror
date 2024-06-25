@@ -32,6 +32,8 @@
 #include <hash_128.h>
 #include <geometry/shape_arc.h>
 
+#include <iomanip>
+
 
 /*
 CircleCenterFrom3Points calculate the center of a circle defined by 3 points
@@ -343,9 +345,11 @@ BOOST_AUTO_TEST_CASE( TestHash128 )
 
     BOOST_CHECK( b == h );
     BOOST_CHECK( h == b );
-
-    char hashStr[33] = {};
-    snprintf( hashStr, sizeof( hashStr ), "%016llX%016llX", h.Value64[0], h.Value64[1] );
+    std::stringstream ss;
+    ss << std::hex << std::uppercase << std::setfill('0')
+       << std::setw(16) << h.Value64[0]
+       << std::setw(16) << h.Value64[1];
+    std::string hashStr = ss.str();
 
     BOOST_CHECK( std::string( hashStr ) == std::string( "00CDEF012345678956789ABCDEF01234" ) );
 }
