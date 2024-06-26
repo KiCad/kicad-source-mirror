@@ -26,6 +26,8 @@
 #define HASH_128_H_
 
 #include <cstdint>
+#include <iomanip>
+#include <sstream>
 
 /**
  * A storage class for 128-bit hash value
@@ -40,6 +42,15 @@ struct HASH_128
     bool operator==( const HASH_128& aOther ) const
     {
         return memcmp( Value64, aOther.Value64, sizeof( Value64 ) ) == 0;
+    }
+
+    std::string ToString() const
+    {
+        std::stringstream ss;
+        ss << std::hex << std::uppercase << std::setfill( '0' )
+           << std::setw( 16 ) << Value64[0]
+           << std::setw( 16 ) << Value64[1];
+        return ss.str();
     }
 
 public:
