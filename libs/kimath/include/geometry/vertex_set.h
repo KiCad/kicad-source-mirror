@@ -52,98 +52,7 @@
 #include <math/box2.h>
 #include <geometry/shape_line_chain.h>
 
-class VERTEX;
-
-class VERTEX_SET
-{
-    friend class VERTEX;
-
-public:
-    VERTEX_SET( int aSimplificationLevel )
-    {
-        m_simplificationLevel = aSimplificationLevel * ( VECTOR2I::extended_type ) aSimplificationLevel;
-    }
-    ~VERTEX_SET() {}
-
-    void SetBoundingBox( const BOX2I& aBBox );
-
-    /**
-     * Insert a vertex into the vertex set
-     * @param aIndex the index of the vertex
-     * @param pt the point to insert
-     * @param last the last vertex in the list
-     * @return the newly inserted vertex
-    */
-    VERTEX* insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last );
-
-    /**
-     * Create a list of vertices from a line chain
-     * @param points the line chain to create the list from
-     * @return the first vertex in the list
-    */
-    VERTEX* createList( const SHAPE_LINE_CHAIN& points );
-
-protected:
-
-    /**
-     * Get the next vertex in the outline, avoiding steiner points
-     * and points that overlap with splits
-     * @param aPt the current vertex
-     * @return the next vertex in the outline
-    */
-    VERTEX* getNextOutlineVertex( const VERTEX* aPt ) const;
-
-    /**
-     * Get the previous vertex in the outline, avoiding steiner points
-     * and points that overlap with splits
-     * @param aPt the current vertex
-     * @return the previous vertex in the outline
-    */
-    VERTEX* getPrevOutlineVertex( const VERTEX* aPt ) const;
-
-    /**
-     * Check whether the segment from vertex a -> vertex b is inside the polygon
-     * around the immediate area of vertex a.
-     *
-     * We don't define the exact area over which the segment is inside but it is guaranteed to
-     * be inside the polygon immediately adjacent to vertex a.
-     *
-     * @return true if the segment from a->b is inside a's polygon next to vertex a.
-    */
-    bool    locallyInside( const VERTEX* a, const VERTEX* b ) const;
-
-    /**
-     * Check if the middle of the segment from a to b is inside the polygon
-     * @param a the first vertex
-     * @param b the second vertex
-     * @return true if the point is in the middle of the triangle
-    */
-    bool middleInside( const VERTEX* a, const VERTEX* b ) const;
-
-    /**
-     * Check if two vertices are at the same point
-     * @param aA the first vertex
-     * @param aB the second vertex
-     * @return true if the vertices are at the same point
-    */
-    bool    same_point( const VERTEX* aA, const VERTEX* aB ) const;
-
-    /**
-     * Note that while the inputs are doubles, these are scaled
-     * by the size of the bounding box to fit into a 32-bit Morton code
-     * @return the Morton code for the point (aX, aY)
-    */
-    int32_t zOrder( const double aX, const double aY ) const;
-
-    /**
-     * @return the area of the triangle defined by the three vertices
-    */
-    double  area( const VERTEX* p, const VERTEX* q, const VERTEX* r ) const;
-
-    BOX2I                   m_bbox;
-    std::deque<VERTEX>      m_vertices;
-    VECTOR2I::extended_type m_simplificationLevel;
-};
+class VERTEX_SET;
 
 class VERTEX
 {
@@ -198,35 +107,9 @@ class VERTEX
      * @return the newly created vertex in the polygon that does not include the
      *         reference vertex.
      */
-    VERTEX* split( VERTEX* b )
-    {
-        parent->m_vertices.emplace_back( i, x, y, parent );
-        VERTEX* a2 = parent->insertVertex( i, VECTOR2I( x, y ), nullptr );
-        parent->m_vertices.emplace_back( b->i, b->x, b->y, parent );
-        VERTEX* b2 = &parent->m_vertices.back();
-        VERTEX* an = next;
-        VERTEX* bp = b->prev;
+    VERTEX* split( VERTEX* b );
 
-        next = b;
-        b->prev = this;
-
-        a2->next = an;
-        an->prev = a2;
-
-        b2->next = a2;
-        a2->prev = b2;
-
-        bp->next = b2;
-        b2->prev = bp;
-
-        return b2;
-    }
-
-    void updateOrder()
-    {
-        if( !z )
-            z = parent->zOrder( x, y );
-    }
+    void updateOrder();
 
     /**
      * After inserting or changing nodes, this function should be called to
@@ -345,6 +228,97 @@ class VERTEX
     // previous and next nodes in z-order
     VERTEX* prevZ = nullptr;
     VERTEX* nextZ = nullptr;
+};
+
+class VERTEX_SET
+{
+    friend class VERTEX;
+
+public:
+    VERTEX_SET( int aSimplificationLevel )
+    {
+        m_simplificationLevel = aSimplificationLevel * ( VECTOR2I::extended_type ) aSimplificationLevel;
+    }
+    ~VERTEX_SET() {}
+
+    void SetBoundingBox( const BOX2I& aBBox );
+
+    /**
+     * Insert a vertex into the vertex set
+     * @param aIndex the index of the vertex
+     * @param pt the point to insert
+     * @param last the last vertex in the list
+     * @return the newly inserted vertex
+    */
+    VERTEX* insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last );
+
+    /**
+     * Create a list of vertices from a line chain
+     * @param points the line chain to create the list from
+     * @return the first vertex in the list
+    */
+    VERTEX* createList( const SHAPE_LINE_CHAIN& points );
+
+protected:
+
+    /**
+     * Get the next vertex in the outline, avoiding steiner points
+     * and points that overlap with splits
+     * @param aPt the current vertex
+     * @return the next vertex in the outline
+    */
+    VERTEX* getNextOutlineVertex( const VERTEX* aPt ) const;
+
+    /**
+     * Get the previous vertex in the outline, avoiding steiner points
+     * and points that overlap with splits
+     * @param aPt the current vertex
+     * @return the previous vertex in the outline
+    */
+    VERTEX* getPrevOutlineVertex( const VERTEX* aPt ) const;
+
+    /**
+     * Check whether the segment from vertex a -> vertex b is inside the polygon
+     * around the immediate area of vertex a.
+     *
+     * We don't define the exact area over which the segment is inside but it is guaranteed to
+     * be inside the polygon immediately adjacent to vertex a.
+     *
+     * @return true if the segment from a->b is inside a's polygon next to vertex a.
+    */
+    bool    locallyInside( const VERTEX* a, const VERTEX* b ) const;
+
+    /**
+     * Check if the middle of the segment from a to b is inside the polygon
+     * @param a the first vertex
+     * @param b the second vertex
+     * @return true if the point is in the middle of the triangle
+    */
+    bool middleInside( const VERTEX* a, const VERTEX* b ) const;
+
+    /**
+     * Check if two vertices are at the same point
+     * @param aA the first vertex
+     * @param aB the second vertex
+     * @return true if the vertices are at the same point
+    */
+    bool    same_point( const VERTEX* aA, const VERTEX* aB ) const;
+
+    /**
+     * Note that while the inputs are doubles, these are scaled
+     * by the size of the bounding box to fit into a 32-bit Morton code
+     * @return the Morton code for the point (aX, aY)
+    */
+    int32_t zOrder( const double aX, const double aY ) const;
+
+    /**
+     * @return the area of the triangle defined by the three vertices
+    */
+    double  area( const VERTEX* p, const VERTEX* q, const VERTEX* r ) const;
+
+    BOX2I                   m_bbox;
+    std::deque<VERTEX>      m_vertices;
+    VECTOR2I::extended_type m_simplificationLevel;
 };
 
 

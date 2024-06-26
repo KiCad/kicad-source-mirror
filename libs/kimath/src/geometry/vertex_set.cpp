@@ -204,3 +204,35 @@ VERTEX* VERTEX_SET::insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last )
     }
     return p;
 }
+
+
+VERTEX* VERTEX::split( VERTEX* b )
+{
+    parent->m_vertices.emplace_back( i, x, y, parent );
+    VERTEX* a2 = parent->insertVertex( i, VECTOR2I( x, y ), nullptr );
+    parent->m_vertices.emplace_back( b->i, b->x, b->y, parent );
+    VERTEX* b2 = &parent->m_vertices.back();
+    VERTEX* an = next;
+    VERTEX* bp = b->prev;
+
+    next = b;
+    b->prev = this;
+
+    a2->next = an;
+    an->prev = a2;
+
+    b2->next = a2;
+    a2->prev = b2;
+
+    bp->next = b2;
+    b2->prev = bp;
+
+    return b2;
+}
+
+
+void VERTEX::updateOrder()
+{
+    if( !z )
+        z = parent->zOrder( x, y );
+}
