@@ -238,7 +238,6 @@ bool SPECCTRA_DB::BuiltBoardOutlines( BOARD* aBoard  )
 
 PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 {
-    char        name[256];                  // padstack name builder
     std::string uniqifier;
 
     // caller must do these checks before calling here.
@@ -286,16 +285,15 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     if( aPad->GetOffset().x || aPad->GetOffset().y )
     {
-        char offsetTxt[64];
-
         VECTOR2I offset( aPad->GetOffset().x, aPad->GetOffset().y );
 
         dsnOffset = mapPt( offset );
-
-        // using () would cause padstack name to be quoted, and {} locks freerouter, so use [].
-        std::snprintf( offsetTxt, sizeof( offsetTxt ), "[%.6g,%.6g]", dsnOffset.x, dsnOffset.y );
-
-        uniqifier += offsetTxt;
+        // Using () would cause padstack name to be quoted, and {} locks freerouter, so use [].
+        std::ostringstream oss;
+        oss.imbue( std::locale::classic() );
+        oss << std::fixed << std::setprecision( 6 )
+            << '[' << dsnOffset.x << ',' << dsnOffset.y << ']';
+        uniqifier += oss.str();
     }
 
     switch( aPad->GetShape() )
@@ -319,12 +317,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             circle->SetVertex( dsnOffset );
         }
 
-        snprintf( name, sizeof(name), "Round%sPad_%.6g_um",
-                  uniqifier.c_str(), IU2um( aPad->GetSize().x ) );
+        std::ostringstream oss;
+        oss << "Round" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
+            << IU2um(aPad->GetSize().x) << "_um";
 
-        name[ sizeof(name) - 1 ] = 0;
-
-        padstack->SetPadstackId( name );
+        padstack->SetPadstackId( oss.str().c_str() );
         break;
     }
 
@@ -353,12 +350,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             rect->SetCorners( lowerLeft, upperRight );
         }
 
-        snprintf( name, sizeof( name ), "Rect%sPad_%.6gx%.6g_um", uniqifier.c_str(),
-                  IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ) );
+        std::ostringstream oss;
+        oss << "Rect" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
+            << IU2um(aPad->GetSize().x) << "x" << IU2um(aPad->GetSize().y) << "_um";
 
-        name[sizeof( name ) - 1] = 0;
-
-        padstack->SetPadstackId( name );
+        padstack->SetPadstackId( oss.str().c_str() );
         break;
     }
 
@@ -404,11 +400,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             path->aperture_width = 2.0 * radius;
         }
 
-        snprintf( name, sizeof( name ), "Oval%sPad_%.6gx%.6g_um", uniqifier.c_str(),
-                  IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ) );
-        name[sizeof( name ) - 1] = 0;
+        std::ostringstream oss;
+        oss << "Oval" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
+            << IU2um(aPad->GetSize().x) << "x" << IU2um(aPad->GetSize().y) << "_um";
 
-        padstack->SetPadstackId( name );
+        padstack->SetPadstackId( oss.str().c_str() );
         break;
     }
 
@@ -451,13 +447,13 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         }
 
         // this string _must_ be unique for a given physical shape
-        snprintf( name, sizeof( name ), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_um", uniqifier.c_str(),
-                  IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
-                  aPad->GetDelta().x < 0 ? 'n' : 'p', std::abs( IU2um( aPad->GetDelta().x ) ),
-                  aPad->GetDelta().y < 0 ? 'n' : 'p', std::abs( IU2um( aPad->GetDelta().y ) ) );
-        name[sizeof( name ) - 1] = 0;
+        std::ostringstream oss;
+        oss << "Trapz" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
+            << IU2um(aPad->GetSize().x) << "x" << IU2um(aPad->GetSize().y) << "_"
+            << (aPad->GetDelta().x < 0 ? "n" : "p") << std::abs(IU2um(aPad->GetDelta().x)) << "x"
+            << (aPad->GetDelta().y < 0 ? "n" : "p") << std::abs(IU2um(aPad->GetDelta().y)) << "_um";
 
-        padstack->SetPadstackId( name );
+        padstack->SetPadstackId( oss.str().c_str() );
         break;
     }
 
@@ -524,14 +520,17 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         }
 
         // this string _must_ be unique for a given physical shape
-        snprintf( name, sizeof( name ), "RoundRect%sPad_%.6gx%.6g_%.6g_um_%f_%X", uniqifier.c_str(),
-                  IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ), IU2um( rradius ),
-                  doChamfer ? aPad->GetChamferRectRatio() : 0.0,
-                  doChamfer ? aPad->GetChamferPositions() : 0 );
+        std::ostringstream oss;
+        oss << "RoundRect" << uniqifier << "Pad_"
+            << std::fixed << std::setprecision(6)
+            << IU2um( aPad->GetSize().x ) << 'x'
+            << IU2um( aPad->GetSize().y ) << '_'
+            << IU2um( rradius ) << "_um_"
+            << ( doChamfer ? aPad->GetChamferRectRatio() : 0.0 ) << '_'
+            << std::hex << std::uppercase
+            << ( doChamfer ? aPad->GetChamferPositions() : 0 );
 
-        name[sizeof( name ) - 1] = 0;
-
-        padstack->SetPadstackId( name );
+        padstack->SetPadstackId( oss.str().c_str() );
         break;
     }
 
@@ -577,18 +576,17 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
         // this string _must_ be unique for a given physical shape, so try to make it unique
         const HASH_128 hash = pad_shape.GetHash();
-        char           hashStr[33] = {};
+        const BOX2I rect = aPad->GetBoundingBox();
 
-        snprintf( hashStr, sizeof( hashStr ), "%016llX%016llX", hash.Value64[0], hash.Value64[1] );
+        std::ostringstream oss;
+        oss << "Cust" << uniqifier << "Pad_"
+            << std::fixed << std::setprecision(6)
+            << IU2um( aPad->GetSize().x ) << 'x' << IU2um( aPad->GetSize().y ) << '_'
+            << IU2um( rect.GetWidth() ) << 'x' << IU2um( rect.GetHeight() ) << '_'
+            << polygonal_shape.size() << "_um_"
+            << hash.ToString();
 
-        BOX2I    rect = aPad->GetBoundingBox();
-        snprintf( name, sizeof( name ), "Cust%sPad_%.6gx%.6g_%.6gx_%.6g_%d_um_%s",
-                  uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
-                  IU2um( rect.GetWidth() ), IU2um( rect.GetHeight() ), (int) polygonal_shape.size(),
-                  hashStr );
-        name[sizeof( name ) - 1] = 0;
-
-        padstack->SetPadstackId( name );
+        padstack->SetPadstackId( oss.str().c_str() );
         break;
     }
     }

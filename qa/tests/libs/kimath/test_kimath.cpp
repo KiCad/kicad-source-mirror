@@ -345,13 +345,7 @@ BOOST_AUTO_TEST_CASE( TestHash128 )
 
     BOOST_CHECK( b == h );
     BOOST_CHECK( h == b );
-    std::stringstream ss;
-    ss << std::hex << std::uppercase << std::setfill('0')
-       << std::setw(16) << h.Value64[0]
-       << std::setw(16) << h.Value64[1];
-    std::string hashStr = ss.str();
-
-    BOOST_CHECK( std::string( hashStr ) == std::string( "00CDEF012345678956789ABCDEF01234" ) );
+    BOOST_CHECK_EQUAL( h.ToString(), std::string( "00CDEF012345678956789ABCDEF01234" ) );
 }
 
 
