@@ -2062,7 +2062,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     if( src->mirror )
                     {
-                        txt->SetLayer( FlipLayer( layer ) );
+                        txt->SetLayer( aBoard->FlipLayer( layer ) );
                         txt->SetTextPos( VECTOR2I( lsrc->start_x,
                                                    2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
                     }
@@ -2121,7 +2121,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                         if( src->mirror )
                         {
-                            line->SetLayer( FlipLayer( layer ) );
+                            line->SetLayer( aBoard->FlipLayer( layer ) );
                             line->SetStart( VECTOR2I( lsrc->start_x, 2 * src->y - lsrc->start_y ) );
                             line->SetEnd( VECTOR2I( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
                         }
@@ -2190,7 +2190,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                         if( src->mirror )
                         {
-                            rect->SetLayer( FlipLayer( layer ) );
+                            rect->SetLayer( aBoard->FlipLayer( layer ) );
                             rect->SetStart( VECTOR2I( lsrc->start_x, 2 * src->y - lsrc->start_y ) );
                             rect->SetEnd( VECTOR2I( lsrc->end_x, 2 * src->y - lsrc->end_y ) );
                         }
@@ -2215,7 +2215,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                         if( src->mirror )
                         {
-                            txt->SetLayer( FlipLayer( layer ) );
+                            txt->SetLayer( aBoard->FlipLayer( layer ) );
                             txt->SetTextPos( VECTOR2I( lsrc->start_x,
                                                        2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
                         }

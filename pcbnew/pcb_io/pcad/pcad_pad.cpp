@@ -187,7 +187,7 @@ void PCAD_PAD::Flip()
         m_Rotation = -m_Rotation;
 
     for( i = 0; i < (int)m_Shapes.GetCount(); i++ )
-        m_Shapes[i]->m_KiCadLayer = FlipLayer( m_Shapes[i]->m_KiCadLayer );
+        m_Shapes[i]->m_KiCadLayer = m_board->FlipLayer( m_Shapes[i]->m_KiCadLayer );
 }
 
 

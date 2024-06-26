@@ -261,6 +261,8 @@ public:
         // Derived classes which support multiple layers must implement this
     }
 
+    bool IsSideSpecific() const;
+
     /**
      * Set the layer this item is on.
      *

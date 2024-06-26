@@ -102,13 +102,28 @@ const KIFONT::METRICS& BOARD_ITEM::GetFontMetrics() const
 
 wxString BOARD_ITEM::GetLayerName() const
 {
-    const BOARD* board = GetBoard();
-
-    if( board )
+    if( const BOARD* board = GetBoard() )
         return board->GetLayerName( m_layer );
 
     // If no parent, return standard name
     return BOARD::GetStandardLayerName( m_layer );
+}
+
+
+bool BOARD_ITEM::IsSideSpecific() const
+{
+    if( ( GetLayerSet() & LSET::SideSpecificMask() ).any() )
+        return true;
+
+    if( const BOARD* board = GetBoard() )
+    {
+        LAYER_T principalLayerType = board->GetLayerType( m_layer );
+
+        if( principalLayerType == LT_FRONT || principalLayerType == LT_BACK )
+            return true;
+    }
+
+    return false;
 }
 
 

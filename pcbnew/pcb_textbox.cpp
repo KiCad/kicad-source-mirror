@@ -455,7 +455,7 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     else
         EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
 
-    if( ( GetLayerSet() & LSET::SideSpecificMask() ).any() )
+    if( IsSideSpecific() )
         SetMirrored( !IsMirrored() );
 }
 

@@ -227,7 +227,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         rowOffset += GetColCount();
     }
 
-    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
     Normalize();
 }
 

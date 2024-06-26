@@ -659,7 +659,8 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard, int aNestLevel 
     {
         PCB_LAYER_ID layer = *cu;
 
-        m_out->Print( aNestLevel+1, "(%d %s %s", layer,
+        m_out->Print( aNestLevel+1, "(%d %s %s",
+                      layer,
                       m_out->Quotew( LSET::Name( layer ) ).c_str(),
                       LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
 
@@ -706,8 +707,14 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard, int aNestLevel 
     {
         PCB_LAYER_ID layer = *seq;
 
-        m_out->Print( aNestLevel+1, "(%d %s user", layer,
+        m_out->Print( aNestLevel+1, "(%d %s",
+                      layer,
                       m_out->Quotew( LSET::Name( layer ) ).c_str() );
+
+        if( layer >= User_1 && layer <= User_9 )
+            m_out->Print( 0, " %s", LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
+        else
+            m_out->Print( 0, " user" );
 
         if( m_board->GetLayerName( layer ) != LSET::Name( layer ) )
             m_out->Print( 0, " %s", m_out->Quotew( m_board->GetLayerName( layer ) ).c_str() );

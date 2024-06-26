@@ -140,6 +140,7 @@ PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( int aLayerNumber )
 #define RETURN_COPPER( x )    return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Choice )
 #define RETURN_AUX( x )       return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##StaticText )
 #define RETURN_MANDATORY( x ) return PANEL_SETUP_LAYERS_CTLs( x##Name, nullptr, x##StaticText )
+#define RETURN_USER( x )      return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Type )
 
     switch( aLayerNumber )
     {
@@ -198,15 +199,15 @@ PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( int aLayerNumber )
     case Cmts_User:    RETURN_AUX( m_Comments );
     case Dwgs_User:    RETURN_AUX( m_Drawings );
 
-    case User_1:       RETURN_AUX( m_User1 );
-    case User_2:       RETURN_AUX( m_User2 );
-    case User_3:       RETURN_AUX( m_User3 );
-    case User_4:       RETURN_AUX( m_User4 );
-    case User_5:       RETURN_AUX( m_User5 );
-    case User_6:       RETURN_AUX( m_User6 );
-    case User_7:       RETURN_AUX( m_User7 );
-    case User_8:       RETURN_AUX( m_User8 );
-    case User_9:       RETURN_AUX( m_User9 );
+    case User_1:       RETURN_USER( m_User1 );
+    case User_2:       RETURN_USER( m_User2 );
+    case User_3:       RETURN_USER( m_User3 );
+    case User_4:       RETURN_USER( m_User4 );
+    case User_5:       RETURN_USER( m_User5 );
+    case User_6:       RETURN_USER( m_User6 );
+    case User_7:       RETURN_USER( m_User7 );
+    case User_8:       RETURN_USER( m_User8 );
+    case User_9:       RETURN_USER( m_User9 );
 
     default:
         wxASSERT_MSG( 0, wxT( "bad layer id" ) );
@@ -335,12 +336,21 @@ void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
 
 void PANEL_SETUP_LAYERS::showLayerTypes()
 {
-    for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID cu_layer : LSET::AllCuMask().Seq() )
     {
-        PCB_LAYER_ID cu_layer = *seq;
-
         wxChoice* ctl = getChoice( cu_layer );
-        ctl->SetSelection( m_pcb->GetLayerType( cu_layer ) );
+        ctl->SetStringSelection( LAYER::ShowType( m_pcb->GetLayerType( cu_layer ) ) );
+    }
+
+    for( int ii = User_1; ii <= User_9; ++ii )
+    {
+        switch( m_pcb->GetLayerType( ToLAYER_ID( ii ) ) )
+        {
+        case LT_AUX:   getChoice( ii )->SetSelection( 0 ); break;
+        case LT_FRONT: getChoice( ii )->SetSelection( 1 ); break;
+        case LT_BACK:  getChoice( ii )->SetSelection( 2 ); break;
+        default:       getChoice( ii )->SetSelection( 0 ); break;
+        }
     }
 }
 
@@ -586,10 +596,36 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                 modified = true;
             }
 
-            // Only copper layers have a definable type.
-            if( LSET::AllCuMask().Contains( layer ) )
+            if( IsCopperLayer( layer ) )
             {
-                LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
+                LAYER_T t;
+
+                switch( getChoice( layer )->GetCurrentSelection() )
+                {
+                case 0:  t = LT_SIGNAL;    break;
+                case 1:  t = LT_POWER;     break;
+                case 2:  t = LT_MIXED;     break;
+                case 3:  t = LT_JUMPER;    break;
+                default: t = LT_UNDEFINED; break;
+                }
+
+                if( m_pcb->GetLayerType( layer ) != t )
+                {
+                    m_pcb->SetLayerType( layer, t );
+                    modified = true;
+                }
+            }
+            else if( layer >= User_1 && layer <= User_9 )
+            {
+                LAYER_T t;
+
+                switch( getChoice( layer )->GetCurrentSelection() )
+                {
+                case 0:  t = LT_AUX;       break;
+                case 1:  t = LT_FRONT;     break;
+                case 2:  t = LT_BACK;      break;
+                default: t = LT_UNDEFINED; break;
+                }
 
                 if( m_pcb->GetLayerType( layer ) != t )
                 {
@@ -621,14 +657,6 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         m_frame->OnModify();
 
     return true;
-}
-
-
-int PANEL_SETUP_LAYERS::getLayerTypeIndex( int aLayer )
-{
-    wxChoice* ctl = getChoice( aLayer );
-    int ret = ctl->GetCurrentSelection(); // Indices must have same sequence as LAYER_T
-    return ret;
 }
 
 
@@ -896,19 +924,24 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 
     // All user-defined layers should have a checkbox
     wxASSERT( ctl.checkbox );
+    ctl.checkbox->SetValue( true );
 
     wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ctl.name );
 
     wxCHECK( textCtrl, /* void */ );
     textCtrl->ChangeValue( LSET::Name( *seq ) );
+
+    wxChoice* userLayerType = dynamic_cast<wxChoice*>( ctl.choice );
+
+    wxCHECK( userLayerType, /* void */ );
+    userLayerType->SetSelection( 0 );
+
     ctl.name->Show( true );
     ctl.checkbox->Show( true );
     ctl.choice->Show( true );
 
     wxSizeEvent evt_size( m_LayersListPanel->GetSize() );
     m_LayersListPanel->GetEventHandler()->ProcessEvent( evt_size );
-
-    setLayerCheckBox( *seq, true );
 }
 
 

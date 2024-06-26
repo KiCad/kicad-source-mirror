@@ -685,8 +685,7 @@ void PCB_TRACK::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
     }
 
-    int copperLayerCount = GetBoard()->GetCopperLayerCount();
-    SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
+    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
 
 
@@ -705,8 +704,7 @@ void PCB_ARC::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         m_Mid.y = aCentre.y - ( m_Mid.y - aCentre.y );
     }
 
-    int copperLayerCount = GetBoard()->GetCopperLayerCount();
-    SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
+    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
 
 
@@ -735,12 +733,11 @@ void PCB_VIA::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     if( GetViaType() != VIATYPE::THROUGH )
     {
-        int          copperLayerCount = GetBoard()->GetCopperLayerCount();
         PCB_LAYER_ID top_layer;
         PCB_LAYER_ID bottom_layer;
         LayerPair( &top_layer, &bottom_layer );
-        top_layer    = FlipLayer( top_layer, copperLayerCount );
-        bottom_layer = FlipLayer( bottom_layer, copperLayerCount );
+        top_layer    = GetBoard()->FlipLayer( top_layer );
+        bottom_layer = GetBoard()->FlipLayer( bottom_layer );
         SetLayerPair( top_layer, bottom_layer );
     }
 }

@@ -2149,7 +2149,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         else
             attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
-        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::SideSpecificMask() ).any() )
+        if( m_gal->IsFlippedX() && !aText->IsSideSpecific() )
         {
             VECTOR2I textPos = aText->GetTextPos();
             VECTOR2I textWidth = VECTOR2I( aText->GetTextBox().GetWidth(), 0 );
@@ -2307,7 +2307,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     TEXT_ATTRIBUTES        attrs = aTextBox->GetAttributes();
     attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
 
-    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::SideSpecificMask() ).any() )
+    if( m_gal->IsFlippedX() && !aTextBox->IsSideSpecific() )
     {
         attrs.m_Mirrored = !attrs.m_Mirrored;
         strokeText( resolvedText, aTextBox->GetDrawPos( true ), attrs, metrics );
@@ -2786,7 +2786,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     wxString        resolvedText = aDimension->GetShownText( true );
     TEXT_ATTRIBUTES attrs = aDimension->GetAttributes();
 
-    if( m_gal->IsFlippedX() && !( aDimension->GetLayerSet() & LSET::SideSpecificMask() ).any() )
+    if( m_gal->IsFlippedX() && !aDimension->IsSideSpecific() )
         attrs.m_Mirrored = !attrs.m_Mirrored;
 
     if( outline_mode )

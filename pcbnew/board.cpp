@@ -99,6 +99,8 @@ BOARD::BOARD() :
 
         if( IsCopperLayer( layer ) )
             m_layers[layer].m_type = LT_SIGNAL;
+        else if( layer >= User_1 && layer <= User_9 )
+            m_layers[layer].m_type = LT_AUX;
         else
             m_layers[layer].m_type = LT_UNDEFINED;
     }
@@ -600,21 +602,20 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
 
 LAYER_T BOARD::GetLayerType( PCB_LAYER_ID aLayer ) const
 {
-    if( !IsCopperLayer( aLayer ) )
-        return LT_SIGNAL;
-
     if( IsLayerEnabled( aLayer ) )
         return m_layers[aLayer].m_type;
 
-    return LT_SIGNAL;
+    if( aLayer >= User_1 && aLayer <= User_9 )
+        return LT_AUX;
+    else if( IsCopperLayer( aLayer ) )
+        return LT_SIGNAL;
+    else
+        return LT_UNDEFINED;
 }
 
 
 bool BOARD::SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType )
 {
-    if( !IsCopperLayer( aLayer ) )
-        return false;
-
     if( IsLayerEnabled( aLayer ) )
     {
         m_layers[aLayer].m_type = aLayerType;
@@ -634,22 +635,56 @@ const char* LAYER::ShowType( LAYER_T aType )
     case LT_POWER:  return "power";
     case LT_MIXED:  return "mixed";
     case LT_JUMPER: return "jumper";
+    case LT_AUX:    return "auxillary";
+    case LT_FRONT:  return "front";
+    case LT_BACK:   return "back";
     }
 }
 
 
 LAYER_T LAYER::ParseType( const char* aType )
 {
-    if( strcmp( aType, "signal" ) == 0 )
-        return LT_SIGNAL;
-    else if( strcmp( aType, "power" ) == 0 )
-        return LT_POWER;
-    else if( strcmp( aType, "mixed" ) == 0 )
-        return LT_MIXED;
-    else if( strcmp( aType, "jumper" ) == 0 )
-        return LT_JUMPER;
-    else
-        return LT_UNDEFINED;
+    if(      strcmp( aType, "signal" ) == 0 )    return LT_SIGNAL;
+    else if( strcmp( aType, "power" ) == 0 )     return LT_POWER;
+    else if( strcmp( aType, "mixed" ) == 0 )     return LT_MIXED;
+    else if( strcmp( aType, "jumper" ) == 0 )    return LT_JUMPER;
+    else if( strcmp( aType, "auxillary" ) == 0 ) return LT_AUX;
+    else if( strcmp( aType, "front" ) == 0 )     return LT_FRONT;
+    else if( strcmp( aType, "back" ) == 0 )      return LT_BACK;
+    else                                         return LT_UNDEFINED;
+}
+
+
+PCB_LAYER_ID BOARD::FlipLayer( PCB_LAYER_ID aLayer ) const
+{
+    LAYER_T layerType = m_layers[aLayer].m_type;
+
+    if( aLayer >= User_1 && aLayer <= User_9 && ( layerType == LT_FRONT || layerType == LT_BACK ) )
+    {
+        LAYER_T opposite = layerType == LT_FRONT ? LT_BACK : LT_FRONT;
+
+        // See if there is a similarly-named layer
+        wxString principalName = m_layers[aLayer].m_userName.AfterFirst( '.' );
+
+        for( int ii = User_1; ii <= User_9; ++ii )
+        {
+            if( ii == aLayer || m_layers[ii].m_type != opposite )
+                continue;
+
+            wxString candidate = m_layers[ii].m_userName.AfterFirst( '.' );
+
+            if( candidate == principalName )
+                return ToLAYER_ID( ii );
+        }
+
+        // If not, see if there are consecutive front/back pairs
+        if( layerType == LT_FRONT && aLayer < User_9 && m_layers[aLayer+1].m_type == opposite )
+            return ToLAYER_ID( aLayer+1 );
+        else if( layerType == LT_BACK && aLayer > User_1 && m_layers[aLayer-1].m_type == opposite )
+            return ToLAYER_ID( aLayer-1 );
+    }
+
+    return ::FlipLayer( aLayer, GetCopperLayerCount() );
 }
 
 

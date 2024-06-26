@@ -103,8 +103,6 @@ private:
     void showSelectedLayerCheckBoxes( LSET enableLayerMask );
     void showLayerTypes();
 
-    int getLayerTypeIndex( int layer );
-
     void OnCheckBox( wxCommandEvent& event ) override;
     void DenyChangeCheckBox( wxCommandEvent& event ) override;
     bool TransferDataToWindow() override;

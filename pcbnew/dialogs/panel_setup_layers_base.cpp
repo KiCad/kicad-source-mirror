@@ -542,7 +542,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	wxString m_In29ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In29ChoiceNChoices = sizeof( m_In29ChoiceChoices ) / sizeof( wxString );
 	m_In29Choice = new wxChoice( m_LayersListPanel, ID_IN29CHOICE, wxDefaultPosition, wxDefaultSize, m_In29ChoiceNChoices, m_In29ChoiceChoices, 0 );
-	m_In29Choice->SetSelection( 1 );
+	m_In29Choice->SetSelection( 0 );
 	m_In29Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
 	m_LayerListFlexGridSizer->Add( m_In29Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -556,7 +556,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	wxString m_In30ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In30ChoiceNChoices = sizeof( m_In30ChoiceChoices ) / sizeof( wxString );
 	m_In30Choice = new wxChoice( m_LayersListPanel, ID_IN30CHOICE, wxDefaultPosition, wxDefaultSize, m_In30ChoiceNChoices, m_In30ChoiceChoices, 0 );
-	m_In30Choice->SetSelection( 3 );
+	m_In30Choice->SetSelection( 0 );
 	m_In30Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
 	m_LayerListFlexGridSizer->Add( m_In30Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -574,7 +574,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	wxString m_BackChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_BackChoiceNChoices = sizeof( m_BackChoiceChoices ) / sizeof( wxString );
 	m_BackChoice = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_BackChoiceNChoices, m_BackChoiceChoices, 0 );
-	m_BackChoice->SetSelection( 3 );
+	m_BackChoice->SetSelection( 0 );
 	m_BackChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
 	m_LayerListFlexGridSizer->Add( m_BackChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -665,7 +665,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_MarginName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Margin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_MarginName, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_MarginStaticText = new wxStaticText( m_LayersListPanel, ID_ECO2CHOICE, _("Edge_Cuts setback"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MarginStaticText = new wxStaticText( m_LayersListPanel, ID_ECO2CHOICE, _("Board contour setback"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MarginStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_MarginStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -719,9 +719,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User1Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User1Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User1StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User1StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User1StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User1TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User1TypeNChoices = sizeof( m_User1TypeChoices ) / sizeof( wxString );
+	m_User1Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User1TypeNChoices, m_User1TypeChoices, 0 );
+	m_User1Type->SetSelection( 0 );
+	m_User1Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User1Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_User2CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -729,9 +733,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User2Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User2Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User2StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User2StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User2StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User2TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User2TypeNChoices = sizeof( m_User2TypeChoices ) / sizeof( wxString );
+	m_User2Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User2TypeNChoices, m_User2TypeChoices, 0 );
+	m_User2Type->SetSelection( 0 );
+	m_User2Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User2Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_User3CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -739,9 +747,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User3Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User3"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User3Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User3StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User3StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User3StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User3TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User3TypeNChoices = sizeof( m_User3TypeChoices ) / sizeof( wxString );
+	m_User3Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User3TypeNChoices, m_User3TypeChoices, 0 );
+	m_User3Type->SetSelection( 0 );
+	m_User3Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User3Type, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_User4CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -749,9 +761,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User4Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User4"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User4Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User4StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User4StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User4StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User4TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User4TypeNChoices = sizeof( m_User4TypeChoices ) / sizeof( wxString );
+	m_User4Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User4TypeNChoices, m_User4TypeChoices, 0 );
+	m_User4Type->SetSelection( 0 );
+	m_User4Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User4Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_User5CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -759,9 +775,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User5Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User5"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User5Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User5StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User5StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User5StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User5TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User5TypeNChoices = sizeof( m_User5TypeChoices ) / sizeof( wxString );
+	m_User5Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User5TypeNChoices, m_User5TypeChoices, 0 );
+	m_User5Type->SetSelection( 0 );
+	m_User5Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User5Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_User6CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -769,9 +789,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User6Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User6"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User6Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User6StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User6StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User6StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User6TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User6TypeNChoices = sizeof( m_User6TypeChoices ) / sizeof( wxString );
+	m_User6Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User6TypeNChoices, m_User6TypeChoices, 0 );
+	m_User6Type->SetSelection( 0 );
+	m_User6Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User6Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_User7CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -779,9 +803,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User7Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User7"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User7Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User7StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User7StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User7StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User7TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User7TypeNChoices = sizeof( m_User7TypeChoices ) / sizeof( wxString );
+	m_User7Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User7TypeNChoices, m_User7TypeChoices, 0 );
+	m_User7Type->SetSelection( 0 );
+	m_User7Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User7Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_User8CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -789,9 +817,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User8Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User8"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User8Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User8StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User8StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User8StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User8TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User8TypeNChoices = sizeof( m_User8TypeChoices ) / sizeof( wxString );
+	m_User8Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User8TypeNChoices, m_User8TypeChoices, 0 );
+	m_User8Type->SetSelection( 0 );
+	m_User8Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User8Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_User9CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -799,9 +831,13 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User9Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User9"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User9Name, 0, wxEXPAND|wxRIGHT, 5 );
 
-	m_User9StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_User9StaticText->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_User9StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxString m_User9TypeChoices[] = { _("Auxillary"), _(" Off-board, front"), _("Off-board, back") };
+	int m_User9TypeNChoices = sizeof( m_User9TypeChoices ) / sizeof( wxString );
+	m_User9Type = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_User9TypeNChoices, m_User9TypeChoices, 0 );
+	m_User9Type->SetSelection( 0 );
+	m_User9Type->SetToolTip( _("Auxillary layers do not flip with board side, while back and front layers do.") );
+
+	m_LayerListFlexGridSizer->Add( m_User9Type, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );

@@ -142,7 +142,7 @@ void PCB_GENERATOR::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     else
         MIRROR( m_origin.y, aCentre.y );
 
-    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 
     PCB_GROUP::Flip( aCentre, aFlipLeftRight );
 }

@@ -532,7 +532,7 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     flip( aCentre, aFlipLeftRight );
 
-    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
 
 

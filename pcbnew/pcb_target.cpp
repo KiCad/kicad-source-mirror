@@ -97,7 +97,7 @@ void PCB_TARGET::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     else
         m_pos.y = aCentre.y - ( m_pos.y - aCentre.y );
 
-    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
 
 

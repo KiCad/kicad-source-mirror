@@ -7288,7 +7288,7 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
-                      <property name="selection">1</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
@@ -7484,7 +7484,7 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
-                      <property name="selection">3</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
@@ -7680,7 +7680,7 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
-                      <property name="selection">3</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
@@ -9099,7 +9099,7 @@
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
                       <property name="id">ID_ECO2CHOICE</property>
-                      <property name="label">Edge_Cuts setback</property>
+                      <property name="label">Board contour setback</property>
                       <property name="markup">0</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
@@ -10033,9 +10033,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -10049,6 +10049,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10063,9 +10064,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -10073,7 +10072,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User1StaticText</property>
+                      <property name="name">m_User1Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -10081,16 +10080,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -10226,9 +10229,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -10242,6 +10245,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10256,9 +10260,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -10266,7 +10268,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User2StaticText</property>
+                      <property name="name">m_User2Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -10274,16 +10276,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -10419,9 +10425,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -10435,6 +10441,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10449,9 +10456,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -10459,7 +10464,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User3StaticText</property>
+                      <property name="name">m_User3Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -10467,16 +10472,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -10612,9 +10621,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -10628,6 +10637,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10642,9 +10652,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -10652,7 +10660,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User4StaticText</property>
+                      <property name="name">m_User4Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -10660,16 +10668,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -10805,9 +10817,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -10821,6 +10833,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10835,9 +10848,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -10845,7 +10856,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User5StaticText</property>
+                      <property name="name">m_User5Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -10853,16 +10864,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -10998,9 +11013,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -11014,6 +11029,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11028,9 +11044,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -11038,7 +11052,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User6StaticText</property>
+                      <property name="name">m_User6Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -11046,16 +11060,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -11191,9 +11209,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -11207,6 +11225,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11221,9 +11240,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -11231,7 +11248,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User7StaticText</property>
+                      <property name="name">m_User7Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -11239,16 +11256,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -11384,9 +11405,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -11400,6 +11421,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11414,9 +11436,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -11424,7 +11444,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User8StaticText</property>
+                      <property name="name">m_User8Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -11432,16 +11452,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -11577,9 +11601,9 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="true">
+                    <object class="wxChoice" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -11593,6 +11617,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
+                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11607,9 +11632,7 @@
                       <property name="font"></property>
                       <property name="gripper">0</property>
                       <property name="hidden">0</property>
-                      <property name="id">wxID_ANY</property>
-                      <property name="label">User defined layer</property>
-                      <property name="markup">0</property>
+                      <property name="id">ID_BACKCHOICE</property>
                       <property name="max_size"></property>
                       <property name="maximize_button">0</property>
                       <property name="maximum_size"></property>
@@ -11617,7 +11640,7 @@
                       <property name="minimize_button">0</property>
                       <property name="minimum_size"></property>
                       <property name="moveable">1</property>
-                      <property name="name">m_User9StaticText</property>
+                      <property name="name">m_User9Type</property>
                       <property name="pane_border">1</property>
                       <property name="pane_position"></property>
                       <property name="pane_size"></property>
@@ -11625,16 +11648,20 @@
                       <property name="pin_button">1</property>
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
+                      <property name="selection">0</property>
                       <property name="show">1</property>
                       <property name="size"></property>
                       <property name="style"></property>
-                      <property name="subclass">; ; forward_declare</property>
+                      <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip"></property>
+                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="validator_data_type"></property>
+                      <property name="validator_style">wxFILTER_NONE</property>
+                      <property name="validator_type">wxDefaultValidator</property>
+                      <property name="validator_variable"></property>
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <property name="wrap">-1</property>
                     </object>
                   </object>
                 </object>

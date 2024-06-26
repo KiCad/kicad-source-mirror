@@ -230,7 +230,7 @@ void PCAD_POLYGON::Flip()
 {
     PCAD_PCB_COMPONENT::Flip();
 
-    m_KiCadLayer = FlipLayer( m_KiCadLayer );
+    m_KiCadLayer = m_board->FlipLayer( m_KiCadLayer );
 }
 
 

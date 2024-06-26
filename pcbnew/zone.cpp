@@ -737,7 +737,7 @@ void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     for( auto& [oldLayer, shape] : fillsCopy )
     {
-        PCB_LAYER_ID newLayer = FlipLayer( oldLayer, GetBoard()->GetCopperLayerCount() );
+        PCB_LAYER_ID newLayer = GetBoard()->FlipLayer( oldLayer );
         SetFilledPolysList( newLayer, shape );
     }
 }

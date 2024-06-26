@@ -152,7 +152,10 @@ enum LAYER_T
     LT_SIGNAL,
     LT_POWER,
     LT_MIXED,
-    LT_JUMPER
+    LT_JUMPER,
+    LT_AUX,
+    LT_FRONT,
+    LT_BACK
 };
 
 
@@ -554,6 +557,8 @@ public:
      */
     int  GetCopperLayerCount() const;
     void SetCopperLayerCount( int aCount );
+
+    PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayer ) const;
 
     int LayerDepth( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer ) const;
 

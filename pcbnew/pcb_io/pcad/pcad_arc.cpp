@@ -168,7 +168,7 @@ void PCAD_ARC::Flip()
     m_StartX = -m_StartX;
     m_Angle = -m_Angle;
 
-    m_KiCadLayer = FlipLayer( m_KiCadLayer );
+    m_KiCadLayer = m_board->FlipLayer( m_KiCadLayer );
 }
 
 
