@@ -222,6 +222,21 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     }
                 }
             }
+            else if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
+            {
+                for( SCH_FIELD& field : label->GetFields() )
+                {
+                    if( unresolved( field.GetShownText( &sheet, true ) ) )
+                    {
+                        auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                        ercItem->SetItems( &field );
+                        ercItem->SetSheetSpecificPath( sheet );
+
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
+                        screen->Append( marker );
+                    }
+                }
+            }
             else if( item->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* subSheet = static_cast<SCH_SHEET*>( item );
