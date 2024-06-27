@@ -114,6 +114,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_padOpacity      = 1.0;
     m_zoneOpacity     = 1.0;
     m_imageOpacity    = 1.0;
+    m_filledShapeOpacity    = 1.0;
 
     m_ForcePadSketchModeOn = false;
 
@@ -189,6 +190,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     m_padOpacity      = aOptions.m_PadOpacity;
     m_zoneOpacity     = aOptions.m_ZoneOpacity;
     m_imageOpacity    = aOptions.m_ImageOpacity;
+    m_filledShapeOpacity = aOptions.m_FilledShapeOpacity;
 }
 
 
@@ -481,6 +483,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         color.a *= m_zoneOpacity;
     else if( aItem->Type() == PCB_REFERENCE_IMAGE_T )
         color.a *= m_imageOpacity;
+    else if( aItem->Type() == PCB_SHAPE_T && static_cast<const PCB_SHAPE*>( aItem )->IsFilled() )
+        color.a *= m_filledShapeOpacity;
     else if( aItem->Type() == PCB_SHAPE_T && aItem->IsOnCopperLayer() )
         color.a *= m_trackOpacity;
 

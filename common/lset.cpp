@@ -1085,6 +1085,7 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_DRAW_BITMAPS,
         LAYER_PADS,
         LAYER_ZONES,
+        LAYER_SHAPES,
         LAYER_LOCKED_ITEM_SHADOW,
         LAYER_CONFLICTS_SHADOW
     };

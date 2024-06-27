@@ -2974,6 +2974,11 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         KI_FALLTHROUGH;
 
     case PCB_SHAPE_T:
+        if( !board()->IsElementVisible( LAYER_SHAPES ) || ( options.m_FilledShapeOpacity == 0.0 ) )
+            return false;
+
+        KI_FALLTHROUGH;
+
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_TABLECELL_T:

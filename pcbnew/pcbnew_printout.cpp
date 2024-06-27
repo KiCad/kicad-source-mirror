@@ -181,6 +181,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_VIA_BBLIND );
         setVisibility( LAYER_VIA_THROUGH );
         setVisibility( LAYER_ZONES );
+        setVisibility( LAYER_SHAPES );
 
         setVisibility( LAYER_DRC_WARNING );
         setVisibility( LAYER_DRC_ERROR );
@@ -218,7 +219,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                     LAYER_FP_TEXT, LAYER_FP_VALUES, LAYER_FP_REFERENCES,
                     LAYER_FOOTPRINTS_FR, LAYER_FOOTPRINTS_BK,
                     LAYER_TRACKS, LAYER_VIAS,
-                    LAYER_ZONES,
+                    LAYER_ZONES, LAYER_SHAPES,
                     LAYER_PADS, LAYER_PADS_SMD_FR, LAYER_PADS_SMD_BK, LAYER_PADS_TH
                 };
 

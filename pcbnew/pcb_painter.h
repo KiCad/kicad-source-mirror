@@ -164,6 +164,7 @@ protected:
     double m_padOpacity;       ///< Opacity override for SMD pads and PTHs
     double m_zoneOpacity;      ///< Opacity override for filled zones
     double m_imageOpacity;     ///< Opacity override for user images
+    double m_filledShapeOpacity;     ///< Opacity override for graphic shapes
 };
 
 

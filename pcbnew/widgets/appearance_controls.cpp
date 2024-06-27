@@ -325,11 +325,12 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
 
 #define RR  APPEARANCE_CONTROLS::APPEARANCE_SETTING   // Render Row abbreviation to reduce source width
 
-    //     text                         id                        tooltip                   opacity slider
+    //     text                         id                        tooltip                   opacity slider   visibility checkbox
     RR( _HKI( "Tracks" ),             LAYER_TRACKS,             _HKI( "Show tracks" ),         true ),
     RR( _HKI( "Vias" ),               LAYER_VIAS,               _HKI( "Show all vias" ),       true ),
     RR( _HKI( "Pads" ),               LAYER_PADS,               _HKI( "Show all pads" ),       true ),
     RR( _HKI( "Zones" ),              LAYER_ZONES,              _HKI( "Show copper zones" ),   true ),
+    RR( _HKI( "Filled Shapes" ),      LAYER_SHAPES,             _HKI( "Opacity of filled shapes" ),  true,         false ),
     RR( _HKI( "Images" ),             LAYER_DRAW_BITMAPS,       _HKI( "Show user images" ),    true ),
     RR(),
     RR( _HKI( "Footprints Front" ),   LAYER_FOOTPRINTS_FR,      _HKI( "Show footprints that are on board's front" ) ),
@@ -359,6 +360,7 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_VIAS,
             LAYER_PADS,
             LAYER_ZONES,
+            LAYER_SHAPES,
             LAYER_PADS_TH,
             LAYER_FP_VALUES,
             LAYER_FP_REFERENCES,
@@ -2149,6 +2151,9 @@ void APPEARANCE_CONTROLS::rebuildObjects()
     int             swatchWidth = m_windowObjects->ConvertDialogToPixels( wxSize( 8, 0 ) ).x;
     int             labelWidth = 0;
 
+    int btnWidth =
+            KiBitmapBundle( BITMAPS::visibility ).GetPreferredLogicalSizeFor( m_windowObjects ).x;
+
     m_objectSettings.clear();
     m_objectsOuterSizer->Clear( true );
     m_objectsOuterSizer->AddSpacer( 5 );
@@ -2181,28 +2186,33 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 }
                 else
                 {
-                    sizer->AddSpacer( swatchWidth  );
+                    sizer->AddSpacer( swatchWidth );
                 }
 
-                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE(
-                        m_windowObjects, layer, KiBitmapBundle( BITMAPS::visibility ),
-                        KiBitmapBundle( BITMAPS::visibility_off ), aSetting->visible );
-
+                BITMAP_TOGGLE* btn_visible = nullptr;
                 wxString tip;
-                tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
-                btn_visible->SetToolTip( tip );
 
-                aSetting->ctl_visibility = btn_visible;
+                if( aSetting->can_control_visibility )
+                {
+                    btn_visible = new BITMAP_TOGGLE(
+                            m_windowObjects, layer, KiBitmapBundle( BITMAPS::visibility ),
+                            KiBitmapBundle( BITMAPS::visibility_off ), aSetting->visible );
+
+                    tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
+                    btn_visible->SetToolTip( tip );
+
+                    aSetting->ctl_visibility = btn_visible;
+
+                    btn_visible->Bind( TOGGLE_CHANGED,
+                            [&]( wxCommandEvent& aEvent )
+                            {
+                                int id = static_cast<wxWindow*>( aEvent.GetEventObject() )->GetId();
+                                bool isVisible = aEvent.GetInt();
+                                onObjectVisibilityChanged( ToGalLayer( id ), isVisible, true );
+                            } );
+                }
 
                 sizer->AddSpacer( 5 );
-
-                btn_visible->Bind( TOGGLE_CHANGED,
-                        [&]( wxCommandEvent& aEvent )
-                        {
-                            int id = static_cast<wxWindow*>( aEvent.GetEventObject() )->GetId();
-                            bool isVisible = aEvent.GetInt();
-                            onObjectVisibilityChanged( ToGalLayer( id ), isVisible, true );
-                        } );
 
                 wxStaticText* label = new wxStaticText( m_windowObjects, layer, aSetting->label );
                 label->Wrap( -1 );
@@ -2212,11 +2222,19 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 {
                     label->SetMinSize( wxSize( labelWidth, -1 ) );
 #ifdef __WXMAC__
-                    sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 10 );
+                    if( btn_visible )
+                        sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 10 );
+                    else
+                        sizer->AddSpacer( btnWidth );
+
                     sizer->AddSpacer( 5 );
                     sizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM, 10 );
 #else
-                    sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL, 0 );
+                    if( btn_visible )
+                        sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL, 0 );
+                    else
+                        sizer->AddSpacer( btnWidth );
+
                     sizer->AddSpacer( 5 );
                     sizer->Add( label, 0, wxALIGN_CENTER_VERTICAL, 0 );
 #endif
@@ -2250,7 +2268,11 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 }
                 else
                 {
-                    sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL, 0 );
+                    if( btn_visible )
+                        sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL, 0 );
+                    else
+                        sizer->AddSpacer( btnWidth );
+
                     sizer->AddSpacer( 5 );
                     sizer->Add( label, 0, wxALIGN_CENTER_VERTICAL, 0 );
                 }
@@ -2325,13 +2347,15 @@ void APPEARANCE_CONTROLS::syncObjectSettings()
               && m_objectSettingsMap.count( LAYER_VIAS )
               && m_objectSettingsMap.count( LAYER_PADS )
               && m_objectSettingsMap.count( LAYER_ZONES )
-              && m_objectSettingsMap.count( LAYER_DRAW_BITMAPS ) );
+              && m_objectSettingsMap.count( LAYER_DRAW_BITMAPS )
+              && m_objectSettingsMap.count( LAYER_SHAPES ) );
 
     m_objectSettingsMap[LAYER_TRACKS]->ctl_opacity->SetValue( opts.m_TrackOpacity * 100 );
     m_objectSettingsMap[LAYER_VIAS]->ctl_opacity->SetValue( opts.m_ViaOpacity * 100 );
     m_objectSettingsMap[LAYER_PADS]->ctl_opacity->SetValue( opts.m_PadOpacity * 100 );
     m_objectSettingsMap[LAYER_ZONES]->ctl_opacity->SetValue( opts.m_ZoneOpacity * 100 );
     m_objectSettingsMap[LAYER_DRAW_BITMAPS]->ctl_opacity->SetValue( opts.m_ImageOpacity * 100 );
+    m_objectSettingsMap[LAYER_SHAPES]->ctl_opacity->SetValue( opts.m_FilledShapeOpacity * 100 );
 }
 
 
@@ -3039,6 +3063,7 @@ void APPEARANCE_CONTROLS::onObjectOpacitySlider( int aLayer, float aOpacity )
     case static_cast<int>( LAYER_PADS ):          options.m_PadOpacity      = aOpacity; break;
     case static_cast<int>( LAYER_ZONES ):         options.m_ZoneOpacity     = aOpacity; break;
     case static_cast<int>( LAYER_DRAW_BITMAPS ):  options.m_ImageOpacity    = aOpacity; break;
+    case static_cast<int>( LAYER_SHAPES ):        options.m_FilledShapeOpacity    = aOpacity; break;
     default: return;
     }
 

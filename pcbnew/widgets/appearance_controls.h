@@ -153,6 +153,7 @@ public:
         wxString tooltip;
         bool     visible;
         bool     can_control_opacity;
+        bool     can_control_visibility;
         bool     spacer;
 
         wxPanel*        ctl_panel;
@@ -164,12 +165,14 @@ public:
 
         APPEARANCE_SETTING( const wxString& aLabel, int aId,
                             const wxString& aTooltip = wxEmptyString,
-                            bool aCanControlOpacity = false ) :
+                            bool aCanControlOpacity = false,
+                            bool aCanControlVisibility = true ) :
                 id( aId ),
                 label( aLabel ),
                 tooltip( aTooltip ),
                 visible( true ),
                 can_control_opacity( aCanControlOpacity ),
+                can_control_visibility( aCanControlVisibility ),
                 spacer( false ),
                 ctl_panel( nullptr ),
                 ctl_indicator( nullptr ),
@@ -184,6 +187,7 @@ public:
                 id( -1 ),
                 visible( false ),
                 can_control_opacity( false ),
+                can_control_visibility( true ),
                 spacer( true ),
                 ctl_panel( nullptr ),
                 ctl_indicator( nullptr ),

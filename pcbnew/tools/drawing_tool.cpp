@@ -1811,6 +1811,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    // Turn shapes on if they are off, so that the created object will be visible after completion
+    m_frame->SetObjectVisible( LAYER_SHAPES );
+
     if( !m_view->IsLayerVisible( layer ) )
     {
         m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
@@ -2069,6 +2072,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
         m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
     }
+
+    // Turn shapes on if they are off, so that the created object will be visible after completion
+    m_frame->SetObjectVisible( LAYER_SHAPES );
 
     // geometric construction manager
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointMgr;
@@ -2462,6 +2468,9 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
     }
+
+    // Turn shapes on if they are off, so that the created object will be visible after completion
+    m_frame->SetObjectVisible( LAYER_SHAPES );
 
     // Arc geometric construction manager
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
