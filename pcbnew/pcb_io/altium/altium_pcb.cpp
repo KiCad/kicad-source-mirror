@@ -2506,6 +2506,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         LSET padLayers;
         padLayers.set( aLayer );
 
+        pad->SetKeepTopBottom( false );
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetShape( PAD_SHAPE::CUSTOM );
         pad->SetThermalSpokeAngle( ANGLE_90 );
@@ -4312,11 +4313,23 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         LSET padLayers;
         padLayers.set( aLayer );
 
+        pad->SetKeepTopBottom( false );
         pad->SetAttribute( PAD_ATTRIB::SMD );
-        if( aElem.rotation == 0. )
+        EDA_ANGLE rotation( aElem.rotation, DEGREES_T );
+
+        // Handle rotation multiples of 90 degrees
+        if( rotation.IsCardinal() )
         {
             pad->SetShape( PAD_SHAPE::RECTANGLE );
-            pad->SetSize( { aElem.pos2.x - aElem.pos1.x, aElem.pos2.y - aElem.pos1.y } );
+
+            int width = std::abs( aElem.pos2.x - aElem.pos1.x );
+            int height = std::abs( aElem.pos2.y - aElem.pos1.y );
+
+            // Swap width and height for 90 or 270 degree rotations
+            if( rotation.IsCardinal90() )
+                std::swap( width, height );
+
+            pad->SetSize( { width, height } );
             pad->SetPosition( ( aElem.pos1 + aElem.pos2 ) / 2 );
         }
         else
@@ -4364,7 +4377,6 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 
         if( aElem.rotation != 0. )
         {
-            // TODO: Do we need SHAPE_T::POLY for non 90° rotations?
             VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2,
                              aElem.pos1.y / 2 + aElem.pos2.y / 2 );
             fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
