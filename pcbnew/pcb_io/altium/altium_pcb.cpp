@@ -38,6 +38,7 @@
 #include <core/profile.h>
 #include <pad_shapes.h>
 #include <string_utils.h>
+#include <tools/pad_tool.h>
 #include <zone.h>
 
 #include <board_stackup_manager/stackup_predefined_prms.h>
@@ -806,6 +807,11 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
 
     // Auto-position reference and value
     footprint->AutoPositionFields();
+
+    for( PAD* pad : footprint->Pads() )
+    {
+        pad->Recombine( false, ARC_HIGH_DEF );
+    }
 
     if( parser.HasParsingError() )
     {
@@ -2468,71 +2474,14 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         polySet.AddHole( hole_linechain );
     }
 
-    if( aLayer == F_Cu || aLayer == B_Cu )
-    {
-        PAD* pad = new PAD( aFootprint );
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::POLY );
 
-        LSET padLayers;
-        padLayers.set( aLayer );
+    shape->SetPolyShape( polySet );
+    shape->SetFilled( true );
+    shape->SetLayer( aLayer );
+    shape->SetStroke( STROKE_PARAMS( 0 ) );
 
-        pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
-        pad->SetAttribute( PAD_ATTRIB::SMD );
-        pad->SetShape( PAD_SHAPE::CUSTOM );
-        pad->SetThermalSpokeAngle( ANGLE_90 );
-
-        int      anchorSize = 1;
-        VECTOR2I anchorPos = linechain.CPoint( 0 );
-
-        pad->SetShape( PAD_SHAPE::CUSTOM );
-        pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-        pad->SetSize( { anchorSize, anchorSize } );
-        pad->SetPosition( anchorPos );
-
-        SHAPE_POLY_SET shapePolys = polySet;
-        shapePolys.Move( -anchorPos );
-        pad->AddPrimitivePoly( shapePolys, 0, true );
-
-        auto& map = m_extendedPrimitiveInformationMaps[ALTIUM_RECORD::REGION];
-        auto  it = map.find( aPrimitiveIndex );
-
-        if( it != map.end() )
-        {
-            const AEXTENDED_PRIMITIVE_INFORMATION& info = it->second;
-
-            if( info.pastemaskexpansionmode == ALTIUM_MODE::MANUAL )
-            {
-                pad->SetLocalSolderPasteMargin(
-                        info.pastemaskexpansionmanual ? info.pastemaskexpansionmanual : 1 );
-            }
-
-            if( info.soldermaskexpansionmode == ALTIUM_MODE::MANUAL )
-            {
-                pad->SetLocalSolderMaskMargin(
-                        info.soldermaskexpansionmanual ? info.soldermaskexpansionmanual : 1 );
-            }
-
-            if( info.pastemaskexpansionmode != ALTIUM_MODE::NONE )
-                padLayers.set( aLayer == F_Cu ? F_Paste : B_Paste );
-
-            if( info.soldermaskexpansionmode != ALTIUM_MODE::NONE )
-                padLayers.set( aLayer == F_Cu ? F_Mask : B_Mask );
-        }
-
-        pad->SetLayerSet( padLayers );
-
-        aFootprint->Add( pad, ADD_MODE::APPEND );
-    }
-    else
-    {
-        PCB_SHAPE* shape = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
-
-        shape->SetPolyShape( polySet );
-        shape->SetFilled( true );
-        shape->SetLayer( aLayer );
-        shape->SetStroke( STROKE_PARAMS( 0 ) );
-
-        aFootprint->Add( shape, ADD_MODE::APPEND );
-    }
+    aFootprint->Add( shape.release(), ADD_MODE::APPEND );
 }
 
 

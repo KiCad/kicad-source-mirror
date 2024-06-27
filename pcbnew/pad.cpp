@@ -1726,6 +1726,142 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 }
 
 
+std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
+{
+    FOOTPRINT* footprint = GetParentFootprint();
+
+    for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        item->ClearFlags( SKIP_STRUCT );
+
+    auto findNext =
+            [&]( PCB_LAYER_ID aLayer ) -> PCB_SHAPE*
+            {
+                SHAPE_POLY_SET padPoly;
+                TransformShapeToPolygon( padPoly, aLayer, 0, maxError, ERROR_INSIDE );
+
+                for( BOARD_ITEM* item : footprint->GraphicalItems() )
+                {
+                    PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+
+                    if( !shape || ( shape->GetFlags() & SKIP_STRUCT ) )
+                        continue;
+
+                    if( shape->GetLayer() != aLayer )
+                        continue;
+
+                    if( shape->IsProxyItem() )    // Pad number (and net name) box
+                        return shape;
+
+                    SHAPE_POLY_SET drawPoly;
+                    shape->TransformShapeToPolygon( drawPoly, aLayer, 0, maxError, ERROR_INSIDE );
+                    drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
+
+                    if( !drawPoly.IsEmpty() )
+                        return shape;
+                }
+
+                return nullptr;
+            };
+
+    auto findMatching =
+            [&]( PCB_SHAPE* aShape ) -> std::vector<PCB_SHAPE*>
+            {
+                std::vector<PCB_SHAPE*> matching;
+
+                for( BOARD_ITEM* item : footprint->GraphicalItems() )
+                {
+                    PCB_SHAPE* other = dynamic_cast<PCB_SHAPE*>( item );
+
+                    if( !other || ( other->GetFlags() & SKIP_STRUCT ) )
+                        continue;
+
+                    if( GetLayerSet().test( other->GetLayer() )
+                            && aShape->Compare( other ) == 0 )
+                    {
+                        matching.push_back( other );
+                    }
+                }
+
+                return matching;
+            };
+
+    PCB_LAYER_ID            layer;
+    std::vector<PCB_SHAPE*> mergedShapes;
+
+    if( IsOnLayer( F_Cu ) )
+        layer = F_Cu;
+    else if( IsOnLayer( B_Cu ) )
+        layer = B_Cu;
+    else
+        layer = *GetLayerSet().UIOrder();
+
+    // If there are intersecting items to combine, we need to first make sure the pad is a
+    // custom-shape pad.
+    if( !aIsDryRun && findNext( layer ) && GetShape() != PAD_SHAPE::CUSTOM )
+    {
+        if( GetShape() == PAD_SHAPE::CIRCLE || GetShape() == PAD_SHAPE::RECTANGLE )
+        {
+            // Use the existing pad as an anchor
+            SetAnchorPadShape( GetShape() );
+            SetShape( PAD_SHAPE::CUSTOM );
+        }
+        else
+        {
+            // Create a new circular anchor and convert existing pad to a polygon primitive
+            SHAPE_POLY_SET existingOutline;
+            TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
+
+            int minExtent = std::min( GetSize().x, GetSize().y );
+            SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+            SetSize( VECTOR2I( minExtent, minExtent ) );
+            SetShape( PAD_SHAPE::CUSTOM );
+
+            PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
+            shape->SetFilled( true );
+            shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+            shape->SetPolyShape( existingOutline );
+            shape->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
+            shape->Move( - ShapePos() );
+            AddPrimitive( shape );
+        }
+    }
+
+    while( PCB_SHAPE* fpShape = findNext( layer ) )
+    {
+        fpShape->SetFlags( SKIP_STRUCT );
+
+        mergedShapes.push_back( fpShape );
+
+        if( !aIsDryRun )
+        {
+            PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate() );
+
+            primitive->SetParent( nullptr );
+            primitive->Move( - ShapePos() );
+            primitive->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
+
+            AddPrimitive( primitive );
+        }
+
+        // See if there are other shapes that match and mark them for delete.  (KiCad won't
+        // produce these, but old footprints from other vendors have them.)
+        for( PCB_SHAPE* other : findMatching( fpShape ) )
+        {
+            other->SetFlags( SKIP_STRUCT );
+            mergedShapes.push_back( other );
+        }
+    }
+
+    for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        item->ClearFlags( SKIP_STRUCT );
+
+    if( !aIsDryRun )
+        ClearFlags( ENTERED );
+
+    return mergedShapes;
+}
+
+
 void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
                     const std::function<void( int aErrorCode,
                                               const wxString& aMsg )>& aErrorHandler ) const
