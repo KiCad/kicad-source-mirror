@@ -765,6 +765,9 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         if( pcb_layer == F_Mask || pcb_layer == B_Mask )
             continue;
 
+        if( !aPad->FlashLayer( pcb_layer ) )
+            continue;
+
         double Zpos, thickness;
         getLayerZPlacement( pcb_layer, Zpos, thickness );
 
