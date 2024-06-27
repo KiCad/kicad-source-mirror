@@ -803,7 +803,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
-            if( via->IsOnLayer( layer ) )    // via holes can be not through holes
+            if( via->GetLayerSet().Contains( layer ) )   // via holes can be not through holes
                 aPlotter->Circle( via->GetPosition(), via->GetDrillValue(), FILL_T::NO_FILL );
         }
     }
