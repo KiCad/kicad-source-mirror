@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 CERN
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -239,6 +239,7 @@ public:
             m_preselect( aPreselect ),
             m_symbolNetlist( aSymbolNetlist.ToStdString() )
     {
+        m_buttonFpChooserLock = false;
         SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_library ) );
 
         // win32 fix, avoids drawing the "native dropdown caret"
@@ -253,16 +254,20 @@ protected:
 
     void OnButtonClick() override
     {
+        if( m_buttonFpChooserLock ) // The button to show the FP chooser is clicked, but
+                                    // a previous click is currently in progress.
+            return;
+
+        // Disable the button until we have finished processing it.  Normally this is not an issue
+        // but if the footprint chooser is loading for the first time, it can be slow enough that
+        // multiple clicks will cause multiple instances of the footprint loader process to start
+        m_buttonFpChooserLock = true;
+
         // pick a footprint using the footprint picker.
         wxString fpid = GetValue();
 
         if( fpid.IsEmpty() )
             fpid = m_preselect;
-
-        // Disable the button until we have finished processing it.  Normally this is not an issue
-        // but if the footprint chooser is loading for the first time, it can be slow enough that
-        // multiple clicks will cause multiple instances of the footprint loader process to start
-        Disable();
 
         if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
         {
@@ -278,13 +283,16 @@ protected:
             frame->Destroy();
         }
 
-        Enable();
+        m_buttonFpChooserLock = false;
     }
 
 protected:
     DIALOG_SHIM* m_dlg;
     wxString     m_preselect;
-
+    // Lock flag to lock the button to show the FP chooser
+    // true when the button is busy, waiting all footprints loaded to
+    // avoid running more than once the FP chooser
+    bool         m_buttonFpChooserLock;
     /*
      * Symbol netlist format:
      *   pinNumber pinName <tab> pinNumber pinName...
