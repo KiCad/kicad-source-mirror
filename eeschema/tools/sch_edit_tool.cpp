@@ -101,10 +101,14 @@ private:
 
         for( int ii = 0; ii < symbol->GetLibSymbolRef()->GetUnitCount(); ii++ )
         {
-            wxString num_unit;
-            num_unit.Printf( _( "Unit %s" ), symbol->SubReference( ii + 1, false ) );
+            wxString unit_text;
 
-            wxMenuItem* item = Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, num_unit, wxEmptyString,
+            if( symbol->GetLibSymbolRef()->HasUnitDisplayName( ii + 1 ) )
+                unit_text = symbol->GetLibSymbolRef()->GetUnitDisplayName( ii + 1 );
+            else
+                unit_text.Printf( _( "Unit %s" ), symbol->SubReference( ii + 1, false ) );
+
+            wxMenuItem* item = Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, unit_text, wxEmptyString,
                                        wxITEM_CHECK );
 
             if( unit == ii + 1 )
