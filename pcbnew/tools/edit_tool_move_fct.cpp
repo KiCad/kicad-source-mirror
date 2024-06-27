@@ -282,14 +282,14 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
     bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );
 
-    PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-    PCBNEW_SETTINGS*      cfg = editFrame->GetPcbNewSettings();
-    BOARD*                board = editFrame->GetBoard();
-    KIGFX::VIEW_CONTROLS* controls  = getViewControls();
-    VECTOR2I              originalCursorPos = controls->GetCursorPosition();
-    STATUS_TEXT_POPUP     statusPopup( frame() );
-    wxString              status;
-    size_t                itemIdx = 0;
+    PCB_BASE_EDIT_FRAME*               editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    PCBNEW_SETTINGS*                   cfg = editFrame->GetPcbNewSettings();
+    BOARD*                             board = editFrame->GetBoard();
+    KIGFX::VIEW_CONTROLS*              controls = getViewControls();
+    VECTOR2I                           originalCursorPos = controls->GetCursorPosition();
+    std::unique_ptr<STATUS_TEXT_POPUP> statusPopup;
+    wxString                           status;
+    size_t                             itemIdx = 0;
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection)
@@ -343,7 +343,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     msg = item->GetTypeDesc().Lower();
                 }
 
-                statusPopup.SetText( wxString::Format( popuptext, msg, ii, count ) );
+                if( !statusPopup )
+                    statusPopup = std::make_unique<STATUS_TEXT_POPUP>( frame() );
+
+                statusPopup->SetText( wxString::Format( popuptext, msg, ii, count ) );
             };
 
     std::vector<BOARD_ITEM*> sel_items;         // All the items operated on by the move below
@@ -393,9 +396,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
 
         updateStatusPopup( orig_items[ itemIdx ], itemIdx + 1, orig_items.size() );
-        statusPopup.Popup();
-        statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
-        canvas()->SetStatusPopup( statusPopup.GetPanel() );
+        statusPopup->Popup();
+        statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+        canvas()->SetStatusPopup( statusPopup->GetPanel() );
 
         m_selectionTool->ClearSelection();
         m_selectionTool->AddItemToSel( orig_items[ itemIdx ] );
@@ -662,7 +665,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             }
 
-            statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+            if( statusPopup )
+                statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
 
             if( enableLocalRatsnest )
                 m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, movement );
