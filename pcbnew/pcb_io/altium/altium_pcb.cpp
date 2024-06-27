@@ -805,13 +805,38 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
         }
     }
 
+
+    // Loop over this multiple times to catch pads that are jumpered to each other by multiple shapes
+    for( bool changes = true; changes; )
+    {
+        changes = false;
+
+        alg::for_all_pairs( footprint->Pads().begin(), footprint->Pads().end(),
+            [&changes]( PAD* aPad1, PAD* aPad2 )
+            {
+                if( !( aPad1->GetNumber().IsEmpty() ^ aPad2->GetNumber().IsEmpty() ) )
+                    return;
+
+                for( PCB_LAYER_ID layer : aPad1->GetLayerSet().Seq() )
+                {
+                    std::shared_ptr<SHAPE> shape1 = aPad1->GetEffectiveShape( layer );
+                    std::shared_ptr<SHAPE> shape2 = aPad2->GetEffectiveShape( layer );
+
+                    if( shape1->Collide( shape2.get() ) )
+                    {
+                        if( aPad1->GetNumber().IsEmpty() )
+                            aPad1->SetNumber( aPad2->GetNumber() );
+                        else
+                            aPad2->SetNumber( aPad1->GetNumber() );
+
+                        changes = true;
+                    }
+                }
+            } );
+    }
+
     // Auto-position reference and value
     footprint->AutoPositionFields();
-
-    for( PAD* pad : footprint->Pads() )
-    {
-        pad->Recombine( false, ARC_HIGH_DEF );
-    }
 
     if( parser.HasParsingError() )
     {
@@ -2474,14 +2499,70 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         polySet.AddHole( hole_linechain );
     }
 
-    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::POLY );
+    if( aLayer == F_Cu || aLayer == B_Cu )
+    {
+        std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
 
-    shape->SetPolyShape( polySet );
-    shape->SetFilled( true );
-    shape->SetLayer( aLayer );
-    shape->SetStroke( STROKE_PARAMS( 0 ) );
+        LSET padLayers;
+        padLayers.set( aLayer );
 
-    aFootprint->Add( shape.release(), ADD_MODE::APPEND );
+        pad->SetAttribute( PAD_ATTRIB::SMD );
+        pad->SetShape( PAD_SHAPE::CUSTOM );
+        pad->SetThermalSpokeAngle( ANGLE_90 );
+
+        int      anchorSize = 1;
+        VECTOR2I anchorPos = linechain.CPoint( 0 );
+
+        pad->SetShape( PAD_SHAPE::CUSTOM );
+        pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+        pad->SetSize( { anchorSize, anchorSize } );
+        pad->SetPosition( anchorPos );
+
+        SHAPE_POLY_SET shapePolys = polySet;
+        shapePolys.Move( -anchorPos );
+        pad->AddPrimitivePoly( shapePolys, 0, true );
+
+        auto& map = m_extendedPrimitiveInformationMaps[ALTIUM_RECORD::REGION];
+        auto  it = map.find( aPrimitiveIndex );
+
+        if( it != map.end() )
+        {
+            const AEXTENDED_PRIMITIVE_INFORMATION& info = it->second;
+
+            if( info.pastemaskexpansionmode == ALTIUM_MODE::MANUAL )
+            {
+                pad->SetLocalSolderPasteMargin(
+                        info.pastemaskexpansionmanual ? info.pastemaskexpansionmanual : 1 );
+            }
+
+            if( info.soldermaskexpansionmode == ALTIUM_MODE::MANUAL )
+            {
+                pad->SetLocalSolderMaskMargin(
+                        info.soldermaskexpansionmanual ? info.soldermaskexpansionmanual : 1 );
+            }
+
+            if( info.pastemaskexpansionmode != ALTIUM_MODE::NONE )
+                padLayers.set( aLayer == F_Cu ? F_Paste : B_Paste );
+
+            if( info.soldermaskexpansionmode != ALTIUM_MODE::NONE )
+                padLayers.set( aLayer == F_Cu ? F_Mask : B_Mask );
+        }
+
+        pad->SetLayerSet( padLayers );
+
+        aFootprint->Add( pad.release(), ADD_MODE::APPEND );
+    }
+    else
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::POLY );
+
+        shape->SetPolyShape( polySet );
+        shape->SetFilled( true );
+        shape->SetLayer( aLayer );
+        shape->SetStroke( STROKE_PARAMS( 0 ) );
+
+        aFootprint->Add( shape.release(), ADD_MODE::APPEND );
+    }
 }
 
 
@@ -4224,24 +4305,73 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER
 void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                                       PCB_LAYER_ID aLayer )
 {
-    PCB_SHAPE* fill = new PCB_SHAPE( aFootprint, SHAPE_T::RECTANGLE );
-
-    fill->SetFilled( true );
-    fill->SetLayer( aLayer );
-    fill->SetStroke( STROKE_PARAMS( 0 ) );
-
-    fill->SetStart( aElem.pos1 );
-    fill->SetEnd( aElem.pos2 );
-
-    if( aElem.rotation != 0. )
+    if( aLayer == F_Cu || aLayer == B_Cu )
     {
-        // TODO: Do we need SHAPE_T::POLY for non 90° rotations?
-        VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2,
-                         aElem.pos1.y / 2 + aElem.pos2.y / 2 );
-        fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
-    }
+        std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
 
-    aFootprint->Add( fill, ADD_MODE::APPEND );
+        LSET padLayers;
+        padLayers.set( aLayer );
+
+        pad->SetAttribute( PAD_ATTRIB::SMD );
+        if( aElem.rotation == 0. )
+        {
+            pad->SetShape( PAD_SHAPE::RECTANGLE );
+            pad->SetSize( { aElem.pos2.x - aElem.pos1.x, aElem.pos2.y - aElem.pos1.y } );
+            pad->SetPosition( ( aElem.pos1 + aElem.pos2 ) / 2 );
+        }
+        else
+        {
+            pad->SetShape( PAD_SHAPE::CUSTOM );
+
+            int      anchorSize = std::min( std::abs( aElem.pos2.x - aElem.pos1.x ),
+                                            std::abs( aElem.pos2.y - aElem.pos1.y ) );
+            VECTOR2I anchorPos = aElem.pos1;
+
+            pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+            pad->SetSize( { anchorSize, anchorSize } );
+            pad->SetPosition( anchorPos );
+
+            SHAPE_POLY_SET shapePolys;
+            shapePolys.NewOutline();
+            shapePolys.Append( aElem.pos1.x - anchorPos.x, aElem.pos1.y - anchorPos.y );
+            shapePolys.Append( aElem.pos2.x - anchorPos.x, aElem.pos1.y - anchorPos.y );
+            shapePolys.Append( aElem.pos2.x - anchorPos.x, aElem.pos2.y - anchorPos.y );
+            shapePolys.Append( aElem.pos1.x - anchorPos.x, aElem.pos2.y - anchorPos.y );
+            shapePolys.Outline( 0 ).SetClosed( true );
+
+            VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2 - anchorPos.x,
+                             ( aElem.pos1.y + aElem.pos2.y ) / 2 - anchorPos.y );
+            shapePolys.Rotate( EDA_ANGLE( aElem.rotation, DEGREES_T ), center );
+            pad->AddPrimitivePoly( shapePolys, 0, true );
+        }
+
+        pad->SetThermalSpokeAngle( ANGLE_90 );
+        pad->SetLayerSet( padLayers );
+
+        aFootprint->Add( pad.release(), ADD_MODE::APPEND );
+    }
+    else
+    {
+        std::unique_ptr<PCB_SHAPE> fill =
+                std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::RECTANGLE );
+
+        fill->SetFilled( true );
+        fill->SetLayer( aLayer );
+        fill->SetStroke( STROKE_PARAMS( 0 ) );
+
+        fill->SetStart( aElem.pos1 );
+        fill->SetEnd( aElem.pos2 );
+
+        if( aElem.rotation != 0. )
+        {
+            // TODO: Do we need SHAPE_T::POLY for non 90° rotations?
+            VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2,
+                             aElem.pos1.y / 2 + aElem.pos2.y / 2 );
+            fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+        }
+
+        aFootprint->Add( fill.release(), ADD_MODE::APPEND );
+    }
 }
 
 
