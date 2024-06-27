@@ -119,7 +119,7 @@ public:
                 return diff;                                \
         } while (0)
 
-#define ITEM_DESC( item ) ( item )->GetItemDescription( &g_unitsProvider )
+#define ITEM_DESC( item ) ( item )->GetItemDescription( &g_unitsProvider, true )
 #define PAD_DESC( pad ) wxString::Format( _( "Pad %s" ), ( pad )->GetNumber() )
 
 

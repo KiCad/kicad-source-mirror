@@ -1180,10 +1180,11 @@ void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 }
 
 
-wxString SCH_SHEET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_SHEET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Hierarchical Sheet %s" ),
-                             KIUI::EllipsizeMenuText( m_fields[ SHEETNAME ].GetText() ) );
+                             aFull ? m_fields[ SHEETNAME ].GetShownText( false )
+                                   : KIUI::EllipsizeMenuText( m_fields[ SHEETNAME ].GetText() ) );
 }
 
 

@@ -734,7 +734,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                          EscapeHTML( a->GetItemDescription( this ) ),
+                                          EscapeHTML( a->GetItemDescription( this, true ) ),
                                           MessageTextFromValue( overrideA.value() ) ) )
 
                 override_val = ac->GetClearanceOverrides( &msg ).value();
@@ -744,7 +744,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                          EscapeHTML( b->GetItemDescription( this ) ),
+                                          EscapeHTML( b->GetItemDescription( this, true ) ),
                                           EscapeHTML( MessageTextFromValue( overrideB.value() ) ) ) )
 
                 if( overrideB > override_val )
@@ -793,7 +793,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; zone connection: %s." ),
-                                      EscapeHTML( pad->GetItemDescription( this ) ),
+                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
                                       EscapeHTML( PrintZoneConnection( override ) ) ) )
 
             constraint.SetName( msg );
@@ -810,7 +810,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal relief gap: %s." ),
-                                      EscapeHTML( pad->GetItemDescription( this ) ),
+                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
                                       EscapeHTML( MessageTextFromValue( gap_override ) ) ) )
 
             constraint.SetName( msg );
@@ -827,7 +827,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal spoke width: %s." ),
-                                      EscapeHTML( pad->GetItemDescription( this ) ),
+                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
                                       EscapeHTML( MessageTextFromValue( spoke_override ) ) ) )
 
             if( zone && zone->GetMinThickness() > spoke_override )
@@ -836,7 +836,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                 REPORT( "" )
                 REPORT( wxString::Format( _( "%s min thickness: %s." ),
-                                          EscapeHTML( zone->GetItemDescription( this ) ),
+                                          EscapeHTML( zone->GetItemDescription( this, true ) ),
                                           EscapeHTML( MessageTextFromValue( spoke_override ) ) ) )
             }
 
@@ -1070,12 +1070,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         else if( a_is_non_copper )
                         {
                             REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
-                                                      EscapeHTML( a->GetItemDescription( this ) ) ) )
+                                                      EscapeHTML( a->GetItemDescription( this, true ) ) ) )
                         }
                         else if( b_is_non_copper )
                         {
                             REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
-                                                      EscapeHTML( b->GetItemDescription( this ) ) ) )
+                                                      EscapeHTML( b->GetItemDescription( this, true ) ) ) )
                         }
 
                         return;
@@ -1193,7 +1193,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 {
                     // Report non-drilled-holes as an implicit condition
                     REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
-                                              a->GetItemDescription( this ) ) )
+                                              a->GetItemDescription( this, true ) ) )
                 }
                 else if( !c->condition || c->condition->GetExpression().IsEmpty() )
                 {
@@ -1313,7 +1313,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             }
 
             REPORT( wxString::Format( _( "Local clearance on %s: %s." ),
-                                      EscapeHTML( a->GetItemDescription( this ) ),
+                                      EscapeHTML( a->GetItemDescription( this, true ) ),
                                       MessageTextFromValue( localA ) ) )
 
             if( localA > clearance )
@@ -1337,7 +1337,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             }
 
             REPORT( wxString::Format( _( "Local clearance on %s: %s." ),
-                                      EscapeHTML( b->GetItemDescription( this ) ),
+                                      EscapeHTML( b->GetItemDescription( this, true ) ),
                                       MessageTextFromValue( localB ) ) )
 
             if( localB > clearance )
@@ -1396,7 +1396,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "%s zone connection: %s." ),
-                                          EscapeHTML( parentFootprint->GetItemDescription( this ) ),
+                                          EscapeHTML( parentFootprint->GetItemDescription( this, true ) ),
                                           EscapeHTML( PrintZoneConnection( local ) ) ) )
 
                 constraint.SetParentRule( nullptr );
@@ -1412,7 +1412,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "%s pad connection: %s." ),
-                                      EscapeHTML( zone->GetItemDescription( this ) ),
+                                      EscapeHTML( zone->GetItemDescription( this, true ) ),
                                       EscapeHTML( PrintZoneConnection( local ) ) ) )
 
             constraint.SetParentRule( nullptr );
@@ -1429,7 +1429,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "%s thermal relief gap: %s." ),
-                                      EscapeHTML( zone->GetItemDescription( this ) ),
+                                      EscapeHTML( zone->GetItemDescription( this, true ) ),
                                       EscapeHTML( MessageTextFromValue( local ) ) ) )
 
             constraint.SetParentRule( nullptr );
@@ -1446,7 +1446,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "%s thermal spoke width: %s." ),
-                                      EscapeHTML( zone->GetItemDescription( this ) ),
+                                      EscapeHTML( zone->GetItemDescription( this, true ) ),
                                       EscapeHTML( MessageTextFromValue( local ) ) ) )
 
             constraint.SetParentRule( nullptr );

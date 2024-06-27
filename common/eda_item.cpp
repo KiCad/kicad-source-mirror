@@ -105,7 +105,7 @@ INSPECT_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString EDA_ITEM::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString EDA_ITEM::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     wxFAIL_MSG( wxT( "GetItemDescription() was not overridden for schematic item type " ) +
                 GetClass() );

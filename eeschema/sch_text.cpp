@@ -450,9 +450,10 @@ void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 }
 
 
-wxString SCH_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Graphic Text '%s'" ),
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

@@ -185,7 +185,7 @@ public:
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     /// @copydoc EDA_ITEM::GetItemDescription
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     /// @copydoc EDA_ITEM::GetMenuImage
     BITMAPS GetMenuImage() const override;

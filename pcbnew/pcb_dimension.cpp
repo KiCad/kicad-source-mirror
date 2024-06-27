@@ -562,10 +562,10 @@ const BOX2I PCB_DIMENSION_BASE::GetBoundingBox() const
 }
 
 
-wxString PCB_DIMENSION_BASE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_DIMENSION_BASE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Dimension '%s' on %s" ),
-                             KIUI::EllipsizeMenuText( GetText() ),
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ),
                              GetLayerName() );
 }
 

@@ -1510,7 +1510,7 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 
 
 #define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
-#define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider )
+#define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider, true )
 
 int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aReporter ) const
 {

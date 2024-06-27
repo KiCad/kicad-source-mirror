@@ -820,7 +820,7 @@ bool ZONE::AppendCorner( VECTOR2I aPosition, int aHoleIdx, bool aAllowDuplicatio
 }
 
 
-wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     LSEQ     layers = m_layerSet.Seq();
     wxString layerDesc;

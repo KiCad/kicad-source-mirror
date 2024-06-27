@@ -93,7 +93,7 @@ public:
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override
     {
         return wxString( _( "No Connect" ) );
     }

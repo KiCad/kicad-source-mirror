@@ -1054,9 +1054,11 @@ void SCH_FIELD::CalcEdit( const VECTOR2I& aPosition )
 }
 
 
-wxString SCH_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( "%s '%s'", UnescapeString( GetName() ), KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Field %s '%s'" ),
+                             UnescapeString( GetName() ),
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

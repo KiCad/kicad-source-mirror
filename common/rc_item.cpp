@@ -133,9 +133,9 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
                     GetViolatingRuleDesc(),
                     severity,
                     showCoord( aUnitsProvider, mainItem->GetPosition()),
-                    mainItem->GetItemDescription( aUnitsProvider ),
+                    mainItem->GetItemDescription( aUnitsProvider, true ),
                     showCoord( aUnitsProvider, auxItem->GetPosition()),
-                    auxItem->GetItemDescription( aUnitsProvider ) );
+                    auxItem->GetItemDescription( aUnitsProvider, true ) );
     }
     else if( mainItem )
     {
@@ -145,7 +145,7 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
                     GetViolatingRuleDesc(),
                     severity,
                     showCoord( aUnitsProvider, mainItem->GetPosition()),
-                    mainItem->GetItemDescription( aUnitsProvider ) );
+                    mainItem->GetItemDescription( aUnitsProvider, true ) );
     }
     else
     {
@@ -190,7 +190,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
     if( mainItem )
     {
         RC_JSON::AFFECTED_ITEM item;
-        item.description = mainItem->GetItemDescription( aUnitsProvider );
+        item.description = mainItem->GetItemDescription( aUnitsProvider, true );
         item.uuid = mainItem->m_Uuid.AsString();
         item.pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
                                                      aUnitsProvider->GetUserUnits(),
@@ -204,7 +204,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
     if( auxItem )
     {
         RC_JSON::AFFECTED_ITEM item;
-        item.description = auxItem->GetItemDescription( aUnitsProvider );
+        item.description = auxItem->GetItemDescription( aUnitsProvider, true );
         item.uuid = auxItem->m_Uuid.AsString();
         item.pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
                                                      aUnitsProvider->GetUserUnits(),
@@ -467,7 +467,7 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     }
 
     if( item )
-        msg += item->GetItemDescription( m_editFrame );
+        msg += item->GetItemDescription( m_editFrame, true );
 
     msg.Replace( wxS( "\n" ), wxS( " " ) );
     aVariant = msg;

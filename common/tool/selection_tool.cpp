@@ -286,18 +286,18 @@ bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
             {
 #ifdef __WXMAC__
                 menuText = wxString::Format( "%s\t%d",
-                                             item->GetItemDescription( unitsProvider ),
+                                             item->GetItemDescription( unitsProvider, false ),
                                              i + 1 );
 #else
                 menuText = wxString::Format( "&%d  %s\t%d",
                                              i + 1,
-                                             item->GetItemDescription( unitsProvider ),
+                                             item->GetItemDescription( unitsProvider, false ),
                                              i + 1 );
 #endif
             }
             else
             {
-                menuText = item->GetItemDescription( unitsProvider );
+                menuText = item->GetItemDescription( unitsProvider, false );
             }
 
             menu.Add( menuText, i + 1, item->GetMenuImage() );

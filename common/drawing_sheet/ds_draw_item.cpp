@@ -237,9 +237,10 @@ bool DS_DRAW_ITEM_TEXT::HitTest( const BOX2I& aRect, bool aContains, int aAccura
 }
 
 
-wxString DS_DRAW_ITEM_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString DS_DRAW_ITEM_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Text '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Text '%s'" ),
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -332,7 +333,7 @@ bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const BOX2I& aRect, bool aContained, in
 }
 
 
-wxString DS_DRAW_ITEM_POLYPOLYGONS::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString DS_DRAW_ITEM_POLYPOLYGONS::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return _( "Imported Shape" );
 }
@@ -431,7 +432,7 @@ bool DS_DRAW_ITEM_RECT::HitTest( const BOX2I& aRect, bool aContained, int aAccur
 }
 
 
-wxString DS_DRAW_ITEM_RECT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString DS_DRAW_ITEM_RECT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Rectangle, width %s height %s" ),
                              aUnitsProvider->MessageTextFromValue( std::abs( GetStart().x - GetEnd().x ) ),
@@ -464,7 +465,7 @@ bool DS_DRAW_ITEM_LINE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) cons
 }
 
 
-wxString DS_DRAW_ITEM_LINE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString DS_DRAW_ITEM_LINE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Line, length %s" ),
                              aUnitsProvider->MessageTextFromValue( GetStart().Distance( GetEnd() ) ) );
@@ -516,13 +517,13 @@ bool DS_DRAW_ITEM_BITMAP::HitTest( const BOX2I& aRect, bool aContains, int aAccu
 }
 
 
-wxString DS_DRAW_ITEM_BITMAP::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString DS_DRAW_ITEM_BITMAP::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return _( "Image" );
 }
 
 
-wxString DS_DRAW_ITEM_PAGE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString DS_DRAW_ITEM_PAGE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return _( "Page Limits" );
 }

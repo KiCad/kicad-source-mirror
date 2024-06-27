@@ -191,7 +191,7 @@ public:
                 ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
     }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     EDA_ITEM* Clone() const override;
 
@@ -239,7 +239,7 @@ public:
         return aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_BUS;
     }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     EDA_ITEM* Clone() const override;
 

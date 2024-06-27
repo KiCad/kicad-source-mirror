@@ -255,7 +255,7 @@ public:
 
     bool Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData = nullptr ) override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     BITMAPS GetMenuImage() const override;

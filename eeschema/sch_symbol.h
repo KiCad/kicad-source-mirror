@@ -786,7 +786,7 @@ public:
      */
     SCH_ITEM* GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType = TYPE_NOT_INIT );
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 

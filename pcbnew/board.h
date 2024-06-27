@@ -673,7 +673,7 @@ public:
     const TITLE_BLOCK& GetTitleBlock() const                { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     EDA_UNITS GetUserUnits()                                { return m_userUnits; }
     void SetUserUnits( EDA_UNITS aUnits )                   { m_userUnits = aUnits; }

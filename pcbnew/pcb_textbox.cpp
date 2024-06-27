@@ -483,10 +483,10 @@ bool PCB_TEXTBOX::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-wxString PCB_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "PCB Text Box '%s' on %s" ),
-                             KIUI::EllipsizeMenuText( GetText() ),
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ),
                              GetLayerName() );
 }
 

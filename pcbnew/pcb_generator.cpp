@@ -211,7 +211,7 @@ std::vector<std::pair<wxString, wxVariant>> PCB_GENERATOR::GetRowData()
 }
 
 
-wxString PCB_GENERATOR::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_GENERATOR::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString( _( "Generator" ) );
 }

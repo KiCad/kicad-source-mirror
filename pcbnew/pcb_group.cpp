@@ -363,7 +363,7 @@ void PCB_GROUP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
-wxString PCB_GROUP::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_GROUP::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     if( m_name.empty() )
         return wxString::Format( _( "Unnamed Group, %zu members" ), m_items.size() );

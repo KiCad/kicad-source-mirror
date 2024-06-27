@@ -1879,7 +1879,7 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, ALT* aAlt 
 }
 
 
-wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     if( m_libPin )
     {

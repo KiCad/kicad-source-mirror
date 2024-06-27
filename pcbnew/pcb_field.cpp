@@ -139,34 +139,31 @@ wxString PCB_FIELD::GetTextTypeDescription() const
 }
 
 
-wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
+    wxString content = aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() );
+    wxString ref = GetParentFootprint()->GetReference();
+
     switch( m_id )
     {
     case REFERENCE_FIELD:
-        return wxString::Format( _( "Reference '%s'" ),
-                                 GetParentFootprint()->GetReference() );
+        return wxString::Format( _( "Reference field of %s" ), ref );
 
     case VALUE_FIELD:
-        return wxString::Format( _( "Value '%s' of %s" ),
-                                 KIUI::EllipsizeMenuText( GetText() ),
-                                 GetParentFootprint()->GetReference() );
+        return wxString::Format( _( "Value field of %s (%s)" ), ref, content );
 
     case FOOTPRINT_FIELD:
-        return wxString::Format( _( "Footprint '%s' of %s" ),
-                                 KIUI::EllipsizeMenuText( GetText() ),
-                                 GetParentFootprint()->GetReference() );
+        return wxString::Format( _( "Footprint field of %s (%s)" ), ref, content );
+
     case DATASHEET_FIELD:
-        return wxString::Format( _( "Datasheet '%s' of %s" ),
-                                 KIUI::EllipsizeMenuText( GetText() ),
-                                 GetParentFootprint()->GetReference() );
+        return wxString::Format( _( "Datasheet field of %s (%s)" ), ref, content );
 
     default:
-        break; // avoid unreachable code / missing return statement warnings
+        if( GetName().IsEmpty() )
+            return wxString::Format( _( "Field of %s (%s)" ), ref, content );
+        else
+            return wxString::Format( _( "%s field of %s (%s)" ), GetName(), ref, content );
     }
-
-    return wxString::Format( _( "Field '%s' of %s" ), KIUI::EllipsizeMenuText( GetText() ),
-                             GetParentFootprint()->GetReference() );
 }
 
 

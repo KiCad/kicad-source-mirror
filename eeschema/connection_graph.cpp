@@ -1579,7 +1579,7 @@ void CONNECTION_GRAPH::collectAllDriverValues()
                 UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
 
                 wxLogTrace( ConnTrace, wxS( "Unexpected strong driver %s" ),
-                            driver->GetItemDescription( &unitsProvider ) );
+                            driver->GetItemDescription( &unitsProvider, true ) );
                 break;
             }
             }
@@ -1850,7 +1850,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                                     wxS( "%ld (%s) weakly driven by unique sheet pin %s, "
                                          "promoting" ),
                                     subgraph->m_code, name,
-                                    subgraph->m_driver->GetItemDescription( &unitsProvider ) );
+                                    subgraph->m_driver->GetItemDescription( &unitsProvider, true ) );
 
                         subgraph->m_strong_driver = true;
                     }

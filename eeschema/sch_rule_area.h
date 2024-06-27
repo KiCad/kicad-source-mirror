@@ -67,7 +67,7 @@ public:
     virtual void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                        int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     /// @brief Resets all item and directive caches, saving the current state first
     void ResetCaches( KIGFX::SCH_VIEW* view );

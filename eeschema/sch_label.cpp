@@ -1529,10 +1529,10 @@ const BOX2I SCH_LABEL::GetBodyBoundingBox() const
 }
 
 
-wxString SCH_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Label '%s'" ),
-                             KIUI::EllipsizeMenuText( GetShownText( false ) ) );
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -1796,7 +1796,7 @@ void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 }
 
 
-wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     if( m_fields.empty() )
     {
@@ -1806,7 +1806,8 @@ wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider
     {
         return wxString::Format( _( "Directive Label [%s %s]" ),
                                  UnescapeString( m_fields[0].GetName() ),
-                                 KIUI::EllipsizeMenuText( m_fields[0].GetShownText( false ) ) );
+                                 aFull ? m_fields[0].GetShownText( false )
+                                       : KIUI::EllipsizeMenuText( m_fields[0].GetText() ) );
     }
 }
 
@@ -2049,10 +2050,10 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 }
 
 
-wxString SCH_GLOBALLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_GLOBALLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Global Label '%s'" ),
-                             KIUI::EllipsizeMenuText( GetShownText( false ) ) );
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -2196,10 +2197,10 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
 }
 
 
-wxString SCH_HIERLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_HIERLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Hierarchical Label '%s'" ),
-                             KIUI::EllipsizeMenuText( GetShownText( false ) ) );
+                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

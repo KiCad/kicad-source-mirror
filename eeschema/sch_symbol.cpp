@@ -2231,7 +2231,7 @@ SCH_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 }
 
 
-wxString SCH_SYMBOL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_SYMBOL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
                              KIUI::EllipsizeMenuText( GetField( REFERENCE_FIELD )->GetText() ),

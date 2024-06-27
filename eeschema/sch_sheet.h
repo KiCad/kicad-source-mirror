@@ -387,7 +387,7 @@ public:
     bool GetDNP() const { return m_DNP; }
     void SetDNP( bool aDNP ) { m_DNP = aDNP; }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 

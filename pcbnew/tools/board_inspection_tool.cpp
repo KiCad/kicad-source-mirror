@@ -191,7 +191,7 @@ wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
     if( !aItem )
         return wxString();
 
-    wxString msg = aItem->GetItemDescription( m_frame );
+    wxString msg = aItem->GetItemDescription( m_frame, true );
 
     if( aItem->IsConnected() && !isNPTHPad( aItem ) )
     {

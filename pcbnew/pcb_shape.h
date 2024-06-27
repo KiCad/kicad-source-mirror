@@ -150,7 +150,7 @@ public:
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool ignoreLineWidth = false ) const override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 

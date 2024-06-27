@@ -239,7 +239,7 @@ void DIALOG_POSITION_RELATIVE::updateAnchorInfo( BOARD_ITEM* aItem )
         wxString       msg = _( "<none selected>" );
 
         if( aItem )
-            msg = aItem->GetItemDescription( &unitsProvider );
+            msg = aItem->GetItemDescription( &unitsProvider, true );
 
         m_referenceInfo->SetLabel( wxString::Format( _( "Reference item: %s" ), msg ) );
         break;

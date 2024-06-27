@@ -86,7 +86,7 @@ public:
     std::shared_ptr<SHAPE>
     GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 

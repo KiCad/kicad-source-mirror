@@ -2002,7 +2002,7 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString FOOTPRINT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString FOOTPRINT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     wxString reference = GetReference();
 

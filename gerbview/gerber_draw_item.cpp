@@ -1029,7 +1029,7 @@ INSPECT_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString GERBER_DRAW_ITEM::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString GERBER_DRAW_ITEM::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     wxString layerName = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
 

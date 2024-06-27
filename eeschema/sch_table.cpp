@@ -395,7 +395,7 @@ INSPECT_RESULT SCH_TABLE::Visit( INSPECTOR aInspector, void* aTestData,
 }
 
 
-wxString SCH_TABLE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_TABLE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "%d Column Table" ), m_colCount );
 }

@@ -698,7 +698,7 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-wxString PCB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     FOOTPRINT* parentFP = nullptr;
 

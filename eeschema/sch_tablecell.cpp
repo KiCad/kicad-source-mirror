@@ -47,7 +47,7 @@ void SCH_TABLECELL::SwapData( SCH_ITEM* aItem )
 }
 
 
-wxString SCH_TABLECELL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_TABLECELL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Table Cell %s" ), GetAddr() );
 }

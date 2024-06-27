@@ -195,7 +195,7 @@ void SCH_RULE_AREA::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OP
 }
 
 
-wxString SCH_RULE_AREA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_RULE_AREA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return _( "Schematic rule area" );
 }

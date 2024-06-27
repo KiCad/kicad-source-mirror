@@ -1349,7 +1349,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "NI: %s (%s)" ),
                                                ni->Format(),
-                                               ni->Parent() ? ni->Parent()->GetItemDescription( &up )
+                                               ni->Parent() ? ni->Parent()->GetItemDescription( &up, false )
                                                             : wxString( wxT( "null" ) ) ) );
 
     unwindLineStack( ni );

@@ -221,7 +221,7 @@ public:
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
     ///< @copydoc EDA_ITEM::GetItemDescription()
-    virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     ///< @copydoc EDA_ITEM::GetMenuImage()
     BITMAPS GetMenuImage() const override;

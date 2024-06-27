@@ -347,9 +347,10 @@ public:
      * returns a string to indicate that it was not overridden to provide the object
      * specific text.
      *
+     * @param aLong indicates a long string is acceptable
      * @return The menu text string.
      */
-    virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const;
+    virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const;
 
     /**
      * Return a pointer to an image to be used in menus.

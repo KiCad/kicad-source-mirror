@@ -1431,7 +1431,7 @@ wxString PAD::ShowPadAttr() const
 }
 
 
-wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     FOOTPRINT* parentFP = nullptr;
 

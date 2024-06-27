@@ -76,7 +76,7 @@ public:
 
     wxString GetTextTypeDescription() const override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 

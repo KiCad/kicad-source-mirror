@@ -187,7 +187,7 @@ public:
     bool HasConnectivityChanges( const SCH_ITEM* aItem,
                                  const SCH_SHEET_PATH* aInstance = nullptr ) const override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 

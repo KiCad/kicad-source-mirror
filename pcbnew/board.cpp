@@ -1207,7 +1207,7 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
 }
 
 
-wxString BOARD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString BOARD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "PCB" ) );
 }

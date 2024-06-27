@@ -735,7 +735,7 @@ void SCH_LINE::GetSelectedPoints( std::vector<VECTOR2I>& aPoints ) const
 }
 
 
-wxString SCH_LINE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_LINE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     wxString txtfmt;
 

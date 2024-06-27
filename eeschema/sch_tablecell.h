@@ -43,7 +43,7 @@ public:
         return wxT( "SCH_TABLECELL" );
     }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     EDA_ITEM* Clone() const override
     {

@@ -397,7 +397,7 @@ public:
 
     bool IsConnectable() const override { return true; }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 
@@ -460,12 +460,13 @@ public:
 
     int GetPenWidth() const override;
 
-    void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPoints,
+    void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
+                             std::vector<VECTOR2I>& aPoints,
                              const VECTOR2I& aPos ) const override;
 
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     bool IsConnectable() const override { return true; }
 
@@ -531,7 +532,8 @@ public:
 
     VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
-    void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings, std::vector<VECTOR2I>& aPoints,
+    void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
+                             std::vector<VECTOR2I>& aPoints,
                              const VECTOR2I& aPos ) const override;
 
     bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const override;
@@ -540,7 +542,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 
@@ -595,7 +597,7 @@ public:
 
     bool IsConnectable() const override { return true; }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 

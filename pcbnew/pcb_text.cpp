@@ -487,17 +487,17 @@ wxString PCB_TEXT::GetTextTypeDescription() const
 }
 
 
-wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
+    wxString content = aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() );
+
     if( FOOTPRINT* parentFP = GetParentFootprint() )
     {
-        return wxString::Format( _( "Footprint Text '%s' of %s" ),
-                                 KIUI::EllipsizeMenuText( GetText() ), parentFP->GetReference() );
+        wxString ref = parentFP->GetReference();
+        return wxString::Format( _( "Footprint text of %s (%s)" ), ref, content );
     }
 
-    return wxString::Format( _( "PCB Text '%s' on %s" ),
-                             KIUI::EllipsizeMenuText( GetText() ),
-                             GetLayerName() );
+    return wxString::Format( _( "PCB text '%s' on %s" ), content, GetLayerName() );
 }
 
 

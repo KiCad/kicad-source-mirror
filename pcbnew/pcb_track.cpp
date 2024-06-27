@@ -136,7 +136,7 @@ EDA_ITEM* PCB_VIA::Clone() const
 }
 
 
-wxString PCB_VIA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_VIA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     wxString formatStr;
 
@@ -1529,7 +1529,7 @@ bool PCB_VIA::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) cons
 }
 
 
-wxString PCB_TRACK::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_TRACK::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( Type() == PCB_ARC_T ? _("Track (arc) %s on %s, length %s" )
                                                  : _("Track %s on %s, length %s" ),

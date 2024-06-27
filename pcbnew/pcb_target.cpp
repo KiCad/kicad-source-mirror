@@ -119,7 +119,7 @@ std::shared_ptr<SHAPE> PCB_TARGET::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 }
 
 
-wxString PCB_TARGET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_TARGET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     // Targets are on *every* layer by definition
     return _( "Target" );

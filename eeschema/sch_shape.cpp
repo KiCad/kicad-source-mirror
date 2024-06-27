@@ -507,7 +507,7 @@ void SCH_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-wxString SCH_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString SCH_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     switch( GetShape() )
     {

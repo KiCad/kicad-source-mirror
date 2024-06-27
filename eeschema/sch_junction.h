@@ -97,7 +97,7 @@ public:
                                         || aItem->Type() == SCH_DIRECTIVE_LABEL_T );
     }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override
     {
         return wxString( _( "Junction" ) );
     }

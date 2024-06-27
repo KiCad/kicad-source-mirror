@@ -308,10 +308,10 @@ void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
 
         if( mainItem )
-            mainText = mainItem->GetItemDescription( aFrame );
+            mainText = mainItem->GetItemDescription( aFrame, true );
 
         if( auxItem )
-            auxText = auxItem->GetItemDescription( aFrame );
+            auxText = auxItem->GetItemDescription( aFrame, true );
 
         aList.emplace_back( mainText, auxText );
     }

@@ -682,7 +682,7 @@ public:
 
     void AddPolygon( const SHAPE_LINE_CHAIN& aPolygon );
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     BITMAPS GetMenuImage() const override;
 

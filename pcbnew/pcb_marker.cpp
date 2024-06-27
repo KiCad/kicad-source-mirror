@@ -227,10 +227,10 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
 
         if( mainItem )
-            mainText = mainItem->GetItemDescription( aFrame );
+            mainText = mainItem->GetItemDescription( aFrame, true );
 
         if( auxItem )
-            auxText = auxItem->GetItemDescription( aFrame );
+            auxText = auxItem->GetItemDescription( aFrame, true );
 
         aList.emplace_back( mainText, auxText );
     }
@@ -260,11 +260,10 @@ std::shared_ptr<SHAPE> PCB_MARKER::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 }
 
 
-wxString PCB_MARKER::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+wxString PCB_MARKER::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    // m_rcItem->GetErrorMessage() could be used instead, but is probably too long
-    // for menu duty.
-    return wxString::Format( _( "Marker (%s)" ), m_rcItem->GetErrorText() );
+    return wxString::Format( _( "Marker (%s)" ),
+                             aFull ? m_rcItem->GetErrorMessage() : m_rcItem->GetErrorText() );
 }
 
 

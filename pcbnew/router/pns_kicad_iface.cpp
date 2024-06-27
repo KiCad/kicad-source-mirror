@@ -1263,7 +1263,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
     if( !poly->IsTriangulationUpToDate() )
     {
         UNITS_PROVIDER unitsProvider( pcbIUScale, GetUnits() );
-        msg.Printf( _( "%s is malformed." ), aZone->GetItemDescription( &unitsProvider ) );
+        msg.Printf( _( "%s is malformed." ), aZone->GetItemDescription( &unitsProvider, true ) );
 
         KIDIALOG dlg( nullptr, msg, KIDIALOG::KD_WARNING );
         dlg.ShowDetailedText( _( "This zone cannot be handled by the router.\n"

@@ -103,7 +103,7 @@ public:
 
     virtual void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) {};
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     virtual wxString GetPluralName() const = 0;
 
