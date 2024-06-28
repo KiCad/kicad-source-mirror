@@ -81,20 +81,30 @@ bool VERTEX_MANAGER::Reserve( unsigned int aSize )
     if( !aSize )
         return true;
 
-    if( m_reservedSpace != 0 || m_reserved )
-        wxLogTrace( traceVertexManager, wxS( "Did not use all previous vertices allocated" ) );
+    // flags to avoid hanging by calling DisplayError too many times:
+    static bool show_err_reserve = true;
+    static bool show_err_alloc = true;
 
-    // flag to avoid hanging by calling DisplayError too many times:
-    static bool show_err = true;
+    if( m_reservedSpace != 0 || m_reserved )
+    {
+        if( show_err_reserve )
+        {
+            DisplayError(
+                    nullptr,
+                    wxT( "VERTEX_MANAGER::Reserve: Did not use all previous vertices allocated" ) );
+
+            show_err_reserve = false;
+        }
+    }
 
     m_reserved = m_container->Allocate( aSize );
 
     if( m_reserved == nullptr )
     {
-        if( show_err )
+        if( show_err_alloc )
         {
             DisplayError( nullptr, wxT( "VERTEX_MANAGER::Reserve: Vertex allocation error" ) );
-            show_err = false;
+            show_err_alloc = false;
         }
 
         return false;
