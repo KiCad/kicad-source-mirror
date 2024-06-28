@@ -744,15 +744,27 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
     // Clearance lines
     if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
-            && !m_pcbSettings.m_isPrinting && aLayer != LAYER_LOCKED_ITEM_SHADOW )
+            && !m_pcbSettings.m_isPrinting
+            && aLayer != LAYER_LOCKED_ITEM_SHADOW )
     {
-        int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
+        /*
+         * Showing the clearance area is not obvious for optionally-flashed pads and vias, so we
+         * choose to not display clearance lines at all on non-copper active layers.  We follow
+         * the same rule for tracks to be consistent (even though they don't have the same issue).
+         */
+        PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
+        const BOARD* board = aTrack->GetBoard();
 
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( color );
-        m_gal->DrawSegment( start, end, track_width + clearance * 2 );
+        if( IsCopperLayer( activeLayer ) && board->GetVisibleLayers().test( activeLayer ) )
+        {
+            int clearance = aTrack->GetOwnClearance( activeLayer );
+
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+            m_gal->DrawSegment( start, end, track_width + clearance * 2 );
+        }
     }
 }
 
@@ -864,17 +876,29 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
     // Clearance lines
     if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
-            && !m_pcbSettings.m_isPrinting && aLayer != LAYER_LOCKED_ITEM_SHADOW )
+            && !m_pcbSettings.m_isPrinting
+            && aLayer != LAYER_LOCKED_ITEM_SHADOW )
     {
-        int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
+        /*
+         * Showing the clearance area is not obvious for optionally-flashed pads and vias, so we
+         * choose to not display clearance lines at all on non-copper active layers.  We follow
+         * the same rule for tracks to be consistent (even though they don't have the same issue).
+         */
+        PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
+        const BOARD* board = aArc->GetBoard();
 
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( color );
+        if( IsCopperLayer( activeLayer ) && board->GetVisibleLayers().test( activeLayer ) )
+        {
+            int clearance = aArc->GetOwnClearance( activeLayer );
 
-        m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2,
-                               m_maxError );
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+
+            m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2,
+                                   m_maxError );
+        }
     }
 
 // Debug only: enable this code only to test the TransformArcToPolygon function
@@ -1121,21 +1145,32 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     // Clearance lines
     if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
             && aLayer != LAYER_VIA_HOLES
-            && !m_pcbSettings.m_isPrinting )
+            && !m_pcbSettings.m_isPrinting
+            && aLayer != LAYER_LOCKED_ITEM_SHADOW )
     {
+        /*
+         * Showing the clearance area is not obvious as the clearance extends from the via's pad
+         * on flashed copper layers and from the via's hole on non-flashed copper layers.  Because
+         * of this, we choose to not display clearance lines at all on non-copper active layers as
+         * it's not clear which we'd be displaying.
+         */
         PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
-        double       radius;
 
-        if( aVia->FlashLayer( activeLayer ) )
-            radius = aVia->GetWidth() / 2.0;
-        else
-            radius = getViaDrillSize( aVia ) / 2.0 + m_holePlatingThickness;
+        if( IsCopperLayer( activeLayer ) && board->GetVisibleLayers().test( activeLayer ) )
+        {
+            double radius;
 
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( color );
-        m_gal->DrawCircle( center, radius + aVia->GetOwnClearance( activeLayer ) );
+            if( aVia->FlashLayer( activeLayer ) )
+                radius = aVia->GetWidth() / 2.0;
+            else
+                radius = getViaDrillSize( aVia ) / 2.0 + m_holePlatingThickness;
+
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+            m_gal->DrawCircle( center, radius + aVia->GetOwnClearance( activeLayer ) );
+        }
     }
 }
 
@@ -1634,24 +1669,15 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             && ( aLayer == LAYER_PADS_SMD_FR || aLayer == LAYER_PADS_SMD_BK || aLayer == LAYER_PADS_TH )
             && !m_pcbSettings.m_isPrinting )
     {
-        /* Showing the clearance area is not obvious.
-         * - A pad can be removed from some copper layers.
-         * - For non copper layers, what is the clearance area?
-         * So for copper layers, the clearance area is the shape if the pad is flashed on this
-         * layer and the hole clearance area for other copper layers.
-         * For other layers, use the pad shape, although one can use an other criteria,
-         * depending on the non copper layer.
+        /*
+         * Showing the clearance area is not obvious as the clearance extends from the pad on
+         * flashed copper layers and from the hole on non-flashed copper layers.  Because of this,
+         * we choose to not display clearance lines at all on non-copper active layers as it's
+         * not clear which we'd be displaying.
          */
-        int  activeLayer = m_pcbSettings.GetActiveLayer();
-        bool flashActiveLayer = true;
+        PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
 
-        if( IsCopperLayer( activeLayer ) )
-            flashActiveLayer = aPad->FlashLayer( activeLayer );
-
-        if( !board->GetVisibleLayers().test( activeLayer ) )
-            flashActiveLayer = false;
-
-        if( flashActiveLayer || aPad->GetDrillSize().x )
+        if( IsCopperLayer( activeLayer ) && board->GetVisibleLayers().test( activeLayer ) )
         {
             if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
                 color = m_pcbSettings.GetLayerColor( LAYER_NON_PLATEDHOLES );
@@ -1661,9 +1687,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             m_gal->SetIsFill( false );
             m_gal->SetStrokeColor( color );
 
-            int clearance = aPad->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
+            int clearance = aPad->GetOwnClearance( activeLayer );
 
-            if( flashActiveLayer && clearance > 0 )
+            if( aPad->FlashLayer( activeLayer ) && clearance > 0 )
             {
                 auto shape = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
@@ -1683,8 +1709,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     SHAPE_POLY_SET polySet;
 
                     // Use ERROR_INSIDE because it avoids Clipper and is therefore much faster.
-                    aPad->TransformShapeToPolygon( polySet, ToLAYER_ID( aLayer ), clearance,
-                                                   m_maxError, ERROR_INSIDE );
+                    aPad->TransformShapeToPolygon( polySet, activeLayer, clearance, m_maxError,
+                                                   ERROR_INSIDE );
 
                     if( polySet.Outline( 0 ).PointCount() > 2 )     // Careful of empty pads
                         m_gal->DrawPolygon( polySet );
