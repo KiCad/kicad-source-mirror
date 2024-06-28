@@ -3619,7 +3619,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
             {
                 // short vertical line
                 aShape->SetShape( SHAPE_T::SEGMENT );
-                VECTOR2I pointOffset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
+                VECTOR2I pointOffset( 0, ( aElem.topsize.y / 2 - aElem.topsize.x / 2 ) );
                 aShape->SetStart( aElem.position + pointOffset );
                 aShape->SetEnd( aElem.position - pointOffset );
             }
@@ -3627,7 +3627,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
             {
                 // short horizontal line
                 aShape->SetShape( SHAPE_T::SEGMENT );
-                VECTOR2I pointOffset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
+                VECTOR2I pointOffset( ( aElem.topsize.x / 2 - aElem.topsize.y / 2 ), 0 );
                 aShape->SetStart( aElem.position + pointOffset );
                 aShape->SetEnd( aElem.position - pointOffset );
             }
@@ -3655,13 +3655,13 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
 
             if( aElem.topsize.x < aElem.topsize.y )
             {
-                VECTOR2I offset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
+                VECTOR2I offset( 0, ( aElem.topsize.y / 2 - aElem.topsize.x / 2 ) );
                 aShape->SetStart( aElem.position + offset );
                 aShape->SetEnd( aElem.position - offset );
             }
             else
             {
-                VECTOR2I offset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
+                VECTOR2I offset( ( aElem.topsize.x / 2 - aElem.topsize.y / 2 ), 0 );
                 aShape->SetStart( aElem.position + offset );
                 aShape->SetEnd( aElem.position - offset );
             }
@@ -4472,7 +4472,7 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
                 std::swap( width, height );
 
             pad->SetSize( { width, height } );
-            pad->SetPosition( ( aElem.pos1 + aElem.pos2 ) / 2 );
+            pad->SetPosition( aElem.pos1 / 2 + aElem.pos2 / 2 );
         }
         else
         {
@@ -4494,8 +4494,8 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
             shapePolys.Append( aElem.pos1.x - anchorPos.x, aElem.pos2.y - anchorPos.y );
             shapePolys.Outline( 0 ).SetClosed( true );
 
-            VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2 - anchorPos.x,
-                             ( aElem.pos1.y + aElem.pos2.y ) / 2 - anchorPos.y );
+            VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2 - anchorPos.x,
+                             aElem.pos1.y / 2 + aElem.pos2.y / 2 - anchorPos.y );
             shapePolys.Rotate( EDA_ANGLE( aElem.rotation, DEGREES_T ), center );
             pad->AddPrimitivePoly( shapePolys, 0, true );
         }
