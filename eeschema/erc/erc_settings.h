@@ -92,8 +92,10 @@ enum ERCE_T
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
     ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
-    ERCE_ANNOTATION_ACTION      // Not actually an error; just an action performed during
+    ERCE_ANNOTATION_ACTION,     // Not actually an error; just an action performed during
                                 // annotation which is passed back through the error handler.
+    ERCE_GENERIC_WARNING,
+    ERCE_GENERIC_ERROR
 };
 
 /// The values a pin-to-pin entry in the pin matrix can take on

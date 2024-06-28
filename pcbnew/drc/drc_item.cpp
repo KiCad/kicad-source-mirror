@@ -48,6 +48,7 @@ DRC_ITEM DRC_ITEM::heading_schematic_parity( 0, _( "Schematic Parity" ), "" );
 DRC_ITEM DRC_ITEM::heading_signal_integrity( 0, _( "Signal Integrity" ), "" );
 DRC_ITEM DRC_ITEM::heading_readability( 0, _( "Readability" ), "" );
 DRC_ITEM DRC_ITEM::heading_misc( 0, _( "Miscellaneous" ), "" );
+DRC_ITEM DRC_ITEM::heading_internal( 0, "", "" );
 
 DRC_ITEM DRC_ITEM::unconnectedItems( DRCE_UNCONNECTED_ITEMS,
         _( "Missing connection between items" ),
@@ -205,6 +206,14 @@ DRC_ITEM DRC_ITEM::assertionFailure( DRCE_ASSERTION_FAILURE,
         _( "Assertion failure" ),
         wxT( "assertion_failure" ) );
 
+DRC_ITEM DRC_ITEM::genericWarning( DRCE_GENERIC_WARNING,
+        _( "Warning" ),
+        wxT( "generic_warning" ) );
+
+DRC_ITEM DRC_ITEM::genericError( DRCE_GENERIC_ERROR,
+        _( "Error" ),
+        wxT( "generic_error" ) );
+
 DRC_ITEM DRC_ITEM::copperSliver( DRCE_COPPER_SLIVER,
         _( "Copper sliver" ),
         wxT( "copper_sliver" ) );
@@ -267,7 +276,8 @@ DRC_ITEM DRC_ITEM::footprintTHPadhasNoHole( DRCE_PAD_TH_WITH_NO_HOLE,
         wxT( "through_hole_pad_without_hole" ) );
 
 
-std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
+std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
+        {
             DRC_ITEM::heading_electrical,
             DRC_ITEM::shortingItems,
             DRC_ITEM::tracksCrossing,
@@ -321,17 +331,21 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::isolatedCopper,
             DRC_ITEM::footprint,
             DRC_ITEM::padstack,
-            // Do not include padstackInvalid; it flags invalid states so must always be an error
-            // DRC_ITEM::padStackInvalid;
             DRC_ITEM::pthInsideCourtyard,
             DRC_ITEM::npthInsideCourtyard,
             DRC_ITEM::itemOnDisabledLayer,
             DRC_ITEM::unresolvedVariable,
-
             DRC_ITEM::footprintTypeMismatch,
             DRC_ITEM::libFootprintIssues,
             DRC_ITEM::libFootprintMismatch,
-            DRC_ITEM::footprintTHPadhasNoHole
+            DRC_ITEM::footprintTHPadhasNoHole,
+
+            // DRC_ITEM types with no user-editable severities
+            // NOTE: this MUST be the last grouping in the list!
+            DRC_ITEM::heading_internal,
+            DRC_ITEM::padstackInvalid,
+            DRC_ITEM::genericError,
+            DRC_ITEM::genericWarning
         } );
 
 
@@ -378,6 +392,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_LIB_FOOTPRINT_MISMATCH:   return std::make_shared<DRC_ITEM>( libFootprintMismatch );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
     case DRCE_ASSERTION_FAILURE:        return std::make_shared<DRC_ITEM>( assertionFailure );
+    case DRCE_GENERIC_WARNING:          return std::make_shared<DRC_ITEM>( genericWarning );
+    case DRCE_GENERIC_ERROR:            return std::make_shared<DRC_ITEM>( genericError );
     case DRCE_COPPER_SLIVER:            return std::make_shared<DRC_ITEM>( copperSliver );
     case DRCE_OVERLAPPING_SILK:         return std::make_shared<DRC_ITEM>( silkOverlaps );
     case DRCE_SILK_CLEARANCE:           return std::make_shared<DRC_ITEM>( silkClearance );

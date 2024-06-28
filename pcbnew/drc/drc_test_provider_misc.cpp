@@ -39,7 +39,9 @@
     - DRCE_DISABLED_LAYER_ITEM,               ///< item on a disabled layer
     - DRCE_INVALID_OUTLINE,                   ///< invalid board outline
     - DRCE_UNRESOLVED_VARIABLE,
-    - DRCE_ASSERTION_FAILURE                  ///< user-defined assertions
+    - DRCE_ASSERTION_FAILURE,                 ///< user-defined assertions
+    - DRCE_GENERIC_WARNING                    ///< user-defined warnings
+    - DRCE_GENERIC_ERROR                      ///< user-defined errors
 */
 
 class DRC_TEST_PROVIDER_MISC : public DRC_TEST_PROVIDER
@@ -260,23 +262,61 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
     auto checkAssertions =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE ) )
-                    return false;
-
                 if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
-                m_drcEngine->ProcessAssertions( item,
-                        [&]( const DRC_CONSTRAINT* c )
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE ) )
+                {
+                    m_drcEngine->ProcessAssertions( item,
+                            [&]( const DRC_CONSTRAINT* c )
+                            {
+                                auto drcItem = DRC_ITEM::Create( DRCE_ASSERTION_FAILURE );
+                                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " (" )
+                                                            + c->GetName() + wxS( ")" ) );
+                                drcItem->SetItems( item );
+                                drcItem->SetViolatingRule( c->GetParentRule() );
+
+                                reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                            } );
+                }
+
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_WARNING ) )
+                {
+                    if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item ) )
+                    {
+                        static wxRegEx warningExpr( wxS( "^\\$\\{DRC_WARNING\\s*([^}]*)\\}(.*)$" ) );
+
+                        wxString text = textItem->GetText();
+
+                        if( warningExpr.Matches( text ) )
                         {
-                            auto drcItem = DRC_ITEM::Create( DRCE_ASSERTION_FAILURE );
-                            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " (" )
-                                                        + c->GetName() + wxS( ")" ) );
+                            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_WARNING );
                             drcItem->SetItems( item );
-                            drcItem->SetViolatingRule( c->GetParentRule() );
+                            drcItem->SetErrorMessage( warningExpr.GetMatch( text, 1 ) );
 
                             reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
-                        } );
+                        }
+                    }
+                }
+
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_ERROR ) )
+                {
+                    if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item ) )
+                    {
+                        static wxRegEx errorExpr( wxS( "^\\$\\{DRC_ERROR\\s*([^}]*)\\}(.*)$" ) );
+
+                        wxString text = textItem->GetText();
+
+                        if( errorExpr.Matches( text ) )
+                        {
+                            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_ERROR );
+                            drcItem->SetItems( item );
+                            drcItem->SetErrorMessage( errorExpr.GetMatch( text, 1 ) );
+
+                            reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                        }
+                    }
+                }
 
                 return true;
             };
@@ -315,21 +355,18 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                 if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
-                BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-                EDA_TEXT*   textItem = dynamic_cast<EDA_TEXT*>( boardItem );
-
-                if( !textItem )
-                    return true;
-
-                wxString resolved = ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
-                                                               nullptr /*project already done*/ );
-
-                if( resolved.Matches( wxT( "*${*}*" ) ) )
+                if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item ) )
                 {
-                    std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
-                    drcItem->SetItems( item );
+                    wxString result = ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
+                                                                 nullptr /*project already done*/ );
 
-                    reportViolation( drcItem, boardItem->GetPosition(), boardItem->GetLayer() );
+                    if( result.Matches( wxT( "*${*}*" ) ) )
+                    {
+                        auto drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
+                        drcItem->SetItems( item );
+
+                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                    }
                 }
 
                 return true;
@@ -398,7 +435,9 @@ bool DRC_TEST_PROVIDER_MISC::Run()
         testTextVars();
     }
 
-    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE ) )
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE )
+            || !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_WARNING )
+            || !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_ERROR ) )
     {
         if( !reportPhase( _( "Checking assertions..." ) ) )
             return false;   // DRC cancelled

@@ -37,6 +37,7 @@
 #include <wx/stdpaths.h>
 #include <wx/url.h>
 #include <wx/utils.h>
+#include <wx/regex.h>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -70,8 +71,9 @@ wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject )
 wxString ExpandTextVars( const wxString& aSource,
                          const std::function<bool( wxString* )>* aResolver )
 {
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
+    static wxRegEx userDefinedWarningError( wxS( "^(ERC|DRC)_(WARNING|ERROR).*$" ) );
+    wxString       newbuf;
+    size_t         sourceLen = aSource.length();
 
     newbuf.Alloc( sourceLen );  // best guess (improves performance)
 
@@ -92,7 +94,11 @@ wxString ExpandTextVars( const wxString& aSource,
             if( token.IsEmpty() )
                 continue;
 
-            if( aResolver && (*aResolver)( &token ) )
+            if( userDefinedWarningError.Matches( token ) )
+            {
+                // Only show user-defined warnings/errors during ERC/DRC
+            }
+            else if( aResolver && (*aResolver)( &token ) )
             {
                 newbuf.append( token );
             }

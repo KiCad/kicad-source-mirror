@@ -82,6 +82,8 @@ enum PCB_DRC_CODE {
 
     DRCE_UNRESOLVED_VARIABLE,
     DRCE_ASSERTION_FAILURE,              // user-defined (custom rule) assertion
+    DRCE_GENERIC_WARNING,                // generic warning
+    DRCE_GENERIC_ERROR,                  // generic error
 
     DRCE_COPPER_SLIVER,
     DRCE_SOLDERMASK_BRIDGE,              // failure to maintain min soldermask web thickness
@@ -123,7 +125,20 @@ public:
 
     static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
     {
-        return allItemTypes;
+        static std::vector<std::reference_wrapper<RC_ITEM>> itemsWithSeverities;
+
+        if( itemsWithSeverities.empty() )
+        {
+            for( RC_ITEM& item : allItemTypes )
+            {
+                if( &item == &heading_internal )
+                    break;
+
+                itemsWithSeverities.push_back( item );
+            }
+        }
+
+        return itemsWithSeverities;
     }
 
     void SetViolatingRule ( DRC_RULE *aRule ) { m_violatingRule = aRule; }
@@ -155,6 +170,7 @@ private:
     static DRC_ITEM heading_signal_integrity;
     static DRC_ITEM heading_readability;
     static DRC_ITEM heading_misc;
+    static DRC_ITEM heading_internal;
 
     static DRC_ITEM unconnectedItems;
     static DRC_ITEM shortingItems;
@@ -195,6 +211,8 @@ private:
     static DRC_ITEM libFootprintMismatch;
     static DRC_ITEM unresolvedVariable;
     static DRC_ITEM assertionFailure;
+    static DRC_ITEM genericWarning;
+    static DRC_ITEM genericError;
     static DRC_ITEM copperSliver;
     static DRC_ITEM silkClearance;
     static DRC_ITEM silkEdgeClearance;

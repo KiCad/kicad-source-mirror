@@ -75,7 +75,20 @@ public:
 
     static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
     {
-        return allItemTypes;
+        static std::vector<std::reference_wrapper<RC_ITEM>> itemsWithSeverities;
+
+        if( itemsWithSeverities.empty() )
+        {
+            for( RC_ITEM& item : allItemTypes )
+            {
+                if( &item == &heading_internal )
+                    break;
+
+                itemsWithSeverities.push_back( item );
+            }
+        }
+
+        return itemsWithSeverities;
     }
 
     /**
@@ -182,6 +195,7 @@ private:
     static ERC_ITEM heading_connections;
     static ERC_ITEM heading_conflicts;
     static ERC_ITEM heading_misc;
+    static ERC_ITEM heading_internal;
 
     static ERC_ITEM duplicateSheetName;
     static ERC_ITEM endpointOffGrid;
@@ -191,6 +205,8 @@ private:
     static ERC_ITEM duplicatePinError;
     static ERC_ITEM pinTableWarning;
     static ERC_ITEM pinTableError;
+    static ERC_ITEM genericWarning;
+    static ERC_ITEM genericError;
     static ERC_ITEM hierLabelMismatch;
     static ERC_ITEM noConnectConnected;
     static ERC_ITEM fourWayJunction;
