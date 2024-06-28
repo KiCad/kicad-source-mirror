@@ -156,12 +156,11 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
                 // similar names like Mysheet and mysheet
-                if( sheet->GetShownName( false ).CmpNoCase( test_item->GetShownName( false ) ) == 0 )
+                if( sheet->GetShownName( false ).IsSameAs( test_item->GetShownName( false ), false ) )
                 {
                     if( aCreateMarker )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem =
-                                ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_NAME );
+                        auto ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_NAME );
                         ercItem->SetItems( sheet, test_item );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, sheet->GetPosition() );
@@ -471,22 +470,22 @@ int ERC_TESTER::TestMultiunitFootprints()
         wxString    unitName;
         wxString    unitFP;
 
-        for( unsigned i = 0; i < refList.GetCount(); ++i )
+        for( size_t ii = 0; ii < refList.GetCount(); ++ii )
         {
-            SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
-            unitFP = refList.GetItem( i ).GetFootprint();
+            SCH_SHEET_PATH sheetPath = refList.GetItem( ii ).GetSheetPath();
+            unitFP = refList.GetItem( ii ).GetFootprint();
 
             if( !unitFP.IsEmpty() )
             {
-                unit = refList.GetItem( i ).GetSymbol();
+                unit = refList.GetItem( ii ).GetSymbol();
                 unitName = unit->GetRef( &sheetPath, true );
                 break;
             }
         }
 
-        for( unsigned i = 0; i < refList.GetCount(); ++i )
+        for( size_t ii = 0; ii < refList.GetCount(); ++ii )
         {
-            SCH_REFERENCE& secondRef = refList.GetItem( i );
+            SCH_REFERENCE& secondRef = refList.GetItem( ii );
             SCH_SYMBOL*    secondUnit = secondRef.GetSymbol();
             wxString       secondName = secondUnit->GetRef( &secondRef.GetSheetPath(), true );
             const wxString secondFp = secondRef.GetFootprint();
@@ -535,8 +534,8 @@ int ERC_TESTER::TestMissingUnits()
         std::set<int> instance_units;
         std::set<int> missing_units;
 
-        auto report_missing =
-                [&]( std::set<int>& aMissingUnits, wxString aErrorMsg, int aErrorCode )
+        auto report =
+                [&]( std::set<int>& aMissingUnits, const wxString& aErrorMsg, int aErrorCode )
                 {
                     wxString msg;
                     wxString missing_pin_units = wxS( "[ " );
@@ -580,8 +579,7 @@ int ERC_TESTER::TestMissingUnits()
 
         if( !missing_units.empty() && m_settings.IsTestEnabled( ERCE_MISSING_UNIT ) )
         {
-            report_missing( missing_units, _( "Symbol %s has unplaced units %s" ),
-                            ERCE_MISSING_UNIT );
+            report( missing_units, _( "Symbol %s has unplaced units %s" ), ERCE_MISSING_UNIT );
         }
 
         std::set<int> missing_power;
@@ -625,24 +623,23 @@ int ERC_TESTER::TestMissingUnits()
 
         if( !missing_power.empty() && m_settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN ) )
         {
-            report_missing( missing_power,
-                            _( "Symbol %s has input power pins in units %s that are not placed." ),
-                            ERCE_MISSING_POWER_INPUT_PIN );
+            report( missing_power,
+                    _( "Symbol %s has input power pins in units %s that are not placed." ),
+                    ERCE_MISSING_POWER_INPUT_PIN );
         }
 
         if( !missing_input.empty() && m_settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN ) )
         {
-           report_missing( missing_input,
-                           _( "Symbol %s has input pins in units %s that are not placed." ),
-                           ERCE_MISSING_INPUT_PIN );
+           report( missing_input,
+                   _( "Symbol %s has input pins in units %s that are not placed." ),
+                   ERCE_MISSING_INPUT_PIN );
         }
 
         if( !missing_bidi.empty() && m_settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
         {
-            report_missing( missing_bidi,
-                            _( "Symbol %s has bidirectional pins in units %s that are not "
-                               "placed." ),
-                            ERCE_MISSING_BIDI_PIN );
+            report( missing_bidi,
+                    _( "Symbol %s has bidirectional pins in units %s that are not placed." ),
+                    ERCE_MISSING_BIDI_PIN );
         }
     }
 
@@ -867,6 +864,7 @@ int ERC_TESTER::TestPinToPin()
                    } );
 
         ERC_SCH_PIN_CONTEXT needsDriver;
+        ELECTRICAL_PINTYPE  needsDriverType;
         bool                hasDriver = false;
 
         // We need different drivers for power nets and normal nets.
@@ -895,12 +893,11 @@ int ERC_TESTER::TestPinToPin()
                 // if this net needs a power driver
                 if( !needsDriver.Pin()
                     || ( !needsDriver.Pin()->IsVisible() && refPin.Pin()->IsVisible() )
-                    || ( ispowerNet
-                                 != ( needsDriver.Pin()->GetType()
-                                      == ELECTRICAL_PINTYPE::PT_POWER_IN )
+                    || ( ispowerNet != ( needsDriverType == ELECTRICAL_PINTYPE::PT_POWER_IN )
                          && ispowerNet == ( refType == ELECTRICAL_PINTYPE::PT_POWER_IN ) ) )
                 {
                     needsDriver = refPin;
+                    needsDriverType = needsDriver.Pin()->GetType();
                 }
             }
 
