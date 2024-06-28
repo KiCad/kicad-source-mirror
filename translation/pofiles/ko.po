@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-06-25 10:03+0000\n"
+"PO-Revision-Date: 2024-06-28 06:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -44292,7 +44292,7 @@ msgstr "정렬된 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Add an aligned linear dimension"
-msgstr "정렬된 선형 치수선 추가"
+msgstr "선형 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:237
 msgid "Add Center Dimension"
@@ -45273,23 +45273,23 @@ msgstr "패드 번호 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1419
 msgid "Draw Zone Fills"
-msgstr "영역 채움 그리기"
+msgstr "영역 채움 보기"
 
 #: pcbnew/tools/pcb_actions.cpp:1420
 msgid "Show filled areas of zones"
-msgstr "영역의 채워진 구역 표시"
+msgstr "채움 영역의 채워진 보기"
 
 #: pcbnew/tools/pcb_actions.cpp:1426
 msgid "Draw Zone Outlines"
-msgstr "영역 외곽선 그리기"
+msgstr "영역 경계 보기"
 
 #: pcbnew/tools/pcb_actions.cpp:1427
 msgid "Show only zone boundaries"
-msgstr "영역 경계만 표시"
+msgstr "채움 영역 경계만 보기"
 
 #: pcbnew/tools/pcb_actions.cpp:1433
 msgid "Draw Zone Fill Fracture Borders"
-msgstr "부러진 경계선으로 영역 채움 그리기"
+msgstr "채움 영역의 끈어진 경계 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:1439
 msgid "Draw Zone Fill Triangulation"
@@ -45760,11 +45760,11 @@ msgstr "기판 영역 밖에 있는 부품에 대해 자동 배치를 수행"
 
 #: pcbnew/tools/pcb_actions.cpp:2182
 msgid "Route Single Track"
-msgstr "단일 배선 라우트"
+msgstr "단선 배선"
 
 #: pcbnew/tools/pcb_actions.cpp:2183
 msgid "Route tracks"
-msgstr "배선 라우트"
+msgstr "배선"
 
 #: pcbnew/tools/pcb_actions.cpp:2194
 msgid "Route Differential Pair"
@@ -45832,11 +45832,11 @@ msgstr "라우팅을 위한 활성화된 레이어 쌍 변경"
 
 #: pcbnew/tools/pcb_actions.cpp:2260
 msgid "Tune Length of a Single Track"
-msgstr "단일 배선의 길이 조정"
+msgstr "단선 배선의 길이 조정"
 
 #: pcbnew/tools/pcb_actions.cpp:2261
 msgid "Tune length of a single track"
-msgstr "단일 배선의 길이를 조정"
+msgstr "단선 배선의 길이 조정"
 
 #: pcbnew/tools/pcb_actions.cpp:2272
 msgid "Tune Length of a Differential Pair"
