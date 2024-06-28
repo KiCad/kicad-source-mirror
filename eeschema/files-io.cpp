@@ -645,6 +645,7 @@ bool SCH_EDIT_FRAME::AddSheetAndUpdateDisplay( const wxString aFullFileName )
     SyncView();
     OnModify();
     HardRedraw();   // Full reinit of the current screen and the display.
+    bool selected = false;
 
     // Select all new items
     for( EDA_ITEM* item : GetScreen()->Items() )
@@ -652,7 +653,8 @@ bool SCH_EDIT_FRAME::AddSheetAndUpdateDisplay( const wxString aFullFileName )
         if( !item->HasFlag( SKIP_STRUCT ) )
         {
             commit.Added( item, GetScreen() );
-            selectionTool->AddItemToSel( item );
+            selectionTool->AddItemToSel( item, true );
+            selected = true;
 
             if( item->Type() == SCH_LINE_T )
                 item->SetFlags( STARTPOINT | ENDPOINT );
@@ -660,6 +662,9 @@ bool SCH_EDIT_FRAME::AddSheetAndUpdateDisplay( const wxString aFullFileName )
         else
             item->ClearFlags( SKIP_STRUCT );
     }
+
+    if( selected )
+        m_toolManager->ProcessEvent( EVENTS::SelectedEvent );
 
     // Start moving selection, cancel undoes the insertion
     if( !m_toolManager->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
