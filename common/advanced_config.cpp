@@ -257,7 +257,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_PcbSelectionVisibilityRatio = 1.0;
 
-    m_FontErrorSize             = 16;
+    m_FontErrorSize             = 2;
 
     m_OcePluginLinearDeflection = 0.14;
     m_OcePluginAngularDeflection = 30;

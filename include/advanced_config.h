@@ -514,7 +514,7 @@ public:
      *
      * Setting name: "FontErrorSize"
      * Valid values: 0.01 to 100
-     * Default value: 8
+     * Default value: 2
      */
     double m_FontErrorSize;
 
