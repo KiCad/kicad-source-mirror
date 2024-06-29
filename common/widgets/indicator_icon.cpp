@@ -61,7 +61,7 @@ void INDICATOR_ICON::SetIndicatorState( ICON_ID aIconId )
 
     const wxBitmap& icon = m_iconProvider.GetIndicatorIcon( m_currentId );
     m_bitmap->SetBitmap( icon );
-    m_bitmap->SetSize( icon.GetSize() );
+    m_bitmap->SetSize( icon.GetLogicalSize() );
 }
 
 
