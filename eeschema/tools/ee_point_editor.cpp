@@ -1262,9 +1262,8 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
-    size_t            ptCount = poly.GetPointCount();
 
-    if( ptCount < 3 || ( ptCount == 3 && m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T ) )
+    if( poly.GetPointCount() <= 3 )
         return 0;
 
     commit.Modify( shape, m_frame->GetScreen() );
