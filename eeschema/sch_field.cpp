@@ -1017,11 +1017,38 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 
 void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
+    if( GetTextAngle().IsVertical() && GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+    {
+        if( aRotateCCW )
+            SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+
+        SetTextAngle( ANGLE_HORIZONTAL );
+    }
+    else if( GetTextAngle().IsVertical() && GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+    {
+        if( aRotateCCW )
+            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+        SetTextAngle( ANGLE_HORIZONTAL );
+    }
+    else if( GetTextAngle().IsHorizontal() && GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+    {
+        if( !aRotateCCW )
+            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+        SetTextAngle( ANGLE_VERTICAL );
+    }
+    else if( GetTextAngle().IsHorizontal() && GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+    {
+        if( !aRotateCCW )
+            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+        SetTextAngle( ANGLE_VERTICAL );
+    }
+
     VECTOR2I pt = GetPosition();
     RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
     SetPosition( pt );
-
-    SetTextAngle( GetTextAngle() != ANGLE_HORIZONTAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
 }
 
 

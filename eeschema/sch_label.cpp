@@ -203,6 +203,12 @@ SPIN_STYLE SPIN_STYLE::MirrorY()
 }
 
 
+unsigned SPIN_STYLE::CCWRotationsTo( const SPIN_STYLE& aOther ) const
+{
+    return ( ( (int) m_spin - (int) aOther.m_spin ) % 4 + 4 ) % 4;
+}
+
+
 SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KICAD_T aType ) :
         SCH_TEXT( aPos, aText, LAYER_NOTES, aType ),
         m_shape( L_UNSPECIFIED ),
@@ -456,42 +462,7 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
     {
         for( SCH_FIELD& field : m_fields )
         {
-            if( field.GetTextAngle().IsVertical()
-                    && field.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-            {
-                if( !aClockwise )
-                    field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-
-                field.SetTextAngle( ANGLE_HORIZONTAL );
-            }
-            else if( field.GetTextAngle().IsVertical()
-                        && field.GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            {
-                if( !aClockwise )
-                    field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-                field.SetTextAngle( ANGLE_HORIZONTAL );
-            }
-            else if( field.GetTextAngle().IsHorizontal()
-                        && field.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-            {
-                if( aClockwise )
-                    field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-                field.SetTextAngle( ANGLE_VERTICAL );
-            }
-            else if( field.GetTextAngle().IsHorizontal()
-                        && field.GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            {
-                if( aClockwise )
-                    field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-                field.SetTextAngle( ANGLE_VERTICAL );
-            }
-
-            VECTOR2I pos = field.GetTextPos();
-            RotatePoint( pos, GetPosition(), aClockwise ? -ANGLE_90 : ANGLE_90 );
-            field.SetTextPos( pos );
+            field.Rotate( GetPosition(), !aClockwise );
         }
     }
 }

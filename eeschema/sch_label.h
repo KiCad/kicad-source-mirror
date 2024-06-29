@@ -81,6 +81,11 @@ public:
      */
     SPIN_STYLE MirrorY();
 
+    /**
+     * Get CCW rotation needed to get to the given spin style.
+     */
+    unsigned CCWRotationsTo( const SPIN_STYLE& aOther ) const;
+
 private:
     SPIN m_spin;
 };

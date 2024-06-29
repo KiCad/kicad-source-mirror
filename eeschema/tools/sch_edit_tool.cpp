@@ -1149,6 +1149,90 @@ const std::vector<KICAD_T> swappableItems = {
 };
 
 
+/**
+ * Swap the positions of the fields in the two lists, aAFields and aBFields,
+ * relative to their parent positions.
+ *
+ * If a field is in both lists, it will be swapped to the position of the
+ * matching field on the counterpart.
+ *
+ * If a field is in only one list, it will simply be rotated by aFallbackRotation
+ * (CW or CCW depending on which list it is in)
+ */
+static void swapFieldPositionsWithMatching( std::vector<SCH_FIELD>& aAFields,
+                                            std::vector<SCH_FIELD>& aBFields,
+                                            unsigned                aFallbackRotationsCCW )
+{
+    std::set<wxString> handledKeys;
+
+    const auto swapFieldTextProps = []( SCH_FIELD& aField, SCH_FIELD& bField )
+    {
+        const VECTOR2I          aRelPos = aField.GetPosition() - aField.GetParentPosition();
+        const GR_TEXT_H_ALIGN_T aTextJustifyH = aField.GetHorizJustify();
+        const GR_TEXT_V_ALIGN_T aTextJustifyV = aField.GetVertJustify();
+        const EDA_ANGLE         aTextAngle = aField.GetTextAngle();
+
+        const VECTOR2I          bRelPos = bField.GetPosition() - bField.GetParentPosition();
+        const GR_TEXT_H_ALIGN_T bTextJustifyH = bField.GetHorizJustify();
+        const GR_TEXT_V_ALIGN_T bTextJustifyV = bField.GetVertJustify();
+        const EDA_ANGLE         bTextAngle = bField.GetTextAngle();
+
+        aField.SetPosition( aField.GetParentPosition() + bRelPos );
+        aField.SetHorizJustify( bTextJustifyH );
+        aField.SetVertJustify( bTextJustifyV );
+        aField.SetTextAngle( bTextAngle );
+
+        bField.SetPosition( bField.GetParentPosition() + aRelPos );
+        bField.SetHorizJustify( aTextJustifyH );
+        bField.SetVertJustify( aTextJustifyV );
+        bField.SetTextAngle( aTextAngle );
+    };
+
+    for( SCH_FIELD& aField : aAFields )
+    {
+        const wxString name = aField.GetCanonicalName();
+
+        auto it = std::find_if( aBFields.begin(), aBFields.end(),
+                                [name]( const SCH_FIELD& bField )
+                                {
+                                    return bField.GetCanonicalName() == name;
+                                } );
+
+        if( it != aBFields.end() )
+        {
+            // We have a field with the same key in both labels
+            SCH_FIELD& bField = *it;
+            swapFieldTextProps( aField, bField );
+        }
+        else
+        {
+            // We only have this field in A, so just rotate it
+            for( unsigned ii = 0; ii < aFallbackRotationsCCW; ii++ )
+            {
+                aField.Rotate( aField.GetParentPosition(), true );
+            }
+        }
+
+        // And keep track that we did this one
+        handledKeys.insert( name );
+    }
+
+    // Any fields in B that weren't in A weren't handled and need to be rotated
+    // in reverse
+    for( SCH_FIELD& bField : aBFields )
+    {
+        const wxString bName = bField.GetCanonicalName();
+        if( handledKeys.find( bName ) == handledKeys.end() )
+        {
+            for( unsigned ii = 0; ii < aFallbackRotationsCCW; ii++ )
+            {
+                bField.Rotate( bField.GetParentPosition(), false );
+            }
+        }
+    }
+}
+
+
 int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION&          selection = m_selectionTool->RequestSelection( swappableItems );
@@ -1217,9 +1301,26 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIER_LABEL_T:
             case SCH_DIRECTIVE_LABEL_T:
-                m_frame->AutoRotateItem( screen, a );
-                m_frame->AutoRotateItem( screen, b );
+            {
+                SCH_LABEL_BASE& aLabelBase = static_cast<SCH_LABEL_BASE&>( *a );
+                SCH_LABEL_BASE& bLabelBase = static_cast<SCH_LABEL_BASE&>( *b );
+
+                const SPIN_STYLE aSpinStyle = aLabelBase.GetSpinStyle();
+                const SPIN_STYLE bSpinStyle = bLabelBase.GetSpinStyle();
+
+                // First, swap the label orientations
+                aLabelBase.SetSpinStyle( bSpinStyle );
+                bLabelBase.SetSpinStyle( aSpinStyle );
+
+                // And swap the fields as best we can
+                std::vector<SCH_FIELD>& aFields = aLabelBase.GetFields();
+                std::vector<SCH_FIELD>& bFields = bLabelBase.GetFields();
+
+                const unsigned rotationsAtoB = aSpinStyle.CCWRotationsTo( bSpinStyle );
+
+                swapFieldPositionsWithMatching( aFields, bFields, rotationsAtoB );
                 break;
+            }
             case SCH_SYMBOL_T:
             {
                 SCH_SYMBOL* aSymbol = static_cast<SCH_SYMBOL*>( a );
