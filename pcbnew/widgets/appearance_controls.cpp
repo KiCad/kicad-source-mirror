@@ -1283,7 +1283,9 @@ void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible 
     if( m_objectSettingsMap.count( aLayer ) )
     {
         APPEARANCE_SETTING* setting = m_objectSettingsMap.at( aLayer );
-        setting->ctl_visibility->SetValue( isVisible );
+
+        if( setting->can_control_visibility )
+            setting->ctl_visibility->SetValue( isVisible );
     }
 
     m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
