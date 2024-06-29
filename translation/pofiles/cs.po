@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
-"PO-Revision-Date: 2024-06-10 13:09+0000\n"
+"PO-Revision-Date: 2024-06-29 16:07+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -2007,7 +2007,7 @@ msgstr "O programu"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:90
 msgid "Version"
-msgstr "esVerze"
+msgstr "Verze"
 
 #: common/dialog_about/dialog_about.cpp:157
 msgid "Developers"
@@ -10725,7 +10725,7 @@ msgstr "nepojmenováno"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
 msgid "Edit Label Properties"
-msgstr "pravit Vlastnosti označení"
+msgstr "Upravit Vlastnosti označení"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -11912,9 +11912,8 @@ msgid "PDF Options"
 msgstr "Možnosti PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Generovat soubory pro výrobu"
+msgstr "Generování kontextových oken vlastnictví"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 msgid "Other options"
@@ -13259,9 +13258,8 @@ msgid "Leave blank to disable ranges."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:248
-#, fuzzy
 msgid "Keep tabs"
-msgstr "Bez prokovů"
+msgstr "Ponechat karty"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:251
 #, fuzzy
@@ -15814,29 +15812,24 @@ msgid "Symbol pin name offsets differ."
 msgstr "Posun názvu vývodu symbolu se liší."
 
 #: eeschema/lib_symbol.cpp:464
-#, fuzzy
 msgid "Show pin names settings differ."
-msgstr "Zobrazit název vývodu"
+msgstr "Zobrazení nastavení názvů vývodů se liší."
 
 #: eeschema/lib_symbol.cpp:473
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "Zobrazit číslo vývodu"
+msgstr "Zobrazení nastavení čísel vývodů se liší."
 
 #: eeschema/lib_symbol.cpp:482
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "Vyloučit z desky"
+msgstr "Vyloučení z nastavení simulace se liší."
 
 #: eeschema/lib_symbol.cpp:491
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "Vyloučit z rozpisky materiálu"
+msgstr "Vyloučení z kusovníku se liší nastavením."
 
 #: eeschema/lib_symbol.cpp:500
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "Vyloučit z desky"
+msgstr "Vyloučení z nastavení desky se liší."
 
 #: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:497
 #: eeschema/tools/sch_edit_tool.cpp:105
@@ -16068,9 +16061,8 @@ msgid "Change Body Style"
 msgstr "Změnit styl těla"
 
 #: eeschema/picksymbol.cpp:178
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "Vyberte spojení"
+msgstr "Nastavit funkci vývodu"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:61
 msgid "none"
@@ -16246,9 +16238,8 @@ msgstr "Typ vstupu na sběrnici"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2043 pcbnew/pad.cpp:1030
 #: pcbnew/pcb_track.cpp:1163 pcbnew/tools/pcb_control.cpp:1721
 #: pcbnew/zone.cpp:580
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Analyzovaná třída spojů"
+msgstr "Vyřešená třída spojů"
 
 #: eeschema/sch_connection.cpp:435
 msgid "Connection Name"
@@ -16329,9 +16320,8 @@ msgid "[no schematic loaded]"
 msgstr "[není načteno schéma]"
 
 #: eeschema/sch_edit_frame.cpp:1873
-#, fuzzy
 msgid "Schematic Cleanup"
-msgstr "Nastavení schématu"
+msgstr "Čištění schématu"
 
 #: eeschema/sch_edit_frame.cpp:1986
 #, c-format
@@ -16492,14 +16482,12 @@ msgid "Altium schematic files"
 msgstr "Soubory schématu Altium"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:68
-#, fuzzy
 msgid "Altium Schematic Library or Integrated Library"
-msgstr "Soubory schématu Altium"
+msgstr "Knihovny schématu Altium nebo integrované knihovny"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:72
-#, fuzzy
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
-msgstr "Soubor '%s' se nezdá jako platný soubor schématu."
+msgstr "Vybraný soubor nevypadá jako soubor knihovny komponent CADSTAR"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:117
 #, c-format
@@ -16729,18 +16717,17 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "Nelze vytvořit knihovnu pouzder '%s'."
+msgstr "Nelze najít soubor .csa odpovídající knihovně '%s'."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
 msgstr "Soubory archívu schémat CADSTAR"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "Soubory archívu CADSTAR"
+msgstr "Soubory knihoven komponent CADSTAR"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:222
 #, c-format
@@ -16771,13 +16758,13 @@ msgid "Unable to read file '%s'."
 msgstr "Nelze číst soubor '%s'."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:641
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
-"'%s' je soubor schématu v binárním formátu Eagle; importovat lze pouze "
-"schémata ve formátu Eagle XML."
+"'%s' je soubor v binárním formátu Eagle; importovat lze pouze soubory ve "
+"formátu Eagle XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1732
 #, c-format
@@ -16806,31 +16793,31 @@ msgstr "Soubory knihoven Eagle XML"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:440
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:484
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "Nelze číst soubor dat '%s'."
+msgstr "Nelze najít platný soubor schématu v '%s'"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:293
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:298
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:492
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "Chyba při načítání symbolu %s z knihovny '%s'. (%s)"
+msgstr "Chyba při načítání symbolu '%s' z knihovny '%s': %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:418
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:423
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:460
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "Chyba při vytváření knihovny symbolů '%s'."
+msgstr "Chyba při výčtu knihovny symbolů '%s': %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:599
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "Chyba při načítání schématu '%s'."
+msgstr "Chyba při načítání schématu '%s': %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
@@ -16886,9 +16873,8 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr ""
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:46
-#, fuzzy
 msgid "KiCad HTTP library files"
-msgstr "Soubor knihovny symbolů KiCadu"
+msgstr "Soubory knihoven HTTP symbolů"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:116
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:288
@@ -17004,9 +16990,9 @@ msgstr ""
 "hierarchii schématu."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "Očíslování %s jako %s."
+msgstr "Nelze analyzovat %s jako symbol"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:308
 msgid "Invalid symbol name"
@@ -17157,7 +17143,6 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Očekávám R0, R90, R18, R270, M0, M90, M180 nebo M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:490
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
@@ -17165,7 +17150,6 @@ msgstr ""
 "Očekávám LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP nebo VBOTTOM"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:512
-#, fuzzy
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
@@ -17182,7 +17166,6 @@ msgid "Symbol '%s.asy' not found"
 msgstr "Symbol '%s.asy' nenalezen"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
-#, fuzzy
 msgid "LTspice schematic files"
 msgstr "Soubory schématu Ltspice"
 
@@ -17631,9 +17614,8 @@ msgstr "Odkaz na knihovnu"
 
 #: eeschema/sch_symbol.cpp:2830 pcbnew/footprint.cpp:3525
 #: pcbnew/plot_board_layers.cpp:114
-#, fuzzy
 msgid "Library Description"
-msgstr "Popis"
+msgstr "Popis knihovny"
 
 #: eeschema/sch_symbol.cpp:2839
 msgid "Exclude From Board"
@@ -17648,9 +17630,8 @@ msgid "Exclude From Bill of Materials"
 msgstr "Vyloučit z rozpisky materiálu"
 
 #: eeschema/sch_symbol.cpp:2848 pcbnew/footprint.cpp:3542
-#, fuzzy
 msgid "Do not Populate"
-msgstr "Není osazeno (DNP)"
+msgstr "Neobsazený"
 
 #: eeschema/sch_text.cpp:404
 msgid "Graphic Text"
@@ -18227,9 +18208,8 @@ msgid "Invalid C_ref value."
 msgstr "Neplatná hodnota C_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
-msgstr "neplatná hodnota V_ref."
+msgstr "Neplatná hodnota V_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:531
 msgid "Invalid V_meas value."
@@ -18308,44 +18288,36 @@ msgid "Negative number of pins."
 msgstr "Záporný počet vývodů."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "Prázdné číslo vývodu"
+msgstr "Prázdné číslo vývodu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
-msgstr "Matice odporu je nesprávná"
+msgstr "Matice odporu je nesprávná."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
-msgstr "Matice kapacity není definována"
+msgstr "Matice kapacity není definována."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
-msgstr "Matice kapacity je nesprávná"
+msgstr "Matice kapacity je nesprávná."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
-msgstr "Matice kapacity je nullptr"
+msgstr "Matice kapacity je nullptr."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "Matice indukcí je nesprávná"
+msgstr "Matice indukcí není definována."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "Indukční matice je nesprávná"
+msgstr "Indukční matice je nesprávná."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "Indukční matice je nullptr"
+msgstr "Indukční matice je nullptr."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -18627,56 +18599,45 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr ""
 
 #: eeschema/sim/legacy_workbook.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"Chyba načítání souboru desky.\n"
-"%s"
+msgstr "Chyba při načítání sešitu: řádek %d: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:133
-#, fuzzy
 msgid "expecting version"
-msgstr "Očekávám %s"
+msgstr "očekávána verze"
 
 #: eeschema/sim/legacy_workbook.cpp:150
-#, fuzzy
 msgid "expecting simulation tab count"
-msgstr "externí simulátor nenalezen"
+msgstr "očekávám počet karet simulace"
 
 #: eeschema/sim/legacy_workbook.cpp:164
-#, fuzzy
 msgid "expecting simulation tab type"
-msgstr "Otevřít záznamy simulaci"
+msgstr "očekávám typ karty simulace"
 
 #: eeschema/sim/legacy_workbook.cpp:210
-#, fuzzy
 msgid "expecting trace count"
-msgstr "existující spoj"
+msgstr "očekávaný počet stop"
 
 #: eeschema/sim/legacy_workbook.cpp:226
-#, fuzzy
 msgid "expecting trace type"
-msgstr "existující spoj"
+msgstr "očekávaný typ stopy"
 
 #: eeschema/sim/legacy_workbook.cpp:236
-#, fuzzy
 msgid "expecting trace name"
-msgstr "Očekává se číslo."
+msgstr "očekávaný název stopy"
 
 #: eeschema/sim/legacy_workbook.cpp:246
-#, fuzzy
 msgid "expecting trace color"
-msgstr "Výběr barev:"
+msgstr "očekávaná barva stopy"
 
 #: eeschema/sim/legacy_workbook.cpp:262
-#, fuzzy
 msgid "expecting measurement count"
-msgstr "Odstranit segment"
+msgstr "očekává počet měření"
 
 #: eeschema/sim/legacy_workbook.cpp:274
-#, fuzzy
 msgid "expecting measurement definition"
-msgstr "Neplatná definice názvů vývodů"
+msgstr "očekává definici měření"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
@@ -18958,38 +18919,32 @@ msgid "Measure Peak-to-peak"
 msgstr "Měřit špička-špička"
 
 #: eeschema/sim/simulator_frame_ui.cpp:154
-#, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "Měření"
+msgstr "Měření frekvence Min"
 
 #: eeschema/sim/simulator_frame_ui.cpp:155
-#, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "Měření"
+msgstr "Měření frekvence Max"
 
 #: eeschema/sim/simulator_frame_ui.cpp:159
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "Měření"
+msgstr "Měření minimálního času"
 
 #: eeschema/sim/simulator_frame_ui.cpp:160
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "Měření"
+msgstr "Měření maximálního času"
 
 #: eeschema/sim/simulator_frame_ui.cpp:163
-#, fuzzy
 msgid "Measure Integral"
-msgstr "Změřit vzdálenost"
+msgstr "Měření integrity"
 
 #: eeschema/sim/simulator_frame_ui.cpp:168
 msgid "Perform Fourier Analysis..."
 msgstr "Proveďte Fourierovu analýzu..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Fáze signálu:"
+msgstr "Kopírovat název signálu"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -19008,9 +18963,8 @@ msgid "Fourier Analyses of Multiple Signals"
 msgstr "Fourierovy analýzy více signálů"
 
 #: eeschema/sim/simulator_frame_ui.cpp:277
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "Frekvence signálu:"
+msgstr "Základní frekvence:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:341
 #, c-format
@@ -19022,9 +18976,8 @@ msgid "Format Value..."
 msgstr "Formát hodnoty..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:419
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "Odstranit segment"
+msgstr "Smazat měření"
 
 #: eeschema/sim/simulator_frame_ui.cpp:600
 #: eeschema/sim/simulator_frame_ui.cpp:974
@@ -19057,9 +19010,8 @@ msgstr "Kurzor 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1169
 #: eeschema/sim/simulator_frame_ui.cpp:2569
-#, fuzzy
 msgid "Diff"
-msgstr "Dif. pár"
+msgstr "Rozdíl"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1431
 #: eeschema/sim/simulator_frame_ui.cpp:1444
@@ -19074,19 +19026,16 @@ msgid "%s is not tunable"
 msgstr "%s není laditelné"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1529
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Napájení, proud a izolace"
+msgstr "Chyba: žádná aktuální simulace.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1538
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "Chyba: typ simulace není definován!\n"
+msgstr "Chyba: typ simulace není definován.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1544
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "Chyba: typ simulace nepodporuje vykreslování!\n"
+msgstr "Chyba: typ simulace nepodporuje vykreslování.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:2672
 #: eeschema/sim/simulator_frame_ui.cpp:2787
@@ -19103,9 +19052,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:221
-#, fuzzy
 msgid "Measurement"
-msgstr "Nástroj měřítko"
+msgstr "Měření"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:223
 #: gerbview/gerber_file_image.cpp:340
@@ -19125,19 +19073,16 @@ msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr "Nelze najít model '%s' ke kopírování pro \"A Kind Of“ model '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:57
-#, fuzzy
 msgid "DC Operating Point"
-msgstr "Provozní bod"
+msgstr "Funkční bod DC"
 
 #: eeschema/sim/spice_simulator.cpp:58
-#, fuzzy
 msgid "Small-Signal Analysis"
-msgstr "Přechodná analýza"
+msgstr "Analýza malého signálu"
 
 #: eeschema/sim/spice_simulator.cpp:59
-#, fuzzy
 msgid "DC Sweep Analysis"
-msgstr "DC/AC analýza"
+msgstr "Analýza průchodu DC"
 
 #: eeschema/sim/spice_simulator.cpp:60
 msgid "Transient Analysis"
@@ -19148,9 +19093,8 @@ msgid "Small-Signal Distortion Analysis"
 msgstr "Analýza zkreslení malých signálů"
 
 #: eeschema/sim/spice_simulator.cpp:62
-#, fuzzy
 msgid "Noise Analysis"
-msgstr "Přechodná analýza"
+msgstr "Analýza šumu"
 
 #: eeschema/sim/spice_simulator.cpp:63
 #, fuzzy
