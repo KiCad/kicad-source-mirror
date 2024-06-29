@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 17:41-0700\n"
+"POT-Creation-Date: 2024-06-29 12:41-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -9863,8 +9863,12 @@ msgid "Schematic file changes are unsaved"
 msgstr "Schematic file changes are unsaved"
 
 #, c-format
-msgid "Unsupported schematic file '%s'."
-msgstr "Unsupported schematic file '%s'."
+msgid ""
+"'%s' is not a KiCad schematic file.\n"
+"Use File -> Import for non-KiCad schematic files."
+msgstr ""
+"'%s' is not a KiCad schematic file.\n"
+"Use File -> Import for non-KiCad schematic files."
 
 msgid "Root"
 msgstr "Root"
@@ -10745,9 +10749,6 @@ msgstr "Expected Altium Schematic file version 5.0"
 
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Record 'IEEE_SYMBOL' not handled."
-
-msgid "Record 'PIECHART' not handled."
-msgstr "Record 'PIECHART' not handled."
 
 msgid "Parameter Set not currently supported."
 msgstr "Parameter Set not currently supported."
@@ -12677,15 +12678,11 @@ msgstr "Simulator"
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
+msgid "Errors during netlist generation."
+msgstr "Errors during netlist generation."
+
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator requires a fully annotated schematic."
-
-msgid ""
-"Errors during netlist generation.\n"
-"\n"
-msgstr ""
-"Errors during netlist generation.\n"
-"\n"
 
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
@@ -14757,6 +14754,13 @@ msgstr "Press <ESC> to cancel move."
 #, c-format
 msgid "Page '%s' not found."
 msgstr "Page '%s' not found."
+
+msgid ""
+"Errors during netlist generation.\n"
+"\n"
+msgstr ""
+"Errors during netlist generation.\n"
+"\n"
 
 msgid "Open Simulation Workbook"
 msgstr "Open Simulation Workbook"
@@ -23019,89 +23023,8 @@ msgstr "Connected layers only"
 msgid "%s and %s"
 msgstr "%s and %s"
 
-msgid "Error: Pad must have a positive size."
-msgstr "Error: Pad must have a positive size."
-
-msgid "Warning: Pad hole not inside pad shape."
-msgstr "Warning: Pad hole not inside pad shape."
-
-msgid "Warning: Pad hole will leave no copper."
-msgstr "Warning: Pad hole will leave no copper."
-
-msgid "Warning: Negative local clearance values will have no effect."
-msgstr "Warning: Negative local clearance values will have no effect."
-
-msgid ""
-"Warning: Negative solder mask clearances larger than some shape primitives. "
-"Results may be surprising."
-msgstr ""
-"Warning: Negative solder mask clearances larger than some shape primitives. "
-"Results may be surprising."
-
-msgid ""
-"Warning: Negative solder mask clearance larger than pad. No solder mask will "
-"be generated."
-msgstr ""
-"Warning: Negative solder mask clearance larger than pad. No solder mask will "
-"be generated."
-
-msgid ""
-"Warning: Negative solder paste margins larger than pad. No solder paste mask "
-"will be generated."
-msgstr ""
-"Warning: Negative solder paste margins larger than pad. No solder paste mask "
-"will be generated."
-
-msgid "Error: pad has no layer."
-msgstr "Error: pad has no layer."
-
-msgid ""
-"Warning: Plated through holes should normally have a copper pad on at least "
-"one layer."
-msgstr ""
-"Warning: Plated through holes should normally have a copper pad on at least "
-"one layer."
-
-msgid "Error: Trapazoid delta is too large."
-msgstr "Error: Trapazoid delta is too large."
-
 msgid "Error: Through hole pad has no hole."
 msgstr "Error: Through hole pad has no hole."
-
-msgid ""
-"Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-msgstr ""
-"Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-
-msgid "Error: SMD pad has a hole."
-msgstr "Error: SMD pad has a hole."
-
-msgid "Warning: SMD pad has no outer layers."
-msgstr "Warning: SMD pad has no outer layers."
-
-msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "Warning: Fiducial property makes no sense on NPTH pads."
-
-msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr "Warning: Testpoint property makes no sense on NPTH pads."
-
-msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "Warning: Heatsink property makes no sense of NPTH pads."
-
-msgid "Warning: Castellated property is for PTH pads."
-msgstr "Warning: Castellated property is for PTH pads."
-
-msgid "Warning: BGA property is for SMD pads."
-msgstr "Warning: BGA property is for SMD pads."
-
-msgid "Error: Negative corner size."
-msgstr "Error: Negative corner size."
-
-msgid "Warning: Corner size will make pad circular."
-msgstr "Warning: Corner size will make pad circular."
-
-msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr "Error: Custom pad shape must resolve to a single polygon."
 
 msgid "Pad Properties Errors"
 msgstr "Pad Properties Errors"
@@ -24499,6 +24422,9 @@ msgstr "Default text items for new footprints:"
 
 msgid "Default properties for new graphic items:"
 msgstr "Default properties for new graphic items:"
+
+msgid "Hidden footprint libraries are not yet supported."
+msgstr "Hidden footprint libraries are not yet supported."
 
 #, c-format
 msgid "folder with %s files"
@@ -26639,8 +26565,8 @@ msgstr "Track has unconnected end"
 msgid "Hole clearance violation"
 msgstr "Hole clearance violation"
 
-msgid "Drilled holes too close together"
-msgstr "Drilled holes too close together"
+msgid "Drilled hole too close to other hole"
+msgstr "Drilled hole too close to other hole"
 
 msgid "Drilled holes co-located"
 msgstr "Drilled holes co-located"
@@ -27723,11 +27649,17 @@ msgstr "(expected 'Through hole'; actual '%s')"
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(expected 'SMD'; actual '%s')"
 
+msgid "(PTH pad's hole size is very small or null)"
+msgstr "(PTH pad's hole size is very small or null)"
+
 msgid "(PTH pad has no copper layers)"
 msgstr "(PTH pad has no copper layers)"
 
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(PTH pad's hole leaves no copper)"
+
+msgid "(PTH pad's hole non fully inside copper)"
+msgstr "(PTH pad's hole non fully inside copper)"
 
 msgid "(SMD pad appears on both front and back copper)"
 msgstr "(SMD pad appears on both front and back copper)"
@@ -28760,6 +28692,103 @@ msgstr "NPTH of %s"
 msgid "PTH pad %s %s of %s"
 msgstr "PTH pad %s %s of %s"
 
+msgid "(Pad must have a positive size)"
+msgstr "(Pad must have a positive size)"
+
+#, c-format
+msgid "(PTH pad hole size must be larger than %s)"
+msgstr "(PTH pad hole size must be larger than %s)"
+
+msgid "Pad hole not inside pad shape"
+msgstr "Pad hole not inside pad shape"
+
+msgid "Pad hole will leave no copper"
+msgstr "Pad hole will leave no copper"
+
+msgid "Negative local clearance values have no effect"
+msgstr "Negative local clearance values have no effect"
+
+msgid ""
+"Negative solder mask clearance is larger than some shape primitives; results "
+"may be surprising"
+msgstr ""
+"Negative solder mask clearance is larger than some shape primitives; results "
+"may be surprising"
+
+msgid ""
+"Negative solder mask clearance is larger than pad; no solder mask will be "
+"generated"
+msgstr ""
+"Negative solder mask clearance is larger than pad; no solder mask will be "
+"generated"
+
+msgid ""
+"Negative solder paste margin is larger than pad; no solder paste mask will "
+"be generated"
+msgstr ""
+"Negative solder paste margin is larger than pad; no solder paste mask will "
+"be generated"
+
+msgid "(Pad has no layer)"
+msgstr "(Pad has no layer)"
+
+msgid "PTH pad has no copper layers"
+msgstr "PTH pad has no copper layers"
+
+msgid "Plated through holes normally have a copper pad on at least one layer"
+msgstr "Plated through holes normally have a copper pad on at least one layer"
+
+msgid "Connector pads normally have no solder paste; use a SMD pad instead"
+msgstr "Connector pads normally have no solder paste; use a SMD pad instead"
+
+msgid "(SMD pad has a hole)"
+msgstr "(SMD pad has a hole)"
+
+msgid "SMD pad has copper on both sides of the board"
+msgstr "SMD pad has copper on both sides of the board"
+
+msgid "SMD pad has copper and mask layers on different sides of the board"
+msgstr "SMD pad has copper and mask layers on different sides of the board"
+
+msgid "SMD pad has copper and paste layers on different sides of the board"
+msgstr "SMD pad has copper and paste layers on different sides of the board"
+
+msgid "SMD pad has no outer layers"
+msgstr "SMD pad has no outer layers"
+
+msgid "Fiducial property makes no sense on NPTH pads"
+msgstr "Fiducial property makes no sense on NPTH pads"
+
+msgid "Testpoint property makes no sense on NPTH pads"
+msgstr "Testpoint property makes no sense on NPTH pads"
+
+msgid "Heatsink property makes no sense of NPTH pads"
+msgstr "Heatsink property makes no sense of NPTH pads"
+
+msgid "Castellated property is for PTH pads"
+msgstr "Castellated property is for PTH pads"
+
+msgid "BGA property is for SMD pads"
+msgstr "BGA property is for SMD pads"
+
+msgid "(Negative corner radius is not allowed)"
+msgstr "(Negative corner radius is not allowed)"
+
+msgid "Corner size will make pad circular"
+msgstr "Corner size will make pad circular"
+
+msgid "(Negative corner chamfer is not allowed)"
+msgstr "(Negative corner chamfer is not allowed)"
+
+msgid "(Corner chamfer is too large)"
+msgstr "(Corner chamfer is too large)"
+
+msgid "(Trapazoid delta is too large)"
+msgstr "(Trapazoid delta is too large)"
+
+msgid "(Custom pad shape must resolve to a single polygon)"
+msgstr "(Custom pad shape must resolve to a single polygon)"
+
 msgid "Edge connector"
 msgstr "Edge connector"
 
@@ -29091,6 +29120,10 @@ msgstr "Loading nets..."
 msgid "Loading polygons..."
 msgstr "Loading polygons..."
 
+#, c-format
+msgid "Polygon outline count is %d, expected 1."
+msgstr "Polygon outline count is %d, expected 1."
+
 msgid "Loading rules..."
 msgstr "Loading rules..."
 
@@ -29301,6 +29334,10 @@ msgstr ""
 #, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "Footprint %s contains barcode on Altium layer %d (not yet supported)."
+
+#, c-format
+msgid "Unknown textbox justification %d, text %s"
+msgstr "Unknown textbox justification %d, text %s"
 
 msgid "Loading rectangles..."
 msgstr "Loading rectangles..."
@@ -29980,9 +30017,6 @@ msgstr "Saving file"
 
 msgid "Failed to save file to buffer"
 msgstr "Failed to save file to buffer"
-
-msgid "IPC-2581 Production File"
-msgstr "IPC-2581 Production File"
 
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
@@ -31534,18 +31568,11 @@ msgstr "Chamfer Lines"
 msgid "Enter chamfer setback:"
 msgstr "Enter chamfer setback:"
 
-msgid ""
-"A setback of zero was entered.\n"
-"The chamfer operation was not performed."
-msgstr ""
-"A setback of zero was entered.\n"
-"The chamfer operation was not performed."
-
-msgid "A shape with least two lines must be selected."
-msgstr "A shape with least two lines must be selected."
-
 msgid "Exactly two lines must be selected to extend them."
 msgstr "Exactly two lines must be selected to extend them."
+
+msgid "A shape with at least two lines must be selected."
+msgstr "A shape with at least two lines must be selected."
 
 msgid "Heal Shapes"
 msgstr "Heal Shapes"
@@ -34016,6 +34043,112 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Unsupported schematic file '%s'."
+#~ msgstr "Unsupported schematic file '%s'."
+
+#~ msgid "Record 'PIECHART' not handled."
+#~ msgstr "Record 'PIECHART' not handled."
+
+#~ msgid "Error: Pad must have a positive size."
+#~ msgstr "Error: Pad must have a positive size."
+
+#~ msgid "Warning: Pad hole not inside pad shape."
+#~ msgstr "Warning: Pad hole not inside pad shape."
+
+#~ msgid "Warning: Pad hole will leave no copper."
+#~ msgstr "Warning: Pad hole will leave no copper."
+
+#~ msgid "Warning: Negative local clearance values will have no effect."
+#~ msgstr "Warning: Negative local clearance values will have no effect."
+
+#~ msgid ""
+#~ "Warning: Negative solder mask clearances larger than some shape "
+#~ "primitives. Results may be surprising."
+#~ msgstr ""
+#~ "Warning: Negative solder mask clearances larger than some shape "
+#~ "primitives. Results may be surprising."
+
+#~ msgid ""
+#~ "Warning: Negative solder mask clearance larger than pad. No solder mask "
+#~ "will be generated."
+#~ msgstr ""
+#~ "Warning: Negative solder mask clearance larger than pad. No solder mask "
+#~ "will be generated."
+
+#~ msgid ""
+#~ "Warning: Negative solder paste margins larger than pad. No solder paste "
+#~ "mask will be generated."
+#~ msgstr ""
+#~ "Warning: Negative solder paste margins larger than pad. No solder paste "
+#~ "mask will be generated."
+
+#~ msgid "Error: pad has no layer."
+#~ msgstr "Error: pad has no layer."
+
+#~ msgid ""
+#~ "Warning: Plated through holes should normally have a copper pad on at "
+#~ "least one layer."
+#~ msgstr ""
+#~ "Warning: Plated through holes should normally have a copper pad on at "
+#~ "least one layer."
+
+#~ msgid "Error: Trapazoid delta is too large."
+#~ msgstr "Error: Trapazoid delta is too large."
+
+#~ msgid ""
+#~ "Warning: Connector pads normally have no solder paste. Use a SMD pad "
+#~ "instead."
+#~ msgstr ""
+#~ "Warning: Connector pads normally have no solder paste. Use a SMD pad "
+#~ "instead."
+
+#~ msgid "Error: SMD pad has a hole."
+#~ msgstr "Error: SMD pad has a hole."
+
+#~ msgid "Warning: SMD pad has no outer layers."
+#~ msgstr "Warning: SMD pad has no outer layers."
+
+#~ msgid "Warning: Fiducial property makes no sense on NPTH pads."
+#~ msgstr "Warning: Fiducial property makes no sense on NPTH pads."
+
+#~ msgid "Warning: Testpoint property makes no sense on NPTH pads."
+#~ msgstr "Warning: Testpoint property makes no sense on NPTH pads."
+
+#~ msgid "Warning: Heatsink property makes no sense of NPTH pads."
+#~ msgstr "Warning: Heatsink property makes no sense of NPTH pads."
+
+#~ msgid "Warning: Castellated property is for PTH pads."
+#~ msgstr "Warning: Castellated property is for PTH pads."
+
+#~ msgid "Warning: BGA property is for SMD pads."
+#~ msgstr "Warning: BGA property is for SMD pads."
+
+#~ msgid "Error: Negative corner size."
+#~ msgstr "Error: Negative corner size."
+
+#~ msgid "Warning: Corner size will make pad circular."
+#~ msgstr "Warning: Corner size will make pad circular."
+
+#~ msgid "Error: Custom pad shape must resolve to a single polygon."
+#~ msgstr "Error: Custom pad shape must resolve to a single polygon."
+
+#~ msgid "Drilled holes too close together"
+#~ msgstr "Drilled holes too close together"
+
+#~ msgid "IPC-2581 Production File"
+#~ msgstr "IPC-2581 Production File"
+
+#~ msgid ""
+#~ "A setback of zero was entered.\n"
+#~ "The chamfer operation was not performed."
+#~ msgstr ""
+#~ "A setback of zero was entered.\n"
+#~ "The chamfer operation was not performed."
+
+#~ msgid "A shape with least two lines must be selected."
+#~ msgstr "A shape with least two lines must be selected."
 
 #~ msgid "Unable to create the footprint viewer frame"
 #~ msgstr "Unable to create the footprint viewer frame"
