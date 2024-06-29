@@ -113,7 +113,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:41-0700\n"
-"PO-Revision-Date: 2024-06-05 12:08+0200\n"
+"PO-Revision-Date: 2024-06-30 01:10+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -15391,6 +15391,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' non è un file schema KiCad.\n"
+"Usare File -> Importa per file schema non-KiCad."
 
 #: eeschema/files-io.cpp:274
 msgid "Root"
@@ -19121,11 +19123,8 @@ msgid "Spice Simulator"
 msgstr "Simulatore Spice"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Errori nella generazione della netlist.\n"
-"\n"
+msgstr "Errori nella generazione della netlist."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -35353,9 +35352,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Valori predefiniti per i nuovi elementi grafici:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Libreria impronte non aggiornata\n"
+msgstr "Librerie di impronte nascoste non ancora supportate."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -38055,9 +38053,8 @@ msgid "Hole clearance violation"
 msgstr "Violazione distanza foro"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Fori troppo vicini tra loro"
+msgstr "Foro troppo vicino ad un altro foro"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -39515,9 +39512,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(atteso 'SMD'; effettivo '%s')"
 
 #: pcbnew/footprint.cpp:2817
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(foro piazzola PTH senza rame)"
+msgstr "(foro piazzola PTH molto piccolo o nullo)"
 
 #: pcbnew/footprint.cpp:2825
 msgid "(PTH pad has no copper layers)"
@@ -39528,9 +39524,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(foro piazzola PTH senza rame)"
 
 #: pcbnew/footprint.cpp:2856
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(foro piazzola PTH senza rame)"
+msgstr "(foro piazzola PTH non del tutto nel rame)"
 
 #: pcbnew/footprint.cpp:2866
 msgid "(SMD pad appears on both front and back copper)"
@@ -40892,159 +40887,123 @@ msgid "PTH pad %s %s of %s"
 msgstr "Piazzola PTH  %s %s di %s"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Errore: la piazzola deve avere una dimensione positiva."
+msgstr "(la piazzola deve avere una dimensione positiva)"
 
 #: pcbnew/pad.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "La dimensione del foro del via deve essere minore del diametro del via"
+msgstr "(il foro della piazzola PTH deve essere maggiore di %s)"
 
 #: pcbnew/pad.cpp:1899
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Attenzione: foro piazzola fuori dalla sagoma."
+msgstr "Foro piazzola fuori dalla sagoma"
 
 #: pcbnew/pad.cpp:1912
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Attenzione: il foro piazzola toglierà il rame."
+msgstr "Il foro piazzola non lascerà rame"
 
 #: pcbnew/pad.cpp:1917
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr "Attenzione: i valori di distanza locale negativa non avranno effetto."
+msgstr "I valori di distanza locale negativi non avranno effetto"
 
 #: pcbnew/pad.cpp:1936
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
-msgstr ""
-"Attenzione: le distanze negative della maschera di saldatura più grandi di "
-"alcune primitive di forma. I risultati potrebbero essere sorprendenti."
+msgstr "Distanza negativa dalla maschera di saldatura più grande di alcune primitive di forma; i risultati potrebbero essere sorprendenti."
 
 #: pcbnew/pad.cpp:1946
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
-msgstr ""
-"Attenzione: distanza maschera di saldatura negativa più grande della "
-"piazzola. Non verrà generata nessuna maschera di saldatura."
+msgstr "Distanza maschera di saldatura negativa più grande della piazzola; non verrà generata nessuna maschera di saldatura"
 
 #: pcbnew/pad.cpp:1965
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
-msgstr ""
-"Attenzione: margine pastasalda negativo più grande della piazzola. Non verrà "
-"generata nessuna maschera di pastasalda."
+msgstr "Margine pastasalda negativo più grande della piazzola; non verrà generata nessuna maschera di pastasalda"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(piazzola PTH senza strati rame)"
+msgstr "(piazzola senza uno strato)"
 
 #: pcbnew/pad.cpp:1975
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(piazzola PTH senza strati rame)"
+msgstr "Piazzola PTH senza strati rame"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
-msgstr ""
-"Attenzione: i fori metallizzati dovrebbero avere una piazzola in rame almeno "
-"su uno strato."
+msgstr "I fori metallizzati normalmente hanno una piazzola in rame almeno su uno strato"
 
 #: pcbnew/pad.cpp:2000
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
-msgstr ""
-"Attenzione: le piazzole del connettore normalmente non hanno pastasalda. "
-"Usare piazzole SMD."
+msgstr "Le piazzole del connettore normalmente non hanno pastasalda; usare piazzole SMD"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Errore: la piazzola SMD ha un foro."
+msgstr "(la piazzola SMD ha un foro)"
 
 #: pcbnew/pad.cpp:2014
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr "Se si desidera uno strato di pasta salda per il fronte scheda"
+msgstr "La piazzola SMD ha rame su entrambi i lati della scheda"
 
 #: pcbnew/pad.cpp:2020 pcbnew/pad.cpp:2033
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(gli strati rame e maschera della piazzola SMD non corrispondono)"
+msgstr "la piazzola SMD ha strati rame e maschera su lati diversi della scheda"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "Se si desidera uno strato di pasta salda per il fronte scheda"
+msgstr "la piazzola SMD ha strati rame e pastasalda su lati diversi della scheda"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Attenzione: la piazzola SMD non ha strati esterni."
+msgstr "La piazzola SMD non ha strati esterni"
 
 #: pcbnew/pad.cpp:2054
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Attenzione: la proprietà allineatore non ha senso con piazzole NPTH."
+msgstr "La proprietà di allineamento non ha senso su piazzole NPTH"
 
 #: pcbnew/pad.cpp:2058
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Attenzione: la proprietà testpoint non ha senso con piazzole NPTH."
+msgstr "La proprietà testpoint non ha senso su piazzole NPTH"
 
 #: pcbnew/pad.cpp:2061
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr "Attenzione: la proprietà dissipatore non ha senso per piazzole NPTH."
+msgstr "La proprietà dissipazione non ha senso per piazzole NPTH"
 
 #: pcbnew/pad.cpp:2064
-#, fuzzy
 msgid "Castellated property is for PTH pads"
-msgstr "Attenzione: la proprietà dentellata è per piazzole PTH."
+msgstr "La proprietà dentellata è per piazzole PTH"
 
 #: pcbnew/pad.cpp:2067
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Attenzione: la proprietà BGA è per piazzole SMD."
+msgstr "La proprietà BGA è per piazzole SMD"
 
 #: pcbnew/pad.cpp:2072
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(Raggio angolo negativo non consentito)"
 
 #: pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Attenzione: la dimensione angolo renderà la piazzola circolare."
+msgstr "La dimensione angolo renderà la piazzola circolare"
 
 #: pcbnew/pad.cpp:2079
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(smusso angolo negativo non consentito)"
 
 #: pcbnew/pad.cpp:2081
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "Scaricamento troppo grande."
+msgstr "(Smusso angolo troppo grande)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Errore: il delta del trapeziode è troppo grande."
+msgstr "(delta trapezoide troppo grande)"
 
 #: pcbnew/pad.cpp:2101
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr ""
-"Errore: la forma piazzola personalizzata deve risolvere un singolo poligono."
+msgstr "(forma piazzola personalizzata deve risolversi in un singolo poligono)"
 
 #: pcbnew/pad.cpp:2293
 msgid "Edge connector"
@@ -41480,7 +41439,7 @@ msgstr "Caricamento poligoni..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Il conteggio contorni poligono è %d, previsto 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41750,7 +41709,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4120
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Giustificazione casella di testo sconosciuta %d, testo %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4185
 msgid "Loading rectangles..."
@@ -44669,7 +44628,6 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Bisogna selezionare esattamente due linee per estenderle."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "Bisogna selezionare una forma di almeno due linee."
 
@@ -48020,26 +47978,3 @@ msgstr "Simbolo schema di KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Foglo di disegno KiCad"
-
-#, c-format
-#~ msgid "Unsupported schematic file '%s'."
-#~ msgstr "File schemi elettrici '%s' non supportato."
-
-#~ msgid "Record 'PIECHART' not handled."
-#~ msgstr "Record 'PIECHART' non gestito."
-
-#~ msgid "Error: pad has no layer."
-#~ msgstr "Errore: la piazzola non ha strati."
-
-#~ msgid "Error: Negative corner size."
-#~ msgstr "Errore: dimensione angolo negativo."
-
-#~ msgid "IPC-2581 Production File"
-#~ msgstr "File produzione IPC-2581"
-
-#~ msgid ""
-#~ "A setback of zero was entered.\n"
-#~ "The chamfer operation was not performed."
-#~ msgstr ""
-#~ "È stato inserito un raggio zero.\n"
-#~ "L'operazione di smusso non è stata eseguita."
