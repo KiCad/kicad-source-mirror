@@ -382,7 +382,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
     m_params.emplace_back( new PARAM_LAYER_PRESET_3D( "layer_presets",
                                                       &m_LayerPresets ) );
     m_params.emplace_back( new PARAM<wxString>( "current_layer_preset",
-                                                &m_CurrentPreset, FOLLOW_PLOT_SETTINGS ) );
+                                                &m_CurrentPreset, LEGACY_PRESET_FLAG ) );
 
     registerMigration( 0, 1, std::bind( &EDA_3D_VIEWER_SETTINGS::migrateSchema0to1, this ) );
 

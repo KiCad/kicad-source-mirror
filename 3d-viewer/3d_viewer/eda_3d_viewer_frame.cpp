@@ -591,7 +591,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
                                                   GetAdapter().GetDefaultColors() );
             }
 
-            cfg->m_CurrentPreset = wxEmptyString;
+            cfg->m_CurrentPreset = FOLLOW_PLOT_SETTINGS;
         }
 
         m_boardAdapter.InitSettings( nullptr, nullptr );
