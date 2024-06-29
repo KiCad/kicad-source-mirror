@@ -372,12 +372,6 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
 }
 
 
-bool SHAPE_ARC::IsClockwise() const
-{
-    return GetCentralAngle() < ANGLE_0;
-}
-
-
 VECTOR2I SHAPE_ARC::NearestPoint( const VECTOR2I& aP ) const
 {
     const static int s_epsilon = 8;

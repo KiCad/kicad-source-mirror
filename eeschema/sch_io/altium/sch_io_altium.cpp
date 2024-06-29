@@ -2413,7 +2413,7 @@ void SCH_IO_ALTIUM::ParsePieChart( const std::map<wxString, wxString>& aProperti
         if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
 
-        SCH_SHAPE*  line = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+        LIB_SHAPE*  line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
         symbol->AddDrawItem( line, false );
 
         line->SetUnit( std::max( 0, elem.ownerpartid ) );
