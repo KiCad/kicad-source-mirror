@@ -325,26 +325,8 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     sort( m_drillTypes.begin(), m_drillTypes.end(),
           DRILL_LINE_ITEM::COMPARE( DRILL_LINE_ITEM::COL_COUNT, false ) );
 
-    bool           boundingBoxCreated = false; //flag if bounding box initialized
-    BOX2I          bbox;
     SHAPE_POLY_SET polySet;
     m_hasOutline = board->GetBoardPolygonOutlines( polySet );
-
-    // If board has no Edge Cuts lines, board->GetBoardPolygonOutlines will
-    // return small rectangle, so we double check that
-    bool edgeCutsExists = false;
-
-    for( BOARD_ITEM* drawing : board->Drawings() )
-    {
-        if( drawing->GetLayer() == Edge_Cuts )
-        {
-            edgeCutsExists = true;
-            break;
-        }
-    }
-
-    if( !edgeCutsExists )
-        m_hasOutline = false;
 
     if( m_hasOutline )
     {
@@ -361,17 +343,10 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 for( int j = 0; j < polySet.HoleCount( i ); j++ )
                     m_boardArea -= polySet.Hole( i, j ).Area();
             }
-
-            if( boundingBoxCreated )
-            {
-                bbox.Merge( outline.BBox() );
-            }
-            else
-            {
-                bbox = outline.BBox();
-                boundingBoxCreated = true;
-            }
         }
+
+        // Compute the bounding box to get a rectangular size
+        BOX2I bbox = board->GetBoardEdgesBoundingBox();
 
         m_boardWidth = bbox.GetWidth();
         m_boardHeight = bbox.GetHeight();
