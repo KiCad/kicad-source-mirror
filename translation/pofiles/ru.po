@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:41-0700\n"
-"PO-Revision-Date: 2024-05-26 16:09+0000\n"
+"PO-Revision-Date: 2024-06-30 16:56+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15241,6 +15241,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' не является файлом схемы KiCad.\n"
+"Используйте Файл -> Импорт для импорта схем из других САПР."
 
 #: eeschema/files-io.cpp:274
 msgid "Root"
@@ -18951,11 +18953,8 @@ msgid "Spice Simulator"
 msgstr "Spice симулятор"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Ошибки при генерации списка цепей.\n"
-"\n"
+msgstr "Ошибки при генерации списка цепей."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -35147,9 +35146,8 @@ msgid "Default properties for new graphic items:"
 msgstr "По умолчанию для новых графических элементов:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Библиотека посад.мест не была обновлена\n"
+msgstr "Скрытие библиотек посад.мест пока не поддерживается."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -37854,9 +37852,8 @@ msgid "Hole clearance violation"
 msgstr "Нарушение зазора между отв."
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Сквозные отверстия слишком близко друг к другу"
+msgstr "Сверленое отверстие слишком близко к другому отверстию"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -39305,9 +39302,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(ожидался тип 'SMD'; но задано '%s')"
 
 #: pcbnew/footprint.cpp:2817
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(отверстие в конт.пл. не оставляет меди)"
+msgstr "(размер метал. отверстия конт.пл. очень мал или равен нулю)"
 
 #: pcbnew/footprint.cpp:2825
 msgid "(PTH pad has no copper layers)"
@@ -39318,9 +39314,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(отверстие в конт.пл. не оставляет меди)"
 
 #: pcbnew/footprint.cpp:2856
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(отверстие в конт.пл. не оставляет меди)"
+msgstr "(отверстие PTH конт.пл. не полностью внутри меди)"
 
 #: pcbnew/footprint.cpp:2866
 msgid "(SMD pad appears on both front and back copper)"
@@ -40673,161 +40668,131 @@ msgid "PTH pad %s %s of %s"
 msgstr "PTH конт.пл. %s %s у %s"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Ошибка: Конт.пл. должна иметь положительный размер."
+msgstr "(Конт.пл. должна иметь положительный размер)"
 
 #: pcbnew/pad.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "Сверло должно быть меньше размера перех.отв."
+msgstr "(размер метал. отверстия конт.пл. должен быть больше чем %s)"
 
 #: pcbnew/pad.cpp:1899
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Предупреждение: Отверстие конт.пл находится не в контуре конт.пл."
+msgstr "Отверстие конт.пл находится не в контуре конт.пл."
 
 #: pcbnew/pad.cpp:1912
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Предупреждение: Размер отверстия конт.пл. не оставит меди."
+msgstr "Отверстие конт.пл. не оставит меди"
 
 #: pcbnew/pad.cpp:1917
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr ""
-"Предупреждение: отрицательные значения локального зазора ни на что не влияют."
+msgstr "Отрицательные значения локального зазора ни на что не влияют"
 
 #: pcbnew/pad.cpp:1936
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Предупреждение: отрицательные зазоры паяльной маски больше некоторых "
-"примитивов. Результат может быть неожиданным."
+"Отрицательные зазоры паяльной маски больше некоторых примитивов. Результат "
+"может быть неожиданным."
 
 #: pcbnew/pad.cpp:1946
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Предупреждение: отрицательный зазор паяльной маски больше конт.пл. Паяльная "
-"маска не будет сформирована."
+"Отрицательный зазор паяльной маски больше конт.пл. Паяльная маска не будет "
+"сформирована."
 
 #: pcbnew/pad.cpp:1965
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Предупреждение: отрицательные отступы паяльной пасты больше конт.пл. Маска "
-"паяльной пасты не будет сформирована."
+"Отрицательные отступы паяльной пасты больше конт.пл. Маска паяльной пасты не "
+"будет сформирована."
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(конт.пл. с отверстием не имеет медных слоев)"
+msgstr "(конт.пл. не имеет слоя)"
 
 #: pcbnew/pad.cpp:1975
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(конт.пл. с отверстием не имеет медных слоев)"
+msgstr "Конт.пл. с метал. отверстием не имеет медных слоев"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
-msgstr ""
-"Предупреждение: метал. отверстие должно иметь конт.пл. хотя бы на одном слое."
+msgstr "Метал. отверстия обычно имеют медную конт.пл. хотя бы на одном слое"
 
 #: pcbnew/pad.cpp:2000
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
 msgstr ""
-"Предупреждение: конт.пл. разъемов обычно не имеют паяльной пасты. "
-"Используйте SMD конт.пл."
+"Конт.пл. разъемов обычно не имеют паяльной пасты. Используйте SMD конт.пл."
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Ошибка: SMD конт.пл. имеет отверстие."
+msgstr "(SMD конт.пл. имеет отверстие)"
 
 #: pcbnew/pad.cpp:2014
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr "Если нужен слой паяльной пасты для верхней стороны платы"
+msgstr "SMD конт.пл. имеет медь на обеих сторонах платы"
 
 #: pcbnew/pad.cpp:2020 pcbnew/pad.cpp:2033
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(Слои меди и паяльной маски не совпадают у SMD конт.пл.)"
+msgstr "SMD конт.пл. имеет слои меди и масок на разных сторонах платы"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "Если нужен слой паяльной пасты для верхней стороны платы"
+msgstr "SMD конт.пл. имеет слои меди и пасты на разных сторонах платы"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Предупреждение: SMD конт.пл. не имеет наружных слоёв."
+msgstr "SMD конт.пл. не имеет наружных слоёв."
 
 #: pcbnew/pad.cpp:2054
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Предупреждение: не имеет смысла обозначать NPTH конт.пл. реперной."
+msgstr "Не имеет смысла обозначать NPTH конт.пл. реперной."
 
 #: pcbnew/pad.cpp:2058
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Предупреждение: не имеет смысла обозначать NPTH конт.пл. тестовой."
+msgstr "Не имеет смысла обозначать NPTH конт.пл. тестовой."
 
 #: pcbnew/pad.cpp:2061
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr ""
-"Предупреждение: не имеет смысла обозначать NPTH конт.пл. теплоотводной."
+msgstr "Не имеет смысла обозначать NPTH конт.пл. теплоотводной."
 
 #: pcbnew/pad.cpp:2064
-#, fuzzy
 msgid "Castellated property is for PTH pads"
 msgstr ""
-"Предупреждение: только PTH конт.пл. могут быть обозначены как периферийные "
-"полу-отверстия."
+"Только PTH конт.пл. могут быть обозначены как периферийные полу-отверстия."
 
 #: pcbnew/pad.cpp:2067
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Предупреждение: только SMD конт.пл. могут быть обозначены как BGA."
+msgstr "Только SMD конт.пл. могут быть обозначены как BGA."
 
 #: pcbnew/pad.cpp:2072
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(Отрицательный радиус скругления не допускается)"
 
 #: pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Предупреждение: скругление сделает конт.пл. круглой."
+msgstr "Скругление сделает конт.пл. круглой."
 
 #: pcbnew/pad.cpp:2079
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(Отрицательное значение фаски не допускается)"
 
 #: pcbnew/pad.cpp:2081
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "Загрузка слишком большая."
+msgstr "(Слишком большая фаска угла)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Ошибка: Дельта трапеции слишком велика."
+msgstr "(Дельта трапеции слишком велика)"
 
 #: pcbnew/pad.cpp:2101
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr "Ошибка: конт.пл. сложной формы должна образовать единый полигон."
+msgstr "(Конт.пл. сложной формы должна образовать единый полигон)"
 
 #: pcbnew/pad.cpp:2293
 msgid "Edge connector"
@@ -41262,7 +41227,7 @@ msgstr "Загрузка полигонов..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Количество контуров полигона равно %d, ожидалось 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41528,7 +41493,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4120
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Неизвестное выравнивание текстового блока %d, текст %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4185
 msgid "Loading rectangles..."
@@ -44435,7 +44400,6 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Необходимо выбрать ровно две линии, чтобы удлинить их."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "Необходимо выбрать фигуру, состоящую как минимум из двух линий."
 
