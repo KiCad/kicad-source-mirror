@@ -19,15 +19,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:41-0700\n"
-"PO-Revision-Date: 2024-05-28 14:09+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2024-06-30 16:56+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -18959,11 +18959,8 @@ msgid "Spice Simulator"
 msgstr "Spice-Simulaattori"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Virheitä verkkolistan luomisen aikana.\n"
-"\n"
+msgstr "Virheitä verkkolistan luomisen aikana."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -30813,7 +30810,7 @@ msgstr "Valmistaja"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:144
 msgid "mfg"
-msgstr "mfg"
+msgstr "valmistaja"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
@@ -35149,9 +35146,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Uusien graafisten kohteiden oletusominaisuudet:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Jalanjälkikirjastoa ei päivitetty\n"
+msgstr "Piilotetun jalanjäljen kirjastoja ei vielä tueta."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -37397,9 +37393,8 @@ msgid "Hole clearance violation"
 msgstr "Reiän välyksen rikkomus"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Poratut reiät ovat liian lähellä toisiaan"
+msgstr "Porattu reikä liian lähellä toista reikää"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -38847,9 +38842,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(odotettu 'SMD'; todellinen '%s')"
 
 #: pcbnew/footprint.cpp:2817
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(PTH anturan reikään ei jää kuparia)"
+msgstr "(PTH anturan reikäkoko on hyvin pieni tai nolla)"
 
 #: pcbnew/footprint.cpp:2825
 msgid "(PTH pad has no copper layers)"
@@ -38860,9 +38854,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(PTH anturan reikään ei jää kuparia)"
 
 #: pcbnew/footprint.cpp:2856
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(PTH anturan reikään ei jää kuparia)"
+msgstr "(PTH anturan reikä ei kokonaan kuparin sisäpuolella)"
 
 #: pcbnew/footprint.cpp:2866
 msgid "(SMD pad appears on both front and back copper)"
@@ -40209,116 +40202,97 @@ msgid "PTH pad %s %s of %s"
 msgstr "PTH-antura %s %s %s:sta"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Virhe: Anturalla on oltava positiivinen koko."
+msgstr "(Anturalla on oltava positiivinen koko)"
 
 #: pcbnew/pad.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "Läpiviennin reiän koko on oltava pienempi kuin läpiviennin halkaisija"
+msgstr "(PTH-anturan reiän koon on oltava suurempi kuin %s)"
 
 #: pcbnew/pad.cpp:1899
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Varoitus: Anturan reikä ei Anturan muodon sisällä."
+msgstr "Anturan reikä ei ole anturan muodon sisällä."
 
 #: pcbnew/pad.cpp:1912
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Varoitus: Anturan reikä ei jätä yhtään kuparia."
+msgstr "Anturan reikä ei jätä yhtään kuparia"
 
 #: pcbnew/pad.cpp:1917
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr ""
-"Varoitus: Negatiivisilla paikallisilla välysarvoilla ei ole vaikutusta."
+msgstr "Negatiivisilla paikallisilla etäisyysarvoilla ei ole vaikutusta"
 
 #: pcbnew/pad.cpp:1936
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Varoitus: Negatiiviset juotosmaskivälykset suurempia, kuin joidenkin "
-"muotoprimitiivien. Tulos saattaa olla yllättävä."
+"Negatiivinen juotosmaskietäisyys on suurempi, kuin osalla "
+"muotoprimitiiveistä; tulokset saattavat olla yllättäviä"
 
 #: pcbnew/pad.cpp:1946
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Varoitus: Negatiivisen juotosmaskin välys on anturaa suurempi. Juotosmaskia "
-"ei luoda."
+"Negatiivinen juotosmaskietäisyys on suurempi kuin antura; juotosmaskia ei "
+"luoda"
 
 #: pcbnew/pad.cpp:1965
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Varoitus: Negatiiviset juotostahnan reunukset suurempia, kuin antura. Yhtään "
-"juotostahnamaskia ei tulla generoimaan."
+"Negatiivinen juotospastareunus on suurempi kuin antura; juotospastamaskia ei "
+"luoda"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(PTH anturalla ei ole kuparikerroksia)"
+msgstr "(Anturalla ei ole kerrosta)"
 
 #: pcbnew/pad.cpp:1975
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(PTH anturalla ei ole kuparikerroksia)"
+msgstr "PTH-anturalla ei ole kuparikerroksia"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
 msgstr ""
-"Varoitus: päällystetyllä reiällä pitäisi tavallisesti olla juotospiste "
-"vähintään yhdessä kerroksessa."
+"Pinnoitetuissa läpirei'issä on yleensä kupariantura vähintään yhdessä "
+"kerroksessa"
 
 #: pcbnew/pad.cpp:2000
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
 msgstr ""
-"Varoitus: Liitinanturoissa ei yleensä käytetä juotospastaa. Käytä "
-"pintaliitosanturaa sen sijaan."
+"Liitinanturoissa ei normaalisti ole juotospastaa; käytä pintaliitosanturaa "
+"sen sijaan"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Virhe: pintaliitosanturalla ei ole reikää."
+msgstr "(SMD-anturalla ei ole reikää)"
 
 #: pcbnew/pad.cpp:2014
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr "Jos sinä haluat juotospastakerroksen piirilevyn etupuolelle"
+msgstr "SMD-anturassa on kuparia levyn molemmilla puolilla"
 
 #: pcbnew/pad.cpp:2020 pcbnew/pad.cpp:2033
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(SMD-anturan kupari- ja maskikerrokset eivät täsmää)"
+msgstr "SMD-anturassa on kupari- ja maskikerrokset levyn eri puolilla"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "Jos sinä haluat juotospastakerroksen piirilevyn etupuolelle"
+msgstr "SMD-anturassa on kupari- ja tahnakerrokset levyn eri puolilla"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Virhe: pintaliitosjuotospiste ei sijaitse ulkokerroksella."
+msgstr "SMD-anturalla ei ole ulkokerroksia"
 
 #: pcbnew/pad.cpp:2054
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Varoitus: Viitearvon ominaisuus ei käy järkeen NPTH anturoilla."
+msgstr "Kriteeriarvot ei käy järkeen NPTH-anturoilla."
 
 #: pcbnew/pad.cpp:2058
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Varoitus: Testipisteen ominaisuus ei sovi NPTH pädille."
+msgstr "Testipisteominaisuus ei käy järkeen NPTH-anturoissa"
 
 #: pcbnew/pad.cpp:2061
 #, fuzzy
