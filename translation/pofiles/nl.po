@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:51-0700\n"
-"PO-Revision-Date: 2024-05-24 09:09+0000\n"
+"PO-Revision-Date: 2024-06-30 16:56+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -10514,9 +10514,8 @@ msgid "Edit exclusion comment..."
 msgstr "Uitzonderingsopmerking bewerken..."
 
 #: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:678
-#, fuzzy
 msgid "Exclude this violation"
-msgstr "Deze overtreding uitzonderen..."
+msgstr "Overtreding uitzonderen"
 
 #: eeschema/dialogs/dialog_erc.cpp:653 eeschema/dialogs/dialog_erc.cpp:657
 #: pcbnew/dialogs/dialog_drc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:683
@@ -10525,9 +10524,8 @@ msgid "It will be excluded from the %s list"
 msgstr "Het wordt weggelaten van de %s -lijst"
 
 #: eeschema/dialogs/dialog_erc.cpp:656 pcbnew/dialogs/dialog_drc.cpp:682
-#, fuzzy
 msgid "Exclude with comment..."
-msgstr "Uitzonderingsopmerking bewerken..."
+msgstr "Uitzonderen met opmerking..."
 
 #: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:704
 #, c-format
@@ -17102,9 +17100,9 @@ msgid "Compare Symbol with Library"
 msgstr "Symbolen vergelijken met bibliotheek"
 
 #: eeschema/sch_field.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s '%s'"
-msgstr "Veld '%s' van %s"
+msgstr "Veld %s '%s'"
 
 #: eeschema/sch_field.cpp:1069
 msgid "Symbol Field"
@@ -19824,9 +19822,8 @@ msgstr ""
 "resultaten."
 
 #: eeschema/sim/simulator_frame.cpp:347
-#, fuzzy
 msgid "SPICE Simulator"
-msgstr "Simulatie"
+msgstr "SPICE-simulatie"
 
 #: eeschema/sim/simulator_frame.cpp:366
 #, fuzzy
@@ -20087,9 +20084,9 @@ msgid "Please, fill required fields"
 msgstr "Vul de verplichte velden in"
 
 #: eeschema/sim/spice_value.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid SPICE value."
-msgstr "'%s' is geen geldige Spice-waarde."
+msgstr "'%s' is geen geldige SPICE-waarde."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:173
 msgid "&Simulation"
@@ -22857,9 +22854,8 @@ msgid "Place Pin Anyway"
 msgstr "Pin toch plaatsen"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:449
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Bladspeld"
+msgstr "Pin herhalen"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -24508,9 +24504,8 @@ msgstr "Sporen, pads en via’s exporteren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:128
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
-#, fuzzy
 msgid "Export pads"
-msgstr "Sporen exporteren"
+msgstr "Pads exporteren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:132
 #: pcbnew/dialogs/dialog_export_step_base.cpp:75
@@ -30317,9 +30312,8 @@ msgid "Reannotate anyway?"
 msgstr "Toch herannoteren?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:642
-#, fuzzy
 msgid "Annotation"
-msgstr "Annotaties"
+msgstr "Annotatie"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:804
 #, c-format
@@ -32070,9 +32064,8 @@ msgstr ""
 "de footprint in de bibliotheek en wil deze terug doorvoeren naar de PCB."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:310
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Footprints wijzigen"
+msgstr "Footprint wijzigen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, c-format
@@ -32340,13 +32333,12 @@ msgid "Binary glTF files"
 msgstr "Binaire glTF-bestanden"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:416
-#, fuzzy
 msgid "XAO files"
-msgstr "Alle bestanden"
+msgstr "XAO-bestanden"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:418
 msgid "BREP (OCCT) files"
-msgstr ""
+msgstr "BREP (OCCT)-bestanden"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:426
 #, fuzzy
@@ -32371,27 +32363,24 @@ msgid "STEP/GLTF Export"
 msgstr "STEP/GLTF exporteren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
-#, fuzzy
 msgid "Format:"
-msgstr "Plot Formaat"
+msgstr "Indeling:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "STEP"
-msgstr "STAP..."
+msgstr "STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "GLB (Binary glTF)"
-msgstr "GLB (binaire GLTF) exporteren"
+msgstr "GLB (Binaire glTF)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -32558,9 +32547,8 @@ msgstr ""
 "applicaties verminderen."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:99
-#, fuzzy
 msgid "Export 3D Model"
-msgstr "Exporteer Module"
+msgstr "3D-model exporteren"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
@@ -34081,9 +34069,8 @@ msgid "Set to layer default values:"
 msgstr "Instellen op standaardwaarden van lagen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
-#, fuzzy
 msgid "Footprint fields"
-msgstr "Footprint Filter"
+msgstr "Footprintvelden"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:35
 #, fuzzy
@@ -41024,9 +41011,8 @@ msgid "Footprint '%s' added to '%s'"
 msgstr "Footprint '%s' toegevoegd aan '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:1232
-#, fuzzy
 msgid "Untitled"
-msgstr "naamloos"
+msgstr "Naamloos"
 
 #: pcbnew/footprint_viewer_frame.cpp:116
 msgid "KiCad Footprint Library Browser"
@@ -41423,14 +41409,12 @@ msgid "Export IDF 3D board representation"
 msgstr "IDF 3D-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO..."
-msgstr "STEP / BREP / XAO..."
+msgstr "STEP / GLB / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO 3D board representation"
-msgstr "STEP / BREP / XAO 3D-bordrepresentatie exporteren"
+msgstr "STEP / GLB / BREP / XAO 3D-bordrepresentatie exporteren"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -44309,9 +44293,9 @@ msgid "%s %s on %s"
 msgstr "%s %s op %s"
 
 #: pcbnew/pcb_shape.cpp:733
-#, fuzzy, c-format
+#, c-format
 msgid "%s of %s on %s"
-msgstr "%s %s op %s"
+msgstr "%s van %s op %s"
 
 #: pcbnew/pcb_shape.cpp:740
 #, c-format
@@ -45242,14 +45226,12 @@ msgstr ""
 "projectbeheerder starten en een project aanmaken."
 
 #: pcbnew/tools/board_editor_control.cpp:752
-#, fuzzy
 msgid "Increase Track Width"
-msgstr "Lijnbreedte vergroten"
+msgstr "Spoorbreedte vergroten"
 
 #: pcbnew/tools/board_editor_control.cpp:834
-#, fuzzy
 msgid "Decrease Track Width"
-msgstr "Lijnbreedte verkleinen"
+msgstr "Spoorbreedte verkleinen"
 
 #: pcbnew/tools/board_editor_control.cpp:918 pcbnew/tools/pcb_actions.cpp:1089
 msgid "Increase Via Size"
@@ -45923,9 +45905,8 @@ msgid "Fillet Tracks"
 msgstr "Sporen afronden"
 
 #: pcbnew/tools/edit_tool.cpp:1015 pcbnew/tools/edit_tool.cpp:1198
-#, fuzzy
 msgid "Radius:"
-msgstr "Straal"
+msgstr "Straal:"
 
 #: pcbnew/tools/edit_tool.cpp:1177
 msgid "Unable to fillet the selected track segments."
@@ -48445,7 +48426,7 @@ msgstr "DRC-uitsluitingen"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "DRC violations which have been individually excluded"
-msgstr "DRC-fouten die individueel zijn uitgesloten"
+msgstr "DRC-overtredingen die individueel zijn uitgezonderd"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show footprint and text origins as a cross"
