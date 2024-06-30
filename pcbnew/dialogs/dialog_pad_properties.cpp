@@ -572,9 +572,9 @@ void DIALOG_PAD_PROPERTIES::initValues()
         PAD_TOOL* padTool = m_parent->GetToolManager()->GetTool<PAD_TOOL>();
         m_padNumCtrl->SetValue( padTool->GetLastPadNumber() );
 
-        if( m_isFpEditor )
+        if( m_isFpEditor && m_board->GetFirstFootprint() )
         {
-            switch( m_board->Footprints()[0]->GetAttributes() )
+            switch( m_board->GetFirstFootprint()->GetAttributes() )
             {
             case FOOTPRINT_ATTR_T::FP_THROUGH_HOLE:
                 m_previewPad->SetAttribute( PAD_ATTRIB::PTH );
@@ -585,6 +585,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
                 break;
 
             case FOOTPRINT_ATTR_T::FP_SMD:
+                m_previewPad->SetLayerSet( PAD::SMDMask() );
                 m_previewPad->SetAttribute( PAD_ATTRIB::SMD );
                 break;
             }
