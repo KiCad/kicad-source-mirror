@@ -1926,10 +1926,13 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
     git_reference* currentBranchReference = nullptr;
     git_repository_head( &currentBranchReference, repo );
 
+    PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
+    wxFileName         rootFilename( rootItem->GetFileName() );
+    wxString           repoWorkDir( git_repository_workdir( repo ) );
+
     // Get the current branch name
     if( currentBranchReference )
     {
-        PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
         wxString filename = wxFileNameFromPath( rootItem->GetFileName() );
         wxString branchName = git_reference_shorthand( currentBranchReference );
 
@@ -1957,7 +1960,11 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
 
             PROJECT_TREE_ITEM* nextItem = GetItemIdData( kid );
 
-            branchMap[nextItem->GetFileName()] = kid;
+            wxString gitAbsPath = nextItem->GetFileName();
+#ifdef _WIN32
+            gitAbsPath.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+            branchMap[gitAbsPath] = kid;
 
             wxTreeItemIdValue cookie;
             wxTreeItemId      child = m_TreeProject->GetFirstChild( kid, cookie );
@@ -1970,10 +1977,21 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         }
     }
 
+    wxFileName relative = rootFilename;
+    relative.MakeRelativeTo( repoWorkDir );
+    wxString pathspecStr = relative.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );
+
+#ifdef _WIN32
+    pathspecStr.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+
+    const char* pathspec[] = { pathspecStr.c_str().AsChar() };
+
     git_status_options status_options;
     git_status_init_options( &status_options, GIT_STATUS_OPTIONS_VERSION );
     status_options.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
     status_options.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
+    status_options.pathspec = { (char**) pathspec, 1 };
 
     git_index* index = nullptr;
 
@@ -2002,10 +2020,11 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         const git_status_entry* entry = git_status_byindex( status_list, ii );
         std::string path( entry->head_to_index? entry->head_to_index->old_file.path
                         : entry->index_to_workdir->old_file.path );
-        wxFileName fn( path );
-        fn.MakeAbsolute( git_repository_workdir( repo ) );
 
-        auto iter = branchMap.find( fn.GetFullPath() );
+        wxString absPath = repoWorkDir;
+        absPath << path;
+
+        auto iter = branchMap.find( absPath );
 
         if( iter == branchMap.end() )
             continue;
