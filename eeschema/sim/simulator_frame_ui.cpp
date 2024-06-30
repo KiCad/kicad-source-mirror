@@ -2079,6 +2079,29 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
         return false;
     }
+    catch( nlohmann::json::type_error& error )
+    {
+        wxLogTrace( traceSettings, wxT( "Json type error reading %s: %s" ), aPath, error.what() );
+
+        return false;
+    }
+    catch( nlohmann::json::invalid_iterator& error )
+    {
+        wxLogTrace( traceSettings, wxT( "Json invalid_iterator error reading %s: %s" ), aPath, error.what() );
+
+        return false;
+    }
+    catch( nlohmann::json::out_of_range& error )
+    {
+        wxLogTrace( traceSettings, wxT( "Json out_of_range error reading %s: %s" ), aPath, error.what() );
+
+        return false;
+    }
+    catch( ... )
+    {
+        wxLogTrace( traceSettings, wxT( "Error reading %s" ), aPath );
+        return false;
+    }
 
     return true;
 }
