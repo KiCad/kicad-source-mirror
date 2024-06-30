@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:41-0700\n"
-"PO-Revision-Date: 2024-05-28 14:09+0000\n"
+"PO-Revision-Date: 2024-06-30 16:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -15236,6 +15236,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' är inte en KiCad kretsschemafil.\n"
+"Använd Arkiv -> Importera för kretsschemafieler som inte är KiCad-format."
 
 #: eeschema/files-io.cpp:274
 msgid "Root"
@@ -18950,11 +18952,8 @@ msgid "Spice Simulator"
 msgstr "Spice-simulator"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Det uppstod fel vid generering av nätlista.\n"
-"\n"
+msgstr "Fel vid generering av nätlista."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -35146,9 +35145,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Standardegenskaper för nya grafiska objekt:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Fotavtrycksbiblioteket uppdaterades inte\n"
+msgstr "Gömda fotavtrycksbiblioteket stöds inte ännu."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -37854,9 +37852,8 @@ msgid "Hole clearance violation"
 msgstr "Otillräcklig frigång för hål"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Borrade hål för nära varandra"
+msgstr "Borrat hål för nära ett annat hål"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -39308,9 +39305,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "('SMD' förväntas; faktisk %s)"
 
 #: pcbnew/footprint.cpp:2817
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(Hålmonteringslödytans hål lämnar ingen koppar kvar)"
+msgstr "(Hålmonteringslödytans hålstorlek är väldigt liten eller noll)"
 
 #: pcbnew/footprint.cpp:2825
 msgid "(PTH pad has no copper layers)"
@@ -39321,9 +39317,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(Hålmonteringslödytans hål lämnar ingen koppar kvar)"
 
 #: pcbnew/footprint.cpp:2856
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(Hålmonteringslödytans hål lämnar ingen koppar kvar)"
+msgstr "(Hålmonteringslödytans hål inte fullständigt omsluten av koppar)"
 
 #: pcbnew/footprint.cpp:2866
 msgid "(SMD pad appears on both front and back copper)"
@@ -40670,158 +40665,143 @@ msgid "PTH pad %s %s of %s"
 msgstr "PTH-lödyta (genompläterat hål) %s %s tillhörande %s"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Fel: Lödytan måste ha positiv storlek."
+msgstr "(Lödytan måste ha positiv storlek)"
 
 #: pcbnew/pad.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "Viahålets storlek måste vara mindre än via-diametern"
+msgstr ""
+"(Lödytan med genompläterat hål (PTH) måste ha en hålstorlek större än %s)"
 
 #: pcbnew/pad.cpp:1899
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Varning: Lödytans hål ej inom lödytan."
+msgstr "Lödytans hål ej inom lödytans kontur"
 
 #: pcbnew/pad.cpp:1912
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Varning: Lödytans hål lämnar inte kvar någon kopparkrage."
+msgstr "Lödytans hål lämnar inte kvar någon kopparkrage"
 
 #: pcbnew/pad.cpp:1917
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr "Varning: Negativa lokala värden för frigång har ingen verkan."
+msgstr "Negativa lokala värden för frigång har ingen verkan"
 
 #: pcbnew/pad.cpp:1936
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Varning: Negativa värden för lödmaskens frigång är större än vissa primitiva "
-"former. Resultaten kan bli oförutsägbara."
+"Negativa värden för lödmaskens frigång är större än vissa primitiva former; "
+"resultaten kan bli oförutsägbara"
 
 #: pcbnew/pad.cpp:1946
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Varning: Negativ frigång för lödmask är större än lödytan. Ingen lödmask "
-"genereras."
+"Negativ frigång för lödmask är större än lödytan; ingen lödmask kommer att "
+"genereras"
 
 #: pcbnew/pad.cpp:1965
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Varning: Negativa marginaler för lodpasta som är större än lödytan. Ingen "
-"mask för lodpasta kommer att genereras."
+"Negativa marginaler för lodpasta som är större än lödytan; ingen mask för "
+"lodpasta kommer att genereras"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(Hålmonteringshål har inga kopparlager)"
+msgstr "(Lödyta har inget lager)"
 
 #: pcbnew/pad.cpp:1975
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(Hålmonteringshål har inga kopparlager)"
+msgstr "Genompläterat hål har inga kopparlager"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
-msgstr ""
-"Varning: Pläterade genomgående hål ska normalt ha en kopparkrage på minst "
-"ett lager."
+msgstr "Geompläterade hål ska normalt ha en kopparkrage på minst ett lager"
 
 #: pcbnew/pad.cpp:2000
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
 msgstr ""
-"Varning: Lödytor för kontakter har vanligtvis ingen lodpasta. Använd "
-"istället en lödyta för ytmontering."
+"Anslutningskragar har vanligtvis ingen lodpasta; använd istället en lödyta "
+"för ytmontering"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Fel: SMD-lödyta har ett hål."
+msgstr "(SMD-lödyta har ett hål)"
 
 #: pcbnew/pad.cpp:2014
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr "Om du vill ha ett lager för lodpasta för mönsterkortets framsida"
+msgstr "SMD-lödyta har koppar på båda sidor av mönsterkortet"
 
 #: pcbnew/pad.cpp:2020 pcbnew/pad.cpp:2033
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(SMD-lödytans koppar och masklager matchar inte)"
+msgstr ""
+"Ytmonteringslödytan har koppar- och lödmasklager på olika sidor av "
+"mönsterkortet"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "Om du vill ha ett lager för lodpasta för mönsterkortets framsida"
+msgstr ""
+"Ytmonteringslödytan har koppar- och lodpastelager på olika sidor av "
+"mönsterkortet"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Varning: SMD-lödytan har inga yttre lager."
+msgstr "Ytmonteringslödytan har inga yttre lager"
 
 #: pcbnew/pad.cpp:2054
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Varning: Referenspunkts-egenskapen är meningslös för NPTH-hål."
+msgstr ""
+"Referenspunkts-egenskapen är meningslös för lödytor med ej genompläterade "
+"hål (NPTH)"
 
 #: pcbnew/pad.cpp:2058
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Varning: Testpunktsegenskapen är meningslös för NPTH-hål."
+msgstr ""
+"Testpunktsegenskapen är meningslös för lödytor med ej genompläterade hål "
+"(NPTH)"
 
 #: pcbnew/pad.cpp:2061
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr "Varning: Kylfläns-egenskapen är meningslös för NPTH-hål."
+msgstr ""
+"Kylfläns-egenskapen är meningslös för lödytor med ej genompläterade hål "
+"(NPTH)"
 
 #: pcbnew/pad.cpp:2064
-#, fuzzy
 msgid "Castellated property is for PTH pads"
-msgstr "Varning: Egenskapen krenelerad lödyta kan endast användas på PTH-hål."
+msgstr ""
+"Egenskapen krenelerad lödyta kan endast användas på genompläterade hål (PTH)"
 
 #: pcbnew/pad.cpp:2067
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Varning: BGA-egenskapen kan bara användas på lödytor för ytmontering."
+msgstr "BGA-egenskapen kan bara användas på lödytor för ytmontering (SMD)"
 
 #: pcbnew/pad.cpp:2072
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(Negativ hörnradie är inte tillåten)"
 
 #: pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Varning: Hörnstorleken gör lödytan cirkulär."
+msgstr "Hörnstorleken gör lödytan cirkulär"
 
 #: pcbnew/pad.cpp:2079
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(Negativ hörnfasning är inte tillåten)"
 
 #: pcbnew/pad.cpp:2081
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "Nedladdningen är för stor."
+msgstr "(Hörnfasningen är för stor)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Fel: Trapezoid-delta är för stort."
+msgstr "(Trapezoid-delta är för stort)"
 
 #: pcbnew/pad.cpp:2101
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr "Fel: Anpassad lödyteform måste lösas till en enda polygon."
+msgstr "(Anpassad lödyteform måste lösa till en enda polygon)"
 
 #: pcbnew/pad.cpp:2293
 msgid "Edge connector"
@@ -41256,7 +41236,7 @@ msgstr "Läser in polygoner..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Polygonkontursantal är %d, förväntas vara 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41518,7 +41498,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4120
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Okänd justering av textruta %d, text %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4185
 msgid "Loading rectangles..."
@@ -44425,7 +44405,6 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Exakt två linjer måste vara valda för att förlänga dem."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "En form med minst två linjer måste vara vald."
 
