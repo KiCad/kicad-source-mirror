@@ -14,13 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2024-05-31 17:41-0700\n"
-"PO-Revision-Date: 2024-05-24 09:09+0000\n"
-=======
 "POT-Creation-Date: 2024-05-21 09:37-0700\n"
 "PO-Revision-Date: 2024-06-05 17:09+0000\n"
->>>>>>> efda77eae7 (Translated using Weblate (Dutch))
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
