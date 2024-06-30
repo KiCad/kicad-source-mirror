@@ -551,6 +551,7 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
         return true;
     }
 
+    DisplayErrorMessage( this, wxString::Format( _( "Unable to load or parse file %s" ), aPath ) );
     return false;
 }
 
