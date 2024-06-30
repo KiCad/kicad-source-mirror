@@ -106,9 +106,9 @@ public:
             switch( shape->GetShape() )
             {
             case SHAPE_T::ARC:
-                points->AddPoint( mapCoords( shape->GetPosition() ) );
                 points->AddPoint( mapCoords( shape->GetStart() ) );
                 points->AddPoint( mapCoords( shape->GetEnd() ) );
+                points->AddPoint( mapCoords( shape->GetPosition() ) );
                 break;
 
             case SHAPE_T::CIRCLE:
