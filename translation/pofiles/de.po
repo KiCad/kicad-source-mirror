@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:41-0700\n"
-"PO-Revision-Date: 2024-06-07 06:09+0000\n"
+"PO-Revision-Date: 2024-07-01 10:10+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -19154,11 +19154,8 @@ msgid "Spice Simulator"
 msgstr "Spice-Simulator"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Bei der Erstellung der Netzliste sind Fehler aufgetreten.\n"
-"\n"
+msgstr "Bei der Netzlistenerzeugung sind Fehler aufgetreten."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -35479,9 +35476,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Standardeigenschaften für neue grafische Elemente:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Footprint-Bibliothek wurde nicht aktualisiert\n"
+msgstr "Versteckte Footprint-Bibliotheken werden noch nicht unterstützt."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
