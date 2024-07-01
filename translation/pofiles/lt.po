@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:51-0700\n"
+"POT-Creation-Date: 2024-07-01 10:52-0700\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -3237,7 +3237,7 @@ msgstr "Parinktis"
 #: eeschema/fields_grid_table.cpp:370 eeschema/sch_symbol.cpp:1939
 #: eeschema/sch_symbol.cpp:1989 eeschema/sch_symbol.cpp:2821
 #: eeschema/sim/simulator_frame_ui.cpp:617
-#: eeschema/sim/simulator_frame_ui.cpp:2619
+#: eeschema/sim/simulator_frame_ui.cpp:2642
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:147
@@ -4551,9 +4551,9 @@ msgstr "Mastelis"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties.cpp:944
-#: pcbnew/dialogs/dialog_pad_properties.cpp:953
-#: pcbnew/dialogs/dialog_pad_properties.cpp:963
+#: pcbnew/dialogs/dialog_pad_properties.cpp:945
+#: pcbnew/dialogs/dialog_pad_properties.cpp:954
+#: pcbnew/dialogs/dialog_pad_properties.cpp:964
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
 #: pcbnew/dialogs/dialog_plot_base.cpp:113 pcbnew/footprint.cpp:3802
@@ -7724,12 +7724,12 @@ msgid "Excluded error: "
 msgstr "Neįtraukta "
 
 #: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:389
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1273
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1274
 msgid "Warning: "
 msgstr "Įspėjimas: "
 
 #: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:393
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1271
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1272
 msgid "Error: "
 msgstr "Klaida: "
 
@@ -11691,8 +11691,8 @@ msgstr "Jungtys"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1511
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1528
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1512
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1529
 msgid "Diameter:"
 msgstr "Diametras:"
 
@@ -20693,8 +20693,8 @@ msgstr "Įtampa (išmatuota)"
 #: eeschema/sim/simulator_frame_ui.cpp:766
 #: eeschema/sim/simulator_frame_ui.cpp:870
 #: eeschema/sim/simulator_frame_ui.cpp:1046
-#: eeschema/sim/simulator_frame_ui.cpp:2179
-#: eeschema/sim/simulator_frame_ui.cpp:2180
+#: eeschema/sim/simulator_frame_ui.cpp:2202
+#: eeschema/sim/simulator_frame_ui.cpp:2203
 msgid " (gain)"
 msgstr ""
 
@@ -20704,8 +20704,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:871
 #: eeschema/sim/simulator_frame_ui.cpp:876
 #: eeschema/sim/simulator_frame_ui.cpp:1047
-#: eeschema/sim/simulator_frame_ui.cpp:2177
-#: eeschema/sim/simulator_frame_ui.cpp:2178
+#: eeschema/sim/simulator_frame_ui.cpp:2200
+#: eeschema/sim/simulator_frame_ui.cpp:2201
 #, fuzzy
 msgid " (phase)"
 msgstr "Kintamosios srovės fazė:"
@@ -20744,12 +20744,17 @@ msgid ""
 "update the Simulation Command?"
 msgstr ""
 
-#: eeschema/sim/simulator_frame.cpp:479 eeschema/sim/simulator_frame.cpp:824
+#: eeschema/sim/simulator_frame.cpp:479 eeschema/sim/simulator_frame.cpp:825
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "pl_editor уже запущен. Продолжить?"
 
-#: eeschema/sim/simulator_frame.cpp:625
+#: eeschema/sim/simulator_frame.cpp:554
+#, fuzzy, c-format
+msgid "Unable to load or parse file %s"
+msgstr "Negaliu užkrauti %s failo"
+
+#: eeschema/sim/simulator_frame.cpp:626
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Išsaugoti šią plokštę"
@@ -20882,7 +20887,7 @@ msgid "Cursor 2"
 msgstr "Kursorius"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1196
-#: eeschema/sim/simulator_frame_ui.cpp:2610
+#: eeschema/sim/simulator_frame_ui.cpp:2633
 #, fuzzy
 msgid "Diff"
 msgstr "Diferencialinės poros"
@@ -20914,9 +20919,9 @@ msgstr "Klaida: modeliavimo tipas neapibrėžtas!\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Klaida: modeliavimo tipas nepalaiko braižymo!\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2716
-#: eeschema/sim/simulator_frame_ui.cpp:2831
-#: eeschema/sim/simulator_frame_ui.cpp:2874
+#: eeschema/sim/simulator_frame_ui.cpp:2739
+#: eeschema/sim/simulator_frame_ui.cpp:2854
+#: eeschema/sim/simulator_frame_ui.cpp:2897
 msgid ""
 "\n"
 "\n"
@@ -27569,57 +27574,57 @@ msgstr "Ar tikrai norite pašalinti „%s“?"
 msgid "Failed to remove git directory"
 msgstr "Nepavyko sukurti katalogo „%s“"
 
-#: kicad/project_tree_pane.cpp:2189
+#: kicad/project_tree_pane.cpp:2208
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2195
+#: kicad/project_tree_pane.cpp:2214
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2201
+#: kicad/project_tree_pane.cpp:2220
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr ""
 "Не удается разобрать URL:\n"
 "'%s'"
 
-#: kicad/project_tree_pane.cpp:2209
+#: kicad/project_tree_pane.cpp:2228
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Nepavyko ištrinti „%s“"
 
-#: kicad/project_tree_pane.cpp:2217
+#: kicad/project_tree_pane.cpp:2236
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Nepavyko sukurti failo „%s“"
 
-#: kicad/project_tree_pane.cpp:2224
+#: kicad/project_tree_pane.cpp:2243
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "Nepavyko sukurti '%s'"
 
-#: kicad/project_tree_pane.cpp:2233
+#: kicad/project_tree_pane.cpp:2252
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Nepavyko ištrinti „%s“"
 
-#: kicad/project_tree_pane.cpp:2241
+#: kicad/project_tree_pane.cpp:2260
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Nepavyko sukurti katalogo „%s“"
 
-#: kicad/project_tree_pane.cpp:2248
+#: kicad/project_tree_pane.cpp:2267
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Nepavyko išsaugoti schemos „%s“"
 
-#: kicad/project_tree_pane.cpp:2264
+#: kicad/project_tree_pane.cpp:2283
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Nepavyko sukurti laikino failo „%s“"
 
-#: kicad/project_tree_pane.cpp:2281
+#: kicad/project_tree_pane.cpp:2300
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "Nepavyko sukurti '%s'"
@@ -35434,9 +35439,9 @@ msgstr "%"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:238
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:285
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1531
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1532
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1533
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1534
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:653
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:721
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
@@ -36083,59 +36088,59 @@ msgstr "galinė pusė (veidrodinė)"
 msgid "front side"
 msgstr "Titulinis puslapis"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:939
+#: pcbnew/dialogs/dialog_pad_properties.cpp:940
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:320 pcbnew/pad.cpp:2526
 msgid "All copper layers"
 msgstr "Visi vario sluoksniai"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:940
+#: pcbnew/dialogs/dialog_pad_properties.cpp:941
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s ir sujungtus sluoksnius"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:943
+#: pcbnew/dialogs/dialog_pad_properties.cpp:944
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:320 pcbnew/pad.cpp:2527
 msgid "Connected layers only"
 msgstr "Tik prijungti sluoksniai"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:948 pcbnew/zone.cpp:600
+#: pcbnew/dialogs/dialog_pad_properties.cpp:949 pcbnew/zone.cpp:600
 #, c-format
 msgid "%s and %s"
 msgstr "%s ir %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1275
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1276
 #, fuzzy
 msgid "Error: Through hole pad has no hole."
 msgstr "Klaida: per skylės padėkliuką: grąžto skersmuo nustatytas į 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1280
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1281
 #, fuzzy
 msgid "Pad Properties Errors"
 msgstr "Aikštelės savybės"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1281
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1282
 #, fuzzy
 msgid "Pad Properties Warnings"
 msgstr "Aikštelės savybės"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1482
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1483
 #, fuzzy
 msgid "Edit Pad Properties"
 msgstr "Išvado savybės"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1516
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1517
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
 msgid "Hole size X:"
 msgstr "Skylės dydis X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1537
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1538
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
 msgid "Pad size X:"
 msgstr "Trinkelės dydis X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1540
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1541
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1542
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1543
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:270
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:312
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:370

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 20:07+0200\n"
+"POT-Creation-Date: 2024-07-01 10:52-0700\n"
 "PO-Revision-Date: 2024-06-30 19:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -2620,12 +2620,14 @@ msgstr "Nom Projet"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1212
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1284 eeschema/sch_plotter.cpp:1019
 #: eeschema/widgets/symbol_diff_widget.cpp:39
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -6302,7 +6304,6 @@ msgid "Failed to perform checkout operation."
 msgstr "Échec de l'opération d'extraction."
 
 #: common/git/git_pull_handler.cpp:215
-#, c++-format
 msgid "Could not lookup commit '{}'"
 msgstr "Impossible de rechercher le commit '{}'"
 
@@ -7249,10 +7250,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1156
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1162
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -13672,7 +13675,6 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:206
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -26507,55 +26509,55 @@ msgstr "Êtes-vous sûr de vouloir supprimer le suivi git de ce projet ?"
 msgid "Failed to remove git directory"
 msgstr "Échec de la suppression du répertoire git"
 
-#: kicad/project_tree_pane.cpp:2189
+#: kicad/project_tree_pane.cpp:2208
 msgid "Discarding commit due to empty commit message."
 msgstr "Rejet du commit en raison d'un message de commit vide."
 
-#: kicad/project_tree_pane.cpp:2195
+#: kicad/project_tree_pane.cpp:2214
 msgid "Discarding commit due to empty file selection."
 msgstr "Rejet de commit en raison d'une sélection de fichiers vides."
 
-#: kicad/project_tree_pane.cpp:2201
+#: kicad/project_tree_pane.cpp:2220
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Échec de la récupération de l'index du dépôt : %s"
 
-#: kicad/project_tree_pane.cpp:2209
+#: kicad/project_tree_pane.cpp:2228
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Échec de l'ajout d'un fichier à l'index : %s"
 
-#: kicad/project_tree_pane.cpp:2217
+#: kicad/project_tree_pane.cpp:2236
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Échec de l'écriture de l'index : %s"
 
-#: kicad/project_tree_pane.cpp:2224
+#: kicad/project_tree_pane.cpp:2243
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Échec de l'écriture de l'arbre : %s"
 
-#: kicad/project_tree_pane.cpp:2233
+#: kicad/project_tree_pane.cpp:2252
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Échec de la recherche de l'arbre : %s"
 
-#: kicad/project_tree_pane.cpp:2241
+#: kicad/project_tree_pane.cpp:2260
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Échec de l'obtention de la référence HEAD : %s"
 
-#: kicad/project_tree_pane.cpp:2248
+#: kicad/project_tree_pane.cpp:2267
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Échec de l'obtention du commit : %s"
 
-#: kicad/project_tree_pane.cpp:2264
+#: kicad/project_tree_pane.cpp:2283
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Échec de la création de la signature de l'auteur : %s"
 
-#: kicad/project_tree_pane.cpp:2281
+#: kicad/project_tree_pane.cpp:2300
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Échec de la création du commit: %s"
@@ -35315,6 +35317,7 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -49730,6 +49733,14 @@ msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+msgid "Circuit board"
+msgstr "Circuit Imprimé"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -50763,12 +50774,6 @@ msgstr "Feuille de Dessin KiCad"
 #~ "Ce fichier doit être supprimé manuellement ou la fonction "
 #~ "d’enregistrement automatique sera\n"
 #~ "affiché chaque fois que l’éditeur de schémas est lancé."
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit Imprimé"
 
 #~ msgid "Grid Options"
 #~ msgstr "Options de Grille"
