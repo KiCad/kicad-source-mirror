@@ -536,12 +536,6 @@ bool RN_NET::NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I&
                 }
             };
 
-    std::multiset<std::shared_ptr<CN_ANCHOR>, CN_PTR_CMP> nodes_b;
-
-    std::copy_if( m_nodes.begin(), m_nodes.end(), std::inserter( nodes_b, nodes_b.end() ),
-            []( const std::shared_ptr<CN_ANCHOR> &aVal )
-            { return !aVal->GetNoLine(); } );
-
     /// Sweep-line algorithm to cut the number of comparisons to find the closest point
     ///
     /// Step 1: The outer loop needs to be the subset (selected nodes) as it is a linear search
@@ -554,12 +548,15 @@ bool RN_NET::NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I&
         /// Step 2: O( log n ) search to identify a close element ordered by x
         /// The fwd_it iterator will move forward through the elements while
         /// the rev_it iterator will move backward through the same set
-        auto fwd_it = nodes_b.lower_bound( nodeA );
+        auto fwd_it = m_nodes.lower_bound( nodeA );
         auto rev_it = std::make_reverse_iterator( fwd_it );
 
-        for( ; fwd_it != nodes_b.end(); ++fwd_it )
+        for( ; fwd_it != m_nodes.end(); ++fwd_it )
         {
             const std::shared_ptr<CN_ANCHOR>& nodeB = *fwd_it;
+
+            if( nodeB->GetNoLine() )
+                continue;
 
             SEG::ecoord distX_sq = SEG::Square( nodeA->Pos().x - nodeB->Pos().x );
 
@@ -572,9 +569,12 @@ bool RN_NET::NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I&
         }
 
         /// Step 3: using the same starting point, check points backwards for closer points
-        for( ; rev_it != nodes_b.rend(); ++rev_it )
+        for( ; rev_it != m_nodes.rend(); ++rev_it )
         {
             const std::shared_ptr<CN_ANCHOR>& nodeB = *rev_it;
+
+            if( nodeB->GetNoLine() )
+                continue;
 
             SEG::ecoord distX_sq = SEG::Square( nodeA->Pos().x - nodeB->Pos().x );
 
