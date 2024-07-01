@@ -13,12 +13,11 @@
 # Gabriel Martinez <hijopayaso@gmail.com>, 2023.
 # Ulices <hasecilu@tuta.io>, 2023.
 # gallegonovato <fran-carro@hotmail.es>, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-04-02 11:49+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v8/es/>\n"

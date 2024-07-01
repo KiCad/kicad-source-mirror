@@ -1,10 +1,9 @@
 # Michał Radziejewicz <radziejewiczmichal@gmail.com>, 2023.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-03-07 00:01+0000\n"
 "Last-Translator: 109247019824 <stoyan@gmx.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/v8/bg/>\n"

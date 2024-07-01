@@ -6,12 +6,11 @@
 # ssantos <ssantos@web.de>, 2020, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
 # Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-05-30 17:31+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"

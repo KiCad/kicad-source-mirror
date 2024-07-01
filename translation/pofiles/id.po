@@ -3,12 +3,11 @@
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # whenwesober <naomi16i_1298q@cikuh.com>, 2021.
 # Neko Nekowazarashi <kodra@nekoweb.my.id>, 2022.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2022-12-17 19:13+0000\n"
 "Last-Translator: Neko Nekowazarashi <kodra@nekoweb.my.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"

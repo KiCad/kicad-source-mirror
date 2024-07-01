@@ -3,12 +3,11 @@
 # Jakub Janek <shaman.janek@gmail.com>, 2020, 2022, 2023.
 # Marcel Hecko <maco@blava.net>, 2022, 2023.
 # Milan Šalka <salka.milan@googlemail.com>, 2023.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-03-13 20:01+0000\n"
 "Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v8/sk/>\n"

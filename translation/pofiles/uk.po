@@ -3,12 +3,11 @@
 # Artem <artem@molotov.work>, 2022.
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
 # Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-05-21 16:35+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v8/uk/>\n"

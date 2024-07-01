@@ -3,12 +3,11 @@
 # Dejan Smole <dejko1@hotmail.com>, 2022.
 # Vitan Košpenda <kospendavitan@gmail.com>, 2022.
 # Sašo Domadenik <saso.doma@gmail.com>, 2022.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2022-12-07 22:47+0000\n"
 "Last-Translator: Sašo Domadenik <saso.doma@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"

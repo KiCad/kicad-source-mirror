@@ -1,11 +1,10 @@
 # Djamel Dellaa <d2jamel@gmail.com>, 2023.
 # Ahmed Elswah <janelswah2010@gmail.com>, 2023.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2023-11-20 15:37+0000\n"
 "Last-Translator: Ahmed Elswah <janelswah2010@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/master-"

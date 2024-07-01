@@ -3,12 +3,11 @@
 # WhiteChairFromIkea <dainius.mazuika@gmail.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"

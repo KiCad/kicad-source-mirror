@@ -4,12 +4,11 @@
 # nickoe <oe.nick@gmail.com>, 2021.
 # Mads Dyrmann <madsdyrmannlarsen@gmail.com>, 2022.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"

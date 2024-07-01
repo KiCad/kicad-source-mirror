@@ -31,12 +31,11 @@
 # Lao·Zhu <2208213223@qq.com>, 2024.
 # CloverGit <CloverGit@users.noreply.hosted.weblate.org>, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-06-07 06:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"

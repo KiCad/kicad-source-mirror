@@ -7,12 +7,11 @@
 # Hanna Breisand <weblate.org@breisand.se>, 2022, 2024.
 # Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-06-30 16:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"

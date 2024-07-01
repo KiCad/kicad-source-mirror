@@ -5,12 +5,11 @@
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-06-17 04:09+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v8/el/>\n"

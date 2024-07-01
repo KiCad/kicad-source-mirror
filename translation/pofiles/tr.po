@@ -15,12 +15,11 @@
 # Erkan <erkankarakas@outlook.com>, 2023.
 # Mert Kalkancı <mertkalkanci79@gmail.com>, 2024.
 # YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-03-05 10:02+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v8/tr/>\n"

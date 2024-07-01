@@ -1,12 +1,11 @@
 # Alex Gellen <alex.n.gellen@gmail.com>, 2021, 2022.
 # Adrian Scripcă <benishor@gmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-04-18 07:23+0000\n"
 "Last-Translator: Nicoara Alex <alex.nicoara@yahoo.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v8/ro/>\n"

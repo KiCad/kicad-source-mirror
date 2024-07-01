@@ -1,11 +1,10 @@
 # ___davidpr <david.pribic95@gmail.com>, 2021, 2022, 2023.
 # Zoran <zastos@gmail.com>, 2022.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2023-11-21 22:05+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"

@@ -8,12 +8,11 @@
 # 撒景賢 <james.sa.2013@gmail.com>, 2024.
 # Oliver0804 <icetzsr@gmail.com>, 2024.
 # William Lin <unrealin01@gmail.com>, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-06-07 06:09+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"

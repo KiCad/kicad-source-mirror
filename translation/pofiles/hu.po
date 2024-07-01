@@ -2,12 +2,11 @@
 # Miklós Márton <martonmiklosqdev@gmail.com>, 2022, 2023.
 # István Farkas <sakrafi1963@gmail.com>, 2023.
 # Hajdu Norbert <norbert.hajdu.biz@gmail.com>, 2024.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2024-01-22 00:51+0000\n"
 "Last-Translator: Hajdu Norbert <norbert.hajdu.biz@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"

@@ -4,12 +4,11 @@
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
 # Håvard Syslak <haavard.syslak@gmail.com>, 2022.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
-#: pcbnew/drc/drc_item.cpp:133
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:53-0700\n"
+"POT-Creation-Date: 2024-07-01 10:55-0700\n"
 "PO-Revision-Date: 2023-06-23 20:34+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
