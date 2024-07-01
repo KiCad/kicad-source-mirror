@@ -113,16 +113,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:41-0700\n"
-"PO-Revision-Date: 2024-06-30 01:10+0200\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2024-07-01 17:21+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -526,6 +525,7 @@ msgid "Home View"
 msgstr "Vista origine"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
+#, fuzzy
 msgid "Redraw at the home position and zoom"
 msgstr "Ridisegna alla posizione origine e zooma"
 
@@ -871,6 +871,7 @@ msgstr "Colore fine gradiente sfondo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:207
+#, fuzzy
 msgid "Use board stackup colors"
 msgstr "Usa colori stackup scheda"
 
