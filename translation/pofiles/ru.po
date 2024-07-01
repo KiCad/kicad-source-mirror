@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-06-30 16:56+0000\n"
+"PO-Revision-Date: 2024-07-02 19:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19904,9 +19904,9 @@ msgid "Another simulation is already running."
 msgstr "Уже запущена другая симуляция."
 
 #: eeschema/sim/simulator_frame.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Не удалось загрузить файл %s"
+msgstr "Не удалось загрузить или разобрать файл %s"
 
 #: eeschema/sim/simulator_frame.cpp:626
 msgid "Save changes to workbook?"
