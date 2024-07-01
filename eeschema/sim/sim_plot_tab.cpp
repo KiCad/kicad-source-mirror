@@ -922,12 +922,20 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vec
     trace->SetSweepCount( aSweepCount );
     trace->SetSweepSize( aSweepSize );
 
-    if( ( trace->GetType() & SPT_AC_PHASE ) || ( trace->GetType() & SPT_CURRENT ) )
+    // Phase and currents on second Y axis, except for AC currents, those use the same axis as voltage
+    if( ( trace->GetType() & SPT_AC_PHASE )
+        || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
+    {
         trace->SetScale( m_axis_x, m_axis_y2 );
+    }
     else if( trace->GetType() & SPT_POWER )
+    {
         trace->SetScale( m_axis_x, m_axis_y3 );
+    }
     else
+    {
         trace->SetScale( m_axis_x, m_axis_y1 );
+    }
 
     for( auto& [ cursorId, cursor ] : trace->GetCursors() )
     {
