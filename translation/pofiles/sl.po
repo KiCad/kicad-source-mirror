@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:41-0700\n"
+"POT-Creation-Date: 2024-07-01 10:53-0700\n"
 "PO-Revision-Date: 2022-12-07 22:47+0000\n"
 "Last-Translator: Sašo Domadenik <saso.doma@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -3464,7 +3464,7 @@ msgstr "Možnost"
 #: eeschema/fields_grid_table.cpp:387 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2586
+#: eeschema/sim/simulator_frame_ui.cpp:2609
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -21457,8 +21457,8 @@ msgstr "Napetost (izmerjena)"
 #: eeschema/sim/simulator_frame_ui.cpp:744
 #: eeschema/sim/simulator_frame_ui.cpp:848
 #: eeschema/sim/simulator_frame_ui.cpp:1019
-#: eeschema/sim/simulator_frame_ui.cpp:2146
-#: eeschema/sim/simulator_frame_ui.cpp:2147
+#: eeschema/sim/simulator_frame_ui.cpp:2169
+#: eeschema/sim/simulator_frame_ui.cpp:2170
 msgid " (gain)"
 msgstr ""
 
@@ -21468,8 +21468,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:849
 #: eeschema/sim/simulator_frame_ui.cpp:854
 #: eeschema/sim/simulator_frame_ui.cpp:1020
-#: eeschema/sim/simulator_frame_ui.cpp:2144
-#: eeschema/sim/simulator_frame_ui.cpp:2145
+#: eeschema/sim/simulator_frame_ui.cpp:2167
+#: eeschema/sim/simulator_frame_ui.cpp:2168
 #, fuzzy
 msgid " (phase)"
 msgstr "AC faza:"
@@ -21515,12 +21515,17 @@ msgid ""
 "update the Simulation Command?"
 msgstr ""
 
-#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:812
+#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:813
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "Cvpcb že teče, Nadaljujem ?"
 
-#: eeschema/sim/simulator_frame.cpp:615
+#: eeschema/sim/simulator_frame.cpp:544
+#, fuzzy, c-format
+msgid "Unable to load or parse file %s"
+msgstr "Datoteke %s ni mogoče naložiti"
+
+#: eeschema/sim/simulator_frame.cpp:616
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Shrani trenutno ploščo"
@@ -21655,7 +21660,7 @@ msgid "Cursor 2"
 msgstr "Kazalnik"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1169
-#: eeschema/sim/simulator_frame_ui.cpp:2577
+#: eeschema/sim/simulator_frame_ui.cpp:2600
 #, fuzzy
 msgid "Diff"
 msgstr "Diferencialni pari"
@@ -21687,9 +21692,9 @@ msgstr "Napaka: vrsta simulacije ni definirana!\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Napaka: vrsta simulacije ne podpira izrisovanja!\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2683
-#: eeschema/sim/simulator_frame_ui.cpp:2798
-#: eeschema/sim/simulator_frame_ui.cpp:2841
+#: eeschema/sim/simulator_frame_ui.cpp:2706
+#: eeschema/sim/simulator_frame_ui.cpp:2821
+#: eeschema/sim/simulator_frame_ui.cpp:2864
 #, fuzzy
 msgid ""
 "\n"

@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:41-0700\n"
+"POT-Creation-Date: 2024-07-01 10:53-0700\n"
 "PO-Revision-Date: 2024-06-07 06:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -3017,7 +3017,7 @@ msgstr "选项"
 #: eeschema/fields_grid_table.cpp:387 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2586
+#: eeschema/sim/simulator_frame_ui.cpp:2609
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -18597,8 +18597,8 @@ msgstr "电压 (测量)"
 #: eeschema/sim/simulator_frame_ui.cpp:744
 #: eeschema/sim/simulator_frame_ui.cpp:848
 #: eeschema/sim/simulator_frame_ui.cpp:1019
-#: eeschema/sim/simulator_frame_ui.cpp:2146
-#: eeschema/sim/simulator_frame_ui.cpp:2147
+#: eeschema/sim/simulator_frame_ui.cpp:2169
+#: eeschema/sim/simulator_frame_ui.cpp:2170
 msgid " (gain)"
 msgstr " (增益)"
 
@@ -18608,8 +18608,8 @@ msgstr " (增益)"
 #: eeschema/sim/simulator_frame_ui.cpp:849
 #: eeschema/sim/simulator_frame_ui.cpp:854
 #: eeschema/sim/simulator_frame_ui.cpp:1020
-#: eeschema/sim/simulator_frame_ui.cpp:2144
-#: eeschema/sim/simulator_frame_ui.cpp:2145
+#: eeschema/sim/simulator_frame_ui.cpp:2167
+#: eeschema/sim/simulator_frame_ui.cpp:2168
 msgid " (phase)"
 msgstr " (相位)"
 
@@ -18651,11 +18651,16 @@ msgid ""
 "update the Simulation Command?"
 msgstr "原理图表仿真命令指令已更改。你要更新仿真命令吗?"
 
-#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:812
+#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:813
 msgid "Another simulation is already running."
 msgstr "另一个仿真已经在运行。"
 
-#: eeschema/sim/simulator_frame.cpp:615
+#: eeschema/sim/simulator_frame.cpp:544
+#, fuzzy, c-format
+msgid "Unable to load or parse file %s"
+msgstr "无法加载文件 %s"
+
+#: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
 msgstr "保存对工作簿的更改?"
 
@@ -18770,7 +18775,7 @@ msgid "Cursor 2"
 msgstr "光标 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1169
-#: eeschema/sim/simulator_frame_ui.cpp:2577
+#: eeschema/sim/simulator_frame_ui.cpp:2600
 msgid "Diff"
 msgstr "差值"
 
@@ -18798,9 +18803,9 @@ msgstr "错误: 未定义仿真类型。\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "错误: 仿真类型不支持绘制。\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2683
-#: eeschema/sim/simulator_frame_ui.cpp:2798
-#: eeschema/sim/simulator_frame_ui.cpp:2841
+#: eeschema/sim/simulator_frame_ui.cpp:2706
+#: eeschema/sim/simulator_frame_ui.cpp:2821
+#: eeschema/sim/simulator_frame_ui.cpp:2864
 msgid ""
 "\n"
 "\n"

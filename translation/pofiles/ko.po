@@ -30,7 +30,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:41-0700\n"
+"POT-Creation-Date: 2024-07-01 10:53-0700\n"
 "PO-Revision-Date: 2024-06-28 06:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
@@ -3033,7 +3033,7 @@ msgstr "옵션"
 #: eeschema/fields_grid_table.cpp:387 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2586
+#: eeschema/sim/simulator_frame_ui.cpp:2609
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -18776,8 +18776,8 @@ msgstr "전압 (측정됨)"
 #: eeschema/sim/simulator_frame_ui.cpp:744
 #: eeschema/sim/simulator_frame_ui.cpp:848
 #: eeschema/sim/simulator_frame_ui.cpp:1019
-#: eeschema/sim/simulator_frame_ui.cpp:2146
-#: eeschema/sim/simulator_frame_ui.cpp:2147
+#: eeschema/sim/simulator_frame_ui.cpp:2169
+#: eeschema/sim/simulator_frame_ui.cpp:2170
 msgid " (gain)"
 msgstr " (게인)"
 
@@ -18787,8 +18787,8 @@ msgstr " (게인)"
 #: eeschema/sim/simulator_frame_ui.cpp:849
 #: eeschema/sim/simulator_frame_ui.cpp:854
 #: eeschema/sim/simulator_frame_ui.cpp:1020
-#: eeschema/sim/simulator_frame_ui.cpp:2144
-#: eeschema/sim/simulator_frame_ui.cpp:2145
+#: eeschema/sim/simulator_frame_ui.cpp:2167
+#: eeschema/sim/simulator_frame_ui.cpp:2168
 msgid " (phase)"
 msgstr " (상)"
 
@@ -18836,11 +18836,16 @@ msgstr ""
 "회로도 시트 시뮬레이션 명령 지시문이 변경되었습니다.   시뮬레이션 명령을 업데"
 "이트하시겠습니까?"
 
-#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:812
+#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:813
 msgid "Another simulation is already running."
 msgstr "다른 시뮬레이션이 이미 실행 중입니다."
 
-#: eeschema/sim/simulator_frame.cpp:615
+#: eeschema/sim/simulator_frame.cpp:544
+#, fuzzy, c-format
+msgid "Unable to load or parse file %s"
+msgstr "%s 파일을 불러올 수 없습니다"
+
+#: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
 msgstr "통합 문서에 변경 내용을 저장하시겠습니까?"
 
@@ -18955,7 +18960,7 @@ msgid "Cursor 2"
 msgstr "커서 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1169
-#: eeschema/sim/simulator_frame_ui.cpp:2577
+#: eeschema/sim/simulator_frame_ui.cpp:2600
 msgid "Diff"
 msgstr "차동쌍"
 
@@ -18983,9 +18988,9 @@ msgstr "오류: 시뮬레이션 유형이 정의되지 않음.\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "오류: 시뮬레이션 유형이 플로팅을 지원하지 않음.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2683
-#: eeschema/sim/simulator_frame_ui.cpp:2798
-#: eeschema/sim/simulator_frame_ui.cpp:2841
+#: eeschema/sim/simulator_frame_ui.cpp:2706
+#: eeschema/sim/simulator_frame_ui.cpp:2821
+#: eeschema/sim/simulator_frame_ui.cpp:2864
 msgid ""
 "\n"
 "\n"

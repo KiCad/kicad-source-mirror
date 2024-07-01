@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:41-0700\n"
+"POT-Creation-Date: 2024-07-01 10:53-0700\n"
 "PO-Revision-Date: 2024-03-05 10:02+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v8/tr/>\n"
@@ -3027,7 +3027,7 @@ msgstr "Seçenek"
 #: eeschema/fields_grid_table.cpp:387 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2586
+#: eeschema/sim/simulator_frame_ui.cpp:2609
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -19560,8 +19560,8 @@ msgstr "Gerilim (ölçülen)"
 #: eeschema/sim/simulator_frame_ui.cpp:744
 #: eeschema/sim/simulator_frame_ui.cpp:848
 #: eeschema/sim/simulator_frame_ui.cpp:1019
-#: eeschema/sim/simulator_frame_ui.cpp:2146
-#: eeschema/sim/simulator_frame_ui.cpp:2147
+#: eeschema/sim/simulator_frame_ui.cpp:2169
+#: eeschema/sim/simulator_frame_ui.cpp:2170
 msgid " (gain)"
 msgstr " (kazanç)"
 
@@ -19571,8 +19571,8 @@ msgstr " (kazanç)"
 #: eeschema/sim/simulator_frame_ui.cpp:849
 #: eeschema/sim/simulator_frame_ui.cpp:854
 #: eeschema/sim/simulator_frame_ui.cpp:1020
-#: eeschema/sim/simulator_frame_ui.cpp:2144
-#: eeschema/sim/simulator_frame_ui.cpp:2145
+#: eeschema/sim/simulator_frame_ui.cpp:2167
+#: eeschema/sim/simulator_frame_ui.cpp:2168
 msgid " (phase)"
 msgstr " (faz)"
 
@@ -19622,11 +19622,16 @@ msgstr ""
 "Şematik sayfa simülasyon komut yönergesi değişti.   Simülasyon Komutunu "
 "güncellemek ister misiniz?"
 
-#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:812
+#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:813
 msgid "Another simulation is already running."
 msgstr "Başka bir simülasyon zaten çalışıyor."
 
-#: eeschema/sim/simulator_frame.cpp:615
+#: eeschema/sim/simulator_frame.cpp:544
+#, fuzzy, c-format
+msgid "Unable to load or parse file %s"
+msgstr "Dosya açılamıyor"
+
+#: eeschema/sim/simulator_frame.cpp:616
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Değişiklikler kaydedilsin mi?"
@@ -19758,7 +19763,7 @@ msgid "Cursor 2"
 msgstr "İmleç"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1169
-#: eeschema/sim/simulator_frame_ui.cpp:2577
+#: eeschema/sim/simulator_frame_ui.cpp:2600
 #, fuzzy
 msgid "Diff"
 msgstr "Fark Çifti Boşluğu"
@@ -19787,9 +19792,9 @@ msgstr "Hata: simülasyon türü tanımlanmamış.\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Hata: simülasyon türü çizim yapmayı desteklemiyor.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2683
-#: eeschema/sim/simulator_frame_ui.cpp:2798
-#: eeschema/sim/simulator_frame_ui.cpp:2841
+#: eeschema/sim/simulator_frame_ui.cpp:2706
+#: eeschema/sim/simulator_frame_ui.cpp:2821
+#: eeschema/sim/simulator_frame_ui.cpp:2864
 msgid ""
 "\n"
 "\n"

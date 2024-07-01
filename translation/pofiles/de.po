@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:41-0700\n"
+"POT-Creation-Date: 2024-07-01 10:53-0700\n"
 "PO-Revision-Date: 2024-07-01 10:10+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
@@ -3084,7 +3084,7 @@ msgstr "Option"
 #: eeschema/fields_grid_table.cpp:387 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2586
+#: eeschema/sim/simulator_frame_ui.cpp:2609
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -19120,8 +19120,8 @@ msgstr "Spannung (gemessen)"
 #: eeschema/sim/simulator_frame_ui.cpp:744
 #: eeschema/sim/simulator_frame_ui.cpp:848
 #: eeschema/sim/simulator_frame_ui.cpp:1019
-#: eeschema/sim/simulator_frame_ui.cpp:2146
-#: eeschema/sim/simulator_frame_ui.cpp:2147
+#: eeschema/sim/simulator_frame_ui.cpp:2169
+#: eeschema/sim/simulator_frame_ui.cpp:2170
 msgid " (gain)"
 msgstr " (Verstärkung)"
 
@@ -19131,8 +19131,8 @@ msgstr " (Verstärkung)"
 #: eeschema/sim/simulator_frame_ui.cpp:849
 #: eeschema/sim/simulator_frame_ui.cpp:854
 #: eeschema/sim/simulator_frame_ui.cpp:1020
-#: eeschema/sim/simulator_frame_ui.cpp:2144
-#: eeschema/sim/simulator_frame_ui.cpp:2145
+#: eeschema/sim/simulator_frame_ui.cpp:2167
+#: eeschema/sim/simulator_frame_ui.cpp:2168
 msgid " (phase)"
 msgstr " (Phase)"
 
@@ -19177,11 +19177,16 @@ msgstr ""
 "Befehlsanweisung für Schaltplan-Simulationsbefehl hat sich geändert.  Soll "
 "der Simulationsbefehl aktualisiert werden?"
 
-#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:812
+#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:813
 msgid "Another simulation is already running."
 msgstr "Eine andere Simulation wurde bereits gestartet."
 
-#: eeschema/sim/simulator_frame.cpp:615
+#: eeschema/sim/simulator_frame.cpp:544
+#, fuzzy, c-format
+msgid "Unable to load or parse file %s"
+msgstr "Datei %s kann nicht geladen werden"
+
+#: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
 msgstr "Änderungen in Arbeitsmappe speichern?"
 
@@ -19296,7 +19301,7 @@ msgid "Cursor 2"
 msgstr "Zeiger 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1169
-#: eeschema/sim/simulator_frame_ui.cpp:2577
+#: eeschema/sim/simulator_frame_ui.cpp:2600
 msgid "Diff"
 msgstr "Diff"
 
@@ -19324,9 +19329,9 @@ msgstr "Fehler: Simulationstyp nicht definiert.\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Fehler: Simulationstyp unterstützt kein Plotten.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2683
-#: eeschema/sim/simulator_frame_ui.cpp:2798
-#: eeschema/sim/simulator_frame_ui.cpp:2841
+#: eeschema/sim/simulator_frame_ui.cpp:2706
+#: eeschema/sim/simulator_frame_ui.cpp:2821
+#: eeschema/sim/simulator_frame_ui.cpp:2864
 msgid ""
 "\n"
 "\n"

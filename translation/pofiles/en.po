@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:41-0700\n"
+"POT-Creation-Date: 2024-07-01 10:53-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -12700,6 +12700,10 @@ msgstr ""
 
 msgid "Another simulation is already running."
 msgstr "Another simulation is already running."
+
+#, c-format
+msgid "Unable to load or parse file %s"
+msgstr "Unable to load or parse file %s"
 
 msgid "Save changes to workbook?"
 msgstr "Save changes to workbook?"

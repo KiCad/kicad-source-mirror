@@ -112,7 +112,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 12:41-0700\n"
+"POT-Creation-Date: 2024-07-01 10:53-0700\n"
 "PO-Revision-Date: 2024-07-01 17:21+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
@@ -3155,7 +3155,7 @@ msgstr "Opzione"
 #: eeschema/fields_grid_table.cpp:387 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2586
+#: eeschema/sim/simulator_frame_ui.cpp:2609
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -19090,8 +19090,8 @@ msgstr "Tensione (misurata)"
 #: eeschema/sim/simulator_frame_ui.cpp:744
 #: eeschema/sim/simulator_frame_ui.cpp:848
 #: eeschema/sim/simulator_frame_ui.cpp:1019
-#: eeschema/sim/simulator_frame_ui.cpp:2146
-#: eeschema/sim/simulator_frame_ui.cpp:2147
+#: eeschema/sim/simulator_frame_ui.cpp:2169
+#: eeschema/sim/simulator_frame_ui.cpp:2170
 msgid " (gain)"
 msgstr " (guadagno)"
 
@@ -19101,8 +19101,8 @@ msgstr " (guadagno)"
 #: eeschema/sim/simulator_frame_ui.cpp:849
 #: eeschema/sim/simulator_frame_ui.cpp:854
 #: eeschema/sim/simulator_frame_ui.cpp:1020
-#: eeschema/sim/simulator_frame_ui.cpp:2144
-#: eeschema/sim/simulator_frame_ui.cpp:2145
+#: eeschema/sim/simulator_frame_ui.cpp:2167
+#: eeschema/sim/simulator_frame_ui.cpp:2168
 msgid " (phase)"
 msgstr " (fase)"
 
@@ -19147,11 +19147,16 @@ msgstr ""
 "La direttiva del comando di simulazione del foglio schema è stata "
 "modificata. Aggiornare il comando di simulazione?"
 
-#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:812
+#: eeschema/sim/simulator_frame.cpp:469 eeschema/sim/simulator_frame.cpp:813
 msgid "Another simulation is already running."
 msgstr "Un'altra simulazione è già in esecuzione."
 
-#: eeschema/sim/simulator_frame.cpp:615
+#: eeschema/sim/simulator_frame.cpp:544
+#, fuzzy, c-format
+msgid "Unable to load or parse file %s"
+msgstr "Impossibile caricare il file %s"
+
+#: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
 msgstr "Salva i cambiamenti nel libretto di lavoro?"
 
@@ -19266,7 +19271,7 @@ msgid "Cursor 2"
 msgstr "Puntatore 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1169
-#: eeschema/sim/simulator_frame_ui.cpp:2577
+#: eeschema/sim/simulator_frame_ui.cpp:2600
 msgid "Diff"
 msgstr "Diff"
 
@@ -19294,9 +19299,9 @@ msgstr "Errore: tipo di simulazione non definito.\n"
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Errore: il tipo di simulazione non supporta i grafici.\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2683
-#: eeschema/sim/simulator_frame_ui.cpp:2798
-#: eeschema/sim/simulator_frame_ui.cpp:2841
+#: eeschema/sim/simulator_frame_ui.cpp:2706
+#: eeschema/sim/simulator_frame_ui.cpp:2821
+#: eeschema/sim/simulator_frame_ui.cpp:2864
 msgid ""
 "\n"
 "\n"
@@ -40912,19 +40917,25 @@ msgstr "I valori di distanza locale negativi non avranno effetto"
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
-msgstr "Distanza negativa dalla maschera di saldatura più grande di alcune primitive di forma; i risultati potrebbero essere sorprendenti."
+msgstr ""
+"Distanza negativa dalla maschera di saldatura più grande di alcune primitive "
+"di forma; i risultati potrebbero essere sorprendenti."
 
 #: pcbnew/pad.cpp:1946
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
-msgstr "Distanza maschera di saldatura negativa più grande della piazzola; non verrà generata nessuna maschera di saldatura"
+msgstr ""
+"Distanza maschera di saldatura negativa più grande della piazzola; non verrà "
+"generata nessuna maschera di saldatura"
 
 #: pcbnew/pad.cpp:1965
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
-msgstr "Margine pastasalda negativo più grande della piazzola; non verrà generata nessuna maschera di pastasalda"
+msgstr ""
+"Margine pastasalda negativo più grande della piazzola; non verrà generata "
+"nessuna maschera di pastasalda"
 
 #: pcbnew/pad.cpp:1972
 msgid "(Pad has no layer)"
@@ -40936,11 +40947,15 @@ msgstr "Piazzola PTH senza strati rame"
 
 #: pcbnew/pad.cpp:1981
 msgid "Plated through holes normally have a copper pad on at least one layer"
-msgstr "I fori metallizzati normalmente hanno una piazzola in rame almeno su uno strato"
+msgstr ""
+"I fori metallizzati normalmente hanno una piazzola in rame almeno su uno "
+"strato"
 
 #: pcbnew/pad.cpp:2000
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
-msgstr "Le piazzole del connettore normalmente non hanno pastasalda; usare piazzole SMD"
+msgstr ""
+"Le piazzole del connettore normalmente non hanno pastasalda; usare piazzole "
+"SMD"
 
 #: pcbnew/pad.cpp:2008
 msgid "(SMD pad has a hole)"
@@ -40956,7 +40971,8 @@ msgstr "la piazzola SMD ha strati rame e maschera su lati diversi della scheda"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "la piazzola SMD ha strati rame e pastasalda su lati diversi della scheda"
+msgstr ""
+"la piazzola SMD ha strati rame e pastasalda su lati diversi della scheda"
 
 #: pcbnew/pad.cpp:2044
 msgid "SMD pad has no outer layers"
