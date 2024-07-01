@@ -353,6 +353,8 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
 
 void VIEW::Remove( VIEW_ITEM* aItem )
 {
+    static int s_gcCounter = 0;
+
     if( aItem && aItem->m_viewPrivData )
     {
         wxCHECK( aItem->m_viewPrivData->m_view == this, /*void*/ );
@@ -360,8 +362,22 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
         if( item != m_allItems->end() )
         {
-            m_allItems->erase( item );
+            *item = nullptr;
             aItem->m_viewPrivData->clearUpdateFlags();
+
+            s_gcCounter++;
+
+            if( s_gcCounter > 4096 )
+            {
+                // Perform defragmentation
+                alg::delete_if( *m_allItems,
+                                []( VIEW_ITEM* it )
+                                {
+                                    return it == nullptr;
+                                } );
+
+                s_gcCounter = 0;
+            }
         }
 
         int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
@@ -696,6 +712,9 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 
     for( VIEW_ITEM* item : *m_allItems )
     {
+        if( !item )
+            continue;
+
         VIEW_ITEM_DATA* viewData = item->viewPrivData();
 
         if( !viewData )
@@ -771,6 +790,9 @@ void VIEW::UpdateAllLayersColor()
 
         for( VIEW_ITEM* item : *m_allItems )
         {
+            if( !item )
+                continue;
+
             VIEW_ITEM_DATA* viewData = item->viewPrivData();
 
             if( !viewData )
@@ -904,6 +926,9 @@ void VIEW::UpdateAllLayersOrder()
 
         for( VIEW_ITEM* item : *m_allItems )
         {
+            if( !item )
+                continue;
+
             VIEW_ITEM_DATA* viewData = item->viewPrivData();
 
             if( !viewData )
@@ -1434,6 +1459,9 @@ void VIEW::UpdateItems()
 
     for( VIEW_ITEM* item : *m_allItems )
     {
+        if( !item )
+            continue;
+
         auto vpd = item->viewPrivData();
 
         if( !vpd )
@@ -1472,6 +1500,9 @@ void VIEW::UpdateItems()
         // and re-insert items from scratch
         for( VIEW_ITEM* item : allItems )
         {
+            if( !item )
+                continue;
+
             const BOX2I bbox = item->ViewBBox();
             item->m_viewPrivData->m_bbox = bbox;
 
@@ -1497,7 +1528,7 @@ void VIEW::UpdateItems()
 
         for( VIEW_ITEM* item : *m_allItems.get() )
         {
-            if( item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
+            if( item && item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
             {
                 invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
                 item->viewPrivData()->m_requiredUpdate = NONE;
@@ -1514,7 +1545,7 @@ void VIEW::UpdateAllItems( int aUpdateFlags )
 {
     for( VIEW_ITEM* item : *m_allItems )
     {
-        if( item->viewPrivData() )
+        if( item && item->viewPrivData() )
             item->viewPrivData()->m_requiredUpdate |= aUpdateFlags;
     }
 }
@@ -1525,6 +1556,9 @@ void VIEW::UpdateAllItemsConditionally( int aUpdateFlags,
 {
     for( VIEW_ITEM* item : *m_allItems )
     {
+        if( !item )
+            continue;
+
         if( aCondition( item ) )
         {
             if( item->viewPrivData() )
@@ -1538,6 +1572,9 @@ void VIEW::UpdateAllItemsConditionally( std::function<int( VIEW_ITEM* )> aItemFl
 {
     for( VIEW_ITEM* item : *m_allItems )
     {
+        if( !item )
+            continue;
+
         if( item->viewPrivData() )
             item->viewPrivData()->m_requiredUpdate |= aItemFlagsProvider( item );
     }
