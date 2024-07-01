@@ -255,7 +255,8 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     bmp.accessTime = currentTime;
 
 #ifndef DISABLE_BITMAP_CACHE
-    if( m_cacheLru.size() + 1 > m_cacheMaxElements || m_cacheSize + bmp.size > m_cacheMaxSize )
+    if( ( m_cacheLru.size() + 1 > m_cacheMaxElements || m_cacheSize + bmp.size > m_cacheMaxSize )
+        && !m_cacheLru.empty() )
     {
         KIID toRemove( 0 );
         auto toRemoveLru = m_cacheLru.end();
