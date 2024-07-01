@@ -25,16 +25,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-29 12:51-0700\n"
-"PO-Revision-Date: 2024-06-01 00:10+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-07-01 13:57+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -10595,9 +10595,8 @@ msgid "Edit exclusion comment..."
 msgstr "Ausschlusskommentar bearbeiten..."
 
 #: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:678
-#, fuzzy
 msgid "Exclude this violation"
-msgstr "Diesen Verstoß ausschließen..."
+msgstr "Diesen Verstoß ausschließen"
 
 #: eeschema/dialogs/dialog_erc.cpp:653 eeschema/dialogs/dialog_erc.cpp:657
 #: pcbnew/dialogs/dialog_drc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:683
@@ -19976,11 +19975,8 @@ msgid "SPICE Simulator"
 msgstr "Simulator"
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Bei der Erstellung der Netzliste sind Fehler aufgetreten.\n"
-"\n"
+msgstr "Bei der Netzlistenerzeugung sind Fehler aufgetreten."
 
 #: eeschema/sim/simulator_frame.cpp:374
 msgid "Simulator requires a fully annotated schematic."
@@ -36731,9 +36727,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Standardeigenschaften für neue grafische Elemente:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:307
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Footprint-Bibliothek wurde nicht aktualisiert\n"
+msgstr "Versteckte Footprint-Bibliotheken werden noch nicht unterstützt."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:486
 #, c-format
@@ -37913,9 +37908,8 @@ msgstr ""
 "Gebrückte Lötstoppöffnungen zwischen Pads innerhalb von Footprints erlauben"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:101
-#, fuzzy
 msgid "Tent vias:"
-msgstr "Vias mit Lötstopplack bedecken"
+msgstr "Vias mit Lötstopplack bedecken:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:111
@@ -40728,9 +40722,8 @@ msgid "Using non-simplified polygon.\n"
 msgstr "Verwende nicht vereinfachtes Polygon.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1677
-#, fuzzy
 msgid "Failed to create a prismatic shape\n"
-msgstr "Branch konnte nicht erstellt werden."
+msgstr "Konnte prismatische Form nicht erstellen\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1688
 msgid "** Face skipped **\n"
