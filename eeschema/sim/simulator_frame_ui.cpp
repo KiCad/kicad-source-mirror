@@ -1520,7 +1520,7 @@ void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
     }
 
     m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT, aCmd );
-    SetMeasureFormat( row, { 2, wxS( "~V" ) } );
+    SetMeasureFormat( row, { 3, wxS( "~V" ) } );
 
     UpdateMeasurement( row );
     OnModify();
