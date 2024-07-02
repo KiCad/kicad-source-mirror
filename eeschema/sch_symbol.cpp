@@ -1364,9 +1364,21 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
             return true;
     }
 
+    wxString upperToken = token->Upper();
+
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        if( token->IsSameAs( m_fields[ i ].GetCanonicalName().Upper() ) )
+        wxString field = m_fields[i].GetCanonicalName();
+
+        wxString textToken = m_fields[i].GetText();
+        textToken.Replace( " ", wxEmptyString );
+        wxString tokenString = "${" + field + "}";
+
+        // If the field data is just a reference to the field, don't resolve
+        if( textToken.IsSameAs( tokenString, false ) )
+            return true;
+
+        if( token->IsSameAs( field, false ) )
         {
             if( i == REFERENCE_FIELD )
                 *token = GetRef( aPath, true );
@@ -1379,8 +1391,16 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
     for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
     {
-        if( token->IsSameAs( m_fields[ i ].GetName() )
-            || token->IsSameAs( m_fields[ i ].GetName().Upper() ) )
+        wxString field = m_fields[ i ].GetName();
+
+        wxString textToken = m_fields[i].GetText();
+        textToken.Replace( " ", wxEmptyString );
+        wxString tokenString = "${" + field + "}";
+
+        if( textToken.IsSameAs( tokenString, false ) )
+            return true;
+
+        if( token->IsSameAs( field, false ) )
         {
             *token = m_fields[ i ].GetShownText( aPath, false, aDepth + 1 );
             return true;
