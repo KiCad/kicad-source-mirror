@@ -1,20 +1,20 @@
-# Arnau Llovet Vidal <arnaullv@gmail.com>, 2021, 2022, 2023.
+# Arnau Llovet Vidal <arnaullv@gmail.com>, 2021, 2022, 2023, 2024.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2023-04-08 05:46+0000\n"
+"PO-Revision-Date: 2024-07-02 19:09+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -1283,9 +1283,8 @@ msgid "3D Preview Options"
 msgstr "Opcions de Gerbview"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:404
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Gruix de la placa: "
+msgstr "Gruix de la placa:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:23
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:230
@@ -3591,9 +3590,9 @@ msgid "Connection successful"
 msgstr "Fitxer creat satisfactòriament."
 
 #: common/dialogs/git/dialog_git_repository.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "No s'ha pogut obrir el fitxer d'arxiu."
+msgstr "No s'ha pogut connectar a '%s "
 
 #: common/dialogs/git/dialog_git_repository.cpp:361
 #, fuzzy, c-format
@@ -6419,9 +6418,8 @@ msgid "Could not fetch data from remote '%s'"
 msgstr "No s'ha trobat el pad personalitzat '%s'."
 
 #: common/git/git_pull_handler.cpp:92
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "No s'ha pogut llegir el fitxer "
+msgstr "No s'ha pogut llegir 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:100
 #, fuzzy
@@ -6429,9 +6427,8 @@ msgid "Could not lookup commit"
 msgstr "No s'ha pogut obrir el CvPcb"
 
 #: common/git/git_pull_handler.cpp:110
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "No s'ha pogut llegir el fitxer "
+msgstr "No s'ha pogut analitzar la fusió"
 
 #: common/git/git_pull_handler.cpp:120
 msgid "Invalid HEAD.  Cannot merge."
@@ -14017,9 +14014,9 @@ msgstr "Símbol d'alimentació"
 #: eeschema/symbol_chooser_frame.cpp:112
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:108
 #: pcbnew/footprint_chooser_frame.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "Selecciona símbol (%d elements carregats)"
+msgstr " (%d elements carregats)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -14568,9 +14565,8 @@ msgstr "Reassigna els símbols"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr " context: "
+msgstr "Contingut de la cel·la:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
@@ -15736,14 +15732,12 @@ msgstr "Afegeix de totes maneres"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:851
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1079
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Aquesta operació canviarà l'anotació actual i no es pot desfer."
+"Aquesta operació reiniciarà la taula de biblioteques globals al disc i no es "
+"pot desfer."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:920
 #, fuzzy
@@ -20570,9 +20564,8 @@ msgstr "Fase de la senyal:"
 #: eeschema/sim/simulator_frame_ui.cpp:771
 #: eeschema/sim/simulator_frame_ui.cpp:875
 #: eeschema/sim/simulator_frame_ui.cpp:1045
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Amplitud:"
+msgstr " (amplitud)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:274
 #, fuzzy, c-format
@@ -33029,11 +33022,9 @@ msgid "Run DRC"
 msgstr "Executa DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:304
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
-"DRC incomplet: no s'han pogut compilar les normes de disseny "
-"personalitzades.  "
+"DRC incomplet: no s'han pogut compilar les normes de disseny personalitzades."
 
 #: pcbnew/dialogs/dialog_drc.cpp:306 pcbnew/tools/board_inspection_tool.cpp:213
 msgid "Show design rules."
@@ -41383,11 +41374,9 @@ msgstr ""
 "** Error en escriure el fitxer STEP. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:704
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"S'ha creat el fitxer STEP '%s'.\n"
+msgstr "%s fitxer '%s' creat.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:711
 #: pcbnew/exporters/step/exporter_step.cpp:717
@@ -41412,11 +41401,13 @@ msgid "%s file has been created, but there are warnings."
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Temps de la recàrrega %.3f s"
+msgstr ""
+"\n"
+"Temps d'exportació %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:620
 msgid "** Got problems while fusing shapes **\n"
@@ -50839,9 +50830,8 @@ msgid "[INFO] load failed: %s"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Mapa de bits per al convertidor de components"
+msgstr "bitmap2component;Mapa de bits;Conversor;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -50887,9 +50877,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Cap de Projecte"
+msgstr "Cap de Projecte;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -50905,9 +50894,8 @@ msgid "KiCad PCB Calculator"
 msgstr "Calculadora PCB"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "Calculadora PCB"
+msgstr "PCB;Calculadora;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
