@@ -599,6 +599,15 @@ public:
      */
     int m_MinorSchematicGraphSize;
 
+    /**
+     * The number of recursions to resolve text variables.
+     *
+     * Setting name: "ResolveTextRecursionDepth"
+     * Valid values: 0 to 10
+     * Default value: 2
+     */
+    int m_ResolveTextRecursionDepth;
+
 ///@}
 
 private:

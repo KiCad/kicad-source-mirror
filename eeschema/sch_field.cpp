@@ -32,6 +32,8 @@
 
 #include <wx/log.h>
 #include <wx/menu.h>
+
+#include <advanced_config.h>
 #include <base_units.h>
 #include <common.h>     // for ExpandTextVars
 #include <sch_edit_frame.h>
@@ -264,9 +266,14 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
         text = wxS( "" );
 
+    // The iteration here it to allow for nested variables in the
+    // text strings (e.g. ${${VAR}}).  Although the symbols and sheets
+    // and labels recurse, text that is none of those types such as text
+    // boxes and labels do not.  This only loops if there is still a
+    // variable to resolve.
     for( int ii = 0; ii < 10 && text.Contains( wxT( "${" ) ); ++ii )
     {
-        if( aDepth < 10 )
+        if( aDepth < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
         {
             if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
                 text = ExpandTextVars( text, &libSymbolResolver );
