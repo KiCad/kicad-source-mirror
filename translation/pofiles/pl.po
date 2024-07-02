@@ -17,17 +17,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-05-26 08:09+0000\n"
+"PO-Revision-Date: 2024-07-02 19:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2854,11 +2854,13 @@ msgid "Drawing Sheet File"
 msgstr "Plik z ramką arkusza"
 
 #: common/dialogs/dialog_page_settings.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Błąd wczytywania arkusza rysunkowego '%s'."
+msgstr ""
+"Błąd wczytywania arkusza rysunkowego '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -4914,18 +4916,16 @@ msgid "File not found."
 msgstr "Nie znaleziono pliku."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:987
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Plik '%s' nie może zostać utworzony."
+msgstr "Plik nie mógł być otwarty."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1001
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Arkusz z rysunkiem '%s' nie został w pełni odczytany."
+msgstr "Arkusz z rysunkiem nie został w pełni odczytany."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Brak dostępnej pamięci."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -6755,9 +6755,8 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Nie można przetworzyć %d linii JSON w '%s': %s"
 
 #: common/io/io_base.cpp:137
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "Otwieranie zostało anulowane przez użytkownika."
+msgstr "Wczytywanie zostało anulowane przez użytkownika."
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -6935,9 +6934,8 @@ msgid "DNP markers"
 msgstr "Znaczniki 'Nie montować'"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Wyłączono z symulacji"
+msgstr "Znaczniki wyłączenia z symulacji"
 
 #: common/layer_id.cpp:141
 msgid "ERC warnings"
@@ -7926,36 +7924,32 @@ msgid "Zoom In Horizontally"
 msgstr "Powiększ w poziomie"
 
 #: common/tool/actions.cpp:582
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "Powiększ poziomo"
+msgstr "Powiększ w poziomie obszar wykresu"
 
 #: common/tool/actions.cpp:588
 msgid "Zoom Out Horizontally"
 msgstr "Pomniejsz w poziomie"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom out horizontally the plot area"
-msgstr "Pomniejsz w poziomie"
+msgstr "Pomniejsz w poziomie obszar wykresu"
 
 #: common/tool/actions.cpp:595
 msgid "Zoom In Vertically"
 msgstr "Powiększ w pionie"
 
 #: common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom in vertically the plot area"
-msgstr "Powiększ w pionie"
+msgstr "Powiększ w pionie obszar wykresu"
 
 #: common/tool/actions.cpp:602
 msgid "Zoom Out Vertically"
 msgstr "Pomniejsz w pionie"
 
 #: common/tool/actions.cpp:603
-#, fuzzy
 msgid "Zoom out vertically the plot area"
-msgstr "Pomniejsz w pionie"
+msgstr "Pomniejsz w pionie obszar wykresu"
 
 #: common/tool/actions.cpp:611 common/widgets/mathplot.cpp:1385
 msgid "Center on Cursor"
@@ -8049,17 +8043,14 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Odpina bibliotekę by nie pojawiała się na początku listy"
 
 #: common/tool/actions.cpp:751
-#, fuzzy
 msgid "Show Library Tree"
-msgstr "Nowy odnośnik w bibliotece"
+msgstr "Pokaż strukturę biblioteki"
 
 #: common/tool/actions.cpp:757
-#, fuzzy
 msgid "Hide Library Tree"
-msgstr "Nowy odnośnik w bibliotece"
+msgstr "Ukryj strukturę biblioteki"
 
 #: common/tool/actions.cpp:763
-#, fuzzy
 msgid "Focus Library Tree Search Field"
 msgstr "Wyróżnij pole wyszukiwania w drzewie symboli"
 
@@ -9104,7 +9095,6 @@ msgid "Electrical rule check file"
 msgstr "Plik wynikowy z kontroli ERC"
 
 #: common/wildcards_and_files_ext.cpp:441
-#, fuzzy
 msgid "SPICE library file"
 msgstr "Plik biblioteki SPICE"
 
@@ -9610,14 +9600,14 @@ msgid "Delete all associations?"
 msgstr "Usuń wszystkie przydzielnia footprintów?"
 
 #: eeschema/annotate.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "Ponumerowano %s (część %s) jako %s."
+msgstr "Wyczyszczono numerację dla %s (część %s)."
 
 #: eeschema/annotate.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "Wyczyść numerację"
+msgstr "Wyczyszczono numerację dla %s."
 
 #: eeschema/annotate.cpp:174
 msgid "Delete Annotation"
@@ -10520,9 +10510,8 @@ msgid "Edit exclusion comment..."
 msgstr "Edycja komentarza wykluczenia..."
 
 #: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:678
-#, fuzzy
 msgid "Exclude this violation"
-msgstr "Wyklucz to naruszenie zasad..."
+msgstr "Wyklucz to naruszenie zasad"
 
 #: eeschema/dialogs/dialog_erc.cpp:653 eeschema/dialogs/dialog_erc.cpp:657
 #: pcbnew/dialogs/dialog_drc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:683
@@ -10531,9 +10520,8 @@ msgid "It will be excluded from the %s list"
 msgstr "Zostanie wykluczone z listy %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:656 pcbnew/dialogs/dialog_drc.cpp:682
-#, fuzzy
 msgid "Exclude with comment..."
-msgstr "Edycja komentarza wykluczenia..."
+msgstr "Wykluczenie z opcją komentarza..."
 
 #: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:704
 #, c-format
@@ -13245,9 +13233,8 @@ msgid "Compute noise current correlation matrix"
 msgstr "Oblicz matrycę korelacji szumu"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
-#, fuzzy
 msgid "SPICE directives:"
-msgstr "Dyrektywy Spice:"
+msgstr "Dyrektywy SPICE:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
 msgid "Load directives from schematic"
@@ -14481,9 +14468,8 @@ msgid "Show ERC exclusions"
 msgstr "Pokaż wyjątki ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "Wyczyść atrybut wykluczania z symulacji"
+msgstr "Oznacz elementy które posiadają atrybut wykluczania z symulacji"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:72
 msgid "Show OP voltages"
@@ -15698,11 +15684,9 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'"
 
 #: eeschema/erc/erc.cpp:1175
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr ""
-"Symbol %s posiada piny zasilające w jednostkach %s, które nie zostały "
-"umieszczone."
+msgstr "Symbol '%s' posiada powielone piny o tych samych numerach"
 
 #: eeschema/erc/erc.cpp:1185
 #, c-format
@@ -15831,9 +15815,8 @@ msgstr ""
 "zasilania"
 
 #: eeschema/erc/erc_item.cpp:68
-#, fuzzy
 msgid "Multiple pins with the same pin numbers"
-msgstr "Opisuje piny na podstawie ich numerów"
+msgstr "Istnieje wiele pinów z tymi samymi numerami pinów"
 
 #: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
 msgid "Conflict problem between pins"
@@ -16051,6 +16034,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' nie jest plikiem schematu programu KiCad.\n"
+"Użyj polecenia Plik -> Importuj schemat spoza programu KiCad."
 
 #: eeschema/files-io.cpp:279
 msgid "Root"
@@ -17141,9 +17126,9 @@ msgid "Compare Symbol with Library"
 msgstr "Porównuje symbol z biblioteką"
 
 #: eeschema/sch_field.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s '%s'"
-msgstr "Pole '%s' z %s"
+msgstr "Pole %s '%s'"
 
 #: eeschema/sch_field.cpp:1069
 msgid "Symbol Field"
@@ -17620,6 +17605,8 @@ msgid ""
 "No module instance '%s' found in schematic file:\n"
 "%s"
 msgstr ""
+"Nie znaleziono instancji '%s' modułu w pliku schematu:\n"
+"%s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1720
 #, c-format
@@ -18931,7 +18918,7 @@ msgstr ""
 "magistrali."
 
 #: eeschema/sheet.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
@@ -19870,16 +19857,12 @@ msgstr ""
 "poszukiwaniu wyników."
 
 #: eeschema/sim/simulator_frame.cpp:347
-#, fuzzy
 msgid "SPICE Simulator"
-msgstr "Symulator"
+msgstr "Symulator SPICE"
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Podczas tworzenia listy sieci wykryto błędy.\n"
-"\n"
+msgstr "Podczas tworzenia listy sieci wykryto błędy."
 
 #: eeschema/sim/simulator_frame.cpp:374
 msgid "Simulator requires a fully annotated schematic."
@@ -19907,9 +19890,9 @@ msgid "Another simulation is already running."
 msgstr "Inna symulacja jest obecnie uruchomiona."
 
 #: eeschema/sim/simulator_frame.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Nie mogę załadować pliku %s"
+msgstr "Nie mogę załadować lub przetworzyć pliku %s"
 
 #: eeschema/sim/simulator_frame.cpp:626
 msgid "Save changes to workbook?"
@@ -20139,9 +20122,9 @@ msgid "Please, fill required fields"
 msgstr "Proszę uzupełnić wymagane pola"
 
 #: eeschema/sim/spice_value.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid SPICE value."
-msgstr "'%s' to nie jest poprawna wartość programu Spice."
+msgstr "'%s' to nie jest poprawna wartość programu SPICE."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:173
 msgid "&Simulation"
@@ -22080,13 +22063,12 @@ msgstr ""
 "Pokazuje znaczniki gdzie znajdują się wyjątki kontroli reguł projektowych"
 
 #: eeschema/tools/ee_actions.cpp:1166
-#, fuzzy
 msgid "Mark items excluded from simulation"
-msgstr "Wyłączono z symulacji"
+msgstr "Oznacz elementy wyłączone z symulacji"
 
 #: eeschema/tools/ee_actions.cpp:1167
 msgid "Draw 'X's over items which have been excluded from simulation"
-msgstr ""
+msgstr "Rysuje znak 'X' na elementach, które zostały wykluczone z symulacji"
 
 #: eeschema/tools/ee_actions.cpp:1172
 msgid "Show OP Voltages"
@@ -22915,9 +22897,8 @@ msgid "Place Pin Anyway"
 msgstr "Umieść pin mimo to"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:449
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Pin arkusza"
+msgstr "Powtórz pin"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -24562,15 +24543,13 @@ msgstr "Wyklucz modele 3D komponentów"
 
 #: kicad/cli/command_pcb_export_3d.cpp:124
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Export tracks and vias"
-msgstr "Eksport ścieżek, pól lutowniczych i przelotek"
+msgstr "Eksport ścieżek i przelotek"
 
 #: kicad/cli/command_pcb_export_3d.cpp:128
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
-#, fuzzy
 msgid "Export pads"
-msgstr "Eksportuj ścieżki"
+msgstr "Eksport pól lutowniczych"
 
 #: kicad/cli/command_pcb_export_3d.cpp:132
 #: pcbnew/dialogs/dialog_export_step_base.cpp:75
@@ -34153,9 +34132,8 @@ msgid "Footprint dimension items"
 msgstr "Elementy wymiarowe footprintów"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
-#, fuzzy
 msgid "Footprint text items not associated with a field"
-msgstr "Pliki z przydziałem footprintów:"
+msgstr "Elementy tekstowe footprintu nie mające powiązania z polem"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "PCB graphic items"
@@ -36552,9 +36530,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Domyślne ustawienia dla nowych elementów graficznych:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:307
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Biblioteka footprintów nie została uaktualniona\n"
+msgstr "Ukryte biblioteki footprintów nie są jeszcze wspierane."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:486
 #, c-format
@@ -37727,9 +37704,8 @@ msgstr ""
 "footprintów"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:101
-#, fuzzy
 msgid "Tent vias:"
-msgstr "Maskuj przelotki"
+msgstr "Maskuj przelotki:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:111
@@ -40531,16 +40507,12 @@ msgid "Using non-simplified polygon.\n"
 msgstr "Użycie nieuproszczonego wielokąta.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1677
-#, fuzzy
 msgid "Failed to create a prismatic shape\n"
-msgstr "Nie można utworzyć gałęzi."
+msgstr "Nie udało się utworzyć kształtu pryzmatycznego\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1688
-#, fuzzy
 msgid "** Face skipped **\n"
-msgstr ""
-"\n"
-"** Pominięto otwór **\n"
+msgstr "** Pominięto widok **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1855
 #, c-format
@@ -42207,9 +42179,9 @@ msgid "PTH pad %s %s of %s"
 msgstr "Pole PTH %s %s na %s"
 
 #: pcbnew/pad.cpp:1517
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s"
-msgstr "Pola PTH"
+msgstr "Pole PTH %s"
 
 #: pcbnew/pad.cpp:2071
 #, fuzzy
@@ -42217,9 +42189,9 @@ msgid "(Pad must have a positive size)"
 msgstr "Błąd: Pole lutownicze nie może posiadać ujemnego rozmiaru."
 
 #: pcbnew/pad.cpp:2082
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "Rozmiar wiercenia musi być mniejszy niż rozmiar przelotki"
+msgstr "(Rozmiar wiercenia pola PTH musi być większy niż %s)"
 
 #: pcbnew/pad.cpp:2094
 #, fuzzy
@@ -42609,9 +42581,9 @@ msgid "User Field"
 msgstr "Pole użytkownika"
 
 #: pcbnew/pcb_field.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Reference field of %s"
-msgstr "pole odnośnik"
+msgstr "Pole odnośnika do %s"
 
 #: pcbnew/pcb_field.cpp:153
 #, fuzzy, c-format
@@ -42634,9 +42606,9 @@ msgid "Field of %s (%s)"
 msgstr "Siatka: %s (%s)"
 
 #: pcbnew/pcb_field.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "%s field of %s (%s)"
-msgstr "Siatka użytkownika: %s (%s)"
+msgstr "%s pól z %s (%s)"
 
 #: pcbnew/pcb_generator.cpp:207 pcbnew/pcb_generator.cpp:244
 msgid "Update Order"
