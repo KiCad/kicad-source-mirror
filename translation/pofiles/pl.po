@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:55-0700\n"
-"PO-Revision-Date: 2024-05-24 09:09+0000\n"
+"PO-Revision-Date: 2024-07-02 19:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -15299,6 +15299,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' nie jest plikiem schematu programu KiCad.\n"
+"Użyj polecenia Plik -> Importuj schemat spoza programu KiCad."
 
 #: eeschema/files-io.cpp:274
 msgid "Root"
@@ -19044,11 +19046,8 @@ msgid "Spice Simulator"
 msgstr "Symulator Spice"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Podczas tworzenia listy sieci wykryto błędy.\n"
-"\n"
+msgstr "Podczas tworzenia listy sieci wykryto błędy."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -19076,9 +19075,9 @@ msgid "Another simulation is already running."
 msgstr "Inna symulacja jest obecnie uruchomiona."
 
 #: eeschema/sim/simulator_frame.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Nie mogę załadować pliku %s"
+msgstr "Nie mogę załadować lub przetworzyć pliku %s"
 
 #: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
@@ -35299,9 +35298,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Domyślne ustawienia dla nowych elementów graficznych:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Biblioteka footprintów nie została uaktualniona\n"
+msgstr "Ukryte biblioteki footprintów nie są jeszcze wspierane."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -40851,9 +40849,9 @@ msgid "(Pad must have a positive size)"
 msgstr "Błąd: Pole lutownicze nie może posiadać ujemnego rozmiaru."
 
 #: pcbnew/pad.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "Rozmiar wiercenia musi być mniejszy niż rozmiar przelotki"
+msgstr "(Rozmiar wiercenia pola PTH musi być większy niż %s)"
 
 #: pcbnew/pad.cpp:1899
 #, fuzzy
