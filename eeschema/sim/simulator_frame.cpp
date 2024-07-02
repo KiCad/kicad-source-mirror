@@ -467,6 +467,8 @@ void SIMULATOR_FRAME::StartSimulation()
 
     if( simulatorLock.owns_lock() )
     {
+        m_simFinished = false;
+
         m_ui->OnSimUpdate();
         m_simulator->Run();
 
