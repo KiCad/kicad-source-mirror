@@ -113,10 +113,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-07-01 17:21+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2024-07-02 19:09+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6190,7 +6190,7 @@ msgstr "Versione deprecata di KICAD_SYMBOL_DIR."
 #: common/exceptions.cpp:78
 #, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s in '%s', riga %d, offset %d"
+msgstr "%s in '%s', riga %d, offset %d."
 
 #: common/exceptions.cpp:109
 #, c-format
@@ -6200,11 +6200,10 @@ msgid ""
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad non è stato in grado di aprire questo file, dato che è stato creato "
-"con\n"
-"una versione più recente di quella correntemente in esecuzione.\n"
+"KiCad non è riuscito ad aprire questo file, che è stato creato con una "
+"versione più recente di quella in esecuzione.\n"
 "\n"
-"Per aprirlo, aggiornare KiCad ad una versione datata %s o più recente."
+"Per aprirlo, aggiornare KiCad a una versione datata %s o più recente."
 
 #: common/exceptions.cpp:117
 #, c-format
@@ -6215,12 +6214,11 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
-"KiCad non è stato in grado di aprire questo file, dato che è stato creato "
-"con\n"
-"una versione più recente di quella correntemente in esecuzione.\n"
+"KiCad non è riuscito ad aprire questo file, che è stato creato con una "
+"versione più recente di quella in esecuzione.\n"
 "\n"
 "Per aprirlo, aggiornare KiCad alla versione %s o successiva (formato file "
-"datato %s o più recenti)."
+"datato %s o più recente)."
 
 #: common/exceptions.cpp:153
 msgid "Full error text:"
@@ -6305,7 +6303,7 @@ msgstr "Impossibile creare il percorso tabella librerie globale '%s'."
 #: common/gestfich.cpp:244
 #, c-format
 msgid "Command '%s' could not be found."
-msgstr "Comando '%s' non trovato"
+msgstr "Comando '%s' non trovato."
 
 #: common/gestfich.cpp:261
 #, c-format
@@ -6669,7 +6667,7 @@ msgstr "Gestore progetto"
 
 #: common/hotkey_store.cpp:159
 msgid "Gestures"
-msgstr "Gestures"
+msgstr "Gesture"
 
 #: common/http_lib/http_lib_connection.cpp:73
 msgid "KiCad received an empty response!"
@@ -9647,7 +9645,7 @@ msgstr "Mostra l'impronta selezionata nel visualizzatore impronte"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
 msgid "Manage Footprint Association Files..."
-msgstr "Gestisci i file di associazione impronte:"
+msgstr "Gestisci i file di associazione impronte..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
 msgid ""
@@ -10721,7 +10719,7 @@ msgstr "Modifica la mappa conflitti da-pin-a-pin..."
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:704
 #: eeschema/dialogs/dialog_erc.cpp:711
 msgid "Open the Schematic Setup... dialog"
-msgstr "Apri la finestra impostazioni schema..."
+msgstr "Apri la finestra impostazioni schema"
 
 #: eeschema/dialogs/dialog_erc.cpp:703 pcbnew/dialogs/dialog_drc.cpp:723
 msgid "Edit violation severities..."
@@ -13797,7 +13795,7 @@ msgstr "Scegli simbolo di potenza"
 #: pcbnew/footprint_chooser_frame.cpp:172
 #, c-format
 msgid " (%d items loaded)"
-msgstr "(%d elementi caricati)"
+msgstr " (%d elementi caricati)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -13941,7 +13939,7 @@ msgstr "Impossibile scrivere la DIBA d'uscita '%s'."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1309
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "DIBA scritta su '%s'."
+msgstr "DIBA scritta su '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1627
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2029
@@ -14456,9 +14454,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:588
 #: pcbnew/dialogs/dialog_text_properties.cpp:536
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Proprietà testo"
+msgstr "Modifica proprietà testo"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
 msgid "Background fill"
@@ -14727,7 +14724,7 @@ msgstr "Evidenzia collegamenti sottoposti ad analisi-incrociata"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:167
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Evidenza collegamenti quando solo evidenziati nell'editor del C.S."
+msgstr "Evidenza collegamenti quando sono evidenziati nell'editor del C.S."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Line drawing mode:"
@@ -15799,7 +15796,7 @@ msgstr "Non connesso"
 
 #: eeschema/erc/erc.cpp:397
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Variabile testo non risolta nel foglio di disegno."
+msgstr "Variabile testo non risolta nel foglio di disegno"
 
 #: eeschema/erc/erc.cpp:431
 #, c-format
@@ -16396,8 +16393,8 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
-"Errore nel salvataggio del file schema \"%s\".\n"
-"Fallita rinomina del file temporaneo \"%s\""
+"Errore nel salvataggio del file schema '%s'.\n"
+"Fallita rinomina del file temporaneo '%s'."
 
 #: eeschema/files-io.cpp:902 pcbnew/files.cpp:1067 pcbnew/files.cpp:1394
 #, c-format
@@ -16489,10 +16486,10 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Speriamo che ciò non sia stato dovuto ad un bug ma...\n"
-"l'ultima volta che è stato modificato, il file\n"
-"\"%s\"\n"
-"non è stato salvato correttamente. Recuperare le ultime modifiche effettuate?"
+"Beh, questo è potenzialmente imbarazzante!\n"
+"Sembra che l'ultima volta che si stava modificando uno o più file schema\n"
+"questi non sono siano stati salvati correttamente. Ripristinare le ultime "
+"modifiche salvate?"
 
 #: eeschema/files-io.cpp:1639
 #, c-format
@@ -17475,7 +17472,7 @@ msgstr "File di schemi elettrici Altium"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:69
 msgid "Altium Schematic Library or Integrated Library"
-msgstr "File di schemi elettrici o libreria integrata Altium "
+msgstr "File di schemi elettrici o libreria integrata Altium"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
 #, fuzzy
@@ -17816,7 +17813,7 @@ msgstr "File di libreria XML Eagle"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:521
 #, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "Impossibile trovare un file schema valido in '%s'."
+msgstr "Impossibile trovare un file schema valido in '%s'"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:293
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:298
@@ -17838,7 +17835,7 @@ msgstr "Errore enumerando la libreria di simboli '%s': %s"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:607
 #, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "Errore caricando lo schema '%s': %s."
+msgstr "Errore caricando lo schema '%s': %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
@@ -17972,7 +17969,7 @@ msgstr "La libreria simboli %s esiste già."
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1753
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "La libreria simboli \"%s\" non può essere cancellata"
+msgstr "La libreria simboli '%s' non può essere cancellata."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:81
 msgid "KiCad legacy symbol library files"
@@ -18071,7 +18068,7 @@ msgstr "Numero simbolo convertito %s non valido"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:773
 #, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "URL ipertestuale '%s' non valido "
+msgstr "URL ipertestuale '%s' non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:846
 msgid "Invalid pin names definition"
@@ -18188,12 +18185,12 @@ msgstr ""
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:526
 msgid "Expecting CELL or BLOCK"
-msgstr "Era previsto CELL o  BLOCK"
+msgstr "Era previsto CELL o BLOCK"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:545
 #, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "Simbolo '%s.asy' non trovato."
+msgstr "Simbolo '%s.asy' non trovato"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -19247,9 +19244,10 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Il nome file '%s' può causare problemi con un nome file esistente\n"
-"già definito nello schema su file system che non distinguono le\n"
+"già definito nello schema su sistemi che non distinguono le\n"
 "minuscole dalle maiuscole.  Ciò provocherà problemi se si copia\n"
-"questo progetto su tali tipi di sistemi operativi.\n"
+"questo progetto su un sistema operativo che avesse un file system\n"
+"che non distingue le minuscole dalle maiuscole.\n"
 "\n"
 "Continuare ugualmente?"
 
@@ -19289,7 +19287,7 @@ msgstr "Valore C_pkg non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:186
 msgid "Checking pin "
-msgstr "Controllo pin"
+msgstr "Controllo pin "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:193
 msgid "Pin name cannot be empty."
@@ -19317,7 +19315,7 @@ msgstr "Cpin non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:247
 msgid "Checking component "
-msgstr "Controllo componente"
+msgstr "Controllo componente "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
 msgid "Component: name cannot be empty."
@@ -19365,7 +19363,7 @@ msgstr "Il nome modello non può essere vuoto"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:475
 msgid "Checking model "
-msgstr "Controllo modello"
+msgstr "Controllo modello "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
 msgid "Undefined model type."
@@ -19609,7 +19607,7 @@ msgstr "I valori Typ-Min-Max richiedono almeno Typ."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1986
 msgid "Unknown Model_type "
-msgstr "Model_type sconosciuto"
+msgstr "Model_type sconosciuto "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1993
 msgid "Internal Error while reading model_type"
@@ -19626,7 +19624,7 @@ msgstr "Errore interno durante la lettura di Enable"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2030
 msgid "Unknown polarity "
-msgstr "Polarità sconosciuta"
+msgstr "Polarità sconosciuta "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -20040,7 +20038,7 @@ msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
 "Questa simulazione non fornisce grafici. Andare alla finestra console per i "
-"risultati"
+"risultati."
 
 #: eeschema/sim/simulator_frame.cpp:347
 #, fuzzy
@@ -20048,11 +20046,8 @@ msgid "SPICE Simulator"
 msgstr "Simulatore"
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Errori nella generazione della netlist.\n"
-"\n"
+msgstr "Errori nella generazione della netlist."
 
 #: eeschema/sim/simulator_frame.cpp:374
 msgid "Simulator requires a fully annotated schematic."
@@ -20079,9 +20074,9 @@ msgid "Another simulation is already running."
 msgstr "Un'altra simulazione è già in esecuzione."
 
 #: eeschema/sim/simulator_frame.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Impossibile caricare il file %s"
+msgstr "Impossibile caricare o analizzare il file %s"
 
 #: eeschema/sim/simulator_frame.cpp:626
 msgid "Save changes to workbook?"
@@ -22240,7 +22235,7 @@ msgstr "Mostra avvisi ERC"
 
 #: eeschema/tools/ee_actions.cpp:1149
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Mostra marcatori avvisi controllo regole elettriche "
+msgstr "Mostra marcatori avvisi controllo regole elettriche"
 
 #: eeschema/tools/ee_actions.cpp:1154
 msgid "Show ERC Errors"
