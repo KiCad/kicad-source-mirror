@@ -20,15 +20,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:55-0700\n"
-"PO-Revision-Date: 2024-03-05 10:02+0000\n"
-"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"PO-Revision-Date: 2024-07-02 19:09+0000\n"
+"Last-Translator: Bahtiyar Bayram <bahtiyar.bayramov@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v8/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -3545,7 +3545,7 @@ msgstr "Depo özelliklerini düzenle"
 #: common/dialogs/git/panel_git_repos_base.cpp:135
 #, fuzzy
 msgid "Remove Git Repository"
-msgstr "Depo"
+msgstr "Git Reposunu Kaldır"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
@@ -3767,9 +3767,8 @@ msgid ""
 msgstr "Sistem renk temasına göre açık veya koyu simgeleri otomatik olarak seç"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Özel kağıt boyutu:"
+msgstr "Araç çubuğu ikon boyutu:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4047,7 +4046,7 @@ msgstr "Ayak izi"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:24
 #, fuzzy
 msgid "Tracks:"
-msgstr "İzler"
+msgstr "Yollar"
 
 #: common/dialogs/panel_grid_settings.cpp:138 common/tool/grid_menu.cpp:100
 #, fuzzy, c-format
@@ -4055,24 +4054,21 @@ msgid "%s%s (%s)"
 msgstr "Izgara: %s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "'%s' dosyası listede zaten var."
+msgstr "'%s' ızgara boyutu listede zaten var."
 
 #: common/dialogs/panel_grid_settings.cpp:283
-#, fuzzy
 msgid "At least one grid size is required."
-msgstr "Varsayılan net sınıfı gereklidir."
+msgstr "En az bit ızgara boyutu gereklidir."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "Kılavuz"
+msgstr "Izgaralar:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Hızlı Anahtarlama"
+msgstr "Hızlı Izgara Değişimi"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4093,20 +4089,18 @@ msgid "Grid Overrides"
 msgstr "Üzerine yaz"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "Bağlanmamış"
+msgstr "Bağlanan öğeler:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
-#, fuzzy
 msgid "Wires:"
-msgstr "Teller"
+msgstr "Yollar:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:135
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
 #, fuzzy
 msgid "Vias:"
-msgstr "Geçişler"
+msgstr "Atlamalar"
 
 #: common/dialogs/panel_grid_settings_base.cpp:143
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -4122,9 +4116,8 @@ msgid "Text:"
 msgstr "Metin:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
-#, fuzzy
 msgid "Graphics:"
-msgstr "Çizimler"
+msgstr "Grafikler:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -4176,9 +4169,8 @@ msgstr ""
 "misin?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Ölçek"
+msgstr "Ölçek:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
@@ -4187,7 +4179,7 @@ msgstr "Piksel/İnç"
 #: common/dialogs/panel_image_editor_base.cpp:48
 #, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Seçim dikdörtgeni çiz"
+msgstr "Gri Tonlamaya Çevir"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4401,9 +4393,8 @@ msgid "General"
 msgstr "Genel"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Başlangıçta paket güncellemelerini kontrol edin"
+msgstr "Başlangıçta KiCAD güncellemelerini kontrol et"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -4422,19 +4413,16 @@ msgid "Library package handling"
 msgstr "Kitaplık bağlantısı:"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr "Ayak izlerini otomatik olarak atayın"
+msgstr "Yüklenen kütüphaneleri otomatik olarak global kütüphane tablosuna ekle"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Ayak izlerini otomatik olarak atayın"
+msgstr "Kaldırılan kütüphaneleri otomatik olarak sil"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:87
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Oluşturanın takma adı:"
+msgstr "Kütüphane takma adının öneki:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1948
 #: common/stroke_params.cpp:36
@@ -4694,9 +4682,8 @@ msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL kullanılamadı, yazılım işlemeye geri döndü"
 
 #: common/draw_panel_gal.cpp:324
-#, fuzzy
 msgid "Graphics error"
-msgstr "Grafik Stili"
+msgstr "Grafik hatası"
 
 #: common/draw_panel_gal.cpp:504
 msgid "Could not use OpenGL"
@@ -4705,9 +4692,8 @@ msgstr "OpenGL kullanılamadı"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3217
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3104
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "'%s' yüklenemedi."
+msgstr "Resim verisi okunamadı."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:979
 #, c-format
@@ -4947,9 +4933,8 @@ msgid "Hotkeys"
 msgstr "Kısayol Tuşları"
 
 #: common/eda_base_frame.cpp:1095 kicad/project_tree_pane.cpp:986
-#, fuzzy
 msgid "Version Control"
-msgstr "Yalnızca seçim"
+msgstr "Versiyon Kontrolü"
 
 #: common/eda_base_frame.cpp:1103
 msgid "Data Collection"
@@ -4971,9 +4956,8 @@ msgstr "Görüntüleme Seçenekleri"
 #: common/eda_base_frame.cpp:1161 common/eda_base_frame.cpp:1172
 #: common/eda_base_frame.cpp:1205 common/eda_base_frame.cpp:1226
 #: common/tool/common_tools.cpp:555
-#, fuzzy
 msgid "Grids"
-msgstr "Kılavuz"
+msgstr "Kılavuzlar"
 
 #: common/eda_base_frame.cpp:1129 common/eda_base_frame.cpp:1138
 #: common/eda_base_frame.cpp:1163 common/eda_base_frame.cpp:1174
@@ -5056,9 +5040,8 @@ msgid "Drawing Sheet Editor"
 msgstr "Çizim Sayfası Düzenleyici"
 
 #: common/eda_base_frame.cpp:1233
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "Yüklemeyi İptal Et"
+msgstr "Paketler ve Güncellemeler"
 
 #: common/eda_base_frame.cpp:1319
 #, c-format
@@ -5126,9 +5109,8 @@ msgid "Constrain to H, V, 45"
 msgstr "Y, D, 45 ile sınırla"
 
 #: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:702
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "Kullanıcı Kılavuzlarını Düzenle..."
+msgstr "Kılavuzları Düzenle..."
 
 #: common/eda_draw_frame.cpp:562
 msgid "Zoom Auto"
@@ -5184,9 +5166,8 @@ msgstr "Yeni Kütüphane"
 
 #: common/eda_draw_frame.cpp:1192 common/widgets/search_pane.cpp:39
 #: eeschema/sch_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:322
-#, fuzzy
 msgid "Search"
-msgstr "Metin Ara"
+msgstr "Ara"
 
 #: common/eda_draw_frame.cpp:1200 eeschema/eeschema_settings.cpp:92
 #: pagelayout_editor/pl_editor_frame.cpp:193
@@ -5368,7 +5349,7 @@ msgstr "Termal bariyer iletken genişliği:"
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:747
 #, fuzzy
 msgid "Number Box"
-msgstr "Sayı"
+msgstr "Sayı Girişi"
 
 #: common/eda_shape.cpp:76 pcbnew/pad.cpp:1269
 msgid "Rect"
@@ -5489,9 +5470,8 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Sayfa Özellikleri"
+msgstr "Şekil Özellikleri"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:676
 #: pcbnew/pcb_track.cpp:1495
@@ -5504,14 +5484,12 @@ msgid "Start Y"
 msgstr "Y'yi başlat"
 
 #: common/eda_shape.cpp:1993
-#, fuzzy
 msgid "Center X"
-msgstr "Merkez"
+msgstr "X-Eksen Merkezi"
 
 #: common/eda_shape.cpp:1999
-#, fuzzy
 msgid "Center Y"
-msgstr "Merkez"
+msgstr "Y-Eksen Merkezi"
 
 #: common/eda_shape.cpp:2011 pcbnew/generators/pcb_tuning_pattern.cpp:2504
 #: pcbnew/pcb_textbox.cpp:678 pcbnew/pcb_track.cpp:1502
@@ -5530,9 +5508,8 @@ msgid "Line Width"
 msgstr "Çizgi Genişliği"
 
 #: common/eda_shape.cpp:2032 pcbnew/pcb_shape.cpp:688
-#, fuzzy
 msgid "Line Color"
-msgstr "Çizgi rengi:"
+msgstr "Çizgi Rengi"
 
 #: common/eda_shape.cpp:2070 eeschema/lib_shape.cpp:587
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
@@ -5540,9 +5517,8 @@ msgid "Filled"
 msgstr "Dolu"
 
 #: common/eda_shape.cpp:2075 pcbnew/pcb_shape.cpp:689
-#, fuzzy
 msgid "Fill Color"
-msgstr "Dolgu rengi:"
+msgstr "Dolgu Rengi"
 
 #: common/eda_text.cpp:812 common/eda_text.cpp:1200
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
@@ -5687,9 +5663,8 @@ msgstr "Metin Özellikleri"
 #: eeschema/widgets/sch_properties_panel.cpp:229 pcbnew/pcb_dimension.cpp:429
 #: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:373
 #: pcbnew/widgets/pcb_properties_panel.cpp:286
-#, fuzzy
 msgid "Font"
-msgstr "Yazı tipi:"
+msgstr "Yazı Tipi"
 
 #: common/eda_text.cpp:1196 eeschema/lib_field.cpp:661
 #: eeschema/lib_textbox.cpp:561 eeschema/sch_field.cpp:1434
@@ -5748,19 +5723,16 @@ msgstr "Dikey Yaslama"
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
 #: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_text.cpp:590
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "Köprü"
 
 #: common/eda_units.cpp:509 pcbnew/generators/pcb_tuning_pattern.cpp:206
-#, fuzzy
 msgid "min"
-msgstr "Bacak"
+msgstr "min"
 
 #: common/eda_units.cpp:517
-#, fuzzy
 msgid "opt"
-msgstr "Üst"
+msgstr "opt"
 
 #: common/eda_units.cpp:525 pcbnew/generators/pcb_tuning_pattern.cpp:209
 msgid "max"
@@ -5981,14 +5953,14 @@ msgid "Invalid directory name, cannot remove root"
 msgstr "Geçersiz dizin adı, kök kaldırılamıyor"
 
 #: common/gestfich.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "'%s' birimi 'mil' ile bitmiyor."
+msgstr "'%s' klasörü bulunamadı"
 
 #: common/gestfich.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' geçerli bir ayak izi değil."
+msgstr "'%s' klasör değil"
 
 #: common/gestfich.cpp:357
 #, fuzzy, c-format
@@ -5996,14 +5968,14 @@ msgid "Error removing directory '%s': %s"
 msgstr "Dizin kaldırılamadı %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Çıktı dizini oluşturulamıyor. '%s'"
+msgstr "'%s' klasörü oluşturulamıyor"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "'%s' görüntüsü yüklenemedi."
+msgstr "'%s' reposu knonlanamıyor"
 
 #: common/git/git_pull_handler.cpp:46
 #, fuzzy, c-format
