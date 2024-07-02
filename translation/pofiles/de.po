@@ -1,5 +1,5 @@
 # Christian Schlüter <chschlue@gmail.com>, 2020.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021, 2022, 2023.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021, 2022, 2023, 2024.
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
 # Kliment <kliment@0xfb.com>, 2020.
 # jonathan haas <jonathan.haas@live.de>, 2020.
@@ -25,10 +25,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-07-01 13:57+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-07-03 21:12+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4966,7 +4966,7 @@ msgstr "Zeichnungsblatt \"%s\" wurde nicht vollständig gelesen."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Nicht genügend Arbeitsspeicher."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -16127,6 +16127,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"„ %s “ ist keine KiCad-Schaltplan.\n"
+" Verwenden Sie Datei -> Importieren für Nicht-KiCad-Schaltplan."
 
 #: eeschema/files-io.cpp:279
 msgid "Root"
@@ -17710,6 +17712,8 @@ msgid ""
 "No module instance '%s' found in schematic file:\n"
 "%s"
 msgstr ""
+"Keine Modulinstanz ' %s ' in der Schaltplandatei gefunden:\n"
+" %s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1720
 #, c-format
@@ -32554,7 +32558,7 @@ msgstr "Alle Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:418
 msgid "BREP (OCCT) files"
-msgstr ""
+msgstr "BREP (OCCT)-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:426
 #, fuzzy
@@ -32594,11 +32598,11 @@ msgstr "GLB (binäres GLTF) exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -40686,7 +40690,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:620
 msgid "** Got problems while fusing shapes **\n"
-msgstr ""
+msgstr "** Probleme beim Zusammenfügen von Formen **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:624
 #: pcbnew/exporters/step/step_pcb_model.cpp:1886
@@ -41707,7 +41711,7 @@ msgstr "Eine IDF 3D-Platinendarstellung exportieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / GLB / BREP / XAO..."
-msgstr ""
+msgstr "STEP / GLB / BREP / XAO …"
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 #, fuzzy
