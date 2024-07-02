@@ -153,7 +153,8 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
     wxString strResult;
     strResult.Alloc( strlen );  // best guess (improves performance)
 
-    auto getVersionedEnvVar = []( const wxString& aMatch, wxString& aResult ) -> bool
+    auto getVersionedEnvVar =
+            []( const wxString& aMatch, wxString& aResult ) -> bool
             {
                 for ( const wxString& var : ENV_VAR::GetPredefinedEnvVars() )
                 {
@@ -186,7 +187,9 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
             Bracket bracket;
 #ifdef __WINDOWS__
             if( str_n == wxT( '%' ) )
-              bracket = Bracket_Windows;
+            {
+                bracket = Bracket_Windows;
+            }
             else
 #endif // __WINDOWS__
             if( n == strlen - 1 )

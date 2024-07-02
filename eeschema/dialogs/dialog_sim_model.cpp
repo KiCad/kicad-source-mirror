@@ -44,6 +44,7 @@
 #include <sch_edit_frame.h>
 #include <sim/sim_model_l_mutual.h>
 #include <sim/spice_circuit_model.h>
+#include <wx/log.h>
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
@@ -74,8 +75,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
         m_scintillaTricksSubckt( nullptr ),
         m_firstCategory( nullptr ),
         m_prevParamGridSelection( nullptr ),
-        m_lastParamGridWidth( 0 ),
-        m_inKillFocus( false )
+        m_lastParamGridWidth( 0 )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -216,12 +216,14 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         // The model is sourced from a library, optionally with instance overrides.
         m_rbLibraryModel->SetValue( true );
 
-        if( !loadLibrary( libraryFilename ) )
+        if( !loadLibrary( libraryFilename, reporter ) )
         {
+            if( reporter.HasMessage() )
+                m_infoBar->ShowMessage( msg );
+
             m_libraryPathText->ChangeValue( libraryFilename );
             m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
 
-            // load library will mangle the set reporter
             m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, reporter );
 
             m_modelNameChoice->Append( _( "<unknown>" ) );
@@ -234,14 +236,15 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
             if( modelIdx == wxNOT_FOUND )
             {
-                DisplayErrorMessage( this, wxString::Format( _( "No model named '%s' in library." ),
-                                                             modelName ) );
+                m_infoBar->ShowMessage( wxString::Format( _( "No model named '%s' in library." ),
+                                                          modelName ) );
 
                 // Default to first item in library
                 m_modelNameChoice->SetSelection( 0 );
             }
             else
             {
+                m_infoBar->Hide();
                 m_modelNameChoice->SetSelection( modelIdx );
             }
 
@@ -803,35 +806,27 @@ void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments( SIM_MODEL* aModel )
 
 
 template <typename T>
-bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, bool aForceReload )
+bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& aReporter,
+                                       bool aForceReload )
 {
     if( m_prevLibrary == aLibraryPath && !aForceReload )
         return true;
 
-    wxString           msg;
-    WX_STRING_REPORTER reporter( &msg );
-
     m_libraryModelsMgr.SetForceFullParse();
-    m_libraryModelsMgr.SetLibrary( aLibraryPath, reporter );
+    m_libraryModelsMgr.SetLibrary( aLibraryPath, aReporter );
 
-    if( reporter.HasMessage() )
-    {
-        DisplayErrorMessage( this, msg );
+    if( aReporter.HasMessage() )
         return false;
-    }
 
     std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
     for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
-            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields, reporter );
+            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields, aReporter );
         else
-            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, reporter );
+            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, aReporter );
     }
-
-    if( reporter.HasMessage() )
-        DisplayErrorMessage( this, msg );
 
     m_rbLibraryModel->SetValue( true );
     m_libraryPathText->ChangeValue( aLibraryPath );
@@ -1169,22 +1164,7 @@ void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onLibraryPathText( wxCommandEvent& aEvent )
 {
-    if( m_rbLibraryModel->GetValue() )
-    {
-        wxString path = m_libraryPathText->GetValue();
-
-        if( loadLibrary( path, true ) )
-        {
-            try
-            {
-                updateWidgets();
-            }
-            catch( const IO_ERROR& )
-            {
-                // TODO: Add an infobar to report the error?
-            }
-        }
-    }
+    m_rbLibraryModel->SetValue( true );
 }
 
 
@@ -1192,21 +1172,33 @@ template <typename T>
 void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
 {
     m_rbLibraryModel->SetValue( true );
+
+    wxString           msg;
+    WX_STRING_REPORTER reporter( &msg );
+    wxString           path = m_libraryPathText->GetValue();
+
+    if( loadLibrary( path, reporter, true ) )
+        m_infoBar->Hide();
+    else if( reporter.HasMessage() )
+        m_infoBar->ShowMessage( msg );
+
+    updateWidgets();
 }
 
 
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
 {
-    if( !m_inKillFocus )
-    {
-        m_inKillFocus = true;
+    CallAfter(
+            [this]()
+            {
+                // Disable logging -- otherwise we'll end up in an endless loop of show-log,
+                // kill-focus, show-log, kill-focus, etc.
+                wxLogNull doNotLog;
 
-        wxCommandEvent dummy;
-        onLibraryPathTextEnter( dummy );
-
-        m_inKillFocus = false;
-    }
+                wxCommandEvent dummy;
+                onLibraryPathTextEnter( dummy );
+            } );
 }
 
 
@@ -1231,7 +1223,14 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
     if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( wxS( ".." ) ) )
         path = fn.GetFullPath();
 
-    loadLibrary( path, true );
+    wxString           msg;
+    WX_STRING_REPORTER reporter( &msg );
+
+    if( loadLibrary( path, reporter, true ) )
+        m_infoBar->Hide();
+    else
+        m_infoBar->ShowMessage( msg );
+
     updateWidgets();
 }
 

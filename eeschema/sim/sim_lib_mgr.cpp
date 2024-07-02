@@ -53,7 +53,8 @@ void SIM_LIB_MGR::Clear()
 }
 
 
-wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject )
+wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject,
+                                          REPORTER& aReporter )
 {
     wxString expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, aProject );
 
@@ -80,20 +81,23 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PR
 
     if( spiceLibDir.IsEmpty() || spiceLibFn.GetFullPath() == projectFn.GetFullPath() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Simulation model library not found at '%s'" ),
-                                          projectFn.GetFullPath() ) );
+        aReporter.Report( wxString::Format( _( "Simulation model library not found at '%s'" ),
+                                            projectFn.GetFullPath() ) );
     }
     else
     {
-        THROW_IO_ERROR( wxString::Format( _( "Simulation model library not found at '%s' or '%s'" ),
-                                          projectFn.GetFullPath(),
-                                          spiceLibFn.GetFullPath() ) );
+        aReporter.Report( wxString::Format( _( "Simulation model library not found at '%s' or '%s'" ),
+                                            projectFn.GetFullPath(),
+                                            spiceLibFn.GetFullPath() ) );
     }
+
+    return aLibraryPath;
 }
 
 
 wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
-                                                  const wxString& aRelativeLib )
+                                                  const wxString& aRelativeLib,
+                                                  REPORTER& aReporter )
 {
     wxFileName testPath( aLibPath );
     wxString fullPath( aLibPath );
@@ -102,12 +106,7 @@ wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
     {
         wxString relLib( aRelativeLib );
 
-        try
-        {
-            relLib = ResolveLibraryPath( relLib, m_project );
-        }
-        catch( ... )
-        {}
+        relLib = ResolveLibraryPath( relLib, m_project, aReporter );
 
         wxFileName fn( relLib );
 
@@ -115,17 +114,12 @@ wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
         fullPath = testPath.GetFullPath();
     }
 
-    try
-    {
-        wxFileName fn( fullPath );
+    wxFileName fn( fullPath );
 
-        if( !fn.Exists() )
-            fullPath = aLibPath;
+    if( !fn.Exists() )
+        fullPath = aLibPath;
 
-        fullPath = ResolveLibraryPath( fullPath, m_project );
-    }
-    catch( ... )
-    {}
+    fullPath = ResolveLibraryPath( fullPath, m_project, aReporter );
 
     return fullPath;
 }
@@ -133,23 +127,26 @@ wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
 
 void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter )
 {
-    try
+    wxString path = ResolveLibraryPath( aLibraryPath, m_project, aReporter );
+
+    if( aReporter.HasMessage() )
+        return;
+
+    if( !wxFileName::Exists( path ) )
     {
-        wxString path = ResolveLibraryPath( aLibraryPath, m_project );
-
-        std::function<wxString(const wxString&, const wxString&)> f2 =
-                std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
-
-        std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_forceFullParse,
-                                                                    aReporter, &f2 );
-
-        Clear();
-        m_libraries[path] = std::move( library );
+        aReporter.Report( wxString::Format( _( "Simulation model library not found at '%s'" ),
+                                            path ) );
+        return;
     }
-    catch( const IO_ERROR& e )
-    {
-        aReporter.Report( e.What() );
-    }
+
+    std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_forceFullParse, aReporter,
+            [&]( const wxString& libPath, const wxString& relativeLib ) -> wxString
+            {
+                return ResolveEmbeddedLibraryPath( libPath, relativeLib, aReporter );
+            } );
+
+    Clear();
+    m_libraries[path] = std::move( library );
 }
 
 
@@ -279,37 +276,24 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                              const std::vector<SCH_PIN*>& aPins,
                                              REPORTER& aReporter )
 {
-    wxString     path;
     wxString     msg;
     SIM_LIBRARY* library = nullptr;
     SIM_MODEL*   baseModel = nullptr;
     std::string  modelName;
+    wxString     path = ResolveLibraryPath( aLibraryPath, m_project, aReporter );
 
-    try
+    auto it = m_libraries.find( path );
+
+    if( it == m_libraries.end() )
     {
-        path = ResolveLibraryPath( aLibraryPath, m_project );
-
-        auto it = m_libraries.find( path );
-
-        if( it == m_libraries.end() )
-        {
-            std::function<wxString( const wxString&, const wxString& )> f2 =
-                    std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
-
-            it = m_libraries.emplace( path, SIM_LIBRARY::Create( path, m_forceFullParse,
-                                                                 aReporter, &f2 ) ).first;
-        }
-
-        library = &*it->second;
+        it = m_libraries.emplace( path, SIM_LIBRARY::Create( path, m_forceFullParse, aReporter,
+                [&]( const wxString& libPath, const wxString& relativeLib ) -> wxString
+                {
+                    return ResolveEmbeddedLibraryPath( libPath, relativeLib, aReporter );
+                } ) ).first;
     }
-    catch( const IO_ERROR& e )
-    {
-        msg.Printf( _( "Error loading simulation model library '%s': %s" ),
-                    path,
-                    e.What() );
 
-        aReporter.Report( msg, RPT_SEVERITY_ERROR );
-    }
+    library = &*it->second;
 
     if( aBaseModelName == "" )
     {

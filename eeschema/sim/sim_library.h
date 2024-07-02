@@ -56,7 +56,7 @@ public:
      */
     static std::unique_ptr<SIM_LIBRARY>
     Create( const wxString& aFilePath, bool aForceFullParse, REPORTER& aReporter,
-            std::function<wxString( const wxString&, const wxString& )>* aResolver );
+            const std::function<wxString( const wxString&, const wxString& )>& aResolver );
 
     /**
      * Read library from a source file. Must be in the format appropriate to the subclass, e.g.
@@ -77,7 +77,7 @@ protected:
     std::vector<std::string>                m_modelNames;
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
 
-    std::function<wxString( const wxString&, const wxString& )>* m_pathResolver;
+    std::function<wxString( const wxString&, const wxString& )> m_pathResolver;
 
     std::string m_filePath;
 };

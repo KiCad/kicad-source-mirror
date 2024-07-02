@@ -118,10 +118,7 @@ void SPICE_LIBRARY_PARSER::readFallbacks( const wxString& aFilePath, REPORTER& a
             }
             else if( token == wxS( ".inc" ) )
             {
-                wxString lib = tokenizer.GetNextToken();
-
-                if( m_library.m_pathResolver )
-                    lib = ( *m_library.m_pathResolver )( lib, aFilePath );
+                wxString lib = m_library.m_pathResolver( tokenizer.GetNextToken(), aFilePath );
 
                 parseFile( lib, aReporter );
             }
@@ -170,13 +167,10 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aRepo
             }
             else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::dotInclude>() )
             {
-                wxString lib = node->children.at( 0 )->string();
+                wxString lib = m_library.m_pathResolver( node->children.at( 0 )->string(), aFilePath );
 
                 try
                 {
-                    if( m_library.m_pathResolver )
-                        lib = ( *m_library.m_pathResolver )( lib, aFilePath );
-
                     parseFile( lib, aReporter );
                 }
                 catch( const IO_ERROR& e )
