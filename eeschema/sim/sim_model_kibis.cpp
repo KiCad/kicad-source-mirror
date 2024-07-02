@@ -68,7 +68,12 @@ std::string SPICE_GENERATOR_KIBIS::IbisDevice( const SPICE_ITEM& aItem, const PR
     std::string ibisModelName   = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::MODEL_FIELD );
     bool        diffMode        = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
 
-    wxString path = SIM_LIB_MGR::ResolveLibraryPath( ibisLibFilename, &aProject );
+    wxString           msg;
+    WX_STRING_REPORTER reporter( &msg );
+    wxString           path = SIM_LIB_MGR::ResolveLibraryPath( ibisLibFilename, &aProject, reporter );
+
+    if( reporter.HasMessage() )
+        THROW_IO_ERROR( msg );
 
     KIBIS kibis( std::string( path.c_str() ) );
     kibis.m_cacheDir = std::string( aCacheDir.c_str() );

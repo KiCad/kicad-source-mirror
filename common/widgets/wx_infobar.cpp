@@ -159,7 +159,10 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     m_updateLock = true;
 
-    wxInfoBarGeneric::ShowMessage( aMessage, aFlags );
+    wxString msg = aMessage;
+    msg.Trim();
+
+    wxInfoBarGeneric::ShowMessage( msg, aFlags );
 
     if( m_auiManager )
         updateAuiLayout( true );

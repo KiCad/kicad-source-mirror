@@ -79,8 +79,10 @@ public:
     std::map<wxString, std::reference_wrapper<const SIM_LIBRARY>> GetLibraries() const;
     std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
 
-    static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject );
-    wxString ResolveEmbeddedLibraryPath( const wxString& aLibPath, const wxString& aRelativeLib );
+    static wxString ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject,
+                                        REPORTER& aReporter );
+    wxString ResolveEmbeddedLibraryPath( const wxString& aLibPath, const wxString& aRelativeLib,
+                                         REPORTER& aReporter );
 
 private:
     const PROJECT*                                   m_project;
