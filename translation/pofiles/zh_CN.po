@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-05-28 12:07+0000\n"
+"PO-Revision-Date: 2024-07-03 21:12+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2827,11 +2827,13 @@ msgid "Drawing Sheet File"
 msgstr "图纸文件"
 
 #: common/dialogs/dialog_page_settings.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "加载图纸 '%s' 时出错。"
+msgstr ""
+"加载图纸 '%s' 时出错。\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -4826,9 +4828,8 @@ msgid "File not found."
 msgstr "找不到文件。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:987
-#, fuzzy
 msgid "File could not be opened."
-msgstr "无法创建文件 '%s'。"
+msgstr "无法打开文件。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1001
 #, fuzzy
@@ -4837,7 +4838,7 @@ msgstr "无法完整地读取图纸 '%s'。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "内存不足。"
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -6648,9 +6649,8 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "无法解析 JSON 文件 '%2$s' 中的第 %1$d 行: %3$s"
 
 #: common/io/io_base.cpp:137
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "用户取消了打开操作。"
+msgstr "用户取消了加载文件操作。"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -6826,9 +6826,8 @@ msgid "DNP markers"
 msgstr "DNP (不作装配) 标记"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "不参与电路仿真"
+msgstr "'不参与电路仿真' 标记"
 
 #: common/layer_id.cpp:141
 msgid "ERC warnings"
@@ -7816,36 +7815,32 @@ msgid "Zoom In Horizontally"
 msgstr "水平放大"
 
 #: common/tool/actions.cpp:582
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "水平缩放"
+msgstr "在绘图区水平放大"
 
 #: common/tool/actions.cpp:588
 msgid "Zoom Out Horizontally"
 msgstr "水平缩小"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom out horizontally the plot area"
-msgstr "水平缩小"
+msgstr "在绘图区水平缩小"
 
 #: common/tool/actions.cpp:595
 msgid "Zoom In Vertically"
 msgstr "垂直放大"
 
 #: common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom in vertically the plot area"
-msgstr "垂直放大"
+msgstr "在绘图区垂直放大"
 
 #: common/tool/actions.cpp:602
 msgid "Zoom Out Vertically"
 msgstr "垂直缩小"
 
 #: common/tool/actions.cpp:603
-#, fuzzy
 msgid "Zoom out vertically the plot area"
-msgstr "垂直缩小"
+msgstr "在绘图区垂直缩小"
 
 #: common/tool/actions.cpp:611 common/widgets/mathplot.cpp:1385
 msgid "Center on Cursor"
@@ -8984,9 +8979,8 @@ msgid "Electrical rule check file"
 msgstr "电气规则检查 (ERC) 文件"
 
 #: common/wildcards_and_files_ext.cpp:441
-#, fuzzy
 msgid "SPICE library file"
-msgstr "Spice 库文件"
+msgstr "SPICE 库文件"
 
 #: common/wildcards_and_files_ext.cpp:447
 msgid "SPICE netlist file"
@@ -13011,9 +13005,8 @@ msgid "Compute noise current correlation matrix"
 msgstr "计算噪声电流相关矩阵"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
-#, fuzzy
 msgid "SPICE directives:"
-msgstr "Spice 指令:"
+msgstr "SPICE 指令:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
 msgid "Load directives from schematic"
@@ -19435,9 +19428,8 @@ msgid ""
 msgstr "仿真没有提供任何绘图。请参考控制台窗口的结果。"
 
 #: eeschema/sim/simulator_frame.cpp:347
-#, fuzzy
 msgid "SPICE Simulator"
-msgstr "仿真工具"
+msgstr "SPICE 仿真"
 
 #: eeschema/sim/simulator_frame.cpp:366
 #, fuzzy
@@ -24029,9 +24021,8 @@ msgstr "导出走线, 焊盘和过孔"
 
 #: kicad/cli/command_pcb_export_3d.cpp:128
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
-#, fuzzy
 msgid "Export pads"
-msgstr "导出走线"
+msgstr "导出焊盘"
 
 #: kicad/cli/command_pcb_export_3d.cpp:132
 #: pcbnew/dialogs/dialog_export_step_base.cpp:75
@@ -31672,18 +31663,16 @@ msgid "Binary glTF files"
 msgstr "二进制 glTF 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:416
-#, fuzzy
 msgid "XAO files"
-msgstr "所有文件"
+msgstr "XAO 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:418
 msgid "BREP (OCCT) files"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:426
-#, fuzzy
 msgid "3D Model Output File"
-msgstr "BOM 输出文件"
+msgstr "3D 模型输出文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:477
 msgid "No filename for output file"
@@ -31707,22 +31696,20 @@ msgid "Format:"
 msgstr "格式："
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "STEP"
-msgstr "STEP..."
+msgstr "STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "GLB (Binary glTF)"
-msgstr "导出 GLB (binary GLTF)"
+msgstr "GLB (Binary glTF)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -31883,9 +31870,8 @@ msgstr ""
 "性。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:99
-#, fuzzy
 msgid "Export 3D Model"
-msgstr "选择 3D 模型"
+msgstr "导出 3D 模型"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
@@ -32958,9 +32944,8 @@ msgid "Get and Move Footprint"
 msgstr "获取和移动封装"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:258
-#, fuzzy
 msgid "Global Delete"
-msgstr "全局删除..."
+msgstr "全局删除"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
@@ -33364,7 +33349,6 @@ msgid "Set to layer default values:"
 msgstr "设置为板层默认值:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
-#, fuzzy
 msgid "Footprint fields"
 msgstr "封装字段"
 
@@ -34373,9 +34357,8 @@ msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "绘图时在 F.Fab 和 B.Fab 层上包括焊盘轮廓"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
-#, fuzzy
 msgid "Include pad numbers"
-msgstr "包含层"
+msgstr "包含焊盘编号"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:106
 msgid "Check zone fills before plotting"
@@ -41187,7 +41170,6 @@ msgid "PTH pad %s of %s"
 msgstr "%s 的非金属化焊盘 %s"
 
 #: pcbnew/pad.cpp:1483
-#, fuzzy
 msgid "PTH pad"
 msgstr "PTH 焊盘"
 
@@ -41207,19 +41189,18 @@ msgid "PTH pad %s %s of %s"
 msgstr "%s 的非金属化焊盘 %s %s"
 
 #: pcbnew/pad.cpp:1517
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s"
-msgstr "PTH 焊盘"
+msgstr "PTH 焊盘 %s"
 
 #: pcbnew/pad.cpp:2071
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "错误: 焊盘必须具有正尺寸。"
+msgstr "错误: 焊盘大小数值必须为正数。"
 
 #: pcbnew/pad.cpp:2082
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "过孔孔径尺寸必须小于过孔直径"
+msgstr "PTH 焊盘的孔径尺寸必须大于 %s"
 
 #: pcbnew/pad.cpp:2094
 #, fuzzy
