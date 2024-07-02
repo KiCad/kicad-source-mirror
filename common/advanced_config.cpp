@@ -110,8 +110,8 @@ static const wxChar TriangulateSimplificationLevel[] = wxT( "TriangulateSimplifi
 static const wxChar TriangulateMinimumArea[] = wxT( "TriangulateMinimumArea" );
 static const wxChar EnableCacheFriendlyFracture[] = wxT( "EnableCacheFriendlyFracture" );
 static const wxChar MinParallelAngle[] = wxT( "MinParallelAngle" );
+static const wxChar ResolveTextRecursionDepth[] = wxT( "ResolveTextRecursionDepth" );
 } // namespace KEYS
-
 
 /**
  * List of known groups for advanced configuration options.
@@ -263,6 +263,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableCacheFriendlyFracture = true;
 
     m_MinParallelAngle = 0.001;
+
+    m_ResolveTextRecursionDepth = 2;
 
     loadFromConfigFile();
 }
@@ -483,6 +485,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinParallelAngle,
                                                   &m_MinParallelAngle, m_MinParallelAngle,
                                                   0.0, 45.0 ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ResolveTextRecursionDepth,
+                                                  &m_ResolveTextRecursionDepth,
+                                                  m_ResolveTextRecursionDepth, 0, 10 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
