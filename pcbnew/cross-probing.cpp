@@ -393,7 +393,7 @@ void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems,
 
     if( Kiface().IsSingle() )
     {
-        SendCommand( MSG_TO_PCB, command );
+        SendCommand( MSG_TO_SCH, command );
     }
     else
     {
