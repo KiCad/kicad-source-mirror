@@ -179,7 +179,12 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
 void SCH_VIEW::ClearHiddenFlags()
 {
     for( VIEW_ITEM* item : *m_allItems )
+    {
+        if( !item )
+            continue;
+
         Hide( item, false );
+    }
 }
 
 
