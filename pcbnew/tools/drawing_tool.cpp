@@ -293,6 +293,9 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     // Re-initialize session attributes
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
 
+    if( aReason == RESET_REASON::SHUTDOWN )
+        return;
+
     m_layer = m_frame->GetActiveLayer();
     m_stroke.SetWidth( bds.GetLineThickness( m_layer ) );
     m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );

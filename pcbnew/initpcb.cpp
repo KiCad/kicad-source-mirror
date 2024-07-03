@@ -90,7 +90,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges, bool aFinal )
     else if( m_isClosing )
     {
         if( m_toolManager )
-            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+            m_toolManager->ResetTools( TOOL_BASE::SHUTDOWN );
 
         // Clear the view so we don't attempt redraws (particularly of the RATSNEST_VIEW_ITEM,
         // which causes all manner of grief).
@@ -145,10 +145,10 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
         // Setup our own severities for the Footprint Checker.
         // These are not (at present) user-editable.
         std::map<int, SEVERITY>& drcSeverities = GetBoard()->GetDesignSettings().m_DRCSeverities;
-        
+
         for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
             drcSeverities[ errorCode ] = RPT_SEVERITY_ERROR;
-    
+
         drcSeverities[ DRCE_DRILLED_HOLES_COLOCATED ] = RPT_SEVERITY_WARNING;
         drcSeverities[ DRCE_DRILLED_HOLES_TOO_CLOSE ] = RPT_SEVERITY_WARNING;
 

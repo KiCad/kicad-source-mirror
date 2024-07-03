@@ -56,11 +56,13 @@ COMMON_TOOLS::COMMON_TOOLS() :
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
+    m_grids.clear();
+
+    if( aReason == RESET_REASON::SHUTDOWN )
+        return;
 
     GRID_SETTINGS& settings = m_toolMgr->GetSettings()->m_Window.grid;
     EDA_IU_SCALE   scale = m_frame->GetIuScale();
-
-    m_grids.clear();
 
     for( GRID& gridDef : settings.grids )
     {

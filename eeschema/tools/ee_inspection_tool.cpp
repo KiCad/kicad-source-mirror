@@ -78,7 +78,7 @@ void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 {
     EE_TOOL_BASE::Reset( aReason );
 
-    if( aReason == SUPERMODEL_RELOAD )
+    if( aReason == SUPERMODEL_RELOAD || aReason == RESET_REASON::SHUTDOWN )
     {
         wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_ERC_DIALOG, wxID_ANY );
 

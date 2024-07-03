@@ -80,7 +80,8 @@ public:
         MODEL_RELOAD,       ///< Model changes (the sheet for a schematic)
         SUPERMODEL_RELOAD,  ///< For schematics, the entire schematic changed, not just the sheet
         GAL_SWITCH,         ///< Rendering engine changes
-        REDRAW              ///< Full drawing refresh
+        REDRAW,             ///< Full drawing refresh
+        SHUTDOWN            ///< Tool is being shut down
     };
 
     /**

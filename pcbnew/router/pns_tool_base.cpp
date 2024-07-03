@@ -75,6 +75,14 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     delete m_router;
     delete m_iface; // Delete after m_router because PNS::NODE dtor needs m_ruleResolver
 
+    if( aReason == RESET_REASON::SHUTDOWN )
+    {
+        m_gridHelper = nullptr;
+        m_router = nullptr;
+        m_iface = nullptr;
+        return;
+    }
+
     m_iface = new PNS_KICAD_IFACE;
     m_iface->SetBoard( board() );
     m_iface->SetView( getView() );

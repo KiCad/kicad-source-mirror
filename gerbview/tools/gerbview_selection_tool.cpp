@@ -142,7 +142,7 @@ void GERBVIEW_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<GERBVIEW_FRAME>();
 
-    if( aReason == TOOL_BASE::MODEL_RELOAD )
+    if( aReason == TOOL_BASE::MODEL_RELOAD || aReason == RESET_REASON::SHUTDOWN )
     {
         // Remove pointers to the selected items from containers
         // without changing their properties (as they are already deleted
