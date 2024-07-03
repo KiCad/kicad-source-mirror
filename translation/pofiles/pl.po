@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:55-0700\n"
-"PO-Revision-Date: 2024-07-02 19:09+0000\n"
+"PO-Revision-Date: 2024-07-03 21:12+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -38027,13 +38027,12 @@ msgid "Hole clearance violation"
 msgstr "Naruszenie prześwitu otworów"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Otwory zbyt blisko siebie"
+msgstr "Otwory na wylot zbyt blisko siebie"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
-msgstr "Otwory zbyt blisko siebie"
+msgstr "Otwory na wylot nakładają się"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Copper connection too narrow"
@@ -39480,9 +39479,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(spodziewano się 'SMD'; obecnie '%s')"
 
 #: pcbnew/footprint.cpp:2817
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(pole z otworem na wylot na warstwach miedzi)"
+msgstr "(rozmiar otworu na wylot jest bardzo mały lub jego brak)"
 
 #: pcbnew/footprint.cpp:2825
 msgid "(PTH pad has no copper layers)"
@@ -39493,9 +39491,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(pole z otworem na wylot na warstwach miedzi)"
 
 #: pcbnew/footprint.cpp:2856
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(pole z otworem na wylot na warstwach miedzi)"
+msgstr "(otwór na wylot nie jest całkowicie w granicach miedzi)"
 
 #: pcbnew/footprint.cpp:2866
 msgid "(SMD pad appears on both front and back copper)"
@@ -40844,9 +40841,8 @@ msgid "PTH pad %s %s of %s"
 msgstr "Pole PTH %s %s na %s"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Błąd: Pole lutownicze nie może posiadać ujemnego rozmiaru."
+msgstr "(Pole lutownicze nie może posiadać ujemnego rozmiaru)"
 
 #: pcbnew/pad.cpp:1887
 #, c-format
@@ -40854,158 +40850,128 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(Rozmiar wiercenia pola PTH musi być większy niż %s)"
 
 #: pcbnew/pad.cpp:1899
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Ostrzeżenie: Otwór nie jest granicach pola lutowniczego."
+msgstr "Otwór nie jest granicach pola lutowniczego"
 
 #: pcbnew/pad.cpp:1912
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr ""
-"Ostrzeżenie: Otwór jest zbyt duży i nie pozostawi wystarczającego pola "
-"miedzi."
+msgstr "Otwór jest zbyt duży i nie pozostawi wystarczającego pola miedzi"
 
 #: pcbnew/pad.cpp:1917
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr ""
-"Ostrzeżenie: Ujemne wartości lokalnego prześwitu nie mają żadnego wpływu."
+msgstr "Ujemne wartości lokalnego prześwitu nie mają żadnego wpływu"
 
 #: pcbnew/pad.cpp:1936
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Ostrzeżenie: Ujemne prześwity maski lutowniczej większe niż niektóre "
-"kształty podstawowe. Rezultat w takim wypadku może być zaskakujący."
+"Ujemne prześwity maski lutowniczej większe niż niektóre kształty podstawowe. "
+"Rezultat w takim wypadku może być zaskakujący"
 
 #: pcbnew/pad.cpp:1946
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Ostrzeżenie: Ujemny prześwit maski lutowniczej jest większy niż pole. Nie "
-"zostanie wygenerowana soldermaska."
+"Ujemny prześwit maski lutowniczej jest większy niż pole. Nie zostanie "
+"wygenerowana soldermaska"
 
 #: pcbnew/pad.cpp:1965
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Ostrzeżenie: Ujemne marginesy pasty lutowniczej są większe niż samo pole. "
-"Nie zostanie wygenerowana żadna maska pasty."
+"Ujemne marginesy pasty lutowniczej są większe niż samo pole. Nie zostanie "
+"wygenerowana żadna maska pasty"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(pole z otworem na wylot nie znajduje się na warstwach miedzi)"
+msgstr "(pole nie znajduje się na żadnej z warstw)"
 
 #: pcbnew/pad.cpp:1975
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(pole z otworem na wylot nie znajduje się na warstwach miedzi)"
+msgstr "Pole z metalizacją (PTH) nie znajduje się na żadnej z warstw miedzi"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
 msgstr ""
-"Ostrzeżenie: Otwory pokryte powinny normalnie posiadać pole lutownicze "
-"przynajmniej na jednej z warstw."
+"Metalizowane otwory powinny normalnie posiadać pole lutownicze przynajmniej "
+"na jednej z warstw"
 
 #: pcbnew/pad.cpp:2000
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
-msgstr ""
-"Ostrzeżenie: Pola lutownicze złącza nie posiadają warstw pasty. Należy użyć "
-"pól SMD."
+msgstr "Pola lutownicze złącza nie posiadają warstw pasty. Należy użyć pól SMD"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Błąd: Pole lutownicze SMD posiada otwór."
+msgstr "(Pole lutownicze SMD posiada otwór)"
 
 #: pcbnew/pad.cpp:2014
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr ""
-"Jeśli potrzebna jest warstwa pasty lutowniczej po stronie górnej płytki"
+msgstr "Pad SMD istnieje po obu stronach płytki"
 
 #: pcbnew/pad.cpp:2020 pcbnew/pad.cpp:2033
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(Pole SMD na warstwie miedzi i jego maski nie pasują do siebie)"
+msgstr ""
+"Pole SMD na warstwie miedzi i jego maska znajdują się na różnych stronach "
+"płytki"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
 msgstr ""
-"Jeśli potrzebna jest warstwa pasty lutowniczej po stronie górnej płytki"
+"Pole SMD na warstwie miedzi i jego pasta znajdują się na różnych stronach "
+"płytki"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Ostrzeżenie: Pole lutownicze SMD nie posiada zewnętrznych warstw."
+msgstr "Pole lutownicze SMD nie posiada zewnętrznych warstw"
 
 #: pcbnew/pad.cpp:2054
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Ostrzeżenie: Właściwość Fiducial nie powinna być używana dla pól NPTH."
+msgstr "Właściwość Fiducial nie powinna być używana dla pól NPTH"
 
 #: pcbnew/pad.cpp:2058
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr ""
-"Ostrzeżenie: Właściwość Punkt Testowy nie powinna być używana dla pól NPTH."
+msgstr "Właściwość Punkt Testowy nie powinna być używana dla pól NPTH"
 
 #: pcbnew/pad.cpp:2061
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr ""
-"Ostrzeżenie: Właściwość Pole Radiatorowe nie powinna być używana dla pól "
-"NPTH."
+msgstr "Właściwość Pole Radiatorowe nie powinna być używana dla pól NPTH"
 
 #: pcbnew/pad.cpp:2064
-#, fuzzy
 msgid "Castellated property is for PTH pads"
-msgstr "Ostrzeżenie: Właściwość Kastelacja jest używana tylko dla pól PTH."
+msgstr "Właściwość Kastelacja jest używana tylko dla pól PTH"
 
 #: pcbnew/pad.cpp:2067
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Ostrzeżenie: Właściwość BGA jest używana tylko dla pół SMD."
+msgstr "Właściwość BGA jest używana tylko dla pół SMD"
 
 #: pcbnew/pad.cpp:2072
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(Ujemny kąt nie jest dozwolony)"
 
 #: pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Ostrzeżenie: Rozmiar narożnika spowoduje, że pole będzie okrągłe."
+msgstr "Rozmiar narożnika spowoduje, że pole będzie okrągłe"
 
 #: pcbnew/pad.cpp:2079
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(Negatywny kąt ścięcia nie jest dozwolony)"
 
 #: pcbnew/pad.cpp:2081
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "Rozmiar pobieranych danych jest zbyt duży."
+msgstr "(Ścięcie jest zbyt duże)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Błąd: Trapezowość jest zbyt duża."
+msgstr "(Trapezowość jest zbyt duża)"
 
 #: pcbnew/pad.cpp:2101
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
 msgstr ""
-"Błąd: Niestandardowy kształt pola musi zostać przekształcony w pojedynczy "
-"wielokąt."
+"(Niestandardowy kształt pola musi zostać przekształcony w pojedynczy "
+"wielokąt)"
 
 #: pcbnew/pad.cpp:2293
 msgid "Edge connector"
@@ -41441,7 +41407,7 @@ msgstr "Wczytywanie polygonów..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Liczba zarysów wielokątów wynosi %d, oczekiwano 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41716,7 +41682,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4120
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Nieznane wyrównanie tekstu %d, tekst %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4185
 msgid "Loading rectangles..."
@@ -44664,7 +44630,6 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Muszą być wybrane dokładnie dwa odcinki linii."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "Muszą być wybrane co najmniej dwa odcinki linii."
 
