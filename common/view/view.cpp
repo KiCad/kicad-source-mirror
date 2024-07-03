@@ -57,6 +57,7 @@ public:
         m_flags( KIGFX::VISIBLE ),
         m_requiredUpdate( KIGFX::NONE ),
         m_drawPriority( 0 ),
+        m_cachedIndex( -1 ),
         m_groups( nullptr ),
         m_groupsSize( 0 ) {}
 
@@ -228,6 +229,7 @@ private:
     int                  m_flags;            ///< Visibility flags
     int                  m_requiredUpdate;   ///< Flag required for updating
     int                  m_drawPriority;     ///< Order to draw this item in a layer, lowest first
+    int                  m_cachedIndex;      ///< Cached index in m_allItems.
 
     std::pair<int, int>* m_groups;           ///< layer_number:group_id pairs for each layer the
                                              ///< item occupies.
@@ -330,6 +332,7 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     aItem->m_viewPrivData->m_drawPriority = aDrawPriority;
     const BOX2I bbox = aItem->ViewBBox();
     aItem->m_viewPrivData->m_bbox = bbox;
+    aItem->m_viewPrivData->m_cachedIndex = m_allItems->size();
 
     aItem->ViewGetLayers( layers, layers_count );
     aItem->viewPrivData()->saveLayers( layers, layers_count );
@@ -358,7 +361,19 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     if( aItem && aItem->m_viewPrivData )
     {
         wxCHECK( aItem->m_viewPrivData->m_view == this, /*void*/ );
-        auto item = std::find( m_allItems->begin(), m_allItems->end(), aItem );
+
+        std::vector<VIEW_ITEM*>::iterator item = m_allItems->end();
+        int                               cachedIndex = aItem->m_viewPrivData->m_cachedIndex;
+
+        if( cachedIndex >= 0 && cachedIndex < m_allItems->size()
+            && ( *m_allItems )[cachedIndex] == aItem )
+        {
+            item = m_allItems->begin() + cachedIndex;
+        }
+        else
+        {
+            item = std::find( m_allItems->begin(), m_allItems->end(), aItem );
+        }
 
         if( item != m_allItems->end() )
         {
@@ -375,6 +390,10 @@ void VIEW::Remove( VIEW_ITEM* aItem )
                                 {
                                     return it == nullptr;
                                 } );
+
+                // Update cached indices
+                for( int idx = 0; idx < m_allItems->size(); idx++ )
+                    ( *m_allItems )[idx]->m_viewPrivData->m_cachedIndex = idx;
 
                 s_gcCounter = 0;
             }
