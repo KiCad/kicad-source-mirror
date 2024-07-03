@@ -89,6 +89,11 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 {
     m_PaintEventCounter = std::make_unique<PROF_COUNTER>( "Draw panel paint events" );
 
+    if( Pgm().GetCommonSettings()->m_Appearance.show_scrollbars )
+        ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+    else
+        ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+
     SetLayoutDirection( wxLayout_LeftToRight );
 
     m_edaFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_parent );
@@ -107,15 +112,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-
-    if( Pgm().GetCommonSettings()->m_Appearance.show_scrollbars )
-    {
-        ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
-    }
-    else
-    {
-        ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
-    }
 
     EnableScrolling( false, false ); // otherwise Zoom Auto disables GAL canvas
     KIPLATFORM::UI::SetOverlayScrolling( this, false ); // Prevent excessive repaint on GTK
