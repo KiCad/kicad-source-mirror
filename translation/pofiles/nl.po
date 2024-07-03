@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-06-30 16:56+0000\n"
+"PO-Revision-Date: 2024-07-03 21:12+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16010,6 +16010,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' is geen Kicad-schemabestand.\n"
+"Gebruik Bestand -> Importeren voor niet-KiCad-schemabestanden."
 
 #: eeschema/files-io.cpp:279
 msgid "Root"
@@ -19826,11 +19828,8 @@ msgid "SPICE Simulator"
 msgstr "SPICE-simulatie"
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Fouten tijdens netlijstgeneratie.\n"
-"\n"
+msgstr "Fouten tijdens netlijstgeneratie."
 
 #: eeschema/sim/simulator_frame.cpp:374
 msgid "Simulator requires a fully annotated schematic."
@@ -19857,9 +19856,9 @@ msgid "Another simulation is already running."
 msgstr "Er is al een andere simulatie bezig."
 
 #: eeschema/sim/simulator_frame.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Kan bestand %s niet laden"
+msgstr "Kan bestand %s niet laden of verwerken"
 
 #: eeschema/sim/simulator_frame.cpp:626
 msgid "Save changes to workbook?"
@@ -25689,7 +25688,7 @@ msgid ""
 "updated with 'Update All' button."
 msgstr ""
 "Vastgepinde pakketten krijgen geen meldingen van beschikbare updates en "
-"zullen niet door de 'Alles bijwerken'-knop worden bijgewerkt."
+"zullen niet door de ‘Alles bijwerken’-knop worden bijgewerkt."
 
 #: kicad/pcm/dialogs/panel_package.cpp:134
 msgid "Install Pending"
@@ -36479,9 +36478,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Standaardeigenschappen voor nieuwe grafische items:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:307
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Footprintbibliotheek was niet bijgewerkt\n"
+msgstr "Verborgen footprintbibliotheken worden nog niet ondersteund."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:486
 #, c-format
@@ -39232,9 +39230,8 @@ msgid "Hole clearance violation"
 msgstr "Overschrijding van de vrije afstand om een gat"
 
 #: pcbnew/drc/drc_item.cpp:106
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Boorgaten te dicht bij elkaar"
+msgstr "Boorgat te dicht bij een ander gat"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Drilled holes co-located"
@@ -40726,9 +40723,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(verwacht 'SMD'; werkelijk '%s')"
 
 #: pcbnew/footprint.cpp:3080
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(gat van PTH-pad laat geen koper vrij)"
+msgstr "(Gatmaat van PTH-pad is erg klein of leeg)"
 
 #: pcbnew/footprint.cpp:3088
 msgid "(PTH pad has no copper layers)"
@@ -40739,9 +40735,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(gat van PTH-pad laat geen koper vrij)"
 
 #: pcbnew/footprint.cpp:3119
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(gat van PTH-pad laat geen koper vrij)"
+msgstr "(Gat van PTH-pad valt niet volledig binnen koper)"
 
 #: pcbnew/footprint.cpp:3129
 msgid "(SMD pad appears on both front and back copper)"
@@ -42125,131 +42120,111 @@ msgid "PTH pad %s"
 msgstr "PTH-pads"
 
 #: pcbnew/pad.cpp:2071
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Fout: Pad moet een positieve maat hebben."
+msgstr "(Pad moet een positieve maat hebben)"
 
 #: pcbnew/pad.cpp:2082
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "Via boor-maat moet kleiner zijn dan via diameter"
+msgstr "(Gatmaat van PTH-pad moet groter zijn dan %s)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Waarschuwing: Padgat niet binnen padvorm."
+msgstr "Padgat niet binnen padvorm"
 
 #: pcbnew/pad.cpp:2107
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Waarschuwing: Padgat laat geen koper over."
+msgstr "Padgat laat geen koper over"
 
 #: pcbnew/pad.cpp:2112
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr ""
-"Waarschuwing: negatieve waarden voor lokale vrije afstand hebben geen effect."
+msgstr "Negatieve waarden voor lokale vrije afstand hebben geen effect"
 
 #: pcbnew/pad.cpp:2131
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Waarschuwing: Negatieve vrije afstand voor het soldeermasker is groter dan "
-"sommige vormen. Dit kan verrassingen opleveren."
+"Negatieve vrije afstand voor het soldeermasker is groter dan sommige vormen; "
+"dit kan verrassingen opleveren"
 
 #: pcbnew/pad.cpp:2141
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Waarschuwing: Negatieve vrije afstand voor het soldeermasker is groter dan "
-"een pad. Er wordt geen soldeermasker gegenereerd."
+"Negatieve vrije afstand voor het soldeermasker is groter dan een pad; er "
+"wordt geen soldeermasker gegenereerd"
 
 #: pcbnew/pad.cpp:2160
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Waarschuwing: Negatieve soldeerpastamarges groter dan pad. Er wordt geen "
-"soldeerpastamasker aangemaakt."
+"Negatieve soldeerpastamarges groter dan pad; er wordt geen "
+"soldeerpastamasker aangemaakt"
 
 #: pcbnew/pad.cpp:2167
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(PTH-pad heeft geen koperlagen)"
+msgstr "(Pad heeft geen laag)"
 
 #: pcbnew/pad.cpp:2170
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(PTH-pad heeft geen koperlagen)"
+msgstr "PTH-pad heeft geen koperlagen"
 
 #: pcbnew/pad.cpp:2176
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
 msgstr ""
-"Waarschuwing: Geplateerde doorsteekgaten moeten normaal gesproken op "
-"minstens één laag een koperpad hebben."
+"Geplateerde doorsteekgaten moeten normaal gesproken op minstens één laag een "
+"koperpad hebben"
 
 #: pcbnew/pad.cpp:2195
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
 msgstr ""
-"Waarschuwing: Connectorpads hebben normaalgesproken geen soldeerpasta. "
-"Gebruik in plaats daarvan SMD-pads."
+"Connectorpads hebben normaal gesproken geen soldeerpasta; gebruik in plaats "
+"daarvan een SMD-pad"
 
 #: pcbnew/pad.cpp:2203
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Fout: SMD-pad heeft een gat."
+msgstr "(SMD-pad heeft een gat)"
 
 #: pcbnew/pad.cpp:2209
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr "Als u een soldeerpastalaag wilt voor de voorkant van de PCB"
+msgstr "SMD-pad heeft koper aan weerszijden van het bord"
 
 #: pcbnew/pad.cpp:2215 pcbnew/pad.cpp:2228
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(koper en maskerlagen van SMD-pad komen niet overeen)"
+msgstr ""
+"SMD-pad heeft koper- en maskerlagen aan verschillende zijden van het bord"
 
 #: pcbnew/pad.cpp:2220 pcbnew/pad.cpp:2233
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "Als u een soldeerpastalaag wilt voor de voorkant van de PCB"
+msgstr ""
+"SMD-pad heeft koper- en pastalagen aan verschillende zijden van het bord"
 
 #: pcbnew/pad.cpp:2239
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Waarschuwing: SMD-pad heeft geen buitenlagen."
+msgstr "SMD-pad heeft geen buitenlagen"
 
 #: pcbnew/pad.cpp:2249
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Waarschuwing: Fiducial-eigenschap is zinloos voor NPTH-pads."
+msgstr "Fiducial-eigenschap is zinloos voor NPTH-pads"
 
 #: pcbnew/pad.cpp:2253
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Waarschuwing: Testpunt-eigenschap is zinloos voor NPTH-pads."
+msgstr "Testpunt-eigenschap is zinloos voor NPTH-pads"
 
 #: pcbnew/pad.cpp:2256
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr "Waarschuwing: Koellichaam-eigenschap is zinloos voor NPTH-pads."
+msgstr "Koellichaam-eigenschap is zinloos voor NPTH-pads"
 
 #: pcbnew/pad.cpp:2259
-#, fuzzy
 msgid "Castellated property is for PTH pads"
-msgstr "Waarschuwing: Gekanteeld-eigenschap is bedoeld voor PTH-pads."
+msgstr "Gekanteeld-eigenschap is bedoeld voor PTH-pads"
 
 #: pcbnew/pad.cpp:2262
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Waarschuwing: BGA-eigenschap is alleen voor SMD-pads."
+msgstr "BGA-eigenschap is alleen voor SMD-pads"
 
 #: pcbnew/pad.cpp:2265
 #, fuzzy
@@ -42258,31 +42233,27 @@ msgstr "Waarschuwing: Mechanisch-eigenschap is bedoeld voor PTH-pads."
 
 #: pcbnew/pad.cpp:2270
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(Negatieve hoekradius is niet toegestaan)"
 
 #: pcbnew/pad.cpp:2272
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Waarschuwing: Hoekmaat maakt de pad rond."
+msgstr "Hoekmaat maakt de pad rond"
 
 #: pcbnew/pad.cpp:2277
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(Negatieve hoekafschuining is niet toegestaan)"
 
 #: pcbnew/pad.cpp:2279
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "Download is te groot."
+msgstr "(Hoekafschuining is te groot)"
 
 #: pcbnew/pad.cpp:2288
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Fout: Trapeziumdelta is te groot."
+msgstr "(Trapeziumdelta is te groot)"
 
 #: pcbnew/pad.cpp:2299
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr "Fout: Aangepaste padvorm moet resulteren in één polygoon."
+msgstr "(Aangepaste padvorm moet resulteren in één polygoon)"
 
 #: pcbnew/pad.cpp:2491
 msgid "Edge connector"
@@ -42739,7 +42710,7 @@ msgstr "Polygonen laden..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2038
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Aantal polygoonomtrekken is %d, verwachtte 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2165
 msgid "Loading rules..."
@@ -42998,7 +42969,7 @@ msgstr "Footprint %s bevat barcode op Altium-laag %d (nog niet ondersteund)."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4266
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Onbekende tekstvakuitlijning %d, tekst %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4328
 msgid "Loading rectangles..."
@@ -45941,9 +45912,8 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Er moeten exact twee lijnen zijn geselecteerd om ze te verlengen."
 
 #: pcbnew/tools/edit_tool.cpp:1328
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
-msgstr "Er moet een vorm met op zijn minst twee lijnen worden geselecteerd."
+msgstr "Er moet een vorm met op zijn minst twee lijnen zijn geselecteerd."
 
 #: pcbnew/tools/edit_tool.cpp:1504
 msgid "Simplify Shapes"
