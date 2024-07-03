@@ -378,7 +378,7 @@ if (USE_DISTCC)
   if(DISTCC_FOUND)
     list(APPEND CMAKE_C_COMPILER_LAUNCHER ${DISTCC_FOUND})
     list(APPEND CMAKE_CXX_COMPILER_LAUNCHER ${DISTCC_FOUND})
-    
+
     message(STATUS "Using ${DISTCC_FOUND} for distributed build.")
   else(DISTCC_FOUND)
     message(INFO "Distcc was requested but not found.")
@@ -458,7 +458,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     if( KICAD_SANITIZE_ADDRESS )
         add_compile_definitions( KICAD_SANITIZE_ADDRESS )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=address -fsanitize-recover=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer" )
 
         # ASAN shouldn't be used with these options (https://github.com/google/sanitizers/wiki/AddressSanitizer#faq)
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector -U_FORTIFY_SOURCE" )
@@ -536,7 +536,7 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS " /wd4290" )
     # C4800: non-bool is explicitly cast to bool, forcing value of 0 or 1
     string( APPEND CMAKE_CXX_FLAGS " /wd4800" )
-    
+
     # cmake 3.25 or higher requried for MSVC, should be fine
     if( USE_CCACHE AND CCACHE_FOUND )
         # Equivalent to /Z7, ensures cmake doesn't fight over the default
