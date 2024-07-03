@@ -10049,7 +10049,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10086,7 +10086,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -10245,7 +10245,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10282,7 +10282,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -10441,7 +10441,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10478,7 +10478,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -10637,7 +10637,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10674,7 +10674,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -10833,7 +10833,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -10870,7 +10870,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -11029,7 +11029,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11066,7 +11066,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -11225,7 +11225,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11262,7 +11262,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -11421,7 +11421,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11458,7 +11458,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>
@@ -11617,7 +11617,7 @@
                       <property name="caption"></property>
                       <property name="caption_visible">1</property>
                       <property name="center_pane">0</property>
-                      <property name="choices">&quot;Auxillary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
+                      <property name="choices">&quot;Auxiliary&quot; &quot; Off-board, front&quot; &quot;Off-board, back&quot;</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
                       <property name="context_menu">1</property>
@@ -11654,7 +11654,7 @@
                       <property name="style"></property>
                       <property name="subclass"></property>
                       <property name="toolbar_pane">0</property>
-                      <property name="tooltip">Auxillary layers do not flip with board side, while back and front layers do.</property>
+                      <property name="tooltip">Auxiliary layers do not flip with board side, while back and front layers do.</property>
                       <property name="validator_data_type"></property>
                       <property name="validator_style">wxFILTER_NONE</property>
                       <property name="validator_type">wxDefaultValidator</property>

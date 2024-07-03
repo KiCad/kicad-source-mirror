@@ -635,7 +635,7 @@ const char* LAYER::ShowType( LAYER_T aType )
     case LT_POWER:  return "power";
     case LT_MIXED:  return "mixed";
     case LT_JUMPER: return "jumper";
-    case LT_AUX:    return "auxillary";
+    case LT_AUX:    return "auxiliary";
     case LT_FRONT:  return "front";
     case LT_BACK:   return "back";
     }
@@ -648,7 +648,7 @@ LAYER_T LAYER::ParseType( const char* aType )
     else if( strcmp( aType, "power" ) == 0 )     return LT_POWER;
     else if( strcmp( aType, "mixed" ) == 0 )     return LT_MIXED;
     else if( strcmp( aType, "jumper" ) == 0 )    return LT_JUMPER;
-    else if( strcmp( aType, "auxillary" ) == 0 ) return LT_AUX;
+    else if( strcmp( aType, "auxiliary" ) == 0 ) return LT_AUX;
     else if( strcmp( aType, "front" ) == 0 )     return LT_FRONT;
     else if( strcmp( aType, "back" ) == 0 )      return LT_BACK;
     else                                         return LT_UNDEFINED;

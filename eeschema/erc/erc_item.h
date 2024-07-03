@@ -155,8 +155,8 @@ public:
     }
 
     /**
-     * Gets the SCH_SHEET_PATH of the auxillary item causing this ERC violation
-     * @return SCH_SHEET_PATH containing the auxillary item
+     * Gets the SCH_SHEET_PATH of the auxiliary item causing this ERC violation
+     * @return SCH_SHEET_PATH containing the auxiliary item
      */
     SCH_SHEET_PATH& GetAuxItemSheetPath()
     {
