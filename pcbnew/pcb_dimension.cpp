@@ -71,40 +71,46 @@ bool PCB_DIMENSION_BASE::operator==( const BOARD_ITEM& aOther ) const
 
     const PCB_DIMENSION_BASE& other = static_cast<const PCB_DIMENSION_BASE&>( aOther );
 
-    if( m_textPosition != other.m_textPosition )
+    return *this == other;
+}
+
+
+bool PCB_DIMENSION_BASE::operator==( const PCB_DIMENSION_BASE& aOther ) const
+{
+    if( m_textPosition != aOther.m_textPosition )
         return false;
 
-    if( m_keepTextAligned != other.m_keepTextAligned )
+    if( m_keepTextAligned != aOther.m_keepTextAligned )
         return false;
 
-    if( m_units != other.m_units )
+    if( m_units != aOther.m_units )
         return false;
 
-    if( m_autoUnits != other.m_autoUnits )
+    if( m_autoUnits != aOther.m_autoUnits )
         return false;
 
-    if( m_unitsFormat != other.m_unitsFormat )
+    if( m_unitsFormat != aOther.m_unitsFormat )
         return false;
 
-    if( m_precision != other.m_precision )
+    if( m_precision != aOther.m_precision )
         return false;
 
-    if( m_suppressZeroes != other.m_suppressZeroes )
+    if( m_suppressZeroes != aOther.m_suppressZeroes )
         return false;
 
-    if( m_lineThickness != other.m_lineThickness )
+    if( m_lineThickness != aOther.m_lineThickness )
         return false;
 
-    if( m_arrowLength != other.m_arrowLength )
+    if( m_arrowLength != aOther.m_arrowLength )
         return false;
 
-    if( m_extensionOffset != other.m_extensionOffset )
+    if( m_extensionOffset != aOther.m_extensionOffset )
         return false;
 
-    if( m_measuredValue != other.m_measuredValue )
+    if( m_measuredValue != aOther.m_measuredValue )
         return false;
 
-    return EDA_TEXT::operator==( other );
+    return EDA_TEXT::operator==( aOther );
 }
 
 

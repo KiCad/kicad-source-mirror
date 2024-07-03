@@ -229,7 +229,8 @@ public:
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
-    bool operator==( const BOARD_ITEM& aOther ) const override;
+    bool operator==( const PCB_TABLE& aOther ) const;
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override;
 
     static int Compare( const PCB_TABLE* aTable, const PCB_TABLE* aOther );
 

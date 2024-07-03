@@ -636,14 +636,20 @@ void PCB_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aL
 }
 
 
-bool PCB_TEXT::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_TEXT::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( aOther.Type() != Type() )
+    if( aBoardItem.Type() != Type() )
         return false;
 
-    const PCB_TEXT& other = static_cast<const PCB_TEXT&>( aOther );
+    const PCB_TEXT& other = static_cast<const PCB_TEXT&>( aBoardItem );
 
-    return EDA_TEXT::operator==( other );
+    return *this == other;
+}
+
+
+bool PCB_TEXT::operator==( const PCB_TEXT& aOther ) const
+{
+    return EDA_TEXT::operator==( aOther );
 }
 
 

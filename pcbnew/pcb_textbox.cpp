@@ -635,7 +635,6 @@ void PCB_TEXTBOX::SetBorderWidth( const int aSize )
 }
 
 
-
 bool PCB_TEXTBOX::operator==( const BOARD_ITEM& aBoardItem ) const
 {
     if( aBoardItem.Type() != Type() )
@@ -643,7 +642,14 @@ bool PCB_TEXTBOX::operator==( const BOARD_ITEM& aBoardItem ) const
 
     const PCB_TEXTBOX& other = static_cast<const PCB_TEXTBOX&>( aBoardItem );
 
-    return m_borderEnabled == other.m_borderEnabled && EDA_TEXT::operator==( other );
+    return *this == other;
+}
+
+
+bool PCB_TEXTBOX::operator==( const PCB_TEXTBOX& aOther ) const
+{
+    return m_borderEnabled == aOther.m_borderEnabled
+            && EDA_TEXT::operator==( aOther );
 }
 
 

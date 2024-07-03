@@ -189,15 +189,24 @@ void PCB_TARGET::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
 }
 
 
-bool PCB_TARGET::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_TARGET::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( aOther.Type() != Type() )
+    if( aBoardItem.Type() != Type() )
         return false;
 
-    const PCB_TARGET& other = static_cast<const PCB_TARGET&>( aOther );
+    const PCB_TARGET& other = static_cast<const PCB_TARGET&>( aBoardItem );
 
-    return m_shape == other.m_shape && m_size == other.m_size && m_lineWidth == other.m_lineWidth
-           && m_layer == other.m_layer && m_pos == other.m_pos;
+    return *this == other;
+}
+
+
+bool PCB_TARGET::operator==( const PCB_TARGET& aOther ) const
+{
+    return m_shape == aOther.m_shape
+           && m_size == aOther.m_size
+           && m_lineWidth == aOther.m_lineWidth
+           && m_layer == aOther.m_layer
+           && m_pos == aOther.m_pos;
 }
 
 

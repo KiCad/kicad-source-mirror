@@ -2301,92 +2301,98 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 }
 
 
-bool PAD::operator==( const BOARD_ITEM& aOther ) const
+bool PAD::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( Type() != aOther.Type() )
+    if( Type() != aBoardItem.Type() )
         return false;
 
-    if( m_parent && aOther.GetParent() && m_parent->m_Uuid != aOther.GetParent()->m_Uuid )
+    if( m_parent && aBoardItem.GetParent() && m_parent->m_Uuid != aBoardItem.GetParent()->m_Uuid )
         return false;
 
-    const PAD& other = static_cast<const PAD&>( aOther );
+    const PAD& other = static_cast<const PAD&>( aBoardItem );
 
-    if( GetShape() != other.GetShape() )
+    return *this == other;
+}
+
+
+bool PAD::operator==( const PAD& aOther ) const
+{
+    if( GetShape() != aOther.GetShape() )
         return false;
 
-    if( GetPosition() != other.GetPosition() )
+    if( GetPosition() != aOther.GetPosition() )
         return false;
 
-    if( GetAttribute() != other.GetAttribute() )
+    if( GetAttribute() != aOther.GetAttribute() )
         return false;
 
-    if( GetSize() != other.GetSize() )
+    if( GetSize() != aOther.GetSize() )
         return false;
 
-    if( GetOffset() != other.GetOffset() )
+    if( GetOffset() != aOther.GetOffset() )
         return false;
 
-    if( GetDrillSize() != other.GetDrillSize() )
+    if( GetDrillSize() != aOther.GetDrillSize() )
         return false;
 
-    if( GetDrillShape() != other.GetDrillShape() )
+    if( GetDrillShape() != aOther.GetDrillShape() )
         return false;
 
-    if( GetRoundRectRadiusRatio() != other.GetRoundRectRadiusRatio() )
+    if( GetRoundRectRadiusRatio() != aOther.GetRoundRectRadiusRatio() )
         return false;
 
-    if( GetChamferRectRatio() != other.GetChamferRectRatio() )
+    if( GetChamferRectRatio() != aOther.GetChamferRectRatio() )
         return false;
 
-    if( GetChamferPositions() != other.GetChamferPositions() )
+    if( GetChamferPositions() != aOther.GetChamferPositions() )
         return false;
 
-    if( GetOrientation() != other.GetOrientation() )
+    if( GetOrientation() != aOther.GetOrientation() )
         return false;
 
-    if( GetLocalZoneConnection() != other.GetLocalZoneConnection() )
+    if( GetLocalZoneConnection() != aOther.GetLocalZoneConnection() )
         return false;
 
-    if( GetThermalSpokeWidth() != other.GetThermalSpokeWidth() )
+    if( GetThermalSpokeWidth() != aOther.GetThermalSpokeWidth() )
         return false;
 
-    if( GetThermalSpokeAngle() != other.GetThermalSpokeAngle() )
+    if( GetThermalSpokeAngle() != aOther.GetThermalSpokeAngle() )
         return false;
 
-    if( GetThermalGap() != other.GetThermalGap() )
+    if( GetThermalGap() != aOther.GetThermalGap() )
         return false;
 
-    if( GetCustomShapeInZoneOpt() != other.GetCustomShapeInZoneOpt() )
+    if( GetCustomShapeInZoneOpt() != aOther.GetCustomShapeInZoneOpt() )
         return false;
 
-    if( GetPrimitives().size() != other.GetPrimitives().size() )
+    if( GetPrimitives().size() != aOther.GetPrimitives().size() )
         return false;
 
     for( size_t ii = 0; ii < GetPrimitives().size(); ii++ )
     {
-        if( *GetPrimitives()[ii] != *other.GetPrimitives()[ii] )
+        if( *GetPrimitives()[ii] != *aOther.GetPrimitives()[ii] )
             return false;
     }
 
-    if( GetAnchorPadShape() != other.GetAnchorPadShape() )
+    if( GetAnchorPadShape() != aOther.GetAnchorPadShape() )
         return false;
 
-    if( GetLocalClearance() != other.GetLocalClearance() )
+    if( GetLocalClearance() != aOther.GetLocalClearance() )
         return false;
 
-    if( GetLocalSolderMaskMargin() != other.GetLocalSolderMaskMargin() )
+    if( GetLocalSolderMaskMargin() != aOther.GetLocalSolderMaskMargin() )
         return false;
 
-    if( GetLocalSolderPasteMargin() != other.GetLocalSolderPasteMargin() )
+    if( GetLocalSolderPasteMargin() != aOther.GetLocalSolderPasteMargin() )
         return false;
 
-    if( GetLocalSolderPasteMarginRatio() != other.GetLocalSolderPasteMarginRatio() )
+    if( GetLocalSolderPasteMarginRatio() != aOther.GetLocalSolderPasteMarginRatio() )
         return false;
 
-    if( GetLocalSpokeWidthOverride() != other.GetLocalSpokeWidthOverride() )
+    if( GetLocalSpokeWidthOverride() != aOther.GetLocalSpokeWidthOverride() )
         return false;
 
-    if( GetLayerSet() != other.GetLayerSet() )
+    if( GetLayerSet() != aOther.GetLayerSet() )
         return false;
 
     return true;

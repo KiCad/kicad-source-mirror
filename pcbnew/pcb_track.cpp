@@ -157,12 +157,12 @@ BITMAPS PCB_VIA::GetMenuImage() const
 }
 
 
-bool PCB_TRACK::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_TRACK::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( aOther.Type() != Type() )
+    if( aBoardItem.Type() != Type() )
         return false;
 
-    const PCB_TRACK& other = static_cast<const PCB_TRACK&>( aOther );
+    const PCB_TRACK& other = static_cast<const PCB_TRACK&>( aBoardItem );
 
     return *this == other;
 }
@@ -171,9 +171,9 @@ bool PCB_TRACK::operator==( const BOARD_ITEM& aOther ) const
 bool PCB_TRACK::operator==( const PCB_TRACK& aOther ) const
 {
     return m_Start == aOther.m_Start
-        && m_End == aOther.m_End
-        && m_layer == aOther.m_layer
-        && m_Width == aOther.m_Width;
+            && m_End == aOther.m_End
+            && m_layer == aOther.m_layer
+            && m_Width == aOther.m_Width;
 }
 
 
@@ -202,15 +202,24 @@ double PCB_TRACK::Similarity( const BOARD_ITEM& aOther ) const
 }
 
 
-bool PCB_ARC::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_ARC::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( aOther.Type() != Type() )
+    if( aBoardItem.Type() != Type() )
         return false;
 
-    const PCB_ARC& other = static_cast<const PCB_ARC&>( aOther );
+    const PCB_ARC& other = static_cast<const PCB_ARC&>( aBoardItem );
 
-    return m_Start == other.m_Start && m_End == other.m_End && m_Mid == other.m_Mid &&
-           m_layer == other.m_layer && m_Width == other.m_Width;
+    return *this == other;
+}
+
+
+bool PCB_ARC::operator==( const PCB_ARC& aOther ) const
+{
+    return m_Start == aOther.m_Start
+            && m_End == aOther.m_End
+            && m_Mid == aOther.m_Mid
+            && m_layer == aOther.m_layer
+            && m_Width == aOther.m_Width;
 }
 
 
@@ -242,12 +251,12 @@ double PCB_ARC::Similarity( const BOARD_ITEM& aOther ) const
 }
 
 
-bool PCB_VIA::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_VIA::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( aOther.Type() != Type() )
+    if( aBoardItem.Type() != Type() )
         return false;
 
-    const PCB_VIA& other = static_cast<const PCB_VIA&>( aOther );
+    const PCB_VIA& other = static_cast<const PCB_VIA&>( aBoardItem );
 
     return *this == other;
 }
@@ -255,9 +264,13 @@ bool PCB_VIA::operator==( const BOARD_ITEM& aOther ) const
 
 bool PCB_VIA::operator==( const PCB_VIA& aOther ) const
 {
-    return m_Start == aOther.m_Start && m_End == aOther.m_End && m_layer == aOther.m_layer
-           && m_padStack == aOther.m_padStack && m_Width == aOther.m_Width
-           && m_viaType == aOther.m_viaType && m_zoneLayerOverrides == aOther.m_zoneLayerOverrides;
+    return m_Start == aOther.m_Start
+            && m_End == aOther.m_End
+            && m_layer == aOther.m_layer
+            && m_padStack == aOther.m_padStack
+            && m_Width == aOther.m_Width
+            && m_viaType == aOther.m_viaType
+            && m_zoneLayerOverrides == aOther.m_zoneLayerOverrides;
 }
 
 

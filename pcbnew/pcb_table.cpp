@@ -438,46 +438,52 @@ int PCB_TABLE::Compare( const PCB_TABLE* aTable, const PCB_TABLE* aOther )
 }
 
 
-bool PCB_TABLE::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_TABLE::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( Type() != aOther.Type() )
+    if( Type() != aBoardItem.Type() )
         return false;
 
-    const PCB_TABLE& other = static_cast<const PCB_TABLE&>( aOther );
+    const PCB_TABLE& other = static_cast<const PCB_TABLE&>( aBoardItem );
 
-    if( m_cells.size() != other.m_cells.size() )
+    return *this == other;
+}
+
+
+bool PCB_TABLE::operator==( const PCB_TABLE& aOther ) const
+{
+    if( m_cells.size() != aOther.m_cells.size() )
         return false;
 
-    if( m_strokeExternal != other.m_strokeExternal )
+    if( m_strokeExternal != aOther.m_strokeExternal )
         return false;
 
-    if( m_strokeHeader != other.m_strokeHeader )
+    if( m_strokeHeader != aOther.m_strokeHeader )
         return false;
 
-    if( m_borderStroke != other.m_borderStroke )
+    if( m_borderStroke != aOther.m_borderStroke )
         return false;
 
-    if( m_strokeRows != other.m_strokeRows )
+    if( m_strokeRows != aOther.m_strokeRows )
         return false;
 
-    if( m_strokeColumns != other.m_strokeColumns )
+    if( m_strokeColumns != aOther.m_strokeColumns )
         return false;
 
-    if( m_separatorsStroke != other.m_separatorsStroke )
+    if( m_separatorsStroke != aOther.m_separatorsStroke )
         return false;
 
-    if( m_orientation != other.m_orientation )
+    if( m_orientation != aOther.m_orientation )
         return false;
 
-    if( m_colWidths != other.m_colWidths )
+    if( m_colWidths != aOther.m_colWidths )
         return false;
 
-    if( m_rowHeights != other.m_rowHeights )
+    if( m_rowHeights != aOther.m_rowHeights )
         return false;
 
     for( int ii = 0; ii < (int) m_cells.size(); ++ii )
     {
-        if( !( *m_cells[ii] == *other.m_cells[ii] ) )
+        if( !( *m_cells[ii] == *aOther.m_cells[ii] ) )
             return false;
     }
 

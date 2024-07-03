@@ -458,9 +458,14 @@ public:
         return ( this == &aItem ) ? 1.0 : 0.0;
     }
 
-    bool operator==( const BOARD_ITEM& aItem ) const override
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override
     {
-        return ( this == &aItem );
+        return ( this == &aBoardItem );
+    }
+
+    bool operator==( const DELETED_BOARD_ITEM& aOther ) const
+    {
+        return ( this == &aOther );
     }
 
 #if defined(DEBUG)

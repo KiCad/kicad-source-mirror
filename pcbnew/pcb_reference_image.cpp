@@ -269,32 +269,38 @@ void PCB_REFERENCE_IMAGE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-bool PCB_REFERENCE_IMAGE::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_REFERENCE_IMAGE::operator==( const BOARD_ITEM& aBoardItem ) const
 {
-    if( aOther.Type() != Type() )
+    if( aBoardItem.Type() != Type() )
         return false;
 
-    const PCB_REFERENCE_IMAGE& other = static_cast<const PCB_REFERENCE_IMAGE&>( aOther );
+    const PCB_REFERENCE_IMAGE& other = static_cast<const PCB_REFERENCE_IMAGE&>( aBoardItem );
 
-    if( m_layer != other.m_layer )
+    return *this == other;
+}
+
+
+bool PCB_REFERENCE_IMAGE::operator==( const PCB_REFERENCE_IMAGE& aOther ) const
+{
+    if( m_layer != aOther.m_layer )
         return false;
 
-    if( m_pos != other.m_pos )
+    if( m_pos != aOther.m_pos )
         return false;
 
-    if( m_bitmapBase->GetSize() != other.m_bitmapBase->GetSize() )
+    if( m_bitmapBase->GetSize() != aOther.m_bitmapBase->GetSize() )
         return false;
 
-    if( m_bitmapBase->GetPPI() != other.m_bitmapBase->GetPPI() )
+    if( m_bitmapBase->GetPPI() != aOther.m_bitmapBase->GetPPI() )
         return false;
 
-    if( m_bitmapBase->GetScale() != other.m_bitmapBase->GetScale() )
+    if( m_bitmapBase->GetScale() != aOther.m_bitmapBase->GetScale() )
         return false;
 
-    if( m_bitmapBase->GetImageID() != other.m_bitmapBase->GetImageID() )
+    if( m_bitmapBase->GetImageID() != aOther.m_bitmapBase->GetImageID() )
         return false;
 
-    if( m_bitmapBase->GetImageData() != other.m_bitmapBase->GetImageData() )
+    if( m_bitmapBase->GetImageData() != aOther.m_bitmapBase->GetImageData() )
         return false;
 
     return true;
