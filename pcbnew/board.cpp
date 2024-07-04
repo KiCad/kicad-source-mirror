@@ -105,6 +105,8 @@ BOARD::BOARD() :
             m_layers[layer].m_type = LT_UNDEFINED;
     }
 
+    recalcOpposites();
+
     // Creates a zone to show sloder mask bridges created by a min web value
     // it it just to show them
     m_SolderMaskBridges = new ZONE( this );
@@ -539,6 +541,7 @@ bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
     if( unsigned( aIndex ) < arrayDim( m_layers ) )
     {
         m_layers[ aIndex ] = aLayer;
+        recalcOpposites();
         return true;
     }
 
@@ -593,6 +596,7 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
     if( IsLayerEnabled( aLayer ) )
     {
         m_layers[aLayer].m_userName = aLayerName;
+        recalcOpposites();
         return true;
     }
 
@@ -619,6 +623,7 @@ bool BOARD::SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType )
     if( IsLayerEnabled( aLayer ) )
     {
         m_layers[aLayer].m_type = aLayerType;
+        recalcOpposites();
         return true;
     }
 
@@ -655,36 +660,70 @@ LAYER_T LAYER::ParseType( const char* aType )
 }
 
 
-PCB_LAYER_ID BOARD::FlipLayer( PCB_LAYER_ID aLayer ) const
+void BOARD::recalcOpposites()
 {
-    LAYER_T layerType = m_layers[aLayer].m_type;
+    for( int layer = F_Cu; layer < User_9; ++layer )
+        m_layers[layer].m_opposite = ::FlipLayer( ToLAYER_ID( layer ), GetCopperLayerCount() );
 
-    if( aLayer >= User_1 && aLayer <= User_9 && ( layerType == LT_FRONT || layerType == LT_BACK ) )
+    // Match up similary-named front/back user layers
+    for( int layer = User_1; layer <= User_9; ++layer )
     {
-        LAYER_T opposite = layerType == LT_FRONT ? LT_BACK : LT_FRONT;
+        if( m_layers[layer].m_opposite != layer )   // already paired
+            continue;
 
-        // See if there is a similarly-named layer
-        wxString principalName = m_layers[aLayer].m_userName.AfterFirst( '.' );
+        if( m_layers[layer].m_type != LT_FRONT )
+            continue;
+
+        wxString principalName = m_layers[layer].m_userName.AfterFirst( '.' );
 
         for( int ii = User_1; ii <= User_9; ++ii )
         {
-            if( ii == aLayer || m_layers[ii].m_type != opposite )
+            if( ii == layer )                      // can't pair with self
+                continue;
+
+            if( m_layers[ii].m_opposite != ii )    // already paired
+                continue;
+
+            if( m_layers[ii].m_type != LT_BACK )
                 continue;
 
             wxString candidate = m_layers[ii].m_userName.AfterFirst( '.' );
 
-            if( candidate == principalName )
-                return ToLAYER_ID( ii );
+            if( !candidate.IsEmpty() && candidate == principalName )
+            {
+                m_layers[layer].m_opposite = ii;
+                m_layers[ii].m_opposite = layer;
+                break;
+            }
         }
-
-        // If not, see if there are consecutive front/back pairs
-        if( layerType == LT_FRONT && aLayer < User_9 && m_layers[aLayer+1].m_type == opposite )
-            return ToLAYER_ID( aLayer+1 );
-        else if( layerType == LT_BACK && aLayer > User_1 && m_layers[aLayer-1].m_type == opposite )
-            return ToLAYER_ID( aLayer-1 );
     }
 
-    return ::FlipLayer( aLayer, GetCopperLayerCount() );
+    // Match up non-custom-named consecutive front/back user layer pairs
+    for( int layer = User_1; layer < User_9; ++layer )
+    {
+        int next = layer + 1;
+
+        // ignore already-matched layers
+        if( m_layers[layer].m_opposite != layer || m_layers[next].m_opposite != next )
+            continue;
+
+        // ignore layer pairs that aren't consecutive front/back
+        if( m_layers[layer].m_type != LT_FRONT || m_layers[next].m_type != LT_BACK )
+            continue;
+
+        if( m_layers[layer].m_userName != m_layers[layer].m_name
+                && m_layers[next].m_userName != m_layers[next].m_name )
+        {
+            m_layers[layer].m_opposite = next;
+            m_layers[next].m_opposite = layer;
+        }
+    }
+}
+
+
+PCB_LAYER_ID BOARD::FlipLayer( PCB_LAYER_ID aLayer ) const
+{
+    return ToLAYER_ID( m_layers[aLayer].m_opposite );
 }
 
 

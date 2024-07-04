@@ -176,6 +176,7 @@ struct LAYER
         m_number  = 0;
         m_name.clear();
         m_userName.clear();
+        m_opposite = m_number;
     }
 
     /*
@@ -194,6 +195,7 @@ struct LAYER
     LAYER_T     m_type;      ///< The type of the layer. @see #LAYER_T
     bool        m_visible;
     int         m_number;    ///< The layer ID. @see PCB_LAYER_ID
+    int         m_opposite;  ///< Similar layer on opposite side of the board, if any.
 
     /**
      * Convert a #LAYER_T enum to a string representation of the layer type.
@@ -1291,8 +1293,12 @@ private:
             ( l->*aFunc )( std::forward<Args>( args )... );
     }
 
+    // Refresh user layer opposites.
+    void recalcOpposites();
+
     friend class PCB_EDIT_FRAME;
 
+private:
     /// the max distance between 2 end point to see them connected when building the board outlines
     int                 m_outlinesChainingEpsilon;
 
