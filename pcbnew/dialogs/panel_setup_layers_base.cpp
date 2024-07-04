@@ -37,17 +37,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer = new wxFlexGridSizer( 0, 3, 2, 8 );
 	m_LayerListFlexGridSizer->AddGrowableCol( 1 );
 	m_LayerListFlexGridSizer->AddGrowableCol( 2 );
-	m_LayerListFlexGridSizer->SetFlexibleDirection( wxBOTH );
+	m_LayerListFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-
-	m_LayerListFlexGridSizer->Add( 0, 5, 0, 0, 5 );
-
-
-	m_LayerListFlexGridSizer->Add( 0, 0, 0, 0, 5 );
-
-
-	m_LayerListFlexGridSizer->Add( 0, 0, 0, 0, 5 );
 
 
 	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -139,7 +130,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_FrontChoice->SetSelection( 0 );
 	m_FrontChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In1CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN1CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In1CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -153,7 +144,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In1Choice->SetSelection( 0 );
 	m_In1Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In1Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In1Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In2CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN2CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -167,7 +158,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In2Choice->SetSelection( 0 );
 	m_In2Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In2Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In2Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In3CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN3CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -181,7 +172,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In3Choice->SetSelection( 0 );
 	m_In3Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In3Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In3Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In4CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN4CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -195,7 +186,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In4Choice->SetSelection( 0 );
 	m_In4Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In4Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In4Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In5CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN5CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -209,7 +200,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In5Choice->SetSelection( 0 );
 	m_In5Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In5Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In5Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In6CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN6CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -223,7 +214,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In6Choice->SetSelection( 0 );
 	m_In6Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In6Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In6Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In7CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN7CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -237,7 +228,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In7Choice->SetSelection( 0 );
 	m_In7Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In7Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In7Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In8CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN8CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -251,7 +242,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In8Choice->SetSelection( 0 );
 	m_In8Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In8Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In8Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In9CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN9CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -265,7 +256,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In9Choice->SetSelection( 0 );
 	m_In9Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In9Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In9Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In10CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN10CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In10CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -279,7 +270,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In10Choice->SetSelection( 0 );
 	m_In10Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In10Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In10Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In11CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN11CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In11CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -293,7 +284,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In11Choice->SetSelection( 0 );
 	m_In11Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In11Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In11Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In12CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN12CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In12CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -307,7 +298,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In12Choice->SetSelection( 0 );
 	m_In12Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In12Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In12Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In13CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN13CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In13CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -321,7 +312,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In13Choice->SetSelection( 0 );
 	m_In13Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In13Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In13Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In14CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN14CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In14CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -335,7 +326,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In14Choice->SetSelection( 0 );
 	m_In14Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In14Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In14Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In15CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN15CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In15CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -349,7 +340,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In15Choice->SetSelection( 0 );
 	m_In15Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In15Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In15Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In16CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN16CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In16CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -363,7 +354,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In16Choice->SetSelection( 0 );
 	m_In16Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In16Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In16Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In17CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN17CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In17CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -377,7 +368,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In17Choice->SetSelection( 0 );
 	m_In17Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In17Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In17Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In18CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN18CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In18CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -391,7 +382,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In18Choice->SetSelection( 0 );
 	m_In18Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In18Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In18Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In19CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN19CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In19CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -405,7 +396,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In19Choice->SetSelection( 0 );
 	m_In19Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In19Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In19Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In20CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN20CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In20CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -419,7 +410,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In20Choice->SetSelection( 0 );
 	m_In20Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In20Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In20Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In21CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN21CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In21CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -433,7 +424,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In21Choice->SetSelection( 0 );
 	m_In21Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In21Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In21Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In22CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN22CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In22CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -447,7 +438,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In22Choice->SetSelection( 0 );
 	m_In22Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In22Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In22Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In23CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN23CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In23CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -461,7 +452,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In23Choice->SetSelection( 0 );
 	m_In23Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In23Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In23Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In24CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN24CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In24CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -475,7 +466,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In24Choice->SetSelection( 0 );
 	m_In24Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In24Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In24Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In25CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN25CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In25CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -489,7 +480,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In25Choice->SetSelection( 0 );
 	m_In25Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In25Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In25Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In26CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN26CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In26CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -503,7 +494,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In26Choice->SetSelection( 0 );
 	m_In26Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In26Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In26Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In27CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN27CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In27CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -517,7 +508,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In27Choice->SetSelection( 0 );
 	m_In27Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In27Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In27Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In28CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN28CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In28CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -531,7 +522,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In28Choice->SetSelection( 0 );
 	m_In28Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In28Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In28Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In29CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN29CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In29CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -545,7 +536,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In29Choice->SetSelection( 0 );
 	m_In29Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In29Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In29Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_In30CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN30CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In30CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -559,7 +550,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In30Choice->SetSelection( 0 );
 	m_In30Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_In30Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_In30Choice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_BackCheckBox = new wxCheckBox( m_LayersListPanel, ID_BACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_BackCheckBox->SetToolTip( _("If you want a back copper layer") );
@@ -577,7 +568,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_BackChoice->SetSelection( 0 );
 	m_BackChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_BackChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_BackChoice, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_MaskBackCheckBox = new wxCheckBox( m_LayersListPanel, ID_MASKBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskBackCheckBox->SetToolTip( _("If you want a solder mask layer for the back side of the board") );
@@ -725,7 +716,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User1Type->SetSelection( 0 );
 	m_User1Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User1Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_User1Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User2CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -739,7 +730,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User2Type->SetSelection( 0 );
 	m_User2Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User2Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_User2Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User3CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -753,7 +744,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User3Type->SetSelection( 0 );
 	m_User3Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User3Type, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_User3Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User4CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -767,7 +758,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User4Type->SetSelection( 0 );
 	m_User4Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User4Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_User4Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User5CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -781,7 +772,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User5Type->SetSelection( 0 );
 	m_User5Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User5Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_User5Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User6CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -795,7 +786,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User6Type->SetSelection( 0 );
 	m_User6Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User6Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_User6Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User7CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -809,7 +800,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User7Type->SetSelection( 0 );
 	m_User7Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User7Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_User7Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User8CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -823,7 +814,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User8Type->SetSelection( 0 );
 	m_User8Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User8Type, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_User8Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_User9CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_User9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -837,7 +828,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_User9Type->SetSelection( 0 );
 	m_User9Type->SetToolTip( _("Auxiliary layers do not flip with board side, while back and front layers do.") );
 
-	m_LayerListFlexGridSizer->Add( m_User9Type, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( m_User9Type, 0, wxEXPAND|wxRIGHT, 5 );
 
 
 	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
