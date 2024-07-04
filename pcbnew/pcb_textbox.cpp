@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <bitmaps.h>
@@ -327,29 +328,33 @@ void PCB_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
 
 wxString PCB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
-    BOARD* board = dynamic_cast<BOARD*>( GetParent() );
+    const FOOTPRINT* parentFootprint = GetParentFootprint();
+    const BOARD*     board = GetBoard();
 
-    std::function<bool( wxString* )> pcbTextResolver =
-            [&]( wxString* token ) -> bool
-            {
-                if( token->IsSameAs( wxT( "LAYER" ) ) )
-                {
-                    *token = GetLayerName();
-                    return true;
-                }
+    std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
+    {
+        if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
 
-                if( board->ResolveTextVar( token, aDepth + 1 ) )
-                {
-                    return true;
-                }
+        if( token->IsSameAs( wxT( "LAYER" ) ) )
+        {
+            *token = GetLayerName();
+            return true;
+        }
 
-                return false;
-            };
+        if( board->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
+
+        return false;
+    };
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
-    if( board && HasTextVars() && aDepth < 10 )
-        text = ExpandTextVars( text, &pcbTextResolver );
+    if( HasTextVars() )
+    {
+        if( aDepth < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
+            text = ExpandTextVars( text, &resolver );
+    }
 
     KIFONT::FONT*         font = getDrawFont();
     std::vector<VECTOR2I> corners = GetAnchorAndOppositeCorner();
