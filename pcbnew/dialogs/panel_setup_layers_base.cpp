@@ -38,7 +38,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->AddGrowableCol( 1 );
 	m_LayerListFlexGridSizer->AddGrowableCol( 2 );
 	m_LayerListFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
-	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
 
 	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -46,7 +46,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_CrtYdFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("CrtYd_Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdFrontName->SetMinSize( wxSize( 160,-1 ) );
 
-	m_LayerListFlexGridSizer->Add( m_CrtYdFrontName, 0, wxEXPAND|wxRIGHT, 5 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdFrontName, 0, wxRIGHT|wxEXPAND, 5 );
 
 	m_CrtYdFrontStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdFrontStaticText->Wrap( -1 );
@@ -130,7 +130,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_FrontChoice->SetSelection( 0 );
 	m_FrontChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
-	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxEXPAND|wxRIGHT, 5 );
+	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxRIGHT|wxEXPAND, 5 );
 
 	m_In1CheckBox = new wxCheckBox( m_LayersListPanel, ID_IN1CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In1CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );

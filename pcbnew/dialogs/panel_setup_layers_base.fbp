@@ -288,7 +288,7 @@
                   <property name="hgap">8</property>
                   <property name="minimum_size"></property>
                   <property name="name">m_LayerListFlexGridSizer</property>
-                  <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                  <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_NONE</property>
                   <property name="permission">protected</property>
                   <property name="rows">0</property>
                   <property name="vgap">2</property>
@@ -304,7 +304,7 @@
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxTextCtrl" expanded="true">
                       <property name="BottomDockable">1</property>
@@ -1527,7 +1527,7 @@
                   </object>
                   <object class="sizeritem" expanded="false">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxRIGHT</property>
+                    <property name="flag">wxRIGHT|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxChoice" expanded="false">
                       <property name="BottomDockable">1</property>
