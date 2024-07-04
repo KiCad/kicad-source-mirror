@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <cstddef>
 #include <exception>
 #include <sstream>
+#include <shared_mutex>
 #include <wx/app.h>
 
 #include <build_version.h>
@@ -88,6 +89,9 @@ static size_t stream_write_callback( void* aContents, size_t aSize, size_t aNmem
 static int xferinfo( void* aProgress, curl_off_t aDLtotal, curl_off_t aDLnow, curl_off_t aULtotal,
                      curl_off_t aULnow )
 {
+    if( KICAD_CURL::IsShuttingDown() )
+        return 1; // Should abort the operation
+
     CURL_PROGRESS* progress = static_cast<CURL_PROGRESS*>( aProgress );
     curl_off_t     curtime  = 0;
 
@@ -190,6 +194,12 @@ KICAD_CURL_EASY::~KICAD_CURL_EASY()
 
 int KICAD_CURL_EASY::Perform()
 {
+    std::shared_lock lock( KICAD_CURL::Mutex(), std::try_to_lock );
+
+    // If can't lock, we should be in the process of tearing down.
+    if( !lock )
+        return CURLE_ABORTED_BY_CALLBACK;
+
     if( m_headers )
         curl_easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
 
