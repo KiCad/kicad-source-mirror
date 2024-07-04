@@ -106,6 +106,8 @@ protected:
     void OnTableCharHook( wxKeyEvent& event ) override;
 
 private:
+    void SaveChange();
+
     void GenericProcessChar( wxKeyEvent& event );
 
     void OnIdle( wxIdleEvent& aEvent );
