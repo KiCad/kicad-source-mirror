@@ -923,6 +923,10 @@ protected:
 
     void updateSelectionFilterVisbility() override;
 
+#ifdef KICAD_IPC_API
+    void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
+#endif
+
 private:
     // Called when resizing the Hierarchy Navigator panel
     void OnResizeHierarchyNavigator( wxSizeEvent& aEvent );

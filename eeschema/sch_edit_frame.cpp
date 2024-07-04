@@ -189,12 +189,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 #ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
-            [&]( wxCommandEvent& aEvt )
-            {
-                wxLogTrace( traceApi, "SCH frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
-                ReCreateHToolbar();
-                aEvt.Skip();
-            } );
+                    &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
 
     m_hierarchy = new HIERARCHY_PANE( this );
@@ -429,6 +424,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
+#ifdef KICAD_IPC_API
+    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+                      &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
+#endif
+
     m_hierarchy->Unbind( wxEVT_SIZE, &SCH_EDIT_FRAME::OnResizeHierarchyNavigator, this );
 
     // Ensure m_canvasType is up to date, to save it in config
@@ -2553,3 +2554,12 @@ void SCH_EDIT_FRAME::updateSelectionFilterVisbility()
 
     selectionFilterPane.Show( showFilter );
 }
+
+#ifdef KICAD_IPC_API
+void SCH_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
+{
+    wxLogTrace( traceApi, "SCH frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
+    ReCreateHToolbar();
+    aEvt.Skip();
+}
+#endif
