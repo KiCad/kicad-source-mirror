@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2015, 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@
 #include <kicommon.h>
 #include <curl/curl.h>
 #include <string>
+#include <shared_mutex>
 
 // CURL_EXTERN expands to dllimport on MinGW which causes gcc warnings.  This really should
 // expand to nothing on MinGW.
@@ -74,6 +75,17 @@ public:
      * curl_global_init was called.
      */
     static void Cleanup();
+
+    /**
+     * Returns the mutex for shared locking when performing curl operations.
+     * Unique locking is performed when shutting down.
+     */
+    static std::shared_mutex& Mutex();
+
+    /**
+     * Returns true if all curl operations should terminate.
+     */
+    static bool IsShuttingDown();
 
     /**
      * Wrapper for curl_version(). Reports back a short string of loaded libraries.
