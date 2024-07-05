@@ -1836,49 +1836,59 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         // parent zone.
 
         auto buildSpokesFromOrigin =
-                [&]( const BOX2I& box )
+                [&]( const BOX2I& box, EDA_ANGLE angle )
                 {
-                    for( int i = 0; i < 4; i++ )
-                    {
-                        SHAPE_LINE_CHAIN spoke;
+                    VECTOR2I center = box.GetCenter();
+                    VECTOR2I half_size( box.GetWidth() / 2, box.GetHeight() / 2 );
 
-                        switch( i )
+                    // Function to find intersection of line with box edge
+                    auto intersectLineBox = [&](const VECTOR2D& direction) -> VECTOR2I {
+                        double dx = direction.x;
+                        double dy = direction.y;
+
+                        // Shortcircuit the axis cases because they will be degenerate in the
+                        // intersection test
+                        if( direction.x == 0 )
                         {
-                        case 0:       // lower stub
-                            spoke.Append( +spoke_half_w, -spoke_half_w );
-                            spoke.Append( -spoke_half_w, -spoke_half_w );
-                            spoke.Append( -spoke_half_w, box.GetBottom() );
-                            spoke.Append( 0,             box.GetBottom() );  // test pt
-                            spoke.Append( +spoke_half_w, box.GetBottom() );
-                            break;
-
-                        case 1:       // upper stub
-                            spoke.Append( +spoke_half_w, +spoke_half_w );
-                            spoke.Append( -spoke_half_w, +spoke_half_w );
-                            spoke.Append( -spoke_half_w, box.GetTop() );
-                            spoke.Append( 0,             box.GetTop() );     // test pt
-                            spoke.Append( +spoke_half_w, box.GetTop() );
-                            break;
-
-                        case 2:       // right stub
-                            spoke.Append( -spoke_half_w,  +spoke_half_w );
-                            spoke.Append( -spoke_half_w,  -spoke_half_w );
-                            spoke.Append( box.GetRight(), -spoke_half_w );
-                            spoke.Append( box.GetRight(), 0             );   // test pt
-                            spoke.Append( box.GetRight(), +spoke_half_w );
-                            break;
-
-                        case 3:       // left stub
-                            spoke.Append( +spoke_half_w, +spoke_half_w );
-                            spoke.Append( +spoke_half_w, -spoke_half_w );
-                            spoke.Append( box.GetLeft(), -spoke_half_w );
-                            spoke.Append( box.GetLeft(), 0             );    // test pt
-                            spoke.Append( box.GetLeft(), +spoke_half_w );
-                            break;
+                            return VECTOR2I(0, dy * half_size.y );
+                        }
+                        else if( direction.y == 0 )
+                        {
+                            return VECTOR2I(dx * half_size.x, 0);
                         }
 
-                        spoke.SetClosed( true );
-                        aSpokesList.push_back( std::move( spoke ) );
+                        // We are going to intersect with one side or the other.  Whichever
+                        // we hit first is the fraction of the spoke length we keep
+                        double tx = std::min( half_size.x / std::abs( dx ),
+                                              half_size.y / std::abs( dy ) );
+                        return VECTOR2I( dx * tx, dy * tx );
+                    };
+
+                    // Precalculate angles for four cardinal directions
+                    const EDA_ANGLE angles[4] = {
+                        EDA_ANGLE(  0.0, DEGREES_T ) + angle,  // Right
+                        EDA_ANGLE( 90.0, DEGREES_T ) + angle,  // Up
+                        EDA_ANGLE( 180.0, DEGREES_T ) + angle, // Left
+                        EDA_ANGLE( 270.0, DEGREES_T ) + angle  // Down
+                    };
+
+                    // Generate four spokes in cardinal directions
+                    for( const EDA_ANGLE& spokeAngle : angles )
+                    {
+                        VECTOR2D direction( spokeAngle.Cos(), spokeAngle.Sin() );
+                        VECTOR2D perpendicular = direction.Perpendicular();
+
+                        VECTOR2I intersection = intersectLineBox(direction);
+                        VECTOR2I spoke_side = perpendicular.Resize(spoke_half_w);
+
+                        SHAPE_LINE_CHAIN spoke;
+                        spoke.Append(center + spoke_side);
+                        spoke.Append(center - spoke_side);
+                        spoke.Append(center + intersection - spoke_side);
+                        spoke.Append(center + intersection);  // test pt
+                        spoke.Append(center + intersection + spoke_side);
+                        spoke.SetClosed(true);
+                        aSpokesList.push_back(std::move(spoke));
                     }
                 };
 
@@ -1929,61 +1939,12 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 }
             }
         }
-        // If the spokes are at a cardinal angle then we can generate them from a bounding box
-        // without trig.
-        else if( ( pad->GetOrientation() + pad->GetThermalSpokeAngle() ).IsCardinal() )
-        {
-            BOX2I spokesBox = pad->GetBoundingBox();
-            spokesBox.Inflate( thermalReliefGap + epsilon );
-
-            // Spokes are from center of pad shape, not from hole.
-            spokesBox.Offset( - pad->ShapePos() );
-
-            buildSpokesFromOrigin( spokesBox );
-
-            auto spokeIter = aSpokesList.rbegin();
-
-            for( int ii = 0; ii < 4; ++ii, ++spokeIter )
-                spokeIter->Move( pad->ShapePos() );
-        }
-        // Even if the spokes are rotated, we can fudge it for round and square pads by rotating
-        // the bounding box to match the spokes.
-        else if( pad->GetSizeX() == pad->GetSizeY() && pad->GetShape() != PAD_SHAPE::CUSTOM )
-        {
-            // Since the bounding-box needs to be correclty rotated we use a dummy pad to keep
-            // from dirtying the real pad's cached shapes.
-            PAD dummy_pad( *pad );
-            dummy_pad.SetOrientation( pad->GetThermalSpokeAngle() );
-
-            // Spokes are from center of pad shape, not from hole. So the dummy pad has no shape
-            // offset and is at position 0,0
-            dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
-            dummy_pad.SetOffset( VECTOR2I( 0, 0 ) );
-
-            BOX2I spokesBox = dummy_pad.GetBoundingBox();
-            spokesBox.Inflate( thermalReliefGap + epsilon );
-
-            buildSpokesFromOrigin( spokesBox );
-
-            auto spokeIter = aSpokesList.rbegin();
-
-            for( int ii = 0; ii < 4; ++ii, ++spokeIter )
-            {
-                spokeIter->Rotate( pad->GetOrientation() + pad->GetThermalSpokeAngle() );
-                spokeIter->Move( pad->ShapePos() );
-            }
-
-            // Remove group membership from dummy item before deleting
-            dummy_pad.SetParentGroup( nullptr );
-        }
-        // And lastly, even when we have to resort to trig, we can use it only in a post-process
-        // after the rotated-bounding-box trick from above.
         else
         {
             // Since the bounding-box needs to be correclty rotated we use a dummy pad to keep
             // from dirtying the real pad's cached shapes.
             PAD dummy_pad( *pad );
-            dummy_pad.SetOrientation( pad->GetThermalSpokeAngle() );
+            dummy_pad.SetOrientation( ANGLE_0 );
 
             // Spokes are from center of pad shape, not from hole. So the dummy pad has no shape
             // offset and is at position 0,0
@@ -1992,35 +1953,18 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
             BOX2I spokesBox = dummy_pad.GetBoundingBox();
 
-            // In this case make the box -big-; we're going to clip to the "real" bbox later.
-            spokesBox.Inflate( thermalReliefGap + spokesBox.GetWidth() + spokesBox.GetHeight() );
+            //Add the half width of the spoke to the inflate amount to account for the fact that
+            //the deflation procedure will shrink the bounding box by half the width of the spoke
+            spokesBox.Inflate( thermalReliefGap + epsilon + spoke_half_w );
 
-            buildSpokesFromOrigin( spokesBox );
-
-            BOX2I realBBox = pad->GetBoundingBox();
-            realBBox.Inflate( thermalReliefGap + epsilon );
+            buildSpokesFromOrigin( spokesBox, pad->GetThermalSpokeAngle() );
 
             auto spokeIter = aSpokesList.rbegin();
 
             for( int ii = 0; ii < 4; ++ii, ++spokeIter )
             {
-                spokeIter->Rotate( pad->GetOrientation() + pad->GetThermalSpokeAngle() );
+                spokeIter->Rotate( pad->GetOrientation() );
                 spokeIter->Move( pad->ShapePos() );
-
-                VECTOR2I origin_p = spokeIter->GetPoint( 0 );
-                VECTOR2I origin_m = spokeIter->GetPoint( 1 );
-                VECTOR2I origin = ( origin_p + origin_m ) / 2;
-                VECTOR2I end_m = spokeIter->GetPoint( 2 );
-                VECTOR2I end = spokeIter->GetPoint( 3 );
-                VECTOR2I end_p = spokeIter->GetPoint( 4 );
-
-                ClipLine( &realBBox, origin_p.x, origin_p.y, end_p.x, end_p.y );
-                ClipLine( &realBBox, origin_m.x, origin_m.y, end_m.x, end_m.y );
-                ClipLine( &realBBox, origin.x, origin.y, end.x, end.y );
-
-                spokeIter->SetPoint( 2, end_m );
-                spokeIter->SetPoint( 3, end );
-                spokeIter->SetPoint( 4, end_p );
             }
 
             // Remove group membership from dummy item before deleting
