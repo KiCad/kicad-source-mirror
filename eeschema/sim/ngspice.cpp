@@ -303,14 +303,13 @@ bool NGSPICE::LoadNetlist( const std::string& aNetlist )
     std::vector<char*> lines;
     std::stringstream  ss( aNetlist );
 
-    m_netlist = "";
+    m_netlist.erase();
 
-    while( !ss.eof() )
+    for( std::string line; std::getline( ss, line ); )
     {
-        char line[1024];
-        ss.getline( line, sizeof( line ) );
-        lines.push_back( strdup( line ) );
-        m_netlist += std::string( line ) + std::string( "\n" );
+        lines.push_back( strdup( line.data() ) );
+        m_netlist += line;
+        m_netlist += '\n';
     }
 
     lines.push_back( nullptr ); // sentinel, as requested in ngSpice_Circ description
