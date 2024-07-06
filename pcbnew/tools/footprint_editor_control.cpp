@@ -563,18 +563,23 @@ int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
     FP_LIB_TABLE* projectTable = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
     LIB_ID        libId = m_frame->GetLibTree()->GetSelectedLibId();
 
-    const char* libName = libId.GetLibNickname().c_str();
-    wxString    libItemName = wxEmptyString;
+    wxString libName = libId.GetLibNickname();
+    wxString  libItemName = wxEmptyString;
 
     for( FP_LIB_TABLE* table : { globalTable, projectTable } )
     {
         if( !table )
             break;
 
-        libItemName = table->FindRow( libName, true )->GetFullURI( true ).c_str();
-
-        libItemName = libItemName + "/" + libId.GetLibItemName() + ".kicad_mod";
-
+        try
+        {
+            libItemName = table->FindRow( libName, true )->GetFullURI( true );
+            libItemName = libItemName + "/" + libId.GetLibItemName() + ".kicad_mod";
+        }
+        catch( IO_ERROR& err )
+        {
+           // Do nothing: libName can be not found in globalTable if libName is in projectTable
+        }
     }
 
     if( !libItemName.IsEmpty() )
