@@ -970,13 +970,13 @@ void ZONE::HatchBorder()
 
         if( slope_flag == 1 )
         {
-            max_a = KiROUND( max_y - slope * min_x );
-            min_a = KiROUND( min_y - slope * max_x );
+            max_a = KiROUND<double, int64_t>( max_y - slope * min_x );
+            min_a = KiROUND<double, int64_t>( min_y - slope * max_x );
         }
         else
         {
-            max_a = KiROUND( max_y - slope * max_x );
-            min_a = KiROUND( min_y - slope * min_x );
+            max_a = KiROUND<double, int64_t>( max_y - slope * max_x );
+            min_a = KiROUND<double, int64_t>( min_y - slope * min_x );
         }
 
         min_a = (min_a / spacing) * spacing;
