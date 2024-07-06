@@ -1758,12 +1758,23 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePin( const SCH_PIN* aPin, OUTPUTFORMATTE
     else
         aFormatter.Print( 0, "X ~" );
 
+    int pin_orient = 'L';   // Printed as a char in lib file
+
+    switch( aPin->GetOrientation() )
+    {
+        case PIN_ORIENTATION::PIN_RIGHT: pin_orient = 'R'; break;
+        case PIN_ORIENTATION::PIN_LEFT: pin_orient = 'L'; break;
+        case PIN_ORIENTATION::PIN_UP: pin_orient = 'U'; break;
+        case PIN_ORIENTATION::PIN_DOWN: pin_orient = 'D'; break;
+        case PIN_ORIENTATION::INHERIT: pin_orient = 'L'; break;     // Should not happens
+    }
+
     aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
                       aPin->GetNumber().IsEmpty() ? "~" : TO_UTF8( aPin->GetNumber() ),
                       schIUScale.IUToMils( aPin->GetPosition().x ),
                       schIUScale.IUToMils( -aPin->GetPosition().y ),
                       schIUScale.IUToMils( (int) aPin->GetLength() ),
-                      (int) aPin->GetOrientation(),
+                      pin_orient,
                       schIUScale.IUToMils( aPin->GetNumberTextSize() ),
                       schIUScale.IUToMils( aPin->GetNameTextSize() ),
                       aPin->GetUnit(),
