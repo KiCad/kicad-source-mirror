@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-05-11 11:09+0000\n"
+"PO-Revision-Date: 2024-07-07 07:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.4\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16167,6 +16167,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' no es un archivo esquemático de KiCad.\n"
+"Utilice Archivo -> Importar para archivos esquemáticos que no sean de KiCad."
 
 #: eeschema/files-io.cpp:279
 msgid "Root"
@@ -20028,11 +20030,8 @@ msgid "SPICE Simulator"
 msgstr "Simulador"
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Errores durante la generación de netlist\n"
-"\n"
+msgstr "Errores durante la generación de lista de redes."
 
 #: eeschema/sim/simulator_frame.cpp:374
 msgid "Simulator requires a fully annotated schematic."
@@ -25481,6 +25480,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Ignora el aviso de actualización de la nueva versión anunciada. Se mostrarán "
+"notas de actualización adicionales para las versiones más recientes."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -25491,10 +25492,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Cierra este aviso de actualización. El aviso de actualización se mostrará "
+"nuevamente cuando reinicie KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Inicia un navegador web en la página de anuncios de lanzamiento."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -25502,7 +25505,7 @@ msgstr "Abrir página de descargas"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Ir a la página de descargas correspondiente a la plataforma."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -36859,9 +36862,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Propiedades por defecto para nuevos elementos gráficos:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:307
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "La biblioteca de huellas no se actualizó\n"
+msgstr "Las bibliotecas de huellas ocultas aún no son compatibles."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:486
 #, c-format
@@ -42566,10 +42568,9 @@ msgid "(Pad must have a positive size)"
 msgstr "Error: El pad debe tener un tamaño positivo."
 
 #: pcbnew/pad.cpp:2082
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr ""
-"El tamaño del agujero de vía tiene que ser menor que el diámetro de la vía"
+msgstr "(El tamaño del agujero del pad PTH tiene que ser mayor que %s)"
 
 #: pcbnew/pad.cpp:2094
 #, fuzzy
@@ -42698,7 +42699,7 @@ msgstr "Advertencia: la propiedad castellada es para pads PTH."
 
 #: pcbnew/pad.cpp:2270
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(No se permiten radios de esquina negativos)"
 
 #: pcbnew/pad.cpp:2272
 #, fuzzy
@@ -42707,7 +42708,7 @@ msgstr "Advertencia: el tamaño de esquina hará que el pad sea circular."
 
 #: pcbnew/pad.cpp:2277
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(No se permiten biselados de esquina negativos)"
 
 #: pcbnew/pad.cpp:2279
 #, fuzzy
@@ -43191,7 +43192,7 @@ msgstr "Cargando polígonos..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2038
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "El recuento de contornos de polígonos es %d, se esperaba 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2165
 msgid "Loading rules..."
@@ -43461,7 +43462,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4266
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Justificación de cuadro de texto desconocido %d, texto %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4328
 msgid "Loading rectangles..."
@@ -46199,7 +46200,7 @@ msgstr "Crear desde la selección"
 
 #: pcbnew/tools/convert_tool.cpp:444
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "El polígono resultante podría estar vacío"
 
 #: pcbnew/tools/convert_tool.cpp:446
 msgid "Objects must form a closed shape"
