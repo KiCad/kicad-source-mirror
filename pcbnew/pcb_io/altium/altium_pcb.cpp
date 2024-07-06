@@ -4078,14 +4078,6 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         { "PRINT_DATE", "CURRENT_DATE"},
     };
 
-    wxString  kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
-
-    fpText->SetText(kicadText);
-    fpText->SetKeepUpright( false );
-    fpText->SetLayer( aLayer );
-    fpText->SetPosition( aElem.position );
-    fpText->SetIsKnockout( aElem.isInverted );
-
     if( isTextbox )
     {
         item = fpTextbox.get();
@@ -4096,7 +4088,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
                                   aElem.textbox_rect_width + aElem.margin_border_width );
         fpTextbox->SetBorderEnabled( false );
 
-        // KiCad only does top alignment for textboxes atm
+        // KiCad only does top? alignment for textboxes atm
         switch( aElem.textbox_rect_justification )
         {
         case ALTIUM_TEXT_POSITION::LEFT_TOP:
@@ -4172,6 +4164,14 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
             break;
         }
     }
+
+
+    wxString  kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
+
+    text->SetText( kicadText );
+    text->SetKeepUpright( false );
+    item->SetLayer( aLayer );
+    item->SetIsKnockout( aElem.isInverted );
 
     ConvertTexts6ToEdaTextSettings( aElem, text );
 
