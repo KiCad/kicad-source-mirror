@@ -864,7 +864,7 @@ int ERC_TESTER::TestPinToPin()
                    } );
 
         ERC_SCH_PIN_CONTEXT needsDriver;
-        ELECTRICAL_PINTYPE  needsDriverType;
+        ELECTRICAL_PINTYPE  needsDriverType = ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
         bool                hasDriver = false;
 
         // We need different drivers for power nets and normal nets.
