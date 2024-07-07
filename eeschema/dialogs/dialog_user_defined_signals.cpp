@@ -29,6 +29,7 @@
 #include <../sim/simulator_frame.h>
 #include <dialog_user_defined_signals.h>
 #include <string_utils.h>
+#include <validators.h>
 
 
 DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aParent,
