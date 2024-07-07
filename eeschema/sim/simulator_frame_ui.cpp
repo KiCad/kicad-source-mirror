@@ -1366,6 +1366,8 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
 
         fmt.UpdateUnits( units );
         SetMeasureFormat( aRow, fmt );
+
+        updateMeasurementsFromGrid();
     }
 
     if( m_simulatorFrame->SimFinished() )
