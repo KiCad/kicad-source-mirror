@@ -84,9 +84,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newN
     {
         SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol();
 
-        auto node = m_dataStore[symbol->m_Uuid].extract( m_cols[aCol].m_fieldName );
-        node.key() = newName;
-        m_dataStore[symbol->m_Uuid].insert( std::move( node ) );
+        // Careful; field may have already been renamed from another sheet instance
+        if( auto node = m_dataStore[symbol->m_Uuid].extract( m_cols[aCol].m_fieldName ) )
+        {
+            node.key() = newName;
+            m_dataStore[symbol->m_Uuid].insert( std::move( node ) );
+        }
     }
 
     m_cols[aCol].m_fieldName = newName;
