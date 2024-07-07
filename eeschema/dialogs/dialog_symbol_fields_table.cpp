@@ -343,8 +343,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( DATASHEET_FIELD ) )
     {
         // set datasheet column viewer button
-        attr->SetEditor(
-                new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) ) );
+        attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) ) );
         m_grid->SetColAttr( aCol, attr );
     }
     else if( m_dataModel->ColIsQuantity( aCol ) || m_dataModel->ColIsItemNumber( aCol ) )
@@ -1268,7 +1267,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 
     if( path.IsEmpty() )
     {
-        DisplayError( this, _( "No filename specified in exporter" ) );
+        DisplayError( this, _( "No output file specified in Export tab." ) );
         return;
     }
 
@@ -1382,9 +1381,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 
     wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxID_ANY );
 
-    wxWindow* parent = GetParent();
-
-    if( parent )
+    if( wxWindow* parent = GetParent() )
         wxQueueEvent( parent, evt );
 }
 
