@@ -1894,27 +1894,41 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 
         TransformShapeToPolygon( padOutline, UNDEFINED_LAYER, 0, maxError, ERROR_INSIDE );
 
-        if( !padOutline.Collide( GetPosition() ) )
+        if( GetAttribute() == PAD_ATTRIB::PTH )
         {
-            aErrorHandler( DRCE_PADSTACK, _( "Pad hole not inside pad shape" ) );
+            // Test if there is copper area outside hole
+            std::shared_ptr<SHAPE_SEGMENT> hole = GetEffectiveHoleShape();
+            SHAPE_POLY_SET                 holeOutline;
+
+            TransformOvalToPolygon( holeOutline, hole->GetSeg().A, hole->GetSeg().B,
+                                    hole->GetWidth(), ARC_HIGH_DEF, ERROR_OUTSIDE );
+
+            SHAPE_POLY_SET copper = padOutline;
+            copper.BooleanSubtract( holeOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+            if( copper.IsEmpty() )
+            {
+                aErrorHandler( DRCE_PADSTACK, _( "(PTH pad hole leaves no copper)" ) );
+            }
+            else
+            {
+                // Test if the pad hole is fully inside the copper area
+                holeOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+                if( !holeOutline.IsEmpty() )
+                    aErrorHandler( DRCE_PADSTACK, _( "(PTH pad hole non fully inside copper)" ) );
+            }
         }
-        else if( GetAttribute() == PAD_ATTRIB::PTH )
+        else
         {
-            std::shared_ptr<SHAPE_SEGMENT> slot = GetEffectiveHoleShape();
-            SHAPE_POLY_SET                 slotOutline;
-
-            TransformOvalToPolygon( slotOutline, slot->GetSeg().A, slot->GetSeg().B,
-                                    slot->GetWidth(), maxError, ERROR_OUTSIDE );
-
-            padOutline.BooleanSubtract( slotOutline, SHAPE_POLY_SET::PM_FAST );
-
-            if( padOutline.IsEmpty() )
-                aErrorHandler( DRCE_PADSTACK, _( "Pad hole will leave no copper" ) );
+            // Test only if the pad hole's centre is inside the copper area
+            if( !padOutline.Collide( GetPosition() ) )
+                aErrorHandler( DRCE_PADSTACK, _( "(pad hole not inside pad shape)" ) );
         }
     }
 
     if( GetLocalClearance() < 0 )
-        aErrorHandler( DRCE_PADSTACK, _( "Negative local clearance values have no effect" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "(negative local clearance values have no effect)" ) );
 
     // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
     // However the negative solder mask clearance must not create negative mask size
@@ -1933,9 +1947,9 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 
                 if( absMargin > shapeBBox.GetWidth() || absMargin > shapeBBox.GetHeight() )
                 {
-                    aErrorHandler( DRCE_PADSTACK, _( "Negative solder mask clearance is larger "
+                    aErrorHandler( DRCE_PADSTACK, _( "(negative solder mask clearance is larger "
                                                      "than some shape primitives; results may be "
-                                                     "surprising" ) );
+                                                     "surprising)" ) );
 
                     break;
                 }
@@ -1943,8 +1957,8 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
         }
         else if( absMargin > pad_size.x || absMargin > pad_size.y )
         {
-            aErrorHandler( DRCE_PADSTACK, _( "Negative solder mask clearance is larger than pad; "
-                                             "no solder mask will be generated" ) );
+            aErrorHandler( DRCE_PADSTACK, _( "(negative solder mask clearance is larger than pad; "
+                                             "no solder mask will be generated)" ) );
         }
     }
 
@@ -1962,8 +1976,8 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 
     if( paste_size.x <= 0 || paste_size.y <= 0 )
     {
-        aErrorHandler( DRCE_PADSTACK, _( "Negative solder paste margin is larger than pad; "
-                                         "no solder paste mask will be generated" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "(negative solder paste margin is larger than pad; "
+                                         "no solder paste mask will be generated)" ) );
     }
 
     LSET padlayers_mask = GetLayerSet();
@@ -1972,14 +1986,14 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
         aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Pad has no layer)" ) );
 
     if( GetAttribute() == PAD_ATTRIB::PTH && !IsOnCopperLayer() )
-        aErrorHandler( DRCE_PADSTACK, _( "PTH pad has no copper layers" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "(PTH pad has no copper layers)" ) );
 
     if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
     {
         if( ( drill_size.x || drill_size.y ) && GetAttribute() != PAD_ATTRIB::NPTH )
         {
-            aErrorHandler( DRCE_PADSTACK, _( "Plated through holes normally have a copper pad on "
-                                             "at least one layer" ) );
+            aErrorHandler( DRCE_PADSTACK, _( "(plated through holes normally have a copper pad on "
+                                             "at least one layer)" ) );
         }
     }
 
@@ -1997,8 +2011,8 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
     case PAD_ATTRIB::CONN:      // Connector pads are smd pads, just they do not have solder paste.
         if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
         {
-            aErrorHandler( DRCE_PADSTACK, _( "Connector pads normally have no solder paste; use a "
-                                             "SMD pad instead" ) );
+            aErrorHandler( DRCE_PADSTACK, _( "(connector pads normally have no solder paste; use a "
+                                             "SMD pad instead)" ) );
         }
         KI_FALLTHROUGH;
 
@@ -2011,37 +2025,37 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 
         if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )
         {
-            aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper on both sides of the board" ) );
+            aErrorHandler( DRCE_PADSTACK, _( "(SMD pad has copper on both sides of the board)" ) );
         }
         else if( IsOnLayer( F_Cu ) )
         {
             if( IsOnLayer( B_Mask ) )
             {
-                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and mask layers on different "
-                                                 "sides of the board" ) );
+                aErrorHandler( DRCE_PADSTACK, _( "(SMD pad has copper and mask layers on different "
+                                                 "sides of the board)" ) );
             }
             else if( IsOnLayer( B_Paste ) )
             {
-                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and paste layers on different "
-                                                 "sides of the board" ) );
+                aErrorHandler( DRCE_PADSTACK, _( "(SMD pad has copper and paste layers on different "
+                                                 "sides of the board)" ) );
             }
         }
         else if( IsOnLayer( B_Cu ) )
         {
             if( IsOnLayer( F_Mask ) )
             {
-                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and mask layers on different "
-                                                 "sides of the board" ) );
+                aErrorHandler( DRCE_PADSTACK, _( "(SMD pad has copper and mask layers on different "
+                                                 "sides of the board)" ) );
             }
             else if( IsOnLayer( F_Paste ) )
             {
-                aErrorHandler( DRCE_PADSTACK, _( "SMD pad has copper and paste layers on different "
-                                                 "sides of the board" ) );
+                aErrorHandler( DRCE_PADSTACK, _( "(SMD pad has copper and paste layers on different "
+                                                 "sides of the board)" ) );
             }
         }
         else if( innerlayers_mask.count() != 0 )
         {
-            aErrorHandler( DRCE_PADSTACK, _( "SMD pad has no outer layers" ) );
+            aErrorHandler( DRCE_PADSTACK, _( "(SMD pad has no outer layers)" ) );
         }
 
         break;
@@ -2051,34 +2065,34 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
     if( ( GetProperty() == PAD_PROP::FIDUCIAL_GLBL || GetProperty() == PAD_PROP::FIDUCIAL_LOCAL )
             && GetAttribute() == PAD_ATTRIB::NPTH )
     {
-        aErrorHandler( DRCE_PADSTACK, _( "Fiducial property makes no sense on NPTH pads" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('fiducial' property makes no sense on NPTH pads)" ) );
     }
 
     if( GetProperty() == PAD_PROP::TESTPOINT && GetAttribute() == PAD_ATTRIB::NPTH )
-        aErrorHandler( DRCE_PADSTACK, _( "Testpoint property makes no sense on NPTH pads" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('testpoint' property makes no sense on NPTH pads)" ) );
 
     if( GetProperty() == PAD_PROP::HEATSINK && GetAttribute() == PAD_ATTRIB::NPTH )
-        aErrorHandler( DRCE_PADSTACK, _( "Heatsink property makes no sense of NPTH pads" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('heatsink' property makes no sense of NPTH pads)" ) );
 
     if( GetProperty() == PAD_PROP::CASTELLATED && GetAttribute() != PAD_ATTRIB::PTH )
-        aErrorHandler( DRCE_PADSTACK, _( "Castellated property is for PTH pads" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('castellated' property is for PTH pads)" ) );
 
     if( GetProperty() == PAD_PROP::BGA && GetAttribute() != PAD_ATTRIB::SMD )
-        aErrorHandler( DRCE_PADSTACK, _( "BGA property is for SMD pads" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('BGA' property is for SMD pads)" ) );
 
     if( GetShape() == PAD_SHAPE::ROUNDRECT )
     {
         if( GetRoundRectRadiusRatio() < 0.0 )
-            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Negative corner radius is not allowed)" ) );
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(negative corner radius is not allowed)" ) );
         else if( GetRoundRectRadiusRatio() > 50.0 )
-            aErrorHandler( DRCE_PADSTACK, _( "Corner size will make pad circular" ) );
+            aErrorHandler( DRCE_PADSTACK, _( "(corner size will make pad circular)" ) );
     }
     else if( GetShape() == PAD_SHAPE::CHAMFERED_RECT )
     {
         if( GetChamferRectRatio() < 0.0 )
-            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Negative corner chamfer is not allowed)" ) );
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(negative corner chamfer is not allowed)" ) );
         else if( GetChamferRectRatio() > 50.0 )
-            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Corner chamfer is too large)" ) );
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(corner chamfer is too large)" ) );
     }
     else if( GetShape() == PAD_SHAPE::TRAPEZOID )
     {
@@ -2087,7 +2101,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
             || ( GetDelta().y < 0 && GetDelta().y < -GetSize().x )
             || ( GetDelta().y > 0 && GetDelta().y > GetSize().x ) )
         {
-            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Trapazoid delta is too large)" ) );
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(trapazoid delta is too large)" ) );
         }
     }
 
@@ -2098,7 +2112,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
         MergePrimitivesAsPolygon( &mergedPolygon );
 
         if( mergedPolygon.OutlineCount() > 1 )
-            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Custom pad shape must resolve to a single polygon)" ) );
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(custom pad shape must resolve to a single polygon)" ) );
     }
 }
 

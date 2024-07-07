@@ -130,7 +130,7 @@ DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
         wxT( "via_diameter" ) );
 
 DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
-        wxT( "" ),
+        wxT( "Padstack is questionable" ),
         wxT( "padstack" ) );
 
 DRC_ITEM DRC_ITEM::padstackInvalid( DRCE_PADSTACK_INVALID,
