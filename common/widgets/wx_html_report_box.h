@@ -35,6 +35,8 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 
+    ~WX_HTML_REPORT_BOX();
+
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return !m_messages.empty(); }
@@ -61,6 +63,8 @@ public:
 
 private:
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
+    void onRightClick( wxMouseEvent& event );
+    void onMenuEvent( wxMenuEvent& event );
 
     wxString generateHtml( const wxString& aLine );
 
