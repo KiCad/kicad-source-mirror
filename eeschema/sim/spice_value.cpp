@@ -40,10 +40,18 @@
 
 void SPICE_VALUE_FORMAT::FromString( const wxString& aString )
 {
-    long val;
-    aString.Left( 1 ).ToLong( &val );
-    Precision = (int) val;
-    Range = aString.Right( aString.Length() - 1 );
+    if( aString.IsEmpty() )
+    {
+        Precision = 3;
+        Range = wxS( "~V" );
+    }
+    else
+    {
+        long val;
+        aString.Left( 1 ).ToLong( &val );
+        Precision = (int) val;
+        Range = aString.Right( aString.Length() - 1 );
+    }
 }
 
 
