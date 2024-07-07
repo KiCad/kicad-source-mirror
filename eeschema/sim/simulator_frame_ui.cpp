@@ -1214,6 +1214,7 @@ void SIMULATOR_FRAME_UI::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
     if( col == COL_MEASUREMENT )
     {
         UpdateMeasurement( row );
+        updateMeasurementsFromGrid();
         OnModify();
     }
     else
@@ -1496,6 +1497,7 @@ void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
     SetMeasureFormat( row, { 3, wxS( "~V" ) } );
 
     UpdateMeasurement( row );
+    updateMeasurementsFromGrid();
     OnModify();
 
     // Always leave at least one empty row for type-in:
@@ -2397,8 +2399,6 @@ void SIMULATOR_FRAME_UI::updateMeasurementsFromGrid()
 
 void SIMULATOR_FRAME_UI::onPlotChanging( wxAuiNotebookEvent& event )
 {
-    updateMeasurementsFromGrid();
-
     event.Skip();
 }
 
