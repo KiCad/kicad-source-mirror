@@ -465,9 +465,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 } );
     }
 
-    if( bulkAddedItems.size() > 0 || bulkRemovedItems.size() > 0 || itemsChanged.size() > 0 )
-        board->OnItemsCompositeUpdate( bulkAddedItems, bulkRemovedItems, itemsChanged );
-
     if( m_isBoardEditor )
     {
         size_t num_changes = m_changes.size();
@@ -529,6 +526,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
         }
     }
+
+    if( bulkAddedItems.size() > 0 || bulkRemovedItems.size() > 0 || itemsChanged.size() > 0 )
+        board->OnItemsCompositeUpdate( bulkAddedItems, bulkRemovedItems, itemsChanged );
 
     if( frame )
     {
