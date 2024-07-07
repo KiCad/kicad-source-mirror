@@ -57,12 +57,17 @@ void ARRAY_CREATOR::Invoke()
 
     FOOTPRINT* const fp = m_isFootprintEditor ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
 
-    const bool     enableArrayNumbering = m_isFootprintEditor;
-    const VECTOR2I rotPoint = m_selection.GetCenter();
+    const bool enableArrayNumbering = m_isFootprintEditor;
+    VECTOR2I   origin;
+
+    if( m_selection.Size() == 1 )
+        origin = m_selection.Items()[0]->GetPosition();
+    else
+        origin = m_selection.GetCenter();
 
     std::unique_ptr<ARRAY_OPTIONS> array_opts;
 
-    DIALOG_CREATE_ARRAY dialog( &m_parent, array_opts, enableArrayNumbering, rotPoint );
+    DIALOG_CREATE_ARRAY dialog( &m_parent, array_opts, enableArrayNumbering, origin );
 
     int ret = dialog.ShowModal();
 
