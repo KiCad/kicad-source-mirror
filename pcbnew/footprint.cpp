@@ -3068,93 +3068,6 @@ void FOOTPRINT::CheckPads( UNITS_PROVIDER* aUnitsProvider,
                 {
                     aErrorHandler( pad, errorCode, msg );
                 } );
-        if( pad->GetAttribute() == PAD_ATTRIB::PTH ||  pad->GetAttribute() == PAD_ATTRIB::NPTH )
-        {
-            // Ensure the drill size can be handled in next calculations.
-            // Use min size = 4 IU to be able to build a polygon from a hole shape
-            const int min_drill_size = 4;
-
-            if( pad->GetDrillSizeX() <= min_drill_size || pad->GetDrillSizeY() <= min_drill_size )
-            {
-                (aErrorHandler)( pad, DRCE_PAD_TH_WITH_NO_HOLE,
-                                 _( "(PTH pad's hole size is very small or null)" ) );
-            }
-        }
-
-        if( pad->GetAttribute() == PAD_ATTRIB::PTH )
-        {
-            if( !pad->IsOnCopperLayer() )
-            {
-                (aErrorHandler)( pad, DRCE_PADSTACK, _( "(PTH pad has no copper layers)" ) );
-            }
-            else
-            {
-                // Ensure the pad has a copper area.
-                // min drill size is already tested and converting shapes to polygon can be made
-                LSET           lset = pad->GetLayerSet() & LSET::AllCuMask();
-                PCB_LAYER_ID   layer = lset.Seq().at( 0 );
-                SHAPE_POLY_SET padOutline;
-
-                pad->TransformShapeToPolygon( padOutline, layer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
-
-                std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
-                SHAPE_POLY_SET                 holeOutline;
-
-                TransformOvalToPolygon( holeOutline, hole->GetSeg().A, hole->GetSeg().B,
-                                        hole->GetWidth(), ARC_HIGH_DEF, ERROR_OUTSIDE );
-
-                // Test if there is copper area outside hole
-                SHAPE_POLY_SET padOutlineCopy = padOutline;
-                padOutline.BooleanSubtract( holeOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
-
-                if( padOutline.IsEmpty() )
-                    aErrorHandler( pad, DRCE_PADSTACK, _( "(PTH pad's hole leaves no copper)" ) );
-                else
-                {
-                    // Test if the pad hole is fully inside the copper area
-                    holeOutline.BooleanSubtract( padOutlineCopy, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
-
-                    if( !holeOutline.IsEmpty() )
-                        aErrorHandler( pad, DRCE_PADSTACK,
-                                      _( "(PTH pad's hole non fully inside copper)" ) );
-                }
-            }
-        }
-
-        if( pad->GetAttribute() == PAD_ATTRIB::SMD )
-        {
-            if( pad->IsOnLayer( F_Cu ) && pad->IsOnLayer( B_Cu ) )
-            {
-                aErrorHandler( pad, DRCE_PADSTACK,
-                               _( "(SMD pad appears on both front and back copper)" ) );
-            }
-            else if( pad->IsOnLayer( F_Cu ) )
-            {
-                if( pad->IsOnLayer( B_Mask ) )
-                {
-                    aErrorHandler( pad, DRCE_PADSTACK,
-                                   _( "(SMD pad copper and mask layers don't match)" ) );
-                }
-                else if( pad->IsOnLayer( B_Paste ) )
-                {
-                    aErrorHandler( pad, DRCE_PADSTACK,
-                                   _( "(SMD pad copper and paste layers don't match)" ) );
-                }
-            }
-            else if( pad->IsOnLayer( B_Cu ) )
-            {
-                if( pad->IsOnLayer( F_Mask ) )
-                {
-                    aErrorHandler( pad, DRCE_PADSTACK,
-                                   _( "(SMD pad copper and mask layers don't match)" ) );
-                }
-                else if( pad->IsOnLayer( F_Paste ) )
-                {
-                    aErrorHandler( pad, DRCE_PADSTACK,
-                                   _( "(SMD pad copper and paste layers don't match)" ) );
-                }
-            }
-        }
     }
 }
 
@@ -3342,9 +3255,7 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
     std::set<wxString> padNumbers;
     wxString           msg;
 
-    auto ret = MapPadNumbersToNetTieGroups();
-
-    for( auto [ padNumber, _ ] : ret )
+    for( const auto& [ padNumber, _ ] : MapPadNumbersToNetTieGroups() )
     {
         const PAD* pad = FindPadByNumber( padNumber );
 
@@ -3458,9 +3369,8 @@ double FOOTPRINT::Similarity( const BOARD_ITEM& aOther ) const
 
     double similarity = 1.0;
 
-    for( size_t ii = 0; ii < m_pads.size(); ++ii )
+    for( const PAD* pad : m_pads)
     {
-        const PAD* pad = m_pads[ii];
         const PAD* otherPad = other.FindPadByNumber( pad->GetNumber() );
 
         if( !otherPad )
@@ -3615,8 +3525,8 @@ bool FOOTPRINT::cmp_padstack::operator()( const PAD* aFirst, const PAD* aSecond 
     if( aFirst->GetLocalSolderMaskMargin() != aSecond->GetLocalSolderMaskMargin() )
         return aFirst->GetLocalSolderMaskMargin() < aSecond->GetLocalSolderMaskMargin();
 
-    std::shared_ptr<SHAPE_POLY_SET> firstShape = aFirst->GetEffectivePolygon( ERROR_INSIDE );
-    std::shared_ptr<SHAPE_POLY_SET> secondShape = aSecond->GetEffectivePolygon( ERROR_INSIDE );
+    const std::shared_ptr<SHAPE_POLY_SET>& firstShape = aFirst->GetEffectivePolygon( ERROR_INSIDE );
+    const std::shared_ptr<SHAPE_POLY_SET>& secondShape = aSecond->GetEffectivePolygon( ERROR_INSIDE );
 
     if( firstShape->VertexCount() != secondShape->VertexCount() )
         return firstShape->VertexCount() < secondShape->VertexCount();

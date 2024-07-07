@@ -652,9 +652,8 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(Rectangle has null or very small "
-                                                           "size: %d nm)" ),
-                                                        dim ),
+                    (*aErrorHandler)( wxString::Format( _( "(rectangle has null or very small "
+                                                           "size: %d nm)" ), dim ),
                                       graphic, nullptr, graphic->GetStart() );
                 }
             }
@@ -663,15 +662,16 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
         case SHAPE_T::CIRCLE:
         {
-            if( graphic->GetRadius()  <= min_dist )
+            int r = graphic->GetRadius();
+
+            if( r <= min_dist )
             {
                 success = false;
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(Circle has null or very small "
-                                                           "radius: %d nm)" ),
-                                                        (int)graphic->GetRadius() ),
+                    (*aErrorHandler)( wxString::Format( _( "(circle has null or very small "
+                                                           "radius: %d nm)" ), r ),
                                       graphic, nullptr, graphic->GetStart() );
                 }
             }
@@ -689,7 +689,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(Segment has null or very small "
+                    (*aErrorHandler)( wxString::Format( _( "(segment has null or very small "
                                                            "length: %d nm)" ), dim ),
                                       graphic, nullptr, graphic->GetStart() );
                 }
@@ -712,7 +712,8 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(Arc has null or very small size: %d nm)" ), dim ),
+                    (*aErrorHandler)( wxString::Format( _( "(arc has null or very small size: "
+                                                           "%d nm)" ), dim ),
                                       graphic, nullptr, graphic->GetStart() );
                 }
             }
