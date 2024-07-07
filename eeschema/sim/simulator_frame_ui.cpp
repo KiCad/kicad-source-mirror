@@ -2432,6 +2432,8 @@ void SIMULATOR_FRAME_UI::updateMeasurementsFromGrid()
 
 void SIMULATOR_FRAME_UI::onPlotChanging( wxAuiNotebookEvent& event )
 {
+    m_measurementsGrid->ClearRows();
+
     event.Skip();
 }
 
