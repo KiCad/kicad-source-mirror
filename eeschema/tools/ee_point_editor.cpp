@@ -1272,7 +1272,19 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     commit.Modify( shape, m_frame->GetScreen() );
 
-    poly.Remove( getEditedPointIndex() );
+    int idx = getEditedPointIndex();
+    int last = (int) poly.GetPointCount() - 1;
+
+    if( idx == 0 && poly.GetPoint( 0 ) == poly.GetPoint( last ) )
+    {
+        poly.Remove( idx );
+        poly.SetPoint( last-1, poly.GetPoint( 0 ) );
+    }
+    else
+    {
+        poly.Remove( idx );
+    }
+
     setEditedPoint( nullptr );
 
     updateItem( shape, true );
