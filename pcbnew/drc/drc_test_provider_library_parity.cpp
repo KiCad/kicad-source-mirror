@@ -643,7 +643,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
                 && GetLocalSolderPasteMarginRatio() != aLibFP->GetLocalSolderPasteMarginRatio() )
         {
             diff = true;
-            aReporter->Report( _( "\"Solder paste relative clearance overridden." ) );
+            aReporter->Report( _( "Solder paste relative clearance overridden." ) );
         }
 
         if( GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED
