@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Mikołaj Wielgus <wielgusmikolaj@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,11 @@
 class HTML_WINDOW : public wxHtmlWindow
 {
 public:
-    HTML_WINDOW( wxWindow* aParent, wxWindowID aId=wxID_ANY, const wxPoint& aPos=wxDefaultPosition,
-                 const wxSize& aSize=wxDefaultSize, long aStyle=wxHW_DEFAULT_STYLE,
-                 const wxString& aName="htmlWindow" );
+    HTML_WINDOW( wxWindow* aParent, wxWindowID aId = wxID_ANY,
+                 const wxPoint& aPos = wxDefaultPosition, const wxSize& aSize = wxDefaultSize,
+                 long aStyle = wxHW_DEFAULT_STYLE, const wxString& aName = wxT( "htmlWindow" ) );
+
+    ~HTML_WINDOW();
 
     bool SetPage( const wxString& aSource ) override;
     bool AppendToPage( const wxString& aSource );
@@ -47,6 +49,8 @@ public:
 
 private:
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
+    void onRightClick( wxMouseEvent& event );
+    void onMenuEvent( wxMenuEvent& event );
 
     wxString m_pageSource;
 };

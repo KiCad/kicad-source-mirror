@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Mikołaj Wielgus <wielgusmikolaj@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <widgets/html_window.h>
+#include <wx/menu.h>
+#include <wx/clipbrd.h>
+#include <wx/log.h>
 #include <wx/settings.h>
+#include <widgets/html_window.h>
 
 
 HTML_WINDOW::HTML_WINDOW( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
@@ -32,6 +35,15 @@ HTML_WINDOW::HTML_WINDOW( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos
 {
     Bind( wxEVT_SYS_COLOUR_CHANGED,
           wxSysColourChangedEventHandler( HTML_WINDOW::onThemeChanged ), this );
+
+    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( HTML_WINDOW::onRightClick ), nullptr, this );
+}
+
+
+HTML_WINDOW::~HTML_WINDOW()
+{
+	// Disconnect Events
+	Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( HTML_WINDOW::onRightClick ), nullptr, this );
 }
 
 
@@ -70,3 +82,32 @@ void HTML_WINDOW::onThemeChanged( wxSysColourChangedEvent &aEvent )
 {
     ThemeChanged();
 }
+
+
+void HTML_WINDOW::onRightClick( wxMouseEvent& event )
+{
+    wxMenu popup;
+    popup.Append( wxID_COPY, "Copy" );
+    PopupMenu( &popup );
+}
+
+
+void HTML_WINDOW::onMenuEvent( wxMenuEvent& event )
+{
+    if( event.GetId() == wxID_COPY )
+    {
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+        if( wxTheClipboard->Open() )
+        {
+            bool primarySelection = wxTheClipboard->IsUsingPrimarySelection();
+            wxTheClipboard->UsePrimarySelection( false );   // required to use the main clipboard
+            wxTheClipboard->SetData( new wxTextDataObject( SelectionToText() ) );
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+            wxTheClipboard->Close();
+            wxTheClipboard->UsePrimarySelection( primarySelection );
+        }
+    }
+}
+
+
