@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:55-0700\n"
-"PO-Revision-Date: 2024-05-30 17:31+0000\n"
+"PO-Revision-Date: 2024-07-08 16:53+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -10079,7 +10079,7 @@ msgstr "Será colocado de volta na lista %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:612 pcbnew/dialogs/dialog_drc.cpp:638
 msgid "Exclude this violation"
-msgstr "Exclua esta violação"
+msgstr "Excluir esta violação"
 
 #: eeschema/dialogs/dialog_erc.cpp:613 pcbnew/dialogs/dialog_drc.cpp:639
 #, c-format
@@ -15342,6 +15342,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' não é um arquivo de esquema do KiCad.\n"
+"Use Arquivo -> Importar para arquivos esquemáticos que não sejam do KiCad."
 
 #: eeschema/files-io.cpp:274
 msgid "Root"
@@ -19113,11 +19115,8 @@ msgid "Spice Simulator"
 msgstr "Simulador Spice"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Houveram erros durante a geração da netlist.\n"
-"\n"
+msgstr "Houveram erros durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -19144,9 +19143,9 @@ msgid "Another simulation is already running."
 msgstr "Outra simulação já está em andamento."
 
 #: eeschema/sim/simulator_frame.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Não foi possível carregar o arquivo %s"
+msgstr "Não foi possível carregar ou analisar o arquivo %s"
 
 #: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
@@ -35411,9 +35410,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Propriedades padrão para os novos itens gráficos:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "A biblioteca footprint não foi atualizada\n"
+msgstr "Ainda não há suporte para bibliotecas de footprint oculto."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -38124,9 +38122,8 @@ msgid "Hole clearance violation"
 msgstr "Violação do isolamento do furo"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Os furos perfurados estão muito próximos"
+msgstr "Furo feito muito próximo de outro furo"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -39585,9 +39582,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(era esperado o 'SMD'; atual '%s')"
 
 #: pcbnew/footprint.cpp:2817
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
+msgstr "(O tamanho do orifício do bloco PTH é muito pequeno ou nulo)"
 
 #: pcbnew/footprint.cpp:2825
 msgid "(PTH pad has no copper layers)"
@@ -39598,9 +39594,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
 
 #: pcbnew/footprint.cpp:2856
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
+msgstr "(O orifício da ilha PTH não está totalmente dentro do cobre)"
 
 #: pcbnew/footprint.cpp:2866
 msgid "(SMD pad appears on both front and back copper)"
@@ -40968,162 +40963,133 @@ msgid "PTH pad %s %s of %s"
 msgstr "Ilha PTH %s %s de %s"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Erro: a ilha deve ter um tamanho positivo."
+msgstr "(A ilha deve ter um tamanho positivo)"
 
 #: pcbnew/pad.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "O tamanho do furo da via deve ser menor que o diâmetro da via"
+msgstr "(O tamanho do orifício do bloco PTH deve ser maior que %s)"
 
 #: pcbnew/pad.cpp:1899
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Aviso: O furo da ilha não está dentro do formato da ilha."
+msgstr "O orifício da ilha não está dentro do formato da ilha"
 
 #: pcbnew/pad.cpp:1912
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Aviso: O furo da ilha não deixará nenhum cobre."
+msgstr "O furo da ilha não deixará nenhum cobre"
 
 #: pcbnew/pad.cpp:1917
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr "Aviso: Os valores negativos do isolamento local não terão efeito."
+msgstr "Os valores negativos de liberação local não têm efeito"
 
 #: pcbnew/pad.cpp:1936
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Aviso: os isolamento da máscara de solda negativa são maiores do que algumas "
-"formas primitivas. Os resultados podem ser surpreendentes."
+"O isolamento negativo da máscara de solda é maior do que algumas formas "
+"primitivas; os resultados podem ser surpreendentes"
 
 #: pcbnew/pad.cpp:1946
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Aviso: O isolamento negativo da máscara de solda é maior do que a ilha. "
-"Nenhuma máscara de solda será gerada."
+"O isolamento negativo da máscara de solda é maior do que a ilha; nenhuma "
+"máscara de solda será gerada"
 
 #: pcbnew/pad.cpp:1965
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Aviso: as margens negativas da pasta de solda são maiores que a ilha. "
-"Nenhuma máscara de pasta de solda será gerada."
+"A margem negativa da pasta de solda é maior do que a ilha; nenhuma máscara "
+"para a pasta de solda será gerada"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(A ilha PTH não possui camadas de cobre)"
+msgstr "(A ilha não possui camadas)"
 
 #: pcbnew/pad.cpp:1975
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(A ilha PTH não possui camadas de cobre)"
+msgstr "A ilha PTH não possui camadas de cobre"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
 msgstr ""
-"Aviso: Os furos passantes geralmente devem ter uma ilha com cobre em pelo "
-"menos uma camada."
+"Os furos passantes metalizados geralmente devem ter uma ilha com cobre em "
+"pelo menos uma camada"
 
 #: pcbnew/pad.cpp:2000
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
 msgstr ""
-"Aviso: Os conectores das ilhas normalmente não têm pasta de solda. Em vez "
-"disso, use uma ilha SMD."
+"Os conectores das ilhas normalmente não têm pasta de solda. Em vez disso, "
+"use uma ilha SMD"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Erro: A ilha SMD tem um furo."
+msgstr "(A ilha SMD tem um furo)"
 
 #: pcbnew/pad.cpp:2014
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr ""
-"Caso queira uma camada de pasta de solta para o lado da frente da placa"
+msgstr "A ilha SMD tem cobre em ambos os lados da placa"
 
 #: pcbnew/pad.cpp:2020 pcbnew/pad.cpp:2033
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(As camadas de cobre e a máscara da ilha SMD não correspondem)"
+msgstr "A ilha SMD tem camadas de cobre e máscara em lados diferentes da placa"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr ""
-"Caso queira uma camada de pasta de solta para o lado da frente da placa"
+msgstr "A ilha SMD tem camadas de cobre e de pasta em lados diferentes da placa"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Aviso: a ilha SMD não tem camadas externas."
+msgstr "A ilha SMD não tem camadas externas"
 
 #: pcbnew/pad.cpp:2054
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Aviso: A propriedade fiducial não faz sentido nas ilhas NPTH."
+msgstr "A propriedade fiducial não faz sentido nas ilhas NPTH"
 
 #: pcbnew/pad.cpp:2058
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Aviso: A propriedade Testpoint não faz sentido nas ilhas NPTH."
+msgstr "A propriedade Testpoint não faz sentido nas ilhas NPTH"
 
 #: pcbnew/pad.cpp:2061
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr ""
-"Aviso: A propriedade do dissipador de calor não faz sentido nas ilhas NPTH."
+msgstr "A propriedade do dissipador de calor não faz sentido nas ilhas NPTH"
 
 #: pcbnew/pad.cpp:2064
-#, fuzzy
 msgid "Castellated property is for PTH pads"
-msgstr "Aviso: A propriedade do castelamento são para ilhas PTH."
+msgstr "A propriedade do castelamento são para ilhas PTH"
 
 #: pcbnew/pad.cpp:2067
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Aviso: A propriedade BGA são para ilhas SMD."
+msgstr "A propriedade BGA são para ilhas SMD"
 
 #: pcbnew/pad.cpp:2072
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(Não é permitido raio com canto negativo)"
 
 #: pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Aviso: O tamanho do canto tornará a ilha circular."
+msgstr "O tamanho do canto tornará a ilha circular"
 
 #: pcbnew/pad.cpp:2079
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(Não é permitido um chanfro com canto negativo)"
 
 #: pcbnew/pad.cpp:2081
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "O download é muito grande."
+msgstr "(O chanfro do canto é muito grande)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Erro: O delta do trapezoide é muito grande."
+msgstr "(O delta do trapezoide é muito grande)"
 
 #: pcbnew/pad.cpp:2101
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr ""
-"Erro: O formato do bloco personalizado deve ser resolvido num único polígono."
+msgstr "(A forma da ilha personalizada deve ser resolvida num único polígono)"
 
 #: pcbnew/pad.cpp:2293
 msgid "Edge connector"
@@ -41559,7 +41525,7 @@ msgstr "Carregando polígonos..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "A contagem do contorno do polígono é %d, 1 é esperado."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41827,7 +41793,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4120
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Justificativa de caixa de texto desconhecida %d, texto %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4185
 msgid "Loading rectangles..."
@@ -44768,9 +44734,8 @@ msgstr ""
 "estendidas."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
-msgstr "Uma forma com pelo menos duas linhas deve ser selecionada."
+msgstr "Um formato com pelo menos duas linhas deve ser selecionado."
 
 #: pcbnew/tools/edit_tool.cpp:1477 pcbnew/tools/pcb_actions.cpp:620
 msgid "Heal Shapes"
