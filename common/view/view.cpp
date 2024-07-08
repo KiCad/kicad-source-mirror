@@ -365,7 +365,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
         std::vector<VIEW_ITEM*>::iterator item = m_allItems->end();
         int                               cachedIndex = aItem->m_viewPrivData->m_cachedIndex;
 
-        if( cachedIndex >= 0 && cachedIndex < m_allItems->size()
+        if( cachedIndex >= 0 && cachedIndex < static_cast<ssize_t>( m_allItems->size() )
             && ( *m_allItems )[cachedIndex] == aItem )
         {
             item = m_allItems->begin() + cachedIndex;
@@ -392,7 +392,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
                                 } );
 
                 // Update cached indices
-                for( int idx = 0; idx < m_allItems->size(); idx++ )
+                for( size_t idx = 0; idx < m_allItems->size(); idx++ )
                     ( *m_allItems )[idx]->m_viewPrivData->m_cachedIndex = idx;
 
                 s_gcCounter = 0;
