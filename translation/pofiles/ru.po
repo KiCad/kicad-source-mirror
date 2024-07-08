@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:55-0700\n"
-"PO-Revision-Date: 2024-07-05 06:09+0000\n"
+"PO-Revision-Date: 2024-07-08 16:53+0000\n"
 "Last-Translator: alevtina-karashokova <karashokovaaa@basealt.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -37902,7 +37902,7 @@ msgstr "У посад. места не определена область ус�
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "Footprint has malformed courtyard"
-msgstr "Плохая область установки для посад. места"
+msgstr "Некорректная область установки для посад. места"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "PTH inside courtyard"
@@ -37918,7 +37918,7 @@ msgstr "Элемент на отключенном медном слое"
 
 #: pcbnew/drc/drc_item.cpp:169
 msgid "Board has malformed outline"
-msgstr "Плохой контур платы"
+msgstr "Деформированный контур платы"
 
 #: pcbnew/drc/drc_item.cpp:173
 msgid "Duplicate footprints"
