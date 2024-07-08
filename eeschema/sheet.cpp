@@ -72,7 +72,7 @@ bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
     {
         msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
                        "has the sheet '%s' or one of its subsheets as a parent somewhere in the "
-                       "schematic schematicSheets." ),
+                       "schematic hierarchy." ),
                     destFilePath );
         DisplayError( this, msg );
         return true;
