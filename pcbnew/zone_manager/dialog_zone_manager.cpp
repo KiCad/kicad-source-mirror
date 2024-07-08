@@ -170,22 +170,6 @@ void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelectionChange( wxDataViewItem con
 }
 
 
-void DIALOG_ZONE_MANAGER::SaveChange()
-{
-    for( ZONE_MANAGEMENT_BASE* zone_management :
-         std::list<ZONE_MANAGEMENT_BASE*>{ m_panelZoneProperties, m_zonesContainer.get() } )
-    {
-        zone_management->OnUserConfirmChange();
-    }
-
-    if( m_zoneInfo )
-    {
-        if( std::shared_ptr<ZONE_SETTINGS> zone = m_panelZoneProperties->GetZoneSettings() )
-            *m_zoneInfo = *zone;
-    }
-}
-
-
 void DIALOG_ZONE_MANAGER::GenericProcessChar( wxKeyEvent& aEvent )
 {
     aEvent.Skip();
@@ -265,7 +249,17 @@ void DIALOG_ZONE_MANAGER::SelectZoneTableItem( wxDataViewItem const& aItem )
 
 void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
 {
-    SaveChange();
+    for( ZONE_MANAGEMENT_BASE* zone_management :
+         std::list<ZONE_MANAGEMENT_BASE*>{ m_panelZoneProperties, m_zonesContainer.get() } )
+    {
+        zone_management->OnUserConfirmChange();
+    }
+
+    if( m_zoneInfo )
+    {
+        if( std::shared_ptr<ZONE_SETTINGS> zone = m_panelZoneProperties->GetZoneSettings() )
+            *m_zoneInfo = *zone;
+    }
 
     aEvt.Skip();
 }
@@ -380,8 +374,6 @@ void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
 {
     if( m_isFillingZones )
         return;
-
-    SaveChange();
 
     m_isFillingZones = true;
     m_zonesContainer->FlushZoneSettingsChange();
