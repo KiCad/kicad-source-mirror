@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:55-0700\n"
+"POT-Creation-Date: 2024-07-08 09:54-0700\n"
 "PO-Revision-Date: 2024-05-07 02:28+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
@@ -13691,7 +13691,7 @@ msgstr "親シンボルにないフィールドを削除"
 msgid "Reset fields if empty in parent symbol"
 msgstr "親シンボルで空となっているフィールドをリセット"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:253
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:261
 #: eeschema/sch_label.cpp:2130 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
 msgstr "構文ヘルプ"

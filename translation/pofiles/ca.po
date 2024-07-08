@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:55-0700\n"
+"POT-Creation-Date: 2024-07-08 09:54-0700\n"
 "PO-Revision-Date: 2024-07-02 19:09+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v8/ca/>\n"
@@ -14126,7 +14126,7 @@ msgstr "Elimina el camps si no hi són al símbol pare"
 msgid "Reset fields if empty in parent symbol"
 msgstr "Reinicia els camps si estan buits al símbol pare"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:253
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:261
 #: eeschema/sch_label.cpp:2130 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
 msgstr "Ajuda de sintaxis"

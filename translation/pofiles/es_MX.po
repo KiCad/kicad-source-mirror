@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:55-0700\n"
+"POT-Creation-Date: 2024-07-08 09:54-0700\n"
 "PO-Revision-Date: 2024-07-07 07:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
@@ -13804,7 +13804,7 @@ msgstr "Eliminar campos si no están en el símbolo padre"
 msgid "Reset fields if empty in parent symbol"
 msgstr "Reiniciar campos si están vacíos en el símbolo padre"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:253
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:261
 #: eeschema/sch_label.cpp:2130 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
 msgstr "Ayuda de sintaxis"

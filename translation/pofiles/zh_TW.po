@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:55-0700\n"
+"POT-Creation-Date: 2024-07-08 09:54-0700\n"
 "PO-Revision-Date: 2024-06-07 06:09+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -13521,7 +13521,7 @@ msgstr "如果在父符號中不存在, 則移除欄位"
 msgid "Reset fields if empty in parent symbol"
 msgstr "如果在父符號中該欄位為空, 則重置欄位"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:253
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:261
 #: eeschema/sch_label.cpp:2130 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
 msgstr "語法幫助"

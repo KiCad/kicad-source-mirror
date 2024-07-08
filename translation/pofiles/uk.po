@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:55-0700\n"
+"POT-Creation-Date: 2024-07-08 09:54-0700\n"
 "PO-Revision-Date: 2024-05-21 16:35+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v8/uk/>\n"
@@ -13792,7 +13792,7 @@ msgstr "Видалити поля, якщо немає батьківськог�
 msgid "Reset fields if empty in parent symbol"
 msgstr "Скинути поля, що порожні в батьківському символі"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:253
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:261
 #: eeschema/sch_label.cpp:2130 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
 msgstr "Довідка про синтаксис"

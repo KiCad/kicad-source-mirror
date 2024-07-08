@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:55-0700\n"
+"POT-Creation-Date: 2024-07-08 09:54-0700\n"
 "PO-Revision-Date: 2024-07-07 07:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -13542,7 +13542,7 @@ msgstr "如果在父符号中不存在, 则移除字段"
 msgid "Reset fields if empty in parent symbol"
 msgstr "如果在父符号中该字段为空, 则重置字段"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:253
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:261
 #: eeschema/sch_label.cpp:2130 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
 msgstr "语法帮助"
@@ -19024,8 +19024,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 <b>("
-"%s, %s)</b>, 在单元 %s和 %s 中发生冲突。"
+"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 "
+"<b>(%s, %s)</b>, 在单元 %s和 %s 中发生冲突。"
 
 #: eeschema/symbol_checker.cpp:194
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -23280,8 +23280,9 @@ msgstr "要使用的配色主题 (默认使用 PCB 编辑器设置)"
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
-msgstr "设置页面大小模式 (0 = 带有框架和标题块的页面, 1 = 当前页面大小, 2 = "
-"电路板区域的大小)"
+msgstr ""
+"设置页面大小模式 (0 = 带有框架和标题块的页面, 1 = 当前页面大小, 2 = 电路板区"
+"域的大小)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:73
 #: kicad/cli/command_sch_export_plot.cpp:73
@@ -40727,8 +40728,9 @@ msgid ""
 "Unable to determine zone fill priorities for layer '%s'. A best attempt has "
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
-msgstr "无法确定层 '%s' 的填充域优先级。已进行了最优尝试, 但可能存在 DRC "
-"错误并且需要手动编辑域优先级。"
+msgstr ""
+"无法确定层 '%s' 的填充域优先级。已进行了最优尝试, 但可能存在 DRC 错误并且需要"
+"手动编辑域优先级。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -40896,8 +40898,9 @@ msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
-msgstr "CADSTAR '%s' 区在 CADSTAR 中标记为放置区。KiCad "
-"不支持放置区。只有该区中支持的元素被导入了。"
+msgstr ""
+"CADSTAR '%s' 区在 CADSTAR 中标记为放置区。KiCad 不支持放置区。只有该区中支持"
+"的元素被导入了。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1724
 #, c-format
@@ -40962,9 +40965,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - "
-"隔离\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad "
-"覆铜域的最小孤岛大小设置。"
+"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - 隔离"
+"\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad 覆铜域的最小孤岛"
+"大小设置。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2032
 #, c-format
@@ -40986,8 +40989,8 @@ msgid ""
 "will be applied next time the zones are filled."
 msgstr ""
 "CADSTAR 模板\"%s\"在原始设计中具有散热片, 但引线宽度 (%.2f mm)比域的最小厚度 "
-"(%.2f mm) 更薄。KiCad 要求保留域的最小厚度。因此, "
-"已将最小厚度用作新的引线宽度, 并将在下次填充域时应用。"
+"(%.2f mm) 更薄。KiCad 要求保留域的最小厚度。因此, 已将最小厚度用作新的引线宽"
+"度, 并将在下次填充域时应用。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2096
 #, c-format
@@ -40995,8 +40998,9 @@ msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
-msgstr "CADSTAR 层 '%s' 被定义为电源层。然而, 不存在具有该名称的网络。已加载层, "
-"但未创建覆铜域。"
+msgstr ""
+"CADSTAR 层 '%s' 被定义为电源层。然而, 不存在具有该名称的网络。已加载层, 但未"
+"创建覆铜域。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2198
 msgid ""
@@ -41005,9 +41009,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。"
-"如果填充的是实体或图案填充, 则它们已导入为 KiCad 域; "
-"如果形状是未填充的轮廓(开放或闭合), 则它们将导入为 KiCad 走线。"
+"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。如果填充的是实体"
+"或图案填充, 则它们已导入为 KiCad 域; 如果形状是未填充的轮廓(开放或闭合), 则它"
+"们将导入为 KiCad 走线。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2301
 #, c-format
@@ -41120,8 +41124,8 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
-"CADSTAR 设计包含关联了\"间隔类\"的网络。但在 KiCad 中没有对应的等效项, "
-"因此未导入这些元素。请检查设计规则, 因为覆铜填充将受此影响。"
+"CADSTAR 设计包含关联了\"间隔类\"的网络。但在 KiCad 中没有对应的等效项, 因此未"
+"导入这些元素。请检查设计规则, 因为覆铜填充将受此影响。"
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
@@ -45514,8 +45518,9 @@ msgstr "不再显示"
 msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
-msgstr "不是所有的域都被填充。如你希望看到所有域都被填充, 请使用\"编辑\" > "
-"\"填充所有的域\"(%s)。"
+msgstr ""
+"不是所有的域都被填充。如你希望看到所有域都被填充, 请使用\"编辑\" > \"填充所有"
+"的域\"(%s)。"
 
 #: pcbnew/tools/pcb_control.cpp:343
 msgid "Dimmed"

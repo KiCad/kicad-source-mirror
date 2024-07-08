@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:55-0700\n"
+"POT-Creation-Date: 2024-07-08 09:54-0700\n"
 "PO-Revision-Date: 2024-07-08 16:53+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -13819,7 +13819,7 @@ msgstr "Remova os campos caso não estejam no símbolo principal"
 msgid "Reset fields if empty in parent symbol"
 msgstr "Redefina os campos caso estejam vazios no símbolo principal"
 
-#: eeschema/dialogs/dialog_user_defined_signals.cpp:253
+#: eeschema/dialogs/dialog_user_defined_signals.cpp:261
 #: eeschema/sch_label.cpp:2130 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
 msgstr "Ajuda de sintaxe"
@@ -41041,7 +41041,8 @@ msgstr "A ilha SMD tem camadas de cobre e máscara em lados diferentes da placa"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "A ilha SMD tem camadas de cobre e de pasta em lados diferentes da placa"
+msgstr ""
+"A ilha SMD tem camadas de cobre e de pasta em lados diferentes da placa"
 
 #: pcbnew/pad.cpp:2044
 msgid "SMD pad has no outer layers"
