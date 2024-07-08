@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-08 09:55-0700\n"
-"PO-Revision-Date: 2024-07-08 16:53+0000\n"
+"PO-Revision-Date: 2024-07-09 07:35+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10837,10 +10837,13 @@ msgid "Save all digital event data"
 msgstr "Αποθήκευση όλων των δεδομένων ψηφιακών συμβάντων"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
+#, fuzzy
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Εάν δεν έχει οριστεί, γράψτε μια οδηγία για την αποτροπή αποθήκευσης "
+"δεδομένων ψηφιακών συμβάντων (αποθήκευση κανενός)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:355
 msgid "Run external simulator command:"
@@ -10931,8 +10934,9 @@ msgid "Browse Scripts..."
 msgstr "Αναζήτηση Δημιουργών..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
+#, fuzzy
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "Προσθήκη Εξαγωγέα Λίστας Δικτύων βασισμένου σε Σενάρια"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:229
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -16002,7 +16006,7 @@ msgstr "Αντικρουόμενες αναθέσεις κλάσεων δικτ�
 
 #: eeschema/erc/erc_item.cpp:140
 msgid "Overlapping rule areas"
-msgstr ""
+msgstr "Επικαλυπτόμενες περιοχές κανόνων"
 
 #: eeschema/erc/erc_item.cpp:144
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -16873,11 +16877,13 @@ msgid "Error in parsing model '%s', error: '%s'"
 msgstr "Σφάλμα κατά τη φόρτωση πλακέτας '%s': %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
+"Σφάλμα στην ανάλυση του μοντέλου '%s', λάθος αριθμός κόμβων '?' στο "
+"Sim.NodesFormat σε σύγκριση με τις συνδέσεις"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:568
 #, c-format
@@ -17723,11 +17729,13 @@ msgstr ""
 "XML μπορούν να εισαχθούν."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:975
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "No module instance '%s' found in schematic file:\n"
 "%s"
 msgstr ""
+"Δεν βρέθηκε λειτουργική μονάδα '%s' σε αρχείο σχηματικού:\n"
+"%s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1720
 #, c-format
@@ -22207,6 +22215,7 @@ msgstr "Εξαιρέθηκε από την προσομοίωση"
 #: eeschema/tools/ee_actions.cpp:1167
 msgid "Draw 'X's over items which have been excluded from simulation"
 msgstr ""
+"Σχεδιασμός 'Χ' επάνω από στοιχεία που έχουν εξαιρεθεί από την προσομοίωση"
 
 #: eeschema/tools/ee_actions.cpp:1172
 msgid "Show OP Voltages"
@@ -23008,8 +23017,9 @@ msgid "Hide Fields"
 msgstr "Προβολή Κρυφών Πεδίων"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:370
+#, fuzzy
 msgid "Use the Symbol Properties dialog to remove fields."
-msgstr ""
+msgstr "Χρήση του παραθύρου διαλόγου Ιδιότητες Συμβόλου για να αφαίρεση πεδίων."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:665
 msgid "Edit Pins"
@@ -23517,8 +23527,9 @@ msgid "Forced opacity:"
 msgstr "Αδιαφάνεια:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
+#, fuzzy
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "Αδιαφάνεια στη λειτουργία απεικόνισης αναγκαστικής αδιαφάνειας"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -24730,19 +24741,23 @@ msgstr "Εξαγωγή γραφικών μεταξοτυπίας."
 
 #: kicad/cli/command_pcb_export_3d.cpp:144
 msgid "Export soldermask layers as a set of flat faces"
-msgstr ""
+msgstr "Εξαγωγή στρώσεων μάσκας συγκόλλησης ως σύνολο επίπεδων επιφανειών"
 
 #: kicad/cli/command_pcb_export_3d.cpp:148
+#, fuzzy
 msgid "Fuse overlapping geometry together"
-msgstr ""
+msgstr "Συγχώνευση επικαλυπτόμενης γεωμετρίας"
 
 #: kicad/cli/command_pcb_export_3d.cpp:154
 msgid "Minimum distance between points to treat them as separate ones"
 msgstr "Ελάχιστη απόσταση σημείων για να θεωρηθούν ξεχωριστά"
 
 #: kicad/cli/command_pcb_export_3d.cpp:160
+#, fuzzy
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
+"Συμπερίληψη μόνο αντικειμένων χαλκού από δίκτυα που ταιριάζουν με αυτόν τον "
+"χαρακτήρα μπαλαντέρ"
 
 #: kicad/cli/command_pcb_export_3d.cpp:166
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -25077,7 +25092,7 @@ msgstr "Απουσία φύλλου σχεδίασης"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "Αποδίδει το PCB σε προβολή 3D σε εικόνα PNG ή JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:173
 #, fuzzy
@@ -25095,10 +25110,13 @@ msgid "Render from side. Options: %s"
 msgstr "Επιλογές Απόδοσης"
 
 #: kicad/cli/command_pcb_render.cpp:190
+#, fuzzy
 msgid ""
 "Image background. Options: transparent, opaque. Default: transparent for "
 "PNG, opaque for JPEG"
 msgstr ""
+"Φόντο εικόνας. Επιλογές: transparent, opaque. Προεπιλογή: transparent για "
+"PNG, opaque για JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:198
 #, fuzzy, c-format
@@ -25106,19 +25124,23 @@ msgid "Render quality. Options: %s"
 msgstr "Γενικές Επιλογές"
 
 #: kicad/cli/command_pcb_render.cpp:204
-#, c-format
+#, c-format, fuzzy
 msgid "Color preset. Options: %s, %s, %s, ..."
-msgstr ""
+msgstr "Προκαθορισμένο χρώμα. Επιλογές: %s, %s, %s, ..."
 
 #: kicad/cli/command_pcb_render.cpp:210
+#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "preset"
 msgstr ""
+"Ενεργοποιεί το δάπεδο, τις σκιές και τη μετα-επεξεργασία, ακόμη και αν είναι "
+"απενεργοποιημένα από προκαθορισμένη ποιότητα"
 
 #: kicad/cli/command_pcb_render.cpp:215
+#, fuzzy
 msgid "Use perspective projection instead of orthogonal"
-msgstr ""
+msgstr "Χρήση προοπτικής αντί για ορθογώνιας προβολής"
 
 #: kicad/cli/command_pcb_render.cpp:221
 #, fuzzy
@@ -25126,18 +25148,25 @@ msgid "Camera zoom"
 msgstr "Επιλογές Κάμερας"
 
 #: kicad/cli/command_pcb_render.cpp:226
+#, fuzzy
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "Μετατόπιση κάμερας, μορφή 'X,Y,Z' π.χ.: '3,0,0'"
 
 #: kicad/cli/command_pcb_render.cpp:231
+#, fuzzy
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
+"Ορίστε το σημείο περιστροφής σε σχέση με το κέντρο της πλακέτας σε εκατοστά, "
+"μορφοποιήστε 'X,Y,Z' π.χ.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:238
+#, fuzzy
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
+"Περιστροφή πλακέτας, μορφή \"X,Y,Z\" π.χ.: \"-45,0,45\" για ισομετρική "
+"προβολή"
 
 #: kicad/cli/command_pcb_render.cpp:262
 #, fuzzy
@@ -25248,8 +25277,10 @@ msgid "Do not generate property popups in PDF"
 msgstr "Να μην δημιουργηθούν αναδυόμενα παράθυρα ιδιοτήτων σε PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:85
+#, fuzzy
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
 msgstr ""
+"Να μη δημιουργηθούν μεταδεδομένα για PDF από μεταβλητές AUTHOR και SUBJECT"
 
 #: kicad/cli/command_sch_export_plot.cpp:94
 msgid "Avoid setting a background color (regardless of theme)"
@@ -28359,16 +28390,18 @@ msgid "Vref set to 0 !"
 msgstr "Vref έχει οριστεί 0 !"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:414
+#, fuzzy
 msgid "Vref must VrefMin < VrefTyp < VrefMax"
-msgstr ""
+msgstr "Το Vref πρέπει να: VrefMin < VrefTyp < VrefMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:420
 msgid "Incorrect value for R1 R2"
 msgstr "Λανθασμένη τιμή για R1 R2"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:435
+#, fuzzy
 msgid "Iadj must IadjTyp < IadjMax"
-msgstr ""
+msgstr "Το Iadj πρέπει να: IadjTyp < IadjMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
@@ -28961,16 +28994,18 @@ msgid "Data file error."
 msgstr "Σφάλμα αρχείου δεδομένων."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
+#, fuzzy
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (ελάχ/τυπ/μέγ):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
 msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
+#, fuzzy
 msgid "Iadj (typ/max):"
-msgstr ""
+msgstr "Iadj (τυπ/μέγ):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -32580,8 +32615,9 @@ msgid "XAO files"
 msgstr "Όλα τα αρχεία"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:418
+#, fuzzy
 msgid "BREP (OCCT) files"
-msgstr ""
+msgstr "BREP αρχεία (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:426
 #, fuzzy
@@ -32621,12 +32657,14 @@ msgid "GLB (Binary glTF)"
 msgstr "Εξαγωγή GLB (δυαδικό GLTF)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
+#, fuzzy
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
+#, fuzzy
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -32704,9 +32742,12 @@ msgid "Net filter (supports wildcards):"
 msgstr "Κείμενο με προαιρετικούς χαρακτήρες μπαλαντέρ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:109
+#, fuzzy
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr ""
+"Εξαγωγή μόνο αντικειμένων χαλκού που ανήκουν σε δίκτυα που ταιριάζουν με "
+"αυτό το φίλτρο."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:113
 msgid "Board outline chaining tolerance:"
@@ -36388,8 +36429,11 @@ msgid "Not tented"
 msgstr "Μη Συνδεδεμένο"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:334
+#, fuzzy
 msgid "Whether to tent (cover with soldermask) this via on the front side"
 msgstr ""
+"Πότε θα γίνει tent (κάλυψη με μάσκα συγκόλλησης) της διέλευσης στην "
+"μπροστινή πλευρά"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:340
 msgid "Link front and back tenting settings"
@@ -39823,8 +39867,9 @@ msgid "Unrecognized item '%s'.| Expected quoted expression."
 msgstr "Μη αναγνωριζόμενο στοιχείο \"%s\". | Αναμενόμενη παράθεση έκφρασης."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
+#, fuzzy
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "Λέξη κλειδί 'layer' υπάρχει ήδη."
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -40801,7 +40846,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1612
 msgid "Using non-simplified polygon.\n"
-msgstr ""
+msgstr "Χρήση μη απλοποιημένου πολυγώνου..\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1677
 #, fuzzy
@@ -40809,8 +40854,9 @@ msgid "Failed to create a prismatic shape\n"
 msgstr "Αποτυχία δημιουργίας κλάδου."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1688
+#, fuzzy
 msgid "** Face skipped **\n"
-msgstr ""
+msgstr "** Επιφάνεια παραλείφθηκε **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1855
 #, c-format
@@ -40823,11 +40869,13 @@ msgid "Cutting %d/%d %s\n"
 msgstr "Κόψιμο %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "** Got problems while cutting %s number %d **\n"
 msgstr ""
+"\n"
+"** Πρόβλημα κατά την αποκοπή του αριθμού %s %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1908
 msgid "shapes"
@@ -41751,7 +41799,7 @@ msgstr "Εξαγωγή απεικόνισης πλακέτας IDF 3D"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / GLB / BREP / XAO..."
-msgstr ""
+msgstr "STEP / GLB / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 #, fuzzy
@@ -46365,8 +46413,9 @@ msgid "Change Side / Flip"
 msgstr "Αλλαγή Πλευράς / Αναποδογύρισμα"
 
 #: pcbnew/tools/edit_tool.cpp:2544
+#, fuzzy
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr ""
+msgstr "Χρήση παραθύρου διαλόγου Ιδιότητες Αποτυπώματος για αφαίρεση πεδίων."
 
 #: pcbnew/tools/edit_tool.cpp:2702
 msgid "Move Exactly"
@@ -46990,8 +47039,9 @@ msgid "Cut away corners between selected lines"
 msgstr "Αφαίρεση γωνιών μεταξύ των επιλεγμένων γραμμών"
 
 #: pcbnew/tools/pcb_actions.cpp:629
+#, fuzzy
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "Απλοποίηση περιγραμμάτων πολυγώνων, αφαιρώντας τα περιττά σημεία"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid ""
@@ -49440,7 +49490,7 @@ msgstr "Ομαδοποίηση"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1254
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "(Χρήση /.../ για ένδειξη regular expression.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1327
 #, fuzzy
