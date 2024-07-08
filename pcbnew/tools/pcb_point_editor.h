@@ -77,14 +77,6 @@ private:
     ///< Update item's points with edit points.
     void updateItem( BOARD_COMMIT* aCommit );
 
-    /**
-     * Validate a polygon and displays a popup warning if invalid.
-     *
-     * @param aModified is the polygon to be checked.
-     * @return True if polygon is valid.
-     */
-    bool validatePolygon( SHAPE_POLY_SET& aModified ) const;
-
     ///< Update edit points with item's points.
     void updatePoints();
 

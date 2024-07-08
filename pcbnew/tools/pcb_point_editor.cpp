@@ -1389,11 +1389,9 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
             {
                 if( !isModified( m_editPoints->Line( i ) ) )
-                    m_editPoints->Line( i ).SetConstraint(
-                            new EC_PERPLINE( m_editPoints->Line( i ) ) );
+                    m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
             }
 
-            validatePolygon( outline );
             break;
         }
 
@@ -1589,7 +1587,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
                 m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
         }
 
-        validatePolygon( outline );
         zone->HatchBorder();
         break;
     }
@@ -1841,12 +1838,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
     getView()->Update( item );
 
     frame()->SetMsgPanel( item );
-}
-
-
-bool PCB_POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aPoly ) const
-{
-    return true;
 }
 
 
@@ -2544,7 +2535,6 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
             // the usual case: remove just the corner when there are >3 vertices
             commit.Modify( item );
             polygon->RemoveVertex( vertexIdx );
-            validatePolygon( *polygon );
         }
         else
         {

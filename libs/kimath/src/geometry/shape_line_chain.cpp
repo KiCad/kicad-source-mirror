@@ -282,7 +282,7 @@ void SHAPE_LINE_CHAIN::mergeFirstLastPointIfNeeded()
         {
             // Create a duplicate point at the end
             m_points.push_back( m_points.front() );
-            m_shapes.push_back( { m_shapes.front().first, SHAPE_IS_PT });
+            m_shapes.push_back( { m_shapes.front().first, SHAPE_IS_PT } );
             m_shapes.front().first = m_shapes.front().second;
             m_shapes.front().second = SHAPE_IS_PT;
         }
