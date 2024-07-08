@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-01 10:52-0700\n"
-"PO-Revision-Date: 2024-03-22 01:36+0000\n"
+"PO-Revision-Date: 2024-07-08 16:53+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -2862,11 +2862,13 @@ msgid "Drawing Sheet File"
 msgstr "Φύλλο Σχεδίασης"
 
 #: common/dialogs/dialog_page_settings.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Σφάλμα φόρτωσης σελίδας σχεδίασης '%s'."
+msgstr ""
+"Σφάλμα φόρτωσης σελίδας σχεδίασης '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -4953,7 +4955,7 @@ msgstr "Το φύλλο σχεδίασης '%s' δεν διαβάστηκε πλ
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Εξαντλήθηκε η μνήμη."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -12542,12 +12544,12 @@ msgstr "Δημιουργία αναδυόμενων παραθύρων ιδιο�
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 #: pcbnew/dialogs/dialog_plot_base.cpp:415
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "Δημιουργία μεταδεδομένων από μεταβλητές AUTHOR και SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:168
 #: pcbnew/dialogs/dialog_plot_base.cpp:416
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
-msgstr ""
+msgstr "Δημιουργία ιδιοτήτων εγγράφου PDF από μεταβλητές AUTHOR και SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:175
 msgid "Other options"
@@ -15181,8 +15183,9 @@ msgid "Shift:"
 msgstr "Shift"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
+#, fuzzy
 msgid "Alt:"
-msgstr ""
+msgstr "Εναλλ:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
 #, fuzzy
@@ -15190,8 +15193,9 @@ msgid "Horizontal touchpad movement:"
 msgstr "Πλήθος οριζόντια:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
+#, fuzzy
 msgid "Any:"
-msgstr ""
+msgstr "Any:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -15943,8 +15947,9 @@ msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Αναντιστοιχία μεταξύ ιεραρχικών ετικετών και pins φύλλων"
 
 #: eeschema/erc/erc_item.cpp:92
+#, fuzzy
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "Τέσσερεις συνδέσεις ενώνονται σε ένα σημείο"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "A pin with a \"no connection\" flag is connected"
@@ -16151,6 +16156,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"Το '%s' δεν είναι αρχείο σχηματικού του KiCad.\n"
+"Χρησιμοποιήστε Αρχείο -> Εισαγωγή για σχηματικό που δεν είναι του KiCad."
 
 #: eeschema/files-io.cpp:279
 msgid "Root"
@@ -16703,7 +16710,7 @@ msgstr "Εισαγωγή"
 
 #: eeschema/menubar.cpp:109
 msgid "Non-KiCad Schematic..."
-msgstr "Εισαγωγή Σχηματικού Όχι Από Kicad..."
+msgstr "Σχηματικό Όχι Του KiCad..."
 
 #: eeschema/menubar.cpp:110
 msgid ""
@@ -19980,11 +19987,8 @@ msgid "SPICE Simulator"
 msgstr "Προσομοιωτής"
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Υπήρξαν λάθη κατά την εξαγωγή λίστας δικτύων.\n"
-"\n"
+msgstr "Υπήρξαν λάθη κατά τη δημιουργία λίστας δικτύων."
 
 #: eeschema/sim/simulator_frame.cpp:374
 msgid "Simulator requires a fully annotated schematic."
@@ -36769,9 +36773,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Προκαθορισμένες ιδιότητες για νέα στοιχεία γραφικών:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:307
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Η βιβλιοθήκη αποτυπωμάτων δεν ενημερώθηκε\n"
+msgstr "Κρυφές βιβλιοθήκες αποτυπωμάτων δεν υποστηρίζονται ακόμη."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:486
 #, c-format
@@ -41061,9 +41064,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(η οπή της PTH έδρας δεν αφήνει καθόλου χαλκό)"
 
 #: pcbnew/footprint.cpp:3119
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(η οπή της PTH έδρας δεν αφήνει καθόλου χαλκό)"
+msgstr "(η οπή της PTH έδρας δεν είναι ολόκληρη μέσα σε χαλκό)"
 
 #: pcbnew/footprint.cpp:3129
 msgid "(SMD pad appears on both front and back copper)"
@@ -42456,33 +42458,25 @@ msgid "PTH pad %s"
 msgstr "έδρες PTH"
 
 #: pcbnew/pad.cpp:2071
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Σφάλμα: Η έδρα πρέπει να έχει θετικό μέγεθος."
+msgstr "(Η έδρα πρέπει να έχει θετικό μέγεθος)"
 
 #: pcbnew/pad.cpp:2082
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr ""
-"Το μέγεθος διάτρησης των διελεύσεων πρέπει να είναι μικρότερο από τη "
-"διάμετρο τους"
+msgstr "(Το μέγεθος της οπής έδρας PTH πρέπει να είναι μεγαλύτερο από %s)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Προειδοποίηση: Η τρύπα της έδρας δεν είναι μέσα στο σχήμα της έδρας."
+msgstr "Η τρύπα της έδρας δεν είναι μέσα στο σχήμα της έδρας"
 
 #: pcbnew/pad.cpp:2107
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Προειδοποίηση: Η τρύπα της έδρας δεν θα αφήσει καθόλου χαλκό."
+msgstr "Η τρύπα της έδρας δεν θα αφήσει καθόλου χαλκό"
 
 #: pcbnew/pad.cpp:2112
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr ""
-"Προειδοποίηση: Οι αρνητικές τιμές τοπικού διακένου δεν θα έχουν καμία "
-"επίδραση."
+msgstr "Οι αρνητικές τιμές τοπικού διακένου δεν θα έχουν καμία επίδραση"
 
 #: pcbnew/pad.cpp:2131
 #, fuzzy
@@ -42490,31 +42484,28 @@ msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Αρνητική τιμή διακένου σημαίνει περιοχή μικρότερη από το pad (συνήθως για "
-"διάκενο solder paste)."
+"Αρνητικό διάκενο μάσκας συγκόλλησης είναι μεγαλύτερο από ορισμένα πρωτόγονα "
+"σχήματα· τα αποτελέσματα μπορεί να είναι εκπληκτικά"
 
 #: pcbnew/pad.cpp:2141
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Προειδοποίηση: Αρνητικό διάκενο μάσκας κόλλησης μεγαλύτερο από την έδρα. Δεν "
-"θα δημιουργηθεί μάσκα συγκόλλησης."
+"Αρνητικό διάκενο μάσκας κόλλησης μεγαλύτερο από την έδρα· δεν θα "
+"δημιουργηθεί μάσκα συγκόλλησης"
 
 #: pcbnew/pad.cpp:2160
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Προειδοποίηση: Αρνητικό περιθώριο πάστας κόλλησης μεγαλύτερο από την έδρα. "
-"Δεν θα δημιουργηθεί μάσκα πάστας συγκόλλησης."
+"Αρνητικό περιθώριο πάστας κόλλησης μεγαλύτερο από την έδρα· δεν θα "
+"δημιουργηθεί μάσκα πάστας συγκόλλησης"
 
 #: pcbnew/pad.cpp:2167
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "Η έδρα PTH δεν έχει επίπεδα χαλκού"
+msgstr "(Η έδρα δεν έχει επίπεδα)"
 
 #: pcbnew/pad.cpp:2170
 #, fuzzy
@@ -42522,72 +42513,59 @@ msgid "PTH pad has no copper layers"
 msgstr "Η έδρα PTH δεν έχει επίπεδα χαλκού"
 
 #: pcbnew/pad.cpp:2176
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
 msgstr ""
-"Προειδοποίηση: οι επιμεταλλωμένες οπές πρέπει κανονικά να έχουν μία έδρα "
-"χαλκού σε τουλάχιστον ένα στρώμα."
+"Οι επιμεταλλωμένες οπές PTH πρέπει κανονικά να έχουν μία έδρα σε τουλάχιστον "
+"ένα επίπεδο χαλκού"
 
 #: pcbnew/pad.cpp:2195
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
 msgstr ""
-"Προειδοποίηση: οι έδρες σύνδεσης συνήθως δεν έχουν πάστα συγκόλλησης. "
-"Χρησιμοποιήστε έδρες SMD στη θέση τους."
+"Οι έδρες σύνδεσης συνήθως δεν έχουν πάστα συγκόλλησης· χρησιμοποιήστε έδρες "
+"SMD στη θέση τους"
 
 #: pcbnew/pad.cpp:2203
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Σφάλμα: η έδρα SMD έχει μία τρύπα."
+msgstr "(οπή σε SMD έδρα)"
 
 #: pcbnew/pad.cpp:2209
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr ""
-"Αν θέλετε ένα επίπεδο πάστας συγκόλλησης για την μπροστινή όψη της πλακέτας"
+msgstr "Έδρα SMD με χαλκό και στις δύο όψεις της πλακέτας"
 
 #: pcbnew/pad.cpp:2215 pcbnew/pad.cpp:2228
 #, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(επίπεδα χαλκού και μάσκας συγκόλλησης SMD έδρας δεν ταιριάζουν)"
+msgstr "Διαφορετικά επίπεδα χαλκού και μάσκας συγκόλλησης σε SMD έδρα"
 
 #: pcbnew/pad.cpp:2220 pcbnew/pad.cpp:2233
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
 msgstr ""
-"Αν θέλετε ένα επίπεδο πάστας συγκόλλησης για την μπροστινή όψη της πλακέτας"
+"Έδρα SMD με χαλκό και πάστα συγκόλλησης σε διαφορετικές πλευρές της πλακέτας"
 
 #: pcbnew/pad.cpp:2239
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Προειδοποίηση: Η SMD έδρα δεν έχει εξωτερικά επίπεδα."
+msgstr "SMD έδρα χωρίς εξωτερικά επίπεδα"
 
 #: pcbnew/pad.cpp:2249
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr ""
-"Προειδοποίηση: Η βασική ιδιότητα των Fiducial δεν έχει νόημα στα pads NPTH."
+msgstr "Η βασική ιδιότητα των Fiducial δεν έχει νόημα σε NPTH έδρες"
 
 #: pcbnew/pad.cpp:2253
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Προειδοποίηση: Η ιδιότητα Testpoint δεν έχει νόημα στα pads NPTH."
+msgstr "Η ιδιότητα Testpoint δεν έχει νόημα σε NPTH έδρες"
 
 #: pcbnew/pad.cpp:2256
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr ""
-"Προειδοποίηση: Η ιδιότητα απαγωγή θερμότητας δεν έχει νόημα για έδρες NPTH."
+msgstr "Η ιδιότητα απαγωγή θερμότητας δεν έχει νόημα σε NPTH έδρες"
 
 #: pcbnew/pad.cpp:2259
 #, fuzzy
 msgid "Castellated property is for PTH pads"
-msgstr "Προειδοποίηση: Η ιδιότητα Οδοντωτή προορίζεται για έδρες PTH."
+msgstr "Η ιδιότητα Castellated προορίζεται για έδρες PTH"
 
 #: pcbnew/pad.cpp:2262
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Προειδοποίηση: Η ιδιότητα BGA προορίζεται για SMD pad."
+msgstr "Η ιδιότητα BGA προορίζεται για SMD έδρες"
 
 #: pcbnew/pad.cpp:2265
 #, fuzzy
@@ -42596,33 +42574,28 @@ msgstr "Προειδοποίηση: Η ιδιότητα Οδοντωτή προ�
 
 #: pcbnew/pad.cpp:2270
 msgid "(Negative corner radius is not allowed)"
-msgstr ""
+msgstr "(Δεν επιτρέπεται αρνητική ακτίνα γωνίας)"
 
 #: pcbnew/pad.cpp:2272
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Προειδοποίηση: Το μέγεθος της γωνίας θα κάνει το pad κυκλικό."
+msgstr "Το μέγεθος της γωνίας θα κάνει την έδρα κυκλική"
 
 #: pcbnew/pad.cpp:2277
+#, fuzzy
 msgid "(Negative corner chamfer is not allowed)"
-msgstr ""
+msgstr "(Δεν επιτρέπεται η αρνητική λοξότμηση)"
 
 #: pcbnew/pad.cpp:2279
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "Η λήψη είναι πολύ μεγάλη."
+msgstr "(Λοξότμηση γωνίας πολύ μεγάλη)"
 
 #: pcbnew/pad.cpp:2288
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Σφάλμα: Το δέλτα του Τραπαζοειδούς είναι πολύ μεγάλο."
+msgstr "(Το δέλτα του Τραπαζοειδούς είναι πολύ μεγάλο)"
 
 #: pcbnew/pad.cpp:2299
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr ""
-"Σφάλμα: Το προσαρμοσμένο σχήμα του pad πρέπει να σχηματιστεί σαν ένα "
-"πολύγωνο."
+msgstr "(Το προσαρμοσμένο σχήμα έδρας πρέπει να σχηματιστεί σαν ένα πολύγωνο)"
 
 #: pcbnew/pad.cpp:2491
 msgid "Edge connector"
@@ -43090,7 +43063,7 @@ msgstr "Φόρτωση Πολύγωνων..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2038
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Το πλήθος περιγραμμάτων πολυγώνου είναι %d, αναμενόμενο 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2165
 msgid "Loading rules..."
@@ -43360,9 +43333,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4155
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4266
-#, c-format
+#, c-format, fuzzy
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Άγνωστη στοίχιση πλαισίου κειμένου %d, κείμενο %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4328
 msgid "Loading rectangles..."
@@ -48485,7 +48458,7 @@ msgstr "Επιλογές Μικρο-ρύθμισης Μήκους..."
 #: pcbnew/tools/pcb_actions.cpp:2453
 #, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Εμφάνιση του παραθύρου ιδιοτήτων αντικειμένου"
+msgstr "Εμφάνιση του παραθύρου ιδιοτήτων μικρορύθμισης μοτίβου"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
