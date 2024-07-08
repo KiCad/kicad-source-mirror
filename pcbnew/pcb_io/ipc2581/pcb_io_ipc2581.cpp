@@ -2414,17 +2414,12 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
         wxXmlNode* layerNode = appendNode( aStepNode, "LayerFeature" );
         addAttribute( layerNode,  "layerRef", m_layer_name_map[layer] );
 
-        for( const NETINFO_ITEM* net : nets )
+        auto process_net = [&] ( int net )
         {
-            if( m_progressReporter )
-            {
-                m_progressReporter->Report( wxString::Format( _( "Exporting Layer %s, Net %s" ),
-                                                               m_board->GetLayerName( layer ),
-                                                               net->GetNetname() ) );
-                m_progressReporter->AdvanceProgress();
-            }
+            std::vector<BOARD_ITEM*>& vec = elements[layer][net];
 
-            std::vector<BOARD_ITEM*>& vec = elements[layer][net->GetNetCode()];
+            if( vec.empty() )
+                return;
 
             std::stable_sort( vec.begin(), vec.end(),
                        []( BOARD_ITEM* a, BOARD_ITEM* b )
@@ -2435,10 +2430,20 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
                             return a->GetParentFootprint() < b->GetParentFootprint();
                        } );
 
-            if( vec.empty() )
-                continue;
-
             generateLayerSetNet( layerNode, layer, vec );
+        };
+
+        for( const NETINFO_ITEM* net : nets )
+        {
+            if( m_progressReporter )
+            {
+                m_progressReporter->Report( wxString::Format( _( "Exporting Layer %s, Net %s" ),
+                                                               m_board->GetLayerName( layer ),
+                                                               net->GetNetname() ) );
+                m_progressReporter->AdvanceProgress();
+            }
+
+            process_net( net->GetNetCode() );
         }
 
         if( layerNode->GetChildren() == nullptr )
@@ -2803,10 +2808,18 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
     if( specialNode->GetChildren() == nullptr )
     {
         featureSetNode->RemoveChild( specialNode );
-        layerSetNode->RemoveChild( featureSetNode );
-        aLayerNode->RemoveChild( layerSetNode );
         delete specialNode;
+    }
+
+    if( featureSetNode->GetChildren() == nullptr )
+    {
+        layerSetNode->RemoveChild( featureSetNode );
         delete featureSetNode;
+    }
+
+    if( layerSetNode->GetChildren() == nullptr )
+    {
+        aLayerNode->RemoveChild( layerSetNode );
         delete layerSetNode;
     }
 }
