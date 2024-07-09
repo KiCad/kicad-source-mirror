@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <lset.h>
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <settings/json_settings_internals.h>

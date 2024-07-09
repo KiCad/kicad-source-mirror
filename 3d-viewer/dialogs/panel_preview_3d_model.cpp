@@ -36,6 +36,7 @@
 #include <board.h>
 #include <common_ogl/ogl_attr_list.h>
 #include <dpi_scaling_common.h>
+#include <lset.h>
 #include <pgm_base.h>
 #include <project_pcb.h>
 #include <settings/common_settings.h>

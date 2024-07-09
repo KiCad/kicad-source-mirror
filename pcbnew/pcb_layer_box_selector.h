@@ -25,6 +25,7 @@
 #ifndef PCB_LAYER_BOX_SELECTOR_H
 #define PCB_LAYER_BOX_SELECTOR_H
 
+#include <lset.h>
 #include <widgets/layer_box_selector.h>
 
 class PCB_BASE_FRAME;

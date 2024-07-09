@@ -28,6 +28,7 @@
 #include <api/serializable.h>
 #include <geometry/eda_angle.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <math/vector2d.h>
 #include <properties/property.h>
 #include <zones.h>

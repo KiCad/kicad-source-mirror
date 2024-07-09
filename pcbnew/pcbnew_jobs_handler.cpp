@@ -39,6 +39,7 @@
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_pcb_render.h>
 #include <jobs/job_pcb_drc.h>
+#include <lset.h>
 #include <cli/exit_codes.h>
 #include <exporters/place_file_exporter.h>
 #include <exporters/step/exporter_step.h>

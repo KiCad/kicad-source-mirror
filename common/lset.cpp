@@ -30,10 +30,13 @@
 
 #include <core/arraydim.h>
 #include <math/util.h>                        // for Clamp
-#include <layer_ids.h>                        // for LSET, PCB_LAYER_ID, LSEQ
+#include <layer_ids.h>                        // for PCB_LAYER_ID
+#include <lseq.h>
 #include <macros.h>                           // for arrayDim
 #include <wx/debug.h>                         // for wxASSERT, wxASSERT_MSG
 #include <wx/string.h>
+
+#include <lset.h>
 
 
 LSET::LSET( const PCB_LAYER_ID* aArray, unsigned aCount ) :
@@ -631,121 +634,65 @@ LSEQ LSET::SeqStackupForPlotting() const
 }
 
 
-PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount )
+LSET& LSET::Flip( int aCopperLayersCount )
 {
-    switch( aLayerId )
-    {
-    case B_Cu:              return F_Cu;
-    case F_Cu:              return B_Cu;
+    LSET oldMask = *this;
 
-    case B_SilkS:           return F_SilkS;
-    case F_SilkS:           return B_SilkS;
+    reset();
 
-    case B_Adhes:           return F_Adhes;
-    case F_Adhes:           return B_Adhes;
+    if( oldMask.test( B_Cu ) )
+        set( F_Cu );
 
-    case B_Mask:            return F_Mask;
-    case F_Mask:            return B_Mask;
+    if( oldMask.test( F_Cu ) )
+        set( B_Cu );
 
-    case B_Paste:           return F_Paste;
-    case F_Paste:           return B_Paste;
+    if( oldMask.test( B_SilkS ) )
+        set( F_SilkS );
 
-    case B_CrtYd:           return F_CrtYd;
-    case F_CrtYd:           return B_CrtYd;
+    if( oldMask.test( F_SilkS ) )
+        set( B_SilkS );
 
-    case B_Fab:             return F_Fab;
-    case F_Fab:             return B_Fab;
+    if( oldMask.test( B_Adhes ) )
+        set( F_Adhes );
 
-    default:    // change internal layer if aCopperLayersCount is >= 4
-        if( IsCopperLayer( aLayerId ) && aCopperLayersCount >= 4 )
-        {
-            // internal copper layers count is aCopperLayersCount-2
-            PCB_LAYER_ID fliplayer = PCB_LAYER_ID(aCopperLayersCount - 2 - ( aLayerId - In1_Cu ) );
-            // Ensure fliplayer has a value which does not crash Pcbnew:
-            if( fliplayer < F_Cu )
-                fliplayer = F_Cu;
+    if( oldMask.test( F_Adhes ) )
+        set( B_Adhes );
 
-            if( fliplayer > B_Cu )
-                fliplayer = B_Cu;
+    if( oldMask.test( B_Mask ) )
+        set( F_Mask );
 
-            return fliplayer;
-        }
+    if( oldMask.test( F_Mask ) )
+        set( B_Mask );
 
-        // No change for the other layers
-        return aLayerId;
-    }
-}
+    if( oldMask.test( B_Paste ) )
+        set( F_Paste );
 
+    if( oldMask.test( F_Paste ) )
+        set( B_Paste );
 
-LSET FlipLayerMask( LSET aMask, int aCopperLayersCount )
-{
-    // layers on physical outside of a board:
-    const static LSET and_mask( 16,     // !! update count
-                B_Cu,       F_Cu,
-                B_SilkS,    F_SilkS,
-                B_Adhes,    F_Adhes,
-                B_Mask,     F_Mask,
-                B_Paste,    F_Paste,
-                B_Adhes,    F_Adhes,
-                B_CrtYd,    F_CrtYd,
-                B_Fab,      F_Fab
-                );
+    if( oldMask.test( B_Adhes ) )
+        set( F_Adhes );
 
-    LSET newMask = aMask & ~and_mask;
+    if( oldMask.test( F_Adhes ) )
+        set( B_Adhes );
 
-    if( aMask[B_Cu] )
-        newMask.set( F_Cu );
+    if( oldMask.test( B_CrtYd ) )
+        set( F_CrtYd );
 
-    if( aMask[F_Cu] )
-        newMask.set( B_Cu );
+    if( oldMask.test( F_CrtYd ) )
+        set( B_CrtYd );
 
-    if( aMask[B_SilkS] )
-        newMask.set( F_SilkS );
+    if( oldMask.test( B_Fab ) )
+        set( F_Fab );
 
-    if( aMask[F_SilkS] )
-        newMask.set( B_SilkS );
-
-    if( aMask[B_Adhes] )
-        newMask.set( F_Adhes );
-
-    if( aMask[F_Adhes] )
-        newMask.set( B_Adhes );
-
-    if( aMask[B_Mask] )
-        newMask.set( F_Mask );
-
-    if( aMask[F_Mask] )
-        newMask.set( B_Mask );
-
-    if( aMask[B_Paste] )
-        newMask.set( F_Paste );
-
-    if( aMask[F_Paste] )
-        newMask.set( B_Paste );
-
-    if( aMask[B_Adhes] )
-        newMask.set( F_Adhes );
-
-    if( aMask[F_Adhes] )
-        newMask.set( B_Adhes );
-
-    if( aMask[B_CrtYd] )
-        newMask.set( F_CrtYd );
-
-    if( aMask[F_CrtYd] )
-        newMask.set( B_CrtYd );
-
-    if( aMask[B_Fab] )
-        newMask.set( F_Fab );
-
-    if( aMask[F_Fab] )
-        newMask.set( B_Fab );
+    if( oldMask.test( F_Fab ) )
+        set( B_Fab );
 
     if( aCopperLayersCount >= 4 )   // Internal layers exist
     {
-        LSET internalMask = aMask & LSET::InternalCuMask();
+        LSET internalMask = *this & InternalCuMask();
 
-        if( internalMask != LSET::InternalCuMask() )
+        if( internalMask != InternalCuMask() )
         {
             // the mask does not include all internal layers. Therefore
             // the flipped mask for internal copper layers must be built
@@ -757,17 +704,17 @@ LSET FlipLayerMask( LSET aMask, int aCopperLayersCount )
             {
                 if( internalMask[innerLayerCnt - ii] )
                 {
-                    newMask.set( ii + In1_Cu );
+                    set( ii + In1_Cu );
                 }
                 else
                 {
-                    newMask.reset( ii + In1_Cu );
+                    reset( ii + In1_Cu );
                 }
             }
         }
     }
 
-    return newMask;
+    return *this;
 }
 
 

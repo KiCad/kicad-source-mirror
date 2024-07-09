@@ -23,6 +23,8 @@
 #include <kiface_base.h>
 #include <bitset>
 #include <layer_ids.h>
+#include <lset.h>
+#include <lseq.h>
 #include <string_utils.h>
 
 #include <macros.h>

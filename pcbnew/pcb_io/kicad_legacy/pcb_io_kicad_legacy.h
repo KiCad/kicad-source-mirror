@@ -31,6 +31,7 @@
 #include <richio.h>
 #include <string>
 #include <layer_ids.h>
+#include <lset.h>
 #include <memory>
 #include <geometry/eda_angle.h>
 

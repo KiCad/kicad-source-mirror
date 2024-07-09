@@ -20,6 +20,7 @@
 
 
 #include <layer_ids.h>
+#include <lseq.h>
 #include <dialog_map_layers.h>
 
 #include <wx/msgdlg.h>

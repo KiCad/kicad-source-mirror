@@ -26,6 +26,7 @@
  */
 
 #include "ar_matrix.h"
+#include <lset.h>
 #include <math/util.h>      // for KiROUND
 #include <math_for_graphics.h>
 #include <trigo.h>

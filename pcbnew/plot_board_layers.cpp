@@ -24,6 +24,7 @@
 #include <wx/log.h>
 #include <eda_item.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <pcb_base_frame.h>

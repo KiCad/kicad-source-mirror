@@ -44,6 +44,7 @@
 #include <pcb_target.h>
 
 #include <layer_ids.h>
+#include <lset.h>
 #include <pcb_painter.h>
 #include <pcb_display_options.h>
 #include <project/net_settings.h>

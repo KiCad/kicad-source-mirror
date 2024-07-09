@@ -30,6 +30,7 @@
 #define __AR_MATRIX_H
 
 #include <layer_ids.h>
+#include <lset.h>
 #include <math/box2.h>
 
 class PCB_SHAPE;

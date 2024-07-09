@@ -27,6 +27,7 @@
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
 #include "pcb_layer_box_selector.h"
+#include <lset.h>
 
 class wxGrid;
 class PCB_LAYER_BOX_SELECTOR;

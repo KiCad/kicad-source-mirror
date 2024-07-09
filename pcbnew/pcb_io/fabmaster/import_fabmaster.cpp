@@ -2432,7 +2432,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             if( pad.top )
                                 newpad->SetLayerSet( PAD::SMDMask() );
                             else if( pad.bottom )
-                                newpad->SetLayerSet( FlipLayerMask( PAD::SMDMask() ) );
+                                newpad->SetLayerSet( PAD::SMDMask().Flip() );
                         }
                     }
 

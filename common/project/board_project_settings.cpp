@@ -19,6 +19,8 @@
  */
 
 #include <functional>
+#include <lset.h>
+#include <lseq.h>
 #include <project/board_project_settings.h>
 
 using namespace std::placeholders;

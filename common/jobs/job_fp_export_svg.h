@@ -23,6 +23,7 @@
 
 #include <kicommon.h>
 #include <layer_ids.h>
+#include <lseq.h>
 #include <wx/string.h>
 #include "job.h"
 

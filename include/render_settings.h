@@ -29,6 +29,7 @@
 
 #include <gal/color4d.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <memory>
 
 #include <wx/dc.h>

@@ -26,6 +26,7 @@
 #include <plotters/plotter.h>
 #include <pcbplot.h>
 #include <base_units.h>
+#include <lset.h>
 #include <locale_io.h>
 #include <reporter.h>
 #include <board.h>

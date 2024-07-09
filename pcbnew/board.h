@@ -31,6 +31,7 @@
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <hash.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <netinfo.h>
 #include <pcb_item_containers.h>
 #include <pcb_plot_params.h>

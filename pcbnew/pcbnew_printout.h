@@ -22,6 +22,7 @@
 #define PCBNEW_PRINTOUT_H
 
 #include <board_printout.h>
+#include <lset.h>
 #include <pcb_painter.h>
 #include <plotprint_opts.h>
 

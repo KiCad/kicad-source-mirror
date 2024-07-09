@@ -31,6 +31,7 @@
 #define ZONE_SETTINGS_H_
 
 #include <layer_ids.h>
+#include <lset.h>
 #include <zones.h>
 #include <geometry/eda_angle.h>
 #include <teardrop/teardrop_types.h>

@@ -32,6 +32,7 @@
 #include <gerbview_draw_panel_gal.h>
 #include <gerbview_settings.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+#include <lset.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>

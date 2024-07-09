@@ -33,6 +33,7 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <excellon_image.h>
+#include <lset.h>
 #include <wildcards_and_files_ext.h>
 #include <view/view.h>
 #include <widgets/wx_progress_reporters.h>

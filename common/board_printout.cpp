@@ -26,6 +26,7 @@
 
 #include <board_printout.h>
 
+#include <lset.h>
 #include <view/view.h>
 #include <gal/gal_print.h>
 #include <gal/graphics_abstraction_layer.h>

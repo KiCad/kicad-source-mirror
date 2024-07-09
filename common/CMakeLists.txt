@@ -143,6 +143,7 @@ set( KICOMMON_SRCS
     layer_id.cpp
     lib_id.cpp
     locale_io.cpp
+    lseq.cpp
     lset.cpp
     markup_parser.cpp
     netclass.cpp

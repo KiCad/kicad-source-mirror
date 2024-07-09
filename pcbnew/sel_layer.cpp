@@ -25,6 +25,7 @@
 
 #include <kiplatform/ui.h>
 #include <confirm.h>
+#include <lset.h>
 #include <pcb_base_frame.h>
 #include <widgets/layer_box_selector.h>
 #include <board.h>

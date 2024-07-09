@@ -41,6 +41,7 @@
 #include <board_connected_item.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <lset.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <connectivity/connectivity_data.h>
@@ -873,7 +874,8 @@ void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     // PADS items are currently on all copper layers, or
     // currently, only on Front or Back layers.
     // So the copper layers count is not taken in account
-    SetLayerSet( FlipLayerMask( m_padStack.LayerSet() ) );
+    LSET layerSet = m_padStack.LayerSet();
+    SetLayerSet( layerSet.Flip() );
 
     // Flip the basic shapes, in custom pads
     FlipPrimitives( aFlipLeftRight );

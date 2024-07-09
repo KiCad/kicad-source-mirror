@@ -30,6 +30,7 @@
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <kiplatform/ui.h>
+#include <lset.h>
 #include <widgets/panel_footprint_chooser.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>

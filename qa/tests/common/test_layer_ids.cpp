@@ -20,6 +20,8 @@
 
 #include <boost/test/unit_test.hpp>
 #include <layer_ids.h>
+#include <lset.h>
+#include <lseq.h>
 
 
 BOOST_AUTO_TEST_SUITE( LayerIds )

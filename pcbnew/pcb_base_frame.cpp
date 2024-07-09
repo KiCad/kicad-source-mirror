@@ -43,6 +43,7 @@
 #include <footprint.h>
 #include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
+#include <lset.h>
 #include <kiface_base.h>
 #include <pcb_painter.h>
 #include <pcbnew_id.h>

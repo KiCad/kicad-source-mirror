@@ -23,6 +23,7 @@
 #include <board.h>
 #include <board_item_container.h>
 #include <footprint.h>
+#include <lset.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_reference_image.h>

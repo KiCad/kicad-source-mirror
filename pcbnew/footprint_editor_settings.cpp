@@ -21,6 +21,7 @@
 #include <common.h>
 #include <footprint_editor_settings.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <pgm_base.h>
 #include <eda_text.h>
 #include <settings/common_settings.h>

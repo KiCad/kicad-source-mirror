@@ -24,6 +24,7 @@
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
 #include <bitmaps.h>
+#include <lset.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

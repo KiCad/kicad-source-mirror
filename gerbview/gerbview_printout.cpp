@@ -29,6 +29,9 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include "gerbview_printout.h"
+
+#include <lseq.h>
+#include <lset.h>
 #include <view/view.h>
 #include <gerbview_painter.h>
 #include <math/util.h>      // for KiROUND

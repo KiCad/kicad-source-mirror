@@ -25,6 +25,7 @@
 #include <core/typeinfo.h>
 #include <import_export.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <api/common/types/base_types.pb.h>
 #include <api/board/board_types.pb.h>
 

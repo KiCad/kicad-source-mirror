@@ -31,6 +31,7 @@
 #include <eda_draw_frame.h>
 #include <outline_mode.h>
 #include <lib_id.h>
+#include <lset.h>
 #include <pcb_display_options.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_origin_transforms.h>

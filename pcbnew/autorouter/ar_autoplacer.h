@@ -33,6 +33,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <lset.h>
 
 #include <connectivity/connectivity_data.h>
 

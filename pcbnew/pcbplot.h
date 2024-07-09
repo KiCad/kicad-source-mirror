@@ -24,6 +24,7 @@
 #ifndef PCBPLOT_H_
 #define PCBPLOT_H_
 
+#include <lset.h>
 #include <padstack.h>         // for PAD_DRILL_SHAPE
 #include <pcb_plot_params.h>
 #include <settings/color_settings.h>

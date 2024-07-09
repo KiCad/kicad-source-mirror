@@ -32,6 +32,7 @@
 
 #include <eda_units.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <netclass.h>
 
 #include <map>

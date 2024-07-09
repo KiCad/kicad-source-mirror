@@ -27,6 +27,7 @@
 
 #include <pcb_io/pcb_io_mgr.h>
 #include <layer_ids.h> // PCB_LAYER_ID
+#include <lset.h>
 
 /**
  * @brief Describes an imported layer and how it could be mapped to KiCad Layers

@@ -32,6 +32,7 @@
 
 #include <collector.h>
 #include <layer_ids.h>              // LAYER_COUNT, layer defs
+#include <lset.h>
 #include <view/view.h>
 #include <board_item.h>
 

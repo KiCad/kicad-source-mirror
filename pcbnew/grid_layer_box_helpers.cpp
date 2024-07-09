@@ -27,6 +27,7 @@
 #include <settings/color_settings.h>
 #include <footprint_editor_settings.h>
 #include <board.h>
+#include <lset.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <settings/color_settings.h>

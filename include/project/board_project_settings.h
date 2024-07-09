@@ -22,6 +22,7 @@
 #define KICAD_BOARD_PROJECT_SETTINGS_H
 
 #include <layer_ids.h>
+#include <lset.h>
 #include <settings/parameters.h>
 
 // Can be removed by refactoring PARAM_LAYER_PRESET

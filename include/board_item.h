@@ -28,6 +28,8 @@
 
 #include <eda_item.h>
 #include <layer_ids.h>
+#include <lseq.h>
+#include <lset.h>
 #include <geometry/geometry_utils.h>
 #include <stroke_params.h>
 #include <geometry/eda_angle.h>

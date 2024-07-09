@@ -30,6 +30,7 @@
 #include <board_design_settings.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_engine.h>
+#include <lset.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <geometry/shape_segment.h>

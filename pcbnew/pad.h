@@ -31,6 +31,7 @@
 #include <board_connected_item.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_compound.h>
+#include <lset.h>
 #include <padstack.h>
 #include <geometry/eda_angle.h>
 #include <geometry/geometry_utils.h>

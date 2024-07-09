@@ -24,6 +24,7 @@
 #include <pcb_dimension.h>
 #include <pcb_track.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <kiface_base.h>
 #include <pad.h>
 #include <board_design_settings.h>

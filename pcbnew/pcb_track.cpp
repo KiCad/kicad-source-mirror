@@ -31,6 +31,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <pcb_track.h>
 #include <base_units.h>
+#include <lset.h>
 #include <string_utils.h>
 #include <view/view.h>
 #include <settings/color_settings.h>

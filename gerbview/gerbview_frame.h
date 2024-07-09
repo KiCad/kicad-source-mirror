@@ -24,6 +24,7 @@
 
 #include <file_history.h>
 #include <eda_draw_frame.h>
+#include <lset.h>
 #include <layer_ids.h>
 #include <gerbview.h>
 #include <gbr_layout.h>

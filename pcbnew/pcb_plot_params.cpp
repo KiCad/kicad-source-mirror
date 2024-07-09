@@ -24,6 +24,7 @@
 #include <board_design_settings.h>
 #include <charconv>
 #include <layer_ids.h>
+#include <lset.h>
 #include <string_utils.h>
 #include <math/util.h> // for KiROUND
 #include <pcb_plot_params.h>

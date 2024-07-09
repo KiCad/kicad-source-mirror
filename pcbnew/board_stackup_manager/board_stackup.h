@@ -29,6 +29,7 @@
 #include <vector>
 #include <wx/string.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <api/serializable.h>
 
 class BOARD;

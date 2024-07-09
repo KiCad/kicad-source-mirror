@@ -29,6 +29,7 @@
 #include <unordered_set>
 #include <string_any_map.h>
 
+#include <lset.h>
 #include <pcb_group.h>
 
 class EDIT_POINTS;

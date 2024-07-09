@@ -27,6 +27,7 @@
 
 #include <pcb_base_frame.h>
 #include <board.h>
+#include <lset.h>
 #include <settings/color_settings.h>
 #include <zones.h>
 

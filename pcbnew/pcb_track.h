@@ -43,6 +43,7 @@
 #include <geometry/shape_segment.h>
 #include <core/minoptmax.h>
 #include <core/arraydim.h>
+#include <lset.h>
 #include <padstack.h>
 
 class PCB_TRACK;

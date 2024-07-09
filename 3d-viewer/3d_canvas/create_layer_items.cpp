@@ -38,6 +38,7 @@
 #include <board_design_settings.h>
 #include <board.h>
 #include <footprint.h>
+#include <lset.h>
 #include <pad.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>

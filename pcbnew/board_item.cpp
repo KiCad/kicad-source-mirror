@@ -31,6 +31,7 @@
 #include <macros.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <lset.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
 #include <footprint.h>

@@ -34,6 +34,7 @@
 #include <3d_math.h>
 #include "3d_fastmath.h"
 #include <geometry/geometry_utils.h>
+#include <lset.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <wx/log.h>

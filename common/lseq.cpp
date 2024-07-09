@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,37 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_EXPORT_PCB_DXF_H
-#define JOB_EXPORT_PCB_DXF_H
-
-#include <kicommon.h>
 #include <layer_ids.h>
 #include <lseq.h>
-#include <wx/string.h>
-#include "job.h"
 
-class KICOMMON_API JOB_EXPORT_PCB_DXF : public JOB
-{
-public:
-    JOB_EXPORT_PCB_DXF( bool aIsCli );
-
-    enum class DXF_UNITS
-    {
-        INCHES,
-        MILLIMETERS
-    };
-
-    wxString m_filename;
-    wxString m_outputFile;
-    wxString m_drawingSheet;
-
-    bool m_plotFootprintValues;
-    bool m_plotRefDes;
-    bool m_plotGraphicItemsUsingContours;
-    bool m_plotBorderTitleBlocks;
-    DXF_UNITS m_dxfUnits;
-
-    LSEQ m_printMaskLayer;
-};
-
-#endif
+#include <vector>

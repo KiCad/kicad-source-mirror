@@ -29,6 +29,7 @@
 #include <geometry/shape_poly_set.h>
 #include <gal/color4d.h>
 #include <layer_ids.h>
+#include <lset.h>
 
 // Default value to chain 2 shapes when creating the board outlines
 // from shapes on Edges.Cut layer

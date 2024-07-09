@@ -30,6 +30,7 @@
 #include <pcb_screen.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <lset.h>
 #include <pad.h>
 #include <zone.h>
 #include <footprint.h>
@@ -733,7 +734,7 @@ void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         fillsCopy[oldLayer] = *shapePtr;
     }
 
-    SetLayerSet( FlipLayerMask( GetLayerSet(), GetBoard()->GetCopperLayerCount() ) );
+    SetLayerSet( GetLayerSet().Flip( GetBoard()->GetCopperLayerCount() ) );
 
     for( auto& [oldLayer, shape] : fillsCopy )
     {

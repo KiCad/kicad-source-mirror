@@ -33,6 +33,7 @@
 #include <board_item.h>
 #include <collectors.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
+#include <lset.h>
 #include <lib_id.h>
 #include <list>
 

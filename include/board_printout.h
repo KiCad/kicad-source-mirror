@@ -30,6 +30,7 @@
 
 #include <wx/print.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <printout.h>
 #include <math/box2.h>
 

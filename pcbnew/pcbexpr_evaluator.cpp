@@ -26,6 +26,7 @@
 #include <memory>
 #include <mutex>
 #include <board.h>
+#include <lset.h>
 #include <board_connected_item.h>
 #include <pcbexpr_evaluator.h>
 #include <drc/drc_engine.h>

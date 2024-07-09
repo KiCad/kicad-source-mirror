@@ -27,6 +27,8 @@
 #define PCB_GRID_HELPER_H
 
 #include <vector>
+
+#include <lset.h>
 #include <pcb_item_containers.h>
 #include <tool/grid_helper.h>
 

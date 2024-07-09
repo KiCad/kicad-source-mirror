@@ -34,6 +34,7 @@
 #include <footprint.h>
 #include <3d_math.h>
 #include <glm/geometric.hpp>
+#include <lset.h>
 #include <math/util.h>      // for KiROUND
 #include <utility>
 #include <vector>

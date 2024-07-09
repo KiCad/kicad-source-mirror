@@ -30,6 +30,7 @@
 #include <fp_lib_table.h>
 #include <bitmaps.h>
 #include <confirm.h>
+#include <lset.h>
 #include <trace_helpers.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>

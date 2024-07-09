@@ -30,7 +30,7 @@
 
 #include <units_provider.h>
 #include <geometry/shape.h>
-
+#include <lset.h>
 #include <drc/drc_rule.h>
 
 

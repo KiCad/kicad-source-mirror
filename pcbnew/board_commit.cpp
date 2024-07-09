@@ -26,6 +26,7 @@
 #include <macros.h>
 #include <board.h>
 #include <footprint.h>
+#include <lset.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <tool/tool_manager.h>

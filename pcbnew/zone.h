@@ -32,6 +32,7 @@
 #include <board_item.h>
 #include <board_connected_item.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <geometry/shape_poly_set.h>
 #include <zone_settings.h>
 #include <teardrop/teardrop_types.h>

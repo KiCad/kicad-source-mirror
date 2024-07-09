@@ -24,6 +24,8 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <layer_ids.h>
+#include <lset.h>
+
 
 BOOST_AUTO_TEST_SUITE( LSet )
 

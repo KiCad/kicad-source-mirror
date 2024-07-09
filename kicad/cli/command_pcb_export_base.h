@@ -23,6 +23,8 @@
 
 #include "command.h"
 #include <layer_ids.h>
+#include <lset.h>
+#include <lseq.h>
 
 namespace CLI
 {

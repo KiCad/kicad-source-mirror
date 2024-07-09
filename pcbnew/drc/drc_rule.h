@@ -29,6 +29,7 @@
 #include <optional>
 #include <core/minoptmax.h>
 #include <layer_ids.h>
+#include <lset.h>
 #include <netclass.h>
 #include <zones.h>
 #include <libeval_compiler/libeval_compiler.h>

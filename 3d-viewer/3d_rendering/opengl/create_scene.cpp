@@ -28,6 +28,7 @@
 #include <footprint.h>
 #include "../../3d_math.h"
 #include "convert_basic_shapes_to_polygon.h"
+#include <lset.h>
 #include <trigo.h>
 #include <project.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
