@@ -222,9 +222,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     for( unsigned i = 0; i < arrayDim( cu_seq ); ++i )
         cu_seq[i] = ToLAYER_ID( B_Cu - i );
 
-    for( LSEQ cu = cu_set.Seq( cu_seq, arrayDim( cu_seq ) ); cu; ++cu )
+    for( PCB_LAYER_ID layer : cu_set.Seq( cu_seq, arrayDim( cu_seq ) ) )
     {
-        const PCB_LAYER_ID layer = *cu;
+        if( !Is3dLayerEnabled( layer, visibilityFlags ) ) // Skip non enabled layers
 
         if( !Is3dLayerEnabled( layer, visibilityFlags ) ) // Skip non enabled layers
             continue;

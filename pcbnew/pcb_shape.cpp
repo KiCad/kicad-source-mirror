@@ -916,8 +916,8 @@ static struct PCB_SHAPE_DESC
         {
             layerEnum.Undefined( UNDEFINED_LAYER );
 
-            for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
-                layerEnum.Map( *seq, LSET::Name( *seq ) );
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+                layerEnum.Map( layer, LSET::Name( layer ) );
         }
 
         void ( PCB_SHAPE::*shapeLayerSetter )( PCB_LAYER_ID ) = &PCB_SHAPE::SetLayer;

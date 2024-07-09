@@ -202,10 +202,8 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
     int      right_row = 0;
     wxString layername;
 
-    for( LSEQ ui_seq = m_brd->GetEnabledLayers().UIOrder(); ui_seq; ++ui_seq )
+    for( PCB_LAYER_ID layerid : m_brd->GetEnabledLayers().UIOrder() )
     {
-        PCB_LAYER_ID  layerid = *ui_seq;
-
         if( m_notAllowedLayersMask[layerid] )
             continue;
 
@@ -385,10 +383,8 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
     int      row = 0;
     wxString layername;
 
-    for( LSEQ ui_seq = m_brd->GetEnabledLayers().UIOrder(); ui_seq; ++ui_seq )
+    for( PCB_LAYER_ID layerid : m_brd->GetEnabledLayers().UIOrder() )
     {
-        PCB_LAYER_ID layerid = *ui_seq;
-
         if( !IsCopperLayer( layerid ) )
             continue;
 

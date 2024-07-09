@@ -157,11 +157,10 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     m_layerColors[LAYER_PAD_BK_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
 
     // Netnames for copper layers
-    for( LSEQ cu = LSET::AllCuMask().CuStack();  cu;  ++cu )
+    for( PCB_LAYER_ID layer : LSET::AllCuMask().CuStack() )
     {
         const COLOR4D lightLabel( 1.0, 1.0, 1.0, 0.7 );
         const COLOR4D darkLabel = lightLabel.Inverted();
-        PCB_LAYER_ID  layer = *cu;
 
         if( m_layerColors[layer].GetBrightness() > 0.5 )
             m_layerColors[GetNetnameLayer( layer )] = darkLabel;

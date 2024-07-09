@@ -589,10 +589,8 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
                  fmt_mask( mask ).c_str(),
                  via->GetDrillValue() / SCALE_FACTOR );
 
-        for( LSEQ seq = mask.Seq( gc_seq, arrayDim( gc_seq ) );  seq;  ++seq )
+        for( PCB_LAYER_ID layer : mask.Seq( gc_seq, arrayDim( gc_seq ) ) )
         {
-            PCB_LAYER_ID layer = *seq;
-
             fprintf( m_file, "PAD V%d.%d.%s %s 0 0\n",
                     via->GetWidth(), via->GetDrillValue(),
                     fmt_mask( mask ).c_str(),
@@ -615,10 +613,8 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         LSET pad_set = pad->GetLayerSet() & master_layermask;
 
         // the special gc_seq
-        for( LSEQ seq = pad_set.Seq( gc_seq, arrayDim( gc_seq ) );  seq;  ++seq )
+        for( PCB_LAYER_ID layer : pad_set.Seq( gc_seq, arrayDim( gc_seq ) ) )
         {
-            PCB_LAYER_ID layer = *seq;
-
             fprintf( m_file, "PAD P%u %s 0 0\n", i, GenCADLayerName( cu_count, layer ).c_str() );
         }
 
@@ -628,10 +624,8 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
             fprintf( m_file, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
 
             // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
-            for( LSEQ seq = pad_set.Seq();  seq;  ++seq )
+            for( PCB_LAYER_ID layer : pad_set.Seq() )
             {
-                PCB_LAYER_ID layer = *seq;
-
                 fprintf( m_file, "PAD P%u %s 0 0\n", i,
                          GenCADLayerNameFlipped( cu_count, layer ).c_str() );
             }

@@ -453,10 +453,10 @@ LSEQ LSET::Seq( const LSEQ& aSequence ) const
 {
     LSEQ ret;
 
-    for( LSEQ seq = aSequence; seq; ++seq )
+    for( PCB_LAYER_ID layer : aSequence )
     {
-        if( test( *seq ) )
-            ret.push_back( *seq );
+        if( test( layer ) )
+            ret.push_back( layer );
     }
 
     return ret;

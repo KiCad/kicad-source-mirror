@@ -271,9 +271,8 @@ void PANEL_SETUP_LAYERS::setMandatoryLayerCheckBoxes()
 
 void PANEL_SETUP_LAYERS::setUserDefinedLayerCheckBoxes()
 {
-    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : LSET::UserDefinedLayers().Seq() )
     {
-        PCB_LAYER_ID layer = *seq;
         bool         state = m_pcb->IsLayerEnabled( layer );
 
 #ifdef HIDE_INACTIVE_LAYERS
@@ -305,9 +304,8 @@ void PANEL_SETUP_LAYERS::showBoardLayerNames()
     // Set all the board's layer names into the dialog by calling BOARD::GetLayerName(),
     // which will call BOARD::GetStandardLayerName() for non-coppers.
 
-    for( LSEQ seq = dlg_layers();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : dlg_layers() )
     {
-        PCB_LAYER_ID layer = *seq;
         wxControl*   ctl = getName( layer );
 
         if( ctl )
@@ -326,11 +324,8 @@ void PANEL_SETUP_LAYERS::showBoardLayerNames()
 void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
 {
     // The check boxes
-    for( LSEQ seq = dlg_layers();  seq;  ++seq )
-    {
-        PCB_LAYER_ID layer = *seq;
+    for( PCB_LAYER_ID layer : dlg_layers() )
         setLayerCheckBox( layer, enabledLayers[layer] );
-    }
 }
 
 
@@ -359,9 +354,8 @@ LSET PANEL_SETUP_LAYERS::GetUILayerMask()
 {
     LSET layerMaskResult;
 
-    for( LSEQ seq = dlg_layers();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : dlg_layers() )
     {
-        PCB_LAYER_ID layer = *seq;
         wxCheckBox*  ctl = getCheckBox( layer );
 
         if( !ctl || ctl->GetValue() )
@@ -397,9 +391,8 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
         --copperCount;
     }
 
-    for( LSEQ seq = LSET::InternalCuMask().Seq();  seq;  ++seq, --copperCount )
+    for( PCB_LAYER_ID layer : LSET::InternalCuMask().Seq() )
     {
-        PCB_LAYER_ID layer = *seq;
         bool     state = copperCount > 0;
 
 #ifdef HIDE_INACTIVE_LAYERS
@@ -436,9 +429,9 @@ void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 {
     wxObject* source = event.GetEventObject();
 
-    for( LSEQ seq = LSET::AllCuMask().Seq(); seq; ++seq )
+    for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
     {
-        wxCheckBox* copper = getCheckBox( *seq );
+        wxCheckBox* copper = getCheckBox( layer );
 
         if( source == copper )
         {
@@ -582,10 +575,8 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         modified = true;
     }
 
-    for( LSEQ seq = LSET::AllLayersMask().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
     {
-        PCB_LAYER_ID  layer = *seq;
-
         if( m_enabledLayers[layer] )
         {
             const wxString& newLayerName = GetLayerName( layer );
@@ -636,9 +627,8 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         }
     }
 
-    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : LSET::UserDefinedLayers().Seq() )
     {
-        PCB_LAYER_ID    layer = *seq;
         const wxString& newLayerName = GetLayerName( layer );
 
         if( m_enabledLayers[ layer ] && m_pcb->GetLayerName( layer ) != newLayerName )
@@ -688,10 +678,8 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
     std::vector<wxString>    names;
     wxTextCtrl*  ctl;
 
-    for( LSEQ seq = LSET::AllLayersMask().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
     {
-        PCB_LAYER_ID layer = *seq;
-
         // we _can_ rely on m_enabledLayers being current here:
 
         if( !m_enabledLayers[layer] )
@@ -878,15 +866,15 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
     // Build the available user-defined layers list:
     std::vector<wxArrayString> list;
 
-    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : LSET::UserDefinedLayers().Seq() )
     {
-        wxCheckBox* checkBox = getCheckBox( *seq );
+        wxCheckBox* checkBox = getCheckBox( layer );
 
         if( checkBox && checkBox->IsShown() )
             continue;
 
         wxArrayString available_user_layer;
-        available_user_layer.Add( LayerName( *seq ) );
+        available_user_layer.Add( LayerName( layer ) );
 
         list.emplace_back( available_user_layer );
     }
@@ -906,21 +894,24 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetTextSelection().IsEmpty() )
         return;
 
-    LSEQ seq;
+    PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-    for( seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID layer2 : LSET::UserDefinedLayers().Seq() )
     {
-        if( LayerName( *seq ) == dlg.GetTextSelection() )
+        if( LayerName( layer2 ) == dlg.GetTextSelection() )
+        {
+            layer = layer2;
             break;
+        }
     }
 
-    wxCHECK( *seq >= User_1 && *seq <= User_9, /* void */ );
+    wxCHECK( layer >= User_1 && layer <= User_9, /* void */ );
 
-    LSET newLayer( *seq );
+    LSET newLayer( layer );
 
     m_enabledLayers |= newLayer;
 
-    PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( *seq );
+    PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
 
     // All user-defined layers should have a checkbox
     wxASSERT( ctl.checkbox );
@@ -929,7 +920,7 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
     wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ctl.name );
 
     wxCHECK( textCtrl, /* void */ );
-    textCtrl->ChangeValue( LSET::Name( *seq ) );
+    textCtrl->ChangeValue( LSET::Name( layer ) );
 
     wxChoice* userLayerType = dynamic_cast<wxChoice*>( ctl.choice );
 

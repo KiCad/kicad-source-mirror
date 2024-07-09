@@ -655,9 +655,8 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard, int aNestLevel 
 
     // Save only the used copper layers from front to back.
 
-    for( LSEQ cu = aBoard->GetEnabledLayers().CuStack();  cu;  ++cu )
+    for( PCB_LAYER_ID layer : aBoard->GetEnabledLayers().CuStack() )
     {
-        PCB_LAYER_ID layer = *cu;
 
         m_out->Print( aNestLevel+1, "(%d %s %s",
                       layer,
@@ -703,10 +702,8 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard, int aNestLevel 
         User_9
     };
 
-    for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, arrayDim( non_cu ) ); seq; ++seq )
+    for( PCB_LAYER_ID layer : aBoard->GetEnabledLayers().Seq( non_cu, arrayDim( non_cu ) ) )
     {
-        PCB_LAYER_ID layer = *seq;
-
         m_out->Print( aNestLevel+1, "(%d %s",
                       layer,
                       m_out->Quotew( LSET::Name( layer ) ).c_str() );
@@ -1580,10 +1577,10 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
             {
                 m_out->Print( 0, " (zone_layer_connections" );
 
-                for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
+                for( PCB_LAYER_ID layer : board->GetEnabledLayers().CuStack() )
                 {
-                    if( aPad->GetZoneLayerOverride( *cu ) == ZLO_FORCE_FLASHED )
-                        m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
+                    if( aPad->GetZoneLayerOverride( layer ) == ZLO_FORCE_FLASHED )
+                        m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( layer ) ).c_str() );
                 }
 
                 m_out->Print( 0, ")" );
@@ -2263,10 +2260,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
         {
             m_out->Print( 0, " (zone_layer_connections" );
 
-            for( LSEQ cu = board->GetEnabledLayers().CuStack();  cu;  ++cu )
+            for( PCB_LAYER_ID layer : board->GetEnabledLayers().CuStack() )
             {
-                if( via->GetZoneLayerOverride( *cu ) == ZLO_FORCE_FLASHED )
-                    m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( *cu ) ).c_str() );
+                if( via->GetZoneLayerOverride( layer ) == ZLO_FORCE_FLASHED )
+                    m_out->Print( 0, " %s", m_out->Quotew( LSET::Name( layer ) ).c_str() );
             }
 
             m_out->Print( 0, ")" );

@@ -239,11 +239,11 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     wxPGChoices fonts;
 
     // Regenerate all layers
-    for( LSEQ seq = aBoard->GetEnabledLayers().UIOrder(); seq; ++seq )
-        layersAll.Add( LSET::Name( *seq ), *seq );
+    for( PCB_LAYER_ID layer : aBoard->GetEnabledLayers().UIOrder() )
+        layersAll.Add( LSET::Name( layer ), layer );
 
-    for( LSEQ seq = LSET( aBoard->GetEnabledLayers() & LSET::AllCuMask() ).UIOrder(); seq; ++seq )
-        layersCu.Add( LSET::Name( *seq ), *seq );
+    for( PCB_LAYER_ID layer : LSET( aBoard->GetEnabledLayers() & LSET::AllCuMask() ).UIOrder() )
+        layersCu.Add( LSET::Name( layer ), layer );
 
     m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
     m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) )->SetChoices( layersAll );

@@ -105,20 +105,19 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     std::vector<PCB_LAYER_ID> layersIdChoiceList;
     int                       textWidth = 0;
 
-    for( LSEQ seq = board->GetEnabledLayers().SeqStackupForPlotting(); seq; ++seq )
+    for( PCB_LAYER_ID layer : board->GetEnabledLayers().SeqStackupForPlotting() )
     {
-        PCB_LAYER_ID id = *seq;
-        wxString     layerName = board->GetLayerName( id );
+        wxString     layerName = board->GetLayerName( layer );
 
         // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
         textWidth = std::max( textWidth, KIUI::GetTextSize( layerName, m_layerCheckListBox ).x );
 
         plotAllLayersChoicesStrings.Add( layerName );
-        layersIdChoiceList.push_back( id );
+        layersIdChoiceList.push_back( layer );
 
         size_t size = plotOnAllLayersSelection.size();
 
-        if( ( static_cast<size_t>( id ) <= size ) && plotOnAllLayersSelection.test( id ) )
+        if( ( static_cast<size_t>( layer ) <= size ) && plotOnAllLayersSelection.test( layer ) )
             plotAllLayersOrder.push_back( order );
         else
             plotAllLayersOrder.push_back( ~order );
@@ -286,10 +285,8 @@ void DIALOG_PLOT::init_Dialog()
     m_layerList = board->GetEnabledLayers().UIOrder();
 
     // Populate the check list box by all enabled layers names.
-    for( LSEQ seq = m_layerList;  seq;  ++seq )
+    for( PCB_LAYER_ID layer : m_layerList )
     {
-        PCB_LAYER_ID layer = *seq;
-
         int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
 
         if( m_plotOpts.GetLayerSelection()[layer] )
@@ -443,9 +440,9 @@ void DIALOG_PLOT::arrangeAllLayersList( const LSEQ& aSeq )
 
     int  idx = 0;
 
-    for( LSEQ seq = aSeq; seq; ++seq, ++idx )
+    for( PCB_LAYER_ID layer : aSeq )
     {
-        int currentPos = findLayer( m_plotAllLayersList, *seq );
+        int currentPos = findLayer( m_plotAllLayersList, layer );
 
         while( currentPos > idx )
         {
@@ -1174,12 +1171,12 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     wxBusyCursor dummy;
 
-    for( LSEQ seq = m_plotOpts.GetLayerSelection().UIOrder();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : m_plotOpts.GetLayerSelection().UIOrder() )
     {
         LSEQ plotSequence;
 
         // Base layer always gets plotted first.
-        plotSequence.push_back( *seq );
+        plotSequence.push_back( layer );
 
         // Add selected layers from plot on all layers list in order set by user.
         wxArrayInt plotOnAllLayers;
@@ -1191,17 +1188,16 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             for( size_t i = 0; i < count; i++ )
             {
                 int index = plotOnAllLayers.Item( i );
-                PCB_LAYER_ID layer = getLayerClientData( m_plotAllLayersList, index )->Layer();
+                PCB_LAYER_ID client_layer = getLayerClientData( m_plotAllLayersList, index )->Layer();
 
                 // Don't plot the same layer more than once;
-                if( find( plotSequence.begin(), plotSequence.end(), layer ) != plotSequence.end() )
+                if( find( plotSequence.begin(), plotSequence.end(), client_layer ) != plotSequence.end() )
                     continue;
 
-                plotSequence.push_back( layer );
+                plotSequence.push_back( client_layer );
             }
         }
 
-        PCB_LAYER_ID layer = *seq;
         wxString     layerName = board->GetLayerName( layer );
         //@todo allow controlling the sheet name and path that will be displayed in the title block
         // Leave blank for now

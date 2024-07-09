@@ -538,11 +538,6 @@ public:
             BASE_SEQ( aLayers ), m_index( 0 )
     {}
 
-    void Rewind()           { m_index = 0; }
-
-    void operator ++ ()     { ++m_index; }  // returns nothing, used in simple statements only.
-
-    void operator ++ (int)  { ++m_index; }
 
     operator bool ()        { return m_index < size(); }
 

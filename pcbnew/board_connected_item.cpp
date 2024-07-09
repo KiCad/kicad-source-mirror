@@ -167,8 +167,8 @@ static struct BOARD_CONNECTED_ITEM_DESC
         {
             layerEnum.Undefined( UNDEFINED_LAYER );
 
-            for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
-                layerEnum.Map( *seq, LSET::Name( *seq ) );
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+                layerEnum.Map( layer, LSET::Name( layer ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();

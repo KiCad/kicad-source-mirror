@@ -268,9 +268,8 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
 
     int textWidth = 0;
 
-    for( LSEQ layer = aLayers.UIOrder(); layer; ++layer )
+    for( PCB_LAYER_ID layerID : aLayers.UIOrder() )
     {
-        PCB_LAYER_ID layerID = *layer;
         wxString layerName = board->GetLayerName( layerID );
 
         if( aFpEditorMode && layerID == In1_Cu )

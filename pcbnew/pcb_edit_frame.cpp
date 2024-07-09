@@ -1519,13 +1519,13 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     layerEnum.Choices().Clear();
     layerEnum.Undefined( UNDEFINED_LAYER );
 
-    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
     {
         // Canonical name
-        layerEnum.Map( *seq, LSET::Name( *seq ) );
+        layerEnum.Map( layer, LSET::Name( layer ) );
 
         // User name
-        layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
+        layerEnum.Map( layer, GetBoard()->GetLayerName( layer ) );
     }
 
     DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
@@ -1741,13 +1741,13 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     layerEnum.Choices().Clear();
     layerEnum.Undefined( UNDEFINED_LAYER );
 
-    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
     {
         // Canonical name
-        layerEnum.Map( *seq, LSET::Name( *seq ) );
+        layerEnum.Map( layer, LSET::Name( layer ) );
 
         // User name
-        layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
+        layerEnum.Map( layer, GetBoard()->GetLayerName( layer ) );
     }
 
     // Sync visibility with canvas

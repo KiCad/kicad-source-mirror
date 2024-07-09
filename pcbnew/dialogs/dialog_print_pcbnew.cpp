@@ -146,10 +146,8 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
     m_layerList = board->GetEnabledLayers().UIOrder();
 
     // Populate the check list box by all enabled layers names
-    for( LSEQ seq = m_layerList;  seq;  ++seq )
+    for( PCB_LAYER_ID layer : m_layerList )
     {
-        PCB_LAYER_ID layer = *seq;
-
         int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
 
         if( settings()->m_LayerSet.test( layer ) )

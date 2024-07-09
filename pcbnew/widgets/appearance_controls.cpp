@@ -1727,9 +1727,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     auto layer_it = m_layerSettings.begin();
 
     // show all coppers first, with front on top, back on bottom, then technical layers
-    for( LSEQ cu_stack = enabled.CuStack(); cu_stack; ++cu_stack, ++layer_it )
+    for( PCB_LAYER_ID layer : enabled.CuStack() )
     {
-        PCB_LAYER_ID layer = *cu_stack;
         wxString dsc;
 
         switch( layer )

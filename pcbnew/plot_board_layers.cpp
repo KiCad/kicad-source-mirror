@@ -63,24 +63,24 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     // white shape *after* all other shapes are plotted
     bool plot_mark = aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE;
 
-    for( LSEQ seq = aLayers; seq; ++seq )
+    for( PCB_LAYER_ID layer : aLayers )
     {
         // copper layers with drill marks will be plotted after all other layers
-        if( *seq <= B_Cu && plot_mark )
+        if( layer <= B_Cu && plot_mark )
             continue;
 
-        PlotOneBoardLayer( aBoard, aPlotter, *seq, aPlotOptions );
+        PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions );
     }
 
     if( !plot_mark )
         return;
 
-    for( LSEQ seq = aLayers; seq; ++seq )
+    for( PCB_LAYER_ID layer : aLayers )
     {
-        if( *seq > B_Cu )   // already plotted
+        if( layer > B_Cu )   // already plotted
             continue;
 
-        PlotOneBoardLayer( aBoard, aPlotter, *seq, aPlotOptions );
+        PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions );
     }
 }
 
@@ -739,10 +739,8 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     SHAPE_POLY_SET outlines;
 
-    for( LSEQ seq = aLayerMask.Seq( aLayerMask.SeqStackupForPlotting() );  seq;  ++seq )
+    for( PCB_LAYER_ID layer : aLayerMask.Seq( aLayerMask.SeqStackupForPlotting() ) )
     {
-        PCB_LAYER_ID layer = *seq;
-
         outlines.RemoveAllContours();
         aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines );
 

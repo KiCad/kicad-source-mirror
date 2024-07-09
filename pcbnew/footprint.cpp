@@ -3721,8 +3721,8 @@ static struct FOOTPRINT_DESC
         {
             layerEnum.Undefined( UNDEFINED_LAYER );
 
-            for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
-                layerEnum.Map( *seq, LSET::Name( *seq ) );
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+                layerEnum.Map( layer, LSET::Name( layer ) );
         }
 
         wxPGChoices fpLayers;       // footprints might be placed only on F.Cu & B.Cu

@@ -726,9 +726,9 @@ void EXPORTER_PCB_VRML::ComputeLayer3D_Zpos()
     double half_thickness = m_brd_thickness / 2;
 
     // Compute each layer's Z value, more or less like the 3d view
-    for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
+    for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
     {
-        int i = static_cast<int>( *seq );
+        int i = static_cast<int>( layer );
 
         if( i < copper_layers )
             SetLayerZ( i,  half_thickness - m_brd_thickness * i / (copper_layers - 1) );

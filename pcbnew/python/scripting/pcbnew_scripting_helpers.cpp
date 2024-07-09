@@ -197,13 +197,13 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSet
         layerEnum.Choices().Clear();
         layerEnum.Undefined( UNDEFINED_LAYER );
 
-        for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+        for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
         {
             // Canonical name
-            layerEnum.Map( *seq, LSET::Name( *seq ) );
+            layerEnum.Map( layer, LSET::Name( layer ) );
 
             // User name
-            layerEnum.Map( *seq, brd->GetLayerName( *seq ) );
+            layerEnum.Map( layer, brd->GetLayerName( layer ) );
         }
 
         brd->SetProject( project );
@@ -557,10 +557,10 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     layerEnum.Choices().Clear();
     layerEnum.Undefined( UNDEFINED_LAYER );
 
-    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
     {
-        layerEnum.Map( *seq, LSET::Name( *seq ) );              // Add Canonical name
-        layerEnum.Map( *seq, aBoard->GetLayerName( *seq ) );    // Add User name
+        layerEnum.Map( layer, LSET::Name( layer ) );              // Add Canonical name
+        layerEnum.Map( layer, aBoard->GetLayerName( layer ) );    // Add User name
     }
 
     try

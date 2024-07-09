@@ -671,26 +671,25 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
             aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection;
     }
 
-    for( LSEQ seq = LSET( aGerberJob->m_printMaskLayer ).UIOrder(); seq; ++seq )
+    for( PCB_LAYER_ID layer : LSET( aGerberJob->m_printMaskLayer ).UIOrder() )
     {
         LSEQ plotSequence;
 
         // Base layer always gets plotted first.
-        plotSequence.push_back( *seq );
+        plotSequence.push_back( layer );
 
         // Now all the "include on all" layers
-        for( LSEQ seqAll = aGerberJob->m_layersIncludeOnAll.UIOrder(); seqAll; ++seqAll )
+        for( PCB_LAYER_ID layer_all : aGerberJob->m_layersIncludeOnAll.UIOrder() )
         {
             // Don't plot the same layer more than once;
-            if( find( plotSequence.begin(), plotSequence.end(), *seqAll ) != plotSequence.end() )
+            if( find( plotSequence.begin(), plotSequence.end(), layer_all ) != plotSequence.end() )
                 continue;
 
-            plotSequence.push_back( *seqAll );
+            plotSequence.push_back( layer_all );
         }
 
         // Pick the basename from the board file
         wxFileName      fn( brd->GetFileName() );
-        PCB_LAYER_ID    layer = *seq;
         wxString        layerName = brd->GetLayerName( layer );
         wxString        sheetName;
         wxString        sheetPath;
