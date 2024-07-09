@@ -290,10 +290,12 @@ public:
 
     void Move( const VECTOR2I& aMoveVector ) override
     {
+        m_origin += aMoveVector;
+        m_end += aMoveVector;
+
         if( !this->HasFlag( IN_EDIT ) )
         {
-            PCB_GENERATOR::Move( aMoveVector );
-            m_end += aMoveVector;
+            PCB_GROUP::Move( aMoveVector );
 
             if( m_baseLine )
                 m_baseLine->Move( aMoveVector );
@@ -1463,6 +1465,7 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
                 if( bounds.PointInside( track->GetStart(), epsilon )
                     && bounds.PointInside( track->GetEnd(), epsilon ) )
                 {
+                    AddItem( item );
                     aCommit->Stage( item, CHT_GROUP );
                 }
             }
