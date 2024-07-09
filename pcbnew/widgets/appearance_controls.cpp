@@ -1756,6 +1756,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
             setting->ctl_text->Disable();
             setting->ctl_color->SetToolTip( wxEmptyString );
         }
+
+        ++layer_it;
     }
 
     for( const auto& entry : non_cu_seq )

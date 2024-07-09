@@ -84,7 +84,7 @@ wxString LayerName( int aLayer )
     case PCB_LAYER_ID::Eco1_User:         return wxT( "User.Eco1" );
     case PCB_LAYER_ID::Eco2_User:         return wxT( "User.Eco2" );
     case PCB_LAYER_ID::Edge_Cuts:         return wxT( "Edge.Cuts" );
-    case PCB_LAYER_ID::Margin:            return wxT( "PCB_LAYER_ID::Margin" );
+    case PCB_LAYER_ID::Margin:            return wxT( "Margin" );
 
     // Footprint
     case PCB_LAYER_ID::F_CrtYd:           return wxT( "F.Courtyard" );
