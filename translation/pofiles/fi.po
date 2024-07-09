@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-08 09:55-0700\n"
-"PO-Revision-Date: 2024-06-30 16:56+0000\n"
+"PO-Revision-Date: 2024-07-10 12:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4913,7 +4913,7 @@ msgstr "Piirustusarkkia ei luettu kokonaan."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Muisti loppui."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -13712,9 +13712,8 @@ msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "Muutokset ovat tallentamatta. Viedäänkö tallentamaton tieto?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1270
-#, fuzzy
 msgid "No output file specified in Export tab."
-msgstr "Viejässä ei ole määritetty tiedostonimeä"
+msgstr "Vienti-välilehdellä ei ole määritetty tulostustiedostoa."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1284
 #, c-format
@@ -15968,6 +15967,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' ei ole KiCad-kytkentäkaaviotiedosto.\n"
+"Käytä Tiedosto -> Tuo muita kuin KiCad-kytkentäkaaviotiedostoja."
 
 #: eeschema/files-io.cpp:279
 msgid "Root"
@@ -17518,6 +17519,8 @@ msgid ""
 "No module instance '%s' found in schematic file:\n"
 "%s"
 msgstr ""
+"Kytkentäkaaviotiedostosta ei löydy moduulin esiintymää '%s':\n"
+"%s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1720
 #, c-format
@@ -19783,9 +19786,9 @@ msgid "Another simulation is already running."
 msgstr "Toinen simulaatio on jo käynnissä."
 
 #: eeschema/sim/simulator_frame.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Tiedostoa %s ei voi ladata"
+msgstr "Tiedostoa %s ei voi ladata tai jäsentää"
 
 #: eeschema/sim/simulator_frame.cpp:626
 msgid "Save changes to workbook?"
@@ -21946,7 +21949,7 @@ msgstr "Merkitse simulaatiosta poissuljetut kohteet"
 
 #: eeschema/tools/ee_actions.cpp:1167
 msgid "Draw 'X's over items which have been excluded from simulation"
-msgstr ""
+msgstr "Piirrä 'X':t kohteiden päälle, jotka on jätetty pois simulaatiosta"
 
 #: eeschema/tools/ee_actions.cpp:1172
 msgid "Show OP Voltages"
@@ -24436,7 +24439,7 @@ msgstr "Vie silkkipainografiikkaa tasaisten pintojen joukkona"
 
 #: kicad/cli/command_pcb_export_3d.cpp:144
 msgid "Export soldermask layers as a set of flat faces"
-msgstr ""
+msgstr "Vie juotosmaskikerrokset tasaisten pintojen joukkona"
 
 #: kicad/cli/command_pcb_export_3d.cpp:148
 msgid "Fuse overlapping geometry together"
@@ -29918,24 +29921,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(useita piirilevyn ääriviivoja ei tueta)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(Suorakaiteen koko on nolla tai erittäin pieni: %d nm)"
+msgstr "(suorakulmion koko on nolla tai erittäin pieni: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:673
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(Ympyrän säde on nolla tai hyvin pieni: %d nm)"
+msgstr "(ympyrän säde on nolla tai hyvin pieni: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:692
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(Segmentin pituus on nolla tai erittäin pieni: %d nm)"
+msgstr "(segmentin pituus on nolla tai hyvin pieni: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(Kaaren koko on tyhjä tai erittäin pieni: %d nm)"
+msgstr "(kaaren koko on tyhjä tai erittäin pieni: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_drc.cpp:271 pcbnew/pcb_edit_frame.cpp:2450
@@ -32216,7 +32219,7 @@ msgstr "XAO-tiedostot"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:418
 msgid "BREP (OCCT) files"
-msgstr ""
+msgstr "BREP (OCCT) tiedostot"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:426
 msgid "3D Model Output File"
@@ -32253,11 +32256,11 @@ msgstr "GLB (binäärinen glTF)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -34652,7 +34655,6 @@ msgid "Fabrication property:"
 msgstr "Valmistusominaisuus:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -34664,16 +34666,16 @@ msgid ""
 "Castellated specifies a through hole pad on a board edge\n"
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
-"Valinnainen ominaisuus määrittelee erityistarkoituksen tai rajoituksen "
+"Valinnainen ominaisuus erityistarkoituksen tai rajoitteen määrittämiseksi "
 "valmistustiedostoissa:\n"
-"BGA-attribuutti on tarkoitettu anturoille BGA-jalanjäljissä\n"
-"Fiducial paikallinen on vanhempi jalanjälki\n"
-"Fiducial global on koko piirilevyllä\n"
-"Testipisteantura on hyödyllinen määrittelemään testipisteet Gerber-"
-"tiedostoissa\n"
-"Jäähdytysprofiilin antura määrittää lämpöanturan\n"
-"Uritettu määrittää uritettujen läpireikäanturoiden avulla levyn reunalla\n"
-"Nämä ominaisuudet määritetään Gerber X2  tiedostoissa."
+"BGA-attribuutti on tarkoitettu BGA-jalanjälkien anturoille\n"
+"Fiduciaalinen paikallinen on vanhemman jalanjäljen fiduciaali\n"
+"Fiducial globaali on koko piirilevyn fiduciaali\n"
+"Testipiste määrittää sähköisen testipisteen\n"
+"Jäähdytyselementti määrittää lämpöanturan\n"
+"Syvennykset määrittää läpimenevän reiän anturan piirilevyn reunassa\n"
+"Mekaaninen määrittelee läpimenevän reiän anturan, jota käytetään mekaaniseen "
+"tukeen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2525
 msgid "BGA pad"
@@ -35960,11 +35962,11 @@ msgstr "Ei peitetty"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:334
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr ""
+msgstr "Telttataanko (peitä juotosmaskilla) tämä läpivienti etupuolelta"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:340
 msgid "Link front and back tenting settings"
-msgstr ""
+msgstr "Linkitä etu- ja taka peittoasetukset"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:347
 msgid "Back tenting:"
@@ -35972,7 +35974,7 @@ msgstr "Peitetty takaa:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr ""
+msgstr "Telttataanko (peitä juotosmaskilla) tämä läpivienti takapuolelta"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:405
 msgid "Add teardrops on via's track connections"
@@ -37439,6 +37441,8 @@ msgstr "Ulkoinen, testaus"
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
 msgstr ""
+"Apukerrokset eivät käänny piirilevyn puolella, kun taas taka- ja "
+"etukerrokset kääntyvät."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:724
 msgid "User2"
@@ -41519,9 +41523,8 @@ msgid "(PTH pad hole non fully inside copper)"
 msgstr "(PTH anturan reikä ei kokonaan kuparin sisäpuolella)"
 
 #: pcbnew/pad.cpp:2121
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Anturan reikä ei ole anturan muodon sisällä."
+msgstr "(anturareikä ei anturan muodon sisällä)"
 
 #: pcbnew/pad.cpp:2126
 #, fuzzy
@@ -41602,9 +41605,8 @@ msgid "(SMD pad has no outer layers)"
 msgstr "SMD-anturalla ei ole ulkokerroksia"
 
 #: pcbnew/pad.cpp:2263
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Kriteeriarvot ei käy järkeen NPTH-anturoilla."
+msgstr "(\"fiducial\"-ominaisuudella ei ole järkeä NPTH-anturoissa)"
 
 #: pcbnew/pad.cpp:2267
 #, fuzzy
@@ -41612,53 +41614,44 @@ msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr "Testipisteominaisuus ei käy järkeen NPTH-anturoissa"
 
 #: pcbnew/pad.cpp:2270
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "Varoitus: Jäähdytysprofiilin ominaisuus, ei sovi NPTH anturoille."
+msgstr "('jäähdytyselementti' ominaisuus ei käy järkeen NPTH-anturoissa)"
 
 #: pcbnew/pad.cpp:2273
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Varoitus: Uritettu ominaisuus on PTH anturoille."
+msgstr "('uritettu' -ominaisuus on PTH-anturoille)"
 
 #: pcbnew/pad.cpp:2276
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "Varoitus: BGA ominaisuus on SMD anturoille."
+msgstr "('BGA'-ominaisuus on SMD-anturoille)"
 
 #: pcbnew/pad.cpp:2279
-#, fuzzy
 msgid "('mechanical' property is for PTH pads)"
-msgstr "Varoitus: Mekaaninen ominaisuus on PTH-anturoille."
+msgstr "('mekaaninen' ominaisuus on PTH-anturoille)"
 
 #: pcbnew/pad.cpp:2284
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(negatiivinen kulman säde ei ole sallittu)"
 
 #: pcbnew/pad.cpp:2286
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "Varoitus: Kulman koko tekee anturasta pyöreän."
+msgstr "(kulman koko tekee anturasta pyöreän)"
 
 #: pcbnew/pad.cpp:2291
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "Lataus on liian suuri."
+msgstr "(negatiivinen kulman viiste ei ole sallittu)"
 
 #: pcbnew/pad.cpp:2293
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "Lataus on liian suuri."
+msgstr "(kulmaviiste on liian suuri)"
 
 #: pcbnew/pad.cpp:2302
-#, fuzzy
 msgid "(trapazoid delta is too large)"
-msgstr "Virhe: Trapetsi-delta on liian suuri."
+msgstr "(trapatsoidinen delta on liian suuri)"
 
 #: pcbnew/pad.cpp:2313
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "Virhe: Mukautetun anturan muodon on oltava yksi polygoni."
+msgstr "(muokatun anturan muodon tulee mudostua yhdeksi monikulmioksi)"
 
 #: pcbnew/pad.cpp:2511
 msgid "Edge connector"
@@ -42115,7 +42108,7 @@ msgstr "Ladataan monikulmioita..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2038
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Monikulmion ääriviivojen määrä on %d, odotettu 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2165
 msgid "Loading rules..."
@@ -42382,7 +42375,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4261
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Tuntematon tekstilaatikon perustelu %d, teksti %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4331
 msgid "Loading rectangles..."
@@ -48361,7 +48354,7 @@ msgstr "Uusi ryhmä"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1254
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "Käytä /.../ osoittaaksesi säännöllisen lausekkeen.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1327
 msgid "Filter by Net Name"
