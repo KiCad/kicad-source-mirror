@@ -226,8 +226,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     for( PCB_LAYER_ID layer : cu_set.Seq( cu_seq, arrayDim( cu_seq ) ) )
     {
         if( !Is3dLayerEnabled( layer, visibilityFlags ) ) // Skip non enabled layers
-
-        if( !Is3dLayerEnabled( layer, visibilityFlags ) ) // Skip non enabled layers
             continue;
 
         layer_ids.push_back( layer );
