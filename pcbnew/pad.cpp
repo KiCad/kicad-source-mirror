@@ -1820,8 +1820,8 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
             shape->SetFilled( true );
             shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
             shape->SetPolyShape( existingOutline );
-            shape->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
             shape->Move( - ShapePos() );
+            shape->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
             AddPrimitive( shape );
         }
     }
