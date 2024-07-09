@@ -92,6 +92,10 @@ ERC_ITEM ERC_ITEM::fourWayJunction( ERCE_FOUR_WAY_JUNCTION,
         _( "Four connection points are joined together" ),
         wxT( "four_way_junction" ) );
 
+ERC_ITEM ERC_ITEM::labelMultipleWires( ERCE_LABEL_MULTIPLE_WIRES,
+        _( "Label connects more than one wire" ),
+        wxT( "label_multiple_wires" ) );
+
 ERC_ITEM ERC_ITEM::noConnectConnected( ERCE_NOCONNECT_CONNECTED,
         _( "A pin with a \"no connection\" flag is connected" ),
         wxT( "no_connect_connected" ) );
@@ -294,6 +298,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_NOCONNECT_CONNECTED:     return std::make_shared<ERC_ITEM>( noConnectConnected );
     case ERCE_NOCONNECT_NOT_CONNECTED: return std::make_shared<ERC_ITEM>( noConnectDangling );
     case ERCE_FOUR_WAY_JUNCTION:       return std::make_shared<ERC_ITEM>( fourWayJunction );
+    case ERCE_LABEL_MULTIPLE_WIRES:    return std::make_shared<ERC_ITEM>( labelMultipleWires );
     case ERCE_LABEL_NOT_CONNECTED:     return std::make_shared<ERC_ITEM>( labelDangling );
     case ERCE_SIMILAR_LABELS:          return std::make_shared<ERC_ITEM>( similarLabels );
     case ERCE_SINGLE_GLOBAL_LABEL:     return std::make_shared<ERC_ITEM>( singleGlobalLabel );

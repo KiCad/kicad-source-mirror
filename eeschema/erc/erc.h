@@ -124,6 +124,11 @@ public:
     int TestFourWayJunction();
 
     /**
+     * Test to see if there are labels that are connected to more than one wire.
+     */
+    int TestLabelMultipleWires();
+
+    /**
      * Test symbols for changed library symbols and broken symbol library links.
      * @return the number of issues found
      */

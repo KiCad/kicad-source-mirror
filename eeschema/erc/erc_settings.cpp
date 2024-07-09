@@ -111,6 +111,7 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_ERCSeverities[ERCE_MISSING_BIDI_PIN]        = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_SIMULATION_MODEL]        = RPT_SEVERITY_IGNORE;
     m_ERCSeverities[ERCE_FOUR_WAY_JUNCTION]       = RPT_SEVERITY_IGNORE;
+    m_ERCSeverities[ERCE_LABEL_MULTIPLE_WIRES]    = RPT_SEVERITY_WARNING;
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "rule_severities",
             [&]() -> nlohmann::json

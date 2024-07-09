@@ -83,9 +83,10 @@ enum ERCE_T
     ERCE_DUPLICATE_REFERENCE,     ///< More than one symbol with the same reference.
     ERCE_BUS_ENTRY_NEEDED,        ///< Importer failed to auto-place a bus entry.
     ERCE_FOUR_WAY_JUNCTION,       ///< A four-way junction was found.
+    ERCE_LABEL_MULTIPLE_WIRES,    ///< A label is connected to more than one wire.
 
 
-    ERCE_LAST = ERCE_FOUR_WAY_JUNCTION,
+    ERCE_LAST = ERCE_LABEL_MULTIPLE_WIRES,
 
     // Errors after this point will not automatically appear in the Severities Panel
 

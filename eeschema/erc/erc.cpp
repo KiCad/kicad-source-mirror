@@ -700,6 +700,61 @@ int ERC_TESTER::TestMissingNetclasses()
 }
 
 
+int ERC_TESTER::TestLabelMultipleWires()
+{
+    int err_count = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        std::map<VECTOR2I, std::vector<SCH_ITEM*>> connMap;
+
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_LABEL_T ) )
+        {
+            SCH_LABEL* label = static_cast<SCH_LABEL*>( item );
+
+            for( const VECTOR2I& pt : label->GetConnectionPoints() )
+                connMap[pt].emplace_back( label );
+        }
+
+        for( const std::pair<const VECTOR2I, std::vector<SCH_ITEM*>>& pair : connMap )
+        {
+            std::vector<SCH_ITEM*> lines;
+
+            for( SCH_ITEM* item : sheet.LastScreen()->Items().Overlapping( SCH_LINE_T, pair.first ) )
+            {
+                SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+                if( line->IsGraphicLine() )
+                    continue;
+
+                // If the line is connected at the endpoint, then there will be a junction
+                if( !line->IsEndPoint( pair.first ) )
+                    lines.emplace_back( line );
+            }
+
+            if( lines.size() > 1 )
+            {
+                err_count++;
+                lines.resize( 3 ); // Only show the first 3 lines and if there are only two, adds a nullptr
+
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LABEL_MULTIPLE_WIRES );
+                wxString msg = wxString::Format( _( "Label connects more than one wire at %d, %d" ),
+                                                 pair.first.x, pair.first.y );
+
+                ercItem->SetItems( pair.second.front(), lines[0], lines[1], lines[2] );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetSheetSpecificPath( sheet );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
+                sheet.LastScreen()->Append( marker );
+            }
+        }
+    }
+
+    return err_count;
+}
+
+
 int ERC_TESTER::TestFourWayJunction()
 {
     int err_count = 0;
@@ -1609,6 +1664,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking for four way junctions..." ) );
 
         TestFourWayJunction();
+    }
+
+    if( m_settings.IsTestEnabled( ERCE_LABEL_MULTIPLE_WIRES ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking for labels on more than one wire..." ) );
+
+        TestLabelMultipleWires();
     }
 
     if( m_settings.IsTestEnabled( ERCE_UNDEFINED_NETCLASS ) )
