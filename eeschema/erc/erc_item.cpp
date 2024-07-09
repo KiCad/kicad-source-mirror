@@ -235,6 +235,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::endpointOffGrid,
             ERC_ITEM::fourWayJunction,
             ERC_ITEM::duplicatePinError,
+            ERC_ITEM::labelMultipleWires,
 
             ERC_ITEM::heading_conflicts,
             ERC_ITEM::duplicateReference,
