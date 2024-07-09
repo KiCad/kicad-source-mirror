@@ -492,6 +492,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     plotOpts.SetFormat( PLOT_FORMAT::DXF );
 
     plotOpts.SetDXFPlotPolygonMode( aDxfJob->m_plotGraphicItemsUsingContours );
+    plotOpts.SetUseAuxOrigin( aDxfJob->m_useDrillOrigin );
 
     if( aDxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS )
         plotOpts.SetDXFPlotUnits( DXF_UNITS::MILLIMETERS );

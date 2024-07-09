@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,6 +29,7 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF( bool aIsCli ) :
     m_plotFootprintValues( true ),
     m_plotRefDes( true ),
     m_plotGraphicItemsUsingContours( true ),
+    m_useDrillOrigin( false ),
     m_plotBorderTitleBlocks( false ),
     m_dxfUnits( DXF_UNITS::INCHES ),
     m_printMaskLayer()
