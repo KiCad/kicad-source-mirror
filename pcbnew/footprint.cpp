@@ -2896,7 +2896,9 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         int width = 0;
 
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_courtyard_cache_front.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
+        // Use maxError here because that is the allowed deviation when transforming arcs/circles to
+        // polygons.
+        m_courtyard_cache_front.Inflate( -maxError, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_front.CacheTriangulation( false );
         auto max = std::max_element( front_width_histogram.begin(), front_width_histogram.end(),
@@ -2925,7 +2927,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         int width = 0;
 
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_courtyard_cache_back.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
+        m_courtyard_cache_back.Inflate( -maxError, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_back.CacheTriangulation( false );
         auto max = std::max_element( back_width_histogram.begin(), back_width_histogram.end(),
