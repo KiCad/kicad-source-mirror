@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-08 09:54-0700\n"
-"PO-Revision-Date: 2024-06-30 16:56+0000\n"
+"PO-Revision-Date: 2024-07-09 18:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -15244,6 +15244,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' ei ole KiCad-kytkentäkaaviotiedosto.\n"
+"Käytä Tiedosto -> Tuo muita kuin KiCad-kytkentäkaaviotiedostoja."
 
 #: eeschema/files-io.cpp:274
 msgid "Root"
@@ -18986,9 +18988,9 @@ msgid "Another simulation is already running."
 msgstr "Toinen simulaatio on jo käynnissä."
 
 #: eeschema/sim/simulator_frame.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Tiedostoa %s ei voi ladata"
+msgstr "Tiedostoa %s ei voi ladata tai jäsentää"
 
 #: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
@@ -40774,7 +40776,7 @@ msgstr "Ladataan monikulmioita..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Monikulmion ääriviivojen määrä on %d, odotettu 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41041,7 +41043,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4120
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Tuntematon tekstilaatikon perustelu %d, teksti %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4185
 msgid "Loading rectangles..."
