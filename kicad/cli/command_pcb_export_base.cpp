@@ -59,18 +59,18 @@ CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
     m_layerMasks["*"] = LSET::AllLayersMask();
     m_layerMasks["*.Cu"] = LSET::AllCuMask();
     m_layerMasks["*In.Cu"] = LSET::InternalCuMask();
-    m_layerMasks["F&B.Cu"] = LSET( 2, F_Cu, B_Cu );
-    m_layerMasks["*.Adhes"] = LSET( 2, B_Adhes, F_Adhes );
-    m_layerMasks["*.Paste"] = LSET( 2, B_Paste, F_Paste );
-    m_layerMasks["*.Mask"] = LSET( 2, B_Mask, F_Mask );
-    m_layerMasks["*.SilkS"] = LSET( 2, B_SilkS, F_SilkS );
-    m_layerMasks["*.Fab"] = LSET( 2, B_Fab, F_Fab );
-    m_layerMasks["*.CrtYd"] = LSET( 2, B_CrtYd, F_CrtYd );
+    m_layerMasks["F&B.Cu"] = LSET( { F_Cu, B_Cu } );
+    m_layerMasks["*.Adhes"] = LSET( { B_Adhes, F_Adhes } );
+    m_layerMasks["*.Paste"] = LSET( { B_Paste, F_Paste } );
+    m_layerMasks["*.Mask"] = LSET( { B_Mask, F_Mask } );
+    m_layerMasks["*.SilkS"] = LSET( { B_SilkS, F_SilkS } );
+    m_layerMasks["*.Fab"] = LSET( { B_Fab, F_Fab } );
+    m_layerMasks["*.CrtYd"] = LSET( { B_CrtYd, F_CrtYd } );
 
     // Add list of grouped layer names using GUI canonical layer names
-    m_layerGuiMasks["*.Adhesive"] = LSET( 2, B_Adhes, F_Adhes );
-    m_layerGuiMasks["*.Silkscreen"] = LSET( 2, B_SilkS, F_SilkS );
-    m_layerGuiMasks["*.Courtyard"] = LSET( 2, B_CrtYd, F_CrtYd );
+    m_layerGuiMasks["*.Adhesive"] = LSET( { B_Adhes, F_Adhes } );
+    m_layerGuiMasks["*.Silkscreen"] = LSET( { B_SilkS, F_SilkS } );
+    m_layerGuiMasks["*.Courtyard"] = LSET( { B_CrtYd, F_CrtYd } );
 }
 
 

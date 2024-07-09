@@ -3433,7 +3433,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     default:
         PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
         pad->SetLayer( klayer );
-        pad->SetLayerSet( LSET( 1, klayer ) );
+        pad->SetLayerSet( LSET( klayer ) );
         break;
     }
 

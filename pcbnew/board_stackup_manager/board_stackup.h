@@ -242,7 +242,7 @@ public:
      */
     static LSET StackupAllowedBrdLayers()
     {
-        return LSET( 6, F_SilkS, F_Mask, F_Paste, B_SilkS, B_Mask, B_Paste )
+        return LSET( { F_SilkS, F_Mask, F_Paste, B_SilkS, B_Mask, B_Paste } )
                | LSET::ExternalCuMask() | LSET::InternalCuMask();
     }
 

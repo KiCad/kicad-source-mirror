@@ -755,10 +755,10 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
     wxString name;
     VECTOR2I expansion{ 0, 0 };
 
-    if( LSET( 2, F_Mask, B_Mask ).Contains( aLayer ) )
+    if( LSET( { F_Mask, B_Mask } ).Contains( aLayer ) )
         expansion.x = expansion.y = 2 * aPad.GetSolderMaskExpansion();
 
-    if( LSET( 2, F_Paste, B_Paste ).Contains( aLayer ) )
+    if( LSET( { F_Paste, B_Paste } ).Contains( aLayer ) )
         expansion = 2 * aPad.GetSolderPasteMargin();
 
     switch( aPad.GetShape() )

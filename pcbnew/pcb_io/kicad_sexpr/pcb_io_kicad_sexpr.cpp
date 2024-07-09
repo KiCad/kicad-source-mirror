@@ -1392,13 +1392,13 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, int aNestLevel ) const
     output += "(layers";
 
     static const LSET cu_all( LSET::AllCuMask() );
-    static const LSET fr_bk(  2, B_Cu,       F_Cu );
-    static const LSET adhes(  2, B_Adhes,    F_Adhes );
-    static const LSET paste(  2, B_Paste,    F_Paste );
-    static const LSET silks(  2, B_SilkS,    F_SilkS );
-    static const LSET mask(   2, B_Mask,     F_Mask );
-    static const LSET crt_yd( 2, B_CrtYd,    F_CrtYd );
-    static const LSET fab(    2, B_Fab,      F_Fab );
+    static const LSET fr_bk(  { B_Cu, F_Cu } );
+    static const LSET adhes(  { B_Adhes, F_Adhes } );
+    static const LSET paste(  { B_Paste, F_Paste } );
+    static const LSET silks(  { B_SilkS, F_SilkS } );
+    static const LSET mask(   { B_Mask, F_Mask } );
+    static const LSET crt_yd( { B_CrtYd, F_CrtYd } );
+    static const LSET fab(    { B_Fab, F_Fab } );
 
     LSET cu_mask = cu_all;
 

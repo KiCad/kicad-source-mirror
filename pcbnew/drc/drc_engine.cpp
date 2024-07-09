@@ -175,19 +175,19 @@ void DRC_ENGINE::loadImplicitRules()
     rule->AddConstraint( thermalSpokeCountConstraint );
 
     rule = createImplicitRule( _( "board setup constraints silk" ) );
-    rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
+    rule->m_LayerCondition = LSET( { F_SilkS, B_SilkS } );
     DRC_CONSTRAINT silkClearanceConstraint( SILK_CLEARANCE_CONSTRAINT );
     silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
     rule->AddConstraint( silkClearanceConstraint );
 
     rule = createImplicitRule( _( "board setup constraints silk text height" ) );
-    rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
+    rule->m_LayerCondition = LSET( { F_SilkS, B_SilkS } );
     DRC_CONSTRAINT silkTextHeightConstraint( TEXT_HEIGHT_CONSTRAINT );
     silkTextHeightConstraint.Value().SetMin( bds.m_MinSilkTextHeight );
     rule->AddConstraint( silkTextHeightConstraint );
 
     rule = createImplicitRule( _( "board setup constraints silk text thickness" ) );
-    rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
+    rule->m_LayerCondition = LSET( { F_SilkS, B_SilkS } );
     DRC_CONSTRAINT silkTextThicknessConstraint( TEXT_THICKNESS_CONSTRAINT );
     silkTextThicknessConstraint.Value().SetMin( bds.m_MinSilkTextThickness );
     rule->AddConstraint( silkTextThicknessConstraint );

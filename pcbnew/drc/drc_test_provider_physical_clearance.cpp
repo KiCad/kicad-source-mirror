@@ -117,7 +117,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
         PCB_DIMENSION_T
     };
 
-    static const LSET courtyards( 2, F_CrtYd, B_CrtYd );
+    static const LSET courtyards( { F_CrtYd, B_CrtYd } );
 
     //
     // Generate a count for use in progress reporting.

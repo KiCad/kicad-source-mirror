@@ -193,7 +193,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
 void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
 {
     ZONE*  solderMask = m_board->m_SolderMaskBridges;
-    LSET   layers = { 4, F_Mask, B_Mask, F_Cu, B_Cu };
+    LSET   layers( { F_Mask, B_Mask, F_Cu, B_Cu } );
 
     const size_t progressDelta = 500;
     int          count = 0;
@@ -245,7 +245,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
 {
-    LSET   silkLayers = { 2, F_SilkS, B_SilkS };
+    LSET   silkLayers( { F_SilkS, B_SilkS } );
 
     const size_t progressDelta = 250;
     int          count = 0;
@@ -345,7 +345,7 @@ bool isMaskAperture( BOARD_ITEM* aItem )
     if( aItem->Type() == PCB_PAD_T && static_cast<PAD*>( aItem )->IsFreePad() )
         return true;
 
-    static const LSET saved( 2, F_Mask, B_Mask );
+    static const LSET saved( { F_Mask, B_Mask } );
 
     LSET maskLayers = aItem->GetLayerSet() & saved;
     LSET copperLayers = ( aItem->GetLayerSet() & ~saved ) & LSET::AllCuMask();
@@ -703,7 +703,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
 {
-    LSET   copperAndMaskLayers = { 4, F_Mask, B_Mask, F_Cu, B_Cu };
+    LSET copperAndMaskLayers( { F_Mask, B_Mask, F_Cu, B_Cu } );
 
     const size_t progressDelta = 250;
     int          count = 0;

@@ -287,8 +287,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     OUTLINE_MODE plotMode = aPlotOpt.GetPlotMode();
     bool onCopperLayer = ( LSET::AllCuMask() & aLayerMask ).any();
-    bool onSolderMaskLayer = ( LSET( 2, F_Mask, B_Mask ) & aLayerMask ).any();
-    bool onSolderPasteLayer = ( LSET( 2, F_Paste, B_Paste ) & aLayerMask ).any();
+    bool onSolderMaskLayer = ( LSET( { F_Mask, B_Mask } ) & aLayerMask ).any();
+    bool onSolderPasteLayer = ( LSET( { F_Paste, B_Paste } ) & aLayerMask ).any();
     bool onFrontFab = ( LSET( F_Fab ) & aLayerMask ).any();
     bool onBackFab  = ( LSET( B_Fab ) & aLayerMask ).any();
     bool sketchPads = ( onFrontFab || onBackFab ) && aPlotOpt.GetSketchPadsOnFabLayers();

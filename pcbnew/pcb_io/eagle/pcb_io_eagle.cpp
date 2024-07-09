@@ -2487,8 +2487,8 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     pad->SetSize( padSize );
     pad->SetLayer( layer );
 
-    const LSET front( 3, F_Cu, F_Paste, F_Mask );
-    const LSET back(  3, B_Cu, B_Paste, B_Mask );
+    const LSET front( { F_Cu, F_Paste, F_Mask } );
+    const LSET back( { B_Cu, B_Paste, B_Mask } );
 
     if( layer == F_Cu )
         pad->SetLayerSet( front );
@@ -2995,7 +2995,7 @@ std::tuple<PCB_LAYER_ID, LSET, bool> PCB_IO_EAGLE::defaultKicadLayer( int aEagle
     case EAGLE_LAYER::DIMENSION:
         kiLayer         = Edge_Cuts;
         required        = true;
-        permittedLayers = LSET( 1, Edge_Cuts );
+        permittedLayers = LSET( Edge_Cuts );
         break;
 
     case EAGLE_LAYER::TPLACE:

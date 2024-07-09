@@ -27,7 +27,6 @@
 class LSEQ;
 typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
 
-
 /**
  * LSET is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
  * the various member functions, most of which are based on Seq(). The advantage
@@ -61,43 +60,13 @@ public:
     {
     }
 
-    /**
-     * Take a PCB_LAYER_ID and sets that bit.  This makes the following code into
-     * a bug:
-     *
-     * <code>   LSET s = 0;  </code>
-     *
-     * Instead use:
-     *
-     * <code>
-     *    LSET s;
-     * </code>
-     *
-     * for an empty set.
-     */
-    LSET( PCB_LAYER_ID aLayer ) :    // PCB_LAYER_ID deliberately excludes int and relatives
+    LSET( PCB_LAYER_ID aLayer ) :
         BASE_SET()
     {
         set( aLayer );
     }
 
-    /**
-     * Create an array or LSEQ.
-     */
-    LSET( const PCB_LAYER_ID* aArray, unsigned aCount );
-
-    /**
-     * Take one or more PCB_LAYER_IDs in the argument list to construct the set.  Typically
-     * only used in static construction.
-     *
-     * @param aIdCount is the number of PCB_LAYER_IDs which follow.
-     * @param aFirst is the first included in @a aIdCount and must always be present, and can
-     *  be followed by any number of additional PCB_LAYER_IDs so long as @a aIdCount accurately
-     *  reflects the count.
-     *
-     *  Parameter is 'int' to avoid va_start undefined behavior.
-     */
-    LSET( unsigned aIdCount, int aFirst, ... ); // args chosen to prevent LSET( int ) from compiling
+    LSET( std::initializer_list<PCB_LAYER_ID> aList );
 
     LSET( const LSEQ& aSeq );
 

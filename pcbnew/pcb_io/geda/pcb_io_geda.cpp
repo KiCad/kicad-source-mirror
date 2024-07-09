@@ -508,8 +508,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             std::unique_ptr<PAD> pad = std::make_unique<PAD>( footprint.get() );
 
-            static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
-            static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
+            static const LSET pad_front( { F_Cu, F_Mask, F_Paste } );
+            static const LSET pad_back( { B_Cu, B_Mask, B_Paste } );
 
             pad->SetShape( PAD_SHAPE::RECTANGLE );
             pad->SetAttribute( PAD_ATTRIB::SMD );
@@ -604,7 +604,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             pad->SetShape( PAD_SHAPE::CIRCLE );
 
-            static const LSET pad_set = LSET::AllCuMask() | LSET( 3, F_SilkS, F_Mask, B_Mask );
+            static const LSET pad_set = LSET::AllCuMask() | LSET( { F_SilkS, F_Mask, B_Mask } );
 
             pad->SetLayerSet( pad_set );
 

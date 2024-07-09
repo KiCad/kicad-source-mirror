@@ -131,8 +131,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_widthAdjust                = 0.;
     m_textMode                   = PLOT_TEXT_MODE::DEFAULT;
     m_outputDirectory.clear();
-    m_layerSelection             = LSET( 7, F_SilkS, B_SilkS, F_Mask, B_Mask,
-                                         F_Paste, B_Paste, Edge_Cuts )
+    m_layerSelection             = LSET( { F_SilkS, B_SilkS, F_Mask, B_Mask,
+                                         F_Paste, B_Paste, Edge_Cuts } )
                                          | LSET::AllCuMask();
 
     m_PDFFrontFPPropertyPopups   = true;
@@ -455,7 +455,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
                 //  number without knowing the number or total Cu layers in the legacy board.
                 //  We do not have that information here, so simply set all layers ON.  User
                 //  can turn them off in the UI.
-                aPcbPlotParams->m_layerSelection = LSET( 2, F_SilkS, B_SilkS ) | LSET::AllCuMask();
+                aPcbPlotParams->m_layerSelection = LSET( { F_SilkS, B_SilkS } ) | LSET::AllCuMask();
             }
             else if( cur.find_first_of( "0x" ) == 0 ) // pretty ver. 4.
             {

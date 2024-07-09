@@ -24,7 +24,6 @@
 
 #include <file_history.h>
 #include <eda_draw_frame.h>
-#include <lset.h>
 #include <layer_ids.h>
 #include <gerbview.h>
 #include <gbr_layout.h>
@@ -40,6 +39,7 @@ class GERBER_DRAW_ITEM;
 class GERBER_FILE_IMAGE;
 class GERBER_FILE_IMAGE_LIST;
 class GERBVIEW_SETTINGS;
+class LSET;
 class REPORTER;
 class SELECTION;
 class wxStaticText;

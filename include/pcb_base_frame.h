@@ -31,7 +31,6 @@
 #include <eda_draw_frame.h>
 #include <outline_mode.h>
 #include <lib_id.h>
-#include <lset.h>
 #include <pcb_display_options.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_origin_transforms.h>
@@ -53,6 +52,7 @@ class EDA_3D_VIEWER_FRAME;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class BOARD_DESIGN_SETTINGS;
+class LSET;
 class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;

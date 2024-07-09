@@ -135,16 +135,16 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 return true;
             };
 
-    forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), countItems );
+    forEachGeometryItem( s_allBasicItems, LSET( { F_SilkS, B_SilkS } ), countItems );
 
     forEachGeometryItem( s_allBasicItems,
-                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
+                         LSET::FrontMask() | LSET::BackMask() | LSET( { Edge_Cuts, Margin } ),
                          countItems );
 
-    forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
+    forEachGeometryItem( s_allBasicItems, LSET( { F_SilkS, B_SilkS } ), addToSilkTree );
 
     forEachGeometryItem( s_allBasicItems,
-                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
+                         LSET::FrontMask() | LSET::BackMask() | LSET( { Edge_Cuts, Margin } ),
                          addToTargetTree );
 
     reportAux( wxT( "Testing %d silkscreen features against %d board items." ),

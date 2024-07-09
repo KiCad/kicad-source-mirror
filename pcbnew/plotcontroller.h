@@ -32,10 +32,10 @@
 
 #include <pcb_plot_params.h>
 #include <layer_ids.h>
-#include <lset.h>
 
 class PLOTTER;
 class BOARD;
+class LSEQ;
 
 
 /**

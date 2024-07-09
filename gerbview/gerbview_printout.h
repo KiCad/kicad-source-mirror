@@ -20,10 +20,10 @@
 #ifndef GERBVIEW_PRINTOUT_H
 #define GERBVIEW_PRINTOUT_H
 
-#include <lset.h>
 #include <board_printout.h>
 
 class GBR_LAYOUT;
+class LSET;
 
 class GERBVIEW_PRINTOUT : public BOARD_PRINTOUT
 {

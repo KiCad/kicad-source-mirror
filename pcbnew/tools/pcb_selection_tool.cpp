@@ -3463,8 +3463,8 @@ void PCB_SELECTION_TOOL::pruneObscuredSelectionCandidates( GENERAL_COLLECTOR& aC
 void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                                                    const VECTOR2I& aWhere ) const
 {
-    static const LSET silkLayers( 2, B_SilkS, F_SilkS );
-    static const LSET courtyardLayers( 2, B_CrtYd, F_CrtYd );
+    static const LSET silkLayers( { B_SilkS, F_SilkS } );
+    static const LSET courtyardLayers( { B_CrtYd, F_CrtYd } );
     static std::vector<KICAD_T> singleLayerSilkTypes = { PCB_FIELD_T,
                                                          PCB_TEXT_T, PCB_TEXTBOX_T,
                                                          PCB_TABLE_T, PCB_TABLECELL_T,

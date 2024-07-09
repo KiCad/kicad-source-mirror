@@ -466,7 +466,7 @@ void DIALOG_PLOT::arrangeAllLayersList( const LSEQ& aSeq )
 void DIALOG_PLOT::OnRightClickLayers( wxMouseEvent& event )
 {
     // Build a list of layers for usual fabrication: copper layers + tech layers without courtyard
-    LSET fab_layer_set = ( LSET::AllCuMask() | LSET::AllTechMask() ) & ~LSET( 2, B_CrtYd, F_CrtYd );
+    LSET fab_layer_set = ( LSET::AllCuMask() | LSET::AllTechMask() ) & ~LSET( { B_CrtYd, F_CrtYd } );
 
     wxMenu menu;
     menu.Append( new wxMenuItem( &menu, ID_LAYER_FAB, _( "Select Fab Layers" ) ) );

@@ -39,41 +39,11 @@
 #include <lset.h>
 
 
-LSET::LSET( const PCB_LAYER_ID* aArray, unsigned aCount ) :
+LSET::LSET( std::initializer_list<PCB_LAYER_ID> aList ) :
     BASE_SET()
 {
-    for( unsigned i=0; i<aCount; ++i )
-        set( aArray[i] );
-}
-
-
-LSET::LSET( unsigned aIdCount, int aFirst, ... ) :
-    BASE_SET()
-{
-    // The constructor, without the mandatory aFirst argument, could have been confused
-    // by the compiler with the LSET( PCB_LAYER_ID ).  With aFirst, that ambiguity is not
-    // present.  Therefore aIdCount must always be >=1.
-    wxASSERT_MSG( aIdCount > 0, wxT( "aIdCount must be >= 1" ) );
-
-    set( aFirst );
-
-    if( --aIdCount )
-    {
-        va_list ap;
-
-        va_start( ap, aFirst );
-
-        for( unsigned i=0;  i<aIdCount;  ++i )
-        {
-            PCB_LAYER_ID id = (PCB_LAYER_ID) va_arg( ap, int );
-
-            assert( unsigned( id ) < PCB_LAYER_ID_COUNT );
-
-            set( id );
-        }
-
-        va_end( ap );
-    }
+    for( PCB_LAYER_ID layer : aList )
+        set( layer );
 }
 
 
@@ -741,68 +711,25 @@ PCB_LAYER_ID LSET::ExtractLayer() const
 
 LSET LSET::FrontAssembly()
 {
-    static const PCB_LAYER_ID front_assembly[] = {
-        F_SilkS,
-        F_Mask,
-        F_Fab,
-        F_CrtYd
-    };
-
-    static const LSET saved( front_assembly, arrayDim( front_assembly ) );
+    static const LSET saved( { F_SilkS, F_Mask, F_Fab, F_CrtYd } );
     return saved;
 }
 
 
 LSET LSET::BackAssembly()
 {
-    static const PCB_LAYER_ID back_assembly[] = {
-        B_SilkS,
-        B_Mask,
-        B_Fab,
-        B_CrtYd
-    };
-
-    static const LSET saved( back_assembly, arrayDim( back_assembly ) );
+    static const LSET saved( { B_SilkS, B_Mask, B_Fab, B_CrtYd } );
     return saved;
 }
 
 
 LSET LSET::InternalCuMask()
 {
-    static const PCB_LAYER_ID cu_internals[] = {
-        In1_Cu,
-        In2_Cu,
-        In3_Cu,
-        In4_Cu,
-        In5_Cu,
-        In6_Cu,
-        In7_Cu,
-        In8_Cu,
-        In9_Cu,
-        In10_Cu,
-        In11_Cu,
-        In12_Cu,
-        In13_Cu,
-        In14_Cu,
-        In15_Cu,
-        In16_Cu,
-        In17_Cu,
-        In18_Cu,
-        In19_Cu,
-        In20_Cu,
-        In21_Cu,
-        In22_Cu,
-        In23_Cu,
-        In24_Cu,
-        In25_Cu,
-        In26_Cu,
-        In27_Cu,
-        In28_Cu,
-        In29_Cu,
-        In30_Cu,
-    };
-
-    static const LSET saved( cu_internals, arrayDim( cu_internals ) );
+    static const LSET saved( { In1_Cu,  In2_Cu,  In3_Cu,  In4_Cu,  In5_Cu,  In6_Cu,
+                               In7_Cu,  In8_Cu,  In9_Cu,  In10_Cu, In11_Cu, In12_Cu,
+                               In13_Cu, In14_Cu, In15_Cu, In16_Cu, In17_Cu, In18_Cu,
+                               In19_Cu, In20_Cu, In21_Cu, In22_Cu, In23_Cu, In24_Cu,
+                               In25_Cu, In26_Cu, In27_Cu, In28_Cu, In29_Cu, In30_Cu } );
     return saved;
 }
 
@@ -837,7 +764,7 @@ LSET LSET::AllNonCuMask()
 
 LSET LSET::ExternalCuMask()
 {
-    static const LSET saved( 2, F_Cu, B_Cu );
+    static const LSET saved( { F_Cu, B_Cu } );
     return saved;
 }
 
@@ -851,26 +778,26 @@ LSET LSET::AllLayersMask()
 
 LSET LSET::BackTechMask()
 {
-    static const LSET saved( 6, B_SilkS, B_Mask, B_Adhes, B_Paste, B_CrtYd, B_Fab );
+    static const LSET saved( { B_SilkS, B_Mask, B_Adhes, B_Paste, B_CrtYd, B_Fab } );
     return saved;
 }
 
 LSET LSET::BackBoardTechMask()
 {
-    static const LSET saved( 4, B_SilkS, B_Mask, B_Adhes, B_Paste );
+    static const LSET saved( { B_SilkS, B_Mask, B_Adhes, B_Paste } );
     return saved;
 }
 
 LSET LSET::FrontTechMask()
 {
-    static const LSET saved( 6, F_SilkS, F_Mask, F_Adhes, F_Paste, F_CrtYd, F_Fab );
+    static const LSET saved( { F_SilkS, F_Mask, F_Adhes, F_Paste, F_CrtYd, F_Fab } );
     return saved;
 }
 
 
 LSET LSET::FrontBoardTechMask()
 {
-    static const LSET saved( 4, F_SilkS, F_Mask, F_Adhes, F_Paste );
+    static const LSET saved( { F_SilkS, F_Mask, F_Adhes, F_Paste } );
     return saved;
 }
 
@@ -891,14 +818,7 @@ LSET LSET::AllBoardTechMask()
 
 LSET LSET::UserMask()
 {
-    static const LSET saved( 6,
-        Dwgs_User,
-        Cmts_User,
-        Eco1_User,
-        Eco2_User,
-        Edge_Cuts,
-        Margin
-        );
+    static const LSET saved( { Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts, Margin } );
 
     return saved;
 }
@@ -913,17 +833,8 @@ LSET LSET::PhysicalLayersMask()
 
 LSET LSET::UserDefinedLayers()
 {
-    static const LSET saved( 9,
-        User_1,
-        User_2,
-        User_3,
-        User_4,
-        User_5,
-        User_6,
-        User_7,
-        User_8,
-        User_9
-        );
+    static const LSET saved(
+            { User_1, User_2, User_3, User_4, User_5, User_6, User_7, User_8, User_9 } );
 
     return saved;
 }

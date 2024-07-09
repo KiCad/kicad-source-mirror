@@ -177,7 +177,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     std::vector<std::unique_ptr<PCB_SHAPE>> edges;
     DRC_RTREE                               edgesTree;
 
-    forEachGeometryItem( { PCB_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ),
+    forEachGeometryItem( { PCB_SHAPE_T }, LSET( { Edge_Cuts, Margin } ),
             [&]( BOARD_ITEM *item ) -> bool
             {
                 PCB_SHAPE*    shape = static_cast<PCB_SHAPE*>( item );

@@ -285,35 +285,35 @@ bool PAD::IsFreePad() const
 
 LSET PAD::PTHMask()
 {
-    static LSET saved = LSET::AllCuMask() | LSET( 2, F_Mask, B_Mask );
+    static LSET saved = LSET::AllCuMask() | LSET( { F_Mask, B_Mask } );
     return saved;
 }
 
 
 LSET PAD::SMDMask()
 {
-    static LSET saved( 3, F_Cu, F_Paste, F_Mask );
+    static LSET saved( { F_Cu, F_Paste, F_Mask } );
     return saved;
 }
 
 
 LSET PAD::ConnSMDMask()
 {
-    static LSET saved( 2, F_Cu, F_Mask );
+    static LSET saved( { F_Cu, F_Mask } );
     return saved;
 }
 
 
 LSET PAD::UnplatedHoleMask()
 {
-    static LSET saved = LSET( 4, F_Cu, B_Cu, F_Mask, B_Mask );
+    static LSET saved = LSET( { F_Cu, B_Cu, F_Mask, B_Mask } );
     return saved;
 }
 
 
 LSET PAD::ApertureMask()
 {
-    static LSET saved( 1, F_Paste );
+    static LSET saved( F_Paste );
     return saved;
 }
 

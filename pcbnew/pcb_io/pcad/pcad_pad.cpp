@@ -222,7 +222,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
             pad->SetLocalClearance( sm_margin + pcbIUScale.mmToIU( 0.254 ) );
         }
 
-        pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
+        pad->SetLayerSet( LSET::AllCuMask() | LSET( { B_Mask, F_Mask } ) );
     }
     else
     {
@@ -244,9 +244,9 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
 
                     // assume this is SMD pad
                     if( padShape->m_KiCadLayer == F_Cu )
-                        pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
+                        pad->SetLayerSet( LSET( { F_Cu, F_Paste, F_Mask } ) );
                     else
-                        pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
+                        pad->SetLayerSet( LSET( { B_Cu, B_Paste, B_Mask } ) );
 
                     break;
                 }
@@ -261,7 +261,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
 
         if( padType == PAD_ATTRIB::PTH )
             // actually this is a thru-hole pad
-            pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
+            pad->SetLayerSet( LSET::AllCuMask() | LSET( { B_Mask, F_Mask } ) );
 
         pad->SetNumber( m_Name.text );
 
