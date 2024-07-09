@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,11 +85,12 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 
 	m_sizerBottom->Add( 25, 0, 1, wxEXPAND, 5 );
 
+	m_updateDisplayedZones = new wxButton( this, wxID_ANY, _("Update displayed zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sizerBottom->Add( m_updateDisplayedZones, 0, wxALL, 5 );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizerApply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer->AddButton( m_sdbSizerApply );
 	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
@@ -117,7 +118,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_btnMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnMoveUpClick ), NULL, this );
 	m_btnMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnMoveDownClick ), NULL, this );
 	m_checkRepour->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnRepourCheck ), NULL, this );
-	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnButtonApplyClick ), NULL, this );
+	m_updateDisplayedZones->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnUpdateDisplayedZonesClick ), NULL, this );
 }
 
 DIALOG_ZONE_MANAGER_BASE::~DIALOG_ZONE_MANAGER_BASE()
@@ -135,6 +136,6 @@ DIALOG_ZONE_MANAGER_BASE::~DIALOG_ZONE_MANAGER_BASE()
 	m_btnMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnMoveUpClick ), NULL, this );
 	m_btnMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnMoveDownClick ), NULL, this );
 	m_checkRepour->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnRepourCheck ), NULL, this );
-	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnButtonApplyClick ), NULL, this );
+	m_updateDisplayedZones->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ZONE_MANAGER_BASE::OnUpdateDisplayedZonesClick ), NULL, this );
 
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,7 +44,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 			ID_DIALOG_COPPER_ZONE_BASE = 1000,
 			CHECK_NAME,
 			CHECK_NET,
-			VIEW_ZONE_TABLE
+			VIEW_ZONE_TABLE,
 		};
 
 		wxBoxSizer* m_MainBoxSizer;
@@ -59,9 +59,9 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_sizerProperties;
 		wxBoxSizer* m_sizerBottom;
 		wxCheckBox* m_checkRepour;
+		wxButton* m_updateDisplayedZones;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
@@ -77,7 +77,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		virtual void OnMoveUpClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDownClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRepourCheck( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonApplyClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateDisplayedZonesClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

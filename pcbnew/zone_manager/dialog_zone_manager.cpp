@@ -370,12 +370,13 @@ void DIALOG_ZONE_MANAGER::OnFilterCtrlEnter( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
+void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 {
     if( m_isFillingZones )
         return;
 
     m_isFillingZones = true;
+    m_panelZoneProperties->TransferZoneSettingsFromWindow();
     m_zonesContainer->FlushZoneSettingsChange();
     m_zonesContainer->FlushPriorityChange();
 
@@ -397,7 +398,6 @@ void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
     //       the pcb frame.
     m_zoneFillComplete = m_filler->Fill( board->Zones() );
     board->BuildConnectivity();
-    const_cast<ZONES&>( board->Zones() ) = m_zonesContainer->GetOriginalZoneList();
 
     if( PANEL_ZONE_GAL* gal = m_zoneViewer->GetZoneGAL() )
     {
@@ -409,6 +409,11 @@ void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
                 m_modelZoneOverviewTable->GetZone( m_viewZonesOverview->GetSelection() ) );
         gal->OnLayerSelected( layer );
     }
+
+    //NOTE - But the connectivity need to be rebuild, otherwise if cancelling, it may
+    //       segfault.
+    const_cast<ZONES&>( board->Zones() ) = m_zonesContainer->GetOriginalZoneList();
+    board->BuildConnectivity();
 
     m_isFillingZones = false;
 }

@@ -55,6 +55,7 @@ public:
 
     std::shared_ptr<ZONE_SETTINGS> GetZoneSettings() const { return m_settings; }
 
+    bool TransferZoneSettingsFromWindow();
 
 private:
     static constexpr int INVALID_NET_CODE{ 0 };
@@ -65,7 +66,6 @@ private:
     static constexpr int SORT_BY_PAD_COUNT{ 1 << 1 };
 
     bool TransferZoneSettingsToWindow();
-    bool TransferZoneSettingsFromWindow();
 
     /**
      * @param aUseExportableSetupOnly is true to use exportable parameters only (used to

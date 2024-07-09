@@ -98,7 +98,7 @@ protected:
     void OnFilterCtrlTextChange( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlEnter( wxCommandEvent& aEvent ) override;
     void OnRepourCheck( wxCommandEvent& aEvent ) override;
-    void OnButtonApplyClick( wxCommandEvent& aEvent ) override;
+    void OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent ) override;
 
     void PostProcessZoneViewSelectionChange( wxDataViewItem const& item );
 

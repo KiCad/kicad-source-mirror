@@ -49,23 +49,23 @@ public:
     /**
      * @brief Adapter for the zone filler ,zones are actually managed the smart ptr
      *
-     * @return std::vector<ZONE*>
+     * @return std::vector<ZONE*>&
      */
     std::vector<ZONE*>& GetClonedZoneList() { return m_clonedZoneList; }
     /**
      * @brief Used for restoring the zones in the board after refilling
-     * 
-     * @return std::vector<ZONE*>& 
+     *
+     * @return std::vector<ZONE*>&
      */
     std::vector<ZONE*>& GetOriginalZoneList() { return m_originalZoneList; }
     /**
      * @brief Flush the zone settings change to the cloned ones
-     * 
+     *
      */
     void FlushZoneSettingsChange();
     /**
      * @brief Flush the priority change to the cloned ones
-     * 
+     *
      * @return true if priority changed
      */
     bool FlushPriorityChange();
