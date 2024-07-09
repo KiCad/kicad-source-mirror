@@ -1833,6 +1833,19 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         // Get all changed connectable items and determine all changed screens
         for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
         {
+            switch( changed_list->GetPickedItemStatus( ii ) )
+            {
+                // Only care about changed, new, and deleted items, the other
+                // cases are not connectivity-related
+                case UNDO_REDO::CHANGED:
+                case UNDO_REDO::NEWITEM:
+                case UNDO_REDO::DELETED:
+                    break;
+
+                default:
+                    continue;
+            }
+
             SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
 
             if( item )
