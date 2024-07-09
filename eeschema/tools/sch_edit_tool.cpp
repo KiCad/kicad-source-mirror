@@ -1310,9 +1310,18 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             if( m_frame->CheckSheetForRecursion( sheet, currentSheet ) )
             {
                 // Clear out the filename so that the user can pick a new one
+                const wxString originalFileName = sheet->GetFileName();
+                const wxString originalScreenFileName = sheet->GetScreen()->GetFileName();
+
                 sheet->SetFileName( wxEmptyString );
                 sheet->GetScreen()->SetFileName( wxEmptyString );
                 restore_state = !m_frame->EditSheetProperties( sheet, currentSheet );
+
+                if( restore_state )
+                {
+                    sheet->SetFileName( originalFileName );
+                    sheet->GetScreen()->SetFileName( originalScreenFileName );
+                }
             }
         }
 
