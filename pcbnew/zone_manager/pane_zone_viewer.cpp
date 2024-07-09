@@ -112,7 +112,7 @@ public:
 };
 
 PANE_ZONE_VIEWER::PANE_ZONE_VIEWER( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame ) :
-        wxNotebook( aParent, -1, wxDefaultPosition, wxDefaultSize ), m_pcbFrame( aPcbFrame )
+        wxNotebook( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ), m_pcbFrame( aPcbFrame )
 {
     Bind( wxEVT_BOOKCTRL_PAGE_CHANGED, &PANE_ZONE_VIEWER::OnNotebook, this );
 

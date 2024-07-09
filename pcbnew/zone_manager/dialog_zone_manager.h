@@ -58,10 +58,10 @@ enum class ZONE_INDEX_MOVEMENT;
 
 class DIALOG_ZONE_MANAGER : public DIALOG_ZONE_MANAGER_BASE
 {
-    enum
+    /*enum
     {
         ZONE_VIEWER = ID_DIALOG_COPPER_ZONE_BASE + 10,
-    };
+    };*/
 
 public:
     DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo );

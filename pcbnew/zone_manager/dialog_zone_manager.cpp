@@ -79,7 +79,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_sizerTop->Add( m_zoneViewer, 1, wxBOTTOM | wxLEFT | wxEXPAND, 10 );
 
     m_checkRepour->SetValue( ZONE_MANAGER_PREFERENCE::GetRepourOnClose() );
-    m_zoneViewer->SetId( ZONE_VIEWER );
+    //m_zoneViewer->SetId( ZONE_VIEWER );
 
     for( const auto& [k, v] : MODEL_ZONES_OVERVIEW_TABLE::GetColumnNames() )
     {
@@ -97,11 +97,10 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_viewZonesOverview->EnableDragSource( wxDF_UNICODETEXT );
     m_viewZonesOverview->EnableDropTarget( wxDF_UNICODETEXT );
 
-    Bind( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, &DIALOG_ZONE_MANAGER::OnBeginDrag, this,
-          VIEW_ZONE_TABLE );
-    Bind( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, &DIALOG_ZONE_MANAGER::OnDropPossible, this,
-          VIEW_ZONE_TABLE );
-    Bind( wxEVT_DATAVIEW_ITEM_DROP, &DIALOG_ZONE_MANAGER::OnDrop, this, VIEW_ZONE_TABLE );
+    int id = m_viewZonesOverview->GetId();
+    Bind( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, &DIALOG_ZONE_MANAGER::OnBeginDrag, this, id );
+    Bind( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, &DIALOG_ZONE_MANAGER::OnDropPossible, this, id );
+    Bind( wxEVT_DATAVIEW_ITEM_DROP, &DIALOG_ZONE_MANAGER::OnDrop, this, id );
 #endif // wxUSE_DRAG_AND_DROP
 
     Bind( wxEVT_BUTTON, &DIALOG_ZONE_MANAGER::OnOk, this, wxID_OK );
@@ -114,13 +113,14 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
             {
                 Layout();
             },
-            ZONE_VIEWER );
+            m_zoneViewer->GetId() );
 
     if( m_modelZoneOverviewTable->GetCount() )
         SelectZoneTableItem( m_modelZoneOverviewTable->GetItem( 0 ) );
 
     Layout();
     m_MainBoxSizer->Fit( this );
+    finishDialogSettings();
 
     //NOTE - Works on Windows and MacOS , need further handling in IDLE on Ubuntu
     FitCanvasToScreen();

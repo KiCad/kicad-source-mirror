@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,16 +36,6 @@ class PANEL_ZONE_PROPERTIES_BASE : public wxPanel
 	private:
 
 	protected:
-		enum
-		{
-			EDIT_ZONE_NAME = 1000,
-			ID_M_CORNERSMOOTHINGCTRL,
-			ID_CORNER_SMOOTHING,
-			ID_M_PADINZONEOPT,
-			wxID_ANTIPAD_SIZE,
-			wxID_COPPER_BRIDGE_VALUE
-		};
-
 		wxStaticText* m_zoneNameLabel;
 		wxTextCtrl* m_tcZoneName;
 		wxCheckBox* m_cbLocked;

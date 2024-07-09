@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,14 +39,6 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		enum
-		{
-			ID_DIALOG_COPPER_ZONE_BASE = 1000,
-			CHECK_NAME,
-			CHECK_NET,
-			VIEW_ZONE_TABLE,
-		};
-
 		wxBoxSizer* m_MainBoxSizer;
 		wxBoxSizer* m_sizerTop;
 		wxSearchCtrl* m_filterCtrl;
@@ -82,7 +74,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Zone Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 556,369 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_ZONE_MANAGER_BASE();
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,18 +35,18 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 
 	searchSizer->Add( 10, 0, 0, wxEXPAND, 5 );
 
-	m_checkName = new wxCheckBox( this, CHECK_NAME, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkName = new wxCheckBox( this, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkName->SetValue(true);
 	searchSizer->Add( m_checkName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_checkNet = new wxCheckBox( this, CHECK_NET, _("Net"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkNet = new wxCheckBox( this, wxID_ANY, _("Net"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkNet->SetValue(true);
 	searchSizer->Add( m_checkNet, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	leftColumn->Add( searchSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
-	m_viewZonesOverview = new wxDataViewCtrl( this, VIEW_ZONE_TABLE, wxDefaultPosition, wxSize( -1,240 ), wxDV_HORIZ_RULES|wxDV_SINGLE|wxDV_VERT_RULES );
+	m_viewZonesOverview = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,240 ), wxDV_HORIZ_RULES|wxDV_SINGLE|wxDV_VERT_RULES );
 	m_viewZonesOverview->SetMinSize( wxSize( -1,240 ) );
 
 	leftColumn->Add( m_viewZonesOverview, 1, wxEXPAND, 0 );
@@ -80,12 +80,16 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_checkRepour = new wxCheckBox( this, wxID_ANY, _("Refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkRepour->SetToolTip( _("Refill zones after changes made on board") );
+
 	m_sizerBottom->Add( m_checkRepour, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 
 	m_sizerBottom->Add( 25, 0, 1, wxEXPAND, 5 );
 
-	m_updateDisplayedZones = new wxButton( this, wxID_ANY, _("Update displayed zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateDisplayedZones = new wxButton( this, wxID_ANY, _("Update Displayed Zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateDisplayedZones->SetToolTip( _("Update filled areas shown in dialog, according to the new current settings") );
+
 	m_sizerBottom->Add( m_updateDisplayedZones, 0, wxALL, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
@@ -103,7 +107,6 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 
 	this->SetSizer( m_MainBoxSizer );
 	this->Layout();
-	m_MainBoxSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_ZONE_MANAGER_BASE::onDialogResize ) );

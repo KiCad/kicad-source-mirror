@@ -14,7 +14,7 @@
     <property name="embedded_files_path">res</property>
     <property name="encoding">UTF-8</property>
     <property name="file">dialog_zone_manager_base</property>
-    <property name="first_id">1000</property>
+    <property name="first_id">6000</property>
     <property name="internationalize">1</property>
     <property name="lua_skip_events">1</property>
     <property name="lua_ui_table">UI</property>
@@ -45,12 +45,12 @@
       <property name="fg"></property>
       <property name="font"></property>
       <property name="hidden">0</property>
-      <property name="id">ID_DIALOG_COPPER_ZONE_BASE</property>
+      <property name="id">wxID_ANY</property>
       <property name="maximum_size"></property>
       <property name="minimum_size">-1,-1</property>
       <property name="name">DIALOG_ZONE_MANAGER_BASE</property>
       <property name="pos"></property>
-      <property name="size">-1,-1</property>
+      <property name="size">556,369</property>
       <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
       <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
       <property name="title">Zone Manager</property>
@@ -205,7 +205,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">CHECK_NAME</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="label">Name</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
@@ -270,7 +270,7 @@
                         <property name="font"></property>
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
-                        <property name="id">CHECK_NET</property>
+                        <property name="id">wxID_ANY</property>
                         <property name="label">Net</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
@@ -317,7 +317,7 @@
                     <property name="fg"></property>
                     <property name="font"></property>
                     <property name="hidden">0</property>
-                    <property name="id">VIEW_ZONE_TABLE</property>
+                    <property name="id">wxID_ANY</property>
                     <property name="maximum_size"></property>
                     <property name="minimum_size">-1,240</property>
                     <property name="name">m_viewZonesOverview</property>
@@ -576,7 +576,7 @@
                 <property name="style"></property>
                 <property name="subclass">; ; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Refill zones after changes made on board</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
@@ -636,7 +636,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Update displayed zones</property>
+                <property name="label">Update Displayed Zones</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -661,7 +661,7 @@
                 <property name="style"></property>
                 <property name="subclass">; ; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Update filled areas shown in dialog, according to the new current settings</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
