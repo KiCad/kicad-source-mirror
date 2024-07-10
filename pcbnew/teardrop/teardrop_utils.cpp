@@ -297,12 +297,12 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     int delta = ( aTdWidth / 2 - aTrackHalfWidth );
 
     delta /= 4;     // A scaling factor giving a fine shape, defined from tests.
-    // However for short sides, the value of delta must be reduced, depending
-    // on the side length
-    // We use here a max delta value = side_length/8, defined from tests
 
+    // However for short sides, the value of delta must be reduced, depending on the side length
+    // We use here a max delta value = side_length/8, defined from tests
     int side_length = side1.EuclideanNorm();
     int delta_effective = std::min( delta, side_length/8 );
+
     // The move vector depend on the quadrant: it must be always defined to create a
     // curve with a direction toward the track
     EDA_ANGLE angle1( side1 );
@@ -314,10 +314,8 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     // if the algo is refined.
     // RotatePoint( bias, angle1 );
 
-    ctrl1.x += bias.x;
-    ctrl1.y += bias.y;
-    ctrl2.x += bias.x;
-    ctrl2.y += bias.y;
+    ctrl1 += bias;
+    ctrl2 += bias;
 
     BEZIER_POLY( aPts[1], ctrl1, ctrl2, aPts[2] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
@@ -342,10 +340,8 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     // Does not works well with the current algo
     // RotatePoint( bias, angle2 );
 
-    ctrl1.x += bias.x;
-    ctrl1.y += bias.y;
-    ctrl2.x += bias.x;
-    ctrl2.y += bias.y;
+    ctrl1 += bias;
+    ctrl2 += bias;
 
     BEZIER_POLY( aPts[4], ctrl1, ctrl2, aPts[0] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
