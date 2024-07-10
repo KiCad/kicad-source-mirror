@@ -274,7 +274,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_MinorSchematicGraphSize = 10000;
 
-    m_ResolveTextRecursionDepth = 2;
+    m_ResolveTextRecursionDepth = 3;
 
     loadFromConfigFile();
 }
