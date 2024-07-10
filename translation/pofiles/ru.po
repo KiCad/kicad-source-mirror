@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-08 09:55-0700\n"
-"PO-Revision-Date: 2024-07-10 12:09+0000\n"
-"Last-Translator: alevtina-karashokova <karashokovaaa@basealt.ru>\n"
+"PO-Revision-Date: 2024-07-10 21:45+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -49153,7 +49153,7 @@ msgstr "Перезалить зоны"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
-msgstr "Перезалить зоны"
+msgstr "унаследовано"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
