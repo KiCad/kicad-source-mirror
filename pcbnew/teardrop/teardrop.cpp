@@ -198,10 +198,6 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
             if( !forceUpdate && !alg::contains( *dirtyPadsAndVias, pad ) )
                 continue;
 
-            if( pad->GetShape() == PAD_SHAPE::CUSTOM )
-                // A teardrop shape cannot be built
-                continue;
-
             TEARDROP_PARAMETERS& tdParams = pad->GetTeardropParams();
             int                  annularWidth = std::min( pad->GetSize().x, pad->GetSize().y );
 
