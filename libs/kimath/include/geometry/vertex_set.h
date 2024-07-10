@@ -58,11 +58,12 @@ class VERTEX
 {
     public:
 
-    VERTEX( int aIndex, double aX, double aY, VERTEX_SET* aParent ) :
+    VERTEX( int aIndex, double aX, double aY, VERTEX_SET* aParent, void* aUserData = nullptr ) :
             i( aIndex ),
             x( aX ),
             y( aY ),
-            parent( aParent )
+            parent( aParent ),
+            m_userData( aUserData )
     {
     }
 
@@ -74,6 +75,8 @@ class VERTEX
         return this->x == rhs.x && this->y == rhs.y;
     }
     bool operator!=( const VERTEX& rhs ) const { return !( *this == rhs ); }
+
+    void* GetUserData() const { return m_userData; }
 
     /**
      * Remove the node from the linked list and z-ordered linked list.
@@ -228,6 +231,8 @@ class VERTEX
     // previous and next nodes in z-order
     VERTEX* prevZ = nullptr;
     VERTEX* nextZ = nullptr;
+
+    void* m_userData = nullptr;
 };
 
 class VERTEX_SET
@@ -248,16 +253,19 @@ public:
      * @param aIndex the index of the vertex
      * @param pt the point to insert
      * @param last the last vertex in the list
+     * @param aUserData user data to associate with the vertex
      * @return the newly inserted vertex
     */
-    VERTEX* insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last );
+    VERTEX* insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last, void* aUserData = nullptr );
 
     /**
      * Create a list of vertices from a line chain
      * @param points the line chain to create the list from
+     * @param aTail the optional vertex to which to append the list
+     * @param aUserData user data to associate with the vertices
      * @return the first vertex in the list
     */
-    VERTEX* createList( const SHAPE_LINE_CHAIN& points );
+    VERTEX* createList( const SHAPE_LINE_CHAIN& points, VERTEX* aTail = nullptr, void* aUserData = nullptr );
 
 protected:
 

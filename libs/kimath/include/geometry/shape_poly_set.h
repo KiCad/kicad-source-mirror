@@ -1312,6 +1312,14 @@ public:
      */
     void RemoveContour( int aContourIdx, int aPolygonIdx = -1 );
 
+
+    /**
+     * Delete the \a aOutlineIdx-th outline of the set including its contours and holes.
+     *
+     * @param aOutlineIdx is the index of the outline to be removed.
+     */
+    void RemoveOutline( int aOutlineIdx );
+
     /**
      * Look for null segments; ie, segments whose ends are exactly the same and deletes them.
      *

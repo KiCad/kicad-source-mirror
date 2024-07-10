@@ -105,6 +105,13 @@ private:
                              std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**
+     * Create strands of zero-width between elements of SHAPE_POLY_SET that are within
+     * aDistance of each other.  When we inflate these strands, they will create minimum
+     * width bands
+     */
+    void connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance );
+
+    /**
      * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
      * The solid areas can be more than one on copper layers, and do not have holes
      *  ( holes are linked by overlapping segments to the main outline)

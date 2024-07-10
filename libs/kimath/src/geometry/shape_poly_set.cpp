@@ -2444,6 +2444,12 @@ void SHAPE_POLY_SET::RemoveContour( int aContourIdx, int aPolygonIdx )
 }
 
 
+void SHAPE_POLY_SET::RemoveOutline( int aOutlineIdx )
+{
+    m_polys.erase( m_polys.begin() + aOutlineIdx );
+}
+
+
 int SHAPE_POLY_SET::RemoveNullSegments()
 {
     int removed = 0;

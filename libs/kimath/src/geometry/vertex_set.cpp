@@ -6,9 +6,9 @@ void VERTEX_SET::SetBoundingBox( const BOX2I& aBBox ) { m_bbox = aBBox; }
 /**
  * Take a #SHAPE_LINE_CHAIN and links each point into a circular, doubly-linked list.
  */
-VERTEX* VERTEX_SET::createList( const SHAPE_LINE_CHAIN& points )
+VERTEX* VERTEX_SET::createList( const SHAPE_LINE_CHAIN& points, VERTEX* aTail, void* aUserData )
 {
-    VERTEX* tail = nullptr;
+    VERTEX* tail = aTail;
     double sum = 0.0;
 
     // Check for winding order
@@ -28,7 +28,7 @@ VERTEX* VERTEX_SET::createList( const SHAPE_LINE_CHAIN& points )
         VECTOR2I diff = pt - last_pt;
         if( diff.SquaredEuclideanNorm() > m_simplificationLevel )
         {
-            tail = insertVertex( i, pt, tail );
+            tail = insertVertex( i, pt, tail, aUserData );
             last_pt = pt;
         }
     };
@@ -184,9 +184,9 @@ bool VERTEX_SET::middleInside( const VERTEX* a, const VERTEX* b ) const
  *
  * @return a pointer to the newly created vertex.
  */
-VERTEX* VERTEX_SET::insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last )
+VERTEX* VERTEX_SET::insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last, void* aUserData )
 {
-    m_vertices.emplace_back( aIndex, pt.x, pt.y, this );
+    m_vertices.emplace_back( aIndex, pt.x, pt.y, this, aUserData );
 
     VERTEX* p = &m_vertices.back();
 
@@ -208,9 +208,9 @@ VERTEX* VERTEX_SET::insertVertex( int aIndex, const VECTOR2I& pt, VERTEX* last )
 
 VERTEX* VERTEX::split( VERTEX* b )
 {
-    parent->m_vertices.emplace_back( i, x, y, parent );
-    VERTEX* a2 = parent->insertVertex( i, VECTOR2I( x, y ), nullptr );
-    parent->m_vertices.emplace_back( b->i, b->x, b->y, parent );
+    parent->m_vertices.emplace_back( i, x, y, parent, m_userData );
+    VERTEX* a2 = parent->insertVertex( i, VECTOR2I( x, y ), nullptr, m_userData );
+    parent->m_vertices.emplace_back( b->i, b->x, b->y, parent, m_userData );
     VERTEX* b2 = &parent->m_vertices.back();
     VERTEX* an = next;
     VERTEX* bp = b->prev;

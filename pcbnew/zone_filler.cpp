@@ -45,10 +45,151 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/vertex_set.h>
 #include <kidialog.h>
 #include <core/thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
+
+// Helper classes for connect_nearby_polys
+class RESULTS
+{
+public:
+    RESULTS( int aOutline1, int aOutline2, int aVertex1, int aVertex2 ) :
+            m_outline1( aOutline1 ), m_outline2( aOutline2 ),
+            m_vertex1( aVertex1 ), m_vertex2( aVertex2 )
+    {
+    }
+
+    bool operator<( const RESULTS& aOther ) const
+    {
+        if( m_outline1 != aOther.m_outline1 )
+            return m_outline1 < aOther.m_outline1;
+        if( m_outline2 != aOther.m_outline2 )
+            return m_outline2 < aOther.m_outline2;
+        if( m_vertex1 != aOther.m_vertex1 )
+            return m_vertex1 < aOther.m_vertex1;
+        return m_vertex2 < aOther.m_vertex2;
+    }
+
+    int m_outline1;
+    int m_outline2;
+    int m_vertex1;
+    int m_vertex2;
+};
+
+class VERTEX_CONNECTOR : protected VERTEX_SET
+{
+public:
+    VERTEX_CONNECTOR( const BOX2I& aBBox, const SHAPE_POLY_SET& aPolys, int aDist ) : VERTEX_SET( 0 )
+    {
+        SetBoundingBox( aBBox );
+        VERTEX* tail = nullptr;
+
+        for( int i = 0; i < aPolys.OutlineCount(); i++ )
+            tail = createList( aPolys.Outline( i ), tail, (void*)( intptr_t )( i ) );
+
+        tail->updateList();
+        m_dist = aDist;
+    }
+
+    VERTEX* getPoint( VERTEX* aPt ) const
+    {
+        // z-order range for the current point ± limit bounding box
+        const int32_t     maxZ = zOrder( aPt->x + m_dist, aPt->y + m_dist );
+        const int32_t     minZ = zOrder( aPt->x - m_dist, aPt->y - m_dist );
+        const SEG::ecoord limit2 = SEG::Square( m_dist );
+
+        // first look for points in increasing z-order
+        VERTEX* p = aPt->nextZ;
+        SEG::ecoord min_dist = std::numeric_limits<SEG::ecoord>::max();
+        VERTEX* retval = nullptr;
+
+        auto check_pt = [&]( VERTEX* p )
+        {
+            VECTOR2D diff( p->x - aPt->x, p->y - aPt->y );
+            SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
+
+            if( dist2 < limit2 && dist2 < min_dist
+                && area( p->prev, p, p->next ) < 0
+                && !locallyInside( p, aPt ) )
+            {
+
+                min_dist = dist2;
+                retval = p;
+            }
+        };
+
+        while( p && p->z <= maxZ )
+        {
+            check_pt( p );
+            p = p->nextZ;
+        }
+
+        p = aPt->prevZ;
+
+        while( p && p->z >= minZ )
+        {
+            check_pt( p );
+            p = p->prevZ;
+        }
+
+        return retval;
+    }
+
+    void FindResults()
+    {
+        VERTEX* p = m_vertices.front().next;
+        std::set<VERTEX*> visited;
+
+        while( p != &m_vertices.front() )
+        {
+            // Skip points that are concave
+            if( area( p->prev, p, p->next ) >= 0 )
+            {
+                p = p->next;
+                continue;
+            }
+
+            VERTEX* q = nullptr;
+
+            if( ( visited.empty() || !visited.contains( p ) ) && ( q = getPoint( p ) ) )
+            {
+                visited.insert( p );
+
+                if( !visited.contains( q ) &&
+                    m_results.emplace( (intptr_t) p->GetUserData(), (intptr_t) q->GetUserData(),
+                                        p->i, q->i ).second )
+                {
+                    // We don't want to connect multiple points in the same vicinity, so skip
+                    // 2 points before and after each point and match.
+                    visited.insert( p->prev );
+                    visited.insert( p->prev->prev );
+                    visited.insert( p->next );
+                    visited.insert( p->next->next );
+
+                    visited.insert( q->prev );
+                    visited.insert( q->prev->prev );
+                    visited.insert( q->next );
+                    visited.insert( q->next->next );
+
+                    visited.insert( q );
+                }
+            }
+
+            p = p->next;
+        }
+    }
+
+    std::set<RESULTS> GetResults() const
+    {
+        return m_results;
+    }
+
+private:
+    std::set<RESULTS> m_results;
+    int m_dist;
+};
 
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
@@ -1419,6 +1560,32 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
 }
 
 
+void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance )
+{
+    if( aPolys.OutlineCount() < 1 )
+        return;
+
+    VERTEX_CONNECTOR vs( aPolys.BBoxFromCaches(), aPolys, aDistance );
+
+    vs.FindResults();
+
+    // This cannot be a reference because we need to do the comparison below while
+    // changing the values
+    for( const RESULTS& result : vs.GetResults() )
+    {
+        SHAPE_LINE_CHAIN& line1 = aPolys.Outline( result.m_outline1 );
+        SHAPE_LINE_CHAIN& line2 = aPolys.Outline( result.m_outline2 );
+
+        VECTOR2I pt1 = line1.CPoint( result.m_vertex1 );
+        VECTOR2I pt2 = line2.CPoint( result.m_vertex2 );
+
+        // Duplicate the point first, so that we return to the same location
+        line1.Insert( result.m_vertex1, pt1 );
+        line1.Insert( result.m_vertex1 + 1, pt2 );
+    }
+}
+
+
 #define DUMP_POLYS_TO_COPPER_LAYER( a, b, c ) \
     { if( m_debugZoneFiller && aDebugLayer == b ) \
         { \
@@ -1615,6 +1782,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
+
     /* -------------------------------------------------------------------------------------
      * Process the hatch pattern (note that we do this while deflated)
      */
@@ -1623,6 +1791,21 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     {
         if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys ) )
             return false;
+    }
+    else
+    {
+
+        /* -------------------------------------------------------------------------------------
+         * Connect nearby polygons
+         */
+
+        if( ADVANCED_CFG::GetCfg().m_ZoneConnectionFiller )
+        {
+            aFillPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
+            connect_nearby_polys( aFillPolys, aZone->GetMinThickness() );
+        }
+
+        DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In10_Cu, wxT( "connected-nearby-polys" ) );
     }
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
