@@ -264,7 +264,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_MinParallelAngle = 0.001;
 
-    m_ResolveTextRecursionDepth = 2;
+    m_ResolveTextRecursionDepth = 3;
 
     loadFromConfigFile();
 }
