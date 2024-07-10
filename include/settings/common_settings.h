@@ -120,6 +120,7 @@ public:
     {
         int autosave_interval;
         wxString text_editor;
+        wxString file_explorer;
         int file_history_size;
         wxString language;
         wxString pdf_viewer_name;

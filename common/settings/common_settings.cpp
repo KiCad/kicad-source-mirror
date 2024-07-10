@@ -296,6 +296,14 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             &m_System.text_editor, wxS( "" ) ) );
 #endif
 
+#if defined( __WINDOWS__ )
+    m_params.emplace_back( new PARAM<wxString>( "system.file_explorer",
+            &m_System.file_explorer, wxS( "explorer.exe /n,/select,%F" ) ) );
+#else
+    m_params.emplace_back( new PARAM<wxString>( "system.file_explorer",
+            &m_System.file_explorer, wxS( "" ) ) );
+#endif
+
     m_params.emplace_back( new PARAM<int>( "system.file_history_size",
             &m_System.file_history_size, 9 ) );
 

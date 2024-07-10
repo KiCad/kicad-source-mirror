@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -93,6 +93,18 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 
 	bHelperAppsSizer->Add( bSizer61, 0, wxTOP|wxRIGHT|wxEXPAND, 5 );
+
+	bSizerFileManager = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextFileManager = new wxStaticText( this, wxID_ANY, _("File manager:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFileManager->Wrap( -1 );
+	bSizerFileManager->Add( m_staticTextFileManager, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_textCtrlFileManager = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerFileManager->Add( m_textCtrlFileManager, 1, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bHelperAppsSizer->Add( bSizerFileManager, 0, wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
 	bHelperAppsSizer->Add( 0, 12, 0, wxEXPAND, 5 );

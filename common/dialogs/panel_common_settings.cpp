@@ -55,6 +55,8 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
     m_antialiasingFallbackLabel->Show( false );
 #endif
 
+    ShowFileManagerWidgets( ADVANCED_CFG::GetCfg().m_EnableLibDir );
+
     m_textEditorBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_pdfViewerBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -143,6 +145,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
 
     applySettingsToPanel( *commonSettings );
 
+    m_textCtrlFileManager->SetValue( commonSettings->m_System.file_explorer );
+
     // TODO(JE) Move these into COMMON_SETTINGS probably
     m_textEditorPath->SetValue( Pgm().GetTextEditor( false ) );
     m_defaultPDFViewer->SetValue( Pgm().UseSystemPdfBrowser() );
@@ -157,6 +161,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
 bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 {
     COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
+
+    commonSettings->m_System.file_explorer = m_textCtrlFileManager->GetValue();
 
     commonSettings->m_System.autosave_interval = m_SaveTime->GetValue() * 60;
     commonSettings->m_System.file_history_size = m_fileHistorySize->GetValue();
@@ -332,6 +338,28 @@ void PANEL_COMMON_SETTINGS::OnTextEditorClick( wxCommandEvent& event )
     // value will be retained.
     if( !editorname.IsEmpty() )
         m_textEditorPath->SetValue( editorname );
+}
+
+
+void PANEL_COMMON_SETTINGS::ShowFileManagerWidgets( bool aBool )
+{
+    m_staticTextFileManager->Show( aBool );
+    m_textCtrlFileManager->Show( aBool );
+
+    if( aBool )
+    {
+#if defined( __WINDOWS__ )
+        wxString msg = _( "Default 'explorer.exe /n,/select,%F' for this OS." );
+        m_textCtrlFileManager->SetToolTip( msg );
+        wxString str = "%F";
+#else
+        wxString msg = _( "File explorer command.\nexample:" ) + wxS( " 'nemo -n %F'" );
+        m_textCtrlFileManager->SetToolTip( msg );
+        wxString str= " %F";
+#endif
+        msg = _( "Explorer command with mandatory '%s' suffix after last entered character." );
+        m_staticTextFileManager->SetToolTip( wxString::Format( msg, str ) );
+    }
 }
 
 

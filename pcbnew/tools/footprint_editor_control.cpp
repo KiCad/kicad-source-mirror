@@ -33,6 +33,9 @@
 #include <pcbnew_id.h>
 #include <confirm.h>
 #include <kidialog.h>
+#include <wx/filename.h>
+#include <wildcards_and_files_ext.h>
+#include <launch_ext.h> // To default when file manager setting is empty
 #include <gestfich.h> // To open with a text editor
 #include <widgets/wx_infobar.h>
 #include <footprint.h>
@@ -108,7 +111,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
                 return fp != nullptr;
             };
 
-    auto canOpenWithTextEditor =
+    auto canOpenExternally =
             [ this ]( const SELECTION& aSel )
             {
                 // The option is shown if the editor has no current edits,
@@ -141,7 +144,13 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     if( ADVANCED_CFG::GetCfg().m_EnableLibWithText )
     {
         ctxMenu.AddSeparator( 200 );
-        ctxMenu.AddItem( ACTIONS::openWithTextEditor, canOpenWithTextEditor && fpSelectedCondition, 200 );
+        ctxMenu.AddItem( ACTIONS::openWithTextEditor, canOpenExternally && fpSelectedCondition, 200 );
+    }
+
+    if( ADVANCED_CFG::GetCfg().m_EnableLibDir )
+    {
+        ctxMenu.AddSeparator( 200 );
+        ctxMenu.AddItem( ACTIONS::openDirectory,  canOpenExternally && ( libSelectedCondition || fpSelectedCondition ), 200 );
     }
 // clang-format on
 
@@ -549,6 +558,77 @@ int FOOTPRINT_EDITOR_CONTROL::ExportFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
+{
+    // No check for multi selection since the context menu option must be hidden in that case
+    FP_LIB_TABLE* globalTable = dynamic_cast<FP_LIB_TABLE*>( &GFootprintTable );
+    FP_LIB_TABLE* projectTable = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
+    LIB_ID        libId = m_frame->GetTargetFPID();
+
+    wxString    libName = libId.GetLibNickname();
+    wxString    libItemName = libId.GetLibItemName();
+    wxString    path = wxEmptyString;
+
+    for( FP_LIB_TABLE* table : { globalTable, projectTable } )
+    {
+        if( !table )
+            break;
+
+        try
+        {
+            path = table->FindRow( libName, true )->GetFullURI( true );
+        }
+        catch( IO_ERROR& err )
+        {
+            // Do nothing: libName can be not found in globalTable if libName is in projectTable
+        }
+
+        if( !path.IsEmpty() )
+            break;
+    }
+
+    wxString fileExt = wxEmptyString;
+
+    // If selection is footprint
+    if( !libItemName.IsEmpty() )
+        fileExt = FILEEXT::KiCadFootprintFileExtension;
+
+    wxFileName fileName( path, libItemName, fileExt );
+
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+
+    wxString explCommand = cfg->m_System.file_explorer;
+
+    if( explCommand.IsEmpty() )
+    {
+        path = fileName.GetFullPath().BeforeLast( wxFileName::GetPathSeparator() );
+
+        if( !path.IsEmpty() && wxDirExists( path ) )
+            LaunchExternal( path );
+        return 0;
+    }
+
+    if( !explCommand.EndsWith( "%F" ) )
+    {
+        wxMessageBox( _( "Missing/malformed file explorer argument '%F' in common settings." ) );
+        return 0;
+    }
+
+    wxString escapedFilePath = fileName.GetFullPath();
+    escapedFilePath.Replace( wxS( "\"" ), wxS( "_" ) );
+
+    wxString fileArg = wxEmptyString;
+    fileArg << '"' << escapedFilePath << '"';
+
+    explCommand.Replace( wxT( "%F" ), fileArg );
+
+    if( !explCommand.IsEmpty() )
+        wxExecute( explCommand );
+
+    return 0;
+}
+
+
 int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
 {
     wxString fullEditorName = Pgm().GetTextEditor();
@@ -559,12 +639,13 @@ int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    // No check for multi selection since the context menu option must be hidden in that case
     FP_LIB_TABLE* globalTable = dynamic_cast<FP_LIB_TABLE*>( &GFootprintTable );
     FP_LIB_TABLE* projectTable = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
     LIB_ID        libId = m_frame->GetLibTree()->GetSelectedLibId();
 
-    wxString libName = libId.GetLibNickname();
-    wxString  libItemName = wxEmptyString;
+    wxString    libName = libId.GetLibNickname();
+    wxString    libItemName = wxEmptyString;
 
     for( FP_LIB_TABLE* table : { globalTable, projectTable } )
     {
@@ -574,16 +655,24 @@ int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
         try
         {
             libItemName = table->FindRow( libName, true )->GetFullURI( true );
-            libItemName = libItemName + "/" + libId.GetLibItemName() + ".kicad_mod";
         }
         catch( IO_ERROR& err )
         {
-           // Do nothing: libName can be not found in globalTable if libName is in projectTable
+            // Do nothing: libName can be not found in globalTable if libName is in projectTable
         }
+
+        if( !libItemName.IsEmpty() )
+            break;
     }
 
-    if( !libItemName.IsEmpty() )
-        ExecuteFile( fullEditorName, libItemName.wc_str(), nullptr, false );
+    libItemName << wxFileName::GetPathSeparator();
+    libItemName << libId.GetLibItemName();
+    libItemName << '.' + FILEEXT::KiCadFootprintFileExtension;
+
+    if( !wxFileName::FileExists( libItemName ) )
+        return 0;
+
+    ExecuteFile( fullEditorName, libItemName.wc_str(), nullptr, false );
 
     return 0;
 }
@@ -763,7 +852,9 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
+
     Go( &FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor,   ACTIONS::openWithTextEditor.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::OpenDirectory,        ACTIONS::openDirectory.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::EditTextAndGraphics,  PCB_ACTIONS::editTextAndGraphics.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );

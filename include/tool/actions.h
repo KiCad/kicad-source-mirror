@@ -59,6 +59,7 @@ public:
     static TOOL_ACTION quit;
     static TOOL_ACTION ddAddLibrary;    // for drag and drop lib
     static TOOL_ACTION openWithTextEditor;
+    static TOOL_ACTION openDirectory;
 
     // Generic edit actions
     static TOOL_ACTION cancelInteractive;

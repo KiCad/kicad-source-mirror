@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,6 +53,9 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticLine* m_staticline2;
 		wxTextCtrl* m_textEditorPath;
 		STD_BITMAP_BUTTON* m_textEditorBtn;
+		wxBoxSizer* bSizerFileManager;
+		wxStaticText* m_staticTextFileManager;
+		wxTextCtrl* m_textCtrlFileManager;
 		wxRadioButton* m_defaultPDFViewer;
 		wxRadioButton* m_otherPDFViewer;
 		wxTextCtrl* m_PDFViewerPath;

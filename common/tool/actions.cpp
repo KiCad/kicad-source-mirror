@@ -76,6 +76,13 @@ TOOL_ACTION ACTIONS::openWithTextEditor( TOOL_ACTION_ARGS()
         .Tooltip( _( "Open a library file with a text editor" ) )
         .Icon( BITMAPS::editor ) );
 
+TOOL_ACTION ACTIONS::openDirectory( TOOL_ACTION_ARGS()
+        .Name( "common.Control.openDirectory" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Open in file explorer..." ) )
+        .Tooltip( _( "Open a library file with system file explorer" ) )
+        .Icon( BITMAPS::directory_browser ) );
+
 TOOL_ACTION ACTIONS::save( TOOL_ACTION_ARGS()
         .Name( "common.Control.save" )
         .Scope( AS_GLOBAL )

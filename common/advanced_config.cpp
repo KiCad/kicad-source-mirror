@@ -101,6 +101,7 @@ static const wxChar UseClipper2[] = wxT( "UseClipper2" );
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 static const wxChar EnableGit[] = wxT( "EnableGit" );
 static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
+static const wxChar EnableLibDir[] = wxT( "EnableLibDir" );
 static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
 static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibilityRatio" );
@@ -241,6 +242,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
     m_EnableLibWithText         = false;
+    m_EnableLibDir              = false;
 
     m_EnableEeschemaPrintCairo  = true;
 
@@ -463,6 +465,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibWithText,
                                                 &m_EnableLibWithText, m_EnableLibWithText ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibDir,
+                                                &m_EnableLibDir, m_EnableLibDir ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaPrintCairo,
                                                 &m_EnableEeschemaPrintCairo,

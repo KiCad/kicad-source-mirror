@@ -61,6 +61,7 @@ protected:
     void OnCanvasScaleAuto( wxCommandEvent& aEvent ) override;
 
 private:
+    void ShowFileManagerWidgets( bool aBool );
     void setPdfViewerPathState();
 };
 

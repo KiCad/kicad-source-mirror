@@ -485,6 +485,24 @@ public:
     bool m_EnableLibWithText;
 
     /**
+     * Enable option to open lib file directory.
+     * Reveals one additional field under common preferences to set
+     * system's file manager command in order for the context menu options to work.
+     * On windows common settings preselect the default explorer with a hardcoded value.
+     *
+     * Examples,
+     * Linux:  "nemo -n %F"
+     *         "nautilus --browser %F"
+     *         "dolphin --select %F" etc
+     * Win11:  "explorer.exe /n,/select,%F"
+     *
+     * Setting name: "EnableLibDir"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_EnableLibDir;
+
+    /**
      * Enable Eeschema printing using Cairo.
      *
      * Setting name: "EnableEeschemaPrintCairo"
