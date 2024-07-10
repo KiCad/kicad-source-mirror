@@ -249,7 +249,6 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
     VECTOR2I tangentA = VECTOR2I( pts[0].x - aTrackDir.x * biasAE, pts[0].y - aTrackDir.y * biasAE );
 
     std::vector<VECTOR2I> curve_pts;
-    curve_pts.reserve( aParams.m_CurveSegCount );
     BEZIER_POLY( pts[1], tangentB, tangentC, pts[2] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
     for( VECTOR2I& corner: curve_pts )
@@ -288,7 +287,6 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     VECTOR2I trackDir( aIntersection - ( aPts[0] + aPts[1] ) / 2 );
 
     std::vector<VECTOR2I> curve_pts;
-    curve_pts.reserve( aParams.m_CurveSegCount );
 
     // Note: This side is from track to pad/via
     VECTOR2I ctrl1 = aPts[1] + trackDir.Resize( side1.EuclideanNorm() / 4 );

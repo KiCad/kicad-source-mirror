@@ -82,15 +82,14 @@ public:
     }
 
     /**
-     * Set the params for teardrop using curved shape
-     * note: if aCurveSegCount is < 3, the shape uses a straight line
+     * Set the teardrop curved or straight
      */
     void SetTeardropCurvedPrm( int aCurveSegCount = 0 )
     {
         m_CurveSegCount = aCurveSegCount;
     }
 
-    bool IsCurved() const { return m_CurveSegCount > 2; }
+    bool IsCurved() const { return m_CurveSegCount > 0; }
 
     bool operator== ( const TEARDROP_PARAMETERS& aOther ) const
     {
@@ -122,8 +121,7 @@ public:
     /// The ratio (H/D) between the via/pad size and the track width max value to create a teardrop
     /// 1.0 (100 %) always creates a teardrop, 0.0 (0%) never create a teardrop
     double  m_WidthtoSizeFilterRatio;
-    /// number of segments to build the curved sides of a teardrop area
-    /// must be > 2. for values <= 2 a straight line is used
+    /// True if the teardrop should be curved
     int m_CurveSegCount;
 
     /// Flag to enable teardrops

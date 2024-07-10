@@ -53,7 +53,6 @@ private:
 
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
-    void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) override;
 
     bool confirmPadChange( const std::vector<PAD*>& connectedPads );
 

@@ -319,7 +319,7 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::setSpecifiedParams( TEARDROP_PARAMETERS* targ
     if( m_curvedEdges->Get3StateValue() != wxCHK_UNDETERMINED )
     {
         if( m_curvedEdges->GetValue() )
-            targetParams->m_CurveSegCount = m_curvePointsCtrl->GetValue();
+            targetParams->m_CurveSegCount = 1;
         else
             targetParams->m_CurveSegCount = 0;
     }

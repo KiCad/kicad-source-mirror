@@ -664,11 +664,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_curvedEdges->SetValue( m_previewPad->GetTeardropParams().IsCurved() );
 
-    if( m_curvedEdges->GetValue() )
-        m_curvePointsCtrl->SetValue( m_previewPad->GetTeardropParams().m_CurveSegCount );
-    else
-        m_curvePointsCtrl->SetValue( 5 );
-
     switch( m_previewPad->GetLocalZoneConnection() )
     {
     default:
@@ -1584,7 +1579,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->GetTeardropParams().m_BestWidthRatio = m_spTeardropSizePercent->GetValue() / 100;
 
     if( m_curvedEdges->GetValue() )
-        aPad->GetTeardropParams().m_CurveSegCount = m_curvePointsCtrl->GetValue();
+        aPad->GetTeardropParams().m_CurveSegCount = 1;
     else
         aPad->GetTeardropParams().m_CurveSegCount = 0;
 

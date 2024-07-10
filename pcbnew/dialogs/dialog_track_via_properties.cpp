@@ -240,7 +240,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_teardropWidthPercent.SetDoubleValue( v->GetTeardropParams().m_BestWidthRatio*100.0 );
                     m_teardropHDPercent.SetDoubleValue( v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 );
                     m_curvedEdges->SetValue( v->GetTeardropParams().IsCurved() );
-                    m_curvePointsCtrl->SetValue( v->GetTeardropParams().m_CurveSegCount );
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -296,12 +295,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                     if( m_teardropHDPercent.GetDoubleValue() != v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 )
                         m_teardropHDPercent.SetValue( INDETERMINATE_STATE );
-
-                    if( m_curvePointsCtrl->GetValue() != v->GetTeardropParams().m_CurveSegCount )
-                    {
-                        m_curvedEdges->Set3StateValue( wxCHK_UNDETERMINED );
-                        m_curvePointsCtrl->SetValue( 5 );
-                    }
                 }
 
                 if( v->IsLocked() )
@@ -748,7 +741,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( m_curvedEdges->Get3StateValue() != wxCHK_UNDETERMINED )
                 {
                     if( m_curvedEdges->GetValue() )
-                        targetParams->m_CurveSegCount = m_curvePointsCtrl->GetValue();
+                        targetParams->m_CurveSegCount = 1;
                     else
                         targetParams->m_CurveSegCount = 0;
                 }
@@ -946,9 +939,3 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTeardropsUpdateUi( wxUpdateUIEvent& event )
     event.Enable( !m_frame->GetBoard()->LegacyTeardrops() );
 }
 
-
-void DIALOG_TRACK_VIA_PROPERTIES::onCurvedEdgesUpdateUi( wxUpdateUIEvent& event )
-{
-    event.Enable( !m_frame->GetBoard()->LegacyTeardrops()
-                  && m_curvedEdges->Get3StateValue() == wxCHK_CHECKED );
-}

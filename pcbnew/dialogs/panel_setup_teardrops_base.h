@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,8 +56,6 @@ class PANEL_SETUP_TEARDROPS_BASE : public wxPanel
 		wxStaticText* m_stMaxWidthLabel;
 		wxTextCtrl* m_tcMaxWidth;
 		wxStaticText* m_stMaxWidthUnits;
-		wxStaticText* m_curvePointsLabel;
-		wxSpinCtrl* m_curvePointsCtrl;
 		wxCheckBox* m_cbPreferZoneConnection;
 		wxStaticText* m_stHDRatio;
 		wxSpinCtrlDouble* m_spTeardropHDPercent;
@@ -78,8 +76,6 @@ class PANEL_SETUP_TEARDROPS_BASE : public wxPanel
 		wxStaticText* m_stMaxWidth1Label;
 		wxTextCtrl* m_tcMaxWidth1;
 		wxStaticText* m_stMaxWidth1Units;
-		wxStaticText* m_curvePoints1Label;
-		wxSpinCtrl* m_curvePointsCtrl1;
 		wxCheckBox* m_cbPreferZoneConnection1;
 		wxStaticText* m_stHDRatio1;
 		wxSpinCtrlDouble* m_spTeardropHDPercent1;
@@ -100,8 +96,6 @@ class PANEL_SETUP_TEARDROPS_BASE : public wxPanel
 		wxStaticText* m_stMaxWidth2Label;
 		wxTextCtrl* m_tcMaxWidth2;
 		wxStaticText* m_stMaxWidth2Units;
-		wxStaticText* m_curvePoints2Label;
-		wxSpinCtrl* m_curvePointsCtrl2;
 		wxStaticText* m_stHDRatio2;
 		wxSpinCtrlDouble* m_spTeardropHDPercent2;
 		wxCheckBox* m_cbTeardropsUseNextTrack2;

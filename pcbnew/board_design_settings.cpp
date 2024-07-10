@@ -555,7 +555,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     entry["td_curve_segcount"]  = td_prm->m_CurveSegCount;
                     entry["td_width_to_size_filter_ratio"] = td_prm->m_WidthtoSizeFilterRatio;
                     entry["td_allow_use_two_tracks"] = td_prm->m_AllowUseTwoTracks;
-                    entry["td_curve_segcount"]  = td_prm->m_CurveSegCount;
                     entry["td_on_pad_in_zone"]  = td_prm->m_TdOnPadsInZones;
 
                     js.push_back( entry );
@@ -602,9 +601,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
                         if( entry.contains( "td_allow_use_two_tracks" ) )
                             td_prm->m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
-
-                        if( entry.contains( "td_curve_segcount" ) )
-                            td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
 
                         if( entry.contains( "td_on_pad_in_zone" ) )
                             td_prm->m_TdOnPadsInZones = entry["td_on_pad_in_zone"].get<bool>();

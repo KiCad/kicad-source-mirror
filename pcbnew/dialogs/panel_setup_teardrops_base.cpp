@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -144,13 +144,6 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_stMaxWidthUnits->Wrap( -1 );
 	gbSizer->Add( m_stMaxWidthUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_curvePointsLabel = new wxStaticText( this, wxID_ANY, _("Curve points:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_curvePointsLabel->Wrap( -1 );
-	gbSizer->Add( m_curvePointsLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_curvePointsCtrl = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
-	gbSizer->Add( m_curvePointsCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
 	m_cbPreferZoneConnection = new wxCheckBox( this, wxID_ANY, _("Prefer zone connection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPreferZoneConnection->SetToolTip( _("Do not create teardrops on tracks connected to pads that are also connected to a copper zone.") );
 
@@ -160,13 +153,13 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_stHDRatio->Wrap( -1 );
 	m_stHDRatio->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
-	gbSizer->Add( m_stHDRatio, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
+	gbSizer->Add( m_stHDRatio, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
 	m_spTeardropHDPercent = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 90, 10 );
 	m_spTeardropHDPercent->SetDigits( 0 );
 	m_spTeardropHDPercent->SetToolTip( _("Tracks which are similar in size to the pad or via do not need teardrops.") );
 
-	gbSizer->Add( m_spTeardropHDPercent, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer->Add( m_spTeardropHDPercent, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer1311;
 	bSizer1311 = new wxBoxSizer( wxHORIZONTAL );
@@ -189,13 +182,13 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	bSizer1311->Add( stMinTrackWidthSuffix, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer->Add( bSizer1311, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer->Add( bSizer1311, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_cbTeardropsUseNextTrack = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span two track segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTeardropsUseNextTrack->SetValue(true);
 	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
 
-	gbSizer->Add( m_cbTeardropsUseNextTrack, wxGBPosition( 6, 2 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer->Add( m_cbTeardropsUseNextTrack, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
 
 	bSizerShapeColumns->Add( gbSizer, 0, wxEXPAND|wxLEFT, 20 );
@@ -334,13 +327,6 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_stMaxWidth1Units->Wrap( -1 );
 	gbSizer1->Add( m_stMaxWidth1Units, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_curvePoints1Label = new wxStaticText( this, wxID_ANY, _("Curve points:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_curvePoints1Label->Wrap( -1 );
-	gbSizer1->Add( m_curvePoints1Label, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_curvePointsCtrl1 = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
-	gbSizer1->Add( m_curvePointsCtrl1, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
 	m_cbPreferZoneConnection1 = new wxCheckBox( this, wxID_ANY, _("Prefer zone connection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPreferZoneConnection1->SetToolTip( _("Do not create teardrops on tracks connected to pads that are also connected to a copper zone.") );
 
@@ -350,13 +336,13 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_stHDRatio1->Wrap( -1 );
 	m_stHDRatio1->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
-	gbSizer1->Add( m_stHDRatio1, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
+	gbSizer1->Add( m_stHDRatio1, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
 	m_spTeardropHDPercent1 = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 90, 10 );
 	m_spTeardropHDPercent1->SetDigits( 0 );
 	m_spTeardropHDPercent1->SetToolTip( _("Tracks which are similar in size to the pad do not need teardrops.") );
 
-	gbSizer1->Add( m_spTeardropHDPercent1, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_spTeardropHDPercent1, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer1221;
 	bSizer1221 = new wxBoxSizer( wxHORIZONTAL );
@@ -379,13 +365,13 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	bSizer1221->Add( staticText73, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer1->Add( bSizer1221, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( bSizer1221, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_cbTeardropsUseNextTrack1 = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span two track segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTeardropsUseNextTrack1 = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span track segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTeardropsUseNextTrack1->SetValue(true);
 	m_cbTeardropsUseNextTrack1->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
 
-	gbSizer1->Add( m_cbTeardropsUseNextTrack1, wxGBPosition( 6, 2 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_cbTeardropsUseNextTrack1, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
 
 	bSizerShapeColumns1->Add( gbSizer1, 0, wxEXPAND|wxLEFT, 20 );
@@ -524,24 +510,17 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_stMaxWidth2Units->Wrap( -1 );
 	gbSizer2->Add( m_stMaxWidth2Units, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_curvePoints2Label = new wxStaticText( this, wxID_ANY, _("Curve points:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_curvePoints2Label->Wrap( -1 );
-	gbSizer2->Add( m_curvePoints2Label, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_curvePointsCtrl2 = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
-	gbSizer2->Add( m_curvePointsCtrl2, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
 	m_stHDRatio2 = new wxStaticText( this, wxID_ANY, _("Maximum track width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio2->Wrap( -1 );
 	m_stHDRatio2->SetToolTip( _("Max track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
-	gbSizer2->Add( m_stHDRatio2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
+	gbSizer2->Add( m_stHDRatio2, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
 	m_spTeardropHDPercent2 = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 90, 10 );
 	m_spTeardropHDPercent2->SetDigits( 0 );
 	m_spTeardropHDPercent2->SetToolTip( _("Tracks which are similar in size do not need teardrops.") );
 
-	gbSizer2->Add( m_spTeardropHDPercent2, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( m_spTeardropHDPercent2, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer12211;
 	bSizer12211 = new wxBoxSizer( wxHORIZONTAL );
@@ -564,13 +543,13 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	bSizer12211->Add( stMinTrackWidth2Suffix, 0, wxALIGN_BOTTOM|wxBOTTOM, 1 );
 
 
-	gbSizer2->Add( bSizer12211, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( bSizer12211, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_cbTeardropsUseNextTrack2 = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span two track segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTeardropsUseNextTrack2 = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span track segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTeardropsUseNextTrack2->SetValue(true);
 	m_cbTeardropsUseNextTrack2->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
 
-	gbSizer2->Add( m_cbTeardropsUseNextTrack2, wxGBPosition( 6, 2 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_cbTeardropsUseNextTrack2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
 
 	bSizerShapeColumns2->Add( gbSizer2, 0, wxEXPAND|wxLEFT, 20 );

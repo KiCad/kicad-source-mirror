@@ -280,9 +280,9 @@ static struct BOARD_CONNECTED_ITEM_DESC
         maxWidth->SetAvailableFunc( supportsTeardrops );
         propMgr.AddProperty( maxWidth, groupTeardrops );
 
-        auto curvePts = new PROPERTY<BOARD_CONNECTED_ITEM, int>( _HKI( "Curve Points" ),
-                         &BOARD_CONNECTED_ITEM::SetTeardropCurvePts,
-                         &BOARD_CONNECTED_ITEM::GetTeardropCurvePts );
+        auto curvePts = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Curved Teardrops" ),
+                         &BOARD_CONNECTED_ITEM::SetTeardropCurved,
+                         &BOARD_CONNECTED_ITEM::GetTeardropCurved );
         curvePts->SetAvailableFunc( supportsTeardrops );
         propMgr.AddProperty( curvePts, groupTeardrops );
 
