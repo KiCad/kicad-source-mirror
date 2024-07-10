@@ -272,27 +272,27 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
 void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aParams,
                                                   std::vector<VECTOR2I>& aPoly, int aTdWidth,
                                                   int aTrackHalfWidth,
-                                                  std::vector<VECTOR2I>& aPts ) const
+                                                  std::vector<VECTOR2I>& aPts,
+                                                  const VECTOR2I& aIntersection) const
 {
     // in aPts:
     // A and B are points on the track ( pts[0] and pts[1] )
     // C and E are points on the pad/via ( pts[2] and pts[4] )
     // D is the aViaPad centre ( pts[3] )
-    // F is the intersection between the track centerline and the pad outline ( pts[5] )
 
     // side1 is( aPts[1], aPts[2] );  from track to via
     VECTOR2I side1( aPts[2] - aPts[1] );  // vector from track to via
     // side2 is ( aPts[4], aPts[0] ); from via to track
     VECTOR2I side2( aPts[4] - aPts[0] );  // vector from track to via
 
-    VECTOR2I trackDir( aPts[5] - ( aPts[0] + aPts[1] ) / 2 );
+    VECTOR2I trackDir( aIntersection - ( aPts[0] + aPts[1] ) / 2 );
 
     std::vector<VECTOR2I> curve_pts;
     curve_pts.reserve( aParams.m_CurveSegCount );
 
     // Note: This side is from track to pad/via
     VECTOR2I ctrl1 = aPts[1] + trackDir.Resize( side1.EuclideanNorm() / 4 );
-    VECTOR2I ctrl2 = ( aPts[2] + aPts[5] ) / 2;
+    VECTOR2I ctrl2 = ( aPts[2] + aIntersection ) / 2;
 
     BEZIER_POLY( aPts[1], ctrl1, ctrl2, aPts[2] ).GetPoly( curve_pts, ARC_HIGH_DEF );
 
@@ -304,7 +304,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     // Note: This side is from pad/via to track
     curve_pts.clear();
 
-    ctrl1 = ( aPts[4] + aPts[5] ) / 2;
+    ctrl1 = ( aPts[4] + aIntersection ) / 2;
     ctrl2 = aPts[0] + trackDir.Resize( side2.EuclideanNorm() / 4 );
 
     BEZIER_POLY( aPts[4], ctrl1, ctrl2, aPts[0] ).GetPoly( curve_pts, ARC_HIGH_DEF );
@@ -490,24 +490,14 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
     if( area1 > area2 )     // The first choice (without swapping) is the better.
         std::swap( aPts[2], aPts[4] );
 
-    SHAPE_LINE_CHAIN::INTERSECTIONS ips;
-    SEG                             projection( ( aPts[0] + aPts[1] ) / 2, aPts[3] );
-
-    padpoly.Intersect( projection, ips );
-
-    if( ips.size() > 0 )
-        aPts[5] = ips[0].p;
-    else
-        aPts[5] = aPts[3];
-
     return true;
 }
 
 
 bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aParams,
                                                 VECTOR2I& aStartPoint, VECTOR2I& aEndPoint,
-                                                PCB_TRACK*& aTrack, BOARD_ITEM* aOther,
-                                                const VECTOR2I& aOtherPos,
+                                                VECTOR2I& aIntersection, PCB_TRACK*& aTrack,
+                                                BOARD_ITEM* aOther, const VECTOR2I& aOtherPos,
                                                 int* aEffectiveTeardropLen ) const
 {
     bool found = true;
@@ -564,15 +554,17 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
         pt_count = outline.Intersect( poly, pts );
     }
     else
+    {
         pt_count = outline.Intersect( SEG( start, end ), pts );
+    }
 
     // Ensure a intersection point was found, otherwise we cannot built the teardrop
     // using this track (it is fully outside or inside the pad/via shape)
     if( pt_count < 1 )
         return false;
 
-    VECTOR2I intersect = pts[0].p;
-    start = intersect;      // This is currently the reference point of the teardrop lenght
+    aIntersection = pts[0].p;
+    start = aIntersection;      // This is currently the reference point of the teardrop length
 
     // actualTdLen for now the distance between start and the teardrop point on the (start end)segment
     // It cannot be bigger than the lenght of this segment
@@ -689,12 +681,16 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     VECTOR2I start, end;    // Start and end points of the track anchor of the teardrop
                             // the start point is inside the teardrop shape
                             // the end point is outside.
+    VECTOR2I intersection;  // Where the track centerline intersects the pad/via edge
     int track_stub_len;     // the dist between the start point and the anchor point
                             // on the track
 
     // Note: aTrack can be modified if the initial track is too short
-    if( !findAnchorPointsOnTrack( aParams, start, end, aTrack, aOther, aOtherPos, &track_stub_len ) )
+    if( !findAnchorPointsOnTrack( aParams, start, end, intersection, aTrack, aOther, aOtherPos,
+                                  &track_stub_len ) )
+    {
         return false;
+    }
 
     // The start and end points must be different to calculate a valid polygon shape
     if( start == end )
@@ -729,8 +725,8 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     int offset = pcbIUScale.mmToIU( 0.001 );
     pointD += VECTOR2I( int( -vecT.x*offset), int(-vecT.y*offset) );
 
-    VECTOR2I pointC, pointE;     // Point on PADVIA outlines
-    std::vector<VECTOR2I> pts = { pointA, pointB, pointC, pointD, pointE, pointD };
+    VECTOR2I pointC, pointE;     // Point on pad/via outlines
+    std::vector<VECTOR2I> pts = { pointA, pointB, pointC, pointD, pointE };
 
     computeAnchorPoints( aParams, aTrack->GetLayer(), aOther, aOtherPos, pts );
 
@@ -752,7 +748,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
         if( aParams.m_TdMaxWidth > 0 && aParams.m_TdMaxWidth < td_width )
             td_width = aParams.m_TdMaxWidth;
 
-        computeCurvedForRectShape( aParams, aCorners, td_width, track_halfwidth, pts );
+        computeCurvedForRectShape( aParams, aCorners, td_width, track_halfwidth, pts, intersection );
     }
 
     return true;
