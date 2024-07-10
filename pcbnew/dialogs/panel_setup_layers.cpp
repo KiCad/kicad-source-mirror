@@ -408,6 +408,7 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
 #endif
 
         setLayerCheckBox( layer, state );
+        --copperCount;
     }
 
 #ifdef HIDE_INACTIVE_LAYERS
