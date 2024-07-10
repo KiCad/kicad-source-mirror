@@ -1799,12 +1799,13 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     BOX2I                  zoneBB = aZone->GetBoundingBox();
     DRC_CONSTRAINT         constraint;
+    int                    zone_half_width = aZone->GetMinThickness() / 2;
 
     zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance().value() ) );
 
-    // Is a point on the boundary of the polygon inside or outside?  The boundary may be off by
-    // MaxError, and we add 1.5 mil for some wiggle room.
-    int epsilon = KiROUND( bds.m_MaxError + pcbIUScale.IU_PER_MM * 0.038 ); // 1.5 mil
+    // Is a point on the boundary of the polygon inside or outside?
+    // The boundary may be off by MaxError
+    int epsilon = bds.m_MaxError;
 
     for( PAD* pad : aSpokedPadsList )
     {
@@ -1823,8 +1824,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         // and the algo to count the actual number of spokes can fail
         int spoke_max_allowed_w = std::min( pad->GetSize().x, pad->GetSize().y );
 
-        spoke_w = std::max( spoke_w, constraint.Value().Min() );
-        spoke_w = std::min( spoke_w, constraint.Value().Max() );
+        spoke_w = alg::clamp( constraint.Value().Min(), spoke_w, constraint.Value().Max() );
 
         // ensure the spoke width is smaller than the pad minor size
         spoke_w = std::min( spoke_w, spoke_max_allowed_w );
@@ -1904,17 +1904,17 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                         VECTOR2D direction( spokeAngle.Cos(), spokeAngle.Sin() );
                         VECTOR2D perpendicular = direction.Perpendicular();
 
-                        VECTOR2I intersection = intersectLineBox(direction);
-                        VECTOR2I spoke_side = perpendicular.Resize(spoke_half_w);
+                        VECTOR2I intersection = intersectLineBox( direction );
+                        VECTOR2I spoke_side = perpendicular.Resize( spoke_half_w );
 
                         SHAPE_LINE_CHAIN spoke;
-                        spoke.Append(center + spoke_side);
-                        spoke.Append(center - spoke_side);
-                        spoke.Append(center + intersection - spoke_side);
-                        spoke.Append(center + intersection);  // test pt
-                        spoke.Append(center + intersection + spoke_side);
-                        spoke.SetClosed(true);
-                        aSpokesList.push_back(std::move(spoke));
+                        spoke.Append( center + spoke_side );
+                        spoke.Append( center - spoke_side );
+                        spoke.Append( center + intersection - spoke_side );
+                        spoke.Append( center + intersection ); // test pt
+                        spoke.Append( center + intersection + spoke_side );
+                        spoke.SetClosed( true );
+                        aSpokesList.push_back( std::move( spoke ) );
                     }
                 };
 
@@ -1979,11 +1979,29 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
             BOX2I spokesBox = dummy_pad.GetBoundingBox();
 
-            //Add the half width of the spoke to the inflate amount to account for the fact that
-            //the deflation procedure will shrink the bounding box by half the width of the spoke
-            spokesBox.Inflate( thermalReliefGap + epsilon + spoke_half_w );
+            //Add the half width of the zone mininum width to the inflate amount to account for the fact that
+            //the deflation procedure will shrink the results by half the half the zone min width
+            spokesBox.Inflate( thermalReliefGap + epsilon + zone_half_width );
 
-            buildSpokesFromOrigin( spokesBox, pad->GetThermalSpokeAngle() );
+            // This is a touchy case because the bounding box for circles overshoots the mark
+            // when rotated at 45 degrees.  So we just build spokes at 0 degrees and rotate
+            // them later.
+            if( pad->GetShape() == PAD_SHAPE::CIRCLE
+                || ( pad->GetShape() == PAD_SHAPE::OVAL && pad->GetSizeX() == pad->GetSizeY() ) )
+            {
+                buildSpokesFromOrigin( spokesBox, ANGLE_0 );
+
+                if( pad->GetThermalSpokeAngle() != ANGLE_0 )
+                {
+                    //Rotate the last four elements of aspokeslist
+                    for( auto it = aSpokesList.rbegin(); it != aSpokesList.rbegin() + 4; ++it )
+                        it->Rotate( pad->GetThermalSpokeAngle() );
+                }
+            }
+            else
+            {
+                buildSpokesFromOrigin( spokesBox, pad->GetThermalSpokeAngle() );
+            }
 
             auto spokeIter = aSpokesList.rbegin();
 
