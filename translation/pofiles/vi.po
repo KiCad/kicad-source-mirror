@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-08 09:54-0700\n"
+"POT-Creation-Date: 2024-07-11 09:41-0700\n"
 "PO-Revision-Date: 2024-06-03 13:09+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
@@ -4828,7 +4828,7 @@ msgstr "Kiểu cách Đường thẳng"
 #: eeschema/sch_field.cpp:937 eeschema/sch_label.cpp:1269
 #: eeschema/sch_line.cpp:1088 eeschema/sch_text.cpp:409
 #: eeschema/sch_textbox.cpp:450 include/stroke_params.h:73
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2492 pcbnew/pcb_dimension.cpp:429
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2495 pcbnew/pcb_dimension.cpp:429
 #: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:373
 #: pcbnew/pcb_textbox.cpp:660
 msgid "Default"
@@ -5709,7 +5709,7 @@ msgstr "Điểm"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 #: pcbnew/fp_text_grid_table.cpp:139
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1067
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2066 pcbnew/pad.cpp:1067
 #: pcbnew/pcb_reference_image.cpp:259 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:245 pcbnew/pcb_track.cpp:1071
 #: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522
@@ -5760,12 +5760,12 @@ msgstr "Căn giữa X"
 msgid "Center Y"
 msgstr "Căn giữa Y"
 
-#: common/eda_shape.cpp:2011 pcbnew/generators/pcb_tuning_pattern.cpp:2504
+#: common/eda_shape.cpp:2011 pcbnew/generators/pcb_tuning_pattern.cpp:2507
 #: pcbnew/pcb_textbox.cpp:678 pcbnew/pcb_track.cpp:1502
 msgid "End X"
 msgstr "Kết thúc X"
 
-#: common/eda_shape.cpp:2017 pcbnew/generators/pcb_tuning_pattern.cpp:2510
+#: common/eda_shape.cpp:2017 pcbnew/generators/pcb_tuning_pattern.cpp:2513
 #: pcbnew/pcb_textbox.cpp:679 pcbnew/pcb_track.cpp:1505
 msgid "End Y"
 msgstr "Kết thúc Y"
@@ -5853,7 +5853,7 @@ msgstr "In đậm + Nghiêng"
 #: eeschema/fields_grid_table.cpp:771 eeschema/lib_field.cpp:558
 #: eeschema/lib_pin.cpp:1657 eeschema/lib_text.cpp:425
 #: eeschema/pin_type.cpp:113 eeschema/sch_field.cpp:945
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2493
 msgid "Left"
 msgstr "Trái"
 
@@ -5877,7 +5877,7 @@ msgstr "Giữa"
 #: eeschema/fields_grid_table.cpp:775 eeschema/lib_field.cpp:560
 #: eeschema/lib_pin.cpp:1656 eeschema/lib_text.cpp:427
 #: eeschema/pin_type.cpp:112 eeschema/sch_field.cpp:947
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2491
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2494
 msgid "Right"
 msgstr "Phải"
 
@@ -13623,7 +13623,7 @@ msgstr "Tham số Đầu ra"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2019 pcbnew/pcb_marker.cpp:194
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2022 pcbnew/pcb_marker.cpp:194
 #: pcbnew/pcb_shape.cpp:471 pcbnew/pcb_text.cpp:229 pcbnew/pcb_track.cpp:1065
 #: pcbnew/pcb_track.cpp:1132 pcbnew/tools/drawing_stackup_table_tool.cpp:250
 #: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:550
@@ -17127,7 +17127,7 @@ msgstr "Nhập bus"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:320
 #: eeschema/sch_label.cpp:1299 eeschema/sch_line.cpp:992
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2058 pcbnew/pad.cpp:1031
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2061 pcbnew/pad.cpp:1031
 #: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1721
 #: pcbnew/zone.cpp:580
 #, fuzzy
@@ -18062,7 +18062,7 @@ msgstr "Giá trị SCH_FILE_T không xác định: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
 #: pcbnew/footprint.cpp:3541 pcbnew/footprint.cpp:3544
 #: pcbnew/fp_text_grid_table.cpp:143
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2060 pcbnew/pad.cpp:1039
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1039
 #: pcbnew/pad.cpp:2330 pcbnew/pcb_dimension.cpp:462
 #: pcbnew/pcb_dimension.cpp:1197 pcbnew/pcb_group.cpp:487
 #: pcbnew/pcb_marker.cpp:361 pcbnew/pcb_reference_image.cpp:261
@@ -18134,8 +18134,8 @@ msgstr "Vertical Justification"
 #: pcbnew/board_connected_item.cpp:186
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:984
-#: pcbnew/generators/pcb_tuning_pattern.cpp:461
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2054 pcbnew/pad.cpp:1029
+#: pcbnew/generators/pcb_tuning_pattern.cpp:463
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2057 pcbnew/pad.cpp:1029
 #: pcbnew/pad.cpp:2358 pcbnew/pcb_shape.cpp:701 pcbnew/pcb_track.cpp:1158
 #: pcbnew/tools/pcb_control.cpp:1718
 #: pcbnew/widgets/pcb_properties_panel.cpp:274
@@ -19473,7 +19473,7 @@ msgstr "Lỗi khi tải mô hình mô phỏng: không có trường '%s'"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:691
 #: pcbnew/dialogs/dialog_board_statistics.cpp:692
 #: pcbnew/dialogs/dialog_board_statistics.cpp:693
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1393
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1395
 #, fuzzy
 msgid "unknown"
 msgstr "Không xác định parent của thuộc tính"
@@ -29450,7 +29450,7 @@ msgstr ""
 msgid "Track Segments"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2048
+#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2051
 #: pcbnew/pcb_draw_panel_gal.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2365
@@ -36459,8 +36459,8 @@ msgid "Target skew: "
 msgstr "Độ lệch mục tiêu: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:86
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2120
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2142 pcbnew/pad.cpp:1112
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2123
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2145 pcbnew/pad.cpp:1112
 #: pcbnew/pcb_track.cpp:1107 pcbnew/pcb_track.cpp:1115
 #: pcbnew/pcb_track.cpp:1145 pcbnew/pcb_track.cpp:1151
 #: pcbnew/router/router_tool.cpp:2706 pcbnew/router/router_tool.cpp:2711
@@ -36538,7 +36538,7 @@ msgstr "Bán kính"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2593
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2596
 msgid "Single-sided"
 msgstr ""
 
@@ -41056,7 +41056,7 @@ msgstr "Lỗi khi tải footprint %s từ thư viện '%s'."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:255
 #: pcbnew/generators/pcb_tuning_pattern.cpp:260
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2149
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2152
 #, fuzzy
 msgid "Tuning Pattern"
 msgstr "Mẫu"
@@ -41066,165 +41066,165 @@ msgstr "Mẫu"
 msgid "Tuning Patterns"
 msgstr "Mẫu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:462
+#: pcbnew/generators/pcb_tuning_pattern.cpp:464
 #, fuzzy
 msgid "Tuning"
 msgstr "Cảnh báo"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1390
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1392
 msgid "too long"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1391
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1393
 #, fuzzy
 msgid "too short"
 msgstr "Không hiện lại"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1392
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1394
 msgid "tuned"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1471
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1474
 #, fuzzy
 msgid "Edit Tuning Pattern"
 msgstr "Trình soạn thảo Văn bản"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1995
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1998
 #, fuzzy
 msgid "current skew"
 msgstr "Phím hiện tại:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1997
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2000
 #, fuzzy
 msgid "current length"
 msgstr "Đường thẳng, chiều dài %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2083
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
 #, fuzzy
 msgid "Routed Lengths"
 msgstr "Độ dài"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2089 pcbnew/pcb_track.cpp:1090
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2092 pcbnew/pcb_track.cpp:1090
 #, fuzzy
 msgid "Routed Length"
 msgstr "Độ dài"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2095 pcbnew/pad.cpp:2427
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2098 pcbnew/pad.cpp:2427
 #: pcbnew/pcb_track.cpp:1095
 msgid "Pad To Die Length"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2098 pcbnew/pcb_track.cpp:1098
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2101 pcbnew/pcb_track.cpp:1098
 #, fuzzy
 msgid "Full Length"
 msgstr "Độ dài"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2110
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2113
 #, fuzzy, c-format
 msgid "Target Skew: %s"
 msgstr "Mục tiêu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2111
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2133
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2114
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2136
 msgid "(from tuning pattern properties)"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2119
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2122
 #, fuzzy, c-format
 msgid "Skew Constraints: %s"
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2132
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2135
 #, fuzzy, c-format
 msgid "Target Length: %s"
 msgstr "Đường thẳng, chiều dài %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2141
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2144
 #, fuzzy, c-format
 msgid "Length Constraints: %s"
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2341
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2344
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2375
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2378
 msgid "Tune"
 msgstr "Điều chỉnh"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2401
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2417
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2443
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2404
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2420
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2446
 #, fuzzy
 msgid "Select a track to tune first."
 msgstr "Chọn tất cả các phần tử trên màn hình"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2485
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2488
 #, fuzzy
 msgid "Single track"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2486
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2489
 #, fuzzy
 msgid "Differential pair"
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2487
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
 #, fuzzy
 msgid "Diff pair skew"
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2501
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2504
 #, fuzzy
 msgid "Pattern Properties"
 msgstr "Thuộc tính nhãn"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2516
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2519
 #, fuzzy
 msgid "Tuning Mode"
 msgstr "Màu sắc đường kẻ:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2522
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2525
 #, fuzzy
 msgid "Min Amplitude"
 msgstr "Kiểu dáng đường kẻ:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2529
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2532
 #, fuzzy
 msgid "Max Amplitude"
 msgstr "Kiểu dáng đường kẻ:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2536
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2539
 #, fuzzy
 msgid "Initial Side"
 msgstr "Số"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2542
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
 #, fuzzy
 msgid "Min Spacing"
 msgstr "Khoảng cách lưới tối thiểu:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2548
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2551
 #, fuzzy
 msgid "Corner Radius %"
 msgstr "Kiểu cách Đường thẳng"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2570
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2573
 #, fuzzy
 msgid "Target Length"
 msgstr "Đường thẳng, chiều dài %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2579
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2582
 #, fuzzy
 msgid "Target Skew"
 msgstr "Mục tiêu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2587
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2590
 #, fuzzy
 msgid "Override Custom Rules"
 msgstr "Ghi đè ổ khóa"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2599
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2602
 #, fuzzy
 msgid "Rounded"
 msgstr "%s được tìm thấy"

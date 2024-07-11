@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-08 09:54-0700\n"
+"POT-Creation-Date: 2024-07-11 09:41-0700\n"
 "PO-Revision-Date: 2024-06-28 06:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
@@ -4596,7 +4596,7 @@ msgstr "선 스타일"
 #: eeschema/sch_field.cpp:937 eeschema/sch_label.cpp:1269
 #: eeschema/sch_line.cpp:1088 eeschema/sch_text.cpp:409
 #: eeschema/sch_textbox.cpp:450 include/stroke_params.h:73
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2492 pcbnew/pcb_dimension.cpp:429
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2495 pcbnew/pcb_dimension.cpp:429
 #: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:373
 #: pcbnew/pcb_textbox.cpp:660
 msgid "Default"
@@ -5419,7 +5419,7 @@ msgstr "포인트"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 #: pcbnew/fp_text_grid_table.cpp:139
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1067
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2066 pcbnew/pad.cpp:1067
 #: pcbnew/pcb_reference_image.cpp:259 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:245 pcbnew/pcb_track.cpp:1071
 #: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522
@@ -5466,12 +5466,12 @@ msgstr "중앙 X"
 msgid "Center Y"
 msgstr "중앙 Y"
 
-#: common/eda_shape.cpp:2011 pcbnew/generators/pcb_tuning_pattern.cpp:2504
+#: common/eda_shape.cpp:2011 pcbnew/generators/pcb_tuning_pattern.cpp:2507
 #: pcbnew/pcb_textbox.cpp:678 pcbnew/pcb_track.cpp:1502
 msgid "End X"
 msgstr "끝 X"
 
-#: common/eda_shape.cpp:2017 pcbnew/generators/pcb_tuning_pattern.cpp:2510
+#: common/eda_shape.cpp:2017 pcbnew/generators/pcb_tuning_pattern.cpp:2513
 #: pcbnew/pcb_textbox.cpp:679 pcbnew/pcb_track.cpp:1505
 msgid "End Y"
 msgstr "끝 Y"
@@ -5553,7 +5553,7 @@ msgstr "굵게+이탤릭체"
 #: eeschema/fields_grid_table.cpp:771 eeschema/lib_field.cpp:558
 #: eeschema/lib_pin.cpp:1657 eeschema/lib_text.cpp:425
 #: eeschema/pin_type.cpp:113 eeschema/sch_field.cpp:945
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2493
 msgid "Left"
 msgstr "좌"
 
@@ -5577,7 +5577,7 @@ msgstr "중"
 #: eeschema/fields_grid_table.cpp:775 eeschema/lib_field.cpp:560
 #: eeschema/lib_pin.cpp:1656 eeschema/lib_text.cpp:427
 #: eeschema/pin_type.cpp:112 eeschema/sch_field.cpp:947
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2491
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2494
 msgid "Right"
 msgstr "우"
 
@@ -12879,7 +12879,7 @@ msgstr "매개변수"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2019 pcbnew/pcb_marker.cpp:194
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2022 pcbnew/pcb_marker.cpp:194
 #: pcbnew/pcb_shape.cpp:471 pcbnew/pcb_text.cpp:229 pcbnew/pcb_track.cpp:1065
 #: pcbnew/pcb_track.cpp:1132 pcbnew/tools/drawing_stackup_table_tool.cpp:250
 #: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:550
@@ -16170,7 +16170,7 @@ msgstr "버스 항목 유형"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:320
 #: eeschema/sch_label.cpp:1299 eeschema/sch_line.cpp:992
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2058 pcbnew/pad.cpp:1031
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2061 pcbnew/pad.cpp:1031
 #: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1721
 #: pcbnew/zone.cpp:580
 msgid "Resolved Netclass"
@@ -17140,7 +17140,7 @@ msgstr "알 수 없는 SCH_FILE_T 값: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
 #: pcbnew/footprint.cpp:3541 pcbnew/footprint.cpp:3544
 #: pcbnew/fp_text_grid_table.cpp:143
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2060 pcbnew/pad.cpp:1039
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1039
 #: pcbnew/pad.cpp:2330 pcbnew/pcb_dimension.cpp:462
 #: pcbnew/pcb_dimension.cpp:1197 pcbnew/pcb_group.cpp:487
 #: pcbnew/pcb_marker.cpp:361 pcbnew/pcb_reference_image.cpp:261
@@ -17205,8 +17205,8 @@ msgstr "위치 맞춤"
 #: pcbnew/board_connected_item.cpp:186
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:984
-#: pcbnew/generators/pcb_tuning_pattern.cpp:461
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2054 pcbnew/pad.cpp:1029
+#: pcbnew/generators/pcb_tuning_pattern.cpp:463
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2057 pcbnew/pad.cpp:1029
 #: pcbnew/pad.cpp:2358 pcbnew/pcb_shape.cpp:701 pcbnew/pcb_track.cpp:1158
 #: pcbnew/tools/pcb_control.cpp:1718
 #: pcbnew/widgets/pcb_properties_panel.cpp:274
@@ -18612,7 +18612,7 @@ msgstr "시뮬레이션 모델 로드 오류: '%s' 필드 없음"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:691
 #: pcbnew/dialogs/dialog_board_statistics.cpp:692
 #: pcbnew/dialogs/dialog_board_statistics.cpp:693
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1393
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1395
 msgid "unknown"
 msgstr "알 수 없음"
 
@@ -27912,7 +27912,7 @@ msgstr "비아"
 msgid "Track Segments"
 msgstr "배선 세그먼트"
 
-#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2048
+#: pcbnew/board.cpp:1475 pcbnew/generators/pcb_tuning_pattern.cpp:2051
 #: pcbnew/pcb_draw_panel_gal.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2365
@@ -34479,8 +34479,8 @@ msgid "Target skew: "
 msgstr "대상 편향: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:86
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2120
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2142 pcbnew/pad.cpp:1112
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2123
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2145 pcbnew/pad.cpp:1112
 #: pcbnew/pcb_track.cpp:1107 pcbnew/pcb_track.cpp:1115
 #: pcbnew/pcb_track.cpp:1145 pcbnew/pcb_track.cpp:1151
 #: pcbnew/router/router_tool.cpp:2706 pcbnew/router/router_tool.cpp:2711
@@ -34553,7 +34553,7 @@ msgstr "반경 (r):"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2593
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2596
 msgid "Single-sided"
 msgstr "단면"
 
@@ -39308,7 +39308,7 @@ msgstr ""
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:255
 #: pcbnew/generators/pcb_tuning_pattern.cpp:260
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2149
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2152
 msgid "Tuning Pattern"
 msgstr "패턴 조정"
 
@@ -39316,143 +39316,143 @@ msgstr "패턴 조정"
 msgid "Tuning Patterns"
 msgstr "패턴 조정"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:462
+#: pcbnew/generators/pcb_tuning_pattern.cpp:464
 msgid "Tuning"
 msgstr "조정"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1390
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1392
 msgid "too long"
 msgstr "매우 김"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1391
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1393
 msgid "too short"
 msgstr "매우 짧음"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1392
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1394
 msgid "tuned"
 msgstr "조정됨"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1471
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1474
 msgid "Edit Tuning Pattern"
 msgstr "조정 패턴 편집"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1995
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1998
 msgid "current skew"
 msgstr "현재 왜곡도"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1997
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2000
 msgid "current length"
 msgstr "현재 길이"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2083
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
 msgid "Routed Lengths"
 msgstr "배선 길이"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2089 pcbnew/pcb_track.cpp:1090
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2092 pcbnew/pcb_track.cpp:1090
 msgid "Routed Length"
 msgstr "배선 길이"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2095 pcbnew/pad.cpp:2427
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2098 pcbnew/pad.cpp:2427
 #: pcbnew/pcb_track.cpp:1095
 msgid "Pad To Die Length"
 msgstr "패드에서 다이까지의 길이"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2098 pcbnew/pcb_track.cpp:1098
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2101 pcbnew/pcb_track.cpp:1098
 msgid "Full Length"
 msgstr "총 길이"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2110
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2113
 #, c-format
 msgid "Target Skew: %s"
 msgstr "대상 편향: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2111
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2133
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2114
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2136
 msgid "(from tuning pattern properties)"
 msgstr "(패턴 속성 조정에서)"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2119
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2122
 #, c-format
 msgid "Skew Constraints: %s"
 msgstr "왜곡 제약 조건: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2132
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2135
 #, c-format
 msgid "Target Length: %s"
 msgstr "대상 길이: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2141
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2144
 #, c-format
 msgid "Length Constraints: %s"
 msgstr "길이 제약 조건: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2341
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2344
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr "다른 튜닝 패턴 내의 세그먼트는 튜닝할 수 없습니다."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2375
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2378
 msgid "Tune"
 msgstr "조정"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2401
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2417
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2443
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2404
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2420
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2446
 msgid "Select a track to tune first."
 msgstr "먼저 조정할 트랙을 선택합니다."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2485
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2488
 msgid "Single track"
 msgstr "단일 배선"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2486
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2489
 msgid "Differential pair"
 msgstr "차동 쌍"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2487
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2490
 msgid "Diff pair skew"
 msgstr "차동 쌍 왜곡"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2501
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2504
 msgid "Pattern Properties"
 msgstr "패턴 속성"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2516
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2519
 msgid "Tuning Mode"
 msgstr "조정 모드"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2522
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2525
 msgid "Min Amplitude"
 msgstr "최소 진폭"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2529
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2532
 msgid "Max Amplitude"
 msgstr "최대 진폭"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2536
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2539
 msgid "Initial Side"
 msgstr "초기 상태"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2542
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
 msgid "Min Spacing"
 msgstr "최소 간격"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2548
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2551
 msgid "Corner Radius %"
 msgstr "모서리 반경 %"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2570
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2573
 msgid "Target Length"
 msgstr "타겟 길이"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2579
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2582
 msgid "Target Skew"
 msgstr "대상 기울기"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2587
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2590
 msgid "Override Custom Rules"
 msgstr "맞춤 규칙 무시"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2599
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2602
 msgid "Rounded"
 msgstr "둥근"
 
