@@ -323,7 +323,7 @@ private:
             prev = aPoint->prev;
             next = aPoint->next;
 
-            if( isEar( aPoint ) )
+            if( aPoint->isEar() )
             {
                 // Tiny ears cannot be seen on the screen
                 if( !isTooSmall( aPoint ) )
@@ -448,66 +448,6 @@ private:
                             ( aPoint->next->y - aPoint->prev->y ) * ( aPoint->next->y - aPoint->prev->y );
 
         return ( prev_sq_len < min_area || next_sq_len < min_area || opp_sq_len < min_area );
-    }
-
-
-    /**
-     * Check whether the given vertex is in the middle of an ear.
-     *
-     * This works by walking forward and backward in zOrder to the limits of the minimal
-     * bounding box formed around the triangle, checking whether any points are located
-     * inside the given triangle.
-     *
-     * @return true if aEar is the apex point of a ear in the polygon.
-     */
-    bool isEar( VERTEX* aEar ) const
-    {
-        const VERTEX* a = aEar->prev;
-        const VERTEX* b = aEar;
-        const VERTEX* c = aEar->next;
-
-        // If the area >=0, then the three points for a concave sequence
-        // with b as the reflex point
-        if( area( a, b, c ) >= 0 )
-            return false;
-
-        // triangle bbox
-        const double minTX = std::min( a->x, std::min( b->x, c->x ) );
-        const double minTY = std::min( a->y, std::min( b->y, c->y ) );
-        const double maxTX = std::max( a->x, std::max( b->x, c->x ) );
-        const double maxTY = std::max( a->y, std::max( b->y, c->y ) );
-
-        // z-order range for the current triangle bounding box
-        const int32_t minZ = zOrder( minTX, minTY );
-        const int32_t maxZ = zOrder( maxTX, maxTY );
-
-        // first look for points inside the triangle in increasing z-order
-        VERTEX* p = aEar->nextZ;
-
-        while( p && p->z <= maxZ )
-        {
-            if( p != a && p != c
-                    && p->inTriangle( *a, *b, *c )
-                    && area( p->prev, p, p->next ) >= 0 )
-                return false;
-
-            p = p->nextZ;
-        }
-
-        // then look for points in decreasing z-order
-        p = aEar->prevZ;
-
-        while( p && p->z >= minZ )
-        {
-            if( p != a && p != c
-                    && p->inTriangle( *a, *b, *c )
-                    && area( p->prev, p, p->next ) >= 0 )
-                return false;
-
-            p = p->prevZ;
-        }
-
-        return true;
     }
 
     /**

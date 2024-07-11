@@ -50,10 +50,10 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperConn, DRC_REGRESSION_TEST_FIXTURE )
 
     std::vector<std::pair<wxString, int>> tests =
     {
-        { "issue9870",              12  },
+        { "issue9870",              13  },
         { "connection_width_rules",  3  },
         { "issue12831",              0  },
-        { "issue14130",              0  }
+        { "issue14130",              1  }
     };
 
     for( const std::pair<wxString, int>& test : tests )

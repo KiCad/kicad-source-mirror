@@ -216,6 +216,17 @@ class VERTEX
         return a / 2;
     }
 
+    /**
+     * Check whether the given vertex is in the middle of an ear.
+     *
+     * This works by walking forward and backward in zOrder to the limits of the minimal
+     * bounding box formed around the triangle, checking whether any points are located
+     * inside the given triangle.
+     *
+     * @return true if aEar is the apex point of a ear in the polygon.
+     */
+    bool isEar() const;
+
     const int    i;
     const double x;
     const double y;

@@ -101,7 +101,6 @@ public:
         const SEG::ecoord limit2 = SEG::Square( m_dist );
 
         // first look for points in increasing z-order
-        VERTEX* p = aPt->nextZ;
         SEG::ecoord min_dist = std::numeric_limits<SEG::ecoord>::max();
         VERTEX* retval = nullptr;
 
@@ -111,14 +110,14 @@ public:
             SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
 
             if( dist2 < limit2 && dist2 < min_dist
-                && area( p->prev, p, p->next ) < 0
-                && !locallyInside( p, aPt ) )
+                && p->isEar() )
             {
-
                 min_dist = dist2;
                 retval = p;
             }
         };
+
+        VERTEX* p = aPt->nextZ;
 
         while( p && p->z <= maxZ )
         {
@@ -145,7 +144,7 @@ public:
         while( p != &m_vertices.front() )
         {
             // Skip points that are concave
-            if( area( p->prev, p, p->next ) >= 0 )
+            if( !p->isEar() )
             {
                 p = p->next;
                 continue;
@@ -1571,6 +1570,8 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
 
     // This cannot be a reference because we need to do the comparison below while
     // changing the values
+    std::map<int, std::vector<std::pair<int, VECTOR2I>>> insertion_points;
+
     for( const RESULTS& result : vs.GetResults() )
     {
         SHAPE_LINE_CHAIN& line1 = aPolys.Outline( result.m_outline1 );
@@ -1579,9 +1580,26 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
         VECTOR2I pt1 = line1.CPoint( result.m_vertex1 );
         VECTOR2I pt2 = line2.CPoint( result.m_vertex2 );
 
-        // Duplicate the point first, so that we return to the same location
-        line1.Insert( result.m_vertex1, pt1 );
-        line1.Insert( result.m_vertex1 + 1, pt2 );
+        // We want to insert the existing point first so that we can place the new point
+        // between the two points at the same location.
+        insertion_points[result.m_outline1].push_back( { result.m_vertex1, pt1 } );
+        insertion_points[result.m_outline1].push_back( { result.m_vertex1, pt2 } );
+    }
+
+    for( auto& [outline, vertices] : insertion_points )
+    {
+        SHAPE_LINE_CHAIN& line = aPolys.Outline( outline );
+
+        // Stable sort here because we want to make sure that we are inserting pt1 first and
+        // pt2 second but still sorting the rest of the indices from highest to lowest.
+        // This allows us to insert into the existing polygon without modifying the future
+        // insertion points.
+        std::stable_sort( vertices.begin(), vertices.end(),
+                  []( const std::pair<int, VECTOR2I>& a, const std::pair<int, VECTOR2I>& b )
+                  { return a.first > b.first; } );
+
+        for( const auto& [vertex, pt] : vertices )
+            line.Insert( vertex + 1, pt );  // +1 here because we want to insert after the existing point
     }
 }
 

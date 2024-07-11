@@ -236,3 +236,54 @@ void VERTEX::updateOrder()
     if( !z )
         z = parent->zOrder( x, y );
 }
+
+
+bool VERTEX::isEar() const
+{
+    const VERTEX* a = prev;
+    const VERTEX* b = this;
+    const VERTEX* c = next;
+
+    // If the area >=0, then the three points for a concave sequence
+    // with b as the reflex point
+    if( parent->area( a, b, c ) >= 0 )
+        return false;
+
+    // triangle bbox
+    const double minTX = std::min( a->x, std::min( b->x, c->x ) );
+    const double minTY = std::min( a->y, std::min( b->y, c->y ) );
+    const double maxTX = std::max( a->x, std::max( b->x, c->x ) );
+    const double maxTY = std::max( a->y, std::max( b->y, c->y ) );
+
+    // z-order range for the current triangle bounding box
+    const int32_t minZ = parent->zOrder( minTX, minTY );
+    const int32_t maxZ = parent->zOrder( maxTX, maxTY );
+
+    // first look for points inside the triangle in increasing z-order
+    VERTEX* p = nextZ;
+
+    while( p && p->z <= maxZ )
+    {
+        if( p != a && p != c
+                && p->inTriangle( *a, *b, *c )
+                && parent->area( p->prev, p, p->next ) >= 0 )
+            return false;
+
+        p = p->nextZ;
+    }
+
+    // then look for points in decreasing z-order
+    p = prevZ;
+
+    while( p && p->z >= minZ )
+    {
+        if( p != a && p != c
+                && p->inTriangle( *a, *b, *c )
+                && parent->area( p->prev, p, p->next ) >= 0 )
+            return false;
+
+        p = p->prevZ;
+    }
+
+    return true;
+}
