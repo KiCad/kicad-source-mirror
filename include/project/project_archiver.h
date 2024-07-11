@@ -43,8 +43,8 @@ public:
      * @param aReporter is used to report status
      * @return true if the archives are identical
      */
-    bool AreZipArchivesIdentical( const wxString& aZipFileA, const wxString& aZipFileB,
-                                  REPORTER& aReporter );
+    static bool AreZipArchivesIdentical( const wxString& aZipFileA, const wxString& aZipFileB,
+                                        REPORTER& aReporter );
 
     /**
      * Creates an archive of the project
@@ -55,8 +55,8 @@ public:
      * @param aIncludeExtraFiles if true will archive legacy and output files
      * @return true if the archive was created successfully
      */
-    bool Archive( const wxString& aSrcDir, const wxString& aDestFile, REPORTER& aReporter,
-                  bool aVerbose = true, bool aIncludeExtraFiles = false );
+    static bool Archive( const wxString& aSrcDir, const wxString& aDestFile, REPORTER& aReporter,
+                         bool aVerbose = true, bool aIncludeExtraFiles = false );
 
     /**
      * Extracts an archive of the current project over existing files
@@ -67,7 +67,7 @@ public:
      * @param aReporter is used to report status
      * @return true if the archive was created successfully
      */
-    bool Unarchive( const wxString& aSrcFile, const wxString& aDestDir, REPORTER& aReporter );
+    static bool Unarchive( const wxString& aSrcFile, const wxString& aDestDir, REPORTER& aReporter );
 };
 
 #endif // KICAD_PROJECT_ARCHIVER_H

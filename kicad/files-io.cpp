@@ -90,9 +90,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
     STATUSBAR_REPORTER reporter( GetStatusBar(), 1 );
 
-    PROJECT_ARCHIVER archiver;
-
-    archiver.Unarchive( zipfiledlg.GetPath(), unzipDir, reporter );
+    PROJECT_ARCHIVER::Unarchive( zipfiledlg.GetPath(), unzipDir, reporter );
 
     if( unzipDir == Prj().GetProjectPath() )
     {

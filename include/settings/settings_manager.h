@@ -34,6 +34,7 @@ class PROJECT;
 class PROJECT_FILE;
 class REPORTER;
 class wxSingleInstanceChecker;
+class wxFileName;
 class LOCKFILE;
 
 
@@ -301,9 +302,11 @@ public:
     /**
      * Creates a backup archive of the current project
      * @param aReporter is used for progress reporting
+     * @param aTarget is the full path to the backup file.  If empty, will generate and return the
+     * full path to the backup file.
      * @return true if everything succeeded
      */
-    bool BackupProject( REPORTER& aReporter ) const;
+    bool BackupProject( REPORTER& aReporter, wxFileName& aTarget ) const;
 
     /**
      * Calls BackupProject if a new backup is needed according to the current backup policy.
