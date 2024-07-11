@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-10 21:45+0000\n"
+"PO-Revision-Date: 2024-07-12 19:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3842,8 +3842,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:169
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
-"Показывать всплывающий индикатор при переключении настроек горячими клавишами"
+msgstr "Показывать вспл. индикатор при переключении настроек горячими клавишами"
 
 #: common/dialogs/panel_common_settings_base.cpp:170
 msgid ""
@@ -4388,9 +4387,7 @@ msgstr "Формировать область выделения"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
-"Перетащить выбранные объекты; если не выделено – формировать область "
-"выделения"
+msgstr "Перетащить выделенные объекты; если не выделено– выделять"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag any object (selected or not)"
@@ -38681,9 +38678,8 @@ msgstr "По умолчанию для прямоугольных фигур:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:370
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:548
-#, fuzzy
 msgid "Allow teardrop to span track segments"
-msgstr "Разрешить каплевидным переходам охватывать 2 сегмента дорожек"
+msgstr "Разрешить каплевидным переходам охватывать сегменты дорожек"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:385
 msgid "Properties for track-to-track teardrops:"
@@ -39978,9 +39974,8 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "Абсолютный зазор паяльной пасты переопределен."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:646
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "\"Относительный зазор паяльной пасты переопределён."
+msgstr "Относительный зазор паяльной пасты переопределён."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:653
 msgid "Zone connection overridden."
