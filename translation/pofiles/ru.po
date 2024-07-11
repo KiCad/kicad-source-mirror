@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-10 21:46+0000\n"
+"PO-Revision-Date: 2024-07-12 19:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -3756,8 +3756,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
-"Показывать всплывающий индикатор при переключении настроек горячими клавишами"
+msgstr "Показывать вспл. индикатор при переключении настроек горячими клавишами"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
@@ -4292,9 +4291,7 @@ msgstr "Формировать область выделения"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
-"Перетащить выбранные объекты; если не выделено – формировать область "
-"выделения"
+msgstr "Перетащить выделенные объекты; если не выделено– выделять"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag any object (selected or not)"
@@ -38623,7 +38620,7 @@ msgstr "Абсолютный зазор паяльной пасты переоп
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
 msgid "Solder paste relative clearance overridden."
-msgstr "Относительный зазор паяльной пасты переопределен."
+msgstr "Относительный зазор паяльной пасты переопределён."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:590
 msgid "Zone connection overridden."
