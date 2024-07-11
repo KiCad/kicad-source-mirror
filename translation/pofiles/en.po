@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-08 09:55-0700\n"
+"POT-Creation-Date: 2024-07-11 09:41-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2152,6 +2152,23 @@ msgstr ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 
+#, c-format
+msgid "Default 'explorer.exe /n,/select,%F' for this OS."
+msgstr "Default 'explorer.exe /n,/select,%F' for this OS."
+
+msgid ""
+"File explorer command.\n"
+"example:"
+msgstr ""
+"File explorer command.\n"
+"example:"
+
+#, c-format
+msgid ""
+"Explorer command with mandatory '%s' suffix after last entered character."
+msgstr ""
+"Explorer command with mandatory '%s' suffix after last entered character."
+
 msgid "Executable files ("
 msgstr "Executable files ("
 
@@ -2181,6 +2198,9 @@ msgstr "Helper Applications"
 
 msgid "Text editor:"
 msgstr "Text editor:"
+
+msgid "File manager:"
+msgstr "File manager:"
 
 msgid "System default PDF viewer"
 msgstr "System default PDF viewer"
@@ -4555,6 +4575,12 @@ msgstr "Edit in a Text Editor..."
 
 msgid "Open a library file with a text editor"
 msgstr "Open a library file with a text editor"
+
+msgid "Open in file explorer..."
+msgstr "Open in file explorer..."
+
+msgid "Open a library file with system file explorer"
+msgstr "Open a library file with system file explorer"
 
 msgid "Save changes"
 msgstr "Save changes"
@@ -10042,6 +10068,10 @@ msgid "Netclass %s is not defined"
 msgstr "Netclass %s is not defined"
 
 #, c-format
+msgid "Label connects more than one wire at %d, %d"
+msgstr "Label connects more than one wire at %d, %d"
+
+#, c-format
 msgid "Four items connected at %d, %d"
 msgstr "Four items connected at %d, %d"
 
@@ -10138,6 +10168,9 @@ msgstr "Checking for off grid pins and wires..."
 msgid "Checking for four way junctions..."
 msgstr "Checking for four way junctions..."
 
+msgid "Checking for labels on more than one wire..."
+msgstr "Checking for labels on more than one wire..."
+
 msgid "Checking for undefined netclasses..."
 msgstr "Checking for undefined netclasses..."
 
@@ -10173,6 +10206,9 @@ msgstr "Mismatch between hierarchical labels and sheet pins"
 
 msgid "Four connection points are joined together"
 msgstr "Four connection points are joined together"
+
+msgid "Label connects more than one wire"
+msgstr "Label connects more than one wire"
 
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "A pin with a “no connection” flag is connected"
@@ -12494,11 +12530,11 @@ msgstr "Signal name contains '[' or ']' but is not a valid bus name."
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
-"schematic schematicSheets."
+"schematic hierarchy."
 msgstr ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
-"schematic schematicSheets."
+"schematic hierarchy."
 
 #, c-format
 msgid ""
@@ -15370,6 +15406,10 @@ msgstr "SPICE Netlist"
 msgid "No symbol library selected."
 msgstr "No symbol library selected."
 
+#, c-format
+msgid "Missing/malformed file explorer argument '%F' in common settings."
+msgstr "Missing/malformed file explorer argument '%F' in common settings."
+
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "No text editor selected in KiCad. Please choose one."
 
@@ -16694,6 +16734,9 @@ msgstr "Exclude the value text"
 
 msgid "Plot graphic items using their contours"
 msgstr "Plot graphic items using their contours"
+
+msgid "Plot using the drill/place file origin"
+msgstr "Plot using the drill/place file origin"
 
 msgid "Include the border and title block"
 msgstr "Include the border and title block"
@@ -20257,8 +20300,8 @@ msgstr "Best Width Ratio"
 msgid "Max Width"
 msgstr "Max Width"
 
-msgid "Curve Points"
-msgstr "Curve Points"
+msgid "Curved Teardrops"
+msgstr "Curved Teardrops"
 
 msgid "Prefer Zone Connections"
 msgstr "Prefer Zone Connections"
@@ -26944,14 +26987,14 @@ msgstr "Straight lines"
 msgid "Curved"
 msgstr "Curved"
 
-msgid "Curve points:"
-msgstr "Curve points:"
-
 msgid "Allow teardrop to span two track segments"
 msgstr "Allow teardrop to span two track segments"
 
 msgid "Default properties for rectangular shapes:"
 msgstr "Default properties for rectangular shapes:"
+
+msgid "Allow teardrop to span track segments"
+msgstr "Allow teardrop to span track segments"
 
 msgid "Properties for track-to-track teardrops:"
 msgstr "Properties for track-to-track teardrops:"
@@ -27909,8 +27952,8 @@ msgstr "Solder mask expansion overridden."
 msgid "Solder paste absolute clearance overridden."
 msgstr "Solder paste absolute clearance overridden."
 
-msgid "\"Solder paste relative clearance overridden."
-msgstr "\"Solder paste relative clearance overridden."
+msgid "Solder paste relative clearance overridden."
+msgstr "Solder paste relative clearance overridden."
 
 msgid "Zone connection overridden."
 msgstr "Zone connection overridden."
@@ -34899,6 +34942,17 @@ msgstr ""
 msgid "Refill zones"
 msgstr "Refill zones"
 
+msgid "Refill zones after changes made on board"
+msgstr "Refill zones after changes made on board"
+
+msgid "Update Displayed Zones"
+msgstr "Update Displayed Zones"
+
+msgid ""
+"Update filled areas shown in dialog, according to the new current settings"
+msgstr ""
+"Update filled areas shown in dialog, according to the new current settings"
+
 msgid "inherited"
 msgstr "inherited"
 
@@ -35031,6 +35085,25 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid ""
+#~ "The sheet changes cannot be made because the destination sheet already "
+#~ "has the sheet '%s' or one of its subsheets as a parent somewhere in the "
+#~ "schematic schematicSheets."
+#~ msgstr ""
+#~ "The sheet changes cannot be made because the destination sheet already "
+#~ "has the sheet '%s' or one of its subsheets as a parent somewhere in the "
+#~ "schematic schematicSheets."
+
+#~ msgid "Curve Points"
+#~ msgstr "Curve Points"
+
+#~ msgid "Curve points:"
+#~ msgstr "Curve points:"
+
+#~ msgid "\"Solder paste relative clearance overridden."
+#~ msgstr "\"Solder paste relative clearance overridden."
 
 #~ msgid "No filename specified in exporter"
 #~ msgstr "No filename specified in exporter"
@@ -35202,16 +35275,6 @@ msgstr "KiCad Drawing Sheet"
 #, c-format
 #~ msgid "Unsupported schematic file '%s'."
 #~ msgstr "Unsupported schematic file '%s'."
-
-#, c-format
-#~ msgid ""
-#~ "The sheet changes cannot be made because the destination sheet already "
-#~ "has the sheet '%s' or one of its subsheets as a parent somewhere in the "
-#~ "schematic hierarchy."
-#~ msgstr ""
-#~ "The sheet changes cannot be made because the destination sheet already "
-#~ "has the sheet '%s' or one of its subsheets as a parent somewhere in the "
-#~ "schematic hierarchy."
 
 #~ msgid "Spice Simulator"
 #~ msgstr "Spice Simulator"
@@ -38759,9 +38822,6 @@ msgstr "KiCad Drawing Sheet"
 #~ "\n"
 #~ "For the full documentation see [https://docs.kicad.org](https://docs."
 #~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
-
-#~ msgid "Solder paste relative clearance overridden."
-#~ msgstr "Solder paste relative clearance overridden."
 
 #, c-format
 #~ msgid "The current configuration does not include the library '%s'."
