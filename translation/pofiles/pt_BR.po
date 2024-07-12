@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-08 16:53+0000\n"
+"PO-Revision-Date: 2024-07-12 19:09+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -3745,19 +3745,23 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Padrão 'explorer.exe /n,/select,%F' para esse sistema operacional."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Comando do explorador de arquivos.\n"
+"exemplo:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Comando do Explorer com o sufixo obrigatório '%s' após o último caractere "
+"inserido."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -3803,9 +3807,8 @@ msgid "Text editor:"
 msgstr "Editor de texto:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Nome do arquivo:"
+msgstr "Gerenciador de arquivos:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -7587,14 +7590,12 @@ msgid "Open a library file with a text editor"
 msgstr "Abrir um arquivo da biblioteca com um editor de texto"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Abrir o diretório no explorador de arquivos"
+msgstr "Abrir no explorador de arquivos..."
 
 #: common/tool/actions.cpp:83
-#, fuzzy
 msgid "Open a library file with system file explorer"
-msgstr "Abrir um arquivo da biblioteca com um editor de texto"
+msgstr "Abrir um arquivo da biblioteca com o explorador de arquivos do sistema"
 
 #: common/tool/actions.cpp:92
 msgid "Save changes"
@@ -13827,9 +13828,8 @@ msgstr ""
 "salvos?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1270
-#, fuzzy
 msgid "No output file specified in Export tab."
-msgstr "Nenhum nome de arquivo foi definido no exportador"
+msgstr "Nenhum arquivo de saída foi especificado na guia exportar."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1284
 #, c-format
@@ -15724,7 +15724,7 @@ msgstr "A netclass %s não foi definida"
 #: eeschema/erc/erc.cpp:741
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "A etiqueta conecta mais de um fio em %d, %d"
 
 #: eeschema/erc/erc.cpp:796
 #, c-format
@@ -15857,9 +15857,8 @@ msgid "Checking for four way junctions..."
 msgstr "Verificando as junções de quatro vias..."
 
 #: eeschema/erc/erc.cpp:1672
-#, fuzzy
 msgid "Checking for labels on more than one wire..."
-msgstr "Verificando se há pinos e fios fora da grade..."
+msgstr "Verificando por etiquetas em mais de um fio..."
 
 #: eeschema/erc/erc.cpp:1680
 msgid "Checking for undefined netclasses..."
@@ -15916,7 +15915,7 @@ msgstr "Quatro pontos de conexão foram unidos"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "A etiqueta conecta mais de um fio"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
@@ -19026,15 +19025,15 @@ msgstr ""
 "O nome do sinal contém '[' or ']' mas, não é um nome válido do barramento."
 
 #: eeschema/sheet.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
 "As alterações na planilha não podem ser feitas porque a planilha de destino "
-"já tem a planilha '%s' ou uma de suas subplanilhas como pai em algum lugar "
-"do esquema schematicSheets."
+"já tem a planilha '%s' ou existe uma de suas subplanilhas principais em "
+"algum lugar da hierarquia do esquema."
 
 #: eeschema/sheet.cpp:94
 #, c-format
@@ -22934,6 +22933,8 @@ msgstr "Nenhum símbolo da biblioteca foi selecionada."
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr ""
+"O argumento do explorador de arquivos '%F' está ausente/malformado nas "
+"configurações comuns."
 
 #: eeschema/tools/symbol_editor_control.cpp:332
 #: pcbnew/tools/footprint_editor_control.cpp:638
@@ -24863,9 +24864,8 @@ msgid "Plot graphic items using their contours"
 msgstr "Plote os itens gráficos utilizando os seus contornos"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:59
-#, fuzzy
 msgid "Plot using the drill/place file origin"
-msgstr "Use a origem do arquivo de perfuração/local"
+msgstr "Plotar usando a origem do arquivo de perfuração/posicionamento"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:63
 #: kicad/cli/command_pcb_export_gerber.cpp:52
@@ -29706,9 +29706,8 @@ msgid "Max Width"
 msgstr "Largura máxima"
 
 #: pcbnew/board_connected_item.cpp:283
-#, fuzzy
 msgid "Curved Teardrops"
-msgstr "Definir o reforço da junção"
+msgstr "Reforços curvados da junção"
 
 #: pcbnew/board_connected_item.cpp:289
 msgid "Prefer Zone Connections"
@@ -30216,24 +30215,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(diversos contornos da placa não são suportados)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(O retângulo tem tamanho nulo ou muito pequeno: %d nm)"
+msgstr "(o retângulo é nulo ou tem um tamanho muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:673
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(O círculo tem raio nulo ou muito pequeno: %d nm)"
+msgstr "(o círculo é nulo ou tem o tamanho muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:692
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(O segmento tem comprimento nulo ou muito pequeno: %d nm)"
+msgstr "(o segmento é nulo ou tem o comprimento muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(O arco tem tamanho nulo ou muito pequeno: %d nm)"
+msgstr "(o arco é nulo ou tem o tamanho muito pequeno: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_drc.cpp:271 pcbnew/pcb_edit_frame.cpp:2451
@@ -37699,9 +37698,8 @@ msgid "Margin"
 msgstr "Margem"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
-#, fuzzy
 msgid "Board contour setback"
-msgstr "Contorno da placa"
+msgstr "Recuo do contorno da placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:666
 msgid "Eco1"
@@ -37756,9 +37754,8 @@ msgstr "Usuário1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid " Off-board, front"
-msgstr "Fora da placa, testando"
+msgstr " Fora da placa, frente"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -37769,9 +37766,8 @@ msgstr "Fora da placa, testando"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid "Off-board, back"
-msgstr "Fora da placa, testando"
+msgstr "Fora da placa, verso"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:717
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:731
@@ -37785,6 +37781,8 @@ msgstr "Fora da placa, testando"
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
 msgstr ""
+"As camadas auxiliares não se invertem com o lado da placa, enquanto as "
+"camadas do verso e da frente se invertem."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:724
 msgid "User2"
@@ -38935,9 +38933,8 @@ msgstr "Propriedades padrão para formas retangulares:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:370
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:548
-#, fuzzy
 msgid "Allow teardrop to span track segments"
-msgstr "Permite que um reforço da junção se espalhe por 2 segmentos de trilhas"
+msgstr "Permite que um reforço da junção se espalhe pelos segmentos das trilhas"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:385
 msgid "Properties for track-to-track teardrops:"
@@ -40236,9 +40233,8 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "O isolamento absoluto da pasta de solda substituído."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:646
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "\"Isolamento relativo da pasta de solda redefinido."
+msgstr "Isolamento relativo da pasta de solda foi redefinido."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:653
 msgid "Zone connection overridden."
@@ -42360,51 +42356,44 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(O tamanho do orifício do bloco PTH deve ser maior que %s)"
 
 #: pcbnew/pad.cpp:2108
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
+msgstr "(A ilha PTH não deixa nenhum cobre)"
 
 #: pcbnew/pad.cpp:2116
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(O orifício da ilha PTH não está totalmente dentro do cobre)"
+msgstr "(a ilha PTH não está totalmente dentro do cobre)"
 
 #: pcbnew/pad.cpp:2123
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "O orifício da ilha não está dentro do formato da ilha"
+msgstr "(o orifício da ilha não está dentro do formato da ilha)"
 
 #: pcbnew/pad.cpp:2128
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "Os valores negativos de liberação local não têm efeito"
+msgstr "(os valores negativos de liberação local não têm efeito)"
 
 #: pcbnew/pad.cpp:2147
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"O isolamento negativo da máscara de solda é maior do que algumas formas "
-"primitivas; os resultados podem ser surpreendentes"
+"(o isolamento negativo da máscara de solda é maior do que algumas formas "
+"primitivas; os resultados podem ser surpreendentes)"
 
 #: pcbnew/pad.cpp:2157
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"O isolamento negativo da máscara de solda é maior do que a ilha; nenhuma "
-"máscara de solda será gerada"
+"(o isolamento negativo da máscara de solda é maior do que a ilha; nenhuma "
+"máscara de solda será gerada)"
 
 #: pcbnew/pad.cpp:2176
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"A margem negativa da pasta de solda é maior do que a ilha; nenhuma máscara "
-"para a pasta de solda será gerada"
+"(a margem negativa da pasta de solda é maior do que a ilha; nenhuma máscara "
+"para a pasta de solda será gerada)"
 
 #: pcbnew/pad.cpp:2183
 msgid "(Pad has no layer)"
@@ -42415,103 +42404,86 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(A ilha PTH não possui camadas de cobre)"
 
 #: pcbnew/pad.cpp:2192
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"Os furos passantes metalizados geralmente devem ter uma ilha com cobre em "
-"pelo menos uma camada"
+"(os furos passantes metalizados geralmente devem ter uma ilha com cobre em "
+"pelo menos uma camada)"
 
 #: pcbnew/pad.cpp:2211
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"Os conectores das ilhas normalmente não têm pasta de solda. Em vez disso, "
-"use uma ilha SMD"
+"(os conectores das ilhas normalmente não têm pasta de solda. Em vez disso, "
+"use uma ilha SMD)"
 
 #: pcbnew/pad.cpp:2219
 msgid "(SMD pad has a hole)"
 msgstr "(A ilha SMD tem um furo)"
 
 #: pcbnew/pad.cpp:2225
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "A ilha SMD tem cobre em ambos os lados da placa"
+msgstr "(a ilha SMD tem cobre em ambos os lados da placa)"
 
 #: pcbnew/pad.cpp:2231 pcbnew/pad.cpp:2244
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "A ilha SMD tem camadas de cobre e máscara em lados diferentes da placa"
+msgstr ""
+"(a ilha SMD tem camadas de cobre e máscara em lados diferentes da placa)"
 
 #: pcbnew/pad.cpp:2236 pcbnew/pad.cpp:2249
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"A ilha SMD tem camadas de cobre e de pasta em lados diferentes da placa"
+"(a ilha SMD tem camadas de cobre e de pasta em lados diferentes da placa)"
 
 #: pcbnew/pad.cpp:2255
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "A ilha SMD não tem camadas externas"
+msgstr "(a ilha SMD não tem camadas externas)"
 
 #: pcbnew/pad.cpp:2265
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "A propriedade fiducial não faz sentido nas ilhas NPTH"
+msgstr "(a propriedade 'fiducial' não faz sentido nas ilhas NPTH)"
 
 #: pcbnew/pad.cpp:2269
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "A propriedade Testpoint não faz sentido nas ilhas NPTH"
+msgstr "(a propriedade 'testpoint' não faz sentido nas ilhas NPTH)"
 
 #: pcbnew/pad.cpp:2272
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "A propriedade do dissipador de calor não faz sentido nas ilhas NPTH"
+msgstr "(a propriedade do 'dissipador' de calor não faz sentido nas ilhas NPTH)"
 
 #: pcbnew/pad.cpp:2275
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "A propriedade do castelamento são para ilhas PTH"
+msgstr "(a propriedade do 'castelamento' são para ilhas PTH)"
 
 #: pcbnew/pad.cpp:2278
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "A propriedade BGA são para ilhas SMD"
+msgstr "(a propriedade 'BGA' são para ilhas SMD)"
 
 #: pcbnew/pad.cpp:2281
-#, fuzzy
 msgid "('mechanical' property is for PTH pads)"
-msgstr "A propriedade mecânica são para ilhas PTH"
+msgstr "(a propriedade 'mecânica' são para ilhas PTH)"
 
 #: pcbnew/pad.cpp:2286
-#, fuzzy
 msgid "(negative corner radius is not allowed)"
-msgstr "(Não é permitido raio com canto negativo)"
+msgstr "(não é permitido um raio com canto negativo)"
 
 #: pcbnew/pad.cpp:2288
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "O tamanho do canto tornará a ilha circular"
+msgstr "(o tamanho do canto tornará a ilha circular)"
 
 #: pcbnew/pad.cpp:2293
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "(Não é permitido um chanfro com canto negativo)"
+msgstr "(não é permitido um chanfro com canto negativo)"
 
 #: pcbnew/pad.cpp:2295
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "(O chanfro do canto é muito grande)"
+msgstr "(o chanfro do canto é muito grande)"
 
 #: pcbnew/pad.cpp:2304
-#, fuzzy
 msgid "(trapazoid delta is too large)"
-msgstr "(O delta do trapezoide é muito grande)"
+msgstr "(o delta do trapezoide é muito grande)"
 
 #: pcbnew/pad.cpp:2315
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "(A forma da ilha personalizada deve ser resolvida num único polígono)"
+msgstr "(a forma da ilha personalizada deve ser resolvida num único polígono)"
 
 #: pcbnew/pad.cpp:2513
 msgid "Edge connector"
@@ -49552,19 +49524,19 @@ msgid "Refill zones"
 msgstr "Preencher novamente as regiões"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
-#, fuzzy
 msgid "Refill zones after changes made on board"
-msgstr "Recargas da zonas após a caixa de diálogo propriedades da zona"
+msgstr "Refaça o preenchimento das regiões após alterações feitas na placa"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
-#, fuzzy
 msgid "Update Displayed Zones"
-msgstr "Opções de exibição das camada"
+msgstr "Atualize as regiões apontadas"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""
+"Atualizar as áreas preenchidas que estão apontadas na caixa de diálogo, de "
+"acordo com as novas configurações atuais"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
