@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-10 12:09+0000\n"
+"PO-Revision-Date: 2024-07-13 21:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7540,9 +7540,8 @@ msgid "Open a library file with a text editor"
 msgstr "Avaa kirjastotiedosto tekstieditorilla"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Avaa hakemisto Resurssienhallinnassa"
+msgstr "Avaa tiedostoselaimessa..."
 
 #: common/tool/actions.cpp:83
 #, fuzzy
@@ -39478,9 +39477,8 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "Juotospastan absoluuttinen välys ohitettu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:646
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "\"Juotostahnan suhteellinen välys ohitettu."
+msgstr "Juotostahnan suhteellinen etäisyys ohitettu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:653
 msgid "Zone connection overridden."
