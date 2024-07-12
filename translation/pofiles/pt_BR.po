@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-08 16:53+0000\n"
+"PO-Revision-Date: 2024-07-12 19:09+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -18168,9 +18168,9 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"As alterações da folha não podem ser feitas porque o destino da folha já tem "
-"a folha '%s' ou uma de suas sub-folhas como relacionadas em algum lugar na "
-"hierarquia do esquema."
+"As alterações na planilha não podem ser feitas porque a planilha de destino "
+"já tem a planilha '%s' ou existe uma de suas subplanilhas principais em "
+"algum lugar da hierarquia do esquema."
 
 #: eeschema/sheet.cpp:92
 #, c-format
@@ -38886,7 +38886,7 @@ msgstr "O isolamento absoluto da pasta de solda substituído."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
 msgid "Solder paste relative clearance overridden."
-msgstr "O isolamento relativo da pasta de solda substituído."
+msgstr "Isolamento relativo da pasta de solda foi redefinido."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:590
 msgid "Zone connection overridden."
