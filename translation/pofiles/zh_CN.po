@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-10 12:09+0000\n"
+"PO-Revision-Date: 2024-07-12 19:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3687,19 +3687,21 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "当前操作系统默认: 'explorer.exe /n,/select,%F'"
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"文件资源管理器命令\n"
+"例:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
-msgstr ""
+msgstr "文件资源管理器命令, 在输入的最后必须加上后缀 '%s'。"
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -3745,9 +3747,8 @@ msgid "Text editor:"
 msgstr "文本编辑器:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "文件名称:"
+msgstr "文件管理器:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -7444,14 +7445,12 @@ msgid "Open a library file with a text editor"
 msgstr "使用文本编辑器打开库文件"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "在文件资源管理器中打开目录"
+msgstr "在文件资源管理器中打开文件..."
 
 #: common/tool/actions.cpp:83
-#, fuzzy
 msgid "Open a library file with system file explorer"
-msgstr "使用文本编辑器打开库文件"
+msgstr "使用系统文件资源管理器打开库文件"
 
 #: common/tool/actions.cpp:92
 msgid "Save changes"
@@ -15388,7 +15387,7 @@ msgstr "网络类 %s 未定义"
 #: eeschema/erc/erc.cpp:741
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "位于 %d, %d 处的标签连接了不止一条连线"
 
 #: eeschema/erc/erc.cpp:796
 #, c-format
@@ -15521,9 +15520,8 @@ msgid "Checking for four way junctions..."
 msgstr "正在检查四通路结点..."
 
 #: eeschema/erc/erc.cpp:1672
-#, fuzzy
 msgid "Checking for labels on more than one wire..."
-msgstr "检查偏离栅格的引脚与走线..."
+msgstr "检查标签是否连接了不止一条连线..."
 
 #: eeschema/erc/erc.cpp:1680
 msgid "Checking for undefined netclasses..."
@@ -15576,7 +15574,7 @@ msgstr "四个连接点被连接在一起"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "标签连接了不止一条连线"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
@@ -22067,7 +22065,7 @@ msgstr "导入图形"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1070
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr "结点位置不包含可连接的电线和/或引脚。"
+msgstr "结点位置不包含可连接的电线/引脚。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1523
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:180
@@ -24235,7 +24233,6 @@ msgid "Plot graphic items using their contours"
 msgstr "使用轮廓绘制图形项目"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:59
-#, fuzzy
 msgid "Plot using the drill/place file origin"
 msgstr "使用 钻孔/放置 文件原点"
 
@@ -24722,7 +24719,7 @@ msgstr "编辑工程原理图"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:127
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "编辑全局和/或工程原理符号库"
+msgstr "编辑全局/工程原理符号库"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project PCB design"
@@ -24730,7 +24727,7 @@ msgstr "编辑 PCB 设计工程"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:133
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "编辑全局和/或工程 PCB 封装库"
+msgstr "编辑全局/工程 PCB 封装库"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:136
 msgid "Preview Gerber files"
@@ -32790,7 +32787,7 @@ msgstr "生成映射文件"
 #: pcbnew/dialogs/dialog_gendrill.cpp:407
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "无法将钻孔和/或地图文件写入文件夹 '%s'。"
+msgstr "无法将钻孔/地图文件写入文件夹 '%s'。"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:456
 msgid "Save Drill Report File"
@@ -37867,9 +37864,8 @@ msgstr "矩形形状的默认属性:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:370
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:548
-#, fuzzy
 msgid "Allow teardrop to span track segments"
-msgstr "允许泪滴跨越两个走线段"
+msgstr "允许泪滴跨越走线段"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:385
 msgid "Properties for track-to-track teardrops:"
@@ -48134,19 +48130,17 @@ msgid "Refill zones"
 msgstr "重填域"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
-#, fuzzy
 msgid "Refill zones after changes made on board"
-msgstr "在区域属性会话框后重新填充区域"
+msgstr "在板上发生修改后重新填充域"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
-#, fuzzy
 msgid "Update Displayed Zones"
-msgstr "层显示选项"
+msgstr "更新显示域"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
-msgstr ""
+msgstr "根据当前新的设置参数, 更新对话框中显示的填充区"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
