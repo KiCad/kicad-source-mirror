@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-09 18:09+0000\n"
+"PO-Revision-Date: 2024-07-13 21:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -38162,7 +38162,7 @@ msgstr "Juotospastan absoluuttinen välys ohitettu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
 msgid "Solder paste relative clearance overridden."
-msgstr "Juotospastan suhteellinen välys ohitettu."
+msgstr "Juotostahnan suhteellinen etäisyys ohitettu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:590
 msgid "Zone connection overridden."
