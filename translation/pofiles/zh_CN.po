@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-07 07:09+0000\n"
+"PO-Revision-Date: 2024-07-12 19:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -21156,7 +21156,7 @@ msgstr "导入图形"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1054
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr "结点位置不包含可连接的电线和/或引脚。"
+msgstr "结点位置不包含可连接的电线/引脚。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1506
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:181
@@ -23523,7 +23523,7 @@ msgstr "编辑工程原理图"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "编辑全局和/或工程原理符号库"
+msgstr "编辑全局/工程原理符号库"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
@@ -23531,7 +23531,7 @@ msgstr "编辑 PCB 设计工程"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "编辑全局和/或工程 PCB 封装库"
+msgstr "编辑全局/工程 PCB 封装库"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Preview Gerber files"
@@ -31473,7 +31473,7 @@ msgstr "生成映射文件"
 #: pcbnew/dialogs/dialog_gendrill.cpp:407
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "无法将钻孔和/或地图文件写入文件夹 '%s'。"
+msgstr "无法将钻孔/地图文件写入文件夹 '%s'。"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:456
 msgid "Save Drill Report File"
