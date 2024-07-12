@@ -449,9 +449,9 @@ void RN_NET::OptimizeRNEdges()
         }
 
         std::sort( pairsToTest.begin(), pairsToTest.end(),
-                   []( const DIST_PAIR& a, const DIST_PAIR& b )
+                   []( const DIST_PAIR& dp_a, const DIST_PAIR& dp_b )
                    {
-                       return a.dist_sq < b.dist_sq;
+                       return dp_a.dist_sq < dp_b.dist_sq;
                    } );
 
         const int c_polyPairsLimit = 3;

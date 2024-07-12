@@ -1264,8 +1264,6 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     bool appendUndo  = isMoving;
     bool connections = false;
 
-    SCH_SCREEN* screen = this->m_frame->GetScreen();
-
     for( size_t i = 0; i < sorted.size() - 1; i++ )
     {
         SCH_ITEM* a = static_cast<SCH_ITEM*>( sorted[i] );

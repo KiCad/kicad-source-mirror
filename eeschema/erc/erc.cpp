@@ -1117,8 +1117,6 @@ int ERC_TESTER::TestSimilarLabels()
         sheet.LastScreen()->Append( marker );
     };
 
-    const NET_MAP& nets = m_schematic->ConnectionGraph()->GetNetMap();
-
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
