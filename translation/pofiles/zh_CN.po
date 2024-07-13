@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-12 19:09+0000\n"
+"PO-Revision-Date: 2024-07-13 21:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -974,7 +974,7 @@ msgstr "用裸铜色表示未电镀的铜(慢)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "电镀铜和非电镀铜使用不同的颜色。(慢)"
+msgstr "使用不同的颜色区分电镀铜和非电镀铜 (慢)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
@@ -3637,7 +3637,7 @@ msgstr "抗锯齿选项"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 msgid "Accelerated graphics:"
-msgstr "硬件图形加速选项:"
+msgstr "硬件图形加速:"
 
 #: common/dialogs/panel_common_settings_base.cpp:43
 #: common/dialogs/panel_common_settings_base.cpp:53
@@ -3656,7 +3656,7 @@ msgstr "高品质抗锯齿处理"
 
 #: common/dialogs/panel_common_settings_base.cpp:49
 msgid "Fallback graphics:"
-msgstr "软件图形加速选项:"
+msgstr "软件图形加速:"
 
 #: common/dialogs/panel_common_settings_base.cpp:70
 msgid "Helper Applications"
@@ -3923,7 +3923,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:390
 msgid "Maximum backups to keep:"
-msgstr "保留的最大备份数:"
+msgstr "保留最大备份数:"
 
 #: common/dialogs/panel_common_settings_base.cpp:392
 msgid "How many backup files total to keep (set to 0 for no limit)"
@@ -3939,7 +3939,7 @@ msgstr "每天要保留多少个备份文件(设置为 0 表示没有限制)"
 
 #: common/dialogs/panel_common_settings_base.cpp:408
 msgid "Minimum time between backups:"
-msgstr "备份最短间隔时间:"
+msgstr "备份的最短间隔:"
 
 #: common/dialogs/panel_common_settings_base.cpp:410
 msgid ""
@@ -17717,9 +17717,8 @@ msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
-msgstr ""
-"该图纸无法被变更, 因为目标图纸已经将图纸 \"%s\" 或其中一个子图纸作为层次结构"
-"中某处的父级图纸。"
+msgstr "无法进行图纸变更, 因为目标图纸已经将图纸 \"%s\" "
+"或其子图纸作为原理图层次结构中某一父级图纸。"
 
 #: eeschema/sheet.cpp:92
 #, c-format
@@ -31974,7 +31973,7 @@ msgstr "最大宽度 (W):"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:799
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:544
 msgid "Curved edges"
-msgstr "曲线边"
+msgstr "曲化边缘"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:324
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:805
