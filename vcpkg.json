@@ -71,6 +71,10 @@
       "name": "liblzma",
       "version": "5.4.4",
       "$comment": "liblzma & xz were compromised upstream: CVE-2024-3094."
+    },
+    {
+      "name": "protobuf",
+      "version": "3.21.12#4"
     }
   ]
 }
