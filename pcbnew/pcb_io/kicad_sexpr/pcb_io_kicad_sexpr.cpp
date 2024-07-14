@@ -67,6 +67,7 @@
 
 #include <build_version.h>
 #include <filter_reader.h>
+#include <ctl_flags.h>
 
 
 using namespace PCB_KEYS_T;

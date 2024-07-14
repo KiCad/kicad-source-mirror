@@ -33,6 +33,7 @@
 #include <font/glyph.h>
 #include <font/text_attributes.h>
 
+
 class OUTPUTFORMATTER;
 class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
@@ -59,11 +60,6 @@ namespace KIFONT
 
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::COLOR4D;
-
-// part of the kicad_plugin.h family of defines.
-// See kicad_plugin.h for the choice of the value
-// When set when calling  EDA_TEXT::Format, disable writing the "hide" keyword in save file
-#define CTL_OMIT_HIDE               (1 << 6)
 
 
 /**
