@@ -1902,7 +1902,13 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText, int aNestLevel ) const
 
     KICAD_FORMAT::FormatUuid( m_out, aText->m_Uuid );
 
-    aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
+    int ctl_flags = m_ctl | CTL_OMIT_HIDE;
+
+    // Currently, texts have no specific color and no hyperlink.
+    // so ensure they are never written in kicad_pcb file
+    ctl_flags |= CTL_OMIT_COLOR | CTL_OMIT_HYPERLINK;
+
+    aText->EDA_TEXT::Format( m_out, aNestLevel, ctl_flags );
 
     if( aText->GetFont() && aText->GetFont()->IsOutline() )
         formatRenderCache( aText, aNestLevel + 1 );
