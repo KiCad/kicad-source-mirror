@@ -3946,7 +3946,13 @@ SCH_RULE_AREA* SCH_IO_KICAD_SEXPR_PARSER::parseSchRuleArea()
         case T_polyline:
         {
             std::unique_ptr<SCH_SHAPE> poly( parseSchPolyLine() );
-            ruleArea->SetPolyShape( poly->GetPolyShape() );
+            SHAPE_POLY_SET& sch_rule_poly = poly->GetPolyShape();
+
+            // The polygon must be closed, it is a schematic closed polyline:
+            sch_rule_poly.Outline(0).SetClosed( true );
+
+            ruleArea->SetPolyShape( sch_rule_poly );
+
             ruleArea->SetStroke( poly->GetStroke() );
             ruleArea->SetFillMode( poly->GetFillMode() );
             ruleArea->SetFillColor( poly->GetFillColor() );
