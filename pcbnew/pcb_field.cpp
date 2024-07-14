@@ -273,5 +273,9 @@ static struct PCB_FIELD_DESC
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
                                       isNotFootprintFootprint );
+
+        // These properties, inherited from EDA_TEXT, have no sense for the board editor
+        propMgr.Mask( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
+        propMgr.Mask( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
     }
 } _PCB_FIELD_DESC;
