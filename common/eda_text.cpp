@@ -48,6 +48,7 @@
 #include <font/outline_font.h>
 #include <geometry/shape_poly_set.h>
 #include <properties/property_validators.h>
+#include <ctl_flags.h>         // for CTL_OMIT_HIDE definition
 
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>

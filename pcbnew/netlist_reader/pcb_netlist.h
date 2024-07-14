@@ -32,6 +32,7 @@
 
 #include <lib_id.h>
 #include <footprint.h>
+#include <ctl_flags.h>
 
 
 class REPORTER;
@@ -292,11 +293,6 @@ public:
     bool AnyFootprintsLinked() const;
 
     void Format( const char* aDocName, OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl = 0 );
-
-#define CTL_OMIT_EXTRA      (1<<0)
-#define CTL_OMIT_NETS       (1<<1)
-#define CTL_OMIT_FILTERS    (1<<2)
-#define CTL_OMIT_FP_UUID    (1<<3)  ///< Don't prefix the footprint UUID to the sheet path.
 
 #define CTL_FOR_CVPCB    (CTL_OMIT_NETS | CTL_OMIT_FILTERS | CTL_OMIT_EXTRA)
 

@@ -27,6 +27,7 @@
 
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/pcb_io_mgr.h>
+#include <ctl_flags.h>
 
 #include <richio.h>
 #include <string>
@@ -165,17 +166,6 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
                                                 ///<   to indicate a net-tie.
 #define FIRST_NORMALIZED_VERISON      20230924  ///< Earlier files did not have normalized bools
 
-#define CTL_OMIT_PAD_NETS           (1 << 1)    ///< Omit pads net names (useless in library)
-#define CTL_OMIT_UUIDS              (1 << 2)    ///< Omit component unique ids (useless in library)
-#define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit FOOTPRINT initial comments
-#define CTL_OMIT_PATH               (1 << 4)    ///< Omit component sheet time stamp (useless in library)
-#define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation. (always saved
-                                                ///< with position 0,0 and rotation = 0 in library).
-//#define CTL_OMIT_HIDE             (1 << 6)    // found and defined in eda_text.h
-#define CTL_OMIT_LIBNAME            (1 << 7)    ///< Omit lib alias when saving (used for
-                                                ///< board/not library).
-#define CTL_OMIT_FOOTPRINT_VERSION  (1 << 8)    ///< Omit the version string from the (footprint)
-                                                ///<sexpr group
 
 // common combinations of the above:
 
@@ -183,7 +173,7 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 #define CTL_FOR_CLIPBOARD           (CTL_OMIT_INITIAL_COMMENTS) // (CTL_OMIT_NETS)
 
 /// Format output for a footprint library instead of clipboard or BOARD
-#define CTL_FOR_LIBRARY                                                                    \
+#define CTL_FOR_LIBRARY \
     ( CTL_OMIT_PAD_NETS | CTL_OMIT_UUIDS | CTL_OMIT_PATH | CTL_OMIT_AT | CTL_OMIT_LIBNAME )
 
 /// The zero arg constructor when PCB_PLUGIN is used for PLUGIN::Load() and PLUGIN::Save()ing
