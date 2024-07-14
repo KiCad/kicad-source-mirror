@@ -20,10 +20,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-05-27 14:09+0000\n"
+"PO-Revision-Date: 2024-07-15 07:09+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13838,9 +13838,8 @@ msgid "Keep tabs"
 msgstr "Ponechat karty"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:255
-#, fuzzy
 msgid "Keep line breaks"
-msgstr "Bez spojů"
+msgstr "Zachovat konce řádků"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:261
 msgid "Format presets:"
@@ -13988,7 +13987,6 @@ msgstr ""
 "projektu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:76
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -13999,14 +13997,14 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"Toto schéma v současné době používá metodu vyhledávání knihovny součástek "
-"projektu pro načtení součástek knihovny. KiCad se pokusí namapovat "
-"existující součástky pro použití tabulky nové knihovny součástek. Mapování "
-"změní některé soubory projektu a schémata nemusí být kompatibilní se "
-"staršími verzemi KiCad. Všechny soubory, které jsou změněny, budou "
-"zálohovány do složky \"remap_backup\" ve složce projektu, pokud budete "
-"potřebovat vrátit změny. Pokud se rozhodnete tento krok přeskočit, budete "
-"muset provést přemapování symbolů ručně."
+"Toto schéma aktuálně používá vyhledávací metodu seznamu knihoven symbolů "
+"projektu pro načtení symbolů knihovny. KiCad se pokusí mapovat existující "
+"symboly a použít novou tabulku knihovny symbolů. Přemapování změní některé "
+"soubory projektu a schémata nemusí být kompatibilní se staršími verzemi "
+"KiCadu. Všechny změněné soubory budou zálohovány do složky \"rescue-backup\" "
+"ve složce projektu, pokud budete potřebovat vrátit všechny změny. Pokud se "
+"rozhodnete tento krok přeskočit, budete zodpovědní za ruční přemapování "
+"symbolů."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:216
 #, c-format
@@ -14473,9 +14471,8 @@ msgid "Cross-probing"
 msgstr "Křížové sondování"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
-#, fuzzy
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Zvýraznit pouzdra odpovídající vybraným symbolům"
+msgstr "Vybrat/zvýraznit objekty odpovídající výběru DPS"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 msgid "Highlight symbols corresponding to selected footprints"
@@ -14505,9 +14502,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Zvýrazněte sítě, když jsou zvýrazněny v editoru PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
-msgstr "Režim kreslení čáry:"
+msgstr "Režim kreslení čar:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
@@ -14748,9 +14744,8 @@ msgid "Default text size:"
 msgstr "Výchozí velikost textu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Poměr posunu označení:"
+msgstr "Koeficient posunu čáry nad textem:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -14804,9 +14799,8 @@ msgid "Largest"
 msgstr "Největší"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "Řetězec připojení:"
+msgstr "Mřížka připojení:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -15072,13 +15066,12 @@ msgid "&Default line width:"
 msgstr "&Výchozí šířka čáry:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
 msgstr ""
-"Nastavit na 0, aby symboly mohly zdědit šířku čáry od\n"
-"svého nadřazeného schématu"
+"Nastavit na 0, aby symboly zdědily vlastnosti šířky čáry\n"
+"od schématu"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -15216,13 +15209,12 @@ msgstr ""
 "Tato operace nevratně změní aktuální očíslování."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:920
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
-"Vyberte jeden nebo více řádků obsahujících knihovny ve formátu Legacy (* ."
-"lib), které chcete uložit jako aktuální formát KiCad (* .kicad_sym)."
+"Vyberte jeden nebo více řádků obsahujících knihovny, které chcete uložit "
+"jako aktuální formát KiCad (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:928
 #, c-format
@@ -15234,13 +15226,13 @@ msgstr ""
 "tabulce?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
-"Uložit %d starší verze knihoven jako aktuální formát KiCad (*.kicad_sym) a "
-"nahradit starší položky v tabulce?"
+"Uložit %d knihoven jako aktuální formát KiCad (*.kicad_sym) a nahradit "
+"starší položky v tabulce?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:965
 #: pcbnew/dialogs/dialog_export_step.cpp:528
@@ -15517,9 +15509,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "Zpráva ERC uložena do %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
-#, fuzzy
 msgid "Net Navigator"
-msgstr "Hierarchická navigace"
+msgstr "Síťový navigátor"
 
 #: eeschema/eeschema_settings.cpp:114 eeschema/sch_edit_frame.cpp:2125
 #: pcbnew/footprint_edit_frame.cpp:244 pcbnew/footprint_edit_frame.cpp:903
@@ -16223,11 +16214,12 @@ msgid "Locked File Warning"
 msgstr "Měřítko modelu Varování"
 
 #: eeschema/files-io.cpp:1147
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "Nemáte oprávnění zapisovat do složky \"%s\"."
+msgstr ""
+"Nemáte oprávnění k zápisu:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1163
 msgid "Saving will overwrite existing files."
@@ -16280,13 +16272,13 @@ msgstr ""
 "provedli?"
 
 #: eeschema/files-io.cpp:1639
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
 "Soubor '%s' nelze otevřít.\n"
-"Je vyžadováno ruční obnovení automaticky uložených souborů."
+"Je nutné ruční obnovení automaticky uložených souborů."
 
 #: eeschema/files-io.cpp:1690
 msgid "The following automatically saved file(s) could not be restored\n"
@@ -16297,11 +16289,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Ruční obnovení bude vyžadováno pro obnovení výše uvedených souboru(ů)."
 
 #: eeschema/files-io.cpp:1705
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "Automaticky uložený soubor \"%s\" nelze odstranit!"
+msgstr ""
+"Automaticky uložený soubor '%s' nelze odstranit.\n"
+"Bude nutné provést ruční odstranění."
 
 #: eeschema/files-io.cpp:1739
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -16445,15 +16439,13 @@ msgid "Power flag differs."
 msgstr "Power Flag se liší."
 
 #: eeschema/lib_symbol.cpp:1551
-#, fuzzy
 msgid "Unit count differs."
-msgstr "Počet vývodů"
+msgstr "Počet jednotek se liší."
 
 #: eeschema/lib_symbol.cpp:1591
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:713
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "Nenalezeny žádné grafické položky v souboru."
+msgstr "Počet grafických položek se liší."
 
 #: eeschema/lib_symbol.cpp:1603
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:727
@@ -16481,24 +16473,20 @@ msgid "%s field differs."
 msgstr "Pole %s se liší."
 
 #: eeschema/lib_symbol.cpp:1675
-#, fuzzy
 msgid "Field count differs."
-msgstr "Počet vývodů"
+msgstr "Počet polí se liší."
 
 #: eeschema/lib_symbol.cpp:1684
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "Typ pouzdra:"
+msgstr "Filtry pouzder se liší."
 
 #: eeschema/lib_symbol.cpp:1696
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "Typ pouzdra:"
+msgstr "Filtry pouzdra se liší."
 
 #: eeschema/lib_symbol.cpp:1707
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "Provedení pouzdra"
+msgstr "Klíčová slova symbolu se liší."
 
 #: eeschema/lib_symbol.cpp:1716
 msgid "Symbol pin name offsets differ."
@@ -17092,9 +17080,8 @@ msgid "Save Symbol to Schematic"
 msgstr "Uložit symbol do schématu"
 
 #: eeschema/sch_edit_frame.cpp:2432 eeschema/tools/ee_actions.cpp:60
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "Symboly do knihovny..."
+msgstr "Porovnat symbol s knihovnou"
 
 #: eeschema/sch_field.cpp:1093
 #, fuzzy, c-format
@@ -17153,24 +17140,22 @@ msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Záznam 'IEEE_SYMBOL' není zpracován."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1067
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "Sada parametrů není momentálně podporována."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1092
 msgid "Compile mask not currently supported."
 msgstr "Maska kompilace není aktuálně podporována."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1117
-#, fuzzy
 msgid "Blanket not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "Blanket není v současné době podporován."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1122
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4470
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
+msgstr "Neznámé nebo neočekávané ID záznamu %d nalezeno v %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1180
 #, c-format
@@ -17611,19 +17596,18 @@ msgstr "Soubory EasyEDA (JLCEDA) Std"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:84
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "Nepodařilo se archivovat soubor '%s'."
+msgstr "Nepodařilo se zpracovat hodnotu: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:58
 msgid "httplib plugin missing library table handle!"
 msgstr ""
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid"
-msgstr ""
-"Nelze načíst databázovou knihovnu: soubor nastavení %s chybí nebo je neplatný"
+msgstr "Soubor nastavení knihovny HTTP %s chybí nebo je neplatný"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:230
 #, c-format
@@ -17653,9 +17637,9 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr ""
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Error retriving data from HTTP library %s: %s"
-msgstr "Chyba při načítání pouzdra %s z knihovny '%s'."
+msgstr "Chyba získávání dat z knihovny HTTP %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:46
 msgid "KiCad HTTP library files"
@@ -18044,9 +18028,8 @@ msgstr "Síť"
 
 #: eeschema/sch_label.cpp:1358 eeschema/sch_line.cpp:905
 #: eeschema/sch_rule_area.cpp:385
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Analyzovaná třída spojů"
+msgstr "Vyřešeno třída spojů"
 
 #: eeschema/sch_label.cpp:1375
 msgid "Hierarchical Labels"
@@ -18333,14 +18316,12 @@ msgid "Bezier Curve, %d points"
 msgstr "Bezierova křivka, %d bodů"
 
 #: eeschema/sch_shape.cpp:644
-#, fuzzy
 msgid "Body outline color"
-msgstr "Vyplnit barvou obrysu těla"
+msgstr "Barva obrysu těla"
 
 #: eeschema/sch_shape.cpp:645
-#, fuzzy
 msgid "Body background color"
-msgstr "Barva pozadí vykreslení"
+msgstr "Barva pozadí těla"
 
 #: eeschema/sch_shape.cpp:646
 msgid "Fill color"
@@ -18463,9 +18444,8 @@ msgid "Mirror Y"
 msgstr "Zrcadlit Y"
 
 #: eeschema/sch_symbol.cpp:2844 pcbnew/footprint.cpp:3760
-#, fuzzy
 msgid "Library Link"
-msgstr "Odkaz na knihovnu"
+msgstr "Propojení knihovny"
 
 #: eeschema/sch_symbol.cpp:2847 pcbnew/footprint.cpp:3763
 #: pcbnew/plot_board_layers.cpp:130
@@ -19086,9 +19066,8 @@ msgid "Component: manufacturer cannot be empty."
 msgstr "Součástka: výrobce nemůže být prázdný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "Součástka: Neplatné pouzdro."
+msgstr "Komponenta: Neplatné pouzdro."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 msgid "Component: no pin"
@@ -19796,11 +19775,8 @@ msgid "SPICE Simulator"
 msgstr "Simulátor"
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Chyby během generování netlistu.\n"
-"\n"
+msgstr "Chyby během generování netlistu."
 
 #: eeschema/sim/simulator_frame.cpp:374
 msgid "Simulator requires a fully annotated schematic."
@@ -19827,9 +19803,9 @@ msgid "Another simulation is already running."
 msgstr "Již běží jiná simulace."
 
 #: eeschema/sim/simulator_frame.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Nelze načíst soubor %s"
+msgstr "Nelze načíst nebo analyzovat soubor %s"
 
 #: eeschema/sim/simulator_frame.cpp:628
 msgid "Save changes to workbook?"
@@ -20038,14 +20014,12 @@ msgid "Noise Analysis"
 msgstr "Analýza šumu"
 
 #: eeschema/sim/spice_simulator.cpp:63
-#, fuzzy
 msgid "Pole-Zero Analysis"
-msgstr "Nulový pól"
+msgstr "Analýza nulového pólu"
 
 #: eeschema/sim/spice_simulator.cpp:64
-#, fuzzy
 msgid "Sensitivity Analysis"
-msgstr "Citlivost"
+msgstr "Analýza citlivosti"
 
 #: eeschema/sim/spice_simulator.cpp:65
 #, fuzzy
