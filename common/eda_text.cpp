@@ -919,7 +919,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     if( IsItalic() )
         aFormatter->Print( 0, " (italic yes)" );
 
-    if( GetTextColor() != COLOR4D::UNSPECIFIED )
+    if( !( aControlBits & CTL_OMIT_COLOR ) && GetTextColor() != COLOR4D::UNSPECIFIED )
     {
         aFormatter->Print( 0, " (color %d %d %d %s)",
                            KiROUND( GetTextColor().r * 255.0 ),
@@ -950,7 +950,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     if( !( aControlBits & CTL_OMIT_HIDE ) && !IsVisible() )
         aFormatter->Print( 0, " (hide yes)" );
 
-    if( HasHyperlink() )
+    if( !( aControlBits & CTL_OMIT_HYPERLINK ) && HasHyperlink() )
     {
         aFormatter->Print( 0, " (href %s)", aFormatter->Quotew( GetHyperlink() ).c_str() );
     }
