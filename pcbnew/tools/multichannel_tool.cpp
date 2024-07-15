@@ -52,7 +52,6 @@ static const wxString traceMultichannelTool = wxT( "MULTICHANNEL_TOOL" );
 
 MULTICHANNEL_TOOL::MULTICHANNEL_TOOL() : PCB_TOOL_BASE( "pcbnew.Multichannel" )
 {
-    m_reporter.reset( new NULL_REPORTER );
 }
 
 
@@ -78,7 +77,7 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
 
     auto reportError = [&]( const wxString& aMessage, int aOffset )
     {
-        m_reporter->Report( _( "ERROR:" ) + wxS( " " ) + aMessage );
+        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s"), aMessage );
     };
 
     ctx.SetErrorCallback( reportError );
@@ -86,11 +85,9 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
     compiler.SetErrorCallback( reportError );
     //compiler.SetDebugReporter( m_reporter );
 
-    m_reporter->Report(
-            wxString::Format( wxT( "Process rule area '%s'" ), aRuleArea->GetZoneName() ) );
+    wxLogTrace( traceMultichannelTool, wxT( "rule area '%s'"), aRuleArea->GetZoneName() );
 
     auto ok = compiler.Compile( aRuleArea->GetRuleAreaExpression(), &ucode, &preflightCtx );
-
 
     if( !ok )
     {
@@ -103,8 +100,9 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
         auto val = ucode.Run( &ctx );
         if( val->AsDouble() != 0.0 )
         {
-            m_reporter->Report( wxString::Format( wxT( "- %s [sheet %s]" ), fp->GetReference(),
-                                                  fp->GetSheetname() ) );
+            wxLogTrace( traceMultichannelTool, wxT( " - %s [sheet %s]" ), fp->GetReference(),
+                                                  fp->GetSheetname() );
+
             aComponents.insert( fp );
         }
     }
@@ -322,10 +320,6 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 
 int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 {
-    //KI_TEST::CONSOLE_LOG          consoleLog;
-    //m_reporter.reset( new KI_TEST::CONSOLE_MSG_REPORTER ( &consoleLog ) );
-
-    
     BOARD_COMMIT commit( GetManager(), true );
 
     int totalCopied = 0;
@@ -408,7 +402,7 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
     for( PAD* pad : aFp->Pads() )
     {
         const std::vector<BOARD_CONNECTED_ITEM*> connItems = aConnectivity->GetConnectedItems(
-                pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, true );
+                pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_SHAPE_T }, true );
 
         for( BOARD_CONNECTED_ITEM* item : connItems )
             conns.insert( item );
@@ -478,10 +472,6 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             wxLogTrace( traceMultichannelTool, wxT("target-routes %d\n"), (int) targetRouting.size() );
         }
 
-        printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
-        printf("target-ls: %s\n", aTargetArea->m_area->GetLayerSet().FmtHex().c_str() );
-
-
         for( BOARD_ITEM* item : targetRouting )
         {
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
@@ -522,24 +512,18 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             FOOTPRINT* refFP = fpPair.first;
             FOOTPRINT* targetFP = fpPair.second;
 
-            printf("ref-fp-l: %s\n", refFP->GetLayerSet().FmtHex().c_str() );
-
-#if 1
-        //fixme: respect layers assigned to RAs
-        printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
-        printf("target-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
-
-        if( ! aRefArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
-        {
-            wxLogTrace( traceMultichannelTool, wxT("discard ref:%s (ref layer)\n"), refFP->GetReference() );
-            continue;
-        }
-        if( ! aTargetArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
-        {
-            wxLogTrace( traceMultichannelTool, wxT("discard ref:%s (target layer)\n"), refFP->GetReference() );
-            continue;
-        }
-#endif
+            if( !aRefArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
+            {
+                wxLogTrace( traceMultichannelTool, wxT( "discard ref:%s (ref layer)\n" ),
+                            refFP->GetReference() );
+                continue;
+            }
+            if( !aTargetArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
+            {
+                wxLogTrace( traceMultichannelTool, wxT( "discard ref:%s (target layer)\n" ),
+                            refFP->GetReference() );
+                continue;
+            }
 
             if( targetFP->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
@@ -599,13 +583,22 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
     return (status == TMATCH::CONNECTION_GRAPH::ST_OK ); 
 }
 
+#if 0
+bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToRemove )
+{
+    for( PCB_GROUP* grp : board()->Groups() )
+    {
+        std::unordered_set<BOARD_ITEM*>& grpItems = grp->GetItems();
+        std::unordered_set<BOARD_ITEM*> toPrune;
+        std::set_intersection( grpItems.begin(), grpItems.end(), aItemsToRemove.begin(), aItemsToRemove.end(),
+        std::inserter( toPrune, toPrune.begin() ) );
+    }
+
+    return false;
+}
 
 int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 {
-    //KI_TEST::CONSOLE_LOG          consoleLog;
-    //m_reporter.reset( new KI_TEST::CONSOLE_MSG_REPORTER ( &consoleLog ) );
-
-
     if( Pgm().IsGUI() )
     {
         QuerySheets();
@@ -643,9 +636,9 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         {
             if( components == ra.m_sheetComponents )
             {
-                m_reporter->Report( wxString::Format(
+                wxLogTrace( traceMultichannelTool,
                         wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
-                        ra.m_sheetPath, zone->GetZoneName() ) );
+                        ra.m_sheetPath, zone->GetZoneName() );
 
                 ra.m_area = zone;
                 ra.m_existsAlready = true;
@@ -653,8 +646,8 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_reporter->Report(
-            wxString::Format( wxT( "%d placement areas found\n" ), (int) m_areas.m_areas.size() ) );
+    wxLogTrace( traceMultichannelTool,
+             wxT( "%d placement areas found\n" ), (int) m_areas.m_areas.size() );
 
     BOARD_COMMIT commit( GetManager(), true );
 
@@ -670,9 +663,11 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
 
         newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_sheetPath ) );
-        m_reporter->Report( wxString::Format( wxT( "Generated rule area '%s' (%d components)\n" ),
+
+        wxLogTrace( traceMultichannelTool,
+            wxT( "Generated rule area '%s' (%d components)\n" ),
                                               newZone->GetZoneName(),
-                                              (int) ra.m_sheetComponents.size() ) );
+                                              (int) ra.m_sheetComponents.size() );
 
         newZone->SetIsRuleArea( true );
         newZone->SetLayerSet( LSET::AllCuMask() );
@@ -682,31 +677,53 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->AddPolygon( raOutline );
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
         //aBoard->Add( newZone.release() );
-        commit.Add( newZone.get() );
-        commit.Push( _( "Auto-generate placement rule areas" ) );
 
-        if( m_areas.m_groupItems )
+        ra.m_area = newZone.get();
+        commit.Add( newZone.get() );
+
+    }
+
+    commit.Push( _( "Auto-generate placement rule areas" ) );
+
+    // fixme: handle corner cases where the items belonging to a Rule Area already
+    // belong to other groups.
+
+    if( 0 /*m_areas.m_groupItems*/ )
+    {
+        // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
+        BOARD_COMMIT grpCommit( GetManager(), true );
+
+
+        for( RULE_AREA& ra : m_areas.m_areas )
         {
-            // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
-            BOARD_COMMIT grpCommit( GetManager(), true );
+            if( !ra.m_generateEnabled )
+                continue;
+            if( ra.m_existsAlready && !m_areas.m_replaceExisting )
+                continue;
+
+            std::unordered_set<BOARD_ITEM*> toPrune;
+
+            std::copy( ra.m_sheetComponents.begin(), ra.m_sheetComponents.end(),
+                       std::inserter( toPrune, toPrune.begin() ) );
+
+            pruneExistingGroups( grpCommit, toPrune );
 
             PCB_GROUP* grp = new PCB_GROUP( board() );
 
             grpCommit.Add( grp );
 
-            grpCommit.Stage( newZone.get(), CHT_GROUP );
-            grp->AddItem( newZone.get() );
+            grpCommit.Stage( ra.m_area, CHT_GROUP );
+            grp->AddItem( ra.m_area );
 
             for( auto fp : ra.m_sheetComponents )
             {
                 grpCommit.Stage( fp, CHT_GROUP );
                 grp->AddItem( fp );
             }
-            grpCommit.Push( _( "Group components with their placement rule areas" ) );
         }
-
-        newZone.release();
+        grpCommit.Push( _( "Group components with their placement rule areas" ) );
     }
+
 
     return true;
 }
