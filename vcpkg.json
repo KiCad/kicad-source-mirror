@@ -43,7 +43,8 @@
     "wxpython",
     "libgit2",
     "nng",
-    "protobuf"
+    "protobuf",
+    "zstd"
   ],
   "overrides": [
     {
