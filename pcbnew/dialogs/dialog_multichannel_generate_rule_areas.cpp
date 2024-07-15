@@ -38,7 +38,6 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
     RULE_AREAS_DATA* raData = m_parentTool->GetData();
 
-    m_sheetsGrid->AppendCols( 3 );
     m_sheetsGrid->EnableEditing( true );
     m_sheetsGrid->HideRowLabels();
     m_sheetsGrid->SetColLabelValue( 0, wxT("Generate") );
@@ -58,7 +57,6 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
     m_sheetsGrid->SetMaxSize( wxSize( -1, 800 ) );
     m_sheetsGrid->Fit();
-
     m_cbGroupItems->SetValue( raData->m_groupItems );
     m_cbReplaceExisting->SetValue( raData->m_replaceExisting );
 

@@ -64,7 +64,6 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     int i = 0;
 
     m_raGrid->ClearGrid();
-    m_raGrid->AppendCols( 3 );
     m_raGrid->EnableEditing( true );
     m_raGrid->HideRowLabels();
     m_raGrid->SetColLabelValue( 0, wxT("Copy") );
