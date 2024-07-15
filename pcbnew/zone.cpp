@@ -1626,7 +1626,7 @@ static struct ZONE_DESC
                     return false;
                 };
 
-   auto isRuleArea =
+        auto isRuleArea =
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
@@ -1675,8 +1675,8 @@ static struct ZONE_DESC
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, RULE_AREA_TYPE>( _HKI( "Rule Area Type" ),
                                                            &ZONE::SetRuleAreaType,
-                                                           &ZONE::GetRuleAreaType ) );
-                //.SetAvailableFunc( isRuleArea );
+                                                           &ZONE::GetRuleAreaType ) )
+                .SetAvailableFunc( isRuleArea );
 
         const wxString groupFill = _HKI( "Fill Style" );
 
