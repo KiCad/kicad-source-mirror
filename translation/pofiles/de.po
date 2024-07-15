@@ -25,10 +25,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-11 09:41-0700\n"
-"PO-Revision-Date: 2024-07-10 12:09+0000\n"
+"PO-Revision-Date: 2024-07-16 14:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3763,19 +3763,23 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Standard 'explorer.exe /n,/select,%F' für dieses Betriebssystem."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Datei-Explorer Kommando.\n"
+"Bespiel:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Explorerkommando mit obligatorischem '%s' Suffix nach dem letzten "
+"eingegebenen Zeichen."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -34378,9 +34382,8 @@ msgid "Footprint dimension items"
 msgstr "Footprint-Bemaßungselemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
-#, fuzzy
 msgid "Footprint text items not associated with a field"
-msgstr "Footprint-Zuordnungsdateien:"
+msgstr "Footprint-Textelemente, die keinem Feld zugeordnet sind"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "PCB graphic items"
@@ -40371,9 +40374,8 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "Freiraum (absolut) für Lötpaste überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:646
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "\"Freiraum (relativ) für Lötpaste überschrieben."
+msgstr "Freiraum (relativ) für Lötpaste überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:653
 msgid "Zone connection overridden."
