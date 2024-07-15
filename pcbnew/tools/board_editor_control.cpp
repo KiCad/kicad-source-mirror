@@ -430,7 +430,7 @@ int BOARD_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 {
     wxCHECK( m_frame, 0 );
-
+     
     wxFileName fn = m_frame->Prj().GetProjectFullName();
 
     // Use a different file extension for the board netlist so the schematic netlist file

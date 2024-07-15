@@ -81,6 +81,11 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
         fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );
     }
 
+    if( ADVANCED_CFG::GetCfg().m_EnableJobset )
+    {
+        fileMenu->Add( KICAD_MANAGER_ACTIONS::newJobsetFile );
+    }
+
     if( wxDir::Exists( PATHS::GetStockDemosPath() ) )
     {
         fileMenu->Add( KICAD_MANAGER_ACTIONS::openDemoProject );

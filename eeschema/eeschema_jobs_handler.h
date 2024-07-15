@@ -62,11 +62,14 @@ public:
                              const wxString& aDrawingSheetOverride = wxEmptyString );
 
 private:
+    SCHEMATIC* getSchematic( const wxString& aPath );
 
     int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, SCH_RENDER_SETTINGS* aRenderSettings,
                         LIB_SYMBOL* symbol );
 
     DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( SCHEMATIC* aSch );
+
+    SCHEMATIC* m_cliSchematic;
 };
 
 #endif

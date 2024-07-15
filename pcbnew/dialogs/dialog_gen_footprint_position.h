@@ -27,6 +27,7 @@
 
 class PCB_EDIT_FRAME;
 class REPORTER;
+class JOB_EXPORT_PCB_POS;
 
 /**
  * The dialog to create footprint position files and choose options (one or 2 files, units
@@ -36,6 +37,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION : public DIALOG_GEN_FOOTPRINT_POSITION_BASE
 {
 public:
     DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aEditFrame );
+    DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
 
 private:
     void initDialog();
@@ -78,4 +80,5 @@ private:
 private:
     PCB_EDIT_FRAME* m_editFrame;
     REPORTER*       m_reporter;
+    JOB_EXPORT_PCB_POS* m_job;
 };

@@ -30,9 +30,11 @@ class KICOMMON_API JOB_EXPORT_PCB_POS : public JOB
 {
 public:
     JOB_EXPORT_PCB_POS( bool aIsCli );
+    wxString GetDescription() override;
+
+    void SetDefaultOutputPath( const wxString& aReferenceName );
 
     wxString m_filename;
-    wxString m_outputFile;
 
     bool m_useDrillPlaceFileOrigin;
     bool m_smdOnly;

@@ -19,14 +19,40 @@
  */
 
 #include <jobs/job_sch_erc.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_SCH_ERC::UNITS,
+                              {
+                                      { JOB_SCH_ERC::UNITS::INCHES, "in" },
+                                      { JOB_SCH_ERC::UNITS::MILLIMETERS, "mm" },
+                                      { JOB_SCH_ERC::UNITS::MILS, "mils" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_SCH_ERC::OUTPUT_FORMAT,
+                              {
+                                      { JOB_SCH_ERC::OUTPUT_FORMAT::REPORT, "report" },
+                                      { JOB_SCH_ERC::OUTPUT_FORMAT::JSON, "json" },
+                              } )
 
 JOB_SCH_ERC::JOB_SCH_ERC( bool aIsCli ) :
-    JOB( "erc", aIsCli ),
+    JOB( "erc", false, aIsCli ),
     m_filename(),
     m_units( JOB_SCH_ERC::UNITS::MILLIMETERS ),
     m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
     m_format( OUTPUT_FORMAT::REPORT ),
     m_exitCodeViolations( false )
 {
+    m_params.emplace_back( new JOB_PARAM<UNITS>( "units", &m_units, m_units ) );
+    m_params.emplace_back( new JOB_PARAM<int>( "severity", &m_severity, m_severity ) );
+    m_params.emplace_back( new JOB_PARAM<OUTPUT_FORMAT>( "format", &m_format, m_format ) );
 }
+
+
+wxString JOB_SCH_ERC::GetDescription()
+{
+    return wxString::Format( _( "Perform Schematic ERC" ) );
+}
+
+
+REGISTER_JOB( sch_erc, _HKI( "Schematic: Perform ERC" ), KIWAY::FACE_SCH, JOB_SCH_ERC );

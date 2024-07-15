@@ -22,10 +22,9 @@
 
 
 JOB_SYM_EXPORT_SVG::JOB_SYM_EXPORT_SVG( bool aIsCli ) :
-    JOB( "symsvg", aIsCli ),
+    JOB( "symsvg", true, aIsCli ),
     m_libraryPath(),
     m_symbol(),
-    m_outputDirectory(),
     m_blackAndWhite( false ),
     m_includeHiddenPins( false ),
     m_includeHiddenFields( false )

@@ -346,6 +346,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     int HandleJob( JOB* aJob ) override;
 
+    bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
+
 private:
     bool loadGlobalLibTable();
     bool loadGlobalDesignBlockLibTable();
@@ -696,4 +698,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 int IFACE::HandleJob( JOB* aJob )
 {
     return m_jobHandler->RunJob( aJob );
+}
+
+
+bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
+{
+    return m_jobHandler->HandleJobConfig( aJob, aParent );
 }

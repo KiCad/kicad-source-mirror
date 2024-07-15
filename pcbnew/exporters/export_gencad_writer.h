@@ -39,7 +39,7 @@ public:
      * @param aFullFileName is the full filenam to create
      * @return true on success
      */
-    bool WriteFile( wxString& aFullFileName );
+    bool WriteFile( const wxString& aFullFileName );
 
     /// Set the coordinates offet when exporting items
     void SetPlotOffet( VECTOR2I aOffset ) { GencadOffset = aOffset; }

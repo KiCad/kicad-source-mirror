@@ -39,6 +39,10 @@
 #include <launch_ext.h>
 #include "wx/tokenzr.h"
 
+#include <wx/wfstream.h>
+#include <wx/fs_zip.h>
+#include <wx/zipstrm.h>
+
 #include <filesystem>
 
 void QuoteString( wxString& string )
@@ -365,6 +369,102 @@ bool RmDirRecursive( const wxString& aFileName, wxString* aErrors )
             *aErrors = wxString::Format( _( "Error removing directory '%s': %s" ), aFileName, e.what() );
 
         return false;
+    }
+
+    return true;
+}
+
+bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxString& aErrors )
+{
+    wxDir dir( aSourceDir );
+    if( !dir.IsOpened() )
+    {
+        aErrors += wxString::Format( _( "Could not open source directory: %s" ), aSourceDir );
+        aErrors += wxT( "\n" );
+        return false;
+    }
+
+    if( !wxFileName::Mkdir( aDestDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+    {
+        aErrors += wxString::Format( _( "Could not create destination directory: %s" ), aDestDir );
+        aErrors += wxT( "\n" );
+        return false;
+    }
+
+    wxString filename;
+    bool     cont = dir.GetFirst( &filename );
+    while( cont )
+    {
+        wxString sourcePath = aSourceDir + wxFileName::GetPathSeparator() + filename;
+        wxString destPath = aDestDir + wxFileName::GetPathSeparator() + filename;
+
+        if( wxFileName::DirExists( sourcePath ) )
+        {
+            // Recursively copy subdirectories
+            if( !CopyDirectory( sourcePath, destPath, aErrors ) )
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // Copy files
+            if( !wxCopyFile( sourcePath, destPath ) )
+            {
+                aErrors += wxString::Format( _( "Could not copy file: %s to %s" ), sourcePath, destPath );
+                return false;
+            }
+        }
+
+        cont = dir.GetNext( &filename );
+    }
+
+    return true;
+}
+
+
+bool AddDirectoryToZip( wxZipOutputStream& aZip, const wxString& aSourceDir, wxString& aErrors,
+                        const wxString& aParentDir )
+{
+    wxDir dir( aSourceDir );
+    if( !dir.IsOpened() )
+    {
+        aErrors += wxString::Format( _( "Could not open source directory: %s" ), aSourceDir );
+        aErrors += "\n";
+        return false;
+    }
+
+    wxString filename;
+    bool     cont = dir.GetFirst( &filename );
+    while( cont )
+    {
+        wxString sourcePath = aSourceDir + wxFileName::GetPathSeparator() + filename;
+        wxString zipPath = aParentDir + filename;
+
+        if( wxFileName::DirExists( sourcePath ) )
+        {
+            // Add directory entry to the ZIP file
+            aZip.PutNextDirEntry( zipPath + "/" );
+            // Recursively add subdirectories
+            if( !AddDirectoryToZip( aZip, sourcePath, aErrors, zipPath + "/" ) )
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // Add file entry to the ZIP file
+            aZip.PutNextEntry( zipPath );
+            wxFFileInputStream fileStream( sourcePath );
+            if( !fileStream.IsOk() )
+            {
+                aErrors += wxString::Format( _( "Could not read file: %s" ), sourcePath );
+                return false;
+            }
+            aZip.Write( fileStream );
+        }
+
+        cont = dir.GetNext( &filename );
     }
 
     return true;

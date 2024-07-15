@@ -94,6 +94,8 @@ enum id_kicad_frm {
     ID_GIT_SWITCH_QUICK4,       // Switch the local repository to the fourth quick branch
     ID_GIT_SWITCH_QUICK5,       // Switch the local repository to the fifth quick branch
 
+    ID_JOBS_RUN,
+
     // Please, verify: the number of items in this list should be
     // less than ROOM_FOR_KICADMANAGER (see id.h)
     ID_KICADMANAGER_END_LIST

@@ -78,7 +78,6 @@ int CLI::PCB_EXPORT_GENCAD_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_PCB_GENCAD> gencadJob( new JOB_EXPORT_PCB_GENCAD( true ) );
 
     gencadJob->m_filename = m_argInput;
-    gencadJob->m_outputFile = m_argOutput;
     gencadJob->SetVarOverrides( m_argDefineVars );
 
     gencadJob->m_flipBottomPads = m_argParser.get<bool>( ARG_FLIP_BOTTOM_PADS );

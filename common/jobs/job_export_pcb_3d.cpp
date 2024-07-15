@@ -19,7 +19,27 @@
  */
 
 #include <jobs/job_export_pcb_3d.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::FORMAT,
+                              {
+                                      { JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN, nullptr },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::STEP, "step" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::BREP, "brep" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::GLB, "step" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::VRML, "vrml" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::XAO, "xao" },
+                              } )
+
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::VRML_UNITS,
+                              {
+                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES, "in" },
+                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::METERS, "m" },
+                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::MILLIMETERS, "mm" },
+                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS, "tenths" },
+                              } )
 
 wxString EXPORTER_STEP_PARAMS::GetDefaultExportExtension() const
 {
@@ -49,7 +69,7 @@ wxString EXPORTER_STEP_PARAMS::GetFormatName() const
 
 
 JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D( bool aIsCli ) :
-    JOB( "3d", aIsCli ),
+    JOB( "3d", false, aIsCli ),
     m_hasUserOrigin( false ),
     m_filename(),
     m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
@@ -57,4 +77,58 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D( bool aIsCli ) :
     m_vrmlModelDir( wxEmptyString ),
     m_vrmlRelativePaths( false )
 {
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "overwrite", &m_3dparams.m_Overwrite, m_3dparams.m_Overwrite ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_grid_origin", &m_3dparams.m_UseGridOrigin,
+                                                m_3dparams.m_UseGridOrigin ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_drill_origin", &m_3dparams.m_UseDrillOrigin,
+                                                m_3dparams.m_UseDrillOrigin ) );
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "board_only", &m_3dparams.m_BoardOnly, m_3dparams.m_BoardOnly ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "include_unspecified",
+                                                &m_3dparams.m_IncludeUnspecified,
+                                                m_3dparams.m_IncludeUnspecified ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "include_dnp", &m_3dparams.m_IncludeDNP,
+                                                m_3dparams.m_IncludeDNP ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "subst_models", &m_3dparams.m_SubstModels,
+                                                m_3dparams.m_SubstModels ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "optimize_step", &m_3dparams.m_OptimizeStep,
+                                                m_3dparams.m_OptimizeStep ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "user_origin.x", &m_3dparams.m_Origin.x,
+                                                  m_3dparams.m_Origin.x ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "user_origin.y", &m_3dparams.m_Origin.y,
+                                                  m_3dparams.m_Origin.y ) );
+    m_params.emplace_back( new JOB_PARAM<double>( "board_outlines_chaining_epsilon",
+                                                  &m_3dparams.m_BoardOutlinesChainingEpsilon,
+                                                  m_3dparams.m_BoardOutlinesChainingEpsilon ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_board_body", &m_3dparams.m_ExportBoardBody,
+                                                m_3dparams.m_ExportBoardBody ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_components", &m_3dparams.m_ExportComponents,
+                                                m_3dparams.m_ExportComponents ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_tracks", &m_3dparams.m_ExportTracksVias,
+                                                m_3dparams.m_ExportTracksVias ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_pads", &m_3dparams.m_ExportPads,
+                                                m_3dparams.m_ExportPads ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_zones", &m_3dparams.m_ExportZones,
+                                                m_3dparams.m_ExportZones ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_inner_copper",
+                                                &m_3dparams.m_ExportInnerCopper,
+                                                m_3dparams.m_ExportInnerCopper ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_silkscreen", &m_3dparams.m_ExportSilkscreen,
+                                                m_3dparams.m_ExportInnerCopper ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "export_soldermask", &m_3dparams.m_ExportSoldermask,
+                                                m_3dparams.m_ExportSoldermask ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "fuse_shapes", &m_3dparams.m_FuseShapes,
+                                                m_3dparams.m_FuseShapes ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "vrml_model_dir", &m_vrmlModelDir, m_vrmlModelDir ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "vrml_relative_paths", &m_vrmlRelativePaths,
+                                                m_vrmlRelativePaths ) );
 }
+
+
+wxString JOB_EXPORT_PCB_3D::GetDescription()
+{
+    return wxString::Format( _( "3D model export" ) );
+}
+
+REGISTER_JOB( pcb_export_3d, _HKI( "PCB: Export 3D Model" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_3D );

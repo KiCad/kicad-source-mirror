@@ -29,9 +29,9 @@ class KICOMMON_API JOB_EXPORT_SCH_PYTHONBOM : public JOB
 {
 public:
     JOB_EXPORT_SCH_PYTHONBOM( bool aIsCli );
+    wxString GetDescription() override;
 
     wxString m_filename;
-    wxString m_outputFile;
 };
 
 #endif

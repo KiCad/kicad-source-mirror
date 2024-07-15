@@ -19,12 +19,48 @@
  */
 
 #include <jobs/job_export_sch_netlist.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_SCH_NETLIST::FORMAT,
+                              {
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR, "kicad" },
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::KICADXML, "xml" },
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO, "allegro" },
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::PADS, "pads" },
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::CADSTAR, "cadstar" },
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2, "orcadpcb2" },
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE, "spice" },
+                                      { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL, "spicemodel" },
+                              } )
 
 JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST( bool aIsCli ) :
-    JOB( "netlist", aIsCli ),
+    JOB( "netlist", false, aIsCli ),
     m_filename(),
-    m_outputFile()
+    format( FORMAT::KICADSEXPR ),
+    m_spiceSaveAllVoltages( false ),
+    m_spiceSaveAllCurrents( false ),
+    m_spiceSaveAllDissipations( false ),
+    m_spiceSaveAllEvents( false )
 {
-    format = FORMAT::KICADSEXPR;
+    m_params.emplace_back( new JOB_PARAM<FORMAT>( "format", &format, format ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "spice.save_all_voltages", &m_spiceSaveAllVoltages,
+                                                m_spiceSaveAllVoltages ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "spice.save_all_currents", &m_spiceSaveAllCurrents,
+                                                m_spiceSaveAllCurrents ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "spice.save_all_events", &m_spiceSaveAllEvents,
+                                                m_spiceSaveAllEvents ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "spice.save_all_dissipations", &m_spiceSaveAllDissipations,
+                                                m_spiceSaveAllDissipations ) );
 }
+
+
+wxString JOB_EXPORT_SCH_NETLIST::GetDescription()
+{
+    return wxString::Format( _( "Schematic Netlist Export" ) );
+}
+
+
+REGISTER_JOB( sch_export_netlist, _HKI( "Schematic: Export Netlist" ), KIWAY::FACE_SCH,
+              JOB_EXPORT_SCH_NETLIST );

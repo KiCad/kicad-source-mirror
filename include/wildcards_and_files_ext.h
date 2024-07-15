@@ -193,6 +193,8 @@ public:
     static const std::string BrepFileExtension;
     static const std::string XaoFileExtension;
 
+    static const std::string KiCadJobSetFileExtension;
+
     static const wxString GerberFileExtensionsRegex;
 
     static const std::string KiCadUriPrefix;
@@ -269,6 +271,7 @@ public:
     static wxString PngFileWildcard();
     static wxString JpegFileWildcard();
     static wxString HotkeyFileWildcard();
+    static wxString JobsetFileWildcard();
 
     /**
      * @}

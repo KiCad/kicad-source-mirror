@@ -155,6 +155,7 @@ const std::string FILEEXT::EquFileExtension( "equ" );
 const std::string FILEEXT::HotkeyFileExtension( "hotkeys" );
 const std::string FILEEXT::DatabaseLibraryFileExtension( "kicad_dbl" );
 const std::string FILEEXT::HTTPLibraryFileExtension( "kicad_httplib" );
+const std::string FILEEXT::KiCadJobSetFileExtension( "kicad_jobset" );
 
 const std::string FILEEXT::ArchiveFileExtension( "zip" );
 
@@ -546,4 +547,10 @@ wxString FILEEXT::JpegFileWildcard()
 wxString FILEEXT::HotkeyFileWildcard()
 {
     return _( "Hotkey file" ) + AddFileExtListToFilter( { HotkeyFileExtension } );
+}
+
+
+wxString FILEEXT::JobsetFileWildcard()
+{
+    return _( "KiCad jobset files" ) + AddFileExtListToFilter( { KiCadJobSetFileExtension } );
 }

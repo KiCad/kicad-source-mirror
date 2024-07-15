@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,7 +34,6 @@ class STD_BITMAP_BUTTON;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GENDRILL_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,6 +42,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxBoxSizer* bMainSizer;
 		wxStaticText* staticTextOutputDir;
 		wxTextCtrl* m_outputDirectoryName;
 		STD_BITMAP_BUTTON* m_browseButton;
@@ -68,6 +68,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxStaticText* m_MicroViasInfoMsg;
 		wxStaticText* staticTextBuriedVias;
 		wxStaticText* m_BuriedViasInfoMsg;
+		wxStaticBoxSizer* bMsgSizer;
 		wxTextCtrl* m_messagesBox;
 		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_buttonReport;

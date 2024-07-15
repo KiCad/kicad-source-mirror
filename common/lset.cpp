@@ -349,6 +349,12 @@ std::string LSET::FmtHex() const
 }
 
 
+int LSET::ParseHex( const std::string& str )
+{
+    return ParseHex( str.c_str(), str.length() );
+}
+
+
 int LSET::ParseHex( const char* aStart, int aCount )
 {
     LSET tmp;

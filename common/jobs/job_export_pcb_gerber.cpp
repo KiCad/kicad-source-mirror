@@ -19,29 +19,65 @@
  */
 
 #include <jobs/job_export_pcb_gerber.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
 
 JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIsCli ) :
-    JOB( aType, aIsCli ),
-    m_filename(),
-    m_outputFile(),
-    m_drawingSheet(),
-    m_plotFootprintValues( true ),
-    m_plotRefDes( true ),
-    m_plotBorderTitleBlocks( false ),
+    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER, aType, false, aIsCli ),
     m_subtractSolderMaskFromSilk( false ),
     m_includeNetlistAttributes( true ),
     m_useX2Format( true ),
     m_disableApertureMacros( false ),
     m_useAuxOrigin( false ),
     m_useProtelFileExtension( true ),
-    m_precision( 5 ),
-    m_printMaskLayer()
+    m_precision( 5 )
 {
+    m_plotDrawingSheet = false;
+
+    m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet",
+                                                    &m_drawingSheet,
+                                                    m_drawingSheet ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_footprint_values",
+                                                &m_plotFootprintValues,
+                                                m_plotFootprintValues ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_ref_des", &m_plotRefDes, m_plotRefDes ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_drawing_sheet",
+                                                &m_plotDrawingSheet,
+                                                m_plotDrawingSheet ) );
+
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "subtract_solder_mask_from_silk",
+                                                &m_subtractSolderMaskFromSilk,
+                                                m_subtractSolderMaskFromSilk ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "include_netlist_attributes",
+                                                &m_includeNetlistAttributes,
+                                                m_includeNetlistAttributes ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_x2_format", &m_useX2Format, m_useX2Format ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "disable_aperture_macros", &m_disableApertureMacros,
+                                                m_disableApertureMacros ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_aux_origin",
+                                                &m_useAuxOrigin,
+                                                m_useAuxOrigin ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_protel_file_extension",
+                                                &m_useProtelFileExtension,
+                                                m_useProtelFileExtension ) );
+    m_params.emplace_back( new JOB_PARAM<int>( "precision", &m_precision, m_precision ) );
+    m_params.emplace_back( new JOB_PARAM<LSEQ>( "layers", &m_printMaskLayer, m_printMaskLayer ) );
 }
 
 
 JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( bool aIsCli ) :
     JOB_EXPORT_PCB_GERBER( "gerber", aIsCli )
 {
+}
+
+
+wxString JOB_EXPORT_PCB_GERBER::GetDescription()
+{
+    return wxString::Format( _( "Single gerber export" ) );
 }

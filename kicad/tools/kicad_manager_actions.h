@@ -34,6 +34,7 @@ public:
     static TOOL_ACTION newProject;
     static TOOL_ACTION newFromTemplate;
     static TOOL_ACTION newFromRepository;
+    static TOOL_ACTION newJobsetFile;
     static TOOL_ACTION openDemoProject;
     static TOOL_ACTION openProject;
     static TOOL_ACTION closeProject;

@@ -32,6 +32,7 @@
 class wxRearrangeList;
 class wxBitmapButton;
 
+class JOB_EXPORT_PCB_PLOT;
 
 /**
  * A dialog to set the plot options and create plot files in various formats.
@@ -39,11 +40,14 @@ class wxBitmapButton;
 class DIALOG_PLOT : public DIALOG_PLOT_BASE
 {
 public:
-    DIALOG_PLOT( PCB_EDIT_FRAME* parent );
+    DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame );
+    DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
+                 JOB_EXPORT_PCB_PLOT* aJob = nullptr );
 
     virtual ~DIALOG_PLOT();
 
 private:
+
     // Event called functions
     void Plot( wxCommandEvent& event ) override;
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
@@ -69,6 +73,8 @@ private:
     void applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
 
+    void updateJobFromDialog();
+
     void setPlotModeChoiceSelection( OUTLINE_MODE aPlotMode )
     {
         m_plotModeOpt->SetSelection( aPlotMode == SKETCH ? 1 : 0 );
@@ -77,7 +83,7 @@ private:
     void arrangeAllLayersList( const LSEQ& aSeq );
 
 private:
-    PCB_EDIT_FRAME*     m_parent;
+    PCB_EDIT_FRAME*     m_editFrame;
     LSEQ                m_layerList;                // List to hold CheckListBox layer numbers
     double              m_XScaleAdjust;             // X scale factor adjust to compensate
                                                     // plotter X scaling error
@@ -101,6 +107,8 @@ private:
 
     STD_BITMAP_BUTTON*  m_bpMoveUp;
     STD_BITMAP_BUTTON*  m_bpMoveDown;
+
+    JOB_EXPORT_PCB_PLOT* m_job;
 
     /// The plot layer set that last time the dialog was opened.
     static LSET         s_lastLayerSet;

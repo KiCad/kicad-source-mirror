@@ -29,17 +29,20 @@
 
 class BOARD;
 class PCB_EDIT_FRAME;
+class JOB_EXPORT_PCB_SVG;
 
 class DIALOG_EXPORT_SVG : public DIALOG_EXPORT_SVG_BASE
 {
 public:
-    DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aEditFrame, BOARD* aBoard );
+    DIALOG_EXPORT_SVG( JOB_EXPORT_PCB_SVG* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
+    DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aEditFrame, BOARD* aBoard, wxWindow* aParent );
     ~DIALOG_EXPORT_SVG() override;
 
 private:
-    BOARD*          m_board;
-    PCB_EDIT_FRAME* m_editFrame;
-    LSEQ            m_printMaskLayer;
+    BOARD*              m_board;
+    JOB_EXPORT_PCB_SVG* m_job;
+    PCB_EDIT_FRAME*     m_editFrame;
+    LSEQ                m_printMaskLayer;
     // the list of existing board layers in wxCheckListBox, with the
     // board layers id:
     std::pair<wxCheckListBox*, int> m_boxSelectLayer[PCB_LAYER_ID_COUNT];

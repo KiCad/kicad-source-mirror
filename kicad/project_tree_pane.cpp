@@ -131,6 +131,7 @@ static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.svg$" ),           // SVG print/plot files
     wxT( "^.*\\.ps$" ),            // PostScript plot files
     wxT( "^.*\\.zip$" ),           // Zip archive files
+    wxT( "^.*\\.kicad_jobset" ),     // KiCad jobs file
     nullptr                        // end of list
 };
 
@@ -168,6 +169,7 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_GIT_ADD_TO_INDEX, PROJECT_TREE_PANE::onGitAddToIndex )
     EVT_MENU( ID_GIT_REMOVE_FROM_INDEX, PROJECT_TREE_PANE::onGitRemoveFromIndex )
 
+    EVT_MENU( ID_JOBS_RUN, PROJECT_TREE_PANE::onRunSelectedJobsFile )
 
     EVT_IDLE( PROJECT_TREE_PANE::onIdle )
     EVT_PAINT( PROJECT_TREE_PANE::onPaint )
@@ -331,6 +333,7 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE: return FILEEXT::KiCadSymbolLibFileExtension;
     case TREE_FILE_TYPE::DESIGN_RULES:          return FILEEXT::DesignRulesFileExtension;
     case TREE_FILE_TYPE::ZIP_ARCHIVE:           return FILEEXT::ArchiveFileExtension;
+    case TREE_FILE_TYPE::JOBSET_FILE:          return FILEEXT::KiCadJobSetFileExtension;
 
     case TREE_FILE_TYPE::ROOT:
     case TREE_FILE_TYPE::UNKNOWN:
@@ -751,6 +754,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool can_edit = true;
     bool can_rename = true;
     bool can_delete = true;
+    bool run_jobs = false;
 
     bool vcs_has_repo    = m_TreeProject->GetGitRepo() != nullptr;
     bool vcs_can_commit  = hasChangedFiles();
@@ -820,6 +824,11 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             can_edit = false;
             break;
 
+        case TREE_FILE_TYPE::JOBSET_FILE:
+            run_jobs = true;
+            can_edit = false;
+            KI_FALLTHROUGH;
+
         case TREE_FILE_TYPE::SEXPR_SCHEMATIC:
         case TREE_FILE_TYPE::SEXPR_PCB:
             KI_FALLTHROUGH;
@@ -887,6 +896,12 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "Edit in a Text Editor" ), help_text,
                            KiBitmap( BITMAPS::editor ) );
+    }
+
+    if( run_jobs && selection.size() == 1 )
+    {
+        KIUI::AddMenuItem( &popup_menu, ID_JOBS_RUN, _( "Run Jobs" ), help_text,
+                           KiBitmap( BITMAPS::exchange ) );
     }
 
     if( can_rename )
@@ -2403,4 +2418,7 @@ void PROJECT_TREE_PANE::onGitRemoveFromIndex( wxCommandEvent& aEvent )
 }
 
 
+void PROJECT_TREE_PANE::onRunSelectedJobsFile(wxCommandEvent& event)
+{
 
+}

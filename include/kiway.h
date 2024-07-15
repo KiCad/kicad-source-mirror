@@ -104,7 +104,6 @@
 #include <frame_type.h>
 #include <mail_type.h>
 #include <ki_exception.h>
-#include <jobs/job.h>
 
 
 #define KIFACE_VERSION      1
@@ -133,6 +132,7 @@ class KIWAY;
 class KIWAY_PLAYER;
 class wxTopLevelWindow;
 class TOOL_ACTION;
+class JOB;
 
 
 /**
@@ -242,6 +242,11 @@ struct KIFACE
     virtual void GetActions( std::vector<TOOL_ACTION*>& aActions ) const = 0;
 
     virtual int HandleJob( JOB* aJob )
+    {
+        return 0;
+    }
+
+    virtual bool HandleJobConfig( JOB* aJob, wxWindow* aParent )
     {
         return 0;
     }
@@ -426,7 +431,8 @@ public:
 
     bool ProcessEvent( wxEvent& aEvent ) override;
 
-    int ProcessJob( KIWAY::FACE_T aFace, JOB* job );
+    int ProcessJob( KIWAY::FACE_T aFace, JOB* aJob );
+    bool ProcessJobConfigDialog( KIWAY::FACE_T aFace, JOB* aJob, wxWindow* aWindow );
 
     /**
      * Gets the window pointer to the blocking dialog (to send it signals)

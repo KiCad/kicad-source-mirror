@@ -46,6 +46,8 @@
 #include <kiplatform/environment.h>
 #include <locale_io.h>
 
+#include "cli/command_jobset.h"
+#include "cli/command_jobset_run.h"
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
 #include "cli/command_pcb_drc.h"
@@ -106,6 +108,8 @@ struct COMMAND_ENTRY
             handler( aHandler ), subCommands( aSub ){};
 };
 
+static CLI::JOBSET_COMMAND               jobsetCmd{};
+static CLI::JOBSET_RUN_COMMAND           jobsetRunCmd{};
 static CLI::PCB_COMMAND                  pcbCmd{};
 static CLI::PCB_DRC_COMMAND              pcbDrcCmd{};
 static CLI::PCB_RENDER_COMMAND           pcbRenderCmd{};
@@ -147,6 +151,14 @@ static CLI::VERSION_COMMAND              versionCmd{};
 
 
 static std::vector<COMMAND_ENTRY> commandStack = {
+    {
+        &jobsetCmd,
+        {
+            {
+                &jobsetRunCmd
+            }
+        }
+    },
     {
         &fpCmd,
         {

@@ -102,6 +102,7 @@ void PROJECT_TREE::LoadIcons()
     images.push_back( KiBitmapBundle( BITMAPS::library ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
     images.push_back( KiBitmapBundle( BITMAPS::editor ) );                 // DESIGN_RULES
     images.push_back( KiBitmapBundle( BITMAPS::zip ) );                    // ZIP_ARCHIVE
+    images.push_back( KiBitmapBundle( BITMAPS::editor ) );                 // JOBSET_FILE
     SetImages( images );
 
     wxVector<wxBitmapBundle> stateImages;
@@ -176,6 +177,7 @@ void PROJECT_TREE::LoadIcons()
     m_imageList->Add( toBitmap( BITMAPS::library ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
     m_imageList->Add( toBitmap( BITMAPS::editor ) );                 // DESIGN_RULES
     m_imageList->Add( toBitmap( BITMAPS::zip ) );                    // ZIP_ARCHIVE
+    m_imageList->Add( toBitmap( BITMAPS::editor ) );                 // JOBSET_FILE
 
     SetImageList( m_imageList );
 

@@ -67,27 +67,123 @@
 
 #include <fields_data_model.h>
 
+#include <dialogs/dialog_export_netlist.h>
+#include <dialogs/dialog_plot_schematic.h>
+
 
 EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
-        JOB_DISPATCHER( aKiway )
+        JOB_DISPATCHER( aKiway ),
+        m_cliSchematic( nullptr )
 {
     Register( "bom",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ) );
+                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
+                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+                {
+	                JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
+
+	                if( !bomJob )
+		                return false;
+
+                    return false;
+                } );
     Register( "pythonbom",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this,
-                         std::placeholders::_1 ) );
+                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ),
+                []( JOB* job, wxWindow* aParent ) -> bool
+                {
+                    return false;
+                });
     Register( "netlist",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ) );
+                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ),
+                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+                {
+                    JOB_EXPORT_SCH_NETLIST* netJob =
+                            dynamic_cast < JOB_EXPORT_SCH_NETLIST*>( job );
+
+                    if( !netJob )
+                        return false;
+
+                    SCH_EDIT_FRAME* editFrame =
+                            dynamic_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+
+                    DIALOG_EXPORT_NETLIST dlg( editFrame, aParent, netJob );
+                    dlg.ShowModal();
+
+                    return dlg.GetReturnCode() == wxID_OK;
+                } );
     Register( "plot",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPlot, this, std::placeholders::_1 ) );
+                std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPlot, this, std::placeholders::_1 ),
+                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+                {
+                    JOB_EXPORT_SCH_PLOT* plotJob = dynamic_cast<JOB_EXPORT_SCH_PLOT*>( job );
+
+                    if( !plotJob )
+						return false;
+
+                    SCH_EDIT_FRAME* editFrame =
+                            dynamic_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+
+                    DIALOG_PLOT_SCHEMATIC dlg( editFrame, aParent, plotJob );
+                    dlg.ShowModal();
+
+                    return false;
+                } );
     Register( "symupgrade",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ) );
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return false;
+              } );
     Register( "symsvg",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymExportSvg, this, std::placeholders::_1 ) );
-    Register( "erc",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobSchErc, this, std::placeholders::_1 ) );
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymExportSvg, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return false;
+              } );
+    Register( "erc", std::bind( &EESCHEMA_JOBS_HANDLER::JobSchErc, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return false;
+              } );
 }
 
+SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
+{
+    SCHEMATIC* sch = nullptr;
+
+    if( !Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpenNotDummy() )
+    {
+        PROJECT& project = Pgm().GetSettingsManager().Prj();
+
+        wxString schPath = aPath;
+        if( schPath.IsEmpty() )
+        {
+            wxFileName path = project.GetProjectFullName();
+            path.SetExt( FILEEXT::KiCadSchematicFileExtension );
+            path.MakeAbsolute();
+            schPath = path.GetFullPath();
+        }
+
+        if( !m_cliSchematic )
+        {
+            m_reporter->Report( _( "Loading schematic\n" ), RPT_SEVERITY_INFO );
+            m_cliSchematic = EESCHEMA_HELPERS::LoadSchematic( schPath, true, false, &project );
+        }
+
+        sch = m_cliSchematic;
+    }
+    else if( !aPath.IsEmpty() )
+    {
+        m_reporter->Report( _( "Loading schematic\n" ), RPT_SEVERITY_INFO );
+        sch = EESCHEMA_HELPERS::LoadSchematic( aPath, true, false );
+    }
+
+    if( !sch )
+    {
+        m_reporter->Report( _( "Failed to load schematic\n" ), RPT_SEVERITY_ERROR );
+    }
+
+    return sch;
+}
 
 void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSettings,
                                                 const wxString& aTheme, SCHEMATIC* aSch,
@@ -149,14 +245,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     if( !aPlotJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aPlotJob->m_filename, SCH_IO_MGR::SCH_KICAD,
-                                                      true, false );
+    SCHEMATIC* sch = getSchematic( aPlotJob->m_filename );
 
-    if( sch == nullptr )
-    {
-        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
+    if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
 
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
@@ -248,14 +340,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     if( !aNetJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD,
-                                                      true, false );
+    SCHEMATIC* sch = getSchematic( aNetJob->m_filename );
 
-    if( sch == nullptr )
-    {
-        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
+    if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -335,16 +423,16 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    if( aNetJob->m_outputFile.IsEmpty() )
+    if( aNetJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( fileExt );
 
-        aNetJob->m_outputFile = fn.GetFullName();
+        aNetJob->SetOutputPath( fn.GetFullName() );
     }
 
-    bool res = helper->WriteNetlist( aNetJob->m_outputFile, netlistOption, *m_reporter );
+    bool res = helper->WriteNetlist( aNetJob->GetOutputPath(), netlistOption, *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -360,14 +448,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     if( !aBomJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aBomJob->m_filename, SCH_IO_MGR::SCH_KICAD,
-                                                      true, false );
+    SCHEMATIC* sch = getSchematic( aBomJob->m_filename );
 
-    if( sch == nullptr )
-    {
-        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
+    if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
 
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
@@ -540,21 +624,21 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     dataModel.ApplyBomPreset( preset );
 
-    if( aBomJob->m_outputFile.IsEmpty() )
+    if( aBomJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( FILEEXT::CsvFileExtension );
 
-        aBomJob->m_outputFile = fn.GetFullName();
+        aBomJob->SetOutputPath( fn.GetFullName() );
     }
 
     wxFile f;
 
-    if( !f.Open( aBomJob->m_outputFile, wxFile::write ) )
+    if( !f.Open( aBomJob->GetOutputPath(), wxFile::write ) )
     {
         m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ),
-                                              aBomJob->m_outputFile ),
+                                              aBomJob->GetOutputPath() ),
                             RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
@@ -619,14 +703,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     if( !aNetJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD,
-                                                      true, false );
+    SCHEMATIC* sch = getSchematic( aNetJob->m_filename );
 
-    if( sch == nullptr )
-    {
-        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
+    if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -657,16 +737,16 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
             std::make_unique<NETLIST_EXPORTER_XML>( sch );
 
-    if( aNetJob->m_outputFile.IsEmpty() )
+    if( aNetJob->GetOutputPath().IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() + "-bom" );
         fn.SetExt( FILEEXT::XmlFileExtension );
 
-        aNetJob->m_outputFile = fn.GetFullName();
+        aNetJob->SetOutputPath( fn.GetFullName() );
     }
 
-    bool res = xmlNetlist->WriteNetlist( aNetJob->m_outputFile, GNL_OPT_BOM, *m_reporter );
+    bool res = xmlNetlist->WriteNetlist( aNetJob->GetOutputPath(), GNL_OPT_BOM, *m_reporter );
 
     if( !res )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -967,14 +1047,10 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     if( !ercJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( ercJob->m_filename, SCH_IO_MGR::SCH_KICAD,
-                                                      true, false );
+    SCHEMATIC* sch = getSchematic( ercJob->m_filename );
 
-    if( sch == nullptr )
-    {
-        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
+    if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
 
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 

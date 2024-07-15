@@ -56,7 +56,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
             },
             [&]( const std::string& aString )
             {
-                m_VisibleLayers.ParseHex( aString.c_str(), aString.size() );
+                m_VisibleLayers.ParseHex( aString );
             },
             LSET::AllLayersMask().FmtHex() ) );
 

@@ -51,29 +51,47 @@
 #include <kiplatform/environment.h>
 #include <wx/log.h>
 
+#include <jobs/job_export_sch_plot.h>
+
 
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
 HPGL_PAGE_SIZE DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = HPGL_PAGE_SIZE::DEFAULT;
 
 
-DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
-        : DIALOG_PLOT_SCHEMATIC_BASE( parent ),
-          m_parent( parent ),
+DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame ) :
+        DIALOG_PLOT_SCHEMATIC( aEditFrame, aEditFrame )
+{
+
+}
+
+
+DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent,
+                                              JOB_EXPORT_SCH_PLOT* aJob )
+        : DIALOG_PLOT_SCHEMATIC_BASE( aEditFrame ),
+          m_editFrame( aEditFrame ),
           m_plotFormat( PLOT_FORMAT::UNDEFINED ),
           m_HPGLPenSize( 1.0 ),
-          m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
-          m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits )
+          m_defaultLineWidth( aEditFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
+          m_penWidth( aEditFrame, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits ), m_job( aJob )
 {
     m_configChanged = false;
 
-    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-
-    m_MessagesBox->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
-
-    SetupStandardButtons( { { wxID_OK,     _( "Plot All Pages" )    },
-                            { wxID_APPLY,  _( "Plot Current Page" ) },
-                            { wxID_CANCEL, _( "Close" )             } } );
+    if( !m_job )
+    {
+        m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+        m_MessagesBox->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
+        SetupStandardButtons( { { wxID_OK, _( "Plot All Pages" ) },
+                                { wxID_APPLY, _( "Plot Current Page" ) },
+                                { wxID_CANCEL, _( "Close" ) } } );
+    }
+    else
+    {
+        m_browseButton->Hide();
+        m_MessagesBox->Hide();
+        SetupStandardButtons( { { wxID_OK, _( "Save" ) },
+                                { wxID_CANCEL, _( "Close" ) } } );
+    }
 
     initDlg();
 
@@ -87,72 +105,104 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
-    if( cfg )
+    if( !m_job )
     {
-        for( COLOR_SETTINGS* settings : m_parent->GetSettingsManager()->GetColorSettingsList() )
+        if( cfg )
         {
-            int idx = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+            for( COLOR_SETTINGS* settings : m_editFrame->GetSettingsManager()->GetColorSettingsList() )
+            {
+                int idx = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
-            if( settings->GetFilename() == cfg->m_PlotPanel.color_theme )
-                m_colorTheme->SetSelection( idx );
+                if( settings->GetFilename() == cfg->m_PlotPanel.color_theme )
+                    m_colorTheme->SetSelection( idx );
+            }
+
+            m_colorTheme->Enable( cfg->m_PlotPanel.color );
+
+            m_plotBackgroundColor->Enable( cfg->m_PlotPanel.color );
+            m_plotBackgroundColor->SetValue( cfg->m_PlotPanel.background_color );
+
+            // Set color or B&W plot option
+            setModeColor( cfg->m_PlotPanel.color );
+
+            // Set plot or not frame reference option
+            setPlotDrawingSheet( cfg->m_PlotPanel.frame_reference );
+
+            setOpenFileAfterPlot( cfg->m_PlotPanel.open_file_after_plot );
+
+            m_plotPDFPropertyPopups->SetValue( cfg->m_PlotPanel.pdf_property_popups );
+            m_plotPDFMetadata->SetValue( cfg->m_PlotPanel.pdf_metadata );
+
+            // HPGL plot origin and unit system configuration
+            m_plotOriginOpt->SetSelection( cfg->m_PlotPanel.hpgl_origin );
+
+            m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( cfg->m_PlotPanel.hpgl_paper_size );
+
+            // HPGL Pen Size is stored in mm in config
+            m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * schIUScale.IU_PER_MM;
+
+            // Switch to the last save plot format
+            PLOT_FORMAT fmt = static_cast<PLOT_FORMAT>( cfg->m_PlotPanel.format );
+
+            switch( fmt  )
+            {
+            default:
+            case PLOT_FORMAT::POST: m_plotFormatOpt->SetSelection( 0 ); break;
+            case PLOT_FORMAT::PDF:  m_plotFormatOpt->SetSelection( 1 ); break;
+            case PLOT_FORMAT::SVG:  m_plotFormatOpt->SetSelection( 2 ); break;
+            case PLOT_FORMAT::DXF:  m_plotFormatOpt->SetSelection( 3 ); break;
+            case PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
+            }
+
+            if( fmt == PLOT_FORMAT::DXF || fmt == PLOT_FORMAT::HPGL )
+                m_plotBackgroundColor->Disable();
+
+            // Set the default line width (pen width which should be used for
+            // items that do not have a pen size defined (like frame ref)
+            // the default line width is stored in mils in config
+            m_defaultLineWidth.SetValue( schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
         }
 
-        m_colorTheme->Enable( cfg->m_PlotPanel.color );
+        // Initialize HPGL specific widgets
+        m_penWidth.SetValue( m_HPGLPenSize );
 
-        m_plotBackgroundColor->Enable( cfg->m_PlotPanel.color );
-        m_plotBackgroundColor->SetValue( cfg->m_PlotPanel.background_color );
+        // Plot directory
+        SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
+        wxString            path = settings.m_PlotDirectoryName;
+#ifdef __WINDOWS__
+        path.Replace( '/', '\\' );
+#endif
+        m_outputDirectoryName->SetValue( path );
+    }
+    else if( m_job )
+    {
+        m_plotFormatOpt->SetSelection( static_cast<int>( m_job->m_plotFormat ) );
+		m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
+		m_penWidth.SetValue( m_job->m_HPGLPenSize );
+        m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_job->m_HPGLPaperSizeSelect );
+		m_plotPDFPropertyPopups->SetValue( m_job->m_PDFPropertyPopups );
+		m_plotPDFMetadata->SetValue( m_job->m_PDFMetadata );
+		m_colorTheme->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
+		m_ModeColorOption->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
+		m_plotOriginOpt->SetSelection( static_cast<int>( m_job->m_HPGLPlotOrigin ) );
+		m_pageSizeSelect = static_cast<int>( m_job->m_pageSizeSelect );
 
-        // Set color or B&W plot option
-        setModeColor( cfg->m_PlotPanel.color );
-
-        // Set plot or not frame reference option
-        setPlotDrawingSheet( cfg->m_PlotPanel.frame_reference );
-
-        setOpenFileAfterPlot( cfg->m_PlotPanel.open_file_after_plot );
-
-        m_plotPDFPropertyPopups->SetValue( cfg->m_PlotPanel.pdf_property_popups );
-        m_plotPDFMetadata->SetValue( cfg->m_PlotPanel.pdf_metadata );
-
-        // HPGL plot origin and unit system configuration
-        m_plotOriginOpt->SetSelection( cfg->m_PlotPanel.hpgl_origin );
-
-        m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( cfg->m_PlotPanel.hpgl_paper_size );
-
-        // HPGL Pen Size is stored in mm in config
-        m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * schIUScale.IU_PER_MM;
-
-        // Switch to the last save plot format
-        PLOT_FORMAT fmt = static_cast<PLOT_FORMAT>( cfg->m_PlotPanel.format );
-
-        switch( fmt  )
+        // Set the plot format
+        switch( m_job->m_plotFormat )
         {
         default:
-        case PLOT_FORMAT::POST: m_plotFormatOpt->SetSelection( 0 ); break;
-        case PLOT_FORMAT::PDF:  m_plotFormatOpt->SetSelection( 1 ); break;
-        case PLOT_FORMAT::SVG:  m_plotFormatOpt->SetSelection( 2 ); break;
-        case PLOT_FORMAT::DXF:  m_plotFormatOpt->SetSelection( 3 ); break;
-        case PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
+        case SCH_PLOT_FORMAT::POST: m_plotFormatOpt->SetSelection( 0 ); break;
+        case SCH_PLOT_FORMAT::PDF: m_plotFormatOpt->SetSelection( 1 ); break;
+        case SCH_PLOT_FORMAT::SVG: m_plotFormatOpt->SetSelection( 2 ); break;
+        case SCH_PLOT_FORMAT::DXF: m_plotFormatOpt->SetSelection( 3 ); break;
+        case SCH_PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
         }
 
-        if( fmt == PLOT_FORMAT::DXF || fmt == PLOT_FORMAT::HPGL )
-            m_plotBackgroundColor->Disable();
+        // And then hide it
+        m_plotFormatOpt->Hide();
 
-        // Set the default line width (pen width which should be used for
-        // items that do not have a pen size defined (like frame ref)
-        // the default line width is stored in mils in config
-        m_defaultLineWidth.SetValue( schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
+        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
     }
-
-    // Initialize HPGL specific widgets
-    m_penWidth.SetValue( m_HPGLPenSize );
-
-    // Plot directory
-    SCHEMATIC_SETTINGS& settings = m_parent->Schematic().Settings();
-    wxString            path     = settings.m_PlotDirectoryName;
-#ifdef __WINDOWS__
-    path.Replace( '/', '\\' );
-#endif
-    m_outputDirectoryName->SetValue( path );
 }
 
 
@@ -185,7 +235,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
 
     wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    wxFileName fn( Prj().AbsolutePath( m_parent->Schematic().Root().GetFileName() ) );
+    wxFileName fn( Prj().AbsolutePath( m_editFrame->Schematic().Root().GetFileName() ) );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
     wxFileName relPathTest; // Used to test if we can make the path relative
@@ -331,7 +381,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
     wxString path = m_outputDirectoryName->GetValue();
     path.Replace( '\\', '/' );
 
-    SCHEMATIC_SETTINGS& settings = m_parent->Schematic().Settings();
+    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
 
     if( settings.m_PlotDirectoryName != path )
         m_configChanged = true;
@@ -346,7 +396,7 @@ COLOR_SETTINGS* DIALOG_PLOT_SCHEMATIC::getColorSettings()
 
     if( selection < 0 )
     {
-        return m_parent->GetSettingsManager()->GetColorSettings(
+        return m_editFrame->GetSettingsManager()->GetColorSettings(
                 COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT );
     }
 
@@ -370,13 +420,13 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
 {
     wxBusyCursor dummy;
 
-    SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
+    SCH_RENDER_SETTINGS renderSettings( *m_editFrame->GetRenderSettings() );
     renderSettings.m_ShowHiddenPins = false;
     renderSettings.m_ShowHiddenFields = false;
 
     getPlotOptions( &renderSettings );
 
-    std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( m_parent );
+    std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( m_editFrame );
 
     COLOR_SETTINGS*   colors = getColorSettings();
 
@@ -426,7 +476,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                SCHEMATIC& schematic = m_parent->Schematic();
+                SCHEMATIC& schematic = m_editFrame->Schematic();
                 return schematic.ResolveTextVar( &schematic.CurrentSheet(), token, 0 );
             };
 
@@ -444,7 +494,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
     // project path is not defined.
     if( Prj().IsNullProject() )
     {
-        SCH_SCREEN* screen = m_parent->Schematic().RootScreen();
+        SCH_SCREEN* screen = m_editFrame->Schematic().RootScreen();
 
         if( screen && !screen->GetFileName().IsEmpty() )
         {

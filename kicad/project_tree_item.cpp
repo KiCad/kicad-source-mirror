@@ -193,6 +193,11 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 
         break;
 
+    case TREE_FILE_TYPE::JOBSET_FILE:
+        frame->OpenJobsFile( fullFileName );
+
+        break;
+
     case TREE_FILE_TYPE::DIRECTORY:
         m_parent->Toggle( id );
         break;

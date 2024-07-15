@@ -42,11 +42,13 @@ class SCH_EDIT_FRAME;
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
 
+class JOB_EXPORT_SCH_PLOT;
 
 class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
 {
 public:
-    DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent );
+    DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame );
+    DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_SCH_PLOT* aJob = nullptr );
 
     /**
      * Return true if the project configuration was modified.
@@ -142,7 +144,7 @@ private:
      */
     wxString getOutputPath();
 
-    SCH_EDIT_FRAME* m_parent;
+    SCH_EDIT_FRAME* m_editFrame;
     bool            m_configChanged;        // true if a project config param has changed
     PLOT_FORMAT     m_plotFormat;
     static int      m_pageSizeSelect;       // Static to keep last option for some format
@@ -150,6 +152,7 @@ private:
     double             m_HPGLPenSize;
     UNIT_BINDER     m_defaultLineWidth;
     UNIT_BINDER     m_penWidth;
+    JOB_EXPORT_SCH_PLOT*  m_job;
 };
 
 #endif    // __DIALOG_PLOT_SCHEMATIC__

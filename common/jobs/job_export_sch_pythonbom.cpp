@@ -19,11 +19,22 @@
  */
 
 #include <jobs/job_export_sch_pythonbom.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
 
 JOB_EXPORT_SCH_PYTHONBOM::JOB_EXPORT_SCH_PYTHONBOM( bool aIsCli ) :
-        JOB( "pythonbom", aIsCli ),
-        m_filename(),
-        m_outputFile()
+        JOB( "pythonbom", false, aIsCli ),
+        m_filename()
 {
 }
+
+
+wxString JOB_EXPORT_SCH_PYTHONBOM::GetDescription()
+{
+    return wxString::Format( _( "Schematic PythonBOM export" ) );
+}
+
+
+REGISTER_JOB( sch_export_pythonbom, _HKI( "Schematic: Export PythonBOM" ), KIWAY::FACE_SCH,
+              JOB_EXPORT_SCH_PYTHONBOM );

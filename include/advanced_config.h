@@ -494,6 +494,15 @@ public:
     bool m_EnableGit;
 
     /**
+     * Enable jobsets
+     *
+     * Setting name: "EnableJobs"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_EnableJobset;
+
+    /**
      * Enable option to load lib files with text editor.
      *
      * Setting name: "EnableLibWithText"

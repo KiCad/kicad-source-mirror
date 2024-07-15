@@ -288,6 +288,12 @@ public:
     bool IsProjectOpen() const;
 
     /**
+     * Helper for checking if we have a project open that is not a dummy project
+     * @return true if a call to Prj() will succeed and the project is not a dummy project
+     */
+    bool IsProjectOpenNotDummy() const;
+
+    /**
      * A helper while we are not MDI-capable -- return the one and only project
      * @return the loaded project
      */

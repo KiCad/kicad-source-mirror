@@ -19,11 +19,25 @@
  */
 
 #include <jobs/job_export_pcb_ipc2581.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
+#include <wildcards_and_files_ext.h>
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS,
+                              {
+                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCHES, "in" },
+                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS, "mm" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION,
+                              {
+                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B, "B" },
+                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C, "C" },
+                              } )
 
 JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581( bool aIsCli ) :
-    JOB( "ipc2581", aIsCli ),
+    JOB( "ipc2581", false, aIsCli ),
     m_filename(),
-    m_outputFile(),
     m_drawingSheet(),
     m_units( IPC2581_UNITS::MILLIMETERS ),
     m_version( IPC2581_VERSION::C ),
@@ -35,4 +49,38 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581( bool aIsCli ) :
     m_colDistPn(),
     m_colDist()
 {
+    m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
+    m_params.emplace_back( new JOB_PARAM<IPC2581_UNITS>( "units", &m_units, m_units ) );
+    m_params.emplace_back( new JOB_PARAM<IPC2581_VERSION>( "version", &m_version, m_version ) );
+    m_params.emplace_back( new JOB_PARAM<int>( "precision", &m_precision, m_precision ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "compress", &m_compress, m_compress ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.internal_id",
+                                                    &m_colInternalId,
+                                                    m_colInternalId ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.mfg_pn",
+                                                    &m_colMfgPn, m_colMfgPn ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.mfg", &m_colMfg, m_colMfg ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.dist_pn",
+                                                    &m_colDistPn,
+                                                    m_colDistPn ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.dist", &m_colDist, m_colDist ) );
 }
+
+
+wxString JOB_EXPORT_PCB_IPC2581::GetDescription()
+{
+    return wxString::Format( _( "IPC2581 export" ) );
+}
+
+
+void JOB_EXPORT_PCB_IPC2581::SetDefaultOutputPath( const wxString& aReferenceName )
+{
+    wxFileName fn = aReferenceName;
+
+    fn.SetExt( FILEEXT::Ipc2581FileExtension );
+
+    SetOutputPath( fn.GetFullName() );
+}
+
+REGISTER_JOB( pcb_export_ipc2581, _HKI( "PCB: Export IPC2581" ), KIWAY::FACE_PCB,
+              JOB_EXPORT_PCB_IPC2581 );

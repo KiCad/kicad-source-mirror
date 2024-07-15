@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,21 +13,21 @@
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
-#include <wx/notebook.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/panel.h>
+#include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/notebook.h>
+#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/dialog.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -50,9 +50,11 @@ class DIALOG_EXPORT_NETLIST_BASE : public DIALOG_SHIM
 		{
 			ID_CHANGE_NOTEBOOK_PAGE = 1000,
 			ID_ADD_PLUGIN,
-			ID_DEL_PLUGIN
+			ID_DEL_PLUGIN,
 		};
 
+		wxStaticText* m_staticTextOutputPath;
+		wxTextCtrl* m_outputPath;
 		wxNotebook* m_NoteBook;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;
 		wxBoxSizer* m_buttonSizer;
@@ -91,7 +93,7 @@ class NETLIST_DIALOG_ADD_GENERATOR_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			wxID_BROWSE_PLUGINS = 1000
+			wxID_BROWSE_PLUGINS = 1000,
 		};
 
 		wxStaticText* m_staticTextName;

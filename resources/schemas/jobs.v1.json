@@ -1,0 +1,66 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.kicad.org/jobs.v1.json",
+    "title": "KiCad Jobs Schema",
+    "description": "KiCad Jobs",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+          "type": "string",
+          "description": "JSON schema reference"
+        },
+        "meta": {
+          "type": "object",
+            "$ref": "#/definitions/Meta"
+        },    
+        "jobs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Job"
+          }
+        },
+    },
+    "required": [
+        "meta",
+        "jobs"
+    ],
+    "definitions": {
+        "Job": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Job type",
+              "enum": ["pcb_drill"]
+            },
+            "meta": {
+              "type": "object",
+                "$ref": "#/definitions/Meta"
+            },
+            "settings": {
+              "type": "object"
+            },
+          },
+          "required": [
+            "meta",
+            "type",
+            "settings"
+          ]
+        },
+        "Meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "version": {
+              "type": "integer",
+              "description": "File format version"
+            }
+          },
+          "required": [
+            "version"
+          ]
+        },
+    }
+}

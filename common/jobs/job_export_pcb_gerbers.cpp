@@ -19,7 +19,9 @@
  */
 
 #include <jobs/job_export_pcb_gerbers.h>
-
+#include <jobs/lset_json.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
 JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS( bool aIsCli ) :
         JOB_EXPORT_PCB_GERBER( "gerbers", aIsCli ),
@@ -27,4 +29,22 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS( bool aIsCli ) :
         m_layersIncludeOnAllSet( false ),
         m_useBoardPlotParams( false )
 {
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_board_plot_params", &m_useBoardPlotParams,
+                                                m_useBoardPlotParams ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "layers_include_on_all_set", &m_layersIncludeOnAllSet,
+                                                m_layersIncludeOnAllSet ) );
+
+    m_params.emplace_back( new JOB_PARAM<LSET>( "layers_include_on_all", &m_layersIncludeOnAll,
+                                                m_layersIncludeOnAll ) );
 }
+
+
+wxString JOB_EXPORT_PCB_GERBERS::GetDescription()
+{
+    return wxString::Format( _( "Multi gerber export" ) );
+}
+
+
+REGISTER_JOB( pcb_export_gerbers, _HKI( "PCB: Export Gerbers" ), KIWAY::FACE_PCB,
+              JOB_EXPORT_PCB_GERBERS );

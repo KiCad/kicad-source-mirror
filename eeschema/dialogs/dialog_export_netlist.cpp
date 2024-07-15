@@ -48,6 +48,7 @@
 #include <eeschema_settings.h>
 #include <schematic.h>
 #include <paths.h>
+#include <jobs/job_export_sch_netlist.h>
 
 #include <eeschema_id.h>
 #include <wx/checkbox.h>
@@ -80,6 +81,17 @@ enum PANEL_NETLIST_INDEX
     PANELCUSTOMBASE = DEFINED_NETLISTS_COUNT
 };
 
+
+std::map<JOB_EXPORT_SCH_NETLIST::FORMAT, wxString> jobNetlistNameLookup =
+{
+	{ JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR,      _( "KiCad" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2, _( "OrcadPCB2" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO, _( "Allegro" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::PADS, _( "PADS" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::CADSTAR, _( "CadStar" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE, _( "SPICE" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL, _( "SPICE Model" ) }
+};
 
 /* wxPanels for creating the NoteBook pages for each netlist format: */
 class EXPORT_NETLIST_PAGE : public wxPanel
@@ -195,7 +207,16 @@ EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& a
 
 
 DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame ) :
-        DIALOG_EXPORT_NETLIST_BASE( aEditFrame )
+        DIALOG_EXPORT_NETLIST( aEditFrame, aEditFrame )
+{
+
+}
+
+
+DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent,
+                                              JOB_EXPORT_SCH_NETLIST* aJob ) :
+        DIALOG_EXPORT_NETLIST_BASE( aParent ),
+        m_job( aJob )
 {
     m_editFrame = aEditFrame;
 
@@ -235,16 +256,41 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame ) :
 
     InstallPageSpice();
     InstallPageSpiceModel();
-    InstallCustomPages();
 
-    SetupStandardButtons( { { wxID_OK,     _( "Export Netlist" ) },
-                            { wxID_CANCEL, _( "Close" )          } } );
+    wxString selectedPageFormatName;
+    if( !m_job )
+    {
+        m_outputPath->Hide();
+        m_staticTextOutputPath->Hide();
+        InstallCustomPages();
+
+        SetupStandardButtons( { { wxID_OK,     _( "Export Netlist" ) },
+                                { wxID_CANCEL, _( "Close" )          } } );
+
+        selectedPageFormatName = settings.m_NetFormatName;
+    }
+    else
+    {
+        m_MessagesBox->Hide();
+        m_outputPath->SetValue( m_job->GetOutputPath() );
+
+        SetupStandardButtons( { { wxID_OK,     _( "Save" ) },
+                                { wxID_CANCEL, _( "Close" )          } } );
+
+        // custom netlist (external invokes, not supported)
+        auto it = jobNetlistNameLookup.find( m_job->format );
+        if( it != jobNetlistNameLookup.end() )
+			selectedPageFormatName = it->second;
+
+        m_buttonAddGenerator->Hide();
+        m_buttonDelGenerator->Hide();
+    }
 
     for( int ii = 0; ii < DEFINED_NETLISTS_COUNT + CUSTOMPANEL_COUNTMAX; ++ii )
     {
         if( EXPORT_NETLIST_PAGE* candidate = m_PanelNetType[ii] )
         {
-            if( candidate->GetPageNetFmtName() == settings.m_NetFormatName )
+            if( candidate->GetPageNetFmtName() == selectedPageFormatName )
             {
                 m_NoteBook->ChangeSelection( ii );
                 break;
@@ -393,7 +439,6 @@ void DIALOG_EXPORT_NETLIST::OnNetlistTypeSelection( wxNotebookEvent& event )
 bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
 {
     bool changed = false;
-
     bool saveAllVoltages = m_PanelNetType[ PANELSPICE ]->m_SaveAllVoltages->IsChecked();
     bool saveAllCurrents = m_PanelNetType[ PANELSPICE ]->m_SaveAllCurrents->IsChecked();
     bool saveAllDissipations = m_PanelNetType[ PANELSPICE ]->m_SaveAllDissipations->IsChecked();
@@ -402,26 +447,46 @@ bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
     bool curSheetAsRoot = m_PanelNetType[ PANELSPICE ]->m_CurSheetAsRoot->GetValue();
     bool spiceModelCurSheetAsRoot = m_PanelNetType[ PANELSPICEMODEL ]->m_CurSheetAsRoot->GetValue();
 
-    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
-    wxString netFormatName = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
+    if( !m_job )
+    {
+        SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
+        wxString netFormatName = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
 
-    changed |= ( settings.m_SpiceSaveAllVoltages != saveAllVoltages );
-    changed |= ( settings.m_SpiceSaveAllCurrents != saveAllCurrents );
-    changed |= ( settings.m_SpiceSaveAllDissipations != saveAllDissipations );
-    changed |= ( settings.m_SpiceSaveAllEvents != saveAllEvents );
-    changed |= ( settings.m_SpiceCommandString != spiceCmdString );
-    changed |= ( settings.m_SpiceCurSheetAsRoot != curSheetAsRoot );
-    changed |= ( settings.m_SpiceModelCurSheetAsRoot != spiceModelCurSheetAsRoot );
-    changed |= ( settings.m_NetFormatName != netFormatName );
+        changed |= ( settings.m_SpiceSaveAllVoltages != saveAllVoltages );
+        changed |= ( settings.m_SpiceSaveAllCurrents != saveAllCurrents );
+        changed |= ( settings.m_SpiceSaveAllDissipations != saveAllDissipations );
+        changed |= ( settings.m_SpiceSaveAllEvents != saveAllEvents );
+        changed |= ( settings.m_SpiceCommandString != spiceCmdString );
+        changed |= ( settings.m_SpiceCurSheetAsRoot != curSheetAsRoot );
+        changed |= ( settings.m_SpiceModelCurSheetAsRoot != spiceModelCurSheetAsRoot );
+        changed |= ( settings.m_NetFormatName != netFormatName );
 
-    settings.m_SpiceSaveAllVoltages     = saveAllVoltages;
-    settings.m_SpiceSaveAllCurrents     = saveAllCurrents;
-    settings.m_SpiceSaveAllDissipations = saveAllDissipations;
-    settings.m_SpiceSaveAllEvents       = saveAllEvents;
-    settings.m_SpiceCommandString       = spiceCmdString;
-    settings.m_SpiceCurSheetAsRoot      = curSheetAsRoot;
-    settings.m_SpiceModelCurSheetAsRoot = spiceModelCurSheetAsRoot;
-    settings.m_NetFormatName            = netFormatName;
+        settings.m_SpiceSaveAllVoltages     = saveAllVoltages;
+        settings.m_SpiceSaveAllCurrents     = saveAllCurrents;
+        settings.m_SpiceSaveAllDissipations = saveAllDissipations;
+        settings.m_SpiceSaveAllEvents       = saveAllEvents;
+        settings.m_SpiceCommandString       = spiceCmdString;
+        settings.m_SpiceCurSheetAsRoot      = curSheetAsRoot;
+        settings.m_SpiceModelCurSheetAsRoot = spiceModelCurSheetAsRoot;
+        settings.m_NetFormatName            = netFormatName;
+    }
+    else
+    {
+        for (auto i = jobNetlistNameLookup.begin(); i != jobNetlistNameLookup.end(); ++i)
+        {
+            if( i->second == m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName() )
+            {
+                m_job->format = i->first;
+                break;
+            }
+        }
+
+        m_job->SetOutputPath( m_outputPath->GetValue() );
+        m_job->m_spiceSaveAllVoltages = saveAllVoltages;
+        m_job->m_spiceSaveAllCurrents = saveAllCurrents;
+        m_job->m_spiceSaveAllDissipations = saveAllDissipations;
+        m_job->m_spiceSaveAllEvents = saveAllEvents;
+    }
 
     return changed;
 }
@@ -434,8 +499,18 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     wxString    fileExt;
     wxString    title = _( "Save Netlist File" );
 
-    if( NetlistUpdateOpt() )
-        m_editFrame->OnModify();
+
+    if (m_job)
+    {
+        NetlistUpdateOpt();
+        return true;
+    }
+    else
+    {
+        if( NetlistUpdateOpt() )
+            m_editFrame->OnModify();
+    }
+
 
     EXPORT_NETLIST_PAGE* currPage;
     currPage = (EXPORT_NETLIST_PAGE*) m_NoteBook->GetCurrentPage();

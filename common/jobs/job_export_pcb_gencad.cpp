@@ -22,7 +22,7 @@
 
 
 JOB_EXPORT_PCB_GENCAD::JOB_EXPORT_PCB_GENCAD( bool aIsCli ) :
-    JOB( "gencad", aIsCli ),
+    JOB( "gencad", false, aIsCli ),
     m_flipBottomPads( false ),
     m_useIndividualShapes( false ),
     m_storeOriginCoords( false ),

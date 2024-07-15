@@ -120,6 +120,7 @@ static const wxChar ResolveTextRecursionDepth[] = wxT( "ResolveTextRecursionDept
 static const wxChar EnableExtensionSnaps[] = wxT( "EnableExtensionSnaps" );
 static const wxChar EnableSnapAnchorsDebug[] = wxT( "EnableSnapAnchorsDebug" );
 static const wxChar EnableODB[] = wxT( "EnableODB" );
+static const wxChar EnableJobset[] = wxT( "EnableJobset" );
 } // namespace KEYS
 
 
@@ -248,6 +249,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableDesignBlocks        = false;
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
+    m_EnableJobset              = false;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;
 
@@ -479,6 +481,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGit,
                                                 &m_EnableGit, m_EnableGit ) );
 
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableJobset,
+                                                &m_EnableJobset, m_EnableJobset ) );
+
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibWithText,
                                                 &m_EnableLibWithText, m_EnableLibWithText ) );
 
@@ -528,7 +533,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ResolveTextRecursionDepth,
                                                   &m_ResolveTextRecursionDepth,
                                                   m_ResolveTextRecursionDepth, 0, 10 ) );
-    
+
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableODB,
                                             &m_EnableODB, m_EnableODB ) );
 

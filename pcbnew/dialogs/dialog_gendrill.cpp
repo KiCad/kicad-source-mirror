@@ -45,6 +45,7 @@
 #include <wx/msgdlg.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
+#include <jobs/job_export_pcb_drill.h>
 
 // list of allowed precision for EXCELLON files, for integer format:
 // Due to difference between inches and mm,
@@ -66,7 +67,7 @@ int BOARD_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
 }
 
 
-DIALOG_GENDRILL::DIALOG_GENDRILL(  PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent  ) :
+DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent  ) :
     DIALOG_GENDRILL_BASE( aParent )
 {
     m_pcbEditFrame = aPcbEditFrame;
@@ -81,6 +82,30 @@ DIALOG_GENDRILL::DIALOG_GENDRILL(  PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aPar
 
     SetReturnCode( 1 );
     initDialog();
+    GetSizer()->SetSizeHints( this );
+}
+
+
+
+DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_DRILL* aJob,
+                                  wxWindow* aParent ) :
+    DIALOG_GENDRILL_BASE( aParent )
+{
+    m_pcbEditFrame = aPcbEditFrame;
+    m_board = m_pcbEditFrame->GetBoard();
+    m_job = aJob;
+
+    // hide ui elements that dont belong for job config
+    m_buttonReport->Hide();
+    bMainSizer->Remove( bMsgSizer );
+    m_messagesBox->Hide();
+
+    m_sdbSizerApply->Hide();
+    SetupStandardButtons( { { wxID_OK, _( "Save" ) }, { wxID_CANCEL, _( "Cancel" ) } } );
+    m_buttonsSizer->Layout();
+
+    SetReturnCode( 1 );
+
     GetSizer()->SetSizeHints( this );
 }
 
@@ -100,24 +125,40 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 }
 
 
+bool DIALOG_GENDRILL::TransferDataFromWindow()
+{
+    return true;
+}
+
+
+bool DIALOG_GENDRILL::TransferDataToWindow()
+{
+	initDialog();
+	return true;
+}
+
+
 void DIALOG_GENDRILL::initDialog()
 {
-    auto cfg = m_pcbEditFrame->GetPcbNewSettings();
+    if( !m_job )
+    {
+        auto cfg = m_pcbEditFrame->GetPcbNewSettings();
 
-    m_Merge_PTH_NPTH           = cfg->m_GenDrill.merge_pth_npth;
-    m_MinimalHeader            = cfg->m_GenDrill.minimal_header;
-    m_Mirror                   = cfg->m_GenDrill.mirror;
-    m_UnitDrillIsInch          = cfg->m_GenDrill.unit_drill_is_inch;
-    m_UseRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
-    m_drillFileType            = cfg->m_GenDrill.drill_file_type;
-    m_mapFileType              = cfg->m_GenDrill.map_file_type;
-    m_ZerosFormat              = cfg->m_GenDrill.zeros_format;
+        m_Merge_PTH_NPTH = cfg->m_GenDrill.merge_pth_npth;
+        m_MinimalHeader = cfg->m_GenDrill.minimal_header;
+        m_Mirror = cfg->m_GenDrill.mirror;
+        m_UnitDrillIsInch = cfg->m_GenDrill.unit_drill_is_inch;
+        m_UseRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
+        m_drillFileType = cfg->m_GenDrill.drill_file_type;
+        m_mapFileType = cfg->m_GenDrill.map_file_type;
+        m_ZerosFormat = cfg->m_GenDrill.zeros_format;
+
+        // Ensure validity of m_mapFileType
+        if( m_mapFileType < 0 || m_mapFileType >= (int) m_Choice_Drill_Map->GetCount() )
+            m_mapFileType = m_Choice_Drill_Map->GetCount() - 1; // last item in list = default = PDF
+	}
 
     m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
-
-    // Ensure validity of m_mapFileType
-    if( m_mapFileType < 0 || m_mapFileType >= (int)m_Choice_Drill_Map->GetCount() )
-        m_mapFileType = m_Choice_Drill_Map->GetCount() - 1;  // last item in list = default = PDF
 
     InitDisplayParams();
 }
@@ -125,21 +166,46 @@ void DIALOG_GENDRILL::initDialog()
 
 void DIALOG_GENDRILL::InitDisplayParams()
 {
-    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    if( !m_job )
+    {
+        m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    m_rbExcellon->SetValue( m_drillFileType == 0 );
-    m_rbGerberX2->SetValue( m_drillFileType == 1 );
-    m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
-    m_Choice_Zeros_Format->SetSelection( m_ZerosFormat );
-    UpdatePrecisionOptions();
-    m_Check_Minimal->SetValue( m_MinimalHeader );
+        m_rbExcellon->SetValue( m_drillFileType == 0 );
+        m_rbGerberX2->SetValue( m_drillFileType == 1 );
+        m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
+        m_Choice_Zeros_Format->SetSelection( m_ZerosFormat );
+        UpdatePrecisionOptions();
+        m_Check_Minimal->SetValue( m_MinimalHeader );
 
-    m_Choice_Drill_Offset->SetSelection( m_drillOriginIsAuxAxis ? 1 : 0 );
+        m_Choice_Drill_Offset->SetSelection( m_drillOriginIsAuxAxis ? 1 : 0 );
 
-    m_Check_Mirror->SetValue( m_Mirror );
-    m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
-    m_Choice_Drill_Map->SetSelection( m_mapFileType );
-    m_radioBoxOvalHoleMode->SetSelection( m_UseRouteModeForOvalHoles ? 0 : 1 );
+        m_Check_Mirror->SetValue( m_Mirror );
+        m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
+        m_Choice_Drill_Map->SetSelection( m_mapFileType );
+        m_radioBoxOvalHoleMode->SetSelection( m_UseRouteModeForOvalHoles ? 0 : 1 );
+
+        // Output directory
+        m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
+    }
+    else
+    {
+        m_browseButton->Hide();
+        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
+
+        m_rbExcellon->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON );
+        m_rbGerberX2->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER );
+        m_Choice_Unit->SetSelection( m_job->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES );
+        m_Choice_Zeros_Format->SetSelection( static_cast<int>( m_job->m_zeroFormat ) );
+        UpdatePrecisionOptions();
+        m_Check_Minimal->SetValue( m_job->m_excellonMinimalHeader );
+
+        m_Choice_Drill_Offset->SetSelection( m_job->m_drillOrigin == JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::PLOT );
+
+        m_Check_Mirror->SetValue( m_job->m_excellonMirrorY );
+        m_Check_Merge_PTH_NPTH->SetValue( m_job->m_excellonCombinePTHNPTH );
+        m_Choice_Drill_Map->SetSelection( static_cast<int>( m_job->m_mapFormat ) );
+        m_radioBoxOvalHoleMode->SetSelection( m_job->m_excellonOvalDrillRoute ? 0 : 1 );
+    }
 
     m_platedPadsHoleCount    = 0;
     m_notplatedPadsHoleCount = 0;
@@ -197,9 +263,6 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_MicroViasInfoMsg->SetLabel( wxString() << m_microViasCount );
     m_BuriedViasInfoMsg->SetLabel( wxString() << m_blindOrBuriedViasCount );
 
-    // Output directory
-    m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
-
     wxCommandEvent dummy;
     onFileFormatSelection( dummy );
 }
@@ -256,13 +319,36 @@ void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::OnGenMapFile( wxCommandEvent& event )
 {
-    GenDrillAndMapFiles( false, true );
+    if( !m_job )
+    {
+        GenDrillAndMapFiles( false, true );
+    }
 }
 
 
 void DIALOG_GENDRILL::OnGenDrillFile( wxCommandEvent& event )
 {
-    GenDrillAndMapFiles( true, false );
+    if( !m_job )
+    {
+        GenDrillAndMapFiles( true, false );
+    }
+    else
+    {
+        m_job->SetOutputPath( m_outputDirectoryName->GetValue() );
+        m_job->m_format = m_rbExcellon->GetValue() ? JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON
+												   : JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER;
+        m_job->m_drillUnits = m_Choice_Unit->GetSelection() == 0
+							? JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS
+							: JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES;
+        m_job->m_drillOrigin = static_cast<JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN>( m_Choice_Drill_Offset->GetSelection() );
+        m_job->m_excellonCombinePTHNPTH = m_Check_Merge_PTH_NPTH->IsChecked();
+        m_job->m_excellonMinimalHeader = m_Check_Minimal->IsChecked();
+        m_job->m_excellonMirrorY = m_Check_Mirror->IsChecked();
+        m_job->m_excellonOvalDrillRoute = m_radioBoxOvalHoleMode->GetSelection() == 0;
+        m_job->m_mapFormat = static_cast<JOB_EXPORT_PCB_DRILL::MAP_FORMAT>( m_Choice_Drill_Map->GetSelection() );
+        m_job->m_zeroFormat = static_cast<JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT>( m_Choice_Zeros_Format->GetSelection() );
+        Close();
+    }
 }
 
 

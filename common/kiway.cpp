@@ -714,6 +714,14 @@ int KIWAY::ProcessJob( KIWAY::FACE_T aFace, JOB* job )
 }
 
 
+bool KIWAY::ProcessJobConfigDialog( KIWAY::FACE_T aFace, JOB* aJob, wxWindow* aWindow )
+{
+    KIFACE* kiface = KiFACE( aFace );
+
+    return kiface->HandleJobConfig( aJob, aWindow );
+}
+
+
 void KIWAY::OnKiCadExit()
 {
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
