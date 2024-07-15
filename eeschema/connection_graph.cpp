@@ -2373,6 +2373,12 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     netSettings->m_NetClassLabelAssignments.clear();
 
+    // Used to track where netclasses are assigned to a net from a bus netclass
+    // definition. Without this tracking, depending on the order of testing for
+    // netclasses, an already-assigned netclass on a bus member can be deleted
+    // if an explicitly labelled member net does not have a netclass assigned.
+    std::unordered_set<wxString> netclassAssignedFromBus;
+
     auto dirtySubgraphs =
             [&]( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
             {
@@ -2420,39 +2426,90 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
                 const wxString netname = driverSubgraph->GetNetName();
 
+                // Handle netclass assignments on buses
                 if( driverSubgraph->m_driver_connection->IsBus() )
                 {
-                    for( const auto& member : driverSubgraph->m_driver_connection->Members() )
+                    auto processBusMember = [&, this]( const SCH_CONNECTION* member )
                     {
                         if( netclass.IsEmpty() )
+                        {
                             netSettings->m_NetClassLabelAssignments.erase( member->Name() );
+                        }
                         else
+                        {
                             netSettings->m_NetClassLabelAssignments[member->Name()] = netclass;
+                            netclassAssignedFromBus.insert( member->Name() );
+                        }
 
                         auto ii = m_net_name_to_subgraphs_map.find( member->Name() );
 
-                        if( ii != m_net_name_to_subgraphs_map.end() )
-                            dirtySubgraphs( ii->second );
+                        if( oldAssignments.count( member->Name() ) )
+                        {
+                            if( oldAssignments[member->Name()] != netclass )
+                            {
+                                affectedNetclassNetAssignments.insert( member->Name() );
+
+                                if( ii != m_net_name_to_subgraphs_map.end() )
+                                    dirtySubgraphs( ii->second );
+                            }
+                        }
+                        else if( !netclass.IsEmpty() )
+                        {
+                            affectedNetclassNetAssignments.insert( member->Name() );
+
+                            if( ii != m_net_name_to_subgraphs_map.end() )
+                                dirtySubgraphs( ii->second );
+                        }
+                    };
+
+                    for( const std::shared_ptr<SCH_CONNECTION>& member :
+                         driverSubgraph->m_driver_connection->Members() )
+                    {
+                        // Check if this member itself is a bus (which can be the case
+                        // for vector buses as members of a bus, see
+                        // https://gitlab.com/kicad/code/kicad/-/issues/16545
+                        if( member->IsBus() )
+                        {
+                            for( const std::shared_ptr<SCH_CONNECTION>& nestedMember :
+                                 member->Members() )
+                            {
+                                processBusMember( nestedMember.get() );
+                            }
+                        }
+                        else
+                        {
+                            processBusMember( member.get() );
+                        }
                     }
                 }
 
-                if( netclass.IsEmpty() )
-                    netSettings->m_NetClassLabelAssignments.erase( netname );
-                else
-                    netSettings->m_NetClassLabelAssignments[netname] = netclass;
-
-                if( oldAssignments.count( netname ) )
+                // Handle netclass assignments on nets / overarching bus definitions.
+                // Note: currently a netclass definition on a bus will override any
+                // on a net. This will be resolved with multiple netclasses.
+                if( !netclassAssignedFromBus.count( netname ) )
                 {
-                    if( oldAssignments[netname] != netclass )
+                    if( netclass.IsEmpty() )
+                    {
+                        netSettings->m_NetClassLabelAssignments.erase( netname );
+                    }
+                    else
+                    {
+                        netSettings->m_NetClassLabelAssignments[netname] = netclass;
+                    }
+
+                    if( oldAssignments.count( netname ) )
+                    {
+                        if( oldAssignments[netname] != netclass )
+                        {
+                            affectedNetclassNetAssignments.insert( netname );
+                            dirtySubgraphs( subgraphs );
+                        }
+                    }
+                    else if( !netclass.IsEmpty() )
                     {
                         affectedNetclassNetAssignments.insert( netname );
                         dirtySubgraphs( subgraphs );
                     }
-                }
-                else if( !netclass.IsEmpty() )
-                {
-                    affectedNetclassNetAssignments.insert( netname );
-                    dirtySubgraphs( subgraphs );
                 }
             };
 
