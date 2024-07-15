@@ -40,6 +40,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <exporters/place_file_exporter.h>
 #include "gerber_placefile_writer.h"
+#include <jobs/job_export_pcb_pos.h>
 
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
@@ -61,30 +62,74 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aE
 }
 
 
+
+DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS* aJob,
+                                                              PCB_EDIT_FRAME*     aEditFrame,
+                                                              wxWindow*           aParent ) :
+        DIALOG_GEN_FOOTPRINT_POSITION_BASE( aParent ),
+        m_editFrame( aEditFrame ),
+        m_job( aJob )
+{
+    m_messagesPanel->Hide();
+    initDialog();
+
+    SetupStandardButtons( { { wxID_OK, _( "Save" ) }, { wxID_CANCEL, _( "Close" ) } } );
+
+    GetSizer()->SetSizeHints( this );
+    Centre();
+}
+
+
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
-    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    if( !m_job )
+    {
+        m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    PROJECT_FILE&    projectFile = m_editFrame->Prj().GetProjectFile();
-    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
+        PROJECT_FILE&    projectFile = m_editFrame->Prj().GetProjectFile();
+        PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
-    m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
+        m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
-    // Output directory
-    m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[ LAST_PATH_POS_FILES ] );
+        // Output directory
+        m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
 
-    // Update Options
-    m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );
-    m_radioBoxFilesCount->SetSelection( cfg->m_PlaceFile.file_options );
-    m_rbFormat->SetSelection( cfg->m_PlaceFile.file_format );
-    m_cbIncludeBoardEdge->SetValue( cfg->m_PlaceFile.include_board_edge );
-    m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
-    m_onlySMD->SetValue( cfg->m_PlaceFile.only_SMD );
-    m_negateXcb->SetValue( cfg->m_PlaceFile.negate_xcoord );
-    m_excludeTH->SetValue( cfg->m_PlaceFile.exclude_TH );
+        // Update Options
+        m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );
+        m_radioBoxFilesCount->SetSelection( cfg->m_PlaceFile.file_options );
+        m_rbFormat->SetSelection( cfg->m_PlaceFile.file_format );
+        m_cbIncludeBoardEdge->SetValue( cfg->m_PlaceFile.include_board_edge );
+        m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
+        m_onlySMD->SetValue( cfg->m_PlaceFile.only_SMD );
+        m_negateXcb->SetValue( cfg->m_PlaceFile.negate_xcoord );
+        m_excludeTH->SetValue( cfg->m_PlaceFile.exclude_TH );
 
-    // Update sizes and sizers:
-    m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
+        // Update sizes and sizers:
+        m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
+    }
+    else
+    {
+        m_browseButton->Hide();
+
+        m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCHES ? EDA_UNITS::INCHES
+																	  : EDA_UNITS::MILLIMETRES;
+
+
+        m_outputDirectoryName->SetValue( m_job->GetOutputPath() );
+
+        m_radioBoxUnits->SetSelection( static_cast<int>( m_job->m_units ) );
+        m_radioBoxFilesCount->SetSelection( 0 );
+        m_rbFormat->SetSelection( static_cast<int>( m_job->m_format ) );
+        m_cbIncludeBoardEdge->SetValue( m_job->m_gerberBoardEdge );
+		m_useDrillPlaceOrigin->SetValue( m_job->m_useDrillPlaceFileOrigin );
+        m_onlySMD->SetValue( m_job->m_smdOnly );
+        m_negateXcb->SetValue( m_job->m_negateBottomX );
+        m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
+
+        m_messagesPanel->Hide();
+    }
+
+
     GetSizer()->SetSizeHints( this );
 }
 
@@ -212,29 +257,48 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 {
-    m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
+    if( !m_job )
+    {
+        m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
-    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
+        PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
-    wxString dirStr = m_outputDirectoryName->GetValue();
-    // Keep unix directory format convention in cfg files
-    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
+        wxString dirStr = m_outputDirectoryName->GetValue();
+        // Keep unix directory format convention in cfg files
+        dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
-    cfg->m_PlaceFile.output_directory   = dirStr;
-    cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
-    cfg->m_PlaceFile.file_options       = m_radioBoxFilesCount->GetSelection();
-    cfg->m_PlaceFile.file_format        = m_rbFormat->GetSelection();
-    cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
-    cfg->m_PlaceFile.exclude_TH         = m_excludeTH->GetValue();
-    cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
-    cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
-    cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
+        m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
+        cfg->m_PlaceFile.output_directory   = dirStr;
+        cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
+        cfg->m_PlaceFile.file_options       = m_radioBoxFilesCount->GetSelection();
+        cfg->m_PlaceFile.file_format        = m_rbFormat->GetSelection();
+        cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
+        cfg->m_PlaceFile.exclude_TH         = m_excludeTH->GetValue();
+        cfg->m_PlaceFile.only_SMD           = m_onlySMD->GetValue();
+        cfg->m_PlaceFile.use_aux_origin     = m_useDrillPlaceOrigin->GetValue();
+        cfg->m_PlaceFile.negate_xcoord      = m_negateXcb->GetValue();
 
-    if( m_rbFormat->GetSelection() == 2 )
-        CreateGerberFiles();
+        if( m_rbFormat->GetSelection() == 2 )
+            CreateGerberFiles();
+        else
+            CreateAsciiFiles();
+    }
     else
-        CreateAsciiFiles();
+    {
+        m_job->SetOutputPath( m_outputDirectoryName->GetValue() );
+        m_job->m_units = m_radioBoxUnits->GetSelection() == 0
+                                 ? JOB_EXPORT_PCB_POS::UNITS::INCHES
+                                 : JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS;
+        m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_rbFormat->GetSelection() );
+        m_job->m_gerberBoardEdge = m_cbIncludeBoardEdge->GetValue();
+        m_job->m_excludeFootprintsWithTh = m_excludeTH->GetValue();
+        m_job->m_smdOnly = m_onlySMD->GetValue();
+        m_job->m_useDrillPlaceFileOrigin = m_useDrillPlaceOrigin->GetValue();
+        m_job->m_negateBottomX = m_negateXcb->GetValue();
+        m_job->m_excludeDNP = m_excludeDNP->GetValue();
+
+        Close();
+    }
 }
 
 

@@ -142,6 +142,8 @@ public:
     bool CloseProject( bool aSave );
     void LoadProject( const wxFileName& aProjectFileName );
 
+    void OpenJobsFile( const wxFileName& aFileName, bool aCreate = false );
+
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 

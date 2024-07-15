@@ -23,6 +23,6 @@
 
 
 JOB_PCB_RENDER::JOB_PCB_RENDER( bool aIsCli ) :
-        JOB( "render", aIsCli ), m_filename(), m_outputFile()
+        JOB( "render", false, aIsCli ), m_filename()
 {
 }

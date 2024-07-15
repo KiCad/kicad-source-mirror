@@ -87,19 +87,19 @@ void ScriptingOnDestructPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 }
 
 
-BOARD* LoadBoard( wxString& aFileName, bool aSetActive )
+BOARD* LoadBoard( const wxString& aFileName, bool aSetActive, PROJECT* aProject )
 {
     if( aFileName.EndsWith( FILEEXT::KiCadPcbFileExtension ) )
-        return LoadBoard( aFileName, PCB_IO_MGR::KICAD_SEXP, aSetActive );
+        return LoadBoard( aFileName, PCB_IO_MGR::KICAD_SEXP, aSetActive, aProject );
     else if( aFileName.EndsWith( FILEEXT::LegacyPcbFileExtension ) )
-        return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive );
+        return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive, aProject );
 
     // as fall back for any other kind use the legacy format
-    return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive );
+    return LoadBoard( aFileName, PCB_IO_MGR::LEGACY, aSetActive, aProject );
 }
 
 
-BOARD* LoadBoard( wxString& aFileName )
+BOARD* LoadBoard( const wxString& aFileName )
 {
     return LoadBoard( aFileName, false );
 }
@@ -142,12 +142,13 @@ PROJECT* GetDefaultProject()
     return project;
 }
 
-BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
+BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
 {
     return LoadBoard( aFileName, aFormat, false );
 }
 
-BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive )
+BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive,
+                  PROJECT* aProject )
 {
     wxFileName pro = aFileName;
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -158,7 +159,12 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSet
     // It also avoid wxWidget alerts about locale issues, later, when using Python 3
     LOCALE_IO dummy;
 
-    PROJECT* project = GetSettingsManager()->GetProject( projectPath );
+    PROJECT* project = aProject;
+
+    if( !project )
+    {
+        GetSettingsManager()->GetProject( projectPath );
+    }
 
     if( !project )
     {
@@ -181,7 +187,15 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSet
 
     BASE_SCREEN::m_DrawingSheetFileName = project->GetProjectFile().m_BoardDrawingSheetFile;
 
-    BOARD* brd = PCB_IO_MGR::Load( aFormat, aFileName );
+    BOARD* brd = nullptr;
+    try
+    {
+        brd = PCB_IO_MGR::Load( aFormat, aFileName );
+    }
+    catch( ... )
+    {
+        brd = nullptr;
+    }
 
     if( brd )
     {

@@ -22,10 +22,9 @@
 
 
 JOB_FP_EXPORT_SVG::JOB_FP_EXPORT_SVG( bool aIsCli ) :
-    JOB( "fpsvg", aIsCli ),
+    JOB( "fpsvg", true, aIsCli ),
     m_libraryPath(),
     m_footprint(),
-    m_outputDirectory(),
     m_blackAndWhite( false ),
     m_sketchPadsOnFabLayers( false ),
     m_hideDNPFPsOnFabLayers( false ),

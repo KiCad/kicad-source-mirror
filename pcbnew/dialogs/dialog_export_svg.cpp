@@ -41,10 +41,11 @@
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <exporters/export_svg.h>
+#include <jobs/job_export_pcb_svg.h>
 
 
-DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aEditFrame, BOARD* aBoard ) :
-        DIALOG_EXPORT_SVG_BASE( aEditFrame ),
+DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aEditFrame, BOARD* aBoard, wxWindow* aParent ) :
+        DIALOG_EXPORT_SVG_BASE( aParent ),
         m_board( aBoard ),
         m_editFrame( aEditFrame ),
         m_printBW( false ),
@@ -75,6 +76,17 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aEditFrame, BOARD* aBoard 
     }
 
     finishDialogSettings();
+}
+
+
+DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( JOB_EXPORT_PCB_SVG* aJob, PCB_EDIT_FRAME* aEditFrame,
+                                      wxWindow* aParent ) :
+        DIALOG_EXPORT_SVG( aEditFrame, aEditFrame->GetBoard(), aParent )
+{
+    m_job = aJob;
+
+    SetupStandardButtons( { { wxID_OK, _( "Save" ) },
+                            { wxID_CANCEL, _( "Close" ) } } );
 }
 
 
@@ -350,7 +362,7 @@ void DIALOG_EXPORT_SVG::OnButtonPlot( wxCommandEvent& event )
 
 bool InvokeExportSVG( PCB_EDIT_FRAME* aCaller, BOARD* aBoard )
 {
-    DIALOG_EXPORT_SVG dlg( aCaller, aBoard );
+    DIALOG_EXPORT_SVG dlg( aCaller, aBoard, aCaller );
 
     dlg.ShowModal();
 

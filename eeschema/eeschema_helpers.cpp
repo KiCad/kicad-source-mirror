@@ -79,8 +79,24 @@ PROJECT* EESCHEMA_HELPERS::GetDefaultProject( bool aSetActive )
 
 
 SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString&        aFileName,
-                                            SCH_IO_MGR::SCH_FILE_T aFormat, bool aSetActive,
-                                            bool aForceDefaultProject )
+                                            bool aSetActive,
+                                            bool aForceDefaultProject,
+                                            PROJECT* aProject )
+{
+    if( aFileName.EndsWith( FILEEXT::KiCadSchematicFileExtension ) )
+        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD, aSetActive, aForceDefaultProject, aProject );
+    else if( aFileName.EndsWith( FILEEXT::LegacySchematicFileExtension ) )
+        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject, aProject );
+
+    // as fall back for any other kind use the legacy format
+    return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject, aProject );
+}
+
+
+SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat,
+                                            bool aSetActive,
+                                            bool aForceDefaultProject,
+                                            PROJECT* aProject )
 {
     wxFileName pro = aFileName;
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -91,7 +107,12 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString&        aFileName,
     // It also avoid wxWidget alerts about locale issues, later, when using Python 3
     LOCALE_IO dummy;
 
-    PROJECT* project = GetSettingsManager()->GetProject( projectPath );
+    PROJECT* project = aProject;
+
+    if( !project )
+    {
+        project = GetSettingsManager()->GetProject( projectPath );
+    }
 
     if( !aForceDefaultProject )
     {

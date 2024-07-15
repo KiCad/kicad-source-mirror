@@ -29,6 +29,9 @@ class KICOMMON_API JOB_EXPORT_PCB_IPC2581 : public JOB
 {
 public:
     JOB_EXPORT_PCB_IPC2581( bool aIsCli );
+    wxString GetDescription() override;
+
+    void SetDefaultOutputPath( const wxString& aReferenceName );
 
     enum class IPC2581_UNITS
     {
@@ -43,7 +46,6 @@ public:
     };
 
     wxString m_filename;
-    wxString m_outputFile;
     wxString m_drawingSheet;
 
     IPC2581_UNITS m_units;

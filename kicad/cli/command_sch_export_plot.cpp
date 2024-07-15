@@ -137,8 +137,9 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob =
-            std::make_unique<JOB_EXPORT_SCH_PLOT>( true, m_plotFormat, filename );
-
+            std::make_unique<JOB_EXPORT_SCH_PLOT>( true );
+    plotJob->m_filename = filename;
+    plotJob->m_plotFormat = m_plotFormat;
     plotJob->m_plotPages = pages;
     plotJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     plotJob->m_pageSizeSelect = JOB_PAGE_SIZE::PAGE_SIZE_AUTO;

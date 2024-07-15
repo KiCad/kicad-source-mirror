@@ -28,6 +28,8 @@
 #include <gendrill_file_writer_base.h>      // for DRILL_PRECISION definition
 #include <dialog_gendrill_base.h>
 
+class JOB_EXPORT_PCB_DRILL;
+
 class DIALOG_GENDRILL : public DIALOG_GENDRILL_BASE
 {
 public:
@@ -36,12 +38,16 @@ public:
      * @param aParent is the parent window caller ( the board edit frame or a dialog ).
      */
     DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent );
+    DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, JOB_EXPORT_PCB_DRILL* aJob, wxWindow* aParent );
     ~DIALOG_GENDRILL();
 
     /**
      * Update board drill/plot parameters
      */
     void             UpdateDrillParams();
+
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
 
 private:
     void initDialog();
@@ -108,6 +114,8 @@ private:
     PCB_EDIT_FRAME*  m_pcbEditFrame;
     BOARD*           m_board;
     PCB_PLOT_PARAMS  m_plotOpts;
+    JOB_EXPORT_PCB_DRILL* m_job;
+
     bool             m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
                                                  // for drill origin coordinates
     int              m_platedPadsHoleCount;

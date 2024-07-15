@@ -53,7 +53,7 @@ def test_sch_export_svg( kitest,
     assert stderr == ''
     assert stdout is not None
 
-    stdout_regex = re.match("^Plotted to '(.+)'", stdout)
+    stdout_regex = re.search("Plotted to '(.+)'", stdout)
     assert stdout_regex
 
     # now try and manipulate the extracted path

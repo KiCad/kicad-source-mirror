@@ -30,13 +30,15 @@
 
 class SCH_EDIT_FRAME;
 class EXPORT_NETLIST_PAGE;
-
+class JOB_EXPORT_SCH_NETLIST;
 
 /* Dialog frame for creating netlists */
 class DIALOG_EXPORT_NETLIST : public DIALOG_EXPORT_NETLIST_BASE
 {
 public:
     DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame );
+    DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent,
+                           JOB_EXPORT_SCH_NETLIST* aJob = nullptr );
     ~DIALOG_EXPORT_NETLIST(){};
 
 private:
@@ -82,5 +84,6 @@ private:
 
 private:
     SCH_EDIT_FRAME*      m_editFrame;
+    JOB_EXPORT_SCH_NETLIST*           m_job;
     std::vector<EXPORT_NETLIST_PAGE*> m_PanelNetType;
 };

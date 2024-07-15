@@ -153,7 +153,7 @@ double GENCAD_EXPORTER::MapYTo( int aY )
 }
 
 
-bool GENCAD_EXPORTER::WriteFile( wxString& aFullFileName )
+bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
 {
     componentShapes.clear();
     shapeNames.clear();

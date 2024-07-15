@@ -22,9 +22,8 @@
 
 
 JOB_FP_UPGRADE::JOB_FP_UPGRADE( bool aIsCli ) :
-        JOB( "fpupgrade", aIsCli ),
+        JOB( "fpupgrade", true, aIsCli ),
         m_libraryPath(),
-        m_outputLibraryPath(),
         m_force( false )
 {
 }

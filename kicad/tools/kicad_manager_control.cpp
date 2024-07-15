@@ -205,6 +205,24 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 }
 
 
+int KICAD_MANAGER_CONTROL::NewJobsetFile( const TOOL_EVENT& aEvent )
+{
+    wxString     default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
+    wxFileDialog dlg( m_frame, _( "Create New Jobset" ), default_dir, wxEmptyString,
+                      FILEEXT::JobsetFileWildcard(),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return -1;
+
+    wxFileName jobsetFn( dlg.GetPath() );
+
+    m_frame->OpenJobsFile( jobsetFn.GetFullPath(), true );
+
+    return 0;
+}
+
+
 int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 {
     DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( m_frame );
@@ -960,6 +978,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::NewProject,         KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromTemplate,    KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromRepository,  KICAD_MANAGER_ACTIONS::newFromRepository.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewJobsetFile,        KICAD_MANAGER_ACTIONS::newJobsetFile.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenDemoProject,    KICAD_MANAGER_ACTIONS::openDemoProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenProject,        KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::CloseProject,       KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );

@@ -29,9 +29,9 @@ class KICOMMON_API JOB_EXPORT_SCH_NETLIST : public JOB
 {
 public:
     JOB_EXPORT_SCH_NETLIST( bool aIsCli );
+    wxString GetDescription() override;
 
     wxString m_filename;
-    wxString m_outputFile;
 
     enum class FORMAT
     {
@@ -46,6 +46,11 @@ public:
     };
 
     FORMAT format;
+
+    bool m_spiceSaveAllVoltages;
+    bool m_spiceSaveAllCurrents;
+    bool m_spiceSaveAllDissipations;
+    bool m_spiceSaveAllEvents;
 };
 
 #endif

@@ -55,7 +55,7 @@ BOARD*  GetBoard();
  * This function does not set the board project as the active one
  * @return a pointer to the board if it was created, or None if not
  */
-BOARD*  LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat );
+BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat );
 
 #ifndef SWIG
 /**
@@ -63,7 +63,7 @@ BOARD*  LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat );
  *
  * Hidden from SWIG as aSetActive should not be used by python, but cli also leverages this function
  */
-BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive );
+BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSetActive, PROJECT* aProject = nullptr );
 #endif
 
 // Default LoadBoard() to load .kicad_pcb files:.
@@ -75,7 +75,7 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSet
  *
  * Hidden from SWIG as aSetActive should not be used by python, but cli also leverages this function
  */
-BOARD* LoadBoard( wxString& aFileName, bool aSetActive );
+BOARD* LoadBoard( const wxString& aFileName, bool aSetActive, PROJECT* aProject = nullptr );
 #endif
 
 /**
@@ -85,7 +85,7 @@ BOARD* LoadBoard( wxString& aFileName, bool aSetActive );
  * This function does not set the board project as the active one
  * @return a pointer to the board if it was created, or None if not
  */
-BOARD* LoadBoard( wxString& aFileName );
+BOARD* LoadBoard( const wxString& aFileName );
 
 /**
  * Creates a new board and project with the given filename (will overwrite existing files!)

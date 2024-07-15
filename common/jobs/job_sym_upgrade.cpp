@@ -22,7 +22,7 @@
 
 
 JOB_SYM_UPGRADE::JOB_SYM_UPGRADE( bool aIsCli ) :
-    JOB( "symupgrade", aIsCli ),
+    JOB( "symupgrade", false, aIsCli ),
     m_libraryPath(),
     m_outputLibraryPath(),
     m_force( false )

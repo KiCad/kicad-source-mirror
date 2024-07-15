@@ -22,11 +22,13 @@
 #include "dialog_export_2581_base.h"
 
 class PCB_EDIT_FRAME;
+class JOB_EXPORT_PCB_IPC2581;
 
 class DIALOG_EXPORT_2581 : public DIALOG_EXPORT_2581_BASE
 {
 public:
     DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent );
+    DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
 
     wxString GetOutputPath() const
     {
@@ -108,6 +110,7 @@ private:
     bool TransferDataFromWindow() override;
 
     PCB_EDIT_FRAME* m_parent;
+    JOB_EXPORT_PCB_IPC2581* m_job;
 };
 
 #endif // IPC2581_EXPORT_DIALOG_H

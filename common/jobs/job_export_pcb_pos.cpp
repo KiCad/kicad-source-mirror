@@ -19,20 +19,91 @@
  */
 
 #include <jobs/job_export_pcb_pos.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
+#include <wildcards_and_files_ext.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::FORMAT,
+                              {
+                                      { JOB_EXPORT_PCB_POS::FORMAT::ASCII, "ascii" },
+                                      { JOB_EXPORT_PCB_POS::FORMAT::CSV, "csv" },
+                                      { JOB_EXPORT_PCB_POS::FORMAT::GERBER, "gerber" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::SIDE,
+                              {
+                                      { JOB_EXPORT_PCB_POS::SIDE::FRONT, "front" },
+                                      { JOB_EXPORT_PCB_POS::SIDE::BACK, "back" },
+                                      { JOB_EXPORT_PCB_POS::SIDE::BOTH, "both" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::UNITS,
+                              {
+                                      { JOB_EXPORT_PCB_POS::UNITS::INCHES, "in" },
+                                      { JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS, "mm" },
+                              } )
 
 JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS( bool aIsCli ) :
-    JOB( "pos", aIsCli ),
+    JOB( "pos", false, aIsCli ),
     m_filename(),
-    m_outputFile(),
     m_useDrillPlaceFileOrigin( true ),
     m_smdOnly( false ),
     m_excludeFootprintsWithTh( false ),
     m_excludeDNP( false ),
-    m_negateBottomX( false )
+    m_negateBottomX( false ),
+    m_side( SIDE::BOTH ),
+    m_units( UNITS::MILLIMETERS ),
+    m_format( FORMAT::ASCII ),
+    m_gerberBoardEdge( true )
 {
-    m_side = SIDE::BOTH;
-    m_units = UNITS::MILLIMETERS;
-    m_format = FORMAT::ASCII;
-    m_gerberBoardEdge = true;
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_drill_place_file_origin",
+                                                &m_useDrillPlaceFileOrigin,
+                                                m_useDrillPlaceFileOrigin ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "smd_only",
+                                                &m_smdOnly,
+                                                m_smdOnly ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "exclude_footprints_with_th",
+                                                &m_excludeFootprintsWithTh,
+                                                m_excludeFootprintsWithTh ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "exclude_dnp",
+                                                &m_excludeDNP,
+                                                m_excludeDNP ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "negate_bottom_x",
+                                                &m_negateBottomX,
+                                                m_negateBottomX ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "gerber_board_edge",
+                                                &m_gerberBoardEdge,
+                                                m_gerberBoardEdge ) );
+
+    m_params.emplace_back( new JOB_PARAM<SIDE>( "side", &m_side, m_side ) );
+    m_params.emplace_back( new JOB_PARAM<UNITS>( "units", &m_units, m_units ) );
+    m_params.emplace_back( new JOB_PARAM<FORMAT>( "format", &m_format, m_format ) );
 }
+
+
+wxString JOB_EXPORT_PCB_POS::GetDescription()
+{
+    return wxString::Format( _( "Placement data export" ) );
+}
+
+
+void JOB_EXPORT_PCB_POS::SetDefaultOutputPath( const wxString& aReferenceName )
+{
+    wxFileName fn = aReferenceName;
+
+    if( m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII )
+        fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
+    else if( m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
+        fn.SetExt( FILEEXT::CsvFileExtension );
+    else if( m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
+        fn.SetExt( FILEEXT::GerberFileExtension );
+
+    SetOutputPath( fn.GetFullName() );
+}
+
+REGISTER_JOB( pcb_export_pos, _HKI( "PCB: Export Position Data" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_POS );

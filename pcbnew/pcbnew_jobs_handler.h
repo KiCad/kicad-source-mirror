@@ -51,12 +51,15 @@ public:
     int JobExportIpc2581( JOB* aJob );
 
 private:
+    BOARD* getBoard( const wxString& aPath = wxEmptyString );
     void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,
                                            JOB_EXPORT_PCB_GERBER* aJob );
     int  doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint );
     void loadOverrideDrawingSheet( BOARD* brd, const wxString& aSheetPath );
 
     DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( BOARD* aBrd );
+
+    BOARD* m_cliBoard;
 };
 
 #endif

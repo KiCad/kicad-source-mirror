@@ -1035,6 +1035,12 @@ bool SETTINGS_MANAGER::IsProjectOpen() const
 }
 
 
+bool SETTINGS_MANAGER::IsProjectOpenNotDummy() const
+{
+    return m_projects.size() > 1 || ( m_projects.size() == 1 && !m_projects.begin()->second->GetProjectFullName().IsEmpty() );
+}
+
+
 PROJECT* SETTINGS_MANAGER::GetProject( const wxString& aFullPath ) const
 {
     if( m_projects.count( aFullPath ) )

@@ -75,7 +75,8 @@ enum class SCH_PLOT_FORMAT
 class KICOMMON_API JOB_EXPORT_SCH_PLOT : public JOB
 {
 public:
-    JOB_EXPORT_SCH_PLOT( bool aIsCli, SCH_PLOT_FORMAT aPlotFormat, wxString aFilename );
+    JOB_EXPORT_SCH_PLOT( bool aIsCli );
+    wxString GetDescription() override;
 
     SCH_PLOT_FORMAT       m_plotFormat;
     wxString              m_filename;
@@ -98,6 +99,41 @@ public:
     wxString m_outputFile;
 
     JOB_HPGL_PLOT_ORIGIN_AND_UNITS m_HPGLPlotOrigin;
+};
+
+
+class KICOMMON_API JOB_EXPORT_SCH_PLOT_PDF : public JOB_EXPORT_SCH_PLOT
+{
+public:
+    JOB_EXPORT_SCH_PLOT_PDF( bool aIsCli );
+};
+
+
+class KICOMMON_API JOB_EXPORT_SCH_PLOT_DXF : public JOB_EXPORT_SCH_PLOT
+{
+public:
+    JOB_EXPORT_SCH_PLOT_DXF( bool aIsCli );
+};
+
+
+class KICOMMON_API JOB_EXPORT_SCH_PLOT_SVG : public JOB_EXPORT_SCH_PLOT
+{
+public:
+    JOB_EXPORT_SCH_PLOT_SVG( bool aIsCli );
+};
+
+
+class KICOMMON_API JOB_EXPORT_SCH_PLOT_PS : public JOB_EXPORT_SCH_PLOT
+{
+public:
+    JOB_EXPORT_SCH_PLOT_PS( bool aIsCli );
+};
+
+
+class KICOMMON_API JOB_EXPORT_SCH_PLOT_HPGL : public JOB_EXPORT_SCH_PLOT
+{
+public:
+    JOB_EXPORT_SCH_PLOT_HPGL( bool aIsCli );
 };
 
 #endif

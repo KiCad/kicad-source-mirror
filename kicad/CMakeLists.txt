@@ -25,7 +25,11 @@ set( KICAD_SRCS
     dialogs/dialog_template_selector.cpp
     dialogs/panel_kicad_launcher_base.cpp
     dialogs/panel_kicad_launcher.cpp
+    dialogs/dialog_job_config_base.cpp
+    dialogs/panel_jobs_base.cpp
+    dialogs/panel_jobs.cpp
     files-io.cpp
+    jobs_runner.cpp
     import_proj.cpp
     import_project.cpp
     kicad_manager_frame.cpp
@@ -41,6 +45,7 @@ set( KICAD_SRCS
 
 set( KICAD_CLI_SRCS
     cli/command.cpp
+    cli/command_jobset_run.cpp
     cli/command_pcb_export_base.cpp
     cli/command_pcb_drc.cpp
     cli/command_pcb_render.cpp
@@ -64,6 +69,8 @@ set( KICAD_CLI_SRCS
     cli/command_sym_export_svg.cpp
     cli/command_sym_upgrade.cpp
     cli/command_version.cpp
+
+    jobs_runner.cpp
     )
 
 if( WIN32 )

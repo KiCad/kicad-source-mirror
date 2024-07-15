@@ -28,6 +28,7 @@
 #include <kicommon.h>
 #include <wx/filename.h>
 #include <wx/process.h>
+#include <wx/zipstrm.h>
 
 
 /**
@@ -106,5 +107,29 @@ KICOMMON_API extern wxString QuoteFullPath( wxFileName& fn, wxPathFormat format 
  * subdirectories and their files
  */
 KICOMMON_API bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = nullptr );
+
+/**
+ * Copy a directory and its contents to another directory.
+ *
+ * @param aSourceDir is the directory to copy.
+ * @param aDestDir is the directory to copy to.
+ * @param aErrors is a string to append any errors to.
+ */
+KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir,
+                                 wxString& aErrors );
+
+
+/**
+ * Add a directory and its contents to a zip file.
+ *
+ * @param aZip is the zip file to add to.
+ * @param aSourceDir is the directory to add.
+ * @param aErrors is a string to append any errors to.
+ * @param aParentDir is the parent directory to add to the zip file.
+ */
+KICOMMON_API bool AddDirectoryToZip( wxZipOutputStream& aZip,
+                                     const wxString& aSourceDir,
+                                     wxString& aErrors,
+                                     const wxString& aParentDir = "" );
 
 #endif /* GESTFICH_H */

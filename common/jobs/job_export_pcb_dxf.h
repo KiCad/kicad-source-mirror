@@ -25,12 +25,14 @@
 #include <layer_ids.h>
 #include <lseq.h>
 #include <wx/string.h>
+#include <jobs/job_export_pcb_plot.h>
 #include "job.h"
 
-class KICOMMON_API JOB_EXPORT_PCB_DXF : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_DXF : public JOB_EXPORT_PCB_PLOT
 {
 public:
     JOB_EXPORT_PCB_DXF( bool aIsCli );
+    wxString GetDescription() override;
 
     enum class DXF_UNITS
     {
@@ -38,18 +40,9 @@ public:
         MILLIMETERS
     };
 
-    wxString m_filename;
-    wxString m_outputFile;
-    wxString m_drawingSheet;
-
-    bool m_plotFootprintValues;
-    bool m_plotRefDes;
     bool m_plotGraphicItemsUsingContours;
     bool m_useDrillOrigin;
-    bool m_plotBorderTitleBlocks;
     DXF_UNITS m_dxfUnits;
-
-    LSEQ m_printMaskLayer;
 };
 
 #endif

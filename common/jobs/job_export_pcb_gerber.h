@@ -25,21 +25,15 @@
 #include <layer_ids.h>
 #include <lseq.h>
 #include <wx/string.h>
-#include "job.h"
+#include <jobs/job_export_pcb_plot.h>
 
-class KICOMMON_API JOB_EXPORT_PCB_GERBER : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_GERBER : public JOB_EXPORT_PCB_PLOT
 {
 public:
     JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIsCli );
     JOB_EXPORT_PCB_GERBER( bool aIsCli );
+    wxString GetDescription() override;
 
-    wxString m_filename;
-    wxString m_outputFile;
-    wxString m_drawingSheet;
-
-    bool m_plotFootprintValues;
-    bool m_plotRefDes;
-    bool m_plotBorderTitleBlocks;
     bool m_subtractSolderMaskFromSilk;
     bool m_includeNetlistAttributes;
     bool m_useX2Format;
@@ -48,9 +42,6 @@ public:
     bool m_useProtelFileExtension;
 
     int m_precision;
-
-
-    LSEQ m_printMaskLayer;
 };
 
 #endif

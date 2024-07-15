@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,6 +26,21 @@ DIALOG_EXPORT_NETLIST_BASE::DIALOG_EXPORT_NETLIST_BASE( wxWindow* parent, wxWind
 
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextOutputPath = new wxStaticText( this, wxID_ANY, _("Output Path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOutputPath->Wrap( -1 );
+	bSizer8->Add( m_staticTextOutputPath, 0, wxALL, 5 );
+
+	m_outputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_outputPath->SetMinSize( wxSize( 450,-1 ) );
+
+	bSizer8->Add( m_outputPath, 0, wxALL, 5 );
+
+
+	bUpperSizer->Add( bSizer8, 1, wxEXPAND, 5 );
 
 	m_NoteBook = new wxNotebook( this, ID_CHANGE_NOTEBOOK_PAGE, wxDefaultPosition, wxDefaultSize, 0 );
 	m_NoteBook->SetMinSize( wxSize( 540,-1 ) );

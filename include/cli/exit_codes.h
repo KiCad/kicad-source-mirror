@@ -25,15 +25,16 @@ namespace CLI
 {
     namespace EXIT_CODES
     {
-        static const int  AVOID_CLOSING = -1;
-        static const int  SUCCESS = 0;
-        static const int  OK = 0;
-        static const int  ERR_ARGS = 1;
-        static const int  ERR_UNKNOWN = 2;
-        static const int  ERR_INVALID_INPUT_FILE = 3;
-        static const int  ERR_INVALID_OUTPUT_CONFLICT = 4;
+        static const int AVOID_CLOSING = -1;
+        static const int SUCCESS = 0;
+        static const int OK = 0;
+        static const int ERR_ARGS = 1;
+        static const int ERR_UNKNOWN = 2;
+        static const int ERR_INVALID_INPUT_FILE = 3;
+        static const int ERR_INVALID_OUTPUT_CONFLICT = 4;
         ///< Rules check violation count was greater than 0
-        static const int  ERR_RC_VIOLATIONS = 5;
+        static const int ERR_RC_VIOLATIONS = 5;
+        static const int ERR_JOBS_RUN_FAILED = 6;
     };
 }
 

@@ -30,10 +30,10 @@ class KICOMMON_API JOB_EXPORT_SCH_BOM : public JOB
 {
 public:
     JOB_EXPORT_SCH_BOM( bool aIsCli );
+    wxString GetDescription() override;
 
     // Basic options
     wxString m_filename;
-    wxString m_outputFile;
 
     // Preset options (from schematic)
     wxString m_bomPresetName;

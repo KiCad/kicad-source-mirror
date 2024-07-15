@@ -19,11 +19,47 @@
  */
 
 #include <jobs/job_export_pcb_drill.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::DRILL_FORMAT,
+                              {
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON, "excellon" },
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER, "gerber" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN,
+                              {
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::ABS, "abs" },
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::PLOT, "plot" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::DRILL_UNITS,
+                              {
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES, "in" },
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS, "mm" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT,
+                              {
+                                    { JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::DECIMAL, "decimal" },
+                                    { JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_LEADING, "surpress_leading" },
+                                    { JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_TRAILING, "surpress_trailing" },
+                                    { JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::KEEP_ZEROS, "keep_zeros" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::MAP_FORMAT,
+                              {
+                                      { JOB_EXPORT_PCB_DRILL::MAP_FORMAT::DXF, "dxf" },
+                                      { JOB_EXPORT_PCB_DRILL::MAP_FORMAT::GERBER_X2, "gerberx2" },
+                                      { JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF, "pdf" },
+                                      { JOB_EXPORT_PCB_DRILL::MAP_FORMAT::POSTSCRIPT, "postscript" },
+                                      { JOB_EXPORT_PCB_DRILL::MAP_FORMAT::SVG, "svg" },
+                              } )
 
 JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL( bool aIsCli ) :
-    JOB( "drill", aIsCli ),
+    JOB( "drill", true, aIsCli ),
     m_filename(),
-    m_outputDir(),
     m_excellonMirrorY( false ),
     m_excellonMinimalHeader( false ),
     m_excellonCombinePTHNPTH( true ),
@@ -36,4 +72,56 @@ JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL( bool aIsCli ) :
     m_gerberPrecision( 5 ),
     m_generateMap( false )
 {
+    m_params.emplace_back( new JOB_PARAM<bool>( "excellon.mirror_y",
+                                                &m_excellonMirrorY,
+                                                m_excellonMirrorY ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "excellon.minimal_header",
+                                                &m_excellonMinimalHeader,
+                                                m_excellonMinimalHeader ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "excellon.combine_pth_npth",
+                                                &m_excellonCombinePTHNPTH,
+                                                m_excellonCombinePTHNPTH ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "excellon.oval_drill_route",
+                                                &m_excellonOvalDrillRoute,
+                                                m_excellonOvalDrillRoute ) );
+
+    m_params.emplace_back( new JOB_PARAM<DRILL_FORMAT>( "format",
+                                                        &m_format,
+                                                        m_format ) );
+
+    m_params.emplace_back( new JOB_PARAM<DRILL_ORIGIN>( "drill_origin",
+                                                        &m_drillOrigin,
+                                                        m_drillOrigin ) );
+
+    m_params.emplace_back( new JOB_PARAM<DRILL_UNITS>( "units",
+                                                       &m_drillUnits,
+                                                       m_drillUnits ) );
+
+    m_params.emplace_back( new JOB_PARAM<ZEROS_FORMAT>(  "zero_format",
+                                                         &m_zeroFormat,
+                                                         m_zeroFormat ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "generate_map",
+                                                &m_generateMap,
+                                                m_generateMap ) );
+
+    m_params.emplace_back( new JOB_PARAM<MAP_FORMAT>( "map_format",
+                                                      &m_mapFormat,
+                                                      m_mapFormat ) );
+
+    m_params.emplace_back( new JOB_PARAM<int>( "gerber_precision",
+                                               &m_gerberPrecision,
+                                               m_gerberPrecision ) );
 }
+
+
+wxString JOB_EXPORT_PCB_DRILL::GetDescription()
+{
+    return wxString::Format( _( "Drill data export" ), m_format );
+}
+
+REGISTER_JOB( pcb_export_drill, _HKI( "PCB: Export drill data" ), KIWAY::FACE_PCB,
+              JOB_EXPORT_PCB_DRILL );

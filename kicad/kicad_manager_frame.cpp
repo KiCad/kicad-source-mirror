@@ -35,6 +35,7 @@
 #include <build_version.h>
 #include <dialogs/panel_kicad_launcher.h>
 #include <dialogs/dialog_update_check_prompt.h>
+#include <dialogs/panel_jobs.h>
 #include <eda_base_frame.h>
 #include <executable_names.h>
 #include <file_history.h>
@@ -67,7 +68,7 @@
 #include <wx/process.h>
 #include <atomic>
 #include <update_manager.h>
-
+#include <jobs/jobset.h>
 
 #include <../pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>   // for SEXPR_BOARD_FILE_VERSION def
 
@@ -116,6 +117,8 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
 END_EVENT_TABLE()
 
+
+    static JOBSET* test = new JOBSET( "" );
 
 // See below the purpose of this include
 #include <wx/xml/xml.h>
@@ -701,6 +704,33 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     m_leftWin->EmptyTreePrj();
 
     return true;
+}
+
+
+void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreate )
+{
+    if( !ADVANCED_CFG::GetCfg().m_EnableJobset )
+    {
+        return;
+    }
+
+    try
+    {
+        std::unique_ptr<JOBSET> jobsFile =
+                std::make_unique<JOBSET>( aFileName.GetFullPath().ToStdString() );
+
+        jobsFile->LoadFromFile();
+
+        PANEL_JOBS* jobPanel = new PANEL_JOBS( m_notebook, this, std::move( jobsFile ) );
+        jobPanel->SetProjectTied( true );
+        jobPanel->SetClosable( true );
+        m_notebook->AddPage( jobPanel, aFileName.GetFullName(),
+                             true );
+    }
+    catch( ... )
+    {
+
+    }
 }
 
 

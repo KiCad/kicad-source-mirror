@@ -26,35 +26,13 @@
 #include <layer_ids.h>
 #include <lseq.h>
 #include <wx/string.h>
-#include "job.h"
+#include <jobs/job_export_pcb_plot.h>
 
-class KICOMMON_API JOB_EXPORT_PCB_PDF : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_PDF : public JOB_EXPORT_PCB_PLOT
 {
 public:
     JOB_EXPORT_PCB_PDF( bool aIsCli );
-
-    wxString m_filename;
-    wxString m_outputFile;
-    wxString m_colorTheme;
-    wxString m_drawingSheet;
-
-    bool m_mirror;
-    bool m_blackAndWhite;
-    bool m_negative;
-    bool m_plotFootprintValues;
-    bool m_plotRefDes;
-    bool m_plotBorderTitleBlocks;
-
-    LSEQ m_printMaskLayer;
-
-    bool m_sketchPadsOnFabLayers;
-    bool m_hideDNPFPsOnFabLayers;
-    bool m_sketchDNPFPsOnFabLayers;
-    bool m_crossoutDNPFPsOnFabLayers;
-
-    // How holes in pads/vias are plotted:
-    // 0 = no hole, 1 = small shape, 2 = actual shape
-    int m_drillShapeOption;
+    wxString GetDescription() override;
 };
 
 #endif

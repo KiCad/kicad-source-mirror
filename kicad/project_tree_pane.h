@@ -221,6 +221,11 @@ private:
     void onGitRevertLocal( wxCommandEvent& event );
 
     /**
+     * Run a selected jobs file
+     */
+    void onRunSelectedJobsFile( wxCommandEvent& event );
+
+    /**
      * Updates the icons shown in the tree project to reflect the current git status
     */
     void updateGitStatusIcons();

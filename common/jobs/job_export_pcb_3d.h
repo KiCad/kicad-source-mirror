@@ -53,7 +53,8 @@ public:
             m_ExportSoldermask( false ),
             m_FuseShapes( false ),
             m_OptimizeStep( true ),
-            m_Format( FORMAT::STEP )
+            m_Format( FORMAT::STEP ),
+            m_OutputFile()
     {};
 
     enum class FORMAT
@@ -64,7 +65,6 @@ public:
         GLB
     };
 
-    wxString m_OutputFile;
     wxString m_NetFilter;
     wxString m_ComponentFilter;
 
@@ -89,6 +89,7 @@ public:
     bool     m_FuseShapes;
     bool     m_OptimizeStep;
     FORMAT   m_Format;
+    wxString m_OutputFile;
 
     wxString GetDefaultExportExtension() const;
     wxString GetFormatName() const;
@@ -99,6 +100,7 @@ class KICOMMON_API JOB_EXPORT_PCB_3D : public JOB
 {
 public:
     JOB_EXPORT_PCB_3D( bool aIsCli );
+    wxString GetDescription() override;
 
     enum class FORMAT
     {

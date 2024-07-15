@@ -31,8 +31,9 @@ class KICOMMON_API JOB_EXPORT_PCB_DRILL : public JOB
 public:
     JOB_EXPORT_PCB_DRILL( bool aIsCli );
 
+    wxString GetDescription() override;
+
     wxString m_filename;
-    wxString m_outputDir;
 
     bool m_excellonMirrorY;
     bool m_excellonMinimalHeader;

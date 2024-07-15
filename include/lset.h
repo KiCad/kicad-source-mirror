@@ -260,6 +260,7 @@ public:
      * @return int - number of bytes consumed
      */
     int ParseHex( const char* aStart, int aCount );
+    int ParseHex( const std::string& str );
 
     /**
      * Return a binary string showing contents of this LSEQ.

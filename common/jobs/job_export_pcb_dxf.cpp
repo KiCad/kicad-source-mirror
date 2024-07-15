@@ -19,19 +19,43 @@
  */
 
 #include <jobs/job_export_pcb_dxf.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DXF::DXF_UNITS,
+                              {
+                                      { JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES, "in" },
+                                      { JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS, "mm" },
+                              } )
 
 JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF( bool aIsCli ) :
-    JOB( "dxf", aIsCli ),
-    m_filename(),
-    m_outputFile(),
-    m_drawingSheet(),
-    m_plotFootprintValues( true ),
-    m_plotRefDes( true ),
+    JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF, "dxf", false, aIsCli ),
     m_plotGraphicItemsUsingContours( true ),
     m_useDrillOrigin( false ),
-    m_plotBorderTitleBlocks( false ),
-    m_dxfUnits( DXF_UNITS::INCHES ),
-    m_printMaskLayer()
+    m_dxfUnits( DXF_UNITS::INCHES )
 {
+    m_plotDrawingSheet = false;
+
+    m_params.emplace_back(
+            new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "plot_footprint_values", &m_plotFootprintValues, m_plotFootprintValues ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_ref_des", &m_plotRefDes, m_plotRefDes ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_graphic_items_using_contours", &m_plotGraphicItemsUsingContours,
+                                                m_plotGraphicItemsUsingContours ) );
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "use_drill_origin", &m_useDrillOrigin, m_useDrillOrigin ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_border_title_blocks", &m_plotDrawingSheet,
+                                                m_plotDrawingSheet ) );
+    m_params.emplace_back( new JOB_PARAM<DXF_UNITS>( "units", &m_dxfUnits, m_dxfUnits ) );
+    m_params.emplace_back(
+            new JOB_PARAM<LSEQ>( "layers", &m_printMaskLayer, m_printMaskLayer ) );
 }
+
+
+wxString JOB_EXPORT_PCB_DXF::GetDescription()
+{
+    return wxString::Format( _( "PCB DXF export" ) );
+}
+
+REGISTER_JOB( pcb_export_dxf, _HKI( "PCB: Export DXF" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_DXF );

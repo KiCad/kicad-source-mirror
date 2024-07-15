@@ -41,6 +41,7 @@ endif()
     set( NEW_PATHS
 "${CMAKE_BINARY_DIR}/kicad/;\
 ${CMAKE_BINARY_DIR}/common/;\
+${CMAKE_BINARY_DIR}/api/;\
 ${CMAKE_BINARY_DIR}/common/gal/;\
 ${CMAKE_BINARY_DIR}/pcbnew/;\
 ${CMAKE_BINARY_DIR}/eeschema/;\
@@ -55,6 +56,16 @@ if( APPLE )
 ${NEW_PATHS};" )
     get_filename_component( CAIRO_LIB_BASE "${CAIRO_LIBRARY}" DIRECTORY )
     set( EXTRA_PYTEST_ENVIRONMENT "DYLD_FALLBACK_LIBRARY_PATH=${CAIRO_LIB_BASE}" )
+elseif ( MSVC )
+    if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+        set( NEW_PATHS
+        "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin;\
+        ${NEW_PATHS};" )
+    else()
+        set( NEW_PATHS
+        "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin;\
+        ${NEW_PATHS};" )
+    endif()
 endif()
 
 set( QA_PATH_REPLACEMENT "PATH=${NEW_PATHS};$ENV{PATH}" )

@@ -27,6 +27,7 @@
 #include "dialog_export_step_base.h"
 
 class PCB_EDIT_FRAME;
+class JOB_EXPORT_PCB_3D;
 
 class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
 {
@@ -41,6 +42,8 @@ public:
     };
 
     DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, const wxString& aBoardPath );
+    DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, const wxString& aBoardPath,
+                        JOB_EXPORT_PCB_3D* aJob = nullptr );
     ~DIALOG_EXPORT_STEP();
 
 protected:
@@ -96,6 +99,7 @@ private:
     };
 
     PCB_EDIT_FRAME*    m_editFrame;
+    JOB_EXPORT_PCB_3D* m_job;
     STEP_ORIGIN_OPTION m_origin;         // The last preference for STEP origin option
     double             m_userOriginX;    // remember last User Origin X value
     double             m_userOriginY;    // remember last User Origin Y value
