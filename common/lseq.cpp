@@ -20,4 +20,17 @@
 #include <layer_ids.h>
 #include <lseq.h>
 
+#include <algorithm>
 #include <vector>
+
+
+int LSEQ::TestLayers( PCB_LAYER_ID aRhs, PCB_LAYER_ID aLhs ) const
+{
+    if( aRhs == aLhs )
+        return 0;
+
+    auto itRhs = std::find( begin(), end(), aRhs );
+    auto itLhs = std::find( begin(), end(), aLhs );
+
+    return std::distance( itRhs, itLhs );
+}

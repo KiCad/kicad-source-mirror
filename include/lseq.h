@@ -70,16 +70,7 @@ public:
         return at( m_index );       // throws std::out_of_range
     }
 
-    int TestLayers( PCB_LAYER_ID aRhs, PCB_LAYER_ID aLhs ) const
-    {
-        if( aRhs == aLhs )
-            return 0;
-
-        auto itRhs = std::find( begin(), end(), aRhs );
-        auto itLhs = std::find( begin(), end(), aLhs );
-
-        return std::distance( itRhs, itLhs );
-    }
+    int TestLayers( PCB_LAYER_ID aRhs, PCB_LAYER_ID aLhs ) const;
 };
 
 

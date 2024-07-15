@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <bitset>                             // for bitset, __bitset<>::ref...
 #include <cassert>
 #include <cstdarg>
