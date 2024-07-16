@@ -542,14 +542,6 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
     m_schematic = &aSchematic;
     m_out = aFormatter;
 
-    // If we've requested to embed the fonts in the schematic, do so.
-    // Otherwise, clear the embedded fonts from the schematic.  Embedded
-    // fonts will be used if available
-    if( m_schematic->GetAreFontsEmbedded() )
-        m_schematic->EmbedFonts();
-    else
-        m_schematic->GetEmbeddedFiles()->ClearEmbeddedFonts();
-
     size_t                          i;
     SCH_ITEM*                       item;
     std::map<wxString, LIB_SYMBOL*> libSymbols;

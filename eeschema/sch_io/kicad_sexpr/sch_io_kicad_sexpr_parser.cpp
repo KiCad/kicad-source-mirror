@@ -2792,7 +2792,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
 
         case T_embedded_fonts:
         {
-            SCHEMATIC* schematic = aSheet->Schematic();
+            SCHEMATIC* schematic = screen->Schematic();
 
             if( !schematic )
                 THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
@@ -2805,7 +2805,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
 
         case T_embedded_files:
         {
-            SCHEMATIC* schematic = aSheet->Schematic();
+            SCHEMATIC* schematic = screen->Schematic();
 
             if( !schematic )
                 THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
@@ -2846,7 +2846,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
     screen->UpdateLocalLibSymbolLinks();
     screen->FixupEmbeddedData();
 
-    SCHEMATIC* schematic = aSheet->Schematic();
+    SCHEMATIC* schematic = screen->Schematic();
 
     if( !schematic )
         THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
