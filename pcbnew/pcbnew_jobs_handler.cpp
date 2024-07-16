@@ -667,7 +667,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     else
     {
         // default to the board enabled layers
-        if( aGerberJob->m_printMaskLayer == 0 )
+        if( aGerberJob->m_printMaskLayer.empty() )
             aGerberJob->m_printMaskLayer = brd->GetEnabledLayers().SeqStackupForPlotting();
 
         if( aGerberJob->m_layersIncludeOnAllSet )

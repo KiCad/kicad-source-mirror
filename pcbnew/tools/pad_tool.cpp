@@ -812,7 +812,7 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommi
     else if( aPad->IsOnLayer( B_Cu ) )
         *aLayer = B_Cu;
     else
-        *aLayer = *aPad->GetLayerSet().UIOrder();
+        *aLayer = aPad->GetLayerSet().UIOrder().front();
 
     if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
     {

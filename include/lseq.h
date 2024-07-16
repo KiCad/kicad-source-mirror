@@ -45,30 +45,19 @@ typedef std::vector<PCB_LAYER_ID>   BASE_SEQ;
  */
 class KICOMMON_API LSEQ : public BASE_SEQ
 {
-    unsigned   m_index;
-
 public:
 
-    LSEQ() :
-        m_index( 0 )
+    LSEQ()
     {}
 
     template <class InputIterator>
     LSEQ( InputIterator aStart, InputIterator aEnd ) :
-        BASE_SEQ( aStart, aEnd ), m_index( 0 )
+        BASE_SEQ( aStart, aEnd )
     {}
 
     LSEQ( std::initializer_list<PCB_LAYER_ID> aLayers ) :
-            BASE_SEQ( aLayers ), m_index( 0 )
+        BASE_SEQ( aLayers )
     {}
-
-
-    operator bool ()        { return m_index < size(); }
-
-    PCB_LAYER_ID operator * () const
-    {
-        return at( m_index );       // throws std::out_of_range
-    }
 
     int TestLayers( PCB_LAYER_ID aRhs, PCB_LAYER_ID aLhs ) const;
 };

@@ -1990,7 +1990,7 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
     else if( IsOnLayer( B_Cu ) )
         layer = B_Cu;
     else
-        layer = *GetLayerSet().UIOrder();
+        layer = GetLayerSet().UIOrder().front();
 
     // If there are intersecting items to combine, we need to first make sure the pad is a
     // custom-shape pad.
