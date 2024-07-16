@@ -196,7 +196,7 @@ target_link_libraries( kicommon
     fmt::fmt
     CURL::libcurl
     picosha2
-    zstd
+    ${ZSTD_LIBRARY}
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}
 
