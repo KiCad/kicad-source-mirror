@@ -32,6 +32,7 @@
 #include <richio.h>
 #include <string>
 #include <layer_ids.h>
+#include <lset.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <wx_filename.h>
 #include "widgets/report_severity.h"
