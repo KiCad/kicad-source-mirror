@@ -479,7 +479,11 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& 
 
         wxCHECK( bufferedSymbol, false );
 
+        // If we are coming from a different library, the library ID needs to be preserved
+        auto libId = bufferedSymbol->GetLibId();
         *bufferedSymbol = *aSymbol;
+        bufferedSymbol->SetLibId( libId );
+
         symbolBuf->GetScreen()->SetContentModified();
     }
     else                // New symbol
