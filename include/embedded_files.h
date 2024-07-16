@@ -189,9 +189,9 @@ public:
         return m_files;
     }
 
-    wxFileName GetTempFileName( const wxString& aName ) const;
+    wxFileName GetTemporaryFileName( const wxString& aName ) const;
 
-    wxFileName GetTempFileName( EMBEDDED_FILE* aFile ) const;
+    wxFileName GetTemporaryFileName( EMBEDDED_FILE* aFile ) const;
 
     void ClearEmbeddedFiles( bool aDeleteFiles = true )
     {

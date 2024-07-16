@@ -446,7 +446,7 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
 }
 
 
-wxFileName EMBEDDED_FILES::GetTempFileName( const wxString& aName ) const
+wxFileName EMBEDDED_FILES::GetTemporaryFileName( const wxString& aName ) const
 {
     wxFileName cacheFile;
 
@@ -504,7 +504,7 @@ const std::vector<wxString>* EMBEDDED_FILES::UpdateFontFiles()
     for( const auto& [name, entry] : m_files )
     {
         if( entry->type == EMBEDDED_FILE::FILE_TYPE::FONT )
-            m_fontFiles.push_back( GetTempFileName( name ).GetFullPath() );
+            m_fontFiles.push_back( GetTemporaryFileName( name ).GetFullPath() );
     }
 
     return &m_fontFiles;

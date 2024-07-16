@@ -274,7 +274,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
         }
 
         wxString path = tname.Mid( 14 );
-        wxFileName temp_file = aFiles->GetTempFileName( path );
+        wxFileName temp_file = aFiles->GetTemporaryFileName( path );
 
         if( !temp_file.IsOk() )
         {

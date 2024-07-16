@@ -103,7 +103,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
 
                 docname = docname.Mid( 14 );
 
-                wxFileName temp_file = aFiles->GetTempFileName( docname );
+                wxFileName temp_file = aFiles->GetTemporaryFileName( docname );
 
                 if( !temp_file.IsOk() )
                 {

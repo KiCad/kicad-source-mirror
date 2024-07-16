@@ -822,7 +822,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
         fn.Assign( fileName );
         EMBEDDED_FILES::EMBEDDED_FILE* result = m_embeddedFiles->AddFile( fn, false );
         shortFileName = result->GetLink();
-        fileName = m_embeddedFiles->GetTempFileName( result->name ).GetFullPath();
+        fileName = m_embeddedFiles->GetTemporaryFileName( result->name ).GetFullPath();
     }
     else if( !m_projectPath.IsEmpty() && fileName.StartsWith( m_projectPath ) )
     {
