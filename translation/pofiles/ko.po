@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-11 09:41-0700\n"
+"POT-Creation-Date: 2024-07-16 11:00-0700\n"
 "PO-Revision-Date: 2024-06-28 06:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
@@ -3169,8 +3169,9 @@ msgstr "출력 모드:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:98
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
-#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_text.cpp:564
-#: pcbnew/pcb_textbox.cpp:683 pcbnew/tools/drawing_stackup_table_tool.cpp:270
+#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
+#: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:683
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "컬러"
 
@@ -5697,7 +5698,8 @@ msgstr "수직 위치 맞춤"
 #: eeschema/sch_field.cpp:1433 eeschema/sch_label.cpp:2195
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
-#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_text.cpp:590
+#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_field.cpp:230
+#: pcbnew/pcb_text.cpp:590
 msgid "Hyperlink"
 msgstr "하이퍼링크"
 

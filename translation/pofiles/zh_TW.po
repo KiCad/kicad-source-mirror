@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-11 09:41-0700\n"
+"POT-Creation-Date: 2024-07-16 11:00-0700\n"
 "PO-Revision-Date: 2024-06-07 06:09+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -3130,8 +3130,9 @@ msgstr "輸出模式:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:98
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
-#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_text.cpp:564
-#: pcbnew/pcb_textbox.cpp:683 pcbnew/tools/drawing_stackup_table_tool.cpp:270
+#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
+#: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:683
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "顏色"
 
@@ -5644,7 +5645,8 @@ msgstr "垂直對齊"
 #: eeschema/sch_field.cpp:1433 eeschema/sch_label.cpp:2195
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
-#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_text.cpp:590
+#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_field.cpp:230
+#: pcbnew/pcb_text.cpp:590
 msgid "Hyperlink"
 msgstr "超鏈接"
 

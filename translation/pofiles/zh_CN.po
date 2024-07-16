@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-11 09:41-0700\n"
+"POT-Creation-Date: 2024-07-16 11:00-0700\n"
 "PO-Revision-Date: 2024-07-15 07:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -3153,8 +3153,9 @@ msgstr "输出模式:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:98
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
-#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_text.cpp:564
-#: pcbnew/pcb_textbox.cpp:683 pcbnew/tools/drawing_stackup_table_tool.cpp:270
+#: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
+#: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:683
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "颜色"
 
@@ -5666,7 +5667,8 @@ msgstr "垂直对齐"
 #: eeschema/sch_field.cpp:1433 eeschema/sch_label.cpp:2195
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
-#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_text.cpp:590
+#: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_field.cpp:230
+#: pcbnew/pcb_text.cpp:590
 msgid "Hyperlink"
 msgstr "超链接"
 
@@ -17717,8 +17719,9 @@ msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
-msgstr "无法进行图纸变更, 因为目标图纸已经将图纸 \"%s\" "
-"或其子图纸作为原理图层次结构中某一父级图纸。"
+msgstr ""
+"无法进行图纸变更, 因为目标图纸已经将图纸 \"%s\" 或其子图纸作为原理图层次结构"
+"中某一父级图纸。"
 
 #: eeschema/sheet.cpp:92
 #, c-format
