@@ -1364,7 +1364,8 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
     files.insert( files.begin(), target.GetFullPath() );
 
     // Are there any changes since the last backup?
-    if( PROJECT_ARCHIVER::AreZipArchivesIdentical( files[0], files[1], aReporter ) )
+    if( files.size() >= 2
+        && PROJECT_ARCHIVER::AreZipArchivesIdentical( files[0], files[1], aReporter ) )
     {
         wxRemoveFile( files[0] );
         return true;
