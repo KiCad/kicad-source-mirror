@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-11 09:41-0700\n"
+"POT-Creation-Date: 2024-07-16 11:01-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -600,6 +600,9 @@ msgstr "Available paths:"
 
 msgid "Configure Paths"
 msgstr "Configure Paths"
+
+msgid "Embed Model"
+msgstr "Embed Model"
 
 msgid "Select 3D Model"
 msgstr "Select 3D Model"
@@ -2453,6 +2456,69 @@ msgstr "I agree to provide anonymous reports"
 
 msgid "Reset Unique Id"
 msgstr "Reset Unique Id"
+
+msgid "Copy Embedded Reference"
+msgstr "Copy Embedded Reference"
+
+msgid "Select a file to embed"
+msgstr "Select a file to embed"
+
+msgid "All files|*.*"
+msgstr "All files|*.*"
+
+#, c-format
+msgid "File '%s' already exists."
+msgstr "File '%s' already exists."
+
+msgid "Overwrite"
+msgstr "Overwrite"
+
+#, c-format
+msgid "Failed to add file '%s'."
+msgstr "Failed to add file '%s'."
+
+msgid "Select a directory to export files"
+msgstr "Select a directory to export files"
+
+msgid "Skip"
+msgstr "Skip"
+
+#, c-format
+msgid "Directory '%s' is not writable."
+msgstr "Directory '%s' is not writable."
+
+#, c-format
+msgid "Folder '%s' is not writable."
+msgstr "Folder '%s' is not writable."
+
+msgid "Retry"
+msgstr "Retry"
+
+#, c-format
+msgid "Failed to open file '%s'."
+msgstr "Failed to open file '%s'."
+
+#, c-format
+msgid "Failed to write file '%s'."
+msgstr "Failed to write file '%s'."
+
+msgid "Internal Reference"
+msgstr "Internal Reference"
+
+msgid "Add embedded file"
+msgstr "Add embedded file"
+
+msgid "Remove embedded file"
+msgstr "Remove embedded file"
+
+msgid "&Export"
+msgstr "&Export"
+
+msgid "Embed Fonts"
+msgstr "Embed Fonts"
+
+msgid "Store a copy of all fonts used"
+msgstr "Store a copy of all fonts used"
 
 msgid "Footprints/pads:"
 msgstr "Footprints/pads:"
@@ -5197,6 +5263,24 @@ msgstr "Refresh Plugins"
 msgid "Reload all python plugins and refresh plugin menus"
 msgstr "Reload all python plugins and refresh plugin menus"
 
+msgid "Embedded Files"
+msgstr "Embedded Files"
+
+msgid "Manage embedded files"
+msgstr "Manage embedded files"
+
+msgid "Remove File"
+msgstr "Remove File"
+
+msgid "Remove an embedded file"
+msgstr "Remove an embedded file"
+
+msgid "Extract File"
+msgstr "Extract File"
+
+msgid "Extract an embedded file"
+msgstr "Extract an embedded file"
+
 msgid "Can not switch to project manager in stand-alone mode."
 msgstr "Can not switch to project manager in stand-alone mode."
 
@@ -5402,6 +5486,9 @@ msgstr "Full window crosshairs"
 
 msgid "Always show crosshairs"
 msgstr "Always show crosshairs"
+
+msgid "Open file"
+msgstr "Open file"
 
 msgid "Select a File"
 msgstr "Select a File"
@@ -8097,6 +8184,9 @@ msgstr "Bus Alias Definitions"
 msgid "Text Variables"
 msgstr "Text Variables"
 
+msgid "Schematic Data"
+msgstr "Schematic Data"
+
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr "Project is missing or read-only. Settings will not be editable."
 
@@ -9777,9 +9867,6 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
 "One of the nicknames will need to be changed after adding this library."
 
-msgid "Skip"
-msgstr "Skip"
-
 msgid "Add Anyway"
 msgstr "Add Anyway"
 
@@ -9919,9 +10006,6 @@ msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
-
-msgid "Error loading drawing sheet."
-msgstr "Error loading drawing sheet."
 
 msgid "Failed to load schematic file\n"
 msgstr "Failed to load schematic file\n"
@@ -10224,6 +10308,12 @@ msgstr "Global label not connected anywhere else in the schematic"
 
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Labels are similar (lower/upper case difference only)"
+
+msgid "Power pins are similar (lower/upper case difference only)"
+msgstr "Power pins are similar (lower/upper case difference only)"
+
+msgid "Power pin and label are similar (lower/upper case difference only)"
+msgstr "Power pin and label are similar (lower/upper case difference only)"
 
 msgid "Global label only appears once in the schematic"
 msgstr "Global label only appears once in the schematic"
@@ -11759,6 +11849,9 @@ msgstr "Invalid sheet pin name"
 
 msgid "Empty sheet pin name"
 msgstr "Empty sheet pin name"
+
+msgid "No schematic object"
+msgstr "No schematic object"
 
 msgid "Invalid symbol library name"
 msgstr "Invalid symbol library name"
@@ -13777,9 +13870,6 @@ msgstr "Deriving from symbol '%s'."
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "Symbol '%s' already exists in library '%s'."
-
-msgid "Overwrite"
-msgstr "Overwrite"
 
 msgid "Save Symbol As"
 msgstr "Save Symbol As"
@@ -16449,6 +16539,9 @@ msgstr "Delete Column"
 
 msgid "Show import issues"
 msgstr "Show import issues"
+
+msgid "Embed File"
+msgstr "Embed File"
 
 msgid "Reset all settings on this page to their default"
 msgstr "Reset all settings on this page to their default"
@@ -21102,6 +21195,9 @@ msgstr "Pre-defined Sizes"
 msgid "Length-tuning Patterns"
 msgstr "Length-tuning Patterns"
 
+msgid "Board Data"
+msgstr "Board Data"
+
 msgid "Project is missing or read-only. Some settings will not be editable."
 msgstr "Project is missing or read-only. Some settings will not be editable."
 
@@ -25247,6 +25343,9 @@ msgstr "Warning: Duplicate Nicknames"
 
 msgid "LIbrary Format"
 msgstr "LIbrary Format"
+
+msgid "Error adding 3D model"
+msgstr "Error adding 3D model"
 
 msgid "No filename entered"
 msgstr "No filename entered"
@@ -29980,16 +30079,9 @@ msgstr "Ignored Radial dimension (not yet supported)."
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "Ignored dimension of kind %d (not yet supported)."
 
-msgid "No 3D-models will be imported."
-msgstr "No 3D-models will be imported."
-
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "File not found: '%s'. 3D-model not imported."
-
-#, c-format
-msgid "Unable to write file '%s'."
-msgstr "Unable to write file '%s'."
 
 msgid "Loading nets..."
 msgstr "Loading nets..."
@@ -31517,6 +31609,10 @@ msgstr "Apply Action Script"
 
 msgid "Exception on python footprint wizard code"
 msgstr "Exception on python footprint wizard code"
+
+#, c-format
+msgid "Error loading drawing sheet '%s': %s"
+msgstr "Error loading drawing sheet '%s': %s"
 
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
@@ -35085,6 +35181,16 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Error loading drawing sheet."
+#~ msgstr "Error loading drawing sheet."
+
+#~ msgid "No 3D-models will be imported."
+#~ msgstr "No 3D-models will be imported."
+
+#, c-format
+#~ msgid "Unable to write file '%s'."
+#~ msgstr "Unable to write file '%s'."
 
 #, c-format
 #~ msgid ""
