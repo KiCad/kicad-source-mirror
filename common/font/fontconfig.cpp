@@ -204,6 +204,17 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
     if( !g_fcInitSuccess )
         return retval;
 
+    // If the original font name contains any of these, then it is bold, regardless
+    // of whether we are looking for bold or not
+    if( aFontName.Lower().Contains( wxS( "bold" ) )       // also catches ultrabold
+        || aFontName.Lower().Contains( wxS( "heavy" ) )
+        || aFontName.Lower().Contains( wxS( "black" ) )   // also catches extrablack
+        || aFontName.Lower().Contains( wxS( "thick" ) )
+        || aFontName.Lower().Contains( wxS( "dark" ) ) )
+    {
+        aBold = true;
+    }
+
     wxString qualifiedFontName = aFontName;
 
     wxScopedCharBuffer const fcBuffer = qualifiedFontName.ToUTF8();
@@ -333,7 +344,10 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
     {
         fontName.Replace( ':', ' ' );
 
-        if( s_reporter )
+        // If we missed a case but the matching found the original font name, then we are not substituting
+        if( fontName.CmpNoCase( qualifiedFontName ) == 0 )
+            retval = FF_RESULT::FF_OK;
+        else if( s_reporter )
             s_reporter->Report( wxString::Format( _( "Font '%s' not found; substituting '%s'." ), qualifiedFontName, fontName ) );
     }
 
