@@ -2392,11 +2392,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 {
                     auto processBusMember = [&, this]( const SCH_CONNECTION* member )
                     {
-                        if( netclass.IsEmpty() )
-                        {
-                            netSettings->m_NetClassLabelAssignments.erase( member->Name() );
-                        }
-                        else
+                        if( !netclass.IsEmpty() )
                         {
                             netSettings->m_NetClassLabelAssignments[member->Name()] = netclass;
                             netclassAssignedFromBus.insert( member->Name() );
@@ -2449,11 +2445,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 // on a net. This will be resolved with multiple netclasses.
                 if( !netclassAssignedFromBus.count( netname ) )
                 {
-                    if( netclass.IsEmpty() )
-                    {
-                        netSettings->m_NetClassLabelAssignments.erase( netname );
-                    }
-                    else
+                    if( !netclass.IsEmpty() )
                     {
                         netSettings->m_NetClassLabelAssignments[netname] = netclass;
                     }
