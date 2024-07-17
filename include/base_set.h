@@ -23,6 +23,14 @@
 #include <stdexcept>
 #include <iterator>
 
+#if defined( _MSC_VER )
+// ssize_t is a POSIX extension
+// wx usually defines it on windows as a helper
+// windows does have SSIZE_T (capital) for the same purpose
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
 class BASE_SET
 {
 public:
