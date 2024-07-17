@@ -22,6 +22,7 @@
 #include <vector>
 #include <stdexcept>
 #include <iterator>
+#include <limits>
 
 #if defined( _MSC_VER )
 // ssize_t is a POSIX extension
@@ -37,30 +38,60 @@ public:
     using iterator = std::vector<int>::iterator;
     using const_iterator = std::vector<int>::const_iterator;
 
-    BASE_SET( size_t size = 0 ) : m_bits( size, 0 ) {}
+    BASE_SET( size_t size = 64 ) : m_bits( size, 0 ) {}
 
     bool test( size_t pos ) const
     {
         if( pos >= m_bits.size() )
-            throw std::out_of_range( "Index out of range" );
+            return false;
 
         return m_bits[pos] == 1;
     }
 
-    void set( size_t pos )
-    {
-        if( pos >= m_bits.size() )
-            throw std::out_of_range( "Index out of range" );
+    bool any() const { return std::any_of( m_bits.begin(), m_bits.end(), []( int bit ) { return bit == 1; } ); }
 
-        m_bits[pos] = 1;
+    bool all() const { return std::all_of( m_bits.begin(), m_bits.end(), []( int bit ) { return bit == 1; } ); }
+
+    bool none() const { return std::none_of( m_bits.begin(), m_bits.end(), []( int bit ) { return bit == 1; } ); }
+
+    BASE_SET& set( size_t pos = std::numeric_limits<size_t>::max(), bool value = true )
+    {
+        if( pos == std::numeric_limits<size_t>::max() )
+        {
+            std::fill( m_bits.begin(), m_bits.end(), value ? 1 : 0 );
+            return *this;
+        }
+
+        if( pos >= m_bits.size() )
+            m_bits.resize( pos + 1, 0 );
+
+        m_bits[pos] = value ? 1 : 0;
+        return *this;
     }
 
-    void reset( size_t pos )
+    BASE_SET& reset( size_t pos = std::numeric_limits<size_t>::max() )
     {
+        if( pos == std::numeric_limits<size_t>::max() )
+        {
+            std::fill( m_bits.begin(), m_bits.end(), 0 );
+            return *this;
+        }
+
         if( pos >= m_bits.size() )
-            throw std::out_of_range( "Index out of range" );
+            m_bits.resize( pos + 1, 0 );
 
         m_bits[pos] = 0;
+        return *this;
+    }
+
+    BASE_SET& flip( size_t pos = std::numeric_limits<size_t>::max() )
+    {
+        if( pos == std::numeric_limits<size_t>::max() )
+            std::transform( m_bits.begin(), m_bits.end(), m_bits.begin(), []( int bit ) { return bit ^ 1; } );
+        else
+            m_bits[pos] ^= 1;
+
+        return *this;
     }
 
     size_t count() const { return std::count( m_bits.begin(), m_bits.end(), 1 ); }
@@ -69,10 +100,100 @@ public:
 
     void resize( size_t newSize ) { m_bits.resize( newSize, 0 ); }
 
+    int& operator[]( size_t pos ) { return m_bits[pos]; }
+
+    const int& operator[]( size_t pos ) const { return m_bits[pos]; }
+
+    int compare( const BASE_SET& other ) const
+    {
+        auto result = std::lexicographical_compare_three_way(
+                m_bits.begin(), m_bits.end(), other.m_bits.begin(), other.m_bits.end() );
+        return result == std::strong_ordering::equal ? 0 : ( result == std::strong_ordering::less ? -1 : 1 );
+    }
+
     iterator       begin() { return m_bits.begin(); }
     iterator       end() { return m_bits.end(); }
     const_iterator begin() const { return m_bits.begin(); }
     const_iterator end() const { return m_bits.end(); }
+
+    // Define equality operator
+    bool operator==( const BASE_SET& other ) const
+    {
+        std::size_t minSize = std::min( size(), other.size() );
+        if( !std::equal( m_bits.begin(), m_bits.begin() + minSize, other.m_bits.begin() ) )
+            return false;
+
+        if( std::any_of( m_bits.begin() + minSize, m_bits.end(), []( int bit ) { return bit != 0; } ) )
+            return false;
+
+        if( std::any_of( other.m_bits.begin() + minSize, other.m_bits.end(), []( int bit ) { return bit != 0; } ) )
+            return false;
+
+        return true;
+    }
+
+    // Define less-than operator for comparison
+    bool operator<( const BASE_SET& other ) const
+    {
+        return std::lexicographical_compare( m_bits.begin(), m_bits.end(), other.m_bits.begin(), other.m_bits.end() );
+    }
+
+    // Define output operator
+    friend std::ostream& operator<<( std::ostream& os, const BASE_SET& set )
+    {
+        return os << set.to_string();
+    }
+
+    // to_string method
+    template <typename CharT = char>
+    std::basic_string<CharT> to_string( CharT zero = CharT( '0' ), CharT one = CharT( '1' ) ) const
+    {
+        std::basic_string<CharT> result( size(), zero );
+
+        for( size_t i = 0; i < size(); ++i )
+        {
+            if( test( i ) )
+            {
+                result[size() - 1 - i] = one; // Reverse order to match std::bitset behavior
+            }
+        }
+
+        return result;
+    }
+
+    // Boolean operators
+    BASE_SET& operator&=( const BASE_SET& rhs )
+    {
+        for( size_t i = 0; i < m_bits.size(); ++i )
+            m_bits[i] &= rhs.m_bits[i];
+
+        return *this;
+    }
+
+    BASE_SET& operator|=( const BASE_SET& rhs )
+    {
+        for( size_t i = 0; i < m_bits.size(); ++i )
+            m_bits[i] |= rhs.m_bits[i];
+
+        return *this;
+    }
+
+    BASE_SET& operator^=( const BASE_SET& rhs )
+    {
+        for( size_t i = 0; i < m_bits.size(); ++i )
+            m_bits[i] ^= rhs.m_bits[i];
+
+        return *this;
+    }
+
+    BASE_SET operator~() const
+    {
+        BASE_SET result = *this;
+        for( size_t i = 0; i < m_bits.size(); ++i )
+            result.m_bits[i] = !m_bits[i];
+
+        return result;
+    }
 
     // Custom iterator to iterate over set bits
     class set_bits_iterator
@@ -177,5 +298,42 @@ public:
 private:
     std::vector<int> m_bits;
 };
+
+inline BASE_SET operator&( const BASE_SET& lhs, const BASE_SET& rhs )
+{
+    BASE_SET result = lhs;
+    result &= rhs;
+    return result;
+}
+
+inline BASE_SET operator|( const BASE_SET& lhs, const BASE_SET& rhs )
+{
+    BASE_SET result = lhs;
+    result |= rhs;
+    return result;
+}
+
+inline BASE_SET operator^( const BASE_SET& lhs, const BASE_SET& rhs )
+{
+    BASE_SET result = lhs;
+    result ^= rhs;
+    return result;
+}
+
+namespace std
+{
+template <>
+struct hash<BASE_SET>
+{
+    size_t operator()( const BASE_SET& bs ) const
+    {
+        size_t hash = 0;
+        for( const auto& bit : bs )
+            hash = hash * 31 + std::hash<int>()( bit );
+
+        return hash;
+    }
+};
+} // namespace std
 
 #endif // BASE_SET_H

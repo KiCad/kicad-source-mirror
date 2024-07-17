@@ -43,7 +43,7 @@ static inline size_t hash_board_item( const BOARD_ITEM* aItem, int aFlags )
     size_t ret = 0;
 
     if( aFlags & HASH_LAYER )
-        ret = hash<unsigned long long>{}( aItem->GetLayerSet().to_ullong() );
+        ret = hash<BASE_SET>{}( aItem->GetLayerSet() );
 
     return ret;
 }

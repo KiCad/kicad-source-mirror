@@ -32,7 +32,6 @@
 #include <richio.h>
 #include <string>
 #include <layer_ids.h>
-#include <lset.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <wx_filename.h>
 #include "widgets/report_severity.h"
@@ -40,6 +39,7 @@
 class BOARD;
 class BOARD_ITEM;
 class FP_CACHE;
+class LSET;
 class PCB_IO_KICAD_SEXPR_PARSER;
 class NETINFO_MAPPING;
 class BOARD_DESIGN_SETTINGS;

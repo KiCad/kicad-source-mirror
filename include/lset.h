@@ -20,12 +20,10 @@
 #ifndef LSET_H
 #define LSET_H
 
-#include <bitset>
-
 #include <layer_ids.h>
+#include <base_set.h>
 
 class LSEQ;
-typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
 
 /**
  * LSET is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
@@ -51,7 +49,7 @@ public:
      * Create an empty (cleared) set.
      */
     LSET() :
-        BASE_SET()  // all bits are set to zero in BASE_SET()
+        BASE_SET(PCB_LAYER_ID_COUNT)  // all bits are set to zero in BASE_SET()
     {
     }
 
@@ -61,7 +59,7 @@ public:
     }
 
     LSET( PCB_LAYER_ID aLayer ) :
-        BASE_SET()
+        BASE_SET(PCB_LAYER_ID_COUNT)
     {
         set( aLayer );
     }

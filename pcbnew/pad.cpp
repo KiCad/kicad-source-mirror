@@ -1377,21 +1377,7 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
     // Dick: specctra_export needs this
     // Lorenzo: gencad also needs it to implement padstacks!
 
-#if __cplusplus >= 201103L
-    long long d = aPadRef->GetLayerSet().to_ullong() - aPadCmp->GetLayerSet().to_ullong();
-
-    if( d < 0 )
-        return -1;
-    else if( d > 0 )
-        return 1;
-
-    return 0;
-#else
-    // these strings are not typically constructed, since we don't get here often.
-    std::string s1 = aPadRef->GetLayerSet().to_string();
-    std::string s2 = aPadCmp->GetLayerSet().to_string();
-    return s1.compare( s2 );
-#endif
+    return aPadRef->GetLayerSet().compare( aPadCmp->GetLayerSet() );
 }
 
 
@@ -1410,7 +1396,7 @@ wxString PAD::ShowPadShape() const
     {
     case PAD_SHAPE::CIRCLE:         return _( "Circle" );
     case PAD_SHAPE::OVAL:           return _( "Oval" );
-    case PAD_SHAPE::RECTANGLE:           return _( "Rect" );
+    case PAD_SHAPE::RECTANGLE:      return _( "Rect" );
     case PAD_SHAPE::TRAPEZOID:      return _( "Trap" );
     case PAD_SHAPE::ROUNDRECT:      return _( "Roundrect" );
     case PAD_SHAPE::CHAMFERED_RECT: return _( "Chamferedrect" );

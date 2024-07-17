@@ -144,7 +144,7 @@ static wxString escapeString( const wxString& aString )
 
 static std::string fmt_mask( LSET aSet )
 {
-    return StrPrintf( "%08x", (unsigned) ( aSet & LSET::AllCuMask() ).to_ulong() );
+    return ( aSet & LSET::AllCuMask() ).to_string();
 }
 
 
