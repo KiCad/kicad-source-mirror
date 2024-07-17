@@ -19,10 +19,14 @@
 #ifndef BASE_SET_H
 #define BASE_SET_H
 
-#include <vector>
-#include <stdexcept>
+#include <algorithm>
 #include <iterator>
 #include <limits>
+#include <ostream>
+#include <stdexcept>
+#include <vector>
+
+#include <import_export.h>
 
 #if defined( _MSC_VER )
 // ssize_t is a POSIX extension
@@ -32,7 +36,7 @@
 typedef SSIZE_T ssize_t;
 #endif
 
-class BASE_SET
+class APIEXPORT BASE_SET
 {
 public:
     using iterator = std::vector<int>::iterator;
@@ -87,10 +91,15 @@ public:
     BASE_SET& flip( size_t pos = std::numeric_limits<size_t>::max() )
     {
         if( pos == std::numeric_limits<size_t>::max() )
+        {
             std::transform( m_bits.begin(), m_bits.end(), m_bits.begin(), []( int bit ) { return bit ^ 1; } );
-        else
-            m_bits[pos] ^= 1;
+            return *this;
+        }
 
+        if( pos >= m_bits.size() )
+            m_bits.resize( pos + 1, 0 );
+
+        m_bits[pos] ^= 1;
         return *this;
     }
 
