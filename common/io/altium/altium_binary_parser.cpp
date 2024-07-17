@@ -361,7 +361,7 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
 
     if( !hasNullByte && !isBinary )
     {
-        wxLogError( _( "Missing null byte at end of property list. Imported data might be "
+        wxLogTrace( "ALTIUM", wxT( "Missing null byte at end of property list. Imported data might be "
                        "malformed or missing." ) );
     }
 

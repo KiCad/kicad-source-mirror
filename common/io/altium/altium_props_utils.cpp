@@ -93,7 +93,7 @@ int32_t ALTIUM_PROPS_UTILS::ReadKicadUnit( const std::map<wxString, wxString>& a
 
     if( !value.EndsWith( "mil", &prefix ) )
     {
-        wxLogError( _( "Unit '%s' does not end with 'mil'." ), value );
+        wxLogTrace( "ALTIUM", wxT( "Unit '%s' does not end with 'mil'." ), value );
         return 0;
     }
 
@@ -103,7 +103,7 @@ int32_t ALTIUM_PROPS_UTILS::ReadKicadUnit( const std::map<wxString, wxString>& a
 
     if( !prefix.ToCDouble( &mils ) )
     {
-        wxLogError( _( "Cannot convert '%s' to double." ), prefix );
+        wxLogTrace( "ALTIUM", wxT( "Cannot convert '%s' to double." ), prefix );
         return 0;
     }
 
