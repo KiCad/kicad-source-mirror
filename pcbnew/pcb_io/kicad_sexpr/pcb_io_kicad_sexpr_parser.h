@@ -33,6 +33,7 @@
 #include <core/wx_stl_compat.h>
 #include <hashtables.h>
 #include <layer_ids.h>     // PCB_LAYER_ID
+#include <lset.h>
 #include <pcb_lexer.h>
 #include <kiid.h>
 #include <math/box2.h>
