@@ -578,7 +578,7 @@ int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
         {
             path = table->FindRow( libName, true )->GetFullURI( true );
         }
-        catch( IO_ERROR& err )
+        catch( IO_ERROR& )
         {
             // Do nothing: libName can be not found in globalTable if libName is in projectTable
         }
@@ -656,7 +656,7 @@ int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
         {
             libItemName = table->FindRow( libName, true )->GetFullURI( true );
         }
-        catch( IO_ERROR& err )
+        catch( IO_ERROR& )
         {
             // Do nothing: libName can be not found in globalTable if libName is in projectTable
         }

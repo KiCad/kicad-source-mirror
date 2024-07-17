@@ -65,10 +65,10 @@ public:
 
         wxString          name;
         FILE_TYPE         type;
+        bool              is_valid;
         std::string       compressedEncodedData;
         std::vector<char> decompressedData;
         std::string       data_sha;
-        bool              is_valid;
     };
 
     enum class RETURN_CODE : int
@@ -216,15 +216,14 @@ public:
         return m_embedFonts;
     }
 
-protected:
-    bool            m_embedFonts;        // If set, fonts will be embedded in the element on save
-                                         // Otherwise, font files embedded in the element will be
-                                         // removed on save
-
-
 private:
     std::map<wxString, EMBEDDED_FILE*> m_files;
     std::vector<wxString>              m_fontFiles;
+
+protected:
+    bool m_embedFonts = false; // If set, fonts will be embedded in the element on save
+                               // Otherwise, font files embedded in the element will be
+                               // removed on save
 };
 
 
