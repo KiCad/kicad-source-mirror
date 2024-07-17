@@ -38,6 +38,7 @@
 %ignore GAL_SET::set(int);
 
 %include layer_ids.h
+%include lset.h
 
 // Extend LSET by 2 methods to add or remove layers from the layer list
 // Mainly used to add or remove layers of a pad layer list
@@ -65,5 +66,6 @@
 }
 %{
 #include <layer_ids.h>
+#include <lset.h>
 #include <pcbnew_scripting_helpers.h>
 %}
