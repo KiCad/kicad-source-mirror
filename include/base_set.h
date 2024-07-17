@@ -336,11 +336,12 @@ struct hash<BASE_SET>
 {
     size_t operator()( const BASE_SET& bs ) const
     {
-        size_t hash = 0;
-        for( const auto& bit : bs )
-            hash = hash * 31 + std::hash<int>()( bit );
+        size_t hashVal = 0;
 
-        return hash;
+        for( const auto& bit : bs )
+            hashVal = hashVal * 31 + std::hash<int>()( bit );
+
+        return hashVal;
     }
 };
 } // namespace std
