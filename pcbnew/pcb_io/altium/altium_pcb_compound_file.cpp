@@ -155,33 +155,37 @@ bool ALTIUM_PCB_COMPOUND_FILE::CacheLibModels()
     if( !models_root )
         return false;
 
-    int      idx = 0;
+    m_reader->EnumFiles(
+        models_root, 1,
+        [&]( const CFB::COMPOUND_FILE_ENTRY* stepEntry, const CFB::utf16string&, int ) -> int
+        {
+            long     fileNumber;
+            wxString fileName = UTF16ToUTF8( stepEntry->name, stepEntry->nameLen );
 
-    m_reader->EnumFiles( models_root, 1, [&]( const CFB::COMPOUND_FILE_ENTRY* stepEntry, const CFB::utf16string&, int ) -> int
-    {
-        wxString fileName = UTF16ToUTF8( stepEntry->name, stepEntry->nameLen );
+            if( !fileName.ToLong( &fileNumber ) )
+                return 0;
 
-        if( !m_reader->IsStream( stepEntry ) || idx >= models.size() )
+
+            if( !m_reader->IsStream( stepEntry ) || fileNumber >= long( models.size() ) )
+                return 0;
+
+            size_t            stepSize = static_cast<size_t>( stepEntry->size );
+            std::vector<char> stepContent( stepSize );
+
+            // read file into buffer
+            m_reader->ReadFile( stepEntry, 0, stepContent.data(), stepSize );
+
+            if( stepContent.empty() )
+                return 0;
+
+            // We store the models in their original compressed form so as to speed the caching process
+            // When we parse an individual footprint, we decompress and recompress the model data into
+            // our format
+            m_libModelsCache.emplace( models[fileNumber].id,
+                                      std::make_pair( std::move( models[fileNumber] ),
+                                                      std::move( stepContent ) ) );
             return 0;
-
-        size_t            stepSize = static_cast<size_t>( stepEntry->size );
-        std::vector<char> stepContent( stepSize );
-
-        // read file into buffer
-        m_reader->ReadFile( stepEntry, 0, stepContent.data(), stepSize );
-
-        if( stepContent.empty() )
-            return 0;
-
-        // We store the models in their original compressed form so as to speed the caching process
-        // When we parse an individual footprint, we decompress and recompress the model data into
-        // our format
-        m_libModelsCache.emplace( models[idx].id, std::make_pair( std::move( models[idx] ),
-                                                                  std::move( stepContent ) ) );
-        idx++;
-
-        return 0;
-    } );
+        } );
 
     return true;
 }

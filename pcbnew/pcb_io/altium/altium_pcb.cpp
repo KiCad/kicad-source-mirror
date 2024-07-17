@@ -1345,19 +1345,32 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
 
     EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
     file->name = aElem.modelName;
-    // Decompress the model data before assigning
-    std::vector<char> decompressedData;
-    wxMemoryInputStream compressedStream(model->second.data(), model->second.size());
-    wxZlibInputStream zlibStream(compressedStream);
 
-    decompressedData.reserve(model->second.size() * 2); // Reserve some space, assuming decompressed data is larger
-    while (!zlibStream.Eof()) {
-        size_t currentSize = decompressedData.size();
-        decompressedData.resize(currentSize + 4096); // Increase buffer size
-        zlibStream.Read(decompressedData.data() + currentSize, 4096);
+    // Decompress the model data before assigning
+    std::vector<char>   decompressedData;
+    wxMemoryInputStream compressedStream( model->second.data(), model->second.size() );
+    wxZlibInputStream   zlibStream( compressedStream );
+
+    // Reserve some space, assuming decompressed data is larger -- STEP file
+    // compression is typically 5:1 using zlib like Altium does
+    decompressedData.resize( model->second.size() * 6 );
+    size_t offset = 0;
+
+    while( !zlibStream.Eof() )
+    {
+        zlibStream.Read( decompressedData.data() + offset, decompressedData.size() - offset );
         size_t bytesRead = zlibStream.LastRead();
-        decompressedData.resize(currentSize + bytesRead); // Resize to actual read size
+
+        if( !bytesRead )
+            break;
+
+        offset += bytesRead;
+
+        if( offset >= decompressedData.size() )
+            decompressedData.resize( 2 * decompressedData.size() ); // Resizing is expensive, avoid if we can
     }
+
+    decompressedData.resize( offset );
 
     file->decompressedData = std::move( decompressedData );
     file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;
@@ -1369,8 +1382,8 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
 
     modelSettings.m_Filename = aFootprint->GetEmbeddedFiles()->GetEmbeddedFileLink( *file );
 
-    modelSettings.m_Offset.x = pcbIUScale.IUTomm((int) aElem.modelPosition.x - fpPosition.x );
-    modelSettings.m_Offset.y = -pcbIUScale.IUTomm((int) aElem.modelPosition.y - fpPosition.y );
+    modelSettings.m_Offset.x = pcbIUScale.IUTomm( (int) aElem.modelPosition.x - fpPosition.x );
+    modelSettings.m_Offset.y = -pcbIUScale.IUTomm( (int) aElem.modelPosition.y - fpPosition.y );
     modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) aElem.modelPosition.z + model->first.z_offset );
 
     EDA_ANGLE orientation = aFootprint->GetOrientation();
