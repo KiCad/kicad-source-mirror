@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-15 07:09+0000\n"
+"PO-Revision-Date: 2024-07-17 08:57+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -959,9 +959,8 @@ msgid "Configure Paths"
 msgstr "配置路径"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "模型"
+msgstr "嵌入模型"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -1374,7 +1373,7 @@ msgstr "图片文件"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:445
 msgid "Create Drawing Sheet File"
-msgstr "创建图纸文件"
+msgstr "创建图框文件"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:462
 #: bitmap2component/bitmap2cmp_frame.cpp:498
@@ -1734,7 +1733,7 @@ msgstr "Postscript (.ps 文件)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "图纸 (.kicad_wks file)"
+msgstr "图框 (.kicad_wks file)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:171
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
@@ -2823,7 +2822,7 @@ msgstr "工程明细表"
 #: pcbnew/pcbnew_jobs_handler.cpp:1567
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "加载图纸 '%s' 时出错。"
+msgstr "加载图框 '%s' 时出错。"
 
 #: common/dialogs/dialog_page_settings.cpp:717
 #: common/dialogs/dialog_page_settings_base.cpp:54
@@ -2837,7 +2836,7 @@ msgstr "横向"
 
 #: common/dialogs/dialog_page_settings.cpp:807 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
-msgstr "图纸文件"
+msgstr "图框文件"
 
 #: common/dialogs/dialog_page_settings.cpp:845
 #, c-format
@@ -2845,7 +2844,7 @@ msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
 msgstr ""
-"加载图纸 '%s' 时出错。\n"
+"加载图框 '%s' 时出错。\n"
 "%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
@@ -2926,7 +2925,7 @@ msgstr "导出到其他图纸"
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:218
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Drawing Sheet"
-msgstr "图纸"
+msgstr "图框"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:46
@@ -3239,7 +3238,7 @@ msgstr "黑白"
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/printing/dialog_print_using_printer_base.cpp:22
 msgid "Print drawing sheet"
-msgstr "打印图纸"
+msgstr "打印图框"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -4107,25 +4106,22 @@ msgid "Reset Unique Id"
 msgstr "重置唯一标识"
 
 #: common/dialogs/panel_embedded_files.cpp:87
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "带参考点复制"
+msgstr "复制嵌入参考"
 
 #: common/dialogs/panel_embedded_files.cpp:159
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "选择要调整的值"
+msgstr "选择要嵌入的文件"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "所有文件"
+msgstr "所有文件|*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "文件 \"%s\" 已存在。"
+msgstr "文件 '%s' 已存在。"
 
 #: common/dialogs/panel_embedded_files.cpp:174
 #: common/dialogs/panel_embedded_files.cpp:248
@@ -4143,14 +4139,13 @@ msgid "Overwrite"
 msgstr "覆盖"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "创建文件 '%s' 失败。"
+msgstr "添加文件 '%s' 失败。"
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "选择 GenCAD 导出文件名"
+msgstr "选择保存导出文件的目录"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4161,55 +4156,52 @@ msgid "Skip"
 msgstr "跳过"
 
 #: common/dialogs/panel_embedded_files.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "符号库 '%s' 不可写入。"
+msgstr "目录 '%s' 不可写。"
 
 #: common/dialogs/panel_embedded_files.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "符号库 '%s' 不可写入。"
+msgstr "文件夹 '%s' 不可写。"
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "创建文件 '%s' 失败。"
+msgstr "打开文件 '%s' 失败。"
 
 #: common/dialogs/panel_embedded_files.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "创建文件 '%s' 失败。"
+msgstr "写入文件 '%s' 失败。"
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "图纸间参考"
+msgstr "内部参考"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "添加嵌入文件"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "保留已下载文件"
+msgstr "移除嵌入文件"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "&Export"
-msgstr "导出"
+msgstr "导出 (&E)"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "嵌入字体"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "嵌入所有使用到的字体"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 msgid "Footprints/pads:"
@@ -4975,7 +4967,7 @@ msgstr "无法打开文件。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1001
 msgid "Drawing sheet was not fully read."
-msgstr "无法完整读取图纸。"
+msgstr "无法完整读取图框。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
@@ -5047,7 +5039,7 @@ msgstr "图片"
 #: common/drawing_sheet/ds_data_model_io.cpp:94
 #: common/drawing_sheet/ds_data_model_io.cpp:123
 msgid "Error writing drawing sheet file"
-msgstr "写入图纸文件出错"
+msgstr "写入图框文件出错"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
@@ -7035,7 +7027,7 @@ msgstr "选区高亮"
 
 #: common/layer_id.cpp:154 common/layer_id.cpp:185
 msgid "Drawing sheet"
-msgstr "图纸"
+msgstr "图框"
 
 #: common/layer_id.cpp:155 common/layer_id.cpp:186
 msgid "Page limits"
@@ -8432,34 +8424,28 @@ msgstr "重新加载所有的 Python 插件并刷新插件菜单"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:133
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:79
-#, fuzzy
 msgid "Embedded Files"
-msgstr "图片文件"
+msgstr "嵌入文件"
 
 #: common/tool/actions.cpp:1193
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "重命名文件"
+msgstr "管理嵌入文件"
 
 #: common/tool/actions.cpp:1198
-#, fuzzy
 msgid "Remove File"
-msgstr "重命名文件"
+msgstr "移除文件"
 
 #: common/tool/actions.cpp:1199
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "移除所有匹配的层。"
+msgstr "移除一个嵌入文件"
 
 #: common/tool/actions.cpp:1204
-#, fuzzy
 msgid "Extract File"
-msgstr "导出到文件"
+msgstr "导出文件"
 
 #: common/tool/actions.cpp:1205
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "可执行文件"
+msgstr "导出一个嵌入文件"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
@@ -8749,7 +8735,6 @@ msgid "Always show crosshairs"
 msgstr "始终显示十字光标"
 
 #: common/widgets/grid_text_button_helpers.cpp:363
-#, fuzzy
 msgid "Open file"
 msgstr "打开文件"
 
@@ -9102,7 +9087,7 @@ msgstr "KiCad 封装库路径"
 
 #: common/wildcards_and_files_ext.cpp:342
 msgid "Drawing sheet files"
-msgstr "图纸文件"
+msgstr "图框文件"
 
 #: common/wildcards_and_files_ext.cpp:350
 msgid "KiCad symbol footprint link files"
@@ -9267,7 +9252,7 @@ msgid ""
 "more information."
 msgstr ""
 "你首次使用新的封装库表方法运行 CvPcb 查找封装。\n"
-"CvPcb 已经复制了默认表或在你的主文件夹中创建了一个空表。\n"
+"CvPcb 已经复制了默认表或在你的用户文件夹中创建了一个空表。\n"
 "你必须先配置库表, 以包含 KiCad 中未包含的所有封装库。\n"
 "有关更多信息。请参阅 CvPcb 文档的 \"封装库表\" 部分。"
 
@@ -12701,9 +12686,8 @@ msgid "Text Variables"
 msgstr "文本变量"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:126
-#, fuzzy
 msgid "Schematic Data"
-msgstr "原理图一致性检验"
+msgstr "原理图数据"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:144
 msgid "Project is missing or read-only. Settings will not be editable."
@@ -15500,7 +15484,7 @@ msgstr "未连接"
 
 #: eeschema/erc/erc.cpp:398
 msgid "Unresolved text variable in drawing sheet"
-msgstr "图纸中未解析的文本变量"
+msgstr "图框中未解析的文本变量"
 
 #: eeschema/erc/erc.cpp:432
 #, c-format
@@ -15747,17 +15731,15 @@ msgstr "在原理图中的任何其他位置都未连接全局标签"
 
 #: eeschema/erc/erc_item.cpp:116
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr "标签相似 (只有大小写的区别)"
+msgstr "标签名相似 (仅大小写区别)"
 
 #: eeschema/erc/erc_item.cpp:120
-#, fuzzy
 msgid "Power pins are similar (lower/upper case difference only)"
-msgstr "标签相似 (只有大小写的区别)"
+msgstr "电源引脚名相似 (仅大小写区别)"
 
 #: eeschema/erc/erc_item.cpp:124
-#, fuzzy
 msgid "Power pin and label are similar (lower/upper case difference only)"
-msgstr "全局标签相似（只有大小写的区别）"
+msgstr "电源引脚名与标签名相似 (仅大小写区别)"
 
 #: eeschema/erc/erc_item.cpp:128
 msgid "Global label only appears once in the schematic"
@@ -17762,9 +17744,8 @@ msgstr "空的图纸引脚名"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2798
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2811
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2852
-#, fuzzy
 msgid "No schematic object"
-msgstr "[没有加载原理图]"
+msgstr "没有原理图对象"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2913
 msgid "Invalid symbol library name"
@@ -21645,7 +21626,7 @@ msgstr "将绘图导出到剪贴板"
 
 #: eeschema/tools/ee_actions.cpp:1055
 msgid "Export drawing of current sheet to clipboard"
-msgstr "将当前图纸的绘图导出到剪贴板"
+msgstr "将当前图框的绘图导出到剪贴板"
 
 #: eeschema/tools/ee_actions.cpp:1063 pcbnew/tools/pcb_actions.cpp:337
 msgid "Import Graphics..."
@@ -23906,7 +23887,7 @@ msgstr "显示图纸边框和工程明细表"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:140
 msgid "Show drawing sheet page limits"
-msgstr "显示图纸页限制"
+msgstr "显示图框页限制"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "PCB Background"
@@ -24023,9 +24004,8 @@ msgid "Show import issues"
 msgstr "显示导入问题"
 
 #: include/widgets/filedlg_open_embed_file.h:36
-#, fuzzy
 msgid "Embed File"
-msgstr "编辑文件"
+msgstr "嵌入文件"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24059,7 +24039,7 @@ msgstr "输出文件"
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
-msgstr "图纸的路径, 使用时会覆盖所有工程中已定义的图纸"
+msgstr "图框的路径, 使用时会覆盖所有工程中已定义的图框"
 
 #: kicad/cli/command.cpp:177
 msgid ""
@@ -24362,7 +24342,7 @@ msgstr "指定的椭圆钻孔格式无效\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:216
 msgid "Invalid map format specified\n"
-msgstr "指定的地图格式无效\n"
+msgstr "指定的映射格式无效\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:232
 msgid "Invalid origin mode specified\n"
@@ -24559,7 +24539,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_svg.cpp:74
 #: kicad/cli/command_sch_export_plot.cpp:74
 msgid "No drawing sheet"
-msgstr "无图纸"
+msgstr "无图框"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -26269,11 +26249,11 @@ msgstr "新建项"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:234
 msgid "Print Drawing Sheet"
-msgstr "打印图纸"
+msgstr "打印图框"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "尝试打印图纸时出现错误。"
+msgstr "尝试打印图框时出现错误。"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:240
 msgid "Printing"
@@ -26446,7 +26426,7 @@ msgstr "通用选项"
 
 #: pagelayout_editor/files.cpp:65 pagelayout_editor/files.cpp:109
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "当前图纸已被修改。保存变更?"
+msgstr "当前图框已被修改。保存变更?"
 
 #: pagelayout_editor/files.cpp:81
 #, c-format
@@ -26455,7 +26435,7 @@ msgstr "文件 \"%s\" 已加载"
 
 #: pagelayout_editor/files.cpp:131
 msgid "Append Existing Drawing Sheet"
-msgstr "附加现有的图纸"
+msgstr "附加现有的图框"
 
 #: pagelayout_editor/files.cpp:142 pagelayout_editor/files.cpp:167
 #, c-format
@@ -26469,7 +26449,7 @@ msgstr "插入文件 \"%s\""
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
-msgstr "打开图纸"
+msgstr "打开图框"
 
 #: pagelayout_editor/files.cpp:173
 #, c-format
@@ -26483,7 +26463,7 @@ msgstr "无法写入 '%s'。"
 
 #: pagelayout_editor/files.cpp:195
 msgid "Save Drawing Sheet As"
-msgstr "将图纸另存为"
+msgstr "将图框另存为"
 
 #: pagelayout_editor/files.cpp:269
 msgid "Layout file is read only."
@@ -26491,7 +26471,7 @@ msgstr "布局文件为只读。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:101
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad 工程图编辑器"
+msgstr "KiCad 图框编辑器"
 
 #: pagelayout_editor/pl_editor_frame.cpp:165
 msgid "coord origin: Right Bottom page corner"
@@ -26503,7 +26483,7 @@ msgstr "初始化打印机信息出现错误"
 
 #: pagelayout_editor/pl_editor_frame.cpp:570
 msgid "[no drawing sheet loaded]"
-msgstr "[未加载图纸]"
+msgstr "[未加载图框]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:784
 #, c-format
@@ -26512,11 +26492,11 @@ msgstr "坐标原点: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:925
 msgid "New drawing sheet file is unsaved"
-msgstr "新图纸文件未保存"
+msgstr "新的图框文件未保存"
 
 #: pagelayout_editor/pl_editor_frame.cpp:929
 msgid "Drawing sheet changes are unsaved"
-msgstr "图纸变更未保存"
+msgstr "图框变更未保存"
 
 #: pagelayout_editor/pl_editor_frame.cpp:976
 msgid "Page Width"
@@ -26588,11 +26568,11 @@ msgstr "添加一张位图图像"
 
 #: pagelayout_editor/tools/pl_actions.cpp:94
 msgid "Append Existing Drawing Sheet..."
-msgstr "添加现有的图纸..."
+msgstr "添加现有的图框..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:95
 msgid "Append an existing drawing sheet file to current file"
-msgstr "追加一个现有的图纸文件到当前文件"
+msgstr "追加一个现有的图框文件到当前文件"
 
 #: pagelayout_editor/tools/pl_actions.cpp:105
 msgid "Show Design Inspector"
@@ -26600,7 +26580,7 @@ msgstr "显示设计检查器"
 
 #: pagelayout_editor/tools/pl_actions.cpp:106
 msgid "Show the list of items in the drawing sheet"
-msgstr "显示图纸中项目的列表"
+msgstr "显示图框中的项目列表"
 
 #: pagelayout_editor/tools/pl_actions.cpp:112
 msgid "Page Preview Settings..."
@@ -30149,9 +30129,8 @@ msgid "Length-tuning Patterns"
 msgstr "长度调整规则"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:207
-#, fuzzy
 msgid "Board Data"
-msgstr "电路板名称"
+msgstr "电路板数据"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:224
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -32173,7 +32152,7 @@ msgstr "你确定要覆盖现有的文件吗?"
 #: pcbnew/dialogs/dialog_export_vrml.cpp:291
 #, c-format
 msgid "Failed to create folder '%s'."
-msgstr "创建文件 '%s' 失败。"
+msgstr "创建文件夹 '%s' 失败。"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
@@ -32952,7 +32931,7 @@ msgstr "生成映射文件"
 #: pcbnew/dialogs/dialog_gendrill.cpp:407
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "无法将钻孔/地图文件写入文件夹 '%s'。"
+msgstr "无法将钻孔/映射文件写入文件夹 '%s'。"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:456
 msgid "Save Drill Report File"
@@ -33140,7 +33119,7 @@ msgstr "可用封装:"
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:54
 #: pcbnew/tools/pcb_actions.cpp:445
 msgid "Get and Move Footprint"
-msgstr "获取和移动封装"
+msgstr "捕捉并移动封装"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:258
 msgid "Global Delete"
@@ -35926,9 +35905,8 @@ msgid "LIbrary Format"
 msgstr "库格式"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:382
-#, fuzzy
 msgid "Error adding 3D model"
-msgstr "正在加载 3D 模型..."
+msgstr "添加 3D 模型时出错"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:464
 msgid "No filename entered"
@@ -42382,7 +42360,7 @@ msgstr "无法在组定义中找到组 ID %s。"
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
-msgstr "无法在组地图中找到子组 %s (父组 ID = %s, 名称 = %s)。"
+msgstr "无法在组映射中找到子组 %s (父组 ID = %s, 名称 = %s)。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1476
 #, c-format
@@ -43776,11 +43754,9 @@ msgid "Exception on python footprint wizard code"
 msgstr "Python 封装向导代码异常"
 
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s': %s"
-msgstr ""
-"加载图纸 '%s' 时出错。\n"
-"%s"
+msgstr "加载图框 '%s' 时出错: %s"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:496
 msgid ""
@@ -48479,7 +48455,7 @@ msgstr "KiCad 原理图符号"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad 工程图编辑器"
+msgstr "KiCad 图框编辑器"
 
 #~ msgid "Error loading drawing sheet."
 #~ msgstr "加载图纸时出错。"
