@@ -1086,6 +1086,42 @@ BOOST_AUTO_TEST_CASE( Slice )
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 3 ),
                            expectedSliceArc0.GetP1() ); // equal to arc end
     }
+
+    BOOST_TEST_CONTEXT( "Case 10: New chain, start at arc middle, finish at end" )
+    {
+        SHAPE_LINE_CHAIN chain10;
+        chain10.Append( firstArc );
+
+        SHAPE_LINE_CHAIN sliceResult = chain10.Slice( 3, 6 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
+
+        BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
+
+        SHAPE_ARC expectedSliceArc0;
+        expectedSliceArc0.ConstructFromStartEndCenter( chain10.GetPoint( 3 ), firstArc.GetP1(),
+                                                       firstArc.GetCenter(),
+                                                       firstArc.IsClockwise() );
+
+        BOOST_CHECK_EQUAL( sliceResult.Arc( 0 ).GetP1(),
+                           expectedSliceArc0.GetP1() ); // equal arc end points
+        BOOST_CHECK( sliceResult.Arc( 0 ).Collide( expectedSliceArc0.GetArcMid(), tol ) );
+        BOOST_CHECK( sliceResult.Arc( 0 ).Collide( expectedSliceArc0.GetP0(), tol ) );
+
+        BOOST_CHECK_EQUAL( sliceResult.PointCount(), 4 );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ),
+                           expectedSliceArc0.GetP0() ); // equal to arc start
+        BOOST_CHECK_EQUAL( sliceResult.IsArcStart( 0 ), true );
+
+        for( int i = 1; i <= 3; i++ )
+            BOOST_CHECK_EQUAL( sliceResult.IsArcStart( i ), false );
+
+        for( int i = 0; i <= 2; i++ )
+            BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( i ), false );
+
+        BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( 3 ), true );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 3 ),
+                           expectedSliceArc0.GetP1() ); // equal to arc end
+    }
 }
 
 
