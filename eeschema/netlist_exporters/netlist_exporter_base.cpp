@@ -131,7 +131,8 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
 {
     std::vector<PIN_INFO> pins;
 
-    wxCHECK( aSymbol, pins );
+    if( !aSymbol )
+        return pins;
 
     wxString ref( aSymbol->GetRef( &aSheetPath ) );
 

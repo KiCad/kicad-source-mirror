@@ -246,15 +246,16 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         symbolNames.Remove( m_libEntry->GetName() );
         m_inheritanceSelectCombo->Append( symbolNames );
 
-        LIB_SYMBOL_SPTR rootSymbol = m_libEntry->GetParent().lock();
+        if( LIB_SYMBOL_SPTR rootSymbol = m_libEntry->GetParent().lock() )
+        {
+            wxString parentName = UnescapeString( rootSymbol->GetName() );
+            int selection = m_inheritanceSelectCombo->FindString( parentName );
 
-        wxCHECK( rootSymbol, false );
+            if( selection == wxNOT_FOUND )
+                return false;
 
-        wxString parentName = UnescapeString( rootSymbol->GetName() );
-        int selection = m_inheritanceSelectCombo->FindString( parentName );
-
-        wxCHECK( selection != wxNOT_FOUND, false );
-        m_inheritanceSelectCombo->SetSelection( selection );
+            m_inheritanceSelectCombo->SetSelection( selection );
+        }
 
         m_lastOpenedPage = 0;
     }

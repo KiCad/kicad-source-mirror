@@ -1038,22 +1038,21 @@ bool SIM_MODEL::requiresSpiceModelLine( const SPICE_ITEM& aItem ) const
         if ( param.value == "" )
             continue;
 
-        const SIM_MODEL* baseModel = dynamic_cast<const SIM_MODEL*>( m_baseModel );
+        if( const SIM_MODEL* baseModel = dynamic_cast<const SIM_MODEL*>( m_baseModel ) )
+        {
+            const std::string& baseValue = baseModel->m_params[ii].value;
 
-        wxCHECK( baseModel, false );
+            if( param.value == baseValue )
+                continue;
 
-        std::string      baseValue = baseModel->m_params[ii].value;
+            // One more check for equivalence, mostly for early 7.0 files which wrote all
+            // parameters to the Sim.Params field in normalized format
+            if( param.value == SIM_VALUE::Normalize( SIM_VALUE::ToDouble( baseValue ) ) )
+                continue;
 
-        if( param.value == baseValue )
-            continue;
-
-        // One more check for equivalence, mostly for early 7.0 files which wrote all parameters
-        // to the Sim.Params field in normalized format
-        if( param.value == SIM_VALUE::Normalize( SIM_VALUE::ToDouble( baseValue ) ) )
-            continue;
-
-        // Overrides must be written
-        return true;
+            // Overrides must be written
+            return true;
+        }
     }
 
     return false;

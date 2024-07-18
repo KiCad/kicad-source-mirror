@@ -62,9 +62,8 @@ void BASE_SCREEN::InitDataPoints( const VECTOR2I& aPageSizeIU )
 
 void BASE_SCREEN::SetPageCount( int aPageCount )
 {
-    wxCHECK( aPageCount > 0, /* void */ );
-
-    m_pageCount = aPageCount;
+    if( aPageCount > 0 )
+        m_pageCount = aPageCount;
 }
 
 

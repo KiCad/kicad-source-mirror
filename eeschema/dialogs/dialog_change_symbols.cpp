@@ -435,13 +435,12 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
 
 bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInstance )
 {
-    LIB_ID id;
-
-    wxCHECK( aSymbol, false );
-
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
 
     wxCHECK( frame, false );
+
+    if( !aSymbol )
+        return false;
 
     if( m_matchAll->GetValue() )
     {
@@ -465,6 +464,8 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
     }
     else if( m_matchById )
     {
+        LIB_ID id;
+
         id.Parse( getLibIdValue( m_specifiedId ) );
         return aSymbol->GetLibId() == id;
     }

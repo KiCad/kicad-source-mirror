@@ -35,7 +35,7 @@ DIALOG_EESCHEMA_PAGE_SETTINGS::DIALOG_EESCHEMA_PAGE_SETTINGS( EDA_DRAW_FRAME* aP
 
 DIALOG_EESCHEMA_PAGE_SETTINGS::~DIALOG_EESCHEMA_PAGE_SETTINGS()
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxCHECK( cfg, /* void */ );
 
     cfg->m_PageSettings.export_paper = m_PaperExport->GetValue();
@@ -85,7 +85,7 @@ void DIALOG_EESCHEMA_PAGE_SETTINGS::onTransferDataToWindow()
     msg.Printf( format, m_screen->GetVirtualPageNumber() );
     m_TextSheetNumber->SetLabel( msg );
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxCHECK( cfg, /* void */ );
 
     m_PaperExport->SetValue( cfg->m_PageSettings.export_paper );

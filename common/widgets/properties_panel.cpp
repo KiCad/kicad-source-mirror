@@ -199,7 +199,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     for( EDA_ITEM* item : aSelection )
         types.insert( TYPE_HASH( *item ) );
 
-    wxCHECK( !types.empty(), /* void */ );
+    wxCHECK( !types.empty(), /* void */ );  // already guarded above, but Coverity doesn't know that
 
     PROPERTY_MANAGER&        propMgr = PROPERTY_MANAGER::Instance();
     std::set<PROPERTY_BASE*> commonProps;

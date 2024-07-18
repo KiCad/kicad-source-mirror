@@ -152,7 +152,7 @@ double DIALOG_PRINT_GENERIC::getScaleValue()
 
         if( !m_scaleCustomText->GetValue().ToDouble( &scale ) )
         {
-            DisplayInfoMessage( nullptr, _( "Warning: Bad scale number" ) );
+            DisplayInfoMessage( nullptr, _( "Warning: scale is not a number." ) );
             scale = 1.0;
         }
 
@@ -160,23 +160,24 @@ double DIALOG_PRINT_GENERIC::getScaleValue()
         {
             scale = MAX_SCALE;
             setScaleValue( scale );
-            DisplayInfoMessage( nullptr,
-                wxString::Format( _( "Warning: Scale option set to a very large value.\n"
-                                     " Clamped to %f" ), scale ) );
+            DisplayInfoMessage( nullptr, wxString::Format( _( "Warning: scale set to a very large "
+                                                              "value.\nIt will be clamped to %f." ),
+                                                           scale ) );
         }
         else if( scale < MIN_SCALE )
         {
             scale = MIN_SCALE;
             setScaleValue( scale );
-            DisplayInfoMessage( nullptr,
-                wxString::Format( _( "Warning: Scale option set to a very small value.\n"
-                                     " Clamped to %f" ), scale ) );
+            DisplayInfoMessage( nullptr, wxString::Format( _( "Warning: scale set to a very small "
+                                                              "value.\nIt will be clamped to %f." ),
+                                                           scale ) );
         }
 
         return scale;
     }
 
-    wxCHECK( false, 1.0 );
+    wxFAIL_MSG( wxT( "No scale option selected." ) );
+    return 1.0;
 }
 
 

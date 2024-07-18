@@ -1314,14 +1314,13 @@ void DIALOG_SIM_MODEL<T>::onPinModelComboboxTextEnter( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onDifferentialCheckbox( wxCommandEvent& aEvent )
 {
-    SIM_MODEL_IBIS* modelibis = dynamic_cast<SIM_MODEL_IBIS*>( &curModel() );
+    if( SIM_MODEL_IBIS* modelibis = dynamic_cast<SIM_MODEL_IBIS*>( &curModel() ) )
+    {
+        bool diff = m_differentialCheckbox->GetValue() && modelibis->CanDifferential();
+        modelibis->SwitchSingleEndedDiff( diff );
 
-    wxCHECK( modelibis, /* void */ );
-
-    bool diff = m_differentialCheckbox->GetValue() && modelibis->CanDifferential();
-    modelibis->SwitchSingleEndedDiff( diff );
-
-    updateWidgets();
+        updateWidgets();
+    }
 }
 
 

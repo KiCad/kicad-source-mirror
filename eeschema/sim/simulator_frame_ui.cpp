@@ -591,16 +591,15 @@ void SIMULATOR_FRAME_UI::ShowChangedLanguage()
 {
     for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
     {
-        SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( ii ) );
+        if( SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( ii ) ) )
+        {
+            simTab->OnLanguageChanged();
 
-        wxCHECK( simTab, /* void */ );
+            wxString pageTitle( simulator()->TypeToName( simTab->GetSimType(), true ) );
+            pageTitle.Prepend( wxString::Format( _( "Analysis %u - " ), ii+1 /* 1-based */ ) );
 
-        simTab->OnLanguageChanged();
-
-        wxString pageTitle( simulator()->TypeToName( simTab->GetSimType(), true ) );
-        pageTitle.Prepend( wxString::Format( _( "Analysis %u - " ), ii+1 /* 1-based */ ) );
-
-        m_plotNotebook->SetPageText( ii, pageTitle );
+            m_plotNotebook->SetPageText( ii, pageTitle );
+        }
     }
 
     m_filter->SetHint( _( "Filter" ) );
@@ -1576,25 +1575,25 @@ void SIMULATOR_FRAME_UI::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
         return;
     }
 
-    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-    wxCHECK( plotTab, /* void */ );
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
+    {
+        if( simType == ST_AC )
+        {
+            updateTrace( aName, aType | SPT_AC_GAIN, plotTab );
+            updateTrace( aName, aType | SPT_AC_PHASE, plotTab );
+        }
+        else if( simType == ST_SP )
+        {
+            updateTrace( aName, aType | SPT_AC_GAIN, plotTab );
+            updateTrace( aName, aType | SPT_AC_PHASE, plotTab );
+        }
+        else
+        {
+            updateTrace( aName, aType, plotTab );
+        }
 
-    if( simType == ST_AC )
-    {
-        updateTrace( aName, aType | SPT_AC_GAIN, plotTab );
-        updateTrace( aName, aType | SPT_AC_PHASE, plotTab );
+        plotTab->GetPlotWin()->UpdateAll();
     }
-    else if( simType == ST_SP )
-    {
-        updateTrace( aName, aType | SPT_AC_GAIN, plotTab );
-        updateTrace( aName, aType | SPT_AC_PHASE, plotTab );
-    }
-    else
-    {
-        updateTrace( aName, aType, plotTab );
-    }
-
-    plotTab->GetPlotWin()->UpdateAll();
 
     updateSignalsGrid();
     OnModify();
@@ -2099,11 +2098,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
         {
             m_simulatorFrame->LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() );
 
-            simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
-
-            wxCHECK( simTab, false );
-
-            simTab->SetLastSchTextSimCommand( js[ "last_sch_text_sim_command" ] );
+            if( SIM_TAB* firstTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) ) )
+                firstTab->SetLastSchTextSimCommand( js[ "last_sch_text_sim_command" ] );
         }
     }
     catch( nlohmann::json::parse_error& error )
