@@ -267,6 +267,13 @@ public:
 
     void SetBodyStyle( int aBodyStyle ) override;
 
+    /**
+     * Similar to SetBodyStyle(), but always set the body style, regardless
+     * the lib symbol properties (the LIB_SYMBOL m_part can be not set during
+     * schematic files loading)
+     */
+    void SetBodyStyleUnconditional( int aBodyStyle );
+
     bool HasAlternateBodyStyle() const override;
 
     wxString GetPrefix() const { return m_prefix; }

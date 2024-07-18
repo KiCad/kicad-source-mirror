@@ -420,6 +420,19 @@ void SCH_SYMBOL::UpdatePins()
 }
 
 
+void SCH_SYMBOL::SetBodyStyleUnconditional( int aBodyStyle )
+{
+    if( m_bodyStyle != aBodyStyle )
+    {
+        m_bodyStyle = ( m_bodyStyle == BODY_STYLE::BASE ) ? BODY_STYLE::DEMORGAN
+                                                          : BODY_STYLE::BASE;
+
+        // The body style may have a different pin layout so the update the pin map.
+        UpdatePins();
+    }
+}
+
+
 void SCH_SYMBOL::SetBodyStyle( int aBodyStyle )
 {
     if( HasAlternateBodyStyle() && m_bodyStyle != aBodyStyle )

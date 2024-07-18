@@ -2995,7 +2995,9 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         case T_convert:
-            symbol->SetBodyStyle( parseInt( "symbol body style" ) );
+            // Use SetBodyStyleUnconditional() because the full symbol properties
+            // (including the corresponding LIB_SYMBOL) are not known
+            symbol->SetBodyStyleUnconditional( parseInt( "symbol body style" ) );
             NeedRIGHT();
             break;
 
