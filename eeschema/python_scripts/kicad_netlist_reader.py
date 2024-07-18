@@ -745,7 +745,7 @@ class netlist():
         # the normal sort would place 100 before 99 since it only would look at the first digit.
         def sortKey( str ):
             return [ int(t) if t.isdigit() else t.lower()
-                    for t in re.split( '(\d+)', str ) ]
+                    for t in re.split( r'(\d+)', str ) ]
 
         ret.sort(key=lambda g: sortKey(g.getRef()))
 
@@ -791,7 +791,7 @@ class netlist():
         # the normal sort would place 100 before 99 since it only would look at the first digit.
         def sortKey( str ):
             return [ int(t) if t.isdigit() else t.lower()
-                    for t in re.split( '(\d+)', str ) ]
+                    for t in re.split( r'(\d+)', str ) ]
 
         for g in groups:
             #g = sorted(g, key=lambda g: sortKey(g.getRef()))
