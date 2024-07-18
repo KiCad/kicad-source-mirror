@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-17 08:56+0000\n"
+"PO-Revision-Date: 2024-07-18 18:45+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -15969,9 +15969,9 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbol \"%s\" nicht in Bibliothek \"'%s\" gefunden"
 
 #: eeschema/erc/erc.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr "Symbol %s hat in den Einheiten %s unplatzierte Stromversorgungs-Pins."
+msgstr "Symbol \"%s\" hat mehrere Pins mit der gleichen Pinnummer."
 
 #: eeschema/erc/erc.cpp:1289
 #, c-format
@@ -42657,9 +42657,9 @@ msgid "PTH pad %s %s of %s"
 msgstr "PTH-Pad %s %s von %s"
 
 #: pcbnew/pad.cpp:1519
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s"
-msgstr "Durchsteckpads"
+msgstr "Durchsteckpad %s"
 
 #: pcbnew/pad.cpp:2073
 #, fuzzy
@@ -42667,9 +42667,9 @@ msgid "(Pad must have a positive size)"
 msgstr "Fehler: Pad muss eine positive Größe haben."
 
 #: pcbnew/pad.cpp:2084
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "Via-Lochgröße muss kleiner als Via-Durchmesser sein"
+msgstr "(Durchsteckpad-Lochgröße muss größer als %s sein)"
 
 #: pcbnew/pad.cpp:2108
 #, fuzzy
@@ -43059,9 +43059,9 @@ msgid "User Field"
 msgstr "Benutzerdefiniertes Feld"
 
 #: pcbnew/pcb_field.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Reference field of %s"
-msgstr "Referenzfeld"
+msgstr "Referenzfeld von %s"
 
 #: pcbnew/pcb_field.cpp:153
 #, fuzzy, c-format
@@ -43084,9 +43084,9 @@ msgid "Field of %s (%s)"
 msgstr "Raster: %s (%s)"
 
 #: pcbnew/pcb_field.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "%s field of %s (%s)"
-msgstr "Benutzerdefiniertes Raster: %s (%s)"
+msgstr "%s Feld von %s (%s)"
 
 #: pcbnew/pcb_generator.cpp:207 pcbnew/pcb_generator.cpp:244
 msgid "Update Order"
