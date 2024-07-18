@@ -1026,6 +1026,66 @@ BOOST_AUTO_TEST_CASE( Slice )
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 1 ), VECTOR2I( 263450000, 258360000 ) );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( -1 ), VECTOR2I( 263450000, 258360000 ) ); // Same as index 1
     }
+
+    BOOST_TEST_CONTEXT( "Case 8: Full 2nd arc, nothing else" )
+    {
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 12, 19 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
+
+        BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
+        SHAPE_ARC sliceArc0 = sliceResult.Arc( 0 );
+
+        // Equal arc to original inserted arc
+        BOOST_CHECK_EQUAL( secondArc.GetP1(), sliceArc0.GetP1() );
+        BOOST_CHECK_EQUAL( secondArc.GetArcMid(), sliceArc0.GetArcMid() );
+        BOOST_CHECK_EQUAL( secondArc.GetP1(), sliceArc0.GetP1() );
+
+        BOOST_CHECK_EQUAL( sliceResult.PointCount(), 8 );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ), sliceArc0.GetP0() ); // equal to arc start
+        BOOST_CHECK_EQUAL( sliceResult.IsArcStart( 0 ), true );
+
+        for( int i = 1; i <= 7; i++ )
+            BOOST_CHECK_EQUAL( sliceResult.IsArcStart( i ), false );
+
+        for( int i = 0; i <= 6; i++ )
+            BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( i ), false );
+
+        BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( 7 ), true );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 7 ), sliceArc0.GetP1() ); // equal to arc end
+    }
+
+    BOOST_TEST_CONTEXT( "Case 9: Start at middle of a 2nd arc, finish at end" )
+    {
+        SHAPE_LINE_CHAIN sliceResult = chain.Slice( 16, 19 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
+
+        BOOST_CHECK_EQUAL( sliceResult.ArcCount(), 1 );
+
+        SHAPE_ARC expectedSliceArc0;
+        expectedSliceArc0.ConstructFromStartEndCenter( chain.GetPoint( 16 ), secondArc.GetP1(),
+                                                       secondArc.GetCenter(),
+                                                       secondArc.IsClockwise() );
+
+        BOOST_CHECK_EQUAL( sliceResult.Arc( 0 ).GetP1(),
+                           expectedSliceArc0.GetP1() ); // equal arc end points
+        BOOST_CHECK( sliceResult.Arc( 0 ).Collide( expectedSliceArc0.GetArcMid(), tol ) );
+        BOOST_CHECK( sliceResult.Arc( 0 ).Collide( expectedSliceArc0.GetP0(), tol ) );
+
+        BOOST_CHECK_EQUAL( sliceResult.PointCount(), 4 );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ),
+                           expectedSliceArc0.GetP0() ); // equal to arc start
+        BOOST_CHECK_EQUAL( sliceResult.IsArcStart( 0 ), true );
+
+        for( int i = 1; i <= 3; i++ )
+            BOOST_CHECK_EQUAL( sliceResult.IsArcStart( i ), false );
+
+        for( int i = 0; i <= 2; i++ )
+            BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( i ), false );
+
+        BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( 3 ), true );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 3 ),
+                           expectedSliceArc0.GetP1() ); // equal to arc end
+    }
 }
 
 
