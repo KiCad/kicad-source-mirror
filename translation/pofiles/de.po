@@ -20,13 +20,14 @@
 # Julian Daube <julian@daube.xyz>, 2023.
 # Johannes Maibaum <jmaibaum@gmail.com>, 2024.
 # "Pferd O." <frank.0228@ich-war-hier.de>, 2024.
+# tct123 <tct1234@protonmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
 "PO-Revision-Date: 2024-07-18 18:45+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: tct123 <tct1234@protonmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -646,8 +647,9 @@ msgid "Show solder paste"
 msgstr "Lötpaste anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
+#, fuzzy
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "F.Siebdruck"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
@@ -36565,7 +36567,7 @@ msgstr "Aus Designregeln"
 #: pcbnew/pcb_track.cpp:1728
 #, fuzzy
 msgid "Tented"
-msgstr "Zentriert"
+msgstr "Zelt"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
