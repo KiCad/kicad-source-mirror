@@ -26,8 +26,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-18 18:45+0000\n"
-"Last-Translator: tct123 <tct1234@protonmail.com>\n"
+"PO-Revision-Date: 2024-07-19 19:09+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -647,9 +647,8 @@ msgid "Show solder paste"
 msgstr "Lötpaste anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "F.Siebdruck"
+msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
@@ -4282,7 +4281,7 @@ msgstr "Symbolbibliothek '%s' ist nicht beschreibbar."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "Erneut versuchen"
 
 #: common/dialogs/panel_embedded_files.cpp:297
 #, fuzzy, c-format
@@ -4301,7 +4300,7 @@ msgstr "Querverweise zwischen Schaltplanblättern"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Eingebettete Datei hinzufügen"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
 #, fuzzy
@@ -4314,11 +4313,11 @@ msgstr "&Exportieren"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "Schriftarten einbetten"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Eine Kopie aller benutzten Schriftarten speichern"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 msgid "Footprints/pads:"
@@ -15933,7 +15932,7 @@ msgstr "Netzklasse %s ist nicht definiert"
 #: eeschema/erc/erc.cpp:742
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "Bezeichner verbindet mehr als eine Verbindung an Position %d, %d"
 
 #: eeschema/erc/erc.cpp:797
 #, fuzzy, c-format
@@ -16129,7 +16128,7 @@ msgstr "Vier Verbindungspunkte sind verbunden"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "Bezeichner verbindet mehr als eine Verbindung"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
@@ -20227,9 +20226,9 @@ msgid "Another simulation is already running."
 msgstr "Eine andere Simulation wurde bereits gestartet."
 
 #: eeschema/sim/simulator_frame.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Datei %s kann nicht geladen werden"
+msgstr "Datei %s kann nicht geladen oder geparst werden"
 
 #: eeschema/sim/simulator_frame.cpp:628
 msgid "Save changes to workbook?"
@@ -22407,7 +22406,7 @@ msgstr "Von Simulation ausgeschlossen"
 
 #: eeschema/tools/ee_actions.cpp:1167
 msgid "Draw 'X's over items which have been excluded from simulation"
-msgstr ""
+msgstr "Zeichne \"X\" über von der Simulation ausgeschlossenen Elementen"
 
 #: eeschema/tools/ee_actions.cpp:1172
 msgid "Show OP Voltages"
@@ -23166,6 +23165,8 @@ msgstr "Keine Symbolbibliothek gewählt."
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr ""
+"Fehlendes/fehlerhaftes Dateiexplorerargument \"%F\" in gemeinsamen "
+"Einstellungen."
 
 #: eeschema/tools/symbol_editor_control.cpp:332
 #: pcbnew/tools/footprint_editor_control.cpp:638
@@ -36578,20 +36579,19 @@ msgstr "Nicht beschichtet"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:334
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr ""
+msgstr "Bestimmt, ob ein Via vorderseitig mit Lötstopplack abgedeckt wird."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:340
 msgid "Link front and back tenting settings"
-msgstr ""
+msgstr "Verbinde Abdeckungseinstellung für Vorder- und Rückseite"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:347
-#, fuzzy
 msgid "Back tenting:"
-msgstr "Präfix für Rückseite:"
+msgstr "Rückseitiges Abdecken:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr ""
+msgstr "Bestimmt, ob ein Via rückseitig mit Lötstopplack abgedeckt wird."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:405
 msgid "Add teardrops on via's track connections"
@@ -38058,9 +38058,8 @@ msgstr "Benutzer1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid " Off-board, front"
-msgstr "Off-board, Test"
+msgstr " Außerhalb der Platine, Vorderseite"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -38071,9 +38070,8 @@ msgstr "Off-board, Test"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid "Off-board, back"
-msgstr "Off-board, Test"
+msgstr "Außerhalb der Platine, Rückseite"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:717
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:731
@@ -38087,6 +38085,8 @@ msgstr "Off-board, Test"
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
 msgstr ""
+"Im Gegensatz zur Vorder- und Rückseite, wechseln Hilfslagen nicht die "
+"Platinenseite beim Spiegeln."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:724
 msgid "User2"
@@ -39777,9 +39777,8 @@ msgid "Hole clearance violation"
 msgstr "Loch-Freiraum-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:106
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Bohrlöcher zu dicht beieinander"
+msgstr "Bohrloch zu dich an anderem Loch"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Drilled holes co-located"
@@ -42664,9 +42663,8 @@ msgid "PTH pad %s"
 msgstr "Durchsteckpad %s"
 
 #: pcbnew/pad.cpp:2073
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Fehler: Pad muss eine positive Größe haben."
+msgstr "(Pad muss eine positive Größe haben.)"
 
 #: pcbnew/pad.cpp:2084
 #, c-format
@@ -42721,9 +42719,8 @@ msgstr ""
 "Lötstoppmaske erzeugt."
 
 #: pcbnew/pad.cpp:2183
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(PTH-Pad hat keine Kupferlagen)"
+msgstr "(Pad hat keine Lagen)"
 
 #: pcbnew/pad.cpp:2186
 msgid "(PTH pad has no copper layers)"
@@ -42744,9 +42741,8 @@ msgstr ""
 "Verwenden Sie stattdessen ein SMD-Pad."
 
 #: pcbnew/pad.cpp:2219
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Fehler: SMD-Pad hat ein Loch."
+msgstr "(SMD-Pad hat ein Loch)"
 
 #: pcbnew/pad.cpp:2225
 #, fuzzy
@@ -43280,7 +43276,7 @@ msgstr "Lade Polygone..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2057
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Polygonumrissanzahl ist %d, erwarte 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2184
 msgid "Loading rules..."
@@ -43553,7 +43549,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4280
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Unbekannte Textboxausrichtung %d, text %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4350
 msgid "Loading rectangles..."
@@ -46556,9 +46552,8 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Es müssen genau zwei Linien ausgewählt werden, um sie zu verlängern."
 
 #: pcbnew/tools/edit_tool.cpp:1328
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
-msgstr "Es muss eine Form mit mindestens zwei Linien ausgewählt werden."
+msgstr "Eine Form mit mindestens zwei Linien auswählen."
 
 #: pcbnew/tools/edit_tool.cpp:1504
 #, fuzzy
