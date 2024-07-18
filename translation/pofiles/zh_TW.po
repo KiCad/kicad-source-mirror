@@ -10,13 +10,14 @@
 # William Lin <unrealin01@gmail.com>, 2024.
 # pominglee <pominglee@gmail.com>, 2024.
 # Andrew <yenchang.lin@gmail.com>, 2024.
+# CloverGit <w991593239@163.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-05-28 12:07+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2024-07-18 18:45+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -941,9 +942,8 @@ msgid "Configure Paths"
 msgstr "配置路徑"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "程式碼模型"
+msgstr "嵌入模型"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -4124,9 +4124,8 @@ msgid "Failed to add file '%s'."
 msgstr "建立檔案 '%s' 失敗。"
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "選擇 GenCAD 匯出檔案名"
+msgstr "選擇匯出檔案的目錄"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4148,12 +4147,12 @@ msgstr "符號庫 '%s' 不可寫入。"
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "重試"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "無法開啟文件 '%s'"
+msgstr "無法開啟檔案 '%s'。"
 
 #: common/dialogs/panel_embedded_files.cpp:307
 #, fuzzy, c-format
@@ -4167,7 +4166,7 @@ msgstr "圖紙間參考"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "新增嵌入檔案"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
 #, fuzzy
