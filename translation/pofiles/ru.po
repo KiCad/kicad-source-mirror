@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-18 18:45+0000\n"
-"Last-Translator: Alex Life <life.alex.v@gmail.com>\n"
+"PO-Revision-Date: 2024-07-20 21:09+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -41790,7 +41790,7 @@ msgstr "У символа %s сменилось посад. место с %s н�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
 #, c-format
 msgid "Update %s fields."
-msgstr "Обновить %s полей."
+msgstr "Обновить поля %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:439
 #, c-format
