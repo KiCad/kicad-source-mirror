@@ -39,6 +39,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     auto cfg = m_parentFrame->GetPcbNewSettings();
     m_reporter = new WX_TEXT_CTRL_REPORTER( m_tcReport );
 
+    m_cbRefillZones->SetValue( cfg->m_Cleanup.cleanup_refill_zones );
     m_cleanViasOpt->SetValue( cfg->m_Cleanup.cleanup_vias );
     m_mergeSegmOpt->SetValue( cfg->m_Cleanup.merge_segments );
     m_deleteUnconnectedOpt->SetValue( cfg->m_Cleanup.cleanup_unconnected );
@@ -72,6 +73,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 
     if( cfg )
     {
+        cfg->m_Cleanup.cleanup_refill_zones   = m_cbRefillZones->GetValue();
         cfg->m_Cleanup.cleanup_vias           = m_cleanViasOpt->GetValue();
         cfg->m_Cleanup.merge_segments         = m_mergeSegmOpt->GetValue();
         cfg->m_Cleanup.cleanup_unconnected    = m_deleteUnconnectedOpt->GetValue();
@@ -139,10 +141,14 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     if( m_firstRun )
     {
-        m_reporter->Report( _( "Checking zones..." ) );
-        wxSafeYield();      // Timeslice to update UI
-        m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
-        wxSafeYield();      // Timeslice to close zone progress reporter
+        if( m_cbRefillZones->GetValue() )
+        {
+            m_reporter->Report( _( "Checking zones..." ) );
+            wxSafeYield();      // Timeslice to update UI
+            m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
+            wxSafeYield();      // Timeslice to close zone progress reporter
+        }
+
         m_firstRun = false;
     }
 

@@ -153,6 +153,7 @@ public:
 
     struct DIALOG_CLEANUP
     {
+        bool cleanup_refill_zones;
         bool cleanup_vias;
         bool delete_dangling_vias;
         bool cleanup_tracks_in_pad;

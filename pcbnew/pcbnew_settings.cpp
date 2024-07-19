@@ -285,6 +285,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.show_page_borders",
             &m_ShowPageLimits, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_refill_zones",
+            &m_Cleanup.cleanup_refill_zones, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_vias",
             &m_Cleanup.cleanup_vias, true ) );
 

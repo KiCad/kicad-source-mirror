@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,7 +26,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,6 +34,7 @@ class DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxCheckBox* m_cbRefillZones;
 		wxCheckBox* m_cleanShortCircuitOpt;
 		wxCheckBox* m_cleanViasOpt;
 		wxCheckBox* m_deleteDanglingViasOpt;
