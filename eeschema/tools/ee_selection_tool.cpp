@@ -1056,12 +1056,10 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
         else if( aItem->Type() == SCH_SYMBOL_T )
         {
             const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( aItem );
+            const SCH_PIN*    pin = symbol->GetPin( pos );
 
-            wxCHECK( symbol, OPT_TOOL_EVENT() );
-
-            const SCH_PIN* pin = symbol->GetPin( pos );
-
-            wxCHECK( pin, OPT_TOOL_EVENT() );
+            if( !pin )
+                return OPT_TOOL_EVENT();
 
             if( !pin->IsVisible()
                 && !( m_frame->eeconfig()->m_Appearance.show_hidden_pins

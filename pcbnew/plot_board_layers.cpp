@@ -57,7 +57,8 @@ static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMa
 void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
                       const PCB_PLOT_PARAMS& aPlotOptions )
 {
-    wxCHECK( aBoard && aPlotter && aLayers.size(), /* void */ );
+    if( !aBoard || !aPlotter || aLayers.empty() )
+        return;
 
     // if a drill mark must be plotted, the copper layer needs to be plotted
     // after other layers because the drill mark must be plotted as a filled

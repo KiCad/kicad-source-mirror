@@ -86,8 +86,6 @@ BOARD* BOARD_COMMIT::GetBoard() const
 
 COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen )
 {
-    wxCHECK( aItem, *this );
-
     // Many operations (move, rotate, etc.) are applied directly to a group's children, so they
     // must be staged as well.
     if( aChangeType == CHT_MODIFY )

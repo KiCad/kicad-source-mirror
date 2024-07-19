@@ -143,7 +143,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     else if( style < (int) lineTypeNames.size() )
         m_borderStyleCombo->SetSelection( style );
     else
-        wxFAIL_MSG( "Line type not found in the type lookup map" );
+        wxFAIL_MSG( wxT( "Line type not found in the type lookup map" ) );
 
     if( SYMBOL_EDIT_FRAME* symbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) )
     {

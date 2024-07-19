@@ -177,7 +177,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
             break;
 
         default:
-            wxFAIL_MSG( "PlotDrawingSheet(): Unknown drawing sheet item." );
+            wxFAIL_MSG( wxT( "PlotDrawingSheet(): Unknown drawing sheet item." ) );
             break;
         }
     }

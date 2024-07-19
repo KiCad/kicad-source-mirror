@@ -1121,12 +1121,13 @@ void SCH_EDIT_FRAME::OnModify()
 {
     EDA_BASE_FRAME::OnModify();
 
-    wxCHECK( GetScreen(), /* void */ );
+    if( GetScreen() )
+        GetScreen()->SetContentModified();
 
-    GetScreen()->SetContentModified();
     m_autoSaveRequired = true;
 
-    GetCanvas()->Refresh();
+    if( GetCanvas() )
+        GetCanvas()->Refresh();
 
     if( !GetTitle().StartsWith( wxS( "*" ) ) )
         updateTitle();

@@ -139,9 +139,8 @@ public:
                 }
             }
 
-            wxCHECK( seg1 && seg2, false );
-
-            return seg1->Width() == seg2->Width();
+            if( seg1 && seg2 )
+                return seg1->Width() == seg2->Width();
         }
 
         return false;

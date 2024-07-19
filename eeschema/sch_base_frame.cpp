@@ -444,9 +444,9 @@ void SCH_BASE_FRAME::AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
     // Null pointers will cause boost::ptr_vector to raise a boost::bad_pointer exception which
     // will be unhandled.  There is no valid reason to pass an invalid EDA_ITEM pointer to the
     // screen append function.
-    wxCHECK( aItem != nullptr, /* void */ );
+    wxCHECK( aItem, /* void */ );
 
-    auto screen = aScreen;
+    SCH_SCREEN* screen = aScreen;
 
     if( aScreen == nullptr )
         screen = GetScreen();

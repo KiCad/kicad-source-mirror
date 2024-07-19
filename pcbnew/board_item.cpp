@@ -85,13 +85,15 @@ bool BOARD_ITEM::IsLocked() const
 
 STROKE_PARAMS BOARD_ITEM::GetStroke() const
 {
-    wxCHECK( false, STROKE_PARAMS( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) ) );
+    wxFAIL_MSG( wxString( "GetStroke() not defined by " ) + GetClass() );
+
+    return STROKE_PARAMS( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
 }
 
 
 void BOARD_ITEM::SetStroke( const STROKE_PARAMS& aStroke )
 {
-    wxCHECK( false, /* void */ );
+    wxFAIL_MSG( wxString( "SetStroke() not defined by " ) + GetClass() );
 }
 
 

@@ -540,12 +540,13 @@ void SYMBOL_EDIT_FRAME::Save()
 
 void SYMBOL_EDIT_FRAME::SaveLibraryAs()
 {
-    wxCHECK( !GetTargetLibId().GetLibNickname().empty(), /* void */ );
-
     const wxString& libName = GetTargetLibId().GetLibNickname();
 
-    saveLibrary( libName, true );
-    m_treePane->GetLibTree()->RefreshLibTree();
+    if( !libName.IsEmpty() )
+    {
+        saveLibrary( libName, true );
+        m_treePane->GetLibTree()->RefreshLibTree();
+    }
 }
 
 
@@ -895,22 +896,15 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
             wxLogMessage( wxS( "Can not paste: %s" ), e.Problem() );
         }
     }
-    else
+    else if( LIB_SYMBOL* srcSymbol = m_libMgr->GetBufferedSymbol( libId.GetLibItemName(), lib ) )
     {
-        LIB_SYMBOL*  srcSymbol = m_libMgr->GetBufferedSymbol( libId.GetLibItemName(), lib );
-
-        wxCHECK( srcSymbol, /* void */ );
-
         newSymbols.emplace_back( new LIB_SYMBOL( *srcSymbol ) );
 
         // Derive from same parent.
         if( srcSymbol->IsAlias() )
         {
-            std::shared_ptr< LIB_SYMBOL > srcParent = srcSymbol->GetParent().lock();
-
-            wxCHECK( srcParent, /* void */ );
-
-            newSymbols.back()->SetParent( srcParent.get() );
+            if( std::shared_ptr<LIB_SYMBOL> srcParent = srcSymbol->GetParent().lock() )
+                newSymbols.back()->SetParent( srcParent.get() );
         }
     }
 
@@ -935,16 +929,17 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
 
 void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& aLibrary )
 {
-    wxCHECK( aSymbol, /* void */ );
+    if( aSymbol )
+    {
+        int      i = 1;
+        wxString newName = aSymbol->GetName();
 
-    int      i = 1;
-    wxString newName = aSymbol->GetName();
+        // Append a number to the name until the name is unique in the library.
+        while( m_libMgr->SymbolExists( newName, aLibrary ) )
+            newName.Printf( "%s_%d", aSymbol->GetName(), i++ );
 
-    // Append a number to the name until the name is unique in the library.
-    while( m_libMgr->SymbolExists( newName, aLibrary ) )
-        newName.Printf( "%s_%d", aSymbol->GetName(), i++ );
-
-    aSymbol->SetName( newName );
+        aSymbol->SetName( newName );
+    }
 }
 
 

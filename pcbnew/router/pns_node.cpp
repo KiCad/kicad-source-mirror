@@ -975,7 +975,8 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
         const VECTOR2I p  = aCurrent->Anchor( aScanDirection ^ prevReversed );
         const JOINT*   jt = FindJoint( p, aCurrent );
 
-        wxCHECK( jt, /* void */ );
+        if( !jt )
+            break;
 
         aCorners[aPos]     = jt->Pos();
         aSegments[aPos]    = aCurrent;
@@ -985,7 +986,9 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
         {
             if( ( aScanDirection && jt->Pos() == aCurrent->Anchor( 0 ) )
                     || ( !aScanDirection && jt->Pos() == aCurrent->Anchor( 1 ) ) )
+            {
                 aArcReversed[aPos] = true;
+            }
         }
 
         aPos += ( aScanDirection ? 1 : -1 );

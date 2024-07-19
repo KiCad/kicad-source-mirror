@@ -827,7 +827,8 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     wxCHECK( screen, false );
 
     // Cannot save to nowhere
-    wxCHECK( !aSavePath.IsEmpty(), false );
+    if( aSavePath.IsEmpty() )
+        return false;
 
     // Construct the name of the file to be saved
     schematicFileName = Prj().AbsolutePath( aSavePath );

@@ -197,7 +197,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
                                                   const VECTOR2I& aCollisionPos,
                                                   const PNS::ITEM* aCollidingItem )
 {
-    wxCHECK( aItem && aCollidingItem, false );
+    if( !aItem || !aCollidingItem )
+        return false;
 
     std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
     BOARD_ITEM*                 item = aItem->BoardItem();

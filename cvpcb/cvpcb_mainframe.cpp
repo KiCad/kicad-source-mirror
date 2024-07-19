@@ -1177,10 +1177,10 @@ void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
 {
     switch( aNumber )
     {
-    case 0:  m_statusLine1->SetLabel( aText );          break;
-    case 1:  m_statusLine2->SetLabel( aText );          break;
-    case 2:  m_statusLine3->SetLabel( aText );          break;
-    default: wxFAIL_MSG( "Invalid status row number" ); break;
+    case 0:  m_statusLine1->SetLabel( aText );                 break;
+    case 1:  m_statusLine2->SetLabel( aText );                 break;
+    case 2:  m_statusLine3->SetLabel( aText );                 break;
+    default: wxFAIL_MSG( wxT( "Invalid status row number" ) ); break;
     }
 }
 

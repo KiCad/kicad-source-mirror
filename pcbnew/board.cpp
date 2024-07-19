@@ -590,17 +590,18 @@ const wxString BOARD::GetLayerName( PCB_LAYER_ID aLayer ) const
 
 bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
 {
-    wxCHECK( !aLayerName.IsEmpty(), false );
-
-    // no quote chars in the name allowed
-    if( aLayerName.Find( wxChar( '"' ) ) != wxNOT_FOUND )
-        return false;
-
-    if( IsLayerEnabled( aLayer ) )
+    if( !aLayerName.IsEmpty() )
     {
-        m_layers[aLayer].m_userName = aLayerName;
-        recalcOpposites();
-        return true;
+        // no quote chars in the name allowed
+        if( aLayerName.Find( wxChar( '"' ) ) != wxNOT_FOUND )
+            return false;
+
+        if( IsLayerEnabled( aLayer ) )
+        {
+            m_layers[aLayer].m_userName = aLayerName;
+            recalcOpposites();
+            return true;
+        }
     }
 
     return false;

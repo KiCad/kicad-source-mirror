@@ -931,8 +931,6 @@ static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR
     PNS::LINKED_ITEM* startItem = pickSegment( router, aStart, layer, aStartOut );
     PNS::LINKED_ITEM* endItem = pickSegment( router, aEnd, layer, aEndOut );
 
-    //wxCHECK( startItem && endItem, std::nullopt );
-
     for( PNS::LINKED_ITEM* testItem : { startItem, endItem } )
     {
         if( !testItem )

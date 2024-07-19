@@ -104,7 +104,7 @@ bool DIALOG_LINE_PROPERTIES::TransferDataToWindow()
         else if( style < (int) lineTypeNames.size() )
             m_typeCombo->SetSelection( style );
         else
-            wxFAIL_MSG( "Line type not found in the type lookup map" );
+            wxFAIL_MSG( wxT( "Line type not found in the type lookup map" ) );
     }
     else
     {

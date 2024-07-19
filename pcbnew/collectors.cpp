@@ -441,6 +441,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         }
         else if( aTestItem->Type() == PCB_FOOTPRINT_T )
         {
+            // Already tested above, but Coverity can't figure that out
             wxCHECK( footprint, INSPECT_RESULT::CONTINUE );
 
             if( footprint->HitTest( m_refPos, accuracy )

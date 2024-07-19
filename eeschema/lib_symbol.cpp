@@ -795,14 +795,15 @@ void LIB_SYMBOL::RemoveDrawItem( SCH_ITEM* aItem )
 
 void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 {
-    wxCHECK( aItem, /* void */ );
+    if( aItem )
+    {
+        aItem->SetParent( this );
 
-    aItem->SetParent( this );
+        m_drawings.push_back( aItem );
 
-    m_drawings.push_back( aItem );
-
-    if( aSort )
-        m_drawings.sort();
+        if( aSort )
+            m_drawings.sort();
+    }
 }
 
 
@@ -1790,8 +1791,6 @@ int LIB_SYMBOL::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         return Type() - aOther.Type();
 
     const LIB_SYMBOL* tmp = static_cast<const LIB_SYMBOL*>( &aOther );
-
-    wxCHECK( tmp, -1 );
 
     return Compare( *tmp, aCompareFlags );
 }
