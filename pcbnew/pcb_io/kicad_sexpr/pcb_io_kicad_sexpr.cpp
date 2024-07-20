@@ -2390,10 +2390,17 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
 void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
 {
+    // temporary safeguard for the multichannel tool (and placement area/room support). When the tool is off
+    // (default), KiCad will not write any placement info in the RAs (and won't break file format compatibility)
+
+    if( ! ADVANCED_CFG::GetCfg().m_EnableMultichannelTool && aZone->GetIsRuleArea() && aZone->GetRuleAreaType() == RULE_AREA_TYPE::PLACEMENT )
+        return;
+
     // Save the NET info.
     // For keepout and non copper zones, net code and net name are irrelevant
     // so be sure a dummy value is stored, just for ZONE compatibility
     // (perhaps netcode and netname should be not stored)
+
     bool has_no_net = aZone->GetIsRuleArea() || !aZone->IsOnCopperLayer();
 
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",

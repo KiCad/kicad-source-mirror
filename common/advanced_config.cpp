@@ -72,6 +72,7 @@ static const wxChar HoleWallThickness[] = wxT( "HoleWallPlatingThickness" );
 static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
 static const wxChar ShowRouterDebugGraphics[] = wxT( "ShowRouterDebugGraphics" );
 static const wxChar EnableRouterDump[] = wxT( "EnableRouterDump" );
+static const wxChar EnableMultichannelTool[] = wxT( "EnableMultichannelTool" );
 static const wxChar HyperZoom[] = wxT( "HyperZoom" );
 static const wxChar CompactFileSave[] = wxT( "CompactSave" );
 static const wxChar DrawArcAccuracy[] = wxT( "DrawArcAccuracy" );
@@ -206,6 +207,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_CoroutineStackSize        = AC_STACK::default_stack;
     m_ShowRouterDebugGraphics   = false;
     m_EnableRouterDump          = false;
+    m_EnableMultichannelTool    = false;
     m_HyperZoom                 = false;
     m_DrawArcAccuracy           = 10.0;
     m_DrawArcCenterMaxAngle     = 50.0;
@@ -356,6 +358,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
                                                 &m_ShowRouterDebugGraphics,
                                                 m_ShowRouterDebugGraphics ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableMultichannelTool,
+                                                &m_EnableMultichannelTool, m_EnableMultichannelTool ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableRouterDump,
                                                 &m_EnableRouterDump, m_EnableRouterDump ) );

@@ -432,13 +432,17 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
         toolsMenu->Add( PCB_ACTIONS::showPythonConsole );
     }
 
-    ACTION_MENU* multichannelSubmenu = new ACTION_MENU( false, selTool );
-    multichannelSubmenu->SetTitle( _( "Multi-Channel" ) );
-    multichannelSubmenu->SetIcon( BITMAPS::mode_module );
-    multichannelSubmenu->Add( PCB_ACTIONS::generatePlacementRuleAreas );
-    multichannelSubmenu->Add( PCB_ACTIONS::repeatLayout );
+    if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
+    {
+        printf("EnableMCTool\n");
+        ACTION_MENU* multichannelSubmenu = new ACTION_MENU( false, selTool );
+        multichannelSubmenu->SetTitle( _( "Multi-Channel" ) );
+        multichannelSubmenu->SetIcon( BITMAPS::mode_module );
+        multichannelSubmenu->Add( PCB_ACTIONS::generatePlacementRuleAreas );
+        multichannelSubmenu->Add( PCB_ACTIONS::repeatLayout );
 
-    toolsMenu->Add( multichannelSubmenu );
+        toolsMenu->Add( multichannelSubmenu );
+    }
 
     ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );

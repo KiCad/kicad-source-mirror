@@ -228,6 +228,15 @@ public:
     bool m_EnableRouterDump;
 
     /**
+     * Enable Multichannel tool(s) (repeat layout, placement areas)
+     *
+     * Setting name: "EnableMultichannelTool"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_EnableMultichannelTool;
+
+    /**
      * Slide the zoom steps over for debugging things "up close".
      *
      * Setting name: "EnableRouterDump"
