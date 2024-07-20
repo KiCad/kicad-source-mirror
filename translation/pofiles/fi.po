@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-07-13 21:09+0000\n"
+"PO-Revision-Date: 2024-07-20 21:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -18026,8 +18026,8 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"Taulukon muutoksia ei voida tehdä, koska kohdearkilla on jo taulukko '%s' "
-"tai yksi sen alitaulukoista vanhempana jossain kytkentäkaaviohierarkiassa."
+"Taulukkomuutoksia ei voida tehdä, koska kohdetaulukossa on jo taulukko '%s' "
+"tai jokin sen aliarkeista vanhempana jossakin kytkentäkaaviohierarkiassa."
 
 #: eeschema/sheet.cpp:92
 #, c-format
@@ -43943,7 +43943,6 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Niiden laajentamiseksi on valittava täsmälleen kaksi riviä."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "On valittava muoto, jossa on vähintään kaksi viivaa."
 
