@@ -228,15 +228,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
 {
-    try
-    {
-        PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-        cfg->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
-    }
-    catch( const std::runtime_error& e )
-    {
-        wxFAIL_MSG( e.what() );
-    }
+    m_frame->GetSettings()->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_fields );
