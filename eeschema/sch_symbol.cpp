@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <ee_collectors.h>
+#include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
@@ -1097,6 +1099,113 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
             {
                 if( aResetOtherFields || aUpdateOtherFields )
                     schField->SetText( libField->GetText() );
+            }
+        }
+    }
+}
+
+
+void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT& aCommit,
+                                 PROPERTY_BASE* aProperty )
+{
+    bool updateValue = true;
+    bool updateExclFromBOM = true;
+    bool updateExclFromBoard = true;
+    bool updateDNP = true;
+    bool updateOtherFields = true;
+    bool updatePins = true;
+
+    if( aProperty )
+    {
+        updateValue = aProperty->Name() == _HKI( "Value" );
+        updateExclFromBoard = aProperty->Name() == _HKI( "Exclude From Board" );
+        updateExclFromBOM = aProperty->Name() == _HKI( "Exclude From Bill of Materials" );
+        updateDNP = aProperty->Name() == _HKI( "Do not Populate" );
+    }
+
+    if( !updateValue
+            && !updateExclFromBOM
+            && !updateExclFromBoard
+            && !updateDNP
+            && !updateOtherFields
+            && !updatePins )
+    {
+        return;
+    }
+
+    // Keep fields other than the reference, include/exclude flags, and alternate pin assignements
+    // in sync in multi-unit parts.
+    if( GetUnitCount() > 1 && IsAnnotated( &aSourceSheet ) )
+    {
+        wxString ref = GetRef( &aSourceSheet );
+
+        for( SCH_SHEET_PATH& sheet : Schematic()->BuildUnorderedSheetList() )
+        {
+            SCH_SCREEN*              screen = sheet.LastScreen();
+            std::vector<SCH_SYMBOL*> otherUnits;
+
+            CollectOtherUnits( ref, m_unit, m_lib_id, sheet, &otherUnits );
+
+            for( SCH_SYMBOL* otherUnit : otherUnits )
+            {
+                aCommit.Modify( otherUnit, screen );
+
+                if( updateValue )
+                    otherUnit->SetValueFieldText( GetField( VALUE_FIELD )->GetText() );
+
+                if( updateOtherFields )
+                {
+                    otherUnit->SetFootprintFieldText( GetField( FOOTPRINT_FIELD )->GetText() );
+
+                    for( size_t ii = DATASHEET_FIELD; ii < m_fields.size(); ++ii )
+                    {
+                        SCH_FIELD* otherField = otherUnit->FindField( m_fields[ii].GetName() );
+
+                        if( otherField )
+                        {
+                            otherField->SetText( m_fields[ii].GetText() );
+                        }
+                        else
+                        {
+                            SCH_FIELD newField( m_fields[ii] );
+                            const_cast<KIID&>( newField.m_Uuid ) = KIID();
+
+                            newField.Offset( -GetPosition() );
+                            newField.Offset( otherUnit->GetPosition() );
+
+                            newField.SetParent( otherUnit );
+                            otherUnit->AddField( newField );
+                        }
+                    }
+
+                    for( size_t ii = otherUnit->GetFields().size() - 1; ii > DATASHEET_FIELD; ii-- )
+                    {
+                        SCH_FIELD& otherField = otherUnit->GetFields().at( ii );
+
+                        if( !FindField( otherField.GetName() ) )
+                            otherUnit->GetFields().erase( otherUnit->GetFields().begin() + ii );
+                    }
+                }
+
+                if( updateExclFromBOM )
+                    otherUnit->SetExcludedFromBOM( m_excludedFromBOM );
+
+                if( updateExclFromBoard )
+                    otherUnit->SetExcludedFromBoard( m_excludedFromBoard );
+
+                if( updateDNP )
+                    otherUnit->SetDNP( m_DNP );
+
+                if( updatePins )
+                {
+                    for( const std::unique_ptr<SCH_PIN>& model_pin : m_pins )
+                    {
+                        SCH_PIN* src_pin = otherUnit->GetPin( model_pin->GetNumber() );
+
+                        if( src_pin )
+                            src_pin->SetAlt( model_pin->GetAlt() );
+                    }
+                }
             }
         }
     }

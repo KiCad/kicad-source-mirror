@@ -59,6 +59,7 @@ class SYMBOL_LIB;
 class SYMBOL_LIBS;
 class EE_COLLECTOR;
 class SCH_SCREEN;
+class SCH_COMMIT;
 class SYMBOL_LIB_TABLE;
 
 
@@ -591,6 +592,18 @@ public:
      */
     void UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, bool aUpdateRef,
                        bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields );
+
+    /**
+     * Keep fields other than the reference, include/exclude flags, and alternate pin assignements
+     * in sync in multi-unit parts.
+     *
+     * @param aSourceSheet the sheet instance of the unit to sync to
+     * @param aProperty [optional] if present, the single property to sync.  (Otherwise the
+     *                  include/exclude flags, alternate pin assignments, and all fields bar the
+     *                  reference will be synced.)
+     */
+    void SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT& aCommit,
+                         PROPERTY_BASE* aProperty );
 
     /**
      * Return the number of fields in this symbol.

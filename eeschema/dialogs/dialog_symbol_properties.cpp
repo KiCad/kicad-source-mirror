@@ -779,72 +779,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // Keep fields other than the reference, include/exclude flags, and alternate pin assignements
     // in sync in multi-unit parts.
-    if( m_symbol->GetUnitCount() > 1 && m_symbol->IsAnnotated( &GetParent()->GetCurrentSheet() ) )
-    {
-        wxString ref = m_symbol->GetRef( &GetParent()->GetCurrentSheet() );
-        int      unit = m_symbol->GetUnit();
-        LIB_ID   libId = m_symbol->GetLibId();
-
-        for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().BuildUnorderedSheetList() )
-        {
-            SCH_SCREEN*              screen = sheet.LastScreen();
-            std::vector<SCH_SYMBOL*> otherUnits;
-
-            CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
-
-            for( SCH_SYMBOL* otherUnit : otherUnits )
-            {
-                commit.Modify( otherUnit, screen );
-                otherUnit->SetValueFieldText( m_fields->at( VALUE_FIELD ).GetText() );
-                otherUnit->SetFootprintFieldText( m_fields->at( FOOTPRINT_FIELD ).GetText() );
-
-                for( size_t ii = DATASHEET_FIELD; ii < m_fields->size(); ++ii )
-                {
-                    SCH_FIELD* otherField = otherUnit->FindField( m_fields->at( ii ).GetName() );
-
-                    if( otherField )
-                    {
-                        otherField->SetText( m_fields->at( ii ).GetText() );
-                    }
-                    else
-                    {
-                        SCH_FIELD newField( m_fields->at( ii ) );
-                        const_cast<KIID&>( newField.m_Uuid ) = KIID();
-
-                        newField.Offset( -m_symbol->GetPosition() );
-                        newField.Offset( otherUnit->GetPosition() );
-
-                        newField.SetParent( otherUnit );
-                        otherUnit->AddField( newField );
-                    }
-                }
-
-                for( size_t ii = otherUnit->GetFields().size() - 1; ii > DATASHEET_FIELD; ii-- )
-                {
-                    SCH_FIELD& otherField = otherUnit->GetFields().at( ii );
-
-                    if( !m_symbol->FindField( otherField.GetName() ) )
-                        otherUnit->GetFields().erase( otherUnit->GetFields().begin() + ii );
-                }
-
-                otherUnit->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked() );
-                otherUnit->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked() );
-                otherUnit->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
-                otherUnit->SetDNP( m_cbDNP->IsChecked() );
-
-                if( m_dataModel )
-                {
-                    for( const SCH_PIN& model_pin : *m_dataModel )
-                    {
-                        SCH_PIN* src_pin = otherUnit->GetPin( model_pin.GetNumber() );
-
-                        if( src_pin )
-                            src_pin->SetAlt( model_pin.GetAlt() );
-                    }
-                }
-            }
-        }
-    }
+    m_symbol->SyncOtherUnits( GetParent()->GetCurrentSheet(), commit, nullptr );
 
     if( replaceOnCurrentScreen )
         currentScreen->Append( m_symbol );
