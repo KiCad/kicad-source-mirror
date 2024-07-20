@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-02 19:09+0000\n"
-"Last-Translator: Bahtiyar Bayram <bahtiyar.bayramov@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2024-07-20 21:09+0000\n"
+"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -802,6 +802,8 @@ msgstr "Renk değiştirmek için sol çift tıklama veya orta tıklama"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:489
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Renk düzenlemesine izin vermek için 'Kart yığın renklerini kullan' "
+"seçeneğini işaretlemeyin."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:538
 #: pcbnew/widgets/appearance_controls.cpp:2204
@@ -941,9 +943,8 @@ msgid "Configure Paths"
 msgstr "Yolları Yapılandır"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "Model"
+msgstr "Gömülü Model"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -1739,9 +1740,8 @@ msgid "Export to Clipboard"
 msgstr "Panoya Aktar"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Kod tanımlamasını göster"
+msgstr "API'den yapılan değişiklik"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -1994,16 +1994,14 @@ msgid "Additional Contributions By"
 msgstr "Ek Katkıda Bulunanlar"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Belgeler"
+msgstr "Dokümantasyon Ekibi"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "Kütüphaneci Takımı"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
 msgstr "3B Modeller"
 
@@ -2027,9 +2025,8 @@ msgid "Footprints"
 msgstr "Ayak izi"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Simge"
+msgstr "Simgeler"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -2855,11 +2852,13 @@ msgid "Drawing Sheet File"
 msgstr "Çizim Sayfası Dosyası"
 
 #: common/dialogs/dialog_page_settings.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "'%s' çizim sayfası yüklenirken hata oluştu."
+msgstr ""
+"Çizim sayfası '%s' yüklenirken hata oluştu.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -3052,13 +3051,12 @@ msgid "Reference Designators"
 msgstr "Başvuru Belirleyicileri"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "Alternatif Atama"
+msgstr "Parça Atamalarını Temizle"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
-msgstr ""
+msgstr "Yapıştırmadan önce tüm bağlı öğelerden parça bilgilerini kaldırın"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3420,7 +3418,6 @@ msgstr "Değişiklikleri Kabul Et"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 #: common/dialogs/panel_embedded_files_base.cpp:37
-#, fuzzy
 msgid "Filename"
 msgstr "Dosya Adı"
 
@@ -3623,7 +3620,6 @@ msgid "Edit repository properties"
 msgstr "Depo özelliklerini düzenle"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
 msgstr "Git Reposunu Kaldır"
 
@@ -3722,19 +3718,21 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Bu işletim sistemi için varsayılan 'explorer.exe /n,/select,%F'."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Dosya gezgini komutu.\n"
+"örnek:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
-msgstr ""
+msgstr "Son girilen karakterden sonra zorunlu '%s' eki ile Explorer komutu."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -3780,9 +3778,8 @@ msgid "Text editor:"
 msgstr "Metin düzenleyicisi:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Dosya Adı"
+msgstr "Dosya yöneticisi:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -3835,11 +3832,12 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:174
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Tablolarda satır renklerini dönüşümlü olarak kullan"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "When enabled, use a different color for every other table row"
 msgstr ""
+"Etkinleştirildiğinde, her iki tablonun satırına farklı bir renk kullanın"
 
 #: common/dialogs/panel_common_settings_base.cpp:185
 msgid "Icon theme:"
@@ -4109,7 +4107,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4125,20 +4122,19 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"KiCad, kullanıcı tabanındaki kritik hataların daha etkin bir şekilde "
-"belirlenmesine yardımcı olmak ve iyileştirmelere rehberlik etmek için profil "
-"işlevselliğine yardımcı olmak için kilitlenmeleri ve özel etkinlik "
-"verilerini geliştiricilere anonim olarak bildirebilir\n"
+"KiCad, geliştiricilere kritik hataları daha etkili bir şekilde "
+"belirlemelerine ve iyileştirmeleri yönlendirmelerine yardımcı olmak "
+"amacıyla, çökme ve özel olay verilerini anonim olarak raporlayabilir.\n"
 "\n"
-"Aynı KiCad kurulumundan otomatik raporları bağlamak için, tamamen rastgele "
-"olan benzersiz bir tanımlayıcı oluşturulur, yalnızca kilitlenme raporlaması "
-"amacıyla kullanılır. IP adresi de dahil olmak üzere hiçbir kişisel kimlik "
-"bilgisi (KTB) bu tanımlayıcıya kaydedilmez veya bu tanımlayıcıya bağlanmaz. "
-"Verilen düğme ile bu kimliği istediğiniz zaman sıfırlayabilirsiniz.\n"
+"Aynı KiCad kurulumundan gelen otomatik raporları bağlamak için tamamen "
+"rastgele bir benzersiz tanımlayıcı oluşturulur ve bu tanımlayıcı sadece "
+"çökme raporlama amacıyla kullanılır. Bu tanımlayıcıya bağlı olarak hiçbir "
+"kişisel tanımlanabilir bilgi (PII) veya IP adresi saklanmaz. Sağlanan düğme "
+"ile bu kimliği istediğiniz zaman sıfırlayabilirsiniz.\n"
 "\n"
-"Gönüllü olarak katılmayı seçerseniz, çökmeler veya olaylar meydana "
-"geldiğinde KiCad söz konusu raporları göndermeyi otomatik olarak halleder. "
-"Şematik veya PCB gibi tasarım dosyalarınız bu süreçte paylaşılmaz."
+"Gönüllü olarak katılmayı seçerseniz, çökme veya olaylar meydana geldiğinde "
+"KiCad bu raporları otomatik olarak göndermeyi halledecektir. Tasarım "
+"dosyalarınız, örneğin şema veya PCB, bu süreçte asla paylaşılmaz."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -4149,25 +4145,22 @@ msgid "Reset Unique Id"
 msgstr "Görünümü Sıfırla"
 
 #: common/dialogs/panel_embedded_files.cpp:87
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Kaynak"
+msgstr "Gömülü Referansı Kopyala"
 
 #: common/dialogs/panel_embedded_files.cpp:159
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Ayarlanacak bir değer seçin"
+msgstr "Gömülecek bir dosya seçin"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "Tüm dosyalar"
+msgstr "Tüm dosyalar |*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "'%s' dosyası listede zaten var."
+msgstr "Dosya '%s' zaten var."
 
 #: common/dialogs/panel_embedded_files.cpp:174
 #: common/dialogs/panel_embedded_files.cpp:248
@@ -4185,14 +4178,13 @@ msgid "Overwrite"
 msgstr "Üzerine yaz"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Dosya '%s' eklenemedi."
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Bir GenCAD dışa aktarma dosya adı seçin"
+msgstr "Dosyaları dışa aktarmak için bir dizin seçin"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4203,60 +4195,56 @@ msgid "Skip"
 msgstr "Atla"
 
 #: common/dialogs/panel_embedded_files.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "'%s' sembol kitaplığı yazılabilir değil."
+msgstr "Dizin '%s' yazılabilir değil."
 
 #: common/dialogs/panel_embedded_files.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "'%s' sembol kitaplığı yazılabilir değil."
+msgstr "Klasör '%s' yazılabilir değil."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "Tekrar Dene"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Dosya '%s' açılamadı."
 
 #: common/dialogs/panel_embedded_files.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Dosya '%s' yazılamadı."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "Sayfalar Arası Başvurular"
+msgstr "Dahili Referans"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Gömülü dosya ekle"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "İndirme boyutu"
+msgstr "Gömülü dosyayı kaldır"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "&Export"
-msgstr "Dışa Aktar"
+msgstr "&Dışa Aktar"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "Yazı Tiplerini Göm"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Kullanılan tüm yazı tiplerinin bir kopyasını sakla"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Ayak izi"
+msgstr "Baskı izleri/padler:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -4265,9 +4253,9 @@ msgid "Tracks:"
 msgstr "Yollar"
 
 #: common/dialogs/panel_grid_settings.cpp:138 common/tool/grid_menu.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Izgara: %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:261
 #, c-format
@@ -4300,9 +4288,8 @@ msgid "Grid 2:"
 msgstr "Elek 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:872
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "Üzerine yaz"
+msgstr "Izgara Geçersiz Kılmaları"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
 msgid "Connected items:"
@@ -4386,14 +4373,12 @@ msgid "Scale:"
 msgstr "Ölçek:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
-#, fuzzy
 msgid "PPI:"
-msgstr "Piksel/İnç"
+msgstr "İnç başına Piksel:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Gri Tonlamaya Çevir"
+msgstr "Gri Tonlamaya Dönüştür"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -4574,9 +4559,8 @@ msgid "Pan left/right:"
 msgstr "Sola/sağa kaydır:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
-msgstr "Geri al"
+msgstr "Tersine Çevir"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid "Pan left/right with horizontal movement"
@@ -4631,9 +4615,8 @@ msgid "Check for package updates on startup"
 msgstr "Başlangıçta paket güncellemelerini kontrol edin"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:63
-#, fuzzy
 msgid "Library package handling"
-msgstr "Kitaplık bağlantısı:"
+msgstr "Kütüphane paketi yönetimi"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
 msgid "Automatically add installed libraries to global library table"
@@ -4648,84 +4631,89 @@ msgid "Library nickname prefix:"
 msgstr "Kütüphane takma adının öneki:"
 
 #: common/dialogs/panel_plugin_settings.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Mevcut yol:"
+msgstr "%s de dinleniyor"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Bu KiCad kurulumu API desteği etkinleştirilmiş değil."
 
 #: common/dialogs/panel_plugin_settings.cpp:120
 msgid "KiCad API is not enabled; external Python plugins will not be available"
 msgstr ""
+"KiCad API etkinleştirilmemiş; harici Python eklentileri kullanılamayacak"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Geçerli bir Python yorumlayıcısı seçilmedi; harici Python eklentileri "
+"kullanılamayacak"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "Dosya bulunamadı %s."
+msgstr "%s bulundu"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Geçerli bir Python 3 yorumlayıcısı değil"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"KiCad API etkinleştirildiğinde, bu bilgisayarda çalışan eklentiler ve diğer "
+"yazılımlar KiCad'e bağlanabilir."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "KiCad API'sini Etkinleştir"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"KiCad API'sini etkinleştirin.  Bunu yapmak, bilgisayarınızda çalışan üçüncü "
+"taraf yazılımların KiCad'e erişmesine izin verecektir."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Python Yorumlayıcısı"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Python yorumlayıcısının yolu:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Geçerli öğeye eklenen son noktayı sil"
+msgstr "Bir Python yorumlayıcısının yolunu seçin"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Şemayı Numaralandır"
+msgstr "Otomatik Olarak Algıla"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Python yorumlayıcısı seçilmedi; harici Python eklentileri kullanılamayacak"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Python yorumlayıcı durumu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1979
 #: common/stroke_params.cpp:37
@@ -4774,9 +4762,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Tire-Nokta-Nokta"
 
 #: common/dialogs/panel_setup_netclasses.cpp:179
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "KiCad varsayılan rengini kullanmak için rengi saydam olarak ayarlayın."
+msgstr "Katman varsayılan rengini kullanmak için rengi şeffaf olarak ayarlayın."
 
 #: common/dialogs/panel_setup_netclasses.cpp:372
 msgid ""
@@ -4843,9 +4830,8 @@ msgid "Schematic wire line style"
 msgstr "Şema çizgi stili"
 
 #: common/dialogs/panel_setup_netclasses.cpp:609
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Netclass Rengini Ayarla"
+msgstr "Baskıdevre parça sınıfı rengi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:662
 msgid "The default net class is required."
@@ -4899,9 +4885,8 @@ msgid "DP Gap"
 msgstr "DP Boşluğu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Renk"
+msgstr "Baskıdevre Rengi"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4946,9 +4931,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "KiCad varsayılan rengini kullanmak için rengi saydam olarak ayarlayın."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:99
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "[şematikten]"
+msgstr "Renkleri şemadan içe aktar"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:116
 msgid "Netclass assignments:"
@@ -5025,23 +5009,20 @@ msgstr "Resim verisi okunamadı."
 #: common/drawing_sheet/drawing_sheet_parser.cpp:975
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:73
 #: pcbnew/dialogs/dialog_import_settings.cpp:128
-#, fuzzy
 msgid "File not found."
-msgstr "Dosya bulunamadı %s."
+msgstr "Dosya bulunamadı."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:987
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Dosya '%s' oluşturulamadı."
+msgstr "Dosya açılamadı."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1001
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Çizim sayfası '%s' tam olarak okunmadı."
+msgstr "Çizim sayfası tam olarak okunamadı."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Bellek tükendi."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -5327,9 +5308,8 @@ msgstr "Alan Adı Şablonları"
 #: common/eda_base_frame.cpp:1157 eeschema/sim/simulator_frame.cpp:116
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/ee_actions.cpp:73
-#, fuzzy
 msgid "Simulator"
-msgstr "Simülatör..."
+msgstr "Simülatör"
 
 #: common/eda_base_frame.cpp:1175 common/tool/actions.cpp:1064
 #: common/tool/common_tools.cpp:566 kicad/tools/kicad_manager_actions.cpp:137
@@ -5388,9 +5368,8 @@ msgid "Packages and Updates"
 msgstr "Paketler ve Güncellemeler"
 
 #: common/eda_base_frame.cpp:1256
-#, fuzzy
 msgid "Plugins"
-msgstr "İhlaller (%d)"
+msgstr "Eklentiler"
 
 #: common/eda_base_frame.cpp:1339
 #, c-format
@@ -5527,9 +5506,8 @@ msgstr "Özellikler"
 
 #: common/eda_draw_frame.cpp:1219 pcbnew/pcb_edit_frame.cpp:339
 #: pcbnew/pcb_edit_frame.cpp:1631
-#, fuzzy
 msgid "Net Inspector"
-msgstr "&İncele"
+msgstr "Parça Denetleyici"
 
 #: common/eda_item.cpp:342
 msgid "Screen"
@@ -5555,14 +5533,12 @@ msgstr "Grafik"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Kaynak"
+msgstr "Referans Görseli"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:216
-#, fuzzy
 msgid "Generator"
-msgstr "Oluştur"
+msgstr "Üreteç"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:379 eeschema/sch_textbox.cpp:422
 #: eeschema/sch_textbox.cpp:536 eeschema/widgets/search_handlers.cpp:361
@@ -5572,16 +5548,14 @@ msgstr "Metin kutusu"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:380 eeschema/sch_table.cpp:545
 #: pcbnew/pcb_table.cpp:396
-#, fuzzy
 msgid "Table"
-msgstr "Bacak Tablosu"
+msgstr "Tablo"
 
 #: common/eda_item.cpp:353 common/eda_item.cpp:381
 #: eeschema/sch_tablecell.cpp:116 pcbnew/pcb_tablecell.cpp:100
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "Delik Büyüklüğü"
+msgstr "Tablo Hücresi"
 
 #: common/eda_item.cpp:354 common/eda_item.cpp:355 pcbnew/pcb_track.cpp:1307
 msgid "Track"
@@ -5651,9 +5625,8 @@ msgstr "Bitmap"
 
 #: common/eda_item.cpp:377 eeschema/sch_rule_area.cpp:50
 #: eeschema/sch_rule_area.cpp:370 pcbnew/zone.cpp:690
-#, fuzzy
 msgid "Rule Area"
-msgstr "Alan"
+msgstr "Kural Alanı"
 
 #: common/eda_item.cpp:382 eeschema/tools/sch_edit_tool.cpp:210
 msgid "Net Label"
@@ -5710,14 +5683,12 @@ msgid "Draw Item"
 msgstr "Öğe Çiz"
 
 #: common/eda_shape.cpp:68
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "Termal bariyer iletken genişliği:"
+msgstr "Termal Bağlantı"
 
 #: common/eda_shape.cpp:69 pcbnew/pcb_shape.cpp:1007
-#, fuzzy
 msgid "Number Box"
-msgstr "Sayı Girişi"
+msgstr "Sayı Kutusu"
 
 #: common/eda_shape.cpp:78 pcbnew/pad.cpp:1413
 msgid "Rect"
@@ -5745,14 +5716,12 @@ msgid "Polygon"
 msgstr "Çokgen"
 
 #: common/eda_shape.cpp:731
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Bacak Numarası"
+msgstr "Pad Numarası Kutusu"
 
 #: common/eda_shape.cpp:732 pcbnew/pcb_shape.cpp:1014
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "Termal Tahliye iletim Genişliği"
+msgstr "Termal Bağlantı Şablonu"
 
 #: common/eda_shape.cpp:733 common/eda_shape.cpp:746
 msgid "Unrecognized"
@@ -6212,7 +6181,7 @@ msgstr ""
 "Açmak için KiCad'i %s veya sonraki bir sürüme yükseltmeniz gerekir."
 
 #: common/exceptions.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -6220,10 +6189,11 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
-"Dosya, çalıştırdığınız Kicad sürümünden daha yeni bir sürümle "
-"oluşturulduğundan bu dosyayı açamadı.\n"
+"KiCad bu dosyayı açamadı çünkü dosya, kullandığınız sürümden daha yeni bir "
+"sürümle oluşturulmuş.\n"
 "\n"
-"Açmak için KiCad'i %s veya sonraki bir sürüme yükseltmeniz gerekir."
+"Açmak için KiCad'i sürüm %s veya daha yenisine (dosya formatı tarihi %s veya "
+"daha sonrası) yükseltmeniz gerekecek."
 
 #: common/exceptions.cpp:153
 msgid "Full error text:"
@@ -6342,9 +6312,9 @@ msgid "'%s' is not a directory"
 msgstr "'%s' klasör değil"
 
 #: common/gestfich.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Dizin kaldırılamadı %s"
+msgstr "Dizin '%s' kaldırılırken hata oluştu: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -6357,34 +6327,31 @@ msgid "Could not clone repository '%s'"
 msgstr "'%s' reposu knonlanamıyor"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "'%s' görüntüsü yüklenemedi."
+msgstr "Uzak '%s' sorgulanamadı"
 
 #: common/git/git_pull_handler.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "'%s' özel ayak bulunamadı."
+msgstr "Uzak '%s' bağlantısı kurulamadı"
 
 #: common/git/git_pull_handler.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "'%s' özel ayak bulunamadı."
+msgstr "Uzak '%s' verileri alınamadı"
 
 #: common/git/git_pull_handler.cpp:92
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "'FETCH_HEAD' okunamadı"
 
 #: common/git/git_pull_handler.cpp:100
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "Yapı döngüsü sorgulanamadı"
 
 #: common/git/git_pull_handler.cpp:110
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "Birleştirme analiz edilemedi"
 
 #: common/git/git_pull_handler.cpp:120
 msgid "Invalid HEAD.  Cannot merge."
@@ -6404,48 +6371,40 @@ msgid "Failed to perform checkout operation."
 msgstr "Çıkış işlemi gerçekleştirilemedi."
 
 #: common/git/git_pull_handler.cpp:215
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "'%s' görüntüsü yüklenemedi."
+msgstr "Yapı ('{}') sorgulanamadı"
 
 #: common/git/git_pull_handler.cpp:255
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "Yapılar birleştirilemedi"
 
 #: common/git/git_pull_handler.cpp:263
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "%s kütüphane dosyası bulunamadı."
+msgstr "Depo dizin bilgisi alınamadı"
 
 #: common/git/git_pull_handler.cpp:271
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Yapılandırma dosyası açılamadı"
+msgstr "Çakışma yineleyicisi alınamadı"
 
 #: common/git/git_pull_handler.cpp:291 common/git/git_pull_handler.cpp:292
-#, fuzzy
 msgid "Changed"
-msgstr "Değiştir"
+msgstr "Değiştirilmiş"
 
 #: common/git/git_pull_handler.cpp:306 common/git/git_pull_handler.cpp:307
 msgid "Added"
 msgstr "Eklendi"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "Uzak bağlantı sorgulanamadı"
 
 #: common/git/git_push_handler.cpp:59
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "Uzak bağlantıya bağlanılamadı"
 
 #: common/git/git_push_handler.cpp:70
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "OpenGL kullanılamadı"
+msgstr "Uzak bağlantıya gönderme yapılamadı"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
@@ -6453,14 +6412,14 @@ msgid "Received %u of %u objects"
 msgstr "%u nesnenin %u'i alındı"
 
 #: common/git/kicad_git_common.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "%s %s ile %s arasında güncelleştirildi."
+msgstr "* [güncellenmiş] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Bölge"
+msgstr "* [yeni] %s %s"
 
 #: common/git/kicad_git_common.cpp:471
 #, c-format
@@ -6468,58 +6427,50 @@ msgid "Writing objects: %d%% (%d/%d), %d bytes"
 msgstr "Nesnelerin yazılması: %d%% (%d/%d), %d bayt"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Izgara: %s (%s)"
+msgstr "* [reddedildi] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Güncellendi"
+msgstr "[güncellenmiş] %s"
 
 #: common/git/kicad_git_errors.cpp:39
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Geçersiz sinyal adı"
+msgstr "Geçersiz depo."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Değişiklikler yapılamadı."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "'%s' kiface kitaplığı yüklenemedi."
+msgstr "Dalları birleştirme başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:44
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "'%s' içinde '%s' ayrıştırılamıyor"
+msgstr "Depoyu kopyalama başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:45
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Depo"
+msgstr "Uzak depo bulunamadı."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
 msgstr "Uzak depo için kimlik doğrulama başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:49
-#, fuzzy
 msgid "Branch not found."
-msgstr "'%s' dosyası bulunamadı."
+msgstr "Dal bulunamadı."
 
 #: common/git/kicad_git_errors.cpp:50
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Dal oluşturma başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:51
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Dal silme başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
@@ -6534,53 +6485,44 @@ msgid "Rebase conflict encountered."
 msgstr "Yeniden yükleme çakışmasıyla karşılaşıldı."
 
 #: common/git/kicad_git_errors.cpp:62
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "'%s' içinde '%s' ayrıştırılamıyor"
+msgstr "Uzak depodan değişiklikleri çekme başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "'%s' içinde '%s' ayrıştırılamıyor"
+msgstr "Uzak depodan değişiklikleri çekme başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
 msgstr "Yapılandırılmış yukarı akış dallandırması yok."
 
 #: common/git/kicad_git_errors.cpp:65
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "'%s' içinde '%s' ayrıştırılamıyor"
+msgstr "Uzak depo ile bağlantı kurulamadı."
 
 #: common/git/kicad_git_errors.cpp:68
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s bulunamadı"
+msgstr "Etiket bulunamadı."
 
 #: common/git/kicad_git_errors.cpp:69
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Etiket oluşturma başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:70
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Etiketi silme başarısız oldu."
 
 #: common/git/kicad_git_errors.cpp:72
-#, fuzzy
 msgid "Unknown error."
-msgstr "Bilinmiyor"
+msgstr "Bilinmeyen hata."
 
 #: common/git/kicad_git_errors.cpp:73
-#, fuzzy
 msgid "No error."
-msgstr "Ayak izi sorunu bulunamadı."
+msgstr "Hata yok."
 
 #: common/git/kicad_git_errors.h:46 common/git/kicad_git_errors.h:54
-#, fuzzy
 msgid "No error"
-msgstr "hatalar"
+msgstr "Hata yok"
 
 #: common/grid_tricks.cpp:355 common/tool/actions.cpp:214
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:130
@@ -6621,9 +6563,8 @@ msgid "Delete"
 msgstr "Sil"
 
 #: common/grid_tricks.cpp:362
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "Seçili hücreleri sil"
+msgstr "Seçilen hücrelerin içeriğini temizle"
 
 #: common/grid_tricks.cpp:363 common/tool/actions.cpp:246
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
@@ -6641,19 +6582,16 @@ msgid "Select all cells"
 msgstr "Tüm hücreleri seç"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Numaralandırma tamamlandı."
+msgstr "Otomatik Tamamlamayı Kabul Et"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Geçerli aracı iptal et"
+msgstr "Otomatik Tamamlamayı İptal Et"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Geçiş Kilidi"
+msgstr "Onay Kutusunu Değiştir"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -6737,20 +6675,18 @@ msgid "Invalid spline definition encountered"
 msgstr "Geçersiz eğri tanımıyla karşılaşıldı"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "(çoklu pano anahatları desteklenmez)"
+msgstr "%s desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
-#, fuzzy
 msgid "DXF construction lines not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF yapı çizgileri şu anda desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:467
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF yay hizalı metin şu anda desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:472
 #: common/import_gfx/dxf_import_plugin.h:476
@@ -6760,34 +6696,28 @@ msgstr "Derleme maskesi şu anda desteklenmiyor."
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF ölçüler şu anda desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF tarama desenleri şu anda desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:513
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF izler şu anda desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF 3b yüzler şu anda desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:523
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF katı cisimler şu anda desteklenmiyor."
 
 #: common/import_gfx/dxf_import_plugin.h:528
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Derleme maskesi şu anda desteklenmiyor."
+msgstr "DXF görüntüler şu anda desteklenmiyor."
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -6879,9 +6809,9 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "%f Yarıçaplı geçersiz Yay ve %f açı"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "'%s' için bir rakama ihtiyacınız var"
+msgstr "'%s' içinden sayıyı ayrıştırma başarısız oldu"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:171
 #: common/io/easyedapro/easyedapro_import_utils.cpp:226
@@ -6910,14 +6840,13 @@ msgid "Cannot read ZIP archive '%s'"
 msgstr "ZIP arşivi '%s' okunamıyor"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "'%s' içindeki %d JSON satırı ayrıştırılamıyor: %s"
+msgstr "'%s' dosyasındaki %d numaralı JSON satırı ayrıştırılamadı: %s"
 
 #: common/io/io_base.cpp:137
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "Dosya alma işlemi kullanıcı tarafından iptal edildi."
+msgstr "Dosya yükleme kullanıcı tarafından iptal edildi."
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -7030,9 +6959,8 @@ msgid "Net class references"
 msgstr "Net class başvuruları"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Rule areas"
-msgstr "Kurallar"
+msgstr "Kural alanları"
 
 #: common/layer_id.cpp:126
 msgid "Symbol body outlines"
@@ -7090,14 +7018,12 @@ msgid "No-connect symbols"
 msgstr "Bağlantısız semboller"
 
 #: common/layer_id.cpp:139
-#, fuzzy
 msgid "DNP markers"
-msgstr "işaretçiler"
+msgstr "DNP işaretçileri"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Bu ihlali hariç tut"
+msgstr "Simülasyondan hariç tutulan işaretler"
 
 #: common/layer_id.cpp:141
 msgid "ERC warnings"
@@ -7171,14 +7097,12 @@ msgid "Page limits"
 msgstr "Sayfa Sınırları"
 
 #: common/layer_id.cpp:156
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Çalışma Noktası"
+msgstr "Çalışma noktası voltajları"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Çalışma Noktası"
+msgstr "Çalışma noktası akımları"
 
 #: common/layer_id.cpp:161
 msgid "Footprints front"
@@ -7293,19 +7217,16 @@ msgid "Courtyard collision shadow"
 msgstr "Avlu çarpışma gölgesi"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Mantıksal kitaplık adında geçersiz karakter bulundu"
+msgstr "Kütüphane takma adında geçersiz karakter bulundu"
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options..."
-msgstr "Düzenleme Seçenekleri"
+msgstr "Seçenekleri Düzenle..."
 
 #: common/lib_table_grid_tricks.cpp:34
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "'%s' Kitaplığı seçenekleri"
+msgstr "Bu kütüphane girdisi için seçenekleri düzenle"
 
 #: common/lib_table_grid_tricks.cpp:64
 msgid "Activate selected"
@@ -7316,19 +7237,17 @@ msgid "Deactivate selected"
 msgstr "Seçileni devre dışı bırak"
 
 #: common/lib_table_grid_tricks.cpp:72
-#, fuzzy
 msgid "Set visible flag"
-msgstr "Görünen katmanlar"
+msgstr "Görünür bayrağı ayarla"
 
 #: common/lib_table_grid_tricks.cpp:75
-#, fuzzy
 msgid "Unset visible flag"
-msgstr "Görünen katmanlar"
+msgstr "Görünür bayrağını kaldır"
 
 #: common/lib_table_grid_tricks.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "Kütüphane konumu: %s"
+msgstr "%s için kütüphane ayarları..."
 
 #: common/lib_tree_model.cpp:152
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -7399,18 +7318,16 @@ msgstr "%lf ve '%s' arasında tip uyuşmazlığı"
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
-#, fuzzy
 msgid "View Details"
-msgstr "Detaylar"
+msgstr "Detayları Görüntüle"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
 msgstr "Reddet"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Gerekçe"
+msgstr "Bildirimler"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -7586,9 +7503,8 @@ msgid "Line length exceeded"
 msgstr "Satır uzunluğu aşıldı"
 
 #: common/settings/bom_settings.cpp:125
-#, fuzzy
 msgid "Default Editing"
-msgstr "Varsayılan yazı tipi"
+msgstr "Varsayılan Düzenleme"
 
 #: common/settings/bom_settings.cpp:125 common/settings/bom_settings.cpp:146
 #: common/settings/bom_settings.cpp:165 common/settings/bom_settings.cpp:184
@@ -7602,14 +7518,12 @@ msgid "Reference"
 msgstr "Kaynak"
 
 #: common/settings/bom_settings.cpp:146
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Ada göre grupla"
+msgstr "Değere Göre Gruplandırılmış"
 
 #: common/settings/bom_settings.cpp:165
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "İz Düşümünü Farklı Kaydet"
+msgstr "Değere ve Baskı İzine Göre Gruplandırılmış"
 
 #: common/settings/bom_settings.cpp:184
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -7630,14 +7544,12 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:261
-#, fuzzy
 msgid "TSV"
-msgstr "V"
+msgstr "TSV (Silisyum Üzerinden Geçiş)"
 
 #: common/settings/bom_settings.cpp:267
-#, fuzzy
 msgid "Semicolons"
-msgstr "Düz renkler"
+msgstr "Noktalı Virgüller"
 
 #: common/settings/color_settings.cpp:338
 msgid "(Footprints)"
@@ -7701,24 +7613,20 @@ msgid "Open existing document"
 msgstr "Varolan belgeyi aç"
 
 #: common/tool/actions.cpp:75
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Metin düzenleyicisi:"
+msgstr "Bir Metin Düzenleyicide Düzenle..."
 
 #: common/tool/actions.cpp:76
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Şema Düzenleyici"
+msgstr "Bir kütüphane dosyasını metin düzenleyici ile aç"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Dosya Gezgini'nde Dizini Aç"
+msgstr "Dosya gezgini ile aç..."
 
 #: common/tool/actions.cpp:83
-#, fuzzy
 msgid "Open a library file with system file explorer"
-msgstr "Şema Düzenleyici"
+msgstr "Bir kütüphane dosyasını sistem dosya gezgini ile aç"
 
 #: common/tool/actions.cpp:92
 msgid "Save changes"
@@ -7978,14 +7886,12 @@ msgstr "Birleştirilmiş tablo hücrelerini tekrar ayrı hücrelere dönüştür
 
 #: common/tool/actions.cpp:408 eeschema/dialogs/dialog_table_properties.cpp:387
 #: pcbnew/dialogs/dialog_table_properties.cpp:371
-#, fuzzy
 msgid "Edit Table"
-msgstr "Ağ Etiketi"
+msgstr "Tabloyu Düzenle"
 
 #: common/tool/actions.cpp:419
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
-msgstr "Gerçekçi modu aç/kapat"
+msgstr "Yay Düzenleme Modunu Döngüye Al"
 
 #: common/tool/actions.cpp:420
 msgid "Switch to a different method of editing arcs"
@@ -8027,14 +7933,12 @@ msgid "Find next match"
 msgstr "Sonraki eşleşmeyi bul"
 
 #: common/tool/actions.cpp:463 pcbnew/dialogs/dialog_find_base.cpp:96
-#, fuzzy
 msgid "Find Previous"
-msgstr "Yazdırma Önizleme"
+msgstr "Önceki Bul"
 
 #: common/tool/actions.cpp:464
-#, fuzzy
 msgid "Find previous match"
-msgstr "Yazdırma Önizleme"
+msgstr "Önceki eşleşmeyi bul"
 
 #: common/tool/actions.cpp:472
 msgid "Find Next Marker"
@@ -8113,44 +8017,36 @@ msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
 #: common/tool/actions.cpp:588
-#, fuzzy
 msgid "Zoom In Horizontally"
-msgstr "Yatay"
+msgstr "Yatay Olarak Yakınlaştır"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "Yatay"
+msgstr "Grafik alanını yatay olarak yakınlaştır"
 
 #: common/tool/actions.cpp:595
-#, fuzzy
 msgid "Zoom Out Horizontally"
-msgstr "Yatay"
+msgstr "Yatay Olarak Uzaklaştır"
 
 #: common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom out horizontally the plot area"
-msgstr "Yatay"
+msgstr "Grafik alanını yatay olarak uzaklaştır"
 
 #: common/tool/actions.cpp:602
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "Dikey"
+msgstr "Dikey Olarak Yakınlaştır"
 
 #: common/tool/actions.cpp:603
-#, fuzzy
 msgid "Zoom in vertically the plot area"
-msgstr "Dikey"
+msgstr "Grafik alanını dikey olarak yakınlaştır"
 
 #: common/tool/actions.cpp:609
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "Dikey"
+msgstr "Dikey Olarak Uzaklaştır"
 
 #: common/tool/actions.cpp:610
-#, fuzzy
 msgid "Zoom out vertically the plot area"
-msgstr "Dikey"
+msgstr "Grafik alanını dikey olarak uzaklaştır"
 
 #: common/tool/actions.cpp:618 common/widgets/mathplot.cpp:1385
 msgid "Center on Cursor"
@@ -8161,18 +8057,16 @@ msgid "Zoom to Selection"
 msgstr "Seçime Yakınlaştır"
 
 #: common/tool/actions.cpp:633 common/widgets/mathplot.cpp:1380
-#, fuzzy
 msgid "Undo Last Zoom"
-msgstr "Son düzenlemeyi geri al"
+msgstr "Son Yakınlaştırmayı Geri Al"
 
 #: common/tool/actions.cpp:634 common/widgets/mathplot.cpp:1380
 msgid "Return zoom to level prior to last zoom action"
 msgstr "Yakınlaştırmayı son yakınlaştırma eyleminden önceki seviyeye döndür"
 
 #: common/tool/actions.cpp:640 common/widgets/mathplot.cpp:1381
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "Son düzenlemeyi yeniden yap"
+msgstr "Son Yakınlaştırmayı Tekrar Yap"
 
 #: common/tool/actions.cpp:641 common/widgets/mathplot.cpp:1381
 msgid "Return zoom to level prior to last zoom undo"
@@ -8245,19 +8139,16 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Kitaplığı artık listenin başında tutma"
 
 #: common/tool/actions.cpp:758
-#, fuzzy
 msgid "Show Library Tree"
-msgstr "Yeni Kütüphane Başvurusu"
+msgstr "Kütüphane Ağacını Göster"
 
 #: common/tool/actions.cpp:764
-#, fuzzy
 msgid "Hide Library Tree"
-msgstr "Yeni Kütüphane Başvurusu"
+msgstr "Kütüphane Ağacını Gizle"
 
 #: common/tool/actions.cpp:770
-#, fuzzy
 msgid "Focus Library Tree Search Field"
-msgstr "İz düşümü referanslarını göster"
+msgstr "Kütüphane Ağacı Arama Alanına Odaklan"
 
 #: common/tool/actions.cpp:777
 msgid "Pan Up"
@@ -8284,9 +8175,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "Hızlı Izgara 2'ye geçme"
 
 #: common/tool/actions.cpp:825
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Hızlı Izgara 1'e geçme"
+msgstr "Hızlı Izgarayı Döngüye Al"
 
 #: common/tool/actions.cpp:832
 msgid "Switch to Next Grid"
@@ -8301,9 +8191,8 @@ msgid "Grid Origin"
 msgstr "Izgara Başlangıç noktası"
 
 #: common/tool/actions.cpp:846
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "Kılavuz başlangıç noktasını ayarlama"
+msgstr "Izgara başlangıç noktasını yerleştir"
 
 #: common/tool/actions.cpp:854
 msgid "Reset Grid Origin"
@@ -8322,14 +8211,12 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr "Geçerli ızgarayı geçersiz kılan, öğeye özgü ızgaraları etkinleştirir"
 
 #: common/tool/actions.cpp:880
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Kılavuz boyutlarını ayarla"
+msgstr "Izgara tanımlarını düzenle"
 
 #: common/tool/actions.cpp:886
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Izgara Başlangıç noktası"
+msgstr "Izgara Başlangıç noktası..."
 
 #: common/tool/actions.cpp:887
 msgid "Set the grid origin point"
@@ -8370,9 +8257,8 @@ msgid "Use millimeters"
 msgstr "Milimetre kullan"
 
 #: common/tool/actions.cpp:927
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Seçimi kaldır"
+msgstr "Sütunları Seç..."
 
 #: common/tool/actions.cpp:934
 msgid "Switch units"
@@ -8395,14 +8281,12 @@ msgid "Reset Local Coordinates"
 msgstr "Yerel Koordinatları Sıfırla"
 
 #: common/tool/actions.cpp:958
-#, fuzzy
 msgid "Always Show Crosshairs"
-msgstr "Artı işaretlerini her zaman göster"
+msgstr "Kılavuz Çizgilerini Her Zaman Göster"
 
 #: common/tool/actions.cpp:959
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Seçim aracında bile artı işaretlerini göster"
+msgstr "Nesne çizilmediğinde bile kılavuz çizgilerini görüntüle"
 
 #: common/tool/actions.cpp:965
 msgid "Full-Window Crosshairs"
@@ -8447,14 +8331,12 @@ msgid "Interactively measure distance between points"
 msgstr "Noktalar arasındaki mesafeyi etkileşimli olarak ölç"
 
 #: common/tool/actions.cpp:1021
-#, fuzzy
 msgid "Switch to Project Manager"
-msgstr "Proje Yöneticisi"
+msgstr "Proje Yöneticisi'ne Geç"
 
 #: common/tool/actions.cpp:1022
-#, fuzzy
 msgid "Show project window"
-msgstr "Konsol penceresini göster"
+msgstr "Proje penceresini göster"
 
 #: common/tool/actions.cpp:1031
 msgid "Show 3D viewer window"
@@ -8487,14 +8369,12 @@ msgid "Create, delete and edit footprints"
 msgstr "Ayak izleri oluşturun, silin ve düzenleyin"
 
 #: common/tool/actions.cpp:1073
-#, fuzzy
 msgid "Show Properties Manager"
-msgstr "Sayfa Özellikleri"
+msgstr "Özellikler Yöneticisi'ni Göster"
 
 #: common/tool/actions.cpp:1074
-#, fuzzy
 msgid "Show/hide the properties manager"
-msgstr "Sayfa Özellikleri"
+msgstr "Özellikler Yöneticisi'ni Göster/Gizle"
 
 #: common/tool/actions.cpp:1082
 msgid "Update PCB from Schematic..."
@@ -8566,14 +8446,12 @@ msgid "Open product documentation in a web browser"
 msgstr "Ürün belgelerini web tarayıcısında açın"
 
 #: common/tool/actions.cpp:1140
-#, fuzzy
 msgid "About KiCad"
-msgstr "KiCad &Hakkında"
+msgstr "KiCad Hakkında"
 
 #: common/tool/actions.cpp:1141
-#, fuzzy
 msgid "Open about dialog"
-msgstr "Metin düzenleyicisi:"
+msgstr "Hakkında penceresini aç"
 
 #: common/tool/actions.cpp:1150
 msgid "List Hotkeys..."
@@ -8601,9 +8479,8 @@ msgid "Report Bug"
 msgstr "Hata Bildir"
 
 #: common/tool/actions.cpp:1183
-#, fuzzy
 msgid "Refresh Plugins"
-msgstr "Yenile"
+msgstr "Eklentileri Yenile"
 
 #: common/tool/actions.cpp:1184
 msgid "Reload all python plugins and refresh plugin menus"
@@ -8614,34 +8491,28 @@ msgstr "Tüm python eklentilerini yeniden yükle ve eklenti menülerini yenile"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:133
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:79
-#, fuzzy
 msgid "Embedded Files"
-msgstr "Görüntü Dosyaları"
+msgstr "Gömülü Dosyalar"
 
 #: common/tool/actions.cpp:1193
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Ağ adı filtresi:"
+msgstr "Gömülü dosyaları yönet"
 
 #: common/tool/actions.cpp:1198
-#, fuzzy
 msgid "Remove File"
-msgstr "Yeniden Adlandır"
+msgstr "Dosyayı Kaldır"
 
 #: common/tool/actions.cpp:1199
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Kullanılmayan katmanları &kaldır"
+msgstr "Gömülü bir dosyayı kaldır"
 
 #: common/tool/actions.cpp:1204
-#, fuzzy
 msgid "Extract File"
-msgstr "Dosyaya Aktar"
+msgstr "Dosyayı Çıkart"
 
 #: common/tool/actions.cpp:1205
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "Çalıştırılabilir dosya"
+msgstr "Gömülü bir dosyayı çıkart"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
@@ -8694,9 +8565,8 @@ msgstr ""
 "KiCad projesine bağış yapmak için %s adresini ziyaret edin"
 
 #: common/tool/library_editor_control.cpp:132
-#, fuzzy
 msgid "New name:"
-msgstr "Ağ adları"
+msgstr "Yeni ad:"
 
 #: common/tool/selection_tool.cpp:307
 msgid "Select &All\tA"
@@ -8729,9 +8599,8 @@ msgid "Signal names cannot contain spaces"
 msgstr "Sinyal adları boşluk içeremez"
 
 #: common/validators.cpp:362
-#, fuzzy
 msgid "The value of the field cannot be empty."
-msgstr "Metin boş olamaz."
+msgstr "Alan değeri boş olamaz."
 
 #: common/validators.cpp:373
 msgid "carriage return"
@@ -8758,48 +8627,47 @@ msgid ", or "
 msgstr ", veya "
 
 #: common/validators.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
+msgstr "Referans belirleyici %s karakter(ler) içeremez."
 
 #: common/validators.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
+msgstr "Değer alanı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
+msgstr "Baskı izi alanı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
+msgstr "Veri sayfası alanı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
+msgstr "Sayfa adı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
+msgstr "Sayfa adı %s karakter(ler) içeremez."
 
 #: common/validators.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
+msgstr "Alan %s karakter(ler) içeremez."
 
 #: common/validators.cpp:440
 msgid "The reference designator cannot contain text variable references"
 msgstr "Referans belirteci metin değişkeni referansları içeremez"
 
 #: common/validators.cpp:447
-#, fuzzy
 msgid "Field Validation Error"
-msgstr "Kitaplık Tanımlayıcı Doğrulama Hatası"
+msgstr "Alan Doğrulama Hatası"
 
 #: common/view/view.cpp:576
 msgid "Mirroring for Y axis is not supported yet"
@@ -8860,9 +8728,8 @@ msgstr ""
 "desteklemeyen bilgisayarlar için)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "Ekran"
+msgstr "Izgara Görüntüleme"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_line_properties_base.cpp:62
