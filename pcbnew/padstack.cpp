@@ -36,9 +36,9 @@ PADSTACK::PADSTACK( BOARD_ITEM* aParent ) :
 {
     m_defaultCopperProps.shape = SHAPE_PROPS();
     m_defaultCopperProps.zone_connection = ZONE_CONNECTION::INHERITED;
-    m_defaultCopperProps.thermal_spoke_width = std::nullopt;
+    m_defaultCopperProps.thermal_spoke_width = 0;
     m_defaultCopperProps.thermal_spoke_angle = ANGLE_45;
-    m_defaultCopperProps.thermal_gap = std::nullopt;
+    m_defaultCopperProps.thermal_gap = 0;
 
     m_drill.shape = PAD_DRILL_SHAPE::CIRCLE;
     m_drill.start = F_Cu;
@@ -141,10 +141,151 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
             if( shape->Deserialize( a ) )
                 AddPrimitive( shape.release() );
         }
+
+        if( layer.has_zone_settings() )
+        {
+            CopperLayerDefaults().zone_connection =
+                    FromProtoEnum<ZONE_CONNECTION>( layer.zone_settings().zone_connection() );
+
+            if( layer.zone_settings().has_thermal_spokes() )
+            {
+                const ThermalSpokeSettings& thermals = layer.zone_settings().thermal_spokes();
+
+                CopperLayerDefaults().thermal_gap = thermals.gap();
+                CopperLayerDefaults().thermal_spoke_width = thermals.width();
+                SetThermalSpokeAngle( thermals.angle().value_degrees() );
+            }
+        }
+        else
+        {
+            CopperLayerDefaults().zone_connection = ZONE_CONNECTION::INHERITED;
+            CopperLayerDefaults().thermal_gap = 0;
+            CopperLayerDefaults().thermal_spoke_width = 0;
+            CopperLayerDefaults().thermal_spoke_angle = DefaultThermalSpokeAngleForShape();
+        }
     }
 
     SetUnconnectedLayerMode(
         FromProtoEnum<UNCONNECTED_LAYER_MODE>( padstack.unconnected_layer_removal() ) );
+
+    auto unpackMask =
+            []( const SolderMaskMode& aProto, std::optional<bool>& aDest )
+            {
+                switch( aProto )
+                {
+                case kiapi::board::types::SMM_MASKED:
+                    aDest = true;
+                    break;
+
+                case kiapi::board::types::SMM_UNMASKED:
+                    aDest = false;
+                    break;
+
+                default:
+                case kiapi::board::types::SMM_FROM_DESIGN_RULES:
+                    aDest = std::nullopt;
+                    break;
+                }
+            };
+
+    unpackMask( padstack.front_outer_layers().solder_mask_mode(),
+                FrontOuterLayers().has_solder_mask );
+
+    unpackMask( padstack.back_outer_layers().solder_mask_mode(),
+                BackOuterLayers().has_solder_mask );
+
+    auto unpackPaste =
+            []( const SolderPasteMode& aProto, std::optional<bool>& aDest )
+            {
+                switch( aProto )
+                {
+                case kiapi::board::types::SPM_PASTE:
+                    aDest = true;
+                    break;
+
+                case kiapi::board::types::SPM_NO_PASTE:
+                    aDest = false;
+                    break;
+
+                default:
+                case kiapi::board::types::SPM_FROM_DESIGN_RULES:
+                    aDest = std::nullopt;
+                    break;
+                }
+            };
+
+    unpackPaste( padstack.front_outer_layers().solder_paste_mode(),
+                 FrontOuterLayers().has_solder_paste );
+
+    unpackPaste( padstack.back_outer_layers().solder_paste_mode(),
+                 BackOuterLayers().has_solder_paste );
+
+    if( padstack.front_outer_layers().has_solder_mask_settings()
+        && padstack.front_outer_layers().solder_mask_settings().has_solder_mask_margin() )
+    {
+        FrontOuterLayers().solder_mask_margin =
+            padstack.front_outer_layers().solder_mask_settings().solder_mask_margin().value_nm();
+    }
+    else
+    {
+        FrontOuterLayers().solder_mask_margin = std::nullopt;
+    }
+
+    if( padstack.back_outer_layers().has_solder_mask_settings()
+        && padstack.back_outer_layers().solder_mask_settings().has_solder_mask_margin() )
+    {
+        BackOuterLayers().solder_mask_margin =
+                padstack.back_outer_layers().solder_mask_settings().solder_mask_margin().value_nm();
+    }
+    else
+    {
+        BackOuterLayers().solder_mask_margin = std::nullopt;
+    }
+
+    if( padstack.front_outer_layers().has_solder_paste_settings()
+        && padstack.front_outer_layers().solder_paste_settings().has_solder_paste_margin() )
+    {
+        FrontOuterLayers().solder_paste_margin =
+            padstack.front_outer_layers().solder_paste_settings().solder_paste_margin().value_nm();
+    }
+    else
+    {
+        FrontOuterLayers().solder_paste_margin = std::nullopt;
+    }
+
+    if( padstack.back_outer_layers().has_solder_paste_settings()
+        && padstack.back_outer_layers().solder_paste_settings().has_solder_paste_margin() )
+    {
+        BackOuterLayers().solder_paste_margin =
+            padstack.back_outer_layers().solder_paste_settings().solder_paste_margin().value_nm();
+    }
+    else
+    {
+        BackOuterLayers().solder_paste_margin = std::nullopt;
+    }
+
+    if( padstack.front_outer_layers().has_solder_paste_settings()
+        && padstack.front_outer_layers().solder_paste_settings().has_solder_paste_margin_ratio() )
+    {
+        FrontOuterLayers().solder_paste_margin_ratio =
+            padstack.front_outer_layers().solder_paste_settings().solder_paste_margin_ratio().value();
+    }
+    else
+    {
+        FrontOuterLayers().solder_paste_margin_ratio = std::nullopt;
+    }
+
+    if( padstack.back_outer_layers().has_solder_paste_settings()
+        && padstack.back_outer_layers().solder_paste_settings().has_solder_paste_margin_ratio() )
+    {
+        BackOuterLayers().solder_paste_margin_ratio =
+            padstack.back_outer_layers().solder_paste_settings().solder_paste_margin_ratio().value();
+    }
+    else
+    {
+        BackOuterLayers().solder_paste_margin_ratio = std::nullopt;
+    }
+
 
     return true;
 }
@@ -184,8 +325,86 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
     stackLayer->mutable_chamfered_corners()->set_bottom_left( corners & RECT_CHAMFER_BOTTOM_LEFT );
     stackLayer->mutable_chamfered_corners()->set_bottom_right( corners & RECT_CHAMFER_BOTTOM_RIGHT );
 
+    ZoneConnectionSettings* zoneSettings = stackLayer->mutable_zone_settings();
+    ThermalSpokeSettings* thermalSettings = zoneSettings->mutable_thermal_spokes();
+
+    if( CopperLayerDefaults().zone_connection.has_value() )
+    {
+        zoneSettings->set_zone_connection( ToProtoEnum<ZONE_CONNECTION, ZoneConnectionStyle>(
+            *CopperLayerDefaults().zone_connection ) );
+    }
+
+    thermalSettings->set_width( CopperLayerDefaults().thermal_spoke_width.value_or( 0 ) );
+    thermalSettings->set_gap( CopperLayerDefaults().thermal_gap.value_or( 0 ) );
+    thermalSettings->mutable_angle()->set_value_degrees( ThermalSpokeAngle().AsDegrees() );
+
     padstack.set_unconnected_layer_removal(
         ToProtoEnum<UNCONNECTED_LAYER_MODE, UnconnectedLayerRemoval>( m_unconnectedLayerMode ) );
+
+    auto packOptional =
+        []<typename ProtoEnum>( const std::optional<bool>& aVal, ProtoEnum aTrueVal,
+                                ProtoEnum aFalseVal, ProtoEnum aNullVal ) -> ProtoEnum
+        {
+            if( aVal.has_value() )
+                return *aVal ? aTrueVal : aFalseVal;
+
+            return aNullVal;
+        };
+
+    PadStackOuterLayer* frontOuter = padstack.mutable_front_outer_layers();
+    PadStackOuterLayer* backOuter = padstack.mutable_back_outer_layers();
+
+    frontOuter->set_solder_mask_mode( packOptional( FrontOuterLayers().has_solder_mask,
+                                                    SMM_MASKED, SMM_UNMASKED,
+                                                    SMM_FROM_DESIGN_RULES ) );
+
+    backOuter->set_solder_mask_mode( packOptional( BackOuterLayers().has_solder_mask,
+                                                   SMM_MASKED, SMM_UNMASKED,
+                                                   SMM_FROM_DESIGN_RULES ) );
+
+    frontOuter->set_solder_paste_mode( packOptional( FrontOuterLayers().has_solder_paste,
+                                                     SPM_PASTE, SPM_NO_PASTE,
+                                                     SPM_FROM_DESIGN_RULES ) );
+
+    backOuter->set_solder_paste_mode( packOptional( BackOuterLayers().has_solder_paste,
+                                                    SPM_PASTE, SPM_NO_PASTE,
+                                                    SPM_FROM_DESIGN_RULES ) );
+
+    if( FrontOuterLayers().solder_mask_margin.has_value() )
+    {
+        frontOuter->mutable_solder_mask_settings()->mutable_solder_mask_margin()->set_value_nm(
+            *FrontOuterLayers().solder_mask_margin );
+    }
+
+    if( BackOuterLayers().solder_mask_margin.has_value() )
+    {
+        backOuter->mutable_solder_mask_settings()->mutable_solder_mask_margin()->set_value_nm(
+            *BackOuterLayers().solder_mask_margin );
+    }
+
+    if( FrontOuterLayers().solder_paste_margin.has_value() )
+    {
+        frontOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin()->set_value_nm(
+            *FrontOuterLayers().solder_paste_margin );
+    }
+
+    if( BackOuterLayers().solder_paste_margin.has_value() )
+    {
+        backOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin()->set_value_nm(
+            *BackOuterLayers().solder_paste_margin );
+    }
+
+    if( FrontOuterLayers().solder_paste_margin_ratio.has_value() )
+    {
+        frontOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin_ratio()->set_value(
+            *FrontOuterLayers().solder_paste_margin_ratio );
+    }
+
+    if( BackOuterLayers().solder_paste_margin_ratio.has_value() )
+    {
+        backOuter->mutable_solder_paste_settings()->mutable_solder_paste_margin_ratio()->set_value(
+            *BackOuterLayers().solder_paste_margin_ratio );
+    }
 
     aContainer.PackFrom( padstack );
 }
@@ -477,15 +696,22 @@ const std::optional<int>& PADSTACK::ThermalGap( PCB_LAYER_ID aLayer ) const
 }
 
 
+EDA_ANGLE PADSTACK::DefaultThermalSpokeAngleForShape( PCB_LAYER_ID aLayer ) const
+{
+    const COPPER_LAYER_PROPS& defaults = CopperLayerDefaults();
+
+    return ( defaults.shape.shape == PAD_SHAPE::CIRCLE
+             || ( defaults.shape.shape == PAD_SHAPE::CUSTOM
+                  && defaults.shape.anchor_shape == PAD_SHAPE::CIRCLE ) )
+                   ? ANGLE_45 : ANGLE_90;
+}
+
+
 EDA_ANGLE PADSTACK::ThermalSpokeAngle( PCB_LAYER_ID aLayer ) const
 {
     const COPPER_LAYER_PROPS& defaults = CopperLayerDefaults();
 
-    return defaults.thermal_spoke_angle.value_or(
-            ( defaults.shape.shape == PAD_SHAPE::CIRCLE
-              || ( defaults.shape.shape == PAD_SHAPE::CUSTOM
-                   && defaults.shape.anchor_shape == PAD_SHAPE::CIRCLE ) )
-            ? ANGLE_45 : ANGLE_90 );
+    return defaults.thermal_spoke_angle.value_or( DefaultThermalSpokeAngleForShape( aLayer ) );
 }
 
 

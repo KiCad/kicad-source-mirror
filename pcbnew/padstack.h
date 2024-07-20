@@ -346,6 +346,7 @@ public:
     std::optional<int>& ThermalGap( PCB_LAYER_ID aLayer = F_Cu );
     const std::optional<int>& ThermalGap( PCB_LAYER_ID aLayer = F_Cu ) const;
 
+    EDA_ANGLE DefaultThermalSpokeAngleForShape( PCB_LAYER_ID aLayer = F_Cu ) const;
     EDA_ANGLE ThermalSpokeAngle( PCB_LAYER_ID aLayer = F_Cu ) const;
     void SetThermalSpokeAngle( EDA_ANGLE aAngle, PCB_LAYER_ID aLayer = F_Cu );
 

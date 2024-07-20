@@ -150,28 +150,8 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
     m_padStack.Serialize( padStackMsg );
     padStackMsg.UnpackTo( pad.mutable_pad_stack() );
 
-    DesignRuleOverrides* overrides = pad.mutable_overrides();
-
     if( GetLocalClearance().has_value() )
-        overrides->mutable_clearance()->set_value_nm( *GetLocalClearance() );
-
-    if( GetLocalSolderMaskMargin().has_value() )
-        overrides->mutable_solder_mask_margin()->set_value_nm( *GetLocalSolderMaskMargin() );
-
-    if( GetLocalSolderPasteMargin().has_value() )
-        overrides->mutable_solder_paste_margin()->set_value_nm( *GetLocalSolderPasteMargin() );
-
-    if( GetLocalSolderPasteMarginRatio().has_value() )
-        overrides->mutable_solder_paste_margin_ratio()->set_value( *GetLocalSolderPasteMarginRatio() );
-
-    overrides->set_zone_connection(
-            ToProtoEnum<ZONE_CONNECTION, ZoneConnectionStyle>( GetLocalZoneConnection() ) );
-
-    ThermalSpokeSettings* thermals = pad.mutable_thermal_spokes();
-
-    thermals->set_width( GetThermalSpokeWidth() );
-    thermals->set_gap( GetThermalGap() );
-    thermals->mutable_angle()->set_value_degrees( GetThermalSpokeAngleDegrees() );
+        pad.mutable_copper_clearance_override()->set_value_nm( *GetLocalClearance() );
 
     aContainer.PackFrom( pad );
 }
@@ -196,35 +176,10 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
 
     SetLayer( m_padStack.StartLayer() );
 
-    const kiapi::board::types::DesignRuleOverrides& overrides = pad.overrides();
-
-    if( overrides.has_clearance() )
-        SetLocalClearance( overrides.clearance().value_nm() );
+    if( pad.has_copper_clearance_override() )
+        SetLocalClearance( pad.copper_clearance_override().value_nm() );
     else
         SetLocalClearance( std::nullopt );
-
-    if( overrides.has_solder_mask_margin() )
-        SetLocalSolderMaskMargin( overrides.solder_mask_margin().value_nm() );
-    else
-        SetLocalSolderMaskMargin( std::nullopt );
-
-    if( overrides.has_solder_paste_margin() )
-        SetLocalSolderPasteMargin( overrides.solder_paste_margin().value_nm() );
-    else
-        SetLocalSolderPasteMargin( std::nullopt );
-
-    if( overrides.has_solder_paste_margin_ratio() )
-        SetLocalSolderPasteMarginRatio( overrides.solder_paste_margin_ratio().value() );
-    else
-        SetLocalSolderPasteMarginRatio( std::nullopt );
-
-    SetLocalZoneConnection( FromProtoEnum<ZONE_CONNECTION>( overrides.zone_connection() ) );
-
-    const kiapi::board::types::ThermalSpokeSettings& thermals = pad.thermal_spokes();
-
-    SetThermalGap( thermals.gap() );
-    SetThermalSpokeWidth( thermals.width() );
-    SetThermalSpokeAngleDegrees( thermals.angle().value_degrees() );
 
     return true;
 }

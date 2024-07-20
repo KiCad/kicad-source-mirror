@@ -183,6 +183,39 @@ message ChamferedRectCorners
   bool bottom_right = 4;
 }
 
+// enum class ZONE_CONNECTION
+enum ZoneConnectionStyle
+{
+  ZCS_UNKNOWN     = 0;
+  ZCS_INHERITED   = 1;
+  ZCS_NONE        = 2;
+  ZCS_THERMAL     = 3;
+  ZCS_FULL        = 4;
+  ZCS_PTH_THERMAL = 5;  // Thermal reliefs for plated through holes, solid for SMD pads
+}
+
+message ZoneConnectionSettings
+{
+  ZoneConnectionStyle zone_connection = 1;
+
+  ThermalSpokeSettings thermal_spokes = 2;
+}
+
+message SolderMaskOverrides
+{
+  // Solder mask expansion/contraction
+  kiapi.common.types.Distance solder_mask_margin = 1;
+}
+
+message SolderPasteOverrides
+{
+  // Solder paste expansion/contraction
+  kiapi.common.types.Distance solder_paste_margin = 1;
+
+  // Solder paste expansion/contraction ratio
+  kiapi.common.types.Ratio solder_paste_margin_ratio = 2;
+}
+
 // The defintion of a padstack on a single layer
 message PadStackLayer
 {
@@ -209,6 +242,33 @@ message PadStackLayer
 
   // If shape == PSS_CUSTOM, defines the shape of the anchor (only PSS_CIRCLE and PSS_RECTANGLE supported at present)
   PadStackShape custom_anchor_shape = 8;
+
+  ZoneConnectionSettings zone_settings = 9;
+}
+
+enum SolderMaskMode
+{
+  SMM_UNKOWN = 0;
+  SMM_MASKED = 1;
+  SMM_UNMASKED = 2;
+  SMM_FROM_DESIGN_RULES = 3;
+}
+
+enum SolderPasteMode
+{
+  SPM_UNKOWN = 0;
+  SPM_PASTE = 1;
+  SPM_NO_PASTE = 2;
+  SPM_FROM_DESIGN_RULES = 3;
+}
+
+// Properties for the outer technical layers of a padstack on the top or bottom of the stack
+message PadStackOuterLayer
+{
+  SolderMaskMode solder_mask_mode = 1;
+  SolderPasteMode solder_paste_mode = 2;
+  SolderMaskOverrides solder_mask_settings = 3;
+  SolderPasteOverrides solder_paste_settings = 4;
 }
 
 // A pad stack definition for a multilayer pad or via.
@@ -234,6 +294,12 @@ message PadStack
 
   // The overall rotation of this padstack (affects all layers)
   kiapi.common.types.Angle angle = 7;
+
+  // Solder mask and paste settings for the front
+  PadStackOuterLayer front_outer_layers = 8;
+
+  // Solder mask and paste settings for the back
+  PadStackOuterLayer back_outer_layers = 9;
 }
 
 enum ViaType
@@ -378,9 +444,8 @@ message Pad
   // A pad's position is always relative to the parent footprint's origin
   kiapi.common.types.Vector2 position = 7;
 
-  DesignRuleOverrides overrides = 8;
-
-  ThermalSpokeSettings thermal_spokes = 9;
+  // Copper-to-copper clearance override
+  kiapi.common.types.Distance copper_clearance_override = 8;
 }
 
 // Copper zone, non-copper zone, or rule area
@@ -443,37 +508,17 @@ message FootprintAttributes
   FootprintMountingStyle mounting_style = 8;
 }
 
-// enum class ZONE_CONNECTION
-enum ZoneConnectionStyle
-{
-  ZCS_UNKNOWN     = 0;
-  ZCS_INHERITED   = 1;
-  ZCS_NONE        = 2;
-  ZCS_THERMAL     = 3;
-  ZCS_FULL        = 4;
-  ZCS_PTH_THERMAL = 5;  // Thermal reliefs for plated through holes, solid for SMD pads
-}
-
-message DesignRuleOverrides
-{
-  // Copper-to-copper clearance override
-  kiapi.common.types.Distance clearance = 1;
-
-  // Solder mask expansion/contraction
-  kiapi.common.types.Distance solder_mask_margin = 2;
-
-  // Solder paste expansion/contraction
-  kiapi.common.types.Distance solder_paste_margin = 3;
-
-  // Solder paste expansion/contraction ratio
-  kiapi.common.types.Ratio solder_paste_margin_ratio = 4;
-
-  ZoneConnectionStyle zone_connection = 5;
-}
-
 message NetTieDefinition
 {
   repeated string pad_number = 1;
+}
+
+message FootprintDesignRuleOverrides
+{
+  SolderMaskOverrides solder_mask = 1;
+  SolderPasteOverrides solder_paste = 2;
+  kiapi.common.types.Distance copper_clearance = 3;
+  ZoneConnectionStyle zone_connection = 4;
 }
 
 // A footprint definition (i.e. what would be in a library)
@@ -482,7 +527,7 @@ message Footprint
   kiapi.common.types.LibraryIdentifier id         = 1;
   kiapi.common.types.Vector2           anchor     = 2;
   FootprintAttributes                  attributes = 3;
-  DesignRuleOverrides                  overrides  = 4;
+  FootprintDesignRuleOverrides         overrides  = 4;
   repeated NetTieDefinition            net_ties   = 5;
   repeated BoardLayer                  private_layers = 6;
 
@@ -511,5 +556,5 @@ message FootprintInstance
   Field description_field = 10;
 
   FootprintAttributes attributes = 11;
-  DesignRuleOverrides overrides  = 12;
+  FootprintDesignRuleOverrides overrides  = 12;
 }

@@ -308,19 +308,19 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     // TODO: serialize library mandatory fields
 
-    kiapi::board::types::DesignRuleOverrides* overrides = def->mutable_overrides();
+    kiapi::board::types::FootprintDesignRuleOverrides* overrides = def->mutable_overrides();
 
     if( GetLocalClearance().has_value() )
-        overrides->mutable_clearance()->set_value_nm( *GetLocalClearance() );
+        overrides->mutable_copper_clearance()->set_value_nm( *GetLocalClearance() );
 
     if( GetLocalSolderMaskMargin().has_value() )
-        overrides->mutable_solder_mask_margin()->set_value_nm( *GetLocalSolderMaskMargin() );
+        overrides->mutable_solder_mask()->mutable_solder_mask_margin()->set_value_nm( *GetLocalSolderMaskMargin() );
 
     if( GetLocalSolderPasteMargin().has_value() )
-        overrides->mutable_solder_paste_margin()->set_value_nm( *GetLocalSolderPasteMargin() );
+        overrides->mutable_solder_paste()->mutable_solder_paste_margin()->set_value_nm( *GetLocalSolderPasteMargin() );
 
     if( GetLocalSolderPasteMarginRatio().has_value() )
-        overrides->mutable_solder_paste_margin_ratio()->set_value( *GetLocalSolderPasteMarginRatio() );
+        overrides->mutable_solder_paste()->mutable_solder_paste_margin_ratio()->set_value( *GetLocalSolderPasteMarginRatio() );
 
     overrides->set_zone_connection(
             ToProtoEnum<ZONE_CONNECTION,
@@ -434,27 +434,32 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     SetLibDescription( footprint.definition().attributes().description() );
     SetKeywords( footprint.definition().attributes().keywords() );
 
-    const kiapi::board::types::DesignRuleOverrides& overrides = footprint.overrides();
+    const kiapi::board::types::FootprintDesignRuleOverrides& overrides = footprint.overrides();
 
-    if( overrides.has_clearance() )
-        SetLocalClearance( overrides.clearance().value_nm() );
+    if( overrides.has_copper_clearance() )
+        SetLocalClearance( overrides.copper_clearance().value_nm() );
     else
         SetLocalClearance( std::nullopt );
 
-    if( overrides.has_solder_mask_margin() )
-        SetLocalSolderMaskMargin( overrides.solder_mask_margin().value_nm() );
+    if( overrides.has_solder_mask() && overrides.solder_mask().has_solder_mask_margin() )
+        SetLocalSolderMaskMargin( overrides.solder_mask().solder_mask_margin().value_nm() );
     else
         SetLocalSolderMaskMargin( std::nullopt );
 
-    if( overrides.has_solder_paste_margin() )
-        SetLocalSolderPasteMargin( overrides.solder_paste_margin().value_nm() );
-    else
-        SetLocalSolderPasteMargin( std::nullopt );
+    if( overrides.has_solder_paste() )
+    {
+        const kiapi::board::types::SolderPasteOverrides& pasteSettings = overrides.solder_paste();
 
-    if( overrides.has_solder_paste_margin_ratio() )
-        SetLocalSolderPasteMarginRatio( overrides.solder_paste_margin_ratio().value() );
-    else
-        SetLocalSolderPasteMarginRatio( std::nullopt );
+        if( pasteSettings.has_solder_paste_margin() )
+            SetLocalSolderPasteMargin( pasteSettings.solder_paste_margin().value_nm() );
+        else
+            SetLocalSolderPasteMargin( std::nullopt );
+
+        if( pasteSettings.has_solder_paste_margin_ratio() )
+            SetLocalSolderPasteMarginRatio( pasteSettings.solder_paste_margin_ratio().value() );
+        else
+            SetLocalSolderPasteMarginRatio( std::nullopt );
+    }
 
     SetLocalZoneConnection( FromProtoEnum<ZONE_CONNECTION>( overrides.zone_connection() ) );
 
