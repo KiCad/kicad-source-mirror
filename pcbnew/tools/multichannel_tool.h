@@ -51,6 +51,7 @@ struct REPEAT_LAYOUT_OPTIONS
     bool                    m_moveOffRAComponents = true;
     bool                    m_includeLockedItems = true;
     bool                    m_keepOldRouting = false;
+    bool                    m_copyOnlyMatchingRAShapes = false;
     REPEAT_LAYOUT_EDGE_MODE m_edgeMode;
 };
 
@@ -68,6 +69,7 @@ struct RULE_AREA_COMPAT_DATA
 
 struct RULE_AREA
 {
+    ZONE*                            m_oldArea = nullptr;
     ZONE*                            m_area;
     std::set<FOOTPRINT*>             m_raFootprints;
     std::set<FOOTPRINT*>             m_sheetComponents;
@@ -125,7 +127,8 @@ private:
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                           RULE_AREA_COMPAT_DATA& aMatches );
     bool       copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
-                                     RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts );
+                                     RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts, std::unordered_set<BOARD_ITEM*>& aAffectedItems,
+                                     std::unordered_set<BOARD_ITEM*>& aGroupableItems );
     int        findRoutedConnections( std::set<BOARD_ITEM*>&             aOutput,
                                       std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
                                       const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA, FOOTPRINT* aFp,

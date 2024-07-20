@@ -320,8 +320,6 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 
 int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 {
-    BOARD_COMMIT commit( GetManager(), true );
-
     int totalCopied = 0;
 
     for( auto& targetArea : m_areas.m_compatMap )
@@ -336,8 +334,13 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         if( !targetArea.second.m_isOk )
             continue;
 
+        BOARD_COMMIT commit( GetManager(), true );
+
+        std::unordered_set<BOARD_ITEM*> affectedItems;
+        std::unordered_set<BOARD_ITEM*> groupableItems;
+
         if( !copyRuleAreaContents( targetArea.second.m_matchingComponents, &commit, m_areas.m_refRA,
-                                   targetArea.first, m_areas.m_options ) )
+                                   targetArea.first, m_areas.m_options, affectedItems, groupableItems ) )
         {
             auto errMsg = wxString::Format(
                     _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
@@ -351,6 +354,30 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
             }
 
             return -1;
+        }
+
+
+        printf("rep-l grp %d affected %d\n", groupableItems.size(), affectedItems.size() );
+        commit.Push( _( "Repeat layout" ) );
+
+
+        if( m_areas.m_groupItems )
+        {
+            // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
+            BOARD_COMMIT grpCommit( GetManager(), true );
+
+            pruneExistingGroups( grpCommit, affectedItems );
+
+            PCB_GROUP* grp = new PCB_GROUP( board() );
+
+            grpCommit.Add( grp );
+            
+            for( auto item : groupableItems )
+            {
+                grpCommit.Stage( item, CHT_GROUP );
+            }
+    
+            grpCommit.Push( _( "Group components with their placement rule areas" ) );
         }
 
         totalCopied++;
@@ -432,7 +459,9 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
 
 bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit,
                                               RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
-                                              REPEAT_LAYOUT_OPTIONS aOpts )
+                                              REPEAT_LAYOUT_OPTIONS aOpts,
+                                              std::unordered_set<BOARD_ITEM*>& aAffectedItems,
+                                              std::unordered_set<BOARD_ITEM*>& aGroupableItems )
 {
     // copy RA shapes first
     SHAPE_LINE_CHAIN refOutline = aRefArea->m_area->Outline()->COutline( 0 );
@@ -454,6 +483,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     auto connectivity = board()->GetConnectivity();
 
     aCommit->Modify( aTargetArea->m_area );
+
+    aAffectedItems.insert( aTargetArea->m_area );
+    aGroupableItems.insert( aTargetArea->m_area );
 
     if( aOpts.m_copyRouting )
     {
@@ -482,7 +514,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 continue;
 
             if( aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+            {
+                aAffectedItems.insert( item );
                 aCommit->Remove( item );
+            }
         }
 
         for( BOARD_ITEM* item : refRouting )
@@ -495,6 +530,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             BOARD_ITEM* copied = static_cast<BOARD_ITEM*>( item->Clone() );
 
             copied->Move( disp );
+            aGroupableItems.insert( copied );
             aCommit->Add( copied );
         }
     }
@@ -538,6 +574,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
             targetFP->Reference().SetPosition( refFP->Reference().GetPosition() + disp );
             targetFP->Value().SetTextAngle( refFP->Value().GetTextAngle() );
             targetFP->Value().SetPosition( refFP->Value().GetPosition() + disp );
+
+            aAffectedItems.insert( targetFP );
+            aGroupableItems.insert( targetFP );
         }
     }
 
@@ -583,15 +622,34 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
     return (status == TMATCH::CONNECTION_GRAPH::ST_OK ); 
 }
 
-#if 0
+
 bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToRemove )
 {
     for( PCB_GROUP* grp : board()->Groups() )
     {
         std::unordered_set<BOARD_ITEM*>& grpItems = grp->GetItems();
-        std::unordered_set<BOARD_ITEM*> toPrune;
-        std::set_intersection( grpItems.begin(), grpItems.end(), aItemsToRemove.begin(), aItemsToRemove.end(),
-        std::inserter( toPrune, toPrune.begin() ) );
+        int n_erased = 0;
+
+        for(  auto refItem : grpItems )
+        {
+            //printf("check ref %p [%s]\n", refItem, refItem->GetTypeDesc().c_str().AsChar() );
+            for (  auto& testItem : aItemsToRemove )
+            {
+
+                if( refItem->m_Uuid == testItem->m_Uuid )
+                {
+                    aCommit.Stage( refItem, CHT_UNGROUP );
+                    n_erased++;
+                }
+            }
+        }
+
+        if( n_erased == grpItems.size() )
+        {
+            aCommit.Stage( grp, CHT_REMOVE );
+        }
+
+        printf("Grp %p items %d pruned %d air %d\n", grp,grpItems.size(), (int) n_erased, (int) aItemsToRemove.size() );
     }
 
     return false;
@@ -640,7 +698,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
                         wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
                         ra.m_sheetPath, zone->GetZoneName() );
 
-                ra.m_area = zone;
+                ra.m_oldArea = zone;
                 ra.m_existsAlready = true;
             }
         }
@@ -676,10 +734,14 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
                 wxString::Format( wxT( "A.memberOfSheet('%s')" ), ra.m_sheetPath ) );
         newZone->AddPolygon( raOutline );
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
-        //aBoard->Add( newZone.release() );
+
+        if( ra.m_existsAlready )
+        {
+            commit.Remove( ra.m_oldArea );
+        }
 
         ra.m_area = newZone.get();
-        commit.Add( newZone.get() );
+        commit.Add( newZone.release() );
 
     }
 
@@ -688,11 +750,10 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
     // fixme: handle corner cases where the items belonging to a Rule Area already
     // belong to other groups.
 
-    if( 0 /*m_areas.m_groupItems*/ )
+    if( m_areas.m_groupItems )
     {
         // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
         BOARD_COMMIT grpCommit( GetManager(), true );
-
 
         for( RULE_AREA& ra : m_areas.m_areas )
         {
@@ -706,19 +767,19 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             std::copy( ra.m_sheetComponents.begin(), ra.m_sheetComponents.end(),
                        std::inserter( toPrune, toPrune.begin() ) );
 
+            if( ra.m_existsAlready )
+                toPrune.insert( ra.m_area );
+
             pruneExistingGroups( grpCommit, toPrune );
 
             PCB_GROUP* grp = new PCB_GROUP( board() );
 
             grpCommit.Add( grp );
-
             grpCommit.Stage( ra.m_area, CHT_GROUP );
-            grp->AddItem( ra.m_area );
 
             for( auto fp : ra.m_sheetComponents )
             {
                 grpCommit.Stage( fp, CHT_GROUP );
-                grp->AddItem( fp );
             }
         }
         grpCommit.Push( _( "Group components with their placement rule areas" ) );
