@@ -1578,6 +1578,8 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
     }
 
+    wxASSERT( rv.m_points.size() == rv.m_shapes.size() );
+
     return rv;
 }
 
@@ -2654,6 +2656,14 @@ void SHAPE_LINE_CHAIN::Simplify( int aMaxError )
 
     // If we have only one point, we need to add a second point to make a line
     if( new_points.size() == 1 )
+    {
+        new_points.push_back( m_points.back() );
+        new_shapes.push_back( m_shapes.back() );
+    }
+
+    // If we are not closed, then the start and end points of the original line need to
+    // be the start and end points of the new line.
+    if( !m_closed && m_points.back() != new_points.back() )
     {
         new_points.push_back( m_points.back() );
         new_shapes.push_back( m_shapes.back() );
