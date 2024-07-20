@@ -387,6 +387,36 @@ BOOST_AUTO_TEST_CASE( SimplifyDuplicatePoint )
 }
 
 
+BOOST_AUTO_TEST_CASE( SimplifyComplexChain )
+{
+    SHAPE_LINE_CHAIN chain;
+
+    // Append points
+    chain.Append( { 130000, 147320 } );
+    chain.Append( { 125730, 147320 } );
+    chain.Append( { 125730, 150630 } );
+    chain.Append( { 128800, 153700 } );
+    chain.Append( { 150300, 153700 } );
+    chain.Append( { 151500, 152500 } );
+    chain.Append( { 151500, 148900 } );
+    chain.Append( { 149920, 147320 } );
+    chain.Append( { 140000, 147320 } );
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 9 );
+
+    // The chain should be open, so the points should not be simplified
+    // between the begining and the end.
+    chain.Simplify();
+
+    BOOST_CHECK_EQUAL( chain.PointCount(), 9 );
+
+    chain.SetClosed( true );
+    chain.Simplify();
+
+    BOOST_CHECK_EQUAL( chain.PointCount(), 8 );
+}
+
 struct REMOVE_SHAPE_CASE
 {
     std::string m_ctx_name;
