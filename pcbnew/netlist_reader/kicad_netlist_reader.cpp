@@ -421,7 +421,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
                         }
                         else if( token == T_STRING )
                         {
-                            fieldValue = CurText();
+                            fieldValue = From_UTF8( CurText() );
                         }
                     }
 
