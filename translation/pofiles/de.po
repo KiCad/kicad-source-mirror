@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-07-19 19:09+0000\n"
+"PO-Revision-Date: 2024-07-20 21:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -41187,7 +41187,7 @@ msgstr "(Eckfase ist zu groß.)"
 
 #: pcbnew/pad.cpp:2090
 msgid "(Trapazoid delta is too large)"
-msgstr "(Trapez-Delta ist zu groß.)"
+msgstr "(Trapez-Delta ist zu groß)"
 
 #: pcbnew/pad.cpp:2101
 msgid "(Custom pad shape must resolve to a single polygon)"
