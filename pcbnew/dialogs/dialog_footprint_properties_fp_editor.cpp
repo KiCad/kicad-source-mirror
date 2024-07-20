@@ -121,20 +121,20 @@ NOTEBOOK_PAGES DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::m_page = NOTEBOOK_PAGES::P
 
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
-        FOOTPRINT_EDIT_FRAME* aParent,
-        FOOTPRINT* aFootprint ) :
-    DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( aParent ),
-    m_frame( aParent ),
-    m_footprint( aFootprint ),
-    m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
-    m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
-                  m_SolderMaskMarginUnits ),
-    m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl,
-                   m_SolderPasteMarginUnits ),
-    m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
-                        m_PasteMarginRatioUnits ),
-    m_gridSize( 0, 0 ),
-    m_lastRequestedSize( 0, 0 )
+                                                                    FOOTPRINT_EDIT_FRAME* aParent,
+                                                                    FOOTPRINT* aFootprint ) :
+        DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( aParent ),
+        m_frame( aParent ),
+        m_footprint( aFootprint ),
+        m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
+        m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
+                      m_SolderMaskMarginUnits ),
+        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl,
+                       m_SolderPasteMarginUnits ),
+        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
+                            m_PasteMarginRatioUnits ),
+        m_gridSize( 0, 0 ),
+        m_lastRequestedSize( 0, 0 )
 {
     SetEvtHandlerEnabled( false );
     // Create the 3D models page
@@ -227,20 +227,14 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
 {
-    PCBNEW_SETTINGS* cfg = nullptr;
-
     try
     {
-        cfg = m_frame->GetPcbNewSettings();
+        PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
+        cfg->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
     }
     catch( const std::runtime_error& e )
     {
         wxFAIL_MSG( e.what() );
-    }
-
-    if( cfg )
-    {
-        cfg->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
     }
 
     // Prevents crash bug in wxGrid's d'tor
@@ -526,7 +520,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     // Update fields
 
     std::vector<PCB_FIELD*> items_to_remove;
-    size_t              i = 0;
+    size_t                  i = 0;
 
     for( PCB_FIELD* field : m_footprint->GetFields() )
     {
@@ -547,12 +541,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
         item->DeleteStructure();
     }
 
-
     // if there are still grid table entries, create new fields for them
     while( i < m_fields->size() )
-    {
         view->Add( m_footprint->AddField( m_fields->at( i++ ) ) );
-    }
 
     LSET privateLayers;
 
@@ -662,11 +653,11 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    int                          fieldId = (int) m_fields->size();
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    PCB_FIELD                    newField =
-            PCB_FIELD( m_footprint, m_fields->size(),
-                       TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
+
+    int       fieldId = (int) m_fields->size();
+    PCB_FIELD newField( m_footprint, m_fields->size(),
+                        TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
@@ -720,7 +711,10 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
     m_itemsGrid->ClearSelection();
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
+    selectedRows.Sort( []( int* first, int* second )
+                       {
+                           return *second - *first;
+                       } );
 
     for( int row : selectedRows )
     {
@@ -780,9 +774,9 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event
     if( m_privateLayersGrid->GetNumberRows() > 0 )
     {
         m_privateLayersGrid->MakeCellVisible( std::max( 0, curRow-1 ),
-                                               m_privateLayersGrid->GetGridCursorCol() );
+                                              m_privateLayersGrid->GetGridCursorCol() );
         m_privateLayersGrid->SetGridCursor( std::max( 0, curRow-1 ),
-                                             m_privateLayersGrid->GetGridCursorCol() );
+                                            m_privateLayersGrid->GetGridCursorCol() );
     }
 }
 
