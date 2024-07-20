@@ -870,6 +870,18 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
                 }
             }
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BASE
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_ALT )
+            {
+                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
+                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BASE ) + 1;
+
+                if( symbol && symbol->GetBodyStyle() != bodyStyle )
+                {
+                    m_frame->FlipBodyStyle( symbol );
+                    m_toolMgr->PostAction( ACTIONS::refreshPreview );
+                }
+            }
         }
         else if( evt->IsAction( &EE_ACTIONS::highlightNet )
                     || evt->IsAction( &EE_ACTIONS::selectOnPCB ) )

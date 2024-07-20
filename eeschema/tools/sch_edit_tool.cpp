@@ -25,7 +25,6 @@
 #include <kiway.h>
 #include <tool/picker_tool.h>
 #include <tools/sch_edit_tool.h>
-#include <tools/ee_selection_tool.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
@@ -36,22 +35,12 @@
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
-#include <sch_edit_frame.h>
-#include <sch_item.h>
 #include <sch_junction.h>
-#include <sch_line.h>
 #include <sch_marker.h>
 #include <sch_rule_area.h>
-#include <sch_symbol.h>
-#include <sch_shape.h>
-#include <sch_sheet.h>
 #include <sch_sheet_pin.h>
-#include <sch_text.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
-#include <sch_tablecell.h>
-#include <sch_view.h>
-#include <schematic.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <dialogs/dialog_change_symbols.h>
@@ -124,6 +113,43 @@ private:
             if( ii >= ( ID_POPUP_SCH_SELECT_UNIT_END - ID_POPUP_SCH_SELECT_UNIT1) )
                 break;      // We have used all IDs for these submenus
         }
+    }
+};
+
+
+class BODY_STYLE_MENU : public ACTION_MENU
+{
+public:
+    BODY_STYLE_MENU() :
+        ACTION_MENU( true )
+    {
+        SetIcon( BITMAPS::component_select_alternate_shape );
+        SetTitle( _( "Body Style" ) );
+    }
+
+protected:
+    ACTION_MENU* create() const override
+    {
+        return new BODY_STYLE_MENU();
+    }
+
+private:
+    void update() override
+    {
+        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selTool->GetSelection();
+        SCH_SYMBOL*        symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
+        wxMenuItem*        item;
+
+        Clear();
+
+        wxCHECK( symbol, /* void */ );
+
+        item = Append( ID_POPUP_SCH_SELECT_BASE, _( "Standard" ), wxEmptyString, wxITEM_CHECK );
+        item->Check( symbol->GetBodyStyle() == BODY_STYLE::BASE );
+
+        item = Append( ID_POPUP_SCH_SELECT_ALT, _( "Alternate" ), wxEmptyString, wxITEM_CHECK );
+        item->Check( symbol->GetBodyStyle() != BODY_STYLE::BASE );
     }
 };
 
@@ -462,6 +488,15 @@ bool SCH_EDIT_TOOL::Init()
                 return menu.get();
             };
 
+    auto makeBodyStyleMenu =
+            [&]( TOOL_INTERACTIVE* tool )
+            {
+                std::shared_ptr<BODY_STYLE_MENU> menu = std::make_shared<BODY_STYLE_MENU>();
+                menu->SetTool( tool );
+                tool->GetToolMenu().RegisterSubMenu( menu );
+                return menu.get();
+            };
+
     auto makePinFunctionMenu =
             [&]( TOOL_INTERACTIVE* tool )
             {
@@ -559,6 +594,7 @@ bool SCH_EDIT_TOOL::Init()
 
     moveMenu.AddSeparator();
     moveMenu.AddMenu( makeSymbolUnitMenu( moveTool ), E_C::SingleMultiUnitSymbol, 1 );
+    moveMenu.AddMenu( makeBodyStyleMenu( moveTool ),  E_C::SingleDeMorganSymbol, 1 );
 
     moveMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
     moveMenu.AddMenu( makeAttributesMenu(),           E_C::HasType( SCH_SYMBOL_T ), 200 );
@@ -584,6 +620,7 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddSeparator(                            sheetSelection && EE_CONDITIONS::Idle, 1 );
 
     drawMenu.AddMenu( makeSymbolUnitMenu( drawingTools ), E_C::SingleMultiUnitSymbol, 1 );
+    drawMenu.AddMenu( makeBodyStyleMenu( drawingTools ),  E_C::SingleDeMorganSymbol, 1 );
 
     drawMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
     drawMenu.AddMenu( makeAttributesMenu(),           E_C::HasType( SCH_SYMBOL_T ), 200 );
@@ -605,6 +642,7 @@ bool SCH_EDIT_TOOL::Init()
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     selToolMenu.AddMenu( makeSymbolUnitMenu( m_selectionTool ),  E_C::SingleMultiUnitSymbol, 1 );
+    selToolMenu.AddMenu( makeBodyStyleMenu( m_selectionTool ),   E_C::SingleDeMorganSymbol, 1 );
     selToolMenu.AddMenu( makePinFunctionMenu( m_selectionTool ), E_C::SingleMultiFunctionPin, 1 );
     selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   E_C::AllPinsOrSheetPins, 1 );
 

@@ -679,6 +679,15 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( symbol )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectUnit( symbol, unit );
             }
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BASE
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_ALT )
+            {
+                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_selection.Front() );
+                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BASE ) + 1;
+
+                if( symbol && symbol->GetBodyStyle() != bodyStyle )
+                    static_cast<SCH_EDIT_FRAME*>( m_frame )->FlipBodyStyle( symbol );
+            }
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_ALT_PIN_FUNCTION
                      && *evt->GetCommandId() <= ID_POPUP_SCH_ALT_PIN_FUNCTION_END )
             {

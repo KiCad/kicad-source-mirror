@@ -481,6 +481,17 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
                 }
             }
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_BASE
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_ALT )
+            {
+                int bodyStyle = ( *evt->GetCommandId() - ID_POPUP_SCH_SELECT_BASE ) + 1;
+
+                if( symbol && symbol->GetBodyStyle() != bodyStyle )
+                {
+                    m_frame->FlipBodyStyle( symbol );
+                    m_toolMgr->PostAction( ACTIONS::refreshPreview );
+                }
+            }
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
                  || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
