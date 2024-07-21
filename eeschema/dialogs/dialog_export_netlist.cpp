@@ -297,9 +297,9 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
 
     for( int ii = 0; ii < DEFINED_NETLISTS_COUNT + CUSTOMPANEL_COUNTMAX; ++ii )
     {
-        if( EXPORT_NETLIST_PAGE* page = m_PanelNetType[ii] )
+        if( EXPORT_NETLIST_PAGE* candidate = m_PanelNetType[ii] )
         {
-            if( page->GetPageNetFmtName() == settings.m_NetFormatName )
+            if( candidate->GetPageNetFmtName() == settings.m_NetFormatName )
             {
                 m_NoteBook->ChangeSelection( ii );
                 break;
