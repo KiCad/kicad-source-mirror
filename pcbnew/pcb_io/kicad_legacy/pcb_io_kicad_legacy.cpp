@@ -285,14 +285,16 @@ static GR_TEXT_V_ALIGN_T vertJustify( const char* vertical )
 
 
 /// Count the number of set layers in the mask
-inline int layerMaskCountSet( LEG_MASK aMask )
+int layerMaskCountSet( LEG_MASK aMask )
 {
     int count = 0;
 
-    for( int i = 0;  aMask;  ++i, aMask >>= 1 )
+    while( aMask )
     {
         if( aMask & 1 )
             ++count;
+
+        aMask >>= 1;
     }
 
     return count;
