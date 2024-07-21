@@ -199,16 +199,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
 
     do
     {
-        try
-        {
-            std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
-        }
-        catch( std::system_error& e )
-        {
-            wxASSERT_MSG( false, wxString::Format( wxS( "Failed to lock lib table mutex: %s" ),
-                                                   e.what() ) );
-            continue;
-        }
+        std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
 
         if( cur->m_rowsMap.count( aNickName ) )
             row = &*cur->m_rowsMap.at( aNickName );
