@@ -105,7 +105,7 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 
         // aPage starts at 1, not 0
         if( unsigned( aPage - 1 ) < seq.size() )
-            m_settings.m_LayerSet = LSET( seq[ aPage - 1] );
+            m_settings.m_LayerSet = LSET( { seq[aPage - 1] } );
     }
 
     if( !m_settings.m_LayerSet.any() )

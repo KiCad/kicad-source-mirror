@@ -142,7 +142,8 @@ public:
         m_valid = true;
         m_dirty = true;
         m_anchors.reserve( std::max( 6, aAnchorCount ) );
-        m_layers = LAYER_RANGE( 0, PCB_LAYER_ID_COUNT );
+        m_start_layer = 0;
+        m_end_layer = std::numeric_limits<int>::max();
         m_connected.reserve( 8 );
     }
 
@@ -167,26 +168,55 @@ public:
     bool Dirty() const { return m_dirty;  }
 
     /**
-     * Set the layers spanned by the item to aLayers.
+     * Set the layers spanned by the item to aStartLayer and aEndLayer.
      */
-    void SetLayers( const LAYER_RANGE& aLayers ) { m_layers = aLayers;  }
+    void SetLayers( int aStartLayer, int aEndLayer )
+    {
+        // B_Cu is nominally layer 2 but we reset it to INT_MAX to ensure that it is
+        // always greater than any other layer in the RTree
+        if( aStartLayer == B_Cu )
+            aStartLayer = std::numeric_limits<int>::max();
+
+        if( aEndLayer == B_Cu )
+            aEndLayer = std::numeric_limits<int>::max();
+
+        m_start_layer = aStartLayer;
+        m_end_layer = aEndLayer;
+    }
 
     /**
      * Set the layers spanned by the item to a single layer aLayer.
      */
-    void SetLayer( int aLayer ) { m_layers = LAYER_RANGE( aLayer, aLayer ); }
+    void SetLayer( int aLayer ) { SetLayers( aLayer, aLayer ); }
 
     /**
      * Return the contiguous set of layers spanned by the item.
      */
-    const LAYER_RANGE& Layers() const { return m_layers; }
+    int StartLayer() const { return m_start_layer; }
+    int EndLayer() const { return m_end_layer; }
 
     /**
      * Return the item's layer, for single-layered items only.
+     * N.B. This should only be used inside connectivity as B_Cu
+     * is mapped to a large int
      */
     virtual int Layer() const
     {
-        return Layers().Start();
+        return StartLayer();
+    }
+
+    /**
+     * When using CN_ITEM layers to compare against board items,
+     * use this function which correctly remaps the B_Cu layer
+    */
+    PCB_LAYER_ID GetBoardLayer() const
+    {
+        int layer = Layer();
+
+        if( layer == std::numeric_limits<int>::max() )
+            layer = B_Cu;
+
+        return ToLAYER_ID( layer );
     }
 
     const BOX2I& BBox()
@@ -232,7 +262,8 @@ public:
 protected:
     bool            m_dirty;         ///< used to identify recently added item not yet
                                      ///< scanned into the connectivity search
-    LAYER_RANGE     m_layers;        ///< layer range over which the item exists
+    int             m_start_layer;   ///< start layer of the item N.B. B_Cu is set to INT_MAX
+    int             m_end_layer;     ///< end layer of the item N.B. B_Cu is set to INT_MAX
     BOX2I           m_bbox;          ///< bounding box for the item
 
 private:
@@ -264,7 +295,7 @@ public:
             m_layer( aLayer )
     {
         m_fillPoly = aParent->GetFilledPolysList( aLayer );
-        SetLayers( aLayer );
+        SetLayers( aLayer, aLayer );
     }
 
     void BuildRTree()
@@ -399,7 +430,7 @@ public:
     template <class T>
     void FindNearby( CN_ITEM* aItem, T aFunc )
     {
-        m_index.Query( aItem->BBox(), aItem->Layers(), aFunc );
+        m_index.Query( aItem->BBox(), aItem->StartLayer(), aItem->EndLayer(), aFunc );
     }
 
     void SetHasInvalid( bool aInvalid = true ) { m_hasInvalid = aInvalid; }

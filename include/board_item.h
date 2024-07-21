@@ -240,6 +240,21 @@ public:
     virtual PCB_LAYER_ID GetLayer() const { return m_layer; }
 
     /**
+     * Return the total number of layers for the board that this item resides on.
+     */
+    virtual int BoardLayerCount() const;
+
+    /**
+     * Return the total number of copper layers for the board that this item resides on.
+     */
+    virtual int BoardCopperLayerCount() const;
+
+    /**
+     * Return the LSET for the board that this item resides on.
+     */
+    virtual LSET BoardLayerSet() const;
+
+    /**
      * Return a std::bitset of all layers on which the item physically resides.
      */
     virtual LSET GetLayerSet() const
@@ -247,7 +262,7 @@ public:
         if( m_layer == UNDEFINED_LAYER )
             return LSET();
         else
-            return LSET( m_layer );
+            return LSET( { m_layer } );
     }
 
     virtual void SetLayerSet( const LSET& aLayers )

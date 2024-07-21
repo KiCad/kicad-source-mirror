@@ -349,7 +349,7 @@ void RN_NET::OptimizeRNEdges()
 
                     CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( item );
 
-                    if( zoneLayer && aLayerSet.test( zoneLayer->Layer() ) )
+                    if( zoneLayer && aLayerSet.test( zoneLayer->GetBoardLayer() ) )
                     {
                         const std::vector<VECTOR2I>& pts = zoneLayer->GetOutline().CPoints();
 

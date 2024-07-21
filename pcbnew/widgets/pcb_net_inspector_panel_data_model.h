@@ -25,7 +25,7 @@
 
 /**
  * Primary data item for entries in the Net Inspector list.
- * 
+ *
  * This class tracks all data for a given net entry in the net inspector list.
  */
 class PCB_NET_INSPECTOR_PANEL::LIST_ITEM
@@ -44,7 +44,7 @@ public:
             m_net_name( aGroupName )
     {
         m_group_name = aGroupName;
-        m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + MAX_CU_LAYERS, 0 );
+        m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + 2, 0 ); // 2 for default layer count
     }
 
     LIST_ITEM( NETINFO_ITEM* aNet ) :
@@ -54,10 +54,10 @@ public:
         wxASSERT( aNet );
         m_net_name = UnescapeString( aNet->GetNetname() );
         m_net_class = UnescapeString( aNet->GetNetClass()->GetName() );
-        m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + MAX_CU_LAYERS, 0 );
+        m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + 2, 0 );
     }
 
-    LIST_ITEM() { m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + MAX_CU_LAYERS, 0 ); }
+    LIST_ITEM() { m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + 2, 0 ); }
 
     LIST_ITEM& operator=( const LIST_ITEM& ) = delete;
 
@@ -69,6 +69,11 @@ public:
     auto         ChildrenBegin() const { return m_children.begin(); }
     auto         ChildrenEnd() const { return m_children.end(); }
     unsigned int ChildrenCount() const { return m_children.size(); }
+
+    void SetLayerCount( unsigned int aValue )
+    {
+        m_column_changed.resize( COLUMN_LAST_STATIC_COL + 1 + aValue, 0 );
+    }
 
     NETINFO_ITEM* GetNet() const { return m_net; }
 
@@ -182,37 +187,46 @@ public:
     {
         uint64_t retval = 0;
 
-        for( uint64_t val : m_layer_wire_length )
-            retval += val;
+        for( auto& [layer, length] : m_layer_wire_length )
+            retval += length;
 
         return retval;
     }
 
-    uint64_t GetLayerWireLength( size_t aLayer ) const
+    uint64_t GetLayerWireLength( PCB_LAYER_ID aLayer ) const
     {
-        wxCHECK_MSG( aLayer < m_layer_wire_length.size(), 0, wxT( "Invalid layer specified" ) );
-
-        return m_layer_wire_length[aLayer];
+        auto it = m_layer_wire_length.find( aLayer );
+        return it != m_layer_wire_length.end() ? it->second : 0;
     }
 
     bool BoardWireLengthChanged() const { return m_column_changed[COLUMN_BOARD_LENGTH]; }
 
-    void SetLayerWireLength( const uint64_t aValue, size_t aLayer )
+    void SetLayerWireLength( const uint64_t aValue, PCB_LAYER_ID aLayer )
     {
-        wxCHECK_RET( aLayer < m_layer_wire_length.size(), wxT( "Invalid layer specified" ) );
+        auto it = m_layer_wire_length.find( aLayer );
+
+        wxCHECK_RET( it != m_layer_wire_length.end(), wxT( "Invalid layer specified" ) );
+
+        auto& [_, length] = *it;
 
         if( m_parent )
         {
-            m_parent->SetLayerWireLength( m_parent->GetBoardWireLength()
-                                              - m_layer_wire_length[aLayer] + aValue,
-                                          aLayer );
+            m_parent->SetLayerWireLength( m_parent->GetBoardWireLength() - length + aValue,
+                                           aLayer );
         }
 
-        m_column_changed[COLUMN_BOARD_LENGTH] |= ( m_layer_wire_length[aLayer] != aValue );
-        m_layer_wire_length[aLayer] = aValue;
+        m_column_changed[COLUMN_BOARD_LENGTH] |= ( length != aValue );
+        length = aValue;
     }
 
-    void AddLayerWireLength( const uint64_t aValue, size_t aLayer )
+    std::map<PCB_LAYER_ID, uint64_t> GetLayerWireLength() const { return m_layer_wire_length; }
+
+    void SetLayerWireLength( const std::map<PCB_LAYER_ID, uint64_t>& aValue )
+    {
+        m_layer_wire_length = aValue;
+    }
+
+    void AddLayerWireLength( const uint64_t aValue, PCB_LAYER_ID aLayer )
     {
         if( m_parent )
             m_parent->AddLayerWireLength( aValue, aLayer );
@@ -221,7 +235,7 @@ public:
         m_layer_wire_length[aLayer] += aValue;
     }
 
-    void SubLayerWireLength( const uint64_t aValue, size_t aLayer )
+    void SubLayerWireLength( const uint64_t aValue, PCB_LAYER_ID aLayer )
     {
         if( m_parent )
             m_parent->SubLayerWireLength( aValue, aLayer );
@@ -285,8 +299,8 @@ public:
             m_parent->SubViaCount( GetViaCount() );
             m_parent->SubViaLength( GetViaLength() );
 
-            for( size_t ii = 0; ii < m_layer_wire_length.size(); ++ii )
-                m_parent->SubLayerWireLength( m_layer_wire_length[ii], ii );
+            for( auto& [layer, length] : m_layer_wire_length )
+                m_parent->SubLayerWireLength( length, layer );
 
             m_parent->SubPadDieLength( GetPadDieLength() );
 
@@ -302,8 +316,8 @@ public:
             m_parent->AddViaCount( GetViaCount() );
             m_parent->AddViaLength( GetViaLength() );
 
-            for( size_t ii = 0; ii < m_layer_wire_length.size(); ++ii )
-                m_parent->AddLayerWireLength( m_layer_wire_length[ii], ii );
+            for( auto& [layer, length] : m_layer_wire_length )
+                m_parent->AddLayerWireLength( length, layer );
 
             m_parent->AddPadDieLength( GetPadDieLength() );
 
@@ -323,7 +337,7 @@ private:
     uint64_t      m_via_length = 0;
     uint64_t      m_pad_die_length = 0;
 
-    std::array<uint64_t, MAX_CU_LAYERS> m_layer_wire_length{};
+    std::map<PCB_LAYER_ID, uint64_t> m_layer_wire_length{};
 
     // Dirty bits to record when some attribute has changed, in order to avoid unnecessary sort
     // operations.
@@ -577,7 +591,7 @@ public:
 
     /**
      * Adds all custom group-by entries to the items table
-     * 
+     *
      * Note this assumes that m_items is empty prior to adding these groups
     */
     void addCustomGroups()
@@ -590,6 +604,7 @@ public:
             std::unique_ptr<LIST_ITEM>& group = m_items.emplace_back( std::make_unique<LIST_ITEM>(
                     groupId, rule->GetPattern(), LIST_ITEM::GROUP_TYPE::USER_DEFINED ) );
             m_custom_group_map[ rule->GetPattern() ] = group.get();
+            group->SetLayerCount( m_parent.m_brd->GetCopperLayerCount() );
             ItemAdded( wxDataViewItem( group->Parent() ), wxDataViewItem( group.get() ) );
             ++groupId;
         }

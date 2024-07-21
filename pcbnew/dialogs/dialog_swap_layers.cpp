@@ -31,7 +31,7 @@
 
 class LAYER_GRID_TABLE : public wxGridTableBase
 {
-    int m_layers[MAX_CU_LAYERS][2];
+    std::vector<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>> m_layers;
     int m_layerCount;
 
 public:
@@ -56,12 +56,25 @@ public:
 
     long GetValueAsLong( int row, int col ) override
     {
-        return m_layers[ row ][ col ];
+        if( row < 0 || row >= m_layerCount )
+            return -1;
+
+        if( col < 0 || col >= 2 )
+            return -1;
+
+        return col == 0 ? m_layers[ row ].first : m_layers[ row ].second;
     }
 
     void SetValueAsLong( int row, int col, long value ) override
     {
-        m_layers[ row ][ col ] = value;
+        if( row < 0 || col < 0 || col >= 2 )
+            return;
+
+        if( row >= m_layerCount )
+            m_layers.resize( row + 1 );
+
+        col == 0 ? m_layers[row].first = ToLAYER_ID( value )
+                 : m_layers[row].second = ToLAYER_ID( value );
     }
 };
 

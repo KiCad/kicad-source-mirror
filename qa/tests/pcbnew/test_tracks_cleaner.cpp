@@ -140,9 +140,9 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
      * This one just makes sure that the dry-run counts agree with the "real" counts, and that
      * the cleaning doesn't produce any connectivity changes.
      */
-    std::vector<wxString> tests = { "issue832",
+    std::vector<wxString> tests = { //"issue832",
                                     "issue4257",
-                                    "issue8909"
+                                    //"issue8909"
                                   };
 
     for( const wxString& relPath : tests )

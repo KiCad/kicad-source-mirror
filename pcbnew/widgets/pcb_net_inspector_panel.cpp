@@ -107,9 +107,9 @@ PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
 
 
 /*****************************************************************************************
- * 
+ *
  * Grid / model columns configuration
- * 
+ *
  * ***************************************************************************************/
 
 
@@ -385,9 +385,9 @@ wxDataViewColumn* PCB_NET_INSPECTOR_PANEL::getDisplayedColumnForModelField( int 
 
 
 /*****************************************************************************************
- * 
+ *
  * Nets list generation
- * 
+ *
  * ***************************************************************************************/
 
 
@@ -633,6 +633,7 @@ PCB_NET_INSPECTOR_PANEL::buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCoun
     std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( aNet );
 
     new_item->SetPadCount( aPadCount );
+    new_item->SetLayerCount( m_brd->GetCopperLayerCount() );
 
     const auto cn_items = std::equal_range( aCNItems.begin(), aCNItems.end(), aNet->GetNetCode(),
                                             NETCODE_CMP_LESS() );
@@ -647,8 +648,7 @@ PCB_NET_INSPECTOR_PANEL::buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCoun
         }
         else if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
         {
-            new_item->AddLayerWireLength( track->GetLength(),
-                                          static_cast<int>( track->GetLayer() ) );
+            new_item->AddLayerWireLength( track->GetLength(), track->GetLayer() );
 
             if( item->Type() == PCB_VIA_T )
             {
@@ -789,10 +789,7 @@ void PCB_NET_INSPECTOR_PANEL::updateNet( NETINFO_ITEM* aNet )
         // update fields only
         cur_list_item->SetPadCount( new_list_item->GetPadCount() );
         cur_list_item->SetViaCount( new_list_item->GetViaCount() );
-
-        for( size_t ii = 0; ii < MAX_CU_LAYERS; ++ii )
-            cur_list_item->SetLayerWireLength( new_list_item->GetLayerWireLength( ii ), ii );
-
+        cur_list_item->SetLayerWireLength( new_list_item->GetLayerWireLength() );
         cur_list_item->SetPadDieLength( new_list_item->GetPadDieLength() );
 
         updateDisplayedRowValues( cur_net_row );
@@ -801,9 +798,9 @@ void PCB_NET_INSPECTOR_PANEL::updateNet( NETINFO_ITEM* aNet )
 
 
 /*****************************************************************************************
- * 
+ *
  * Formatting helpers
- * 
+ *
  * ***************************************************************************************/
 
 
@@ -852,9 +849,9 @@ void PCB_NET_INSPECTOR_PANEL::updateDisplayedRowValues( const std::optional<LIST
 
 
 /*****************************************************************************************
- * 
+ *
  * BOARD_LISTENER event handling
- * 
+ *
  * ***************************************************************************************/
 
 
@@ -893,6 +890,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoar
 
             // the new net could have some pads already assigned, count them.
             new_item->SetPadCount( m_brd->GetNodesCount( net->GetNetCode() ) );
+            new_item->SetLayerCount( m_brd->GetCopperLayerCount() );
 
             m_data_model->addItem( std::move( new_item ) );
         }
@@ -909,7 +907,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoar
                 const std::unique_ptr<LIST_ITEM>& list_item = *r.value();
                 int                               len = track->GetLength();
 
-                list_item->AddLayerWireLength( len, static_cast<int>( track->GetLayer() ) );
+                list_item->AddLayerWireLength( len, track->GetLayer() );
 
                 if( track->Type() == PCB_VIA_T )
                 {
@@ -949,6 +947,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoar
 
                 list_item->AddPadCount( 1 );
                 list_item->AddPadDieLength( len );
+                list_item->SetLayerCount( m_brd->GetCopperLayerCount() );
 
                 if( list_item->GetPadCount() == 0 && !m_show_zero_pad_nets )
                     m_data_model->deleteItem( r );
@@ -1024,7 +1023,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBo
                 const std::unique_ptr<LIST_ITEM>& list_item = *r.value();
                 int                               len = track->GetLength();
 
-                list_item->SubLayerWireLength( len, static_cast<int>( track->GetLayer() ) );
+                list_item->SubLayerWireLength( len, track->GetLayer() );
 
                 if( track->Type() == PCB_VIA_T )
                 {
@@ -1143,9 +1142,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardHighlightNetChanged( BOARD& aBoard )
 
 
 /*****************************************************************************************
- * 
+ *
  * UI-generated event handling
- * 
+ *
  * ***************************************************************************************/
 
 void PCB_NET_INSPECTOR_PANEL::OnShowPanel()
@@ -1881,9 +1880,9 @@ void PCB_NET_INSPECTOR_PANEL::onDeleteSelectedNet()
 }
 
 /*****************************************************************************************
- * 
+ *
  * Application-generated event handling
- * 
+ *
  * ***************************************************************************************/
 
 
@@ -1903,9 +1902,9 @@ void PCB_NET_INSPECTOR_PANEL::onUnitsChanged( wxCommandEvent& event )
 
 
 /*****************************************************************************************
- * 
+ *
  * Settings persistence
- * 
+ *
  * ***************************************************************************************/
 
 

@@ -161,7 +161,7 @@ bool PCB_GENERATOR::AddItem( BOARD_ITEM* aItem )
 
 LSET PCB_GENERATOR::GetLayerSet() const
 {
-    return PCB_GROUP::GetLayerSet() | LSET( GetLayer() );
+    return PCB_GROUP::GetLayerSet() | LSET( { GetLayer() } );
 }
 
 

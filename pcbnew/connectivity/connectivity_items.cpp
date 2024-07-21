@@ -152,7 +152,7 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
 
      auto item = new CN_ITEM( pad, false, 1 );
      item->AddAnchor( pad->ShapePos() );
-     item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+     item->SetLayers( F_Cu, B_Cu );
 
      switch( pad->GetAttribute() )
      {
@@ -160,16 +160,11 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
      case PAD_ATTRIB::NPTH:
      case PAD_ATTRIB::CONN:
      {
-         LSET lmsk = pad->GetLayerSet();
+        LSEQ lmsk = pad->GetLayerSet().CuStack();
 
-         for( int i = 0; i <= MAX_CU_LAYERS; i++ )
-         {
-             if( lmsk[i] )
-             {
-                 item->SetLayer( i );
-                 break;
-             }
-         }
+        if( !lmsk.empty() )
+            item->SetLayer( lmsk.front() );
+
          break;
      }
      default:
@@ -216,7 +211,7 @@ CN_ITEM* CN_LIST::Add( PCB_VIA* via )
     m_items.push_back( item );
     item->AddAnchor( via->GetStart() );
 
-    item->SetLayers( LAYER_RANGE( via->TopLayer(), via->BottomLayer() ) );
+    item->SetLayers( via->TopLayer(), via->BottomLayer() );
     addItemtoTree( item );
     SetDirty();
     return item;
@@ -358,7 +353,7 @@ bool CN_ANCHOR::IsDangling() const
         {
             ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), Pos(), accuracy ) )
+            if( zone->HitTestFilledArea( item->GetBoardLayer(), Pos(), accuracy ) )
                 connected_count++;
         }
         else if( item->Parent()->HitTest( Pos(), accuracy ) )
@@ -384,7 +379,7 @@ int CN_ANCHOR::ConnectedItemsCount() const
         {
             ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), Pos() ) )
+            if( zone->HitTestFilledArea( item->GetBoardLayer(), Pos() ) )
                 connected_count++;
         }
         else if( item->Parent()->HitTest( Pos() ) )

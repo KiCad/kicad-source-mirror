@@ -68,7 +68,7 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     for( PCB_LAYER_ID layer : aLayers )
     {
         // copper layers with drill marks will be plotted after all other layers
-        if( layer <= B_Cu && plot_mark )
+        if( IsCopperLayer( layer ) && plot_mark )
             continue;
 
         PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions );
@@ -79,7 +79,7 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
 
     for( PCB_LAYER_ID layer : aLayers )
     {
-        if( layer > B_Cu )   // already plotted
+        if( !IsCopperLayer( layer ) )
             continue;
 
         PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions );
@@ -177,7 +177,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
     // Specify that the contents of the "Edges Pcb" layer are to be plotted in addition to the
     // contents of the currently specified layer.
-    LSET    layer_mask( aLayer );
+    LSET    layer_mask( { aLayer } );
 
     if( IsCopperLayer( aLayer ) )
     {
@@ -238,9 +238,9 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                     && plotOpt.GetSubtractMaskFromSilk() )
             {
                 if( aLayer == F_SilkS )
-                    layer_mask = LSET( F_Mask );
+                    layer_mask = LSET( { F_Mask } );
                 else
-                    layer_mask = LSET( B_Mask );
+                    layer_mask = LSET( { B_Mask } );
 
                 // Create the mask to subtract by creating a negative layer polarity
                 aPlotter->SetLayerPolarity( false );
@@ -290,8 +290,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     bool onCopperLayer = ( LSET::AllCuMask() & aLayerMask ).any();
     bool onSolderMaskLayer = ( LSET( { F_Mask, B_Mask } ) & aLayerMask ).any();
     bool onSolderPasteLayer = ( LSET( { F_Paste, B_Paste } ) & aLayerMask ).any();
-    bool onFrontFab = ( LSET( F_Fab ) & aLayerMask ).any();
-    bool onBackFab  = ( LSET( B_Fab ) & aLayerMask ).any();
+    bool onFrontFab = ( LSET( { F_Fab } ) & aLayerMask ).any();
+    bool onBackFab  = ( LSET( { B_Fab } ) & aLayerMask ).any();
     bool sketchPads = ( onFrontFab || onBackFab ) && aPlotOpt.GetSketchPadsOnFabLayers();
 
      // Plot edge layer and graphic items

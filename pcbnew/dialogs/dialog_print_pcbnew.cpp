@@ -358,7 +358,7 @@ void DIALOG_PRINT_PCBNEW::onPopUpLayers( wxCommandEvent& event )
     case ID_SELECT_FAB_LAYERS: // Select layers usually needed to build a board
         for( unsigned i = 0; i < m_layerList.size(); i++ )
         {
-            LSET layermask( m_layerList[ i ] );
+            LSET layermask( { m_layerList[ i ] } );
 
             if( ( layermask & fab_layer_set ).any() )
                 m_layerCheckListBox->Check( i, true );

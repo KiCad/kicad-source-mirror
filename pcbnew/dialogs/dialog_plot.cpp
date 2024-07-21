@@ -500,7 +500,7 @@ void DIALOG_PLOT::OnRightClickLayers( wxMouseEvent& event )
                 {
                     for( unsigned i = 0; i < m_layerList.size(); i++ )
                     {
-                        LSET layermask( m_layerList[ i ] );
+                        LSET layermask( { m_layerList[ i ] } );
 
                         if( ( layermask & fab_layer_set ).any() )
                             m_layerCheckListBox->Check( i, true );

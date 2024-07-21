@@ -193,10 +193,10 @@ public:
     void SetNet( NET_HANDLE aNet ) { m_net = aNet; }
     virtual NET_HANDLE Net() const { return m_net;  }
 
-    const LAYER_RANGE& Layers() const { return m_layers; }
-    void SetLayers( const LAYER_RANGE& aLayers ) { m_layers = aLayers; }
+    const PNS_LAYER_RANGE& Layers() const { return m_layers; }
+    void SetLayers( const PNS_LAYER_RANGE& aLayers ) { m_layers = aLayers; }
 
-    void SetLayer( int aLayer ) { m_layers = LAYER_RANGE( aLayer, aLayer ); }
+    void SetLayer( int aLayer ) { m_layers = PNS_LAYER_RANGE( aLayer, aLayer ); }
     virtual int Layer() const { return Layers().Start(); }
 
     /**
@@ -285,7 +285,7 @@ protected:
     PnsKind       m_kind;
 
     BOARD_ITEM*   m_parent;
-    LAYER_RANGE   m_layers;
+    PNS_LAYER_RANGE   m_layers;
 
     bool          m_movable;
     NET_HANDLE    m_net;

@@ -686,39 +686,9 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard, int aNestLevel 
     }
 
     // Save used non-copper layers in the order they are defined.
-    // desired sequence for non Cu BOARD layers.
-    static const PCB_LAYER_ID non_cu[] =
-    {
-        B_Adhes,        // 32
-        F_Adhes,
-        B_Paste,
-        F_Paste,
-        B_SilkS,
-        F_SilkS,
-        B_Mask,
-        F_Mask,
-        Dwgs_User,
-        Cmts_User,
-        Eco1_User,
-        Eco2_User,
-        Edge_Cuts,
-        Margin,
-        B_CrtYd,
-        F_CrtYd,
-        B_Fab,
-        F_Fab,
-        User_1,
-        User_2,
-        User_3,
-        User_4,
-        User_5,
-        User_6,
-        User_7,
-        User_8,
-        User_9
-    };
+    LSEQ seq = aBoard->GetEnabledLayers().TechAndUserUIOrder();
 
-    for( PCB_LAYER_ID layer : aBoard->GetEnabledLayers().Seq( non_cu, arrayDim( non_cu ) ) )
+    for( PCB_LAYER_ID layer : seq )
     {
         m_out->Print( aNestLevel+1, "(%d %s",
                       layer,

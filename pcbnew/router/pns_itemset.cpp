@@ -48,12 +48,12 @@ void ITEM_SET::Prepend( const LINE& aLine )
 ITEM_SET& ITEM_SET::FilterLayers( int aStart, int aEnd, bool aInvert )
 {
     std::vector<ITEM*> newItems;
-    LAYER_RANGE        l;
+    PNS_LAYER_RANGE        l;
 
     if( aEnd < 0 )
-        l = LAYER_RANGE( aStart );
+        l = PNS_LAYER_RANGE( aStart );
     else
-        l = LAYER_RANGE( aStart, aEnd );
+        l = PNS_LAYER_RANGE( aStart, aEnd );
 
     for( ITEM* item : m_items )
     {

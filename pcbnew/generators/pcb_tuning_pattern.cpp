@@ -1301,7 +1301,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     KIGFX::VIEW*     view = aTool->GetManager()->GetView();
     PNS::ROUTER*     router = aTool->Router();
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
-    int              layer = GetLayer();
+    PCB_LAYER_ID     layer = GetLayer();
 
     auto hideRemovedItems = [&]( bool aHide )
     {
@@ -1318,7 +1318,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
         }
     };
 
-    iface->SetStartLayer( layer );
+    iface->SetStartLayerFromPCBNew( layer );
 
     if( router->RoutingInProgress() )
     {
@@ -1984,7 +1984,9 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
             PNS::ITEM_SET items = placer->TunedPath();
 
             for( PNS::ITEM* item : items )
-                previewItems.push_back( new ROUTER_PREVIEW_ITEM( item, view, PNS_HOVER_ITEM ) );
+                previewItems.push_back( new ROUTER_PREVIEW_ITEM( item,
+                                                                  aTool->Router()->GetInterface(),
+                                                                  view, PNS_HOVER_ITEM ) );
         }
 
         TUNING_STATUS_VIEW_ITEM* statusItem = new TUNING_STATUS_VIEW_ITEM( aFrame );

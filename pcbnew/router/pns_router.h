@@ -93,10 +93,10 @@ enum DRAG_MODE
     virtual void AddItem( ITEM* aItem ) = 0;
     virtual void UpdateItem( ITEM* aItem ) = 0;
     virtual void RemoveItem( ITEM* aItem ) = 0;
-    virtual bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const = 0;
+    virtual bool IsAnyLayerVisible( const PNS_LAYER_RANGE& aLayer ) const = 0;
     virtual bool IsItemVisible( const PNS::ITEM* aItem ) const = 0;
     virtual bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const = 0;
-    virtual bool IsFlashedOnLayer( const PNS::ITEM* aItem, const LAYER_RANGE& aLayer ) const = 0;
+    virtual bool IsFlashedOnLayer( const PNS::ITEM* aItem, const PNS_LAYER_RANGE& aLayer ) const = 0;
     virtual void DisplayItem( const ITEM* aItem, int aClearance, bool aEdit = false,
                                     int aFlags = 0 ) = 0;
     virtual void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) = 0;
@@ -115,6 +115,9 @@ enum DRAG_MODE
 
     virtual RULE_RESOLVER* GetRuleResolver() = 0;
     virtual DEBUG_DECORATOR* GetDebugDecorator() = 0;
+
+    virtual int GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
+    virtual int GetPNSLayerFromBoardLayer( int aLayer ) const = 0;
 };
 
 class ROUTER
@@ -232,7 +235,7 @@ private:
     void markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved );
     bool isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aItem, int aLayer );
 
-    bool getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEndLayers,
+    bool getNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers,
                                   ITEM*& aOtherEndItem );
 
 

@@ -725,7 +725,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
 
         LAYER_ID cadstarLayerID        = cadstarLayerNameMap.at( layerPair.first );
         m_layermap.at( cadstarLayerID ) = layerPair.second;
-        enabledLayers |= LSET( layerPair.second );
+        enabledLayers |= LSET( { layerPair.second } );
     }
 
     m_board->SetEnabledLayers( enabledLayers );
@@ -1119,7 +1119,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
             // prevent DRC errors.
             // TODO: This could be a custom padstack, update when KiCad supports padstacks
             pad->SetAttribute( PAD_ATTRIB::SMD );
-            pad->SetLayerSet( LSET( F_Mask ) );
+            pad->SetLayerSet( LSET( { F_Mask } ) );
         }
 
         // zero sized pads seems to break KiCad so lets make it very small instead
@@ -4177,7 +4177,7 @@ LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayer
                 | LSET::AllBoardTechMask();
 
     default:
-        return LSET( getKiCadLayer( aCadstarLayerID ) );
+        return LSET( { getKiCadLayer( aCadstarLayerID ) } );
     }
 }
 

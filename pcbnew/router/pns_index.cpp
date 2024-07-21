@@ -27,7 +27,7 @@ namespace PNS {
 
 void INDEX::Add( ITEM* aItem )
 {
-    const LAYER_RANGE& range = aItem->Layers();
+    const PNS_LAYER_RANGE& range = aItem->Layers();
     assert( range.Start() != -1 && range.End() != -1 );
 
     if( m_subIndices.size() <= static_cast<size_t>( range.End() ) )
@@ -46,7 +46,7 @@ void INDEX::Add( ITEM* aItem )
 
 void INDEX::Remove( ITEM* aItem )
 {
-    const LAYER_RANGE& range = aItem->Layers();
+    const PNS_LAYER_RANGE& range = aItem->Layers();
     assert( range.Start() != -1 && range.End() != -1 );
 
     if( m_subIndices.size() <= static_cast<size_t>( range.End() ) )

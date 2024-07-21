@@ -88,42 +88,6 @@ static std::string GenCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 }
 
 
-static const PCB_LAYER_ID gc_seq[] = {
-    B_Cu,
-    In30_Cu,
-    In29_Cu,
-    In28_Cu,
-    In27_Cu,
-    In26_Cu,
-    In25_Cu,
-    In24_Cu,
-    In23_Cu,
-    In22_Cu,
-    In21_Cu,
-    In20_Cu,
-    In19_Cu,
-    In18_Cu,
-    In17_Cu,
-    In16_Cu,
-    In15_Cu,
-    In14_Cu,
-    In13_Cu,
-    In12_Cu,
-    In11_Cu,
-    In10_Cu,
-    In9_Cu,
-    In8_Cu,
-    In7_Cu,
-    In6_Cu,
-    In5_Cu,
-    In4_Cu,
-    In3_Cu,
-    In2_Cu,
-    In1_Cu,
-    F_Cu,
-};
-
-
 // flipped layer name for Gencad export (to make CAM350 imports correct)
 static std::string GenCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 {
@@ -299,6 +263,9 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
     std::vector<PCB_VIA*> viastacks;
 
     padstacks.resize( 1 ); // We count pads from 1
+
+    LSEQ gc_seq = m_board->GetEnabledLayers().CuStack();
+    std::reverse(gc_seq.begin(), gc_seq.end());
 
     // The master layermask (i.e. the enabled layers) for padstack generation
     LSET    master_layermask = m_board->GetDesignSettings().GetEnabledLayers();
@@ -589,7 +556,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
                  fmt_mask( mask ).c_str(),
                  via->GetDrillValue() / SCALE_FACTOR );
 
-        for( PCB_LAYER_ID layer : mask.Seq( gc_seq, arrayDim( gc_seq ) ) )
+        for( PCB_LAYER_ID layer : mask.Seq( gc_seq ) )
         {
             fprintf( m_file, "PAD V%d.%d.%s %s 0 0\n",
                     via->GetWidth(), via->GetDrillValue(),
@@ -613,7 +580,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         LSET pad_set = pad->GetLayerSet() & master_layermask;
 
         // the special gc_seq
-        for( PCB_LAYER_ID layer : pad_set.Seq( gc_seq, arrayDim( gc_seq ) ) )
+        for( PCB_LAYER_ID layer : pad_set.Seq( gc_seq ) )
         {
             fprintf( m_file, "PAD P%u %s 0 0\n", i, GenCADLayerName( cu_count, layer ).c_str() );
         }

@@ -907,7 +907,7 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 
     wxCHECK( layer >= User_1 && layer <= User_9, /* void */ );
 
-    LSET newLayer( layer );
+    LSET newLayer( { layer } );
 
     m_enabledLayers |= newLayer;
 

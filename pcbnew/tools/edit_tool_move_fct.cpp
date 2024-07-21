@@ -424,7 +424,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     VECTOR2D        bboxMovement;
     BOX2I           originalBBox;
     bool            updateBBox = true;
-    LSET            layers( editFrame->GetActiveLayer() );
+    LSET            layers( { editFrame->GetActiveLayer() } );
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     TOOL_EVENT      copy = aEvent;
     TOOL_EVENT*     evt = &copy;

@@ -62,84 +62,82 @@ enum PCB_LAYER_ID: int
     UNSELECTED_LAYER = -2,
 
     F_Cu = 0,
-    In1_Cu,
-    In2_Cu,
-    In3_Cu,
-    In4_Cu,
-    In5_Cu,
-    In6_Cu,
-    In7_Cu,
-    In8_Cu,
-    In9_Cu,
-    In10_Cu,
-    In11_Cu,
-    In12_Cu,
-    In13_Cu,
-    In14_Cu,
-    In15_Cu,
-    In16_Cu,
-    In17_Cu,
-    In18_Cu,
-    In19_Cu,
-    In20_Cu,
-    In21_Cu,
-    In22_Cu,
-    In23_Cu,
-    In24_Cu,
-    In25_Cu,
-    In26_Cu,
-    In27_Cu,
-    In28_Cu,
-    In29_Cu,
-    In30_Cu,
-    B_Cu,           // 31
+    B_Cu = 2,
+    In1_Cu = 4,
+    In2_Cu = 6,
+    In3_Cu = 8,
+    In4_Cu = 10,
+    In5_Cu = 12,
+    In6_Cu = 14,
+    In7_Cu = 16,
+    In8_Cu = 18,
+    In9_Cu = 20,
+    In10_Cu = 22,
+    In11_Cu = 24,
+    In12_Cu = 26,
+    In13_Cu = 28,
+    In14_Cu = 30,
+    In15_Cu = 32,
+    In16_Cu = 34,
+    In17_Cu = 36,
+    In18_Cu = 38,
+    In19_Cu = 40,
+    In20_Cu = 42,
+    In21_Cu = 44,
+    In22_Cu = 46,
+    In23_Cu = 48,
+    In24_Cu = 50,
+    In25_Cu = 52,
+    In26_Cu = 54,
+    In27_Cu = 56,
+    In28_Cu = 58,
+    In29_Cu = 60,
+    In30_Cu = 62,
 
-    B_Adhes,
-    F_Adhes,
+    F_Mask = 1,
+    B_Mask = 3,
 
-    B_Paste,
-    F_Paste,
+    F_SilkS = 5,
+    B_SilkS = 7,
+    F_Adhes = 9,
+    B_Adhes = 11,
+    F_Paste = 13,
+    B_Paste = 15,
 
-    B_SilkS,
-    F_SilkS,
+    Dwgs_User = 17,
+    Cmts_User = 19,
+    Eco1_User = 21,
+    Eco2_User = 23,
 
-    B_Mask,
-    F_Mask,         // 39
+    Edge_Cuts = 25,
+    Margin = 27,
 
-    Dwgs_User,
-    Cmts_User,
-    Eco1_User,
-    Eco2_User,
-    Edge_Cuts,
-    Margin,         // 45
+    B_CrtYd = 29,
+    F_CrtYd = 31,
 
-    B_CrtYd,
-    F_CrtYd,
+    B_Fab = 33,
+    F_Fab = 35,
 
-    B_Fab,
-    F_Fab,          // 49
+    Rescue = 37,
 
     // User definable layers.
-    User_1,
-    User_2,
-    User_3,
-    User_4,
-    User_5,
-    User_6,
-    User_7,
-    User_8,
-    User_9,
+    User_1 = 39,
+    User_2 = 41,
+    User_3 = 43,
+    User_4 = 45,
+    User_5 = 47,
+    User_6 = 49,
+    User_7 = 51,
+    User_8 = 53,
+    User_9 = 55,
 
-    Rescue,         // 59
 
-    // Four reserved layers (60 - 63) for future expansion within the 64 bit integer limit.
-
-    PCB_LAYER_ID_COUNT
+    PCB_LAYER_ID_COUNT = 64
 };
 
 constexpr PCB_LAYER_ID PCBNEW_LAYER_ID_START = F_Cu;
 
-#define MAX_CU_LAYERS       (B_Cu - F_Cu + 1)
+#define MAX_CU_LAYERS       32
 
 /**
  * Enum used during connectivity building to ensure we do not query connectivity while building
@@ -531,7 +529,7 @@ inline bool IsPcbLayer( int aLayer )
  */
 inline bool IsCopperLayer( int aLayerId )
 {
-    return aLayerId >= F_Cu && aLayerId <= B_Cu;
+    return !( aLayerId & 1 ) && aLayerId <= PCB_LAYER_ID_COUNT;
 }
 
 /**
@@ -542,7 +540,7 @@ inline bool IsCopperLayer( int aLayerId )
  */
 inline bool IsNonCopperLayer( int aLayerId )
 {
-    return aLayerId > B_Cu && aLayerId <= PCB_LAYER_ID_COUNT;
+    return ( aLayerId & 1 ) && aLayerId <= PCB_LAYER_ID_COUNT;
 }
 
 /**

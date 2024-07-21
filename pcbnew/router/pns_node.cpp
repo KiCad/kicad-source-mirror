@@ -1249,7 +1249,7 @@ void NODE::LockJoint( const VECTOR2I& aPos, const ITEM* aItem, bool aLock )
 }
 
 
-JOINT& NODE::touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet )
+JOINT& NODE::touchJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet )
 {
     JOINT::HASH_TAG tag;
 
@@ -1310,7 +1310,7 @@ void JOINT::Dump() const
 }
 
 
-void NODE::linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+void NODE::linkJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet,
                       ITEM* aWhere )
 {
     JOINT& jt = touchJoint( aPos, aLayers, aNet );
@@ -1319,7 +1319,7 @@ void NODE::linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HAND
 }
 
 
-void NODE::unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+void NODE::unlinkJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet,
                         ITEM* aWhere )
 {
     // fixme: remove dangling joints
@@ -1556,7 +1556,7 @@ void NODE::RemoveByMarker( int aMarker )
 }
 
 
-SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
+SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const PNS_LAYER_RANGE& lr,
                                      NET_HANDLE aNet )
 {
     const JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
@@ -1591,7 +1591,7 @@ SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
 }
 
 
-ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
+ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const PNS_LAYER_RANGE& lr,
                              NET_HANDLE aNet )
 {
     const JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
@@ -1626,7 +1626,7 @@ ARC* NODE::findRedundantArc( ARC* aArc )
 }
 
 
-int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, LAYER_RANGE aLayerMask,
+int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, PNS_LAYER_RANGE aLayerMask,
                        int aKindMask )
 {
     int n = 0;

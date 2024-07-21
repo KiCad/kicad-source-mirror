@@ -47,6 +47,67 @@
 
 class PNS_LOG_VIEWER_OVERLAY;
 
+class PNS_VIEWER_IFACE : public PNS::ROUTER_IFACE
+{
+public:
+    PNS_VIEWER_IFACE( std::shared_ptr<BOARD> aBoard ){ m_board = aBoard; };
+    ~PNS_VIEWER_IFACE() override{};
+
+    void EraseView() override {};
+    void SyncWorld( PNS::NODE* aWorld ) override {};
+    bool IsAnyLayerVisible( const PNS_LAYER_RANGE& aLayer ) const override { return true; };
+    bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override { return false; };
+    bool IsFlashedOnLayer( const PNS::ITEM* aItem, const PNS_LAYER_RANGE& aLayer ) const override { return false; };
+    bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; };
+    void HideItem( PNS::ITEM* aItem ) override {}
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
+                      int aFlags = 0 ) override {}
+    void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) override {}
+    void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET_HANDLE aNet ) override {}
+    void AddItem( PNS::ITEM* aItem ) override {}
+    void UpdateItem( PNS::ITEM* aItem ) override {}
+    void RemoveItem( PNS::ITEM* aItem ) override {}
+    void Commit() override {}
+    bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem,
+                      PNS::NET_HANDLE aNet, VECTOR2D aStartPosition ) override { return false; }
+    int StackupHeight( int aFirstLayer, int aSecondLayer ) const override { return 0; }
+
+    int GetNetCode( PNS::NET_HANDLE aNet ) const override { return -1; }
+    wxString GetNetName( PNS::NET_HANDLE aNet ) const override { return wxEmptyString; }
+    void UpdateNet( PNS::NET_HANDLE aNet ) override {}
+    PNS::NET_HANDLE GetOrphanedNetHandle() override { return nullptr; }
+
+    virtual PNS::NODE* GetWorld() const override { return nullptr; };
+    PNS::RULE_RESOLVER* GetRuleResolver() override { return nullptr; }
+    PNS::DEBUG_DECORATOR* GetDebugDecorator() override { return nullptr; }
+
+    int GetBoardLayerFromPNSLayer( int aLayer ) const override
+    {
+        if( aLayer == 0 )
+            return F_Cu;
+
+        if( aLayer == m_board->GetCopperLayerCount() - 1 )
+            return B_Cu;
+
+        return ( aLayer + 1 ) * 2;
+    }
+
+
+    int GetPNSLayerFromBoardLayer( int aLayer ) const override
+    {
+        if( aLayer == F_Cu )
+            return 0;
+
+        if( aLayer == B_Cu )
+            return m_board->GetCopperLayerCount() - 1;
+
+        return ( aLayer / 2 ) - 1;
+    }
+
+    private:
+        std::shared_ptr<BOARD> m_board;
+};
+
 class PNS_LOG_VIEWER_FRAME : public PNS_LOG_VIEWER_FRAME_BASE, public PCB_TEST_FRAME_BASE
 {
 public:
@@ -69,6 +130,7 @@ private:
     PNS_DEBUG_STAGE* getCurrentStage();
     void             updatePnsPreviewItems( int iter );
     bool             filterStringMatches( PNS_DEBUG_SHAPE* ent );
+    void             updateViewerIface();
 
     virtual void onOpen( wxCommandEvent& event ) override;
     virtual void onSaveAs( wxCommandEvent& event ) override;
@@ -92,6 +154,7 @@ private:
     int                                     m_rewindIter;
     wxMenu*                                 m_listPopupMenu;
     std::shared_ptr<KIGFX::VIEW_GROUP>      m_previewItems;
+    std::shared_ptr<PNS_VIEWER_IFACE>       m_viewerIface;
     std::map<wxString,wxString>             m_filenameToPathMap;
 
     bool m_showThinLines = true;

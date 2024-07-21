@@ -222,7 +222,7 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
         pad->SetPosition( footprint->GetPosition() );
         pad->SetShape( PAD_SHAPE::RECTANGLE );
         pad->SetAttribute( PAD_ATTRIB::SMD );
-        pad->SetLayerSet( F_Cu );
+        pad->SetLayerSet( { F_Cu } );
 
         pad->SetNumber( wxString::Format( wxT( "%d" ), pad_num ) );
         pad_num++;

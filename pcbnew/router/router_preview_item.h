@@ -42,6 +42,7 @@ namespace PNS {
 
 class ITEM;
 class ROUTER;
+class ROUTER_IFACE;
 
 }
 
@@ -75,8 +76,8 @@ public:
     static constexpr double LayerDepthFactor = 0.0001;
     static constexpr double PathOverlayDepth = LayerDepthFactor * static_cast<double>( LAYER_ZONE_END );
 
-    ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr );
-    ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr,
+    ROUTER_PREVIEW_ITEM( const SHAPE& aShape, PNS::ROUTER_IFACE* aIface, KIGFX::VIEW* aView );
+    ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IFACE* aIface, KIGFX::VIEW* aView,
                          int aFlags = 0 );
     ~ROUTER_PREVIEW_ITEM();
 
@@ -122,6 +123,8 @@ private:
 
 private:
     KIGFX::VIEW*   m_view;
+
+    PNS::ROUTER_IFACE* m_iface;
 
     SHAPE*         m_shape;
     SHAPE*         m_hole;

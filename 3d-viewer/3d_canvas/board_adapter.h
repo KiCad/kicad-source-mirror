@@ -236,7 +236,12 @@ public:
      */
     float GetLayerTopZPos( PCB_LAYER_ID aLayerId ) const noexcept
     {
-        return m_layerZcoordTop[aLayerId];
+        auto it = m_layerZcoordTop.find( aLayerId );
+
+        if( it != m_layerZcoordTop.end() )
+            return it->second;
+        else
+            return -( m_boardBodyThickness3DU / 2.0f );
     }
 
     /**
@@ -247,7 +252,12 @@ public:
      */
     float GetLayerBottomZPos( PCB_LAYER_ID aLayerId ) const noexcept
     {
-        return m_layerZcoordBottom[aLayerId];
+        auto it = m_layerZcoordBottom.find( aLayerId );
+
+        if( it != m_layerZcoordBottom.end() )
+            return it->second;
+        else
+            return -( m_boardBodyThickness3DU / 2.0f ) - m_backCopperThickness3DU;
     }
 
     /**
@@ -488,11 +498,11 @@ private:
     double            m_biuTo3Dunits;         ///< Scale factor to convert board internal units
                                               ///<  to 3D units normalized between -1.0 and 1.0.
 
-    std::array<float, PCB_LAYER_ID_COUNT> m_layerZcoordTop;    ///< Top (End) Z position of each
-                                                               ///< layer in 3D units.
+    std::map<PCB_LAYER_ID, float> m_layerZcoordTop;    ///< Top (End) Z position of each
+                                                       ///< layer in 3D units.
 
-    std::array<float, PCB_LAYER_ID_COUNT> m_layerZcoordBottom; ///< Bottom (Start) Z position of
-                                                               ///< each layer in 3D units.
+    std::map<PCB_LAYER_ID, float> m_layerZcoordBottom; ///< Bottom (Start) Z position of
+                                                       ///< each layer in 3D units.
 
     float             m_frontCopperThickness3DU;
     float             m_backCopperThickness3DU;

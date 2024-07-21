@@ -43,7 +43,7 @@ struct VIA_HANDLE
 {
     bool        valid = false;
     VECTOR2I    pos;
-    LAYER_RANGE layers;
+    PNS_LAYER_RANGE layers;
     NET_HANDLE  net = nullptr;
 };
 
@@ -62,7 +62,7 @@ public:
         SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2 ) );
     }
 
-    VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,
+    VIA( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, int aDiameter, int aDrill,
          NET_HANDLE aNet = nullptr, VIATYPE aViaType = VIATYPE::THROUGH ) :
         LINKED_ITEM( VIA_T ),
         m_hole( nullptr )
@@ -218,7 +218,7 @@ class VVIA : public VIA
 {
 public:
     VVIA( const VECTOR2I& aPos, int aLayer, int aDiameter, NET_HANDLE aNet ) :
-        VIA( aPos, LAYER_RANGE( aLayer, aLayer ), aDiameter, aDiameter / 2, aNet )
+        VIA( aPos, PNS_LAYER_RANGE( aLayer, aLayer ), aDiameter, aDiameter / 2, aNet )
     {
         m_isVirtual = true;
     }

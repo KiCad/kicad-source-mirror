@@ -76,6 +76,11 @@ class TEARDROP_PARAMETERS;
 class PCB_IO_KICAD_SEXPR_PARSER : public PCB_LEXER
 {
 public:
+
+    typedef std::unordered_map< std::string, PCB_LAYER_ID > LAYER_ID_MAP;
+    typedef std::unordered_map< std::string, LSET >         LSET_MAP;
+    typedef std::unordered_map< wxString, KIID >            KIID_MAP;
+
     PCB_IO_KICAD_SEXPR_PARSER( LINE_READER* aReader, BOARD* aAppendToMe,
                 std::function<bool( wxString, int, wxString, wxString )> aQueryUserCallback,
                 PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 ) :
@@ -249,8 +254,8 @@ private:
      * @throw IO_ERROR if the layer is not valid.
      * @throw PARSE_ERROR if the layer syntax is incorrect.
      */
-    template<class T, class M>
-    T lookUpLayer( const M& aMap );
+    PCB_LAYER_ID lookUpLayer( const LAYER_ID_MAP& aMap );
+    LSET lookUpLayerSet( const LSET_MAP& aMap );
 
     /**
      * Parse the layer definition of a #BOARD_ITEM object.
@@ -373,10 +378,6 @@ private:
      * lists.
      */
     void resolveGroups( BOARD_ITEM* aParent );
-
-    typedef std::unordered_map< std::string, PCB_LAYER_ID > LAYER_ID_MAP;
-    typedef std::unordered_map< std::string, LSET >         LSET_MAP;
-    typedef std::unordered_map< wxString, KIID >            KIID_MAP;
 
     ///< The type of progress bar timeout
     using TIMEOUT = std::chrono::milliseconds;

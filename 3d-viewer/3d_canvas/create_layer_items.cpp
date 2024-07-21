@@ -38,6 +38,7 @@
 #include <board_design_settings.h>
 #include <board.h>
 #include <footprint.h>
+#include <layer_range.h>
 #include <lset.h>
 #include <pad.h>
 #include <pcb_text.h>
@@ -162,9 +163,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     int64_t start_Time = stats_startCopperLayersTime;
 #endif
 
-    PCB_LAYER_ID cu_seq[MAX_CU_LAYERS];
-    LSET         cu_set = LSET::AllCuMask( m_copperLayersCount );
-
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_Cfg->m_Render;
 
     std::bitset<LAYER_3D_END> visibilityFlags = GetVisibleLayers();
@@ -220,10 +218,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     layer_ids.clear();
     layer_ids.reserve( m_copperLayersCount );
 
-    for( unsigned i = 0; i < arrayDim( cu_seq ); ++i )
-        cu_seq[i] = ToLAYER_ID( B_Cu - i );
-
-    for( PCB_LAYER_ID layer : cu_set.Seq( cu_seq, arrayDim( cu_seq ) ) )
+    for( PCB_LAYER_ID layer : LAYER_RANGE( B_Cu, F_Cu, m_copperLayersCount ) )
     {
         if( !Is3dLayerEnabled( layer, visibilityFlags ) ) // Skip non enabled layers
             continue;
@@ -795,7 +790,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     // draw graphic items, on technical layers
 
-    static const PCB_LAYER_ID techLayerList[] = {
+    LSEQ techLayerList = LSET::AllNonCuMask().Seq( {
             B_Adhes,
             F_Adhes,
             B_Paste,
@@ -810,7 +805,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             Cmts_User,
             Eco1_User,
             Eco2_User
-        };
+        } );
 
     std::bitset<LAYER_3D_END> enabledFlags = visibilityFlags;
 
@@ -820,7 +815,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         enabledFlags.set( LAYER_3D_SOLDERMASK_BOTTOM );
     }
 
-    for( PCB_LAYER_ID layer : LSET::AllNonCuMask().Seq( techLayerList, arrayDim( techLayerList ) ) )
+    for( PCB_LAYER_ID layer : techLayerList )
     {
         if( aStatusReporter )
             aStatusReporter->Report( wxString::Format( _( "Build Tech layer %d" ), (int) layer ) );

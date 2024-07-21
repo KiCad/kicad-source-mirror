@@ -292,7 +292,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
         m_frame->FocusOnItem( item );
         m_frame->GetCanvas()->Refresh();
 
-        if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
+        if( ( violationLayers & board->GetVisibleLayers() ).none() )
         {
             m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
             m_frame->GetCanvas()->Refresh();

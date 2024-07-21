@@ -604,7 +604,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( layerFlags.test( LAYER_3D_BOARD ) && m_boardAdapter.m_BoardBodyColor.a > opacity_min )
         {
-            if( layer > F_Cu && layer < B_Cu )
+            // B_Cu is layer 2 and all inner layers are higher values
+            if( layer > B_Cu )
                 continue;
         }
 

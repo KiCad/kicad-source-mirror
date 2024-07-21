@@ -56,11 +56,10 @@ public:
      */
     void Insert( T aItem )
     {
-        const BOX2I&        bbox    = aItem->BBox();
-        const LAYER_RANGE   layers  = aItem->Layers();
+        const BOX2I& bbox = aItem->BBox();
 
-        const int           mmin[3] = { layers.Start(), bbox.GetX(), bbox.GetY() };
-        const int           mmax[3] = { layers.End(), bbox.GetRight(), bbox.GetBottom() };
+        const int mmin[3] = { aItem->StartLayer(), bbox.GetX(), bbox.GetY() };
+        const int mmax[3] = { aItem->EndLayer(), bbox.GetRight(), bbox.GetBottom() };
 
         m_tree->Insert( mmin, mmax, aItem );
     }
@@ -75,9 +74,9 @@ public:
 
         // First, attempt to remove the item using its given BBox
         const BOX2I&        bbox    = aItem->BBox();
-        const LAYER_RANGE   layers  = aItem->Layers();
-        const int           mmin[3] = { layers.Start(), bbox.GetX(), bbox.GetY() };
-        const int           mmax[3] = { layers.End(), bbox.GetRight(), bbox.GetBottom() };
+
+        const int           mmin[3] = { aItem->StartLayer(), bbox.GetX(), bbox.GetY() };
+        const int           mmax[3] = { aItem->EndLayer(), bbox.GetRight(), bbox.GetBottom() };
 
         // If we are not successful ( 1 == not found ), then we expand
         // the search to the full tree
@@ -107,10 +106,13 @@ public:
      * with aBounds.
      */
     template <class Visitor>
-    void Query( const BOX2I& aBounds, const LAYER_RANGE& aRange, Visitor& aVisitor ) const
+    void Query( const BOX2I& aBounds, int aStartLayer, int aEndLayer, Visitor& aVisitor ) const
     {
-        const int   mmin[3] = { aRange.Start(), aBounds.GetX(), aBounds.GetY() };
-        const int   mmax[3] = { aRange.End(), aBounds.GetRight(), aBounds.GetBottom() };
+        int start_layer = aStartLayer == B_Cu ? INT_MAX : aStartLayer;
+        int end_layer = aEndLayer == B_Cu ? INT_MAX : aEndLayer;
+
+        const int   mmin[3] = { start_layer, aBounds.GetX(), aBounds.GetY() };
+        const int   mmax[3] = { end_layer, aBounds.GetRight(), aBounds.GetBottom() };
 
         m_tree->Search( mmin, mmax, aVisitor );
     }

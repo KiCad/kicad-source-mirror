@@ -95,7 +95,7 @@ const TOPOLOGY::JOINT_SET TOPOLOGY::ConnectedJoints( const JOINT* aStart )
 
 
 bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoint,
-                                              LAYER_RANGE& aLayers, ITEM*& aItem )
+                                              PNS_LAYER_RANGE& aLayers, ITEM*& aItem )
 {
     LINE track( *aTrack );
     VECTOR2I end;
@@ -142,7 +142,7 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
 {
     VECTOR2I end;
     // Ratline doesn't care about the layer
-    LAYER_RANGE layers;
+    PNS_LAYER_RANGE layers;
     ITEM*       unusedItem;
 
     if( !NearestUnconnectedAnchorPoint( aTrack, end, layers, unusedItem ) )

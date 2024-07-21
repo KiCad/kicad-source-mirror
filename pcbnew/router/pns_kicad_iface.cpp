@@ -24,6 +24,7 @@
 #include <board_design_settings.h>
 #include <netinfo.h>
 #include <footprint.h>
+#include <layer_range.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <zone.h>
@@ -62,6 +63,7 @@
 #include "pns_arc.h"
 #include "pns_sizes_settings.h"
 #include "pns_item.h"
+#include "pns_layerset.h"
 #include "pns_line.h"
 #include "pns_solid.h"
 #include "pns_segment.h"
@@ -215,7 +217,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
 
     if( drcEngine )
     {
-        return drcEngine->IsNetTieExclusion( NetCode( aItem->Net() ), ToLAYER_ID( aItem->Layer() ),
+        return drcEngine->IsNetTieExclusion( NetCode( aItem->Net() ),
+                                             ToLAYER_ID( m_routerIface->GetBoardLayerFromPNSLayer( aItem->Layer() ) ),
                                              aCollisionPos, collidingItem );
     }
 
@@ -333,12 +336,12 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNonPlatedSlot( const PNS::ITEM* aItem )
 }
 
 
-BOARD_ITEM* PNS_PCBNEW_RULE_RESOLVER::getBoardItem( const PNS::ITEM* aItem, int aLayer, int aIdx )
+BOARD_ITEM* PNS_PCBNEW_RULE_RESOLVER::getBoardItem( const PNS::ITEM* aItem, int aBoardLayer, int aIdx )
 {
     switch( aItem->Kind() )
     {
     case PNS::ITEM::ARC_T:
-        m_dummyArcs[aIdx].SetLayer( ToLAYER_ID( aLayer ) );
+        m_dummyArcs[aIdx].SetLayer( ToLAYER_ID( aBoardLayer ) );
         m_dummyArcs[aIdx].SetNet( static_cast<NETINFO_ITEM*>( aItem->Net() ) );
         m_dummyArcs[aIdx].SetStart( aItem->Anchor( 0 ) );
         m_dummyArcs[aIdx].SetEnd( aItem->Anchor( 1 ) );
@@ -346,14 +349,14 @@ BOARD_ITEM* PNS_PCBNEW_RULE_RESOLVER::getBoardItem( const PNS::ITEM* aItem, int 
 
     case PNS::ITEM::VIA_T:
     case PNS::ITEM::HOLE_T:
-        m_dummyVias[aIdx].SetLayer( ToLAYER_ID( aLayer ) );
+        m_dummyVias[aIdx].SetLayer( ToLAYER_ID( aBoardLayer ) );
         m_dummyVias[aIdx].SetNet( static_cast<NETINFO_ITEM*>( aItem->Net() ) );
         m_dummyVias[aIdx].SetStart( aItem->Anchor( 0 ) );
         return &m_dummyVias[aIdx];
 
     case PNS::ITEM::SEGMENT_T:
     case PNS::ITEM::LINE_T:
-        m_dummyTracks[aIdx].SetLayer( ToLAYER_ID( aLayer ) );
+        m_dummyTracks[aIdx].SetLayer( ToLAYER_ID( aBoardLayer ) );
         m_dummyTracks[aIdx].SetNet( static_cast<NETINFO_ITEM*>( aItem->Net() ) );
         m_dummyTracks[aIdx].SetStart( aItem->Anchor( 0 ) );
         m_dummyTracks[aIdx].SetEnd( aItem->Anchor( 1 ) );
@@ -367,7 +370,7 @@ BOARD_ITEM* PNS_PCBNEW_RULE_RESOLVER::getBoardItem( const PNS::ITEM* aItem, int 
 
 bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
                                                 const PNS::ITEM* aItemA, const PNS::ITEM* aItemB,
-                                                int aLayer, PNS::CONSTRAINT* aConstraint )
+                                                int aPNSLayer, PNS::CONSTRAINT* aConstraint )
 {
     std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
 
@@ -395,17 +398,18 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     BOARD_ITEM*    parentA = aItemA ? aItemA->BoardItem() : nullptr;
     BOARD_ITEM*    parentB = aItemB ? aItemB->BoardItem() : nullptr;
+    int            board_layer = m_routerIface->GetBoardLayerFromPNSLayer( aPNSLayer );
     DRC_CONSTRAINT hostConstraint;
 
     // A track being routed may not have a BOARD_ITEM associated yet.
     if( aItemA && !parentA )
-        parentA = getBoardItem( aItemA, aLayer, 0 );
+        parentA = getBoardItem( aItemA, board_layer, 0 );
 
     if( aItemB && !parentB )
-        parentB = getBoardItem( aItemB, aLayer, 1 );
+        parentB = getBoardItem( aItemB, board_layer, 1 );
 
     if( parentA )
-        hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, ToLAYER_ID( aLayer ) );
+        hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, ToLAYER_ID( board_layer ) );
 
     if( hostConstraint.IsNull() )
         return false;
@@ -502,7 +506,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     PNS::CONSTRAINT constraint;
     int             rv = 0;
-    LAYER_RANGE     layers;
+    PNS_LAYER_RANGE     layers;
 
     if( !aB )
         layers = aA->Layers();
@@ -514,7 +518,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         layers = aA->Layers().Intersection( aB->Layers() );
 
     // Normalize layer range (no -1 magic numbers)
-    layers = layers.Intersection( LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
+    layers = layers.Intersection( PNS_LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
 
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
@@ -859,7 +863,8 @@ int PNS_KICAD_IFACE_BASE::StackupHeight( int aFirstLayer, int aSecondLayer ) con
 
     BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
 
-    return stackup.GetLayerDistance( ToLAYER_ID( aFirstLayer ), ToLAYER_ID( aSecondLayer ) );
+    return stackup.GetLayerDistance( GetPCBLayerIDFromPNSLayer( aFirstLayer ),
+                                     GetPCBLayerIDFromPNSLayer( aSecondLayer ) );
 }
 
 
@@ -935,14 +940,13 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDL
 class PNS_PCBNEW_DEBUG_DECORATOR: public PNS::DEBUG_DECORATOR
 {
 public:
-    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = nullptr ) :
+    PNS_PCBNEW_DEBUG_DECORATOR( PNS::ROUTER_IFACE* aIface  ) :
             PNS::DEBUG_DECORATOR(),
+            m_iface( aIface ),
             m_view( nullptr ),
             m_items( nullptr ),
             m_depth( 0 )
-    {
-        SetView( aView );
-    }
+    {}
 
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
@@ -993,7 +997,7 @@ public:
         if( !m_view || !aItem )
             return;
 
-        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view );
+        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_iface, m_view );
 
         pitem->SetColor( aColor.WithAlpha( 0.5 ) );
         pitem->SetWidth( aOverrideWidth );
@@ -1029,7 +1033,7 @@ public:
         if( !m_view || !aShape )
             return;
 
-        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( *aShape, m_view );
+        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( *aShape, m_iface, m_view );
 
         pitem->SetColor( aColor.WithAlpha( 0.5 ) );
         pitem->SetWidth( aOverrideWidth );
@@ -1064,6 +1068,7 @@ private:
         return m_depth;
     }
 
+    PNS::ROUTER_IFACE* m_iface;
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_items;
 
@@ -1115,10 +1120,11 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 
 std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 {
-    LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
+    PNS_LAYER_RANGE layers( 0, aPad->BoardCopperLayerCount() );
+    LSEQ lmsk = aPad->GetLayerSet().CuStack();
 
     // ignore non-copper pads except for those with holes
-    if( ( aPad->GetLayerSet() & LSET::AllCuMask() ).none() && aPad->GetDrillSize().x == 0 )
+    if( lmsk.empty() && aPad->GetDrillSize().x == 0 )
         return nullptr;
 
     switch( aPad->GetAttribute() )
@@ -1130,20 +1136,12 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     case PAD_ATTRIB::CONN:
     case PAD_ATTRIB::SMD:
     {
-        LSET lmsk = aPad->GetLayerSet();
         bool is_copper = false;
 
-        for( int i = 0; i < MAX_CU_LAYERS; i++ )
+        if( !lmsk.empty() && aPad->GetAttribute() != PAD_ATTRIB::NPTH )
         {
-            if( lmsk[i] )
-            {
-                is_copper = true;
-
-                if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
-                    layers = LAYER_RANGE( i );
-
-                break;
-            }
+            layers = SetLayersFromPCBNew( lmsk.front(), lmsk.front() );
+            is_copper = true;
         }
 
         if( !is_copper )
@@ -1216,7 +1214,7 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack
                                                    aTrack->GetNet() );
 
     segment->SetWidth( aTrack->GetWidth() );
-    segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
+    segment->SetLayer( GetPNSLayerFromBoardLayer( aTrack->GetLayer() ) );
     segment->SetParent( aTrack );
 
     if( aTrack->IsLocked() )
@@ -1238,7 +1236,7 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
                                                       aArc->GetEnd(), aArc->GetWidth() ),
                                            aArc->GetNet() );
 
-    arc->SetLayers( LAYER_RANGE( aArc->GetLayer() ) );
+    arc->SetLayer( GetPNSLayerFromBoardLayer( aArc->GetLayer() ) );
     arc->SetParent( aArc );
 
     if( aArc->IsLocked() )
@@ -1260,7 +1258,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
     aVia->LayerPair( &top, &bottom );
 
     auto via = std::make_unique<PNS::VIA>( aVia->GetPosition(),
-                                           LAYER_RANGE( aVia->TopLayer(), aVia->BottomLayer() ),
+                                           SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ),
                                            aVia->GetWidth(),
                                            aVia->GetDrillValue(),
                                            aVia->GetNet(),
@@ -1311,7 +1309,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
         return false;
     }
 
-    for( int layer = F_Cu; layer <= B_Cu; layer++ )
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, m_board->GetCopperLayerCount() ) )
     {
         if( !layers[ layer ] )
             continue;
@@ -1332,7 +1330,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
 
                 std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
-                solid->SetLayer( layer );
+                solid->SetLayer( GetPNSLayerFromBoardLayer( layer ) );
                 solid->SetNet( nullptr );
                 solid->SetParent( aZone );
                 solid->SetShape( triShape );
@@ -1356,7 +1354,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB
     std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
     SHAPE_SIMPLE*               shape = new SHAPE_SIMPLE;
 
-    solid->SetLayer( aLayer );
+    solid->SetLayer( GetPNSLayerFromBoardLayer( aLayer ) );
     solid->SetNet( nullptr );
     solid->SetParent( aText );
     solid->SetShape( shape );   // takes ownership
@@ -1393,12 +1391,12 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
 
             if( aItem->GetLayer() == Edge_Cuts || aItem->GetLayer() == Margin )
             {
-                solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+                solid->SetLayers( PNS_LAYER_RANGE( 0, m_board->GetCopperLayerCount() ) );
                 solid->SetRoutable( false );
             }
             else
             {
-                solid->SetLayer( aItem->GetLayer() );
+                solid->SetLayer( GetPNSLayerFromBoardLayer( aItem->GetLayer() ) );
             }
 
             if( aItem->GetLayer() == Edge_Cuts )
@@ -1437,7 +1435,7 @@ void PNS_KICAD_IFACE_BASE::SetBoard( BOARD* aBoard )
 }
 
 
-bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const
+bool PNS_KICAD_IFACE::IsAnyLayerVisible( const PNS_LAYER_RANGE& aLayer ) const
 {
     if( !m_view )
         return false;
@@ -1466,14 +1464,14 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer 
         {
             const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem->Parent() );
 
-            return via->FlashLayer( ToLAYER_ID( aLayer ) );
+            return via->FlashLayer( GetPCBLayerIDFromPNSLayer( aLayer ) );
         }
 
         case PCB_PAD_T:
         {
             const PAD* pad = static_cast<const PAD*>( aItem->Parent() );
 
-            return pad->FlashLayer( ToLAYER_ID( aLayer ) );
+            return pad->FlashLayer( GetPCBLayerIDFromPNSLayer( aLayer ) );
         }
 
         default:
@@ -1486,9 +1484,9 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer 
 
 
 bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem,
-                                             const LAYER_RANGE& aLayer ) const
+                                             const PNS_LAYER_RANGE& aLayer ) const
 {
-    LAYER_RANGE test = aItem->Layers().Intersection( aLayer );
+    PNS_LAYER_RANGE test = aItem->Layers().Intersection( aLayer );
 
     if( aItem->Parent() )
     {
@@ -1500,7 +1498,7 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem,
 
             for( int layer = test.Start(); layer <= test.End(); ++layer )
             {
-                if( via->FlashLayer( ToLAYER_ID( layer ) ) )
+                if( via->FlashLayer( GetPCBLayerIDFromPNSLayer( layer ) ) )
                     return true;
             }
 
@@ -1513,7 +1511,7 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem,
 
             for( int layer = test.Start(); layer <= test.End(); ++layer )
             {
-                if( pad->FlashLayer( ToLAYER_ID( layer ) ) )
+                if( pad->FlashLayer( GetPCBLayerIDFromPNSLayer( layer ) ) )
                     return true;
             }
 
@@ -1703,7 +1701,7 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
             aFlags |= PNS_SEMI_SOLID;
     }
 
-    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view, aFlags );
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, this, m_view, aFlags );
 
     // Note: SEGMENT_T is used for placed tracks; LINE_T is used for the routing head
     static int tracks = PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T | PNS::ITEM::LINE_T;
@@ -1743,7 +1741,7 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 
 void PNS_KICAD_IFACE::DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance )
 {
-    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aLine, m_view );
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aLine, this, m_view );
     pitem->SetDepth( pitem->GetOriginDepth() - ROUTER_PREVIEW_ITEM::PathOverlayDepth );
 
     COLOR4D color;
@@ -1762,7 +1760,7 @@ void PNS_KICAD_IFACE::DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImpor
 
 void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET_HANDLE aNet )
 {
-    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aRatline, m_view );
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aRatline, this, m_view );
 
     KIGFX::RENDER_SETTINGS*     renderSettings = m_view->GetPainter()->GetSettings();
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings );
@@ -1910,8 +1908,8 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
         via_board->SetIsFree( via->IsFree() );
-        via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
-                                 ToLAYER_ID( via->Layers().End() ) );
+        via_board->SetLayerPair( GetPCBLayerIDFromPNSLayer( via->Layers().Start() ),
+                                 GetPCBLayerIDFromPNSLayer( via->Layers().End() ) );
         break;
     }
 
@@ -1960,7 +1958,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         PNS::ARC* arc = static_cast<PNS::ARC*>( aItem );
         PCB_ARC*  new_arc = new PCB_ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape() ) );
         new_arc->SetWidth( arc->Width() );
-        new_arc->SetLayer( ToLAYER_ID( arc->Layers().Start() ) );
+        new_arc->SetLayer( GetPCBLayerIDFromPNSLayer( arc->Layers().Start() ) );
         new_arc->SetNet( net );
         newBoardItem = new_arc;
         break;
@@ -1974,7 +1972,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         track->SetStart( VECTOR2I( s.A.x, s.A.y ) );
         track->SetEnd( VECTOR2I( s.B.x, s.B.y ) );
         track->SetWidth( seg->Width() );
-        track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
+        track->SetLayer( GetPCBLayerIDFromPNSLayer( seg->Layers().Start() ) );
         track->SetNet( net );
         newBoardItem = track;
         break;
@@ -1990,8 +1988,8 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         via_board->SetNet( net );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
         via_board->SetIsFree( via->IsFree() );
-        via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
-                                 ToLAYER_ID( via->Layers().End() ) );
+        via_board->SetLayerPair( GetPCBLayerIDFromPNSLayer( via->Layers().Start() ),
+                                 GetPCBLayerIDFromPNSLayer( via->Layers().End() ) );
         newBoardItem = via_board;
         break;
     }
@@ -2088,7 +2086,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 
     delete m_debugDecorator;
 
-    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR();
+    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR( this );
     m_debugDecorator = dec;
 
     dec->SetDebugEnabled( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics );
@@ -2138,4 +2136,53 @@ void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL_BASE* aTool )
 {
     m_tool = aTool;
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
+}
+
+
+int PNS_KICAD_IFACE_BASE::GetBoardLayerFromPNSLayer( int aLayer ) const
+{
+    if( aLayer < 0 )
+        return -1;
+
+    if( aLayer == 0 )
+        return F_Cu;
+
+    if( aLayer == m_board->GetCopperLayerCount() - 1 )
+        return B_Cu;
+
+    return ( aLayer + 1 ) * 2;
+}
+
+
+int PNS_KICAD_IFACE_BASE::GetPNSLayerFromBoardLayer( int aLayer ) const
+{
+    if( aLayer < 0 )
+        return -1;
+
+    if( aLayer == F_Cu )
+        return 0;
+
+    if( aLayer == B_Cu )
+        return m_board->GetCopperLayerCount() - 1;
+
+    return ( aLayer / 2 ) - 1;
+}
+
+
+PCB_LAYER_ID PNS_KICAD_IFACE_BASE::GetPCBLayerIDFromPNSLayer( int aLayer ) const
+{
+    return static_cast<PCB_LAYER_ID>( GetBoardLayerFromPNSLayer( aLayer ) );
+}
+
+
+void PNS_KICAD_IFACE_BASE::SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer )
+{
+    m_startLayer = GetPNSLayerFromBoardLayer( aLayer );
+}
+
+
+PNS_LAYER_RANGE PNS_KICAD_IFACE_BASE::SetLayersFromPCBNew( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer )
+{
+    return PNS_LAYER_RANGE( GetPNSLayerFromBoardLayer( aStartLayer ),
+                             GetPNSLayerFromBoardLayer( aEndLayer ) );
 }

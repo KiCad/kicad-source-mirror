@@ -31,6 +31,7 @@
 #include <3d_rendering/raytracing/shapes2D/polygon_2d.h>
 #include <board.h>
 #include <dialogs/dialog_color_picker.h>
+#include <layer_range.h>
 #include <3d_math.h>
 #include "3d_fastmath.h"
 #include <geometry/geometry_utils.h>
@@ -434,14 +435,16 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     //                                        Top = Bottom - m_copperThickness
 
     unsigned int layer;
+    LSET copperLayers = LSET::AllCuMask();
 
-    for( layer = 0; layer < m_copperLayersCount; ++layer )
+    for( auto layer : LAYER_RANGE( F_Cu, B_Cu, m_copperLayersCount ) )
     {
         // This approximates internal layer positions (because we're treating all the dielectric
         // layers as having the same thickness).  But we don't render them anyway so it doesn't
         // really matter.
-        m_layerZcoordBottom[layer] = m_boardBodyThickness3DU / 2.0f -
-                                     (m_boardBodyThickness3DU * layer / (m_copperLayersCount - 1) );
+        m_layerZcoordBottom[layer] = m_boardBodyThickness3DU / 2.0f
+                                     - ( m_boardBodyThickness3DU * static_cast<int>( layer )
+                                         / ( 2 * ( m_copperLayersCount - 1 ) ) );
 
         if( layer < (m_copperLayersCount / 2) )
             m_layerZcoordTop[layer] = m_layerZcoordBottom[layer] + m_frontCopperThickness3DU;
@@ -452,20 +455,13 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     #define layerThicknessMargin 1.1
     const float zpos_offset = m_nonCopperLayerThickness3DU * layerThicknessMargin;
 
-    // Fill remaining unused copper layers and back layer zpos with -m_boardBodyThickness / 2.0
-    for( ; layer < MAX_CU_LAYERS; layer++ )
-    {
-        m_layerZcoordBottom[layer] = -( m_boardBodyThickness3DU / 2.0f );
-        m_layerZcoordTop[layer]    = m_layerZcoordBottom[layer] - m_backCopperThickness3DU;
-    }
-
     // This is the top of the copper layer thickness.
     const float zpos_copperTop_back  = m_layerZcoordTop[B_Cu];
     const float zpos_copperTop_front = m_layerZcoordTop[F_Cu];
 
     // calculate z position for each non copper layer
     // Solder mask and Solder paste have the same Z position
-    for( int layer_id = MAX_CU_LAYERS; layer_id < PCB_LAYER_ID_COUNT; ++layer_id )
+    for( PCB_LAYER_ID layer_id : { B_Adhes, B_Mask, B_Paste, F_Adhes, F_Mask, F_Paste, B_SilkS, F_SilkS } )
     {
         float zposTop;
         float zposBottom;
@@ -513,12 +509,10 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
             break;
 
         default:
-            zposTop = zpos_copperTop_front + (layer_id - MAX_CU_LAYERS + 3.0f) * zpos_offset;
-            zposBottom = zposTop - m_nonCopperLayerThickness3DU;
             break;
         }
 
-        m_layerZcoordTop[layer_id]    = zposTop;
+        m_layerZcoordTop[layer_id] = zposTop;
         m_layerZcoordBottom[layer_id] = zposBottom;
     }
 
@@ -957,9 +951,17 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 float BOARD_ADAPTER::GetFootprintZPos( bool aIsFlipped ) const
 {
     if( aIsFlipped )
-        return m_layerZcoordBottom[B_Paste];
+    {
+        if( auto it = m_layerZcoordBottom.find( B_Paste ); it != m_layerZcoordBottom.end() )
+            return it->second;
+    }
     else
-        return m_layerZcoordTop[F_Paste];
+    {
+        if( auto it = m_layerZcoordTop.find( F_Paste ); it != m_layerZcoordTop.end() )
+            return it->second;
+    }
+
+    return 0.0;
 }
 
 

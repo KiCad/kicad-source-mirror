@@ -39,6 +39,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <layer_range.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <vector>
@@ -72,7 +73,7 @@ static int compute_pad_access_code( BOARD *aPcb, LSET aLayerMask )
     // OK, we have an inner-layer only pad (and I have no idea about
     // what could be used for); anyway, find the first copper layer
     // it's on
-    for( int layer = In1_Cu; layer < B_Cu; ++layer )
+    for( PCB_LAYER_ID layer : LAYER_RANGE( In1_Cu, B_Cu, aPcb->GetCopperLayerCount() ) )
     {
         if( aLayerMask[layer] )
             return layer + 1;

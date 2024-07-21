@@ -30,6 +30,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <layer_range.h>
 #include <pcb_dimension.h>
 #include <pad.h>
 #include <pcb_shape.h>
@@ -240,10 +241,11 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
 
     if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER || aAltiumLayer == ALTIUM_LAYER::KEEP_OUT_LAYER )
     {
+        int layerCount = m_board ? m_board->GetCopperLayerCount() : 32;
         std::vector<PCB_LAYER_ID> layers;
-        layers.reserve( MAX_CU_LAYERS );
+        layers.reserve( layerCount );
 
-        for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, layerCount ) )
         {
             if( !m_board || m_board->IsLayerEnabled( layer ) )
                 layers.emplace_back( layer );
@@ -268,7 +270,7 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
         }
 
         klayer = Eco1_User;
-        m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET( klayer ) );
+        m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET( { klayer } ) );
     }
 
     return { klayer };
@@ -1154,7 +1156,7 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
 
         ALTIUM_LAYER altiumID     = altiumLayerNameMap.at( layerPair.first );
         m_layermap.insert_or_assign( altiumID, layerPair.second );
-        enabledLayers |= LSET( layerPair.second );
+        enabledLayers |= LSET( { layerPair.second } );
     }
 
     m_board->SetEnabledLayers( enabledLayers );
@@ -3485,7 +3487,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     default:
         PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
         pad->SetLayer( klayer );
-        pad->SetLayerSet( LSET( klayer ) );
+        pad->SetLayerSet( LSET( { klayer } ) );
         break;
     }
 

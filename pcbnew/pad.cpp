@@ -34,6 +34,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_null.h>
+#include <layer_range.h>
 #include <string_utils.h>
 #include <i18n_utility.h>
 #include <view/view.h>
@@ -102,7 +103,8 @@ PAD::PAD( FOOTPRINT* parent ) :
     SetDirty();
     m_effectiveBoundingRadius = 0;
 
-    m_zoneLayerOverrides.fill( ZLO_NONE );
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
+        m_zoneLayerOverrides[layer] = ZLO_NONE;
 }
 
 
@@ -182,6 +184,30 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
         SetLocalClearance( std::nullopt );
 
     return true;
+}
+
+
+void PAD::ClearZoneLayerOverrides()
+{
+    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
+        m_zoneLayerOverrides[layer] = ZLO_NONE;
+}
+
+
+const ZONE_LAYER_OVERRIDE& PAD::GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
+{
+    static const ZONE_LAYER_OVERRIDE defaultOverride = ZLO_NONE;
+    auto it = m_zoneLayerOverrides.find( aLayer );
+    return it != m_zoneLayerOverrides.end() ? it->second : defaultOverride;
+}
+
+
+void PAD::SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
+{
+    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+    m_zoneLayerOverrides[aLayer] = aOverride;
 }
 
 
@@ -268,7 +294,7 @@ LSET PAD::UnplatedHoleMask()
 
 LSET PAD::ApertureMask()
 {
-    static LSET saved( F_Paste );
+    static LSET saved( { F_Paste } );
     return saved;
 }
 
@@ -360,12 +386,19 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
             static std::initializer_list<KICAD_T> types = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
                                                             PCB_PAD_T };
 
-            if( m_zoneLayerOverrides[ aLayer ] == ZLO_FORCE_FLASHED )
+            if( auto it = m_zoneLayerOverrides.find( static_cast<PCB_LAYER_ID>( aLayer ) );
+                it != m_zoneLayerOverrides.end() && it->second == ZLO_FORCE_FLASHED )
+            {
                 return true;
+            }
             else if( aOnlyCheckIfPermitted )
+            {
                 return true;
+            }
             else
+            {
                 return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types );
+            }
         }
     }
 
@@ -2138,7 +2171,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
 
     LSET padlayers_mask = GetLayerSet();
 
-    if( padlayers_mask == 0 )
+    if( padlayers_mask.none() )
         aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Pad has no layer)" ) );
 
     if( GetAttribute() == PAD_ATTRIB::PTH && !IsOnCopperLayer() )

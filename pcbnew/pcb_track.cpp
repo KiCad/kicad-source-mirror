@@ -31,6 +31,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <pcb_track.h>
 #include <base_units.h>
+#include <layer_range.h>
 #include <lset.h>
 #include <string_utils.h>
 #include <view/view.h>
@@ -98,7 +99,8 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     // For now, vias are always circles
     m_padStack.SetShape( PAD_SHAPE::CIRCLE );
 
-    m_zoneLayerOverrides.fill( ZLO_NONE );
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
+        m_zoneLayerOverrides[layer] = ZLO_NONE;
 
     m_isFree = false;
 }
@@ -867,7 +869,7 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
     return GetLayerSet().test( aLayer );
 #endif
 
-    if( aLayer >= Padstack().Drill().start && aLayer <= Padstack().Drill().end )
+    if( LAYER_RANGE::Contains( Padstack().Drill().start, Padstack().Drill().end, aLayer ) )
         return true;
 
     if( aLayer == F_Mask )
@@ -899,13 +901,17 @@ LSET PCB_VIA::GetLayerSet() const
         return layermask;
 
     if( GetViaType() == VIATYPE::THROUGH )
-        layermask = LSET::AllCuMask();
+    {
+        layermask = LSET::AllCuMask( BoardCopperLayerCount() );
+    }
     else
-        wxASSERT( Padstack().Drill().start <= Padstack().Drill().end );
+    {
+        LAYER_RANGE range( Padstack().Drill().start, Padstack().Drill().end, BoardCopperLayerCount() );
 
-    // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
-    for( int id = Padstack().Drill().start; id <= Padstack().Drill().end; ++id )
-        layermask.set( id );
+        // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
+        for( PCB_LAYER_ID id : range )
+            layermask.set( id );
+    }
 
     if( !IsTented( F_Mask ) && layermask.test( F_Cu ) )
         layermask.set( F_Mask );
@@ -1064,10 +1070,34 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
                                                              PCB_PAD_T };
 
-    if( m_zoneLayerOverrides[ aLayer ] == ZLO_FORCE_FLASHED )
+    if( GetZoneLayerOverride( static_cast<PCB_LAYER_ID>( aLayer ) ) == ZLO_FORCE_FLASHED )
         return true;
     else
-        return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes );
+        return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<PCB_LAYER_ID>( aLayer ), connectedTypes );
+}
+
+
+void PCB_VIA::ClearZoneLayerOverrides()
+{
+    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
+        m_zoneLayerOverrides[layer] = ZLO_NONE;
+}
+
+
+const ZONE_LAYER_OVERRIDE& PCB_VIA::GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
+{
+    static const ZONE_LAYER_OVERRIDE defaultOverride = ZLO_NONE;
+    auto it = m_zoneLayerOverrides.find( aLayer );
+    return it != m_zoneLayerOverrides.end() ? it->second : defaultOverride;
+}
+
+
+void PCB_VIA::SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
+{
+    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+    m_zoneLayerOverrides[aLayer] = aOverride;
 }
 
 
@@ -1084,7 +1114,7 @@ void PCB_VIA::GetOutermostConnectedLayers( PCB_LAYER_ID* aTopmost,
     {
         bool connected = false;
 
-        if( m_zoneLayerOverrides[ layer ] == ZLO_FORCE_FLASHED )
+        if( GetZoneLayerOverride( static_cast<PCB_LAYER_ID>( layer ) ) == ZLO_FORCE_FLASHED )
             connected = true;
         else if( GetBoard()->GetConnectivity()->IsConnectedOnLayer( this, layer, connectedTypes ) )
             connected = true;

@@ -510,7 +510,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
     WINDOW_THAWER thawer( m_frame );
 
-    if( principalLayer > UNDEFINED_LAYER && ( violationLayers & board->GetVisibleLayers() ) == 0 )
+    if( principalLayer > UNDEFINED_LAYER && ( violationLayers & board->GetVisibleLayers() ).none() )
         m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
 
     if( principalLayer > UNDEFINED_LAYER && board->GetVisibleLayers().test( principalLayer ) )

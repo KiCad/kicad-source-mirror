@@ -25,6 +25,7 @@
 #include <math_for_graphics.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <layer_range.h>
 #include <pcb_shape.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -113,7 +114,7 @@ private:
             : layers(), has_error( false ) {}
 
         checked( PCB_LAYER_ID aLayer )
-            : layers( aLayer ), has_error( false ) {}
+            : layers( { aLayer } ), has_error( false ) {}
 
         LSET layers;
         bool has_error;
@@ -1280,10 +1281,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 return invalid_result;
             };
 
-    for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
+
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, m_board->GetCopperLayerCount() ) )
     {
-        PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( layer_id );
-        int          zone2zoneClearance;
+        int zone2zoneClearance;
 
         // Skip over layers not used on the current board
         if( !m_board->IsLayerEnabled( layer ) )

@@ -154,7 +154,7 @@ void PCB_IO_EAGLE::setKeepoutSettingsToZone( ZONE* aZone, int aLayer ) const
         aZone->SetDoNotAllowPads( false );
         aZone->SetDoNotAllowFootprints( false );
 
-        aZone->SetLayerSet( kicad_layer( aLayer ) );
+        aZone->SetLayerSet( { kicad_layer( aLayer ) } );
     }
 }
 
@@ -3008,7 +3008,7 @@ std::tuple<PCB_LAYER_ID, LSET, bool> PCB_IO_EAGLE::defaultKicadLayer( int aEagle
     case EAGLE_LAYER::DIMENSION:
         kiLayer         = Edge_Cuts;
         required        = true;
-        permittedLayers = LSET( Edge_Cuts );
+        permittedLayers = LSET( { Edge_Cuts } );
         break;
 
     case EAGLE_LAYER::TPLACE:

@@ -703,7 +703,7 @@ void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap(
             {
                 for( CN_ITEM* item : *cluster )
                 {
-                    if( item->Parent() == zone && item->Layer() == layer )
+                    if( item->Parent() == zone && item->GetBoardLayer() == layer )
                     {
                         CN_ZONE_LAYER* z = static_cast<CN_ZONE_LAYER*>( item );
 

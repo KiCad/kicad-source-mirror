@@ -338,7 +338,7 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 
         nlohmann::ordered_json file_json;
 
-        if( layer <= B_Cu )
+        if( IsCopperLayer( layer ) )
         {
             gbr_layer_id = wxT( "Copper,L" );
 

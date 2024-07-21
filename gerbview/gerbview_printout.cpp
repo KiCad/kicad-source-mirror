@@ -59,7 +59,7 @@ bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
     // objects when using only one page is tricky
 
     // Enable only one layer to create a printout
-    m_settings.m_LayerSet = LSET( layerId );
+    m_settings.m_LayerSet = LSET( { layerId } );
 
     GERBER_FILE_IMAGE_LIST& gbrImgList = GERBER_FILE_IMAGE_LIST::GetImagesList();
     GERBER_FILE_IMAGE*      gbrImage = gbrImgList.GetGbrImage( layerId );

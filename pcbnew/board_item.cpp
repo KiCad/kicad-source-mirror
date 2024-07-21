@@ -103,6 +103,39 @@ const KIFONT::METRICS& BOARD_ITEM::GetFontMetrics() const
 }
 
 
+int BOARD_ITEM::BoardLayerCount() const
+{
+    const BOARD* board = GetBoard();
+
+    if( board )
+        return board->GetLayerSet().count();
+
+    return 64;
+}
+
+
+int BOARD_ITEM::BoardCopperLayerCount() const
+{
+    const BOARD* board = GetBoard();
+
+    if( board )
+        return board->GetCopperLayerCount();
+
+    return 32;
+}
+
+
+LSET BOARD_ITEM::BoardLayerSet() const
+{
+    const BOARD* board = GetBoard();
+
+    if( board )
+        return board->GetLayerSet();
+
+    return LSET::AllLayersMask();
+}
+
+
 wxString BOARD_ITEM::GetLayerName() const
 {
     if( const BOARD* board = GetBoard() )

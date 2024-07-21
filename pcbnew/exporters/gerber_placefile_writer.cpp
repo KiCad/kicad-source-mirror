@@ -124,7 +124,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     // defined size for component outlines
     int line_thickness = pcbIUScale.mmToIU( 0.1 );
 
-    brd_plotter.SetLayerSet( LSET( aLayer ) );
+    brd_plotter.SetLayerSet( LSET( { aLayer } ) );
     int cmp_count = 0;
     const bool allowUtf8 = true;
     const bool quoteOption = false;
@@ -291,9 +291,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     // Plot board outlines, if requested
     if( aIncludeBrdEdges )
     {
-        brd_plotter.SetLayerSet( LSET( Edge_Cuts ) );
+        brd_plotter.SetLayerSet( LSET( { Edge_Cuts } ) );
 
-         // Plot edge layer and graphic items
+        // Plot edge layer and graphic items
         for( const BOARD_ITEM* item : m_pcb->Drawings() )
             brd_plotter.PlotBoardGraphicItem( item );
 

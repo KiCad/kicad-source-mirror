@@ -443,7 +443,7 @@ public:
     {
     }
 
-    void SetLayerId( const char* aLayerId )
+    void SetLayerId( std::string& aLayerId )
     {
         layer_id = aLayerId;
     }
@@ -596,7 +596,7 @@ public:
 
     POINTS& GetPoints() {return points; }
 
-    void SetLayerId( const char* aLayerId )
+    void SetLayerId( const std::string& aLayerId )
     {
         layer_id = aLayerId;
     }
@@ -753,7 +753,7 @@ public:
             out->Print( 0, ")%s", newline );
     }
 
-    void SetLayerId( const char* aLayerId )
+    void SetLayerId( const std::string& aLayerId )
     {
         layer_id = aLayerId;
     }
@@ -801,7 +801,7 @@ public:
         out->Print( 0, ")%s", newline );
     }
 
-    void SetLayerId( const char* aLayerId )
+    void SetLayerId( std::string& aLayerId )
     {
         layer_id = aLayerId;
     }

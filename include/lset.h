@@ -24,6 +24,7 @@
 #include <base_set.h>
 
 class LSEQ;
+class LAYER_RANGE;
 
 /**
  * LSET is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
@@ -35,38 +36,18 @@ class KICOMMON_API LSET : public BASE_SET
 {
 public:
 
-    // The constructor flavors are carefully chosen to prevent LSET( int ) from compiling.
-    // That excludes  "LSET s = 0;" and excludes "LSET s = -1;", etc.
-    // LSET s = 0;  needs to be removed from the code, this accomplishes that.
-    // Remember LSET( PCB_LAYER_ID(0) ) sets bit 0, so "LSET s = 0;" is illegal
-    // to prevent that surprise.  Therefore LSET's constructor suite is significantly
-    // different than the base class from which it is derived.
-
-    // Other member functions (non-constructor functions) are identical to the base
-    // class's and therefore are re-used from the base class.
-
     /**
      * Create an empty (cleared) set.
      */
-    LSET() :
-        BASE_SET( PCB_LAYER_ID_COUNT )  // all bits are set to zero in BASE_SET()
-    {
-    }
+    LSET() : BASE_SET( PCB_LAYER_ID_COUNT ) {} // all bits are set to zero in BASE_SET()
 
-    LSET( const BASE_SET& aOther ) :
-        BASE_SET( aOther )
-    {
-    }
-
-    LSET( PCB_LAYER_ID aLayer ) :
-        BASE_SET( PCB_LAYER_ID_COUNT )
-    {
-        set( aLayer );
-    }
+    LSET( const BASE_SET& aOther ) : BASE_SET( aOther ) {}
 
     LSET( std::initializer_list<PCB_LAYER_ID> aList );
 
     LSET( const LSEQ& aSeq );
+
+    LSET( const LAYER_RANGE& aRange );
 
     LSET( unsigned long __val ) = delete;
 
@@ -91,7 +72,18 @@ public:
     /**
      * Return the fixed name association with aLayerId.
      */
-    static const wxChar* Name( PCB_LAYER_ID aLayerId );
+    static wxString Name( PCB_LAYER_ID aLayerId );
+
+    /**
+     * Return the layer number from a layer name.
+     */
+    static int NameToLayer( wxString& aName );
+
+    /**
+     * Return true if aLayer is between aStart and aEnd, inclusive. Takes into
+     * account the direction of the layers and the fact that B_Cu comes before In*_Cu
+     */
+    static bool IsBetween( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd, PCB_LAYER_ID aLayer );
 
     /**
      * Return a complete set of internal copper layers which is all Cu layers
@@ -192,24 +184,20 @@ public:
 
     /**
      * Return a sequence of copper layers in starting from the front/top
-     * and extending to the back/bottom.  This specific sequence is depended upon
-     * in numerous places.
+     * and extending to the back/bottom.
      */
     LSEQ CuStack() const;
 
     /**
-     * Return a sequence of technical layers.  A sequence provides a certain order.
+     * Returns the technical and user layers in the order shown in layer widget
      *
-     * @param aSubToOmit is the subset of the technical layers to omit, defaults to none.
      */
-    LSEQ Technicals( LSET aSubToOmit = LSET() ) const;
-
-    /// *_User layers.
-    LSEQ Users() const;
-
-    /// Returns the technical and user layers in the order shown in layer widget
     LSEQ TechAndUserUIOrder() const;
 
+    /**
+     * Returns the copper, technical and user layers in the order shown in layer widget
+     *
+     */
     LSEQ UIOrder() const;
 
     /**
@@ -217,10 +205,7 @@ public:
      * element will be in the same sequence as aWishListSequence if they are present.
      * @param aWishListSequence establishes the order of the returned LSEQ, and the LSEQ will only
      * contain PCB_LAYER_IDs which are present in this set.
-     * @param aCount is the length of aWishListSequence array.
      */
-    LSEQ Seq( const PCB_LAYER_ID* aWishListSequence, unsigned aCount ) const;
-
     LSEQ Seq( const LSEQ& aSequence ) const;
 
     /**
@@ -294,6 +279,64 @@ public:
      *  internal layers will be not flipped because the layer count is not known
      */
     LSET& Flip( int aCopperLayersCount = 0 );
+
+    /**
+     * Return the number of layers between aStart and aEnd, inclusive.
+     */
+    static int LayerCount( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd, int aCopperLayerCount );
+
+#ifndef SWIG
+    // Custom iterator to iterate over all set bits
+    class all_set_layers_iterator : public BASE_SET::set_bits_iterator
+    {
+    public:
+        all_set_layers_iterator( const BASE_SET& set, size_t index ) :
+                BASE_SET::set_bits_iterator( set, index )
+        {
+        }
+
+        PCB_LAYER_ID operator*() const { return PCB_LAYER_ID( BASE_SET::set_bits_iterator::operator*() ); }
+
+        all_set_layers_iterator& operator++()
+        {
+            BASE_SET::set_bits_iterator::operator++();
+            return *this;
+        }
+    };
+
+    all_set_layers_iterator begin() const { return all_set_layers_iterator( *this, 0 ); }
+    all_set_layers_iterator end() const { return all_set_layers_iterator( *this, size() ); }
+
+    // Custom iterators for Copper and Non-Copper layers
+    class copper_layers_iterator : public BASE_SET::set_bits_iterator
+    {
+    public:
+        copper_layers_iterator( const BASE_SET& set, size_t index );
+        PCB_LAYER_ID            operator*() const;
+        copper_layers_iterator& operator++();
+
+    private:
+        void advance_to_next_set_copper_bit();
+        void next_copper_layer();
+    };
+
+    class non_copper_layers_iterator : public BASE_SET::set_bits_iterator
+    {
+    public:
+        non_copper_layers_iterator( const BASE_SET& set, size_t index );
+        PCB_LAYER_ID                operator*() const;
+        non_copper_layers_iterator& operator++();
+
+    private:
+        void advance_to_next_set_non_copper_bit();
+    };
+
+    copper_layers_iterator copper_layers_begin() const;
+    copper_layers_iterator copper_layers_end() const;
+    non_copper_layers_iterator non_copper_layers_begin() const;
+    non_copper_layers_iterator non_copper_layers_end() const;
+
+#endif
 
 };
 #endif // LSET_H

@@ -100,7 +100,7 @@ public:
     {
         PNS::CONSTRAINT constraint;
         int             rv = 0;
-        LAYER_RANGE     layers;
+        PNS_LAYER_RANGE     layers;
 
         if( !aB )
             layers = aA->Layers();
@@ -112,7 +112,7 @@ public:
             layers = aA->Layers().Intersection( aB->Layers() );
 
         // Normalize layer range (no -1 magic numbers)
-        layers = layers.Intersection( LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
+        layers = layers.Intersection( PNS_LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
 
         for( int layer = layers.Start(); layer <= layers.End(); ++layer )
         {
@@ -336,8 +336,8 @@ static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 
 BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
 {
-    PNS::VIA* v1 = new PNS::VIA( VECTOR2I( 0, 1000000 ), LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
-    PNS::VIA* v2 = new PNS::VIA( VECTOR2I( 0, 2000000 ), LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
+    PNS::VIA* v1 = new PNS::VIA( VECTOR2I( 0, 1000000 ), PNS_LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
+    PNS::VIA* v2 = new PNS::VIA( VECTOR2I( 0, 2000000 ), PNS_LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
 
     std::unique_ptr<PNS::NODE> world ( new PNS::NODE );
 

@@ -437,7 +437,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     pad->SetSize( VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 
-    pad->SetLayerSet( LSET( footprint->GetLayer() ) );
+    pad->SetLayerSet( LSET( { footprint->GetLayer() } ) );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetShape( PAD_SHAPE::CIRCLE );
 

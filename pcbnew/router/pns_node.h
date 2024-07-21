@@ -272,7 +272,7 @@ public:
                         const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() ) const;
 
     int QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints,
-                     LAYER_RANGE aLayerMask = LAYER_RANGE::All(), int aKindMask = ITEM::ANY_T );
+                     PNS_LAYER_RANGE aLayerMask = PNS_LAYER_RANGE::All(), int aKindMask = ITEM::ANY_T );
 
     /**
      * Follow the line in search of an obstacle that is nearest to the starting to the line's
@@ -482,14 +482,14 @@ private:
     NODE& operator=( const NODE& aB );
 
     ///< Try to find matching joint and creates a new one if not found.
-    JOINT& touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet );
+    JOINT& touchJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet );
 
     ///< Touch a joint and links it to an m_item.
-    void linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+    void linkJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet,
                     ITEM* aWhere );
 
     ///< Unlink an item from a joint.
-    void unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+    void unlinkJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet,
                       ITEM* aWhere );
 
     ///< Helpers for adding/removing items.
@@ -515,11 +515,11 @@ private:
         return m_parent == nullptr;
     }
 
-    SEGMENT* findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
+    SEGMENT* findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const PNS_LAYER_RANGE& lr,
                                    NET_HANDLE aNet );
     SEGMENT* findRedundantSegment( SEGMENT* aSeg );
 
-    ARC* findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
+    ARC* findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const PNS_LAYER_RANGE& lr,
                            NET_HANDLE aNet );
     ARC* findRedundantArc( ARC* aSeg );
 

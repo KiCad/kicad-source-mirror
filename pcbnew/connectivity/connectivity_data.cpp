@@ -447,7 +447,7 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
             CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected );
 
             if( connected->Valid()
-                    && connected->Layers().Overlaps( aLayer )
+                    && connected->StartLayer() <= aLayer && connected->EndLayer() >= aLayer
                     && matchType( connected->Parent()->Type() )
                     && connected->Net() == aItem->GetNetCode() )
             {

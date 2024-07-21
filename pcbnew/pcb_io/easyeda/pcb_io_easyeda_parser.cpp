@@ -984,7 +984,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             else
             {
                 pad->SetLayer( klayer );
-                pad->SetLayerSet( LSET( klayer ) );
+                pad->SetLayerSet( LSET( { klayer } ) );
                 pad->SetAttribute( PAD_ATTRIB::SMD );
             }
 

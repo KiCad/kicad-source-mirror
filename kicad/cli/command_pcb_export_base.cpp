@@ -50,9 +50,9 @@ CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
         //m_layerIndices[untranslated] = PCB_LAYER_ID( layer );
 
         // Add layer name used in pcb files
-        m_layerMasks[untranslated] = LSET( PCB_LAYER_ID( layer ) );
+        m_layerMasks[untranslated] = LSET( { PCB_LAYER_ID( layer ) } );
         // Add layer name using GUI canonical layer name
-        m_layerGuiMasks[ TO_UTF8(LayerName( layer ) ) ] = LSET( PCB_LAYER_ID( layer ) );
+        m_layerGuiMasks[ TO_UTF8(LayerName( layer ) ) ] = LSET( { PCB_LAYER_ID( layer ) } );
     }
 
     // Add list of grouped layer names used in pcb files

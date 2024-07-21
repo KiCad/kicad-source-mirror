@@ -34,12 +34,15 @@
 #include "pns_line.h"
 #include "pns_segment.h"
 #include "pns_via.h"
+#include "pns_kicad_iface.h"
 
 using namespace KIGFX;
 
 
-ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* aView, int aFlags ) :
+ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IFACE* aIface,
+                                          KIGFX::VIEW* aView, int aFlags ) :
         EDA_ITEM( NOT_USED ),
+        m_iface( aIface ),
         m_view( aView ),
         m_shape( nullptr ),
         m_hole( nullptr ),
@@ -76,12 +79,13 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 }
 
 
-ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView ) :
+ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, PNS::ROUTER_IFACE* aIface,
+                                          KIGFX::VIEW* aView ) :
         EDA_ITEM( NOT_USED ),
+        m_iface( aIface ),
+        m_view( aView ),
         m_flags( 0 )
 {
-    m_view = aView;
-
     m_shape = aShape.Clone();
     m_hole = nullptr;
 
@@ -106,7 +110,7 @@ ROUTER_PREVIEW_ITEM::~ROUTER_PREVIEW_ITEM()
 
 void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 {
-    m_originLayer = aItem->Layers().Start();
+    m_originLayer = m_iface->GetBoardLayerFromPNSLayer( aItem->Layers().Start() );
 
     if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( aItem ) )
     {
@@ -119,7 +123,8 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
             return;
     }
 
-    assert( m_originLayer >= 0 );
+    if( m_originLayer < 0 )
+        m_originLayer = 0;
 
     m_layer = m_originLayer;
     m_color = getLayerColor( m_originLayer );

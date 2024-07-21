@@ -57,9 +57,9 @@ public:
     void EraseView() override {};
     void SetBoard( BOARD* aBoard );
     void SyncWorld( PNS::NODE* aWorld ) override;
-    bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const override { return true; };
+    bool IsAnyLayerVisible( const PNS_LAYER_RANGE& aLayer ) const override { return true; };
     bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override;
-    bool IsFlashedOnLayer( const PNS::ITEM* aItem, const LAYER_RANGE& aLayer ) const override;
+    bool IsFlashedOnLayer( const PNS::ITEM* aItem, const PNS_LAYER_RANGE& aLayer ) const override;
     bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; };
     void HideItem( PNS::ITEM* aItem ) override {}
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
@@ -81,7 +81,14 @@ public:
 
     void SetDebugDecorator( PNS::DEBUG_DECORATOR* aDec );
 
-    void SetStartLayer( int aLayer ) { m_startLayer = aLayer; }
+    int GetBoardLayerFromPNSLayer( int aLayer ) const override;
+    int GetPNSLayerFromBoardLayer( int aLayer ) const override;
+    PCB_LAYER_ID GetPCBLayerIDFromPNSLayer( int aLayer ) const;
+
+    void SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer );
+    void SetStartLayerFromPNS( int aLayer ) { m_startLayer = aLayer; }
+
+    PNS_LAYER_RANGE SetLayersFromPCBNew( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer );
 
     virtual PNS::NODE* GetWorld() const override { return m_world; };
 
@@ -108,7 +115,7 @@ protected:
 protected:
     PNS::NODE* m_world;
     BOARD*     m_board;
-    int        m_startLayer;
+    int        m_startLayer; // The starting layer, in PNS layer coordinates
 };
 
 class PNS_KICAD_IFACE : public PNS_KICAD_IFACE_BASE
@@ -121,7 +128,7 @@ public:
 
     void SetView( KIGFX::VIEW* aView );
     void EraseView() override;
-    bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const override;
+    bool IsAnyLayerVisible( const PNS_LAYER_RANGE& aLayer ) const override;
     bool IsItemVisible( const PNS::ITEM* aItem ) const override;
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,

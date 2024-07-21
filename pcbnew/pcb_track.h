@@ -605,21 +605,11 @@ public:
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    void ClearZoneLayerOverrides()
-    {
-        m_zoneLayerOverrides.fill( ZLO_NONE );
-    }
+    void ClearZoneLayerOverrides();
 
-    const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
-    {
-        return m_zoneLayerOverrides.at( aLayer );
-    }
+    const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const;
 
-    void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
-    {
-        std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
-        m_zoneLayerOverrides.at( aLayer ) = aOverride;
-    }
+    void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride );
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
@@ -641,8 +631,8 @@ private:
 
     bool         m_isFree;                   ///< "Free" vias don't get their nets auto-updated
 
-    std::mutex                                     m_zoneLayerOverridesMutex;
-    std::array<ZONE_LAYER_OVERRIDE, MAX_CU_LAYERS> m_zoneLayerOverrides;
+    std::mutex                                  m_zoneLayerOverridesMutex;
+    std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> m_zoneLayerOverrides;
 };
 
 

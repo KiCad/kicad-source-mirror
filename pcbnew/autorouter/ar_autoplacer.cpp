@@ -571,7 +571,7 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
 
     if( m_matrix.m_RoutingLayersCount > 1 )
     {
-        LSET other( aFootprint->GetLayer() == B_Cu ? F_Cu : B_Cu );
+        LSET other( { aFootprint->GetLayer() == B_Cu ? F_Cu : B_Cu } );
 
         for( PAD* pad : aFootprint->Pads() )
         {

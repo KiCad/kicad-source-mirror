@@ -147,6 +147,10 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { GERBVIEW_LAYER_ID_START + 57, CSS_COLOR( 127, 200, 127, 1 ) },
             { GERBVIEW_LAYER_ID_START + 58, CSS_COLOR( 206, 125, 44,  1 ) },
             { GERBVIEW_LAYER_ID_START + 59, CSS_COLOR( 79,  203, 203, 1 ) },
+            { GERBVIEW_LAYER_ID_START + 60, CSS_COLOR( 219, 98, 139,  1 ) },
+            { GERBVIEW_LAYER_ID_START + 61, CSS_COLOR( 167, 165, 198, 1 ) },
+            { GERBVIEW_LAYER_ID_START + 62, CSS_COLOR( 40,  204, 217, 1 ) },
+            { GERBVIEW_LAYER_ID_START + 63, CSS_COLOR( 232, 178, 167, 1 ) },
 
             { LAYER_ANCHOR,                 CSS_COLOR( 255, 38,  226, 1 ) },
             { LAYER_LOCKED_ITEM_SHADOW,     CSS_COLOR( 255, 38,  226, 0.5 ) },

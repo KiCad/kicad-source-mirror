@@ -805,21 +805,11 @@ public:
 
     virtual const BOX2I ViewBBox() const override;
 
-    void ClearZoneLayerOverrides()
-    {
-        m_zoneLayerOverrides.fill( ZLO_NONE );
-    }
+    void ClearZoneLayerOverrides();
 
-    const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
-    {
-        return m_zoneLayerOverrides.at( aLayer );
-    }
+    const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const;
 
-    void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
-    {
-        std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
-        m_zoneLayerOverrides.at( aLayer ) = aOverride;
-    }
+    void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride );
 
     void CheckPad( UNITS_PROVIDER* aUnitsProvider,
                    const std::function<void( int aErrorCode,
@@ -871,8 +861,8 @@ private:
 
     int         m_lengthPadToDie;   // Length net from pad to die, inside the package
 
-    std::mutex                                     m_zoneLayerOverridesMutex;
-    std::array<ZONE_LAYER_OVERRIDE, MAX_CU_LAYERS> m_zoneLayerOverrides;
+    std::mutex                                  m_zoneLayerOverridesMutex;
+    std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> m_zoneLayerOverrides;
 };
 
 #endif  // PAD_H

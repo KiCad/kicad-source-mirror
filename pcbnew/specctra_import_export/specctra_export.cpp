@@ -225,7 +225,7 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 
     path->AppendPoint( aStart );
     path->AppendPoint( aEnd );
-    path->SetLayerId( aLayerName.c_str() );
+    path->SetLayerId( aLayerName );
     return path;
 }
 
@@ -245,19 +245,17 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     PADSTACK*   padstack = new PADSTACK();
 
-    int         reportedLayers = 0;         // how many in reported padstack
-    const char* layerName[MAX_CU_LAYERS];
-
     uniqifier = '[';
 
-    static const LSET all_cu = LSET::AllCuMask();
+    const int   copperCount = aBoard->GetCopperLayerCount();
+    static const LSET all_cu = LSET::AllCuMask( copperCount );
+    int         reportedLayers = 0;
+    std::vector<std::string> layerName( copperCount );
 
     bool onAllCopperLayers = ( (aPad->GetLayerSet() & all_cu) == all_cu );
 
     if( onAllCopperLayers )
         uniqifier += 'A'; // A for all layers
-
-    const int copperCount = aBoard->GetCopperLayerCount();
 
     for( int layer=0; layer<copperCount; ++layer )
     {
@@ -265,7 +263,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
         if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
         {
-            layerName[reportedLayers++] = m_layerIds[layer].c_str();
+            layerName[reportedLayers++] = m_layerIds[layer];
 
             if( !onAllCopperLayers )
             {
@@ -640,7 +638,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
                 circle->SetDiameter( diameter );
                 circle->SetVertex( vertex );
-                circle->SetLayerId( m_layerIds[layer].c_str() );
+                circle->SetLayerId( m_layerIds[layer] );
             }
         }
         else        // else if() could there be a square keepout here?
@@ -998,7 +996,7 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
         shape->SetShape( circle );
 
         circle->SetDiameter( dsnDiameter );
-        circle->SetLayerId( m_layerIds[layer].c_str() );
+        circle->SetLayerId( m_layerIds[layer] );
     }
 
     snprintf( name, sizeof( name ), "Via[%d-%d]_%.6g:%.6g_um",

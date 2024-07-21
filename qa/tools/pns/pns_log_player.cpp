@@ -118,7 +118,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         case LOGGER::EVT_START_ROUTE:
         {
             PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-            m_iface->SetStartLayer( routingLayer );
+            m_iface->SetStartLayerFromPNS( routingLayer );
             m_iface->ImportSizes( sizes, ritem, nullptr, evt.p );
             m_router->UpdateSizes( sizes );
 
@@ -138,7 +138,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         case LOGGER::EVT_START_DRAG:
         {
             PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-            m_iface->SetStartLayer( routingLayer );
+            m_iface->SetStartLayerFromPNS( routingLayer );
             m_iface->ImportSizes( sizes, ritem, nullptr, evt.p );
             m_router->UpdateSizes( sizes );
 

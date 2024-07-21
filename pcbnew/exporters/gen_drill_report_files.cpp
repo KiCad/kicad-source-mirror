@@ -105,7 +105,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     // Calculate dimensions and center of PCB. The Edge_Cuts layer must be visible
     // to calculate the board edges bounding box
     LSET visibleLayers = m_pcb->GetVisibleLayers();
-    m_pcb->SetVisibleLayers( visibleLayers | LSET( Edge_Cuts ) );
+    m_pcb->SetVisibleLayers( visibleLayers | LSET( { Edge_Cuts } ) );
     BOX2I bbbox = m_pcb->GetBoardEdgesBoundingBox();
     m_pcb->SetVisibleLayers( visibleLayers );
 
@@ -236,7 +236,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     BRDITEMS_PLOTTER itemplotter( plotter, m_pcb, plot_opts );
 
     // Use attributes of a drawing layer (we are not really draw the Edge.Cuts layer)
-    itemplotter.SetLayerSet( Dwgs_User );
+    itemplotter.SetLayerSet( { Dwgs_User } );
 
     for( BOARD_ITEM* item : m_pcb->Drawings() )
     {

@@ -79,7 +79,7 @@ private:
 
     int getStartLayer( const PNS::ITEM* aItem );
     void switchLayerOnViaPlacement();
-    void updateSizesAfterRouterEvent( PCB_LAYER_ID targetLayer, const VECTOR2I& aPos );
+    void updateSizesAfterRouterEvent( int targetLayer, const VECTOR2I& aPos );
 
     int onLayerCommand( const TOOL_EVENT& aEvent );
     int onViaCommand( const TOOL_EVENT& aEvent );
@@ -94,7 +94,7 @@ private:
     std::shared_ptr<ACTION_MENU> m_trackViaMenu;
 
     int                          m_lastTargetLayer;
-    PCB_LAYER_ID                 m_originalActiveLayer;
+    int                          m_originalActiveLayer;
 
     bool                         m_inRouterTool;         // Re-entrancy guard
 };

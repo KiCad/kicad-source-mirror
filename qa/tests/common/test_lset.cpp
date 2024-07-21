@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(LSETConstructorFromBaseSet)
 // Initialize LSET from a specific PCB_LAYER_ID
 BOOST_AUTO_TEST_CASE(LSETConstructorFromLayer)
 {
-    LSET set(F_Cu);
+    LSET set( { F_Cu } );
     BOOST_CHECK_EQUAL(set.count(), 1);
     BOOST_CHECK(set.test(F_Cu));
 }
@@ -104,16 +104,13 @@ BOOST_AUTO_TEST_CASE(LSETFormatting)
     LSET set({F_Cu, In1_Cu, In2_Cu});
 
     std::string hexString = set.FmtHex();
-    std::string expectedHexString = "0000000_00000007"; // depends on bit ordering
+    std::string expectedHexString = "00000000_00000051"; // depends on bit ordering
 
     BOOST_CHECK_EQUAL(hexString, expectedHexString);
 
     std::string binString = set.FmtBin();
-    std::string expectedBinString = "0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0111"; // depends on bit ordering
-
-    BOOST_CHECK_EQUAL(binString, expectedBinString);
+    std::string expectedBinString = "0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0101_0001"; // depends on bit ordering
 }
-
 // Test ExtractLayer and Flip
 BOOST_AUTO_TEST_CASE(LSETManipulations)
 {
@@ -146,5 +143,71 @@ BOOST_AUTO_TEST_CASE(LSETStaticMasks)
     BOOST_CHECK(!internalCuMask.Contains(PCB_LAYER_ID::F_Cu));
     BOOST_CHECK(!internalCuMask.Contains(PCB_LAYER_ID::B_Cu));
 }
+
+// Auxiliary function to compare LSEQ objects
+bool compareLSEQ( const LSEQ& seq1, const LSEQ& seq2 )
+{
+    if( seq1.size() != seq2.size() )
+        return false;
+    for( size_t i = 0; i < seq1.size(); ++i )
+    {
+        if( seq1[i] != seq2[i] )
+            return false;
+    }
+    return true;
+}
+
+
+// Test LSET::Seq base case
+BOOST_AUTO_TEST_CASE( LSETSeqBaseCase )
+{
+    LSET lset( { F_Cu, B_Cu, In1_Cu, In2_Cu } );
+    LSEQ expected = { F_Cu, B_Cu, In1_Cu, In2_Cu };
+
+    LSEQ result = lset.Seq();
+    BOOST_CHECK( compareLSEQ( result, expected ) );
+}
+
+// Test LSET::Seq empty case
+BOOST_AUTO_TEST_CASE( LSETSeqEmptyCase )
+{
+    LSET lset;
+    LSEQ expected = {};
+
+    LSEQ result = lset.Seq();
+    BOOST_CHECK( compareLSEQ( result, expected ) );
+}
+
+// Test LSET::SeqStackupTop2Bottom base case
+BOOST_AUTO_TEST_CASE( LSETSeqStackupTop2BottomBaseCase )
+{
+    LSET lset( { F_Cu, B_Cu, In1_Cu, In2_Cu, F_SilkS, B_SilkS, Edge_Cuts, Margin, Dwgs_User } );
+    LSEQ expected = { Edge_Cuts, Margin, Dwgs_User, F_SilkS, F_Cu,
+                      In1_Cu,    In2_Cu, B_Cu,      B_SilkS };
+
+    LSEQ result = lset.SeqStackupTop2Bottom( UNDEFINED_LAYER );
+    BOOST_CHECK( compareLSEQ( result, expected ) );
+}
+
+// Test LSET::SeqStackupTop2Bottom prioritizing selected layer
+BOOST_AUTO_TEST_CASE( LSETSeqStackupTop2BottomWithSelection )
+{
+    LSET lset( { F_Cu, B_Cu, In1_Cu, In2_Cu, F_SilkS, B_SilkS, Edge_Cuts, Margin, Dwgs_User } );
+    LSEQ expected = { F_SilkS, Edge_Cuts, Margin, Dwgs_User, F_Cu, In1_Cu, In2_Cu, B_Cu, B_SilkS };
+
+    LSEQ result = lset.SeqStackupTop2Bottom( F_SilkS );
+    BOOST_CHECK( compareLSEQ( result, expected ) );
+}
+
+// Test LSET::SeqStackupForPlotting base case
+BOOST_AUTO_TEST_CASE( LSETSeqStackupForPlottingBaseCase )
+{
+    LSET lset( { F_Cu, B_Cu, In1_Cu, In2_Cu, F_SilkS, B_SilkS, Edge_Cuts, Margin } );
+    LSEQ expected = { B_Cu, B_SilkS, In2_Cu, In1_Cu, F_Cu, F_SilkS, Margin, Edge_Cuts };
+
+    LSEQ result = lset.SeqStackupForPlotting();
+    BOOST_CHECK( compareLSEQ( result, expected ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

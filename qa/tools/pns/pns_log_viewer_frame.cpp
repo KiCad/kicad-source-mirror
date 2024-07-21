@@ -352,6 +352,12 @@ void PNS_LOG_VIEWER_FRAME::LoadLogFile( const wxString& aFile )
 }
 
 
+void PNS_LOG_VIEWER_FRAME::updateViewerIface()
+{
+    m_viewerIface = std::make_shared<PNS_VIEWER_IFACE>( m_board );
+}
+
+
 void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
 {
     m_logPlayer.reset( new PNS_LOG_PLAYER );
@@ -935,7 +941,7 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
         }
         else
         {
-            ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( ent.m_item, view );
+            ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( ent.m_item, m_viewerIface.get(), view );
             pitem->Update( ent.m_item );
             m_previewItems->Add(pitem);
     //        printf("DBG vadd %p total %d\n", pitem, m_previewItems->GetSize() );

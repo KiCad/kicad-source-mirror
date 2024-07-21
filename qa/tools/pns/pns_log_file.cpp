@@ -114,7 +114,7 @@ bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
     {
         int start = wxAtoi( aTokens.GetNextToken() );
         int end = wxAtoi( aTokens.GetNextToken() );
-        aItem->SetLayers( LAYER_RANGE( start, end ) );
+        aItem->SetLayers( PNS_LAYER_RANGE( start, end ) );
         return true;
     }
     return false;

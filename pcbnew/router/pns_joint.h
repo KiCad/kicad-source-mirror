@@ -67,7 +67,7 @@ public:
     JOINT() :
         ITEM( JOINT_T ), m_tag(), m_locked( false ) {}
 
-    JOINT( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet = nullptr ) :
+    JOINT( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet = nullptr ) :
         ITEM( JOINT_T )
     {
         m_tag.pos = aPos;

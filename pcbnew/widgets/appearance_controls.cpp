@@ -1908,7 +1908,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         break;
 
     case ID_HIDE_ALL_BUT_ACTIVE:
-        preset.layers = presetNoLayers.layers | LSET( current );
+        preset.layers = presetNoLayers.layers | LSET( { current } );
         ApplyLayerPreset( preset );
         break;
 

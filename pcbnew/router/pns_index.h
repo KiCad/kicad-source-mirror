@@ -144,7 +144,7 @@ int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor ) const
 
     wxCHECK( aItem->Kind() != ITEM::INVALID_T, 0 );
 
-    const LAYER_RANGE& layers = aItem->Layers();
+    const PNS_LAYER_RANGE& layers = aItem->Layers();
 
     for( int i = layers.Start(); i <= layers.End(); ++i )
         total += querySingle( i, aItem->Shape(), aMinDistance, aVisitor );

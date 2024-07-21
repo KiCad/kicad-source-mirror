@@ -660,7 +660,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
             aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection;
     }
 
-    for( PCB_LAYER_ID layer : LSET( aGerberJob->m_printMaskLayer ).UIOrder() )
+    for( PCB_LAYER_ID layer : LSET( { aGerberJob->m_printMaskLayer } ).UIOrder() )
     {
         LSEQ plotSequence;
 

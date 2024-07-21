@@ -1186,7 +1186,7 @@ PCB_GRID_HELPER::ANCHOR* PCB_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, i
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( a.item );
 
-        if( !m_magneticSettings->allLayers && ( ( aMatchLayers & item->GetLayerSet() ) == 0 ) )
+        if( !m_magneticSettings->allLayers && ( ( aMatchLayers & item->GetLayerSet() ).none() ) )
             continue;
 
         if( ( aFlags & a.flags ) != aFlags )

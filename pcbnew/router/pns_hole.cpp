@@ -133,7 +133,7 @@ HOLE* HOLE::MakeCircularHole( const VECTOR2I& pos, int radius )
     SHAPE_CIRCLE* circle = new SHAPE_CIRCLE( pos, radius );
     HOLE*         hole = new HOLE( circle );
 
-    hole->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+    hole->SetLayers( PNS_LAYER_RANGE( F_Cu, B_Cu ) );
     return hole;
 }
 
