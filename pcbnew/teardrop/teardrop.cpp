@@ -191,7 +191,7 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
 
         connectivity->GetConnectedPadsAndVias( track, &connectedPads, &connectedVias );
 
-        bool forceUpdate = aForceFullUpdate || dirtyTracks->contains( track );
+        bool forceUpdate = aForceFullUpdate || dirtyTracks->find( track ) != dirtyTracks->end();
 
         for( PAD* pad : connectedPads )
         {
