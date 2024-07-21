@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-07-20 21:09+0000\n"
+"PO-Revision-Date: 2024-07-22 00:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -41059,7 +41059,7 @@ msgstr "NPTH von %s"
 #: pcbnew/pad.cpp:1330
 #, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "PTH-Pad %s %s von %s"
+msgstr "Durchsteckpad %s %s von %s"
 
 #: pcbnew/pad.cpp:1876
 msgid "(Pad must have a positive size)"
