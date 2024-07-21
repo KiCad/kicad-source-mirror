@@ -117,9 +117,6 @@ principle should be easily implemented by adapting the current STL containers.
 // SWIG is incompatible with std::unique_ptr
 %ignore GetNewConfig;
 
-// wrapper of BASE_SEQ (see typedef std::vector<PCB_LAYER_ID> BASE_SEQ;)
-%template(base_seqVect) std::vector<enum PCB_LAYER_ID>;
-
 // TODO: wrapper of BASE_SET (see std::bitset<PCB_LAYER_ID_COUNT> BASE_SET;)
 
 

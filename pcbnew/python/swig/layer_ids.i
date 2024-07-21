@@ -37,7 +37,18 @@
 %ignore GAL_SET::set(int, bool);
 %ignore GAL_SET::set(int);
 
+%{
+#include <layer_ids.h>
+#include <lseq.h>
+#include <lset.h>
+#include <pcbnew_scripting_helpers.h>
+%}
+
+// wrapper of BASE_SEQ (see typedef std::vector<PCB_LAYER_ID> BASE_SEQ;)
+%template(base_seqVect) std::vector<enum PCB_LAYER_ID>;
+
 %include layer_ids.h
+%include lseq.h
 %include lset.h
 
 // Extend LSET by 2 methods to add or remove layers from the layer list
@@ -64,8 +75,3 @@
         return self.removeLayerSet( layers )
     %}
 }
-%{
-#include <layer_ids.h>
-#include <lset.h>
-#include <pcbnew_scripting_helpers.h>
-%}
