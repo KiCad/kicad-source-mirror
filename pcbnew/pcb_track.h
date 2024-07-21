@@ -112,8 +112,8 @@ public:
     VECTOR2I GetPosition() const override             { return m_Start; }
     const VECTOR2I GetFocusPosition() const override  { return ( m_Start + m_End ) / 2; }
 
-    void SetWidth( int aWidth )             { m_Width = aWidth; }
-    int GetWidth() const                    { return m_Width; }
+    virtual void SetWidth( int aWidth )             { m_Width = aWidth; }
+    virtual int GetWidth() const                    { return m_Width; }
 
     void SetEnd( const VECTOR2I& aEnd )     { m_End = aEnd; }
     const VECTOR2I& GetEnd() const          { return m_End; }
@@ -244,7 +244,7 @@ protected:
                                      std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 protected:
-    int      m_Width;        ///< Thickness of track, or via diameter
+    int      m_Width;        ///< Thickness of track
     VECTOR2I m_Start;        ///< Line start point
     VECTOR2I m_End;          ///< Line end point
 };
@@ -380,6 +380,9 @@ public:
     const PADSTACK& Padstack() const              { return m_padStack; }
     PADSTACK& Padstack()                          { return m_padStack; }
     void SetPadstack( const PADSTACK& aPadstack ) { m_padStack = aPadstack; }
+
+    void SetWidth( int aWidth ) override;
+    int GetWidth() const override;
 
     bool HasHole() const override
     {

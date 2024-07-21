@@ -119,7 +119,6 @@ PCB_VIA& PCB_VIA::operator=( const PCB_VIA &aOther )
 {
     BOARD_CONNECTED_ITEM::operator=( aOther );
 
-    m_Width = aOther.m_Width;
     m_Start = aOther.m_Start;
     m_End = aOther.m_End;
 
@@ -269,7 +268,6 @@ bool PCB_VIA::operator==( const PCB_VIA& aOther ) const
             && m_End == aOther.m_End
             && m_layer == aOther.m_layer
             && m_padStack == aOther.m_padStack
-            && m_Width == aOther.m_Width
             && m_viaType == aOther.m_viaType
             && m_zoneLayerOverrides == aOther.m_zoneLayerOverrides;
 }
@@ -285,9 +283,6 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
     double similarity = 1.0;
 
     if( m_layer != other.m_layer )
-        similarity *= 0.9;
-
-    if( m_Width != other.m_Width )
         similarity *= 0.9;
 
     if( m_Start != other.m_Start )
@@ -306,6 +301,18 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
         similarity *= 0.9;
 
     return similarity;
+}
+
+
+void PCB_VIA::SetWidth( int aWidth )
+{
+    m_padStack.Size() = { aWidth, aWidth };
+}
+
+
+int PCB_VIA::GetWidth() const
+{
+    return m_padStack.Size().x;
 }
 
 
@@ -399,10 +406,6 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     via.mutable_position()->set_y_nm( GetPosition().y );
 
     PADSTACK padstack = Padstack();
-
-    // Via width is currently stored in PCB_TRACK::m_Width rather than in the
-    // padstack object; so hack it in here unless/until that changes
-    padstack.Size() = { m_Width, m_Width };
 
     google::protobuf::Any padStackWrapper;
     padstack.Serialize( padStackWrapper );
@@ -1230,6 +1233,8 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( const BOARD* board = GetBoard() )
         visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
+    int width = GetWidth();
+
     // In high contrast mode don't show vias that don't cross the high-contrast layer
     if( renderSettings->GetHighContrast() )
     {
@@ -1287,13 +1292,13 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         }
 
         // Netnames will be shown only if zoom is appropriate
-        return m_Width == 0 ? HIDE : ( (double)pcbIUScale.mmToIU( 10 ) / m_Width );
+        return width == 0 ? HIDE : ( (double)pcbIUScale.mmToIU( 10 ) / width );
     }
 
     if( IsCopperLayer( aLayer ) )
-        return (double) pcbIUScale.mmToIU( 1 ) / m_Width;
+        return (double) pcbIUScale.mmToIU( 1 ) / width;
     else
-        return (double) pcbIUScale.mmToIU( 0.6 ) / m_Width;
+        return (double) pcbIUScale.mmToIU( 0.6 ) / width;
 }
 
 
@@ -1386,7 +1391,7 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
-    aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( m_Width ) );
+    aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( GetWidth() ) );
     aList.emplace_back( _( "Hole" ), aFrame->MessageTextFromValue( GetDrillValue() ) );
 
     wxString  source;
@@ -1486,7 +1491,7 @@ bool PCB_ARC::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 bool PCB_VIA::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    int max_dist = aAccuracy + ( m_Width / 2 );
+    int max_dist = aAccuracy + ( GetWidth() / 2 );
 
     // rel_pos is aPosition relative to m_Start (or the center of the via)
     VECTOR2I rel_pos = aPosition - m_Start;
@@ -1660,7 +1665,7 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
     if( aFlash == FLASHING::ALWAYS_FLASHED
             || ( aFlash == FLASHING::DEFAULT && FlashLayer( aLayer ) ) )
     {
-        return std::make_shared<SHAPE_CIRCLE>( m_Start, m_Width / 2 );
+        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetWidth() / 2 );
     }
     else
     {
@@ -1686,7 +1691,7 @@ void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
     {
     case PCB_VIA_T:
     {
-        int radius = ( m_Width / 2 ) + aClearance;
+        int radius = ( static_cast<const PCB_VIA*>( this )->GetWidth() / 2 ) + aClearance;
         TransformCircleToPolygon( aBuffer, m_Start, radius, aError, aErrorLoc );
         break;
     }
@@ -1774,9 +1779,8 @@ static struct TRACK_VIA_DESC
 
         propMgr.Mask( TYPE_HASH( PCB_VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) );
 
-        propMgr.ReplaceProperty( TYPE_HASH( PCB_TRACK ), _HKI( "Width" ),
-            new PROPERTY<PCB_VIA, int, PCB_TRACK>( _HKI( "Diameter" ),
-            &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Diameter" ),
+            &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
             &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Top" ),
