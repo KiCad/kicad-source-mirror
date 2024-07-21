@@ -215,6 +215,7 @@ private:
     static ERC_ITEM labelDangling;
     static ERC_ITEM globalLabelDangling;
     static ERC_ITEM singleGlobalLabel;
+    static ERC_ITEM sameLocalGlobalLabel;
     static ERC_ITEM similarLabels;
     static ERC_ITEM similarPower;
     static ERC_ITEM similarLabelAndPower;

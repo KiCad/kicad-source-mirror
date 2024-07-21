@@ -76,3 +76,41 @@ BOOST_FIXTURE_TEST_CASE( ERCLabelCapitalization, ERC_REGRESSION_TEST_FIXTURE )
                                          << reportWriter.GetTextReport() );
     }
 }
+
+
+BOOST_FIXTURE_TEST_CASE( ERCSameLocalGlobalLabel, ERC_REGRESSION_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    // Check for Errors when using rule area netclass directives
+    std::vector<std::pair<wxString, int>> tests = { { "same_local_global_label", 1 } };
+
+    for( const std::pair<wxString, int>& test : tests )
+    {
+        KI_TEST::LoadSchematic( m_settingsManager, test.first, m_schematic );
+
+        ERC_SETTINGS&                settings = m_schematic->ErcSettings();
+        SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+
+        // Skip the "Modified symbol" warning
+        settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+        settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+
+        // Configure the rules under test
+        settings.m_ERCSeverities[ERCE_SAME_LOCAL_GLOBAL_LABEL] = RPT_SEVERITY_ERROR;
+
+        m_schematic->ConnectionGraph()->RunERC();
+
+        ERC_TESTER tester( m_schematic.get() );
+        tester.TestSameLocalGlobalLabel();
+
+        errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+        ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MILLIMETRES );
+
+        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second,
+                             "Expected " << test.second << " errors in " << test.first.ToStdString()
+                                         << " but got " << errors.GetCount() << "\n"
+                                         << reportWriter.GetTextReport() );
+    }
+}

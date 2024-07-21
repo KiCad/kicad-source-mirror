@@ -52,6 +52,7 @@ enum ERCE_T
     ERCE_SIMILAR_POWER,           ///< 2 power pins are equal for case insensitive comparisons.
     ERCE_SIMILAR_LABEL_AND_POWER, ///< label and pin are equal for case insensitive comparisons.
     ERCE_SINGLE_GLOBAL_LABEL,     ///< A global label only exists once in the schematic.
+    ERCE_SAME_LOCAL_GLOBAL_LABEL, ///< 2 labels are equal for case insensitive comparisons.
     ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same symbol have different
                                   ///<   footprints assigned.
     ERCE_MISSING_POWER_INPUT_PIN, ///< Symbol has power input pins that are not placed on the

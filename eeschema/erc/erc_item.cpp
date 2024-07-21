@@ -128,6 +128,10 @@ ERC_ITEM ERC_ITEM::singleGlobalLabel( ERCE_SINGLE_GLOBAL_LABEL,
         _( "Global label only appears once in the schematic"),
         wxT( "single_global_label" ) );
 
+ERC_ITEM ERC_ITEM::sameLocalGlobalLabel( ERCE_SAME_LOCAL_GLOBAL_LABEL,
+        _( "Local and global labels have same name" ),
+        wxT( "same_local_global_label" ) );
+
 ERC_ITEM ERC_ITEM::differentUnitFootprint( ERCE_DIFFERENT_UNIT_FP,
         _( "Different footprint assigned in another unit of the symbol" ),
         wxT( "different_unit_footprint" ) );
@@ -238,6 +242,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::noConnectDangling,
             ERC_ITEM::globalLabelDangling,
             ERC_ITEM::singleGlobalLabel,
+            ERC_ITEM::sameLocalGlobalLabel,
             ERC_ITEM::wireDangling,
             ERC_ITEM::busEntryNeeded,
             ERC_ITEM::endpointOffGrid,
@@ -290,7 +295,6 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
         } );
 
 
-
 std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
 {
     switch( aErrorCode )
@@ -315,6 +319,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_SIMILAR_POWER:           return std::make_shared<ERC_ITEM>( similarPower );
     case ERCE_SIMILAR_LABEL_AND_POWER: return std::make_shared<ERC_ITEM>( similarLabelAndPower );
     case ERCE_SINGLE_GLOBAL_LABEL:     return std::make_shared<ERC_ITEM>( singleGlobalLabel );
+    case ERCE_SAME_LOCAL_GLOBAL_LABEL: return std::make_shared<ERC_ITEM>( sameLocalGlobalLabel );
     case ERCE_DIFFERENT_UNIT_FP:       return std::make_shared<ERC_ITEM>( differentUnitFootprint );
     case ERCE_DIFFERENT_UNIT_NET:      return std::make_shared<ERC_ITEM>( differentUnitNet );
     case ERCE_BUS_ALIAS_CONFLICT:      return std::make_shared<ERC_ITEM>( busDefinitionConflict );

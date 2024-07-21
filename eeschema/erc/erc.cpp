@@ -1082,6 +1082,65 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 }
 
 
+int ERC_TESTER::TestSameLocalGlobalLabel()
+{
+    int errCount = 0;
+
+    std::unordered_map<wxString, std::pair<SCH_ITEM*, SCH_SHEET_PATH>> globalLabels;
+    std::unordered_map<wxString, std::pair<SCH_ITEM*, SCH_SHEET_PATH>> localLabels;
+
+    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
+    {
+        for( CONNECTION_SUBGRAPH* subgraph : net.second )
+        {
+            const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
+
+            for( SCH_ITEM* item : subgraph->GetItems() )
+            {
+                switch( item->Type() )
+                {
+                case SCH_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                {
+                    SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+                    wxString        text = label->GetShownText( &sheet, false );
+
+                    auto& map = item->Type() == SCH_LABEL_T ? localLabels : globalLabels;
+
+                    if( !map.count( text ) )
+                    {
+                        map[text] = std::make_pair( label, sheet );
+                    }
+                }
+                }
+            }
+        }
+    }
+
+    for( auto& [globalText, globalItem] : globalLabels )
+    {
+        for( auto& [localText, localItem] : localLabels )
+        {
+            if( globalText == localText )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem =
+                        ERC_ITEM::Create( ERCE_SAME_LOCAL_GLOBAL_LABEL );
+                ercItem->SetItems( globalItem.first, localItem.first );
+                ercItem->SetSheetSpecificPath( globalItem.second );
+                ercItem->SetItemsSheetPaths( globalItem.second, localItem.second );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, globalItem.first->GetPosition() );
+                globalItem.second.LastScreen()->Append( marker );
+
+                errCount++;
+            }
+        }
+    }
+
+    return errCount;
+}
+
+
 int ERC_TESTER::TestSimilarLabels()
 {
     int errors = 0;
@@ -1652,12 +1711,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     // using case insensitive comparisons)
     if( m_settings.IsTestEnabled( ERCE_SIMILAR_LABELS )
         || m_settings.IsTestEnabled( ERCE_SIMILAR_POWER )
-        || m_settings.IsTestEnabled( ERCE_SIMILAR_LABEL_AND_POWER ) )
+        || m_settings.IsTestEnabled( ERCE_SIMILAR_LABEL_AND_POWER )
+        || m_settings.IsTestEnabled( ERCE_SAME_LOCAL_GLOBAL_LABEL ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking labels..." ) );
 
         TestSimilarLabels();
+        TestSameLocalGlobalLabel();
     }
 
     if( m_settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )

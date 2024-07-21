@@ -113,6 +113,12 @@ public:
     int TestMultUnitPinConflicts();
 
     /**
+     * Checks for global and local labels with the same name
+     * @return the error count
+     */
+    int TestSameLocalGlobalLabel();
+
+    /**
      * Checks for labels that differ only in capitalization
      * @return the error count
      */
