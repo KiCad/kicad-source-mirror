@@ -320,6 +320,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
     svgPlotOptions.m_negative = false;
     svgPlotOptions.m_blackAndWhite = m_printBW;
     svgPlotOptions.m_printMaskLayer = m_printMaskLayer;
+    svgPlotOptions.m_sketchPadsOnFabLayers = false;
     svgPlotOptions.m_pageSizeMode = m_rbSvgPageSizeOpt->GetSelection();
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
