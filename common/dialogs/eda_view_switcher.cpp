@@ -136,6 +136,10 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
+    else if( wxGetKeyState( WXK_ESCAPE ) )
+    {
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
+    }
 
     return DIALOG_SHIM::TryBefore( aEvent );
 }
