@@ -180,9 +180,9 @@ bool ALTIUM_PCB_COMPOUND_FILE::CacheLibModels()
             // We store the models in their original compressed form so as to speed the caching process
             // When we parse an individual footprint, we decompress and recompress the model data into
             // our format
-            m_libModelsCache.emplace( models[fileNumber].id,
-                                      std::make_pair( models[fileNumber],
-                                                      stepContent ) );
+            wxString modelName = models[fileNumber].id;
+            m_libModelsCache.emplace( modelName, std::make_pair( std::move( models[fileNumber] ),
+                                                                 std::move( stepContent ) ) );
             return 0;
         } );
 
