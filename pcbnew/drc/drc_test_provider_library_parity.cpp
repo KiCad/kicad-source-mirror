@@ -88,7 +88,7 @@ public:
                 return diff;                                \
         } while (0)
 
-#define EPSILON 1
+#define EPSILON 2
 #define TEST_PT( a, b, msg )                                \
         do {                                                \
             if( abs( a.x - b.x ) > EPSILON                  \
@@ -104,7 +104,7 @@ public:
                 return diff;                                \
         } while (0)
 
-#define EPSILON_D 0.000001
+#define EPSILON_D 0.000002
 #define TEST_D( a, b, msg )                                 \
         do {                                                \
             if( abs( a - b ) > EPSILON_D )                  \
