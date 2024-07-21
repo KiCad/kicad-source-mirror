@@ -98,7 +98,7 @@ protected:
                       wxString::Format( "Duplicate API handler for type %s", typeName ) );
 
         m_handlers[typeName] =
-                [this, &aHandler]( ApiRequest& aRequest ) -> API_RESULT
+                [this, aHandler]( ApiRequest& aRequest ) -> API_RESULT
                 {
                     RequestType cmd;
                     ApiResponse envelope;
