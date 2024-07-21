@@ -1387,6 +1387,7 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "FOOTPRINT_LIBRARY" ) );
     aVars->push_back( wxT( "FOOTPRINT_NAME" ) );
     aVars->push_back( wxT( "UNIT" ) );
+    aVars->push_back( wxT( "SHORT_REFERENCE" ) );
     aVars->push_back( wxT( "SYMBOL_LIBRARY" ) );
     aVars->push_back( wxT( "SYMBOL_NAME" ) );
     aVars->push_back( wxT( "SYMBOL_DESCRIPTION" ) );
@@ -1585,6 +1586,11 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     else if( token->IsSameAs( wxT( "UNIT" ) ) )
     {
         *token = SubReference( GetUnitSelection( aPath ) );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SHORT_REFERENCE" ) ) )
+    {
+        GetRef( aPath, false );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_LIBRARY" ) ) )
