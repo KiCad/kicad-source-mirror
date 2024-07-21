@@ -1121,6 +1121,8 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
         updateExclFromBoard = aProperty->Name() == _HKI( "Exclude From Board" );
         updateExclFromBOM = aProperty->Name() == _HKI( "Exclude From Bill of Materials" );
         updateDNP = aProperty->Name() == _HKI( "Do not Populate" );
+        updateOtherFields = false;
+        updatePins = false;
     }
 
     if( !updateValue
