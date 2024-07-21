@@ -1080,14 +1080,13 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             {
                 wxCHECK2( item, continue );
 
-                SCH_CONNECTION* connection = item->Connection();
-
-                wxCHECK2( connection, continue );
-
-                for( const std::shared_ptr<SCH_CONNECTION>& member : connection->AllMembers() )
+                if( SCH_CONNECTION* connection = item->Connection() )
                 {
-                    if( member )
-                        connNames.emplace( member->Name() );
+                    for( const std::shared_ptr<SCH_CONNECTION>& member : connection->AllMembers() )
+                    {
+                        if( member )
+                            connNames.emplace( member->Name() );
+                    }
                 }
             }
         }
@@ -1106,50 +1105,44 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            wxCHECK2( symbol, continue );
-
             for( SCH_PIN* pin : symbol->GetPins() )
             {
-                SCH_CONNECTION* pin_conn = pin->Connection();
-
-                wxCHECK2( pin_conn, continue );
-
-                if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
+                if( SCH_CONNECTION* pin_conn = pin->Connection() )
                 {
-                    pin->SetBrightened();
-                    redrawItem = symbol;
-                }
-                else if( pin->IsBrightened() && !connNames.count( pin_conn->Name() ) )
-                {
-                    pin->ClearBrightened();
-                    redrawItem = symbol;
+                    if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
+                    {
+                        pin->SetBrightened();
+                        redrawItem = symbol;
+                    }
+                    else if( pin->IsBrightened() && !connNames.count( pin_conn->Name() ) )
+                    {
+                        pin->ClearBrightened();
+                        redrawItem = symbol;
+                    }
                 }
             }
 
-            if( symbol->IsPower() )
+            if( symbol->IsPower() && symbol->GetPins().size() )
             {
-                wxCHECK2( symbol->GetPins().size(), continue );
-
-                SCH_CONNECTION* pinConn = symbol->GetPins()[0]->Connection();
-
-                wxCHECK2( pinConn, continue );
-
-                std::vector<SCH_FIELD>& fields = symbol->GetFields();
-
-                for( int id : { REFERENCE_FIELD, VALUE_FIELD } )
+                if( SCH_CONNECTION* pinConn = symbol->GetPins()[0]->Connection() )
                 {
-                    if( !fields[id].IsVisible() )
-                        continue;
+                    std::vector<SCH_FIELD>& fields = symbol->GetFields();
 
-                    if( !fields[id].IsBrightened() && connNames.count( pinConn->Name() ) )
+                    for( int id : { REFERENCE_FIELD, VALUE_FIELD } )
                     {
-                        fields[id].SetBrightened();
-                        redrawItem = symbol;
-                    }
-                    else if( fields[id].IsBrightened() && !connNames.count( pinConn->Name() ) )
-                    {
-                        fields[id].ClearBrightened();
-                        redrawItem = symbol;
+                        if( !fields[id].IsVisible() )
+                            continue;
+
+                        if( !fields[id].IsBrightened() && connNames.count( pinConn->Name() ) )
+                        {
+                            fields[id].SetBrightened();
+                            redrawItem = symbol;
+                        }
+                        else if( fields[id].IsBrightened() && !connNames.count( pinConn->Name() ) )
+                        {
+                            fields[id].ClearBrightened();
+                            redrawItem = symbol;
+                        }
                     }
                 }
             }
@@ -1158,43 +1151,39 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
-            wxCHECK2( sheet, continue );
-
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
                 wxCHECK2( pin, continue );
 
-                SCH_CONNECTION* pin_conn = pin->Connection();
-
-                wxCHECK2( pin_conn, continue );
-
-                if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
+                if( SCH_CONNECTION* pin_conn = pin->Connection() )
                 {
-                    pin->SetBrightened();
-                    redrawItem = sheet;
-                }
-                else if( pin->IsBrightened() && !connNames.count( pin_conn->Name() ) )
-                {
-                    pin->ClearBrightened();
-                    redrawItem = sheet;
+                    if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
+                    {
+                        pin->SetBrightened();
+                        redrawItem = sheet;
+                    }
+                    else if( pin->IsBrightened() && !connNames.count( pin_conn->Name() ) )
+                    {
+                        pin->ClearBrightened();
+                        redrawItem = sheet;
+                    }
                 }
             }
         }
         else
         {
-            SCH_CONNECTION* itemConn = item->Connection();
-
-            wxCHECK2( itemConn, continue );
-
-            if( !item->IsBrightened() && connNames.count( itemConn->Name() ) )
+            if( SCH_CONNECTION* itemConn = item->Connection() )
             {
-                item->SetBrightened();
-                redrawItem = item;
-            }
-            else if( item->IsBrightened() && !connNames.count( itemConn->Name() ) )
-            {
-                item->ClearBrightened();
-                redrawItem = item;
+                if( !item->IsBrightened() && connNames.count( itemConn->Name() ) )
+                {
+                    item->SetBrightened();
+                    redrawItem = item;
+                }
+                else if( item->IsBrightened() && !connNames.count( itemConn->Name() ) )
+                {
+                    item->ClearBrightened();
+                    redrawItem = item;
+                }
             }
         }
 
