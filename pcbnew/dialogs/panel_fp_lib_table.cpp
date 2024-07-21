@@ -1128,16 +1128,12 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
         if( *global_model() != *m_globalTable )
         {
             m_parent->m_GlobalTableChanged = true;
-
-            m_globalTable->Clear();
             m_globalTable->TransferRows( global_model()->m_rows );
         }
 
         if( project_model() && *project_model() != *m_projectTable )
         {
             m_parent->m_ProjectTableChanged = true;
-
-            m_projectTable->Clear();
             m_projectTable->TransferRows( project_model()->m_rows );
         }
 

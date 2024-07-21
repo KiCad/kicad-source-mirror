@@ -607,7 +607,6 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
         }
     }
 
-    aTable.Clear();
     aTable.Load( fn.GetFullPath() );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();

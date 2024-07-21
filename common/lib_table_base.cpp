@@ -128,7 +128,7 @@ LIB_TABLE::~LIB_TABLE()
 }
 
 
-void LIB_TABLE::Clear()
+void LIB_TABLE::clear()
 {
     m_rows.clear();
     m_rowsMap.clear();
@@ -406,6 +406,7 @@ void LIB_TABLE::TransferRows( LIB_TABLE_ROWS& aRowsList )
 {
     std::lock_guard<std::shared_mutex> lock( m_mutex );
 
+    clear();
     m_rows.transfer( m_rows.end(), aRowsList.begin(), aRowsList.end(), aRowsList );
 
     reindex();
@@ -451,6 +452,9 @@ bool LIB_TABLE::migrate()
 
 void LIB_TABLE::Load( const wxString& aFileName )
 {
+    std::shared_lock<std::shared_mutex> lock( m_mutex );
+    clear();
+
     // It's OK if footprint library tables are missing.
     if( wxFileName::IsFileReadable( aFileName ) )
     {
@@ -461,6 +465,8 @@ void LIB_TABLE::Load( const wxString& aFileName )
 
         if( m_version != 7 && migrate() && wxFileName::IsFileWritable( aFileName ) )
             Save( aFileName );
+
+        reindex();
     }
 }
 

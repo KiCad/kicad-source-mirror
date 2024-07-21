@@ -235,19 +235,6 @@ BOOST_AUTO_TEST_CASE( EmptyWithFallback )
 
 
 /**
- * Check table clearing function
- */
-BOOST_AUTO_TEST_CASE( Clear )
-{
-    m_mainTableNoFb.Clear();
-
-    // Tables start out empty
-    BOOST_CHECK_EQUAL( m_mainTableNoFb.GetCount(), 0 );
-    BOOST_CHECK_EQUAL( true, m_mainTableNoFb.IsEmpty() );
-}
-
-
-/**
  * Check table equality function
  */
 BOOST_AUTO_TEST_CASE( Equal )

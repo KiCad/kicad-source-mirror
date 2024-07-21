@@ -556,10 +556,9 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     // Load the global fp-lib-table otherwise we can't check the libs parity
     wxFileName  fn_flp = FP_LIB_TABLE::GetGlobalTableFileName();
-    if( fn_flp.FileExists() ) {
-        GFootprintTable.Clear();
+
+    if( fn_flp.FileExists() )
         GFootprintTable.Load( fn_flp.GetFullPath() );
-    }
 
     wxString drcRulesPath = prj->AbsolutePath( fn.GetFullName() );
 
