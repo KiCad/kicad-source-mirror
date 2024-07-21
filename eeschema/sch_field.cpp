@@ -1017,33 +1017,49 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 
 void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    if( GetTextAngle().IsVertical() && GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-    {
-        if( aRotateCCW )
-            SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+    const GR_TEXT_H_ALIGN_T horizJustify = GetHorizJustify();
 
+    if( GetTextAngle().IsVertical() )
+    {
+        switch( horizJustify )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            if( aRotateCCW )
+                SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+
+            break;
+        case GR_TEXT_H_ALIGN_RIGHT:
+            if( aRotateCCW )
+                SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+        case GR_TEXT_H_ALIGN_CENTER:
+        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+        }
         SetTextAngle( ANGLE_HORIZONTAL );
     }
-    else if( GetTextAngle().IsVertical() && GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+    else if( GetTextAngle().IsHorizontal() )
     {
-        if( aRotateCCW )
-            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-        SetTextAngle( ANGLE_HORIZONTAL );
-    }
-    else if( GetTextAngle().IsHorizontal() && GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-    {
-        if( !aRotateCCW )
-            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
+        switch( horizJustify )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            if( !aRotateCCW )
+                SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+        case GR_TEXT_H_ALIGN_RIGHT:
+            if( !aRotateCCW )
+                SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+        case GR_TEXT_H_ALIGN_CENTER:
+        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+        }
         SetTextAngle( ANGLE_VERTICAL );
     }
-    else if( GetTextAngle().IsHorizontal() && GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+    else
     {
-        if( !aRotateCCW )
-            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-        SetTextAngle( ANGLE_VERTICAL );
+        wxASSERT_MSG(
+                false,
+                wxString::Format( wxT( "SCH_FIELD text angle is not horizontal or vertical: %d" ),
+                                  GetTextAngle().AsDegrees() ) );
     }
 
     VECTOR2I pt = GetPosition();
