@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-07-20 21:09+0000\n"
+"PO-Revision-Date: 2024-07-22 00:09+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v8/tr/>\n"
 "Language: tr\n"
@@ -8161,14 +8161,12 @@ msgid "Grid thickness:"
 msgstr "Izgara kalınlığı:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
-msgstr "En az ızgara aralığı:"
+msgstr "En düşük ızgara aralığı:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Izgaraya Yasla:"
+msgstr "Izgaraya hizala:"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -8191,14 +8189,12 @@ msgid "Never"
 msgstr "Hiçbir Zaman"
 
 #: common/widgets/gal_options_panel_base.cpp:132
-#, fuzzy
 msgid "Small crosshairs"
-msgstr "Küçük artı"
+msgstr "Küçük çapraz işaretler"
 
 #: common/widgets/gal_options_panel_base.cpp:135
-#, fuzzy
 msgid "Full window crosshairs"
-msgstr "Tam pencere artı"
+msgstr "Tam pencere çapraz işaretler"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
@@ -8217,9 +8213,8 @@ msgid "Sort by Best Match"
 msgstr "En İyi Eşleşmeye Göre Sırala"
 
 #: common/widgets/lib_tree.cpp:100
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Dikey"
+msgstr "Alfabetik Sırala"
 
 #: common/widgets/lib_tree.cpp:382
 msgid "recent searches"
@@ -8275,14 +8270,12 @@ msgid "Reset to Defaults"
 msgstr "Varsayılanlara Sıfırla"
 
 #: common/widgets/paged_dialog.cpp:90
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Finder'da Temaları Göster"
+msgstr "Arayıcı'da Tercihleri Göster"
 
 #: common/widgets/paged_dialog.cpp:92
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Tercihleri Aç"
+msgstr "Tercihler Dizini'ni Aç"
 
 #: common/widgets/paged_dialog.cpp:336
 #, c-format
@@ -8327,9 +8320,8 @@ msgid "Current key:"
 msgstr "Geçerli tuş:"
 
 #: common/widgets/widget_hotkey_list.cpp:130
-#, fuzzy
 msgid "Clear assigned hotkey"
-msgstr "Atanan Kısayol Tuşunu Temizle"
+msgstr "Atanan kısayolu temizle"
 
 #: common/widgets/widget_hotkey_list.cpp:154
 msgid "Set Hotkey"
@@ -8345,9 +8337,8 @@ msgid "Edit..."
 msgstr "Düzenle..."
 
 #: common/widgets/widget_hotkey_list.cpp:451
-#, fuzzy
 msgid "Edit Alternate..."
-msgstr "Ayak izi..."
+msgstr "Alternatifini Düzenle..."
 
 #: common/widgets/widget_hotkey_list.cpp:452
 msgid "Undo Changes"
@@ -8358,14 +8349,12 @@ msgid "Clear Assigned Hotkey"
 msgstr "Atanan Kısayol Tuşunu Temizle"
 
 #: common/widgets/widget_hotkey_list.cpp:454
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Atanan Kısayol Tuşunu Temizle"
+msgstr "Atanan Alternatifi Temizle"
 
 #: common/widgets/widget_hotkey_list.cpp:455
-#, fuzzy
 msgid "Restore Defaults"
-msgstr "Varsayılanı Geri Yükle"
+msgstr "Varsayılanları Geri Yükle"
 
 #: common/widgets/widget_hotkey_list.cpp:495
 #, c-format
@@ -8395,9 +8384,8 @@ msgstr "Kısayol tuşu"
 #: common/widgets/widget_hotkey_list.cpp:528
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47 eeschema/lib_item.cpp:61
 #: eeschema/symbol_editor/symbol_editor.cpp:1281
-#, fuzzy
 msgid "Alternate"
-msgstr "Alternatif Pin Adı"
+msgstr "Alternatif"
 
 #: common/widgets/wx_html_report_panel.cpp:192
 #: common/widgets/wx_html_report_panel.cpp:213
@@ -8420,9 +8408,8 @@ msgstr "Bilgi:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:652
 #: pcbnew/dialogs/dialog_drc.cpp:909
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2290
-#, fuzzy
 msgid "Save Report File"
-msgstr "Raporu Dosyaya Kaydet"
+msgstr "Rapor Dosyasını Kaydet"
 
 #: common/widgets/wx_html_report_panel.cpp:387
 #, c-format
@@ -8530,9 +8517,8 @@ msgid "KiCad netlist files"
 msgstr "KiCad netlist dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "KiCad netlist dosyaları"
+msgstr "Allegro parça listesi dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -8592,9 +8578,8 @@ msgid "PostScript files"
 msgstr "PostScript dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:383
-#, fuzzy
 msgid "Json files"
-msgstr "Dosya yok"
+msgstr "Json dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:389
 msgid "Report files"
@@ -8805,9 +8790,9 @@ msgid "Filtered by %s"
 msgstr "%s tarafından filtrelendi"
 
 #: cvpcb/cvpcb_mainframe.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Ayak izi ata"
+msgstr ": %i eşleşen bacak çizimleri"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
 #, c-format
@@ -8864,31 +8849,26 @@ msgid "File '%s' already exists in list."
 msgstr "'%s' dosyası listede zaten var."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
-#, fuzzy
 msgid "Footprint association files:"
-msgstr "Ayak İzi İlişkilendirme Dosyası"
+msgstr "Bacak çizimi ilişkilendirme dosyaları:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
-#, fuzzy
 msgid "Add association file"
-msgstr "Ayak İzi İlişkilendirme Dosyası"
+msgstr "İlişkilendirme dosyası ekle"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
-#, fuzzy
 msgid "Edit association file"
-msgstr "Ayak İzi İlişkilendirme Dosyası"
+msgstr "İlişkilendirme dosyasını düzenle"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:61
-#, fuzzy
 msgid "Remove association file"
-msgstr "İlişkilendirmeyi sil"
+msgstr "İlişkilendirme dosyasını kaldır"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:163
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Kullanılabilir yollar:"
+msgstr "Kullanılabilir yol değişiklikleri:"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -9021,18 +9001,17 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "Ayak izi görüntüleyicide seçilen ayak izini görüntüleyin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Footprint İlişkilendirme Dosyalarını Yönetin"
+msgstr "Bacak Çizimi İlişkilendirme Dosyalarını Yönet..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Ayak izi ilişkilendirma dosyası (.equ) listesini yapılandırın.  Bu dosyalar, "
-"sembol değerlerinden otomatik olarak ayak izi adları atamak için kullanılır."
+"Bacak çizimi ilişkilendirme dosyalarının listesini düzenleyin. Bu dosyalar, "
+"simge değerlerinden bacak çizimi isimlerini otomatik olarak atamak için "
+"kullanılır."
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save to Schematic"
@@ -9129,9 +9108,8 @@ msgid "Delete all associations?"
 msgstr "Tüm atamaları silin?"
 
 #: eeschema/annotate.cpp:155
-#, fuzzy
 msgid "Delete Annotation"
-msgstr "Numaralandırmayı Temizle"
+msgstr "Açıklamayı Sil"
 
 #: eeschema/annotate.cpp:259
 #, c-format
@@ -9343,9 +9321,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr "Ürün reçetesi oluşturmak için tam numaralandırılmış bir şema gerekir."
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Dosya oluşturulamadı."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -9649,14 +9626,12 @@ msgid "Update"
 msgstr "Güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:432
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Sembol Alanlarını Güncelle..."
+msgstr "Sembolleri Güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:539
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** sembol bulunamadı ***"
+msgstr "*** Kriterlere uyan sembol bulunamadı ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:576
 msgid "*** symbol not found ***"
@@ -9765,9 +9740,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Sembol özniteliklerini güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Güç simgesi olarak tanımla"
+msgstr "Özelleştirilmiş güç sembollerini sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -9778,37 +9752,34 @@ msgid "Connected to database successfully"
 msgstr "Veritabanına başarıyla bağlandı"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Ayak izi %s bölge bağlantısı: %s."
+msgstr "Veritabanı bağlantısı başarısız: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Ped bağlantısı:"
+msgstr "Veritabanına bağlantı yok"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Sembol Kitaplıkları Yükleniyor"
+msgstr "%zu kütüphane yüklendi"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
 msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Ağ adları"
+msgstr "Kullanıcı adı:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Şifre:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "Bağlayıcı:"
+msgstr "Bağlantı Dizesi:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:202
@@ -9818,24 +9789,20 @@ msgid "Libraries"
 msgstr "kütüphaneler"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "Kullanıcı yapılandırması"
+msgstr "Yapılandırmayı Yeniden Yükle"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "KiCad sembol kitaplığı dosyaları"
+msgstr "Veritabanı kütüphanesi yapılandırma dosyasını yeniden yükle"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Aranıyor..."
+msgstr "Önbelleğe alınıyor"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Sayfa boyutu:"
+msgstr "Önbellek boyutu:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
@@ -9843,9 +9810,8 @@ msgid "How many database queries to cache"
 msgstr "Kaç veritabanı sorgusu önbelleğe alınacak"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "Önbelleğe Alınmış Simge:"
+msgstr "Önbellek zaman aşımı:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -9853,9 +9819,8 @@ msgid "Time in seconds that database queries will be cached for"
 msgstr "Veritabanı sorgularının önbelleğe alınacağı saniye cinsinden süre"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "KiCad sembol kitaplığı dosyaları"
+msgstr "Veritabanı Kütüphane Ayarları"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:546
 #, c-format
@@ -10007,6 +9972,7 @@ msgid "It will be placed back in the %s list"
 msgstr "%s listesine geri yerleştirilecektir"
 
 #: eeschema/dialogs/dialog_erc.cpp:612 pcbnew/dialogs/dialog_drc.cpp:638
+#, fuzzy
 msgid "Exclude this violation"
 msgstr "Bu ihlali hariç tut"
 
@@ -10021,10 +9987,10 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Tüm '%s' ihlalleri için önem derecesini Hataya değiştirme"
 
 #: eeschema/dialogs/dialog_erc.cpp:627 eeschema/dialogs/dialog_erc.cpp:633
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "İhlal önemleri Pano Kurulumu'nda da düzenlenebilir... Iletişim"
+msgstr ""
+"İhlal şiddetleri ayrıca Şematik Ayarları... penceresinde de düzenlenebilir"
 
 #: eeschema/dialogs/dialog_erc.cpp:631 pcbnew/dialogs/dialog_drc.cpp:685
 #, c-format
@@ -10053,9 +10019,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Şematik Kurulum... iletişim kutusunu açın"
 
 #: eeschema/dialogs/dialog_erc.cpp:654
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "En az ızgara aralığı:"
+msgstr "Bağlantı ızgara aralığını düzenle..."
 
 #: eeschema/dialogs/dialog_erc.cpp:751
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -10133,21 +10098,20 @@ msgstr "Panoda vurgulamak için öğelere tıklayın."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:90
 #: pcbnew/dialogs/dialog_drc_base.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "İhlaller"
+msgstr "İhlaller (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:98
 #: pcbnew/dialogs/dialog_drc_base.cpp:148
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Yoksayılan ihlalleri düzenle..."
+msgstr "Yoksayılan testleri düzenle..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:108
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Yoksayılan Testler (%d)"
+msgstr "Yoksayılan Testler (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:148
 #: pcbnew/dialogs/dialog_drc_base.cpp:198
@@ -10172,21 +10136,18 @@ msgstr "Ağ Listesini Dışa Aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:301
 #: eeschema/dialogs/dialog_export_netlist.cpp:351
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Yalnızca geçerli sayfa"
+msgstr "Geçerli sayfayı kök olarak kullan"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:302
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Diğer sayfalara aktar"
+msgstr "Sadece geçerli sayfa için parça listesini dışa aktar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:307
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Tüm değişiklikleri kaydet"
+msgstr "Tüm voltajları kaydet"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:308
 msgid "Write a directive to save all voltages (.save all)"
@@ -10194,9 +10155,8 @@ msgstr "Tüm gerilimleri kaydetmek için bir yönerge yazın (.tümünü kaydet)
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
 #: eeschema/dialogs/dialog_sim_command_base.cpp:650
-#, fuzzy
 msgid "Save all currents"
-msgstr "Tüm değişiklikleri kaydet"
+msgstr "Tüm akımları kaydet"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:314
 msgid "Write a directive to save all currents (.probe alli)"
@@ -10204,9 +10164,8 @@ msgstr "Tüm akımları kaydetmek için bir yönerge yazın (.alli'yi araştır�
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:319
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Standart sapma:"
+msgstr "Tüm güç tüketimlerini kaydet"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 msgid ""
@@ -10216,20 +10175,18 @@ msgstr ""
 "p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:326
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Harici simülatör komutu:"
+msgstr "Dış simülatör komutunu çalıştır:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:328
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Spice çalıştırmak için komut satırını girin\n"
-"Genellikle <spice yolu > %I\n"
-"%I spice netlist adı ile değiştirilecek"
+"SPICE'i çalıştırmak için komut satırını girin.  \n"
+"Genellikle '<SPICE ikili dosyasının yolu> \"%I\"' şeklindedir.  \n"
+"%I, parça listesi dosya yoluyla değiştirilecektir."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:401
 msgid "Netlist command:"
@@ -10250,9 +10207,8 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "Ağlistesi vermek için tam numaralandırılmış bir şema gerekir."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:606
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Harici simülatör komutu:"
+msgstr "Dış simülatör bulunamadı"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:607
 msgid ""
@@ -10327,18 +10283,16 @@ msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:94
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:320
-#, fuzzy
 msgid "Show field name"
-msgstr "Bacak adını göster"
+msgstr "Alan adını göster"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:96
 msgid "Show the field name in addtion to its value"
 msgstr "Alan adını değerine ek olarak göster"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
-#, fuzzy
 msgid "Allow automatic placement"
-msgstr "otomatik yerleştirilmiş"
+msgstr "Otomatik yerleştirmeye izin ver"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:106
 msgid "Allow automatic placement of this field in the schematic"
@@ -10495,9 +10449,8 @@ msgid "Text Item Properties"
 msgstr "Metin Öğesi Özellikleri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:597
-#, fuzzy
 msgid "Edit Text and Graphics"
-msgstr "Metin ve Grafik Özelliklerini Düzenle"
+msgstr "Metin ve Grafikleri Düzenle"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -10512,9 +10465,8 @@ msgid "Buses && bus labels"
 msgstr "Veri yolu ve veri yolu etiketleri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Sembol alanları"
+msgstr "Alan adlarını etiketle"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -10534,9 +10486,8 @@ msgid "Filters"
 msgstr "Filtreler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Öğeleri ağalara göre filtreleyin:"
+msgstr "Alan adlarına göre filtrele:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
@@ -10569,18 +10520,16 @@ msgstr "Öğeleri ağalara göre filtreleyin:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:91
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
-#, fuzzy
 msgid "Selected items only"
-msgstr "Yalnızca &seçim"
+msgstr "Sadece seçili öğeler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
 msgstr "Ayarla"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:189
-#, fuzzy
 msgid "Text color:"
-msgstr "Ağ renkleri:"
+msgstr "Yazı rengi:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/lib_pin.cpp:1658 eeschema/pin_type.cpp:114
@@ -10600,27 +10549,23 @@ msgid "-- leave unchanged --"
 msgstr "-- değiştirilmemiş bırak --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "Görünür (yalnızca alanlar)"
+msgstr "(yalnızca etiketler)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
-#, fuzzy
 msgid "H Align:"
-msgstr "Y Hizala"
+msgstr "Yatay Hizalama:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:289
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:299
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:313
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:323
-#, fuzzy
 msgid "(fields only)"
-msgstr "Görünür (yalnızca alanlar)"
+msgstr "(sadece alanlar)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
-#, fuzzy
 msgid "V Align:"
-msgstr "D Hizala"
+msgstr "Dikey Hizala:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:354
@@ -10693,15 +10638,15 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "'%s' genel kütüphane tablo yolu oluşturulamıyor."
+msgstr "Küresel kütüphane tablosu '%s' oluşturulamıyor."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr ""
-"Global sembol kitaplığı tablo dosyası '%s', '%s' dosyasına kopyalanamıyor."
+"Küresel sembol kütüphane tablosu '%s' '%s' olarak kopyalanırken hata oluştu."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
@@ -15088,6 +15033,8 @@ msgstr "Çıktı yolu mevcut yolla çakışmamalıdır\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Eski ve KiCad dışı kütüphaneleri dönüştürmek için çıkış yolu belirtilmelidir."
+"\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -15546,6 +15493,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' bir KiCad şematik dosyası değil.\n"
+"KiCad dışı şematik dosyaları için Dosya -> İçeri Aktar seçeneğini kullanın."
 
 #: eeschema/files-io.cpp:274
 msgid "Root"
@@ -24979,6 +24928,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Duyurulan yeni sürüm için güncelleme bildirimini yoksayar. Daha yeni "
+"sürümler için ek güncelleme notları görüntülenecektir."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -24989,10 +24940,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Bu güncelleme bildirimini kapat. Güncelleme bildirimi, KiCad'i yeniden "
+"başlattığınızda tekrar gösterilecektir."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Bir web tarayıcısını sürüm duyuruları sayfasını açacak şekilde başlat."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 #, fuzzy
@@ -25001,7 +24954,7 @@ msgstr "İndirme boyutu"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Platforma uygun indirme sayfasına gidin."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 #, fuzzy
@@ -43081,7 +43034,7 @@ msgstr "Çokgenler yükleniyor..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "Poligon konturu sayısı %d, beklenen 1."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -43318,7 +43271,7 @@ msgstr "Altium %d katmanında barkod yok sayıldı (henüz desteklenmiyor)."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4120
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "Bilinmeyen metin kutusu hizalaması %d, metin %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4185
 msgid "Loading rectangles..."
@@ -46026,7 +45979,7 @@ msgstr "Seçimden Oluştur"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "Elde edilen çokgen boş olacak"
 
 #: pcbnew/tools/convert_tool.cpp:437
 #, fuzzy
