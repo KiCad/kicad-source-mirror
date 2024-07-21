@@ -1969,6 +1969,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& a
         tempSymbol->SetShowPinNumbers( false );
     }
 
+    // Update aSymbol just to keep lint happy.
     aSymbol = tempSymbol.release();
 }
 
