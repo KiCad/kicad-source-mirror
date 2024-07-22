@@ -84,8 +84,26 @@ void ZONES_CONTAINER::OnUserConfirmChange()
     FlushZoneSettingsChange();
     FlushPriorityChange();
 
-    for( auto& [ zone, zoneClone ] : m_zonesCloneMap )
+    for( auto& [zone, zoneClone] : m_zonesCloneMap )
+    {
+        std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> filled_zone_to_restore;
+        zone->GetLayerSet().RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+                    if( fill )
+                    {
+                        filled_zone_to_restore[layer] = fill;
+                    }
+                } );
+
         *zone = *zoneClone;
+
+        for( auto& it : filled_zone_to_restore )
+        {
+            zone->SetFilledPolysList( it.first, *it.second.get() );
+        }
+    }
 }
 
 void ZONES_CONTAINER::FlushZoneSettingsChange()
