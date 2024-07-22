@@ -354,6 +354,35 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 canvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
 
+    KIGFX::VIEW*         view = m_toolMgr->GetView();
+    RENDER_SETTINGS*     settings = view->GetPainter()->GetSettings();
+    const std::set<int>& activeLayers = settings->GetHighContrastLayers();
+    bool                 isHighContrast = settings->GetHighContrast();
+
+    auto checkVisibility =
+            [&]( BOARD_ITEM* item )
+            {
+                if( !view->IsVisible( item ) )
+                    return false;
+
+                bool onActiveLayer = !isHighContrast;
+                bool isLODVisible = false;
+
+                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                {
+                    if( !onActiveLayer && activeLayers.count( layer ) )
+                        onActiveLayer = true;
+
+                    if( !isLODVisible && item->ViewGetLOD( layer, view ) < view->GetScale() )
+                        isLODVisible = true;
+
+                    if( onActiveLayer && isLODVisible )
+                        return true;
+                }
+
+                return false;
+            };
+
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
@@ -436,7 +465,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 {
                     PAD* pad = static_cast<PAD*>( collector[i] );
 
-                    if( !pad->IsAperturePad() )
+                    if( !pad->IsAperturePad() && checkVisibility( pad ) )
                         selectedPads.push_back( pad );
                 }
             }
