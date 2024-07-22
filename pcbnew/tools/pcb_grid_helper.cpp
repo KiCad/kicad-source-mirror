@@ -548,6 +548,30 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
     bool                 isHighContrast = settings->GetHighContrast();
 
+    auto checkVisibility =
+            [&]( BOARD_ITEM* item )
+            {
+                if( !view->IsVisible( item ) )
+                    return false;
+
+                bool onActiveLayer = !isHighContrast;
+                bool isLODVisible = false;
+
+                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                {
+                    if( !onActiveLayer && activeLayers.count( layer ) )
+                        onActiveLayer = true;
+
+                    if( !isLODVisible && item->ViewGetLOD( layer, view ) < view->GetScale() )
+                        isLODVisible = true;
+
+                    if( onActiveLayer && isLODVisible )
+                        return true;
+                }
+
+                return false;
+            };
+
     // As defaults, these are probably reasonable to avoid spamming key points
     const OVAL_KEY_POINT_FLAGS ovalKeyPointFlags = OVAL_CENTER
                                                     | OVAL_CAP_TIPS
@@ -774,27 +798,13 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         continue;
                 }
 
-                if( !view->IsVisible( pad ) || !pad->GetBoundingBox().Contains( aRefPos ) )
+                if( !checkVisibility( pad ) )
                     continue;
 
-                // Getting pads from a footprint requires re-checking that the pads are shown
-                bool onActiveLayer = !isHighContrast;
-                bool isLODVisible = false;
+                if( !pad->GetBoundingBox().Contains( aRefPos ) )
+                    continue;
 
-                for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
-                {
-                    if( !onActiveLayer && activeLayers.count( layer ) )
-                        onActiveLayer = true;
-
-                    if( !isLODVisible && pad->ViewGetLOD( layer, view ) < view->GetScale() )
-                        isLODVisible = true;
-
-                    if( onActiveLayer && isLODVisible )
-                    {
-                        handlePadShape( pad );
-                        break;
-                    }
-                }
+                handlePadShape( pad );
             }
 
             if( aFrom && aSelectionFilter && !aSelectionFilter->footprints )
@@ -826,10 +836,10 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
             }
 
-            handlePadShape( static_cast<PAD*>( aItem ) );
+            if( checkVisibility( aItem ) )
+                handlePadShape( static_cast<PAD*>( aItem ) );
 
             break;
-        }
 
         case PCB_TEXTBOX_T:
             if( aFrom )
@@ -843,7 +853,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
             }
 
-            handleShape( static_cast<PCB_SHAPE*>( aItem ) );
+            if( checkVisibility( aItem ) )
+                handleShape( static_cast<PCB_SHAPE*>( aItem ) );
+
             break;
 
         case PCB_SHAPE_T:
@@ -858,12 +870,13 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
             }
 
-            handleShape( static_cast<PCB_SHAPE*>( aItem ) );
+            if( checkVisibility( aItem ) )
+                handleShape( static_cast<PCB_SHAPE*>( aItem ) );
+
             break;
 
         case PCB_TRACE_T:
         case PCB_ARC_T:
-        {
             if( aFrom )
             {
                 if( aSelectionFilter && !aSelectionFilter->tracks )
@@ -875,14 +888,16 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
             }
 
-            PCB_TRACK* track = static_cast<PCB_TRACK*>( aItem );
+            if( checkVisibility( aItem ) )
+            {
+                PCB_TRACK* track = static_cast<PCB_TRACK*>( aItem );
 
-            addAnchor( track->GetStart(), CORNER | SNAPPABLE, track );
-            addAnchor( track->GetEnd(), CORNER | SNAPPABLE, track );
-            addAnchor( track->GetCenter(), ORIGIN, track);
+                addAnchor( track->GetStart(), CORNER | SNAPPABLE, track );
+                addAnchor( track->GetEnd(), CORNER | SNAPPABLE, track );
+                addAnchor( track->GetCenter(), ORIGIN, track);
+            }
 
             break;
-        }
 
         case PCB_MARKER_T:
         case PCB_TARGET_T:
@@ -901,108 +916,118 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
             }
 
-            addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
+            if( checkVisibility( aItem ) )
+                addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
 
             break;
 
         case PCB_ZONE_T:
-        {
             if( aFrom && aSelectionFilter && !aSelectionFilter->zones )
                 break;
 
-            const SHAPE_POLY_SET* outline = static_cast<const ZONE*>( aItem )->Outline();
-
-            SHAPE_LINE_CHAIN lc;
-            lc.SetClosed( true );
-
-            for( auto iter = outline->CIterateWithHoles(); iter; iter++ )
+            if( checkVisibility( aItem ) )
             {
-                addAnchor( *iter, CORNER | SNAPPABLE, aItem );
-                lc.Append( *iter );
+                const SHAPE_POLY_SET* outline = static_cast<const ZONE*>( aItem )->Outline();
+
+                SHAPE_LINE_CHAIN lc;
+                lc.SetClosed( true );
+
+                for( auto iter = outline->CIterateWithHoles(); iter; iter++ )
+                {
+                    addAnchor( *iter, CORNER | SNAPPABLE, aItem );
+                    lc.Append( *iter );
+                }
+
+                addAnchor( lc.NearestPoint( aRefPos ), OUTLINE, aItem );
             }
 
-            addAnchor( lc.NearestPoint( aRefPos ), OUTLINE, aItem );
-
             break;
-        }
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_ORTHOGONAL_T:
-        {
             if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
                 break;
 
-            const PCB_DIM_ALIGNED* dim = static_cast<const PCB_DIM_ALIGNED*>( aItem );
-            addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetCrossbarEnd(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
-            break;
-        }
-
-        case PCB_DIM_CENTER_T:
-        {
-            if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
-                break;
-
-            const PCB_DIM_CENTER* dim = static_cast<const PCB_DIM_CENTER*>( aItem );
-            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
-
-            VECTOR2I start( dim->GetStart() );
-            VECTOR2I radial( dim->GetEnd() - dim->GetStart() );
-
-            for( int i = 0; i < 2; i++ )
+            if( checkVisibility( aItem ) )
             {
-                RotatePoint( radial, -ANGLE_90 );
-                addAnchor( start + radial, CORNER | SNAPPABLE, aItem );
+                const PCB_DIM_ALIGNED* dim = static_cast<const PCB_DIM_ALIGNED*>( aItem );
+                addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );
+                addAnchor( dim->GetCrossbarEnd(), CORNER | SNAPPABLE, aItem );
+                addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
+                addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
             }
 
             break;
-        }
+
+        case PCB_DIM_CENTER_T:
+            if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
+                break;
+
+            if( checkVisibility( aItem ) )
+            {
+                const PCB_DIM_CENTER* dim = static_cast<const PCB_DIM_CENTER*>( aItem );
+                addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
+                addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
+
+                VECTOR2I start( dim->GetStart() );
+                VECTOR2I radial( dim->GetEnd() - dim->GetStart() );
+
+                for( int i = 0; i < 2; i++ )
+                {
+                    RotatePoint( radial, -ANGLE_90 );
+                    addAnchor( start + radial, CORNER | SNAPPABLE, aItem );
+                }
+            }
+
+            break;
 
         case PCB_DIM_RADIAL_T:
-        {
             if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
                 break;
 
-            const PCB_DIM_RADIAL* radialDim = static_cast<const PCB_DIM_RADIAL*>( aItem );
-            addAnchor( radialDim->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( radialDim->GetEnd(), CORNER | SNAPPABLE, aItem );
-            addAnchor( radialDim->GetKnee(), CORNER | SNAPPABLE, aItem );
-            addAnchor( radialDim->GetTextPos(), CORNER | SNAPPABLE, aItem );
+            if( checkVisibility( aItem ) )
+            {
+                const PCB_DIM_RADIAL* radialDim = static_cast<const PCB_DIM_RADIAL*>( aItem );
+                addAnchor( radialDim->GetStart(), CORNER | SNAPPABLE, aItem );
+                addAnchor( radialDim->GetEnd(), CORNER | SNAPPABLE, aItem );
+                addAnchor( radialDim->GetKnee(), CORNER | SNAPPABLE, aItem );
+                addAnchor( radialDim->GetTextPos(), CORNER | SNAPPABLE, aItem );
+            }
+
             break;
-        }
 
         case PCB_DIM_LEADER_T:
-        {
             if( aFrom && aSelectionFilter && !aSelectionFilter->dimensions )
                 break;
 
-            const PCB_DIM_LEADER* leader = static_cast<const PCB_DIM_LEADER*>( aItem );
-            addAnchor( leader->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( leader->GetEnd(), CORNER | SNAPPABLE, aItem );
-            addAnchor( leader->GetTextPos(), CORNER | SNAPPABLE, aItem );
+            if( checkVisibility( aItem ) )
+            {
+                const PCB_DIM_LEADER* leader = static_cast<const PCB_DIM_LEADER*>( aItem );
+                addAnchor( leader->GetStart(), CORNER | SNAPPABLE, aItem );
+                addAnchor( leader->GetEnd(), CORNER | SNAPPABLE, aItem );
+                addAnchor( leader->GetTextPos(), CORNER | SNAPPABLE, aItem );
+            }
+
             break;
-        }
 
         case PCB_FIELD_T:
         case PCB_TEXT_T:
             if( aFrom && aSelectionFilter && !aSelectionFilter->text )
                 break;
 
-            addAnchor( aItem->GetPosition(), ORIGIN, aItem );
+            if( checkVisibility( aItem ) )
+                addAnchor( aItem->GetPosition(), ORIGIN, aItem );
+
             break;
 
         case PCB_GROUP_T:
-        {
-            const PCB_GROUP* group = static_cast<const PCB_GROUP*>( aItem );
-
-            for( BOARD_ITEM* item : group->GetItems() )
-                computeAnchors( item, aRefPos, aFrom );
+            for( BOARD_ITEM* item : static_cast<const PCB_GROUP*>( aItem )->GetItems() )
+            {
+                if( checkVisibility( item ) )
+                    computeAnchors( item, aRefPos, aFrom );
+            }
 
             break;
-        }
 
         default:
             break;
