@@ -99,6 +99,16 @@ public:
     double   m_Opacity;
     wxString m_Filename;    ///< The 3D shape filename in 3D library
     bool     m_Show;        ///< Include model in rendering
+
+    bool operator==( const FP_3DMODEL& aOther ) const
+    {
+        return m_Scale == aOther.m_Scale
+                && m_Rotation == aOther.m_Rotation
+                && m_Offset == aOther.m_Offset
+                && m_Opacity == aOther.m_Opacity
+                && m_Filename == aOther.m_Filename
+                && m_Show == aOther.m_Show;
+    }
 };
 
 
