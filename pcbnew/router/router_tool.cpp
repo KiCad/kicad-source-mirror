@@ -1624,9 +1624,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
         {
-            const PADS& fpPads = ( static_cast<FOOTPRINT*>( item ) )->Pads();
-
-            for( PAD* pad : fpPads )
+            for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
                 itemList.push_back( pad );
         }
         else if( dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) != nullptr )

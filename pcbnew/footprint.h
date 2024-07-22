@@ -192,8 +192,8 @@ public:
     PCB_FIELDS& Fields()                   { return m_fields; }
     const PCB_FIELDS& Fields() const       { return m_fields; }
 
-    PADS& Pads()                           { return m_pads; }
-    const PADS& Pads() const               { return m_pads; }
+    std::deque<PAD*>& Pads()               { return m_pads; }
+    const std::deque<PAD*>& Pads() const   { return m_pads; }
 
     DRAWINGS& GraphicalItems()             { return m_drawings; }
     const DRAWINGS& GraphicalItems() const { return m_drawings; }
@@ -1016,7 +1016,7 @@ protected:
 private:
     PCB_FIELDS      m_fields;
     DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
-    PADS            m_pads;              // PAD items, owned by pointer
+    std::deque<PAD*> m_pads;              // PAD items, owned by pointer
     ZONES           m_zones;             // PCB_ZONE items, owned by pointer
     GROUPS          m_groups;            // PCB_GROUP items, owned by pointer
 

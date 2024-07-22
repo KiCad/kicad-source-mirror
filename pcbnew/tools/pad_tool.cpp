@@ -332,16 +332,17 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     frame()->PushTool( aEvent );
 
-    VECTOR2I        oldCursorPos;  // store the previous mouse cursor position, during mouse drag
-    std::list<PAD*> selectedPads;
-    BOARD_COMMIT    commit( frame() );
-    bool            isFirstPoint = true;   // make sure oldCursorPos is initialized at least once
-    PADS            pads = board()->GetFirstFootprint()->Pads();
-
+    VECTOR2I          oldCursorPos;  // store the previous mouse cursor position, during mouse drag
+    std::list<PAD*>   selectedPads;
+    BOARD_COMMIT      commit( frame() );
+    bool              isFirstPoint = true;   // make sure oldCursorPos is initialized at least once
+    std::deque<PAD*>  pads = board()->GetFirstFootprint()->Pads();
     MAGNETIC_SETTINGS mag_settings;
+
     mag_settings.graphics = false;
     mag_settings.tracks = MAGNETIC_OPTIONS::NO_EFFECT;
     mag_settings.pads = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+
     PCB_GRID_HELPER grid( m_toolMgr, &mag_settings );
 
     grid.SetSnap( true );

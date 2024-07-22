@@ -680,7 +680,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     bool changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
-    PADS pads = aFootprint->Pads();
+    std::deque<PAD*>   pads = aFootprint->Pads();
     std::set<wxString> padNetnames;
 
     std::sort( pads.begin(), pads.end(),
