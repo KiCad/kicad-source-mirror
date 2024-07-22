@@ -1097,10 +1097,7 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
 
             for( SCH_ITEM* item : subgraph->GetItems() )
             {
-                switch( item->Type() )
-                {
-                case SCH_LABEL_T:
-                case SCH_GLOBAL_LABEL_T:
+                if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T )
                 {
                     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
                     wxString        text = label->GetShownText( &sheet, false );
@@ -1111,7 +1108,6 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
                     {
                         map[text] = std::make_pair( label, sheet );
                     }
-                }
                 }
             }
         }
