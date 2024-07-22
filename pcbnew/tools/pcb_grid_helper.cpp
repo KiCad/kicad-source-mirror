@@ -549,20 +549,21 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
     bool                 isHighContrast = settings->GetHighContrast();
 
     // As defaults, these are probably reasonable to avoid spamming key points
-    const OVAL_KEY_POINT_FLAGS ovalKeyPointFlags =
-            OVAL_CENTER | OVAL_CAP_TIPS | OVAL_SIDE_MIDPOINTS | OVAL_CARDINAL_EXTREMES;
+    const OVAL_KEY_POINT_FLAGS ovalKeyPointFlags = OVAL_CENTER
+                                                    | OVAL_CAP_TIPS
+                                                    | OVAL_SIDE_MIDPOINTS
+                                                    | OVAL_CARDINAL_EXTREMES;
 
     // The key points of a circle centred around (0, 0) with the given radius
-    const auto getCircleKeyPoints = [] ( int radius )
-    {
-        return std::vector<VECTOR2I>{
-            {0, 0},
-            { -radius, 0 },
-            { radius, 0 },
-            { 0, -radius },
-            { 0, radius }
-        };
-    };
+    auto getCircleKeyPoints =
+            []( int radius )
+            {
+                return std::vector<VECTOR2I>{ { 0, 0 },
+                                              { -radius, 0 },
+                                              { radius, 0 },
+                                              { 0, -radius },
+                                              { 0, radius } };
+            };
 
     auto handlePadShape =
             [&]( PAD* aPad )
@@ -576,32 +577,24 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 switch( aPad->GetShape() )
                 {
                 case PAD_SHAPE::CIRCLE:
-                {
-                    int      r      = aPad->GetSizeX() / 2;
-                    VECTOR2I center = aPad->ShapePos();
-
-                    const std::vector<VECTOR2I> circle_pts = getCircleKeyPoints( r );
-
-                    for ( const VECTOR2I& pt: circle_pts ) {
+                    for( const VECTOR2I& pt: getCircleKeyPoints( aPad->GetSizeX() / 2 ) )
+                    {
                         // Transform to the pad positon
-                        addAnchor( center + pt, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( aPad->ShapePos() + pt, OUTLINE | SNAPPABLE, aPad );
                     }
+
                     break;
-                }
 
                 case PAD_SHAPE::OVAL:
-                {
-                    const VECTOR2I pos = aPad->ShapePos();
-
-                    const std::vector<VECTOR2I> oval_pts = GetOvalKeyPoints(
-                            aPad->GetSize(), aPad->GetOrientation(), ovalKeyPointFlags );
-
-                    for ( const VECTOR2I& pt: oval_pts ) {
+                    for( const VECTOR2I& pt: GetOvalKeyPoints( aPad->GetSize(),
+                                                               aPad->GetOrientation(),
+                                                               ovalKeyPointFlags ) )
+                    {
                         // Transform to the pad positon
-                        addAnchor( pos + pt, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( aPad->ShapePos() + pt, OUTLINE | SNAPPABLE, aPad );
                     }
+
                     break;
-                }
 
                 case PAD_SHAPE::RECTANGLE:
                 case PAD_SHAPE::TRAPEZOID:
@@ -672,14 +665,12 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         // For now there's no way to have an off-angle hole, so this is the
                         // same as the pad. In future, this may not be true:
                         // https://gitlab.com/kicad/code/kicad/-/issues/4124
-                        const EDA_ANGLE hole_orientation = aPad->GetOrientation();
-                        snap_pts = GetOvalKeyPoints( hole_size, hole_orientation, ovalKeyPointFlags );
+                        snap_pts = GetOvalKeyPoints( hole_size, aPad->GetOrientation(),
+                                                     ovalKeyPointFlags );
                     }
 
-                    for (const auto& snap_pt : snap_pts)
-                    {
+                    for( const VECTOR2I& snap_pt : snap_pts )
                         addAnchor( hole_pos + snap_pt, OUTLINE | SNAPPABLE, aPad );
-                    }
                 }
             };
 
@@ -838,6 +829,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             handlePadShape( static_cast<PAD*>( aItem ) );
 
             break;
+        }
 
         case PCB_TEXTBOX_T:
             if( aFrom )
