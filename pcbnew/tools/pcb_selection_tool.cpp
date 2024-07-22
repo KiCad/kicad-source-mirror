@@ -744,16 +744,16 @@ const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
     bool padsDisabled = !board()->IsElementVisible( LAYER_PADS );
 
     // account for the globals
-    guide.SetIgnoreMTextsMarkedNoShow( ! board()->IsElementVisible( LAYER_HIDDEN_TEXT ) );
-    guide.SetIgnoreMTextsOnBack( ! board()->IsElementVisible( LAYER_FP_TEXT ) );
-    guide.SetIgnoreMTextsOnFront( ! board()->IsElementVisible( LAYER_FP_TEXT ) );
-    guide.SetIgnoreModulesOnBack( ! board()->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
-    guide.SetIgnoreModulesOnFront( ! board()->IsElementVisible( LAYER_FOOTPRINTS_FR ) );
+    guide.SetIgnoreHiddenFPText( !board()->IsElementVisible( LAYER_HIDDEN_TEXT ) );
+    guide.SetIgnoreFPTextOnBack( !board()->IsElementVisible( LAYER_FP_TEXT ) );
+    guide.SetIgnoreFPTextOnFront( !board()->IsElementVisible( LAYER_FP_TEXT ) );
+    guide.SetIgnoreFootprintsOnBack( !board()->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
+    guide.SetIgnoreFootprintsOnFront( !board()->IsElementVisible( LAYER_FOOTPRINTS_FR ) );
     guide.SetIgnorePadsOnBack( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_SMD_BK ) );
     guide.SetIgnorePadsOnFront( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_SMD_FR ) );
     guide.SetIgnoreThroughHolePads( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_TH ) );
-    guide.SetIgnoreModulesVals( ! board()->IsElementVisible( LAYER_FP_VALUES ) );
-    guide.SetIgnoreModulesRefs( ! board()->IsElementVisible( LAYER_FP_REFERENCES ) );
+    guide.SetIgnoreFPValues( !board()->IsElementVisible( LAYER_FP_VALUES ) );
+    guide.SetIgnoreFPReferences( !board()->IsElementVisible( LAYER_FP_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIAS ) );
     guide.SetIgnoreBlindBuriedVias( ! board()->IsElementVisible( LAYER_VIAS ) );
     guide.SetIgnoreMicroVias( ! board()->IsElementVisible( LAYER_VIAS ) );

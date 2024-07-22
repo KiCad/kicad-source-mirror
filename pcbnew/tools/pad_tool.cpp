@@ -310,11 +310,11 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     GENERAL_COLLECTOR        collector;
     GENERAL_COLLECTORS_GUIDE guide = frame()->GetCollectorsGuide();
-    guide.SetIgnoreMTextsMarkedNoShow( true );
-    guide.SetIgnoreMTextsOnBack( true );
-    guide.SetIgnoreMTextsOnFront( true );
-    guide.SetIgnoreModulesVals( true );
-    guide.SetIgnoreModulesRefs( true );
+    guide.SetIgnoreHiddenFPText( true );
+    guide.SetIgnoreFPTextOnBack( true );
+    guide.SetIgnoreFPTextOnFront( true );
+    guide.SetIgnoreFPValues( true );
+    guide.SetIgnoreFPReferences( true );
 
     const std::optional<SEQUENTIAL_PAD_ENUMERATION_PARAMS> params =
             GetSequentialPadNumberingParams( frame() );
