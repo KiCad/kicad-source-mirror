@@ -278,7 +278,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     std::unordered_map<EDA_ITEM*, ITEM_CHANGE_TYPE> item_changes;
 
-    auto update_item_change_state = [&]( EDA_ITEM* item, ITEM_CHANGE_TYPE change_type )
+    auto update_item_change_state =
+            [&]( EDA_ITEM* item, ITEM_CHANGE_TYPE change_type )
             {
                 auto item_itr = item_changes.find( item );
 
@@ -589,25 +590,21 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     // Invoke bulk BOARD_LISTENER callbacks
     std::vector<BOARD_ITEM*> added_items, deleted_items, changed_items;
 
-    for( auto& item_itr : item_changes )
+    for( auto& [item, changeType] : item_changes )
     {
-        switch( item_itr.second )
+        switch( changeType )
         {
         case ITEM_CHANGE_TYPE::ADDED:
-        {
-            added_items.push_back( static_cast<BOARD_ITEM*>( item_itr.first ) );
+            added_items.push_back( static_cast<BOARD_ITEM*>( item ) );
             break;
-        }
+
         case ITEM_CHANGE_TYPE::DELETED:
-        {
-            deleted_items.push_back( static_cast<BOARD_ITEM*>( item_itr.first ) );
+            deleted_items.push_back( static_cast<BOARD_ITEM*>( item ) );
             break;
-        }
+
         case ITEM_CHANGE_TYPE::CHANGED:
-        {
-            changed_items.push_back( static_cast<BOARD_ITEM*>( item_itr.first ) );
+            changed_items.push_back( static_cast<BOARD_ITEM*>( item ) );
             break;
-        }
         }
     }
 
