@@ -2178,6 +2178,19 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_TEXT_T:
+            if( parentFP )
+            {
+                commit.Modify( parentFP );
+                parentFP->Delete( board_item );
+                getView()->Update( parentFP );
+            }
+            else
+            {
+                commit.Remove( board_item );
+            }
+
+            break;
+
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
         case PCB_REFERENCE_IMAGE_T:
