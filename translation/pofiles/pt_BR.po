@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-12 19:09+0000\n"
+"PO-Revision-Date: 2024-07-23 22:09+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -961,9 +961,8 @@ msgid "Configure Paths"
 msgstr "Configurar caminhos"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "Modelo"
+msgstr "Modelo incorporado"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -4195,25 +4194,22 @@ msgid "Reset Unique Id"
 msgstr "Redefinir o ID único"
 
 #: common/dialogs/panel_embedded_files.cpp:87
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Copia com referência"
+msgstr "Copiar a referência incorporada"
 
 #: common/dialogs/panel_embedded_files.cpp:159
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Selecione um valor que será afinado"
+msgstr "Selecione um arquivo para ser incorporado"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "Todos os arquivos"
+msgstr "Todos os arquivos|*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "O arquivo %s já existe."
+msgstr "O arquivo '%s' já existe."
 
 #: common/dialogs/panel_embedded_files.cpp:174
 #: common/dialogs/panel_embedded_files.cpp:248
@@ -4231,14 +4227,13 @@ msgid "Overwrite"
 msgstr "Sobrescreva"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Houve uma falha ao criar o arquivo '%s'."
+msgstr "Houve uma falha ao adicionar o arquivo '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Selecione um nome para o arquivo de exportação GenCAD"
+msgstr "Selecione um diretório de destino para exportar os arquivos"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4249,55 +4244,52 @@ msgid "Skip"
 msgstr "Ignore"
 
 #: common/dialogs/panel_embedded_files.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "O símbolo da biblioteca '%s' não tem permissão de escrita."
+msgstr "O diretório '%s' não tem permissão de escrita."
 
 #: common/dialogs/panel_embedded_files.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "O símbolo da biblioteca '%s' não tem permissão de escrita."
+msgstr "O diretório '%s' não é gravável."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "Tentar novamente"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Falha ao abrir o arquivo \"%s”."
+msgstr "Houve uma falha ao abrir o arquivo \"%s”."
 
 #: common/dialogs/panel_embedded_files.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Houve uma falha ao criar o arquivo '%s'."
+msgstr "Houve uma falha ao gravar no arquivo '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "As referências entre as folhas"
+msgstr "Referência interna"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Adicionar o arquivo incorporado"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Mantenha o arquivo que foi baixado"
+msgstr "Remover o arquivo incorporado"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "&Export"
-msgstr "Exportar"
+msgstr "&Exportar"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "Fontes incorporadas"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Armazenar uma cópia de todas as fontes usadas"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 msgid "Footprints/pads:"
@@ -8583,34 +8575,28 @@ msgstr "Recarrega todos os plug-ins python e atualiza os menus do plug-in"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:133
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:79
-#, fuzzy
 msgid "Embedded Files"
-msgstr "Arquivos de imagem"
+msgstr "Arquivos incorporados"
 
 #: common/tool/actions.cpp:1193
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Renomeie os arquivos"
+msgstr "Gerenciar os arquivos incorporados"
 
 #: common/tool/actions.cpp:1198
-#, fuzzy
 msgid "Remove File"
-msgstr "Renomeie o arquivo"
+msgstr "Remover o arquivo"
 
 #: common/tool/actions.cpp:1199
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Remove todas as camadas correspondentes."
+msgstr "Remover um arquivo incorporado"
 
 #: common/tool/actions.cpp:1204
-#, fuzzy
 msgid "Extract File"
-msgstr "Exportar para arquivo"
+msgstr "Exportar o arquivo"
 
 #: common/tool/actions.cpp:1205
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "Arquivo executável"
+msgstr "Extrair o arquivo incorporado"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
@@ -8904,9 +8890,8 @@ msgid "Always show crosshairs"
 msgstr "Sempre exibir a retícula"
 
 #: common/widgets/grid_text_button_helpers.cpp:363
-#, fuzzy
 msgid "Open file"
-msgstr "Abrir arquivo"
+msgstr "Abrir o arquivo"
 
 #: common/widgets/grid_text_button_helpers.cpp:490
 msgid "Select a File"
@@ -12965,9 +12950,8 @@ msgid "Text Variables"
 msgstr "Variáveis do texto"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:126
-#, fuzzy
 msgid "Schematic Data"
-msgstr "Paridade esquemática"
+msgstr "Dados do esquema"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:144
 msgid "Project is missing or read-only. Settings will not be editable."
@@ -16092,16 +16076,16 @@ msgstr ""
 "Os rótulos são similares (com diferença apenas entre maiúscula/minúscula)"
 
 #: eeschema/erc/erc_item.cpp:120
-#, fuzzy
 msgid "Power pins are similar (lower/upper case difference only)"
 msgstr ""
-"Os rótulos são similares (com diferença apenas entre maiúscula/minúscula)"
+"Os pinos de alimentação são semelhantes (com diferença apenas entre maiú"
+"scula/minúscula)"
 
 #: eeschema/erc/erc_item.cpp:124
-#, fuzzy
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr ""
-"Os rótulos globais são similares (diferença apenas entre maiúscula/minúscula)"
+"O pino de alimentação e a etiqueta são semelhantes (com diferença apenas "
+"entre maiúscula/minúscula)"
 
 #: eeschema/erc/erc_item.cpp:128
 msgid "Global label only appears once in the schematic"
@@ -18213,9 +18197,8 @@ msgstr "O nome do pino da folha está vazio"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2798
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2811
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2852
-#, fuzzy
 msgid "No schematic object"
-msgstr "[nenhum esquema carregado]"
+msgstr "Não há objeto esquemático"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2913
 msgid "Invalid symbol library name"
@@ -24623,9 +24606,8 @@ msgid "Show import issues"
 msgstr "Mostrar problemas de importação"
 
 #: include/widgets/filedlg_open_embed_file.h:36
-#, fuzzy
 msgid "Embed File"
-msgstr "Edite o arquivo"
+msgstr "Arquivo incorporado"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -30930,9 +30912,8 @@ msgid "Length-tuning Patterns"
 msgstr "Padrões de ajuste de comprimento"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:207
-#, fuzzy
 msgid "Board Data"
-msgstr "Nome da placa"
+msgstr "Dados da placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:224
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -36904,9 +36885,8 @@ msgid "LIbrary Format"
 msgstr "Formato da biblioteca"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:382
-#, fuzzy
 msgid "Error adding 3D model"
-msgstr "Carregando os modelos 3D..."
+msgstr "Houve um erro ao adicionar o modelo 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:464
 msgid "No filename entered"
@@ -45040,11 +45020,9 @@ msgid "Exception on python footprint wizard code"
 msgstr "Exceção no código do assistente de footprint python"
 
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s': %s"
-msgstr ""
-"Houve um erro ao carregar a folha do desenho '%s'.\n"
-"%s"
+msgstr "Houve um erro ao carregar a folha do desenho '%s': %s"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:496
 msgid ""
