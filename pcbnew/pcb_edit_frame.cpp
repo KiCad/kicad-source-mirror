@@ -2338,7 +2338,11 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                 processTextItem( *oldTextItem, *newTextItem, resetTextContent, resetTextLayers,
                                  resetTextEffects, aUpdated );
             }
-            else if( !deleteExtraTexts )
+            else if( deleteExtraTexts )
+            {
+                *aUpdated = true;
+            }
+            else
             {
                 aNew->Add( static_cast<BOARD_ITEM*>( oldTextItem->Clone() ) );
             }
@@ -2365,42 +2369,60 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
         PCB_FIELD* newField = aNew->GetFieldByName( oldField->GetName() );
 
-        if( !newField )
+        if( newField )
+        {
+            processTextItem( *oldField, *newField, resetTextContent, resetTextLayers,
+                             resetTextEffects, aUpdated );
+        }
+        else if( deleteExtraTexts )
+        {
+            *aUpdated = true;
+        }
+        else
         {
             newField = new PCB_FIELD( *oldField );
             aNew->Add( newField );
             processTextItem( *oldField, *newField, true, true, true, aUpdated );
         }
-        else
-        {
-            processTextItem( *oldField, *newField, resetTextContent, resetTextLayers,
-                             resetTextEffects, aUpdated );
-        }
-
     }
+
+    // Careful; allow-soldermask-bridges is in the m_attributes field but is not presented
+    // as a fabrication attribute in the GUI....
+    int existingFabAttrs = aExisting->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
+    int libraryFabAttrs = aNew->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
 
     if( resetFabricationAttrs )
     {
         // We've replaced the existing footprint with the library one, so the fabrication attrs
-        // are already reset.
-        //
-        // We only have to do anything if resetFabricationAttrs is *not* set....
+        // are already reset.  Just set the aUpdated flag if appropriate.
+        if( libraryFabAttrs != existingFabAttrs )
+            *aUpdated = true;
     }
     else
     {
-        // Careful; allow-soldermask-bridges is in the m_attributes field but is not presented
-        // as a fabrication attribute in the GUI....
-        int libraryFlagsToKeep = aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
-        int existingFlagsToKeep = aExisting->GetAttributes() & ~FP_ALLOW_SOLDERMASK_BRIDGES;
-        aNew->SetAttributes( existingFlagsToKeep | libraryFlagsToKeep );
+        int solderMaskBridgesFlag = aNew->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES;
+        aNew->SetAttributes( existingFabAttrs | solderMaskBridgesFlag );
     }
 
     if( reset3DModels )
     {
         // We've replaced the existing footprint with the library one, so the 3D models are
-        // already reset.
-        //
-        // We only have to do anything if reset3DModels is *not* set....
+        // already reset.  Just set the aUpdated flag if appropriate.
+        if( aNew->Models().size() != aExisting->Models().size() )
+        {
+            *aUpdated = true;
+        }
+        else
+        {
+            for( size_t ii = 0; ii < aNew->Models().size(); ++ii )
+            {
+                if( aNew->Models()[ii] != aExisting->Models()[ii] )
+                {
+                    *aUpdated = true;
+                    break;
+                }
+            }
+        }
     }
     else
     {
