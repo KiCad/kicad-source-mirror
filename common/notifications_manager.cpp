@@ -178,6 +178,7 @@ public:
         m_contentSizer->Add( m_noNotificationsText, 1, wxALL | wxEXPAND, 5 );
 
         Bind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
+        m_scrolledWindow->Bind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
 
         SetSizer( bSizer1 );
         Layout();
