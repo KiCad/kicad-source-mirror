@@ -810,13 +810,14 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             if( aFrom && aSelectionFilter && !aSelectionFilter->footprints )
                 break;
 
-            // if the cursor is not over a pad, then drag the footprint by its origin
+            // If the cursor is not over a pad, snap to the anchor (if visible) or the center
+            // (if markedly different from the anchor).
             VECTOR2I position = footprint->GetPosition();
-            addAnchor( position, ORIGIN | SNAPPABLE, footprint );
-
-            // Add the footprint center point if it is markedly different from the origin
             VECTOR2I center = footprint->GetBoundingBox( false, false ).Centre();
             VECTOR2I grid( GetGrid() );
+
+            if( view->IsLayerVisible( LAYER_ANCHOR ) )
+                addAnchor( position, ORIGIN | SNAPPABLE, footprint );
 
             if( ( center - position ).SquaredEuclideanNorm() > grid.SquaredEuclideanNorm() )
                 addAnchor( center, ORIGIN | SNAPPABLE, footprint );
