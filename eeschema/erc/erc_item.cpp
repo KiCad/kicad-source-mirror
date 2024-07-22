@@ -232,6 +232,10 @@ ERC_ITEM ERC_ITEM::busEntryNeeded( ERCE_BUS_ENTRY_NEEDED,
         _( "Bus Entry needed" ),
         wxT( "bus_entry_needed" ) );
 
+ERC_ITEM ERC_ITEM::unconnectedWireEndpoint( ERCE_UNCONNECTED_WIRE_ENDPOINT,
+        _( "Unconnected wire endpoint" ),
+        wxT( "unconnected_wire_endpoint" ) );
+
 std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
         {
             ERC_ITEM::heading_connections,
@@ -249,6 +253,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::fourWayJunction,
             ERC_ITEM::duplicatePinError,
             ERC_ITEM::labelMultipleWires,
+            ERC_ITEM::unconnectedWireEndpoint,
 
             ERC_ITEM::heading_conflicts,
             ERC_ITEM::duplicateReference,
@@ -346,6 +351,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_MISSING_INPUT_PIN:       return std::make_shared<ERC_ITEM>( missingInputPin );
     case ERCE_MISSING_POWER_INPUT_PIN: return std::make_shared<ERC_ITEM>( missingPowerInputPin );
     case ERCE_MISSING_BIDI_PIN:        return std::make_shared<ERC_ITEM>( missingBidiPin );
+    case ERCE_UNCONNECTED_WIRE_ENDPOINT: return std::make_shared<ERC_ITEM>( unconnectedWireEndpoint );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( wxS( "Unknown ERC error code" ) );

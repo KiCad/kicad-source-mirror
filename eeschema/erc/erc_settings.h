@@ -87,9 +87,10 @@ enum ERCE_T
     ERCE_BUS_ENTRY_NEEDED,        ///< Importer failed to auto-place a bus entry.
     ERCE_FOUR_WAY_JUNCTION,       ///< A four-way junction was found.
     ERCE_LABEL_MULTIPLE_WIRES,    ///< A label is connected to more than one wire.
+    ERCE_UNCONNECTED_WIRE_ENDPOINT, ///< A label is connected to more than one wire.
 
 
-    ERCE_LAST = ERCE_LABEL_MULTIPLE_WIRES,
+    ERCE_LAST = ERCE_UNCONNECTED_WIRE_ENDPOINT,
 
     // Errors after this point will not automatically appear in the Severities Panel
 

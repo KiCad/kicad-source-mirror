@@ -3221,6 +3221,12 @@ int CONNECTION_GRAPH::RunERC()
                 error_count++;
         }
 
+        if( settings.IsTestEnabled( ERCE_UNCONNECTED_WIRE_ENDPOINT ) )
+        {
+            if( !ercCheckDanglingWireEndpoints( subgraph ) )
+                error_count++;
+        }
+
         if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED )
                 || settings.IsTestEnabled( ERCE_NOCONNECT_NOT_CONNECTED )
                 || settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
@@ -3843,6 +3849,46 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
     }
 
     return ok;
+}
+
+
+bool CONNECTION_GRAPH::ercCheckDanglingWireEndpoints( const CONNECTION_SUBGRAPH* aSubgraph )
+{
+    int                   err_count = 0;
+    const SCH_SHEET_PATH& sheet = aSubgraph->m_sheet;
+
+    for( SCH_ITEM* item : aSubgraph->m_items )
+    {
+        if( item->Type() != SCH_LINE_T || item->GetLayer() != LAYER_WIRE )
+            continue;
+
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+        if( line->IsGraphicLine() )
+            continue;
+
+        auto report_error = [&]( VECTOR2I& location )
+        {
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNCONNECTED_WIRE_ENDPOINT );
+
+            ercItem->SetItems( line );
+            ercItem->SetSheetSpecificPath( sheet );
+            ercItem->SetErrorMessage( _( "Unconnected wire endpoint" ) );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, location );
+            sheet.LastScreen()->Append( marker );
+
+            err_count++;
+        };
+
+        if( line->IsStartDangling() )
+            report_error( line->GetConnectionPoints()[0] );
+
+        if( line->IsEndDangling() )
+            report_error( line->GetConnectionPoints()[1] );
+    }
+
+    return err_count > 0;
 }
 
 

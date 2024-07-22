@@ -244,6 +244,7 @@ private:
     static ERC_ITEM differentUnitValue;
     static ERC_ITEM duplicateReference;
     static ERC_ITEM busEntryNeeded;
+    static ERC_ITEM unconnectedWireEndpoint;
 
     /// True if this item is specific to a sheet instance (as opposed to applying to all instances)
     std::optional<SCH_SHEET_PATH> m_sheetSpecificPath;

@@ -702,6 +702,16 @@ private:
     bool ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
+     * Check one subgraph for dangling wire endpoints.
+     *
+     * Will throw an error for any subgraph that has wires with only one endpoing
+     *
+     * @param  aSubgraph      is the subgraph to examine.
+     * @return                true for no errors, false for errors.
+     */
+    bool ercCheckDanglingWireEndpoints( const CONNECTION_SUBGRAPH* aSubgraph );
+
+    /**
      * Check one subgraph for proper connection of labels.
      *
      * Labels should be connected to something.
