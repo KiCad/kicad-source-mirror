@@ -42,7 +42,7 @@ public:
     using iterator = std::vector<int>::iterator;
     using const_iterator = std::vector<int>::const_iterator;
 
-    BASE_SET( size_t size = 64 ) : m_bits( size, 0 ) {}
+    BASE_SET( size_t size ) : m_bits( size, 0 ) {}
 
     bool test( size_t pos ) const
     {
@@ -173,6 +173,8 @@ public:
     // Boolean operators
     BASE_SET& operator&=( const BASE_SET& rhs )
     {
+        assert( m_bits.size() == rhs.m_bits.size() );
+
         for( size_t i = 0; i < m_bits.size(); ++i )
             m_bits[i] &= rhs.m_bits[i];
 
@@ -181,6 +183,8 @@ public:
 
     BASE_SET& operator|=( const BASE_SET& rhs )
     {
+        assert( m_bits.size() == rhs.m_bits.size() );
+
         for( size_t i = 0; i < m_bits.size(); ++i )
             m_bits[i] |= rhs.m_bits[i];
 
@@ -189,6 +193,8 @@ public:
 
     BASE_SET& operator^=( const BASE_SET& rhs )
     {
+        assert( m_bits.size() == rhs.m_bits.size() );
+
         for( size_t i = 0; i < m_bits.size(); ++i )
             m_bits[i] ^= rhs.m_bits[i];
 

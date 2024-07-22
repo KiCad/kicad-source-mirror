@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(LSETConstructorEmpty)
 // Initialize LSET from another BASE_SET
 BOOST_AUTO_TEST_CASE(LSETConstructorFromBaseSet)
 {
-    BASE_SET base;
+    BASE_SET base( PCB_LAYER_ID_COUNT );
     base.set(F_Cu);
     base.set(In1_Cu);
 

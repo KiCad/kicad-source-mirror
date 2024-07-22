@@ -49,7 +49,7 @@ public:
      * Create an empty (cleared) set.
      */
     LSET() :
-        BASE_SET(PCB_LAYER_ID_COUNT)  // all bits are set to zero in BASE_SET()
+        BASE_SET( PCB_LAYER_ID_COUNT )  // all bits are set to zero in BASE_SET()
     {
     }
 
@@ -59,7 +59,7 @@ public:
     }
 
     LSET( PCB_LAYER_ID aLayer ) :
-        BASE_SET(PCB_LAYER_ID_COUNT)
+        BASE_SET( PCB_LAYER_ID_COUNT )
     {
         set( aLayer );
     }
