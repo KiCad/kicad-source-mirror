@@ -363,8 +363,14 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     int       rectangle_width = 0;
 
     BOARD_COMMIT commit( m_parent );
-
     commit.Modify( m_item );
+
+    bool pushCommit = ( m_item->GetEditFlags() == 0 );
+
+    // Set IN_EDIT flag to force undo/redo/abort proper operation and avoid new calls to
+    // SaveCopyInUndoList for the same text if is moved, and then rotated, edited, etc....
+    if( !pushCommit )
+        m_item->SetFlags( IN_EDIT );
 
     if( m_item->GetShape() == SHAPE_T::SEGMENT )
     {
@@ -520,7 +526,8 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     else
         m_item->SetNetCode( -1 );
 
-    commit.Push( _( "Edit Shape Properties" ) );
+    if( pushCommit )
+        commit.Push( _( "Edit Shape Properties" ) );
 
     // Notify clients which treat locked and unlocked items differently (ie: POINT_EDITOR)
     if( wasLocked != m_item->IsLocked() )

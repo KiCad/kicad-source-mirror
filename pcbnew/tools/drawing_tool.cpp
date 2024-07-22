@@ -2382,7 +2382,6 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             frame()->OnEditItemRequest( graphic );
             m_view->Update( &m_preview );
             frame()->SetMsgPanel( graphic );
-            break;
         }
         else if( started && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
                              || evt->IsAction( &ACTIONS::redo ) ) )
