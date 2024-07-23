@@ -789,8 +789,6 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     {
     case PCB_FIELD_T:
     {
-        PCB_FIELD* field = static_cast<PCB_FIELD*>( aBoardItem );
-
         for( auto it = m_fields.begin(); it != m_fields.end(); ++it )
         {
             if( *it == aBoardItem )

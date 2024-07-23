@@ -432,15 +432,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
         case UNDO_REDO::CHANGED:    /* Exchange old and new data for each item */
         {
-            BOARD_ITEM*           item = (BOARD_ITEM*) eda_item;
-            BOARD_ITEM_CONTAINER* parent = GetBoard();
+            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
 
             if( item->GetParentFootprint() )
             {
-                // We need the current item and it's parent, which may be different from what
-                // was stored if we're multiple frames up the undo stack.
+                // We need the current item, which may be different from what was stored if
+                // we're multiple frames up the undo stack.
                 item = GetBoard()->GetItem( item->m_Uuid );
-                parent = item->GetParentFootprint();
             }
 
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );

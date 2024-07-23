@@ -2354,22 +2354,9 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     if( reset3DModels )
     {
         // We've replaced the existing footprint with the library one, so the 3D models are
-        // already reset.  Just set the aUpdated flag if appropriate.
-        if( aNew->Models().size() != aExisting->Models().size() )
-        {
-            *aUpdated = true;
-        }
-        else
-        {
-            for( size_t ii = 0; ii < aNew->Models().size(); ++ii )
-            {
-                if( aNew->Models()[ii] != aExisting->Models()[ii] )
-                {
-                    *aUpdated = true;
-                    break;
-                }
-            }
-        }
+        // already reset.
+        //
+        // We only have to do anything if reset3DModels is *not* set....
     }
     else
     {
