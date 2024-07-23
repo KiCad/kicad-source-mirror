@@ -103,7 +103,8 @@ wxString SCH_MARKER::SerializeToString() const
         auxItemPath = erc->GetAuxItemSheetPath().Path().AsString();
 
     if( m_rcItem->GetErrorCode() == ERCE_GENERIC_WARNING
-            || m_rcItem->GetErrorCode() == ERCE_GENERIC_ERROR )
+            || m_rcItem->GetErrorCode() == ERCE_GENERIC_ERROR
+            || m_rcItem->GetErrorCode() == ERCE_UNRESOLVED_VARIABLE )
     {
         SCH_ITEM* sch_item = Schematic()->GetItem( erc->GetMainItemID() );
         SCH_ITEM* parent = static_cast<SCH_ITEM*>( sch_item->GetParent() );
@@ -125,31 +126,17 @@ wxString SCH_MARKER::SerializeToString() const
                                      mainItemPath,
                                      wxEmptyString );
         }
-        else
-        {
-            return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s|%s|%s" ),
-                                     m_rcItem->GetSettingsKey(),
-                                     m_Pos.x,
-                                     m_Pos.y,
-                                     sch_item->m_Uuid.AsString(),
-                                     wxEmptyString,
-                                     sheetSpecificPath,
-                                     mainItemPath,
-                                     wxEmptyString );
-        }
     }
-    else
-    {
-        return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s|%s|%s" ),
-                                 m_rcItem->GetSettingsKey(),
-                                 m_Pos.x,
-                                 m_Pos.y,
-                                 m_rcItem->GetMainItemID().AsString(),
-                                 m_rcItem->GetAuxItemID().AsString(),
-                                 sheetSpecificPath,
-                                 mainItemPath,
-                                 auxItemPath );
-    }
+
+    return wxString::Format( wxT( "%s|%d|%d|%s|%s|%s|%s|%s" ),
+                             m_rcItem->GetSettingsKey(),
+                             m_Pos.x,
+                             m_Pos.y,
+                             m_rcItem->GetMainItemID().AsString(),
+                             m_rcItem->GetAuxItemID().AsString(),
+                             sheetSpecificPath,
+                             mainItemPath,
+                             auxItemPath );
 }
 
 
@@ -166,7 +153,8 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
         return nullptr;
 
     if( ercItem->GetErrorCode() == ERCE_GENERIC_WARNING
-            || ercItem->GetErrorCode() == ERCE_GENERIC_ERROR )
+            || ercItem->GetErrorCode() == ERCE_GENERIC_ERROR
+            || ercItem->GetErrorCode() == ERCE_UNRESOLVED_VARIABLE )
     {
         // SCH_FIELDs and SCH_ITEMs inside LIB_SYMBOLs don't have persistent KIIDs.  So the
         // exclusion will contain the parent's KIID in prop[3], and the text of the original
