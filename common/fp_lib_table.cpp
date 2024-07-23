@@ -205,15 +205,15 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
         if( !sawUri )
             in->Expecting( T_uri );
 
-        // all nickNames within this table fragment must be unique, so we do not
-        // use doReplace in InsertRow().  (However a fallBack table can have a
-        // conflicting nickName and ours will supercede that one since in
-        // FindLib() we search this table before any fall back.)
-        wxString nickname = row->GetNickName(); // store it to be able to used it
-                                                // after row deletion if an error occurs
+        // All nickNames within this table fragment must be unique, so we do not use doReplace
+        // in doInsertRow().  (However a fallBack table can have a conflicting nickName and ours
+        // will supercede that one since in FindLib() we search this table before any fall back.)
+        wxString       nickname = row->GetNickName();   // store it to be able to used it
+                                                        // after row deletion if an error occurs
+        bool           doReplace = false;
         LIB_TABLE_ROW* tmp = row.release();
 
-        if( !InsertRow( tmp ) )
+        if( !doInsertRow( tmp, doReplace ) )
         {
             delete tmp;     // The table did not take ownership of the row.
 

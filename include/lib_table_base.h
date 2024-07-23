@@ -543,6 +543,11 @@ protected:
     LIB_TABLE_ROW* findRow( const wxString& aNickname, bool aCheckIfEnabled = false ) const;
 
     /**
+     * Performs the mechanics of inserting a row, but without locking or reindexing.
+     */
+    bool doInsertRow( LIB_TABLE_ROW* aRow, bool doReplace = false );
+
+    /**
      * Updates the env vars from older version of KiCad, provided they do not currently
      * resolve to anything
      *
@@ -550,6 +555,9 @@ protected:
      */
     bool migrate();
 
+    /*
+     * Do not make this public.  It MUST be called with a lock already in place.
+     */
     void reindex();
 
 protected:

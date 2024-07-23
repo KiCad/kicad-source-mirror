@@ -309,6 +309,15 @@ bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 {
     std::lock_guard<std::shared_mutex> lock( m_mutex );
 
+    doInsertRow( aRow, doReplace );
+    reindex();
+
+    return true;
+}
+
+
+bool LIB_TABLE::doInsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
+{
     auto it = m_rowsMap.find( aRow->GetNickName() );
 
     if( it != m_rowsMap.end() )
@@ -452,7 +461,7 @@ bool LIB_TABLE::migrate()
 
 void LIB_TABLE::Load( const wxString& aFileName )
 {
-    std::shared_lock<std::shared_mutex> lock( m_mutex );
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
     clear();
 
     // It's OK if footprint library tables are missing.
