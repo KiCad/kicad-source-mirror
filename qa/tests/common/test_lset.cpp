@@ -104,12 +104,12 @@ BOOST_AUTO_TEST_CASE(LSETFormatting)
     LSET set({F_Cu, In1_Cu, In2_Cu});
 
     std::string hexString = set.FmtHex();
-    std::string expectedHexString = "00000000_00000007"; // depends on bit ordering
+    std::string expectedHexString = "0000000_00000007"; // depends on bit ordering
 
     BOOST_CHECK_EQUAL(hexString, expectedHexString);
 
     std::string binString = set.FmtBin();
-    std::string expectedBinString = "0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0111"; // depends on bit ordering
+    std::string expectedBinString = "0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0111"; // depends on bit ordering
 
     BOOST_CHECK_EQUAL(binString, expectedBinString);
 }
