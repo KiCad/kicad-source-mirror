@@ -26,6 +26,7 @@
 #include <stdexcept>
 #include <vector>
 
+#include <core/kicad_algo.h>
 #include <import_export.h>
 
 #if defined( _MSC_VER )
@@ -115,9 +116,7 @@ public:
 
     int compare( const BASE_SET& other ) const
     {
-        auto result = std::lexicographical_compare_three_way(
-                m_bits.begin(), m_bits.end(), other.m_bits.begin(), other.m_bits.end() );
-        return result == std::strong_ordering::equal ? 0 : ( result == std::strong_ordering::less ? -1 : 1 );
+        return alg::lexicographical_compare_3way( m_bits, other.m_bits );
     }
 
     iterator       begin() { return m_bits.begin(); }

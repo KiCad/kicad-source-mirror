@@ -125,6 +125,32 @@ BOOST_AUTO_TEST_CASE(BASE_SETComparisonOperator)
     BOOST_CHECK( !( set1 < set2 ) ); // Although sizes are equal, elements in set2 are subsets of set1
 }
 
+// Test compare function
+BOOST_AUTO_TEST_CASE(BASE_SETCompareFunction)
+{
+    BASE_SET set1( 10 );
+    BASE_SET set2( 10 );
+    BASE_SET set3( 10 );
+    BASE_SET set4( 15 );
+
+    set1.set( 2 );
+    set1.set( 4 );
+
+    set2.set( 2 );
+    set2.set( 4 );
+
+    set3.set( 2 );
+
+    set4.set( 2 );
+
+    BOOST_CHECK_EQUAL( set1.compare( set2 ), 0 ); // set1 and set2 are equal
+    BOOST_CHECK_EQUAL( set1.compare( set3 ), 1 ); // set1 is greater than set3
+    BOOST_CHECK_EQUAL( set3.compare( set1 ), -1 ); // set3 is less than set1
+    BOOST_CHECK_EQUAL( set3.compare( set4 ), -1 ); // set3 is less than set4
+    BOOST_CHECK_EQUAL( set4.compare( set3 ), 1 ); // set4 is greater than set3
+}
+
+
 // Test boolean operator&=
 BOOST_AUTO_TEST_CASE(BASE_SETAndAssignment)
 {
