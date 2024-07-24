@@ -23,19 +23,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pgm_base.h>
-#include <settings/settings_manager.h>
-#include <footprint_editor_settings.h>
-#include <pcb_edit_frame.h>
-#include <layer_ids.h>
-#include <settings/color_settings.h>
+#include "pcb_layer_box_selector.h"
+
 #include <board.h>
-#include <pcb_layer_box_selector.h>
+#include <layer_ids.h>
+#include <pcb_edit_frame.h>
+#include <pcb_layer_presentation.h>
+#include <settings/color_settings.h>
 #include <tools/pcb_actions.h>
 #include <dpi_scaling_common.h>
 
 
-// class to display a layer list in a wxBitmapComboBox.
+PCB_LAYER_BOX_SELECTOR::PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
+                                                const wxString& value, const wxPoint& pos,
+                                                const wxSize& size, int n, const wxString choices[],
+                                                int style ) :
+        LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices ), m_boardFrame( nullptr ),
+        m_showNotEnabledBrdlayers( false ),
+        m_layerPresentation( std::make_unique<PCB_LAYER_PRESENTATION>(
+                nullptr ) ) // The parent isn't awlays the frame
+{
+}
+
+
+void PCB_LAYER_BOX_SELECTOR::SetBoardFrame( PCB_BASE_FRAME* aFrame )
+{
+    m_boardFrame = aFrame;
+    m_layerPresentation->SetBoardFrame( m_boardFrame );
+}
+
 
 // Reload the Layers
 void PCB_LAYER_BOX_SELECTOR::Resync()
@@ -64,13 +80,13 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         {
             wxBitmap bmp( size * scale, size * scale );
 
-            DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
+            m_layerPresentation->DrawColorSwatch( bmp, layerid );
 
             bmp.SetScaleFactor( scale );
             bitmaps.push_back( bmp );
         }
 
-        wxString layername = getLayerName( layerid ) + layerstatus;
+        wxString layername = m_layerPresentation->getLayerName( layerid ) + layerstatus;
 
         if( m_layerhotkeys )
         {
@@ -121,32 +137,4 @@ LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
         return m_boardFrame->GetBoard()->GetEnabledLayers();
     else
         return footprintEditorLayers;
-}
-
-
-// Returns a color index from the layer id
-COLOR4D PCB_LAYER_BOX_SELECTOR::getLayerColor( int aLayer ) const
-{
-    if( m_boardFrame )
-    {
-        return m_boardFrame->GetColorSettings()->GetColor( aLayer );
-    }
-    else
-    {
-        SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-        FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-        COLOR_SETTINGS*            current  = mgr.GetColorSettings( settings->m_ColorTheme );
-
-        return current->GetColor( aLayer );
-    }
-}
-
-
-// Returns the name of the layer id
-wxString PCB_LAYER_BOX_SELECTOR::getLayerName( int aLayer ) const
-{
-    if( m_boardFrame )
-        return m_boardFrame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
-    else
-        return BOARD::GetStandardLayerName( ToLAYER_ID( aLayer ) );
 }

@@ -33,6 +33,7 @@
 #include <board_design_settings.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
+#include <layer_presentation.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
@@ -49,12 +50,12 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/layer_box_selector.h>
 #include <widgets/pcb_properties_panel.h>
 #include <widgets/net_inspector_panel.h>
 #include <widgets/pcb_search_pane.h>
 #include <widgets/wx_aui_utils.h>
 #include <wx/wupdlock.h>
-#include <wx/dcmemory.h>
 #include <wx/combobox.h>
 
 #include "../scripting/python_scripting.h"
@@ -63,46 +64,9 @@
 /* Data to build the layer pair indicator button */
 static std::unique_ptr<wxBitmap> LayerPairBitmap;
 
-#define BM_LAYERICON_SIZE 24
-static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
-{
-    // 0 = draw pixel with white
-    // 1 = draw pixel with black
-    // 2 = draw pixel with top layer from router pair
-    // 3 = draw pixel with bottom layer from router pair
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-};
-
-static COLOR4D ICON_WHITE { 0.86, 0.86, 0.86, 1.0 };
-static COLOR4D ICON_BLACK { 0.28, 0.28, 0.28, 1.0 };
-
 
 void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
 {
-    int        ii, jj;
     COLOR4D    top_color, bottom_color, background_color;
     bool       change = aForceRebuild;
 
@@ -140,56 +104,9 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
 
     if( change || !LayerPairBitmap )
     {
-        LayerPairBitmap = std::make_unique<wxBitmap>( 24, 24 );
-
-        // Draw the icon, with colors according to the router's layer pair
-        wxMemoryDC iconDC;
-        iconDC.SelectObject( *LayerPairBitmap );
-        wxBrush    brush;
-        wxPen      pen;
-        int buttonColor = -1;
-
-        brush.SetStyle( wxBRUSHSTYLE_SOLID );
-        brush.SetColour( background_color.WithAlpha(1.0).ToColour() );
-        iconDC.SetBrush( brush );
-        iconDC.DrawRectangle( 0, 0, BM_LAYERICON_SIZE, BM_LAYERICON_SIZE );
-
-        for( ii = 0; ii < BM_LAYERICON_SIZE; ii++ )
-        {
-            for( jj = 0; jj < BM_LAYERICON_SIZE; jj++ )
-            {
-                if( s_BitmapLayerIcon[ii][jj] != buttonColor )
-                {
-                    switch( s_BitmapLayerIcon[ii][jj] )
-                    {
-                    default:
-                    case 0: pen.SetColour( ICON_WHITE.ToColour() );   break;
-                    case 1: pen.SetColour( ICON_BLACK.ToColour() );   break;
-                    case 2: pen.SetColour( top_color.ToColour() );    break;
-                    case 3: pen.SetColour( bottom_color.ToColour() ); break;
-                    }
-
-                    buttonColor = s_BitmapLayerIcon[ii][jj];
-                    iconDC.SetPen( pen );
-                }
-
-                iconDC.DrawPoint( jj, ii );
-            }
-        }
-
-        // Deselect the bitmap from the DC in order to delete the MemoryDC safely without
-        // deleting the bitmap
-        iconDC.SelectObject( wxNullBitmap );
-
-        // Scale the bitmap
         const int scale = ( requested_scale <= 0 ) ? KiIconScale( this ) : requested_scale;
-        wxImage image = LayerPairBitmap->ConvertToImage();
-
-        // "NEAREST" causes less mixing of colors
-        image.Rescale( scale * image.GetWidth() / 4, scale * image.GetHeight() / 4,
-                       wxIMAGE_QUALITY_NEAREST );
-
-        LayerPairBitmap = std::make_unique<wxBitmap>( image );
+        LayerPairBitmap = LAYER_PRESENTATION::CreateLayerPairIcon( background_color, top_color,
+                                                                   bottom_color, scale );
 
         if( m_auxiliaryToolBar )
         {

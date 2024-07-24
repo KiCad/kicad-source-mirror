@@ -26,10 +26,7 @@
 #define LAYER_BOX_SELECTOR_H
 
 #include <wx/bmpcbox.h>
-#include <gal/color4d.h>
-#include <layer_ids.h>
 
-using KIGFX::COLOR4D;
 
 /**
  * Base class to build a layer list.
@@ -43,17 +40,7 @@ public:
 
     bool SetLayersHotkeys( bool value );
 
-    // Fill the layer bitmap aLayerbmp with the layer color
-    static void DrawColorSwatch( wxBitmap& aLayerbmp, const COLOR4D& aBackground,
-                                 const COLOR4D& aColor );
-
 protected:
-    // Return a color index from the layer id
-    virtual COLOR4D getLayerColor( int aLayer ) const = 0;
-
-    // Return the name of the layer id
-    virtual wxString getLayerName( int aLayer ) const = 0;
-
     // Return true if the layer id is enabled (i.e. is it should be displayed)
     virtual bool isLayerEnabled( int aLayer ) const = 0;
 

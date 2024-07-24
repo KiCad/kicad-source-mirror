@@ -26,11 +26,14 @@
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <lset.h>
-#include <pcb_base_frame.h>
-#include <widgets/layer_box_selector.h>
 #include <board.h>
+#include <pgm_base.h>
+#include <pcb_base_frame.h>
+#include <pcb_layer_presentation.h>
+#include <footprint_editor_settings.h>
 #include <dialogs/dialog_layer_selection_base.h>
 #include <router/router_tool.h>
+#include <settings/settings_manager.h>
 #include <settings/color_settings.h>
 #include <tools/pcb_actions.h>
 
@@ -40,45 +43,40 @@
 #define LAYERNAME_COLNUM    2
 #define LAYER_HK_COLUMN     3
 
-/*
- * Display a layer list using a wxGrid.
- */
-class PCB_LAYER_SELECTOR: public LAYER_SELECTOR
+
+PCB_LAYER_PRESENTATION::PCB_LAYER_PRESENTATION( PCB_BASE_FRAME* aFrame ) : m_boardFrame( aFrame )
 {
-public:
-    PCB_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame ) :
-        LAYER_SELECTOR()
-    {
-        m_frame = aFrame;
-    }
+}
 
-protected:
-    PCB_BASE_FRAME*  m_frame;
-
-    ///< @return true if the layer id is enabled (i.e. is it should be displayed).
-    bool isLayerEnabled( int aLayer ) const override
+COLOR4D PCB_LAYER_PRESENTATION::getLayerColor( int aLayer ) const
+{
+    if( m_boardFrame )
     {
-        return m_frame->GetBoard()->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
+        return m_boardFrame->GetColorSettings()->GetColor( aLayer );
     }
-
-    // Return the color index from the layer ID.
-    COLOR4D getLayerColor( int aLayer ) const override
+    else
     {
-        return m_frame->GetColorSettings()->GetColor( aLayer );
-    }
+        SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+        FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+        COLOR_SETTINGS*            current = mgr.GetColorSettings( settings->m_ColorTheme );
 
-    // Return the name of the layer ID.
-    wxString getLayerName( int aLayer ) const override
-    {
-        return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
+        return current->GetColor( aLayer );
     }
-};
+}
+
+wxString PCB_LAYER_PRESENTATION::getLayerName( int aLayer ) const
+{
+    if( m_boardFrame )
+        return m_boardFrame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
+    else
+        return BOARD::GetStandardLayerName( ToLAYER_ID( aLayer ) );
+}
 
 
 /**
  * Display a PCB layers list in a dialog to select one layer from this list.
  */
-class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR, public DIALOG_LAYER_SELECTION_BASE
+class PCB_ONE_LAYER_SELECTOR : public DIALOG_LAYER_SELECTION_BASE
 {
 public:
     PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD * aBrd, PCB_LAYER_ID aDefaultLayer,
@@ -104,6 +102,7 @@ private:
 
     void buildList();
 
+    PCB_LAYER_PRESENTATION    m_layerPresentation;
     PCB_LAYER_ID              m_layerSelected;
     LSET                      m_notAllowedLayersMask;
     BOARD*                    m_brd;
@@ -114,10 +113,8 @@ private:
 
 PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* aBrd,
                                                 PCB_LAYER_ID aDefaultLayer,
-                                                LSET aNotAllowedLayersMask,
-                                                bool aHideCheckBoxes ) :
-        PCB_LAYER_SELECTOR( aParent ),
-        DIALOG_LAYER_SELECTION_BASE( aParent )
+                                                LSET aNotAllowedLayersMask, bool aHideCheckBoxes ) :
+        DIALOG_LAYER_SELECTION_BASE( aParent ), m_layerPresentation( aParent )
 {
     m_useCalculatedSize = true;
 
@@ -198,7 +195,7 @@ void PCB_ONE_LAYER_SELECTOR::onCharHook( wxKeyEvent& event )
 
 void PCB_ONE_LAYER_SELECTOR::buildList()
 {
-    wxColour bg = getLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
+    wxColour bg = m_layerPresentation.getLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
     int      left_row = 0;
     int      right_row = 0;
     wxString layername;
@@ -208,12 +205,12 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
         if( m_notAllowedLayersMask[layerid] )
             continue;
 
-        wxColour fg = getLayerColor( layerid ).ToColour();
+        wxColour fg = m_layerPresentation.getLayerColor( layerid ).ToColour();
         wxColour color( wxColour::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() / 255.0 ) );
 
-        layername = wxT( " " ) + getLayerName( layerid );
+        layername = wxT( " " ) + m_layerPresentation.getLayerName( layerid );
 
         if( IsCopperLayer( layerid ) )
         {
@@ -304,8 +301,7 @@ PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aN
 /**
  * Display a pair PCB copper layers list in a dialog to select a layer pair from these lists.
  */
-class SELECT_COPPER_LAYERS_PAIR_DIALOG: public PCB_LAYER_SELECTOR,
-                                        public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
+class SELECT_COPPER_LAYERS_PAIR_DIALOG : public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 {
 public:
     SELECT_COPPER_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* aParent, BOARD* aPcb,
@@ -323,11 +319,12 @@ private:
 
     void buildList();
 
-    BOARD*       m_brd;
-    PCB_LAYER_ID m_frontLayer;
-    PCB_LAYER_ID m_backLayer;
-    int          m_leftRowSelected;
-    int          m_rightRowSelected;
+    PCB_LAYER_PRESENTATION m_layerPresentation;
+    BOARD*                 m_brd;
+    PCB_LAYER_ID           m_frontLayer;
+    PCB_LAYER_ID           m_backLayer;
+    int                    m_leftRowSelected;
+    int                    m_rightRowSelected;
 
     std::vector<PCB_LAYER_ID> m_layersId;
 };
@@ -354,10 +351,11 @@ int ROUTER_TOOL::SelectCopperLayerPair( const TOOL_EVENT& aEvent )
 }
 
 
-SELECT_COPPER_LAYERS_PAIR_DIALOG::SELECT_COPPER_LAYERS_PAIR_DIALOG(
-        PCB_BASE_FRAME* aParent, BOARD * aPcb, PCB_LAYER_ID aFrontLayer, PCB_LAYER_ID aBackLayer) :
-    PCB_LAYER_SELECTOR( aParent ),
-    DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( aParent )
+SELECT_COPPER_LAYERS_PAIR_DIALOG::SELECT_COPPER_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* aParent,
+                                                                    BOARD*          aPcb,
+                                                                    PCB_LAYER_ID    aFrontLayer,
+                                                                    PCB_LAYER_ID    aBackLayer ) :
+        DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( aParent ), m_layerPresentation( aParent )
 {
     m_frontLayer = aFrontLayer;
     m_backLayer = aBackLayer;
@@ -380,7 +378,7 @@ SELECT_COPPER_LAYERS_PAIR_DIALOG::SELECT_COPPER_LAYERS_PAIR_DIALOG(
 
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
 {
-    wxColour bg = getLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
+    wxColour bg = m_layerPresentation.getLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
     int      row = 0;
     wxString layername;
 
@@ -389,12 +387,12 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
         if( !IsCopperLayer( layerid ) )
             continue;
 
-        wxColour fg = getLayerColor( layerid ).ToColour();
+        wxColour fg = m_layerPresentation.getLayerColor( layerid ).ToColour();
         wxColour color( wxColour::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() / 255.0 ) );
 
-        layername = wxT( " " ) + getLayerName( layerid );
+        layername = wxT( " " ) + m_layerPresentation.getLayerName( layerid );
 
         if( row )
             m_leftGridLayers->AppendRows( 1 );

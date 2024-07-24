@@ -22,17 +22,20 @@
  */
 
 #include <grid_layer_box_helpers.h>
+
+#include <wx/textctrl.h>
+
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
 #include <footprint_editor_settings.h>
 #include <board.h>
+#include <layer_presentation.h>
 #include <lset.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <settings/color_settings.h>
 #include <widgets/layer_box_selector.h>
-#include <wx/textctrl.h>
 
 
 //-------- Custom wxGridCellRenderers --------------------------------------------------
@@ -76,9 +79,9 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     int      size = KiROUND( 14 * aDC.GetContentScaleFactor() );
     wxBitmap bitmap( size, size );
 
-    LAYER_SELECTOR::DrawColorSwatch( bitmap,
-                                     cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
-                                     cs->GetColor( ToLAYER_ID( value ) ) );
+    LAYER_PRESENTATION::DrawColorSwatch( bitmap,
+                                         cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
+                                         cs->GetColor( ToLAYER_ID( value ) ) );
 
     aDC.DrawBitmap( bitmap, rect.GetLeft() + 4,
                     rect.GetTop() + ( rect.GetHeight() - bitmap.GetHeight() ) / 2, true );

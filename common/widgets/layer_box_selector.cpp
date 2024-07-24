@@ -47,34 +47,6 @@ bool LAYER_SELECTOR::SetLayersHotkeys( bool value )
 }
 
 
-void LAYER_SELECTOR::DrawColorSwatch( wxBitmap& aLayerbmp, const COLOR4D& aBackground,
-                                      const COLOR4D& aColor )
-{
-    wxMemoryDC bmpDC;
-    wxBrush    brush;
-
-    // Prepare Bitmap
-    bmpDC.SelectObject( aLayerbmp );
-
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-    if( aBackground != COLOR4D::UNSPECIFIED )
-    {
-        brush.SetColour( aBackground.WithAlpha( 1.0 ).ToColour() );
-        bmpDC.SetBrush( brush );
-        bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
-    }
-
-    brush.SetColour( aColor.ToColour() );
-    bmpDC.SetBrush( brush );
-    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
-
-    bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
-    bmpDC.SetPen( *wxBLACK_PEN );
-    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
-}
-
-
 LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                         const wxSize& size, int n, const wxString choices[] ) :
         wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),

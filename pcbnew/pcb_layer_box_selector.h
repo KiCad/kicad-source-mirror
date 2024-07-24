@@ -25,10 +25,14 @@
 #ifndef PCB_LAYER_BOX_SELECTOR_H
 #define PCB_LAYER_BOX_SELECTOR_H
 
+#include <memory>
+
 #include <lset.h>
 #include <widgets/layer_box_selector.h>
 
 class PCB_BASE_FRAME;
+class PCB_LAYER_PRESENTATION;
+
 
 /**
  * Class to display a pcb layer list in a wxBitmapComboBox.
@@ -39,21 +43,15 @@ public:
     // If you are thinking the constructor is a bit curious, just remember it is automatically
     // generated when used in wxFormBuilder files, and so must have the same signature as the
     // wxBitmapComboBox constructor.  In particular, value and style are not used by this class.
-    PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                            const wxString& value = wxEmptyString,
+    PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxString& value = wxEmptyString,
                             const wxPoint& pos = wxDefaultPosition,
-                            const wxSize& size = wxDefaultSize,
-                            int n = 0, const wxString choices[] = nullptr, int style = 0 ) :
-        LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices )
-    {
-        m_boardFrame = nullptr;
-        m_showNotEnabledBrdlayers = false;
-    }
+                            const wxSize& size = wxDefaultSize, int n = 0,
+                            const wxString choices[] = nullptr, int style = 0 );
 
     // SetBoardFrame should be called after creating a PCB_LAYER_BOX_SELECTOR.  It is not passed
     // through the constructor because it must have the same signature as wxBitmapComboBox for
     // use with wxFormBuilder.
-    void SetBoardFrame( PCB_BASE_FRAME* aFrame ) { m_boardFrame = aFrame; };
+    void SetBoardFrame( PCB_BASE_FRAME* aFrame );
 
     // SetLayerSet allows disabling some layers, which are not shown in list
     void SetNotAllowedLayerSet( LSET aMask ) { m_layerMaskDisable = aMask; }
@@ -70,14 +68,8 @@ public:
     void ShowNonActivatedLayers( bool aShow ) { m_showNotEnabledBrdlayers = aShow; }
 
 private:
-    // Returns a color index from the layer id
-    COLOR4D getLayerColor( int aLayer ) const override;
-
     // Returns true if the layer id is enabled (i.e. if it should be displayed)
     bool isLayerEnabled( int aLayer ) const override;
-
-    // Returns the name of the layer id
-    wxString getLayerName( int aLayer ) const override;
 
     LSET getEnabledLayers() const;
 
@@ -89,6 +81,8 @@ private:
                                         // (with not activated layers flagged)
     wxString m_undefinedLayerName;      // if not empty add an item with this name which sets
                                         // the layer to UNDEFINED_LAYER
+
+    std::unique_ptr<PCB_LAYER_PRESENTATION> m_layerPresentation;
 };
 
 #endif // PCB_LAYER_BOX_SELECTOR_H

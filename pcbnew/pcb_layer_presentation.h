@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,31 +21,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GBR_LAYER_BOX_SELECTOR_H
-#define GBR_LAYER_BOX_SELECTOR_H
+#ifndef PCB_LAYER_PRESENTATION_H
+#define PCB_LAYER_PRESENTATION_H
 
-#include <memory>
+#include <layer_presentation.h>
 
-#include <widgets/layer_box_selector.h>
+class PCB_BASE_FRAME;
 
-class LAYER_PRESENTATION;
-
-// class to display a layer list in GerbView.
-class GBR_LAYER_BOX_SELECTOR : public LAYER_BOX_SELECTOR
+/**
+ * Class that manages the presentation of PCB layers in a PCB frame.
+ */
+class PCB_LAYER_PRESENTATION : public LAYER_PRESENTATION
 {
 public:
-    GBR_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
-                            const wxSize& size = wxDefaultSize, int n = 0,
-                            const wxString choices[] = nullptr );
+    PCB_LAYER_PRESENTATION( PCB_BASE_FRAME* aFrame );
 
-    // Reload the Layers names and bitmaps
-    void Resync() override;
+    COLOR4D getLayerColor( int aLayer ) const override;
 
-    // Return true if the layer id is enabled (i.e. is it should be displayed)
-    bool isLayerEnabled( int aLayer ) const override { return true; }
+    wxString getLayerName( int aLayer ) const override;
+
+    /**
+     * Annoying post-ctor initialization (for when PCB_LAYER_BOX_SELECTOR doesn't
+     * have access to the PCB_BASE_FRAME at construction time).
+     */
+    void SetBoardFrame( PCB_BASE_FRAME* aFrame ) { m_boardFrame = aFrame; }
 
 private:
-    std::unique_ptr<LAYER_PRESENTATION> m_layerPresentation;
+    PCB_BASE_FRAME* m_boardFrame;
 };
 
-#endif //GBR_LAYER_BOX_SELECTOR_H
+#endif // PCB_LAYER_PRESENTATION_H

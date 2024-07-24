@@ -556,6 +556,7 @@ set( COMMON_SRCS
     hotkeys_basic.cpp
     kiface_base.cpp
     kiway_player.cpp
+    layer_presentation.cpp
     lib_table_grid_tricks.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
