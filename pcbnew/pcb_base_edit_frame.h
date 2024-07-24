@@ -30,6 +30,7 @@
 #include <pcb_base_frame.h>
 
 class APPEARANCE_CONTROLS;
+class LAYER_PAIR_SETTINGS;
 class BOARD_ITEM_CONTAINER;
 class PANEL_SELECTION_FILTER;
 class PCB_TEXTBOX;
@@ -220,6 +221,11 @@ public:
 
     APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
 
+    /**
+     * Acess to the layer pair settings controller of the board, if available
+     */
+    LAYER_PAIR_SETTINGS* GetLayerPairSettings() { return m_layerPairSettings.get(); }
+
     void ToggleProperties() override;
 
     void GetContextualTextVars( BOARD_ITEM* aSourceItem, const wxString& aCrossRef,
@@ -252,8 +258,9 @@ protected:
 protected:
     bool                    m_undoRedoBlocked;
 
-    PANEL_SELECTION_FILTER* m_selectionFilterPanel;
-    APPEARANCE_CONTROLS*    m_appearancePanel;
+    PANEL_SELECTION_FILTER*              m_selectionFilterPanel;
+    APPEARANCE_CONTROLS*                 m_appearancePanel;
+    std::unique_ptr<LAYER_PAIR_SETTINGS> m_layerPairSettings;
 
     wxAuiNotebook*          m_tabbedPanel;        /// Panel with Layers and Object Inspector tabs
 

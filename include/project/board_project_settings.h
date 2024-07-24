@@ -258,6 +258,85 @@ private:
     std::vector<VIEWPORT3D>* m_viewports;
 };
 
+
+class KICOMMON_API LAYER_PAIR
+{
+public:
+    LAYER_PAIR() :
+            m_layerA( UNDEFINED_LAYER ), m_layerB( UNDEFINED_LAYER )
+    {
+    }
+
+    LAYER_PAIR( PCB_LAYER_ID a, PCB_LAYER_ID b ) :
+            m_layerA( a ), m_layerB( b )
+    {
+    }
+
+    PCB_LAYER_ID GetLayerA() const { return m_layerA; }
+    PCB_LAYER_ID GetLayerB() const { return m_layerB; }
+
+    void SetLayerA( PCB_LAYER_ID aLayer ) { m_layerA = aLayer; }
+    void SetLayerB( PCB_LAYER_ID aLayer ) { m_layerB = aLayer; }
+
+    /**
+     * @return true if the two layer pairs have the same layers, regardless of order
+     */
+    bool HasSameLayers( const LAYER_PAIR& aOther ) const
+    {
+        return ( m_layerA == aOther.m_layerA && m_layerB == aOther.m_layerB )
+               || ( m_layerA == aOther.m_layerB && m_layerB == aOther.m_layerA );
+    }
+
+    bool operator<=> ( const LAYER_PAIR& aOther ) const = default;
+
+private:
+    PCB_LAYER_ID m_layerA;
+    PCB_LAYER_ID m_layerB;
+};
+
+
+/**
+ * All information about a layer pair as stored in the layer pair store.
+ */
+class KICOMMON_API LAYER_PAIR_INFO
+{
+public:
+    LAYER_PAIR_INFO( LAYER_PAIR aPair, bool aEnabled, std::optional<wxString> aName ) :
+            m_pair( std::move( aPair ) ), m_enabled( aEnabled), m_name( std::move( aName ) )
+    {
+    }
+
+    const LAYER_PAIR& GetLayerPair() const { return m_pair; }
+
+    const std::optional<wxString>& GetName() const { return m_name; }
+
+    void SetName( const wxString& aNewName ) { m_name = aNewName; }
+    void UnsetName() { m_name = std::nullopt; }
+
+    bool IsEnabled() const { return m_enabled; }
+    void SetEnabled( bool aNewEnabled ) { m_enabled = aNewEnabled; }
+
+private:
+    LAYER_PAIR              m_pair;
+    bool                    m_enabled = true;
+    std::optional<wxString> m_name;
+};
+
+
+class KICOMMON_API PARAM_LAYER_PAIRS : public PARAM_LAMBDA<nlohmann::json>
+{
+public:
+    PARAM_LAYER_PAIRS( const std::string& aPath, std::vector<LAYER_PAIR_INFO>& m_layerPairInfos );
+
+private:
+    nlohmann::json layerPairsToJson();
+
+    void jsonToLayerPairs( const nlohmann::json& aJson );
+
+    std::vector<LAYER_PAIR_INFO>& m_layerPairInfos;
+};
+
+
 /**
  * Persisted state for the net inspector panel
  */

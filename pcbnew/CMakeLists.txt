@@ -328,6 +328,7 @@ set( PCBNEW_CLASS_SRCS
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
     initpcb.cpp
+    layer_pairs.cpp
     load_select_footprint.cpp
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp

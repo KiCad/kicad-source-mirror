@@ -24,6 +24,7 @@
 #ifndef PCB_LAYER_PRESENTATION_H
 #define PCB_LAYER_PRESENTATION_H
 
+#include <lseq.h>
 #include <layer_presentation.h>
 
 class PCB_BASE_FRAME;
@@ -39,6 +40,8 @@ public:
     COLOR4D getLayerColor( int aLayer ) const override;
 
     wxString getLayerName( int aLayer ) const override;
+
+    LSEQ getOrderedEnabledLayers() const;
 
     /**
      * Annoying post-ctor initialization (for when PCB_LAYER_BOX_SELECTOR doesn't

@@ -46,6 +46,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <layer_pairs.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
@@ -393,6 +394,30 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         }
 
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
+    }
+
+    {
+        m_layerPairSettings = std::make_unique<LAYER_PAIR_SETTINGS>();
+
+        m_layerPairSettings->Bind( PCB_LAYER_PAIR_PRESETS_CHANGED, [&]( wxCommandEvent& aEvt )
+        {
+            // Update the project file list
+            std::span<const LAYER_PAIR_INFO> newPairInfos = m_layerPairSettings->GetLayerPairs();
+            Prj().GetProjectFile().m_LayerPairInfos =
+                    std::vector<LAYER_PAIR_INFO>{ newPairInfos.begin(), newPairInfos.end() };
+        });
+
+        m_layerPairSettings->Bind( PCB_CURRENT_LAYER_PAIR_CHANGED, [&]( wxCommandEvent& aEvt )
+        {
+            const LAYER_PAIR& layerPair = m_layerPairSettings->GetCurrentLayerPair();
+            PCB_SCREEN& screen = *GetScreen();
+
+            screen.m_Route_Layer_TOP = layerPair.GetLayerA();
+            screen.m_Route_Layer_BOTTOM = layerPair.GetLayerB();
+
+            // Update the toolbar icon
+            PrepareLayerIndicator();
+        });
     }
 
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
@@ -1573,6 +1598,11 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 
     if( GetBoard()->GetDesignSettings().IsLayerEnabled( localSettings.m_ActiveLayer ) )
         SetActiveLayer( localSettings.m_ActiveLayer );
+
+    PROJECT_FILE& projectFile = Prj().GetProjectFile();
+
+    m_layerPairSettings->SetLayerPairs( projectFile.m_LayerPairInfos );
+    m_layerPairSettings->SetCurrentLayerPair( LAYER_PAIR{ F_Cu, B_Cu } );
 
     // Updates any auto dimensions and the auxiliary toolbar tracks/via sizes
     unitsChangeRefresh();

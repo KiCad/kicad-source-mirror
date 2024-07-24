@@ -305,3 +305,67 @@ void PARAM_VIEWPORT3D::jsonToViewports( const nlohmann::json& aJson )
         }
     }
 }
+
+
+PARAM_LAYER_PAIRS::PARAM_LAYER_PAIRS( const std::string& aPath,
+                                      std::vector<LAYER_PAIR_INFO>& aLayerPairInfos ) :
+        PARAM_LAMBDA<nlohmann::json>( aPath,
+                                      std::bind( &PARAM_LAYER_PAIRS::layerPairsToJson, this ),
+                                      std::bind( &PARAM_LAYER_PAIRS::jsonToLayerPairs, this, _1 ),
+                                      {} ),
+        m_layerPairInfos( aLayerPairInfos )
+{
+}
+
+
+nlohmann::json PARAM_LAYER_PAIRS::layerPairsToJson()
+{
+    nlohmann::json ret = nlohmann::json::array();
+
+    for( const LAYER_PAIR_INFO& pairInfo : m_layerPairInfos )
+    {
+        const LAYER_PAIR& pair = pairInfo.GetLayerPair();
+        nlohmann::json js = {
+                { "topLayer", pair.GetLayerA() },
+                { "bottomLayer", pair.GetLayerB() },
+                { "enabled", pairInfo.IsEnabled() },
+        };
+
+        if( pairInfo.GetName().has_value() )
+        {
+            js["name"] = pairInfo.GetName().value();
+        }
+
+        ret.push_back( std::move( js ) );
+    }
+
+    return ret;
+}
+
+
+void PARAM_LAYER_PAIRS::jsonToLayerPairs( const nlohmann::json& aJson )
+{
+    if( aJson.empty() || !aJson.is_array() )
+        return;
+
+    m_layerPairInfos.clear();
+
+    for( const nlohmann::json& pairJson : aJson )
+    {
+        if( pairJson.contains( "topLayer" ) && pairJson.contains( "bottomLayer" ) )
+        {
+            LAYER_PAIR pair( pairJson.at( "topLayer" ).get<PCB_LAYER_ID>(),
+                             pairJson.at( "bottomLayer" ).get<PCB_LAYER_ID>() );
+
+            bool enabled = true;
+            if( pairJson.contains( "enabled" ) )
+                enabled = pairJson.at( "enabled" ).get<bool>();
+
+            std::optional<wxString> name;
+            if( pairJson.contains( "name" ) )
+                name = pairJson.at( "name" ).get<wxString>();
+
+            m_layerPairInfos.emplace_back( LAYER_PAIR_INFO( pair, enabled, std::move( name ) ) );
+        }
+    }
+}

@@ -440,17 +440,6 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
         m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition,
                                                  wxDefaultSize,
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-
-        // The layer indicator is special, so we register a callback directly that will
-        // regenerate the bitmap instead of using the conditions system.
-        auto layerIndicatorUpdate =
-            [this] ( wxUpdateUIEvent& )
-            {
-                PrepareLayerIndicator();
-            };
-
-        Bind( wxEVT_UPDATE_UI, layerIndicatorUpdate, PCB_ACTIONS::selectLayerPair.GetUIId() );
-
         m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
     }
 

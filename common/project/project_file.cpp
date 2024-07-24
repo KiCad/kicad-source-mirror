@@ -124,6 +124,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     m_params.emplace_back( new PARAM_VIEWPORT3D( "board.3dviewports", &m_Viewports3D ) );
 
+    m_params.emplace_back( new PARAM_LAYER_PAIRS( "board.layer_pairs", m_LayerPairInfos ) );
+
     m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.internal_id",
             &m_IP2581Bom.id, wxEmptyString ) );
 

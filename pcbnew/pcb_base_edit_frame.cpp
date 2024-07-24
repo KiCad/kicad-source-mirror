@@ -37,6 +37,7 @@
 #include <pcb_dimension.h>
 #include <footprint.h>
 #include <footprint_info_impl.h>
+#include <layer_pairs.h>
 #include <project.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
