@@ -115,10 +115,12 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         setCursor();
         cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || ( item && evt->IsAction( &ACTIONS::undo ) )  )
         {
             if( item )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( aEvent );
@@ -143,7 +145,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            // First click creates...
+            bool placeItem = true;
+
             if( !item )
             {
                 DS_DATA_ITEM* dataItem = m_frame->AddDrawingSheetItem( type );
@@ -163,10 +166,14 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
                     // update the cursor so it looks correct before another event
                     setCursor();
+
+                    // Text is a single-click-place; all others are first-click-creates,
+                    // second-click-places.
+                    placeItem = dataItem->GetType() == DS_DATA_ITEM::DS_TEXT;
                 }
             }
-            // ... and second click places:
-            else
+
+            if( item && placeItem )
             {
                 item->GetPeer()->MoveStartPointToIU( cursorPos );
                 item->SetPosition( item->GetPeer()->GetStartPosIU( 0 ) );
@@ -249,7 +256,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
-        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || ( item && evt->IsAction( &ACTIONS::undo ) )  )
         {
             m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
 
@@ -260,13 +267,26 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 // Pop the undo stack and delete the item being placed
                 m_frame->RollbackFromUndo();
             }
-            else if( evt->IsCancelInteractive() )
+            else
             {
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( item )
+            {
+                item = nullptr;
 
-            if( evt->IsActivate() && !evt->IsPointEditor() && !evt->IsMoveTool() )
+                // Pop the undo stack and delete the item being placed
+                m_frame->RollbackFromUndo();
+            }
+
+            if( evt->IsPointEditor() || evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
