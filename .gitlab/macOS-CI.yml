@@ -9,7 +9,7 @@ macos_build:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $CI_PROJECT_ROOT_NAMESPACE == "kicad" && $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_PROJECT_ROOT_NAMESPACE == "kicad"
   script:
     - mkdir -p build/macos
     - cd build/macos
