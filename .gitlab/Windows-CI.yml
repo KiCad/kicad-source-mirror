@@ -19,7 +19,7 @@ win64_build:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $CI_PROJECT_ROOT_NAMESPACE == "kicad" && $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_PROJECT_ROOT_NAMESPACE == "kicad"
   script:
     - C:\builder\build.ps1 -Env -Arch x64
     - $vcpkgCache=Join-Path -Path (Get-Location) -ChildPath ".vcpkgCache";$env:VCPKG_DEFAULT_BINARY_CACHE=$vcpkgCache;New-Item -ItemType Directory -Force -Path $vcpkgCache
