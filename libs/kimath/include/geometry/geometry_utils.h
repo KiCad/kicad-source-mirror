@@ -30,6 +30,7 @@
 #ifndef GEOMETRY_UTILS_H
 #define GEOMETRY_UTILS_H
 
+#include <algorithm>
 #include <math.h>           // for copysign
 #include <stdlib.h>         // for abs
 #include <math/box2.h>
@@ -152,24 +153,29 @@ VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aP
 {
     typedef std::numeric_limits<int32_t> coord_limits;
 
-    long long max = static_cast<long long>( coord_limits::max() ) - aPadding;
-    long long min = -max;
-
     in_type x = aCoords.x;
     in_type y = aCoords.y;
 
-    if( x < min )
-        x = in_type( min );
-    else if( x > max )
-        x = in_type( max );
+    if constexpr( !std::is_floating_point_v<in_type> )
+    {
+        int64_t max = static_cast<int64_t>( coord_limits::max() ) - aPadding;
+        int64_t min = -max;
+        x = std::clamp<int64_t>( static_cast<int64_t>( x ), min, max );
+        y = std::clamp<int64_t>( static_cast<int64_t>( y ), min, max );
+    }
+    else
+    {
+        double max = static_cast<double>( coord_limits::max() ) - aPadding;
+        double min = -max;
+        x = std::clamp<double>( static_cast<double>( x ), min, max );
+        y = std::clamp<double>( static_cast<double>( y ), min, max );
+    }
 
-    if( y < min )
-        y = in_type( min );
-    else if( y > max )
-        y = in_type( max );
-
-    if( !std::is_integral<in_type>() && std::is_integral<ret_type>() )
-        return VECTOR2<ret_type>( KiROUND( x ), KiROUND( y ) );
+    if constexpr( !std::is_integral_v<in_type> && std::is_integral_v<ret_type> )
+    {
+        return VECTOR2<ret_type>( KiROUND<in_type, ret_type>( x, true ),
+                                  KiROUND<in_type, ret_type>( y, true ) );
+    }
 
     return VECTOR2<ret_type>( x, y );
 }
@@ -192,4 +198,3 @@ bool ClipLine( const BOX2I *aClipBox, int &x1, int &y1, int &x2, int &y2 );
 
 
 #endif  // #ifndef GEOMETRY_UTILS_H
-
