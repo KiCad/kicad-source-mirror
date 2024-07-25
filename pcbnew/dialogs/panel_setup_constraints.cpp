@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+
 #include <board_design_settings.h>
 #include <board.h>
 #include <math/util.h>
@@ -143,9 +145,9 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 
     m_BrdSettings->m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
 
-    m_BrdSettings->m_MaxError = Clamp<int>( pcbIUScale.IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
-                                            m_maxError.GetValue(),
-                                            pcbIUScale.IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
+    m_BrdSettings->m_MaxError = KiROUND( std::clamp( static_cast<double>( m_maxError.GetValue() ),
+                                            pcbIUScale.IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
+                                            pcbIUScale.IU_PER_MM * MAXIMUM_ERROR_SIZE_MM ) );
 
     m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
     m_BrdSettings->m_MinResolvedSpokes = m_minResolvedSpokeCountCtrl->GetValue();

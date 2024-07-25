@@ -51,27 +51,6 @@ void kimathLogDebug( const char* aFormatString, ... );
  */
 void kimathLogOverflow( double v, const char* aTypeName );
 
-/**
- * Limit @a value within the range @a lower <= @a value <= @a upper.
- *
- * It will work on temporary expressions, since they are evaluated only once, and it should
- * work on most if not all numeric types, string types, or any type for which "operator < ()"
- * is present. The arguments are accepted in this order so you can remember the expression as
- * a memory aid:
- * <p>
- * result is:  lower <= value <= upper
- *</p>
- */
-template <typename T> inline constexpr T Clamp( const T& lower, const T& value, const T& upper )
-{
-    assert( upper >= lower );
-
-    if( value < lower )
-        return lower;
-    else if( upper < value )
-        return upper;
-    return value;
-}
 
 // Suppress an annoying warning that the explicit rounding we do is not precise
 #ifdef HAVE_WIMPLICIT_FLOAT_CONVERSION

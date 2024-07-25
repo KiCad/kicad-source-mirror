@@ -203,7 +203,7 @@ int PCB_IO_KICAD_SEXPR_PARSER::parseBoardUnits()
     // N.B. we currently represent board units as integers.  Any values that are
     // larger or smaller than those board units represent undefined behavior for
     // the system.  We limit values to the largest that is visible on the screen
-    return KiROUND( Clamp<double>( -INT_LIMIT, retval, INT_LIMIT ) );
+    return KiROUND( std::clamp( retval, -INT_LIMIT, INT_LIMIT ) );
 }
 
 
@@ -214,7 +214,7 @@ int PCB_IO_KICAD_SEXPR_PARSER::parseBoardUnits( const char* aExpected )
     // N.B. we currently represent board units as integers.  Any values that are
     // larger or smaller than those board units represent undefined behavior for
     // the system.  We limit values to the largest that is visible on the screen
-    return KiROUND( Clamp<double>( -INT_LIMIT, retval, INT_LIMIT ) );
+    return KiROUND( std::clamp( retval, -INT_LIMIT, INT_LIMIT ) );
 }
 
 

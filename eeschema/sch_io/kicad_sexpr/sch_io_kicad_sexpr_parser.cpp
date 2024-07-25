@@ -38,7 +38,7 @@
 #include <base_units.h>
 #include <lib_id.h>
 #include <sch_pin.h>
-#include <math/util.h>                           // KiROUND, Clamp
+#include <math/util.h>                           // KiROUND
 #include <font/font.h>
 #include <font/fontconfig.h>
 #include <pgm_base.h>
@@ -610,7 +610,7 @@ int SCH_IO_KICAD_SEXPR_PARSER::parseInternalUnits()
     // the system.  Limit values to the largest that can be displayed on the screen.
     constexpr double int_limit = std::numeric_limits<int>::max() * 0.7071; // 0.7071 = roughly 1/sqrt(2)
 
-    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
+    return KiROUND( std::clamp( retval, -int_limit, int_limit ) );
 }
 
 
@@ -620,7 +620,7 @@ int SCH_IO_KICAD_SEXPR_PARSER::parseInternalUnits( const char* aExpected )
 
     constexpr double int_limit = std::numeric_limits<int>::max() * 0.7071;
 
-    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
+    return KiROUND( std::clamp( retval, -int_limit, int_limit ) );
 }
 
 
@@ -676,7 +676,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
             color.r = parseInt( "red" ) / 255.0;
             color.g = parseInt( "green" ) / 255.0;
             color.b = parseInt( "blue" ) / 255.0;
-            color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+            color.a = std::clamp( parseDouble( "alpha" ), 0.0, 1.0 );
             aFill.m_Color = color;
             NeedRIGHT();
             break;
@@ -761,7 +761,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
                     color.r = parseInt( "red" ) / 255.0;
                     color.g = parseInt( "green" ) / 255.0;
                     color.b = parseInt( "blue" ) / 255.0;
-                    color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+                    color.a = std::clamp( parseDouble( "alpha" ), 0.0, 1.0 );
                     aText->SetTextColor( color );
                     NeedRIGHT();
                     break;
@@ -3592,7 +3592,7 @@ SCH_JUNCTION* SCH_IO_KICAD_SEXPR_PARSER::parseJunction()
             color.r = parseInt( "red" ) / 255.0;
             color.g = parseInt( "green" ) / 255.0;
             color.b = parseInt( "blue" ) / 255.0;
-            color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+            color.a = std::clamp( parseDouble( "alpha" ), 0.0, 1.0 );
 
             junction->SetColor( color );
             NeedRIGHT();

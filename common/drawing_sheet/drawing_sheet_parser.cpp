@@ -792,7 +792,7 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
                     aItem->m_TextColor.r = parseInt( 0, 255 ) / 255.0;
                     aItem->m_TextColor.g = parseInt( 0, 255 ) / 255.0;
                     aItem->m_TextColor.b = parseInt( 0, 255 ) / 255.0;
-                    aItem->m_TextColor.a = Clamp( parseDouble(), 0.0, 1.0 );
+                    aItem->m_TextColor.a = std::clamp( parseDouble(), 0.0, 1.0 );
                     NeedRIGHT();
                     break;
 

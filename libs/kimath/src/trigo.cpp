@@ -27,8 +27,9 @@
  * @brief Trigonometric and geometric basic functions.
  */
 
+#include <algorithm>        // for std::clamp
 #include <limits>           // for numeric_limits
-#include <stdlib.h>         // for abs
+#include <cstdlib>         // for abs
 #include <type_traits>      // for swap
 
 #include <geometry/seg.h>
@@ -526,13 +527,13 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, cons
 
     VECTOR2I iCenter;
 
-    iCenter.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() + 100 ),
-                                        dCenter.x,
-                                        double( std::numeric_limits<int>::max() - 100 ) ) );
+    iCenter.x = KiROUND( std::clamp( dCenter.x,
+                                    double( std::numeric_limits<int>::min() + 100 ),
+                                    double( std::numeric_limits<int>::max() - 100 ) ) );
 
-    iCenter.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() + 100 ),
-                                        dCenter.y,
-                                        double( std::numeric_limits<int>::max() - 100 ) ) );
+    iCenter.y = KiROUND( std::clamp( dCenter.y,
+                                    double( std::numeric_limits<int>::min() + 100 ),
+                                    double( std::numeric_limits<int>::max() - 100 ) ) );
 
     return iCenter;
 }

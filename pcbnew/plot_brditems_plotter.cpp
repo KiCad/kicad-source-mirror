@@ -32,7 +32,7 @@
 #include <geometry/shape_segment.h>
 #include <string_utils.h>
 #include <macros.h>
-#include <math/util.h>                        // for KiROUND, Clamp
+#include <math/util.h>                        // for KiROUND
 #include <math/vector2d.h>                    // for VECTOR2I
 #include <plotters/plotter_gerber.h>
 #include <trigo.h>
@@ -1094,12 +1094,12 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECT
 
     // Round holes only have x diameter, slots have both
     drillSize.x -= getFineWidthAdj();
-    drillSize.x = Clamp( 1, drillSize.x, aPadSize.x - 1 );
+    drillSize.x = std::clamp( drillSize.x, 1, aPadSize.x - 1 );
 
     if( aDrillShape == PAD_DRILL_SHAPE::OBLONG )
     {
         drillSize.y -= getFineWidthAdj();
-        drillSize.y = Clamp( 1, drillSize.y, aPadSize.y - 1 );
+        drillSize.y = std::clamp( drillSize.y, 1, aPadSize.y - 1 );
 
         m_plotter->FlashPadOval( aDrillPos, drillSize, aOrientation, GetPlotMode(), nullptr );
     }

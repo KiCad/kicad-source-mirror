@@ -28,6 +28,7 @@
 #ifndef VECTOR2D_H_
 #define VECTOR2D_H_
 
+#include <algorithm>
 #include <limits>
 #include <iostream>
 #include <sstream>
@@ -97,16 +98,16 @@ public:
             CastingType minI = static_cast<CastingType>( std::numeric_limits<T>::min() );
             CastingType maxI = static_cast<CastingType>( std::numeric_limits<T>::max() );
 
-            x = static_cast<T>( Clamp( minI, aVec.x, maxI ) );
-            y = static_cast<T>( Clamp( minI, aVec.y, maxI ) );
+            x = static_cast<T>( std::clamp( aVec.x, minI, maxI ) );
+            y = static_cast<T>( std::clamp( aVec.y, minI, maxI ) );
         }
         else if( std::is_integral<T>() && std::is_integral<CastingType>() )
         {
             int64_t minI = static_cast<int64_t>( std::numeric_limits<T>::min() );
             int64_t maxI = static_cast<int64_t>( std::numeric_limits<T>::max() );
 
-            x = static_cast<T>( Clamp( minI, static_cast<int64_t>( aVec.x ), maxI ) );
-            y = static_cast<T>( Clamp( minI, static_cast<int64_t>(aVec.y), maxI ) );
+            x = static_cast<T>( std::clamp( static_cast<int64_t>( aVec.x ), minI, maxI ) );
+            y = static_cast<T>( std::clamp( static_cast<int64_t>( aVec.y ), minI, maxI ) );
         }
         else
         {
@@ -134,17 +135,19 @@ public:
         {
             T minI = static_cast<T>( std::numeric_limits<U>::min() );
             T maxI = static_cast<T>( std::numeric_limits<U>::max() );
-            return VECTOR2<U>( static_cast<U>( Clamp( minI, x, maxI ) ),
-                               static_cast<U>( Clamp( minI, y, maxI ) ) );
+            return VECTOR2<U>( static_cast<U>( std::clamp( x, minI, maxI ) ),
+                               static_cast<U>( std::clamp( y, minI, maxI ) ) );
         }
         else if( std::is_integral<T>() && std::is_integral<U>() )
         {
             int64_t minI = static_cast<int64_t>( std::numeric_limits<U>::min() );
             int64_t maxI = static_cast<int64_t>( std::numeric_limits<U>::max() );
+            int64_t x64 = static_cast<int64_t>( x );
+            int64_t y64 = static_cast<int64_t>( y );
 
             return VECTOR2<U>(
-                    static_cast<U>( Clamp( minI, static_cast<int64_t>( x ), maxI ) ),
-                    static_cast<U>( Clamp( minI, static_cast<int64_t>( y ), maxI ) ) );
+                    static_cast<U>( std::clamp( x64, minI, maxI ) ),
+                    static_cast<U>( std::clamp( y64, minI, maxI ) ) );
         }
         else
         {

@@ -37,7 +37,7 @@ int32_t ALTIUM_PROPS_UTILS::ConvertToKicadUnit( const double aValue )
 {
     constexpr double int_limit = ( std::numeric_limits<int>::max() - 10 ) / 2.54;
 
-    int32_t iu = KiROUND( Clamp<double>( -int_limit, aValue, int_limit ) * 2.54 );
+    int32_t iu = KiROUND( std::clamp( aValue, -int_limit, int_limit ) * 2.54 );
 
     // Altium's internal precision is 0.1uinch.  KiCad's is 1nm.  Round to nearest 10nm to clean
     // up most rounding errors.  This allows lossless conversion of increments of 0.05mils and

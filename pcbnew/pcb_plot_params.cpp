@@ -26,7 +26,6 @@
 #include <layer_ids.h>
 #include <lset.h>
 #include <string_utils.h>
-#include <math/util.h> // for KiROUND
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
 #include <plotters/plotter.h>
@@ -167,7 +166,7 @@ void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
 
 void PCB_PLOT_PARAMS::SetSvgPrecision( unsigned aPrecision )
 {
-    m_svgPrecision = Clamp( SVG_PRECISION_MIN, aPrecision, SVG_PRECISION_MAX );
+    m_svgPrecision = std::clamp( aPrecision, SVG_PRECISION_MIN, SVG_PRECISION_MAX );
 }
 
 

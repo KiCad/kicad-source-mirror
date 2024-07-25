@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <kiface_base.h>
 #include <macros.h>
-#include <math/util.h>      // for KiROUND, Clamp
+#include <math/util.h>      // for KiROUND
 #include <project.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
@@ -602,8 +602,8 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
 {
     int lyWidth, lyHeight;
 
-    VECTOR2D clamped_layout_size( Clamp( (double)MIN_PAGE_SIZE_MILS, m_layout_size.x, m_maxPageSizeMils.x ),
-                                  Clamp( (double)MIN_PAGE_SIZE_MILS, m_layout_size.y, m_maxPageSizeMils.y ) );
+    VECTOR2D clamped_layout_size( std::clamp( m_layout_size.x, (double)MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.x ),
+                                  std::clamp( m_layout_size.y, (double)MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.y ) );
 
     double lyRatio = clamped_layout_size.x < clamped_layout_size.y ?
                         (double) clamped_layout_size.y / clamped_layout_size.x :
@@ -775,8 +775,8 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
     double customSizeY = (double) m_customSizeY.GetDoubleValue() / m_iuPerMils;
 
     // Ensure layout size can be converted to int coordinates later
-    customSizeX = Clamp( double( INT_MIN ), customSizeX, double( INT_MAX ) );
-    customSizeY = Clamp( double( INT_MIN ), customSizeY, double( INT_MAX ) );
+    customSizeX = std::clamp( customSizeX, double( INT_MIN ), double( INT_MAX ) );
+    customSizeY = std::clamp( customSizeY, double( INT_MIN ), double( INT_MAX ) );
     m_layout_size = VECTOR2D( customSizeX, customSizeY );
 }
 

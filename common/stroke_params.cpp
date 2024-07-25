@@ -311,7 +311,7 @@ void STROKE_PARAMS_PARSER::ParseStroke( STROKE_PARAMS& aStroke )
             color.r = parseInt( "red" ) / 255.0;
             color.g = parseInt( "green" ) / 255.0;
             color.b = parseInt( "blue" ) / 255.0;
-            color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+            color.a = std::clamp( parseDouble( "alpha" ), 0.0, 1.0 );
 
             aStroke.SetColor( color );
             NeedRIGHT();
