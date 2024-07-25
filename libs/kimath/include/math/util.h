@@ -97,20 +97,26 @@ inline constexpr ret_type KiCheckedCast( in_type v )
  * In Debug build an assert fires if will not fit into the return type.
  */
 template <typename fp_type, typename ret_type = int>
-constexpr ret_type KiROUND( fp_type v )
+constexpr ret_type KiROUND( fp_type v, bool aQuiet = false )
 {
     using max_ret = long long int;
     fp_type ret = v < 0 ? v - 0.5 : v + 0.5;
 
     if( ret > std::numeric_limits<ret_type>::max() )
     {
-        kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+        if( !aQuiet )
+        {
+            kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+        }
 
         return std::numeric_limits<ret_type>::max() - 1;
     }
     else if( ret < std::numeric_limits<ret_type>::lowest() )
     {
-        kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+        if( !aQuiet )
+        {
+            kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+        }
 
         if( std::numeric_limits<ret_type>::is_signed )
             return std::numeric_limits<ret_type>::lowest() + 1;
@@ -122,7 +128,10 @@ constexpr ret_type KiROUND( fp_type v )
     {
         if( std::isnan( v ) )
         {
-            kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+            if( !aQuiet )
+            {
+                kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+            }
 
             return 0;
         }
