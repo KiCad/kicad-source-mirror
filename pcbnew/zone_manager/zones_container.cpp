@@ -88,7 +88,8 @@ void ZONES_CONTAINER::OnUserConfirmChange()
     {
         std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> filled_zone_to_restore;
         zone->GetLayerSet().RunOnLayers(
-                [&]( PCB_LAYER_ID layer )
+                // Capture 'zone' by value and 'filled_zone_to_restore' by reference for MacOS clang
+                [&filled_zone_to_restore, zone]( PCB_LAYER_ID layer )
                 {
                     std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
                     if( fill )
