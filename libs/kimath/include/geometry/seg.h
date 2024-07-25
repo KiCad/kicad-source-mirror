@@ -250,10 +250,7 @@ public:
      */
     int Distance( const SEG& aSeg ) const;
 
-    ecoord SquaredDistance( const VECTOR2I& aP ) const
-    {
-        return ( NearestPoint( aP ) - aP ).SquaredEuclideanNorm();
-    }
+    ecoord SquaredDistance( const VECTOR2I& aP ) const;
 
     /**
      * Compute minimum Euclidean distance to point \a aP.

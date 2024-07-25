@@ -207,9 +207,9 @@ bool SEG::NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_
 
 bool SEG::intersects( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines, VECTOR2I* aPt ) const
 {
-    const VECTOR2<ecoord> e = VECTOR2<ecoord>( B ) - A;
-    const VECTOR2<ecoord> f = VECTOR2<ecoord>( aSeg.B ) - aSeg.A;
-    const VECTOR2<ecoord> ac = VECTOR2<ecoord>( aSeg.A ) - A;
+    const VECTOR2<ecoord> e = VECTOR2<ecoord>( B.x - A.x, B.y - A.y );
+    const VECTOR2<ecoord> f = VECTOR2<ecoord>( aSeg.B.x - aSeg.A.x, aSeg.B.y - aSeg.A.y );
+    const VECTOR2<ecoord> ac = VECTOR2<ecoord>( aSeg.A.x - A.x, aSeg.A.y - A.y );
 
     ecoord d = f.Cross( e );
     ecoord p = f.Cross( ac );
@@ -394,6 +394,25 @@ int SEG::Distance( const SEG& aSeg ) const
 int SEG::Distance( const VECTOR2I& aP ) const
 {
     return int( isqrt( SquaredDistance( aP ) ) );
+}
+
+
+SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
+{
+    VECTOR2L ab = VECTOR2L( B.x - A.x, B.y - A.y );
+    VECTOR2L ap = VECTOR2L( aP.x - A.x, aP.y - A.y );
+
+    ecoord e = ap.Dot( ab );
+
+    if( e <= 0 )
+        return ap.SquaredEuclideanNorm();
+
+    ecoord f = ab.SquaredEuclideanNorm();
+
+    if( e >= f )
+        return VECTOR2L( aP.x - B.x, aP.y - B.y ).SquaredEuclideanNorm();
+
+    return KiROUND<double, ecoord>( ap.SquaredEuclideanNorm() - ( double( e ) * e ) / f );
 }
 
 
