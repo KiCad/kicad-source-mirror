@@ -87,11 +87,12 @@ void ZONES_CONTAINER::OnUserConfirmChange()
     for( auto& [zone, zoneClone] : m_zonesCloneMap )
     {
         std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> filled_zone_to_restore;
+        ZONE* internal_zone = zone; // Duplicate the zone pointer to allow capture on older MacOS (13)
+
         zone->GetLayerSet().RunOnLayers(
-                // Capture 'zone' by value and 'filled_zone_to_restore' by reference for MacOS clang
-                [&filled_zone_to_restore, zone]( PCB_LAYER_ID layer )
+                [&]( PCB_LAYER_ID layer )
                 {
-                    std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+                    std::shared_ptr<SHAPE_POLY_SET> fill = internal_zone->GetFilledPolysList( layer );
                     if( fill )
                     {
                         filled_zone_to_restore[layer] = fill;
