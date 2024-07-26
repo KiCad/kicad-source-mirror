@@ -126,8 +126,9 @@ BOARD::BOARD() :
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 
     // Initialize default netclass.
-    bds.m_NetSettings->m_DefaultNetClass = std::make_shared<NETCLASS>( NETCLASS::Default );
-    bds.m_NetSettings->m_DefaultNetClass->SetDescription( _( "This is the default net class." ) );
+    bds.m_NetSettings->SetDefaultNetclass( std::make_shared<NETCLASS>( NETCLASS::Default ) );
+    bds.m_NetSettings->GetDefaultNetclass()->SetDescription(
+            _( "This is the default net class." ) );
 
     bds.UseCustomTrackViaSize( false );
 
@@ -219,11 +220,10 @@ void BOARD::SetProject( PROJECT* aProject, bool aReferenceOnly )
             std::shared_ptr<NET_SETTINGS>  legacySettings  = GetDesignSettings().m_NetSettings;
             std::shared_ptr<NET_SETTINGS>& projectSettings = project.NetSettings();
 
-            projectSettings->m_DefaultNetClass = legacySettings->m_DefaultNetClass;
-            projectSettings->m_NetClasses      = legacySettings->m_NetClasses;
-            projectSettings->m_NetClassPatternAssignments =
-                    std::move( legacySettings->m_NetClassPatternAssignments );
-            projectSettings->m_NetClassPatternAssignmentCache.clear();
+            projectSettings->SetDefaultNetclass( legacySettings->GetDefaultNetclass() );
+            projectSettings->SetNetclasses( legacySettings->GetNetclasses() );
+            projectSettings->SetNetclassPatternAssignments(
+                    std::move( legacySettings->GetNetclassPatternAssignments() ) );
         }
 
         // Now update the DesignSettings' netclass pointer to point into the project.
@@ -2037,7 +2037,9 @@ void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
         return;
 
     BOARD_DESIGN_SETTINGS&     bds = GetDesignSettings();
-    std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->m_DefaultNetClass;
+    const std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->GetDefaultNetclass();
+
+    bds.m_NetSettings->ClearAllCaches();
 
     for( NETINFO_ITEM* net : m_NetInfo )
         net->SetNetClass( bds.m_NetSettings->GetEffectiveNetClass( net->GetNetname() ) );

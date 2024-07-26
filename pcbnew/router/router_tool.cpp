@@ -2642,7 +2642,7 @@ void ROUTER_TOOL::UpdateMessagePanel()
             NETCLASS* netclassA = netA->GetNetClass();
             NETCLASS* netclassB = netB->GetNetClass();
 
-            if( netclassA == netclassB )
+            if( *netclassA == *netclassB )
                 netclass = netclassA->GetName();
             else
                 netclass = netclassA->GetName() + wxT( ", " ) + netclassB->GetName();

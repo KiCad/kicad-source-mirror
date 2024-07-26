@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+
 #include <widgets/unit_binder.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
@@ -215,9 +217,9 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::buildFilterLists()
     wxArrayString                  netclassNames;
     std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;
 
-    netclassNames.push_back( settings->m_DefaultNetClass->GetName() );
+    netclassNames.push_back( settings->GetDefaultNetclass()->GetName() );
 
-    for( const auto& [ name, netclass ] : settings->m_NetClasses )
+    for( const auto& [name, netclass] : settings->GetNetclasses() )
         netclassNames.push_back( name );
 
     m_netclassFilter->Set( netclassNames );
@@ -246,7 +248,8 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataToWindow()
     if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
         m_netclassFilterOpt->SetValue( true );
     else if( item )
-        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClass()->GetName() );
+        m_netclassFilter->SetStringSelection(
+                item->GetNet()->GetNetClass()->GetVariableSubstitutionName() );
 
     if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )
     {
@@ -387,7 +390,10 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit, BOARD_CONNE
 
     if( m_netclassFilterOpt->GetValue() && !m_netclassFilter->GetStringSelection().IsEmpty() )
     {
-        if( aItem->GetEffectiveNetClass()->GetName() != m_netclassFilter->GetStringSelection() )
+        wxString  filterNetclass = m_netclassFilter->GetStringSelection();
+        NETCLASS* netclass = aItem->GetEffectiveNetClass();
+
+        if( !netclass->ContainsNetclassWithName( filterNetclass ) )
             return;
     }
 

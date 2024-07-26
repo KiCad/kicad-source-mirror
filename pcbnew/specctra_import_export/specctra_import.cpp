@@ -523,7 +523,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
             std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
-            int via_drill_default = netSettings->m_DefaultNetClass->GetViaDrill();
+            int via_drill_default = netSettings->GetDefaultNetclass()->GetViaDrill();
 
             for( unsigned v = 0; v < wire_via->m_vertexes.size(); ++v )
             {

@@ -432,7 +432,7 @@ const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
 
 
 const std::vector<std::pair<wxString, SCH_ITEM*>>
-CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem, bool returnAll ) const
+CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem ) const
 {
     std::vector<std::pair<wxString, SCH_ITEM*>> foundNetclasses;
 
@@ -446,16 +446,8 @@ CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem, bool returnAll ) c
 
         if( ruleNetclasses.size() > 0 )
         {
-            if( returnAll )
-            {
-                foundNetclasses.insert( foundNetclasses.end(), ruleNetclasses.begin(),
-                                        ruleNetclasses.end() );
-            }
-            else
-            {
-                foundNetclasses.push_back( ruleNetclasses[0] );
-                return foundNetclasses;
-            }
+            foundNetclasses.insert( foundNetclasses.end(), ruleNetclasses.begin(),
+                                    ruleNetclasses.end() );
         }
     }
 
@@ -473,12 +465,15 @@ CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem, bool returnAll ) c
 
                         if( netclass != wxEmptyString )
                             foundNetclasses.push_back( { netclass, aItem } );
-
-                        return returnAll;
                     }
                 }
+            } );
 
-                return true;
+    std::sort(
+            foundNetclasses.begin(), foundNetclasses.end(),
+            []( const std::pair<wxString, SCH_ITEM*>& i1, const std::pair<wxString, SCH_ITEM*>& i2 )
+            {
+                return i1.first < i2.first;
             } );
 
     return foundNetclasses;
@@ -2368,16 +2363,11 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     }
 
     std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Prj().GetProjectFile().m_NetSettings;
-    std::map<wxString, wxString>   oldAssignments = netSettings->m_NetClassLabelAssignments;
+    std::map<wxString, std::set<wxString>> oldAssignments =
+            netSettings->GetNetclassLabelAssignments();
     std::set<wxString>             affectedNetclassNetAssignments;
 
-    netSettings->m_NetClassLabelAssignments.clear();
-
-    // Used to track where netclasses are assigned to a net from a bus netclass
-    // definition. Without this tracking, depending on the order of testing for
-    // netclasses, an already-assigned netclass on a bus member can be deleted
-    // if an explicitly labelled member net does not have a netclass assigned.
-    std::unordered_set<wxString> netclassAssignedFromBus;
+    netSettings->ClearNetclassLabelAssignments();
 
     auto dirtySubgraphs =
             [&]( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
@@ -2393,132 +2383,117 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
             };
 
     auto checkNetclassDrivers =
-            [&]( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
+            [&]( const wxString& netName, const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
+    {
+        wxCHECK_RET( !subgraphs.empty(), wxS( "Invalid empty subgraph" ) );
+
+        const CONNECTION_SUBGRAPH* driverSubgraph = nullptr;
+        std::set<wxString>         netclasses;
+
+        // Collect all netclasses on all subgraphs for this net
+        for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        {
+            for( SCH_ITEM* item : subgraph->m_items )
             {
-                const CONNECTION_SUBGRAPH* driverSubgraph = nullptr;
-                wxString                   netclass;
+                std::vector<std::pair<wxString, SCH_ITEM*>> netclassesWithProviders =
+                        subgraph->GetNetclassesForDriver( item );
 
-                wxCHECK_RET( !subgraphs.empty(), wxS( "Invalid empty subgraph" ) );
+                for( std::pair<wxString, SCH_ITEM*>& ncPair : netclassesWithProviders )
+                    netclasses.insert( std::move( ncPair.first ) );
+            }
+        }
 
-                for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        // Append the netclasses to any included bus members
+        for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        {
+            if( subgraph->m_driver_connection->IsBus() )
+            {
+                auto processBusMember = [&, this]( const SCH_CONNECTION* member )
                 {
-                    for( SCH_ITEM* item : subgraph->m_items )
+                    if( !netclasses.empty() )
                     {
-                        const std::vector<std::pair<wxString, SCH_ITEM*>> netclassesWithProviders =
-                                subgraph->GetNetclassesForDriver( item, false );
-
-                        if( netclassesWithProviders.size() > 0 )
-                        {
-                            netclass = netclassesWithProviders[0].first;
-                            break;
-                        }
+                        netSettings->AppendNetclassLabelAssignment( member->Name(), netclasses );
                     }
 
-                    if( !netclass.IsEmpty() )
+                    auto ii = m_net_name_to_subgraphs_map.find( member->Name() );
+
+                    if( oldAssignments.count( member->Name() ) )
                     {
-                        driverSubgraph = subgraph;
-                        break;
-                    }
-                }
-
-                if( !driverSubgraph )
-                    driverSubgraph = subgraphs.front();
-
-                const wxString netname = driverSubgraph->GetNetName();
-
-                // Handle netclass assignments on buses
-                if( driverSubgraph->m_driver_connection->IsBus() )
-                {
-                    auto processBusMember = [&, this]( const SCH_CONNECTION* member )
-                    {
-                        if( !netclass.IsEmpty() )
-                        {
-                            netSettings->m_NetClassLabelAssignments[member->Name()] = netclass;
-                            netclassAssignedFromBus.insert( member->Name() );
-                        }
-
-                        auto ii = m_net_name_to_subgraphs_map.find( member->Name() );
-
-                        if( oldAssignments.count( member->Name() ) )
-                        {
-                            if( oldAssignments[member->Name()] != netclass )
-                            {
-                                affectedNetclassNetAssignments.insert( member->Name() );
-
-                                if( ii != m_net_name_to_subgraphs_map.end() )
-                                    dirtySubgraphs( ii->second );
-                            }
-                        }
-                        else if( !netclass.IsEmpty() )
+                        if( oldAssignments[member->Name()] != netclasses )
                         {
                             affectedNetclassNetAssignments.insert( member->Name() );
 
                             if( ii != m_net_name_to_subgraphs_map.end() )
                                 dirtySubgraphs( ii->second );
                         }
-                    };
-
-                    for( const std::shared_ptr<SCH_CONNECTION>& member :
-                         driverSubgraph->m_driver_connection->Members() )
-                    {
-                        // Check if this member itself is a bus (which can be the case
-                        // for vector buses as members of a bus, see
-                        // https://gitlab.com/kicad/code/kicad/-/issues/16545
-                        if( member->IsBus() )
-                        {
-                            for( const std::shared_ptr<SCH_CONNECTION>& nestedMember :
-                                 member->Members() )
-                            {
-                                processBusMember( nestedMember.get() );
-                            }
-                        }
-                        else
-                        {
-                            processBusMember( member.get() );
-                        }
                     }
-                }
+                    else if( !netclasses.empty() )
+                    {
+                        affectedNetclassNetAssignments.insert( member->Name() );
 
-                // Handle netclass assignments on nets / overarching bus definitions.
-                // Note: currently a netclass definition on a bus will override any
-                // on a net. This will be resolved with multiple netclasses.
-                if( !netclassAssignedFromBus.count( netname ) )
+                        if( ii != m_net_name_to_subgraphs_map.end() )
+                            dirtySubgraphs( ii->second );
+                    }
+                };
+
+                for( const std::shared_ptr<SCH_CONNECTION>& member :
+                            subgraph->m_driver_connection->Members() )
                 {
-                    if( !netclass.IsEmpty() )
+                    // Check if this member itself is a bus (which can be the case
+                    // for vector buses as members of a bus, see
+                    // https://gitlab.com/kicad/code/kicad/-/issues/16545
+                    if( member->IsBus() )
                     {
-                        netSettings->m_NetClassLabelAssignments[netname] = netclass;
-                    }
-
-                    if( oldAssignments.count( netname ) )
-                    {
-                        if( oldAssignments[netname] != netclass )
+                        for( const std::shared_ptr<SCH_CONNECTION>& nestedMember :
+                            member->Members() )
                         {
-                            affectedNetclassNetAssignments.insert( netname );
-                            dirtySubgraphs( subgraphs );
+                            processBusMember( nestedMember.get() );
                         }
                     }
-                    else if( !netclass.IsEmpty() )
+                    else
                     {
-                        affectedNetclassNetAssignments.insert( netname );
-                        dirtySubgraphs( subgraphs );
+                        processBusMember( member.get() );
                     }
                 }
-            };
+            }
+        }
 
+        // Assign the netclasses to the root netname
+        if( !netclasses.empty() )
+        {
+            netSettings->AppendNetclassLabelAssignment( netName, netclasses );
+        }
+
+        if( oldAssignments.count( netName ) )
+        {
+            if( oldAssignments[netName] != netclasses )
+            {
+                affectedNetclassNetAssignments.insert( netName );
+                dirtySubgraphs( subgraphs );
+            }
+        }
+        else if( !netclasses.empty() )
+        {
+            affectedNetclassNetAssignments.insert( netName );
+            dirtySubgraphs( subgraphs );
+        }
+    };
+
+    // Check for netclass assignments
     for( const auto& [ netname, subgraphs ] : m_net_name_to_subgraphs_map )
-        checkNetclassDrivers( subgraphs );
+        checkNetclassDrivers( netname, subgraphs );
 
     if( !aUnconditional )
     {
-        for( auto& [ netname, netclass ] : oldAssignments )
+        for( auto& [netname, netclasses] : oldAssignments )
         {
-            if( netSettings->m_NetClassLabelAssignments.count( netname )
+            if( netSettings->GetNetclassLabelAssignments().count( netname )
                 || affectedNetclassNetAssignments.count( netname ) )
             {
                 continue;
             }
 
-            netSettings->m_NetClassLabelAssignments[ netname ] = netclass;
+            netSettings->SetNetclassLabelAssignment( netname, netclasses );
         }
     }
 }
@@ -3250,15 +3225,6 @@ int CONNECTION_GRAPH::RunERC()
         error_count += ercCheckHierSheets();
     }
 
-    if( settings.IsTestEnabled( ERCE_NETCLASS_CONFLICT ) )
-    {
-        for( const auto& [ netname, subgraphs ] : m_net_name_to_subgraphs_map )
-        {
-            if( !ercCheckNetclassConflicts( subgraphs ) )
-                error_count++;
-        }
-    }
-
     if( settings.IsTestEnabled( ERCE_SINGLE_GLOBAL_LABEL ) )
     {
         error_count += ercCheckSingleGlobalLabel();
@@ -3310,60 +3276,6 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
     }
 
     return true;
-}
-
-
-bool CONNECTION_GRAPH::ercCheckNetclassConflicts( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
-{
-    wxString              firstNetclass;
-    SCH_ITEM*             firstNetclassDriver = nullptr;
-    const SCH_SHEET_PATH* firstNetclassDriverSheet = nullptr;
-    bool                  conflictFound = false;
-
-    for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
-    {
-        for( SCH_ITEM* item : subgraph->m_items )
-        {
-            const std::vector<std::pair<wxString, SCH_ITEM*>> netclassesWithProvider =
-                    subgraph->GetNetclassesForDriver( item, true );
-
-            if( netclassesWithProvider.size() == 0 )
-                continue;
-
-            auto checkNetclass = [&]( const std::pair<wxString, SCH_ITEM*>& netclass )
-            {
-                if( netclass.first != firstNetclass )
-                {
-                    if( !firstNetclassDriver )
-                    {
-                        firstNetclass = netclass.first;
-                        firstNetclassDriver = netclass.second;
-                        firstNetclassDriverSheet = &subgraph->GetSheet();
-                    }
-                    else
-                    {
-                        conflictFound = true;
-
-                        std::shared_ptr<ERC_ITEM> ercItem =
-                                ERC_ITEM::Create( ERCE_NETCLASS_CONFLICT );
-                        ercItem->SetItems( firstNetclassDriver, netclass.second );
-                        ercItem->SetSheetSpecificPath( subgraph->GetSheet() );
-                        ercItem->SetItemsSheetPaths( *firstNetclassDriverSheet,
-                                                     subgraph->GetSheet() );
-
-                        SCH_MARKER* marker =
-                                new SCH_MARKER( ercItem, netclass.second->GetPosition() );
-                        subgraph->m_sheet.LastScreen()->Append( marker );
-                    }
-                }
-            };
-
-            for( const std::pair<wxString, SCH_ITEM*>& netclass : netclassesWithProvider )
-                checkNetclass( netclass );
-        }
-    }
-
-    return conflictFound;
 }
 
 

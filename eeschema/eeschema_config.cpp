@@ -162,7 +162,7 @@ int SCH_EDIT_FRAME::GetSchematicJunctionSize()
 
     const std::shared_ptr<NET_SETTINGS>& netSettings = Prj().GetProjectFile().NetSettings();
     int sizeChoice = Schematic().Settings().m_JunctionSizeChoice;
-    int dotSize = netSettings->m_DefaultNetClass->GetWireWidth() * sizeMultipliers[ sizeChoice ];
+    int dotSize = netSettings->GetDefaultNetclass()->GetWireWidth() * sizeMultipliers[sizeChoice];
 
     return std::max( dotSize, 1 );
 }

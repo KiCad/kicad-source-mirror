@@ -1737,17 +1737,26 @@ void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET
     std::shared_ptr<CONNECTIVITY_DATA>  connectivity = m_board->GetConnectivity();
     std::set<int>                       highlightedNets = rs->GetHighlightNetCodes();
     std::map<int, KIGFX::COLOR4D>&      netColors = rs->GetNetColorMap();
-    std::map<wxString, KIGFX::COLOR4D>& ncColors = rs->GetNetclassColorMap();
-    const std::map<int, wxString>&      ncMap = connectivity->GetNetclassMap();
     int                                 netCode = -1;
 
     if( NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aNet ) )
         netCode = net->GetNetCode();
 
+    const NETCLASS*     nc = nullptr;
+    const NET_SETTINGS* netSettings = connectivity->GetNetSettings();
+
+    if( connectivity->HasNetNameForNetCode( netCode ) )
+    {
+        const wxString& netName = connectivity->GetNetNameForNetCode( netCode );
+
+        if( netSettings->HasEffectiveNetClass( netName ) )
+            nc = netSettings->GetCachedEffectiveNetClass( netName ).get();
+    }
+
     if( colorByNet && netColors.count( netCode ) )
         color = netColors.at( netCode );
-    else if( colorByNet && ncMap.count( netCode ) && ncColors.count( ncMap.at( netCode ) ) )
-        color = ncColors.at( ncMap.at( netCode ) );
+    else if( colorByNet && nc && nc->HasPcbColor() )
+        color = nc->GetPcbColor();
     else
         color = defaultColor;
 
@@ -1969,7 +1978,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         NETINFO_ITEM* newNetInfo = newBoardItem->GetNet();
 
         newNetInfo->SetParent( m_board );
-        newNetInfo->SetNetClass( m_board->GetDesignSettings().m_NetSettings->m_DefaultNetClass );
+        newNetInfo->SetNetClass( m_board->GetDesignSettings().m_NetSettings->GetDefaultNetclass() );
     }
 
     return newBoardItem;

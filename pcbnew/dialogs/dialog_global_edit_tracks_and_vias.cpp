@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+
 #include <pcb_edit_frame.h>
 #include <widgets/unit_binder.h>
 #include <board.h>
@@ -209,9 +211,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
     wxArrayString                  netclassNames;
     std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;
 
-    netclassNames.push_back( settings->m_DefaultNetClass->GetName() );
+    netclassNames.push_back( settings->GetDefaultNetclass()->GetName() );
 
-    for( const auto& [ name, netclass ] : settings->m_NetClasses )
+    for( const auto& [name, netclass] : settings->GetNetclasses() )
         netclassNames.push_back( name );
 
     m_netclassFilter->Set( netclassNames );
@@ -238,7 +240,8 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
         m_netclassFilterOpt->SetValue( true );
     else if( item )
-        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClass()->GetName() );
+        m_netclassFilter->SetStringSelection(
+                item->GetNet()->GetNetClass()->GetVariableSubstitutionName() );
 
     if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )
     {
@@ -382,7 +385,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList
 
     if( m_netclassFilterOpt->GetValue() && !m_netclassFilter->GetStringSelection().IsEmpty() )
     {
-        if( aItem->GetEffectiveNetClass()->GetName() != m_netclassFilter->GetStringSelection() )
+        wxString  filterNetclass = m_netclassFilter->GetStringSelection();
+        NETCLASS* netclass = aItem->GetEffectiveNetClass();
+
+        if( !netclass->ContainsNetclassWithName( filterNetclass ) )
             return;
     }
 

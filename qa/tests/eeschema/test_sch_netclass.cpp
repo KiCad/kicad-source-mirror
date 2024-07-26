@@ -22,6 +22,8 @@
 
 #include <sch_sheet_path.h>
 #include <sch_label.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
 
 class TEST_SCH_NETCLASS_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {};
@@ -47,6 +49,38 @@ BOOST_AUTO_TEST_CASE( TestSubsheetNetclass )
         else
             BOOST_CHECK_EQUAL( label->GetEffectiveNetClass( &path )->GetName(), "net_01" );
     }
+}
+
+BOOST_AUTO_TEST_CASE( TestMultiNetclasses )
+{
+    LoadSchematic( "multinetclasses" );
+
+    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic.Prj().GetProjectFile().m_NetSettings;
+
+    std::shared_ptr<NETCLASS> nc = netSettings->GetEffectiveNetClass( "/BUS.SIGNAL" );
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS2,CLASS1,Default" );
+
+    nc = netSettings->GetEffectiveNetClass( "/BUS.A0" );
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS1,CLASS3,Default" );
+
+    nc = netSettings->GetEffectiveNetClass( "/BUS.A1" );
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS1,Default" );
+
+    nc = netSettings->GetEffectiveNetClass( "/BUS.A2" );
+    wxString name = nc->GetName();
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS1,CLASS4,Default" );
+
+    nc = netSettings->GetEffectiveNetClass( "/NET_1" );
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS2,CLASS3,Default" );
+
+    nc = netSettings->GetEffectiveNetClass( "/NET_2" );
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS_COMPLETE" );
+
+    nc = netSettings->GetEffectiveNetClass( "/NET_3" );
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS_COMPLETE,CLASS3,CLASS4" );
+
+    nc = netSettings->GetEffectiveNetClass( "/NET_4" );
+    BOOST_CHECK_EQUAL( nc->GetVariableSubstitutionName(), "CLASS_COMPLETE,CLASS3,CLASS4" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

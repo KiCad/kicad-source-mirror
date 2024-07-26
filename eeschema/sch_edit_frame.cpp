@@ -1771,6 +1771,9 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
             || m_undoList.m_CommandsList.empty()|| Schematic().ConnectionGraph()->IsMinor() )
     {
+        // Clear all resolved netclass caches in case labels have changed
+        Prj().GetProjectFile().NetSettings()->ClearAllCaches();
+
         // Update all rule areas so we can cascade implied connectivity changes
         std::unordered_set<SCH_SCREEN*> all_screens;
 
@@ -1975,11 +1978,25 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
         new_graph.SetLastCodes( Schematic().ConnectionGraph() );
 
+        std::shared_ptr<NET_SETTINGS> netSettings = Prj().GetProjectFile().NetSettings();
+
+        std::set<wxString> affectedNets;
+
         for( auto&[ path, item ] : all_items )
         {
             wxCHECK2( item, continue );
             item->SetConnectivityDirty();
+            SCH_CONNECTION* conn = item->Connection();
+
+            if( conn )
+            {
+                affectedNets.insert( conn->Name() );
+            }
         }
+
+        // Reset resolved netclass cache for this connection
+        for( const wxString& netName : affectedNets )
+            netSettings->ClearCacheForNet( netName );
 
         new_graph.Recalculate( list, false, &changeHandler );
         Schematic().ConnectionGraph()->Merge( new_graph );

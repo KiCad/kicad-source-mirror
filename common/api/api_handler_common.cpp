@@ -67,7 +67,7 @@ HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses( GetN
     std::shared_ptr<NET_SETTINGS>& netSettings =
             Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
 
-    for( const auto& [name, netClass] : netSettings->m_NetClasses )
+    for( const auto& [name, netClass] : netSettings->GetNetclasses() )
     {
         reply.add_net_classes()->set_name( name.ToStdString() );
     }

@@ -508,7 +508,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 BOARD_DESIGN_SETTINGS&         bds = m_frame->GetBoard()->GetDesignSettings();
                 std::shared_ptr<NET_SETTINGS>& netSettings = bds.m_NetSettings;
 
-                for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+                for( const auto& [name, netclass] : netSettings->GetNetclasses() )
                     tokens += wxT( "|" ) + name;
             }
             else if( m_netNameRegex.Matches( last ) )

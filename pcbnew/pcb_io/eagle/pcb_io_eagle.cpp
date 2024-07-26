@@ -410,9 +410,9 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 
         std::shared_ptr<NET_SETTINGS>& netSettings = bds.m_NetSettings;
 
-        finishNetclass( netSettings->m_DefaultNetClass );
+        finishNetclass( netSettings->GetDefaultNetclass() );
 
-        for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+        for( const auto& [name, netclass] : netSettings->GetNetclasses() )
             finishNetclass( netclass );
 
         m_board->m_LegacyNetclassesLoaded = true;
@@ -2603,12 +2603,12 @@ void PCB_IO_EAGLE::loadClasses( wxXmlNode* aClasses )
 
         if( eClass.name.CmpNoCase( wxT( "default" ) ) == 0 )
         {
-            netclass = bds.m_NetSettings->m_DefaultNetClass;
+            netclass = bds.m_NetSettings->GetDefaultNetclass();
         }
         else
         {
             netclass.reset( new NETCLASS( eClass.name ) );
-            bds.m_NetSettings->m_NetClasses[ eClass.name ] = netclass;
+            bds.m_NetSettings->SetNetclass( eClass.name, netclass );
         }
 
         netclass->SetTrackWidth( INT_MAX );
@@ -2681,10 +2681,8 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
 
             if( netclassIt != m_classMap.end() )
             {
-                m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
-                        { std::make_unique<EDA_COMBINED_MATCHER>( netName, CTX_NETCLASS ),
-                          netclassIt->second->GetName() } );
-
+                m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
+                        netName, netclassIt->second->GetName() );
                 netInfo->SetNetClass( netclassIt->second );
                 netclass = netclassIt->second;
             }

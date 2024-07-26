@@ -246,7 +246,7 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSet
 
         brd->BuildConnectivity();
         brd->BuildListOfNets();
-        brd->SynchronizeNetsAndNetClasses( false );
+        brd->SynchronizeNetsAndNetClasses( true );
         brd->UpdateUserUnits( brd, nullptr );
     }
 

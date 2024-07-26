@@ -261,7 +261,7 @@ std::shared_ptr<NETCLASS> SCH_ITEM::GetEffectiveNetClass( const SCH_SHEET_PATH* 
         if( connection )
             return netSettings->GetEffectiveNetClass( connection->Name() );
         else
-            return netSettings->m_DefaultNetClass;
+            return netSettings->GetDefaultNetclass();
     }
 
     return nullNetclass;

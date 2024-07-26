@@ -41,7 +41,7 @@ DIALOG_ASSIGN_NETCLASS::DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const w
 
     m_netclassCtrl->Append( NETCLASS::Default );
 
-    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
         m_netclassCtrl->Append( name );
 
     if( m_netclassCtrl->GetCount() > 1 )
@@ -69,25 +69,8 @@ bool DIALOG_ASSIGN_NETCLASS::TransferDataFromWindow()
     if( m_patternCtrl->GetValue().IsEmpty() )
         return true;
 
-    // TODO: Rework when we support multiple netclass assignments
-    // Replace existing assignment if we have one
-    for( auto& assignment : netSettings->m_NetClassPatternAssignments )
-    {
-        if( assignment.first->GetPattern() == m_patternCtrl->GetValue() )
-        {
-            assignment.second = m_netclassCtrl->GetStringSelection();
-            return true;
-        }
-    }
-
-    // No assignment, add a new one
-    netSettings->m_NetClassPatternAssignments.push_back(
-            {
-                std::make_unique<EDA_COMBINED_MATCHER>( m_patternCtrl->GetValue(), CTX_NETCLASS ),
-                m_netclassCtrl->GetStringSelection()
-            } );
-
-    netSettings->m_NetClassPatternAssignmentCache.clear();
+    netSettings->SetNetclassPatternAssignment( m_patternCtrl->GetValue(),
+                                               m_netclassCtrl->GetStringSelection() );
 
     return true;
 }

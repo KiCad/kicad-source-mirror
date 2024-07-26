@@ -1274,9 +1274,9 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue() const
 
 int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue() const
 {
-    int clearance = m_NetSettings->m_DefaultNetClass->GetClearance();
+    int clearance = m_NetSettings->GetDefaultNetclass()->GetClearance();
 
-    for( const auto& [ name, netclass ] : m_NetSettings->m_NetClasses )
+    for( const auto& [name, netclass] : m_NetSettings->GetNetclasses() )
         clearance = std::min( clearance, netclass->GetClearance() );
 
     return clearance;
@@ -1295,7 +1295,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaSize() const
     if( m_useCustomTrackVia )
         return m_customViaSize.m_Diameter;
     else if( m_viaSizeIndex == 0 )
-        return m_NetSettings->m_DefaultNetClass->GetViaDiameter();
+        return m_NetSettings->GetDefaultNetclass()->GetViaDiameter();
     else
         return m_ViasDimensionsList[ m_viaSizeIndex ].m_Diameter;
 }
@@ -1308,7 +1308,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
     if( m_useCustomTrackVia )
         drill = m_customViaSize.m_Drill;
     else if( m_viaSizeIndex == 0 )
-        drill = m_NetSettings->m_DefaultNetClass->GetViaDrill();
+        drill = m_NetSettings->GetDefaultNetclass()->GetViaDrill();
     else
         drill = m_ViasDimensionsList[ m_viaSizeIndex ].m_Drill;
 
@@ -1328,7 +1328,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentTrackWidth() const
     if( m_useCustomTrackVia )
         return m_customTrackWidth;
     else if( m_trackWidthIndex == 0 )
-        return m_NetSettings->m_DefaultNetClass->GetTrackWidth();
+        return m_NetSettings->GetDefaultNetclass()->GetTrackWidth();
     else
         return m_TrackWidthList[ m_trackWidthIndex ];
 }
@@ -1354,10 +1354,10 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairWidth() const
     }
     else if( m_diffPairIndex == 0 )
     {
-        if( m_NetSettings->m_DefaultNetClass->HasDiffPairWidth() )
-            return m_NetSettings->m_DefaultNetClass->GetDiffPairWidth();
+        if( m_NetSettings->GetDefaultNetclass()->HasDiffPairWidth() )
+            return m_NetSettings->GetDefaultNetclass()->GetDiffPairWidth();
         else
-            return m_NetSettings->m_DefaultNetClass->GetTrackWidth();
+            return m_NetSettings->GetDefaultNetclass()->GetTrackWidth();
     }
     else
     {
@@ -1374,10 +1374,10 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairGap() const
     }
     else if( m_diffPairIndex == 0 )
     {
-        if( m_NetSettings->m_DefaultNetClass->HasDiffPairGap() )
-            return m_NetSettings->m_DefaultNetClass->GetDiffPairGap();
+        if( m_NetSettings->GetDefaultNetclass()->HasDiffPairGap() )
+            return m_NetSettings->GetDefaultNetclass()->GetDiffPairGap();
         else
-            return m_NetSettings->m_DefaultNetClass->GetClearance();
+            return m_NetSettings->GetDefaultNetclass()->GetClearance();
     }
     else
     {
@@ -1394,8 +1394,8 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairViaGap() const
     }
     else if( m_diffPairIndex == 0 )
     {
-        if( m_NetSettings->m_DefaultNetClass->HasDiffPairViaGap() )
-            return m_NetSettings->m_DefaultNetClass->GetDiffPairViaGap();
+        if( m_NetSettings->GetDefaultNetclass()->HasDiffPairViaGap() )
+            return m_NetSettings->GetDefaultNetclass()->GetDiffPairViaGap();
         else
             return GetCurrentDiffPairGap();
     }

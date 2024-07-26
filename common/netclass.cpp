@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <netclass.h>
 #include <macros.h>
 #include <base_units.h>
@@ -44,35 +45,151 @@ const int DEFAULT_DIFF_PAIR_VIAGAP = pcbIUScale.mmToIU( 0.25 );
 const int DEFAULT_WIRE_WIDTH       = schIUScale.MilsToIU( 6 );
 const int DEFAULT_BUS_WIDTH        = schIUScale.MilsToIU( 12 );
 
-const int DEFAULT_LINE_STYLE = 0; // solid
+const int DEFAULT_LINE_STYLE       = 0; // solid
 
 
-NETCLASS::NETCLASS( const wxString& aName ) :
-    m_Name( aName ),
-    m_PcbColor( KIGFX::COLOR4D::UNSPECIFIED )
+NETCLASS::NETCLASS( const wxString& aName, bool aInitWithDefaults ) : m_isDefault( false )
 {
-    // Default settings
-    SetClearance( DEFAULT_CLEARANCE );
-    SetViaDrill( DEFAULT_VIA_DRILL );
-    SetuViaDrill( DEFAULT_UVIA_DRILL );
-    // These defaults will be overwritten by SetParams,
-    // from the board design parameters, later
-    SetTrackWidth( DEFAULT_TRACK_WIDTH );
-    SetViaDiameter( DEFAULT_VIA_DIAMETER );
-    SetuViaDiameter( DEFAULT_UVIA_DIAMETER );
-    SetDiffPairWidth( DEFAULT_DIFF_PAIR_WIDTH );
-    SetDiffPairGap( DEFAULT_DIFF_PAIR_GAP );
-    SetDiffPairViaGap( DEFAULT_DIFF_PAIR_VIAGAP );
+    m_constituents.push_back( this );
 
-    SetWireWidth( DEFAULT_WIRE_WIDTH );
-    SetBusWidth( DEFAULT_BUS_WIDTH );
+    SetName( aName );
+    SetPriority( -1 );
+
+    // Colors are a special optional case - always set, but UNSPECIFIED used in place of optional
+    SetPcbColor( COLOR4D::UNSPECIFIED );
     SetSchematicColor( COLOR4D::UNSPECIFIED );
-    SetLineStyle( DEFAULT_LINE_STYLE );
+
+    if( aInitWithDefaults )
+    {
+        SetClearance( DEFAULT_CLEARANCE );
+        SetViaDrill( DEFAULT_VIA_DRILL );
+        SetuViaDrill( DEFAULT_UVIA_DRILL );
+        SetTrackWidth( DEFAULT_TRACK_WIDTH );
+        SetViaDiameter( DEFAULT_VIA_DIAMETER );
+        SetuViaDiameter( DEFAULT_UVIA_DIAMETER );
+        SetDiffPairWidth( DEFAULT_DIFF_PAIR_WIDTH );
+        SetDiffPairGap( DEFAULT_DIFF_PAIR_GAP );
+        SetDiffPairViaGap( DEFAULT_DIFF_PAIR_VIAGAP );
+
+        SetWireWidth( DEFAULT_WIRE_WIDTH );
+        SetBusWidth( DEFAULT_BUS_WIDTH );
+        SetLineStyle( DEFAULT_LINE_STYLE );
+    }
+
+    ResetParents();
 }
 
 
-NETCLASS::~NETCLASS()
+void NETCLASS::ResetParents()
 {
+    SetClearanceParent( this );
+    SetTrackWidthParent( this );
+    SetViaDiameterParent( this );
+    SetViaDrillParent( this );
+    SetuViaDiameterParent( this );
+    SetuViaDrillParent( this );
+    SetDiffPairWidthParent( this );
+    SetDiffPairGapParent( this );
+    SetDiffPairViaGapParent( this );
+    SetPcbColorParent( this );
+    SetWireWidthParent( this );
+    SetBusWidthParent( this );
+    SetSchematicColorParent( this );
+    SetLineStyleParent( this );
 }
 
 
+void NETCLASS::ResetParameters()
+{
+    SetPcbColor( COLOR4D::UNSPECIFIED );
+    SetSchematicColor( COLOR4D::UNSPECIFIED );
+    SetClearance( std::optional<int>() );
+    SetViaDrill( std::optional<int>() );
+    SetuViaDrill( std::optional<int>() );
+    SetTrackWidth( std::optional<int>() );
+    SetViaDiameter( std::optional<int>() );
+    SetuViaDiameter( std::optional<int>() );
+    SetDiffPairWidth( std::optional<int>() );
+    SetDiffPairGap( std::optional<int>() );
+    SetDiffPairViaGap( std::optional<int>() );
+    SetWireWidth( std::optional<int>() );
+    SetBusWidth( std::optional<int>() );
+    SetLineStyle( std::optional<int>() );
+
+    ResetParents();
+}
+
+
+bool NETCLASS::operator==( const NETCLASS& other ) const
+{
+    return m_constituents == other.m_constituents;
+}
+
+
+const std::vector<NETCLASS*>& NETCLASS::GetConstituentNetclasses() const
+{
+    return m_constituents;
+}
+
+
+void NETCLASS::SetConstituentNetclasses( std::vector<NETCLASS*>&& constituents )
+{
+    m_constituents = std::move( constituents );
+}
+
+
+bool NETCLASS::ContainsNetclassWithName( const wxString& netclass ) const
+{
+    return std::any_of( m_constituents.begin(), m_constituents.end(),
+                        [&netclass]( const NETCLASS* nc )
+                        {
+                            return nc->GetName() == netclass;
+                        } );
+}
+
+
+const wxString NETCLASS::GetName() const
+{
+    if( m_constituents.size() == 1 )
+        return m_Name;
+
+    wxASSERT( m_constituents.size() >= 2 );
+
+    wxString name;
+
+    if( m_constituents.size() == 2 )
+    {
+        name.Printf( _( "%s and %s" ), m_constituents[0]->GetName(), m_constituents[1]->GetName() );
+    }
+    else if( m_constituents.size() == 3 )
+    {
+        name.Printf( _( "%s, %s and %s" ), m_constituents[0]->GetName(),
+                     m_constituents[1]->GetName(), m_constituents[2]->GetName() );
+    }
+    else if( m_constituents.size() > 3 )
+    {
+        name.Printf( _( "%s, %s and %d more" ), m_constituents[0]->GetName(),
+                     m_constituents[1]->GetName(), static_cast<int>( m_constituents.size() - 2 ) );
+    }
+
+    return name;
+}
+
+
+const wxString NETCLASS::GetVariableSubstitutionName() const
+{
+    if( m_constituents.size() == 1 )
+        return m_Name;
+
+    wxASSERT( m_constituents.size() >= 2 );
+
+    wxString name = m_constituents[0]->GetName();
+
+    for( std::size_t i = 1; i < m_constituents.size(); ++i )
+    {
+        name += ",";
+        name += m_constituents[i]->GetName();
+    }
+
+    return name;
+}

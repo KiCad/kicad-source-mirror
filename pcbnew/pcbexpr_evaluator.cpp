@@ -138,14 +138,16 @@ public:
 
     const wxString& AsString() const override
     {
-        const_cast<PCBEXPR_NETCLASS_VALUE*>( this )->Set( m_item->GetEffectiveNetClass()->GetName() );
+        const_cast<PCBEXPR_NETCLASS_VALUE*>( this )->Set(
+                m_item->GetEffectiveNetClass()->GetVariableSubstitutionName() );
         return LIBEVAL::VALUE::AsString();
     }
 
     bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
     {
         if( const PCBEXPR_NETCLASS_VALUE* bValue = dynamic_cast<const PCBEXPR_NETCLASS_VALUE*>( b ) )
-            return m_item->GetEffectiveNetClass() == bValue->m_item->GetEffectiveNetClass();
+            return *( m_item->GetEffectiveNetClass() )
+                   == *( bValue->m_item->GetEffectiveNetClass() );
         else
             return LIBEVAL::VALUE::EqualTo( aCtx, b );
     }

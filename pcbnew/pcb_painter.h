@@ -126,8 +126,6 @@ public:
     NET_COLOR_MODE GetNetColorMode() const { return m_netColorMode; }
     void SetNetColorMode( NET_COLOR_MODE aMode ) { m_netColorMode = aMode; }
 
-    std::map<wxString, KIGFX::COLOR4D>& GetNetclassColorMap() { return m_netclassColors; }
-
     std::map<int, KIGFX::COLOR4D>& GetNetColorMap() { return m_netColors; }
 
     std::set<int>& GetHiddenNets() { return m_hiddenNets; }

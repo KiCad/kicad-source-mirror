@@ -37,6 +37,7 @@
 
 #include <math/vector2d.h>
 #include <geometry/shape_poly_set.h>
+#include <project/net_settings.h>
 #include <zone.h>
 
 class FROM_TO_CACHE;
@@ -270,7 +271,13 @@ public:
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
-    const std::map<int, wxString>& GetNetclassMap() const { return m_netclassMap; }
+    const NET_SETTINGS* GetNetSettings() const { return m_netSettings.get(); }
+
+    bool            HasNetNameForNetCode( int nc ) const { return m_netcodeMap.count( nc ) > 0; }
+    const wxString& GetNetNameForNetCode( int nc ) const { return m_netcodeMap.at( nc ); }
+
+    /// @brief Refresh the map of netcodes to net names
+    void RefreshNetcodeMap( BOARD* aBoard );
 
 #ifndef SWIG
     const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*>& aItems );
@@ -306,10 +313,13 @@ private:
 
     KISPINLOCK                      m_lock;
 
-    /// Map of netcode -> netclass the net is a member of; used for ratsnest painting
-    std::map<int, wxString>         m_netclassMap;
-
     PROGRESS_REPORTER*              m_progressReporter;
+
+    /// @brief Used to get netclass data when drawing ratsnests
+    std::shared_ptr<NET_SETTINGS> m_netSettings;
+
+    /// @brief Used to map netcode to net name
+    std::map<int, wxString> m_netcodeMap;
 };
 
 #endif

@@ -722,6 +722,7 @@ set( BMAPS_OTHER
     stroke_dashdotdot
     stroke_dot
     stroke_solid
+    stroke_none
     twistedpair
     viacalc
     )

@@ -95,7 +95,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     std::map<int, KIGFX::COLOR4D>& netColors = renderSettings->GetNetColorMap();
     netColors.clear();
 
-    for( const auto& [ netname, color ] : netSettings->m_NetColorAssignments )
+    for( const auto& [netname, color] : netSettings->GetNetColorAssignments() )
     {
         if( color != COLOR4D::UNSPECIFIED )
         {
@@ -103,12 +103,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
                 netColors[ net->GetNetCode() ] = color;
         }
     }
-
-    std::map<wxString, KIGFX::COLOR4D>& netclassColors = renderSettings->GetNetclassColorMap();
-    netclassColors.clear();
-
-    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
-        netclassColors[ name ] = netclass->GetPcbColor();
 
     m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
     m_appearancePanel->SetUserViewports( project.m_Viewports );
@@ -174,21 +168,12 @@ void PCB_EDIT_FRAME::SaveProjectLocalSettings()
     KIGFX::RENDER_SETTINGS*        rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
     KIGFX::PCB_RENDER_SETTINGS*    renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 
-    netSettings->m_NetColorAssignments.clear();
+    netSettings->ClearNetColorAssignments();
 
     for( const auto& [ netcode, color ] : renderSettings->GetNetColorMap() )
     {
         if( NETINFO_ITEM* net = nets.GetNetItem( netcode ) )
-            netSettings->m_NetColorAssignments[ net->GetNetname() ] = color;
-    }
-
-    std::map<wxString, KIGFX::COLOR4D>& netclassColors = renderSettings->GetNetclassColorMap();
-
-    // NOTE: this assumes netclasses will have already been updated, which I think is the case
-    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
-    {
-        if( netclassColors.count( name ) )
-            netclass->SetPcbColor( netclassColors.at( name ) );
+            netSettings->SetNetColorAssignment( net->GetNetname(), color );
     }
 
     /**

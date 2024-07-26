@@ -154,7 +154,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         return SaveBoard(filename,self)
 
     def GetNetClasses(self):
-        return self.GetDesignSettings().m_NetSettings.m_NetClasses
+        return self.GetDesignSettings().m_NetSettings.GetNetclasses()
 
     def GetCurrentNetClassName(self):
         return self.GetDesignSettings().GetCurrentNetClassName()
@@ -194,7 +194,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         # Copy the NETCLASS_MAP so the one in the BOARD isn't modified
         # when we add the Default net class.
         netclassmap = {k:v for k,v in self.GetNetClasses().items()}
-        netclassmap['Default'] = self.GetDesignSettings().m_NetSettings.m_DefaultNetClass
+        netclassmap['Default'] = self.GetDesignSettings().m_NetSettings.GetDefaultNetclass()
         return netclassmap
     %}
 }

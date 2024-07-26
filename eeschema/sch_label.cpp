@@ -807,7 +807,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         *token = wxEmptyString;
 
         if( connection )
-            *token = GetEffectiveNetClass()->GetName();
+            *token = GetEffectiveNetClass()->GetVariableSubstitutionName();
 
         return true;
     }

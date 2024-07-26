@@ -24,6 +24,7 @@
  */
 
 #include <algorithm>
+#include <limits>
 
 #include <pgm_base.h>
 #include <eda_draw_frame.h>
@@ -91,6 +92,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     g_lineStyleIcons.clear();
     g_lineStyleNames.clear();
 
+    g_lineStyleIcons.push_back( BITMAPS::stroke_none );
+    g_lineStyleNames.push_back( _( "<Not defined>" ) );
     g_lineStyleIcons.push_back( BITMAPS::stroke_solid );
     g_lineStyleNames.push_back( _( "Solid" ) );
     g_lineStyleIcons.push_back( BITMAPS::stroke_dash );
@@ -216,6 +219,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     m_addAssignmentButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_removeAssignmentButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
+    m_moveUpButton->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_moveDownButton->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+
     // wxFormBuilder doesn't include this event...
     m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING,
                              wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
@@ -242,7 +248,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
                   wxWindow* dialog = wxGetTopLevelParent( this );
                   wxWindow* topLevelFocus = wxGetTopLevelParent( wxWindow::FindFocus() );
 
-                  if( topLevelFocus == dialog && m_lastLoaded != m_netSettings->m_NetClasses )
+                  if( topLevelFocus == dialog && m_lastLoaded != m_netSettings->GetNetclasses() )
                       checkReload();
               }
           } );
@@ -275,91 +281,130 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
 
 void PANEL_SETUP_NETCLASSES::loadNetclasses()
 {
-    KIGFX::PCB_RENDER_SETTINGS* rs = nullptr;
-
-    if( !m_isEEschema )
-    {
-        rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-                m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
-    }
-
-    int row = 0;
-
     auto netclassToGridRow =
-            [&]( int aRow, const std::shared_ptr<NETCLASS>& nc, bool isDefault )
+            [&]( int aRow, const NETCLASS* nc )
             {
                 m_netclassGrid->SetCellValue( aRow, GRID_NAME, nc->GetName() );
 
-                m_netclassGrid->SetUnitValue( aRow, GRID_WIREWIDTH, nc->GetWireWidth() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_BUSWIDTH, nc->GetBusWidth() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_WIREWIDTH,
+                                                      nc->GetWireWidthOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_BUSWIDTH,
+                                                      nc->GetBusWidthOpt() );
 
                 wxString colorAsString = nc->GetSchematicColor().ToCSSString();
                 m_netclassGrid->SetCellValue( aRow, GRID_SCHEMATIC_COLOR, colorAsString );
 
-                int lineStyleIdx = std::max( 0, nc->GetLineStyle() );
-
-                if( lineStyleIdx >= (int) g_lineStyleNames.size() )
-                    lineStyleIdx = 0;
-
-                m_netclassGrid->SetCellValue( aRow, GRID_LINESTYLE, g_lineStyleNames[lineStyleIdx] );
-                m_netclassGrid->SetUnitValue( aRow, GRID_CLEARANCE, nc->GetClearance() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_TRACKSIZE, nc->GetTrackWidth() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_VIASIZE, nc->GetViaDiameter() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_VIADRILL, nc->GetViaDrill() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_uVIASIZE, nc->GetuViaDiameter() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_uVIADRILL, nc->GetuViaDrill() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_DIFF_PAIR_WIDTH, nc->GetDiffPairWidth() );
-                m_netclassGrid->SetUnitValue( aRow, GRID_DIFF_PAIR_GAP, nc->GetDiffPairGap() );
-
-                colorAsString = KIGFX::COLOR4D( 0.0, 0.0, 0.0, 0.0 ).ToCSSString();
-
-                if( m_isEEschema )
-                    colorAsString = nc->GetPcbColor().ToCSSString();
-
-                if( rs )
+                if( nc->HasLineStyle() )
                 {
-                    std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
+                    int lineStyleIdx = std::max( 0, nc->GetLineStyle() );
 
-                    if( netclassColors.find( nc->GetName() ) != netclassColors.end() )
-                        colorAsString = netclassColors[nc->GetName()].ToCSSString();
+                    if( lineStyleIdx >= (int) g_lineStyleNames.size() + 1 )
+                        lineStyleIdx = 0;
+
+                    m_netclassGrid->SetCellValue( aRow, GRID_LINESTYLE,
+                                                  g_lineStyleNames[lineStyleIdx + 1] );
+                }
+                else
+                {
+                    m_netclassGrid->SetCellValue(
+                            aRow, GRID_LINESTYLE,
+                            g_lineStyleNames[0] ); // <Not defined> line style in list
                 }
 
-                if( isDefault )
-                {
-                    colorAsString = KIGFX::COLOR4D( 0.0, 0.0, 0.0, 0.0 ).ToCSSString();
-                    m_netclassGrid->SetReadOnly( aRow, GRID_PCB_COLOR );
-                }
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_CLEARANCE, nc->GetClearanceOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_TRACKSIZE, nc->GetTrackWidthOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_VIASIZE, nc->GetViaDiameterOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_VIADRILL, nc->GetViaDrillOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_uVIASIZE, nc->GetuViaDiameterOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_uVIADRILL, nc->GetuViaDrillOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH, nc->GetDiffPairWidthOpt() );
+                m_netclassGrid->SetOptionalUnitValue( aRow, GRID_DIFF_PAIR_GAP, nc->GetDiffPairGapOpt() );
 
+                colorAsString = nc->GetPcbColor().ToCSSString();
                 m_netclassGrid->SetCellValue( aRow, GRID_PCB_COLOR, colorAsString );
+
+                if( nc->IsDefault() )
+                {
+                    m_netclassGrid->SetReadOnly( aRow, GRID_PCB_COLOR );
+                    m_netclassGrid->SetReadOnly( aRow, GRID_SCHEMATIC_COLOR );
+                }
+
+                setNetclassRowNullableEditors( aRow, nc->IsDefault() );
             };
 
+    // Get the netclasses sorted by priority
+    std::vector<const NETCLASS*> netclasses;
+    netclasses.reserve( m_netSettings->GetNetclasses().size() );
+
+    for( const auto& [name, netclass] : m_netSettings->GetNetclasses() )
+        netclasses.push_back( netclass.get() );
+
+    std::sort( netclasses.begin(), netclasses.end(),
+               []( const NETCLASS* nc1, const NETCLASS* nc2 )
+               {
+                   return nc1->GetPriority() < nc2->GetPriority();
+               } );
+
+    // Enter user-defined netclasses
     m_netclassGrid->ClearRows();
+    m_netclassGrid->AppendRows( static_cast<int>( netclasses.size() ) );
 
-    // enter the Default NETCLASS.
+    int row = 0;
+
+    for( const NETCLASS* nc : netclasses )
+        netclassToGridRow( row++, nc );
+
+    // Enter the Default netclass.
     m_netclassGrid->AppendRows( 1 );
-    netclassToGridRow( row++, m_netSettings->m_DefaultNetClass, true );
+    netclassToGridRow( row, m_netSettings->GetDefaultNetclass().get() );
 
-    // make the Default NETCLASS name read-only
+    // Make the Default netclass name read-only
     wxGridCellAttr* cellAttr = m_netclassGrid->GetOrCreateCellAttr( 0, GRID_NAME );
     cellAttr->SetReadOnly();
     cellAttr->DecRef();
 
-    // enter other netclasses
-    m_netclassGrid->AppendRows( (int) m_netSettings->m_NetClasses.size() );
-
-    for( const auto& [ name, netclass ] : m_netSettings->m_NetClasses )
-        netclassToGridRow( row++, netclass, false );
-
     m_assignmentGrid->ClearRows();
-    m_assignmentGrid->AppendRows( m_netSettings->m_NetClassPatternAssignments.size() );
+    m_assignmentGrid->AppendRows( m_netSettings->GetNetclassPatternAssignments().size() );
+
     row = 0;
 
-    for( const auto& [ matcher, netclassName ] :  m_netSettings->m_NetClassPatternAssignments )
+    for( const auto& [matcher, netclassName] : m_netSettings->GetNetclassPatternAssignments() )
     {
         m_assignmentGrid->SetCellValue( row, 0, matcher->GetPattern() );
         m_assignmentGrid->SetCellValue( row, 1, netclassName );
         row++;
     }
+}
+
+
+void PANEL_SETUP_NETCLASSES::setNetclassRowNullableEditors( int aRowId, bool aIsDefault )
+{
+    // Set nullable editors
+    auto setCellEditor = [this, aRowId, aIsDefault]( int aCol )
+    {
+        GRID_CELL_MARK_AS_NULLABLE* cellEditor;
+
+        if( aIsDefault )
+            cellEditor = new GRID_CELL_MARK_AS_NULLABLE( false );
+        else
+            cellEditor = new GRID_CELL_MARK_AS_NULLABLE( true );
+    
+        wxGridCellAttr* attr = m_netclassGrid->GetOrCreateCellAttr( aRowId, aCol );
+        attr->SetEditor( cellEditor );
+        attr->DecRef();
+    };
+
+    setCellEditor( GRID_WIREWIDTH );
+    setCellEditor( GRID_BUSWIDTH );
+    setCellEditor( GRID_CLEARANCE );
+    setCellEditor( GRID_TRACKSIZE );
+    setCellEditor( GRID_VIASIZE );
+    setCellEditor( GRID_VIADRILL );
+    setCellEditor( GRID_VIADRILL );
+    setCellEditor( GRID_uVIASIZE );
+    setCellEditor( GRID_uVIADRILL );
+    setCellEditor( GRID_DIFF_PAIR_WIDTH );
+    setCellEditor( GRID_DIFF_PAIR_GAP );
 }
 
 
@@ -372,7 +417,7 @@ void PANEL_SETUP_NETCLASSES::checkReload()
     if( IsOK( m_parent, _( "The netclasses have been changed outside the Setup dialog.\n"
                            "Do you wish to reload them?" ) ) )
     {
-        m_lastLoaded = m_netSettings->m_NetClasses;
+        m_lastLoaded = m_netSettings->GetNetclasses();
         loadNetclasses();
     }
 }
@@ -400,7 +445,7 @@ void PANEL_SETUP_NETCLASSES::onUnitsChanged( wxCommandEvent& aEvent )
 
 bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 {
-    m_lastLoaded = m_netSettings->m_NetClasses;
+    m_lastLoaded = m_netSettings->GetNetclasses();
     m_lastCheckedTicker = m_frame->Prj().GetNetclassesTicker();
 
     loadNetclasses();
@@ -435,79 +480,78 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     if( !Validate() )
         return false;
 
-    int row = 0;
-
     auto gridRowToNetclass =
-            [&]( int aRow, const std::shared_ptr<NETCLASS>& nc, bool isDefault )
+            [&]( int aRow, const std::shared_ptr<NETCLASS>& nc )
             {
+                if( nc->IsDefault() )
+                    nc->SetPriority( std::numeric_limits<int>::max() );
+                else
+                    nc->SetPriority( aRow );
+
                 nc->SetName( m_netclassGrid->GetCellValue( aRow, GRID_NAME ) );
 
-                nc->SetWireWidth( m_netclassGrid->GetUnitValue( aRow, GRID_WIREWIDTH ) );
-                nc->SetBusWidth( m_netclassGrid->GetUnitValue( aRow, GRID_BUSWIDTH ) );
-
-                wxString color = m_netclassGrid->GetCellValue( aRow, GRID_SCHEMATIC_COLOR );
-                nc->SetSchematicColor( wxColour( color ) );
+                nc->SetWireWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_WIREWIDTH ) );
+                nc->SetBusWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_BUSWIDTH ) );
 
                 wxString lineStyle = m_netclassGrid->GetCellValue( aRow, GRID_LINESTYLE );
-                nc->SetLineStyle( g_lineStyleNames.Index( lineStyle ) );
-                wxASSERT_MSG( nc->GetLineStyle() >= 0, "Line style name not found." );
+                int      lineIdx = g_lineStyleNames.Index( lineStyle );
 
-                nc->SetClearance( m_netclassGrid->GetUnitValue( aRow, GRID_CLEARANCE ) );
-                nc->SetTrackWidth( m_netclassGrid->GetUnitValue( aRow, GRID_TRACKSIZE ) );
-                nc->SetViaDiameter( m_netclassGrid->GetUnitValue( aRow, GRID_VIASIZE ) );
-                nc->SetViaDrill( m_netclassGrid->GetUnitValue( aRow, GRID_VIADRILL ) );
-                nc->SetuViaDiameter( m_netclassGrid->GetUnitValue( aRow, GRID_uVIASIZE ) );
-                nc->SetuViaDrill( m_netclassGrid->GetUnitValue( aRow, GRID_uVIADRILL ) );
-                nc->SetDiffPairWidth( m_netclassGrid->GetUnitValue( aRow, GRID_DIFF_PAIR_WIDTH ) );
-                nc->SetDiffPairGap( m_netclassGrid->GetUnitValue( aRow, GRID_DIFF_PAIR_GAP ) );
+                if( lineIdx == 0 )
+                    nc->SetLineStyle( std::optional<int>() );
+                else
+                    nc->SetLineStyle( lineIdx - 1 );
 
-                if( !isDefault )
+                wxASSERT_MSG( lineIdx >= 0, "Line style name not found." );
+
+                nc->SetClearance( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_CLEARANCE ) );
+                nc->SetTrackWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_TRACKSIZE ) );
+                nc->SetViaDiameter( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_VIASIZE ) );
+                nc->SetViaDrill( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_VIADRILL ) );
+                nc->SetuViaDiameter( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_uVIASIZE ) );
+                nc->SetuViaDrill( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_uVIADRILL ) );
+                nc->SetDiffPairWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH ) );
+                nc->SetDiffPairGap( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_GAP ) );
+
+                if( !nc->IsDefault() )
                 {
-                    color = m_netclassGrid->GetCellValue( aRow, GRID_PCB_COLOR );
+                    wxString color = m_netclassGrid->GetCellValue( aRow, GRID_PCB_COLOR );
                     KIGFX::COLOR4D newPcbColor( color );
 
                     if( newPcbColor != KIGFX::COLOR4D::UNSPECIFIED )
                         nc->SetPcbColor( newPcbColor );
+                    
+                    color = m_netclassGrid->GetCellValue( aRow, GRID_SCHEMATIC_COLOR );
+                    KIGFX::COLOR4D newSchematicColor( color );
 
-                    if( !m_isEEschema )
-                    {
-                        KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-                                m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
-                        std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
-
-                        if( newPcbColor != COLOR4D::UNSPECIFIED )
-                            netclassColors[nc->GetName()] = newPcbColor;
-                        else
-                            netclassColors.erase( nc->GetName() );
-                    }
+                    if( newSchematicColor != KIGFX::COLOR4D::UNSPECIFIED )
+                        nc->SetSchematicColor( newSchematicColor );
                 }
             };
 
-    m_netSettings->m_NetClasses.clear();
+    m_netSettings->ClearNetclasses();
 
     // Copy the default NetClass:
-    gridRowToNetclass( row++, m_netSettings->m_DefaultNetClass, true );
+    gridRowToNetclass( m_netclassGrid->GetNumberRows() - 1, m_netSettings->GetDefaultNetclass() );
 
     // Copy other NetClasses:
-    for( row = 1; row < m_netclassGrid->GetNumberRows(); ++row )
+    for( int row = 0; row < m_netclassGrid->GetNumberRows() - 1; ++row )
     {
-        auto nc = std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row, GRID_NAME ) );
-        gridRowToNetclass( row, nc, false );
-        m_netSettings->m_NetClasses[ nc->GetName() ] = nc;
+        auto nc =
+                std::make_shared<NETCLASS>( m_netclassGrid->GetCellValue( row, GRID_NAME ), false );
+        gridRowToNetclass( row, nc );
+        m_netSettings->SetNetclass( nc->GetName(), nc );
     }
 
-    m_netSettings->m_NetClassPatternAssignments.clear();
+    m_netSettings->ClearNetclassPatternAssignments();
+    m_netSettings->ClearAllCaches();
 
-    for( row = 0; row < m_assignmentGrid->GetNumberRows(); ++row )
+    for( int row = 0; row < m_assignmentGrid->GetNumberRows(); ++row )
     {
         wxString pattern = m_assignmentGrid->GetCellValue( row, 0 );
         wxString netclass = m_assignmentGrid->GetCellValue( row, 1 );
 
-        m_netSettings->m_NetClassPatternAssignments.push_back(
-                { std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ), netclass } );
+        m_netSettings->SetNetclassPatternAssignment( pattern, netclass );
     }
-
-    m_netSettings->m_NetClassPatternAssignmentCache.clear();
 
     return true;
 }
@@ -627,15 +671,19 @@ void PANEL_SETUP_NETCLASSES::OnAddNetclassClick( wxCommandEvent& event )
     if( !m_netclassGrid->CommitPendingChanges() )
         return;
 
-    int row = m_netclassGrid->GetNumberRows();
-    m_netclassGrid->AppendRows();
+    m_netclassGrid->InsertRows();
 
-    // Copy values of the default class:
-    for( int col = 1; col < m_netclassGrid->GetNumberCols(); col++ )
-        m_netclassGrid->SetCellValue( row, col, m_netclassGrid->GetCellValue( 0, col ) );
+    // Set defaults where required
+    wxString colorAsString = KIGFX::COLOR4D::UNSPECIFIED.ToCSSString();
+    m_netclassGrid->SetCellValue( 0, GRID_PCB_COLOR, colorAsString );
+    m_netclassGrid->SetCellValue( 0, GRID_SCHEMATIC_COLOR, colorAsString );
+    m_netclassGrid->SetCellValue( 0, GRID_LINESTYLE, g_lineStyleNames[0] );
 
-    m_netclassGrid->MakeCellVisible( row, 0 );
-    m_netclassGrid->SetGridCursor( row, 0 );
+    // Set the row nullable editors
+    setNetclassRowNullableEditors( 0, false );
+
+    m_netclassGrid->MakeCellVisible( 0, 0 );
+    m_netclassGrid->SetGridCursor( 0, 0 );
 
     m_netclassGrid->EnableCellEditControl( true );
     m_netclassGrid->ShowCellEditControl();
@@ -655,7 +703,7 @@ void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
     {
         return;
     }
-    else if( curRow == 0 )
+    else if( curRow == m_netclassGrid->GetNumberRows() - 1 )
     {
         wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
@@ -720,7 +768,7 @@ void PANEL_SETUP_NETCLASSES::OnAddAssignmentClick( wxCommandEvent& event )
     int row = m_assignmentGrid->GetNumberRows();
     m_assignmentGrid->AppendRows();
 
-    m_assignmentGrid->SetCellValue( row, 1, m_netSettings->m_DefaultNetClass->GetName() );
+    m_assignmentGrid->SetCellValue( row, 1, m_netSettings->GetDefaultNetclass()->GetName() );
 
     m_assignmentGrid->MakeCellVisible( row, 0 );
     m_assignmentGrid->SetGridCursor( row, 0 );
@@ -752,7 +800,8 @@ void PANEL_SETUP_NETCLASSES::OnRemoveAssignmentClick( wxCommandEvent& event )
 
 void PANEL_SETUP_NETCLASSES::OnImportColorsClick( wxCommandEvent& event )
 {
-    std::map<wxString, std::shared_ptr<NETCLASS>>& netclasses = m_netSettings->m_NetClasses;
+    const std::map<wxString, std::shared_ptr<NETCLASS>>& netclasses =
+            m_netSettings->GetNetclasses();
 
     for( int row = 1; row < m_netclassGrid->GetNumberRows(); ++row )
     {
@@ -760,7 +809,7 @@ void PANEL_SETUP_NETCLASSES::OnImportColorsClick( wxCommandEvent& event )
 
         if( netclasses.find( netclassName ) != netclasses.end() )
         {
-            const KIGFX::COLOR4D ncColor = netclasses[netclassName]->GetSchematicColor();
+            const KIGFX::COLOR4D ncColor = netclasses.at( netclassName )->GetSchematicColor();
             m_netclassGrid->SetCellValue( row, GRID_PCB_COLOR, ncColor.ToCSSString() );
         }
     }
@@ -882,3 +931,81 @@ void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( const std::shared_ptr<NET_SETTI
 }
 
 
+void PANEL_SETUP_NETCLASSES::OnMoveNetclassUpClick( wxCommandEvent& event )
+{
+    if( !m_netclassGrid->CommitPendingChanges() )
+        return;
+
+    // Work out which rows are selected
+    std::vector<int> selectedRows;
+
+    for( int i = 0; i < m_netclassGrid->GetNumberRows(); ++i )
+    {
+        if( m_netclassGrid->IsInSelection( i, 0 ) )
+            selectedRows.push_back( i );
+    }
+
+    // Only move one row at a time
+    if( selectedRows.size() != 1 )
+        return;
+
+    // Can't move the first netclass, nor move the Default netclass
+    if( selectedRows[0] == 0 || selectedRows[0] == ( m_netclassGrid->GetNumberRows() - 1 ) )
+        return;
+
+    int newRowId = selectedRows[0] - 1;
+    m_netclassGrid->InsertRows( newRowId );
+
+    for( int col = 0; col < m_netclassGrid->GetNumberCols(); col++ )
+        m_netclassGrid->SetCellValue( newRowId, col,
+                                      m_netclassGrid->GetCellValue( newRowId + 2, col ) );
+    
+    // Set the row nullable editors
+    setNetclassRowNullableEditors( newRowId, false );
+    
+    m_netclassGrid->DeleteRows( newRowId + 2, 1 );
+    m_netclassGrid->MakeCellVisible( newRowId, 0 );
+    m_netclassGrid->SetGridCursor( newRowId, 0 );
+
+    m_netclassesDirty = true;
+}
+
+
+void PANEL_SETUP_NETCLASSES::OnMoveNetclassDownClick( wxCommandEvent& event )
+{
+    if( !m_netclassGrid->CommitPendingChanges() )
+        return;
+
+    // Work out which rows are selected
+    std::vector<int> selectedRows;
+
+    for( int i = 0; i < m_netclassGrid->GetNumberRows(); ++i )
+    {
+        if( m_netclassGrid->IsInSelection( i, 0 ) )
+            selectedRows.push_back( i );
+    }
+
+    // Only move one row at a time
+    if( selectedRows.size() != 1 )
+        return;
+
+    // Can't move the last row down, nor move the Default netclass
+    if( selectedRows[0] == ( m_netclassGrid->GetNumberRows() - 2 )
+        || selectedRows[0] == ( m_netclassGrid->GetNumberRows() - 1 ) )
+        return;
+
+    int newRowId = selectedRows[0] + 2;
+    m_netclassGrid->InsertRows( newRowId );
+
+    for( int col = 0; col < m_netclassGrid->GetNumberCols(); col++ )
+    {
+        m_netclassGrid->SetCellValue( newRowId, col,
+                                      m_netclassGrid->GetCellValue( newRowId - 2, col ) );
+    }
+
+    m_netclassGrid->DeleteRows( newRowId - 2, 1 );
+    m_netclassGrid->MakeCellVisible( newRowId - 1, 0 );
+    m_netclassGrid->SetGridCursor( newRowId - 1, 0 );
+
+    m_netclassesDirty = true;
+}

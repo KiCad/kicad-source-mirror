@@ -456,11 +456,11 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     // Job file support a few design rules:
     std::shared_ptr<NET_SETTINGS>& netSettings = m_pcb->GetDesignSettings().m_NetSettings;
 
-    int  minclearanceOuter = netSettings->m_DefaultNetClass->GetClearance();
+    int  minclearanceOuter = netSettings->GetDefaultNetclass()->GetClearance();
     bool hasInnerLayers = m_pcb->GetCopperLayerCount() > 2;
 
     // Search a smaller clearance in other net classes, if any.
-    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
         minclearanceOuter = std::min( minclearanceOuter, netclass->GetClearance() );
 
     // job file knows different clearance types.
@@ -470,8 +470,8 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     // However, pads can have a specific clearance defined for a pad or a footprint,
     // and min clearance can be dependent on layers.
     // Search for a minimal pad clearance:
-    int minPadClearanceOuter = netSettings->m_DefaultNetClass->GetClearance();
-    int minPadClearanceInner = netSettings->m_DefaultNetClass->GetClearance();
+    int minPadClearanceOuter = netSettings->GetDefaultNetclass()->GetClearance();
+    int minPadClearanceInner = netSettings->GetDefaultNetclass()->GetClearance();
 
     for( FOOTPRINT* footprint : m_pcb->Footprints() )
     {

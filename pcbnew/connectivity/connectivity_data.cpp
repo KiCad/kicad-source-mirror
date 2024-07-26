@@ -110,20 +110,12 @@ bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         aReporter->KeepRefreshing( false );
     }
 
-    std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
-
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO( this ) );
     m_connAlgo->Build( aBoard, aReporter );
 
-    m_netclassMap.clear();
+    m_netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
-    for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
-    {
-        net->SetNetClass( netSettings->GetEffectiveNetClass( net->GetNetname() ) );
-
-        if( net->GetNetClass()->GetName() != NETCLASS::Default )
-            m_netclassMap[ net->GetNetCode() ] = net->GetNetClass()->GetName();
-    }
+    RefreshNetcodeMap( aBoard );
 
     if( aReporter )
     {
@@ -140,6 +132,15 @@ bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     }
 
     return true;
+}
+
+
+void CONNECTIVITY_DATA::RefreshNetcodeMap( BOARD* aBoard )
+{
+    m_netcodeMap.clear();
+
+    for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
+        m_netcodeMap[net->GetNetCode()] = net->GetNetname();
 }
 
 

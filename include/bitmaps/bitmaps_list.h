@@ -577,6 +577,7 @@ enum class BITMAPS : unsigned int
     stroke_dashdotdot,
     stroke_dot,
     stroke_solid,
+    stroke_none,
     subtract_polygons,
     swap,
     swap_layer,

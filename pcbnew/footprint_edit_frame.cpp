@@ -150,7 +150,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // In Footprint Editor, the default net clearance is not known (it depends on the actual
     // board).  So we do not show the default clearance, by setting it to 0.  The footprint or
     // pad specific clearance will be shown.
-    GetBoard()->GetDesignSettings().m_NetSettings->m_DefaultNetClass->SetClearance( 0 );
+    GetBoard()->GetDesignSettings().m_NetSettings->GetDefaultNetclass()->SetClearance( 0 );
 
     // Don't show the default board solder mask expansion in the footprint editor.  Only the
     // footprint or pad mask expansions settings should be shown.

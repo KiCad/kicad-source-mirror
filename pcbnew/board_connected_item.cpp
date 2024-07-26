@@ -101,13 +101,19 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetClass() const
     if( m_netinfo && m_netinfo->GetNetClass() )
         return m_netinfo->GetNetClass();
     else
-        return GetBoard()->GetDesignSettings().m_NetSettings->m_DefaultNetClass.get();
+        return GetBoard()->GetDesignSettings().m_NetSettings->GetDefaultNetclass().get();
 }
 
 
 wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
     return GetEffectiveNetClass()->GetName();
+}
+
+
+wxString BOARD_CONNECTED_ITEM::GetNetClassVariableSubstitutionName() const
+{
+    return GetEffectiveNetClass()->GetVariableSubstitutionName();
 }
 
 

@@ -502,10 +502,10 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Prj().GetProjectFile().NetSettings();
 
     if( minWireWidth < std::numeric_limits<int>::max() )
-        netSettings->m_DefaultNetClass->SetWireWidth( minWireWidth );
+        netSettings->GetDefaultNetclass()->SetWireWidth( minWireWidth );
 
     if( minBusWidth < std::numeric_limits<int>::max() )
-        netSettings->m_DefaultNetClass->SetBusWidth( minBusWidth );
+        netSettings->GetDefaultNetclass()->SetBusWidth( minBusWidth );
 
     return m_rootSheet;
 }

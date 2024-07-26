@@ -760,17 +760,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
                                                    // so set to minimum permitted in KiCad (2 mils)
     bds.m_HoleClearance = 0; // Testing suggests cadstar might not have a copper-to-hole clearance
 
-    auto applyNetClassRule =
-            [&]( wxString aID, std::shared_ptr<NETCLASS>& aNetClassPtr )
-            {
-                int value = -1;
-                applyRule( aID, &value );
+    auto applyNetClassRule = [&]( wxString aID, const std::shared_ptr<NETCLASS>& aNetClassPtr )
+    {
+        int value = -1;
+        applyRule( aID, &value );
 
-                if( value != -1 )
-                    aNetClassPtr->SetClearance( value );
-            };
+        if( value != -1 )
+            aNetClassPtr->SetClearance( value );
+    };
 
-    applyNetClassRule( "T_T", bds.m_NetSettings->m_DefaultNetClass );
+    applyNetClassRule( "T_T", bds.m_NetSettings->GetDefaultNetclass() );
 
     wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
                      "design rules were imported. It is recommended that you review the design "
@@ -4047,18 +4046,15 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
                 netClassName += wxT( " | Spacing class: " ) + sp.Name;
             }
 
-            netclass.reset( new NETCLASS( *netSettings->m_DefaultNetClass ) );
+            netclass.reset( new NETCLASS( *netSettings->GetDefaultNetclass() ) );
             netclass->SetName( netClassName );
-            netSettings->m_NetClasses[ netClassName ] = netclass;
+            netSettings->SetNetclass( netClassName, netclass );
             netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
             m_netClassMap.insert( { key, netclass } );
         }
 
-        m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
-                {
-                    std::make_unique<EDA_COMBINED_MATCHER>( newName, CTX_NETCLASS ),
-                    netclass->GetName()
-                } );
+        m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
+                newName, netclass->GetName() );
 
         netInfo->SetNetClass( netclass );
         m_board->Add( netInfo, ADD_MODE::APPEND );

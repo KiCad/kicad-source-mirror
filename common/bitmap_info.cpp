@@ -4711,6 +4711,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::stroke_dashdotdot].emplace_back( BITMAPS::stroke_dashdotdot, wxT( "stroke_dashdotdot.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::stroke_dot].emplace_back( BITMAPS::stroke_dot, wxT( "stroke_dot.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::stroke_solid].emplace_back( BITMAPS::stroke_solid, wxT( "stroke_solid.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::stroke_none].emplace_back( BITMAPS::stroke_none, wxT( "stroke_none.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::twistedpair].emplace_back( BITMAPS::twistedpair, wxT( "twistedpair.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::viacalc].emplace_back( BITMAPS::viacalc, wxT( "viacalc.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::att_bridge].emplace_back( BITMAPS::att_bridge, wxT( "att_bridge_dark.png" ), -1, wxT( "dark" ) );
@@ -4745,6 +4746,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::stroke_dashdotdot].emplace_back( BITMAPS::stroke_dashdotdot, wxT( "stroke_dashdotdot_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::stroke_dot].emplace_back( BITMAPS::stroke_dot, wxT( "stroke_dot_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::stroke_solid].emplace_back( BITMAPS::stroke_solid, wxT( "stroke_solid_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::stroke_none].emplace_back( BITMAPS::stroke_none, wxT( "stroke_none_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::twistedpair].emplace_back( BITMAPS::twistedpair, wxT( "twistedpair_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::viacalc].emplace_back( BITMAPS::viacalc, wxT( "viacalc_dark.png" ), -1, wxT( "dark" ) );
 

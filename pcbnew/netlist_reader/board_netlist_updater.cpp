@@ -1324,7 +1324,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         // * it is useless because zones will be refilled after placing new footprints
         m_commit.Push( _( "Update Netlist" ), m_newFootprintsCount ? ZONE_FILL_OP  : 0 );
 
+        // Update net, netcode and netclass data after commiting the netlist
         m_board->SynchronizeNetsAndNetClasses( true );
+        m_board->GetConnectivity()->RefreshNetcodeMap( m_board );
 
         // Although m_commit will probably also set this, it's not guaranteed, and we need to make
         // sure any modification to netclasses gets persisted to project settings through a save.

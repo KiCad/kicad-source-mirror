@@ -181,6 +181,11 @@ of whether or not the rule is being evaluated for that layer.
 For the latter use a `(layer "layer_name")` clause in the rule.
 <br><br>
 
+    A.hasNetclass('<netclass_name>')
+True if `A` has had the given netclass assigned to it, either by an explicit netclass label 
+or through a pattern match assignment.
+<br><br>
+
 ### More Examples
 
     (rule "copper keepout"

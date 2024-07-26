@@ -2081,7 +2081,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
     BOARD_DESIGN_SETTINGS&     bds = m_board->GetDesignSettings();
-    std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->m_DefaultNetClass;
+    const std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->GetDefaultNetclass();
     ZONE_SETTINGS&             zoneSettings = bds.GetDefaultZoneSettings();
 
     // Missing soldermask min width value means that the user has set the value to 0 and
@@ -2682,11 +2682,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNETCLASS()
             if( m_requiredVersion < 20210606 )
                 netName = ConvertToNewOverbarNotation( FromUTF8() );
 
-            m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
-                    {
-                        std::make_unique<EDA_COMBINED_MATCHER>( netName, CTX_NETCLASS ),
-                        nc->GetName()
-                    } );
+            m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
+                    netName, nc->GetName() );
 
             break;
         }
@@ -2701,7 +2698,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNETCLASS()
 
     std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
 
-    if( netSettings->m_NetClasses.count( nc->GetName() ) )
+    if( netSettings->HasNetclass( nc->GetName() ) )
     {
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.
@@ -2711,13 +2708,13 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNETCLASS()
                       CurOffset() );
         THROW_IO_ERROR( error );
     }
-    else if( nc->GetName() == netSettings->m_DefaultNetClass->GetName() )
+    else if( nc->GetName() == netSettings->GetDefaultNetclass()->GetName() )
     {
-        netSettings->m_DefaultNetClass = nc;
+        netSettings->SetDefaultNetclass( nc );
     }
     else
     {
-        netSettings->m_NetClasses[ nc->GetName() ] = nc;
+        netSettings->SetNetclass( nc->GetName(), nc );
     }
 }
 

@@ -734,7 +734,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 
                 for( int i = 0; i < (int) bds.m_TrackWidthList.size(); ++i )
                 {
-                    int candidate = bds.m_NetSettings->m_DefaultNetClass->GetTrackWidth();
+                    int candidate = bds.m_NetSettings->GetDefaultNetclass()->GetTrackWidth();
 
                     if( i > 0 )
                         candidate = bds.m_TrackWidthList[ i ];
@@ -816,7 +816,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 
                 for( int i = (int) bds.m_TrackWidthList.size() - 1; i >= 0; --i )
                 {
-                    int candidate = bds.m_NetSettings->m_DefaultNetClass->GetTrackWidth();
+                    int candidate = bds.m_NetSettings->GetDefaultNetclass()->GetTrackWidth();
 
                     if( i > 0 )
                         candidate = bds.m_TrackWidthList[ i ];
@@ -898,8 +898,8 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 
                 for( int i = 0; i < (int) bds.m_ViasDimensionsList.size(); ++i )
                 {
-                    VIA_DIMENSION dims( bds.m_NetSettings->m_DefaultNetClass->GetViaDiameter(),
-                                        bds.m_NetSettings->m_DefaultNetClass->GetViaDrill() );
+                    VIA_DIMENSION dims( bds.m_NetSettings->GetDefaultNetclass()->GetViaDiameter(),
+                                        bds.m_NetSettings->GetDefaultNetclass()->GetViaDrill() );
 
                     if( i> 0 )
                         dims = bds.m_ViasDimensionsList[ i ];
@@ -953,8 +953,8 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 
                 for( int i = (int) bds.m_ViasDimensionsList.size() - 1; i >= 0; --i )
                 {
-                    VIA_DIMENSION dims( bds.m_NetSettings->m_DefaultNetClass->GetViaDiameter(),
-                                        bds.m_NetSettings->m_DefaultNetClass->GetViaDrill() );
+                    VIA_DIMENSION dims( bds.m_NetSettings->GetDefaultNetclass()->GetViaDiameter(),
+                                        bds.m_NetSettings->GetDefaultNetclass()->GetViaDrill() );
 
                     if( i > 0 )
                         dims = bds.m_ViasDimensionsList[ i ];

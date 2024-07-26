@@ -24,15 +24,17 @@
 #ifndef KICAD_WX_GRID_H
 #define KICAD_WX_GRID_H
 
-#include <memory>
-#include <vector>
-#include <memory>
 #include <bitset>
+#include <memory>
+#include <utility>
+#include <vector>
+
 #include <wx/event.h>
 #include <wx/grid.h>
 #include <wx/version.h>
-#include <units_provider.h>
+
 #include <libeval/numeric_evaluator.h>
+#include <units_provider.h>
 
 class wxTextEntryBase;
 
@@ -123,14 +125,31 @@ public:
 
     /**
      * Apply standard KiCad unit and eval services to a numeric cell.
+     * @param aRow the cell row index to fetch
+     * @param aCol the cell column index to fetch
+     * @param aIsOptional if true, indicates to the unit provider the value is optional
      * @return the value held by the cell in internal units
      */
     int GetUnitValue( int aRow, int aCol );
+
+
+    /**
+     * Apply standard KiCad unit and eval services to a numeric cell.
+     * @param aRow the cell row index to fetch
+     * @param aCol the cell column index to fetch
+     * @return the value held by the cell in internal units
+     */
+    std::optional<int> GetOptionalUnitValue( int aRow, int aCol );
 
     /**
      * Set a unitized cell's value.
      */
     void SetUnitValue( int aRow, int aCol, int aValue );
+
+    /**
+     * Set a unitized cell's optional value
+     */
+    void SetOptionalUnitValue( int aRow, int aCol, std::optional<int> aValue );
 
     /**
      * Calculates the specified column based on the actual size of the text

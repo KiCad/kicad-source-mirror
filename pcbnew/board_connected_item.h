@@ -185,6 +185,11 @@ public:
      */
     wxString GetNetClassName() const;
 
+    /*
+     * Returns the name of the effective netclass for variable substitutions
+     */
+    wxString GetNetClassVariableSubstitutionName() const;
+
     void SetLocalRatsnestVisible( bool aVisible ) { m_localRatsnestVisible = aVisible; }
     bool GetLocalRatsnestVisible() const { return m_localRatsnestVisible; }
 

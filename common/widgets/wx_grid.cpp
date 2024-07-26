@@ -28,12 +28,14 @@
 #include <wx/event.h> // Needed for textentry.h on MSW
 #include <wx/textentry.h>
 
+#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
 #include <algorithm>
 #include <core/kicad_algo.h>
 #include <gal/color4d.h>
 #include <kiplatform/ui.h>
+#include <utility>
 
 #include <pgm_base.h>
 #include <settings/common_settings.h>
@@ -374,23 +376,63 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
         int row = aEvent.GetRow();
         int col = aEvent.GetCol();
 
+        // Determine if this cell is marked as holding nullable values
+        bool              isNullable = false;
+        wxGridCellEditor* cellEditor = GetCellEditor( row, col );
+
+        if( cellEditor )
+        {
+            GRID_CELL_MARK_AS_NULLABLE* nullableCell =
+                    dynamic_cast<GRID_CELL_MARK_AS_NULLABLE*>( cellEditor );
+
+            if( nullableCell )
+                isNullable = nullableCell->IsNullable();
+
+            cellEditor->DecRef();
+        }
+
         CallAfter(
-              [this, row, col, unitsProvider]()
-              {
-                  wxString stringValue = GetCellValue( row, col );
+                [this, row, col, isNullable, unitsProvider]()
+                {
+                    wxString stringValue = GetCellValue( row, col );
+                    bool     processedOk = true;
 
-                  if( m_eval->Process( stringValue ) )
-                  {
-                      int      val = unitsProvider->ValueFromString( m_eval->Result() );
-                      wxString evalValue = unitsProvider->StringFromValue( val, true );
+                    if( stringValue != UNITS_PROVIDER::NullUiString )
+                        processedOk = m_eval->Process( stringValue );
 
-                      if( stringValue != evalValue )
-                      {
-                          SetCellValue( row, col, evalValue );
-                          m_evalBeforeAfter[ { row, col } ] = { stringValue, evalValue };
-                      }
-                  }
-              } );
+                    if( processedOk )
+                    {
+                        wxString evalValue;
+
+                        if( isNullable )
+                        {
+                            std::optional<int> val;
+
+                            if( stringValue == UNITS_PROVIDER::NullUiString )
+                            {
+                                val = unitsProvider->OptionalValueFromString(
+                                        UNITS_PROVIDER::NullUiString );
+                            }
+                            else
+                            {
+                                val = unitsProvider->OptionalValueFromString( m_eval->Result() );
+                            }
+
+                            evalValue = unitsProvider->StringFromOptionalValue( val, true );
+                        }
+                        else
+                        {
+                            int val = unitsProvider->ValueFromString( m_eval->Result() );
+                            evalValue = unitsProvider->StringFromValue( val, true );
+                        }
+
+                        if( stringValue != evalValue )
+                        {
+                            SetCellValue( row, col, evalValue );
+                            m_evalBeforeAfter[{ row, col }] = { stringValue, evalValue };
+                        }
+                    }
+                } );
     }
 
     aEvent.Skip();
@@ -670,6 +712,27 @@ int WX_GRID::GetUnitValue( int aRow, int aCol )
 }
 
 
+std::optional<int> WX_GRID::GetOptionalUnitValue( int aRow, int aCol )
+{
+    UNITS_PROVIDER* unitsProvider = m_unitsProviders[aCol];
+
+    if( !unitsProvider )
+        unitsProvider = m_unitsProviders.begin()->second;
+
+    wxString stringValue = GetCellValue( aRow, aCol );
+
+    if( alg::contains( m_autoEvalCols, aCol ) )
+    {
+        m_eval->SetDefaultUnits( unitsProvider->GetUserUnits() );
+
+        if( stringValue != UNITS_PROVIDER::NullUiString && m_eval->Process( stringValue ) )
+            stringValue = m_eval->Result();
+    }
+
+    return unitsProvider->OptionalValueFromString( stringValue );
+}
+
+
 void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
 {
     UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aCol ];
@@ -678,6 +741,17 @@ void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
         unitsProvider = m_unitsProviders.begin()->second;
 
     SetCellValue( aRow, aCol, unitsProvider->StringFromValue( aValue, true ) );
+}
+
+
+void WX_GRID::SetOptionalUnitValue( int aRow, int aCol, std::optional<int> aValue )
+{
+    UNITS_PROVIDER* unitsProvider = m_unitsProviders[aCol];
+
+    if( !unitsProvider )
+        unitsProvider = m_unitsProviders.begin()->second;
+
+    SetCellValue( aRow, aCol, unitsProvider->StringFromOptionalValue( aValue, true ) );
 }
 
 

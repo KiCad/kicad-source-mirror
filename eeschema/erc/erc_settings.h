@@ -69,8 +69,6 @@ enum ERCE_T
                                   ///<   one net.
     ERCE_BUS_TO_NET_CONFLICT,     ///< A bus wire is graphically connected to a net port/pin
                                   ///<   (or vice versa).
-    ERCE_NETCLASS_CONFLICT,       ///< Multiple labels assign different netclasses to same net.
-    ERCE_OVERLAPPING_RULE_AREAS,  ///< Rule areas are overlapping
     ERCE_GLOBLABEL,               ///< A global label is unique.
     ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
     ERCE_UNDEFINED_NETCLASS,      ///< A netclass was referenced but not defined.

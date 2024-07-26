@@ -34,6 +34,7 @@
 #include <memory>
 #include <eda_item.h>
 #include <math/vector2d.h>
+#include <project/net_settings.h>
 
 class GAL;
 class CONNECTIVITY_DATA;

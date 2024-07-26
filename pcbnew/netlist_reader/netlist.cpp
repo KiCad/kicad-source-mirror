@@ -29,6 +29,7 @@ using namespace std::placeholders;
 
 #include <confirm.h>
 #include <kiway.h>
+#include <drc/drc_engine.h>
 #include <pcb_edit_frame.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/netlist_reader.h>
@@ -42,6 +43,7 @@ using namespace std::placeholders;
 #include <pcb_io/pcb_io_mgr.h>
 #include "board_netlist_updater.h"
 #include <tool/tool_manager.h>
+#include <tools/drc_tool.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
@@ -87,6 +89,19 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     BOARD* board = GetBoard();
 
     SetMsgPanel( board );
+
+    // Re-sync nets, netclasses, and DRC rules to account for new aggregate netclass rules
+    board->SynchronizeNetsAndNetClasses( false );
+
+    DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
+
+    try
+    {
+        drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
+    }
+    catch( PARSE_ERROR& )
+    {
+    }
 
     // Update rendered track/via/pad net labels, and any text items that might reference a
     // netName or netClass

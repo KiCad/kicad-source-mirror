@@ -51,6 +51,8 @@ public:
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
+    void OnMoveNetclassUpClick( wxCommandEvent& event ) override;
+    void OnMoveNetclassDownClick( wxCommandEvent& event ) override;
     void OnImportColorsClick( wxCommandEvent& event ) override;
     void OnSizeNetclassGrid( wxSizeEvent& event ) override;
 	void OnSizeAssignmentGrid( wxSizeEvent& event ) override;
@@ -71,6 +73,8 @@ private:
 
     void loadNetclasses();
     void checkReload();
+
+    void setNetclassRowNullableEditors( int aRowId, bool aIsDefault );
 
 private:
     EDA_DRAW_FRAME*                 m_frame;

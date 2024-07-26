@@ -308,10 +308,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
         if( netColor == COLOR4D::UNSPECIFIED )
         {
-            auto jj = m_netclassColors.find( conItem->GetNetClassName() );
+            const NETCLASS* nc = conItem->GetEffectiveNetClass();
 
-            if( jj != m_netclassColors.end() )
-                netColor = jj->second;
+            if( nc->HasPcbColor() )
+                netColor = nc->GetPcbColor();
         }
 
         if( netColor == COLOR4D::UNSPECIFIED )

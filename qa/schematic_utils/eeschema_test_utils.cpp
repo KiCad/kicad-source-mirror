@@ -32,6 +32,7 @@
 #include <eeschema/sch_screen.h>
 #include <eeschema/schematic.h>
 #include <eeschema/connection_graph.h>
+#include <eeschema/sch_rule_area.h>
 
 
 void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
@@ -87,6 +88,13 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 
     // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
     // SchematicCleanUp must be freed from its UI dependencies.
+
+    std::unordered_set<SCH_SCREEN*> all_screens;
+
+    for( const SCH_SHEET_PATH& path : sheets )
+        all_screens.insert( path.LastScreen() );
+
+    SCH_RULE_AREA::UpdateRuleAreasInScreens( all_screens, nullptr );
 
     m_schematic.ConnectionGraph()->Recalculate( sheets, true );
 }

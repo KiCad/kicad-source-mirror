@@ -27,6 +27,8 @@
 #include <eda_units.h>
 #include <origin_transforms.h>
 #include <core/minoptmax.h>
+#include <optional>
+#include <utility>
 
 
 class UNITS_PROVIDER
@@ -85,6 +87,30 @@ public:
                                                     aAddUnitLabel, aType );
     }
 
+    /**
+     * Converts an optional \a aValue in internal units into a united string.
+     *
+     * For readability, trailing 0s are removed if the mantissa has 3 or more digits.
+     * This function should be used to display values in dialogs because a value entered in mm
+     * (for instance 2.0 mm) could need up to 8 digits mantissa if displayed in inch to avoid
+     * truncation or rounding made just by the printf function.
+     *
+     * @param aValue = optional value in internal units
+     * @param aAddUnitLabel = true to add symbol unit to the string value
+     * @param aType is the type of this value, and controls the way the value is converted
+     * to a string, and the suitable unit
+     * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
+     */
+    wxString StringFromOptionalValue( std::optional<int> aValue, bool aAddUnitLabel = false,
+                                      EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
+    {
+        if( !aValue )
+            return NullUiString;
+        else
+            return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUserUnits(),
+                                                        aValue.value(), aAddUnitLabel, aType );
+    }
+
     wxString StringFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = false ) const
     {
         return EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::DEGREES,
@@ -135,6 +161,30 @@ public:
         return KiROUND<double, int>( value );
     }
 
+    /**
+     * Converts \a aTextValue in \a aUnits to internal units used by the frame. Allows the return
+     * of an empty optional if the string represents a null value (currently empty string)
+     * @warning This utilizes the current locale and will break if decimal formats differ
+     * @param aType is the type of this value, and controls the way the string is converted
+     * to a value
+     *
+     * @param aTextValue A reference to a wxString object containing the string to convert.
+     * @return internal units value
+     */
+    std::optional<int>
+    OptionalValueFromString( const wxString& aTextValue,
+                             EDA_DATA_TYPE   aType = EDA_DATA_TYPE::DISTANCE ) const
+    {
+        // Handle null (empty) values
+        if( aTextValue == NullUiString )
+            return {};
+
+        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), GetUserUnits(),
+                                                                  aTextValue, aType );
+
+        return KiROUND<double, int>( value );
+    }
+
     EDA_ANGLE AngleValueFromString( const wxString& aTextValue ) const
     {
         double angle = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), EDA_UNITS::DEGREES,
@@ -142,6 +192,9 @@ public:
 
         return EDA_ANGLE( angle, DEGREES_T );
     }
+
+    /// @brief The string that is used in the UI to represent a null value
+    static inline const wxString NullUiString = "";
 
 private:
     const EDA_IU_SCALE& m_iuScale;

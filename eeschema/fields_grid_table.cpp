@@ -310,9 +310,9 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
         PROJECT_FILE&                        projectFile = editFrame->Prj().GetProjectFile();
         const std::shared_ptr<NET_SETTINGS>& settings = projectFile.NetSettings();
 
-        existingNetclasses.push_back( settings->m_DefaultNetClass->GetName() );
+        existingNetclasses.push_back( settings->GetDefaultNetclass()->GetName() );
 
-        for( const auto& [ name, netclass ] : settings->m_NetClasses )
+        for( const auto& [name, netclass] : settings->GetNetclasses() )
             existingNetclasses.push_back( name );
 
         // We don't need to re-cache the embedded fonts when looking at symbols in the schematic editor

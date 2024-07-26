@@ -908,7 +908,7 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
 {
     BOARD_DESIGN_SETTINGS&    bds             = m_board->GetDesignSettings();
     ZONE_SETTINGS             zoneSettings    = bds.GetDefaultZoneSettings();
-    std::shared_ptr<NETCLASS> defaultNetclass = bds.m_NetSettings->m_DefaultNetClass;
+    std::shared_ptr<NETCLASS> defaultNetclass = bds.m_NetSettings->GetDefaultNetclass();
     char*                     line;
     char*                     saveptr;
 
@@ -2313,11 +2313,8 @@ void PCB_IO_KICAD_LEGACY::loadNETCLASS()
             ReadDelimitedText( buf, line + SZ( "AddNet" ), sizeof(buf) );
             netname = ConvertToNewOverbarNotation( From_UTF8( buf ) );
 
-            m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
-                    {
-                        std::make_unique<EDA_COMBINED_MATCHER>( netname, CTX_NETCLASS ),
-                        nc->GetName()
-                    } );
+            m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
+                    netname, nc->GetName() );
         }
         else if( TESTLINE( "Clearance" ) )
         {
@@ -2361,7 +2358,7 @@ void PCB_IO_KICAD_LEGACY::loadNETCLASS()
         }
         else if( TESTLINE( "$EndNCLASS" ) )
         {
-            if( m_board->GetDesignSettings().m_NetSettings->m_NetClasses.count( nc->GetName() ) )
+            if( m_board->GetDesignSettings().m_NetSettings->HasNetclass( nc->GetName() ) )
             {
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.
@@ -2373,7 +2370,7 @@ void PCB_IO_KICAD_LEGACY::loadNETCLASS()
             }
             else
             {
-                m_board->GetDesignSettings().m_NetSettings->m_NetClasses[ nc->GetName() ] = nc;
+                m_board->GetDesignSettings().m_NetSettings->SetNetclass( nc->GetName(), nc );
             }
 
             return;     // preferred exit

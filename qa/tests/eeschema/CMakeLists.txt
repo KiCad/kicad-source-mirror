@@ -59,7 +59,6 @@ set( QA_EESCHEMA_SRCS
 	erc/test_erc_no_connect.cpp
     erc/test_erc_hierarchical_schematics.cpp
     erc/test_erc_label_multiple_wires.cpp
-    erc/test_erc_rule_areas.cpp
     erc/test_erc_unconnected_wire_endpoints.cpp
 
     test_eagle_plugin.cpp

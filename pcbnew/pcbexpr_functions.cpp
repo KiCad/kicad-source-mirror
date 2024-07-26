@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
+#include <algorithm>
 #include <cstdio>
 #include <memory>
 #include <mutex>
@@ -1162,6 +1162,45 @@ static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void hasNetclassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg || arg->AsString().IsEmpty() )
+    {
+        if( aCtx->HasErrorCallback() )
+            aCtx->ReportError( _( "Missing netclass name argument to hasNetclass()" ) );
+
+        return;
+    }
+
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> double
+            {
+                if( !item->IsConnected() )
+                    return 0.0;
+
+                BOARD_CONNECTED_ITEM* bcItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                NETCLASS*             netclass = bcItem->GetEffectiveNetClass();
+
+                if( netclass->ContainsNetclassWithName( arg->AsString() ) )
+                    return 1.0;
+
+                return 0.0;
+            } );
+}
+
+
 PCBEXPR_BUILTIN_FUNCTIONS::PCBEXPR_BUILTIN_FUNCTIONS()
 {
     RegisterAllFunctions();
@@ -1200,6 +1239,6 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "inDiffPair('x')" ), inDiffPairFunc );
 
     RegisterFunc( wxT( "getField('x')" ), getFieldFunc );
+
+    RegisterFunc( wxT( "hasNetclass('x')" ), hasNetclassFunc );
 }
-
-

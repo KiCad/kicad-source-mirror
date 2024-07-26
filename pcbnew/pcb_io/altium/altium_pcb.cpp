@@ -1222,14 +1222,11 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
 
             for( const wxString& name : elem.names )
             {
-                m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
-                        {
-                            std::make_unique<EDA_COMBINED_MATCHER>( name, CTX_NETCLASS ),
-                            nc->GetName()
-                        } );
+                m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
+                        name, nc->GetName() );
             }
 
-            if( m_board->GetDesignSettings().m_NetSettings->m_NetClasses.count( nc->GetName() ) )
+            if( m_board->GetDesignSettings().m_NetSettings->HasNetclass( nc->GetName() ) )
             {
                 // Name conflict, happens in some unknown circumstances
                 // unique_ptr will delete nc on this code path
@@ -1243,7 +1240,7 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
             }
             else
             {
-                m_board->GetDesignSettings().m_NetSettings->m_NetClasses[ nc->GetName() ] = nc;
+                m_board->GetDesignSettings().m_NetSettings->SetNetclass( nc->GetName(), nc );
             }
         }
     }

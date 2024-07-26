@@ -2425,10 +2425,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
     m_staticTextNets->SetLabel( _( "Nets" ) );
     m_staticTextNetClasses->SetLabel( _( "Net Classes" ) );
 
-    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-            m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
+    std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
 
-    std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
     const std::set<wxString>& hiddenClasses = m_frame->Prj().GetLocalSettings().m_HiddenNetclasses;
 
     m_netclassOuterSizer->Clear( true );
@@ -2445,8 +2443,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_panel = new wxPanel( m_netclassScrolledWindow, aId );
                 wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
                 setting->ctl_panel->SetSizer( sizer );
-                COLOR4D color = netclassColors.count( name ) ? netclassColors.at( name ) :
-                                                                COLOR4D::UNSPECIFIED;
+
+                COLOR4D color = netSettings->HasNetclass( name )
+                                        ? netSettings->GetNetClassByName( name )->GetPcbColor()
+                                        : COLOR4D::UNSPECIFIED;
 
                 setting->ctl_color = new COLOR_SWATCH( setting->ctl_panel, color, aId, bgColor,
                                                         COLOR4D::UNSPECIFIED, SWATCH_SMALL );
@@ -2502,11 +2502,9 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_text->Bind( wxEVT_RIGHT_DOWN, menuHandler );
             };
 
-    std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
-
     std::vector<wxString> names;
 
-    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
         names.emplace_back( name );
 
     std::sort( names.begin(), names.end() );
@@ -2515,13 +2513,13 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
     int idx = wxID_HIGHEST;
 
-    m_netclassIdMap[idx] = netSettings->m_DefaultNetClass->GetName();
-    appendNetclass( idx++, netSettings->m_DefaultNetClass, true );
+    m_netclassIdMap[idx] = netSettings->GetDefaultNetclass()->GetName();
+    appendNetclass( idx++, netSettings->GetDefaultNetclass(), true );
 
     for( const wxString& name : names )
     {
         m_netclassIdMap[idx] = name;
-        appendNetclass( idx++, netSettings->m_NetClasses.at( name ) );
+        appendNetclass( idx++, netSettings->GetNetclasses().at( name ) );
     }
 
     int      hotkey;
@@ -3143,7 +3141,7 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 
     for( NETINFO_ITEM* net : m_frame->GetBoard()->GetNetInfo() )
     {
-        if( net->GetNetClass()->GetName() == aClassName )
+        if( net->GetNetClass()->ContainsNetclassWithName( aClassName ) )
         {
             m_frame->GetToolManager()->RunAction( aShow ? PCB_ACTIONS::showNetInRatsnest
                                                         : PCB_ACTIONS::hideNetInRatsnest,
@@ -3177,12 +3175,10 @@ void APPEARANCE_CONTROLS::onNetclassColorChanged( wxCommandEvent& aEvent )
 
     BOARD*                         board = m_frame->GetBoard();
     std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
-    netSettings->m_NetClasses[netclassName]->SetPcbColor( swatch->GetSwatchColor() );
+    std::shared_ptr<NETCLASS>      nc = netSettings->GetNetClassByName( netclassName );
 
-    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-            m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
-    std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
-    netclassColors[netclassName] = swatch->GetSwatchColor();
+    nc->SetPcbColor( swatch->GetSwatchColor() );
+    netSettings->RecomputeEffectiveNetclasses();
 
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->RedrawRatsnest();
@@ -3267,7 +3263,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
             {
                 for( NETINFO_ITEM* net : board->GetNetInfo() )
                 {
-                    if( net->GetNetClass()->GetName() == netClassName )
+                    if( net->GetNetClass()->ContainsNetclassWithName( netClassName ) )
                         aFunction( net );
                 }
             };
@@ -3282,12 +3278,11 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
                 COLOR4D color = setting->ctl_color->GetSwatchColor();
 
-                std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
-
                 if( color != COLOR4D::UNSPECIFIED )
-                    netclassColors[m_contextMenuNetclass] = color;
-                else
-                    netclassColors.erase( m_contextMenuNetclass );
+                {
+                    netSettings->GetNetClassByName( m_contextMenuNetclass )->SetPcbColor( color );
+                    netSettings->RecomputeEffectiveNetclasses();
+                }
 
                 view->UpdateAllLayersColor();
             }
@@ -3301,8 +3296,9 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
             {
                 setting->ctl_color->SetSwatchColor( COLOR4D( 0, 0, 0, 0 ), true );
 
-                std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
-                netclassColors.erase( m_contextMenuNetclass );
+                netSettings->GetNetClassByName( m_contextMenuNetclass )
+                        ->SetPcbColor( COLOR4D::UNSPECIFIED );
+                netSettings->RecomputeEffectiveNetclasses();
 
                 view->UpdateAllLayersColor();
             }
@@ -3320,8 +3316,8 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
                 setting->ctl_color->SetSwatchColor( ncColor, true );
 
-                std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
-                netclassColors[m_contextMenuNetclass] = ncColor;
+                netSettings->GetNetClassByName( m_contextMenuNetclass )->SetPcbColor( ncColor );
+                netSettings->RecomputeEffectiveNetclasses();
 
                 view->UpdateAllLayersColor();
             }
@@ -3384,7 +3380,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
             wxASSERT( m_netclassSettingsMap.count( NETCLASS::Default ) );
             m_netclassSettingsMap.at( NETCLASS::Default )->ctl_visibility->SetValue( true );
 
-            for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+            for( const auto& [name, netclass] : netSettings->GetNetclasses() )
             {
                 showNetclass( name );
 
@@ -3402,7 +3398,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
             wxASSERT( m_netclassSettingsMap.count( NETCLASS::Default ) );
             m_netclassSettingsMap.at( NETCLASS::Default )->ctl_visibility->SetValue( showDefault );
 
-            for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+            for( const auto& [name, netclass] : netSettings->GetNetclasses() )
             {
                 bool show = ( name == m_contextMenuNetclass );
 

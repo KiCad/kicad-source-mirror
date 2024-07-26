@@ -1,7 +1,7 @@
 %ignore BOARD_DESIGN_SETTINGS::m_Pad_Master;
 %ignore BOARD_DESIGN_SETTINGS::m_DRCEngine;
-%ignore NET_SETTINGS::m_NetClassPatternAssignments;
-%ignore NET_SETTINGS::m_NetClassLabelAssignments;
+%ignore NET_SETTINGS::m_netClassPatternAssignments;
+%ignore NET_SETTINGS::m_netClassLabelAssignments;
 
 %shared_ptr(NET_SETTINGS)
 %template(netclasses_map) std::map<wxString, std::shared_ptr<NETCLASS>>;

@@ -200,7 +200,7 @@ BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
             m_board->SetLayerName( klayer, name );
 
         BOARD_DESIGN_SETTINGS&    bds = m_board->GetDesignSettings();
-        std::shared_ptr<NETCLASS> defNetclass = bds.m_NetSettings->m_DefaultNetClass;
+        std::shared_ptr<NETCLASS> defNetclass = bds.m_NetSettings->GetDefaultNetclass();
 
         if( pcbDoc.DRCRULE )
         {

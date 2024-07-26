@@ -88,9 +88,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     const bool colorByNet = rs->GetNetColorMode() != NET_COLOR_MODE::OFF;
     const bool dimStatic = m_data->GetLocalRatsnest().size() > 0 || highlightedNets.size() > 0;
 
-    std::map<int, KIGFX::COLOR4D>&      netColors = rs->GetNetColorMap();
-    std::map<wxString, KIGFX::COLOR4D>& ncColors  = rs->GetNetclassColorMap();
-    const std::map<int, wxString>&      ncMap     = m_data->GetNetclassMap();
+    std::map<int, KIGFX::COLOR4D>& netColors = rs->GetNetColorMap();
 
     const bool onlyVisibleLayers = cfg->m_Display.m_RatsnestMode == RATSNEST_MODE::VISIBLE;
     LSET       visibleLayers;
@@ -127,10 +125,21 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( hiddenNets.count( l.netCode ) )
             continue;
 
+        const NETCLASS*     nc = nullptr;
+        const NET_SETTINGS* netSettings = m_data->GetNetSettings();
+
+        if( m_data->HasNetNameForNetCode( l.netCode ) )
+        {
+            const wxString& netName = m_data->GetNetNameForNetCode( l.netCode );
+
+            if( netSettings->HasEffectiveNetClass( netName ) )
+                nc = netSettings->GetCachedEffectiveNetClass( netName ).get();
+        }
+
         if( colorByNet && netColors.count( l.netCode ) )
             color = netColors.at( l.netCode );
-        else if( colorByNet && ncMap.count( l.netCode ) && ncColors.count( ncMap.at( l.netCode ) ) )
-            color = ncColors.at( ncMap.at( l.netCode ) );
+        else if( colorByNet && nc && nc->HasPcbColor() )
+            color = nc->GetPcbColor();
         else
             color = defaultColor;
 
@@ -173,10 +182,21 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( !net || m_data->GetConnectivityAlgo()->IsNetDirty( i ) )
             continue;
 
+        const NETCLASS*     nc = nullptr;
+        const NET_SETTINGS* netSettings = m_data->GetNetSettings();
+
+        if( m_data->HasNetNameForNetCode( i ) )
+        {
+            const wxString& netName = m_data->GetNetNameForNetCode( i );
+
+            if( netSettings->HasEffectiveNetClass( netName ) )
+                nc = netSettings->GetCachedEffectiveNetClass( netName ).get();
+        }
+
         if( colorByNet && netColors.count( i ) )
             color = netColors.at( i );
-        else if( colorByNet && ncMap.count( i ) && ncColors.count( ncMap.at( i ) ) )
-            color = ncColors.at( ncMap.at( i ) );
+        else if( colorByNet && nc && nc->HasPcbColor() )
+            color = nc->GetPcbColor();
         else
             color = defaultColor;
 

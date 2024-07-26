@@ -48,6 +48,8 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		WX_GRID* m_netclassGrid;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_removeButton;
+		STD_BITMAP_BUTTON* m_moveUpButton;
+		STD_BITMAP_BUTTON* m_moveDownButton;
 		wxStaticText* m_colorDefaultHelpText;
 		wxButton* m_importColorsButton;
 		WX_PANEL* m_membershipPane;
@@ -62,6 +64,8 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveNetclassClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveNetclassUpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveNetclassDownClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnImportColorsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onmembershipPanelSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnSizeAssignmentGrid( wxSizeEvent& event ) { event.Skip(); }

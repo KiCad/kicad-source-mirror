@@ -1180,8 +1180,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     //-----<rules>--------------------------------------------------------
     {
         char      rule[80];
-        int       defaultTrackWidth = netSettings->m_DefaultNetClass->GetTrackWidth();
-        int       defaultClearance  = netSettings->m_DefaultNetClass->GetClearance();
+        int       defaultTrackWidth = netSettings->GetDefaultNetclass()->GetTrackWidth();
+        int       defaultClearance = netSettings->GetDefaultNetclass()->GetClearance();
         double    clearance         = scale( defaultClearance );
 
         STRINGS&  rules = m_pcb->m_structure->m_rules->m_rules;
@@ -1571,9 +1571,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // Add the via from the Default netclass first.  The via container
         // in pcb->library preserves the sequence of addition.
 
-        PADSTACK*   via = makeVia( netSettings->m_DefaultNetClass->GetViaDiameter(),
-                                   netSettings->m_DefaultNetClass->GetViaDrill(),
-                                   m_top_via_layer, m_bot_via_layer );
+        PADSTACK* via = makeVia( netSettings->GetDefaultNetclass()->GetViaDiameter(),
+                                 netSettings->GetDefaultNetclass()->GetViaDrill(), m_top_via_layer,
+                                 m_bot_via_layer );
 
         // we AppendVia() this first one, there is no way it can be a duplicate,
         // the pcb->library via container is empty at this point.  After this,
@@ -1585,7 +1585,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // pcb->library->spareViaIndex = pcb->library->vias.size();
 
         // output the non-Default netclass vias
-        for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+        for( const auto& [name, netclass] : netSettings->GetNetclasses() )
         {
             via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
                            m_top_via_layer, m_bot_via_layer );
@@ -1717,9 +1717,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<output NETCLASSs>----------------------------------------------------
 
-    exportNETCLASS( netSettings->m_DefaultNetClass, aBoard );
+    exportNETCLASS( netSettings->GetDefaultNetclass(), aBoard );
 
-    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
         exportNETCLASS( netclass, aBoard );
 }
 
@@ -1766,7 +1766,7 @@ void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BO
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
     {
-        if( net->GetNetClass()->GetName() == clazz->m_class_id )
+        if( net->GetNetClass()->GetVariableSubstitutionName() == clazz->m_class_id )
             clazz->m_net_ids.push_back( TO_UTF8( net->GetNetname() ) );
     }
 

@@ -173,12 +173,6 @@ public:
      */
     int RunRuleAreaERC();
 
-    /**
-     * Runs ERC to check for overlapping rule areas
-     */
-    int TestRuleAreaOverlappingRuleAreasERC( std::map<SCH_SCREEN*,
-                                             std::vector<SCH_RULE_AREA*>>& allScreenRuleAreas );
-
     void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                    KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );
 

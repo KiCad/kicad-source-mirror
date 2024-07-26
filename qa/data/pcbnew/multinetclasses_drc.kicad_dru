@@ -1,0 +1,19 @@
+(version 1)
+
+(rule rule_1
+	(constraint track_width (max 10mil))
+	(condition "A.hasNetclass('CLASS2')")
+	(severity error)
+)
+
+(rule rule_2
+	(constraint track_width (max 30mil))
+	(condition "A.NetClass == 'CLASS1,Default'")
+	(severity error)
+)
+
+(rule rule_3
+	(constraint track_width (max 5mil))
+	(condition "A.NetClass == 'Default'")
+	(severity error)
+)

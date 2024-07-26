@@ -126,10 +126,8 @@ public:
 
     /// Return the resolved netclasses for the item, and the source item providing the netclass
     /// @param aItem the item to query for netclass assignments
-    /// @param returnAll If true, return all assigned netclasses (for ERC). If false, stop on first
-    ///                  netclass (for connectivity).
     const std::vector<std::pair<wxString, SCH_ITEM*>>
-    GetNetclassesForDriver( SCH_ITEM* aItem, bool returnAll ) const;
+    GetNetclassesForDriver( SCH_ITEM* aItem ) const;
 
     /// Combine another subgraph on the same sheet into this one.
     void Absorb( CONNECTION_SUBGRAPH* aOther );
@@ -641,8 +639,6 @@ private:
      * @return  true for no errors, false for errors
      */
     bool ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubgraph );
-
-    bool ercCheckNetclassConflicts( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs );
 
     /**
      * Check one subgraph for conflicting connections between net and bus labels.
