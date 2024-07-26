@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-07-03 21:12+0000\n"
+"PO-Revision-Date: 2024-07-27 23:09+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -46808,7 +46808,7 @@ msgstr "Zonevullingen zijn mogelijk onnauwkeurig. DRC-regels bevatten fouten."
 #: pcbnew/tools/zone_filler_tool.cpp:254
 #, c-format
 msgid "Refill %d Zones"
-msgstr "%d zones opnieuw vullen"
+msgstr "%d zones hervullen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:263
 msgid "Auto-fill Zone(s)"
@@ -47672,11 +47672,11 @@ msgstr "Geïsoleerde kopereilanden verwijderen..."
 
 #: pcbnew/zone_filler.cpp:730
 msgid "Zone fills are out-of-date. Refill?"
-msgstr "Zonevullingen zijn verouderd. Opnieuw vullen?"
+msgstr "Zonevullingen zijn verouderd. Hervullen?"
 
 #: pcbnew/zone_filler.cpp:732
 msgid "Refill"
-msgstr "Opnieuw vullen"
+msgstr "Hervullen"
 
 #: pcbnew/zone_filler.cpp:732
 msgid "Continue without Refill"
