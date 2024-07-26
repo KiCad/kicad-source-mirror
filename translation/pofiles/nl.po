@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-03 21:12+0000\n"
+"PO-Revision-Date: 2024-07-27 23:09+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4181,15 +4181,14 @@ msgid "Select a file to embed"
 msgstr "Waarde selecteren om af te stemmen"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "Alle bestanden"
+msgstr "Alle bestanden|*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "Bestand %s bestaat al."
+msgstr "Bestand '%s' bestaat al."
 
 #: common/dialogs/panel_embedded_files.cpp:174
 #: common/dialogs/panel_embedded_files.cpp:248
@@ -4207,9 +4206,9 @@ msgid "Overwrite"
 msgstr "Overschrijven"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Aanmaken van bestand '%s' mislukt."
+msgstr "Toevoegen van bestand '%s' mislukt."
 
 #: common/dialogs/panel_embedded_files.cpp:230
 #, fuzzy
@@ -8565,9 +8564,8 @@ msgid "Manage embedded files"
 msgstr "Bestanden hernoemen"
 
 #: common/tool/actions.cpp:1198
-#, fuzzy
 msgid "Remove File"
-msgstr "Hernoem Bestand"
+msgstr "Bestand verwijderen"
 
 #: common/tool/actions.cpp:1199
 #, fuzzy
@@ -8875,9 +8873,8 @@ msgid "Always show crosshairs"
 msgstr "Altijd kruislijnen weergeven"
 
 #: common/widgets/grid_text_button_helpers.cpp:363
-#, fuzzy
 msgid "Open file"
-msgstr "Open een Bestand"
+msgstr "Bestand openen"
 
 #: common/widgets/grid_text_button_helpers.cpp:490
 msgid "Select a File"
@@ -40255,9 +40252,8 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "Absolute vrije afstand van soldeerpasta aangepast."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:646
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "\"Relatieve vrije afstand van soldeerpasta aangepast."
+msgstr "Relatieve vrije afstand van soldeerpasta aangepast."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:653
 msgid "Zone connection overridden."
@@ -40737,9 +40733,8 @@ msgid "pads"
 msgstr "pads"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1917
-#, fuzzy
 msgid "vias"
-msgstr "Geen via’s"
+msgstr "via’s"
 
 #: pcbnew/files.cpp:150
 msgid "All KiCad Board Files"
@@ -42306,9 +42301,8 @@ msgid "NPTH pad of %s"
 msgstr "NPTH-pad van %s"
 
 #: pcbnew/pad.cpp:1455
-#, fuzzy
 msgid "NPTH pad"
-msgstr "PTH-pads"
+msgstr "NPTH-pad"
 
 #: pcbnew/pad.cpp:1464
 #, c-format
@@ -42316,9 +42310,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s van %s op %s"
 
 #: pcbnew/pad.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Pad on %s"
-msgstr "Pad %s"
+msgstr "Pad op %s"
 
 #: pcbnew/pad.cpp:1479
 #, c-format
@@ -42326,9 +42320,8 @@ msgid "PTH pad %s of %s"
 msgstr "PTH-pad %s van %s"
 
 #: pcbnew/pad.cpp:1485
-#, fuzzy
 msgid "PTH pad"
-msgstr "PTH-pads"
+msgstr "PTH-pad"
 
 #: pcbnew/pad.cpp:1495
 #, c-format
@@ -42336,9 +42329,9 @@ msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s %s van %s op %s"
 
 #: pcbnew/pad.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s on %s"
-msgstr "Via %s op %s"
+msgstr "Pad %s op %s"
 
 #: pcbnew/pad.cpp:1512
 #, c-format
@@ -42346,9 +42339,9 @@ msgid "PTH pad %s %s of %s"
 msgstr "PTH-pad %s %s van %s"
 
 #: pcbnew/pad.cpp:1519
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s"
-msgstr "PTH-pads"
+msgstr "PTH-pad %s"
 
 #: pcbnew/pad.cpp:2073
 msgid "(Pad must have a positive size)"
@@ -44510,9 +44503,9 @@ msgid "Drawing"
 msgstr "Tekening"
 
 #: pcbnew/pcb_shape.cpp:716
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s of %s on %s"
-msgstr "Pad %s %s van %s op %s"
+msgstr "%s %s van %s op %s"
 
 #: pcbnew/pcb_shape.cpp:724
 #, c-format
@@ -46041,9 +46034,8 @@ msgid "Board Characteristics"
 msgstr "Bordeigenschappen toevoegen"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:664
-#, fuzzy
 msgid "Place Items"
-msgstr "Plaats node"
+msgstr "Items plaatsen"
 
 #: pcbnew/tools/drawing_tool.cpp:94
 msgid "Select Via Size"
@@ -46298,9 +46290,8 @@ msgid "Ungroup Items"
 msgstr "Items degroeperen"
 
 #: pcbnew/tools/group_tool.cpp:348
-#, fuzzy
 msgid "Remove Group Items"
-msgstr "Items verwijderen"
+msgstr "Groepsitems verwijderen"
 
 #: pcbnew/tools/item_modification_routine.cpp:74
 msgid "Unable to fillet the selected lines."
@@ -48484,7 +48475,7 @@ msgstr "Zonevullingen zijn mogelijk onnauwkeurig. DRC-regels bevatten fouten."
 #: pcbnew/tools/zone_filler_tool.cpp:257
 #, c-format
 msgid "Refill %d Zones"
-msgstr "%d zones opnieuw vullen"
+msgstr "%d zones hervullen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:266
 msgid "Auto-fill Zone(s)"
@@ -48586,9 +48577,8 @@ msgid "Show copper zones"
 msgstr "Koperzones weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
-#, fuzzy
 msgid "Filled Shapes"
-msgstr "Gevulde vorm"
+msgstr "Gevulde vormen"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
 #, fuzzy
@@ -49222,9 +49212,8 @@ msgid "Remove Selected Custom Group"
 msgstr "Geselecteerde aangepaste groep verwijderen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1252
-#, fuzzy
 msgid "Group name / pattern:"
-msgstr "Groepsnaam:"
+msgstr "Groepsnaam / -patroon:"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1252
 msgid "New Group"
@@ -49491,11 +49480,11 @@ msgstr "Geïsoleerde kopereilanden verwijderen..."
 
 #: pcbnew/zone_filler.cpp:875
 msgid "Zone fills are out-of-date. Refill?"
-msgstr "Zonevullingen zijn verouderd. Opnieuw vullen?"
+msgstr "Zonevullingen zijn verouderd. Hervullen?"
 
 #: pcbnew/zone_filler.cpp:877
 msgid "Refill"
-msgstr "Opnieuw vullen"
+msgstr "Hervullen"
 
 #: pcbnew/zone_filler.cpp:877
 msgid "Continue without Refill"
@@ -49512,19 +49501,16 @@ msgstr ""
 "van de andere zone."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:82
-#, fuzzy
 msgid "Refill zones"
-msgstr "%d zones opnieuw vullen"
+msgstr "Zones hervullen"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
-#, fuzzy
 msgid "Refill zones after changes made on board"
-msgstr "Zone opnieuw vullen na sluiten van de zone-property dialog"
+msgstr "Zones hervullen na wijzigingen op het bord"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
-#, fuzzy
 msgid "Update Displayed Zones"
-msgstr "Laagweergaveopties"
+msgstr "Weergegeven zones bijwerken"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
