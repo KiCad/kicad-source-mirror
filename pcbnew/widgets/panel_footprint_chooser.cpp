@@ -128,7 +128,8 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     detailsSizer->Fit( detailsPanel );
 
     m_vsplitter->SetSashGravity( 0.5 );
-    m_vsplitter->SetMinimumPaneSize( 20 );
+    // Ensure the splitted areas are always shown (i.e. 0 size not allowed)
+    m_vsplitter->SetMinimumPaneSize( 80 );  // arbitrary value but reasonable min size
     m_vsplitter->SplitHorizontally( m_hsplitter, detailsPanel );
 
     sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
@@ -144,7 +145,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( m_RightPanel, m_frame->Kiway() );
     m_preview_ctrl->SetUserUnits( m_frame->GetUserUnits() );
-    m_RightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND, 5 );
+    m_RightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND|wxRIGHT, 5 );
 
     m_RightPanel->SetSizer( m_RightPanelSizer );
     m_RightPanel->Layout();
