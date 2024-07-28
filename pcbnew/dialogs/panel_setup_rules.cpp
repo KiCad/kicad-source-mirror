@@ -237,10 +237,42 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                     || token == wxT( "via" )
                     || token == wxT( "zone" );
             };
+    
+    auto isConstraintTypeToken =
+            []( const wxString& token ) -> bool
+            {
+                return token == wxT( "annular_width" )
+                    || token == wxT( "assertion" )
+                    || token == wxT( "clearance" )
+                    || token == wxT( "connection_width" )
+                    || token == wxT( "courtyard_clearance" )
+                    || token == wxT( "diff_pair_gap" )
+                    || token == wxT( "diff_pair_uncoupled" )
+                    || token == wxT( "disallow" )
+                    || token == wxT( "edge_clearance" )
+                    || token == wxT( "length" )
+                    || token == wxT( "hole_clearance" )
+                    || token == wxT( "hole_size" )
+                    || token == wxT( "hole_to_hole" )
+                    || token == wxT( "min_resolved_spokes" )
+                    || token == wxT( "physical_clearance" )
+                    || token == wxT( "physical_hole_clearance" )
+                    || token == wxT( "silk_clearance" )
+                    || token == wxT( "skew" )
+                    || token == wxT( "text_height" )
+                    || token == wxT( "text_thickness" )
+                    || token == wxT( "thermal_relief_gap" )
+                    || token == wxT( "thermal_spoke_width" )
+                    || token == wxT( "track_width" )
+                    || token == wxT( "via_count" )
+                    || token == wxT( "via_diameter" )
+                    || token == wxT( "zone_connection" );
+            };
 
     std::stack<wxString> sexprs;
     wxString             partial;
     wxString             last;
+    wxString             constraintType;
     int                  context = NONE;
     int                  expr_context = NONE;
 
@@ -313,7 +345,18 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             }
 
             if( !sexprs.empty() )
-                sexprs.pop();
+            {
+                // Ignore argument-less tokens
+                if( partial != wxT( "group_matched" ) && partial != wxT( "within_diff_pairs" ) )
+                {
+                    if( sexprs.top() == wxT( "constraint" ) )
+                    {
+                        constraintType = wxEmptyString;
+                    }
+
+                    sexprs.pop();
+                }
+            }
 
             context = NONE;
         }
@@ -364,6 +407,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 context = SEXPR_STRING;
                 continue;
             }
+            else if( isConstraintTypeToken( partial ) )
+            {
+                constraintType = partial;
+            }
 
             context = NONE;
         }
@@ -391,7 +438,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( sexprs.top() == wxT( "constraint" ) )
         {
-            tokens = wxT( "max|min|opt" );
+            if( constraintType == wxT( "skew" ) )
+                tokens = wxT( "max|min|opt|group_matched|within_diff_pairs" );
+            else
+                tokens = wxT( "max|min|opt" );
         }
     }
     else if( context == SEXPR_TOKEN )

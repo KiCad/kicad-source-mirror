@@ -58,6 +58,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_copper_sliver.cpp
     drc/test_solder_mask_bridging.cpp
     drc/test_drc_multi_netclasses.cpp
+    drc/test_drc_skew.cpp
 
     pcb_io/altium/test_altium_rule_transformer.cpp
     pcb_io/altium/test_altium_pcblib_import.cpp

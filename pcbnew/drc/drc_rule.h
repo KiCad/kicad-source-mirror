@@ -24,6 +24,7 @@
 #ifndef DRC_RULE_H
 #define DRC_RULE_H
 
+#include <bitset>
 #include <kiid.h>
 #include <core/typeinfo.h>
 #include <optional>
@@ -134,6 +135,12 @@ class DRC_CONSTRAINT
     {
     }
 
+    enum class OPTIONS : std::size_t
+    {
+        SKEW_GROUP_MATCHED = 0,
+        SKEW_WITHIN_DIFF_PAIRS = 1
+    };
+
     bool IsNull() const
     {
         return m_Type == NULL_CONSTRAINT;
@@ -168,6 +175,13 @@ class DRC_CONSTRAINT
             return RPT_SEVERITY_UNDEFINED;
     }
 
+    void SetOption( OPTIONS option ) { m_options.set( static_cast<std::size_t>( option ), true ); }
+
+    bool GetOption( OPTIONS option ) const
+    {
+        return m_options.test( static_cast<std::size_t>( option ) );
+    }
+
 public:
     DRC_CONSTRAINT_T    m_Type;
     MINOPTMAX<int>      m_Value;
@@ -178,6 +192,7 @@ public:
 private:
     wxString            m_name;          // For just-in-time constraints
     DRC_RULE*           m_parentRule;    // For constraints found in rules
+    std::bitset<2>      m_options;       // Constraint-specific option bits
 };
 
 

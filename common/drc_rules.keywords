@@ -15,6 +15,7 @@ error
 exclusion
 footprint
 graphic
+group_matched
 hole
 hole_clearance
 hole_size
@@ -55,5 +56,6 @@ via
 via_count
 via_diameter
 warning
+within_diff_pairs
 zone
 zone_connection

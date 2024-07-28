@@ -31,6 +31,7 @@ public:
     {
         int                             netcode;
         wxString                        netname;
+        NETINFO_ITEM*                   netinfo;
         BOARD_CONNECTED_ITEM*           fromItem;
         BOARD_CONNECTED_ITEM*           toItem;
         DRC_RULE*                       matchingRule;

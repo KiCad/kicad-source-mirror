@@ -1,0 +1,6 @@
+(version 1)
+
+(rule diff_skew
+    (constraint skew (max 3mil) (within_diff_pairs))
+    (condition "A.hasNetclass('DIFF_PAIR')")
+)
