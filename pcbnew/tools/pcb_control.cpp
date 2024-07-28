@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -820,64 +820,20 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
     std::vector<BOARD_ITEM*> returnItems;
     bool                     fpItemDeleted = false;
 
-    auto processFPItem =
-            [&]( FOOTPRINT* aFootprint, BOARD_ITEM* aItem )
-            {
-                LSET allowed = aItem->GetLayerSet() & enabledLayers;
-
-                if( allowed.any() )
-                {
-                    // Don't prune internal copper layers on items with holes
-                    if( aItem->HasHole() && aItem->IsOnCopperLayer() )
-                        allowed |= LSET::InternalCuMask();
-
-                    aItem->SetLayerSet( allowed );
-                }
-                else
-                {
-                    aFootprint->Remove( aItem );
-                    fpItemDeleted = true;
-                }
-            };
-
     for( BOARD_ITEM* item : aItems )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
         {
             FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
 
-            if( !enabledLayers.test( fp->Reference().GetLayer() ) )
-                fp->Reference().SetLayer( fp->IsFlipped() ? B_SilkS : F_SilkS );
-
-            if( !enabledLayers.test( fp->Value().GetLayer() ) )
-                fp->Value().SetLayer( fp->IsFlipped() ? B_Fab : F_Fab );
-
-            // NOTE: all traversals from the back as processFPItem() might delete the item
-
-            for( int ii = static_cast<int>( fp->Fields().size() ) - 1; ii >= 0; ii-- )
-                processFPItem( fp, fp->Fields()[ii] );
-
-            for( int ii = static_cast<int>( fp->Pads().size() ) - 1; ii >= 0; ii-- )
-                processFPItem( fp, fp->Pads()[ii] );
-
-            for( int ii = static_cast<int>( fp->Zones().size() ) - 1; ii >= 0; ii-- )
-                processFPItem( fp, fp->Zones()[ii] );
-
-            for( int ii = static_cast<int>( fp->GraphicalItems().size() ) - 1; ii >= 0; ii-- )
-                processFPItem( fp, fp->GraphicalItems()[ii] );
-
-            if( fp->Fields().size()
-                || fp->GraphicalItems().size()
-                || fp->Pads().size()
-                || fp->Zones().size() )
-            {
-                returnItems.push_back( fp );
-            }
-            else
-            {
-                if( PCB_GROUP* parentGroup = fp->GetParentGroup() )
-                    parentGroup->RemoveItem( item );
-            }
+            // Items living in a parent footprint are never removed, even if their
+            // layer does not exist in the board editor
+            // Otherwise the parent footprint could be seriously broken especially
+            // if some layers are later re-enabled.
+            // Moreover a fp lives in a fp library, that does not know the enabled
+            // layers of a given board, so fp items are just ignored when on not
+            // enabled layers in board editor
+            returnItems.push_back( fp );
         }
         else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
         {
