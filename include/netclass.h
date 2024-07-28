@@ -85,7 +85,7 @@ public:
     bool ContainsNetclassWithName( const wxString& netclass ) const;
 
     /// @ brief Determines if this is marked as the default netclass
-    const bool IsDefault() const { return m_isDefault; }
+    bool IsDefault() const { return m_isDefault; }
 
     /// @brief Gets the consolidated name of this netclass (which may be an aggregate)
     const wxString GetName() const;
