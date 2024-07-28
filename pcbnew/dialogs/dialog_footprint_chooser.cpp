@@ -50,7 +50,9 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
     m_parent = aParent;
     m_showFpMode = true;
 
+    // This is also the main sizer:
     wxBoxSizer* m_SizerTop = new wxBoxSizer( wxVERTICAL );
+
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( aParent, this, aFootprintHistoryList,
             // Filter
             []( LIB_TREE_NODE& aNode ) -> bool
@@ -68,7 +70,7 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
                 EndModal( wxID_CANCEL );
             } );
 
-    m_SizerTop->Add( m_chooserPanel, 1, wxEXPAND, 5 );
+    m_SizerTop->Add( m_chooserPanel, 1, wxEXPAND | wxRIGHT, 5 );
     FOOTPRINT_PREVIEW_WIDGET* viewerFpPanel = m_chooserPanel->GetViewerPanel();
 
     viewerFpPanel->Show( m_showFpMode );
@@ -77,6 +79,7 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
 
     m_preview3DCanvas->Show( !m_showFpMode );
 
+    // bSizerBottom shows all buttons to the bottom of window
     wxBoxSizer* bSizerBottom;
     bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
     // Add a spacer on the left
@@ -120,6 +123,8 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
     SetupStandardButtons();
 
     m_chooserPanel->FinishSetup();
+    // Ensure a reasonable min size that shows all widgets in this dialog
+    SetMinSize( wxSize( 400, 300 ) );
     Layout();
 
     // Connect Events
