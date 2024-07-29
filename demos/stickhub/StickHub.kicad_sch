@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20240716)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "8.99")
 	(uuid "468c1611-b068-4724-babd-2f440b5886f5")
 	(paper "A3" portrait)
 	(title_block
@@ -62,6 +62,18 @@
 				)
 			)
 			(symbol "Logo_2_0_1"
+				(arc
+					(start -1.016 0)
+					(mid -0.413 -0.3693)
+					(end -0.127 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(rectangle
 					(start -1.27 1.27)
 					(end 1.27 -1.27)
@@ -75,20 +87,8 @@
 				)
 				(arc
 					(start -0.127 -1.016)
-					(mid -0.413 -0.3693)
-					(end -1.016 0)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 1.016 1.016)
-					(mid 0.1393 0.1717)
-					(end -0.127 -1.016)
+					(mid 0.1391 0.1718)
+					(end 1.016 1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -98,6 +98,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "Logo_3"
 			(pin_numbers hide)
@@ -152,6 +153,18 @@
 				)
 			)
 			(symbol "Logo_3_0_1"
+				(arc
+					(start -1.016 0)
+					(mid -0.413 -0.3693)
+					(end -0.127 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(rectangle
 					(start -1.27 1.27)
 					(end 1.27 -1.27)
@@ -165,20 +178,8 @@
 				)
 				(arc
 					(start -0.127 -1.016)
-					(mid -0.413 -0.3693)
-					(end -1.016 0)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 1.016 1.016)
-					(mid 0.1393 0.1717)
-					(end -0.127 -1.016)
+					(mid 0.1391 0.1718)
+					(end 1.016 1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -188,6 +189,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:CPsmall"
 			(pin_numbers hide)
@@ -310,6 +312,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:Conn_01x01"
 			(pin_names
@@ -380,17 +383,6 @@
 			)
 			(symbol "Conn_01x01_1_1"
 				(rectangle
-					(start -1.27 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
 					(start -1.27 1.27)
 					(end 1.27 -1.27)
 					(stroke
@@ -399,6 +391,17 @@
 					)
 					(fill
 						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
 					)
 				)
 				(pin passive line
@@ -420,6 +423,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:Conn_01x04_Male"
 			(pin_names
@@ -489,21 +493,53 @@
 				)
 			)
 			(symbol "Conn_01x04_Male_1_1"
-				(polyline
-					(pts
-						(xy 1.27 -5.08) (xy 0.8636 -5.08)
-					)
+				(rectangle
+					(start 0.8636 2.667)
+					(end 0 2.413)
 					(stroke
 						(width 0.1524)
 						(type default)
 					)
 					(fill
-						(type none)
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(polyline
 					(pts
-						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+						(xy 1.27 2.54) (xy 0.8636 2.54)
 					)
 					(stroke
 						(width 0.1524)
@@ -527,7 +563,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.27 2.54) (xy 0.8636 2.54)
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
 					)
 					(stroke
 						(width 0.1524)
@@ -537,48 +573,16 @@
 						(type none)
 					)
 				)
-				(rectangle
-					(start 0.8636 -4.953)
-					(end 0 -5.207)
+				(polyline
+					(pts
+						(xy 1.27 -5.08) (xy 0.8636 -5.08)
+					)
 					(stroke
 						(width 0.1524)
 						(type default)
 					)
 					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 2.667)
-					(end 0 2.413)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type outline)
+						(type none)
 					)
 				)
 				(pin passive line
@@ -654,6 +658,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:Conn_01x04_MountingPin"
 			(pin_names
@@ -725,19 +730,19 @@
 			)
 			(symbol "Conn_01x04_MountingPin_1_1"
 				(rectangle
-					(start -1.27 -4.953)
-					(end 0 -5.207)
+					(start -1.27 3.81)
+					(end 1.27 -6.35)
 					(stroke
-						(width 0.1524)
+						(width 0.254)
 						(type default)
 					)
 					(fill
-						(type none)
+						(type background)
 					)
 				)
 				(rectangle
-					(start -1.27 -2.413)
-					(end 0 -2.667)
+					(start -1.27 2.667)
+					(end 0 2.413)
 					(stroke
 						(width 0.1524)
 						(type default)
@@ -758,8 +763,8 @@
 					)
 				)
 				(rectangle
-					(start -1.27 2.667)
-					(end 0 2.413)
+					(start -1.27 -2.413)
+					(end 0 -2.667)
 					(stroke
 						(width 0.1524)
 						(type default)
@@ -769,14 +774,14 @@
 					)
 				)
 				(rectangle
-					(start -1.27 3.81)
-					(end 1.27 -6.35)
+					(start -1.27 -4.953)
+					(end 0 -5.207)
 					(stroke
-						(width 0.254)
+						(width 0.1524)
 						(type default)
 					)
 					(fill
-						(type background)
+						(type none)
 					)
 				)
 				(polyline
@@ -890,6 +895,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:Crystal_small_4P"
 			(pin_names
@@ -939,15 +945,16 @@
 				)
 			)
 			(symbol "Crystal_small_4P_0_1"
-				(rectangle
-					(start -0.635 1.905)
-					(end 0.635 -1.905)
+				(polyline
+					(pts
+						(xy -1.27 1.27) (xy -1.27 -1.27)
+					)
 					(stroke
-						(width 0.2032)
+						(width 0)
 						(type default)
 					)
 					(fill
-						(type background)
+						(type none)
 					)
 				)
 				(polyline
@@ -962,16 +969,15 @@
 						(type none)
 					)
 				)
-				(polyline
-					(pts
-						(xy -1.27 1.27) (xy -1.27 -1.27)
-					)
+				(rectangle
+					(start -0.635 1.905)
+					(end 0.635 -1.905)
 					(stroke
-						(width 0)
+						(width 0.2032)
 						(type default)
 					)
 					(fill
-						(type none)
+						(type background)
 					)
 				)
 				(polyline
@@ -1061,6 +1067,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:Csmall"
 			(pin_numbers hide)
@@ -1260,6 +1267,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:D_TVS_Filled"
 			(pin_numbers hide)
@@ -1332,18 +1340,6 @@
 			(symbol "D_TVS_Filled_0_1"
 				(polyline
 					(pts
-						(xy 1.27 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy -2.54 -1.27) (xy 0 0) (xy -2.54 1.27) (xy -2.54 -1.27)
 					)
 					(stroke
@@ -1360,6 +1356,18 @@
 					)
 					(stroke
 						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -1417,6 +1425,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:Dialog_SLG5NT1487V"
 			(exclude_from_sim no)
@@ -1479,6 +1488,24 @@
 			)
 			(symbol "Dialog_SLG5NT1487V_1_1"
 				(pin power_in line
+					(at -7.62 5.08 0)
+					(length 2.54)
+					(name "D"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
 					(at -7.62 -2.54 0)
 					(length 2.54)
 					(name "VDD"
@@ -1507,24 +1534,6 @@
 						)
 					)
 					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -7.62 5.08 0)
-					(length 2.54)
-					(name "D"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1587,6 +1596,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:JUMPER"
 			(pin_numbers hide)
@@ -1651,9 +1661,9 @@
 					)
 				)
 				(arc
-					(start 0.889 0.508)
+					(start -0.889 0.508)
 					(mid 0 1.0239)
-					(end -0.889 0.508)
+					(end 0.889 0.508)
 					(stroke
 						(width 0.2032)
 						(type default)
@@ -1710,6 +1720,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:LED_DUAL_red_green"
 			(pin_names
@@ -1781,16 +1792,16 @@
 						(type none)
 					)
 				)
-				(text "green"
-					(at 0 -0.508 0)
+				(text "red"
+					(at 0 0.635 0)
 					(effects
 						(font
 							(size 0.6096 0.6096)
 						)
 					)
 				)
-				(text "red"
-					(at 0 0.635 0)
+				(text "green"
+					(at 0 -0.508 0)
 					(effects
 						(font
 							(size 0.6096 0.6096)
@@ -1824,7 +1835,7 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 -2.54) (xy -2.54 -2.54)
+						(xy -1.27 1.27) (xy -1.27 3.81)
 					)
 					(stroke
 						(width 0)
@@ -1848,7 +1859,7 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 1.27) (xy -1.27 3.81)
+						(xy -1.27 -2.54) (xy -2.54 -2.54)
 					)
 					(stroke
 						(width 0)
@@ -1884,19 +1895,7 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 -2.54) (xy 1.27 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 1.27 2.54)
+						(xy 0.254 3.556) (xy -0.508 4.318) (xy -0.508 4.064)
 					)
 					(stroke
 						(width 0)
@@ -1920,7 +1919,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0.254 3.556) (xy -0.508 4.318) (xy -0.508 4.064)
+						(xy 0.762 3.81) (xy 0 4.572) (xy 0 4.318)
 					)
 					(stroke
 						(width 0)
@@ -1944,14 +1943,14 @@
 				)
 				(polyline
 					(pts
-						(xy 0.762 3.81) (xy 0 4.572) (xy 0 4.318)
+						(xy 1.27 1.27) (xy -1.27 2.54) (xy 1.27 3.81)
 					)
 					(stroke
 						(width 0)
 						(type default)
 					)
 					(fill
-						(type none)
+						(type outline)
 					)
 				)
 				(polyline
@@ -1968,29 +1967,41 @@
 				)
 				(polyline
 					(pts
-						(xy 1.27 1.27) (xy -1.27 2.54) (xy 1.27 3.81)
+						(xy 2.54 2.54) (xy 1.27 2.54)
 					)
 					(stroke
 						(width 0)
 						(type default)
 					)
 					(fill
-						(type outline)
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 1.27 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
 					)
 				)
 			)
 			(symbol "LED_DUAL_red_green_1_1"
 				(pin passive line
-					(at 5.08 -2.54 180)
+					(at -5.08 2.54 0)
 					(length 2.54)
-					(name "1"
+					(name "4"
 						(effects
 							(font
 								(size 0.7874 0.7874)
 							)
 						)
 					)
-					(number "GA"
+					(number "RK"
 						(effects
 							(font
 								(size 0.7874 0.7874)
@@ -2035,16 +2046,16 @@
 					)
 				)
 				(pin passive line
-					(at -5.08 2.54 0)
+					(at 5.08 -2.54 180)
 					(length 2.54)
-					(name "4"
+					(name "1"
 						(effects
 							(font
 								(size 0.7874 0.7874)
 							)
 						)
 					)
-					(number "RK"
+					(number "GA"
 						(effects
 							(font
 								(size 0.7874 0.7874)
@@ -2053,6 +2064,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:Logo"
 			(pin_numbers hide)
@@ -2107,6 +2119,18 @@
 				)
 			)
 			(symbol "Logo_0_1"
+				(arc
+					(start -1.016 0)
+					(mid -0.413 -0.3693)
+					(end -0.127 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(rectangle
 					(start -1.27 1.27)
 					(end 1.27 -1.27)
@@ -2120,20 +2144,8 @@
 				)
 				(arc
 					(start -0.127 -1.016)
-					(mid -0.413 -0.3693)
-					(end -1.016 0)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 1.016 1.016)
-					(mid 0.1393 0.1717)
-					(end -0.127 -1.016)
+					(mid 0.1391 0.1718)
+					(end 1.016 1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -2143,6 +2155,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:MaxLinear_XR22417-48"
 			(pin_names
@@ -2207,35 +2220,17 @@
 				)
 			)
 			(symbol "MaxLinear_XR22417-48_1_1"
-				(pin output line
-					(at 15.24 -68.58 180)
+				(pin bidirectional line
+					(at -15.24 60.96 0)
 					(length 2.54)
-					(name "LED_CTL"
+					(name "UP_D-"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -15.24 -63.5 0)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "10"
+					(number "29"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2244,16 +2239,16 @@
 					)
 				)
 				(pin bidirectional line
-					(at 15.24 22.86 180)
+					(at -15.24 58.42 0)
 					(length 2.54)
-					(name "USB4D-"
+					(name "UP_D+"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "11"
+					(number "30"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2261,17 +2256,17 @@
 						)
 					)
 				)
-				(pin bidirectional line
-					(at 15.24 20.32 180)
+				(pin power_in line
+					(at -15.24 48.26 0)
 					(length 2.54)
-					(name "USB4D+"
+					(name "VCC5"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "12"
+					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2279,17 +2274,17 @@
 						)
 					)
 				)
-				(pin bidirectional line
-					(at 15.24 35.56 180)
+				(pin input line
+					(at -15.24 38.1 0)
 					(length 2.54)
-					(name "USB3D-"
+					(name "VBUS_SENSE"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "13"
+					(number "41"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2297,17 +2292,17 @@
 						)
 					)
 				)
-				(pin bidirectional line
-					(at 15.24 33.02 180)
+				(pin power_out line
+					(at -15.24 22.86 0)
 					(length 2.54)
-					(name "USB3D+"
+					(name "3V3_OUT"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "14"
+					(number "9"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2333,17 +2328,17 @@
 						)
 					)
 				)
-				(pin bidirectional line
-					(at 15.24 48.26 180)
+				(pin power_in line
+					(at -15.24 17.78 0)
 					(length 2.54)
-					(name "USB2D-"
+					(name "VCC33"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "16"
+					(number "20"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2351,17 +2346,323 @@
 						)
 					)
 				)
-				(pin bidirectional line
-					(at 15.24 45.72 180)
+				(pin power_in line
+					(at -15.24 15.24 0)
 					(length 2.54)
-					(name "USB2D+"
+					(name "VCC33"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "17"
+					(number "26"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -15.24 12.7 0)
+					(length 2.54)
+					(name "VCC33"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "31"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -15.24 10.16 0)
+					(length 2.54)
+					(name "VCC33"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "36"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -15.24 7.62 0)
+					(length 2.54)
+					(name "VCC33"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "42"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -15.24 2.54 0)
+					(length 2.54)
+					(name "TEST1#"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "43"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -15.24 0 0)
+					(length 2.54)
+					(name "TEST3#"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "45"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -15.24 -2.54 0)
+					(length 2.54)
+					(name "EXT_RST#"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "40"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at -15.24 -20.32 0)
+					(length 2.54)
+					(name "1V8_OUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "25"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -15.24 -22.86 0)
+					(length 2.54)
+					(name "VCC18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -15.24 -25.4 0)
+					(length 2.54)
+					(name "VCC18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "21"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -15.24 -27.94 0)
+					(length 2.54)
+					(name "VCC18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "28"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -15.24 -33.02 0)
+					(length 2.54)
+					(name "XTALIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "22"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at -15.24 -48.26 0)
+					(length 2.54)
+					(name "XTALOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "23"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -15.24 -53.34 0)
+					(length 2.54)
+					(name "REXT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "27"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at -15.24 -60.96 0)
+					(length 2.54)
+					(name "TEST#2/DNC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "44"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -63.5 0)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -66.04 0)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "24"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -68.58 0)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "39"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2406,178 +2707,16 @@
 					)
 				)
 				(pin bidirectional line
-					(at 15.24 -27.94 180)
+					(at 15.24 48.26 180)
 					(length 2.54)
-					(name "TEST#/SDA"
+					(name "USB2D-"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -15.24 17.78 0)
-					(length 2.54)
-					(name "VCC33"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "20"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -15.24 -25.4 0)
-					(length 2.54)
-					(name "VCC18"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "21"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -15.24 -33.02 0)
-					(length 2.54)
-					(name "XTALIN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "22"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at -15.24 -48.26 0)
-					(length 2.54)
-					(name "XTALOUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "23"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -15.24 -66.04 0)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "24"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at -15.24 -20.32 0)
-					(length 2.54)
-					(name "1V8_OUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "25"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -15.24 15.24 0)
-					(length 2.54)
-					(name "VCC33"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "26"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -15.24 -53.34 0)
-					(length 2.54)
-					(name "REXT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "27"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -15.24 -27.94 0)
-					(length 2.54)
-					(name "VCC18"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "28"
+					(number "16"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2586,16 +2725,16 @@
 					)
 				)
 				(pin bidirectional line
-					(at -15.24 60.96 0)
+					(at 15.24 45.72 180)
 					(length 2.54)
-					(name "UP_D-"
+					(name "USB2D+"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "29"
+					(number "17"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2604,16 +2743,16 @@
 					)
 				)
 				(pin bidirectional line
-					(at 15.24 -33.02 180)
+					(at 15.24 35.56 180)
 					(length 2.54)
-					(name "LED1/SCL"
+					(name "USB3D-"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "3"
+					(number "13"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2622,16 +2761,16 @@
 					)
 				)
 				(pin bidirectional line
-					(at -15.24 58.42 0)
+					(at 15.24 33.02 180)
 					(length 2.54)
-					(name "UP_D+"
+					(name "USB3D+"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "30"
+					(number "14"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2639,17 +2778,35 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -15.24 12.7 0)
+				(pin bidirectional line
+					(at 15.24 22.86 180)
 					(length 2.54)
-					(name "VCC33"
+					(name "USB4D-"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "31"
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 15.24 20.32 180)
+					(length 2.54)
+					(name "USB4D+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2729,24 +2886,6 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -15.24 10.16 0)
-					(length 2.54)
-					(name "VCC33"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "36"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
 				(pin bidirectional line
 					(at 15.24 -15.24 180)
 					(length 2.54)
@@ -2783,17 +2922,35 @@
 						)
 					)
 				)
-				(pin passive line
-					(at -15.24 -68.58 0)
+				(pin bidirectional line
+					(at 15.24 -27.94 180)
 					(length 2.54)
-					(name "GND"
+					(name "TEST#/SDA"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "39"
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 15.24 -33.02 180)
+					(length 2.54)
+					(name "LED1/SCL"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2819,71 +2976,17 @@
 						)
 					)
 				)
-				(pin input line
-					(at -15.24 -2.54 0)
+				(pin output line
+					(at 15.24 -43.18 180)
 					(length 2.54)
-					(name "EXT_RST#"
+					(name "LED3"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "40"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -15.24 38.1 0)
-					(length 2.54)
-					(name "VBUS_SENSE"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "41"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -15.24 7.62 0)
-					(length 2.54)
-					(name "VCC33"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "42"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -15.24 2.54 0)
-					(length 2.54)
-					(name "TEST1#"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "43"
+					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2892,70 +2995,16 @@
 					)
 				)
 				(pin output line
-					(at -15.24 -60.96 0)
+					(at 15.24 -48.26 180)
 					(length 2.54)
-					(name "TEST#2/DNC"
+					(name "LED4"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "44"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -15.24 0 0)
-					(length 2.54)
-					(name "TEST3#"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "45"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 15.24 -63.5 180)
-					(length 2.54)
-					(name "LED7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "46"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 15.24 -58.42 180)
-					(length 2.54)
-					(name "LED6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "47"
+					(number "7"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2982,34 +3031,16 @@
 					)
 				)
 				(pin output line
-					(at 15.24 -43.18 180)
+					(at 15.24 -58.42 180)
 					(length 2.54)
-					(name "LED3"
+					(name "LED6"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -15.24 -22.86 0)
-					(length 2.54)
-					(name "VCC18"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
+					(number "47"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3018,16 +3049,16 @@
 					)
 				)
 				(pin output line
-					(at 15.24 -48.26 180)
+					(at 15.24 -63.5 180)
 					(length 2.54)
-					(name "LED4"
+					(name "LED7"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "7"
+					(number "46"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3035,35 +3066,17 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -15.24 48.26 0)
+				(pin output line
+					(at 15.24 -68.58 180)
 					(length 2.54)
-					(name "VCC5"
+					(name "LED_CTL"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at -15.24 22.86 0)
-					(length 2.54)
-					(name "3V3_OUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "9"
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3072,6 +3085,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:MountingHole"
 			(pin_names
@@ -3154,6 +3168,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:RSMALL"
 			(pin_numbers hide)
@@ -3238,18 +3253,6 @@
 			(symbol "RSMALL_0_1"
 				(polyline
 					(pts
-						(xy -0.508 -1.524) (xy 0 -1.778) (xy 0 -2.032)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy -0.508 1.524) (xy 0 1.778) (xy 0 2.032)
 					)
 					(stroke
@@ -3264,6 +3267,18 @@
 					(pts
 						(xy -0.508 -1.524) (xy 0.508 -1.016) (xy -0.508 -0.508) (xy 0.508 0) (xy -0.508 0.508) (xy 0.508 1.016)
 						(xy -0.508 1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.508 -1.524) (xy 0 -1.778) (xy 0 -2.032)
 					)
 					(stroke
 						(width 0)
@@ -3312,6 +3327,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "RobotProtos:VIN"
 			(power)
@@ -3364,10 +3380,9 @@
 				)
 			)
 			(symbol "VIN_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 1.27)
-					)
+				(circle
+					(center 0 1.905)
+					(radius 0.635)
 					(stroke
 						(width 0)
 						(type default)
@@ -3376,9 +3391,10 @@
 						(type none)
 					)
 				)
-				(circle
-					(center 0 1.905)
-					(radius 0.635)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27)
+					)
 					(stroke
 						(width 0)
 						(type default)
@@ -3408,6 +3424,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:+1V8"
 			(power)
@@ -3485,7 +3502,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 2.54)
+						(xy 0 2.54) (xy 0.762 1.27)
 					)
 					(stroke
 						(width 0)
@@ -3497,7 +3514,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
+						(xy 0 0) (xy 0 2.54)
 					)
 					(stroke
 						(width 0)
@@ -3528,6 +3545,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:+3.3V"
 			(power)
@@ -3605,7 +3623,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 2.54)
+						(xy 0 2.54) (xy 0.762 1.27)
 					)
 					(stroke
 						(width 0)
@@ -3617,7 +3635,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
+						(xy 0 0) (xy 0 2.54)
 					)
 					(stroke
 						(width 0)
@@ -3648,6 +3666,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:+5V"
 			(power)
@@ -3725,7 +3744,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 2.54)
+						(xy 0 2.54) (xy 0.762 1.27)
 					)
 					(stroke
 						(width 0)
@@ -3737,7 +3756,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
+						(xy 0 0) (xy 0 2.54)
 					)
 					(stroke
 						(width 0)
@@ -3768,6 +3787,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:GND"
 			(power)
@@ -3864,6 +3884,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:PWR_FLAG"
 			(power)
@@ -3960,7 +3981,30 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
+	)
+	(text "ESD caps at connectors / plug"
+		(exclude_from_sim no)
+		(at 88.9 320.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "80667bec-a8d4-4b22-b729-377d8bf4d5a7")
+	)
+	(text "Shared VBUS capacitance"
+		(exclude_from_sim no)
+		(at 92.71 278.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c69897a1-234a-4809-9809-28c5524706dd")
 	)
 	(junction
 		(at 240.03 115.57)
@@ -9556,28 +9600,6 @@
 		)
 		(uuid "ff9e3c17-7fd6-46c8-b56f-677ed06893f2")
 	)
-	(text "ESD caps at connectors / plug"
-		(exclude_from_sim no)
-		(at 88.9 320.04 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "80667bec-a8d4-4b22-b729-377d8bf4d5a7")
-	)
-	(text "Shared VBUS capacitance"
-		(exclude_from_sim no)
-		(at 92.71 278.13 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c69897a1-234a-4809-9809-28c5524706dd")
-	)
 	(label "LED1"
 		(at 132.08 132.08 0)
 		(fields_autoplaced yes)
@@ -9891,7 +9913,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 156.21 205.232 90)
 			(effects
 				(font
@@ -10051,11 +10073,11 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Logo"
+		(property "Footprint" "footprints:Creative_Commons_SA_Mask"
 			(at 217.678 333.502 0)
 			(effects
 				(font
-					(size 0.991 0.991)
+					(size 0.5 0.5)
 				)
 				(justify left)
 			)
@@ -10309,7 +10331,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 219.71 175.26 0)
 			(effects
 				(font
@@ -10450,7 +10472,7 @@
 				)
 			)
 		)
-		(property "Footprint" "SH_Solder_Pads:1P-1.5x1.5"
+		(property "Footprint" "footprints:1P-1.5x1.5"
 			(at 58.42 45.72 0)
 			(effects
 				(font
@@ -10517,7 +10539,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 117.348 333.756 0)
 			(effects
 				(font
@@ -10659,7 +10681,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 219.71 132.08 0)
 			(effects
 				(font
@@ -10738,7 +10760,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 198.628 247.396 0)
 			(effects
 				(font
@@ -10945,7 +10967,7 @@
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
+		(property "Footprint" "footprints:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
 			(at 171.45 133.731 0)
 			(effects
 				(font
@@ -11090,7 +11112,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Crystal:Crystal_4-SMD_2.5x2mm"
+		(property "Footprint" "footprints:Crystal_4-SMD_2.5x2mm"
 			(at 91.948 139.7 0)
 			(effects
 				(font
@@ -11239,7 +11261,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 80.518 335.026 0)
 			(effects
 				(font
@@ -11447,7 +11469,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 92.202 91.44 90)
 			(effects
 				(font
@@ -11542,7 +11564,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "footprints:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
 			(at 240.03 102.87 0)
 			(effects
 				(font
@@ -11629,7 +11651,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 84.582 91.44 90)
 			(effects
 				(font
@@ -11725,7 +11747,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" "footprints:JP-2_1.5x1.5"
 			(at 54.61 34.036 0)
 			(effects
 				(font
@@ -11791,7 +11813,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "footprints:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
 			(at 240.03 167.64 0)
 			(effects
 				(font
@@ -11879,11 +11901,11 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Logo"
+		(property "Footprint" "footprints:Creative_Commons_NC_Mask"
 			(at 217.678 329.692 0)
 			(effects
 				(font
-					(size 0.991 0.991)
+					(size 0.5 0.5)
 				)
 				(justify left)
 			)
@@ -11943,7 +11965,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 132.588 333.756 0)
 			(effects
 				(font
@@ -12087,7 +12109,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 218.948 224.536 0)
 			(effects
 				(font
@@ -12230,7 +12252,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 74.422 299.466 0)
 			(effects
 				(font
@@ -12373,7 +12395,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 94.742 55.88 90)
 			(effects
 				(font
@@ -12532,7 +12554,7 @@
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
+		(property "Footprint" "footprints:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
 			(at 171.45 235.331 0)
 			(effects
 				(font
@@ -12612,7 +12634,7 @@
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
+		(property "Footprint" "footprints:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
 			(at 171.45 255.651 0)
 			(effects
 				(font
@@ -12824,7 +12846,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 227.33 153.67 0)
 			(effects
 				(font
@@ -12903,7 +12925,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 86.868 59.436 0)
 			(effects
 				(font
@@ -13113,7 +13135,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 213.868 224.536 0)
 			(effects
 				(font
@@ -13257,7 +13279,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 79.248 84.836 0)
 			(effects
 				(font
@@ -13462,7 +13484,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "footprints:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
 			(at 240.03 146.05 0)
 			(effects
 				(font
@@ -13679,7 +13701,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 219.71 67.31 0)
 			(effects
 				(font
@@ -13757,7 +13779,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 156.21 245.872 90)
 			(effects
 				(font
@@ -13854,7 +13876,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 178.308 289.306 0)
 			(effects
 				(font
@@ -13998,7 +14020,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 155.448 289.306 0)
 			(effects
 				(font
@@ -14207,11 +14229,11 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Logo"
+		(property "Footprint" "footprints:Creative_Commons_CC_Mask"
 			(at 217.678 322.072 0)
 			(effects
 				(font
-					(size 0.991 0.991)
+					(size 0.5 0.5)
 				)
 				(justify left)
 			)
@@ -14269,7 +14291,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 67.31 46.99 0)
 			(effects
 				(font
@@ -14346,7 +14368,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 227.33 175.26 0)
 			(effects
 				(font
@@ -14488,7 +14510,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 219.71 153.67 0)
 			(effects
 				(font
@@ -14565,7 +14587,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 227.33 88.9 0)
 			(effects
 				(font
@@ -15035,7 +15057,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 49.53 330.2 0)
 			(effects
 				(font
@@ -15114,7 +15136,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 89.408 128.016 0)
 			(effects
 				(font
@@ -15257,7 +15279,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 156.21 123.952 90)
 			(effects
 				(font
@@ -15354,7 +15376,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 109.728 289.306 0)
 			(effects
 				(font
@@ -15693,7 +15715,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 102.108 289.306 0)
 			(effects
 				(font
@@ -15967,7 +15989,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 208.788 224.536 0)
 			(effects
 				(font
@@ -16176,7 +16198,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 86.868 289.306 0)
 			(effects
 				(font
@@ -16317,7 +16339,7 @@
 				)
 			)
 		)
-		(property "Footprint" "MountingHole:Plain_Hole_3mm"
+		(property "Footprint" "footprints:Plain_Hole_3mm"
 			(at 246.38 248.92 0)
 			(effects
 				(font
@@ -16378,7 +16400,7 @@
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
+		(property "Footprint" "footprints:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
 			(at 171.45 194.691 0)
 			(effects
 				(font
@@ -16460,7 +16482,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 88.392 91.44 90)
 			(effects
 				(font
@@ -16622,7 +16644,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 147.828 289.306 0)
 			(effects
 				(font
@@ -16829,7 +16851,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 219.71 88.9 0)
 			(effects
 				(font
@@ -16974,7 +16996,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 102.108 333.756 0)
 			(effects
 				(font
@@ -17118,7 +17140,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 140.208 289.306 0)
 			(effects
 				(font
@@ -17259,7 +17281,7 @@
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
+		(property "Footprint" "footprints:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
 			(at 171.45 154.051 0)
 			(effects
 				(font
@@ -17342,7 +17364,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 224.028 224.536 0)
 			(effects
 				(font
@@ -17486,7 +17508,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 94.488 289.306 0)
 			(effects
 				(font
@@ -17629,7 +17651,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 156.21 225.552 90)
 			(effects
 				(font
@@ -17726,7 +17748,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 203.708 224.536 0)
 			(effects
 				(font
@@ -17868,7 +17890,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 227.33 45.72 0)
 			(effects
 				(font
@@ -17945,7 +17967,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 227.33 132.08 0)
 			(effects
 				(font
@@ -18023,7 +18045,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 156.21 184.912 90)
 			(effects
 				(font
@@ -18245,7 +18267,7 @@
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
+		(property "Footprint" "footprints:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
 			(at 171.45 174.371 0)
 			(effects
 				(font
@@ -18325,11 +18347,11 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_QFP:LQFP-48_7x7mm_P0.5mm"
-			(at 114.3 169.672 0)
+		(property "Footprint" "footprints:LQFP-48_7x7mm_P0.5mm"
+			(at 114.046 170.942 0)
 			(effects
 				(font
-					(size 0.25 0.25)
+					(size 0.5 0.5)
 				)
 			)
 		)
@@ -18541,7 +18563,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 163.068 289.306 0)
 			(effects
 				(font
@@ -18685,7 +18707,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 90.678 69.596 0)
 			(effects
 				(font
@@ -18827,7 +18849,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 219.71 45.72 0)
 			(effects
 				(font
@@ -18903,7 +18925,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_USB:USB_A_PCB_traces_small"
+		(property "Footprint" "footprints:USB_A_PCB_traces_small"
 			(at 44.45 38.1 0)
 			(effects
 				(font
@@ -18979,7 +19001,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 132.588 289.306 0)
 			(effects
 				(font
@@ -19188,7 +19210,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 156.21 164.592 90)
 			(effects
 				(font
@@ -19350,7 +19372,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 124.968 289.306 0)
 			(effects
 				(font
@@ -19491,7 +19513,7 @@
 				)
 			)
 		)
-		(property "Footprint" "SH_Capacitors:CP_Elec_6.3x7.7"
+		(property "Footprint" "footprints:CP_Elec_6.3x11_Board_Edge_Mirrored"
 			(at 201.295 285.75 90)
 			(effects
 				(font
@@ -19623,11 +19645,11 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Logo"
+		(property "Footprint" "footprints:Creative_Commons_BY_Mask"
 			(at 217.678 325.882 0)
 			(effects
 				(font
-					(size 0.991 0.991)
+					(size 0.5 0.5)
 				)
 				(justify left)
 			)
@@ -19687,7 +19709,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 193.548 289.306 0)
 			(effects
 				(font
@@ -19831,7 +19853,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 117.348 289.306 0)
 			(effects
 				(font
@@ -19973,7 +19995,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "footprints:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
 			(at 240.03 59.69 0)
 			(effects
 				(font
@@ -20061,7 +20083,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 94.488 333.756 0)
 			(effects
 				(font
@@ -20205,7 +20227,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 140.208 333.756 0)
 			(effects
 				(font
@@ -20348,7 +20370,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 94.742 157.48 90)
 			(effects
 				(font
@@ -20445,7 +20467,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 208.788 247.396 0)
 			(effects
 				(font
@@ -20654,7 +20676,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 124.968 333.756 0)
 			(effects
 				(font
@@ -20862,7 +20884,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "footprints:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
 			(at 240.03 81.28 0)
 			(effects
 				(font
@@ -20948,7 +20970,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 227.33 67.31 0)
 			(effects
 				(font
@@ -21025,7 +21047,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 227.33 110.49 0)
 			(effects
 				(font
@@ -21166,7 +21188,7 @@
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
+		(property "Footprint" "footprints:Duo_LED_1.6x0.8_Kingbright_APHB1608LZGKSURKC"
 			(at 171.45 215.011 0)
 			(effects
 				(font
@@ -21314,7 +21336,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 185.928 289.306 0)
 			(effects
 				(font
@@ -21456,7 +21478,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 74.93 46.99 0)
 			(effects
 				(font
@@ -21533,7 +21555,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "footprints:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
 			(at 240.03 124.46 0)
 			(effects
 				(font
@@ -21621,7 +21643,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:2012_C"
 			(at 109.728 333.756 0)
 			(effects
 				(font
@@ -21893,7 +21915,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 198.628 224.536 0)
 			(effects
 				(font
@@ -22100,7 +22122,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_DFN_QFN:TDFN-8_1.5x2mm_Fused-Lead_JEDEC_MO-252_W2015D"
+		(property "Footprint" "footprints:TDFN-8_1.5x2mm_Fused-Lead_JEDEC_MO-252_W2015D"
 			(at 59.69 298.958 0)
 			(effects
 				(font
@@ -22190,7 +22212,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1005_C"
 			(at 203.708 247.396 0)
 			(effects
 				(font
@@ -22333,7 +22355,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 156.21 144.272 90)
 			(effects
 				(font
@@ -22429,7 +22451,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:1608_C"
+		(property "Footprint" "footprints:R_1005_C"
 			(at 94.742 66.04 90)
 			(effects
 				(font
@@ -22590,7 +22612,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 62.23 330.2 0)
 			(effects
 				(font
@@ -22669,7 +22691,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:1608_C"
+		(property "Footprint" "footprints:1608_C"
 			(at 170.688 289.306 0)
 			(effects
 				(font
@@ -22811,7 +22833,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_SMD:1006_C"
+		(property "Footprint" "footprints:D_0402"
 			(at 219.71 110.49 0)
 			(effects
 				(font
@@ -22888,7 +22910,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "footprints:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
 			(at 240.03 38.1 0)
 			(effects
 				(font
@@ -22953,4 +22975,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )
