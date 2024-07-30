@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin, jasuramme@gmail.com
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -376,7 +376,10 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         }
 
         // Compute the bounding box to get a rectangular size
-        BOX2I bbox = board->GetBoardEdgesBoundingBox();
+        // We use the polySet bounding box, not the board bounding box, because
+        // we do not want the thickness of graphic items defining the board outlines
+        // to be taken in account to calculate the physical board bbox
+        BOX2I bbox = polySet.BBox();
 
         m_boardWidth = bbox.GetWidth();
         m_boardHeight = bbox.GetHeight();
