@@ -153,7 +153,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             PCB_SELECTION dummy;
-            m_menu.ShowContextMenu( dummy );
+            m_menu->ShowContextMenu( dummy );
         }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
         // but we don't at present have that, so we just knock out some of the egregious ones.

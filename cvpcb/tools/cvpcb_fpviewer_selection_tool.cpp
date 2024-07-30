@@ -35,7 +35,7 @@ CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL() :
 
 bool CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Init()
 {
-    getEditFrame<DISPLAY_FOOTPRINTS_FRAME>()->AddStandardSubMenus( m_menu );
+    getEditFrame<DISPLAY_FOOTPRINTS_FRAME>()->AddStandardSubMenus( *m_menu.get() );
     return true;
 }
 
@@ -60,7 +60,7 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( m_selection );
+            m_menu->ShowContextMenu( m_selection );
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {

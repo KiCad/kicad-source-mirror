@@ -243,7 +243,7 @@ bool DRAWING_TOOL::Init()
                 return m_mode == MODE::TUNING;
             };
 
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive,       activeToolFunctor, 1 );
@@ -267,7 +267,7 @@ bool DRAWING_TOOL::Init()
 
     std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();
     viaSizeMenu->SetTool( this );
-    m_menu.RegisterSubMenu( viaSizeMenu );
+    m_menu->RegisterSubMenu( viaSizeMenu );
     ctxMenu.AddMenu( viaSizeMenu.get(),                viaToolActive, 500 );
 
     ctxMenu.AddSeparator( 500 );
@@ -276,7 +276,7 @@ bool DRAWING_TOOL::Init()
     // For example, zone fill/unfill is provided by the PCB control tool
 
     // Finally, add the standard zoom/grid items
-    getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( m_menu );
+    getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( *m_menu.get() );
 
     return true;
 }
@@ -751,7 +751,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
             if( !image )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( selectionTool->GetSelection() );
+            m_menu->ShowContextMenu( selectionTool->GetSelection() );
         }
         else if( image && (   evt->IsAction( &ACTIONS::refreshPreview )
                            || evt->IsMotion() ) )
@@ -895,7 +895,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             if( !text )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -1133,7 +1133,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
             if( !table )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -1415,7 +1415,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             if( !dimension )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
@@ -1890,7 +1890,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
@@ -1992,7 +1992,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -2221,7 +2221,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             if( !graphic )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
@@ -2661,7 +2661,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             if( !graphic )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
@@ -2916,7 +2916,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             if( !started )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         // events that lock in nodes
         else if( evt->IsClick( BUT_LEFT )

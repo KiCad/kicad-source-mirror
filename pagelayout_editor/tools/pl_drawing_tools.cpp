@@ -49,14 +49,14 @@ bool PL_DRAWING_TOOLS::Init()
     m_frame = getEditFrame<PL_EDITOR_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
 
-    auto& ctxMenu = m_menu.GetMenu();
+    auto& ctxMenu = m_menu->GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1 );
     ctxMenu.AddSeparator( 1 );
 
     // Finally, add the standard zoom/grid items
-    m_frame->AddStandardSubMenus( m_menu );
+    m_frame->AddStandardSubMenus( *m_menu.get() );
 
     return true;
 }
@@ -196,7 +196,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             if( !item )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+            m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -336,7 +336,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( !item )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+            m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else
         {

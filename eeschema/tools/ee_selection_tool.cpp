@@ -294,7 +294,7 @@ bool EE_SELECTION_TOOL::Init()
                         && !symbEditorFrame->IsSymbolAlias();
             };
 
-    auto& menu = m_menu.GetMenu();
+    auto& menu = m_menu->GetMenu();
 
     menu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                            haveHighlight && EE_CONDITIONS::Idle, 1 );
@@ -336,7 +336,7 @@ bool EE_SELECTION_TOOL::Init()
                   haveSymbol && symbolDisplayNameIsEditable && EE_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( 1000 );
-    m_frame->AddStandardSubMenus( m_menu );
+    m_frame->AddStandardSubMenus( *m_menu.get() );
 
     m_disambiguateTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( EE_SELECTION_TOOL::onDisambiguationExpire ),
@@ -558,7 +558,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             if( !selCancelled )
-                m_menu.ShowContextMenu( m_selection );
+                m_menu->ShowContextMenu( m_selection );
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
         {

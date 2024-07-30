@@ -51,7 +51,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
     if( m_isSymbolEditor )
     {
         LIBRARY_EDITOR_CONTROL* libraryTreeTool = m_toolMgr->GetTool<LIBRARY_EDITOR_CONTROL>();
-        CONDITIONAL_MENU&       ctxMenu = m_menu.GetMenu();
+        CONDITIONAL_MENU&       ctxMenu = m_menu->GetMenu();
         SYMBOL_EDIT_FRAME*      editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
         wxCHECK( editFrame, false );

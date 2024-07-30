@@ -165,17 +165,17 @@ bool PCB_SELECTION_TOOL::Init()
 
     if( frame && frame->IsType( FRAME_FOOTPRINT_VIEWER ) )
     {
-        frame->AddStandardSubMenus( m_menu );
+        frame->AddStandardSubMenus( *m_menu.get() );
         return true;
     }
 
     std::shared_ptr<SELECT_MENU> selectMenu = std::make_shared<SELECT_MENU>();
     selectMenu->SetTool( this );
-    m_menu.RegisterSubMenu( selectMenu );
+    m_menu->RegisterSubMenu( selectMenu );
 
     static const std::vector<KICAD_T> tableCellTypes = { PCB_TABLECELL_T };
 
-    auto& menu = m_menu.GetMenu();
+    auto& menu = m_menu->GetMenu();
 
     auto activeToolCondition =
             [ frame ] ( const SELECTION& aSel )
@@ -223,7 +223,7 @@ bool PCB_SELECTION_TOOL::Init()
     menu.AddSeparator( 1 );
 
     if( frame )
-        frame->AddStandardSubMenus( m_menu );
+        frame->AddStandardSubMenus( *m_menu.get() );
 
     m_disambiguateTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ),
@@ -363,7 +363,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !selectionCancelled )
             {
                 m_toolMgr->VetoContextMenuMouseWarp();
-                m_menu.ShowContextMenu( m_selection );
+                m_menu->ShowContextMenu( m_selection );
             }
         }
         else if( evt->IsDblClick( BUT_LEFT ) )

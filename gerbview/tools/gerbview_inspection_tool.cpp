@@ -306,7 +306,7 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( m_frame->GetCurrentSelection() );
+            m_menu->ShowContextMenu( m_frame->GetCurrentSelection() );
         }
         else
         {

@@ -194,7 +194,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     std::shared_ptr<BUS_UNFOLD_MENU>
             busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>( busGetter );
     busUnfoldMenu->SetTool( this );
-    m_menu.RegisterSubMenu( busUnfoldMenu );
+    m_menu->RegisterSubMenu( busUnfoldMenu );
 
     std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>( busGetter );
     selBusUnfoldMenu->SetTool( m_selectionTool );
@@ -230,7 +230,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
                 return editFrame && !editFrame->GetHighlightedConnection().IsEmpty();
             };
 
-    auto& ctxMenu = m_menu.GetMenu();
+    auto& ctxMenu = m_menu->GetMenu();
 
     // Build the tool menu
     //
@@ -1019,7 +1019,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             contextMenuPos = cursorPos;
-            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+            m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {

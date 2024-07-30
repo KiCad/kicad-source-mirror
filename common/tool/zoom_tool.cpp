@@ -41,14 +41,14 @@ ZOOM_TOOL::~ZOOM_TOOL() {}
 
 bool ZOOM_TOOL::Init()
 {
-    auto& ctxMenu = m_menu.GetMenu();
+    auto& ctxMenu = m_menu->GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1 );
     ctxMenu.AddSeparator( 1 );
 
     // Finally, add the standard zoom/grid items
-    getEditFrame<EDA_DRAW_FRAME>()->AddStandardSubMenus( m_menu );
+    getEditFrame<EDA_DRAW_FRAME>()->AddStandardSubMenus( *m_menu.get() );
 
     return true;
 }
@@ -89,7 +89,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             SELECTION dummy;
-            m_menu.ShowContextMenu( dummy );
+            m_menu->ShowContextMenu( dummy );
         }
         else
         {

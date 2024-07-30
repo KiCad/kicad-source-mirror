@@ -127,12 +127,12 @@ bool GERBVIEW_SELECTION_TOOL::Init()
 {
     std::shared_ptr<HIGHLIGHT_MENU> highlightSubMenu = std::make_shared<HIGHLIGHT_MENU>();
     highlightSubMenu->SetTool( this );
-    m_menu.RegisterSubMenu( highlightSubMenu );
+    m_menu->RegisterSubMenu( highlightSubMenu );
 
-    m_menu.GetMenu().AddMenu( highlightSubMenu.get() );
-    m_menu.GetMenu().AddSeparator( 1000 );
+    m_menu->GetMenu().AddMenu( highlightSubMenu.get() );
+    m_menu->GetMenu().AddSeparator( 1000 );
 
-    getEditFrame<GERBVIEW_FRAME>()->AddStandardSubMenus( m_menu );
+    getEditFrame<GERBVIEW_FRAME>()->AddStandardSubMenus( *m_menu.get() );
 
     return true;
 }
@@ -191,7 +191,7 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             // Show selection before opening menu
             m_frame->GetCanvas()->ForceRefresh();
 
-            m_menu.ShowContextMenu( m_selection );
+            m_menu->ShowContextMenu( m_selection );
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {

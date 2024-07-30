@@ -2386,7 +2386,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             PCB_SELECTION dummy;
-            m_menu.ShowContextMenu( dummy );
+            m_menu->ShowContextMenu( dummy );
         }
         else if( evt->IsAction( &PCB_ACTIONS::spacingIncrease )
                  || evt->IsAction( &PCB_ACTIONS::spacingDecrease ) )

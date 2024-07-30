@@ -68,14 +68,14 @@ public:
         m_isSymbolEditor = m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
         // A basic context menu.  Many (but not all) tools will choose to override this.
-        auto& ctxMenu = m_menu.GetMenu();
+        auto& ctxMenu = m_menu->GetMenu();
 
         // cancel current tool goes in main context menu at the top if present
         ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1 );
         ctxMenu.AddSeparator( 1 );
 
         // Finally, add the standard zoom/grid items
-        m_frame->AddStandardSubMenus( m_menu );
+        m_frame->AddStandardSubMenus( *m_menu.get() );
 
         return true;
     }

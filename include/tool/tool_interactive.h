@@ -74,7 +74,7 @@ public:
      */
     void Activate();
 
-    TOOL_MENU& GetToolMenu() { return m_menu; }
+    TOOL_MENU& GetToolMenu();
 
     /**
      * Assign a context menu and tells when it should be activated.
@@ -122,7 +122,7 @@ public:
         void Yield( const T& returnValue );*/
 
 protected:
-    TOOL_MENU m_menu;
+    std::unique_ptr<TOOL_MENU> m_menu;
 
 private:
     /**

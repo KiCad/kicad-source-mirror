@@ -45,7 +45,7 @@ bool PCB_VIEWER_TOOLS::Init()
                 return !frame()->ToolStackIsEmpty();
             };
 
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     // "Cancel" goes at the top of the context menu when a tool is active
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
@@ -54,7 +54,7 @@ bool PCB_VIEWER_TOOLS::Init()
     ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, activeToolCondition, 2 );
     ctxMenu.AddSeparator(                              activeToolCondition, 2 );
 
-    frame()->AddStandardSubMenus( m_menu );
+    frame()->AddStandardSubMenus( *m_menu.get() );
 
     return true;
 }
@@ -358,7 +358,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu->ShowContextMenu();
         }
         else
         {

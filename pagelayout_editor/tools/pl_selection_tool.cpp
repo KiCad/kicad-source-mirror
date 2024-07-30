@@ -55,7 +55,7 @@ bool PL_SELECTION_TOOL::Init()
 {
     m_frame = getEditFrame<PL_EDITOR_FRAME>();
 
-    auto& menu = m_menu.GetMenu();
+    auto& menu = m_menu->GetMenu();
 
     menu.AddSeparator( 200 );
     menu.AddItem( PL_ACTIONS::drawLine,      SELECTION_CONDITIONS::Empty, 200 );
@@ -64,7 +64,7 @@ bool PL_SELECTION_TOOL::Init()
     menu.AddItem( PL_ACTIONS::placeImage,    SELECTION_CONDITIONS::Empty, 200 );
 
     menu.AddSeparator( 1000 );
-    m_frame->AddStandardSubMenus( m_menu );
+    m_frame->AddStandardSubMenus( *m_menu.get() );
 
     m_disambiguateTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( PL_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
@@ -131,7 +131,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->GetCanvas()->ForceRefresh();
 
             if( !selectionCancelled )
-                m_menu.ShowContextMenu( m_selection );
+                m_menu->ShowContextMenu( m_selection );
         }
 
         // double click? Display the properties window

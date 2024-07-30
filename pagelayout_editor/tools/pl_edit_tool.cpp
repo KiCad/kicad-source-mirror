@@ -66,7 +66,7 @@ bool PL_EDIT_TOOL::Init()
 
     wxASSERT_MSG( m_selectionTool, "plEditor.InteractiveSelection tool is not available" );
 
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive,     SELECTION_CONDITIONS::ShowAlways, 1 );
@@ -75,7 +75,7 @@ bool PL_EDIT_TOOL::Init()
     ctxMenu.AddItem( ACTIONS::doDelete,              SELECTION_CONDITIONS::NotEmpty, 200 );
 
     // Finally, add the standard zoom/grid items
-    m_frame->AddStandardSubMenus( m_menu );
+    m_frame->AddStandardSubMenus( *m_menu.get() );
 
     //
     // Add editing actions to the selection tool menu
@@ -277,7 +277,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+            m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         //------------------------------------------------------------------------
         // Handle drop

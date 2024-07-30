@@ -78,7 +78,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 
     // Build a context menu for the footprint tree
     //
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     auto libSelectedCondition =
             [ this ]( const SELECTION& aSel )

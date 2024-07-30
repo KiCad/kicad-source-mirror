@@ -31,19 +31,28 @@
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
 
+#include <pgm_base.h>
+
 #include <wx/log.h>
 
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName ) :
-    TOOL_BASE( INTERACTIVE, aId, aName ),
-    m_menu( *this )
+    TOOL_BASE( INTERACTIVE, aId, aName )
 {
+    if( Pgm().IsGUI() )
+    {
+        m_menu.reset( new TOOL_MENU( *this ) );
+    }
 }
 
 
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( const std::string& aName ) :
-    TOOL_BASE( INTERACTIVE, TOOL_MANAGER::MakeToolId( aName ), aName ),
-    m_menu( *this )
+    TOOL_BASE( INTERACTIVE, TOOL_MANAGER::MakeToolId( aName ), aName )
+    
 {
+    if( Pgm().IsGUI() )
+    {
+        m_menu.reset( new TOOL_MENU( *this ) );
+    }
 }
 
 
@@ -97,3 +106,8 @@ void TOOL_INTERACTIVE::RunMainStack( std::function<void()> aFunc )
     m_toolMgr->RunMainStack( this, std::move( aFunc ) );
 }
 
+
+TOOL_MENU& TOOL_INTERACTIVE::GetToolMenu()
+{
+    return *m_menu.get();
+}

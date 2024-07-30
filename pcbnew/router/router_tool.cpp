@@ -472,16 +472,16 @@ bool ROUTER_TOOL::Init()
 
     wxASSERT( frame );
 
-    auto& menu = m_menu.GetMenu();
+    auto& menu = m_menu->GetMenu();
     menu.SetTitle( _( "Interactive Router" ) );
 
     m_trackViaMenu = std::make_shared<TRACK_WIDTH_MENU>( *frame );
     m_trackViaMenu->SetTool( this );
-    m_menu.RegisterSubMenu( m_trackViaMenu );
+    m_menu->RegisterSubMenu( m_trackViaMenu );
 
     m_diffPairMenu = std::make_shared<DIFF_PAIR_MENU>( *frame );
     m_diffPairMenu->SetTool( this );
-    m_menu.RegisterSubMenu( m_diffPairMenu );
+    m_menu->RegisterSubMenu( m_diffPairMenu );
 
     auto haveHighlight =
             [&]( const SELECTION& sel )
@@ -555,7 +555,7 @@ bool ROUTER_TOOL::Init()
 
     menu.AddSeparator();
 
-    frame->AddStandardSubMenus( m_menu );
+    frame->AddStandardSubMenus( *m_menu.get() );
 
     return true;
 }
@@ -1475,7 +1475,7 @@ void ROUTER_TOOL::performRouting()
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
         // but we don't at present have that, so we just knock out some of the egregious ones.
@@ -1834,7 +1834,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else
         {
@@ -1949,7 +1949,7 @@ void ROUTER_TOOL::performDragging( int aMode )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection() );
+            m_menu->ShowContextMenu( selection() );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
