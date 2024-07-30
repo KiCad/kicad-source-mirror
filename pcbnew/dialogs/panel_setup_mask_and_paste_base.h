@@ -42,6 +42,7 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxStaticText* m_staticTextInfoMaskMinWidth1;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_maskMarginLabel;
+		wxStaticText* m_stSolderMaskSettings;
 		wxTextCtrl* m_maskMarginCtrl;
 		wxStaticText* m_maskMarginUnits;
 		wxStaticText* m_maskMinWidthLabel;
@@ -54,6 +55,7 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxStaticText* m_stTenting;
 		wxCheckBox* m_tentViasFront;
 		wxCheckBox* m_tentViasBack;
+		wxStaticText* m_stSolderPasteSettings;
 		wxStaticText* m_pasteMarginLabel;
 		wxTextCtrl* m_pasteMarginCtrl;
 		wxStaticText* m_pasteMarginUnits;
@@ -64,7 +66,7 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 
 	public:
 
-		PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 606,401 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_SETUP_MASK_AND_PASTE_BASE();
 
