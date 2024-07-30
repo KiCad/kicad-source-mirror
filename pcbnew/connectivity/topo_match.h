@@ -26,10 +26,15 @@
 
 #include <vector>
 #include <map>
+#include <optional>
 
 #include <wx/string.h>
 
 class FOOTPRINT;
+
+/* A very simple (but working) partial connection graph isomorphism algorithm,
+   operating on sets of footprints and connections between their pads.
+*/
 
 namespace TMATCH
 {
@@ -43,7 +48,7 @@ class COMPONENT
     friend class CONNECTION_GRAPH;
 
 public:
-    COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp );
+    COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp, std::optional<VECTOR2I> aRaOffset = std::optional<VECTOR2I>() );
     ~COMPONENT();
 
     bool               IsSameKind( const COMPONENT& b ) const;
@@ -53,9 +58,14 @@ public:
     std::vector<PIN*>& Pins() { return m_pins; }
     FOOTPRINT* GetParent() const { return m_parentFootprint; }
 
+    bool HasRAOffset() const { return m_raOffset.has_value(); }
+    const VECTOR2I GetRAOffset() const { return *m_raOffset; }
+
 private:
     void sortPinsByName();
 
+
+    std::optional<VECTOR2I> m_raOffset;
     wxString          m_reference;
     wxString          m_prefix;
     FOOTPRINT*        m_parentFootprint;
@@ -83,8 +93,6 @@ public:
         if( !m_parent->IsSameKind( *b.m_parent ) )
             return false;
 
-        //printf("Cmpt '%s'/'%s' %p %p similar=%d\n", ref.c_str(), b.ref.c_str(), parent, b.parent, ref==b.ref ? 1 :0 );
-
         return m_ref == b.m_ref;
     }
 
@@ -93,6 +101,8 @@ public:
     int GetNetCode() const { return m_netcode; }
 
     const wxString& GetReference() const { return m_ref; }
+
+    COMPONENT* GetParent() const { return m_parent; }
 
 private:
 
@@ -110,7 +120,8 @@ public:
     BACKTRACK_STAGE()
     {
         m_ref = nullptr;
-        m_currentMatch = 0;
+        m_currentMatch = -1;
+        m_refIndex = 0;
     }
 
     BACKTRACK_STAGE( const BACKTRACK_STAGE& other )
@@ -120,16 +131,18 @@ public:
         m_matches = other.m_matches;
         m_locked = other.m_locked;
         m_nloops = other.m_nloops;
+        m_refIndex = other.m_refIndex;
     }
 
     const std::map<COMPONENT*, COMPONENT*>& GetMatchingComponentPairs() const { return m_locked; }
 
 private:
     COMPONENT*                       m_ref;
-    int                              m_currentMatch = 0;
+    int                              m_currentMatch = -1;
     int                              m_nloops;
     std::vector<COMPONENT*>          m_matches;
     std::map<COMPONENT*, COMPONENT*> m_locked;
+    int m_refIndex;
 };
 
 typedef std::map<FOOTPRINT*, FOOTPRINT*> COMPONENT_MATCHES;
@@ -152,9 +165,10 @@ public:
     ~CONNECTION_GRAPH();
 
     void   BuildConnectivity();
-    void   AddFootprint( FOOTPRINT* aFp );
+    void   AddFootprint( FOOTPRINT* aFp, const VECTOR2I& aOffset );
     STATUS FindIsomorphism( CONNECTION_GRAPH* target, COMPONENT_MATCHES& result );
     static std::unique_ptr<CONNECTION_GRAPH> BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps );
+    std::vector<COMPONENT*> &Components() { return m_components; }
 
 private:
     void sortByPinCount()
@@ -167,10 +181,12 @@ private:
     }
 
 
-    std::vector<COMPONENT*> findMatchingComponents( COMPONENT*             ref,
-                                                    const BACKTRACK_STAGE& partialMatches );
+    std::vector<COMPONENT*> findMatchingComponents( CONNECTION_GRAPH* aRefGraph,
+                                                    COMPONENT*             ref,
+                                                    BACKTRACK_STAGE& partialMatches );
 
     std::vector<COMPONENT*> m_components;
+    
 };
 
 }; // namespace TMATCH
