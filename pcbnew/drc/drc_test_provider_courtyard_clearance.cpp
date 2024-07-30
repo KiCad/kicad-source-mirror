@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -158,6 +158,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
         if( !reportProgress( ii++, m_board->Footprints().size(), progressDelta ) )
             return false;   // DRC cancelled
 
+        // Ensure tests realted to courtyard constraints are not fully disabled:
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS)
             && m_drcEngine->IsErrorLimitExceeded( DRCE_PTH_IN_COURTYARD )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_NPTH_IN_COURTYARD ) )
@@ -211,12 +212,11 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             int            actual;
             VECTOR2I       pos;
 
-            //
-            // Check courtyard-to-courtyard collisions on front of board.
-            //
-
+            // Check courtyard-to-courtyard collisions on front of board,
+            // if DRCE_OVERLAPPING_FOOTPRINTS is not diasbled
             if( frontA.OutlineCount() > 0 && frontB.OutlineCount() > 0
-                    && frontA_worstCaseBBox.Intersects( frontB.BBoxFromCaches() ) )
+                    && frontA_worstCaseBBox.Intersects( frontB.BBoxFromCaches() )
+                    && !m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS ) )
             {
                 constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, F_Cu );
                 clearance = constraint.GetValue().Min();
@@ -244,12 +244,11 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                 }
             }
 
-            //
-            // Check courtyard-to-courtyard collisions on back of board.
-            //
-
+            // Check courtyard-to-courtyard collisions on back of board,
+            // if DRCE_OVERLAPPING_FOOTPRINTS is not disabled
             if( backA.OutlineCount() > 0 && backB.OutlineCount() > 0
-                    && backA_worstCaseBBox.Intersects( backB.BBoxFromCaches() ) )
+                    && backA_worstCaseBBox.Intersects( backB.BBoxFromCaches() )
+                    && !m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS ) )
             {
                 constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
                 clearance = constraint.GetValue().Min();
