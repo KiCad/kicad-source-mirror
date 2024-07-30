@@ -383,9 +383,6 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         totalCopied++;
     }
 
-    commit.Push( _( "Repeat layout" ) );
-
-
     if( Pgm().IsGUI() )
     {
         frame()->ShowInfoBarMsg( wxString::Format( _( "Copied to %d Rule Areas." ), totalCopied ),
