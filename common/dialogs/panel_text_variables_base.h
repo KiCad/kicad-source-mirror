@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -43,8 +43,6 @@ class PANEL_TEXT_VARIABLES_BASE : public wxPanel
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnGridCellChange( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddTextVar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveTextVar( wxCommandEvent& event ) { event.Skip(); }
 

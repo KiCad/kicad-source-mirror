@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -92,7 +92,6 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ) );
-	m_EnvVars->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridSize ), NULL, this );
 	m_btnAddEnvVar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddEnvVar ), NULL, this );
 	m_btnDeleteEnvVar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnRemoveEnvVar ), NULL, this );
 	m_sdbSizerHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnHelp ), NULL, this );
@@ -102,7 +101,6 @@ DIALOG_CONFIGURE_PATHS_BASE::~DIALOG_CONFIGURE_PATHS_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ) );
-	m_EnvVars->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridSize ), NULL, this );
 	m_btnAddEnvVar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddEnvVar ), NULL, this );
 	m_btnDeleteEnvVar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnRemoveEnvVar ), NULL, this );
 	m_sdbSizerHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnHelp ), NULL, this );

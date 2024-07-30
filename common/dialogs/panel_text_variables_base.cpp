@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,8 +77,6 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_TEXT_VARIABLES_BASE::OnUpdateUI ) );
-	m_TextVars->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_TEXT_VARIABLES_BASE::OnGridCellChange ), NULL, this );
-	m_TextVars->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEXT_VARIABLES_BASE::OnGridSize ), NULL, this );
 	m_btnAddTextVar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEXT_VARIABLES_BASE::OnAddTextVar ), NULL, this );
 	m_btnDeleteTextVar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEXT_VARIABLES_BASE::OnRemoveTextVar ), NULL, this );
 }
@@ -87,8 +85,6 @@ PANEL_TEXT_VARIABLES_BASE::~PANEL_TEXT_VARIABLES_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_TEXT_VARIABLES_BASE::OnUpdateUI ) );
-	m_TextVars->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_TEXT_VARIABLES_BASE::OnGridCellChange ), NULL, this );
-	m_TextVars->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEXT_VARIABLES_BASE::OnGridSize ), NULL, this );
 	m_btnAddTextVar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEXT_VARIABLES_BASE::OnAddTextVar ), NULL, this );
 	m_btnDeleteTextVar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEXT_VARIABLES_BASE::OnRemoveTextVar ), NULL, this );
 

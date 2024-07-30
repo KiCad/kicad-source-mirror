@@ -26,9 +26,12 @@
 
 #include <../common/dialogs/panel_text_variables_base.h>
 #include <wx/valtext.h>
+
 #include <map>
+#include <memory>
 
 class PROJECT;
+class WX_GRID_AUTOSIZER;
 
 
 class PANEL_TEXT_VARIABLES: public PANEL_TEXT_VARIABLES_BASE
@@ -42,8 +45,6 @@ public:
 
 protected:
     // Various button callbacks
-    void OnGridCellChange( wxGridEvent& event ) override;
-    void OnGridSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnAddTextVar( wxCommandEvent& event ) override;
@@ -65,7 +66,7 @@ private:
 
     wxTextValidator              m_nameValidator;
 
-    bool                         m_gridWidthsDirty;
+    std::unique_ptr<WX_GRID_AUTOSIZER> m_autoSizer;
 };
 
 #endif    // _PANEL_TEXT_VARIABLES_H_

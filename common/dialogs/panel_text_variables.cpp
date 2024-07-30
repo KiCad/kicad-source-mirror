@@ -23,6 +23,8 @@
 
 #include <panel_text_variables.h>
 
+#include <algorithm>
+
 #include <bitmaps.h>
 #include <confirm.h>
 #include <validators.h>
@@ -30,8 +32,8 @@
 #include <grid_tricks.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/grid_text_helpers.h>
+#include <widgets/wx_grid_autosizer.h>
 
-#include <algorithm>
 
 enum TEXT_VAR_GRID_COLUMNS
 {
@@ -41,11 +43,8 @@ enum TEXT_VAR_GRID_COLUMNS
 
 
 PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject ) :
-    PANEL_TEXT_VARIABLES_BASE( aParent ),
-    m_project( aProject ),
-    m_lastCheckedTicker( 0 ),
-    m_errorRow( -1 ), m_errorCol( -1 ),
-    m_gridWidthsDirty( true )
+        PANEL_TEXT_VARIABLES_BASE( aParent ), m_project( aProject ), m_lastCheckedTicker( 0 ),
+        m_errorRow( -1 ), m_errorCol( -1 )
 {
     m_btnAddTextVar->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_btnDeleteTextVar->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
@@ -82,6 +81,13 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
                       checkReload();
               }
           } );
+
+    m_autoSizer = std::make_unique<WX_GRID_AUTOSIZER>( *m_TextVars,
+                                                       WX_GRID_AUTOSIZER::COL_MIN_WIDTHS{
+                                                               { TV_NAME_COL, 72 },
+                                                               { TV_VALUE_COL, 120 },
+                                                       },
+                                                       TV_VALUE_COL );
 }
 
 
@@ -223,29 +229,8 @@ void PANEL_TEXT_VARIABLES::OnRemoveTextVar( wxCommandEvent& event )
 }
 
 
-void PANEL_TEXT_VARIABLES::OnGridCellChange( wxGridEvent& aEvent )
-{
-    m_gridWidthsDirty = true;
-
-    aEvent.Skip();
-}
-
-
 void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    if( m_gridWidthsDirty )
-    {
-        int width = m_TextVars->GetClientRect().GetWidth();
-
-        m_TextVars->AutoSizeColumn( TV_NAME_COL );
-        m_TextVars->SetColSize( TV_NAME_COL,
-                                std::max( 72, m_TextVars->GetColSize( TV_NAME_COL ) ) );
-
-        m_TextVars->SetColSize( TV_VALUE_COL,
-                                std::max( 120, width - m_TextVars->GetColSize( TV_NAME_COL ) ) );
-        m_gridWidthsDirty = false;
-    }
-
     // Handle a grid error.  This is delayed to OnUpdateUI so that we can change focus
     // even when the original validation was triggered from a killFocus event (and for
     // dialog with notebooks, so that the corresponding notebook page can be shown in
@@ -269,12 +254,3 @@ void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
         m_TextVars->ShowCellEditControl();
     }
 }
-
-
-void PANEL_TEXT_VARIABLES::OnGridSize( wxSizeEvent& event )
-{
-    m_gridWidthsDirty = true;
-
-    event.Skip();
-}
-
