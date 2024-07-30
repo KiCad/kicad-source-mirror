@@ -170,15 +170,15 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                     auto cgRef = TMATCH::CONNECTION_GRAPH::BuildFromFootprintSet( refArea.m_raFootprints );
                     auto cgTarget = TMATCH::CONNECTION_GRAPH::BuildFromFootprintSet( targetArea.m_raFootprints );
 
-                    TMATCH::BACKTRACK_STAGE result;
+                    TMATCH::COMPONENT_MATCHES result;
 
                     auto status = cgRef->FindIsomorphism( cgTarget.get(), result );
                     printf("topo match: '%s' [%d] -> '%s' [%d] result %d\n", refArea.m_ruleName.c_str().AsChar(), refArea.m_raFootprints.size(), targetArea.m_ruleName.c_str().AsChar(), targetArea.m_raFootprints.size(), status );
 
-                    for( const auto& iter : result.GetMatchingComponentPairs() )
+                    for( const auto& iter : result )
                     {
-                        printf("%s : %s\n", iter.second->GetParent()->GetReference().c_str().AsChar(),
-                         iter.first->GetParent()->GetReference().c_str().AsChar()
+                        printf("%s : %s\n", iter.second->GetReference().c_str().AsChar(),
+                         iter.first->GetReference().c_str().AsChar()
                          );
                     }
 
