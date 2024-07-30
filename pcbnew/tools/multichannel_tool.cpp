@@ -36,22 +36,19 @@
 #include <geometry/convex_hull.h>
 #include <pcb_group.h>
 #include <connectivity/connectivity_data.h>
+#include <connectivity/topo_match.h>
 #include <optional>
 #include <algorithm>
 #include <random>
 #include <core/profile.h>
+#include <wx/log.h>
+#include <pgm_base.h>
 
-#undef MULTICHANNEL_EXTRA_DEBUG
 
-#ifdef MULTICHANNEL_EXTRA_DEBUG
-    #define DBG( level, fmt, ...) \
-        fprintf( stderr, "%s", wxString::Format( fmt, __VA_ARGS__ ).c_str().AsChar() )
-    #define DBGn( level, fmt ) \
-        fprintf( stderr, "%s", wxString(fmt).c_str().AsChar() )
-#else
-    #define DBG( level, fmt, ...)
-    #define DBGn( level, fmt )
-#endif
+#define MULTICHANNEL_EXTRA_DEBUG
+
+static const wxString traceMultichannelTool = wxT( "MULTICHANNEL_TOOL" );
+
 
 MULTICHANNEL_TOOL::MULTICHANNEL_TOOL() : PCB_TOOL_BASE( "pcbnew.Multichannel" )
 {
@@ -67,7 +64,7 @@ MULTICHANNEL_TOOL::~MULTICHANNEL_TOOL()
 
 void MULTICHANNEL_TOOL::setTransitions()
 {
-    Go( &MULTICHANNEL_TOOL::autogenerateRuleAreas, PCB_ACTIONS::generatePlacementRuleAreas.MakeEvent() );
+    Go( &MULTICHANNEL_TOOL::AutogenerateRuleAreas, PCB_ACTIONS::generatePlacementRuleAreas.MakeEvent() );
     Go( &MULTICHANNEL_TOOL::repeatLayout, PCB_ACTIONS::repeatLayout.MakeEvent() );
 }
 
@@ -181,7 +178,7 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
 }
 
 
-void MULTICHANNEL_TOOL::querySheets()
+void MULTICHANNEL_TOOL::QuerySheets()
 {
     using PathAndName = std::pair<wxString, wxString>;
     std::set<PathAndName> uniqueSheets;
@@ -196,16 +193,20 @@ void MULTICHANNEL_TOOL::querySheets()
     for( const PathAndName& sheet : uniqueSheets )
     {
         RULE_AREA ent;
+
         ent.m_generateEnabled = false;
         ent.m_sheetPath = sheet.first;
         ent.m_sheetName = sheet.second;
         ent.m_sheetComponents = queryComponentsInSheet( ent.m_sheetPath );
         m_areas.m_areas.push_back( ent );
+
+        wxLogTrace( traceMultichannelTool, wxT("found sheet '%s' @ '%s' s %d\n"),
+            ent.m_sheetName, ent.m_sheetPath, (int)m_areas.m_areas.size() );
     }
 }
 
 
-void MULTICHANNEL_TOOL::findExistingRuleAreas()
+void MULTICHANNEL_TOOL::FindExistingRuleAreas()
 {
     m_areas.m_areas.clear();
 
@@ -216,31 +217,21 @@ void MULTICHANNEL_TOOL::findExistingRuleAreas()
         if( zone->GetRuleAreaType() != RULE_AREA_TYPE::PLACEMENT )
             continue;
 
-        std::set<FOOTPRINT*> components;
-        identifyComponentsInRuleArea( zone, components );
-
         RULE_AREA area;
 
         area.m_existsAlready = true;
         area.m_area = zone;
 
-        for( FOOTPRINT* fp : components )
-        {
-            FP_WITH_CONNECTIONS fpc;
-            fpc.fp = fp;
-            area.m_raFootprints.push_back( fpc );
+        identifyComponentsInRuleArea( zone, area.m_raFootprints );
 
-            for( PAD* pad : fp->Pads() )
-            {
-                area.m_fpPads[pad] = fp;
-            }
-        }
         area.m_ruleName = zone->GetZoneName();
         area.m_center = zone->Outline()->COutline( 0 ).Centre();
         m_areas.m_areas.push_back( area );
+
+        wxLogTrace( traceMultichannelTool, wxT("RA '%s', %d footprints\n"), area.m_ruleName, (int) area.m_raFootprints.size() );
     }
 
-    DBG( 1, "Total RAs found: %d\n", (int) m_areas.m_areas.size() );
+    wxLogTrace( traceMultichannelTool, wxT("Total RAs found: %d\n"), (int) m_areas.m_areas.size() );
 }
 
 
@@ -258,9 +249,6 @@ RULE_AREA* MULTICHANNEL_TOOL::findRAByName( const wxString& aName )
 
 int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 {
-    //KI_TEST::CONSOLE_LOG          consoleLog;
-    //m_reporter.reset( new KI_TEST::CONSOLE_MSG_REPORTER ( &consoleLog ) );
-
     std::vector<ZONE*> refRAs;
 
     for( EDA_ITEM* item : selection() )
@@ -280,17 +268,34 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
     if( refRAs.size() != 1 )
     {
         frame()->ShowInfoBarError( _( "Please select a single reference Rule Area to copy from" ),
-                                   true );
+                                       true );
         return 0;
     }
 
-    findExistingRuleAreas();
+    FindExistingRuleAreas();
 
+    int status = CheckRACompatibility( refRAs.front() );
+
+    if( status < 0 )
+        return status;
+
+    DIALOG_MULTICHANNEL_REPEAT_LAYOUT dialog( frame(), this );
+    int                               ret = dialog.ShowModal();
+
+    if( ret != wxID_OK )
+        return 0;
+
+    return RepeatLayout( aEvent, refRAs.front() );
+}
+
+
+int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
+{
     m_areas.m_refRA = nullptr;
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {
-        if( ra.m_area == refRAs.front() )
+        if( ra.m_area == aRefZone )
         {
             m_areas.m_refRA = &ra;
             break;
@@ -312,14 +317,16 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
         resolveConnectionTopology( m_areas.m_refRA, &ra, m_areas.m_compatMap[&ra] );
     }
 
-    DIALOG_MULTICHANNEL_REPEAT_LAYOUT dialog( frame(), this );
-    int                               ret = dialog.ShowModal();
+    return 0;
+}
 
-    if( ret != wxID_OK )
-        return 0;
+int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
+{
+    //KI_TEST::CONSOLE_LOG          consoleLog;
+    //m_reporter.reset( new KI_TEST::CONSOLE_MSG_REPORTER ( &consoleLog ) );
 
-    BOARD_COMMIT commit( frame()->GetToolManager(),
-                         true ); //<PNS_LOG_VIEWER_FRAME>()->GetToolManager(), true );
+    
+    BOARD_COMMIT commit( GetManager(), true );
 
     int totalCopied = 0;
 
@@ -327,7 +334,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
     {
         if( !targetArea.second.m_doCopy )
         {
-            DBG( 1, "skipping copy to RA '%s' (disabled in dialog)\n",
+            wxLogTrace( traceMultichannelTool, wxT("skipping copy to RA '%s' (disabled in dialog)\n"),
                  targetArea.first->m_ruleName );
             continue;
         }
@@ -335,7 +342,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
         if( !targetArea.second.m_isOk )
             continue;
 
-        if( !copyRuleAreaContents( targetArea.second.m_matchingFootprints, &commit, m_areas.m_refRA,
+        if( !copyRuleAreaContents( targetArea.second.m_matchingComponents, &commit, m_areas.m_refRA,
                                    targetArea.first, m_areas.m_options ) )
         {
             auto errMsg = wxString::Format(
@@ -344,9 +351,12 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
                     targetArea.first->m_area->GetZoneName() );
 
             commit.Revert();
-            frame()->ShowInfoBarError( errMsg, true );
+            if( Pgm().IsGUI() )
+            {
+                frame()->ShowInfoBarError( errMsg, true );
+            }
 
-            return 0;
+            return -1;
         }
 
         totalCopied++;
@@ -354,8 +364,12 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Repeat layout" ) );
 
-    frame()->ShowInfoBarMsg( wxString::Format( _( "Copied to %d Rule Areas." ), totalCopied ),
+
+    if( Pgm().IsGUI() )
+    {
+        frame()->ShowInfoBarMsg( wxString::Format( _( "Copied to %d Rule Areas." ), totalCopied ),
                              true );
+    }
     return 0;
 }
 
@@ -422,7 +436,7 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
 }
 
 
-bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit,
+bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit,
                                               RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                               REPEAT_LAYOUT_OPTIONS aOpts )
 {
@@ -452,7 +466,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
         std::set<BOARD_ITEM*> refRouting;
         std::set<BOARD_ITEM*> targetRouting;
 
-        DBG( 1, "copying routing: %d fps\n", aMatches.size() );
+        wxLogTrace( traceMultichannelTool, wxT("copying routing: %d fps\n"), (int) aMatches.size() );
 
         for( auto& fpPair : aMatches )
         {
@@ -461,20 +475,35 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
             findRoutedConnections( refRouting, connectivity, refPoly, aRefArea, fpPair.first,
                                    aOpts );
 
-            DBG( 2, "target-routes %d\n", (int) targetRouting.size() );
+            wxLogTrace( traceMultichannelTool, wxT("target-routes %d\n"), (int) targetRouting.size() );
         }
+
+        printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+        printf("target-ls: %s\n", aTargetArea->m_area->GetLayerSet().FmtHex().c_str() );
+
 
         for( BOARD_ITEM* item : targetRouting )
         {
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
-            aCommit->Remove( item );
+            // item already removed
+            if( aCommit->GetStatus( item ) != 0 )
+                continue;
+
+            if( aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                aCommit->Remove( item );
         }
 
         for( BOARD_ITEM* item : refRouting )
         {
+            if( !aRefArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                continue;
+            if( !aTargetArea->m_area->GetLayerSet().Contains( item->GetLayer() ) )
+                continue;
+
             BOARD_ITEM* copied = static_cast<BOARD_ITEM*>( item->Clone() );
+
             copied->Move( disp );
             aCommit->Add( copied );
         }
@@ -493,19 +522,21 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
             FOOTPRINT* refFP = fpPair.first;
             FOOTPRINT* targetFP = fpPair.second;
 
-#if 0
-        //fixme: respect layers assigned to RAs
-        //printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
-        //printf("target-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+            printf("ref-fp-l: %s\n", refFP->GetLayerSet().FmtHex().c_str() );
 
-        if( ! aRefArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) );
+#if 1
+        //fixme: respect layers assigned to RAs
+        printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+        printf("target-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+
+        if( ! aRefArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
         {
-            DBG(2, wxT("discard ref:%s (ref layer)\n"), refFP->GetReference() );
+            wxLogTrace( traceMultichannelTool, wxT("discard ref:%s (ref layer)\n"), refFP->GetReference() );
             continue;
         }
-        if( ! aTargetArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) );
+        if( ! aTargetArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) )
         {
-            DBG(2, wxT("discard ref:%s (target layer)\n"), refFP->GetReference() );
+            wxLogTrace( traceMultichannelTool, wxT("discard ref:%s (target layer)\n"), refFP->GetReference() );
             continue;
         }
 #endif
@@ -530,350 +561,70 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
 }
 
 
-bool MULTICHANNEL_TOOL::checkIfPadNetsMatch( FP_WITH_CONNECTIONS& aRef, FP_WITH_CONNECTIONS& aTgt,
-                                             FP_PAIRS& aMatches ) const
-{
-#ifdef MULTICHANNEL_EXTRA_DEBUG
-    DBG( 2, "ref: %d pads\n", (int) aRef.connsWithinRA.size() );
-    DBG( 2, "matches so far: %d\n", (int) aMatches.size() );
-#endif
-
-    std::map<PAD*, PAD*> pairs;
-    std::vector<PAD*>    pref, ptgt;
-
-    for( auto& m : aMatches )
-    {
-        for( PAD* p : m.first->Pads() )
-            pref.push_back( p );
-
-        for( PAD* p : m.second->Pads() )
-            ptgt.push_back( p );
-    }
-
-    for( PAD* p : aRef.fp->Pads() )
-        pref.push_back( p );
-
-    for( PAD* p : aTgt.fp->Pads() )
-        ptgt.push_back( p );
-
-    if( pref.size() != ptgt.size() )
-        return false;
-
-    for( unsigned int i = 0; i < pref.size(); i++ )
-        pairs[pref[i]] = ptgt[i];
-
-    for( auto& ref : aRef.connsWithinRA )
-    {
-        DBG( 2, wxT( "pad %s: %s -> " ), ref.first->GetNumber(), ref.first->GetNetname() );
-
-        std::optional<int> prevNet;
-
-        for( auto& pc : ref.second )
-        {
-            auto tpad = pairs.find( pc.pad );
-
-            if( tpad != pairs.end() )
-            {
-                int nc = tpad->second->GetNetCode();
-
-                DBG( 3, wxT( " %s[%d]" ), tpad->second->GetNetname(), tpad->second->GetNetCode() );
-
-                if( prevNet && ( *prevNet != nc ) )
-                {
-                    return false;
-                }
-
-                prevNet = nc;
-            }
-            else
-            {
-                DBGn( 3, wxT( " ?" ) );
-            }
-        }
-        DBGn( 3, wxT( "\n" ) );
-    }
-
-    return true;
-}
-
-
 bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, RULE_AREA_COMPAT_DATA& aMatches )
 {
-    std::map<NETINFO_ITEM*, std::vector<PAD*>> allPads;
+    using namespace TMATCH;
 
-    for( FOOTPRINT* fp : board()->Footprints() )
+    std::unique_ptr<CONNECTION_GRAPH> cgRef ( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_raFootprints ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgTarget ( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_raFootprints ) );
+
+    auto status = cgRef->FindIsomorphism( cgTarget.get(), aMatches.m_matchingComponents );
+
+    switch( status )
     {
-        for( PAD* pad : fp->Pads() )
-        {
-            auto iter = allPads.find( pad->GetNet() );
-
-            if( iter == allPads.end() )
-                allPads[pad->GetNet()] = { pad };
-            else
-                allPads[pad->GetNet()].push_back( pad );
-        }
-    }
-
-    auto belongsToRAFootprint = []( RULE_AREA* ra, PAD* aPad ) -> FOOTPRINT*
-    {
-        auto iter = ra->m_fpPads.find( aPad );
-        if( iter == ra->m_fpPads.end() )
-            return nullptr;
-
-        return iter->second;
-    };
-
-    auto findPadConnectionsWithinRA = [&]( RULE_AREA* ra,
-                                           PAD*       aPad ) -> std::vector<PAD_PREFIX_ENTRY>
-    {
-        std::vector<PAD_PREFIX_ENTRY> rv;
-
-        for( auto cpad : allPads[aPad->GetNet()] )
-        {
-            if( belongsToRAFootprint( ra, cpad ) )
-            {
-                rv.push_back( PAD_PREFIX_ENTRY(
-                        cpad, stripComponentIndex( cpad->GetParentFootprint()->GetReference() ) ) );
-            }
-        }
-
-        return rv;
-    };
-
-    auto buildPadConnectionsWithinRA = [&]( RULE_AREA* ra ) -> bool
-    {
-        for( auto& fp : ra->m_raFootprints )
-        {
-            for( auto pad : fp.fp->Pads() )
-            {
-                fp.connsWithinRA[pad] = findPadConnectionsWithinRA( ra, pad );
-
-                DBG( 3, wxT( "p %s-%s ->" ), pad->GetParentAsString(), pad->GetNumber() );
-                for( auto p : fp.connsWithinRA[pad] )
-                {
-                    DBG( 3, wxT( " %s-%s" ), p.pad->GetParentAsString(), p.pad->GetNumber() );
-                }
-
-                DBGn( 3, wxT( "\n" ) );
-            }
-        }
-
-        return true;
-    };
-
-    auto matchConnections = [&]( FP_WITH_CONNECTIONS* aRef, FP_WITH_CONNECTIONS* aTarget ) -> bool
-    {
-        for( auto ref : aRef->connsWithinRA )
-        {
-            DBG( 2, wxT( "ref [%s]: " ), ref.first->GetNumber() );
-            for( auto conn : ref.second )
-                DBG( 2, wxT( "%s[%s] " ), conn.format(), conn.pad->GetNetname() );
-            DBGn( 2, wxT( "\n" ) );
-        }
-
-        for( auto tgt : aTarget->connsWithinRA )
-        {
-            DBG( 2, wxT( "tgt [%s]: " ), tgt.first->GetNumber() );
-            for( auto conn : tgt.second )
-                DBG( 2, wxT( "%s[%s]" ), conn.format(), conn.pad->GetNetname() );
-            DBGn( 2, wxT( "\n" ) );
-        }
-
-        bool matchFound = false;
-
-        for( auto ref : aRef->connsWithinRA )
-        {
-            for( auto tgt : aTarget->connsWithinRA )
-            {
-                bool padsMatch = true;
-
-                if( ref.second.size() != tgt.second.size() )
-                {
-                    padsMatch = false;
-                    continue;
-                }
-
-                for( unsigned int i = 0; i < ref.second.size(); i++ )
-                {
-                    PAD_PREFIX_ENTRY& eref = ref.second[i];
-                    PAD_PREFIX_ENTRY& etgt = tgt.second[i];
-
-                    if( !eref.matchesPadNumberAndPrefix( etgt ) )
-                    {
-                        padsMatch = false;
-                        break;
-                    }
-                }
-
-                if( padsMatch )
-                {
-                    matchFound = true;
-                }
-            }
-
-            if( !matchFound )
-            {
-                return false;
-            }
-        }
-
-        return matchFound;
-    };
-
-    if( aRefArea->m_raFootprints.size() != aTargetArea->m_raFootprints.size() )
-    {
-        aMatches.m_isOk = false;
-        aMatches.m_errorMsg = wxString::Format(
-                wxT( "Component count mismatch (reference area has %d, target area has %d)" ),
-                (int) aRefArea->m_raFootprints.size(), (int) aTargetArea->m_raFootprints.size() );
-
-        m_reporter->Report( aMatches.m_errorMsg );
-        return false;
-    }
-
-    buildPadConnectionsWithinRA( aRefArea );
-    buildPadConnectionsWithinRA( aTargetArea );
-
-    for( auto& refFP : aRefArea->m_raFootprints )
-    {
-        refFP.sortByPadNumbers();
-        refFP.processed = false;
-    }
-
-    for( auto& targetFP : aTargetArea->m_raFootprints )
-    {
-        targetFP.sortByPadNumbers();
-        targetFP.processed = false;
-    }
-
-    //int targetsRemaining = aTargetArea->m_raFootprints.size();
-
-    std::sort( aRefArea->m_raFootprints.begin(), aRefArea->m_raFootprints.end(),
-               []( const FP_WITH_CONNECTIONS& a, const FP_WITH_CONNECTIONS& b ) -> int
-               {
-                   return a.fp->GetPadCount() > b.fp->GetPadCount();
-               } );
-
-    const int  MATCH_MAX_ATTEMPTS = 100;
-    FOOTPRINT* failingRefFP = nullptr;
-
-    for( int attempt = 0; attempt < MATCH_MAX_ATTEMPTS; attempt++ )
-    {
-        aMatches.m_matchingFootprints.clear();
-
-        for( auto& targetFP : aTargetArea->m_raFootprints )
-        {
-            targetFP.processed = false;
-        }
-
-        for( auto& refFP : aRefArea->m_raFootprints )
-        {
-            std::vector<FP_WITH_CONNECTIONS*> candidates;
-
-            bool anyMatchesFound = false;
-
-            for( auto& targetFP : aTargetArea->m_raFootprints )
-            {
-                if( stripComponentIndex( refFP.fp->GetReference() )
-                    != stripComponentIndex( targetFP.fp->GetReference() ) )
-                    continue;
-
-                if( refFP.fp->GetValue() != targetFP.fp->GetValue() )
-                    continue;
-
-                if( refFP.fp->GetFPID() != targetFP.fp->GetFPID() )
-                    continue;
-
-                if( !targetFP.processed )
-                {
-                    bool matches = matchConnections( &refFP, &targetFP );
-
-                    DBG( 2, wxT( "testFP %s vs %s\n" ), refFP.fp->GetReference().c_str().AsChar(),
-                         targetFP.fp->GetReference().c_str().AsChar() );
-
-
-                    if( matches )
-                    {
-                        DBG( 2, wxT( "%s: matches %s\n" ),
-                             refFP.fp->GetReference().c_str().AsChar(),
-                             targetFP.fp->GetReference().c_str().AsChar() );
-                        candidates.push_back( &targetFP );
-                    }
-                }
-            }
-
-
-            DBG( 2, wxT( "Candidates for %s: %d\n" ), refFP.fp->GetReference(),
-                 (int) candidates.size() );
-
-            FP_WITH_CONNECTIONS* best = nullptr;
-
-            for( auto& c : candidates )
-            {
-                bool chk = checkIfPadNetsMatch( refFP, *c, aMatches.m_matchingFootprints );
-                DBG( 2, wxT( "\n  %s om %d\n" ), c->fp->GetReference(), chk ? 1 : 0 );
-
-                if( chk )
-                {
-                    anyMatchesFound = true;
-                    best = c;
-                }
-            }
-
-
-            if( !anyMatchesFound )
-            {
-                failingRefFP = refFP.fp;
-                break;
-            }
-            else
-            {
-                best->processed = true;
-                aMatches.m_matchingFootprints.push_back( { refFP.fp, best->fp } );
-            }
-        }
-
-        if( aMatches.m_matchingFootprints.size() == aTargetArea->m_raFootprints.size() )
-        {
+        case CONNECTION_GRAPH::ST_OK:
             aMatches.m_isOk = true;
-            return true;
-        }
-
-        auto rng = std::default_random_engine{};
-        std::shuffle( aTargetArea->m_raFootprints.begin(), aTargetArea->m_raFootprints.end(), rng );
+            aMatches.m_errorMsg = _("OK");
+            break;
+        case CONNECTION_GRAPH::ST_EMPTY:
+            aMatches.m_isOk = false;
+            aMatches.m_errorMsg = _("One or both of the areas has no components assigned.");
+            break;
+        case CONNECTION_GRAPH::ST_COMPONENT_COUNT_MISMATCH:
+            aMatches.m_isOk = false;
+            aMatches.m_errorMsg = _("Component count mismatch");
+            break;
+        case CONNECTION_GRAPH::ST_ITERATION_COUNT_EXCEEDED:
+            aMatches.m_isOk = false;
+            aMatches.m_errorMsg = _("Iteration count exceeded (timeout)");
+            break;
+        case CONNECTION_GRAPH::ST_TOPOLOGY_MISMATCH:
+            aMatches.m_isOk = false;
+            aMatches.m_errorMsg = _("Topology mismatch");
+            break;
+        default:
+            break;
     }
 
-    aMatches.m_errorMsg =
-            wxString::Format( wxT( "Topology mismatch (no counterpart found for component %s)" ),
-                              failingRefFP->GetReference() );
-
-    aMatches.m_isOk = false;
-    DBG( 2, wxT( "%s: no match\n" ), failingRefFP->GetReference() );
-    return false;
+    return (status == TMATCH::CONNECTION_GRAPH::ST_OK ); 
 }
 
 
-int MULTICHANNEL_TOOL::autogenerateRuleAreas( const TOOL_EVENT& aEvent )
+int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 {
     //KI_TEST::CONSOLE_LOG          consoleLog;
     //m_reporter.reset( new KI_TEST::CONSOLE_MSG_REPORTER ( &consoleLog ) );
 
-    querySheets();
 
-    if( m_areas.m_areas.size() <= 1 )
+    if( Pgm().IsGUI() )
     {
-        frame()->ShowInfoBarError( _( "Cannot auto-generate any placement areas because the "
-                                      "schematic has only one or no hierarchical sheet(s)." ),
-                                   true );
-        return 0;
+        QuerySheets();
+
+        if( m_areas.m_areas.size() <= 1 )
+        {
+            frame()->ShowInfoBarError( _( "Cannot auto-generate any placement areas because the "
+                                        "schematic has only one or no hierarchical sheet(s)." ),
+                                    true );
+            return 0;
+        }
+
+
+        DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS dialog( frame(), this );
+        int                                     ret = dialog.ShowModal();
+
+        if( ret != wxID_OK )
+            return 0;
     }
-
-
-    DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS dialog( frame(), this );
-    int                                     ret = dialog.ShowModal();
-
-    if( ret != wxID_OK )
-        return 0;
 
     for( ZONE* zone : board()->Zones() )
     {
@@ -905,7 +656,7 @@ int MULTICHANNEL_TOOL::autogenerateRuleAreas( const TOOL_EVENT& aEvent )
     m_reporter->Report(
             wxString::Format( wxT( "%d placement areas found\n" ), (int) m_areas.m_areas.size() ) );
 
-    BOARD_COMMIT commit( frame()->GetToolManager(), true );
+    BOARD_COMMIT commit( GetManager(), true );
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {
@@ -937,7 +688,7 @@ int MULTICHANNEL_TOOL::autogenerateRuleAreas( const TOOL_EVENT& aEvent )
         if( m_areas.m_groupItems )
         {
             // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
-            BOARD_COMMIT grpCommit( frame()->GetToolManager(), true );
+            BOARD_COMMIT grpCommit( GetManager(), true );
 
             PCB_GROUP* grp = new PCB_GROUP( board() );
 

@@ -30,12 +30,11 @@
 #include <unordered_set>
 
 #include <tools/pcb_tool_base.h>
+#include <connectivity/topo_match.h>
 
 #include <pad.h>
 #include <footprint.h>
 #include <reporter.h>
-
-typedef std::vector<std::pair<FOOTPRINT*, FOOTPRINT*>> FP_PAIRS;
 
 enum class REPEAT_LAYOUT_EDGE_MODE
 {
@@ -55,63 +54,6 @@ struct REPEAT_LAYOUT_OPTIONS
     REPEAT_LAYOUT_EDGE_MODE m_edgeMode;
 };
 
-struct PAD_PREFIX_ENTRY
-{
-    PAD_PREFIX_ENTRY( PAD* pad_, wxString pfx_ ) :
-            pad( pad_ ), componentPrefix( pfx_ ), processed( false ){};
-    PAD*     pad;
-    wxString componentPrefix;
-    bool     processed;
-
-    wxString format() const
-    {
-        return wxString::Format( wxT( "%s-%s[%s]" ), componentPrefix, pad->GetNumber(),
-                                 pad->GetNetname().c_str().AsChar() );
-    }
-
-    bool matchesPadNumberAndPrefix( const PAD_PREFIX_ENTRY& aOther ) const
-    {
-        if( componentPrefix != aOther.componentPrefix )
-            return false;
-
-        if( pad->GetNumber() != aOther.pad->GetNumber() )
-            return false;
-
-        return true;
-    }
-};
-
-struct FP_WITH_CONNECTIONS
-{
-    FOOTPRINT*                                                      fp;
-    typedef std::unordered_map<PAD*, std::vector<PAD_PREFIX_ENTRY>> PAD_CONNECTION_MAP;
-    PAD_CONNECTION_MAP                                              connsWithinRA;
-    bool                                                            processed;
-
-    void sortByPadNumbers()
-    {
-        // fixme
-        PAD_CONNECTION_MAP sorted;
-        for( auto& ent : connsWithinRA )
-        {
-            std::vector<PAD_PREFIX_ENTRY> v( ent.second );
-            auto compare = []( const PAD_PREFIX_ENTRY& a, const PAD_PREFIX_ENTRY& b ) -> int
-            {
-                if( a.pad->GetNumber() > b.pad->GetNumber() )
-                    return 0;
-                else if( a.pad->GetNumber() == b.pad->GetNumber() )
-                    return a.componentPrefix < b.componentPrefix;
-                else
-                    return a.pad->GetNumber() < b.pad->GetNumber();
-            };
-
-            std::sort( v.begin(), v.end(), compare );
-            sorted[ent.first] = v;
-        }
-
-        connsWithinRA = sorted;
-    }
-};
 
 struct RULE_AREA;
 
@@ -121,15 +63,14 @@ struct RULE_AREA_COMPAT_DATA
     bool                                           m_isOk;
     bool                                           m_doCopy;
     wxString                                       m_errorMsg;
-    std::vector<std::pair<FOOTPRINT*, FOOTPRINT*>> m_matchingFootprints;
+    TMATCH::COMPONENT_MATCHES m_matchingComponents;
 };
 
 struct RULE_AREA
 {
     ZONE*                            m_area;
-    std::vector<FP_WITH_CONNECTIONS> m_raFootprints;
+    std::set<FOOTPRINT*>             m_raFootprints;
     std::set<FOOTPRINT*>             m_sheetComponents;
-    std::map<PAD*, FOOTPRINT*>       m_fpPads;
     bool                             m_existsAlready;
     bool                             m_generateEnabled;
     wxString                         m_sheetPath;
@@ -166,30 +107,29 @@ public:
     ~MULTICHANNEL_TOOL();
 
     RULE_AREAS_DATA* GetData() { return &m_areas; }
+    int AutogenerateRuleAreas( const TOOL_EVENT& aEvent );
+    int RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone );
+    void QuerySheets();
+    void FindExistingRuleAreas();
+    int CheckRACompatibility( ZONE *aRefZone );
 
 private:
     void     setTransitions() override;
-    int      autogenerateRuleAreas( const TOOL_EVENT& aEvent );
     int      repeatLayout( const TOOL_EVENT& aEvent );
+
     wxString stripComponentIndex( wxString aRef ) const;
     bool     identifyComponentsInRuleArea( ZONE* aRuleArea, std::set<FOOTPRINT*>& aComponents );
     const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
     std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName );
-    void                   findExistingRuleAreas();
-    void                   querySheets();
-
     RULE_AREA* findRAByName( const wxString& aName );
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                           RULE_AREA_COMPAT_DATA& aMatches );
-    bool       copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
+    bool       copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
                                      RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts );
     int        findRoutedConnections( std::set<BOARD_ITEM*>&             aOutput,
                                       std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
                                       const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA, FOOTPRINT* aFp,
                                       const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
-
-    bool checkIfPadNetsMatch( FP_WITH_CONNECTIONS& aRef, FP_WITH_CONNECTIONS& aTgt,
-                              FP_PAIRS& aMatches ) const;
 
     std::unique_ptr<REPORTER> m_reporter;
     RULE_AREAS_DATA           m_areas;

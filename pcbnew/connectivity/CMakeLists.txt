@@ -12,6 +12,7 @@ set( PCBNEW_CONN_SRCS
     connectivity_data.cpp
     connectivity_items.cpp
     from_to_cache.cpp
+    topo_match.cpp
 )
 
 add_library( connectivity STATIC ${PCBNEW_CONN_SRCS} )
