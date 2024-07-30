@@ -356,10 +356,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
             return -1;
         }
 
-
-        printf("rep-l grp %d affected %d\n", groupableItems.size(), affectedItems.size() );
         commit.Push( _( "Repeat layout" ) );
-
 
         if( m_areas.m_groupItems )
         {
@@ -625,7 +622,7 @@ bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit, const std::unorder
     for( PCB_GROUP* grp : board()->Groups() )
     {
         std::unordered_set<BOARD_ITEM*>& grpItems = grp->GetItems();
-        int n_erased = 0;
+        size_t n_erased = 0;
 
         for(  auto refItem : grpItems )
         {
@@ -646,7 +643,7 @@ bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit, const std::unorder
             aCommit.Stage( grp, CHT_REMOVE );
         }
 
-        printf("Grp %p items %d pruned %d air %d\n", grp,grpItems.size(), (int) n_erased, (int) aItemsToRemove.size() );
+        //printf("Grp %p items %d pruned %d air %d\n", grp,grpItems.size(), (int) n_erased, (int) aItemsToRemove.size() );
     }
 
     return false;

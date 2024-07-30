@@ -134,6 +134,8 @@ private:
                                       const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA, FOOTPRINT* aFp,
                                       const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
 
+    bool pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToCheck );
+
     std::unique_ptr<REPORTER> m_reporter;
     RULE_AREAS_DATA           m_areas;
 };

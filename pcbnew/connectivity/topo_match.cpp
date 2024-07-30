@@ -32,6 +32,7 @@
 #include <set>
 #include <cctype>
 
+#include <pad.h>
 #include <footprint.h>
 #include <wx/string.h>
 #include <wx/log.h>
