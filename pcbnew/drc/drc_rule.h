@@ -137,8 +137,7 @@ class DRC_CONSTRAINT
 
     enum class OPTIONS : std::size_t
     {
-        SKEW_GROUP_MATCHED = 0,
-        SKEW_WITHIN_DIFF_PAIRS = 1
+        SKEW_WITHIN_DIFF_PAIRS = 0
     };
 
     bool IsNull() const
@@ -192,7 +191,8 @@ public:
 private:
     wxString            m_name;          // For just-in-time constraints
     DRC_RULE*           m_parentRule;    // For constraints found in rules
-    std::bitset<2>      m_options;       // Constraint-specific option bits
+    std::bitset<1>      m_options;       // Constraint-specific option bits
+                                         // (indexed from DRC_CONSTRAINT::OPTIONS)
 };
 
 

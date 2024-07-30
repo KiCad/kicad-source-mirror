@@ -347,7 +347,11 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             if( !sexprs.empty() )
             {
                 // Ignore argument-less tokens
-                if( partial != wxT( "group_matched" ) && partial != wxT( "within_diff_pairs" ) )
+                if( partial == wxT( "within_diff_pairs" ) )
+                {
+                    partial = wxEmptyString;
+                }
+                else
                 {
                     if( sexprs.top() == wxT( "constraint" ) )
                     {
@@ -439,7 +443,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         else if( sexprs.top() == wxT( "constraint" ) )
         {
             if( constraintType == wxT( "skew" ) )
-                tokens = wxT( "max|min|opt|group_matched|within_diff_pairs" );
+                tokens = wxT( "max|min|opt|within_diff_pairs" );
             else
                 tokens = wxT( "max|min|opt" );
         }

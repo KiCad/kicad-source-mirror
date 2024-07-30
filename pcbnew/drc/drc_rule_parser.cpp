@@ -482,38 +482,10 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         switch( token )
         {
-        case T_group_matched:
-            if( c.m_Type != SKEW_CONSTRAINT )
-            {
-                reportError( _( "group_matched option invalid for constraint type." ) );
-                break;
-            }
-
-            if( c.GetOption( DRC_CONSTRAINT::OPTIONS::SKEW_WITHIN_DIFF_PAIRS ) )
-            {
-                reportError( _( "within_diff_pairs argument already set for skew constraint." ) );
-                break;
-            }
-
-            c.SetOption( DRC_CONSTRAINT::OPTIONS::SKEW_GROUP_MATCHED );
-
-            if( (int) NextTok() != DSN_RIGHT )
-            {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
-                parseUnknown();
-            }
-
-            break;
         case T_within_diff_pairs:
             if( c.m_Type != SKEW_CONSTRAINT )
             {
                 reportError( _( "within_diff_pairs option invalid for constraint type." ) );
-                break;
-            }
-
-            if( c.GetOption( DRC_CONSTRAINT::OPTIONS::SKEW_GROUP_MATCHED ) )
-            {
-                reportError( _( "group_matched argument already set for skew constraint." ) );
                 break;
             }
 
