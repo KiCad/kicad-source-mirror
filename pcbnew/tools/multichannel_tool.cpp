@@ -148,10 +148,10 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
         auto bb = fp->GetBoundingBox( false, false );
         bb.Inflate( aMargin );
 
-        bbCorners.push_back( { bb.GetX(), bb.GetY() } );
-        bbCorners.push_back( { bb.GetX() + bb.GetWidth(), bb.GetY() } );
-        bbCorners.push_back( { bb.GetX() + bb.GetWidth(), bb.GetY() + bb.GetHeight() } );
-        bbCorners.push_back( { bb.GetX(), bb.GetY() + bb.GetHeight() } );
+        bbCorners.push_back( VECTOR2I( bb.GetX(), bb.GetY() ) );
+        bbCorners.push_back( VECTOR2I( bb.GetX() + bb.GetWidth(), bb.GetY() ) );
+        bbCorners.push_back( VECTOR2I( bb.GetX() + bb.GetWidth(), bb.GetY() + bb.GetHeight() ) );
+        bbCorners.push_back( VECTOR2I( bb.GetX(), bb.GetY() + bb.GetHeight() ) );
     }
 
     BuildConvexHull( hullVertices, bbCorners );

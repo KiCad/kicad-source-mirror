@@ -90,6 +90,7 @@
 #include <tools/position_relative_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/pcb_actions.h>
+#include <tools/multichannel_tool.h>
 #include <router/router_tool.h>
 #include <autorouter/autoplace_tool.h>
 #include <python/scripting/pcb_scripting_tool.h>

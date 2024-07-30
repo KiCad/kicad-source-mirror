@@ -1399,6 +1399,17 @@ bool ZONE::operator==( const BOARD_ITEM& aOther ) const
         return false;
 
     const ZONE& other = static_cast<const ZONE&>( aOther );
+    return *this == other;
+}
+
+
+bool ZONE::operator==( const ZONE& aOther ) const
+
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const ZONE& other = static_cast<const ZONE&>( aOther );
 
     if( GetIsRuleArea() != other.GetIsRuleArea() )
         return false;
