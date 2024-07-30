@@ -84,8 +84,11 @@ void ZONES_CONTAINER::OnUserConfirmChange()
     FlushZoneSettingsChange();
     FlushPriorityChange();
 
-    for( auto& [zone, zoneClone] : m_zonesCloneMap )
+    for( auto iter : m_zonesCloneMap )
     {
+        ZONE* zone = iter.first;
+        std::shared_ptr<ZONE> zoneClone = iter.second;
+
         std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> filled_zone_to_restore;
         ZONE* internal_zone = zone; // Duplicate the zone pointer to allow capture on older MacOS (13)
 
