@@ -80,8 +80,10 @@ elseif(VCPKG_TOOLCHAIN)
     # the main problem being nobody seems to actually cross-compile kicad
     # and insteads compiles it painfully on slow hardware
     set(INTERP_TRIPLET "${VCPKG_TARGET_TRIPLET}")
-    if(${VCPKG_TARGET_TRIPLET} STREQUAL "arm64-windows")
-        set(INTERP_TRIPLET "x64-windows")
+    if(NOT "${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "ARM64")
+        if(${VCPKG_TARGET_TRIPLET} STREQUAL "arm64-windows")
+            set(INTERP_TRIPLET "x64-windows")
+        endif()
     endif()
 
     # Our VCPKG usage will always place it in a known location
