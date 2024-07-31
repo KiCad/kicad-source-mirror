@@ -87,6 +87,14 @@ LSEQ PCB_LAYER_PRESENTATION::getOrderedEnabledLayers() const
     return m_boardFrame->GetBoard()->GetEnabledLayers().UIOrder();
 }
 
+wxString PCB_LAYER_PRESENTATION::getLayerPairName( const LAYER_PAIR& aPair ) const
+{
+    const wxString layerAName = getLayerName( aPair.GetLayerA() );
+    const wxString layerBName = getLayerName( aPair.GetLayerB() );
+
+    return layerAName + wxT( " / " ) + layerBName;
+}
+
 
 /**
  * Display a PCB layers list in a dialog to select one layer from this list.
@@ -425,20 +433,13 @@ private:
         }
     }
 
-    wxString constructLayerPairLabel( const LAYER_PAIR& aLayerPair )
-    {
-        const wxString layerAName = m_layerPresentation.getLayerName( aLayerPair.GetLayerA() );
-        const wxString layerBName = m_layerPresentation.getLayerName( aLayerPair.GetLayerB() );
-        return layerAName + wxT( " / " ) + layerBName;
-    }
-
     void fillRowFromLayerPair( int aRow, const LAYER_PAIR_INFO& aLayerPairInfo )
     {
         wxASSERT_MSG( aRow < m_grid.GetNumberRows(), "Row index out of bounds" );
 
         const LAYER_PAIR& layerPair = aLayerPairInfo.GetLayerPair();
 
-        const wxString layerNames = constructLayerPairLabel( layerPair );
+        const wxString layerNames = m_layerPresentation.getLayerPairName( layerPair );
 
         m_grid.SetCellValue( aRow, (int) COLNUMS::LAYERNAMES, layerNames );
 
@@ -482,9 +483,9 @@ private:
         m_layerPairSettings.SetCurrentLayerPair( layerPair );
     }
 
-    LAYER_PRESENTATION&  m_layerPresentation;
-    WX_GRID&             m_grid;
-    LAYER_PAIR_SETTINGS& m_layerPairSettings;
+    PCB_LAYER_PRESENTATION& m_layerPresentation;
+    WX_GRID&                m_grid;
+    LAYER_PAIR_SETTINGS&    m_layerPairSettings;
 
     // Lifetime managment of the swatches
     std::vector<std::unique_ptr<wxBitmap>> m_swatches;

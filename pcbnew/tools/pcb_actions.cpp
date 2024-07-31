@@ -1810,6 +1810,13 @@ TOOL_ACTION PCB_ACTIONS::layerAlphaDec( TOOL_ACTION_ARGS()
         .Tooltip( _( "Make the current layer more transparent" ) )
         .Icon( BITMAPS::contrast_mode ) );
 
+TOOL_ACTION PCB_ACTIONS::layerPairPresetsCycle( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.layerPairPresetCycle" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'V' )
+        .FriendlyName( _( "Cycle Layer Pair Presets" ) )
+        .Tooltip( _( "Cycle between preset layer pairs" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::layerChanged( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.layerChanged" )
         .Scope( AS_GLOBAL )
@@ -2465,3 +2472,6 @@ TOOL_ACTION PCB_ACTIONS::ddImportFootprint( TOOL_ACTION_ARGS()
 
 const TOOL_EVENT PCB_EVENTS::SnappingModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
                                                 "common.Interactive.snappingModeChangedByKey" );
+
+const TOOL_EVENT PCB_EVENTS::LayerPairPresetChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
+                                                "pcbnew.Control.layerPairPresetChangedByKey" );

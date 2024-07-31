@@ -70,6 +70,14 @@ public:
     std::span<LAYER_PAIR_INFO> GetLayerPairs();
 
     /**
+     * Get a vector of all enabled layer pairs, in order.
+     *
+     * This includes a "manual" pair, if one is set
+     * and isn't in the list of presets.
+     */
+    std::vector<LAYER_PAIR_INFO> GetEnabledLayerPairs( int& aCurrentIndex ) const;
+
+    /**
      * Replace the stored layer pairs with the given list.
      *
      * The same conditions are maintained as for AddLayerPair
@@ -89,6 +97,10 @@ private:
 
     // Ordered store of all preset layer pairs
     std::vector<LAYER_PAIR_INFO> m_pairs;
+
+    // Keep track of the last manual pair (set, but not a preset)
+    // for quick switching back
+    std::optional<LAYER_PAIR> m_lastManualPair;
 
     LAYER_PAIR m_currentPair;
 };

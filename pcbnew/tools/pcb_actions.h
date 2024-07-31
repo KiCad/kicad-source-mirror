@@ -374,6 +374,7 @@ public:
     static TOOL_ACTION layerAlphaInc;
     static TOOL_ACTION layerAlphaDec;
     static TOOL_ACTION layerToggle;
+    static TOOL_ACTION layerPairPresetsCycle;
 
     // Group to link all actions that directly select layers
     static TOOL_ACTION_GROUP layerDirectSwitchActions();
@@ -585,6 +586,7 @@ class PCB_EVENTS
 public:
     /// Hotkey feedback
     const static TOOL_EVENT SnappingModeChangedByKeyEvent;
+    const static TOOL_EVENT LayerPairPresetChangedByKeyEvent;
 };
 
 #endif

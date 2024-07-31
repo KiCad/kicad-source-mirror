@@ -27,6 +27,7 @@
 #include <lseq.h>
 #include <layer_presentation.h>
 
+class LAYER_PAIR;
 class PCB_BASE_FRAME;
 
 /**
@@ -48,6 +49,8 @@ public:
      * have access to the PCB_BASE_FRAME at construction time).
      */
     void SetBoardFrame( PCB_BASE_FRAME* aFrame ) { m_boardFrame = aFrame; }
+
+    wxString getLayerPairName( const LAYER_PAIR& aPair ) const;
 
 private:
     PCB_BASE_FRAME* m_boardFrame;

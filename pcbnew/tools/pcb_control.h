@@ -79,6 +79,8 @@ public:
     int LayerToggle( const TOOL_EVENT& aEvent );
     int LayerAlphaInc( const TOOL_EVENT& aEvent );
     int LayerAlphaDec( const TOOL_EVENT& aEvent );
+    int CycleLayerPresets( const TOOL_EVENT& aEvent );
+    int LayerPresetFeedback( const TOOL_EVENT& aEvent );
 
     // Grid control
     int GridPlaceOrigin( const TOOL_EVENT& aEvent );

@@ -42,7 +42,9 @@
 #include <pcb_dimension.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <footprint.h>
+#include <layer_pairs.h>
 #include <pcb_group.h>
+#include <pcb_layer_presentation.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <pcb_generator.h>
@@ -67,6 +69,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_infobar.h>
 #include <wx/hyperlink.h>
+
 
 using namespace std::placeholders;
 
@@ -554,6 +557,88 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
     else
     {
         wxBell();
+    }
+
+    return 0;
+}
+
+
+int PCB_CONTROL::CycleLayerPresets( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 0;
+
+    LAYER_PAIR_SETTINGS* settings = editFrame->GetLayerPairSettings();
+
+    if( !settings )
+        return 0;
+
+    int                          currentIndex;
+    std::vector<LAYER_PAIR_INFO> presets = settings->GetEnabledLayerPairs( currentIndex );
+
+    if( presets.size() < 2 )
+        return 0;
+
+    if( currentIndex < 0 )
+    {
+        wxASSERT_MSG( false, "Current layer pair not found in layer settings" );
+        currentIndex = 0;
+    }
+
+    const int         nextIndex = ( currentIndex + 1 ) % presets.size();
+    const LAYER_PAIR& nextPair = presets[nextIndex].GetLayerPair();
+
+    settings->SetCurrentLayerPair( nextPair );
+
+    m_toolMgr->PostEvent( PCB_EVENTS::LayerPairPresetChangedByKeyEvent );
+    return 0;
+}
+
+
+int PCB_CONTROL::LayerPresetFeedback( const TOOL_EVENT& aEvent )
+{
+    if( !Pgm().GetCommonSettings()->m_Input.hotkey_feedback )
+        return 0;
+
+    PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 0;
+
+    LAYER_PAIR_SETTINGS* settings = editFrame->GetLayerPairSettings();
+
+    if( !settings )
+        return 0;
+
+    PCB_LAYER_PRESENTATION layerPresentation( editFrame );
+
+    int                          currentIndex;
+    std::vector<LAYER_PAIR_INFO> presets = settings->GetEnabledLayerPairs( currentIndex );
+
+    wxArrayString labels;
+    for( const LAYER_PAIR_INFO& layerPairInfo : presets )
+    {
+        wxString label = layerPresentation.getLayerPairName( layerPairInfo.GetLayerPair() );
+
+        if( layerPairInfo.GetName() )
+        {
+            label += wxT( " (" ) + *layerPairInfo.GetName() + wxT( ")" );
+        }
+
+        labels.Add( label );
+    }
+
+    if( !editFrame->GetHotkeyPopup() )
+        editFrame->CreateHotkeyPopup();
+
+    HOTKEY_CYCLE_POPUP* popup = editFrame->GetHotkeyPopup();
+
+    if( popup )
+    {
+        int selection = currentIndex;
+        popup->Popup( _( "Preset Layer Pairs" ), labels, selection );
     }
 
     return 0;
@@ -1715,7 +1800,7 @@ int PCB_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
+// clang-format off
 void PCB_CONTROL::setTransitions()
 {
     Go( &PCB_CONTROL::AddLibrary,           ACTIONS::newLibrary.MakeEvent() );
@@ -1779,6 +1864,9 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::LayerAlphaInc,        PCB_ACTIONS::layerAlphaInc.MakeEvent() );
     Go( &PCB_CONTROL::LayerAlphaDec,        PCB_ACTIONS::layerAlphaDec.MakeEvent() );
 
+    Go( &PCB_CONTROL::CycleLayerPresets,    PCB_ACTIONS::layerPairPresetsCycle.MakeEvent() );
+    Go( &PCB_CONTROL::LayerPresetFeedback,  PCB_EVENTS::LayerPairPresetChangedByKeyEvent );
+
     // Grid control
     Go( &PCB_CONTROL::GridPlaceOrigin,      ACTIONS::gridSetOrigin.MakeEvent() );
     Go( &PCB_CONTROL::GridResetOrigin,      ACTIONS::gridResetOrigin.MakeEvent() );
@@ -1813,3 +1901,4 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::DdAddLibrary,         ACTIONS::ddAddLibrary.MakeEvent() );
     Go( &PCB_CONTROL::DdImportFootprint,    PCB_ACTIONS::ddImportFootprint.MakeEvent() );
 }
+// clang-format on
