@@ -1217,6 +1217,8 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextKillFocus( wxFocusEve
 
         m_inKillFocus = false;
     }
+
+    aEvent.Skip();  // mandatory in wxFocusEvent events
 }
 
 
