@@ -78,6 +78,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
         m_lastParamGridWidth( 0 )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_infoBar->AddCloseButton();
 
     for( SCH_PIN* pin : aSymbol.GetAllLibPins() )
     {
@@ -1177,7 +1178,7 @@ void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
     WX_STRING_REPORTER reporter( &msg );
     wxString           path = m_libraryPathText->GetValue();
 
-    if( loadLibrary( path, reporter, true ) )
+    if( loadLibrary( path, reporter, true ) || path.IsEmpty() )
         m_infoBar->Hide();
     else if( reporter.HasMessage() )
         m_infoBar->ShowMessage( msg );
@@ -1199,6 +1200,8 @@ void DIALOG_SIM_MODEL<T>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
                 wxCommandEvent dummy;
                 onLibraryPathTextEnter( dummy );
             } );
+
+    aEvent.Skip();  // mandatory in wxFocusEvent events
 }
 
 

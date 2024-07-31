@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,15 +17,15 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	m_infoBar = new WX_INFOBAR( this );
 	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
 	m_infoBar->SetEffectDuration( 500 );
 	m_infoBar->Hide();
 
-	bSizer8->Add( m_infoBar, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_infoBar, 0, wxEXPAND, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_modelPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -307,13 +307,13 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer10->Fit( m_pinAssignmentsPanel );
 	m_notebook->AddPage( m_pinAssignmentsPanel, _("Pin Assignments"), false );
 
-	bSizer8->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerMain->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	wxBoxSizer* bSizer81;
-	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerBottom;
+	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 
-	bSizer81->Add( 30, 0, 1, wxEXPAND, 5 );
+	bSizerBottom->Add( 30, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -322,15 +322,15 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizer81->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
+	bSizerBottom->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizer8->Add( bSizer81, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	this->SetSizer( bSizer8 );
+	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizer8->Fit( this );
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 
