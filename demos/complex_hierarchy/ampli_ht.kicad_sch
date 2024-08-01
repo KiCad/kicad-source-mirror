@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20240716)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "8.99")
 	(uuid "994297ef-4ddc-40ea-b4d6-64ee58be7864")
 	(paper "A4")
 	(title_block
@@ -75,7 +75,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 2.54)
+						(xy 0 2.54) (xy 0.762 1.27)
 					)
 					(stroke
 						(width 0)
@@ -87,7 +87,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
+						(xy 0 0) (xy 0 2.54)
 					)
 					(stroke
 						(width 0)
@@ -118,6 +118,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:-VAA"
 			(power)
@@ -192,18 +193,6 @@
 			(symbol "-VAA_0_1"
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 1.27) (xy 0 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0 2.032) (xy 0.762 1.27) (xy -0.508 1.27) (xy -0.762 1.27) (xy 0 2.032) (xy 0 2.032) (xy 0 2.032)
 					)
 					(stroke
@@ -214,7 +203,20 @@
 						(type outline)
 					)
 				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:C"
 			(pin_numbers hide)
@@ -279,7 +281,7 @@
 			(symbol "C_0_1"
 				(polyline
 					(pts
-						(xy -2.032 -0.762) (xy 2.032 -0.762)
+						(xy -2.032 0.762) (xy 2.032 0.762)
 					)
 					(stroke
 						(width 0.508)
@@ -291,7 +293,7 @@
 				)
 				(polyline
 					(pts
-						(xy -2.032 0.762) (xy 2.032 0.762)
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
 					)
 					(stroke
 						(width 0.508)
@@ -340,6 +342,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:CONN_2"
 			(pin_names
@@ -439,6 +442,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:D_Small"
 			(pin_numbers hide)
@@ -563,6 +567,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:GND"
 			(power)
@@ -648,6 +653,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:HT"
 			(power)
@@ -722,7 +728,7 @@
 			(symbol "HT_0_1"
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 1.016) (xy 0 1.016)
+						(xy 0 1.016) (xy 0.508 0.508) (xy 0 1.778) (xy -0.508 0.508) (xy 0 1.016) (xy 0 1.016)
 					)
 					(stroke
 						(width 0)
@@ -734,7 +740,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 1.016) (xy 0.508 0.508) (xy 0 1.778) (xy -0.508 0.508) (xy 0 1.016) (xy 0 1.016)
+						(xy 0 0) (xy 0 1.016) (xy 0 1.016)
 					)
 					(stroke
 						(width 0)
@@ -745,6 +751,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:LM358N"
 			(exclude_from_sim no)
@@ -807,24 +814,6 @@
 					)
 				)
 				(pin power_in line
-					(at -2.54 -10.16 90)
-					(length 6.35)
-					(name "V-"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
 					(at -2.54 10.16 270)
 					(length 6.35)
 					(name "V+"
@@ -842,19 +831,37 @@
 						)
 					)
 				)
-			)
-			(symbol "LM358N_1_1"
-				(pin output line
-					(at 12.7 0 180)
-					(length 7.62)
-					(name "~"
+				(pin power_in line
+					(at -2.54 -10.16 90)
+					(length 6.35)
+					(name "V-"
 						(effects
 							(font
 								(size 1.016 1.016)
 							)
 						)
 					)
-					(number "1"
+					(number "4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(symbol "LM358N_1_1"
+				(pin input line
+					(at -12.7 2.54 0)
+					(length 7.62)
+					(name "+"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "3"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -880,17 +887,17 @@
 						)
 					)
 				)
-				(pin input line
-					(at -12.7 2.54 0)
+				(pin output line
+					(at 12.7 0 180)
 					(length 7.62)
-					(name "+"
+					(name "~"
 						(effects
 							(font
 								(size 1.016 1.016)
 							)
 						)
 					)
-					(number "3"
+					(number "1"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -955,6 +962,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:MPSA42"
 			(pin_names
@@ -1019,6 +1027,18 @@
 			(symbol "MPSA42_0_1"
 				(polyline
 					(pts
+						(xy 0 1.905) (xy 0 -1.905) (xy 0 -1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 0 0) (xy 2.54 2.54)
 					)
 					(stroke
@@ -1029,10 +1049,9 @@
 						(type none)
 					)
 				)
-				(polyline
-					(pts
-						(xy 0 1.905) (xy 0 -1.905) (xy 0 -1.905)
-					)
+				(circle
+					(center 1.27 0)
+					(radius 2.8194)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -1077,37 +1096,8 @@
 						(type outline)
 					)
 				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 			)
 			(symbol "MPSA42_1_1"
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name "E"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
-					)
-				)
 				(pin input line
 					(at -5.08 0 0)
 					(length 5.08)
@@ -1144,7 +1134,26 @@
 						)
 					)
 				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "E"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:MPSA92"
 			(pin_names
@@ -1209,18 +1218,6 @@
 			(symbol "MPSA92_0_1"
 				(polyline
 					(pts
-						(xy 0 0) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0 1.905) (xy 0 -1.905) (xy 0 -1.905)
 					)
 					(stroke
@@ -1233,19 +1230,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0.635 -0.635) (xy 0 0) (xy 0 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -2.54) (xy 1.651 -1.651) (xy 1.651 -1.651)
+						(xy 0 0) (xy 2.54 2.54)
 					)
 					(stroke
 						(width 0)
@@ -1267,6 +1252,18 @@
 						(type outline)
 					)
 				)
+				(polyline
+					(pts
+						(xy 0.635 -0.635) (xy 0 0) (xy 0 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(circle
 					(center 1.27 0)
 					(radius 2.8194)
@@ -1278,26 +1275,20 @@
 						(type none)
 					)
 				)
-			)
-			(symbol "MPSA92_1_1"
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name "E"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 1.651 -1.651) (xy 1.651 -1.651)
 					)
-					(number "1"
-						(effects
-							(font
-								(size 0.508 0.508)
-							)
-						)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
 					)
 				)
+			)
+			(symbol "MPSA92_1_1"
 				(pin input line
 					(at -5.08 0 0)
 					(length 5.08)
@@ -1334,7 +1325,26 @@
 						)
 					)
 				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "E"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:POT"
 			(pin_names
@@ -1464,6 +1474,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "complex_hierarchy_schlib:R"
 			(pin_numbers hide)
@@ -1574,7 +1585,22 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
+	)
+	(text "Filter:\nFc =1000Hz"
+		(exclude_from_sim no)
+		(at 66.04 74.93 0)
+		(effects
+			(font
+				(size 2.032 2.032)
+				(thickness 0.4064)
+				(bold yes)
+				(italic yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "4fee597b-5b3d-4d5f-9246-cb5aaa802827")
 	)
 	(junction
 		(at 138.43 60.96)
@@ -2464,20 +2490,6 @@
 		)
 		(uuid "fe597290-c281-45fd-998f-2c25c487bba9")
 	)
-	(text "Filter:\nFc =1000Hz"
-		(exclude_from_sim no)
-		(at 66.04 74.93 0)
-		(effects
-			(font
-				(size 2.032 2.032)
-				(thickness 0.4064)
-				(bold yes)
-				(italic yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "4fee597b-5b3d-4d5f-9246-cb5aaa802827")
-	)
 	(label "Vpil_0_3,3V"
 		(at 132.08 134.62 0)
 		(fields_autoplaced yes)
@@ -2531,7 +2543,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1357")
-		(property "Reference" "RV1"
+		(property "Reference" "RV201"
 			(at 148.59 165.1 0)
 			(effects
 				(font
@@ -2585,11 +2597,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "RV1")
+					(reference "RV201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "RV2")
+					(reference "RV301")
 					(unit 1)
 				)
 			)
@@ -2604,7 +2616,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1358")
-		(property "Reference" "C3"
+		(property "Reference" "C201"
 			(at 110.49 36.83 90)
 			(effects
 				(font
@@ -2655,11 +2667,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "C3")
+					(reference "C201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "C6")
+					(reference "C301")
 					(unit 1)
 				)
 			)
@@ -2674,7 +2686,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1359")
-		(property "Reference" "R7"
+		(property "Reference" "R203"
 			(at 100.33 48.26 90)
 			(effects
 				(font
@@ -2725,11 +2737,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R7")
+					(reference "R203")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R17")
+					(reference "R303")
 					(unit 1)
 				)
 			)
@@ -2744,7 +2756,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a135b")
-		(property "Reference" "#U050"
+		(property "Reference" "#U0201"
 			(at 120.65 50.8 0)
 			(effects
 				(font
@@ -2794,11 +2806,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#U050")
+					(reference "#U0201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#U034")
+					(reference "#U0301")
 					(unit 1)
 				)
 			)
@@ -2813,7 +2825,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a135c")
-		(property "Reference" "U3"
+		(property "Reference" "U201"
 			(at 124.46 55.88 0)
 			(effects
 				(font
@@ -2882,11 +2894,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "U3")
+					(reference "U201")
 					(unit 2)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "U4")
+					(reference "U301")
 					(unit 2)
 				)
 			)
@@ -2901,7 +2913,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a135d")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR0207"
 			(at 218.44 80.772 0)
 			(effects
 				(font
@@ -2951,11 +2963,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR049")
+					(reference "#PWR0207")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR033")
+					(reference "#PWR0307")
 					(unit 1)
 				)
 			)
@@ -2970,7 +2982,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a135e")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR0203"
 			(at 200.66 61.722 0)
 			(effects
 				(font
@@ -3020,11 +3032,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR048")
+					(reference "#PWR0203")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR032")
+					(reference "#PWR0303")
 					(unit 1)
 				)
 			)
@@ -3039,7 +3051,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a135f")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR0204"
 			(at 185.42 64.262 0)
 			(effects
 				(font
@@ -3089,11 +3101,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR047")
+					(reference "#PWR0204")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR031")
+					(reference "#PWR0304")
 					(unit 1)
 				)
 			)
@@ -3109,7 +3121,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1360")
-		(property "Reference" "Q1"
+		(property "Reference" "Q201"
 			(at 198.12 80.01 0)
 			(effects
 				(font
@@ -3165,11 +3177,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "Q1")
+					(reference "Q201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "Q5")
+					(reference "Q301")
 					(unit 1)
 				)
 			)
@@ -3184,7 +3196,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1361")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR0214"
 			(at 128.27 162.56 0)
 			(effects
 				(font
@@ -3235,11 +3247,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR046")
+					(reference "#PWR0214")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR030")
+					(reference "#PWR0314")
 					(unit 1)
 				)
 			)
@@ -3254,7 +3266,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1362")
-		(property "Reference" "R11"
+		(property "Reference" "R213"
 			(at 133.35 160.02 90)
 			(effects
 				(font
@@ -3305,11 +3317,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R11")
+					(reference "R213")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R21")
+					(reference "R313")
 					(unit 1)
 				)
 			)
@@ -3324,7 +3336,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1363")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR0209"
 			(at 260.35 115.57 0)
 			(effects
 				(font
@@ -3375,11 +3387,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR045")
+					(reference "#PWR0209")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR029")
+					(reference "#PWR0309")
 					(unit 1)
 				)
 			)
@@ -3394,7 +3406,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1364")
-		(property "Reference" "R5"
+		(property "Reference" "R206"
 			(at 240.03 107.442 90)
 			(effects
 				(font
@@ -3445,11 +3457,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R5")
+					(reference "R206")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R15")
+					(reference "R306")
 					(unit 1)
 				)
 			)
@@ -3464,7 +3476,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1365")
-		(property "Reference" "C5"
+		(property "Reference" "C204"
 			(at 207.01 143.51 0)
 			(effects
 				(font
@@ -3517,11 +3529,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "C5")
+					(reference "C204")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "C8")
+					(reference "C304")
 					(unit 1)
 				)
 			)
@@ -3536,7 +3548,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1366")
-		(property "Reference" "C4"
+		(property "Reference" "C203"
 			(at 104.14 62.23 0)
 			(effects
 				(font
@@ -3589,11 +3601,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "C4")
+					(reference "C203")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "C7")
+					(reference "C303")
 					(unit 1)
 				)
 			)
@@ -3609,7 +3621,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1367")
-		(property "Reference" "P4"
+		(property "Reference" "P201"
 			(at 35.56 53.34 90)
 			(effects
 				(font
@@ -3660,11 +3672,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "P4")
+					(reference "P201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "P6")
+					(reference "P301")
 					(unit 1)
 				)
 			)
@@ -3679,7 +3691,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1368")
-		(property "Reference" "U3"
+		(property "Reference" "U201"
 			(at 163.83 132.08 0)
 			(effects
 				(font
@@ -3748,11 +3760,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "U3")
+					(reference "U201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "U4")
+					(reference "U301")
 					(unit 1)
 				)
 			)
@@ -3767,7 +3779,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1369")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR0205"
 			(at 101.6 69.85 0)
 			(effects
 				(font
@@ -3818,11 +3830,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR044")
+					(reference "#PWR0205")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR028")
+					(reference "#PWR0305")
 					(unit 1)
 				)
 			)
@@ -3837,7 +3849,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a136a")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR0201"
 			(at 45.72 57.15 0)
 			(effects
 				(font
@@ -3888,11 +3900,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR043")
+					(reference "#PWR0201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR027")
+					(reference "#PWR0301")
 					(unit 1)
 				)
 			)
@@ -3907,7 +3919,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a136b")
-		(property "Reference" "R6"
+		(property "Reference" "R202"
 			(at 82.55 48.26 90)
 			(effects
 				(font
@@ -3958,11 +3970,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R6")
+					(reference "R202")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R16")
+					(reference "R302")
 					(unit 1)
 				)
 			)
@@ -3977,7 +3989,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a136c")
-		(property "Reference" "P3"
+		(property "Reference" "P202"
 			(at 271.78 111.76 90)
 			(effects
 				(font
@@ -4028,11 +4040,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "P3")
+					(reference "P202")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "P5")
+					(reference "P302")
 					(unit 1)
 				)
 			)
@@ -4047,7 +4059,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a136d")
-		(property "Reference" "R9"
+		(property "Reference" "R212"
 			(at 187.96 134.62 90)
 			(effects
 				(font
@@ -4098,11 +4110,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R9")
+					(reference "R212")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R19")
+					(reference "R312")
 					(unit 1)
 				)
 			)
@@ -4117,7 +4129,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a136f")
-		(property "Reference" "#U042"
+		(property "Reference" "#U0202"
 			(at 160.02 127 0)
 			(effects
 				(font
@@ -4167,11 +4179,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#U042")
+					(reference "#U0202")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#U026")
+					(reference "#U0302")
 					(unit 1)
 				)
 			)
@@ -4186,7 +4198,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1370")
-		(property "Reference" "R12"
+		(property "Reference" "R209"
 			(at 223.52 129.54 90)
 			(effects
 				(font
@@ -4237,11 +4249,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R12")
+					(reference "R209")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R22")
+					(reference "R309")
 					(unit 1)
 				)
 			)
@@ -4256,7 +4268,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1371")
-		(property "Reference" "R8"
+		(property "Reference" "R208"
 			(at 184.15 127 90)
 			(effects
 				(font
@@ -4307,11 +4319,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R8")
+					(reference "R208")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R18")
+					(reference "R308")
 					(unit 1)
 				)
 			)
@@ -4326,7 +4338,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1373")
-		(property "Reference" "#PWR041"
+		(property "Reference" "#PWR0208"
 			(at 185.42 97.79 0)
 			(effects
 				(font
@@ -4377,11 +4389,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR041")
+					(reference "#PWR0208")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR025")
+					(reference "#PWR0308")
 					(unit 1)
 				)
 			)
@@ -4396,7 +4408,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1374")
-		(property "Reference" "R4"
+		(property "Reference" "R205"
 			(at 187.452 91.44 90)
 			(effects
 				(font
@@ -4447,11 +4459,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R4")
+					(reference "R205")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R14")
+					(reference "R305")
 					(unit 1)
 				)
 			)
@@ -4466,7 +4478,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1375")
-		(property "Reference" "D2"
+		(property "Reference" "D201"
 			(at 180.34 72.39 90)
 			(effects
 				(font
@@ -4517,11 +4529,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "D2")
+					(reference "D201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "D5")
+					(reference "D301")
 					(unit 1)
 				)
 			)
@@ -4536,7 +4548,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1376")
-		(property "Reference" "R3"
+		(property "Reference" "R204"
 			(at 202.692 69.85 90)
 			(effects
 				(font
@@ -4587,11 +4599,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R3")
+					(reference "R204")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R13")
+					(reference "R304")
 					(unit 1)
 				)
 			)
@@ -4606,7 +4618,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1377")
-		(property "Reference" "D3"
+		(property "Reference" "D202"
 			(at 180.34 80.01 90)
 			(effects
 				(font
@@ -4657,11 +4669,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "D3")
+					(reference "D202")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "D6")
+					(reference "D302")
 					(unit 1)
 				)
 			)
@@ -4676,7 +4688,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1378")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR0210"
 			(at 177.8 132.08 0)
 			(effects
 				(font
@@ -4727,11 +4739,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR040")
+					(reference "#PWR0210")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR024")
+					(reference "#PWR0310")
 					(unit 1)
 				)
 			)
@@ -4746,7 +4758,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a1379")
-		(property "Reference" "Q4"
+		(property "Reference" "Q204"
 			(at 198.12 133.35 0)
 			(effects
 				(font
@@ -4802,11 +4814,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "Q4")
+					(reference "Q204")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "Q8")
+					(reference "Q304")
 					(unit 1)
 				)
 			)
@@ -4821,7 +4833,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a137a")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR0211"
 			(at 218.44 134.62 0)
 			(effects
 				(font
@@ -4872,11 +4884,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR039")
+					(reference "#PWR0211")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR023")
+					(reference "#PWR0311")
 					(unit 1)
 				)
 			)
@@ -4891,7 +4903,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a137b")
-		(property "Reference" "D4"
+		(property "Reference" "D204"
 			(at 195.58 115.57 90)
 			(effects
 				(font
@@ -4942,11 +4954,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "D4")
+					(reference "D204")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "D7")
+					(reference "D304")
 					(unit 1)
 				)
 			)
@@ -4962,7 +4974,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a137c")
-		(property "Reference" "Q3"
+		(property "Reference" "Q203"
 			(at 215.9 118.11 0)
 			(effects
 				(font
@@ -5018,11 +5030,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "Q3")
+					(reference "Q203")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "Q7")
+					(reference "Q303")
 					(unit 1)
 				)
 			)
@@ -5037,7 +5049,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b3a137d")
-		(property "Reference" "Q2"
+		(property "Reference" "Q202"
 			(at 215.9 87.63 0)
 			(effects
 				(font
@@ -5093,11 +5105,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "Q2")
+					(reference "Q202")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "Q6")
+					(reference "Q302")
 					(unit 1)
 				)
 			)
@@ -5112,7 +5124,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b4b1080")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR0206"
 			(at 120.65 74.93 0)
 			(effects
 				(font
@@ -5162,11 +5174,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR038")
+					(reference "#PWR0206")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR022")
+					(reference "#PWR0306")
 					(unit 1)
 				)
 			)
@@ -5181,7 +5193,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b4b1086")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR0212"
 			(at 160.02 151.13 0)
 			(effects
 				(font
@@ -5231,11 +5243,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR037")
+					(reference "#PWR0212")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR021")
+					(reference "#PWR0312")
 					(unit 1)
 				)
 			)
@@ -5250,7 +5262,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b4f363e")
-		(property "Reference" "R23"
+		(property "Reference" "R201"
 			(at 62.23 48.26 90)
 			(effects
 				(font
@@ -5301,11 +5313,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R23")
+					(reference "R201")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R24")
+					(reference "R301")
 					(unit 1)
 				)
 			)
@@ -5320,7 +5332,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b4f3641")
-		(property "Reference" "C12"
+		(property "Reference" "C202"
 			(at 76.2 55.88 0)
 			(effects
 				(font
@@ -5373,11 +5385,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "C12")
+					(reference "C202")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "C14")
+					(reference "C302")
 					(unit 1)
 				)
 			)
@@ -5392,7 +5404,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b4f364a")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR0202"
 			(at 72.39 62.23 0)
 			(effects
 				(font
@@ -5443,11 +5455,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR036")
+					(reference "#PWR0202")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR020")
+					(reference "#PWR0302")
 					(unit 1)
 				)
 			)
@@ -5462,7 +5474,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b61688c")
-		(property "Reference" "R10"
+		(property "Reference" "R211"
 			(at 207.772 133.35 90)
 			(effects
 				(font
@@ -5513,11 +5525,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R10")
+					(reference "R211")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R20")
+					(reference "R311")
 					(unit 1)
 				)
 			)
@@ -5532,7 +5544,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b6168a3")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR0213"
 			(at 205.74 151.13 0)
 			(effects
 				(font
@@ -5583,11 +5595,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "#PWR035")
+					(reference "#PWR0213")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "#PWR019")
+					(reference "#PWR0313")
 					(unit 1)
 				)
 			)
@@ -5602,7 +5614,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b616afa")
-		(property "Reference" "D8"
+		(property "Reference" "D203"
 			(at 195.58 102.87 90)
 			(effects
 				(font
@@ -5653,11 +5665,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "D8")
+					(reference "D203")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "D9")
+					(reference "D303")
 					(unit 1)
 				)
 			)
@@ -5672,7 +5684,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b616b96")
-		(property "Reference" "R25"
+		(property "Reference" "R207"
 			(at 240.03 115.062 90)
 			(effects
 				(font
@@ -5723,11 +5735,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R25")
+					(reference "R207")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R27")
+					(reference "R307")
 					(unit 1)
 				)
 			)
@@ -5742,7 +5754,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00004b617b88")
-		(property "Reference" "R26"
+		(property "Reference" "R210"
 			(at 233.68 129.54 90)
 			(effects
 				(font
@@ -5793,11 +5805,11 @@
 		(instances
 			(project "complex_hierarchy"
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a1333"
-					(reference "R26")
+					(reference "R210")
 					(unit 1)
 				)
 				(path "/5b9623a5-6d01-41fc-9865-e1bc779418c8/00000000-0000-0000-0000-00004b3a13a4"
-					(reference "R28")
+					(reference "R310")
 					(unit 1)
 				)
 			)
