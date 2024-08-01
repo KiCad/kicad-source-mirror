@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-17 09:38+0000\n"
+"PO-Revision-Date: 2024-08-02 10:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -16009,7 +16009,7 @@ msgstr "终止"
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
-msgstr "此文件由旧版 KiCad 创建。将在保存文件时将其转换为新的格式。"
+msgstr "此文件由较旧版本的 KiCad 创建, 保存文件时将转换为新版格式。"
 
 #: eeschema/files-io.cpp:599
 msgid "Schematic is read only."
@@ -44360,7 +44360,7 @@ msgstr "部分域的优先级不匹配, 因此没有合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1373
 msgid "Some zones were rule areas and were not merged."
-msgstr "部分域为规则域, 因此没有合并。"
+msgstr "部分域为规则区, 因此没有合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1379
 msgid "Some zone layer sets did not match and were not merged."
@@ -45463,7 +45463,7 @@ msgstr "添加挖空域"
 
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Add a cutout area of an existing zone"
-msgstr "在现有域中添加一个挖空域"
+msgstr "在现有域中添加一个挖空区"
 
 #: pcbnew/tools/pcb_actions.cpp:326
 msgid "Add a Similar Zone"
