@@ -69,6 +69,7 @@ class MEANDER_SETTINGS
 public:
     static const long long int DEFAULT_TOLERANCE;
     static const long long int LENGTH_UNCONSTRAINED;
+    static const int SKEW_UNCONSTRAINED;
 
     MEANDER_SETTINGS();
 
