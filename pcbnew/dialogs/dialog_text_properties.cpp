@@ -428,6 +428,21 @@ void DIALOG_TEXT_PROPERTIES::onThickness( wxCommandEvent& event )
 }
 
 
+void DIALOG_TEXT_PROPERTIES::updateTextThickness( wxCommandEvent &aEvent )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+    int thickness;
+
+    // Calculate the "best" thickness from text size and bold option:
+    if( m_bold->IsChecked() )
+        thickness = GetPenSizeForBold( textSize );
+    else
+        thickness = GetPenSizeForNormal( textSize );
+
+    m_thickness.SetValue( thickness );
+}
+
+
 bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 {
     if( !DIALOG_TEXT_PROPERTIES_BASE::TransferDataFromWindow() )

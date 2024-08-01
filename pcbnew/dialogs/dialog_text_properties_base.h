@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,7 +37,6 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_TEXT_PROPERTIES_BASE
@@ -90,6 +89,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_OrientLabel;
 		wxComboBox* m_OrientCtrl;
 		wxStaticText* m_statusLine;
+		wxButton* m_buttonUpdateTh;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -104,6 +104,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onValignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
+		virtual void updateTextThickness( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

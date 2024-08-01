@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -262,6 +262,17 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	bMainSizer->Add( bMargins, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
 
+	wxBoxSizer* bSizerBottom;
+	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
+
+	m_buttonUpdateTh = new wxButton( this, wxID_ANY, _("Update thickness according to text size "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonUpdateTh->SetToolTip( _("Set the best text thickness from the text width and height\nNormal text: thickness is size/8\nBold text: thickness is size/5") );
+
+	bSizerBottom->Add( m_buttonUpdateTh, 0, wxALL, 5 );
+
+
+	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -269,7 +280,10 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bMainSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerBottom->Add( m_sdbSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+
+	bMainSizer->Add( bSizerBottom, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );
@@ -297,6 +311,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_PositionXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_OrientCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_buttonUpdateTh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::updateTextThickness ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 }
 
@@ -321,6 +336,7 @@ DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
 	m_PositionXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_OrientCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_buttonUpdateTh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::updateTextThickness ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 
 }
