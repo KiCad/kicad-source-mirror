@@ -30,6 +30,7 @@ namespace PNS {
 
 const long long int MEANDER_SETTINGS::DEFAULT_TOLERANCE( pcbIUScale.mmToIU( 0.1 ) );
 const long long int MEANDER_SETTINGS::LENGTH_UNCONSTRAINED( 1000000 * pcbIUScale.IU_PER_MM );
+const int MEANDER_SETTINGS::SKEW_UNCONSTRAINED( std::numeric_limits<int>::max() );
 
 
 MEANDER_SETTINGS::MEANDER_SETTINGS()
@@ -55,7 +56,7 @@ void MEANDER_SETTINGS::SetTargetLength( long long int aOpt )
 {
     m_targetLength.SetOpt( aOpt );
 
-    if( aOpt == std::numeric_limits<long long int>::max() )
+    if( aOpt == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
     {
         m_targetLength.SetMin( 0 );
         m_targetLength.SetMax( aOpt );
@@ -84,7 +85,7 @@ void MEANDER_SETTINGS::SetTargetSkew( int aOpt )
 {
     m_targetSkew.SetOpt( aOpt );
 
-    if( aOpt == std::numeric_limits<int>::max() )
+    if( aOpt == PNS::MEANDER_SETTINGS::SKEW_UNCONSTRAINED )
     {
         m_targetSkew.SetMin( 0 );
         m_targetSkew.SetMax( aOpt );
