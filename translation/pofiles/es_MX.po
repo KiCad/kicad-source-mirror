@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-07 07:09+0000\n"
+"PO-Revision-Date: 2024-08-02 10:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -20273,9 +20273,9 @@ msgid "Another simulation is already running."
 msgstr "Otra simulación está en marcha."
 
 #: eeschema/sim/simulator_frame.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "No se ha podido abrir el archivo %s"
+msgstr "No se puede cargar o analizar el archivo %s"
 
 #: eeschema/sim/simulator_frame.cpp:628
 msgid "Save changes to workbook?"
@@ -24777,9 +24777,8 @@ msgid "Delete Column"
 msgstr "Seleccionar columnas"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Mostrar u ocultar %s"
+msgstr "Mostrar problemas de importación"
 
 #: include/widgets/filedlg_open_embed_file.h:36
 #, fuzzy
@@ -40458,9 +40457,9 @@ msgid "%s rounded corners differ."
 msgstr "%s las esquinas redondeadas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s las esquinas biseladas difieren."
+msgstr "%s los tamaños de las esquinas biseladas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
 #, c-format
@@ -41823,9 +41822,8 @@ msgstr "Ajustar"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2406
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2422
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2448
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Seleccionar un valor para ajustar"
+msgstr "Seleccione una pista a sintonizar primero."
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2490
@@ -42795,9 +42793,8 @@ msgid "PTH pad %s"
 msgstr "Pads PTH"
 
 #: pcbnew/pad.cpp:2073
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Error: El pad debe tener un tamaño positivo."
+msgstr "(El pad debe tener un tamaño positivo)"
 
 #: pcbnew/pad.cpp:2084
 #, c-format
