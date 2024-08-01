@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-07-07 07:09+0000\n"
+"PO-Revision-Date: 2024-08-02 10:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v8/es_MX/>\n"
@@ -19126,9 +19126,9 @@ msgid "Another simulation is already running."
 msgstr "Otra simulación está en marcha."
 
 #: eeschema/sim/simulator_frame.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "No se ha podido abrir el archivo %s"
+msgstr "No se puede cargar o analizar el archivo %s"
 
 #: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
@@ -23355,9 +23355,8 @@ msgid "Leave unchanged"
 msgstr "Mantener sin cambios"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Mostrar u ocultar %s"
+msgstr "Mostrar problemas de importación"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -38729,9 +38728,9 @@ msgid "%s rounded corners differ."
 msgstr "%s las esquinas redondeadas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s las esquinas biseladas difieren."
+msgstr "%s los tamaños de las esquinas biseladas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39631,9 +39630,8 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(esperado 'SMD' real '%s')"
 
 #: pcbnew/footprint.cpp:2817
-#, fuzzy
 msgid "(PTH pad's hole size is very small or null)"
-msgstr "(El agujero del pad PTH no deja cobre)"
+msgstr "(El tamaño del orificio del pad PTH es muy pequeño o nulo)"
 
 #: pcbnew/footprint.cpp:2825
 msgid "(PTH pad has no copper layers)"
@@ -39644,9 +39642,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(El agujero del pad PTH no deja cobre)"
 
 #: pcbnew/footprint.cpp:2856
-#, fuzzy
 msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(El agujero del pad PTH no deja cobre)"
+msgstr "(El orificio del pad PTH no está completamente dentro del cobre)"
 
 #: pcbnew/footprint.cpp:2866
 msgid "(SMD pad appears on both front and back copper)"
@@ -40099,9 +40096,8 @@ msgstr "Ajustar"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2404
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2420
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2446
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Seleccionar un valor para ajustar"
+msgstr "Seleccione una pista a sintonizar primero."
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2488
@@ -41025,9 +41021,8 @@ msgid "PTH pad %s %s of %s"
 msgstr "Pad PTH %s %s de %s"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Error: El pad debe tener un tamaño positivo."
+msgstr "(El pad debe tener un tamaño positivo)"
 
 #: pcbnew/pad.cpp:1887
 #, c-format
@@ -41035,29 +41030,24 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(El tamaño del agujero del pad PTH tiene que ser mayor que %s)"
 
 #: pcbnew/pad.cpp:1899
-#, fuzzy
 msgid "Pad hole not inside pad shape"
-msgstr "Advertencia: El agujero del pad no está dentro del pad."
+msgstr "El agujero del pad no está dentro de la forma del pad."
 
 #: pcbnew/pad.cpp:1912
-#, fuzzy
 msgid "Pad hole will leave no copper"
-msgstr "Advertencia: El agujero del pad no dejará cobre."
+msgstr "El agujero del pad no dejará cobre"
 
 #: pcbnew/pad.cpp:1917
-#, fuzzy
 msgid "Negative local clearance values have no effect"
-msgstr ""
-"Advertencia: los valores negativos de margen local no tendrán ningún efecto."
+msgstr "Los valores negativos de margen local no tendrán ningún efecto"
 
 #: pcbnew/pad.cpp:1936
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than some shape primitives; results "
 "may be surprising"
 msgstr ""
-"Advertencia: hay márgenes negativos de máscara de soldadura más grandes que "
-"algunas formas primitivas. Los resultados pueden ser sorprendentes."
+"La separación negativa de la máscara de soldadura es más grande que algunas "
+"formas primitivas; los resultados pueden ser sorprendentes"
 
 #: pcbnew/pad.cpp:1946
 #, fuzzy
