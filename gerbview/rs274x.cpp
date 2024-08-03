@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -670,11 +670,24 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
 
     case IMAGE_POLARITY:
+        // These commands are deprecated since 2012.
+        // So do nothing and prompt the user about this command
         if( strncasecmp( aText, "NEG", 3 ) == 0 )
+        {
             m_ImageNegative = true;
+            // IPPOS Gerber command is deprecated since 2012.
+            // in Gerber doc 2024, the advice is: warn user and skip it.
+            AddMessageToList( _( "IPNEG Gerber command is deprecated since 2012. Skip it" ) );
+        }
         else
+        {
             m_ImageNegative = false;
+            // IPPOS Gerber command is deprecated since 2012.
+            // However this is the default for a Gerber file, and does not have
+            // actual effect. Just skip it.
+        }
 
+        ok = false;
         break;
 
     case LOAD_POLARITY:
