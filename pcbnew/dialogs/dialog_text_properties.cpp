@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2010-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -371,6 +371,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
     if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
     {
         m_thickness.Show( true );
+        m_buttonUpdateTh->Show( true );
 
         int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
         int thickness = m_thickness.GetValue();
@@ -381,6 +382,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
     else
     {
         m_thickness.Show( false );
+        m_buttonUpdateTh->Show( false );
     }
 }
 
