@@ -28,12 +28,10 @@
 
 #include <geometry/shape_poly_set.h>
 #include <gal/color4d.h>
+#include <jobs/job_export_pcb_3d.h>     // For EXPORTER_STEP_PARAMS
 #include <layer_ids.h>
 #include <lset.h>
 
-// Default value to chain 2 shapes when creating the board outlines
-// from shapes on Edges.Cut layer
-#define BOARD_DEFAULT_CHAINING_EPSILON 0.01
 
 class PCBMODEL;
 class BOARD;
@@ -43,68 +41,6 @@ class PCB_TRACK;
 class FILENAME_RESOLVER;
 class STEP_PCB_MODEL;
 
-class EXPORTER_STEP_PARAMS
-{
-public:
-    EXPORTER_STEP_PARAMS() :
-            m_origin(),
-            m_overwrite( false ),
-            m_useGridOrigin( false ),
-            m_useDrillOrigin( false ),
-            m_includeUnspecified( true ),
-            m_includeDNP( true ),
-            m_substModels( true ),
-            m_BoardOutlinesChainingEpsilon( BOARD_DEFAULT_CHAINING_EPSILON ),
-            m_boardOnly( false ),
-            m_exportBoardBody( true ),
-            m_exportComponents( true ),
-            m_exportTracksVias( false ),
-            m_exportPads( false ),
-            m_exportZones( false ),
-            m_exportInnerCopper( false ),
-            m_exportSilkscreen( false ),
-            m_exportSoldermask( false ),
-            m_fuseShapes( false ),
-            m_optimizeStep( true ),
-            m_format( FORMAT::STEP )
-    {};
-
-    enum class FORMAT
-    {
-        STEP,
-        BREP,
-        XAO,
-        GLB
-    };
-
-    wxString m_outputFile;
-    wxString m_netFilter;
-
-    VECTOR2D m_origin;
-
-    bool     m_overwrite;
-    bool     m_useGridOrigin;
-    bool     m_useDrillOrigin;
-    bool     m_includeUnspecified;
-    bool     m_includeDNP;
-    bool     m_substModels;
-    double   m_BoardOutlinesChainingEpsilon;
-    bool     m_boardOnly;
-    bool     m_exportBoardBody;
-    bool     m_exportComponents;
-    bool     m_exportTracksVias;
-    bool     m_exportPads;
-    bool     m_exportZones;
-    bool     m_exportInnerCopper;
-    bool     m_exportSilkscreen;
-    bool     m_exportSoldermask;
-    bool     m_fuseShapes;
-    bool     m_optimizeStep;
-    FORMAT   m_format;
-
-    wxString GetDefaultExportExtension();
-    wxString GetFormatName();
-};
 
 class EXPORTER_STEP
 {

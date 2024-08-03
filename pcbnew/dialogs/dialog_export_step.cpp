@@ -87,6 +87,7 @@ protected:
     void onUpdateYPos( wxUpdateUIEvent& aEvent ) override;
     void onExportButton( wxCommandEvent& aEvent ) override;
     void onFormatChoice( wxCommandEvent& event ) override;
+    void OnComponentModeChange( wxCommandEvent& event ) override;
 
     int GetOrgUnitsChoice() const
     {
@@ -126,6 +127,13 @@ protected:
     }
 
 private:
+    enum class COMPONENT_MODE
+    {
+        EXPORT_ALL,
+        EXPORT_SELECTED,
+        CUSTOM_FILTER
+    };
+
     PCB_EDIT_FRAME*    m_parent;
     STEP_ORIGIN_OPTION m_origin;         // The last preference for STEP origin option
     double             m_userOriginX;    // remember last User Origin X value
@@ -144,6 +152,8 @@ private:
     static bool        m_exportSoldermask;  // remember last preference to export soldermask (stored only for the session)
     static bool        m_fuseShapes;     // remember last preference to fuse shapes (stored only for the session)
     wxString           m_netFilter;      // filter copper nets
+    wxString           m_componentFilter; // filter component reference designators
+    static COMPONENT_MODE m_componentMode;
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
     static int         m_formatLastChoice; // Store format option during a session
@@ -162,6 +172,7 @@ bool DIALOG_EXPORT_STEP::m_exportInnerCopper = false;
 bool DIALOG_EXPORT_STEP::m_exportSilkscreen = false;
 bool DIALOG_EXPORT_STEP::m_exportSoldermask = false;
 bool DIALOG_EXPORT_STEP::m_fuseShapes = false;
+DIALOG_EXPORT_STEP::COMPONENT_MODE DIALOG_EXPORT_STEP::m_componentMode = COMPONENT_MODE::EXPORT_ALL;
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -226,6 +237,20 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_cbRemoveDNP->SetValue( m_noDNP );
     m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
     m_cbOverwriteFile->SetValue( cfg->m_ExportStep.overwrite_file );
+
+    m_txtComponentFilter->SetValue( m_componentFilter );
+
+    switch( m_componentMode )
+    {
+    case COMPONENT_MODE::EXPORT_ALL:
+    case COMPONENT_MODE::EXPORT_SELECTED:
+        m_txtComponentFilter->Disable();
+        break;
+
+    case COMPONENT_MODE::CUSTOM_FILTER:
+        m_txtComponentFilter->Enable();
+        break;
+    }
 
     m_STEP_OrgUnitChoice->SetSelection( m_originUnits );
     wxString tmpStr;
@@ -329,6 +354,14 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
     m_exportSilkscreen = m_cbExportSilkscreen->GetValue();
     m_exportSoldermask = m_cbExportSoldermask->GetValue();
     m_fuseShapes = m_cbFuseShapes->GetValue();
+    m_componentFilter = m_txtComponentFilter->GetValue();
+
+    if( m_rbAllComponents->GetValue() )
+        m_componentMode = COMPONENT_MODE::EXPORT_ALL;
+    else if( m_rbOnlySelected->GetValue() )
+        m_componentMode = COMPONENT_MODE::EXPORT_SELECTED;
+    else
+        m_componentMode = COMPONENT_MODE::CUSTOM_FILTER;
 }
 
 
@@ -456,6 +489,12 @@ void DIALOG_EXPORT_STEP::onFormatChoice( wxCommandEvent& event )
 }
 
 
+void DIALOG_EXPORT_STEP::OnComponentModeChange( wxCommandEvent& event )
+{
+    m_txtComponentFilter->Enable( m_rbFilteredComponents->GetValue() );
+}
+
+
 void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
     wxString path = m_outputFileName->GetValue();
@@ -479,6 +518,14 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     }
 
     m_netFilter = m_txtNetFilter->GetValue();
+    m_componentFilter = m_txtComponentFilter->GetValue();
+
+    if( m_rbAllComponents->GetValue() )
+        m_componentMode = COMPONENT_MODE::EXPORT_ALL;
+    else if( m_rbOnlySelected->GetValue() )
+        m_componentMode = COMPONENT_MODE::EXPORT_SELECTED;
+    else
+        m_componentMode = COMPONENT_MODE::CUSTOM_FILTER;
 
     double tolerance;   // default value in mm
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
@@ -612,6 +659,34 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     {
         cmdK2S.Append( wxString::Format( wxT( " --net-filter %c%s%c" ), dblquote, m_netFilter,
                                          dblquote ) );
+    }
+
+    switch( m_componentMode )
+    {
+    case COMPONENT_MODE::EXPORT_SELECTED:
+    {
+        wxArrayString components;
+        SELECTION& selection = m_parent->GetCurrentSelection();
+
+        std::for_each( selection.begin(), selection.end(),
+                       [&components]( EDA_ITEM* item )
+                       {
+                           if( item->Type() == PCB_FOOTPRINT_T )
+                               components.push_back( static_cast<FOOTPRINT*>( item )->GetReference() );
+                       } );
+
+        cmdK2S.Append( wxString::Format( wxT( " --component-filter %c%s%c" ), dblquote,
+                                         wxJoin( components, ',' ), dblquote ) );
+        break;
+    }
+
+    case COMPONENT_MODE::CUSTOM_FILTER:
+        cmdK2S.Append( wxString::Format( wxT( " --component-filter %c%s%c" ), dblquote,
+                                         m_componentFilter, dblquote ) );
+        break;
+
+    default:
+        break;
     }
 
     switch( GetOriginOption() )

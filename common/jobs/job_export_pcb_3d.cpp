@@ -21,32 +21,37 @@
 #include <jobs/job_export_pcb_3d.h>
 
 
+wxString EXPORTER_STEP_PARAMS::GetDefaultExportExtension() const
+{
+    switch( m_Format )
+    {
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "step" );
+    case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "brep" );
+    case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "xao" );
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "glb" );
+    default:                                 return wxEmptyString; // shouldn't happen
+    }
+}
+
+
+wxString EXPORTER_STEP_PARAMS::GetFormatName() const
+{
+    switch( m_Format )
+    {
+        // honestly these names shouldn't be translated since they are mostly industry standard acronyms
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "STEP" );
+    case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "BREP" );
+    case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "XAO" );
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "Binary GLTF" );
+    default:                                 return wxEmptyString; // shouldn't happen
+    }
+}
+
+
 JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D( bool aIsCli ) :
     JOB( "3d", aIsCli ),
-    m_overwrite( false ),
-    m_useGridOrigin( false ),
-    m_useDrillOrigin( false ),
     m_hasUserOrigin( false ),
-    m_boardOnly( false ),
-    m_includeUnspecified( false ),
-    m_includeDNP( false ),
-    m_substModels( false ),
-    m_optimizeStep( false ),
     m_filename(),
-    m_outputFile(),
-    m_xOrigin( 0.0 ),
-    m_yOrigin( 0.0 ),
-    // max dist to chain 2 items (lines or curves) to build the board outlines
-    m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
-    m_exportBoardBody( true ),
-    m_exportComponents( true ),
-    m_exportTracks( false ),
-    m_exportPads( false ),
-    m_exportZones( false ),
-    m_exportInnerCopper( false ),
-    m_exportSilkscreen( false ),
-    m_exportSoldermask( false ),
-    m_fuseShapes( false ),
     m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
     m_vrmlUnits( JOB_EXPORT_PCB_3D::VRML_UNITS::METERS ),
     m_vrmlModelDir( wxEmptyString ),

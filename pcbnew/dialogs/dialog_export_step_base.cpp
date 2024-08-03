@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -63,6 +63,30 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	m_cbExportComponents = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export components"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbGeneralOptions->Add( m_cbExportComponents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer51;
+	bSizer51 = new wxBoxSizer( wxVERTICAL );
+
+	m_rbAllComponents = new wxRadioButton( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("All components"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAllComponents->SetValue( true );
+	bSizer51->Add( m_rbAllComponents, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_rbOnlySelected = new wxRadioButton( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Only selected"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbOnlySelected->SetToolTip( _("Export only the component models that are selected in the PCB editor") );
+
+	bSizer51->Add( m_rbOnlySelected, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_rbFilteredComponents = new wxRadioButton( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Components matching filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer51->Add( m_rbFilteredComponents, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_txtComponentFilter = new wxTextCtrl( sbGeneralOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtComponentFilter->Enable( false );
+	m_txtComponentFilter->SetToolTip( _("A list of comma-selected reference designators to export (wildcards are supported)") );
+
+	bSizer51->Add( m_txtComponentFilter, 0, wxALL|wxEXPAND, 5 );
+
+
+	sbGeneralOptions->Add( bSizer51, 1, wxEXPAND|wxLEFT, 20 );
 
 	m_cbExportTracks = new wxCheckBox( sbGeneralOptions->GetStaticBox(), wxID_ANY, _("Export tracks and vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportTracks->SetToolTip( _("Export tracks and vias on external copper layers.") );
@@ -254,6 +278,10 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	// Connect Events
 	m_choiceFormat->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onFormatChoice ), NULL, this );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onBrowseClicked ), NULL, this );
+	m_rbAllComponents->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
+	m_rbOnlySelected->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
+	m_rbFilteredComponents->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
+	m_txtComponentFilter->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentFilterTextClick ), NULL, this );
 	m_STEP_OrgUnitChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
 	m_STEP_Xorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
 	m_STEP_Yorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
@@ -265,6 +293,10 @@ DIALOG_EXPORT_STEP_BASE::~DIALOG_EXPORT_STEP_BASE()
 	// Disconnect Events
 	m_choiceFormat->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onFormatChoice ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onBrowseClicked ), NULL, this );
+	m_rbAllComponents->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
+	m_rbOnlySelected->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
+	m_rbFilteredComponents->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
+	m_txtComponentFilter->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentFilterTextClick ), NULL, this );
 	m_STEP_OrgUnitChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
 	m_STEP_Xorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
 	m_STEP_Yorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );

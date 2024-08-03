@@ -125,7 +125,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aStepJob->m_outputFile.IsEmpty() )
+    if( aStepJob->m_params.m_OutputFile.IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -146,7 +146,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
-        aStepJob->m_outputFile = fn.GetFullName();
+        aStepJob->m_params.m_OutputFile = fn.GetFullName();
     }
 
     if( aStepJob->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
@@ -164,8 +164,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         EXPORTER_VRML vrmlExporter( brd );
         wxString      messages;
 
-        double originX = pcbIUScale.IUTomm( aStepJob->m_xOrigin );
-        double originY = pcbIUScale.IUTomm( aStepJob->m_yOrigin );
+        double originX = pcbIUScale.IUTomm( aStepJob->m_params.m_Origin.x );
+        double originY = pcbIUScale.IUTomm( aStepJob->m_params.m_Origin.y );
 
         if( !aStepJob->m_hasUserOrigin )
         {
@@ -175,15 +175,15 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         }
 
         bool success = vrmlExporter.ExportVRML_File(
-                brd->GetProject(), &messages, aStepJob->m_outputFile, scale,
-                aStepJob->m_includeUnspecified, aStepJob->m_includeDNP,
+                brd->GetProject(), &messages, aStepJob->m_params.m_OutputFile, scale,
+                aStepJob->m_params.m_IncludeUnspecified, aStepJob->m_params.m_IncludeDNP,
                 !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
                 aStepJob->m_vrmlModelDir, originX, originY );
 
         if ( success )
         {
             m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
-                                                  aStepJob->m_outputFile ),
+                                                  aStepJob->m_params.m_OutputFile ),
                                 RPT_SEVERITY_INFO );
         }
         else
@@ -194,48 +194,28 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     }
     else
     {
-        EXPORTER_STEP_PARAMS params;
-        params.m_exportBoardBody = aStepJob->m_exportBoardBody;
-        params.m_exportComponents = aStepJob->m_exportComponents;
-        params.m_exportTracksVias = aStepJob->m_exportTracks;
-        params.m_exportPads = aStepJob->m_exportPads;
-        params.m_exportZones = aStepJob->m_exportZones;
-        params.m_exportInnerCopper = aStepJob->m_exportInnerCopper;
-        params.m_exportSilkscreen = aStepJob->m_exportSilkscreen;
-        params.m_exportSoldermask = aStepJob->m_exportSoldermask;
-        params.m_fuseShapes = aStepJob->m_fuseShapes;
-        params.m_includeUnspecified = aStepJob->m_includeUnspecified;
-        params.m_includeDNP = aStepJob->m_includeDNP;
-        params.m_BoardOutlinesChainingEpsilon = aStepJob->m_BoardOutlinesChainingEpsilon;
-        params.m_overwrite = aStepJob->m_overwrite;
-        params.m_substModels = aStepJob->m_substModels;
-        params.m_origin = VECTOR2D( aStepJob->m_xOrigin, aStepJob->m_yOrigin );
-        params.m_useDrillOrigin = aStepJob->m_useDrillOrigin;
-        params.m_useGridOrigin = aStepJob->m_useGridOrigin;
-        params.m_boardOnly = aStepJob->m_boardOnly;
-        params.m_optimizeStep = aStepJob->m_optimizeStep;
-        params.m_netFilter = aStepJob->m_netFilter;
+        EXPORTER_STEP_PARAMS params = aStepJob->m_params;
 
         switch( aStepJob->m_format )
         {
         case JOB_EXPORT_PCB_3D::FORMAT::STEP:
-            params.m_format = EXPORTER_STEP_PARAMS::FORMAT::STEP;
+            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP;
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::BREP:
-            params.m_format = EXPORTER_STEP_PARAMS::FORMAT::BREP;
+            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP;
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::XAO:
-            params.m_format = EXPORTER_STEP_PARAMS::FORMAT::XAO;
+            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO;
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:
-            params.m_format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
+            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
             break;
         default:
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
         EXPORTER_STEP stepExporter( brd, params );
-        stepExporter.m_outputFile = aStepJob->m_outputFile;
+        stepExporter.m_outputFile = params.m_OutputFile;
 
         if( !stepExporter.Export() )
             return CLI::EXIT_CODES::ERR_UNKNOWN;

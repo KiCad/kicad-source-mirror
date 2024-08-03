@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,8 +29,8 @@ class TEXT_CTRL_EVAL;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/statbox.h>
 #include <wx/radiobut.h>
+#include <wx/statbox.h>
 #include <wx/valtext.h>
 #include <wx/dialog.h>
 
@@ -54,6 +54,10 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbExportCompound_hidden;
 		wxCheckBox* m_cbExportBody;
 		wxCheckBox* m_cbExportComponents;
+		wxRadioButton* m_rbAllComponents;
+		wxRadioButton* m_rbOnlySelected;
+		wxRadioButton* m_rbFilteredComponents;
+		wxTextCtrl* m_txtComponentFilter;
 		wxCheckBox* m_cbExportTracks;
 		wxCheckBox* m_cbExportPads;
 		wxCheckBox* m_cbExportZones;
@@ -88,6 +92,8 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onFormatChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnComponentModeChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnComponentFilterTextClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateXPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateYPos( wxUpdateUIEvent& event ) { event.Skip(); }

@@ -53,6 +53,7 @@
 #define ARG_VRML_UNITS "--units"
 #define ARG_VRML_MODELS_DIR "--models-dir"
 #define ARG_VRML_MODELS_RELATIVE "--models-relative"
+#define ARG_COMPONENT_FILTER "--component-filter"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
@@ -119,6 +120,12 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_argParser.add_argument( ARG_NO_COMPONENTS )
                 .help( UTF8STDSTR( _( "Exclude 3D models for components" ) ) )
                 .flag();
+
+        m_argParser.add_argument( ARG_COMPONENT_FILTER )
+                .help( UTF8STDSTR( _( "Only include component 3D models matching this list of "
+                                      "reference designators (comma-separated, wildcards supported)"
+                                      ) ) )
+                .default_value( std::string() );
 
         m_argParser.add_argument( ARG_INCLUDE_TRACKS )
                 .help( UTF8STDSTR( _( "Export tracks and vias" ) ) )
@@ -196,37 +203,42 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D( true ) );
+    EXPORTER_STEP_PARAMS& params = step->m_params;
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
         || m_format == JOB_EXPORT_PCB_3D::FORMAT::XAO
         || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
-        step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
-        step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
-        step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
-        step->m_exportBoardBody = !m_argParser.get<bool>( ARG_NO_BOARD_BODY );
-        step->m_exportComponents = !m_argParser.get<bool>( ARG_NO_COMPONENTS );
-        step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
-        step->m_exportPads = m_argParser.get<bool>( ARG_INCLUDE_PADS );
-        step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
-        step->m_exportInnerCopper = m_argParser.get<bool>( ARG_INCLUDE_INNER_COPPER );
-        step->m_exportSilkscreen = m_argParser.get<bool>( ARG_INCLUDE_SILKSCREEN );
-        step->m_exportSoldermask = m_argParser.get<bool>( ARG_INCLUDE_SOLDERMASK );
-        step->m_fuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
-        step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
-        step->m_netFilter = From_UTF8( m_argParser.get<std::string>( ARG_NET_FILTER ).c_str() );
+        params.m_UseDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
+        params.m_UseGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
+        params.m_SubstModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
+        params.m_ExportBoardBody = !m_argParser.get<bool>( ARG_NO_BOARD_BODY );
+        params.m_ExportComponents = !m_argParser.get<bool>( ARG_NO_COMPONENTS );
+        params.m_ExportTracksVias = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
+        params.m_ExportPads = m_argParser.get<bool>( ARG_INCLUDE_PADS );
+        params.m_ExportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
+        params.m_ExportInnerCopper = m_argParser.get<bool>( ARG_INCLUDE_INNER_COPPER );
+        params.m_ExportSilkscreen = m_argParser.get<bool>( ARG_INCLUDE_SILKSCREEN );
+        params.m_ExportSoldermask = m_argParser.get<bool>( ARG_INCLUDE_SOLDERMASK );
+        params.m_FuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
+        params.m_BoardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
+        params.m_NetFilter = From_UTF8( m_argParser.get<std::string>( ARG_NET_FILTER ).c_str() );
+        params.m_ComponentFilter =
+                From_UTF8( m_argParser.get<std::string>( ARG_COMPONENT_FILTER ).c_str() );
+
     }
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
     {
-        step->m_optimizeStep = !m_argParser.get<bool>( ARG_NO_OPTIMIZE_STEP );
+        params.m_OptimizeStep = !m_argParser.get<bool>( ARG_NO_OPTIMIZE_STEP );
     }
 
-    step->m_includeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
-    step->m_includeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
-    step->m_overwrite = m_argParser.get<bool>( ARG_FORCE );
+    params.m_IncludeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
+    params.m_IncludeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
+    params.m_Overwrite = m_argParser.get<bool>( ARG_FORCE );
+    params.m_OutputFile = m_argOutput;
+
     step->m_filename = m_argInput;
-    step->m_outputFile = m_argOutput;
     step->m_format = m_format;
     step->SetVarOverrides( m_argDefineVars );
 
@@ -283,13 +295,13 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         std::smatch sm;
         std::string str( userOrigin.ToUTF8() );
         std::regex_search( str, sm, re_pattern );
-        step->m_xOrigin = atof( sm.str( 1 ).c_str() );
-        step->m_yOrigin = atof( sm.str( 2 ).c_str() );
+        step->m_params.m_Origin.x = atof( sm.str( 1 ).c_str() );
+        step->m_params.m_Origin.y = atof( sm.str( 2 ).c_str() );
 
         // Default unit for m_xOrigin and m_yOrigin is mm.
         // Convert in to board units. If the value is given in inches, it will be converted later
-        step->m_xOrigin = pcbIUScale.mmToIU( step->m_xOrigin );
-        step->m_yOrigin = pcbIUScale.mmToIU( step->m_yOrigin );
+        step->m_params.m_Origin.x = pcbIUScale.mmToIU( step->m_params.m_Origin.x );
+        step->m_params.m_Origin.y = pcbIUScale.mmToIU( step->m_params.m_Origin.y );
 
         std::string tunit( sm[3] );
 
@@ -305,8 +317,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             // only in, inch and mm are valid:
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
-                step->m_xOrigin *= 25.4;
-                step->m_yOrigin *= 25.4;
+                step->m_params.m_Origin *= 25.4;
             }
             else if( tunit.compare( "mm" ) )
             {
@@ -331,7 +342,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             std::smatch sm;
             std::string str( minDistance.ToUTF8() );
             std::regex_search( str, sm, re_pattern );
-            step->m_BoardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
+            step->m_params.m_BoardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
 
             std::string tunit( sm[2] );
 
@@ -339,7 +350,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             {
                 if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
                 {
-                    step->m_BoardOutlinesChainingEpsilon *= 25.4;
+                    step->m_params.m_BoardOutlinesChainingEpsilon *= 25.4;
                 }
                 else if( tunit.compare( "mm" ) )
                 {
