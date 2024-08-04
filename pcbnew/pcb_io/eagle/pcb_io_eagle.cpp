@@ -746,7 +746,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                 if( t.rot )
                 {
                     if( !t.rot->spin )
-                        degrees = t.rot->degrees;
+                        degrees = t.rot->mirror ? -t.rot->degrees : t.rot->degrees;
 
                     if( t.rot->mirror )
                         pcbtxt->SetMirrored( t.rot->mirror );
@@ -851,6 +851,22 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                     pcbtxt->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
                     break;
                 }
+
+                // Refine justification and rotation for mirrored texts
+                if( pcbtxt->IsMirrored() && degrees < -90 && degrees >= -270 )
+                {
+                    pcbtxt->SetTextAngle( EDA_ANGLE( 180+degrees, DEGREES_T ) );
+
+                    if( pcbtxt->GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                        pcbtxt->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    else if( pcbtxt->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                        pcbtxt->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+                    if( pcbtxt->GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+                        pcbtxt->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                    else if( pcbtxt->GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+                        pcbtxt->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+               }
             }
 
             m_xpath->pop();
