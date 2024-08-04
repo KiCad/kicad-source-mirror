@@ -1077,3 +1077,10 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT
 }
 
 
+const NET_SETTINGS* CONNECTIVITY_DATA::GetNetSettings() const
+{
+    if( std::shared_ptr<NET_SETTINGS> netSettings = m_netSettings.lock() )
+        return netSettings.get();
+    else
+        return nullptr;
+}

@@ -1749,7 +1749,7 @@ void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET
     {
         const wxString& netName = connectivity->GetNetNameForNetCode( netCode );
 
-        if( netSettings->HasEffectiveNetClass( netName ) )
+        if( netSettings && netSettings->HasEffectiveNetClass( netName ) )
             nc = netSettings->GetCachedEffectiveNetClass( netName ).get();
     }
 

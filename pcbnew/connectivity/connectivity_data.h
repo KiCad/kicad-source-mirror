@@ -271,7 +271,7 @@ public:
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
-    const NET_SETTINGS* GetNetSettings() const { return m_netSettings.get(); }
+    const NET_SETTINGS* GetNetSettings() const;
 
     bool            HasNetNameForNetCode( int nc ) const { return m_netcodeMap.count( nc ) > 0; }
     const wxString& GetNetNameForNetCode( int nc ) const { return m_netcodeMap.at( nc ); }
@@ -316,7 +316,7 @@ private:
     PROGRESS_REPORTER*              m_progressReporter;
 
     /// @brief Used to get netclass data when drawing ratsnests
-    std::shared_ptr<NET_SETTINGS> m_netSettings;
+    std::weak_ptr<NET_SETTINGS> m_netSettings;
 
     /// @brief Used to map netcode to net name
     std::map<int, wxString> m_netcodeMap;

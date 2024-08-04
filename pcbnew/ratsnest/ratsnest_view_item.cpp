@@ -132,7 +132,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         {
             const wxString& netName = m_data->GetNetNameForNetCode( l.netCode );
 
-            if( netSettings->HasEffectiveNetClass( netName ) )
+            if( netSettings && netSettings->HasEffectiveNetClass( netName ) )
                 nc = netSettings->GetCachedEffectiveNetClass( netName ).get();
         }
 
@@ -189,7 +189,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         {
             const wxString& netName = m_data->GetNetNameForNetCode( i );
 
-            if( netSettings->HasEffectiveNetClass( netName ) )
+            if( netSettings && netSettings->HasEffectiveNetClass( netName ) )
                 nc = netSettings->GetCachedEffectiveNetClass( netName ).get();
         }
 
