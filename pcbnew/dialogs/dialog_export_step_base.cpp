@@ -278,10 +278,10 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	// Connect Events
 	m_choiceFormat->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onFormatChoice ), NULL, this );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onBrowseClicked ), NULL, this );
+	m_cbExportComponents->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onCbExportComponents ), NULL, this );
 	m_rbAllComponents->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbOnlySelected->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbFilteredComponents->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
-	m_txtComponentFilter->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentFilterTextClick ), NULL, this );
 	m_STEP_OrgUnitChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
 	m_STEP_Xorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
 	m_STEP_Yorg->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );
@@ -293,10 +293,10 @@ DIALOG_EXPORT_STEP_BASE::~DIALOG_EXPORT_STEP_BASE()
 	// Disconnect Events
 	m_choiceFormat->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onFormatChoice ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onBrowseClicked ), NULL, this );
+	m_cbExportComponents->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onCbExportComponents ), NULL, this );
 	m_rbAllComponents->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbOnlySelected->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
 	m_rbFilteredComponents->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentModeChange ), NULL, this );
-	m_txtComponentFilter->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_EXPORT_STEP_BASE::OnComponentFilterTextClick ), NULL, this );
 	m_STEP_OrgUnitChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateUnits ), NULL, this );
 	m_STEP_Xorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateXPos ), NULL, this );
 	m_STEP_Yorg->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_STEP_BASE::onUpdateYPos ), NULL, this );

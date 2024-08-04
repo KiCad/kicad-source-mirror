@@ -92,8 +92,8 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onFormatChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCbExportComponents( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComponentModeChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnComponentFilterTextClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateXPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateYPos( wxUpdateUIEvent& event ) { event.Skip(); }

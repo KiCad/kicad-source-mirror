@@ -87,6 +87,7 @@ protected:
     void onUpdateYPos( wxUpdateUIEvent& aEvent ) override;
     void onExportButton( wxCommandEvent& aEvent ) override;
     void onFormatChoice( wxCommandEvent& event ) override;
+    void onCbExportComponents( wxCommandEvent& event ) override;
     void OnComponentModeChange( wxCommandEvent& event ) override;
 
     int GetOrgUnitsChoice() const
@@ -152,7 +153,7 @@ private:
     static bool        m_exportSoldermask;  // remember last preference to export soldermask (stored only for the session)
     static bool        m_fuseShapes;     // remember last preference to fuse shapes (stored only for the session)
     wxString           m_netFilter;      // filter copper nets
-    wxString           m_componentFilter; // filter component reference designators
+    static wxString    m_componentFilter; // filter component reference designators
     static COMPONENT_MODE m_componentMode;
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
@@ -173,6 +174,7 @@ bool DIALOG_EXPORT_STEP::m_exportSilkscreen = false;
 bool DIALOG_EXPORT_STEP::m_exportSoldermask = false;
 bool DIALOG_EXPORT_STEP::m_fuseShapes = false;
 DIALOG_EXPORT_STEP::COMPONENT_MODE DIALOG_EXPORT_STEP::m_componentMode = COMPONENT_MODE::EXPORT_ALL;
+wxString DIALOG_EXPORT_STEP::m_componentFilter;
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -242,15 +244,14 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     switch( m_componentMode )
     {
-    case COMPONENT_MODE::EXPORT_ALL:
-    case COMPONENT_MODE::EXPORT_SELECTED:
-        m_txtComponentFilter->Disable();
-        break;
-
-    case COMPONENT_MODE::CUSTOM_FILTER:
-        m_txtComponentFilter->Enable();
-        break;
+    case COMPONENT_MODE::EXPORT_ALL:      m_rbAllComponents->SetValue( true );      break;
+    case COMPONENT_MODE::EXPORT_SELECTED: m_rbOnlySelected->SetValue( true );       break;
+    case COMPONENT_MODE::CUSTOM_FILTER:   m_rbFilteredComponents->SetValue( true ); break;
     }
+
+    // Sync the enabled states
+    wxCommandEvent dummy;
+    DIALOG_EXPORT_STEP::onCbExportComponents( dummy );
 
     m_STEP_OrgUnitChoice->SetSelection( m_originUnits );
     wxString tmpStr;
@@ -486,6 +487,17 @@ void DIALOG_EXPORT_STEP::onFormatChoice( wxCommandEvent& event )
         path = path.Mid( 0, dotIdx ) << '.' << newExt;
 
     m_outputFileName->SetValue( path );
+}
+
+
+void DIALOG_EXPORT_STEP::onCbExportComponents( wxCommandEvent& event )
+{
+    bool enable = m_cbExportComponents->GetValue();
+
+    m_rbAllComponents->Enable( enable );
+    m_rbOnlySelected->Enable( enable );
+    m_rbFilteredComponents->Enable( enable );
+    m_txtComponentFilter->Enable( enable && m_rbFilteredComponents->GetValue() );
 }
 
 
