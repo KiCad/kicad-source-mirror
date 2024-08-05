@@ -1119,7 +1119,8 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     }
     else
     {
-        if( !PCB_IO_MGR::ConvertLibrary( nullptr, upgradeJob->m_libraryPath, upgradeJob->m_outputLibraryPath ) )
+        if( !PCB_IO_MGR::ConvertLibrary( nullptr, upgradeJob->m_libraryPath,
+                                         upgradeJob->m_outputLibraryPath, nullptr /* REPORTER */ ) )
         {
             m_reporter->Report( ( "Unable to convert library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;

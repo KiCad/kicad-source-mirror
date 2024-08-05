@@ -40,6 +40,7 @@ class FOOTPRINT;
 class STRING_UTF8_MAP;
 class PROJECT;
 class PROGRESS_REPORTER;
+class REPORTER;
 
 /**
  * A factory which returns an instance of a #PLUGIN.
@@ -233,7 +234,7 @@ public:
      * Convert a schematic symbol library to the latest KiCad format
      */
     static bool ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
-                                const wxString& aNewFilePath );
+                                const wxString& aNewFilePath, REPORTER* aReporter );
 };
 
 #endif // PCB_IO_MGR_H_

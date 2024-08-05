@@ -247,6 +247,22 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
             std::map<wxString, wxString> properties = parser.ReadProperties();
 
             uint32_t numberOfFootprints = parser.Read<uint32_t>();
+
+            // The number of footprints might be bogus. Following it is a list of index strings to
+            // find the footprints, and this list might actually be longer than how many footprints
+            // actually are in the library.
+            // If this case was detected, truncate the list to the number of footprints.
+            // Sample in #18452 shows that by simply truncating can get the correct footprints.
+            // Fixes https://gitlab.com/kicad/code/kicad/issues/18452.
+            // After truncation we shall no longer detect if the stream is fully parsed.
+            bool footprintListNotTruncated = true;
+
+            if ( patternMap.size() < numberOfFootprints )
+            {
+                numberOfFootprints = patternMap.size();
+                footprintListNotTruncated = false;
+            }
+
             aFootprintNames.Alloc( numberOfFootprints );
 
             for( size_t i = 0; i < numberOfFootprints; i++ )
@@ -257,6 +273,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
                 wxString           fpPattern( charBuffer, wxConvISO8859_1 );
 
                 auto it = patternMap.find( fpPattern );
+
                 if( it != patternMap.end() )
                 {
                     aFootprintNames.Add( it->second ); // Proper unicode name
@@ -276,7 +293,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
                                                   FormatPath( streamName ) ) );
             }
 
-            if( parser.GetRemainingBytes() != 0 )
+            if( footprintListNotTruncated && parser.GetRemainingBytes() != 0 )
             {
                 THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed",
                                                   FormatPath( streamName ) ) );
