@@ -2332,7 +2332,12 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
 
             table = new SCH_TABLE( 0 );
             table->SetColCount( 1 );
-            table->AddCell( new SCH_TABLECELL() );
+
+            SCH_TABLECELL* tableCell = new SCH_TABLECELL();
+            int defaultTextSize = schematic->Settings().m_DefaultTextSize;
+
+            tableCell->SetTextSize( VECTOR2I( defaultTextSize, defaultTextSize ) );
+            table->AddCell( tableCell );
 
             table->SetParent( schematic );
             table->SetFlags( IS_NEW );
@@ -2399,6 +2404,9 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
                 for( int col = 0; col < colCount; ++col )
                 {
                     SCH_TABLECELL* cell = new SCH_TABLECELL();
+                    int defaultTextSize = schematic->Settings().m_DefaultTextSize;
+
+                    cell->SetTextSize( VECTOR2I( defaultTextSize, defaultTextSize ) );
                     cell->SetPosition( origin + VECTOR2I( col * cellSize.x, row * cellSize.y ) );
                     cell->SetEnd( cell->GetPosition() + cellSize );
                     table->AddCell( cell );
