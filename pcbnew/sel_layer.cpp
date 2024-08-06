@@ -128,7 +128,6 @@ private:
     PCB_LAYER_PRESENTATION    m_layerPresentation;
     PCB_LAYER_ID              m_layerSelected;
     LSET                      m_notAllowedLayersMask;
-    BOARD*                    m_brd;
     std::vector<PCB_LAYER_ID> m_layersIdLeftColumn;
     std::vector<PCB_LAYER_ID> m_layersIdRightColumn;
 };
@@ -629,7 +628,7 @@ private:
      */
     void setCurrentSelection( int aLeftRow, int aRightRow )
     {
-        const auto selectGridRow = [this]( wxGrid& aGrid, int aRow, bool aSelect )
+        const auto selectGridRow = []( wxGrid& aGrid, int aRow, bool aSelect )
         {
             // At start, there is no old row
             if( aRow < 0 )

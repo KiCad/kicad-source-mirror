@@ -2387,8 +2387,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     {
         wxCHECK_RET( !subgraphs.empty(), wxS( "Invalid empty subgraph" ) );
 
-        const CONNECTION_SUBGRAPH* driverSubgraph = nullptr;
-        std::set<wxString>         netclasses;
+        std::set<wxString> netclasses;
 
         // Collect all netclasses on all subgraphs for this net
         for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
