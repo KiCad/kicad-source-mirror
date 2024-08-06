@@ -287,8 +287,6 @@ public:
                || ( m_layerA == aOther.m_layerB && m_layerB == aOther.m_layerA );
     }
 
-    bool operator<=> ( const LAYER_PAIR& aOther ) const = default;
-
 private:
     PCB_LAYER_ID m_layerA;
     PCB_LAYER_ID m_layerB;
