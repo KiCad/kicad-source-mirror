@@ -381,6 +381,13 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
         // Remove group membership from dummy item before deleting
         dummy.SetParentGroup( nullptr );
     }
+    else if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
+    {
+        // A custom pad can have many complex subshape items. To avoid issues, use its
+        // final polygon shape, not its basic shape set. One cannot apply the clearance
+        // to each subshape: it does no work
+        aPad->TransformShapeToPolygon( poly, aLayer, 0, maxError );
+    }
     else
     {
         auto padShapes = std::static_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
@@ -429,7 +436,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
                 break;
 
             case SH_POLY_SET:
-                poly = *(SHAPE_POLY_SET*) shape;
+                poly.Append( *static_cast<const SHAPE_POLY_SET*>( shape ) );
                 break;
 
             case SH_ARC:
