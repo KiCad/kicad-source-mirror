@@ -11,13 +11,14 @@
 # pominglee <pominglee@gmail.com>, 2024.
 # Andrew <yenchang.lin@gmail.com>, 2024.
 # CloverGit <w991593239@163.com>, 2024.
+# Ricky From Hong Kong <lamricky11@hotmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-18 18:45+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2024-08-06 11:09+0000\n"
+"Last-Translator: Ricky From Hong Kong <lamricky11@hotmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -36964,7 +36965,7 @@ msgstr "用戶 1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
 #, fuzzy
 msgid " Off-board, front"
-msgstr "電路板外, 測試"
+msgstr " 電路板外，測試"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
