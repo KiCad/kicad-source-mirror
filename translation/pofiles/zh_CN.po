@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-08-02 10:09+0000\n"
+"PO-Revision-Date: 2024-08-07 09:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -9614,7 +9614,7 @@ msgstr "如果在库符号中不存在, 则移除字段"
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:98
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr "移除来源库中不存在的符号字段"
+msgstr "移除在来源库符号中不存在的符号字段"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:125
 msgid "Reset fields if empty in library symbol"
@@ -37183,7 +37183,7 @@ msgstr "在库中找不到封装"
 
 #: pcbnew/drc/drc_item.cpp:197
 msgid "Footprint doesn't match copy in library"
-msgstr "封装与来源库封装存在差异"
+msgstr "封装与来源库中的封装存在差异"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Assertion failure"
@@ -37906,7 +37906,7 @@ msgstr "在库 %2$s 中未找到封装 '%1$s'。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:831
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "封装 '%s' 与来源库封装 '%s' 存在差异。"
+msgstr "封装 '%s' 与来源库 '%s' 中的封装存在差异。"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:114
 #, c-format
