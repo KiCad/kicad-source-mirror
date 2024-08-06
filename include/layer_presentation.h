@@ -26,7 +26,7 @@
 
 #include <gal/color4d.h>
 #include <layer_ids.h>
-#include <layer_pairs.h>
+#include "../pcbnew/layer_pairs.h"
 
 class wxBitmap;
 
