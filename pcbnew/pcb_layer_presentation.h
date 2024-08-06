@@ -25,7 +25,7 @@
 #define PCB_LAYER_PRESENTATION_H
 
 #include <lseq.h>
-#include <layer_presentation.h>
+#include <widgets/layer_presentation.h>
 
 class LAYER_PAIR;
 class PCB_BASE_FRAME;

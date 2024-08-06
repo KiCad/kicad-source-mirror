@@ -25,7 +25,7 @@
 
 #include "gbr_layer_box_selector.h"
 
-#include <layer_presentation.h>
+#include <widgets/layer_presentation.h>
 
 #include <gerbview_frame.h>
 #include <gerber_file_image_list.h>

@@ -33,7 +33,6 @@
 #include <board_design_settings.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
-#include <layer_presentation.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
@@ -51,6 +50,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/layer_box_selector.h>
+#include <widgets/layer_presentation.h>
 #include <widgets/pcb_properties_panel.h>
 #include <widgets/net_inspector_panel.h>
 #include <widgets/pcb_search_pane.h>

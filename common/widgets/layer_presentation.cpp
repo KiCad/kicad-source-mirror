@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "layer_presentation.h"
+#include "widgets/layer_presentation.h"
 
 #include <wx/bitmap.h>
 #include <wx/dcmemory.h>

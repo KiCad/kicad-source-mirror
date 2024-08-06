@@ -30,12 +30,11 @@
 #include <settings/color_settings.h>
 #include <footprint_editor_settings.h>
 #include <board.h>
-#include <layer_presentation.h>
 #include <lset.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <settings/color_settings.h>
-#include <widgets/layer_box_selector.h>
+#include <widgets/layer_presentation.h>
 
 
 //-------- Custom wxGridCellRenderers --------------------------------------------------
