@@ -160,12 +160,12 @@ std::unique_ptr<wxBitmap> LAYER_PRESENTATION::CreateLayerPairIcon( const COLOR4D
 }
 
 
-std::unique_ptr<wxBitmap> LAYER_PRESENTATION::CreateLayerPairIcon( const LAYER_PAIR& aPair,
-                                                                   int               aScale ) const
+std::unique_ptr<wxBitmap> LAYER_PRESENTATION::CreateLayerPairIcon( int aLeftLayer, int aRightLayer,
+                                                                   int aScale ) const
 {
     const COLOR4D bgColor = getLayerColor( LAYER_PCB_BACKGROUND );
-    const COLOR4D topColor = getLayerColor( aPair.GetLayerA() );
-    const COLOR4D bottomColor = getLayerColor( aPair.GetLayerB() );
+    const COLOR4D topColor = getLayerColor( aLeftLayer );
+    const COLOR4D bottomColor = getLayerColor( aRightLayer );
 
     return CreateLayerPairIcon( bgColor, topColor, bottomColor, aScale );
 }

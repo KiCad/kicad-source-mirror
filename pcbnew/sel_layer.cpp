@@ -453,8 +453,9 @@ private:
                              aLayerPairInfo.IsEnabled() ? wxT( "1" ) : wxT( "0" ) );
 
         // Set the color swatch
-        std::unique_ptr<wxBitmap>& swatch = m_swatches.emplace_back(
-                m_layerPresentation.CreateLayerPairIcon( layerPair, KiIconScale( &m_grid ) ) );
+        std::unique_ptr<wxBitmap>& swatch =
+                m_swatches.emplace_back( m_layerPresentation.CreateLayerPairIcon(
+                        layerPair.GetLayerA(), layerPair.GetLayerB(), KiIconScale( &m_grid ) ) );
 
         m_grid.SetCellRenderer( aRow, (int) COLNUMS::SWATCH,
                                 new GRID_CELL_ICON_RENDERER( *swatch ) );

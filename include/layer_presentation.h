@@ -26,7 +26,6 @@
 
 #include <gal/color4d.h>
 #include <layer_ids.h>
-#include "../pcbnew/layer_pairs.h"
 
 class wxBitmap;
 
@@ -67,7 +66,8 @@ public:
      * Create a layer pair "side-by-side swatch" icon for the given
      * layer pair with the style of this presentation.
      */
-    std::unique_ptr<wxBitmap> CreateLayerPairIcon( const LAYER_PAIR& aPair, int aScale ) const;
+    std::unique_ptr<wxBitmap> CreateLayerPairIcon( int aLeftLayer, int aRightLayer,
+                                                   int aScale ) const;
 };
 
 #endif // LAYER_PRESENTATION_H
