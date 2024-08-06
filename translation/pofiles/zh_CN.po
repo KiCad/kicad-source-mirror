@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-08-02 10:09+0000\n"
+"PO-Revision-Date: 2024-08-06 11:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -10241,7 +10241,7 @@ msgstr "如果在库符号中不存在, 则移除字段"
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:98
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr "移除来源库中不存在的符号字段"
+msgstr "移除在来源库符号中不存在的符号字段"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
 msgid "Reset fields if empty in library symbol"
@@ -15568,7 +15568,7 @@ msgstr "符号 '%s' 有多个引脚具有相同的引脚编号"
 #: eeschema/erc/erc.cpp:1289
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "封装 '%s' 与来源库封装 '%s' 存在差异"
+msgstr "符号 '%s' 与来源库 '%s' 中的符号存在差异"
 
 #: eeschema/erc/erc.cpp:1338
 #, c-format
@@ -15803,7 +15803,7 @@ msgstr "库符号问题"
 
 #: eeschema/erc/erc_item.cpp:188
 msgid "Symbol doesn't match copy in library"
-msgstr "符号与来源库符号存在差异"
+msgstr "符号与来源库中的符号存在差异"
 
 #: eeschema/erc/erc_item.cpp:192
 msgid "Footprint link issue"
@@ -38628,7 +38628,7 @@ msgstr "在库中找不到封装"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Footprint doesn't match copy in library"
-msgstr "封装与来源库封装存在差异"
+msgstr "封装与来源库中的封装存在差异"
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Assertion failure"
@@ -39340,7 +39340,7 @@ msgstr "正在根据库检查电路板封装..."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:895
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "封装 '%s' 与来源库封装 '%s' 存在差异。"
+msgstr "封装 '%s' 与来源库 '%s' 中的封装存在差异。"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:114
 #, c-format
