@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,6 +40,7 @@
 #define ARG_GENERATE_MAP "--generate-map"
 #define ARG_MAP_FORMAT "--map-format"
 #define ARG_DRILL_ORIGIN "--drill-origin"
+
 
 CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drill",
                                                                                      false, true )
@@ -109,7 +110,8 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
 
     if( !drillJob->m_outputDir.IsEmpty() )
     {
-        wxFileName fn( drillJob->m_outputDir );
+        wxFileName fn( drillJob->m_outputDir, wxEmptyString );
+
         if( !fn.IsDir() )
         {
             wxFprintf( stderr, _( "Output must be a directory\n" ) );
@@ -175,6 +177,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
 
     wxString drillFormat =
             From_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_OVAL_FORMAT ).c_str() );
+
     if( drillFormat == wxS( "route" ) )
     {
         drillJob->m_excellonOvalDrillRoute = true;
