@@ -174,7 +174,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     SetupStandardButtons();
 
     finishDialogSettings();
-    m_initialized = true;
 }
 
 
@@ -371,6 +370,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     Layout();
     adjustGridColumns();
+    m_initialized = true;
 
     return true;
 }
@@ -655,6 +655,8 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
 
     m_itemsGrid->EnableCellEditControl( true );
     m_itemsGrid->ShowCellEditControl();
+
+    OnModify();
 }
 
 
@@ -701,6 +703,8 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
             m_itemsGrid->SetGridCursor( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
         }
     }
+
+    OnModify();
 }
 
 
@@ -780,6 +784,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
                 referenceEditor->DecRef();
             }
         }
+
         m_initialFocus = false;
     }
 }
@@ -819,13 +824,36 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnGridSize( wxSizeEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES::OnPageChange( wxNotebookEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES::OnPageChanging( wxNotebookEvent& aEvent )
 {
-    int page = aEvent.GetSelection();
-
-    // Shouldn't be necessary, but is on at least OSX
-    if( page >= 0 )
-        m_NoteBook->ChangeSelection( (unsigned) page );
+    if( !m_itemsGrid->CommitPendingChanges() )
+        aEvent.Veto();
 }
 
 
+void DIALOG_FOOTPRINT_PROPERTIES::OnCheckBox( wxCommandEvent& event )
+{
+    if( m_initialized )
+        OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES::OnCombobox( wxCommandEvent& event )
+{
+    if( m_initialized )
+        OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES::OnText( wxCommandEvent& event )
+{
+    if( m_initialized )
+        OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES::OnChoice( wxCommandEvent& event )
+{
+    if( m_initialized )
+        OnModify();
+}

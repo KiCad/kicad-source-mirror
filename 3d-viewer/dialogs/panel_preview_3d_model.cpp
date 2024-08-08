@@ -356,6 +356,7 @@ void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
 
         // Update the dummy footprint for the preview
         UpdateDummyFootprint( false );
+        onModify();
     }
 }
 
@@ -371,6 +372,7 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
 
         // Update the dummy footprint for the preview
         UpdateDummyFootprint( false );
+        onModify();
     }
 }
 
@@ -625,4 +627,11 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
         m_previewPane->ReloadRequest();
 
     m_previewPane->Request_refresh();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::onModify()
+{
+    if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
+        dlg->OnModify();
 }

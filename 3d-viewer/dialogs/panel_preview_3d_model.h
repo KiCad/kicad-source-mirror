@@ -199,6 +199,8 @@ private:
         m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_BOTTOM );
     }
 
+    void onModify();
+
 private:
     PCB_BASE_FRAME*          m_parentFrame;
     EDA_3D_CANVAS*           m_previewPane;

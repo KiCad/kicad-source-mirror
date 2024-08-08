@@ -71,6 +71,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnFilterDClick( wxMouseEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
+    void OnPageChanging( wxNotebookEvent& event ) override;
 
     void adjustGridColumns();
     void syncControlStates( bool aIsAlias );

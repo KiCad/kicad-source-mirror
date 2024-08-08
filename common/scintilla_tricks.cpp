@@ -269,13 +269,8 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
             if( !aEvent.ShiftDown() )
                 flags |= wxNavigationKeyEvent::IsForward;
 
-            wxWindow* parent = m_te->GetParent();
-
-            while( parent && dynamic_cast<DIALOG_SHIM*>( parent ) == nullptr )
-                parent = parent->GetParent();
-
-            if( parent )
-                parent->NavigateIn( flags );
+            if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( m_te ) ) )
+                dlg->NavigateIn( flags );
         }
         else if( dynamic_cast<WX_GRID*>( ancestor ) )
         {

@@ -83,7 +83,6 @@ public:
 private:
     // virtual event functions
     void OnGridSize( wxSizeEvent& event ) override;
-    void OnFootprintNameText( wxCommandEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnAddLayer( wxCommandEvent& event ) override;
@@ -91,6 +90,10 @@ private:
     void OnAddPadGroup( wxCommandEvent& event ) override;
     void OnRemovePadGroup( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnPageChanging( wxNotebookEvent& event ) override;
+    void OnText( wxCommandEvent& event ) override;
+    void OnChoice( wxCommandEvent& event ) override;
+    void OnCheckBox( wxCommandEvent& event ) override;
 
     bool checkFootprintName( const wxString& aFootprintName );
 
@@ -99,6 +102,7 @@ private:
 private:
     FOOTPRINT_EDIT_FRAME*      m_frame;
     FOOTPRINT*                 m_footprint;
+    bool                       m_initialized;
 
     static NOTEBOOK_PAGES      m_page;       // remember the last open page during session
 

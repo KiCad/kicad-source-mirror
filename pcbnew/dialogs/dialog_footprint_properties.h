@@ -73,7 +73,11 @@ private:
     void OnAddField( wxCommandEvent&  ) override;
     void OnDeleteField( wxCommandEvent&  ) override;
     void OnUpdateUI( wxUpdateUIEvent&  ) override;
-    void OnPageChange( wxNotebookEvent& event ) override;
+    void OnPageChanging( wxNotebookEvent& event ) override;
+    void OnCombobox( wxCommandEvent& event ) override;
+    void OnText( wxCommandEvent& event ) override;
+    void OnChoice( wxCommandEvent& event ) override;
+    void OnCheckBox( wxCommandEvent& event ) override;
 
     void adjustGridColumns();
 

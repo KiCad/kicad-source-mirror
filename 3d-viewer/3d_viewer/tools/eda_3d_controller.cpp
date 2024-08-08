@@ -118,12 +118,9 @@ int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() )
         {
             wxWindow* canvas = m_toolMgr->GetToolHolder()->GetToolCanvas();
-            wxWindow* topLevelParent = wxGetTopLevelParent( canvas->GetParent() );
 
-            if( topLevelParent && dynamic_cast<DIALOG_SHIM*>( topLevelParent ) )
+            if( DIALOG_SHIM* dialog = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( canvas ) ) )
             {
-                DIALOG_SHIM* dialog = static_cast<DIALOG_SHIM*>( topLevelParent );
-
                 if( dialog->IsQuasiModal() )
                     dialog->EndQuasiModal( wxID_CANCEL );
                 else

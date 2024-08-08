@@ -126,6 +126,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
         DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( aParent ),
         m_frame( aParent ),
         m_footprint( aFootprint ),
+        m_initialized( false ),
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
         m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
                       m_SolderMaskMarginUnits ),
@@ -365,6 +366,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     Layout();
     adjustGridColumns();
+    m_initialized = true;
 
     return true;
 }
@@ -631,15 +633,6 @@ static bool footprintIsFromBoard( FOOTPRINT* aFootprint )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
-{
-    if( !footprintIsFromBoard( m_footprint ) )
-    {
-        // Currently: nothing to do
-    }
-}
-
-
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 {
     if( !m_itemsGrid->CommitPendingChanges() )
@@ -673,6 +666,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
     m_itemsGrid->EnableCellEditControl( true );
     m_itemsGrid->ShowCellEditControl();
+
+    OnModify();
 }
 
 
@@ -722,6 +717,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
             m_itemsGrid->SetGridCursor( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
         }
     }
+
+    OnModify();
 }
 
 
@@ -744,6 +741,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddLayer( wxCommandEvent& event )
     m_privateLayersGrid->SetFocus();
     m_privateLayersGrid->MakeCellVisible( m_privateLayers->size() - 1, 0 );
     m_privateLayersGrid->SetGridCursor( m_privateLayers->size() - 1, 0 );
+
+    OnModify();
 }
 
 
@@ -770,6 +769,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event
         m_privateLayersGrid->SetGridCursor( std::max( 0, curRow-1 ),
                                             m_privateLayersGrid->GetGridCursorCol() );
     }
+
+    OnModify();
 }
 
 
@@ -786,6 +787,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddPadGroup( wxCommandEvent& event
 
     m_padGroupsGrid->EnableCellEditControl( true );
     m_padGroupsGrid->ShowCellEditControl();
+
+    OnModify();
 }
 
 
@@ -810,6 +813,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemovePadGroup( wxCommandEvent& ev
     curRow = std::max( 0, curRow - 1 );
     m_padGroupsGrid->MakeCellVisible( curRow, m_padGroupsGrid->GetGridCursorCol() );
     m_padGroupsGrid->SetGridCursor( curRow, m_padGroupsGrid->GetGridCursorCol() );
+
+    OnModify();
 }
 
 
@@ -927,4 +932,35 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridSize( wxSizeEvent& aEvent )
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     aEvent.Skip();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnPageChanging( wxNotebookEvent& aEvent )
+{
+    if( !m_itemsGrid->CommitPendingChanges() )
+        aEvent.Veto();
+
+    if( !m_privateLayersGrid->CommitPendingChanges() )
+        aEvent.Veto();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnCheckBox( wxCommandEvent& event )
+{
+    if( m_initialized )
+        OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnText( wxCommandEvent& event )
+{
+    if( m_initialized )
+        OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnChoice( wxCommandEvent& event )
+{
+    if( m_initialized )
+        OnModify();
 }

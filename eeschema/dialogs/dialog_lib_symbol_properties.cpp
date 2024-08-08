@@ -989,3 +989,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnSpinCtrlText( wxCommandEvent& event )
 }
 
 
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnPageChanging( wxBookCtrlEvent& aEvent )
+{
+    if( !m_grid->CommitPendingChanges() )
+        aEvent.Veto();
+}

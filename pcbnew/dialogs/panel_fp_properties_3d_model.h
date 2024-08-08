@@ -86,6 +86,8 @@ private:
 
     void select3DModel( int aModelIdx );
 
+    void onModify();
+
 private:
     DIALOG_SHIM*            m_parentDialog;
     PCB_BASE_EDIT_FRAME*    m_frame;

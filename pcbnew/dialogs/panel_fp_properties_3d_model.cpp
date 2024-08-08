@@ -273,6 +273,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
     }
 
     m_previewPane->UpdateDummyFootprint();
+    onModify();
 }
 
 
@@ -295,6 +296,8 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnRemove3DModel( wxCommandEvent&  )
         select3DModel( idx );       // will clamp idx within bounds
         m_previewPane->UpdateDummyFootprint();
     }
+
+    onModify();
 }
 
 
@@ -416,6 +419,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     updateValidateStatus( idx );
 
     m_previewPane->UpdateDummyFootprint();
+    onModify();
 }
 
 
@@ -444,6 +448,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DRow( wxCommandEvent&  )
     m_modelsGrid->ShowCellEditControl();
 
     updateValidateStatus( row );
+    onModify();
 }
 
 
@@ -566,4 +571,11 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnGridSize( wxSizeEvent& event )
 void PANEL_FP_PROPERTIES_3D_MODEL::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_button3DShapeRemove->Enable( m_modelsGrid->GetNumberRows() > 0 );
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::onModify()
+{
+    if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
+        dlg->OnModify();
 }

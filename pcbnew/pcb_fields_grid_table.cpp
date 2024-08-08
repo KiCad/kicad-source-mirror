@@ -423,6 +423,7 @@ void PCB_FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue
     }
 
     GetView()->Refresh();
+    m_dialog->OnModify();
 }
 
 
@@ -442,6 +443,8 @@ void PCB_FIELDS_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         break;
     }
+
+    m_dialog->OnModify();
 }
 
 
@@ -460,5 +463,7 @@ void PCB_FIELDS_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a long value" ), aCol ) );
         break;
     }
+
+    m_dialog->OnModify();
 }
 

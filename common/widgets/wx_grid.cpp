@@ -39,6 +39,7 @@
 
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <dialog_shim.h>
 
 
 wxGridCellAttr* WX_GRID_TABLE_BASE::enhanceAttr( wxGridCellAttr* aInputAttr, int aRow, int aCol,
@@ -676,6 +677,9 @@ bool WX_GRID::CommitPendingChanges( bool aQuietMode )
             SetCellValue( row, col, oldval );
             return false;
         }
+
+        if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
+            dlg->OnModify();
     }
 
     return true;

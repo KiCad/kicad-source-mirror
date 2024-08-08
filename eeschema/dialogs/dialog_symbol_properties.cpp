@@ -1226,3 +1226,12 @@ void DIALOG_SYMBOL_PROPERTIES::onUpdateEditLibrarySymbol( wxUpdateUIEvent& event
     event.Enable( m_symbol && m_symbol->GetLibSymbolRef() );
 }
 
+
+void DIALOG_SYMBOL_PROPERTIES::OnPageChanging( wxBookCtrlEvent& aEvent )
+{
+    if( !m_fieldsGrid->CommitPendingChanges() )
+        aEvent.Veto();
+
+    if( !m_pinGrid->CommitPendingChanges() )
+        aEvent.Veto();
+}
