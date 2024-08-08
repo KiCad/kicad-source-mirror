@@ -186,17 +186,57 @@ void NETINFO_LIST::buildListOfNets()
 
 void NETINFO_LIST::RebuildDisplayNetnames() const
 {
-    std::map<wxString, int> shortNames;
+    std::map<wxString, std::vector<wxString>> shortNameMap;
 
     for( NETINFO_ITEM* net : *this )
-        shortNames[net->m_shortNetname]++;
+        shortNameMap[net->m_shortNetname].push_back( net->m_netname );
 
     for( NETINFO_ITEM* net : *this )
     {
-        if( shortNames[net->m_shortNetname] == 1 )
+        if( shortNameMap[net->m_shortNetname].size() == 1 )
+        {
             net->m_displayNetname = UnescapeString( net->m_shortNetname );
+        }
         else
-            net->m_displayNetname = UnescapeString( net->m_netname );
+        {
+            wxArrayString              parts = wxSplit( net->m_netname, '/' );
+            std::vector<wxArrayString> aggregateParts;
+            std::optional<size_t>      firstNonCommon;
+
+            for( const wxString& longName : shortNameMap[net->m_shortNetname] )
+                aggregateParts.push_back( wxSplit( longName, '/' ) );
+
+            for( size_t ii = 0; ii < parts.size() && !firstNonCommon; ++ii )
+            {
+                for( const wxArrayString& otherParts : aggregateParts )
+                {
+                    if( ii < otherParts.size() && otherParts[ii] == parts[ii] )
+                        continue;
+
+                    firstNonCommon = ii;
+                    break;
+                }
+            }
+
+            if( firstNonCommon.value_or( 0 ) > 0 && firstNonCommon.value() < parts.size() )
+            {
+                wxString disambiguatedName;
+
+                for( size_t ii = firstNonCommon.value(); ii < parts.size(); ++ii )
+                {
+                    if( !disambiguatedName.IsEmpty() )
+                        disambiguatedName += wxS( "/" );
+
+                    disambiguatedName += parts[ii];
+                }
+
+                net->m_displayNetname = UnescapeString( disambiguatedName );
+            }
+            else
+            {
+                net->m_displayNetname = UnescapeString( net->m_netname );
+            }
+        }
     }
 
     m_DisplayNetnamesDirty = false;
