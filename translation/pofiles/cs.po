@@ -20,10 +20,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-15 07:09+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2024-08-09 08:09+0000\n"
+"Last-Translator: ivit VT <st17ivito@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -309,7 +309,6 @@ msgstr "Nastav dle editoru DPS"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:331
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:613
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Plot Settings"
 msgstr "Nastav dle Nastavení pro vykreslování DPS"
 
@@ -946,9 +945,8 @@ msgid "Configure Paths"
 msgstr "Konfigurace cest"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "Mód modelu"
+msgstr "Vložit model"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -2854,11 +2852,13 @@ msgid "Drawing Sheet File"
 msgstr "Soubor výkresového listu"
 
 #: common/dialogs/dialog_page_settings.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Chyba při načítání listu výkresu '%s'."
+msgstr ""
+"Chyba při načítání listu výkresu '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -3722,19 +3722,21 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Výchozí 'explorer.exe /n,/select,%F' pro tento operační systém."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Příkaz průzkumníku souborů.\n"
+"příklad:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
-msgstr ""
+msgstr "Příkaz průzkumníku s povinnou příponou '%s' za zadaným znakem."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -3780,9 +3782,8 @@ msgid "Text editor:"
 msgstr "Textový editor:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Název souboru:"
+msgstr "Správce souborů:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -4144,25 +4145,22 @@ msgid "Reset Unique Id"
 msgstr "Obnovení jedinečného ID"
 
 #: common/dialogs/panel_embedded_files.cpp:87
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Nová knihovna Reference"
+msgstr "Kopírovat vloženou referenci"
 
 #: common/dialogs/panel_embedded_files.cpp:159
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Vybrat hodnotu k doladění"
+msgstr "Vybrat soubor ke vložení"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "Všechny soubory"
+msgstr "Všechny soubory *.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "Soubor %s již existuje."
+msgstr "Soubor '%s' již existuje."
 
 #: common/dialogs/panel_embedded_files.cpp:174
 #: common/dialogs/panel_embedded_files.cpp:248
@@ -4180,14 +4178,13 @@ msgid "Overwrite"
 msgstr "Přepsat"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Selhalo vytvoření souboru '%s'."
+msgstr "Selhalo přidání souboru '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Zvolte název souboru GenCAD exportu"
+msgstr "Zvolte složku pro GenCAD export"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4198,28 +4195,28 @@ msgid "Skip"
 msgstr "Přeskočit"
 
 #: common/dialogs/panel_embedded_files.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "Knihovna symbolů '%s' není zapisovatelná."
+msgstr "Adresář '%s' není zapisovatelný."
 
 #: common/dialogs/panel_embedded_files.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "Knihovna symbolů '%s' není zapisovatelná."
+msgstr "Složka '%s' není zapisovatelná."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "Zkusit znovu"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Selhal zápis do souboru \"%s\""
+msgstr "Selhalo otevření souboru \"%s\"."
 
 #: common/dialogs/panel_embedded_files.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Selhalo vytvoření souboru '%s'."
+msgstr "Selhalo přepsání souboru '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
 #, fuzzy
@@ -4228,12 +4225,11 @@ msgstr "Odkazy mezi listy"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Přidat vložený soubor"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Odstranit symbol"
+msgstr "Odstranit vložený soubor"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
 msgid "&Export"
@@ -4241,11 +4237,11 @@ msgstr "&Exportovat"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "Vložit fonty"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Uložit kopii všech použitých fontů"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 msgid "Footprints/pads:"
@@ -4640,7 +4636,7 @@ msgid "Library nickname prefix:"
 msgstr "Předpona přezdívky knihovny:"
 
 #: common/dialogs/panel_plugin_settings.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
 msgstr "Naslouchání na %s"
 
@@ -5022,18 +5018,16 @@ msgid "File not found."
 msgstr "Soubor nenalezen."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:987
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Soubor '%s' nelze vytvořit."
+msgstr "Soubor '%s' nelze otevřít."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1001
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Výkresový list '%s' nebyl zcela načten."
+msgstr "Výkresový list nebyl zcela načten."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Nedostatek paměti."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -6854,9 +6848,8 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Nelze zpracovat řádek JSON %d v '%s': %s"
 
 #: common/io/io_base.cpp:137
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "Otevírání zrušeno uživatelem."
+msgstr "Otevírání souboru zrušeno uživatelem."
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -7032,9 +7025,8 @@ msgid "DNP markers"
 msgstr "Značky DNP"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Vyloučeno ze simulace"
+msgstr "Značky \"Vyloučeno ze simulace\""
 
 #: common/layer_id.cpp:141
 msgid "ERC warnings"
@@ -7624,24 +7616,20 @@ msgid "Open existing document"
 msgstr "Otevře existující dokument"
 
 #: common/tool/actions.cpp:75
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Upravit v textovém editoru"
+msgstr "Upravit v textovém editoru..."
 
 #: common/tool/actions.cpp:76
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Ukázat, číst nebo upravit soubor pomocí textového editoru"
+msgstr "Ukázat, číst nebo upravit soubor knihovny pomocí textového editoru"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Otevřít adresář v Průzkumníku souborů"
+msgstr "Otevřít v Průzkumníku souborů..."
 
 #: common/tool/actions.cpp:83
-#, fuzzy
 msgid "Open a library file with system file explorer"
-msgstr "Ukázat, číst nebo upravit soubor pomocí textového editoru"
+msgstr "Ukázat, číst nebo upravit soubor pomocí systémového textového editoru"
 
 #: common/tool/actions.cpp:92
 msgid "Save changes"
@@ -7778,9 +7766,8 @@ msgstr "Odstranit položky, na které jste klikli"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2685
 #: pcbnew/tools/edit_tool.cpp:2217
-#, fuzzy
 msgid "Left Justify"
-msgstr "Zarovnat vlevo"
+msgstr "Zarovnat doleva"
 
 #: common/tool/actions.cpp:298
 msgid "Left-justify fields and text items"
@@ -7788,7 +7775,6 @@ msgstr "Zarovnat pole a textové položky vlevo"
 
 #: common/tool/actions.cpp:304 eeschema/tools/sch_edit_tool.cpp:2687
 #: pcbnew/tools/edit_tool.cpp:2219
-#, fuzzy
 msgid "Center Justify"
 msgstr "Zarovnat na střed"
 
@@ -7798,7 +7784,6 @@ msgstr "Zarovnat pole a textové položky na střed"
 
 #: common/tool/actions.cpp:311 eeschema/tools/sch_edit_tool.cpp:2689
 #: pcbnew/tools/edit_tool.cpp:2221
-#, fuzzy
 msgid "Right Justify"
 msgstr "Zarovnat vpravo"
 
@@ -7815,7 +7800,6 @@ msgid "Collapse All"
 msgstr "Sbalit vše"
 
 #: common/tool/actions.cpp:330
-#, fuzzy
 msgid "Select Column(s)"
 msgstr "Vybrat sloupce"
 
@@ -8041,36 +8025,32 @@ msgid "Zoom In Horizontally"
 msgstr "Vodorovně přiblížit"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "Zrcadlit horizontálně"
+msgstr "Vodorovně přiblížit oblast tisku"
 
 #: common/tool/actions.cpp:595
 msgid "Zoom Out Horizontally"
 msgstr "Vodorovně oddálit"
 
 #: common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom out horizontally the plot area"
-msgstr "Vodorovně oddálit"
+msgstr "Vodorovně oddálit oblast tisku"
 
 #: common/tool/actions.cpp:602
 msgid "Zoom In Vertically"
 msgstr "Svisle přiblížit"
 
 #: common/tool/actions.cpp:603
-#, fuzzy
 msgid "Zoom in vertically the plot area"
-msgstr "Svisle přiblížit"
+msgstr "Svisle přiblížit oblast tisku"
 
 #: common/tool/actions.cpp:609
 msgid "Zoom Out Vertically"
 msgstr "Svisle oddálit"
 
 #: common/tool/actions.cpp:610
-#, fuzzy
 msgid "Zoom out vertically the plot area"
-msgstr "Svisle oddálit"
+msgstr "Svisle oddálit oblast tisku"
 
 #: common/tool/actions.cpp:618 common/widgets/mathplot.cpp:1385
 msgid "Center on Cursor"
@@ -8162,19 +8142,16 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Uvolněte knihovnu, aby se nezobrazila v horní části seznamu"
 
 #: common/tool/actions.cpp:758
-#, fuzzy
 msgid "Show Library Tree"
-msgstr "Nová knihovna Reference"
+msgstr "Zobraz strom souborů knihovny"
 
 #: common/tool/actions.cpp:764
-#, fuzzy
 msgid "Hide Library Tree"
-msgstr "Nová knihovna Reference"
+msgstr "Skryj strom souborů knihovny"
 
 #: common/tool/actions.cpp:770
-#, fuzzy
 msgid "Focus Library Tree Search Field"
-msgstr "Otáčet pole pouzdra"
+msgstr "Vybrat vyhledávací pole souborů knihovny"
 
 #: common/tool/actions.cpp:777
 msgid "Pan Up"
@@ -8522,29 +8499,24 @@ msgid "Embedded Files"
 msgstr "Soubory obrázku"
 
 #: common/tool/actions.cpp:1193
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Přejmenovat soubory"
+msgstr "Spravovat vložené soubory"
 
 #: common/tool/actions.cpp:1198
-#, fuzzy
 msgid "Remove File"
-msgstr "Přejmenovat soubor"
+msgstr "Odstranit soubor"
 
 #: common/tool/actions.cpp:1199
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Odstranit všechny odpovídající vrstvy."
+msgstr "Odstranit vložený soubor"
 
 #: common/tool/actions.cpp:1204
-#, fuzzy
 msgid "Extract File"
-msgstr "Export do souboru"
+msgstr "Rozbalit soubor"
 
 #: common/tool/actions.cpp:1205
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "Spustitelný soubor"
+msgstr "Rozbalit vložený soubor"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
@@ -8910,7 +8882,7 @@ msgstr "Obnovit výchozí"
 
 #: common/widgets/paged_dialog.cpp:91
 msgid "Reveal Preferences in Finder"
-msgstr "Odhalte nasstavení ve vyhledávači"
+msgstr "Odhalte nastavení ve vyhledávači"
 
 #: common/widgets/paged_dialog.cpp:93
 msgid "Open Preferences Directory"
@@ -9251,9 +9223,8 @@ msgid "Electrical rule check file"
 msgstr "Soubor kontroly pravidel elektrického návrhu"
 
 #: common/wildcards_and_files_ext.cpp:443
-#, fuzzy
 msgid "SPICE library file"
-msgstr "Soubor knihovny spice"
+msgstr "Soubor knihovny SPICE"
 
 #: common/wildcards_and_files_ext.cpp:449
 msgid "SPICE netlist file"
@@ -9745,14 +9716,14 @@ msgid "Delete all associations?"
 msgstr "Smazat všechna přidružení?"
 
 #: eeschema/annotate.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "Očíslováno %s (jednotka %s) jako %s."
+msgstr "Vymazán popisek pro %s (jednotka %s)."
 
 #: eeschema/annotate.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "Vyčistit očíslování"
+msgstr "Vymazán popisek pro %s."
 
 #: eeschema/annotate.cpp:174
 msgid "Delete Annotation"
@@ -10641,9 +10612,8 @@ msgid "Edit exclusion comment..."
 msgstr "Upravit komentář vyloučení..."
 
 #: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:678
-#, fuzzy
 msgid "Exclude this violation"
-msgstr "Vyloučit toto porušení..."
+msgstr "Vyloučit toto porušení"
 
 #: eeschema/dialogs/dialog_erc.cpp:653 eeschema/dialogs/dialog_erc.cpp:657
 #: pcbnew/dialogs/dialog_drc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:683
@@ -10652,9 +10622,8 @@ msgid "It will be excluded from the %s list"
 msgstr "Bude vyloučeno ze seznamu %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:656 pcbnew/dialogs/dialog_drc.cpp:682
-#, fuzzy
 msgid "Exclude with comment..."
-msgstr "Upravit komentář vyloučení..."
+msgstr "Vyloučit s komentářem..."
 
 #: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:704
 #, c-format
@@ -10981,7 +10950,7 @@ msgstr "Procházet skripty..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "Přidat Netlist exportér založený na skriptu"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:229
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -11018,7 +10987,7 @@ msgstr "Zobrazit název pole"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Zobrazit jméno pole spolu s jeho hodnotou"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:112
 msgid "Allow automatic placement"
@@ -11996,6 +11965,9 @@ msgid ""
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
+"Vybrat tuto možnost, když mají všechny jednotky symbolů stejnou funkci.\n"
+"Například může být tato možnost vybrána pro čtverné hradlo NAND, ale tato "
+"možnost by neměla být vybrána pro dvojitou triodu (kde jednotka C je vlákno)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 msgid "Has alternate body style (De Morgan)"
@@ -12008,6 +11980,10 @@ msgid ""
 "For instance, this should be checked for a NAND gate to provide an alternate "
 "representation as an OR gate with inverted inputs."
 msgstr ""
+"Vybrat tuto možnost, když má symbol alternativní styl pro De Morganovu "
+"logickou funkci ekvivalence.\n"
+"Například může být tato možnost vybrána pro hradlo NAND k vytvoření "
+"alternativní reprezentace jako hradlo OR s invertovanými vstupy."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
 msgid "Define as power symbol"
@@ -12248,6 +12224,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties.cpp:446
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Mód synchronizovaných pinů.  Shodné piny v jiných jednotkách budou "
+"aktualizovány."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -12569,12 +12547,13 @@ msgstr "Generování kontextových oken vlastnictví"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 #: pcbnew/dialogs/dialog_plot_base.cpp:415
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "Generovat metadata z proměnných AUTHOR && SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:168
 #: pcbnew/dialogs/dialog_plot_base.cpp:416
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
 msgstr ""
+"Generovat vlastnosti PDF dokumentu z textových proměnných AUTHOR and SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:175
 msgid "Other options"
@@ -12586,7 +12565,7 @@ msgstr "Otevřít soubor po vykreslení"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:178
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Otevřít výstupní soubor přiřazenou aplikací po úspěšném vytištění"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:91
 msgid "Plot Schematic Options"
@@ -12839,9 +12818,8 @@ msgid "Text Variables"
 msgstr "Textové proměnné"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:126
-#, fuzzy
 msgid "Schematic Data"
-msgstr "Schématická parita"
+msgstr "Schématická Data"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:144
 msgid "Project is missing or read-only. Settings will not be editable."
@@ -12915,9 +12893,8 @@ msgstr "Vyplnit:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:208
 #: eeschema/dialogs/dialog_text_properties_base.cpp:318
-#, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "Upravit editorem symbolů"
+msgstr "Privátní pro Editor symbolů"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:103
 #: pcbnew/dialogs/dialog_shape_properties_base.h:110
@@ -12926,9 +12903,8 @@ msgid "%s Properties"
 msgstr "%s vlastnosti"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
-#, fuzzy
 msgid "Edit Sheet Pin Properties"
-msgstr "Vlastnosti listu vývodů"
+msgstr "Upravit vlastnosti listu vývodů"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -24524,9 +24500,8 @@ msgid "Show import issues"
 msgstr "Zobrazit nebo skrýt %s"
 
 #: include/widgets/filedlg_open_embed_file.h:36
-#, fuzzy
 msgid "Embed File"
-msgstr "Upravit soubor"
+msgstr "Vložit soubor"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24788,6 +24763,8 @@ msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
+"Jméno složky, kam budou uloženy vytvořené 3d modely, pokud není "
+"specifikována, modely budou vloženy do hlavního exportovaného VRML souboru."
 
 #: kicad/cli/command_pcb_export_3d.cpp:190
 msgid "Used with --models-dir to output relative paths in the resulting file"
