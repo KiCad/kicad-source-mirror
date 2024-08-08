@@ -106,7 +106,7 @@ void RENDER_3D_RAYTRACE_BASE::restartRenderState()
 }
 
 
-static inline void SetPixel( GLubyte* p, const COLOR_RGBA& v )
+static inline void SetPixel( uint8_t* p, const COLOR_RGBA& v )
 {
     p[0] = v.c[0];
     p[1] = v.c[1];
@@ -121,7 +121,7 @@ SFVEC4F RENDER_3D_RAYTRACE_BASE::premultiplyAlpha( const SFVEC4F& aInput )
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE_BASE::render( uint8_t* ptrPBO, REPORTER* aStatusReporter )
 {
     if( ( m_renderState == RT_RENDER_STATE_FINISH ) || ( m_renderState >= RT_RENDER_STATE_MAX ) )
     {
@@ -136,7 +136,7 @@ void RENDER_3D_RAYTRACE_BASE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter
             // This way it will draw the full buffer but only shows the updated (
             // already calculated) squares
             unsigned int nPixels = m_realBufferSize.x * m_realBufferSize.y;
-            GLubyte* tmp_ptrPBO = ptrPBO + 3;   // PBO is RGBA
+            uint8_t* tmp_ptrPBO = ptrPBO + 3;   // PBO is RGBA
 
             for( unsigned int i = 0; i < nPixels; ++i )
             {
@@ -181,7 +181,7 @@ void RENDER_3D_RAYTRACE_BASE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE_BASE::renderTracing( uint8_t* ptrPBO, REPORTER* aStatusReporter )
 {
     m_isPreview = false;
 
@@ -295,7 +295,7 @@ SFVEC4F ConvertSRGBAToLinear( const SFVEC4F& aSRGBAcolor )
 #endif
 
 
-void RENDER_3D_RAYTRACE_BASE::renderFinalColor( GLubyte* ptrPBO, const SFVEC4F& rgbColor,
+void RENDER_3D_RAYTRACE_BASE::renderFinalColor( uint8_t* ptrPBO, const SFVEC4F& rgbColor,
                                          bool applyColorSpaceConversion )
 {
     SFVEC4F color = rgbColor;
@@ -476,7 +476,7 @@ void RENDER_3D_RAYTRACE_BASE::renderAntiAliasPackets( const SFVEC4F* aBgColorY,
 #define DISP_FACTOR 0.075f
 
 
-void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( GLubyte* ptrPBO, signed int iBlock )
+void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( uint8_t* ptrPBO, signed int iBlock )
 {
     // Initialize ray packets
     const SFVEC2UI& blockPos = m_blockPositions[iBlock];
@@ -535,7 +535,7 @@ void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( GLubyte* ptrPBO, signed int iB
 
             for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
             {
-                GLubyte* ptr = &ptrPBO[( yConst + x ) * 4];
+                uint8_t* ptr = &ptrPBO[( yConst + x ) * 4];
 
                 renderFinalColor( ptr, outColor, isFinalColor );
             }
@@ -628,7 +628,7 @@ void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( GLubyte* ptrPBO, signed int iB
     }
 
     // Copy results to the next stage
-    GLubyte* ptr = &ptrPBO[( blockPos.x + ( blockPos.y * m_realBufferSize.x ) ) * 4];
+    uint8_t* ptr = &ptrPBO[( blockPos.x + ( blockPos.y * m_realBufferSize.x ) ) * 4];
 
     const uint32_t ptrInc = ( m_realBufferSize.x - RAYPACKET_DIM ) * 4;
 
@@ -687,7 +687,7 @@ void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( GLubyte* ptrPBO, signed int iB
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::postProcessShading( GLubyte* /* ptrPBO */, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE_BASE::postProcessShading( uint8_t* /* ptrPBO */, REPORTER* aStatusReporter )
 {
     if( m_boardAdapter.m_Cfg->m_Render.raytrace_post_processing )
     {
@@ -739,7 +739,7 @@ void RENDER_3D_RAYTRACE_BASE::postProcessShading( GLubyte* /* ptrPBO */, REPORTE
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* /* aStatusReporter */ )
+void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( uint8_t* ptrPBO, REPORTER* /* aStatusReporter */ )
 {
     if( m_boardAdapter.m_Cfg->m_Render.raytrace_post_processing )
     {
@@ -756,7 +756,7 @@ void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* 
                 for( size_t y = nextBlock.fetch_add( 1 ); y < m_realBufferSize.y;
                      y = nextBlock.fetch_add( 1 ) )
                 {
-                    GLubyte* ptr = &ptrPBO[ y * m_realBufferSize.x * 4 ];
+                    uint8_t* ptr = &ptrPBO[ y * m_realBufferSize.x * 4 ];
 
                     for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
                     {
@@ -796,7 +796,7 @@ void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* 
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::renderPreview( GLubyte* ptrPBO )
+void RENDER_3D_RAYTRACE_BASE::renderPreview( uint8_t* ptrPBO )
 {
     m_isPreview = true;
 
@@ -1351,7 +1351,7 @@ void RENDER_3D_RAYTRACE_BASE::renderPreview( GLubyte* ptrPBO )
                         }
 
                         // Set pixel colors
-                        GLubyte* ptr =
+                        uint8_t* ptr =
                                 &ptrPBO[( 4 * x + m_blockPositionsFast[iBlock].x
                                           + m_realBufferSize.x
                                           * ( m_blockPositionsFast[iBlock].y + 4 * y ) ) * 4];

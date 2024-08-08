@@ -41,7 +41,7 @@ RENDER_3D_RAYTRACE_RAM::~RENDER_3D_RAYTRACE_RAM()
 }
 
 
-GLubyte* RENDER_3D_RAYTRACE_RAM::GetBuffer()
+uint8_t* RENDER_3D_RAYTRACE_RAM::GetBuffer()
 {
     return m_outputBuffer;
 }
@@ -155,5 +155,5 @@ void RENDER_3D_RAYTRACE_RAM::initPbo()
     deletePbo();
 
     m_pboDataSize = m_realBufferSize.x * m_realBufferSize.y * 4;
-    m_outputBuffer = new GLubyte[m_pboDataSize]();
+    m_outputBuffer = new uint8_t[m_pboDataSize]();
 }

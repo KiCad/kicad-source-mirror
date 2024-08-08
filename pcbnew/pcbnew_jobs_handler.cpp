@@ -350,7 +350,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         }
     }
 
-    GLubyte* rgbaBuffer = raytrace.GetBuffer();
+    uint8_t* rgbaBuffer = raytrace.GetBuffer();
     wxSize   realSize = raytrace.GetRealBufferSize();
     bool     success = !!rgbaBuffer;
 

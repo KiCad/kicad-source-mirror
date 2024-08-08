@@ -77,11 +77,11 @@ protected:
                                    float aLayerZOffset );
 
     void restartRenderState();
-    void renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void postProcessShading( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void renderBlockTracing( GLubyte* ptrPBO , signed int iBlock );
-    void renderFinalColor( GLubyte* ptrPBO, const SFVEC4F& rgbColor,
+    void renderTracing( uint8_t* ptrPBO, REPORTER* aStatusReporter );
+    void postProcessShading( uint8_t* ptrPBO, REPORTER* aStatusReporter );
+    void postProcessBlurFinish( uint8_t* ptrPBO, REPORTER* aStatusReporter );
+    void renderBlockTracing( uint8_t* ptrPBO , signed int iBlock );
+    void renderFinalColor( uint8_t* ptrPBO, const SFVEC4F& rgbColor,
                            bool applyColorSpaceConversion );
 
     void renderRayPackets( const SFVEC4F* bgColorY, const RAY* aRayPkt, HITINFO_PACKET* aHitPacket,
@@ -119,8 +119,8 @@ protected:
 
     void initializeBlockPositions();
 
-    void render( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void renderPreview( GLubyte* ptrPBO );
+    void render( uint8_t* ptrPBO, REPORTER* aStatusReporter );
+    void renderPreview( uint8_t* ptrPBO );
 
     static SFVEC4F premultiplyAlpha( const SFVEC4F& aInput );
 

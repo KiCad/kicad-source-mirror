@@ -158,7 +158,7 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
 
         // Get the PBO pixel pointer to write the data
-        GLubyte* ptrPBO = (GLubyte *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
+        uint8_t* ptrPBO = (uint8_t *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
                                                      GL_WRITE_ONLY_ARB );
 
         if( ptrPBO )
@@ -179,7 +179,7 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         if( m_renderState != RT_RENDER_STATE_FINISH )
         {
             // Get the PBO pixel pointer to write the data
-            GLubyte* ptrPBO = (GLubyte *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
+            uint8_t* ptrPBO = (uint8_t *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
                                                          GL_WRITE_ONLY_ARB );
 
             if( ptrPBO )

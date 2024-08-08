@@ -40,7 +40,7 @@ public:
 
     ~RENDER_3D_RAYTRACE_RAM();
 
-    GLubyte* GetBuffer();
+    uint8_t* GetBuffer();
     wxSize   GetRealBufferSize();
 
     void SetCurWindowSize( const wxSize& aSize ) override;
@@ -50,8 +50,8 @@ private:
     void initPbo() override;
     void deletePbo() override;
 
-    GLubyte* m_outputBuffer;
-    GLuint   m_pboDataSize;
+    uint8_t* m_outputBuffer;
+    uint32_t m_pboDataSize;
 };
 
 
