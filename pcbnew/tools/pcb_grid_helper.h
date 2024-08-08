@@ -30,6 +30,7 @@
 
 #include <pcb_item_containers.h>
 #include <tool/grid_helper.h>
+#include <board.h>
 
 class LSET;
 class SHAPE_ARC;
@@ -37,7 +38,7 @@ class TOOL_MANAGER;
 struct MAGNETIC_SETTINGS;
 struct PCB_SELECTION_FILTER_OPTIONS;
 
-class PCB_GRID_HELPER : public GRID_HELPER
+class PCB_GRID_HELPER : public GRID_HELPER, public BOARD_LISTENER
 {
 public:
 
@@ -65,6 +66,14 @@ public:
     VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
 
     VECTOR2I AlignToNearestPad( const VECTOR2I& aMousePos, std::deque<PAD*>& aPads );
+
+    virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override
+    {
+        if( m_snapItem->item == aBoardItem )
+        {
+            m_snapItem = std::nullopt;
+        }
+    }
 
     /**
      * Chooses the "best" snap anchor around the given point, optionally taking layers from

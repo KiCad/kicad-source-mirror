@@ -236,7 +236,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
     }
     else if( snapPoint )
     {
-        m_snapItem = nearest;
+        m_snapItem = *nearest;
         m_viewSnapPoint.SetPosition( pt );
         m_viewSnapLine.SetPosition( pt );
 

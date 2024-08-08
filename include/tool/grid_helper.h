@@ -154,7 +154,6 @@ protected:
     void clearAnchors()
     {
         m_anchors.clear();
-        m_snapItem = nullptr;
     }
 
     /**
@@ -177,7 +176,7 @@ protected:
     bool                    m_enableSnap;     // Allow snapping to other items on the layers
     bool                    m_enableGrid;     // If true, allow snapping to grid
     bool                    m_enableSnapLine; // Allow drawing lines from snap points
-    ANCHOR*                 m_snapItem;       // Pointer to the currently snapped item in m_anchors
+    std::optional<ANCHOR>   m_snapItem;       // Pointer to the currently snapped item in m_anchors
                                               //   (NULL if not snapped)
     VECTOR2I                m_skipPoint;      // When drawing a line, we avoid snapping to the
                                               //   source point

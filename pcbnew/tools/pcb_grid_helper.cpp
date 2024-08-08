@@ -370,12 +370,12 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             else
                 m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, true );
 
-            m_snapItem = nearest;
+            m_snapItem = *nearest;
             return nearest->pos;
         }
     }
 
-    m_snapItem = nullptr;
+    m_snapItem = std::nullopt;
     m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
     m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
     return nearestGrid;
