@@ -158,6 +158,8 @@ public:
     static TOOL_ACTION filletLines;
     /// Chamfer (i.e. adds a straight line) all selected straight lines by a user defined setback
     static TOOL_ACTION chamferLines;
+    /// Add "dogbone" corners to selected lines to allow routing with a cutter radius
+    static TOOL_ACTION dogboneCorners;
     /// Connect selected shapes, possibly extending or cutting them, or adding extra geometry
     static TOOL_ACTION healShapes;
     /// Extend selected lines to meet at a point

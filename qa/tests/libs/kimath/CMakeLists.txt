@@ -29,6 +29,7 @@ set( QA_KIMATH_SRCS
 
     geometry/test_chamfer.cpp
     geometry/test_distribute.cpp
+    geometry/test_dogbone.cpp
     geometry/test_eda_angle.cpp
     geometry/test_ellipse_to_bezier.cpp
     geometry/test_fillet.cpp

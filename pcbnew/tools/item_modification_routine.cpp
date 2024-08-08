@@ -22,7 +22,9 @@
  */
 
 #include "item_modification_routine.h"
+
 #include <geometry/geometry_utils.h>
+#include <geometry/circle.h>
 
 namespace
 {
@@ -35,21 +37,47 @@ bool SegmentsShareEndpoint( const SEG& aSegA, const SEG& aSegB )
     return ( aSegA.A == aSegB.A || aSegA.A == aSegB.B || aSegA.B == aSegB.A || aSegA.B == aSegB.B );
 }
 
+
+std::pair<VECTOR2I*, VECTOR2I*> GetSharedEndpoints( SEG& aSegA, SEG& aSegB )
+{
+    std::pair<VECTOR2I*, VECTOR2I*> result = { nullptr, nullptr };
+
+    if( aSegA.A == aSegB.A )
+    {
+        result = { &aSegA.A, &aSegB.A };
+    }
+    else if( aSegA.A == aSegB.B )
+    {
+        result = { &aSegA.A, &aSegB.B };
+    }
+    else if( aSegA.B == aSegB.A )
+    {
+        result = { &aSegA.B, &aSegB.A };
+    }
+    else if( aSegA.B == aSegB.B )
+    {
+        result = { &aSegA.B, &aSegB.B };
+    }
+
+    return result;
+}
+
 } // namespace
 
 
-bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aLine, const SEG& aSeg )
+bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE&                aLine,
+                                                                const std::optional<SEG>& aSeg )
 {
     wxASSERT_MSG( aLine.GetShape() == SHAPE_T::SEGMENT, "Can only modify segments" );
 
-    const bool removed = aSeg.Length() == 0;
+    const bool removed = !aSeg.has_value() || aSeg->Length() == 0;
 
     if( !removed )
     {
         // Mark modified, then change it
         GetHandler().MarkItemModified( aLine );
-        aLine.SetStart( aSeg.A );
-        aLine.SetEnd( aSeg.B );
+        aLine.SetStart( aSeg->A );
+        aLine.SetEnd( aSeg->B );
     }
     else
     {
@@ -88,32 +116,15 @@ void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB 
 
     SEG       seg_a( aLineA.GetStart(), aLineA.GetEnd() );
     SEG       seg_b( aLineB.GetStart(), aLineB.GetEnd() );
-    VECTOR2I* a_pt;
-    VECTOR2I* b_pt;
 
-    if( seg_a.A == seg_b.A )
+    auto [a_pt, b_pt] = GetSharedEndpoints( seg_a, seg_b );
+
+    if( !a_pt || !b_pt )
     {
-        a_pt = &seg_a.A;
-        b_pt = &seg_b.A;
-    }
-    else if( seg_a.A == seg_b.B )
-    {
-        a_pt = &seg_a.A;
-        b_pt = &seg_b.B;
-    }
-    else if( seg_a.B == seg_b.A )
-    {
-        a_pt = &seg_a.B;
-        b_pt = &seg_b.A;
-    }
-    else if( seg_a.B == seg_b.B )
-    {
-        a_pt = &seg_a.B;
-        b_pt = &seg_b.B;
-    }
-    else
-        // Nothing to do
+        // The lines do not share an endpoint, so we can't fillet them
+        AddFailure();
         return;
+    }
 
     if( seg_a.Angle( seg_b ).IsHorizontal() )
         return;
@@ -235,6 +246,98 @@ void LINE_CHAMFER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB
 
     ModifyLineOrDeleteIfZeroLength( aLineA, *chamfer_result->m_updated_seg_a );
     ModifyLineOrDeleteIfZeroLength( aLineB, *chamfer_result->m_updated_seg_b );
+
+    AddSuccess();
+}
+
+
+wxString DOGBONE_CORNER_ROUTINE::GetCommitDescription() const
+{
+    return _( "Dogbone Corners" );
+}
+
+
+std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage() const
+{
+    wxString msg;
+
+    if( GetSuccesses() == 0 )
+    {
+        msg += _( "Unable to add dogbone corners to the selected lines." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        msg += _( "Some of the lines could not have dogbone corners added." );
+    }
+
+    if( m_haveNarrowMouths )
+    {
+        if( !msg.empty() )
+            msg += " ";
+
+        msg += _( "Some of the dogbone corners are too narrow to fit a "
+                  "cutter of the specified radius." );
+    }
+
+    if( msg.empty() )
+        return std::nullopt;
+
+    return msg;
+}
+
+
+void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB )
+{
+    if( aLineA.GetLength() == 0.0 || aLineB.GetLength() == 0.0 )
+        return;
+
+    SEG seg_a( aLineA.GetStart(), aLineA.GetEnd() );
+    SEG seg_b( aLineB.GetStart(), aLineB.GetEnd() );
+
+    auto [a_pt, b_pt] = GetSharedEndpoints( seg_a, seg_b );
+
+    if( !a_pt || !b_pt )
+    {
+        return;
+    }
+
+    // Cannot handle parallel lines
+    if( seg_a.Angle( seg_b ).IsHorizontal() )
+    {
+        AddFailure();
+        return;
+    }
+
+    std::optional<DOGBONE_RESULT> dogbone_result =
+            ComputeDogbone( seg_a, seg_b, m_dogboneRadiusIU );
+
+    if( !dogbone_result )
+    {
+        AddFailure();
+        return;
+    }
+
+    if( dogbone_result->m_small_arc_mouth )
+    {
+        // The arc is too small to fit the radius
+        m_haveNarrowMouths = true;
+    }
+
+    auto tArc = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::ARC );
+
+    tArc->SetArcGeometry( dogbone_result->m_arc_start, dogbone_result->m_arc_mid,
+                          dogbone_result->m_arc_end );
+
+    // Copy properties from one of the source lines
+    tArc->SetWidth( aLineA.GetWidth() );
+    tArc->SetLayer( aLineA.GetLayer() );
+    tArc->SetLocked( aLineA.IsLocked() );
+
+    CHANGE_HANDLER& handler = GetHandler();
+    handler.AddNewItem( std::move( tArc ) );
+
+    ModifyLineOrDeleteIfZeroLength( aLineA, dogbone_result->m_updated_seg_a );
+    ModifyLineOrDeleteIfZeroLength( aLineB, dogbone_result->m_updated_seg_b );
 
     AddSuccess();
 }

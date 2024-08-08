@@ -23,7 +23,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <geometry/chamfer.h>
+#include <geometry/corner_operations.h>
 
 #include "geom_test_utils.h"
 

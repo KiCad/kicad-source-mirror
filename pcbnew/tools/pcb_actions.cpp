@@ -622,6 +622,12 @@ TOOL_ACTION PCB_ACTIONS::chamferLines( TOOL_ACTION_ARGS()
         .Tooltip( _( "Cut away corners between selected lines" ) )
         .Icon( BITMAPS::chamfer ) );
 
+TOOL_ACTION PCB_ACTIONS::dogboneCorners( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.dogboneCorners" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Dogbone Corners..." ) )
+        .Tooltip( _( "Add dogbone corners to selected lines" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::simplifyPolygons( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.simplifyPolygons" )
         .Scope( AS_GLOBAL )

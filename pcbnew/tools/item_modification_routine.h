@@ -32,7 +32,7 @@
 #include <board_item.h>
 #include <pcb_shape.h>
 
-#include <geometry/chamfer.h>
+#include <geometry/corner_operations.h>
 
 /**
  * @brief An object that has the ability to modify items on a board
@@ -198,7 +198,7 @@ protected:
      * @param aItem the line to modify
      * @param aSeg the new line geometry
      */
-    bool ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aItem, const SEG& aSeg );
+    bool ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aItem, const std::optional<SEG>& aSeg );
 
     /**
      * @brief Access the handler for making changes to the board
@@ -299,6 +299,28 @@ public:
     std::optional<wxString> GetStatusMessage() const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
+};
+
+/**
+ * Pairwise add dogbone corners to an internal corner.
+ */
+class DOGBONE_CORNER_ROUTINE : public PAIRWISE_LINE_ROUTINE
+{
+public:
+    DOGBONE_CORNER_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler, int aDogboneRadiusIU ) :
+            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ), m_dogboneRadiusIU( aDogboneRadiusIU ),
+            m_haveNarrowMouths( false )
+    {
+    }
+
+    wxString                GetCommitDescription() const override;
+    std::optional<wxString> GetStatusMessage() const override;
+
+    void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
+
+private:
+    int m_dogboneRadiusIU;
+    bool m_haveNarrowMouths;
 };
 
 

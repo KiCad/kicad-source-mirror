@@ -58,5 +58,38 @@ struct CHAMFER_RESULT
 std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG& aSegA, const SEG& aSegB,
                                                     const CHAMFER_PARAMS& aChamferParams );
 
+struct DOGBONE_RESULT
+{
+    // For lack of a generic ARC class, we can just use the points
+    // that define the arc
+    VECTOR2I m_arc_start;
+    VECTOR2I m_arc_mid;
+    VECTOR2I m_arc_end;
+
+    // The updated original segments
+    // These can be empty if the dogbone "consumed" the original segments
+    std::optional<SEG> m_updated_seg_a;
+    std::optional<SEG> m_updated_seg_b;
+
+    // If the arc mouth is smaller than the radius
+    bool m_small_arc_mouth;
+};
+
+/**
+ * Compute the dogbone geometry for a given line pair and dogbone parameters.
+ *
+ * This turns a sharp internal corner into a "dogbone" shape, which allows it to be
+ * routed with a cutter that has a radius, and still allows a sharp external corner
+ * to fit into the space.
+ *
+ *        _----_
+ * ------/      |
+ *  ---------+  /
+ *           | |
+ *           | |
+ */
+std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB,
+                                              int aDogboneRadius );
+
 
 #endif

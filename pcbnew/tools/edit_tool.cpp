@@ -182,6 +182,7 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
     menu->AddItem( PCB_ACTIONS::simplifyPolygons,        SELECTION_CONDITIONS::HasTypes( polygonSimplifyTypes ) );
     menu->AddItem( PCB_ACTIONS::filletLines,             SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::chamferLines,            SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::dogboneCorners,          SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::extendLines,             SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
                                                              && SELECTION_CONDITIONS::Count( 2 ) );
     menu->AddItem( PCB_ACTIONS::pointEditorMoveCorner,   hasCornerCondition );
@@ -1183,26 +1184,25 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
 
 /**
- * Prompt the user for the fillet radius and return it.
+ * Prompt the user for a radius and return it.
  *
  * @param aFrame
- * @param aErrorMsg filled with an error message if the parameter is invalid somehow
- * @return std::optional<int> the fillet radius or std::nullopt if no
- * valid fillet specified
+ * @param aTitle the title of the dialog
+ * @param aPersitentRadius the last used radius
+ * @return std::optional<int> the radius or std::nullopt if no
+ * valid radius specified
  */
-static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame )
+static std::optional<int> GetRadiusParams( PCB_BASE_EDIT_FRAME& aFrame, const wxString& aTitle,
+                                           int& aPersitentRadius )
 {
-    // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
-    static int filletRadius = 0;
-
-    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Fillet Lines" ), _( "Radius:" ), filletRadius );
+    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, aTitle, _( "Radius:" ), aPersitentRadius );
 
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == 0 )
         return std::nullopt;
 
-    filletRadius = dlg.GetValue();
+    aPersitentRadius = dlg.GetValue();
 
-    return filletRadius;
+    return aPersitentRadius;
 }
 
 
@@ -1401,13 +1401,26 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::filletLines ) )
     {
-        std::optional<int> filletRadiusIU = GetFilletParams( *frame() );
+        static int         s_filletRadius = pcbIUScale.mmToIU( 1 );
+        std::optional<int> filletRadiusIU =
+                GetRadiusParams( *frame(), _( "Fillet Lines" ), s_filletRadius );
 
         if( filletRadiusIU.has_value() )
         {
-            pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>( frame()->GetModel(),
-                                                                           change_handler,
-                                                                           *filletRadiusIU );
+            pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>(
+                    frame()->GetModel(), change_handler, *filletRadiusIU );
+        }
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::dogboneCorners ) )
+    {
+        static int         s_dogBoneRadius = pcbIUScale.mmToIU( 1 );
+        std::optional<int> radiusIU =
+                GetRadiusParams( *frame(), _( "Dogbone Corners" ), s_dogBoneRadius );
+
+        if( radiusIU.has_value() )
+        {
+            pairwise_line_routine = std::make_unique<DOGBONE_CORNER_ROUTINE>(
+                    frame()->GetModel(), change_handler, *radiusIU );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::chamferLines ) )
@@ -3173,6 +3186,7 @@ void EDIT_TOOL::rebuildConnectivity()
 }
 
 
+// clang-format off
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::GetAndPlace,           PCB_ACTIONS::getAndPlace.MakeEvent() );
@@ -3199,6 +3213,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::filletLines.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::dogboneCorners.MakeEvent() );
     Go( &EDIT_TOOL::SimplifyPolygons,      PCB_ACTIONS::simplifyPolygons.MakeEvent() );
     Go( &EDIT_TOOL::HealShapes,            PCB_ACTIONS::healShapes.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
@@ -3213,3 +3228,4 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,        ACTIONS::cut.MakeEvent() );
 }
+// clang-format on

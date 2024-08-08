@@ -11,10 +11,10 @@ set( KIMATH_SRCS
     src/transform.cpp
     src/trigo.cpp
 
-	src/geometry/chamfer.cpp
+    src/geometry/corner_operations.cpp
     src/geometry/distribute.cpp
-	src/geometry/eda_angle.cpp
-	src/geometry/ellipse.cpp
+    src/geometry/eda_angle.cpp
+    src/geometry/ellipse.cpp
     src/geometry/circle.cpp
     src/geometry/convex_hull.cpp
     src/geometry/direction_45.cpp
