@@ -15,3 +15,29 @@ std::ostream& boost_test_print_type( std::ostream& os, const SHAPE_LINE_CHAIN& c
     os << "]";
     return os;
 }
+
+std::string toString( const POINT_TYPE& aType )
+{
+    switch( aType )
+    {
+    case PT_NONE: return "PT_NONE";
+    case PT_CENTER: return "PT_CENTER";
+    case PT_END: return "PT_END";
+    case PT_MID: return "PT_MID";
+    case PT_QUADRANT: return "PT_QUADRANT";
+    case PT_CORNER: return "PT_CORNER";
+    default: return "Unknown POINT_TYPE: " + std::to_string( (int) aType );
+    }
+}
+
+std::ostream& operator<<( std::ostream& os, const POINT_TYPE& aPtType )
+{
+    os << "POINT_TYPE: " << toString( aPtType );
+    return os;
+}
+
+std::ostream& operator<<( std::ostream& os, const TYPED_POINT2I& aPt )
+{
+    os << "TYPED_POINT2I: " << aPt.m_point << " (" << toString( aPt.m_types ) << ")";
+    return os;
+}

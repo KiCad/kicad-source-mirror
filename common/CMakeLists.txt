@@ -449,6 +449,7 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/ruler_item.cpp
     preview_items/selection_area.cpp
     preview_items/simple_overlay_item.cpp
+    preview_items/snap_indicator.cpp
     preview_items/two_point_assistant.cpp
     )
 

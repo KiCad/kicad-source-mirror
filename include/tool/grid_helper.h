@@ -24,13 +24,15 @@
 #ifndef GRID_HELPER_H
 #define GRID_HELPER_H
 
-#include "tool/selection.h"
-#include <tool/tool_manager.h>
 #include <vector>
+
+#include <geometry/point_types.h>
 #include <math/vector2d.h>
+#include <preview_items/snap_indicator.h>
+#include <tool/tool_manager.h>
+#include <tool/selection.h>
 #include <origin_viewitem.h>
 
-class TOOL_MANAGER;
 class EDA_ITEM;
 
 enum GRID_HELPER_GRIDS : int
@@ -117,7 +119,8 @@ public:
 
     std::optional<VECTOR2I> GetSnappedPoint() const;
 
-    enum ANCHOR_FLAGS {
+    enum ANCHOR_FLAGS
+    {
         CORNER = 1,
         OUTLINE = 2,
         SNAPPABLE = 4,
@@ -131,14 +134,23 @@ protected:
 
     struct ANCHOR
     {
-        ANCHOR( const VECTOR2I& aPos, int aFlags = CORNER | SNAPPABLE, EDA_ITEM* aItem = nullptr ) :
-            pos( aPos ),
-            flags( aFlags ),
-            item( aItem )
-        { };
+        /**
+         *
+         * @param aPos The position of the anchor
+         * @param aFlags The flags for the anchor - this is a bitfield of ANCHOR_FLAGS,
+         *               specifying the type of anchor (which may be used to filter out
+         *               unwanted anchors per the settings)
+         * @param aPointTypes The point types that this anchor represents in geometric terms
+         * @param aItem The item to which the anchor belongs
+         */
+        ANCHOR( const VECTOR2I& aPos, int aFlags, int aPointTypes, EDA_ITEM* aItem ) :
+                pos( aPos ), flags( aFlags ), pointTypes( aPointTypes ), item( aItem )
+        {
+        }
 
         VECTOR2I  pos;
         int       flags;
+        int       pointTypes;
         EDA_ITEM* item;
 
         double Distance( const VECTOR2I& aP ) const
@@ -147,10 +159,11 @@ protected:
         }
     };
 
-    void addAnchor( const VECTOR2I& aPos, int aFlags, EDA_ITEM* aItem )
+    void addAnchor( const VECTOR2I& aPos, int aFlags, EDA_ITEM* aItem,
+                    int aPointTypes = POINT_TYPE::PT_NONE )
     {
         if( ( aFlags & m_maskTypes ) == aFlags )
-            m_anchors.emplace_back( ANCHOR( aPos, aFlags, aItem ) );
+            m_anchors.emplace_back( ANCHOR( aPos, aFlags, aPointTypes, aItem ) );
     }
 
     void clearAnchors()
@@ -182,7 +195,7 @@ protected:
                                               //   (NULL if not snapped)
     VECTOR2I                m_skipPoint;      // When drawing a line, we avoid snapping to the
                                               //   source point
-    KIGFX::ORIGIN_VIEWITEM  m_viewSnapPoint;
+    KIGFX::SNAP_INDICATOR   m_viewSnapPoint;
     KIGFX::ORIGIN_VIEWITEM  m_viewSnapLine;
     KIGFX::ORIGIN_VIEWITEM  m_viewAxis;
 };

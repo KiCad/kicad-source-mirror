@@ -26,6 +26,7 @@
 
 #include <cmath>
 
+#include <geometry/point_types.h>
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
@@ -352,5 +353,9 @@ inline bool SegmentsHaveSameEndPoints( const SEG& aSeg1, const SEG& aSeg2 )
 
 std::ostream& boost_test_print_type( std::ostream& os, const SHAPE_LINE_CHAIN& c );
 
+// Not clear why boost_test_print_type doesn't work on Debian specifically for this type,
+// but this works on all platforms
+std::ostream& operator<<( std::ostream& os, const TYPED_POINT2I& c );
+std::ostream& operator<<( std::ostream& os, const POINT_TYPE& c );
 
 #endif // GEOM_TEST_UTILS_H

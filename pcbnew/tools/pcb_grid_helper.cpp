@@ -65,6 +65,7 @@ PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMa
     view->Add( &m_viewAxis );
     view->SetVisible( &m_viewAxis, false );
 
+    m_viewSnapPoint.SetSize( 10 );
     m_viewSnapPoint.SetStyle( KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
     m_viewSnapPoint.SetColor( auxItemsColor );
     m_viewSnapPoint.SetDrawAtZero( true );
@@ -289,7 +290,6 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* a
     return BestSnapAnchor( aOrigin, layers, aGrid, item );
 }
 
-
 VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
                                           GRID_HELPER_GRIDS               aGrid,
                                           const std::vector<BOARD_ITEM*>& aSkip )
@@ -364,6 +364,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             m_viewSnapPoint.SetPosition( nearest->pos );
             m_viewSnapLine.SetPosition( nearest->pos );
             m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
+
+            m_viewSnapPoint.SetSnapTypes( nearest->pointTypes );
 
             if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )
                 m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
@@ -579,124 +581,126 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                                                     | OVAL_CARDINAL_EXTREMES;
 
     // The key points of a circle centred around (0, 0) with the given radius
-    auto getCircleKeyPoints =
-            []( int radius )
+    auto getCircleKeyPoints = []( int radius, bool aIncludeCenter )
+    {
+        std::vector<TYPED_POINT2I> points = {
+            { { -radius, 0 }, POINT_TYPE::PT_QUADRANT },
+            { { radius, 0 }, POINT_TYPE::PT_QUADRANT },
+            { { 0, -radius }, POINT_TYPE::PT_QUADRANT },
+            { { 0, radius }, POINT_TYPE::PT_QUADRANT },
+        };
+
+        if( aIncludeCenter )
+            points.push_back( { { 0, 0 }, POINT_TYPE::PT_CENTER } );
+
+        return points;
+    };
+
+    auto handlePadShape = [&]( PAD* aPad )
+    {
+        addAnchor( aPad->GetPosition(), ORIGIN | SNAPPABLE, aPad, POINT_TYPE::PT_CENTER );
+
+        /// If we are getting a drag point, we don't want to center the edge of pads
+        if( aFrom )
+            return;
+
+        switch( aPad->GetShape() )
+        {
+        case PAD_SHAPE::CIRCLE:
+            for( const TYPED_POINT2I& pt : getCircleKeyPoints( aPad->GetSizeX() / 2, false ) )
             {
-                return std::vector<VECTOR2I>{ { 0, 0 },
-                                              { -radius, 0 },
-                                              { radius, 0 },
-                                              { 0, -radius },
-                                              { 0, radius } };
-            };
+                // Transform to the pad positon
+                addAnchor( aPad->ShapePos() + pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
+            }
 
-    auto handlePadShape =
-            [&]( PAD* aPad )
+            break;
+
+        case PAD_SHAPE::OVAL:
+            for( const TYPED_POINT2I& pt :
+                 GetOvalKeyPoints( aPad->GetSize(), aPad->GetOrientation(), ovalKeyPointFlags ) )
             {
-                addAnchor( aPad->GetPosition(), ORIGIN | SNAPPABLE, aPad );
+                // Transform to the pad positon
+                addAnchor( aPad->ShapePos() + pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
+            }
 
-                /// If we are getting a drag point, we don't want to center the edge of pads
-                if( aFrom )
-                    return;
+            break;
 
-                switch( aPad->GetShape() )
-                {
-                case PAD_SHAPE::CIRCLE:
-                    for( const VECTOR2I& pt: getCircleKeyPoints( aPad->GetSizeX() / 2 ) )
-                    {
-                        // Transform to the pad positon
-                        addAnchor( aPad->ShapePos() + pt, OUTLINE | SNAPPABLE, aPad );
-                    }
+        case PAD_SHAPE::RECTANGLE:
+        case PAD_SHAPE::TRAPEZOID:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::CHAMFERED_RECT:
+        {
+            VECTOR2I half_size( aPad->GetSize() / 2 );
+            VECTOR2I trap_delta( 0, 0 );
 
-                    break;
+            if( aPad->GetShape() == PAD_SHAPE::TRAPEZOID )
+                trap_delta = aPad->GetDelta() / 2;
 
-                case PAD_SHAPE::OVAL:
-                    for( const VECTOR2I& pt: GetOvalKeyPoints( aPad->GetSize(),
-                                                               aPad->GetOrientation(),
-                                                               ovalKeyPointFlags ) )
-                    {
-                        // Transform to the pad positon
-                        addAnchor( aPad->ShapePos() + pt, OUTLINE | SNAPPABLE, aPad );
-                    }
+            SHAPE_LINE_CHAIN corners;
 
-                    break;
+            corners.Append( -half_size.x - trap_delta.y, half_size.y + trap_delta.x );
+            corners.Append( half_size.x + trap_delta.y, half_size.y - trap_delta.x );
+            corners.Append( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
+            corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
+            corners.SetClosed( true );
 
-                case PAD_SHAPE::RECTANGLE:
-                case PAD_SHAPE::TRAPEZOID:
-                case PAD_SHAPE::ROUNDRECT:
-                case PAD_SHAPE::CHAMFERED_RECT:
-                {
-                    VECTOR2I half_size( aPad->GetSize() / 2 );
-                    VECTOR2I trap_delta( 0, 0 );
+            corners.Rotate( aPad->GetOrientation() );
+            corners.Move( aPad->ShapePos() );
 
-                    if( aPad->GetShape() == PAD_SHAPE::TRAPEZOID )
-                        trap_delta = aPad->GetDelta() / 2;
+            for( size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
+            {
+                const SEG& seg = corners.GetSegment( ii );
+                addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_CORNER );
+                addAnchor( seg.Center(), OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_MID );
 
-                    SHAPE_LINE_CHAIN corners;
+                if( ii == corners.GetSegmentCount() - 1 )
+                    addAnchor( seg.B, OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_CORNER );
+            }
 
-                    corners.Append( -half_size.x - trap_delta.y,  half_size.y + trap_delta.x );
-                    corners.Append(  half_size.x + trap_delta.y,  half_size.y - trap_delta.x );
-                    corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
-                    corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
-                    corners.SetClosed( true );
+            break;
+        }
 
-                    corners.Rotate( aPad->GetOrientation() );
-                    corners.Move( aPad->ShapePos() );
+        default:
+        {
+            const auto& outline = aPad->GetEffectivePolygon( ERROR_INSIDE );
 
-                    for( size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
-                    {
-                        const SEG& seg = corners.GetSegment( ii );
-                        addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad );
-                        addAnchor( seg.Center(), OUTLINE | SNAPPABLE, aPad );
+            if( !outline->IsEmpty() )
+            {
+                for( const VECTOR2I& pt : outline->Outline( 0 ).CPoints() )
+                    addAnchor( pt, OUTLINE | SNAPPABLE, aPad );
+            }
 
-                        if( ii == corners.GetSegmentCount() - 1 )
-                            addAnchor( seg.B, OUTLINE | SNAPPABLE, aPad );
-                    }
+            break;
+        }
+        }
 
-                    break;
-                }
+        if( aPad->HasHole() )
+        {
+            // Holes are at the pad centre (it's the shape that may be offset)
+            const VECTOR2I hole_pos = aPad->GetPosition();
+            const VECTOR2I hole_size = aPad->GetDrillSize();
 
-                default:
-                {
-                    const auto& outline = aPad->GetEffectivePolygon( ERROR_INSIDE );
+            std::vector<TYPED_POINT2I> snap_pts;
 
-                    if( !outline->IsEmpty() )
-                    {
-                        for( const VECTOR2I& pt : outline->Outline( 0 ).CPoints() )
-                            addAnchor( pt, OUTLINE | SNAPPABLE, aPad );
-                    }
+            if( hole_size.x == hole_size.y )
+            {
+                // Circle
+                snap_pts = getCircleKeyPoints( hole_size.x / 2, true );
+            }
+            else
+            {
+                // Oval
 
-                    break;
-                }
-                }
+                // For now there's no way to have an off-angle hole, so this is the
+                // same as the pad. In future, this may not be true:
+                // https://gitlab.com/kicad/code/kicad/-/issues/4124
+                snap_pts = GetOvalKeyPoints( hole_size, aPad->GetOrientation(), ovalKeyPointFlags );
+            }
 
-                if( aPad->HasHole() )
-                {
-                    // Holes are at the pad centre (it's the shape that may be offset)
-                    const VECTOR2I hole_pos = aPad->GetPosition();
-                    const VECTOR2I hole_size = aPad->GetDrillSize();
-
-                    std::vector<VECTOR2I> snap_pts;
-
-                    if ( hole_size.x == hole_size.y )
-                    {
-                        // Circle
-                        snap_pts = getCircleKeyPoints( hole_size.x / 2 );
-                    }
-                    else
-                    {
-                        // Oval
-
-                        // For now there's no way to have an off-angle hole, so this is the
-                        // same as the pad. In future, this may not be true:
-                        // https://gitlab.com/kicad/code/kicad/-/issues/4124
-                        snap_pts = GetOvalKeyPoints( hole_size, aPad->GetOrientation(),
-                                                     ovalKeyPointFlags );
-                    }
-
-                    for( const VECTOR2I& snap_pt : snap_pts )
-                        addAnchor( hole_pos + snap_pt, OUTLINE | SNAPPABLE, aPad );
-                }
-            };
+            for( const TYPED_POINT2I& snap_pt : snap_pts )
+                addAnchor( hole_pos + snap_pt.m_point, OUTLINE | SNAPPABLE, aPad, snap_pt.m_types );
+        }
+    };
 
     auto handleShape =
             [&]( PCB_SHAPE* shape )
@@ -708,21 +712,30 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 {
                     case SHAPE_T::CIRCLE:
                     {
-                        int r = ( start - end ).EuclideanNorm();
+                        const int r = ( start - end ).EuclideanNorm();
 
-                        addAnchor( start, ORIGIN | SNAPPABLE, shape );
-                        addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, shape );
-                        addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, shape );
-                        addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, shape );
-                        addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, shape );
+                        addAnchor( start, ORIGIN | SNAPPABLE, shape, POINT_TYPE::PT_CENTER );
+
+                        addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_QUADRANT );
+                        addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_QUADRANT );
+                        addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_QUADRANT );
+                        addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_QUADRANT );
                         break;
                     }
 
                     case SHAPE_T::ARC:
-                        addAnchor( shape->GetStart(), CORNER | SNAPPABLE, shape );
-                        addAnchor( shape->GetEnd(), CORNER | SNAPPABLE, shape );
-                        addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape );
-                        addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape );
+                        addAnchor( shape->GetStart(), CORNER | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_END );
+                        addAnchor( shape->GetEnd(), CORNER | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_CORNER );
+                        addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_MID );
+                        addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_CENTER );
                         break;
 
                     case SHAPE_T::RECTANGLE:
@@ -734,21 +747,24 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         SEG third( end, point3 );
                         SEG fourth( point3, start );
 
-                        addAnchor( first.A,         CORNER | SNAPPABLE, shape );
-                        addAnchor( first.Center(),  CORNER | SNAPPABLE, shape );
-                        addAnchor( second.A,        CORNER | SNAPPABLE, shape );
-                        addAnchor( second.Center(), CORNER | SNAPPABLE, shape );
-                        addAnchor( third.A,         CORNER | SNAPPABLE, shape );
-                        addAnchor( third.Center(),  CORNER | SNAPPABLE, shape );
-                        addAnchor( fourth.A,        CORNER | SNAPPABLE, shape );
-                        addAnchor( fourth.Center(), CORNER | SNAPPABLE, shape );
+                        const int snapFlags = CORNER | SNAPPABLE;
+
+                        addAnchor( first.A,         snapFlags, shape, POINT_TYPE::PT_CORNER );
+                        addAnchor( first.Center(),  snapFlags, shape, POINT_TYPE::PT_MID );
+                        addAnchor( second.A,        snapFlags, shape, POINT_TYPE::PT_CORNER );
+                        addAnchor( second.Center(), snapFlags, shape, POINT_TYPE::PT_MID );
+                        addAnchor( third.A,         snapFlags, shape, POINT_TYPE::PT_CORNER );
+                        addAnchor( third.Center(),  snapFlags, shape, POINT_TYPE::PT_MID );
+                        addAnchor( fourth.A,        snapFlags, shape, POINT_TYPE::PT_CORNER );
+                        addAnchor( fourth.Center(), snapFlags, shape, POINT_TYPE::PT_MID );
                         break;
                     }
 
                     case SHAPE_T::SEGMENT:
-                        addAnchor( start, CORNER | SNAPPABLE, shape );
-                        addAnchor( end, CORNER | SNAPPABLE, shape );
-                        addAnchor( shape->GetCenter(), CORNER | SNAPPABLE, shape );
+                        addAnchor( start, CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
+                        addAnchor( end, CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
+                        addAnchor( shape->GetCenter(), CORNER | SNAPPABLE, shape,
+                                   POINT_TYPE::PT_MID );
                         break;
 
                     case SHAPE_T::POLY:
@@ -760,7 +776,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
                         for( const VECTOR2I& p : poly )
                         {
-                            addAnchor( p, CORNER | SNAPPABLE, shape );
+                            addAnchor( p, CORNER | SNAPPABLE, shape, POINT_TYPE::PT_CORNER );
                             lc.Append( p );
                         }
 
@@ -769,8 +785,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     }
 
                     case SHAPE_T::BEZIER:
-                        addAnchor( start, CORNER | SNAPPABLE, shape );
-                        addAnchor( end, CORNER | SNAPPABLE, shape );
+                        addAnchor( start, CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
+                        addAnchor( end, CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
                         KI_FALLTHROUGH;
 
                     default:
@@ -817,10 +833,10 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             VECTOR2I grid( GetGrid() );
 
             if( view->IsLayerVisible( LAYER_ANCHOR ) )
-                addAnchor( position, ORIGIN | SNAPPABLE, footprint );
+                addAnchor( position, ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
 
             if( ( center - position ).SquaredEuclideanNorm() > grid.SquaredEuclideanNorm() )
-                addAnchor( center, ORIGIN | SNAPPABLE, footprint );
+                addAnchor( center, ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
 
             break;
         }
@@ -893,16 +909,17 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             {
                 PCB_TRACK* track = static_cast<PCB_TRACK*>( aItem );
 
-                addAnchor( track->GetStart(), CORNER | SNAPPABLE, track );
-                addAnchor( track->GetEnd(), CORNER | SNAPPABLE, track );
-                addAnchor( track->GetCenter(), ORIGIN, track);
+                addAnchor( track->GetStart(), CORNER | SNAPPABLE, track, POINT_TYPE::PT_END );
+                addAnchor( track->GetEnd(), CORNER | SNAPPABLE, track, POINT_TYPE::PT_END );
+                addAnchor( track->GetCenter(), ORIGIN, track, POINT_TYPE::PT_MID );
             }
 
             break;
 
         case PCB_MARKER_T:
         case PCB_TARGET_T:
-            addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
+            addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem,
+                       POINT_TYPE::PT_CENTER );
             break;
 
         case PCB_VIA_T:
@@ -918,7 +935,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             }
 
             if( checkVisibility( aItem ) )
-                addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
+                addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem,
+                           POINT_TYPE::PT_CENTER );
 
             break;
 
@@ -935,7 +953,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
                 for( auto iter = outline->CIterateWithHoles(); iter; iter++ )
                 {
-                    addAnchor( *iter, CORNER | SNAPPABLE, aItem );
+                    addAnchor( *iter, CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CORNER );
                     lc.Append( *iter );
                 }
 

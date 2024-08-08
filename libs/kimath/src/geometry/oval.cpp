@@ -28,8 +28,8 @@
 #include <trigo.h> // for RotatePoint
 
 
-std::vector<VECTOR2I> GetOvalKeyPoints( const VECTOR2I& aOvalSize, const EDA_ANGLE& aRotation,
-                                        OVAL_KEY_POINT_FLAGS aFlags )
+std::vector<TYPED_POINT2I> GetOvalKeyPoints( const VECTOR2I& aOvalSize, const EDA_ANGLE& aRotation,
+                                             OVAL_KEY_POINT_FLAGS aFlags )
 {
     const VECTOR2I half_size = aOvalSize / 2;
     const int      half_width = std::min( half_size.x, half_size.y );
@@ -37,26 +37,29 @@ std::vector<VECTOR2I> GetOvalKeyPoints( const VECTOR2I& aOvalSize, const EDA_ANG
 
     // Points on a non-rotated pad at the origin, long-axis is y
     // (so for now, width is left/right, len is up/down)
-    std::vector<VECTOR2I> pts;
+    std::vector<TYPED_POINT2I> pts;
 
     if ( aFlags & OVAL_CENTER )
     {
         // Centre is easy
-        pts.emplace_back( 0, 0 );
+        pts.emplace_back( VECTOR2I{ 0, 0 }, POINT_TYPE::PT_CENTER );
     };
 
-    if ( aFlags & OVAL_SIDE_MIDPOINTS )
+    if( aFlags & OVAL_SIDE_MIDPOINTS )
     {
         // Side midpoints
-        pts.emplace_back( half_width, 0 );
-        pts.emplace_back( -half_width, 0 );
+        pts.emplace_back( VECTOR2I{ half_width, 0 }, POINT_TYPE::PT_MID );
+        pts.emplace_back( VECTOR2I{ -half_width, 0 }, POINT_TYPE::PT_MID );
     }
 
-    if ( aFlags & OVAL_CAP_TIPS )
+    if( aFlags & OVAL_CAP_TIPS )
     {
+        // If the oval is square-on, the tips are quadrants
+        const POINT_TYPE pt_type = aRotation.IsCardinal() ? PT_QUADRANT : PT_END;
+
         // Cap ends
-        pts.emplace_back( 0, half_len );
-        pts.emplace_back( 0, -half_len );
+        pts.emplace_back( VECTOR2I{ 0, half_len }, pt_type );
+        pts.emplace_back( VECTOR2I{ 0, -half_len }, pt_type );
     }
 
     // Distance from centre to cap centres
@@ -65,17 +68,22 @@ std::vector<VECTOR2I> GetOvalKeyPoints( const VECTOR2I& aOvalSize, const EDA_ANG
     if ( aFlags & OVAL_CAP_CENTERS )
     {
         // Cap centres
-        pts.emplace_back( 0, d_centre_to_cap_centre );
-        pts.emplace_back( 0, -d_centre_to_cap_centre );
+        pts.emplace_back( VECTOR2I{ 0, d_centre_to_cap_centre }, POINT_TYPE::PT_CENTER );
+        pts.emplace_back( VECTOR2I{ 0, -d_centre_to_cap_centre }, POINT_TYPE::PT_CENTER );
     }
 
     if ( aFlags & OVAL_SIDE_ENDS )
     {
+        const auto add_end = [&]( const VECTOR2I& aPt )
+        {
+            pts.emplace_back( aPt, POINT_TYPE::PT_END );
+        };
+
         // End points of flat sides (always vertical)
-        pts.emplace_back( half_width, d_centre_to_cap_centre );
-        pts.emplace_back( half_width, -d_centre_to_cap_centre );
-        pts.emplace_back( -half_width, d_centre_to_cap_centre );
-        pts.emplace_back( -half_width, -d_centre_to_cap_centre );
+        add_end( { half_width, d_centre_to_cap_centre } );
+        add_end( { half_width, -d_centre_to_cap_centre } );
+        add_end( { -half_width, d_centre_to_cap_centre } );
+        add_end( { -half_width, -d_centre_to_cap_centre } );
     }
 
     // If the pad is horizontal (i.e. x > y), we'll rotate the whole thing
@@ -115,19 +123,24 @@ std::vector<VECTOR2I> GetOvalKeyPoints( const VECTOR2I& aOvalSize, const EDA_ANG
         VECTOR2I cap_radial_to_y_axis = cap_radial;
         RotatePoint( cap_radial_to_y_axis, radial_line_rotation );
 
+        const auto add_quadrant = [&]( const VECTOR2I& aPt )
+        {
+            pts.emplace_back( aPt, POINT_TYPE::PT_QUADRANT );
+        };
+
         // The quadrant points are then the relevant offsets from each cap centre
-        pts.emplace_back( VECTOR2I{ 0, d_centre_to_cap_centre } + cap_radial_to_y_axis );
-        pts.emplace_back( VECTOR2I{ 0, d_centre_to_cap_centre } + cap_radial_to_x_axis );
+        add_quadrant( VECTOR2I{ 0, d_centre_to_cap_centre } + cap_radial_to_y_axis );
+        add_quadrant( VECTOR2I{ 0, d_centre_to_cap_centre } + cap_radial_to_x_axis );
         // The opposite cap offsets go from the other cap centre, the other way
-        pts.emplace_back( VECTOR2I{ 0, -d_centre_to_cap_centre } - cap_radial_to_y_axis );
-        pts.emplace_back( VECTOR2I{ 0, -d_centre_to_cap_centre } - cap_radial_to_x_axis );
+        add_quadrant( VECTOR2I{ 0, -d_centre_to_cap_centre } - cap_radial_to_y_axis );
+        add_quadrant( VECTOR2I{ 0, -d_centre_to_cap_centre } - cap_radial_to_x_axis );
     }
 
-    for( VECTOR2I& pt : pts )
+    for( TYPED_POINT2I& pt : pts )
     {
         // Transform to the actual orientation
         // Already includes the extra 90 to swap x/y if needed
-        RotatePoint( pt, rotation );
+        RotatePoint( pt.m_point, rotation );
     }
 
     return pts;

@@ -28,6 +28,7 @@
 
 #include <math/vector2d.h>
 #include <geometry/eda_angle.h>
+#include <geometry/point_types.h>
 
 enum OVAL_KEY_POINTS
 {
@@ -55,9 +56,9 @@ using OVAL_KEY_POINT_FLAGS = unsigned int;
  * @param aRotation - The rotation of the oval
  * @param aFlags - The flags indicating which points to return
  *
- * @return std::vector<VECTOR2I> - The list of points
+ * @return std::vector<TYPED_POINT2I> - The list of points and their geomtrical types
  */
-std::vector<VECTOR2I> GetOvalKeyPoints( const VECTOR2I& aOvalSize, const EDA_ANGLE& aRotation,
-                                        OVAL_KEY_POINT_FLAGS aFlags );
+std::vector<TYPED_POINT2I> GetOvalKeyPoints( const VECTOR2I& aOvalSize, const EDA_ANGLE& aRotation,
+                                             OVAL_KEY_POINT_FLAGS aFlags );
 
 #endif /* GEOMETRY_OVAL_H_ */
