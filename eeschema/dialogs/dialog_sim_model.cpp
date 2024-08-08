@@ -1169,15 +1169,15 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onRadioButton( wxCommandEvent& aEvent 
 
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathText( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathText( wxCommandEvent& aEvent )
 {
     m_rbLibraryModel->SetValue( true );
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
 {
     m_rbLibraryModel->SetValue( true );
 
@@ -1194,8 +1194,8 @@ void DIALOG_SIM_MODEL<T>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
 }
 
 
-template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
+template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextKillFocus( wxFocusEvent& aEvent )
 {
     CallAfter(
             [this]()
