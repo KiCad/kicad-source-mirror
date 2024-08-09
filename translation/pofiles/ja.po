@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-05-07 02:28+0000\n"
+"PO-Revision-Date: 2024-08-09 08:09+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.4-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -18912,11 +18912,8 @@ msgid "Spice Simulator"
 msgstr "Spice シミュレーター"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"ネットリストの生成中にエラーが発生しました。\n"
-"\n"
+msgstr "ネットリストの生成中にエラーが発生しました。"
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -18943,9 +18940,9 @@ msgid "Another simulation is already running."
 msgstr "別のシミュレーションがすでに実行中です。"
 
 #: eeschema/sim/simulator_frame.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "ファイル %s をロードできません"
+msgstr "ファイル %s のロードもしくは解析ができません"
 
 #: eeschema/sim/simulator_frame.cpp:616
 msgid "Save changes to workbook?"
@@ -40511,9 +40508,8 @@ msgid "PTH pad %s %s of %s"
 msgstr "PTHパッド %s %s (%s)"
 
 #: pcbnew/pad.cpp:1876
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "エラー: パッドのサイズは正でなければなりません。"
+msgstr "(パッドのサイズは正でなければなりません)"
 
 #: pcbnew/pad.cpp:1887
 #, fuzzy, c-format
