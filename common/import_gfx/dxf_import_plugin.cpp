@@ -1223,6 +1223,8 @@ wxString DXF_IMPORT_PLUGIN::toNativeString( const wxString& aData )
 
                 if( codeHex.ToCULong( &codeVal, 16 ) && codeVal != 0 )
                     res << wxUniChar( codeVal );
+
+                i--;
             }
             break;
 
