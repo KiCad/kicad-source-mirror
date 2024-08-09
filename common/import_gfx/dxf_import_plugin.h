@@ -428,7 +428,9 @@ private:
      * Called for every polyline vertex.
      */
     virtual void addVertex( const DL_VertexData& aData ) override;
-    virtual void addMText( const DL_MTextData& aData) override;
+
+    virtual void addMTextChunk( const std::string& text ) override;
+    virtual void addMText( const DL_MTextData& aData ) override;
 
     virtual void endEntity() override;
 
@@ -571,6 +573,8 @@ private:
     wxString    m_messages;          // messages generated during dxf file parsing.
                                      // Each message ends by '\n'
     DXF2BRD_ENTITY_DATA m_curr_entity;  // the current entity parameters when parsing a DXF entity
+
+    std::string m_mtextContent;      // Contents of MText.
 
     double      m_minX, m_maxX;      // handles image size in mm
     double      m_minY, m_maxY;      // handles image size in mm

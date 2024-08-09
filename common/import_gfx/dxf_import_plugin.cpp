@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
@@ -840,10 +840,23 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 }
 
 
+void DXF_IMPORT_PLUGIN::addMTextChunk( const std::string& text )
+{
+    // If the text string is greater than 250 characters, the string is divided into 250-character
+    // chunks, which appear in one or more group 3 codes. If group 3 codes are used, the last group
+    // is a group 1 and has fewer than 250 characters
+
+    m_mtextContent.append( text );
+}
+
+
 void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 {
-    wxString          text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
-    wxString          attrib;
+    m_mtextContent.append( aData.text );
+
+    // TODO: determine control codes applied to the whole text?
+    wxString text = toNativeString( wxString::FromUTF8( m_mtextContent.c_str() ) );
+
     DXF_IMPORT_STYLE* style = getImportStyle( aData.style.c_str() );
     double            textHeight = mapDim( aData.height );
 
@@ -860,30 +873,6 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     VECTOR2D bottomRight(0.0, 0.0);
     VECTOR2D topLeft(0.0, 0.0);
     VECTOR2D topRight(0.0, 0.0);
-
-    /* Some texts start by '\' and have formatting chars (font name, font option...)
-     *  ending with ';'
-     *  Here are some mtext formatting codes:
-     *  Format code        Purpose
-     * \0...\o            Turns overline on and off
-     *  \L...\l            Turns underline on and off
-     * \~                 Inserts a nonbreaking space
-     \\                 Inserts a backslash
-     \\\{...\}            Inserts an opening and closing brace
-     \\ \File name;        Changes to the specified font file
-     \\ \Hvalue;           Changes to the text height specified in drawing units
-     \\ \Hvaluex;          Changes the text height to a multiple of the current text height
-     \\ \S...^...;         Stacks the subsequent text at the \, #, or ^ symbol
-     \\ \Tvalue;           Adjusts the space between characters, from.75 to 4 times
-     \\ \Qangle;           Changes oblique angle
-     \\ \Wvalue;           Changes width factor to produce wide text
-     \\ \A                 Sets the alignment value; valid values: 0, 1, 2 (bottom, center, top)    while( text.StartsWith( wxT("\\") ) )
-     */
-    while( text.StartsWith( wxT( "\\" ) ) )
-    {
-        attrib << text.BeforeFirst( ';' );
-        text = text.AfterFirst( ';' );
-    }
 
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D   textposCoords = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
@@ -1001,6 +990,8 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     updateImageLimits( bottomRight );
     updateImageLimits( topLeft );
     updateImageLimits( topRight );
+
+    m_mtextContent.clear();
 }
 
 
@@ -1165,55 +1156,153 @@ wxString DXF_IMPORT_PLUGIN::toDxfString( const wxString& aStr )
 
 wxString DXF_IMPORT_PLUGIN::toNativeString( const wxString& aData )
 {
-    wxString    res;
+    wxString res;
+    size_t   i = 0;
+    int      braces = 0;
+    int      overbarLevel = -1;
 
-    // Ignore font tags:
-    int         j = 0;
+    // For description, see:
+    // https://ezdxf.readthedocs.io/en/stable/dxfinternals/entities/mtext.html
+    // https://www.cadforum.cz/en/text-formatting-codes-in-mtext-objects-tip8640
 
-    for( unsigned i = 0; i < aData.length(); ++i )
+    for( i = 0; i < aData.length(); i++ )
     {
-        if( aData[ i ] == 0x7B )                                     // is '{' ?
+        switch( (wchar_t) aData[i] )
         {
-            if( aData[ i + 1 ] == 0x5c && aData[ i + 2 ] == 0x66 )    // is "\f" ?
-            {
-                // found font tag, append parsed part
-                res.append( aData.Mid( j, i - j ) );
+        case '{': // Text area influenced by the code
+            braces++;
+            break;
 
-                // skip to ';'
-                for( unsigned k = i + 3; k < aData.length(); ++k )
+        case '}':
+            if( overbarLevel == braces )
+            {
+                res << '}';
+                overbarLevel = -1;
+            }
+            braces--;
+            break;
+
+        case '^': // C0 control code
+            if( ++i >= aData.length() )
+                break;
+
+            switch( (wchar_t) aData[i] )
+            {
+            case 'I': res << '\t'; break;
+            case 'J': res << '\b'; break;
+            case ' ': res << '^'; break;
+            default: break;
+            }
+            break;
+
+        case '\\':
+        {
+            if( ++i >= aData.length() )
+                break;
+
+            switch( (wchar_t) aData[i] )
+            {
+            case 'P': // New paragraph (new line)
+            case 'X': // Paragraph wrap on the dimension line (only in dimensions)
+                res << '\n';
+                break;
+
+            case '~': // Non-wrapping space, hard space
+                res << '\u00A0';
+                break;
+
+            case 'S': // Stacking
+            {
+                i++;
+                wxString stacked;
+
+                for( ; i < aData.length(); i++ )
                 {
-                    if( aData[ k ] == 0x3B )
-                    {
-                        i = j = ++k;
+                    if( aData[i] == ';' )
                         break;
-                    }
+                    else
+                        stacked << aData[i];
                 }
 
-                // add to '}'
-                for( unsigned k = i; k < aData.length(); ++k )
+                if( stacked.Contains( wxS( "#" ) ) )
                 {
-                    if( aData[ k ] == 0x7D )
-                    {
-                        res.append( aData.Mid( i, k - i ) );
-                        i = j = ++k;
-                        break;
-                    }
+                    res << '^' << '{';
+                    res << stacked.BeforeFirst( '#' );
+                    res << '}' << '/' << '_' << '{';
+                    res << stacked.AfterFirst( '#' );
+                    res << '}';
+                }
+                else
+                {
+                    stacked.Replace( wxS( "^ " ), wxS( "/" ) );
+                    res << stacked;
                 }
             }
+            break;
+
+            case 'O': // Start overstrike
+                if( overbarLevel == -1 )
+                {
+                    res << '~' << '{';
+                    overbarLevel = braces;
+                }
+                break;
+            case 'o': // Stop overstrike
+                if( overbarLevel == braces )
+                {
+                    res << '}';
+                    overbarLevel = -1;
+                }
+                break;
+
+            case 'L': // Start underline
+            case 'l': // Stop underline
+            case 'K': // Start strike-through
+            case 'k': // Stop strike-through
+            case 'N': // New column
+                // Ignore
+                break;
+
+            case 'p': // Control codes for bullets, numbered paragraphs, tab stops and columns
+            case 'Q': // Slanting (obliquing) text by angle
+            case 'H': // Text height
+            case 'W': // Text width
+            case 'F': // Font selection
+            case 'f': // Font selection (alternative)
+            case 'A': // Alignment
+            case 'C': // Color change (ACI colors)
+            case 'c': // Color change (truecolor)
+            case 'T': // Tracking, char.spacing
+                // Skip to ;
+                for( ; i < aData.length(); i++ )
+                {
+                    if( aData[i] == ';' )
+                        break;
+                }
+                break;
+
+            default: // Escaped character
+                if( ++i >= aData.length() )
+                    break;
+
+                res << aData[i];
+                break;
+            }
+        }
+        break;
+
+        default: res << aData[i];
         }
     }
 
-    res.append( aData.Mid( j ) );
+    if( overbarLevel != -1 )
+    {
+        res << '}';
+        overbarLevel = -1;
+    }
 
 #if 1
     wxRegEx regexp;
-    // Line feed:
-    regexp.Compile( wxT( "\\\\P" ) );
-    regexp.Replace( &res, wxT( "\n" ) );
-
-    // Space:
-    regexp.Compile( wxT( "\\\\~" ) );
-    regexp.Replace( &res, wxT( " " ) );
 
     // diameter:
     regexp.Compile( wxT( "%%[cC]" ) );
