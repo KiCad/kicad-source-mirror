@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <refdes_utils.h>
 #include <sch_screen.h>
 #include <sch_item.h>
 #include <sch_marker.h>
@@ -663,6 +664,33 @@ void SCH_SHEET_PATH::RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
         // Prefix the hierarchical path of the symbol instance to be removed.
         fullSheetPath = fullSheetPath + currentSheetPath;
         symbol->RemoveInstance( fullSheetPath );
+    }
+}
+
+
+void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectName )
+{
+    wxCHECK( !aProjectName.IsEmpty() && LastScreen(), /* void */ );
+
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        SCH_SYMBOL_INSTANCE symbolInstance;
+
+        if( !symbol->GetInstance( symbolInstance, Path() ) )
+        {
+            wxLogTrace( traceSchSheetPaths, "Adding missing symbol \"%s\" instance data for "
+                        "sheet path '%s'.",
+                        symbol->m_Uuid.AsString(), PathHumanReadable( false ) );
+
+            symbolInstance.m_Reference = UTIL::GetRefDesUnannotated( symbol->GetPrefix() );
+            symbolInstance.m_ProjectName = aProjectName;
+            symbolInstance.m_Path = Path();
+            symbol->AddHierarchicalReference( symbolInstance );
+        }
     }
 }
 
@@ -1367,6 +1395,13 @@ void SCH_SHEET_LIST::AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPat
         newSheetPath.SetPageNumber( instance.m_PageNumber );
         usedPageNumbers.push_back( instance.m_PageNumber );
     }
+}
+
+
+void SCH_SHEET_LIST::CheckForMissingSymbolInstances( const wxString& aProjectName )
+{
+    for( SCH_SHEET_PATH& sheetPath : *this )
+        sheetPath.CheckForMissingSymbolInstances( aProjectName );
 }
 
 
