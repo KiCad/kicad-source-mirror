@@ -276,6 +276,10 @@ public:
     void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
         m_origin = aTransform * m_origin + aTranslation;
+
+        VECTOR2D textSize = aTransform * VECTOR2D( m_width, m_height );
+        m_width = textSize.x;
+        m_height = textSize.y;
     }
 
     BOX2D GetBoundingBox() const override
