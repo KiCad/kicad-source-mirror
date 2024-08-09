@@ -12,13 +12,14 @@
 # Dmitry Mikhirev <mikhirev@gmail.com>, 2024.
 # alevtina-karashokova <karashokovaaa@basealt.ru>, 2024.
 # Alex Life <life.alex.v@gmail.com>, 2024.
+# Free_squire <danil_pyankov_2004@mail.ru>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-20 21:09+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2024-08-09 08:09+0000\n"
+"Last-Translator: Free_squire <danil_pyankov_2004@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -13332,7 +13333,7 @@ msgstr "Поменять источники местами"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:251
 msgid "Time step:"
-msgstr "Период:"
+msgstr "Шаг времени:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:260
 #: eeschema/dialogs/dialog_sim_command_base.cpp:271
