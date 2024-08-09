@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -408,6 +408,8 @@ public:
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
+    void CheckForMissingSymbolInstances( const wxString& aProjectName );
+
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
     bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }
@@ -689,6 +691,8 @@ public:
     int GetLastVirtualPageNumber() const;
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
+
+    void CheckForMissingSymbolInstances( const wxString& aProjectName );
 
     bool HasPath( const KIID_PATH& aPath ) const;
 

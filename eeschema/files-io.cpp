@@ -181,7 +181,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         CreateScreens();
     }
 
-    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName, KICTL_KICAD_ONLY );
+    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName,
+                                                                                 KICTL_KICAD_ONLY );
 
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
     {
@@ -492,13 +493,14 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             // Restore all of the loaded symbol and sheet instances from the root sheet.
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
-                sheetList.UpdateSymbolInstanceData( Schematic().RootScreen()->GetSymbolInstances());
+                sheetList.UpdateSymbolInstanceData( Schematic().RootScreen()->GetSymbolInstances() );
 
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
                 sheetList.UpdateSheetInstanceData( Schematic().RootScreen()->GetSheetInstances());
 
             if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20230221 )
-                for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+                for( SCH_SCREEN* screen = schematic.GetFirst(); screen;
+                     screen = schematic.GetNext() )
                     screen->FixLegacyPowerSymbolMismatches();
 
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
@@ -511,8 +513,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
         }
 
-        schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), Schematic().GetSheets() );
-        schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), Schematic().GetSheets() );
+        schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), sheetList );
+        schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), sheetList );
+        sheetList.CheckForMissingSymbolInstances( Prj().GetProjectName() );
 
         Schematic().ConnectionGraph()->Reset();
 
