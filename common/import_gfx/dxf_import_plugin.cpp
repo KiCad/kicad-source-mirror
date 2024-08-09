@@ -1211,6 +1211,21 @@ wxString DXF_IMPORT_PLUGIN::toNativeString( const wxString& aData )
                 res << '\u00A0';
                 break;
 
+            case 'U': // Unicode character, e.g. \U+ff08
+            {
+                i += 2;
+                wxString codeHex;
+
+                for( ; codeHex.length() < 4 && i < aData.length(); i++ )
+                    codeHex << aData[i];
+
+                unsigned long codeVal = 0;
+
+                if( codeHex.ToCULong( &codeVal, 16 ) && codeVal != 0 )
+                    res << wxUniChar( codeVal );
+            }
+            break;
+
             case 'S': // Stacking
             {
                 i++;
