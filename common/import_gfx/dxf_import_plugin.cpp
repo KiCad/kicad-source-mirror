@@ -1208,7 +1208,7 @@ wxString DXF_IMPORT_PLUGIN::toNativeString( const wxString& aData )
                 break;
 
             case '~': // Non-wrapping space, hard space
-                res << '\u00A0';
+                res << L'\u00A0';
                 break;
 
             case 'U': // Unicode character, e.g. \U+ff08
