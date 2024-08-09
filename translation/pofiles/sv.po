@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-04 14:27+0000\n"
+"PO-Revision-Date: 2024-08-10 15:09+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -944,9 +944,8 @@ msgid "Configure Paths"
 msgstr "Konfigurera sökvägar"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "Modell"
+msgstr "Bädda in modell"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -3728,19 +3727,23 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Förinställning 'explorer.exe /n,/select,%F' för detta operativsystem."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Filutforskarkommando.\n"
+"Exempel:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Filutforskarkommando med obligatoriskt tillägg '%s' efter det sista inmatade "
+"tecknet."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -3786,9 +3789,8 @@ msgid "Text editor:"
 msgstr "Textredigerare:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Filnamn:"
+msgstr "Filutforskare:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -4157,25 +4159,22 @@ msgid "Reset Unique Id"
 msgstr "Återställ unikt id"
 
 #: common/dialogs/panel_embedded_files.cpp:87
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Kopiera med referens"
+msgstr "Kopiera inbäddad referens"
 
 #: common/dialogs/panel_embedded_files.cpp:159
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Välj ett värde att ställa in"
+msgstr "Välj en fil att bädda in"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "Alla filer"
+msgstr "Alla filer|*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "Filen %s finns redan."
+msgstr "Filen '%s' finns redan."
 
 #: common/dialogs/panel_embedded_files.cpp:174
 #: common/dialogs/panel_embedded_files.cpp:248
@@ -4193,14 +4192,13 @@ msgid "Overwrite"
 msgstr "Skriv över"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Det gick inte att skapa filen '%s'."
+msgstr "Det gick inte att lägga till filen '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Välj ett GenCAD-exportfilnamn"
+msgstr "Välj en mapp att exportera filer till"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4211,55 +4209,52 @@ msgid "Skip"
 msgstr "Hoppa över"
 
 #: common/dialogs/panel_embedded_files.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "Kan inte skriva till symbolbibliotek '%s'."
+msgstr "Mappen '%s' är inte skrivbar."
 
 #: common/dialogs/panel_embedded_files.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "Kan inte skriva till symbolbibliotek '%s'."
+msgstr "Mappen '%s' är inte skrivbar."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "Försök igen"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Kunde inte öppna filen "
+msgstr "Kunde inte öppna filen '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Det gick inte att skapa filen '%s'."
+msgstr "Det gick inte att skriva filen '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "Referenser mellan ark"
+msgstr "Intern referens"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Lägg till inbäddad fil"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Spara nedladdad fil"
+msgstr "Ta bort inbäddad fil"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "&Export"
-msgstr "Exportera"
+msgstr "&Exportera"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "Bädda in fonter"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Spara en kopia av alla använda fonter"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 msgid "Footprints/pads:"
@@ -7653,14 +7648,12 @@ msgid "Open a library file with a text editor"
 msgstr "Öppna en biblioteksfil i en textredigerare"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Öppna katalog i File Explorer"
+msgstr "Öppna i filutforskare..."
 
 #: common/tool/actions.cpp:83
-#, fuzzy
 msgid "Open a library file with system file explorer"
-msgstr "Öppna en biblioteksfil i en textredigerare"
+msgstr "Öppna en biblioteksfil i systemets filutforskare"
 
 #: common/tool/actions.cpp:92
 msgid "Save changes"
@@ -8536,34 +8529,28 @@ msgstr ""
 #: eeschema/dialogs/dialog_schematic_setup.cpp:133
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:79
-#, fuzzy
 msgid "Embedded Files"
-msgstr "Bildfiler"
+msgstr "Inbäddade filer"
 
 #: common/tool/actions.cpp:1193
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Byt namn på fil"
+msgstr "Hantera inbäddade filer"
 
 #: common/tool/actions.cpp:1198
-#, fuzzy
 msgid "Remove File"
-msgstr "Döp om fil"
+msgstr "Ta bort fil"
 
 #: common/tool/actions.cpp:1199
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Ta bort alla matchade lager."
+msgstr "Ta bort en inbäddad fil"
 
 #: common/tool/actions.cpp:1204
-#, fuzzy
 msgid "Extract File"
-msgstr "Exportera till fil"
+msgstr "Extrahera fil"
 
 #: common/tool/actions.cpp:1205
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "Körbar fil"
+msgstr "Extrahera en inbäddad fil"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
@@ -8855,7 +8842,6 @@ msgid "Always show crosshairs"
 msgstr "Visa alltid hårkors"
 
 #: common/widgets/grid_text_button_helpers.cpp:363
-#, fuzzy
 msgid "Open file"
 msgstr "Öppna fil"
 
@@ -12886,9 +12872,8 @@ msgid "Text Variables"
 msgstr "Textvariabler"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:126
-#, fuzzy
 msgid "Schematic Data"
-msgstr "Överensstämmelse med kretsschema"
+msgstr "Kretsschemadata"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:144
 msgid "Project is missing or read-only. Settings will not be editable."
@@ -13913,9 +13898,8 @@ msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "Ändringar har inte sparats ännu. Exportera data som ej sparats?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1271
-#, fuzzy
 msgid "No output file specified in Export tab."
-msgstr "Inget filnamn specificerat i export"
+msgstr "Inget filnamn för utmatning specificerat i exportfliken."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1285
 #, c-format
@@ -15783,7 +15767,7 @@ msgstr "Nätklass %s ej definierad"
 #: eeschema/erc/erc.cpp:742
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "Etikett ansluter mer än en ledning vid %d, %d"
 
 #: eeschema/erc/erc.cpp:797
 #, c-format
@@ -15918,9 +15902,8 @@ msgid "Checking for four way junctions..."
 msgstr "Kontrollerar om fyrvägsanslutningar existerar..."
 
 #: eeschema/erc/erc.cpp:1723
-#, fuzzy
 msgid "Checking for labels on more than one wire..."
-msgstr "Kontrollerar om stift eller ledningar missar rutnätet..."
+msgstr "Kontrollerar om etiketter finns på mer än en ledning..."
 
 #: eeschema/erc/erc.cpp:1731
 msgid "Checking for undefined netclasses..."
@@ -15975,7 +15958,7 @@ msgstr "Fyra anslutningar sammankopplade"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "Etikett ansluter mer än en ledning"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
@@ -15998,14 +15981,16 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Etiketterna liknar varandra (endast små och stora bokstäver skiljer)"
 
 #: eeschema/erc/erc_item.cpp:120
-#, fuzzy
 msgid "Power pins are similar (lower/upper case difference only)"
-msgstr "Etiketterna liknar varandra (endast små och stora bokstäver skiljer)"
+msgstr ""
+"Strömförsörjningsstift liknar varandra (endast små och stora bokstäver "
+"skiljer)"
 
 #: eeschema/erc/erc_item.cpp:124
-#, fuzzy
 msgid "Power pin and label are similar (lower/upper case difference only)"
-msgstr "Etiketterna liknar varandra (endast små och stora bokstäver skiljer)"
+msgstr ""
+"Etikett och strömförsörjningsstift liknar varandra (endast små och stora "
+"bokstäver skiljer)"
 
 #: eeschema/erc/erc_item.cpp:128
 msgid "Global label only appears once in the schematic"
@@ -18078,9 +18063,8 @@ msgstr "Tomt namn på arkstift"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2798
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2811
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2852
-#, fuzzy
 msgid "No schematic object"
-msgstr "Spara schemaprojekt"
+msgstr "Inget kretsschemaobjekt"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2913
 msgid "Invalid symbol library name"
@@ -19050,7 +19034,7 @@ msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr "Signalnamn innehåller '[' eller ']' men är inte ett giltigt bussnamn."
 
 #: eeschema/sheet.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
@@ -22920,7 +22904,7 @@ msgstr "Inget symbolbibliotek valt."
 #: pcbnew/tools/footprint_editor_control.cpp:613
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
-msgstr ""
+msgstr "Saknat/felaktigt filutforskarargument '%F' i almänna inställningar."
 
 #: eeschema/tools/symbol_editor_control.cpp:332
 #: pcbnew/tools/footprint_editor_control.cpp:638
@@ -23004,7 +22988,6 @@ msgid "Place Pin Anyway"
 msgstr "Placera Pin ändå"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:449
-#, fuzzy
 msgid "Repeat Pin"
 msgstr "Gör om stift"
 
@@ -24440,9 +24423,8 @@ msgid "Show import issues"
 msgstr "Visa problem med import"
 
 #: include/widgets/filedlg_open_embed_file.h:36
-#, fuzzy
 msgid "Embed File"
-msgstr "Redigera fil"
+msgstr "Bädda in fil"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24836,9 +24818,8 @@ msgid "Plot graphic items using their contours"
 msgstr "Plotta grafiska objekt med deras konturer"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:59
-#, fuzzy
 msgid "Plot using the drill/place file origin"
-msgstr "Använd borr- / placeringsfilens origo"
+msgstr "Plotta användandes borr- / placeringsfilens origo"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:63
 #: kicad/cli/command_pcb_export_gerber.cpp:52
@@ -29667,9 +29648,8 @@ msgid "Max Width"
 msgstr "Maximal bredd"
 
 #: pcbnew/board_connected_item.cpp:283
-#, fuzzy
 msgid "Curved Teardrops"
-msgstr "Ställ in kragförstärkningar"
+msgstr "Böjda kragförstärkningar"
 
 #: pcbnew/board_connected_item.cpp:289
 msgid "Prefer Zone Connections"
@@ -30179,24 +30159,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(fler än ett mönsterkort stöds inte)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(Rektangel har storlek noll eller väldigt liten: %d nm)"
+msgstr "(rektangel har storlek noll eller väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:673
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(Cirkel har radie noll eller väldigt liten: %d nm)"
+msgstr "(cirkel har radie noll eller väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:692
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(Segment har längd noll eller väldigt liten: %d nm)"
+msgstr "(segment har längd noll eller väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(Båge har storlek noll eller väldigt liten: %d nm)"
+msgstr "(båge har storlek noll eller väldigt liten: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:196
 #: pcbnew/dialogs/dialog_drc.cpp:271 pcbnew/pcb_edit_frame.cpp:2454
@@ -30460,9 +30440,8 @@ msgid "Reannotate anyway?"
 msgstr "Gör om numreringen ändå?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:642
-#, fuzzy
 msgid "Annotation"
-msgstr "Referensbeteckningar"
+msgstr "Komponentnumrering"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:804
 #, c-format
@@ -30728,9 +30707,8 @@ msgid "Length-tuning Patterns"
 msgstr "Längdjusteringsmönster"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:207
-#, fuzzy
 msgid "Board Data"
-msgstr "Mönsterkortets namn"
+msgstr "Mönsterkortsdata"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:224
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -36644,9 +36622,8 @@ msgid "LIbrary Format"
 msgstr "Biblioteksformat"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:382
-#, fuzzy
 msgid "Error adding 3D model"
-msgstr "Laddar 3D-modeller..."
+msgstr "Fel vid tillägg av 3D-modell"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:464
 msgid "No filename entered"
@@ -37608,9 +37585,8 @@ msgid "Margin"
 msgstr "Marginal"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
-#, fuzzy
 msgid "Board contour setback"
-msgstr "Mönsterkortets kantkontur"
+msgstr "Mönsterkortets kantkontursmarginal"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:666
 msgid "Eco1"
@@ -37665,9 +37641,8 @@ msgstr "Användare1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid " Off-board, front"
-msgstr "Ej på mönsterkortet, testning"
+msgstr " Utanför mönsterkortet, framsida"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -37678,9 +37653,8 @@ msgstr "Ej på mönsterkortet, testning"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid "Off-board, back"
-msgstr "Ej på mönsterkortet, testning"
+msgstr "Utanför mönsterkortet, baksida"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:717
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:731
@@ -37694,6 +37668,8 @@ msgstr "Ej på mönsterkortet, testning"
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
 msgstr ""
+"Extra lager vänds inte enligt mönsterkortssida, medan främre och bakre lager "
+"gör det."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:724
 msgid "User2"
@@ -38830,9 +38806,8 @@ msgstr "Standardegenskaper för rektangulära objekt:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:370
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:548
-#, fuzzy
 msgid "Allow teardrop to span track segments"
-msgstr "Tillåt kragförstärkningar att sträcka sig över två ledarsegment"
+msgstr "Tillåt kragförstärkningar att sträcka sig över ledarsegment"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:385
 msgid "Properties for track-to-track teardrops:"
@@ -40130,9 +40105,8 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "Undantag för absolut marginal för lodpasta."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:646
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "\"Undantag för relativ frigång för lodpasta."
+msgstr "Undantag för relativ frigång för lodpasta."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:653
 msgid "Zone connection overridden."
@@ -42224,51 +42198,44 @@ msgstr ""
 "(Lödytan med genompläterat hål (PTH) måste ha en hålstorlek större än %s)"
 
 #: pcbnew/pad.cpp:2108
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(Hålmonteringslödytans hål lämnar ingen koppar kvar)"
 
 #: pcbnew/pad.cpp:2116
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(Hålmonteringslödytans hål inte fullständigt omsluten av koppar)"
+msgstr "(Hålmonteringslödytans hål inte fullständigt omslutet av koppar)"
 
 #: pcbnew/pad.cpp:2123
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Lödytans hål ej inom lödytans kontur"
+msgstr "(lödytans hål ej inom lödytans kontur)"
 
 #: pcbnew/pad.cpp:2128
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "Negativa lokala värden för frigång har ingen verkan"
+msgstr "(negativa lokala värden för frigång har ingen verkan)"
 
 #: pcbnew/pad.cpp:2147
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Negativa värden för lödmaskens frigång är större än vissa primitiva former; "
-"resultaten kan bli oförutsägbara"
+"(negativa värden för lödmaskens frigång är större än vissa primitiva former; "
+"resultaten kan bli oförutsägbara)"
 
 #: pcbnew/pad.cpp:2157
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Negativ frigång för lödmask är större än lödytan; ingen lödmask kommer att "
-"genereras"
+"(negativ frigång för lödmask är större än lödytan; ingen lödmask kommer att "
+"genereras)"
 
 #: pcbnew/pad.cpp:2176
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Negativa marginaler för lodpasta som är större än lödytan; ingen mask för "
-"lodpasta kommer att genereras"
+"(negativa marginaler för lodpasta är större än lödytan; ingen mask för "
+"lodpasta kommer att genereras)"
 
 #: pcbnew/pad.cpp:2183
 msgid "(Pad has no layer)"
@@ -42279,111 +42246,95 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(Hålmonteringshål har inga kopparlager)"
 
 #: pcbnew/pad.cpp:2192
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
-msgstr "Geompläterade hål ska normalt ha en kopparkrage på minst ett lager"
+msgstr "(geompläterade hål ska normalt ha en kopparkrage på minst ett lager)"
 
 #: pcbnew/pad.cpp:2211
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"Anslutningskragar har vanligtvis ingen lodpasta; använd istället en lödyta "
-"för ytmontering"
+"(anslutningsytor har vanligtvis ingen lodpasta; använd istället en lödyta "
+"för ytmontering)"
 
 #: pcbnew/pad.cpp:2219
 msgid "(SMD pad has a hole)"
 msgstr "(SMD-lödyta har ett hål)"
 
 #: pcbnew/pad.cpp:2225
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "SMD-lödyta har koppar på båda sidor av mönsterkortet"
+msgstr "(ytmonteringslödyta har koppar på båda sidor av mönsterkortet)"
 
 #: pcbnew/pad.cpp:2231 pcbnew/pad.cpp:2244
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
-"Ytmonteringslödytan har koppar- och lödmasklager på olika sidor av "
-"mönsterkortet"
+"(ytmonteringslödytan har koppar- och lödmasklager på olika sidor av "
+"mönsterkortet)"
 
 #: pcbnew/pad.cpp:2236 pcbnew/pad.cpp:2249
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"Ytmonteringslödytan har koppar- och lodpastelager på olika sidor av "
-"mönsterkortet"
+"(ytmonteringslödytan har koppar- och lodpastelager på olika sidor av "
+"mönsterkortet)"
 
 #: pcbnew/pad.cpp:2255
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "Ytmonteringslödytan har inga yttre lager"
+msgstr "(ytmonteringslödytan har inga yttre lager)"
 
 #: pcbnew/pad.cpp:2265
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr ""
-"Referenspunkts-egenskapen är meningslös för lödytor med ej genompläterade "
-"hål (NPTH)"
+"(referenspunkts-egenskapen är meningslös för lödytor med ej genompläterade "
+"hål (NPTH))"
 
 #: pcbnew/pad.cpp:2269
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr ""
-"Testpunktsegenskapen är meningslös för lödytor med ej genompläterade hål "
-"(NPTH)"
+"(testpunktsegenskapen är meningslös för lödytor med ej genompläterade hål "
+"(NPTH))"
 
 #: pcbnew/pad.cpp:2272
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr ""
-"Kylfläns-egenskapen är meningslös för lödytor med ej genompläterade hål "
-"(NPTH)"
+"(kylfläns-egenskapen är meningslös för lödytor med ej genompläterade hål "
+"(NPTH))"
 
 #: pcbnew/pad.cpp:2275
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
 msgstr ""
-"Egenskapen krenelerad lödyta kan endast användas på genompläterade hål (PTH)"
+"(egenskapen krenelerad lödyta kan endast användas på genompläterade hål "
+"(PTH))"
 
 #: pcbnew/pad.cpp:2278
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "BGA-egenskapen kan bara användas på lödytor för ytmontering (SMD)"
+msgstr "(BGA-egenskapen kan bara användas på lödytor för ytmontering (SMD))"
 
 #: pcbnew/pad.cpp:2281
-#, fuzzy
 msgid "('mechanical' property is for PTH pads)"
-msgstr "Mekanisk-egenskapen är endast för lödytor med genompläterade hål (PTH)"
+msgstr ""
+"(mekanisk-egenskapen är endast för lödytor med genompläterade hål (PTH))"
 
 #: pcbnew/pad.cpp:2286
-#, fuzzy
 msgid "(negative corner radius is not allowed)"
-msgstr "(Negativ hörnradie är inte tillåten)"
+msgstr "(negativ hörnradie är inte tillåten)"
 
 #: pcbnew/pad.cpp:2288
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "Hörnstorleken gör lödytan cirkulär"
+msgstr "(hörnstorleken gör lödytan cirkulär)"
 
 #: pcbnew/pad.cpp:2293
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "(Negativ hörnfasning är inte tillåten)"
+msgstr "(negativ hörnfasning är inte tillåten)"
 
 #: pcbnew/pad.cpp:2295
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "(Hörnfasningen är för stor)"
+msgstr "(hörnfasningen är för stor)"
 
 #: pcbnew/pad.cpp:2304
-#, fuzzy
 msgid "(trapazoid delta is too large)"
-msgstr "(Trapezoid-delta är för stort)"
+msgstr "(trapezoid-delta är för stort)"
 
 #: pcbnew/pad.cpp:2315
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "(Anpassad lödyteform måste lösa till en enda polygon)"
+msgstr "(anpassad lödyteform måste lösa till en enda polygon)"
 
 #: pcbnew/pad.cpp:2513
 msgid "Edge connector"
@@ -44729,11 +44680,9 @@ msgid "Exception on python footprint wizard code"
 msgstr "Undantag för guiden för pythons fotavtryck"
 
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s': %s"
-msgstr ""
-"Fel vid inläsning av ritningsark '%s'.\n"
-"%s"
+msgstr "Fel vid inläsning av ritningsark '%s': %s"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:496
 msgid ""
@@ -45855,7 +45804,7 @@ msgstr "Infoga mönsterkortets lageruppbyggnadstabell"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:399
 msgid "BOARD CHARACTERISTICS"
-msgstr "MÖNSTERKORTSKARAKTERISTIK"
+msgstr "MÖNSTERKORTSEGENSKAPER"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:414
 msgid "Copper Layer Count: "
@@ -45902,7 +45851,6 @@ msgid "Yes, Bevelled"
 msgstr "Ja, avfasad"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:531
-#, fuzzy
 msgid "Board Characteristics"
 msgstr "Mönsterkortsegenskaper"
 
@@ -49340,19 +49288,18 @@ msgid "Refill zones"
 msgstr "Gör om fyllning av zoner"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
-#, fuzzy
 msgid "Refill zones after changes made on board"
-msgstr "Återfyll zoner efter dialogrutan Egenskaper för kopparzon"
+msgstr "Återfyll zoner efter att ändringar gjorts på mönsterkortet"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
-#, fuzzy
 msgid "Update Displayed Zones"
-msgstr "Alternativ för lagervisning"
+msgstr "Uppdatera visade kopparzoner"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""
+"Uppdatera fyllda ytor som visas i dialogen i enlighet med nya inställningar"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
