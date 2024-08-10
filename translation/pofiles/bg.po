@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-03-07 00:01+0000\n"
+"PO-Revision-Date: 2024-08-10 16:09+0000\n"
 "Last-Translator: 109247019824 <stoyan@gmx.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/v8/bg/>\n"
 "Language: bg\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: C:\\kicad\\trunk\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -52,10 +52,13 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"Контурът на цокъла липсва или е повреден. Пуснете проверка на цокли за "
+"цялостен анализ."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:933
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
+"Контурът на платката липсва или е повреден. Пуснете DRC за цялостен анализ."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
 #, fuzzy
@@ -84,7 +87,7 @@ msgstr "всички медни слоеве"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1038
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Изчисляване на медното покритие"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1124
 #, fuzzy, c-format
@@ -93,7 +96,7 @@ msgstr "всички медни слоеве"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1167
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Оптимизиране контура на отворите"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1187
 msgid "Build BVH for holes and vias"
@@ -21057,7 +21060,7 @@ msgstr "Контур"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1290
 msgid "Power Symbol"
-msgstr "Захранващ символ"
+msgstr "Символ захранване"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1297
 msgid "Datasheet"
@@ -33800,7 +33803,7 @@ msgstr "Проходна връзка"
 #: pcbnew/footprint_libraries_utils.cpp:1237 pcbnew/pad.cpp:1284
 #: pcbnew/pad.cpp:2292
 msgid "SMD"
-msgstr "SMD"
+msgstr "повърхностен монтаж"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
