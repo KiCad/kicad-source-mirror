@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-08-07 09:09+0000\n"
+"PO-Revision-Date: 2024-08-11 18:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -702,11 +702,11 @@ msgstr "虚拟模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Models not in POS File"
-msgstr "不在 POS 坐标文件文件中的模型"
+msgstr "不在 POS 文件中的模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Models marked DNP"
-msgstr "标记为 DNP (不作装配) 的模型"
+msgstr "标记为 DNP 的模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Model Bounding Boxes"
@@ -28146,7 +28146,7 @@ msgstr "移除重复的走线"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Merge co-linear tracks"
-msgstr "合并共线的走线"
+msgstr "合并重叠的走线"
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Remove track not connected at both ends"
@@ -29144,7 +29144,7 @@ msgstr "没有层被选择。"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:819
 msgid "<no net> will result in an isolated copper island."
-msgstr "<no net> 将产生孤岛铜。"
+msgstr "<no net> 将产生死铜。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
@@ -29362,7 +29362,7 @@ msgstr "死铜移除:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:353
 msgid "Choose what to do with unconnected copper islands"
-msgstr "选择如何处理未连接的孤铜"
+msgstr "选择如何处理未连接的死铜"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1572
 msgid "Below area limit"
@@ -29370,11 +29370,11 @@ msgstr "仅低于区限制时"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 msgid "Minimum island size:"
-msgstr "最小孤铜尺寸:"
+msgstr "最小死铜尺寸:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 msgid "Isolated islands smaller than this will be removed"
-msgstr "小于该值的孤铜将被移除"
+msgstr "小于该值的死铜将被移除"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:135
 msgid "Copper Zone Properties"
@@ -37074,7 +37074,7 @@ msgstr "覆铜域相交"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Isolated copper fill"
-msgstr "孤铜"
+msgstr "死铜"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Thermal relief connection to zone incomplete"
@@ -38116,7 +38116,7 @@ msgstr "(%s 最大直径 %s; 实际 %s)"
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:222
 #, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(层 %s; %d 条引线与孤岛相连)"
+msgstr "(层 %s; %d 条引线与死铜相连)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:229
 #, c-format
@@ -40967,9 +40967,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - 隔离"
-"\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad 覆铜域的最小孤岛"
-"大小设置。"
+"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - "
+"隔离\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad "
+"覆铜域的最小死铜大小设置。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2032
 #, c-format
@@ -43226,11 +43226,11 @@ msgstr "当前位置允许的项目。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1446
 msgid "Select a footprint to diff with its library equivalent."
-msgstr "选择一个封装并与其对应的库封装进行比较。"
+msgstr "请先选择一个封装, 再将其与其对应的库封装进行比较。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1464
 msgid "Select a footprint for a footprint associations report."
-msgstr "选择一个封装, 生成封装关联报告。。"
+msgstr "请先选择一个封装, 再对其生成封装关联报告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1491
 msgid "Board vs library diff for:"
@@ -46533,7 +46533,7 @@ msgstr "死铜移除"
 
 #: pcbnew/zone.cpp:1711
 msgid "Minimum Island Area"
-msgstr "最小孤铜大小"
+msgstr "最小死铜大小"
 
 #: pcbnew/zone.cpp:1726
 msgid "Minimum Width"
@@ -46553,7 +46553,7 @@ msgstr "构造域填充..."
 
 #: pcbnew/zone_filler.cpp:521
 msgid "Removing isolated copper islands..."
-msgstr "正在移除孤立的铜岛..."
+msgstr "正在移除死铜..."
 
 #: pcbnew/zone_filler.cpp:730
 msgid "Zone fills are out-of-date. Refill?"
