@@ -42,7 +42,7 @@
  * platforms.  This is the list of illegal file name characters for Windows which includes
  * the illegal file name characters for Linux and OSX.
  */
-static const char illegalFileNameChars[] = "\\/:\"<>|";
+static const char illegalFileNameChars[] = "\\/:\"<>|*";
 
 
 wxString ConvertToNewOverbarNotation( const wxString& aOldStr )

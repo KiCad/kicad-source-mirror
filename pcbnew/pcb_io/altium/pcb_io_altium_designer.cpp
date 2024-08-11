@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -222,6 +222,22 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
             std::map<wxString, wxString> properties = parser.ReadProperties();
 
             uint32_t numberOfFootprints = parser.Read<uint32_t>();
+
+            // The number of footprints might be bogus. Following it is a list of index strings to
+            // find the footprints, and this list might actually be longer than how many footprints
+            // actually are in the library.
+            // If this case was detected, truncate the list to the number of footprints.
+            // Sample in #18452 shows that by simply truncating can get the correct footprints.
+            // Fixes https://gitlab.com/kicad/code/kicad/issues/18452.
+            // After truncation we shall no longer detect if the stream is fully parsed.
+            bool footprintListNotTruncated = true;
+
+            if ( patternMap.size() < numberOfFootprints )
+            {
+                numberOfFootprints = patternMap.size();
+                footprintListNotTruncated = false;
+            }
+
             aFootprintNames.Alloc( numberOfFootprints );
 
             for( size_t i = 0; i < numberOfFootprints; i++ )
@@ -251,7 +267,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
                                                   FormatPath( streamName ) ) );
             }
 
-            if( parser.GetRemainingBytes() != 0 )
+            if( footprintListNotTruncated && parser.GetRemainingBytes() != 0 )
             {
                 THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed",
                                                   FormatPath( streamName ) ) );
