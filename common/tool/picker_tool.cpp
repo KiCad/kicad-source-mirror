@@ -101,6 +101,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         setCursor();
         VECTOR2D cursorPos = controls->GetCursorPosition( m_snap && m_frame->IsGridVisible() );
+        m_modifiers = aEvent.Modifier();
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {

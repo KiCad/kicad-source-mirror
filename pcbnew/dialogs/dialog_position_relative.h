@@ -40,6 +40,7 @@ public:
     ~DIALOG_POSITION_RELATIVE() { };
 
     void UpdateAnchor( EDA_ITEM* aItem );
+    void UpdateAnchor( std::optional<VECTOR2I> aPoint );
 
 private:
     /**
@@ -51,6 +52,7 @@ private:
     void OnClear( wxCommandEvent& event ) override;
 
     void OnSelectItemClick( wxCommandEvent& event ) override;
+    void OnSelectPointClick( wxCommandEvent& event ) override;
     void OnUseGridOriginClick( wxCommandEvent& event ) override;
     void OnUseUserOriginClick( wxCommandEvent& event ) override;
     void OnOkClick( wxCommandEvent& event ) override;
@@ -87,7 +89,8 @@ private:
     {
         ANCHOR_GRID_ORIGIN,
         ANCHOR_USER_ORIGIN,
-        ANCHOR_ITEM
+        ANCHOR_ITEM,
+        ANCHOR_POINT
     };
 
     struct POSITION_RELATIVE_OPTIONS

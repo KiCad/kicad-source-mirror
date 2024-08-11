@@ -115,6 +115,8 @@ public:
     void SetMaskFlag( int aFlag ) { m_maskTypes |= aFlag; }
     void ClearMaskFlag( int aFlag ) { m_maskTypes = m_maskTypes & ~aFlag; }
 
+    std::optional<VECTOR2I> GetSnappedPoint() const;
+
     enum ANCHOR_FLAGS {
         CORNER = 1,
         OUTLINE = 2,

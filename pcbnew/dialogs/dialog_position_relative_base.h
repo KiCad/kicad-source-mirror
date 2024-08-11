@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_POSITION_RELATIVE_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,6 +41,7 @@ class DIALOG_POSITION_RELATIVE_BASE : public DIALOG_SHIM
 		wxButton* m_user_origin_button;
 		wxButton* m_grid_origin_button;
 		wxButton* m_select_anchor_button;
+		wxButton* m_select_point_button;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_xLabel;
 		wxTextCtrl* m_xEntry;
@@ -61,6 +61,7 @@ class DIALOG_POSITION_RELATIVE_BASE : public DIALOG_SHIM
 		virtual void OnUseUserOriginClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUseGridOriginClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectItemClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelectPointClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextFocusLost( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnClear( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPolarChanged( wxCommandEvent& event ) { event.Skip(); }

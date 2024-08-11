@@ -321,7 +321,8 @@ public:
     static TOOL_ACTION positionRelative;
 
     /// Selection of anchor item for position relative tool
-    static TOOL_ACTION selectpositionRelativeItem;
+    static TOOL_ACTION selectPositionRelativeItem;
+    static TOOL_ACTION selectPositionRelativePoint;
 
     // Display modes
     static TOOL_ACTION showRatsnest;

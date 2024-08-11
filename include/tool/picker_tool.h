@@ -106,6 +106,8 @@ public:
         m_finalizeHandler = aHandler;
     }
 
+    int CurrentModifiers() const { return m_modifiers; }
+
 protected:
     ///< Reinitializes tool to its initial state.
     virtual void reset();
@@ -113,6 +115,7 @@ protected:
     EDA_DRAW_FRAME* m_frame;
     KICURSOR        m_cursor;
     bool            m_snap;
+    int             m_modifiers;
 
     std::optional<CLICK_HANDLER>    m_clickHandler;
     std::optional<MOTION_HANDLER>   m_motionHandler;

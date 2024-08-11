@@ -215,7 +215,19 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
     wxASSERT( posrelTool );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectpositionRelativeItem );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectPositionRelativeItem );
+
+    Hide();
+}
+
+
+void DIALOG_POSITION_RELATIVE::OnSelectPointClick( wxCommandEvent& event )
+{
+    event.Skip();
+
+    POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
+    wxASSERT( posrelTool );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectPositionRelativePoint );
 
     Hide();
 }
@@ -244,6 +256,13 @@ void DIALOG_POSITION_RELATIVE::updateAnchorInfo( BOARD_ITEM* aItem )
         m_referenceInfo->SetLabel( wxString::Format( _( "Reference item: %s" ), msg ) );
         break;
     }
+
+    case ANCHOR_POINT:
+        m_referenceInfo->SetLabel( wxString::Format(
+            _( "Reference location: selected point (%s, %s)" ),
+            m_parentFrame->MessageTextFromValue( m_anchorItemPosition.x ),
+            m_parentFrame->MessageTextFromValue( m_anchorItemPosition.y ) ) );
+        break;
     }
 }
 
@@ -259,6 +278,7 @@ VECTOR2I DIALOG_POSITION_RELATIVE::getAnchorPos()
         return static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() )->GetScreen()->m_LocalOrigin;
 
     case ANCHOR_ITEM:
+    case ANCHOR_POINT:
         return m_anchorItemPosition;
     }
 
@@ -290,6 +310,19 @@ void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 
     if( item )
         m_anchorItemPosition = item->GetPosition();
+
+    Show( true );
+}
+
+
+void DIALOG_POSITION_RELATIVE::UpdateAnchor( std::optional<VECTOR2I> aPoint )
+{
+    m_options.anchorType = ANCHOR_POINT;
+
+    if( aPoint )
+        m_anchorItemPosition = *aPoint;
+
+    updateAnchorInfo( nullptr );
 
     Show( true );
 }

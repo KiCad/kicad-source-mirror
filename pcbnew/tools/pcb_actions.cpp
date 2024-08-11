@@ -2021,8 +2021,12 @@ TOOL_ACTION PCB_ACTIONS::positionRelative( TOOL_ACTION_ARGS()
         .Tooltip( _( "Positions the selected item(s) by an exact amount relative to another" ) )
         .Icon( BITMAPS::move_relative ) );
 
-TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem( TOOL_ACTION_ARGS()
+TOOL_ACTION PCB_ACTIONS::selectPositionRelativeItem( TOOL_ACTION_ARGS()
         .Name( "pcbnew.PositionRelative.selectpositionRelativeItem" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION PCB_ACTIONS::selectPositionRelativePoint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PositionRelative.selectPositionRelativePoint" )
         .Scope( AS_GLOBAL ) );
 
 

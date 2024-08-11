@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,7 +23,7 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	m_referenceInfo->Wrap( -1 );
 	m_referenceInfo->SetMinSize( wxSize( 340,-1 ) );
 
-	bUpperSizer->Add( m_referenceInfo, 0, wxALL, 5 );
+	bUpperSizer->Add( m_referenceInfo, 0, wxALL|wxEXPAND, 5 );
 
 
 	bUpperSizer->Add( 0, 0, 0, wxEXPAND, 5 );
@@ -41,6 +41,9 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	m_select_anchor_button->SetToolTip( _("Click and select a board item.\nThe anchor position will be the position of the selected item.") );
 
 	bSizerButtOpts->Add( m_select_anchor_button, 1, wxALL|wxEXPAND, 5 );
+
+	m_select_point_button = new wxButton( this, wxID_ANY, _("Select Point..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtOpts->Add( m_select_point_button, 1, wxALL, 5 );
 
 
 	bUpperSizer->Add( bSizerButtOpts, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -132,6 +135,7 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	m_user_origin_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnUseUserOriginClick ), NULL, this );
 	m_grid_origin_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnUseGridOriginClick ), NULL, this );
 	m_select_anchor_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnSelectItemClick ), NULL, this );
+	m_select_point_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnSelectPointClick ), NULL, this );
 	m_xEntry->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnTextFocusLost ), NULL, this );
 	m_clearX->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnClear ), NULL, this );
 	m_yEntry->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnTextFocusLost ), NULL, this );
@@ -147,6 +151,7 @@ DIALOG_POSITION_RELATIVE_BASE::~DIALOG_POSITION_RELATIVE_BASE()
 	m_user_origin_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnUseUserOriginClick ), NULL, this );
 	m_grid_origin_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnUseGridOriginClick ), NULL, this );
 	m_select_anchor_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnSelectItemClick ), NULL, this );
+	m_select_point_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnSelectPointClick ), NULL, this );
 	m_xEntry->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnTextFocusLost ), NULL, this );
 	m_clearX->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnClear ), NULL, this );
 	m_yEntry->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_POSITION_RELATIVE_BASE::OnTextFocusLost ), NULL, this );

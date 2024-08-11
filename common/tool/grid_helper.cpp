@@ -163,3 +163,12 @@ bool GRID_HELPER::canUseGrid() const
 {
     return m_enableGrid && m_toolMgr->GetView()->GetGAL()->GetGridSnapping();
 }
+
+
+std::optional<VECTOR2I> GRID_HELPER::GetSnappedPoint() const
+{
+    if( m_snapItem )
+        return m_snapItem->pos;
+
+    return std::nullopt;
+}

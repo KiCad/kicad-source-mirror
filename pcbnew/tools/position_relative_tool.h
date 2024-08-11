@@ -64,6 +64,12 @@ public:
     int SelectPositionRelativeItem( const TOOL_EVENT& aEvent  );
 
     /**
+     * Invoke the picker tool to select the point to which the previous selection will be placed
+     * relative to.
+     */
+    int SelectPositionRelativePoint( const TOOL_EVENT& aEvent  );
+
+    /**
      * Return the position of the selected item(s)
      */
     VECTOR2I GetSelectionAnchorPosition() const { return m_selectionAnchor; }
