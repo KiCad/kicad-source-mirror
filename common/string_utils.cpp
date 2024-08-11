@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
  * platforms.  This is the list of illegal file name characters for Windows which includes
  * the illegal file name characters for Linux and OSX.
  */
-static const char illegalFileNameChars[] = "\\/:\"<>|*";
+static const char illegalFileNameChars[] = "\\/:\"<>|*?";
 
 
 wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
