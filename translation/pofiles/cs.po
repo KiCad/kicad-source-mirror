@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-08-09 08:09+0000\n"
-"Last-Translator: ivit VT <st17ivito@gmail.com>\n"
+"PO-Revision-Date: 2024-08-11 18:09+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -13255,9 +13255,8 @@ msgid "Reference delimiter:"
 msgstr "Referenční oddělovač:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "Okraje strany"
+msgstr "Omezovač rozsahu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -14113,9 +14112,8 @@ msgstr ""
 "nebo vývod"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Rozpětí globálních označení:"
+msgstr "Koeficient rozpětí globálních označení:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -19096,19 +19094,16 @@ msgid "Sensitivity Analysis"
 msgstr "Analýza citlivosti"
 
 #: eeschema/sim/spice_simulator.cpp:65
-#, fuzzy
 msgid "Transfer Function Analysis"
-msgstr "Funkce přenosu"
+msgstr "Analýza přenosových funkcí"
 
 #: eeschema/sim/spice_simulator.cpp:66
-#, fuzzy
 msgid "S-Parameter Analysis"
-msgstr "Přechodná analýza"
+msgstr "Analýza S-parametrů"
 
 #: eeschema/sim/spice_simulator.cpp:67
-#, fuzzy
 msgid "Frequency Content Analysis"
-msgstr "Frekvence vstupního signálu"
+msgstr "Analýza obsahu frekvencí"
 
 #: eeschema/sim/spice_value.cpp:391
 msgid "Please, fill required fields"
@@ -19223,22 +19218,22 @@ msgstr ""
 "problémy, pokud je uložena v knihovně symbolů"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>Duplicitní vývod %s</b> %s na místě <b>(%s, %s)</b> v rozporu s vývodem "
-"%s%s na místě <b>(%s, %s)</b> v jednotkách %s a %s."
+"<b>Duplicitní vývod %s</b> %s na místě <b>(%s, %s)</b> v konfliktu s vývodem "
+"%s%s na místě <b>(%s, %s)</b> v %s stylu těla."
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
 "<b>Duplicitní vývod %s</b> %s na místě <b>(%s, %s)</b> v rozporu s vývodem "
-"%s%s na místě <b>(%s, %s)</b> v jednotkách %s a %s."
+"%s%s na místě <b>(%s, %s)</b> v jednotkách %s a %s stylu těla %s."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19263,9 +19258,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Symbol napájení by měl mít pouze jednu jednotku</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>Symbol napájení by měl mít jen jeden vývod</b><br><br>"
+msgstr "<b>Symbol napájení by neměl mít varianty DeMorgan</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -19280,31 +19274,30 @@ msgstr ""
 "význam<br><br>"
 
 #: eeschema/symbol_checker.cpp:222
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b>Podezřelý symbol napájení</b><br>Automaticky připojeny pouze neviditelné "
-"vstupní napájecí vývody<br><br>"
+"<b>Podezřelý symbol napájení</b><br>Neviditelné vstupní napájecí vývody již "
+"nejsou potřeba<br><br>"
 
 #: eeschema/symbol_checker.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
 msgstr ""
-"Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b> v "
-"jednotce %c."
+"Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b> v stylu "
+"těla %s."
 
 #: eeschema/symbol_checker.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
 "Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b>v jednotce "
-"%c převeden."
+"%c stylu těla %s."
 
 #: eeschema/symbol_checker.cpp:271
 #, c-format
@@ -19327,17 +19320,18 @@ msgstr ""
 "sítí.)"
 
 #: eeschema/symbol_checker.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> převedeno."
+msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> styl těla %s."
 
 #: eeschema/symbol_checker.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
+"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c stylu "
+"těla %s."
 
 #: eeschema/symbol_checker.cpp:329
 #, c-format
@@ -19361,14 +19355,12 @@ msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Kontrola symbolů"
+msgstr "Výběr symbolu"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "KiCad prohlížeč knihoven symbolů"
+msgstr "Prohlížeč rozdílů symbolů KiCad"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 msgid ""
@@ -19443,9 +19435,9 @@ msgstr ""
 "symbolů pro migraci do aktuálního formátu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:878
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
-msgstr "Symbol %s je odvozen z %s. Grafika symbolu nebude upravitelná."
+msgstr "Symbol %s je odvozený symbol.  Grafika symbolu nebude upravitelná."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:956
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
@@ -19591,9 +19583,8 @@ msgstr "Uložit v knihovně:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:686
 #: pcbnew/footprint_libraries_utils.cpp:1118
-#, fuzzy
 msgid "A library must be specified."
-msgstr "Knihovna není zvolena."
+msgstr "Musí být zadána knihovna."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:713
 msgid ""
@@ -19699,9 +19690,9 @@ msgstr "Importovat symbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:94
 #: pcbnew/load_select_footprint.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "Nelze najít prohlížeč PDF pro '%s'."
+msgstr "Nelze najít prohlížeč pro '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:108
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
@@ -19784,17 +19775,13 @@ msgstr "Nelze vyjmenovat knihovnu '%s'."
 
 #: eeschema/symbol_library_manager.cpp:843
 #: eeschema/symbol_library_manager.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"Při ukládání tabulky globální knihovny došlo k chybě:\n"
-"\n"
-"%s"
+msgstr "Chyba při aktualizaci vyrovnávací paměti knihovny: %s"
 
 #: eeschema/symbol_library_manager.cpp:853
-#, fuzzy
 msgid "Error updating library buffer."
-msgstr "Chyba při ukládání globální tabulky knihovny symbolů."
+msgstr "Chyba aktualizace vyrovnávací paměti knihovny."
 
 #: eeschema/symbol_library_manager.cpp:993
 #: eeschema/tools/sch_editor_control.cpp:450
@@ -20123,9 +20110,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Přidat symbol do schématu"
 
 #: eeschema/tools/ee_actions.cpp:258
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Uložit aktuální symbol do schématu"
+msgstr "Přidat aktuální symbol do schématu"
 
 #: eeschema/tools/ee_actions.cpp:264
 msgid "Show Pin Electrical Types"
@@ -20286,18 +20272,16 @@ msgid "Add Symbol"
 msgstr "Přidat Symbol"
 
 #: eeschema/tools/ee_actions.cpp:413
-#, fuzzy
 msgid "Add symbols"
-msgstr "Přidat symbol"
+msgstr "Přidat symboly"
 
 #: eeschema/tools/ee_actions.cpp:423
 msgid "Add Power"
 msgstr "Přidat napájení"
 
 #: eeschema/tools/ee_actions.cpp:424
-#, fuzzy
 msgid "Add power symbols"
-msgstr "Přidat symbol napájení"
+msgstr "Přidat symboly napájení"
 
 #: eeschema/tools/ee_actions.cpp:434 eeschema/tools/sch_drawing_tools.cpp:966
 msgid "Add No Connect Flag"
@@ -20350,9 +20334,8 @@ msgid "Add Hierarchical Label"
 msgstr "Přidat hierarchické označení"
 
 #: eeschema/tools/ee_actions.cpp:486
-#, fuzzy
 msgid "Add hierarchical labels"
-msgstr "Přidat hierarchické označení"
+msgstr "Přidat hierarchická označení"
 
 #: eeschema/tools/ee_actions.cpp:495
 msgid "Add Sheet"
@@ -20377,7 +20360,6 @@ msgid "Add Global Label"
 msgstr "Přidat globální označení"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Add global labels"
 msgstr "Přidat globální označení"
 
@@ -20423,9 +20405,8 @@ msgid "Add Image"
 msgstr "Přidat obrázek"
 
 #: eeschema/tools/ee_actions.cpp:569
-#, fuzzy
 msgid "Add bitmap images"
-msgstr "Přidat bitmapový obrázek"
+msgstr "Přidat bitmapové obrázky"
 
 #: eeschema/tools/ee_actions.cpp:586
 msgid "Repeat Last Item"
@@ -20711,9 +20692,8 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Otevře vybraný symbol v editoru symbolů"
 
 #: eeschema/tools/ee_actions.cpp:878
-#, fuzzy
 msgid "Exclude from Bill of Materials"
-msgstr "Vyloučit z rozpisky materiálu"
+msgstr "Vyloučit z rozpisky materiálů"
 
 #: eeschema/tools/ee_actions.cpp:879
 #, fuzzy
@@ -20721,9 +20701,8 @@ msgid "Set the exclude from bill of materials attribute"
 msgstr "Vyloučit z rozpisky materiálu"
 
 #: eeschema/tools/ee_actions.cpp:884
-#, fuzzy
 msgid "Include in Bill of Materials"
-msgstr "Vyloučit z rozpisky materiálu"
+msgstr "Zahrnout do rozpisky materiálů"
 
 #: eeschema/tools/ee_actions.cpp:885
 #, fuzzy
@@ -20751,9 +20730,8 @@ msgid "Set the exclude from simulation attribute"
 msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
 
 #: eeschema/tools/ee_actions.cpp:902
-#, fuzzy
 msgid "Include in Simulation"
-msgstr "Spice hodnota v simulaci"
+msgstr "Zahrnout do simulace"
 
 #: eeschema/tools/ee_actions.cpp:903
 #, fuzzy
@@ -20761,9 +20739,8 @@ msgid "Clear the exclude from simulation attribute"
 msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
 
 #: eeschema/tools/ee_actions.cpp:908
-#, fuzzy
 msgid "Toggle Exclude from Simulation"
-msgstr "Vyloučit ze simulace"
+msgstr "Přepnout Vyloučit ze simulace"
 
 #: eeschema/tools/ee_actions.cpp:909
 #, fuzzy
@@ -20771,7 +20748,6 @@ msgid "Toggle the exclude from simulation attribute"
 msgstr "Smazat %s 'vyloučit z BOM' atribut výrobní."
 
 #: eeschema/tools/ee_actions.cpp:914
-#, fuzzy
 msgid "Exclude from Board"
 msgstr "Vyloučit z desky"
 
@@ -20781,9 +20757,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
 
 #: eeschema/tools/ee_actions.cpp:920
-#, fuzzy
 msgid "Include on Board"
-msgstr "Vyloučit z desky"
+msgstr "Zahrnout do desky"
 
 #: eeschema/tools/ee_actions.cpp:921
 #, fuzzy
@@ -21338,9 +21313,8 @@ msgid "Run Simulation"
 msgstr "Spustit simulaci"
 
 #: eeschema/tools/ee_actions.cpp:1464
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Spustit/Zastavit simulaci"
+msgstr "Zastavit simulaci"
 
 #: eeschema/tools/ee_actions.cpp:1471
 #, fuzzy
@@ -21370,9 +21344,8 @@ msgid "Add, edit or delete user-defined simulation signals"
 msgstr "Přidat, upravit nebo odstranit uživatelem definované signály simulace"
 
 #: eeschema/tools/ee_actions.cpp:1493
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "Zobrazit SPICE Netlist..."
+msgstr "Zobrazit SPICE Netlist"
 
 #: eeschema/tools/ee_inspection_tool.cpp:250
 msgid "No symbol issues found."
@@ -21388,9 +21361,9 @@ msgid "Select a symbol to diff against its library equivalent."
 msgstr "Kontrola pouzder desky proti knihovně..."
 
 #: eeschema/tools/ee_inspection_tool.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "Symboly"
+msgstr "Symbol %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:293
 #: pcbnew/tools/board_inspection_tool.cpp:1489
@@ -21453,14 +21426,12 @@ msgid "No datasheet defined."
 msgstr "Nedefinován žádný datasheet."
 
 #: eeschema/tools/ee_point_editor.cpp:537
-#, fuzzy
 msgid "Move Point"
-msgstr "Přesunout koncový bod"
+msgstr "Přesunout bod"
 
 #: eeschema/tools/ee_point_editor.cpp:1493
-#, fuzzy
 msgid "Add Corner"
-msgstr "Přidat napájení"
+msgstr "Přidat roh"
 
 #: eeschema/tools/sch_drawing_tools.cpp:285
 msgid "Press <ESC> to cancel symbol creation."
@@ -21487,9 +21458,8 @@ msgstr "Nenalezeny žádné grafické položky v souboru."
 #: eeschema/tools/sch_drawing_tools.cpp:909
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:712
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:801
-#, fuzzy
 msgid "Import Graphic"
-msgstr "Import grafiky..."
+msgstr "Import grafiky"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1054
 msgid "Junction location contains no joinable wires and/or pins."
@@ -21515,14 +21485,14 @@ msgstr "Přidat vývod listu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1886
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s"
-msgstr "Přidat sběrnici"
+msgstr "Přidat %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1941
-#, fuzzy, c-format
+#, c-format
 msgid "Draw %s"
-msgstr "Kresby"
+msgstr "Kreslit %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2087
 msgid "Press <ESC> to cancel sheet creation."
@@ -21747,9 +21717,8 @@ msgstr ""
 "\n"
 
 #: eeschema/tools/simulator_control.cpp:94
-#, fuzzy
 msgid "Open Simulation Workbook"
-msgstr "Otevřít záznamy simulaci"
+msgstr "Otevřít sešit simulace"
 
 #: eeschema/tools/simulator_control.cpp:113
 msgid "noname"
@@ -21796,9 +21765,8 @@ msgstr "Žádný symbol pro export"
 
 #: eeschema/tools/symbol_editor_control.cpp:604
 #: pcbnew/footprint_edit_frame.cpp:1375
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "Exportovat pohled jako PNG..."
+msgstr "Exportovat pohled jako PNG"
 
 #: eeschema/tools/symbol_editor_control.cpp:615
 #, c-format
@@ -21810,9 +21778,8 @@ msgid "SVG File Name"
 msgstr "Název SVG souboru"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Úpravy vývodu"
+msgstr "Upravit vývody"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -21828,9 +21795,8 @@ msgid "Set Unit Display Name"
 msgstr "Nastavte název zobrazené jednotky"
 
 #: eeschema/tools/symbol_editor_move_tool.cpp:505
-#, fuzzy
 msgid "Align"
-msgstr "Zarovnat:"
+msgstr "Zarovnat"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:190
 #, fuzzy
@@ -21871,9 +21837,8 @@ msgid "Recently Used"
 msgstr "Nedávno použité"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:174
-#, fuzzy
 msgid "Already Placed"
-msgstr "Přesunutí a umístění"
+msgstr "Již umístěno"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:562
 msgid "No footprint specified"
@@ -21904,9 +21869,8 @@ msgid "Excl. board"
 msgstr "schránka"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "Hierarchická cesta"
+msgstr "Hierarchický"
 
 #: eeschema/widgets/search_handlers.cpp:357
 #, fuzzy
@@ -21930,9 +21894,9 @@ msgid "Add new project library table entry"
 msgstr "Přidat novou položku do tabulky knihovny projektu"
 
 #: eeschema/widgets/tuner_slider.cpp:58 eeschema/widgets/tuner_slider.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Ladit"
+msgstr "Ladit %s"
 
 #: eeschema/widgets/tuner_slider.cpp:75
 #, c-format
@@ -21969,9 +21933,8 @@ msgid "Clear layer %d?"
 msgstr "Vyčistit vrstvu %d?"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
-#, fuzzy
 msgid "Active layer name:"
-msgstr "Neaktivní vrstvy:"
+msgstr "Název aktivní vrstvy:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
 #: pcbnew/dialogs/dialog_position_relative.cpp:167
@@ -21988,14 +21951,13 @@ msgid "Offset Y:"
 msgstr "Posun Y:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
-#, fuzzy
 msgid "Rotate counterclockwise:"
-msgstr "Otočit proti směru hodinových ručiček"
+msgstr "Otočit proti směru hodinových ručiček:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #, fuzzy
 msgid "Active layer"
-msgstr "Neaktivní vrstvy:"
+msgstr "Aktivní vrstva:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
@@ -22003,14 +21965,12 @@ msgid "All layers"
 msgstr "Všechny vrstvy"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "All visible layers"
-msgstr "Viditelné vrstvy"
+msgstr "Všechny viditelné vrstvy"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
-#, fuzzy
 msgid "Layers Settings"
-msgstr "Nastavení stránky"
+msgstr "Nastavení vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:144
 #, c-format
@@ -22982,9 +22942,8 @@ msgid "None of the Gerber layers contain any data"
 msgstr "Žádná z Gerber vrstev neobsahuje data"
 
 #: gerbview/tools/gerbview_control.cpp:126
-#, fuzzy
 msgid "Export as KiCad Board File"
-msgstr "Import jiného souboru schématu, než KiCad"
+msgstr "Exportovat jako soubor desky KiCad"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -23152,9 +23111,8 @@ msgid "Leave unchanged"
 msgstr "Nechat beze změny"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Zobrazit nebo skrýt %s"
+msgstr "Zobrazit problémy importu"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23173,23 +23131,20 @@ msgid "Failed to output data"
 msgstr "Selhaly výstupní data"
 
 #: kicad/cli/command.cpp:126
-#, fuzzy
 msgid "Input directory"
-msgstr "Výstupní adresář:"
+msgstr "Vstupní adresář"
 
 #: kicad/cli/command.cpp:132
 msgid "Input file"
 msgstr "Vstupní soubor"
 
 #: kicad/cli/command.cpp:143
-#, fuzzy
 msgid "Output directory"
-msgstr "Výstupní adresář:"
+msgstr "Výstupní adresář"
 
 #: kicad/cli/command.cpp:150
-#, fuzzy
 msgid "Output file"
-msgstr "Výstupní soubor:"
+msgstr "Výstupní soubor"
 
 #: kicad/cli/command.cpp:163
 msgid ""
@@ -23303,9 +23258,8 @@ msgid "Invalid units specified\n"
 msgstr "Zadány neplatné jednotky\n"
 
 #: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:149
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "Neplatný formát\n"
+msgstr "Neplatný formát zprávy\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
@@ -23353,9 +23307,8 @@ msgstr "Zakázané spoje"
 
 #: kicad/cli/command_pcb_export_3d.cpp:109
 #: pcbnew/dialogs/dialog_export_step_base.cpp:165
-#, fuzzy
 msgid "Export zones"
-msgstr "Export jednotek:"
+msgstr "Exportovat zóny"
 
 #: kicad/cli/command_pcb_export_3d.cpp:115
 msgid "Minimum distance between points to treat them as separate ones"
@@ -23372,9 +23325,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:137
-#, fuzzy
 msgid "Output units; valid options: mm, m, in, tenths"
-msgstr "Výstupní jednotky, platné možnosti: mm, in"
+msgstr "Výstupní jednotky; platné volby: mm, m, in, desetiny"
 
 #: kicad/cli/command_pcb_export_3d.cpp:142
 msgid ""
@@ -23568,9 +23520,8 @@ msgid "Precision of Gerber coordinates, valid options: 5 or 6"
 msgstr "Přesnost souřadnic gerber, platné možnosti: 5 nebo 6"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:83
-#, fuzzy
 msgid "Use KiCad Gerber file extension"
-msgstr "Použít přípony souborů KiCad"
+msgstr "Použít příponu souboru KiCad Gerber"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:43
 msgid ""
@@ -23594,9 +23545,8 @@ msgid "Use the Gerber plot settings already configured in the board file"
 msgstr "Použít nastavení gerber plot již nakonfigurované v souboru desky"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:39
-#, fuzzy
 msgid "Generate PDF from a list of layers"
-msgstr "Generovat IPC-D-356 soubor netlistu"
+msgstr "Generovat PDF ze seznamu vrstev"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:46
 #: kicad/cli/command_pcb_export_svg.cpp:49
@@ -23698,9 +23648,8 @@ msgid "No drawing sheet"
 msgstr "Žádný výkresový list"
 
 #: kicad/cli/command_sch.h:31
-#, fuzzy
 msgid "Schematics"
-msgstr "Schéma"
+msgstr "Schémata"
 
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
@@ -23740,9 +23689,8 @@ msgid "Export utilities (netlist, pdf, bom, etc)"
 msgstr ""
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
-msgstr "Generovat rozpis materiálu"
+msgstr "Generovat rozpisku materiálu (BOM)"
 
 #: kicad/cli/command_sch_export_bom.cpp:174
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -23752,9 +23700,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Soubor schématu neexistuje nebo není přístupný\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a netlist"
-msgstr "Exportovat Netlist"
+msgstr "Exportovat netlist"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
 msgid ""
@@ -23801,9 +23748,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "Načítání knihoven symbolů"
+msgstr "Symboly a knihovny symbolů"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
 #, fuzzy
@@ -23884,7 +23830,6 @@ msgid "KiCad"
 msgstr "KiCad"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
-#, fuzzy
 msgid "Check for Updates"
 msgstr "Zkontrolovat aktualizace"
 
@@ -23899,9 +23844,8 @@ msgid "A new version of KiCad is available!"
 msgstr "K dispozici je nová verze KiCadu!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "Skip this version"
-msgstr "Očekávám %s"
+msgstr "Přeskočit tuto verzi"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
 msgid ""
@@ -23924,18 +23868,16 @@ msgid "Launch a web browser to the release announcements page."
 msgstr ""
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
-#, fuzzy
 msgid "Open Downloads Page"
-msgstr "Postup stahování"
+msgstr "Otevřít stránku ke stažení"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
 msgstr ""
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
-#, fuzzy
 msgid "Update Available"
-msgstr "Jsou k dispozici aktualizace balíčků"
+msgstr "Aktualizace k dispozici"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
@@ -24053,9 +23995,8 @@ msgid "Import EasyEDA Std Backup"
 msgstr "Import zálohy EasyEDA Std"
 
 #: kicad/import_project.cpp:167
-#, fuzzy
 msgid "Import EasyEDA Pro Project"
-msgstr "Import souborů projektu Eagle"
+msgstr "Importovat projekt EasyEDA Pro"
 
 #: kicad/kicad.cpp:320
 #, c-format
@@ -24075,34 +24016,28 @@ msgid "Export STEP"
 msgstr "Export do STEP"
 
 #: kicad/kicad_cli.cpp:135
-#, fuzzy
 msgid "Export VRML"
-msgstr "Export"
+msgstr "Export VRML"
 
 #: kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export DXF"
-msgstr "Exportovat IDFv3"
+msgstr "Export DXF"
 
 #: kicad/kicad_cli.cpp:150
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Export do STEP"
+msgstr "Export HPGL"
 
 #: kicad/kicad_cli.cpp:151
-#, fuzzy
 msgid "Export PDF"
-msgstr "Exportovat IDFv3"
+msgstr "Export PDF"
 
 #: kicad/kicad_cli.cpp:152
-#, fuzzy
 msgid "Export PS"
-msgstr "Export do STEP"
+msgstr "Export PS"
 
 #: kicad/kicad_cli.cpp:153
-#, fuzzy
 msgid "Export SVG"
-msgstr "Export SVG souboru"
+msgstr "Export SVG"
 
 #: kicad/kicad_cli.cpp:320
 msgid "prints version information and exits"
@@ -24117,19 +24052,17 @@ msgid "Editors"
 msgstr "Editory"
 
 #: kicad/kicad_manager_frame.cpp:303
-#, fuzzy
 msgid "PCM Updates Available"
-msgstr "Jsou k dispozici aktualizace balíčků"
+msgstr "Dostupné aktualizace PCM"
 
 #: kicad/kicad_manager_frame.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "Nejsou dostupné žádné aktualizace balíčků"
+msgstr "%d aktualizace dostupného balíčku(ů)"
 
 #: kicad/kicad_manager_frame.cpp:759
-#, fuzzy
 msgid "Edit File in Text Editor"
-msgstr "Upravit v textovém editoru"
+msgstr "Upravit soubor v textovém editoru"
 
 #: kicad/kicad_manager_frame.cpp:841
 msgid "[no project loaded]"
@@ -24325,9 +24258,8 @@ msgid ""
 msgstr "Opravdu chcete zavřít Správce balíčků a ignorovat nevyřízené změny?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:292
-#, fuzzy
 msgid "Install Package"
-msgstr "Instalovat balíček"
+msgstr "Nainstalovat balíček"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:405
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
@@ -24620,9 +24552,8 @@ msgid "Local file"
 msgstr "Místní soubor"
 
 #: kicad/pcm/pcm.cpp:1104
-#, fuzzy
 msgid "PCM Update"
-msgstr "Aktualizovat"
+msgstr "Aktualizace PCM"
 
 #: kicad/pcm/pcm.cpp:1114
 #, fuzzy
@@ -24630,14 +24561,12 @@ msgid "Preparing to fetch repositories"
 msgstr "Správa repozitářů"
 
 #: kicad/pcm/pcm.cpp:1132
-#, fuzzy
 msgid "Fetching repository..."
-msgstr "Načítání repozitáře"
+msgstr "Načítání repozitáře..."
 
 #: kicad/pcm/pcm.cpp:1145
-#, fuzzy
 msgid "Reviewing packages..."
-msgstr "Smazat spoj uvnitř plošky"
+msgstr "Prohlížení balíčků..."
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:168
 #, c-format
@@ -24679,9 +24608,9 @@ msgid "Removing previous version of package '%s'."
 msgstr "Odstraňuji předchozí verzi balíčku '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Installing package '%s'."
-msgstr "Rozbalování balíčku '%s'."
+msgstr "Instaluje se balíček '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:312
 msgid "Aborting package installation."
@@ -30784,7 +30713,7 @@ msgstr "Vybrat výrobce"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:142
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "P/N distributora:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:150
 msgid "Column containing the distributor part number"
@@ -33198,7 +33127,7 @@ msgstr "Velikost plošky X:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:502
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:555
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
