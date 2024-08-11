@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -135,7 +135,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	sbAction->Add( m_setToSpecifiedValues, 0, 0, 5 );
 
 	wxFlexGridSizer* fgSizerTrackViaPopups;
-	fgSizerTrackViaPopups = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizerTrackViaPopups = new wxFlexGridSizer( 3, 4, 0, 0 );
 	fgSizerTrackViaPopups->AddGrowableCol( 0 );
 	fgSizerTrackViaPopups->AddGrowableCol( 1 );
 	fgSizerTrackViaPopups->AddGrowableCol( 2 );
@@ -144,30 +144,52 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	fgSizerTrackViaPopups->SetFlexibleDirection( wxBOTH );
 	fgSizerTrackViaPopups->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
-	m_trackWidthLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Track width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_trackWidthLabel->Wrap( -1 );
-	fgSizerTrackViaPopups->Add( m_trackWidthLabel, 0, wxALIGN_BOTTOM|wxTOP, 5 );
-
-	m_viaSizeLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Via size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_viaSizeLabel->Wrap( -1 );
-	fgSizerTrackViaPopups->Add( m_viaSizeLabel, 0, wxALIGN_BOTTOM|wxTOP|wxRIGHT|wxLEFT, 5 );
-
 	m_layerLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_layerLabel->Wrap( -1 );
-	fgSizerTrackViaPopups->Add( m_layerLabel, 0, wxALIGN_BOTTOM|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTrackViaPopups->Add( m_layerLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+
+	m_layerCtrl = new PCB_LAYER_BOX_SELECTOR( sbAction->GetStaticBox(), wxID_ANY, _("-- leave unchanged --  "), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	fgSizerTrackViaPopups->Add( m_layerCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	fgSizerTrackViaPopups->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerTrackViaPopups->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_trackWidthLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Track width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackWidthLabel->Wrap( -1 );
+	fgSizerTrackViaPopups->Add( m_trackWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	wxArrayString m_trackWidthCtrlChoices;
 	m_trackWidthCtrl = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_trackWidthCtrlChoices, 0 );
 	m_trackWidthCtrl->SetSelection( 0 );
-	fgSizerTrackViaPopups->Add( m_trackWidthCtrl, 4, wxEXPAND|wxRIGHT, 5 );
+	fgSizerTrackViaPopups->Add( m_trackWidthCtrl, 4, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSizerTrackViaPopups->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerTrackViaPopups->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_viaSizeLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Via size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaSizeLabel->Wrap( -1 );
+	fgSizerTrackViaPopups->Add( m_viaSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	wxArrayString m_viaSizesCtrlChoices;
 	m_viaSizesCtrl = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_viaSizesCtrlChoices, 0 );
 	m_viaSizesCtrl->SetSelection( 0 );
-	fgSizerTrackViaPopups->Add( m_viaSizesCtrl, 5, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizerTrackViaPopups->Add( m_viaSizesCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_layerCtrl = new PCB_LAYER_BOX_SELECTOR( sbAction->GetStaticBox(), wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizerTrackViaPopups->Add( m_layerCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_annularRingsLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_annularRingsLabel->Wrap( -1 );
+	fgSizerTrackViaPopups->Add( m_annularRingsLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 15 );
+
+	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
+	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
+	m_annularRingsCtrl = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
+	m_annularRingsCtrl->SetSelection( 1 );
+	fgSizerTrackViaPopups->Add( m_annularRingsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	sbAction->Add( fgSizerTrackViaPopups, 0, wxBOTTOM|wxEXPAND|wxLEFT, 25 );

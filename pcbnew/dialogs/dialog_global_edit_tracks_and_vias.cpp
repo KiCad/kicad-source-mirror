@@ -136,12 +136,16 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_trackWidthCtrl->Append( INDETERMINATE_ACTION );
     m_parent->UpdateViaSizeSelectBox( m_viaSizesCtrl, false, false );
     m_viaSizesCtrl->Append( INDETERMINATE_ACTION );
+    m_annularRingsCtrl->Append( INDETERMINATE_ACTION );
 
     m_layerCtrl->SetBoardFrame( m_parent );
     m_layerCtrl->SetLayersHotkeys( false );
     m_layerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_layerCtrl->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_layerCtrl->Resync();
+
+    m_annularRingsLabel->Show( m_brd->GetCopperLayerCount() > 2 );
+    m_annularRingsCtrl->Show( m_brd->GetCopperLayerCount() > 2 );
 
     SetupStandardButtons();
 
@@ -238,10 +242,14 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     m_vias->SetValue( g_modifyVias );
 
     if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
+    {
         m_netclassFilterOpt->SetValue( true );
+    }
     else if( item )
+    {
         m_netclassFilter->SetStringSelection(
                 item->GetNet()->GetNetClass()->GetVariableSubstitutionName() );
+    }
 
     if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )
     {
@@ -279,6 +287,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 
     m_trackWidthCtrl->SetSelection( (int) m_trackWidthCtrl->GetCount() - 1 );
     m_viaSizesCtrl->SetSelection( (int) m_viaSizesCtrl->GetCount() - 1 );
+    m_annularRingsCtrl->SetSelection( (int) m_annularRingsCtrl->GetCount() - 1 );
     m_layerCtrl->SetStringSelection( INDETERMINATE_ACTION );
 
     m_selectedItemsFilter->SetValue( g_filterSelected );
@@ -299,6 +308,8 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onActionButtonChange( wxCommandEvent& e
     m_trackWidthCtrl->Enable( enable );
     m_viaSizeLabel->Enable( enable );
     m_viaSizesCtrl->Enable( enable );
+    m_annularRingsLabel->Enable( enable );
+    m_annularRingsCtrl->Enable( enable );
     m_layerLabel->Enable( enable );
     m_layerCtrl->Enable( enable );
 }
@@ -326,7 +337,8 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 
             brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
         }
-        else if( isVia && m_viaSizesCtrl->GetStringSelection() != INDETERMINATE_ACTION )
+
+        if( isVia && m_viaSizesCtrl->GetStringSelection() != INDETERMINATE_ACTION )
         {
             unsigned int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
             int          viaSizeIndex = m_viaSizesCtrl->GetSelection();
@@ -337,6 +349,29 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
 
             brdSettings.SetViaSizeIndex( prevViaSizeIndex );
+        }
+
+        if( isVia && m_annularRingsCtrl->GetStringSelection() != INDETERMINATE_ACTION )
+        {
+            PCB_VIA* v = static_cast<PCB_VIA*>( aItem );
+
+            switch( m_annularRingsCtrl->GetSelection() )
+            {
+            case 0:
+                v->Padstack().SetUnconnectedLayerMode(
+                        PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+                break;
+            case 1:
+                v->Padstack().SetUnconnectedLayerMode(
+                        PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+                break;
+            case 2:
+                v->Padstack().SetUnconnectedLayerMode(
+                        PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+                break;
+            default:
+                break;
+            }
         }
 
         if( ( isArc || isTrack ) && m_layerCtrl->GetLayerSelection() != UNDEFINED_LAYER )
