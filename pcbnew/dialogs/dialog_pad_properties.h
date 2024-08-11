@@ -118,6 +118,9 @@ private:
     // Setting the X/Diameter label according to the selected hole type
     void updatePadSizeControls();
 
+    void onModify( wxCommandEvent& aEvent ) override;
+    void onModify( wxSpinDoubleEvent& aEvent ) override;
+
 private:
     PCB_BASE_FRAME* m_parent;
     PAD*            m_currentPad;       // pad currently being edited
@@ -125,7 +128,7 @@ private:
     PAD*            m_masterPad;        // pad used to create new pads in board or FP editor
     BOARD*          m_board;            // the main board: this is the board handled by the PCB
                                         //    editor or the dummy board used by the FP editor
-    bool            m_canUpdate;
+    bool            m_initialized;
     bool            m_canEditNetName;   // true only if the caller is the board editor
     bool            m_isFpEditor;       // true if the caller is the footprint editor
 

@@ -147,7 +147,7 @@ void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad ) :
         DIALOG_PAD_PROPERTIES_BASE( aParent ),
         m_parent( aParent ),
-        m_canUpdate( false ),
+        m_initialized( false ),
         m_posX( aParent, m_posXLabel, m_posXCtrl, m_posXUnits ),
         m_posY( aParent, m_posYLabel, m_posYCtrl, m_posYUnits ),
         m_sizeX( aParent, m_sizeXLabel, m_sizeXCtrl, m_sizeXUnits ),
@@ -285,7 +285,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     SetInitialFocus( m_padNumCtrl );
     SetupStandardButtons();
-    m_canUpdate = true;
+    m_initialized = true;
 
     m_padNetSelector->Connect( NET_SELECTED,
                                wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
@@ -439,6 +439,9 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
 
         redraw();
     }
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -511,6 +514,9 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
         m_cornerRadius.ChangeValue( m_previewPad->GetRoundRectCornerRadius() );
 
     redraw();
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -907,6 +913,9 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
     updatePadSizeControls();
     redraw();
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -915,6 +924,9 @@ void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
     transferDataToPad( m_previewPad );
     updateHoleControls();
     redraw();
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -922,6 +934,9 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 {
     transferDataToPad( m_previewPad );
     redraw();
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -1024,6 +1039,9 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     // Layout adjustment is needed if the hole details got shown/hidden
     m_LeftBoxSizer->Layout();
     redraw();
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -1243,6 +1261,9 @@ void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
 {
     transferDataToPad( m_previewPad );
     redraw();
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -1250,6 +1271,9 @@ void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 {
     transferDataToPad( m_previewPad );
     redraw();
+
+    if( m_initialized )
+        OnModify();
 }
 
 
@@ -1293,7 +1317,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
 void DIALOG_PAD_PROPERTIES::redraw()
 {
-    if( !m_canUpdate )
+    if( !m_initialized )
         return;
 
     KIGFX::VIEW*                view = m_padPreviewGAL->GetView();
@@ -1500,6 +1524,7 @@ PAD_PROP DIALOG_PAD_PROPERTIES::getSelectedProperty()
     return prop;
 }
 
+
 void DIALOG_PAD_PROPERTIES::updateHoleControls()
 {
     if( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
@@ -1515,6 +1540,7 @@ void DIALOG_PAD_PROPERTIES::updateHoleControls()
 
     m_holeXLabel->GetParent()->Layout();
 }
+
 
 void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
 {
@@ -1927,9 +1953,23 @@ void DIALOG_PAD_PROPERTIES::OnPadToDieCheckbox( wxCommandEvent& event )
 }
 
 
+void DIALOG_PAD_PROPERTIES::onModify( wxSpinDoubleEvent& aEvent )
+{
+    if( m_initialized )
+        OnModify();
+}
+
+
+void DIALOG_PAD_PROPERTIES::onModify( wxCommandEvent& aEvent )
+{
+    if( m_initialized )
+        OnModify();
+}
+
+
 void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 {
-    if( m_canUpdate )
+    if( m_initialized )
     {
         if( !transferDataToPad( m_previewPad ) )
             return;
@@ -1938,6 +1978,6 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
         updateRoundRectCornerValues();
 
         redraw();
+        OnModify();
     }
 }
-

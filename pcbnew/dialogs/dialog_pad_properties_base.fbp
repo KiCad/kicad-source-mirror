@@ -133,7 +133,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">General</property>
-                  <property name="select">1</property>
+                  <property name="select">0</property>
                   <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
@@ -7341,6 +7341,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnCheckBox">onModify</event>
                                           <event name="OnUpdateUI">onTeardropsUpdateUi</event>
                                         </object>
                                       </object>
@@ -7407,6 +7408,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnCheckBox">onModify</event>
                                           <event name="OnUpdateUI">onTeardropsUpdateUi</event>
                                         </object>
                                       </object>
@@ -7473,6 +7475,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnCheckBox">onModify</event>
                                           <event name="OnUpdateUI">onTeardropsUpdateUi</event>
                                         </object>
                                       </object>
@@ -7632,6 +7635,8 @@
                                               <property name="window_extra_style"></property>
                                               <property name="window_name"></property>
                                               <property name="window_style"></property>
+                                              <event name="OnSpinCtrlDouble">onModify</event>
+                                              <event name="OnSpinCtrlText">onModify</event>
                                               <event name="OnUpdateUI">onTeardropsUpdateUi</event>
                                             </object>
                                           </object>
@@ -8201,6 +8206,8 @@
                                               <property name="window_extra_style"></property>
                                               <property name="window_name"></property>
                                               <property name="window_style"></property>
+                                              <event name="OnSpinCtrlDouble">onModify</event>
+                                              <event name="OnSpinCtrlText">onModify</event>
                                               <event name="OnUpdateUI">onTeardropsUpdateUi</event>
                                             </object>
                                           </object>
@@ -9524,6 +9531,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnChoice">onModify</event>
                                         </object>
                                       </object>
                                       <object class="sizeritem" expanded="false">
@@ -9651,6 +9659,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnChoice">onModify</event>
                                         </object>
                                       </object>
                                     </object>
@@ -9810,6 +9819,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnText">onModify</event>
                                         </object>
                                       </object>
                                       <object class="sizeritem" expanded="false">
@@ -9999,6 +10009,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnText">onModify</event>
                                         </object>
                                       </object>
                                       <object class="sizeritem" expanded="false">
@@ -10188,6 +10199,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
+                                          <event name="OnText">onModify</event>
                                         </object>
                                       </object>
                                       <object class="sizeritem" expanded="false">
@@ -10862,6 +10874,7 @@
                                       <property name="window_extra_style"></property>
                                       <property name="window_name"></property>
                                       <property name="window_style"></property>
+                                      <event name="OnText">OnValuesChanged</event>
                                     </object>
                                   </object>
                                   <object class="sizeritem" expanded="false">
@@ -11051,6 +11064,7 @@
                                       <property name="window_extra_style"></property>
                                       <property name="window_name"></property>
                                       <property name="window_style"></property>
+                                      <event name="OnText">OnValuesChanged</event>
                                     </object>
                                   </object>
                                   <object class="sizeritem" expanded="false">
@@ -11240,6 +11254,7 @@
                                       <property name="window_extra_style"></property>
                                       <property name="window_name"></property>
                                       <property name="window_style"></property>
+                                      <event name="OnText">OnValuesChanged</event>
                                     </object>
                                   </object>
                                   <object class="sizeritem" expanded="false">
