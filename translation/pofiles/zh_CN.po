@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-08-11 06:29+0000\n"
+"PO-Revision-Date: 2024-08-12 15:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -712,7 +712,7 @@ msgstr "虚拟模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Models not in POS File"
-msgstr "不在 POS 文件中的模型"
+msgstr "POS 文件外的模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Models marked DNP"
