@@ -117,6 +117,7 @@ public:
     void OnPaint( wxPaintEvent &event );
 
     void OnModify();
+    void ClearModify();
 
     /**
      * Force the position of the dialog to a new position

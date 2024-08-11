@@ -677,6 +677,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
     SetupColumnProperties( m_dataModel->GetColsCount() - 1 );
 
     syncBomPresetSelection();
+    OnModify();
 }
 
 
@@ -723,6 +724,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
     m_grid->ProcessTableMessage( msg );
 
     syncBomPresetSelection();
+    OnModify();
 }
 
 
@@ -766,6 +768,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     m_fieldsCtrl->SetTextValue( newFieldName, row, LABEL_COLUMN );
 
     syncBomPresetSelection();
+    OnModify();
 }
 
 
@@ -997,6 +1000,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange( wxDataViewEvent& aEvent )
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableValueChanged( wxGridEvent& aEvent )
 {
     m_grid->ForceRefresh();
+    OnModify();
 }
 
 
@@ -1147,7 +1151,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 {
     if( TransferDataFromWindow() )
+    {
         m_parent->SaveProject();
+        ClearModify();
+    }
 }
 
 

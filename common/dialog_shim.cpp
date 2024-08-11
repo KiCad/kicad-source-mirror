@@ -465,6 +465,13 @@ void DIALOG_SHIM::OnModify()
 }
 
 
+void DIALOG_SHIM::ClearModify()
+{
+    if( GetTitle().StartsWith( wxS( "*" ) ) )
+        SetTitle( GetTitle().AfterFirst( '*' ) );
+}
+
+
 /*
     Quasi-Modal Mode Explained:
 
