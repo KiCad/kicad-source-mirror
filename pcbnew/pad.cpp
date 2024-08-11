@@ -377,6 +377,28 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 }
 
 
+void PAD::SetDrillSizeX( const int aX )
+{
+    m_padStack.Drill().size.x = aX;
+
+    if( GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
+        SetDrillSizeY( aX );
+
+    SetDirty();
+}
+
+
+void PAD::SetDrillShape( PAD_DRILL_SHAPE aShape )
+{
+    m_padStack.Drill().shape = aShape;
+
+    if( aShape == PAD_DRILL_SHAPE::CIRCLE )
+        SetDrillSizeY( GetDrillSizeX() );
+
+    m_shapesDirty = true;
+}
+
+
 int PAD::GetRoundRectCornerRadius() const
 {
     return m_padStack.RoundRectRadius();
@@ -2473,6 +2495,10 @@ static struct PAD_DESC
                 .Map( PAD_PROP::CASTELLATED,       _HKI( "Castellated pad" ) )
                 .Map( PAD_PROP::MECHANICAL,        _HKI( "Mechanical pad" ) );
 
+        ENUM_MAP<PAD_DRILL_SHAPE>::Instance()
+                .Map( PAD_DRILL_SHAPE::CIRCLE,     _HKI( "Round" ) )
+                .Map( PAD_DRILL_SHAPE::OBLONG,     _HKI( "Oblong" ) );
+
         ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
 
         if( zcMap.Choices().GetCount() == 0 )
@@ -2577,6 +2603,10 @@ static struct PAD_DESC
                     } );
         propMgr.AddProperty( roundRadiusRatio, groupPad );
 
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_SHAPE>( _HKI( "Hole Shape" ),
+                    &PAD::SetDrillShape, &PAD::GetDrillShape ), groupPad )
+                .SetWriteableFunc( padCanHaveHole );
+
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size X" ),
                     &PAD::SetDrillSizeX, &PAD::GetDrillSizeX,
                     PROPERTY_DISPLAY::PT_SIZE ), groupPad )
@@ -2587,7 +2617,16 @@ static struct PAD_DESC
                     &PAD::SetDrillSizeY, &PAD::GetDrillSizeY,
                     PROPERTY_DISPLAY::PT_SIZE ), groupPad )
                 .SetWriteableFunc( padCanHaveHole )
-                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator )
+                .SetAvailableFunc(
+                        [=]( INSPECTABLE* aItem ) -> bool
+                        {
+                            // Circle holes have no usable y-size
+                            if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                return pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE;
+
+                            return true;
+                        } );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ), groupPad );
@@ -2653,3 +2692,4 @@ static struct PAD_DESC
 ENUM_TO_WXANY( PAD_ATTRIB );
 ENUM_TO_WXANY( PAD_SHAPE );
 ENUM_TO_WXANY( PAD_PROP );
+ENUM_TO_WXANY( PAD_DRILL_SHAPE );

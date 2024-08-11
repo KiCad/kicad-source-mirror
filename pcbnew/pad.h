@@ -265,7 +265,7 @@ public:
 
     void SetDrillSize( const VECTOR2I& aSize )  { m_padStack.Drill().size = aSize; SetDirty(); }
     const VECTOR2I& GetDrillSize() const        { return m_padStack.Drill().size; }
-    void SetDrillSizeX( const int aX )          { m_padStack.Drill().size.x = aX; SetDirty(); }
+    void SetDrillSizeX( const int aX );
     int GetDrillSizeX() const                   { return m_padStack.Drill().size.x; }
     void SetDrillSizeY( const int aY )          { m_padStack.Drill().size.y = aY; SetDirty(); }
     int GetDrillSizeY() const                   { return m_padStack.Drill().size.y; }
@@ -369,11 +369,7 @@ public:
         return m_padStack.GetOrientation().AsDegrees();
     }
 
-    void SetDrillShape( PAD_DRILL_SHAPE aShape )
-    {
-        m_padStack.Drill().shape = aShape;
-        m_shapesDirty = true;
-    }
+    void SetDrillShape( PAD_DRILL_SHAPE aShape );
     PAD_DRILL_SHAPE GetDrillShape() const { return m_padStack.Drill().shape; }
 
     bool IsDirty() const
