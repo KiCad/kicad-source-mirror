@@ -393,6 +393,9 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_VIA_MICROVIA,           COLOR4D( CYAN ) },
             { LAYER_DRAWINGSHEET,           COLOR4D( DARKRED ) },
             { LAYER_PAGE_LIMITS,            COLOR4D( DARKGRAY) },
+            { NETNAMES_LAYER_ID_START,      CSS_COLOR( 255, 255, 255, 0.7 ) },
+            { LAYER_PAD_NETNAMES,           CSS_COLOR( 255, 255, 255, 0.9 ) },
+            { LAYER_VIA_NETNAMES,           CSS_COLOR( 51, 51, 51, 0.9 ) },
 
             { F_Cu,                         COLOR4D( RED ) },
             { In1_Cu,                       COLOR4D( YELLOW ) },
