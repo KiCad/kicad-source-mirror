@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -315,7 +315,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_annularRingsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_annularRingsLabel->Wrap( -1 );
-	fgSizer4->Add( m_annularRingsLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizer4->Add( m_annularRingsLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
@@ -325,7 +325,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_tentingFrontLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Front tenting:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_tentingFrontLabel->Wrap( -1 );
-	fgSizer4->Add( m_tentingFrontLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizer4->Add( m_tentingFrontLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_tentingFrontCtrlChoices[] = { _("From design rules"), _("Tented"), _("Not tented") };
 	int m_tentingFrontCtrlNChoices = sizeof( m_tentingFrontCtrlChoices ) / sizeof( wxString );
