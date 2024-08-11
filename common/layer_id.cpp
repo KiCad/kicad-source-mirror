@@ -192,6 +192,9 @@ wxString LayerName( int aLayer )
     case LAYER_SELECT_OVERLAY:          return _( "Selection highlight" );
     case LAYER_LOCKED_ITEM_SHADOW:      return _( "Locked item shadow" );
     case LAYER_CONFLICTS_SHADOW:        return _( "Courtyard collision shadow" );
+    case NETNAMES_LAYER_ID_START:       return _( "Track net names" );
+    case LAYER_PAD_NETNAMES:            return _( "Pad net names" );
+    case LAYER_VIA_NETNAMES:            return _( "Via net names" );
 
     default:
         wxCHECK_MSG( false, wxEmptyString, wxString::Format( "Unknown layer ID %d", aLayer ) );

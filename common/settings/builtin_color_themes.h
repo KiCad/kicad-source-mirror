@@ -171,6 +171,9 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_VIA_MICROVIA,           CSS_COLOR( 0,   132, 132, 1 ) },
             { LAYER_DRAWINGSHEET,           CSS_COLOR( 200, 114, 171, 1 ) },
             { LAYER_PAGE_LIMITS,            CSS_COLOR( 132, 132, 132, 1 ) },
+            { NETNAMES_LAYER_ID_START,      CSS_COLOR( 255, 255, 255, 0.7 ) },
+            { LAYER_PAD_NETNAMES,           CSS_COLOR( 255, 255, 255, 0.9 ) },
+            { LAYER_VIA_NETNAMES,           CSS_COLOR( 51, 51, 51, 0.9 ) },
 
             { F_Cu,                         CSS_COLOR( 200, 52,  52,  1 ) },
             { In1_Cu,                       CSS_COLOR( 127, 200, 127, 1 ) },

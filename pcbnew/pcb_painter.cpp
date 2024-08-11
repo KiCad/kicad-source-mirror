@@ -150,19 +150,19 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 
     // Colors for layers that aren't theme-able
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
-    m_layerColors[LAYER_VIA_NETNAMES]    = COLOR4D( 0.2, 0.2, 0.2, 0.9 );
-    m_layerColors[LAYER_PAD_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_VIA_NETNAMES]    = aSettings->GetColor( LAYER_VIA_NETNAMES );
+    m_layerColors[LAYER_PAD_NETNAMES]    = aSettings->GetColor( LAYER_PAD_NETNAMES );
     m_layerColors[LAYER_PADS_SMD_FR]     = aSettings->GetColor( F_Cu );
     m_layerColors[LAYER_PADS_SMD_BK]     = aSettings->GetColor( B_Cu );
-    m_layerColors[LAYER_PAD_FR_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[LAYER_PAD_BK_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_PAD_FR_NETNAMES] = aSettings->GetColor( LAYER_PAD_NETNAMES );
+    m_layerColors[LAYER_PAD_BK_NETNAMES] = aSettings->GetColor( LAYER_PAD_NETNAMES );
 
     // Netnames for copper layers
+    const COLOR4D lightLabel = aSettings->GetColor( NETNAMES_LAYER_ID_START );
+    const COLOR4D darkLabel = lightLabel.Inverted();
+
     for( PCB_LAYER_ID layer : LSET::AllCuMask().CuStack() )
     {
-        const COLOR4D lightLabel( 1.0, 1.0, 1.0, 0.7 );
-        const COLOR4D darkLabel = lightLabel.Inverted();
-
         if( m_layerColors[layer].GetBrightness() > 0.5 )
             m_layerColors[GetNetnameLayer( layer )] = darkLabel;
         else
