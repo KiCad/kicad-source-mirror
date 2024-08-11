@@ -252,7 +252,7 @@ public:
 
     void SetDrillSize( const VECTOR2I& aSize )  { m_drill = aSize; SetDirty(); }
     const VECTOR2I& GetDrillSize() const        { return m_drill; }
-    void SetDrillSizeX( const int aX )          { m_drill.x = aX; SetDirty(); }
+    void SetDrillSizeX( const int aX );
     int GetDrillSizeX() const                   { return m_drill.x; }
     void SetDrillSizeY( const int aY )          { m_drill.y = aY; SetDirty(); }
     int GetDrillSizeY() const                   { return m_drill.y; }
@@ -352,7 +352,7 @@ public:
         return m_orient.AsDegrees();
     }
 
-    void SetDrillShape( PAD_DRILL_SHAPE_T aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
+    void SetDrillShape( PAD_DRILL_SHAPE_T aShape );
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
     bool IsDirty() const
