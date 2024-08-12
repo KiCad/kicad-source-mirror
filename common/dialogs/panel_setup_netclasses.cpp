@@ -799,7 +799,7 @@ void PANEL_SETUP_NETCLASSES::OnImportColorsClick( wxCommandEvent& event )
     const std::map<wxString, std::shared_ptr<NETCLASS>>& netclasses =
             m_netSettings->GetNetclasses();
 
-    for( int row = 1; row < m_netclassGrid->GetNumberRows(); ++row )
+    for( int row = 0; row < m_netclassGrid->GetNumberRows() - 1; ++row )
     {
         wxString netclassName = m_netclassGrid->GetCellValue( row, GRID_NAME );
 
