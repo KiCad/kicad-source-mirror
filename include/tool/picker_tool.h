@@ -53,7 +53,8 @@ public:
 
     PICKER_TOOL_BASE() :
             m_frame( nullptr ),
-            m_snap( false )
+            m_snap( false ),
+            m_modifiers( 0 )
     {
         reset();
     }
