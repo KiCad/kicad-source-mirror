@@ -698,29 +698,32 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SetAltPinFunction( pin, alt );
             }
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_PIN_TRICKS_START
-                     && *evt->GetCommandId() <= ID_POPUP_SCH_PIN_TRICKS_END )
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_PIN_TRICKS_END
+                     && !m_isSymbolEditor && !m_isSymbolViewer )
             {
-                if( !m_selection.OnlyContains( { SCH_PIN_T, SCH_SHEET_PIN_T } )
-                    || m_selection.Empty() )
-                {
-                    return 0;
-                }
+                SCH_EDIT_FRAME* sch_frame = static_cast<SCH_EDIT_FRAME*>( m_frame );
 
                 // Keep track of new items so we make them the new selection at the end
                 EDA_ITEMS  newItems;
-                SCH_COMMIT commit( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
+                SCH_COMMIT commit( sch_frame );
 
                 if( *evt->GetCommandId() == ID_POPUP_SCH_PIN_TRICKS_NO_CONNECT )
                 {
                     for( EDA_ITEM* item : m_selection )
                     {
+                        if( item->Type() != SCH_PIN_T && item->Type() != SCH_SHEET_PIN_T )
+                            continue;
+
                         SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( item->GetPosition() );
-                        commit.Add( nc, m_frame->GetScreen() );
+                        commit.Add( nc, sch_frame->GetScreen() );
                         newItems.push_back( nc );
                     }
 
-                    commit.Push( wxS( "No Connect Pins" ) );
-                    ClearSelection();
+                    if( !commit.Empty() )
+                    {
+                        commit.Push( wxS( "No Connect Pins" ) );
+                        ClearSelection();
+                    }
                 }
                 else if( *evt->GetCommandId() == ID_POPUP_SCH_PIN_TRICKS_WIRE )
                 {
@@ -728,6 +731,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     for( EDA_ITEM* item : m_selection )
                     {
+                        if( item->Type() != SCH_PIN_T && item->Type() != SCH_SHEET_PIN_T )
+                            continue;
+
                         SCH_LINE* wire = new SCH_LINE( item->GetPosition(), LAYER_WIRE );
 
                         // Add some length to the wire as nothing in our code base handles
@@ -753,29 +759,33 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                         wire->SetEndPoint( item->GetPosition() + stub );
 
-                        m_frame->AddToScreen( wire, m_frame->GetScreen() );
-                        commit.Added( wire, m_frame->GetScreen() );
+                        m_frame->AddToScreen( wire, sch_frame->GetScreen() );
+                        commit.Added( wire, sch_frame->GetScreen() );
                         newItems.push_back( wire );
                     }
 
-                    ClearSelection();
-                    AddItemsToSel( &newItems );
+                    if( !commit.Empty() )
+                    {
+                        ClearSelection();
+                        AddItemsToSel( &newItems );
 
-                    // Select only the ends so we can immediately start dragging them
-                    for( EDA_ITEM* item : newItems )
-                        static_cast<SCH_LINE*>( item )->SetFlags( ENDPOINT );
+                        // Select only the ends so we can immediately start dragging them
+                        for( EDA_ITEM* item : newItems )
+                            static_cast<SCH_LINE*>( item )->SetFlags( ENDPOINT );
 
-                    // Put the mouse on the nearest point of the first wire
-                    SCH_LINE* first = static_cast<SCH_LINE*>( newItems[0] );
-                    getViewControls()->SetCrossHairCursorPosition( first->GetEndPoint(), false );
-                    getViewControls()->WarpMouseCursor( getViewControls()->GetCursorPosition(),
-                                                        true );
+                        KIGFX::VIEW_CONTROLS* vc = getViewControls();
 
-                    // Start the drag tool, canceling will remove the wires
-                    if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, &commit, false ) )
-                        commit.Push( wxS( "Wire Pins" ) );
-                    else
-                        commit.Revert();
+                        // Put the mouse on the nearest point of the first wire
+                        SCH_LINE* first = static_cast<SCH_LINE*>( newItems[0] );
+                        vc->SetCrossHairCursorPosition( first->GetEndPoint(), false );
+                        vc->WarpMouseCursor( vc->GetCursorPosition(), true );
+
+                        // Start the drag tool, canceling will remove the wires
+                        if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, &commit, false ) )
+                            commit.Push( wxS( "Wire Pins" ) );
+                        else
+                            commit.Revert();
+                    }
                 }
                 else
                 {
@@ -785,15 +795,30 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         SCH_PIN*        pin = dynamic_cast<SCH_PIN*>( item );
                         SCH_SHEET_PIN*  sheetPin = dynamic_cast<SCH_SHEET_PIN*>( item );
-                        SCH_EDIT_FRAME* sf = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
                         SCH_LABEL_BASE* label = nullptr;
+                        SCH_SHEET_PATH& sheetPath = sch_frame->GetCurrentSheet();
 
                         wxString labelText;
 
                         if( pin )
+                        {
                             labelText = pin->GetShownName();
-                        else if( sheetPin && sf )
-                            labelText = sheetPin->GetShownText( &sf->GetCurrentSheet(), false );
+
+                            if( labelText.IsEmpty() )
+                            {
+                                labelText.Printf( "%s_%s",
+                                                  pin->GetParentSymbol()->GetRef( &sheetPath ),
+                                                  pin->GetNumber() );
+                            }
+                        }
+                        else if( sheetPin )
+                        {
+                            labelText = sheetPin->GetShownText( &sheetPath, false );
+                        }
+                        else
+                        {
+                            continue;
+                        }
 
                         switch( *evt->GetCommandId() )
                         {
@@ -806,7 +831,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         case ID_POPUP_SCH_PIN_TRICKS_GLOBAL_LABEL:
                             label = new SCH_GLOBALLABEL( item->GetPosition(), labelText );
                             break;
-                        default: continue;
+                        default:
+                            continue;
                         }
 
                         switch( pinOrientation( item ) )
@@ -865,16 +891,19 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                             label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
                         }
 
-                        commit.Add( label, m_frame->GetScreen() );
+                        commit.Add( label, sch_frame->GetScreen() );
                         newItems.push_back( label );
                     }
 
-                    commit.Push( wxS( "Label Pins" ) );
+                    if( !commit.Empty() )
+                    {
+                        commit.Push( wxS( "Label Pins" ) );
 
-                    // Many users will want to drag these items to wire off of the pins, so
-                    // pre-select them.
-                    ClearSelection();
-                    AddItemsToSel( &newItems );
+                        // Many users will want to drag these items to wire off of the pins, so
+                        // pre-select them.
+                        ClearSelection();
+                        AddItemsToSel( &newItems );
+                    }
                 }
             }
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_UNFOLD_BUS
