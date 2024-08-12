@@ -24,22 +24,6 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	fgSizer3->SetMinSize( wxSize( 800,300 ) );
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Reference Rule Area:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	bSizer4->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_refRAName = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_refRAName->Wrap( -1 );
-	m_refRAName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	bSizer4->Add( m_refRAName, 0, wxALL, 5 );
-
-
-	fgSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
-
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Target areas:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	fgSizer3->Add( m_staticText4, 0, wxALL, 5 );
@@ -54,9 +38,6 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_raGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_raGrid->SetColSize( 0, 100 );
-	m_raGrid->SetColSize( 1, 300 );
-	m_raGrid->SetColSize( 2, 100 );
 	m_raGrid->AutoSizeColumns();
 	m_raGrid->EnableDragColMove( true );
 	m_raGrid->EnableDragColSize( true );
@@ -73,6 +54,22 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	// Cell Defaults
 	m_raGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	fgSizer3->Add( m_raGrid, 1, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Reference Rule Area:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	bSizer4->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_refRAName = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_refRAName->Wrap( -1 );
+	m_refRAName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	bSizer4->Add( m_refRAName, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );

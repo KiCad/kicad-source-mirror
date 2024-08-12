@@ -69,6 +69,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     m_raGrid->SetColLabelValue( 0, wxT("Copy") );
     m_raGrid->SetColLabelValue( 1, wxT("Target Rule Area") );
     m_raGrid->SetColLabelValue( 2, wxT("Status") );
+    m_raGrid->AutoSizeColumn( 1 );
     m_raGrid->AppendRows( m_targetRAs.size() - 1 );
 
     for( TABLE_ENTRY& entry : m_targetRAs)
@@ -77,7 +78,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
         m_raGrid->SetCellValue( i, 2, entry.m_isOK ? _("OK") : entry.m_errMsg );
         m_raGrid->SetCellRenderer( i, 0, new wxGridCellBoolRenderer);
         m_raGrid->SetCellEditor( i, 0, new wxGridCellBoolEditor);
-        m_raGrid->SetCellValue( i, 0, entry.m_doCopy ? wxT("1") : wxT("0") );
+        m_raGrid->SetCellValue( i, 0, entry.m_doCopy ? wxT("1") : wxT("") );
         i++;
     }
 

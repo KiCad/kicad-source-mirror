@@ -18,6 +18,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE::DIALOG_MULTICHANNEL_GENERATE_RULE_
 	m_GeneralBoxSizer->SetMinSize( wxSize( 800,300 ) );
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 3, 1, 0, 0 );
+	fgSizer3->AddGrowableCol( 0 );
 	fgSizer3->AddGrowableRow( 0 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );

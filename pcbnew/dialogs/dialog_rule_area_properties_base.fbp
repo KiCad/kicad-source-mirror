@@ -425,8 +425,8 @@
                     <property name="vgap">3</property>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxALL|wxEXPAND</property>
-                      <property name="proportion">0</property>
+                      <property name="flag">wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
+                      <property name="proportion">1</property>
                       <object class="wxRadioBox" expanded="true">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>

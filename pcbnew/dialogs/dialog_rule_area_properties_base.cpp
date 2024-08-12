@@ -71,7 +71,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	int m_rbRuleTypeNChoices = sizeof( m_rbRuleTypeChoices ) / sizeof( wxString );
 	m_rbRuleType = new wxRadioBox( this, wxID_ANY, _("Rule type"), wxDefaultPosition, wxDefaultSize, m_rbRuleTypeNChoices, m_rbRuleTypeChoices, 2, wxRA_SPECIFY_COLS );
 	m_rbRuleType->SetSelection( 0 );
-	fgSizer2->Add( m_rbRuleType, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_rbRuleType, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_keepoutRuleSizer = new wxFlexGridSizer( 0, 1, 3, 0 );
 	m_keepoutRuleSizer->SetFlexibleDirection( wxBOTH );

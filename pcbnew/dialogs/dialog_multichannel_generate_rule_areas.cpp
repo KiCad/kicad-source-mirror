@@ -44,14 +44,15 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_sheetsGrid->SetColLabelValue( 1, wxT("Sheet Path") );
     m_sheetsGrid->SetColLabelValue( 2, wxT("Sheet Name") );
     m_sheetsGrid->AppendRows( raData->m_areas.size() - 1 );
+    m_sheetsGrid->AutoSizeColumn( 1 );
 
     for( RULE_AREA& sheet : raData->m_areas )
     {
         m_sheetsGrid->SetCellValue( i, 1, sheet.m_sheetPath );
         m_sheetsGrid->SetCellValue( i, 2, sheet.m_sheetName );
-        m_sheetsGrid->SetCellRenderer( i, 0, new wxGridCellBoolRenderer);
-        m_sheetsGrid->SetCellEditor( i, 0, new wxGridCellBoolEditor);
-        m_sheetsGrid->SetCellValue( i, 0, sheet.m_generateEnabled ? wxT("1") : wxT( "0" ) );
+        m_sheetsGrid->SetCellRenderer( i, 0, new wxGridCellBoolRenderer );
+        m_sheetsGrid->SetCellEditor( i, 0, new wxGridCellBoolEditor );
+        m_sheetsGrid->SetCellValue( i, 0, sheet.m_generateEnabled ? wxT("1") : wxT( "" ) );
         i++;
     }
 
