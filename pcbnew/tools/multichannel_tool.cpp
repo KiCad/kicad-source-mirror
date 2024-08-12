@@ -249,23 +249,40 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 {
     std::vector<ZONE*> refRAs;
 
+    auto isSelectedItemAnRA = [] ( EDA_ITEM* aItem ) -> ZONE*
+    {
+          if( aItem->Type() != PCB_ZONE_T )
+          return nullptr;
+          ZONE* zone = static_cast<ZONE*>( aItem );
+            if( !zone->GetIsRuleArea() )
+                return nullptr;
+            if( zone->GetRuleAreaType() != RULE_AREA_TYPE::PLACEMENT )
+                return nullptr;
+        return zone;
+    };
+
     for( EDA_ITEM* item : selection() )
     {
-        if( item->Type() == PCB_ZONE_T )
+        if( auto zone = isSelectedItemAnRA( item ) )
         {
-            ZONE* zone = static_cast<ZONE*>( item );
-            if( !zone->GetIsRuleArea() )
-                continue;
-            if( zone->GetRuleAreaType() != RULE_AREA_TYPE::PLACEMENT )
-                continue;
-
-            refRAs.push_back( zone );
+            refRAs.push_back(zone);
+        }
+        else if ( item->Type() == PCB_GROUP_T )
+        {
+            PCB_GROUP *group = static_cast<PCB_GROUP*>( item );
+            for( BOARD_ITEM* grpItem : group->GetItems() )
+            {
+                if( auto grpZone = isSelectedItemAnRA( grpItem ) )
+                {
+                    refRAs.push_back( grpZone );
+                }
+            }
         }
     }
 
     if( refRAs.size() != 1 )
     {
-        frame()->ShowInfoBarError( _( "Please select a single reference Rule Area to copy from" ),
+        frame()->ShowInfoBarError( _( "Please select a single reference Rule Area to copy from." ),
                                        true );
         return 0;
     }
@@ -276,6 +293,14 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 
     if( status < 0 )
         return status;
+
+    if( m_areas.m_areas.size() <= 1 )
+    {
+        frame()->ShowInfoBarError( _( "No Rule Areas to repeat layout to have been found." ),
+                                    true );
+        return 0;
+    }
+
 
     DIALOG_MULTICHANNEL_REPEAT_LAYOUT dialog( frame(), this );
     int                               ret = dialog.ShowModal();
