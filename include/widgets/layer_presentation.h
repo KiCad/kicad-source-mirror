@@ -38,6 +38,8 @@ using KIGFX::COLOR4D;
 class LAYER_PRESENTATION
 {
 public:
+    virtual ~LAYER_PRESENTATION() {}
+
     // Return a color index from the layer id
     virtual COLOR4D getLayerColor( int aLayer ) const = 0;
 
