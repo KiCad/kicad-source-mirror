@@ -35,7 +35,8 @@
 // const int netSettingsSchemaVersion = 1;     // new overbar syntax
 // const int netSettingsSchemaVersion = 2;     // exclude buses from netclass members
 // const int netSettingsSchemaVersion = 3;     // netclass assignment patterns
-const int netSettingsSchemaVersion = 4;        // netclass ordering
+// const int netSettingsSchemaVersion = 4;     // netclass ordering
+const int netSettingsSchemaVersion = 5;        // net color highlighting
 
 
 static std::optional<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
@@ -63,6 +64,8 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 {
     m_defaultNetClass = std::make_shared<NETCLASS>( NETCLASS::Default, true );
     m_defaultNetClass->SetDescription( _( "This is the default net class." ) );
+
+    m_highlightNetclassColors = false;
 
     auto saveNetclass =
             []( nlohmann::json& json_array, const std::shared_ptr<NETCLASS>& nc )
@@ -321,11 +324,28 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 }
             },
             {} ) );
+    
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "highlight_net_colors",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+                ret["value"] = m_highlightNetclassColors;
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_highlightNetclassColors = aJson["value"];
+            },
+            {} ) );
 
     registerMigration( 0, 1, std::bind( &NET_SETTINGS::migrateSchema0to1, this ) );
     registerMigration( 1, 2, std::bind( &NET_SETTINGS::migrateSchema1to2, this ) );
     registerMigration( 2, 3, std::bind( &NET_SETTINGS::migrateSchema2to3, this ) );
     registerMigration( 3, 4, std::bind( &NET_SETTINGS::migrateSchema3to4, this ) );
+    registerMigration( 4, 5, std::bind( &NET_SETTINGS::migrateSchema4to5, this ) );
 }
 
 
@@ -461,6 +481,11 @@ bool NET_SETTINGS::migrateSchema3to4()
         m_internals->SetFromString( "netclass_assignments", migrated );
     }
 
+    return true;
+}
+
+bool NET_SETTINGS::migrateSchema4to5()
+{
     return true;
 }
 

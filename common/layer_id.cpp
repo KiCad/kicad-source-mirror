@@ -151,6 +151,7 @@ wxString LayerName( int aLayer )
     case LAYER_BRIGHTENED:              return _( "Highlighted items" );
     case LAYER_HIDDEN:                  return _( "Hidden items" );
     case LAYER_SELECTION_SHADOWS:       return _( "Selection highlight" );
+    case LAYER_NET_COLOR_HIGHLIGHT:     return _( "Wire highlight" );
     case LAYER_SCHEMATIC_DRAWINGSHEET:  return _( "Drawing sheet" );
     case LAYER_SCHEMATIC_PAGE_LIMITS:   return _( "Page limits" );
     case LAYER_OP_VOLTAGES:             return _( "Operating point voltages" );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-3-g43bf300c)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,6 +27,7 @@ class WX_PANEL;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/html/htmlwin.h>
@@ -50,6 +51,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		STD_BITMAP_BUTTON* m_removeButton;
 		STD_BITMAP_BUTTON* m_moveUpButton;
 		STD_BITMAP_BUTTON* m_moveDownButton;
+		wxCheckBox* m_highlightNetColors;
 		wxStaticText* m_colorDefaultHelpText;
 		wxButton* m_importColorsButton;
 		WX_PANEL* m_membershipPane;

@@ -119,7 +119,8 @@ private:
     COLOR4D getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDrawingShadows,
                             bool aDimmed = false ) const;
     KIFONT::FONT* getFont( const EDA_TEXT* aText ) const;
-    float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const;
+    float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows,
+                        bool aDrawingWireColorHighlights = false ) const;
     float getTextThickness( const SCH_ITEM* aItem ) const;
 
     int getOperatingPointTextSize() const;

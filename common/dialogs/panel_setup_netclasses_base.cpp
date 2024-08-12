@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-3-g43bf300c)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -100,6 +100,12 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	m_moveDownButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_moveDownButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	buttonBoxSizer->Add( 60, 0, 1, wxEXPAND, 5 );
+
+	m_highlightNetColors = new wxCheckBox( m_netclassesPane, wxID_ANY, _("Highlight net colors"), wxDefaultPosition, wxDefaultSize, 0 );
+	buttonBoxSizer->Add( m_highlightNetColors, 0, wxALL, 5 );
 
 
 	buttonBoxSizer->Add( 60, 0, 1, wxEXPAND, 5 );

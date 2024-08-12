@@ -178,6 +178,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     }
     else
     {
+        m_highlightNetColors->Hide();
         m_colorDefaultHelpText->SetLabel(
                 _( "Set color to transparent to use layer default color." ) );
         m_colorDefaultHelpText->GetParent()->Layout();
@@ -447,6 +448,8 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     loadNetclasses();
     AdjustAssignmentGridColumns( GetSize().x * 3 / 5 );
 
+    m_highlightNetColors->SetValue( m_netSettings->GetHighlightNetclassColors() );
+
     return true;
 }
 
@@ -548,6 +551,8 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 
         m_netSettings->SetNetclassPatternAssignment( pattern, netclass );
     }
+
+    m_netSettings->SetHighlightNetclassColors( m_highlightNetColors->GetValue() );
 
     return true;
 }
