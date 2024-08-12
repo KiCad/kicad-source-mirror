@@ -40,6 +40,8 @@ public:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
+    void ImportSettingsFrom( const SCHEMATIC& aOtherSchematic );
+
 protected:
     void OnAddAlias( wxCommandEvent& aEvent ) override;
     void OnDeleteAlias( wxCommandEvent& aEvent ) override;
@@ -49,6 +51,8 @@ protected:
     void OnMemberGridCellChanging( wxGridEvent& event );
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
+    void loadAliases( const SCHEMATIC& aSchematic );
 
     void reloadMembersGridOnIdle( wxIdleEvent& aEvent );
 

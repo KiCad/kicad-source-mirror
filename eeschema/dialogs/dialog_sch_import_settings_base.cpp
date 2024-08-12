@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,20 +51,23 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 	m_FieldNameTemplatesOpt = new wxCheckBox( this, wxID_ANY, _("Field name templates"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_FieldNameTemplatesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_PinMapOpt = new wxCheckBox( this, wxID_ANY, _("Pin conflict map"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_PinMapOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_BomPresetsOpt = new wxCheckBox( this, wxID_ANY, _("BOM presets"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_BomPresetsOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_BomFmtPresetsOpt = new wxCheckBox( this, wxID_ANY, _("BOM format presets"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_BomFmtPresetsOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_SeveritiesOpt = new wxCheckBox( this, wxID_ANY, _("Violation severities"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_SeveritiesOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
+	m_PinMapOpt = new wxCheckBox( this, wxID_ANY, _("Pin conflict map"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_PinMapOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_NetClassesOpt = new wxCheckBox( this, wxID_ANY, _("Net classes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_NetClassesOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
-	m_BomPresetsOpt = new wxCheckBox( this, wxID_ANY, _("BOM Presets"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_BomPresetsOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_BomFmtPresetsOpt = new wxCheckBox( this, wxID_ANY, _("BOM Format Presets"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_BomFmtPresetsOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_BusAliasesOpt = new wxCheckBox( this, wxID_ANY, _("Bus alias definitions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_BusAliasesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );

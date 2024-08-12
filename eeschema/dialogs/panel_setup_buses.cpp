@@ -88,7 +88,8 @@ PANEL_SETUP_BUSES::~PANEL_SETUP_BUSES()
                                 nullptr, this );
 }
 
-bool PANEL_SETUP_BUSES::TransferDataToWindow()
+
+void PANEL_SETUP_BUSES::loadAliases( const SCHEMATIC& aSchematic )
 {
     auto contains =
             [&]( const std::shared_ptr<BUS_ALIAS>& alias ) -> bool
@@ -112,7 +113,7 @@ bool PANEL_SETUP_BUSES::TransferDataToWindow()
                 return false;
             };
 
-    SCH_SCREENS screens( m_frame->Schematic().Root() );
+    SCH_SCREENS screens( aSchematic.Root() );
 
     // collect aliases from each open sheet
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
@@ -133,7 +134,12 @@ bool PANEL_SETUP_BUSES::TransferDataToWindow()
         m_aliasesGrid->SetCellValue( ii++, 0, alias->GetName() );
 
     m_membersBook->SetSelection( 1 );
+}
 
+
+bool PANEL_SETUP_BUSES::TransferDataToWindow()
+{
+    loadAliases( m_frame->Schematic() );
     return true;
 }
 
@@ -459,3 +465,11 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
+void PANEL_SETUP_BUSES::ImportSettingsFrom( const SCHEMATIC& aOtherSchematic )
+{
+    loadAliases( aOtherSchematic );
+
+    // New aliases get stored on the currently visible sheet
+    for( const std::shared_ptr<BUS_ALIAS>& alias : m_aliases )
+        alias->SetParent( m_frame->GetScreen() );
+}

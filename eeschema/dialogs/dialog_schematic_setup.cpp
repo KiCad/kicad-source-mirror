@@ -34,6 +34,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
+#include <widgets/wx_progress_reporters.h>
 #include "dialog_schematic_setup.h"
 #include "panel_template_fieldnames.h"
 
@@ -239,6 +240,51 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     {
         static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
                 ->ImportBomFmtPresetsFrom( *file.m_SchematicSettings );
+    }
+
+    if( importDlg.m_BusAliasesOpt->GetValue() )
+    {
+        wxFileName schematicFn( projectFn );
+        schematicFn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+        wxString               fullFileName = schematicFn.GetFullPath();
+        wxString               msg;
+        IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        WX_PROGRESS_REPORTER   progressReporter( this, _( "Loading Bus Aliases" ), 1 );
+
+        pi->SetProgressReporter( &progressReporter );
+
+        try
+        {
+            wxBusyCursor busy;
+            otherSch.SetRoot( pi->LoadSchematicFile( fullFileName, &otherSch ) );
+
+            // Make ${SHEETNAME} work on the root sheet until we properly support
+            // naming the root sheet
+            otherSch.Root().SetName( _( "Root" ) );
+        }
+        catch( const FUTURE_FORMAT_ERROR& ffe )
+        {
+            msg.Printf( _( "Error fetching bus aliases.  Could not load schematic '%s'." ),
+                        fullFileName );
+            progressReporter.Hide();
+            DisplayErrorMessage( this, msg, ffe.Problem() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error fetching bus aliases.  Could not load schematic '%s'." ),
+                        fullFileName );
+            progressReporter.Hide();
+            DisplayErrorMessage( this, msg, ioe.What() );
+        }
+
+        // This fixes a focus issue after the progress reporter is done on GTK.  It shouldn't
+        // cause any issues on macOS and Windows.  If it does, it will have to be conditionally
+        // compiled.
+        Raise();
+
+        static_cast<PANEL_SETUP_BUSES*>( m_treebook->ResolvePage( m_busesPage ) )
+                ->ImportSettingsFrom( otherSch );
     }
 
     if( !alreadyLoaded )
