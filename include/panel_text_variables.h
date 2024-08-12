@@ -43,6 +43,8 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void ImportSettingsFrom( const PROJECT* aOtherProject );
+
 protected:
     // Various button callbacks
     void OnUpdateUI( wxUpdateUIEvent& event ) override;

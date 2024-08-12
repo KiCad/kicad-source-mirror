@@ -90,4 +90,5 @@ void DIALOG_SCH_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
     m_BomPresetsOpt->SetValue( true );
     m_BomFmtPresetsOpt->SetValue( true );
     m_BusAliasesOpt->SetValue( true );
+    m_TextVarsOpt->SetValue( true );
 }

@@ -69,6 +69,9 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 	m_BusAliasesOpt = new wxCheckBox( this, wxID_ANY, _("Bus alias definitions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_BusAliasesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_TextVarsOpt = new wxCheckBox( this, wxID_ANY, _("Text variables"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_TextVarsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 
 	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 

@@ -62,6 +62,7 @@ class DIALOG_SCH_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_PinMapOpt;
 		wxCheckBox* m_NetClassesOpt;
 		wxCheckBox* m_BusAliasesOpt;
+		wxCheckBox* m_TextVarsOpt;
 
 		DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 

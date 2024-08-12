@@ -117,6 +117,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
                 return new PANEL_SETUP_BUSES( aParent, m_frame );
             }, _( "Bus Alias Definitions" ) );
 
+    m_textVarsPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
@@ -244,6 +245,9 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
 
     if( importDlg.m_BusAliasesOpt->GetValue() )
     {
+        // The bus aliases are stored on individual sheets, so we have to load the whole
+        // schematic for this one.
+
         wxFileName schematicFn( projectFn );
         schematicFn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
@@ -285,6 +289,12 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
 
         static_cast<PANEL_SETUP_BUSES*>( m_treebook->ResolvePage( m_busesPage ) )
                 ->ImportSettingsFrom( otherSch );
+    }
+
+    if( importDlg.m_TextVarsOpt->GetValue() )
+    {
+        static_cast<PANEL_TEXT_VARIABLES*>( m_treebook->ResolvePage( m_textVarsPage ) )
+                ->ImportSettingsFrom( otherPrj );
     }
 
     if( !alreadyLoaded )

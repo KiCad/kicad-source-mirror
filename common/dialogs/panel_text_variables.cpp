@@ -254,3 +254,17 @@ void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
         m_TextVars->ShowCellEditControl();
     }
 }
+
+
+void PANEL_TEXT_VARIABLES::ImportSettingsFrom( const PROJECT* aOtherProject )
+{
+    // Fetch from other project...
+    m_lastLoaded = aOtherProject->GetTextVars();
+    // ... but use ticker from current project:
+    m_lastCheckedTicker = m_project->GetTextVarsTicker();
+
+    m_TextVars->ClearRows();
+
+    for( const auto& var : m_lastLoaded )
+        AppendTextVar( var.first, var.second );
+}
