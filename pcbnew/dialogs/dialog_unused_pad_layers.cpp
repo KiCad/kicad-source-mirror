@@ -90,6 +90,27 @@ void DIALOG_UNUSED_PAD_LAYERS::onOK( wxCommandEvent& event )
 
 void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
 {
+    auto viaHasPotentiallyUnusedLayers =
+            [&]( PCB_VIA* via )
+            {
+                if( via->GetViaType() == VIATYPE::THROUGH )
+                    return m_frame->GetBoard()->GetCopperLayerCount() > 2;
+
+                PCB_LAYER_ID startLayer = via->Padstack().StartLayer();
+                PCB_LAYER_ID endLayer = via->Padstack().EndLayer();
+
+                if( startLayer < 0 || endLayer < 0 )
+                    return m_frame->GetBoard()->GetCopperLayerCount() > 2;
+                else
+                    return m_frame->GetBoard()->LayerDepth( startLayer, endLayer ) > 1;
+            };
+
+    auto padHasPotentiallyUnusedLayers =
+            [&]( PAD* pad )
+            {
+                return pad->GetAttribute() == PAD_ATTRIB::PTH;
+            };
+
     if( m_cbSelectedOnly->IsChecked() )
     {
         for( EDA_ITEM* item : m_items )
@@ -99,8 +120,12 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
             if( item->Type() == PCB_VIA_T && m_cbVias->IsChecked() )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                via->SetRemoveUnconnected( aRemoveLayers );
-                via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
+
+                if( viaHasPotentiallyUnusedLayers( via ) )
+                {
+                    via->SetRemoveUnconnected( aRemoveLayers );
+                    via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
+                }
             }
 
             if( item->Type() == PCB_FOOTPRINT_T && m_cbPads->IsChecked() )
@@ -109,8 +134,11 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
 
                 for( PAD* pad : footprint->Pads() )
                 {
-                    pad->SetRemoveUnconnected( aRemoveLayers );
-                    pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                    if( padHasPotentiallyUnusedLayers( pad ) )
+                    {
+                        pad->SetRemoveUnconnected( aRemoveLayers );
+                        pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                    }
                 }
             }
 
@@ -118,8 +146,11 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
             {
                 PAD* pad = static_cast<PAD*>( item );
 
-                pad->SetRemoveUnconnected( aRemoveLayers );
-                pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                if( padHasPotentiallyUnusedLayers( pad ) )
+                {
+                    pad->SetRemoveUnconnected( aRemoveLayers );
+                    pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                }
             }
         }
     }
@@ -133,8 +164,11 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
 
                 for( PAD* pad : footprint->Pads() )
                 {
-                    pad->SetRemoveUnconnected( aRemoveLayers );
-                    pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                    if( padHasPotentiallyUnusedLayers( pad ) )
+                    {
+                        pad->SetRemoveUnconnected( aRemoveLayers );
+                        pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
+                    }
                 }
             }
         }
@@ -146,13 +180,17 @@ void  DIALOG_UNUSED_PAD_LAYERS::updatePadsAndVias( bool aRemoveLayers )
                 if( item->Type() != PCB_VIA_T )
                     continue;
 
-                m_commit.Modify( item );
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                via->SetRemoveUnconnected( aRemoveLayers );
-                via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
+
+                if( viaHasPotentiallyUnusedLayers( via ) )
+                {
+                    m_commit.Modify( via );
+                    via->SetRemoveUnconnected( aRemoveLayers );
+                    via->SetKeepStartEnd( m_cbPreservePads->IsChecked() );
+                }
             }
         }
     }
 
-    m_commit.Push( _( "Set Unused Pad Properties" ) );
+    m_commit.Push( _( "Remove Unused Pads" ) );
 }
