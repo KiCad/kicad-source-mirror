@@ -181,7 +181,6 @@ private:
     bool migrateSchema1to2();
     bool migrateSchema2to3();
     bool migrateSchema3to4();
-    bool migrateSchema4to5();
 
     /**
      * @brief Creates an effective aggregate netclass from the given constituent netclasses
