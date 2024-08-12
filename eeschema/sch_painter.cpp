@@ -35,8 +35,6 @@
 #include <sch_pin.h>
 #include <math/util.h>
 #include <pgm_base.h>
-#include <project/net_settings.h>
-#include <project/project_file.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
@@ -336,21 +334,21 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
     // (i.e. when no specific color is set)
     bool isSymbolChild = aItem->GetParentSymbol() != nullptr;
 
-    if( aItem->Type() == SCH_LINE_T )
+    if( !m_schSettings.m_OverrideItemColors )
     {
-        color = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
-    }
-    else if( aItem->Type() == SCH_BUS_WIRE_ENTRY_T )
-    {
-        color = static_cast<const SCH_BUS_WIRE_ENTRY*>( aItem )->GetBusEntryColor();
-    }
-    else if( aItem->Type() == SCH_JUNCTION_T )
-    {
-        color = static_cast<const SCH_JUNCTION*>( aItem )->GetJunctionColor();
-    }
-    else if( !m_schSettings.m_OverrideItemColors )
-    {
-        if( aItem->Type() == SCH_SHEET_T )
+        if( aItem->Type() == SCH_LINE_T )
+        {
+            color = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
+        }
+        else if( aItem->Type() == SCH_BUS_WIRE_ENTRY_T )
+        {
+            color = static_cast<const SCH_BUS_WIRE_ENTRY*>( aItem )->GetBusEntryColor();
+        }
+        else if( aItem->Type() == SCH_JUNCTION_T )
+        {
+            color = static_cast<const SCH_JUNCTION*>( aItem )->GetJunctionColor();
+        }
+        else if( aItem->Type() == SCH_SHEET_T )
         {
             const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( aItem );
 
@@ -1309,11 +1307,11 @@ void SCH_PAINTER::drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aC
 void SCH_PAINTER::draw( const SCH_JUNCTION* aJct, int aLayer )
 {
     bool highlightNetclassColors = false;
+    EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
 
-    if( m_schematic )
+    if( eeschemaCfg )
     {
-        NET_SETTINGS* netSettings = m_schematic->Prj().GetProjectFile().NetSettings().get();
-        highlightNetclassColors = netSettings->GetHighlightNetclassColors();
+        highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
     }
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
@@ -1355,14 +1353,17 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     bool drawingOP = aLayer == LAYER_OP_VOLTAGES;
 
     bool highlightNetclassColors = false;
+    EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
 
-    if( m_schematic )
+    if( eeschemaCfg )
     {
-        NET_SETTINGS* netSettings = m_schematic->Prj().GetProjectFile().NetSettings().get();
-        highlightNetclassColors = netSettings->GetHighlightNetclassColors();
+        highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
     }
 
     if( !highlightNetclassColors && drawingNetColorHighlights )
+        return;
+
+    if( m_schSettings.m_OverrideItemColors && drawingNetColorHighlights )
         return;
 
     if( m_schSettings.IsPrinting() && drawingShadows )
@@ -2846,14 +2847,17 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         return;
 
     bool highlightNetclassColors = false;
+    EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
 
-    if( m_schematic )
+    if( eeschemaCfg )
     {
-        NET_SETTINGS* netSettings = m_schematic->Prj().GetProjectFile().NetSettings().get();
-        highlightNetclassColors = netSettings->GetHighlightNetclassColors();
+        highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
     }
 
     if( !highlightNetclassColors && drawingNetColorHighlights )
+        return;
+
+    if( m_schSettings.m_OverrideItemColors && drawingNetColorHighlights )
         return;
 
     if( drawingShadows && !( aEntry->IsBrightened() || aEntry->IsSelected() ) )

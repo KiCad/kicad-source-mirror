@@ -64,8 +64,6 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_defaultNetClass = std::make_shared<NETCLASS>( NETCLASS::Default, true );
     m_defaultNetClass->SetDescription( _( "This is the default net class." ) );
 
-    m_highlightNetclassColors = false;
-
     auto saveNetclass =
             []( nlohmann::json& json_array, const std::shared_ptr<NETCLASS>& nc )
             {
@@ -321,22 +319,6 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                                   netclass } );
                     }
                 }
-            },
-            {} ) );
-    
-    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "highlight_net_colors",
-            [&]() -> nlohmann::json
-            {
-                nlohmann::json ret = {};
-                ret["value"] = m_highlightNetclassColors;
-                return ret;
-            },
-            [&]( const nlohmann::json& aJson )
-            {
-                if( !aJson.is_object() )
-                    return;
-
-                m_highlightNetclassColors = aJson["value"];
             },
             {} ) );
 

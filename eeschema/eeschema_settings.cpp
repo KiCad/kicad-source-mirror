@@ -370,6 +370,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "selection.fill_shapes",
             &m_Selection.fill_shapes, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "selection.highlight_netclass_colors",
+            &m_Selection.highlight_netclass_colors, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "annotation.automatic",
             &m_AnnotatePanel.automatic, true ) );
 

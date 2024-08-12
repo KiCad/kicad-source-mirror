@@ -170,12 +170,6 @@ public:
     static bool ParseBusGroup( const wxString& aGroup, wxString* name,
                                std::vector<wxString>* aMemberList );
 
-    /// Sets the net color highlighting mode
-    void SetHighlightNetclassColors( bool aFlag ) { m_highlightNetclassColors = aFlag; }
-
-    /// Gets the net color highlighting mode
-    bool GetHighlightNetclassColors() const { return m_highlightNetclassColors; }
-
 private:
     bool migrateSchema0to1();
     bool migrateSchema1to2();
@@ -233,10 +227,6 @@ private:
      * Nets that no longer exist will be deleted during a netlist read in Pcbnew.
      */
     std::map<wxString, KIGFX::COLOR4D> m_netColorAssignments;
-
-    /// Sets the display mode for eeschema netclass colors. If true, uses a highlighter style.
-    /// If false, uses the color for the wire / objects themselves.
-    bool m_highlightNetclassColors;
 
     // TODO: Add diff pairs, bus information, etc.
 };

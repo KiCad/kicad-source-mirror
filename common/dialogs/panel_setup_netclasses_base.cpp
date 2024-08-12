@@ -104,12 +104,6 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	buttonBoxSizer->Add( 60, 0, 1, wxEXPAND, 5 );
 
-	m_highlightNetColors = new wxCheckBox( m_netclassesPane, wxID_ANY, _("Highlight net colors"), wxDefaultPosition, wxDefaultSize, 0 );
-	buttonBoxSizer->Add( m_highlightNetColors, 0, wxALL, 5 );
-
-
-	buttonBoxSizer->Add( 60, 0, 1, wxEXPAND, 5 );
-
 	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
 	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );

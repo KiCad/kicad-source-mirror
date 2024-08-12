@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,6 +55,7 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticLine* m_staticline2;
 		wxCheckBox* m_checkSelDrawChildItems;
 		wxCheckBox* m_checkSelFillShapes;
+		wxCheckBox* m_highlightNetclassColors;
 		wxStaticText* m_selWidthLabel;
 		wxSpinCtrlDouble* m_selWidthCtrl;
 		wxStaticText* m_highlightColorNote;
