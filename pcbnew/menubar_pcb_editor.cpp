@@ -321,8 +321,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* dimensionSubmenu = new ACTION_MENU( false, selTool );
     dimensionSubmenu->SetTitle( _( "Add Dimension" ) );
     dimensionSubmenu->SetIcon( BITMAPS::add_aligned_dimension );
-    dimensionSubmenu->Add( PCB_ACTIONS::drawAlignedDimension );
     dimensionSubmenu->Add( PCB_ACTIONS::drawOrthogonalDimension );
+    dimensionSubmenu->Add( PCB_ACTIONS::drawAlignedDimension );
     dimensionSubmenu->Add( PCB_ACTIONS::drawCenterDimension );
     dimensionSubmenu->Add( PCB_ACTIONS::drawRadialDimension );
     dimensionSubmenu->Add( PCB_ACTIONS::drawLeader );

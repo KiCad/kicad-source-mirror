@@ -327,8 +327,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     if( !dimensionGroup )
     {
         dimensionGroup = new ACTION_GROUP( "group.pcbDimensions",
-                                           { &PCB_ACTIONS::drawAlignedDimension,
-                                             &PCB_ACTIONS::drawOrthogonalDimension,
+                                           { &PCB_ACTIONS::drawOrthogonalDimension,
+                                             &PCB_ACTIONS::drawAlignedDimension,
                                              &PCB_ACTIONS::drawCenterDimension,
                                              &PCB_ACTIONS::drawRadialDimension,
                                              &PCB_ACTIONS::drawLeader } );
