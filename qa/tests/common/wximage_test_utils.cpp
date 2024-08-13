@@ -67,12 +67,9 @@ bool IsImagePixelOfColor( const wxImage& aImage, int aX, int aY, const KIGFX::CO
 } // namespace KI_TEST
 
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
-{
-void print_log_value<wxImage>::operator()( std::ostream& os, wxImage const& aImage )
+std::ostream& boost_test_print_type( std::ostream& os, wxImage const& aImage )
 {
     const wxSize size = aImage.GetSize();
     os << "wxImage[" << size.x << "x" << size.y << "]";
+    return os;
 }
-} // namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
-BOOST_TEST_PRINT_NAMESPACE_CLOSE

@@ -33,10 +33,9 @@
 
 /**
  * Define a stream function for logging this type.
- *
- * TODO: convert to boost_test_print_type when Boost minver > 1.64
  */
-inline std::ostream& operator<<( std::ostream& os, const BOX2I& aBox )
+template <typename T>
+std::ostream& boost_test_print_type( std::ostream& os, const BOX2<T>& aBox )
 {
     os << "BOX[ " << aBox.GetOrigin() << " + " << aBox.GetSize() << " ]";
     return os;

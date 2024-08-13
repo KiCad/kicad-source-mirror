@@ -67,10 +67,8 @@ struct COROUTINE_TEST_EVENT
 
 /**
  * Define a stream function for logging this type.
- *
- * TODO: convert to boost_test_print_type when Boost minver > 1.64
  */
-std::ostream& operator<<( std::ostream& os, const COROUTINE_TEST_EVENT& aObj )
+std::ostream& boost_test_print_type( std::ostream& os, const COROUTINE_TEST_EVENT& aObj )
 {
     os << "COROUTINE_TEST_EVENT[ type: " << (int) aObj.m_type << ", value: " << aObj.m_value
        << " ]";

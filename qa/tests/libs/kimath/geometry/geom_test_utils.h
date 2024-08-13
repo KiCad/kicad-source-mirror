@@ -347,26 +347,10 @@ inline bool SegmentsHaveSameEndPoints( const SEG& aSeg1, const SEG& aSeg2 )
 
 } // namespace GEOM_TEST
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
-{
-template <>
-struct print_log_value<SHAPE_LINE_CHAIN>
-{
-    inline void operator()( std::ostream& os, const SHAPE_LINE_CHAIN& c )
-    {
-        os << "SHAPE_LINE_CHAIN: " << c.PointCount() << " points: [\n";
 
-        for( int i = 0; i < c.PointCount(); ++i )
-        {
-            os << "   " << i << ": " << c.CPoint( i ) << "\n";
-        }
+// Stream printing for geometry types
 
-        os << "]";
-    }
-};
-
-}
-BOOST_TEST_PRINT_NAMESPACE_CLOSE
+std::ostream& boost_test_print_type( std::ostream& os, const SHAPE_LINE_CHAIN& c );
 
 
 #endif // GEOM_TEST_UTILS_H

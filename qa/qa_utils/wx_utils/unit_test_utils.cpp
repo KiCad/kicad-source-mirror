@@ -23,17 +23,11 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
-{
-
-void print_log_value<wxPoint>::operator()( std::ostream& os, wxPoint const& aPt )
+std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aPt )
 {
     os << "WXPOINT[ x=\"" << aPt.x << "\" y=\"" << aPt.y << "\" ]";
+    return os;
 }
-
-}
-BOOST_TEST_PRINT_NAMESPACE_CLOSE
-
 
 
 #ifndef QA_EESCHEMA_DATA_LOCATION

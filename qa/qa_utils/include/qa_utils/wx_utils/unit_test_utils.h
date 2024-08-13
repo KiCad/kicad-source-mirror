@@ -38,35 +38,6 @@
 #include <wx/gdicmn.h>
 
 
-/*
- * Boost hides the configuration point for print_log_value in different
- * namespaces between < 1.59 and >= 1.59.
- *
- * The macros can be used to open and close the right level of namespacing
- * based on the version.
- *
- * We could just use a conditionally defined namespace alias, but that
- * doesn't work in GCC <7 (GCC bug #56480)
- *
- * From Boost 1.64, this should be done with boost_test_print_type,
- * and these defines can be removed once all logging functions use that.
- */
-#if BOOST_VERSION >= 105900
-#define BOOST_TEST_PRINT_NAMESPACE_OPEN \
-    boost                               \
-    {                                   \
-    namespace test_tools                \
-    {                                   \
-    namespace tt_detail
-#define BOOST_TEST_PRINT_NAMESPACE_CLOSE }}
-#else
-#define BOOST_TEST_PRINT_NAMESPACE_OPEN \
-    boost                               \
-    {                                   \
-    namespace test_tools
-#define BOOST_TEST_PRINT_NAMESPACE_CLOSE }
-#endif
-
 
 template<class T>
 struct PRINTABLE_OPT
@@ -114,79 +85,62 @@ inline bool operator!=( const PRINTABLE_OPT<L>& aLhs, const PRINTABLE_OPT<R>& aR
 }
 
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
+// boost_test_print_type has to be in the same namespace as the printed type
+namespace std
 {
 
 /**
  * Boost print helper for generic vectors
  */
 template <typename T>
-struct print_log_value<std::vector<T>>
+std::ostream& boost_test_print_type( std::ostream& os, std::vector<T> const& aVec )
 {
-    inline void operator()( std::ostream& os, std::vector<T> const& aVec )
+    os << "std::vector size " << aVec.size() << " [";
+
+    for( const auto& i : aVec )
     {
-        os << "std::vector size " << aVec.size() << " [";
-
-        for( const auto& i : aVec )
-        {
-            os << "\n    ";
-            print_log_value<T>()( os, i );
-        }
-
-        os << "]";
+        os << "\n    " << i;
     }
-};
+
+    os << "]";
+    return os;
+}
 
 /**
  * Boost print helper for generic maps
  */
 template <typename K, typename V>
-struct print_log_value<std::map<K, V>>
+std::ostream& boost_test_print_type( std::ostream& os, std::map<K, V> const& aMap )
 {
-    inline void operator()( std::ostream& os, std::map<K, V> const& aMap )
+    os << "std::map size " << aMap.size() << " [";
+
+    for( const auto& [key, value] : aMap )
     {
-        os << "std::map size " << aMap.size() << " [";
-
-        for( const auto& [key, value] : aMap )
-        {
-            os << "\n    ";
-            print_log_value<K>()( os, key );
-            os << " = ";
-            print_log_value<K>()( os, value );
-        }
-
-        os << "]";
+        os << "\n    " << key << " = " << value;
     }
-};
+
+    os << "]";
+    return os;
+}
 
 /**
  * Boost print helper for generic pairs
  */
 template <typename K, typename V>
-struct print_log_value<std::pair<K, V>>
+std::ostream& boost_test_print_type( std::ostream& os, std::pair<K, V> const& aPair )
 {
-    inline void operator()( std::ostream& os, std::pair<K, V> const& aPair )
-    {
-        os << "[";
-        print_log_value<K>()( os, aPair.first );
-        os << ", ";
-        print_log_value<K>()( os, aPair.second );
-        os << "]";
-    }
-};
+    os << "[" << aPair.first << ", " << aPair.second << "]";
+    return os;
+}
+
+} // namespace std
+
 
 /**
  * Boost print helper for wxPoint. Note operator<< for this type doesn't
  * exist in non-DEBUG builds.
  */
-template <>
-struct print_log_value<wxPoint>
-{
-    void operator()( std::ostream& os, wxPoint const& aVec );
-};
-
-}
-BOOST_TEST_PRINT_NAMESPACE_CLOSE
+std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aVec );
 
 
 namespace KI_TEST

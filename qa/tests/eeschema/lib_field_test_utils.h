@@ -35,27 +35,17 @@
 #include <sch_field.h>
 
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
+std::ostream& boost_test_print_type( std::ostream& os, SCH_FIELD const& f )
 {
-template <>
-struct print_log_value<SCH_FIELD>
-{
-    inline void operator()( std::ostream& os, SCH_FIELD const& f )
-    {
-        os << "SCH_FIELD[ " << f.GetCanonicalName() << " ]";
-    }
-};
-
-template <>
-struct print_log_value<std::vector<SCH_FIELD>>
-{
-    inline void operator()( std::ostream& os, std::vector<SCH_FIELD> const& f )
-    {
-        os << "SCH_FIELDS[ " << f.size() << " ]";
-    }
-};
+    os << "SCH_FIELD[ " << f.GetCanonicalName() << " ]";
+    return os;
 }
-BOOST_TEST_PRINT_NAMESPACE_CLOSE
+
+std::ostream& boost_test_print_type( std::ostream& os, std::vector<SCH_FIELD> const& f )
+{
+    os << "SCH_FIELDS[ " << f.size() << " ]";
+    return os;
+}
 
 
 namespace KI_TEST

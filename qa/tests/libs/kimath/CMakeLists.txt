@@ -27,6 +27,7 @@ set( QA_KIMATH_SRCS
 
     test_kimath.cpp
 
+    geometry/geom_test_utils.cpp
     geometry/test_chamfer.cpp
     geometry/test_distribute.cpp
     geometry/test_dogbone.cpp

@@ -24,7 +24,7 @@
 #include "drc_test_utils.h"
 
 
-std::ostream& operator<<( std::ostream& os, const PCB_MARKER& aMarker )
+std::ostream& boost_test_print_type( std::ostream& os, const PCB_MARKER& aMarker )
 {
     const auto& reporter = aMarker.GetRCItem();
     os << "PCB_MARKER[\n";

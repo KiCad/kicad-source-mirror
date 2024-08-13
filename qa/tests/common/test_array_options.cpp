@@ -36,10 +36,8 @@
 
 /**
  * Define a stream function for logging this type.
- *
- * TODO: convert to boost_test_print_type when Boost minver > 1.64
  */
-std::ostream& operator<<( std::ostream& os, const ARRAY_OPTIONS::TRANSFORM& aObj )
+std::ostream& boost_test_print_type( std::ostream& os, const ARRAY_OPTIONS::TRANSFORM& aObj )
 {
     os << "TRANSFORM[ " << aObj.m_offset << " r " << aObj.m_rotation.AsDegrees() << "deg"
        << " ]";
