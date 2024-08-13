@@ -3008,13 +3008,57 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
                     {
-                        if( pad->GetNetCode() > 0 )
-                            return pad;
+                        return pad;
                     }
                 }
             }
 
             return nullptr;
+        }
+
+        PCB_SHAPE* findGraphic( const PCB_VIA* aVia ) const
+        {
+            const LSET lset = aVia->GetLayerSet() & LSET::AllCuMask();
+            VECTOR2I   position = aVia->GetPosition();
+            BOX2I      bbox = aVia->GetBoundingBox();
+
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+            KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
+            std::vector<PCB_SHAPE*> possible_shapes;
+
+            view->Query( bbox, items );
+
+            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+
+                if( !( item->GetLayerSet() & lset ).any() )
+                    continue;
+
+                if( item->Type() == PCB_SHAPE_T )
+                {
+                    PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+                    if( shape->HitTest( position, aVia->GetWidth() / 2 ) )
+                        possible_shapes.push_back( shape );
+                }
+            }
+
+            PCB_SHAPE* return_shape = nullptr;
+            int min_d = std::numeric_limits<int>::max();
+
+            for( PCB_SHAPE* shape : possible_shapes )
+            {
+                int dist = ( shape->GetPosition() - position ).EuclideanNorm();
+
+                if( dist < min_d )
+                {
+                    min_d = dist;
+                    return_shape = shape;
+                }
+            }
+
+            return return_shape;
         }
 
         std::optional<int> selectPossibleNetsByPopupMenu( std::set<int>& aNetcodeList )
@@ -3155,7 +3199,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             PCB_VIA*           via = static_cast<PCB_VIA*>( aItem );
             VECTOR2I           position = via->GetPosition();
 
-            if( settings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS && m_gridHelper.GetSnap() )
+            if( settings->tracks != MAGNETIC_OPTIONS::NO_EFFECT && m_gridHelper.GetSnap() )
             {
                 if( PCB_TRACK* track = findTrack( via ) )
                 {
@@ -3163,12 +3207,99 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
 
                     aItem->SetPosition( snap );
+                    return;
                 }
             }
-            else if( settings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS && m_gridHelper.GetSnap() )
+
+            if( settings->pads != MAGNETIC_OPTIONS::NO_EFFECT && m_gridHelper.GetSnap() )
             {
                 if( PAD* pad = findPad( via ) )
+                {
                     aItem->SetPosition( pad->GetPosition() );
+                    return;
+                }
+            }
+
+            if( settings->graphics && m_gridHelper.GetSnap() )
+            {
+                if( PCB_SHAPE* shape = findGraphic( via ) )
+                {
+                    if( shape->IsFilled() )
+                    {
+                        aItem->SetPosition( shape->GetPosition() );
+                    }
+                    else
+                    {
+                        switch( shape->GetShape() )
+                        {
+                        case SHAPE_T::SEGMENT:
+                        {
+                            SEG seg( shape->GetStart(), shape->GetEnd() );
+                            VECTOR2I snap = m_gridHelper.AlignToSegment( position, seg );
+                            aItem->SetPosition( snap );
+                            break;
+                        }
+
+                        case SHAPE_T::ARC:
+                        {
+                            if( ( shape->GetEnd() - position ).SquaredEuclideanNorm() <
+                                ( shape->GetStart() - position ).SquaredEuclideanNorm() )
+                            {
+                                aItem->SetPosition( shape->GetEnd() );
+                            }
+                            else
+                            {
+                                aItem->SetPosition( shape->GetStart() );
+                            }
+
+                            break;
+                        }
+
+                        case SHAPE_T::POLY:
+                        {
+                            if( !shape->IsPolyShapeValid() )
+                            {
+                                aItem->SetPosition( shape->GetPosition() );
+                                break;
+                            }
+
+                            const SHAPE_POLY_SET& polySet = shape->GetPolyShape();
+                            std::optional<SEG> nearestSeg;
+                            int minDist = std::numeric_limits<int>::max();
+
+                            for( int ii = 0; ii < polySet.OutlineCount(); ++ii )
+                            {
+                                const SHAPE_LINE_CHAIN& poly = polySet.Outline( ii );
+
+                                for( int jj = 0; jj < poly.SegmentCount(); ++jj )
+                                {
+                                    const SEG& seg = poly.GetSegment( jj );
+                                    int dist = seg.Distance( position );
+
+                                    if( dist < minDist )
+                                    {
+                                        minDist = dist;
+                                        nearestSeg = seg;
+                                    }
+                                }
+                            }
+
+                            if( nearestSeg )
+                            {
+                                VECTOR2I snap = m_gridHelper.AlignToSegment( position, *nearestSeg );
+                                aItem->SetPosition( snap );
+                            }
+
+                            break;
+                        }
+
+                        default:
+                            aItem->SetPosition( shape->GetPosition() );
+                        }
+
+                    }
+                }
+
             }
         }
 
