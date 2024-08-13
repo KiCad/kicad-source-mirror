@@ -61,6 +61,10 @@ enum POINT_TYPE
      * (you may want to infer PT_END from this)
      */
     PT_CORNER = 1 << 4,
+    /**
+     * The point is an intersection of two (or more) items.
+     */
+    PT_INTERSECTION = 1 << 5,
 };
 
 struct TYPED_POINT2I

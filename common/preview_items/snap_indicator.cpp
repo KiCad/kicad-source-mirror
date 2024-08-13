@@ -110,6 +110,20 @@ static void DrawQuadrantPointIcon( GAL& aGal, const VECTOR2I& aPosition, int aSi
                   EDA_ANGLE( 140, EDA_ANGLE_T::DEGREES_T ) );
 }
 
+static void DrawIntersectionIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
+{
+    const int nodeRadius = aSize / 8;
+
+    DrawSnapNode( aGal, aPosition, nodeRadius );
+
+    // Slightly squashed X shape
+    VECTOR2I xLeg = VECTOR2I( aSize / 2, aSize / 3 );
+
+    aGal.DrawLine( aPosition - xLeg, aPosition + xLeg );
+    xLeg.y = -xLeg.y;
+    aGal.DrawLine( aPosition - xLeg, aPosition + xLeg );
+}
+
 
 void SNAP_INDICATOR::ViewDraw( int, VIEW* aView ) const
 {
@@ -154,5 +168,9 @@ void SNAP_INDICATOR::ViewDraw( int, VIEW* aView ) const
     else if( m_snapTypes & POINT_TYPE::PT_QUADRANT )
     {
         DrawQuadrantPointIcon( gal, typeIconPos, size );
+    }
+    else if( m_snapTypes & POINT_TYPE::PT_INTERSECTION )
+    {
+        DrawIntersectionIcon( gal, typeIconPos, size );
     }
 }

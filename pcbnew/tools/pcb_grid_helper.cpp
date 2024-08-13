@@ -35,6 +35,7 @@
 #include <pcb_track.h>
 #include <zone.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/intersection.h>
 #include <geometry/oval.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
@@ -195,7 +196,7 @@ VECTOR2I PCB_GRID_HELPER::AlignToNearestPad( const VECTOR2I& aMousePos, std::deq
     clearAnchors();
 
     for( BOARD_ITEM* item : aPads )
-        computeAnchors( item, aMousePos, true );
+        computeAnchors( item, aMousePos, true, nullptr );
 
     double  minDist = std::numeric_limits<double>::max();
     ANCHOR* nearestOrigin = nullptr;
@@ -230,8 +231,7 @@ VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
 {
     clearAnchors();
 
-    for( BOARD_ITEM* item : aItems )
-        computeAnchors( item, aMousePos, true, aSelectionFilter );
+    computeAnchors( aItems, aMousePos, true, aSelectionFilter );
 
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
@@ -315,8 +315,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     clearAnchors();
 
-    for( BOARD_ITEM* item : queryVisible( bb, aSkip ) )
-        computeAnchors( item, aOrigin );
+    const std::vector<BOARD_ITEM*> visibleItems = queryVisible( bb, aSkip );
+    computeAnchors( visibleItems, aOrigin, false, nullptr );
 
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
@@ -480,8 +480,8 @@ VECTOR2D PCB_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
 }
 
 
-std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
-                                                     const std::vector<BOARD_ITEM*>& aSkip ) const
+std::vector<BOARD_ITEM*>
+PCB_GRID_HELPER::queryVisible( const BOX2I& aArea, const std::vector<BOARD_ITEM*>& aSkip ) const
 {
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
@@ -538,7 +538,127 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
     for( BOARD_ITEM* item : aSkip )
         skipItem( item );
 
-    return items;
+    return {items.begin(), items.end()};
+}
+
+
+struct PCB_INTERSECTABLE
+{
+    BOARD_ITEM*        Item;
+    INTERSECTABLE_GEOM Geometry;
+
+    // Clang wants this constructor
+    PCB_INTERSECTABLE( BOARD_ITEM* aItem, INTERSECTABLE_GEOM aSeg ) :
+            Item( aItem ), Geometry( std::move( aSeg ) )
+    {
+    }
+};
+
+
+void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
+                                      const VECTOR2I& aRefPos, bool aFrom,
+                                      const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter )
+{
+    std::vector<PCB_INTERSECTABLE> intersectables;
+
+    // This c/should come from a more granular snap filter
+    const bool computeIntersections = true;
+    const bool excludeGraphics = aSelectionFilter && !aSelectionFilter->graphics;
+    const bool excludeTracks = aSelectionFilter && !aSelectionFilter->tracks;
+
+    for( BOARD_ITEM* item : aItems )
+    {
+        // First, add all the key points of the item itself
+        computeAnchors( item, aRefPos, aFrom, aSelectionFilter );
+
+        // If we are computing intersections, construct the relevant intersectables
+        if( computeIntersections )
+        {
+            if( !excludeGraphics && item->Type() == PCB_SHAPE_T )
+            {
+                PCB_SHAPE& shape = static_cast<PCB_SHAPE&>( *item );
+
+                switch( shape.GetShape() )
+                {
+                case SHAPE_T::SEGMENT:
+                {
+                    intersectables.emplace_back( &shape, SEG{ shape.GetStart(), shape.GetEnd() } );
+                    break;
+                }
+                case SHAPE_T::CIRCLE:
+                {
+                    intersectables.emplace_back( &shape,
+                                                 CIRCLE{ shape.GetCenter(), shape.GetRadius() } );
+                    break;
+                }
+                case SHAPE_T::ARC:
+                {
+                    intersectables.emplace_back(
+                            &shape,
+                            SHAPE_ARC{ shape.GetStart(), shape.GetArcMid(), shape.GetEnd(), 0 } );
+                    break;
+                }
+                case SHAPE_T::RECTANGLE:
+                {
+                    intersectables.emplace_back( &shape,
+                                                 SHAPE_RECT{ shape.GetStart(), shape.GetEnd() } );
+                    break;
+                }
+                default:
+                    // Ignore other shapes
+                    break;
+                }
+            }
+            else if( !excludeTracks )
+            {
+                switch( item->Type() )
+                {
+                case PCB_TRACE_T:
+                {
+                    PCB_TRACK& track = static_cast<PCB_TRACK&>( *item );
+
+                    intersectables.emplace_back( &track, SEG{ track.GetStart(), track.GetEnd() } );
+                    break;
+                }
+                case PCB_ARC_T:
+                {
+                    PCB_ARC& arc = static_cast<PCB_ARC&>( *item );
+
+                    intersectables.emplace_back(
+                            &arc, SHAPE_ARC{ arc.GetStart(), arc.GetMid(), arc.GetEnd(), 0 } );
+                    break;
+                }
+                default:
+                    // Ignore other items
+                    break;
+                }
+            }
+        }
+    }
+
+    // Now, add all the intersections between the items
+    // This is obviously quadratic, so performance may be a concern for large selections
+    // But, so far up to ~20k comparisons seems not to be an issue with run times in the ms range
+
+    for( size_t ii = 0; ii < intersectables.size(); ++ii )
+    {
+        std::vector<VECTOR2I> intersections;
+        const PCB_INTERSECTABLE& intersectableA = intersectables[ii];
+
+        const INTERSECTION_VISITOR visitor{ intersectableA.Geometry, intersections };
+
+        for( size_t jj = ii + 1; jj < intersectables.size(); ++jj )
+        {
+            const PCB_INTERSECTABLE& intersectableB = intersectables[jj];
+            std::visit( visitor, intersectableB.Geometry );
+        }
+
+        // For each intersection, add an intersection snap anchor
+        for( const VECTOR2I& intersection : intersections )
+        {
+            addAnchor( intersection, SNAPPABLE, intersectableA.Item, POINT_TYPE::PT_INTERSECTION );
+        }
+    }
 }
 
 
@@ -1045,7 +1165,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             for( BOARD_ITEM* item : static_cast<const PCB_GROUP*>( aItem )->GetItems() )
             {
                 if( checkVisibility( item ) )
-                    computeAnchors( item, aRefPos, aFrom );
+                    computeAnchors( item, aRefPos, aFrom, nullptr );
             }
 
             break;

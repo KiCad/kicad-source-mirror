@@ -95,10 +95,19 @@ public:
 
 
 private:
-    std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea,
-                                        const std::vector<BOARD_ITEM*>& aSkip ) const;
+    std::vector<BOARD_ITEM*> queryVisible( const BOX2I&                    aArea,
+                                           const std::vector<BOARD_ITEM*>& aSkip ) const;
 
     ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers );
+
+
+    /**
+     * computeAnchors inserts the local anchor points in to the grid helper for the specified
+     * container of board items, including points implied by intersections or other relationships
+     * between the items.
+     */
+    void computeAnchors( const std::vector<BOARD_ITEM*>& aItems, const VECTOR2I& aRefPos,
+                         bool aFrom, const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter );
 
     /**
      * computeAnchors inserts the local anchor points in to the grid helper for the specified
@@ -108,8 +117,8 @@ private:
      * @param aRefPos The point for which to compute the anchors (if used by the component)
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
      */
-    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false,
-                         const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
+    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom,
+                         const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter );
 
 private:
     MAGNETIC_SETTINGS*     m_magneticSettings;

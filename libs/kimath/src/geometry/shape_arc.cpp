@@ -301,7 +301,25 @@ int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer
 
     std::vector<VECTOR2I> intersections = circ.IntersectLine( aSeg );
 
-    size_t originalSize = aIpsBuffer->size();
+    const size_t originalSize = aIpsBuffer->size();
+
+    for( const VECTOR2I& intersection : intersections )
+    {
+        if( sliceContainsPoint( intersection ) )
+            aIpsBuffer->push_back( intersection );
+    }
+
+    return aIpsBuffer->size() - originalSize;
+}
+
+
+int SHAPE_ARC::Intersect( const CIRCLE& aCircle, std::vector<VECTOR2I>* aIpsBuffer ) const
+{
+    CIRCLE thiscirc( GetCenter(), GetRadius() );
+
+    std::vector<VECTOR2I> intersections = thiscirc.Intersect( aCircle );
+
+    const size_t originalSize = aIpsBuffer->size();
 
     for( const VECTOR2I& intersection : intersections )
     {
@@ -320,7 +338,7 @@ int SHAPE_ARC::Intersect( const SHAPE_ARC& aArc, std::vector<VECTOR2I>* aIpsBuff
 
     std::vector<VECTOR2I> intersections = thiscirc.Intersect( othercirc );
 
-    size_t originalSize = aIpsBuffer->size();
+    const size_t originalSize = aIpsBuffer->size();
 
     for( const VECTOR2I& intersection : intersections )
     {

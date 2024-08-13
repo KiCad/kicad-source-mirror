@@ -76,6 +76,16 @@ public:
         m_h( aH )
     {}
 
+    /**
+     * Create by two corners.
+     */
+    SHAPE_RECT( const VECTOR2I& aP0, const VECTOR2I& aP1 ) :
+        SHAPE( SH_RECT ),
+        m_p0( aP0 ),
+        m_w( aP1.x - aP0.x ),
+        m_h( aP1.y - aP0.y )
+    {}
+
     SHAPE_RECT( const SHAPE_RECT& aOther ) :
         SHAPE( SH_RECT ),
         m_p0( aOther.m_p0 ),

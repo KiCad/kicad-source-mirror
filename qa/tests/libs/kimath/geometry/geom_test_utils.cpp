@@ -26,6 +26,7 @@ std::string toString( const POINT_TYPE& aType )
     case PT_MID: return "PT_MID";
     case PT_QUADRANT: return "PT_QUADRANT";
     case PT_CORNER: return "PT_CORNER";
+    case PT_INTERSECTION: return "PT_INTERSECTION";
     default: return "Unknown POINT_TYPE: " + std::to_string( (int) aType );
     }
 }

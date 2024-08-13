@@ -31,6 +31,7 @@
 #include <math/vector2d.h>   // for VECTOR2I
 #include <geometry/eda_angle.h>
 
+class CIRCLE;
 class SHAPE_LINE_CHAIN;
 
 class SHAPE_ARC : public SHAPE
@@ -142,9 +143,18 @@ public:
     int IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const;
 
     /**
-     * Find intersection points between this arc and aArc. Ignores arc width.
+     * Find intersection points between this arc and a CIRCLE. Ignores arc width.
      *
-     * @param aSeg
+     * @param aCircle Circle to intersect against
+     * @param aIpsBuffer Buffer to store the resulting intersection points (if any)
+     * @return Number of intersection points found
+     */
+    int Intersect( const CIRCLE& aArc, std::vector<VECTOR2I>* aIpsBuffer ) const;
+
+    /**
+     * Find intersection points between this arc and another arc. Ignores arc width.
+     *
+     * @param aArc Arc to intersect against
      * @param aIpsBuffer Buffer to store the resulting intersection points (if any)
      * @return Number of intersection points found
      */

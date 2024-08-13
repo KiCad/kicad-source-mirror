@@ -19,6 +19,7 @@ set( KIMATH_SRCS
     src/geometry/convex_hull.cpp
     src/geometry/direction_45.cpp
     src/geometry/geometry_utils.cpp
+    src/geometry/intersection.cpp
     src/geometry/oval.cpp
     src/geometry/seg.cpp
     src/geometry/shape.cpp
