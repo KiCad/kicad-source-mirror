@@ -101,9 +101,6 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_checkSelFillShapes = new wxCheckBox( this, wxID_ANY, _("Fill selected shapes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSelectionSizer->Add( m_checkSelFillShapes, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_highlightNetclassColors = new wxCheckBox( this, wxID_ANY, _("Highlight netclass colors"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSelectionSizer->Add( m_highlightNetclassColors, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
@@ -114,7 +111,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_selWidthLabel->Wrap( -1 );
 	gbSizer1->Add( m_selWidthLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_selWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 0, 1 );
+	m_selWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 0.000000, 1 );
 	m_selWidthCtrl->SetDigits( 0 );
 	gbSizer1->Add( m_selWidthCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -131,7 +128,34 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	gbSizer1->Add( m_highlightWidthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSelectionSizer->Add( gbSizer1, 1, wxEXPAND|wxRIGHT, 5 );
+	bSelectionSizer->Add( gbSizer1, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_highlightNetclassColors = new wxCheckBox( this, wxID_ANY, _("Highlight netclass colors"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSelectionSizer->Add( m_highlightNetclassColors, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	wxGridBagSizer* gbSizer11;
+	gbSizer11 = new wxGridBagSizer( 0, 0 );
+	gbSizer11->SetFlexibleDirection( wxBOTH );
+	gbSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
+
+	m_colorHighlightLabel = new wxStaticText( this, wxID_ANY, _("Color highlight thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_colorHighlightLabel->Wrap( -1 );
+	gbSizer11->Add( m_colorHighlightLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_colHighlightThickness = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 0, 1 );
+	m_colHighlightThickness->SetDigits( 0 );
+	gbSizer11->Add( m_colHighlightThickness, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_colHighlightLabel2 = new wxStaticText( this, wxID_ANY, _("Color highlight opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_colHighlightLabel2->Wrap( -1 );
+	gbSizer11->Add( m_colHighlightLabel2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_colHighlightTransparency = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 100, 0, 1 );
+	m_colHighlightTransparency->SetDigits( 0 );
+	gbSizer11->Add( m_colHighlightTransparency, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSelectionSizer->Add( gbSizer11, 0, wxEXPAND, 5 );
 
 
 	bRightColumn->Add( bSelectionSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

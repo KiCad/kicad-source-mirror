@@ -486,7 +486,18 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows,
     }
 
     if( aDrawingWireColorHighlights )
-        width *= 4;
+    {
+        float              colorHighlightWidth = schIUScale.MilsToIU( 15.0 );
+        EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
+
+        if( eeschemaCfg )
+        {
+            colorHighlightWidth = schIUScale.MilsToIU(
+                    eeschemaCfg->m_Selection.highlight_netclass_colors_thickness );
+        }
+
+        width += colorHighlightWidth;
+    }
 
     return width;
 }
@@ -1353,11 +1364,13 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     bool drawingOP = aLayer == LAYER_OP_VOLTAGES;
 
     bool highlightNetclassColors = false;
+    double             highlightAlpha = 0.6;
     EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
 
     if( eeschemaCfg )
     {
         highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
+        highlightAlpha = eeschemaCfg->m_Selection.highlight_netclass_colors_alpha;
     }
 
     if( !highlightNetclassColors && drawingNetColorHighlights )
@@ -1399,7 +1412,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
             return;
         }
 
-        color = color.WithAlpha( color.a * 0.6 );
+        color = color.WithAlpha( color.a * highlightAlpha );
     }
 
     if( ( drawingDangling || drawingShadows ) && !aLine->IsNew() )

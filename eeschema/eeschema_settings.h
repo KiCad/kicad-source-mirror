@@ -179,6 +179,8 @@ public:
         bool draw_selected_children;
         bool fill_shapes;
         bool highlight_netclass_colors;
+        int    highlight_netclass_colors_thickness;
+        double highlight_netclass_colors_alpha;
     };
 
     struct PAGE_SETTINGS
