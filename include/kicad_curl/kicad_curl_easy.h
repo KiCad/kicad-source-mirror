@@ -38,6 +38,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <cstdint>
 
 typedef void CURL;
 struct curl_slist;
