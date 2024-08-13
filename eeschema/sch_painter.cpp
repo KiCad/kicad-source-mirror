@@ -1504,7 +1504,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
         return;
 
     LINE_STYLE lineStyle = aShape->GetEffectiveLineStyle();
-    COLOR4D    color = getRenderColor( aShape, aLayer, drawingShadows );
+    COLOR4D    color = getRenderColor( aShape, aLayer, drawingShadows, aDimmed );
 
     if( drawingShadows && !( aShape->IsBrightened() || aShape->IsSelected() ) )
         return;
