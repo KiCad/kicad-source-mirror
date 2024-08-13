@@ -434,7 +434,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
     {
-        printf("EnableMCTool\n");
         ACTION_MENU* multichannelSubmenu = new ACTION_MENU( false, selTool );
         multichannelSubmenu->SetTitle( _( "Multi-Channel" ) );
         multichannelSubmenu->SetIcon( BITMAPS::mode_module );
