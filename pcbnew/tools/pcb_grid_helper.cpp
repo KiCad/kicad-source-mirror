@@ -749,6 +749,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
                         const int snapFlags = CORNER | SNAPPABLE;
 
+                        addAnchor( shape->GetCenter(), snapFlags, shape, POINT_TYPE::PT_CENTER );
+
                         addAnchor( first.A,         snapFlags, shape, POINT_TYPE::PT_CORNER );
                         addAnchor( first.Center(),  snapFlags, shape, POINT_TYPE::PT_MID );
                         addAnchor( second.A,        snapFlags, shape, POINT_TYPE::PT_CORNER );
