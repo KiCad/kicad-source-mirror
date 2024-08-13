@@ -11,7 +11,7 @@ Files
 font.kicad_sym        - main glyph library in KiCAD library format
 symbol.kicad_sym      - glyph library for most math, tech and other symbols
 CJK_symbol.kicad_sym  - CJK symbols
-CJK_wide.kicad_sym    - CKJ characters
+CJK_wide*.kicad_sym   - CJK characters in ranges
 katakana.kicad_sym    - Japanese script
 hiragana.kicad_sym    - Japanese script
 half_full.kicad_sym   - U+FF00 half- and full-width forms
@@ -30,15 +30,15 @@ old/font.pro          - KiCAD project
 
 Requirements
 ------------
-KiCAD 6 or newer (https://www.kicad.org/download/) - for glyph editing
+KiCAD 8 or newer (https://www.kicad.org/download/) - for glyph editing
 Python 3.10 or newer - for font generation
 
 Usage
 -----
-* Edit glyps with KiCAD 6 or newer EESchema library editor.
+* Edit glyphs with KiCAD 8 or newer EESchema library editor.
 * Add/modify Unicode positions to charlist.
-* Generate font using following command line:
-
+* Run the `newstroke_generate_cpp` CMake target
+  * Internally, this runs:
       python fontconv.py
 
 Checking changes

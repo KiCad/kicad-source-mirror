@@ -20,3 +20,5 @@ target_link_libraries( utf8_tests
     common
     ${wxWidgets_LIBRARIES}
     )
+
+add_subdirectory( newstroke )
