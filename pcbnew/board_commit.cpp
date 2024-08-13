@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -492,7 +492,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
+        {
             teardropMgr.UpdateTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks );
+
+            // UpdateTeardrops() can modify the ratsnest data. So rebuild this ratsnest data
+            connectivity->RecalculateRatsnest( this );
+        }
 
         // Log undo items for any connectivity or teardrop changes
         for( size_t i = num_changes; i < m_changes.size(); ++i )
@@ -557,6 +562,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             frame->OnModify();
         else
             frame->Update3DView( true, frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
+
+        // Ensure the message panel is updated after committing changes.
+        // By default (i.e. if no event posted), display the updated board info
+        if( !itemsDeselected && !autofillZones && !selectedModified )
+        {
+            std::vector<MSG_PANEL_ITEM> msg_list;
+            board->GetMsgPanelInfo( frame, msg_list );
+            frame->SetMsgPanel( msg_list );
+        }
     }
 
     clear();
