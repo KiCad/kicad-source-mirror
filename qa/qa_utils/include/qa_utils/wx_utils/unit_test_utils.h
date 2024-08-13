@@ -37,53 +37,6 @@
 
 #include <wx/gdicmn.h>
 
-/**
- * If HAVE_EXPECTED_FAILURES is defined, this means that
- * boost::unit_test::expected_failures is available.
- *
- * Wrap expected-to-fail tests with this to prevent them being compiled
- * on platforms with older (<1.59) Boost versions.
- *
- * This can be removed when our minimum boost version is 1.59 or higher.
- */
-#if BOOST_VERSION >= 105900
-#define HAVE_EXPECTED_FAILURES
-#endif
-
-/**
- * BOOST_TEST, while extremely handy, is not available in Boost < 1.59.
- * Undef it here to prevent use. Using it can cause older packaging like
- * Ubuntu LTS (which is on Boost 1.58) to fail.
- *
- * Use BOOST_CHECK_{EQUAL,NE,etc} instead.
- *
- * This can be removed when our minimum boost version is 1.59 or higher.
- */
-#undef BOOST_TEST
-
-
-#if BOOST_VERSION < 105900
-
-/*
- * BOOST_TEST_INFO is not available before 1.59. It's not critical for
- * test pass/fail, it's just info, so just pass along to a logging
- * function.
- *
- * This can be removed when our minimum boost version is 1.59 or higher.
- */
-#define BOOST_TEST_INFO( A ) BOOST_TEST_MESSAGE( A )
-
-/*
- *
- * BOOST_TEST_CONTEXT provides scoped info, but again, only after 1.59.
- * Replacing with a call to BOOST_TEST_MESSAGE will work, and the
- * scoping will still work for newer boosts.
- *
- * This can be removed when our minimum boost version is 1.59 or higher.
- */
-#define BOOST_TEST_CONTEXT( A ) BOOST_TEST_MESSAGE( A );
-
-#endif
 
 /*
  * Boost hides the configuration point for print_log_value in different
@@ -112,29 +65,6 @@
     {                                   \
     namespace test_tools
 #define BOOST_TEST_PRINT_NAMESPACE_CLOSE }
-#endif
-
-/**
- * Before Boost 1.64, nullptr_t wasn't handled. Provide our own logging
- * for nullptr_t's, which helps when doing BOOST_CHECK/REQUIRES on pointers.
- *
- * This can be removed when our minimum boost version is 1.64 or higher.
- */
-#if BOOST_VERSION < 106400
-
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
-{
-template <>
-struct print_log_value<std::nullptr_t>
-{
-    inline void operator()( std::ostream& os, std::nullptr_t const& p )
-    {
-        os << "nullptr";
-    }
-};
-}
-BOOST_TEST_PRINT_NAMESPACE_CLOSE
-
 #endif
 
 
