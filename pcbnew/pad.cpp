@@ -328,20 +328,20 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
 void PAD::SetDrillSizeX( const int aX )
 {
-    m_padStack.Drill().size.x = aX;
+    m_drill.x = aX;
 
-    if( GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
+    if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
         SetDrillSizeY( aX );
 
     SetDirty();
 }
 
 
-void PAD::SetDrillShape( PAD_DRILL_SHAPE aShape )
+void PAD::SetDrillShape( PAD_DRILL_SHAPE_T aShape )
 {
-    m_padStack.Drill().shape = aShape;
+    m_drillShape = aShape;
 
-    if( aShape == PAD_DRILL_SHAPE::CIRCLE )
+    if( aShape == PAD_DRILL_SHAPE_CIRCLE )
         SetDrillSizeY( GetDrillSizeX() );
 
     m_shapesDirty = true;
@@ -2347,9 +2347,9 @@ static struct PAD_DESC
                 .Map( PAD_PROP::HEATSINK,          _HKI( "Heatsink pad" ) )
                 .Map( PAD_PROP::CASTELLATED,       _HKI( "Castellated pad" ) );
 
-        ENUM_MAP<PAD_DRILL_SHAPE>::Instance()
-                .Map( PAD_DRILL_SHAPE::CIRCLE,     _HKI( "Round" ) )
-                .Map( PAD_DRILL_SHAPE::OBLONG,     _HKI( "Oblong" ) );
+        ENUM_MAP<PAD_DRILL_SHAPE_T>::Instance()
+                .Map( PAD_DRILL_SHAPE_CIRCLE,     _HKI( "Round" ) )
+                .Map( PAD_DRILL_SHAPE_OBLONG,     _HKI( "Oblong" ) );
 
         ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
 
@@ -2449,7 +2449,7 @@ static struct PAD_DESC
                     } );
         propMgr.AddProperty( roundRadiusRatio, groupPad );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_SHAPE>( _HKI( "Hole Shape" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_SHAPE_T>( _HKI( "Hole Shape" ),
                     &PAD::SetDrillShape, &PAD::GetDrillShape ), groupPad )
                 .SetWriteableFunc( padCanHaveHole );
 
@@ -2469,7 +2469,7 @@ static struct PAD_DESC
                         {
                             // Circle holes have no usable y-size
                             if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                return pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE;
+                                return pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE;
 
                             return true;
                         } );
@@ -2528,4 +2528,4 @@ static struct PAD_DESC
 ENUM_TO_WXANY( PAD_ATTRIB );
 ENUM_TO_WXANY( PAD_SHAPE );
 ENUM_TO_WXANY( PAD_PROP );
-ENUM_TO_WXANY( PAD_DRILL_SHAPE );
+ENUM_TO_WXANY( PAD_DRILL_SHAPE_T );
