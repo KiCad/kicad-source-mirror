@@ -170,22 +170,68 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
 
         wxASSERT( startAngle < arcEndAngle );
 
+        EDA_ANGLE angleIncrementInRadians = EDA_ANGLE( M_PI / ANGLE_360 ); 
+ 
         for( size_t i = 0; i < 10000 && startAngle < arcEndAngle; ++i )
         {
-            EDA_ANGLE theta = ANGLE_360 * strokes[ i % wrapAround ] / C;
-            EDA_ANGLE endAngle = std::min( startAngle + theta, arcEndAngle );
+             EDA_ANGLE theta = ANGLE_360 * strokes[ i % wrapAround ] / C;
+             EDA_ANGLE endAngle = std::min( startAngle + theta, arcEndAngle );            
 
-            if( i % 2 == 0 )
-            {
-                VECTOR2I a( center.x + KiROUND( r * startAngle.Cos() ),
-                            center.y + KiROUND( r * startAngle.Sin() ) );
-                VECTOR2I b( center.x + KiROUND( r * endAngle.Cos() ),
-                            center.y + KiROUND( r * endAngle.Sin() ) );
+             if( i % 2 == 0 )
+             {
+                 // Calculate the remaining arc length from the current startAngle to the arcEndAngle
+                 EDA_ANGLE remainingArcLength = arcEndAngle - startAngle;
 
-                aStroker( a, b );
-            }
+                 if( remainingArcLength < theta )
+                 {
+                     // If the remaining arc length is less than the current segment length (theta),
+                     // we need to adjust the segment length to fit within the remaining arc.
 
-            startAngle = endAngle;
+                     // Check if the remaining arc length is greater than the gap length (strokes[1]).
+                     // strokes[1] represents the gap between dashes/dots in the pattern.
+                     if( remainingArcLength > ( ANGLE_360 * strokes[1] / C ) )
+                     {
+                         // If the remaining arc length is greater than the gap length,
+                         // adjust the segment length (theta) to leave space for the final gap.
+                         theta = remainingArcLength - ( ANGLE_360 * strokes[1] / C );
+
+                         // Ensure that the adjusted segment length does not exceed the arcEndAngle.
+                         endAngle = startAngle + theta;
+                     }
+                     else
+                     {
+                         // If the remaining arc length is less than or equal to the gap length,
+                         // simply set the endAngle to the arcEndAngle to complete the arc.
+                         endAngle = arcEndAngle;
+                     }
+                 }
+
+                 if( aLineStyle == LINE_STYLE::DASH 
+                     || (( aLineStyle == LINE_STYLE::DASHDOT || aLineStyle == LINE_STYLE::DASHDOTDOT ) && i % wrapAround == 0))
+                 {
+                     for( EDA_ANGLE currentAngle = startAngle; currentAngle < endAngle;
+                          currentAngle += angleIncrementInRadians )
+                     {
+                         VECTOR2I a( center.x + KiROUND( r * currentAngle.Cos() ),
+                                     center.y + KiROUND( r * currentAngle.Sin() ) );
+                         VECTOR2I b( center.x + KiROUND( r * ( currentAngle + angleIncrementInRadians ).Cos() ),
+                                     center.y + KiROUND( r * ( currentAngle + angleIncrementInRadians ).Sin() ) );
+
+                         aStroker( a, b ); // Draw the segment as an arc
+                     }
+                 }
+                 else
+                 {
+                     VECTOR2I a( center.x + KiROUND( r * startAngle.Cos() ),
+                                 center.y + KiROUND( r * startAngle.Sin() ) );
+                     VECTOR2I b( center.x + KiROUND( r * endAngle.Cos() ),
+                                 center.y + KiROUND( r * endAngle.Sin() ) );
+
+                     aStroker( a, b );
+                 }
+             }
+
+             startAngle = endAngle;
         }
 
         break;
