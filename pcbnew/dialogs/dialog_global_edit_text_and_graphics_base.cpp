@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,7 +34,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_footprintFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_footprintFields->SetToolTip( _("Footprint fields that are not the reference designator or value field") );
 
-	sbScope->Add( m_footprintFields, 0, wxALL, 5 );
+	sbScope->Add( m_footprintFields, 0, wxALL, 4 );
 
 	m_footprintGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Footprint graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_footprintGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
@@ -116,7 +116,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	wxStaticBoxSizer* sbAction;
 	sbAction = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Action") ), wxVERTICAL );
 
-	m_setToSpecifiedValues = new wxRadioButton( sbAction->GetStaticBox(), ID_SPECIFIED_NET_TO_NETCLASS_VALUES, _("Set to specified values:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_setToSpecifiedValues = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Set to specified values:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_setToSpecifiedValues->SetValue( true );
 	sbAction->Add( m_setToSpecifiedValues, 0, wxRIGHT, 5 );
 
@@ -197,7 +197,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_bold = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Bold"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	fgSizer1->Add( m_bold, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 120 );
+	fgSizer1->Add( m_bold, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 120 );
 
 	m_SizeXlabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXlabel->Wrap( -1 );
@@ -251,6 +251,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 20 );
 
 	m_centerOnFP = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Center on footprint"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_centerOnFP->SetToolTip( _("Move footprint texts to the center of their parent") );
+
 	fgSizer1->Add( m_centerOnFP, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 120 );
 
 
@@ -262,7 +264,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	bSizer2->Fit( m_specifiedValues );
 	sbAction->Add( m_specifiedValues, 0, wxEXPAND|wxBOTTOM|wxLEFT, 18 );
 
-	m_setToLayerDefaults = new wxRadioButton( sbAction->GetStaticBox(), ID_ALL_TRACKS_VIAS, _("Set to layer default values:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_setToLayerDefaults = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Set to layer default values:"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAction->Add( m_setToLayerDefaults, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
 
 	m_grid = new wxGrid( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
@@ -320,7 +322,6 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
 	m_footprintDimensions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onDimensionItemCheckbox ), NULL, this );
