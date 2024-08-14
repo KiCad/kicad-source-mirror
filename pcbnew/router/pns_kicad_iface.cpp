@@ -661,13 +661,20 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     aSizes.SetMinClearance( bds.m_MinClearance );
     aSizes.SetClearanceSource( _( "board minimum clearance" ) );
 
-    if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aStartItem, nullptr,
-                                         m_startLayer, &constraint ) )
+    if( aStartItem )
     {
-        if( constraint.m_Value.Min() > bds.m_MinClearance )
+        PNS::SEGMENT dummyTrack;
+        dummyTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
+        dummyTrack.SetLayer( ToLAYER_ID( m_startLayer ) );
+
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, &dummyTrack,
+                                             nullptr, m_startLayer, &constraint ) )
         {
-            aSizes.SetClearance( constraint.m_Value.Min() );
-            aSizes.SetClearanceSource( constraint.m_RuleName );
+            if( constraint.m_Value.Min() > bds.m_MinClearance )
+            {
+                aSizes.SetClearance( constraint.m_Value.Min() );
+                aSizes.SetClearanceSource( constraint.m_RuleName );
+            }
         }
     }
 
