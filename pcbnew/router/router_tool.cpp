@@ -735,6 +735,19 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer, const V
     dummyTrack.SetStart( aPos );
     dummyTrack.SetEnd( dummyTrack.GetStart() );
 
+    constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, &dummyTrack, nullptr, targetLayer );
+
+    if( constraint.m_Value.Min() > bds.m_MinClearance )
+    {
+        sizes.SetClearance( constraint.m_Value.Min() );
+        sizes.SetClearanceSource( constraint.GetName() );
+    }
+    else
+    {
+        sizes.SetClearance( bds.m_MinClearance );
+        sizes.SetClearanceSource( _( "board minimum clearance" ) );
+    }
+
     if( bds.UseNetClassTrack() || !sizes.TrackWidthIsExplicit() )
     {
         constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, nullptr,
