@@ -689,7 +689,11 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     if( !found && bds.UseNetClassTrack() && aStartItem )
     {
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem, nullptr,
+        PNS::SEGMENT dummyTrack;
+        dummyTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
+        dummyTrack.SetLayer( ToLAYER_ID( m_startLayer ) );
+
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, &dummyTrack, nullptr,
                                              m_startLayer, &constraint ) )
         {
             trackWidth = std::max( trackWidth, constraint.m_Value.Opt() );
