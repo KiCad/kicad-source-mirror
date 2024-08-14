@@ -195,10 +195,18 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
          */
         wxString netlist;
 
+        // We need the list of pins of the lib symbol, not just the pins of the current
+        // sch symbol, that can be just an unit of a multi-unit symbol, to be able to
+        // select/filter right footprints
         wxArrayString pins;
 
-        for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
-            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+        const std::unique_ptr< LIB_SYMBOL >& lib_symbol = symbol->GetLibSymbolRef();
+
+        if( lib_symbol )
+        {
+            for( SCH_PIN* pin : lib_symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+                pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+        }
 
         if( !pins.IsEmpty() )
             netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
