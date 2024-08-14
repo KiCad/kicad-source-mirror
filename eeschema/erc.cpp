@@ -449,6 +449,8 @@ int ERC_TESTER::TestMissingUnits()
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aErrorCode );
                     ercItem->SetErrorMessage( msg );
                     ercItem->SetItems( unit );
+                    ercItem->SetSheetSpecificPath( base_ref.GetSheetPath() );
+                    ercItem->SetItemsSheetPaths( base_ref.GetSheetPath() );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, unit->GetPosition() );
                     base_ref.GetSheetPath().LastScreen()->Append( marker );
