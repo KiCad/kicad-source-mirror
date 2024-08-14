@@ -765,10 +765,13 @@ struct ATEXT6
     bool isMirrored;
     bool isInverted;
     bool isInvertedRect;
-    uint32_t inverted_borderwidth;
+    bool isFrame;
+    bool isOffsetBorder;
+
+    uint32_t margin_border_width;
     uint32_t textbox_rect_width;
     uint32_t textbox_rect_height;
-    uint32_t textbox_rect_offset;
+    uint32_t text_offset_width;
 
     // Justification only applies when there is a text box size specified
     // Then, the text is justified within the box
