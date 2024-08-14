@@ -220,7 +220,7 @@ void BITMAP_STORE::ThemeChanged()
     }
     else
     {
-        m_theme = wxT( "light" );
+        m_theme = KIPLATFORM::UI::IsDarkTheme() ? wxT( "dark" ) : wxT( "light" );
     }
 
     if( !oldTheme.IsSameAs( m_theme ) )
