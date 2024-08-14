@@ -323,6 +323,15 @@ void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 
 void KIPLATFORM::UI::ImeNotifyCancelComposition( wxWindow* aWindow )
 {
+    wxWindowGTK* win = static_cast<wxWindowGTK*>( aWindow );
+    if( win )
+    {
+        GtkIMContext* imContext = win->m_imContext;
+        if( imContext )
+        {
+            gtk_im_context_focus_out( imContext );
+        }
+    }
 }
 
 
