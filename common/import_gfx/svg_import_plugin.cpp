@@ -426,3 +426,11 @@ static float distanceFromPointToLine( const VECTOR2D& aPoint, const VECTOR2D& aL
 
     return fabs( distance );
 }
+
+
+void SVG_IMPORT_PLUGIN::ReportMsg( const wxString& aMessage )
+{
+    // Add message to keep trace of not handled svg entities
+    m_messages += aMessage;
+    m_messages += '\n';
+}
