@@ -48,8 +48,8 @@ public:
      */
     void Insert( VIEW_ITEM* aItem, const BOX2I& bbox )
     {
-        const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-        const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+        const int       mmin[2] = { std::min( bbox.GetX(), bbox.GetRight() ), std::min( bbox.GetY(), bbox.GetBottom() ) };
+        const int       mmax[2] = { std::max( bbox.GetX(), bbox.GetRight() ), std::max( bbox.GetY(), bbox.GetBottom() ) };
 
         VIEW_RTREE_BASE::Insert( mmin, mmax, aItem );
     }
@@ -65,8 +65,8 @@ public:
 
         if( aBbox )
         {
-            const int mmin[2] = { aBbox->GetX(), aBbox->GetY() };
-            const int mmax[2] = { aBbox->GetRight(), aBbox->GetBottom() };
+            const int mmin[2] = { std::min( aBbox->GetX(), aBbox->GetRight() ), std::min( aBbox->GetY(), aBbox->GetBottom() ) };
+            const int mmax[2] = { std::max( aBbox->GetX(), aBbox->GetRight() ), std::max( aBbox->GetY(), aBbox->GetBottom() ) };
             VIEW_RTREE_BASE::Remove( mmin, mmax, aItem );
             return;
         }
@@ -85,8 +85,8 @@ public:
     template <class Visitor>
     void Query( const BOX2I& aBounds, Visitor& aVisitor ) const
     {
-        int   mmin[2] = { aBounds.GetX(), aBounds.GetY() };
-        int   mmax[2] = { aBounds.GetRight(), aBounds.GetBottom() };
+        int   mmin[2] = { std::min( aBounds.GetX(), aBounds.GetRight() ), std::min( aBounds.GetY(), aBounds.GetBottom() ) };
+        int   mmax[2] = { std::max( aBounds.GetX(), aBounds.GetRight() ), std::max( aBounds.GetY(), aBounds.GetBottom() ) };
 
         // We frequently use the maximum bounding box to recache all items
         // or for any item that overflows the integer width limits of BBOX2I

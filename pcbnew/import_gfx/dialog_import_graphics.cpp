@@ -249,7 +249,7 @@ bool DIALOG_IMPORT_GRAPHICS::TransferDataFromWindow()
     if( cfg->m_Display.m_DisplayInvertYAxis )
         yscale *= -1.0;
 
-    VECTOR2D origin( m_xOrigin.GetIntValue() / xscale, m_yOrigin.GetIntValue() / yscale );
+    VECTOR2D origin( m_xOrigin.GetDoubleValue() / xscale, m_yOrigin.GetDoubleValue() / yscale );
 
     if( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPluginByExt( ext ) )
     {
@@ -277,8 +277,7 @@ bool DIALOG_IMPORT_GRAPHICS::TransferDataFromWindow()
         else
             m_importer->SetLayer( m_parent->GetActiveLayer() );
 
-        m_importer->SetImportOffsetMM( { pcbIUScale.IUTomm( origin.x ),
-                                         pcbIUScale.IUTomm( origin.y ) } );
+        m_importer->SetImportOffsetMM( origin * pcbIUScale.IUTomm( 1 ) );
 
         LOCALE_IO dummy;    // Ensure floats can be read.
 

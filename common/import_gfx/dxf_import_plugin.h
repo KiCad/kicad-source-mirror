@@ -320,10 +320,10 @@ public:
     {
         return m_messages;
     }
+    // report message to keep trace of not supported dxf entities:
+    void ReportMsg( const wxString& aMessage ) override;
 
 private:
-    // report message to keep trace of not supported dxf entities:
-    void reportMsg( const wxString& aMessage );
 
     // coordinate conversions from dxf file to mm
     double mapX( double aDxfCoordX );
@@ -455,77 +455,77 @@ private:
     // Not yet handled DXF entities:
     virtual void addXLine( const DL_XLineData& ) override
     {
-        reportMsg( _( "DXF construction lines not currently supported." ) );
+        ReportMsg( _( "DXF construction lines not currently supported." ) );
     }
     virtual void addRay( const DL_RayData& ) override
     {
-        reportMsg( _( "DXF construction lines not currently supported." ) );
+        ReportMsg( _( "DXF construction lines not currently supported." ) );
     }
 
     virtual void addArcAlignedText( const DL_ArcAlignedTextData& ) override
     {
-        reportMsg( _( "DXF arc-aligned text not currently supported." ) );
+        ReportMsg( _( "DXF arc-aligned text not currently supported." ) );
     }
 
     virtual void addDimAlign( const DL_DimensionData&, const DL_DimAlignedData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addDimLinear( const DL_DimensionData&, const DL_DimLinearData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addDimRadial( const DL_DimensionData&, const DL_DimRadialData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addDimDiametric( const DL_DimensionData&, const DL_DimDiametricData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addDimAngular( const DL_DimensionData&, const DL_DimAngular2LData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addDimAngular3P( const DL_DimensionData&, const DL_DimAngular3PData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addDimOrdinate( const DL_DimensionData&, const DL_DimOrdinateData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addLeader( const DL_LeaderData& ) override
     {
-        reportMsg( _( "DXF dimensions not currently supported." ) );
+        ReportMsg( _( "DXF dimensions not currently supported." ) );
     }
     virtual void addLeaderVertex( const DL_LeaderVertexData& ) override { }
 
     virtual void addHatch( const DL_HatchData& ) override
     {
-        reportMsg( _( "DXF hatches not currently supported." ) );
+        ReportMsg( _( "DXF hatches not currently supported." ) );
     }
     virtual void addHatchLoop( const DL_HatchLoopData& ) override { }
     virtual void addHatchEdge( const DL_HatchEdgeData& ) override { }
 
     virtual void addTrace( const DL_TraceData& ) override
     {
-        reportMsg( _( "DXF traces not currently supported." ) );
+        ReportMsg( _( "DXF traces not currently supported." ) );
     }
 
     virtual void add3dFace( const DL_3dFaceData& ) override
     {
-        reportMsg( _( "DXF 3dfaces not currently supported." ) );
+        ReportMsg( _( "DXF 3dfaces not currently supported." ) );
     }
 
     virtual void addSolid( const DL_SolidData& ) override
     {
-        reportMsg( _( "DXF solids not currently supported." ) );
+        ReportMsg( _( "DXF solids not currently supported." ) );
     }
 
     virtual void addImage( const DL_ImageData& ) override
     {
-        reportMsg( _( "DXF images not currently supported." ) );
+        ReportMsg( _( "DXF images not currently supported." ) );
     }
     virtual void linkImage( const DL_ImageDefData& ) override {}
 

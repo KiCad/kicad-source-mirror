@@ -125,6 +125,11 @@ public:
         return m_plugin->GetMessages();
     }
 
+    void ReportMsg( const wxString& aMessage )
+    {
+        m_plugin->ReportMsg( aMessage );
+    }
+
     /**
      * Get original image Width.
      *

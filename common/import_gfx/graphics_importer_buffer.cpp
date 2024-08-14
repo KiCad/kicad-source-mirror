@@ -98,6 +98,89 @@ void GRAPHICS_IMPORTER_BUFFER::AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape
 
 void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 {
+    BOX2D boundingBox;
+
+    for( std::unique_ptr<IMPORTED_SHAPE>& shape : m_shapes )
+    {
+        BOX2D box = shape->GetBoundingBox();
+
+        if( box.IsValid() )
+            boundingBox.Merge( box );
+    }
+
+    boundingBox.SetOrigin( boundingBox.GetPosition().x * aImporter.GetScale().x,
+                           boundingBox.GetPosition().y * aImporter.GetScale().y );
+    boundingBox.SetSize( boundingBox.GetSize().x * aImporter.GetScale().x,
+                         boundingBox.GetSize().y * aImporter.GetScale().y );
+
+    // Check that the scaled graphics fit in the KiCad numeric limits
+    if( boundingBox.GetSize().x * aImporter.GetMillimeterToIuFactor() > std::numeric_limits<int>::max() ||
+        boundingBox.GetSize().y * aImporter.GetMillimeterToIuFactor() > std::numeric_limits<int>::max() )
+    {
+        double scale_factor = std::numeric_limits<int>::max() / ( aImporter.GetMillimeterToIuFactor() + 100 );
+        double max_scale = std::max( scale_factor / boundingBox.GetSize().x,
+                                     scale_factor / boundingBox.GetSize().y );
+        aImporter.ReportMsg( wxString::Format( _( "Imported graphic is too large. Maximum scale is %f" ),
+                                             max_scale ) );
+        return;
+    }
+    // They haven't set the import offset, so we set it to the bounding box origin to keep the graphics
+    // in the KiCad drawing area
+    else if( aImporter.GetImportOffsetMM() == VECTOR2D( 0, 0 ) )
+    {
+        VECTOR2D offset = boundingBox.GetOrigin();
+        aImporter.SetImportOffsetMM( -offset );
+    }
+    else
+    {
+        VECTOR2D bbox_origin = boundingBox.GetOrigin();
+        aImporter.SetImportOffsetMM( -bbox_origin + aImporter.GetImportOffsetMM() );
+
+        double total_scale_x = aImporter.GetScale().x * aImporter.GetMillimeterToIuFactor();
+        double total_scale_y = aImporter.GetScale().y * aImporter.GetMillimeterToIuFactor();
+
+        double max_offset_x =
+                ( aImporter.GetImportOffsetMM().x + boundingBox.GetRight() ) * total_scale_x;
+        double max_offset_y =
+                ( aImporter.GetImportOffsetMM().y + boundingBox.GetBottom() ) * total_scale_y;
+        double min_offset_x =
+                ( aImporter.GetImportOffsetMM().x + boundingBox.GetLeft() ) * total_scale_x;
+        double min_offset_y =
+                ( aImporter.GetImportOffsetMM().y + boundingBox.GetTop() ) * total_scale_y;
+
+        VECTOR2D newOffset = aImporter.GetImportOffsetMM();
+        bool needsAdjustment = false;
+
+        if( max_offset_x >= std::numeric_limits<int>::max() )
+        {
+            newOffset.x -= ( max_offset_x - std::numeric_limits<int>::max() + 100.0 ) / total_scale_x;
+            needsAdjustment = true;
+        }
+        else if( min_offset_x <= std::numeric_limits<int>::min() )
+        {
+            newOffset.x -= ( min_offset_x - std::numeric_limits<int>::min() - 100 ) / total_scale_x;
+            needsAdjustment = true;
+        }
+
+        if( max_offset_y >= std::numeric_limits<int>::max() )
+        {
+            newOffset.y -= ( max_offset_y - std::numeric_limits<int>::max() + 100 ) / total_scale_y;
+            needsAdjustment = true;
+        }
+        else if( min_offset_y <= std::numeric_limits<int>::min() )
+        {
+            newOffset.y -= ( min_offset_y - std::numeric_limits<int>::min() - 100 ) / total_scale_y;
+            needsAdjustment = true;
+        }
+
+        if( needsAdjustment )
+        {
+            aImporter.ReportMsg( wxString::Format( _( "Import offset adjusted to (%f, %f) to fit within numeric limits" ),
+                                                   newOffset.x, newOffset.y ) );
+            aImporter.SetImportOffsetMM( newOffset );
+        }
+    }
+
     for( std::unique_ptr<IMPORTED_SHAPE>& shape : m_shapes )
         shape->ImportTo( aImporter );
 }

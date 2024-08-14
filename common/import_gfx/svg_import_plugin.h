@@ -62,6 +62,8 @@ public:
         return m_messages;
     }
 
+    void ReportMsg( const wxString& aMessage ) override;
+
     bool Import() override;
     bool Load( const wxString& aFileName ) override;
     bool LoadFromMemory( const wxMemoryBuffer& aMemBuffer ) override;

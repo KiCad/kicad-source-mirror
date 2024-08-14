@@ -30,6 +30,7 @@
 #include "graphics_importer.h"
 
 #include <math/matrix3x3.h>
+#include <math/box2.h>
 #include <list>
 
 
@@ -45,6 +46,8 @@ public:
 
     void SetParentShapeIndex( int aIndex ) { m_parentShapeIndex = aIndex; }
     int  GetParentShapeIndex() const { return m_parentShapeIndex; }
+
+    virtual BOX2D GetBoundingBox() const = 0;
 
 protected:
     int m_parentShapeIndex = -1;
@@ -73,6 +76,14 @@ public:
     {
         m_start = aTransform * m_start + aTranslation;
         m_end = aTransform * m_end + aTranslation;
+    }
+
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D box;
+        box.Merge( m_start );
+        box.Merge( m_end );
+        return box;
     }
 
 private:
@@ -113,6 +124,14 @@ public:
         m_radius = newRadius.EuclideanNorm();
     }
 
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D box;
+        box.Merge( m_center - VECTOR2D( m_radius, m_radius ) );
+        box.Merge( m_center + VECTOR2D( m_radius, m_radius ) );
+        return box;
+    }
+
 private:
     VECTOR2D        m_center;
     double          m_radius;
@@ -146,6 +165,26 @@ public:
     {
         m_start = aTransform * m_start + aTranslation;
         m_center = aTransform * m_center + aTranslation;
+    }
+
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D box;
+
+        box.Merge( m_start + m_stroke.GetWidth() );
+        box.Merge( m_start - m_stroke.GetWidth() );
+
+        for( double angle = 0; angle < m_angle.AsDegrees(); angle += 5 )
+        {
+            EDA_ANGLE ang = EDA_ANGLE( angle );
+            VECTOR2D start = m_center + m_start;
+            VECTOR2D pt = {start.x * ang.Cos() + start.y * ang.Sin(),
+                           start.x * ang.Sin() - start.y * ang.Cos()};
+
+            box.Merge( pt );
+        }
+
+        return box;
     }
 
 private:
@@ -192,6 +231,16 @@ public:
 
     const IMPORTED_STROKE& GetStroke() const { return m_stroke; }
 
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D box;
+
+        for( const VECTOR2D& vert : m_vertices )
+            box.Merge( vert );
+
+        return box;
+    }
+
 private:
     std::vector<VECTOR2D> m_vertices;
     IMPORTED_STROKE       m_stroke;
@@ -227,6 +276,15 @@ public:
     void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
         m_origin = aTransform * m_origin + aTranslation;
+    }
+
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D box;
+        box.Merge( m_origin );
+        box.Merge( m_origin + VECTOR2D( m_width * m_text.length(), m_height ) );
+
+        return box;
     }
 
 private:
@@ -270,6 +328,14 @@ public:
         m_bezierControl1 = aTransform * m_bezierControl1 + aTranslation;
         m_bezierControl2 = aTransform * m_bezierControl2 + aTranslation;
         m_end = aTransform * m_end + aTranslation;
+    }
+
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D box;
+        box.Merge( m_start );
+        box.Merge( m_end );
+        return box;
     }
 
 private:

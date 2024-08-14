@@ -131,6 +131,8 @@ public:
      */
     const virtual wxString& GetMessages() const = 0;
 
+    virtual void ReportMsg( const wxString& aMessage ) = 0;
+
 protected:
     ///< Importer used to create objects representing the imported shapes.
     GRAPHICS_IMPORTER* m_importer;

@@ -131,7 +131,7 @@ bool DXF_IMPORT_PLUGIN::Load( const wxString& aFileName )
 
         m_internalImporter.ClearShapes();
 
-        reportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
+        ReportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
         return false;
     }
 }
@@ -151,7 +151,7 @@ bool DXF_IMPORT_PLUGIN::LoadFromMemory( const wxMemoryBuffer& aMemBuffer )
 
         m_internalImporter.ClearShapes();
 
-        reportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
+        ReportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
         return false;
     }
 }
@@ -247,7 +247,7 @@ bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxMemoryBuffer& aMemBuffer )
 }
 
 
-void DXF_IMPORT_PLUGIN::reportMsg( const wxString& aMessage )
+void DXF_IMPORT_PLUGIN::ReportMsg( const wxString& aMessage )
 {
     // Add message to keep trace of not handled dxf entities
     m_messages += aMessage;
@@ -1429,7 +1429,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
                                         // as runtime errors
     {
         // invalid spline definition, drop this block
-        reportMsg( _( "Invalid spline definition encountered" ) );
+        ReportMsg( _( "Invalid spline definition encountered" ) );
         return;
     }
 
