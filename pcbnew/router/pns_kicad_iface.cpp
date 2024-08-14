@@ -667,7 +667,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, &dummyTrack,
                                              nullptr, m_startLayer, &constraint ) )
         {
-            if( constraint.m_Value.Min() > bds.m_MinClearance )
+            if( constraint.m_Value.Min() >= bds.m_MinClearance )
             {
                 aSizes.SetClearance( constraint.m_Value.Min() );
                 aSizes.SetClearanceSource( constraint.m_RuleName );
