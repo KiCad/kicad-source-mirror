@@ -715,6 +715,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
     m_lastTargetLayer = *newLayer;
 
     updateSizesAfterLayerSwitch( ToLAYER_ID( *newLayer ), m_endSnapPoint );
+    UpdateMessagePanel();
 }
 
 
