@@ -571,6 +571,9 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
             m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
             m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
+            // Store the current zoom level into the current screen before switching
+            m_parent->GetScreen()->m_LastZoomLevel = m_parent->GetCanvas()->GetView()->GetScale();
+
             m_parent->SetCurrentSheet( sheet );
             m_parent->DisplayCurrentSheet();
             m_parent->RedrawScreen(  m_parent->GetScreen()->m_ScrollCenter, false );

@@ -285,6 +285,9 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
             {
                 if( m_frame->Schematic().CurrentSheet() != sheet )
                 {
+                    // Store the current zoom level into the current screen before switching
+                    m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
+
                     m_frame->Schematic().SetCurrentSheet( sheet );
                     m_frame->DisplayCurrentSheet();
                 }
