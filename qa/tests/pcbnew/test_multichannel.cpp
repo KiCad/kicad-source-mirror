@@ -173,7 +173,11 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                     TMATCH::COMPONENT_MATCHES result;
 
                     auto status = cgRef->FindIsomorphism( cgTarget.get(), result );
-                    printf("topo match: '%s' [%d] -> '%s' [%d] result %d\n", refArea.m_ruleName.c_str().AsChar(), refArea.m_raFootprints.size(), targetArea.m_ruleName.c_str().AsChar(), targetArea.m_raFootprints.size(), status );
+                    printf( "topo match: '%s' [%d] -> '%s' [%d] result %d\n",
+                            refArea.m_ruleName.c_str().AsChar(),
+                            (int) refArea.m_raFootprints.size(),
+                            targetArea.m_ruleName.c_str().AsChar(),
+                            (int) targetArea.m_raFootprints.size(), status );
 
                     for( const auto& iter : result )
                     {

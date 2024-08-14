@@ -34,6 +34,7 @@
 
 #include <pad.h>
 #include <footprint.h>
+#include <refdes_utils.h>
 #include <wx/string.h>
 #include <wx/log.h>
 
@@ -82,7 +83,7 @@ bool PIN::IsIsomorphic( const PIN& b ) const
         return true;
     }
 
-    bool matches[m_conns.size()];
+    std::vector<bool> matches( m_conns.size() );
 
     for( int i = 0; i < m_conns.size(); i++ )
         matches[i] = false;
@@ -458,14 +459,7 @@ int main()
 COMPONENT::COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp, std::optional<VECTOR2I> aRaOffset ) :
     m_reference( aRef ), m_parentFootprint( aParentFp ), m_raOffset( aRaOffset )
 {
-    int i;
-    for( i = 0; i < aRef.length(); i++ )
-    {
-        if( std::iswalpha( aRef[i].GetValue() ) )
-            break;
-    }
-
-    m_prefix = aRef.substr( 0, i );
+    m_prefix = UTIL::GetRefDesPrefix( aRef );
 }
 
 bool COMPONENT::IsSameKind( const COMPONENT& b ) const
