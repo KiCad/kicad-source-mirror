@@ -192,8 +192,8 @@ protected:
     RELATION m_relation;
     double   m_value;
 
-    static wxRegEx m_regex_description;
-    static wxRegEx m_regex_search;
+    static const wxRegEx m_regex_description;
+    static const wxRegEx m_regex_search;
     static const std::map<wxString, double> m_units;
 };
 
