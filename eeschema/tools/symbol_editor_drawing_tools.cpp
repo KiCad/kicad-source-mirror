@@ -215,7 +215,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 case LIB_PIN_T:
                 {
                     item = pinTool->CreatePin( VECTOR2I( cursorPos.x, -cursorPos.y ), symbol );
-                    g_lastPin = item->m_Uuid;
+
+                    if( item )
+                        g_lastPin = item->m_Uuid;
+
                     break;
                 }
                 case LIB_TEXT_T:
@@ -845,7 +848,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( sourcePin )
     {
         LIB_PIN* pin = pinTool->RepeatPin( sourcePin );
-        g_lastPin = pin->m_Uuid;
+
+        if( pin )
+            g_lastPin = pin->m_Uuid;
 
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
