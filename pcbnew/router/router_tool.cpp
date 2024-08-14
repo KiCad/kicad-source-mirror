@@ -739,7 +739,7 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer, const V
 
     constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, &dummyTrack, nullptr, targetLayer );
 
-    if( constraint.m_Value.Min() > bds.m_MinClearance )
+    if( constraint.m_Value.Min() >= bds.m_MinClearance )
     {
         sizes.SetClearance( constraint.m_Value.Min() );
         sizes.SetClearanceSource( constraint.GetName() );
