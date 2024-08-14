@@ -213,7 +213,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 case SCH_PIN_T:
                 {
                     item = pinTool->CreatePin( cursorPos, symbol );
-                    g_lastPin = item->m_Uuid;
+
+                    if( item )
+                        g_lastPin = item->m_Uuid;
+
                     break;
                 }
                 case SCH_TEXT_T:
@@ -844,7 +847,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( sourcePin )
     {
         SCH_PIN* pin = pinTool->RepeatPin( sourcePin );
-        g_lastPin = pin->m_Uuid;
+
+        if( pin )
+            g_lastPin = pin->m_Uuid;
 
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
