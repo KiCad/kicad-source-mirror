@@ -589,7 +589,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( fullFileName, aCtl );
 
     if( pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
+    {
+        progressReporter.Hide();
+        DisplayErrorMessage( this, _( "File format is not supported" ), wxEmptyString );
         return false;
+    }
 
     bool converted =  pluginType != PCB_IO_MGR::LEGACY && pluginType != PCB_IO_MGR::KICAD_SEXP;
 
