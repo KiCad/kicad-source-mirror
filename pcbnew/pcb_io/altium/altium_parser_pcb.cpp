@@ -1042,7 +1042,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
 
     char tmpbyte = aReader.Read<uint8_t>();
     isInverted = !!tmpbyte;
-    inverted_borderwidth = aReader.ReadKicadUnit();
+    margin_border_width = aReader.ReadKicadUnit(); // "Margin Border"
     widestring_index = aReader.Read<uint32_t>();
     aReader.Skip( 4 );
 
@@ -1052,7 +1052,31 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     textbox_rect_width = aReader.ReadKicadUnit();
     textbox_rect_height = aReader.ReadKicadUnit();
     textbox_rect_justification = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
-    textbox_rect_offset = aReader.ReadKicadUnit();
+    text_offset_width = aReader.ReadKicadUnit(); // "Text Offset"
+
+    if( aReader.GetRemainingSubrecordBytes() >= 115 )
+    {
+        aReader.Skip( 24 ); // Unknown data
+        aReader.Skip( 64 ); // 2nd font name
+
+        aReader.Skip( 1 ); // Unknown flag
+        aReader.Skip( 1 ); // Unknown flag
+        aReader.Skip( 1 ); // Unknown flag
+        aReader.Skip( 1 ); // Unknown flag
+        aReader.Skip( 1 ); // Unknown flag
+
+        // "Frame" text type flag
+        isFrame = aReader.Read<uint8_t>() != 0;
+
+        // Use "Offset" border value instead of "Margin"
+        isOffsetBorder = aReader.Read<uint8_t>() != 0;
+    }
+    else
+    {
+        isFrame = false;
+        isOffsetBorder = false;
+    }
+
     aReader.SkipSubrecord();
 
     // Subrecord 2 - Legacy 8bit string, max 255 chars, unknown codepage
