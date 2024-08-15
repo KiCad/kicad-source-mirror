@@ -103,7 +103,8 @@ enum DRAG_MODE
     virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, NET_HANDLE aNetCode ) = 0;
     virtual void HideItem( ITEM* aItem ) = 0;
     virtual void Commit() = 0;
-    virtual bool ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, NET_HANDLE aNet ) = 0;
+    virtual bool       ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, NET_HANDLE aNet,
+                                    VECTOR2D aStartPosition ) = 0;
     virtual int  StackupHeight( int aFirstLayer, int aSecondLayer ) const = 0;
     virtual void EraseView() = 0;
     virtual int GetNetCode( NET_HANDLE aNet ) const = 0;

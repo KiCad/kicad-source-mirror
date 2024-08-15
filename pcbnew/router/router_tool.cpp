@@ -1208,7 +1208,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 }
 
 
-bool ROUTER_TOOL::prepareInteractive()
+bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     int             routingLayer = getStartLayer( m_startItem );
@@ -1233,7 +1233,7 @@ bool ROUTER_TOOL::prepareInteractive()
     m_iface->SetStartLayer( routingLayer );
 
     frame()->GetBoard()->GetDesignSettings().m_TempOverrideTrackWidth = false;
-    m_iface->ImportSizes( sizes, m_startItem, nullptr );
+    m_iface->ImportSizes( sizes, m_startItem, nullptr, aStartPosition );
     sizes.AddLayerPair( frame()->GetScreen()->m_Route_Layer_TOP,
                         frame()->GetScreen()->m_Route_Layer_BOTTOM );
 
@@ -1301,11 +1301,11 @@ bool ROUTER_TOOL::finishInteractive()
 }
 
 
-void ROUTER_TOOL::performRouting()
+void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
 {
     m_router->ClearViewDecorations();
 
-    if( !prepareInteractive() )
+    if( !prepareInteractive( aStartPosition ) )
         return;
 
     auto setCursor =
@@ -1711,7 +1711,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
                 m_iface->SetCommitFlags( APPEND_UNDO );
 
             // Start interactive routing. Will automatically finish if possible.
-            performRouting();
+            performRouting( VECTOR2D() );
 
             // Route didn't complete automatically, need to a new undo commit
             // for the next line so those can group as far as they autoroute
@@ -1828,7 +1828,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             updateStartItem( *evt );
 
             if( evt->HasPosition() )
-                performRouting();
+                performRouting( evt->Position() );
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
@@ -2609,7 +2609,7 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
     if( !m_router->GetCurrentNets().empty() )
-        m_iface->ImportSizes( sizes, m_startItem, m_router->GetCurrentNets()[0] );
+        m_iface->ImportSizes( sizes, m_startItem, m_router->GetCurrentNets()[0], VECTOR2D() );
 
     m_router->UpdateSizes( sizes );
 
