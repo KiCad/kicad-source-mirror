@@ -714,12 +714,12 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
     m_router->SwitchLayer( *newLayer );
     m_lastTargetLayer = *newLayer;
 
-    updateSizesAfterLayerSwitch( ToLAYER_ID( *newLayer ), m_endSnapPoint );
+    updateSizesAfterRouterEvent( ToLAYER_ID( *newLayer ), m_endSnapPoint );
     UpdateMessagePanel();
 }
 
 
-void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer, const VECTOR2I& aPos )
+void ROUTER_TOOL::updateSizesAfterRouterEvent( PCB_LAYER_ID targetLayer, const VECTOR2I& aPos )
 {
     std::vector<PNS::NET_HANDLE> nets = m_router->GetCurrentNets();
 
@@ -983,7 +983,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         if( !aForceVia && m_router && m_router->SwitchLayer( targetLayer ) )
         {
             updateEndItem( aEvent );
-            updateSizesAfterLayerSwitch( targetLayer, m_endSnapPoint );
+            updateSizesAfterRouterEvent( targetLayer, m_endSnapPoint );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
             return 0;
         }
@@ -1427,7 +1427,14 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
                 break;
 
             if( needLayerSwitch )
+            {
                 switchLayerOnViaPlacement();
+            }
+            else
+            {
+                updateSizesAfterRouterEvent(
+                        static_cast<PCB_LAYER_ID>( m_router->GetCurrentLayer() ), m_endSnapPoint );
+            }
 
             // Synchronize the indicated layer
             syncRouterAndFrameLayer();
@@ -1838,7 +1845,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             m_router->SwitchLayer( frame->GetActiveLayer() );
             updateStartItem( *evt );
-            updateSizesAfterLayerSwitch( frame->GetActiveLayer(), m_startSnapPoint );
+            updateSizesAfterRouterEvent( frame->GetActiveLayer(), m_startSnapPoint );
         }
         else if( evt->IsKeyPressed() )
         {
