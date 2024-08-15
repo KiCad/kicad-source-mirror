@@ -770,8 +770,21 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     // Next, pick up gap from netclass, and width also if we didn't get a starting width above
     if( bds.UseNetClassDiffPair() && aStartItem )
     {
-        if( !found && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
-                                                       nullptr, m_startLayer, &constraint ) )
+        PNS::NET_HANDLE coupledNet = m_ruleResolver->DpCoupledNet( aStartItem->Net() );
+
+        PNS::SEGMENT dummyTrack;
+        dummyTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
+        dummyTrack.SetLayer( ToLAYER_ID( m_startLayer ) );
+        dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aStartItem->Net() ) );
+
+        PNS::SEGMENT coupledTrack;
+        dummyTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
+        dummyTrack.SetLayer( ToLAYER_ID( m_startLayer ) );
+        dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( coupledNet ) );
+
+        if( !found
+            && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, &dummyTrack,
+                                                &coupledTrack, m_startLayer, &constraint ) )
         {
             diffPairWidth = std::max( diffPairWidth, constraint.m_Value.Opt() );
 
@@ -779,8 +792,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
                 aSizes.SetDiffPairWidthSource( constraint.m_RuleName );
         }
 
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aStartItem,
-                                             nullptr, m_startLayer, &constraint ) )
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, &dummyTrack,
+                                             &coupledTrack, m_startLayer, &constraint ) )
         {
             diffPairGap = std::max( diffPairGap, constraint.m_Value.Opt() );
             diffPairViaGap = std::max( diffPairViaGap, constraint.m_Value.Opt() );
