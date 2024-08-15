@@ -649,7 +649,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
 
 bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem,
-                                        PNS::NET_HANDLE aNet )
+                                        PNS::NET_HANDLE aNet, VECTOR2D aStartPosition )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     PNS::CONSTRAINT        constraint;
@@ -661,10 +661,23 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     aSizes.SetMinClearance( bds.m_MinClearance );
     aSizes.SetClearanceSource( _( "board minimum clearance" ) );
 
+    int      startAnchor = 0;
+    VECTOR2I startPosInt( aStartPosition.x, aStartPosition.y );
+
+    if( aStartItem && aStartItem->Kind() == PNS::ITEM::SEGMENT_T )
+    {
+        // Find the start anchor which is closest to the start mouse location
+        double anchor0Distance = startPosInt.Distance( aStartItem->Anchor( 0 ) );
+        double anchor1Distance = startPosInt.Distance( aStartItem->Anchor( 1 ) );
+
+        if( anchor1Distance < anchor0Distance )
+            startAnchor = 1;
+    }
+
     if( aStartItem )
     {
         PNS::SEGMENT dummyTrack;
-        dummyTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
+        dummyTrack.SetEnds( aStartItem->Anchor( startAnchor ), aStartItem->Anchor( startAnchor ) );
         dummyTrack.SetLayer( ToLAYER_ID( m_startLayer ) );
         dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aStartItem->Net() ) );
 
@@ -694,7 +707,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( !found && bds.UseNetClassTrack() && aStartItem )
     {
         PNS::SEGMENT dummyTrack;
-        dummyTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
+        dummyTrack.SetEnds( aStartItem->Anchor( startAnchor ), aStartItem->Anchor( startAnchor ) );
         dummyTrack.SetLayer( ToLAYER_ID( m_startLayer ) );
         dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aStartItem->Net() ) );
 

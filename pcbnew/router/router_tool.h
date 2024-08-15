@@ -70,7 +70,7 @@ public:
     void UpdateMessagePanel();
 
 private:
-    void performRouting();
+    void performRouting( VECTOR2D aStartPosition );
     void performDragging( int aMode = PNS::DM_ANY );
     void breakTrack();
 
@@ -85,7 +85,7 @@ private:
     int onViaCommand( const TOOL_EVENT& aEvent );
     int onTrackViaSizeChanged( const TOOL_EVENT& aEvent );
 
-    bool prepareInteractive();
+    bool prepareInteractive( VECTOR2D aStartPosition );
     bool finishInteractive();
     void saveRouterDebugLog();
 

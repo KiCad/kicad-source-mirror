@@ -70,8 +70,8 @@ public:
     void UpdateItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
     void Commit() override {}
-    bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem,
-                      PNS::NET_HANDLE aNet ) override;
+    bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem, PNS::NET_HANDLE aNet,
+                      VECTOR2D aStartPosition ) override;
     int StackupHeight( int aFirstLayer, int aSecondLayer ) const override;
 
     int GetNetCode( PNS::NET_HANDLE aNet ) const override { return -1; }
