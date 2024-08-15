@@ -1141,9 +1141,10 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
         if( Pgm().IsGUI() && m_queryUserCallback )
         {
             msg.Printf( _( "Items found on undefined layers (%s).\n"
-                           "Do you wish to rescue them to the %s layer?" ),
-                        undefinedLayerNames,
-                        destLayerName );
+                           "Do you wish to rescue them to the %s layer?\n"
+                           "\n"
+                           "Zones will need to be refilled." ),
+                        undefinedLayerNames, destLayerName );
 
             if( !m_queryUserCallback( _( "Undefined Layers Warning" ), wxICON_WARNING, msg,
                                       _( "Rescue" ) ) )
@@ -1151,10 +1152,18 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
                 THROW_IO_ERROR( wxT( "CANCEL" ) );
             }
 
-            auto visitItem = [&]( BOARD_ITEM* curr_item )
+
+            const auto visitItem = [&]( BOARD_ITEM& curr_item )
             {
-                if( curr_item->GetLayer() == Rescue )
-                    curr_item->SetLayer( destLayer );
+                LSET layers = curr_item.GetLayerSet();
+
+                if( layers.test( Rescue ) )
+                {
+                    layers.set( destLayer );
+                    layers.reset( Rescue );
+                }
+
+                curr_item.SetLayerSet( layers );
             };
 
             for( PCB_TRACK* track : m_board->Tracks() )
@@ -1182,23 +1191,23 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
                 }
                 else
                 {
-                    visitItem( track );
+                    visitItem( *track );
                 }
             }
 
             for( BOARD_ITEM* zone : m_board->Zones() )
-                visitItem( zone );
+                visitItem( *zone );
 
             for( BOARD_ITEM* drawing : m_board->Drawings() )
-                visitItem( drawing );
+                visitItem( *drawing );
 
             for( FOOTPRINT* fp : m_board->Footprints() )
             {
                 for( BOARD_ITEM* drawing : fp->GraphicalItems() )
-                    visitItem( drawing );
+                    visitItem( *drawing );
 
                 for( BOARD_ITEM* zone : fp->Zones() )
-                    visitItem( zone );
+                    visitItem( *zone );
             }
 
             m_undefinedLayers.clear();
