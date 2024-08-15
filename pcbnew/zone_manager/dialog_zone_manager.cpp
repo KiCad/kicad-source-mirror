@@ -89,7 +89,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
             m_viewZonesOverview->AppendTextColumn( v, k );
     }
 
-    m_modelZoneOverviewTable = new MODEL_ZONES_OVERVIEW_TABLE( m_zonesContainer->GetZonesPriorityContainers(),
+    m_modelZoneOverviewTable = new MODEL_ZONES_OVERVIEW_TABLE( m_zonesContainer->GetManagedZones(),
                                                                aParent->GetBoard(), aParent, this );
     m_viewZonesOverview->AssociateModel( m_modelZoneOverviewTable.get() );
 

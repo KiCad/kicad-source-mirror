@@ -37,11 +37,9 @@
 
 class PCB_BASE_FRAME;
 class PCB_BASE_FRAME;
-class ZONE_PRIORITY_CONTAINER;
+class MANAGED_ZONE;
 
 wxDECLARE_EVENT( EVT_ZONES_OVERVIEW_COUNT_CHANGE, wxCommandEvent );
-
-using ZONE_PRIORITY_CONTAINER_LIST = std::vector<std::shared_ptr<ZONE_PRIORITY_CONTAINER>>;
 
 
 enum class ZONE_INDEX_MOVEMENT
@@ -81,7 +79,7 @@ public:
         return ColNames;
     }
 
-    MODEL_ZONES_OVERVIEW_TABLE( ZONE_PRIORITY_CONTAINER_LIST aZones, BOARD* a_pcb,
+    MODEL_ZONES_OVERVIEW_TABLE( std::vector<std::shared_ptr<MANAGED_ZONE>> aZones, BOARD* a_pcb,
                                 PCB_BASE_FRAME* aPCB_FRAME, wxWindow* a_dialog );
 
     ~MODEL_ZONES_OVERVIEW_TABLE() override;
@@ -132,7 +130,7 @@ public:
      */
     wxDataViewItem ClearFilter( wxDataViewItem aSelection );
 
-    unsigned int GetAllZonesCount() const { return m_allZoneContainers.size(); }
+    unsigned int GetAllZonesCount() const { return m_allZones.size(); }
 
 private:
     void SortZoneContainers();
@@ -140,13 +138,13 @@ private:
     void OnRowCountChange();
 
 private:
-    ZONE_PRIORITY_CONTAINER_LIST m_allZoneContainers;
-    ZONE_PRIORITY_CONTAINER_LIST m_filteredZoneContainers;
-    BOARD*                       m_pcb;
-    PCB_BASE_FRAME*              m_PCB_FRAME;
-    wxWindow*                    m_dialog;
-    bool                         m_sortByName;
-    bool                         m_sortByNet;
+    std::vector<std::shared_ptr<MANAGED_ZONE>> m_allZones;
+    std::vector<std::shared_ptr<MANAGED_ZONE>> m_filteredZones;
+    BOARD*                                     m_pcb;
+    PCB_BASE_FRAME*                            m_PCB_FRAME;
+    wxWindow*                                  m_dialog;
+    bool                                       m_sortByName;
+    bool                                       m_sortByNet;
 };
 
 #endif

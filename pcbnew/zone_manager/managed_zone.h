@@ -23,8 +23,8 @@
  */
 
 
-#ifndef ZONE_PRIORITY_CONTAINER_H
-#define ZONE_PRIORITY_CONTAINER_H
+#ifndef MANAGED_ZONE_H
+#define MANAGED_ZONE_H
 
 #include <memory>
 #include <utility>
@@ -34,21 +34,21 @@
  * @brief Workaround to keep the original priorities if user didn't change any
  *
  */
-class ZONE_PRIORITY_CONTAINER : public ZONE_MANAGEMENT_BASE
+class MANAGED_ZONE : public ZONE_MANAGEMENT_BASE
 {
     friend class MODEL_ZONES_OVERVIEW_TABLE;
 
 public:
-    ZONE_PRIORITY_CONTAINER( std::shared_ptr<ZONE> aZone, unsigned aInitialIndex ) :
+    MANAGED_ZONE( std::shared_ptr<ZONE> aZone, unsigned aInitialIndex ) :
             m_zone( std::move( aZone ) ),
             m_initialPriority( aInitialIndex ),
             m_currentPriority( aInitialIndex )
     {
     }
 
-    ZONE_PRIORITY_CONTAINER() = delete;
+    MANAGED_ZONE() = delete;
 
-    ~ZONE_PRIORITY_CONTAINER() override = default;
+    ~MANAGED_ZONE() override = default;
 
     bool PriorityChanged() const { return m_initialPriority != m_currentPriority; }
 

@@ -23,7 +23,7 @@
  */
 
 #include "zones_container.h"
-#include "zone_priority_container.h"
+#include "managed_zone.h"
 
 #include <teardrop/teardrop_types.h>
 #include <zone.h>
@@ -37,11 +37,9 @@ ZONES_CONTAINER::ZONES_CONTAINER( BOARD* aBoard ) : m_originalZoneList( aBoard->
 
     for( ZONE* zone : aBoard->Zones() )
     {
-        if( ( !zone->GetIsRuleArea() ) && IsCopperLayer( zone->GetFirstLayer() )
-            && ( !zone->IsTeardropArea() ) )
+        if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() && zone->IsOnCopperLayer() )
         {
-            std::shared_ptr<ZONE> zone_clone =
-                    std::shared_ptr<ZONE>( static_cast<ZONE*>( zone->Clone() ) );
+            auto zone_clone = std::shared_ptr<ZONE>( static_cast<ZONE*>( zone->Clone() ) );
             m_zonesCloneMap.try_emplace( zone, zone_clone );
             m_clonedZoneList.push_back( zone_clone.get() );
             clonedZones.push_back( std::move( zone_clone ) );
@@ -49,9 +47,7 @@ ZONES_CONTAINER::ZONES_CONTAINER( BOARD* aBoard ) : m_originalZoneList( aBoard->
     }
 
     std::sort( clonedZones.begin(), clonedZones.end(),
-               []( std::shared_ptr<ZONE> const& l, std::shared_ptr<ZONE> const& r
-
-               )
+               []( std::shared_ptr<ZONE> const& l, std::shared_ptr<ZONE> const& r )
                {
                    return l->GetAssignedPriority() > r->GetAssignedPriority();
                } );
@@ -60,13 +56,11 @@ ZONES_CONTAINER::ZONES_CONTAINER( BOARD* aBoard ) : m_originalZoneList( aBoard->
 
     for( const std::shared_ptr<ZONE>& zone : clonedZones )
     {
-        m_zonesPriorityContainer.push_back(
-                std::make_shared<ZONE_PRIORITY_CONTAINER>( zone, currentPriority ) );
+        m_managedZones.push_back( std::make_shared<MANAGED_ZONE>( zone, currentPriority ) );
         --currentPriority;
     }
 }
 
-ZONES_CONTAINER::~ZONES_CONTAINER() = default;
 
 std::shared_ptr<ZONE_SETTINGS> ZONES_CONTAINER::GetZoneSettings( ZONE* aZone )
 {
@@ -79,16 +73,14 @@ std::shared_ptr<ZONE_SETTINGS> ZONES_CONTAINER::GetZoneSettings( ZONE* aZone )
     return zoneSetting;
 }
 
+
 void ZONES_CONTAINER::OnUserConfirmChange()
 {
     FlushZoneSettingsChange();
     FlushPriorityChange();
 
-    for( auto iter : m_zonesCloneMap )
+    for( const auto& [ zone, zoneClone ] : m_zonesCloneMap )
     {
-        ZONE* zone = iter.first;
-        std::shared_ptr<ZONE> zoneClone = iter.second;
-
         std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> filled_zone_to_restore;
         ZONE* internal_zone = zone; // Duplicate the zone pointer to allow capture on older MacOS (13)
 
@@ -96,24 +88,21 @@ void ZONES_CONTAINER::OnUserConfirmChange()
                 [&]( PCB_LAYER_ID layer )
                 {
                     std::shared_ptr<SHAPE_POLY_SET> fill = internal_zone->GetFilledPolysList( layer );
+
                     if( fill )
-                    {
                         filled_zone_to_restore[layer] = fill;
-                    }
                 } );
 
         *zone = *zoneClone;
 
-        for( auto& it : filled_zone_to_restore )
-        {
-            zone->SetFilledPolysList( it.first, *it.second.get() );
-        }
+        for( const auto& [ layer, fill ] : filled_zone_to_restore )
+            zone->SetFilledPolysList( layer, *fill );
     }
 }
 
 void ZONES_CONTAINER::FlushZoneSettingsChange()
 {
-    for( const std::shared_ptr<ZONE_PRIORITY_CONTAINER>& zone : m_zonesPriorityContainer )
+    for( const std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
     {
         if( auto ll = m_zoneSettings.find( &zone->GetZone() ); ll != m_zoneSettings.end() )
             ll->second->ExportSetting( zone->GetZone() );
@@ -124,7 +113,7 @@ bool ZONES_CONTAINER::FlushPriorityChange()
 {
     bool priorityChanged = false;
 
-    for( const std::shared_ptr<ZONE_PRIORITY_CONTAINER>& c : m_zonesPriorityContainer )
+    for( const std::shared_ptr<MANAGED_ZONE>& c : m_managedZones )
     {
         if( c->PriorityChanged() )
         {
@@ -135,7 +124,7 @@ bool ZONES_CONTAINER::FlushPriorityChange()
 
     if( priorityChanged )
     {
-        for( std::shared_ptr<ZONE_PRIORITY_CONTAINER>& c : m_zonesPriorityContainer )
+        for( std::shared_ptr<MANAGED_ZONE>& c : m_managedZones )
             c->OnUserConfirmChange();
     }
 

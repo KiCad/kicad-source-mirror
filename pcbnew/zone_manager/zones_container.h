@@ -33,16 +33,18 @@
 #include "zone_management_base.h"
 #include "zone_settings.h"
 
-class ZONE_PRIORITY_CONTAINER;
+class MANAGED_ZONE;
+
+
 class ZONES_CONTAINER : public ZONE_MANAGEMENT_BASE
 {
 public:
     ZONES_CONTAINER( BOARD* board );
-    ~ZONES_CONTAINER() override;
+    ~ZONES_CONTAINER() override = default;
 
-    std::vector<std::shared_ptr<ZONE_PRIORITY_CONTAINER>> GetZonesPriorityContainers() const
+    std::vector<std::shared_ptr<MANAGED_ZONE>> GetManagedZones() const
     {
-        return m_zonesPriorityContainer;
+        return m_managedZones;
     }
 
     std::shared_ptr<ZONE_SETTINGS> GetZoneSettings( ZONE* zone );
@@ -75,7 +77,7 @@ public:
 private:
     std::unordered_map<ZONE*, std::shared_ptr<ZONE>>          m_zonesCloneMap;
     std::unordered_map<ZONE*, std::shared_ptr<ZONE_SETTINGS>> m_zoneSettings;
-    std::vector<std::shared_ptr<ZONE_PRIORITY_CONTAINER>>     m_zonesPriorityContainer;
+    std::vector<std::shared_ptr<MANAGED_ZONE>>                m_managedZones;
     std::vector<ZONE*>                                        m_clonedZoneList;
     std::vector<ZONE*>                                        m_originalZoneList;
 };
