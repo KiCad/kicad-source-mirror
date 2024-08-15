@@ -365,9 +365,14 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     wxCoord bottomPx = aWindow.GetScrY() - aWindow.GetMarginBottom();
 
     wxPen    pen = GetPen();
-    wxColour fg = GetPen().GetColour();
+    wxColour fg = aWindow.GetForegroundColour();
+    COLOR4D  cursorColor = COLOR4D( m_trace->GetTraceColour() ).Mix( fg, 0.6 );
+    COLOR4D  textColor = fg;
 
-    pen.SetColour( COLOR4D( m_trace->GetTraceColour() ).Mix( fg, 0.6 ).ToColour() );
+    if( cursorColor.Distance( textColor ) < 0.66 )
+        textColor.Invert();
+
+    pen.SetColour( cursorColor.ToColour() );
     pen.SetStyle( m_continuous ? wxPENSTYLE_SOLID : wxPENSTYLE_LONG_DASH );
     aDC.SetPen( pen );
 
@@ -401,7 +406,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
         aDC.SetBrush( brush );
         aDC.DrawPolygon( 3, poly );
 
-        aDC.SetTextForeground( fg );
+        aDC.SetTextForeground( textColor.ToColour() );
         aDC.DrawLabel( id, textRect, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL );
     }
 }

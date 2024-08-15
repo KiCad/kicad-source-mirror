@@ -44,7 +44,6 @@ void SIMULATOR_FRAME_UI::parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace
                 CURSOR* cursor = new CURSOR( aTrace, aPlotTab );
 
                 cursor->SetName( aSignalName );
-                cursor->SetPen( wxPen( aTrace->GetTraceColour() ) );
                 cursor->SetCoordX( x );
 
                 aTrace->SetCursor( aCursorId, cursor );
