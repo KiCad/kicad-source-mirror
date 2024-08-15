@@ -212,7 +212,7 @@ public:
                 break;
 
             case COL_POSY:
-                val = aParentFrame->StringFromValue( -pin->GetPosition().y, true );
+                val = aParentFrame->StringFromValue( pin->GetPosition().y, true );
                 break;
 
             case COL_VISIBLE:
@@ -411,7 +411,7 @@ public:
 
             case COL_POSY:
                 pin->SetPosition( VECTOR2I( pin->GetPosition().x,
-                                            -m_frame->ValueFromString( value ) ) );
+                                            m_frame->ValueFromString( value ) ) );
                 break;
 
             case COL_VISIBLE:

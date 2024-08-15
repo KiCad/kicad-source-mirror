@@ -262,7 +262,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_textPinName->SetValue( m_pin->GetName() );
     m_nameSize.SetValue( m_pin->GetNameTextSize() );
     m_posX.SetValue( m_origPos.x );
-    m_posY.SetValue( -m_origPos.y );
+    m_posY.SetValue( m_origPos.y );
     m_textPinNumber->SetValue( m_pin->GetNumber() );
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
@@ -335,7 +335,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
 
-    VECTOR2I newPos( m_posX.GetIntValue(), -m_posY.GetIntValue() );
+    VECTOR2I newPos( m_posX.GetIntValue(), m_posY.GetIntValue() );
 
     const int standard_grid = 50;
 
