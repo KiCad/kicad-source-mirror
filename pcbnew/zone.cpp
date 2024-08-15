@@ -237,18 +237,32 @@ VECTOR2I ZONE::GetPosition() const
 PCB_LAYER_ID ZONE::GetLayer() const
 {
     if( m_layerSet.count() == 1 )
-        return m_layerSet.UIOrder()[0];
-    else
-        return UNDEFINED_LAYER;
+    {
+        return GetFirstLayer();
+    }
+    return UNDEFINED_LAYER;
 }
 
 
 PCB_LAYER_ID ZONE::GetFirstLayer() const
 {
-    if( m_layerSet.count() )
-        return m_layerSet.UIOrder()[0];
-    else
+    if( m_layerSet.count() == 0 )
+    {
         return UNDEFINED_LAYER;
+    }
+
+    const LSEQ uiLayers = m_layerSet.UIOrder();
+
+    // This can't use m_layerSet.count() because it's possible to have a zone on
+    // a rescue layer that is not in the UI order.
+    if( uiLayers.size() )
+    {
+        return uiLayers[0];
+    }
+
+    // If it's not in the UI set at all, just return the first layer in the set.
+    // (we know the count > 0)
+    return m_layerSet.Seq()[0];
 }
 
 

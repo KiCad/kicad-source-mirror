@@ -47,6 +47,7 @@ set( QA_PCBNEW_SRCS
     test_save_load.cpp
     test_tracks_cleaner.cpp
     test_triangulation.cpp
+    test_zone.cpp
     test_zone_filler.cpp
 
     drc/test_custom_rule_severities.cpp
