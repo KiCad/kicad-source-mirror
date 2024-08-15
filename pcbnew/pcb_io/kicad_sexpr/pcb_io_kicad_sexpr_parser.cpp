@@ -1098,6 +1098,8 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
                 THROW_IO_ERROR( wxT( "CANCEL" ) );
             }
 
+            // Make sure the destination layer is enabled, even if not in the file
+            m_board->SetEnabledLayers( m_board->GetEnabledLayers().set( destLayer ) );
 
             const auto visitItem = [&]( BOARD_ITEM& curr_item )
             {
