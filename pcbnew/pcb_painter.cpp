@@ -413,17 +413,16 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         {
             const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
 
-            if( via->GetViaType() == VIATYPE::BLIND_BURIED
-                    || via->GetViaType() == VIATYPE::MICROVIA )
+            if( via->GetViaType() == VIATYPE::THROUGH )
             {
-                // A blind or micro via's hole is active if it crosses the primary layer
-                if( via->GetLayerSet().test( primary ) == 0 )
+                // A through via's hole is active if any physical layer is active
+                if( LSET::PhysicalLayersMask().test( primary ) == 0 )
                     isActive = false;
             }
             else
             {
-                // A through via's hole is active if any physical layer is active
-                if( LSET::PhysicalLayersMask().test( primary ) == 0 )
+                // A blind/buried or micro via's hole is active if it crosses the primary layer
+                if( via->GetLayerSet().test( primary ) == 0 )
                     isActive = false;
             }
 

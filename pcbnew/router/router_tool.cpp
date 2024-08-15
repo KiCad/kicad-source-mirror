@@ -1022,24 +1022,6 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             if( viaType != VIATYPE::THROUGH )
                 not_allowed_ly.set( currentLayer );
 
-            if( viaType == VIATYPE::MICROVIA )
-            {
-                // Allows only the previous or the next layer from the current layer
-                int previous_layer = currentLayer == B_Cu ? layerCount - 2
-                                                          : currentLayer - 1;
-
-                int next_layer = currentLayer >= layerCount-2 ? B_Cu
-                                                              : currentLayer + 1;
-
-                not_allowed_ly = LSET::AllLayersMask();
-
-                if( previous_layer >= F_Cu && previous_layer != currentLayer )
-                    not_allowed_ly.reset( previous_layer );
-
-                if( next_layer != currentLayer )
-                    not_allowed_ly.reset( next_layer );
-            }
-
             targetLayer = frame()->SelectOneLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
                                                    not_allowed_ly, endPoint );
 
@@ -1071,56 +1053,15 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
     if( targetLayer == UNDEFINED_LAYER )
     {
-        // Implicic layer selection
-
-        switch( viaType )
+        // Implicit layer selection
+        if( viaType == VIATYPE::THROUGH )
         {
-        case VIATYPE::THROUGH:
             // use the default layer pair
             currentLayer = pairTop;
             targetLayer = pairBottom;
-            break;
-
-        case VIATYPE::MICROVIA:
-            // Try to use the layer pair preset, if the layers are adjacent,
-            // because a microvia is usually restricted to 2 adjacent copper layers
-            if( pairTop > pairBottom ) std::swap( pairTop, pairBottom );
-
-            if( currentLayer == pairTop && pairBottom == pairTop+1 )
-            {
-                 targetLayer = pairBottom;
-            }
-            else if( currentLayer == pairBottom && pairBottom == pairTop+1 )
-            {
-                 targetLayer = pairTop;
-            }
-            else if( currentLayer == F_Cu || currentLayer == In1_Cu )
-            {
-                // front-side microvia
-                currentLayer = F_Cu;
-
-                if( layerCount > 2 )    // Ensure the inner layer In1_Cu exists
-                    targetLayer = In1_Cu;
-                else
-                    targetLayer = B_Cu;
-            }
-            else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
-            {
-                // back-side microvia
-                currentLayer = B_Cu,
-                targetLayer = (PCB_LAYER_ID) ( layerCount - 2 );
-            }
-            else
-            {
-                // This is not optimal: from an internal layer one can want to switch
-                // to the previous or the next internal layer
-                // but at this point we do not know what the user want.
-               targetLayer = PCB_LAYER_ID( currentLayer + 1 );
-            }
-
-            break;
-
-        case VIATYPE::BLIND_BURIED:
+        }
+        else
+        {
             if( currentLayer == pairTop || currentLayer == pairBottom )
             {
                 // the current layer is on the defined layer pair,
@@ -1139,18 +1080,11 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             if( currentLayer == targetLayer )
             {
                 WX_INFOBAR* infobar = frame()->GetInfoBar();
-                infobar->ShowMessageFor( _( "Blind/buried via need 2 different layers." ),
+                infobar->ShowMessageFor( _( "Via needs 2 different layers." ),
                                          2000, wxICON_ERROR,
                                          WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
                 return 0;
             }
-
-            break;
-
-        default:
-            wxFAIL_MSG( wxT( "unexpected via type" ) );
-            return 0;
-            break;
         }
     }
 

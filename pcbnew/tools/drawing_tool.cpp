@@ -3628,57 +3628,33 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             via->SetNetCode( 0 );
             via->SetViaType( bds.m_CurrentViaType );
 
-            // for microvias, the size and hole will be changed later.
-            via->SetWidth( bds.GetCurrentViaSize() );
-            via->SetDrill( bds.GetCurrentViaDrill() );
-
-            // Usual via is from copper to component.
-            // layer pair is B_Cu and F_Cu.
-            via->SetLayerPair( B_Cu, F_Cu );
-
-            PCB_LAYER_ID    first_layer = m_frame->GetActiveLayer();
-            PCB_LAYER_ID    last_layer;
-
-            // prepare switch to new active layer:
-            if( first_layer != m_frame->GetScreen()->m_Route_Layer_TOP )
-                last_layer = m_frame->GetScreen()->m_Route_Layer_TOP;
-            else
-                last_layer = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
-
-            // Adjust the actual via layer pair
-            switch( via->GetViaType() )
+            if( via->GetViaType() == VIATYPE::THROUGH )
             {
-            case VIATYPE::BLIND_BURIED:
-                via->SetLayerPair( first_layer, last_layer );
-                break;
-
-            case VIATYPE::MICROVIA: // from external to the near neighbor inner layer
-            {
-                PCB_LAYER_ID last_inner_layer =
-                    ToLAYER_ID( ( m_board->GetCopperLayerCount() - 2 ) );
-
-                if( first_layer == B_Cu )
-                    last_layer = last_inner_layer;
-                else if( first_layer == F_Cu )
-                    last_layer = In1_Cu;
-                else if( first_layer == last_inner_layer )
-                    last_layer = B_Cu;
-                else if( first_layer == In1_Cu )
-                    last_layer = F_Cu;
-
-                // else error: will be removed later
-                via->SetLayerPair( first_layer, last_layer );
-
-                // Update diameter and hole size, which where set previously for normal vias
-                NETCLASS* netClass = via->GetEffectiveNetClass();
-
-                via->SetWidth( netClass->GetuViaDiameter() );
-                via->SetDrill( netClass->GetuViaDrill() );
+                via->SetLayerPair( B_Cu, F_Cu );
             }
-            break;
+            else
+            {
+                PCB_LAYER_ID first_layer = m_frame->GetActiveLayer();
+                PCB_LAYER_ID last_layer;
 
-            default:
-                break;
+                // prepare switch to new active layer:
+                if( first_layer != m_frame->GetScreen()->m_Route_Layer_TOP )
+                    last_layer = m_frame->GetScreen()->m_Route_Layer_TOP;
+                else
+                    last_layer = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
+
+                via->SetLayerPair( first_layer, last_layer );
+            }
+
+            if( via->GetViaType() == VIATYPE::MICROVIA )
+            {
+                via->SetWidth( via->GetEffectiveNetClass()->GetuViaDiameter() );
+                via->SetDrill( via->GetEffectiveNetClass()->GetuViaDrill() );
+            }
+            else
+            {
+                via->SetWidth( bds.GetCurrentViaSize() );
+                via->SetDrill( bds.GetCurrentViaDrill() );
             }
 
             return std::unique_ptr<BOARD_ITEM>( via );
