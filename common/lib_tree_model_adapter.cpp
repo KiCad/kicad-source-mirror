@@ -290,7 +290,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
             wxString             term = tokenizer.GetNextToken().Lower();
             EDA_COMBINED_MATCHER termMatcher( term, CTX_LIBITEM );
 
-            m_tree.UpdateScore( &termMatcher, wxEmptyString, firstTerm ? m_filter : nullptr );
+            m_tree.UpdateScore( &termMatcher, wxEmptyString, m_filter );
             firstTerm = false;
 
             if( term.Contains( ":" ) )
@@ -300,7 +300,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
                 wxString             itemName = term.AfterFirst( ':' );
                 EDA_COMBINED_MATCHER itemNameMatcher( itemName, CTX_LIBITEM );
 
-                m_tree.UpdateScore( &itemNameMatcher, lib, nullptr );
+                m_tree.UpdateScore( &itemNameMatcher, lib, m_filter );
             }
         }
 

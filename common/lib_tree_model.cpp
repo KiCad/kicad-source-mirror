@@ -300,26 +300,21 @@ void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const w
 {
     int maxChildScore = 0;
 
-    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+    // children are additive
+    if( !m_Children.empty() )
     {
-        child->UpdateScore( aMatcher, aLib, aFilter );
-        maxChildScore = std::max( maxChildScore, child->m_Score );
-    }
+        for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+        {
+            child->UpdateScore( aMatcher, aLib, aFilter );
+            maxChildScore = std::max( maxChildScore, child->m_Score );
+        }
 
-    // Each time UpdateScore is called for a library, child (item) scores may go up or down.
-    // If the all go down to zero, we need to make sure to drop the library from the list.
-    if( maxChildScore > 0 )
         m_Score = std::max( m_Score, maxChildScore );
-    else
-        m_Score = 0;
-
-    // aLib test is additive, but only when we've already accumulated some score from children
-    if( !aLib.IsEmpty()
-        && m_Name.Lower().Matches( aLib )
-        && ( m_Score > 0 || m_Children.empty() ) )
-    {
-        m_Score += 1;
     }
+
+    // aLib test is additive
+    if( !aLib.IsEmpty() && m_Name.Lower().Matches( aLib ) )
+        m_Score += 1;
 
     // aMatcher test is additive
     if( aMatcher )
@@ -327,13 +322,22 @@ void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const w
         int ownScore = aMatcher->ScoreTerms( m_SearchTerms );
         m_Score += ownScore;
 
-        // If we have a hit on a library, show all children in that library
+        // If we have a hit on a library, show all children in that library that pass the filter
         if( maxChildScore <= 0 && ownScore > 0 )
         {
             for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-                child->ForceScore( 1 );
+            {
+                if( !aFilter || (*aFilter)( *this ) )
+                    child->ForceScore( 1 );
+
+                maxChildScore = std::max( maxChildScore, child->m_Score );
+            }
         }
     }
+
+    // If all children are excluded for one reason or another, drop the library from the list
+    if( !m_Children.empty() && maxChildScore <= 0 )
+        m_Score = 0;
 
     // show all nodes if no search/filter/etc. criteria are given
     if( m_Children.empty() && !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
