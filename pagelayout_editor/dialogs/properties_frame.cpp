@@ -466,6 +466,7 @@ void PROPERTIES_FRAME::onModify( wxCommandEvent& aEvent )
 void PROPERTIES_FRAME::onTextFocusLost( wxFocusEvent& aEvent )
 {
     m_propertiesDirty = true;
+    aEvent.Skip();      // Mandatory in wxFocusEvent
 }
 
 
