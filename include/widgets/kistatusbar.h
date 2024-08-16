@@ -46,7 +46,8 @@ class KICOMMON_API KISTATUSBAR : public wxStatusBar
 public:
     KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id );
 
-public:
+    ~KISTATUSBAR();
+
     /**
      * Set the text in a field using wxELLIPSIZE_MIDDLE option to adjust the text size
      * to the field size (unfortunately, setting the wxStatusBar style to wxELLIPSIZE_MIDDLE
