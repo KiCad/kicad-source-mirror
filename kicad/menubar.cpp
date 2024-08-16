@@ -231,9 +231,9 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
 
 /**
- * @brief (Re)Create the horizontal toolbar
+ * @brief (Re)Create the left vertical toolbar
  */
-void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
+void KICAD_MANAGER_FRAME::RecreateBaseLeftToolbar()
 {
     if( m_mainToolBar )
     {

@@ -71,7 +71,10 @@ public:
     wxStatusBar* OnCreateStatusBar( int number, long style, wxWindowID id,
                                     const wxString& name ) override;
 
-    void RecreateBaseHToolbar();
+    /**
+     * (Re)Create the left vertical toolbar
+     */
+    void RecreateBaseLeftToolbar();
 
     wxString GetCurrentFileName() const override
     {

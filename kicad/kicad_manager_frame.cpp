@@ -200,7 +200,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     m_launcher = new PANEL_KICAD_LAUNCHER( this );
 
-    RecreateBaseHToolbar();
+    RecreateBaseLeftToolbar();
     ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
@@ -262,7 +262,7 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 {
     Unbind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Unbind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
-    
+
     Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
 
@@ -798,7 +798,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
     EDA_BASE_FRAME::ShowChangedLanguage();
 
     // tooltips in toolbars
-    RecreateBaseHToolbar();
+    RecreateBaseLeftToolbar();
     m_launcher->CreateLaunchers();
 
     PrintPrjInfo();
@@ -1021,7 +1021,7 @@ void KICAD_MANAGER_FRAME::onToolbarSizeChanged()
     m_auimgr.DetachPane( m_mainToolBar );
     delete m_mainToolBar;
     m_mainToolBar = nullptr;
-    RecreateBaseHToolbar();
+    RecreateBaseLeftToolbar();
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Left()
                       .Layer( 2 ) );
 }
