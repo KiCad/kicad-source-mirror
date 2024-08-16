@@ -325,6 +325,7 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
     SetCursor( wxCURSOR_ARROW );
 }
 
+
 void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
 {
     // Update the labels of the hierarchical tree of the schematic.

@@ -576,7 +576,7 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
 
             m_parent->SetCurrentSheet( sheet );
             m_parent->DisplayCurrentSheet();
-            m_parent->RedrawScreen(  m_parent->GetScreen()->m_ScrollCenter, false );
+            m_parent->RedrawScreen( m_parent->GetScreen()->m_ScrollCenter, false );
         }
 
         m_parent->FocusOnItem( item );
