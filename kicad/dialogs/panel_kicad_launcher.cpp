@@ -42,6 +42,13 @@ PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
 }
 
 
+PANEL_KICAD_LAUNCHER::~PANEL_KICAD_LAUNCHER()
+{
+    Unbind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ), this );
+}
+
+
 void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 {
     m_frame->SetPcmButton( nullptr );
