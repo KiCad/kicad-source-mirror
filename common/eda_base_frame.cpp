@@ -265,6 +265,10 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 
 EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
+    Disconnect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
+             wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
+    Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
+    
     delete m_autoSaveTimer;
     delete m_fileHistory;
 
