@@ -63,6 +63,15 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
 
 STD_BITMAP_BUTTON::~STD_BITMAP_BUTTON()
 {
+    Unbind( wxEVT_PAINT, &STD_BITMAP_BUTTON::OnPaint, this );
+    Unbind( wxEVT_LEFT_UP, &STD_BITMAP_BUTTON::OnLeftButtonUp, this );
+    Unbind( wxEVT_LEFT_DOWN, &STD_BITMAP_BUTTON::OnLeftButtonDown, this );
+    Unbind( wxEVT_KILL_FOCUS, &STD_BITMAP_BUTTON::OnKillFocus, this );
+    Unbind( wxEVT_LEAVE_WINDOW, &STD_BITMAP_BUTTON::OnMouseLeave, this );
+    Unbind( wxEVT_ENTER_WINDOW, &STD_BITMAP_BUTTON::OnMouseEnter, this );
+
+    Unbind( wxEVT_SYS_COLOUR_CHANGED,
+            wxSysColourChangedEventHandler( STD_BITMAP_BUTTON::onThemeChanged ), this );
 }
 
 
