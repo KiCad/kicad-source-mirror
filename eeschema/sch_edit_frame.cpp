@@ -2372,6 +2372,8 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     SCH_BASE_FRAME::SetScreen( screen );
 
+    SetSheetNumberAndCount();   // will also update CurrentScreen()'s sheet number info
+
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // update the references, units, and intersheet-refs
@@ -2380,7 +2382,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     // dangling state can also have changed if different units with different pin locations are
     // used
     GetCurrentSheet().LastScreen()->TestDanglingEnds();
-    SetSheetNumberAndCount();
     RefreshOperatingPointDisplay();
 
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
