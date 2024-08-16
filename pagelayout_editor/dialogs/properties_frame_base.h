@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -119,7 +119,6 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextStepY;
 		wxTextCtrl* m_textCtrlStepY;
 		wxStaticText* m_TextStepYUnits;
-		wxButton* m_buttonOK;
 		wxScrolledWindow* m_swGeneralOpts;
 		wxStaticText* m_staticTextDefTsX;
 		wxTextCtrl* m_textCtrlDefaultTextSizeX;
@@ -146,13 +145,13 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_bottomMarginLabel;
 		wxTextCtrl* m_bottomMarginCtrl;
 		wxStaticText* m_bottomMarginUnits;
-		wxButton* m_buttonGeneralOptsOK;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onHelp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onModify( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onScintillaFocusLost( wxFocusEvent& event ) { event.Skip(); }
-		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTextFocusLost( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSetDefaultValues( wxCommandEvent& event ) { event.Skip(); }
 
 

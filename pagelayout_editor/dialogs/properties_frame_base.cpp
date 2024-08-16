@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
 
@@ -447,11 +447,6 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_SizerItemProperties->Add( m_sbStep, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_buttonOK = new wxButton( m_swItemProperties, wxID_ANY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
-
-	m_buttonOK->SetDefault();
-	m_SizerItemProperties->Add( m_buttonOK, 0, wxALL|wxEXPAND, 5 );
-
 
 	m_swItemProperties->SetSizer( m_SizerItemProperties );
 	m_swItemProperties->Layout();
@@ -607,11 +602,6 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	bSizerGeneraMargins->Add( fgSizer6, 1, wxEXPAND, 5 );
 
-	m_buttonGeneralOptsOK = new wxButton( bSizerGeneraMargins->GetStaticBox(), wxID_ANY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
-
-	m_buttonGeneralOptsOK->SetDefault();
-	bSizerGeneraMargins->Add( m_buttonGeneralOptsOK, 0, wxALL|wxEXPAND, 5 );
-
 
 	bSizerGeneralOpts->Add( bSizerGeneraMargins, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
@@ -629,22 +619,82 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerpanel->Fit( this );
 
 	// Connect Events
-	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_PROPERTIES_BASE::OnPageChanged ), NULL, this );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_PROPERTIES_BASE::OnUpdateUI ) );
 	m_buttonHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
+	m_choicePageOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
 	m_stcText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onScintillaFocusLost ), NULL, this );
-	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
+	m_bold->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_italic->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_fontCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_textCtrlTextSizeX->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlTextSizeY->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_constraintXCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_constraintYCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlComment->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlPosX->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlPosY->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_comboBoxCornerPos->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_comboBoxCornerPos->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlEndX->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlEndY->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_comboBoxCornerEnd->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_comboBoxCornerEnd->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_lineWidthCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlRotation->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlBitmapDPI->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlRepeatCount->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlTextIncrement->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlStepX->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlStepY->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlDefaultTextSizeX->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlDefaultTextSizeY->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_defaultLineWidthCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_defaultTextThicknessCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
 	m_buttonDefault->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnSetDefaultValues ), NULL, this );
-	m_buttonGeneralOptsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
+	m_leftMarginCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_rightMarginCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_topMarginCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_bottomMarginCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
 }
 
 PANEL_PROPERTIES_BASE::~PANEL_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_PROPERTIES_BASE::OnPageChanged ), NULL, this );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_PROPERTIES_BASE::OnUpdateUI ) );
 	m_buttonHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
+	m_choicePageOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
 	m_stcText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onScintillaFocusLost ), NULL, this );
-	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
+	m_bold->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_italic->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_fontCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_textCtrlTextSizeX->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlTextSizeY->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_constraintXCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_constraintYCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlComment->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlPosX->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlPosY->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_comboBoxCornerPos->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_comboBoxCornerPos->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlEndX->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlEndY->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_comboBoxCornerEnd->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onModify ), NULL, this );
+	m_comboBoxCornerEnd->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_lineWidthCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlRotation->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlBitmapDPI->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlRepeatCount->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlTextIncrement->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlStepX->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlStepY->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlDefaultTextSizeX->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_textCtrlDefaultTextSizeY->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_defaultLineWidthCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_defaultTextThicknessCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
 	m_buttonDefault->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnSetDefaultValues ), NULL, this );
-	m_buttonGeneralOptsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
+	m_leftMarginCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_rightMarginCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_topMarginCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
+	m_bottomMarginCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_PROPERTIES_BASE::onTextFocusLost ), NULL, this );
 
 }

@@ -76,7 +76,8 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
         m_textRightMargin( aParent, m_rightMarginLabel, m_rightMarginCtrl, m_rightMarginUnits ),
         m_textTopMargin( aParent, m_topMarginLabel, m_topMarginCtrl, m_topMarginUnits ),
         m_textBottomMargin( aParent, m_bottomMarginLabel, m_bottomMarginCtrl, m_bottomMarginUnits ),
-        m_lineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits )
+        m_lineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
+        m_propertiesDirty( false )
 {
     m_parent = aParent;
 
@@ -123,7 +124,11 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
     m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_textColorSwatch->SetSwatchBackground( aParent->GetDrawBgColor() );
 
-    m_buttonOK->SetDefault();
+    m_textColorSwatch->Bind( COLOR_SWATCH_CHANGED,
+            [this]( wxCommandEvent& event )
+            {
+                m_propertiesDirty = true;
+            } );
 
     // ensure sizers are up to date
     // (fix an issue on GTK but should not create issues on other platforms):
@@ -145,17 +150,6 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
 PROPERTIES_FRAME::~PROPERTIES_FRAME()
 {
     delete m_scintillaTricks;
-}
-
-
-void PROPERTIES_FRAME::OnPageChanged( wxNotebookEvent& event )
-{
-    if( event.GetSelection() == 0 )
-        m_buttonOK->SetDefault();
-    else
-        m_buttonGeneralOptsOK->SetDefault();
-
-    event.Skip();
 }
 
 
@@ -411,6 +405,8 @@ void PROPERTIES_FRAME::onHAlignButton( wxCommandEvent& aEvent )
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
     }
+
+    m_propertiesDirty = true;
 }
 
 
@@ -421,10 +417,12 @@ void PROPERTIES_FRAME::onVAlignButton( wxCommandEvent& aEvent )
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
     }
+
+    m_propertiesDirty = true;
 }
 
 
-void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
+void PROPERTIES_FRAME::OnAcceptPrms()
 {
     PL_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
     PL_SELECTION&      selection = selTool->GetSelection();
@@ -449,11 +447,38 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     // Refresh values, exactly as they are converted, to avoid any mistake
     CopyPrmsFromGeneralToPanel();
 
+    m_propertiesDirty = false;
+
     m_parent->OnModify();
 
     // Rebuild the draw list with the new parameters
     m_parent->GetCanvas()->DisplayDrawingSheet();
     m_parent->GetCanvas()->Refresh();
+}
+
+
+void PROPERTIES_FRAME::onModify( wxCommandEvent& aEvent )
+{
+    m_propertiesDirty = true;
+}
+
+
+void PROPERTIES_FRAME::onTextFocusLost( wxFocusEvent& aEvent )
+{
+    m_propertiesDirty = true;
+}
+
+
+void PROPERTIES_FRAME::OnUpdateUI( wxUpdateUIEvent& aEvent )
+{
+    if( m_propertiesDirty )
+    {
+        CallAfter(
+                [this]()
+                {
+                    OnAcceptPrms();
+                } );
+    }
 }
 
 
@@ -635,6 +660,7 @@ void PROPERTIES_FRAME::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 void PROPERTIES_FRAME::onScintillaFocusLost( wxFocusEvent& aEvent )
 {
     m_stcText->AutoCompCancel();
+    m_propertiesDirty = true;
     aEvent.Skip();
 }
 

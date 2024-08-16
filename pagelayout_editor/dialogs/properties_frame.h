@@ -75,13 +75,18 @@ class PROPERTIES_FRAME : public PANEL_PROPERTIES_BASE
 
     UNIT_BINDER m_lineWidth;
 
+    bool        m_propertiesDirty;
+
 public:
     PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent );
     ~PROPERTIES_FRAME();
 
+    void OnAcceptPrms();
+
     // Event functions
-    void OnPageChanged( wxNotebookEvent& event ) override;
-    void OnAcceptPrms( wxCommandEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& aEvent ) override;
+    void onModify( wxCommandEvent& aEvent ) override;
+    void onTextFocusLost( wxFocusEvent& aEvent ) override;
     void OnSetDefaultValues( wxCommandEvent& event ) override;
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
     void onScintillaFocusLost( wxFocusEvent& aEvent ) override;
