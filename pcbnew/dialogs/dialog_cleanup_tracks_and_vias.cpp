@@ -30,13 +30,19 @@
 #include <drc/drc_item.h>
 #include <tools/zone_filler_tool.h>
 #include <reporter.h>
+#include <pcb_layer_box_selector.h>
+#include <board_design_settings.h>
+#include <board_connected_item.h>
+#include <pcb_group.h>
+#include <project/net_settings.h>
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ) :
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
         m_parentFrame( aParentFrame ),
+        m_brd( aParentFrame->GetBoard() ),
         m_firstRun( true )
 {
-    auto cfg = m_parentFrame->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_parentFrame->GetPcbNewSettings();
     m_reporter = new WX_TEXT_CTRL_REPORTER( m_tcReport );
 
     m_cbRefillZones->SetValue( cfg->m_Cleanup.cleanup_refill_zones );
@@ -47,10 +53,16 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
     m_deleteDanglingViasOpt->SetValue( cfg->m_Cleanup.delete_dangling_vias );
 
+    buildFilterLists();
+
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
 
     setupOKButtonLabel();
+
+    m_netFilter->Connect( NET_SELECTED,
+                          wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS::OnNetFilterSelect ),
+                          nullptr, this );
 
     m_sdbSizer->SetSizeHints( this );
 
@@ -86,6 +98,36 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 }
 
 
+void DIALOG_CLEANUP_TRACKS_AND_VIAS::buildFilterLists()
+{
+    // Populate the net filter list with net names
+    m_netFilter->SetBoard( m_brd );
+    m_netFilter->SetNetInfo( &m_brd->GetNetInfo() );
+
+    if( !m_brd->GetHighLightNetCodes().empty() )
+        m_netFilter->SetSelectedNetcode( *m_brd->GetHighLightNetCodes().begin() );
+
+    // Populate the netclass filter list with netclass names
+    wxArrayString                  netclassNames;
+    std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;
+
+    netclassNames.push_back( settings->GetDefaultNetclass()->GetName() );
+
+    for( const auto& [name, netclass] : settings->GetNetclasses() )
+        netclassNames.push_back( name );
+
+    m_netclassFilter->Set( netclassNames );
+    m_netclassFilter->SetStringSelection( m_brd->GetDesignSettings().GetCurrentNetClassName() );
+
+    // Populate the layer filter list
+    m_layerFilter->SetBoardFrame( m_parentFrame );
+    m_layerFilter->SetLayersHotkeys( false );
+    m_layerFilter->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_layerFilter->Resync();
+    m_layerFilter->SetLayerSelection( m_parentFrame->GetActiveLayer() );
+}
+
+
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::setupOKButtonLabel()
 {
     if( m_firstRun )
@@ -97,9 +139,27 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::setupOKButtonLabel()
 
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnCheckBox( wxCommandEvent& anEvent )
 {
+    m_changesTreeModel->Update( nullptr, RPT_SEVERITY_ACTION );
     m_firstRun = true;
     setupOKButtonLabel();
-    m_tcReport->Clear();
+}
+
+
+void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnNetFilterSelect( wxCommandEvent& aEvent )
+{
+    OnCheckBox( aEvent );
+}
+
+
+void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnNetclassFilterSelect( wxCommandEvent& aEvent )
+{
+    OnCheckBox( aEvent );
+}
+
+
+void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLayerFilterSelect( wxCommandEvent& aEvent )
+{
+    OnCheckBox( aEvent );
 }
 
 
@@ -126,7 +186,52 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     wxBusyCursor busy;
     BOARD_COMMIT commit( m_parentFrame );
-    TRACKS_CLEANER cleaner( m_parentFrame->GetBoard(), commit );
+    TRACKS_CLEANER cleaner( m_brd, commit );
+
+    cleaner.SetFilter(
+            [&]( BOARD_CONNECTED_ITEM* aItem ) -> bool
+            {
+                if( m_selectedItemsFilter->GetValue() )
+                {
+                    if( !aItem->IsSelected() )
+                    {
+                        PCB_GROUP* group = aItem->GetParentGroup();
+
+                        while( group && !group->IsSelected() )
+                            group = group->GetParentGroup();
+
+                        if( !group )
+                            return true;
+                    }
+                }
+
+                if( m_netFilterOpt->GetValue() && m_netFilter->GetSelectedNetcode() >= 0 )
+                {
+                    if( aItem->GetNetCode() != m_netFilter->GetSelectedNetcode() )
+                        return true;
+                }
+
+                if( m_netclassFilterOpt->GetValue()
+                        && !m_netclassFilter->GetStringSelection().IsEmpty() )
+                {
+                    wxString  filterNetclass = m_netclassFilter->GetStringSelection();
+                    NETCLASS* netclass = aItem->GetEffectiveNetClass();
+
+                    if( !netclass->ContainsNetclassWithName( filterNetclass ) )
+                        return true;
+                }
+
+                if( m_layerFilterOpt->GetValue()
+                        && m_layerFilter->GetLayerSelection() != UNDEFINED_LAYER )
+                {
+                    if( aItem->GetLayer() != m_layerFilter->GetLayerSelection() )
+                        return true;
+                }
+
+                return false;
+            } );
+
+    m_outputBook->SetSelection( 1 );
 
     if( !aDryRun )
     {
@@ -177,7 +282,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
         m_parentFrame->GetCanvas()->Refresh( true );
     }
 
-    m_reporter->Report( _( "Done." ) );
+    m_outputBook->SetSelection( 0 );
     setupOKButtonLabel();
 }
 
@@ -185,7 +290,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxDataViewEvent& aEvent )
 {
     const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
-    BOARD_ITEM*   item = m_parentFrame->GetBoard()->GetItem( itemID );
+    BOARD_ITEM*   item = m_brd->GetItem( itemID );
     WINDOW_THAWER thawer( m_parentFrame );
 
     m_parentFrame->FocusOnItem( item );

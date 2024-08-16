@@ -40,7 +40,8 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
         m_commit( aCommit ),
         m_dryRun( true ),
         m_itemsList( nullptr ),
-        m_reporter( nullptr )
+        m_reporter( nullptr ),
+        m_filter( nullptr )
 {
 }
 
@@ -160,6 +161,15 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun,
 }
 
 
+bool TRACKS_CLEANER::filterItem( BOARD_CONNECTED_ITEM* aItem )
+{
+    if( !m_filter )
+        return false;
+
+    return (m_filter)( aItem );
+}
+
+
 void TRACKS_CLEANER::removeShortingTrackSegments()
 {
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
@@ -168,8 +178,7 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
 
     for( PCB_TRACK* segment : m_brd->Tracks() )
     {
-        // Assume that the user knows what they are doing
-        if( segment->IsLocked() )
+        if( segment->IsLocked() || filterItem( segment ) )
             continue;
 
         for( PAD* testedPad : connectivity->GetConnectedPads( segment ) )
@@ -266,7 +275,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
 
         for( PCB_TRACK* track : temp_tracks )
         {
-            if( track->IsLocked() || ( track->GetFlags() & IS_DELETED ) > 0 )
+            if( track->HasFlag( IS_DELETED ) || track->IsLocked() || filterItem( track ) )
                 continue;
 
             if( !aVia && track->Type() == PCB_VIA_T )
@@ -316,7 +325,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
 
     for( PCB_TRACK* track : m_brd->Tracks() )
     {
-        if( track->IsLocked() )
+        if( track->IsLocked() || filterItem( track ) )
             continue;
 
         if( track->Type() == PCB_VIA_T )
@@ -370,7 +379,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
     for( PCB_TRACK* track : m_brd->Tracks() )
     {
-        if( track->HasFlag( IS_DELETED ) || track->IsLocked() )
+        if( track->HasFlag( IS_DELETED ) || track->IsLocked() || filterItem( track ) )
             continue;
 
         if( aDeleteDuplicateVias && track->Type() == PCB_VIA_T )
@@ -484,7 +493,6 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
     auto mergeSegments =
             [&]( std::shared_ptr<CN_CONNECTIVITY_ALGO> connectivity ) -> bool
             {
-
                 for( PCB_TRACK* segment : m_brd->Tracks() )
                 {
                     // one can merge only collinear segments, not vias or arcs.
@@ -492,6 +500,9 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                         continue;
 
                     if( segment->HasFlag( IS_DELETED ) )  // already taken into account
+                        continue;
+
+                    if( filterItem( segment ) )
                         continue;
 
                     // for each end of the segment:
@@ -510,7 +521,8 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                             BOARD_CONNECTED_ITEM* candidate = connected->Parent();
 
                             if( candidate->Type() == PCB_TRACE_T
-                                    && !candidate->HasFlag( IS_DELETED ) )
+                                    && !candidate->HasFlag( IS_DELETED )
+                                    && !filterItem( candidate ) )
                             {
                                 PCB_TRACK* candidateSegment = static_cast<PCB_TRACK*>( candidate );
 

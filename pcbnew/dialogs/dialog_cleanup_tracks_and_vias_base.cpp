@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "pcb_layer_box_selector.h"
 
 #include "dialog_cleanup_tracks_and_vias_base.h"
 
@@ -19,68 +21,159 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWind
 	wxBoxSizer* bSizerTop;
 	bSizerTop = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizerLeft;
-	bSizerLeft = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbSizer3;
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Actions") ), wxVERTICAL );
 
-	m_cbRefillZones = new wxCheckBox( this, wxID_ANY, _("Refill zones before run cleanup"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLeft->Add( m_cbRefillZones, 0, wxALL, 5 );
+	m_cbRefillZones = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Refill zones before running cleanup"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_cbRefillZones, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_cleanShortCircuitOpt = new wxCheckBox( this, wxID_ANY, _("Delete &tracks connecting different nets"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	sbSizer3->Add( 0, 12, 1, wxEXPAND, 5 );
+
+	m_cleanShortCircuitOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Delete &tracks connecting different nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cleanShortCircuitOpt->SetToolTip( _("remove track segments connecting nodes belonging to different nets (short circuit)") );
 
-	bSizerLeft->Add( m_cleanShortCircuitOpt, 0, wxALL, 5 );
+	sbSizer3->Add( m_cleanShortCircuitOpt, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_cleanViasOpt = new wxCheckBox( this, wxID_ANY, _("&Delete redundant vias"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	sbSizer3->Add( 0, 10, 1, wxEXPAND, 5 );
+
+	m_cleanViasOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("&Delete redundant vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cleanViasOpt->SetToolTip( _("remove vias on through hole pads and superimposed vias") );
 
-	bSizerLeft->Add( m_cleanViasOpt, 0, wxALL, 5 );
+	sbSizer3->Add( m_cleanViasOpt, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_deleteDanglingViasOpt = new wxCheckBox( this, wxID_ANY, _("Delete vias connected on only one layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLeft->Add( m_deleteDanglingViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_deleteDanglingViasOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Delete vias connected on only one layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_deleteDanglingViasOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_mergeSegmOpt = new wxCheckBox( this, wxID_ANY, _("&Merge co-linear tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	sbSizer3->Add( 0, 10, 1, wxEXPAND, 5 );
+
+	m_mergeSegmOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("&Merge co-linear tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mergeSegmOpt->SetToolTip( _("merge aligned track segments, and remove null segments") );
 
-	bSizerLeft->Add( m_mergeSegmOpt, 0, wxALL, 5 );
+	sbSizer3->Add( m_mergeSegmOpt, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_deleteUnconnectedOpt = new wxCheckBox( this, wxID_ANY, _("Delete tracks unconnected at one end"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deleteUnconnectedOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Delete tracks unconnected at one end"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_deleteUnconnectedOpt->SetToolTip( _("delete tracks having at least one dangling end") );
 
-	bSizerLeft->Add( m_deleteUnconnectedOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	sbSizer3->Add( m_deleteUnconnectedOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_deleteTracksInPadsOpt = new wxCheckBox( this, wxID_ANY, _("Delete tracks fully inside pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deleteTracksInPadsOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Delete tracks fully inside pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_deleteTracksInPadsOpt->SetToolTip( _("Delete tracks that have both start and end positions inside of a pad") );
 
-	bSizerLeft->Add( m_deleteTracksInPadsOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	sbSizer3->Add( m_deleteTracksInPadsOpt, 0, wxALL, 5 );
 
 
-	bSizerTop->Add( bSizerLeft, 0, wxEXPAND|wxALL, 5 );
+	bSizerTop->Add( sbSizer3, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizerRight;
-	bSizerRight = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbFilters;
+	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Items") ), wxVERTICAL );
 
-	m_tcReport = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	bSizerRight->Add( m_tcReport, 1, wxALL|wxEXPAND, 5 );
+	wxFlexGridSizer* fgSizer3;
+	fgSizer3 = new wxFlexGridSizer( 0, 2, 3, 0 );
+	fgSizer3->AddGrowableCol( 1 );
+	fgSizer3->AddGrowableRow( 0 );
+	fgSizer3->AddGrowableRow( 1 );
+	fgSizer3->AddGrowableRow( 2 );
+	fgSizer3->AddGrowableRow( 3 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_netFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by net:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_netFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_netFilter = new NET_SELECTOR( sbFilters->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_netFilter, 1, wxEXPAND|wxRIGHT, 5 );
+
+	m_netclassFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by net class:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_netclassFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	wxArrayString m_netclassFilterChoices;
+	m_netclassFilter = new wxChoice( sbFilters->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_netclassFilterChoices, 0 );
+	m_netclassFilter->SetSelection( 0 );
+	m_netclassFilter->SetMinSize( wxSize( 140,-1 ) );
+
+	fgSizer3->Add( m_netclassFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizerTop->Add( bSizerRight, 1, wxEXPAND, 5 );
+	fgSizer3->Add( 0, 7, 1, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizerTop, 0, wxEXPAND, 5 );
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_layerFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_layerFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_layerFilter = new PCB_LAYER_BOX_SELECTOR( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	fgSizer3->Add( m_layerFilter, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	fgSizer3->Add( 0, 7, 1, wxEXPAND, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	sbFilters->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM, 5 );
+
+
+	sbFilters->Add( 0, 5, 0, 0, 5 );
+
+	m_selectedItemsFilter = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Selected items only"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbFilters->Add( m_selectedItemsFilter, 0, wxALL, 5 );
+
+
+	sbFilters->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizerTop->Add( sbFilters, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerMain->Add( bSizerTop, 0, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 
 	bLowerSizer->SetMinSize( wxSize( 660,250 ) );
-	staticChangesLabel = new wxStaticText( this, wxID_ANY, _("Changes to be applied:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_outputBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_changesPanel = new wxPanel( m_outputBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* changesSizer;
+	changesSizer = new wxBoxSizer( wxVERTICAL );
+
+	staticChangesLabel = new wxStaticText( m_changesPanel, wxID_ANY, _("Changes to be applied:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticChangesLabel->Wrap( -1 );
-	bLowerSizer->Add( staticChangesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	changesSizer->Add( staticChangesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_changesDataView = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
-	bLowerSizer->Add( m_changesDataView, 1, wxALL|wxEXPAND, 5 );
+	m_changesDataView = new wxDataViewCtrl( m_changesPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
+	changesSizer->Add( m_changesDataView, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerMain->Add( bLowerSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_changesPanel->SetSizer( changesSizer );
+	m_changesPanel->Layout();
+	changesSizer->Fit( m_changesPanel );
+	m_outputBook->AddPage( m_changesPanel, _("a page"), false );
+	m_runningPanel = new wxPanel( m_outputBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* progressSizer;
+	progressSizer = new wxBoxSizer( wxVERTICAL );
+
+	staticProgressLabel = new wxStaticText( m_runningPanel, wxID_ANY, _("Progress:"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticProgressLabel->Wrap( -1 );
+	progressSizer->Add( staticProgressLabel, 0, wxALL, 5 );
+
+	m_tcReport = new wxTextCtrl( m_runningPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	progressSizer->Add( m_tcReport, 1, wxEXPAND|wxRIGHT|wxLEFT, 3 );
+
+
+	m_runningPanel->SetSizer( progressSizer );
+	m_runningPanel->Layout();
+	progressSizer->Fit( m_runningPanel );
+	m_outputBook->AddPage( m_runningPanel, _("a page"), false );
+
+	bLowerSizer->Add( m_outputBook, 1, wxEXPAND, 5 );
+
+
+	bSizerMain->Add( bLowerSizer, 1, wxEXPAND|wxALL, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -106,6 +199,12 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWind
 	m_mergeSegmOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
 	m_deleteUnconnectedOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
 	m_deleteTracksInPadsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_netFilterOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_netclassFilterOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_netclassFilter->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnNetclassFilterSelect ), NULL, this );
+	m_layerFilterOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_layerFilter->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnLayerFilterSelect ), NULL, this );
+	m_selectedItemsFilter->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnLeftDClickItem ), NULL, this );
 }
@@ -120,6 +219,12 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::~DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE()
 	m_mergeSegmOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
 	m_deleteUnconnectedOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
 	m_deleteTracksInPadsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_netFilterOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_netclassFilterOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_netclassFilter->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnNetclassFilterSelect ), NULL, this );
+	m_layerFilterOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
+	m_layerFilter->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnLayerFilterSelect ), NULL, this );
+	m_selectedItemsFilter->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::OnLeftDClickItem ), NULL, this );
 

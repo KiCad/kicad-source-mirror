@@ -41,9 +41,13 @@ public:
 
 private:
     void doCleanup( bool aDryRun );
+    void buildFilterLists();
     void setupOKButtonLabel();
 
-    void OnCheckBox( wxCommandEvent& anEvent ) override;
+    void OnCheckBox( wxCommandEvent& aEvent ) override;
+    void OnNetFilterSelect( wxCommandEvent& aEvent );
+    void OnNetclassFilterSelect( wxCommandEvent& aEvent ) override;
+    void OnLayerFilterSelect( wxCommandEvent& aEvent ) override;
     void OnSelectItem( wxDataViewEvent& event ) override;
     void OnLeftDClickItem( wxMouseEvent& event ) override;
 
@@ -51,6 +55,7 @@ private:
     bool TransferDataFromWindow() override;
 
     PCB_EDIT_FRAME*  m_parentFrame;
+    BOARD*           m_brd;
     RC_TREE_MODEL*   m_changesTreeModel;
     bool             m_firstRun;
 

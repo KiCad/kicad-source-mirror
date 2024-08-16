@@ -56,7 +56,14 @@ public:
                        bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias,
                        REPORTER* aReporter = nullptr );
 
+    void SetFilter( const std::function<bool( BOARD_CONNECTED_ITEM* aItem )>& aFilter )
+    {
+        m_filter = aFilter;
+    }
+
 private:
+    bool filterItem( BOARD_CONNECTED_ITEM* aItem );
+
     /*
      * Removes track segments which are connected to more than one net (short circuits).
      */
@@ -109,6 +116,8 @@ private:
 
     // Cache connections.  O(n^2) is awful, but it beats O(2n^3).
     std::map<PCB_TRACK*, std::vector<BOARD_CONNECTED_ITEM*>> m_connectedItemsCache;
+
+    std::function<bool( BOARD_CONNECTED_ITEM* aItem )>       m_filter;
 };
 
 
