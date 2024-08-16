@@ -412,7 +412,16 @@ SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
     if( e >= f )
         return VECTOR2L( aP.x - B.x, aP.y - B.y ).SquaredEuclideanNorm();
 
-    return KiROUND<double, ecoord>( ap.SquaredEuclideanNorm() - ( double( e ) * e ) / f );
+    const double g = ( double( e ) * e ) / f;
+
+    //Squared distance can't be negative
+    if( g > ap.SquaredEuclideanNorm() )
+    {
+        return (ecoord) std::numeric_limits<std::int32_t>::max()
+               * std::numeric_limits<std::int32_t>::max();
+    }
+
+    return KiROUND<double, ecoord>( ap.SquaredEuclideanNorm() - g );
 }
 
 

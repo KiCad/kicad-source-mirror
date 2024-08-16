@@ -103,6 +103,9 @@ bool SegDistanceCorrect( const SEG& aSegA, const SEG& aSegB, int aExp )
  */
 bool SegVecDistanceCorrect( const SEG& aSeg, const VECTOR2I& aVec, int aExp )
 {
+    const SEG::ecoord squaredDistance = aSeg.SquaredDistance( aVec );
+    BOOST_REQUIRE( std::signbit( squaredDistance ) == false );
+
     const int dist = aSeg.Distance( aVec );
 
     bool ok = ( dist == aExp );
@@ -342,6 +345,12 @@ static const std::vector<SEG_VECTOR_DISTANCE_CASE> seg_vec_dist_cases = {
         { 1000 + 200, 200 },
         282, // sqrt(200^2 + 200^2) = 282.8, rounded to nearest
     },
+    {
+        "Issue 18473 (distance negative)",
+        { { 187360000, 42510000 }, { 105796472, 42510000 } },
+        { 106645000, 42510000 },
+        std::numeric_limits<std::int32_t>::max(), // maximal distance
+    }
 };
 // clang-format on
 
