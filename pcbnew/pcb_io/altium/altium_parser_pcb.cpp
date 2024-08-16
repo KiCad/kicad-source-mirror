@@ -1073,7 +1073,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     }
     else
     {
-        isFrame = false;
+        isFrame = textbox_rect_height != 0 && textbox_rect_width != 0;
         isOffsetBorder = false;
     }
 

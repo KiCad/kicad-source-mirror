@@ -3960,7 +3960,7 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
 {
     std::unique_ptr<PCB_TEXTBOX> pcbTextbox = std::make_unique<PCB_TEXTBOX>( m_board );
     std::unique_ptr<PCB_TEXT> pcbText = std::make_unique<PCB_TEXT>( m_board );
-    bool isTextbox = ( aElem.textbox_rect_height != 0 );
+    bool isTextbox = aElem.isFrame;
 
     static const std::map<wxString, wxString> variableMap = {
         { "LAYER_NAME", "LAYER" },
@@ -3979,8 +3979,9 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
 
         item = pcbTextbox.get();
         text = pcbTextbox.get();
-        pcbTextbox->SetPosition( aElem.position );
-        pcbTextbox->SetRectangle( aElem.textbox_rect_height, aElem.textbox_rect_width );
+        pcbTextbox->SetEnd( VECTOR2I( aElem.textbox_rect_width + aElem.margin_border_width,
+                                      aElem.textbox_rect_height + aElem.margin_border_width ) );
+        pcbTextbox->SetPosition( aElem.position - VECTOR2I( 0, aElem.textbox_rect_height ) );
 
         switch( aElem.textbox_rect_justification )
         {
@@ -4047,7 +4048,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     EDA_TEXT*   text = fpText.get();
     PCB_FIELD*  field = nullptr;
 
-    bool isTextbox = ( aElem.textbox_rect_height != 0 );
+    bool isTextbox = aElem.isFrame;
     bool toAdd = false;
 
     if( aElem.isDesignator )
@@ -4089,8 +4090,11 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     {
         item = fpTextbox.get();
         text = fpTextbox.get();
-        fpTextbox->SetPosition( aElem.position );
-        fpTextbox->SetRectangle( aElem.textbox_rect_height, aElem.textbox_rect_width );
+        fpTextbox->SetPosition( aElem.position - VECTOR2I( 0, aElem.textbox_rect_height ) );
+        fpTextbox->SetStart( aElem.position - VECTOR2I( 0, aElem.textbox_rect_height ) );
+        fpTextbox->SetRectangle( aElem.textbox_rect_height + aElem.margin_border_width,
+                                  aElem.textbox_rect_width + aElem.margin_border_width );
+        fpTextbox->SetBorderEnabled( false );
 
         // KiCad only does top alignment for textboxes atm
         switch( aElem.textbox_rect_justification )
@@ -4131,6 +4135,42 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     else
     {
         text->SetTextPos( aElem.position );
+
+        switch( aElem.textbox_rect_justification )
+        {
+        case ALTIUM_TEXT_POSITION::LEFT_TOP:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            break;
+        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            break;
+        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            break;
+        case ALTIUM_TEXT_POSITION::CENTER_TOP:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            break;
+        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            break;
+        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            break;
+        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            break;
+        default:
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            break;
+        }
     }
 
     ConvertTexts6ToEdaTextSettings( aElem, text );
