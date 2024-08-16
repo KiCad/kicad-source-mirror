@@ -210,6 +210,10 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
 
 PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
 {
+    Disconnect( wxEVT_FSWATCHER,
+             wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ) );
+    Unbind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( PROJECT_TREE_PANE::onThemeChanged ), this );
     shutdownFileWatcher();
 }
 
