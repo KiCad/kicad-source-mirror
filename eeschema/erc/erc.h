@@ -147,6 +147,12 @@ public:
     int TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject );
 
     /**
+     * Test symbols to ensure that assigned footprint passes any given footprint filters.
+     * @return the number of issues found
+     */
+    int TestFootprintFilters();
+
+    /**
      * Test pins and wire ends for being off grid.
      * @return the error count
      */

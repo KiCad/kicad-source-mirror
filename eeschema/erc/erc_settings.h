@@ -78,6 +78,7 @@ enum ERCE_T
     ERCE_LIB_SYMBOL_MISMATCH,     ///< Symbol doesn't match copy in library.
     ERCE_FOOTPRINT_LINK_ISSUES,   ///< The footprint link is invalid, or points to a missing
                                   ///<   (or inactive) footprint or library.
+    ERCE_FOOTPRINT_FILTERS,       ///< The assigned footprint doesn't match the footprint filters
     ERCE_UNANNOTATED,             ///< Symbol has not been annotated.
     ERCE_EXTRA_UNITS,             ///< Symbol has more units than are defined.
     ERCE_DIFFERENT_UNIT_VALUE,    ///< Units of same symbol have different values.

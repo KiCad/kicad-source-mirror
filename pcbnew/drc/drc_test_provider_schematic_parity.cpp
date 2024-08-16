@@ -38,7 +38,8 @@
     - DRCE_MISSING_FOOTPRINT
     - DRCE_DUPLICATE_FOOTPRINT
     - DRCE_EXTRA_FOOTPRINT
-    - DRCE_SCHEMATIC_PARITY_ISSUES
+    - DRCE_SCHEMATIC_PARITY
+    - DRCE_FOOTPRINT_FILTERS
 
     TODO:
     - cross-check PCB netlist against SCH netlist
@@ -126,43 +127,64 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
         else
         {
             if( component->GetValue() != footprint->GetValue()
-                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
-                msg.Printf( _( "Footprint %s value (%s) doesn't match symbol value (%s)." ),
+                msg.Printf( _( "Value (%s) doesn't match symbol value (%s)." ),
                             footprint->GetReference(), footprint->GetValue(),
                             component->GetValue() );
 
-                std::shared_ptr<DRC_ITEM> drcItem =
-                        DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
             }
 
             if( component->GetFPID().GetUniStringLibId() != footprint->GetFPID().GetUniStringLibId()
-                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
-                msg.Printf( _( "%s footprint (%s) doesn't match that given by symbol (%s)." ),
-                            footprint->GetReference(), footprint->GetFPID().GetUniStringLibId(),
+                msg.Printf( _( "%s doesn't match footprint given by symbol (%s)." ),
+                            footprint->GetFPID().GetUniStringLibId(),
                             component->GetFPID().GetUniStringLibId() );
 
-                std::shared_ptr<DRC_ITEM> drcItem =
-                        DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
             }
 
+            if( !m_drcEngine->IsErrorLimitExceeded( DRCE_FOOTPRINT_FILTERS ) )
+            {
+                wxString fpName = footprint->GetFPID().GetUniStringLibItemName();
+                size_t   filtercount = component->GetFootprintFilters().GetCount();
+                bool     found = ( 0 == filtercount ); // if no entries, do not filter
+
+                for( size_t jj = 0; jj < filtercount && !found; jj++ )
+                    found = fpName.Matches( component->GetFootprintFilters()[jj] );
+
+                if( !found )
+                {
+                    wxString msg;
+                    msg.Printf( _( "%s doesn't match symbol's footprint filters (%s)." ),
+                                fpName,
+                                wxJoin( component->GetFootprintFilters(), ' ' ) );
+
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_FOOTPRINT_FILTERS );
+                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetItems( footprint );
+                    reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
+                }
+            }
+
             if( ( component->GetProperties().count( "dnp" ) > 0 )
                 != ( ( footprint->GetAttributes() & FP_DNP ) > 0 )
-                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
                 msg.Printf( _( "'%s' settings differ." ), _( "Do not populate" ) );
 
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
                 drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
@@ -170,12 +192,12 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
 
             if( ( component->GetProperties().count( "exclude_from_bom" ) > 0 )
                 != ( (footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 )
-                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
                 msg.Printf( _( "'%s' settings differ." ), _( "Exclude from bill of materials" ) );
 
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
                 drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );

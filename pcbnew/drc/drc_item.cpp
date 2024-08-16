@@ -186,9 +186,13 @@ DRC_ITEM DRC_ITEM::netConflict( DRCE_NET_CONFLICT,
         _( "Pad net doesn't match schematic" ),
         wxT( "net_conflict" ) );
 
-DRC_ITEM DRC_ITEM::schematicParityIssues( DRCE_SCHEMATIC_PARITY_ISSUES,
+DRC_ITEM DRC_ITEM::schematicParity( DRCE_SCHEMATIC_PARITY,
         _( "Footprint attributes don't match symbol" ),
         wxT( "footprint_symbol_mismatch" ) );
+
+DRC_ITEM DRC_ITEM::footprintFilters( DRCE_FOOTPRINT_FILTERS,
+        _( "Footprint doesn't match symbol's footprint filters" ),
+        wxT( "footprint_filters_mismatch" ) );
 
 DRC_ITEM DRC_ITEM::libFootprintIssues( DRCE_LIB_FOOTPRINT_ISSUES,
         _( "Footprint not found in libraries" ),
@@ -307,7 +311,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::duplicateFootprints,
             DRC_ITEM::missingFootprint,
             DRC_ITEM::extraFootprint,
-            DRC_ITEM::schematicParityIssues,
+            DRC_ITEM::schematicParity,
+            DRC_ITEM::footprintFilters,
             DRC_ITEM::netConflict,
             DRC_ITEM::unconnectedItems,
 
@@ -387,7 +392,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DUPLICATE_FOOTPRINT:      return std::make_shared<DRC_ITEM>( duplicateFootprints );
     case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
-    case DRCE_SCHEMATIC_PARITY_ISSUES:  return std::make_shared<DRC_ITEM>( schematicParityIssues );
+    case DRCE_SCHEMATIC_PARITY:         return std::make_shared<DRC_ITEM>( schematicParity );
+    case DRCE_FOOTPRINT_FILTERS:        return std::make_shared<DRC_ITEM>( footprintFilters );
     case DRCE_LIB_FOOTPRINT_ISSUES:     return std::make_shared<DRC_ITEM>( libFootprintIssues );
     case DRCE_LIB_FOOTPRINT_MISMATCH:   return std::make_shared<DRC_ITEM>( libFootprintMismatch );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );

@@ -1309,7 +1309,8 @@ void DIALOG_DRC::updateDisplayedCounts()
                      || ii == DRCE_DUPLICATE_FOOTPRINT
                      || ii == DRCE_EXTRA_FOOTPRINT
                      || ii == DRCE_NET_CONFLICT
-                     || ii == DRCE_SCHEMATIC_PARITY_ISSUES )
+                     || ii == DRCE_SCHEMATIC_PARITY
+                     || ii == DRCE_FOOTPRINT_FILTERS )
             {
                 if( showWarnings && bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
                     footprintsOverflowed = true;

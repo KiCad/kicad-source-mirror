@@ -68,7 +68,8 @@ PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPositio
             case DRCE_DUPLICATE_FOOTPRINT:
             case DRCE_EXTRA_FOOTPRINT:
             case DRCE_NET_CONFLICT:
-            case DRCE_SCHEMATIC_PARITY_ISSUES:
+            case DRCE_SCHEMATIC_PARITY:
+            case DRCE_FOOTPRINT_FILTERS:
                 SetMarkerType( MARKER_BASE::MARKER_PARITY );
                 break;
 

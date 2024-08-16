@@ -72,7 +72,8 @@ enum PCB_DRC_CODE {
     DRCE_DUPLICATE_FOOTPRINT,            // more than one footprints found for netlist item
     DRCE_EXTRA_FOOTPRINT,                // netlist item not found for footprint
     DRCE_NET_CONFLICT,                   // pad net doesn't match netlist
-    DRCE_SCHEMATIC_PARITY_ISSUES,        // footprint attributes don't match symbol attributes
+    DRCE_SCHEMATIC_PARITY,               // footprint attributes don't match symbol attributes
+    DRCE_FOOTPRINT_FILTERS,              // footprint doesn't match symbol's footprint filters
 
     DRCE_FOOTPRINT_TYPE_MISMATCH,        // footprint attribute does not match actual pads
     DRCE_LIB_FOOTPRINT_ISSUES,           // footprint not found in active libraries
@@ -206,7 +207,8 @@ private:
     static DRC_ITEM missingFootprint;
     static DRC_ITEM extraFootprint;
     static DRC_ITEM netConflict;
-    static DRC_ITEM schematicParityIssues;
+    static DRC_ITEM schematicParity;
+    static DRC_ITEM footprintFilters;
     static DRC_ITEM libFootprintIssues;
     static DRC_ITEM libFootprintMismatch;
     static DRC_ITEM unresolvedVariable;

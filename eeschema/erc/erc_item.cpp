@@ -188,6 +188,10 @@ ERC_ITEM ERC_ITEM::footprintLinkIssues( ERCE_FOOTPRINT_LINK_ISSUES,
         _( "Footprint link issue" ),
         wxT( "footprint_link_issues" ) );
 
+ERC_ITEM ERC_ITEM::footprintFilters( ERCE_FOOTPRINT_FILTERS,
+        _( "Assigned footprint doesn't match footprint filters" ),
+        wxT( "footprint_filter" ) );
+
 ERC_ITEM ERC_ITEM::unannotated( ERCE_UNANNOTATED,
         _( "Symbol is not annotated" ),
         wxT( "unannotated" ) );
@@ -274,6 +278,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::libSymbolIssues,
             ERC_ITEM::libSymbolMismatch,
             ERC_ITEM::footprintLinkIssues,
+            ERC_ITEM::footprintFilters,
             ERC_ITEM::extraUnits,
             ERC_ITEM::missingUnits,
             ERC_ITEM::missingInputPin,
@@ -330,6 +335,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_LIB_SYMBOL_ISSUES:       return std::make_shared<ERC_ITEM>( libSymbolIssues );
     case ERCE_LIB_SYMBOL_MISMATCH:     return std::make_shared<ERC_ITEM>( libSymbolMismatch );
     case ERCE_FOOTPRINT_LINK_ISSUES:   return std::make_shared<ERC_ITEM>( footprintLinkIssues );
+    case ERCE_FOOTPRINT_FILTERS:       return std::make_shared<ERC_ITEM>( footprintFilters );
     case ERCE_UNANNOTATED:             return std::make_shared<ERC_ITEM>( unannotated );
     case ERCE_EXTRA_UNITS:             return std::make_shared<ERC_ITEM>( extraUnits );
     case ERCE_DIFFERENT_UNIT_VALUE:    return std::make_shared<ERC_ITEM>( differentUnitValue );

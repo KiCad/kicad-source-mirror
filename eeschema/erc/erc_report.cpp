@@ -121,9 +121,6 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     reportHead.kicad_version = GetMajorMinorPatchVersion();
     reportHead.coordinate_units = EDA_UNIT_UTILS::GetLabel( m_reportUnits );
 
-    int            err_count = 0;
-    int            warn_count = 0;
-    int            total_count = 0;
     SCH_SHEET_LIST sheetList = m_sch->BuildSheetListSortedByPageNumbers();
     sheetList.FillItemMap( itemMap );
 
@@ -144,15 +141,6 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
 
-            total_count++;
-
-            switch( severity )
-            {
-            case RPT_SEVERITY_ERROR:   err_count++;  break;
-            case RPT_SEVERITY_WARNING: warn_count++; break;
-            default: break;
-            }
-
             RC_JSON::VIOLATION violation;
             marker->GetRCItem()->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
 
@@ -161,7 +149,6 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
         reportHead.sheets.push_back( jsonSheet );
     }
-
 
     nlohmann::json saveJson = nlohmann::json( reportHead );
     jsonFileStream << std::setw( 4 ) << saveJson << std::endl;

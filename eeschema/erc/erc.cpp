@@ -1444,6 +1444,69 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
 }
 
 
+int ERC_TESTER::TestFootprintFilters()
+{
+    wxCHECK( m_schematic, 0 );
+
+    wxString msg;
+    int      err_count = 0;
+
+    for( SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        std::vector<SCH_MARKER*> markers;
+
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*                  sch_symbol = static_cast<SCH_SYMBOL*>( item );
+            std::unique_ptr<LIB_SYMBOL>& lib_symbol = sch_symbol->GetLibSymbolRef();
+
+            if( !lib_symbol )
+                continue;
+
+            wxArrayString filters = lib_symbol->GetFPFilters();
+
+            if( filters.empty() )
+                continue;
+
+            LIB_ID footprint;
+
+            if( footprint.Parse( sch_symbol->GetFootprintFieldText( true, &sheet, false ) ) > 0 )
+                continue;
+
+            wxString footprintName = footprint.GetUniStringLibItemName();
+            bool     found = false;
+
+            for( const wxString& filter : filters )
+            {
+                found |= footprintName.Matches( filter );
+
+                if( found )
+                    break;
+            }
+
+            if( !found )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
+                msg.Printf( _( "Assigned footprint (%s) doesn't match footprint filters (%s)." ),
+                            footprintName,
+                            wxJoin( filters, ' ' ) );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetItems( sch_symbol );
+                markers.emplace_back( new SCH_MARKER( ercItem, sch_symbol->GetPosition() ) );
+            }
+        }
+
+        for( SCH_MARKER* marker : markers )
+        {
+            sheet.LastScreen()->Append( marker );
+            err_count += 1;
+        }
+    }
+
+    return err_count;
+}
+
+
 int ERC_TESTER::TestOffGridEndpoints()
 {
     const int gridSize = m_schematic->Settings().m_ConnectionGridSize;
@@ -1685,6 +1748,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking for footprint link issues..." ) );
 
         TestFootprintLinkIssues( aCvPcb, aProject );
+    }
+
+    if( m_settings.IsTestEnabled( ERCE_FOOTPRINT_FILTERS ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking footprint assignments against footprint filters..." ) );
+
+        TestFootprintFilters();
     }
 
     if( m_settings.IsTestEnabled( ERCE_ENDPOINT_OFF_GRID ) )

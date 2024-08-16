@@ -597,7 +597,8 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
                     || aItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT
                     || aItem->GetErrorCode() == DRCE_EXTRA_FOOTPRINT
                     || aItem->GetErrorCode() == DRCE_NET_CONFLICT
-                    || aItem->GetErrorCode() == DRCE_SCHEMATIC_PARITY_ISSUES )
+                    || aItem->GetErrorCode() == DRCE_SCHEMATIC_PARITY
+                    || aItem->GetErrorCode() == DRCE_FOOTPRINT_FILTERS )
                 {
                     footprints.push_back( aItem );
                 }
