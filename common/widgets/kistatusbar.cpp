@@ -107,6 +107,15 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
 }
 
 
+KISTATUSBAR::~KISTATUSBAR()
+{
+    m_notificationsButton->Unbind( wxEVT_BUTTON, &KISTATUSBAR::onNotificationsIconClick, this );
+    Unbind( wxEVT_SIZE, &KISTATUSBAR::onSize, this );
+    m_backgroundProgressBar->Unbind( wxEVT_LEFT_DOWN, &KISTATUSBAR::onBackgroundProgressClick,
+                                     this );
+}
+
+
 void KISTATUSBAR::onNotificationsIconClick( wxCommandEvent& aEvent )
 {
     wxPoint pos = m_notificationsButton->GetScreenPosition();
