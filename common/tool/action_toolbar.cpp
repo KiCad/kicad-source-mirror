@@ -212,6 +212,21 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 
 ACTION_TOOLBAR::~ACTION_TOOLBAR()
 {
+    Disconnect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ),
+                nullptr, this );
+    Disconnect( wxEVT_AUITOOLBAR_RIGHT_CLICK,
+                wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolRightClick ), nullptr, this );
+    Disconnect( wxEVT_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onItemDrag ),
+                nullptr, this );
+    Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr,
+                this );
+    Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
+    Disconnect( m_paletteTimer->GetId(), wxEVT_TIMER,
+                wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ), nullptr, this );
+
+    Unbind( wxEVT_SYS_COLOUR_CHANGED,
+            wxSysColourChangedEventHandler( ACTION_TOOLBAR::onThemeChanged ), this );
+            
     delete m_paletteTimer;
 
     // Clear all the maps keeping track of our items on the toolbar
