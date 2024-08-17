@@ -399,8 +399,8 @@ int SEG::Distance( const VECTOR2I& aP ) const
 
 SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
 {
-    VECTOR2L ab = VECTOR2L( B.x - A.x, B.y - A.y );
-    VECTOR2L ap = VECTOR2L( aP.x - A.x, aP.y - A.y );
+    VECTOR2L ab = VECTOR2L( B ) - A;
+    VECTOR2L ap = VECTOR2L( aP ) - A;
 
     ecoord e = ap.Dot( ab );
 
@@ -410,18 +410,18 @@ SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
     ecoord f = ab.SquaredEuclideanNorm();
 
     if( e >= f )
-        return VECTOR2L( aP.x - B.x, aP.y - B.y ).SquaredEuclideanNorm();
+        return ( VECTOR2L( aP ) - B ).Dot( VECTOR2L( aP ) - B );
 
-    const double g = ( double( e ) * e ) / f;
+    const double g = ap.SquaredEuclideanNorm() - ( double( e ) * e ) / f;
 
-    //Squared distance can't be negative
-    if( g > ap.SquaredEuclideanNorm() )
-    {
-        return (ecoord) std::numeric_limits<std::int32_t>::max()
-               * std::numeric_limits<std::int32_t>::max();
-    }
+    // The only way g can be negative is if there was a rounding error since
+    // e is the projection of aP onto ab and therefore cannot be greater than
+    // the length of ap and f is guaranteed to be greater than e, meaning
+    // e * e / f cannot be greater than ap.SquaredEuclideanNorm()
+    if( g < 0 )
+        return 0;
 
-    return KiROUND<double, ecoord>( ap.SquaredEuclideanNorm() - g );
+    return KiROUND<double, ecoord>( g );
 }
 
 

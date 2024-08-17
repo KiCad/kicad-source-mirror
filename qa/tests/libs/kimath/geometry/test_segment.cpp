@@ -346,11 +346,23 @@ static const std::vector<SEG_VECTOR_DISTANCE_CASE> seg_vec_dist_cases = {
         282, // sqrt(200^2 + 200^2) = 282.8, rounded to nearest
     },
     {
-        "Issue 18473 (distance negative)",
+        "Issue 18473 (inside hit with rounding error)",
         { { 187360000, 42510000 }, { 105796472, 42510000 } },
         { 106645000, 42510000 },
-        std::numeric_limits<std::int32_t>::max(), // maximal distance
-    }
+          0,
+    },
+    {
+        "Straight line x distance",
+        { { 187360000, 42510000 }, { 105796472, 42510000 } },
+          { 197360000, 42510000 },
+             10000000,
+    },
+    {
+        "Straight line -x distance",
+        { { 187360000, 42510000 }, { 105796472, 42510000 } },
+          { 104796472, 42510000 },
+              1000000,
+    },
 };
 // clang-format on
 
