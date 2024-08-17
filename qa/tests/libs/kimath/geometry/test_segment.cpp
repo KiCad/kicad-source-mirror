@@ -104,7 +104,7 @@ bool SegDistanceCorrect( const SEG& aSegA, const SEG& aSegB, int aExp )
 bool SegVecDistanceCorrect( const SEG& aSeg, const VECTOR2I& aVec, int aExp )
 {
     const SEG::ecoord squaredDistance = aSeg.SquaredDistance( aVec );
-    BOOST_REQUIRE( std::signbit( squaredDistance ) == false );
+    BOOST_REQUIRE( squaredDistance >= 0 );
 
     const int dist = aSeg.Distance( aVec );
 
