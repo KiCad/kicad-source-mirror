@@ -125,7 +125,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( aStepJob->m_params.m_OutputFile.IsEmpty() )
+    if( aStepJob->m_3dparams.m_OutputFile.IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -146,7 +146,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
-        aStepJob->m_params.m_OutputFile = fn.GetFullName();
+        aStepJob->m_3dparams.m_OutputFile = fn.GetFullName();
     }
 
     if( aStepJob->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
@@ -164,8 +164,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         EXPORTER_VRML vrmlExporter( brd );
         wxString      messages;
 
-        double originX = pcbIUScale.IUTomm( aStepJob->m_params.m_Origin.x );
-        double originY = pcbIUScale.IUTomm( aStepJob->m_params.m_Origin.y );
+        double originX = pcbIUScale.IUTomm( aStepJob->m_3dparams.m_Origin.x );
+        double originY = pcbIUScale.IUTomm( aStepJob->m_3dparams.m_Origin.y );
 
         if( !aStepJob->m_hasUserOrigin )
         {
@@ -175,15 +175,15 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         }
 
         bool success = vrmlExporter.ExportVRML_File(
-                brd->GetProject(), &messages, aStepJob->m_params.m_OutputFile, scale,
-                aStepJob->m_params.m_IncludeUnspecified, aStepJob->m_params.m_IncludeDNP,
+                brd->GetProject(), &messages, aStepJob->m_3dparams.m_OutputFile, scale,
+                aStepJob->m_3dparams.m_IncludeUnspecified, aStepJob->m_3dparams.m_IncludeDNP,
                 !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
                 aStepJob->m_vrmlModelDir, originX, originY );
 
         if ( success )
         {
             m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
-                                                  aStepJob->m_params.m_OutputFile ),
+                                                  aStepJob->m_3dparams.m_OutputFile ),
                                 RPT_SEVERITY_INFO );
         }
         else
@@ -194,7 +194,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     }
     else
     {
-        EXPORTER_STEP_PARAMS params = aStepJob->m_params;
+        EXPORTER_STEP_PARAMS params = aStepJob->m_3dparams;
 
         switch( aStepJob->m_format )
         {

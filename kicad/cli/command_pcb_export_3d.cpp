@@ -203,7 +203,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D( true ) );
-    EXPORTER_STEP_PARAMS& params = step->m_params;
+    EXPORTER_STEP_PARAMS& params = step->m_3dparams;
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
         || m_format == JOB_EXPORT_PCB_3D::FORMAT::XAO
@@ -295,13 +295,13 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         std::smatch sm;
         std::string str( userOrigin.ToUTF8() );
         std::regex_search( str, sm, re_pattern );
-        step->m_params.m_Origin.x = atof( sm.str( 1 ).c_str() );
-        step->m_params.m_Origin.y = atof( sm.str( 2 ).c_str() );
+        step->m_3dparams.m_Origin.x = atof( sm.str( 1 ).c_str() );
+        step->m_3dparams.m_Origin.y = atof( sm.str( 2 ).c_str() );
 
         // Default unit for m_xOrigin and m_yOrigin is mm.
         // Convert in to board units. If the value is given in inches, it will be converted later
-        step->m_params.m_Origin.x = pcbIUScale.mmToIU( step->m_params.m_Origin.x );
-        step->m_params.m_Origin.y = pcbIUScale.mmToIU( step->m_params.m_Origin.y );
+        step->m_3dparams.m_Origin.x = pcbIUScale.mmToIU( step->m_3dparams.m_Origin.x );
+        step->m_3dparams.m_Origin.y = pcbIUScale.mmToIU( step->m_3dparams.m_Origin.y );
 
         std::string tunit( sm[3] );
 
@@ -317,7 +317,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             // only in, inch and mm are valid:
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
-                step->m_params.m_Origin *= 25.4;
+                step->m_3dparams.m_Origin *= 25.4;
             }
             else if( tunit.compare( "mm" ) )
             {
@@ -342,7 +342,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             std::smatch sm;
             std::string str( minDistance.ToUTF8() );
             std::regex_search( str, sm, re_pattern );
-            step->m_params.m_BoardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
+            step->m_3dparams.m_BoardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
 
             std::string tunit( sm[2] );
 
@@ -350,7 +350,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             {
                 if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
                 {
-                    step->m_params.m_BoardOutlinesChainingEpsilon *= 25.4;
+                    step->m_3dparams.m_BoardOutlinesChainingEpsilon *= 25.4;
                 }
                 else if( tunit.compare( "mm" ) )
                 {

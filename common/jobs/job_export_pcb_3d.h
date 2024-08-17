@@ -124,7 +124,7 @@ public:
     JOB_EXPORT_PCB_3D::FORMAT m_format;
 
     /// Despite the name; also used for other formats
-    EXPORTER_STEP_PARAMS m_params;
+    EXPORTER_STEP_PARAMS m_3dparams;
 
     VRML_UNITS m_vrmlUnits;
     wxString   m_vrmlModelDir;
