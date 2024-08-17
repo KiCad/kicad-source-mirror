@@ -627,12 +627,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 }
 
 
-static bool footprintIsFromBoard( FOOTPRINT* aFootprint )
-{
-    return aFootprint->GetLink() != niluuid;
-}
-
-
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 {
     if( !m_itemsGrid->CommitPendingChanges() )
