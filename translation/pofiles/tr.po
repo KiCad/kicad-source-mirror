@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-22 00:09+0000\n"
+"PO-Revision-Date: 2024-08-18 13:09+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -5605,7 +5605,7 @@ msgstr "Grup"
 #: common/eda_item.cpp:370 eeschema/sch_junction.cpp:306
 #: eeschema/sch_junction.h:102
 msgid "Junction"
-msgstr "Birleşme"
+msgstr "Bağlantı"
 
 #: common/eda_item.cpp:371
 msgid "No-Connect Flag"
@@ -10608,7 +10608,6 @@ msgid "Edit exclusion comment..."
 msgstr "Hariç tutma yorumunu düzenle..."
 
 #: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:678
-#, fuzzy
 msgid "Exclude this violation"
 msgstr "Bu ihlali hariç tut"
 
@@ -11351,9 +11350,8 @@ msgstr "Ibis ayrıştırıcı"
 #: eeschema/dialogs/dialog_image_properties.cpp:75
 #: eeschema/dialogs/dialog_image_properties_base.h:56
 #: pcbnew/pcb_reference_image.cpp:356
-#, fuzzy
 msgid "Image Properties"
-msgstr "Metin Özellikleri"
+msgstr "Görüntü Özellikleri"
 
 #: eeschema/dialogs/dialog_image_properties_base.cpp:25
 #: gerbview/gerber_draw_item.cpp:706
@@ -11368,9 +11366,8 @@ msgid "Edit Junction"
 msgstr "Birleşme"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Kesişimler"
+msgstr "Bağlantıları Düzenle"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -11380,17 +11377,14 @@ msgid "Diameter:"
 msgstr "Çap:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "Şematik bağlantı nokta boyutunu kullanmak için çapı 0'a ayarlayın."
+msgstr "Şemanın bağlantı nokta boyutunu kullanmak için çapı 0'a ayarlayın."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr ""
-"Şematik Düzenleyici renklerini kullanmak için rengi saydam olarak ayarlayın."
+msgstr "Şema Düzenleyici renklerini kullanmak için rengi temizleyin."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
@@ -11414,9 +11408,8 @@ msgid "Label Properties"
 msgstr "Etiket Özellikleri"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Etiket Özellikleri"
+msgstr "Yönerge Etiket Özellikleri"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:103
 msgid "Hierarchical Sheet Pin Properties"
@@ -11434,9 +11427,8 @@ msgid "untitled"
 msgstr "İsimsiz"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Etiket Özellikleri"
+msgstr "Etiket Özelliklerini Düzenle"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -11498,9 +11490,8 @@ msgstr "Göster"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:399
-#, fuzzy
 msgid "Show Name"
-msgstr "Sayfa Adı"
+msgstr "Adını Göster"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -11626,9 +11617,8 @@ msgstr "TÜM"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46 eeschema/sch_item.cpp:68
 #: eeschema/symbol_editor/symbol_editor.cpp:1284
-#, fuzzy
 msgid "Standard"
-msgstr "Standart (1,2,3)"
+msgstr "Standart"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:119
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
@@ -11732,28 +11722,24 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:37
-#, fuzzy
 msgid "Pin count:"
-msgstr "Bacak sayısı"
+msgstr "Bacak sayısı:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "Çiftleme:"
+msgstr "Çiftlenmiş pinler:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:137
 msgid "Group by name"
 msgstr "Ada göre grupla"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
-#, fuzzy
 msgid "Group Selected"
-msgstr "Seç"
+msgstr "Grup Seçildi"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Bacak sayısına göre filtrele"
+msgstr "Birime göre filtrele:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
 msgid "Pin Table"
@@ -11839,9 +11825,8 @@ msgstr "Güç sembolü olarak sembol oluştur"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:208
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:602
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:176
-#, fuzzy
 msgid "Exclude from bill of materials"
-msgstr "Şematik ürün reçetesin ekleme"
+msgstr "Malzeme listesinden hariç tut"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:94
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:279
