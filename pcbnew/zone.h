@@ -126,7 +126,7 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
     wxString GetFriendlyName() const override;
 
-    void SetLayerSet( LSET aLayerSet ) override;
+    void SetLayerSet( const LSET& aLayerSet ) override;
     virtual LSET GetLayerSet() const override { return m_layerSet; }
 
     const wxString& GetZoneName() const { return m_zoneName; }

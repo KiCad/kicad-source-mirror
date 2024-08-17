@@ -917,7 +917,7 @@ LSET PCB_VIA::GetLayerSet() const
 }
 
 
-void PCB_VIA::SetLayerSet( LSET aLayerSet )
+void PCB_VIA::SetLayerSet( const LSET& aLayerSet )
 {
     bool first = true;
 

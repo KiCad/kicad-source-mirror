@@ -250,7 +250,7 @@ public:
             return LSET( m_layer );
     }
 
-    virtual void SetLayerSet( LSET aLayers )
+    virtual void SetLayerSet( const LSET& aLayers )
     {
         if( aLayers.count() == 1 )
         {

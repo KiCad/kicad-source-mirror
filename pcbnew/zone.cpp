@@ -282,7 +282,7 @@ void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 }
 
 
-void ZONE::SetLayerSet( LSET aLayerSet )
+void ZONE::SetLayerSet( const LSET& aLayerSet )
 {
     if( aLayerSet.count() == 0 )
         return;

@@ -418,7 +418,7 @@ public:
      * Note SetLayerSet() initialize the first and last copper layers connected by the via.
      * So currently SetLayerSet ignore non copper layers
      */
-    virtual void SetLayerSet( LSET aLayers ) override;
+    virtual void SetLayerSet( const LSET& aLayers ) override;
 
     /**
      * For a via m_layer contains the top layer, the other layer is in m_bottomLayer/
