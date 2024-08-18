@@ -734,9 +734,12 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
     if( !m_editPoints || !m_editPoints->GetParent() || !HasPoint() )
         return 0;
 
-    BOARD_COMMIT commit( frame() );
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    BOARD_COMMIT commit( editFrame );
     commit.Stage( m_editPoints->GetParent(), CHT_MODIFY );
 
+    VECTOR2I pt = editFrame->GetOriginTransforms().ToDisplayAbs( m_editedPoint->GetPosition() );
     wxString title;
     wxString msg;
 
@@ -751,11 +754,12 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
         msg = _( "Move Corner" );
     }
 
-    WX_PT_ENTRY_DIALOG dlg( frame(), title, _( "X:" ), _( "Y:" ), m_editedPoint->GetPosition() );
+    WX_PT_ENTRY_DIALOG dlg( editFrame, title, _( "X:" ), _( "Y:" ), pt );
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        m_editedPoint->SetPosition( dlg.GetValue() );
+        pt = editFrame->GetOriginTransforms().FromDisplayAbs( dlg.GetValue() );
+        m_editedPoint->SetPosition( pt );
         updateItem( &commit );
         commit.Push( msg );
     }
