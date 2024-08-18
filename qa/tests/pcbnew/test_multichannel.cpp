@@ -89,7 +89,8 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
         auto ruleData = mtTool->GetData();
 
-        printf( "RA multichannel sheets = %d\n", (int) ruleData->m_areas.size() );
+        BOOST_TEST_MESSAGE( wxString::Format( "RA multichannel sheets = %d",
+                                              static_cast<int>( ruleData->m_areas.size() ) ) );
 
         BOOST_CHECK_EQUAL( ruleData->m_areas.size(), 72 );
 
@@ -107,7 +108,7 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
             }
         }
 
-        printf( "Autogenerating %d RAs\n", cnt );
+        BOOST_TEST_MESSAGE( wxString::Format( "Autogenerating %d RAs", cnt ) );
 
         TOOL_EVENT dummyEvent;
 
@@ -116,11 +117,12 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
         int n_areas_io = 0, n_areas_pp = 0, n_areas_other = 0;
 
-        printf( "Found %d RAs after commit\n", (int) ruleData->m_areas.size() );
+        BOOST_TEST_MESSAGE( wxString::Format( "Found %d RAs after commit",
+                                              static_cast<int>(ruleData->m_areas.size() ) ) );
 
         for( const RULE_AREA& ra : ruleData->m_areas )
         {
-            printf( "SN '%s'\n", ra.m_ruleName.c_str().AsChar() );
+            BOOST_TEST_MESSAGE( wxString::Format( "SN '%s'", ra.m_ruleName ) );
 
             if( ra.m_ruleName.Contains( wxT( "io_drivers_fp" ) ) )
             {
@@ -138,7 +140,8 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
             }
         }
 
-        printf( "IO areas=%d, PP areas=%d, others=%d\n", n_areas_io, n_areas_pp, n_areas_other );
+        BOOST_TEST_MESSAGE( wxString::Format( "IO areas=%d, PP areas=%d, others=%d",
+                                              n_areas_io, n_areas_pp, n_areas_other ) );
 
         BOOST_CHECK_EQUAL( n_areas_io, 16 );
         BOOST_CHECK_EQUAL( n_areas_pp, 16 );
@@ -154,7 +157,7 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                 if( !refArea.m_ruleName.Contains( ruleName ) )
                     continue;
 
-                printf( "REF AREA: '%s'\n", refArea.m_ruleName.c_str().AsChar() );
+                BOOST_TEST_MESSAGE( wxString::Format( "REF AREA: '%s'", refArea.m_ruleName ) );
 
                 for( const RULE_AREA& targetArea : ruleData->m_areas )
                 {
@@ -173,16 +176,18 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                     CONNECTION_GRAPH::STATUS status =
                         cgRef->FindIsomorphism( cgTarget.get(), result );
 
-                    printf( "topo match: '%s' [%d] -> '%s' [%d] result %d\n",
+                    BOOST_TEST_MESSAGE( wxString::Format(
+                            "topo match: '%s' [%d] -> '%s' [%d] result %d",
                             refArea.m_ruleName.c_str().AsChar(),
                             static_cast<int>( refArea.m_raFootprints.size() ),
                             targetArea.m_ruleName.c_str().AsChar(),
-                            static_cast<int>( targetArea.m_raFootprints.size() ), status );
+                            static_cast<int>( targetArea.m_raFootprints.size() ), status ) );
 
                     for( const auto& iter : result )
                     {
-                        printf( "%s : %s\n", iter.second->GetReference().c_str().AsChar(),
-                                iter.first->GetReference().c_str().AsChar() );
+                        BOOST_TEST_MESSAGE( wxString::Format( "%s : %s",
+                                                              iter.second->GetReference(),
+                                                              iter.first->GetReference() ) );
                     }
 
                     BOOST_CHECK_EQUAL( status, TMATCH::CONNECTION_GRAPH::ST_OK );
@@ -204,7 +209,7 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
             BOOST_ASSERT( targetRA != nullptr );
 
-            printf( "Clone to: %s\n", targetRA->m_ruleName.c_str().AsChar() );
+            BOOST_TEST_MESSAGE( wxString::Format( "Clone to: %s", targetRA->m_ruleName ) );
 
             ruleData->m_compatMap[targetRA].m_doCopy = true;
         }

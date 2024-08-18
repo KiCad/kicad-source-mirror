@@ -327,10 +327,10 @@ static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 {
     for( const PNS::OBSTACLE& obs : obstacles )
     {
-        printf( "%p [%s] - %p [%s], clearance %d\n",
+        BOOST_TEST_MESSAGE( wxString::Format( "%p [%s] - %p [%s], clearance %d",
                 obs.m_head, obs.m_head->KindStr().c_str(),
                 obs.m_item, obs.m_item->KindStr().c_str(),
-                obs.m_clearance );
+                obs.m_clearance ) );
     }
 }
 
