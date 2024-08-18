@@ -186,7 +186,6 @@ TOOL_ACTION ACTIONS::undo( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'Z' )
         .LegacyHotkeyName( "Undo" )
         .FriendlyName( _( "Undo" ) )
-        .Tooltip( _( "Undo last edit" ) )
         .Icon( BITMAPS::undo ) );
 
 TOOL_ACTION ACTIONS::redo( TOOL_ACTION_ARGS()
@@ -199,7 +198,6 @@ TOOL_ACTION ACTIONS::redo( TOOL_ACTION_ARGS()
 #endif
         .LegacyHotkeyName( "Redo" )
         .FriendlyName( _( "Redo" ) )
-        .Tooltip( _( "Redo last edit" ) )
         .Icon( BITMAPS::redo ) );
 
 // The following actions need to have a hard-coded UI ID using a wx-specific ID
@@ -279,7 +277,7 @@ TOOL_ACTION ACTIONS::doDelete( TOOL_ACTION_ARGS()
 #endif
         .LegacyHotkeyName( "Delete Item" )
         .FriendlyName( _( "Delete" ) )
-        .Tooltip( _( "Deletes selected item(s)" ) )
+        .Tooltip( _( "Delete selected item(s)" ) )  // differentiation from deleteTool, below
         .Icon( BITMAPS::trash )
         .Parameter( ACTIONS::REMOVE_FLAGS::NORMAL ) );
 
@@ -434,7 +432,6 @@ TOOL_ACTION ACTIONS::find( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'F' )
         .LegacyHotkeyName( "Find" )
         .FriendlyName( _( "Find" ) )
-        .Tooltip( _( "Find text" ) )
         .Icon( BITMAPS::find ) );
 
 TOOL_ACTION ACTIONS::findAndReplace( TOOL_ACTION_ARGS()
@@ -443,7 +440,6 @@ TOOL_ACTION ACTIONS::findAndReplace( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + MD_ALT + 'F' )
         .LegacyHotkeyName( "Find and Replace" )
         .FriendlyName( _( "Find and Replace" ) )
-        .Tooltip( _( "Find and replace text" ) )
         .Icon( BITMAPS::find_replace ) );
 
 TOOL_ACTION ACTIONS::findNext( TOOL_ACTION_ARGS()
@@ -452,7 +448,6 @@ TOOL_ACTION ACTIONS::findNext( TOOL_ACTION_ARGS()
         .DefaultHotkey( WXK_F3 )
         .LegacyHotkeyName( "Find Next" )
         .FriendlyName( _( "Find Next" ) )
-        .Tooltip( _( "Find next match" ) )
         .Icon( BITMAPS::find ) );
 
 TOOL_ACTION ACTIONS::findPrevious( TOOL_ACTION_ARGS()
@@ -461,7 +456,6 @@ TOOL_ACTION ACTIONS::findPrevious( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_SHIFT + static_cast<int>( WXK_F3 ) )
         .LegacyHotkeyName( "Find Previous" )
         .FriendlyName( _( "Find Previous" ) )
-        .Tooltip( _( "Find previous match" ) )
         .Icon( BITMAPS::find ) );
 
 TOOL_ACTION ACTIONS::findNextMarker( TOOL_ACTION_ARGS()
@@ -476,14 +470,12 @@ TOOL_ACTION ACTIONS::replaceAndFindNext( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.replaceAndFindNext" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Replace and Find Next" ) )
-        .Tooltip( _( "Replace current match and find next" ) )
         .Icon( BITMAPS::find_replace ) );
 
 TOOL_ACTION ACTIONS::replaceAll( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.replaceAll" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Replace All" ) )
-        .Tooltip( _( "Replace all matches" ) )
         .Icon( BITMAPS::find_replace ) );
 
 TOOL_ACTION ACTIONS::updateFind( TOOL_ACTION_ARGS()
@@ -496,14 +488,12 @@ TOOL_ACTION ACTIONS::prevMarker( TOOL_ACTION_ARGS()
         .Name( "common.Checker.prevMarker" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Previous Marker" ) )
-        .Tooltip( _( "Go to previous marker in Checker window" ) )
         .Icon( BITMAPS::marker_previous ) );
 
 TOOL_ACTION ACTIONS::nextMarker( TOOL_ACTION_ARGS()
         .Name( "common.Checker.nextMarker" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Next Marker" ) )
-        .Tooltip( _( "Go to next marker in Checker window" ) )
         .Icon( BITMAPS::marker_next ) );
 
 TOOL_ACTION ACTIONS::excludeMarker( TOOL_ACTION_ARGS()
@@ -524,7 +514,6 @@ TOOL_ACTION ACTIONS::zoomRedraw( TOOL_ACTION_ARGS()
 #endif
         .LegacyHotkeyName( "Zoom Redraw" )
         .FriendlyName( _( "Refresh" ) )
-        .Tooltip( _( "Refresh" ) )
         .Icon( BITMAPS::refresh ) );
 
 TOOL_ACTION ACTIONS::zoomFitScreen( TOOL_ACTION_ARGS()
@@ -890,7 +879,6 @@ TOOL_ACTION ACTIONS::inchesUnits( TOOL_ACTION_ARGS()
         .Name( "common.Control.imperialUnits" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Inches" ) )
-        .Tooltip( _( "Use inches" ) )
         .Icon( BITMAPS::unit_inch )
         .Flags( AF_NONE )
         .Parameter( EDA_UNITS::INCHES ) );
@@ -899,7 +887,6 @@ TOOL_ACTION ACTIONS::milsUnits( TOOL_ACTION_ARGS()
         .Name( "common.Control.mils" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Mils" ) )
-        .Tooltip( _( "Use mils" ) )
         .Icon( BITMAPS::unit_mil )
         .Flags( AF_NONE )
         .Parameter( EDA_UNITS::MILS ) );
@@ -908,7 +895,6 @@ TOOL_ACTION ACTIONS::millimetersUnits( TOOL_ACTION_ARGS()
         .Name( "common.Control.metricUnits" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Millimeters" ) )
-        .Tooltip( _( "Use millimeters" ) )
         .Icon( BITMAPS::unit_mm )
         .Flags( AF_NONE )
         .Parameter( EDA_UNITS::MILLIMETRES ) );
@@ -1035,7 +1021,6 @@ TOOL_ACTION ACTIONS::showSymbolBrowser( TOOL_ACTION_ARGS()
         .Name( "common.Control.showSymbolBrowser" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Symbol Library Browser" ) )
-        .Tooltip( _( "Browse symbol libraries" ) )
         .Icon( BITMAPS::library_browser )
         .Flags( AF_NONE)
         .Parameter( FRAME_SCH_VIEWER ) );
@@ -1044,7 +1029,7 @@ TOOL_ACTION ACTIONS::showSymbolEditor( TOOL_ACTION_ARGS()
         .Name( "common.Control.showSymbolEditor" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Symbol Editor" ) )
-        .Tooltip( _( "Create, delete and edit symbols" ) )
+        .Tooltip( _( "Create, delete and edit schematic symbols" ) )
         .Icon( BITMAPS::libedit )
         .Flags( AF_NONE )
         .Parameter( FRAME_SCH_SYMBOL_EDITOR ) );
@@ -1053,7 +1038,6 @@ TOOL_ACTION ACTIONS::showFootprintBrowser( TOOL_ACTION_ARGS()
         .Name( "common.Control.showFootprintBrowser" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Footprint Library Browser" ) )
-        .Tooltip( _( "Browse footprint libraries" ) )
         .Icon( BITMAPS::library_browser )
         .Flags( AF_NONE )
         .Parameter( FRAME_FOOTPRINT_VIEWER ) );
@@ -1062,7 +1046,7 @@ TOOL_ACTION ACTIONS::showFootprintEditor( TOOL_ACTION_ARGS()
         .Name( "common.Control.showFootprintEditor" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Footprint Editor" ) )
-        .Tooltip( _( "Create, delete and edit footprints" ) )
+        .Tooltip( _( "Create, delete and edit board footprints" ) )
         .Icon( BITMAPS::module_editor )
         .Flags( AF_NONE )
         .Parameter( FRAME_FOOTPRINT_EDITOR ) );
@@ -1138,7 +1122,6 @@ TOOL_ACTION ACTIONS::about( TOOL_ACTION_ARGS()
         .Name( "common.SuiteControl.about" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "About KiCad" ) )
-        .Tooltip( _( "Open about dialog" ) )
         .UIId( wxID_ABOUT )
         .Icon( BITMAPS::about ) );
 

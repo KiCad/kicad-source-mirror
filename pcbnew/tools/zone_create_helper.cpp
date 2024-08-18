@@ -227,7 +227,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             aZone->HatchBorder();
 
             commit.Add( aZone.get() );
-            commit.Push( _( "Add a zone" ) );
+            commit.Push( _( "Draw Zone" ) );
 
             m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, aZone.release() );
             break;
@@ -249,7 +249,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             poly->SetPolyShape( *aZone->Outline() );
 
             commit.Add( poly );
-            commit.Push( _( "Add Polygon" ) );
+            commit.Push( _( "Draw Polygon" ) );
 
             m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, poly );
             break;

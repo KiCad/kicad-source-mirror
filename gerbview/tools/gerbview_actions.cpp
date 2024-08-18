@@ -74,7 +74,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::toggleLayerManager( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.toggleLayerManager" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Layers Manager" ) )
-        .Tooltip( _( "Show or hide the layer manager" ) )
         .Icon( BITMAPS::layers_manager ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::showDCodes( TOOL_ACTION_ARGS()
@@ -102,21 +101,18 @@ TOOL_ACTION GERBVIEW_ACTIONS::clearLayer( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.clearLayer" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Clear Current Layer..." ) )
-        .Tooltip( _( "Clear the selected graphic layer" ) )
         .Icon( BITMAPS::delete_sheet ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::clearAllLayers( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.clearAllLayers" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Clear All Layers" ) )
-        .Tooltip( _( "Clear all layers. All data will be deleted" ) )
         .Icon( BITMAPS::delete_gerber ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::reloadAllLayers( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.reloadAllLayers" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Reload All Layers" ) )
-        .Tooltip( _( "Reload all layers. All data will be reloaded" ) )
         .Icon( BITMAPS::reload ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( TOOL_ACTION_ARGS()
@@ -173,7 +169,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::moveLayerUp( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( '+' )
         .FriendlyName( _( "Move Layer Up" ) )
-        .Tooltip( _( "Move current layer up" ) )
         .Icon( BITMAPS::up ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::moveLayerDown( TOOL_ACTION_ARGS()
@@ -181,7 +176,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::moveLayerDown( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( '-' )
         .FriendlyName( _( "Move Layer Down" ) )
-        .Tooltip( _( "Move current layer down" ) )
         .Icon( BITMAPS::down ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( TOOL_ACTION_ARGS()
@@ -225,7 +219,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( TOOL_ACTION_ARGS()
         .DefaultHotkey( 'D' )
         .LegacyHotkeyName( "DCodes Display Mode" )
         .FriendlyName( _( "Show DCodes" ) )
-        .Tooltip( _( "Show dcode number" ) )
+        .Tooltip( _( "Show dcode numbers" ) )
         .Icon( BITMAPS::show_dcodenumber ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleForceOpacityMode( TOOL_ACTION_ARGS()

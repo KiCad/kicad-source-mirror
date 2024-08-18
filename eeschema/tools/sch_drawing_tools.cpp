@@ -416,7 +416,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 lwbTool->TrimOverLappingWires( &commit, &m_selectionTool->GetSelection() );
                 lwbTool->AddJunctionsIfNeeded( &commit, &m_selectionTool->GetSelection() );
 
-                commit.Push( _( "Add Symbol" ) );
+                commit.Push( _( "Place Symbol" ) );
 
                 SCH_SYMBOL* nextSymbol = nullptr;
 
@@ -730,7 +730,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 SCH_COMMIT commit( m_toolMgr );
                 commit.Add( image, m_frame->GetScreen() );
-                commit.Push( _( "Add Image" ) );
+                commit.Push( _( "Place Image" ) );
 
                 image = nullptr;
                 m_toolMgr->PostAction( ACTIONS::activatePointEditor );

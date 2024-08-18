@@ -1168,7 +1168,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             else
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-                commit.Push( _( "Place a Footprint" ) );
+                commit.Push( _( "Place Footprint" ) );
                 fp = nullptr;  // to indicate that there is no footprint that we currently modify
                 m_placingFootprint = false;
             }

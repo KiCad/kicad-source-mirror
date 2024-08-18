@@ -297,7 +297,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawRuleArea );
 
     ACTION_MENU* muwaveSubmenu = new ACTION_MENU( false, selTool );
-    muwaveSubmenu->SetTitle( _( "Add Microwave Shape" ) );
+    muwaveSubmenu->SetTitle( _( "Draw Microwave Shapes" ) );
     muwaveSubmenu->SetIcon( BITMAPS::mw_add_line );
     muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateLine );
     muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateGap );
@@ -319,7 +319,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     placeMenu->AppendSeparator();
     ACTION_MENU* dimensionSubmenu = new ACTION_MENU( false, selTool );
-    dimensionSubmenu->SetTitle( _( "Add Dimension" ) );
+    dimensionSubmenu->SetTitle( _( "Draw Dimensions" ) );
     dimensionSubmenu->SetIcon( BITMAPS::add_aligned_dimension );
     dimensionSubmenu->Add( PCB_ACTIONS::drawOrthogonalDimension );
     dimensionSubmenu->Add( PCB_ACTIONS::drawAlignedDimension );

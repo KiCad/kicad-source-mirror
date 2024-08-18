@@ -971,7 +971,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
                 commit.Add( text );
-                commit.Push( _( "Place Text" ) );
+                commit.Push( _( "Draw Text" ) );
 
                 m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, text );
 

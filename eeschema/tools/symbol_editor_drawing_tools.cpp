@@ -288,13 +288,13 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 case SCH_PIN_T:
                     pinTool->PlacePin( static_cast<SCH_PIN*>( item ) );
                     item->ClearEditFlags();
-                    commit.Push( _( "Add Pin" ) );
+                    commit.Push( _( "Place Pin" ) );
                     break;
 
                 case SCH_TEXT_T:
                     symbol->AddDrawItem( static_cast<SCH_TEXT*>( item ) );
                     item->ClearEditFlags();
-                    commit.Push( _( "Add Text" ) );
+                    commit.Push( _( "Draw Text" ) );
                     break;
 
                 default:
