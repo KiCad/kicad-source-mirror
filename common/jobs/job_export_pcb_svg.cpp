@@ -34,6 +34,9 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG( bool aIsCli ) :
     m_pageSizeMode( 0 ),
     m_printMaskLayer(),
     m_sketchPadsOnFabLayers( false ),
+    m_hideDNPFPsOnFabLayers( false ),
+    m_sketchDNPFPsOnFabLayers( true ),
+    m_crossoutDNPFPsOnFabLayers( true ),
     m_drillShapeOption( 2 )
 {
 }

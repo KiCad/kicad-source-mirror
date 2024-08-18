@@ -60,9 +60,7 @@ private:
     void onPlotAllListMoveUp( wxCommandEvent& aEvent );
     void onPlotAllListMoveDown( wxCommandEvent& aEvent );
 
-    void onPlotFPValues( wxCommandEvent& aEvent ) override;
-    void onPlotFPRefs( wxCommandEvent& aEvent ) override;
-    void onPlotFPText( wxCommandEvent& aEvent ) override;
+    void onDNPCheckbox( wxCommandEvent& event ) override;
     void onSketchPads( wxCommandEvent& event ) override;
 
     // other functions

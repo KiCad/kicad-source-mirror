@@ -354,18 +354,22 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 
     // Reference and value have special controls for forcing their plotting
     if( GetPlotReference() && m_layerMask[textLayer]
-        && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
+            && ( textItem->IsVisible() || GetPlotInvisibleText() )
+            && !( aFootprint->IsDNP() && hideDNPItems( textLayer ) ) )
     {
-        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics() );
+        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics(),
+                  aFootprint->IsDNP() && crossoutDNPItems( textLayer ) );
     }
 
     textItem  = &aFootprint->Value();
     textLayer = textItem->GetLayer();
 
     if( GetPlotValue() && m_layerMask[textLayer]
-        && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
+            && ( textItem->IsVisible() || GetPlotInvisibleText() )
+            && !( aFootprint->IsDNP() && hideDNPItems( textLayer ) ) )
     {
-        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics() );
+        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics(),
+                  false );
     }
 
     std::vector<PCB_TEXT*> texts;
@@ -393,20 +397,32 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
             continue;
 
         textLayer = text->GetLayer();
+        bool strikeout = false;
 
         if( textLayer == Edge_Cuts || textLayer >= PCB_LAYER_ID_COUNT )
+            continue;
+
+        if( aFootprint->IsDNP() && hideDNPItems( textLayer ) )
             continue;
 
         if( !m_layerMask[textLayer] || aFootprint->GetPrivateLayers().test( textLayer ) )
             continue;
 
-        if( text->GetText() == wxT( "${REFERENCE}" ) && !GetPlotReference() )
-            continue;
+        if( text->GetText() == wxT( "${REFERENCE}" ) )
+        {
+            if( !GetPlotReference() )
+                continue;
 
-        if( text->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
-            continue;
+            strikeout = aFootprint->IsDNP() && crossoutDNPItems( textLayer );
+        }
 
-        PlotText( text, textLayer, text->IsKnockout(), text->GetFontMetrics() );
+        if( text->GetText() == wxT( "${VALUE}" ) )
+        {
+            if( !GetPlotValue() )
+                continue;
+        }
+
+        PlotText( text, textLayer, text->IsKnockout(), text->GetFontMetrics(), strikeout );
     }
 }
 
@@ -590,10 +606,15 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 {
     for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        if( aFootprint->GetPrivateLayers().test( item->GetLayer() ) )
+        PCB_LAYER_ID itemLayer = item->GetLayer();
+
+        if( aFootprint->GetPrivateLayers().test( itemLayer ) )
             continue;
 
-        if( !m_layerMask[ item->GetLayer() ] )
+        if( aFootprint->IsDNP() && hideDNPItems( itemLayer ) )
+            continue;
+
+        if( !m_layerMask[ itemLayer ] )
             continue;
 
         switch( item->Type() )
@@ -639,7 +660,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 
 #include <font/stroke_font.h>
 void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
-                                 const KIFONT::METRICS& aFontMetrics )
+                                 const KIFONT::METRICS& aFontMetrics, bool aStrikeout )
 {
     KIFONT::FONT* font = aText->GetFont();
 
@@ -678,6 +699,26 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 
     m_plotter->SetCurrentLineWidth( attrs.m_StrokeWidth );
 
+    auto strikeoutText =
+            [&]( const PCB_TEXT* text )
+            {
+                SHAPE_POLY_SET  textPoly;
+
+                text->TransformTextToPolySet( textPoly, 0, ARC_LOW_DEF, ERROR_INSIDE );
+                textPoly.Rotate( -text->GetDrawRotation(), text->GetDrawPos() );
+
+                BOX2I    rect = textPoly.BBox();
+                VECTOR2I start( rect.GetLeft() - attrs.m_StrokeWidth,
+                                ( rect.GetTop() + rect.GetBottom() ) / 2 );
+                VECTOR2I end( rect.GetRight() + attrs.m_StrokeWidth,
+                              ( rect.GetTop() + rect.GetBottom() ) / 2 );
+
+                RotatePoint( start, text->GetDrawPos(), text->GetDrawRotation() );
+                RotatePoint( end, text->GetDrawPos(), text->GetDrawRotation() );
+
+                m_plotter->ThickSegment( start, end, attrs.m_StrokeWidth, FILLED, nullptr );
+            };
+
     if( aIsKnockout )
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aText );
@@ -697,17 +738,24 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
         wxStringSplit( shownText, strings_list, '\n' );
         positions.reserve(  strings_list.Count() );
 
-        aText->GetLinePositions( positions, strings_list.Count() );
+        aText->GetLinePositions( positions, (int) strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->PlotText( positions[ii], color, txt, attrs, font, aFontMetrics, &gbr_metadata );
+            m_plotter->PlotText( positions[ii], color, txt, attrs, font, aFontMetrics,
+                                 &gbr_metadata );
         }
+
+        if( aStrikeout && strings_list.Count() == 1 )
+            strikeoutText( static_cast<const PCB_TEXT*>( aText ) );
     }
     else
     {
         m_plotter->PlotText( pos, color, shownText, attrs, font, aFontMetrics, &gbr_metadata );
+
+        if( aStrikeout )
+            strikeoutText( static_cast<const PCB_TEXT*>( aText ) );
     }
 }
 
@@ -779,9 +827,9 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     if( !m_layerMask[aShape->GetLayer()] )
         return;
 
-    bool       sketch = GetPlotMode() == SKETCH;
-    int        thickness = aShape->GetWidth();
-    LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
+    OUTLINE_MODE plotMode = GetPlotMode();
+    int          thickness = aShape->GetWidth();
+    LINE_STYLE   lineStyle = aShape->GetStroke().GetLineStyle();
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
@@ -792,6 +840,12 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     {
         gbr_metadata.SetCmpReference( parentFP->GetReference() );
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
+    }
+
+    if( parentFP && parentFP->IsDNP() && GetSketchDNPFPsOnFabLayers() )
+    {
+        if( aShape->GetLayer() == F_Fab || aShape->GetLayer() == B_Fab )
+            plotMode = SKETCH;
     }
 
     if( aShape->GetLayer() == Edge_Cuts )
@@ -826,7 +880,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         switch( aShape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, GetPlotMode(),
+            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, plotMode,
                                      &gbr_metadata );
             break;
 
@@ -834,12 +888,12 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             if( aShape->IsFilled() )
             {
                 m_plotter->FilledCircle( aShape->GetStart(), aShape->GetRadius() * 2 + thickness,
-                                         GetPlotMode(), &gbr_metadata );
+                                         plotMode, &gbr_metadata );
             }
             else
             {
                 m_plotter->ThickCircle( aShape->GetStart(), aShape->GetRadius() * 2, thickness,
-                                        GetPlotMode(), &gbr_metadata );
+                                        plotMode, &gbr_metadata );
             }
 
             break;
@@ -851,11 +905,11 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
                 m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
-                                        GetPlotMode(), &gbr_metadata );
+                                        plotMode, &gbr_metadata );
             }
             else
             {
-                m_plotter->ThickArc( *aShape, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickArc( *aShape, plotMode, &gbr_metadata );
             }
 
             break;
@@ -869,13 +923,12 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         case SHAPE_T::POLY:
             if( aShape->IsPolyShapeValid() )
             {
-                if( sketch )
+                if( plotMode == SKETCH )
                 {
                     for( auto it = aShape->GetPolyShape().CIterateSegments( 0 ); it; it++ )
                     {
-                        auto seg = it.Get();
-                        m_plotter->ThickSegment( seg.A, seg.B, thickness, GetPlotMode(),
-                                                 &gbr_metadata );
+                        const SEG& seg = it.Get();
+                        m_plotter->ThickSegment( seg.A, seg.B, thickness, SKETCH, &gbr_metadata );
                     }
                 }
                 else
@@ -902,8 +955,8 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                         // (as region for Gerber plotter to manage attributes)
                         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                         {
-                            static_cast<GERBER_PLOTTER*>( m_plotter )->
-                                        PlotPolyAsRegion( poly, fill, thickness, &gbr_metadata );
+                            GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
+                            gbr_plotter->PlotPolyAsRegion( poly, fill, thickness, &gbr_metadata );
                         }
                         else
                         {
@@ -919,15 +972,14 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         {
             std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-            if( sketch )
+            if( plotMode == SKETCH )
             {
-                m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
-                m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
-                m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
-                m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickSegment( pts[0], pts[1], thickness, SKETCH, &gbr_metadata );
+                m_plotter->ThickSegment( pts[1], pts[2], thickness, SKETCH, &gbr_metadata );
+                m_plotter->ThickSegment( pts[2], pts[3], thickness, SKETCH, &gbr_metadata );
+                m_plotter->ThickSegment( pts[3], pts[0], thickness, SKETCH, &gbr_metadata );
             }
-
-            if( !sketch )
+            else
             {
                 SHAPE_LINE_CHAIN poly;
 
@@ -940,8 +992,8 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
                 if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                 {
-                    static_cast<GERBER_PLOTTER*>( m_plotter )->
-                                PlotPolyAsRegion( poly, fill_mode, thickness, &gbr_metadata );
+                    GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
+                    gbr_plotter->PlotPolyAsRegion( poly, fill_mode, thickness, &gbr_metadata );
                 }
                 else
                 {
@@ -965,7 +1017,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             STROKE_PARAMS::Stroke( shape, lineStyle, thickness, m_plotter->RenderSettings(),
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
-                                       m_plotter->ThickSegment( a, b, thickness, GetPlotMode(),
+                                       m_plotter->ThickSegment( a, b, thickness, plotMode,
                                                                 &gbr_metadata );
                                    } );
         }

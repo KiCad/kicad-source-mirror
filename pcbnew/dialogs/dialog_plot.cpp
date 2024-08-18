@@ -323,6 +323,21 @@ void DIALOG_PLOT::init_Dialog()
     m_plotPadNumbers->SetValue( m_plotOpts.GetPlotPadNumbers() );
     m_plotPadNumbers->Enable( m_plotOpts.GetSketchPadsOnFabLayers() );
 
+    m_plotDNP->SetValue( m_plotOpts.GetHideDNPFPsOnFabLayers()
+                            || m_plotOpts.GetSketchDNPFPsOnFabLayers()
+                            || m_plotOpts.GetCrossoutDNPFPsOnFabLayers() );
+
+    if( m_plotDNP->GetValue() )
+    {
+        if( m_plotOpts.GetHideDNPFPsOnFabLayers() )
+            m_hideDNP->SetValue( true );
+        else
+            m_crossoutDNP->SetValue( true );
+    }
+
+    m_hideDNP->Enable( m_plotDNP->GetValue() );
+    m_crossoutDNP->Enable( m_plotDNP->GetValue() );
+
     // Option to tent vias
     m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
 
@@ -332,10 +347,7 @@ void DIALOG_PLOT::init_Dialog()
     // Option to plot page references:
     m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
 
-    // Options to plot texts on footprints
-    m_plotFootprintValues->SetValue( m_plotOpts.GetPlotValue() );
-    m_plotFootprintRefs->SetValue( m_plotOpts.GetPlotReference() );
-    m_plotFootprintText->SetValue( m_plotOpts.GetPlotFPText() );
+    // Option to force ploting of hidden text in footprints
     m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
 
     // Options to plot pads and vias holes
@@ -895,10 +907,13 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
     tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );
     tempOptions.SetPlotPadNumbers( m_plotPadNumbers->GetValue() );
+    tempOptions.SetHideDNPFPsOnFabLayers( m_plotDNP->GetValue()
+                                            && m_hideDNP->GetValue() );
+    tempOptions.SetSketchDNPFPsOnFabLayers( m_plotDNP->GetValue()
+                                            && m_crossoutDNP->GetValue() );
+    tempOptions.SetCrossoutDNPFPsOnFabLayers( m_plotDNP->GetValue()
+                                            && m_crossoutDNP->GetValue() );
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
-    tempOptions.SetPlotValue( m_plotFootprintValues->GetValue() );
-    tempOptions.SetPlotReference( m_plotFootprintRefs->GetValue() );
-    tempOptions.SetPlotFPText( m_plotFootprintText->GetValue() );
     tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
 
@@ -1332,28 +1347,12 @@ void DIALOG_PLOT::onPlotAllListMoveDown( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_PLOT::onPlotFPRefs( wxCommandEvent& aEvent )
+void DIALOG_PLOT::onDNPCheckbox( wxCommandEvent& aEvent )
 {
-    if( aEvent.IsChecked() )
-        m_plotFootprintText->SetValue( true );
+    m_hideDNP->Enable( aEvent.IsChecked() );
+    m_crossoutDNP->Enable( aEvent.IsChecked() );
 }
 
-
-void DIALOG_PLOT::onPlotFPValues( wxCommandEvent& aEvent )
-{
-    if( aEvent.IsChecked() )
-        m_plotFootprintText->SetValue( true );
-}
-
-
-void DIALOG_PLOT::onPlotFPText( wxCommandEvent& aEvent )
-{
-    if( !aEvent.IsChecked() )
-    {
-        m_plotFootprintRefs->SetValue( false );
-        m_plotFootprintValues->SetValue( false );
-    }
-}
 
 void DIALOG_PLOT::onSketchPads( wxCommandEvent& aEvent )
 {

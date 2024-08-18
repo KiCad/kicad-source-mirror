@@ -1,4 +1,5 @@
 creategerberjobfile
+crossoutdnponfab
 dashed_line_dash_ratio
 dashed_line_gap_ratio
 disableapertmacros
@@ -9,6 +10,7 @@ dxfusepcbnewfont
 excludeedgelayer
 false
 gerberprecision
+hidednponfab
 hpglpendiameter
 hpglpennumber
 hpglpenoverlay
@@ -36,6 +38,7 @@ pscolor
 psnegative
 scaleselection
 sketchpadsonfab
+sketchdnponfab
 subtractmaskfromsilk
 svgprecision
 svguseinch

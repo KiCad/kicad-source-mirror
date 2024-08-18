@@ -41,6 +41,10 @@ public:
 
     bool m_blackAndWhite;
     bool m_sketchPadsOnFabLayers;
+    bool m_hideDNPFPsOnFabLayers;
+    bool m_sketchDNPFPsOnFabLayers;
+    bool m_crossoutDNPFPsOnFabLayers;
+
     LSEQ m_printMaskLayer;
 };
 

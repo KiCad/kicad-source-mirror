@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,6 +31,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/checklst.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
+#include <wx/radiobut.h>
 #include <wx/gbsizer.h>
 #include <wx/statbmp.h>
 #include <wx/hyperlink.h>
@@ -40,6 +41,9 @@ class WX_HTML_REPORT_PANEL;
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define ID_ALLOW_PRINT_PAD_ON_SILKSCREEN 1000
+#define ID_MIROR_OPT 1001
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PLOT_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,13 +52,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		enum
-		{
-			ID_PRINT_REF = 1000,
-			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN,
-			ID_MIROR_OPT,
-		};
-
 		wxBoxSizer* m_MainSizer;
 		wxStaticText* m_staticTextPlotFmt;
 		wxChoice* m_plotFormatOpt;
@@ -66,9 +63,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckListBox* m_layerCheckListBox;
 		wxBoxSizer* m_PlotOptionsSizer;
 		wxCheckBox* m_plotSheetRef;
-		wxCheckBox* m_plotFootprintValues;
-		wxCheckBox* m_plotFootprintRefs;
-		wxCheckBox* m_plotFootprintText;
+		wxCheckBox* m_plotDNP;
+		wxRadioButton* m_hideDNP;
+		wxRadioButton* m_crossoutDNP;
 		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_sketchPadsOnFabLayers;
 		wxCheckBox* m_plotPadNumbers;
@@ -138,9 +135,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onPlotFPValues( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onPlotFPRefs( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onPlotFPText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDNPCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSketchPads( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }

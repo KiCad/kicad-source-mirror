@@ -91,7 +91,7 @@ public:
     void PlotPcbTarget( const PCB_TARGET* aMire );
     void PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList );
     void PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
-                   const KIFONT::METRICS& aFontMetrics );
+                   const KIFONT::METRICS& aFontMetrics, bool aStrikeout = false );
     void PlotShape( const PCB_SHAPE* aShape );
     void PlotTableBorders( const PCB_TABLE* aTable );
 
@@ -129,6 +129,16 @@ public:
     COLOR4D getColor( int aLayer ) const;
 
 private:
+    bool hideDNPItems( PCB_LAYER_ID aLayer )
+    {
+        return GetHideDNPFPsOnFabLayers() && ( aLayer == F_Fab || aLayer == B_Fab );
+    }
+
+    bool crossoutDNPItems( PCB_LAYER_ID aLayer )
+    {
+        return GetCrossoutDNPFPsOnFabLayers() && ( aLayer == F_Fab || aLayer == B_Fab );
+    }
+
     /**
      * Helper function to plot a single drill mark.
      *

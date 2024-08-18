@@ -35,6 +35,9 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF( bool aIsCli ) :
         m_plotBorderTitleBlocks( false ),
         m_printMaskLayer(),
         m_sketchPadsOnFabLayers( false ),
+        m_hideDNPFPsOnFabLayers( false ),
+        m_sketchDNPFPsOnFabLayers( true ),
+        m_crossoutDNPFPsOnFabLayers( true ),
         m_drillShapeOption( 2 )
 {
 }

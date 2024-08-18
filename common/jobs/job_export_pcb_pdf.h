@@ -48,6 +48,9 @@ public:
     LSEQ m_printMaskLayer;
 
     bool m_sketchPadsOnFabLayers;
+    bool m_hideDNPFPsOnFabLayers;
+    bool m_sketchDNPFPsOnFabLayers;
+    bool m_crossoutDNPFPsOnFabLayers;
 
     // How holes in pads/vias are plotted:
     // 0 = no hole, 1 = small shape, 2 = actual shape

@@ -34,6 +34,13 @@ namespace CLI
 #define ARG_SKETCH_PADS_ON_FAB_LAYERS "--sketch-pads-on-fab-layers"
 #define ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC "Draw pad outlines and their numbers on front and back fab layers"
 
+#define ARG_HIDE_DNP_FPS_ON_FAB_LAYERS "--hide-DNP-footprints-on-fab-layers"
+#define ARG_HIDE_DNP_FPS_ON_FAB_LAYERS_DESC "Don't plot text & graphics of DNP footprints on fab layers"
+#define ARG_SKETCH_DNP_FPS_ON_FAB_LAYERS "--sketch-DNP-footprints-on-fab-layers"
+#define ARG_SKETCH_DNP_FPS_ON_FAB_LAYERS_DESC "Plot graphics of DNP footprints in sketch mode on fab layers"
+#define ARG_CROSSOUT_DNP_FPS_ON_FAB_LAYERS "--crossout-DNP-footprints-on-fab-layers"
+#define ARG_CROSSOUT_DNP_FPS_ON_FAB_LAYERS_DESC "Plot an 'X' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators"
+
 #define ARG_DRILL_SHAPE_OPTION "--drill-shape-opt"
 #define ARG_DRILL_SHAPE_OPTION_DESC "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual shape)"
 

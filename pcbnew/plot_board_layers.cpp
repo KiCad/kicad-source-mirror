@@ -571,6 +571,20 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             pad->SetRoundRectRadiusRatio( padCornerRadiusRatio );
         }
 
+        if( footprint->IsDNP()
+                && !itemplotter.GetHideDNPFPsOnFabLayers()
+                && itemplotter.GetCrossoutDNPFPsOnFabLayers()
+                && ( onFrontFab || onBackFab ) )
+        {
+            BOX2I rect = footprint->GetBoundingHull().BBox();
+            int   width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
+
+            aPlotter->ThickSegment( rect.GetOrigin(), rect.GetEnd(), width, FILLED, nullptr );
+            aPlotter->ThickSegment( VECTOR2I( rect.GetLeft(), rect.GetBottom() ),
+                                    VECTOR2I( rect.GetRight(), rect.GetTop() ),
+                                    width, FILLED, nullptr );
+        }
+
         aPlotter->EndBlock( nullptr );
     }
 

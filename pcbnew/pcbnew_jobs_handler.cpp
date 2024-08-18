@@ -423,6 +423,9 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
     svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
     svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
+    svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
+    svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
+    svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
     svgPlotOptions.m_drillShapeOption = aSvgJob->m_drillShapeOption;
 
     if( aJob->IsCli() )
@@ -565,6 +568,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         plotOpts.SetSketchPadsOnFabLayers( true );
         plotOpts.SetPlotPadNumbers( true );
     }
+
+    plotOpts.SetHideDNPFPsOnFabLayers( aPdfJob->m_hideDNPFPsOnFabLayers );
+    plotOpts.SetSketchDNPFPsOnFabLayers( aPdfJob->m_sketchDNPFPsOnFabLayers );
+    plotOpts.SetCrossoutDNPFPsOnFabLayers( aPdfJob->m_crossoutDNPFPsOnFabLayers );
 
     switch( aPdfJob->m_drillShapeOption )
     {
@@ -1245,6 +1252,9 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     svgPlotOptions.m_pageSizeMode = 2; // board bounding box
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
     svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
+    svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
+    svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
+    svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
     svgPlotOptions.m_plotFrame = false;
 
     if( !EXPORT_SVG::Plot( brd.get(), svgPlotOptions ) )

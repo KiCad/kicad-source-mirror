@@ -117,6 +117,9 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotFPText                 = true;
     m_plotInvisibleText          = false;
     m_sketchPadsOnFabLayers      = false;
+    m_hideDNPFPsOnFabLayers      = false;
+    m_sketchDNPFPsOnFabLayers    = true;
+    m_crossoutDNPFPsOnFabLayers  = true;
     m_plotPadNumbers             = false;
     m_subtractMaskFromSilk       = false;
     m_format                     = PLOT_FORMAT::GERBER;
@@ -140,15 +143,15 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter
-    m_skipNPTH_Pads              = false;
+    m_skipNPTH_Pads                 = false;
 
     // line width to plot items in outline mode.
     m_sketchPadLineWidth         = pcbIUScale.mmToIU( 0.1 );
 
-    m_default_colors = std::make_shared<COLOR_SETTINGS>();
-    m_colors         = m_default_colors.get();
+    m_default_colors             = std::make_shared<COLOR_SETTINGS>();
+    m_colors                     = m_default_colors.get();
 
-    m_blackAndWhite = true;
+    m_blackAndWhite              = true;
 }
 
 
@@ -240,12 +243,12 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, getTokenName( T_psa4output ),
                               m_A4Output );
 
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotreference", m_plotReference );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotvalue", m_plotValue );
-    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotfptext", m_plotFPText );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotinvisibletext", m_plotInvisibleText );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchpadsonfab", m_sketchPadsOnFabLayers );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "plotpadnumbers", m_plotPadNumbers );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "hidednponfab", m_hideDNPFPsOnFabLayers );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "sketchdnponfab", m_sketchDNPFPsOnFabLayers );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "crossoutdnponfab", m_crossoutDNPFPsOnFabLayers );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "subtractmaskfromsilk", m_subtractMaskFromSilk );
     aFormatter->Print( aNestLevel+1, "(outputformat %d)\n", static_cast<int>( m_format ) );
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, "mirror", m_mirror );
@@ -354,6 +357,15 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_plotPadNumbers != aPcbPlotParams.m_plotPadNumbers )
+        return false;
+
+    if( m_hideDNPFPsOnFabLayers != aPcbPlotParams.m_hideDNPFPsOnFabLayers )
+        return false;
+
+    if( m_sketchDNPFPsOnFabLayers != aPcbPlotParams.m_sketchDNPFPsOnFabLayers )
+        return false;
+
+    if( m_crossoutDNPFPsOnFabLayers != aPcbPlotParams.m_crossoutDNPFPsOnFabLayers )
         return false;
 
     if( m_subtractMaskFromSilk != aPcbPlotParams.m_subtractMaskFromSilk )
@@ -607,18 +619,6 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_negative = parseBool();
             break;
 
-        case T_plotreference:
-            aPcbPlotParams->m_plotReference = parseBool();
-            break;
-
-        case T_plotfptext:
-            aPcbPlotParams->m_plotFPText = parseBool();
-            break;
-
-        case T_plotvalue:
-            aPcbPlotParams->m_plotValue = parseBool();
-            break;
-
         case T_plotinvisibletext:
             aPcbPlotParams->m_plotInvisibleText = parseBool();
             break;
@@ -629,6 +629,18 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_plotpadnumbers:
             aPcbPlotParams->m_plotPadNumbers = parseBool();
+            break;
+
+        case T_hidednponfab:
+            aPcbPlotParams->m_hideDNPFPsOnFabLayers = parseBool();
+            break;
+
+        case T_sketchdnponfab:
+            aPcbPlotParams->m_sketchDNPFPsOnFabLayers = parseBool();
+            break;
+
+        case T_crossoutdnponfab:
+            aPcbPlotParams->m_crossoutDNPFPsOnFabLayers = parseBool();
             break;
 
         case T_subtractmaskfromsilk:

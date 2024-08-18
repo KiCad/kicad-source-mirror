@@ -104,6 +104,13 @@ public:
     void        SetSketchPadLineWidth( int aWidth ) { m_sketchPadLineWidth = aWidth; }
     int         GetSketchPadLineWidth() const { return m_sketchPadLineWidth; }
 
+    void        SetHideDNPFPsOnFabLayers( bool aFlag ) { m_hideDNPFPsOnFabLayers = aFlag; }
+    bool        GetHideDNPFPsOnFabLayers() const { return m_hideDNPFPsOnFabLayers; }
+    void        SetSketchDNPFPsOnFabLayers( bool aFlag ) { m_sketchDNPFPsOnFabLayers = aFlag; }
+    bool        GetSketchDNPFPsOnFabLayers() const { return m_sketchDNPFPsOnFabLayers; }
+    void        SetCrossoutDNPFPsOnFabLayers( bool aFlag ) { m_crossoutDNPFPsOnFabLayers = aFlag; }
+    bool        GetCrossoutDNPFPsOnFabLayers() const { return m_crossoutDNPFPsOnFabLayers; }
+
     void        SetPlotInvisibleText( bool aFlag ) { m_plotInvisibleText = aFlag; }
     bool        GetPlotInvisibleText() const { return m_plotInvisibleText; }
     void        SetPlotValue( bool aFlag ) { m_plotValue = aFlag; }
@@ -270,6 +277,10 @@ private:
 
     bool       m_sketchPadsOnFabLayers; ///< Plots pads outlines on fab layers
     int        m_sketchPadLineWidth;
+
+    bool       m_hideDNPFPsOnFabLayers;
+    bool       m_sketchDNPFPsOnFabLayers;
+    bool       m_crossoutDNPFPsOnFabLayers;
 
     double     m_fineScaleAdjustX;      ///< Compensation for printer scale errors (and therefore
     double     m_fineScaleAdjustY;      ///<   expected to be very near 1.0).  Only X and Y
