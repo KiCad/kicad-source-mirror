@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +36,7 @@
 
 struct MULTICHANNEL_TEST_FIXTURE
 {
-    MULTICHANNEL_TEST_FIXTURE() :
-            m_settingsManager( true /* headless */ )
-    { }
+    MULTICHANNEL_TEST_FIXTURE() : m_settingsManager( true /* headless */ ) {}
 
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
@@ -47,8 +45,8 @@ struct MULTICHANNEL_TEST_FIXTURE
 class MOCK_TOOLS_HOLDER : public TOOLS_HOLDER
 {
 public:
-    MOCK_TOOLS_HOLDER() {};
-    ~MOCK_TOOLS_HOLDER() {};
+     MOCK_TOOLS_HOLDER(){};
+    ~MOCK_TOOLS_HOLDER(){};
 
     virtual wxWindow* GetToolCanvas() const override { return nullptr; }
 };
@@ -57,11 +55,9 @@ BOOST_FIXTURE_TEST_SUITE( MultichannelTool, MULTICHANNEL_TEST_FIXTURE )
 
 RULE_AREA* findRuleAreaByPartialName( MULTICHANNEL_TOOL* aTool, const wxString& aName )
 {
-    auto ruleData = aTool->GetData();
-
-    for( auto& ra : ruleData->m_areas )
+    for( RULE_AREA& ra : aTool->GetData()->m_areas )
     {
-        if( ra.m_ruleName.Contains(( aName ) ) )
+        if( ra.m_ruleName.Contains( ( aName ) ) )
             return &ra;
     }
 
@@ -71,22 +67,20 @@ RULE_AREA* findRuleAreaByPartialName( MULTICHANNEL_TOOL* aTool, const wxString& 
 
 BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE )
 {
-    std::vector<wxString> tests = {
-                                    "vme-wren"
-                                };
+    using TMATCH::CONNECTION_GRAPH;
+
+    std::vector<wxString> tests = { "vme-wren" };
 
     for( const wxString& relPath : tests )
     {
         KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
 
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
-        TOOL_MANAGER toolMgr;
-        MOCK_TOOLS_HOLDER *toolsHolder = new MOCK_TOOLS_HOLDER;
+        TOOL_MANAGER       toolMgr;
+        MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
 
         toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
 
-        MULTICHANNEL_TOOL *mtTool = new MULTICHANNEL_TOOL; // TOOL_MANAGER owns the tools
+        MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL; // TOOL_MANAGER owns the tools
         toolMgr.RegisterTool( mtTool );
 
         //RULE_AREAS_DATA* raData = m_parentTool->GetData();
@@ -95,23 +89,25 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
         auto ruleData = mtTool->GetData();
 
-        printf("RA multichannel sheets = %d\n", (int) ruleData->m_areas.size() );
+        printf( "RA multichannel sheets = %d\n", (int) ruleData->m_areas.size() );
 
         BOOST_CHECK_EQUAL( ruleData->m_areas.size(), 72 );
 
         int cnt = 0;
 
         ruleData->m_replaceExisting = true;
-        for( auto& ra : ruleData->m_areas )
+
+        for( RULE_AREA& ra : ruleData->m_areas )
         {
-            if ( ra.m_sheetName == wxT("io_driver.kicad_sch") || ra.m_sheetName == wxT("pp_driver_2x.kicad_sch") )
+            if( ra.m_sheetName == wxT( "io_driver.kicad_sch" )
+                || ra.m_sheetName == wxT( "pp_driver_2x.kicad_sch" ) )
             {
                 ra.m_generateEnabled = true;
                 cnt++;
             }
         }
 
-        printf("Autogenerating %d RAs\n", cnt );
+        printf( "Autogenerating %d RAs\n", cnt );
 
         TOOL_EVENT dummyEvent;
 
@@ -120,18 +116,18 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
         int n_areas_io = 0, n_areas_pp = 0, n_areas_other = 0;
 
+        printf( "Found %d RAs after commit\n", (int) ruleData->m_areas.size() );
 
-        printf("Found %d RAs after commit\n", (int) ruleData->m_areas.size() );
-
-        for( auto ra : ruleData->m_areas )
+        for( const RULE_AREA& ra : ruleData->m_areas )
         {
-            printf("SN '%s'\n", ra.m_ruleName.c_str().AsChar() );
-            if( ra.m_ruleName.Contains( wxT("io_drivers_fp") ) )
+            printf( "SN '%s'\n", ra.m_ruleName.c_str().AsChar() );
+
+            if( ra.m_ruleName.Contains( wxT( "io_drivers_fp" ) ) )
             {
                 n_areas_io++;
                 BOOST_CHECK_EQUAL( ra.m_raFootprints.size(), 31 );
             }
-            else if( ra.m_ruleName.Contains( wxT("io_drivers_pp") ) )
+            else if( ra.m_ruleName.Contains( wxT( "io_drivers_pp" ) ) )
             {
                 n_areas_pp++;
                 BOOST_CHECK_EQUAL( ra.m_raFootprints.size(), 11 );
@@ -142,24 +138,25 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
             }
         }
 
-        printf("IO areas=%d, PP areas=%d, others=%d\n", n_areas_io, n_areas_pp, n_areas_other );
+        printf( "IO areas=%d, PP areas=%d, others=%d\n", n_areas_io, n_areas_pp, n_areas_other );
 
         BOOST_CHECK_EQUAL( n_areas_io, 16 );
         BOOST_CHECK_EQUAL( n_areas_pp, 16 );
         BOOST_CHECK_EQUAL( n_areas_other, 0 );
 
-        const std::vector<wxString> rulesToTest = { wxT("io_drivers_fp" ), wxT("io_drivers_pp" ) };
+        const std::vector<wxString> rulesToTest = { wxT( "io_drivers_fp" ),
+                                                    wxT( "io_drivers_pp" ) };
 
-        for( auto ruleName : rulesToTest )
+        for( const wxString& ruleName : rulesToTest )
         {
-            for( auto refArea : ruleData->m_areas )
+            for( const RULE_AREA& refArea : ruleData->m_areas )
             {
                 if( !refArea.m_ruleName.Contains( ruleName ) )
                     continue;
 
-                printf("REF AREA: '%s'\n", refArea.m_ruleName.c_str().AsChar() );
+                printf( "REF AREA: '%s'\n", refArea.m_ruleName.c_str().AsChar() );
 
-                for ( auto targetArea : ruleData->m_areas )
+                for( const RULE_AREA& targetArea : ruleData->m_areas )
                 {
                     if( targetArea.m_area == refArea.m_area )
                         continue;
@@ -167,23 +164,25 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                     if( !targetArea.m_ruleName.Contains( ruleName ) )
                         continue;
 
-                    auto cgRef = TMATCH::CONNECTION_GRAPH::BuildFromFootprintSet( refArea.m_raFootprints );
-                    auto cgTarget = TMATCH::CONNECTION_GRAPH::BuildFromFootprintSet( targetArea.m_raFootprints );
+                    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea.m_raFootprints );
+                    auto cgTarget =
+                        CONNECTION_GRAPH::BuildFromFootprintSet( targetArea.m_raFootprints );
 
                     TMATCH::COMPONENT_MATCHES result;
 
-                    auto status = cgRef->FindIsomorphism( cgTarget.get(), result );
+                    CONNECTION_GRAPH::STATUS status =
+                        cgRef->FindIsomorphism( cgTarget.get(), result );
+
                     printf( "topo match: '%s' [%d] -> '%s' [%d] result %d\n",
                             refArea.m_ruleName.c_str().AsChar(),
-                            (int) refArea.m_raFootprints.size(),
+                            static_cast<int>( refArea.m_raFootprints.size() ),
                             targetArea.m_ruleName.c_str().AsChar(),
-                            (int) targetArea.m_raFootprints.size(), status );
+                            static_cast<int>( targetArea.m_raFootprints.size() ), status );
 
                     for( const auto& iter : result )
                     {
-                        printf("%s : %s\n", iter.second->GetReference().c_str().AsChar(),
-                         iter.first->GetReference().c_str().AsChar()
-                         );
+                        printf( "%s : %s\n", iter.second->GetReference().c_str().AsChar(),
+                                iter.first->GetReference().c_str().AsChar() );
                     }
 
                     BOOST_CHECK_EQUAL( status, TMATCH::CONNECTION_GRAPH::ST_OK );
@@ -191,21 +190,23 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
             }
         }
 
-        auto refArea = findRuleAreaByPartialName( mtTool, wxT("io_drivers_fp/bank3/io78/") );
+        auto refArea = findRuleAreaByPartialName( mtTool, wxT( "io_drivers_fp/bank3/io78/" ) );
 
         BOOST_ASSERT( refArea );
 
-        const std::vector<wxString> targetAreaNames ( { wxT("io_drivers_fp/bank2/io78/"), wxT("io_drivers_fp/bank1/io78/"), wxT("io_drivers_fp/bank0/io01/") } );
+        const std::vector<wxString> targetAreaNames( { wxT( "io_drivers_fp/bank2/io78/" ),
+                                                       wxT( "io_drivers_fp/bank1/io78/" ),
+                                                       wxT( "io_drivers_fp/bank0/io01/" ) } );
 
-        for( wxString targetRaName : targetAreaNames )
+        for( const wxString& targetRaName : targetAreaNames )
         {
             auto targetRA = findRuleAreaByPartialName( mtTool, targetRaName );
 
             BOOST_ASSERT( targetRA != nullptr );
 
-            printf("Clone to: %s\n", targetRA->m_ruleName.c_str().AsChar() );
+            printf( "Clone to: %s\n", targetRA->m_ruleName.c_str().AsChar() );
 
-            ruleData->m_compatMap[ targetRA ].m_doCopy = true;
+            ruleData->m_compatMap[targetRA].m_doCopy = true;
         }
 
         int result = mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_area );
