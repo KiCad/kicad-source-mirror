@@ -612,38 +612,24 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
     // Get all the shapes into 'items', then keep only those on layer == Edge_Cuts.
     items.Collect( aBoard, { PCB_SHAPE_T } );
 
-    std::vector<PCB_SHAPE*> segList;
+    std::vector<PCB_SHAPE*> shapeList;
 
     for( int ii = 0; ii < items.GetCount(); ii++ )
     {
         PCB_SHAPE* seg = static_cast<PCB_SHAPE*>( items[ii] );
 
         if( seg->GetLayer() == Edge_Cuts )
-            segList.push_back( seg );
-    }
-
-    for( FOOTPRINT* fp : aBoard->Footprints() )
-    {
-        PCB_TYPE_COLLECTOR fpItems;
-        fpItems.Collect( fp, { PCB_SHAPE_T } );
-
-        for( int ii = 0; ii < fpItems.GetCount(); ii++ )
-        {
-            PCB_SHAPE* fpSeg = static_cast<PCB_SHAPE*>( fpItems[ii] );
-
-            if( fpSeg->GetLayer() == Edge_Cuts )
-                segList.push_back( fpSeg );
-        }
+            shapeList.push_back( seg );
     }
 
     // Now Test validity of collected items
-    for( PCB_SHAPE* graphic : segList )
+    for( PCB_SHAPE* shape : shapeList )
     {
-        switch( graphic->GetShape() )
+        switch( shape->GetShape() )
         {
         case SHAPE_T::RECTANGLE:
         {
-            VECTOR2I seg = graphic->GetEnd() - graphic->GetStart();
+            VECTOR2I seg = shape->GetEnd() - shape->GetStart();
             int dim = seg.EuclideanNorm();
 
             if( dim <= min_dist )
@@ -654,7 +640,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
                 {
                     (*aErrorHandler)( wxString::Format( _( "(rectangle has null or very small "
                                                            "size: %d nm)" ), dim ),
-                                      graphic, nullptr, graphic->GetStart() );
+                                      shape, nullptr, shape->GetStart() );
                 }
             }
             break;
@@ -662,7 +648,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
         case SHAPE_T::CIRCLE:
         {
-            int r = graphic->GetRadius();
+            int r = shape->GetRadius();
 
             if( r <= min_dist )
             {
@@ -672,7 +658,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
                 {
                     (*aErrorHandler)( wxString::Format( _( "(circle has null or very small "
                                                            "radius: %d nm)" ), r ),
-                                      graphic, nullptr, graphic->GetStart() );
+                                      shape, nullptr, shape->GetStart() );
                 }
             }
             break;
@@ -680,7 +666,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
         case SHAPE_T::SEGMENT:
         {
-            VECTOR2I seg = graphic->GetEnd() - graphic->GetStart();
+            VECTOR2I seg = shape->GetEnd() - shape->GetStart();
             int dim = seg.EuclideanNorm();
 
             if( dim <= min_dist )
@@ -691,7 +677,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
                 {
                     (*aErrorHandler)( wxString::Format( _( "(segment has null or very small "
                                                            "length: %d nm)" ), dim ),
-                                      graphic, nullptr, graphic->GetStart() );
+                                      shape, nullptr, shape->GetStart() );
                 }
             }
             break;
@@ -701,9 +687,9 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
         {
             // Arc size can be evaluated from the distance between arc middle point and arc ends
             // We do not need a precise value, just an idea of its size
-            VECTOR2I arcMiddle = graphic->GetArcMid();
-            VECTOR2I seg1 = arcMiddle - graphic->GetStart();
-            VECTOR2I seg2 = graphic->GetEnd() - arcMiddle;
+            VECTOR2I arcMiddle = shape->GetArcMid();
+            VECTOR2I seg1 = arcMiddle - shape->GetStart();
+            VECTOR2I seg2 = shape->GetEnd() - arcMiddle;
             int dim = seg1.EuclideanNorm() + seg2.EuclideanNorm();
 
             if( dim <= min_dist )
@@ -714,7 +700,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
                 {
                     (*aErrorHandler)( wxString::Format( _( "(arc has null or very small size: "
                                                            "%d nm)" ), dim ),
-                                      graphic, nullptr, graphic->GetStart() );
+                                      shape, nullptr, shape->GetStart() );
                 }
             }
             break;
@@ -727,7 +713,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
             break;
 
         default:
-            UNIMPLEMENTED_FOR( graphic->SHAPE_T_asString() );
+            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             return false;
         }
     }
