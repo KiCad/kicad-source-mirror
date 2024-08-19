@@ -33,6 +33,7 @@
 
 #include <embedded_files.h>
 #include <kiid.h>
+#include <mmh3_hash.h>
 #include <paths.h>
 
 
@@ -199,7 +200,7 @@ void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, int aNestLevel,
             aOut.Print( aNestLevel + 2, ")\n" ); // Close data
         }
 
-        aOut.Print( aNestLevel + 2, "(checksum \"%s\")\n", file.data_sha.c_str() );
+        aOut.Print( aNestLevel + 2, "(checksum \"%s\")\n", file.data_hash.c_str() );
         aOut.Print( aNestLevel + 1, ")\n" ); // Close file
     }
 
@@ -232,7 +233,9 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::CompressAndEncode( EMBEDDED_FILE& aF
         return RETURN_CODE::OUT_OF_MEMORY;
     }
 
-    picosha2::hash256_hex_string( aFile.decompressedData, aFile.data_sha );
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( aFile.decompressedData );
+    aFile.data_hash = hash.digest().ToString();
 
     return RETURN_CODE::OK;
 }
@@ -285,11 +288,19 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
     }
 
     aFile.decompressedData.resize( decompressedSize );
+    std::string test_hash;
+    std::string new_hash;
 
-    std::string new_sha;
-    picosha2::hash256_hex_string( aFile.decompressedData, new_sha );
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( aFile.decompressedData );
+    new_hash = hash.digest().ToString();
 
-    if( new_sha != aFile.data_sha )
+    if( aFile.data_hash.length() == 64 )
+        picosha2::hash256_hex_string( aFile.decompressedData, test_hash );
+    else
+        test_hash = new_hash;
+
+    if( test_hash != aFile.data_hash )
     {
         wxLogTrace( wxT( "KICAD_EMBED" ),
                     wxT( "%s:%s:%d\n * Checksum error in embedded file '%s'" ),
@@ -297,6 +308,8 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
         aFile.decompressedData.clear();
         return RETURN_CODE::CHECKSUM_ERROR;
     }
+
+    aFile.data_hash = new_hash;
 
     return RETURN_CODE::OK;
 }
@@ -355,7 +368,7 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
                 if( !IsSymbol( token ) )
                     Expecting( "checksum data" );
 
-                file->data_sha = CurStr();
+                file->data_hash = CurStr();
                 NeedRIGHT();
                 break;
 
@@ -434,9 +447,7 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
     {
         if( !file->compressedEncodedData.empty() )
         {
-            EMBEDDED_FILES::DecompressAndDecode( *file );
-
-            if( !file->Validate() )
+            if( EMBEDDED_FILES::DecompressAndDecode( *file ) == EMBEDDED_FILES::RETURN_CODE::CHECKSUM_ERROR )
                 THROW_PARSE_ERROR( "Checksum error in embedded file " + file->name, CurSource(),
                                     CurLine(), CurLineNumber(), CurOffset() );
         }
@@ -469,9 +480,9 @@ wxFileName EMBEDDED_FILES::GetTemporaryFileName( const wxString& aName ) const
 
     wxFileName inputName( aName );
 
-    // Store the cache file name using the data SHA to allow for shared data between
+    // Store the cache file name using the data hash to allow for shared data between
     // multiple projects using the same files as well as deconflicting files with the same name
-    cacheFile.SetName( "kicad_embedded_" + it->second->data_sha );
+    cacheFile.SetName( "kicad_embedded_" + it->second->data_hash );
     cacheFile.SetExt( inputName.GetExt() );
 
     if( cacheFile.FileExists() && cacheFile.IsFileReadable() )

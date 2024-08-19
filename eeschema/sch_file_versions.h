@@ -50,8 +50,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Don't save property ID
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20230620   // ki_description -> Description Field
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20231120   // generator_version; V8 cleanups
-#define  SEXPR_SYMBOL_LIB_FILE_VERSION  20240529   // Embedded Files
-
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240529   // Embedded Files
+#define  SEXPR_SYMBOL_LIB_FILE_VERSION  20240819    // Embedded Files - Update hash algorithm to Murmur3
 /**
  * Schematic file version.
  */
@@ -109,4 +109,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240602  // Sheet attributes
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240620  // Embedded Files
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240716  // Multiple netclass assignments
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20240812  // Netclass color highlighting
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20240812  // Netclass color highlighting
+#define SEXPR_SCHEMATIC_FILE_VERSION 20240819    // Embedded Files - Update hash algorithm to Murmur3

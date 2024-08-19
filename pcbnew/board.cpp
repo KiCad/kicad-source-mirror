@@ -974,7 +974,7 @@ void BOARD::FixupEmbeddedData()
             {
                 embeddedFile->compressedEncodedData = file->compressedEncodedData;
                 embeddedFile->decompressedData = file->decompressedData;
-                embeddedFile->data_sha = file->data_sha;
+                embeddedFile->data_hash = file->data_hash;
                 embeddedFile->is_valid = file->is_valid;
             }
         }

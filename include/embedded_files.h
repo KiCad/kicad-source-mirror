@@ -26,9 +26,10 @@
 #include <wx/filename.h>
 
 #include <embedded_files_lexer.h>
-#include <wildcards_and_files_ext.h>
-#include <richio.h>
+#include <mmh3_hash.h>
 #include <picosha2.h>
+#include <richio.h>
+#include <wildcards_and_files_ext.h>
 
 class EMBEDDED_FILES
 {
@@ -51,10 +52,21 @@ public:
 
         bool Validate()
         {
+            MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+            hash.add( decompressedData );
+
+            is_valid = ( hash.digest().ToString() == data_hash );
+            return is_valid;
+        }
+
+        // This is the old way of validating the file.  It is deprecated and retained only
+        // to validate files that were previously embedded.
+        bool Validate_SHA256()
+        {
             std::string new_sha;
             picosha2::hash256_hex_string( decompressedData, new_sha );
 
-            is_valid = ( new_sha == data_sha );
+            is_valid = ( new_sha == data_hash );
             return is_valid;
         }
 
@@ -68,7 +80,7 @@ public:
         bool              is_valid;
         std::string       compressedEncodedData;
         std::vector<char> decompressedData;
-        std::string       data_sha;
+        std::string       data_hash;
     };
 
     enum class RETURN_CODE : int
@@ -214,6 +226,11 @@ public:
     bool GetAreFontsEmbedded() const
     {
         return m_embedFonts;
+    }
+
+    static uint32_t Seed()
+    {
+        return 0xABBA2345;
     }
 
 private:

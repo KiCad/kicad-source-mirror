@@ -19,7 +19,7 @@
 
 #include <magic_enum.hpp>
 #include <boost/test/unit_test.hpp>
-#include <picosha2.h>
+#include <mmh3_hash.h>
 #include <embedded_files.h>
 
 #include <random>
@@ -34,7 +34,9 @@ BOOST_AUTO_TEST_CASE( CompressAndEncode_OK )
     std::string data = "Hello, World!";
     file.decompressedData.assign(data.begin(), data.end());
 
-    picosha2::hash256_hex_string(file.decompressedData, file.data_sha);
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( file.decompressedData );
+    file.data_hash = hash.digest().ToString();
 
     EMBEDDED_FILES::RETURN_CODE result = EMBEDDED_FILES::CompressAndEncode(file);
     BOOST_CHECK_EQUAL(result, EMBEDDED_FILES::RETURN_CODE::OK);
@@ -47,7 +49,9 @@ BOOST_AUTO_TEST_CASE( DecompressAndDecode_OK )
     std::string data = "Hello, World!";
     file.decompressedData.assign( data.begin(), data.end() );
 
-    picosha2::hash256_hex_string( file.decompressedData, file.data_sha );
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( file.decompressedData );
+    file.data_hash = hash.digest().ToString();
 
     EMBEDDED_FILES::RETURN_CODE result = EMBEDDED_FILES::CompressAndEncode( file );
     BOOST_CHECK_EQUAL( result, EMBEDDED_FILES::RETURN_CODE::OK );
@@ -64,7 +68,9 @@ BOOST_AUTO_TEST_CASE( DecompressAndDecode_OK )
 
     file.decompressedData.assign( data.begin(), data.end() );
 
-    picosha2::hash256_hex_string( file.decompressedData, file.data_sha );
+    hash.reset();
+    hash.add( file.decompressedData );
+    file.data_hash = hash.digest().ToString();
 
     result = EMBEDDED_FILES::CompressAndEncode( file );
     BOOST_CHECK_EQUAL( result, EMBEDDED_FILES::RETURN_CODE::OK );
@@ -80,7 +86,9 @@ BOOST_AUTO_TEST_CASE( DecompressAndDecode_OK )
         data += static_cast<char>( i % 256 );
 
     file.decompressedData.assign( data.begin(), data.end() );
-    picosha2::hash256_hex_string( file.decompressedData, file.data_sha );
+    hash.reset();
+    hash.add( file.decompressedData );
+    file.data_hash = hash.digest().ToString();
 
     result = EMBEDDED_FILES::CompressAndEncode( file );
     BOOST_CHECK_EQUAL( result, EMBEDDED_FILES::RETURN_CODE::OK );
@@ -99,7 +107,9 @@ BOOST_AUTO_TEST_CASE( DecompressAndDecode_OK )
         data += static_cast<char>( rng() % 256 );
 
     file.decompressedData.assign( data.begin(), data.end() );
-    picosha2::hash256_hex_string( file.decompressedData, file.data_sha );
+    hash.reset();
+    hash.add( file.decompressedData );
+    file.data_hash = hash.digest().ToString();
 
     result = EMBEDDED_FILES::CompressAndEncode( file );
     BOOST_CHECK_EQUAL( result, EMBEDDED_FILES::RETURN_CODE::OK );
@@ -120,7 +130,7 @@ BOOST_AUTO_TEST_CASE( DecompressAndDecode_ChecksumError )
     BOOST_CHECK_EQUAL(result, EMBEDDED_FILES::RETURN_CODE::OK);
 
     // Modify the checksum
-    file.data_sha[0] = 'x';
+    file.data_hash[0] = 'x';
 
     result = EMBEDDED_FILES::DecompressAndDecode(file);
     BOOST_CHECK_EQUAL(result, EMBEDDED_FILES::RETURN_CODE::CHECKSUM_ERROR);

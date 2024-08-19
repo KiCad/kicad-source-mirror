@@ -70,6 +70,38 @@ public:
         len = 0;
     }
 
+    FORCE_INLINE void addData( const uint8_t* data, size_t length )
+    {
+        size_t remaining = length;
+
+        while( remaining >= 16 )
+        {
+            memcpy( blocks, data, 16 );
+            hashBlock();
+            data += 16;
+            remaining -= 16;
+            len += 16;
+        }
+
+        if( remaining > 0 )
+        {
+            memcpy( blocks, data, remaining );
+            size_t padding = 4 - ( remaining + 4 ) % 4;
+            memset( reinterpret_cast<uint8_t*>( blocks ) + remaining, 0, padding );
+            len += remaining + padding;
+        }
+    }
+
+    FORCE_INLINE void add( const std::string& input )
+    {
+        addData( reinterpret_cast<const uint8_t*>( input.data() ), input.length() );
+    }
+
+    FORCE_INLINE void add( const std::vector<char>& input )
+    {
+        addData( reinterpret_cast<const uint8_t*>( input.data() ), input.size() );
+    }
+
     FORCE_INLINE void add( int32_t input )
     {
         blocks[( len % 16 ) / 4] = input;
