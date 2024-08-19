@@ -50,7 +50,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromTemplate( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'T' )
         .LegacyHotkeyName( "New Project From Template" )
         .FriendlyName( _( "New Project from Template..." ) )
-        .Tooltip( _( "Create new project based on an existing project" ) )
+        .Tooltip( _( "Create a new project based on an existing project" ) )
         .Icon( BITMAPS::new_project_from_template ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromRepository( TOOL_ACTION_ARGS()
