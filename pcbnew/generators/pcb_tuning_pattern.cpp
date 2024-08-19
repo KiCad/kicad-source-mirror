@@ -265,6 +265,18 @@ public:
         return wxString( _( "Tuning Patterns" ) );
     }
 
+    BITMAPS GetMenuImage() const override
+    {
+        switch( m_tuningMode )
+        {
+        case SINGLE:         return BITMAPS::ps_tune_length;           break;
+        case DIFF_PAIR:      return BITMAPS::ps_diff_pair_tune_length; break;
+        case DIFF_PAIR_SKEW: return BITMAPS::ps_diff_pair_tune_phase;  break;
+        }
+
+        return BITMAPS::unknown;
+    }
+
     static PCB_TUNING_PATTERN* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                           BOARD_CONNECTED_ITEM* aStartItem,
                                           LENGTH_TUNING_MODE aMode );
