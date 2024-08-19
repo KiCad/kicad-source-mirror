@@ -56,7 +56,7 @@ public:
     S3D_CACHE();
     virtual ~S3D_CACHE();
 
-    KICAD_T Type() noexcept override
+    KICAD_T ProjectElementType() noexcept override
     {
         return S3D_CACHE_T;
     }

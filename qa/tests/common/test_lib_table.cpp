@@ -83,7 +83,7 @@ public:
     {
     }
 
-    KICAD_T Type() override // from _ELEM
+    KICAD_T ProjectElementType() override // from _ELEM
     {
         // Doesn't really matter what this is
         return FP_LIB_TABLE_T;

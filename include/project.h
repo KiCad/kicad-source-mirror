@@ -74,7 +74,7 @@ public:
     public:
         virtual ~_ELEM() {}
 
-        virtual KICAD_T Type() = 0;     // Sanity-checking for returned values.
+        virtual KICAD_T ProjectElementType() = 0;     // Sanity-checking for returned values.
     };
 
     PROJECT();
@@ -226,6 +226,7 @@ public:
         ELEM_SCH_SEARCH_STACK,
         ELEM_3DCACHE,
         ELEM_SYMBOL_LIB_TABLE,
+        ELEM_PCB,
 
         ELEM_COUNT
     };

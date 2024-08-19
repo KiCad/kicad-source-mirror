@@ -98,7 +98,7 @@ private:
 class FP_LIB_TABLE : public LIB_TABLE
 {
 public:
-    KICAD_T Type() override { return FP_LIB_TABLE_T; }
+    KICAD_T ProjectElementType() override { return FP_LIB_TABLE_T; }
 
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) override;
 

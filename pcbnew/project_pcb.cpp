@@ -42,7 +42,7 @@ FP_LIB_TABLE* PROJECT_PCB::PcbFootprintLibs( PROJECT* aProject )
     FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM_FPTBL );
 
     // its gotta be NULL or a FP_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->Type() == FP_LIB_TABLE_T );
+    wxASSERT( !tbl || tbl->ProjectElementType() == FP_LIB_TABLE_T );
 
     if( !tbl )
     {

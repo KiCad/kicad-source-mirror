@@ -91,7 +91,7 @@ SYMBOL_LIBS* PROJECT_SCH::SchLibs( PROJECT* aProject )
 {
     SYMBOL_LIBS* libs = (SYMBOL_LIBS*) aProject->GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS );
 
-    wxASSERT( !libs || libs->Type() == SYMBOL_LIBS_T );
+    wxASSERT( !libs || libs->ProjectElementType() == SYMBOL_LIBS_T );
 
     if( !libs )
     {
@@ -139,7 +139,7 @@ SYMBOL_LIB_TABLE* PROJECT_SCH::SchSymbolLibTable( PROJECT* aProject )
     SYMBOL_LIB_TABLE* tbl = (SYMBOL_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE );
 
     // its gotta be NULL or a SYMBOL_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->Type() == SYMBOL_LIB_TABLE_T );
+    wxASSERT( !tbl || tbl->ProjectElementType() == SYMBOL_LIB_TABLE_T );
 
     if( !tbl )
     {

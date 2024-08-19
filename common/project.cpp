@@ -345,7 +345,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
 
     if( tbl )
     {
-        wxASSERT( tbl->Type() == FP_LIB_TABLE_T );
+        wxASSERT( tbl->ProjectElementType() == FP_LIB_TABLE_T );
     }
     else
     {
