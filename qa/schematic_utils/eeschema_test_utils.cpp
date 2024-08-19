@@ -48,7 +48,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     m_schematic.Reset();
     m_manager.LoadProject( pro.GetFullPath() );
 
-    m_manager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
+    m_manager.Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
 
     m_schematic.SetProject( &m_manager.Prj() );
     m_schematic.SetRoot( m_pi->LoadSchematicFile( fn.GetFullPath(), &m_schematic ) );

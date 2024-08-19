@@ -42,7 +42,7 @@
 class KICOMMON_API SEARCH_STACK : public wxPathList, public PROJECT::_ELEM
 {
 public:
-    KICAD_T ProjectElementType() override { return SEARCH_STACK_T; }
+    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::SEARCH_STACK; }
 
 #if defined(DEBUG)
     void Show( const wxString& aPrefix ) const;

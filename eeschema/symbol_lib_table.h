@@ -146,7 +146,7 @@ private:
 class SYMBOL_LIB_TABLE : public LIB_TABLE
 {
 public:
-    KICAD_T ProjectElementType() override { return SYMBOL_LIB_TABLE_T; }
+    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::SYMBOL_LIB_TABLE; }
 
     static const char* PropPowerSymsOnly;
     static const char* PropNonPowerSymsOnly;

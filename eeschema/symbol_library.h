@@ -62,7 +62,7 @@ typedef boost::ptr_vector< SYMBOL_LIB >                     SYMBOL_LIBS_BASE;
 class SYMBOL_LIBS : public SYMBOL_LIBS_BASE, public PROJECT::_ELEM
 {
 public:
-    KICAD_T ProjectElementType() override { return SYMBOL_LIBS_T; }
+    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::SCH_SYMBOL_LIBS; }
 
     SYMBOL_LIBS() {}
 

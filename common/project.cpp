@@ -58,7 +58,7 @@ void PROJECT::ElemsClear()
     // be in the same link image as PROJECT.
     for( unsigned i = 0;  i < arrayDim( m_elems );  ++i )
     {
-        SetElem( ELEM_T( i ), nullptr );
+        SetElem( static_cast<PROJECT::ELEM>( i ), nullptr );
     }
 }
 
@@ -296,23 +296,23 @@ const wxString& PROJECT::GetRString( RSTRING_T aIndex )
 }
 
 
-PROJECT::_ELEM* PROJECT::GetElem( ELEM_T aIndex )
+PROJECT::_ELEM* PROJECT::GetElem( PROJECT::ELEM aIndex )
 {
     // This is virtual, so implement it out of line
-    if( unsigned( aIndex ) < arrayDim( m_elems ) )
-        return m_elems[aIndex];
+    if( static_cast<unsigned>( aIndex ) < arrayDim( m_elems ) )
+        return m_elems[static_cast<unsigned>( aIndex )];
 
     return nullptr;
 }
 
 
-void PROJECT::SetElem( ELEM_T aIndex, _ELEM* aElem )
+void PROJECT::SetElem( PROJECT::ELEM aIndex, _ELEM* aElem )
 {
     // This is virtual, so implement it out of line
-    if( unsigned( aIndex ) < arrayDim( m_elems ) )
+    if( static_cast<unsigned>( aIndex ) < arrayDim( m_elems ) )
     {
-        delete m_elems[aIndex];
-        m_elems[aIndex] = aElem;
+        delete m_elems[static_cast<unsigned>(aIndex)];
+        m_elems[static_cast<unsigned>( aIndex )] = aElem;
     }
 }
 
@@ -341,11 +341,11 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
     // This is a lazy loading function, it loads the project specific table when
     // that table is asked for, not before.
 
-    FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) GetElem( ELEM_FPTBL );
+    FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) GetElem( PROJECT::ELEM::FPTBL );
 
     if( tbl )
     {
-        wxASSERT( tbl->ProjectElementType() == FP_LIB_TABLE_T );
+        wxASSERT( tbl->ProjectElementType() == PROJECT::ELEM::FPTBL );
     }
     else
     {
@@ -359,7 +359,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
             tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_NEW_FOOTPRINT_TABLE );
             tbl->Load( FootprintLibTblName() );
 
-            SetElem( ELEM_FPTBL, tbl );
+            SetElem( PROJECT::ELEM::FPTBL, tbl );
         }
         catch( const IO_ERROR& ioe )
         {

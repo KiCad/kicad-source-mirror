@@ -429,7 +429,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         }
 
         // Reload the symbol library table.
-        m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
+        m_schematic->Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
         PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     }
 

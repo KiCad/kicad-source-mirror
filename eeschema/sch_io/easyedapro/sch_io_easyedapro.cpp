@@ -622,7 +622,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         }
 
         // Relaod the symbol library table.
-        aSchematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+        aSchematic->Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
         PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
     }
 

@@ -39,10 +39,10 @@ FP_LIB_TABLE* PROJECT_PCB::PcbFootprintLibs( PROJECT* aProject )
     // This is a lazy loading function, it loads the project specific table when
     // that table is asked for, not before.
 
-    FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM_FPTBL );
+    FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM::FPTBL );
 
     // its gotta be NULL or a FP_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->ProjectElementType() == FP_LIB_TABLE_T );
+    wxASSERT( !tbl || tbl->ProjectElementType() == PROJECT::ELEM::FPTBL );
 
     if( !tbl )
     {
@@ -51,7 +51,7 @@ FP_LIB_TABLE* PROJECT_PCB::PcbFootprintLibs( PROJECT* aProject )
         // stack this way, all using the same global fallback table.
         tbl = new FP_LIB_TABLE( &GFootprintTable );
 
-        aProject->SetElem( PROJECT::ELEM_FPTBL, tbl );
+        aProject->SetElem( PROJECT::ELEM::FPTBL, tbl );
 
         wxString projectFpLibTableFileName = aProject->FootprintLibTblName();
 
@@ -79,7 +79,7 @@ S3D_CACHE* PROJECT_PCB::Get3DCacheManager( PROJECT* aProject, bool aUpdateProjDi
     std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
 
     // Get the existing cache from the project
-    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM_3DCACHE ) );
+    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM::S3DCACHE ) );
 
     if( !cache )
     {
@@ -93,7 +93,7 @@ S3D_CACHE* PROJECT_PCB::Get3DCacheManager( PROJECT* aProject, bool aUpdateProjDi
         cache->SetProgramBase( &Pgm() );
         cache->Set3DConfigDir( cfgpath.GetFullPath() );
 
-        aProject->SetElem( PROJECT::ELEM_3DCACHE, cache );
+        aProject->SetElem( PROJECT::ELEM::S3DCACHE, cache );
         aUpdateProjDir = true;
     }
 
@@ -115,7 +115,7 @@ void PROJECT_PCB::Cleanup3DCache( PROJECT* aProject )
     std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
 
     // Get the existing cache from the project
-    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM_3DCACHE ) );
+    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( aProject->GetElem( PROJECT::ELEM::S3DCACHE ) );
 
     if( cache )
     {

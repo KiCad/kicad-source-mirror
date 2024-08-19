@@ -62,6 +62,22 @@ class KICOMMON_API PROJECT
 {
 public:
     /**
+     * The set of #_ELEMs that a #PROJECT can hold.
+     */
+    enum class ELEM
+    {
+        FPTBL,
+
+        SCH_SYMBOL_LIBS,
+        SCH_SEARCH_STACK,
+        S3DCACHE,
+        SYMBOL_LIB_TABLE,
+        SEARCH_STACK,
+
+        COUNT
+    };
+
+    /**
      * A #PROJECT can hold stuff it knows nothing about, in the form of _ELEM derivatives.
      *
      * Derive #PROJECT elements from this, it has a virtual destructor, and Elem*() functions
@@ -74,7 +90,7 @@ public:
     public:
         virtual ~_ELEM() {}
 
-        virtual KICAD_T ProjectElementType() = 0;     // Sanity-checking for returned values.
+        virtual PROJECT::ELEM ProjectElementType() = 0; // Sanity-checking for returned values.
     };
 
     PROJECT();
@@ -216,22 +232,6 @@ public:
     virtual void SetRString( RSTRING_T aStringId, const wxString& aString );
 
     /**
-     * The set of #_ELEMs that a #PROJECT can hold.
-     */
-    enum ELEM_T
-    {
-        ELEM_FPTBL,
-
-        ELEM_SCH_SYMBOL_LIBS,
-        ELEM_SCH_SEARCH_STACK,
-        ELEM_3DCACHE,
-        ELEM_SYMBOL_LIB_TABLE,
-        ELEM_PCB,
-
-        ELEM_COUNT
-    };
-
-    /**
      * Get and set the elements for this project.
      *
      * This is a cross module API, therefore the #_ELEM destructor is virtual and
@@ -243,8 +243,8 @@ public:
      *  -#) #PROJECT knows nothing about #_ELEM objects except how to delete them and
      *      set and get pointers to them.
      */
-    virtual  _ELEM*  GetElem( ELEM_T aIndex );
-    virtual  void    SetElem( ELEM_T aIndex, _ELEM* aElem );
+    virtual _ELEM* GetElem( PROJECT::ELEM aIndex );
+    virtual void   SetElem( PROJECT::ELEM aIndex, _ELEM* aElem );
 
     /**
      * Delete all the _ELEMs and set their pointers to NULL.
@@ -338,7 +338,7 @@ private:
     wxString                 m_rstrings[RSTRING_COUNT];
 
     /// @see this::Elem() and enum ELEM_T.
-    _ELEM*                   m_elems[ELEM_COUNT];
+    _ELEM* m_elems[static_cast<unsigned int>( PROJECT::ELEM::COUNT )];
 };
 
 

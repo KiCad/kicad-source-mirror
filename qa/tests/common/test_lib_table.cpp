@@ -83,10 +83,10 @@ public:
     {
     }
 
-    KICAD_T ProjectElementType() override // from _ELEM
+    PROJECT::ELEM ProjectElementType() override // from _ELEM
     {
         // Doesn't really matter what this is
-        return FP_LIB_TABLE_T;
+        return PROJECT::ELEM::FPTBL;
     }
 
 private:

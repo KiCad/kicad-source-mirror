@@ -192,25 +192,25 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         // Don't reload the symbol libraries if we are just launching Eeschema from KiCad again.
         // They are already saved in the kiface project object.
-        if( differentProject || !Prj().GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS ) )
+        if( differentProject || !Prj().GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS ) )
         {
             // load the libraries here, not in SCH_SCREEN::Draw() which is a context
             // that will not tolerate DisplayError() dialog since we're already in an
             // event handler in there.
             // And when a schematic file is loaded, we need these libs to initialize
             // some parameters (links to PART LIB, dangling ends ...)
-            Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
+            Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
             PROJECT_SCH::SchLibs( &Prj() );
         }
     }
     else
     {
         // No legacy symbol libraries including the cache are loaded with the new file format.
-        Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
+        Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
     }
 
     // Load the symbol library table, this will be used forever more.
-    Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
+    Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
     PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     // Load project settings after schematic has been set up with the project link, since this will

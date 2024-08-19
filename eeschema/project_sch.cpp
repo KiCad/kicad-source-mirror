@@ -40,16 +40,16 @@ static void add_search_paths( SEARCH_STACK* aDst, const SEARCH_STACK& aSrc, int 
 
 SEARCH_STACK* PROJECT_SCH::SchSearchS( PROJECT* aProject )
 {
-    SEARCH_STACK* ss = (SEARCH_STACK*) aProject->GetElem( PROJECT::ELEM_SCH_SEARCH_STACK );
+    SEARCH_STACK* ss = (SEARCH_STACK*) aProject->GetElem( PROJECT::ELEM::SCH_SEARCH_STACK );
 
-    wxASSERT( !ss || dynamic_cast<SEARCH_STACK*>( aProject->GetElem( PROJECT::ELEM_SCH_SEARCH_STACK ) ) );
+    wxASSERT( !ss || dynamic_cast<SEARCH_STACK*>( ss ) );
 
     if( !ss )
     {
         ss = new SEARCH_STACK();
 
         // Make PROJECT the new SEARCH_STACK owner.
-        aProject->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, ss );
+        aProject->SetElem( PROJECT::ELEM::SCH_SEARCH_STACK, ss );
 
         // to the empty SEARCH_STACK for SchSearchS(), add project dir as first
         ss->AddPaths( aProject->GetProjectDirectory() );
@@ -89,16 +89,16 @@ SEARCH_STACK* PROJECT_SCH::SchSearchS( PROJECT* aProject )
 
 SYMBOL_LIBS* PROJECT_SCH::SchLibs( PROJECT* aProject )
 {
-    SYMBOL_LIBS* libs = (SYMBOL_LIBS*) aProject->GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS );
+    SYMBOL_LIBS* libs = (SYMBOL_LIBS*) aProject->GetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS );
 
-    wxASSERT( !libs || libs->ProjectElementType() == SYMBOL_LIBS_T );
+    wxASSERT( !libs || libs->ProjectElementType() == PROJECT::ELEM::SCH_SYMBOL_LIBS );
 
     if( !libs )
     {
         libs = new SYMBOL_LIBS();
 
         // Make PROJECT the new SYMBOL_LIBS owner.
-        aProject->SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, libs );
+        aProject->SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, libs );
 
         try
         {
@@ -136,10 +136,11 @@ SYMBOL_LIB_TABLE* PROJECT_SCH::SchSymbolLibTable( PROJECT* aProject )
 
     // This is a lazy loading function, it loads the project specific table when
     // that table is asked for, not before.
-    SYMBOL_LIB_TABLE* tbl = (SYMBOL_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE );
+    SYMBOL_LIB_TABLE* tbl =
+            (SYMBOL_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE );
 
     // its gotta be NULL or a SYMBOL_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->ProjectElementType() == SYMBOL_LIB_TABLE_T );
+    wxASSERT( !tbl || tbl->ProjectElementType() == PROJECT::ELEM::SYMBOL_LIB_TABLE );
 
     if( !tbl )
     {
@@ -148,7 +149,7 @@ SYMBOL_LIB_TABLE* PROJECT_SCH::SchSymbolLibTable( PROJECT* aProject )
         // stack this way, all using the same global fallback table.
         tbl = new SYMBOL_LIB_TABLE( &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
 
-        aProject->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, tbl );
+        aProject->SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, tbl );
 
         wxString prjPath;
 

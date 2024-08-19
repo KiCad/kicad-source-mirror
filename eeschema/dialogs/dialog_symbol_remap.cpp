@@ -130,7 +130,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
         wxRemoveFile( prjSymLibTableFileName.GetFullPath() );
 
     createProjectSymbolLibTable( m_messagePanel->Reporter() );
-    Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
+    Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
     PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
@@ -142,7 +142,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     SYMBOL_LIBS::SetLibNamesAndPaths( &Prj(), paths, libNames );
 
     // Reload the cache symbol library.
-    Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
+    Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
     PROJECT_SCH::SchLibs( &Prj() );
 
     Raise();

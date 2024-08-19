@@ -131,7 +131,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
         }
 
         // Relaod the symbol library table.
-        aSchematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+        aSchematic->Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
         PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
     }
 
