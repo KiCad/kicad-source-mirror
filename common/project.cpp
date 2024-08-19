@@ -27,7 +27,6 @@
 
 #include <pgm_base.h>
 #include <confirm.h>
-#include <core/arraydim.h>
 #include <core/kicad_algo.h>
 #include <fp_lib_table.h>
 #include <string_utils.h>
@@ -48,7 +47,7 @@ PROJECT::PROJECT() :
         m_projectFile( nullptr ),
         m_localSettings( nullptr )
 {
-    memset( m_elems, 0, sizeof( m_elems ) );
+    m_elems.fill( nullptr );
 }
 
 
@@ -56,7 +55,7 @@ void PROJECT::ElemsClear()
 {
     // careful here, this should work, but the virtual destructor may not
     // be in the same link image as PROJECT.
-    for( unsigned i = 0;  i < arrayDim( m_elems );  ++i )
+    for( unsigned i = 0;  i < m_elems.size();  ++i )
     {
         SetElem( static_cast<PROJECT::ELEM>( i ), nullptr );
     }
@@ -270,7 +269,7 @@ void PROJECT::SetRString( RSTRING_T aIndex, const wxString& aString )
 {
     unsigned ndx = unsigned( aIndex );
 
-    if( ndx < arrayDim( m_rstrings ) )
+    if( ndx < m_rstrings.size() )
         m_rstrings[ndx] = aString;
     else
         wxASSERT( 0 );      // bad index
@@ -281,7 +280,7 @@ const wxString& PROJECT::GetRString( RSTRING_T aIndex )
 {
     unsigned ndx = unsigned( aIndex );
 
-    if( ndx < arrayDim( m_rstrings ) )
+    if( ndx < m_rstrings.size() )
     {
         return m_rstrings[ndx];
     }
@@ -299,7 +298,8 @@ const wxString& PROJECT::GetRString( RSTRING_T aIndex )
 PROJECT::_ELEM* PROJECT::GetElem( PROJECT::ELEM aIndex )
 {
     // This is virtual, so implement it out of line
-    if( static_cast<unsigned>( aIndex ) < arrayDim( m_elems ) )
+
+    if( static_cast<unsigned>( aIndex ) < m_elems.size() )
         return m_elems[static_cast<unsigned>( aIndex )];
 
     return nullptr;
@@ -309,7 +309,7 @@ PROJECT::_ELEM* PROJECT::GetElem( PROJECT::ELEM aIndex )
 void PROJECT::SetElem( PROJECT::ELEM aIndex, _ELEM* aElem )
 {
     // This is virtual, so implement it out of line
-    if( static_cast<unsigned>( aIndex ) < arrayDim( m_elems ) )
+    if( static_cast<unsigned>( aIndex ) < m_elems.size() )
     {
         delete m_elems[static_cast<unsigned>(aIndex)];
         m_elems[static_cast<unsigned>( aIndex )] = aElem;

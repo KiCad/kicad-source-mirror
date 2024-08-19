@@ -27,6 +27,7 @@
 /**
  * @file project.h
  */
+#include <array>
 #include <map>
 #include <vector>
 #include <kiid.h>
@@ -335,10 +336,10 @@ private:
     std::map<KIID, wxString> m_sheetNames;
 
     /// @see this::SetRString(), GetRString(), and enum RSTRING_T.
-    wxString                 m_rstrings[RSTRING_COUNT];
+    std::array<wxString,RSTRING_COUNT> m_rstrings;
 
     /// @see this::Elem() and enum ELEM_T.
-    _ELEM* m_elems[static_cast<unsigned int>( PROJECT::ELEM::COUNT )];
+    std::array<_ELEM*,static_cast<unsigned int>( PROJECT::ELEM::COUNT )> m_elems;
 };
 
 
