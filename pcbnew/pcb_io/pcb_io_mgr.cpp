@@ -213,6 +213,7 @@ bool PCB_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     {
         bool bestEfforts = false; // throw on first error
         oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, aOldFileProps );
+        std::map<std::string, UTF8> props { { "skip_cache_validation", "" } };
 
         for ( const wxString& fpName : fpNames )
         {
@@ -221,7 +222,7 @@ bool PCB_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
 
             try
             {
-                kicadPI->FootprintSave( aNewFilePath, fp.get() );
+                kicadPI->FootprintSave( aNewFilePath, fp.get(), &props );
             }
             catch( ... )
             {

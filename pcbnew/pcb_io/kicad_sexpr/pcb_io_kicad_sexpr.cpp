@@ -2876,7 +2876,7 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
     // called for saving into a library path.
     m_ctl = CTL_FOR_LIBRARY;
 
-    validateCache( aLibraryPath );
+    validateCache( aLibraryPath, !aProperties || !aProperties->contains( "skip_cache_validation" ) );
 
     if( !m_cache->IsWritable() )
     {
