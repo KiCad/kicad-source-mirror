@@ -77,7 +77,7 @@ public:
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                   SCH_SHEET*             aAppendToMe = nullptr,
-                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                                  const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     // unimplemented functions. Will trigger a not_implemented IO error.
     //void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL ) override;
@@ -88,15 +88,15 @@ public:
 
     void EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
                              const wxString&        aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                              const wxString&           aLibraryPath,
-                             const STRING_UTF8_MAP*    aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>*    aProperties = nullptr ) override;
 
     LIB_SYMBOL* LoadSymbol( const wxString&        aLibraryPath,
                             const wxString&        aAliasName,
-                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                            const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     //void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
     //                 const PROPERTIES* aProperties = NULL ) override;
@@ -180,7 +180,7 @@ private:
     std::map<wxString,LIB_SYMBOL*> ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
     std::vector<LIB_SYMBOL*> ParseLibComponent( const std::map<wxString, wxString>& aProperties );
 
-    void doEnumerateSymbolLib( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties,
+    void doEnumerateSymbolLib( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties,
                                std::function<void(const wxString&, LIB_SYMBOL*)> aInserter );
 
     void fixupSymbolPinNameNumbers( SYMBOL* aSymbol );
@@ -193,7 +193,7 @@ private:
     bool       m_isIntLib;       // Flag to indicate Integrated Library
 
     IO_RELEASER<SCH_IO>               m_pi;                // Plugin to create KiCad symbol library.
-    std::unique_ptr<STRING_UTF8_MAP>  m_properties;        // Library plugin properties.
+    std::unique_ptr<std::map<std::string, UTF8>>  m_properties;        // Library plugin properties.
 
     std::unique_ptr<TITLE_BLOCK>    m_currentTitleBlock; // Will be assigned at the end of parsing
                                                          // a sheet
@@ -221,7 +221,7 @@ private:
     int m_harnessEntryParent; // used to identify harness connector for harness entry element
 
     // Symbol caching
-    void ensureLoadedLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties );
+    void ensureLoadedLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties );
     long long getLibraryTimestamp( const wxString& aLibraryPath ) const;
 
     static bool isBinaryFile( const wxString& aFileName );

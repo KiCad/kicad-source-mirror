@@ -25,7 +25,6 @@
 #include <sch_io/eagle/sch_io_eagle.h>
 
 #include <locale_io.h>
-#include <string_utf8_map.h>
 
 #include <algorithm>
 #include <memory>
@@ -340,7 +339,7 @@ int SCH_IO_EAGLE::GetModifyHash() const
 
 SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                             SCH_SHEET*             aAppendToMe,
-                                            const STRING_UTF8_MAP* aProperties )
+                                            const std::map<std::string, UTF8>* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
     LOCALE_IO toggle; // toggles on, then off, the C locale.
@@ -403,7 +402,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
 
     m_pi.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-    m_properties = std::make_unique<STRING_UTF8_MAP>();
+    m_properties = std::make_unique<std::map<std::string, UTF8>>();
     ( *m_properties )[SCH_IO_KICAD_LEGACY::PropBuffering] = "";
 
     /// @note No check is being done here to see if the existing symbol library exists so this
@@ -453,7 +452,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
 void SCH_IO_EAGLE::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
                                        const wxString&        aLibraryPath,
-                                       const STRING_UTF8_MAP* aProperties )
+                                       const std::map<std::string, UTF8>* aProperties )
 {
     m_filename = aLibraryPath;
     m_libName = m_filename.GetName();
@@ -472,7 +471,7 @@ void SCH_IO_EAGLE::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
 
 void SCH_IO_EAGLE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                        const wxString&           aLibraryPath,
-                                       const STRING_UTF8_MAP*    aProperties )
+                                       const std::map<std::string, UTF8>*    aProperties )
 {
     m_filename = aLibraryPath;
     m_libName = m_filename.GetName();
@@ -490,7 +489,7 @@ void SCH_IO_EAGLE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO_EAGLE::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                                      const STRING_UTF8_MAP* aProperties )
+                                      const std::map<std::string, UTF8>* aProperties )
 {
     m_filename = aLibraryPath;
     m_libName = m_filename.GetName();

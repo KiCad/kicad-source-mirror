@@ -804,7 +804,7 @@ SYMBOL_LIB_TABLE_RESCUER::SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject, SCHEMATIC
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType ) :
     RESCUER( aProject, aSchematic, aCurrentSheet, aGalBackEndType )
 {
-    m_properties = std::make_unique<STRING_UTF8_MAP>();
+    m_properties = std::make_unique<std::map<std::string, UTF8>>();
 }
 
 

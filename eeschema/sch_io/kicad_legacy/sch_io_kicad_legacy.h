@@ -43,7 +43,6 @@ class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
 class SCH_SYMBOL;
 class SCH_FIELD;
-class STRING_UTF8_MAP;
 class SELECTION;
 class SCH_IO_KICAD_LEGACY_LIB_CACHE;
 class LIB_SYMBOL;
@@ -103,13 +102,13 @@ public:
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                   SCH_SHEET*             aAppendToMe = nullptr,
-                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                                  const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen,
                       int version = EESCHEMA_VERSION );
 
     void SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aScreen, SCHEMATIC* aSchematic,
-                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                            const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void Format( SCH_SHEET* aSheet );
 
@@ -117,22 +116,22 @@ public:
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                              const wxString&   aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                            const std::map<std::string, UTF8>* aProperties = nullptr ) override;
     void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                     const std::map<std::string, UTF8>* aProperties = nullptr ) override;
     void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                       const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                       const std::map<std::string, UTF8>* aProperties = nullptr ) override;
     void CreateLibrary( const wxString& aLibraryPath,
-                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                        const std::map<std::string, UTF8>* aProperties = nullptr ) override;
     bool DeleteLibrary( const wxString& aLibraryPath,
-                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                        const std::map<std::string, UTF8>* aProperties = nullptr ) override;
     void SaveLibrary( const wxString& aLibraryPath,
-                      const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                      const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
@@ -169,9 +168,9 @@ private:
     void saveText( SCH_TEXT* aText );
     void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
 
-    void cacheLib( const wxString& aLibraryFileName, const STRING_UTF8_MAP* aProperties );
-    bool writeDocFile( const STRING_UTF8_MAP* aProperties );
-    bool isBuffering( const STRING_UTF8_MAP* aProperties );
+    void cacheLib( const wxString& aLibraryFileName, const std::map<std::string, UTF8>* aProperties );
+    bool writeDocFile( const std::map<std::string, UTF8>* aProperties );
+    bool isBuffering( const std::map<std::string, UTF8>* aProperties );
 
 protected:
     int                      m_version;          ///< Version of file being loaded.
@@ -194,7 +193,7 @@ protected:
     SCHEMATIC*               m_schematic;
 
     /// initialize PLUGIN like a constructor would.
-    void init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aProperties = nullptr );
+    void init( SCHEMATIC* aSchematic, const std::map<std::string, UTF8>* aProperties = nullptr );
 };
 
 #endif  // SCH_IO_KICAD_LEGACY_H_

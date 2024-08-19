@@ -46,7 +46,6 @@
 #include <json_common.h>
 #include <core/json_serializers.h>
 #include <core/map_helpers.h>
-#include <string_utf8_map.h>
 
 
 struct PCB_IO_EASYEDAPRO::PRJ_DATA
@@ -100,7 +99,7 @@ bool PCB_IO_EASYEDAPRO::CanReadBoard( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                     const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                                     const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
 
@@ -130,9 +129,9 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
 
         wxString pcbToLoad;
 
-        if( m_props && m_props->Exists( "pcb_id" ) )
+        if( m_props && m_props->contains( "pcb_id" ) )
         {
-            pcbToLoad = wxString::FromUTF8( aProperties->at( "pcb_id" ) );
+            pcbToLoad = wxString::FromUTF8( m_props->at( "pcb_id" ) );
         }
         else
         {
@@ -198,7 +197,7 @@ long long PCB_IO_EASYEDAPRO::GetLibraryTimestamp( const wxString& aLibraryPath )
 
 void PCB_IO_EASYEDAPRO::FootprintEnumerate( wxArrayString&  aFootprintNames,
                                             const wxString& aLibraryPath, bool aBestEfforts,
-                                            const STRING_UTF8_MAP* aProperties )
+                                            const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName fname( aLibraryPath );
 
@@ -314,7 +313,7 @@ void PCB_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString&       aProjectPa
 
 FOOTPRINT* PCB_IO_EASYEDAPRO::FootprintLoad( const wxString& aLibraryPath,
                                              const wxString& aFootprintName, bool aKeepUUID,
-                                             const STRING_UTF8_MAP* aProperties )
+                                             const std::map<std::string, UTF8>* aProperties )
 {
     fontconfig::FONTCONFIG::SetReporter( nullptr );
 

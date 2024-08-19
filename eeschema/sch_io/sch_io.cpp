@@ -20,7 +20,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string_utf8_map.h>
 #include <unordered_set>
 
 #include <ki_exception.h>
@@ -59,21 +58,21 @@ bool SCH_IO::CanReadSchematicFile( const wxString& aFileName ) const
 }
 
 
-void SCH_IO::SaveLibrary( const wxString& aFileName, const STRING_UTF8_MAP* aProperties )
+void SCH_IO::SaveLibrary( const wxString& aFileName, const std::map<std::string, UTF8>* aProperties )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
 SCH_SHEET* SCH_IO::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                      SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
+                                      SCH_SHEET* aAppendToMe, const std::map<std::string, UTF8>* aProperties )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
 void SCH_IO::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                                const STRING_UTF8_MAP* aProperties )
+                                const std::map<std::string, UTF8>* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -82,7 +81,7 @@ void SCH_IO::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet, SC
 
 void SCH_IO::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                                  const wxString&   aLibraryPath,
-                                 const STRING_UTF8_MAP* aProperties )
+                                 const std::map<std::string, UTF8>* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -91,7 +90,7 @@ void SCH_IO::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
 
 void SCH_IO::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                  const wxString&   aLibraryPath,
-                                 const STRING_UTF8_MAP* aProperties )
+                                 const std::map<std::string, UTF8>* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -99,7 +98,7 @@ void SCH_IO::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                const STRING_UTF8_MAP* aProperties )
+                                const std::map<std::string, UTF8>* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -107,7 +106,7 @@ LIB_SYMBOL* SCH_IO::LoadSymbol( const wxString& aLibraryPath, const wxString& aS
 
 
 void SCH_IO::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                         const STRING_UTF8_MAP* aProperties )
+                         const std::map<std::string, UTF8>* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -115,14 +114,14 @@ void SCH_IO::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol
 
 
 void SCH_IO::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                           const STRING_UTF8_MAP* aProperties )
+                           const std::map<std::string, UTF8>* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
-void SCH_IO::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const
+void SCH_IO::GetLibraryOptions( std::map<std::string, UTF8>* aListToAppendTo ) const
 {
     // Get base options first
     IO_BASE::GetLibraryOptions( aListToAppendTo );

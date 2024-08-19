@@ -21,14 +21,16 @@
 #ifndef IO_BASE_H_
 #define IO_BASE_H_
 
+#include <map>
 #include <vector>
 #include <string>
+
+#include <core/utf8.h>
 #include <wx/string.h>
 #include <widgets/report_severity.h>
 
 class REPORTER;
 class PROGRESS_REPORTER;
-class STRING_UTF8_MAP;
 
 class IO_BASE
 {
@@ -128,7 +130,7 @@ public:
      * @throw IO_ERROR if there is a problem finding the library, or creating it.
      */
     virtual void CreateLibrary( const wxString& aLibraryPath,
-                                const STRING_UTF8_MAP* aProperties = nullptr );
+                                const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
      * Delete an existing library and returns true, or if library does not
@@ -148,7 +150,7 @@ public:
      * @throw IO_ERROR if there is a problem deleting an existing library.
      */
     virtual bool DeleteLibrary( const wxString& aLibraryPath,
-                                const STRING_UTF8_MAP* aProperties = nullptr );
+                                const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
      * Return true if the library at @a aLibraryPath is writable.
@@ -186,7 +188,7 @@ public:
      *   This would require a 3 column list, and introducing wx GUI knowledge to
      *   #SCH_IO, which has been avoided to date.
      */
-    virtual void GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
+    virtual void GetLibraryOptions( std::map<std::string, UTF8>* aListToAppendTo ) const;
 
     virtual void Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
 

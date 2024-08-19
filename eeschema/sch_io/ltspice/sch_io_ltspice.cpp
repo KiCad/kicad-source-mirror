@@ -41,7 +41,7 @@ int SCH_IO_LTSPICE::GetModifyHash() const
 
 SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                               SCH_SHEET*             aAppendToMe,
-                                              const STRING_UTF8_MAP* aProperties )
+                                              const std::map<std::string, UTF8>* aProperties )
 {
     wxASSERT( !aFileName || aSchematic );
 

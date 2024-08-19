@@ -48,7 +48,7 @@ public:
      * Saves the entire board to the clipboard formatted using the PCB_IO_KICAD_SEXPR formatting
      */
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                    const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     /*
      * Write all the settings of the BOARD* set by setBoard() and then adds all the
@@ -59,7 +59,7 @@ public:
     BOARD_ITEM* Parse();
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                      const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     void SetBoard( BOARD* aBoard );
 

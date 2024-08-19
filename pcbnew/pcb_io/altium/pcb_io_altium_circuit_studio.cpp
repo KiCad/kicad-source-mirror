@@ -65,7 +65,7 @@ bool PCB_IO_ALTIUM_CIRCUIT_STUDIO::CanReadBoard( const wxString& aFileName ) con
 
 
 BOARD* PCB_IO_ALTIUM_CIRCUIT_STUDIO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                                const STRING_UTF8_MAP* aProperties,
+                                                const std::map<std::string, UTF8>* aProperties,
                                                 PROJECT*               aProject )
 {
     m_props = aProperties;

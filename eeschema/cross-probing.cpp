@@ -966,7 +966,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             importFormat = -1;
         }
 
-        STRING_UTF8_MAP props;
+        std::map<std::string, UTF8> props;
 
         do
         {

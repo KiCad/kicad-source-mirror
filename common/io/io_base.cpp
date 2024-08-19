@@ -43,13 +43,13 @@ wxString IO_BASE::IO_FILE_DESC::FileFilter() const
 }
 
 
-void IO_BASE::CreateLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+void IO_BASE::CreateLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
 
-bool IO_BASE::DeleteLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+bool IO_BASE::DeleteLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
@@ -60,7 +60,7 @@ bool IO_BASE::IsLibraryWritable( const wxString& aLibraryPath )
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
-void IO_BASE::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const
+void IO_BASE::GetLibraryOptions( std::map<std::string, UTF8>* aListToAppendTo ) const
 {
     // No global options to append
 }

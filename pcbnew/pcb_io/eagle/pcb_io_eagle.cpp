@@ -64,7 +64,6 @@ Load() TODO's
 #include <font/fontconfig.h>
 #include <string_utils.h>
 #include <locale_io.h>
-#include <string_utf8_map.h>
 #include <trigo.h>
 #include <progress_reporter.h>
 #include <project.h>
@@ -323,7 +322,7 @@ VECTOR2I inline PCB_IO_EAGLE::kicad_fontsize( const ECOORD& d, int aTextThicknes
 
 
 BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                                const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     LOCALE_IO       toggle;     // toggles on, then off, the C locale.
     wxXmlNode*      doc;
@@ -456,7 +455,7 @@ std::vector<FOOTPRINT*> PCB_IO_EAGLE::GetImportedCachedLibraryFootprints()
 }
 
 
-void PCB_IO_EAGLE::init( const STRING_UTF8_MAP* aProperties )
+void PCB_IO_EAGLE::init( const std::map<std::string, UTF8>* aProperties )
 {
     m_hole_count  = 0;
     m_min_trace   = 0;
@@ -3136,8 +3135,13 @@ void PCB_IO_EAGLE::centerBoard()
         UTF8 page_width;
         UTF8 page_height;
 
-        if( m_props->Value( "page_width",  &page_width ) &&
-            m_props->Value( "page_height", &page_height ) )
+        if( auto it = m_props->find( "page_width" ); it != m_props->end() )
+            page_width = it->second;
+
+        if( auto it = m_props->find( "page_height" ); it != m_props->end() )
+            page_height = it->second;
+
+        if( !page_width.empty() && !page_height.empty() )
         {
             BOX2I bbbox = m_board->GetBoardEdgesBoundingBox();
 
@@ -3256,7 +3260,7 @@ void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
 
 
 void PCB_IO_EAGLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                       bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
+                                       bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
     wxString errorMsg;
 
@@ -3284,7 +3288,7 @@ void PCB_IO_EAGLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 
 FOOTPRINT* PCB_IO_EAGLE::FootprintLoad( const wxString& aLibraryPath,
                                         const wxString& aFootprintName, bool aKeepUUID,
-                                        const STRING_UTF8_MAP* aProperties )
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     init( aProperties );
     cacheLib( aLibraryPath );

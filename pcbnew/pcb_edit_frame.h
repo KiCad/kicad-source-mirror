@@ -56,7 +56,6 @@ class FP_LIB_TABLE;
 class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 class TOOL_ACTION;
-class STRING_UTF8_MAP;
 
 #ifdef KICAD_IPC_API
 class KICAD_API_SERVER;
@@ -814,7 +813,7 @@ protected:
      * @param aFileType PCB_FILE_T value for file type
      */
     bool importFile( const wxString& aFileName, int aFileType,
-                     const STRING_UTF8_MAP* aProperties = nullptr );
+                     const std::map<std::string, UTF8>* aProperties = nullptr );
 
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
@@ -869,7 +868,7 @@ private:
     DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
     DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
 
-    const STRING_UTF8_MAP* m_importProperties; // Properties used for non-KiCad import.
+    const std::map<std::string, UTF8>* m_importProperties; // Properties used for non-KiCad import.
 
     /**
      * Keep track of viewport so that track net labels can be adjusted when it changes.

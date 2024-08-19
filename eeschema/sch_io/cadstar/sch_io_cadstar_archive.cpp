@@ -26,7 +26,6 @@
 #include <lib_symbol.h>
 #include <progress_reporter.h>
 #include <project_sch.h>
-#include <string_utf8_map.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <schematic.h>
@@ -65,7 +64,7 @@ int SCH_IO_CADSTAR_ARCHIVE::GetModifyHash() const
 SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFileName,
                                                       SCHEMATIC*             aSchematic,
                                                       SCH_SHEET*             aAppendToMe,
-                                                      const STRING_UTF8_MAP* aProperties )
+                                                      const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
@@ -136,7 +135,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     }
 
     // set properties to prevent save file on every symbol save
-    STRING_UTF8_MAP properties;
+    std::map<std::string, UTF8> properties;
     properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, "" );
 
     for( LIB_SYMBOL* const& symbol : csaLoader.GetLoadedSymbols() )
@@ -169,7 +168,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
 
 void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
                                                  const wxString&        aLibraryPath,
-                                                 const STRING_UTF8_MAP* aProperties )
+                                                 const std::map<std::string, UTF8>* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
@@ -180,7 +179,7 @@ void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( wxArrayString&         aSymbolN
 
 void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                                  const wxString&           aLibraryPath,
-                                                 const STRING_UTF8_MAP* aProperties )
+                                                 const std::map<std::string, UTF8>* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
@@ -191,7 +190,7 @@ void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymb
 
 LIB_SYMBOL* SCH_IO_CADSTAR_ARCHIVE::LoadSymbol( const wxString&        aLibraryPath,
                                                 const wxString&        aAliasName,
-                                                const STRING_UTF8_MAP* aProperties )
+                                                const std::map<std::string, UTF8>* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
@@ -224,7 +223,7 @@ void SCH_IO_CADSTAR_ARCHIVE::GetAvailableSymbolFields( std::vector<wxString>& aN
 }
 
 
-void SCH_IO_CADSTAR_ARCHIVE::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const
+void SCH_IO_CADSTAR_ARCHIVE::GetLibraryOptions( std::map<std::string, UTF8>* aListToAppendTo ) const
 {
     ( *aListToAppendTo )["csa"] =
             UTF8( _( "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
@@ -239,7 +238,7 @@ void SCH_IO_CADSTAR_ARCHIVE::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo
 
 
 void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
-                                                  const STRING_UTF8_MAP* aProperties )
+                                                  const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName csafn;
     wxString   fplibname = "cadstarpcblib";
@@ -247,7 +246,7 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
     // Suppress font substitution warnings
     fontconfig::FONTCONFIG::SetReporter( nullptr );
 
-    if( aProperties && aProperties->count( "csa" ) )
+    if( aProperties && aProperties->contains( "csa" ) )
     {
         csafn = wxFileName( aProperties->at( "csa" ) );
 
@@ -286,9 +285,9 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
         }
     }
 
-    if( aProperties && aProperties->count( "fplib" ) )
+    if( aProperties && aProperties->contains( "fplib" ) )
     {
-        fplibname = aProperties->at( "fplib" ).wx_str();
+        fplibname = aProperties->at( "fplib" );
     }
 
     // Get timestamp

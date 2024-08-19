@@ -70,7 +70,6 @@
 #include <project_pcb.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <reporter.h>
-#include <string_utf8_map.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
 #include <wx/wfstream.h>
@@ -1453,7 +1452,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         job->m_outputFile = fn.GetFullName();
     }
 
-    STRING_UTF8_MAP props;
+    std::map<std::string, UTF8> props;
     props["units"] = job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm"
                                                                                         : "inch";
     props["sigfig"] = wxString::Format( "%d", job->m_precision );

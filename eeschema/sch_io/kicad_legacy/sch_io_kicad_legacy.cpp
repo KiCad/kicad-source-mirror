@@ -88,7 +88,7 @@ SCH_IO_KICAD_LEGACY::~SCH_IO_KICAD_LEGACY()
 }
 
 
-void SCH_IO_KICAD_LEGACY::init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aProperties )
+void SCH_IO_KICAD_LEGACY::init( SCHEMATIC* aSchematic, const std::map<std::string, UTF8>* aProperties )
 {
     m_version   = 0;
     m_rootSheet = nullptr;
@@ -123,7 +123,7 @@ void SCH_IO_KICAD_LEGACY::checkpoint()
 
 SCH_SHEET* SCH_IO_KICAD_LEGACY::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                                    SCH_SHEET*             aAppendToMe,
-                                                   const STRING_UTF8_MAP* aProperties )
+                                                   const std::map<std::string, UTF8>* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -1503,7 +1503,7 @@ std::shared_ptr<BUS_ALIAS> SCH_IO_KICAD_LEGACY::loadBusAlias( LINE_READER& aRead
 
 void SCH_IO_KICAD_LEGACY::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
                                              SCHEMATIC*             aSchematic,
-                                             const STRING_UTF8_MAP* aProperties )
+                                             const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -2098,7 +2098,7 @@ void SCH_IO_KICAD_LEGACY::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 
 
 void SCH_IO_KICAD_LEGACY::cacheLib( const wxString& aLibraryFileName,
-                                    const STRING_UTF8_MAP* aProperties )
+                                    const std::map<std::string, UTF8>* aProperties )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
@@ -2112,7 +2112,7 @@ void SCH_IO_KICAD_LEGACY::cacheLib( const wxString& aLibraryFileName,
 }
 
 
-bool SCH_IO_KICAD_LEGACY::writeDocFile( const STRING_UTF8_MAP* aProperties )
+bool SCH_IO_KICAD_LEGACY::writeDocFile( const std::map<std::string, UTF8>* aProperties )
 {
     std::string propName( SCH_IO_KICAD_LEGACY::PropNoDocFile );
 
@@ -2123,9 +2123,9 @@ bool SCH_IO_KICAD_LEGACY::writeDocFile( const STRING_UTF8_MAP* aProperties )
 }
 
 
-bool SCH_IO_KICAD_LEGACY::isBuffering( const STRING_UTF8_MAP* aProperties )
+bool SCH_IO_KICAD_LEGACY::isBuffering( const std::map<std::string, UTF8>* aProperties )
 {
-    return ( aProperties && aProperties->Exists( SCH_IO_KICAD_LEGACY::PropBuffering ) );
+    return ( aProperties && aProperties->contains( SCH_IO_KICAD_LEGACY::PropBuffering ) );
 }
 
 
@@ -2141,7 +2141,7 @@ int SCH_IO_KICAD_LEGACY::GetModifyHash() const
 
 void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                               const wxString&   aLibraryPath,
-                                              const STRING_UTF8_MAP* aProperties )
+                                              const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2162,7 +2162,7 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                               const wxString&   aLibraryPath,
-                                            const STRING_UTF8_MAP* aProperties )
+                                            const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2183,7 +2183,7 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
 
 LIB_SYMBOL* SCH_IO_KICAD_LEGACY::LoadSymbol( const wxString& aLibraryPath,
                                              const wxString& aSymbolName,
-                                             const STRING_UTF8_MAP* aProperties )
+                                             const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2199,7 +2199,7 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY::LoadSymbol( const wxString& aLibraryPath,
 
 
 void SCH_IO_KICAD_LEGACY::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                      const STRING_UTF8_MAP* aProperties )
+                                      const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2213,7 +2213,7 @@ void SCH_IO_KICAD_LEGACY::SaveSymbol( const wxString& aLibraryPath, const LIB_SY
 
 
 void SCH_IO_KICAD_LEGACY::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                        const STRING_UTF8_MAP* aProperties )
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2227,7 +2227,7 @@ void SCH_IO_KICAD_LEGACY::DeleteSymbol( const wxString& aLibraryPath, const wxSt
 
 
 void SCH_IO_KICAD_LEGACY::CreateLibrary( const wxString& aLibraryPath,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
     {
@@ -2246,7 +2246,7 @@ void SCH_IO_KICAD_LEGACY::CreateLibrary( const wxString& aLibraryPath,
 
 
 bool SCH_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName fn = aLibraryPath;
 
@@ -2272,7 +2272,7 @@ bool SCH_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
 
 
 void SCH_IO_KICAD_LEGACY::SaveLibrary( const wxString& aLibraryPath,
-                                       const STRING_UTF8_MAP* aProperties )
+                                       const std::map<std::string, UTF8>* aProperties )
 {
     if( !m_cache )
         m_cache = new SCH_IO_KICAD_LEGACY_LIB_CACHE( aLibraryPath );

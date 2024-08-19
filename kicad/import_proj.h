@@ -3,7 +3,9 @@
 
 #include <wx/filename.h>
 #include <core/typeinfo.h>
-#include <string_utf8_map.h>
+#include <core/utf8.h>
+
+#include <map>
 
 class KICAD_MANAGER_FRAME;
 
@@ -37,7 +39,7 @@ public:
 private:
     KICAD_MANAGER_FRAME* m_frame;
 
-    STRING_UTF8_MAP m_properties;
+    std::map<std::string, UTF8> m_properties;
 
     std::vector<wxString> m_copiedSchPaths;
     std::vector<wxString> m_copiedPcbPaths;

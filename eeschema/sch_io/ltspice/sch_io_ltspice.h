@@ -60,7 +60,7 @@ public:
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                   SCH_SHEET*             aAppendToMe = nullptr,
-                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                                  const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
 };
 #endif // SCH_IO_LTSPICE_H_

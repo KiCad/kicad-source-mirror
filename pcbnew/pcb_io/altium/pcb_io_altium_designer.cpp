@@ -97,7 +97,7 @@ bool PCB_IO_ALTIUM_DESIGNER::CanReadLibrary( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_ALTIUM_DESIGNER::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                          const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                                          const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
 
     m_props = aProperties;
@@ -217,7 +217,7 @@ void PCB_IO_ALTIUM_DESIGNER::loadAltiumLibrary( const wxString& aLibraryPath )
 
 void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames,
                                                  const wxString& aLibraryPath, bool aBestEfforts,
-                                                 const STRING_UTF8_MAP* aProperties )
+                                                 const std::map<std::string, UTF8>* aProperties )
 {
     loadAltiumLibrary( aLibraryPath );
 
@@ -309,7 +309,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
 
 FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
                                                   const wxString& aFootprintName, bool aKeepUUID,
-                                                  const STRING_UTF8_MAP* aProperties )
+                                                  const std::map<std::string, UTF8>* aProperties )
 {
     loadAltiumLibrary( aLibraryPath );
 

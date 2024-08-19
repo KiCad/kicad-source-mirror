@@ -44,7 +44,7 @@ public:
     bool CanReadFootprint( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                      const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
 
@@ -65,16 +65,16 @@ public:
     void RegisterCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             bool aBestEfforts, const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     // default implementation of GetEnumeratedFootprint is fine (call FootprintLoad)
 
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                          const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool  aKeepUUID = false,
-                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 

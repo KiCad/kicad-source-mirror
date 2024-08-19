@@ -984,7 +984,7 @@ private:
      *  @param aFileType SCH_FILE_T value for file type
      */
     bool importFile( const wxString& aFileName, int aFileType,
-                     const STRING_UTF8_MAP* aProperties = nullptr );
+                     const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
      * Save \a aSheet to a schematic file.

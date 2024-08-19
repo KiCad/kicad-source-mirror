@@ -818,7 +818,7 @@ PCB_IO_GEDA::~PCB_IO_GEDA()
 }
 
 
-void PCB_IO_GEDA::init( const STRING_UTF8_MAP* aProperties )
+void PCB_IO_GEDA::init( const std::map<std::string, UTF8>* aProperties )
 {
     m_props = aProperties;
 }
@@ -838,7 +838,7 @@ void PCB_IO_GEDA::validateCache( const wxString& aLibraryPath, bool checkModifie
 
 FOOTPRINT* PCB_IO_GEDA::ImportFootprint( const wxString&        aFootprintPath,
                                          wxString&              aFootprintNameOut,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName fn( aFootprintPath );
 
@@ -861,7 +861,7 @@ FOOTPRINT* PCB_IO_GEDA::ImportFootprint( const wxString&        aFootprintPath,
 
 
 void PCB_IO_GEDA::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                      bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
+                                      bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxDir     dir( aLibraryPath );
@@ -902,7 +902,7 @@ void PCB_IO_GEDA::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
 
 const FOOTPRINT* PCB_IO_GEDA::getFootprint( const wxString& aLibraryPath,
                                             const wxString& aFootprintName,
-                                            const STRING_UTF8_MAP* aProperties,
+                                            const std::map<std::string, UTF8>* aProperties,
                                             bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -925,7 +925,7 @@ const FOOTPRINT* PCB_IO_GEDA::getFootprint( const wxString& aLibraryPath,
 FOOTPRINT* PCB_IO_GEDA::FootprintLoad( const wxString& aLibraryPath,
                                        const wxString& aFootprintName,
                                        bool  aKeepUUID,
-                                       const STRING_UTF8_MAP* aProperties )
+                                       const std::map<std::string, UTF8>* aProperties )
 {
     fontconfig::FONTCONFIG::SetReporter( nullptr );
 
@@ -943,7 +943,7 @@ FOOTPRINT* PCB_IO_GEDA::FootprintLoad( const wxString& aLibraryPath,
 
 
 void PCB_IO_GEDA::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                   const STRING_UTF8_MAP* aProperties )
+                                   const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -961,7 +961,7 @@ void PCB_IO_GEDA::FootprintDelete( const wxString& aLibraryPath, const wxString&
 }
 
 
-bool PCB_IO_GEDA::DeleteLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+bool PCB_IO_GEDA::DeleteLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );

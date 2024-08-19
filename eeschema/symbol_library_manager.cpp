@@ -174,7 +174,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( aFileType ) );
     bool                res = true;    // assume all libraries are successfully saved
-    STRING_UTF8_MAP     properties;
+    std::map<std::string, UTF8>     properties;
 
     properties.emplace( SCH_IO_KICAD_LEGACY::PropBuffering, "" );
 
@@ -996,7 +996,7 @@ bool LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf,
     wxString errorMsg = _( "Error saving symbol %s to library '%s'." ) + wxS( "\n%s" );
 
     // Set properties to prevent saving the file on every symbol save.
-    STRING_UTF8_MAP properties;
+    std::map<std::string, UTF8> properties;
     properties.emplace( SCH_IO_KICAD_LEGACY::PropBuffering, "" );
 
     std::shared_ptr<SYMBOL_BUFFER>& symbolBuf = aSymbolBuf;

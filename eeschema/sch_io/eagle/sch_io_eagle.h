@@ -47,7 +47,6 @@ class SCH_TEXT;
 class SCH_GLOBALLABEL;
 class SCH_SYMBOL;
 class SCH_FIELD;
-class STRING_UTF8_MAP;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
 class SCH_PIN;
@@ -101,16 +100,16 @@ public:
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                   SCH_SHEET*             aAppendToMe = nullptr,
-                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                                  const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties ) override;
+                             const std::map<std::string, UTF8>* aProperties ) override;
 
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties ) override;
+                             const std::map<std::string, UTF8>* aProperties ) override;
 
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                            const STRING_UTF8_MAP* aProperties ) override;
+                            const std::map<std::string, UTF8>* aProperties ) override;
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
@@ -263,7 +262,7 @@ private:
     std::unordered_map<wxString, bool> m_userValue; ///< deviceset/@uservalue for device.
 
     IO_RELEASER<SCH_IO>               m_pi;                ///< PI to create KiCad symbol library.
-    std::unique_ptr<STRING_UTF8_MAP>  m_properties;        ///< Library plugin properties.
+    std::unique_ptr<std::map<std::string, UTF8>>  m_properties;        ///< Library plugin properties.
 
     int m_sheetIndex;
 

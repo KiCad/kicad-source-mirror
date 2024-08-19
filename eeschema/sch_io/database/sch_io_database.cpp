@@ -51,7 +51,7 @@ SCH_IO_DATABASE::~SCH_IO_DATABASE()
 
 void SCH_IO_DATABASE::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                           const wxString&   aLibraryPath,
-                                          const STRING_UTF8_MAP* aProperties )
+                                          const std::map<std::string, UTF8>* aProperties )
 {
     std::vector<LIB_SYMBOL*> symbols;
     EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
@@ -63,7 +63,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                           const wxString&           aLibraryPath,
-                                          const STRING_UTF8_MAP*         aProperties )
+                                          const std::map<std::string, UTF8>*         aProperties )
 {
     wxCHECK_RET( m_libTable, "Database plugin missing library table handle!" );
     ensureSettings( aLibraryPath );
@@ -89,7 +89,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
                                          const wxString&   aAliasName,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK( m_libTable, nullptr );
     ensureSettings( aLibraryPath );

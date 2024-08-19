@@ -41,7 +41,7 @@ SCH_IO_HTTP_LIB::~SCH_IO_HTTP_LIB()
 
 void SCH_IO_HTTP_LIB::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
                                           const wxString&        aLibraryPath,
-                                          const STRING_UTF8_MAP* aProperties )
+                                          const std::map<std::string, UTF8>* aProperties )
 {
     std::vector<LIB_SYMBOL*> symbols;
     EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
@@ -53,7 +53,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( wxArrayString&         aSymbolNameList
 
 void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                           const wxString&           aLibraryPath,
-                                          const STRING_UTF8_MAP*    aProperties )
+                                          const std::map<std::string, UTF8>*    aProperties )
 {
     wxCHECK_RET( m_libTable, _( "httplib plugin missing library table handle!" ) );
     ensureSettings( aLibraryPath );
@@ -103,7 +103,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK( m_libTable, nullptr );
     ensureSettings( aLibraryPath );
@@ -501,7 +501,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
 }
 
 void SCH_IO_HTTP_LIB::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                  const STRING_UTF8_MAP* aProperties )
+                                  const std::map<std::string, UTF8>* aProperties )
 {
     // TODO: Implement this sometime;
 }

@@ -308,44 +308,44 @@ public:
     bool CanReadBoard( const wxString& aFileName ) const override;
 
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                    const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                      const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
-    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
+    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const std::map<std::string, UTF8>* aProperties,
                      PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount );
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             bool aBestEfforts, const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
                                              const wxString& aFootprintName,
-                                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                          const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     FOOTPRINT* ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,
-                                const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                                const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool  aKeepUUID = false,
-                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                        const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                          const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     void CreateLibrary( const wxString& aLibraryPath,
-                        const STRING_UTF8_MAP* aProperties = nullptr) override;
+                        const std::map<std::string, UTF8>* aProperties = nullptr) override;
 
     bool DeleteLibrary( const wxString& aLibraryPath,
-                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                        const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
@@ -380,9 +380,9 @@ protected:
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
     const FOOTPRINT* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                   const STRING_UTF8_MAP* aProperties, bool checkModified );
+                                   const std::map<std::string, UTF8>* aProperties, bool checkModified );
 
-    void init( const STRING_UTF8_MAP* aProperties );
+    void init( const std::map<std::string, UTF8>* aProperties );
 
     /// formats the board setup information
     void formatSetup( const BOARD* aBoard, int aNestLevel = 0 ) const;

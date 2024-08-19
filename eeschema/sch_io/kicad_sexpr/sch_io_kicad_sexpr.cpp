@@ -86,7 +86,7 @@ SCH_IO_KICAD_SEXPR::~SCH_IO_KICAD_SEXPR()
 }
 
 
-void SCH_IO_KICAD_SEXPR::init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aProperties )
+void SCH_IO_KICAD_SEXPR::init( SCHEMATIC* aSchematic, const std::map<std::string, UTF8>* aProperties )
 {
     m_version         = 0;
     m_appending       = false;
@@ -100,7 +100,7 @@ void SCH_IO_KICAD_SEXPR::init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aPr
 
 SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                                   SCH_SHEET*             aAppendToMe,
-                                                  const STRING_UTF8_MAP* aProperties )
+                                                  const std::map<std::string, UTF8>* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -336,7 +336,7 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
 
 void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
                                             SCHEMATIC*             aSchematic,
-                                            const STRING_UTF8_MAP* aProperties )
+                                            const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -1603,7 +1603,7 @@ void SCH_IO_KICAD_SEXPR::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& a
 
 
 void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
-                                   const STRING_UTF8_MAP* aProperties )
+                                   const std::map<std::string, UTF8>* aProperties )
 {
     // Suppress font substitution warnings
     fontconfig::FONTCONFIG::SetReporter( nullptr );
@@ -1620,9 +1620,9 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
 }
 
 
-bool SCH_IO_KICAD_SEXPR::isBuffering( const STRING_UTF8_MAP* aProperties )
+bool SCH_IO_KICAD_SEXPR::isBuffering( const std::map<std::string, UTF8>* aProperties )
 {
-    return ( aProperties && aProperties->Exists( SCH_IO_KICAD_SEXPR::PropBuffering ) );
+    return ( aProperties && aProperties->contains( SCH_IO_KICAD_SEXPR::PropBuffering ) );
 }
 
 
@@ -1638,7 +1638,7 @@ int SCH_IO_KICAD_SEXPR::GetModifyHash() const
 
 void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                              const wxString&   aLibraryPath,
-                                             const STRING_UTF8_MAP* aProperties )
+                                             const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1659,7 +1659,7 @@ void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                              const wxString&   aLibraryPath,
-                                             const STRING_UTF8_MAP* aProperties )
+                                             const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1680,7 +1680,7 @@ void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolLi
 
 LIB_SYMBOL* SCH_IO_KICAD_SEXPR::LoadSymbol( const wxString& aLibraryPath,
                                             const wxString& aSymbolName,
-                                            const STRING_UTF8_MAP* aProperties )
+                                            const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1707,7 +1707,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR::LoadSymbol( const wxString& aLibraryPath,
 
 
 void SCH_IO_KICAD_SEXPR::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                     const STRING_UTF8_MAP* aProperties )
+                                     const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1721,7 +1721,7 @@ void SCH_IO_KICAD_SEXPR::SaveSymbol( const wxString& aLibraryPath, const LIB_SYM
 
 
 void SCH_IO_KICAD_SEXPR::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                       const STRING_UTF8_MAP* aProperties )
+                                       const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1735,7 +1735,7 @@ void SCH_IO_KICAD_SEXPR::DeleteSymbol( const wxString& aLibraryPath, const wxStr
 
 
 void SCH_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath,
-                                        const STRING_UTF8_MAP* aProperties )
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
     {
@@ -1754,7 +1754,7 @@ void SCH_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath,
 
 
 bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
-                                        const STRING_UTF8_MAP* aProperties )
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName fn = aLibraryPath;
 
@@ -1780,7 +1780,7 @@ bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
 
 
 void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath,
-                                      const STRING_UTF8_MAP* aProperties )
+                                      const std::map<std::string, UTF8>* aProperties )
 {
     if( !m_cache )
         m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryPath );

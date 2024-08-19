@@ -44,7 +44,6 @@ class LIB_SYMBOL;
 class LIB_ID;
 class LINE_READER;
 class OUTPUTFORMATTER;
-class STRING_UTF8_MAP;
 class SCH_IO;
 class SYMBOL_LIB;
 
@@ -324,7 +323,7 @@ private:
 
     SCH_IO_MGR::SCH_FILE_T        m_pluginType;
     std::unique_ptr< SCH_IO > m_plugin;
-    std::unique_ptr<STRING_UTF8_MAP> m_properties;   ///< Library properties
+    std::unique_ptr<std::map<std::string, UTF8>> m_properties;   ///< Library properties
 };
 
 

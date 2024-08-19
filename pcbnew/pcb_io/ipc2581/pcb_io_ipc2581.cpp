@@ -36,7 +36,6 @@
 #include <pgm_base.h>
 #include <progress_reporter.h>
 #include <settings/settings_manager.h>
-#include <string_utf8_map.h>
 #include <wx_fstream_progress.h>
 
 #include <geometry/shape_line_chain.h>
@@ -2919,7 +2918,7 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
 
 
 void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                                const STRING_UTF8_MAP* aProperties )
+                                const std::map<std::string, UTF8>* aProperties )
 {
     m_board = aBoard;
     m_units_str = "MILLIMETER";

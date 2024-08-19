@@ -73,7 +73,6 @@
 #include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>
-#include <string_utf8_map.h>
 #include <filter_reader.h>
 #include <zones.h>
 
@@ -468,7 +467,7 @@ bool PCB_IO_KICAD_LEGACY::CanReadFootprint( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_KICAD_LEGACY::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                 const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                                 const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2911,7 +2910,7 @@ EDA_ANGLE PCB_IO_KICAD_LEGACY::degParse( const char* aValue, const char** nptrpt
 }
 
 
-void PCB_IO_KICAD_LEGACY::init( const STRING_UTF8_MAP* aProperties )
+void PCB_IO_KICAD_LEGACY::init( const std::map<std::string, UTF8>* aProperties )
 {
     m_loading_format_version = 0;
     m_cu_count = 16;
@@ -3197,7 +3196,7 @@ void PCB_IO_KICAD_LEGACY::cacheLib( const wxString& aLibraryPath )
 
 
 void PCB_IO_KICAD_LEGACY::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
-                                        bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
+                                        bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxString  errorMsg;
@@ -3226,7 +3225,7 @@ void PCB_IO_KICAD_LEGACY::FootprintEnumerate( wxArrayString& aFootprintNames, co
 
 FOOTPRINT* PCB_IO_KICAD_LEGACY::FootprintLoad( const wxString& aLibraryPath,
                                          const wxString& aFootprintName, bool aKeepUUID,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -3250,7 +3249,7 @@ FOOTPRINT* PCB_IO_KICAD_LEGACY::FootprintLoad( const wxString& aLibraryPath,
 
 
 bool PCB_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName fn = aLibraryPath;
 

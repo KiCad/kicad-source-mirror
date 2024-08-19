@@ -37,7 +37,6 @@
 class BOARD;
 class PCB_IO;
 class FOOTPRINT;
-class STRING_UTF8_MAP;
 class PROJECT;
 class PROGRESS_REPORTER;
 class REPORTER;
@@ -204,7 +203,7 @@ public:
      *                 be loaded.
      */
     static BOARD* Load( PCB_FILE_T aFileType, const wxString& aFileName,
-                        BOARD* aAppendToMe = nullptr, const STRING_UTF8_MAP* aProperties = nullptr,
+                        BOARD* aAppendToMe = nullptr, const std::map<std::string, UTF8>* aProperties = nullptr,
                         PROJECT* aProject = nullptr,
                         PROGRESS_REPORTER* aProgressReporter = nullptr );
 
@@ -228,12 +227,12 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     static void Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
-                      const STRING_UTF8_MAP* aProperties = nullptr );
+                      const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
      * Convert a schematic symbol library to the latest KiCad format
      */
-    static bool ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+    static bool ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
                                 const wxString& aNewFilePath, REPORTER* aReporter );
 };
 

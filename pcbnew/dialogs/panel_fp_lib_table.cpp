@@ -236,7 +236,7 @@ protected:
             LIB_TABLE_ROW*  row = tbl->at( (size_t) aRow );
             const wxString& options = row->GetOptions();
             wxString        result = options;
-            STRING_UTF8_MAP choices;
+            std::map<std::string, UTF8> choices;
 
             PCB_IO_MGR::PCB_FILE_T pi_type = PCB_IO_MGR::EnumFromStr( row->GetType() );
             IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( pi_type ) );
@@ -885,7 +885,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         }
 
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::unique_ptr<STRING_UTF8_MAP> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        std::unique_ptr<std::map<std::string, UTF8>> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
         if( PCB_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(),
                                         newLib.GetFullPath(), errorReporter.m_Reporter ) )

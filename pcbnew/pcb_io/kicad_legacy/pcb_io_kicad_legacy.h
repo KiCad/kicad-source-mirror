@@ -81,18 +81,18 @@ public:
     bool CanReadFootprint( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                      const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool  aKeepUUID = false,
-                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     bool DeleteLibrary( const wxString& aLibraryPath,
-                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                        const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
@@ -109,7 +109,7 @@ public:
 
 protected:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void init( const STRING_UTF8_MAP* aProperties );
+    void init( const std::map<std::string, UTF8>* aProperties );
 
     void checkpoint();
 

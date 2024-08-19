@@ -56,7 +56,7 @@ bool PCB_IO_SOLIDWORKS::CanReadBoard( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                         const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                                         const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
 

@@ -44,7 +44,7 @@ PCB_IO_FABMASTER::~PCB_IO_FABMASTER()
 
 
 BOARD* PCB_IO_FABMASTER::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                    const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                                    const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
 

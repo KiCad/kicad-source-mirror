@@ -155,7 +155,7 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
 
 
 BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aAppendToMe,
-                     const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                     const std::map<std::string, UTF8>* aProperties, PROJECT* aProject,
                      PROGRESS_REPORTER* aProgressReporter )
 {
     IO_RELEASER<PCB_IO> pi( PluginFind( aFileType ) );
@@ -171,7 +171,7 @@ BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD*
 
 
 void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
-                   const STRING_UTF8_MAP* aProperties )
+                   const std::map<std::string, UTF8>* aProperties )
 {
     IO_RELEASER<PCB_IO> pi( PluginFind( aFileType ) );
 
@@ -185,7 +185,7 @@ void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* a
 }
 
 
-bool PCB_IO_MGR::ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+bool PCB_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
                                  const wxString& aNewFilePath, REPORTER* aReporter )
 {
     PCB_IO_MGR::PCB_FILE_T oldFileType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );

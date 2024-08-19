@@ -39,7 +39,7 @@
 
 DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
                         const wxString& aNickname,
-                        const STRING_UTF8_MAP& aPluginOptions,
+                        const std::map<std::string, UTF8>& aPluginOptions,
                         const wxString& aFormattedOptions,
                         wxString* aResult ) :
     DIALOG_PLUGIN_OPTIONS_BASE( aParent ),
@@ -64,7 +64,7 @@ DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
     {
         unsigned int row = 0;
 
-        for( STRING_UTF8_MAP::const_iterator it = m_choices.begin(); it != m_choices.end();
+        for( std::map<std::string, UTF8>::const_iterator it = m_choices.begin(); it != m_choices.end();
                 ++it, ++row )
         {
             wxString item = From_UTF8( it->first.c_str() );
@@ -101,7 +101,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataToWindow()
     // Fill the grid with existing aOptions
     std::string options = TO_UTF8( m_callers_options );
 
-    STRING_UTF8_MAP* props = LIB_TABLE::ParseOptions( options );
+    std::map<std::string, UTF8>* props = LIB_TABLE::ParseOptions( options );
 
     if( props )
     {
@@ -110,7 +110,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataToWindow()
 
         int row = 0;
 
-        for( STRING_UTF8_MAP::const_iterator it = props->begin(); it != props->end();
+        for( std::map<std::string, UTF8>::const_iterator it = props->begin(); it != props->end();
                 ++it, ++row )
         {
             m_grid->SetCellValue( row, 0, From_UTF8( it->first.c_str() ) );
@@ -132,7 +132,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataFromWindow()
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
 
-    STRING_UTF8_MAP props;
+    std::map<std::string, UTF8> props;
     const int   rowCount = m_grid->GetNumberRows();
 
     for( int row = 0;  row<rowCount;  ++row )
@@ -200,10 +200,9 @@ void DIALOG_PLUGIN_OPTIONS::onListBoxItemSelected( wxCommandEvent& event )
     if( event.IsSelection() )
     {
         std::string option = TO_UTF8( event.GetString() );
-        UTF8        help_text;
 
-        if( m_choices.Value( option.c_str(), &help_text ) )
-            m_html->SetPage( help_text );
+        if( auto it = m_choices.find( option ); it != m_choices.end() )
+            m_html->SetPage( it->second );
         else
             m_html->SetPage( m_initial_help );
     }

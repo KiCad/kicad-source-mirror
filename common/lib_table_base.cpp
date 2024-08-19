@@ -46,7 +46,7 @@ LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow )
 }
 
 
-void LIB_TABLE_ROW::setProperties( STRING_UTF8_MAP* aProperties )
+void LIB_TABLE_ROW::setProperties( std::map<std::string, UTF8>* aProperties )
 {
     properties.reset( aProperties );
 }
@@ -490,14 +490,14 @@ void LIB_TABLE::Save( const wxString& aFileName ) const
 }
 
 
-STRING_UTF8_MAP* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
+std::map<std::string, UTF8>* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
 {
     if( aOptionsList.size() )
     {
         const char* cp  = &aOptionsList[0];
         const char* end = cp + aOptionsList.size();
 
-        STRING_UTF8_MAP props;
+        std::map<std::string, UTF8> props;
         std::string pair;
 
         // Parse all name=value pairs
@@ -548,20 +548,20 @@ STRING_UTF8_MAP* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
         }
 
         if( props.size() )
-            return new STRING_UTF8_MAP( props );
+            return new std::map<std::string, UTF8>( props );
     }
 
     return nullptr;
 }
 
 
-UTF8 LIB_TABLE::FormatOptions( const STRING_UTF8_MAP* aProperties )
+UTF8 LIB_TABLE::FormatOptions( const std::map<std::string, UTF8>* aProperties )
 {
     UTF8 ret;
 
     if( aProperties )
     {
-        for( STRING_UTF8_MAP::const_iterator it = aProperties->begin(); it != aProperties->end(); ++it )
+        for( std::map<std::string, UTF8>::const_iterator it = aProperties->begin(); it != aProperties->end(); ++it )
         {
             const std::string& name = it->first;
 

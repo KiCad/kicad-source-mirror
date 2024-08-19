@@ -49,7 +49,6 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <render_settings.h>
-#include <string_utf8_map.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -693,7 +692,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             importFormat = -1;
         }
 
-        STRING_UTF8_MAP props;
+        std::map<std::string, UTF8> props;
 
         std::string key, value;
         do

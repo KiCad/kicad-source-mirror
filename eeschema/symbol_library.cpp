@@ -34,7 +34,6 @@
 #include <project/project_file.h>
 #include <project_rescue.h>
 #include <project_sch.h>
-#include <string_utf8_map.h>
 #include <widgets/app_progress_dialog.h>
 
 #include <symbol_library.h>
@@ -62,7 +61,7 @@ SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
         fileName = "unnamed.lib";
 
     m_plugin.reset( SCH_IO_MGR::FindPlugin( m_pluginType ) );
-    m_properties = std::make_unique<STRING_UTF8_MAP>();
+    m_properties = std::make_unique<std::map<std::string, UTF8>>();
     m_mod_hash = 0;
 }
 
@@ -78,7 +77,7 @@ void SYMBOL_LIB::Save( bool aSaveDocFile )
                  wxString::Format( wxT( "no plugin defined for library `%s`." ),
                                    fileName.GetFullPath() ) );
 
-    STRING_UTF8_MAP props;
+    std::map<std::string, UTF8> props;
 
     if( !aSaveDocFile )
         props[ SCH_IO_KICAD_LEGACY::PropNoDocFile ] = "";
@@ -111,7 +110,7 @@ void SYMBOL_LIB::SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType )
 
 bool SYMBOL_LIB::IsCache() const
 {
-    return m_properties->Exists( SCH_IO_KICAD_LEGACY::PropNoDocFile );
+    return m_properties->contains( SCH_IO_KICAD_LEGACY::PropNoDocFile );
 }
 
 
@@ -123,7 +122,7 @@ void SYMBOL_LIB::SetCache()
 
 bool SYMBOL_LIB::IsBuffering() const
 {
-    return m_properties->Exists( SCH_IO_KICAD_LEGACY::PropBuffering );
+    return m_properties->contains( SCH_IO_KICAD_LEGACY::PropBuffering );
 }
 
 
@@ -132,7 +131,7 @@ void SYMBOL_LIB::EnableBuffering( bool aEnable )
     if( aEnable )
         (*m_properties)[ SCH_IO_KICAD_LEGACY::PropBuffering ] = "";
     else
-        m_properties->Clear( SCH_IO_KICAD_LEGACY::PropBuffering );
+        m_properties->erase( SCH_IO_KICAD_LEGACY::PropBuffering );
 }
 
 

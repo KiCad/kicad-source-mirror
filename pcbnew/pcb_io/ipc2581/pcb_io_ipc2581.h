@@ -71,11 +71,11 @@ public:
     ~PCB_IO_IPC2581() override;
 
     // BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-    //                   const STRING_UTF8_MAP* aProperties = nullptr,
+    //                   const std::map<std::string, UTF8>* aProperties = nullptr,
     //                   PROJECT* aProject = nullptr ) override;
 
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                    const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
@@ -283,7 +283,7 @@ private:
 
     BOARD*                  m_board;
     std::vector<FOOTPRINT*> m_loaded_footprints;
-    const STRING_UTF8_MAP*  m_props;
+    const std::map<std::string, UTF8>*  m_props;
 
     std::map<size_t, wxString> m_user_shape_dict;   //<! Map between shape hash values and reference id string
     wxXmlNode*                 m_shape_user_node;   //<! Output XML node for reference shapes in UserDict

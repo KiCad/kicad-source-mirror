@@ -46,7 +46,7 @@ public:
     bool CanReadBoard( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const STRING_UTF8_MAP* aProperties, PROJECT* aProject ) override;
+                      const std::map<std::string, UTF8>* aProperties, PROJECT* aProject ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {

@@ -68,18 +68,18 @@ public:
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                   SCH_SHEET*             aAppendToMe = nullptr,
-                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                                  const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                              const wxString&           aLibraryPath,
-                             const STRING_UTF8_MAP*         aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>*         aProperties = nullptr ) override;
 
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                            const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
 
@@ -87,11 +87,11 @@ public:
     // Writing to CADSTAR libraries is not supported
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
-    void GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const override;
+    void GetLibraryOptions( std::map<std::string, UTF8>* aListToAppendTo ) const override;
 
 private:
     // Symbol caching
-    void ensureLoadedLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties );
+    void ensureLoadedLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties );
 
     typedef std::map<const wxString, std::unique_ptr<LIB_SYMBOL>> NAME_TO_SYMBOL_MAP;
 

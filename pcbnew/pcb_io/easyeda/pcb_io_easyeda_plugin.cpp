@@ -135,7 +135,7 @@ bool PCB_IO_EASYEDA::CanReadLibrary( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                  const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                                  const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     m_loadedFootprints.clear();
 
@@ -285,7 +285,7 @@ long long PCB_IO_EASYEDA::GetLibraryTimestamp( const wxString& aLibraryPath ) co
 
 void PCB_IO_EASYEDA::FootprintEnumerate( wxArrayString&  aFootprintNames,
                                          const wxString& aLibraryPath, bool aBestEfforts,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     try
     {
@@ -381,7 +381,7 @@ void PCB_IO_EASYEDA::FootprintEnumerate( wxArrayString&  aFootprintNames,
 
 FOOTPRINT* PCB_IO_EASYEDA::FootprintLoad( const wxString& aLibraryPath,
                                           const wxString& aFootprintName, bool aKeepUUID,
-                                          const STRING_UTF8_MAP* aProperties )
+                                          const std::map<std::string, UTF8>* aProperties )
 {
     fontconfig::FONTCONFIG::SetReporter( nullptr );
 

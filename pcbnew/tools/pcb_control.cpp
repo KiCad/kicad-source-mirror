@@ -59,7 +59,6 @@
 #include <origin_viewitem.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
-#include <string_utf8_map.h>
 #include <settings/color_settings.h>
 #include <string>
 #include <tool/tool_manager.h>
@@ -1371,7 +1370,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
     // Load the data
     try
     {
-        STRING_UTF8_MAP props;
+        std::map<std::string, UTF8> props;
 
         // PCB_IO_EAGLE can use this info to center the BOARD, but it does not yet.
 

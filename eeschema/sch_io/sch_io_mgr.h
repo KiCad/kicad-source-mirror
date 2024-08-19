@@ -41,7 +41,6 @@ class SYMBOL_LIB_TABLE;
 class KIWAY;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
-class STRING_UTF8_MAP;
 class PROGRESS_REPORTER;
 
 
@@ -110,7 +109,7 @@ public:
     /**
      * Convert a schematic symbol library to the latest KiCad format
      */
-    static bool ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+    static bool ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
                                 const wxString& aNewFilepath );
 };
 

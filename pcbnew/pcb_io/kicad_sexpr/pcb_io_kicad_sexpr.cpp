@@ -307,7 +307,7 @@ bool PCB_IO_KICAD_SEXPR::CanReadBoard( const wxString& aFileName ) const
 
 
 void PCB_IO_KICAD_SEXPR::SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                            const STRING_UTF8_MAP* aProperties )
+                            const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2444,7 +2444,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),
                   formatInternalUnits( aZone->GetBorderHatchPitch() ).c_str() );
 
-    
+
 
     if( aZone->GetAssignedPriority() > 0 )
         m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetAssignedPriority() );
@@ -2650,7 +2650,7 @@ PCB_IO_KICAD_SEXPR::~PCB_IO_KICAD_SEXPR()
 
 
 BOARD* PCB_IO_KICAD_SEXPR::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                              const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
+                              const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     FILE_LINE_READER reader( aFileName );
 
@@ -2681,7 +2681,7 @@ BOARD* PCB_IO_KICAD_SEXPR::LoadBoard( const wxString& aFileName, BOARD* aAppendT
 }
 
 
-BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
+BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const std::map<std::string, UTF8>* aProperties,
                            PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount)
 {
     init( aProperties );
@@ -2717,7 +2717,7 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, con
 }
 
 
-void PCB_IO_KICAD_SEXPR::init( const STRING_UTF8_MAP* aProperties )
+void PCB_IO_KICAD_SEXPR::init( const std::map<std::string, UTF8>* aProperties )
 {
     m_board = nullptr;
     m_reader = nullptr;
@@ -2740,7 +2740,7 @@ void PCB_IO_KICAD_SEXPR::validateCache( const wxString& aLibraryPath, bool check
 
 
 void PCB_IO_KICAD_SEXPR::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
-                                     bool aBestEfforts, const STRING_UTF8_MAP* aProperties )
+                                     bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxDir     dir( aLibPath );
@@ -2770,7 +2770,7 @@ void PCB_IO_KICAD_SEXPR::FootprintEnumerate( wxArrayString& aFootprintNames, con
 
 const FOOTPRINT* PCB_IO_KICAD_SEXPR::getFootprint( const wxString& aLibraryPath,
                                            const wxString& aFootprintName,
-                                           const STRING_UTF8_MAP* aProperties,
+                                           const std::map<std::string, UTF8>* aProperties,
                                            bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -2798,14 +2798,14 @@ const FOOTPRINT* PCB_IO_KICAD_SEXPR::getFootprint( const wxString& aLibraryPath,
 
 const FOOTPRINT* PCB_IO_KICAD_SEXPR::GetEnumeratedFootprint( const wxString& aLibraryPath,
                                                      const wxString& aFootprintName,
-                                                     const STRING_UTF8_MAP* aProperties )
+                                                     const std::map<std::string, UTF8>* aProperties )
 {
     return getFootprint( aLibraryPath, aFootprintName, aProperties, false );
 }
 
 
 bool PCB_IO_KICAD_SEXPR::FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                  const STRING_UTF8_MAP* aProperties )
+                                  const std::map<std::string, UTF8>* aProperties )
 {
     // Note: checking the cache sounds like a good idea, but won't catch files which differ
     // only in case.
@@ -2821,7 +2821,7 @@ bool PCB_IO_KICAD_SEXPR::FootprintExists( const wxString& aLibraryPath, const wx
 
 
 FOOTPRINT* PCB_IO_KICAD_SEXPR::ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,
-                                        const STRING_UTF8_MAP* aProperties )
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     wxString fcontents;
     wxFFile  f( aFootprintPath );
@@ -2842,7 +2842,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR::ImportFootprint( const wxString& aFootprintPath, 
 FOOTPRINT* PCB_IO_KICAD_SEXPR::FootprintLoad( const wxString& aLibraryPath,
                                       const wxString& aFootprintName,
                                       bool  aKeepUUID,
-                                      const STRING_UTF8_MAP* aProperties )
+                                      const std::map<std::string, UTF8>* aProperties )
 {
     fontconfig::FONTCONFIG::SetReporter( nullptr );
 
@@ -2866,7 +2866,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR::FootprintLoad( const wxString& aLibraryPath,
 
 
 void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                                const STRING_UTF8_MAP* aProperties )
+                                const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2964,7 +2964,7 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
 
 
 void PCB_IO_KICAD_SEXPR::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                  const STRING_UTF8_MAP* aProperties )
+                                  const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2989,7 +2989,7 @@ long long PCB_IO_KICAD_SEXPR::GetLibraryTimestamp( const wxString& aLibraryPath 
 }
 
 
-void PCB_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+void PCB_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
@@ -3007,7 +3007,7 @@ void PCB_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath, const STRI
 }
 
 
-bool PCB_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+bool PCB_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );

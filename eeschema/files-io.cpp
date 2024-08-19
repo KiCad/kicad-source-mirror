@@ -1376,7 +1376,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
 
 bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
-                                 const STRING_UTF8_MAP* aProperties )
+                                 const std::map<std::string, UTF8>* aProperties )
 {
     wxFileName             filename( aFileName );
     wxFileName             newfilename;

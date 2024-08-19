@@ -50,13 +50,13 @@ public:
     int GetModifyHash() const override { return 0; }
 
     void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                            const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     bool SupportsSubLibraries() const override { return true; }
 
@@ -75,7 +75,7 @@ public:
     HTTP_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
     void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                     const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     const wxString& GetError() const override { return m_lastError; }
 

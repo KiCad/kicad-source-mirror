@@ -570,7 +570,6 @@ set( COMMON_SRCS
     reporter.cpp
     scintilla_tricks.cpp
     status_popup.cpp
-    string_utf8_map.cpp
     stroke_params.cpp
     template_fieldnames.cpp
     textentry_tricks.cpp

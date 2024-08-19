@@ -188,7 +188,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& a
 }
 
 
-bool SCH_IO_MGR::ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
                                  const wxString& aNewFilepath )
 {
     SCH_IO_MGR::SCH_FILE_T oldFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );

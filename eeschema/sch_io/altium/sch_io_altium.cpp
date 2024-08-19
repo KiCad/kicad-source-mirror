@@ -383,7 +383,7 @@ wxFileName SCH_IO_ALTIUM::getLibFileName()
 
 SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                              SCH_SHEET* aAppendToMe,
-                                             const STRING_UTF8_MAP* aProperties )
+                                             const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
@@ -4515,7 +4515,7 @@ long long SCH_IO_ALTIUM::getLibraryTimestamp( const wxString& aLibraryPath ) con
 
 
 void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString&        aLibraryPath,
-                                         const STRING_UTF8_MAP* aProperties )
+                                         const std::map<std::string, UTF8>* aProperties )
 {
     // Suppress font substitution warnings
     fontconfig::FONTCONFIG::SetReporter( nullptr );
@@ -4625,7 +4625,7 @@ void SCH_IO_ALTIUM::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
 
 
 void SCH_IO_ALTIUM::doEnumerateSymbolLib( const wxString& aLibraryPath,
-        const STRING_UTF8_MAP* aProperties,
+        const std::map<std::string, UTF8>* aProperties,
         std::function<void(const wxString&, LIB_SYMBOL*)> aInserter )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
@@ -4651,7 +4651,7 @@ void SCH_IO_ALTIUM::doEnumerateSymbolLib( const wxString& aLibraryPath,
 
 void SCH_IO_ALTIUM::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
                                         const wxString&        aLibraryPath,
-                                        const STRING_UTF8_MAP* aProperties )
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     doEnumerateSymbolLib( aLibraryPath, aProperties,
                           [&]( const wxString& aStr, LIB_SYMBOL* )
@@ -4663,7 +4663,7 @@ void SCH_IO_ALTIUM::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
 
 void SCH_IO_ALTIUM::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                         const wxString&           aLibraryPath,
-                                        const STRING_UTF8_MAP*    aProperties )
+                                        const std::map<std::string, UTF8>*    aProperties )
 {
     doEnumerateSymbolLib( aLibraryPath, aProperties,
                           [&]( const wxString&, LIB_SYMBOL* aSymbol )
@@ -4675,7 +4675,7 @@ void SCH_IO_ALTIUM::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 LIB_SYMBOL* SCH_IO_ALTIUM::LoadSymbol( const wxString&        aLibraryPath,
                                        const wxString&        aAliasName,
-                                       const STRING_UTF8_MAP* aProperties )
+                                       const std::map<std::string, UTF8>* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
