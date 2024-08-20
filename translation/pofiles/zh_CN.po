@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-08-17 07:09+0000\n"
+"PO-Revision-Date: 2024-08-20 09:23+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -41320,7 +41320,7 @@ msgstr "NPTH 焊盘"
 #: pcbnew/pad.cpp:1464
 #, c-format
 msgid "Pad %s of %s on %s"
-msgstr "焊盘　%s (%s) - %s"
+msgstr "%3$s 上 %2$s 的焊盘 %1$s"
 
 #: pcbnew/pad.cpp:1471
 #, c-format
@@ -41339,7 +41339,7 @@ msgstr "PTH 焊盘"
 #: pcbnew/pad.cpp:1495
 #, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "%s 上 %s 的焊盘 %s %s"
+msgstr "%4$s 上 %3$s 的焊盘 %1$s %2$s"
 
 #: pcbnew/pad.cpp:1503
 #, c-format
@@ -43411,7 +43411,7 @@ msgstr "%3$s 上的 %1$s %2$s"
 #: pcbnew/pcb_shape.cpp:734
 #, c-format
 msgid "%s of %s on %s"
-msgstr "%2$s 的 %1$, 位于 %3$s"
+msgstr "%2$s 的 %1$s, 位于 %3$s"
 
 #: pcbnew/pcb_shape.cpp:741
 #, c-format
