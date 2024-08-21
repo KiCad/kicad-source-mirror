@@ -1111,7 +1111,7 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         ALTIUM_LAYER           layer_num = static_cast<ALTIUM_LAYER>( ii + 1 );
         INPUT_LAYER_DESC       iLdesc;
 
-        if( ii > m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
+        if( ii >= m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
             && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY
                    && layer_num <= ALTIUM_LAYER::BOTTOM_SOLDER )
             && !( layer_num >= ALTIUM_LAYER::MECHANICAL_1
@@ -1447,35 +1447,50 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
             continue;
         }
 
-        FOOTPRINT*      footprint  = m_components.at( elem.component );
+        const ALTIUM_EMBEDDED_MODEL_DATA& modelData = modelTuple->second;
+        FOOTPRINT*                        footprint = m_components.at( elem.component );
 
         EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
-        file->name = modelTuple->second.m_modelname;
+        file->name = modelData.m_modelname;
 
-        wxMemoryInputStream compressedStream(modelTuple->second.m_data.data(), modelTuple->second.m_data.size());
-        wxZlibInputStream zlibStream(compressedStream);
+        wxMemoryInputStream  compressedStream( modelData.m_data.data(), modelData.m_data.size() );
+        wxZlibInputStream    zlibStream( compressedStream );
         wxMemoryOutputStream decompressedStream;
-        zlibStream.Read(decompressedStream);
-        file->decompressedData.resize(decompressedStream.GetSize());
-        decompressedStream.CopyTo(file->decompressedData.data(), file->decompressedData.size());
+
+        zlibStream.Read( decompressedStream );
+        file->decompressedData.resize( decompressedStream.GetSize() );
+        decompressedStream.CopyTo( file->decompressedData.data(), file->decompressedData.size() );
 
         EMBEDDED_FILES::CompressAndEncode( *file );
-        m_board->GetEmbeddedFiles()->AddFile( file );
+        footprint->GetEmbeddedFiles()->AddFile( file );
 
         FP_3DMODEL modelSettings;
 
         modelSettings.m_Filename = footprint->GetEmbeddedFiles()->GetEmbeddedFileLink( *file );
+        VECTOR2I fpPosition = footprint->GetPosition();
 
-        modelSettings.m_Offset.x = pcbIUScale.IUTomm((int) elem.modelPosition.x );
-        modelSettings.m_Offset.y = -pcbIUScale.IUTomm((int) elem.modelPosition.y );
-        modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) elem.modelPosition.z + modelTuple->second.m_z_offset );
+        modelSettings.m_Offset.x =
+                pcbIUScale.IUTomm( KiROUND( elem.modelPosition.x - fpPosition.x ) );
+        modelSettings.m_Offset.y =
+                -pcbIUScale.IUTomm( KiROUND( elem.modelPosition.y - fpPosition.y ) );
+        modelSettings.m_Offset.z = pcbIUScale.IUTomm( KiROUND( elem.modelPosition.z ) );
 
-        modelSettings.m_Rotation.x = normalizeAngleDegrees( -elem.modelRotation.x + modelTuple->second.m_rotation.x, -180, 180 );
-        modelSettings.m_Rotation.y = normalizeAngleDegrees( -elem.modelRotation.y + modelTuple->second.m_rotation.y, -180, 180 );
-        modelSettings.m_Rotation.z = normalizeAngleDegrees( -elem.modelRotation.z
-                                                                        + elem.rotation
-                                                                        + modelTuple->second.m_rotation.z,
-                                                            -180, 180 );
+        EDA_ANGLE orientation = footprint->GetOrientation();
+
+        if( footprint->IsFlipped() )
+        {
+            modelSettings.m_Offset.y = -modelSettings.m_Offset.y;
+            orientation              = -orientation;
+        }
+
+        RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
+
+        modelSettings.m_Rotation.x = normalizeAngleDegrees( -elem.modelRotation.x, -180, 180 );
+        modelSettings.m_Rotation.y = normalizeAngleDegrees( -elem.modelRotation.y, -180, 180 );
+        modelSettings.m_Rotation.z = normalizeAngleDegrees( -elem.modelRotation.z + elem.rotation
+                                                                                  + orientation.AsDegrees(),
+                                                                                   -180, 180 );
+
         modelSettings.m_Opacity = elem.body_opacity_3d;
 
         footprint->Models().push_back( modelSettings );
