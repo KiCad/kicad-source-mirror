@@ -1424,13 +1424,12 @@ void RENDER_3D_RAYTRACE_BASE::addModels( CONTAINER_3D& aDstContainer, const S3DM
     wxASSERT( a3DModel->m_Meshes != nullptr );
     wxASSERT( a3DModel->m_MaterialsSize > 0 );
     wxASSERT( a3DModel->m_MeshesSize > 0 );
-    wxASSERT( aFPOpacity > 0.0f );
-    wxASSERT( aFPOpacity <= 1.0f );
 
     if( aFPOpacity > 1.0f )
-    {
         aFPOpacity = 1.0f;
-    }
+
+    if( aFPOpacity < 0.0f )
+        aFPOpacity = 0.0f;
 
     if( ( a3DModel->m_Materials != nullptr ) && ( a3DModel->m_Meshes != nullptr )
       && ( a3DModel->m_MaterialsSize > 0 ) && ( a3DModel->m_MeshesSize > 0 ) )
