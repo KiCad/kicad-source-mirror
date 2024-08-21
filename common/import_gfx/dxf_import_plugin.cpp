@@ -98,7 +98,7 @@ DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
     m_brdLayer         = Dwgs_User;    // The default import layer
     m_importAsFPShapes = true;
     m_minX             = m_minY = std::numeric_limits<double>::max();
-    m_maxX             = m_maxY = std::numeric_limits<double>::min();
+    m_maxX             = m_maxY = std::numeric_limits<double>::lowest();
     m_currentUnit      = DXF_IMPORT_UNITS::DEFAULT;
 
     m_importCoordinatePrecision = 4;    // initial value per dxf spec
@@ -1411,8 +1411,8 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
         ctrlp.push_back( m_curr_entity.m_SplineControlPointList[ii].m_y );
     }
 
-    std::vector<double> coords;
     tinyspline::BSpline beziers;
+    std::vector<double> coords;
 
     try
     {
@@ -1421,8 +1421,11 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 
 	    dxfspline.setControlPoints( ctrlp );
 	    dxfspline.setKnots( m_curr_entity.m_SplineKnotsList );
-        beziers = tinyspline::BSpline( dxfspline.toBeziers() );
 
+        if( dxfspline.degree() < 3 )
+            dxfspline = dxfspline.elevateDegree( 3 - dxfspline.degree() );
+
+        beziers = dxfspline.toBeziers();
         coords = beziers.controlPoints();
     }
     catch( const std::runtime_error& )  // tinyspline throws everything including data validation
@@ -1446,14 +1449,14 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
         // not sure why this happens, but it seems to sometimes slip degree on the final bezier
         VECTOR2D bezierControl2;
 
-        if( ii + 4 >= coords.size() )
+        if( ii + 5 >= coords.size() )
             bezierControl2 = bezierControl1;
         else
             bezierControl2 = VECTOR2D( mapX( coords[ii + 4] ), mapY( coords[ii + 5] ) );
 
         VECTOR2D end;
 
-        if( ii + 6 >= coords.size() )
+        if( ii + 7 >= coords.size() )
             end = bezierControl2;
         else
             end = VECTOR2D( mapX( coords[ii + 6] ), mapY( coords[ii + 7] ) );
