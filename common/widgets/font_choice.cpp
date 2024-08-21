@@ -105,13 +105,19 @@ bool FONT_CHOICE::HaveFontSelection() const
 }
 
 
-KIFONT::FONT* FONT_CHOICE::GetFontSelection( bool aBold, bool aItalic ) const
+KIFONT::FONT* FONT_CHOICE::GetFontSelection( bool aBold, bool aItalic, bool aForDrawingSheet ) const
 {
     if( GetSelection() <= 0 )
+    {
         return nullptr;
+    }
     else if( GetSelection() == 1 && m_systemFontCount == 2 )
+    {
         return KIFONT::FONT::GetFont( KICAD_FONT_NAME, aBold, aItalic );
+    }
     else
-        return KIFONT::FONT::GetFont( GetStringSelection(), aBold, aItalic );
+    {
+        return KIFONT::FONT::GetFont( GetStringSelection(), aBold, aItalic, aForDrawingSheet );
+    }
 }
 

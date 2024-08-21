@@ -565,7 +565,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
             item->m_Vjustify = GR_TEXT_V_ALIGN_BOTTOM;
 
         if( m_fontCtrl->HaveFontSelection() )
-            item->m_Font = m_fontCtrl->GetFontSelection( item->m_Bold, item->m_Italic );
+            item->m_Font = m_fontCtrl->GetFontSelection( item->m_Bold, item->m_Italic, true );
 
         msg = m_textCtrlRotation->GetValue();
         item->m_Orient = EDA_UNIT_UTILS::UI::DoubleValueFromString( drawSheetIUScale,

@@ -37,7 +37,7 @@ public:
 
     bool HaveFontSelection() const;
 
-    KIFONT::FONT* GetFontSelection( bool aBold, bool aItalic ) const;
+    KIFONT::FONT* GetFontSelection( bool aBold, bool aItalic, bool aForDrawingSheet = false ) const;
 
 private:
     int       m_systemFontCount;

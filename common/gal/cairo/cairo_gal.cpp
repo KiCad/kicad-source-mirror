@@ -1828,7 +1828,7 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
         for( const std::vector<VECTOR2D>& pointList : glyph )
             drawPoly( pointList );
     }
-    else if( aGlyph.IsOutline() )
+else if( aGlyph.IsOutline() )
     {
         const KIFONT::OUTLINE_GLYPH& glyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
 
@@ -1866,15 +1866,9 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
 
         if( aNth == aTotal - 1 )
         {
-            /*
-            cairo_close_path( currentContext );
-            setSourceRgba( currentContext, fillColor );
-            cairo_set_fill_rule( currentContext, CAIRO_FILL_RULE_EVEN_ODD );
-            cairo_fill_preserve( currentContext );
-            setSourceRgba( currentContext, strokeColor );
-            cairo_stroke( currentContext );
-            */
             flushPath();
+            SetIsFill( false );
+            SetIsStroke( true );
             m_isElementAdded = true;
         }
     }

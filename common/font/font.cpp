@@ -57,7 +57,7 @@ const METRICS& METRICS::Default()
 
 FONT* FONT::s_defaultFont = nullptr;
 
-std::map< std::tuple<wxString, bool, bool>, FONT*> FONT::s_fontMap;
+std::map< std::tuple<wxString, bool, bool, bool>, FONT*> FONT::s_fontMap;
 
 class MARKUP_CACHE
 {
@@ -143,12 +143,13 @@ FONT* FONT::getDefaultFont()
 }
 
 
-FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
+FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic,
+                     bool aForDrawingSheet )
 {
     if( aFontName.empty() || aFontName.StartsWith( KICAD_FONT_NAME ) )
         return getDefaultFont();
 
-    std::tuple<wxString, bool, bool> key = { aFontName, aBold, aItalic };
+    std::tuple<wxString, bool, bool, bool> key = { aFontName, aBold, aItalic, aForDrawingSheet };
 
     FONT* font = nullptr;
 
@@ -156,7 +157,7 @@ FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
         font = s_fontMap[key];
 
     if( !font )
-        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic );
+        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic, aForDrawingSheet );
 
     if( !font )
         font = getDefaultFont();
