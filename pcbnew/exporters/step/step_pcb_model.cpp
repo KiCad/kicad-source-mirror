@@ -2641,6 +2641,15 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     double top = std::max( boardZPos, boardZPos + boardThickness );
     double bottom = std::min( boardZPos, boardZPos + boardThickness );
 
+    // 3D step models are placed on the top of copper layers.
+    // This is true for SMD shapes, and perhaps not always true for TH shapes,
+    // but we use this Z position for any 3D shape.
+    double f_pos, f_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    top += f_thickness;
+    getLayerZPlacement( B_Cu, f_pos, f_thickness );
+    bottom += f_thickness;      // f_thickness is < 0 for B_Cu layer
+
     gp_Trsf lRot;
 
     if( aBottom )
