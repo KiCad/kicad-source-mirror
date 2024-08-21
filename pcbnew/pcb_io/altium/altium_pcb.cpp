@@ -1343,6 +1343,9 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
     EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
     file->name = aElem.modelName;
 
+    if( file->name.IsEmpty() )
+        file->name = model->first.name;
+
     // Decompress the model data before assigning
     std::vector<char>   decompressedData;
     wxMemoryInputStream compressedStream( model->second.data(), model->second.size() );
@@ -1379,9 +1382,9 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
 
     modelSettings.m_Filename = aFootprint->GetEmbeddedFiles()->GetEmbeddedFileLink( *file );
 
-    modelSettings.m_Offset.x = pcbIUScale.IUTomm( (int) aElem.modelPosition.x - fpPosition.x );
-    modelSettings.m_Offset.y = -pcbIUScale.IUTomm( (int) aElem.modelPosition.y - fpPosition.y );
-    modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) aElem.modelPosition.z + model->first.z_offset );
+    modelSettings.m_Offset.x = pcbIUScale.IUTomm( (int) aElem.modelPosition.x );
+    modelSettings.m_Offset.y = -pcbIUScale.IUTomm( (int) aElem.modelPosition.y );
+    modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) aElem.modelPosition.z );
 
     EDA_ANGLE orientation = aFootprint->GetOrientation();
 
@@ -1393,11 +1396,10 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
 
     RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
 
-    modelSettings.m_Rotation.x = normalizeAngleDegrees( -aElem.modelRotation.x + model->first.rotation.x, -180, 180 );
-    modelSettings.m_Rotation.y = normalizeAngleDegrees( -aElem.modelRotation.y + model->first.rotation.y, -180, 180 );
+    modelSettings.m_Rotation.x = normalizeAngleDegrees( -aElem.modelRotation.x, -180, 180 );
+    modelSettings.m_Rotation.y = normalizeAngleDegrees( -aElem.modelRotation.y, -180, 180 );
     modelSettings.m_Rotation.z = normalizeAngleDegrees( -aElem.modelRotation.z + aElem.rotation
-                                                                               + orientation.AsDegrees()
-                                                                               + model->first.rotation.z,
+                                                                               + orientation.AsDegrees(),
                                                                                  -180, 180 );
     modelSettings.m_Opacity = aElem.body_opacity_3d;
 
