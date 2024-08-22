@@ -2498,18 +2498,21 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                 SHAPE_POLY_SET hole;
                 pad->TransformHoleToPolygon( hole, 0, GetDesignSettings().m_MaxError, ERROR_INSIDE );
 
-                // Add this pad hole to the main outline
-                // But we can have more than one main outline (i.e. more than one board), so
-                // search the right main outline i.e. the outline that contains the pad hole
-                SHAPE_LINE_CHAIN& pad_hole = hole.Outline( 0 );
-                const VECTOR2I holePt = pad_hole.CPoint( 0 );
-
-                for( int jj = 0; jj < aOutlines.OutlineCount(); ++jj )
+                if( hole.OutlineCount() > 0 )   // can be not the case for malformed NPTH holes
                 {
-                    if( aOutlines.Outline( jj ).PointInside( holePt ) )
+                    // Add this pad hole to the main outline
+                    // But we can have more than one main outline (i.e. more than one board), so
+                    // search the right main outline i.e. the outline that contains the pad hole
+                    SHAPE_LINE_CHAIN& pad_hole = hole.Outline( 0 );
+                    const VECTOR2I holePt = pad_hole.CPoint( 0 );
+
+                    for( int jj = 0; jj < aOutlines.OutlineCount(); ++jj )
                     {
-                        aOutlines.AddHole( pad_hole, jj );
-                        break;
+                        if( aOutlines.Outline( jj ).PointInside( holePt ) )
+                        {
+                            aOutlines.AddHole( pad_hole, jj );
+                            break;
+                        }
                     }
                 }
             }
