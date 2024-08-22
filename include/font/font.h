@@ -141,7 +141,9 @@ public:
     virtual bool IsItalic() const  { return false; }
 
     static FONT* GetFont( const wxString& aFontName = wxEmptyString, bool aBold = false,
-                          bool aItalic = false, const std::vector<wxString>* aEmbeddedFiles = nullptr );
+                          bool aItalic = false,
+                          const std::vector<wxString>* aEmbeddedFiles = nullptr,
+                          bool aForDrawingSheet = false );
     static bool IsStroke( const wxString& aFontName );
 
     const wxString& GetName() const { return m_fontName; };
@@ -279,7 +281,7 @@ protected:
 private:
     static FONT* s_defaultFont;
 
-    static std::map< std::tuple<wxString, bool, bool>, FONT* > s_fontMap;
+    static std::map< std::tuple<wxString, bool, bool, bool>, FONT* > s_fontMap;
 };
 
 } //namespace KIFONT

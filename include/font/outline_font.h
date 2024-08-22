@@ -95,7 +95,8 @@ public:
      * @param aFontFileName is the (platform-specific) fully qualified name of the font file
      */
     static OUTLINE_FONT* LoadFont( const wxString& aFontFileName, bool aBold, bool aItalic,
-                                   const std::vector<wxString>* aEmbeddedFiles );
+                                   const std::vector<wxString>* aEmbeddedFiles,
+                                   bool aForDrawingSheet );
 
     /**
      * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
@@ -151,6 +152,8 @@ private:
     const int         m_faceSize;
     bool              m_fakeBold;
     bool              m_fakeItal;
+
+    bool              m_forDrawingSheet;
 
     // cache for glyphs converted to straight segments
     // key is glyph index (FT_GlyphSlot field glyph_index)

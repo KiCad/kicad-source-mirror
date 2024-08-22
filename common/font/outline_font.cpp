@@ -48,7 +48,8 @@ OUTLINE_FONT::OUTLINE_FONT() :
         m_face(NULL),
         m_faceSize( 16 ),
         m_fakeBold( false ),
-        m_fakeItal( false )
+        m_fakeItal( false ),
+        m_forDrawingSheet( false )
 {
     std::lock_guard<std::mutex> guard( m_freeTypeMutex );
 
@@ -83,7 +84,8 @@ OUTLINE_FONT::EMBEDDING_PERMISSION OUTLINE_FONT::GetEmbeddingPermission() const
 
 
 OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, bool aItalic,
-                                      const std::vector<wxString>* aEmbeddedFiles )
+                                      const std::vector<wxString>* aEmbeddedFiles,
+                                      bool aForDrawingSheet )
 {
     std::unique_ptr<OUTLINE_FONT> font = std::make_unique<OUTLINE_FONT>();
 
@@ -109,6 +111,7 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
 
     font->m_fontName = aFontName;       // Keep asked-for name, even if we substituted.
     font->m_fontFileName = fontFile;
+    font->m_forDrawingSheet = aForDrawingSheet;
 
     return font.release();
 }
@@ -292,6 +295,7 @@ struct GLYPH_CACHE_KEY {
     FT_Face        face;
     hb_codepoint_t codepoint;
     double         scaler;
+    bool           forDrawingSheet;
     bool           fakeItalic;
     bool           fakeBold;
     bool           mirror;
@@ -299,9 +303,14 @@ struct GLYPH_CACHE_KEY {
 
     bool operator==(const GLYPH_CACHE_KEY& rhs ) const
     {
-        return face == rhs.face && codepoint == rhs.codepoint && scaler == rhs.scaler
-                   && fakeItalic == rhs.fakeItalic && fakeBold == rhs.fakeBold
-                   && mirror == rhs.mirror && angle == rhs.angle;
+        return face == rhs.face
+                && codepoint == rhs.codepoint
+                && scaler == rhs.scaler
+                && forDrawingSheet == rhs.forDrawingSheet
+                && fakeItalic == rhs.fakeItalic
+                && fakeBold == rhs.fakeBold
+                && mirror == rhs.mirror
+                && angle == rhs.angle;
     }
 };
 
@@ -312,10 +321,14 @@ namespace std
     {
         std::size_t operator()( const GLYPH_CACHE_KEY& k ) const
         {
-            return hash<const void*>()( k.face ) ^ hash<unsigned>()( k.codepoint )
+            return hash<const void*>()( k.face )
+                        ^ hash<unsigned>()( k.codepoint )
                         ^ hash<double>()( k.scaler )
-                        ^ hash<int>()( k.fakeItalic ) ^ hash<int>()( k.fakeBold )
-                        ^ hash<int>()( k.mirror ) ^ hash<int>()( k.angle.AsTenthsOfADegree() );
+                        ^ hash<double>()( k.forDrawingSheet )
+                        ^ hash<int>()( k.fakeItalic )
+                        ^ hash<int>()( k.fakeBold )
+                        ^ hash<int>()( k.mirror )
+                        ^ hash<int>()( k.angle.AsTenthsOfADegree() );
         }
     };
 }
@@ -373,8 +386,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
         if( aGlyphs )
         {
-            GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, scaler, m_fakeItal, m_fakeBold,
-                                    aMirror, aAngle };
+            GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, scaler, m_forDrawingSheet,
+                                    m_fakeItal, m_fakeBold, aMirror, aAngle };
             GLYPH_DATA&     glyphData = s_glyphCache[ key ];
 
             if( glyphData.m_Contours.empty() )
