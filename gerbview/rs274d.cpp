@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -298,7 +298,7 @@ void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const VECTOR2I
     aGbrItem->SetLayerPolarity( aLayerNegative );
 }
 
-
+#include <wx/log.h>
 /**
  * Create an arc G code when found in polygon outlines.
  *
@@ -368,9 +368,12 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
 
     EDA_ANGLE arc_angle = start_angle - end_angle;
 
-    // Approximate arc by 36 segments per 360 degree
-    EDA_ANGLE increment_angle = ANGLE_360 / 36;
-    int count = std::abs( arc_angle.AsDegrees() / increment_angle.AsDegrees() );
+    // Approximate arc by segments with a approximation error = err_max
+    // a max err = 5 microns looks good
+    const int approx_err_max =  gerbIUScale.mmToIU( 0.005 );
+    int radius = VECTOR2I( aStart - rel_center ).EuclideanNorm();
+    int count = GetArcToSegmentCount( radius, approx_err_max, arc_angle );
+    EDA_ANGLE increment_angle = std::abs( arc_angle ) / count;
 
     if( aGbrItem->m_ShapeAsPolygon.OutlineCount() == 0 )
         aGbrItem->m_ShapeAsPolygon.NewOutline();
