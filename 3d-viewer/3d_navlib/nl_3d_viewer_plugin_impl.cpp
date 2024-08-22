@@ -575,10 +575,11 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
         // Only allow command execution if the window is enabled. i.e. there is not a modal dialog
         // currently active.
+        TOOLS_HOLDER* tools_holder = nullptr;
 
-        if( parent->IsEnabled() )
+        if( parent->IsEnabled() && ( tools_holder = dynamic_cast<TOOLS_HOLDER*>( parent ) ) )
         {
-            TOOL_MANAGER* tool_manager = dynamic_cast<TOOLS_HOLDER*>( parent )->GetToolManager();
+            TOOL_MANAGER* tool_manager = tools_holder->GetToolManager();
 
             if( tool_manager == nullptr )
             {
