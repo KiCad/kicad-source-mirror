@@ -1330,7 +1330,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case SCH_IO_MGR::SCH_EASYEDAPRO:
     {
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-        wxCHECK_MSG( filename.IsAbsolute(), false,
+        // Unless we are passing the files in aproperties, in which case aFileName can be empty.
+        wxCHECK_MSG( aFileName.IsEmpty() || filename.IsAbsolute(), false,
                      wxS( "Import schematic: path is not absolute!" ) );
 
         try

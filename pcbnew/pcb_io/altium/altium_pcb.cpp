@@ -1329,6 +1329,16 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPc
 
         footprint->SetReference( reference );
 
+        KIID id( elem.sourceUniqueID );
+        KIID pathid( elem.sourceHierachicalPath );
+        KIID_PATH path;
+        path.push_back( pathid );
+        path.push_back( id );
+
+        footprint->SetPath( path );
+        footprint->SetSheetname( elem.sourceHierachicalPath );
+        footprint->SetSheetfile( elem.sourceHierachicalPath + wxT( ".kicad_sch" ));
+
         footprint->SetLocked( elem.locked );
         footprint->Reference().SetVisible( elem.nameon );
         footprint->Value().SetVisible( elem.commenton );

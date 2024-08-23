@@ -102,6 +102,11 @@ public:
                                 int aSchFileType, int aPcbFileType );
 
     /**
+     * Open dialog to import Altium project files.
+     */
+    void OnImportAltiumProjectFiles( wxCommandEvent& event );
+
+    /**
      *  Open dialog to import CADSTAR Schematic and PCB Archive files.
      */
     void OnImportCadstarArchiveFiles( wxCommandEvent& event );

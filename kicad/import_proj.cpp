@@ -24,7 +24,9 @@
 #include <string_utils.h>
 #include <richio.h>
 
+#include <wx/fileconf.h>
 #include <wx/msgdlg.h>
+#include <wx/wfstream.h>
 
 #include <kiway.h>
 #include <kiway_player.h>
@@ -32,13 +34,20 @@
 #include <pcb_edit_frame.h>
 #include <sch_edit_frame.h>
 
+#include <symbol_lib_table.h>
+#include <fp_lib_table.h>
+
 #include <sch_io/sch_io_mgr.h>
 #include <pcb_io/pcb_io_mgr.h>
+#include <project_sch.h>
+#include <project_pcb.h>
 
 #include <io/easyedapro/easyedapro_import_utils.h>
 #include <io/easyedapro/easyedapro_parser.h>
 #include <io/common/plugin_common_choose_project.h>
 #include <dialogs/dialog_import_choose_project.h>
+
+#include <wx/log.h>
 
 
 IMPORT_PROJ_HELPER::IMPORT_PROJ_HELPER( KICAD_MANAGER_FRAME*         aFrame,
@@ -146,16 +155,22 @@ void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileTyp
     if( appImportFile.empty() )
         return;
 
-    KIWAY_PLAYER* frame = m_frame->Kiway().Player( frame_type, true );
+    doImport( appImportFile, frame_type, aImportedFileType );
+}
+
+
+void IMPORT_PROJ_HELPER::doImport( const wxString& aFile, FRAME_T aFrameType, int aImportedFileType )
+{
+    KIWAY_PLAYER* frame = m_frame->Kiway().Player( aFrameType, true );
 
     std::stringstream ss;
-    ss << aImportedFileType << '\n' << TO_UTF8( appImportFile );
+    ss << aImportedFileType << '\n' << TO_UTF8( aFile );
 
     for( const auto& [key, value] : m_properties )
         ss << '\n' << key << '\n' << value.wx_str();
 
     std::string packet = ss.str();
-    frame->Kiway().ExpressMail( frame_type, MAIL_IMPORT_FILE, packet, m_frame );
+    frame->Kiway().ExpressMail( aFrameType, MAIL_IMPORT_FILE, packet, m_frame );
 
     if( !frame->IsShownOnScreen() )
         frame->Show( true );
@@ -202,6 +217,96 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler()
 }
 
 
+void IMPORT_PROJ_HELPER::addLocalLibraries( const std::set<wxString>& aNames, FRAME_T aFrameType )
+{
+    KIWAY_PLAYER* frame = m_frame->Kiway().Player( aFrameType, true );
+
+    std::stringstream ss;
+
+    for( const wxString& name : aNames )
+    {
+        wxFileName fname( name );
+        fname.MakeAbsolute( m_InputFile.GetPath() );
+        ss << TO_UTF8( fname.GetFullPath() ) << '\n';
+    }
+
+    std::string packet = ss.str();
+    frame->Kiway().ExpressMail( aFrameType, MAIL_ADD_LOCAL_LIB, packet, m_frame );
+}
+
+
+void IMPORT_PROJ_HELPER::AltiumProjectHandler()
+{
+    wxFFileInputStream stream( m_InputFile.GetFullPath() );
+
+    if( !stream.IsOk() )
+        return;
+
+    wxFileConfig config( stream );
+    wxString groupname;
+    long groupid;
+
+    std::set<wxString> sch_file;
+    std::set<wxString> pcb_file;
+    std::set<wxString> sch_libs;
+    std::set<wxString> pcb_libs;
+
+    for( bool more = config.GetFirstGroup( groupname, groupid ); more;
+         more = config.GetNextGroup( groupname, groupid ) )
+    {
+        if( !groupname.StartsWith( wxS( "Document" ) ) )
+            continue;
+
+        wxString number = groupname.Mid( 8 );
+        long docNumber;
+
+        if( !number.ToLong( &docNumber ) )
+            continue;
+
+        wxString path = config.Read( groupname + wxS( "/DocumentPath" ), wxEmptyString );
+
+        if( path.empty() )
+            continue;
+
+        wxFileName fname( path );
+
+        if( !fname.IsAbsolute() )
+            fname.MakeAbsolute( m_InputFile.GetPath() );
+
+        if( !fname.GetExt().CmpNoCase( "PCBDOC" ) )
+            pcb_file.insert( fname.GetFullPath() );
+
+        if( !fname.GetExt().CmpNoCase( "SCHDOC" ) )
+            sch_file.insert( fname.GetFullPath() );
+
+        if( !fname.GetExt().CmpNoCase( "PCBLIB" ) )
+            pcb_libs.insert( fname.GetFullPath() );
+
+        if( !fname.GetExt().CmpNoCase( "SCHLIB" ) )
+            sch_libs.insert( fname.GetFullPath() );
+    }
+
+    addLocalLibraries( sch_libs, FRAME_SCH );
+    addLocalLibraries( pcb_libs, FRAME_PCB_EDITOR );
+
+    m_properties["project_file"] = m_InputFile.GetFullPath();
+
+    int ii = 0;
+
+    for( auto& path : sch_file )
+    {
+        std::string key = "sch" + std::to_string( ii++ );
+        m_properties[key] = path.ToStdString();
+    }
+
+    if( !sch_file.empty() )
+        doImport( "", FRAME_SCH, SCH_IO_MGR::SCH_ALTIUM );
+
+    if( !pcb_file.empty() )
+        doImport( *pcb_file.begin(), FRAME_PCB_EDITOR, PCB_IO_MGR::ALTIUM_DESIGNER );
+}
+
+
 void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcbFileType )
 {
     m_properties.clear();
@@ -210,6 +315,12 @@ void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcb
         || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO )
     {
         EasyEDAProProjectHandler();
+    }
+    else if( aImportedSchFileType == SCH_IO_MGR::SCH_ALTIUM
+             || aImportedPcbFileType == PCB_IO_MGR::ALTIUM_DESIGNER )
+    {
+        AltiumProjectHandler();
+        return;
     }
 
     ImportIndividualFile( SCHEMATIC_T, aImportedSchFileType );

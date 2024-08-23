@@ -1275,6 +1275,14 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case PCB_IO_MGR::EASYEDAPRO:
         return OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
                                  KICTL_NONKICAD_ONLY | KICTL_IMPORT_LIB );
+        break;
+
+    case PCB_IO_MGR::ALTIUM_DESIGNER:
+    case PCB_IO_MGR::ALTIUM_CIRCUIT_MAKER:
+    case PCB_IO_MGR::ALTIUM_CIRCUIT_STUDIO:
+    case PCB_IO_MGR::SOLIDWORKS_PCB:
+        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
+                                 KICTL_NONKICAD_ONLY );
 
     default: break;
     }
