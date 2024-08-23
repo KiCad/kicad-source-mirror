@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-08-10 15:09+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2024-08-24 14:09+0000\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -46998,7 +46998,7 @@ msgstr "Exportera Specctra DSN-routningsinformation"
 
 #: pcbnew/tools/pcb_actions.cpp:1021
 msgid "Gerbers (.gbr)..."
-msgstr "Gerbers (.gbr) ..."
+msgstr "Gerber (.gbr) ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1022
 msgid "Generate Gerbers for fabrication"
@@ -47006,7 +47006,7 @@ msgstr "Generera Gerbers för tillverkning"
 
 #: pcbnew/tools/pcb_actions.cpp:1028
 msgid "Drill Files (.drl)..."
-msgstr "Drill Files (.drl) ..."
+msgstr "Borrfiler (.drl) ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1029
 msgid "Generate Excellon drill file(s)"
