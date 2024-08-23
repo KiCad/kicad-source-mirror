@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-08-02 10:09+0000\n"
+"PO-Revision-Date: 2024-08-24 14:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2873,11 +2873,13 @@ msgid "Drawing Sheet File"
 msgstr "Archivo de hoja de dibujo"
 
 #: common/dialogs/dialog_page_settings.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Error al cargar la hoja de dibujo '%s'."
+msgstr ""
+"Error al cargar la hoja de dibujo '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -15553,14 +15555,12 @@ msgstr "Agregar de todas formas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:851
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1079
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Esta operación cambiará las anotaciones y no se puede revertir."
+"Esta acción restablecerá la tabla de biblioteca global en el disco y no se "
+"podrá deshacer."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:920
 msgid ""
@@ -15970,9 +15970,9 @@ msgid "Label connects more than one wire at %d, %d"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "No se pudo conectar a '%s ' "
+msgstr "Cuatro elementos conectados en %d , %d"
 
 #: eeschema/erc/erc.cpp:869
 msgid "Pin with 'no connection' type is connected"
@@ -20887,11 +20887,9 @@ msgstr "La configuración actual no incluye la biblioteca '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1451
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1462
-#, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"La configuración actual no incluye la biblioteca de símbolos '%s'.\n"
-"Utilice 'Gestionar bibliotecas de símbolos' para editar la configuración."
+"Utilice Administrar bibliotecas de símbolos para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1452
 msgid "Library not found in symbol library table."
@@ -25295,13 +25293,12 @@ msgid "Generate Position File"
 msgstr "Generar archivo de posición"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
 "Opciones válidas: anverso, reverso, ambos. El formato Gerber sólo admite "
-"\"ambos\"."
+"\"anverso\" o \"reverso\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -25442,9 +25439,8 @@ msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:262
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Fondo blanco"
+msgstr "Fondo inválido\n"
 
 #: kicad/cli/command_pcb_render.cpp:268
 #, fuzzy
@@ -32005,11 +32001,8 @@ msgid "Reference Position"
 msgstr "Indicador de referencia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
-#, fuzzy
 msgid "Position of the selected item (or  group) to duplicate"
-msgstr ""
-"Esta es la posición del elemento seleccionado,\n"
-"o la posición del grupo a duplicar"
+msgstr "Posición del elemento (o grupo) seleccionado a duplicar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Ref point pos X:"
@@ -34239,7 +34232,7 @@ msgstr "Obtener y mover huella"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:258
 msgid "Global Delete"
-msgstr "&Borrar ..."
+msgstr "Eliminación global"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
@@ -38175,9 +38168,8 @@ msgstr "User1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid " Off-board, front"
-msgstr "Fuera de la placa, probando"
+msgstr " Fuera de placa, frente"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -39889,9 +39881,8 @@ msgid "Hole clearance violation"
 msgstr "Infracción de margen de agujero"
 
 #: pcbnew/drc/drc_item.cpp:106
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Orificios taladrados demasiado juntos"
+msgstr "El agujero perforado está demasiado cerca de otro agujero"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Drilled holes co-located"
@@ -41081,15 +41072,13 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:624
 #: pcbnew/exporters/step/step_pcb_model.cpp:1886
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Errores:"
+msgstr "Errores:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:630
 #: pcbnew/exporters/step/step_pcb_model.cpp:1892
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Avisos:"
+msgstr "Avisos:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
@@ -41102,9 +41091,9 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1579
 #: pcbnew/exporters/step/step_pcb_model.cpp:1592
-#, fuzzy, c-format
+#, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "Mostrar cajas de delimitación de los modelos"
+msgstr "z: %g ; cuadro delimitador: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1589
 msgid ""
@@ -41117,9 +41106,8 @@ msgid "Using non-simplified polygon.\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1677
-#, fuzzy
 msgid "Failed to create a prismatic shape\n"
-msgstr "No se pudo crear la rama."
+msgstr "No se pudo crear una forma prismática\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1688
 msgid "** Face skipped **\n"
@@ -42850,9 +42838,8 @@ msgstr ""
 "grandes que el pad. No se generará una máscara de pasta de soldadura."
 
 #: pcbnew/pad.cpp:2183
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(el pad PTH no tiene capas de cobre)"
+msgstr "(El pad no tiene capa)"
 
 #: pcbnew/pad.cpp:2186
 msgid "(PTH pad has no copper layers)"
@@ -42873,9 +42860,8 @@ msgstr ""
 "Utilice pads SMD en su lugar."
 
 #: pcbnew/pad.cpp:2219
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Error: El pad SMD tiene un agujero."
+msgstr "El pad SMD tiene un agujero"
 
 #: pcbnew/pad.cpp:2225
 #, fuzzy
@@ -43373,29 +43359,24 @@ msgid "Loading dimension drawings..."
 msgstr "Cargando dimensiones de dibujos..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1863
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión angular ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1877
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión datum ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1886
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión línea base ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1897
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión lineal ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1905
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión radial ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1913
 #, c-format
@@ -44934,15 +44915,16 @@ msgid "P-Cad 200x ASCII PCB files"
 msgstr "Archivos ASCII de PCB de P-Cad 200x"
 
 #: pcbnew/pcb_io/pcb_io.cpp:121
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported.\n"
 "To load all footprints, add it as a library using Preferences -> Manage "
 "Footprint Libraries..."
 msgstr ""
-"El archivo seleccionado contiene varias huellas. Sólo se importará la "
-"primera."
+"El archivo seleccionado contiene varias huellas. Solo se importará la "
+"primera.\n"
+"Para cargar todas las huellas, agréguelas como una biblioteca usando "
+"Preferencias -> Administrar bibliotecas de huellas..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:181
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -46680,7 +46662,6 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Se deben seleccionar exactamente dos líneas para extenderlas."
 
 #: pcbnew/tools/edit_tool.cpp:1328
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "Se debe seleccionar una forma con al menos dos líneas."
 
@@ -48829,9 +48810,8 @@ msgid "Length Tuning Settings..."
 msgstr "Ajustes de longitud..."
 
 #: pcbnew/tools/pcb_actions.cpp:2453
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Diálogo de propiedades de elemento"
+msgstr "Muestra el cuadro de diálogo de propiedades del patrón de sintonización"
 
 #: pcbnew/tools/pcb_control.cpp:235
 msgid "Don't show again"
@@ -50075,16 +50055,12 @@ msgstr "Continuar sin rellenar"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:57
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:62
-#, fuzzy
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
-"Las zonas se rellenan por prioridades en cada capa.\n"
-"Así, cuando una zona está incluída en otra:\n"
-"* Si su prioridad es mayor: se eliminan sus perímetros de la otra capa.\n"
-"* Si su prioridad es igual: se muestra un error de DRC ( comprobación de "
-"reglas de diseño)."
+"La zona superior tiene la máxima prioridad. Cuando una zona está dentro de "
+"otra, si su prioridad es mayor, sus contornos se eliminan de la otra zona."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:82
 #, fuzzy
