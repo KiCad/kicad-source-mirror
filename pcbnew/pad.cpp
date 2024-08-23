@@ -2264,7 +2264,7 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider,
             || ( GetDelta().y < 0 && GetDelta().y < -GetSize().x )
             || ( GetDelta().y > 0 && GetDelta().y > GetSize().x ) )
         {
-            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(trapazoid delta is too large)" ) );
+            aErrorHandler( DRCE_PADSTACK_INVALID, _( "(trapezoid delta is too large)" ) );
         }
     }
 
