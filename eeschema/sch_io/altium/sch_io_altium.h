@@ -96,6 +96,9 @@ public:
                                   SCH_SHEET*             aAppendToMe = nullptr,
                                   const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    SCH_SHEET* LoadSchematicProject( SCHEMATIC*                         aSchematic,
+                                     const std::map<std::string, UTF8>* aProperties );
+
     // unimplemented functions. Will trigger a not_implemented IO error.
     //void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL ) override;
 

@@ -833,6 +833,23 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
 }
 
 
+int SCH_SHEET::CountSheets( const wxString& aFilename ) const
+{
+    int count = 0;
+
+    if( m_screen )
+    {
+        if( m_screen->GetFileName().Cmp( aFilename ) == 0 )
+            count++;
+
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
+            count += static_cast<SCH_SHEET*>( aItem )->CountSheets( aFilename );
+    }
+
+    return count;
+}
+
+
 int SCH_SHEET::CountSheets() const
 {
     int count = 1; //1 = this!!

@@ -24,6 +24,7 @@
  */
 
 #include <kiface_base.h>
+#include <kiway.h>
 #include <kiway_express.h>
 #include <eda_dde.h>
 #include <connection_graph.h>
@@ -34,8 +35,10 @@
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <project_sch.h>
 #include <richio.h>
 #include <tools/sch_actions.h>
+#include <symbol_lib_table.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
 #include <widgets/design_block_pane.h>
@@ -835,6 +838,55 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     switch( mail.Command() )
     {
+    case MAIL_ADD_LOCAL_LIB:
+    {
+        std::stringstream ss( payload );
+        std::string       file;
+        SYMBOL_LIB_TABLE* symLibTbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
+
+        wxCHECK_RET( symLibTbl, "Could not load symbol lib table." );
+
+        while( std::getline( ss, file, '\n' ) )
+        {
+            if( file.empty() )
+                continue;
+
+            wxFileName             fn( file );
+            IO_RELEASER<SCH_IO>    pi;
+            SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+
+            if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+            {
+                wxLogTrace( "KIWAY", "Unknown file type: %s", fn.GetFullPath() );
+                continue;
+            }
+
+            pi.reset( SCH_IO_MGR::FindPlugin( type ) );
+
+            if( !symLibTbl->HasLibrary( fn.GetName() ) )
+            {
+                symLibTbl->InsertRow( new SYMBOL_LIB_TABLE_ROW( fn.GetName(), fn.GetFullPath(),
+                                                                SCH_IO_MGR::ShowType( type ) ) );
+                wxString tblName = Prj().SymbolLibTableName();
+
+                try
+                {
+                    symLibTbl->Save( tblName );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxLogError( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
+                }
+            }
+        }
+
+        Kiway().ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
+        Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload );
+        Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );
+
+        break;
+    }
+
     case MAIL_CROSS_PROBE:
         ExecuteRemoteCommand( payload.c_str() );
         break;
@@ -957,7 +1009,6 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         std::string fnameStr;
         wxCHECK( std::getline( ss, fnameStr, delim ), /* void */ );
-        wxASSERT( !fnameStr.empty() );
 
         int importFormat;
 

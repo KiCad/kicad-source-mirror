@@ -341,3 +341,14 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
                                       aFootprintName,
                                       aLibraryPath ) );
 }
+
+
+std::vector<FOOTPRINT*> PCB_IO_ALTIUM_DESIGNER::GetImportedCachedLibraryFootprints()
+{
+    std::vector<FOOTPRINT*> footprints;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+        footprints.push_back( fp );
+
+    return footprints;
+}

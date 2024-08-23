@@ -362,6 +362,13 @@ ACOMPONENT6::ACOMPONENT6( ALTIUM_BINARY_PARSER& aReader )
     commenton        = ALTIUM_PROPS_UTILS::ReadBool( props, wxT( "COMMENTON" ), false );
     sourcedesignator = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "SOURCEDESIGNATOR" ), wxT( "" ) );
 
+    sourceUniqueID = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "SOURCEUNIQUEID" ), wxT( "" ) );
+
+    // Remove leading backslash from sourceUniqueID to match schematic component unique IDs
+    if( sourceUniqueID.starts_with( wxT( "\\" ) ) )
+        sourceUniqueID = sourceUniqueID.Mid( 1 );
+
+    sourceHierachicalPath = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "SOURCEHIERARCHICALPATH" ), wxT( "" ) );
     sourcefootprintlibrary =
             ALTIUM_PROPS_UTILS::ReadUnicodeString( props, wxT( "SOURCEFOOTPRINTLIBRARY" ), wxT( "" ) );
     pattern = ALTIUM_PROPS_UTILS::ReadUnicodeString( props, wxT( "PATTERN" ), wxT( "" ) );

@@ -64,6 +64,8 @@ public:
                               bool              aKeepUUID = false,
                               const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
+
     //bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = nullptr );
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }

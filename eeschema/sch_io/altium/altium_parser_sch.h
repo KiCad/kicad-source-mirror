@@ -151,6 +151,7 @@ struct ASCH_SYMBOL
 {
     int      currentpartid;
     int      m_indexInSheet;
+    wxString uniqueid;
     wxString libreference;
     wxString sourcelibraryname;
     wxString componentdescription;

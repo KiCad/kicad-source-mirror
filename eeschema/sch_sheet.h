@@ -303,6 +303,14 @@ public:
     int CountSheets() const;
 
     /**
+     * Count the number of sheets that refer to a specific file
+     * including all of the subsheets.
+     * @param aFileName The filename to search for.
+     * @return the full count of sheets+subsheets that refer to aFileName
+     */
+    int CountSheets( const wxString& aFileName ) const;
+
+    /**
      * Return the filename corresponding to this sheet.
      *
      * @return a wxString containing the filename

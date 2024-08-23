@@ -160,6 +160,7 @@ ASCH_SYMBOL::ASCH_SYMBOL( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::COMPONENT );
 
+    uniqueid = ALTIUM_PROPS_UTILS::ReadString( aProps, "UNIQUEID", "" );
     currentpartid = ALTIUM_PROPS_UTILS::ReadInt( aProps, "CURRENTPARTID", ALTIUM_COMPONENT_NONE );
     libreference = ALTIUM_PROPS_UTILS::ReadString( aProps, "LIBREFERENCE", "" );
     sourcelibraryname = ALTIUM_PROPS_UTILS::ReadString( aProps, "SOURCELIBRARYNAME", "" );

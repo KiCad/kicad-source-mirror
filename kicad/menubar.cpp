@@ -112,6 +112,10 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     importMenu->SetTitle( _( "Import Non-KiCad Project..." ) );
     importMenu->SetIcon( BITMAPS::import_project );
 
+    importMenu->Add( _( "Altium Project..." ),
+                     _( "Import Altium Schematic and PCB (*.PrjPcb)" ),
+                     ID_IMPORT_ALTIUM_PROJECT,
+                     BITMAPS::import_project );
     importMenu->Add( _( "CADSTAR Project..." ),
                      _( "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)" ),
                      ID_IMPORT_CADSTAR_ARCHIVE_PROJECT,

@@ -376,11 +376,80 @@ wxFileName SCH_IO_ALTIUM::getLibFileName()
 }
 
 
+SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std::map<std::string, UTF8>* aProperties )
+{
+    int x = 1;
+    int y = 1;
+    int page = 2; // Start at page 2 since page 1 is the root sheet.
+
+    std::map<wxString, SCH_SHEET*> sheets;
+    wxFileName project( aProperties->at( "project_file" ) );
+
+    for( auto& [ key, filestring] : *aProperties )
+    {
+        if( !key.starts_with( "sch" ) )
+            continue;
+
+        VECTOR2I pos    = VECTOR2I( x * schIUScale.MilsToIU( 1000 ),
+                                    y * schIUScale.MilsToIU( 1000 ) );
+
+        wxFileName                 fn( filestring );
+        wxFileName                 kicad_fn( fn );
+        std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
+        SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+        sheet->SetScreen( screen );
+
+        kicad_fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+        kicad_fn.SetPath( aSchematic->Prj().GetProjectPath() );
+        sheet->SetFileName( fn.GetFullPath() );
+        screen->SetFileName( sheet->GetFileName() );
+
+        wxCHECK2( sheet && screen, continue );
+
+        wxString pageNo = wxString::Format( wxT( "%d" ), page++ );
+
+        m_sheetPath.push_back( sheet.get() );
+        ParseAltiumSch( fn.GetFullPath() );
+
+        m_sheetPath.SetPageNumber( pageNo );
+        m_sheetPath.pop_back();
+
+        SCH_SCREEN* currentScreen = m_rootSheet->GetScreen();
+
+        wxCHECK2( currentScreen, continue );
+
+        sheet->SetParent( m_sheetPath.Last() );
+        SCH_SHEET* sheetPtr = sheet.release();
+        currentScreen->Append( sheetPtr );
+        sheets[fn.GetFullPath()] = sheetPtr;
+
+        x += 2;
+
+        if( x > 10 ) // Start next row of sheets.
+        {
+            x = 1;
+            y += 2;
+        }
+    }
+
+    // If any of the sheets in the project is a subsheet, then remove the sheet from the root sheet.
+    // The root sheet only contains sheets that are not referenced by any other sheet in a
+    // pseudo-flat structure.
+    for( auto& [ filestring, sheet ] : sheets )
+    {
+        if( m_rootSheet->CountSheets( filestring ) > 1 )
+            getCurrentScreen()->Remove( sheet );
+    }
+
+    return m_rootSheet;
+}
+
+
 SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                              SCH_SHEET* aAppendToMe,
                                              const std::map<std::string, UTF8>* aProperties )
 {
-    wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
+    wxCHECK( ( !aFileName.IsEmpty() || !aProperties->empty() ) && aSchematic, nullptr );
 
     wxFileName fileName( aFileName );
     fileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
@@ -419,6 +488,18 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
+    m_sheetPath.push_back( m_rootSheet );
+
+    SCH_SCREEN* rootScreen = m_rootSheet->GetScreen();
+    wxCHECK( rootScreen, nullptr );
+
+    SCH_SHEET_INSTANCE sheetInstance;
+
+    sheetInstance.m_Path = m_sheetPath.Path();
+    sheetInstance.m_PageNumber = wxT( "#" );
+
+    rootScreen->m_sheetInstances.emplace_back( sheetInstance );
+
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
@@ -452,19 +533,10 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     }
 
-    m_sheetPath.push_back( m_rootSheet );
-
-    SCH_SCREEN* rootScreen = m_rootSheet->GetScreen();
-    wxCHECK( rootScreen, nullptr );
-
-    SCH_SHEET_INSTANCE sheetInstance;
-
-    sheetInstance.m_Path = m_sheetPath.Path();
-    sheetInstance.m_PageNumber = wxT( "#" );
-
-    rootScreen->m_sheetInstances.emplace_back( sheetInstance );
-
-    ParseAltiumSch( aFileName );
+    if( aFileName.empty() )
+        LoadSchematicProject( aSchematic, aProperties );
+    else
+        ParseAltiumSch( aFileName );
 
     if( m_reporter )
     {
@@ -1448,6 +1520,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     // each component has its own symbol for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
 
+    const_cast<KIID&>( symbol->m_Uuid ) = KIID( elem.uniqueid );
     symbol->SetPosition( elem.location + m_sheetOffset );
 
     for( SCH_FIELD& field : symbol->GetFields() )
@@ -1455,6 +1528,15 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
 
     // TODO: keep it simple for now, and only set position.
     // component->SetOrientation( elem.orientation );
+
+    // If Altium has defined a library from which we have the part,
+    // use this as the designated source library.
+    if( !elem.sourcelibraryname.IsEmpty() )
+    {
+        wxFileName fn( elem.sourcelibraryname );
+        libId.SetLibNickname( fn.GetName() );
+    }
+
     symbol->SetLibId( libId );
 
     if( ksymbol->GetUnitCount() > 1 )

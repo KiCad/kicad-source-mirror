@@ -72,6 +72,7 @@ enum id_kicad_frm {
     ID_IMPORT_EAGLE_PROJECT,
     ID_IMPORT_EASYEDA_PROJECT,
     ID_IMPORT_EASYEDAPRO_PROJECT,
+    ID_IMPORT_ALTIUM_PROJECT,
 
     ID_GIT_INITIALIZE_PROJECT,  // Initialize a new git repository in an existing project
     ID_GIT_CLONE_PROJECT,       // Clone a project from a remote repository
