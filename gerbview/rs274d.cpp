@@ -298,7 +298,7 @@ void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const VECTOR2I
     aGbrItem->SetLayerPolarity( aLayerNegative );
 }
 
-#include <wx/log.h>
+
 /**
  * Create an arc G code when found in polygon outlines.
  *

@@ -79,7 +79,8 @@ BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr ) :
 
 BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr, bool aIsBoardEditor ) :
     m_toolMgr( aMgr ),
-    m_isBoardEditor( aIsBoardEditor )
+    m_isBoardEditor( aIsBoardEditor ),
+    m_isFootprintEditor( false )
 {
 }
 

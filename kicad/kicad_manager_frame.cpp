@@ -206,7 +206,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Left()
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().VToolbar().Name( "MainToolbar" ).Left()
                       .Layer( 2 ) );
 
     // BestSize() does not always set the actual pane size of m_leftWin to the required value.

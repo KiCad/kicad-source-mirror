@@ -383,7 +383,7 @@ public:
     {
         LAYER_PAIR_INFO layerPairInfo{ aLayerPair, true, std::nullopt };
 
-        const bool added = m_layerPairSettings.AddLayerPair( std::move( layerPairInfo ) );
+        const bool added = m_layerPairSettings.AddLayerPair( layerPairInfo );
 
         if( added )
         {
