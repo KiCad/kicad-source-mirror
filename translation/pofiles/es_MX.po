@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:00-0700\n"
-"PO-Revision-Date: 2024-08-02 10:09+0000\n"
+"PO-Revision-Date: 2024-08-24 14:09+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v8/es_MX/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23834,13 +23834,12 @@ msgid "Generate Position File"
 msgstr "Generar archivo de posición"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
 "Opciones válidas: anverso, reverso, ambos. El formato Gerber sólo admite "
-"\"ambos\"."
+"\"anverso\" o \"reverso\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -38164,9 +38163,8 @@ msgid "Hole clearance violation"
 msgstr "Infracción de margen de agujero"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Orificios taladrados demasiado juntos"
+msgstr "El agujero perforado está demasiado cerca de otro agujero"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -41031,7 +41029,7 @@ msgstr "(El tamaño del agujero del pad PTH tiene que ser mayor que %s)"
 
 #: pcbnew/pad.cpp:1899
 msgid "Pad hole not inside pad shape"
-msgstr "El agujero del pad no está dentro de la forma del pad."
+msgstr "El agujero del pad no está dentro de la forma del pad"
 
 #: pcbnew/pad.cpp:1912
 msgid "Pad hole will leave no copper"
@@ -41050,128 +41048,105 @@ msgstr ""
 "formas primitivas; los resultados pueden ser sorprendentes"
 
 #: pcbnew/pad.cpp:1946
-#, fuzzy
 msgid ""
 "Negative solder mask clearance is larger than pad; no solder mask will be "
 "generated"
 msgstr ""
-"Advertencia: hay márgenes negativos de máscara de soldadura más grandes que "
-"el pad. No se generará una máscara de soldadura."
+"El espacio libre de la máscara de soldadura negativa es mayor que el del pad;"
+" no se generará ninguna máscara de soldadura"
 
 #: pcbnew/pad.cpp:1965
-#, fuzzy
 msgid ""
 "Negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated"
 msgstr ""
-"Advertencia: hay márgenes negativos de máscara de pasta de soldadura más "
-"grandes que el pad. No se generará una máscara de pasta de soldadura."
+"El margen negativo de la pasta de soldadura es más grande que el pad; no se "
+"generará ninguna máscara de pasta de soldadura"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(el pad PTH no tiene capas de cobre)"
+msgstr "(El pad no tiene capa)"
 
 #: pcbnew/pad.cpp:1975
-#, fuzzy
 msgid "PTH pad has no copper layers"
-msgstr "(el pad PTH no tiene capas de cobre)"
+msgstr "El pad PTH no tiene capas de cobre"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Plated through holes normally have a copper pad on at least one layer"
 msgstr ""
-"Advertencia: los agujeros revestidos normalmente tienen un pad de cobre en "
-"al menos una capa."
+"Los orificios pasantes chapados normalmente tienen un pad de cobre en al "
+"menos una capa"
 
 #: pcbnew/pad.cpp:2000
-#, fuzzy
 msgid "Connector pads normally have no solder paste; use a SMD pad instead"
 msgstr ""
-"Advertencia: los pads del conector normalmente no tienen pasta de soldadura. "
-"Utilice pads SMD en su lugar."
+"Los pads del conector normalmente no tienen pasta de soldadura; utilice un "
+"pad SMD en su lugar"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Error: El pad SMD tiene un agujero."
+msgstr "El pad SMD tiene un agujero"
 
 #: pcbnew/pad.cpp:2014
-#, fuzzy
 msgid "SMD pad has copper on both sides of the board"
-msgstr ""
-"Si desea una capa de pasta de soldadura para la parte frontal de la placa"
+msgstr "El pad SMD tiene cobre en ambos lados de la placa"
 
 #: pcbnew/pad.cpp:2020 pcbnew/pad.cpp:2033
-#, fuzzy
 msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "(Las capas de cobre y máscara del pad SMD no coinciden)"
+msgstr ""
+"El pad SMD tiene capas de cobre y máscara en diferentes lados de la placa"
 
 #: pcbnew/pad.cpp:2025 pcbnew/pad.cpp:2038
-#, fuzzy
 msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr ""
-"Si desea una capa de pasta de soldadura para la parte frontal de la placa"
+msgstr "El pad SMD tiene capas de cobre y pasta en diferentes lados de la placa"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "SMD pad has no outer layers"
-msgstr "Advertencia: el pad SMD no tiene capas externas."
+msgstr "El pad SMD no tiene capas externas"
 
 #: pcbnew/pad.cpp:2054
-#, fuzzy
 msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Advertencia: propiedad de fiduciario no tiene sentido en pads NPTH."
+msgstr "La propiedad fiducial no tiene sentido en los pads NPTH"
 
 #: pcbnew/pad.cpp:2058
-#, fuzzy
 msgid "Testpoint property makes no sense on NPTH pads"
-msgstr ""
-"Advertencia: propiedad de punto de prueba no tiene sentido en pads NPTH."
+msgstr "La propiedad de punto de prueba no tiene sentido en los pads NPTH"
 
 #: pcbnew/pad.cpp:2061
-#, fuzzy
 msgid "Heatsink property makes no sense of NPTH pads"
-msgstr "Advertencia: propiedad de disipador no tiene sentido en pads NPTH."
+msgstr "La propiedad de disipador de calor no tiene sentido en los pads NPTH"
 
 #: pcbnew/pad.cpp:2064
-#, fuzzy
 msgid "Castellated property is for PTH pads"
-msgstr "Advertencia: la propiedad castellada es para pads PTH."
+msgstr "La propiedad castellated es para pads PTH"
 
 #: pcbnew/pad.cpp:2067
-#, fuzzy
 msgid "BGA property is for SMD pads"
-msgstr "Advertencia: la propiedad BGA es para pads SMD."
+msgstr "La propiedad BGA es para pads SMD"
 
 #: pcbnew/pad.cpp:2072
 msgid "(Negative corner radius is not allowed)"
 msgstr "(No se permiten radios de esquina negativos)"
 
 #: pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "Corner size will make pad circular"
-msgstr "Advertencia: el tamaño de esquina hará que el pad sea circular."
+msgstr "El tamaño de esquina hará que el pad sea circular"
 
 #: pcbnew/pad.cpp:2079
 msgid "(Negative corner chamfer is not allowed)"
 msgstr "(No se permiten biselados de esquina negativos)"
 
 #: pcbnew/pad.cpp:2081
-#, fuzzy
 msgid "(Corner chamfer is too large)"
-msgstr "La descarga es muy grande."
+msgstr "(El biselado de la esquina es demasiado grande)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "(Trapazoid delta is too large)"
-msgstr "Error: El delta del trapazoide es demasiado grande."
+msgstr "(El delta trapezoidal es demasiado grande)"
 
 #: pcbnew/pad.cpp:2101
-#, fuzzy
 msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr ""
-"Error: la forma personalizada del pad debe resolverse en un solo polígono."
+msgstr "(La forma del pad personalizado debe resolverse en un solo polígono)"
 
 #: pcbnew/pad.cpp:2293
 msgid "Edge connector"
@@ -41564,29 +41539,24 @@ msgid "Loading dimension drawings..."
 msgstr "Cargando dimensiones de dibujos..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1684
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión angular ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1698
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión datum ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1707
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión línea base ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1718
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión lineal ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1726
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Dimensión radial ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1734
 #, c-format
@@ -44830,7 +44800,6 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Se deben seleccionar exactamente dos líneas para extenderlas."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "Se debe seleccionar una forma con al menos dos líneas."
 
@@ -46938,9 +46907,8 @@ msgid "Length Tuning Settings..."
 msgstr "Ajustes de longitud..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Diálogo de propiedades de elemento"
+msgstr "Muestra el cuadro de diálogo de propiedades del patrón de sintonización"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
