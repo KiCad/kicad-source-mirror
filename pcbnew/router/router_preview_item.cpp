@@ -256,7 +256,11 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
 void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) const
 {
     bool holeDrawn = false;
-    bool showClearance = m_showClearance || ( m_flags | PNS_COLLISION ) > 0;
+    bool showClearance = m_showClearance;
+
+    // Always show clearance when we're in collision, even if the preference is off
+    if( ( m_flags & PNS_COLLISION ) > 0 )
+        showClearance = true;
 
     switch( aShape->Type() )
     {
