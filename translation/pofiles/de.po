@@ -21,13 +21,14 @@
 # Johannes Maibaum <jmaibaum@gmail.com>, 2024.
 # "Pferd O." <frank.0228@ich-war-hier.de>, 2024.
 # tct123 <tct1234@protonmail.com>, 2024.
+# Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-16 11:01-0700\n"
-"PO-Revision-Date: 2024-07-22 00:09+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-08-24 14:09+0000\n"
+"Last-Translator: Lauritz Tieste <lauritz6000000@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -35,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7907,7 +7908,7 @@ msgstr "Spalte(n) auswählen"
 
 #: common/tool/actions.cpp:331
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr "Spalte(n) auswählen, die die aktuell gewählte(n) Zelle(n) enthalten"
+msgstr "Spalte(n) auswählen, welche die aktuell gewählte(n) Zelle(n) enthalten"
 
 #: common/tool/actions.cpp:337
 msgid "Select Row(s)"
@@ -7915,7 +7916,7 @@ msgstr "Zeile(n) auswählen"
 
 #: common/tool/actions.cpp:338
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr "Zeile(n) auswählen, die die aktuell gewählte(n) Zelle(n) enthalten"
+msgstr "Zeile(n) auswählen, welchedie aktuell gewählte(n) Zelle(n) enthalten"
 
 #: common/tool/actions.cpp:344
 msgid "Select Table"
@@ -7964,7 +7965,7 @@ msgstr "Zeile(n) löschen"
 #: common/tool/actions.cpp:380
 msgid "Delete rows containing the currently selected cell(s)"
 msgstr ""
-"Zeile(n) löschen, die die aktuell ausgewählten Zelle(n) enthält/enthalten"
+"Zeile(n) löschen, welche die aktuell ausgewählten Zelle(n) enthält/enthalten"
 
 #: common/tool/actions.cpp:386
 msgid "Delete Column(s)"
@@ -7973,7 +7974,7 @@ msgstr "Spalte(n) lösche(n)"
 #: common/tool/actions.cpp:387
 msgid "Delete columns containing the currently selected cell(s)"
 msgstr ""
-"Spalte(n) löschen, die die aktuell ausgewählten Zelle(n) enthält/enthalten"
+"Spalte(n) löschen, welche die aktuell ausgewählten Zelle(n) enthält/enthalten"
 
 #: common/tool/actions.cpp:393 include/tool/edit_table_tool_base.h:537
 msgid "Merge Cells"
@@ -8095,7 +8096,7 @@ msgstr "Aktuellen Verstoß im Checker-Fenster als Ausschluss markieren"
 #: common/tool/actions.cpp:526 common/tool/actions.cpp:527
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:131
 msgid "Refresh"
-msgstr "Ansicht erneuern"
+msgstr "Ansicht aktualisieren"
 
 #: common/tool/actions.cpp:539
 msgid "Zoom to Fit"
