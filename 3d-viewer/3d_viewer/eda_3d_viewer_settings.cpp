@@ -368,6 +368,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                             &m_Render.clip_silk_on_via_annuli, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.plated_and_bare_copper",
                                             &m_Render.differentiate_plated_copper, false ) );
+    m_params.emplace_back( new PARAM<bool>( "render.use_board_editor_copper_colors",
+                                            &m_Render.use_board_editor_copper_colors, false ) );
     m_params.emplace_back( new PARAM<bool>( "camera.animation_enabled",
                                             &m_Camera.animation_enabled, true ) );
     m_params.emplace_back( new PARAM<int>( "camera.moving_speed_multiplier",

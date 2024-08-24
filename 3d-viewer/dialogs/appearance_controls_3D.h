@@ -187,6 +187,7 @@ private:
     wxColour                       m_layerPanelColour;
     GRID_BITMAP_TOGGLE_RENDERER*   m_toggleGridRenderer;
     wxCheckBox*                    m_cbUseBoardStackupColors;
+    wxCheckBox*                    m_cbUseBoardEditorCopperColors;
 };
 
 #endif

@@ -269,6 +269,20 @@ void RENDER_3D_OPENGL::setupMaterials()
 
 void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
 {
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+
+    if( cfg.use_board_editor_copper_colors && IsCopperLayer( aLayerID ) )
+    {
+        COLOR4D copper_color = m_boardAdapter.m_BoardEditorColors[aLayerID];
+        m_materials.m_Copper.m_Diffuse = SFVEC3F( copper_color.r, copper_color.g,
+                                                  copper_color.b );
+        OglSetMaterial( m_materials.m_Copper, 1.0f );
+        m_materials.m_NonPlatedCopper.m_Diffuse = m_materials.m_Copper.m_Diffuse;
+        OglSetMaterial( m_materials.m_NonPlatedCopper, 1.0f );
+
+        return;
+    }
+
     switch( aLayerID )
     {
     case F_Mask:
@@ -571,7 +585,6 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         bool  isSilkLayer = layer == F_SilkS || layer == B_SilkS;
         bool  isMaskLayer = layer == F_Mask || layer == B_Mask;
         bool  isPasteLayer = layer == F_Paste || layer == B_Paste;
-        bool  isCopperLayer = layer >= F_Cu && layer <= B_Cu;
 
         // Mask layers are not processed here because they are a special case
         if( isMaskLayer )
@@ -592,9 +605,9 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
 
-        if( isCopperLayer )
+        if( IsCopperLayer( layer ) )
         {
-            if( cfg.differentiate_plated_copper )
+            if( cfg.DifferentiatePlatedCopper() )
                 setCopperMaterial();
             else
                 setLayerMaterial( layer );

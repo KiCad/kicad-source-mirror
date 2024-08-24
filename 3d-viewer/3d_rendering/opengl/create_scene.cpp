@@ -612,7 +612,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             m_layers[layer] = oglList;
     }
 
-    if( m_boardAdapter.m_Cfg->m_Render.differentiate_plated_copper )
+    if( m_boardAdapter.m_Cfg->m_Render.DifferentiatePlatedCopper() )
     {
         const SHAPE_POLY_SET* frontPlatedPadAndGraphicPolys = m_boardAdapter.GetFrontPlatedPadAndGraphicPolys();
         const SHAPE_POLY_SET* backPlatedPadAndGraphicPolys = m_boardAdapter.GetBackPlatedPadAndGraphicPolys();

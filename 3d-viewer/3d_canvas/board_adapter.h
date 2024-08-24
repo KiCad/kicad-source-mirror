@@ -107,7 +107,16 @@ public:
 
     void ReloadColorSettings() noexcept;
 
+    /**
+     * Build a color list which is used to store colors layers
+     */
     std::map<int, COLOR4D> GetLayerColors() const;
+
+    /**
+     * Build the copper color list used by the board editor, and store it in m_BoardEditorColors
+     */
+    void GetBoardEditorCopperLayerColors( PCBNEW_SETTINGS* aCfg );
+
     std::map<int, COLOR4D> GetDefaultColors() const;
     void SetLayerColors( const std::map<int, COLOR4D>& aColors );
 
@@ -431,6 +440,7 @@ public:
     SFVEC4F           m_ECO2Color;
 
     std::map<int, COLOR4D> m_ColorOverrides;  ///< allows to override color scheme colors
+    std::map<int, COLOR4D> m_BoardEditorColors; ///< list of colors used by the board editor
 
 private:
     BOARD*            m_board;

@@ -209,6 +209,7 @@ void DIALOG_FOOTPRINT_CHOOSER::build3DCanvas()
         cfg->m_Render.show_solderpaste = true;
         cfg->m_Render.show_zones = true;
         cfg->m_Render.show_board_body = true;
+        cfg->m_Render.use_board_editor_copper_colors = false;
     }
 
     m_chooserPanel->m_RightPanelSizer->Add( m_preview3DCanvas, 1, wxEXPAND, 5 );

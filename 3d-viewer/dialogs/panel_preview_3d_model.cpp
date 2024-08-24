@@ -225,6 +225,7 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
         cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
         cfg->m_Render.show_zones = m_bodyStyleShowAll;
         cfg->m_Render.show_board_body = m_bodyStyleShowAll;
+        cfg->m_Render.use_board_editor_copper_colors = false;
     }
 }
 

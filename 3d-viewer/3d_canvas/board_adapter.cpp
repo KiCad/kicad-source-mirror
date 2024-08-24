@@ -240,6 +240,7 @@ void BOARD_ADAPTER::ReloadColorSettings() noexcept
     if( cfg )
     {
         m_colors = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+        GetBoardEditorCopperLayerColors( cfg );
     }
 }
 
@@ -588,6 +589,17 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetDefaultColors() const
     colors[ LAYER_3D_USER_ECO2 ]         = BOARD_ADAPTER::g_DefaultECOs;
 
     return colors;
+}
+
+
+void BOARD_ADAPTER::GetBoardEditorCopperLayerColors( PCBNEW_SETTINGS* aCfg )
+{
+    m_BoardEditorColors.clear();
+
+    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings( aCfg->m_ColorTheme );
+
+    for( int layer = F_Cu; layer <= B_Cu; layer++ )
+        m_BoardEditorColors[ layer ] = settings->GetColor( layer );
 }
 
 

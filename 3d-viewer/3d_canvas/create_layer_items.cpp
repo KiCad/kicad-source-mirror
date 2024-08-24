@@ -240,7 +240,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    if( cfg.differentiate_plated_copper )
+    if( cfg.DifferentiatePlatedCopper() )
     {
         m_frontPlatedPadAndGraphicPolys = new SHAPE_POLY_SET;
         m_backPlatedPadAndGraphicPolys = new SHAPE_POLY_SET;
@@ -354,12 +354,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 }
             }
 
-            if( cfg.differentiate_plated_copper && layer == F_Cu )
+            if( cfg.DifferentiatePlatedCopper() && layer == F_Cu )
             {
                 track->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu, 0, maxError,
                                                 ERROR_INSIDE );
             }
-            else if( cfg.differentiate_plated_copper && layer == B_Cu )
+            else if( cfg.DifferentiatePlatedCopper() && layer == B_Cu )
             {
                 track->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu, 0, maxError,
                                                 ERROR_INSIDE );
@@ -554,7 +554,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            addPads( footprint, layerContainer, layer, cfg.differentiate_plated_copper, false );
+            addPads( footprint, layerContainer, layer, cfg.DifferentiatePlatedCopper(), false );
 
             // Micro-wave footprints may have items on copper layers
             addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
@@ -576,13 +576,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // Note: NPTH pads are not drawn on copper layers when the pad has same shape as
                 // its hole
                 footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE,
-                                                   true, cfg.differentiate_plated_copper, false );
+                                                   true, cfg.DifferentiatePlatedCopper(), false );
 
                 transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
             }
         }
 
-        if( cfg.differentiate_plated_copper )
+        if( cfg.DifferentiatePlatedCopper() )
         {
             // ADD PLATED PADS contours
             for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -642,7 +642,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // add also this shape to the plated copper polygon list if required
-            if( cfg.differentiate_plated_copper )
+            if( cfg.DifferentiatePlatedCopper() )
             {
                 if( layer == F_Cu )
                     item->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu,
@@ -719,12 +719,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 zones.emplace_back( std::make_pair( zone, layer ) );
                 layer_lock.emplace( layer, std::make_unique<std::mutex>() );
 
-                if( cfg.differentiate_plated_copper && layer == F_Cu )
+                if( cfg.DifferentiatePlatedCopper() && layer == F_Cu )
                 {
                     zone->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu, 0, maxError,
                                                    ERROR_INSIDE );
                 }
-                else if( cfg.differentiate_plated_copper && layer == B_Cu )
+                else if( cfg.DifferentiatePlatedCopper() && layer == B_Cu )
                 {
                     zone->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu, 0, maxError,
                                                    ERROR_INSIDE );
@@ -814,7 +814,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     std::bitset<LAYER_3D_END> enabledFlags = visibilityFlags;
 
-    if( cfg.subtract_mask_from_silk || cfg.differentiate_plated_copper )
+    if( cfg.subtract_mask_from_silk || cfg.DifferentiatePlatedCopper() )
     {
         enabledFlags.set( LAYER_3D_SOLDERMASK_TOP );
         enabledFlags.set( LAYER_3D_SOLDERMASK_BOTTOM );
@@ -926,7 +926,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // Add item contours.  We need these if we're building vertical walls or if this is a
         // mask layer and we're differentiating copper from plated copper.
         if( ( cfg.engine == RENDER_ENGINE::OPENGL && cfg.opengl_copper_thickness )
-                || ( cfg.differentiate_plated_copper && ( layer == F_Mask || layer == B_Mask ) ) )
+                || ( cfg.DifferentiatePlatedCopper() && ( layer == F_Mask || layer == B_Mask ) ) )
         {
             // DRAWINGS
             for( BOARD_ITEM* item : m_board->Drawings() )
@@ -1051,7 +1051,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( aStatusReporter )
         aStatusReporter->Report( _( "Simplifying copper layer polygons" ) );
 
-    if( cfg.differentiate_plated_copper )
+    if( cfg.DifferentiatePlatedCopper() )
     {
         if( aStatusReporter )
             aStatusReporter->Report( _( "Calculating plated copper" ) );
@@ -1122,7 +1122,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         std::vector<PCB_LAYER_ID> &selected_layer_id = layer_ids;
         std::vector<PCB_LAYER_ID> layer_id_without_F_and_B;
 
-        if( cfg.differentiate_plated_copper )
+        if( cfg.DifferentiatePlatedCopper() )
         {
             layer_id_without_F_and_B.clear();
             layer_id_without_F_and_B.reserve( layer_ids.size() );

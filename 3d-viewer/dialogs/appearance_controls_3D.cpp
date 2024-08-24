@@ -135,7 +135,26 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
                 m_frame->NewDisplay( true );
             } );
 
+    m_cbUseBoardEditorCopperColors = new wxCheckBox( m_panelLayers, wxID_ANY,
+                                                _( "Use board editor copper colors" ) );
+    m_cbUseBoardEditorCopperColors->SetFont( infoFont );
+    m_cbUseBoardEditorCopperColors->SetToolTip(
+                _( "Use the board editor copper colors (openGL only)" ) );
+
+    m_cbUseBoardEditorCopperColors->Bind( wxEVT_CHECKBOX,
+            [this]( wxCommandEvent& aEvent )
+            {
+                EDA_3D_VIEWER_SETTINGS* cfg = m_frame->GetAdapter().m_Cfg;
+                cfg->m_Render.use_board_editor_copper_colors = aEvent.IsChecked();
+
+                UpdateLayerCtls();
+                syncLayerPresetSelection();
+                m_frame->NewDisplay( true );
+            } );
+
+
     m_panelLayersSizer->Add( m_cbUseBoardStackupColors, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
+    m_panelLayersSizer->Add( m_cbUseBoardEditorCopperColors, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
 
     m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore color and visibility "
                                                        "combinations.\n"
@@ -596,7 +615,10 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
     }
 
     if( cfg )
+    {
         m_cbUseBoardStackupColors->SetValue( cfg->m_UseStackupColors );
+        m_cbUseBoardEditorCopperColors->SetValue( cfg->m_Render.use_board_editor_copper_colors );
+    }
 }
 
 
