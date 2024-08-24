@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,10 +54,13 @@ RENDER_SETTINGS::~RENDER_SETTINGS()
 }
 
 
-#if 0
-constexpr double correction = 0.8;      // Looks best visually
+#if 1
+constexpr double correction = 0.8;  // Looks best visually and works on GTK and MSW
 #else
-constexpr double correction = 1.0;      // Matches ISO 128-2
+constexpr double correction = 1.0;  // Matches ISO 128-2, but creates issues on GTK and MSW:
+                                    // "dots" are not always visible depending on the zoom level
+                                    // because they create 0 lenght lines
+
 #endif
 
 
