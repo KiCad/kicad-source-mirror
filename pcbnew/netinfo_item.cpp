@@ -52,7 +52,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
     if( aParent )
         m_netClass = aParent->GetDesignSettings().m_NetSettings->m_DefaultNetClass;
     else
-        m_netClass = std::make_shared<NETCLASS>( wxT( "<invalid>" ) );
+        m_netClass = std::make_shared<NETCLASS>( wxT( "Default" ) );
 }
 
 
