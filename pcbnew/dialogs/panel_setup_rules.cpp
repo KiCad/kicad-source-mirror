@@ -761,6 +761,10 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
             OnCompile( dummy );
         }
     }
+    else
+    {
+        m_textEditor->AddText( wxT( "(version 1)\n" ) );
+    }
 
     m_originalText = m_textEditor->GetText();
 

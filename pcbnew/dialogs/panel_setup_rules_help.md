@@ -1,9 +1,8 @@
 ### Top-level Clauses
 
-    (version <number>)
+    (version 1)
 
     (rule <rule_name> <rule_clause> ...)
-
 
 <br>
 
