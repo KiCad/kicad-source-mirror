@@ -33,6 +33,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
 #include <zoom_defines.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 
 
 SCH_PRINTOUT::SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle, bool aUseCairo ) :
@@ -70,6 +71,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
     SCH_SHEET_LIST sheetList = m_parent->Schematic().BuildSheetListSortedByPageNumbers();
+    sheetList.SortByPageNumbers( false );
 
     wxCHECK_MSG( page >= 1 && page <= (int)sheetList.size(), false,
                  wxT( "Cannot print invalid page number." ) );
@@ -81,17 +83,26 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     msg.Printf( _( "Print page %d" ), page );
     m_parent->SetMsgPanel( msg, wxEmptyString );
 
-    SCH_SCREEN*     screen       = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
+
+    // Switch to the new current sheet
     m_parent->SetCurrentSheet( sheetList[ page - 1 ] );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
     m_parent->RecomputeIntersheetRefs();
-    screen = m_parent->GetCurrentSheet().LastScreen();
+    SCH_SCREEN* screen = m_parent->GetCurrentSheet().LastScreen();
+    // Ensure the displayed page number is updated:
+    KIGFX::SCH_VIEW* sch_view = m_parent->GetCanvas()->GetView();
+    sch_view->GetDrawingSheet()->SetPageNumber( screen->GetPageNumber() );
+
     PrintPage( screen );
+
+    // Restore the initial current sheet
     m_parent->SetCurrentSheet( oldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
+    screen = m_parent->GetCurrentSheet().LastScreen();
+    sch_view->GetDrawingSheet()->SetPageNumber( screen->GetPageNumber() );
 
     return true;
 }
@@ -101,6 +112,7 @@ int SCH_PRINTOUT::milsToIU( int aMils )
 {
     return KiROUND( aMils * schIUScale.IU_PER_MILS );
 }
+
 
 /*
  * This is the real print function: print the active screen

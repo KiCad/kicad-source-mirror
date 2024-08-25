@@ -28,7 +28,7 @@ class SCH_SCREEN;
 namespace KIGFX
 {
 class GAL;
-class VIEW;
+class SCH_VIEW;
 class PAINTER;
 };
 
@@ -49,7 +49,7 @@ public:
 private:
     SCH_EDIT_FRAME* m_parent;
     ///< Source VIEW object (note that actual printing only refers to this object)
-    const KIGFX::VIEW* m_view;
+    const KIGFX::SCH_VIEW* m_view;
     bool m_useCairo;
 
     int milsToIU( int aMils );
