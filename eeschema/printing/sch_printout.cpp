@@ -34,6 +34,7 @@
 #include <gal/painter.h>
 #include <zoom_defines.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+#include <string_utils.h>
 
 
 SCH_PRINTOUT::SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle, bool aUseCairo ) :
@@ -93,7 +94,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     SCH_SCREEN* screen = m_parent->GetCurrentSheet().LastScreen();
     // Ensure the displayed page number is updated:
     KIGFX::SCH_VIEW* sch_view = m_parent->GetCanvas()->GetView();
-    sch_view->GetDrawingSheet()->SetPageNumber( screen->GetPageNumber() );
+    sch_view->GetDrawingSheet()->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
 
     PrintPage( screen );
 
@@ -102,7 +103,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
     screen = m_parent->GetCurrentSheet().LastScreen();
-    sch_view->GetDrawingSheet()->SetPageNumber( screen->GetPageNumber() );
+    sch_view->GetDrawingSheet()->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
 
     return true;
 }
