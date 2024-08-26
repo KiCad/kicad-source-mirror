@@ -401,8 +401,6 @@ void EDA_SHAPE::flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
             m_start.y = aCentre.y - ( m_start.y - aCentre.y );
             m_end.y   = aCentre.y - ( m_end.y - aCentre.y );
         }
-
-        std::swap( m_start, m_end );
         break;
 
     case SHAPE_T::CIRCLE:
