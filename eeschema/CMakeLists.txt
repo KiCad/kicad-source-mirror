@@ -113,6 +113,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_ibis_parser_reporter_base.cpp
     dialogs/dialog_image_properties.cpp
     dialogs/dialog_image_properties_base.cpp
+    dialogs/dialog_increment_annotations_base.cpp
     dialogs/dialog_junction_props.cpp
     dialogs/dialog_junction_props_base.cpp
     dialogs/dialog_label_properties.cpp

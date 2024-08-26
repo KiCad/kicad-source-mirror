@@ -318,6 +318,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( EE_ACTIONS::annotate );
+    toolsMenu->Add( EE_ACTIONS::incrementAnnotations );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( EE_ACTIONS::assignFootprints );

@@ -528,10 +528,10 @@ public:
      */
     bool TrimWire( SCH_COMMIT* aCommit, const VECTOR2I& aStart, const VECTOR2I& aEnd );
 
-    void OnOpenPcbnew( wxCommandEvent& event );
-    void OnOpenCvpcb( wxCommandEvent& event );
-    void OnUpdatePCB( wxCommandEvent& event );
-    void OnAnnotate( wxCommandEvent& event );
+    void OnOpenPcbnew();
+    void OnOpenCvpcb();
+    void OnUpdatePCB();
+    void OnAnnotate();
 
     /**
      * Verify that \a aSheet will not cause a recursion error in \a aCurrentSheet.

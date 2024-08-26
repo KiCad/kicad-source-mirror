@@ -382,8 +382,7 @@ void DIALOG_ERC::syncCheckboxes()
 
 void DIALOG_ERC::OnLinkClicked( wxHtmlLinkEvent& event )
 {
-    wxCommandEvent dummy;
-    m_parent->OnAnnotate( dummy );
+    m_parent->OnAnnotate();
 }
 
 

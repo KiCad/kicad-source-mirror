@@ -33,6 +33,7 @@
 #include <dialogs/dialog_assign_netclass.h>
 #include <dialogs/dialog_update_from_pcb.h>
 #include <dialogs/hotkey_cycle_popup.h>
+#include <dialogs/dialog_increment_annotations_base.h>
 #include <project_rescue.h>
 #include <erc/erc.h>
 #include <invoke_sch_dialog.h>
@@ -2243,16 +2244,71 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Annotate( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent dummy;
-    m_frame->OnAnnotate( dummy );
+    m_frame->OnAnnotate();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
+{
+    DIALOG_INCREMENT_ANNOTATIONS_BASE dlg( m_frame );
+
+    dlg.SetInitialFocus( dlg.m_FirstRefDes );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        SCH_REFERENCE startRef;
+        startRef.SetRef( dlg.m_FirstRefDes->GetValue() );
+
+        if( startRef.IsSplitNeeded() )
+            startRef.Split();
+        else
+            return 0;
+
+        int startNum = atoi( startRef.GetRefNumber() );
+
+        SCH_COMMIT         commit( m_frame );
+        SCHEMATIC*         schematic = m_frame->m_schematic;
+        SCH_REFERENCE_LIST references;
+
+        if( dlg.m_AllSheets->GetValue() )
+            schematic->BuildSheetListSortedByPageNumbers().GetSymbols( references );
+        else
+            schematic->CurrentSheet().GetSymbols( references );
+
+        references.SplitReferences();
+
+        for( SCH_REFERENCE& ref : references )
+        {
+            if( ref.GetRef() == startRef.GetRef() )
+            {
+                int num = atoi( ref.GetRefNumber() );
+
+                if( num >= startNum )
+                {
+                    const SCH_SHEET_PATH& sheet = ref.GetSheetPath();
+                    wxString              fullRef = ref.GetRef();
+
+                    num += dlg.m_Increment->GetValue();
+                    fullRef << num;
+
+                    commit.Modify( ref.GetSymbol(), sheet.LastScreen() );
+                    ref.GetSymbol()->SetRef( &sheet, From_UTF8( fullRef.c_str() ) );
+                }
+            }
+        }
+
+        if( !commit.Empty() )
+            commit.Push( _( "Increment Annotations" ) );
+    }
+
     return 0;
 }
 
 
 int SCH_EDITOR_CONTROL::ShowCvpcb( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent dummy;
-    m_frame->OnOpenCvpcb( dummy );
+    m_frame->OnOpenCvpcb();
     return 0;
 }
 
@@ -2286,16 +2342,14 @@ int SCH_EDITOR_CONTROL::EditSymbolLibraryLinks( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ShowPcbNew( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent dummy;
-    m_frame->OnOpenPcbnew( dummy );
+    m_frame->OnOpenPcbnew();
     return 0;
 }
 
 
 int SCH_EDITOR_CONTROL::UpdatePCB( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent dummy;
-    m_frame->OnUpdatePCB( dummy );
+    m_frame->OnUpdatePCB();
     return 0;
 }
 
@@ -2739,6 +2793,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ImportFPAssignments,   EE_ACTIONS::importFPAssignments.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::IncrementAnnotations,  EE_ACTIONS::incrementAnnotations.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,
         EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );

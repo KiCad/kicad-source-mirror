@@ -1135,7 +1135,7 @@ void SCH_EDIT_FRAME::OnModify()
 }
 
 
-void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnUpdatePCB()
 {
     if( Kiface().IsSingle() )
     {
@@ -1356,7 +1356,7 @@ void SCH_EDIT_FRAME::LoadProject()
 }
 
 
-void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnOpenPcbnew()
 {
     wxFileName kicad_board = Prj().AbsolutePath( Schematic().GetFileName() );
 
@@ -1409,7 +1409,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnOpenCvpcb()
 {
     wxFileName fn = Prj().AbsolutePath( Schematic().GetFileName() );
     fn.SetExt( FILEEXT::NetlistFileExtension );

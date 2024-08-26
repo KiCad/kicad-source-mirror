@@ -150,6 +150,7 @@ public:
     static TOOL_ACTION showDatasheet;
     static TOOL_ACTION runERC;
     static TOOL_ACTION annotate;
+    static TOOL_ACTION incrementAnnotations;
     static TOOL_ACTION editSymbolFields;
     static TOOL_ACTION editSymbolLibraryLinks;
     static TOOL_ACTION symbolProperties;

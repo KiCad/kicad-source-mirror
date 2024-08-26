@@ -188,7 +188,7 @@ public:
 
         // To avoid a risk of duplicate, for power symbols the ref number is 0nnn instead of nnn.
         // Just because sometimes only power symbols are annotated
-        if( GetLibPart() && GetLibPart()->IsPower() )
+        if( GetSymbol() && GetLibPart() && GetLibPart()->IsPower() )
             ref = wxT( "0" );
 
         return ref << m_numRef;

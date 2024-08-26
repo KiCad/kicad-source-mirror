@@ -294,9 +294,9 @@ int DIALOG_ANNOTATE::GetStartNumber()
 }
 
 
-void SCH_EDIT_FRAME::OnAnnotate( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnAnnotate()
 {
-    DIALOG_ANNOTATE* dlg = static_cast<DIALOG_ANNOTATE*> ( wxWindow::FindWindowByName( DLG_WINDOW_NAME ) );
+    DIALOG_ANNOTATE* dlg = static_cast<DIALOG_ANNOTATE*>( wxWindow::FindWindowByName( DLG_WINDOW_NAME ) );
 
     if( !dlg )
     {
