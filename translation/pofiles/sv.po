@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-24 14:09+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2024-08-27 05:59+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -770,14 +770,12 @@ msgid "Use board stackup colors"
 msgstr "Använd färger från mönsterkortets lageruppbyggnad"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "Använd färger från mönsterkortets lageruppbyggnad"
+msgstr "Använd kopparfärger från mönsterkortsredigeraren"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
-#, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
-msgstr "Använd kopparfärg för koppar utan oxidskydd"
+msgstr "Använd kopparfärger från mönsterkortsredigeraren (endast openGL)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
 #, c-format
@@ -3193,27 +3191,26 @@ msgid "Close"
 msgstr "Stäng"
 
 #: common/dialogs/dialog_print_generic.cpp:155
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Varning: Ogiltigt värde för skala"
+msgstr "Varning: Skala är inte ett tal."
 
 #: common/dialogs/dialog_print_generic.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Varning: Skalningsfaktorn är satt till ett mycket högt värde.\n"
-" Begränsat till %f"
+"Den kommer att begränsas till %f."
 
 #: common/dialogs/dialog_print_generic.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Varning: Skalningsfaktorn är satt till ett mycket litet värde.\n"
-" Begränsat till %f"
+"Den kommer att begränsas till %f"
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
@@ -6764,7 +6761,7 @@ msgstr "DXF-bilder stöds för närvarande inte."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Importerad grafik är för stor. Maximal skala är %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
@@ -22942,7 +22939,7 @@ msgstr "Placera Pin ändå"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:449
 msgid "Repeat Pin"
-msgstr "Gör om stift"
+msgstr "Repetera stift"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -42406,9 +42403,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2238
 msgid "('castellated' property is for PTH pads)"
-msgstr ""
-"(egenskapen krenelerad lödyta kan endast användas på genompläterade hål "
-"(PTH))"
+msgstr "(egenskapen krenelerad lödyta är avsedd för genompläterade hål (PTH))"
 
 #: pcbnew/pad.cpp:2241
 msgid "('BGA' property is for SMD pads)"
