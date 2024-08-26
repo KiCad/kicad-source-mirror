@@ -2,7 +2,7 @@
 	(version 20231120)
 	(generator "kicad_symbol_editor")
 	(generator_version "8.0")
-	(symbol "U+30A0"
+	(symbol "U+30A0__゠"
 		(pin_names
 			(offset 1.016)
 		)
@@ -52,7 +52,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A0_0_1"
+		(symbol "U+30A0__゠_0_1"
 			(polyline
 				(pts
 					(xy 2.54 8.89) (xy 20.32 8.89)
@@ -115,7 +115,7 @@
 			)
 		)
 	)
-	(symbol "U+30A1"
+	(symbol "U+30A1__ァ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -165,7 +165,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A1_0_1"
+		(symbol "U+30A1__ァ_0_1"
 			(polyline
 				(pts
 					(xy 5.1816 19.0754) (xy 19.0246 19.0754) (xy 17.6784 15.9512) (xy 14.4526 12.6238)
@@ -228,7 +228,7 @@
 			)
 		)
 	)
-	(symbol "U+30A2"
+	(symbol "U+30A2__ア"
 		(pin_names
 			(offset 1.016)
 		)
@@ -278,7 +278,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A2_0_1"
+		(symbol "U+30A2__ア_0_1"
 			(polyline
 				(pts
 					(xy 2.54 25.3492) (xy 20.32 25.3492) (xy 19.177 21.6662) (xy 16.9672 18.7452) (xy 13.9446 16.4592)
@@ -341,7 +341,7 @@
 			)
 		)
 	)
-	(symbol "U+30A3"
+	(symbol "U+30A3__ィ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -391,7 +391,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A3_0_1"
+		(symbol "U+30A3__ィ_0_1"
 			(polyline
 				(pts
 					(xy 11.43 13.97) (xy 11.43 1.27)
@@ -454,7 +454,7 @@
 			)
 		)
 	)
-	(symbol "U+30A4"
+	(symbol "U+30A4__イ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -504,7 +504,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A4_0_1"
+		(symbol "U+30A4__イ_0_1"
 			(polyline
 				(pts
 					(xy 11.43 18.6436) (xy 11.43 0)
@@ -567,7 +567,7 @@
 			)
 		)
 	)
-	(symbol "U+30A5"
+	(symbol "U+30A5__ゥ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -617,7 +617,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A5_0_1"
+		(symbol "U+30A5__ゥ_0_1"
 			(polyline
 				(pts
 					(xy 11.176 24.0284) (xy 11.176 18.9992)
@@ -681,7 +681,7 @@
 			)
 		)
 	)
-	(symbol "U+30A6"
+	(symbol "U+30A6__ウ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -731,7 +731,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A6_0_1"
+		(symbol "U+30A6__ウ_0_1"
 			(polyline
 				(pts
 					(xy 11.43 29.21) (xy 11.43 24.13)
@@ -795,7 +795,7 @@
 			)
 		)
 	)
-	(symbol "U+30A7"
+	(symbol "U+30A7__ェ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -845,7 +845,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A7_0_1"
+		(symbol "U+30A7__ェ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 5.08) (xy 17.78 5.08)
@@ -920,7 +920,7 @@
 			)
 		)
 	)
-	(symbol "U+30A8"
+	(symbol "U+30A8__エ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -970,7 +970,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A8_0_1"
+		(symbol "U+30A8__エ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 5.08) (xy 20.32 5.08)
@@ -1045,7 +1045,7 @@
 			)
 		)
 	)
-	(symbol "U+30A9"
+	(symbol "U+30A9__ォ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1095,7 +1095,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30A9_0_1"
+		(symbol "U+30A9__ォ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 15.24) (xy 17.78 15.24)
@@ -1170,7 +1170,7 @@
 			)
 		)
 	)
-	(symbol "U+30AA"
+	(symbol "U+30AA__オ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1220,7 +1220,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30AA_0_1"
+		(symbol "U+30AA__オ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 20.32) (xy 20.32 20.32)
@@ -1295,7 +1295,7 @@
 			)
 		)
 	)
-	(symbol "U+30AB"
+	(symbol "U+30AB__カ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1345,7 +1345,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30AB_0_1"
+		(symbol "U+30AB__カ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 21.59) (xy 19.05 21.59) (xy 17.78 2.54) (xy 13.97 5.08)
@@ -1409,7 +1409,7 @@
 			)
 		)
 	)
-	(symbol "U+30AC"
+	(symbol "U+30AC__ガ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1459,7 +1459,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30AC_0_1"
+		(symbol "U+30AC__ガ_0_1"
 			(polyline
 				(pts
 					(xy 16.51 27.94) (xy 19.05 24.13)
@@ -1547,7 +1547,7 @@
 			)
 		)
 	)
-	(symbol "U+30AD"
+	(symbol "U+30AD__キ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1597,7 +1597,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30AD_0_1"
+		(symbol "U+30AD__キ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 10.16) (xy 19.05 13.97)
@@ -1672,7 +1672,7 @@
 			)
 		)
 	)
-	(symbol "U+30AE"
+	(symbol "U+30AE__ギ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1722,7 +1722,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30AE_0_1"
+		(symbol "U+30AE__ギ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 10.16) (xy 19.05 13.97)
@@ -1821,7 +1821,7 @@
 			)
 		)
 	)
-	(symbol "U+30AF"
+	(symbol "U+30AF__ク"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1871,7 +1871,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30AF_0_1"
+		(symbol "U+30AF__ク_0_1"
 			(polyline
 				(pts
 					(xy 10.6172 29.0576) (xy 8.9408 22.352) (xy 7.2644 17.8816) (xy 4.4704 13.97)
@@ -1935,7 +1935,7 @@
 			)
 		)
 	)
-	(symbol "U+30B0"
+	(symbol "U+30B0__グ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1985,7 +1985,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B0_0_1"
+		(symbol "U+30B0__グ_0_1"
 			(polyline
 				(pts
 					(xy 17.78 29.21) (xy 20.32 26.67)
@@ -2073,7 +2073,7 @@
 			)
 		)
 	)
-	(symbol "U+30B1"
+	(symbol "U+30B1__ケ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2123,7 +2123,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B1_0_1"
+		(symbol "U+30B1__ケ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 20.32) (xy 20.32 20.32)
@@ -2198,7 +2198,7 @@
 			)
 		)
 	)
-	(symbol "U+30B2"
+	(symbol "U+30B2__ゲ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2248,7 +2248,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B2_0_1"
+		(symbol "U+30B2__ゲ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 20.32) (xy 20.32 20.32)
@@ -2347,7 +2347,7 @@
 			)
 		)
 	)
-	(symbol "U+30B3"
+	(symbol "U+30B3__コ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2397,7 +2397,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B3_0_1"
+		(symbol "U+30B3__コ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 22.86) (xy 19.05 22.86) (xy 19.05 5.08) (xy 3.81 5.08)
@@ -2448,7 +2448,7 @@
 			)
 		)
 	)
-	(symbol "U+30B4"
+	(symbol "U+30B4__ゴ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2498,7 +2498,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B4_0_1"
+		(symbol "U+30B4__ゴ_0_1"
 			(polyline
 				(pts
 					(xy 17.78 26.67) (xy 20.32 24.13)
@@ -2573,7 +2573,7 @@
 			)
 		)
 	)
-	(symbol "U+30B5"
+	(symbol "U+30B5__サ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2623,7 +2623,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B5_0_1"
+		(symbol "U+30B5__サ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 20.32) (xy 20.32 20.32)
@@ -2699,7 +2699,7 @@
 			)
 		)
 	)
-	(symbol "U+30B6"
+	(symbol "U+30B6__ザ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2749,7 +2749,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B6_0_1"
+		(symbol "U+30B6__ザ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 20.32) (xy 20.32 20.32)
@@ -2849,7 +2849,7 @@
 			)
 		)
 	)
-	(symbol "U+30B7"
+	(symbol "U+30B7__シ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2899,7 +2899,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B7_0_1"
+		(symbol "U+30B7__シ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 19.05) (xy 7.62 15.24)
@@ -2974,7 +2974,7 @@
 			)
 		)
 	)
-	(symbol "U+30B8"
+	(symbol "U+30B8__ジ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3024,7 +3024,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B8_0_1"
+		(symbol "U+30B8__ジ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 19.05) (xy 7.62 15.24)
@@ -3123,7 +3123,7 @@
 			)
 		)
 	)
-	(symbol "U+30B9"
+	(symbol "U+30B9__ス"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3173,7 +3173,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30B9_0_1"
+		(symbol "U+30B9__ス_0_1"
 			(polyline
 				(pts
 					(xy 11.7856 12.192) (xy 15.0368 8.4328) (xy 18.9992 2.5146)
@@ -3237,7 +3237,7 @@
 			)
 		)
 	)
-	(symbol "U+30BA"
+	(symbol "U+30BA__ズ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3287,7 +3287,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30BA_0_1"
+		(symbol "U+30BA__ズ_0_1"
 			(polyline
 				(pts
 					(xy 17.78 27.94) (xy 20.32 25.4)
@@ -3375,7 +3375,7 @@
 			)
 		)
 	)
-	(symbol "U+30BB"
+	(symbol "U+30BB__セ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3425,7 +3425,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30BB_0_1"
+		(symbol "U+30BB__セ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 19.05) (xy 20.32 21.59) (xy 15.24 11.43)
@@ -3488,7 +3488,7 @@
 			)
 		)
 	)
-	(symbol "U+30BC"
+	(symbol "U+30BC__ゼ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3538,7 +3538,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30BC_0_1"
+		(symbol "U+30BC__ゼ_0_1"
 			(polyline
 				(pts
 					(xy 16.51 27.94) (xy 19.05 25.4)
@@ -3625,7 +3625,7 @@
 			)
 		)
 	)
-	(symbol "U+30BD"
+	(symbol "U+30BD__ソ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3675,7 +3675,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30BD_0_1"
+		(symbol "U+30BD__ソ_0_1"
 			(polyline
 				(pts
 					(xy 5.0292 25.7048) (xy 7.5692 18.0848)
@@ -3739,7 +3739,7 @@
 			)
 		)
 	)
-	(symbol "U+30BE"
+	(symbol "U+30BE__ゾ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3789,7 +3789,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30BE_0_1"
+		(symbol "U+30BE__ゾ_0_1"
 			(polyline
 				(pts
 					(xy 5.0292 25.146) (xy 7.5692 17.526)
@@ -3877,7 +3877,7 @@
 			)
 		)
 	)
-	(symbol "U+30BF"
+	(symbol "U+30BF__タ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3927,7 +3927,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30BF_0_1"
+		(symbol "U+30BF__タ_0_1"
 			(polyline
 				(pts
 					(xy 7.62 19.05) (xy 14.6558 10.8966)
@@ -4003,7 +4003,7 @@
 			)
 		)
 	)
-	(symbol "U+30C0"
+	(symbol "U+30C0__ダ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4053,7 +4053,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C0_0_1"
+		(symbol "U+30C0__ダ_0_1"
 			(polyline
 				(pts
 					(xy 7.62 19.05) (xy 14.6558 10.8966)
@@ -4153,7 +4153,7 @@
 			)
 		)
 	)
-	(symbol "U+30C1"
+	(symbol "U+30C1__チ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4203,7 +4203,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C1_0_1"
+		(symbol "U+30C1__チ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 16.51) (xy 20.32 16.51)
@@ -4279,7 +4279,7 @@
 			)
 		)
 	)
-	(symbol "U+30C2"
+	(symbol "U+30C2__ヂ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4329,7 +4329,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C2_0_1"
+		(symbol "U+30C2__ヂ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 16.51) (xy 20.32 16.51)
@@ -4429,7 +4429,7 @@
 			)
 		)
 	)
-	(symbol "U+30C3"
+	(symbol "U+30C3__ッ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4479,7 +4479,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C3_0_1"
+		(symbol "U+30C3__ッ_0_1"
 			(polyline
 				(pts
 					(xy 4.953 18.923) (xy 7.0612 12.446)
@@ -4554,7 +4554,7 @@
 			)
 		)
 	)
-	(symbol "U+30C4"
+	(symbol "U+30C4__ツ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4604,7 +4604,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C4_0_1"
+		(symbol "U+30C4__ツ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 25.4) (xy 6.35 16.51)
@@ -4680,7 +4680,7 @@
 			)
 		)
 	)
-	(symbol "U+30C5"
+	(symbol "U+30C5__ヅ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4730,7 +4730,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C5_0_1"
+		(symbol "U+30C5__ヅ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 25.4) (xy 6.35 16.51)
@@ -4830,7 +4830,7 @@
 			)
 		)
 	)
-	(symbol "U+30C6"
+	(symbol "U+30C6__テ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4880,7 +4880,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C6_0_1"
+		(symbol "U+30C6__テ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 17.78) (xy 20.32 17.78)
@@ -4955,7 +4955,7 @@
 			)
 		)
 	)
-	(symbol "U+30C7"
+	(symbol "U+30C7__デ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5005,7 +5005,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C7_0_1"
+		(symbol "U+30C7__デ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 17.78) (xy 20.32 17.78)
@@ -5104,7 +5104,7 @@
 			)
 		)
 	)
-	(symbol "U+30C8"
+	(symbol "U+30C8__ト"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5154,7 +5154,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C8_0_1"
+		(symbol "U+30C8__ト_0_1"
 			(polyline
 				(pts
 					(xy 11.43 17.78) (xy 19.05 11.43)
@@ -5217,7 +5217,7 @@
 			)
 		)
 	)
-	(symbol "U+30C9"
+	(symbol "U+30C9__ド"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5267,7 +5267,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30C9_0_1"
+		(symbol "U+30C9__ド_0_1"
 			(polyline
 				(pts
 					(xy 11.43 17.78) (xy 19.05 11.43)
@@ -5354,7 +5354,7 @@
 			)
 		)
 	)
-	(symbol "U+30CA"
+	(symbol "U+30CA__ナ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5404,7 +5404,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30CA_0_1"
+		(symbol "U+30CA__ナ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 19.05) (xy 20.32 19.05)
@@ -5468,7 +5468,7 @@
 			)
 		)
 	)
-	(symbol "U+30CB"
+	(symbol "U+30CB__ニ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5518,7 +5518,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30CB_0_1"
+		(symbol "U+30CB__ニ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 5.08) (xy 21.59 5.08)
@@ -5581,7 +5581,7 @@
 			)
 		)
 	)
-	(symbol "U+30CC"
+	(symbol "U+30CC__ヌ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5631,7 +5631,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30CC_0_1"
+		(symbol "U+30CC__ヌ_0_1"
 			(polyline
 				(pts
 					(xy 8.7376 17.2212) (xy 17.3736 4.3942)
@@ -5695,7 +5695,7 @@
 			)
 		)
 	)
-	(symbol "U+30CD"
+	(symbol "U+30CD__ネ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5745,7 +5745,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30CD_0_1"
+		(symbol "U+30CD__ネ_0_1"
 			(polyline
 				(pts
 					(xy 8.89 29.21) (xy 13.97 25.4)
@@ -5833,7 +5833,7 @@
 			)
 		)
 	)
-	(symbol "U+30CE"
+	(symbol "U+30CE__ノ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5883,7 +5883,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30CE_0_1"
+		(symbol "U+30CE__ノ_0_1"
 			(polyline
 				(pts
 					(xy 16.7132 26.4922) (xy 16.3576 18.9484) (xy 14.1986 12.1666) (xy 10.7696 6.8326) (xy 5.08 1.6764)
@@ -5934,7 +5934,7 @@
 			)
 		)
 	)
-	(symbol "U+30CF"
+	(symbol "U+30CF__ハ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5984,7 +5984,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30CF_0_1"
+		(symbol "U+30CF__ハ_0_1"
 			(polyline
 				(pts
 					(xy 15.24 21.59) (xy 20.32 6.35)
@@ -6047,7 +6047,7 @@
 			)
 		)
 	)
-	(symbol "U+30D0"
+	(symbol "U+30D0__バ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6097,7 +6097,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D0_0_1"
+		(symbol "U+30D0__バ_0_1"
 			(polyline
 				(pts
 					(xy 15.24 21.59) (xy 20.32 6.35)
@@ -6184,7 +6184,7 @@
 			)
 		)
 	)
-	(symbol "U+30D1"
+	(symbol "U+30D1__パ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6234,7 +6234,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D1_0_1"
+		(symbol "U+30D1__パ_0_1"
 			(polyline
 				(pts
 					(xy 15.24 21.59) (xy 20.32 6.35)
@@ -6310,7 +6310,7 @@
 			)
 		)
 	)
-	(symbol "U+30D2"
+	(symbol "U+30D2__ヒ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6360,7 +6360,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D2_0_1"
+		(symbol "U+30D2__ヒ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 26.67) (xy 3.81 2.54) (xy 19.05 2.54)
@@ -6423,7 +6423,7 @@
 			)
 		)
 	)
-	(symbol "U+30D3"
+	(symbol "U+30D3__ビ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6473,7 +6473,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D3_0_1"
+		(symbol "U+30D3__ビ_0_1"
 			(polyline
 				(pts
 					(xy 17.78 24.13) (xy 20.32 21.59)
@@ -6560,7 +6560,7 @@
 			)
 		)
 	)
-	(symbol "U+30D4"
+	(symbol "U+30D4__ピ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6610,7 +6610,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D4_0_1"
+		(symbol "U+30D4__ピ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 26.67) (xy 3.81 2.54) (xy 19.05 2.54)
@@ -6686,7 +6686,7 @@
 			)
 		)
 	)
-	(symbol "U+30D5"
+	(symbol "U+30D5__フ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6736,7 +6736,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D5_0_1"
+		(symbol "U+30D5__フ_0_1"
 			(polyline
 				(pts
 					(xy 3.8862 23.3172) (xy 18.8722 23.3172) (xy 18.5166 17.272) (xy 16.8402 11.2014) (xy 14.0208 7.1374)
@@ -6788,7 +6788,7 @@
 			)
 		)
 	)
-	(symbol "U+30D6"
+	(symbol "U+30D6__ブ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6838,7 +6838,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D6_0_1"
+		(symbol "U+30D6__ブ_0_1"
 			(polyline
 				(pts
 					(xy 19.05 26.67) (xy 21.59 24.13)
@@ -6914,7 +6914,7 @@
 			)
 		)
 	)
-	(symbol "U+30D7"
+	(symbol "U+30D7__プ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6964,7 +6964,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D7_0_1"
+		(symbol "U+30D7__プ_0_1"
 			(polyline
 				(pts
 					(xy 3.8862 23.3172) (xy 18.8722 23.3172) (xy 18.5166 17.272) (xy 16.8402 11.2014) (xy 14.0208 7.1374)
@@ -7029,7 +7029,7 @@
 			)
 		)
 	)
-	(symbol "U+30D8"
+	(symbol "U+30D8__ヘ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7079,7 +7079,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D8_0_1"
+		(symbol "U+30D8__ヘ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 11.43) (xy 8.89 21.59) (xy 20.32 6.35)
@@ -7130,7 +7130,7 @@
 			)
 		)
 	)
-	(symbol "U+30D9"
+	(symbol "U+30D9__ベ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7180,7 +7180,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30D9_0_1"
+		(symbol "U+30D9__ベ_0_1"
 			(polyline
 				(pts
 					(xy 14.8336 19.304) (xy 17.3736 16.764)
@@ -7255,7 +7255,7 @@
 			)
 		)
 	)
-	(symbol "U+30DA"
+	(symbol "U+30DA__ペ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7305,7 +7305,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30DA_0_1"
+		(symbol "U+30DA__ペ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 11.43) (xy 8.89 21.59) (xy 20.32 6.35)
@@ -7369,7 +7369,7 @@
 			)
 		)
 	)
-	(symbol "U+30DB"
+	(symbol "U+30DB__ホ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7419,7 +7419,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30DB_0_1"
+		(symbol "U+30DB__ホ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 20.32) (xy 19.05 20.32)
@@ -7506,7 +7506,7 @@
 			)
 		)
 	)
-	(symbol "U+30DC"
+	(symbol "U+30DC__ボ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7556,7 +7556,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30DC_0_1"
+		(symbol "U+30DC__ボ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 20.32) (xy 19.05 20.32)
@@ -7667,7 +7667,7 @@
 			)
 		)
 	)
-	(symbol "U+30DD"
+	(symbol "U+30DD__ポ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7717,7 +7717,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30DD_0_1"
+		(symbol "U+30DD__ポ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 20.32) (xy 19.05 20.32)
@@ -7817,7 +7817,7 @@
 			)
 		)
 	)
-	(symbol "U+30DE"
+	(symbol "U+30DE__マ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7867,7 +7867,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30DE_0_1"
+		(symbol "U+30DE__マ_0_1"
 			(polyline
 				(pts
 					(xy 7.2898 13.4112) (xy 10.16 9.8806) (xy 12.3698 6.5024) (xy 14.3256 2.8956)
@@ -7930,7 +7930,7 @@
 			)
 		)
 	)
-	(symbol "U+30DF"
+	(symbol "U+30DF__ミ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7980,7 +7980,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30DF_0_1"
+		(symbol "U+30DF__ミ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 8.89) (xy 17.78 2.54)
@@ -8055,7 +8055,7 @@
 			)
 		)
 	)
-	(symbol "U+30E0"
+	(symbol "U+30E0__ム"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8105,7 +8105,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E0_0_1"
+		(symbol "U+30E0__ム_0_1"
 			(polyline
 				(pts
 					(xy 13.97 13.97) (xy 19.05 1.27)
@@ -8168,7 +8168,7 @@
 			)
 		)
 	)
-	(symbol "U+30E1"
+	(symbol "U+30E1__メ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8218,7 +8218,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E1_0_1"
+		(symbol "U+30E1__メ_0_1"
 			(polyline
 				(pts
 					(xy 7.7216 19.9898) (xy 10.8204 16.9164) (xy 14.9606 12.2428) (xy 18.5166 7.62)
@@ -8282,7 +8282,7 @@
 			)
 		)
 	)
-	(symbol "U+30E2"
+	(symbol "U+30E2__モ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8332,7 +8332,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E2_0_1"
+		(symbol "U+30E2__モ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 15.24) (xy 21.59 15.24)
@@ -8407,7 +8407,7 @@
 			)
 		)
 	)
-	(symbol "U+30E3"
+	(symbol "U+30E3__ャ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8457,7 +8457,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E3_0_1"
+		(symbol "U+30E3__ャ_0_1"
 			(polyline
 				(pts
 					(xy 7.62 22.86) (xy 11.43 1.27)
@@ -8520,7 +8520,7 @@
 			)
 		)
 	)
-	(symbol "U+30E4"
+	(symbol "U+30E4__ヤ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8570,7 +8570,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E4_0_1"
+		(symbol "U+30E4__ヤ_0_1"
 			(polyline
 				(pts
 					(xy 7.62 27.94) (xy 11.43 1.27)
@@ -8633,7 +8633,7 @@
 			)
 		)
 	)
-	(symbol "U+30E5"
+	(symbol "U+30E5__ュ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8683,7 +8683,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E5_0_1"
+		(symbol "U+30E5__ュ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 6.35) (xy 19.05 6.35)
@@ -8746,7 +8746,7 @@
 			)
 		)
 	)
-	(symbol "U+30E6"
+	(symbol "U+30E6__ユ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8796,7 +8796,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E6_0_1"
+		(symbol "U+30E6__ユ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 5.08) (xy 21.59 5.08)
@@ -8859,7 +8859,7 @@
 			)
 		)
 	)
-	(symbol "U+30E7"
+	(symbol "U+30E7__ョ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8909,7 +8909,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E7_0_1"
+		(symbol "U+30E7__ョ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 11.43) (xy 16.51 11.43)
@@ -8972,7 +8972,7 @@
 			)
 		)
 	)
-	(symbol "U+30E8"
+	(symbol "U+30E8__ヨ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9022,7 +9022,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E8_0_1"
+		(symbol "U+30E8__ヨ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 13.97) (xy 19.05 13.97)
@@ -9085,7 +9085,7 @@
 			)
 		)
 	)
-	(symbol "U+30E9"
+	(symbol "U+30E9__ラ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9135,7 +9135,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30E9_0_1"
+		(symbol "U+30E9__ラ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 25.4) (xy 17.78 25.4)
@@ -9199,7 +9199,7 @@
 			)
 		)
 	)
-	(symbol "U+30EA"
+	(symbol "U+30EA__リ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9249,7 +9249,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30EA_0_1"
+		(symbol "U+30EA__リ_0_1"
 			(polyline
 				(pts
 					(xy 7.8232 26.8224) (xy 7.8232 12.8524)
@@ -9313,7 +9313,7 @@
 			)
 		)
 	)
-	(symbol "U+30EB"
+	(symbol "U+30EB__ル"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9363,7 +9363,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30EB_0_1"
+		(symbol "U+30EB__ル_0_1"
 			(polyline
 				(pts
 					(xy 6.3754 25.3492) (xy 6.35 15.0368) (xy 5.5372 9.3218) (xy 4.5466 5.2578) (xy 2.6924 1.6764)
@@ -9426,7 +9426,7 @@
 			)
 		)
 	)
-	(symbol "U+30EC"
+	(symbol "U+30EC__レ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9476,7 +9476,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30EC_0_1"
+		(symbol "U+30EC__レ_0_1"
 			(polyline
 				(pts
 					(xy 6.477 27.7114) (xy 6.477 2.7686) (xy 11.4554 4.445) (xy 15.2908 7.0612) (xy 17.9324 9.906)
@@ -9528,7 +9528,7 @@
 			)
 		)
 	)
-	(symbol "U+30ED"
+	(symbol "U+30ED__ロ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9578,7 +9578,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30ED_0_1"
+		(symbol "U+30ED__ロ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 24.13) (xy 3.81 6.35)
@@ -9641,7 +9641,7 @@
 			)
 		)
 	)
-	(symbol "U+30EE"
+	(symbol "U+30EE__ヮ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9691,7 +9691,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30EE_0_1"
+		(symbol "U+30EE__ヮ_0_1"
 			(polyline
 				(pts
 					(xy 6.1468 12.8524) (xy 6.1468 20.6756) (xy 17.8816 20.6756) (xy 17.3228 13.4112) (xy 15.0876 6.7056)
@@ -9743,7 +9743,7 @@
 			)
 		)
 	)
-	(symbol "U+30EF"
+	(symbol "U+30EF__ワ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9793,7 +9793,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30EF_0_1"
+		(symbol "U+30EF__ワ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 25.4) (xy 3.81 16.51)
@@ -9869,7 +9869,7 @@
 			)
 		)
 	)
-	(symbol "U+30F0"
+	(symbol "U+30F0__ヰ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9919,7 +9919,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F0_0_1"
+		(symbol "U+30F0__ヰ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 10.16) (xy 21.59 10.16)
@@ -10006,7 +10006,7 @@
 			)
 		)
 	)
-	(symbol "U+30F1"
+	(symbol "U+30F1__ヱ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10056,7 +10056,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F1_0_1"
+		(symbol "U+30F1__ヱ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 5.08) (xy 21.59 5.08)
@@ -10131,7 +10131,7 @@
 			)
 		)
 	)
-	(symbol "U+30F2"
+	(symbol "U+30F2__ヲ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10181,7 +10181,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F2_0_1"
+		(symbol "U+30F2__ヲ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 17.78) (xy 17.78 17.78)
@@ -10245,7 +10245,7 @@
 			)
 		)
 	)
-	(symbol "U+30F3"
+	(symbol "U+30F3__ン"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10295,7 +10295,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F3_0_1"
+		(symbol "U+30F3__ン_0_1"
 			(polyline
 				(pts
 					(xy 4.572 23.7236) (xy 9.652 18.6436)
@@ -10358,7 +10358,7 @@
 			)
 		)
 	)
-	(symbol "U+30F4"
+	(symbol "U+30F4__ヴ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10408,7 +10408,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F4_0_1"
+		(symbol "U+30F4__ヴ_0_1"
 			(polyline
 				(pts
 					(xy 11.43 29.21) (xy 11.43 24.13)
@@ -10496,7 +10496,7 @@
 			)
 		)
 	)
-	(symbol "U+30F5"
+	(symbol "U+30F5__ヵ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10546,7 +10546,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F5_0_1"
+		(symbol "U+30F5__ヵ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 17.78) (xy 16.51 17.78) (xy 15.24 2.54) (xy 12.7 3.81)
@@ -10609,7 +10609,7 @@
 			)
 		)
 	)
-	(symbol "U+30F6"
+	(symbol "U+30F6__ヶ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10659,7 +10659,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F6_0_1"
+		(symbol "U+30F6__ヶ_0_1"
 			(polyline
 				(pts
 					(xy 8.89 17.78) (xy 19.05 17.78)
@@ -10734,7 +10734,7 @@
 			)
 		)
 	)
-	(symbol "U+30F7"
+	(symbol "U+30F7__ヷ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10784,7 +10784,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F7_0_1"
+		(symbol "U+30F7__ヷ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 25.4) (xy 3.81 16.51)
@@ -10884,7 +10884,7 @@
 			)
 		)
 	)
-	(symbol "U+30F8"
+	(symbol "U+30F8__ヸ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10934,7 +10934,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F8_0_1"
+		(symbol "U+30F8__ヸ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 10.16) (xy 21.59 10.16)
@@ -11045,7 +11045,7 @@
 			)
 		)
 	)
-	(symbol "U+30F9"
+	(symbol "U+30F9__ヹ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11095,7 +11095,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30F9_0_1"
+		(symbol "U+30F9__ヹ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 5.08) (xy 21.59 5.08)
@@ -11194,7 +11194,7 @@
 			)
 		)
 	)
-	(symbol "U+30FA"
+	(symbol "U+30FA__ヺ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11244,7 +11244,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30FA_0_1"
+		(symbol "U+30FA__ヺ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 17.78) (xy 17.78 17.78)
@@ -11332,7 +11332,7 @@
 			)
 		)
 	)
-	(symbol "U+30FB"
+	(symbol "U+30FB__・"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11382,7 +11382,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30FB_0_1"
+		(symbol "U+30FB__・_0_1"
 			(polyline
 				(pts
 					(xy 10.16 13.97) (xy 12.7 13.97) (xy 13.97 12.7) (xy 13.97 10.16) (xy 12.7 8.89) (xy 10.16 8.89)
@@ -11434,7 +11434,7 @@
 			)
 		)
 	)
-	(symbol "U+30FC"
+	(symbol "U+30FC__ー"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11484,7 +11484,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30FC_0_1"
+		(symbol "U+30FC__ー_0_1"
 			(polyline
 				(pts
 					(xy 1.27 13.97) (xy 21.59 13.97)
@@ -11535,7 +11535,7 @@
 			)
 		)
 	)
-	(symbol "U+30FD"
+	(symbol "U+30FD__ヽ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11585,7 +11585,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30FD_0_1"
+		(symbol "U+30FD__ヽ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 20.32) (xy 15.24 7.62)
@@ -11636,7 +11636,7 @@
 			)
 		)
 	)
-	(symbol "U+30FE"
+	(symbol "U+30FE__ヾ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11686,7 +11686,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30FE_0_1"
+		(symbol "U+30FE__ヾ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 20.32) (xy 15.24 7.62)
@@ -11761,7 +11761,7 @@
 			)
 		)
 	)
-	(symbol "U+30FF"
+	(symbol "U+30FF__ヿ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11811,7 +11811,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+30FF_0_1"
+		(symbol "U+30FF__ヿ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 26.67) (xy 17.78 26.67) (xy 17.78 2.54)

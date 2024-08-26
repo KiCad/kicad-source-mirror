@@ -2,7 +2,7 @@
 	(version 20231120)
 	(generator "kicad_symbol_editor")
 	(generator_version "8.0")
-	(symbol "U+FF01"
+	(symbol "U+FF01__！"
 		(pin_names
 			(offset 1.016)
 		)
@@ -52,7 +52,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF01_0_1"
+		(symbol "U+FF01__！_0_1"
 			(polyline
 				(pts
 					(xy 11.43 3.81) (xy 12.7 2.54) (xy 11.43 1.27) (xy 10.16 2.54) (xy 11.43 3.81) (xy 11.43 1.27)
@@ -115,7 +115,7 @@
 			)
 		)
 	)
-	(symbol "U+FF02"
+	(symbol "U+FF02__＂"
 		(pin_names
 			(offset 1.016)
 		)
@@ -165,7 +165,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF02_0_1"
+		(symbol "U+FF02__＂_0_1"
 			(polyline
 				(pts
 					(xy 8.89 29.21) (xy 8.89 25.4)
@@ -228,7 +228,7 @@
 			)
 		)
 	)
-	(symbol "U+FF03"
+	(symbol "U+FF03__＃"
 		(pin_names
 			(offset 1.016)
 		)
@@ -278,7 +278,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF03_0_1"
+		(symbol "U+FF03__＃_0_1"
 			(polyline
 				(pts
 					(xy 3.81 19.05) (xy 22.86 19.05)
@@ -365,7 +365,7 @@
 			)
 		)
 	)
-	(symbol "U+FF04"
+	(symbol "U+FF04__＄"
 		(pin_names
 			(offset 1.016)
 		)
@@ -415,7 +415,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF04_0_1"
+		(symbol "U+FF04__＄_0_1"
 			(polyline
 				(pts
 					(xy 11.43 29.21) (xy 11.43 0)
@@ -481,7 +481,7 @@
 			)
 		)
 	)
-	(symbol "U+FF05"
+	(symbol "U+FF05__％"
 		(pin_names
 			(offset 1.016)
 		)
@@ -531,7 +531,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF05_0_1"
+		(symbol "U+FF05__％_0_1"
 			(polyline
 				(pts
 					(xy 1.27 0) (xy 21.59 26.67)
@@ -608,7 +608,7 @@
 			)
 		)
 	)
-	(symbol "U+FF06"
+	(symbol "U+FF06__＆"
 		(pin_names
 			(offset 1.016)
 		)
@@ -658,7 +658,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF06_0_1"
+		(symbol "U+FF06__＆_0_1"
 			(polyline
 				(pts
 					(xy 22.225 0) (xy 20.955 0) (xy 19.05 1.27) (xy 15.24 5.08) (xy 8.89 12.7) (xy 6.35 16.51) (xy 5.08 20.32)
@@ -713,7 +713,7 @@
 			)
 		)
 	)
-	(symbol "U+FF07"
+	(symbol "U+FF07__＇"
 		(pin_names
 			(offset 1.016)
 		)
@@ -763,7 +763,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF07_0_1"
+		(symbol "U+FF07__＇_0_1"
 			(polyline
 				(pts
 					(xy 12.7 27.94) (xy 10.16 22.86)
@@ -814,7 +814,7 @@
 			)
 		)
 	)
-	(symbol "U+FF08"
+	(symbol "U+FF08__（"
 		(pin_names
 			(offset 1.016)
 		)
@@ -864,7 +864,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF08_0_1"
+		(symbol "U+FF08__（_0_1"
 			(polyline
 				(pts
 					(xy 18.415 29.845) (xy 16.51 26.67) (xy 15.24 21.59) (xy 15.24 8.89) (xy 16.51 3.81) (xy 18.415 0.635)
@@ -915,7 +915,7 @@
 			)
 		)
 	)
-	(symbol "U+FF09"
+	(symbol "U+FF09__）"
 		(pin_names
 			(offset 1.016)
 		)
@@ -965,7 +965,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF09_0_1"
+		(symbol "U+FF09__）_0_1"
 			(polyline
 				(pts
 					(xy 4.445 29.845) (xy 6.35 26.67) (xy 7.62 21.59) (xy 7.62 8.89) (xy 6.35 3.81) (xy 4.445 0.635)
@@ -1016,7 +1016,7 @@
 			)
 		)
 	)
-	(symbol "U+FF0A"
+	(symbol "U+FF0A__＊"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1066,7 +1066,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF0A_0_1"
+		(symbol "U+FF0A__＊_0_1"
 			(polyline
 				(pts
 					(xy 11.43 22.86) (xy 11.43 13.97)
@@ -1141,7 +1141,7 @@
 			)
 		)
 	)
-	(symbol "U+FF0B"
+	(symbol "U+FF0B__＋"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1191,7 +1191,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF0B_0_1"
+		(symbol "U+FF0B__＋_0_1"
 			(polyline
 				(pts
 					(xy 3.81 15.24) (xy 19.05 15.24)
@@ -1254,7 +1254,7 @@
 			)
 		)
 	)
-	(symbol "U+FF0C"
+	(symbol "U+FF0C__，"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1304,7 +1304,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF0C_0_1"
+		(symbol "U+FF0C__，_0_1"
 			(polyline
 				(pts
 					(xy 5.715 3.175) (xy 5.715 0) (xy 3.81 -1.905)
@@ -1367,7 +1367,7 @@
 			)
 		)
 	)
-	(symbol "U+FF0D"
+	(symbol "U+FF0D__－"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1417,7 +1417,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF0D_0_1"
+		(symbol "U+FF0D__－_0_1"
 			(polyline
 				(pts
 					(xy 3.81 15.24) (xy 19.05 15.24)
@@ -1468,7 +1468,7 @@
 			)
 		)
 	)
-	(symbol "U+FF0E"
+	(symbol "U+FF0E__．"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1518,7 +1518,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF0E_0_1"
+		(symbol "U+FF0E__．_0_1"
 			(polyline
 				(pts
 					(xy 4.445 4.445) (xy 5.715 3.175) (xy 4.445 1.905) (xy 3.175 3.175) (xy 4.445 4.445) (xy 4.445 1.905)
@@ -1569,7 +1569,7 @@
 			)
 		)
 	)
-	(symbol "U+FF0F"
+	(symbol "U+FF0F__／"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1619,7 +1619,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF0F_0_1"
+		(symbol "U+FF0F__／_0_1"
 			(polyline
 				(pts
 					(xy 20.32 27.94) (xy 2.54 2.54)
@@ -1670,7 +1670,7 @@
 			)
 		)
 	)
-	(symbol "U+FF10"
+	(symbol "U+FF10__０"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1720,7 +1720,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF10_0_1"
+		(symbol "U+FF10__０_0_1"
 			(polyline
 				(pts
 					(xy 10.16 26.67) (xy 12.7 26.67) (xy 15.24 25.4) (xy 16.51 24.13) (xy 17.78 21.59) (xy 19.05 16.51)
@@ -1774,7 +1774,7 @@
 			)
 		)
 	)
-	(symbol "U+FF11"
+	(symbol "U+FF11__１"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1824,7 +1824,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF11_0_1"
+		(symbol "U+FF11__１_0_1"
 			(polyline
 				(pts
 					(xy 19.05 0) (xy 3.81 0)
@@ -1887,7 +1887,7 @@
 			)
 		)
 	)
-	(symbol "U+FF12"
+	(symbol "U+FF12__２"
 		(pin_names
 			(offset 1.016)
 		)
@@ -1937,7 +1937,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF12_0_1"
+		(symbol "U+FF12__２_0_1"
 			(polyline
 				(pts
 					(xy 4.445 24.13) (xy 5.715 25.4) (xy 8.255 26.67) (xy 14.605 26.67) (xy 17.145 25.4) (xy 18.415 24.13)
@@ -1989,7 +1989,7 @@
 			)
 		)
 	)
-	(symbol "U+FF13"
+	(symbol "U+FF13__３"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2039,7 +2039,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF13_0_1"
+		(symbol "U+FF13__３_0_1"
 			(polyline
 				(pts
 					(xy 3.175 26.67) (xy 19.685 26.67) (xy 10.795 16.51) (xy 14.605 16.51) (xy 17.145 15.24) (xy 18.415 13.97)
@@ -2092,7 +2092,7 @@
 			)
 		)
 	)
-	(symbol "U+FF14"
+	(symbol "U+FF14__４"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2142,7 +2142,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF14_0_1"
+		(symbol "U+FF14__４_0_1"
 			(polyline
 				(pts
 					(xy 15.875 17.78) (xy 15.875 0)
@@ -2205,7 +2205,7 @@
 			)
 		)
 	)
-	(symbol "U+FF15"
+	(symbol "U+FF15__５"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2255,7 +2255,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF15_0_1"
+		(symbol "U+FF15__５_0_1"
 			(polyline
 				(pts
 					(xy 17.78 26.67) (xy 5.08 26.67) (xy 3.81 13.97) (xy 5.08 15.24) (xy 7.62 16.51) (xy 13.97 16.51)
@@ -2308,7 +2308,7 @@
 			)
 		)
 	)
-	(symbol "U+FF16"
+	(symbol "U+FF16__６"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2358,7 +2358,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF16_0_1"
+		(symbol "U+FF16__６_0_1"
 			(polyline
 				(pts
 					(xy 16.51 26.67) (xy 11.43 26.67) (xy 8.89 25.4) (xy 7.62 24.13) (xy 5.08 20.32) (xy 3.81 15.24)
@@ -2412,7 +2412,7 @@
 			)
 		)
 	)
-	(symbol "U+FF17"
+	(symbol "U+FF17__７"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2462,7 +2462,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF17_0_1"
+		(symbol "U+FF17__７_0_1"
 			(polyline
 				(pts
 					(xy 2.54 26.67) (xy 20.32 26.67) (xy 8.89 0)
@@ -2513,7 +2513,7 @@
 			)
 		)
 	)
-	(symbol "U+FF18"
+	(symbol "U+FF18__８"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2563,7 +2563,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF18_0_1"
+		(symbol "U+FF18__８_0_1"
 			(polyline
 				(pts
 					(xy 8.255 15.24) (xy 5.715 16.51) (xy 4.445 17.78) (xy 3.175 20.32) (xy 3.175 21.59) (xy 4.445 24.13)
@@ -2619,7 +2619,7 @@
 			)
 		)
 	)
-	(symbol "U+FF19"
+	(symbol "U+FF19__９"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2669,7 +2669,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF19_0_1"
+		(symbol "U+FF19__９_0_1"
 			(polyline
 				(pts
 					(xy 5.715 0.635) (xy 10.795 0.635) (xy 13.335 1.905) (xy 14.605 3.175) (xy 17.145 6.985) (xy 18.415 12.065)
@@ -2723,7 +2723,7 @@
 			)
 		)
 	)
-	(symbol "U+FF1A"
+	(symbol "U+FF1A__："
 		(pin_names
 			(offset 1.016)
 		)
@@ -2773,7 +2773,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF1A_0_1"
+		(symbol "U+FF1A__：_0_1"
 			(polyline
 				(pts
 					(xy 11.43 8.89) (xy 12.7 7.62) (xy 11.43 6.35) (xy 10.16 7.62) (xy 11.43 8.89) (xy 11.43 6.35)
@@ -2836,7 +2836,7 @@
 			)
 		)
 	)
-	(symbol "U+FF1B"
+	(symbol "U+FF1B__；"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2886,7 +2886,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF1B_0_1"
+		(symbol "U+FF1B__；_0_1"
 			(polyline
 				(pts
 					(xy 12.7 8.89) (xy 12.7 7.62) (xy 11.43 5.08) (xy 10.16 3.81)
@@ -2949,7 +2949,7 @@
 			)
 		)
 	)
-	(symbol "U+FF1C"
+	(symbol "U+FF1C__＜"
 		(pin_names
 			(offset 1.016)
 		)
@@ -2999,7 +2999,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF1C_0_1"
+		(symbol "U+FF1C__＜_0_1"
 			(polyline
 				(pts
 					(xy 20.32 27.94) (xy 2.54 15.24) (xy 20.32 1.27)
@@ -3050,7 +3050,7 @@
 			)
 		)
 	)
-	(symbol "U+FF1D"
+	(symbol "U+FF1D__＝"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3100,7 +3100,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF1D_0_1"
+		(symbol "U+FF1D__＝_0_1"
 			(polyline
 				(pts
 					(xy 2.54 8.89) (xy 20.32 8.89)
@@ -3163,7 +3163,7 @@
 			)
 		)
 	)
-	(symbol "U+FF1E"
+	(symbol "U+FF1E__＞"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3213,7 +3213,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF1E_0_1"
+		(symbol "U+FF1E__＞_0_1"
 			(polyline
 				(pts
 					(xy 2.54 27.94) (xy 20.32 15.24) (xy 2.54 1.27)
@@ -3264,7 +3264,7 @@
 			)
 		)
 	)
-	(symbol "U+FF1F"
+	(symbol "U+FF1F__？"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3314,7 +3314,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF1F_0_1"
+		(symbol "U+FF1F__？_0_1"
 			(polyline
 				(pts
 					(xy 11.43 3.81) (xy 12.7 2.54) (xy 11.43 1.27) (xy 10.16 2.54) (xy 11.43 3.81) (xy 11.43 1.27)
@@ -3378,7 +3378,7 @@
 			)
 		)
 	)
-	(symbol "U+FF20"
+	(symbol "U+FF20__＠"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3428,7 +3428,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF20_0_1"
+		(symbol "U+FF20__＠_0_1"
 			(polyline
 				(pts
 					(xy 16.51 18.415) (xy 15.24 19.685) (xy 12.7 20.955) (xy 10.16 20.955) (xy 7.62 19.685) (xy 6.35 18.415)
@@ -3496,7 +3496,7 @@
 			)
 		)
 	)
-	(symbol "U+FF21"
+	(symbol "U+FF21__Ａ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3546,7 +3546,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF21_0_1"
+		(symbol "U+FF21__Ａ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 7.62) (xy 17.78 7.62)
@@ -3609,7 +3609,7 @@
 			)
 		)
 	)
-	(symbol "U+FF22"
+	(symbol "U+FF22__Ｂ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3659,7 +3659,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF22_0_1"
+		(symbol "U+FF22__Ｂ_0_1"
 			(polyline
 				(pts
 					(xy 12.7 13.97) (xy 16.51 12.7) (xy 17.78 11.43) (xy 19.05 8.89) (xy 19.05 5.08) (xy 17.78 2.54)
@@ -3712,7 +3712,7 @@
 			)
 		)
 	)
-	(symbol "U+FF23"
+	(symbol "U+FF23__Ｃ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3762,7 +3762,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF23_0_1"
+		(symbol "U+FF23__Ｃ_0_1"
 			(polyline
 				(pts
 					(xy 19.05 3.175) (xy 17.78 1.905) (xy 13.97 0.635) (xy 11.43 0.635) (xy 7.62 1.905) (xy 5.08 4.445)
@@ -3815,7 +3815,7 @@
 			)
 		)
 	)
-	(symbol "U+FF24"
+	(symbol "U+FF24__Ｄ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3865,7 +3865,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF24_0_1"
+		(symbol "U+FF24__Ｄ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 0) (xy 3.81 26.67) (xy 10.16 26.67) (xy 13.97 25.4) (xy 16.51 22.86) (xy 17.78 20.32)
@@ -3918,7 +3918,7 @@
 			)
 		)
 	)
-	(symbol "U+FF25"
+	(symbol "U+FF25__Ｅ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -3968,7 +3968,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF25_0_1"
+		(symbol "U+FF25__Ｅ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 13.97) (xy 13.97 13.97)
@@ -4031,7 +4031,7 @@
 			)
 		)
 	)
-	(symbol "U+FF26"
+	(symbol "U+FF26__Ｆ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4081,7 +4081,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF26_0_1"
+		(symbol "U+FF26__Ｆ_0_1"
 			(polyline
 				(pts
 					(xy 13.97 13.97) (xy 5.08 13.97)
@@ -4144,7 +4144,7 @@
 			)
 		)
 	)
-	(symbol "U+FF27"
+	(symbol "U+FF27__Ｇ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4194,7 +4194,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF27_0_1"
+		(symbol "U+FF27__Ｇ_0_1"
 			(polyline
 				(pts
 					(xy 18.415 25.4) (xy 15.875 26.67) (xy 12.065 26.67) (xy 8.255 25.4) (xy 5.715 22.86) (xy 4.445 20.32)
@@ -4247,7 +4247,7 @@
 			)
 		)
 	)
-	(symbol "U+FF28"
+	(symbol "U+FF28__Ｈ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4297,7 +4297,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF28_0_1"
+		(symbol "U+FF28__Ｈ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 0) (xy 3.81 26.67)
@@ -4372,7 +4372,7 @@
 			)
 		)
 	)
-	(symbol "U+FF29"
+	(symbol "U+FF29__Ｉ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4422,7 +4422,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF29_0_1"
+		(symbol "U+FF29__Ｉ_0_1"
 			(polyline
 				(pts
 					(xy 11.43 0) (xy 11.43 26.67)
@@ -4473,7 +4473,7 @@
 			)
 		)
 	)
-	(symbol "U+FF2A"
+	(symbol "U+FF2A__Ｊ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4523,7 +4523,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF2A_0_1"
+		(symbol "U+FF2A__Ｊ_0_1"
 			(polyline
 				(pts
 					(xy 15.24 27.305) (xy 15.24 8.255) (xy 13.97 4.445) (xy 11.43 1.905) (xy 7.62 0.635) (xy 5.08 0.635)
@@ -4574,7 +4574,7 @@
 			)
 		)
 	)
-	(symbol "U+FF2B"
+	(symbol "U+FF2B__Ｋ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4624,7 +4624,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF2B_0_1"
+		(symbol "U+FF2B__Ｋ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 0.635) (xy 3.81 27.305)
@@ -4699,7 +4699,7 @@
 			)
 		)
 	)
-	(symbol "U+FF2C"
+	(symbol "U+FF2C__Ｌ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4749,7 +4749,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF2C_0_1"
+		(symbol "U+FF2C__Ｌ_0_1"
 			(polyline
 				(pts
 					(xy 17.78 0) (xy 5.08 0) (xy 5.08 26.67)
@@ -4800,7 +4800,7 @@
 			)
 		)
 	)
-	(symbol "U+FF2D"
+	(symbol "U+FF2D__Ｍ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4850,7 +4850,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF2D_0_1"
+		(symbol "U+FF2D__Ｍ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 0) (xy 2.54 26.67) (xy 11.43 7.62) (xy 20.32 26.67) (xy 20.32 0)
@@ -4901,7 +4901,7 @@
 			)
 		)
 	)
-	(symbol "U+FF2E"
+	(symbol "U+FF2E__Ｎ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -4951,7 +4951,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF2E_0_1"
+		(symbol "U+FF2E__Ｎ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 0) (xy 3.81 26.67) (xy 19.05 0) (xy 19.05 26.67)
@@ -5002,7 +5002,7 @@
 			)
 		)
 	)
-	(symbol "U+FF2F"
+	(symbol "U+FF2F__Ｏ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5052,7 +5052,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF2F_0_1"
+		(symbol "U+FF2F__Ｏ_0_1"
 			(polyline
 				(pts
 					(xy 8.89 26.67) (xy 13.97 26.67) (xy 16.51 25.4) (xy 19.05 22.86) (xy 20.32 17.78) (xy 20.32 8.89)
@@ -5105,7 +5105,7 @@
 			)
 		)
 	)
-	(symbol "U+FF30"
+	(symbol "U+FF30__Ｐ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5155,7 +5155,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF30_0_1"
+		(symbol "U+FF30__Ｐ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 0) (xy 3.81 26.67) (xy 13.97 26.67) (xy 16.51 25.4) (xy 17.78 24.13) (xy 19.05 21.59)
@@ -5207,7 +5207,7 @@
 			)
 		)
 	)
-	(symbol "U+FF31"
+	(symbol "U+FF31__Ｑ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5257,7 +5257,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF31_0_1"
+		(symbol "U+FF31__Ｑ_0_1"
 			(polyline
 				(pts
 					(xy 21.59 -1.905) (xy 19.05 -0.635) (xy 16.51 1.905) (xy 12.7 5.715) (xy 10.16 6.985) (xy 7.62 6.985)
@@ -5322,7 +5322,7 @@
 			)
 		)
 	)
-	(symbol "U+FF32"
+	(symbol "U+FF32__Ｒ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5372,7 +5372,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF32_0_1"
+		(symbol "U+FF32__Ｒ_0_1"
 			(polyline
 				(pts
 					(xy 19.05 0) (xy 10.16 12.7)
@@ -5436,7 +5436,7 @@
 			)
 		)
 	)
-	(symbol "U+FF33"
+	(symbol "U+FF33__Ｓ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5486,7 +5486,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF33_0_1"
+		(symbol "U+FF33__Ｓ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 1.27) (xy 7.62 0) (xy 13.97 0) (xy 16.51 1.27) (xy 17.78 2.54) (xy 19.05 5.08) (xy 19.05 7.62)
@@ -5540,7 +5540,7 @@
 			)
 		)
 	)
-	(symbol "U+FF34"
+	(symbol "U+FF34__Ｔ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5590,7 +5590,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF34_0_1"
+		(symbol "U+FF34__Ｔ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 26.67) (xy 19.05 26.67)
@@ -5653,7 +5653,7 @@
 			)
 		)
 	)
-	(symbol "U+FF35"
+	(symbol "U+FF35__Ｕ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5703,7 +5703,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF35_0_1"
+		(symbol "U+FF35__Ｕ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 26.67) (xy 3.81 5.08) (xy 5.08 2.54) (xy 6.35 1.27) (xy 8.89 0) (xy 13.97 0) (xy 16.51 1.27)
@@ -5755,7 +5755,7 @@
 			)
 		)
 	)
-	(symbol "U+FF36"
+	(symbol "U+FF36__Ｖ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5805,7 +5805,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF36_0_1"
+		(symbol "U+FF36__Ｖ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 26.67) (xy 11.43 0) (xy 20.32 26.67)
@@ -5856,7 +5856,7 @@
 			)
 		)
 	)
-	(symbol "U+FF37"
+	(symbol "U+FF37__Ｗ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -5906,7 +5906,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF37_0_1"
+		(symbol "U+FF37__Ｗ_0_1"
 			(polyline
 				(pts
 					(xy 0.635 26.67) (xy 6.35 0) (xy 11.43 19.05) (xy 16.51 0) (xy 22.225 26.67)
@@ -5957,7 +5957,7 @@
 			)
 		)
 	)
-	(symbol "U+FF38"
+	(symbol "U+FF38__Ｘ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6007,7 +6007,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF38_0_1"
+		(symbol "U+FF38__Ｘ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 26.67) (xy 20.32 0)
@@ -6070,7 +6070,7 @@
 			)
 		)
 	)
-	(symbol "U+FF39"
+	(symbol "U+FF39__Ｙ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6120,7 +6120,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF39_0_1"
+		(symbol "U+FF39__Ｙ_0_1"
 			(polyline
 				(pts
 					(xy 11.43 12.7) (xy 11.43 0)
@@ -6183,7 +6183,7 @@
 			)
 		)
 	)
-	(symbol "U+FF3A"
+	(symbol "U+FF3A__Ｚ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6233,7 +6233,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF3A_0_1"
+		(symbol "U+FF3A__Ｚ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 26.67) (xy 20.32 26.67) (xy 2.54 0) (xy 20.32 0)
@@ -6284,7 +6284,7 @@
 			)
 		)
 	)
-	(symbol "U+FF3B"
+	(symbol "U+FF3B__［"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6334,7 +6334,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF3B_0_1"
+		(symbol "U+FF3B__［_0_1"
 			(polyline
 				(pts
 					(xy 19.05 27.94) (xy 12.7 27.94) (xy 12.7 1.27) (xy 19.05 1.27)
@@ -6385,7 +6385,7 @@
 			)
 		)
 	)
-	(symbol "U+FF3C"
+	(symbol "U+FF3C__＼"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6435,7 +6435,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF3C_0_1"
+		(symbol "U+FF3C__＼_0_1"
 			(polyline
 				(pts
 					(xy 2.54 27.94) (xy 20.32 2.54)
@@ -6486,7 +6486,7 @@
 			)
 		)
 	)
-	(symbol "U+FF3D"
+	(symbol "U+FF3D__］"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6536,7 +6536,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF3D_0_1"
+		(symbol "U+FF3D__］_0_1"
 			(polyline
 				(pts
 					(xy 3.81 27.94) (xy 10.16 27.94) (xy 10.16 1.27) (xy 3.81 1.27)
@@ -6587,7 +6587,7 @@
 			)
 		)
 	)
-	(symbol "U+FF3E"
+	(symbol "U+FF3E__＾"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6637,7 +6637,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF3E_0_1"
+		(symbol "U+FF3E__＾_0_1"
 			(polyline
 				(pts
 					(xy 7.62 24.13) (xy 11.43 27.94) (xy 15.24 24.13)
@@ -6688,7 +6688,7 @@
 			)
 		)
 	)
-	(symbol "U+FF3F"
+	(symbol "U+FF3F__＿"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6738,7 +6738,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF3F_0_1"
+		(symbol "U+FF3F__＿_0_1"
 			(polyline
 				(pts
 					(xy 2.54 1.27) (xy 20.32 1.27)
@@ -6789,7 +6789,7 @@
 			)
 		)
 	)
-	(symbol "U+FF40"
+	(symbol "U+FF40__｀"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6839,7 +6839,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF40_0_1"
+		(symbol "U+FF40__｀_0_1"
 			(polyline
 				(pts
 					(xy 8.89 27.94) (xy 13.97 25.4)
@@ -6890,7 +6890,7 @@
 			)
 		)
 	)
-	(symbol "U+FF41"
+	(symbol "U+FF41__ａ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -6940,7 +6940,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF41_0_1"
+		(symbol "U+FF41__ａ_0_1"
 			(polyline
 				(pts
 					(xy 17.78 0) (xy 17.78 13.97) (xy 16.51 16.51) (xy 13.97 17.78) (xy 8.89 17.78) (xy 6.35 16.51)
@@ -7004,7 +7004,7 @@
 			)
 		)
 	)
-	(symbol "U+FF42"
+	(symbol "U+FF42__ｂ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7054,7 +7054,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF42_0_1"
+		(symbol "U+FF42__ｂ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 0) (xy 5.715 26.67)
@@ -7118,7 +7118,7 @@
 			)
 		)
 	)
-	(symbol "U+FF43"
+	(symbol "U+FF43__ｃ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7168,7 +7168,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF43_0_1"
+		(symbol "U+FF43__ｃ_0_1"
 			(polyline
 				(pts
 					(xy 17.145 1.27) (xy 14.605 0) (xy 9.525 0) (xy 6.985 1.27) (xy 5.715 2.54) (xy 4.445 5.08) (xy 4.445 12.7)
@@ -7220,7 +7220,7 @@
 			)
 		)
 	)
-	(symbol "U+FF44"
+	(symbol "U+FF44__ｄ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7270,7 +7270,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF44_0_1"
+		(symbol "U+FF44__ｄ_0_1"
 			(polyline
 				(pts
 					(xy 17.145 0) (xy 17.145 26.67)
@@ -7334,7 +7334,7 @@
 			)
 		)
 	)
-	(symbol "U+FF45"
+	(symbol "U+FF45__ｅ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7384,7 +7384,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF45_0_1"
+		(symbol "U+FF45__ｅ_0_1"
 			(polyline
 				(pts
 					(xy 16.51 1.27) (xy 13.97 0) (xy 8.89 0) (xy 6.35 1.27) (xy 5.08 3.81) (xy 5.08 13.97) (xy 6.35 16.51)
@@ -7436,7 +7436,7 @@
 			)
 		)
 	)
-	(symbol "U+FF46"
+	(symbol "U+FF46__ｆ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7486,7 +7486,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF46_0_1"
+		(symbol "U+FF46__ｆ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 17.78) (xy 16.51 17.78)
@@ -7549,7 +7549,7 @@
 			)
 		)
 	)
-	(symbol "U+FF47"
+	(symbol "U+FF47__ｇ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7599,7 +7599,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF47_0_1"
+		(symbol "U+FF47__ｇ_0_1"
 			(polyline
 				(pts
 					(xy 17.145 26.035) (xy 17.145 4.445) (xy 15.875 1.905) (xy 14.605 0.635) (xy 12.065 -0.635) (xy 8.255 -0.635)
@@ -7664,7 +7664,7 @@
 			)
 		)
 	)
-	(symbol "U+FF48"
+	(symbol "U+FF48__ｈ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7714,7 +7714,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF48_0_1"
+		(symbol "U+FF48__ｈ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 0) (xy 5.08 26.67)
@@ -7778,7 +7778,7 @@
 			)
 		)
 	)
-	(symbol "U+FF49"
+	(symbol "U+FF49__ｉ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7828,7 +7828,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF49_0_1"
+		(symbol "U+FF49__ｉ_0_1"
 			(polyline
 				(pts
 					(xy 10.795 0) (xy 10.795 17.78)
@@ -7891,7 +7891,7 @@
 			)
 		)
 	)
-	(symbol "U+FF4A"
+	(symbol "U+FF4A__ｊ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -7941,7 +7941,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF4A_0_1"
+		(symbol "U+FF4A__ｊ_0_1"
 			(polyline
 				(pts
 					(xy 11.43 18.415) (xy 11.43 3.81) (xy 10.16 1.27) (xy 7.62 0) (xy 6.35 0)
@@ -8004,7 +8004,7 @@
 			)
 		)
 	)
-	(symbol "U+FF4B"
+	(symbol "U+FF4B__ｋ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8054,7 +8054,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF4B_0_1"
+		(symbol "U+FF4B__ｋ_0_1"
 			(polyline
 				(pts
 					(xy 6.985 0) (xy 6.985 26.67)
@@ -8129,7 +8129,7 @@
 			)
 		)
 	)
-	(symbol "U+FF4C"
+	(symbol "U+FF4C__ｌ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8179,7 +8179,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF4C_0_1"
+		(symbol "U+FF4C__ｌ_0_1"
 			(polyline
 				(pts
 					(xy 14.605 -0.635) (xy 12.065 0.635) (xy 10.795 3.175) (xy 10.795 26.035)
@@ -8230,7 +8230,7 @@
 			)
 		)
 	)
-	(symbol "U+FF4D"
+	(symbol "U+FF4D__ｍ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8280,7 +8280,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF4D_0_1"
+		(symbol "U+FF4D__ｍ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 0) (xy 1.27 17.78)
@@ -8357,7 +8357,7 @@
 			)
 		)
 	)
-	(symbol "U+FF4E"
+	(symbol "U+FF4E__ｎ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8407,7 +8407,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF4E_0_1"
+		(symbol "U+FF4E__ｎ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 17.78) (xy 5.715 0)
@@ -8471,7 +8471,7 @@
 			)
 		)
 	)
-	(symbol "U+FF4F"
+	(symbol "U+FF4F__ｏ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8521,7 +8521,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF4F_0_1"
+		(symbol "U+FF4F__ｏ_0_1"
 			(polyline
 				(pts
 					(xy 9.525 0) (xy 6.985 1.27) (xy 5.715 2.54) (xy 4.445 5.08) (xy 4.445 12.7) (xy 5.715 15.24) (xy 6.985 16.51)
@@ -8574,7 +8574,7 @@
 			)
 		)
 	)
-	(symbol "U+FF50"
+	(symbol "U+FF50__ｐ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8624,7 +8624,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF50_0_1"
+		(symbol "U+FF50__ｐ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 25.4) (xy 5.715 -1.27)
@@ -8688,7 +8688,7 @@
 			)
 		)
 	)
-	(symbol "U+FF51"
+	(symbol "U+FF51__ｑ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8738,7 +8738,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF51_0_1"
+		(symbol "U+FF51__ｑ_0_1"
 			(polyline
 				(pts
 					(xy 16.51 26.035) (xy 16.51 -0.635)
@@ -8802,7 +8802,7 @@
 			)
 		)
 	)
-	(symbol "U+FF52"
+	(symbol "U+FF52__ｒ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8852,7 +8852,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF52_0_1"
+		(symbol "U+FF52__ｒ_0_1"
 			(polyline
 				(pts
 					(xy 8.255 0.635) (xy 8.255 18.415)
@@ -8915,7 +8915,7 @@
 			)
 		)
 	)
-	(symbol "U+FF53"
+	(symbol "U+FF53__ｓ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -8965,7 +8965,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF53_0_1"
+		(symbol "U+FF53__ｓ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 1.27) (xy 8.255 0) (xy 13.335 0) (xy 15.875 1.27) (xy 17.145 3.81) (xy 17.145 5.08) (xy 15.875 7.62)
@@ -9018,7 +9018,7 @@
 			)
 		)
 	)
-	(symbol "U+FF54"
+	(symbol "U+FF54__ｔ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9068,7 +9068,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF54_0_1"
+		(symbol "U+FF54__ｔ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 17.78) (xy 15.24 17.78)
@@ -9131,7 +9131,7 @@
 			)
 		)
 	)
-	(symbol "U+FF55"
+	(symbol "U+FF55__ｕ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9181,7 +9181,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF55_0_1"
+		(symbol "U+FF55__ｕ_0_1"
 			(polyline
 				(pts
 					(xy 16.51 17.78) (xy 16.51 0)
@@ -9244,7 +9244,7 @@
 			)
 		)
 	)
-	(symbol "U+FF56"
+	(symbol "U+FF56__ｖ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9294,7 +9294,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF56_0_1"
+		(symbol "U+FF56__ｖ_0_1"
 			(polyline
 				(pts
 					(xy 4.445 17.78) (xy 10.795 0) (xy 17.145 17.78)
@@ -9345,7 +9345,7 @@
 			)
 		)
 	)
-	(symbol "U+FF57"
+	(symbol "U+FF57__ｗ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9395,7 +9395,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF57_0_1"
+		(symbol "U+FF57__ｗ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 17.78) (xy 6.35 0) (xy 11.43 12.7) (xy 16.51 0) (xy 21.59 17.78)
@@ -9446,7 +9446,7 @@
 			)
 		)
 	)
-	(symbol "U+FF58"
+	(symbol "U+FF58__ｘ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9496,7 +9496,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF58_0_1"
+		(symbol "U+FF58__ｘ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 0) (xy 17.78 17.78)
@@ -9559,7 +9559,7 @@
 			)
 		)
 	)
-	(symbol "U+FF59"
+	(symbol "U+FF59__ｙ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9609,7 +9609,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF59_0_1"
+		(symbol "U+FF59__ｙ_0_1"
 			(polyline
 				(pts
 					(xy 5.08 26.035) (xy 11.43 8.255)
@@ -9672,7 +9672,7 @@
 			)
 		)
 	)
-	(symbol "U+FF5A"
+	(symbol "U+FF5A__ｚ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9722,7 +9722,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF5A_0_1"
+		(symbol "U+FF5A__ｚ_0_1"
 			(polyline
 				(pts
 					(xy 4.445 17.78) (xy 18.415 17.78) (xy 4.445 0) (xy 18.415 0)
@@ -9773,7 +9773,7 @@
 			)
 		)
 	)
-	(symbol "U+FF5B"
+	(symbol "U+FF5B__｛"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9823,7 +9823,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF5B_0_1"
+		(symbol "U+FF5B__｛_0_1"
 			(polyline
 				(pts
 					(xy 13.97 -6.35) (xy 12.7 -6.35) (xy 10.16 -5.08) (xy 8.89 -2.54) (xy 8.89 10.16) (xy 7.62 12.7)
@@ -9876,7 +9876,7 @@
 			)
 		)
 	)
-	(symbol "U+FF5C"
+	(symbol "U+FF5C__｜"
 		(pin_names
 			(offset 1.016)
 		)
@@ -9926,7 +9926,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF5C_0_1"
+		(symbol "U+FF5C__｜_0_1"
 			(polyline
 				(pts
 					(xy 11.43 29.21) (xy 11.43 1.27)
@@ -9977,7 +9977,7 @@
 			)
 		)
 	)
-	(symbol "U+FF5D"
+	(symbol "U+FF5D__｝"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10027,7 +10027,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF5D_0_1"
+		(symbol "U+FF5D__｝_0_1"
 			(polyline
 				(pts
 					(xy 8.89 -6.985) (xy 10.16 -6.985) (xy 12.7 -5.715) (xy 13.97 -3.175) (xy 13.97 9.525) (xy 15.24 12.065)
@@ -10080,7 +10080,7 @@
 			)
 		)
 	)
-	(symbol "U+FF5E"
+	(symbol "U+FF5E__～"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10130,7 +10130,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF5E_0_1"
+		(symbol "U+FF5E__～_0_1"
 			(polyline
 				(pts
 					(xy 5.08 13.335) (xy 6.35 14.605) (xy 8.89 15.875) (xy 13.97 13.335) (xy 16.51 14.605) (xy 17.78 15.875)
@@ -10181,7 +10181,7 @@
 			)
 		)
 	)
-	(symbol "U+FF5F"
+	(symbol "U+FF5F__｟"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10231,7 +10231,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF5F_0_1"
+		(symbol "U+FF5F__｟_0_1"
 			(polyline
 				(pts
 					(xy 13.97 29.845) (xy 12.065 26.67) (xy 10.795 21.59) (xy 10.795 8.89) (xy 12.065 3.81) (xy 13.97 0.635)
@@ -10294,7 +10294,7 @@
 			)
 		)
 	)
-	(symbol "U+FF60"
+	(symbol "U+FF60__｠"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10344,7 +10344,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF60_0_1"
+		(symbol "U+FF60__｠_0_1"
 			(polyline
 				(pts
 					(xy 4.445 29.21) (xy 6.35 26.035) (xy 7.62 20.955) (xy 7.62 8.255) (xy 6.35 3.175) (xy 4.445 0)
@@ -10407,7 +10407,7 @@
 			)
 		)
 	)
-	(symbol "U+FF61"
+	(symbol "U+FF61__｡"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10457,7 +10457,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF61_0_1"
+		(symbol "U+FF61__｡_0_1"
 			(polyline
 				(pts
 					(xy 3.81 8.255) (xy 6.35 8.255) (xy 8.89 5.715) (xy 8.89 3.175) (xy 6.35 0.635) (xy 3.81 0.635)
@@ -10509,7 +10509,7 @@
 			)
 		)
 	)
-	(symbol "U+FF62"
+	(symbol "U+FF62__｢"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10559,7 +10559,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF62_0_1"
+		(symbol "U+FF62__｢_0_1"
 			(polyline
 				(pts
 					(xy 10.16 27.94) (xy 6.35 27.94) (xy 6.35 16.51)
@@ -10610,7 +10610,7 @@
 			)
 		)
 	)
-	(symbol "U+FF63"
+	(symbol "U+FF63__｣"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10660,7 +10660,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF63_0_1"
+		(symbol "U+FF63__｣_0_1"
 			(polyline
 				(pts
 					(xy 1.27 1.27) (xy 5.08 1.27) (xy 5.08 12.7)
@@ -10711,7 +10711,7 @@
 			)
 		)
 	)
-	(symbol "U+FF64"
+	(symbol "U+FF64__､"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10761,7 +10761,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF64_0_1"
+		(symbol "U+FF64__､_0_1"
 			(polyline
 				(pts
 					(xy 2.54 3.81) (xy 5.08 1.27)
@@ -10812,7 +10812,7 @@
 			)
 		)
 	)
-	(symbol "U+FF65"
+	(symbol "U+FF65__･"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10862,7 +10862,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF65_0_1"
+		(symbol "U+FF65__･_0_1"
 			(polyline
 				(pts
 					(xy 2.54 2.54) (xy 3.81 2.54) (xy 3.81 1.27) (xy 2.54 1.27) (xy 2.54 2.54)
@@ -10913,7 +10913,7 @@
 			)
 		)
 	)
-	(symbol "U+FF66"
+	(symbol "U+FF66__ｦ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -10963,7 +10963,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF66_0_1"
+		(symbol "U+FF66__ｦ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 17.145) (xy 9.525 17.145)
@@ -11026,7 +11026,7 @@
 			)
 		)
 	)
-	(symbol "U+FF67"
+	(symbol "U+FF67__ｧ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11076,7 +11076,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF67_0_1"
+		(symbol "U+FF67__ｧ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 19.685) (xy 9.525 19.685) (xy 7.62 12.065)
@@ -11139,7 +11139,7 @@
 			)
 		)
 	)
-	(symbol "U+FF68"
+	(symbol "U+FF68__ｨ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11189,7 +11189,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF68_0_1"
+		(symbol "U+FF68__ｨ_0_1"
 			(polyline
 				(pts
 					(xy 6.35 15.875) (xy 6.35 1.27)
@@ -11252,7 +11252,7 @@
 			)
 		)
 	)
-	(symbol "U+FF69"
+	(symbol "U+FF69__ｩ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11302,7 +11302,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF69_0_1"
+		(symbol "U+FF69__ｩ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 21.59) (xy 5.715 17.145)
@@ -11365,7 +11365,7 @@
 			)
 		)
 	)
-	(symbol "U+FF6A"
+	(symbol "U+FF6A__ｪ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11415,7 +11415,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF6A_0_1"
+		(symbol "U+FF6A__ｪ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 5.08) (xy 9.525 5.08)
@@ -11490,7 +11490,7 @@
 			)
 		)
 	)
-	(symbol "U+FF6B"
+	(symbol "U+FF6B__ｫ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11540,7 +11540,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF6B_0_1"
+		(symbol "U+FF6B__ｫ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 17.145) (xy 9.525 17.145)
@@ -11615,7 +11615,7 @@
 			)
 		)
 	)
-	(symbol "U+FF6C"
+	(symbol "U+FF6C__ｬ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11665,7 +11665,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF6C_0_1"
+		(symbol "U+FF6C__ｬ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 20.955) (xy 5.715 0.635)
@@ -11728,7 +11728,7 @@
 			)
 		)
 	)
-	(symbol "U+FF6D"
+	(symbol "U+FF6D__ｭ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11778,7 +11778,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF6D_0_1"
+		(symbol "U+FF6D__ｭ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 5.715) (xy 10.16 5.715)
@@ -11841,7 +11841,7 @@
 			)
 		)
 	)
-	(symbol "U+FF6E"
+	(symbol "U+FF6E__ｮ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -11891,7 +11891,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF6E_0_1"
+		(symbol "U+FF6E__ｮ_0_1"
 			(polyline
 				(pts
 					(xy 3.175 12.065) (xy 8.255 12.065)
@@ -11954,7 +11954,7 @@
 			)
 		)
 	)
-	(symbol "U+FF6F"
+	(symbol "U+FF6F__ｯ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12004,7 +12004,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF6F_0_1"
+		(symbol "U+FF6F__ｯ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 18.415) (xy 3.175 12.7)
@@ -12079,7 +12079,7 @@
 			)
 		)
 	)
-	(symbol "U+FF70"
+	(symbol "U+FF70__ｰ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12129,7 +12129,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF70_0_1"
+		(symbol "U+FF70__ｰ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 15.24) (xy 10.16 15.24)
@@ -12180,7 +12180,7 @@
 			)
 		)
 	)
-	(symbol "U+FF71"
+	(symbol "U+FF71__ｱ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12230,7 +12230,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF71_0_1"
+		(symbol "U+FF71__ｱ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 23.495) (xy 10.16 23.495) (xy 7.62 15.875)
@@ -12293,7 +12293,7 @@
 			)
 		)
 	)
-	(symbol "U+FF72"
+	(symbol "U+FF72__ｲ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12343,7 +12343,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF72_0_1"
+		(symbol "U+FF72__ｲ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 19.685) (xy 5.715 1.27)
@@ -12406,7 +12406,7 @@
 			)
 		)
 	)
-	(symbol "U+FF73"
+	(symbol "U+FF73__ｳ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12456,7 +12456,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF73_0_1"
+		(symbol "U+FF73__ｳ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 28.575) (xy 5.715 24.13)
@@ -12519,7 +12519,7 @@
 			)
 		)
 	)
-	(symbol "U+FF74"
+	(symbol "U+FF74__ｴ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12569,7 +12569,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF74_0_1"
+		(symbol "U+FF74__ｴ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 3.81) (xy 10.16 3.81)
@@ -12644,7 +12644,7 @@
 			)
 		)
 	)
-	(symbol "U+FF75"
+	(symbol "U+FF75__ｵ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12694,7 +12694,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF75_0_1"
+		(symbol "U+FF75__ｵ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 20.955) (xy 9.525 20.955)
@@ -12769,7 +12769,7 @@
 			)
 		)
 	)
-	(symbol "U+FF76"
+	(symbol "U+FF76__ｶ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12819,7 +12819,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF76_0_1"
+		(symbol "U+FF76__ｶ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 20.32) (xy 9.525 20.32) (xy 8.255 0.635) (xy 5.715 1.905)
@@ -12882,7 +12882,7 @@
 			)
 		)
 	)
-	(symbol "U+FF77"
+	(symbol "U+FF77__ｷ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -12932,7 +12932,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF77_0_1"
+		(symbol "U+FF77__ｷ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 9.525) (xy 10.16 12.7)
@@ -13007,7 +13007,7 @@
 			)
 		)
 	)
-	(symbol "U+FF78"
+	(symbol "U+FF78__ｸ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13057,7 +13057,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF78_0_1"
+		(symbol "U+FF78__ｸ_0_1"
 			(polyline
 				(pts
 					(xy 4.445 28.575) (xy 3.81 21.59) (xy 1.27 14.605)
@@ -13120,7 +13120,7 @@
 			)
 		)
 	)
-	(symbol "U+FF79"
+	(symbol "U+FF79__ｹ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13170,7 +13170,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF79_0_1"
+		(symbol "U+FF79__ｹ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 22.225) (xy 9.525 22.225)
@@ -13245,7 +13245,7 @@
 			)
 		)
 	)
-	(symbol "U+FF7A"
+	(symbol "U+FF7A__ｺ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13295,7 +13295,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF7A_0_1"
+		(symbol "U+FF7A__ｺ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 22.225) (xy 9.525 22.225) (xy 9.525 3.81) (xy 1.905 3.81)
@@ -13346,7 +13346,7 @@
 			)
 		)
 	)
-	(symbol "U+FF7B"
+	(symbol "U+FF7B__ｻ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13396,7 +13396,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF7B_0_1"
+		(symbol "U+FF7B__ｻ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 19.05) (xy 10.16 19.05)
@@ -13471,7 +13471,7 @@
 			)
 		)
 	)
-	(symbol "U+FF7C"
+	(symbol "U+FF7C__ｼ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13521,7 +13521,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF7C_0_1"
+		(symbol "U+FF7C__ｼ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 16.51) (xy 3.81 13.335)
@@ -13596,7 +13596,7 @@
 			)
 		)
 	)
-	(symbol "U+FF7D"
+	(symbol "U+FF7D__ｽ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13646,7 +13646,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF7D_0_1"
+		(symbol "U+FF7D__ｽ_0_1"
 			(polyline
 				(pts
 					(xy 7.62 12.065) (xy 10.16 2.54)
@@ -13709,7 +13709,7 @@
 			)
 		)
 	)
-	(symbol "U+FF7E"
+	(symbol "U+FF7E__ｾ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13759,7 +13759,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF7E_0_1"
+		(symbol "U+FF7E__ｾ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 17.145) (xy 10.16 20.32) (xy 8.255 10.795)
@@ -13822,7 +13822,7 @@
 			)
 		)
 	)
-	(symbol "U+FF7F"
+	(symbol "U+FF7F__ｿ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13872,7 +13872,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF7F_0_1"
+		(symbol "U+FF7F__ｿ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 23.495) (xy 3.81 15.24)
@@ -13935,7 +13935,7 @@
 			)
 		)
 	)
-	(symbol "U+FF80"
+	(symbol "U+FF80__ﾀ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -13985,7 +13985,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF80_0_1"
+		(symbol "U+FF80__ﾀ_0_1"
 			(polyline
 				(pts
 					(xy 3.175 18.415) (xy 7.62 11.43)
@@ -14060,7 +14060,7 @@
 			)
 		)
 	)
-	(symbol "U+FF81"
+	(symbol "U+FF81__ﾁ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14110,7 +14110,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF81_0_1"
+		(symbol "U+FF81__ﾁ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 16.51) (xy 10.16 16.51)
@@ -14185,7 +14185,7 @@
 			)
 		)
 	)
-	(symbol "U+FF82"
+	(symbol "U+FF82__ﾂ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14235,7 +14235,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF82_0_1"
+		(symbol "U+FF82__ﾂ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 22.86) (xy 3.175 16.51)
@@ -14310,7 +14310,7 @@
 			)
 		)
 	)
-	(symbol "U+FF83"
+	(symbol "U+FF83__ﾃ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14360,7 +14360,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF83_0_1"
+		(symbol "U+FF83__ﾃ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 15.875) (xy 9.525 15.875)
@@ -14435,7 +14435,7 @@
 			)
 		)
 	)
-	(symbol "U+FF84"
+	(symbol "U+FF84__ﾄ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14485,7 +14485,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF84_0_1"
+		(symbol "U+FF84__ﾄ_0_1"
 			(polyline
 				(pts
 					(xy 5.715 16.51) (xy 9.525 10.795)
@@ -14548,7 +14548,7 @@
 			)
 		)
 	)
-	(symbol "U+FF85"
+	(symbol "U+FF85__ﾅ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14598,7 +14598,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF85_0_1"
+		(symbol "U+FF85__ﾅ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 19.05) (xy 9.525 19.05)
@@ -14661,7 +14661,7 @@
 			)
 		)
 	)
-	(symbol "U+FF86"
+	(symbol "U+FF86__ﾆ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14711,7 +14711,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF86_0_1"
+		(symbol "U+FF86__ﾆ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 3.81) (xy 9.525 3.81)
@@ -14774,7 +14774,7 @@
 			)
 		)
 	)
-	(symbol "U+FF87"
+	(symbol "U+FF87__ﾇ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14824,7 +14824,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF87_0_1"
+		(symbol "U+FF87__ﾇ_0_1"
 			(polyline
 				(pts
 					(xy 3.81 18.415) (xy 9.525 5.08)
@@ -14887,7 +14887,7 @@
 			)
 		)
 	)
-	(symbol "U+FF88"
+	(symbol "U+FF88__ﾈ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -14937,7 +14937,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF88_0_1"
+		(symbol "U+FF88__ﾈ_0_1"
 			(polyline
 				(pts
 					(xy 4.445 27.305) (xy 6.985 22.86)
@@ -15024,7 +15024,7 @@
 			)
 		)
 	)
-	(symbol "U+FF89"
+	(symbol "U+FF89__ﾉ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15074,7 +15074,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF89_0_1"
+		(symbol "U+FF89__ﾉ_0_1"
 			(polyline
 				(pts
 					(xy 9.525 26.035) (xy 8.89 17.145) (xy 6.985 10.16) (xy 1.905 1.905)
@@ -15125,7 +15125,7 @@
 			)
 		)
 	)
-	(symbol "U+FF8A"
+	(symbol "U+FF8A__ﾊ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15175,7 +15175,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF8A_0_1"
+		(symbol "U+FF8A__ﾊ_0_1"
 			(polyline
 				(pts
 					(xy 3.175 20.955) (xy 1.27 4.445)
@@ -15238,7 +15238,7 @@
 			)
 		)
 	)
-	(symbol "U+FF8B"
+	(symbol "U+FF8B__ﾋ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15288,7 +15288,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF8B_0_1"
+		(symbol "U+FF8B__ﾋ_0_1"
 			(polyline
 				(pts
 					(xy 9.525 20.955) (xy 3.81 14.605)
@@ -15351,7 +15351,7 @@
 			)
 		)
 	)
-	(symbol "U+FF8C"
+	(symbol "U+FF8C__ﾌ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15401,7 +15401,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF8C_0_1"
+		(symbol "U+FF8C__ﾌ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 22.86) (xy 10.16 22.86) (xy 9.525 15.875) (xy 6.985 7.62) (xy 2.54 1.27)
@@ -15452,7 +15452,7 @@
 			)
 		)
 	)
-	(symbol "U+FF8D"
+	(symbol "U+FF8D__ﾍ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15502,7 +15502,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF8D_0_1"
+		(symbol "U+FF8D__ﾍ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 10.795) (xy 5.08 20.955) (xy 10.795 4.445)
@@ -15553,7 +15553,7 @@
 			)
 		)
 	)
-	(symbol "U+FF8E"
+	(symbol "U+FF8E__ﾎ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15603,7 +15603,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF8E_0_1"
+		(symbol "U+FF8E__ﾎ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 20.955) (xy 9.525 20.955)
@@ -15690,7 +15690,7 @@
 			)
 		)
 	)
-	(symbol "U+FF8F"
+	(symbol "U+FF8F__ﾏ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15740,7 +15740,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF8F_0_1"
+		(symbol "U+FF8F__ﾏ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 15.24) (xy 7.62 3.175)
@@ -15803,7 +15803,7 @@
 			)
 		)
 	)
-	(symbol "U+FF90"
+	(symbol "U+FF90__ﾐ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15853,7 +15853,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF90_0_1"
+		(symbol "U+FF90__ﾐ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 9.525) (xy 9.525 1.905)
@@ -15928,7 +15928,7 @@
 			)
 		)
 	)
-	(symbol "U+FF91"
+	(symbol "U+FF91__ﾑ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -15978,7 +15978,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF91_0_1"
+		(symbol "U+FF91__ﾑ_0_1"
 			(polyline
 				(pts
 					(xy 6.985 13.97) (xy 9.525 1.905)
@@ -16041,7 +16041,7 @@
 			)
 		)
 	)
-	(symbol "U+FF92"
+	(symbol "U+FF92__ﾒ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16091,7 +16091,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF92_0_1"
+		(symbol "U+FF92__ﾒ_0_1"
 			(polyline
 				(pts
 					(xy 3.175 19.685) (xy 9.525 6.985)
@@ -16154,7 +16154,7 @@
 			)
 		)
 	)
-	(symbol "U+FF93"
+	(symbol "U+FF93__ﾓ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16204,7 +16204,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF93_0_1"
+		(symbol "U+FF93__ﾓ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 15.24) (xy 10.16 15.24)
@@ -16279,7 +16279,7 @@
 			)
 		)
 	)
-	(symbol "U+FF94"
+	(symbol "U+FF94__ﾔ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16329,7 +16329,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF94_0_1"
+		(symbol "U+FF94__ﾔ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 27.305) (xy 7.62 1.27)
@@ -16392,7 +16392,7 @@
 			)
 		)
 	)
-	(symbol "U+FF95"
+	(symbol "U+FF95__ﾕ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16442,7 +16442,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF95_0_1"
+		(symbol "U+FF95__ﾕ_0_1"
 			(polyline
 				(pts
 					(xy 1.27 3.81) (xy 10.16 3.81)
@@ -16505,7 +16505,7 @@
 			)
 		)
 	)
-	(symbol "U+FF96"
+	(symbol "U+FF96__ﾖ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16555,7 +16555,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF96_0_1"
+		(symbol "U+FF96__ﾖ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 13.335) (xy 8.89 13.335)
@@ -16618,7 +16618,7 @@
 			)
 		)
 	)
-	(symbol "U+FF97"
+	(symbol "U+FF97__ﾗ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16668,7 +16668,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF97_0_1"
+		(symbol "U+FF97__ﾗ_0_1"
 			(polyline
 				(pts
 					(xy 3.175 24.13) (xy 8.255 24.13)
@@ -16731,7 +16731,7 @@
 			)
 		)
 	)
-	(symbol "U+FF98"
+	(symbol "U+FF98__ﾘ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16781,7 +16781,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF98_0_1"
+		(symbol "U+FF98__ﾘ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 26.035) (xy 2.54 10.16)
@@ -16844,7 +16844,7 @@
 			)
 		)
 	)
-	(symbol "U+FF99"
+	(symbol "U+FF99__ﾙ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -16894,7 +16894,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF99_0_1"
+		(symbol "U+FF99__ﾙ_0_1"
 			(polyline
 				(pts
 					(xy 3.175 24.765) (xy 3.175 12.065) (xy 1.27 1.27)
@@ -16957,7 +16957,7 @@
 			)
 		)
 	)
-	(symbol "U+FF9A"
+	(symbol "U+FF9A__ﾚ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17007,7 +17007,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF9A_0_1"
+		(symbol "U+FF9A__ﾚ_0_1"
 			(polyline
 				(pts
 					(xy 2.54 27.305) (xy 2.54 1.905) (xy 6.985 6.35) (xy 9.525 14.605)
@@ -17058,7 +17058,7 @@
 			)
 		)
 	)
-	(symbol "U+FF9B"
+	(symbol "U+FF9B__ﾛ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17108,7 +17108,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF9B_0_1"
+		(symbol "U+FF9B__ﾛ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 23.495) (xy 1.905 4.445) (xy 9.525 4.445) (xy 9.525 23.495) (xy 1.905 23.495)
@@ -17159,7 +17159,7 @@
 			)
 		)
 	)
-	(symbol "U+FF9C"
+	(symbol "U+FF9C__ﾜ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17209,7 +17209,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF9C_0_1"
+		(symbol "U+FF9C__ﾜ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 14.605) (xy 1.905 24.13) (xy 9.525 24.13) (xy 9.525 15.24) (xy 7.62 6.985) (xy 3.81 1.27)
@@ -17260,7 +17260,7 @@
 			)
 		)
 	)
-	(symbol "U+FF9D"
+	(symbol "U+FF9D__ﾝ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17310,7 +17310,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF9D_0_1"
+		(symbol "U+FF9D__ﾝ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 24.13) (xy 5.08 19.05)
@@ -17373,7 +17373,7 @@
 			)
 		)
 	)
-	(symbol "U+FF9E"
+	(symbol "U+FF9E__ﾞ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17423,7 +17423,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF9E_0_1"
+		(symbol "U+FF9E__ﾞ_0_1"
 			(polyline
 				(pts
 					(xy 1.905 26.67) (xy 3.81 22.86)
@@ -17486,7 +17486,7 @@
 			)
 		)
 	)
-	(symbol "U+FF9F"
+	(symbol "U+FF9F__ﾟ"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17536,7 +17536,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FF9F_0_1"
+		(symbol "U+FF9F__ﾟ_0_1"
 			(polyline
 				(pts
 					(xy 3.175 27.305) (xy 4.445 27.305) (xy 5.715 26.035) (xy 5.715 24.765) (xy 4.445 23.495) (xy 3.175 23.495)
@@ -17588,7 +17588,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE0"
+	(symbol "U+FFE0__￠"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17638,7 +17638,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE0_0_1"
+		(symbol "U+FFE0__￠_0_1"
 			(polyline
 				(pts
 					(xy 15.24 26.035) (xy 6.985 2.54)
@@ -17702,7 +17702,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE1"
+	(symbol "U+FFE1__￡"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17752,7 +17752,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE1_0_1"
+		(symbol "U+FFE1__￡_0_1"
 			(polyline
 				(pts
 					(xy 4.445 17.78) (xy 14.605 17.78)
@@ -17827,7 +17827,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE2"
+	(symbol "U+FFE2__￢"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17877,7 +17877,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE2_0_1"
+		(symbol "U+FFE2__￢_0_1"
 			(polyline
 				(pts
 					(xy 2.54 15.24) (xy 20.32 15.24) (xy 20.32 11.43)
@@ -17928,7 +17928,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE3"
+	(symbol "U+FFE3__￣"
 		(pin_names
 			(offset 1.016)
 		)
@@ -17978,7 +17978,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE3_0_1"
+		(symbol "U+FFE3__￣_0_1"
 			(polyline
 				(pts
 					(xy 2.54 26.67) (xy 20.32 26.67)
@@ -18029,7 +18029,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE4"
+	(symbol "U+FFE4__￤"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18079,7 +18079,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE4_0_1"
+		(symbol "U+FFE4__￤_0_1"
 			(polyline
 				(pts
 					(xy 11.43 12.7) (xy 11.43 2.54)
@@ -18142,7 +18142,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE5"
+	(symbol "U+FFE5__￥"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18192,7 +18192,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE5_0_1"
+		(symbol "U+FFE5__￥_0_1"
 			(polyline
 				(pts
 					(xy 1.27 8.89) (xy 21.59 8.89)
@@ -18279,7 +18279,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE6"
+	(symbol "U+FFE6__￦"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18329,7 +18329,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE6_0_1"
+		(symbol "U+FFE6__￦_0_1"
 			(polyline
 				(pts
 					(xy 0.635 14.605) (xy 21.59 14.605)
@@ -18392,7 +18392,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE8"
+	(symbol "U+FFE8__￨"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18442,7 +18442,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE8_0_1"
+		(symbol "U+FFE8__￨_0_1"
 			(polyline
 				(pts
 					(xy 5.715 27.94) (xy 5.715 2.54)
@@ -18493,7 +18493,7 @@
 			)
 		)
 	)
-	(symbol "U+FFE9"
+	(symbol "U+FFE9__￩"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18543,7 +18543,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFE9_0_1"
+		(symbol "U+FFE9__￩_0_1"
 			(polyline
 				(pts
 					(xy 1.905 15.24) (xy 4.445 11.43)
@@ -18606,7 +18606,7 @@
 			)
 		)
 	)
-	(symbol "U+FFEA"
+	(symbol "U+FFEA__￪"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18656,7 +18656,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFEA_0_1"
+		(symbol "U+FFEA__￪_0_1"
 			(polyline
 				(pts
 					(xy 5.715 27.305) (xy 1.905 24.765)
@@ -18719,7 +18719,7 @@
 			)
 		)
 	)
-	(symbol "U+FFEB"
+	(symbol "U+FFEB__￫"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18769,7 +18769,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFEB_0_1"
+		(symbol "U+FFEB__￫_0_1"
 			(polyline
 				(pts
 					(xy 10.16 15.24) (xy 7.62 11.43)
@@ -18832,7 +18832,7 @@
 			)
 		)
 	)
-	(symbol "U+FFEC"
+	(symbol "U+FFEC__￬"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18882,7 +18882,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFEC_0_1"
+		(symbol "U+FFEC__￬_0_1"
 			(polyline
 				(pts
 					(xy 5.715 1.905) (xy 9.525 4.445)
@@ -18945,7 +18945,7 @@
 			)
 		)
 	)
-	(symbol "U+FFED"
+	(symbol "U+FFED__￭"
 		(pin_names
 			(offset 1.016)
 		)
@@ -18995,7 +18995,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFED_0_1"
+		(symbol "U+FFED__￭_0_1"
 			(polyline
 				(pts
 					(xy 5.842 16.891) (xy 5.842 14.224)
@@ -19058,7 +19058,7 @@
 			)
 		)
 	)
-	(symbol "U+FFEE"
+	(symbol "U+FFEE__￮"
 		(pin_names
 			(offset 1.016)
 		)
@@ -19108,7 +19108,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "U+FFEE_0_1"
+		(symbol "U+FFEE__￮_0_1"
 			(polyline
 				(pts
 					(xy 4.445 17.78) (xy 6.985 17.78) (xy 8.255 16.51) (xy 8.255 13.97) (xy 6.985 12.7) (xy 4.445 12.7)

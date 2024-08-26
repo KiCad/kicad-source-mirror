@@ -223,7 +223,11 @@ class Glyph(NamedTuple):
     def from_sexpr(cls, sexp: Any) -> 'Glyph':
         if sexp[0] != "symbol":
             raise KicadSymError(f"Expected a symbol sexpr: {sexp}")
-        name = sexp[1]
+
+        # If the name ends with a double underscore suffix, it's a suffix with the
+        # codepoint of the glyph as a readable glyph, and we don't need it here.
+        name = re.sub(r"__.*$", "", sexp[1])
+
         if name[0] in Compositions.transforms:
             raise KicadSymError(f"Invalid glyph name {name}")
 
