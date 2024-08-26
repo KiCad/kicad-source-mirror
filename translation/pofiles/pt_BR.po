@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-07-23 22:09+0000\n"
+"PO-Revision-Date: 2024-08-27 05:59+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -30267,22 +30267,22 @@ msgstr "(diversos contornos da placa não são suportados)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:641
 #, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(o retângulo é nulo ou tem um tamanho muito pequeno: %d nm)"
+msgstr "(O retângulo tem um tamanho nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:659
 #, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(o círculo é nulo ou tem o tamanho muito pequeno: %d nm)"
+msgstr "(O círculo tem um raio nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:678
 #, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(o segmento é nulo ou tem o comprimento muito pequeno: %d nm)"
+msgstr "(O segmento tem um comprimento nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:701
 #, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(o arco é nulo ou tem o tamanho muito pequeno: %d nm)"
+msgstr "(O arco tem um tamanho nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/cross-probing.cpp:104 pcbnew/dialogs/dialog_board_setup.cpp:196
 #: pcbnew/dialogs/dialog_drc.cpp:271 pcbnew/pcb_edit_frame.cpp:2508
@@ -42619,15 +42619,15 @@ msgstr "(O tamanho do orifício do bloco PTH deve ser maior que %s)"
 
 #: pcbnew/pad.cpp:2071
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(A ilha PTH não deixa nenhum cobre)"
+msgstr "(O furo da ilha PTH não deixa cobre)"
 
 #: pcbnew/pad.cpp:2079
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(a ilha PTH não está totalmente dentro do cobre)"
+msgstr "(O furo da ilha PTH não está totalmente dentro do cobre)"
 
 #: pcbnew/pad.cpp:2086
 msgid "(pad hole not inside pad shape)"
-msgstr "(o orifício da ilha não está dentro do formato da ilha)"
+msgstr "(o furo da ilha não está dentro do formato da ilha)"
 
 #: pcbnew/pad.cpp:2091
 msgid "(negative local clearance values have no effect)"
@@ -42710,11 +42710,12 @@ msgstr "(a propriedade 'testpoint' não faz sentido nas ilhas NPTH)"
 #: pcbnew/pad.cpp:2235
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr ""
-"(a propriedade do 'dissipador' de calor não faz sentido nas ilhas NPTH)"
+"(a propriedade do dissipador de calor 'heatsink' não faz sentido nas ilhas "
+"NPTH)"
 
 #: pcbnew/pad.cpp:2238
 msgid "('castellated' property is for PTH pads)"
-msgstr "(a propriedade do 'castelamento' são para ilhas PTH)"
+msgstr "(a propriedade do castelamento 'castellated' são para ilhas PTH)"
 
 #: pcbnew/pad.cpp:2241
 msgid "('BGA' property is for SMD pads)"
@@ -42734,11 +42735,11 @@ msgstr "(o tamanho do canto tornará a ilha circular)"
 
 #: pcbnew/pad.cpp:2256
 msgid "(negative corner chamfer is not allowed)"
-msgstr "(não é permitido um chanfro com canto negativo)"
+msgstr "(chanfro de canto negativo não é permitido)"
 
 #: pcbnew/pad.cpp:2258
 msgid "(corner chamfer is too large)"
-msgstr "(o chanfro do canto é muito grande)"
+msgstr "(o canto do chanfro é muito grande)"
 
 #: pcbnew/pad.cpp:2267
 #, fuzzy
@@ -42771,7 +42772,7 @@ msgstr "Ilha mecânica"
 
 #: pcbnew/pad.cpp:2500
 msgid "Oblong"
-msgstr ""
+msgstr "Oblongo"
 
 #: pcbnew/pad.cpp:2518
 msgid "Front, back and connected layers"
@@ -42802,9 +42803,8 @@ msgid "Corner Radius Ratio"
 msgstr "Proporção de curva do canto"
 
 #: pcbnew/pad.cpp:2606
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Forma do furo:"
+msgstr "Formato do furo"
 
 #: pcbnew/pad.cpp:2610
 msgid "Hole Size X"
