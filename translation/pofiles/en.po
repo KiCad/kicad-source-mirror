@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 11:00-0700\n"
+"POT-Creation-Date: 2024-08-26 14:05-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -12529,10 +12529,6 @@ msgid "Simulation model library not found at '%s' or '%s'"
 msgstr "Simulation model library not found at '%s' or '%s'"
 
 #, c-format
-msgid "Error loading simulation model library '%s': %s"
-msgstr "Error loading simulation model library '%s': %s"
-
-#, c-format
 msgid "Error loading simulation model: no '%s' field"
 msgstr "Error loading simulation model: no '%s' field"
 
@@ -14834,6 +14830,9 @@ msgstr "This position is already occupied by another pin, in unit %d."
 
 msgid "Place Pin Anyway"
 msgstr "Place Pin Anyway"
+
+msgid "Repeat Pin"
+msgstr "Repeat Pin"
 
 msgid "Create a new project for this schematic"
 msgstr "Create a new project for this schematic"
@@ -19843,20 +19842,20 @@ msgid "(multiple board outlines not supported)"
 msgstr "(multiple board outlines not supported)"
 
 #, c-format
-msgid "(Rectangle has null or very small size: %d nm)"
-msgstr "(Rectangle has null or very small size: %d nm)"
+msgid "(rectangle has null or very small size: %d nm)"
+msgstr "(rectangle has null or very small size: %d nm)"
 
 #, c-format
-msgid "(Circle has null or very small radius: %d nm)"
-msgstr "(Circle has null or very small radius: %d nm)"
+msgid "(circle has null or very small radius: %d nm)"
+msgstr "(circle has null or very small radius: %d nm)"
 
 #, c-format
-msgid "(Segment has null or very small length: %d nm)"
-msgstr "(Segment has null or very small length: %d nm)"
+msgid "(segment has null or very small length: %d nm)"
+msgstr "(segment has null or very small length: %d nm)"
 
 #, c-format
-msgid "(Arc has null or very small size: %d nm)"
-msgstr "(Arc has null or very small size: %d nm)"
+msgid "(arc has null or very small size: %d nm)"
+msgstr "(arc has null or very small size: %d nm)"
 
 msgid "Custom Rules"
 msgstr "Custom Rules"
@@ -21288,6 +21287,9 @@ msgstr ""
 "the user made overrides to a footprint on the PCB and wants to remove them, "
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
+
+msgid "Change Footprint"
+msgstr "Change Footprint"
 
 #, c-format
 msgid "Updated footprint %s (%s)"
@@ -27653,27 +27655,6 @@ msgstr "(expected 'Through hole'; actual '%s')"
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(expected 'SMD'; actual '%s')"
 
-msgid "(PTH pad's hole size is very small or null)"
-msgstr "(PTH pad's hole size is very small or null)"
-
-msgid "(PTH pad has no copper layers)"
-msgstr "(PTH pad has no copper layers)"
-
-msgid "(PTH pad's hole leaves no copper)"
-msgstr "(PTH pad's hole leaves no copper)"
-
-msgid "(PTH pad's hole non fully inside copper)"
-msgstr "(PTH pad's hole non fully inside copper)"
-
-msgid "(SMD pad appears on both front and back copper)"
-msgstr "(SMD pad appears on both front and back copper)"
-
-msgid "(SMD pad copper and mask layers don't match)"
-msgstr "(SMD pad copper and mask layers don't match)"
-
-msgid "(SMD pad copper and paste layers don't match)"
-msgstr "(SMD pad copper and paste layers don't match)"
-
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(net-tie pad group contains unknown pad number %s)"
@@ -28703,95 +28684,99 @@ msgstr "(Pad must have a positive size)"
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(PTH pad hole size must be larger than %s)"
 
-msgid "Pad hole not inside pad shape"
-msgstr "Pad hole not inside pad shape"
+msgid "(PTH pad hole leaves no copper)"
+msgstr "(PTH pad hole leaves no copper)"
 
-msgid "Pad hole will leave no copper"
-msgstr "Pad hole will leave no copper"
+msgid "(PTH pad hole non fully inside copper)"
+msgstr "(PTH pad hole non fully inside copper)"
 
-msgid "Negative local clearance values have no effect"
-msgstr "Negative local clearance values have no effect"
+msgid "(pad hole not inside pad shape)"
+msgstr "(pad hole not inside pad shape)"
 
-msgid ""
-"Negative solder mask clearance is larger than some shape primitives; results "
-"may be surprising"
-msgstr ""
-"Negative solder mask clearance is larger than some shape primitives; results "
-"may be surprising"
+msgid "(negative local clearance values have no effect)"
+msgstr "(negative local clearance values have no effect)"
 
 msgid ""
-"Negative solder mask clearance is larger than pad; no solder mask will be "
-"generated"
+"(negative solder mask clearance is larger than some shape primitives; "
+"results may be surprising)"
 msgstr ""
-"Negative solder mask clearance is larger than pad; no solder mask will be "
-"generated"
+"(negative solder mask clearance is larger than some shape primitives; "
+"results may be surprising)"
 
 msgid ""
-"Negative solder paste margin is larger than pad; no solder paste mask will "
-"be generated"
+"(negative solder mask clearance is larger than pad; no solder mask will be "
+"generated)"
 msgstr ""
-"Negative solder paste margin is larger than pad; no solder paste mask will "
-"be generated"
+"(negative solder mask clearance is larger than pad; no solder mask will be "
+"generated)"
+
+msgid ""
+"(negative solder paste margin is larger than pad; no solder paste mask will "
+"be generated)"
+msgstr ""
+"(negative solder paste margin is larger than pad; no solder paste mask will "
+"be generated)"
 
 msgid "(Pad has no layer)"
 msgstr "(Pad has no layer)"
 
-msgid "PTH pad has no copper layers"
-msgstr "PTH pad has no copper layers"
+msgid "(PTH pad has no copper layers)"
+msgstr "(PTH pad has no copper layers)"
 
-msgid "Plated through holes normally have a copper pad on at least one layer"
-msgstr "Plated through holes normally have a copper pad on at least one layer"
+msgid "(plated through holes normally have a copper pad on at least one layer)"
+msgstr ""
+"(plated through holes normally have a copper pad on at least one layer)"
 
-msgid "Connector pads normally have no solder paste; use a SMD pad instead"
-msgstr "Connector pads normally have no solder paste; use a SMD pad instead"
+msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
+msgstr "(connector pads normally have no solder paste; use a SMD pad instead)"
 
 msgid "(SMD pad has a hole)"
 msgstr "(SMD pad has a hole)"
 
-msgid "SMD pad has copper on both sides of the board"
-msgstr "SMD pad has copper on both sides of the board"
+msgid "(SMD pad has copper on both sides of the board)"
+msgstr "(SMD pad has copper on both sides of the board)"
 
-msgid "SMD pad has copper and mask layers on different sides of the board"
-msgstr "SMD pad has copper and mask layers on different sides of the board"
+msgid "(SMD pad has copper and mask layers on different sides of the board)"
+msgstr "(SMD pad has copper and mask layers on different sides of the board)"
 
-msgid "SMD pad has copper and paste layers on different sides of the board"
-msgstr "SMD pad has copper and paste layers on different sides of the board"
+msgid "(SMD pad has copper and paste layers on different sides of the board)"
+msgstr "(SMD pad has copper and paste layers on different sides of the board)"
 
-msgid "SMD pad has no outer layers"
-msgstr "SMD pad has no outer layers"
+msgid "(SMD pad has no outer layers)"
+msgstr "(SMD pad has no outer layers)"
 
-msgid "Fiducial property makes no sense on NPTH pads"
-msgstr "Fiducial property makes no sense on NPTH pads"
+msgid "('fiducial' property makes no sense on NPTH pads)"
+msgstr "('fiducial' property makes no sense on NPTH pads)"
 
-msgid "Testpoint property makes no sense on NPTH pads"
-msgstr "Testpoint property makes no sense on NPTH pads"
+msgid "('testpoint' property makes no sense on NPTH pads)"
+msgstr "('testpoint' property makes no sense on NPTH pads)"
 
-msgid "Heatsink property makes no sense of NPTH pads"
-msgstr "Heatsink property makes no sense of NPTH pads"
+msgid "('heatsink' property makes no sense of NPTH pads)"
+msgstr "('heatsink' property makes no sense of NPTH pads)"
 
-msgid "Castellated property is for PTH pads"
-msgstr "Castellated property is for PTH pads"
+msgid "('castellated' property is for PTH pads)"
+msgstr "('castellated' property is for PTH pads)"
 
-msgid "BGA property is for SMD pads"
-msgstr "BGA property is for SMD pads"
+msgid "('BGA' property is for SMD pads)"
+msgstr "('BGA' property is for SMD pads)"
 
-msgid "(Negative corner radius is not allowed)"
-msgstr "(Negative corner radius is not allowed)"
+msgid "(negative corner radius is not allowed)"
+msgstr "(negative corner radius is not allowed)"
 
-msgid "Corner size will make pad circular"
-msgstr "Corner size will make pad circular"
+msgid "(corner size will make pad circular)"
+msgstr "(corner size will make pad circular)"
 
-msgid "(Negative corner chamfer is not allowed)"
-msgstr "(Negative corner chamfer is not allowed)"
+msgid "(negative corner chamfer is not allowed)"
+msgstr "(negative corner chamfer is not allowed)"
 
-msgid "(Corner chamfer is too large)"
-msgstr "(Corner chamfer is too large)"
+msgid "(corner chamfer is too large)"
+msgstr "(corner chamfer is too large)"
 
-msgid "(Trapazoid delta is too large)"
-msgstr "(Trapazoid delta is too large)"
+msgid "(trapazoid delta is too large)"
+msgstr "(trapazoid delta is too large)"
 
-msgid "(Custom pad shape must resolve to a single polygon)"
-msgstr "(Custom pad shape must resolve to a single polygon)"
+msgid "(custom pad shape must resolve to a single polygon)"
+msgstr "(custom pad shape must resolve to a single polygon)"
 
 msgid "Edge connector"
 msgstr "Edge connector"
@@ -28804,6 +28789,9 @@ msgstr "Trapezoid"
 
 msgid "Castellated pad"
 msgstr "Castellated pad"
+
+msgid "Oblong"
+msgstr "Oblong"
 
 msgid "Pad Type"
 msgstr "Pad Type"
@@ -28822,6 +28810,9 @@ msgstr "Size Y"
 
 msgid "Corner Radius Ratio"
 msgstr "Corner Radius Ratio"
+
+msgid "Hole Shape"
+msgstr "Hole Shape"
 
 msgid "Hole Size X"
 msgstr "Hole Size X"
@@ -34047,6 +34038,130 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Error loading simulation model library '%s': %s"
+#~ msgstr "Error loading simulation model library '%s': %s"
+
+#, c-format
+#~ msgid "(Rectangle has null or very small size: %d nm)"
+#~ msgstr "(Rectangle has null or very small size: %d nm)"
+
+#, c-format
+#~ msgid "(Circle has null or very small radius: %d nm)"
+#~ msgstr "(Circle has null or very small radius: %d nm)"
+
+#, c-format
+#~ msgid "(Segment has null or very small length: %d nm)"
+#~ msgstr "(Segment has null or very small length: %d nm)"
+
+#, c-format
+#~ msgid "(Arc has null or very small size: %d nm)"
+#~ msgstr "(Arc has null or very small size: %d nm)"
+
+#~ msgid "(PTH pad's hole size is very small or null)"
+#~ msgstr "(PTH pad's hole size is very small or null)"
+
+#~ msgid "(PTH pad's hole leaves no copper)"
+#~ msgstr "(PTH pad's hole leaves no copper)"
+
+#~ msgid "(PTH pad's hole non fully inside copper)"
+#~ msgstr "(PTH pad's hole non fully inside copper)"
+
+#~ msgid "(SMD pad appears on both front and back copper)"
+#~ msgstr "(SMD pad appears on both front and back copper)"
+
+#~ msgid "(SMD pad copper and mask layers don't match)"
+#~ msgstr "(SMD pad copper and mask layers don't match)"
+
+#~ msgid "(SMD pad copper and paste layers don't match)"
+#~ msgstr "(SMD pad copper and paste layers don't match)"
+
+#~ msgid "Pad hole not inside pad shape"
+#~ msgstr "Pad hole not inside pad shape"
+
+#~ msgid "Pad hole will leave no copper"
+#~ msgstr "Pad hole will leave no copper"
+
+#~ msgid "Negative local clearance values have no effect"
+#~ msgstr "Negative local clearance values have no effect"
+
+#~ msgid ""
+#~ "Negative solder mask clearance is larger than some shape primitives; "
+#~ "results may be surprising"
+#~ msgstr ""
+#~ "Negative solder mask clearance is larger than some shape primitives; "
+#~ "results may be surprising"
+
+#~ msgid ""
+#~ "Negative solder mask clearance is larger than pad; no solder mask will be "
+#~ "generated"
+#~ msgstr ""
+#~ "Negative solder mask clearance is larger than pad; no solder mask will be "
+#~ "generated"
+
+#~ msgid ""
+#~ "Negative solder paste margin is larger than pad; no solder paste mask "
+#~ "will be generated"
+#~ msgstr ""
+#~ "Negative solder paste margin is larger than pad; no solder paste mask "
+#~ "will be generated"
+
+#~ msgid "PTH pad has no copper layers"
+#~ msgstr "PTH pad has no copper layers"
+
+#~ msgid ""
+#~ "Plated through holes normally have a copper pad on at least one layer"
+#~ msgstr ""
+#~ "Plated through holes normally have a copper pad on at least one layer"
+
+#~ msgid "Connector pads normally have no solder paste; use a SMD pad instead"
+#~ msgstr "Connector pads normally have no solder paste; use a SMD pad instead"
+
+#~ msgid "SMD pad has copper on both sides of the board"
+#~ msgstr "SMD pad has copper on both sides of the board"
+
+#~ msgid "SMD pad has copper and mask layers on different sides of the board"
+#~ msgstr "SMD pad has copper and mask layers on different sides of the board"
+
+#~ msgid "SMD pad has copper and paste layers on different sides of the board"
+#~ msgstr "SMD pad has copper and paste layers on different sides of the board"
+
+#~ msgid "SMD pad has no outer layers"
+#~ msgstr "SMD pad has no outer layers"
+
+#~ msgid "Fiducial property makes no sense on NPTH pads"
+#~ msgstr "Fiducial property makes no sense on NPTH pads"
+
+#~ msgid "Testpoint property makes no sense on NPTH pads"
+#~ msgstr "Testpoint property makes no sense on NPTH pads"
+
+#~ msgid "Heatsink property makes no sense of NPTH pads"
+#~ msgstr "Heatsink property makes no sense of NPTH pads"
+
+#~ msgid "Castellated property is for PTH pads"
+#~ msgstr "Castellated property is for PTH pads"
+
+#~ msgid "BGA property is for SMD pads"
+#~ msgstr "BGA property is for SMD pads"
+
+#~ msgid "(Negative corner radius is not allowed)"
+#~ msgstr "(Negative corner radius is not allowed)"
+
+#~ msgid "Corner size will make pad circular"
+#~ msgstr "Corner size will make pad circular"
+
+#~ msgid "(Negative corner chamfer is not allowed)"
+#~ msgstr "(Negative corner chamfer is not allowed)"
+
+#~ msgid "(Corner chamfer is too large)"
+#~ msgstr "(Corner chamfer is too large)"
+
+#~ msgid "(Trapazoid delta is too large)"
+#~ msgstr "(Trapazoid delta is too large)"
+
+#~ msgid "(Custom pad shape must resolve to a single polygon)"
+#~ msgstr "(Custom pad shape must resolve to a single polygon)"
 
 #, c-format
 #~ msgid "Unsupported schematic file '%s'."
@@ -63832,9 +63947,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Create Pin"
 #~ msgstr "Create Pin"
-
-#~ msgid "Repeat Pin"
-#~ msgstr "Repeat Pin"
 
 #~ msgid "Move Library Item"
 #~ msgstr "Move Library Item"
