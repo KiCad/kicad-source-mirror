@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
 "PO-Revision-Date: 2024-08-27 05:59+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -4747,9 +4747,8 @@ msgid "Python interpreter status"
 msgstr "Status för Python-tolk"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Ej täckt"
+msgstr "<Inte definierat>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1977
 #: common/stroke_params.cpp:37
@@ -30061,22 +30060,22 @@ msgstr "(fler än ett mönsterkort stöds inte)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:641
 #, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(rektangel har storlek noll eller väldigt liten: %d nm)"
+msgstr "(Rektangel har storlek noll eller är väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:659
 #, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(cirkel har radie noll eller väldigt liten: %d nm)"
+msgstr "(Cirkel har radie noll eller är väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:678
 #, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(segment har längd noll eller väldigt liten: %d nm)"
+msgstr "(Segment har längd noll eller är väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:701
 #, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(båge har storlek noll eller väldigt liten: %d nm)"
+msgstr "(Båge har storlek noll eller är väldigt liten: %d nm)"
 
 #: pcbnew/cross-probing.cpp:104 pcbnew/dialogs/dialog_board_setup.cpp:196
 #: pcbnew/dialogs/dialog_drc.cpp:271 pcbnew/pcb_edit_frame.cpp:2508
@@ -41638,7 +41637,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:165
 msgid "Fabrication Outputs"
-msgstr "Tillverkningsutmatning"
+msgstr "Generera filer för tillverkning"
 
 #: pcbnew/menubar_pcb_editor.cpp:300
 #, fuzzy
@@ -42311,7 +42310,7 @@ msgstr "(Hålmonteringslödytans hål inte fullständigt omslutet av koppar)"
 
 #: pcbnew/pad.cpp:2086
 msgid "(pad hole not inside pad shape)"
-msgstr "(lödytans hål ej inom lödytans kontur)"
+msgstr "Lödytans hål är inte inom lödytans kontur"
 
 #: pcbnew/pad.cpp:2091
 msgid "(negative local clearance values have no effect)"
@@ -42322,16 +42321,16 @@ msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"(negativa värden för lödmaskens frigång är större än vissa primitiva former; "
-"resultaten kan bli oförutsägbara)"
+"Frigång för negativ lödmask är större än vissa grundläggande former; "
+"resultaten kan bli oförutsägbara"
 
 #: pcbnew/pad.cpp:2120
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"(negativ frigång för lödmask är större än lödytan; ingen lödmask kommer att "
-"genereras)"
+"Frigång för negativ lödmask är större än lödytan; ingen lödmask kommer att "
+"genereras"
 
 #: pcbnew/pad.cpp:2139
 msgid ""
@@ -42351,7 +42350,7 @@ msgstr "(Hålmonteringshål har inga kopparlager)"
 
 #: pcbnew/pad.cpp:2155
 msgid "(plated through holes normally have a copper pad on at least one layer)"
-msgstr "(geompläterade hål ska normalt ha en kopparkrage på minst ett lager)"
+msgstr "Genompläterade hål ska normalt ha en lödyta på minst ett lager"
 
 #: pcbnew/pad.cpp:2174
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -42376,8 +42375,7 @@ msgstr ""
 #: pcbnew/pad.cpp:2199 pcbnew/pad.cpp:2212
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"(ytmonteringslödytan har koppar- och lodpastelager på olika sidor av "
-"mönsterkortet)"
+"SMD lödyta har koppar- och lodpastelager på olika sidor av mönsterkortet"
 
 #: pcbnew/pad.cpp:2218
 msgid "(SMD pad has no outer layers)"
@@ -42492,9 +42490,8 @@ msgid "Corner Radius Ratio"
 msgstr "Hörnavrundningsradieförhållande"
 
 #: pcbnew/pad.cpp:2606
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Hålform:"
+msgstr "Hålets form"
 
 #: pcbnew/pad.cpp:2610
 msgid "Hole Size X"
