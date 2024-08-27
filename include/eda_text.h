@@ -136,10 +136,33 @@ public:
     }
     double GetTextAngleDegrees() const          { return m_attributes.m_Angle.AsDegrees(); }
 
+    /**
+     * Set the text to be italic - this will also update the font if needed.
+     *
+     * This is the properties system interface.
+     */
     void SetItalic( bool aItalic );
+
+    /**
+     * Set only the italic flag, without changing the font.
+     *
+     * Used when bulk-changing text attributes (e.g. from a dialog or import).
+     */
+    void SetItalicFlag( bool aItalic );
     bool IsItalic() const                       { return m_attributes.m_Italic; }
 
+    /**
+     * Set the text to be bold - this will also update the font if needed.
+     *
+     * This is the properties system interface.
+     */
     void SetBold( bool aBold );
+
+    /**
+     * Set only the italic flag, without changing the font.
+     *
+     * Used when bulk-changing text attributes (e.g. from a dialog or import).
+     */
     void SetBoldFlag( bool aBold );
     bool IsBold() const                         { return m_attributes.m_Bold; }
 

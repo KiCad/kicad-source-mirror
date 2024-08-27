@@ -572,7 +572,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                 case T_italic:
                 {
                     bool value = parseMaybeAbsentBool( true );
-                    aText->SetItalic( value );
+                    aText->SetItalicFlag( value );
                 }
                     break;
 

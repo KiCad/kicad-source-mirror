@@ -650,7 +650,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
             wxChar attr_2 = attributes[2];
 
             if( attr_1 == 'I' )        // Italic
-                field->SetItalic( true );
+                field->SetItalicFlag( true );
             else if( attr_1 != 'N' )   // No italics is default, check for error.
                 SCH_PARSE_ERROR( "invalid field text italic parameter", aReader, line );
 
@@ -1014,7 +1014,7 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
              && !is_eol( *line ) )
     {
         if( strCompare( "Italic", line, &line ) )
-            text->SetItalic( true );
+            text->SetItalicFlag( true );
         else if( !strCompare( "Normal", line, &line ) )
             SCH_PARSE_ERROR( "invalid text stype, expected 'Normal' or 'Italic'", aReader, line );
 
