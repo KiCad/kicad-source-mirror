@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-27 05:58+0000\n"
+"PO-Revision-Date: 2024-08-28 06:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -4482,7 +4482,7 @@ msgstr "连线颜色"
 
 #: common/dialogs/panel_setup_netclasses.cpp:546
 msgid "Schematic wire line style"
-msgstr "连线样式"
+msgstr "原理图连线样式"
 
 #: common/dialogs/panel_setup_netclasses.cpp:599
 msgid "The default net class is required."
@@ -6554,7 +6554,7 @@ msgstr "网络类参考"
 
 #: common/layer_id.cpp:125
 msgid "Symbol body outlines"
-msgstr "符号主体轮廓"
+msgstr "符号主体外框"
 
 #: common/layer_id.cpp:126
 msgid "Symbol body fills"
@@ -7322,7 +7322,7 @@ msgstr "单击删除项目"
 
 #: common/tool/actions.cpp:288
 msgid "Cycle Arc Editing Mode"
-msgstr "弧线编辑模式"
+msgstr "循环切换弧线编辑模式"
 
 #: common/tool/actions.cpp:289
 msgid "Switch to a different method of editing arcs"
@@ -7562,7 +7562,7 @@ msgstr "切换到快速栅格 2"
 
 #: common/tool/actions.cpp:648
 msgid "Cycle Fast Grid"
-msgstr "循环快速切换网格"
+msgstr "循环切换快速网格"
 
 #: common/tool/actions.cpp:655
 msgid "Switch to Next Grid"
@@ -7696,7 +7696,7 @@ msgstr "非活动层视图模式 (三态)"
 
 #: common/tool/actions.cpp:805
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr "在正常、暗显和隐藏三种状态之间循环显示非活动层"
+msgstr "在正常、暗显和隐藏三种状态之间循环切换显示非活动层"
 
 #: common/tool/actions.cpp:811
 msgid "Draw Bounding Boxes"
@@ -11090,7 +11090,7 @@ msgstr "不做填充"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:121
 msgid "Fill with body outline color"
-msgstr "用描边颜色填充主体"
+msgstr "使用外框颜色填充主体"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:124
 msgid "Fill with body background color"
@@ -15563,7 +15563,7 @@ msgstr "有 %d 个点的贝塞尔曲线"
 
 #: eeschema/lib_shape.cpp:594
 msgid "Body outline color"
-msgstr "主体轮廓颜色"
+msgstr "主体外框颜色"
 
 #: eeschema/lib_shape.cpp:595
 msgid "Body background color"
@@ -15622,11 +15622,11 @@ msgstr "'字段数量' 差异。"
 
 #: eeschema/lib_symbol.cpp:421
 msgid "Footprint filters differs."
-msgstr "'封装筛选器' 差异。"
+msgstr "'封装筛选规则' 差异。"
 
 #: eeschema/lib_symbol.cpp:433
 msgid "Footprint filters differ."
-msgstr "'封装筛选器' 差异。"
+msgstr "'封装筛选规则' 差异。"
 
 #: eeschema/lib_symbol.cpp:444
 msgid "Symbol keywords differ."
@@ -17108,7 +17108,7 @@ msgstr "垂直总线, 长度 %s"
 #: eeschema/sch_line.cpp:777
 #, c-format
 msgid "Vertical Graphic Line, length %s"
-msgstr "垂直图形线, 长度 %s"
+msgstr "垂直图线, 长度 %s"
 
 #: eeschema/sch_line.cpp:784
 #, c-format
@@ -17123,7 +17123,7 @@ msgstr "水平总线, 长度 %s"
 #: eeschema/sch_line.cpp:786
 #, c-format
 msgid "Horizontal Graphic Line, length %s"
-msgstr "水平图形线, 长度 %s"
+msgstr "水平图线, 长度 %s"
 
 # Die 裸芯片
 #: eeschema/sch_line.cpp:793
@@ -17139,7 +17139,7 @@ msgstr "总线, 长度 %s"
 #: eeschema/sch_line.cpp:795
 #, c-format
 msgid "Graphic Line, length %s"
-msgstr "图形线, 长度 %s"
+msgstr "图线, 长度 %s"
 
 #: eeschema/sch_line.cpp:969
 msgid "Graphical"
@@ -18536,7 +18536,7 @@ msgstr "延时"
 
 #: eeschema/sim/sim_model_kibis.cpp:456
 msgid "Number of cycles"
-msgstr "循环数"
+msgstr "循环次数"
 
 #: eeschema/sim/sim_model_kibis.cpp:473
 msgid "Bitrate"
@@ -22548,7 +22548,7 @@ msgstr "线条草图"
 
 #: gerbview/tools/gerbview_actions.cpp:193
 msgid "Show lines in outline mode"
-msgstr "在轮廓模式下显示线"
+msgstr "在外框模式下显示线"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
@@ -22556,7 +22556,7 @@ msgstr "Flashed 草图项目"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "在轮廓模式下 flashed 项目"
+msgstr "在外框模式下 flashed 项目"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -22564,7 +22564,7 @@ msgstr "多边形草图"
 
 #: gerbview/tools/gerbview_actions.cpp:211
 msgid "Show polygons in outline mode"
-msgstr "在轮廓模式下显示多边形"
+msgstr "在外框模式下显示多边形"
 
 #: gerbview/tools/gerbview_actions.cpp:218
 msgid "Ghost Negative Objects"
@@ -24336,7 +24336,7 @@ msgstr "权限错误?"
 #: kicad/project_tree_item.cpp:160
 #, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "无法移动 '%s' 到回收站。"
+msgstr "无法将 '%s' 移动到回收站。"
 
 #: kicad/project_tree_item.cpp:163
 #, c-format
@@ -29184,13 +29184,13 @@ msgid ""
 msgstr ""
 "域按优先级填充, 级别 3 优先级高于级别 2。\n"
 "当一个域位于另一个域内时: \n"
-"* 如果优先级较高, 则其轮廓将从其他域中移除。\n"
+"* 如果优先级较高, 则其外框将从其他域中移除。\n"
 "* 如果其优先级相等, 则产生一个 DRC 错误。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
 msgid "Outline display:"
-msgstr "边框显示:"
+msgstr "外框显示:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -29208,7 +29208,7 @@ msgstr "完整阴影"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:126
 msgid "Outline hatch pitch:"
-msgstr "边框阴影线间距:"
+msgstr "外框阴影线间距:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
@@ -31458,7 +31458,7 @@ msgstr "生成唯一的引脚名称"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
-msgstr "为每个封装实例生成一个新形状 (不要重复使用形状)"
+msgstr "为每个封装实例生成一个新形状 (不复用形状)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
@@ -32576,7 +32576,7 @@ msgstr "转换为非覆铜域"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
-msgstr "轮廓样式:"
+msgstr "外框样式:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
 msgid "degree"
@@ -33177,7 +33177,7 @@ msgstr "制造层上的草图焊盘"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "绘图时在 F.Fab 和 B.Fab 层上包括焊盘轮廓"
+msgstr "绘图时在 F.Fab 和 B.Fab 层上包括焊盘外框"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Check zone fills before plotting"
@@ -34397,7 +34397,7 @@ msgstr "飞线线宽:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:374
 msgid "Draw an outline to show the sheet size."
-msgstr "绘制一个边框来显示页面尺寸。"
+msgstr "绘制一个外框来显示页面尺寸。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:378
 msgid "Show courtyard collisions when moving/dragging"
@@ -34581,7 +34581,7 @@ msgstr "显示焊盘编号"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:69
 msgid "Clearance Outlines"
-msgstr "轮廓间距"
+msgstr "外框间距"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Do not show clearances"
@@ -34917,7 +34917,7 @@ msgstr "域填充策略"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:408
 msgid "Allow fillets outside zone outline"
-msgstr "允许圆角超出域边框"
+msgstr "允许圆角超出域的外框"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
 msgid "Minimum thermal relief spoke count:"
@@ -37159,7 +37159,7 @@ msgstr "禁用铜层上的对象"
 
 #: pcbnew/drc/drc_item.cpp:169
 msgid "Board has malformed outline"
-msgstr "电路板的边框有错误"
+msgstr "电路板的外框形状有问题"
 
 #: pcbnew/drc/drc_item.cpp:173
 msgid "Duplicate footprints"
@@ -37811,7 +37811,7 @@ msgstr "%s 个 '网格孔设置' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:475
 #, c-format
 msgid "%s outline corner count differs."
-msgstr "%s 个 '轮廓边角数量' 差异。"
+msgstr "%s 个 '外框边角数量' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:490
 #, c-format
@@ -37915,12 +37915,12 @@ msgstr "封装 '%s' 与来源库 '%s' 中的封装存在差异。"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:114
 #, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s 最小长度 %s; 实际 %s)"
+msgstr "(约束条件 %s 中, 最小长度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:121
 #, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s 最大长度 %s; 实际 %s)"
+msgstr "(约束条件 %s 中, 最大长度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:158
 #, c-format
@@ -37930,7 +37930,7 @@ msgstr "(%s 最大偏移 %s; 实际偏移 %s; 平均网络长度 %s; 实际长�
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
 #, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s 最大数量 %d; 实际 %d)"
+msgstr "(约束条件 %s 中, 最大数量 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:194
 msgid "Too many vias on a connection"
@@ -37939,7 +37939,7 @@ msgstr "连接上的过孔过多"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
 #, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s 最小数量 %d; 实际 %d)"
+msgstr "(约束条件 %s 中, 最小数量 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
 msgid "Too few vias on a connection"
@@ -39481,12 +39481,12 @@ msgstr "已将 %s 图纸文件更新为 '%s'。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:533
 #, c-format
 msgid "Update %s footprint filters to '%s'."
-msgstr "将 %s 封装筛选器更新为 '%s'。"
+msgstr "将 %s 封装筛选规则更新为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:540
 #, c-format
 msgid "Updated %s footprint filters to '%s'."
-msgstr "已将 %s 封装筛选器更新为 '%s'。"
+msgstr "已将 %s 封装筛选规则更新为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:555
 #, c-format
@@ -39865,14 +39865,12 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "PTH 焊盘的孔径尺寸必须大于 %s"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(金属化焊盘的孔没留下铜)"
+msgstr "(PTH 焊盘孔缺少铜箔)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(PTH 焊盘的孔不完全在铜箔内)"
+msgstr "(PTH 焊盘孔没有完全处在铜箔内)"
 
 #: pcbnew/pad.cpp:1948
 #, fuzzy
@@ -39885,18 +39883,16 @@ msgid "(negative local clearance values have no effect)"
 msgstr "负局部间距值无效"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
-msgstr "负阻焊间距大于某些形状图元; 可能产生意料之外的结果"
+msgstr "(负阻焊间距大于某些形状图元; 可能产生意料之外的结果)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
-msgstr "负阻焊间距大于焊盘; 不会生成阻焊层"
+msgstr "(负阻焊间距大于焊盘; 不会生成阻焊层)"
 
 #: pcbnew/pad.cpp:2001
 #, fuzzy
@@ -39914,9 +39910,8 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(金属化焊盘没有铜层)"
 
 #: pcbnew/pad.cpp:2017
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
-msgstr "PTH 焊盘通常在至少一个层上有一个铜焊盘"
+msgstr "(PTH 焊盘通常在至少一个层上有一个铜焊盘)"
 
 #: pcbnew/pad.cpp:2036
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -39935,9 +39930,8 @@ msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr "(贴片焊盘在电路板的不同面上分别有铜层和阻焊层)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
-msgstr "贴片焊盘在电路板的不同面上分别有铜层和焊膏层"
+msgstr "(贴片焊盘的铜层和焊膏层分别处在电路板的不同面上)"
 
 #: pcbnew/pad.cpp:2080
 msgid "(SMD pad has no outer layers)"
@@ -40005,7 +39999,7 @@ msgstr "半孔焊盘"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
-msgstr ""
+msgstr "椭圆"
 
 #: pcbnew/pad.cpp:2404
 msgid "Pad Type"
@@ -40424,7 +40418,7 @@ msgstr "正加载多边形..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr "多边形轮廓计数为 %d, 预期为 1。"
+msgstr "多边形外框计数为 %d, 预期为 1。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -40439,8 +40433,7 @@ msgstr "正加载 board regions..."
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 层 (%d) 上存在虚线轮廓, 但在 KiCad 中没有对应的等效项。已将其移至 "
+msgstr "Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等效项。已将其移至 "
 "KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2270
@@ -40456,8 +40449,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "正在加载 '%s' 库:\n"
-"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线轮廓, 但在 KiCad 中没有对应的等"
-"效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2360
 #, c-format
@@ -40465,8 +40458,8 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线轮廓, 但在 KiCad 中没有对应的等"
-"效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2403
 #, c-format
@@ -41009,9 +41002,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。如果填充的是实体"
-"或图案填充, 则它们已导入为 KiCad 域; 如果形状是未填充的轮廓(开放或闭合), 则它"
-"们将导入为 KiCad 走线。"
+"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。"
+"如果填充的是实体或图案填充, 则它们已导入为 KiCad 域; "
+"如果形状是未填充的外框(开放或闭合), 则它们将导入为 KiCad 走线。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2301
 #, c-format
@@ -41156,7 +41149,7 @@ msgstr "忽略多边形, 因为 Eagle 层 '%s' (%d) 未映射"
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1582
 #, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "忽略层 '%s' (%d) 上的多边形: 轮廓数量不为 1"
+msgstr "忽略层 '%s' (%d) 上的多边形: 外框数量不为 1"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1873
 #, c-format
@@ -43985,11 +43978,11 @@ msgstr "删除当前项目中添加的最后一个点"
 
 #: pcbnew/tools/pcb_actions.cpp:399
 msgid "Close Outline"
-msgstr "闭合边框"
+msgstr "闭合外框"
 
 #: pcbnew/tools/pcb_actions.cpp:400
 msgid "Close the in progress outline"
-msgstr "闭合正在绘制的边框"
+msgstr "闭合正在绘制的外框"
 
 #: pcbnew/tools/pcb_actions.cpp:409
 msgid "Show the design rules checker window"
@@ -44765,7 +44758,7 @@ msgstr "飞线模式 (三态)"
 #: pcbnew/tools/pcb_actions.cpp:1364
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "在显示所有层的飞线、仅显示可见层的飞线和不显示层飞线三种状态之间循环"
+msgstr "在显示所有层的飞线, 仅显示可见层的飞线和不显示层飞线三种状态之间循环切换"
 
 #: pcbnew/tools/pcb_actions.cpp:1369
 msgid "Net Color Mode (3-state)"
@@ -44775,7 +44768,7 @@ msgstr "网络颜色视图模式 (三种状态)"
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "在所有网络, 仅飞线以及不显示3种状态下切换使用网络及网络类的颜色"
+msgstr "在所有网络, 仅飞线以及不显示3种状态之间循环切换使用网络及网络类的颜色"
 
 #: pcbnew/tools/pcb_actions.cpp:1377
 msgid "Sketch Tracks"
@@ -44783,7 +44776,7 @@ msgstr "草图走线"
 
 #: pcbnew/tools/pcb_actions.cpp:1378
 msgid "Show tracks in outline mode"
-msgstr "在轮廓模式下显示走线"
+msgstr "在外框模式下显示走线"
 
 #: pcbnew/tools/pcb_actions.cpp:1384
 msgid "Sketch Pads"
@@ -44791,7 +44784,7 @@ msgstr "草图焊盘"
 
 #: pcbnew/tools/pcb_actions.cpp:1385
 msgid "Show pads in outline mode"
-msgstr "在轮廓模式下显示焊盘"
+msgstr "在外框模式下显示焊盘"
 
 #: pcbnew/tools/pcb_actions.cpp:1391
 msgid "Sketch Vias"
@@ -44799,7 +44792,7 @@ msgstr "草图过孔"
 
 #: pcbnew/tools/pcb_actions.cpp:1392
 msgid "Show vias in outline mode"
-msgstr "在轮廓模式下显示过孔"
+msgstr "在外框模式下显示过孔"
 
 #: pcbnew/tools/pcb_actions.cpp:1398
 msgid "Sketch Graphic Items"
@@ -44807,7 +44800,7 @@ msgstr "草图图形项目"
 
 #: pcbnew/tools/pcb_actions.cpp:1399
 msgid "Show graphic items in outline mode"
-msgstr "在轮廓模式下显示图形项目"
+msgstr "在外框模式下显示图形项目"
 
 #: pcbnew/tools/pcb_actions.cpp:1405
 msgid "Sketch Text Items"
@@ -44831,7 +44824,7 @@ msgstr "显示域内的填充区"
 
 #: pcbnew/tools/pcb_actions.cpp:1426
 msgid "Draw Zone Outlines"
-msgstr "绘制域轮廓"
+msgstr "绘制域外框"
 
 #: pcbnew/tools/pcb_actions.cpp:1427
 msgid "Show only zone boundaries"
@@ -44851,7 +44844,7 @@ msgstr "切换域显示"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "循环显示域填充和及它们的轮廓"
+msgstr "在显示域填充和仅显示域外框之间循环切换"
 
 #: pcbnew/tools/pcb_actions.cpp:1507
 msgid "Switch to Component (F.Cu) layer"
@@ -45220,7 +45213,7 @@ msgstr "选中所有属于每个所选网络的未连接封装。"
 
 #: pcbnew/tools/pcb_actions.cpp:2088
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "获取离得最近的未连接封装"
+msgstr "捕获距离最近的未连线封装"
 
 #: pcbnew/tools/pcb_actions.cpp:2089
 msgid ""
@@ -45364,11 +45357,11 @@ msgstr "将布线切换到绕走模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2243
 msgid "Cycle Router Mode"
-msgstr "在布线器模式间循环"
+msgstr "循环切换布线器模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2244
 msgid "Cycle router to the next mode"
-msgstr "将布线器循环到下一个模式"
+msgstr "循环切换布线器到下一个模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2249
 msgid "Set Layer Pair..."
