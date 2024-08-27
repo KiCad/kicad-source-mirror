@@ -24,6 +24,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/geometry/line_chain_construction.h>
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_line_chain.h>
@@ -82,9 +83,9 @@ void TestSquareFillet( int aSquareSize, int aRadius, int aError )
 
     SHAPE_POLY_SET squarePolySet;
 
-    squarePolySet.AddOutline( MakeSquarePolyLine(aSquareSize, VECTOR2I(0, 0) ) );
+    squarePolySet.AddOutline( KI_TEST::BuildSquareChain( aSquareSize, VECTOR2I( 0, 0 ) ) );
 
-    SHAPE_POLY_SET filleted = FilletPolySet(squarePolySet, aRadius, aError);
+    SHAPE_POLY_SET filleted = FilletPolySet( squarePolySet, aRadius, aError );
 
     // expect a single filleted polygon
     BOOST_CHECK_EQUAL( filleted.OutlineCount(), 1 );

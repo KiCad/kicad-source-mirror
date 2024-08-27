@@ -181,28 +181,6 @@ bool ArePerpendicular( const VECTOR2<T>& a, const VECTOR2<T>& b, const EDA_ANGLE
     return KI_TEST::IsWithin( angle.AsRadians(), ANGLE_90.AsRadians(), aTolerance.AsRadians() );
 }
 
-/**
- * @brief construct a square polygon of given size width and centre
- *
- * @param aSize: the side width (must be divisible by 2 if want to avoid rounding)
- * @param aCentre: the centre of the square
- */
-inline SHAPE_LINE_CHAIN MakeSquarePolyLine( int aSize, const VECTOR2I& aCentre )
-{
-    SHAPE_LINE_CHAIN polyLine;
-
-    const VECTOR2I corner = aCentre + aSize / 2;
-
-    polyLine.Append( VECTOR2I( corner.x, corner.y ) );
-    polyLine.Append( VECTOR2I( -corner.x, corner.y ) ) ;
-    polyLine.Append( VECTOR2I( -corner.x, -corner.y ) );
-    polyLine.Append( VECTOR2I( corner.x, -corner.y ) );
-
-    polyLine.SetClosed( true );
-
-    return polyLine;
-}
-
 /*
  * @brief Fillet every polygon in a set and return a new set
  */
