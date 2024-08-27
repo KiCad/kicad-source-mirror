@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
 "PO-Revision-Date: 2024-08-27 13:52+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -49483,7 +49483,7 @@ msgstr "Fristående kretsschemaredigerare för KiCad kretsscheman"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
-msgstr "eeschema"
+msgstr "Eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
