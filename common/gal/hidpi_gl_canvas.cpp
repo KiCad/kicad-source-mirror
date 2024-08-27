@@ -26,7 +26,7 @@
 
 #include <gal/hidpi_gl_canvas.h>
 
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling.h>
 
 
 HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow* aParent,

@@ -14,7 +14,6 @@ set( GAL_SRCS
     ../callback_gal.cpp
     painter.cpp
     cursors.cpp
-    dpi_scaling.cpp
     gal_display_options.cpp
     graphics_abstraction_layer.cpp
     hidpi_gl_canvas.cpp

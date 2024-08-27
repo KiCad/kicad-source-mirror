@@ -24,7 +24,8 @@
 #ifndef DPI_SCALING_COMMON__H
 #define DPI_SCALING_COMMON__H
 
-#include <gal/dpi_scaling.h>
+#include <kicommon.h>
+#include <dpi_scaling.h>
 
 class COMMON_SETTINGS;
 class wxWindow;
@@ -34,7 +35,7 @@ class wxWindow;
  * scale to use for canvases. This has several sources and the availability of
  * some of them are platform dependent.
  */
-class DPI_SCALING_COMMON : public DPI_SCALING
+class KICOMMON_API DPI_SCALING_COMMON : public DPI_SCALING
 {
 public:
     /**
