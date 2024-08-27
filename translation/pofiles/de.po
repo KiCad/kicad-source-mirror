@@ -16,7 +16,7 @@
 # magical-obama <maschwaerzler@a1.net>, 2022.
 # Luc <some_physics@live.com>, 2023, 2024.
 # Ken Ovo <Elektroniker@aon.at>, 2023.
-# Karl SCHUH <k.schuh@schuh-tv.at>, 2023.
+# Karl SCHUH <k.schuh@schuh-tv.at>, 2023, 2024.
 # Julian Daube <julian@daube.xyz>, 2023.
 # Johannes Maibaum <jmaibaum@gmail.com>, 2024.
 # "Pferd O." <frank.0228@ich-war-hier.de>, 2024.
@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
 "PO-Revision-Date: 2024-08-27 13:51+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -36551,7 +36551,7 @@ msgstr "Aus Designregeln"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 #: pcbnew/pcb_track.cpp:1733
 msgid "Tented"
-msgstr "Abgedeckt"
+msgstr "abgedeckt"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
