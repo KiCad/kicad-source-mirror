@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-09 08:09+0000\n"
-"Last-Translator: Free_squire <danil_pyankov_2004@mail.ru>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2024-08-27 13:51+0000\n"
+"Last-Translator: Dmitry Mikhirev <mikhirev@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4876,7 +4876,7 @@ msgstr "Диаметр конт. пл. перех. микроотв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:642
 msgid "Microvia plated hole diameter"
-msgstr "Сверло перех.микроотв."
+msgstr "Сверло перех. микроотв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:643
 msgid "Differential pair track width"
@@ -22951,7 +22951,7 @@ msgstr "Создать новый проект для этой схемы"
 
 #: eeschema/widgets/hierarchy_pane.cpp:395
 msgid "Edit Page Number"
-msgstr "Правка номера листа"
+msgstr "Изменить номер листа"
 
 #: eeschema/widgets/hierarchy_pane.cpp:399
 msgid "Rename"
@@ -32113,7 +32113,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:310
 msgid "Change Footprint"
-msgstr "Замена посад. мест"
+msgstr "Изменить посадочное место"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, c-format
@@ -42349,19 +42349,20 @@ msgstr "(Конт.пл. должна иметь положительный ра�
 #: pcbnew/pad.cpp:2047
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "(размер метал. отверстия конт.пл. должен быть больше чем %s)"
+msgstr ""
+"(размер контактной площадки переходного отверстия должен быть больше чем %s)"
 
 #: pcbnew/pad.cpp:2071
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(отверстие в конт. пл. не оставляет меди)"
+msgstr "(переходное отверстие не оставляет меди)"
 
 #: pcbnew/pad.cpp:2079
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(отверстие PTH конт.пл. не полностью внутри меди)"
+msgstr "(переходное отверстие не полностью внутри меди)"
 
 #: pcbnew/pad.cpp:2086
 msgid "(pad hole not inside pad shape)"
-msgstr "(отверстие конт. пл находится не в контуре конт. пл.)"
+msgstr "(отверстие конт. пл. находится вне её границ)"
 
 #: pcbnew/pad.cpp:2091
 msgid "(negative local clearance values have no effect)"
@@ -42380,75 +42381,82 @@ msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"(отрицательный зазор паяльной маски больше конт. пл.; паяльная маска не "
-"будет сформирована)"
+"(отрицательный зазор паяльной маски больше контактной площадки; паяльная "
+"маска не будет сформирована)"
 
 #: pcbnew/pad.cpp:2139
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"(отрицательные отступы паяльной пасты больше конт. пл.; маска паяльной пасты "
-"не будет сформирована)"
+"(отрицательные отступы паяльной пасты больше контактной площадки; маска "
+"паяльной пасты не будет сформирована)"
 
 #: pcbnew/pad.cpp:2146
 msgid "(Pad has no layer)"
-msgstr "(конт.пл. не имеет слоя)"
+msgstr "(контактная площадка не имеет слоя)"
 
 #: pcbnew/pad.cpp:2149
 msgid "(PTH pad has no copper layers)"
-msgstr "(конт. пл. с отверстием не имеет медных слоёв)"
+msgstr "(переходное отверстие не имеет медных слоёв)"
 
 #: pcbnew/pad.cpp:2155
 msgid "(plated through holes normally have a copper pad on at least one layer)"
-msgstr "(метал. отверстия обычно имеют медную конт. пл. хотя бы на одном слое)"
+msgstr ""
+"(переходные отверстия обычно имеют медную контактную площадку хотя бы на "
+"одном слое)"
 
 #: pcbnew/pad.cpp:2174
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"(конт. пл. разъёмов обычно не имеют паяльной пасты; используйте SMD конт. "
-"пл.)"
+"(контактные площадки разъемов обычно не имеют паяльной пасты; используйте "
+"контактную площадку SMD)"
 
 #: pcbnew/pad.cpp:2182
 msgid "(SMD pad has a hole)"
-msgstr "(SMD конт.пл. имеет отверстие)"
+msgstr "(контактная площадка SMD имеет отверстие)"
 
 #: pcbnew/pad.cpp:2188
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "(SMD конт. пл. имеет медь на обеих сторонах платы)"
+msgstr "(контактная площадка SMD имеет медь на обеих сторонах платы)"
 
 #: pcbnew/pad.cpp:2194 pcbnew/pad.cpp:2207
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "(SMD конт. пл. имеет слои меди и масок на разных сторонах платы)"
+msgstr ""
+"(контактная площадка SMD имеет слои меди и маски на разных сторонах платы)"
 
 #: pcbnew/pad.cpp:2199 pcbnew/pad.cpp:2212
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
-msgstr "(SMD конт. пл. имеет слои меди и пасты на разных сторонах платы)"
+msgstr ""
+"(контактная площадка SMD имеет слои меди и пасты на разных сторонах платы)"
 
 #: pcbnew/pad.cpp:2218
 msgid "(SMD pad has no outer layers)"
-msgstr "(SMD конт. пл. не имеет наружных слоёв)"
+msgstr "(контактная площадка SMD не имеет наружных слоёв)"
 
 #: pcbnew/pad.cpp:2228
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "(не имеет смысла обозначать NPTH конт.пл. реперной)"
+msgstr ""
+"(не имеет смысла обозначать площадку неметаллизированного отверстия реперной)"
 
 #: pcbnew/pad.cpp:2232
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "(не имеет смысла обозначать NPTH конт. пл. тестовой)"
+msgstr ""
+"(не имеет смысла обозначать площадку неметаллизированного отверстия тестовой)"
 
 #: pcbnew/pad.cpp:2235
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "(не имеет смысла обозначать NPTH конт. пл. теплоотводной)"
+msgstr ""
+"(не имеет смысла обозначать площадку неметаллизированного отверстия "
+"теплоотводной)"
 
 #: pcbnew/pad.cpp:2238
 msgid "('castellated' property is for PTH pads)"
-msgstr ""
-"(только PTH конт. пл. могут быть обозначены как периферийные полу-отверстия)"
+msgstr "(только площадки переходных отверстий могут быть зубчатыми)"
 
 #: pcbnew/pad.cpp:2241
 msgid "('BGA' property is for SMD pads)"
-msgstr "(только SMD конт. пл. могут быть обозначены как BGA)"
+msgstr "(только контактные площадки SMD могут быть обозначены как BGA)"
 
 #: pcbnew/pad.cpp:2244
 msgid "('mechanical' property is for PTH pads)"
@@ -42456,15 +42464,15 @@ msgstr "(механическое свойство предназначено т
 
 #: pcbnew/pad.cpp:2249
 msgid "(negative corner radius is not allowed)"
-msgstr "(отрицательный радиус скругления не допускается)"
+msgstr "(трицательный радиус скругления не допускается)"
 
 #: pcbnew/pad.cpp:2251
 msgid "(corner size will make pad circular)"
-msgstr "(скругление сделает конт. пл. круглой)"
+msgstr "(скругление углов сделает контактную площадку круглой)"
 
 #: pcbnew/pad.cpp:2256
 msgid "(negative corner chamfer is not allowed)"
-msgstr "(отрицательное значение фаски угла не допускается)"
+msgstr "(отрицательное значение фаски не допускается)"
 
 #: pcbnew/pad.cpp:2258
 msgid "(corner chamfer is too large)"
@@ -42477,7 +42485,7 @@ msgstr "(дельта трапеции слишком велика)"
 
 #: pcbnew/pad.cpp:2278
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "(конт. пл. произвольной формы должна образовать единый полигон)"
+msgstr "(контактная площадка сложной формы должна образовать единый полигон)"
 
 #: pcbnew/pad.cpp:2476
 msgid "Edge connector"
@@ -42493,7 +42501,7 @@ msgstr "Трапециевидная"
 
 #: pcbnew/pad.cpp:2495
 msgid "Castellated pad"
-msgstr "Периферийное полу-отверстие"
+msgstr "Зубчатая конактная площадка"
 
 #: pcbnew/pad.cpp:2496
 msgid "Mechanical pad"
@@ -42501,7 +42509,7 @@ msgstr "Механическая контактная площадка"
 
 #: pcbnew/pad.cpp:2500
 msgid "Oblong"
-msgstr ""
+msgstr "Продолговатая"
 
 #: pcbnew/pad.cpp:2518
 msgid "Front, back and connected layers"
@@ -42532,9 +42540,8 @@ msgid "Corner Radius Ratio"
 msgstr "Относительный радиус скругления"
 
 #: pcbnew/pad.cpp:2606
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Форма отв.:"
+msgstr "Форма отв."
 
 #: pcbnew/pad.cpp:2610
 msgid "Hole Size X"
