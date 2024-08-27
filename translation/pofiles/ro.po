@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-27 05:58+0000\n"
+"PO-Revision-Date: 2024-08-28 06:09+0000\n"
 "Last-Translator: Peter B <sleepyghostshark@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v8/ro/>\n"
@@ -624,7 +624,7 @@ msgstr "Afișați straturile pastei de sudură"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "F.Silkscreen"
-msgstr "F.Serigrafie"
+msgstr "Inscripționare față"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 #, fuzzy
@@ -2976,7 +2976,7 @@ msgstr "Exportați în alte foii"
 #: gerbview/widgets/gerbview_layer_widget.cpp:136 pcbnew/pcb_marker.cpp:214
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Drawing Sheet"
-msgstr "Foaie de desen"
+msgstr "Pagină desen"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:46
@@ -13828,7 +13828,7 @@ msgstr "Mod de ieșire:"
 #: pcbnew/dialogs/dialog_export_svg.cpp:88
 #: pcbnew/menubar_footprint_editor.cpp:73 pcbnew/menubar_pcb_editor.cpp:126
 msgid "Export"
-msgstr "Exportați"
+msgstr "Export"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:139
 #, fuzzy
@@ -45492,9 +45492,8 @@ msgid "Loss Tangent"
 msgstr "Tangenta unghiului de pierderi"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
-#, fuzzy
 msgid "Dielectric"
-msgstr "Electric"
+msgstr "dielectric"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:354
 #, fuzzy
