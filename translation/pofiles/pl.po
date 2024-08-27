@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
 "PO-Revision-Date: 2024-08-28 06:09+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -25967,27 +25967,27 @@ msgstr "Uwaga: Podawane wartości są wartościami minimalnymi"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:57
 msgid "Class 1"
-msgstr "Class 1"
+msgstr "Klasa 1"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:58
 msgid "Class 2"
-msgstr "Class 2"
+msgstr "Klasa 2"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:59
 msgid "Class 3"
-msgstr "Class 3"
+msgstr "Klasa 3"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:60
 msgid "Class 4"
-msgstr "Class 4"
+msgstr "Klasa 4"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:61
 msgid "Class 5"
-msgstr "Class 5"
+msgstr "Klasa 5"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:62
 msgid "Class 6"
-msgstr "Class 6"
+msgstr "Klasa 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
@@ -47855,7 +47855,7 @@ msgstr "Menedżerprojektu;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
-msgstr "EDA Suite"
+msgstr "Zestaw oprogramowania EDA"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
