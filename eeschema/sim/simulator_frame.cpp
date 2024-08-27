@@ -62,8 +62,7 @@
 
 
 // Reporter is stored by pointer in KIBIS, so keep this here to avoid crashes
-static wxString           s_errors;
-static WX_STRING_REPORTER s_reporter( &s_errors );
+static WX_STRING_REPORTER s_reporter;
 
 
 class SIM_THREAD_REPORTER : public SIMULATOR_REPORTER
@@ -353,9 +352,12 @@ void SIMULATOR_FRAME::UpdateTitle()
 // Don't let the dialog grow too tall: you may not be able to get to the OK button
 #define MAX_MESSAGES 20
 
-void SIMULATOR_FRAME::showNetlistErrors( const wxString& aErrors )
+void SIMULATOR_FRAME::showNetlistErrors( const WX_STRING_REPORTER& aReporter )
 {
-    wxArrayString lines = wxSplit( aErrors, '\n' );
+    if( !aReporter.HasMessage() )
+        return;
+
+    wxArrayString lines = wxSplit( aReporter.GetMessages(), '\n' );
 
     if( lines.size() > MAX_MESSAGES )
     {
@@ -363,13 +365,22 @@ void SIMULATOR_FRAME::showNetlistErrors( const wxString& aErrors )
         lines.Add( wxS( "..." ) );
     }
 
-    DisplayErrorMessage( this, _( "Errors during netlist generation." ), wxJoin( lines, '\n' ) );
+    if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
+    {
+        DisplayErrorMessage( this, _( "Errors during netlist generation." ),
+                             wxJoin( lines, '\n' ) );
+    }
+    else if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_WARNING ) )
+    {
+        DisplayInfoMessage( this, _( "Warnings during netlist generation." ),
+                             wxJoin( lines, '\n' ) );
+    }
 }
 
 
 bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
 {
-    s_errors.clear();
+    s_reporter.Clear();
 
     if( !m_schematicFrame->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
         return false;
@@ -378,26 +389,23 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
         m_schematicFrame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
-    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
-                              s_reporter ) )
-    {
-        showNetlistErrors( s_errors );
-        return false;
-    }
+    bool success = m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions,
+                                        Prj().GetProjectPath(), s_reporter );
 
-    return true;
+    showNetlistErrors( s_reporter );
+
+    return success;
 }
 
 
 void SIMULATOR_FRAME::ReloadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
 {
-    s_errors.clear();
+    s_reporter.Clear();
 
-    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
-                              s_reporter ) )
-    {
-        showNetlistErrors( s_errors );
-    }
+    m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
+                         s_reporter );
+
+    showNetlistErrors( s_reporter );
 }
 
 
@@ -583,16 +591,15 @@ bool SIMULATOR_FRAME::EditAnalysis()
     SIM_TAB*           simTab = m_ui->GetCurrentSimTab();
     DIALOG_SIM_COMMAND dlg( this, m_circuitModel, m_simulator->Settings() );
 
-    s_errors.clear();
+    s_reporter.Clear();
 
     if( !simTab )
         return false;
 
-    if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
-                                                    s_reporter ) )
-    {
-        showNetlistErrors( s_errors );
-    }
+    m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
+                                               s_reporter );
+
+    showNetlistErrors( s_reporter );
 
     dlg.SetSimCommand( simTab->GetSimCommand() );
     dlg.SetSimOptions( simTab->GetSimOptions() );

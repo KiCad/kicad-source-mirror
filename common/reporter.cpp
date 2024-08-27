@@ -50,6 +50,13 @@ REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
 }
 
 
+bool REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
+{
+    wxFAIL_MSG( "HasMessageOfSeverity is not implemented in this reporter" );
+    return HasMessage();
+}
+
+
 REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     wxCHECK_MSG( m_textCtrl != nullptr, *this,
@@ -68,17 +75,34 @@ bool WX_TEXT_CTRL_REPORTER::HasMessage() const
 
 REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
-    wxCHECK_MSG( m_string != nullptr, *this,
-                 wxT( "No wxString object defined in WX_STRING_REPORTER." ) );
-
-    *m_string << aText << wxS( "\n" );
+    m_severityMask |= aSeverity;
+    m_string << aText << wxS( "\n" );
     return *this;
+}
+
+
+const wxString& WX_STRING_REPORTER::GetMessages() const
+{
+    return m_string;
+}
+
+
+void WX_STRING_REPORTER::Clear()
+{
+    m_severityMask = 0;
+    m_string.clear();
 }
 
 
 bool WX_STRING_REPORTER::HasMessage() const
 {
-    return !m_string->IsEmpty();
+    return !m_string.IsEmpty();
+}
+
+
+bool WX_STRING_REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
+{
+    return ( m_severityMask & aSeverityMask ) != 0;
 }
 
 

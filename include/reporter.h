@@ -121,6 +121,12 @@ public:
      */
     virtual bool HasMessage() const = 0;
 
+    /**
+     * Returns true if the reporter has one or more messages matching the specified
+     * severity mask.
+     */
+    virtual bool HasMessageOfSeverity( int aSeverityMask ) const;
+
     virtual EDA_UNITS GetUnits() const
     {
         return EDA_UNITS::MILLIMETRES;
@@ -164,9 +170,9 @@ private:
 class KICOMMON_API WX_STRING_REPORTER : public REPORTER
 {
 public:
-    WX_STRING_REPORTER( wxString* aString ) :
+    WX_STRING_REPORTER() :
         REPORTER(),
-        m_string( aString )
+        m_severityMask( 0 )
     {
     }
 
@@ -177,9 +183,14 @@ public:
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
+    bool HasMessageOfSeverity( int aSeverityMask ) const override;
+
+    const wxString& GetMessages() const;
+    void            Clear();
 
 private:
-    wxString* m_string;
+    wxString m_string;
+    int      m_severityMask;
 };
 
 

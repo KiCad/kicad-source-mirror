@@ -1294,10 +1294,10 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
     if( !Kiface().IsSingle() )
     {
-        WX_STRING_REPORTER backupReporter( &msg );
+        WX_STRING_REPORTER backupReporter;
 
         if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
-            SetStatusText( msg, 0 );
+            SetStatusText( backupReporter.GetMessages(), 0 );
     }
 
     updateTitle();

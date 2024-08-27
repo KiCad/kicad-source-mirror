@@ -1706,8 +1706,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
     if( !lib.IsEmpty() )
     {
-        wxString               msg;
-        WX_STRING_REPORTER     reporter( &msg );
+        WX_STRING_REPORTER     reporter;
         SIM_LIB_MGR            libMgr( aProject );
         std::vector<SCH_FIELD> emptyFields;
 

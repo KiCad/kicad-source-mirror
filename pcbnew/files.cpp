@@ -1079,10 +1079,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     if( !Kiface().IsSingle() )
     {
-        WX_STRING_REPORTER backupReporter( &upperTxt );
+        WX_STRING_REPORTER backupReporter;
 
-        if( GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
-            upperTxt.clear();
+        if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
+            upperTxt = backupReporter.GetMessages();
     }
 
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );

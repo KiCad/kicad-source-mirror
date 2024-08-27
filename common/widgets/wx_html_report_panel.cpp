@@ -494,5 +494,12 @@ REPORTER& WX_HTML_PANEL_REPORTER::ReportHead( const wxString& aText, SEVERITY aS
 
 bool WX_HTML_PANEL_REPORTER::HasMessage() const
 {
-    return m_panel->Count( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) > 0;
+    // Check just for errors and warnings for compatibility
+    return HasMessageOfSeverity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+}
+
+
+bool WX_HTML_PANEL_REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
+{
+    return m_panel->Count( aSeverityMask ) > 0;
 }

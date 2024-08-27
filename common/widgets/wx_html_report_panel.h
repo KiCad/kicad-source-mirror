@@ -48,6 +48,7 @@ public:
                           SEVERITY        aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
+    bool HasMessageOfSeverity( int aSeverityMask ) const override;
 
 private:
     WX_HTML_REPORT_PANEL* m_panel;

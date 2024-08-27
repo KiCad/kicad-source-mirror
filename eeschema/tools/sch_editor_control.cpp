@@ -567,14 +567,13 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         SCH_PIN*    pin = static_cast<SCH_PIN*>( item )->GetLibPin();
                         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
 
-                        wxString           msg;
-                        WX_STRING_REPORTER reporter( &msg );
+                        WX_STRING_REPORTER reporter;
                         SIM_LIB_MGR        mgr( &m_frame->Prj() );
 
                         SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol, reporter ).model;
 
                         if( reporter.HasMessage() )
-                            THROW_IO_ERROR( msg );
+                            THROW_IO_ERROR( reporter.GetMessages() );
 
                         SPICE_ITEM spiceItem;
                         spiceItem.refName = symbol->GetRef( &sheet ).ToStdString();

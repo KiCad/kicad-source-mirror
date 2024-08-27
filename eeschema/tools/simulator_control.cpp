@@ -71,14 +71,20 @@ void SIMULATOR_CONTROL::Reset( RESET_REASON aReason )
 int SIMULATOR_CONTROL::NewAnalysisTab( const TOOL_EVENT& aEvent )
 {
     DIALOG_SIM_COMMAND dlg( m_simulatorFrame, m_circuitModel, m_simulator->Settings() );
-    wxString           errors;
-    WX_STRING_REPORTER reporter( &errors );
+    WX_STRING_REPORTER reporter;
 
-    if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
-                                                    reporter ) )
+    m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
+                                               reporter );
+
+    if( reporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
     {
-        DisplayErrorMessage( m_simulatorFrame,
-                             _( "Errors during netlist generation.\n\n" ) + errors );
+        DisplayErrorMessage( m_simulatorFrame, _( "Errors during netlist generation." ),
+                             reporter.GetMessages() );
+    }
+    else if( reporter.HasMessageOfSeverity( RPT_SEVERITY_WARNING ) )
+    {
+        DisplayInfoMessage( m_simulatorFrame, _( "Warnings during netlist generation." ),
+                            reporter.GetMessages() );
     }
 
     dlg.SetSimCommand( wxS( "*" ) );

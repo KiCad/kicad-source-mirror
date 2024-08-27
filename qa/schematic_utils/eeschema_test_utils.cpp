@@ -133,13 +133,12 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::WriteNetlist()
     if( wxFileExists( GetNetlistPath( true ) ) )
         wxRemoveFile( GetNetlistPath( true ) );
 
-    wxString                  errors;
-    WX_STRING_REPORTER        reporter( &errors );
+    WX_STRING_REPORTER        reporter;
     std::unique_ptr<Exporter> exporter = std::make_unique<Exporter>( &m_schematic );
 
     bool success = exporter->WriteNetlist( GetNetlistPath( true ), GetNetlistOptions(), reporter );
 
-    BOOST_REQUIRE( success && errors.IsEmpty() );
+    BOOST_REQUIRE( success && reporter.GetMessages().IsEmpty() );
 }
 
 
