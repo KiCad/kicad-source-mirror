@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
 "PO-Revision-Date: 2024-08-28 14:09+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -7253,19 +7253,16 @@ msgid "Courtyard collision shadow"
 msgstr "Skugga kollision mellan gårdsplaner"
 
 #: common/layer_id.cpp:196
-#, fuzzy
 msgid "Track net names"
-msgstr "Sök nätnamn"
+msgstr "Nätnamn för ledare"
 
 #: common/layer_id.cpp:197
-#, fuzzy
 msgid "Pad net names"
-msgstr "Sök nätnamn"
+msgstr "Nätnamn för lödytor"
 
 #: common/layer_id.cpp:198
-#, fuzzy
 msgid "Via net names"
-msgstr "Sök nätnamn"
+msgstr "Nätnamn för vior"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -7811,9 +7808,8 @@ msgid "Duplicates the selected item(s)"
 msgstr "Duplicerar valda objekt"
 
 #: common/tool/actions.cpp:280
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Raderar valda objekt"
+msgstr "Radera valda objekt"
 
 #: common/tool/actions.cpp:287
 msgid "Interactive Delete Tool"
@@ -8374,9 +8370,8 @@ msgid "Symbol Library Browser"
 msgstr "Bläddrare för symbolbibliotek"
 
 #: common/tool/actions.cpp:1032 kicad/tools/kicad_manager_actions.cpp:112
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Skapa, ta bort och redigera symboler"
+msgstr "Skapa, ta bort och redigera kretsschemasymboler"
 
 #: common/tool/actions.cpp:1040 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1031
@@ -8384,9 +8379,8 @@ msgid "Footprint Library Browser"
 msgstr "Fotavtrycksbiblioteksläsaren"
 
 #: common/tool/actions.cpp:1049
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Skapa, ta bort och redigera fotavtryck"
+msgstr "Skapa, ta bort och redigera mönsterkorts fotavtryck"
 
 #: common/tool/actions.cpp:1057
 msgid "Show Properties Manager"
@@ -9624,7 +9618,6 @@ msgid "Footprint Filters:"
 msgstr "Fotavtrycksfilter:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
 msgstr "Visa valt fotavtryck"
 
@@ -9646,27 +9639,23 @@ msgid "Save to Schematic"
 msgstr "Spara till kretsschema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
 msgstr ""
-"Spara fotavtrycksassociationer i kretsschemasymbolernas fält för fotavtryck "
-"och i kretsschemafiler"
+"Spara fotavtryckstilldelningar i kretsschemasymbolernas fält för fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
 msgstr "Spara till kretsschema och fil"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Spara fotavtrycksassociationer i kretsschemasymbolernas fält för fotavtryck "
-"och i kretsschemafiler"
+"Spara fotavtryckstilldelningar i kretsschemasymbolernas fält för fotavtryck "
+"och spara sedan kretsschemafilerna"
 
 #: cvpcb/tools/cvpcb_actions.cpp:104
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
 msgstr "Välj nästa icke tilldelade symbol"
 
@@ -9675,7 +9664,6 @@ msgid "Select next symbol with no footprint assignment"
 msgstr "Välj nästa symbol som inte tilldelats fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:113
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
 msgstr "Välj föregående icke tilldelade symbol"
 
@@ -9684,29 +9672,25 @@ msgid "Select previous symbol with no footprint assignment"
 msgstr "Välj föregående symbol som inte tilldelats fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
-#, fuzzy
 msgid "Assign Footprint"
 msgstr "Tilldela fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:131
-#, fuzzy
 msgid "Automatically Assign Footprints"
 msgstr "Tilldela fotavtryck automatiskt"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Välj ett fotavtryck för en fotavtrycksassociationsrapport."
+msgstr ""
+"Tilldela fotavtryck automatiskt med hjälp av en fotavtryckstillhörighetsfil"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Fotavtryckstilldelningar"
+msgstr "Ta bort fotavtryckstilldelning"
 
 #: cvpcb/tools/cvpcb_actions.cpp:145
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Tilldelning av fotavtryck till symboler"
+msgstr "Ta bort alla tilldelningar av fotavtryck till symboler"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -9814,9 +9798,8 @@ msgid ""
 msgstr "Nät %s är grafiskt anslutet till buss %s men ingår inte i den bussen"
 
 #: eeschema/connection_graph.cpp:3787 eeschema/erc/erc_item.cpp:232
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Ej ansluten"
+msgstr "Ej ansluten ledningsändpunkt"
 
 #: eeschema/connection_graph.cpp:4130
 #, c-format
@@ -10969,7 +10952,7 @@ msgstr "Det här insticksprogrammet finns redan."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:807
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "Maximalt antal insticksprogram har redan lagts till i dialogen."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:838
 msgid "You must provide a netlist generator command string"
@@ -12743,12 +12726,10 @@ msgid "Field name templates"
 msgstr "Fältnamnsmallar"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "BOM presets"
 msgstr "Förinställningar för komponentlista"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM format presets"
 msgstr "Förinställningar för komponentlistans format"
 
