@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-27 05:59+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"PO-Revision-Date: 2024-08-27 13:52+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -32118,7 +32118,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:310
 msgid "Change Footprint"
-msgstr "Byt fotavtryck"
+msgstr "Byt ut fotavtryck"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, c-format
@@ -42306,7 +42306,7 @@ msgstr "(Hålmonteringslödytans hål lämnar ingen koppar kvar)"
 
 #: pcbnew/pad.cpp:2079
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(Hålmonteringslödytans hål inte fullständigt omslutet av koppar)"
+msgstr "(Hålmonteringslödytans hål inte fullständigt omsluten av koppar)"
 
 #: pcbnew/pad.cpp:2086
 msgid "(pad hole not inside pad shape)"
@@ -42350,12 +42350,14 @@ msgstr "(Hålmonteringshål har inga kopparlager)"
 
 #: pcbnew/pad.cpp:2155
 msgid "(plated through holes normally have a copper pad on at least one layer)"
-msgstr "Genompläterade hål ska normalt ha en lödyta på minst ett lager"
+msgstr ""
+"(genompläterade hål ska normalt ha en lödyta eller kopparkrage på minst ett "
+"lager)"
 
 #: pcbnew/pad.cpp:2174
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"(anslutningsytor har vanligtvis ingen lodpasta; använd istället en lödyta "
+"(anslutningskragar har vanligtvis ingen lodpasta; använd istället en lödyta "
 "för ytmontering)"
 
 #: pcbnew/pad.cpp:2182
@@ -42369,7 +42371,7 @@ msgstr "(ytmonteringslödyta har koppar på båda sidor av mönsterkortet)"
 #: pcbnew/pad.cpp:2194 pcbnew/pad.cpp:2207
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
-"(ytmonteringslödytan har koppar- och lödmasklager på olika sidor av "
+"(ytmonteringslödyta har koppar- och lödmasklager på olika sidor av "
 "mönsterkortet)"
 
 #: pcbnew/pad.cpp:2199 pcbnew/pad.cpp:2212
@@ -42379,7 +42381,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2218
 msgid "(SMD pad has no outer layers)"
-msgstr "(ytmonteringslödytan har inga yttre lager)"
+msgstr "(ytmonteringslödyta har inga yttre lager)"
 
 #: pcbnew/pad.cpp:2228
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -42405,7 +42407,7 @@ msgstr "(egenskapen krenelerad lödyta är avsedd för genompläterade hål (PTH
 
 #: pcbnew/pad.cpp:2241
 msgid "('BGA' property is for SMD pads)"
-msgstr "(BGA-egenskapen kan bara användas på lödytor för ytmontering (SMD))"
+msgstr "(BGA-egenskapen är avsedd för ytmonteringslödytor (SMD))"
 
 #: pcbnew/pad.cpp:2244
 msgid "('mechanical' property is for PTH pads)"
@@ -42435,7 +42437,7 @@ msgstr "(trapezoid-delta är för stort)"
 
 #: pcbnew/pad.cpp:2278
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "(anpassad lödyteform måste lösa till en enda polygon)"
+msgstr "(användardefinierad lödyteform måste lösa till en enda polygon)"
 
 #: pcbnew/pad.cpp:2476
 msgid "Edge connector"
@@ -42459,7 +42461,7 @@ msgstr "Mekanisk yta"
 
 #: pcbnew/pad.cpp:2500
 msgid "Oblong"
-msgstr ""
+msgstr "Avlång"
 
 #: pcbnew/pad.cpp:2518
 msgid "Front, back and connected layers"
