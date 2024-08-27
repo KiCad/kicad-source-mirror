@@ -1746,7 +1746,8 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION sel = m_selectionTool->RequestSelection( { SCH_FIELD_T, SCH_SYMBOL_T } );
+    EE_SELECTION sel =
+            m_selectionTool->RequestSelection( { SCH_FIELD_T, SCH_SYMBOL_T, SCH_PIN_T } );
 
     if( sel.Size() != 1 )
         return 0;
@@ -1794,6 +1795,27 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
         if( !field->IsVisible() )
             clearSelection = true;
+    }
+    else if( item->Type() == SCH_PIN_T )
+    {
+        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParent() );
+
+        if( symbol )
+        {
+            if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
+            {
+                editFieldText( symbol->GetField( REFERENCE_FIELD ) );
+            }
+            else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
+            {
+                editFieldText( symbol->GetField( VALUE_FIELD ) );
+            }
+            else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
+            {
+                if( !symbol->IsPower() )
+                    editFieldText( symbol->GetField( FOOTPRINT_FIELD ) );
+            }
+        }
     }
 
     if( clearSelection )
