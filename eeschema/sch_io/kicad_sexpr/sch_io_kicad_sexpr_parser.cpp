@@ -744,7 +744,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
                 case T_italic:
                 {
                     bool italic = parseMaybeAbsentBool( true );
-                    aText->SetItalic( italic );
+                    aText->SetItalicFlag( italic );
                     break;
                 }
 

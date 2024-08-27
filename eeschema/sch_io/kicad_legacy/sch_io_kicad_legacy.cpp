@@ -1075,7 +1075,7 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY::loadText( LINE_READER& aReader )
         if( m_version > 2 || *line >= ' ' )
         {
             if( strCompare( "Italic", line, &line ) )
-                text->SetItalic( true );
+                text->SetItalicFlag( true );
             else if( !strCompare( "~", line, &line ) )
                 SCH_PARSE_ERROR( _( "expected 'Italics' or '~'" ), aReader, line );
         }
@@ -1359,7 +1359,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 
                     if( textAttrs[1] == 'I' )
                     {
-                        field.SetItalic( true );
+                        field.SetItalicFlag( true );
                     }
                     else if( textAttrs[1] != 'N' )
                     {

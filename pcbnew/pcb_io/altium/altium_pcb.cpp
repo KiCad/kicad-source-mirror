@@ -4198,7 +4198,7 @@ void ALTIUM_PCB::HelperSetTextAlignmentAndPos( const ATEXT6& aElem, EDA_TEXT* aT
     int rectHeight = aElem.height;
 
     if( aElem.isMirrored )
-        rectWidth = -rectWidth; 
+        rectWidth = -rectWidth;
 
     ALTIUM_TEXT_POSITION justification = aElem.isJustificationValid
                                                  ? aElem.textbox_rect_justification
@@ -4322,7 +4322,7 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
 
     aEdaText->SetTextThickness( aElem.strokewidth );
     aEdaText->SetBoldFlag( aElem.isBold );
-    aEdaText->SetItalic( aElem.isItalic );
+    aEdaText->SetItalicFlag( aElem.isItalic );
     aEdaText->SetMirrored( aElem.isMirrored );
 }
 

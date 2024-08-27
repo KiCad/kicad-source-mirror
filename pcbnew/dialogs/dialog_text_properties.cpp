@@ -509,7 +509,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         m_item->SetKeepUpright( m_KeepUpright->GetValue() );
 
     m_item->SetBoldFlag( m_bold->IsChecked() );
-    m_item->SetItalic( m_italic->IsChecked() );
+    m_item->SetItalicFlag( m_italic->IsChecked() );
 
     if( m_alignLeft->IsChecked() )
         m_item->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );

@@ -213,6 +213,26 @@ void EDA_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
 
 void EDA_TEXT::SetItalic( bool aItalic )
 {
+    if( m_attributes.m_Italic != aItalic )
+    {
+        const KIFONT::FONT* font = GetFont();
+
+        if( !font || font->IsStroke() )
+        {
+            // For stroke fonts, just need to set the attribute.
+        }
+        else
+        {
+            // For outline fonts, italic-ness is determined by the font itself.
+            SetFont( KIFONT::FONT::GetFont( font->GetName(), IsBold(), aItalic ) );
+        }
+    }
+
+    SetItalicFlag( aItalic );
+}
+
+void EDA_TEXT::SetItalicFlag( bool aItalic )
+{
     m_attributes.m_Italic = aItalic;
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
@@ -223,12 +243,23 @@ void EDA_TEXT::SetBold( bool aBold )
 {
     if( m_attributes.m_Bold != aBold )
     {
-        int size = std::min( m_attributes.m_Size.x, m_attributes.m_Size.y );
+        const KIFONT::FONT* font = GetFont();
 
-        if( aBold )
-            m_attributes.m_StrokeWidth = GetPenSizeForBold( size );
+        if( !font || font->IsStroke() )
+        {
+            // For stroke fonts, boldness is determined by the pen size.
+            const int size = std::min( m_attributes.m_Size.x, m_attributes.m_Size.y );
+
+            if( aBold )
+                m_attributes.m_StrokeWidth = GetPenSizeForBold( size );
+            else
+                m_attributes.m_StrokeWidth = GetPenSizeForNormal( size );
+        }
         else
-            m_attributes.m_StrokeWidth = GetPenSizeForNormal( size );
+        {
+            // For outline fonts, boldness is determined by the font itself.
+            SetFont( KIFONT::FONT::GetFont( font->GetName(), aBold, IsItalic() ) );
+        }
     }
 
     SetBoldFlag( aBold );
