@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-27 05:59+0000\n"
-"Last-Translator: Marek <fotelpl@gmail.com>\n"
+"PO-Revision-Date: 2024-08-27 13:51+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -3203,27 +3203,26 @@ msgid "Close"
 msgstr "Zamknij"
 
 #: common/dialogs/dialog_print_generic.cpp:155
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Ostrzeżenie: Zła wartość skali"
+msgstr "Ostrzeżenie: wartość skali nie jest liczbą."
 
 #: common/dialogs/dialog_print_generic.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość.\n"
-" Zredukowano do %f"
+"Zostanie zredukowana do %f."
 
 #: common/dialogs/dialog_print_generic.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Ostrzeżenie: Skala została ustawiona na bardzo małą wartość.\n"
-" Zredukowano do %f"
+"Zostanie rozszerzona do %f."
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
@@ -5134,7 +5133,7 @@ msgstr "Prostokąt"
 #: common/drawing_sheet/ds_draw_item.cpp:137
 #: common/drawing_sheet/ds_draw_item.cpp:338
 msgid "Imported Shape"
-msgstr "Zaimportowane kształty"
+msgstr "Zaimportowany kształt"
 
 #: common/drawing_sheet/ds_data_item.cpp:369
 #: common/drawing_sheet/ds_draw_item.cpp:141
@@ -6785,12 +6784,14 @@ msgstr "Obrazy DXF nie są aktualnie nieobsługiwane."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Zaimportowana grafika jest zbyt duża. Maksymalna skala to %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Przesunięcie podczas importu skorygowane do (%f, %f) by zmieścić się w "
+"dopuszczalnym zakresie"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -9716,9 +9717,9 @@ msgid "Automatically Assign Footprints"
 msgstr "Automatycznie przypisz footprinty"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Wybierz footprint do raportu powiązań footprintów."
+msgstr ""
+"Automatyczne przypisywanie footprintów za pomocą pliku skojarzeń footprintów"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
 #, fuzzy
@@ -10998,7 +10999,7 @@ msgstr "Ta wtyczka już istnieje."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:807
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "Dodano już maksymalną liczbę wtyczek do okna dialogowego."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:838
 msgid "You must provide a netlist generator command string"
@@ -14729,9 +14730,8 @@ msgid "Color highlight thickness:"
 msgstr "Grubość podświetlenia:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
-#, fuzzy
 msgid "Color highlight opacity:"
-msgstr "Naruszenie DRC: podświetlanie przeszkód"
+msgstr "Przeźroczystość koloru wyróżnienia:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:166
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:120
@@ -15938,9 +15938,9 @@ msgid "Footprint '%s' not found in library '%s'."
 msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'."
 
 #: eeschema/erc/erc.cpp:1490
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
-msgstr "%s footprintu (%s) nie odpowiada tej, podanej przez symbol (%s)."
+msgstr "Przypisany footprint (%s) nie odpowiada ustawionym filtrom (%s)."
 
 #: eeschema/erc/erc.cpp:1636
 msgid "Checking sheet names..."
@@ -16098,7 +16098,7 @@ msgstr "Globalna etykieta występuje tylko raz na schemacie"
 
 #: eeschema/erc/erc_item.cpp:132
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "Lokalne i globalne etykiety posiadają te same nazwy"
 
 #: eeschema/erc/erc_item.cpp:136
 msgid "Different footprint assigned in another unit of the symbol"
@@ -20078,7 +20078,7 @@ msgstr "Napięcie (zmierzone)"
 #: eeschema/sim/simulator_frame_ui.cpp:2202
 #: eeschema/sim/simulator_frame_ui.cpp:2203
 msgid " (gain)"
-msgstr " (gain)"
+msgstr " (wzmocnienie)"
 
 #: eeschema/sim/sim_plot_tab.h:148 eeschema/sim/simulator_frame_ui.cpp:214
 #: eeschema/sim/simulator_frame_ui.cpp:766
@@ -21290,9 +21290,8 @@ msgid "Save Library As..."
 msgstr "Zapisz bibliotekę jako..."
 
 #: eeschema/tools/ee_actions.cpp:160
-#, fuzzy
 msgid "Save the current library to a new file"
-msgstr "Zapisz obecną bibliotekę w nowym pliku."
+msgstr "Zapisuje bieżącą bibliotekę w nowym pliku"
 
 #: eeschema/tools/ee_actions.cpp:166
 msgid "New Symbol..."
@@ -21332,9 +21331,8 @@ msgid "Save Copy As..."
 msgstr "Zapisz kopię jako..."
 
 #: eeschema/tools/ee_actions.cpp:200
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library"
-msgstr "Zapisuje kopię bieżącego symbolu w innej bibliotece."
+msgstr "Zapisuje kopię bieżącego symbolu w innej bibliotece"
 
 #: eeschema/tools/ee_actions.cpp:207
 msgid "Remove the selected symbol from its library"
@@ -22360,7 +22358,7 @@ msgstr "Przeciągnij"
 
 #: eeschema/tools/ee_actions.cpp:1350
 msgid "Move items while keeping their connections"
-msgstr ""
+msgstr "Przesuwa elementy zachowując ich połączenia"
 
 #: eeschema/tools/ee_actions.cpp:1357 eeschema/tools/sch_move_tool.cpp:1808
 msgid "Align Items to Grid"
@@ -24060,6 +24058,8 @@ msgstr "RS274X: Polecenie KNOCKOUT ignorowane przez GerbView"
 #: gerbview/rs274x.cpp:680
 msgid "IPNEG Gerber command is deprecated since 2012. Skip it"
 msgstr ""
+"Polecenie IPNEG formatu Gerber jest uznawane za przestarzałe począwszy od "
+"2012 r. Należy je pominąć"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
@@ -24671,6 +24671,8 @@ msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
 msgstr ""
+"Uwzględnij tylko modele 3D pasujące do tej listy oznaczeń (rozdzielone "
+"przecinkami, obsługiwane symbole wieloznaczne)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 #: pcbnew/dialogs/dialog_export_step_base.cpp:91
@@ -31063,9 +31065,8 @@ msgid "Filter items by layer:"
 msgstr "Filtrowane na podstawie warstwy:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:160
-#, fuzzy
 msgid "Progress:"
-msgstr "Postęp całości"
+msgstr "Postęp:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:82
 msgid "Cleanup Tracks and Vias"
@@ -32572,20 +32573,20 @@ msgid "All components"
 msgstr "Autorozmieszczanie komponentów"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:75
-#, fuzzy
 msgid "Export only the component models that are selected in the PCB editor"
-msgstr "Uaktualnia odnośniki symboli, które zostały zmienione w edytorze PCB."
+msgstr "Eksportuj tylko te modele komponentów, które wybrano w edytorze PCB"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:79
-#, fuzzy
 msgid "Components matching filter:"
-msgstr "Pliki położeń komponentów"
+msgstr "Komponenty pasujące do filtra:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:84
 msgid ""
 "A list of comma-selected reference designators to export (wildcards are "
 "supported)"
 msgstr ""
+"Lista eksportowanych odnośników oddzielona przecinkami (symbole wieloznaczne "
+"są obsługiwane)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:92
 msgid "Export tracks and vias on external copper layers."
@@ -34303,9 +34304,8 @@ msgid "Filter vias by size:"
 msgstr "Filtrowane przelotek na podstawie rozmiaru:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "-- pozostaw niezmienione --"
+msgstr "-- pozostaw niezmienione --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "Via size:"
@@ -34580,14 +34580,12 @@ msgid "Bottom/Back layer:"
 msgstr "Dolna/Tylna warstwa:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:209
-#, fuzzy
 msgid "Copper layer pair presets"
-msgstr "Warstwy miedzi:"
+msgstr "Predefiniowane pary warstw miedzi"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:227
-#, fuzzy
 msgid "Enabled"
-msgstr "Włączone:"
+msgstr "Włączone"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:57
 msgid "Select Layer"
@@ -34675,7 +34673,7 @@ msgstr "Przesuń element"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:60
 msgid "Replace existing placement rule areas"
-msgstr ""
+msgstr "Zamień istniejące strefy z regułami"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:63
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
@@ -34722,7 +34720,7 @@ msgstr "Wyklucz komponenty nie posiadające pinów"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
-msgstr ""
+msgstr "Powtórz układ wielokanałowy"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:129
 msgid "Convert to Non Copper Zone"
@@ -35853,9 +35851,9 @@ msgid "Reference item: %s"
 msgstr "Element referencyjny: %s"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Reference location: selected point (%s, %s)"
-msgstr "Punkt bazowy: początek siatki"
+msgstr "Punkt bazowy: wskazany punkt (%s, %s)"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -36233,7 +36231,7 @@ msgstr "Opis footprintu nadrzędnego"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
 msgid "Update thickness according to text size "
-msgstr ""
+msgstr "Uaktualnij grubość odpowiednio do rozmiaru tekstu "
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -36241,6 +36239,9 @@ msgid ""
 "Normal text: thickness is size/8\n"
 "Bold text: thickness is size/5"
 msgstr ""
+"Ustawia najlepszą grubość tekstu na podstawie szerokości i wysokości tekstu\n"
+"Tekst normalny: grubość ustalona wzorem rozmiar/8\n"
+"Tekst pogrubiony: grubość ustalona wzorem rozmiar/5"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:382
 msgid "Edit Text Box Properties"
@@ -37980,6 +37981,10 @@ msgid ""
 "max distance between a solder mask opening and a copper item having a "
 "different net than the parent solder mask opening to create a DRC error"
 msgstr ""
+"W przypadku testów DRC:\n"
+"maksymalna odległość między otwarciem maski lutowniczej a elementem miedzi "
+"posiadające inne niż nadrzędne otwarcie maski lutowniczej, która spowoduje "
+"wygenerowanie błędu DRC"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -39881,7 +39886,7 @@ msgstr "Brak wyrażenia dla asercji."
 
 #: pcbnew/drc/drc_rule_parser.cpp:488
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
+msgstr "opcja within_diff_pairs nie jest prawidłowa dla typu constraint."
 
 #: pcbnew/drc/drc_rule_parser.cpp:506
 msgid "Missing min value."
@@ -40427,17 +40432,18 @@ msgid "(%s max length %s; actual %s)"
 msgstr "(%s maksymalna długość %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"(%s min nachylenie %s; obecne %s; średnia długość sieci %s; obecnie %s)"
+"(%s min nachylenie %s; obecne %s; docelowa długość sieci %s (z %s); obecnie "
+"%s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"(%s maksymalne nachylenie %s; obecne nachylenie %s; średnia długość sieci "
-"%s; obecna długość sieci %s)"
+"(%s maksymalne nachylenie %s; obecnie %s; docelowa długość sieci %s (z %s); "
+"obecna %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 #, c-format
@@ -40517,19 +40523,19 @@ msgid "Missing footprint %s (%s)"
 msgstr "Brakujący footprint %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Value (%s) doesn't match symbol value (%s)."
-msgstr "Wartość footprintu %s (%s) nie odpowiada wartości symbolu (%s)."
+msgstr "Wartość (%s) nie odpowiada wartości symbolu (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match footprint given by symbol (%s)."
-msgstr "%s footprintu (%s) nie odpowiada tej, podanej przez symbol (%s)."
+msgstr "%s nie odpowiada footprintowi podanemu przez symbol (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)."
-msgstr "Użyj filtrów z symbolu przy doborze footprintu"
+msgstr "%s nie odpowiada filtrowi footprintu z symbolu (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:220
 msgid "No corresponding pin found in schematic."
@@ -41835,7 +41841,7 @@ msgstr "Automatyczne rozmieszczanie footprintów"
 
 #: pcbnew/menubar_pcb_editor.cpp:438
 msgid "Multi-Channel"
-msgstr ""
+msgstr "Wielokanałowe"
 
 #: pcbnew/menubar_pcb_editor.cpp:447
 msgid "External Plugins"
@@ -42496,7 +42502,6 @@ msgid "(pad hole not inside pad shape)"
 msgstr "(otwór nie jest granicach pola lutowniczego)"
 
 #: pcbnew/pad.cpp:2091
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
 msgstr "(ujemne wartości lokalnego prześwitu nie mają żadnego wpływu)"
 
@@ -42638,7 +42643,7 @@ msgstr "Pole mechaniczne"
 
 #: pcbnew/pad.cpp:2500
 msgid "Oblong"
-msgstr "Prostokąt"
+msgstr "Podłużny"
 
 #: pcbnew/pad.cpp:2518
 msgid "Front, back and connected layers"
@@ -44406,7 +44411,7 @@ msgid "Cannot interpret date code %d"
 msgstr "Nie można zinterpretować kodu daty %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1143
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -44414,7 +44419,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Znaleziono elementy na niezdefiniowanych warstwach (%s).\n"
-"Czy chcesz je odzyskać i przenieść na warstwę %s?"
+"Czy chcesz je odzyskać i przenieść na warstwę %s?\n"
+"\n"
+"Strefy będą wymagać ponownego wypełnienia."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1149
 msgid "Undefined Layers Warning"
@@ -44861,9 +44868,8 @@ msgid "Missing field name argument to %s."
 msgstr "Brakujący argument z nawą pola dla %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1184
-#, fuzzy
 msgid "Missing netclass name argument to hasNetclass()"
-msgstr "Brakujący argument z nazwą warstwy dla %s."
+msgstr "Brak argumentu z nazwą klasy sieci dla hasNetclass()"
 
 #: pcbnew/pcbnew.cpp:463
 msgid ""
@@ -46495,6 +46501,8 @@ msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
 msgstr ""
+"Niektóre narożniki są zbyt wąskie, aby zmieścił się w nich frez o podanym "
+"promieniu."
 
 #: pcbnew/tools/item_modification_routine.cpp:348
 #: pcbnew/tools/pcb_actions.cpp:624
@@ -46547,49 +46555,51 @@ msgstr "Niektóre polygony nie mogą być przecięte."
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
-msgstr ""
+msgstr "Proszę wybrać jedną referencyjną strefę z regułami by z niej skopiować."
 
 #: pcbnew/tools/multichannel_tool.cpp:299
 msgid "No Rule Areas to repeat layout to have been found."
-msgstr ""
+msgstr "Nie znaleziono stref z regułami by powtórzyć układ ścieżek."
 
 #: pcbnew/tools/multichannel_tool.cpp:371
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
+"Nie udało się skopiować zawartości stref z regułami między obszarami reguł "
+"'%s' i '%s'."
 
 #: pcbnew/tools/multichannel_tool.cpp:384
-#, fuzzy
 msgid "Repeat layout"
-msgstr "Liczba powtórzeń"
+msgstr "Powtórz układ ścieżek"
 
 #: pcbnew/tools/multichannel_tool.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "Copied to %d Rule Areas."
-msgstr "Przekształć w strefę z regułami"
+msgstr "Skopiowano do %d stref z z regułami."
 
 #: pcbnew/tools/multichannel_tool.cpp:623
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "Jedna lub obie strefy nie mają przypisanych komponentów."
 
 #: pcbnew/tools/multichannel_tool.cpp:627
-#, fuzzy
 msgid "Component count mismatch"
-msgstr "Liczba komponentów: %d."
+msgstr "Niezgodna liczba komponentów"
 
 #: pcbnew/tools/multichannel_tool.cpp:631
 msgid "Iteration count exceeded (timeout)"
-msgstr ""
+msgstr "Liczba iteracji została przekroczona (ograniczenie czasowe)"
 
 #: pcbnew/tools/multichannel_tool.cpp:635
 msgid "Topology mismatch"
-msgstr ""
+msgstr "Niezgodność topologii"
 
 #: pcbnew/tools/multichannel_tool.cpp:685
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s)."
 msgstr ""
+"Nie można automatycznie wygenerować stref rozmieszczania, ponieważ schemat "
+"zawiera tylko jeden arkusz hierarchiczny lub nie zawiera go wcale."
 
 #: pcbnew/tools/multichannel_tool.cpp:767
 #, fuzzy
@@ -47611,7 +47621,7 @@ msgstr "Pokaż połączenia wspomagające"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "Pokazuje linie/łuki reprezentujące brakujące połączenia na płytce"
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Curved Ratsnest Lines"
@@ -48492,9 +48502,8 @@ msgid "Inactive Layer Display"
 msgstr "Wyświetlanie warstw nieaktywnych"
 
 #: pcbnew/tools/pcb_control.cpp:640
-#, fuzzy
 msgid "Preset Layer Pairs"
-msgstr "Ustal parę warstw..."
+msgstr "Predefiniowane pary warstw"
 
 #: pcbnew/tools/pcb_control.cpp:730
 msgid "Item locked."
