@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-20 09:23+0000\n"
+"PO-Revision-Date: 2024-08-27 05:59+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -29513,7 +29513,7 @@ msgstr "(线段长度过小或为空: %d nm)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:701
 #, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(弧的大小过小或为空: %d nm)"
+msgstr "(弧的尺寸过小或为空: %d nm)"
 
 #: pcbnew/cross-probing.cpp:104 pcbnew/dialogs/dialog_board_setup.cpp:196
 #: pcbnew/dialogs/dialog_drc.cpp:271 pcbnew/pcb_edit_frame.cpp:2508
@@ -41531,7 +41531,7 @@ msgstr "(贴片焊盘在电路板的两面都有铜层)"
 
 #: pcbnew/pad.cpp:2194 pcbnew/pad.cpp:2207
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "(贴片焊盘的铜层和阻焊层分别处在电路板的不同面上）"
+msgstr "(贴片焊盘在电路板的不同面上分别有铜层和阻焊层)"
 
 #: pcbnew/pad.cpp:2199 pcbnew/pad.cpp:2212
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
@@ -41543,19 +41543,19 @@ msgstr "(贴片焊盘没有外形层)"
 
 #: pcbnew/pad.cpp:2228
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "('基准点' (fiducial) 属性对于 NPTH 焊盘毫无意义)"
+msgstr "('基准点' (Fiducial) 属性对于 NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2232
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "('测试点焊盘' (testpoint) 属性对于NPTH 焊盘毫无意义)"
+msgstr "('测试点' (Testpoint) 属性对于NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2235
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "('散热焊盘' (heatsink) 属性对于 NPTH 焊盘毫无意义)"
+msgstr "('散热焊盘' (Heatsink) 属性对于 NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2238
 msgid "('castellated' property is for PTH pads)"
-msgstr "('半孔焊盘' (castellated) 属性适用于 PTH 焊盘)"
+msgstr "('半孔焊盘' (Castellated) 属性适用于 PTH 焊盘)"
 
 #: pcbnew/pad.cpp:2241
 msgid "('BGA' property is for SMD pads)"
@@ -41643,9 +41643,8 @@ msgid "Corner Radius Ratio"
 msgstr "边角半径比"
 
 #: pcbnew/pad.cpp:2606
-#, fuzzy
 msgid "Hole Shape"
-msgstr "钻孔形状:"
+msgstr "孔洞形状"
 
 #: pcbnew/pad.cpp:2610
 msgid "Hole Size X"
