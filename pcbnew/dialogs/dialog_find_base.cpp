@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 14 2021)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,16 +40,16 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* sizerOptions;
 	sizerOptions = new wxBoxSizer( wxHORIZONTAL );
 
-	m_matchCase = new wxCheckBox( this, wxID_ANY, _("Match case"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchCase = new wxCheckBox( this, wxID_ANY, _("Match &case"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerOptions->Add( m_matchCase, 0, wxALL, 5 );
 
-	m_matchWords = new wxCheckBox( this, wxID_ANY, _("Words"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchWords = new wxCheckBox( this, wxID_ANY, _("Whole &words only"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerOptions->Add( m_matchWords, 0, wxALL, 5 );
 
-	m_wildcards = new wxCheckBox( this, wxID_ANY, _("Wildcards"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_wildcards = new wxCheckBox( this, wxID_ANY, _("Wi&ldcards"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerOptions->Add( m_wildcards, 0, wxALL, 5 );
 
-	m_wrap = new wxCheckBox( this, wxID_ANY, _("Wrap"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_wrap = new wxCheckBox( this, wxID_ANY, _("Wra&p"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_wrap->SetValue(true);
 	sizerOptions->Add( m_wrap, 0, wxALL, 5 );
 
@@ -59,23 +59,23 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* sizerInclude;
 	sizerInclude = new wxBoxSizer( wxVERTICAL );
 
-	m_includeReferences = new wxCheckBox( this, wxID_ANY, _("Search footprint reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeReferences = new wxCheckBox( this, wxID_ANY, _("Search footprint reference &designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeReferences->SetValue(true);
 	sizerInclude->Add( m_includeReferences, 0, wxALL, 5 );
 
-	m_includeValues = new wxCheckBox( this, wxID_ANY, _("Search footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeValues = new wxCheckBox( this, wxID_ANY, _("Search footprint &values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeValues->SetValue(true);
 	sizerInclude->Add( m_includeValues, 0, wxALL, 5 );
 
-	m_includeTexts = new wxCheckBox( this, wxID_ANY, _("Search other text items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeTexts = new wxCheckBox( this, wxID_ANY, _("Search &other text items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeTexts->SetValue(true);
 	sizerInclude->Add( m_includeTexts, 0, wxALL, 5 );
 
-	m_includeMarkers = new wxCheckBox( this, wxID_ANY, _("Search DRC markers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeMarkers = new wxCheckBox( this, wxID_ANY, _("Search DRC &markers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeMarkers->SetValue(true);
 	sizerInclude->Add( m_includeMarkers, 0, wxALL, 5 );
 
-	m_includeNets = new wxCheckBox( this, wxID_ANY, _("Search net names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeNets = new wxCheckBox( this, wxID_ANY, _("Search &net names"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeNets->SetValue(true);
 	sizerInclude->Add( m_includeNets, 0, wxALL, 5 );
 

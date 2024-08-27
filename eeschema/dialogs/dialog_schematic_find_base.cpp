@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -79,20 +79,20 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
-	m_checkMatchCase = new wxCheckBox( this, wxID_ANY, _("&Match case"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkMatchCase = new wxCheckBox( this, wxID_ANY, _("Match &case"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkMatchCase, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_checkWholeWord = new wxCheckBox( this, wxID_ANY, _("Words"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkWholeWord = new wxCheckBox( this, wxID_ANY, _("Whole &words only"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkWholeWord->SetValue(true);
 	gbSizer2->Add( m_checkWholeWord, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_checkWildcardMatch = new wxCheckBox( this, wxID_ANY, _("Wildcards"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkWildcardMatch = new wxCheckBox( this, wxID_ANY, _("Wi&ldcards"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkWildcardMatch, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search pin &names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkAllPins, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search &hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkAllFields, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet only"), wxDefaultPosition, wxDefaultSize, 0 );

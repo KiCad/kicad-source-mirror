@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 14 2021)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,15 +20,14 @@
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FIND_BASE
@@ -55,7 +54,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxButton* m_closeButton;
 		wxStaticText* m_status;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindNextClick( wxCommandEvent& event ) { event.Skip(); }
@@ -67,6 +66,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+
 		~DIALOG_FIND_BASE();
 
 };
