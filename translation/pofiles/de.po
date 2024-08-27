@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-24 14:09+0000\n"
+"PO-Revision-Date: 2024-08-28 06:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -22108,9 +22108,8 @@ msgid "Place Pin Anyway"
 msgstr "Pin trotzdem platzieren"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:448
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Schaltplanpin"
+msgstr "Pin wiederholen"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -28999,22 +28998,22 @@ msgid "(multiple board outlines not supported)"
 msgstr "(mehrere Platinenumrisse werden nicht unterstützt)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
 msgstr "(Rechteck hat keine oder sehr kleine Größe: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
 msgstr "(Kreis hat keinen oder sehr kleinen Radius: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
 msgstr "(Abschnitt hat keine oder sehr kleine Länge: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
 msgstr "(Bogen hat keine oder sehr kleine Größe: %d nm)"
 
@@ -31024,9 +31023,8 @@ msgid ""
 msgstr "(source text is only a hint for translators)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:305
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Footprints ändern"
+msgstr "Footprint ändern"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:358
 #, c-format
@@ -41050,51 +41048,44 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(Durchsteckpad-Lochgröße muss größer als %s sein)"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(Loch des PTH-Pads lässt kein Kupfer zurück)"
+msgstr "(Loch des Durchsteckpads lässt kein Kupfer zurück)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
 msgstr "(Durchsteckpadloch nicht vollständig innerhalb von Kupfer)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Pad-Bohrloch nicht innerhalb der Padform."
+msgstr "(Pad-Bohrloch nicht innerhalb der Padform)"
 
 #: pcbnew/pad.cpp:1953
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "Negative lokale Freiraumwerte haben keine Auswirkungen."
+msgstr "(Negative lokale Freiraumwerte haben keine Auswirkungen.)"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Negativer Lötmaskenfreiraum ist größer als einige Formen; Dies kann zu "
-"unerwarteten Ergebnissen führen"
+"(Negativer Lötmaskenfreiraum ist größer als einige Formen; Dies kann zu "
+"unerwarteten Ergebnissen führen)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Negativer Lötmaskenfreiraum ist größer als das Pad. Es wird keine Lötmaske "
-"erzeugt"
+"(Negativer Lötmaskenfreiraum ist größer als das Pad. Es wird keine Lötmaske "
+"erzeugt)"
 
 #: pcbnew/pad.cpp:2001
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Negativer Lötpastenabstand ist größer als Pad. Es wird keine Lötstoppmaske "
-"erzeugt"
+"(Negativer Lötpastenabstand ist größer als Pad. Es wird keine Lötstoppmaske "
+"erzeugt.)"
 
 #: pcbnew/pad.cpp:2008
 msgid "(Pad has no layer)"
@@ -41105,98 +41096,81 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(PTH-Pad hat keine Kupferlagen)"
 
 #: pcbnew/pad.cpp:2017
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"Metallisierte Löcher haben normalerweise ein Kupferpad auf mindestens einer "
-"Lage."
+"(Metallisierte Löcher haben normalerweise ein Kupferpad auf mindestens einer "
+"Lage.)"
 
 #: pcbnew/pad.cpp:2036
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"Pads für Steckverbinder haben normalerweise keine Lötpaste; Verwenden Sie "
-"stattdessen ein SMD-Pad."
+"(Pads für Steckverbinder haben normalerweise keine Lötpaste; Verwenden Sie "
+"stattdessen ein SMD-Pad.)"
 
 #: pcbnew/pad.cpp:2044
 msgid "(SMD pad has a hole)"
 msgstr "(SMD-Pad hat ein Loch)"
 
 #: pcbnew/pad.cpp:2050
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "SMD-Pad hat auf beiden Platinenseiten Kupfer."
+msgstr "(SMD-Pad hat auf beiden Platinenseiten Kupfer.)"
 
 #: pcbnew/pad.cpp:2056 pcbnew/pad.cpp:2069
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
-"SMD-Pad hat Kupfer- und Maskenlagen auf unterschiedlichen Platinenseiten."
+"(SMD-Pad hat Kupfer- und Maskenlagen auf unterschiedlichen Platinenseiten.)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"SMD-Pad hat Kupfer- und Pastenlagen auf unterschiedlichen Platinenseiten."
+"(SMD-Pad hat Kupfer- und Pastenlagen auf unterschiedlichen Platinenseiten.)"
 
 #: pcbnew/pad.cpp:2080
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "SMD-Pad hat keine Außenlagen"
+msgstr "(SMD-Pad hat keine Außenlagen.)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Passermarken auf mechanischen Bohrungen ergeben keinen Sinn."
+msgstr ""
+"(Passermarke-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "Testpunkte auf mechanischen Bohrungen ergeben keinen Sinn."
+msgstr "(Testpunkt-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
 
 #: pcbnew/pad.cpp:2097
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr ""
-"Eine Kühlkörpereigenschaft auf mechanischen Bohrungen ergibt keinen Sinn."
+msgstr "(Kühlkörper-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
 
 #: pcbnew/pad.cpp:2100
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Halbloch-Eigenschaft kann nur für Durchsteckpads gesetzt werden."
+msgstr "(Halbloch-Eigenschaft kann nur für Durchsteckpads gesetzt werden.)"
 
 #: pcbnew/pad.cpp:2103
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden."
+msgstr "(BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden.)"
 
 #: pcbnew/pad.cpp:2108
-#, fuzzy
 msgid "(negative corner radius is not allowed)"
-msgstr "(Negativer Eckradius ist nicht erlaubt)"
+msgstr "(Negativer Eckradius ist nicht erlaubt.)"
 
 #: pcbnew/pad.cpp:2110
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "Eckgröße wird das Pad kreisförmig machen."
+msgstr "(Eckgröße wird das Pad kreisförmig machen.)"
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "(Negative Eckfase ist nicht erlaubt)"
+msgstr "(Negative Eckfase ist nicht erlaubt.)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
 msgstr "(Eckfase ist zu groß.)"
 
 #: pcbnew/pad.cpp:2126
-#, fuzzy
 msgid "(trapazoid delta is too large)"
-msgstr "(Trapez-Delta ist zu groß)"
+msgstr "(Trapez-Delta ist zu groß.)"
 
 #: pcbnew/pad.cpp:2137
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr ""
 "(Benutzerdefinierte Padform muss in einzelnes Polygon aufgelöst werden.)"
@@ -41219,7 +41193,7 @@ msgstr "Castellated Pad (Halbloch)"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
-msgstr ""
+msgstr "Länglich"
 
 #: pcbnew/pad.cpp:2404
 msgid "Pad Type"
@@ -41246,9 +41220,8 @@ msgid "Corner Radius Ratio"
 msgstr "Eckradius-Verhältnis"
 
 #: pcbnew/pad.cpp:2452
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Lochform:"
+msgstr "Lochform"
 
 #: pcbnew/pad.cpp:2456
 msgid "Hole Size X"
