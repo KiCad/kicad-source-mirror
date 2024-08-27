@@ -837,6 +837,8 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     for( const auto& [name, model] : library()->GetModels() )
         modelNames.Add( name );
 
+    modelNames.Sort();
+
     m_modelNameChoice->Clear();
     m_modelNameChoice->Append( modelNames );
 
