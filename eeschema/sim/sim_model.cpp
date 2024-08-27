@@ -1804,8 +1804,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
     if( !lib.IsEmpty() )
     {
-        wxString             msg;
-        WX_STRING_REPORTER   reporter( &msg );
+        WX_STRING_REPORTER   reporter;
         SIM_LIB_MGR          libMgr( aProject );
         std::vector<T_field> emptyFields;
 

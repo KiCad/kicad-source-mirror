@@ -129,7 +129,7 @@ void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter 
 {
     wxString path = ResolveLibraryPath( aLibraryPath, m_project, aReporter );
 
-    if( aReporter.HasMessage() )
+    if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
         return;
 
     if( !wxFileName::Exists( path ) )

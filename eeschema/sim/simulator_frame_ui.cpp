@@ -1834,8 +1834,7 @@ void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 
 void SIMULATOR_FRAME_UI::applyTuners()
 {
-    wxString            errors;
-    WX_STRING_REPORTER  reporter( &errors );
+    WX_STRING_REPORTER reporter;
 
     for( const TUNER_SLIDER* tuner : m_tuners )
     {
@@ -1865,7 +1864,8 @@ void SIMULATOR_FRAME_UI::applyTuners()
     }
 
     if( reporter.HasMessage() )
-        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n" ) + errors );
+        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n" )
+                                           + reporter.GetMessages() );
 }
 
 

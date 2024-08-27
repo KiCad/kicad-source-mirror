@@ -173,8 +173,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     wxString       pinMap;
     bool           storeInValue = false;
 
-    wxString           msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     auto setFieldValue =
             [&]( const wxString& aFieldName, const wxString& aValue )
@@ -222,7 +221,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( !loadLibrary( libraryFilename, reporter ) )
         {
             if( reporter.HasMessage() )
-                m_infoBar->ShowMessage( msg );
+                m_infoBar->ShowMessage( reporter.GetMessages() );
 
             m_libraryPathText->ChangeValue( libraryFilename );
             m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
@@ -305,24 +304,24 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         // The model is sourced from the instance.
         m_rbBuiltinModel->SetValue( true );
 
-        msg.clear();
+        reporter.Clear();
         m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
 
         if( reporter.HasMessage() )
-            DisplayErrorMessage( this, msg );
+            DisplayErrorMessage( this, reporter.GetMessages() );
     }
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         if( m_rbBuiltinModel->GetValue() && type == m_curModelType )
         {
-            msg.clear();
+            reporter.Clear();
             m_builtinModelsMgr.CreateModel( m_fields, m_sortedPartPins, false, reporter );
 
             if( reporter.HasMessage() )
             {
                 DisplayErrorMessage( this, _( "Failed to read simulation model from fields." )
-                                           + wxT( "\n\n" ) + msg );
+                                                   + wxT( "\n\n" ) + reporter.GetMessages() );
             }
         }
         else
@@ -819,7 +818,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
     m_libraryModelsMgr.SetForceFullParse();
     m_libraryModelsMgr.SetLibrary( aLibraryPath, aReporter );
 
-    if( aReporter.HasMessage() )
+    if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
         return false;
 
     std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
@@ -1181,14 +1180,13 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextEnter( wxCommandEvent
 {
     m_rbLibraryModel->SetValue( true );
 
-    wxString           msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
     wxString           path = m_libraryPathText->GetValue();
 
     if( loadLibrary( path, reporter, true ) )
         m_infoBar->Hide();
     else if( reporter.HasMessage() )
-        m_infoBar->ShowMessage( msg );
+        m_infoBar->ShowMessage( reporter.GetMessages() );
 
     updateWidgets();
 }
@@ -1233,13 +1231,12 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onBrowseButtonClick( wxCommandEvent& a
     if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( wxS( ".." ) ) )
         path = fn.GetFullPath();
 
-    wxString           msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     if( loadLibrary( path, reporter, true ) )
         m_infoBar->Hide();
     else
-        m_infoBar->ShowMessage( msg );
+        m_infoBar->ShowMessage( reporter.GetMessages() );
 
     updateWidgets();
 }

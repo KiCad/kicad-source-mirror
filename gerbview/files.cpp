@@ -258,8 +258,7 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
     LSET visibility = GetVisibleLayers();
 
     // Manage errors when loading files
-    wxString msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     // Create progress dialog (only used if more than 1 file to load
     std::unique_ptr<WX_PROGRESS_REPORTER> progress = nullptr;
@@ -402,7 +401,7 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
         wxSafeYield();  // Allows slice of time to redraw the screen
                         // to refresh widgets, before displaying messages
         HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
-        mbox.ListSet( msg );
+        mbox.ListSet( reporter.GetMessages() );
         mbox.ShowModal();
     }
 
@@ -657,8 +656,7 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
         m_mruPath = currentPath;
     }
 
-    wxString msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     if( filename.IsOk() )
         unarchiveFiles( filename.GetFullPath(), &reporter );
@@ -671,12 +669,12 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 
-    if( !msg.IsEmpty() )
+    if( reporter.HasMessage() )
     {
         wxSafeYield();  // Allows slice of time to redraw the screen
                         // to refresh widgets, before displaying messages
         HTML_MESSAGE_BOX mbox( this, _( "Messages" ) );
-        mbox.ListSet( msg );
+        mbox.ListSet( reporter.GetMessages() );
         mbox.ShowModal();
     }
 

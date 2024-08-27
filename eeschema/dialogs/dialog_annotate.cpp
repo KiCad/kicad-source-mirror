@@ -230,7 +230,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_sdbSizer1Cancel->SetDefault();
 
     // Don't close dialog if there are things the user needs to address
-    if( reporter.HasMessage() )
+    if( reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) )
         return;
 
     if( m_infoBar->IsShown() )

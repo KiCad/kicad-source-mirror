@@ -40,6 +40,7 @@
 #include <sch_text.h>
 #include <sch_textbox.h>
 #include <string_utils.h>
+#include <ki_exception.h>
 
 #include <dialogs/html_message_box.h>
 #include <fmt/core.h>
@@ -210,31 +211,38 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             if( !symbol || symbol->GetExcludedFromSim() )
                 continue;
 
-            SPICE_ITEM            spiceItem;
-            std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );
-
-            for( const SCH_FIELD& field : symbol->GetFields() )
+            try
             {
-                spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, field.GetName() );
+                SPICE_ITEM            spiceItem;
+                std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );
 
-                if( field.GetId() == REFERENCE_FIELD )
-                    spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
-                else
-                    spiceItem.fields.back().SetText( field.GetShownText( &sheet, false ) );
+                for( const SCH_FIELD& field : symbol->GetFields() )
+                {
+                    spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, field.GetName() );
+
+                    if( field.GetId() == REFERENCE_FIELD )
+                        spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
+                    else
+                        spiceItem.fields.back().SetText( field.GetShownText( &sheet, false ) );
+                }
+
+                readRefName( sheet, *symbol, spiceItem, refNames );
+                readModel( sheet, *symbol, spiceItem, aReporter );
+                readPinNumbers( *symbol, spiceItem, pins );
+                readPinNetNames( *symbol, spiceItem, pins, ncCounter );
+
+                // TODO: transmission line handling?
+
+                m_items.push_back( std::move( spiceItem ) );
             }
-
-            readRefName( sheet, *symbol, spiceItem, refNames );
-            readModel( sheet, *symbol, spiceItem, aReporter );
-            readPinNumbers( *symbol, spiceItem, pins );
-            readPinNetNames( *symbol, spiceItem, pins, ncCounter );
-
-            // TODO: transmission line handling?
-
-            m_items.push_back( std::move( spiceItem ) );
+            catch( IO_ERROR& e )
+            {
+                aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
+            }
         }
     }
 
-    return !aReporter.HasMessage();
+    return !aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR );
 }
 
 

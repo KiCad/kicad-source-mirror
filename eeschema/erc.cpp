@@ -1083,8 +1083,7 @@ int ERC_TESTER::TestOffGridEndpoints()
 
 int ERC_TESTER::TestSimModelIssues()
 {
-    wxString           msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
     int                err_count = 0;
     SIM_LIB_MGR        libMgr( &m_schematic->Prj() );
 
@@ -1102,12 +1101,13 @@ int ERC_TESTER::TestSimModelIssues()
                 continue;
 
             // Reset for each symbol
-            msg.Clear();
+            reporter.Clear();
 
             SIM_LIBRARY::MODEL model = libMgr.CreateModel( &sheet, *symbol, reporter );
 
-            if( !msg.IsEmpty() )
+            if( reporter.HasMessage() )
             {
+                wxString                  msg = reporter.GetMessages();
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMULATION_MODEL );
 
                 //Remove \n and \r at e.o.l if any:

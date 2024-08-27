@@ -194,7 +194,7 @@ private:
 
     void setupUIConditions() override;
 
-    void showNetlistErrors( const wxString& aErrors );
+    void showNetlistErrors( const WX_STRING_REPORTER& aReporter );
 
     bool canCloseWindow( wxCloseEvent& aEvent ) override;
     void doCloseWindow() override;

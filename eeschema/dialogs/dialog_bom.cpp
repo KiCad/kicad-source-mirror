@@ -333,8 +333,7 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
     wxString fullfilename = fn.GetFullPath();
     m_parent->ClearMsgPanel();
 
-    wxString reportmsg;
-    WX_STRING_REPORTER reporter( &reportmsg );
+    WX_STRING_REPORTER reporter;
     m_parent->SetNetListerCommand( m_textCtrlCommand->GetValue() );
 
 #ifdef __WINDOWS__
@@ -350,7 +349,7 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
     if( !status )
         DisplayError( this, _( "Failed to create file." ) );
 
-    m_Messages->SetValue( reportmsg );
+    m_Messages->SetValue( reporter.GetMessages() );
 
     // Force focus back on the dialog
     SetFocus();
