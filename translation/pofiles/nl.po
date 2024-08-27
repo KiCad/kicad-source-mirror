@@ -15,15 +15,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-07-27 23:09+0000\n"
-"Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
+"PO-Revision-Date: 2024-08-28 06:09+0000\n"
+"Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -459,11 +459,11 @@ msgstr "Rechts weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "View Top"
-msgstr "Boven weergeven"
+msgstr "Bovenkant weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:211
 msgid "View Bottom"
-msgstr "Onder weergeven"
+msgstr "Onderkant weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "No 3D Grid"
@@ -491,7 +491,7 @@ msgstr "Realistische materialen renderen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
-msgstr "Alle materiaaleigenschappen van elk 3D-modelbestand gebruiken"
+msgstr "Alle materiaaleigenschappen gebruiken van elk 3D-modelbestand"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
 msgid "Render Solid Colors"
@@ -499,7 +499,7 @@ msgstr "Effen kleuren renderen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Alleen de diffuse kleureigenschap uit het 3D-modelbestand gebruiken"
+msgstr "Alleen de diffuse kleureigenschap gebruiken uit het 3D-modelbestand"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Render CAD Colors"
@@ -508,23 +508,23 @@ msgstr "CAD-kleuren renderen"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr ""
-"CAD-kleurstijl op basis van de diffuse kleur van het materiaal gebruiken"
+"CAD-kleurstijl gebruiken op basis van de diffuse kleur van het materiaal"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:279
 msgid "Show Through Hole 3D Models"
-msgstr "3D-modellen met doorsteekmontage weergeven"
+msgstr "doorsteekmontage 3D-modellen weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "3D-modellen voor footprinttypes met doorsteekmontage weergeven"
+msgstr "3D-modellen weergeven voor footprints met doorsteekmontage"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:288
 msgid "Show SMD 3D Models"
-msgstr "3D-modellen met SMD weergeven"
+msgstr "SMD 3D-modellen weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "3D-modellen voor footprinttypes met opbouwmontage weergeven"
+msgstr "3D-modellen weergeven voor footprints met opbouwmontage"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
 msgid "Show Unspecified 3D Models"
@@ -536,7 +536,7 @@ msgstr "3D-modellen voor 'ongespecificeerd'-footprinttypes weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
 msgid "Show 3D Models not in POS File"
-msgstr "3D-modellen die niet in POS-bestand staan weergeven"
+msgstr "3D-modellen weergeven die niet in POS-bestand staan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:307
 msgid "Show 3D models even if not found in .pos file"
@@ -587,7 +587,7 @@ msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show front copper / surface finish color"
-msgstr "Kleur koper-/oppervlakteafwerking voor weergeven"
+msgstr "Voorkant koper-/oppervlakteafwerking kleur weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "B.Cu"
@@ -595,7 +595,7 @@ msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show back copper / surface finish color"
-msgstr "Kleur koper-/oppervlakteafwerking achter weergeven"
+msgstr "Achterkant koper-/oppervlakteafwerking kleur weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
@@ -619,7 +619,7 @@ msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
-msgstr "Silkscreen voor weergeven"
+msgstr "Silkscreen voorkant weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
@@ -627,7 +627,7 @@ msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
-msgstr "Silkscreen achter weergeven"
+msgstr "Silkscreen achterkant weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "F.Mask"
@@ -635,7 +635,7 @@ msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
-msgstr "Soldeermasker voor weergeven"
+msgstr "Soldeermasker voorkant weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "B.Mask"
@@ -643,7 +643,7 @@ msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show back solder mask"
-msgstr "Soldeermasker achter weergeven"
+msgstr "Soldeermasker achterkant weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Drawings"
@@ -651,7 +651,7 @@ msgstr "User.Drawings"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user drawings layer"
-msgstr "Gebruikerslaag tekeningen weergeven"
+msgstr "Gebruikers-tekening laag weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Comments"
@@ -659,7 +659,7 @@ msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user comments layer"
-msgstr "Gebruikerslaag commentaar weergeven"
+msgstr "Gebruikers-commentaar laag weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "User.Eco1"
@@ -667,7 +667,7 @@ msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO1 layer"
-msgstr "Gebruikerslaag ECO1 weergeven"
+msgstr "Gebruikers-ECO1 laag weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "User.Eco2"
@@ -675,7 +675,7 @@ msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user ECO2 layer"
-msgstr "Gebruikerslaag ECO2 weergeven"
+msgstr "Gebruikers-ECO2 laag weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "Through-hole Models"
@@ -887,7 +887,7 @@ msgstr "Weergavegebied verwijderen..."
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
 #: pcbnew/widgets/appearance_controls.cpp:2877
 msgid "Viewport name:"
-msgstr "Weergavegebiednaam:"
+msgstr "Weergavegebied naam:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:869
 #: pcbnew/widgets/appearance_controls.cpp:2877
@@ -917,7 +917,7 @@ msgstr "Voorinstellingen (Ctrl+Tab):"
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "Viewports (Alt+Tab):"
-msgstr "Weergavegebieds (Alt+Tab):"
+msgstr "Weergavegebieden (Alt+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
@@ -1032,7 +1032,7 @@ msgstr "Koper- en technische laagdikte weergeven (erg langzaam)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr "Gemarkeerde items"
+msgstr "Markeer items tijdens rollover"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -1061,7 +1061,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
-msgstr "Selectiekleuren:"
+msgstr "Selectiekleur:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
@@ -1140,7 +1140,7 @@ msgid ""
 "levels improve results, specially on very transparent boards)"
 msgstr ""
 "Het aantal interacties dat een straal door objecten kan reizen. (hoger "
-"aantal niveaus verbetert de resultaten, vooral op zeer transparante borden)"
+"aantal verbetert de resultaten, vooral op zeer transparante borden)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
@@ -1311,7 +1311,7 @@ msgid ""
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
 "Bordkern weergeven of verbergen\n"
-"Laat wanneer verborgen alleen koper en silkscreenlagen zien."
+"Laat wanneer verborgen alleen koper- en silkscreenlagen zien."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -1561,7 +1561,7 @@ msgstr "Afbeelding in grijstinten"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
 msgid "Black && White Picture"
-msgstr "Zwart-witafbeelding"
+msgstr "Zwart-wit afbeelding"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
 msgid "Image Information"
@@ -1612,7 +1612,7 @@ msgstr "Uitvoergrootte"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:107
 msgid "Lock height / width ratio"
-msgstr "Hoogte-/breedteverhouding vergrendelen"
+msgstr "Hoogte/breedte verhouding vergrendelen"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:113
 #: common/dialogs/dialog_page_settings_base.cpp:37
@@ -1645,15 +1645,15 @@ msgstr "Opties"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 msgid "Black / white threshold:"
-msgstr "Zwart-witdrempelwaarde:"
+msgstr "Zwart-wit drempelwaarde:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:148
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr ""
-"Pas het niveau aan om de grijswaardenafbeelding om te zetten naar een zwart-"
-"witafbeelding."
+"Pas het niveau aan om de grijswaarden afbeelding om te zetten naar een zwart-"
+"wit afbeelding."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:357
@@ -1667,16 +1667,16 @@ msgstr "PCB-laag voor tekeningen"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr "Silkscreen voor"
+msgstr "Silkscreen voorkant"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr "Soldeermasker voor"
+msgstr "Soldeermasker voorkant"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "Front Fab layer"
-msgstr "Fabricatielaag voor"
+msgstr "Fabricatielaag voorkant"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer drawings"
@@ -1700,11 +1700,11 @@ msgstr "Symbool (.kicad_sym-bestand)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr "Footprint (.kicad_mod-bestand)"
+msgstr "Footprint (.kicad_mod bestand)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Postscript (.ps file)"
-msgstr "Postscript (.ps-bestand)"
+msgstr "Postscript (.ps bestand)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Drawing Sheet (.kicad_wks file)"
@@ -1975,7 +1975,7 @@ msgstr "GNU General Public License (GPL) versie 3 of een latere versie"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Team"
-msgstr "Hoofdontwikkelaarsteam"
+msgstr "Hoofd ontwikkelaarsteam"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Lead Development Alumni"
@@ -1991,7 +1991,7 @@ msgstr "Bibliothecaristeam"
 
 #: common/dialog_about/AboutDialog_main.cpp:1353
 msgid "3D models by"
-msgstr "3D-modellen van"
+msgstr "3D-modellen door"
 
 #: common/dialog_about/AboutDialog_main.cpp:1365
 msgid "Symbols by"
@@ -2003,16 +2003,16 @@ msgstr "Footprints door"
 
 #: common/dialog_about/AboutDialog_main.cpp:1385
 msgid "Icons by"
-msgstr "Pictogrammen van"
+msgstr "Pictogrammen door"
 
 #: common/dialog_about/AboutDialog_main.cpp:1404
 msgid "Package Developers"
-msgstr "Pakketontwikkelaars"
+msgstr "Pakket ontwikkelaars"
 
 #: common/dialog_about/dialog_about.cpp:119
 #, c-format
 msgid "About %s"
-msgstr "Ongeveer %s"
+msgstr "Betreft %s"
 
 #: common/dialog_about/dialog_about.cpp:150
 #: common/dialog_about/dialog_about_base.h:58
@@ -2357,8 +2357,8 @@ msgid ""
 msgstr ""
 "KiCad is voor het eerst gedraaid met behulp van de nieuwe %s "
 "bibliotheektabel voor\n"
-"toegang tot bibliotheken. Om KiCad toegang te geven tot %s bibliotheken,\n"
-"u moet uw globale %s bibliotheektabel configureren. Maak een keuze uit één\n"
+"toegang tot bibliotheken. Om KiCad toegang te geven tot %s bibliotheken\n"
+"moet u uw globale %s bibliotheektabel configureren. Maak een keuze uit één\n"
 "van de onderstaande opties. Gebruik de standaardselectie als u niet zeker "
 "weet\n"
 "welke optie u moet selecteren."
@@ -21931,9 +21931,8 @@ msgid "Place Pin Anyway"
 msgstr "Pin toch plaatsen"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:448
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Bladspeld"
+msgstr "Herhaal Pin"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -28489,8 +28488,8 @@ msgstr ""
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
-"Onjuiste waarde voor verliestangent (verliestangent moet positief of nul "
-"zijn indien niet gebruikt)"
+"Onjuiste waarde voor verliestangent (verliestangent moet positief zijn, of "
+"nul indien niet gebruikt)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1237
 msgid "A layer thickness is < 0. Fix it"
@@ -28799,24 +28798,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(meerdere bordgrenzen niet ondersteund)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(Rechthoek heeft geen of heel kleine maat: %d nm)"
+msgstr "(Rechthoek heeft geen of heel kleine afmetingen: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(Cirkel heeft geen of heel kleine maat: %d nm)"
+msgstr "(Cirkel heeft geen of heel kleine straal: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(Segment heeft geen of heel kleine maat: %d nm)"
+msgstr "(Segment heeft geen of heel kleine lengte: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(Boog heeft geen of heel kleine maat: %d nm)"
+msgstr "(Boog heeft geen of heel kleine afmetingen: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_drc.cpp:257 pcbnew/pcb_edit_frame.cpp:2410
@@ -30827,9 +30826,8 @@ msgstr ""
 "de footprint in de bibliotheek en wil deze terug doorvoeren naar de PCB."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:305
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Footprints wijzigen"
+msgstr "Footprint wijzigen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:358
 #, c-format
@@ -31801,7 +31799,7 @@ msgstr ""
 "Deze waarde kan worden overschreven door een lokale padwaarde.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
 "vrije afstand.\n"
-"Een negatieve waarde betekent een kleinere maskeropening dan de padgrootte."
+"Een negatieve waarde betekent een kleinere stencil-opening dan de padgrootte."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -31983,8 +31981,8 @@ msgstr ""
 "padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
 "vrije afstand.\n"
-"Een negatieve waarde betekent een kleinere stencilopening dan de "
-"padgrootte.\n"
+"Een negatieve waarde betekent een kleinere stencil opening dan de padgrootte."
+"\n"
 "Deze waarde kan per pad worden aangepast in het tabblad voor aangepaste "
 "vrije afstand en instellingen in de padeigenschappen."
 
@@ -40773,51 +40771,44 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(Gatmaat van PTH-pad moet groter zijn dan %s)"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(gat van PTH-pad laat geen koper vrij)"
+msgstr "(gat van PTH-pad laat geen ruimte voor koper)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
 msgstr "(Gat van PTH-pad valt niet volledig binnen koper)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Padgat niet binnen padvorm"
+msgstr "Pad-gat niet binnen pad-vorm"
 
 #: pcbnew/pad.cpp:1953
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "Negatieve waarden voor lokale vrije afstand hebben geen effect"
+msgstr "(Negatieve waarden voor lokale vrije afstand hebben geen effect)"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Negatieve vrije afstand voor het soldeermasker is groter dan sommige vormen; "
-"dit kan verrassingen opleveren"
+"(Negatieve vrije afstand voor het soldeermasker is groter dan sommige vormen;"
+" dit kan verrassingen opleveren)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Negatieve vrije afstand voor het soldeermasker is groter dan een pad; er "
-"wordt geen soldeermasker gegenereerd"
+"(Negatieve vrije afstand voor het soldeermasker is groter dan de pad; er "
+"wordt geen soldeermasker gegenereerd)"
 
 #: pcbnew/pad.cpp:2001
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Negatieve soldeerpastamarges groter dan pad; er wordt geen "
-"soldeerpastamasker aangemaakt"
+"(Negatieve soldeerpastamarges groter dan pad; er wordt geen "
+"soldeerpastamasker aangemaakt)"
 
 #: pcbnew/pad.cpp:2008
 msgid "(Pad has no layer)"
@@ -40828,97 +40819,80 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(PTH-pad heeft geen koperlagen)"
 
 #: pcbnew/pad.cpp:2017
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"Geplateerde doorsteekgaten moeten normaal gesproken op minstens één laag een "
-"koperpad hebben"
+"(Geplateerde gaten moeten normaal gesproken op minstens één laag een "
+"koperpad hebben)"
 
 #: pcbnew/pad.cpp:2036
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"Connectorpads hebben normaal gesproken geen soldeerpasta; gebruik in plaats "
-"daarvan een SMD-pad"
+"(Connector pads hebben normaal gesproken geen soldeerpasta; gebruik in "
+"plaats daarvan een SMD-pad)"
 
 #: pcbnew/pad.cpp:2044
 msgid "(SMD pad has a hole)"
 msgstr "(SMD-pad heeft een gat)"
 
 #: pcbnew/pad.cpp:2050
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr "SMD-pad heeft koper aan weerszijden van het bord"
 
 #: pcbnew/pad.cpp:2056 pcbnew/pad.cpp:2069
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
-"SMD-pad heeft koper- en maskerlagen aan verschillende zijden van het bord"
+"(SMD-pad heeft koper- en maskerlagen aan verschillende zijden van het bord)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"SMD-pad heeft koper- en pastalagen aan verschillende zijden van het bord"
+"(SMD-pad heeft koper- en pastalagen aan verschillende zijden van het bord)"
 
 #: pcbnew/pad.cpp:2080
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "SMD-pad heeft geen buitenlagen"
+msgstr "(SMD-pad heeft geen buitenlagen)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Fiducial-eigenschap is zinloos voor NPTH-pads"
+msgstr "(Fiducial-eigenschap is zinloos voor NPTH-pads)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "Testpunt-eigenschap is zinloos voor NPTH-pads"
+msgstr "(Testpunt-eigenschap is zinloos voor NPTH-pads)"
 
 #: pcbnew/pad.cpp:2097
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "Koellichaam-eigenschap is zinloos voor NPTH-pads"
+msgstr "(Koellichaam-eigenschap is zinloos voor NPTH-pads)"
 
 #: pcbnew/pad.cpp:2100
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Gekanteeld-eigenschap is bedoeld voor PTH-pads"
+msgstr "(Gekanteeld-eigenschap is bedoeld voor PTH-pads)"
 
 #: pcbnew/pad.cpp:2103
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "BGA-eigenschap is alleen voor SMD-pads"
+msgstr "(BGA-eigenschap is alleen voor SMD-pads)"
 
 #: pcbnew/pad.cpp:2108
-#, fuzzy
 msgid "(negative corner radius is not allowed)"
 msgstr "(Negatieve hoekradius is niet toegestaan)"
 
 #: pcbnew/pad.cpp:2110
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "Hoekmaat maakt de pad rond"
+msgstr "(Hoekmaat maakt de pad rond)"
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
 msgstr "(Negatieve hoekafschuining is niet toegestaan)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "(Hoekafschuining is te groot)"
+msgstr "(hoekafschuining is te groot)"
 
 #: pcbnew/pad.cpp:2126
-#, fuzzy
 msgid "(trapazoid delta is too large)"
 msgstr "(Trapeziumdelta is te groot)"
 
 #: pcbnew/pad.cpp:2137
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr "(Aangepaste padvorm moet resulteren in één polygoon)"
 
@@ -40940,7 +40914,7 @@ msgstr "Gekanteelde pad"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
-msgstr ""
+msgstr "langwerpig"
 
 #: pcbnew/pad.cpp:2404
 msgid "Pad Type"
@@ -40967,9 +40941,8 @@ msgid "Corner Radius Ratio"
 msgstr "Hoekradiusratio"
 
 #: pcbnew/pad.cpp:2452
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Gatvorm:"
+msgstr "Gatvorm"
 
 #: pcbnew/pad.cpp:2456
 msgid "Hole Size X"
@@ -42933,7 +42906,7 @@ msgstr "Padprimitieven"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
-msgstr "Tekst"
+msgstr "PCB Target"
 
 #: pcbnew/pcb_text.cpp:226
 msgid "PCB Text"
