@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-03-13 14:01+0000\n"
+"PO-Revision-Date: 2024-08-28 14:09+0000\n"
 "Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -11151,13 +11151,12 @@ msgstr "Hodnota nezákonného referenčného označenia!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:620
 #: eeschema/dialogs/dialog_label_properties.cpp:480
-#, fuzzy
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Okraje okolo textu sú riadené pomerom odsadenia textu\n"
-"v časti Schematické nastavenie> Všeobecné> Formátovanie."
+"Medzilistová referenčná viditeľnosť je riadená globálne z nastavenia Schémy "
+"> Obecné > Formátovanie"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
@@ -11508,11 +11507,13 @@ msgid "symbol"
 msgstr "symbol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
-msgstr "Chyba pri vytváraní knižnice symbolov '%s'"
+msgstr ""
+"Chyba pri vytváraní knižnice symbolov '%s'\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -11526,11 +11527,13 @@ msgid "File '%s' not found."
 msgstr "Súbor '%s' sa nenašiel."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
-msgstr "Pri načítaní tabuľky knižnice symbolov '%s' sa vyskytla chyba."
+msgstr ""
+"Chyba načítanie tabuľky knižníc symbolov '%s'.\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #, fuzzy, c-format
@@ -14555,9 +14558,9 @@ msgid "Created project symbol library table.\n"
 msgstr "Vytvorená tabuľka knižnice symbolov projektu.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "V tabuľke knižnice symbolov sa nenašiel žiadny symbol '%s'."
+msgstr "Žiadny symbol %s nenájdený v tabuľke knižnice symbolov."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:277
 #, fuzzy, c-format
@@ -14729,9 +14732,8 @@ msgstr "Vlastnosti menovky"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:101
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "Vlastnosti textu"
+msgstr "Vlastnosti textového poľa"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:172 eeschema/schematic.cpp:468
 msgid "<root sheet>"
@@ -14757,7 +14759,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_text_properties.cpp:588
 #: pcbnew/dialogs/dialog_text_properties.cpp:553
 msgid "Edit Text Properties"
-msgstr "Upraviť vlastnosti textu"
+msgstr "Zmeniť vlastnosti textu"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
 msgid "Background fill"
@@ -20663,11 +20665,8 @@ msgid "SPICE Simulator"
 msgstr "Simulátor..."
 
 #: eeschema/sim/simulator_frame.cpp:366
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Počas exportu netlistu sa vyskytli chyby, prerušené.\n"
-"\n"
+msgstr "Počas exportu netlistu sa vyskytli chyby."
 
 #: eeschema/sim/simulator_frame.cpp:374
 #, fuzzy
@@ -37952,9 +37951,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Predvolené vlastnosti pre nové grafické prvky:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Knižnica stopy nie je povolená.\n"
+msgstr "Skryté knižnice puzdier nie sú ešte podporované."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:488
 #, fuzzy, c-format
@@ -50932,9 +50930,9 @@ msgid "thermal reliefs for PTH"
 msgstr "Tepelný reliéf"
 
 #: plugins/3d/vrml/vrml.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "Načítanie [INFO] zlyhalo: vstupný riadok je príliš dlhý\n"
+msgstr "[INFO] načítavanie zlyhalo: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
