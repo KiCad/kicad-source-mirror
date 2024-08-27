@@ -27,6 +27,7 @@
 #include <widgets/ui_common.h>
 #include <wx/dcclient.h>
 #include <wx/panel.h>
+#include <kicommon.h>
 
 
 /**
@@ -35,7 +36,7 @@
  * This badge will also automatically truncate the displayed number to the set maximum and display
  * "+" at the end to represent it is truncated.
  */
-class NUMBER_BADGE : public wxPanel
+class KICOMMON_API NUMBER_BADGE : public wxPanel
 {
 public:
     /**

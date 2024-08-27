@@ -28,6 +28,7 @@
 #include <wx/timer.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <reporter.h>
 
 
 class wxAuiManager;
@@ -41,8 +42,8 @@ enum
 };
 
 
-wxDECLARE_EVENT( KIEVT_SHOW_INFOBAR,    wxCommandEvent );
-wxDECLARE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
+wxDECLARE_EXPORTED_EVENT( KICOMMON_API, KIEVT_SHOW_INFOBAR,    wxCommandEvent );
+wxDECLARE_EXPORTED_EVENT( KICOMMON_API, KIEVT_DISMISS_INFOBAR, wxCommandEvent );
 
 /**
  * A modified version of the wxInfoBar class that allows us to:
@@ -71,7 +72,7 @@ wxDECLARE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
  * KIEVT_DISMISS_INFOBAR:
  *   An event that tells the infobar to hide itself.
  */
-class WX_INFOBAR : public wxInfoBarGeneric
+class KICOMMON_API WX_INFOBAR : public wxInfoBarGeneric
 {
 public:
     /**
@@ -275,7 +276,7 @@ protected:
  * https://gitlab.com/kicad/code/kicad/-/issues/4501
  *
  */
-class EDA_INFOBAR_PANEL : public wxPanel
+class KICOMMON_API EDA_INFOBAR_PANEL : public wxPanel
 {
 public:
     EDA_INFOBAR_PANEL( wxWindow* aParent, wxWindowID aId = wxID_ANY,
@@ -304,4 +305,40 @@ protected:
     wxFlexGridSizer* m_mainSizer;
 };
 
+
+/**
+ * A wrapper for reporting to a #WX_INFOBAR UI element.
+ *
+ * The infobar is not updated until the @c Finalize() method is called. That method will
+ * queue either a show message or a dismiss event for the infobar - so this reporter is
+ * safe to use inside a paint event without causing an infinite paint event loop.
+ *
+ * No action is taken if no message is given to the reporter.
+ */
+class KICOMMON_API INFOBAR_REPORTER : public REPORTER
+{
+public:
+    INFOBAR_REPORTER( WX_INFOBAR* aInfoBar ) :
+            REPORTER(), m_messageSet( false ), m_infoBar( aInfoBar ),
+            m_severity( RPT_SEVERITY_UNDEFINED )
+    {
+    }
+
+    virtual ~INFOBAR_REPORTER() {};
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override;
+
+    /**
+     * Update the infobar with the reported text.
+     */
+    void Finalize();
+
+private:
+    bool                      m_messageSet;
+    WX_INFOBAR*               m_infoBar;
+    std::unique_ptr<wxString> m_message;
+    SEVERITY                  m_severity;
+};
 #endif // INFOBAR_H_

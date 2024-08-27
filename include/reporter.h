@@ -29,6 +29,7 @@
 
 #include <eda_units.h>
 #include <widgets/report_severity.h>
+#include <kicommon.h>
 
 /**
  * @file reporter.h
@@ -67,7 +68,7 @@ class WX_INFOBAR;
  * filtering is not made here.
  */
 
-class REPORTER
+class KICOMMON_API REPORTER
 {
 public:
     /**
@@ -134,7 +135,7 @@ public:
 /**
  * A wrapper for reporting to a wxTextCtrl object.
  */
-class WX_TEXT_CTRL_REPORTER : public REPORTER
+class KICOMMON_API WX_TEXT_CTRL_REPORTER : public REPORTER
 {
 public:
     WX_TEXT_CTRL_REPORTER( wxTextCtrl* aTextCtrl ) :
@@ -160,7 +161,7 @@ private:
 /**
  * A wrapper for reporting to a wxString object.
  */
-class WX_STRING_REPORTER : public REPORTER
+class KICOMMON_API WX_STRING_REPORTER : public REPORTER
 {
 public:
     WX_STRING_REPORTER( wxString* aString ) :
@@ -183,43 +184,11 @@ private:
 
 
 /**
- * A wrapper for reporting to a wx HTML window.
- */
-class WX_HTML_PANEL_REPORTER : public REPORTER
-{
-public:
-    WX_HTML_PANEL_REPORTER( WX_HTML_REPORT_PANEL* aPanel ) :
-        REPORTER(),
-        m_panel( aPanel )
-    {
-    }
-
-    virtual ~WX_HTML_PANEL_REPORTER()
-    {
-    }
-
-    REPORTER& Report( const wxString& aText,
-                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    REPORTER& ReportTail( const wxString& aText,
-                          SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    REPORTER& ReportHead( const wxString& aText,
-                          SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override;
-
-private:
-    WX_HTML_REPORT_PANEL* m_panel;
-};
-
-
-/**
  * A singleton reporter that reports to nowhere.
  *
  * Used as to simplify code by avoiding the reportee to check for a non-NULL reporter object.
  */
-class NULL_REPORTER : public REPORTER
+class KICOMMON_API NULL_REPORTER : public REPORTER
 {
 public:
     NULL_REPORTER()
@@ -242,7 +211,7 @@ public:
 /**
  * Reporter forwarding messages to stdout or stderr as appropriate
  */
-class CLI_REPORTER : public REPORTER
+class KICOMMON_API CLI_REPORTER : public REPORTER
 {
 public:
     CLI_REPORTER()
@@ -264,7 +233,7 @@ public:
 /**
  * Debug type reporter, forwarding messages to std::cout.
  */
-class STDOUT_REPORTER : public REPORTER
+class KICOMMON_API STDOUT_REPORTER : public REPORTER
 {
 public:
     STDOUT_REPORTER()
@@ -283,7 +252,7 @@ public:
 };
 
 
-class WXLOG_REPORTER : public REPORTER
+class KICOMMON_API WXLOG_REPORTER : public REPORTER
 {
 public:
     WXLOG_REPORTER()
@@ -305,7 +274,7 @@ public:
 /**
  * A wrapper for reporting to a specific text location in a statusbar.
  */
-class STATUSBAR_REPORTER : public REPORTER
+class KICOMMON_API STATUSBAR_REPORTER : public REPORTER
 {
 public:
     STATUSBAR_REPORTER( wxStatusBar* aStatusBar, int aPosition = 0 )
@@ -322,46 +291,6 @@ public:
 private:
     wxStatusBar* m_statusBar;
     int          m_position;
-};
-
-
-/**
- * A wrapper for reporting to a #WX_INFOBAR UI element.
- *
- * The infobar is not updated until the @c Finalize() method is called. That method will
- * queue either a show message or a dismiss event for the infobar - so this reporter is
- * safe to use inside a paint event without causing an infinite paint event loop.
- *
- * No action is taken if no message is given to the reporter.
- */
-class INFOBAR_REPORTER : public REPORTER
-{
-public:
-    INFOBAR_REPORTER( WX_INFOBAR* aInfoBar )
-            : REPORTER(),
-              m_messageSet( false ),
-              m_infoBar( aInfoBar ),
-              m_severity( RPT_SEVERITY_UNDEFINED )
-    {
-    }
-
-    virtual ~INFOBAR_REPORTER();
-
-    REPORTER& Report( const wxString& aText,
-                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
-
-    bool HasMessage() const override;
-
-    /**
-     * Update the infobar with the reported text.
-     */
-    void Finalize();
-
-private:
-    bool                      m_messageSet;
-    WX_INFOBAR*               m_infoBar;
-    std::unique_ptr<wxString> m_message;
-    SEVERITY                  m_severity;
 };
 
 #endif     // _REPORTER_H_

@@ -106,10 +106,15 @@ set( KICOMMON_SRCS
     dialogs/dialog_migrate_settings_base.cpp
 
     widgets/bitmap_button.cpp
+    widgets/html_window.cpp
     widgets/kistatusbar.cpp
+    widgets/number_badge.cpp
     widgets/progress_reporter_base.cpp
     widgets/std_bitmap_button.cpp
     widgets/ui_common.cpp
+    widgets/wx_html_report_panel.cpp
+    widgets/wx_html_report_panel_base.cpp
+    widgets/wx_infobar.cpp
 
     database/database_lib_settings.cpp
 
@@ -126,6 +131,8 @@ set( KICOMMON_SRCS
     config_params.cpp
     confirm.cpp
     dialog_shim.cpp
+    dpi_scaling.cpp
+    dpi_scaling_common.cpp
     dsnlexer.cpp
     eda_pattern_match.cpp
     eda_units.cpp
@@ -151,6 +158,7 @@ set( KICOMMON_SRCS
     page_info.cpp
     paths.cpp
     project.cpp
+    reporter.cpp
     richio.cpp
     search_stack.cpp
     searchhelpfilefullpath.cpp
@@ -388,15 +396,12 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
     widgets/grid_text_helpers.cpp
-    widgets/html_window.cpp
     widgets/indicator_icon.cpp
-    widgets/wx_infobar.cpp
     widgets/layer_box_selector.cpp
     widgets/layer_presentation.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
     widgets/msgpanel.cpp
-    widgets/number_badge.cpp
     widgets/paged_dialog.cpp
     widgets/properties_panel.cpp
     widgets/search_pane.cpp
@@ -418,8 +423,6 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_grid.cpp
     widgets/wx_grid_autosizer.cpp
     widgets/wx_html_report_box.cpp
-    widgets/wx_html_report_panel.cpp
-    widgets/wx_html_report_panel_base.cpp
     widgets/wx_listbox.cpp
     widgets/wx_panel.cpp
     widgets/wx_progress_reporters.cpp
@@ -530,7 +533,6 @@ set( COMMON_SRCS
     board_printout.cpp
     cli_progress_reporter.cpp
     commit.cpp
-    dpi_scaling_common.cpp
     draw_panel_gal.cpp
     gal_display_options_common.cpp
     gr_text.cpp
@@ -567,7 +569,6 @@ set( COMMON_SRCS
     rc_item.cpp
     refdes_utils.cpp
     render_settings.cpp
-    reporter.cpp
     scintilla_tricks.cpp
     status_popup.cpp
     stroke_params.cpp

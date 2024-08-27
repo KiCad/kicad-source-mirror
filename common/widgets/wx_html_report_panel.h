@@ -27,6 +27,32 @@
 
 #include "wx_html_report_panel_base.h"
 
+class WX_HTML_REPORT_PANEL;
+
+/**
+ * A wrapper for reporting to a wx HTML window.
+ */
+class KICOMMON_API WX_HTML_PANEL_REPORTER : public REPORTER
+{
+public:
+    WX_HTML_PANEL_REPORTER( WX_HTML_REPORT_PANEL* aPanel ) : REPORTER(), m_panel( aPanel ) {}
+
+    virtual ~WX_HTML_PANEL_REPORTER() {}
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    REPORTER& ReportTail( const wxString& aText,
+                          SEVERITY        aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    REPORTER& ReportHead( const wxString& aText,
+                          SEVERITY        aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override;
+
+private:
+    WX_HTML_REPORT_PANEL* m_panel;
+};
+
 /**
  * A widget for browsing a rich text error/status report. Used in numerous
  * dialogs in eeschema and pcbnew. Provides error filtering functionality
@@ -34,7 +60,7 @@
  *
  * The messages are reported through a REPORTER object
  */
-class WX_HTML_REPORT_PANEL : public WX_HTML_REPORT_PANEL_BASE
+class KICOMMON_API WX_HTML_REPORT_PANEL : public WX_HTML_REPORT_PANEL_BASE
 {
 public:
     WX_HTML_REPORT_PANEL( wxWindow* parent, wxWindowID id = wxID_ANY,

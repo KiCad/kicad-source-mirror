@@ -29,7 +29,6 @@
 #include <reporter.h>
 #include <string_utils.h>
 #include <widgets/wx_infobar.h>
-#include <widgets/wx_html_report_panel.h>
 #include <wx/crt.h>
 #include <wx/log.h>
 #include <wx/textctrl.h>
@@ -80,42 +79,6 @@ REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
 bool WX_STRING_REPORTER::HasMessage() const
 {
     return !m_string->IsEmpty();
-}
-
-
-REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
-{
-    wxCHECK_MSG( m_panel != nullptr, *this,
-                 wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
-
-    m_panel->Report( aText, aSeverity );
-    return *this;
-}
-
-
-REPORTER& WX_HTML_PANEL_REPORTER::ReportTail( const wxString& aText, SEVERITY aSeverity )
-{
-    wxCHECK_MSG( m_panel != nullptr, *this,
-                 wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
-
-    m_panel->Report( aText, aSeverity, LOC_TAIL );
-    return *this;
-}
-
-
-REPORTER& WX_HTML_PANEL_REPORTER::ReportHead( const wxString& aText, SEVERITY aSeverity )
-{
-    wxCHECK_MSG( m_panel != nullptr, *this,
-                 wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
-
-    m_panel->Report( aText, aSeverity, LOC_HEAD );
-    return *this;
-}
-
-
-bool WX_HTML_PANEL_REPORTER::HasMessage() const
-{
-    return m_panel->Count( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) > 0;
 }
 
 
@@ -235,59 +198,4 @@ bool STATUSBAR_REPORTER::HasMessage() const
         return !m_statusBar->GetStatusText( m_position ).IsEmpty();
 
     return false;
-}
-
-
-INFOBAR_REPORTER::~INFOBAR_REPORTER()
-{
-}
-
-
-REPORTER& INFOBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
-{
-    m_message.reset( new wxString( aText ) );
-    m_severity   = aSeverity;
-    m_messageSet = true;
-
-    return *this;
-}
-
-
-bool INFOBAR_REPORTER::HasMessage() const
-{
-    return m_message && !m_message->IsEmpty();
-}
-
-
-void INFOBAR_REPORTER::Finalize()
-{
-    // Don't do anything if no message was ever given
-    if( !m_infoBar || !m_messageSet )
-        return;
-
-    // Short circuit if the message is empty and it is already hidden
-    if( !HasMessage() && !m_infoBar->IsShownOnScreen() )
-        return;
-
-    int icon = wxICON_NONE;
-
-    switch( m_severity )
-    {
-        case RPT_SEVERITY_UNDEFINED: icon = wxICON_INFORMATION; break;
-        case RPT_SEVERITY_INFO:      icon = wxICON_INFORMATION; break;
-        case RPT_SEVERITY_EXCLUSION: icon = wxICON_WARNING;     break;
-        case RPT_SEVERITY_ACTION:    icon = wxICON_WARNING;     break;
-        case RPT_SEVERITY_WARNING:   icon = wxICON_WARNING;     break;
-        case RPT_SEVERITY_ERROR:     icon = wxICON_ERROR;       break;
-        case RPT_SEVERITY_IGNORE:    icon = wxICON_INFORMATION; break;
-        case RPT_SEVERITY_DEBUG:     icon = wxICON_INFORMATION; break;
-    }
-
-    if( m_message->EndsWith( wxS( "\n" ) ) )
-        *m_message = m_message->Left( m_message->Length() - 1 );
-
-    if( HasMessage() )
-        m_infoBar->QueueShowMessage( *m_message, icon );
-    else
-        m_infoBar->QueueDismiss();
 }
