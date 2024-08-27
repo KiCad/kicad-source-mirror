@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-07-19 19:09+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2024-08-27 05:58+0000\n"
+"Last-Translator: Marek <fotelpl@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -21978,13 +21978,12 @@ msgid "Place Pin Anyway"
 msgstr "Umieść pin mimo to"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:448
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Pin arkusza"
+msgstr "Powtórz pin"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
-msgstr "Tworzenie nowego projektu dla tego schematu"
+msgstr "Stwórz nowy projekt dla tego schematu"
 
 #: eeschema/widgets/hierarchy_pane.cpp:381
 msgid "Edit Page Number"
@@ -28840,24 +28839,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(wielokrotne obrysy płytki nie są obsługiwane)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(Prostokąt ma zerowy lub bardzo mały rozmiar: %d nm)"
+msgstr "(prostokąt ma zerowy lub bardzo mały rozmiar: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(Okrąg ma zerowy lub bardzo mały rozmiar: %d nm)"
+msgstr "(okrąg ma zerowy lub bardzo mały rozmiar: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(Segment ma zerową lub bardzo małą długość: %d nm)"
+msgstr "(segment ma zerową lub bardzo małą długość: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(Łuk ma zerowy lub bardzo mały rozmiar: %d nm)"
+msgstr "(łuk ma zerowy lub bardzo mały rozmiar: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_drc.cpp:257 pcbnew/pcb_edit_frame.cpp:2410
@@ -30862,9 +30861,8 @@ msgstr ""
 "przenieść z powrotem na PCB."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:305
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Zamień footprinty"
+msgstr "Zmień footprint"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:358
 #, c-format
@@ -39215,9 +39213,9 @@ msgstr ""
 "Czas eksportu %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:878
-#, c-format
+#, c-format, fuzzy
 msgid "Wire not done (contour %d, points %d): OCC error %d\n"
-msgstr ""
+msgstr "Przewód niezakończony (kontur %d, punkty %d): błąd OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1049
 #, c-format
@@ -39286,19 +39284,18 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Bieżąca płytka zostanie zamknięta. Kontynuwać?"
 
 #: pcbnew/files.cpp:492
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Gdy strefy na tej płytce są wypełniane ponownie użyta będzie wartość z pola "
-"Prześwit wobec krawędzi (zobacz Ustawienia płytki > Reguły projektowe -> "
-"Ograniczenia).\n"
-" Może to doprowadzić do sytuacji, gdzie obecne wypełnienie będzie się różnić "
-"od tego jakie używane było w poprzednich wydaniach, które używały wartości "
-"pobranej z grubości linii brzegowych umieszczonych na warstwie Edge.Cuts."
+"Jeśli strefy na tej płytce są wypełnione ponownie, użyta będzie wartość z "
+"pola Prześwit wobec krawędzi (zobacz Ustawienia płytki > Reguły projektowe -"
+"> Ograniczenia).\n"
+"Może to doprowadzić do sytuacji gdzie obecne wypełnienie będzie się różnić "
+"od tego używanego w poprzednich wydaniach, które używało wartości pobranej z "
+"grubości linii brzegowych umieszczonych na warstwie Edge.Cuts."
 
 #: pcbnew/files.cpp:538
 #, c-format
@@ -40830,51 +40827,45 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(Rozmiar wiercenia pola PTH musi być większy niż %s)"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(pole z otworem na wylot na warstwach miedzi)"
+msgstr "(pole z otworem na wylot nie zostawia miedzi)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(otwór na wylot nie jest całkowicie w granicach miedzi)"
+msgstr "(otwór na wylot nie jest całkowicie w miedzi)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Otwór nie jest granicach pola lutowniczego"
+msgstr "(otwór nie jest granicach pola lutowniczego)"
 
 #: pcbnew/pad.cpp:1953
 #, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "Ujemne wartości lokalnego prześwitu nie mają żadnego wpływu"
+msgstr "(ujemne wartości lokalnego prześwitu nie mają żadnego wpływu)"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Ujemne prześwity maski lutowniczej większe niż niektóre kształty podstawowe. "
-"Rezultat w takim wypadku może być zaskakujący"
+"(ujemny prześwit maski lutowniczej jest większy niż niektóre kształty "
+"podstawowe; rezultat może być zaskakujący)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Ujemny prześwit maski lutowniczej jest większy niż pole. Nie zostanie "
-"wygenerowana soldermaska"
+"(ujemny prześwit soldermaski jest większy niż pole; nie zostanie "
+"wygenerowana soldermaska)"
 
 #: pcbnew/pad.cpp:2001
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Ujemne marginesy pasty lutowniczej są większe niż samo pole. Nie zostanie "
-"wygenerowana żadna maska pasty"
+"(ujemne marginesy pasty lutowniczej są większe niż samo pole; nie zostanie "
+"wygenerowana żadna maska pasty)"
 
 #: pcbnew/pad.cpp:2008
 msgid "(Pad has no layer)"
@@ -40885,89 +40876,73 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(pole z otworem na wylot nie znajduje się na warstwach miedzi)"
 
 #: pcbnew/pad.cpp:2017
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"Metalizowane otwory powinny normalnie posiadać pole lutownicze przynajmniej "
-"na jednej z warstw"
+"(metalizowane otwory zwykle posiadają pole lutownicze na przynajmniej jednej "
+"z warstw)"
 
 #: pcbnew/pad.cpp:2036
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
-msgstr "Pola lutownicze złącza nie posiadają warstw pasty. Należy użyć pól SMD"
+msgstr "(pla lutownicze złącza nie posiadają warstw pasty; należy użyć pól SMD)"
 
 #: pcbnew/pad.cpp:2044
 msgid "(SMD pad has a hole)"
 msgstr "(Pole lutownicze SMD posiada otwór)"
 
 #: pcbnew/pad.cpp:2050
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "Pad SMD istnieje po obu stronach płytki"
+msgstr "(pad SMD istnieje po obu stronach płytki)"
 
 #: pcbnew/pad.cpp:2056 pcbnew/pad.cpp:2069
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
-"Pole SMD na warstwie miedzi i jego maska znajdują się na różnych stronach "
-"płytki"
+"(soldermaska i warstwa miedzi pola SMD znajdują się na różnych stronach "
+"płytki)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"Pole SMD na warstwie miedzi i jego pasta znajdują się na różnych stronach "
-"płytki"
+"(warstwy pasty i miedzi pola SMD znajdują się na różnych stronach płytki)"
 
 #: pcbnew/pad.cpp:2080
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "Pole lutownicze SMD nie posiada zewnętrznych warstw"
+msgstr "(pad SMD nie ma zewnętrznych warstw)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Właściwość Fiducial nie powinna być używana dla pól NPTH"
+msgstr "(właściwość 'fiducial' nie powinna być używana dla padów NPTH)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "Właściwość Punkt Testowy nie powinna być używana dla pól NPTH"
+msgstr "(właściwość 'testpoint' nie powinna być używana dla padów NPTH)"
 
 #: pcbnew/pad.cpp:2097
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "Właściwość Pole Radiatorowe nie powinna być używana dla pól NPTH"
+msgstr "(właściwość 'heatsink' nie powinna być używana dla padów NPTH)"
 
 #: pcbnew/pad.cpp:2100
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Właściwość Kastelacja jest używana tylko dla pól PTH"
+msgstr "(właściwość 'castellated' jest używana tylko dla padów PTH)"
 
 #: pcbnew/pad.cpp:2103
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "Właściwość BGA jest używana tylko dla pół SMD"
+msgstr "Właściwość BGA jest używana tylko dla pól SMD"
 
 #: pcbnew/pad.cpp:2108
-#, fuzzy
 msgid "(negative corner radius is not allowed)"
-msgstr "(Ujemny kąt nie jest dozwolony)"
+msgstr "(ujemny kąt nie jest dozwolony)"
 
 #: pcbnew/pad.cpp:2110
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "Rozmiar narożnika spowoduje, że pole będzie okrągłe"
+msgstr "(rozmiar narożnika spowoduje że pole będzie okrągłe)"
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "(Negatywny kąt ścięcia nie jest dozwolony)"
+msgstr "(ujemny kąt ścięcia nie jest dozwolony)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "(Ścięcie jest zbyt duże)"
+msgstr "(ścięcie jest zbyt duże)"
 
 #: pcbnew/pad.cpp:2126
 #, fuzzy
@@ -40975,10 +40950,9 @@ msgid "(trapazoid delta is too large)"
 msgstr "(Trapezowość jest zbyt duża)"
 
 #: pcbnew/pad.cpp:2137
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr ""
-"(Niestandardowy kształt pola musi zostać przekształcony w pojedynczy "
+"(niestandardowy kształt pola musi zostać przekształcony w pojedynczy "
 "wielokąt)"
 
 #: pcbnew/pad.cpp:2329
@@ -40999,7 +40973,7 @@ msgstr "Pole z kastelacją"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
-msgstr ""
+msgstr "Prostokąt"
 
 #: pcbnew/pad.cpp:2404
 msgid "Pad Type"
@@ -41026,9 +41000,8 @@ msgid "Corner Radius Ratio"
 msgstr "Współczynnik promienia narożnika"
 
 #: pcbnew/pad.cpp:2452
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Kształt otworu:"
+msgstr "Kształt Otworu"
 
 #: pcbnew/pad.cpp:2456
 msgid "Hole Size X"
