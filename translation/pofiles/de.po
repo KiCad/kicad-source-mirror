@@ -27,10 +27,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-24 14:09+0000\n"
-"Last-Translator: Lauritz Tieste <lauritz6000000@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-08-27 13:51+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34474,9 +34474,8 @@ msgid "Filter vias by size:"
 msgstr "Vias nach Größe filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "-- unverändert lassen --"
+msgstr "-- unverändert lassen --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "Via size:"
@@ -34885,9 +34884,8 @@ msgid "Copy placement"
 msgstr "Platzierung"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
-#, fuzzy
 msgid "Copy routing"
-msgstr "Möchten Sie das Routing abbrechen?"
+msgstr "Routing kopieren"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:86
 #, fuzzy
@@ -42707,11 +42705,11 @@ msgstr "(Durchsteckpad-Lochgröße muss größer als %s sein)"
 
 #: pcbnew/pad.cpp:2071
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(Durchsteckpad-Loch lässt kein Kupfer zurück)"
+msgstr "(Loch des Durchsteckpads lässt kein Kupfer zurück)"
 
 #: pcbnew/pad.cpp:2079
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(Durchsteckpad-Loch nicht vollständig innerhalb von Kupfer)"
+msgstr "(Durchsteckpadloch nicht vollständig innerhalb von Kupfer)"
 
 #: pcbnew/pad.cpp:2086
 msgid "(pad hole not inside pad shape)"
@@ -42719,7 +42717,7 @@ msgstr "(Pad-Bohrloch nicht innerhalb der Padform)"
 
 #: pcbnew/pad.cpp:2091
 msgid "(negative local clearance values have no effect)"
-msgstr "(negative lokale Freiräume haben keine Auswirkungen)"
+msgstr "(Negative lokale Freiraumwerte haben keine Auswirkungen.)"
 
 #: pcbnew/pad.cpp:2110
 msgid ""
@@ -42727,7 +42725,7 @@ msgid ""
 "results may be surprising)"
 msgstr ""
 "(Negativer Lötmaskenfreiraum ist größer als einige Formen; Dies kann zu "
-"unerwarteten Ergebnissen führen.)"
+"unerwarteten Ergebnissen führen)"
 
 #: pcbnew/pad.cpp:2120
 msgid ""
@@ -42735,7 +42733,7 @@ msgid ""
 "generated)"
 msgstr ""
 "(Negativer Lötmaskenfreiraum ist größer als das Pad. Es wird keine Lötmaske "
-"erzeugt.)"
+"erzeugt)"
 
 #: pcbnew/pad.cpp:2139
 msgid ""
@@ -42771,34 +42769,34 @@ msgstr "(SMD-Pad hat ein Loch)"
 
 #: pcbnew/pad.cpp:2188
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "(SMD-Pad hat auf beiden Platinenseiten Kupfer)"
+msgstr "(SMD-Pad hat auf beiden Platinenseiten Kupfer.)"
 
 #: pcbnew/pad.cpp:2194 pcbnew/pad.cpp:2207
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr ""
-"(SMD-Pad hat Kupfer- und Maskenlagen auf unterschiedlichen Platinenseiten)"
+"(SMD-Pad hat Kupfer- und Maskenlagen auf unterschiedlichen Platinenseiten.)"
 
 #: pcbnew/pad.cpp:2199 pcbnew/pad.cpp:2212
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"(SMD-Pad hat Kupfer- und Pastenlagen auf unterschiedlichen Platinenseiten)"
+"(SMD-Pad hat Kupfer- und Pastenlagen auf unterschiedlichen Platinenseiten.)"
 
 #: pcbnew/pad.cpp:2218
 msgid "(SMD pad has no outer layers)"
-msgstr "(SMD-Pad hat keine Außenlagen)"
+msgstr "(SMD-Pad hat keine Außenlagen.)"
 
 #: pcbnew/pad.cpp:2228
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "(Passermarken auf mechanischen Bohrungen ergeben keinen Sinn.)"
+msgstr ""
+"(Passermarke-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
 
 #: pcbnew/pad.cpp:2232
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "(Testpunkte auf mechanischen Bohrungen ergeben keinen Sinn.)"
+msgstr "(Testpunkt-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
 
 #: pcbnew/pad.cpp:2235
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr ""
-"(Eine Kühlkörpereigenschaft auf mechanischen Bohrungen ergibt keinen Sinn.)"
+msgstr "(Kühlkörper-Eigenschaft ergibt auf mechanischen Bohrungen keinen Sinn.)"
 
 #: pcbnew/pad.cpp:2238
 msgid "('castellated' property is for PTH pads)"
@@ -42814,7 +42812,7 @@ msgstr "(mechanisch-Eigenschaft ist für Durchsteckpads)"
 
 #: pcbnew/pad.cpp:2249
 msgid "(negative corner radius is not allowed)"
-msgstr "(negativer Eckradius ist nicht erlaubt)"
+msgstr "(Negativer Eckradius ist nicht erlaubt.)"
 
 #: pcbnew/pad.cpp:2251
 msgid "(corner size will make pad circular)"
@@ -42822,11 +42820,11 @@ msgstr "(Eckgröße wird das Pad kreisförmig machen.)"
 
 #: pcbnew/pad.cpp:2256
 msgid "(negative corner chamfer is not allowed)"
-msgstr "(Negative Eckfase ist nicht erlaubt)"
+msgstr "(Negative Eckfase ist nicht erlaubt.)"
 
 #: pcbnew/pad.cpp:2258
 msgid "(corner chamfer is too large)"
-msgstr "(Eckfase ist zu groß)"
+msgstr "(Eckfase ist zu groß.)"
 
 #: pcbnew/pad.cpp:2267
 #, fuzzy
@@ -42836,7 +42834,7 @@ msgstr "(Trapez-Delta ist zu groß)"
 #: pcbnew/pad.cpp:2278
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr ""
-"(Benutzerdefinierte Padform muss in einzelnes Polygon aufgelöst werden)"
+"(Benutzerdefinierte Padform muss in einzelnes Polygon aufgelöst werden.)"
 
 #: pcbnew/pad.cpp:2476
 msgid "Edge connector"
@@ -42860,7 +42858,7 @@ msgstr "Mechanisches Pad"
 
 #: pcbnew/pad.cpp:2500
 msgid "Oblong"
-msgstr ""
+msgstr "Länglich"
 
 #: pcbnew/pad.cpp:2518
 msgid "Front, back and connected layers"
@@ -42891,9 +42889,8 @@ msgid "Corner Radius Ratio"
 msgstr "Eckradius-Verhältnis"
 
 #: pcbnew/pad.cpp:2606
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Lochform:"
+msgstr "Lochform"
 
 #: pcbnew/pad.cpp:2610
 msgid "Hole Size X"
@@ -44629,7 +44626,7 @@ msgid "Cannot interpret date code %d"
 msgstr "Die Datumsangaben sind nicht korrekt %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1143
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -44637,7 +44634,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Elemente auf einer nicht definierten Lage gefunden (%s).\n"
-"Möchten Sie diese auf die Lage %s retten?"
+"Möchten Sie diese auf die Lage %s retten?\n"
+"\n"
+"Zonen müssen neu gefüllt werden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1149
 msgid "Undefined Layers Warning"
