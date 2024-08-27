@@ -2,22 +2,24 @@
 # Adrian Scripcă <benishor@gmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
 # Nicoara Alex <alex.nicoara@yahoo.com>, 2024.
+# Peter B <sleepyghostshark@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-04-18 07:23+0000\n"
-"Last-Translator: Nicoara Alex <alex.nicoara@yahoo.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"PO-Revision-Date: 2024-08-27 05:59+0000\n"
+"Last-Translator: Peter B <sleepyghostshark@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -25,7 +27,7 @@ msgstr "Toate fișierele"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:332
 msgid "Build board outline"
-msgstr "Construieste conturul plăci"
+msgstr "Construiește conturul plăcii"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:544
 msgid "Create layers"
@@ -34,7 +36,7 @@ msgstr "Creați straturi"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:924
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "Nici o capsulă încărcată."
+msgstr "Nu a fost încărcată nici o capsulă."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:941
 msgid ""
@@ -65,34 +67,35 @@ msgstr "Construiți straturi tehnice"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:826
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Construiți stratul Tehnic %d"
+msgstr "Construiți stratul tehnic %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1052
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "Simplificarea poligoanelor straturilor de cupru"
+msgstr "Simplific poligoane pe straturile de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1057
+#, fuzzy
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Calculez aria de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1143
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Simplificarea %d straturi de cupru"
+msgstr "Simplific %d straturi de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1186
 msgid "Simplify holes contours"
-msgstr "Simplificați contururile găurilor"
+msgstr "Simplific contururile găurilor"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1206
+#, fuzzy
 msgid "Build BVH for holes and vias"
 msgstr "Construiți BVH pentru găuri și via-uri"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:398
 #, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Foraj în afara razei de acțiune"
+msgstr "Eroare creare context OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:429
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -101,27 +104,27 @@ msgstr "Versiunea dvs. OpenGL nu este acceptată. Minimul necesar este 1.5."
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:563
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "Ultimul durată a randări %.0f ms"
+msgstr "Ultima durată a randării %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:739
 #, fuzzy, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Net '%s' NetClass '%s'"
+msgstr "Net %s\tClasă Net %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:763
 #, fuzzy, c-format
 msgid "Pad %s\t"
-msgstr "Solid"
+msgstr "Pad %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:794
 #, fuzzy, c-format
 msgid "Rule area %s\t"
-msgstr "Reguli"
+msgstr "Zonă reguli %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:796
 #, fuzzy, c-format
 msgid "Zone %s\t"
-msgstr "Zonele"
+msgstr "Zona %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
@@ -136,15 +139,15 @@ msgid "Load OpenGL: layers"
 msgstr "Încărcați OpenGL: straturi"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Încărcați strat OpenGL%d"
+msgstr "Încărcați strat OpenGL %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:660
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1957
 msgid "Loading 3D models..."
-msgstr "Se încarcă modelele 3D..."
+msgstr "Se încarcă modele 3D..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:669
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
@@ -175,21 +178,21 @@ msgstr "Se încarcă..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
 msgid "Load Raytracing: board"
-msgstr "Încărcați Raytracing: placă"
+msgstr "Încărcare Raytracing: placă"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
 msgid "Load Raytracing: layers"
-msgstr "Încărcați Raytracing: straturi"
+msgstr "Încărcare Raytracing: straturi"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:179
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "Timp de redare %.3f s"
+msgstr "Timp de randare %.3f s"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:237
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Redare: %.0f %%"
+msgstr "Randare: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:695
 msgid "Rendering: Post processing shader"
@@ -274,7 +277,7 @@ msgstr "Copiați imaginea 3D în clipboard"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 msgid "Render current view using Raytracing"
-msgstr "Randați vizualizarea curentă utilizând Raytracing"
+msgstr "Randați vizualizarea folosind Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:103
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
@@ -292,22 +295,22 @@ msgstr "Aspect"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:329
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:634
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Editor PCB"
+msgstr "Urmărește Editor PCB"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:331
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:635
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Filtrează rețele"
+msgstr "Urmează Setările de plotare PCB"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:583
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
+#, fuzzy
 msgid "legacy colors"
-msgstr "culorile moștenite"
+msgstr "culori tradiționale"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:719
 msgid "3D Image File Name"
@@ -7435,7 +7438,7 @@ msgstr "Trasee"
 
 #: common/layer_id.cpp:172
 msgid "Through vias"
-msgstr "Prin via-uri"
+msgstr "Treceri metalizate (via)"
 
 #: common/layer_id.cpp:173
 #, fuzzy
@@ -8741,8 +8744,9 @@ msgid "Edit path configuration environment variables"
 msgstr "Editați variabilele de mediu de configurare a căii"
 
 #: common/tool/actions.cpp:1096
+#, fuzzy
 msgid "Manage Symbol Libraries..."
-msgstr "Gestionați bibliotecile de simboluri..."
+msgstr "Gestionare biblioteci de simboluri..."
 
 #: common/tool/actions.cpp:1097
 msgid "Edit the global and project symbol library lists"
@@ -9447,7 +9451,7 @@ msgstr "Fișiere de proiect KiCad"
 
 #: common/wildcards_and_files_ext.cpp:237
 msgid "KiCad legacy project files"
-msgstr "Fișiere de proiect vechi KiCad"
+msgstr "Fișiere de proiect tradițional KiCad"
 
 #: common/wildcards_and_files_ext.cpp:244
 msgid "All KiCad project files"
@@ -9461,7 +9465,7 @@ msgstr "Fișiere schematice Altium"
 #: common/wildcards_and_files_ext.cpp:258
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:74
 msgid "KiCad legacy schematic files"
-msgstr "Fișiere schematice KiCad legacy"
+msgstr "Fișiere schematice format tradițional KiCad"
 
 #: common/wildcards_and_files_ext.cpp:265
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:75
@@ -9580,7 +9584,7 @@ msgstr "Fișiere text"
 
 #: common/wildcards_and_files_ext.cpp:431
 msgid "Legacy footprint export files"
-msgstr "Fișiere de export vechi de amprentă"
+msgstr "Fișiere de export de amprentă în format vechi"
 
 #: common/wildcards_and_files_ext.cpp:437
 msgid "Electrical rule check file"
@@ -9932,7 +9936,7 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Unele dintre amprentele atribuite sunt intrări moștenite fără nume de "
+"Unele dintre amprentele atribuite sunt intrări în format vechi fără nume de "
 "bibliotecă. Doriți ca KiCad să încerce să le convertească la noul format de "
 "LIB_ID necesar? (Dacă răspundeți nu, atunci aceste atribuiri vor fi "
 "eliminate și va trebui să le re-atribuiți manual.)"
@@ -16091,11 +16095,13 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:928
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
+"Memorează '%s' în formatul KiCad curent (*.kicad_sym) și înlocuiește "
+"intrările în format vechi?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:934
 #, c-format
@@ -16103,6 +16109,8 @@ msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
+"Memorează %d bibliotecile în format KiCad curent (*.kicad_sym) și "
+"înlocuiește întrările în format vechi?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:965
 #: pcbnew/dialogs/dialog_export_step.cpp:587
@@ -18647,7 +18655,7 @@ msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:80
 msgid "KiCad legacy symbol library files"
-msgstr "Fișiere de bibliotecă de simboluri vechi KiCad"
+msgstr "Fișiere bibliotecă de simboluri în format vechi KiCad"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:222
 msgid "expected unquoted string"
@@ -19314,9 +19322,8 @@ msgid "Simulation"
 msgstr "Simulare"
 
 #: eeschema/sch_sheet.cpp:881 eeschema/sch_symbol.cpp:2057
-#, fuzzy
 msgid "BOM"
-msgstr "BOM..."
+msgstr "Listă de materiale (BOM)"
 
 #: eeschema/sch_sheet.cpp:893 eeschema/sch_symbol.cpp:2069
 #: eeschema/sch_text.cpp:632 eeschema/sch_textbox.cpp:539
@@ -21321,6 +21328,9 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
+"Nu au fost încărcate toate bibliotecile de simboluri. Folosește\n"
+"„Gestionare biblioteci de simboluri” pentru a actualiza căile,\n"
+"a adăuga sau șterge biblioteci."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:68
 msgid "Symbol..."
@@ -21369,15 +21379,17 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:875
-#, fuzzy
 msgid "Manage symbol libraries"
-msgstr "Gestionați bibliotecile de simboluri..."
+msgstr "Gestionare biblioteci de simboluri"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:886
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"Simbolurile din bibliotecile în format vechi nu sunt editabile. Folosește "
+"\"Gestionare biblioteci de simboluri\" pentru a le transforma în formatul "
+"curent."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:907
 #, c-format
@@ -22827,13 +22839,16 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1009
 msgid "Remap Legacy Library Symbols..."
-msgstr ""
+msgstr "Re-asociază biblioteci de simboluri în format vechi..."
 
 #: eeschema/tools/ee_actions.cpp:1010
+#, fuzzy
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
+"Re-asociază referințele bibliotecii de simboluri din schemele în format "
+"vechi în tabelul de biblioteci de simboluri"
 
 #: eeschema/tools/ee_actions.cpp:1016
 #, fuzzy
@@ -22882,14 +22897,13 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1054
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Listă de materiale(BOM)"
+msgstr "Generează Listă de materiale (BOM) în format vechi"
 
 #: eeschema/tools/ee_actions.cpp:1055
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr ""
+msgstr "Genereaza o listă de materiale pentru schema curentă (Generator vechi)"
 
 #: eeschema/tools/ee_actions.cpp:1061
 #, fuzzy
@@ -23392,9 +23406,8 @@ msgstr "Biblioteca \"%s\" nu se află în tabelul de biblioteci de amprentă."
 
 #: eeschema/tools/ee_inspection_tool.cpp:396
 #: eeschema/tools/ee_inspection_tool.cpp:402
-#, fuzzy
 msgid "Manage Symbol Libraries"
-msgstr "Gestionați bibliotecile de simboluri..."
+msgstr "Gestionare biblioteci de simboluri"
 
 #: eeschema/tools/ee_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1581
@@ -26264,10 +26277,13 @@ msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr ""
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
+#, fuzzy
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 msgstr ""
+"Exportă BOM XML în formatul vechi folosit în editorul de schemă cu scripturi "
+"Python"
 
 #: kicad/cli/command_sym.h:31
 #, fuzzy
@@ -30759,7 +30775,7 @@ msgstr "Denumiri Net"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 #, fuzzy
 msgid "Teardrops"
-msgstr "Adăugați Bitmap"
+msgstr "Picături"
 
 #: pcbnew/board_connected_item.cpp:257
 #, fuzzy
@@ -36487,8 +36503,9 @@ msgstr "Etichete ierarhice"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:379
+#, fuzzy
 msgid "Board contains legacy teardrops."
-msgstr ""
+msgstr "Placa conține „picături” (teardrops) în format vechi."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:383
@@ -37797,9 +37814,8 @@ msgstr "Verificator de reguli de proiectare"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 #: pcbnew/pcb_track.cpp:1733
-#, fuzzy
 msgid "Tented"
-msgstr "Centru"
+msgstr "Acoperite"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
@@ -41910,9 +41926,8 @@ msgid "pads"
 msgstr "Spatele padului SMD"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1917
-#, fuzzy
 msgid "vias"
-msgstr "Prin via-uri"
+msgstr "treceri metalizate (via)"
 
 #: pcbnew/files.cpp:149
 #, fuzzy
@@ -42314,12 +42329,19 @@ msgid "Loading footprints..."
 msgstr "Încărcarea amprentelor..."
 
 #: pcbnew/footprint_libraries_utils.cpp:63
+#, fuzzy
 msgid ""
 "Writing/modifying legacy libraries (.mod files) is not allowed\n"
 "Please save the current library to the new .pretty format\n"
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
+"Nu este permisă scrierea/modificarea bibliotecilor în format vechi (extensia "
+".mod)\n"
+"Salvează biblioteca curentă în noul format .pretty și actualizează tabelul "
+"cu biblioteci \n"
+"de amprentă pentru a salva amprenta (extensie .kicad_mod) \n"
+"în directorul de biblioteci .pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:69
 msgid ""
@@ -42328,6 +42350,10 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
+"Nu este permisă modificarea bibliotecilor în format\n"
+"vechi (extensia .mod). Salvează biblioteca curentă în\n"
+"noul format .pretty și actualizează tabelul cu biblioteci\n"
+"de amprentă înainte de a șterge o amprentă"
 
 #: pcbnew/footprint_libraries_utils.cpp:122
 #, fuzzy
