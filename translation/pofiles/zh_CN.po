@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-21 10:09+0000\n"
+"PO-Revision-Date: 2024-08-27 05:58+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -21491,9 +21491,8 @@ msgid "Place Pin Anyway"
 msgstr "任意位置放置引脚"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:448
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "图纸引脚"
+msgstr "复刻引脚"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -28204,24 +28203,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(不支持多个电路板外框)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
 msgstr "(矩形大小过小或为空: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
 msgstr "(圆的半径过小或为空: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
 msgstr "(线段长度过小或为空: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(弧的大小过小或为空: %d nm)"
+msgstr "(弧的尺寸过小或为空: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_drc.cpp:257 pcbnew/pcb_edit_frame.cpp:2410
@@ -30171,7 +30170,6 @@ msgstr ""
 "并希望将其移除; 或者用户对库的封装进行了变更, 并希望将其传递回PCB。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:305
-#, fuzzy
 msgid "Change Footprint"
 msgstr "替换封装"
 
@@ -32898,11 +32896,11 @@ msgid ""
 "These properties are specified in Gerber X2  files."
 msgstr ""
 "在制造文件中指定特殊用途或约束的可选属性: \n"
-"BGA 特性用于 BGA 封装中的焊盘\n"
+"BGA 特性适用于 BGA 封装中的焊盘\n"
 "局部基准点 属性是父级封装的基准\n"
 "全局基准点 是整个电路板的基准\n"
-"测试点焊盘 (Test Point) 可用于在 Gerber 文件中指定测试点\n"
-"散热焊盘 (Heatsink) 指定热焊盘\n"
+"测试点 (Test Point) 可用于在 Gerber 文件中指定测试点\n"
+"散热焊盘 (Heatsink) 用于指定起到散热作用的焊盘\n"
 "半孔焊盘 (Castellated) 指定板边缘金属化半孔焊盘\n"
 "此属性在 Gerber X2 文件中指定。"
 
@@ -39921,23 +39919,20 @@ msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr "PTH 焊盘通常在至少一个层上有一个铜焊盘"
 
 #: pcbnew/pad.cpp:2036
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
-msgstr "连接器焊盘上通常不会使用锡膏; 请使用贴片焊盘"
+msgstr "(连接器焊盘上通常不会使用锡膏; 请使用贴片焊盘)"
 
 #: pcbnew/pad.cpp:2044
 msgid "(SMD pad has a hole)"
 msgstr "(贴片焊盘上存在一个孔)"
 
 #: pcbnew/pad.cpp:2050
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "贴片焊盘在电路板的两面都有铜层"
+msgstr "(贴片焊盘在电路板的两面都有铜层)"
 
 #: pcbnew/pad.cpp:2056 pcbnew/pad.cpp:2069
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "贴片焊盘在电路板的不同面上分别有铜层和阻焊层"
+msgstr "(贴片焊盘在电路板的不同面上分别有铜层和阻焊层)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
 #, fuzzy
@@ -39945,62 +39940,50 @@ msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr "贴片焊盘在电路板的不同面上分别有铜层和焊膏层"
 
 #: pcbnew/pad.cpp:2080
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "贴片焊盘没有外形层"
+msgstr "(贴片焊盘没有外形层)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "基准点 (Fiducial) 属性对于 NPTH 焊盘毫无意义"
+msgstr "('基准点' (Fiducial) 属性对于 NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "测试点焊盘 (Testpoint) 属性对于NPTH 焊盘毫无意义"
+msgstr "('测试点' (Testpoint) 属性对于NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2097
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "散热焊盘 (Heatsink) 属性对于 NPTH 焊盘毫无意义"
+msgstr "('散热焊盘' (Heatsink) 属性对于 NPTH 焊盘毫无意义)"
 
 #: pcbnew/pad.cpp:2100
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "半孔焊盘 (Castellated) 属性适用于 PTH 焊盘"
+msgstr "('半孔焊盘' (Castellated) 属性适用于 PTH 焊盘)"
 
 #: pcbnew/pad.cpp:2103
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "BGA 属性适用于贴片焊盘"
+msgstr "('BGA' 属性适用于贴片焊盘)"
 
 #: pcbnew/pad.cpp:2108
-#, fuzzy
 msgid "(negative corner radius is not allowed)"
 msgstr "(圆角半径不允许为负)"
 
 #: pcbnew/pad.cpp:2110
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "圆角大小将使焊盘呈圆形"
+msgstr "(圆角大小将使焊盘呈圆形)"
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
 msgstr "(倒角尺寸不允许为负)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
 msgstr "(倒角尺寸过大)"
 
 #: pcbnew/pad.cpp:2126
-#, fuzzy
 msgid "(trapazoid delta is too large)"
-msgstr "(Trapazoid delta 过大)"
+msgstr "(trapazoid delta 过大)"
 
 #: pcbnew/pad.cpp:2137
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr "(自定义焊盘形状必须解析为一个单一的多边形)"
 
@@ -40049,9 +40032,8 @@ msgid "Corner Radius Ratio"
 msgstr "边角半径比"
 
 #: pcbnew/pad.cpp:2452
-#, fuzzy
 msgid "Hole Shape"
-msgstr "钻孔形状:"
+msgstr "孔洞形状"
 
 #: pcbnew/pad.cpp:2456
 msgid "Hole Size X"
