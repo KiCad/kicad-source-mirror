@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,7 +71,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	int m_rbRuleTypeNChoices = sizeof( m_rbRuleTypeChoices ) / sizeof( wxString );
 	m_rbRuleType = new wxRadioBox( this, wxID_ANY, _("Rule type"), wxDefaultPosition, wxDefaultSize, m_rbRuleTypeNChoices, m_rbRuleTypeChoices, 2, wxRA_SPECIFY_COLS );
 	m_rbRuleType->SetSelection( 0 );
-	fgSizer2->Add( m_rbRuleType, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_rbRuleType, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_keepoutRuleSizer = new wxFlexGridSizer( 0, 1, 3, 0 );
 	m_keepoutRuleSizer->SetFlexibleDirection( wxBOTH );
@@ -106,7 +106,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	fgSizer2->Add( m_keepoutRuleSizer, 1, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( fgSizer2, 1, wxEXPAND, 5 );
+	bSizerRight->Add( fgSizer2, 0, wxEXPAND, 5 );
 
 	m_placementRuleSizer = new wxFlexGridSizer( 0, 1, 3, 0 );
 	m_placementRuleSizer->AddGrowableCol( 0 );
@@ -190,7 +190,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	gbSizer1->Add( m_outlineHatchUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerRight->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerRight->Add( gbSizer1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bUpperSizer->Add( bSizerRight, 1, wxEXPAND|wxALL, 5 );
