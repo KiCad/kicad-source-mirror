@@ -50,19 +50,20 @@ public:
         EVT_MOVE,
         EVT_ABORT,
         EVT_TOGGLE_VIA,
-        EVT_UNFIX
+        EVT_UNFIX,
+        EVT_START_MULTIDRAG
     };
 
     struct EVENT_ENTRY {
         VECTOR2I p;
         EVENT_TYPE type;
-        KIID uuid;
+        std::vector<KIID> uuids;
         SIZES_SETTINGS sizes;
 
         EVENT_ENTRY() {}
 
         EVENT_ENTRY( const EVENT_ENTRY& aE ) :
-                p( aE.p ), type( aE.type ), uuid( aE.uuid ), sizes( aE.sizes )
+                p( aE.p ), type( aE.type ), uuids( aE.uuids ), sizes( aE.sizes )
         {
         }
     };
@@ -71,6 +72,9 @@ public:
     ~LOGGER();
 
     void Clear();
+
+    void LogM( EVENT_TYPE evt, const VECTOR2I& pos = VECTOR2I(), std::vector<ITEM*> items = {},
+              const SIZES_SETTINGS* sizes = nullptr);
 
     void Log( EVENT_TYPE evt, const VECTOR2I& pos = VECTOR2I(), const ITEM* item = nullptr,
               const SIZES_SETTINGS* sizes = nullptr );

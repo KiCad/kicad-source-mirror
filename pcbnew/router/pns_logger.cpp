@@ -43,24 +43,35 @@ void LOGGER::Clear()
 }
 
 
-void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item,
+void LOGGER::LogM( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, std::vector<ITEM*> items,
                   const SIZES_SETTINGS* sizes )
 {
     LOGGER::EVENT_ENTRY ent;
 
     ent.type = evt;
     ent.p = pos;
-    ent.uuid = KIID( 0 );
 
     if( sizes )
     {
         ent.sizes = *sizes;
     }
 
-    if( item && item->Parent() )
-        ent.uuid = item->Parent()->m_Uuid;
+    for( auto& item : items )
+    {
+        if( item && item->Parent() )
+            ent.uuids.push_back( item->Parent()->m_Uuid );
+    }
 
     m_events.push_back( ent );
+}
+
+
+void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item,
+                  const SIZES_SETTINGS* sizes )
+{
+    std::vector<ITEM*> items;
+    items.push_back( const_cast<ITEM*>( item ) );
+    LogM( evt, pos, items, sizes );
 }
 
 
@@ -90,13 +101,26 @@ wxString LOGGER::FormatLogFileAsString( int aMode,
 
 wxString LOGGER::FormatEvent( const LOGGER::EVENT_ENTRY& aEvent )
 {
-    return wxString::Format(
-            "event %d %d %d %s %d %d %d %d %d %d %d\n", aEvent.p.x, aEvent.p.y, aEvent.type,
-            static_cast<const char*>( aEvent.uuid.AsString().c_str() ), aEvent.sizes.TrackWidth(),
-            aEvent.sizes.ViaDiameter(), aEvent.sizes.ViaDrill(),
-            aEvent.sizes.TrackWidthIsExplicit() ? 1 : 0, aEvent.sizes.GetLayerBottom(),
-            aEvent.sizes.GetLayerTop(), static_cast<int>( aEvent.sizes.ViaType() ) );
+    wxString str = wxString::Format( "event %d %d %d %d ", aEvent.p.x, aEvent.p.y, aEvent.type, (int)aEvent.uuids.size() );
 
+    for( int i = 0; i < aEvent.uuids.size(); i++ )
+    {
+        str.Append( aEvent.uuids[i].AsString() );
+        str.Append( wxT(" ") );
+    }
+
+    str.Append( wxString::Format( "%d %d %d %d %d %d %d",
+            aEvent.sizes.TrackWidth(),
+            aEvent.sizes.ViaDiameter(),
+            aEvent.sizes.ViaDrill(),
+            aEvent.sizes.TrackWidthIsExplicit() ? 1 : 0,
+            aEvent.sizes.GetLayerBottom(),
+            aEvent.sizes.GetLayerTop(),
+            static_cast<int>( aEvent.sizes.ViaType() ) ) );
+
+    str.Append( wxT("\n") );
+
+    return str;
 }
 
 
@@ -105,13 +129,20 @@ LOGGER::EVENT_ENTRY LOGGER::ParseEvent( const wxString& aLine )
     wxStringTokenizer tokens( aLine );
     wxString          cmd = tokens.GetNextToken();
 
+    int n_uuids = 0;
+
     wxCHECK_MSG( cmd == wxT( "event" ), EVENT_ENTRY(), "Line doesn't contain an event!" );
 
     EVENT_ENTRY evt;
     evt.p.x = wxAtoi( tokens.GetNextToken() );
     evt.p.y = wxAtoi( tokens.GetNextToken() );
     evt.type = (PNS::LOGGER::EVENT_TYPE) wxAtoi( tokens.GetNextToken() );
-    evt.uuid = KIID( tokens.GetNextToken() );
+    n_uuids = wxAtoi( tokens.GetNextToken() );
+
+    printf("Evt %d NUUIDS %d\n", evt.type, n_uuids );
+
+    for( int i = 0; i < n_uuids; i++)
+        evt.uuids.push_back( KIID( tokens.GetNextToken() ) );
 
     return evt;
 }
