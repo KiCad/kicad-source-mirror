@@ -116,13 +116,13 @@ struct COLLISION_SEARCH_OPTIONS
     int m_limitCount = -1;
     int m_kindMask = -1;
     bool m_useClearanceEpsilon = true;
-    std::set<ITEM*>* m_restrictedSet = nullptr;
+    std::function<bool(const ITEM*)> m_filter = nullptr;
 };
 
 
 struct COLLISION_SEARCH_CONTEXT
 {
-    COLLISION_SEARCH_CONTEXT( std::set<OBSTACLE>& aObs, const COLLISION_SEARCH_OPTIONS aOpts ) :
+    COLLISION_SEARCH_CONTEXT( std::set<OBSTACLE>& aObs, const COLLISION_SEARCH_OPTIONS aOpts = COLLISION_SEARCH_OPTIONS() ) :
         obstacles( aObs ),
         options( aOpts )
     {

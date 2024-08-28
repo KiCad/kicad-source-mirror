@@ -329,7 +329,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
 
     for( const OBSTACLE& obstacle : obstacleList )
     {
-        if( aOpts.m_restrictedSet && !aOpts.m_restrictedSet->empty() && aOpts.m_restrictedSet->count( obstacle.m_item ) == 0 )
+        if( aOpts.m_filter && !aOpts.m_filter( obstacle.m_item) )
             continue;
 
         int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon )
