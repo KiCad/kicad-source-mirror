@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-28 06:09+0000\n"
+"PO-Revision-Date: 2024-08-29 07:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -39873,14 +39873,12 @@ msgid "(PTH pad hole non fully inside copper)"
 msgstr "(PTH 焊盘孔没有完全处在铜箔内)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "焊盘孔不在焊盘形状内"
+msgstr "(焊盘孔不在焊盘形状内)"
 
 #: pcbnew/pad.cpp:1953
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "负局部间距值无效"
+msgstr "(负局部间距值无效)"
 
 #: pcbnew/pad.cpp:1972
 msgid ""
@@ -39895,11 +39893,10 @@ msgid ""
 msgstr "(负阻焊间距大于焊盘; 不会生成阻焊层)"
 
 #: pcbnew/pad.cpp:2001
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
-msgstr "负焊膏余量大于焊盘; 不会生成锡膏层"
+msgstr "(负焊膏余量大于焊盘; 不会生成锡膏层)"
 
 #: pcbnew/pad.cpp:2008
 msgid "(Pad has no layer)"
