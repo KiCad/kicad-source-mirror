@@ -282,17 +282,21 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 {
     std::vector<ZONE*> refRAs;
 
-    auto isSelectedItemAnRA = [] ( EDA_ITEM* aItem ) -> ZONE*
-    {
-          if( aItem->Type() != PCB_ZONE_T )
-          return nullptr;
-          ZONE* zone = static_cast<ZONE*>( aItem );
+    auto isSelectedItemAnRA = []( EDA_ITEM* aItem ) -> ZONE*
+        {
+            if( aItem->Type() != PCB_ZONE_T )
+                return nullptr;
+
+            ZONE* zone = static_cast<ZONE*>( aItem );
+
             if( !zone->GetIsRuleArea() )
                 return nullptr;
+
             if( !zone->GetRuleAreaPlacementEnabled() )
                 return nullptr;
-        return zone;
-    };
+
+            return zone;
+        };
 
     for( EDA_ITEM* item : selection() )
     {
@@ -303,6 +307,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
         else if ( item->Type() == PCB_GROUP_T )
         {
             PCB_GROUP *group = static_cast<PCB_GROUP*>( item );
+
             for( BOARD_ITEM* grpItem : group->GetItems() )
             {
                 if( auto grpZone = isSelectedItemAnRA( grpItem ) )
@@ -334,9 +339,8 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-
     DIALOG_MULTICHANNEL_REPEAT_LAYOUT dialog( frame(), this );
-    int                               ret = dialog.ShowModal();
+    int ret = dialog.ShowModal();
 
     if( ret != wxID_OK )
         return 0;
@@ -376,6 +380,7 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
     return 0;
 }
 
+
 int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 {
     int totalCopied = 0;
@@ -398,7 +403,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         std::unordered_set<BOARD_ITEM*> groupableItems;
 
         if( !copyRuleAreaContents( targetArea.second.m_matchingComponents, &commit, m_areas.m_refRA,
-                                   targetArea.first, m_areas.m_options, affectedItems, groupableItems ) )
+                                   targetArea.first, m_areas.m_options, affectedItems,
+                                   groupableItems ) )
         {
             auto errMsg = wxString::Format(
                     _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
@@ -427,7 +433,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 
             grpCommit.Add( grp );
 
-            for( auto item : groupableItems )
+            for( BOARD_ITEM* item : groupableItems )
             {
                 grpCommit.Stage( item, CHT_GROUP );
             }
@@ -447,7 +453,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 }
 
 
-wxString MULTICHANNEL_TOOL::stripComponentIndex( wxString aRef ) const
+wxString MULTICHANNEL_TOOL::stripComponentIndex( const wxString& aRef ) const
 {
     wxString rv;
 
@@ -509,7 +515,8 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
 }
 
 
-bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches, BOARD_COMMIT* aCommit,
+bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatches,
+                                              BOARD_COMMIT* aCommit,
                                               RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                               REPEAT_LAYOUT_OPTIONS aOpts,
                                               std::unordered_set<BOARD_ITEM*>& aAffectedItems,
@@ -587,7 +594,6 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
         }
     }
 
-
     aTargetArea->m_area->RemoveAllContours();
     aTargetArea->m_area->AddPolygon( newTargetOutline );
     aTargetArea->m_area->UnHatchBorder();
@@ -636,7 +642,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 }
 
 
-bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, RULE_AREA_COMPAT_DATA& aMatches )
+bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
+                                                   RULE_AREA_COMPAT_DATA& aMatches )
 {
     using namespace TMATCH;
 
@@ -675,19 +682,19 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 }
 
 
-bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToRemove )
+bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit,
+                                             const std::unordered_set<BOARD_ITEM*>& aItemsToRemove )
 {
     for( PCB_GROUP* grp : board()->Groups() )
     {
         std::unordered_set<BOARD_ITEM*>& grpItems = grp->GetItems();
         size_t n_erased = 0;
 
-        for(  auto refItem : grpItems )
+        for( BOARD_ITEM* refItem : grpItems )
         {
             //printf("check ref %p [%s]\n", refItem, refItem->GetTypeDesc().c_str().AsChar() );
-            for (  auto& testItem : aItemsToRemove )
+            for( BOARD_ITEM* testItem : aItemsToRemove )
             {
-
                 if( refItem->m_Uuid == testItem->m_Uuid )
                 {
                     aCommit.Stage( refItem, CHT_UNGROUP );
@@ -707,6 +714,7 @@ bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit, const std::unorder
     return false;
 }
 
+
 int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 {
     if( Pgm().IsGUI() )
@@ -722,9 +730,8 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-
         DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS dialog( frame(), this );
-        int                                     ret = dialog.ShowModal();
+        int ret = dialog.ShowModal();
 
         if( ret != wxID_OK )
             return 0;
@@ -743,7 +750,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         if( components.empty() )
             continue;
 
-        for( auto& ra : m_areas.m_areas )
+        for( RULE_AREA& ra : m_areas.m_areas )
         {
             if( components == ra.m_components )
             {
@@ -778,10 +785,11 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
     {
         if( !ra.m_generateEnabled )
             continue;
+
         if( ra.m_existsAlready && !m_areas.m_replaceExisting )
             continue;
 
-        auto raOutline = buildRAOutline( ra.m_components, 100000 );
+        SHAPE_LINE_CHAIN raOutline = buildRAOutline( ra.m_components, 100000 );
 
         std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
 
@@ -847,6 +855,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         {
             if( !ra.m_generateEnabled )
                 continue;
+
             if( ra.m_existsAlready && !m_areas.m_replaceExisting )
                 continue;
 
@@ -865,14 +874,13 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             grpCommit.Add( grp );
             grpCommit.Stage( ra.m_area, CHT_GROUP );
 
-            for( auto fp : ra.m_components )
+            for( FOOTPRINT* fp : ra.m_components )
             {
                 grpCommit.Stage( fp, CHT_GROUP );
             }
         }
         grpCommit.Push( _( "Group components with their placement rule areas" ) );
     }
-
 
     return true;
 }

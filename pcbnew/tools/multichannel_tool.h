@@ -121,7 +121,7 @@ private:
     void     setTransitions() override;
     int      repeatLayout( const TOOL_EVENT& aEvent );
 
-    wxString stripComponentIndex( wxString aRef ) const;
+    wxString stripComponentIndex( const wxString& aRef ) const;
     bool     identifyComponentsInRuleArea( ZONE* aRuleArea, std::set<FOOTPRINT*>& aComponents );
     const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
     std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName ) const;
