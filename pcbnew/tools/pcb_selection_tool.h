@@ -28,6 +28,7 @@
 #ifndef PCB_SELECTION_TOOL_H
 #define PCB_SELECTION_TOOL_H
 
+#include <functional>
 #include <memory>
 
 #include <math/vector2d.h>
@@ -50,7 +51,8 @@ namespace KIGFX
 }
 
 
-typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, PCB_SELECTION_TOOL* );
+using CLIENT_SELECTION_FILTER =
+        std::function<void( const VECTOR2I&, GENERAL_COLLECTOR&, PCB_SELECTION_TOOL* )>;
 
 
 /**
