@@ -173,6 +173,13 @@ public:
         return ( m_linkedItems.Size() == 1 && m_linkedItems.Count( VIA_T ) == 1 );
     }
 
+    bool IsTrivialEndpoint() const
+    {
+        // fixme: Arcs & trivial endpoint vias
+        return m_linkedItems.Size() == 1 && m_linkedItems.Count( SEGMENT_T ) == 1;
+    }
+
+
     bool IsTraceWidthChange() const
     {
         if( m_linkedItems.Count( SEGMENT_T ) != 2 )
