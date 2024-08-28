@@ -28,7 +28,7 @@
 #include <wx/log.h>
 
 #include <config_map.h>
-#include <dpi_scaling.h>
+#include <gal/dpi_scaling.h>
 
 using namespace KIGFX;
 

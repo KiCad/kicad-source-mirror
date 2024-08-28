@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,14 +28,13 @@
 #include <wx/statbox.h>
 #include <wx/panel.h>
 
-#include "kicommon.h"
-
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class WX_HTML_REPORT_PANEL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class KICOMMON_API WX_HTML_REPORT_PANEL_BASE : public wxPanel
+class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 {
 	private:
 

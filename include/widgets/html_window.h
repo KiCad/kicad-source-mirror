@@ -25,13 +25,12 @@
 #ifndef HTML_WINDOW_H
 #define HTML_WINDOW_H
 
-#include <kicommon.h>
 #include <wx/html/htmlwin.h>
 
 /**
  * Add dark theme support to wxHtmlWindow.
  */
-class KICOMMON_API HTML_WINDOW : public wxHtmlWindow
+class HTML_WINDOW : public wxHtmlWindow
 {
 public:
     HTML_WINDOW( wxWindow* aParent, wxWindowID aId = wxID_ANY,

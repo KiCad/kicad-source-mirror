@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dpi_scaling.h>
+#include <gal/dpi_scaling.h>
 
 
 double DPI_SCALING::GetMaxScaleFactor()
