@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-27 13:52+0000\n"
+"PO-Revision-Date: 2024-08-28 14:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -41381,7 +41381,7 @@ msgstr "(PTH 焊盘孔没有完全处在铜箔内)"
 
 #: pcbnew/pad.cpp:2086
 msgid "(pad hole not inside pad shape)"
-msgstr "(焊盘孔没有处在焊盘形状内)"
+msgstr "(焊盘孔不在焊盘形状内)"
 
 #: pcbnew/pad.cpp:2091
 msgid "(negative local clearance values have no effect)"
