@@ -635,15 +635,6 @@ public:
      */
     int m_ResolveTextRecursionDepth;
 
-    /**
-     * Use the new zone-connection fill routine
-     *
-     * Setting name: "ZoneConnectionFiller"
-     * Valid values: true or false
-     * Default value: false
-     */
-    bool m_ZoneConnectionFiller;
-
 ///@}
 
 private:

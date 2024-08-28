@@ -1819,12 +1819,8 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         /* -------------------------------------------------------------------------------------
          * Connect nearby polygons
          */
-
-        if( ADVANCED_CFG::GetCfg().m_ZoneConnectionFiller )
-        {
-            aFillPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
-            connect_nearby_polys( aFillPolys, aZone->GetMinThickness() );
-        }
+        aFillPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
+        connect_nearby_polys( aFillPolys, aZone->GetMinThickness() );
 
         DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In10_Cu, wxT( "connected-nearby-polys" ) );
     }
