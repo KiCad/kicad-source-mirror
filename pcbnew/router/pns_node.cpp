@@ -817,6 +817,8 @@ void NODE::rebuildJoint( const JOINT* aJoint, const ITEM* aItem )
     {
         if( link != aItem )
             linkJoint( tag.pos, link->Layers(), net, link );
+        else
+            unlinkJoint( tag.pos, link->Layers(), net, link );
     }
 }
 
