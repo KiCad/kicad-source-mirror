@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
 "PO-Revision-Date: 2024-08-28 14:09+0000\n"
-"Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -774,14 +774,12 @@ msgid "Use board stackup colors"
 msgstr "Użyj kolorów ze stosu warstw"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "Użyj kolorów ze stosu warstw"
+msgstr "Użyj kolorów miedzi z edytora obwodów drukowanych"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
-#, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
-msgstr "Użyj koloru czystej miedzi dla niepokrytych pól (powolne)"
+msgstr "Użyj kolorów miedzi z edytora obwodów drukowanych (tylko OpenGL)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
 #, c-format
@@ -4767,9 +4765,8 @@ msgid "Python interpreter status"
 msgstr "Status interpretera języka Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Niemaskowane"
+msgstr "<Niezdefiniowane>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1977
 #: common/stroke_params.cpp:37
@@ -7148,9 +7145,8 @@ msgid "Selection highlight"
 msgstr "Podświetlenie zaznaczenia"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Podświetlenie zaznaczenia"
+msgstr "Kolor podświetlenia sieci"
 
 #: common/layer_id.cpp:155 common/layer_id.cpp:186
 msgid "Drawing sheet"
@@ -7281,19 +7277,16 @@ msgid "Courtyard collision shadow"
 msgstr "Cień kolizji pól zajętości"
 
 #: common/layer_id.cpp:196
-#, fuzzy
 msgid "Track net names"
-msgstr "Wyszukaj nazwy sieci"
+msgstr "Nazwy sieci ścieżek"
 
 #: common/layer_id.cpp:197
-#, fuzzy
 msgid "Pad net names"
-msgstr "Wyszukaj nazwy sieci"
+msgstr "Nazwy sieci pól lutowniczych"
 
 #: common/layer_id.cpp:198
-#, fuzzy
 msgid "Via net names"
-msgstr "Wyszukaj nazwy sieci"
+msgstr "Nazwy sieci przelotek"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -7837,9 +7830,8 @@ msgid "Duplicates the selected item(s)"
 msgstr "Powiela wybrany(e) element(y)"
 
 #: common/tool/actions.cpp:280
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Usuwa wybrany(e) element(y)"
+msgstr "Usuń wybrany(e) element(y)"
 
 #: common/tool/actions.cpp:287
 msgid "Interactive Delete Tool"
@@ -8394,9 +8386,8 @@ msgid "Symbol Library Browser"
 msgstr "Przeglądarka bibliotek symboli"
 
 #: common/tool/actions.cpp:1032 kicad/tools/kicad_manager_actions.cpp:112
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Tworzy, usuwa oraz dokonuje edycji symboli"
+msgstr "Tworzy, usuwa oraz dokonuje edycji symboli schematowych"
 
 #: common/tool/actions.cpp:1040 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1031
@@ -8404,7 +8395,6 @@ msgid "Footprint Library Browser"
 msgstr "Przeglądarka bibliotek footprintów"
 
 #: common/tool/actions.cpp:1049
-#, fuzzy
 msgid "Create, delete and edit board footprints"
 msgstr "Tworzy, usuwa oraz dokonuje edycji footprintów"
 
@@ -9647,7 +9637,6 @@ msgid "Footprint Filters:"
 msgstr "Filtry footprintów:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
 msgstr "Pokaż zaznaczony footprint"
 
@@ -9656,40 +9645,35 @@ msgid "Manage Footprint Association Files..."
 msgstr "Zarządzaj plikami z przydziałem footprintów..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
 "Edytuj listę plików ze skojarzeniami footprintów.  Pliki te służą do "
-"automatycznego przypisywania nazw śladów na podstawie wartości symboli."
+"automatycznego przypisywania footprintów na podstawie wartości symboli."
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
 msgid "Save to Schematic"
 msgstr "Zapisz na schemacie"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
 msgstr ""
-"Zapisuje przydzielenie footprintów w polach nazwy footprintu symboli na "
-"schemacie oraz w pliku schematu"
+"Zapisuje przydzielenie footprintów w polach 'Footprint' symboli na schemacie"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
 msgstr "Zapisz na schemacie oraz do pliku"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Zapisuje przydzielenie footprintów w polach nazwy footprintu symboli na "
-"schemacie oraz w pliku schematu"
+"Zapisuje przydzielenie footprintów w polach 'Footprint' symboli na schemacie "
+"a następnie zapisuje pliki"
 
 #: cvpcb/tools/cvpcb_actions.cpp:104
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
 msgstr "Wybierz następny nieprzydzielony symbol"
 
@@ -9698,7 +9682,6 @@ msgid "Select next symbol with no footprint assignment"
 msgstr "Wybiera następny symbol, który nie posiada przypisanego footprintu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:113
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
 msgstr "Wybierz poprzedni nieprzydzielony symbol"
 
@@ -9707,14 +9690,12 @@ msgid "Select previous symbol with no footprint assignment"
 msgstr "Wybiera poprzedni symbol, który nie posiada przypisanego footprintu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
-#, fuzzy
 msgid "Assign Footprint"
-msgstr "Przydziel footprinty"
+msgstr "Przydziel footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:131
-#, fuzzy
 msgid "Automatically Assign Footprints"
-msgstr "Automatycznie przypisz footprinty"
+msgstr "Automatycznie przydziel footprinty"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
 msgid "Assign footprints automatically using a footprint association file"
@@ -9722,14 +9703,12 @@ msgstr ""
 "Automatyczne przypisywanie footprintów za pomocą pliku skojarzeń footprintów"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Przypisania footprintów"
+msgstr "Usuń przypisania footprintów"
 
 #: cvpcb/tools/cvpcb_actions.cpp:145
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Symbol : Przydzielony footprint"
+msgstr "Usuwa wszystkie przypisania footprintów"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -9841,9 +9820,8 @@ msgstr ""
 "magistrali"
 
 #: eeschema/connection_graph.cpp:3787 eeschema/erc/erc_item.cpp:232
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Niepołączone"
+msgstr "Końcówka niedokończonego połączenia"
 
 #: eeschema/connection_graph.cpp:4130
 #, c-format
@@ -12788,14 +12766,12 @@ msgid "Field name templates"
 msgstr "Wzorce nazw pól"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "BOM presets"
 msgstr "Zdefiniowane formaty BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM format presets"
-msgstr "Zdefiniowane formaty BOM"
+msgstr "Predefiniowane formaty BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
@@ -12812,12 +12788,10 @@ msgid "Net classes"
 msgstr "Klasy sieci"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
-#, fuzzy
 msgid "Bus alias definitions"
-msgstr "Definicje aliasów magistrali"
+msgstr "Definicje aliasów magistral"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
-#, fuzzy
 msgid "Text variables"
 msgstr "Zmienne tekstowe"
 
@@ -12946,9 +12920,8 @@ msgstr ""
 "Plik projektu %s nie mógł być załadowany."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:257
-#, fuzzy
 msgid "Loading Bus Aliases"
-msgstr "Aliasy magistral"
+msgstr "Wczytywanie aliasów magistral"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:268 eeschema/files-io.cpp:280
 msgid "Root"
@@ -12956,9 +12929,9 @@ msgstr "Główny"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:272
 #: eeschema/dialogs/dialog_schematic_setup.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Error fetching bus aliases.  Could not load schematic '%s'."
-msgstr "Wyczerpano pamięć przy ładowaniu schematu '%s'."
+msgstr "Błąd pobierania aliasów magistral.  Nie można wczytać schematu '%s'."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties.cpp:85
@@ -14720,14 +14693,12 @@ msgid "Highlight thickness:"
 msgstr "Grubość podświetlenia:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:133
-#, fuzzy
 msgid "Highlight netclass colors"
-msgstr "Kolor dla klasy sieci"
+msgstr "Kolory dla podświetlonych klasy sieci"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
-#, fuzzy
 msgid "Color highlight thickness:"
-msgstr "Grubość podświetlenia:"
+msgstr "Grubość kolorowego podświetlenia:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
 msgid "Color highlight opacity:"
@@ -15992,9 +15963,8 @@ msgid "Checking for footprint link issues..."
 msgstr "Sprawdzam poprawność łącz z footprintami..."
 
 #: eeschema/erc/erc.cpp:1756
-#, fuzzy
 msgid "Checking footprint assignments against footprint filters..."
-msgstr "Porównywanie footprintów na płytce z ich źródłami w bibliotece..."
+msgstr "Sprawdzanie przydzielonych footprintów względem filtrów footprintów..."
 
 #: eeschema/erc/erc.cpp:1764
 msgid "Checking for off grid pins and wires..."
@@ -16165,9 +16135,8 @@ msgid "Footprint link issue"
 msgstr "Problemy z łączami do footprintów"
 
 #: eeschema/erc/erc_item.cpp:192
-#, fuzzy
 msgid "Assigned footprint doesn't match footprint filters"
-msgstr "Footprint nie odpowiada jego kopii w bibliotece"
+msgstr "Przydzielony footprint nie odpowiada filtrom"
 
 #: eeschema/erc/erc_item.cpp:196
 msgid "Symbol is not annotated"
@@ -21237,9 +21206,8 @@ msgid "Add label '%s' to %s pin %s net."
 msgstr "Dodaje etykietę '%s' do pinu %s o sieci %s."
 
 #: eeschema/tools/ee_actions.cpp:47
-#, fuzzy
 msgid "Show the electrical rules checker window"
-msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych PCB"
+msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych"
 
 #: eeschema/tools/ee_actions.cpp:53
 msgid "Symbol Checker"
@@ -21264,9 +21232,8 @@ msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr "Ukazuje okno symulacji do uruchamiania symulacji SPICE lub IBIS."
 
 #: eeschema/tools/ee_actions.cpp:83
-#, fuzzy
 msgid "Open the datasheet in a browser"
-msgstr "Otwiera powiązaną dokumentację w przeglądarce"
+msgstr "Otwiera dokumentację w przeglądarce"
 
 #: eeschema/tools/ee_actions.cpp:92 pcbnew/tools/pcb_actions.cpp:1941
 msgid "Create Corner"
@@ -21298,9 +21265,8 @@ msgid "New Symbol..."
 msgstr "Nowy symbol..."
 
 #: eeschema/tools/ee_actions.cpp:167
-#, fuzzy
 msgid "Create a new symbol in an existing library"
-msgstr "Tworzy nowy symbol na podstawie już istniejącego symbolu"
+msgstr "Tworzy nowy symbol w istniejącej bibliotece"
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Derive from Existing Symbol"
@@ -21363,9 +21329,10 @@ msgid "Set Unit Display Name..."
 msgstr "Ustaw wyświetlaną nazwę części..."
 
 #: eeschema/tools/ee_actions.cpp:246
-#, fuzzy
 msgid "Set the display name for a particular unit in a multi-unit symbol"
-msgstr "Ustala wyświetlaną nazwę dla części składowej"
+msgstr ""
+"Ustala wyświetlaną nazwę dla pojedynczej części składowej symbolu "
+"wieloskładnikowego"
 
 #: eeschema/tools/ee_actions.cpp:251
 msgid "Add Symbol to Schematic"
@@ -21432,39 +21399,33 @@ msgid "Show Hidden Fields"
 msgstr "Pokaż ukryte pola tekstowe"
 
 #: eeschema/tools/ee_actions.cpp:312
-#, fuzzy
 msgid "Draw Pins"
-msgstr "Rysuje wyprowadzenia"
+msgstr "Rysuj wyprowadzenia"
 
 #: eeschema/tools/ee_actions.cpp:320 eeschema/tools/ee_actions.cpp:504
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:297
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:974
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Draw Text"
-msgstr "Rysuj blok tekstu"
+msgstr "Rysuj tekst"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:511
 #: pcbnew/tools/pcb_actions.cpp:176
-#, fuzzy
 msgid "Draw Text Boxes"
 msgstr "Rysuj blok tekstu"
 
 #: eeschema/tools/ee_actions.cpp:335 eeschema/tools/ee_actions.cpp:1311
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:100
-#, fuzzy
 msgid "Draw Lines"
-msgstr "Rysuj linię"
+msgstr "Rysuj linie"
 
 #: eeschema/tools/ee_actions.cpp:336
-#, fuzzy
 msgid "Draw connected graphic lines"
-msgstr "Dodaje połączone linie graficzne"
+msgstr "Rysuj połączone linie graficzne"
 
 #: eeschema/tools/ee_actions.cpp:344 pcbnew/tools/pcb_actions.cpp:109
-#, fuzzy
 msgid "Draw Polygons"
-msgstr "Rysuje wielokąty"
+msgstr "Rysuj wielokąty"
 
 #: eeschema/tools/ee_actions.cpp:352
 msgid "Move Symbol Anchor"
@@ -21495,94 +21456,77 @@ msgid "Copy pin number size to other pins in symbol"
 msgstr "Kopiuje rozmiar numeru pinu do pozostałych pinów w symbolu"
 
 #: eeschema/tools/ee_actions.cpp:387
-#, fuzzy
 msgid "Place Symbols"
-msgstr "Wklej symbol"
+msgstr "Umieść symbole"
 
 #: eeschema/tools/ee_actions.cpp:397
-#, fuzzy
 msgid "Place Power Symbols"
-msgstr "Symbol Zasilania"
+msgstr "Umieść symbole zasilania"
 
 #: eeschema/tools/ee_actions.cpp:407
-#, fuzzy
 msgid "Place No Connect Flags"
-msgstr "Dodaj flagę Niepołączone"
+msgstr "Umieść flagi Niepołączone"
 
 #: eeschema/tools/ee_actions.cpp:417
-#, fuzzy
 msgid "Place Junctions"
-msgstr "Węzły"
+msgstr "Umieść węzły"
 
 #: eeschema/tools/ee_actions.cpp:427
-#, fuzzy
 msgid "Place Wire to Bus Entries"
-msgstr "Dodaj wejście do magistrali"
+msgstr "Umieść wejścia do magistrali"
 
 #: eeschema/tools/ee_actions.cpp:437
-#, fuzzy
 msgid "Place Net Labels"
-msgstr "Etykieta"
+msgstr "Umieść etykiety"
 
 #: eeschema/tools/ee_actions.cpp:444
-#, fuzzy
 msgid "Place Net Class Directives"
-msgstr "Dodaj dyrektywę klasy sieci"
+msgstr "Umieść dyrektywy klasy sieci"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Place Hierarchical Labels"
-msgstr "Etykiety hierarchiczne"
+msgstr "Umieść etykiety hierarchiczne"
 
 #: eeschema/tools/ee_actions.cpp:462
-#, fuzzy
 msgid "Draw Hierarchical Sheets"
-msgstr "Umieszcza arkusze hierarchiczne"
+msgstr "Umieść arkusze hierarchiczne"
 
 #: eeschema/tools/ee_actions.cpp:470
-#, fuzzy
 msgid "Place Sheet Pins"
-msgstr "Usuń piny arkusza"
+msgstr "Umieść piny arkusza"
 
 #: eeschema/tools/ee_actions.cpp:477 eeschema/tools/ee_actions.cpp:485
 msgid "Sync Sheet Pins"
 msgstr "Synchronizacja pinów arkusza"
 
 #: eeschema/tools/ee_actions.cpp:495
-#, fuzzy
 msgid "Place Global Labels"
-msgstr "Etykieta globalna"
+msgstr "Umieść etykiety globalne"
 
 #: eeschema/tools/ee_actions.cpp:519 pcbnew/tools/pcb_actions.cpp:183
-#, fuzzy
 msgid "Draw Tables"
-msgstr "Rysuj tabelę"
+msgstr "Rysuj tabele"
 
 #: eeschema/tools/ee_actions.cpp:526 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Draw Rectangles"
-msgstr "Rysuj prostokąt"
+msgstr "Rysuj prostokąty"
 
 #: eeschema/tools/ee_actions.cpp:534 pcbnew/tools/pcb_actions.cpp:126
-#, fuzzy
 msgid "Draw Circles"
-msgstr "Rysuj okrąg"
+msgstr "Rysuj okręgi"
 
 #: eeschema/tools/ee_actions.cpp:542 pcbnew/tools/pcb_actions.cpp:135
-#, fuzzy
 msgid "Draw Arcs"
-msgstr "Rysuj łuk"
+msgstr "Rysuj łuki"
 
 #: eeschema/tools/ee_actions.cpp:550
-#, fuzzy
 msgid "Place Images"
-msgstr "Umieść obraz"
+msgstr "Umieść obrazy"
 
 #: eeschema/tools/ee_actions.cpp:558 pcbnew/tools/pcb_actions.cpp:290
-#, fuzzy
 msgid "Draw Rule Areas"
-msgstr "Rysuj strefę z regułami"
+msgstr "Rysuj strefy z regułami"
 
 #: eeschema/tools/ee_actions.cpp:566 pcbnew/tools/pcb_actions.cpp:382
 msgid "Delete Last Point"
@@ -21597,7 +21541,6 @@ msgid "Close Outline"
 msgstr "Zamknij obrys"
 
 #: eeschema/tools/ee_actions.cpp:574
-#, fuzzy
 msgid "Close the in-progress outline"
 msgstr "Zamyka tworzony właśnie obrys"
 
@@ -21639,9 +21582,8 @@ msgid "Swap"
 msgstr "Zamień"
 
 #: eeschema/tools/ee_actions.cpp:629
-#, fuzzy
 msgid "Swap positions of selected items"
-msgstr "Dopuszczaj zaznaczanie zablokowanych elementów"
+msgstr "Zamień pozycje wybranych elementów"
 
 #: eeschema/tools/ee_actions.cpp:637 pcbnew/tools/pcb_actions.cpp:664
 msgid "Properties..."
@@ -21665,7 +21607,6 @@ msgid "Autoplace Fields"
 msgstr "Automatycznie rozłóż pola"
 
 #: eeschema/tools/ee_actions.cpp:670
-#, fuzzy
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
 msgstr "Uruchamia algorytm automatycznego umieszczania pól symbolu lub arkusza"
@@ -22314,9 +22255,8 @@ msgid "Draw Wires"
 msgstr "Rysuj połączenia"
 
 #: eeschema/tools/ee_actions.cpp:1289
-#, fuzzy
 msgid "Draw Buses"
-msgstr "Rysuj %s"
+msgstr "Rysuj magistrale"
 
 #: eeschema/tools/ee_actions.cpp:1299
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
@@ -22589,9 +22529,8 @@ msgid "Press <ESC> to cancel symbol creation."
 msgstr "Naciśnij <ESC> by anulować tworzenie symbolu."
 
 #: eeschema/tools/sch_drawing_tools.cpp:419
-#, fuzzy
 msgid "Place Symbol"
-msgstr "Wklej symbol"
+msgstr "Umieść symbol"
 
 #: eeschema/tools/sch_drawing_tools.cpp:659 pcbnew/tools/drawing_tool.cpp:659
 msgid "Press <ESC> to cancel image creation."
@@ -22982,9 +22921,8 @@ msgid "SVG File Name"
 msgstr "Nazwa pliku SVG"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:291
-#, fuzzy
 msgid "Place Pin"
-msgstr "Umieść przelotkę"
+msgstr "Umieść wyprowadzenie"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:366
 #: pcbnew/tools/edit_tool.cpp:2567
@@ -24236,7 +24174,6 @@ msgid "Show DCodes"
 msgstr "Pokaż D-kody"
 
 #: gerbview/tools/gerbview_actions.cpp:222
-#, fuzzy
 msgid "Show dcode numbers"
 msgstr "Pokaż numery D-kodów"
 
@@ -26521,18 +26458,16 @@ msgid "New Project..."
 msgstr "Nowy projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new, blank project"
-msgstr "Tworzy pusty projekt"
+msgstr "Utwórz nowy, pusty projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "New Project from Template..."
 msgstr "Nowy projekt na podstawie szablonu..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "Tworzy nowy symbol na podstawie już istniejącego symbolu"
+msgstr "Tworzy nowy projekt na podstawie już istniejącego projektu"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 msgid "Clone Project from Repository..."
@@ -26551,17 +26486,14 @@ msgid "Close Project"
 msgstr "Zamknij projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:101
-#, fuzzy
 msgid "Edit schematic in schematic editor"
-msgstr "Otwórz schemat w edytorze schematów"
+msgstr "Edycja schematu w edytorze schematów"
 
 #: kicad/tools/kicad_manager_actions.cpp:123
-#, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "Edytuj w edytorze tekstu"
+msgstr "Edycja PCB w edytorze obwodów drukowanyhc"
 
 #: kicad/tools/kicad_manager_actions.cpp:134
-#, fuzzy
 msgid "Create, delete and edit PCB footprints"
 msgstr "Tworzy, usuwa oraz dokonuje edycji footprintów"
 
@@ -27091,19 +27023,16 @@ msgstr ""
 "elementy, które nie są składnikami wszystkich stron"
 
 #: pagelayout_editor/tools/pl_actions.cpp:69
-#, fuzzy
 msgid "Place Bitmaps"
-msgstr "Umieść elementy"
+msgstr "Umieść mapy bitowe"
 
 #: pagelayout_editor/tools/pl_actions.cpp:89
 msgid "Append Existing Drawing Sheet..."
 msgstr "Dodaj istniejący rysunek definicji strony..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:90
-#, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
-msgstr ""
-"Dołącza do obecnego projektu istniejący graficzny projekt obramowania strony"
+msgstr "Dołącza istniejący plik arkusza projektowego do obecnego pliku"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid "Show Design Inspector"
@@ -30991,9 +30920,8 @@ msgid "Board Cleanup"
 msgstr "Oczyszczanie obwodu drukowanego"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
-#, fuzzy
 msgid "Refill zones before running cleanup"
-msgstr "Wypełnij wszystkie strefy przed przeprowadzeniem kontroli DRC"
+msgstr "Wypełnia wszystkie strefy przed uruchomieniem oczyszczania"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:33
 msgid "Delete &tracks connecting different nets"
@@ -32568,9 +32496,8 @@ msgid "Export components"
 msgstr "Eksportuj komponenty"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:70
-#, fuzzy
 msgid "All components"
-msgstr "Autorozmieszczanie komponentów"
+msgstr "Wszystkie komponenty"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:75
 msgid "Export only the component models that are selected in the PCB editor"
@@ -34291,9 +34218,8 @@ msgid "Center on footprint"
 msgstr "W punkcie centralnym footprintu"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:254
-#, fuzzy
 msgid "Move footprint texts to the center of their parent"
-msgstr "Wczytuje footprint z bieżącej płytki do edytora footprintów"
+msgstr "Przesuwa teksty footprintów do środka ich footprintu nadrzędnego"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -34679,44 +34605,36 @@ msgstr "Zamień istniejące strefy z regułami"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
 #: pcbnew/tools/multichannel_tool.cpp:402
 #: pcbnew/tools/multichannel_tool.cpp:804
-#, fuzzy
 msgid "Group components with their placement rule areas"
-msgstr "Pliki położeń komponentów"
+msgstr "Grupuje komponenty według ich reguł stref układania"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:51
-#, fuzzy
 msgid "Generate Multichannel Rule Areas"
-msgstr "Przekształć w strefę z regułami"
+msgstr "Tworzy wielokanałowe strefy z regułami"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
-#, fuzzy
 msgid "Target areas:"
-msgstr "Docelowa odchyłka:"
+msgstr "Docelowe strefy:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:61
-#, fuzzy
 msgid "Reference Rule Area:"
-msgstr "Ogranicznik oznaczenia:"
+msgstr "Referencyjna strefa z regułami:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Copy placement"
-msgstr "Rozmieszczenie"
+msgstr "Kopiuj rozmieszczenie"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
-#, fuzzy
 msgid "Copy routing"
-msgstr "Kopiuj footprint"
+msgstr "Kopiuj układ ścieżek"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:86
-#, fuzzy
 msgid "Include locked components"
-msgstr "Uwzględnij zablokowane footprinty"
+msgstr "Uwzględnij zablokowane komponenty"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:89
-#, fuzzy
 msgid "Include components outside the target area"
-msgstr "Wyklucz komponenty nie posiadające pinów"
+msgstr "Uwzględnij komponenty na zewnątrz strefy docelowej"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
@@ -35321,14 +35239,14 @@ msgid "Include Layers"
 msgstr "Załączone warstwy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
-#, fuzzy
 msgid "Indicate DNP on fabrication layers"
-msgstr "Obrysy pól na warstwach produkcyjnych"
+msgstr "Zaznacz stan flagi 'Nie montować' na warstwach produkcyjnych"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:81
-#, fuzzy
 msgid "Hide or cross-out DNP footprints on fabrication layers"
-msgstr "Obrysy pól na warstwach produkcyjnych"
+msgstr ""
+"Ukrywa bądź przekreśla footprinty z aktywnym stanem flagi 'Nie montować' na "
+"warstwach produkcyjnych"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
 #: pcbnew/widgets/appearance_controls.cpp:656
@@ -35337,14 +35255,12 @@ msgid "Hide"
 msgstr "Ukryte"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
-#, fuzzy
 msgid "Hide the footprint text and graphics"
-msgstr "Inne elementy tekstowe footprintów"
+msgstr "Ukryj teksty oraz grafiki footprintu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
-#, fuzzy
 msgid "Cross-out"
-msgstr "Ustawienia zaznaczania"
+msgstr "Przekreśl"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Force plotting of invisible values / refs"
@@ -35880,9 +35796,8 @@ msgstr ""
 "Punkt zaczepienia będzie pozycją wybranego elementu."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:45
-#, fuzzy
 msgid "Select Point..."
-msgstr "Wybierz footprint..."
+msgstr "Wybierz punkt..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
@@ -36032,14 +35947,12 @@ msgstr ""
 "Unikalna nazwa dla obszaru z regułami do użytku w regułach projektowych DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:70 pcbnew/zone.cpp:1600
-#, fuzzy
 msgid "Keepout"
-msgstr "Strefy chronione"
+msgstr "Wyklucz"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:72
-#, fuzzy
 msgid "Rule type"
-msgstr "Strefa z regułami"
+msgstr "Typ reguły"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:80
 msgid "Keep out tracks"
@@ -36082,9 +35995,8 @@ msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "Zgłoś błąd DRC jeśli pole zajętości footprintu nachodzi na ten obszar"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
-#, fuzzy
 msgid "Condition:"
-msgstr "Pozycja:"
+msgstr "Warunek:"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:204
 msgid "Center Point"
@@ -37934,9 +37846,8 @@ msgstr ""
 "footprintach lub dla pól lutowniczych."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
-#, fuzzy
 msgid "Solder mask settings:"
-msgstr "Soldermaska na górze:"
+msgstr "Ustawienia soldermaski:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
 msgid ""
@@ -37998,6 +37909,9 @@ msgid ""
 "Disable DRC error type solder mask aperture bridge between pads of the same "
 "footprint (useful for net ties)"
 msgstr ""
+"Dla testów DRC:\n"
+"Wyłącz błąd DRC dotyczący możliwości połączenia apertur soldermaski pomiędzy "
+"polami tego samego footprintu (przydatne przy powiązanych sieciach)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:111
 msgid "Tent vias:"
@@ -38015,9 +37929,8 @@ msgstr ""
 "(Soldermaska jest warstwą negatywową)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:128
-#, fuzzy
 msgid "Solder paste settings:"
-msgstr "Relatywny prześwit pasty lutowniczej:"
+msgstr "Ustawienia pasty lutowniczej:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 msgid ""
@@ -38091,7 +38004,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -38565,10 +38477,9 @@ msgid ""
 msgstr ""
 "### Klauzule najwyższego poziomu\n"
 "\n"
-"    (version <numer>)\n"
+"    (version 1)\n"
 "\n"
 "    (rule <nazwa_reguły> <warunek_reguły> ...)\n"
-"\n"
 "\n"
 "<br>\n"
 "\n"
@@ -38587,169 +38498,214 @@ msgstr ""
 "\n"
 "### Typy ograniczeń\n"
 "\n"
-"| Typ ograniczenia          | Typ "
-"argumentu                                                                                                          "
-"| "
-"Opis                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+"| Typ ograniczenia          | Typ argumentu                                  "
+"                                                                        | Opi"
+"s                                                                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                          |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"--------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza szerokość okręgów przelotek.<br>                                    "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"|                                                                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                     \n"
+"| `assertion`               | \"&lt;expression>\"                            "
+"                                                                          | "
+"Sprawdza podane wyrażenie warunkowe.<br>                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Sprawdza szerokość okręgów przelotek."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                     "
-"|                                                                                                                                                                                                                                                                                                                                        \n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                      "
-"| Sprawdza podane wyrażenie warunkowe."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Określa **elektryczny** odstęp pomiędzy elementami miedzi różnych sieci. "
-"(Zobacz `physical_clearance` jeśli chcesz określić odstęp pomiędzy obiektami "
+"| `clearance`               | min                                            "
+"                                                                        | "
+"Określa **elektryczny** odstęp pomiędzy elementami miedzi różnych sieci. ("
+"Zobacz `physical_clearance` jeśli chcesz określić odstęp pomiędzy obiektami "
 "niezależnie od sieci.)<br><br>Aby umożliwić miedzianym obiektom nakładanie "
 "się (kolidowanie), utwórz ograniczenie `clearance` z wartością `min` "
-"mniejszą od zera (na przykład , `-1`)."
-"<br>                                                                                                                              "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy polami zajętości footprintów i generuje błąd, "
-"jeśli dowolne dwa z nich są bliżej niż odległość `min`. Jeśli obrys nie ma "
-"oznaczonego tego kształtu nie zostaną wygenerowane żadne błędy."
-"<br>                                                                                                                                                                                                                                                         "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Sprawdza odstęp między ścieżkami pary różnicowej. Para różnicowa to "
-"odcinki równoległe do siebie. Odstęp między parami różnicowymi nie jest "
-"testowany na niesprzężonych częściach pary różnicowej (na przykład na "
-"rozgałęzieniu komponentu)."
-"<br>                                                                                                                                                                                                                              "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Sprawdza odległość, z jaką jest poprowadzona ścieżka pary różnicowej bez "
+"mniejszą od zera (na przykład , `-1`).<br>                                   "
+"                                                                             "
+"              |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy polami zajętości footprintów i generuje błąd, jeśli "
+"dowolne dwa z nich są bliżej niż odległość `min`. Jeśli obrys nie ma "
+"oznaczonego tego kształtu nie zostaną wygenerowane żadne błędy.<br>          "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"        |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp między ścieżkami pary różnicowej. Para różnicowa to odcinki "
+"równoległe do siebie. Odstęp między parami różnicowymi nie jest testowany na "
+"niesprzężonych częściach pary różnicowej (na przykład na rozgałęzieniu "
+"komponentu).<br>                                                             "
+"                                                                             "
+"                                                                             "
+"       |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"Sprawdza odległość, z jaką jest poprowadzona ścieżka pary różnicowej bez "
 "odłączenia od ścieżki przeciwnej polaryzacji w parze (na przykład, gdy para "
 "rozchodzi się od komponentu lub zostaje rozłączona, aby ominąć inny obiekt, "
-"np. przelotkę)."
-"<br>                                                                                                                                                                                                                          "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Określa jeden lub więcej typów obiektów, które stają się zabronione, "
-"oddzielając je spacjami. Na przykład `(constraint disallow track)` lub "
-"`(constraint disallow track via pad)`. Jeśli obiekt podanego typu pasuje do "
+"np. przelotkę).<br>                                                          "
+"                                                                             "
+"                                                                             "
+"      |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Określa jeden lub więcej typów obiektów, które stają się zabronione, "
+"oddzielając je spacjami. Na przykład `(constraint disallow track)` lub `("
+"constraint disallow track via pad)`. Jeśli obiekt podanego typu pasuje do "
 "warunku reguły, zostanie utworzony błąd DRC.<br><br>To ograniczenie jest "
 "zasadniczo takie samo jak obszar odcięty, ale można go wykorzystać do "
-"utworzenia bardziej szczegółowych ograniczeń."
-"<br>                                                      |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Sprawdza odstęp między obiektami a krawędzią płytki.<br><br>Można to "
-"również traktować jako `tolerancję frezowania`, ponieważ krawędź płytki "
-"będzie zawierać wszystkie elementy graficzne na warstwie `Edge.Cuts` oraz "
-"wszelkie otwory *owalne*. (Zobacz `physical_hole_clearance`, aby zapoznać "
-"się z tolerancją "
-"wiercenia.)<br>                                                                                                                                             "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Sprawdza całkowitą długość trasy dla sieci spełniających warunek reguły i "
+"utworzenia bardziej szczegółowych "
+"ograniczeń.<br>                                                      |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp między obiektami a krawędzią płytki.<br><br>Można to również "
+"traktować jako `tolerancję frezowania`, ponieważ krawędź płytki będzie "
+"zawierać wszystkie elementy graficzne na warstwie `Edge.Cuts` oraz wszelkie "
+"otwory *owalne*. (Zobacz `physical_hole_clearance`, aby zapoznać się z "
+"tolerancją wiercenia.)<br>                                                   "
+"                                                                             "
+"             |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"Sprawdza całkowitą długość trasy dla sieci spełniających warunek reguły i "
 "generuje błąd dla każdej sieci, która jest poniżej wartości `min` (jeśli "
-"została określona) lub powyżej wartości `max` (jeśli została określona) "
-"ograniczenia."
-"<br>                                                                                                                                                                                                                                  "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Sprawdza wielkość (średnicę) otworu wierconego w polu lutowniczym, lub "
+"została określona) lub powyżej wartości `max` (jeśli została określona) ogran"
+"iczenia.<br>                                                                 "
+"                                                                             "
+"                                                                             "
+"       |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"Sprawdza wielkość (średnicę) otworu wierconego w polu lutowniczym, lub "
 "przelotce. W przypadku otworów owalnych mniejsza (poboczna) średnica "
-"zostanie przetestowana w stosunku do wartości `min` (jeśli została "
-"określona), a większa (główna) średnica zostanie przetestowana w odniesieniu "
-"do wartości `max` (jeśli została określona)."
-"<br>                                                                                                                                  "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
+"zostanie przetestowana w stosunku do wartości `min` (jeśli została określona)"
+", a większa (główna) średnica zostanie przetestowana w odniesieniu do "
+"wartości `max` (jeśli została określona).<br>                                "
+"                                                                             "
+"                     |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
 "przelotce a miedzianymi elementami innej sieci. Odstęp mierzy się od "
-"średnicy otworu, a nie od jego środka."
-"<br>                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy mechanicznie wywierconymi otworami w polach "
+"średnicy otworu, a nie od jego środka.<br>                                   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy mechanicznie wywierconymi otworami w polach "
 "lutowniczych i przelotkach. Odstęp mierzy się pomiędzy średnicami otworów, a "
 "nie pomiędzy ich środkami.<br><br>Ograniczenie służy wyłącznie do ochrony "
 "wierteł. Nie sprawdza się odstępu między **wywierconymi laserowo** "
 "(mikroprzelotkami) a innymi otworami nie wierconymi mechanicznie, ani "
 "odstępem pomiędzy **frezowanymi** (owalnymi) otworami i innymi otworami nie "
 "wierconymi mechanicznie.<br> |  \n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy dwoma obiektami na danej warstwie (w tym "
-"warstwami nie będącymi sygnałowymi).<br><br>Chociaż można tym wykonywać "
-"kontrolę bardziej ogólnego przeznaczenia niż `clearance`, jest ona znacznie "
-"wolniejsza. Jeśli to możliwe, użyj `clearance`."
-"<br>                                                                                                                                                                                                     "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy dwoma obiektami na danej warstwie (w tym warstwami "
+"nie będącymi sygnałowymi).<br><br>Chociaż można tym wykonywać kontrolę "
+"bardziej ogólnego przeznaczenia niż `clearance`, jest ona znacznie "
+"wolniejsza. Jeśli to możliwe, użyj `clearance`.<br>                          "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
 "przelotce a innym obiektem, niezależnie od przynależnośći do sieci. odstęp "
 "mierzy się od średnicy otworu, a nie od jego środka.<br><br>Można to również "
 "traktować jako `tolerancję wiercenia`, ponieważ obejmuje tylko **okrągłe** "
-"otwory (zobacz `edge_clearance` dla tolerancja frezowania)."
-"<br>                                                                                                        "
-"| \n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Sprawdza odstęp pomiędzy obiektami na warstwach sitodruku a innymi "
-"obiektami."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                             "
+"otwory (zobacz `edge_clearance` dla tolerancja frezowania).<br>              "
+"                                                                             "
+"             | \n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy obiektami na warstwach sitodruku a innymi obiektami."
+"<br>                                                                         "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Sprawdza całkowite nachylenie sieci spełniających warunek reguły, czyli "
+"| `skew`                    | max                                            "
+"                                                                        | "
+"Sprawdza całkowite nachylenie sieci spełniających warunek reguły, czyli "
 "różnicę między długością każdej sieci a średnią wszystkich długości każdej "
 "sieci spełniającej warunek reguły. Jeśli wartość bezwzględna różnicy między "
 "tą średnią a długością dowolnej sieci przekracza wartość ograniczenia `max`, "
-"zostanie wygenerowany błąd."
-"<br>                                                                                                                                   "
+"zostanie wygenerowany błąd.<br>                                              "
+"                                                                             "
+"        |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"Określa szerokość szczeliny pomiędzy polem lutowniczym a strefą z "
+"połączeniem termicznym.<br>                                                  "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"           |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"Określa szerokość ramion łączących pole lutownicze ze strefą z połączeniem te"
+"rmicznym.<br>                                                                "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Określa szerokość szczeliny pomiędzy polem lutowniczym a strefą z "
-"połączeniem termicznym."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                 "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Określa szerokość ramion łączących pole lutownicze ze strefą z połączeniem "
-"termicznym."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                    "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Sprawdza szerokość segmentów ścieżek i łuków. Błąd zostanie wygenerowany "
-"dla każdego segmentu, którego szerokość jest mniejsza niż wartość `min` "
-"(jeśli została określona) lub większa niż wartość `max` (jeśli została "
-"określona)."
-"<br>                                                                                                                                                                                                                                       "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Zlicza przelotki w każdej sieci spełniającej warunek reguły. Jeśli liczba "
-"ta przekroczy wartość ograniczenia `max` w dowolnej dopasowanej sieci, dla "
-"tej sieci zostanie wygenerowany błąd."
-"<br>                                                                                                                                                                                                                                                                                "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Określa typ połączenia, które ma zostać wykonane pomiędzy strefą a polem "
-"lutowniczym."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                     "
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza szerokość segmentów ścieżek i łuków. Błąd zostanie wygenerowany dla "
+"każdego segmentu, którego szerokość jest mniejsza niż wartość `min` (jeśli "
+"została określona) lub większa niż wartość `max` (jeśli została określona).<b"
+"r>                                                                           "
+"                                                                             "
+"                                                                             "
+"  |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"Zlicza przelotki w każdej sieci spełniającej warunek reguły. Jeśli liczba ta "
+"przekroczy wartość ograniczenia `max` w dowolnej dopasowanej sieci, dla tej "
+"sieci zostanie wygenerowany błąd.<br>                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+" |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"Określa typ połączenia, które ma zostać wykonane pomiędzy strefą a polem luto"
+"wniczym.<br>                                                                 "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
 "|\n"
 "\n"
 "\n"
@@ -38861,8 +38817,8 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<nazwa_sieci>')\n"
 "Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
-"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład `inDiffPair('/"
-"CLK')`\n"
+"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład "
+"`inDiffPair('/CLK')`\n"
 "odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -38899,8 +38855,14 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer "
-"\"nazwa_warstwy\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
+"<br><br>\n"
+"\n"
+"    A.hasNetclass('<nazwa_klasy_sieci>')\n"
+"Prawdziwe jeśli `A` ma przypisaną daną klasę sieci, poprzez jawną etykietę "
+"klasy sieci, \n"
+"albo poprzez przypisanie przez dopasowania wzorca.\n"
 "<br><br>\n"
 "\n"
 "### Więcej przykładów\n"
@@ -39033,15 +38995,15 @@ msgstr ""
 "-przed- laserowym \n"
 "    # tworzeniem mikroprzelotek.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
 "### Dokumentacja\n"
 "\n"
-"Pełna dokumentację można znaleźć pod adresem [https://docs.kicad.org]"
-"(https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"Pełna dokumentację można znaleźć pod adresem [https://docs.kicad."
+"org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
 "html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
@@ -39693,9 +39655,8 @@ msgid "Footprint attributes don't match symbol"
 msgstr "Atrybuty footprintu nie odpowiadają symbolowi"
 
 #: pcbnew/drc/drc_item.cpp:194
-#, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
-msgstr "Footprint nie odpowiada jego kopii w bibliotece"
+msgstr "Footprint nie odpowiada jego filtrom zapisanych w symbolu"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Footprint not found in libraries"
@@ -41826,14 +41787,12 @@ msgid "Fabrication Outputs"
 msgstr "Pliki produkcyjne"
 
 #: pcbnew/menubar_pcb_editor.cpp:300
-#, fuzzy
 msgid "Draw Microwave Shapes"
-msgstr "Dodaj kształt mikrofalowy"
+msgstr "Rysuj kształty mikrofalowe"
 
 #: pcbnew/menubar_pcb_editor.cpp:322
-#, fuzzy
 msgid "Draw Dimensions"
-msgstr "Rysuj wymiar"
+msgstr "Rysuj wymiary"
 
 #: pcbnew/menubar_pcb_editor.cpp:343
 msgid "Auto-Place Footprints"
@@ -42274,7 +42233,7 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Ostrzeżeń w sumie: %d, błędów w sumie: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -42611,9 +42570,8 @@ msgid "(corner chamfer is too large)"
 msgstr "(ścięcie jest zbyt duże)"
 
 #: pcbnew/pad.cpp:2267
-#, fuzzy
 msgid "(trapezoid delta is too large)"
-msgstr "(trapezowość jest zbyt duża)"
+msgstr "(stopień trapezowości jest zbyt duży)"
 
 #: pcbnew/pad.cpp:2278
 msgid "(custom pad shape must resolve to a single polygon)"
@@ -45328,9 +45286,8 @@ msgid "Save router log"
 msgstr "Zapisz dziennik zdarzeń trasowania"
 
 #: pcbnew/router/router_tool.cpp:1083
-#, fuzzy
 msgid "Via needs 2 different layers."
-msgstr "Przelotki ślepe/zagrzebane wymagają 2 różnych warstw."
+msgstr "Przelotki wymagają 2 różnych warstw."
 
 #: pcbnew/router/router_tool.cpp:1154
 msgid "Tracks on Copper layers only."
@@ -45631,7 +45588,6 @@ msgid "Increase Via Size"
 msgstr "Zwiększ rozmiar przelotki"
 
 #: pcbnew/tools/board_editor_control.cpp:1171
-#, fuzzy
 msgid "Place Footprint"
 msgstr "Umieść footprint"
 
@@ -46336,9 +46292,8 @@ msgstr "Linie zaokrąglone"
 
 #: pcbnew/tools/edit_tool.cpp:1418
 #: pcbnew/tools/item_modification_routine.cpp:256
-#, fuzzy
 msgid "Dogbone Corners"
-msgstr "Przesuń narożnik"
+msgstr "Narożniki dogbone"
 
 #: pcbnew/tools/edit_tool.cpp:1517
 msgid "Simplify Shapes"
@@ -46487,14 +46442,12 @@ msgid "Some of the lines could not be chamfered."
 msgstr "Pewne linie nie mogły zostać ścięte."
 
 #: pcbnew/tools/item_modification_routine.cpp:266
-#, fuzzy
 msgid "Unable to add dogbone corners to the selected lines."
-msgstr "Nie można ściąć wybranych linii."
+msgstr "Nie można dodać narożników dogbone do wybranych linii."
 
 #: pcbnew/tools/item_modification_routine.cpp:270
-#, fuzzy
 msgid "Some of the lines could not have dogbone corners added."
-msgstr "Pewne linie nie mogły zostać ścięte."
+msgstr "Niektóre z linii nie mogą posiadać dodanych narożników dogbone."
 
 #: pcbnew/tools/item_modification_routine.cpp:278
 msgid ""
@@ -46602,9 +46555,8 @@ msgstr ""
 "zawiera tylko jeden arkusz hierarchiczny lub nie zawiera go wcale."
 
 #: pcbnew/tools/multichannel_tool.cpp:767
-#, fuzzy
 msgid "Auto-generate placement rule areas"
-msgstr "Generuj pliki położeń elementów"
+msgstr "Automatyczne generowanie obszarów z regułami rozmieszczenia"
 
 #: pcbnew/tools/pad_tool.cpp:164
 msgid "Paste Pad Properties"
@@ -46710,12 +46662,10 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Dodaje tabelę ze stosem warstw na warstwie rysunkowej"
 
 #: pcbnew/tools/pcb_actions.cpp:158
-#, fuzzy
 msgid "Place Reference Images"
-msgstr "Obraz referencyjny"
+msgstr "Umieść obrazy referencyjne"
 
 #: pcbnew/tools/pcb_actions.cpp:159
-#, fuzzy
 msgid ""
 "Add bitmap images to be used as reference (images will not be included in "
 "any output)"
@@ -46756,53 +46706,44 @@ msgid "Decrease tuning pattern amplitude by one step."
 msgstr "Zmniejsza amplitudę wzorca dostrajania o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:228
-#, fuzzy
 msgid "Draw Aligned Dimensions"
-msgstr "Dopasowany wymiar"
+msgstr "Rysuj dopasowany wymiar"
 
 #: pcbnew/tools/pcb_actions.cpp:235
-#, fuzzy
 msgid "Draw Center Dimensions"
-msgstr "Centrowanie wymiaru"
+msgstr "Rysuj wymiary centryczne"
 
 #: pcbnew/tools/pcb_actions.cpp:242
-#, fuzzy
 msgid "Draw Radial Dimensions"
-msgstr "Dodaj wymiar kątowy"
+msgstr "Rysuj wymiary kątowe"
 
 #: pcbnew/tools/pcb_actions.cpp:250
-#, fuzzy
 msgid "Draw Orthogonal Dimensions"
-msgstr "Wymiar ortogonalny"
+msgstr "Rysuj wymiary ortogonalne"
 
 #: pcbnew/tools/pcb_actions.cpp:257
-#, fuzzy
 msgid "Draw Leaders"
-msgstr "Rysuje łuki"
+msgstr "Rysuj prowadnice"
 
 #: pcbnew/tools/pcb_actions.cpp:270
-#, fuzzy
 msgid "Draw Filled Zones"
-msgstr "Dodaj wypełnioną strefę"
+msgstr "Rysuj strefy wypełnień"
 
 #: pcbnew/tools/pcb_actions.cpp:280
-#, fuzzy
 msgid "Place Vias"
-msgstr "Umieść przelotkę"
+msgstr "Umieść przelotki"
 
 #: pcbnew/tools/pcb_actions.cpp:281
-#, fuzzy
 msgid "Place free-standing vias"
-msgstr "Dodaj samodzielne przelotki"
+msgstr "Umieść samodzielne przelotki"
 
 #: pcbnew/tools/pcb_actions.cpp:300
 msgid "Add a Zone Cutout"
 msgstr "Dodaj obszar odcięty"
 
 #: pcbnew/tools/pcb_actions.cpp:301
-#, fuzzy
 msgid "Add a cutout to an existing zone or rule area"
-msgstr "Dodaje obszar odcięty znajdujący się wewnątrz strefy"
+msgstr "Dodaje obszar odcięty znajdujący się wewnątrz istniejącej strefy"
 
 #: pcbnew/tools/pcb_actions.cpp:311
 msgid "Add a Similar Zone"
@@ -46944,19 +46885,16 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "Przenosi wybrane elementy na przeciwległa warstwę"
 
 #: pcbnew/tools/pcb_actions.cpp:542
-#, fuzzy
 msgid "Mirrors selected item(s) across the Y axis"
 msgstr "Odbija wybrane elementy względem osi Y"
 
 #: pcbnew/tools/pcb_actions.cpp:549
-#, fuzzy
 msgid "Mirrors selected item(s) across the X axis"
 msgstr "Odbija wybrane elementy względem osi X"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Swap positiona of selected items"
-msgstr "Dopuszczaj zaznaczanie zablokowanych elementów"
+msgstr "Zamień pozycje wybranych elementów"
 
 #: pcbnew/tools/pcb_actions.cpp:564
 msgid "Pack and Move Footprints"
@@ -46971,7 +46909,6 @@ msgstr ""
 "rozmiaru i inicjuje ruch"
 
 #: pcbnew/tools/pcb_actions.cpp:573
-#, fuzzy
 msgid "Skip to next item"
 msgstr "Pomiń element"
 
@@ -47004,14 +46941,12 @@ msgid "Cut away corners between selected lines"
 msgstr "Obetnij rogi między wybranymi liniami"
 
 #: pcbnew/tools/pcb_actions.cpp:605
-#, fuzzy
 msgid "Dogbone Corners..."
-msgstr "Przesuń narożnik do..."
+msgstr "Narożniki dogbone..."
 
 #: pcbnew/tools/pcb_actions.cpp:606
-#, fuzzy
 msgid "Add dogbone corners to selected lines"
-msgstr "Obetnij rogi między wybranymi liniami"
+msgstr "Dodaje narożniki typu dogbone do wybranych linii"
 
 #: pcbnew/tools/pcb_actions.cpp:612
 msgid "Simplify polygon outlines, removing superfluous points"
@@ -47223,45 +47158,40 @@ msgid "Cleanup redundant items, etc."
 msgstr "Czyszczenie elementów niepotrzebnych, itp."
 
 #: pcbnew/tools/pcb_actions.cpp:847
-#, fuzzy
 msgid "Draw Microwave Gaps"
-msgstr "Dodaj przerwę mikrofalową"
+msgstr "Dodaj przerwy mikrofalowe"
 
 #: pcbnew/tools/pcb_actions.cpp:848
 msgid "Create gap of specified length for microwave applications"
 msgstr "Utwórz przerwę zadanej długości dla aplikacji mikrofalowej"
 
 #: pcbnew/tools/pcb_actions.cpp:856
-#, fuzzy
 msgid "Draw Microwave Stubs"
-msgstr "Dodaj linię mikrofalową"
+msgstr "Rysuj odcinki mikrofalowe"
 
 #: pcbnew/tools/pcb_actions.cpp:857
 msgid "Create stub of specified length for microwave applications"
 msgstr "Utwórz odcinek o określonej długości dla aplikacji mikrofalowej"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Draw Microwave Arc Stubs"
-msgstr "Dodaj cewkę mikrofalową"
+msgstr "Rysuj mikrofalowe wycinki łuku"
 
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Create stub (arc) of specified size for microwave applications"
 msgstr "Tworzy wycinek łuku o określonej długości dla aplikacji mikrofalowych"
 
 #: pcbnew/tools/pcb_actions.cpp:874
-#, fuzzy
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "Dodaj wielokątny kształt mikrofalowy"
+msgstr "Rysuj wielokątne kształty mikrofalowe"
 
 #: pcbnew/tools/pcb_actions.cpp:875
 msgid "Create a microwave polygonal shape from a list of vertices"
 msgstr "Tworzy wielokątne kształty mikrofalowe z określonej listy wierzchołków"
 
 #: pcbnew/tools/pcb_actions.cpp:883
-#, fuzzy
 msgid "Draw Microwave Lines"
-msgstr "Dodaj linię mikrofalową"
+msgstr "Dodaj linie mikrofalowe"
 
 #: pcbnew/tools/pcb_actions.cpp:884
 msgid "Create line of specified length for microwave applications"
@@ -47465,9 +47395,8 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Klonuj strefę na inną warstwę..."
 
 #: pcbnew/tools/pcb_actions.cpp:1107
-#, fuzzy
 msgid "Place Footprints"
-msgstr "Umieść footprint"
+msgstr "Umieść footprinty"
 
 #: pcbnew/tools/pcb_actions.cpp:1115
 msgid "Drill/Place File Origin"
@@ -47889,14 +47818,12 @@ msgstr ""
 "Zwiększa przeźroczystość bieżącej warstwy by mniej przesłaniała inne warstwy"
 
 #: pcbnew/tools/pcb_actions.cpp:1789
-#, fuzzy
 msgid "Cycle Layer Pair Presets"
-msgstr "Zapisuje ustawienia warstw"
+msgstr "Przełącz pomiędzy zdefiniowanymi parami warstw"
 
 #: pcbnew/tools/pcb_actions.cpp:1790
-#, fuzzy
 msgid "Cycle between preset layer pairs"
-msgstr "Przełącza pomiędzy warstwami w aktywnej parze warstw"
+msgstr "Przełącza pomiędzy zdefiniowanymi wcześniej parami warstw"
 
 #: pcbnew/tools/pcb_actions.cpp:1801
 msgid "Show Board Statistics"
@@ -48643,23 +48570,20 @@ msgid "Click on reference item..."
 msgstr "Kliknij w element odniesienia..."
 
 #: pcbnew/tools/position_relative_tool.cpp:243
-#, fuzzy
 msgid "Click on reference point..."
-msgstr "Kliknij w element odniesienia..."
+msgstr "Kliknij w punkt odniesienia..."
 
 #: pcbnew/tools/zone_create_helper.cpp:198
 msgid "Add Zone Cutout"
 msgstr "Dodaj obszar odcięty"
 
 #: pcbnew/tools/zone_create_helper.cpp:230
-#, fuzzy
 msgid "Draw Zone"
-msgstr "Rysuj linię"
+msgstr "Rysuj strefę"
 
 #: pcbnew/tools/zone_create_helper.cpp:252
-#, fuzzy
 msgid "Draw Polygon"
-msgstr "Rysuje wielokąty"
+msgstr "Rysuj wielokąt"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
 msgid "Checking Zones"
@@ -49623,9 +49547,8 @@ msgid "Zone %s %s"
 msgstr "Strefa %s %s"
 
 #: pcbnew/zone.cpp:1690
-#, fuzzy
 msgid "Rule Area Type"
-msgstr "Strefa z regułami"
+msgstr "Typ strefy z regułami"
 
 #: pcbnew/zone.cpp:1720
 msgid "Cannot be less than zone minimum width"
