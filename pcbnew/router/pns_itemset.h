@@ -180,6 +180,8 @@ public:
         return nullptr;
     }
 
+    ITEM* FindVertex( const VECTOR2I& aV ) const;
+
 private:
     std::vector<ITEM*> m_items;
 };

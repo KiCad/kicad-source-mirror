@@ -21,6 +21,7 @@
 
 #include "pns_itemset.h"
 #include "pns_line.h"
+#include "pns_segment.h"
 
 namespace PNS {
 
@@ -128,6 +129,21 @@ ITEM_SET& ITEM_SET::ExcludeItem( const ITEM* aItem )
     m_items = std::move( newItems );
 
     return *this;
+}
+
+ITEM* ITEM_SET::FindVertex( const VECTOR2I& aV ) const
+{
+    for( ITEM* item : m_items )
+    {
+        // fixme: biconnected concept
+        if( auto seg = dyn_cast<SEGMENT*>( item ) )
+        {
+            if( seg->Seg().A == aV || seg->Seg().B == aV )
+                return seg;
+        }
+    }
+
+    return nullptr;
 }
 
 }
