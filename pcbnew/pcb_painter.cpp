@@ -43,6 +43,7 @@
 #include <pcb_marker.h>
 #include <pcb_dimension.h>
 #include <pcb_target.h>
+#include <pcb_board_outline.h>
 
 #include <layer_ids.h>
 #include <lset.h>
@@ -707,6 +708,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     case PCB_MARKER_T:
         draw( static_cast<const PCB_MARKER*>( item ), aLayer );
+        break;
+
+    case PCB_BOARD_OUTLINE_T:
+        draw( static_cast<const PCB_BOARD_OUTLINE*>( item ), aLayer );
         break;
 
     default:
@@ -3003,6 +3008,25 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
     }
     }
 }
+
+void PCB_PAINTER::draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer )
+{
+    if( !aBoardOutline->HasOutline() )
+        return;
+
+    m_gal->Save();
+    m_gal->PushDepth();
+    const COLOR4D& outlineColor = m_pcbSettings.GetColor( aBoardOutline, aLayer );
+    m_gal->SetFillColor( outlineColor );
+    m_gal->AdvanceDepth();
+    m_gal->SetLineWidth( 0 );
+    m_gal->SetIsFill( true );
+    m_gal->SetIsStroke( false );
+    m_gal->DrawPolygon( aBoardOutline->GetOutline() );
+    m_gal->PopDepth();
+    m_gal->Restore();
+}
+
 
 
 const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = pcbIUScale.mmToIU( 10.0 );

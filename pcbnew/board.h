@@ -67,6 +67,9 @@ class CONNECTIVITY_DATA;
 class COMPONENT;
 class PROJECT;
 class PROGRESS_REPORTER;
+class PCB_BOARD_OUTLINE;
+
+
 namespace KIFONT
 {
     class OUTLINE_FONT;
@@ -359,6 +362,10 @@ public:
     const ZONES& Zones() const { return m_zones; }
 
     const GENERATORS& Generators() const { return m_generators; }
+
+    PCB_BOARD_OUTLINE*       BoardOutline() { return m_boardOutline; }
+    const PCB_BOARD_OUTLINE* BoardOutline() const { return m_boardOutline; }
+    void                     UpdateBoardOutline();
 
     const MARKERS& Markers() const { return m_markers; }
 
@@ -1388,6 +1395,7 @@ private:
     GROUPS              m_groups;
     ZONES               m_zones;
     GENERATORS          m_generators;
+    PCB_BOARD_OUTLINE*  m_boardOutline;
 
     // Cache for fast access to items in the containers above by KIID, including children
     std::unordered_map<KIID, BOARD_ITEM*> m_itemByIdCache;

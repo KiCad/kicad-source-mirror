@@ -43,6 +43,7 @@
 #include <pcb_dimension.h>
 #include <pcb_target.h>
 #include <pcb_group.h>
+#include <pcb_board_outline.h>
 
 class TEST_BOARD_ITEM_FIXTURE
 {
@@ -137,6 +138,7 @@ public:
         case PCB_ITEM_LIST_T:
         case PCB_NETINFO_T:
         case PCB_GENERATOR_T:
+        case PCB_BOARD_OUTLINE_T:
             return nullptr;
 
         default:

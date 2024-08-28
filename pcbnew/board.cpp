@@ -68,6 +68,7 @@
 #include <thread_pool.h>
 #include <zone.h>
 #include <mutex>
+#include <pcb_board_outline.h>
 
 // This is an odd place for this, but CvPcb won't link if it's in board_item.cpp like I first
 // tried it.
@@ -97,6 +98,7 @@ BOARD::BOARD() :
 
     m_DRCMaxClearance = 0;
     m_DRCMaxPhysicalClearance = 0;
+    m_boardOutline = new PCB_BOARD_OUTLINE( this );
 
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
@@ -167,6 +169,7 @@ BOARD::~BOARD()
     for( PCB_GENERATOR* g : m_generators )
         ownedItems.insert( g );
 
+    delete m_boardOutline;
     m_generators.clear();
 
     // Delete the owned items after clearing the containers, because some item dtors
@@ -432,8 +435,8 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->Contains( ':' ) )
     {
-        wxString    remainder;
-        wxString    ref = token->BeforeFirst( ':', &remainder );
+        wxString      remainder;
+        wxString      ref = token->BeforeFirst( ':', &remainder );
         BOARD_ITEM* refItem = ResolveItem( KIID( ref ), true );
 
         if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
@@ -1598,7 +1601,7 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
     if( aAllowNullptrReturn )
         return nullptr;
     else
-        return DELETED_BOARD_ITEM::GetInstance();
+    return DELETED_BOARD_ITEM::GetInstance();
 }
 
 
@@ -3108,3 +3111,14 @@ bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 
     return true;
 }
+
+void BOARD::UpdateBoardOutline()
+{
+    SHAPE_POLY_SET outline;
+    bool           has_outline = GetBoardPolygonOutlines( m_boardOutline->GetOutline() );
+
+    if( !has_outline )
+        m_boardOutline->GetOutline().RemoveAllContours();
+}
+
+

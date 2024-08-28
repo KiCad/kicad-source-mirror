@@ -314,6 +314,7 @@ enum GAL_LAYER_ID: int
     LAYER_DRC_SHAPE1         = GAL_LAYER_ID_START + 42,  ///< Custom shape for DRC marker.
     LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker.
 
+    LAYER_BOARD_OUTLINE      = GAL_LAYER_ID_START + 44, ///< PCB board outline
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 

@@ -48,6 +48,7 @@ using namespace std::placeholders;
 #include <board_commit.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <wx/msgdlg.h>
+#include <pcb_board_outline.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -221,6 +222,8 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
     m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
 
+    m_pcb->UpdateBoardOutline();
+    GetCanvas()->GetView()->Update( m_pcb->BoardOutline() );
     GetCanvas()->Refresh();
 }
 
@@ -251,6 +254,8 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
     m_toolManager->ProcessEvent( EVENTS::UndoRedoPostEvent );
     m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
 
+    m_pcb->UpdateBoardOutline();
+    GetCanvas()->GetView()->Update( m_pcb->BoardOutline() );
     GetCanvas()->Refresh();
 }
 
@@ -670,5 +675,7 @@ void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
     ClearListAndDeleteItems( undo );
     delete undo;
 
+    m_pcb->UpdateBoardOutline();
+    GetCanvas()->GetView()->Update( m_pcb->BoardOutline() );
     GetCanvas()->Refresh();
 }

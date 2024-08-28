@@ -865,6 +865,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_parameters.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_utils.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/zone_settings.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_board_outline.cpp
 
     # IO files
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/pcb_io.cpp
