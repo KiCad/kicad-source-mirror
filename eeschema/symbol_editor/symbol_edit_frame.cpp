@@ -62,6 +62,7 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_point_editor.h>
+#include <tools/ee_grid_helper.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/symbol_editor_control.h>
 #include <tools/symbol_editor_drawing_tools.h>
@@ -1551,6 +1552,12 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     default:
         ;
     }
+}
+
+
+std::unique_ptr<GRID_HELPER> SYMBOL_EDIT_FRAME::MakeGridHelper()
+{
+    return std::make_unique<EE_GRID_HELPER>( m_toolManager );
 }
 
 

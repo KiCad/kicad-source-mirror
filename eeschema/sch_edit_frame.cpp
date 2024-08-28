@@ -74,6 +74,7 @@
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
+#include <tools/ee_grid_helper.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_point_editor.h>
 #include <tools/sch_drawing_tools.h>
@@ -2077,6 +2078,12 @@ void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
     RecomputeIntersheetRefs();
 
     GetCanvas()->GetView()->SetLayerVisible( LAYER_INTERSHEET_REFS, aShow );
+}
+
+
+std::unique_ptr<GRID_HELPER> SCH_EDIT_FRAME::MakeGridHelper()
+{
+    return std::make_unique<EE_GRID_HELPER>( m_toolManager );
 }
 
 

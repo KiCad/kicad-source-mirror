@@ -41,6 +41,7 @@
 class EDA_ITEM;
 class wxSingleInstanceChecker;
 class ACTION_TOOLBAR;
+class GRID_HELPER;
 class COLOR_SETTINGS;
 class LOCKFILE;
 class TOOL_MENU;
@@ -149,6 +150,8 @@ public:
      */
     virtual const VECTOR2I& GetGridOrigin() const = 0;
     virtual void            SetGridOrigin( const VECTOR2I& aPosition ) = 0;
+
+    virtual std::unique_ptr<GRID_HELPER> MakeGridHelper() { return nullptr; }
 
     /**
      * Return the nearest \a aGridSize location to \a aPosition.

@@ -40,6 +40,8 @@
 #include <tool/actions.h>
 #include <tool/common_tools.h>
 #include <tool/tool_manager.h>
+#include <tool/selection_tool.h>
+#include <tool/grid_helper.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include "macros.h"
@@ -103,11 +105,17 @@ int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
 // Cursor control
 int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 {
-    ACTIONS::CURSOR_EVENT_TYPE type = aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>();
+    ACTIONS::CURSOR_EVENT_TYPE   type = aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>();
+    std::unique_ptr<GRID_HELPER> grid = m_frame->MakeGridHelper();
+    VECTOR2D                     gridSize;
+
+    if( grid )
+        gridSize = grid->GetGridSize( grid->GetSelectionGrid( m_frame->GetCurrentSelection() ) );
+    else
+        gridSize = getView()->GetGAL()->GetGridSize();
 
     bool     mirroredX = getView()->IsMirroredX();
     VECTOR2D cursor = getViewControls()->GetRawCursorPosition( false );
-    VECTOR2D gridSize = getView()->GetGAL()->GetGridSize();
 
     switch( type )
     {

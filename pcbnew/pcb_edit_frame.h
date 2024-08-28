@@ -443,6 +443,8 @@ public:
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
+    std::unique_ptr<GRID_HELPER> MakeGridHelper() override;
+
     ///< @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
 

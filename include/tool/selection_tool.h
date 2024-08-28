@@ -75,6 +75,8 @@ public:
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
 
+    SELECTION& GetSelection() { return selection(); }
+
 protected:
     /**
      * Return a reference to the selection.

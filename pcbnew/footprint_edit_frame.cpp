@@ -62,6 +62,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
+#include <tools/pcb_grid_helper.h>
 #include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
 #include <tools/group_tool.h>
@@ -1342,6 +1343,12 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTe
 
     Layout();
     SendSizeEvent();
+}
+
+
+std::unique_ptr<GRID_HELPER> FOOTPRINT_EDIT_FRAME::MakeGridHelper()
+{
+    return std::make_unique<PCB_GRID_HELPER>( m_toolManager, GetMagneticItemsSettings() );
 }
 
 

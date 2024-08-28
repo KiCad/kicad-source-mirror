@@ -54,6 +54,8 @@ public:
 
     ~SYMBOL_EDIT_FRAME() override;
 
+    std::unique_ptr<GRID_HELPER> MakeGridHelper() override;
+
     /**
      * Switch currently used canvas ( Cairo / OpenGL).
      */

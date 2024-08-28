@@ -142,6 +142,8 @@ public:
 
     SCHEMATIC& Schematic() const;
 
+    std::unique_ptr<GRID_HELPER> MakeGridHelper() override;
+
     /**
      * Allow edit frame to show/hide hidden pins.
      */

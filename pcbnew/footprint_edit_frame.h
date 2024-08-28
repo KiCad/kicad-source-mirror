@@ -84,6 +84,8 @@ public:
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
+    std::unique_ptr<GRID_HELPER> MakeGridHelper() override;
+
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
     bool canCloseWindow( wxCloseEvent& Event ) override;

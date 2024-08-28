@@ -67,6 +67,7 @@
 #include <tool/properties_tool.h>
 #include <tool/selection.h>
 #include <tool/zoom_tool.h>
+#include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_point_editor.h>
@@ -607,6 +608,12 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity,
 BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 {
     return m_pcb;
+}
+
+
+std::unique_ptr<GRID_HELPER> PCB_EDIT_FRAME::MakeGridHelper()
+{
+    return std::make_unique<PCB_GRID_HELPER>( m_toolManager, GetMagneticItemsSettings() );
 }
 
 
