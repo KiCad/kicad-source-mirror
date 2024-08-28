@@ -40,6 +40,7 @@ namespace PNS {
 class LINKED_ITEM;
 class NODE;
 class VIA;
+class SEGMENT;
 
 #define PNS_HULL_MARGIN 10
 
@@ -187,6 +188,8 @@ public:
 
     bool EndsWithVia() const { return m_via != nullptr; }
 
+    int FindSegment( const SEGMENT* aSeg ) const;
+
     void AppendVia( const VIA& aVia );
     void RemoveVia();
 
@@ -204,7 +207,7 @@ public:
     ITEM* GetBlockingObstacle() const { return m_blockingObstacle; }
 
     void DragSegment( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false );
-    void DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false );
+    void DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false, DIRECTION_45 aPreferredEndingDirection = DIRECTION_45() );
 
     void SetRank( int aRank ) override;
     int Rank() const override;
@@ -228,7 +231,7 @@ public:
 
 private:
     void dragSegment45( const VECTOR2I& aP, int aIndex );
-    void dragCorner45( const VECTOR2I& aP, int aIndex );
+    void dragCorner45( const VECTOR2I& aP, int aIndex, DIRECTION_45 aPreferredEndingDirection );
     void dragSegmentFree( const VECTOR2I& aP, int aIndex );
     void dragCornerFree( const VECTOR2I& aP, int aIndex );
 

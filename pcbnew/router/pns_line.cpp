@@ -606,7 +606,7 @@ const LINE LINE::ClipToNearestObstacle( NODE* aNode ) const
 
 
 
-SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )
+SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP, DIRECTION_45 aPreferredEndingDirection = DIRECTION_45() )
 {
     std::optional<SHAPE_LINE_CHAIN> picked;
     int i;
@@ -625,7 +625,8 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
         return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, dir.IsDiagonal() );
     }
 
-    if( aOrigin.CSegment( -1 ).Length() > 100000 * 30 ) // fixme: constant/parameter?
+
+    //if( aOrigin.CSegment( -1 ).Length() > 100000 * 30 ) // fixme: constant/parameter?
         d = 1;
 
     for( i = aOrigin.SegmentCount() - d; i >= 0; i-- )
@@ -651,12 +652,28 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
             ++dirCount;
         }
 
-        for( int j = 0; j < dirCount; j++ )
+        if( aPreferredEndingDirection != DIRECTION_45::UNDEFINED )
         {
-            if( dirs[j] == d_start )
+            for( int j = 0; j < dirCount; j++ )
             {
-                picked = paths[j];
-                break;
+                DIRECTION_45 endingDir( paths[j].CSegment(-1) );
+                if( endingDir == aPreferredEndingDirection )
+                {
+                    picked = paths[j];
+                    break;
+                }
+            }
+        }
+
+        if( !picked )
+        {
+            for( int j = 0; j < dirCount; j++ )
+            {
+                if( dirs[j] == d_start )
+                {
+                    picked = paths[j];
+                    break;
+                }
             }
         }
 
@@ -690,7 +707,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 }
 
 
-void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
+void LINE::dragCorner45( const VECTOR2I& aP, int aIndex, DIRECTION_45 aPreferredEndingDirection )
 {
     SHAPE_LINE_CHAIN path;
 
@@ -699,11 +716,11 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
 
     if( aIndex == 0 )
     {
-        path = dragCornerInternal( m_line.Reverse(), snapped ).Reverse();
+        path = dragCornerInternal( m_line.Reverse(), snapped, aPreferredEndingDirection ).Reverse();
     }
     else if( aIndex == m_line.SegmentCount() )
     {
-        path = dragCornerInternal( m_line, snapped );
+        path = dragCornerInternal( m_line, snapped, aPreferredEndingDirection );
     }
     else
     {
@@ -712,9 +729,9 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
             m_line.Insert( aIndex + 1, m_line.CPoint( aIndex + 1 ) );
 
         // fixme: awkward behaviour for "outwards" drags
-        path = dragCornerInternal( m_line.Slice( 0, aIndex ), snapped );
+        path = dragCornerInternal( m_line.Slice( 0, aIndex ), snapped, aPreferredEndingDirection );
         SHAPE_LINE_CHAIN path_rev =
-                dragCornerInternal( m_line.Slice( aIndex, -1 ).Reverse(), snapped ).Reverse();
+                dragCornerInternal( m_line.Slice( aIndex, -1 ).Reverse(), snapped, aPreferredEndingDirection ).Reverse();
         path.Append( path_rev );
     }
 
@@ -751,7 +768,7 @@ void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex )
     m_line.Simplify();
 }
 
-void LINE::DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle )
+void LINE::DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle, DIRECTION_45 aPreferredEndingDirection )
 {
     wxCHECK_RET( aIndex >= 0, wxT( "Negative index passed to LINE::DragCorner" ) );
 
@@ -761,7 +778,7 @@ void LINE::DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle )
     }
     else
     {
-        dragCorner45( aP, aIndex );
+        dragCorner45( aP, aIndex, aPreferredEndingDirection );
     }
 }
 
@@ -1283,6 +1300,19 @@ const std::string SEGMENT::Format( ) const
     ss << ITEM::Format() << " ";
     ss << m_seg.Format( false );
     return ss.str();
+}
+
+
+int LINE::FindSegment( const SEGMENT* aSeg ) const
+{
+    for( int i = 0; i < m_line.SegmentCount(); i++)
+    {
+        const SEG&s = m_line.CSegment(i);
+        if( s == aSeg->Seg() )
+            return i;
+    }
+
+    return -1;
 }
 
 }
