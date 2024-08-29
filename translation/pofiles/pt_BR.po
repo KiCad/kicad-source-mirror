@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-27 05:59+0000\n"
+"PO-Revision-Date: 2024-08-30 18:09+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -785,14 +785,12 @@ msgid "Use board stackup colors"
 msgstr "Usar as cores do empilhamento da placa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "Usar as cores do empilhamento da placa"
+msgstr "Use cores de cobre do editor de placas"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
-#, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
-msgstr "Use a cor de cobre nu para o cobre sem revestimento (lento)"
+msgstr "Use cores de cobre do editor de placas (apenas openGL)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
 #, c-format
@@ -3224,27 +3222,26 @@ msgid "Close"
 msgstr "Fechar"
 
 #: common/dialogs/dialog_print_generic.cpp:155
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Aviso: O número da escala está incorreto"
+msgstr "Aviso: a escala não é um número."
 
 #: common/dialogs/dialog_print_generic.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Aviso: a opção da escala foi definida para um valor muito grande.\n"
-" Limitado para %f"
+"Aviso: escala definida para um valor muito grande.\n"
+"Ela será fixada em %f."
 
 #: common/dialogs/dialog_print_generic.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Aviso: opção da escala foi definida para um valor muito pequeno.\n"
-" Limitado para %f"
+"Aviso: escala definida para um valor muito pequeno.\n"
+"Ela será fixada em %f."
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
@@ -4789,9 +4786,8 @@ msgid "Python interpreter status"
 msgstr "Condição do interpretador Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Não coberto"
+msgstr "<Não definido>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1977
 #: common/stroke_params.cpp:37
@@ -6814,12 +6810,14 @@ msgstr "Atualmente, não há suporte para imagens DXF."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "O gráfico importado é muito grande. A escala máxima é %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"O deslocamento da importação foi ajustado para (%f, %f) para caber dentro "
+"dos limites numéricos"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -7177,9 +7175,8 @@ msgid "Selection highlight"
 msgstr "Destaque de seleção"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Destaque de seleção"
+msgstr "Destaque da cor da net"
 
 #: common/layer_id.cpp:155 common/layer_id.cpp:186
 msgid "Drawing sheet"
@@ -7310,19 +7307,16 @@ msgid "Courtyard collision shadow"
 msgstr "Sombra de colisão do pedaço"
 
 #: common/layer_id.cpp:196
-#, fuzzy
 msgid "Track net names"
-msgstr "Procurar o nome das nets"
+msgstr "Nomes net das trilhas"
 
 #: common/layer_id.cpp:197
-#, fuzzy
 msgid "Pad net names"
-msgstr "Procurar o nome das nets"
+msgstr "Nomes net das ilhas"
 
 #: common/layer_id.cpp:198
-#, fuzzy
 msgid "Via net names"
-msgstr "Procurar o nome das nets"
+msgstr "Nomes net das vias"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -7869,9 +7863,8 @@ msgid "Duplicates the selected item(s)"
 msgstr "Duplique o(s) item(s) selecionado(s)"
 
 #: common/tool/actions.cpp:280
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Exclua o(s) item(s) selecionado(s)"
+msgstr "Excluir o(s) item(s) selecionado(s)"
 
 #: common/tool/actions.cpp:287
 msgid "Interactive Delete Tool"
@@ -8426,9 +8419,8 @@ msgid "Symbol Library Browser"
 msgstr "Navegador da biblioteca dos símbolos"
 
 #: common/tool/actions.cpp:1032 kicad/tools/kicad_manager_actions.cpp:112
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Crie, exclua e edite os símbolos"
+msgstr "Criar, excluir e editar os símbolos do esquema"
 
 #: common/tool/actions.cpp:1040 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1031
@@ -8436,9 +8428,8 @@ msgid "Footprint Library Browser"
 msgstr "Navegador da biblioteca de footprints"
 
 #: common/tool/actions.cpp:1049
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Crie, exclua e edite os footprints"
+msgstr "Criar, excluir e editar os footprints da placa"
 
 #: common/tool/actions.cpp:1057
 msgid "Show Properties Manager"
@@ -9683,90 +9674,81 @@ msgid "Footprint Filters:"
 msgstr "Filtros de footprint:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
-msgstr "Visualize o footprint que foi selecionado"
+msgstr "Visualizar o footprint selecionado"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
 msgid "Manage Footprint Association Files..."
 msgstr "Gerenciar os arquivos de associação do footprint..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
-"Edite a lista de arquivos de associação dos footprints.  Esses arquivos são "
-"usados para atribuir automaticamente nomes aos footprints a partir de "
-"valores dos símbolos."
+"Edite a lista dos arquivos associados ao footprint.  Estes arquivos são "
+"usados para atribuir automaticamente footprints com base nos valores dos "
+"símbolos."
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
 msgid "Save to Schematic"
 msgstr "Salve no esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
 msgstr ""
-"Salve a associações do footprint nos campos dos símbolos do footprint do "
-"esquema e nos arquivos do esquema"
+"Salvar as atribuições de footprint nos campos 'footprint' dos símbolos do "
+"esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
 msgstr "Salvar no esquema e no arquivo"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Salve a associações do footprint nos campos dos símbolos do footprint do "
-"esquema e nos arquivos do esquema"
+"Salvar as atribuições de footprint nos campos 'footprint' dos símbolos do "
+"esquema e, em seguida, salvar os arquivos esquemáticos"
 
 #: cvpcb/tools/cvpcb_actions.cpp:104
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
-msgstr "Selecione o próximo símbolo sem atribuição"
+msgstr "Selecione o próximo símbolo não atribuído"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 msgid "Select next symbol with no footprint assignment"
 msgstr "Selecione o próximo símbolo sem atribuição do footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:113
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
-msgstr "Selecione o símbolo anterior sem atribuição"
+msgstr "Selecione o símbolo anterior não atribuído"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Select previous symbol with no footprint assignment"
 msgstr "Selecione o símbolo anterior sem atribuição do footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
-#, fuzzy
 msgid "Assign Footprint"
-msgstr "Atribua os footprint"
+msgstr "Atribuir footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:131
-#, fuzzy
 msgid "Automatically Assign Footprints"
-msgstr "Atribua os footprints automaticamente"
+msgstr "Atribua footprints automaticamente"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Selecione um footprint para associar um relatório de footprint."
+msgstr ""
+"Atribuir footprints automaticamente usando um arquivo de associação de "
+"footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Apagar associações de footprint"
+msgstr "Excluir atribuição de footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:145
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Símbolo: Atribuições do footprint"
+msgstr "Excluir todas as atribuições de footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -9876,9 +9858,8 @@ msgstr ""
 "deste barramento"
 
 #: eeschema/connection_graph.cpp:3787 eeschema/erc/erc_item.cpp:232
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Sem conexão"
+msgstr "Extremidade do fio não conectado"
 
 #: eeschema/connection_graph.cpp:4130
 #, c-format
@@ -11035,7 +11016,7 @@ msgstr "Este plug-in já existe."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:807
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "Quantidade máxima de plug-ins já adicionados à caixa de diálogo."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:838
 msgid "You must provide a netlist generator command string"
@@ -12824,14 +12805,12 @@ msgid "Field name templates"
 msgstr "Modelos dos nomes dos campos"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "BOM presets"
-msgstr "Predefinições BOM"
+msgstr "Predefinições da lista de materiais (BOM)"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM format presets"
-msgstr "Predefinições do formato BOM"
+msgstr "Formato de predefinições da lista de materiais (BOM)"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
@@ -12848,14 +12827,12 @@ msgid "Net classes"
 msgstr "Classes da rede"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
-#, fuzzy
 msgid "Bus alias definitions"
-msgstr "Definições de apelido do barramento"
+msgstr "Definições dos codinomes do barramento"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
-#, fuzzy
 msgid "Text variables"
-msgstr "Variáveis do texto"
+msgstr "Variáveis de texto"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -12982,9 +12959,8 @@ msgstr ""
 "O arquivo do projeto %s não pôde ser carregado."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:257
-#, fuzzy
 msgid "Loading Bus Aliases"
-msgstr "Aliases de Barramento"
+msgstr "Carregando os codinomes de barramento"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:268 eeschema/files-io.cpp:280
 msgid "Root"
@@ -12992,9 +12968,11 @@ msgstr "Raiz"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:272
 #: eeschema/dialogs/dialog_schematic_setup.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Error fetching bus aliases.  Could not load schematic '%s'."
-msgstr "Houve um esgotamento da memória ao carregar o esquema '%s'."
+msgstr ""
+"Houve um erro ao obter os codinomes de barramento.  Não foi possível "
+"carregar o esquema '%s'."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties.cpp:85
@@ -14759,19 +14737,16 @@ msgid "Highlight thickness:"
 msgstr "Destaque a espessura:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:133
-#, fuzzy
 msgid "Highlight netclass colors"
-msgstr "Cor da netclass da PCI"
+msgstr "Destaque as cores da classe de rede"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
-#, fuzzy
 msgid "Color highlight thickness:"
-msgstr "Destaque a espessura:"
+msgstr "Espessura do realce da cor:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
-#, fuzzy
 msgid "Color highlight opacity:"
-msgstr "Violação DRC: destaca os obstáculos"
+msgstr "Opacidade do realce da cor:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:166
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:120
@@ -15977,10 +15952,10 @@ msgid "Footprint '%s' not found in library '%s'."
 msgstr "O footprint '%s' não foi encontrado na biblioteca '%s'."
 
 #: eeschema/erc/erc.cpp:1490
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
 msgstr ""
-"O footprint de %s (%s) não corresponde àquela fornecida pelo símbolo (%s)."
+"O footprint atribuído (%s) não corresponde aos filtros do footprint (%s)."
 
 #: eeschema/erc/erc.cpp:1636
 msgid "Checking sheet names..."
@@ -16032,9 +16007,10 @@ msgid "Checking for footprint link issues..."
 msgstr "Verificando por problemas com o vínculo do footprint..."
 
 #: eeschema/erc/erc.cpp:1756
-#, fuzzy
 msgid "Checking footprint assignments against footprint filters..."
-msgstr "Verificando os footprints da placa com a biblioteca..."
+msgstr ""
+"Verificação das atribuições do footprint em relação aos filtros de "
+"footprint..."
 
 #: eeschema/erc/erc.cpp:1764
 msgid "Checking for off grid pins and wires..."
@@ -16144,7 +16120,7 @@ msgstr "A etiqueta global aparece apenas uma vez no esquema"
 
 #: eeschema/erc/erc_item.cpp:132
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "As etiquetas locais e globais têm o mesmo nome"
 
 #: eeschema/erc/erc_item.cpp:136
 msgid "Different footprint assigned in another unit of the symbol"
@@ -16211,9 +16187,8 @@ msgid "Footprint link issue"
 msgstr "Problemas com o vínculo do footprint"
 
 #: eeschema/erc/erc_item.cpp:192
-#, fuzzy
 msgid "Assigned footprint doesn't match footprint filters"
-msgstr "O footprint não bate com a cópia existente na biblioteca"
+msgstr "O footprint atribuído não corresponde aos filtros de footprint"
 
 #: eeschema/erc/erc_item.cpp:196
 msgid "Symbol is not annotated"
@@ -21309,9 +21284,8 @@ msgid "Add label '%s' to %s pin %s net."
 msgstr "Adicione o rótulo '%s' à rede de %s pino %s."
 
 #: eeschema/tools/ee_actions.cpp:47
-#, fuzzy
 msgid "Show the electrical rules checker window"
-msgstr "Mostrar a janela do verificador das regras do desenho"
+msgstr "Mostrar a janela do verificador das regras elétricas"
 
 #: eeschema/tools/ee_actions.cpp:53
 msgid "Symbol Checker"
@@ -21336,9 +21310,8 @@ msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr "Mostra a janela de simulação para executar simulações SPICE ou IBIS."
 
 #: eeschema/tools/ee_actions.cpp:83
-#, fuzzy
 msgid "Open the datasheet in a browser"
-msgstr "Abre a ficha técnica num navegador"
+msgstr "Abrir a ficha técnica num navegador"
 
 #: eeschema/tools/ee_actions.cpp:92 pcbnew/tools/pcb_actions.cpp:1941
 msgid "Create Corner"
@@ -21362,18 +21335,16 @@ msgid "Save Library As..."
 msgstr "Salve a biblioteca como..."
 
 #: eeschema/tools/ee_actions.cpp:160
-#, fuzzy
 msgid "Save the current library to a new file"
-msgstr "Salve a biblioteca atual num novo arquivo."
+msgstr "Salvar a biblioteca atual num novo arquivo"
 
 #: eeschema/tools/ee_actions.cpp:166
 msgid "New Symbol..."
 msgstr "Novo símbolo..."
 
 #: eeschema/tools/ee_actions.cpp:167
-#, fuzzy
 msgid "Create a new symbol in an existing library"
-msgstr "Crie um novo símbolo, derivado de um símbolo existente"
+msgstr "Criar um novo símbolo numa biblioteca já existente"
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Derive from Existing Symbol"
@@ -21404,9 +21375,8 @@ msgid "Save Copy As..."
 msgstr "Salve uma cópia como..."
 
 #: eeschema/tools/ee_actions.cpp:200
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library"
-msgstr "Salvar uma cópia do símbolo atual numa biblioteca diferente."
+msgstr "Salvar uma cópia do símbolo atual numa biblioteca diferente"
 
 #: eeschema/tools/ee_actions.cpp:207
 msgid "Remove the selected symbol from its library"
@@ -21438,9 +21408,10 @@ msgid "Set Unit Display Name..."
 msgstr "Definir o nome de exibição da unidade..."
 
 #: eeschema/tools/ee_actions.cpp:246
-#, fuzzy
 msgid "Set the display name for a particular unit in a multi-unit symbol"
-msgstr "Definir o nome de exibição de uma unidade"
+msgstr ""
+"Definir o nome de exibição de uma unidade específica num símbolo com várias "
+"unidades"
 
 #: eeschema/tools/ee_actions.cpp:251
 msgid "Add Symbol to Schematic"
@@ -21507,39 +21478,33 @@ msgid "Show Hidden Fields"
 msgstr "Mostra os campos ocultos"
 
 #: eeschema/tools/ee_actions.cpp:312
-#, fuzzy
 msgid "Draw Pins"
-msgstr "Desenhar pinos"
+msgstr "Pinos de desenho"
 
 #: eeschema/tools/ee_actions.cpp:320 eeschema/tools/ee_actions.cpp:504
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:297
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:974
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Draw Text"
-msgstr "Desenhar uma caixa de texto"
+msgstr "Texto de desenho"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:511
 #: pcbnew/tools/pcb_actions.cpp:176
-#, fuzzy
 msgid "Draw Text Boxes"
-msgstr "Desenhar uma caixa de texto"
+msgstr "Caixa de texto de desenho"
 
 #: eeschema/tools/ee_actions.cpp:335 eeschema/tools/ee_actions.cpp:1311
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:100
-#, fuzzy
 msgid "Draw Lines"
-msgstr "Desenha linha"
+msgstr "Linhas de desenho"
 
 #: eeschema/tools/ee_actions.cpp:336
-#, fuzzy
 msgid "Draw connected graphic lines"
-msgstr "Adicione linhas gráficas conectadas"
+msgstr "Desenhe linhas gráficas conectadas"
 
 #: eeschema/tools/ee_actions.cpp:344 pcbnew/tools/pcb_actions.cpp:109
-#, fuzzy
 msgid "Draw Polygons"
-msgstr "Desenha polígonos"
+msgstr "Polígonos de desenho"
 
 #: eeschema/tools/ee_actions.cpp:352
 msgid "Move Symbol Anchor"
@@ -21570,54 +21535,44 @@ msgid "Copy pin number size to other pins in symbol"
 msgstr "Copia o tamanho do valor do pino para os outros pinos no símbolo"
 
 #: eeschema/tools/ee_actions.cpp:387
-#, fuzzy
 msgid "Place Symbols"
-msgstr "Colá símbolo"
+msgstr "Posicionar símbolos"
 
 #: eeschema/tools/ee_actions.cpp:397
-#, fuzzy
 msgid "Place Power Symbols"
-msgstr "Símbolo de alimentação"
+msgstr "Posicionar símbolos de alimentação"
 
 #: eeschema/tools/ee_actions.cpp:407
-#, fuzzy
 msgid "Place No Connect Flags"
-msgstr "Adiciona marcador sem conexão"
+msgstr "Posicionar marcadores de sem conexão"
 
 #: eeschema/tools/ee_actions.cpp:417
-#, fuzzy
 msgid "Place Junctions"
-msgstr "Adicionar junção"
+msgstr "Posicionar junções"
 
 #: eeschema/tools/ee_actions.cpp:427
-#, fuzzy
 msgid "Place Wire to Bus Entries"
-msgstr "Adicionar entrada de fio em barramento"
+msgstr "Posicionar fio nas entradas do barramento"
 
 #: eeschema/tools/ee_actions.cpp:437
-#, fuzzy
 msgid "Place Net Labels"
-msgstr "Adicionar rótulo de rede"
+msgstr "Posicionar etiquetas net"
 
 #: eeschema/tools/ee_actions.cpp:444
-#, fuzzy
 msgid "Place Net Class Directives"
-msgstr "Adiciona uma diretiva Net Class"
+msgstr "Posicionar diretivas net class"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Place Hierarchical Labels"
-msgstr "Rótulos hierárquicos"
+msgstr "Posicionar etiquetas hierárquicas"
 
 #: eeschema/tools/ee_actions.cpp:462
-#, fuzzy
 msgid "Draw Hierarchical Sheets"
-msgstr "Desenha folhas hierárquicas"
+msgstr "Folhas hierárquicas para desenhar"
 
 #: eeschema/tools/ee_actions.cpp:470
-#, fuzzy
 msgid "Place Sheet Pins"
-msgstr "Excluir a planilha de pinos"
+msgstr "Posicionar planilha de pinos"
 
 #: eeschema/tools/ee_actions.cpp:477 eeschema/tools/ee_actions.cpp:485
 msgid "Sync Sheet Pins"
