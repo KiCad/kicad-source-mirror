@@ -20,16 +20,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-12 15:09+0000\n"
+"PO-Revision-Date: 2024-08-30 18:09+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -20464,14 +20464,14 @@ msgstr ""
 "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
 
 #: eeschema/symbol_checker.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
+msgstr "<b>Grafický kruh má poloměr = 0</b> %s na pozici <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
+msgstr "<b>Grafický obdélník má velikost 0</b> %s na pozici <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
 msgid "Symbol Chooser"
@@ -20980,14 +20980,14 @@ msgid "Select at least one property to back annotate."
 msgstr "Vyberte alespoň jednu vlastnost pro zpětné očíslování."
 
 #: eeschema/tools/backannotate.cpp:100
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Nelze načíst netlist DPS, protože eeschema je otevřen v samostatném režimu.\n"
-"Musíte spustit projektového manažera KiCad a vytvořit projekt."
+"Nelze načíst netlist DPS, protože Editor schémat je otevřen v samostatném "
+"režimu\n"
+"Musíte spustit projektový manažer KiCad a vytvořit projekt."
 
 #: eeschema/tools/backannotate.cpp:168
 #, c-format
@@ -21045,14 +21045,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Změna %s hodnoty z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "Změnit pouzdro '%s' z '%s' na '%s'."
+msgstr "Změnit %s 'Neobsazeno' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "Změnit pouzdro '%s' z '%s' na '%s'."
+msgstr "Změna %s 'Vyloučení z kusovníku' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
@@ -21067,7 +21067,7 @@ msgstr "Změnit hodnotu pole '%s' na '%s'."
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "Přidat pole '%s' s hodnotou '%s'."
 
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
@@ -21700,9 +21700,8 @@ msgid "Highlight wires and pins of a net"
 msgstr "Zvýraznit spoje a vývody patřící této síti"
 
 #: eeschema/tools/ee_actions.cpp:859
-#, fuzzy
 msgid "Show Net Navigator"
-msgstr "Zobrazit naznačené spoje"
+msgstr "Zobrazit Navigátor sítí"
 
 #: eeschema/tools/ee_actions.cpp:866
 msgid "Edit with Symbol Editor"
@@ -21938,9 +21937,8 @@ msgid "Export file containing netlist in one of several formats"
 msgstr "Export souboru obsahující netlist v jednom z několika formátů"
 
 #: eeschema/tools/ee_actions.cpp:1047
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Generovat rozpis materiálu"
+msgstr "Generovat rozpisku materiálů..."
 
 #: eeschema/tools/ee_actions.cpp:1048
 msgid "Generate a bill of materials for the current schematic"
@@ -21963,11 +21961,12 @@ msgid "Generate Bill of Materials (External)..."
 msgstr "Generovat rozpis materiálu"
 
 #: eeschema/tools/ee_actions.cpp:1062
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "Vytvořit rozpisku materiálu z aktuálního schématu"
+msgstr ""
+"Vygenerovat kusovník materiálů pro aktuální schéma pomocí externího "
+"generátoru"
 
 #: eeschema/tools/ee_actions.cpp:1068
 msgid "Export Symbols to Library..."
@@ -24633,7 +24632,7 @@ msgid ""
 "the models will be embedded in main exported VRML file"
 msgstr ""
 "Jméno složky, kam budou uloženy vytvořené 3d modely, pokud není "
-"specifikována, modely budou vloženy do hlavního exportovaného VRML souboru."
+"specifikována, modely budou vloženy do hlavního exportovaného VRML souboru"
 
 #: kicad/cli/command_pcb_export_3d.cpp:197
 msgid "Used with --models-dir to output relative paths in the resulting file"
