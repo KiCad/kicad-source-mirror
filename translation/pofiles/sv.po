@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-29 07:09+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"PO-Revision-Date: 2024-08-30 10:09+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -42970,7 +42970,7 @@ msgstr "Footprint har ingen bakgård."
 #: pcbnew/pcbexpr_functions.cpp:627
 #, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "Saknat argument för regelytan (A, B eller regelytans namn) för %s."
+msgstr "Saknat argument för regelområde (A, B eller regelområdets namn) för %s."
 
 #: pcbnew/pcbexpr_functions.cpp:816
 #, c-format
@@ -47486,7 +47486,7 @@ msgstr "på %s, %s och %zu ytterligare"
 #: pcbnew/zone.cpp:861
 #, c-format
 msgid "Rule Area Cutout %s"
-msgstr "Urtag i regelyta %s"
+msgstr "Urtag i regelområde %s"
 
 #: pcbnew/zone.cpp:863
 #, c-format
