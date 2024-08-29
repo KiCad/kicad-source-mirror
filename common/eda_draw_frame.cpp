@@ -52,6 +52,7 @@
 #include <tool/actions.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
+#include <tool/grid_helper.h>
 #include <tool/grid_menu.h>
 #include <tool/selection_conditions.h>
 #include <tool/tool_dispatcher.h>
@@ -522,6 +523,12 @@ void EDA_DRAW_FRAME::SetGridOverrides( bool aOverride )
     wxCHECK( config(), /* void */ );
 
     config()->m_Window.grid.overrides_enabled = aOverride;
+}
+
+
+std::unique_ptr<GRID_HELPER> EDA_DRAW_FRAME::MakeGridHelper()
+{
+    return nullptr;
 }
 
 

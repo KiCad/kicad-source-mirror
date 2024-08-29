@@ -151,7 +151,7 @@ public:
     virtual const VECTOR2I& GetGridOrigin() const = 0;
     virtual void            SetGridOrigin( const VECTOR2I& aPosition ) = 0;
 
-    virtual std::unique_ptr<GRID_HELPER> MakeGridHelper() { return nullptr; }
+    virtual std::unique_ptr<GRID_HELPER> MakeGridHelper();
 
     /**
      * Return the nearest \a aGridSize location to \a aPosition.
