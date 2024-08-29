@@ -2265,7 +2265,7 @@ int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
         else
             return 0;
 
-        int startNum = atoi( startRef.GetRefNumber() );
+        int startNum = atoi( startRef.GetRefNumber().utf8_string().c_str() );
 
         SCH_COMMIT         commit( m_frame );
         SCHEMATIC*         schematic = m_frame->m_schematic;
@@ -2282,7 +2282,7 @@ int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
         {
             if( ref.GetRef() == startRef.GetRef() )
             {
-                int num = atoi( ref.GetRefNumber() );
+                int num = atoi( ref.GetRefNumber().utf8_string().c_str() );
 
                 if( num >= startNum )
                 {
