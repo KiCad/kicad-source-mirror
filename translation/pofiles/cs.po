@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-11 18:09+0000\n"
+"PO-Revision-Date: 2024-08-30 10:09+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -19340,14 +19340,14 @@ msgstr ""
 "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
+msgstr "<b>Grafický kruh má poloměr = 0</b> %s na pozici <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
+msgstr "<b>Grafický obdélník má velikost 0</b> %s na pozici <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
 msgid "Symbol Chooser"
@@ -19843,14 +19843,14 @@ msgid "Select at least one property to back annotate."
 msgstr "Vyberte alespoň jednu vlastnost pro zpětné očíslování."
 
 #: eeschema/tools/backannotate.cpp:100
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Nelze načíst netlist DPS, protože eeschema je otevřen v samostatném režimu.\n"
-"Musíte spustit projektového manažera KiCad a vytvořit projekt."
+"Nelze načíst netlist DPS, protože Editor schémat je otevřen v samostatném "
+"režimu\n"
+"Musíte spustit projektový manažer KiCad a vytvořit projekt."
 
 #: eeschema/tools/backannotate.cpp:168
 #, c-format
@@ -19908,14 +19908,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Změna %s hodnoty z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "Změnit pouzdro '%s' z '%s' na '%s'."
+msgstr "Změnit %s 'Neobsazeno' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "Změnit pouzdro '%s' z '%s' na '%s'."
+msgstr "Změna %s 'Vyloučení z kusovníku' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
@@ -19930,7 +19930,7 @@ msgstr "Změnit hodnotu pole '%s' na '%s'."
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "Přidat pole '%s' s hodnotou '%s'."
 
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
@@ -20208,9 +20208,8 @@ msgid "Add Text Box"
 msgstr "Přidat blok textu"
 
 #: eeschema/tools/ee_actions.cpp:351
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Přidat text"
+msgstr "Přidat položku textového pole"
 
 #: eeschema/tools/ee_actions.cpp:358 eeschema/tools/ee_actions.cpp:1315
 msgid "Add Lines"
@@ -20221,14 +20220,12 @@ msgid "Add connected graphic lines"
 msgstr "Přidat připojené grafické čáry"
 
 #: eeschema/tools/ee_actions.cpp:367 pcbnew/tools/zone_create_helper.cpp:251
-#, fuzzy
 msgid "Add Polygon"
-msgstr "Mnohoúhelník"
+msgstr "Přidat mnohoúhelník"
 
 #: eeschema/tools/ee_actions.cpp:368
-#, fuzzy
 msgid "Draw polygons"
-msgstr "Grafická Kři&vka"
+msgstr "Kreslit mnohoúhelníky"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Move Symbol Anchor"
@@ -20283,18 +20280,16 @@ msgid "Add No Connect Flag"
 msgstr "Přidat označení nezapojeno"
 
 #: eeschema/tools/ee_actions.cpp:435
-#, fuzzy
 msgid "Draw no-connection flags"
-msgstr "Přidat příznak nezapojeno"
+msgstr "Kreslit příznaky nezapojeno"
 
 #: eeschema/tools/ee_actions.cpp:445 eeschema/tools/sch_drawing_tools.cpp:973
 msgid "Add Junction"
 msgstr "Přidat propojení"
 
 #: eeschema/tools/ee_actions.cpp:446
-#, fuzzy
 msgid "Draw junctions"
-msgstr "Uchopit propojení"
+msgstr "Kreslit propojení"
 
 #: eeschema/tools/ee_actions.cpp:456 eeschema/tools/sch_drawing_tools.cpp:979
 msgid "Add Wire to Bus Entry"
@@ -20311,9 +20306,8 @@ msgid "Add Label"
 msgstr "Přidat označení"
 
 #: eeschema/tools/ee_actions.cpp:468
-#, fuzzy
 msgid "Draw net labels"
-msgstr "Přidat označení sítě"
+msgstr "Kreslit označení sítě"
 
 #: eeschema/tools/ee_actions.cpp:475
 msgid "Add Net Class Directive"
@@ -20337,18 +20331,16 @@ msgid "Add Sheet"
 msgstr "Přidat list"
 
 #: eeschema/tools/ee_actions.cpp:496
-#, fuzzy
 msgid "Draw hierarchical sheets"
-msgstr "Přidat hierarchický list"
+msgstr "Kreslit hierarchické listy"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Import Sheet Pin"
 msgstr "Importovat vývod listu"
 
 #: eeschema/tools/ee_actions.cpp:505
-#, fuzzy
 msgid "Import hierarchical sheet pins"
-msgstr "Importovat vývod hierarchického listu"
+msgstr "Importovat vývody hierarchického listu"
 
 #: eeschema/tools/ee_actions.cpp:514
 msgid "Add Global Label"
@@ -20359,41 +20351,36 @@ msgid "Add global labels"
 msgstr "Přidat globální označení"
 
 #: eeschema/tools/ee_actions.cpp:525
-#, fuzzy
 msgid "Draw text items"
-msgstr "Další textové položky"
+msgstr "Kreslit textové položky"
 
 #: eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Draw text box items"
-msgstr "Přidejte grafický prvek ve formě textového bloku"
+msgstr "Kreslit položky textového pole"
 
 #: eeschema/tools/ee_actions.cpp:541 pagelayout_editor/tools/pl_actions.cpp:54
 msgid "Add Rectangle"
 msgstr "Přidat obdélník"
 
 #: eeschema/tools/ee_actions.cpp:542
-#, fuzzy
 msgid "Draw rectangles"
-msgstr "Kreslit obdélník"
+msgstr "Kreslit obdélníky"
 
 #: eeschema/tools/ee_actions.cpp:550
 msgid "Add Circle"
 msgstr "Přidat kružnici"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Draw circles"
-msgstr "Kreslit kružnici"
+msgstr "Kreslit kružnice"
 
 #: eeschema/tools/ee_actions.cpp:559
 msgid "Add Arc"
 msgstr "Přidat oblouk"
 
 #: eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Draw arcs"
-msgstr "Kreslit oblouk"
+msgstr "Kreslit oblouky"
 
 #: eeschema/tools/ee_actions.cpp:568 eeschema/tools/sch_drawing_tools.cpp:706
 msgid "Add Image"
@@ -20670,9 +20657,8 @@ msgid "Highlight wires and pins of a net"
 msgstr "Zvýraznit spoje a vývody patřící této síti"
 
 #: eeschema/tools/ee_actions.cpp:863
-#, fuzzy
 msgid "Show Net Navigator"
-msgstr "Zobrazit naznačené spoje"
+msgstr "Zobrazit Navigátor sítí"
 
 #: eeschema/tools/ee_actions.cpp:864
 msgid "Toggle the net navigator panel visibility"
@@ -20912,9 +20898,8 @@ msgid "Export file containing netlist in one of several formats"
 msgstr "Export souboru obsahující netlist v jednom z několika formátů"
 
 #: eeschema/tools/ee_actions.cpp:1052
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Generovat rozpis materiálu"
+msgstr "Generovat rozpisku materiálů..."
 
 #: eeschema/tools/ee_actions.cpp:1053
 msgid "Generate a bill of materials for the current schematic"
@@ -20937,11 +20922,12 @@ msgid "Generate Bill of Materials (External)..."
 msgstr "Generovat rozpis materiálu"
 
 #: eeschema/tools/ee_actions.cpp:1067
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "Vytvořit rozpisku materiálu z aktuálního schématu"
+msgstr ""
+"Vygenerovat kusovník materiálů pro aktuální schéma pomocí externího "
+"generátoru"
 
 #: eeschema/tools/ee_actions.cpp:1073
 msgid "Export Symbols to Library..."
@@ -23334,7 +23320,7 @@ msgid ""
 "the models will be embedded in main exported VRML file"
 msgstr ""
 "Jméno složky, kam budou uloženy vytvořené 3d modely, pokud není "
-"specifikována, modely budou vloženy do hlavního exportovaného VRML souboru."
+"specifikována, modely budou vloženy do hlavního exportovaného VRML souboru"
 
 #: kicad/cli/command_pcb_export_3d.cpp:146
 msgid "Used with --models-dir to output relative paths in the resulting file"
