@@ -4211,10 +4211,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 
 void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* aEdaText )
 {
-    // Altium counts the width of the text from the centerline of each stroke while KiCad measures
-    // it to the outside of the stroke. TODO: need to adjust this based on the stroke font.  Altium Default is
-    // definitely wider than the sans serif font.
-    aEdaText->SetTextSize( VECTOR2I( aElem.height, aElem.height + aElem.strokewidth ) );
+    aEdaText->SetTextSize( VECTOR2I( aElem.height, aElem.height ) );
 
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
     {
