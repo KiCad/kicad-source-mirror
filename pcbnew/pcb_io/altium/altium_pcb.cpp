@@ -2998,32 +2998,38 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
 {
     if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
     {
-        // TODO: This is not the actual board item. We use it for now to calculate the arc points. This could be improved!
-        PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
-
         EDA_ANGLE includedAngle( aElem.endangle - aElem.startangle, DEGREES_T );
         EDA_ANGLE startAngle( aElem.endangle, DEGREES_T );
+
+        includedAngle.Normalize();
 
         VECTOR2I startOffset = VECTOR2I( KiROUND( startAngle.Cos() * aElem.radius ),
                                          -KiROUND( startAngle.Sin() * aElem.radius ) );
 
-        shape.SetCenter( aElem.center );
-        shape.SetStart( aElem.center + startOffset );
-        shape.SetArcAngleAndEnd( includedAngle.Normalize(), true );
+        if( includedAngle.AsDegrees() >= 0.1 )
+        {
+            // TODO: This is not the actual board item. We use it for now to calculate the arc points. This could be improved!
+            PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
 
-        // Create actual arc
-        SHAPE_ARC shapeArc( shape.GetCenter(), shape.GetStart(), shape.GetArcAngle(), aElem.width );
-        std::unique_ptr<PCB_ARC>  arc = std::make_unique<PCB_ARC>( m_board, &shapeArc );
+            shape.SetCenter( aElem.center );
+            shape.SetStart( aElem.center + startOffset );
+            shape.SetArcAngleAndEnd( includedAngle, true );
 
-        arc->SetWidth( aElem.width );
-        arc->SetLayer( aLayer );
-        arc->SetNetCode( GetNetCode( aElem.net ) );
+            // Create actual arc
+            SHAPE_ARC shapeArc( shape.GetCenter(), shape.GetStart(), shape.GetArcAngle(),
+                                aElem.width );
+            std::unique_ptr<PCB_ARC> arc = std::make_unique<PCB_ARC>( m_board, &shapeArc );
 
-        m_board->Add( arc.release(), ADD_MODE::APPEND );
+            arc->SetWidth( aElem.width );
+            arc->SetLayer( aLayer );
+            arc->SetNetCode( GetNetCode( aElem.net ) );
+
+            m_board->Add( arc.release(), ADD_MODE::APPEND );
+        }
     }
     else
     {
-        std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( m_board );
+        std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>(m_board);
 
         ConvertArcs6ToPcbShape( aElem, arc.get() );
         arc->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
