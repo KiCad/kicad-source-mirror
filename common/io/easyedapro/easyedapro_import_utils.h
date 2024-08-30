@@ -57,6 +57,12 @@ void IterateZipFiles(
 
 std::vector<nlohmann::json> ParseJsonLines( wxInputStream& aInput, const wxString& aSource );
 
+/**
+ * Multiple document types (e.g. footprint and PCB) can be put into a single file, separated by empty line.
+ */
+std::vector<std::vector<nlohmann::json>> ParseJsonLinesWithSeparation( wxInputStream&  aInput,
+                                                                       const wxString& aSource );
+
 } // namespace EASYEDAPRO
 
 

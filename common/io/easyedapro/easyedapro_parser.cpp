@@ -36,7 +36,9 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::SCH_ATTR& d )
     d.id = j.at( 1 ).get<wxString>();
     d.parentId = j.at( 2 ).get<wxString>();
     d.key = j.at( 3 ).get<wxString>();
-    d.value = j.at( 4 ).get<wxString>();
+
+    if( j.at( 4 ).is_string() )
+        d.value = j.at( 4 ).get<wxString>();
 
     if( j.at( 5 ).is_number() )
         d.keyVisible = j.at( 5 ).get<int>();

@@ -794,50 +794,53 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
 
                 nlohmann::json polyDataList = line.at( 7 );
 
-                if( !polyDataList.at( 0 ).is_array() )
-                    polyDataList = nlohmann::json::array( { polyDataList } );
-
-                std::vector<SHAPE_LINE_CHAIN> contours;
-                for( nlohmann::json& polyData : polyDataList )
+                if( !polyDataList.is_null() && !polyDataList.empty() )
                 {
-                    SHAPE_LINE_CHAIN contour = ParseContour( polyData, false );
-                    contour.SetClosed( true );
+                    if( !polyDataList.at( 0 ).is_array() )
+                        polyDataList = nlohmann::json::array( { polyDataList } );
 
-                    contours.push_back( contour );
-                }
+                    std::vector<SHAPE_LINE_CHAIN> contours;
+                    for( nlohmann::json& polyData : polyDataList )
+                    {
+                        SHAPE_LINE_CHAIN contour = ParseContour( polyData, false );
+                        contour.SetClosed( true );
 
-                SHAPE_POLY_SET polySet;
+                        contours.push_back( contour );
+                    }
 
-                for( SHAPE_LINE_CHAIN& contour : contours )
-                    polySet.AddOutline( contour );
+                    SHAPE_POLY_SET polySet;
 
-                polySet.RebuildHolesFromContours();
+                    for( SHAPE_LINE_CHAIN& contour : contours )
+                        polySet.AddOutline( contour );
 
-                std::unique_ptr<PCB_GROUP> group;
+                    polySet.RebuildHolesFromContours();
 
-                if( polySet.OutlineCount() > 1 )
-                    group = std::make_unique<PCB_GROUP>( footprint );
+                    std::unique_ptr<PCB_GROUP> group;
 
-                BOX2I polyBBox = polySet.BBox();
+                    if( polySet.OutlineCount() > 1 )
+                        group = std::make_unique<PCB_GROUP>( footprint );
 
-                for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
-                {
-                    std::unique_ptr<PCB_SHAPE> shape =
-                            std::make_unique<PCB_SHAPE>( footprint, SHAPE_T::POLY );
+                    BOX2I polyBBox = polySet.BBox();
 
-                    shape->SetFilled( true );
-                    shape->SetPolyShape( poly );
-                    shape->SetLayer( klayer );
-                    shape->SetWidth( 0 );
+                    for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
+                    {
+                        std::unique_ptr<PCB_SHAPE> shape =
+                                std::make_unique<PCB_SHAPE>( footprint, SHAPE_T::POLY );
+
+                        shape->SetFilled( true );
+                        shape->SetPolyShape( poly );
+                        shape->SetLayer( klayer );
+                        shape->SetWidth( 0 );
+
+                        if( group )
+                            group->AddItem( shape.get() );
+
+                        footprint->Add( shape.release(), ADD_MODE::APPEND );
+                    }
 
                     if( group )
-                        group->AddItem( shape.get() );
-
-                    footprint->Add( shape.release(), ADD_MODE::APPEND );
+                        footprint->Add( group.release(), ADD_MODE::APPEND );
                 }
-
-                if( group )
-                    footprint->Add( group.release(), ADD_MODE::APPEND );
             }
             else if( type == wxS( "ATTR" ) )
             {
