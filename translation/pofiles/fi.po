@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-30 18:09+0000\n"
+"PO-Revision-Date: 2024-08-31 19:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -780,9 +780,8 @@ msgid "Use board stackup colors"
 msgstr "Käytä piirilevyn kerrospinon värejä"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "Käytä piirilevyn kerrospinon värejä"
+msgstr "Käytä piirilevyeditorin kuparivärejä"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
 msgid "Use the board editor copper colors (openGL only)"
@@ -7817,9 +7816,8 @@ msgid "Duplicates the selected item(s)"
 msgstr "Kopioi valitut kohteet"
 
 #: common/tool/actions.cpp:280
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Poistaa valitut kohteet"
+msgstr "Poista valitut kohteet"
 
 #: common/tool/actions.cpp:287
 msgid "Interactive Delete Tool"
@@ -9618,7 +9616,6 @@ msgid "Footprint Filters:"
 msgstr "Jalanjälkisuodattimet:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
 msgstr "Näytä valittu jalanjälki"
 
@@ -9627,13 +9624,12 @@ msgid "Manage Footprint Association Files..."
 msgstr "Hallitse jalanjälkiliitostiedostoja..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
-"Muokkaa jalanjäljen liitostiedostojen luetteloa. Näitä tiedostoja käytetään "
-"jalanjälkien nimien määrittämiseen automaattisesti symboliarvoista."
+"Muokkaa jalanjäljen liitostiedostojen luetteloa.   Näitä tiedostoja "
+"käytetään jalanjälkien nimien määrittämiseen automaattisesti symboliarvoista."
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
 msgid "Save to Schematic"
@@ -9675,7 +9671,7 @@ msgstr "Valitse edellinen symboli ilman jalanjälkimääritystä"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
 msgid "Assign Footprint"
-msgstr "Määritä Jalanjäljet"
+msgstr "Määritä jalanjäljet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:131
 msgid "Automatically Assign Footprints"
@@ -12729,12 +12725,10 @@ msgid "Field name templates"
 msgstr "Kentän nimen mallit"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "BOM presets"
-msgstr "Materiaaliluettelon esiasetukset"
+msgstr "BOM-esiasetukset"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM format presets"
 msgstr "BOM-muodon esiasetukset"
 
@@ -21404,11 +21398,11 @@ msgstr "Piirrä taulukot"
 #: eeschema/tools/ee_actions.cpp:526 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Draw Rectangles"
-msgstr "Piirrä suorakulmiot"
+msgstr "Piirrä suorakulmioita"
 
 #: eeschema/tools/ee_actions.cpp:534 pcbnew/tools/pcb_actions.cpp:126
 msgid "Draw Circles"
-msgstr "Piirrä ympyrät"
+msgstr "Piirrä ympyröitä"
 
 #: eeschema/tools/ee_actions.cpp:542 pcbnew/tools/pcb_actions.cpp:135
 msgid "Draw Arcs"
@@ -34359,7 +34353,6 @@ msgid "Bottom/Back layer:"
 msgstr "Ala-/Kääntöpuolen kerros:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:209
-#, fuzzy
 msgid "Copper layer pair presets"
 msgstr "Kuparikerrosparin esiasetukset"
 
@@ -37535,7 +37528,6 @@ msgid "Margin"
 msgstr "Reunus"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
-#, fuzzy
 msgid "Board contour setback"
 msgstr "Levyn reunaviivan etäisyys"
 
@@ -46417,18 +46409,16 @@ msgid "Create stub (arc) of specified size for microwave applications"
 msgstr "Luo tietyn kokoinen kanto (kaari) mikroaaltouunisovelluksiin"
 
 #: pcbnew/tools/pcb_actions.cpp:874
-#, fuzzy
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "Lisää Mikroaalto-monikulmiomuoto"
+msgstr "Piirrä mikroaaltomonikulmioden muodot"
 
 #: pcbnew/tools/pcb_actions.cpp:875
 msgid "Create a microwave polygonal shape from a list of vertices"
 msgstr "Luodaan monikulmainen mikroaaltomuoto kulmapisteiden luettelosta"
 
 #: pcbnew/tools/pcb_actions.cpp:883
-#, fuzzy
 msgid "Draw Microwave Lines"
-msgstr "Lisää Mikroaaltoviiva"
+msgstr "Piirrä mikroaaltoviivat"
 
 #: pcbnew/tools/pcb_actions.cpp:884
 msgid "Create line of specified length for microwave applications"
@@ -46633,9 +46623,8 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Kopioi vyöhyke kerrokselle ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1107
-#, fuzzy
 msgid "Place Footprints"
-msgstr "Aseta jalanjälki"
+msgstr "Aseta jalanjäljet"
 
 #: pcbnew/tools/pcb_actions.cpp:1115
 msgid "Drill/Place File Origin"
@@ -46790,7 +46779,7 @@ msgstr "Näytä kytkentärisukko"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "Näytä puuttuvia yhteyksiä kuvaavat viivat/kaaret piirilevyllä"
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Curved Ratsnest Lines"
@@ -47057,14 +47046,12 @@ msgid "Make the current layer more transparent"
 msgstr "Tee nykyisestä kerroksesta läpinäkyvämpi"
 
 #: pcbnew/tools/pcb_actions.cpp:1789
-#, fuzzy
 msgid "Cycle Layer Pair Presets"
-msgstr "Tallenna Kerroksen Esiasetus"
+msgstr "Vaihda kerrosparin esiasetuksia"
 
 #: pcbnew/tools/pcb_actions.cpp:1790
-#, fuzzy
 msgid "Cycle between preset layer pairs"
-msgstr "Vaihda tasojen välillä aktiivisessa tasoparissa"
+msgstr "Vaihda esiasetettujen kerrosparien välillä"
 
 #: pcbnew/tools/pcb_actions.cpp:1801
 msgid "Show Board Statistics"
@@ -47645,9 +47632,8 @@ msgid "Inactive Layer Display"
 msgstr "Inaktiivisen Kerroksen Näyttö"
 
 #: pcbnew/tools/pcb_control.cpp:640
-#, fuzzy
 msgid "Preset Layer Pairs"
-msgstr "Aseta Kerrospari ..."
+msgstr "Esiasetus kerrosparit"
 
 #: pcbnew/tools/pcb_control.cpp:730
 msgid "Item locked."
@@ -47787,23 +47773,20 @@ msgid "Click on reference item..."
 msgstr "Napsauta viitekohdetta..."
 
 #: pcbnew/tools/position_relative_tool.cpp:243
-#, fuzzy
 msgid "Click on reference point..."
-msgstr "Napsauta viitekohdetta..."
+msgstr "Napsauta viitekohtaa..."
 
 #: pcbnew/tools/zone_create_helper.cpp:198
 msgid "Add Zone Cutout"
 msgstr "Lisää Leikkausalue"
 
 #: pcbnew/tools/zone_create_helper.cpp:230
-#, fuzzy
 msgid "Draw Zone"
-msgstr "Piirrä Viiva"
+msgstr "Piirrä vyöhyke"
 
 #: pcbnew/tools/zone_create_helper.cpp:252
-#, fuzzy
 msgid "Draw Polygon"
-msgstr "Piirrä monikulmioita"
+msgstr "Piirrä monikulmio"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
 msgid "Checking Zones"
@@ -48766,9 +48749,8 @@ msgid "Zone %s %s"
 msgstr "Vyöhyke %s %s"
 
 #: pcbnew/zone.cpp:1690
-#, fuzzy
 msgid "Rule Area Type"
-msgstr "Sääntöalue"
+msgstr "Sääntöaluetyyppi"
 
 #: pcbnew/zone.cpp:1720
 msgid "Cannot be less than zone minimum width"
@@ -48860,6 +48842,8 @@ msgstr "Päivitä näytetyt vyöhykkeet"
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""
+"Päivitä valintaikkunassa näkyvät täytetyt alueet uusien nykyisten asetusten "
+"mukaan"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
