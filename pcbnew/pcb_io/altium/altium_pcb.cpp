@@ -4236,9 +4236,6 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
     aEdaText->SetItalic( aElem.isItalic );
     aEdaText->SetMirrored( aElem.isMirrored );
     aEdaText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
-
-    aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-    aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 }
 
 
