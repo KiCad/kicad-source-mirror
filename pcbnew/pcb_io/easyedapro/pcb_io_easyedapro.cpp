@@ -123,6 +123,7 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     PCB_IO_EASYEDAPRO_PARSER parser( nullptr, nullptr );
 
     wxFileName fname( aFileName );
+    wxString   fpLibName = EASYEDAPRO::ShortenLibName( fname.GetName() );
 
     if( fname.GetExt() == wxS( "epro" ) || fname.GetExt() == wxS( "zip" ) )
     {
@@ -168,7 +169,71 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
             if( pcbUuid != pcbToLoad )
                 EASY_IT_CONTINUE;
 
-            std::vector<nlohmann::json> lines = EASYEDAPRO::ParseJsonLines( zip, name );
+            std::vector<nlohmann::json>* pcbLines = nullptr;
+
+            std::vector<std::vector<nlohmann::json>> lineBlocks =
+                    EASYEDAPRO::ParseJsonLinesWithSeparation( zip, name );
+
+            if( lineBlocks.empty() )
+                EASY_IT_CONTINUE;
+
+            if( lineBlocks.size() > 1 )
+            {
+                for( std::vector<nlohmann::json>& block : lineBlocks )
+                {
+                    wxString       docType;
+                    nlohmann::json headData;
+
+                    for( const nlohmann::json& line : block )
+                    {
+                        if( line.size() < 2 )
+                            continue;
+
+                        if( !line.at( 0 ).is_string() )
+                            continue;
+
+                        wxString lineType = line.at( 0 ).get<wxString>();
+
+                        if( lineType == wxS( "DOCTYPE" ) )
+                        {
+                            if( !line.at( 1 ).is_string() )
+                                continue;
+
+                            docType = line.at( 1 ).get<wxString>();
+                        }
+                        else if( lineType == wxS( "HEAD" ) )
+                        {
+                            if( !line.at( 1 ).is_object() )
+                                continue;
+
+                            headData = line.at( 1 );
+                        }
+                    }
+
+                    if( docType == wxS( "FOOTPRINT" ) )
+                    {
+                        wxString fpUuid = headData.at( "uuid" );
+                        wxString fpTitle = headData.at( "title" );
+
+                        FOOTPRINT* footprint = parser.ParseFootprint( project, fpUuid, block );
+
+                        if( !footprint )
+                            EASY_IT_CONTINUE;
+
+                        LIB_ID fpID = EASYEDAPRO::ToKiCadLibID( fpLibName, fpTitle );
+                        footprint->SetFPID( fpID );
+
+                        m_projectData->m_Footprints.emplace( fpUuid, footprint );
+                    }
+                    else if( docType == wxS( "PCB" ) )
+                    {
+                        pcbLines = &block;
+                    }
+                }
+            }
+
+            if( pcbLines == nullptr )
+                pcbLines = &lineBlocks[0];
 
             wxString           boardKey = pcbUuid + wxS( "_0" );
             wxScopedCharBuffer cb = boardKey.ToUTF8();
@@ -178,7 +243,7 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
                     get_def( m_projectData->m_Poured, boardPouredKey );
 
             parser.ParseBoard( m_board, project, m_projectData->m_Footprints,
-                               m_projectData->m_Blobs, boardPoured, lines,
+                               m_projectData->m_Blobs, boardPoured, *pcbLines,
                                EASYEDAPRO::ShortenLibName( fname.GetName() ) );
 
             EASY_IT_BREAK;

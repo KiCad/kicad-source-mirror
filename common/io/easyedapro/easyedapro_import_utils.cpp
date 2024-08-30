@@ -245,8 +245,17 @@ std::vector<nlohmann::json> EASYEDAPRO::ParseJsonLines( wxInputStream&  aInput,
     {
         try
         {
-            nlohmann::json js = nlohmann::json::parse( txt.ReadLine() );
-            lines.emplace_back( js );
+            wxString line = txt.ReadLine();
+
+            if( !line.IsEmpty() )
+            {
+                nlohmann::json js = nlohmann::json::parse( line );
+                lines.emplace_back( js );
+            }
+            else
+            {
+                lines.emplace_back( nlohmann::json() );
+            }
         }
         catch( nlohmann::json::exception& e )
         {
@@ -258,4 +267,43 @@ std::vector<nlohmann::json> EASYEDAPRO::ParseJsonLines( wxInputStream&  aInput,
     }
 
     return lines;
+}
+
+
+std::vector<std::vector<nlohmann::json>>
+EASYEDAPRO::ParseJsonLinesWithSeparation( wxInputStream& aInput, const wxString& aSource )
+{
+    wxTextInputStream txt( aInput, wxS( " " ), wxConvUTF8 );
+
+    int currentLine = 1;
+
+    std::vector<std::vector<nlohmann::json>> lineBlocks;
+    lineBlocks.emplace_back();
+
+    while( aInput.CanRead() )
+    {
+        try
+        {
+            wxString line = txt.ReadLine();
+
+            if( !line.IsEmpty() )
+            {
+                nlohmann::json js = nlohmann::json::parse( line );
+                lineBlocks.back().emplace_back( js );
+            }
+            else
+            {
+                lineBlocks.emplace_back();
+            }
+        }
+        catch( nlohmann::json::exception& e )
+        {
+            wxLogWarning( wxString::Format( _( "Cannot parse JSON line %d in '%s': %s" ),
+                                            currentLine, aSource, e.what() ) );
+        }
+
+        currentLine++;
+    }
+
+    return lineBlocks;
 }
