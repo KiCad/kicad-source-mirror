@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-30 10:09+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2024-08-31 18:09+0000\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -7365,11 +7365,11 @@ msgstr "Välj alla objekt på skärmen"
 
 #: common/tool/actions.cpp:239
 msgid "Unselect All"
-msgstr "Avlägsna alla val"
+msgstr "Avmarkera allt"
 
 #: common/tool/actions.cpp:240
 msgid "Unselect all items on screen"
-msgstr "Avlägsna alla objekt på skärmen från val"
+msgstr "Avmarkera alla objekt på skärmen"
 
 #: common/tool/actions.cpp:245
 msgid "Paste Special..."
@@ -8106,7 +8106,7 @@ msgstr "<hittades inte>"
 #: common/widgets/footprint_diff_widget.cpp:36 eeschema/sch_symbol.cpp:1943
 #: pcbnew/dialogs/dialog_board_statistics.cpp:677
 msgid "Board"
-msgstr "Anslagstavla"
+msgstr "Mönsterkort"
 
 #: common/widgets/footprint_diff_widget.cpp:37 cvpcb/cvpcb_mainframe.cpp:811
 #: eeschema/sch_base_frame.cpp:569 eeschema/sch_symbol.cpp:1996
