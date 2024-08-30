@@ -100,6 +100,21 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
     auto labels_ori = m_sheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T );
     std::vector<SCH_SHEET_PIN*> pins_ori = m_sheet->GetPins();
 
+    // De-duplicate the hierarchical labels list
+    std::set<wxString>          dedup_labels_ori_text;
+    std::vector<SCH_HIERLABEL*> dedup_labels_ori;
+
+    for( const auto& item : labels_ori )
+    {
+        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+
+        if( dedup_labels_ori_text.count( label->GetText() ) == 0 )
+        {
+            dedup_labels_ori_text.insert( label->GetText() );
+            dedup_labels_ori.push_back( label );
+        }
+    }
+
     auto check_matched = [&]( SCH_HIERLABEL* label )
     {
         for( size_t i = 0; i < pins_ori.size(); i++ )
@@ -119,7 +134,7 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
                 std::make_shared<SCH_HIERLABEL_SYNCHRONIZATION_ITEM>( label, m_sheet ) );
     };
 
-    for( const auto& item : labels_ori )
+    for( const auto& item : dedup_labels_ori )
         check_matched( static_cast<SCH_HIERLABEL*>( item ) );
 
     for( const auto& pin : pins_ori )
