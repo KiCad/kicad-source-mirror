@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,12 +61,23 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_modelNameLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_modelNameLabel->Wrap( -1 );
-	gbSizer1->Add( m_modelNameLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_modelNameLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxTOP, 4 );
 
-	wxArrayString m_modelNameChoiceChoices;
-	m_modelNameChoice = new wxChoice( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_modelNameChoiceChoices, 0 );
-	m_modelNameChoice->SetSelection( 0 );
-	gbSizer1->Add( m_modelNameChoice, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxEXPAND|wxRIGHT, 5 );
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
+
+	m_modelFilter = new wxSearchCtrl( m_modelPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_modelFilter->ShowSearchButton( true );
+	#endif
+	m_modelFilter->ShowCancelButton( false );
+	bSizer9->Add( m_modelFilter, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_modelListBox = new wxListBox( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	bSizer9->Add( m_modelListBox, 1, wxEXPAND|wxRIGHT, 5 );
+
+
+	gbSizer1->Add( bSizer9, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 
 	gbSizer1->Add( 0, 0, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
@@ -99,11 +110,12 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 
 	gbSizer1->AddGrowableCol( 1 );
+	gbSizer1->AddGrowableRow( 1 );
 
-	bSizerMargins->Add( gbSizer1, 0, wxEXPAND|wxLEFT, 28 );
+	bSizerMargins->Add( gbSizer1, 1, wxEXPAND|wxLEFT, 28 );
 
 
-	bSizerMargins->Add( 0, 25, 0, wxEXPAND, 5 );
+	bSizerMargins->Add( 0, 18, 0, wxEXPAND, 5 );
 
 	m_rbBuiltinModel = new wxRadioButton( m_modelPanel, wxID_ANY, _("Built-in SPICE model"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_rbBuiltinModel, 0, wxBOTTOM|wxLEFT, 5 );
@@ -136,7 +148,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMargins->Add( fgSizer16, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 24 );
 
 
-	bSizerMargins->Add( 0, 15, 0, wxEXPAND, 5 );
+	bSizerMargins->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_modelNotebook = new wxNotebook( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_parametersPanel = new wxPanel( m_modelNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -207,9 +219,6 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_modelNotebook->AddPage( m_codePanel, _("Code"), false );
 
 	bSizerMargins->Add( m_modelNotebook, 1, wxEXPAND|wxALL, 5 );
-
-
-	bSizerMargins->Add( 0, 4, 0, wxEXPAND, 5 );
 
 	m_saveInValueCheckbox = new wxCheckBox( m_modelPanel, wxID_ANY, _("Save {} in Value field as \"{}\""), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_saveInValueCheckbox, 0, wxALL, 6 );
@@ -343,7 +352,9 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
 	m_modelNameLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameLabelUpdate ), NULL, this );
-	m_modelNameChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameChoice ), NULL, this );
+	m_modelFilter->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_SIM_MODEL_BASE::onFilterCharHook ), NULL, this );
+	m_modelFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelFilter ), NULL, this );
+	m_modelListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameChoice ), NULL, this );
 	m_pinLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onIbisPinLabelUpdate ), NULL, this );
 	m_pinCombobox->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onPinCombobox ), NULL, this );
 	m_pinCombobox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
@@ -380,7 +391,9 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
 	m_modelNameLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameLabelUpdate ), NULL, this );
-	m_modelNameChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameChoice ), NULL, this );
+	m_modelFilter->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_SIM_MODEL_BASE::onFilterCharHook ), NULL, this );
+	m_modelFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelFilter ), NULL, this );
+	m_modelListBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameChoice ), NULL, this );
 	m_pinLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onIbisPinLabelUpdate ), NULL, this );
 	m_pinCombobox->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onPinCombobox ), NULL, this );
 	m_pinCombobox->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );

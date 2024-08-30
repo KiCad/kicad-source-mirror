@@ -227,13 +227,13 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
             m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, reporter );
 
-            m_modelNameChoice->Append( _( "<unknown>" ) );
-            m_modelNameChoice->SetSelection( 0 );
+            m_modelListBox->Append( _( "<unknown>" ) );
+            m_modelListBox->SetSelection( 0 );
         }
         else
         {
             std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
-            int         modelIdx = m_modelNameChoice->FindString( modelName );
+            int         modelIdx = m_modelListBox->FindString( modelName );
 
             if( modelIdx == wxNOT_FOUND )
             {
@@ -241,20 +241,20 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                                                           modelName ) );
 
                 // Default to first item in library
-                m_modelNameChoice->SetSelection( 0 );
+                m_modelListBox->SetSelection( 0 );
             }
             else
             {
                 m_infoBar->Hide();
-                m_modelNameChoice->SetSelection( modelIdx );
+                m_modelListBox->SetSelection( modelIdx );
             }
 
             m_curModelType = curModel().GetType();
         }
 
-        if( isIbisLoaded() && ( m_modelNameChoice->GetSelection() >= 0 ) )
+        if( isIbisLoaded() && ( m_modelListBox->GetSelection() >= 0 ) )
         {
-            int  idx = m_modelNameChoice->GetSelection();
+            int  idx = m_modelListBox->GetSelection();
             auto ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &m_libraryModelsMgr.GetModels()[idx].get() );
 
             if( ibismodel )
@@ -365,8 +365,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
             path = fn.GetFullPath();
 
-        if( !m_modelNameChoice->IsEmpty() )
-            name = m_modelNameChoice->GetStringSelection().ToStdString();
+        if( m_modelListBox->GetSelection() >= 0 )
+            name = m_modelListBox->GetStringSelection().ToStdString();
         else if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &model ) )
             name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
     }
@@ -377,7 +377,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
     if( isIbisLoaded() )
     {
         SIM_MODEL_IBIS* ibismodel = static_cast<SIM_MODEL_IBIS*>(
-                &m_libraryModelsMgr.GetModels().at( m_modelNameChoice->GetSelection() ).get() );
+                &m_libraryModelsMgr.GetModels().at( m_modelListBox->GetSelection() ).get() );
 
         if( ibismodel )
         {
@@ -440,7 +440,8 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     m_pathLabel->Enable( enableLibCtrls );
     m_libraryPathText->Enable( enableLibCtrls );
     m_modelNameLabel->Enable( enableLibCtrls );
-    m_modelNameChoice->Enable( enableLibCtrls );
+    m_modelFilter->Enable( enableLibCtrls && !isIbisLoaded() );
+    m_modelListBox->Enable( enableLibCtrls );
     m_pinLabel->Enable( enableLibCtrls );
     m_pinCombobox->Enable( enableLibCtrls );
     m_differentialCheckbox->Enable( enableLibCtrls );
@@ -699,7 +700,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab( SIM_MODEL* aModel )
     wxString   text;
     SPICE_ITEM item;
 
-    item.modelName = m_modelNameChoice->GetStringSelection();
+    item.modelName = m_modelListBox->GetStringSelection();
 
     if( m_rbBuiltinModel->GetValue() || item.modelName == "" )
         item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();
@@ -839,8 +840,8 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
 
     modelNames.Sort();
 
-    m_modelNameChoice->Clear();
-    m_modelNameChoice->Append( modelNames );
+    m_modelListBox->Clear();
+    m_modelListBox->Append( modelNames );
 
     if( isIbisLoaded() )
     {
@@ -1077,10 +1078,8 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
 {
     if( m_rbLibraryModel->GetValue() )
     {
-        int sel = m_modelNameChoice->GetSelection();
-
-        if( sel >= 0 && sel < static_cast<int>( m_libraryModelsMgr.GetModels().size() ) )
-            return m_libraryModelsMgr.GetModels().at( sel ).get();
+        if( library() )
+            return *library()->FindModel( m_modelListBox->GetStringSelection().ToStdString() );
     }
     else
     {
@@ -1241,6 +1240,68 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 
 
 template <typename T>
+void DIALOG_SIM_MODEL<T>::onFilterCharHook( wxKeyEvent& aKeyStroke )
+{
+    int sel = m_modelListBox->GetSelection();
+
+    switch( aKeyStroke.GetKeyCode() )
+    {
+    case WXK_UP:
+        if( sel == wxNOT_FOUND )
+            sel = m_modelListBox->GetCount() - 1;
+        else
+            sel--;
+
+        break;
+
+    case WXK_DOWN:
+        if( sel == wxNOT_FOUND )
+            sel = 0;
+        else
+            sel++;
+
+        break;
+
+    case WXK_RETURN:
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+        return;
+
+    default:
+        aKeyStroke.Skip();      // Any other key: pass on to search box directly.
+        return;
+    }
+
+    if( sel >= 0 && sel < (int) m_modelListBox->GetCount() )
+        m_modelListBox->SetSelection( sel );
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onModelFilter( wxCommandEvent& aEvent )
+{
+    wxArrayString modelNames;
+    wxString      current = m_modelListBox->GetStringSelection();
+    wxString      filter = wxT( "*" ) + m_modelFilter->GetValue() + wxT( "*" );
+
+    for( const auto& [name, model] : library()->GetModels() )
+    {
+        wxString wx_name( name );
+
+        if( wx_name.Matches( filter ) )
+            modelNames.Add( wx_name );
+    }
+
+    modelNames.Sort();
+
+    m_modelListBox->Clear();
+    m_modelListBox->Append( modelNames );
+
+    if( !m_modelListBox->SetStringSelection( current ) )
+        m_modelListBox->SetSelection( 0 );
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::onModelNameChoice( wxCommandEvent& aEvent )
 {
     if( isIbisLoaded() )
@@ -1361,7 +1422,7 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
         if( equivalent( deviceType, SIM_MODEL::TypeInfo( type ).deviceType )
             && typeDescription == SIM_MODEL::TypeInfo( type ).description )
         {
-            int idx = m_modelNameChoice->GetSelection();
+            int idx = m_modelListBox->GetSelection();
 
             auto& baseModel = static_cast<SIM_MODEL_IBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
 

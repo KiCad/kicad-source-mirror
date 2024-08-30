@@ -99,6 +99,8 @@ private:
     void onLibraryPathTextEnter( wxCommandEvent& aEvent ) override;
     void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
+    void onFilterCharHook( wxKeyEvent& aKeyStroke ) override;
+    void onModelFilter( wxCommandEvent& aEvent ) override;
     void onModelNameChoice( wxCommandEvent& aEvent ) override;
     void onPinCombobox( wxCommandEvent& event ) override;
     void onPinComboboxTextEnter( wxCommandEvent& event ) override;

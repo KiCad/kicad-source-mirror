@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,9 +30,11 @@ class WX_INFOBAR;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/choice.h>
+#include <wx/srchctrl.h>
+#include <wx/listbox.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/manager.h>
@@ -44,6 +46,7 @@ class WX_INFOBAR;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SIM_MODEL_BASE
@@ -61,7 +64,8 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_libraryPathText;
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_modelNameLabel;
-		wxChoice* m_modelNameChoice;
+		wxSearchCtrl* m_modelFilter;
+		wxListBox* m_modelListBox;
 		wxStaticText* m_pinLabel;
 		wxComboBox* m_pinCombobox;
 		wxCheckBox* m_differentialCheckbox;
@@ -98,6 +102,8 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onModelNameLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onFilterCharHook( wxKeyEvent& event ) { event.Skip(); }
+		virtual void onModelFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelNameChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisPinLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPinCombobox( wxCommandEvent& event ) { event.Skip(); }
