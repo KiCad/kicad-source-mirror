@@ -953,6 +953,12 @@ TOOL_ACTION ACTIONS::unpinLibrary( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Unpin Library" ) )
         .Tooltip( _( "No longer keep the library at the top of the list" ) ) );
 
+TOOL_ACTION ACTIONS::showLibraryTable( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showLibraryTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Library Table" ) )
+        .Icon( BITMAPS::table ) );
+
 TOOL_ACTION ACTIONS::showLibraryTree( TOOL_ACTION_ARGS()
         .Name( "common.Control.showLibraryTree" )
         .Scope( AS_GLOBAL )

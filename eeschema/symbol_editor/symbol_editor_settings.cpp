@@ -130,6 +130,13 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "use_eeschema_color_settings",
                                             &m_UseEeschemaColorSettings, true ) );
 
+    m_params.emplace_back( new PARAM_MAP<int>( "field_editor.field_widths", &m_LibFieldEditor.field_widths, {} ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.width", &m_LibFieldEditor.width, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.height", &m_LibFieldEditor.height, 0 ) );
+
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "selection_filter",
             [&]() -> nlohmann::json
             {

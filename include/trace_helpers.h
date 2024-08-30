@@ -248,6 +248,13 @@ extern KICOMMON_API const wxChar* const traceEagleIo;
  */
 extern KICOMMON_API const wxChar* const traceDesignBlocks;
 
+/*
+ * Flag to enable library field table debug tracing.
+ *
+ * Use "KICAD_LIB_FIELD_TABLE" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceLibFieldTable;
+
 ///@}
 
 /**

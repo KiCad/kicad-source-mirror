@@ -25,25 +25,28 @@
 #include "tools/symbol_editor_control.h"
 
 #include <advanced_config.h>
-#include <kiway.h>
-#include <pgm_base.h>
-#include <sch_painter.h>
-#include <tool/tool_manager.h>
-#include <tool/library_editor_control.h>
-#include <tools/sch_actions.h>
-#include <lib_symbol_library_manager.h>
-#include <symbol_editor/symbol_editor_settings.h>
-#include <symbol_viewer_frame.h>
-#include <symbol_tree_model_adapter.h>
-#include <symbol_lib_table.h>
-#include <wildcards_and_files_ext.h>
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
-#include <kidialog.h>
-#include <launch_ext.h> // To default when file manager setting is empty
+#include <dialogs/dialog_lib_fields.h>
 #include <gestfich.h> // To open with a text editor
+#include <kidialog.h>
+#include <kiway.h>
+#include <launch_ext.h> // To default when file manager setting is empty
+#include <lib_symbol_library_manager.h>
+#include <pgm_base.h>
+#include <sch_painter.h>
+#include <string_utils.h>
+#include <symbol_editor/symbol_editor_settings.h>
+#include <symbol_lib_table.h>
+#include <symbol_tree_model_adapter.h>
+#include <symbol_viewer_frame.h>
+#include <tool/library_editor_control.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
+#include <wildcards_and_files_ext.h>
+
 #include <wx/filedlg.h>
-#include "string_utils.h"
+
 
 bool SYMBOL_EDITOR_CONTROL::Init()
 {
@@ -155,6 +158,30 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     return false;
                 };
 
+
+        auto librarySelectedCondition = [this]( const SELECTION& aSel ) -> bool
+        {
+            bool      result = false;
+            LIB_TREE* libTree = m_frame->GetLibTree();
+
+            if( libTree )
+            {
+                std::vector<LIB_TREE_NODE*> selection;
+                libTree->GetSelectedTreeNodes( selection );
+
+                if( selection.size() == 1 )
+                {
+                    const LIB_TREE_NODE* lib = selection[0];
+                    if( lib && lib->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
+                    {
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        };
+
 // clang-format off
         ctxMenu.AddItem( SCH_ACTIONS::newSymbol,                libInferredCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::deriveFromExistingSymbol, symbolSelectedCondition, 10 );
@@ -189,6 +216,8 @@ bool SYMBOL_EDITOR_CONTROL::Init()
             ctxMenu.AddSeparator( 200 );
             ctxMenu.AddItem( ACTIONS::openDirectory,      canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
         }
+
+        ctxMenu.AddItem( ACTIONS::showLibraryTable,  librarySelectedCondition, 300 );
 
         libraryTreeTool->AddContextMenuItems( &ctxMenu );
     }
@@ -887,6 +916,18 @@ int SYMBOL_EDITOR_CONTROL::ChangeUnit( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    wxString           libName = editFrame->GetTreeLIBID().GetLibNickname();
+
+    DIALOG_LIB_FIELDS dlg( editFrame, libName );
+    dlg.SetTitle( _( "Library Fields" ) );
+    dlg.ShowModal();
+    return 0;
+}
+
+
 void SYMBOL_EDITOR_CONTROL::setTransitions()
 {
     // clang-format off
@@ -930,6 +971,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenPins,      SCH_ACTIONS::showHiddenPins.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    SCH_ACTIONS::showHiddenFields.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::TogglePinAltIcons,     SCH_ACTIONS::togglePinAltIcons.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showLibraryTable.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );

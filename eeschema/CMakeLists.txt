@@ -122,6 +122,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_label_properties_base.cpp
     dialogs/dialog_lib_edit_pin_table.cpp
     dialogs/dialog_lib_edit_pin_table_base.cpp
+    dialogs/dialog_lib_fields_base.cpp
+    dialogs/dialog_lib_fields.cpp
     dialogs/dialog_lib_new_symbol.cpp
     dialogs/dialog_lib_new_symbol_base.cpp
     dialogs/dialog_lib_symbol_properties.cpp
@@ -365,6 +367,7 @@ set( EESCHEMA_SRCS
     generate_alias_info.cpp
     gfx_import_utils.cpp
     junction_helpers.cpp
+    lib_fields_data_model.cpp
     lib_symbol.cpp
     libarch.cpp
     menubar.cpp

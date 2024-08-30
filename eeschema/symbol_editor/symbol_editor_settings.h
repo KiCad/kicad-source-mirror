@@ -65,6 +65,13 @@ public:
         int      dxf_units;
     };
 
+    struct LIB_FIELD_EDITOR
+    {
+        std::map<std::string, int> field_widths;
+        int                        width;
+        int                        height;
+    };
+
     SYMBOL_EDITOR_SETTINGS();
 
     virtual ~SYMBOL_EDITOR_SETTINGS() {}
@@ -98,6 +105,8 @@ public:
     bool m_UseEeschemaColorSettings;
 
     SCH_SELECTION_FILTER_OPTIONS m_SelectionFilter;
+
+    LIB_FIELD_EDITOR m_LibFieldEditor;
 
 protected:
 
