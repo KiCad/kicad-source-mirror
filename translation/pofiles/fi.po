@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-07-20 21:09+0000\n"
+"PO-Revision-Date: 2024-08-31 18:09+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -28730,9 +28730,9 @@ msgid "(segment has null or very small length: %d nm)"
 msgstr "(Segmentin pituus on nolla tai erittäin pieni: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(Kaaren koko on tyhjä tai erittäin pieni: %d nm)"
+msgstr "(kaaren koko on tyhjä tai erittäin pieni: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_drc.cpp:257 pcbnew/pcb_edit_frame.cpp:2410
@@ -40198,14 +40198,12 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(PTH-anturan reiän koon on oltava suurempi kuin %s)"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(PTH anturan reikään ei jää kuparia)"
+msgstr "(PTH-anturan reikään ei jää kuparia)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(PTH anturan reikä ei kokonaan kuparin sisäpuolella)"
+msgstr "(PTH-anturan reikä ei kokonaan kuparin sisäpuolella)"
 
 #: pcbnew/pad.cpp:1948
 #, fuzzy
@@ -40218,22 +40216,20 @@ msgid "(negative local clearance values have no effect)"
 msgstr "Negatiivisilla paikallisilla etäisyysarvoilla ei ole vaikutusta"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Negatiivinen juotosmaskietäisyys on suurempi, kuin osalla "
-"muotoprimitiiveistä; tulokset saattavat olla yllättäviä"
+"(negatiivinen juotosmaskietäisyys on suurempi, kuin osalla "
+"muotoprimitiiveistä; tulokset saattavat olla yllättäviä)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Negatiivinen juotosmaskietäisyys on suurempi kuin antura; juotosmaskia ei "
-"luoda"
+"(Negatiivinen juotosmaskietäisyys on suurempi kuin antura; juotosmaskia ei "
+"luoda)"
 
 #: pcbnew/pad.cpp:2001
 #, fuzzy
@@ -40253,11 +40249,10 @@ msgid "(PTH pad has no copper layers)"
 msgstr "(PTH anturalla ei ole kuparikerroksia)"
 
 #: pcbnew/pad.cpp:2017
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"Pinnoitetuissa läpirei'issä on yleensä kupariantura vähintään yhdessä "
-"kerroksessa"
+"(Pinnoitetuissa läpirei'issä on yleensä kupariantura vähintään yhdessä "
+"kerroksessa)"
 
 #: pcbnew/pad.cpp:2036
 #, fuzzy
@@ -40281,9 +40276,8 @@ msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr "SMD-anturassa on kupari- ja maskikerrokset levyn eri puolilla"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
-msgstr "SMD-anturassa on kupari- ja tahnakerrokset levyn eri puolilla"
+msgstr "(SMD-anturassa on kupari- ja tahnakerrokset levyn eri puolilla)"
 
 #: pcbnew/pad.cpp:2080
 #, fuzzy
@@ -40362,7 +40356,7 @@ msgstr "Uritettu antura"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
-msgstr ""
+msgstr "Soikea"
 
 #: pcbnew/pad.cpp:2404
 msgid "Pad Type"
@@ -40389,9 +40383,8 @@ msgid "Corner Radius Ratio"
 msgstr "Kulman Säteen Suhde"
 
 #: pcbnew/pad.cpp:2452
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Reiän muoto:"
+msgstr "Reiän muoto"
 
 #: pcbnew/pad.cpp:2456
 msgid "Hole Size X"
