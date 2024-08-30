@@ -77,6 +77,8 @@ public:
 
     int DdAddLibrary( const TOOL_EVENT& aEvent );
 
+    int ShowLibraryTable( const TOOL_EVENT& aEvent );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;
