@@ -40,13 +40,6 @@ std::string SPICE_GENERATOR_IBIS::ModelLine( const SPICE_ITEM& aItem ) const
     return "";
 }
 
-std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SPICE_GENERATOR_IBIS::GetInstanceParams() const
-{
-    std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> vec;
-    return vec;
-}
-
-
 std::vector<std::string> SPICE_GENERATOR_IBIS::CurrentNames( const SPICE_ITEM& aItem ) const
 {
     std::vector<std::string> currentNames;
@@ -278,9 +271,9 @@ SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType, const SIM_MODEL_IBIS& aSource ) :
 {
     for( PARAM& param1 : m_params )
     {
-        for( auto& param2refwrap : aSource.GetParams() )
+        for( int ii = 0; ii < aSource.GetParamCount(); ++ii )
         {
-            const PARAM& param2 = param2refwrap.get();
+            const PARAM& param2 = aSource.GetParam( ii );
 
             if( param1.info.name == param2.info.name )
                 param1.value = param2.value;

@@ -62,8 +62,10 @@ std::string SPICE_GENERATOR::ModelLine( const SPICE_ITEM& aItem ) const
 
     result.append( "\n" );
 
-    for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
+    for( int ii = 0; ii < m_model.GetParamCount(); ++ii )
     {
+        const SIM_MODEL::PARAM& param = m_model.GetParam( ii );
+
         if( param.info.isSpiceInstanceParam )
             continue;
 
@@ -181,8 +183,13 @@ std::string SPICE_GENERATOR::ItemParams() const
 {
     std::string result;
 
-    for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
+    for( int ii = 0; ii < m_model.GetParamCount(); ++ii )
     {
+        const SIM_MODEL::PARAM& param = m_model.GetParam( ii );
+
+        if( !param.info.isSpiceInstanceParam )
+            continue;
+
         std::string name = param.info.spiceInstanceName.empty() ? param.info.name
                                                                 : param.info.spiceInstanceName;
         std::string value = SIM_VALUE::ToSpice( param.value );
@@ -227,20 +234,6 @@ std::string SPICE_GENERATOR::Preview( const SPICE_ITEM& aItem ) const
 
     spiceCode.append( itemLine );
     return boost::trim_copy( spiceCode );
-}
-
-
-std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SPICE_GENERATOR::GetInstanceParams() const
-{
-    std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> instanceParams;
-
-    for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
-    {
-        if( param.info.isSpiceInstanceParam )
-            instanceParams.emplace_back( param );
-    }
-
-    return instanceParams;
 }
 
 

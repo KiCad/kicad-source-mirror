@@ -29,6 +29,7 @@
 #include <pegtl/contrib/parse_tree.hpp>
 #include <fmt/core.h>
 #include <math/util.h>
+#include <wx/regex.h>
 
 
 #define CALL_INSTANCE( ValueType, Notation, func, ... )                  \
@@ -370,6 +371,13 @@ std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFr
                                         NOTATION aToNotation )
 {
     wxString buf( aString );
+
+    // PEGTL is slow as shit.  Avoid if possible.
+    static const wxRegEx plainNumber( wxS( "^[0-9.]*$" ) );
+
+    if( plainNumber.Matches( buf ) )
+        return aString;
+
     buf.Replace( ',', '.' );
 
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( buf.ToStdString(),

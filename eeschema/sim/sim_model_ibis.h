@@ -44,9 +44,6 @@ public:
 
     std::string IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
                             const wxString& aCacheDir, REPORTER& aReporter ) const;
-
-protected:
-    std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const override;
 };
 
 class SIM_MODEL_IBIS : public SIM_MODEL

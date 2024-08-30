@@ -292,9 +292,6 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
     for( SIM_MODEL::TYPE candidate : SIM_MODEL::TYPE_ITERATOR() )
     {
         wxString candidate_type = SIM_MODEL::SpiceInfo( candidate ).modelType;
-        wxString candidate_level = SIM_MODEL::SpiceInfo( candidate ).level;
-        wxString candidate_version = SIM_MODEL::SpiceInfo( candidate ).version;
-        bool     candidate_isDefaultLevel = SIM_MODEL::SpiceInfo( candidate ).isDefaultLevel;
 
         if( candidate_type.IsEmpty() )
             continue;
@@ -308,16 +305,16 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string&
         }
         else if( input_type.StartsWith( candidate_type ) )
         {
-            if( candidate_version != aVersion )
+            if( SIM_MODEL::SpiceInfo( candidate ).version != aVersion )
                 continue;
 
-            if( candidate_level == input_level )
+            if( SIM_MODEL::SpiceInfo( candidate ).level == input_level )
                 return candidate;
 
             if( aSkipDefaultLevel )
                 continue;
 
-            if( candidate_isDefaultLevel && aLevel == "" )
+            if( SIM_MODEL::SpiceInfo( candidate ).isDefaultLevel && aLevel == "" )
                 return candidate;
         }
     }

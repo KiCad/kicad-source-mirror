@@ -175,8 +175,10 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             break;
 
         default:
-            for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
+            for( int ii = 0; ii < m_model.GetParamCount(); ++ii )
             {
+                const SIM_MODEL::PARAM& param = m_model.GetParam( ii );
+
                 if( ac != "" && ( param.Matches( "ac" ) || param.Matches( "ph" ) ) )
                     continue;
 

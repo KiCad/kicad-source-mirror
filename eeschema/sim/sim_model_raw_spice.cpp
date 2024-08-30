@@ -101,8 +101,13 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemParams() const
 {
     std::string result;
 
-    for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
+    for( int ii = 0; ii < m_model.GetParamCount(); ++ii )
     {
+        const SIM_MODEL::PARAM& param = m_model.GetParam( ii );
+
+        if( !param.info.isSpiceInstanceParam )
+            continue;
+
         if( param.info.name == "model" )
             result.append( " " + SIM_VALUE::ToSpice( param.value ) );
     }

@@ -794,11 +794,9 @@ bool SIM_MODEL::PARAM::INFO::Matches( const std::string& aParamName ) const
 
 int SIM_MODEL::doFindParam( const std::string& aParamName ) const
 {
-    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
-
-    for( int ii = 0; ii < (int) params.size(); ++ii )
+    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
     {
-        if( params[ii].get().Matches( aParamName ) )
+        if( GetParam( ii ).Matches( aParamName ) )
             return ii;
     }
 
@@ -811,17 +809,6 @@ const SIM_MODEL::PARAM* SIM_MODEL::FindParam( const std::string& aParamName ) co
     int idx = doFindParam( aParamName );
 
     return idx >= 0 ? &GetParam( idx ) : nullptr;
-}
-
-
-std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetParams() const
-{
-    std::vector<std::reference_wrapper<const PARAM>> params;
-
-    for( int i = 0; i < GetParamCount(); ++i )
-        params.emplace_back( GetParam( i ) );
-
-    return params;
 }
 
 

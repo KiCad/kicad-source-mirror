@@ -70,8 +70,6 @@ protected:
         return m_model.GetPins();
     }
 
-    virtual std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const;
-
     const SIM_MODEL& m_model;
 };
 

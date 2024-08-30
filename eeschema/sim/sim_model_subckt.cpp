@@ -151,8 +151,8 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
         AddPin( pin );
 
     // Same for parameters.
-    for( const PARAM& param : GetBaseModel()->GetParams() )
-        AddParam( param.info );
+    for( int ii = 0; ii < GetBaseModel()->GetParamCount(); ++ii )
+        AddParam( GetBaseModel()->GetParam( ii ).info );
 }
 
 

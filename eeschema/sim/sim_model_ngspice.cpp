@@ -85,11 +85,9 @@ int SIM_MODEL_NGSPICE::doFindParam( const std::string& aParamName ) const
 {
     // Special case to allow escaped model parameters (suffixed with "_")
 
-    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
-
-    for( int ii = 0; ii < (int) params.size(); ++ii )
+    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
     {
-        const PARAM& param = params[ii];
+        const PARAM& param = GetParam( ii );
 
         if( param.Matches( aParamName ) || param.Matches( aParamName + "_" ) )
             return ii;
@@ -111,16 +109,29 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     // First we try to use the name as is. Note that you can't set instance parameters from this
     // function, it's for ".model" cards, not for instantiations.
 
-    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
-
-    for( int ii = 0; ii < (int) params.size(); ++ii )
+    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
     {
-        const PARAM& param = params[ii];
+        const PARAM& param = GetParam(ii);
 
         if( param.info.isSpiceInstanceParam || param.info.category == PARAM::CATEGORY::SUPERFLUOUS )
             continue;
 
-        if( param.Matches( aParamName ) || param.Matches( aParamName + "_" ) )
+        if( param.Matches( aParamName ) )
+        {
+            SetParamValue( ii, aValue, aNotation );
+            return;
+        }
+    }
+
+    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
+    {
+        const PARAM& param = GetParam(ii);
+
+        if( param.info.isSpiceInstanceParam || param.info.category == PARAM::CATEGORY::SUPERFLUOUS )
+            continue;
+
+        if( param.info.name.ends_with( "_" )
+                &&  boost::iequals( param.info.name, aParamName + "_" ) )
         {
             SetParamValue( ii, aValue, aNotation );
             return;
@@ -138,9 +149,9 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
         {
             // Find an actual parameter with the same id.  Even if the ngspiceParam was
             // superfluous, its alias target might not be.
-            for( int ii = 0; ii < (int) params.size(); ++ii )
+            for( int ii = 0; ii < (int) GetParamCount(); ++ii )
             {
-                const PARAM::INFO& paramInfo = params[ii].get().info;
+                const PARAM::INFO& paramInfo = GetParam( ii ).info;
 
                 if( paramInfo.category == PARAM::CATEGORY::SUPERFLUOUS )
                     continue;

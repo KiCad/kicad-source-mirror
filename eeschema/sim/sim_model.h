@@ -485,8 +485,6 @@ public:
 
     const PARAM* FindParam( const std::string& aParamName ) const;
 
-    std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
-
     const PARAM& GetParamOverride( unsigned aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
 
