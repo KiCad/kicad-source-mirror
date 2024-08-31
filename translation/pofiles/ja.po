@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-09 08:09+0000\n"
+"PO-Revision-Date: 2024-08-31 18:09+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23565,12 +23565,11 @@ msgid "Generate Position File"
 msgstr "部品配置ファイルを生成"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
-msgstr ""
-"有効なオプション: front,back,both ガーバーの場合のみ\"both\"もサポート."
+msgstr "有効なオプション: front,back,both ガーバーの場合は\"front\"と\"back"
+"\"のみサポート."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -28609,22 +28608,22 @@ msgid "(multiple board outlines not supported)"
 msgstr "(複数の基板外形はサポートされていません)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
 msgstr "(矩形のサイズが非常に小さい、もしくはnull: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
 msgstr "(円の半径が非常に小さい、もしくはnull: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(セグメントの長さが非常に小さい、もしくはnull: %d nm)"
+msgstr "(セグメントの長さが非常に短い、もしくはnull: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
 msgstr "(弧のサイズが非常に小さい、もしくはnull: %d nm)"
 
@@ -30608,7 +30607,6 @@ msgstr ""
 "はユーザーがライブラリのフットプリントの変更して PCB に反映させたい場合です。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:305
-#, fuzzy
 msgid "Change Footprint"
 msgstr "フットプリントを変更"
 
@@ -35005,9 +35003,8 @@ msgid "Default properties for new graphic items:"
 msgstr "新規グラフィック アイテムのデフォルト値:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "フットプリント ライブラリが更新できませんでした\n"
+msgstr "隠しフットプリント ライブラリはサポートされていません。"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -37694,9 +37691,8 @@ msgid "Hole clearance violation"
 msgstr "穴のクリアランス違反"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "ドリル穴が近過ぎる"
+msgstr "ドリル穴と他の穴が近過ぎる"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -38258,9 +38254,9 @@ msgid "%s rounded corners differ."
 msgstr "%s は丸めた角が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s は面取りした角が異なります。"
+msgstr "%s は面取りした角のサイズが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39578,9 +39574,8 @@ msgstr "調整"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2404
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2420
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2446
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "調整された値を選択"
+msgstr "最初に調整する配線を選択"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2488
 msgid "Single track"
@@ -40488,9 +40483,9 @@ msgid "(Pad must have a positive size)"
 msgstr "(パッドのサイズは正でなければなりません)"
 
 #: pcbnew/pad.cpp:1909
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "%s は %s より大きくなければなりません。"
+msgstr "(PTHパッドの穴のサイズは %s より大きくなければなりません)"
 
 #: pcbnew/pad.cpp:1933
 #, fuzzy
@@ -40498,37 +40493,30 @@ msgid "(PTH pad hole leaves no copper)"
 msgstr "(PTHパッドの穴は導体を残しません)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(PTHパッドの穴は導体を残しません)"
+msgstr "(PTHパッドの穴が導体の中に完全に入っていません)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "警告: パッドの穴がパッド内にありません。"
+msgstr "(パッドの穴がパッド形状の内側に入っていません)"
 
 #: pcbnew/pad.cpp:1953
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "警告: ローカルクリアランス値が負の値では効果がありません。"
+msgstr "(負のローカルクリアランスの値は効果がありません)"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
-msgstr ""
-"警告: 負のハンダマスクのクリアランスは形状プリミティブよりも大きいです。予期"
-"せぬ結果になるかもしれなせん。"
+msgstr "(負のハンダマスクのクリアランスは形状プリミティブよりも大きいです。予期せぬ結"
+"果になるかもしれません)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
-msgstr ""
-"警告: パッドよりも大きい負のハンダマスクのクリアランスです。ハンダマスクは生"
-"成されません。"
+msgstr "(パッドよりも大きい負のハンダマスクのクリアランスです。ハンダマスクは生成され"
+"ません)"
 
 #: pcbnew/pad.cpp:2001
 #, fuzzy
@@ -40540,9 +40528,8 @@ msgstr ""
 "クは生成されません。"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(PTHパッドには導体レイヤーがありません）"
+msgstr "(パッドにはレイヤーがありません）"
 
 #: pcbnew/pad.cpp:2011
 msgid "(PTH pad has no copper layers)"
@@ -46295,9 +46282,8 @@ msgid "Length Tuning Settings..."
 msgstr "配線長の調整設定..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "プロパティ ダイアログにアイテムを表示"
+msgstr "配線の調整のプロパティ ダイアログを表示"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
