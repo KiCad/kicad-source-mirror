@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-06-28 06:03+0000\n"
+"PO-Revision-Date: 2024-08-31 18:09+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -15123,6 +15123,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"' %s '는 KiCad 회로도 파일이 아닙니다.\n"
+" KiCad가 아닌 회로도 파일의 경우 파일 -> 가져오기를 사용하세요."
 
 #: eeschema/files-io.cpp:275
 msgid "Root"
@@ -40400,7 +40402,7 @@ msgstr "경고: BGA 속성은 SMD 패드 전용입니다."
 
 #: pcbnew/pad.cpp:2108
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(음의 모서리 반경은 허용되지 않음)"
 
 #: pcbnew/pad.cpp:2110
 #, fuzzy
@@ -40445,7 +40447,7 @@ msgstr "카스텔레이티드 패드"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
-msgstr ""
+msgstr "Oblong"
 
 #: pcbnew/pad.cpp:2404
 msgid "Pad Type"
@@ -40870,7 +40872,7 @@ msgstr "다각형을 불러오는 중..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "다각형 윤곽선 개수는 %d 이며, 예상 개수는 1개임."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41131,7 +41133,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4124
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "알 수 없는 텍스트 상자 정렬 %d , 텍스트 %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4225
 msgid "Loading rectangles..."
