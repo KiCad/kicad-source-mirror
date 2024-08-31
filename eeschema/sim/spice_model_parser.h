@@ -26,31 +26,21 @@
 #define SPICE_MODEL_PARSER_H
 
 #include <sim/sim_model.h>
-#include <pegtl/contrib/parse_tree.hpp>
 
 class SIM_MODEL_SPICE;
 class SIM_LIBRARY_SPICE;
 
 
-struct PARSE_TREE
-{
-    std::unique_ptr<tao::pegtl::string_input<>>   in;
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-};
-
-
 class SPICE_MODEL_PARSER
 {
 public:
-    static std::unique_ptr<PARSE_TREE> ParseModel( const std::string& aSpiceCode );
-
     static SIM_MODEL::TYPE ReadType( const SIM_LIBRARY_SPICE& aLibrary,
-                                     std::unique_ptr<PARSE_TREE>& aRoot );
+                                     const std::string& aSpiceCode, bool aSkipReferential );
 
     SPICE_MODEL_PARSER( SIM_MODEL_SPICE& aModel ) : m_model( aModel ) {}
     virtual ~SPICE_MODEL_PARSER() = default;
 
-    virtual void ReadModel( const SIM_LIBRARY_SPICE& aLibrary, std::unique_ptr<PARSE_TREE>& aRoot );
+    virtual void ReadModel( const SIM_LIBRARY_SPICE& aLibrary, const std::string& aSpiceCode );
 
 protected:
     static SIM_MODEL::TYPE ReadTypeFromSpiceStrings( const std::string& aTypeString,

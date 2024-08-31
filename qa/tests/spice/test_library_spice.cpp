@@ -95,6 +95,11 @@ public:
                             << ", Model device type: " << aModel.GetDeviceInfo().fieldValue
                             << ", Model type: " << aModel.GetTypeInfo().fieldValue )
         {
+            if( aModel.GetType() != aType )
+            {
+                aModelIndex++;
+            }
+
             BOOST_CHECK( aModel.GetType() == aType );
 
             std::string modelType = aModel.GetSpiceInfo().modelType;

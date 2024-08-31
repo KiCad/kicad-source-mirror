@@ -376,6 +376,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::KIBIS_DRIVER_PRBS:    return { "X"                                                                };
 
     case TYPE::NONE:
+    case TYPE::REFERENTIAL:
     case TYPE::RAWSPICE:             return {};
 
     default:       wxFAIL;           return {};
@@ -836,19 +837,20 @@ void SIM_MODEL::doSetParamValue( int aParamIndex, const std::string& aValue )
 void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
-    wxString value( aValue );
-
-    // PEGTL is slow as shit.  Avoid if possible.
     static const wxRegEx plainNumber( wxS( "^[0-9.]*$" ) );
 
-    if( plainNumber.Matches( value ) )
+    // PEGTL is slow as shit.  Avoid if possible.
+    if( aNotation != SIM_VALUE::NOTATION::SI )
     {
-        doSetParamValue( aParamIndex, aValue );
-        return;
-    }
+        wxString value( aValue );
 
-    if( aNotation != SIM_VALUE::NOTATION::SI || aValue.find( ',' ) != std::string::npos )
-        value = SIM_VALUE::ConvertNotation( aValue, aNotation, SIM_VALUE::NOTATION::SI );
+        if( !plainNumber.Matches( value ) )
+        {
+            doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
+                                                                      SIM_VALUE::NOTATION::SI ) );
+            return;
+        }
+    }
 
     doSetParamValue( aParamIndex, aValue );
 }

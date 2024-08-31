@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,8 @@ public:
     friend class SPICE_MODEL_PARSER;
 
     static std::unique_ptr<SIM_MODEL_SPICE> Create( const SIM_LIBRARY_SPICE& aLibrary,
-                                                    const std::string& aSpiceCode );
+                                                    const std::string& aSpiceCode,
+                                                    bool aSkipReferential );
 
     SIM_MODEL_SPICE( TYPE aType,
                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );

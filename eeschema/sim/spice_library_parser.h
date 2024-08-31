@@ -45,9 +45,8 @@ public:
 
 protected:
     void readFallbacks( const wxString& aFilePath, REPORTER& aReporter );
-    void parseFile( const wxString& aFilePath,
-                    std::vector<std::pair<std::string, std::string>>* aModelQueue,
-                    REPORTER& aReporter );
+    void parseFile( const wxString& aFilePath, REPORTER& aReporter,
+                    std::vector<std::pair<std::string, std::string>>* aModelQueue );
 
 private:
     bool               m_forceFullParse;

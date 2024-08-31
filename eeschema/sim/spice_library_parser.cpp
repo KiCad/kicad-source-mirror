@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/algorithm/string/case_conv.hpp>
 #include <confirm.h>
 
 #include <sim/spice_library_parser.h>
@@ -133,9 +134,8 @@ void SPICE_LIBRARY_PARSER::readFallbacks( const wxString& aFilePath, REPORTER& a
 }
 
 
-void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath,
-                                      std::vector<std::pair<std::string, std::string>>* aModelQueue,
-                                      REPORTER& aReporter )
+void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aReporter,
+                                      std::vector<std::pair<std::string, std::string>>* aQueue )
 {
     try
     {
@@ -150,7 +150,7 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath,
         {
             if( node->is_type<SIM_LIBRARY_SPICE_PARSER::modelUnit>() )
             {
-                aModelQueue->emplace_back( node->children.at( 0 )->string(), node->string() );
+                aQueue->emplace_back( node->children.at( 0 )->string(), node->string() );
             }
             else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::dotInclude>() )
             {
@@ -158,7 +158,7 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath,
 
                 try
                 {
-                    parseFile( lib, aModelQueue, aReporter );
+                    parseFile( lib, aReporter, aQueue );
                 }
                 catch( const IO_ERROR& e )
                 {
@@ -191,38 +191,37 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
     m_library.m_models.clear();
     m_library.m_modelNames.clear();
 
-    std::vector<std::pair<std::string, std::string>> modelQueue;
-
     // Aside from the simulation model editor dialog, about the only data we use from the
     // complete models are the pin definitions for SUBCKTs.  The standard LTSpice "cmp" libraries
     // (cmp/standard.bjt, cmp/standard.mos, etc.) have copious error which trip up our parser,
     // and our parser is *really* slow on such large files (nearly 5 seconds on my dev machine).
     if( !m_forceFullParse && aFilePath.Contains( wxS( "/LTspiceXVII/lib/cmp/standard" ) ) )
-        readFallbacks( aFilePath, aReporter );
-    else
-        parseFile( aFilePath, &modelQueue, aReporter );
-
-    m_library.m_models.reserve( modelQueue.size() );
-    m_library.m_modelNames.reserve( modelQueue.size() );
-
-    for( int ii = 0; ii < (int) modelQueue.size(); ++ii )
     {
-        m_library.m_models.emplace_back( nullptr );
-        m_library.m_modelNames.emplace_back( "" );
+        readFallbacks( aFilePath, aReporter );
     }
+    else
+    {
+        std::vector<std::pair<std::string, std::string>> modelQueue;
 
-    thread_pool& tp = GetKiCadThreadPool();
+        parseFile( aFilePath, aReporter, &modelQueue );
 
-    tp.push_loop( modelQueue.size(),
-            [&]( const int a, const int b )
-            {
-                for( int ii = a; ii < b; ++ii )
+        m_library.m_models.reserve( modelQueue.size() );
+        m_library.m_modelNames.reserve( modelQueue.size() );
+
+        for( const auto& [name, source] : modelQueue )
+        {
+            m_library.m_models.emplace_back( nullptr );
+            m_library.m_modelNames.emplace_back( name );
+        }
+
+        auto createModel =
+                [&]( int ii, bool aSkipReferential )
                 {
-                    std::unique_ptr<SIM_MODEL> model;
-
                     try
                     {
-                        model = SIM_MODEL_SPICE::Create( m_library, modelQueue[ii].second );
+                        m_library.m_models[ii] = SIM_MODEL_SPICE::Create( m_library,
+                                                                          modelQueue[ii].second,
+                                                                          aSkipReferential );
                     }
                     catch( const IO_ERROR& e )
                     {
@@ -234,13 +233,24 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
                                                            modelQueue[ii].second ),
                                          RPT_SEVERITY_ERROR );
                     }
+                };
 
-                    if( model )
-                    {
-                        m_library.m_models[ii] = std::move( model );
-                        m_library.m_modelNames[ii] = modelQueue[ii].first;
-                    }
-                }
-            } );
-    tp.wait_for_tasks();
+        // Read all self-contained models in parallel
+        thread_pool& tp = GetKiCadThreadPool();
+
+        tp.push_loop( modelQueue.size(),
+                [&]( const int a, const int b )
+                {
+                    for( int ii = a; ii < b; ++ii )
+                        createModel( ii, true );
+                } );
+        tp.wait_for_tasks();
+
+        // Now read all referential models in order.
+        for( int ii = 0; ii < (int) modelQueue.size(); ++ii )
+        {
+            if( !m_library.m_models[ii] )
+                createModel( ii, false );
+        }
+    }
 }

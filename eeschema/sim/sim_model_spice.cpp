@@ -55,29 +55,33 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 
 
 std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
-                                                          const std::string& aSpiceCode )
+                                                          const std::string& aSpiceCode,
+                                                          bool aSkipReferential)
 {
-    SIM_MODEL::TYPE modelType = SIM_MODEL::TYPE::NONE;
+    SIM_MODEL::TYPE type = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode, aSkipReferential );
 
-    try
+    if( type == SIM_MODEL::TYPE::REFERENTIAL )
+        return nullptr;
+
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
+
+    if( dynamic_cast<SIM_MODEL_SPICE*>( model.get() ) )
     {
-        std::unique_ptr<PARSE_TREE> root = SPICE_MODEL_PARSER::ParseModel( aSpiceCode );
+        std::unique_ptr<SIM_MODEL_SPICE> spiceModel( static_cast<SIM_MODEL_SPICE*>( model.release() ) );
 
-        modelType = SPICE_MODEL_PARSER::ReadType( aLibrary, root );
-
-        if( auto* model = dynamic_cast<SIM_MODEL_SPICE*>( SIM_MODEL::Create( modelType ).release() ) )
+        try
         {
-            model->m_spiceModelParser->ReadModel( aLibrary, root );
-            return std::unique_ptr<SIM_MODEL_SPICE>( model );
+            spiceModel->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
+            return spiceModel;
         }
-    }
-    catch( const IO_ERROR& )
-    {
-        // Fall back to raw spice code
+        catch( const IO_ERROR& )
+        {
+            // Fall back to raw spice code
+        }
     }
 
     // Fall back to raw spice code
-    return std::make_unique<SIM_MODEL_SPICE_FALLBACK>( modelType, aSpiceCode );
+    return std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type, aSpiceCode );
 }
 
 
