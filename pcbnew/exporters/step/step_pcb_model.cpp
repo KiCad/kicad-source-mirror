@@ -179,30 +179,51 @@ MODEL3D_FORMAT_TYPE fileType( const char* aFileName )
         return FMT_NONE;
 
     char iline[82];
-    memset( iline, 0, 82 );
-    ifile.getline( iline, 82 );
+    MODEL3D_FORMAT_TYPE format_type = FMT_NONE;
+
+    // The expected header should be the first line.
+    // However some files can have a comment at the beginning of the file
+    // So read up to max_line_count lines to try to find the actual header
+    const int max_line_count = 3;
+
+    for( int ii = 0; ii < max_line_count; ii++ )
+    {
+        memset( iline, 0, 82 );
+        ifile.getline( iline, 82 );
+
+        iline[81] = 0;  // ensure NULL termination when string is too long
+
+        // check for STEP in Part 21 format
+        // (this can give false positives since Part 21 is not exclusively STEP)
+        if( !strncmp( iline, "ISO-10303-21;", 13 ) )
+        {
+            format_type = FMT_STEP;
+            break;
+        }
+
+        std::string fstr = iline;
+
+        // check for STEP in XML format
+        // (this can give both false positive and false negatives)
+        if( fstr.find( "urn:oid:1.0.10303." ) != std::string::npos )
+        {
+            format_type = FMT_STEP;
+            break;
+        }
+
+        // Note: this is a very simple test which can yield false positives; the only
+        // sure method for determining if a file *not* an IGES model is to attempt
+        // to load it.
+        if( iline[72] == 'S' && ( iline[80] == 0 || iline[80] == 13 || iline[80] == 10 ) )
+        {
+            format_type = FMT_IGES;
+            break;
+        }
+    }
+
     CLOSE_STREAM( ifile );
-    iline[81] = 0;  // ensure NULL termination when string is too long
 
-    // check for STEP in Part 21 format
-    // (this can give false positives since Part 21 is not exclusively STEP)
-    if( !strncmp( iline, "ISO-10303-21;", 13 ) )
-        return FMT_STEP;
-
-    std::string fstr = iline;
-
-    // check for STEP in XML format
-    // (this can give both false positive and false negatives)
-    if( fstr.find( "urn:oid:1.0.10303." ) != std::string::npos )
-        return FMT_STEP;
-
-    // Note: this is a very simple test which can yield false positives; the only
-    // sure method for determining if a file *not* an IGES model is to attempt
-    // to load it.
-    if( iline[72] == 'S' && ( iline[80] == 0 || iline[80] == 13 || iline[80] == 10 ) )
-        return FMT_IGES;
-
-    return FMT_NONE;
+    return format_type;
 }
 
 
@@ -743,6 +764,7 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_pcbName = aPcbName;
     m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
     m_fuseShapes = false;
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_UNKNOWN;
 }
 
 
@@ -2091,6 +2113,8 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
         return false;
     }
 
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_IGES;
+
     wxFileName fn( aFileName );
     IGESControl_Controller::Init();
     IGESCAFControl_Writer writer;
@@ -2122,6 +2146,8 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
                                          aFileName ) );
         return false;
     }
+
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_STEP;
 
     wxFileName fn( aFileName );
 
@@ -2202,6 +2228,8 @@ bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
         return false;
     }
 
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_BREP;
+
     // s_assy = shape tool for the source
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
 
@@ -2235,6 +2263,8 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
         ReportMessage( wxString::Format( "Could not open file '%s'", fn.GetFullPath() ) );
         return false;
     }
+
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_XAO;
 
     // s_assy = shape tool for the source
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
@@ -2562,19 +2592,22 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 
             // VRML models only work when exporting to glTF
             // Also OCCT < 7.9.0 fail to load most VRML 2.0 models because of Switch nodes
-            if( readVRML( doc, aFileNameUTF8.c_str() ) )
+            if( m_outFmt == OUTPUT_FORMAT::FMT_OUT_GLTF )
             {
-                Handle( XCAFDoc_ShapeTool ) shapeTool =
-                        XCAFDoc_DocumentTool::ShapeTool( doc->Main() );
+                if( readVRML( doc, aFileNameUTF8.c_str() ) )
+                {
+                    Handle( XCAFDoc_ShapeTool ) shapeTool =
+                            XCAFDoc_DocumentTool::ShapeTool( doc->Main() );
 
-                prefixNames( shapeTool->Label(),
-                             TCollection_ExtendedString( baseName.c_str().AsChar() ) );
-            }
-            else
-            {
-                ReportMessage( wxString::Format( wxT( "readVRML() failed on filename '%s'.\n" ),
-                                                 fileName ) );
-                return false;
+                    prefixNames( shapeTool->Label(),
+                                 TCollection_ExtendedString( baseName.c_str().AsChar() ) );
+                }
+                else
+                {
+                    ReportMessage( wxString::Format( wxT( "readVRML() failed on filename '%s'.\n" ),
+                                                     fileName ) );
+                    return false;
+                }
             }
         }
         else // Substitution is not allowed
@@ -2590,6 +2623,8 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
         // TODO: implement IDF and EMN converters
 
     default:
+        ReportMessage( wxString::Format( wxT( "Cannot identify actual file type for '%s'.\n" ),
+                                         fileName ) );
         return false;
     }
 
@@ -2843,6 +2878,8 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
                                          aFileName ) );
         return false;
     }
+
+    m_outFmt = OUTPUT_FORMAT::FMT_OUT_GLTF;
 
     TDF_LabelSequence freeShapes;
     m_assy->GetFreeShapes( freeShapes );

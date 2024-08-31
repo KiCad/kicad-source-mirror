@@ -75,11 +75,24 @@ typedef std::map< std::string, TDF_Label > MODEL_MAP;
 
 extern void ReportMessage( const wxString& aMessage );
 
+enum class OUTPUT_FORMAT
+{
+    FMT_OUT_UNKNOWN = 0,
+    FMT_OUT_STEP,
+    FMT_OUT_IGES,
+    FMT_OUT_BREP,
+    FMT_OUT_XAO,
+    FMT_OUT_GLTF
+};
+
 class STEP_PCB_MODEL
 {
 public:
     STEP_PCB_MODEL( const wxString& aPcbName );
     virtual ~STEP_PCB_MODEL();
+
+    // Update m_outFmt to aVariant, giving the output format variant
+    void SpecializeVariant( OUTPUT_FORMAT aVariant ) { m_outFmt = aVariant; }
 
     // add a pad shape (must be in final position)
     bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia );
@@ -255,9 +268,12 @@ private:
     std::map<wxString, std::pair<gp_Pnt, TopoDS_Shape>> m_pad_points;
 
     /// Name of the PCB, which will most likely be the file name of the path.
-    wxString                        m_pcbName;
+    wxString m_pcbName;
 
-    int                             m_maxError;
+    int      m_maxError;
+
+    /// The current output format for created file
+    OUTPUT_FORMAT m_outFmt;
 };
 
 #endif // OCE_VIS_OCE_UTILS_H

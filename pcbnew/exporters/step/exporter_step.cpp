@@ -514,6 +514,35 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
 }
 
 
+void EXPORTER_STEP::initOutputVariant()
+{
+    // Specialize the STEP_PCB_MODEL generator for specific output format
+    // it can have some minor actions for the generator
+    switch( m_params.m_Format )
+    {
+        case EXPORTER_STEP_PARAMS::FORMAT::STEP:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STEP );
+            break;
+
+        case EXPORTER_STEP_PARAMS::FORMAT::BREP:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_BREP );
+            break;
+
+        case EXPORTER_STEP_PARAMS::FORMAT::XAO:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_XAO );
+            break;
+
+        case EXPORTER_STEP_PARAMS::FORMAT::GLB:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_GLTF );
+            break;
+
+        default:
+            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_UNKNOWN );
+            break;
+    }
+}
+
+
 bool EXPORTER_STEP::buildBoard3DShapes()
 {
     if( m_pcbModel )
@@ -540,6 +569,8 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         origin = m_params.m_Origin;
 
     m_pcbModel = std::make_unique<STEP_PCB_MODEL>( m_pcbBaseName );
+
+    initOutputVariant();
 
     m_pcbModel->SetCopperColor( m_copperColor.r, m_copperColor.g, m_copperColor.b );
     m_pcbModel->SetPadColor( m_padColor.r, m_padColor.g, m_padColor.b );

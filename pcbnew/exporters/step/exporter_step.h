@@ -62,6 +62,7 @@ private:
     bool buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin );
     void buildZones3DShape( VECTOR2D aOrigin );
     bool buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin );
+    void initOutputVariant();
 
     EXPORTER_STEP_PARAMS m_params;
     std::unique_ptr<FILENAME_RESOLVER> m_resolver;

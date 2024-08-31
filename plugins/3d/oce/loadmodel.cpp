@@ -296,27 +296,39 @@ FormatType fileType( const char* aFileName )
     }
 
     char iline[82];
-    memset( iline, 0, 82 );
-    ifile.Read( iline, 82 );
-    iline[81] = 0;  // ensure NULL termination when string is too long
 
-    // check for STEP in Part 21 format
-    // (this can give false positives since Part 21 is not exclusively STEP)
-    if( !strncmp( iline, "ISO-10303-21;", 13 ) )
-        return FMT_STEP;
+    // The expected header should be the first line.
+    // However some files can have a comment at the beginning of the file
+    // So read up to max_line_count lines to try to find the actual header
+    const int max_line_count = 3;
 
-    std::string fstr = iline;
+    for( int ii = 0; ii < max_line_count; ii++ )
+    {
+        memset( iline, 0, 82 );
+        ifile.Read( iline, 82 );
+        iline[81] = 0;  // ensure NULL termination when string is too long
 
-    // check for STEP in XML format
-    // (this can give both false positive and false negatives)
-    if( fstr.find( "urn:oid:1.0.10303." ) != std::string::npos )
-        return FMT_STEP;
+        // check for STEP in Part 21 format
+        // (this can give false positives since Part 21 is not exclusively STEP)
+        if( !strncmp( iline, "ISO-10303-21;", 13 ) )
+        {
+            return FMT_STEP;
+            break;
+        }
 
-    // Note: this is a very simple test which can yield false positives; the only
-    // sure method for determining if a file *not* an IGES model is to attempt
-    // to load it.
-    if( iline[72] == 'S' && ( iline[80] == 0 || iline[80] == 13 || iline[80] == 10 ) )
-        return FMT_IGES;
+        std::string fstr = iline;
+
+        // check for STEP in XML format
+        // (this can give both false positive and false negatives)
+        if( fstr.find( "urn:oid:1.0.10303." ) != std::string::npos )
+            return FMT_STEP;
+
+        // Note: this is a very simple test which can yield false positives; the only
+        // sure method for determining if a file *not* an IGES model is to attempt
+        // to load it.
+        if( iline[72] == 'S' && ( iline[80] == 0 || iline[80] == 13 || iline[80] == 10 ) )
+            return FMT_IGES;
+    }
 
     return FMT_NONE;
 }

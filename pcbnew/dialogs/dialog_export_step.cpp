@@ -127,6 +127,9 @@ protected:
         return m_cbOverwriteFile->GetValue();
     }
 
+    // Called to update filename extension after the output file format is changed
+    void OnFmtChoiceOptionChanged();
+
 private:
     enum class COMPONENT_MODE
     {
@@ -161,8 +164,8 @@ private:
 };
 
 
-int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
-int  DIALOG_EXPORT_STEP::m_formatLastChoice = -1;    // Use default
+int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;    // Use default
+int  DIALOG_EXPORT_STEP::m_formatLastChoice = -1;       // Use default
 bool DIALOG_EXPORT_STEP::m_optimizeStep = true;
 bool DIALOG_EXPORT_STEP::m_exportBoardBody = true;
 bool DIALOG_EXPORT_STEP::m_exportComponents = true;
@@ -302,6 +305,10 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     if( m_formatLastChoice >= 0 )
         m_choiceFormat->SetSelection( m_formatLastChoice );
+    else
+        // ensure the selected fmt and the output file ext are synchronized the first time
+        // the dialog is opened
+        OnFmtChoiceOptionChanged();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -474,6 +481,12 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
 
 
 void DIALOG_EXPORT_STEP::onFormatChoice( wxCommandEvent& event )
+{
+    OnFmtChoiceOptionChanged();
+}
+
+
+void DIALOG_EXPORT_STEP::OnFmtChoiceOptionChanged()
 {
     wxString newExt = c_formatCommand[m_choiceFormat->GetSelection()];
     wxString path = m_outputFileName->GetValue();
