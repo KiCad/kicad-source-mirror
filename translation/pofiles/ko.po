@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-08-31 18:09+0000\n"
+"PO-Revision-Date: 2024-09-01 23:09+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -17881,9 +17881,8 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"목적지 시트는 이미 회로도 계층 어딘가에서 '%s' 시트 또는 해당 시트의 하위 시"
-"트 중 하나를 상위 시트로 가지고 있기 때문에 시트 변경 사항은 적용될 수 없습니"
-"다."
+"대상 시트에 이미 '%s' 시트 또는 하위 시트 중 하나가 회로도 계층 구조의 "
+"어딘가에 상위 시트로 있기 때문에 시트를 변경할 수 없습니다."
 
 #: eeschema/sheet.cpp:92
 #, c-format
@@ -18808,11 +18807,8 @@ msgid "Spice Simulator"
 msgstr "Spice 시뮬레이터"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"네트리스트 생성 중 오류.\n"
-"\n"
+msgstr "네트리스트 생성 중 오류."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -18839,9 +18835,9 @@ msgid "Another simulation is already running."
 msgstr "다른 시뮬레이션이 이미 실행 중입니다."
 
 #: eeschema/sim/simulator_frame.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "%s 파일을 불러올 수 없습니다"
+msgstr "%s 파일을 불러올 수 없음"
 
 #: eeschema/sim/simulator_frame.cpp:618
 msgid "Save changes to workbook?"
@@ -21704,9 +21700,8 @@ msgid "Place Pin Anyway"
 msgstr "강제로 핀 배치"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:448
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "시트 핀"
+msgstr "반복 핀"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -28468,22 +28463,22 @@ msgid "(multiple board outlines not supported)"
 msgstr "(여러 보드 외곽선은 지원되지 않음)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
 msgstr "(직사각형의 크기가 0이거나 매우 작음: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
 msgstr "(원의 반지름이 0이거나 매우 작음: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
 msgstr "(세그먼트의 길이가 0이거나 매우 작음: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
 msgstr "(호의 크기가 0이거나 매우 작음: %d nm)"
 
@@ -30461,7 +30456,6 @@ msgstr ""
 "이브러리 풋프린트를 변경한 뒤 이를 PCB에 반영하고자 할 때."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:305
-#, fuzzy
 msgid "Change Footprint"
 msgstr "풋프린트 변경"
 
@@ -34823,9 +34817,8 @@ msgid "Default properties for new graphic items:"
 msgstr "새 그래픽 항목에 대한 기본 속성:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "풋프린트 라이브러리가 업데이트되지 않음\n"
+msgstr "숨겨진 풋프린트 라이브러리는 아직 지원되지 않습니다."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -37499,9 +37492,8 @@ msgid "Hole clearance violation"
 msgstr "홀 공간거리 위반"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "드릴홀이 서로 너무 가까움"
+msgstr "드릴홀이 서로 너무 가깝게 뚫음"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -38263,7 +38255,7 @@ msgstr "솔더 페이스트 절대 공간거리가 재정의 됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
 msgid "Solder paste relative clearance overridden."
-msgstr "솔더 페이스트 상대 간격이 재정의됨."
+msgstr "솔더 페이스트 상대 공간거리가 재정의 됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:590
 msgid "Zone connection overridden."
@@ -40271,163 +40263,130 @@ msgid "PTH pad %s %s of %s"
 msgstr "%s의 PTH 패드%s%s"
 
 #: pcbnew/pad.cpp:1898
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "오류: 패드의 크기는 양수여야 합니다."
+msgstr "(패드는 양수의 크기여야 함)"
 
 #: pcbnew/pad.cpp:1909
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "비아 홀 크기는 비아 직경보다 작아야 함"
+msgstr "(PTH 패드 구멍 크기는 %s 보다 커야 합니다)"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(PTH 패드의 홀은 구리를 제거하지 않음)"
+msgstr "(PTH 패드 구멍에 구리가 남지 않음)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(PTH 패드의 홀은 구리를 제거하지 않음)"
+msgstr "(구리 내부에 PTH 패드 구멍이 완전하지 않음)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "경고: 패드 홀이 패드 형상 안에 있지 않습니다."
+msgstr "(패드 내부에 패드 구멍이 없음)"
 
 #: pcbnew/pad.cpp:1953
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "경고: 음수 지역 공간거리 값은 적용되지 않습니다."
+msgstr "(음수의 로컬 클리어런스 값은 효과 없음)"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
-msgstr ""
-"경고: 음수 솔더 마스크 공간거리는 일부 형상 기본 요소보다 큽니다. 결과가 예상"
-"외로 나올 수 있습니다."
+msgstr "(음의 솔더 마스크 클리어런스는 일부 모양 기본형보다 큽니다. 결과가 놀라울 수 "
+"있음)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
-msgstr ""
-"경고: 음수 솔더 마스크 공간거리 값이 패드 값보다 더 큽니다. 솔더 마스크는 생"
-"성되지 않습니다."
+msgstr "(음의 솔더 마스크 클리어런스가 패드보다 크기 때문에 솔더 마스크가 생성되지 "
+"않음)"
 
 #: pcbnew/pad.cpp:2001
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
-msgstr ""
-"경고: 음수 솔더 페이스트 간격이 패드 값보다 더 큽니다. 솔더 페이스트 마스크"
-"는 생성되지 않습니다."
+msgstr "(음의 솔더 페이스트 마진은 패드보다 큽니다. 솔더 페이스트 마스크가 생성되지 "
+"않음)"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(PTH 패드에는 구리레이어가 없습니다)"
+msgstr "(패드에 레이어가 없음)"
 
 #: pcbnew/pad.cpp:2011
 msgid "(PTH pad has no copper layers)"
 msgstr "(PTH 패드에는 구리레이어가 없습니다)"
 
 #: pcbnew/pad.cpp:2017
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
-msgstr ""
-"경고: 도금 스루홀에는 일반적으로 적어도 한 층 이상에 구리 패드가 있어야 합니"
-"다."
+msgstr "(도금된 구멍에는 일반적으로 최소한 한 층에 구리 패드가 있음)"
 
 #: pcbnew/pad.cpp:2036
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
-msgstr ""
-"주의: 커넥터 패드는 일반적으로 솔더 페이스트가 없습니다. SMD 패드를 대신 사용"
-"하세요."
+msgstr "(커넥터 패드에는 일반적으로 솔더 페이스트가 없습니다. 대신에 SMD 패드 사용)"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "오류: SMD 패드에 구멍이 있습니다."
+msgstr "(SMD 패드에 구멍이 있음)"
 
 #: pcbnew/pad.cpp:2050
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr "기판의 전면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
+msgstr "(SMD 패드는 보드 한쪽에 구리가 있음)"
 
 #: pcbnew/pad.cpp:2056 pcbnew/pad.cpp:2069
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "(SMD 패드 쿠퍼와 마스크 레이어가 일치하지 않음)"
+msgstr "(SMD 패드는 기판의 다른 면에 구리와 마스크 레이어가 있음)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
-msgstr "기판의 전면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
+msgstr "(SMD 패드는 기판의 다른 면에 구리와 페이스트 층이 있음)"
 
 #: pcbnew/pad.cpp:2080
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "경고: SMD 패드에는 외부 레이어가 없습니다."
+msgstr "(SMD 패드에는 외부 레이어가 없음)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "경고: NPTH 패드에서 기준점 속성은 의미가 없습니다."
+msgstr "('fiducial' 속성은 NPTH 패드에서는 의미가 없음)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "경고: NPTH 패드에서 테스트포인트 속성은 의미가 없습니다."
+msgstr "('testpoint' 속성은 NPTH 패드에서는 의미가 없음)"
 
 #: pcbnew/pad.cpp:2097
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "경고: NPTH 패드에서 히트 싱크 속성은 의미가 없습니다."
+msgstr "('히트싱크' 속성은 NPTH 패드에는 의미가 없음)"
 
 #: pcbnew/pad.cpp:2100
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "경고: 카스텔레이티드 속성은 PTH 패드 전용입니다."
+msgstr "('castellated' 속성은 PTH 패드임)"
 
 #: pcbnew/pad.cpp:2103
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "경고: BGA 속성은 SMD 패드 전용입니다."
+msgstr "('BGA' 속성은 SMD 패드용임)"
 
 #: pcbnew/pad.cpp:2108
 msgid "(negative corner radius is not allowed)"
 msgstr "(음의 모서리 반경은 허용되지 않음)"
 
 #: pcbnew/pad.cpp:2110
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "경고: 모서리 크기는 패드를 둥글게 만듭니다."
+msgstr "(코너 크기를 지정하면 패드가 원형이 됨)"
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "다운로드 파일이 너무 큽니다."
+msgstr "(음의 모서리 모따기는 허용되지 않음)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "다운로드 파일이 너무 큽니다."
+msgstr "(코너 모따기가 너무 큼)"
 
 #: pcbnew/pad.cpp:2126
-#, fuzzy
 msgid "(trapazoid delta is too large)"
-msgstr "오류: Trapazoid delta가 너무 큽니다."
+msgstr "(사다리꼴 델타가 너무 큼)"
 
 #: pcbnew/pad.cpp:2137
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "오류: 사용자 정의 패드 형상은 하나의 다각형으로 완성되어야 합니다."
+msgstr "(사용자 정의 패드 모양은 단일 다각형으로 해결되어야 함)"
 
 #: pcbnew/pad.cpp:2329
 msgid "Edge connector"
@@ -40474,9 +40433,8 @@ msgid "Corner Radius Ratio"
 msgstr "모서리 반경 비율"
 
 #: pcbnew/pad.cpp:2452
-#, fuzzy
 msgid "Hole Shape"
-msgstr "홀 모양:"
+msgstr "홀 모양"
 
 #: pcbnew/pad.cpp:2456
 msgid "Hole Size X"
@@ -44015,9 +43973,8 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "정확히 두 선을 선택해야 연장할 수 있습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
-msgstr "두 개 이상의 선이 있는 도형을 선택해야 합니다."
+msgstr "두 개 이상의 선이 있는 모양을 선택해야 합니다."
 
 #: pcbnew/tools/edit_tool.cpp:1477 pcbnew/tools/pcb_actions.cpp:620
 msgid "Heal Shapes"
