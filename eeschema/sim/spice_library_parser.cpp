@@ -33,6 +33,8 @@
 
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+#include <utility>
+#include <core/thread_pool.h>
 
 
 namespace SIM_LIBRARY_SPICE_PARSER
@@ -120,7 +122,7 @@ void SPICE_LIBRARY_PARSER::readFallbacks( const wxString& aFilePath, REPORTER& a
             {
                 wxString lib = m_library.m_pathResolver( tokenizer.GetNextToken(), aFilePath );
 
-                parseFile( lib, aReporter );
+                readFallbacks( lib, aReporter );
             }
         }
     }
@@ -131,7 +133,9 @@ void SPICE_LIBRARY_PARSER::readFallbacks( const wxString& aFilePath, REPORTER& a
 }
 
 
-void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aReporter )
+void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath,
+                                      std::vector<std::pair<std::string, std::string>>* aModelQueue,
+                                      REPORTER& aReporter )
 {
     try
     {
@@ -146,24 +150,7 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aRepo
         {
             if( node->is_type<SIM_LIBRARY_SPICE_PARSER::modelUnit>() )
             {
-                std::string model = node->string();
-                std::string modelName = node->children.at( 0 )->string();
-
-                try
-                {
-                    m_library.m_models.push_back( SIM_MODEL_SPICE::Create( m_library, model ) );
-                    m_library.m_modelNames.emplace_back( modelName );
-                }
-                catch( const IO_ERROR& e )
-                {
-                   aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
-                }
-                catch( ... )
-                {
-                   aReporter.Report( wxString::Format( _( "Cannot create sim model from %s" ),
-                                                       model ),
-                                     RPT_SEVERITY_ERROR );
-                }
+                aModelQueue->emplace_back( node->children.at( 0 )->string(), node->string() );
             }
             else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::dotInclude>() )
             {
@@ -171,7 +158,7 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aRepo
 
                 try
                 {
-                    parseFile( lib, aReporter );
+                    parseFile( lib, aModelQueue, aReporter );
                 }
                 catch( const IO_ERROR& e )
                 {
@@ -204,6 +191,8 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
     m_library.m_models.clear();
     m_library.m_modelNames.clear();
 
+    std::vector<std::pair<std::string, std::string>> modelQueue;
+
     // Aside from the simulation model editor dialog, about the only data we use from the
     // complete models are the pin definitions for SUBCKTs.  The standard LTSpice "cmp" libraries
     // (cmp/standard.bjt, cmp/standard.mos, etc.) have copious error which trip up our parser,
@@ -211,5 +200,47 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
     if( !m_forceFullParse && aFilePath.Contains( wxS( "/LTspiceXVII/lib/cmp/standard" ) ) )
         readFallbacks( aFilePath, aReporter );
     else
-        parseFile( aFilePath, aReporter );
+        parseFile( aFilePath, &modelQueue, aReporter );
+
+    m_library.m_models.reserve( modelQueue.size() );
+    m_library.m_modelNames.reserve( modelQueue.size() );
+
+    for( int ii = 0; ii < (int) modelQueue.size(); ++ii )
+    {
+        m_library.m_models.emplace_back( nullptr );
+        m_library.m_modelNames.emplace_back( "" );
+    }
+
+    thread_pool& tp = GetKiCadThreadPool();
+
+    tp.push_loop( modelQueue.size(),
+            [&]( const int a, const int b )
+            {
+                for( int ii = a; ii < b; ++ii )
+                {
+                    std::unique_ptr<SIM_MODEL> model;
+
+                    try
+                    {
+                        model = SIM_MODEL_SPICE::Create( m_library, modelQueue[ii].second );
+                    }
+                    catch( const IO_ERROR& e )
+                    {
+                       aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
+                    }
+                    catch( ... )
+                    {
+                       aReporter.Report( wxString::Format( _( "Cannot create sim model from %s" ),
+                                                           modelQueue[ii].second ),
+                                         RPT_SEVERITY_ERROR );
+                    }
+
+                    if( model )
+                    {
+                        m_library.m_models[ii] = std::move( model );
+                        m_library.m_modelNames[ii] = modelQueue[ii].first;
+                    }
+                }
+            } );
+    tp.wait_for_tasks();
 }

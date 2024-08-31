@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,20 +57,23 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
                                                           const std::string& aSpiceCode )
 {
-    SIM_MODEL::TYPE            modelType = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode );
-    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( modelType );
+    SIM_MODEL::TYPE modelType = SIM_MODEL::TYPE::NONE;
 
-    if( SIM_MODEL_SPICE* spiceModel = dynamic_cast<SIM_MODEL_SPICE*>( model.release() ) )
+    try
     {
-        try
+        std::unique_ptr<PARSE_TREE> root = SPICE_MODEL_PARSER::ParseModel( aSpiceCode );
+
+        modelType = SPICE_MODEL_PARSER::ReadType( aLibrary, root );
+
+        if( auto* model = dynamic_cast<SIM_MODEL_SPICE*>( SIM_MODEL::Create( modelType ).release() ) )
         {
-            spiceModel->m_spiceModelParser->ReadModel( aLibrary, aSpiceCode );
-            return std::unique_ptr<SIM_MODEL_SPICE>( spiceModel );
+            model->m_spiceModelParser->ReadModel( aLibrary, root );
+            return std::unique_ptr<SIM_MODEL_SPICE>( model );
         }
-        catch( const IO_ERROR& )
-        {
-            // Fall back to raw spice code
-        }
+    }
+    catch( const IO_ERROR& )
+    {
+        // Fall back to raw spice code
     }
 
     // Fall back to raw spice code

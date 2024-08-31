@@ -27,19 +27,9 @@
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
 #include <sim/sim_library_spice.h>
-
-#include <boost/algorithm/string/case_conv.hpp>
-#include <boost/algorithm/string/predicate.hpp>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
-
-/**
- * Flag to enable SPICE model parser debugging output.
- *
- * @ingroup trace_env_vars
- */
-static const wxChar traceSpiceModelParser[] = wxT( "KICAD_SPICE_MODEL_PARSER" );
 
 
 namespace SIM_MODEL_SPICE_PARSER
@@ -59,27 +49,26 @@ namespace SIM_MODEL_SPICE_PARSER
 }
 
 
-SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
-                                              const std::string& aSpiceCode )
+std::unique_ptr<PARSE_TREE> SPICE_MODEL_PARSER::ParseModel( const std::string& aSpiceCode )
 {
-    tao::pegtl::string_input<> in( aSpiceCode, "Spice_Code" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
+    std::unique_ptr parseTree = std::make_unique<PARSE_TREE>();
 
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
-                                             tao::pegtl::nothing,
-                                             SIM_MODEL_SPICE_PARSER::control>
-            ( in );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        wxLogTrace( traceSpiceModelParser, wxS( "%s" ), e.what() );
-        return SIM_MODEL::TYPE::NONE;
-    }
+    parseTree->in = std::make_unique<tao::pegtl::string_input<>>( aSpiceCode, "Spice_Code" );
 
-    for( const auto& node : root->children )
+    parseTree->root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
+                                                    SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
+                                                    tao::pegtl::nothing,
+                                                    SIM_MODEL_SPICE_PARSER::control>
+        ( *parseTree->in );
+
+    return parseTree;
+}
+
+
+SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
+                                              std::unique_ptr<PARSE_TREE>& aParseTree )
+{
+    for( const auto& node : aParseTree->root->children )
     {
         if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModelAko>() )
         {
@@ -161,28 +150,12 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary,
 
 
 void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
-                                    const std::string& aSpiceCode )
+                                    std::unique_ptr<PARSE_TREE>& aParseTree )
 {
     // The default behavior is to treat the Spice param=value pairs as the model parameters and
     // values (for many models the correspondence is not exact, so this function is overridden).
 
-    tao::pegtl::string_input<> in( aSpiceCode, "Spice_Code" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
-                                             tao::pegtl::nothing,
-                                             SIM_MODEL_SPICE_PARSER::control>
-            ( in );
-    }
-    catch( tao::pegtl::parse_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
-    }
-
-    for( const auto& node : root->children )
+    for( const auto& node : aParseTree->root->children )
     {
         if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModelAko>() )
         {
@@ -232,14 +205,13 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
         }
         else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
         {
-            std::string modelName;
             std::string paramName;
 
             for( const auto& subnode : node->children )
             {
                 if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
                 {
-                    modelName = subnode->string();
+                    // Do nothing.
                 }
                 else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
                 {
@@ -267,7 +239,8 @@ void SPICE_MODEL_PARSER::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
         }
     }
 
-    m_model.m_spiceCode = aSpiceCode;
+    if( aParseTree->root->children.size() == 1 )
+        m_model.m_spiceCode = aParseTree->root->children[0]->string();
 }
 
 

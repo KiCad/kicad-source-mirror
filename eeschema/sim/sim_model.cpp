@@ -836,12 +836,21 @@ void SIM_MODEL::doSetParamValue( int aParamIndex, const std::string& aValue )
 void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
-    std::string value = aValue;
+    wxString value( aValue );
+
+    // PEGTL is slow as shit.  Avoid if possible.
+    static const wxRegEx plainNumber( wxS( "^[0-9.]*$" ) );
+
+    if( plainNumber.Matches( value ) )
+    {
+        doSetParamValue( aParamIndex, aValue );
+        return;
+    }
 
     if( aNotation != SIM_VALUE::NOTATION::SI || aValue.find( ',' ) != std::string::npos )
-        value = SIM_VALUE::ConvertNotation( value, aNotation, SIM_VALUE::NOTATION::SI );
+        value = SIM_VALUE::ConvertNotation( aValue, aNotation, SIM_VALUE::NOTATION::SI );
 
-    doSetParamValue( aParamIndex, value );
+    doSetParamValue( aParamIndex, aValue );
 }
 
 

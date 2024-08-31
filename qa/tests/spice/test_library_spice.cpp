@@ -275,14 +275,14 @@ BOOST_AUTO_TEST_CASE( Diodes )
             BOOST_CHECK_EQUAL( modelName, "D1" );
             BOOST_CHECK_EQUAL( model.FindParam( "is" )->value, "1.23n" );
             BOOST_CHECK_EQUAL( model.FindParam( "n" )->value, "1.23" );
-            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, "0.789" );
+            BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value, ".7890" );
             BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value, "12.34m" );
             BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value, "3" );
             BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value, "1.23" );
             BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value, "0.9p" );
-            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, "0.56" );
-            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value, "0.78" );
-            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value, "0.9" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, ".56" );
+            BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value, ".78" );
+            BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value, ".9" );
             BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value, "12.34n" );
             BOOST_CHECK_EQUAL( model.FindParam( "nr" )->value, "2.345" );
             BOOST_CHECK_EQUAL( model.FindParam( "bv" )->value, "100" );
@@ -362,7 +362,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
             BOOST_CHECK_EQUAL( model.FindParam( "ikf" )->value, "111.1" );
             BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value, "3" );
             BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value, "2.2" );
-            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, "0.3" );
+            BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value, ".3" );
             break;
 
         case 24:

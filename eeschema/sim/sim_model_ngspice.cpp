@@ -83,13 +83,23 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
 
 int SIM_MODEL_NGSPICE::doFindParam( const std::string& aParamName ) const
 {
-    // Special case to allow escaped model parameters (suffixed with "_")
-
     for( int ii = 0; ii < (int) GetParamCount(); ++ii )
     {
         const PARAM& param = GetParam( ii );
 
-        if( param.Matches( aParamName ) || param.Matches( aParamName + "_" ) )
+        if( param.Matches( aParamName ) )
+            return ii;
+    }
+
+    // Look for escaped param names as a second pass (as they're less common)
+    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
+    {
+        const PARAM& param = GetParam( ii );
+
+        if( !param.info.name.ends_with( '_' ) )
+            continue;
+
+        if( param.Matches( aParamName + "_" ) )
             return ii;
     }
 
@@ -111,7 +121,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
 
     for( int ii = 0; ii < (int) GetParamCount(); ++ii )
     {
-        const PARAM& param = GetParam(ii);
+        const PARAM& param = GetParam( ii );
 
         if( param.info.isSpiceInstanceParam || param.info.category == PARAM::CATEGORY::SUPERFLUOUS )
             continue;
@@ -123,15 +133,18 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
         }
     }
 
+    // Look for escaped param names as a second pass (as they're less common)
     for( int ii = 0; ii < (int) GetParamCount(); ++ii )
     {
-        const PARAM& param = GetParam(ii);
+        const PARAM& param = GetParam( ii );
 
         if( param.info.isSpiceInstanceParam || param.info.category == PARAM::CATEGORY::SUPERFLUOUS )
             continue;
 
-        if( param.info.name.ends_with( "_" )
-                &&  boost::iequals( param.info.name, aParamName + "_" ) )
+        if( !param.info.name.ends_with( '_' ) )
+            continue;
+
+        if( param.Matches( aParamName + "_" ) )
         {
             SetParamValue( ii, aValue, aNotation );
             return;

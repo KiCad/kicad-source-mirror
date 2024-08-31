@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
 #include <sim/spice_grammar.h>
 
 #include <fmt/core.h>
-#include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
 
@@ -67,26 +66,11 @@ std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const SPICE_ITEM&
 
 
 void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
-                                           const std::string& aSpiceCode )
+                                           std::unique_ptr<PARSE_TREE>& aParseTree )
 {
-    tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitSelector,
-                                             tao::pegtl::nothing,
-                                             SIM_MODEL_SUBCKT_SPICE_PARSER::control>( in );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
-    }
-
     SIM_MODEL_SUBCKT& model = static_cast<SIM_MODEL_SUBCKT&>( m_model );
 
-    for( const auto& node : root->children )
+    for( const auto& node : aParseTree->root->children )
     {
         if( node->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubckt>() )
         {
@@ -131,7 +115,8 @@ void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
         }
     }
 
-    model.m_spiceCode = aSpiceCode;
+    if( aParseTree->root->children.size() == 1 )
+        model.m_spiceCode = aParseTree->root->children[0]->string();
 }
 
 

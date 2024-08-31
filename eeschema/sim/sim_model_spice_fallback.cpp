@@ -64,13 +64,23 @@ std::vector<std::string> SIM_MODEL_SPICE_FALLBACK::GetPinNames() const
 
 int SIM_MODEL_SPICE_FALLBACK::doFindParam( const std::string& aParamName ) const
 {
-    // Special case to allow escaped model parameters (suffixed with "_")
-
     for( int ii = 0; ii < GetParamCount(); ++ii )
     {
         const SIM_MODEL::PARAM& param = GetParam( ii );
 
-        if( param.Matches( aParamName ) || param.Matches( aParamName + "_" ) )
+        if( param.Matches( aParamName ) )
+            return ii;
+    }
+
+    // Look for escaped param names as a second pass (as they're less common)
+    for( int ii = 0; ii < GetParamCount(); ++ii )
+    {
+        const SIM_MODEL::PARAM& param = GetParam( ii );
+
+        if( !param.info.name.ends_with( '_' ) )
+            continue;
+
+        if( param.Matches( aParamName + "_" ) )
             return ii;
     }
 
