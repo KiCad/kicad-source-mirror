@@ -219,6 +219,10 @@ MODEL3D_FORMAT_TYPE fileType( const char* aFileName )
             format_type = FMT_IGES;
             break;
         }
+
+        // Only a comment (starting by "/*") is allowed as header
+        if( strncmp( iline, "/*", 2 ) != 0 )    // not a comment
+             break;
     }
 
     CLOSE_STREAM( ifile );

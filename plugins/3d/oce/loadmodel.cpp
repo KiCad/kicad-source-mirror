@@ -328,6 +328,10 @@ FormatType fileType( const char* aFileName )
         // to load it.
         if( iline[72] == 'S' && ( iline[80] == 0 || iline[80] == 13 || iline[80] == 10 ) )
             return FMT_IGES;
+
+        // Only a comment (starting by "/*") is allowed as header
+        if( strncmp( iline, "/*", 2 ) != 0 )    // not a comment
+             break;
     }
 
     return FMT_NONE;
