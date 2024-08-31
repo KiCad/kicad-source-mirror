@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-29 15:09+0000\n"
-"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
+"PO-Revision-Date: 2024-08-31 19:09+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -791,14 +791,12 @@ msgid "Use board stackup colors"
 msgstr "기판 스택업 색상 사용"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "기판 스택업 색상 사용"
+msgstr "보드 편집기 구리색 사용"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
-#, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
-msgstr "도금되지 않은 구리에는 베어 구리 색상 사용 (느림)"
+msgstr "보드 편집기 구리색 사용(openGL만 해당)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
 #, c-format
@@ -970,9 +968,8 @@ msgid "Configure Paths"
 msgstr "경로 구성"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "코드 모델"
+msgstr "모델 포함"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -2866,11 +2863,11 @@ msgid "Drawing Sheet File"
 msgstr "도면 시트 파일"
 
 #: common/dialogs/dialog_page_settings.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "도면 시트 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
+msgstr "도면 시트 '%s'을(를) 불러오는 중에 오류 발생."
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -3188,27 +3185,26 @@ msgid "Close"
 msgstr "닫기"
 
 #: common/dialogs/dialog_print_generic.cpp:155
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "경고: 잘못된 배율 숫자"
+msgstr "경고: 스케일은 숫자가 아닙니다."
 
 #: common/dialogs/dialog_print_generic.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"경고: 배율 옵션이 매우 큰 값으로 설정됩니다.\n"
+"경고: 스케일이 매우 큰 값으로 설정되었습니다.\n"
 " %f에 고정됨"
 
 #: common/dialogs/dialog_print_generic.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
 "경고: 배율 옵션이 매우 작은 값으로 설정됩니다.\n"
-" %f에 고정됨"
+" %f에 고정됨."
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
@@ -3733,19 +3729,21 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "이 OS의 기본값은 'explorer.exe /n,/select,%F'입니다."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"파일 탐색기 명령.\n"
+"예:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
-msgstr ""
+msgstr "마지막으로 입력한 문자 뒤에 필수 접미사 '%s'가 붙은 탐색기 명령입니다."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -3791,9 +3789,8 @@ msgid "Text editor:"
 msgstr "텍스트 편집기:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "파일 이름:"
+msgstr "파일 관리자:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -4145,23 +4142,20 @@ msgid "Reset Unique Id"
 msgstr "고유 ID 재설정"
 
 #: common/dialogs/panel_embedded_files.cpp:87
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "레퍼런스에 따라 복사"
+msgstr "내장된 참조번호 복사"
 
 #: common/dialogs/panel_embedded_files.cpp:159
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "조정하고 싶은 값을 선택하세요"
+msgstr "포함할 파일을 선택하세요"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "모든 파일"
+msgstr "모든 파일|*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
 msgstr "파일 %s이(가) 이미 존재합니다."
 
@@ -4181,14 +4175,13 @@ msgid "Overwrite"
 msgstr "덮어쓰기"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "파일 '%s'의 생성에 실패하였습니다."
+msgstr "%s 파일을 추가 실패."
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "GenCAD로 내보낼 파일 이름 선택"
+msgstr "파일을 내보낼 디렉토리를 선택하세요"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4199,55 +4192,52 @@ msgid "Skip"
 msgstr "건너뛰기"
 
 #: common/dialogs/panel_embedded_files.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "심볼 라이브러리 '%s'에 쓸 수 없습니다."
+msgstr "디렉토리 ' %s '에 쓸 수 없습니다."
 
 #: common/dialogs/panel_embedded_files.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "심볼 라이브러리 '%s'에 쓸 수 없습니다."
+msgstr "폴더 ' %s '에 쓸 수 없습니다."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
 msgstr "재시도"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "파일 열기 실패"
+msgstr "파일 ' %s '을(를) 열수 없음."
 
 #: common/dialogs/panel_embedded_files.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "파일 '%s'의 생성에 실패하였습니다."
+msgstr "파일 ' %s '를 쓰지 못함."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "시트 간 참조"
+msgstr "내부 참조"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "내장된 파일 추가"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "전원 심볼"
+msgstr "내장된 파일 제거"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "&Export"
-msgstr "내보내기"
+msgstr "내보내기(&E)"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "글꼴 삽입"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "사용된 모든 글꼴의 사본 저장"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 msgid "Footprints/pads:"
@@ -4720,9 +4710,8 @@ msgid "Python interpreter status"
 msgstr "Python 인터프리터 상태"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "연결되지 않음"
+msgstr "<정의되지 않음>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1977
 #: common/stroke_params.cpp:37
@@ -5022,14 +5011,12 @@ msgid "File not found."
 msgstr "파일을 찾을 수 없습니다."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:987
-#, fuzzy
 msgid "File could not be opened."
-msgstr "'%s' 파일을 만들 수 없습니다."
+msgstr "파일을 열 수 없음."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1001
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "'%s' 파일을 완전히 읽지 못했음."
+msgstr "도면 시트를 완전히 읽지 못했음."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
@@ -5820,7 +5807,6 @@ msgid "Bezier"
 msgstr "베지어"
 
 #: common/eda_shape.cpp:2014 eeschema/sch_shape.cpp:698
-#, fuzzy
 msgid "Shape Properties"
 msgstr "도형 속성"
 
@@ -6730,12 +6716,12 @@ msgstr "현재 지원되지 않는 DXF 이미지."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "가져온 그래픽이 너무 큽니다. 최대 배율은 %f 임"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr ""
+msgstr "숫자 제한에 맞게 가져오기 오프셋을 ( %f , %f )로 조정함"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -10914,7 +10900,7 @@ msgstr "플러그인이 이미 존재합니다."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:807
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "대화상자에 추가된 플러그인의 최대 개수입니다."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:838
 msgid "You must provide a netlist generator command string"
@@ -15717,7 +15703,7 @@ msgstr "네트클래스 %s가 정의되지 않았음"
 #: eeschema/erc/erc.cpp:744
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "레이블은 %d , %d 에서 두 개 이상의 와이어를 연결함"
 
 #: eeschema/erc/erc.cpp:799
 #, fuzzy, c-format
@@ -15913,7 +15899,7 @@ msgstr "4개의 연결 지점이 함께 연결됨"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "라벨은 두 개 이상의 와이어를 연결함"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
@@ -15952,7 +15938,7 @@ msgstr "전역 레이블은 회로도에 한 번만 표시됨"
 
 #: eeschema/erc/erc_item.cpp:132
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "로컬 및 글로벌 레이블의 이름이 동일함"
 
 #: eeschema/erc/erc_item.cpp:136
 msgid "Different footprint assigned in another unit of the symbol"
@@ -16125,6 +16111,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"' %s '는 KiCad 회로도 파일이 아닙니다.\n"
+" KiCad가 아닌 회로도 파일의 경우 파일 -> 가져오기를 사용하세요."
 
 #: eeschema/files-io.cpp:287
 msgid ""
@@ -17656,6 +17644,8 @@ msgid ""
 "No module instance '%s' found in schematic file:\n"
 "%s"
 msgstr ""
+"회로도 파일에서 모듈 인스턴스 ' %s '를 찾을 수 없음:\n"
+" %s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1719
 #, c-format
@@ -21928,7 +21918,7 @@ msgstr "시뮬레이션에서 제외"
 
 #: eeschema/tools/ee_actions.cpp:1126
 msgid "Draw 'X's over items which have been excluded from simulation"
-msgstr ""
+msgstr "시뮬레이션에서 제외된 항목 위에 'X'를 그림"
 
 #: eeschema/tools/ee_actions.cpp:1131
 msgid "Show OP Voltages"
@@ -22697,7 +22687,7 @@ msgstr "선택한 심볼 라이브러리가 없습니다."
 #: pcbnew/tools/footprint_editor_control.cpp:613
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
-msgstr ""
+msgstr "일반 설정에서 파일 탐색기 인수 ' %F '가 누락되었거나 잘못 구성되었습니다."
 
 #: eeschema/tools/symbol_editor_control.cpp:332
 #: pcbnew/tools/footprint_editor_control.cpp:638
@@ -23808,7 +23798,7 @@ msgstr "RS274X: GerbView에서 밑색빼기 명령을 무시함"
 
 #: gerbview/rs274x.cpp:680
 msgid "IPNEG Gerber command is deprecated since 2012. Skip it"
-msgstr ""
+msgstr "IPNEG Gerber 명령은 2012년부터 더 이상 사용되지 않습니다. 건너뛰기"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
@@ -24406,7 +24396,8 @@ msgstr "부품에서 3D 모델 제외"
 msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
-msgstr ""
+msgstr "이 참조 지정자 목록과 일치하는 구성 요소 3D 모델만 포함합니다(쉼표로 구분, "
+"와일드카드 지원)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 #: pcbnew/dialogs/dialog_export_step_base.cpp:91
@@ -24437,7 +24428,7 @@ msgstr "실크스크린 그래픽 내보내기."
 
 #: kicad/cli/command_pcb_export_3d.cpp:151
 msgid "Export soldermask layers as a set of flat faces"
-msgstr ""
+msgstr "솔더 마스크 레이어를 평면 세트로 내보내기"
 
 #: kicad/cli/command_pcb_export_3d.cpp:155
 msgid "Fuse overlapping geometry together"
@@ -32176,11 +32167,11 @@ msgstr "GLB(바이너리 GLTF) 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -32223,7 +32214,7 @@ msgstr "부품 배치 파일"
 msgid ""
 "A list of comma-selected reference designators to export (wildcards are "
 "supported)"
-msgstr ""
+msgstr "내보낼 쉼표로 선택된 참조 지정자 목록(와일드카드 지원)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:92
 #, fuzzy
@@ -34286,7 +34277,7 @@ msgstr "항목 이동"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:60
 msgid "Replace existing placement rule areas"
-msgstr ""
+msgstr "기존 배치 규칙 영역 교체"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:63
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
@@ -34333,7 +34324,7 @@ msgstr "핀이 없는 부품 제외"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
-msgstr ""
+msgstr "다중 채널 레이아웃 반복"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:129
 msgid "Convert to Non Copper Zone"
@@ -35809,7 +35800,7 @@ msgstr "상위 풋프린트 설명"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
 msgid "Update thickness according to text size "
-msgstr ""
+msgstr "텍스트 크기에 따라 두께 업데이트 "
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -35817,6 +35808,9 @@ msgid ""
 "Normal text: thickness is size/8\n"
 "Bold text: thickness is size/5"
 msgstr ""
+"텍스트 너비와 높이에서 최적의 텍스트 두께를 설정하세요.\n"
+" 일반 글씨 : 두께는 size/8 입니다\n"
+" 굵은 글씨 : 두께는 size/5 입니다"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:382
 msgid "Edit Text Box Properties"
@@ -35959,11 +35953,11 @@ msgstr "연결되지 않음"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:334
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr ""
+msgstr "앞면을 텐트 비아(솔더마스크로 덮음)를 할지 여부"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:340
 msgid "Link front and back tenting settings"
-msgstr ""
+msgstr "앞뒤 텐팅 세팅 연결"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:347
 #, fuzzy
@@ -35972,7 +35966,7 @@ msgstr "후면 접두사:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr ""
+msgstr "후면을 텐트 비아(솔더마스크로 덮음)를 할지 여부"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:405
 msgid "Add teardrops on via's track connections"
@@ -37424,7 +37418,7 @@ msgstr "Off-board, 테스트용"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:829
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
-msgstr ""
+msgstr "보조 층은 보드 면과 함께 뒤집히지 않지만 뒷면과 앞면 층은 뒤집힙니다."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:724
 msgid "User2"
@@ -37525,6 +37519,9 @@ msgid ""
 "max distance between a solder mask opening and a copper item having a "
 "different net than the parent solder mask opening to create a DRC error"
 msgstr ""
+"DRC 테스트의 경우:\n"
+"솔더 마스크 개구부와 상위 솔더 마스크 개구부와 다른 네트를 가진 구리 항목 "
+"사이의 최대 거리로 DRC 오류를 생성함"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -37536,6 +37533,9 @@ msgid ""
 "Disable DRC error type solder mask aperture bridge between pads of the same "
 "footprint (useful for net ties)"
 msgstr ""
+"DRC 테스트의 경우:\n"
+" 동일한 풋프린트의 패드 간 DRC 오류 유형 솔더 마스크 개구부 브리지 비활성화("
+"네트 연결에 유용)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:111
 #, fuzzy
@@ -39388,7 +39388,7 @@ msgstr "규칙 조건이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:488
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
+msgstr "within_diff_pairs 옵션은 제약 조건에 적합하지 않습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:506
 msgid "Missing min value."
@@ -40293,7 +40293,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:620
 msgid "** Got problems while fusing shapes **\n"
-msgstr ""
+msgstr "** 도형을 결합하는 중 문제 발생 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:624
 #: pcbnew/exporters/step/step_pcb_model.cpp:1886
@@ -40340,8 +40340,9 @@ msgid "Failed to create a prismatic shape\n"
 msgstr "분기를 만들지 못함."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1688
+#, fuzzy
 msgid "** Face skipped **\n"
-msgstr ""
+msgstr "** 얼굴 건너뛰기 **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1855
 #, c-format
@@ -41268,7 +41269,7 @@ msgstr "IDF 3D 보드 표현 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / GLB / BREP / XAO..."
-msgstr ""
+msgstr "STEP / GLB / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 #, fuzzy
@@ -41339,7 +41340,7 @@ msgstr "풋프린트 자동 배치"
 
 #: pcbnew/menubar_pcb_editor.cpp:438
 msgid "Multi-Channel"
-msgstr ""
+msgstr "다중 채널"
 
 #: pcbnew/menubar_pcb_editor.cpp:447
 msgid "External Plugins"
@@ -42107,7 +42108,7 @@ msgstr "경고: 카스텔레이티드 속성은 PTH 패드 전용입니다."
 
 #: pcbnew/pad.cpp:2249
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(음의 모서리 반경은 허용되지 않음)"
 
 #: pcbnew/pad.cpp:2251
 #, fuzzy
@@ -42157,7 +42158,7 @@ msgstr "기계식 패드"
 
 #: pcbnew/pad.cpp:2500
 msgid "Oblong"
-msgstr ""
+msgstr "Oblong"
 
 #: pcbnew/pad.cpp:2518
 #, fuzzy
@@ -42593,7 +42594,7 @@ msgstr "다각형을 불러오는 중..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2084
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "다각형 윤곽선 개수는 %d 이며, 예상 개수는 1개임."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2211
 msgid "Loading rules..."
@@ -42854,7 +42855,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 #, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr ""
+msgstr "알 수 없는 텍스트 상자 정렬 %d , 텍스트 %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4421
 msgid "Loading rectangles..."
@@ -45950,7 +45951,7 @@ msgstr "일부 선은 모따기를 할 수 없습니다."
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
-msgstr ""
+msgstr "일부 도그본 모서리가 너무 좁아서 지정된 반경의 커터에 맞지 않습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:348
 #: pcbnew/tools/pcb_actions.cpp:624
@@ -46003,16 +46004,16 @@ msgstr "일부 다각형은 교차할 수 없습니다."
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
-msgstr ""
+msgstr "복사할 참조 규칙 영역을 하나만 선택하세요."
 
 #: pcbnew/tools/multichannel_tool.cpp:299
 msgid "No Rule Areas to repeat layout to have been found."
-msgstr ""
+msgstr "레이아웃을 반복할 규칙 영역을 찾을 수 없습니다."
 
 #: pcbnew/tools/multichannel_tool.cpp:371
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
-msgstr ""
+msgstr "규칙 영역 ' %s '와 ' %s ' 사이에서 규칙 영역 내용 복사에 실패했습니다."
 
 #: pcbnew/tools/multichannel_tool.cpp:384
 #, fuzzy
@@ -46026,7 +46027,7 @@ msgstr "규칙 영역으로 변환"
 
 #: pcbnew/tools/multichannel_tool.cpp:623
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "영역 중 하나 또는 둘 모두에 할당된 컴포넌트가 없습니다."
 
 #: pcbnew/tools/multichannel_tool.cpp:627
 #, fuzzy
@@ -46035,17 +46036,18 @@ msgstr "컴포넌트 수: %d."
 
 #: pcbnew/tools/multichannel_tool.cpp:631
 msgid "Iteration count exceeded (timeout)"
-msgstr ""
+msgstr "반복 횟수 초과(시간 초과)"
 
 #: pcbnew/tools/multichannel_tool.cpp:635
 msgid "Topology mismatch"
-msgstr ""
+msgstr "토폴로지 불일치"
 
 #: pcbnew/tools/multichannel_tool.cpp:685
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s)."
-msgstr ""
+msgstr "회로도에 계층적 시트가 하나뿐이거나 없기 때문에 배치 영역을 자동으로 생성할 "
+"수 없습니다."
 
 #: pcbnew/tools/multichannel_tool.cpp:767
 #, fuzzy
@@ -47048,7 +47050,7 @@ msgstr "연결선 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "보드에서 누락된 연결을 나타내는 선/호 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Curved Ratsnest Lines"
@@ -48804,7 +48806,7 @@ msgstr "새 그룹"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1254
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "(정규 표현식을 나타내려면 /.../를 사용합니다.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1327
 #, fuzzy
@@ -49105,7 +49107,7 @@ msgstr "레이어 표시 옵션"
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
-msgstr ""
+msgstr "새로운 현재 설정에 따라 대화 상자에 표시된 채워진 영역을 업데이트함"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
