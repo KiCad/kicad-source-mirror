@@ -1256,6 +1256,10 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
         bool               restore_state = false;
 
+        // Ensure newItem has a suitable parent: the current screen, because an item from
+        // a list of items to repeat must be attached to this current screen
+        newItem->SetParent( m_frame->GetScreen() );
+
         if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( newItem ) )
         {
             // If incrementing tries to go below zero, tell user why the value is repeated
