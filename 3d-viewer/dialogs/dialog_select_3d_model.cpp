@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,7 +191,10 @@ void DIALOG_SELECT_3DMODEL::OnFileActivated( wxCommandEvent& event )
 void DIALOG_SELECT_3DMODEL::SetRootDir( wxCommandEvent& event )
 {
     if( m_FileTree && m_dirChoices->GetSelection() > 0 )
+    {
         m_FileTree->SetPath( m_dirChoices->GetString( m_dirChoices->GetSelection() ) );
+        m_FileTree->UnselectAll();  // Ensure no unwanted selection
+    }
 }
 
 
