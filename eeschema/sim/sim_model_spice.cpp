@@ -26,7 +26,6 @@
 // (especially on msys2 + wxWidgets 3.0.x)
 #include <sim/sim_model_spice.h>
 #include <sim/sim_model_spice_fallback.h>
-#include <sim/spice_model_parser.h>
 #include <sim/sim_library_spice.h>
 
 #include <boost/algorithm/string/trim.hpp>
@@ -56,7 +55,8 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 
 std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
                                                           const std::string& aSpiceCode,
-                                                          bool aSkipReferential)
+                                                          bool aSkipReferential,
+                                                          REPORTER& aReporter )
 {
     SIM_MODEL::TYPE type = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode, aSkipReferential );
 

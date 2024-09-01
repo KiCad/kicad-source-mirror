@@ -44,7 +44,6 @@ public:
     virtual void ReadFile( const wxString& aFilePath, REPORTER& aReporter );
 
 protected:
-    void readFallbacks( const wxString& aFilePath, REPORTER& aReporter );
     void parseFile( const wxString& aFilePath, REPORTER& aReporter,
                     std::vector<std::pair<std::string, std::string>>* aModelQueue );
 

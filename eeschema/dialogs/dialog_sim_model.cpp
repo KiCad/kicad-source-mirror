@@ -1328,6 +1328,33 @@ void DIALOG_SIM_MODEL<T>::onModelNameChoice( wxCommandEvent& aEvent )
     }
 
     m_rbLibraryModel->SetValue( true );
+
+    if( SIM_MODEL_SPICE_FALLBACK* fallback = dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
+    {
+        wxArrayString lines = wxSplit( fallback->GetSpiceCode(), '\n' );
+        wxString code;
+
+        for( const wxString& line : lines )
+        {
+            if( !line.StartsWith( '*' ) )
+            {
+                if( !code.IsEmpty() )
+                    code += "\n";
+
+                code += line;
+            }
+        }
+
+        m_infoBar->ShowMessage( wxString::Format( _( "Failed to parse:\n\n"
+                                                     "%s\n"
+                                                     "Using generic SPICE model." ),
+                                                  code ) );
+    }
+    else
+    {
+        m_infoBar->Hide();
+    }
+
     updateWidgets();
 }
 

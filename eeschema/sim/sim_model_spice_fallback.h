@@ -37,6 +37,8 @@ public:
 
     std::vector<std::string> GetPinNames() const override;
 
+    std::string GetSpiceCode() const { return m_spiceCode; }
+
 protected:
     int doFindParam( const std::string& aParamName ) const override;
 
