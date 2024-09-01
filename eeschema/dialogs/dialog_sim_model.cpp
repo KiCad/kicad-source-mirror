@@ -852,6 +852,13 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
         m_pinCombobox->SetSelection( -1 );
     }
 
+    m_modelListBox->SetStringSelection( modelName );
+
+    if( m_modelListBox->GetSelection() < 0 && m_modelListBox->GetCount() > 0 )
+        m_modelListBox->SetSelection( 0 );
+
+    m_curModelType = curModel().GetType();
+
     m_prevLibrary = aLibraryPath;
     return true;
 }
@@ -1078,7 +1085,7 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
 {
     if( m_rbLibraryModel->GetValue() )
     {
-        if( library() )
+        if( library() && m_modelListBox->GetSelection() >= 0 )
             return *library()->FindModel( m_modelListBox->GetStringSelection().ToStdString() );
     }
     else
