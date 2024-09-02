@@ -376,7 +376,6 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::KIBIS_DRIVER_PRBS:    return { "X"                                                                };
 
     case TYPE::NONE:
-    case TYPE::REFERENTIAL:
     case TYPE::RAWSPICE:             return {};
 
     default:       wxFAIL;           return {};

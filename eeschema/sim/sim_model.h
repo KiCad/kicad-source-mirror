@@ -280,7 +280,6 @@ public:
         I_RANDPOISSON,
         I_BEHAVIORAL,
 
-        REFERENTIAL,
         SUBCKT,
         XSPICE,
 

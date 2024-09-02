@@ -34,8 +34,8 @@ class SIM_LIBRARY_SPICE;
 class SPICE_MODEL_PARSER
 {
 public:
-    static SIM_MODEL::TYPE ReadType( const SIM_LIBRARY_SPICE& aLibrary,
-                                     const std::string& aSpiceCode, bool aSkipReferential );
+    static bool ReadType( const SIM_LIBRARY_SPICE& aLibrary, const std::string& aSpiceCode,
+                          SIM_MODEL::TYPE* aType, bool aFirstPass );
 
     SPICE_MODEL_PARSER( SIM_MODEL_SPICE& aModel ) : m_model( aModel ) {}
     virtual ~SPICE_MODEL_PARSER() = default;

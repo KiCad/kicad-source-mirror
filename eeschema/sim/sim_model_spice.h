@@ -49,8 +49,7 @@ public:
 
     static std::unique_ptr<SIM_MODEL_SPICE> Create( const SIM_LIBRARY_SPICE& aLibrary,
                                                     const std::string& aSpiceCode,
-                                                    bool aSkipReferential,
-                                                    REPORTER& aReporter );
+                                                    bool aFirstPass, REPORTER& aReporter );
 
     SIM_MODEL_SPICE( TYPE aType,
                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );

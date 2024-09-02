@@ -128,10 +128,10 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
     }
 
     auto createModel =
-            [&]( int ii, bool aSkipReferential )
+            [&]( int ii, bool firstPass )
             {
                 m_library.m_models[ii] = SIM_MODEL_SPICE::Create( m_library, modelQueue[ii].second,
-                                                                  aSkipReferential, aReporter );
+                                                                  firstPass, aReporter );
             };
 
     // Read all self-contained models in parallel
@@ -145,7 +145,7 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aRepor
             } );
     tp.wait_for_tasks();
 
-    // Now read all referential models in order.
+    // Now read all models that might refer to other models in order.
     for( int ii = 0; ii < (int) modelQueue.size(); ++ii )
     {
         if( !m_library.m_models[ii] )

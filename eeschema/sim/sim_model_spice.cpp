@@ -55,12 +55,11 @@ std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const
 
 std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const SIM_LIBRARY_SPICE& aLibrary,
                                                           const std::string& aSpiceCode,
-                                                          bool aSkipReferential,
-                                                          REPORTER& aReporter )
+                                                          bool aFirstPass, REPORTER& aReporter )
 {
-    SIM_MODEL::TYPE type = SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode, aSkipReferential );
+    SIM_MODEL::TYPE type = SIM_MODEL::TYPE::NONE;
 
-    if( type == SIM_MODEL::TYPE::REFERENTIAL )
+    if( !SPICE_MODEL_PARSER::ReadType( aLibrary, aSpiceCode, &type, aFirstPass ) )
         return nullptr;
 
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
