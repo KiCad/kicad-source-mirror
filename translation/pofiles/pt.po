@@ -7,21 +7,22 @@
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
 # Rafael Silva <perigoso@riseup.net>, 2021, 2022.
 # leonardokr <leo@ziondev.us>, 2022.
+# Julio Dias <jcesardias@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-03-25 13:17+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"PO-Revision-Date: 2024-09-03 07:09+0000\n"
+"Last-Translator: Julio Dias <jcesardias@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -43,7 +44,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr "Todos os ficheiros"
+msgstr "Todos os arquivos"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:332
 msgid "Build board outline"
@@ -73,8 +74,9 @@ msgstr ""
 "uma análise completa."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:261
+#, fuzzy
 msgid "Create tracks and vias"
-msgstr "Criar pistas e vias"
+msgstr "Criar trilhas e vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:710
 msgid "Create zones"
@@ -969,9 +971,8 @@ msgid "Configure Paths"
 msgstr "Locais dos Ficheiros"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed Model"
-msgstr "Modelo"
+msgstr "Embarcar Modelo"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:65
 msgid "Select 3D Model"
@@ -1768,9 +1769,8 @@ msgid "Export to Clipboard"
 msgstr "Exportar para a Área de Transferência"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Alterações do formato"
+msgstr "Modificação da API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -2026,9 +2026,8 @@ msgid "Additional Contributions By"
 msgstr "Contribuições adicionais por"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Documentação"
+msgstr "Time de Documentação"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
@@ -2059,9 +2058,8 @@ msgid "Footprints"
 msgstr "Footprints"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Ícone"
+msgstr "Ícones"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -2895,11 +2893,11 @@ msgid "Drawing Sheet File"
 msgstr "Arquivo da folha do desenho"
 
 #: common/dialogs/dialog_page_settings.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Houve um erro ao carregar a folha do desenho '%s'."
+msgstr "Erro ao carregar a folha de desenho '%s'."
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -3098,9 +3096,8 @@ msgid "Reference Designators"
 msgstr "Designadores de referência"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "Atribuição alternativa"
+msgstr "Limpar Atribuições de Nets"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
@@ -3779,6 +3776,8 @@ msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Comando do explorador de arquivos.\n"
+"exemplo:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
