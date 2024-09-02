@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:05-0700\n"
-"PO-Revision-Date: 2024-03-25 13:18+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v8/pt/"
-">\n"
+"PO-Revision-Date: 2024-09-03 07:09+0000\n"
+"Last-Translator: Julio Dias <jcesardias@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v8/pt/>"
+"\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr "Todos os ficheiros"
+msgstr "Todos os arquivos"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
@@ -73,8 +73,9 @@ msgstr ""
 "uma análise completa."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
+#, fuzzy
 msgid "Create tracks and vias"
-msgstr "Criar pistas e vias"
+msgstr "Criar trilhas e vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:701
 msgid "Create zones"
