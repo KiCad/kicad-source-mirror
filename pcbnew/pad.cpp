@@ -341,10 +341,6 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
     if( GetAttribute() == PAD_ATTRIB::PTH && IsCopperLayer( aLayer ) )
     {
-        /// Heat sink pads always get copper
-        if( GetProperty() == PAD_PROP::HEATSINK )
-            return true;
-
         PADSTACK::UNCONNECTED_LAYER_MODE mode = m_padStack.UnconnectedLayerMode();
 
         if( mode == PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL )
