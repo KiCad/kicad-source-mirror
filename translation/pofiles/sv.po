@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-08-31 19:09+0000\n"
+"PO-Revision-Date: 2024-09-03 07:09+0000\n"
 "Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -3210,7 +3210,7 @@ msgid ""
 "It will be clamped to %f."
 msgstr ""
 "Varning: Skalningsfaktorn är satt till ett mycket litet värde.\n"
-"Den kommer att begränsas till %f"
+"Den kommer att begränsas till %f."
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
@@ -30890,9 +30890,8 @@ msgid "Filter items by layer:"
 msgstr "Filtrera objekt efter lager:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:160
-#, fuzzy
 msgid "Progress:"
-msgstr "Framsteg:"
+msgstr "Förlopp:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:82
 msgid "Cleanup Tracks and Vias"
@@ -46018,9 +46017,8 @@ msgstr "Avrundningslinjer"
 
 #: pcbnew/tools/edit_tool.cpp:1418
 #: pcbnew/tools/item_modification_routine.cpp:256
-#, fuzzy
 msgid "Dogbone Corners"
-msgstr "Flytta hörn"
+msgstr "Dogbone hörn (urfrästa hörn)"
 
 #: pcbnew/tools/edit_tool.cpp:1517
 msgid "Simplify Shapes"
@@ -46169,22 +46167,22 @@ msgid "Some of the lines could not be chamfered."
 msgstr "Vissa av linjerna kunde inte fasas av."
 
 #: pcbnew/tools/item_modification_routine.cpp:266
-#, fuzzy
 msgid "Unable to add dogbone corners to the selected lines."
-msgstr "Det går inte att fasa av de valda linjerna."
+msgstr ""
+"Det gick inte att lägga till dogbone urfräsningar av hörnen mellan de valda "
+"linjerna."
 
 #: pcbnew/tools/item_modification_routine.cpp:270
-#, fuzzy
 msgid "Some of the lines could not have dogbone corners added."
-msgstr "Vissa av linjerna kunde inte fasas av."
+msgstr ""
+"Det gick inte att lägga till dogbone hörn (urfrästa hörn) till vissa linjer."
 
 #: pcbnew/tools/item_modification_routine.cpp:278
-#, fuzzy
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
 msgstr ""
-"Vissa av hundbenshörnen är för smala för att rymma en fräs av specificerad "
+"Vissa av de dogbone urfrästa hörnen är för smala för en fräs av specificerad "
 "radie."
 
 #: pcbnew/tools/item_modification_routine.cpp:348
@@ -46436,9 +46434,8 @@ msgid "Decrease tuning pattern amplitude by one step."
 msgstr "Minska meanderamplituden med ett steg."
 
 #: pcbnew/tools/pcb_actions.cpp:228
-#, fuzzy
 msgid "Draw Aligned Dimensions"
-msgstr "Inriktad dimension"
+msgstr "Rita dimension längs med"
 
 #: pcbnew/tools/pcb_actions.cpp:235
 msgid "Draw Center Dimensions"
@@ -46474,9 +46471,8 @@ msgid "Add a Zone Cutout"
 msgstr "Lägg till en zonutklippning"
 
 #: pcbnew/tools/pcb_actions.cpp:301
-#, fuzzy
 msgid "Add a cutout to an existing zone or rule area"
-msgstr "Lägg till ett utklippsområde i en befintlig zon"
+msgstr "Lägg en urfräsning till en befintlig zon eller regelområde"
 
 #: pcbnew/tools/pcb_actions.cpp:311
 msgid "Add a Similar Zone"
@@ -46672,14 +46668,12 @@ msgid "Cut away corners between selected lines"
 msgstr "Fasa av hörn mellan valda linjer"
 
 #: pcbnew/tools/pcb_actions.cpp:605
-#, fuzzy
 msgid "Dogbone Corners..."
-msgstr "Flytta hörn till..."
+msgstr "Dogbone hörn (urfrästa hörn)..."
 
 #: pcbnew/tools/pcb_actions.cpp:606
-#, fuzzy
 msgid "Add dogbone corners to selected lines"
-msgstr "Fasa av hörn mellan valda linjer"
+msgstr "Lägg till dogbone hörn (urfrästa hörn) mellan valda linjer"
 
 #: pcbnew/tools/pcb_actions.cpp:612
 msgid "Simplify polygon outlines, removing superfluous points"
@@ -47553,14 +47547,12 @@ msgid "Make the current layer more transparent"
 msgstr "Gör det aktuella lagret mer transparent"
 
 #: pcbnew/tools/pcb_actions.cpp:1789
-#, fuzzy
 msgid "Cycle Layer Pair Presets"
-msgstr "Spara lagringsförinställning"
+msgstr "Stega igenom förinställda lagerpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1790
-#, fuzzy
 msgid "Cycle between preset layer pairs"
-msgstr "Växla mellan lager i aktivt lagerpar"
+msgstr "Växlar mellan förinställda lagerpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1801
 msgid "Show Board Statistics"
