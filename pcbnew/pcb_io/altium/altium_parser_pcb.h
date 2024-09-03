@@ -767,6 +767,7 @@ struct ATEXT6
     bool isInvertedRect;
     bool isFrame;
     bool isOffsetBorder;
+    bool isJustificationValid;
 
     uint32_t margin_border_width;
     uint32_t textbox_rect_width;

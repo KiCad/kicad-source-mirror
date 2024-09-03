@@ -87,6 +87,7 @@ enum class ALTIUM_PCB_DIR
 class BOARD;
 class FP_SHAPE;
 class PCB_SHAPE;
+class PCB_TEXTBOX;
 class FOOTPRINT;
 class ZONE;
 class PCB_DIM_RADIAL;
@@ -251,6 +252,9 @@ private:
     void HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT* aFootprint, const PCB_SHAPE& aShape,
                                                  const ALTIUM_LAYER aAltiumLayer,
                                                  const uint8_t      aKeepoutRestrictions );
+
+    void HelperSetTextboxAlignmentAndPos( const ATEXT6& aElem, PCB_TEXTBOX* aPcbTextbox );
+    void HelperSetTextAlignmentAndPos( const ATEXT6& aElem, EDA_TEXT* aEdaText );
 
     std::vector<std::pair<PCB_LAYER_ID, int>>
     HelperGetSolderAndPasteMaskExpansions( const ALTIUM_RECORD aType, const int aPrimitiveIndex,

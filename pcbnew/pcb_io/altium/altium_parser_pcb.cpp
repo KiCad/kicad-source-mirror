@@ -1062,23 +1062,28 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     {
         aReader.Skip( 24 ); // Unknown data
         aReader.Skip( 64 ); // 2nd font name
-
-        aReader.Skip( 1 ); // Unknown flag
-        aReader.Skip( 1 ); // Unknown flag
-        aReader.Skip( 1 ); // Unknown flag
-        aReader.Skip( 1 ); // Unknown flag
-        aReader.Skip( 1 ); // Unknown flag
+        aReader.Skip( 5 ); // Unknown flags
 
         // "Frame" text type flag
         isFrame = aReader.Read<uint8_t>() != 0;
 
         // Use "Offset" border value instead of "Margin"
         isOffsetBorder = aReader.Read<uint8_t>() != 0;
+
+        aReader.Skip( 8 ); // Unknown data
+
+        // textbox_rect_justification will be wrong (5) when this flag is unset,
+        // in that case, we should always use the left bottom justification.
+        isJustificationValid = aReader.Read<uint8_t>() != 0;
+
+        aReader.Skip( 3 ); // Unknown data
+        aReader.Skip( 8 ); // Unknown data
     }
     else
     {
         isFrame = textbox_rect_height != 0 && textbox_rect_width != 0;
         isOffsetBorder = false;
+        isJustificationValid = false;
     }
 
     aReader.SkipSubrecord();
