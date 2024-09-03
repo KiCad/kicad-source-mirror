@@ -396,7 +396,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     else
     {
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.overrides_enabled",
-                                                &aWindow->grid.overrides_enabled, false ) );
+                                                &aWindow->grid.overrides_enabled, true ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_connected",
                                                 &aWindow->grid.override_connected, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_wires",
