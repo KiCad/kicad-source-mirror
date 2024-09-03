@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-09-03 07:09+0000\n"
+"PO-Revision-Date: 2024-09-04 13:09+0000\n"
 "Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.7.2-rc\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -21445,12 +21445,11 @@ msgstr "Ta bort den sista punkten som lagts till i det aktuella objektet"
 
 #: eeschema/tools/ee_actions.cpp:573 pcbnew/tools/pcb_actions.cpp:389
 msgid "Close Outline"
-msgstr "Stäng disposition"
+msgstr "Avsluta ytterkonturen"
 
 #: eeschema/tools/ee_actions.cpp:574
-#, fuzzy
 msgid "Close the in-progress outline"
-msgstr "Stäng den pågående konturen"
+msgstr "Rita den avslutande ytterkonturen"
 
 #: eeschema/tools/ee_actions.cpp:589
 msgid "Repeat Last Item"
@@ -46896,27 +46895,24 @@ msgid "Create gap of specified length for microwave applications"
 msgstr "Skapa mellanrum med specificerad längd för mikrovågsapplikationer"
 
 #: pcbnew/tools/pcb_actions.cpp:856
-#, fuzzy
 msgid "Draw Microwave Stubs"
-msgstr "Lägg till mikrovågsstubb"
+msgstr "Rita stub för mikrovågor"
 
 #: pcbnew/tools/pcb_actions.cpp:857
 msgid "Create stub of specified length for microwave applications"
 msgstr "Skapa stub med angiven längd för mikrovågsapplikationer"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Draw Microwave Arc Stubs"
-msgstr "Lägg till mikrovågsbåge"
+msgstr "Rita cirkelbåge stub för mikrovågor"
 
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Create stub (arc) of specified size for microwave applications"
 msgstr "Skapa stub (båge) av angiven storlek för mikrovågsapplikationer"
 
 #: pcbnew/tools/pcb_actions.cpp:874
-#, fuzzy
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "Lägg till mikrovågsformad polygonal form"
+msgstr "Rita polygon för mikrovågor"
 
 #: pcbnew/tools/pcb_actions.cpp:875
 msgid "Create a microwave polygonal shape from a list of vertices"
@@ -48127,9 +48123,8 @@ msgid "Inactive Layer Display"
 msgstr "Visning av inaktiva lager"
 
 #: pcbnew/tools/pcb_control.cpp:640
-#, fuzzy
 msgid "Preset Layer Pairs"
-msgstr "Ställ in lagerpar ..."
+msgstr "Ställ in lagerpar"
 
 #: pcbnew/tools/pcb_control.cpp:730
 msgid "Item locked."
