@@ -3014,8 +3014,9 @@ void PCB_PAINTER::draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer )
     if( !aBoardOutline->HasOutline() )
         return;
 
+    GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
     m_gal->Save();
-    m_gal->PushDepth();
+
     const COLOR4D& outlineColor = m_pcbSettings.GetColor( aBoardOutline, aLayer );
     m_gal->SetFillColor( outlineColor );
     m_gal->AdvanceDepth();
@@ -3023,7 +3024,7 @@ void PCB_PAINTER::draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer )
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
     m_gal->DrawPolygon( aBoardOutline->GetOutline() );
-    m_gal->PopDepth();
+
     m_gal->Restore();
 }
 

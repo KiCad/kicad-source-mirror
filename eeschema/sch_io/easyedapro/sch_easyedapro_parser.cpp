@@ -499,7 +499,8 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
             std::vector<double> points = line.at( 2 );
             wxString            styleStr = line.at( 3 );
 
-            auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER, LAYER_DEVICE );
+            std::unique_ptr<SCH_SHAPE> shape =
+                    std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER, LAYER_DEVICE );
 
             for( size_t i = 1; i < points.size(); i += 2 )
             {

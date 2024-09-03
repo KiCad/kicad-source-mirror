@@ -138,7 +138,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.via_hole_walls",           LAYER_VIA_HOLEWALLS      );
     CLR( "board.worksheet",                LAYER_DRAWINGSHEET       );
     CLR( "board.page_limits",              LAYER_PAGE_LIMITS        );
-    CLR( "board.outline",                  LAYER_BOARD_OUTLINE      );
+    CLR( "board.outline_area",             LAYER_BOARD_OUTLINE_AREA );
     CLR( "board.track_net_names",          NETNAMES_LAYER_ID_START  );
     CLR( "board.pad_net_names",            LAYER_PAD_NETNAMES       );
     CLR( "board.via_net_names",            LAYER_VIA_NETNAMES       );

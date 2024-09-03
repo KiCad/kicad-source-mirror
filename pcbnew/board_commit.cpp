@@ -521,8 +521,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( PCB_BOARD_OUTLINE* outline = board->BoardOutline() )
             {
                 board->UpdateBoardOutline();
-                view->Update( outline );
-            }
+
+                if( view->HasItem( outline ) )
+                    view->Update( outline );
+                else
+                    view->Add( outline );
+             }
         }
 
         if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )

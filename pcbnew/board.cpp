@@ -3114,11 +3114,12 @@ bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 
 void BOARD::UpdateBoardOutline()
 {
-    SHAPE_POLY_SET outline;
-    bool           has_outline = GetBoardPolygonOutlines( m_boardOutline->GetOutline() );
+    m_boardOutline->GetOutline().RemoveAllContours();
 
-    if( !has_outline )
-        m_boardOutline->GetOutline().RemoveAllContours();
+    bool has_outline = GetBoardPolygonOutlines( m_boardOutline->GetOutline() );
+
+    if( has_outline )
+        m_boardOutline->GetOutline().Fracture();
 }
 
 

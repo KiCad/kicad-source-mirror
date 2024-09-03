@@ -152,7 +152,7 @@ wxString LayerName( int aLayer )
     case LAYER_SELECT_OVERLAY:          return _( "Selection highlight" );
     case LAYER_LOCKED_ITEM_SHADOW:      return _( "Locked item shadow" );
     case LAYER_CONFLICTS_SHADOW:        return _( "Courtyard collision shadow" );
-    case LAYER_BOARD_OUTLINE:           return _( "Board outline" );
+    case LAYER_BOARD_OUTLINE_AREA:      return _( "Board outline area" );
     case NETNAMES_LAYER_ID_START:       return _( "Track net names" );
     case LAYER_PAD_NETNAMES:            return _( "Pad net names" );
     case LAYER_VIA_NETNAMES:            return _( "Via net names" );

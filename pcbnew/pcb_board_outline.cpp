@@ -58,21 +58,25 @@ PCB_BOARD_OUTLINE::~PCB_BOARD_OUTLINE()
 {
 }
 
-void PCB_BOARD_OUTLINE::ViewGetLayers( int aLayers[], int& aCount ) const
+
+std::vector<int> PCB_BOARD_OUTLINE::ViewGetLayers() const
 {
-    aCount = 1;
-    aLayers[0] = LAYER_BOARD_OUTLINE;
+    std::vector<int> layers { LAYER_BOARD_OUTLINE_AREA };
+    return layers;
 }
+
 
 const BOX2I PCB_BOARD_OUTLINE::GetBoundingBox() const
 {
     return m_outlines.BBox();
 }
 
+
 PCB_LAYER_ID PCB_BOARD_OUTLINE::GetLayer() const
 {
     return UNDEFINED_LAYER;
 }
+
 
 LSET PCB_BOARD_OUTLINE::GetLayerSet() const
 {
@@ -87,15 +91,15 @@ bool PCB_BOARD_OUTLINE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 double PCB_BOARD_OUTLINE::Similarity( const BOARD_ITEM& aItem ) const
 {
-    if( const PCB_BOARD_OUTLINE* outline = dynamic_cast<const PCB_BOARD_OUTLINE*>( &aItem ) )
+    if( aItem.Type() == KICAD_T::PCB_BOARD_OUTLINE_T )
     {
         if( m_parent == aItem.GetParent() )
-            return 1;
+            return 1.0;
 
         return 0.5;
     }
 
-    return {};
+    return 0.0;
 }
 
 bool PCB_BOARD_OUTLINE::operator==( const BOARD_ITEM& aItem ) const
@@ -123,7 +127,7 @@ wxString PCB_BOARD_OUTLINE::GetClass() const
 
 void PCB_BOARD_OUTLINE::Show( int nestLevel, std::ostream& os ) const
 {
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << wxS( ">\n" );
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 }
 
 #endif

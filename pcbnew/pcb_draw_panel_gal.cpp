@@ -356,6 +356,8 @@ const int GAL_LAYER_ORDER[] =
     BITMAP_LAYER_FOR( B_CrtYd ),
     BITMAP_LAYER_FOR( B_Fab ),
 
+    LAYER_BOARD_OUTLINE_AREA,
+
     LAYER_DRAWINGSHEET
 };
 
@@ -588,7 +590,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
                 m_view->SetTopLayer( PAD_COPPER_LAYER_FOR( layer ) );
                 m_view->SetTopLayer( VIA_COPPER_LAYER_FOR( layer ) );
                 m_view->SetTopLayer( CLEARANCE_LAYER_FOR( layer ) );
-            }
+        }
         }
 
         // Move the active layer to the top of the stack but below all the overlay layers
@@ -670,7 +672,7 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_RATSNEST, true );
     m_view->SetLayerVisible( LAYER_MARKER_SHADOWS, true );
-    m_view->SetLayerVisible( LAYER_BOARD_OUTLINE, true );
+    m_view->SetLayerVisible( LAYER_BOARD_OUTLINE_AREA, true );
     m_view->SetLayerVisible( LAYER_DRC_SHAPE1, true );
     m_view->SetLayerVisible( LAYER_DRC_SHAPE2, true );
 }
@@ -843,6 +845,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 
     m_view->SetLayerDisplayOnly( LAYER_LOCKED_ITEM_SHADOW );
     m_view->SetLayerDisplayOnly( LAYER_CONFLICTS_SHADOW );
+    m_view->SetLayerDisplayOnly( LAYER_BOARD_OUTLINE_AREA );
 
     // Some more required layers settings
     m_view->SetRequired( LAYER_PAD_NETNAMES, LAYER_PADS );
