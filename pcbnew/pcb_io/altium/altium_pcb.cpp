@@ -3983,8 +3983,9 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItem( FOOTPRINT* aFootprint, const ATEX
 void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer )
 {
     std::unique_ptr<PCB_TEXTBOX> pcbTextbox = std::make_unique<PCB_TEXTBOX>( m_board );
-    std::unique_ptr<PCB_TEXT> pcbText = std::make_unique<PCB_TEXT>( m_board );
-    bool isTextbox = aElem.isFrame;
+    std::unique_ptr<PCB_TEXT>    pcbText = std::make_unique<PCB_TEXT>( m_board );
+
+    bool isTextbox = aElem.isFrame && !aElem.isInverted; // Textbox knockout is not supported
 
     static const std::map<wxString, wxString> variableMap = {
         { "LAYER_NAME", "LAYER" },
@@ -3995,65 +3996,25 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
     wxString    kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
     BOARD_ITEM* item = pcbText.get();
     EDA_TEXT*   text = pcbText.get();
+    int         margin = aElem.isOffsetBorder ? aElem.text_offset_width : aElem.margin_border_width;
 
     if( isTextbox )
     {
-        // Altium textboxes do not have borders
-        pcbTextbox->SetBorderEnabled( false );
-
         item = pcbTextbox.get();
         text = pcbTextbox.get();
-        pcbTextbox->SetEnd( VECTOR2I( aElem.textbox_rect_width + aElem.margin_border_width,
-                                      aElem.textbox_rect_height + aElem.margin_border_width ) );
-        pcbTextbox->SetPosition( aElem.position - VECTOR2I( 0, aElem.textbox_rect_height ) );
 
-        switch( aElem.textbox_rect_justification )
-        {
-        case ALTIUM_TEXT_POSITION::LEFT_TOP:
-        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
-        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
-            pcbTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            pcbTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::CENTER_TOP:
-        case ALTIUM_TEXT_POSITION::CENTER_CENTER:
-        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
-            pcbTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            pcbTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
-        case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
-        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
-            pcbTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            pcbTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        default:
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Unknown textbox justification %d, text %s" ),
-                            aElem.textbox_rect_justification, aElem.text );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-            }
-
-            pcbTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            pcbTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        }
-
+        ConvertTexts6ToEdaTextSettings( aElem, text );
+        HelperSetTextboxAlignmentAndPos( aElem, pcbTextbox.get() );
     }
     else
     {
-        pcbText->SetPosition( aElem.position );
-        pcbText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        pcbText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        ConvertTexts6ToEdaTextSettings( aElem, text );
+        HelperSetTextAlignmentAndPos( aElem, text );
     }
 
-    text->SetText(kicadText);
+    text->SetText( kicadText );
     item->SetLayer( aLayer );
     item->SetIsKnockout( aElem.isInverted );
-
-    ConvertTexts6ToEdaTextSettings( aElem, text );
 
     if( isTextbox )
         m_board->Add( pcbTextbox.release(), ADD_MODE::APPEND );
@@ -4072,7 +4033,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     EDA_TEXT*   text = fpText.get();
     PCB_FIELD*  field = nullptr;
 
-    bool isTextbox = aElem.isFrame;
+    bool isTextbox = aElem.isFrame && !aElem.isInverted; // Textbox knockout is not supported
     bool toAdd = false;
 
     if( aElem.isDesignator )
@@ -4106,98 +4067,22 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     {
         item = fpTextbox.get();
         text = fpTextbox.get();
-        fpTextbox->SetPosition( aElem.position - VECTOR2I( 0, aElem.textbox_rect_height ) );
-        fpTextbox->SetStart( aElem.position - VECTOR2I( 0, aElem.textbox_rect_height ) );
-        fpTextbox->SetRectangle( aElem.textbox_rect_height + aElem.margin_border_width,
-                                  aElem.textbox_rect_width + aElem.margin_border_width );
-        fpTextbox->SetBorderEnabled( false );
 
-        // KiCad only does top? alignment for textboxes atm
-        switch( aElem.textbox_rect_justification )
-        {
-        case ALTIUM_TEXT_POSITION::LEFT_TOP:
-        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
-        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
-            fpTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            fpTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::CENTER_TOP:
-        case ALTIUM_TEXT_POSITION::CENTER_CENTER:
-        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
-            fpTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            fpTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
-        case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
-        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
-            fpTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            fpTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        default:
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Unknown textbox justification %d, text %s" ),
-                            aElem.textbox_rect_justification, aElem.text );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-            }
-
-            fpTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            fpTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        }
-
+        ConvertTexts6ToEdaTextSettings( aElem, text );
+        HelperSetTextboxAlignmentAndPos( aElem, fpTextbox.get() );
     }
     else
     {
-        text->SetTextPos( aElem.position );
-
-        switch( aElem.textbox_rect_justification )
-        {
-        case ALTIUM_TEXT_POSITION::LEFT_TOP:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-            break;
-        case ALTIUM_TEXT_POSITION::CENTER_TOP:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-            break;
-        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-            break;
-        default:
-            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-            break;
-        }
+        ConvertTexts6ToEdaTextSettings( aElem, text );
+        HelperSetTextAlignmentAndPos( aElem, text );
     }
 
-
-    wxString  kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
+    wxString kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
 
     text->SetText( kicadText );
     text->SetKeepUpright( false );
     item->SetLayer( aLayer );
     item->SetIsKnockout( aElem.isInverted );
-
-    ConvertTexts6ToEdaTextSettings( aElem, text );
 
     if( toAdd )
     {
@@ -4206,6 +4091,194 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         else
             aFootprint->Add( fpText.release(), ADD_MODE::APPEND );
     }
+}
+
+
+void ALTIUM_PCB::HelperSetTextboxAlignmentAndPos( const ATEXT6& aElem, PCB_TEXTBOX* aTextbox )
+{
+    int margin = aElem.isOffsetBorder ? aElem.text_offset_width : aElem.margin_border_width;
+
+    // Altium textboxes do not have borders
+    aTextbox->SetBorderEnabled( false );
+
+    // Calculate position
+    VECTOR2I kposition = aElem.position;
+
+    if( aElem.isMirrored )
+        kposition.x -= aElem.textbox_rect_width;
+
+    kposition.y -= aElem.textbox_rect_height;
+
+    // Compensate for KiCad's textbox margin
+    int charWidth = aTextbox->GetTextWidth();
+    int charHeight = aTextbox->GetTextHeight();
+
+    VECTOR2I kicadMargin;
+
+    if( !aTextbox->GetFont() || aTextbox->GetFont()->IsStroke() )
+        kicadMargin = VECTOR2I( charWidth * 0.933, charHeight * 0.67 );
+    else
+        kicadMargin = VECTOR2I( charWidth * 0.808, charHeight * 0.844 );
+
+    aTextbox->SetEnd( VECTOR2I( aElem.textbox_rect_width, aElem.textbox_rect_height )
+                        + kicadMargin * 2 - margin * 2 );
+
+    kposition = kposition - kicadMargin + margin;
+    RotatePoint( kposition, aElem.position, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+
+    aTextbox->SetPosition( kposition );
+
+    ALTIUM_TEXT_POSITION justification = aElem.isJustificationValid
+                                                 ? aElem.textbox_rect_justification
+                                                 : ALTIUM_TEXT_POSITION::CENTER_CENTER;
+
+    switch( justification )
+    {
+    case ALTIUM_TEXT_POSITION::LEFT_TOP:
+    case ALTIUM_TEXT_POSITION::LEFT_CENTER:
+    case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
+        aTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        break;
+    case ALTIUM_TEXT_POSITION::CENTER_TOP:
+    case ALTIUM_TEXT_POSITION::CENTER_CENTER:
+    case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
+        aTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        break;
+    case ALTIUM_TEXT_POSITION::RIGHT_TOP:
+    case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
+    case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
+        aTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        break;
+    default:
+        if( m_reporter )
+        {
+            wxString msg;
+            msg.Printf( _( "Unknown textbox justification %d, aText %s" ), justification,
+                        aElem.text );
+            m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
+        }
+
+        aTextbox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aTextbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        break;
+    }
+
+    aTextbox->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+}
+
+
+void ALTIUM_PCB::HelperSetTextAlignmentAndPos( const ATEXT6& aElem, EDA_TEXT* aText )
+{
+    VECTOR2I kposition = aElem.position;
+
+    int margin = aElem.isOffsetBorder ? aElem.text_offset_width : aElem.margin_border_width;
+    int rectWidth = aElem.textbox_rect_width - margin * 2;
+    int rectHeight = aElem.height;
+
+    if( aElem.isMirrored )
+        rectWidth = -rectWidth; 
+
+    ALTIUM_TEXT_POSITION justification = aElem.isJustificationValid
+                                                 ? aElem.textbox_rect_justification
+                                                 : ALTIUM_TEXT_POSITION::LEFT_BOTTOM;
+
+    switch( justification )
+    {
+    case ALTIUM_TEXT_POSITION::LEFT_TOP:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
+        kposition.y -= rectHeight;
+        break;
+    case ALTIUM_TEXT_POSITION::LEFT_CENTER:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+
+        kposition.y -= rectHeight / 2;
+        break;
+    case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        break;
+    case ALTIUM_TEXT_POSITION::CENTER_TOP:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
+        kposition.x += rectWidth / 2;
+        kposition.y -= rectHeight;
+        break;
+    case ALTIUM_TEXT_POSITION::CENTER_CENTER:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+
+        kposition.x += rectWidth / 2;
+        kposition.y -= rectHeight / 2;
+        break;
+    case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+
+        kposition.x += rectWidth / 2;
+        break;
+    case ALTIUM_TEXT_POSITION::RIGHT_TOP:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
+        kposition.x += rectWidth;
+        kposition.y -= rectHeight;
+        break;
+    case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+
+        kposition.x += rectWidth;
+        kposition.y -= rectHeight / 2;
+        break;
+    case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+
+        kposition.x += rectWidth;
+        break;
+    default:
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        break;
+    }
+
+    int charWidth = aText->GetTextWidth();
+    int charHeight = aText->GetTextHeight();
+
+    // Correct for KiCad's baseline offset.
+    // Text height and font must be set correctly before calling.
+    if( !aText->GetFont() || aText->GetFont()->IsStroke() )
+    {
+        switch( aText->GetVertJustify() )
+        {
+        case GR_TEXT_V_ALIGN_TOP: kposition.y -= charHeight * 0.0407; break;
+        case GR_TEXT_V_ALIGN_CENTER: kposition.y += charHeight * 0.0355; break;
+        case GR_TEXT_V_ALIGN_BOTTOM: kposition.y += charHeight * 0.1225; break;
+        default: break;
+        }
+    }
+    else
+    {
+        switch( aText->GetVertJustify() )
+        {
+        case GR_TEXT_V_ALIGN_TOP: kposition.y -= charWidth * 0.016; break;
+        case GR_TEXT_V_ALIGN_CENTER: kposition.y += charWidth * 0.085; break;
+        case GR_TEXT_V_ALIGN_BOTTOM: kposition.y += charWidth * 0.17; break;
+        default: break;
+        }
+    }
+
+    RotatePoint( kposition, aElem.position, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+
+    aText->SetTextPos( kposition );
+    aText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
 }
 
 
@@ -4232,7 +4305,6 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
     aEdaText->SetBoldFlag( aElem.isBold );
     aEdaText->SetItalic( aElem.isItalic );
     aEdaText->SetMirrored( aElem.isMirrored );
-    aEdaText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
 }
 
 
