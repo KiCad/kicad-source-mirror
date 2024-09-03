@@ -2051,7 +2051,35 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     // Reverse mirror footprint graphics and texts.
     for( BOARD_ITEM* item : m_drawings )
+    {
         item->Flip( m_pos, false );
+
+        #if 1
+        // This code is expected to be temporary: a better but more complex fix should
+        // be in drc_test_library_parity.cpp
+        // Before commit 513d659c (master) or 55fafe34 (8.0 branch)
+        // ( (28 08 2024: Fix incorrect flip for graphic segments)
+        // segments ends were flipped (for an obscure reason) creating an issue for
+        // segments living on a board.
+        // They are now not flipped, but it has a side effect for footprints, especially
+        // in DRC test for library parity, any footprint flipped before this commit does
+        // not match library.
+        // so to avoid this issue, swap the ends of segments, like before.
+        // This is ugly fix, until the DRC test can handle swapped and not swapped ends
+        if( item->Type() == PCB_SHAPE_T )
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+            if( shape->GetShape() == SHAPE_T::SEGMENT )
+            {
+                VECTOR2I start = shape->GetStart();
+                VECTOR2I end = shape->GetEnd();
+                shape->SetStart( end );
+                shape->SetEnd( start );
+            }
+        }
+        #endif
+    }
 
     // Now rotate 180 deg if required
     if( aFlipLeftRight )
