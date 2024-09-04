@@ -408,6 +408,33 @@ BOOST_AUTO_TEST_CASE( SimplifyKeepEndPoint )
 }
 
 
+BOOST_AUTO_TEST_CASE( SimplifyPNSChain )
+{
+    SHAPE_LINE_CHAIN chain;
+    chain.Append( VECTOR2I( 157527820, 223074385 ) );
+    chain.Append( VECTOR2I( 186541122, 159990156 ) );
+    chain.Append( VECTOR2I( 186528624, 159977658 ) );
+    chain.Append( VECTOR2I( 186528624, 159770550 ) );
+    chain.Append( VECTOR2I( 186528625, 159366691 ) );
+    chain.Append( VECTOR2I( 186541122, 159354195 ) );
+    chain.Append( VECTOR2I( 186541122, 155566877 ) );
+    chain.Append( VECTOR2I( 187291125, 154816872 ) );
+    chain.Append( VECTOR2I( 187291125, 147807837 ) );
+    chain.Append( VECTOR2I( 189301788, 145797175 ) );
+    chain.Append( VECTOR2I( 194451695, 145797175 ) );
+    chain.Append( VECTOR2I( 195021410, 146366890 ) );
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 12 );
+
+    // The chain should be open, so the points should not be simplified
+    // between the begining and the end.
+    chain.Simplify( 10 );
+
+    BOOST_CHECK_EQUAL( chain.PointCount(), 11 );
+}
+
+
 BOOST_AUTO_TEST_CASE( SimplifyComplexChain )
 {
     SHAPE_LINE_CHAIN chain;

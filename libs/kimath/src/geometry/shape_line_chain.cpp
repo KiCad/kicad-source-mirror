@@ -2602,56 +2602,66 @@ void SHAPE_LINE_CHAIN::Simplify( int aMaxError )
     new_points.reserve( m_points.size() );
     new_shapes.reserve( m_shapes.size() );
 
-    auto is_skip = [this]( size_t i, size_t j, size_t k )
+    for( size_t start_idx = 0; start_idx < m_points.size(); )
     {
-        return ( ( m_points[i].x == m_points[j].x  // First two points on same vertical line
-                && m_points[i].y != m_points[j].y  // and not on same horizontal line
-                && m_points[i].x != m_points[k].x ) // and not on same vertical line as third point
-              || ( m_points[i].y == m_points[j].y
-                && m_points[i].x != m_points[j].x
-                && m_points[i].y != m_points[k].y ) );
-    };
+        new_points.push_back( m_points[start_idx] );
+        new_shapes.push_back( m_shapes[start_idx] );
 
-    for( size_t ii = 0; ii < m_points.size(); )
-    {
-        new_points.push_back( m_points[ii] );
-        new_shapes.push_back( m_shapes[ii] );
-        size_t jj = ( ii + 1 ) % m_points.size();
-        size_t kk = ( ii + 2 ) % m_points.size();
+        // If the line is not closed, we need at least 3 points before simplifying
+        if( !m_closed && start_idx == m_points.size() - 2 )
+            break;
 
-        if( m_shapes[ii].first != SHAPE_IS_PT || m_shapes[jj].first != SHAPE_IS_PT
-            || m_shapes[kk].first != SHAPE_IS_PT
-            || is_skip( ii, jj, kk ) )
+        // Initialize the end index to be two points ahead of start
+        size_t end_idx = ( start_idx + 2 ) % m_points.size();
+        bool can_simplify = true;
+
+        while( can_simplify && end_idx != start_idx && ( end_idx > start_idx || m_closed ) )
         {
-            ++ii;
-            continue;
-        }
-
-        while( ii != kk && jj > ii && !( kk < ii && !m_closed ) )
-        {
-            bool too_far = false;
-
-            for( size_t ll = ( ii + 1 ) % m_points.size(); ll != kk;
-                        ll = ( ll + 1 ) % m_points.size() )
+            // Test all points between start_idx and end_idx
+            for( size_t test_idx = ( start_idx + 1 ) % m_points.size();
+                 test_idx != end_idx;
+                 test_idx = ( test_idx + 1 ) % m_points.size() )
             {
-                if( !TestSegmentHitFast( m_points[ll], m_points[ii], m_points[kk], aMaxError ) )
+                // Check if all points are regular points (not arcs)
+                if( m_shapes[start_idx].first != SHAPE_IS_PT ||
+                    m_shapes[test_idx].first != SHAPE_IS_PT ||
+                    m_shapes[end_idx].first != SHAPE_IS_PT )
                 {
-                    too_far = true;
+                    can_simplify = false;
+                    break;
+                }
+
+                // Test if the point is within the allowed error
+                if( !TestSegmentHit( m_points[test_idx], m_points[start_idx], m_points[end_idx], aMaxError ) )
+                {
+                    can_simplify = false;
                     break;
                 }
             }
 
-            if( too_far || is_skip( ii, jj, kk ) )
-                break;
-
-            jj = ( jj + 1 ) % m_points.size();
-            kk = ( kk + 1 ) % m_points.size();
+            if( can_simplify )
+            {
+                // If we can simplify, move end_idx one further
+                end_idx = ( end_idx + 1 ) % m_points.size();
+            }
         }
 
-        if( ii == kk || jj <= ii )
-            break;
+        // If we couldn't simplify at all, move to the next point
+        if( end_idx == ( start_idx + 2 ) % m_points.size() )
+        {
+            ++start_idx;
+        }
+        else
+        {
+            // Otherwise, jump to the last point we could include in the simplification
+            size_t new_start_idx = ( end_idx + m_points.size() - 1 ) % m_points.size();
 
-        ii = jj;
+            // If we looped all the way around, we're done
+            if( new_start_idx <= start_idx )
+                break;
+
+            start_idx = new_start_idx;
+        }
     }
 
     // If we have only one point, we need to add a second point to make a line
