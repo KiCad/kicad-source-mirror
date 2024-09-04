@@ -1547,24 +1547,28 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
-        BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( ptr.release() );
-        wxCHECK2( item, continue );
+        EDA_ITEM* eda_item = ptr.release();
 
-        newItems.push_back( item );
-
-        if( group )
+        if( eda_item->IsBOARD_ITEM() )
         {
-            group->AddItem( item );
-            groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
-        }
-        else
-        {
-            selectedItems.push_back( item );
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+
+            newItems.push_back( item );
+
+            if( group )
+            {
+                group->AddItem( item );
+                groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+            }
+            else
+            {
+                selectedItems.push_back( item );
+            }
+
+            layer = item->GetLayer();
         }
 
-        layer = item->GetLayer();
-
-        preview.Add( item );
+        preview.Add( eda_item );
     }
 
     // Clear the current selection then select the drawings so that edit tools work on them
@@ -2960,10 +2964,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( std::pair<KIGFX::VIEW_ITEM*, int> it : items )
             {
-                BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( it.first );
-
-                if( !item )
+                if( !it.first->IsBOARD_ITEM() )
                     continue;
+
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
                 if( item->Type() == PCB_ZONE_T && !static_cast<ZONE*>( item )->GetIsRuleArea() )
                 {

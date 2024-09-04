@@ -1585,8 +1585,11 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
     // Promote generated members to their PCB_GENERATOR parents
     for( EDA_ITEM* item : m_selection )
     {
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-        PCB_GROUP*  parent = boardItem ? boardItem->GetParentGroup() : nullptr;
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+        PCB_GROUP*  parent = boardItem->GetParentGroup();
 
         if( parent && parent->Type() == PCB_GENERATOR_T )
         {
@@ -2950,8 +2953,9 @@ void PCB_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, bool aUs
     if( aUsingOverlay && aMode != BRIGHTENED )
         view()->Hide( aItem, true );    // Hide the original item, so it is shown only on overlay
 
-    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
+    if( aItem->IsBOARD_ITEM() )
     {
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( aItem );
         boardItem->RunOnDescendants( std::bind( &PCB_SELECTION_TOOL::highlightInternal, this, _1,
                                                 aMode, aUsingOverlay ) );
     }
@@ -2985,8 +2989,9 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
         view()->Update( aItem );        // ... and make sure it's redrawn un-selected
     }
 
-    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
+    if( aItem->IsBOARD_ITEM() )
     {
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( aItem );
         boardItem->RunOnDescendants( std::bind( &PCB_SELECTION_TOOL::unhighlightInternal, this, _1,
                                                 aMode, aUsingOverlay ) );
     }

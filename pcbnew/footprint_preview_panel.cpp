@@ -245,7 +245,7 @@ wxWindow* FOOTPRINT_PREVIEW_PANEL::GetWindow()
 FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* aParent,
                                                        UNITS_PROVIDER* aUnitsProvider )
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     if( cfg->m_Window.grid.grids.empty() )
         cfg->m_Window.grid.grids = cfg->DefaultGridSizeList();

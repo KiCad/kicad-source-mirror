@@ -260,7 +260,9 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         break;
 
     default:
-        boardItem = dynamic_cast<BOARD_ITEM*>( aTestItem );
+        if( aTestItem->IsBOARD_ITEM() )
+            boardItem = static_cast<BOARD_ITEM*>( aTestItem );
+
         break;
     }
 

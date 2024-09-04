@@ -494,8 +494,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         case UNDO_REDO::REGROUP:    /* grouped items are ungrouped */
             aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
 
-            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
+            if( eda_item->IsBOARD_ITEM() )
             {
+                BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( eda_item );
+
                 if( PCB_GROUP* group = boardItem->GetParentGroup() )
                 {
                     aList->SetPickedItemGroupId( group->m_Uuid, ii );
@@ -509,8 +511,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         case UNDO_REDO::UNGROUP:    /* ungrouped items are re-added to their previuos groups */
             aList->SetPickedItemStatus( UNDO_REDO::REGROUP, ii );
 
-            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
+            if( eda_item->IsBOARD_ITEM() )
             {
+                BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( eda_item );
+
                 PCB_GROUP* group = dynamic_cast<PCB_GROUP*>(
                         GetBoard()->GetItem( aList->GetPickedItemGroupId( ii ) ) );
 
@@ -646,8 +650,8 @@ void PCB_BASE_EDIT_FRAME::ClearListAndDeleteItems( PICKED_ITEMS_LIST* aList )
                 wxASSERT_MSG( item->HasFlag( UR_TRANSIENT ),
                               "Item on undo/redo list not owned by undo/redo!" );
 
-                if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
-                    boardItem->SetParentGroup( nullptr );
+                if( item->IsBOARD_ITEM() )
+                    static_cast<BOARD_ITEM*>( item )->SetParentGroup( nullptr );
 
                 delete item;
             } );

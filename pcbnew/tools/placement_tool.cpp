@@ -89,13 +89,14 @@ std::vector<std::pair<BOARD_ITEM*, BOX2I>> GetBoundingBoxes( const T& aItems )
 
     for( EDA_ITEM* item : aItems )
     {
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+        if( !item->IsBOARD_ITEM() )
+            continue;
 
-        wxCHECK2( boardItem, continue );
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-        if( item->Type() == PCB_FOOTPRINT_T )
+        if( boardItem->Type() == PCB_FOOTPRINT_T )
         {
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
             rects.emplace_back( std::make_pair( footprint,
                                                 footprint->GetBoundingBox( false, false ) ) );
         }
@@ -163,8 +164,10 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-        wxCHECK2( boardItem, continue );
+        if( !item->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
         // We do not lock items in the footprint editor
         if( boardItem->IsLocked() && m_frame->IsType( FRAME_PCB_EDITOR ) )
@@ -177,7 +180,9 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
                 lockedItems.push_back( boardItem );
         }
         else
+        {
             itemsToAlign.push_back( boardItem );
+        }
     }
 
     aItemsToAlign = GetBoundingBoxes( itemsToAlign );

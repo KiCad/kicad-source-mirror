@@ -96,10 +96,14 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
     for( size_t i = 0; i < sorted.size() - 1; i++ )
     {
-        BOARD_ITEM* a = dynamic_cast<BOARD_ITEM*>( sorted[i] );
-        BOARD_ITEM* b = dynamic_cast<BOARD_ITEM*>( sorted[( i + 1 ) % sorted.size()] );
+        EDA_ITEM* edaItemA = sorted[i];
+        EDA_ITEM* edaItemB = sorted[( i + 1 ) % sorted.size()];
 
-        wxCHECK2( a && b, continue );
+        if( !edaItemA->IsBOARD_ITEM() || !edaItemB->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* a = static_cast<BOARD_ITEM*>( edaItemA );
+        BOARD_ITEM* b = static_cast<BOARD_ITEM*>( edaItemB );
 
         // Swap X,Y position
         VECTOR2I aPos = a->GetPosition(), bPos = b->GetPosition();
@@ -354,16 +358,20 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
     for( EDA_ITEM* item : selection )
     {
-        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
+        if( item->IsBOARD_ITEM() )
         {
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
             if( !selection.IsHover() )
                 orig_items.push_back( boardItem );
 
             sel_items.push_back( boardItem );
         }
 
-        if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
+        if( item->Type() == PCB_FOOTPRINT_T )
         {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+
             for( PAD* pad : footprint->Pads() )
                 sel_items.push_back( pad );
 
@@ -391,8 +399,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
         for( EDA_ITEM* item : selection.GetItemsSortedBySelectionOrder() )
         {
-            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
-                orig_items.push_back( boardItem );
+            if( item->IsBOARD_ITEM() )
+                orig_items.push_back( static_cast<BOARD_ITEM*>( item ) );
         }
 
         updateStatusPopup( orig_items[ itemIdx ], itemIdx + 1, orig_items.size() );

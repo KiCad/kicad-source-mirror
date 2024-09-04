@@ -260,9 +260,9 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* eda_item : selection )
     {
-        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( eda_item ) )
+        if( eda_item->IsBOARD_ITEM() )
         {
-            if( item->IsLocked() )
+            if( static_cast<BOARD_ITEM*>( eda_item )->IsLocked() )
                 group->SetLocked( true );
         }
     }
@@ -271,8 +271,8 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* eda_item : selection )
     {
-        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( eda_item ) )
-            commit.Stage( item, CHT_GROUP );
+        if( eda_item->IsBOARD_ITEM() )
+            commit.Stage( static_cast<BOARD_ITEM*>( eda_item ), CHT_GROUP );
     }
 
     commit.Push( _( "Group Items" ) );

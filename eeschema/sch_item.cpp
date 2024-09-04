@@ -52,7 +52,7 @@
 /* They are not inline because this creates problems with gcc at linking time in debug mode */
 
 SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
-    EDA_ITEM( aParent, aType )
+    EDA_ITEM( aParent, aType, true, false )
 {
     m_layer              = LAYER_WIRE;   // It's only a default, in fact
     m_fieldsAutoplaced   = FIELDS_AUTOPLACED_NO;

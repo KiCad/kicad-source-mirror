@@ -302,8 +302,11 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDrilledHole( const PNS::ITEM* aItem )
     if( !isHole( aItem ) )
         return false;
 
-    if( PAD* pad = dynamic_cast<PAD*>( aItem->Parent() ) )
+    if( aItem->Parent() && aItem->Parent()->Type() == PCB_PAD_T )
+    {
+        PAD* pad = static_cast<PAD*>( aItem->Parent() );
         return pad->GetDrillSizeX() && pad->GetDrillSizeX() == pad->GetDrillSizeY();
+    }
 
     // Via holes are (currently) always round
 

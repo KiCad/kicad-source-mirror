@@ -102,7 +102,7 @@ public:
         size_t typeHash = typeid( T ).hash_code();
 
          if( m_app_settings_cache.count( typeHash ) )
-            ret = dynamic_cast<T*>( m_app_settings_cache.at( typeHash ) );
+            ret = static_cast<T*>( m_app_settings_cache.at( typeHash ) );
 
         if( ret )
             return ret;
@@ -116,6 +116,42 @@ public:
         if( it != m_settings.end() )
         {
             ret = dynamic_cast<T*>( it->get() );
+        }
+        else
+        {
+            throw std::runtime_error( "Tried to GetAppSettings before registering" );
+        }
+
+        m_app_settings_cache[typeHash] = ret;
+
+        return ret;
+    }
+
+    template<typename T>
+    T* GetAppSettings( const wxString& aFilename )
+    {
+#ifndef __WXMAC__
+        return GetAppSettings<T>();
+#endif
+
+        T*     ret      = nullptr;
+        size_t typeHash = typeid( T ).hash_code();
+
+         if( m_app_settings_cache.count( typeHash ) )
+            ret = static_cast<T*>( m_app_settings_cache.at( typeHash ) );
+
+        if( ret )
+            return ret;
+
+        auto it = std::find_if( m_settings.begin(), m_settings.end(),
+                                [&]( const std::unique_ptr<JSON_SETTINGS>& aSettings )
+                                {
+                                    return aSettings->GetFilename() == aFilename;
+                                } );
+
+        if( it != m_settings.end() )
+        {
+            ret = static_cast<T*>( it->get() );
         }
         else
         {

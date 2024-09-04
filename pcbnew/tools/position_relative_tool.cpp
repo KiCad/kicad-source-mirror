@@ -128,19 +128,21 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
 
     for( EDA_ITEM* item : m_selection )
     {
-        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
-        {
-            // Don't move a pad by itself unless editing the footprint
-            if( boardItem->Type() == PCB_PAD_T
-                && !frame()->GetPcbNewSettings()->m_AllowFreePads
-                && frame()->IsType( FRAME_PCB_EDITOR ) )
-            {
-                boardItem = boardItem->GetParent();
-            }
+        if( !item->IsBOARD_ITEM() )
+            continue;
 
-            m_commit->Modify( boardItem );
-            boardItem->Move( aggregateTranslation );
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+        // Don't move a pad by itself unless editing the footprint
+        if( boardItem->Type() == PCB_PAD_T
+            && !frame()->GetPcbNewSettings()->m_AllowFreePads
+            && frame()->IsType( FRAME_PCB_EDITOR ) )
+        {
+            boardItem = boardItem->GetParent();
         }
+
+        m_commit->Modify( boardItem );
+        boardItem->Move( aggregateTranslation );
     }
 
     m_commit->Push( _( "Position Relative" ) );

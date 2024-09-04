@@ -83,12 +83,12 @@ void ARRAY_CREATOR::Invoke()
 
         for ( int i = 0; i < m_selection.Size(); ++i )
         {
-            BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( m_selection[ i ] );
-
-            if( !item )
+            if( !m_selection[i]->IsBOARD_ITEM() )
                 continue;
 
-            FOOTPRINT* parentFootprint = dynamic_cast<FOOTPRINT*>( item->GetParentFootprint() );
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection[ i ] );
+
+            FOOTPRINT* parentFootprint = item->GetParentFootprint();
 
             // If it is not the footprint editor, then duplicate the parent footprint instead.
             // This check assumes that the footprint child objects are correctly parented, if

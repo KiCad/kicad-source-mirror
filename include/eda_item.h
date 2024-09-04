@@ -463,8 +463,8 @@ public:
 #endif
 
 protected:
-    EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
-    EDA_ITEM( KICAD_T idType );
+    EDA_ITEM( EDA_ITEM* parent, KICAD_T idType, bool isSCH_ITEM = false, bool isBOARD_ITEM = false );
+    EDA_ITEM( KICAD_T idType, bool isSCH_ITEM = false, bool isBOARD_ITEM = false );
     EDA_ITEM( const EDA_ITEM& base );
 
     /**

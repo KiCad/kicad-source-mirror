@@ -201,9 +201,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     for( COMMIT_LINE& ent : m_changes )
     {
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
+        if( !ent.m_item || !ent.m_item->IsBOARD_ITEM() )
+            continue;
 
-        if( m_isBoardEditor && boardItem )
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+
+        if( m_isBoardEditor )
         {
             if( boardItem->Type() == PCB_VIA_T || boardItem->Type() == PCB_FOOTPRINT_T
                     || boardItem->IsOnLayer( F_Mask ) || boardItem->IsOnLayer( B_Mask ) )
@@ -242,7 +245,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
         }
 
-        if( boardItem && boardItem->IsSelected() )
+        if( boardItem->IsSelected() )
             selectedModified = true;
     }
 
@@ -252,12 +255,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     for( COMMIT_LINE& ent : m_changes )
     {
-        int changeType = ent.m_type & CHT_TYPE;
-        int changeFlags = ent.m_type & CHT_FLAGS;
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
+        if( !ent.m_item || !ent.m_item->IsBOARD_ITEM() )
+            continue;
 
-        wxASSERT( ent.m_item );
-        wxCHECK2( boardItem, continue );
+        BOARD_ITEM* boardItem = boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+        int         changeType = ent.m_type & CHT_TYPE;
+        int         changeFlags = ent.m_type & CHT_FLAGS;
 
         switch( changeType )
         {
@@ -415,7 +418,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
         case CHT_MODIFY:
         {
-            BOARD_ITEM* boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
+            BOARD_ITEM* boardItemCopy = nullptr;
+
+            if( ent.m_copy && ent.m_copy->IsBOARD_ITEM() )
+                boardItemCopy = static_cast<BOARD_ITEM*>( ent.m_copy );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
@@ -503,8 +509,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         for( size_t i = num_changes; i < m_changes.size(); ++i )
         {
             COMMIT_LINE& ent = m_changes[i];
-            BOARD_ITEM*  boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
-            BOARD_ITEM*  boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
+            BOARD_ITEM*  boardItem = nullptr;
+            BOARD_ITEM*  boardItemCopy = nullptr;
+
+            if( ent.m_item && ent.m_item->IsBOARD_ITEM() )
+                boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+
+            if( ent.m_copy && ent.m_copy->IsBOARD_ITEM() )
+                boardItemCopy = static_cast<BOARD_ITEM*>( ent.m_copy );
 
             wxCHECK2( boardItem, continue );
 
@@ -599,8 +611,8 @@ EDA_ITEM* BOARD_COMMIT::MakeImage( EDA_ITEM* aItem )
 {
     EDA_ITEM* clone = aItem->Clone();
 
-    if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( clone ) )
-        board_item->SetParentGroup( nullptr );
+    if( clone->IsBOARD_ITEM() )
+        static_cast<BOARD_ITEM*>( clone )->SetParentGroup( nullptr );
 
     clone->SetFlags( UR_TRANSIENT );
 
@@ -624,11 +636,13 @@ void BOARD_COMMIT::Revert()
     for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
     {
         COMMIT_LINE& ent = *it;
-        BOARD_ITEM*  boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
+
+        if( !ent.m_item || !ent.m_item->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM*  boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
         int          changeType = ent.m_type & CHT_TYPE;
         int          changeFlags = ent.m_type & CHT_FLAGS;
-
-        wxCHECK2( boardItem, continue );
 
         switch( changeType )
         {
@@ -660,15 +674,18 @@ void BOARD_COMMIT::Revert()
             break;
 
         case CHT_REMOVE:
+        {
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
             view->Add( boardItem );
             connectivity->Add( boardItem );
 
-            if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( board->GetItem( ent.m_parent ) ) )
+            BOARD_ITEM* parent = board->GetItem( ent.m_parent );
+
+            if( parent->Type() == PCB_FOOTPRINT_T )
             {
-                parentFP->Add( boardItem, ADD_MODE::INSERT );
+                static_cast<FOOTPRINT*>( parent )->Add( boardItem, ADD_MODE::INSERT );
             }
             else
             {
@@ -677,14 +694,15 @@ void BOARD_COMMIT::Revert()
             }
 
             break;
+        }
 
         case CHT_MODIFY:
         {
             view->Remove( boardItem );
             connectivity->Remove( boardItem );
 
-            BOARD_ITEM* boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
-            wxASSERT( boardItemCopy );
+            wxASSERT( ent.m_copy && ent.m_copy->IsBOARD_ITEM() );
+            BOARD_ITEM* boardItemCopy = static_cast<BOARD_ITEM*>( ent.m_copy );
             boardItem->SwapItemData( boardItemCopy );
 
             if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( boardItem ) )

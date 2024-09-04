@@ -1243,8 +1243,6 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
                     fpMatrix, SFVEC3F( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor,
                                        modelunit_to_3d_units_factor ) );
 
-            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( fp );
-
             // Get the list of model files for this model
             S3D_CACHE* cacheMgr = m_boardAdapter.Get3dCacheManager();
             auto       sM       = fp->Models().begin();
@@ -1304,7 +1302,7 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
                                 SFVEC3F( sM->m_Scale.x, sM->m_Scale.y, sM->m_Scale.z ) );
 
                         addModels( aDstContainer, modelPtr, modelMatrix, (float) sM->m_Opacity,
-                                   aSkipMaterialInformation, boardItem );
+                                   aSkipMaterialInformation, fp );
                     }
                 }
 

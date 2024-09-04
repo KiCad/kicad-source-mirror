@@ -227,7 +227,7 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
     PCBNEW_SETTINGS* cfg = nullptr;
     try
     {
-        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
     }
     catch( const std::runtime_error& e )
     {
@@ -253,7 +253,7 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
 
 void PANEL_FOOTPRINT_CHOOSER::FinishSetup()
 {
-    if( PCBNEW_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>() )
+    if( auto* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
     {
         auto horizPixelsFromDU =
                 [&]( int x ) -> int

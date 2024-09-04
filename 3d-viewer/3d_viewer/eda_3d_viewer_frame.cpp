@@ -113,7 +113,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
     ANTIALIASING_MODE       aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
 
     m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode ), m_boardAdapter,
@@ -479,7 +479,7 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_RESET_DEFAULTS:
     {
-        auto cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+        auto cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
         cfg->ResetToDefaults();
         LoadSettings( cfg );
 
@@ -561,8 +561,8 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    EDA_3D_VIEWER_SETTINGS* cfg = dynamic_cast<EDA_3D_VIEWER_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    // Dynamic_cast here will fail on Mac when called from CvPCB.
+    EDA_3D_VIEWER_SETTINGS* cfg = static_cast<EDA_3D_VIEWER_SETTINGS*>( aCfg );
 
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::LoadSettings" ) );
 
@@ -606,7 +606,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
 void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 {
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
 
     EDA_BASE_FRAME::SaveSettings( cfg );
 
@@ -642,7 +642,7 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     ReCreateMainToolbar();
 
     loadCommonSettings();
-    applySettings( Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>() );
+    applySettings( Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
 
     m_appearancePanel->CommonSettingsChanged();
 
@@ -673,7 +673,7 @@ void EDA_3D_VIEWER_FRAME::ShowChangedLanguage()
 void EDA_3D_VIEWER_FRAME::ToggleAppearanceManager()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
     wxAuiPaneInfo&          layersManager = m_auimgr.GetPane( "LayersManager" );
 
     // show auxiliary Vertical layers and visibility manager toolbar

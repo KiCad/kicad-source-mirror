@@ -616,10 +616,11 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    BOARD_ITEM* a = dynamic_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
-    BOARD_ITEM* b = dynamic_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
+    if( !selection.GetItem( 0 )->IsBOARD_ITEM() || !selection.GetItem( 1 )->IsBOARD_ITEM() )
+        return 0;
 
-    wxCHECK( a && b, 0 );
+    BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
+    BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
 
     if( a->Type() == PCB_GROUP_T )
     {
@@ -1245,14 +1246,15 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     dialog->DeleteAllPages();
 
-    BOARD_ITEM*    item = dynamic_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
+    if( !selection.GetItem( 0 )->IsBOARD_ITEM() )
+        return 0;
+
+    BOARD_ITEM*    item = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     DRC_CONSTRAINT constraint;
 
     bool compileError = false;
     bool courtyardError = false;
     std::unique_ptr<DRC_ENGINE> drcEngine = makeDRCEngine( &compileError, &courtyardError );
-
-    wxCHECK( item, 0 );
 
     WX_HTML_REPORT_BOX* r = nullptr;
 
@@ -1936,7 +1938,10 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 
     for( std::size_t i = 0; i < queued_items.size(); ++i )
     {
-        BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( queued_items[i] );
+        if( !queued_items[i]->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( queued_items[i] );
 
         wxCHECK2( item, continue );
 
