@@ -396,8 +396,8 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     if( !getPolys( preflightSettings ) )
         return 0;
 
-    if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selection.Front() ) )
-        parentFootprint = item->GetParentFootprint();
+    if( selection.Front() && selection.Front()->IsBOARD_ITEM() )
+        parentFootprint = static_cast<BOARD_ITEM*>( selection.Front() )->GetParentFootprint();
 
     PCB_LAYER_ID layer = m_frame->GetActiveLayer();
     BOARD_COMMIT commit( m_frame );
@@ -407,7 +407,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         bool showCopyLineWidth = true;
 
         // No copy-line-width option for pads
-        if( dynamic_cast<PAD*>( selection.Front() ) )
+        if( selection.Front()->Type() == PCB_PAD_T )
         {
             if( m_userSettings.m_Strategy == COPY_LINEWIDTH )
                 m_userSettings.m_Strategy = CENTERLINE;
@@ -462,20 +462,22 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
                 for( EDA_ITEM* item : selection )
                 {
-                    if( BOARD_ITEM* candidate = dynamic_cast<BOARD_ITEM*>( item ) )
-                    {
-                        if( candidate->HasLineStroke() )
-                        {
-                            pos = candidate->GetPosition();
+                    if( !item->IsBOARD_ITEM() )
+                        continue;
 
-                            if( !topLeftItem
-                                || ( pos.x < topLeftItem->GetPosition().x )
-                                || ( topLeftItem->GetPosition().x == pos.x
-                                        && pos.y < topLeftItem->GetPosition().y ) )
-                            {
-                                topLeftItem = candidate;
-                                resolvedSettings.m_LineWidth = topLeftItem->GetStroke().GetWidth();
-                            }
+                    BOARD_ITEM* candidate = static_cast<BOARD_ITEM*>( item );
+
+                    if( candidate->HasLineStroke() )
+                    {
+                        pos = candidate->GetPosition();
+
+                        if( !topLeftItem
+                            || ( pos.x < topLeftItem->GetPosition().x )
+                            || ( topLeftItem->GetPosition().x == pos.x
+                                    && pos.y < topLeftItem->GetPosition().y ) )
+                        {
+                            topLeftItem = candidate;
+                            resolvedSettings.m_LineWidth = topLeftItem->GetStroke().GetWidth();
                         }
                     }
                 }
@@ -1162,8 +1164,11 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
                 }
             } );
 
-    EDA_ITEM* source = selection.Front();
-    VECTOR2I start, end, mid;
+    if( !selection.Front()->IsBOARD_ITEM() )
+        return -1;
+
+    BOARD_ITEM* source = static_cast<BOARD_ITEM*>( selection.Front() );
+    VECTOR2I    start, end, mid;
 
     // Offset the midpoint along the normal a little bit so that it's more obviously an arc
     const double offsetRatio = 0.1;
@@ -1183,16 +1188,8 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
     PCB_BASE_EDIT_FRAME*  frame  = getEditFrame<PCB_BASE_EDIT_FRAME>();
     BOARD_ITEM_CONTAINER* parent = frame->GetModel();
-
-    BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( source );
-
-    // Don't continue processing if we don't actually have a board item
-    if( !boardItem )
-        return 0;
-
-    PCB_LAYER_ID layer = boardItem->GetLayer();
-
-    BOARD_COMMIT commit( m_frame );
+    PCB_LAYER_ID          layer = source->GetLayer();
+    BOARD_COMMIT          commit( m_frame );
 
     if( source->Type() == PCB_SHAPE_T )
     {

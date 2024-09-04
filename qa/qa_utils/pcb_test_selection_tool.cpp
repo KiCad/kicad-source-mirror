@@ -124,8 +124,9 @@ void PCB_TEST_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, boo
     if( aUsingOverlay && aMode != BRIGHTENED )
         view()->Hide( aItem, true ); // Hide the original item, so it is shown only on overlay
 
-    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
+    if( aItem->IsBOARD_ITEM() )
     {
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( aItem );
         boardItem->RunOnDescendants( std::bind( &PCB_TEST_SELECTION_TOOL::highlightInternal, this,
                                                 std::placeholders::_1, aMode, aUsingOverlay ) );
     }
@@ -159,8 +160,9 @@ void PCB_TEST_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, b
         view()->Update( aItem );      // ... and make sure it's redrawn un-selected
     }
 
-    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
+    if( aItem->IsBOARD_ITEM() )
     {
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( aItem );
         boardItem->RunOnDescendants( std::bind( &PCB_TEST_SELECTION_TOOL::unhighlightInternal, this,
                                                 std::placeholders::_1, aMode, aUsingOverlay ) );
     }

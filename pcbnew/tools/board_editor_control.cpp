@@ -1246,9 +1246,10 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
         for( EDA_ITEM* item : selection )
         {
-            BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
+            if( !item->IsBOARD_ITEM() )
+                continue;
 
-            if( board_item && board_item->IsLocked() )
+            if( static_cast<BOARD_ITEM*>( item )->IsLocked() )
             {
                 aMode = OFF;
                 break;
@@ -1258,19 +1259,25 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
-        wxCHECK2( board_item, continue );
+        if( !item->IsBOARD_ITEM() )
+            continue;
 
-        PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( board_item->GetParentGroup() );
+        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+        PCB_GROUP*  parent_group = board_item->GetParentGroup();
 
-        if( generator && commit.GetStatus( generator ) != CHT_MODIFY )
+        if( parent_group && parent_group->Type() == PCB_GENERATOR_T )
         {
-            commit.Modify( generator );
+            PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( parent_group );
 
-            if( aMode == ON )
-                generator->SetLocked( true );
-            else
-                generator->SetLocked( false );
+            if( generator && commit.GetStatus( generator ) != CHT_MODIFY )
+            {
+                commit.Modify( generator );
+
+                if( aMode == ON )
+                    generator->SetLocked( true );
+                else
+                    generator->SetLocked( false );
+            }
         }
 
         commit.Modify( board_item );

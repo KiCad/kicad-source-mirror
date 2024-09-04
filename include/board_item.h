@@ -79,7 +79,7 @@ class BOARD_ITEM : public EDA_ITEM
 {
 public:
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer = F_Cu ) :
-            EDA_ITEM( aParent, idtype ),
+            EDA_ITEM( aParent, idtype, false, true ),
             m_layer( aLayer ),
             m_isKnockout( false ),
             m_isLocked( false ),

@@ -230,7 +230,7 @@ void BOARD_ADAPTER::ReloadColorSettings() noexcept
 
     try
     {
-        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
     }
     catch( const std::runtime_error& e )
     {

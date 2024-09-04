@@ -1777,17 +1777,16 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             tableDlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
         }
     }
-    else if( selection.Size() == 1 )
+    else if( selection.Size() == 1 && selection.Front()->IsBOARD_ITEM() )
     {
         // Display properties dialog
-        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selection.Front() ) )
-        {
-            // Do not handle undo buffer, it is done by the properties dialogs
-            editFrame->OnEditItemRequest( item );
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
-            // Notify other tools of the changes
-            m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
-        }
+        // Do not handle undo buffer, it is done by the properties dialogs
+        editFrame->OnEditItemRequest( item );
+
+        // Notify other tools of the changes
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
     }
     else if( selection.Size() == 0 && getView()->IsLayerVisible( LAYER_DRAWINGSHEET ) )
     {
@@ -1813,11 +1812,13 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         for( EDA_ITEM* eda_item : selCopy )
         {
-            if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( eda_item ) )
-            {
-                if( !( item->GetLayerSet() & visible ).any() )
-                    m_selectionTool->RemoveItemFromSel( item );
-            }
+            if( !eda_item->IsBOARD_ITEM() )
+                continue;
+
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+
+            if( !( item->GetLayerSet() & visible ).any() )
+                m_selectionTool->RemoveItemFromSel( item );
         }
     }
 
@@ -1927,8 +1928,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             if( !item->IsNew() && !item->IsMoving() )
                 commit->Modify( item );
 
-            if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
+            if( item->IsBOARD_ITEM() )
             {
+                BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+
                 board_item->Rotate( refPt, rotateAngle );
                 board_item->Normalize();
             }
@@ -2292,14 +2295,16 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
-        {
-            if( !boardItem->IsNew() && !boardItem->IsMoving() )
-                commit->Modify( boardItem );
+        if( !item->IsBOARD_ITEM() )
+            continue;
 
-            boardItem->Flip( refPt, leftRight );
-            boardItem->Normalize();
-        }
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+        if( !boardItem->IsNew() && !boardItem->IsMoving() )
+            commit->Modify( boardItem );
+
+        boardItem->Flip( refPt, leftRight );
+        boardItem->Normalize();
     }
 
     if( !localCommit.Empty() )
@@ -2347,10 +2352,12 @@ void EDIT_TOOL::removeNonRootItems( std::unordered_set<EDA_ITEM*>& items )
 
     while( itr != items.end() )
     {
-        BOARD_ITEM* curItem = dynamic_cast<BOARD_ITEM*>( *itr );
+        EDA_ITEM* item = *itr;
 
-        if( curItem )
+        if( item->IsBOARD_ITEM() )
         {
+            BOARD_ITEM* curItem = static_cast<BOARD_ITEM*>( item );
+
             if( curItem->Type() == PCB_GROUP_T || curItem->Type() == PCB_GENERATOR_T )
             {
                 std::unordered_set<BOARD_ITEM*> childItems;
@@ -2388,10 +2395,11 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
     for( EDA_ITEM* item : rootItems )
     {
-        BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
-        wxCHECK2( board_item, continue );
+        if( !item->IsBOARD_ITEM() )
+            continue;
 
-        FOOTPRINT* parentFP = board_item->GetParentFootprint();
+        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+        FOOTPRINT*  parentFP = board_item->GetParentFootprint();
 
         if( board_item->GetParentGroup() )
             commit.Stage( board_item, CHT_UNGROUP );
@@ -2696,9 +2704,10 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
         for( EDA_ITEM* item : selection )
         {
-            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+            if( !item->IsBOARD_ITEM() )
+                continue;
 
-            wxCHECK2( boardItem, continue );
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
             if( !boardItem->IsNew() )
                 commit.Modify( boardItem );
@@ -2782,10 +2791,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // Old selection is cleared, and new items are then selected.
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* dupe_item = nullptr;
-        BOARD_ITEM* orig_item = dynamic_cast<BOARD_ITEM*>( item );
+        if( !item->IsBOARD_ITEM() )
+            continue;
 
-        wxCHECK2( orig_item, continue );
+        BOARD_ITEM* dupe_item = nullptr;
+        BOARD_ITEM* orig_item = static_cast<BOARD_ITEM*>( item );
 
         if( m_isFootprintEditor )
         {
@@ -2968,8 +2978,11 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
     // When there is only one item selected, the reference point is its position...
     if( aSelection.Size() == 1 && aSelection.Front()->Type() != PCB_TABLE_T )
     {
-        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aSelection.Front() ) )
+        if( aSelection.Front()->IsBOARD_ITEM() )
+        {
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aSelection.Front() );
             aSelection.SetReferencePoint( item->GetPosition() );
+        }
     }
     // ...otherwise modify items with regard to the grid-snapped center position
     else
@@ -3124,8 +3137,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
         for( EDA_ITEM* item : selection )
         {
-            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
-                items.push_back( boardItem );
+            if( item->IsBOARD_ITEM()  )
+                items.push_back( static_cast<BOARD_ITEM*>( item ) );
         }
 
         VECTOR2I refPoint;

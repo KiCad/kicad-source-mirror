@@ -91,11 +91,13 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
             {
                 items.push_back( item );
 
-                if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
+                if( item->IsBOARD_ITEM() )
                 {
-                    boardItem->RunOnChildren( [&]( BOARD_ITEM* bitem )
+                    BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+                    boardItem->RunOnChildren( [&]( BOARD_ITEM* childItem )
                                               {
-                                                  addItem( bitem );
+                                                  addItem( childItem );
                                               } );
                 }
             };

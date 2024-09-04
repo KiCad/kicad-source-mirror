@@ -170,10 +170,11 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
         for( EDA_ITEM* item : aSelected )
         {
-            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-            BOARD_ITEM* copy = nullptr;
+            if( !item->IsBOARD_ITEM() )
+                continue;
 
-            wxCHECK2( boardItem, continue );
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+            BOARD_ITEM* copy = nullptr;
 
             if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( item ) )
             {
@@ -283,7 +284,10 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
         for( EDA_ITEM* item : aSelected )
         {
-            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+            if( !item->IsBOARD_ITEM() )
+                continue;
+
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
             BOARD_ITEM* copy = nullptr;
 
             wxCHECK2( boardItem, continue );

@@ -303,7 +303,10 @@ void DIALOG_POSITION_RELATIVE::OnUseUserOriginClick( wxCommandEvent& event )
 
 void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 {
-    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+    BOARD_ITEM* item = nullptr;
+
+    if( aItem && aItem->IsBOARD_ITEM() )
+        item = static_cast<BOARD_ITEM*>( aItem );
 
     m_options.anchorType = ANCHOR_ITEM;
     updateAnchorInfo( item );

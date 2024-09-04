@@ -371,20 +371,20 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
+    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
     return &cfg->m_FootprintViewer;
 }
 
 
 PCB_VIEWERS_SETTINGS_BASE* DISPLAY_FOOTPRINTS_FRAME::GetViewerSettingsBase() const
 {
-    return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
+    return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
 }
 
 
 MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
 {
-    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
+    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
     return &cfg->m_FootprintViewerMagneticSettings;
 }
 
@@ -525,6 +525,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         }
 
         GetBoard()->Add( footprint );
+        GetCanvas()->GetView()->Update( footprint );
         m_currentFootprint = footprintName;
         m_currentComp = comp;
         setFPWatcher( footprint );
@@ -579,10 +580,10 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 
 COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fp_edit" );
 
-    if( settings )
-        return Pgm().GetSettingsManager().GetColorSettings( settings->m_ColorTheme );
+    if( cfg )
+        return Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
     else
         return Pgm().GetSettingsManager().GetColorSettings();
 }

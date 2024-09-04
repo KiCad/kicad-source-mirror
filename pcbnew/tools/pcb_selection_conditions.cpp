@@ -47,9 +47,7 @@ bool PCB_SELECTION_CONDITIONS::HasLockedItems( const SELECTION& aSelection )
 {
     for( EDA_ITEM* item : aSelection.Items() )
     {
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-
-        if( boardItem && boardItem->IsLocked() )
+        if( item->IsBOARD_ITEM() && static_cast<BOARD_ITEM*>( item )->IsLocked() )
             return true;
     }
 
@@ -61,9 +59,7 @@ bool PCB_SELECTION_CONDITIONS::HasUnlockedItems( const SELECTION& aSelection )
 {
     for( EDA_ITEM* item : aSelection.Items() )
     {
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-
-        if( boardItem && !boardItem->IsLocked() )
+        if( item->IsBOARD_ITEM() && !static_cast<BOARD_ITEM*>( item )->IsLocked() )
             return true;
     }
 

@@ -34,7 +34,8 @@
 #include <wx/fdrepdlg.h>
 #include <eda_pattern_match.h>
 
-EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
+EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType, bool isSCH_ITEM, bool isBOARD_ITEM ) :
+        KIGFX::VIEW_ITEM( isSCH_ITEM, isBOARD_ITEM ),
         m_structType( idType ),
         m_flags( 0 ),
         m_parent( parent ),
@@ -42,7 +43,8 @@ EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
 { }
 
 
-EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
+EDA_ITEM::EDA_ITEM( KICAD_T idType, bool isSCH_ITEM, bool isBOARD_ITEM ) :
+        KIGFX::VIEW_ITEM( isSCH_ITEM, isBOARD_ITEM ),
         m_structType( idType ),
         m_flags( 0 ),
         m_parent( nullptr ),
@@ -51,6 +53,7 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
 
 
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
+        KIGFX::VIEW_ITEM( base.IsSCH_ITEM(), base.IsBOARD_ITEM() ),
         m_Uuid( base.m_Uuid ),
         m_structType( base.m_structType ),
         m_flags( base.m_flags ),

@@ -765,8 +765,7 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
                 {
                     BOARD_ITEM* item = collector[i];
 
-                    if( dynamic_cast<FOOTPRINT*>( item )
-                        || dynamic_cast<FOOTPRINT*>( item->GetParentFootprint() ) )
+                    if( item->Type() == PCB_FOOTPRINT_T || item->GetParentFootprint() )
                         continue;
 
                     removedLayers.push_back( layer_id );

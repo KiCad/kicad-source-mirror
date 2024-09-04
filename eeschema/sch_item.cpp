@@ -75,7 +75,7 @@ wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle )
 /* They are not inline because this creates problems with gcc at linking time in debug mode */
 
 SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType, int aUnit, int aBodyStyle ) :
-        EDA_ITEM( aParent, aType ),
+        EDA_ITEM( aParent, aType, true, false ),
         m_unit( aUnit ),
         m_bodyStyle( aBodyStyle ),
         m_private( false )

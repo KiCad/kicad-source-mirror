@@ -87,18 +87,18 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_PAINTER::viewer_settings()
     case FRAME_PCB_EDITOR:
     case FRAME_PCB_DISPLAY3D:
     default:
-        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     case FRAME_FOOTPRINT_EDITOR:
     case FRAME_FOOTPRINT_WIZARD:
-        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fp_edit" );
 
     case FRAME_FOOTPRINT_VIEWER:
     case FRAME_FOOTPRINT_CHOOSER:
     case FRAME_FOOTPRINT_PREVIEW:
     case FRAME_CVPCB:
     case FRAME_CVPCB_DISPLAY:
-        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
+        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
     }
 }
 
@@ -544,10 +544,10 @@ int PCB_PAINTER::getViaDrillSize( const PCB_VIA* aVia ) const
 
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
-    const BOARD_ITEM* item = dynamic_cast<const BOARD_ITEM*>( aItem );
-
-    if( !item )
+    if( !aItem->IsBOARD_ITEM() )
         return false;
+
+    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( aItem );
 
     if( const BOARD* board = item->GetBoard() )
     {

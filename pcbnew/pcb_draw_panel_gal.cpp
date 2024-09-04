@@ -322,7 +322,7 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
     }
     else
     {
-        PCBNEW_SETTINGS* app = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+        auto* app = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
         if( app )
             cs = Pgm().GetSettingsManager().GetColorSettings( app->m_ColorTheme );

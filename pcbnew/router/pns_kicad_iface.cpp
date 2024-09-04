@@ -299,11 +299,8 @@ static bool isEdge( const PNS::ITEM* aItem )
 
 bool PNS_PCBNEW_RULE_RESOLVER::IsDrilledHole( const PNS::ITEM* aItem )
 {
-    if( isHole( aItem ) )
-    {
-        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem->Parent() ) )
-            return item->HasDrilledHole();
-    }
+    if( isHole( aItem ) && aItem->Parent() )
+        return aItem->Parent()->HasDrilledHole();
 
     return false;
 }

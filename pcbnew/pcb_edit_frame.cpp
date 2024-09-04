@@ -1313,11 +1313,12 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         GetCanvas()->GetView()->UpdateAllItemsConditionally(
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
-                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
-                    int         flags = 0;
+                    int flags = 0;
 
-                    if( !item )
+                    if( !aItem->IsBOARD_ITEM() )
                         return flags;
+
+                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aItem );
 
                     if( item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T )
                     {
@@ -1468,10 +1469,10 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
-                BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
-
-                if( !item )
+                if( !aItem->IsBOARD_ITEM() )
                     return 0;
+
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aItem );
 
                 // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible
                 // as they won't be found in the view layer's itemset for re-painting.

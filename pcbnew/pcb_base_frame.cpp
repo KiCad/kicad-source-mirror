@@ -594,7 +594,10 @@ void PCB_BASE_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
         GetCanvas()->GetView()->UpdateAllItemsConditionally(
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
-                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+                    BOARD_ITEM* item = nullptr;
+
+                    if( aItem->IsBOARD_ITEM() )
+                        item = static_cast<BOARD_ITEM*>( aItem );
 
                     // Note: KIGFX::REPAINT isn't enough for things that go from invisible to
                     // visible as they won't be found in the view layer's itemset for re-painting.
@@ -913,13 +916,13 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 PCBNEW_SETTINGS* PCB_BASE_FRAME::GetPcbNewSettings() const
 {
-    return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 }
 
 
 FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings() const
 {
-    return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 }
 
 
@@ -930,18 +933,18 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
     case FRAME_PCB_EDITOR:
     case FRAME_PCB_DISPLAY3D:
     default:
-        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     case FRAME_FOOTPRINT_EDITOR:
     case FRAME_FOOTPRINT_WIZARD:
-        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
     case FRAME_FOOTPRINT_VIEWER:
     case FRAME_FOOTPRINT_CHOOSER:
     case FRAME_FOOTPRINT_PREVIEW:
     case FRAME_CVPCB:
     case FRAME_CVPCB_DISPLAY:
-        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
+        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>( "cvpcb" );
     }
 }
 
