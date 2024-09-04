@@ -103,4 +103,8 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( BOARD* aBoard )
 
     m_gapLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
                                                                     importedSettings.GetDashedLineGapRatio() ) );
+
+    m_styleFields->SetValue( aBoard->GetDesignSettings().m_StyleFPFields );
+    m_styleText->SetValue( aBoard->GetDesignSettings().m_StyleFPText );
+    m_styleShapes->SetValue( aBoard->GetDesignSettings().m_StyleFPShapes );
 }
