@@ -466,7 +466,22 @@ void PCB_SHAPE::Scale( double aScale )
 
 void PCB_SHAPE::Normalize()
 {
-    if( m_shape == SHAPE_T::RECTANGLE )
+    if( m_shape == SHAPE_T::SEGMENT )
+    {
+        // we want start point the top left point and end point the bottom right
+        // (more easy to compare 2 segments: we are seeing them as equivalent if
+        // they have the same end points, not necessary the same order)
+        VECTOR2I start = GetStart();
+        VECTOR2I end = GetEnd();
+
+        if( ( start.x > end.x )
+            || ( start.x == end.x && start.y < end.y ) )
+        {
+            SetStart( end );
+            SetEnd( start );
+        }
+    }
+    else if( m_shape == SHAPE_T::RECTANGLE )
     {
         VECTOR2I start = GetStart();
         VECTOR2I end = GetEnd();
