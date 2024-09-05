@@ -836,16 +836,27 @@ void SIM_MODEL::doSetParamValue( int aParamIndex, const std::string& aValue )
 void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
                                SIM_VALUE::NOTATION aNotation )
 {
-    static const wxRegEx plainNumber( wxS( "^[0-9\\.]*$" ) );
-
     // Notation conversion is very slow.  Avoid if possible.
+
+    auto plainNumber =
+            []( const std::string& aString )
+            {
+                for( char c : aString )
+                {
+                    if( c != '.' && ( c < '0' || c > '9' )  )
+                        return false;
+                }
+
+                return true;
+            };
+
 
     if( aValue.find( ',' ) != std::string::npos )
     {
         doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
                                                                   SIM_VALUE::NOTATION::SI ) );
     }
-    else if( aNotation != SIM_VALUE::NOTATION::SI && !plainNumber.Matches( wxString( aValue ) ) )
+    else if( aNotation != SIM_VALUE::NOTATION::SI && !plainNumber( aValue ) )
     {
         doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
                                                                   SIM_VALUE::NOTATION::SI ) );

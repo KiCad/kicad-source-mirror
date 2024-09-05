@@ -418,11 +418,21 @@ std::string SIM_VALUE::Normalize( double aValue )
 
 std::string SIM_VALUE::ToSpice( const std::string& aString )
 {
-    static const wxRegEx plainNumber( wxS( "^[0-9\\.]*$" ) );
-
     // Notation conversion is very slow.  Avoid if possible.
 
-    if( plainNumber.Matches( wxString( aString ) ) )
+    auto plainNumber =
+            []( const std::string& aString )
+            {
+                for( char c : aString )
+                {
+                    if( c != '.' && ( c < '0' || c > '9' )  )
+                        return false;
+                }
+
+                return true;
+            };
+
+    if( plainNumber( aString ) )
         return aString;
     else
         return ConvertNotation( aString, NOTATION::SI, NOTATION::SPICE );
