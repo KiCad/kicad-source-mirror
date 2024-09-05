@@ -81,10 +81,7 @@ public:
 
     static std::string Normalize( double aValue );
 
-    static std::string ToSpice( const std::string& aString )
-    {
-        return ConvertNotation( aString, NOTATION::SI, NOTATION::SPICE );
-    }
+    static std::string ToSpice( const std::string& aString );
 
     static double ToDouble( const std::string& aString, double aDefault = NAN );
 

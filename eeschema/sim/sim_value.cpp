@@ -371,13 +371,6 @@ std::string SIM_VALUE::ConvertNotation( const std::string& aString, NOTATION aFr
                                         NOTATION aToNotation )
 {
     wxString buf( aString );
-
-    // PEGTL is slow as shit.  Avoid if possible.
-    static const wxRegEx plainNumber( wxS( "^[0-9.]*$" ) );
-
-    if( plainNumber.Matches( buf ) )
-        return aString;
-
     buf.Replace( ',', '.' );
 
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( buf.ToStdString(),
@@ -420,6 +413,19 @@ std::string SIM_VALUE::Normalize( double aValue )
     double reducedValue = aValue / std::pow( 10, expReduction );
 
     return fmt::format( "{:g}{}", reducedValue, prefix );
+}
+
+
+std::string SIM_VALUE::ToSpice( const std::string& aString )
+{
+    static const wxRegEx plainNumber( wxS( "^[0-9.]*$" ) );
+
+    // Notation conversion is very slow.  Avoid if possible.
+
+    if( plainNumber.Matches( wxString( aString ) ) )
+        return aString;
+    else
+        return ConvertNotation( aString, NOTATION::SI, NOTATION::SPICE );
 }
 
 

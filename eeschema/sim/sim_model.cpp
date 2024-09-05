@@ -838,20 +838,22 @@ void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
 {
     static const wxRegEx plainNumber( wxS( "^[0-9.]*$" ) );
 
-    // PEGTL is slow as shit.  Avoid if possible.
-    if( aNotation != SIM_VALUE::NOTATION::SI )
+    // Notation conversion is very slow.  Avoid if possible.
+
+    if( aValue.find( ',' ) != std::string::npos )
     {
-        wxString value( aValue );
-
-        if( !plainNumber.Matches( value ) )
-        {
-            doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
-                                                                      SIM_VALUE::NOTATION::SI ) );
-            return;
-        }
+        doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
+                                                                  SIM_VALUE::NOTATION::SI ) );
     }
-
-    doSetParamValue( aParamIndex, aValue );
+    else if( aNotation != SIM_VALUE::NOTATION::SI && !plainNumber.Matches( wxString( aValue ) ) )
+    {
+        doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
+                                                                  SIM_VALUE::NOTATION::SI ) );
+    }
+    else
+    {
+        doSetParamValue( aParamIndex, aValue );
+    }
 }
 
 
