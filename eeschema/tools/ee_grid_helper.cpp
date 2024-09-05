@@ -39,7 +39,7 @@
 
 
 EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
-    GRID_HELPER( aToolMgr )
+        GRID_HELPER( aToolMgr, LAYER_SCHEMATIC_ANCHOR )
 {
     KIGFX::VIEW* view = m_toolMgr->GetView();
 
@@ -55,12 +55,6 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
     m_viewSnapPoint.SetDrawAtZero( true );
     view->Add( &m_viewSnapPoint );
     view->SetVisible( &m_viewSnapPoint, false );
-
-    m_viewSnapLine.SetStyle( KIGFX::ORIGIN_VIEWITEM::DASH_LINE );
-    m_viewSnapLine.SetColor( COLOR4D( 0.33, 0.55, 0.95, 1.0 ) );
-    m_viewSnapLine.SetDrawAtZero( true );
-    view->Add( &m_viewSnapLine );
-    view->SetVisible( &m_viewSnapLine, false );
 }
 
 
@@ -70,7 +64,6 @@ EE_GRID_HELPER::~EE_GRID_HELPER()
 
     view->Remove( &m_viewAxis );
     view->Remove( &m_viewSnapPoint );
-    view->Remove( &m_viewSnapLine );
 }
 
 
@@ -167,19 +160,24 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aGrid );
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
 
-    if( m_enableSnapLine && m_snapItem && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
+    showConstructionGeometry( m_enableSnap );
+
+    std::optional<VECTOR2I> snapLineOrigin = getConstructionManager().GetSnapLineOrigin();
+
+    if( m_enableSnapLine && m_snapItem && snapLineOrigin.has_value()
+        && m_skipPoint != *snapLineOrigin )
     {
-        if( std::abs( m_viewSnapLine.GetPosition().x - aOrigin.x ) < snapDist.x )
+        if( std::abs( snapLineOrigin->x - aOrigin.x ) < snapDist.x )
         {
-            pt.x = m_viewSnapLine.GetPosition().x;
-            snapDist.x = std::abs( m_viewSnapLine.GetPosition().x - aOrigin.x );
+            pt.x = snapLineOrigin->x;
+            snapDist.x = std::abs( pt.x - aOrigin.x );
             snapLineX = true;
         }
 
-        if( std::abs( m_viewSnapLine.GetPosition().y - aOrigin.y ) < snapDist.y )
+        if( std::abs( snapLineOrigin->y - aOrigin.y ) < snapDist.y )
         {
-            pt.y = m_viewSnapLine.GetPosition().y;
-            snapDist.y = std::abs( m_viewSnapLine.GetPosition().y - aOrigin.y );
+            pt.y = snapLineOrigin->y;
+            snapDist.y = std::abs( pt.y - aOrigin.y );
             snapLineY = true;
         }
 
@@ -218,7 +216,8 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
             snapPoint = true;
         }
 
-        snapLineX = snapLineY = false;
+        snapLineX = false;
+        snapLineY = false;
         gridChecked = true;
     }
 
@@ -227,20 +226,14 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
 
     if( snapLineX || snapLineY )
     {
-        m_viewSnapLine.SetEndPosition( pt );
-
-        if( m_toolMgr->GetView()->IsVisible( &m_viewSnapLine ) )
-            m_toolMgr->GetView()->Update( &m_viewSnapLine, KIGFX::GEOMETRY );
-        else
-            m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, true );
+        getConstructionManager().SetSnapLineEnd( pt );
     }
     else if( snapPoint )
     {
         m_snapItem = *nearest;
         m_viewSnapPoint.SetPosition( pt );
-        m_viewSnapLine.SetPosition( pt );
 
-        m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
+        getConstructionManager().SetSnapLineOrigin( pt );
 
         if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )
             m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
@@ -249,8 +242,8 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
     }
     else
     {
+        getConstructionManager().ClearSnapLine();
         m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
-        m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
     }
 
     return pt;
@@ -309,7 +302,10 @@ SCH_ITEM* EE_GRID_HELPER::GetSnapped() const
     if( !m_snapItem )
         return nullptr;
 
-    return static_cast<SCH_ITEM*>( m_snapItem->item );
+    if( m_snapItem->items.empty() )
+        return nullptr;
+
+    return static_cast<SCH_ITEM*>( m_snapItem->items[0] );
 }
 
 
@@ -511,15 +507,20 @@ EE_GRID_HELPER::ANCHOR* EE_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int
 
     for( ANCHOR& a : m_anchors )
     {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( a.item );
-
         if( ( aFlags & a.flags ) != aFlags )
             continue;
 
-        if( aGrid == GRID_CONNECTABLE && !item->IsConnectable() )
-            continue;
-        else if( aGrid == GRID_GRAPHICS && item->IsConnectable() )
-            continue;
+        // A "virtual" anchor with no real items associated shouldn't be filtered out
+        if( !a.items.empty() )
+        {
+            // Filter using the first item
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( a.items[0] );
+
+            if( aGrid == GRID_CONNECTABLE && !item->IsConnectable() )
+                continue;
+            else if( aGrid == GRID_GRAPHICS && item->IsConnectable() )
+                continue;
+        }
 
         double dist = a.Distance( aPos );
 

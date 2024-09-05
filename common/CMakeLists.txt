@@ -457,7 +457,9 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/arc_assistant.cpp
     preview_items/arc_geom_manager.cpp
     preview_items/centreline_rect_item.cpp
+    preview_items/construction_geom.cpp
     preview_items/draw_context.cpp
+    preview_items/item_drawing_utils.cpp
     preview_items/polygon_geom_manager.cpp
     preview_items/polygon_item.cpp
     preview_items/preview_utils.cpp
@@ -603,7 +605,7 @@ set( COMMON_SRCS
     tool/action_toolbar.cpp
     tool/actions.cpp
     tool/common_control.cpp
-    tool/library_editor_control.cpp
+    tool/construction_manager.cpp
     tool/common_tools.cpp
     tool/conditional_menu.cpp
     tool/edit_constraints.cpp
@@ -612,6 +614,7 @@ set( COMMON_SRCS
     tool/embed_tool.cpp
     tool/grid_helper.cpp
     tool/grid_menu.cpp
+    tool/library_editor_control.cpp
     tool/picker_tool.cpp
     tool/properties_tool.cpp
     tool/selection.cpp

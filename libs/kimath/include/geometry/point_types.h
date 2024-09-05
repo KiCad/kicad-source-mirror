@@ -65,15 +65,21 @@ enum POINT_TYPE
      * The point is an intersection of two (or more) items.
      */
     PT_INTERSECTION = 1 << 5,
+    /**
+     * The point is somewhere on another element, but not some specific point.
+     * (you can infer this from some other point types)
+     */
+    PT_ON_ELEMENT = 1 << 6,
 };
 
 struct TYPED_POINT2I
 {
-    VECTOR2I   m_point;
-    POINT_TYPE m_types;
+    VECTOR2I m_point;
+    // Bitwise OR of POINT_TYPE values
+    int m_types;
 
     // Clang needs this apparently
-    TYPED_POINT2I( const VECTOR2I& aVec, POINT_TYPE aTypes ) : m_point( aVec ), m_types( aTypes ) {}
+    TYPED_POINT2I( const VECTOR2I& aVec, int aTypes ) : m_point( aVec ), m_types( aTypes ) {}
 
     bool operator==( const TYPED_POINT2I& ) const = default;
 };

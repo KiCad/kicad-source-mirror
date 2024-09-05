@@ -30,10 +30,42 @@
 // Code under test
 #include <math/box2.h>
 
+
 /**
  * Declare the test suite
  */
 BOOST_AUTO_TEST_SUITE( BOX2TESTS )
+
+BOOST_AUTO_TEST_CASE( DefaultConstructor )
+{
+    const BOX2I box;
+    BOOST_TEST( box.GetPosition() == VECTOR2I( 0, 0 ) );
+    BOOST_TEST( box.GetSize() == VECTOR2I( 0, 0 ) );
+}
+
+BOOST_AUTO_TEST_CASE( Basic )
+{
+    const BOX2I box( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) );
+
+    BOOST_TEST( box.GetPosition() == VECTOR2I( 1, 2 ) );
+    BOOST_TEST( box.GetSize() == VECTOR2I( 3, 4 ) );
+
+    // Check the equality operator
+    BOOST_CHECK( box == BOX2I( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) ) );
+
+    // Inflate
+    const BOX2I inflated = BOX2I( box ).Inflate( 1 );
+    BOOST_TEST( inflated.GetPosition() == VECTOR2I( 0, 1 ) );
+    BOOST_TEST( inflated.GetSize() == VECTOR2I( 5, 6 ) );
+}
+
+BOOST_AUTO_TEST_CASE( ByCorners )
+{
+    const BOX2I boxByCorners = BOX2I::ByCorners( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) );
+    const BOX2I boxByPosSize = BOX2I( VECTOR2I( 1, 2 ), VECTOR2I( 2, 2 ) );
+
+    BOOST_CHECK( boxByCorners == boxByPosSize );
+}
 
 BOOST_AUTO_TEST_CASE( test_closest_point_to, *boost::unit_test::tolerance( 0.000001 ) )
 {

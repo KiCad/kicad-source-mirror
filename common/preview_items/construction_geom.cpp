@@ -1,0 +1,161 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include "preview_items/construction_geom.h"
+
+#include <layer_ids.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <geometry/shape_utils.h>
+#include <preview_items/item_drawing_utils.h>
+#include <view/view.h>
+
+using namespace KIGFX;
+
+
+CONSTRUCTION_GEOM::CONSTRUCTION_GEOM() :
+        EDA_ITEM( nullptr, NOT_USED ), // Never added to a BOARD/SCHEMATIC so it needs no type
+        m_color( COLOR4D::WHITE ), m_persistentColor( COLOR4D::WHITE )
+{
+}
+
+
+void CONSTRUCTION_GEOM::AddDrawable( const DRAWABLE& aItem, bool aPersistent )
+{
+    m_drawables.push_back( { aItem, aPersistent } );
+}
+
+void CONSTRUCTION_GEOM::ClearDrawables()
+{
+    m_drawables.clear();
+}
+
+const BOX2I CONSTRUCTION_GEOM::ViewBBox() const
+{
+    // We could be a bit more circumspect here, but much of the time the
+    // enxtended lines go across the whole screen anyway
+    BOX2I bbox;
+    bbox.SetMaximum();
+    return bbox;
+}
+
+void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
+{
+    GAL& gal = *aView->GetGAL();
+
+    gal.SetIsFill( false );
+    gal.SetIsStroke( true );
+    gal.SetLineWidth( 1 );
+
+    BOX2D viewportD = aView->GetViewport();
+    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+
+    const bool haveSnapLine = m_snapLine && m_snapLine->Length() != 0;
+
+    // Avoid fighting with the snap line
+    const auto drawLineIfNotAlsoSnapLine = [&]( const SEG& aLine )
+    {
+        if( !haveSnapLine || !aLine.ApproxCollinear( *m_snapLine, 1 ) )
+        {
+            gal.DrawLine( aLine.A, aLine.B );
+        }
+    };
+
+    // Draw all the items
+    for( const DRAWABLE_INFO& drawable : m_drawables )
+    {
+        gal.SetStrokeColor( drawable.IsPersistent ? m_persistentColor : m_color );
+
+        std::visit(
+                [&]( const auto& visited )
+                {
+                    using ItemType = std::decay_t<decltype( visited )>;
+
+                    if constexpr( std::is_same_v<ItemType, LINE> )
+                    {
+                        // Extend the segment to the viewport boundary
+                        std::optional<SEG> segToBoundary =
+                                KIGEOM::ClipLineToBox( visited, viewport );
+
+                        if( segToBoundary )
+                        {
+                            drawLineIfNotAlsoSnapLine( *segToBoundary );
+                        }
+                    }
+                    else if constexpr( std::is_same_v<ItemType, HALF_LINE> )
+                    {
+                        // Extend the ray to the viewport boundary
+                        std::optional<SEG> segToBoundary =
+                                KIGEOM::ClipHalfLineToBox( visited, viewport );
+
+                        if( segToBoundary )
+                        {
+                            drawLineIfNotAlsoSnapLine( *segToBoundary );
+                        }
+                    }
+                    else if constexpr( std::is_same_v<ItemType, SEG> )
+                    {
+                        drawLineIfNotAlsoSnapLine( visited );
+                    }
+                    else if constexpr( std::is_same_v<ItemType, CIRCLE> )
+                    {
+                        gal.DrawCircle( visited.Center, visited.Radius );
+                    }
+                    else if constexpr( std::is_same_v<ItemType, SHAPE_ARC> )
+                    {
+                        gal.DrawArc( visited.GetCenter(), visited.GetRadius(),
+                                     visited.GetStartAngle(), visited.GetCentralAngle() );
+                    }
+                    else if constexpr( std::is_same_v<ItemType, VECTOR2I> )
+                    {
+                        KIGFX::DrawCross( gal, visited, aView->ToWorld( 16 ) );
+                    }
+                },
+                drawable.Item );
+    }
+
+    if( haveSnapLine )
+    {
+        gal.SetStrokeColor( m_persistentColor );
+
+        const int dashSizeBasis = aView->ToWorld( 12 );
+        const int snapOriginMarkerSize = aView->ToWorld( 16 );
+        // Avoid clash with the snap marker if very close
+        const int omitStartMarkerIfWithinLength = aView->ToWorld( 8 );
+
+        // The line itself
+        KIGFX::DrawDashedLine( gal, *m_snapLine, dashSizeBasis );
+
+        // The line origin marker if the line is long enough
+        if( m_snapLine->A.Distance( m_snapLine->B ) > omitStartMarkerIfWithinLength )
+        {
+            KIGFX::DrawCross( gal, m_snapLine->A, snapOriginMarkerSize );
+            gal.DrawCircle( m_snapLine->A, snapOriginMarkerSize / 2 );
+        }
+    }
+}
+
+void CONSTRUCTION_GEOM::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aLayers[0] = LAYER_GP_OVERLAY;
+    aCount = 1;
+}

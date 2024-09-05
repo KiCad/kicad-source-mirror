@@ -31,14 +31,8 @@ std::string toString( const POINT_TYPE& aType )
     }
 }
 
-std::ostream& operator<<( std::ostream& os, const POINT_TYPE& aPtType )
-{
-    os << "POINT_TYPE: " << toString( aPtType );
-    return os;
-}
-
 std::ostream& operator<<( std::ostream& os, const TYPED_POINT2I& aPt )
 {
-    os << "TYPED_POINT2I: " << aPt.m_point << " (" << toString( aPt.m_types ) << ")";
+    os << "TYPED_POINT2I: " << aPt.m_point << " (" << aPt.m_types << ")";
     return os;
 }

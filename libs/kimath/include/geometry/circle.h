@@ -38,6 +38,8 @@ public:
 
     CIRCLE( const CIRCLE& aOther );
 
+    bool operator==( const CIRCLE& aOther ) const = default;
+
     /**
      * Construct this circle such that it is tangent to the given segments and passes through the
      * given point, generating the solution which can be used to fillet both segments.

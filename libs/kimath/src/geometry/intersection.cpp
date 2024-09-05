@@ -25,10 +25,7 @@
 
 #include <core/type_helpers.h>
 
-#include <geometry/seg.h>
-#include <geometry/circle.h>
-#include <geometry/shape_arc.h>
-#include <geometry/shape_rect.h>
+#include <geometry/shape_utils.h>
 
 /*
  * Helper functions that dispatch to the correct intersection function
@@ -40,6 +37,27 @@ namespace
 void findIntersections( const SEG& aSegA, const SEG& aSegB, std::vector<VECTOR2I>& aIntersections )
 {
     const OPT_VECTOR2I intersection = aSegA.Intersect( aSegB );
+
+    if( intersection )
+    {
+        aIntersections.push_back( *intersection );
+    }
+}
+
+void findIntersections( const SEG& aSeg, const LINE& aLine, std::vector<VECTOR2I>& aIntersections )
+{
+    OPT_VECTOR2I intersection = aLine.Intersect( aSeg );
+
+    if( intersection )
+    {
+        aIntersections.push_back( *intersection );
+    }
+}
+
+void findIntersections( const SEG& aSeg, const HALF_LINE& aHalfLine,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    OPT_VECTOR2I intersection = aHalfLine.Intersect( aSeg );
 
     if( intersection )
     {
@@ -71,6 +89,68 @@ void findIntersections( const SEG& aSeg, const SHAPE_ARC& aArc,
     }
 }
 
+void findIntersections( const LINE& aLineA, const LINE& aLineB,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    OPT_VECTOR2I intersection = aLineA.Intersect( aLineB );
+
+    if( intersection )
+    {
+        aIntersections.push_back( *intersection );
+    }
+}
+
+void findIntersections( const LINE& aLine, const HALF_LINE& aHalfLine,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    // Intersect as two infinite lines
+    OPT_VECTOR2I intersection =
+            aHalfLine.GetContainedSeg().Intersect( aLine.GetContainedSeg(), false, true );
+
+    // No intersection at all (parallel, or passes on the other side of the start point)
+    if( !intersection )
+    {
+        return;
+    }
+
+    if( aHalfLine.Contains( *intersection ) )
+    {
+        aIntersections.push_back( *intersection );
+    }
+}
+
+void findIntersections( const HALF_LINE& aHalfLineA, const HALF_LINE& aHalfLineB,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    OPT_VECTOR2I intersection = aHalfLineA.Intersect( aHalfLineB );
+
+    if( intersection )
+    {
+        aIntersections.push_back( *intersection );
+    }
+}
+
+void findIntersections( const CIRCLE& aCircle, const LINE& aLine,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aCircle.IntersectLine( aLine.GetContainedSeg() );
+
+    aIntersections.insert( aIntersections.end(), intersections.begin(), intersections.end() );
+}
+
+void findIntersections( const CIRCLE& aCircle, const HALF_LINE& aHalfLine,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aCircle.IntersectLine( aHalfLine.GetContainedSeg() );
+
+    for( const VECTOR2I& intersection : intersections )
+    {
+        if( aHalfLine.Contains( intersection ) )
+        {
+            aIntersections.push_back( intersection );
+        }
+    }
+}
 
 void findIntersections( const CIRCLE& aCircleA, const CIRCLE& aCircleB,
                         std::vector<VECTOR2I>& aIntersections )
@@ -91,19 +171,28 @@ void findIntersections( const SHAPE_ARC& aArcA, const SHAPE_ARC& aArcB,
     aArcA.Intersect( aArcB, &aIntersections );
 }
 
-
-std::vector<SEG> RectToSegs( const SHAPE_RECT& aRect )
+void findIntersections( const SHAPE_ARC& aArc, const LINE& aLine,
+                        std::vector<VECTOR2I>& aIntersections )
 {
-    const VECTOR2I corner = aRect.GetPosition();
-    const int      w = aRect.GetWidth();
-    const int      h = aRect.GetHeight();
+    std::vector<VECTOR2I> intersections;
+    aArc.IntersectLine( aLine.GetContainedSeg(), &intersections );
 
-    return {
-        SEG( corner, { corner + VECTOR2I( w, 0 ) } ),
-        SEG( { corner + VECTOR2I( w, 0 ) }, { corner + VECTOR2I( w, h ) } ),
-        SEG( { corner + VECTOR2I( w, h ) }, { corner + VECTOR2I( 0, h ) } ),
-        SEG( { corner + VECTOR2I( 0, h ) }, corner ),
-    };
+    aIntersections.insert( aIntersections.end(), intersections.begin(), intersections.end() );
+}
+
+void findIntersections( const SHAPE_ARC& aArc, const HALF_LINE& aHalfLine,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections;
+    aArc.IntersectLine( aHalfLine.GetContainedSeg(), &intersections );
+
+    for( const VECTOR2I& intersection : intersections )
+    {
+        if( aHalfLine.Contains( intersection ) )
+        {
+            aIntersections.push_back( intersection );
+        }
+    }
 }
 
 } // namespace
@@ -132,10 +221,10 @@ void INTERSECTION_VISITOR::operator()( const SEG& aSeg ) const
             {
                 using OtherGeomType = std::decay_t<decltype( otherGeom )>;
 
-                if constexpr( std::is_same_v<OtherGeomType, SHAPE_RECT> )
+                if constexpr( std::is_same_v<OtherGeomType, BOX2I> )
                 {
                     // Seg-Rect via decomposition into segments
-                    for( const SEG& aRectSeg : RectToSegs( otherGeom ) )
+                    for( const SEG& aRectSeg : KIGEOM::BoxToSegs( otherGeom ) )
                     {
                         findIntersections( aSeg, aRectSeg, m_intersections );
                     }
@@ -148,6 +237,82 @@ void INTERSECTION_VISITOR::operator()( const SEG& aSeg ) const
             },
             m_otherGeometry );
 }
+
+void INTERSECTION_VISITOR::operator()( const LINE& aLine ) const
+{
+    // Dispatch to the correct function
+    return std::visit(
+            [&]( const auto& otherGeom )
+            {
+                using OtherGeomType = std::decay_t<decltype( otherGeom )>;
+                // Dispatch in the correct order
+                if constexpr( std::is_same_v<OtherGeomType, SEG>
+                              || std::is_same_v<OtherGeomType, LINE>
+                              || std::is_same_v<OtherGeomType, CIRCLE>
+                              || std::is_same_v<OtherGeomType, SHAPE_ARC> )
+                {
+                    // Seg-Line, Line-Line, Circle-Line, Arc-Line
+                    findIntersections( otherGeom, aLine, m_intersections );
+                }
+                else if constexpr( std::is_same_v<OtherGeomType, HALF_LINE> )
+                {
+                    // Line-HalfLine
+                    findIntersections( aLine, otherGeom, m_intersections );
+                }
+                else if constexpr( std::is_same_v<OtherGeomType, BOX2I> )
+                {
+                    // Line-Rect via decomposition into segments
+                    for( const SEG& aRectSeg : KIGEOM::BoxToSegs( otherGeom ) )
+                    {
+                        findIntersections( aRectSeg, aLine, m_intersections );
+                    }
+                }
+                else
+                {
+                    static_assert( always_false<OtherGeomType>::value,
+                                   "Unhandled other geometry type" );
+                }
+            },
+            m_otherGeometry );
+};
+
+void INTERSECTION_VISITOR::operator()( const HALF_LINE& aHalfLine ) const
+{
+    // Dispatch to the correct function
+    return std::visit(
+            [&]( const auto& otherGeom )
+            {
+                using OtherGeomType = std::decay_t<decltype( otherGeom )>;
+                // Dispatch in the correct order
+                if constexpr( std::is_same_v<OtherGeomType, SEG>
+                              || std::is_same_v<OtherGeomType, HALF_LINE>
+                              || std::is_same_v<OtherGeomType, CIRCLE>
+                              || std::is_same_v<OtherGeomType, SHAPE_ARC> )
+                {
+                    // Seg-HalfLine, HalfLine-HalfLine, Circle-HalfLine, Arc-HalfLine
+                    findIntersections( otherGeom, aHalfLine, m_intersections );
+                }
+                else if constexpr( std::is_same_v<OtherGeomType, LINE> )
+                {
+                    // Line-HalfLine
+                    findIntersections( otherGeom, aHalfLine, m_intersections );
+                }
+                else if constexpr( std::is_same_v<OtherGeomType, BOX2I> )
+                {
+                    // HalfLine-Rect via decomposition into segments
+                    for( const SEG& aRectSeg : KIGEOM::BoxToSegs( otherGeom ) )
+                    {
+                        findIntersections( aRectSeg, aHalfLine, m_intersections );
+                    }
+                }
+                else
+                {
+                    static_assert( always_false<OtherGeomType>::value,
+                                   "Unhandled other geometry type" );
+                }
+            },
+            m_otherGeometry );
+};
 
 void INTERSECTION_VISITOR::operator()( const CIRCLE& aCircle ) const
 {
@@ -163,15 +328,17 @@ void INTERSECTION_VISITOR::operator()( const CIRCLE& aCircle ) const
                     // Seg-Circle, Circle-Circle
                     findIntersections( otherGeom, aCircle, m_intersections );
                 }
-                else if constexpr( std::is_same_v<OtherGeomType, SHAPE_ARC> )
+                else if constexpr( std::is_same_v<OtherGeomType, SHAPE_ARC>
+                                   || std::is_same_v<OtherGeomType, LINE>
+                                   || std::is_same_v<OtherGeomType, HALF_LINE> )
                 {
-                    // Circle-Arc
+                    // Circle-Arc, Circle-Line, Circle-HalfLine
                     findIntersections( aCircle, otherGeom, m_intersections );
                 }
-                else if constexpr( std::is_same_v<OtherGeomType, SHAPE_RECT> )
+                else if constexpr( std::is_same_v<OtherGeomType, BOX2I> )
                 {
                     // Circle-Rect via decomposition into segments
-                    for( const SEG& aRectSeg : RectToSegs( otherGeom ) )
+                    for( const SEG& aRectSeg : KIGEOM::BoxToSegs( otherGeom ) )
                     {
                         findIntersections( aRectSeg, aCircle, m_intersections );
                     }
@@ -200,10 +367,16 @@ void INTERSECTION_VISITOR::operator()( const SHAPE_ARC& aArc ) const
                     // Seg-Arc, Circle-Arc, Arc-Arc
                     findIntersections( otherGeom, aArc, m_intersections );
                 }
-                else if constexpr( std::is_same_v<OtherGeomType, SHAPE_RECT> )
+                else if constexpr( std::is_same_v<OtherGeomType, LINE>
+                                   || std::is_same_v<OtherGeomType, HALF_LINE> )
+                {
+                    // Arc-Line, Arc-HalfLine
+                    findIntersections( aArc, otherGeom, m_intersections );
+                }
+                else if constexpr( std::is_same_v<OtherGeomType, BOX2I> )
                 {
                     // Arc-Rect via decomposition into segments
-                    for( const SEG& aRectSeg : RectToSegs( otherGeom ) )
+                    for( const SEG& aRectSeg : KIGEOM::BoxToSegs( otherGeom ) )
                     {
                         findIntersections( aRectSeg, aArc, m_intersections );
                     }
@@ -218,13 +391,13 @@ void INTERSECTION_VISITOR::operator()( const SHAPE_ARC& aArc ) const
 };
 
 
-void INTERSECTION_VISITOR::operator()( const SHAPE_RECT& aRect ) const
+void INTERSECTION_VISITOR::operator()( const BOX2I& aRect ) const
 {
     // Defer to the SEG visitor repeatedly
     // Note - in some cases, points can be repeated in the intersection list
     // if that's an issue, both directions of the visitor can be implemented
     // to take care of that.
-    const std::vector<SEG> segs = RectToSegs( aRect );
+    const std::array<SEG, 4> segs = KIGEOM::BoxToSegs( aRect );
 
     for( const SEG& seg : segs )
     {

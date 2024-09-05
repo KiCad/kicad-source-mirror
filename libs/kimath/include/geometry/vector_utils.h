@@ -28,7 +28,7 @@ namespace KIGEOM
  * @file vector_utils.h
  *
  * Supplemental functions for working with vectors and
- * objects that interact with vectors.
+ * simple objects that interact with vectors.
  */
 
 /*
@@ -82,6 +82,7 @@ bool PointProjectsOntoSegment( const VECTOR2I& aPoint, const SEG& aSeg );
 /**
  * Get the ratio of the vector to a point from the segment's start,
  * compared to the segment's length.
+ *
  *        /--- aPoint
  *  A<---+-------->B  <-- Length L
  *  |    |

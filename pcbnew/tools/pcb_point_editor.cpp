@@ -516,6 +516,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     getViewControls()->ShowCursor( true );
 
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
+
+    // Use the original object as a construction item
+    std::unique_ptr<BOARD_ITEM> clone;
+
     m_editPoints = makePoints( item );
 
     if( !m_editPoints )
@@ -604,6 +608,13 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     if( &point != m_editedPoint )
                         point.SetActive( false );
                 }
+
+                // When we start dragging, create a clone of the item to use as the original
+                // reference geometry (e.g. for intersections and extensions)
+                std::unique_ptr<BOARD_ITEM> oldClone = std::move( clone );
+                clone.reset( static_cast<BOARD_ITEM*>( item->Clone() ) );
+                grid.AddConstructionItems( { clone.get() }, false, true );
+                // Now old clone can be safely deleted
             }
 
             // Keep point inside of limits with some padding

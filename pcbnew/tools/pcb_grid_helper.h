@@ -31,6 +31,9 @@
 #include <pcb_item_containers.h>
 #include <tool/grid_helper.h>
 #include <board.h>
+#include <geometry/intersection.h>
+#include <geometry/nearest.h>
+
 
 class LSET;
 class SHAPE_ARC;
@@ -69,9 +72,17 @@ public:
 
     virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override
     {
-        if( m_snapItem->item == aBoardItem )
+        // If the item being removed is involved in the snap, clear the snap item
+        if( m_snapItem )
         {
-            m_snapItem = std::nullopt;
+            for( EDA_ITEM* item : m_snapItem->items )
+            {
+                if( item == aBoardItem )
+                {
+                    m_snapItem = std::nullopt;
+                    break;
+                }
+            }
         }
     }
 
@@ -93,13 +104,28 @@ public:
 
     VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const override;
 
+    /**
+     * Add construction geometry for a set of board items.
+     *
+     * @param aItems The items for which to add construction geometry
+     * @param aExtensionOnly If true, the construction geometry only includes extensions of the
+     *                       items, if false it also overlays the items themselves.
+     * @param aIsPersistent If true, the construction geometry is considered "persistent" and will
+     *                      always be shown and won't be replaced by later temporary geometry.
+     */
+    void AddConstructionItems( std::vector<BOARD_ITEM*> aItems, bool aExtensionOnly,
+                               bool aIsPersistent );
 
 private:
     std::vector<BOARD_ITEM*> queryVisible( const BOX2I&                    aArea,
                                            const std::vector<BOARD_ITEM*>& aSkip ) const;
 
-    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers );
-
+    /**
+     * Find the nearest anchor point to the given position with matching flags.
+     *
+     * @param return The nearest anchor point, or nullptr if none found
+     */
+    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags );
 
     /**
      * computeAnchors inserts the local anchor points in to the grid helper for the specified
@@ -107,7 +133,8 @@ private:
      * between the items.
      */
     void computeAnchors( const std::vector<BOARD_ITEM*>& aItems, const VECTOR2I& aRefPos,
-                         bool aFrom, const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter );
+                         bool aFrom, const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter,
+                         const LSET* aLayers, bool aForDrag );
 
     /**
      * computeAnchors inserts the local anchor points in to the grid helper for the specified
@@ -120,8 +147,9 @@ private:
     void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom,
                          const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter );
 
-private:
     MAGNETIC_SETTINGS*     m_magneticSettings;
+
+    std::vector<NEARABLE_GEOM> m_pointOnLineCandidates;
 };
 
 #endif

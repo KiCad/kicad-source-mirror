@@ -19,19 +19,23 @@ set( KIMATH_SRCS
     src/geometry/convex_hull.cpp
     src/geometry/direction_45.cpp
     src/geometry/geometry_utils.cpp
+    src/geometry/half_line.cpp
     src/geometry/intersection.cpp
+    src/geometry/line.cpp
+    src/geometry/nearest.cpp
     src/geometry/oval.cpp
     src/geometry/seg.cpp
     src/geometry/shape.cpp
     src/geometry/shape_arc.cpp
     src/geometry/shape_collisions.cpp
+    src/geometry/shape_compound.cpp
     src/geometry/shape_file_io.cpp
     src/geometry/shape_line_chain.cpp
     src/geometry/shape_poly_set.cpp
     src/geometry/shape_rect.cpp
-    src/geometry/shape_compound.cpp
     src/geometry/shape_segment.cpp
     src/geometry/vector_utils.cpp
+    src/geometry/shape_utils.cpp
     src/geometry/vertex_set.cpp
 
 

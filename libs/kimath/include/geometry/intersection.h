@@ -27,17 +27,20 @@
 #include <vector>
 
 #include <math/vector2d.h>
+#include <math/box2.h>
 
-class SEG;
-class CIRCLE;
-class SHAPE_ARC;
-class SHAPE_RECT;
+#include <geometry/circle.h>
+#include <geometry/half_line.h>
+#include <geometry/line.h>
+#include <geometry/seg.h>
+#include <geometry/shape_arc.h>
+#include <geometry/shape_rect.h>
 
 /**
  * A variant type that can hold any of the supported geometry types
  * for intersection calculations.
  */
-using INTERSECTABLE_GEOM = std::variant<SEG, CIRCLE, SHAPE_ARC, SHAPE_RECT>;
+using INTERSECTABLE_GEOM = std::variant<LINE, HALF_LINE, SEG, CIRCLE, SHAPE_ARC, BOX2I>;
 
 /**
  * A visitor that visits INTERSECTABLE_GEOM variant objects with another
@@ -63,9 +66,11 @@ public:
      * other geometry.
      */
     void operator()( const SEG& aSeg ) const;
+    void operator()( const LINE& aLine ) const;
+    void operator()( const HALF_LINE& aLine ) const;
     void operator()( const CIRCLE& aCircle ) const;
     void operator()( const SHAPE_ARC& aArc ) const;
-    void operator()( const SHAPE_RECT& aArc ) const;
+    void operator()( const BOX2I& aArc ) const;
 
 private:
     const INTERSECTABLE_GEOM& m_otherGeometry;

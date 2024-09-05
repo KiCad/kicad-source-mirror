@@ -67,6 +67,11 @@ public:
         Normalize();
     }
 
+    static BOX2<Vec> ByCorners( const Vec& aCorner1, const Vec& aCorner2 )
+    {
+        return BOX2( aCorner1, aCorner2 - aCorner1 );
+    }
+
     void SetMaximum()
     {
         if constexpr( std::is_floating_point<coord_type>() )

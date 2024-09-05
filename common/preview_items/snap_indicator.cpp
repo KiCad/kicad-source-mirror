@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 20204 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <preview_items/snap_indicator.h>
+#include "preview_items/snap_indicator.h"
 
 #include <gal/graphics_abstraction_layer.h>
 
@@ -124,6 +124,16 @@ static void DrawIntersectionIcon( GAL& aGal, const VECTOR2I& aPosition, int aSiz
     aGal.DrawLine( aPosition - xLeg, aPosition + xLeg );
 }
 
+static void DrawOnElementIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
+{
+    const int nodeRadius = aSize / 8;
+
+    // A bit like midpoint by off to one side
+    DrawSnapNode( aGal, aPosition + VECTOR2I( aSize / 4, 0 ), nodeRadius );
+
+    aGal.DrawLine( aPosition - VECTOR2I( aSize / 2, 0 ), aPosition + VECTOR2I( aSize / 2, 0 ) );
+}
+
 
 void SNAP_INDICATOR::ViewDraw( int, VIEW* aView ) const
 {
@@ -134,19 +144,9 @@ void SNAP_INDICATOR::ViewDraw( int, VIEW* aView ) const
 
     gal.SetFillColor( m_color );
 
-    const auto scaleSize = [&]( double aSize ) -> int
-    {
-        return aView->ToWorld( aSize );
-    };
-
-    const auto scaleVec = [&]( const VECTOR2I& aVec ) -> VECTOR2I
-    {
-        return aView->ToWorld( aVec, false );
-    };
-
     // Put the icon near the x-line, so it doesn't overlap with the ruler helpers
-    const VECTOR2I typeIconPos = m_position + scaleVec( { 24, 10 } );
-    const int      size = scaleSize( 16 );
+    const VECTOR2I typeIconPos = m_position + aView->ToWorld( { 24, 10 }, false );
+    const int      size = aView->ToWorld( 16 );
 
     // For now, choose the first type that is set
     if( m_snapTypes & POINT_TYPE::PT_CORNER )
@@ -172,5 +172,9 @@ void SNAP_INDICATOR::ViewDraw( int, VIEW* aView ) const
     else if( m_snapTypes & POINT_TYPE::PT_INTERSECTION )
     {
         DrawIntersectionIcon( gal, typeIconPos, size );
+    }
+    else if( m_snapTypes & POINT_TYPE::PT_ON_ELEMENT )
+    {
+        DrawOnElementIcon( gal, typeIconPos, size );
     }
 }

@@ -214,6 +214,10 @@ public:
      */
     double Distance( const VECTOR2<extended_type>& aVector ) const;
 
+    /**
+     * Compute the squared distance between two vectors.
+     */
+    constexpr extended_type SquaredDistance( const VECTOR2<T>& aVector ) const;
 
     // Operators
 
@@ -554,6 +558,15 @@ double VECTOR2<T>::Distance( const VECTOR2<extended_type>& aVector ) const
 {
     VECTOR2<double> diff( aVector.x - x, aVector.y - y );
     return diff.EuclideanNorm();
+}
+
+template <class T>
+constexpr typename VECTOR2<T>::extended_type
+VECTOR2<T>::SquaredDistance( const VECTOR2<T>& aVector ) const
+{
+    const extended_type dx = (extended_type) x - aVector.x;
+    const extended_type dy = (extended_type) y - aVector.y;
+    return dx * dx + dy * dy;
 }
 
 

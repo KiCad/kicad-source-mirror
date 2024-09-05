@@ -29,12 +29,13 @@ set( QA_KIMATH_SRCS
 
     geometry/geom_test_utils.cpp
     geometry/test_chamfer.cpp
+    geometry/test_circle.cpp
     geometry/test_distribute.cpp
     geometry/test_dogbone.cpp
     geometry/test_eda_angle.cpp
     geometry/test_ellipse_to_bezier.cpp
     geometry/test_fillet.cpp
-    geometry/test_circle.cpp
+    geometry/test_half_line.cpp
     geometry/test_oval.cpp
     geometry/test_segment.cpp
     geometry/test_shape_compound_collision.cpp
