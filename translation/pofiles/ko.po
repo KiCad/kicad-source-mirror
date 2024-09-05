@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-26 14:04-0700\n"
-"PO-Revision-Date: 2024-09-01 23:09+0000\n"
+"PO-Revision-Date: 2024-09-05 21:09+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -34768,7 +34768,6 @@ msgid "Hide the footprint text and graphics"
 msgstr "풋프린트 텍스트와 그래픽 숨기기"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
-#, fuzzy
 msgid "Cross-out"
 msgstr "교차-표시"
 
