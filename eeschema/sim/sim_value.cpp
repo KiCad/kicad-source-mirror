@@ -418,7 +418,7 @@ std::string SIM_VALUE::Normalize( double aValue )
 
 std::string SIM_VALUE::ToSpice( const std::string& aString )
 {
-    static const wxRegEx plainNumber( wxS( "^[0-9.]*$" ) );
+    static const wxRegEx plainNumber( wxS( "^[0-9\\.]*$" ) );
 
     // Notation conversion is very slow.  Avoid if possible.
 
