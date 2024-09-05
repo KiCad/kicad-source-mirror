@@ -173,6 +173,8 @@ BOOST_AUTO_TEST_CASE( Subckts )
     {
         const auto& [modelName, model] = models.at( i );
 
+        BOOST_TEST_CONTEXT( "SUBCKT index: " << i )
+
         switch( i )
         {
         case 0:
@@ -258,6 +260,8 @@ BOOST_AUTO_TEST_CASE( Diodes )
     for( int i = 0; i < models.size(); ++i )
     {
         const auto& [modelName, model] = models.at( i );
+
+        BOOST_TEST_CONTEXT( "Diode index: " << i )
 
         switch( i )
         {
@@ -483,6 +487,8 @@ BOOST_AUTO_TEST_CASE( Bjts )
     for( int i = 0; i < models.size(); ++i )
     {
         const auto& [modelName, model] = models.at( i );
+
+        BOOST_TEST_CONTEXT( "BJT index: " << i )
 
         switch( i )
         {
@@ -1133,6 +1139,8 @@ BOOST_AUTO_TEST_CASE( Fets )
     for( int i = 0; i < models.size(); ++i )
     {
         const auto& [modelName, model] = models.at( i );
+
+        BOOST_TEST_CONTEXT( "FET index: " << i )
 
         // TODO: Actually test ALL model parameters.
 
