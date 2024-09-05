@@ -586,7 +586,7 @@ bool KICAD_MANAGER_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     KICAD_SETTINGS* settings = kicadSettings();
     settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
 
-    for( int i = 0; i < m_notebook->GetPageCount(); i++ )
+    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
         wxWindow* page = m_notebook->GetPage( i );
 
@@ -635,7 +635,7 @@ void KICAD_MANAGER_FRAME::doCloseWindow()
     }
 #endif
 
-    for( int i = 0; i < m_notebook->GetPageCount(); i++ )
+    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
         wxWindow* page = m_notebook->GetPage( i );
 
@@ -684,7 +684,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
 
     SetStatusText( "" );
 
-    for( int i = 0; i < m_notebook->GetPageCount(); i++ )
+    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
         wxWindow* page = m_notebook->GetPage( i );
 
