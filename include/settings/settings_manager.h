@@ -133,8 +133,7 @@ public:
     {
 #ifndef __WXMAC__
         return GetAppSettings<T>();
-#endif
-
+#else
         T*     ret      = nullptr;
         size_t typeHash = typeid( T ).hash_code();
 
@@ -162,6 +161,7 @@ public:
         m_app_settings_cache[typeHash] = ret;
 
         return ret;
+#endif
     }
 
     /**
