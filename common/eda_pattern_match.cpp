@@ -245,16 +245,18 @@ bool EDA_PATTERN_MATCH_WILDCARD_ANCHORED::SetPattern( const wxString& aPattern )
 
 bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
 {
-    bool matches = m_regex_search.IsValid() && m_regex_search.Matches( aPattern );
+    wxRegEx regex_search( R"(^(\w+)(<|<=|=|>=|>)([-+]?[\d.]*)(\w*)$)", wxRE_ADVANCED );
 
-    if( !matches || m_regex_search.GetMatchCount() < 5 )
+    bool matches = regex_search.IsValid() && regex_search.Matches( aPattern );
+
+    if( !matches || regex_search.GetMatchCount() < 5 )
         return false;
 
     m_pattern = aPattern;
-    wxString key = m_regex_search.GetMatch( aPattern, 1 );
-    wxString rel = m_regex_search.GetMatch( aPattern, 2 );
-    wxString val = m_regex_search.GetMatch( aPattern, 3 );
-    wxString unit = m_regex_search.GetMatch( aPattern, 4 );
+    wxString key = regex_search.GetMatch( aPattern, 1 );
+    wxString rel = regex_search.GetMatch( aPattern, 2 );
+    wxString val = regex_search.GetMatch( aPattern, 3 );
+    wxString unit = regex_search.GetMatch( aPattern, 4 );
 
     m_key = key.Lower();
 
@@ -326,16 +328,18 @@ EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_RELATIONAL::Find( const wxStrin
 
 int EDA_PATTERN_MATCH_RELATIONAL::FindOne( const wxString& aCandidate ) const
 {
-    bool matches = m_regex_description.IsValid() && m_regex_description.Matches( aCandidate );
+    wxRegEx regex_description( R"((\w+)[=:]([-+]?[\d.]+)(\w*))", wxRE_ADVANCED );
+
+    bool matches = regex_description.IsValid() && regex_description.Matches( aCandidate );
 
     if( !matches )
         return EDA_PATTERN_NOT_FOUND;
 
     size_t start, len;
-    m_regex_description.GetMatch( &start, &len, 0 );
-    wxString key = m_regex_description.GetMatch( aCandidate, 1 );
-    wxString val = m_regex_description.GetMatch( aCandidate, 2 );
-    wxString unit = m_regex_description.GetMatch( aCandidate, 3 );
+    regex_description.GetMatch( &start, &len, 0 );
+    wxString key = regex_description.GetMatch( aCandidate, 1 );
+    wxString val = regex_description.GetMatch( aCandidate, 2 );
+    wxString unit = regex_description.GetMatch( aCandidate, 3 );
 
     int istart = static_cast<int>( CLAMPED_VAL_INT_MAX( start ) );
 
@@ -365,10 +369,6 @@ int EDA_PATTERN_MATCH_RELATIONAL::FindOne( const wxString& aCandidate ) const
 }
 
 
-const wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_description(
-        R"((\w+)[=:]([-+]?[\d.]+)(\w*))", wxRE_ADVANCED );
-const wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_search(
-        R"(^(\w+)(<|<=|=|>=|>)([-+]?[\d.]*)(\w*)$)", wxRE_ADVANCED );
 const std::map<wxString, double> EDA_PATTERN_MATCH_RELATIONAL::m_units = {
     { wxS( "p" ),  1e-12 },
     { wxS( "n" ),  1e-9 },
