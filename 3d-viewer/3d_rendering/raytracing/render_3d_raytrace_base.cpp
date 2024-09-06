@@ -32,6 +32,7 @@
 #include "../color_rgba.h"
 #include "3d_fastmath.h"
 #include "3d_math.h"
+#include <core/thread_pool.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <wx/log.h>
 
@@ -186,50 +187,37 @@ void RENDER_3D_RAYTRACE_BASE::renderTracing( uint8_t* ptrPBO, REPORTER* aStatusR
     m_isPreview = false;
 
     auto startTime = std::chrono::steady_clock::now();
-    bool breakLoop = false;
-
     std::atomic<size_t> numBlocksRendered( 0 );
     std::atomic<size_t> currentBlock( 0 );
-    std::atomic<size_t> threadsFinished( 0 );
 
-    size_t parallelThreadCount = std::min<size_t>(
-            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            m_blockPositions.size() );
+    thread_pool& tp = GetKiCadThreadPool();
+    const int timeLimit = m_blockPositions.size() > 40000 ? 750 : 400;
 
-    const int timeLimit = m_blockPositions.size() > 40000 ? 500 : 200;
-
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    auto processBlocks = [&]()
     {
-        std::thread t = std::thread( [&]()
+        for( size_t iBlock = currentBlock.fetch_add( 1 );
+                    iBlock < m_blockPositions.size();
+                    iBlock = currentBlock.fetch_add( 1 ) )
         {
-            for( size_t iBlock = currentBlock.fetch_add( 1 );
-                 iBlock < m_blockPositions.size() && !breakLoop;
-                 iBlock = currentBlock.fetch_add( 1 ) )
+            if( !m_blockPositionsWasProcessed[iBlock] )
             {
-                if( !m_blockPositionsWasProcessed[iBlock] )
-                {
-                    renderBlockTracing( ptrPBO, iBlock );
-                    numBlocksRendered++;
-                    m_blockPositionsWasProcessed[iBlock] = 1;
-
-                    // Check if it spend already some time render and request to exit
-                    // to display the progress
-                    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
-                            std::chrono::steady_clock::now() - startTime );
-
-                    if( diff.count() > timeLimit )
-                        breakLoop = true;
-                }
+                renderBlockTracing( ptrPBO, iBlock );
+                m_blockPositionsWasProcessed[iBlock] = 1;
+                numBlocksRendered++;
             }
 
-            threadsFinished++;
-        } );
+            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::steady_clock::now() - startTime );
 
-        t.detach();
-    }
+            if( diff.count() > timeLimit )
+                break;
+        }
+    };
 
-    while( threadsFinished < parallelThreadCount )
-        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+    for( size_t i = 0; i < tp.get_thread_count() + 1; ++i )
+        tp.push_task( processBlocks );
+
+    tp.wait_for_tasks();
 
     m_blockRenderProgressCount += numBlocksRendered;
 
@@ -1721,28 +1709,47 @@ void RENDER_3D_RAYTRACE_BASE::initializeBlockPositions()
     const int blocks_y = m_realBufferSize.y / RAYPACKET_DIM;
     m_blockPositions.reserve( blocks_x * blocks_y );
 
-    for( int x = 0; x < blocks_x; ++x )
+    // Hilbert curve position calculation
+    // modified from Matters Computational, Springer 2011
+    // GPLv3, Copyright Joerg Arndt
+    constexpr auto hilbert_get_pos = []( size_t aT, size_t& aX, size_t& aY )
     {
-        for( int y = 0; y < blocks_y; ++y )
+        static const size_t htab[] = { 0b0010, 0b0100, 0b1100, 0b1001, 0b1111, 0b0101,
+                                       0b0001, 0b1000, 0b0000, 0b1010, 0b1110, 0b0111,
+                                       0b1101, 0b1011, 0b0011, 0b0110 };
+        static const size_t size = sizeof( size_t ) * 8;
+        size_t xv = 0;
+        size_t yv = 0;
+        size_t c01 = 0;
+
+        for( size_t i = 0; i < ( size / 2 ); ++i )
+        {
+            size_t abi = aT >> ( size - 2 );
+            aT <<= 2;
+
+            size_t st = htab[( c01 << 2 ) | abi];
+            c01 = st & 3;
+
+            yv = ( yv << 1 ) | ( ( st >> 2 ) & 1 );
+            xv = ( xv << 1 ) | ( st >> 3 );
+        }
+
+        aX = xv;
+        aY = yv;
+    };
+
+    size_t total_blocks = blocks_x * blocks_y;
+    size_t pos = 0;
+    size_t x = 0;
+    size_t y = 0;
+
+    while( m_blockPositions.size() < total_blocks )
+    {
+        hilbert_get_pos( pos++, x, y );
+
+        if( x < blocks_x && y < blocks_y )
             m_blockPositions.emplace_back( x * RAYPACKET_DIM, y * RAYPACKET_DIM );
     }
-
-    const SFVEC2UI center( m_realBufferSize.x / 2, m_realBufferSize.y / 2 );
-    std::sort( m_blockPositions.begin(), m_blockPositions.end(),
-            [&]( const SFVEC2UI& a, const SFVEC2UI& b )
-            {
-                // Sort order: inside out.
-                float distanceA = distance( a, center );
-                float distanceB = distance( b, center );
-
-                if( distanceA != distanceB )
-                    return distanceA < distanceB;
-
-                if( a[0] != b[0] )
-                    return a[0] < b[0];
-
-                return a[1] < b[1];
-            } );
 
     // Create m_shader buffer
     delete[] m_shaderBuffer;
