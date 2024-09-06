@@ -1471,6 +1471,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 t = dimension->Type();
 
                 dimension->SetLayer( layer );
+                dimension->SetMirrored( IsBackLayer( layer ) );
                 dimension->SetTextSize( boardSettings.GetTextSize( layer ) );
                 dimension->SetTextThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->SetItalic( boardSettings.GetTextItalic( layer ) );
