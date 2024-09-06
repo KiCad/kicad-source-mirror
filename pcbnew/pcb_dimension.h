@@ -485,6 +485,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false ) override;
+
     BITMAPS GetMenuImage() const override;
 
     /**
