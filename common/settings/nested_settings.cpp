@@ -89,7 +89,18 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
             wxLogTrace( traceSettings, wxT( "%s: attempting migration from version %d to %d" ),
                         m_filename, filever, m_schemaVersion );
 
-            if( !Migrate() )
+            bool migrated = false;
+
+            try
+            {
+                migrated = Migrate();
+            }
+            catch( ... )
+            {
+                success = false;
+            }
+
+            if( !migrated )
             {
                 wxLogTrace( traceSettings, wxT( "%s: migration failed!" ), GetFullFilename() );
                 success = false;
