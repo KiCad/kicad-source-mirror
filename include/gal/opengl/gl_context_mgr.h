@@ -86,6 +86,53 @@ public:
      */
     void UnlockCtx( wxGLContext* aContext );
 
+    /**
+     * Get the currently bound GL context.
+     *
+     * @return the currently bound GL context.
+     */
+    wxGLContext* GetCurrentCtx() const
+    {
+        return m_glCtx;
+    }
+
+    /**
+     * Get the currently bound GL canvas.
+     *
+     * @return the currently bound GL canvas.
+     */
+    wxGLCanvas* GetCurrentCanvas() const
+    {
+        auto it = m_glContexts.find( m_glCtx );
+        return it != m_glContexts.end() ? it->second : nullptr;
+    }
+
+    /**
+     * Run the given function first releasing the GL context lock, then restoring it.
+     *
+     * @param aFunction is the function to be executed.
+     */
+    template<typename Func, typename... Args>
+    auto RunWithoutCtxLock( Func&& aFunction, Args&&... args )
+    {
+        wxGLContext* currentCtx = GetCurrentCtx();
+        wxGLCanvas* currentCanvas = GetCurrentCanvas();
+        UnlockCtx( currentCtx );
+
+        if constexpr (std::is_void_v<decltype(aFunction(std::forward<Args>(args)...))>)
+        {
+            std::forward<Func>(aFunction)(std::forward<Args>(args)...);
+            LockCtx( currentCtx, currentCanvas );
+            return;
+        }
+        else
+        {
+            auto result = std::forward<Func>(aFunction)(std::forward<Args>(args)...);
+            LockCtx( currentCtx, currentCanvas );
+            return result;
+        }
+    }
+
 private:
     ///< Map of GL contexts & their parent canvases.
     std::map<wxGLContext*, wxGLCanvas*> m_glContexts;

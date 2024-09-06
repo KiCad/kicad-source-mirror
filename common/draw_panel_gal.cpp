@@ -204,7 +204,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
     if( !m_drawingEnabled )
         return false;
 
-    if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
+    if( !m_gal->IsInitialized() || !m_gal->IsVisible() || m_gal->IsContextLocked() )
         return false;
 
     if( m_drawing )

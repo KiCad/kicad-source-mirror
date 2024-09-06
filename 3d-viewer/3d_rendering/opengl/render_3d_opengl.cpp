@@ -32,6 +32,7 @@
 #include "common_ogl/ogl_utils.h"
 #include <board.h>
 #include <footprint.h>
+#include <gal/opengl/gl_context_mgr.h>
 #include <3d_math.h>
 #include <glm/geometric.hpp>
 #include <lset.h>
@@ -486,7 +487,13 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         if( aStatusReporter )
             aStatusReporter->Report( _( "Loading..." ) );
 
-        reload( aStatusReporter, aWarningReporter );
+        // Careful here!
+        // We are in the middle of rendering and the reload method may show
+        // a dialog box that requires the opengl context for a redraw
+        GL_CONTEXT_MANAGER::Get().RunWithoutCtxLock( [this, aStatusReporter, aWarningReporter]()
+        {
+            reload( aStatusReporter, aWarningReporter );
+        } );
 
         // generate a new 3D grid as the size of the board may had changed
         m_lastGridType = static_cast<GRID3D_TYPE>( cfg.grid_type );
