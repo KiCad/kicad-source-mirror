@@ -33,14 +33,6 @@
 #include <wx/log.h>
 #include <wx/stdpaths.h>
 
-#include <boost/version.hpp>
-
-#if BOOST_VERSION >= 106800
-#include <boost/uuid/detail/sha1.hpp>
-#else
-#include <boost/uuid/sha1.hpp>
-#endif
-
 #include "3d_cache.h"
 #include "3d_info.h"
 #include "3d_plugin_manager.h"
@@ -50,6 +42,7 @@
 #include <advanced_config.h>
 #include <common.h>     // For ExpandEnvVarSubstitutions
 #include <filename_resolver.h>
+#include <mmh3_hash.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -63,18 +56,6 @@
 static std::mutex mutex3D_cache;
 
 
-static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB ) noexcept
-{
-    for( int i = 0; i < 20; ++i )
-    {
-        if( shaA[i] != shaB[i] )
-            return false;
-    }
-
-    return true;
-}
-
-
 static bool checkTag( const char* aTag, void* aPluginMgrPtr )
 {
     if( nullptr == aTag || nullptr == aPluginMgrPtr )
@@ -86,51 +67,17 @@ static bool checkTag( const char* aTag, void* aPluginMgrPtr )
 }
 
 
-static const wxString sha1ToWXString( const unsigned char* aSHA1Sum )
-{
-    unsigned char uc;
-    unsigned char tmp;
-    char          sha1[41];
-    int           j = 0;
-
-    for( int i = 0; i < 20; ++i )
-    {
-        uc = aSHA1Sum[i];
-        tmp = uc / 16;
-
-        if( tmp > 9 )
-            tmp += 87;
-        else
-            tmp += 48;
-
-        sha1[j++] = tmp;
-        tmp = uc % 16;
-
-        if( tmp > 9 )
-            tmp += 87;
-        else
-            tmp += 48;
-
-        sha1[j++] = tmp;
-    }
-
-    sha1[j] = 0;
-
-    return wxString::FromUTF8Unchecked( sha1 );
-}
-
-
 class S3D_CACHE_ENTRY
 {
 public:
     S3D_CACHE_ENTRY();
     ~S3D_CACHE_ENTRY();
 
-    void SetSHA1( const unsigned char* aSHA1Sum );
+    void SetHash( const HASH_128& aHash );
     const wxString GetCacheBaseName();
 
     wxDateTime    modTime;      // file modification time
-    unsigned char sha1sum[20];
+    HASH_128      m_hash;
     std::string   pluginInfo;   // PluginName:Version string
     SCENEGRAPH*   sceneData;
     S3DMODEL*     renderData;
@@ -140,7 +87,7 @@ private:
     S3D_CACHE_ENTRY( const S3D_CACHE_ENTRY& source );
     S3D_CACHE_ENTRY& operator=( const S3D_CACHE_ENTRY& source );
 
-    wxString m_CacheBaseName;  // base name of cache file (a SHA1 digest)
+    wxString m_CacheBaseName;  // base name of cache file
 };
 
 
@@ -148,7 +95,7 @@ S3D_CACHE_ENTRY::S3D_CACHE_ENTRY()
 {
     sceneData = nullptr;
     renderData = nullptr;
-    memset( sha1sum, 0, 20 );
+    m_hash.Clear();
 }
 
 
@@ -161,24 +108,16 @@ S3D_CACHE_ENTRY::~S3D_CACHE_ENTRY()
 }
 
 
-void S3D_CACHE_ENTRY::SetSHA1( const unsigned char* aSHA1Sum )
+void S3D_CACHE_ENTRY::SetHash( const HASH_128& aHash )
 {
-    if( nullptr == aSHA1Sum )
-    {
-        wxLogTrace( MASK_3D_CACHE, wxT( "%s:%s:%d\n * [BUG] NULL passed for aSHA1Sum" ),
-                    __FILE__, __FUNCTION__, __LINE__ );
-
-        return;
-    }
-
-    memcpy( sha1sum, aSHA1Sum, 20 );
+    m_hash = aHash;
 }
 
 
 const wxString S3D_CACHE_ENTRY::GetCacheBaseName()
 {
     if( m_CacheBaseName.empty() )
-        m_CacheBaseName = sha1ToWXString( sha1sum );
+        m_CacheBaseName = m_hash.ToString();
 
     return m_CacheBaseName;
 }
@@ -234,13 +173,13 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePa
 
             if( fmdate != mi->second->modTime )
             {
-                unsigned char hashSum[20];
-                getSHA1( full3Dpath, hashSum );
+                HASH_128 hashSum;
+                getHash( full3Dpath, hashSum );
                 mi->second->modTime = fmdate;
 
-                if( !isSHA1Same( hashSum, mi->second->sha1sum ) )
+                if( hashSum != mi->second->m_hash )
                 {
-                    mi->second->SetSHA1( hashSum );
+                    mi->second->SetHash( hashSum );
                     reload = true;
                 }
             }
@@ -283,13 +222,13 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     if( aCachePtr )
         *aCachePtr = nullptr;
 
-    unsigned char    sha1sum[20];
+    HASH_128    hashSum;
     S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
     m_CacheList.push_back( ep );
     wxFileName fname( aFileName );
     ep->modTime = fname.GetModificationTime();
 
-    if( !getSHA1( aFileName, sha1sum ) || m_CacheDir.empty() )
+    if( !getHash( aFileName, hashSum ) || m_CacheDir.empty() )
     {
         // just in case we can't get a hash digest (for example, on access issues)
         // or we do not have a configured cache file directory, we create an
@@ -327,7 +266,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     if( aCachePtr )
         *aCachePtr = ep;
 
-    ep->SetSHA1( sha1sum );
+    ep->SetHash( hashSum );
 
     wxString bname = ep->GetCacheBaseName();
     wxString cachename = m_CacheDir + bname + wxT( ".3dc" );
@@ -345,19 +284,11 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 }
 
 
-bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
+bool S3D_CACHE::getHash( const wxString& aFileName, HASH_128& aHash )
 {
     if( aFileName.empty() )
     {
         wxLogTrace( MASK_3D_CACHE, wxT( "%s:%s:%d\n * [BUG] empty filename" ),
-                    __FILE__, __FUNCTION__, __LINE__ );
-
-        return false;
-    }
-
-    if( nullptr == aSHA1Sum )
-    {
-        wxLogTrace( MASK_3D_CACHE, wxT( "%s\n * [BUG] NULL pointer passed for aMD5Sum" ),
                     __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
@@ -372,31 +303,15 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
     if( nullptr == fp )
         return false;
 
-    boost::uuids::detail::sha1 dblock;
-    unsigned char block[4096];
+    MMH3_HASH dblock( 0xA1B2C3D4 );
+    std::vector<char> block( 4096 );
     size_t bsize = 0;
 
-    while( ( bsize = fread( &block, 1, 4096, fp ) ) > 0 )
-        dblock.process_bytes( block, bsize );
+    while( ( bsize = fread( block.data(), 1, 4096, fp ) ) > 0 )
+        dblock.add( block );
 
     fclose( fp );
-    unsigned int digest[5];
-    dblock.get_digest( digest );
-
-    // ensure MSB order
-    for( int i = 0; i < 5; ++i )
-    {
-        int idx = i << 2;
-        unsigned int tmp = digest[i];
-        aSHA1Sum[idx+3] = tmp & 0xff;
-        tmp >>= 8;
-        aSHA1Sum[idx+2] = tmp & 0xff;
-        tmp >>= 8;
-        aSHA1Sum[idx+1] = tmp & 0xff;
-        tmp >>= 8;
-        aSHA1Sum[idx] = tmp & 0xff;
-    }
-
+    aHash = dblock.digest();
     return true;
 }
 
