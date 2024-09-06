@@ -4156,7 +4156,7 @@ void ALTIUM_PCB::HelperSetTextboxAlignmentAndPos( const ATEXT6& aElem, PCB_TEXTB
         if( m_reporter )
         {
             wxString msg;
-            msg.Printf( _( "Unknown textbox justification %d, aText %s" ), justification,
+            msg.Printf( _( "Unknown textbox justification %d, text %s" ), justification,
                         aElem.text );
             m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
         }
