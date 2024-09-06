@@ -1205,6 +1205,145 @@ void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I&
     aArc->SetArcGeometry( aStart, mid, aEnd );
 }
 
+/**
+ * Class to help update the text position of a dimension when the crossbar changes.
+ *
+ * Choosing the right way to update the text position requires some care, and
+ * needs to hold some state from the original dimension position so the text can be placed
+ * in a similar position relative to the new crossbar. This class handles that state
+ * and the logic to find the new text position.
+ */
+class DIM_ALIGNED_TEXT_UPDATER
+{
+public:
+    DIM_ALIGNED_TEXT_UPDATER( PCB_DIM_ALIGNED& aDimension ) :
+            m_dimension( aDimension ), m_originalTextPos( aDimension.GetTextPos() ),
+            m_oldCrossBar( SEG{ aDimension.GetCrossbarStart(), aDimension.GetCrossbarEnd() } )
+    {
+    }
+
+    void UpdateTextAfterChange()
+    {
+        const SEG newCrossBar{ m_dimension.GetCrossbarStart(), m_dimension.GetCrossbarEnd() };
+
+        if( newCrossBar == m_oldCrossBar )
+        {
+            // Crossbar didn't change, text doesn't need to change
+            return;
+        }
+
+        const VECTOR2I newTextPos = getDimensionNewTextPosition();
+        m_dimension.SetTextPos( newTextPos );
+
+        const GR_TEXT_H_ALIGN_T oldJustify = m_dimension.GetHorizJustify();
+
+        // We may need to update the justification if we go past vertical.
+        if( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT
+            || oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT )
+        {
+            const VECTOR2I oldProject = m_oldCrossBar.LineProject( m_originalTextPos );
+            const VECTOR2I newProject = newCrossBar.LineProject( newTextPos );
+
+            const VECTOR2I oldProjectedOffset =
+                    oldProject - m_oldCrossBar.NearestPoint( oldProject );
+            const VECTOR2I newProjectedOffset = newProject - newCrossBar.NearestPoint( newProject );
+
+            const bool textWasLeftOf = oldProjectedOffset.x < 0
+                                       || ( oldProjectedOffset.x == 0 && oldProjectedOffset.y > 0 );
+            const bool textIsLeftOf = newProjectedOffset.x < 0
+                                      || ( newProjectedOffset.x == 0 && newProjectedOffset.y > 0 );
+
+            if( textWasLeftOf != textIsLeftOf )
+            {
+                // Flip whatever the user had set
+                m_dimension.SetHorizJustify(
+                        ( oldJustify == GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT )
+                                ? GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_RIGHT
+                                : GR_TEXT_H_ALIGN_T::GR_TEXT_H_ALIGN_LEFT );
+            }
+        }
+
+        // Update the dimension (again) to ensure the text knockouts are correct
+        m_dimension.Update();
+    }
+
+private:
+    VECTOR2I getDimensionNewTextPosition()
+    {
+        const SEG newCrossBar{ m_dimension.GetCrossbarStart(), m_dimension.GetCrossbarEnd() };
+
+        const EDA_ANGLE oldAngle = EDA_ANGLE( m_oldCrossBar.B - m_oldCrossBar.A );
+        const EDA_ANGLE newAngle = EDA_ANGLE( newCrossBar.B - newCrossBar.A );
+        const EDA_ANGLE rotation = oldAngle - newAngle;
+
+        // There are two modes - when the text is between the crossbar points, and when it's not.
+        if( !textIsOverCrossBar( m_oldCrossBar, m_originalTextPos ) )
+        {
+            VECTOR2I rotTextOffsetFromCbCenter = m_originalTextPos - m_oldCrossBar.Center();
+            RotatePoint( rotTextOffsetFromCbCenter, rotation );
+
+            VECTOR2I rotTextOffsetFromCbEnd =
+                    getTextOffsetFromCrossbarNearestEnd( m_oldCrossBar, m_originalTextPos );
+            RotatePoint( rotTextOffsetFromCbEnd, rotation );
+
+            // Which of the two crossbar points is now in the right direction? They could be swapped over now.
+            // If zero-length, doesn't matter, they're the same thing
+            const bool startIsInOffsetDirection =
+                    pointIsInDirection( m_dimension.GetCrossbarStart(), rotTextOffsetFromCbCenter,
+                                        newCrossBar.Center() );
+
+            const VECTOR2I& newCbRefPt = startIsInOffsetDirection ? m_dimension.GetCrossbarStart()
+                                                                  : m_dimension.GetCrossbarEnd();
+
+            // Apply the new offset to the correct crossbar point
+            return newCbRefPt + rotTextOffsetFromCbEnd;
+        }
+
+        // If the text was between the crossbar points, it should stay there, but we need to find a
+        // good place for it. Keep it the same distance from the crossbar line, but rotated as needed.
+
+        const VECTOR2I origTextPointProjected = m_oldCrossBar.NearestPoint( m_originalTextPos );
+        const double   oldRatio = ( origTextPointProjected - m_oldCrossBar.A ).EuclideanNorm()
+                                / double( m_oldCrossBar.Length() );
+
+        // Perpendicular from the crossbar line to the text position
+        // We need to keep this length constant
+        VECTOR2I rotCbNormalToText = m_originalTextPos - origTextPointProjected;
+        RotatePoint( rotCbNormalToText, rotation );
+
+        const VECTOR2I newProjected = newCrossBar.A + ( newCrossBar.B - newCrossBar.A ) * oldRatio;
+        return newProjected + rotCbNormalToText;
+    }
+
+    static bool pointIsInDirection( const VECTOR2I& aPoint, const VECTOR2I& aDirection,
+                                    const VECTOR2I& aFrom )
+    {
+        return ( aPoint - aFrom ).Dot( aDirection ) > 0;
+    };
+
+    static bool textIsOverCrossBar( const SEG& aCrossbar, const VECTOR2I& aTextPos )
+    {
+        const VECTOR2I projected = aCrossbar.NearestPoint( aTextPos );
+        return projected != aCrossbar.A && projected != aCrossbar.B;
+    }
+
+    static VECTOR2I getTextOffsetFromCrossbarNearestEnd( const SEG&      aCrossbar,
+                                                         const VECTOR2I& aTextPos )
+    {
+        const int distToCBStart = aCrossbar.A.Distance( aTextPos );
+        const int distToCBEnd = aCrossbar.B.Distance( aTextPos );
+
+        const bool isNearerStart = distToCBStart < distToCBEnd;
+
+        // This is the offset of the text from the nearer crossbar point
+        return aTextPos - ( isNearerStart ? aCrossbar.A : aCrossbar.B );
+    }
+
+    PCB_DIM_ALIGNED& m_dimension;
+    const VECTOR2I   m_originalTextPos;
+    const SEG        m_oldCrossBar;
+};
+
 
 void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 {
@@ -1622,6 +1761,8 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
     {
         PCB_DIM_ALIGNED* dimension = static_cast<PCB_DIM_ALIGNED*>( item );
 
+        DIM_ALIGNED_TEXT_UPDATER textPositionUpdater( *dimension );
+
         // Check which point is currently modified and updated dimension's points respectively
         if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) )
         {
@@ -1679,12 +1820,15 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
             dimension->Update();
         }
 
+        textPositionUpdater.UpdateTextAfterChange();
         break;
     }
 
     case PCB_DIM_ORTHOGONAL_T:
     {
         PCB_DIM_ORTHOGONAL* dimension = static_cast<PCB_DIM_ORTHOGONAL*>( item );
+
+        DIM_ALIGNED_TEXT_UPDATER textPositionUpdater( *dimension );
 
         if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) ||
             isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
@@ -1735,7 +1879,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         {
             dimension->SetEnd( m_editedPoint->GetPosition() );
         }
-        else if( isModified( m_editPoints->Point(DIM_TEXT ) ) )
+        else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
         {
             // Force manual mode if we weren't already in it
             dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
@@ -1743,6 +1887,9 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         }
 
         dimension->Update();
+
+        // After recompute, find the new text position
+        textPositionUpdater.UpdateTextAfterChange();
 
         break;
     }
