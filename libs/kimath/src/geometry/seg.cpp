@@ -441,7 +441,7 @@ int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
 
     ecoord dist = isqrt( dist_sq );
 
-    return static_cast<int>( aDetermineSide ? dist : std::abs( dist ) );
+    return static_cast<int>( aDetermineSide ? sgn( det ) * dist : std::abs( dist ) );
 }
 
 
