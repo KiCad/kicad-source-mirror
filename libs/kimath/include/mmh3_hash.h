@@ -61,7 +61,7 @@ class MMH3_HASH
 public:
     MMH3_HASH() { reset( 0 ); };
 
-    MMH3_HASH( uint32_t aSeed = 0 ) { reset( aSeed ); }
+    MMH3_HASH( uint32_t aSeed ) { reset( aSeed ); }
 
     FORCE_INLINE void reset( uint32_t aSeed = 0 )
     {
