@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialogs/panel_notebook_base.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
 #include <wx/scrolwin.h>
@@ -21,11 +22,10 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_KICAD_LAUNCHER_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_KICAD_LAUNCHER_BASE : public wxPanel
+class PANEL_KICAD_LAUNCHER_BASE : public PANEL_NOTEBOOK_BASE
 {
 	private:
 

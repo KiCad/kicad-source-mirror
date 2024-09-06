@@ -188,6 +188,8 @@ protected:
 
     void onToolbarSizeChanged();
 
+    void onNotebookPageCloseRequest( wxAuiNotebookEvent& evt );
+
 private:
     void setupTools();
     void setupActions();
@@ -211,6 +213,7 @@ private:
     bool m_active_project;
 
     PROJECT_TREE_PANE*    m_leftWin;
+    wxAuiNotebook*        m_notebook;
     PANEL_KICAD_LAUNCHER* m_launcher;
     ACTION_TOOLBAR*       m_mainToolBar;
     int                   m_lastToolbarIconSize;

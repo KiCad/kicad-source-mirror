@@ -33,8 +33,7 @@
 PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
         PANEL_KICAD_LAUNCHER_BASE( aParent )
 {
-    m_frame = static_cast<KICAD_MANAGER_FRAME*>( aParent );
-    m_toolManager = m_frame->GetToolManager();
+    m_frame = static_cast<KICAD_MANAGER_FRAME*>( aParent->GetParent() );
     CreateLaunchers();
 
     Bind( wxEVT_SYS_COLOUR_CHANGED,
@@ -44,8 +43,37 @@ PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
 
 PANEL_KICAD_LAUNCHER::~PANEL_KICAD_LAUNCHER()
 {
+    for( wxWindow* window : m_scrolledWindow->GetChildren() )
+    {
+        if( dynamic_cast<BITMAP_BUTTON*>( window ) != nullptr )
+        {
+            window->Unbind( wxEVT_BUTTON, &PANEL_KICAD_LAUNCHER::onLauncherButtonClick, this );
+        }
+    }
+
     Unbind( wxEVT_SYS_COLOUR_CHANGED,
-          wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ), this );
+            wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ), this );
+}
+
+
+void PANEL_KICAD_LAUNCHER::onLauncherButtonClick( wxCommandEvent& aEvent )
+{
+    // Defocus the button because leaving the large buttons
+    // focused after a click looks out of place in the launcher
+    m_frame->SetFocus();
+    // Gives a slice of time to update the button state (mandatory on GTK,
+    // useful on MSW to avoid some cosmetic issues).
+    wxSafeYield();
+
+    BITMAP_BUTTON*     button = (BITMAP_BUTTON*) aEvent.GetEventObject();
+    const TOOL_ACTION* action = static_cast<const TOOL_ACTION*>( button->GetClientData() );
+
+    if( action == nullptr )
+        return;
+
+    OPT_TOOL_EVENT evt = action->MakeEvent();
+    evt->SetHasPosition( false );
+    m_frame->GetToolManager()->ProcessEvent( *evt );
 }
 
 
@@ -68,63 +96,49 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
     wxFont helpFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     helpFont.SetStyle( wxFONTSTYLE_ITALIC );
 
-    auto addLauncher = [&]( const TOOL_ACTION& aAction, BITMAPS aBitmaps,
-                            const wxString& aHelpText, bool enabled = true )
+    auto addLauncher = [&]( const TOOL_ACTION& aAction, BITMAPS aBitmaps, const wxString& aHelpText,
+                            bool enabled = true )
+    {
+        BITMAP_BUTTON* btn = new BITMAP_BUTTON( m_scrolledWindow, wxID_ANY );
+        btn->SetBitmap( KiBitmapBundle( aBitmaps ) );
+        btn->SetDisabledBitmap( KiDisabledBitmapBundle( aBitmaps ) );
+        btn->SetPadding( FromDIP( 4 ) );
+        btn->SetToolTip( aAction.GetTooltip() );
+
+        wxStaticText* label = new wxStaticText( m_scrolledWindow, wxID_ANY, wxEmptyString );
+        wxStaticText* help = new wxStaticText( m_scrolledWindow, wxID_ANY, wxEmptyString );
+
+        label->SetToolTip( aAction.GetTooltip() );
+        label->SetFont( titleFont );
+        label->SetLabel( aAction.GetFriendlyName() );
+
+        help->SetFont( helpFont );
+        help->SetLabel( aHelpText );
+
+        btn->Bind( wxEVT_BUTTON, &PANEL_KICAD_LAUNCHER::onLauncherButtonClick, this );
+        btn->SetClientData( (void*) &aAction );
+
+        // The bug fix below makes this handler active for the entire window width.  Without
+        // any visual feedback that's a bit odd.  Disabling for now.
+        // label->Bind( wxEVT_LEFT_UP, handler );
+
+        m_toolsSizer->Add( btn, 1, wxALIGN_CENTER_VERTICAL );
+
+        wxBoxSizer* textSizer = new wxBoxSizer( wxVERTICAL );
+
+        textSizer->Add( label );
+        textSizer->Add( help );
+
+        m_toolsSizer->Add( textSizer, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL );
+
+        btn->Enable( enabled );
+        if( !enabled )
         {
-            BITMAP_BUTTON* btn = new BITMAP_BUTTON( m_scrolledWindow, wxID_ANY );
-            btn->SetBitmap( KiBitmapBundle( aBitmaps ) );
-            btn->SetDisabledBitmap( KiDisabledBitmapBundle( aBitmaps ) );
-            btn->SetPadding( FromDIP( 4 ) );
-            btn->SetToolTip( aAction.GetTooltip() );
+            help->Disable();
+            label->Disable();
+        }
 
-            auto handler =
-                    [&]( wxEvent& aEvent )
-                    {
-                        // Defocus the button because leaving the large buttons
-                        // focused after a click looks out of place in the launcher
-                        m_frame->SetFocus();
-                        // Gives a slice of time to update the button state (mandatory on GTK,
-                        // useful on MSW to avoid some cosmetic issues).
-                        wxSafeYield();
-
-                        OPT_TOOL_EVENT evt = aAction.MakeEvent();
-                        evt->SetHasPosition( false );
-                        m_toolManager->ProcessEvent( *evt );
-                    };
-
-            wxStaticText* label = new wxStaticText( m_scrolledWindow, wxID_ANY, wxEmptyString );
-            wxStaticText* help = new wxStaticText( m_scrolledWindow, wxID_ANY, wxEmptyString );
-
-            label->SetToolTip( aAction.GetTooltip() );
-            label->SetFont( titleFont );
-            label->SetLabel( aAction.GetFriendlyName() );
-
-            help->SetFont( helpFont );
-            help->SetLabel( aHelpText );
-
-            btn->Bind( wxEVT_BUTTON, handler );
-
-            // The bug fix below makes this handler active for the entire window width.  Without
-            // any visual feedback that's a bit odd.  Disabling for now.
-            // label->Bind( wxEVT_LEFT_UP, handler );
-
-            m_toolsSizer->Add( btn, 1, wxALIGN_CENTER_VERTICAL );
-
-            wxBoxSizer* textSizer = new wxBoxSizer( wxVERTICAL );
-
-            textSizer->Add( label );
-            textSizer->Add( help );
-
-            m_toolsSizer->Add( textSizer, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL );
-
-            btn->Enable( enabled );
-            if( !enabled )
-            {
-                help->Disable();
-                label->Disable();
-            }
-
-            return btn;
+        return btn;
     };
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, BITMAPS::icon_eeschema,
@@ -164,12 +178,10 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 }
 
 
-void PANEL_KICAD_LAUNCHER::onThemeChanged( wxSysColourChangedEvent &aEvent )
+void PANEL_KICAD_LAUNCHER::onThemeChanged( wxSysColourChangedEvent& aEvent )
 {
     GetBitmapStore()->ThemeChanged();
     CreateLaunchers();
 
     aEvent.Skip();
 }
-
-
