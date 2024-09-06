@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-26 14:04-0700\n"
+"POT-Creation-Date: 2024-09-06 09:08-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1094,6 +1094,98 @@ msgstr "Yes"
 
 msgid "No"
 msgstr "No"
+
+msgid "Fetching design_block libraries..."
+msgstr "Fetching design_block libraries..."
+
+msgid "Loading design_blocks..."
+msgstr "Loading design_blocks..."
+
+msgid "KiCad"
+msgstr "KiCad"
+
+#, c-format
+msgid "UNKNOWN (%d)"
+msgstr "UNKNOWN (%d)"
+
+msgid "KiCad Design Block folders"
+msgstr "KiCad Design Block folders"
+
+#, c-format
+msgid "Cannot overwrite library path '%s'."
+msgstr "Cannot overwrite library path '%s'."
+
+#, c-format
+msgid ""
+"Library path '%s' could not be created.\n"
+"\n"
+"Make sure you have write permissions and try again."
+msgstr ""
+"Library path '%s' could not be created.\n"
+"\n"
+"Make sure you have write permissions and try again."
+
+#, c-format
+msgid "Insufficient permissions to delete folder '%s'."
+msgstr "Insufficient permissions to delete folder '%s'."
+
+#, c-format
+msgid "Library folder '%s' has unexpected files."
+msgstr "Library folder '%s' has unexpected files."
+
+#, c-format
+msgid "Unexpected folder '%s' found in library path '%s'."
+msgstr "Unexpected folder '%s' found in library path '%s'."
+
+#, c-format
+msgid "Design block library '%s' cannot be deleted."
+msgstr "Design block library '%s' cannot be deleted."
+
+#, c-format
+msgid "Design block metadata file '%s' could not be read."
+msgstr "Design block metadata file '%s' could not be read."
+
+msgid "Design block does not have a valid library ID."
+msgstr "Design block does not have a valid library ID."
+
+#, c-format
+msgid "Schematic source file '%s' does not exist."
+msgstr "Schematic source file '%s' does not exist."
+
+#, c-format
+msgid "Design block folder '%s' could not be created."
+msgstr "Design block folder '%s' could not be created."
+
+#, c-format
+msgid "Schematic file '%s' could not be saved as design block at '%s'."
+msgstr "Schematic file '%s' could not be saved as design block at '%s'."
+
+#, c-format
+msgid "Design block '%s' does not exist."
+msgstr "Design block '%s' does not exist."
+
+#, c-format
+msgid "Design block folder '%s' could not be deleted."
+msgstr "Design block folder '%s' could not be deleted."
+
+#, c-format
+msgid ""
+"Duplicate library nickname '%s' found in design block library table file "
+"line %d."
+msgstr ""
+"Duplicate library nickname '%s' found in design block library table file "
+"line %d."
+
+#, c-format
+msgid "design-block-lib-table files contain no library named '%s'."
+msgstr "design-block-lib-table files contain no library named '%s'."
+
+msgid "Added by Plugin and Content Manager"
+msgstr "Added by Plugin and Content Manager"
+
+#, c-format
+msgid "Cannot create global library table path '%s'."
+msgstr "Cannot create global library table path '%s'."
 
 msgid "Description"
 msgstr "Description"
@@ -3720,13 +3812,6 @@ msgstr ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 
-msgid "Added by Plugin and Content Manager"
-msgstr "Added by Plugin and Content Manager"
-
-#, c-format
-msgid "Cannot create global library table path '%s'."
-msgstr "Cannot create global library table path '%s'."
-
 #, c-format
 msgid "Command '%s' could not be found."
 msgstr "Command '%s' could not be found."
@@ -4539,6 +4624,9 @@ msgstr "Open %s"
 msgid "Error loading project footprint library table."
 msgstr "Error loading project footprint library table."
 
+msgid "Error loading project design block library table."
+msgstr "Error loading project design block library table."
+
 msgid "This is the default net class."
 msgstr "This is the default net class."
 
@@ -5202,6 +5290,12 @@ msgstr "Manage Footprint Libraries..."
 msgid "Edit the global and project footprint library lists"
 msgstr "Edit the global and project footprint library lists"
 
+msgid "Manage Design Block Libraries..."
+msgstr "Manage Design Block Libraries..."
+
+msgid "Edit the global and project design block library lists"
+msgstr "Edit the global and project design block library lists"
+
 msgid "Getting Started with KiCad"
 msgstr "Getting Started with KiCad"
 
@@ -5697,6 +5791,12 @@ msgstr "KiCad footprint files"
 
 msgid "KiCad footprint library paths"
 msgstr "KiCad footprint library paths"
+
+msgid "KiCad design block path"
+msgstr "KiCad design block path"
+
+msgid "KiCad design block library paths"
+msgstr "KiCad design block library paths"
 
 msgid "Drawing sheet files"
 msgstr "Drawing sheet files"
@@ -6209,6 +6309,94 @@ msgstr "%s not found"
 
 msgid "Selected net:"
 msgstr "Selected net:"
+
+msgid "Documentation"
+msgstr "Documentation"
+
+#, c-format
+msgid "Error loading design block %s from library '%s'."
+msgstr "Error loading design block %s from library '%s'."
+
+msgid "Add the library to the global library table?"
+msgstr "Add the library to the global library table?"
+
+msgid "Add To Global Library Table"
+msgstr "Add To Global Library Table"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Project"
+msgstr "Project"
+
+msgid "Choose the Library Table to add the library to:"
+msgstr "Choose the Library Table to add the library to:"
+
+msgid "Add To Library Table"
+msgstr "Add To Library Table"
+
+#, c-format
+msgid "Library %s is read only."
+msgstr "Library %s is read only."
+
+#, c-format
+msgid "Library %s already exists."
+msgstr "Library %s already exists."
+
+msgid "Enter a description for the library:"
+msgstr "Enter a description for the library:"
+
+msgid "Library Description"
+msgstr "Library Description"
+
+msgid "Please select a library to save the design block to."
+msgstr "Please select a library to save the design block to."
+
+msgid "Design blocks with nested sheets are not supported."
+msgstr "Design blocks with nested sheets are not supported."
+
+msgid "Enter a name for the design block:"
+msgstr "Enter a name for the design block:"
+
+msgid "Design Block Name"
+msgstr "Design Block Name"
+
+msgid "Error saving temporary schematic file to create design block."
+msgstr "Error saving temporary schematic file to create design block."
+
+msgid "Please select some items to save as a design block."
+msgstr "Please select some items to save as a design block."
+
+msgid "Please select a library to delete."
+msgstr "Please select a library to delete."
+
+#, c-format
+msgid "Library '%s' is read only."
+msgstr "Library '%s' is read only."
+
+#, c-format
+msgid ""
+"Delete design block library '%s' from disk? This will delete all design "
+"blocks within the library."
+msgstr ""
+"Delete design block library '%s' from disk? This will delete all design "
+"blocks within the library."
+
+#, c-format
+msgid "Design block library '%s' deleted"
+msgstr "Design block library '%s' deleted"
+
+#, c-format
+msgid "Delete design block '%s' in library '%s' from disk?"
+msgstr "Delete design block '%s' in library '%s' from disk?"
+
+#, c-format
+msgid "Design block '%s' deleted from library '%s'"
+msgstr "Design block '%s' deleted from library '%s'"
+
+#, c-format
+msgid "Error loading designblock %s from library '%s'."
+msgstr "Error loading designblock %s from library '%s'."
 
 msgid "Annotation Messages:"
 msgstr "Annotation Messages:"
@@ -7257,6 +7445,25 @@ msgstr "Image Properties"
 msgid "Position"
 msgstr "Position"
 
+msgid "Start reference designator:"
+msgstr "Start reference designator:"
+
+msgid ""
+"The symbol name in library and also the default\n"
+"symbol value when loaded in the schematic."
+msgstr ""
+"The symbol name in library and also the default\n"
+"symbol value when loaded in the schematic."
+
+msgid "Increment by:"
+msgstr "Increment by:"
+
+msgid "All sheets"
+msgstr "All sheets"
+
+msgid "Increment Annotations From"
+msgstr "Increment Annotations From"
+
 msgid "Edit Junction"
 msgstr "Edit Junction"
 
@@ -7430,13 +7637,6 @@ msgstr "Pin Table"
 
 msgid "Symbol name:"
 msgstr "Symbol name:"
-
-msgid ""
-"The symbol name in library and also the default\n"
-"symbol value when loaded in the schematic."
-msgstr ""
-"The symbol name in library and also the default\n"
-"symbol value when loaded in the schematic."
 
 msgid "Derive from existing symbol:"
 msgstr "Derive from existing symbol:"
@@ -8117,20 +8317,20 @@ msgstr "F&orward"
 msgid "&Backward"
 msgstr "&Backward"
 
-msgid "&Match case"
-msgstr "&Match case"
+msgid "Match &case"
+msgstr "Match &case"
 
-msgid "Words"
-msgstr "Words"
+msgid "Whole &words only"
+msgstr "Whole &words only"
 
-msgid "Wildcards"
-msgstr "Wildcards"
+msgid "Wi&ldcards"
+msgstr "Wi&ldcards"
 
 msgid "Search pin &names and numbers"
 msgstr "Search pin &names and numbers"
 
-msgid "Search hidden fields"
-msgstr "Search hidden fields"
+msgid "Search &hidden fields"
+msgstr "Search &hidden fields"
 
 msgid "Search the current &sheet only"
 msgstr "Search the current &sheet only"
@@ -8155,9 +8355,6 @@ msgstr "BOM Presets"
 
 msgid "Electrical Rules"
 msgstr "Electrical Rules"
-
-msgid "Project"
-msgstr "Project"
 
 msgid "Net Classes"
 msgstr "Net Classes"
@@ -8710,6 +8907,18 @@ msgstr "Not Connected"
 
 msgid "Browse Models"
 msgstr "Browse Models"
+
+#, c-format
+msgid ""
+"Failed to parse:\n"
+"\n"
+"%s\n"
+"Using generic SPICE model."
+msgstr ""
+"Failed to parse:\n"
+"\n"
+"%s\n"
+"Using generic SPICE model."
 
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
 msgstr "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -10087,6 +10296,9 @@ msgstr "Net Navigator"
 msgid "Selection Filter"
 msgstr "Selection Filter"
 
+msgid "Design Blocks"
+msgstr "Design Blocks"
+
 msgid "Input Pin"
 msgstr "Input Pin"
 
@@ -10538,21 +10750,6 @@ msgstr ""
 msgid "Schematic is read only."
 msgstr "Schematic is read only."
 
-msgid "Insert Schematic"
-msgstr "Insert Schematic"
-
-msgid "Import Schematic Sheet Content..."
-msgstr "Import Schematic Sheet Content..."
-
-msgid ""
-"This operation cannot be undone.\n"
-"\n"
-"Do you want to save the current document before proceeding?"
-msgstr ""
-"This operation cannot be undone.\n"
-"\n"
-"Do you want to save the current document before proceeding?"
-
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
@@ -10850,14 +11047,6 @@ msgstr "Symbol %s not found in any library or cache."
 msgid "Errors occurred creating symbol library %s."
 msgstr "Errors occurred creating symbol library %s."
 
-msgid "Insert Schematic Sheet Content..."
-msgstr "Insert Schematic Sheet Content..."
-
-msgid ""
-"Append schematic sheet content from another project to the current sheet"
-msgstr ""
-"Append schematic sheet content from another project to the current sheet"
-
 msgid "Import"
 msgstr "Import"
 
@@ -10886,6 +11075,9 @@ msgstr "Symbols to Library..."
 
 msgid "Symbols to New Library..."
 msgstr "Symbols to New Library..."
+
+msgid "Show Design Blocks"
+msgstr "Show Design Blocks"
 
 msgid "&Place"
 msgstr "&Place"
@@ -11134,21 +11326,6 @@ msgid ""
 msgstr ""
 "Error saving project-specific symbol library table:\n"
 "%s"
-
-msgid "Add the library to the global library table?"
-msgstr "Add the library to the global library table?"
-
-msgid "Add To Global Library Table"
-msgstr "Add To Global Library Table"
-
-msgid "Global"
-msgstr "Global"
-
-msgid "Choose the Library Table to add the library to:"
-msgstr "Choose the Library Table to add the library to:"
-
-msgid "Add To Library Table"
-msgstr "Add To Library Table"
 
 msgid "No symbol libraries are loaded."
 msgstr "No symbol libraries are loaded."
@@ -12263,9 +12440,6 @@ msgstr "Mirror Y"
 msgid "Library Link"
 msgstr "Library Link"
 
-msgid "Library Description"
-msgstr "Library Description"
-
 #, c-format
 msgid "%d Column Table"
 msgstr "%d Column Table"
@@ -13334,6 +13508,9 @@ msgstr "SPICE Simulator"
 msgid "Errors during netlist generation."
 msgstr "Errors during netlist generation."
 
+msgid "Warnings during netlist generation."
+msgstr "Warnings during netlist generation."
+
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator requires a fully annotated schematic."
 
@@ -13471,10 +13648,6 @@ msgstr "Measurement"
 
 msgid "Format"
 msgstr "Format"
-
-#, c-format
-msgid "Cannot create sim model from %s"
-msgstr "Cannot create sim model from %s"
 
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
@@ -14220,6 +14393,24 @@ msgstr "Select a connection item under the cursor"
 msgid "Select a complete connection"
 msgstr "Select a complete connection"
 
+msgid "Save Sheet as Design Block..."
+msgstr "Save Sheet as Design Block..."
+
+msgid "Create a new design block from the current sheet"
+msgstr "Create a new design block from the current sheet"
+
+msgid "Save Selection as Design Block..."
+msgstr "Save Selection as Design Block..."
+
+msgid "Create a new design block from the current selection"
+msgstr "Create a new design block from the current selection"
+
+msgid "Delete Design Block"
+msgstr "Delete Design Block"
+
+msgid "Remove the selected design block from its library"
+msgstr "Remove the selected design block from its library"
+
 msgid "Save Library As..."
 msgstr "Save Library As..."
 
@@ -14373,6 +14564,12 @@ msgstr "Place Symbols"
 msgid "Place Power Symbols"
 msgstr "Place Power Symbols"
 
+msgid "Place Design Block"
+msgstr "Place Design Block"
+
+msgid "Add selected design block to current sheet"
+msgstr "Add selected design block to current sheet"
+
 msgid "Place No Connect Flags"
 msgstr "Place No Connect Flags"
 
@@ -14394,11 +14591,23 @@ msgstr "Place Hierarchical Labels"
 msgid "Draw Hierarchical Sheets"
 msgstr "Draw Hierarchical Sheets"
 
+msgid "Draw Sheet Copy"
+msgstr "Draw Sheet Copy"
+
+msgid "Copy sheet into project and draw on current sheet"
+msgstr "Copy sheet into project and draw on current sheet"
+
 msgid "Place Sheet Pins"
 msgstr "Place Sheet Pins"
 
 msgid "Sync Sheet Pins"
 msgstr "Sync Sheet Pins"
+
+msgid "Import Sheet"
+msgstr "Import Sheet"
+
+msgid "Import sheet into project"
+msgstr "Import sheet into project"
 
 msgid "Place Global Labels"
 msgstr "Place Global Labels"
@@ -14727,6 +14936,14 @@ msgstr "Annotate Schematic..."
 
 msgid "Fill in schematic symbol reference designators"
 msgstr "Fill in schematic symbol reference designators"
+
+msgid "Increment Annotations From..."
+msgstr "Increment Annotations From..."
+
+msgid ""
+"Increment a subset of reference designators starting at a particular symbol"
+msgstr ""
+"Increment a subset of reference designators starting at a particular symbol"
 
 msgid "Schematic Setup..."
 msgstr "Schematic Setup..."
@@ -15156,6 +15373,15 @@ msgstr "Press <ESC> to cancel symbol creation."
 msgid "Place Symbol"
 msgstr "Place Symbol"
 
+msgid "Add design block"
+msgstr "Add design block"
+
+msgid "Import Schematic Sheet Content..."
+msgstr "Import Schematic Sheet Content..."
+
+msgid "Choose Schematic"
+msgstr "Choose Schematic"
+
 msgid "Press <ESC> to cancel image creation."
 msgstr "Press <ESC> to cancel image creation."
 
@@ -15218,6 +15444,14 @@ msgstr "Draw Table"
 
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Press <ESC> to cancel sheet creation."
+
+#, c-format
+msgid "File '%s' does not exist."
+msgstr "File '%s' does not exist."
+
+#, c-format
+msgid "Could not import sheet from '%s'."
+msgstr "Could not import sheet from '%s'."
 
 msgid "Modify sheet pin"
 msgstr "Modify sheet pin"
@@ -15333,6 +15567,9 @@ msgstr ""
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "Symbols with broken library symbol links cannot be edited."
 
+msgid "Increment Annotations"
+msgstr "Increment Annotations"
+
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplicate IDs replaced.\n"
@@ -15371,13 +15608,6 @@ msgstr "Press <ESC> to cancel move."
 #, c-format
 msgid "Page '%s' not found."
 msgstr "Page '%s' not found."
-
-msgid ""
-"Errors during netlist generation.\n"
-"\n"
-msgstr ""
-"Errors during netlist generation.\n"
-"\n"
 
 msgid "Open Simulation Workbook"
 msgstr "Open Simulation Workbook"
@@ -15467,6 +15697,25 @@ msgstr "Place Pin Anyway"
 msgid "Repeat Pin"
 msgstr "Repeat Pin"
 
+msgid "Place as sheet"
+msgstr "Place as sheet"
+
+msgid "Keep annotations"
+msgstr "Keep annotations"
+
+msgid "Place copies of the design block on subsequent clicks."
+msgstr "Place copies of the design block on subsequent clicks."
+
+msgid "Place the design block as a new sheet."
+msgstr "Place the design block as a new sheet."
+
+msgid ""
+"Preserve reference designators in the source schematic. Otherwise, clear "
+"then reannotate according to settings."
+msgstr ""
+"Preserve reference designators in the source schematic. Otherwise, clear "
+"then reannotate according to settings."
+
 msgid "Create a new project for this schematic"
 msgstr "Create a new project for this schematic"
 
@@ -15489,6 +15738,15 @@ msgstr "Renaming sheet"
 #, c-format
 msgid "(page %s)"
 msgstr "(page %s)"
+
+msgid "Loading Design Block Libraries"
+msgstr "Loading Design Block Libraries"
+
+msgid "Updating Design Block Libraries"
+msgstr "Updating Design Block Libraries"
+
+msgid "Recently Used"
+msgstr "Recently Used"
 
 #, c-format
 msgid "Only %s"
@@ -15514,9 +15772,6 @@ msgstr "Other items"
 
 msgid "Graphical shapes"
 msgstr "Graphical shapes"
-
-msgid "Recently Used"
-msgstr "Recently Used"
 
 msgid "Already Placed"
 msgstr "Already Placed"
@@ -17068,9 +17323,6 @@ msgstr "Project Template Selector"
 msgid "Would you like to automatically check for updates on startup?"
 msgstr "Would you like to automatically check for updates on startup?"
 
-msgid "KiCad"
-msgstr "KiCad"
-
 msgid "Check for Updates"
 msgstr "Check for Updates"
 
@@ -17114,6 +17366,51 @@ msgstr "Go to the platform appropriate downloads page."
 
 msgid "Update Available"
 msgstr "Update Available"
+
+#, c-format
+msgid "folder with %s files"
+msgstr "folder with %s files"
+
+#, c-format
+msgid "Illegal character '%c' in nickname '%s'."
+msgstr "Illegal character '%c' in nickname '%s'."
+
+msgid ""
+"Select one or more rows containing libraries to save as current KiCad format."
+msgstr ""
+"Select one or more rows containing libraries to save as current KiCad format."
+
+#, c-format
+msgid "Save '%s' as current KiCad format and replace entry in table?"
+msgstr "Save '%s' as current KiCad format and replace entry in table?"
+
+#, c-format
+msgid "Save %d libraries as current KiCad format and replace entries in table?"
+msgstr ""
+"Save %d libraries as current KiCad format and replace entries in table?"
+
+#, c-format
+msgid ""
+"Folder '%s' already exists. Do you want overwrite any existing design blocks?"
+msgstr ""
+"Folder '%s' already exists. Do you want overwrite any existing design blocks?"
+
+#, c-format
+msgid "Failed to save design block library file '%s'."
+msgstr "Failed to save design block library file '%s'."
+
+#, c-format
+msgid "Select %s Library"
+msgstr "Select %s Library"
+
+msgid "Warning: Duplicate Nicknames"
+msgstr "Warning: Duplicate Nicknames"
+
+msgid "LIbrary Format"
+msgstr "LIbrary Format"
+
+msgid "Add Existing"
+msgstr "Add Existing"
 
 msgid "Edit the project schematic"
 msgstr "Edit the project schematic"
@@ -17220,6 +17517,13 @@ msgid ""
 msgstr ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
+
+msgid ""
+"An error occurred attempting to load the global design block library table.\n"
+"Please edit this global design block library table in Preferences menu."
+msgstr ""
+"An error occurred attempting to load the global design block library table.\n"
+"Please edit this global design block library table in Preferences menu."
 
 msgid "Export GLB (binary GLTF)"
 msgstr "Export GLB (binary GLTF)"
@@ -17355,9 +17659,6 @@ msgstr "Please enter fully qualified repository url"
 
 msgid "Add repository"
 msgstr "Add repository"
-
-msgid "Add Existing"
-msgstr "Add Existing"
 
 msgid "Remove repository"
 msgstr "Remove repository"
@@ -18117,6 +18418,9 @@ msgstr "Application failed to load:\n"
 
 msgid "Application cannot start."
 msgstr "Application cannot start."
+
+msgid "Design Block Libraries"
+msgstr "Design Block Libraries"
 
 msgid "Update Check"
 msgstr "Update Check"
@@ -22594,26 +22898,23 @@ msgstr "Hit(s): %d / %zu"
 msgid "Search for:"
 msgstr "Search for:"
 
-msgid "Match case"
-msgstr "Match case"
+msgid "Wra&p"
+msgstr "Wra&p"
 
-msgid "Wrap"
-msgstr "Wrap"
+msgid "Search footprint reference &designators"
+msgstr "Search footprint reference &designators"
 
-msgid "Search footprint reference designators"
-msgstr "Search footprint reference designators"
+msgid "Search footprint &values"
+msgstr "Search footprint &values"
 
-msgid "Search footprint values"
-msgstr "Search footprint values"
+msgid "Search &other text items"
+msgstr "Search &other text items"
 
-msgid "Search other text items"
-msgstr "Search other text items"
+msgid "Search DRC &markers"
+msgstr "Search DRC &markers"
 
-msgid "Search DRC markers"
-msgstr "Search DRC markers"
-
-msgid "Search net names"
-msgstr "Search net names"
+msgid "Search &net names"
+msgstr "Search &net names"
 
 msgid "Restart Search"
 msgstr "Restart Search"
@@ -25260,28 +25561,6 @@ msgid "Hidden footprint libraries are not yet supported."
 msgstr "Hidden footprint libraries are not yet supported."
 
 #, c-format
-msgid "folder with %s files"
-msgstr "folder with %s files"
-
-#, c-format
-msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Illegal character '%c' in nickname '%s'."
-
-msgid ""
-"Select one or more rows containing libraries to save as current KiCad format."
-msgstr ""
-"Select one or more rows containing libraries to save as current KiCad format."
-
-#, c-format
-msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr "Save '%s' as current KiCad format and replace entry in table?"
-
-#, c-format
-msgid "Save %d libraries as current KiCad format and replace entries in table?"
-msgstr ""
-"Save %d libraries as current KiCad format and replace entries in table?"
-
-#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
 msgstr ""
@@ -25290,16 +25569,6 @@ msgstr ""
 #, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Failed to save footprint library file '%s'."
-
-#, c-format
-msgid "Select %s Library"
-msgstr "Select %s Library"
-
-msgid "Warning: Duplicate Nicknames"
-msgstr "Warning: Duplicate Nicknames"
-
-msgid "LIbrary Format"
-msgstr "LIbrary Format"
 
 msgid "Error adding 3D model"
 msgstr "Error adding 3D model"
@@ -25947,8 +26216,8 @@ msgstr "Drawings"
 msgid "User1"
 msgstr "User1"
 
-msgid " Off-board, front"
-msgstr " Off-board, front"
+msgid "Off-board, front"
+msgstr "Off-board, front"
 
 msgid "Off-board, back"
 msgstr "Off-board, back"
@@ -28744,18 +29013,6 @@ msgid "Footprint exported to file '%s'."
 msgstr "Footprint exported to file '%s'."
 
 #, c-format
-msgid "Library %s is read only."
-msgstr "Library %s is read only."
-
-#, c-format
-msgid "Library %s already exists."
-msgstr "Library %s already exists."
-
-#, c-format
-msgid "Library '%s' is read only."
-msgstr "Library '%s' is read only."
-
-#, c-format
 msgid "Delete footprint '%s' from library '%s'?"
 msgstr "Delete footprint '%s' from library '%s'?"
 
@@ -28846,9 +29103,6 @@ msgstr "no wizard selected"
 
 msgid "Couldn't reload footprint wizard"
 msgstr "Couldn't reload footprint wizard"
-
-msgid "Documentation"
-msgstr "Documentation"
 
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
@@ -30315,8 +30569,8 @@ msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 
 #, c-format
-msgid "Unknown textbox justification %d, text %s"
-msgstr "Unknown textbox justification %d, text %s"
+msgid "Unknown textbox justification %d, aText %s"
+msgstr "Unknown textbox justification %d, aText %s"
 
 msgid "Loading rectangles..."
 msgstr "Loading rectangles..."
@@ -30951,10 +31205,6 @@ msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
 #, c-format
-msgid "Insufficient permissions to delete folder '%s'."
-msgstr "Insufficient permissions to delete folder '%s'."
-
-#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Library folder '%s' has unexpected sub-folders."
 
@@ -31128,10 +31378,6 @@ msgstr "Footprint file name '%s' is not valid."
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Insufficient permissions to delete '%s'."
-
-#, c-format
-msgid "Cannot overwrite library path '%s'."
-msgstr "Cannot overwrite library path '%s'."
 
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
@@ -31333,10 +31579,6 @@ msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-
-#, c-format
-msgid "UNKNOWN (%d)"
-msgstr "UNKNOWN (%d)"
 
 msgid "(not activated)"
 msgstr "(not activated)"
@@ -35188,6 +35430,77 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "&Match case"
+#~ msgstr "&Match case"
+
+#~ msgid "Words"
+#~ msgstr "Words"
+
+#~ msgid "Wildcards"
+#~ msgstr "Wildcards"
+
+#~ msgid "Search hidden fields"
+#~ msgstr "Search hidden fields"
+
+#~ msgid "Insert Schematic"
+#~ msgstr "Insert Schematic"
+
+#~ msgid ""
+#~ "This operation cannot be undone.\n"
+#~ "\n"
+#~ "Do you want to save the current document before proceeding?"
+#~ msgstr ""
+#~ "This operation cannot be undone.\n"
+#~ "\n"
+#~ "Do you want to save the current document before proceeding?"
+
+#~ msgid "Insert Schematic Sheet Content..."
+#~ msgstr "Insert Schematic Sheet Content..."
+
+#~ msgid ""
+#~ "Append schematic sheet content from another project to the current sheet"
+#~ msgstr ""
+#~ "Append schematic sheet content from another project to the current sheet"
+
+#, c-format
+#~ msgid "Cannot create sim model from %s"
+#~ msgstr "Cannot create sim model from %s"
+
+#~ msgid ""
+#~ "Errors during netlist generation.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Errors during netlist generation.\n"
+#~ "\n"
+
+#~ msgid "Match case"
+#~ msgstr "Match case"
+
+#~ msgid "Wrap"
+#~ msgstr "Wrap"
+
+#~ msgid "Search footprint reference designators"
+#~ msgstr "Search footprint reference designators"
+
+#~ msgid "Search footprint values"
+#~ msgstr "Search footprint values"
+
+#~ msgid "Search other text items"
+#~ msgstr "Search other text items"
+
+#~ msgid "Search DRC markers"
+#~ msgstr "Search DRC markers"
+
+#~ msgid "Search net names"
+#~ msgstr "Search net names"
+
+#~ msgid " Off-board, front"
+#~ msgstr " Off-board, front"
+
+#, c-format
+#~ msgid "Unknown textbox justification %d, text %s"
+#~ msgstr "Unknown textbox justification %d, text %s"
 
 #~ msgid "Warning: Bad scale number"
 #~ msgstr "Warning: Bad scale number"
