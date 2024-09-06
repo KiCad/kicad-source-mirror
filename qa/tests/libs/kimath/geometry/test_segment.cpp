@@ -695,4 +695,20 @@ BOOST_AUTO_TEST_CASE( SegCreatePerpendicular )
     }
 }
 
+BOOST_AUTO_TEST_CASE( LineDistance )
+{
+    SEG seg( { 0, 0 }, { 10, 0 } );
+
+    BOOST_TEST( seg.LineDistance( { 5, 0 } ) == 0 );
+    BOOST_TEST( seg.LineDistance( { 5, 8 } ) == 8 );
+}
+
+BOOST_AUTO_TEST_CASE( LineDistanceSided )
+{
+    SEG seg( { 0, 0 }, { 10, 0 } );
+
+    BOOST_TEST( seg.LineDistance( { 5, 8 }, true ) == 8 );
+    BOOST_TEST( seg.LineDistance( { 5, -8 }, true ) == -8 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
