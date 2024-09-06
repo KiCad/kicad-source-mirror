@@ -31,6 +31,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <font/font.h>
 #include <board.h>
+#include <core/mirror.h>
 #include <pcb_dimension.h>
 #include <pcb_text.h>
 #include <geometry/shape_compound.h>
@@ -375,14 +376,12 @@ void PCB_DIMENSION_BASE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
 {
-    int axis = aMirrorLeftRight ? axis_pos.x : axis_pos.y;
     VECTOR2I newPos = GetTextPos();
 
-#define INVERT( pos ) ( ( pos ) = axis - ( ( pos ) - axis ) )
     if( aMirrorLeftRight )
-        INVERT( newPos.x );
+        MIRROR( newPos.x, axis_pos.x );
     else
-        INVERT( newPos.y );
+        MIRROR( newPos.y, axis_pos.y );
 
     SetTextPos( newPos );
 
@@ -391,13 +390,13 @@ void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight
 
     if( aMirrorLeftRight )
     {
-        INVERT( m_start.x );
-        INVERT( m_end.x );
+        MIRROR( m_start.x, axis_pos.x );
+        MIRROR( m_end.x, axis_pos.x );
     }
     else
     {
-        INVERT( m_start.y );
-        INVERT( m_end.y );
+        MIRROR( m_start.y, axis_pos.y );
+        MIRROR( m_end.y, axis_pos.y );
     }
 
     if( IsSideSpecific() )
@@ -697,9 +696,9 @@ void PCB_DIM_ALIGNED::swapData( BOARD_ITEM* aImage )
 
 void PCB_DIM_ALIGNED::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
 {
-    PCB_DIMENSION_BASE::Mirror( axis_pos, aMirrorLeftRight );
-
     m_height = -m_height;
+    // Call this last for the Update()
+    PCB_DIMENSION_BASE::Mirror( axis_pos, aMirrorLeftRight );
 }
 
 
@@ -884,6 +883,19 @@ void PCB_DIM_ORTHOGONAL::swapData( BOARD_ITEM* aImage )
                *static_cast<PCB_DIM_ORTHOGONAL*>( aImage ) );
 
     Update();
+}
+
+
+void PCB_DIM_ORTHOGONAL::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
+{
+    // Only reverse the height if the height is aligned with the flip
+    if( m_orientation == DIR::HORIZONTAL && !aMirrorLeftRight )
+        m_height = -m_height;
+    else if( m_orientation == DIR::VERTICAL && aMirrorLeftRight )
+        m_height = -m_height;
+
+    // Call this last, as we need the Update()
+    PCB_DIMENSION_BASE::Mirror( axis_pos, aMirrorLeftRight );
 }
 
 
