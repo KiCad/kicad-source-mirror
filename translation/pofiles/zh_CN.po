@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-26 14:05-0700\n"
+"POT-Creation-Date: 2024-09-06 09:03-0700\n"
 "PO-Revision-Date: 2024-08-29 07:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -3026,7 +3026,7 @@ msgstr "选项"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:430 pcbnew/footprint.cpp:3463
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:430 pcbnew/footprint.cpp:3491
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:105
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -3139,7 +3139,7 @@ msgid "Output mode:"
 msgstr "输出模式:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
-#: common/dialogs/panel_setup_netclasses_base.cpp:62 common/eda_text.cpp:1233
+#: common/dialogs/panel_setup_netclasses_base.cpp:62 common/eda_text.cpp:1249
 #: eeschema/dialogs/dialog_label_properties_base.cpp:100
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:72
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
@@ -3761,7 +3761,7 @@ msgstr "较小"
 msgid "Use compact icons in the toolbars"
 msgstr "在工具栏中使用更紧凑的图标"
 
-#: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:812
+#: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:828
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1271
 #: eeschema/sch_text.cpp:411 eeschema/sch_textbox.cpp:452
 #: gerbview/gerber_file_image.cpp:357 gerbview/gerber_file_image.cpp:361
@@ -4248,7 +4248,7 @@ msgstr "缩放"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:930
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
-#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3422
+#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3450
 #: pcbnew/pad.cpp:2342 pcbnew/pad.cpp:2360 pcbnew/pcb_dimension.cpp:1618
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -4382,7 +4382,7 @@ msgstr "库名称前缀:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3424
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3452
 #: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:630
 #: pcbnew/zone.cpp:1552
 msgid "Solid"
@@ -4664,7 +4664,7 @@ msgstr "无法完整地读取图纸 '%s'。"
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
 #: common/eda_item.cpp:350 common/eda_item.cpp:375 common/eda_item.cpp:396
-#: common/eda_text.cpp:1186 eeschema/dialogs/panel_setup_formatting_base.cpp:47
+#: common/eda_text.cpp:1202 eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/lib_field.cpp:546 eeschema/lib_text.cpp:415 eeschema/lib_text.h:60
 #: eeschema/sch_field.cpp:933 eeschema/sch_field.cpp:1454
 #: eeschema/sch_label.cpp:2229 eeschema/schematic.cpp:66
@@ -5378,7 +5378,7 @@ msgstr "长度"
 msgid "Points"
 msgstr "点"
 
-#: common/eda_shape.cpp:754 common/eda_text.cpp:1214 eeschema/lib_field.cpp:664
+#: common/eda_shape.cpp:754 common/eda_text.cpp:1230 eeschema/lib_field.cpp:664
 #: eeschema/lib_text.cpp:532 eeschema/lib_textbox.cpp:559
 #: eeschema/sch_bitmap.cpp:231 eeschema/sch_field.cpp:1436
 #: eeschema/sch_text.cpp:495 eeschema/sch_textbox.cpp:517
@@ -5396,7 +5396,7 @@ msgstr "点"
 msgid "Width"
 msgstr "宽度"
 
-#: common/eda_shape.cpp:757 common/eda_text.cpp:1219 eeschema/lib_field.cpp:665
+#: common/eda_shape.cpp:757 common/eda_text.cpp:1235 eeschema/lib_field.cpp:665
 #: eeschema/lib_text.cpp:533 eeschema/lib_textbox.cpp:560
 #: eeschema/sch_bitmap.cpp:232 eeschema/sch_field.cpp:1437
 #: eeschema/sch_text.cpp:496 eeschema/sch_textbox.cpp:518
@@ -5465,7 +5465,7 @@ msgstr "填充"
 msgid "Fill Color"
 msgstr "填充颜色"
 
-#: common/eda_text.cpp:813 common/eda_text.cpp:1201
+#: common/eda_text.cpp:829 common/eda_text.cpp:1217
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_label_properties_base.cpp:93
@@ -5491,7 +5491,7 @@ msgstr "填充颜色"
 msgid "Italic"
 msgstr "斜体"
 
-#: common/eda_text.cpp:814 common/eda_text.cpp:1205
+#: common/eda_text.cpp:830 common/eda_text.cpp:1221
 #: eeschema/dialogs/dialog_field_properties_base.cpp:138
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:214
 #: eeschema/dialogs/dialog_label_properties_base.cpp:94
@@ -5512,11 +5512,11 @@ msgstr "斜体"
 msgid "Bold"
 msgstr "粗体"
 
-#: common/eda_text.cpp:815
+#: common/eda_text.cpp:831
 msgid "Bold+Italic"
 msgstr "粗体+斜体"
 
-#: common/eda_text.cpp:1169
+#: common/eda_text.cpp:1185
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:288 eeschema/fields_grid_table.cpp:627
@@ -5527,7 +5527,7 @@ msgstr "粗体+斜体"
 msgid "Left"
 msgstr "向左"
 
-#: common/eda_text.cpp:1170 common/eda_text.cpp:1174
+#: common/eda_text.cpp:1186 common/eda_text.cpp:1190
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:281 eeschema/fields_grid_table.cpp:289
@@ -5540,7 +5540,7 @@ msgstr "向左"
 msgid "Center"
 msgstr "居中"
 
-#: common/eda_text.cpp:1171
+#: common/eda_text.cpp:1187
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:290 eeschema/fields_grid_table.cpp:629
@@ -5551,7 +5551,7 @@ msgstr "居中"
 msgid "Right"
 msgstr "向右"
 
-#: common/eda_text.cpp:1173
+#: common/eda_text.cpp:1189
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:280 eeschema/fields_grid_table.cpp:637
 #: eeschema/fields_grid_table.cpp:791 eeschema/lib_field.cpp:567
@@ -5559,7 +5559,7 @@ msgstr "向右"
 msgid "Top"
 msgstr "向上"
 
-#: common/eda_text.cpp:1175
+#: common/eda_text.cpp:1191
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:282 eeschema/fields_grid_table.cpp:639
 #: eeschema/fields_grid_table.cpp:795 eeschema/lib_field.cpp:569
@@ -5567,7 +5567,7 @@ msgstr "向上"
 msgid "Bottom"
 msgstr "向下"
 
-#: common/eda_text.cpp:1180
+#: common/eda_text.cpp:1196
 #: eeschema/dialogs/dialog_label_properties_base.cpp:96
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
@@ -5582,12 +5582,12 @@ msgstr "向下"
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:3454 pcbnew/fp_text_grid_table.cpp:145
+#: pcbnew/footprint.cpp:3482 pcbnew/fp_text_grid_table.cpp:145
 #: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1649
 msgid "Orientation"
 msgstr "方向"
 
-#: common/eda_text.cpp:1184 eeschema/dialogs/dialog_text_properties_base.h:113
+#: common/eda_text.cpp:1200 eeschema/dialogs/dialog_text_properties_base.h:113
 #: eeschema/lib_field.cpp:670 eeschema/lib_textbox.cpp:565
 #: eeschema/sch_field.cpp:1441 eeschema/sch_text.cpp:501
 #: eeschema/sch_textbox.cpp:524 pcbnew/dialogs/dialog_text_properties.cpp:154
@@ -5596,7 +5596,7 @@ msgstr "方向"
 msgid "Text Properties"
 msgstr "文本属性"
 
-#: common/eda_text.cpp:1192
+#: common/eda_text.cpp:1208
 #: eeschema/dialogs/dialog_label_properties_base.cpp:99
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
@@ -5611,7 +5611,7 @@ msgstr "文本属性"
 msgid "Font"
 msgstr "字体"
 
-#: common/eda_text.cpp:1197 eeschema/lib_field.cpp:661
+#: common/eda_text.cpp:1213 eeschema/lib_field.cpp:661
 #: eeschema/lib_textbox.cpp:561 eeschema/sch_field.cpp:1434
 #: eeschema/sch_label.cpp:2230 eeschema/sch_text.cpp:497
 #: eeschema/sch_textbox.cpp:519
@@ -5622,14 +5622,14 @@ msgstr "字体"
 msgid "Thickness"
 msgstr "线宽"
 
-#: common/eda_text.cpp:1208 eeschema/lib_field.cpp:662
+#: common/eda_text.cpp:1224 eeschema/lib_field.cpp:662
 #: eeschema/lib_text.cpp:530 eeschema/sch_field.cpp:1435
 #: eeschema/sch_text.cpp:493 pcbnew/fp_text_grid_table.cpp:150
 #: pcbnew/microwave/microwave_polygon.cpp:127
 msgid "Mirrored"
 msgstr "镜像"
 
-#: common/eda_text.cpp:1211
+#: common/eda_text.cpp:1227
 #: eeschema/dialogs/dialog_field_properties_base.cpp:88
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:296
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:130
@@ -5652,18 +5652,18 @@ msgstr "镜像"
 msgid "Visible"
 msgstr "可见"
 
-#: common/eda_text.cpp:1225 eeschema/sch_label.cpp:2234
+#: common/eda_text.cpp:1241 eeschema/sch_label.cpp:2234
 msgid "Horizontal Justification"
 msgstr "水平对齐"
 
-#: common/eda_text.cpp:1229 eeschema/sch_label.cpp:2236
+#: common/eda_text.cpp:1245 eeschema/sch_label.cpp:2236
 #: pcbnew/pcb_dimension.cpp:1524 pcbnew/pcb_dimension.cpp:1560
 #: pcbnew/pcb_dimension.cpp:1601 pcbnew/pcb_dimension.cpp:1646
 #: pcbnew/pcb_dimension.cpp:1683
 msgid "Vertical Justification"
 msgstr "垂直对齐"
 
-#: common/eda_text.cpp:1237 eeschema/lib_field.cpp:660
+#: common/eda_text.cpp:1253 eeschema/lib_field.cpp:660
 #: eeschema/sch_field.cpp:1433 eeschema/sch_label.cpp:2195
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
@@ -6425,7 +6425,8 @@ msgstr ""
 msgid "Cannot read ZIP archive '%s'"
 msgstr "无法读取 ZIP 压缩包 '%s'"
 
-#: common/io/easyedapro/easyedapro_import_utils.cpp:253
+#: common/io/easyedapro/easyedapro_import_utils.cpp:262
+#: common/io/easyedapro/easyedapro_import_utils.cpp:301
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "无法解析 JSON 文件 '%2$s' 中的第 %1$d 行: %3$s"
@@ -7093,7 +7094,7 @@ msgstr "按值分组"
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
 #: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1968
 #: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2821
-#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3460
+#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3488
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
 msgstr "位号"
@@ -7109,7 +7110,7 @@ msgstr "按值和封装分组"
 #: eeschema/sch_symbol.cpp:2837 eeschema/tools/sch_edit_tool.cpp:478
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:3477
+#: pcbnew/footprint.cpp:3505
 msgid "Attributes"
 msgstr "特性"
 
@@ -8697,7 +8698,7 @@ msgstr "'%s' 不是有效封装。"
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:2015 eeschema/sch_symbol.cpp:2573
 #: eeschema/sch_symbol.cpp:2833 eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3473
+#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3501
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "关键字"
@@ -10341,7 +10342,7 @@ msgstr "作用于符号的所有图形符号样式"
 msgid "Text Item Properties"
 msgstr "文本项目属性"
 
-#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:597
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:598
 msgid "Edit Text and Graphics"
 msgstr "编辑文本与图形属性"
 
@@ -10626,11 +10627,11 @@ msgstr "标签不能为空。"
 msgid "untitled"
 msgstr "无标题"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:602
+#: eeschema/dialogs/dialog_label_properties.cpp:590
 msgid "Edit Label Properties"
 msgstr "编辑标签属性"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:685
+#: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
 msgstr "首字段是必填项。"
 
@@ -10668,7 +10669,7 @@ msgstr "显示语法帮助窗口"
 #: eeschema/sch_symbol.cpp:2819
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:3458
+#: pcbnew/footprint.cpp:3486
 msgid "Fields"
 msgstr "字段"
 
@@ -12107,7 +12108,7 @@ msgstr "将描边宽度设置为 0 以使用原理图默认线宽。"
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "清除颜色以使用原理图编辑器默认颜色。"
 
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:179
+#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
 msgid "Edit Sheet Pin"
 msgstr "编辑图纸引脚"
 
@@ -13454,7 +13455,7 @@ msgstr ""
 "无效的超链接目标。请输入一个有效的 URL (例如 file:// 或 http(s)://) 或 \"#<页"
 "码>\" 来创建指向此原理图中某一页的超链接。"
 
-#: eeschema/dialogs/dialog_text_properties.cpp:539
+#: eeschema/dialogs/dialog_text_properties.cpp:528
 msgid "Edit Text Properties"
 msgstr "编辑文本属性"
 
@@ -16202,7 +16203,7 @@ msgid "Blanket not currently supported."
 msgstr "尚未支持空白。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1050
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4343
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4350
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "在 %2$s 中发现未知或意外记录 ID %1$d。"
@@ -16213,7 +16214,7 @@ msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "符号 \"%s\"(位于图纸 \"%s\", 该图纸位于索引 %d) 被符号\"%s\"替换。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1260
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3374
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3379
 msgid "Pin has unexpected orientation."
 msgstr "引脚方向不符预期。"
 
@@ -16229,59 +16230,59 @@ msgstr "引脚的外边缘类型出乎意料。"
 msgid "Pin has unexpected inner edge type."
 msgstr "引脚的内边缘类型出乎意料。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1727
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1732
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "贝塞尔曲线有 %d 个控制点。至少应为 2 个。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2873
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2878
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
 msgstr "Altium 的线束连接器 (%s) 被导入为分级表。请检查导入的原理图。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3251
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3256
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:378
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "未知样式的电源端口导入为 'Bar' 类型。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3304
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3309
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1013
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:693
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "电源符号创建名为 '%s' 的全局标签"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3438
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3445
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr "Altium 的线束端口 (%s) 被导入为文本框。请检查导入的原理图。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3495
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3502
 #, c-format
 msgid "Port %s has no connections."
 msgstr "端口 %s 未连接。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3687
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3694
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "在存储中找不到嵌入文件 %s。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3704
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3723
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3711
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3730
 #, c-format
 msgid "Error reading image %s."
 msgstr "读取图片 %s 时出错。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3716
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3723
 #, c-format
 msgid "File not found %s."
 msgstr "找不到文件 %s。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4473
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4480
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Altium 原理图库文件应为 5.0 版本"
 
@@ -16982,7 +16983,7 @@ msgstr "未知 SCH_FILE_T 值: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:57
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
-#: pcbnew/footprint.cpp:3449 pcbnew/footprint.cpp:3452
+#: pcbnew/footprint.cpp:3477 pcbnew/footprint.cpp:3480
 #: pcbnew/fp_text_grid_table.cpp:144
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1061
 #: pcbnew/pad.cpp:2370 pcbnew/pcb_dimension.cpp:462
@@ -17390,11 +17391,11 @@ msgstr "X 轴镜像"
 msgid "Mirror Y"
 msgstr "Y 轴镜像"
 
-#: eeschema/sch_symbol.cpp:2827 pcbnew/footprint.cpp:3467
+#: eeschema/sch_symbol.cpp:2827 pcbnew/footprint.cpp:3495
 msgid "Library Link"
 msgstr "库链接"
 
-#: eeschema/sch_symbol.cpp:2830 pcbnew/footprint.cpp:3470
+#: eeschema/sch_symbol.cpp:2830 pcbnew/footprint.cpp:3498
 #: pcbnew/plot_board_layers.cpp:129
 msgid "Library Description"
 msgstr "库描述"
@@ -17407,11 +17408,11 @@ msgstr "不在 PCB 中进行绘制"
 msgid "Exclude From Simulation"
 msgstr "不参与电路仿真"
 
-#: eeschema/sch_symbol.cpp:2845 pcbnew/footprint.cpp:3484
+#: eeschema/sch_symbol.cpp:2845 pcbnew/footprint.cpp:3512
 msgid "Exclude From Bill of Materials"
 msgstr "不在物料清单中显示"
 
-#: eeschema/sch_symbol.cpp:2848 pcbnew/footprint.cpp:3487
+#: eeschema/sch_symbol.cpp:2848 pcbnew/footprint.cpp:3515
 msgid "Do not Populate"
 msgstr "不作装配"
 
@@ -19945,7 +19946,7 @@ msgid "Add a pin"
 msgstr "添加引脚"
 
 #: eeschema/tools/ee_actions.cpp:341 eeschema/tools/ee_actions.cpp:524
-#: eeschema/tools/sch_drawing_tools.cpp:1536
+#: eeschema/tools/sch_drawing_tools.cpp:1538
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:298
 #: pagelayout_editor/tools/pl_actions.cpp:63 pcbnew/tools/pcb_actions.cpp:174
 msgid "Add Text"
@@ -19957,8 +19958,8 @@ msgid "Add a text item"
 msgstr "添加文本项目"
 
 #: eeschema/tools/ee_actions.cpp:350 eeschema/tools/ee_actions.cpp:532
-#: eeschema/tools/sch_drawing_tools.cpp:1877
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:478
+#: eeschema/tools/sch_drawing_tools.cpp:1882
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:481
 #: pcbnew/tools/pcb_actions.cpp:182
 msgid "Add Text Box"
 msgstr "添加文本框"
@@ -20055,9 +20056,9 @@ msgstr "添加总线入口"
 msgid "Add a wire entry to a bus"
 msgstr "为总线添加连线入口"
 
-#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1546
-#: eeschema/tools/sch_drawing_tools.cpp:1551
-#: eeschema/tools/sch_drawing_tools.cpp:1556
+#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1548
+#: eeschema/tools/sch_drawing_tools.cpp:1553
+#: eeschema/tools/sch_drawing_tools.cpp:1558
 msgid "Add Label"
 msgstr "添加标签"
 
@@ -20073,7 +20074,7 @@ msgstr "添加网络类指令"
 msgid "Add net class directive labels"
 msgstr "添加网络类指令标签"
 
-#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1541
+#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1543
 msgid "Add Hierarchical Label"
 msgstr "添加层次标签"
 
@@ -20343,7 +20344,7 @@ msgstr "更改为文本框"
 msgid "Change existing item to a text box"
 msgstr "将现有项目更改为文本框"
 
-#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2458
+#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2460
 msgid "Cleanup Sheet Pins"
 msgstr "清理图纸引脚"
 
@@ -21139,15 +21140,15 @@ msgid "Could not load image from '%s'."
 msgstr "无法从 '%s' 加载图片。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:797
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:681
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:684
 #: pcbnew/tools/drawing_tool.cpp:1504
 msgid "No graphic items found in file."
 msgstr "在文件中没找到图形项。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:827
 #: eeschema/tools/sch_drawing_tools.cpp:909
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:716
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:805
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:719
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:808
 msgid "Import Graphic"
 msgstr "导入图形"
 
@@ -21155,36 +21156,36 @@ msgstr "导入图形"
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "结点位置不包含可连接的电线/引脚。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1506
+#: eeschema/tools/sch_drawing_tools.cpp:1508
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:182
 msgid "Press <ESC> to cancel item creation."
 msgstr "按下 <ESC> 取消项目创建。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1569
+#: eeschema/tools/sch_drawing_tools.cpp:1571
 msgid "Click over a sheet."
 msgstr "单击图纸。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1582
-#: eeschema/tools/sch_drawing_tools.cpp:1668
+#: eeschema/tools/sch_drawing_tools.cpp:1584
+#: eeschema/tools/sch_drawing_tools.cpp:1670
 msgid "No new hierarchical labels found."
 msgstr "找不到新的层次标签。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1595
+#: eeschema/tools/sch_drawing_tools.cpp:1597
 msgid "Add Sheet Pin"
 msgstr "添加图纸引脚"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1886
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:483
+#: eeschema/tools/sch_drawing_tools.cpp:1891
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:486
 #, c-format
 msgid "Add %s"
 msgstr "添加 %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1941
+#: eeschema/tools/sch_drawing_tools.cpp:1946
 #, c-format
 msgid "Draw %s"
 msgstr "绘制 %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2087
+#: eeschema/tools/sch_drawing_tools.cpp:2092
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "按下 <ESC> 取消图纸创建。"
 
@@ -21208,7 +21209,7 @@ msgstr "旋转和镜像"
 msgid "Edit Main Fields"
 msgstr "编辑主字段"
 
-#: eeschema/tools/sch_edit_tool.cpp:519 eeschema/tools/sch_edit_tool.cpp:2367
+#: eeschema/tools/sch_edit_tool.cpp:519 eeschema/tools/sch_edit_tool.cpp:2369
 msgid "Change To"
 msgstr "修改为"
 
@@ -21248,37 +21249,37 @@ msgstr "编辑 '%s' 字段"
 msgid "<empty>"
 msgstr "<空>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2431
+#: eeschema/tools/sch_edit_tool.cpp:2433
 msgid "Slice Wire"
 msgstr "分割连线"
 
-#: eeschema/tools/sch_edit_tool.cpp:2431
+#: eeschema/tools/sch_edit_tool.cpp:2433
 msgid "Break Wire"
 msgstr "打断连线"
 
-#: eeschema/tools/sch_edit_tool.cpp:2449
+#: eeschema/tools/sch_edit_tool.cpp:2451
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "您是否希望从此表中删除未引用的引脚?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2510
+#: eeschema/tools/sch_edit_tool.cpp:2512
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "输入图纸路径 %s 的页码"
 
-#: eeschema/tools/sch_edit_tool.cpp:2513
+#: eeschema/tools/sch_edit_tool.cpp:2515
 #: eeschema/widgets/hierarchy_pane.cpp:393
 msgid "Edit Sheet Page Number"
 msgstr "编辑图纸页码"
 
-#: eeschema/tools/sch_edit_tool.cpp:2578
+#: eeschema/tools/sch_edit_tool.cpp:2580
 msgid "Set Attribute"
 msgstr "设置特性"
 
-#: eeschema/tools/sch_edit_tool.cpp:2615
+#: eeschema/tools/sch_edit_tool.cpp:2617
 msgid "Clear Attribute"
 msgstr "清除特性"
 
-#: eeschema/tools/sch_edit_tool.cpp:2652
+#: eeschema/tools/sch_edit_tool.cpp:2654
 msgid "Toggle Attribute"
 msgstr "切换特性"
 
@@ -29262,7 +29263,7 @@ msgstr ""
 "焊盘与域的默认连接类型。\n"
 "该设置可被局部焊盘设置覆盖"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3423
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3451
 #: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1551
 msgid "Thermal reliefs"
 msgstr "缓释热焊盘 (花焊盘)"
@@ -37843,7 +37844,7 @@ msgid "'%s' settings differ."
 msgstr "%s 设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:546
-#: pcbnew/footprint.cpp:3494
+#: pcbnew/footprint.cpp:3522
 msgid "Exempt From Courtyard Requirement"
 msgstr "忽略封装外框要求"
 
@@ -38528,59 +38529,59 @@ msgstr "< 无位号 >"
 msgid "Footprint %s"
 msgstr "封装 %s"
 
-#: pcbnew/footprint.cpp:2779
+#: pcbnew/footprint.cpp:2807
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(应为 '通孔', 实际为 '%s')"
 
-#: pcbnew/footprint.cpp:2782
+#: pcbnew/footprint.cpp:2810
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(应为 '贴片', 实际为 '%s')"
 
-#: pcbnew/footprint.cpp:2980
+#: pcbnew/footprint.cpp:3008
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(网络结点焊盘组包含未知的焊盘编号 %s)"
 
-#: pcbnew/footprint.cpp:2985
+#: pcbnew/footprint.cpp:3013
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(焊盘 %s 出现在超过一个网络结点焊盘组中)"
 
-#: pcbnew/footprint.cpp:3421 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1549
+#: pcbnew/footprint.cpp:3449 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1549
 msgid "Inherited"
 msgstr "继承"
 
-#: pcbnew/footprint.cpp:3425 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1553
+#: pcbnew/footprint.cpp:3453 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1553
 msgid "Thermal reliefs for PTH"
 msgstr "对金属化孔 (PTH) 使用缓释热焊盘 (花焊盘)"
 
-#: pcbnew/footprint.cpp:3479
+#: pcbnew/footprint.cpp:3507
 msgid "Not in Schematic"
 msgstr "不在原理图中"
 
-#: pcbnew/footprint.cpp:3481
+#: pcbnew/footprint.cpp:3509
 msgid "Exclude From Position Files"
 msgstr "从定位文件中排除"
 
-#: pcbnew/footprint.cpp:3491 pcbnew/pad.cpp:2486
+#: pcbnew/footprint.cpp:3519 pcbnew/pad.cpp:2486
 msgid "Overrides"
 msgstr "覆盖"
 
-#: pcbnew/footprint.cpp:3497 pcbnew/pad.cpp:2488
+#: pcbnew/footprint.cpp:3525 pcbnew/pad.cpp:2488
 msgid "Clearance Override"
 msgstr "间距重写"
 
-#: pcbnew/footprint.cpp:3501 pcbnew/pad.cpp:2496
+#: pcbnew/footprint.cpp:3529 pcbnew/pad.cpp:2496
 msgid "Solderpaste Margin Override"
 msgstr "锡膏边距重写"
 
-#: pcbnew/footprint.cpp:3506 pcbnew/pad.cpp:2500
+#: pcbnew/footprint.cpp:3534 pcbnew/pad.cpp:2500
 msgid "Solderpaste Margin Ratio Override"
 msgstr "锡膏边距比例重写"
 
-#: pcbnew/footprint.cpp:3511 pcbnew/pad.cpp:2505
+#: pcbnew/footprint.cpp:3539 pcbnew/pad.cpp:2505
 msgid "Zone Connection Style"
 msgstr "域连接样式"
 
@@ -40430,7 +40431,8 @@ msgstr "正加载 board regions..."
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
-msgstr "Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等效项。已将其移至 "
+msgstr ""
+"Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等效项。已将其移至 "
 "KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2270
@@ -40446,8 +40448,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "正在加载 '%s' 库:\n"
-"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad "
-"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等"
+"效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2360
 #, c-format
@@ -40455,8 +40457,8 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad "
-"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等"
+"效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2403
 #, c-format
@@ -40480,11 +40482,11 @@ msgstr "加载域填充中..."
 msgid "Loading arcs..."
 msgstr "加载弧中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2895
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2919
 msgid "Loading pads..."
 msgstr "加载焊盘中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3027
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -40493,12 +40495,12 @@ msgstr ""
 "加载库 '%s' 库出错:\n"
 "封装 %s 的焊盘 %s 未被标记为多层焊盘, 但它却是一个通孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3040
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3064
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "封装 %s 焊盘 %s 未被标记为多层, 但它是 TH 焊盘。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3069
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3093
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -40507,12 +40509,12 @@ msgstr ""
 "正在加载 '%s' 库:\n"
 "在封装 %s 的焊盘 %s 上有一个方孔 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3082
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3106
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "封装 %s 焊盘 %s 有一个方孔。(尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3117
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3141
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -40523,14 +40525,14 @@ msgstr ""
 "在封装 %s 的焊盘 %s 上有旋转角度为 %f 度的孔。KiCad 只支持旋转角度为 90 度的"
 "孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3132
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3156
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr "封装 %s 焊盘 %s 有 %f 度的孔旋转。KiCad 仅支持 90 度角旋转。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3152
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3176
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -40539,12 +40541,12 @@ msgstr ""
 "加载库 '%s' 时出错:\n"
 "封装 %s 的焊盘 %s 使用了未知类型 (%d) 的孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3166
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3190
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "封装 %s 焊盘 %s 有一个未知类型 %d 的孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3191
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3215
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -40553,12 +40555,12 @@ msgstr ""
 "加载库 '%s' 时出错：\n"
 "封装 %s 的焊盘 %s 使用了复杂的焊盘叠层 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3204
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3228
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘叠层 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3250
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3274
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -40567,12 +40569,12 @@ msgstr ""
 "加载库 '%s' 时出错:\n"
 "封装 %s 的焊盘 %s 使用了未知的焊盘形状。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3263
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3287
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3328
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3352
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -40581,7 +40583,7 @@ msgstr ""
 "在 Altium 层 (%2$d) 上存在非铜焊盘 %1$s, 但在 KiCad 中没有对应的等效项。已将"
 "其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3356
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3380
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -40592,7 +40594,7 @@ msgstr ""
 "在封装 %2$s 中发现在其 Altium 层 (%4$d) 上存在非铜焊盘 %3$s, 但在 KiCad 中没"
 "有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3371
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3395
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -40601,54 +40603,54 @@ msgstr ""
 "在封装 %1$s 中发现在其 Altium 层 (%3$d) 上存在非铜焊盘 %2$s, 但在 KiCad 中没"
 "有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3399
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3423
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "非铜焊盘 %s 被连接到了某个网络, KiCad 不支持这种行为。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3410
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3434
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "非铜焊盘 %s有一个孔, KiCad 不支持这种情况。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3420
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3444
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "非铜焊盘\"%s\"使用复杂的焊盘压层, 尚未支持。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3567
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3591
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "非铜焊盘 '%s' 使用了未知的焊盘形状。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3580
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3604
 msgid "Loading vias..."
 msgstr "加载过孔中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3624
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3648
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "来自层 %d <-> %d 的过孔使用非铜层, KiCad 不支持这种情况。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3646
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3670
 msgid "Loading tracks..."
 msgstr "加载走线中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3863
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3887
 msgid "Loading unicode strings..."
 msgstr "正在加载 unicode 字符串..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3877
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3901
 msgid "Loading text..."
 msgstr "加载文本中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3909
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3933
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "忽略了 Altium 层 %d 上的条形码 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3931
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3955
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -40657,18 +40659,17 @@ msgstr ""
 "加载库 '%s' 时出错:\n"
 "封装 %s 在 Altium 层 %d 中包含条形码 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3944
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3968
 #, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "封装 %s 包含 Altium 层 %d 上的条形码 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4010
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4124
-#, c-format
-msgid "Unknown textbox justification %d, text %s"
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
+#, fuzzy, c-format
+msgid "Unknown textbox justification %d, aText %s"
 msgstr "未知的文本框对齐方式 %d, 文本 %s"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4225
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 msgid "Loading rectangles..."
 msgstr "加载矩形中..."
 
@@ -40999,9 +41000,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。"
-"如果填充的是实体或图案填充, 则它们已导入为 KiCad 域; "
-"如果形状是未填充的外框(开放或闭合), 则它们将导入为 KiCad 走线。"
+"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。如果填充的是实体"
+"或图案填充, 则它们已导入为 KiCad 域; 如果形状是未填充的外框(开放或闭合), 则它"
+"们将导入为 KiCad 走线。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2301
 #, c-format
@@ -41223,13 +41224,13 @@ msgstr "从库 '%s' 加载封装时出错: %s"
 msgid "Error reading footprint '%s' from library '%s': %s"
 msgstr "从库 '%2$s' 加载封装 %1$s 时出错: %3$s"
 
-#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:348
-#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:404
+#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:413
+#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:469
 #, c-format
 msgid "Cannot load footprint '%s' from '%s'"
 msgstr "无法从 '%2$s' 加载封装 '%1$s'"
 
-#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:386
+#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:451
 #, c-format
 msgid "Footprint '%s' not found in project '%s'"
 msgstr "在工程 '%2$s 中未发现封装 '%1$s'"
@@ -44755,7 +44756,8 @@ msgstr "飞线模式 (三态)"
 #: pcbnew/tools/pcb_actions.cpp:1364
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "在显示所有层的飞线, 仅显示可见层的飞线和不显示层飞线三种状态之间循环切换"
+msgstr ""
+"在显示所有层的飞线, 仅显示可见层的飞线和不显示层飞线三种状态之间循环切换"
 
 #: pcbnew/tools/pcb_actions.cpp:1369
 msgid "Net Color Mode (3-state)"

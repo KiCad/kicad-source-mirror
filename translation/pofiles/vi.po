@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-26 14:05-0700\n"
+"POT-Creation-Date: 2024-09-06 09:03-0700\n"
 "PO-Revision-Date: 2024-06-03 13:09+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
@@ -3152,7 +3152,7 @@ msgstr "Tùy chọn"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:430 pcbnew/footprint.cpp:3463
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:430 pcbnew/footprint.cpp:3491
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:105
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -3270,7 +3270,7 @@ msgid "Output mode:"
 msgstr "Chế độ xuất:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
-#: common/dialogs/panel_setup_netclasses_base.cpp:62 common/eda_text.cpp:1233
+#: common/dialogs/panel_setup_netclasses_base.cpp:62 common/eda_text.cpp:1249
 #: eeschema/dialogs/dialog_label_properties_base.cpp:100
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:72
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
@@ -3960,7 +3960,7 @@ msgstr "Nhỏ"
 msgid "Use compact icons in the toolbars"
 msgstr "Sử dụng các biểu tượng nhỏ gọn trên thanh công cụ"
 
-#: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:812
+#: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:828
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1271
 #: eeschema/sch_text.cpp:411 eeschema/sch_textbox.cpp:452
 #: gerbview/gerber_file_image.cpp:357 gerbview/gerber_file_image.cpp:361
@@ -4487,7 +4487,7 @@ msgstr "Thu phóng"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:930
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
-#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3422
+#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3450
 #: pcbnew/pad.cpp:2342 pcbnew/pad.cpp:2360 pcbnew/pcb_dimension.cpp:1618
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -4632,7 +4632,7 @@ msgstr "Tiền tố biệt danh thư viện:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3424
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3452
 #: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:630
 #: pcbnew/zone.cpp:1552
 msgid "Solid"
@@ -4930,7 +4930,7 @@ msgstr "Bản vẽ '%s' chưa được đọc đầy đủ."
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
 #: common/eda_item.cpp:350 common/eda_item.cpp:375 common/eda_item.cpp:396
-#: common/eda_text.cpp:1186 eeschema/dialogs/panel_setup_formatting_base.cpp:47
+#: common/eda_text.cpp:1202 eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/lib_field.cpp:546 eeschema/lib_text.cpp:415 eeschema/lib_text.h:60
 #: eeschema/sch_field.cpp:933 eeschema/sch_field.cpp:1454
 #: eeschema/sch_label.cpp:2229 eeschema/schematic.cpp:66
@@ -5699,7 +5699,7 @@ msgstr "Độ dài"
 msgid "Points"
 msgstr "Điểm"
 
-#: common/eda_shape.cpp:754 common/eda_text.cpp:1214 eeschema/lib_field.cpp:664
+#: common/eda_shape.cpp:754 common/eda_text.cpp:1230 eeschema/lib_field.cpp:664
 #: eeschema/lib_text.cpp:532 eeschema/lib_textbox.cpp:559
 #: eeschema/sch_bitmap.cpp:231 eeschema/sch_field.cpp:1436
 #: eeschema/sch_text.cpp:495 eeschema/sch_textbox.cpp:517
@@ -5718,7 +5718,7 @@ msgstr "Điểm"
 msgid "Width"
 msgstr "Chiều rộng"
 
-#: common/eda_shape.cpp:757 common/eda_text.cpp:1219 eeschema/lib_field.cpp:665
+#: common/eda_shape.cpp:757 common/eda_text.cpp:1235 eeschema/lib_field.cpp:665
 #: eeschema/lib_text.cpp:533 eeschema/lib_textbox.cpp:560
 #: eeschema/sch_bitmap.cpp:232 eeschema/sch_field.cpp:1437
 #: eeschema/sch_text.cpp:496 eeschema/sch_textbox.cpp:518
@@ -5793,7 +5793,7 @@ msgstr "Kiểu Tô"
 msgid "Fill Color"
 msgstr "Màu sắc đường kẻ:"
 
-#: common/eda_text.cpp:813 common/eda_text.cpp:1201
+#: common/eda_text.cpp:829 common/eda_text.cpp:1217
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_label_properties_base.cpp:93
@@ -5820,7 +5820,7 @@ msgstr "Màu sắc đường kẻ:"
 msgid "Italic"
 msgstr "In nghiêng"
 
-#: common/eda_text.cpp:814 common/eda_text.cpp:1205
+#: common/eda_text.cpp:830 common/eda_text.cpp:1221
 #: eeschema/dialogs/dialog_field_properties_base.cpp:138
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:214
 #: eeschema/dialogs/dialog_label_properties_base.cpp:94
@@ -5842,12 +5842,12 @@ msgstr "In nghiêng"
 msgid "Bold"
 msgstr "In Đậm"
 
-#: common/eda_text.cpp:815
+#: common/eda_text.cpp:831
 #, fuzzy
 msgid "Bold+Italic"
 msgstr "In đậm + Nghiêng"
 
-#: common/eda_text.cpp:1169
+#: common/eda_text.cpp:1185
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:288 eeschema/fields_grid_table.cpp:627
@@ -5858,7 +5858,7 @@ msgstr "In đậm + Nghiêng"
 msgid "Left"
 msgstr "Trái"
 
-#: common/eda_text.cpp:1170 common/eda_text.cpp:1174
+#: common/eda_text.cpp:1186 common/eda_text.cpp:1190
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:281 eeschema/fields_grid_table.cpp:289
@@ -5871,7 +5871,7 @@ msgstr "Trái"
 msgid "Center"
 msgstr "Giữa"
 
-#: common/eda_text.cpp:1171
+#: common/eda_text.cpp:1187
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:290 eeschema/fields_grid_table.cpp:629
@@ -5882,7 +5882,7 @@ msgstr "Giữa"
 msgid "Right"
 msgstr "Phải"
 
-#: common/eda_text.cpp:1173
+#: common/eda_text.cpp:1189
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:280 eeschema/fields_grid_table.cpp:637
 #: eeschema/fields_grid_table.cpp:791 eeschema/lib_field.cpp:567
@@ -5891,7 +5891,7 @@ msgstr "Phải"
 msgid "Top"
 msgstr "Trên"
 
-#: common/eda_text.cpp:1175
+#: common/eda_text.cpp:1191
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:282 eeschema/fields_grid_table.cpp:639
 #: eeschema/fields_grid_table.cpp:795 eeschema/lib_field.cpp:569
@@ -5900,7 +5900,7 @@ msgstr "Trên"
 msgid "Bottom"
 msgstr "Dưới"
 
-#: common/eda_text.cpp:1180
+#: common/eda_text.cpp:1196
 #: eeschema/dialogs/dialog_label_properties_base.cpp:96
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
@@ -5915,12 +5915,12 @@ msgstr "Dưới"
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:3454 pcbnew/fp_text_grid_table.cpp:145
+#: pcbnew/footprint.cpp:3482 pcbnew/fp_text_grid_table.cpp:145
 #: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1649
 msgid "Orientation"
 msgstr "Sự định hướng"
 
-#: common/eda_text.cpp:1184 eeschema/dialogs/dialog_text_properties_base.h:113
+#: common/eda_text.cpp:1200 eeschema/dialogs/dialog_text_properties_base.h:113
 #: eeschema/lib_field.cpp:670 eeschema/lib_textbox.cpp:565
 #: eeschema/sch_field.cpp:1441 eeschema/sch_text.cpp:501
 #: eeschema/sch_textbox.cpp:524 pcbnew/dialogs/dialog_text_properties.cpp:154
@@ -5929,7 +5929,7 @@ msgstr "Sự định hướng"
 msgid "Text Properties"
 msgstr "Thuộc tính Văn bản"
 
-#: common/eda_text.cpp:1192
+#: common/eda_text.cpp:1208
 #: eeschema/dialogs/dialog_label_properties_base.cpp:99
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
@@ -5944,7 +5944,7 @@ msgstr "Thuộc tính Văn bản"
 msgid "Font"
 msgstr "Phông chữ"
 
-#: common/eda_text.cpp:1197 eeschema/lib_field.cpp:661
+#: common/eda_text.cpp:1213 eeschema/lib_field.cpp:661
 #: eeschema/lib_textbox.cpp:561 eeschema/sch_field.cpp:1434
 #: eeschema/sch_label.cpp:2230 eeschema/sch_text.cpp:497
 #: eeschema/sch_textbox.cpp:519
@@ -5955,7 +5955,7 @@ msgstr "Phông chữ"
 msgid "Thickness"
 msgstr "Độ dày"
 
-#: common/eda_text.cpp:1208 eeschema/lib_field.cpp:662
+#: common/eda_text.cpp:1224 eeschema/lib_field.cpp:662
 #: eeschema/lib_text.cpp:530 eeschema/sch_field.cpp:1435
 #: eeschema/sch_text.cpp:493 pcbnew/fp_text_grid_table.cpp:150
 #: pcbnew/microwave/microwave_polygon.cpp:127
@@ -5963,7 +5963,7 @@ msgstr "Độ dày"
 msgid "Mirrored"
 msgstr "Lật"
 
-#: common/eda_text.cpp:1211
+#: common/eda_text.cpp:1227
 #: eeschema/dialogs/dialog_field_properties_base.cpp:88
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:296
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:130
@@ -5987,12 +5987,12 @@ msgstr "Lật"
 msgid "Visible"
 msgstr "Hiển thị"
 
-#: common/eda_text.cpp:1225 eeschema/sch_label.cpp:2234
+#: common/eda_text.cpp:1241 eeschema/sch_label.cpp:2234
 #, fuzzy
 msgid "Horizontal Justification"
 msgstr "Horizontal Justification"
 
-#: common/eda_text.cpp:1229 eeschema/sch_label.cpp:2236
+#: common/eda_text.cpp:1245 eeschema/sch_label.cpp:2236
 #: pcbnew/pcb_dimension.cpp:1524 pcbnew/pcb_dimension.cpp:1560
 #: pcbnew/pcb_dimension.cpp:1601 pcbnew/pcb_dimension.cpp:1646
 #: pcbnew/pcb_dimension.cpp:1683
@@ -6000,7 +6000,7 @@ msgstr "Horizontal Justification"
 msgid "Vertical Justification"
 msgstr "Vertical Justification"
 
-#: common/eda_text.cpp:1237 eeschema/lib_field.cpp:660
+#: common/eda_text.cpp:1253 eeschema/lib_field.cpp:660
 #: eeschema/sch_field.cpp:1433 eeschema/sch_label.cpp:2195
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
@@ -6825,7 +6825,8 @@ msgstr ""
 msgid "Cannot read ZIP archive '%s'"
 msgstr "Không thể mở tệp '%s'"
 
-#: common/io/easyedapro/easyedapro_import_utils.cpp:253
+#: common/io/easyedapro/easyedapro_import_utils.cpp:262
+#: common/io/easyedapro/easyedapro_import_utils.cpp:301
 #, fuzzy, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Không thể phân tích dòng JSON %d trong '%s': %s"
@@ -7574,7 +7575,7 @@ msgstr "Nhóm theo tên"
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
 #: eeschema/dialogs/dialog_sim_model_base.cpp:262 eeschema/sch_symbol.cpp:1968
 #: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2821
-#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3460
+#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3488
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
 msgstr "Tham chiếu"
@@ -7591,7 +7592,7 @@ msgstr "Footprint: %s"
 #: eeschema/sch_symbol.cpp:2837 eeschema/tools/sch_edit_tool.cpp:478
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:3477
+#: pcbnew/footprint.cpp:3505
 msgid "Attributes"
 msgstr ""
 
@@ -9292,7 +9293,7 @@ msgstr "\"%s\" không phải là footprint hợp lệ."
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:2015 eeschema/sch_symbol.cpp:2573
 #: eeschema/sch_symbol.cpp:2833 eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3473
+#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3501
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "Từ khóa"
@@ -10985,7 +10986,7 @@ msgstr "Phổ biến cho tất cả các kiểu thân"
 msgid "Text Item Properties"
 msgstr "Thuộc tính mục văn bản"
 
-#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:597
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:598
 #, fuzzy
 msgid "Edit Text and Graphics"
 msgstr "Chỉnh sửa thuộc tính văn bản và đồ họa"
@@ -11291,12 +11292,12 @@ msgstr "Giá trị không được để trống."
 msgid "untitled"
 msgstr ""
 
-#: eeschema/dialogs/dialog_label_properties.cpp:602
+#: eeschema/dialogs/dialog_label_properties.cpp:590
 #, fuzzy
 msgid "Edit Label Properties"
 msgstr "Thuộc tính nhãn"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:685
+#: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
 msgstr "Trường đầu tiên là bắt buộc."
 
@@ -11335,7 +11336,7 @@ msgstr "Hiển thị cửa sổ trình xem 3D"
 #: eeschema/sch_symbol.cpp:2819
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:3458
+#: pcbnew/footprint.cpp:3486
 #, fuzzy
 msgid "Fields"
 msgstr "Các trường"
@@ -12881,7 +12882,7 @@ msgstr "Đặt đường kính thành 0 để sử dụng kích thước điểm
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "Đặt màu trong suốt để sử dụng màu Trình soạn thảo Sơ đồ."
 
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:179
+#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
 #, fuzzy
 msgid "Edit Sheet Pin"
 msgstr "Sheet Pin"
@@ -14329,7 +14330,7 @@ msgid ""
 "schematic."
 msgstr ""
 
-#: eeschema/dialogs/dialog_text_properties.cpp:539
+#: eeschema/dialogs/dialog_text_properties.cpp:528
 #, fuzzy
 msgid "Edit Text Properties"
 msgstr "Thuộc tính Văn bản"
@@ -17287,7 +17288,7 @@ msgid "Blanket not currently supported."
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1050
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4343
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4350
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr ""
@@ -17299,7 +17300,7 @@ msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1260
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3374
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3379
 msgid "Pin has unexpected orientation."
 msgstr ""
 
@@ -17315,59 +17316,59 @@ msgstr ""
 msgid "Pin has unexpected inner edge type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1727
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1732
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2873
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2878
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3251
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3256
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:378
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3304
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3309
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1013
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:693
 #, fuzzy, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3438
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3445
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3495
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3502
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Cổng %s không có kết nối."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3687
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3694
 #, fuzzy, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3704
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3723
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3711
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3730
 #, c-format
 msgid "Error reading image %s."
 msgstr "Lỗi khi đọc hình ảnh %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3716
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3723
 #, fuzzy, c-format
 msgid "File not found %s."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4473
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4480
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr ""
 
@@ -18062,7 +18063,7 @@ msgstr "Giá trị SCH_FILE_T không xác định: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:57
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
-#: pcbnew/footprint.cpp:3449 pcbnew/footprint.cpp:3452
+#: pcbnew/footprint.cpp:3477 pcbnew/footprint.cpp:3480
 #: pcbnew/fp_text_grid_table.cpp:144
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1061
 #: pcbnew/pad.cpp:2370 pcbnew/pcb_dimension.cpp:462
@@ -18505,12 +18506,12 @@ msgstr "Mirrored"
 msgid "Mirror Y"
 msgstr "Mirrored"
 
-#: eeschema/sch_symbol.cpp:2827 pcbnew/footprint.cpp:3467
+#: eeschema/sch_symbol.cpp:2827 pcbnew/footprint.cpp:3495
 #, fuzzy
 msgid "Library Link"
 msgstr "Thư Viện"
 
-#: eeschema/sch_symbol.cpp:2830 pcbnew/footprint.cpp:3470
+#: eeschema/sch_symbol.cpp:2830 pcbnew/footprint.cpp:3498
 #: pcbnew/plot_board_layers.cpp:129
 #, fuzzy
 msgid "Library Description"
@@ -18526,12 +18527,12 @@ msgstr "Loại trừ khỏi bo mạch"
 msgid "Exclude From Simulation"
 msgstr "Loại trừ vi phạm này"
 
-#: eeschema/sch_symbol.cpp:2845 pcbnew/footprint.cpp:3484
+#: eeschema/sch_symbol.cpp:2845 pcbnew/footprint.cpp:3512
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Loại trừ khỏi BOM sơ đồ mạch"
 
-#: eeschema/sch_symbol.cpp:2848 pcbnew/footprint.cpp:3487
+#: eeschema/sch_symbol.cpp:2848 pcbnew/footprint.cpp:3515
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Không điền đầy"
@@ -21060,7 +21061,7 @@ msgid "Add a pin"
 msgstr "Thêm chân"
 
 #: eeschema/tools/ee_actions.cpp:341 eeschema/tools/ee_actions.cpp:524
-#: eeschema/tools/sch_drawing_tools.cpp:1536
+#: eeschema/tools/sch_drawing_tools.cpp:1538
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:298
 #: pagelayout_editor/tools/pl_actions.cpp:63 pcbnew/tools/pcb_actions.cpp:174
 #, fuzzy
@@ -21074,8 +21075,8 @@ msgid "Add a text item"
 msgstr "Khác"
 
 #: eeschema/tools/ee_actions.cpp:350 eeschema/tools/ee_actions.cpp:532
-#: eeschema/tools/sch_drawing_tools.cpp:1877
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:478
+#: eeschema/tools/sch_drawing_tools.cpp:1882
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:481
 #: pcbnew/tools/pcb_actions.cpp:182
 #, fuzzy
 msgid "Add Text Box"
@@ -21189,9 +21190,9 @@ msgstr "Nhập dây nối"
 msgid "Add a wire entry to a bus"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1546
-#: eeschema/tools/sch_drawing_tools.cpp:1551
-#: eeschema/tools/sch_drawing_tools.cpp:1556
+#: eeschema/tools/ee_actions.cpp:467 eeschema/tools/sch_drawing_tools.cpp:1548
+#: eeschema/tools/sch_drawing_tools.cpp:1553
+#: eeschema/tools/sch_drawing_tools.cpp:1558
 #, fuzzy
 msgid "Add Label"
 msgstr "Nhãn"
@@ -21211,7 +21212,7 @@ msgstr "Net Class"
 msgid "Add net class directive labels"
 msgstr "Nhãn phân cấp"
 
-#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1541
+#: eeschema/tools/ee_actions.cpp:485 eeschema/tools/sch_drawing_tools.cpp:1543
 #, fuzzy
 msgid "Add Hierarchical Label"
 msgstr "Hierarchical Label"
@@ -21537,7 +21538,7 @@ msgstr "Thay đổi phương pháp chỉnh sửa"
 msgid "Change existing item to a text box"
 msgstr "Thay đổi phương pháp chỉnh sửa"
 
-#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2458
+#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2460
 #, fuzzy
 msgid "Cleanup Sheet Pins"
 msgstr "Sheet Pin"
@@ -22452,15 +22453,15 @@ msgid "Could not load image from '%s'."
 msgstr "Không thể tải hình ảnh từ '%s'."
 
 #: eeschema/tools/sch_drawing_tools.cpp:797
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:681
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:684
 #: pcbnew/tools/drawing_tool.cpp:1504
 msgid "No graphic items found in file."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:827
 #: eeschema/tools/sch_drawing_tools.cpp:909
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:716
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:805
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:719
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:808
 #, fuzzy
 msgid "Import Graphic"
 msgstr "Nhập vào các phím nóng ..."
@@ -22470,38 +22471,38 @@ msgstr "Nhập vào các phím nóng ..."
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Vùng chọn chứa %d đối tượng bị khóa."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1506
+#: eeschema/tools/sch_drawing_tools.cpp:1508
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:182
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1569
+#: eeschema/tools/sch_drawing_tools.cpp:1571
 msgid "Click over a sheet."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1582
-#: eeschema/tools/sch_drawing_tools.cpp:1668
+#: eeschema/tools/sch_drawing_tools.cpp:1584
+#: eeschema/tools/sch_drawing_tools.cpp:1670
 #, fuzzy
 msgid "No new hierarchical labels found."
 msgstr "Nhãn phân cấp"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1595
+#: eeschema/tools/sch_drawing_tools.cpp:1597
 #, fuzzy
 msgid "Add Sheet Pin"
 msgstr "Sheet Pin"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1886
-#: eeschema/tools/symbol_editor_drawing_tools.cpp:483
+#: eeschema/tools/sch_drawing_tools.cpp:1891
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:486
 #, c-format
 msgid "Add %s"
 msgstr "Thêm %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1941
+#: eeschema/tools/sch_drawing_tools.cpp:1946
 #, c-format
 msgid "Draw %s"
 msgstr "Vẽ %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2087
+#: eeschema/tools/sch_drawing_tools.cpp:2092
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
@@ -22530,7 +22531,7 @@ msgstr "Loại bỏ khỏi lựa chọn"
 msgid "Edit Main Fields"
 msgstr "Chỉnh sửa tập tin"
 
-#: eeschema/tools/sch_edit_tool.cpp:519 eeschema/tools/sch_edit_tool.cpp:2367
+#: eeschema/tools/sch_edit_tool.cpp:519 eeschema/tools/sch_edit_tool.cpp:2369
 #, fuzzy
 msgid "Change To"
 msgstr "Thay đổi"
@@ -22575,41 +22576,41 @@ msgstr "Chỉnh sửa '%s' Trường"
 msgid "<empty>"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:2431
+#: eeschema/tools/sch_edit_tool.cpp:2433
 msgid "Slice Wire"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:2431
+#: eeschema/tools/sch_edit_tool.cpp:2433
 #, fuzzy
 msgid "Break Wire"
 msgstr "Track"
 
-#: eeschema/tools/sch_edit_tool.cpp:2449
+#: eeschema/tools/sch_edit_tool.cpp:2451
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 
-#: eeschema/tools/sch_edit_tool.cpp:2510
+#: eeschema/tools/sch_edit_tool.cpp:2512
 #, fuzzy, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "cần một số cho '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:2513
+#: eeschema/tools/sch_edit_tool.cpp:2515
 #: eeschema/widgets/hierarchy_pane.cpp:393
 #, fuzzy
 msgid "Edit Sheet Page Number"
 msgstr "Số"
 
-#: eeschema/tools/sch_edit_tool.cpp:2578
+#: eeschema/tools/sch_edit_tool.cpp:2580
 #, fuzzy
 msgid "Set Attribute"
 msgstr "Duyệt qua các thư viện symbol"
 
-#: eeschema/tools/sch_edit_tool.cpp:2615
+#: eeschema/tools/sch_edit_tool.cpp:2617
 #, fuzzy
 msgid "Clear Attribute"
 msgstr "Duyệt qua các thư viện symbol"
 
-#: eeschema/tools/sch_edit_tool.cpp:2652
+#: eeschema/tools/sch_edit_tool.cpp:2654
 #, fuzzy
 msgid "Toggle Attribute"
 msgstr "Duyệt qua các thư viện symbol"
@@ -31163,7 +31164,7 @@ msgid ""
 "This setting can be overridden by local  pad settings"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3423
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3451
 #: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1551
 #, fuzzy
 msgid "Thermal reliefs"
@@ -39928,7 +39929,7 @@ msgid "'%s' settings differ."
 msgstr "Bộ lọc footprint:"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:546
-#: pcbnew/footprint.cpp:3494
+#: pcbnew/footprint.cpp:3522
 msgid "Exempt From Courtyard Requirement"
 msgstr ""
 
@@ -40656,65 +40657,65 @@ msgstr "Bộ chỉ định tham chiếu"
 msgid "Footprint %s"
 msgstr "Footprint: %s"
 
-#: pcbnew/footprint.cpp:2779
+#: pcbnew/footprint.cpp:2807
 #, fuzzy, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "Các Pad xuyên lỗ"
 
-#: pcbnew/footprint.cpp:2782
+#: pcbnew/footprint.cpp:2810
 #, fuzzy, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "Các Pad xuyên lỗ"
 
-#: pcbnew/footprint.cpp:2980
+#: pcbnew/footprint.cpp:3008
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:2985
+#: pcbnew/footprint.cpp:3013
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3421 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1549
+#: pcbnew/footprint.cpp:3449 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1549
 msgid "Inherited"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3425 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1553
+#: pcbnew/footprint.cpp:3453 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1553
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Khác"
 
-#: pcbnew/footprint.cpp:3479
+#: pcbnew/footprint.cpp:3507
 #, fuzzy
 msgid "Not in Schematic"
 msgstr "Toàn bộ sơ đồ mạch"
 
-#: pcbnew/footprint.cpp:3481
+#: pcbnew/footprint.cpp:3509
 #, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Loại trừ vi phạm này"
 
-#: pcbnew/footprint.cpp:3491 pcbnew/pad.cpp:2486
+#: pcbnew/footprint.cpp:3519 pcbnew/pad.cpp:2486
 #, fuzzy
 msgid "Overrides"
 msgstr "Ghi đè ổ khóa"
 
-#: pcbnew/footprint.cpp:3497 pcbnew/pad.cpp:2488
+#: pcbnew/footprint.cpp:3525 pcbnew/pad.cpp:2488
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Clearance"
 
-#: pcbnew/footprint.cpp:3501 pcbnew/pad.cpp:2496
+#: pcbnew/footprint.cpp:3529 pcbnew/pad.cpp:2496
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Clearance"
 
-#: pcbnew/footprint.cpp:3506 pcbnew/pad.cpp:2500
+#: pcbnew/footprint.cpp:3534 pcbnew/pad.cpp:2500
 msgid "Solderpaste Margin Ratio Override"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3511 pcbnew/pad.cpp:2505
+#: pcbnew/footprint.cpp:3539 pcbnew/pad.cpp:2505
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Chiều rộng Track"
@@ -42747,36 +42748,36 @@ msgstr "Đang tải..."
 msgid "Loading arcs..."
 msgstr "Đang tải..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2895
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2919
 #, fuzzy
 msgid "Loading pads..."
 msgstr "Đang tải..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3027
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3040
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3064
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3069
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3093
 #, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3082
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3106
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3117
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3141
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -42784,57 +42785,57 @@ msgid ""
 "90 degree rotations."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3132
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3156
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3152
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3176
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3166
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3190
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3191
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3215
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3204
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3228
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3250
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3274
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3263
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3287
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3328
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3352
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3356
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3380
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -42842,83 +42843,82 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3371
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3395
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3399
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3423
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3410
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3434
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3420
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3444
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3567
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3591
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3580
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3604
 #, fuzzy
 msgid "Loading vias..."
 msgstr "Đang tải..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3624
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3648
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3646
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3670
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Đang tải..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3863
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3887
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Đang tải..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3877
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3901
 #, fuzzy
 msgid "Loading text..."
 msgstr "Đang tải..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3909
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3933
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3931
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3955
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3944
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3968
 #, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4010
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4124
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
 #, c-format
-msgid "Unknown textbox justification %d, text %s"
+msgid "Unknown textbox justification %d, aText %s"
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4225
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Đang tải..."
@@ -43406,13 +43406,13 @@ msgstr "Lỗi liệt kê footprint trong thư viện '%s': %s"
 msgid "Error reading footprint '%s' from library '%s': %s"
 msgstr "Lỗi đọc footprint '%s' từ thư viện '%s': %s"
 
-#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:348
-#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:404
+#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:413
+#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:469
 #, c-format
 msgid "Cannot load footprint '%s' from '%s'"
 msgstr "Không thể tải footprint '%s' từ '%s'"
 
-#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:386
+#: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:451
 #, fuzzy, c-format
 msgid "Footprint '%s' not found in project '%s'"
 msgstr "Không tìm thấy Footprint"
