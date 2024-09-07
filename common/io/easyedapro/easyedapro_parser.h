@@ -41,7 +41,8 @@
 namespace EASYEDAPRO
 {
 
-static const bool IMPORT_POURED = false;
+static const bool IMPORT_POURED = true;
+static const bool IMPORT_POURED_ECOP = false;
 
 enum class SYMBOL_TYPE
 {

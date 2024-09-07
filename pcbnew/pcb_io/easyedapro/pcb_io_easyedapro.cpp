@@ -356,7 +356,7 @@ void PCB_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString&       aProjectPa
                 }
             }
         }
-        else if( name.EndsWith( wxS( ".ecop" ) ) && EASYEDAPRO::IMPORT_POURED )
+        else if( name.EndsWith( wxS( ".ecop" ) ) && EASYEDAPRO::IMPORT_POURED_ECOP )
         {
             for( const nlohmann::json& line : lines )
             {

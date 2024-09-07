@@ -958,6 +958,9 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
     std::map<wxString, std::vector<nlohmann::json>> componentLines;
     std::map<wxString, std::vector<nlohmann::json>> ruleLines;
 
+    std::multimap<wxString, EASYEDAPRO::POURED> boardPouredMap = aPouredMap;
+    std::map<wxString, ZONE*>                   poursToFill;
+
     BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     for( const nlohmann::json& line : aLines )
@@ -1026,6 +1029,14 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
             }
 
             ruleLines[ruleType].push_back( line );
+        }
+        else if( type == wxS( "POURED" ) )
+        {
+            if( !line.at( 2 ).is_string() )
+                continue; // Unknown type of POURED
+
+            EASYEDAPRO::POURED poured = line;
+            boardPouredMap.emplace( poured.parentId, poured );
         }
         else if( type == wxS( "VIA" ) || type == wxS( "LINE" ) || type == wxS( "ARC" )
                  || type == wxS( "POLY" ) || type == wxS( "FILL" ) || type == wxS( "POUR" ) )
@@ -1211,88 +1222,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                 wxASSERT( zone->Outline()->OutlineCount() == 1 );
 
-                SHAPE_POLY_SET fillPolySet;
-                SHAPE_POLY_SET thermalSpokes;
-                int            entryId = 0;
-
-                if( EASYEDAPRO::IMPORT_POURED )
-                {
-                    auto range = aPouredMap.equal_range( uuid );
-                    for( auto& it = range.first; it != range.second; ++it )
-                    {
-                        const EASYEDAPRO::POURED& poured = it->second;
-                        int                       unki = poured.unki;
-
-                        SHAPE_POLY_SET thisPoly;
-
-                        for( int dataId = 0; dataId < poured.polyData.size(); dataId++ )
-                        {
-                            const nlohmann::json& fillData = poured.polyData[dataId];
-                            const double          ptScale = 10;
-
-                            SHAPE_LINE_CHAIN contour =
-                                    ParseContour( fillData, false, ARC_HIGH_DEF / ptScale );
-
-                            // Scale the fill
-                            for( int i = 0; i < contour.PointCount(); i++ )
-                                contour.SetPoint( i, contour.GetPoint( i ) * ptScale );
-
-                            if( poured.isPoly )
-                            {
-                                contour.SetClosed( true );
-
-                                // The contour can be self-intersecting
-                                SHAPE_POLY_SET simple( contour );
-                                simple.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-                                if( dataId == 0 )
-                                {
-                                    thisPoly.Append( simple );
-                                }
-                                else
-                                {
-                                    thisPoly.BooleanSubtract( simple,
-                                                              SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-                                }
-                            }
-                            else
-                            {
-                                const int thermalWidth = pcbIUScale.mmToIU( 0.2 ); // Generic
-
-                                for( int segId = 0; segId < contour.SegmentCount(); segId++ )
-                                {
-                                    const SEG& seg = contour.CSegment( segId );
-
-                                    TransformOvalToPolygon( thermalSpokes, seg.A, seg.B,
-                                                            thermalWidth, ARC_LOW_DEF,
-                                                            ERROR_INSIDE );
-                                }
-                            }
-                        }
-
-                        fillPolySet.Append( thisPoly );
-
-                        entryId++;
-                    }
-
-                    if( !fillPolySet.IsEmpty() )
-                    {
-                        fillPolySet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-                        const int strokeWidth = pcbIUScale.MilsToIU( 8 ); // Seems to be 8 mils
-
-                        fillPolySet.Inflate( strokeWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                             ARC_HIGH_DEF, false );
-
-                        fillPolySet.BooleanAdd( thermalSpokes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-                        fillPolySet.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-                        zone->SetFilledPolysList( klayer, fillPolySet );
-                        zone->SetNeedRefill( false );
-                        zone->SetIsFilled( true );
-                    }
-                }
+                poursToFill.emplace( uuid, zone.get() );
 
                 aBoard->Add( zone.release(), ADD_MODE::APPEND );
             }
@@ -1799,6 +1729,88 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         }
 
         aBoard->Add( footprint.release(), ADD_MODE::APPEND );
+    }
+
+    // Set zone fills
+    if( EASYEDAPRO::IMPORT_POURED )
+    {
+        for( auto& [uuid, zone] : poursToFill )
+        {
+            SHAPE_POLY_SET fillPolySet;
+            SHAPE_POLY_SET thermalSpokes;
+
+            auto range = boardPouredMap.equal_range( uuid );
+            for( auto& it = range.first; it != range.second; ++it )
+            {
+                const EASYEDAPRO::POURED& poured = it->second;
+                int                       unki = poured.unki;
+
+                SHAPE_POLY_SET thisPoly;
+
+                for( int dataId = 0; dataId < poured.polyData.size(); dataId++ )
+                {
+                    const nlohmann::json& fillData = poured.polyData[dataId];
+                    const double          ptScale = 10;
+
+                    SHAPE_LINE_CHAIN contour =
+                            ParseContour( fillData, false, ARC_HIGH_DEF / ptScale );
+
+                    // Scale the fill
+                    for( int i = 0; i < contour.PointCount(); i++ )
+                        contour.SetPoint( i, contour.GetPoint( i ) * ptScale );
+
+                    if( poured.isPoly )
+                    {
+                        contour.SetClosed( true );
+
+                        // The contour can be self-intersecting
+                        SHAPE_POLY_SET simple( contour );
+                        simple.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+                        if( dataId == 0 )
+                        {
+                            thisPoly.Append( simple );
+                        }
+                        else
+                        {
+                            thisPoly.BooleanSubtract( simple, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                        }
+                    }
+                    else
+                    {
+                        const int thermalWidth = pcbIUScale.mmToIU( 0.2 ); // Generic
+
+                        for( int segId = 0; segId < contour.SegmentCount(); segId++ )
+                        {
+                            const SEG& seg = contour.CSegment( segId );
+
+                            TransformOvalToPolygon( thermalSpokes, seg.A, seg.B, thermalWidth,
+                                                    ARC_LOW_DEF, ERROR_INSIDE );
+                        }
+                    }
+                }
+
+                fillPolySet.Append( thisPoly );
+            }
+
+            if( !fillPolySet.IsEmpty() )
+            {
+                fillPolySet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+                const int strokeWidth = pcbIUScale.MilsToIU( 8 ); // Seems to be 8 mils
+
+                fillPolySet.Inflate( strokeWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                     ARC_HIGH_DEF, false );
+
+                fillPolySet.BooleanAdd( thermalSpokes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+                fillPolySet.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+                zone->SetFilledPolysList( zone->GetFirstLayer(), fillPolySet );
+                zone->SetNeedRefill( false );
+                zone->SetIsFilled( true );
+            }
+        }
     }
 
     // Heal board outlines
