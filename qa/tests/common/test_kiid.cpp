@@ -20,7 +20,7 @@
 #include <boost/test/unit_test.hpp>
 #include <kiid.h>
 #include <wx/string.h>
-
+#include <set>
 
 BOOST_AUTO_TEST_SUITE( Kiid )
 
@@ -33,6 +33,14 @@ BOOST_AUTO_TEST_CASE( Seeding )
     KIID b0;
     KIID c0;
     KIID d0;
+
+    // Make sure the hashes are unique
+    std::set<size_t> hashes;
+    hashes.insert( a0.Hash() );
+    hashes.insert( b0.Hash() );
+    hashes.insert( c0.Hash() );
+    hashes.insert( d0.Hash() );
+    BOOST_CHECK_EQUAL( hashes.size(), 4 );
 
     KIID::SeedGenerator( 0l );
 
