@@ -27,6 +27,7 @@
 
 #include <functional>
 
+#include <advanced_config.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <footprint.h>
@@ -175,6 +176,12 @@ PCB_GRID_HELPER::~PCB_GRID_HELPER()
 void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, bool aExtensionOnly,
                                             bool aIsPersistent )
 {
+    if( !ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps )
+    {
+        return;
+    }
+
+
     // For all the elements that get drawn construction geometry,
     // add something suitable to the construction helper.
     // This can be nothing.

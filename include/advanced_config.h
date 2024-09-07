@@ -644,6 +644,14 @@ public:
      */
     int m_ResolveTextRecursionDepth;
 
+    /**
+     * Enable snap anchors based on item line extensions.
+     *
+     * Setting name: "EnableExtensionSnaps"
+     * Default value: false
+     */
+    bool m_EnableExtensionSnaps;
+
 ///@}
 
 private:

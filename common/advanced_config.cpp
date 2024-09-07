@@ -117,6 +117,7 @@ static const wxChar EnableAPILogging[] = wxT( "EnableAPILogging" );
 static const wxChar MaxFileSystemWatchers[] = wxT( "MaxFileSystemWatchers" );
 static const wxChar MinorSchematicGraphSize[] = wxT( "MinorSchematicGraphSize" );
 static const wxChar ResolveTextRecursionDepth[] = wxT( "ResolveTextRecursionDepth" );
+static const wxChar EnableExtensionSnaps[] = wxT( "EnableExtensionSnaps" );
 } // namespace KEYS
 
 
@@ -279,6 +280,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_MinorSchematicGraphSize = 10000;
 
     m_ResolveTextRecursionDepth = 3;
+
+    m_EnableExtensionSnaps = false;
 
     loadFromConfigFile();
 }
@@ -522,6 +525,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ResolveTextRecursionDepth,
                                                   &m_ResolveTextRecursionDepth,
                                                   m_ResolveTextRecursionDepth, 0, 10 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableExtensionSnaps,
+                                                  &m_EnableExtensionSnaps,
+                                                  m_EnableExtensionSnaps ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
