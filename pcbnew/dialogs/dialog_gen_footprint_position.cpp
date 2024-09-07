@@ -26,6 +26,7 @@
  *  2 - create a footprint report (pos and footprint descr) (ascii file)
  */
 
+#include <dialog_gen_footprint_position.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
@@ -37,7 +38,6 @@
 #include <kiface_base.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/std_bitmap_button.h>
-#include <dialog_gen_footprint_position_file_base.h>
 #include <exporters/place_file_exporter.h>
 #include "gerber_placefile_writer.h"
 
@@ -45,136 +45,28 @@
 #include <wx/msgdlg.h>
 
 
-/**
- * The dialog to create footprint position files and choose options (one or 2 files, units
- * and force all SMD footprints in list)
- */
-class DIALOG_GEN_FOOTPRINT_POSITION : public DIALOG_GEN_FOOTPRINT_POSITION_BASE
+DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aEditFrame ) :
+        DIALOG_GEN_FOOTPRINT_POSITION_BASE( aEditFrame ),
+        m_editFrame( aEditFrame )
 {
-public:
-    DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME * aParent ):
-        DIALOG_GEN_FOOTPRINT_POSITION_BASE( aParent ),
-        m_parent( aParent )
-    {
-        m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
-        m_reporter = &m_messagesPanel->Reporter();
-        initDialog();
+    m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
+    m_reporter = &m_messagesPanel->Reporter();
+    initDialog();
 
-        SetupStandardButtons( { { wxID_OK,     _( "Generate Position File" ) },
-                                { wxID_CANCEL, _( "Close" )                  } } );
+    SetupStandardButtons(
+            { { wxID_OK, _( "Generate Position File" ) }, { wxID_CANCEL, _( "Close" ) } } );
 
-        GetSizer()->SetSizeHints(this);
-        Centre();
-    }
-
-private:
-    void initDialog();
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
-    void OnGenerate( wxCommandEvent& event ) override;
-
-    void onUpdateUIUnits( wxUpdateUIEvent& event ) override
-    {
-        m_radioBoxUnits->Enable( m_rbFormat->GetSelection() != 2 );
-    }
-
-    void onUpdateUIFileOpt( wxUpdateUIEvent& event ) override
-    {
-        m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
-    }
-
-    void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) override
-    {
-        if( m_rbFormat->GetSelection() == 2 )
-        {
-            m_onlySMD->SetValue( false );
-            m_onlySMD->Enable( false );
-        }
-        else
-        {
-            m_onlySMD->Enable( true );
-        }
-    }
-
-    void onUpdateUInegXcoord( wxUpdateUIEvent& event ) override
-    {
-        if( m_rbFormat->GetSelection() == 2 )
-        {
-            m_negateXcb->SetValue( false );
-            m_negateXcb->Enable( false );
-        }
-        else
-        {
-            m_negateXcb->Enable( true );
-        }
-    }
-
-    void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) override
-    {
-        if( m_rbFormat->GetSelection() == 2 )
-        {
-            m_excludeTH->SetValue( false );
-            m_excludeTH->Enable( false );
-        }
-        else
-        {
-            m_excludeTH->Enable( true );
-        }
-    }
-
-    void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override
-    {
-        m_cbIncludeBoardEdge->Enable( m_rbFormat->GetSelection() == 2 );
-    }
-
-    /**
-     * Creates files in text or csv format
-     */
-    bool CreateAsciiFiles();
-
-    /**
-     * Creates placement files in gerber format
-     */
-    bool CreateGerberFiles();
-
-    // accessors to options:
-    bool UnitsMM()
-    {
-        return m_radioBoxUnits->GetSelection() == 1;
-    }
-
-    bool OneFileOnly()
-    {
-        return m_radioBoxFilesCount->GetSelection() == 1;
-    }
-
-    bool OnlySMD()
-    {
-        return m_onlySMD->GetValue();
-    }
-
-    bool ExcludeAllTH()
-    {
-        return m_excludeTH->GetValue();
-    }
-
-    bool ExcludeDNP()
-    {
-        return m_excludeDNP->GetValue();
-    }
-
-private:
-    PCB_EDIT_FRAME* m_parent;
-    REPORTER*       m_reporter;
-};
-
+    GetSizer()->SetSizeHints( this );
+    Centre();
+}
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    PROJECT_FILE&    projectFile = m_parent->Prj().GetProjectFile();
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PROJECT_FILE&    projectFile = m_editFrame->Prj().GetProjectFile();
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
     m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
@@ -197,6 +89,95 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 }
 
 
+void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIUnits( wxUpdateUIEvent& event )
+{
+    m_radioBoxUnits->Enable( m_rbFormat->GetSelection() != 2 );
+}
+
+
+void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIFileOpt( wxUpdateUIEvent& event )
+{
+    m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
+}
+
+
+void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIOnlySMD( wxUpdateUIEvent& event )
+{
+    if( m_rbFormat->GetSelection() == 2 )
+    {
+        m_onlySMD->SetValue( false );
+        m_onlySMD->Enable( false );
+    }
+    else
+    {
+        m_onlySMD->Enable( true );
+    }
+}
+
+
+void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUInegXcoord( wxUpdateUIEvent& event )
+{
+    if( m_rbFormat->GetSelection() == 2 )
+    {
+        m_negateXcb->SetValue( false );
+        m_negateXcb->Enable( false );
+    }
+    else
+    {
+        m_negateXcb->Enable( true );
+    }
+}
+
+void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIExcludeTH( wxUpdateUIEvent& event )
+{
+    if( m_rbFormat->GetSelection() == 2 )
+    {
+        m_excludeTH->SetValue( false );
+        m_excludeTH->Enable( false );
+    }
+    else
+    {
+        m_excludeTH->Enable( true );
+    }
+}
+
+
+bool DIALOG_GEN_FOOTPRINT_POSITION::UnitsMM()
+{
+    return m_radioBoxUnits->GetSelection() == 1;
+}
+
+
+bool DIALOG_GEN_FOOTPRINT_POSITION::OneFileOnly()
+{
+    return m_radioBoxFilesCount->GetSelection() == 1;
+}
+
+
+bool DIALOG_GEN_FOOTPRINT_POSITION::OnlySMD()
+{
+    return m_onlySMD->GetValue();
+}
+
+
+bool DIALOG_GEN_FOOTPRINT_POSITION::ExcludeAllTH()
+{
+    return m_excludeTH->GetValue();
+}
+
+
+bool DIALOG_GEN_FOOTPRINT_POSITION::ExcludeDNP()
+{
+    return m_excludeDNP->GetValue();
+}
+
+
+void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event )
+{
+    m_cbIncludeBoardEdge->Enable( m_rbFormat->GetSelection() == 2 );
+}
+
+
 void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
@@ -215,7 +196,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 
     if( dialog.ShowModal() == wxID_YES )
     {
-        wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName() ).GetPath();
+        wxString boardFilePath = ( (wxFileName) m_editFrame->GetBoard()->GetFileName() ).GetPath();
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
         {
@@ -233,13 +214,13 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 {
     m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
     wxString dirStr = m_outputDirectoryName->GetValue();
     // Keep unix directory format convention in cfg files
     dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    m_parent->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
+    m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
     cfg->m_PlaceFile.output_directory   = dirStr;
     cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
     cfg->m_PlaceFile.file_options       = m_radioBoxFilesCount->GetSelection();
@@ -259,7 +240,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 
 bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 {
-    BOARD*     brd = m_parent->GetBoard();
+    BOARD*     brd = m_editFrame->GetBoard();
     wxString   msg;
     int        fullcount = 0;
 
@@ -270,15 +251,15 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
             [&]( wxString* token ) -> bool
             {
                 // Handles board->GetTitleBlock() *and* board->GetProject()
-                return m_parent->GetBoard()->ResolveTextVar( token, 0 );
+        return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_parent->GetPcbNewSettings()->m_PlaceFile.output_directory;
+    wxString path = m_editFrame->GetPcbNewSettings()->m_PlaceFile.output_directory;
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
     wxFileName  outputDir = wxFileName::DirName( path );
-    wxString    boardFilename = m_parent->GetBoard()->GetFileName();
+    wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();
 
     m_reporter = &m_messagesPanel->Reporter();
 
@@ -289,7 +270,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
         return false;
     }
 
-    wxFileName fn = m_parent->GetBoard()->GetFileName();
+    wxFileName fn = m_editFrame->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
 
     // Create the Front and Top side placement files. Gerber P&P files are always separated.
@@ -347,7 +328,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
 bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 {
-    BOARD *    brd = m_parent->GetBoard();
+    BOARD*     brd = m_editFrame->GetBoard();
     wxString   msg;
     bool       singleFile = OneFileOnly();
     bool       useCSVfmt = m_rbFormat->GetSelection() == 1;
@@ -377,15 +358,15 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
             [&]( wxString* token ) -> bool
             {
                 // Handles board->GetTitleBlock() *and* board->GetProject()
-                return m_parent->GetBoard()->ResolveTextVar( token, 0 );
+        return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_parent->GetPcbNewSettings()->m_PlaceFile.output_directory;
+    wxString path = m_editFrame->GetPcbNewSettings()->m_PlaceFile.output_directory;
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
     wxFileName  outputDir = wxFileName::DirName( path );
-    wxString    boardFilename = m_parent->GetBoard()->GetFileName();
+    wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();
 
     m_reporter = &m_messagesPanel->Reporter();
 
@@ -396,7 +377,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         return false;
     }
 
-    wxFileName fn = m_parent->GetBoard()->GetFileName();
+    wxFileName fn = m_editFrame->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
 
     // Create the Front or Top side placement file, or a single file
@@ -424,7 +405,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
     }
 
-    int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
+    int fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
                                                          ExcludeAllTH(), ExcludeDNP(), topSide,
                                                          bottomSide, useCSVfmt, useAuxOrigin,
                                                          negateBottomX );
@@ -470,7 +451,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
     }
 
-    fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
+    fpcount = m_editFrame->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
                                                      ExcludeAllTH(), ExcludeDNP(), topSide,
                                                      bottomSide, useCSVfmt,
                                                      useAuxOrigin, negateBottomX );
