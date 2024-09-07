@@ -27,15 +27,16 @@
 # pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2023, 2024.
 # Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
 # simmon <simmon@nplob.com>, 2024.
+# jeong-sangwon <drone5023@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-05 21:09+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2024-09-08 17:09+0000\n"
+"Last-Translator: jeong-sangwon <drone5023@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2006,7 +2007,7 @@ msgstr "'%s' 파일을 만들 수 없습니다."
 
 #: common/design_block_io.cpp:323
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "풋프린트에 유효한 라이브러리 ID가 없습니다."
 
 #: common/design_block_io.cpp:328
 #, fuzzy, c-format
@@ -2019,14 +2020,14 @@ msgid "Design block folder '%s' could not be created."
 msgstr "'%s' 파일을 만들 수 없습니다."
 
 #: common/design_block_io.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "회로도 파일 '%s'은(는) 이미 존재합니다."
 
 #: common/design_block_io.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "디렉토리 '%s'가 없음"
+msgstr "디렉토리 '%s'가 없음."
 
 #: common/design_block_io.cpp:377
 #, fuzzy, c-format
@@ -9262,7 +9263,7 @@ msgstr "KiCad 풋프린트 라이브러리 경로"
 
 #: common/wildcards_and_files_ext.cpp:345
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad 풋프린트 파일 경로"
 
 #: common/wildcards_and_files_ext.cpp:352
 #, fuzzy
@@ -10008,7 +10009,7 @@ msgstr "심볼 라이브러리 테이블 파일을 선택하십시오."
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "중첩된 시트가 있는 풋프린트는 지원되지 않습니다."
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
 #, fuzzy
@@ -10016,9 +10017,8 @@ msgid "Enter a name for the design block:"
 msgstr "저장소의 이름을 입력하세요"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
-#, fuzzy
 msgid "Design Block Name"
-msgstr "디자인 규칙"
+msgstr "풋프린트 이름"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
 #, fuzzy
@@ -10029,7 +10029,7 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "풋프린트로 저장할 항목을 선택하세요."
 
 #: eeschema/design_block_utils.cpp:405
 #, fuzzy
@@ -10050,7 +10050,8 @@ msgstr "%s 라이브러리는 읽기 전용입니다."
 msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
-msgstr ""
+msgstr "디스크에서 풋프린트 라이브러리 '%s'를 삭제하시겠습니까? 라이브러리 내의 모든 "
+"풋프린트가 삭제됩니다."
 
 #: eeschema/design_block_utils.cpp:434
 #, fuzzy, c-format
@@ -13012,8 +13013,9 @@ msgstr "대소문자 일치"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
+#, fuzzy
 msgid "Whole &words only"
-msgstr ""
+msgstr "&words 단어만 사용 가능합니다."
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
@@ -13911,6 +13913,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"해당 위치를 찾을 수 없습니다.\n"
+"\n"
+"%s\n"
+"기본적인 SPICE 모델을 사용합니다."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -21301,8 +21307,9 @@ msgid "Select a complete connection"
 msgstr "전체 연결 선택"
 
 #: eeschema/tools/ee_actions.cpp:156
+#, fuzzy
 msgid "Save Sheet as Design Block..."
-msgstr ""
+msgstr "풋프린트로 저장하기"
 
 #: eeschema/tools/ee_actions.cpp:157
 #, fuzzy
@@ -21311,7 +21318,7 @@ msgstr "현재 시점으로부터 PNG 파일 생성하기"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "선택한 항목을 풋프린트로 저장합니다."
 
 #: eeschema/tools/ee_actions.cpp:164
 #, fuzzy
@@ -21537,13 +21544,13 @@ msgid "Place Power Symbols"
 msgstr "전원 심볼 배치"
 
 #: eeschema/tools/ee_actions.cpp:428
-#, fuzzy
 msgid "Place Design Block"
-msgstr "블록 취소"
+msgstr "풋프린트 배치"
 
 #: eeschema/tools/ee_actions.cpp:429
+#, fuzzy
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "선택한 풋프린트를 현재 시트에 추가"
 
 #: eeschema/tools/ee_actions.cpp:440
 msgid "Place No Connect Flags"
@@ -21579,8 +21586,9 @@ msgid "Draw Sheet Copy"
 msgstr "도면 시트"
 
 #: eeschema/tools/ee_actions.cpp:504
+#, fuzzy
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "시트를 프로젝트에 복사하고 현재 시트로 그립니다."
 
 #: eeschema/tools/ee_actions.cpp:512
 msgid "Place Sheet Pins"
@@ -23104,13 +23112,15 @@ msgstr "이후의 클릭을 위해 심볼을 선택한 상태로 유지합니다
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "풋프린트를 새로운 시트에 배치합니다."
 
 #: eeschema/widgets/design_block_pane.cpp:71
+#, fuzzy
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
-msgstr ""
+msgstr "소스 회로도에서 참조 지정자를 유지합니다. 그렇지 않은 경우, 지우고 다시 "
+"주석을 추가합니다."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -32958,8 +32968,9 @@ msgid "Search for:"
 msgstr "찾기:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
+#, fuzzy
 msgid "Wra&p"
-msgstr ""
+msgstr "포&장"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 #, fuzzy
@@ -36287,7 +36298,7 @@ msgstr "설계 규칙에서"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 #: pcbnew/pcb_track.cpp:1733
 msgid "Tented"
-msgstr "텐트"
+msgstr "보호됨"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
@@ -43080,7 +43091,7 @@ msgstr ""
 "음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4342
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "알 수 없는 텍스트 상자 정렬 %d , 텍스트 %s"
 
