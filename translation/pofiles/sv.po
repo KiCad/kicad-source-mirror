@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-05 21:09+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"PO-Revision-Date: 2024-09-08 17:09+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -20706,7 +20706,7 @@ msgstr "Ändra befintligt objekt till en textruta"
 
 #: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2460
 msgid "Cleanup Sheet Pins"
-msgstr "Städa upp arknålar"
+msgstr "Städa upp arkstift"
 
 #: eeschema/tools/ee_actions.cpp:790
 msgid "Delete unreferenced sheet pins"
@@ -21552,7 +21552,7 @@ msgstr "Inga nya hierarkiska etiketter hittades."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1597
 msgid "Add Sheet Pin"
-msgstr "Lägg till arknål"
+msgstr "Lägg till arkstift"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1891
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:486
@@ -40685,16 +40685,16 @@ msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Frigång för negativ lödmask är större än vissa grundläggande former; "
-"resultaten kan bli oförutsägbara"
+"(negativt värde för lödmaskens frigång är större än vissa grundläggande "
+"former; resultaten kan bli oförutsägbara)"
 
 #: pcbnew/pad.cpp:1982
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Frigång för negativ lödmask är större än lödytan; ingen lödmask kommer att "
-"genereras"
+"(negativt värde för lödmaskens frigång är större än lödytan; ingen lödmask "
+"kommer att genereras)"
 
 #: pcbnew/pad.cpp:2001
 msgid ""
