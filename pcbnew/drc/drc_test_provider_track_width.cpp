@@ -126,19 +126,23 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 if( fail_min || fail_max )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_WIDTH );
+                    wxString constraintName = constraint.GetName();
                     wxString msg;
 
                     if( fail_min )
                     {
+                        if( constraint.GetParentRule() && constraint.GetParentRule()->m_Implicit )
+                            constraintName = _( "board setup constraints" );
+
                         msg = formatMsg( _( "(%s min width %s; actual %s)" ),
-                                         constraint.GetName(),
+                                         constraintName,
                                          constraintWidth,
                                          actual );
                     }
                     else
                     {
                         msg = formatMsg( _( "(%s max width %s; actual %s)" ),
-                                         constraint.GetName(),
+                                         constraintName,
                                          constraintWidth,
                                          actual );
                     }

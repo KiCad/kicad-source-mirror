@@ -151,19 +151,23 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
     if( fail_min || fail_max )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILL_OUT_OF_RANGE );
+        wxString constraintName = constraint.GetName();
         wxString msg;
 
         if( fail_min )
         {
-            msg = formatMsg( _( "(%s min width %s; actual %s)" ),
-                             constraint.GetName(),
+            if( constraint.GetParentRule() && constraint.GetParentRule()->m_Implicit )
+                constraintName = _( "board setup constraints" );
+
+            msg = formatMsg( _( "(%s min hole %s; actual %s)" ),
+                             constraintName,
                              constraintValue,
                              holeMinor );
         }
         else
         {
-            msg = formatMsg( _( "(%s max width %s; actual %s)" ),
-                             constraint.GetName(),
+            msg = formatMsg( _( "(%s max hole %s; actual %s)" ),
+                             constraintName,
                              constraintValue,
                              holeMajor );
         }
@@ -220,19 +224,23 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
     if( fail_min || fail_max )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
+        wxString constraintName = constraint.GetName();
         wxString msg;
 
         if( fail_min )
         {
-            msg = formatMsg( _( "(%s min width %s; actual %s)" ),
-                             constraint.GetName(),
+            if( constraint.GetParentRule() && constraint.GetParentRule()->m_Implicit )
+                constraintName = _( "board setup constraints" );
+
+            msg = formatMsg( _( "(%s min hole %s; actual %s)" ),
+                             constraintName,
                              constraintValue,
                              via->GetDrillValue() );
         }
         else
         {
-            msg = formatMsg( _( "(%s max width %s; actual %s)" ),
-                             constraint.GetName(),
+            msg = formatMsg( _( "(%s max hole %s; actual %s)" ),
+                             constraintName,
                              constraintValue,
                              via->GetDrillValue() );
         }
