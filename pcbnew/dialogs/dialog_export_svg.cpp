@@ -31,7 +31,7 @@
 #include <core/arraydim.h>
 #include <pcbplot.h>
 #include <locale_io.h>
-#include <dialog_export_svg_base.h>
+#include <dialog_export_svg.h>
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_html_report_panel.h>
@@ -42,40 +42,11 @@
 #include <project/project_file.h>
 #include <exporters/export_svg.h>
 
-class DIALOG_EXPORT_SVG : public DIALOG_EXPORT_SVG_BASE
-{
-public:
-    DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard );
-    ~DIALOG_EXPORT_SVG() override;
 
-private:
-    BOARD*            m_board;
-    PCB_EDIT_FRAME*   m_parent;
-    LSEQ              m_printMaskLayer;
-    // the list of existing board layers in wxCheckListBox, with the
-    // board layers id:
-    std::pair<wxCheckListBox*, int> m_boxSelectLayer[PCB_LAYER_ID_COUNT];
-    bool              m_printBW;
-    wxString          m_outputDirectory;
-    bool              m_printMirror;
-    bool              m_oneFileOnly;
-
-    void initDialog();
-
-    void OnButtonPlot( wxCommandEvent& event ) override;
-
-    void onPagePerLayerClicked( wxCommandEvent& event ) override;
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
-    void ExportSVGFile( bool aOnlyOneFile );
-
-    LSET getCheckBoxSelectedLayers() const;
-};
-
-
-DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
-        DIALOG_EXPORT_SVG_BASE( aParent ),
+DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aEditFrame, BOARD* aBoard ) :
+        DIALOG_EXPORT_SVG_BASE( aEditFrame ),
         m_board( aBoard ),
-        m_parent( aParent ),
+        m_editFrame( aEditFrame ),
         m_printBW( false ),
         m_printMirror( false ),
         m_oneFileOnly( false )
@@ -89,13 +60,13 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
     SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
                             { wxID_CANCEL, _( "Close" )  } } );
 
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
     m_cbUsedBoardTheme->SetValue( !cfg->m_ExportSvg.use_selected_theme );
 
     // Build color theme list, and select the previoulsy selected theme
     wxString theme_old_selection = cfg->m_ExportSvg.color_theme;
 
-    for( COLOR_SETTINGS* settings : m_parent->GetSettingsManager()->GetColorSettingsList() )
+    for( COLOR_SETTINGS* settings : m_editFrame->GetSettingsManager()->GetColorSettingsList() )
     {
         int pos = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
@@ -114,13 +85,13 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
     m_outputDirectory = m_outputDirectoryName->GetValue();
     m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    m_parent->Prj().GetProjectFile().m_PcbLastPath[ LAST_PATH_SVG ] = m_outputDirectory;
+    m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_SVG] = m_outputDirectory;
 
     PCBNEW_SETTINGS* cfg = nullptr;
 
     try
     {
-        cfg = m_parent->GetPcbNewSettings();
+        cfg = m_editFrame->GetPcbNewSettings();
     }
     catch( const std::runtime_error& e )
     {
@@ -169,8 +140,8 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 
 void DIALOG_EXPORT_SVG::initDialog()
 {
-    PROJECT_FILE&    projectFile = m_parent->Prj().GetProjectFile();
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PROJECT_FILE&    projectFile = m_editFrame->Prj().GetProjectFile();
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
     m_printBW         = cfg->m_ExportSvg.black_and_white;
     m_printMirror     = cfg->m_ExportSvg.mirror;
@@ -265,7 +236,7 @@ void DIALOG_EXPORT_SVG::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
 void DIALOG_EXPORT_SVG::onPagePerLayerClicked( wxCommandEvent& event )
 {
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
     if( m_checkboxPagePerLayer->GetValue() )
     {
@@ -326,7 +297,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
     svgPlotOptions.m_crossoutDNPFPsOnFabLayers = true;
     svgPlotOptions.m_pageSizeMode = m_rbSvgPageSizeOpt->GetSelection();
 
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
     wxString export_theme = m_cbUsedBoardTheme->GetValue()
                             ? cfg->m_ColorTheme
                             : m_colorTheme->GetStringSelection();
