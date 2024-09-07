@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,11 +28,10 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EXPORT_3DFILE_BASE
+/// Class DIALOG_EXPORT_VRML_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
+class DIALOG_EXPORT_VRML_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -64,9 +63,9 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("VRML Export Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EXPORT_VRML_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("VRML Export Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_EXPORT_3DFILE_BASE();
+		~DIALOG_EXPORT_VRML_BASE();
 
 };
 

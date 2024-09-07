@@ -37,175 +37,88 @@
 #include <project/project_file.h>  // LAST_PATH_TYPE
 #include <wx/msgdlg.h>
 
-
-/* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,
- * created by wxFormBuilder
- */
-#include <dialog_export_vrml_base.h> // the wxFormBuilder header file
+#include <dialog_export_vrml.h>
 
 
-class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
+DIALOG_EXPORT_VRML::DIALOG_EXPORT_VRML( PCB_EDIT_FRAME* aEditFrame ) :
+        DIALOG_EXPORT_VRML_BASE( aEditFrame ),
+        m_editFrame( aEditFrame )
 {
-public:
-    DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
-        DIALOG_EXPORT_3DFILE_BASE( parent ), m_parent( parent )
+    m_filePicker->SetFocus();
+
+    PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
+
+    m_unitsOpt = cfg->m_ExportVrml.units;
+    m_noUnspecified = cfg->m_ExportVrml.no_unspecified;
+    m_noDNP = cfg->m_ExportVrml.no_dnp;
+    m_copy3DFilesOpt = cfg->m_ExportVrml.copy_3d_models;
+    m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
+    m_RefUnits = cfg->m_ExportVrml.ref_units;
+    m_XRef = cfg->m_ExportVrml.ref_x;
+    m_YRef = cfg->m_ExportVrml.ref_y;
+    m_originMode = cfg->m_ExportVrml.origin_mode;
+
+
+    m_rbCoordOrigin->SetSelection( m_originMode );
+    m_rbSelectUnits->SetSelection( m_unitsOpt );
+    m_cbRemoveUnspecified->SetValue( m_noUnspecified );
+    m_cbRemoveDNP->SetValue( m_noDNP );
+    m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
+    m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
+    m_VRML_RefUnitChoice->SetSelection( m_RefUnits );
+    wxString tmpStr;
+    tmpStr << m_XRef;
+    m_VRML_Xref->SetValue( tmpStr );
+    tmpStr = wxT( "" );
+    tmpStr << m_YRef;
+    m_VRML_Yref->SetValue( tmpStr );
+
+    SetupStandardButtons();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    finishDialogSettings();
+}
+
+
+DIALOG_EXPORT_VRML::~DIALOG_EXPORT_VRML()
+{
+    m_unitsOpt = GetUnits();
+    m_noUnspecified = GetNoUnspecifiedOption();
+    m_noDNP = GetNoDNPOption();
+    m_copy3DFilesOpt = GetCopyFilesOption();
+
+    PCBNEW_SETTINGS* cfg = nullptr;
+
+    try
     {
-        m_filePicker->SetFocus();
-
-        PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
-
-        m_unitsOpt            = cfg->m_ExportVrml.units;
-        m_noUnspecified       = cfg->m_ExportVrml.no_unspecified;
-        m_noDNP               = cfg->m_ExportVrml.no_dnp;
-        m_copy3DFilesOpt      = cfg->m_ExportVrml.copy_3d_models;
-        m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
-        m_RefUnits            = cfg->m_ExportVrml.ref_units;
-        m_XRef                = cfg->m_ExportVrml.ref_x;
-        m_YRef                = cfg->m_ExportVrml.ref_y;
-        m_originMode          = cfg->m_ExportVrml.origin_mode;
-
-
-        m_rbCoordOrigin->SetSelection( m_originMode );
-        m_rbSelectUnits->SetSelection( m_unitsOpt );
-        m_cbRemoveUnspecified->SetValue( m_noUnspecified );
-        m_cbRemoveDNP->SetValue( m_noDNP );
-        m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
-        m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
-        m_VRML_RefUnitChoice->SetSelection( m_RefUnits );
-        wxString tmpStr;
-        tmpStr << m_XRef;
-        m_VRML_Xref->SetValue( tmpStr );
-        tmpStr = wxT( "" );
-        tmpStr << m_YRef;
-        m_VRML_Yref->SetValue( tmpStr );
-
-        SetupStandardButtons();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        finishDialogSettings();
+        cfg = m_editFrame->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
     }
 
-    ~DIALOG_EXPORT_3DFILE()
+    if( cfg )
     {
-        m_unitsOpt = GetUnits();
-        m_noUnspecified = GetNoUnspecifiedOption();
-        m_noDNP = GetNoDNPOption();
-        m_copy3DFilesOpt = GetCopyFilesOption();
+        cfg->m_ExportVrml.units = m_unitsOpt;
+        cfg->m_ExportVrml.no_unspecified = m_noUnspecified;
+        cfg->m_ExportVrml.no_dnp = m_noDNP;
+        cfg->m_ExportVrml.copy_3d_models = m_copy3DFilesOpt;
+        cfg->m_ExportVrml.use_relative_paths = m_useRelativePathsOpt;
+        cfg->m_ExportVrml.ref_units = m_VRML_RefUnitChoice->GetSelection();
+        cfg->m_ExportVrml.origin_mode = m_rbCoordOrigin->GetSelection();
 
-        PCBNEW_SETTINGS* cfg = nullptr;
+        double val = 0.0;
+        m_VRML_Xref->GetValue().ToDouble( &val );
+        cfg->m_ExportVrml.ref_x = val;
 
-        try
-        {
-            cfg = m_parent->GetPcbNewSettings();
-        }
-        catch( const std::runtime_error& e )
-        {
-            wxFAIL_MSG( e.what() );
-        }
-
-        if( cfg )
-        {
-            cfg->m_ExportVrml.units              = m_unitsOpt;
-            cfg->m_ExportVrml.no_unspecified     = m_noUnspecified;
-            cfg->m_ExportVrml.no_dnp             = m_noDNP;
-            cfg->m_ExportVrml.copy_3d_models     = m_copy3DFilesOpt;
-            cfg->m_ExportVrml.use_relative_paths = m_useRelativePathsOpt;
-            cfg->m_ExportVrml.ref_units          = m_VRML_RefUnitChoice->GetSelection();
-            cfg->m_ExportVrml.origin_mode        = m_rbCoordOrigin->GetSelection();
-
-            double val = 0.0;
-            m_VRML_Xref->GetValue().ToDouble( &val );
-            cfg->m_ExportVrml.ref_x = val;
-
-            m_VRML_Yref->GetValue().ToDouble( &val );
-            cfg->m_ExportVrml.ref_y = val;
-        }
-    };
-
-    void SetSubdir( const wxString & aDir )
-    {
-        m_SubdirNameCtrl->SetValue( aDir );
+        m_VRML_Yref->GetValue().ToDouble( &val );
+        cfg->m_ExportVrml.ref_y = val;
     }
-
-    wxString GetSubdir3Dshapes()
-    {
-        return m_SubdirNameCtrl->GetValue();
-    }
-
-    wxFilePickerCtrl* FilePicker()
-    {
-        return m_filePicker;
-    }
-
-    int GetRefUnitsChoice()
-    {
-        return m_VRML_RefUnitChoice->GetSelection();
-    }
-
-    int GetOriginChoice()
-    {
-        return m_rbCoordOrigin->GetSelection();
-    }
-
-    double GetXRef()
-    {
-        return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Xref->GetValue() );
-    }
-
-    double GetYRef()
-    {
-        return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Yref->GetValue() );
-    }
-
-    int GetUnits()
-    {
-        return m_unitsOpt = m_rbSelectUnits->GetSelection();
-    }
-
-    bool GetNoUnspecifiedOption()
-    {
-        return m_cbRemoveUnspecified->GetValue();
-    }
-
-    bool GetNoDNPOption()
-    {
-        return m_cbRemoveDNP->GetValue();
-    }
-
-    bool GetCopyFilesOption()
-    {
-        return m_copy3DFilesOpt = m_cbCopyFiles->GetValue();
-    }
-
-    bool GetUseRelativePathsOption()
-    {
-        return m_useRelativePathsOpt = m_cbUseRelativePaths->GetValue();
-    }
-
-    void OnUpdateUseRelativePath( wxUpdateUIEvent& event ) override
-    {
-        // Making path relative or absolute has no meaning when VRML files are not copied.
-        event.Enable( m_cbCopyFiles->GetValue() );
-    }
-
-    bool TransferDataFromWindow() override;
-
-private:
-    PCB_EDIT_FRAME* m_parent;
-    int             m_unitsOpt;             // Remember last units option
-    bool            m_noUnspecified;        // Remember last No Unspecified Component option
-    bool            m_noDNP;                // Remember last No DNP Component option
-    bool            m_copy3DFilesOpt;       // Remember last copy model files option
-    bool            m_useRelativePathsOpt;  // Remember last use absolute paths option
-    int             m_RefUnits;             // Remember last units for Reference Point
-    double          m_XRef;                 // Remember last X Reference Point
-    double          m_YRef;                 // Remember last Y Reference Point
-    int             m_originMode;           // Origin selection option
-                                            // (0 = user, 1 = board center)
-};
+}
 
 
-bool DIALOG_EXPORT_3DFILE::TransferDataFromWindow()
+bool DIALOG_EXPORT_VRML::TransferDataFromWindow()
 {
     wxFileName fn = m_filePicker->GetPath();
 
@@ -217,6 +130,18 @@ bool DIALOG_EXPORT_3DFILE::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+double DIALOG_EXPORT_VRML::GetXRef()
+{
+    return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Xref->GetValue() );
+}
+
+
+double DIALOG_EXPORT_VRML::GetYRef()
+{
+    return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Yref->GetValue() );
 }
 
 
@@ -243,7 +168,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     // this is the mm to VRML scaling factor for mm, 0.1 inch, and inch
     double scaleList[4] = { 1.0, 0.001, 10.0/25.4, 1.0/25.4 };
 
-    DIALOG_EXPORT_3DFILE dlg( this );
+    DIALOG_EXPORT_VRML dlg( this );
     dlg.FilePicker()->SetPath( path );
     dlg.SetSubdir( subDirFor3Dshapes );
 
