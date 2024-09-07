@@ -28,7 +28,6 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <boost/functional/hash.hpp>
 
 #if BOOST_VERSION >= 106700
 #include <boost/uuid/entropy_error.hpp>
@@ -236,15 +235,7 @@ timestamp_t KIID::AsLegacyTimestamp() const
 
 size_t KIID::Hash() const
 {
-    size_t hash = 0;
-
-    // Note: this is NOT little-endian/big-endian safe, but as long as it's just used
-    // at runtime it won't matter.
-
-    for( int i = 0; i < 4; ++i )
-        boost::hash_combine( hash, reinterpret_cast<const uint32_t*>( m_uuid.data )[i] );
-
-    return hash;
+    return boost::uuids::hash_value( m_uuid );
 }
 
 
