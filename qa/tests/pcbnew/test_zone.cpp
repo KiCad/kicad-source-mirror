@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE( MultipleLayers )
 {
     ZONE zone( &m_board );
 
-    zone.SetLayerSet( { F_Cu, B_Cu } );
+    zone.SetLayerSet( LSEQ{ F_Cu, B_Cu } );
 
     // There is no "the" layer in a multi-layer zone
     BOOST_CHECK( zone.GetLayer() == UNDEFINED_LAYER );
