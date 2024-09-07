@@ -181,7 +181,6 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
         return;
     }
 
-
     // For all the elements that get drawn construction geometry,
     // add something suitable to the construction helper.
     // This can be nothing.
@@ -518,6 +517,16 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE );
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
+
+    if( KIGFX::ANCHOR_DEBUG* ad = enableAndGetAnchorDebug(); ad )
+    {
+        ad->ClearAnchors();
+        for( const ANCHOR& anchor : m_anchors )
+            ad->AddAnchor( anchor.pos );
+
+        ad->SetNearest( nearest ? OPT_VECTOR2I{ nearest->pos } : std::nullopt );
+        m_toolMgr->GetView()->Update( ad, KIGFX::GEOMETRY );
+    }
 
     // The distance to the nearest snap point, if any
     std::optional<int> snapDist;

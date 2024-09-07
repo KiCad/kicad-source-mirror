@@ -23,51 +23,61 @@
 
 #pragma once
 
-#include <origin_viewitem.h>
-#include <geometry/point_types.h>
+#include <cstddef>
+#include <map>
+#include <span>
 
+#include <origin_viewitem.h>
+
+#include <math/vector2d.h>
+#include <geometry/seg.h> // OPT_VECTOR2I
 
 namespace KIGFX
 {
 
 /**
- * View item to draw an origin marker with an optional
- * snap type indicator.
+ * View item to draw debug items for anchors.
+ *
+ * This can be handy when verifying how many/where anchors are being placed.
  */
-class SNAP_INDICATOR : public ORIGIN_VIEWITEM
+class ANCHOR_DEBUG : public EDA_ITEM
 {
 public:
-    SNAP_INDICATOR( const COLOR4D& aColor = COLOR4D::WHITE, int aSize = 16,
-                   const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) );
+    ANCHOR_DEBUG();
 
-    SNAP_INDICATOR( const VECTOR2D& aPosition, EDA_ITEM_FLAGS flags );
+    ANCHOR_DEBUG* Clone() const override;
 
-    SNAP_INDICATOR* Clone() const override;
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     const BOX2I ViewBBox() const override;
 
     void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-#if defined( DEBUG )
-    void Show( int x, std::ostream& st ) const override {}
-#endif
-
     /**
      * Get class name.
      *
-     * @return string "SNAP_INDICATOR"
+     * @return string "ANCHOR_DEBUG"
      */
-    wxString GetClass() const override { return wxT( "SNAP_INDICATOR" ); }
+    wxString GetClass() const override { return wxT( "ANCHOR_DEBUG" ); }
+
+    void ClearAnchors();
 
     /**
-     * Set a mask of point types that this snap item represents.
-     *
-     * This is a mask of POINT_TYPE.
+     * Add an anchor at the given position.
      */
-    void SetSnapTypes( int aSnapTypes ) { m_snapTypes = aSnapTypes; }
+    void AddAnchor( const VECTOR2I& aAnchor );
+
+    /**
+     * Set the nearest anchor to the given position.
+     *
+     * Pass an empty optional to clear the nearest anchor.
+     */
+    void SetNearest( const OPT_VECTOR2I& aNearest );
 
 private:
-    int m_snapTypes = POINT_TYPE::PT_NONE;
+    // Store the anchors by location and count
+    std::map<VECTOR2I, size_t> m_anchors;
+    OPT_VECTOR2I               m_nearest;
 };
 
 } // namespace KIGFX

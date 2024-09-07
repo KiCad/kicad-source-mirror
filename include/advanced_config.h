@@ -652,6 +652,14 @@ public:
      */
     bool m_EnableExtensionSnaps;
 
+    /**
+     * Enable snap anchors debug visualization.
+     *
+     * Setting name: "EnableSnapAnchorsDebug"
+     * Default value: false
+     */
+    bool m_EnableSnapAnchorsDebug;
+
 ///@}
 
 private:

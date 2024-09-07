@@ -28,6 +28,7 @@
 
 #include <geometry/point_types.h>
 #include <math/vector2d.h>
+#include <preview_items/anchor_debug.h>
 #include <preview_items/snap_indicator.h>
 #include <preview_items/construction_geom.h>
 #include <tool/construction_manager.h>
@@ -206,6 +207,13 @@ protected:
 
     void updateSnapPoint( const TYPED_POINT2I& aPoint );
 
+    /**
+     * Enable the anchor debug if permitted and return it
+     *
+     * Returns nullptr if not permitted by the advancd config
+     */
+    KIGFX::ANCHOR_DEBUG* enableAndGetAnchorDebug();
+
     std::vector<ANCHOR>     m_anchors;
 
     TOOL_MANAGER*           m_toolMgr;
@@ -232,6 +240,9 @@ private:
     // and deals with updating the construction helper as well as keeping
     // track of what geometry is "active" for construction purposes.
     CONSTRUCTION_MANAGER m_constructionManager;
+
+    /// @brief  VIEW_ITEM for visualising anchor points, if enabled
+    std::unique_ptr<KIGFX::ANCHOR_DEBUG> m_anchorDebug;
 };
 
 #endif

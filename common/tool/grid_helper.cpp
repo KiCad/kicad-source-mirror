@@ -25,6 +25,7 @@
 
 #include <functional>
 
+#include <advanced_config.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
 #include <math/util.h>      // for KiROUND
@@ -73,8 +74,25 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
 
 GRID_HELPER::~GRID_HELPER()
 {
-    KIGFX::VIEW* view = m_toolMgr->GetView();
-    view->Remove( &m_constructionGeomPreview );
+    KIGFX::VIEW& view = *m_toolMgr->GetView();
+    view.Remove( &m_constructionGeomPreview );
+
+    if( m_anchorDebug )
+        view.Remove( m_anchorDebug.get() );
+}
+
+
+KIGFX::ANCHOR_DEBUG* GRID_HELPER::enableAndGetAnchorDebug()
+{
+    static bool permitted = ADVANCED_CFG::GetCfg().m_EnableSnapAnchorsDebug;
+    if( permitted && !m_anchorDebug )
+    {
+        KIGFX::VIEW& view = *m_toolMgr->GetView();
+        m_anchorDebug = std::make_unique<KIGFX::ANCHOR_DEBUG>();
+        view.Add( m_anchorDebug.get() );
+        view.SetVisible( m_anchorDebug.get(), true );
+    }
+    return m_anchorDebug.get();
 }
 
 

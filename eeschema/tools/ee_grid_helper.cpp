@@ -160,6 +160,16 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aGrid );
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
 
+    if( KIGFX::ANCHOR_DEBUG* ad = enableAndGetAnchorDebug(); ad )
+    {
+        ad->ClearAnchors();
+        for( const ANCHOR& a : m_anchors )
+            ad->AddAnchor( a.pos );
+
+        ad->SetNearest( nearest ? OPT_VECTOR2I( nearest->pos ) : std::nullopt );
+        m_toolMgr->GetView()->Update( ad, KIGFX::GEOMETRY );
+    }
+
     showConstructionGeometry( m_enableSnap );
 
     std::optional<VECTOR2I> snapLineOrigin = getConstructionManager().GetSnapLineOrigin();
