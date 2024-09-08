@@ -27,7 +27,7 @@
 
 #include <trigo.h>
 #include <geometry/shape_poly_set.h>
-#include <geometry/geometry_utils.h>
+#include <geometry/approximation.h>
 #include <properties/property.h>
 #include <stroke_params.h>
 

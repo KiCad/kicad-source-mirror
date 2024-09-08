@@ -23,13 +23,15 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#include "pcb_track.h"
+
 #include <pcb_base_frame.h>
 #include <core/mirror.h>
 #include <connectivity/connectivity_data.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <pcb_track.h>
 #include <base_units.h>
 #include <layer_range.h>
 #include <lset.h>
@@ -37,6 +39,7 @@
 #include <view/view.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>

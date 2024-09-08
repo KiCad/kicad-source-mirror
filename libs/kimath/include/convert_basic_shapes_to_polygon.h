@@ -25,8 +25,8 @@
 #ifndef CONVERT_BASIC_SHAPES_TO_POLYGON_H
 #define CONVERT_BASIC_SHAPES_TO_POLYGON_H
 
+#include <geometry/approximation.h>
 #include <geometry/shape_poly_set.h>
-#include <geometry/geometry_utils.h>
 
 
 // The chamfer positions of chamfered rect shape.

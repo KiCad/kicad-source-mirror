@@ -30,7 +30,7 @@
 #include <vector>
 #include <geometry/seg.h>
 #include <geometry/eda_angle.h>
-#include <geometry/geometry_utils.h>
+#include <geometry/approximation.h>
 #include <math/vector2d.h>
 #include <math/box2.h>
 #include <wx/string.h>

@@ -25,14 +25,15 @@
  * @brief functions to read the rs274d commands from a rs274d/rs274x file
  */
 
+#include <cmath>
 
+#include <geometry/geometry_utils.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <trigo.h>
 #include <gerber_file_image.h>
+#include <trigo.h>
 #include <X2_gerber_attributes.h>
 
-#include <cmath>
 
 /* Gerber: NOTES about some important commands found in RS274D and RS274X (G codes).
  * Some are now deprecated, but deprecated commands must be known by the Gerber reader
