@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/seg.h>
+#include <geometry/vector_utils.h>
 #include <confirm.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -1277,20 +1278,21 @@ private:
         const EDA_ANGLE rotation = oldAngle - newAngle;
 
         // There are two modes - when the text is between the crossbar points, and when it's not.
-        if( !textIsOverCrossBar( m_oldCrossBar, m_originalTextPos ) )
+        if( !KIGEOM::PointProjectsOntoSegment( m_originalTextPos, m_oldCrossBar ) )
         {
             VECTOR2I rotTextOffsetFromCbCenter = m_originalTextPos - m_oldCrossBar.Center();
             RotatePoint( rotTextOffsetFromCbCenter, rotation );
 
             VECTOR2I rotTextOffsetFromCbEnd =
-                    getTextOffsetFromCrossbarNearestEnd( m_oldCrossBar, m_originalTextPos );
+                    m_originalTextPos
+                    - KIGEOM::GetNearestEndpoint( m_oldCrossBar, m_originalTextPos );
             RotatePoint( rotTextOffsetFromCbEnd, rotation );
 
             // Which of the two crossbar points is now in the right direction? They could be swapped over now.
             // If zero-length, doesn't matter, they're the same thing
             const bool startIsInOffsetDirection =
-                    pointIsInDirection( m_dimension.GetCrossbarStart(), rotTextOffsetFromCbCenter,
-                                        newCrossBar.Center() );
+                    KIGEOM::PointIsInDirection( m_dimension.GetCrossbarStart(),
+                                                rotTextOffsetFromCbCenter, newCrossBar.Center() );
 
             const VECTOR2I& newCbRefPt = startIsInOffsetDirection ? m_dimension.GetCrossbarStart()
                                                                   : m_dimension.GetCrossbarEnd();
@@ -1303,8 +1305,8 @@ private:
         // good place for it. Keep it the same distance from the crossbar line, but rotated as needed.
 
         const VECTOR2I origTextPointProjected = m_oldCrossBar.NearestPoint( m_originalTextPos );
-        const double   oldRatio = ( origTextPointProjected - m_oldCrossBar.A ).EuclideanNorm()
-                                / double( m_oldCrossBar.Length() );
+        const double   oldRatio =
+                KIGEOM::GetLengthRatioFromStart( origTextPointProjected, m_oldCrossBar );
 
         // Perpendicular from the crossbar line to the text position
         // We need to keep this length constant
@@ -1313,30 +1315,6 @@ private:
 
         const VECTOR2I newProjected = newCrossBar.A + ( newCrossBar.B - newCrossBar.A ) * oldRatio;
         return newProjected + rotCbNormalToText;
-    }
-
-    static bool pointIsInDirection( const VECTOR2I& aPoint, const VECTOR2I& aDirection,
-                                    const VECTOR2I& aFrom )
-    {
-        return ( aPoint - aFrom ).Dot( aDirection ) > 0;
-    };
-
-    static bool textIsOverCrossBar( const SEG& aCrossbar, const VECTOR2I& aTextPos )
-    {
-        const VECTOR2I projected = aCrossbar.NearestPoint( aTextPos );
-        return projected != aCrossbar.A && projected != aCrossbar.B;
-    }
-
-    static VECTOR2I getTextOffsetFromCrossbarNearestEnd( const SEG&      aCrossbar,
-                                                         const VECTOR2I& aTextPos )
-    {
-        const int distToCBStart = aCrossbar.A.Distance( aTextPos );
-        const int distToCBEnd = aCrossbar.B.Distance( aTextPos );
-
-        const bool isNearerStart = distToCBStart < distToCBEnd;
-
-        // This is the offset of the text from the nearer crossbar point
-        return aTextPos - ( isNearerStart ? aCrossbar.A : aCrossbar.B );
     }
 
     PCB_DIM_ALIGNED& m_dimension;

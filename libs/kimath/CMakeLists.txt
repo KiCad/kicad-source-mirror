@@ -31,6 +31,7 @@ set( KIMATH_SRCS
     src/geometry/shape_rect.cpp
     src/geometry/shape_compound.cpp
     src/geometry/shape_segment.cpp
+    src/geometry/vector_utils.cpp
     src/geometry/vertex_set.cpp
 
 
