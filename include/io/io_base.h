@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 
+#include <kicommon.h>
 #include <core/utf8.h>
 #include <wx/string.h>
 #include <widgets/report_severity.h>
@@ -32,7 +33,7 @@
 class REPORTER;
 class PROGRESS_REPORTER;
 
-class IO_BASE
+class KICOMMON_API IO_BASE
 {
 public:
     /**
