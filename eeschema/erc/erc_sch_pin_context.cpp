@@ -3,7 +3,7 @@
 *
 * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
 * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
-* Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -27,7 +27,9 @@
  * @file erc_sch_pin_context.cpp
  */
 
-#include <erc/erc_sch_pin_context.h>
+#include "erc/erc_sch_pin_context.h"
+
+#include <hash.h>
 
 
 SCH_PIN* ERC_SCH_PIN_CONTEXT::Pin() const
@@ -57,7 +59,5 @@ bool ERC_SCH_PIN_CONTEXT::operator<( const ERC_SCH_PIN_CONTEXT& other ) const
 void ERC_SCH_PIN_CONTEXT::rehash()
 {
     m_hash = 0;
-
-    boost::hash_combine( m_hash, m_pin );
-    boost::hash_combine( m_hash, m_sheet.GetCurrentHash() );
+    hash_combine( m_hash, m_pin, m_sheet.GetCurrentHash() );
 }

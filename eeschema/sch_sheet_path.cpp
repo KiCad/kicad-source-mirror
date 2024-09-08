@@ -24,6 +24,7 @@
  */
 
 #include <refdes_utils.h>
+#include <hash.h>
 #include <sch_screen.h>
 #include <sch_item.h>
 #include <sch_marker.h>
@@ -37,7 +38,6 @@
 #include <template_fieldnames.h>
 #include <trace_helpers.h>
 
-#include <boost/functional/hash.hpp>
 #include <wx/filename.h>
 #include <wx/log.h>
 
@@ -161,7 +161,7 @@ void SCH_SHEET_PATH::Rehash()
     m_current_hash = 0;
 
     for( SCH_SHEET* sheet : m_sheets )
-        boost::hash_combine( m_current_hash, sheet->m_Uuid.Hash() );
+        hash_combine( m_current_hash, sheet->m_Uuid.Hash() );
 }
 
 

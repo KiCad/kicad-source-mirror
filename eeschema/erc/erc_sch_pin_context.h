@@ -31,7 +31,6 @@
 #define _ERC_ITEM_CONTEXT_H
 
 #include <sch_pin.h>
-#include <boost/functional/hash.hpp>
 
 /**
  * A class used to associate a #SCH_PIN with its owning #SCH_SHEET_PATH, in order to handle ERC
