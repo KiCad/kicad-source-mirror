@@ -477,8 +477,6 @@ set( PLOTTERS_CONTROL_SRCS
     )
 
 set( COMMON_IO_SRCS
-    io/io_base.cpp
-    io/io_utils.cpp
 
     # Altium
     io/altium/altium_binary_parser.cpp

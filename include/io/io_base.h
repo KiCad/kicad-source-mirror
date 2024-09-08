@@ -39,7 +39,7 @@ public:
     /**
     * Container that describes file type info
     */
-    struct IO_FILE_DESC
+    struct KICOMMON_API IO_FILE_DESC
     {
         wxString                 m_Description;    ///< Description shown in the file picker dialog
         std::vector<std::string> m_FileExtensions; ///< Filter used for file pickers if m_IsFile is true

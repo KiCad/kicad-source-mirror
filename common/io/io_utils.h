@@ -24,6 +24,7 @@
 #ifndef IO_UTILS_H
 #define IO_UTILS_H
 
+#include <kicommon.h>
 #include <cstdint>
 #include <vector>
 
@@ -32,7 +33,7 @@
 namespace IO_UTILS
 {
 
-static const std::vector<uint8_t> COMPOUND_FILE_HEADER{ 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1};
+extern KICOMMON_API const std::vector<uint8_t> COMPOUND_FILE_HEADER;
 
 /**
  * Check if a file starts with a defined string
@@ -40,14 +41,15 @@ static const std::vector<uint8_t> COMPOUND_FILE_HEADER{ 0xD0, 0xCF, 0x11, 0xE0, 
  * @param aPrefix prefix string which should match with the initial characters in the file
  * @param aIgnoreWhitespace true if whitespace characters should be ignored before the prefix
  */
-bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix, bool aIgnoreWhitespace );
+KICOMMON_API bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix, bool aIgnoreWhitespace );
 
 /**
  * Check if a file starts with a defined binary header
  * @param aFilePath path to the file where we want to check the prefix
  * @param aHeader vector of bytes which need to match with the start of the file
  */
-bool fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader );
+KICOMMON_API bool fileStartsWithBinaryHeader( const wxString&             aFilePath,
+                                              const std::vector<uint8_t>& aHeader );
 
 }
 
