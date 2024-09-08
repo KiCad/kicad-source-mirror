@@ -1280,13 +1280,12 @@ private:
         // There are two modes - when the text is between the crossbar points, and when it's not.
         if( !KIGEOM::PointProjectsOntoSegment( m_originalTextPos, m_oldCrossBar ) )
         {
-            VECTOR2I rotTextOffsetFromCbCenter = m_originalTextPos - m_oldCrossBar.Center();
-            RotatePoint( rotTextOffsetFromCbCenter, rotation );
-
-            VECTOR2I rotTextOffsetFromCbEnd =
-                    m_originalTextPos
-                    - KIGEOM::GetNearestEndpoint( m_oldCrossBar, m_originalTextPos );
-            RotatePoint( rotTextOffsetFromCbEnd, rotation );
+            const VECTOR2I cbNearestEndToText =
+                    KIGEOM::GetNearestEndpoint( m_oldCrossBar, m_originalTextPos );
+            const VECTOR2I rotTextOffsetFromCbCenter =
+                    GetRotated( m_originalTextPos - m_oldCrossBar.Center(), rotation );
+            const VECTOR2I rotTextOffsetFromCbEnd =
+                    GetRotated( m_originalTextPos - cbNearestEndToText, rotation );
 
             // Which of the two crossbar points is now in the right direction? They could be swapped over now.
             // If zero-length, doesn't matter, they're the same thing
@@ -1310,8 +1309,8 @@ private:
 
         // Perpendicular from the crossbar line to the text position
         // We need to keep this length constant
-        VECTOR2I rotCbNormalToText = m_originalTextPos - origTextPointProjected;
-        RotatePoint( rotCbNormalToText, rotation );
+        const VECTOR2I rotCbNormalToText =
+                GetRotated( m_originalTextPos - origTextPointProjected, rotation );
 
         const VECTOR2I newProjected = newCrossBar.A + ( newCrossBar.B - newCrossBar.A ) * oldRatio;
         return newProjected + rotCbNormalToText;
