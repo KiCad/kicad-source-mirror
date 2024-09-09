@@ -41,8 +41,7 @@
 #include <gestfich.h>
 #include <widgets/wx_html_report_panel.h>
 #include <sch_edit_frame.h>
-#include <netlist.h>
-#include <dialogs/dialog_export_netlist_base.h>
+#include <dialogs/dialog_export_netlist.h>
 #include <wildcards_and_files_ext.h>
 #include <invoke_sch_dialog.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
@@ -129,60 +128,6 @@ private:
 };
 
 
-/* Dialog frame for creating netlists */
-class DIALOG_EXPORT_NETLIST : public DIALOG_EXPORT_NETLIST_BASE
-{
-public:
-    DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent );
-    ~DIALOG_EXPORT_NETLIST() { };
-
-private:
-    void InstallCustomPages();
-    EXPORT_NETLIST_PAGE* AddOneCustomPage( const wxString& aTitle, const wxString& aCommandString,
-                                           NETLIST_TYPE_ID aNetTypeId );
-    void InstallPageSpice();
-    void InstallPageSpiceModel();
-
-    bool TransferDataFromWindow() override;
-    bool NetlistUpdateOpt();
-
-    void updateGeneratorButtons();
-
-    // Called when changing the notebook page (and therefore the current netlist format)
-    void OnNetlistTypeSelection( wxNotebookEvent& event ) override;
-
-    /**
-     * Add a new panel for a new netlist plugin.
-     */
-    void OnAddGenerator( wxCommandEvent& event ) override;
-
-    /**
-     * Remove a panel relative to a netlist plugin.
-     */
-    void OnDelGenerator( wxCommandEvent& event ) override;
-
-    /**
-     * Write the current netlist options setup in the configuration.
-     */
-    void WriteCurrentNetlistSetup();
-
-    /**
-     * Return the filename extension and the wildcard string for this page or a void name
-     * if there is no default name.
-     *
-     * @param aType is the netlist type ( NET_TYPE_PCBNEW ... ).
-     * @param aExt [in] is a holder for the netlist file extension.
-     * @param aWildCard [in] is a holder for netlist file dialog wildcard.
-     * @return true for known netlist type, false for custom formats.
-     */
-    bool FilenamePrms( NETLIST_TYPE_ID aType,  wxString* aExt, wxString* aWildCard );
-
-public:
-    SCH_EDIT_FRAME*      m_Parent;
-    EXPORT_NETLIST_PAGE* m_PanelNetType[DEFINED_NETLISTS_COUNT + CUSTOMPANEL_COUNTMAX];
-};
-
-
 class NETLIST_DIALOG_ADD_GENERATOR : public NETLIST_DIALOG_ADD_GENERATOR_BASE
 {
 public:
@@ -249,15 +194,15 @@ EXPORT_NETLIST_PAGE::EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& a
 }
 
 
-DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
-        DIALOG_EXPORT_NETLIST_BASE( parent )
+DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame ) :
+        DIALOG_EXPORT_NETLIST_BASE( aEditFrame )
 {
-    m_Parent = parent;
+    m_editFrame = aEditFrame;
 
-    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+    // Initialize the array of netlist pages
+    m_PanelNetType.resize( DEFINED_NETLISTS_COUNT + CUSTOMPANEL_COUNTMAX, nullptr );
 
-    for( EXPORT_NETLIST_PAGE*& page : m_PanelNetType )
-        page = nullptr;
+    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
 
     // Add notebook pages:
     EXPORT_NETLIST_PAGE* page = nullptr;
@@ -319,7 +264,7 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpice()
     EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICE] =
             new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE" ), NET_TYPE_SPICE, false );
 
-    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
 
     wxStaticText* label = new wxStaticText( page, wxID_ANY, _( "Export netlist in SPICE format" ) );
     page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
@@ -378,7 +323,7 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpiceModel()
     EXPORT_NETLIST_PAGE* page = m_PanelNetType[PANELSPICEMODEL] =
             new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE Model" ), NET_TYPE_SPICE_MODEL, false );
 
-    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
 
     wxStaticText* label = new wxStaticText( page, wxID_ANY, _( "Export netlist as a SPICE .subckt model" ) );
     page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
@@ -457,7 +402,7 @@ bool DIALOG_EXPORT_NETLIST::NetlistUpdateOpt()
     bool curSheetAsRoot = m_PanelNetType[ PANELSPICE ]->m_CurSheetAsRoot->GetValue();
     bool spiceModelCurSheetAsRoot = m_PanelNetType[ PANELSPICEMODEL ]->m_CurSheetAsRoot->GetValue();
 
-    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+    SCHEMATIC_SETTINGS& settings = m_editFrame->Schematic().Settings();
     wxString netFormatName = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
 
     changed |= ( settings.m_SpiceSaveAllVoltages != saveAllVoltages );
@@ -490,7 +435,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     wxString    title = _( "Save Netlist File" );
 
     if( NetlistUpdateOpt() )
-        m_Parent->OnModify();
+        m_editFrame->OnModify();
 
     EXPORT_NETLIST_PAGE* currPage;
     currPage = (EXPORT_NETLIST_PAGE*) m_NoteBook->GetCurrentPage();
@@ -499,7 +444,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     unsigned netlist_opt = 0;
 
     // Calculate the netlist filename
-    fn = m_Parent->Schematic().GetFileName();
+    fn = m_editFrame->Schematic().GetFileName();
     FilenamePrms( currPage->m_IdNetType, &fileExt, &fileWildcard );
 
     // Set some parameters
@@ -581,23 +526,24 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
         fullpath = dlg.GetPath();   // directory + filename
     }
 
-    m_Parent->ClearMsgPanel();
+    m_editFrame->ClearMsgPanel();
     REPORTER& reporter = m_MessagesBox->Reporter();
 
     if( currPage->m_CommandStringCtrl )
-        m_Parent->SetNetListerCommand( currPage->m_CommandStringCtrl->GetValue() );
+        m_editFrame->SetNetListerCommand( currPage->m_CommandStringCtrl->GetValue() );
     else
-        m_Parent->SetNetListerCommand( wxEmptyString );
+        m_editFrame->SetNetListerCommand( wxEmptyString );
 
-    if( !m_Parent->ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
+    if( !m_editFrame->ReadyToNetlist(
+                _( "Exporting netlist requires a fully annotated schematic." ) ) )
         return false;
 
-    m_Parent->WriteNetListFile( currPage->m_IdNetType, fullpath, netlist_opt, &reporter );
+    m_editFrame->WriteNetListFile( currPage->m_IdNetType, fullpath, netlist_opt, &reporter );
 
     if( runExternalSpiceCommand )
     {
         // Build the command line
-        wxString commandLine = m_Parent->Schematic().Settings().m_SpiceCommandString;
+        wxString commandLine = m_editFrame->Schematic().Settings().m_SpiceCommandString;
         commandLine.Replace( wxS( "%I" ), fullpath, true );
         commandLine.Trim( true ).Trim( false );
 
@@ -731,7 +677,7 @@ bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt
 void DIALOG_EXPORT_NETLIST::WriteCurrentNetlistSetup()
 {
     if( NetlistUpdateOpt() )
-        m_Parent->OnModify();
+        m_editFrame->OnModify();
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxCHECK( cfg, /* void */ );
