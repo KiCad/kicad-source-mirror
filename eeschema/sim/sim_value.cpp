@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -421,9 +421,9 @@ std::string SIM_VALUE::ToSpice( const std::string& aString )
     // Notation conversion is very slow.  Avoid if possible.
 
     auto plainNumber =
-            []( const std::string& aString )
+            []( const std::string& aStringVal )
             {
-                for( char c : aString )
+                for( char c : aStringVal )
                 {
                     if( c != '.' && ( c < '0' || c > '9' )  )
                         return false;
