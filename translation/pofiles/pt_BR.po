@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-08-27 05:58+0000\n"
+"PO-Revision-Date: 2024-09-09 18:09+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -3428,7 +3428,7 @@ msgstr "A mensagem de commit não pode estar vazia"
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:382
 msgid "Enter the password for the SSH key"
-msgstr "Digite a senha da chave SSH"
+msgstr "Insira a senha da chave SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
 msgid "Test connection"
@@ -3468,11 +3468,11 @@ msgstr "Informações ausentes"
 
 #: common/dialogs/git/dialog_git_repository.cpp:418
 msgid "Please enter a name for the repository"
-msgstr "Digite um nome para o repositório"
+msgstr "Insira um nome para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:425
 msgid "Please enter a URL for the repository"
-msgstr "Digite uma URL para o repositório"
+msgstr "Insira uma URL para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:447
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
@@ -4164,7 +4164,7 @@ msgstr "Gráficos:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
-msgstr "Digite o texto do filtro"
+msgstr "Insira o texto do filtro"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:128
 msgid "Undo All Changes"
@@ -10293,7 +10293,7 @@ msgid ""
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Digite o comando para executar o SPICE\n"
+"Insira o comando para executar o SPICE\n"
 "Geralmente é '<o caminho para o binário do spice> \"%I\"'\n"
 "O %I será substituído pelo caminho da netlist"
 
@@ -24470,7 +24470,7 @@ msgstr "Adiciona um repositório padrão"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
-msgstr "Digite a url do repositório plenamente credenciada"
+msgstr "Insira a url do repositório plenamente credenciada"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
@@ -41786,9 +41786,9 @@ msgstr ""
 "compatível)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr "Justificativa de caixa de texto desconhecida %d, texto %s"
+msgstr "Justificativa desconhecida da caixa de texto %d, aText %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 msgid "Loading rectangles..."
