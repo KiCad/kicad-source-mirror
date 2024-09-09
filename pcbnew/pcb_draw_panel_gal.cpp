@@ -677,7 +677,9 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_ANCHOR, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_ANCHOR );
 
-    m_view->SetLayerTarget( LAYER_CONFLICTS_SHADOW, KIGFX::TARGET_NONCACHED );
+    // Use TARGET_OVERLAY for LAYER_CONFLICTS_SHADOW, it is for items
+    // that may change while the view stays the same.
+    m_view->SetLayerTarget( LAYER_CONFLICTS_SHADOW, KIGFX::TARGET_OVERLAY );
 
     m_view->SetLayerDisplayOnly( LAYER_LOCKED_ITEM_SHADOW );
     m_view->SetLayerDisplayOnly( LAYER_CONFLICTS_SHADOW );
