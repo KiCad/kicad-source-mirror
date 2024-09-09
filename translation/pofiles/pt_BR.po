@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-03 07:09+0000\n"
+"PO-Revision-Date: 2024-09-09 09:54+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -1951,14 +1951,12 @@ msgid "No"
 msgstr "Não"
 
 #: common/design_block_info_impl.cpp:116
-#, fuzzy
 msgid "Fetching design_block libraries..."
-msgstr "Buscando as bibliotecas de footprint..."
+msgstr "Buscando bibliotecas design_block..."
 
 #: common/design_block_info_impl.cpp:147
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "Carregando os arquivos..."
+msgstr "Carregando design_blocks..."
 
 #: common/design_block_io.cpp:45 common/design_block_io.cpp:54
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -1973,9 +1971,8 @@ msgid "UNKNOWN (%d)"
 msgstr "DESCONHECIDO (%d)"
 
 #: common/design_block_io.cpp:132
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "Arquivos legados do projeto KiCad"
+msgstr "Pastas de blocos de desenho do KiCad"
 
 #: common/design_block_io.cpp:153
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2996
@@ -1984,15 +1981,15 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Não é possível sobrescrever o caminho da biblioteca '%s'."
 
 #: common/design_block_io.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Não foi possível criar a pasta '%s'.\n"
+"O caminho da biblioteca '%s' não pôde ser criado.\n"
 "\n"
-"Certifique-se de ter permissões de gravação e tente novamente."
+"Verifique se você tem permissões de gravação e tente novamente."
 
 #: common/design_block_io.cpp:182 pcbnew/pcb_io/geda/pcb_io_geda.cpp:975
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3021
@@ -2001,67 +1998,70 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Permissões insuficientes para excluir a pasta '%s'."
 
 #: common/design_block_io.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "A pasta da biblioteca '%s' tem subpastas inesperadas."
+msgstr "A pasta da biblioteca '%s' tem arquivos inesperados."
 
 #: common/design_block_io.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "Arquivo inesperado '%s' foi encontrado no caminho da biblioteca '%s'."
+msgstr "Uma pasta inesperada '%s' foi encontrada no caminho da biblioteca '%s'."
 
 #: common/design_block_io.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "O símbolo da biblioteca '%s' não pode ser excluída."
+msgstr "A biblioteca de blocos de desenho '%s' não pode ser excluída."
 
 #: common/design_block_io.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Não foi possível criar o arquivo '%s'."
+msgstr "Não foi possível ler o arquivo de metadados do bloco de desenho '%s'."
 
 #: common/design_block_io.cpp:323
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "O bloco de desenho não tem uma ID válida da biblioteca ."
 
 #: common/design_block_io.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "O arquivo '%s' do esquema já existe."
+msgstr "O arquivo de origem do esquema '%s' não existe."
 
 #: common/design_block_io.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Não foi possível criar o arquivo '%s'."
+msgstr "Não foi possível criar a pasta de bloco de desenho '%s'."
 
 #: common/design_block_io.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "O arquivo '%s' do esquema já existe."
+msgstr ""
+"O arquivo esquemático '%s' não pôde ser salvo como bloco de desenho em '%s'."
 
 #: common/design_block_io.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "O diretório '%s' não existe"
+msgstr "O bloco de desenho '%s' não existe."
 
 #: common/design_block_io.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Não foi possível criar o arquivo '%s'."
+msgstr "Não foi possível excluir a pasta de blocos de desenho '%s'."
 
 #: common/design_block_lib_table.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"O apelido da biblioteca duplicado '%s' foi encontrado na linha %d do arquivo "
-"da tabela dos símbolos da biblioteca"
+"Um apelido duplicado da biblioteca '%s' foi encontrado na linha %d do "
+"arquivo da tabela de bibliotecas do bloco de desenho."
 
 #: common/design_block_lib_table.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "Os arquivos fp-lib-table não contêm nenhuma biblioteca chamada '%s'."
+msgstr ""
+"Os arquivos design-block-lib-table não contêm nenhuma biblioteca chamada "
+"'%s'."
 
 #: common/design_block_lib_table.cpp:570 common/fp_lib_table.cpp:556
 #: eeschema/symbol_lib_table.cpp:609
@@ -3646,7 +3646,7 @@ msgstr "A mensagem de commit não pode estar vazia"
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:383
 msgid "Enter the password for the SSH key"
-msgstr "Digite a senha da chave SSH"
+msgstr "Insira a senha da chave SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:334
 msgid "Test connection"
@@ -3686,11 +3686,11 @@ msgstr "Informações ausentes"
 
 #: common/dialogs/git/dialog_git_repository.cpp:419
 msgid "Please enter a name for the repository"
-msgstr "Digite um nome para o repositório"
+msgstr "Insira um nome para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:426
 msgid "Please enter a URL for the repository"
-msgstr "Digite uma URL para o repositório"
+msgstr "Insira uma URL para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:448
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
@@ -4520,7 +4520,7 @@ msgstr "Gráficos:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
-msgstr "Digite o texto do filtro"
+msgstr "Insira o texto do filtro"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:128
 msgid "Undo All Changes"
@@ -7662,10 +7662,9 @@ msgstr ""
 "projeto."
 
 #: common/project.cpp:440 common/project.cpp:446
-#, fuzzy
 msgid "Error loading project design block library table."
 msgstr ""
-"Erro ao carregar a tabela da biblioteca do footprint do componente do "
+"Houve um erro ao carregar a tabela da biblioteca de blocos de desenho do "
 "projeto."
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
@@ -8632,14 +8631,13 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Edite as listas globais das bibliotecas de footprint e do projeto"
 
 #: common/tool/actions.cpp:1110
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Gerencie as bibliotecas dos símbolos..."
+msgstr "Gerenciar as bibliotecas dos blocos de desenho..."
 
 #: common/tool/actions.cpp:1111
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "Edite as listas das bibliotecas dos símbolos globais e do projeto"
+msgstr ""
+"Editar as listas das bibliotecas dos blocos de desenho globais e de projeto"
 
 #: common/tool/actions.cpp:1117
 msgid "Getting Started with KiCad"
@@ -9373,12 +9371,11 @@ msgstr "Os caminhos das bibliotecas do footprint do componente do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:345
 msgid "KiCad design block path"
-msgstr ""
+msgstr "Caminho do bloco de desenho do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:352
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "Os caminhos das bibliotecas do footprint do componente do KiCad"
+msgstr "Caminhos da biblioteca de blocos de desenho do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Drawing sheet files"
@@ -10072,9 +10069,9 @@ msgid "Documentation"
 msgstr "Documentação"
 
 #: eeschema/design_block_tree_model_adapter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Houve um erro ao carregar o símbolo %s da biblioteca '%s'."
+msgstr "Houve um erro ao carregar o bloco de desenho %s da biblioteca '%s'."
 
 #: eeschema/design_block_utils.cpp:51 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -10121,9 +10118,8 @@ msgid "Library %s already exists."
 msgstr "A biblioteca %s já existe."
 
 #: eeschema/design_block_utils.cpp:217
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Editar as opções para esta entrada na biblioteca"
+msgstr "Insira uma descrição para a biblioteca:"
 
 #: eeschema/design_block_utils.cpp:218 eeschema/sch_symbol.cpp:2977
 #: pcbnew/footprint.cpp:3810 pcbnew/plot_board_layers.cpp:131
@@ -10131,39 +10127,34 @@ msgid "Library Description"
 msgstr "Descrição da biblioteca"
 
 #: eeschema/design_block_utils.cpp:267 eeschema/design_block_utils.cpp:326
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Selecione um arquivo do símbolos da tabela da biblioteca."
+msgstr "Selecione uma biblioteca para salvar o bloco de desenho."
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "Não há suporte para blocos de desenho com folhas aninhadas."
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
-#, fuzzy
 msgid "Enter a name for the design block:"
-msgstr "Digite um nome para o repositório"
+msgstr "Insira um nome para o bloco de desenho:"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
-#, fuzzy
 msgid "Design Block Name"
-msgstr "Regras de desenho"
+msgstr "Nome do bloco de desenho"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
-#, fuzzy
 msgid "Error saving temporary schematic file to create design block."
 msgstr ""
-"Houve um erro ao salvar o arquivo '%s' do esquema.\n"
-"%s"
+"Houve um erro ao salvar o arquivo esquemático temporário para criar o bloco "
+"de desenho."
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Selecione alguns itens para salvar como um bloco de desenho."
 
 #: eeschema/design_block_utils.cpp:405
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "Selecione um arquivo do símbolos da tabela da biblioteca."
+msgstr "Selecione uma biblioteca para excluir."
 
 #: eeschema/design_block_utils.cpp:411 eeschema/design_block_utils.cpp:453
 #: pcbnew/footprint_libraries_utils.cpp:543
@@ -10180,26 +10171,28 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Deseja excluir a biblioteca de blocos de desenho '%s' do disco? Isso "
+"excluirá todos os blocos de desenho da biblioteca."
 
 #: eeschema/design_block_utils.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[nenhuma biblioteca foi selecionada]"
+msgstr "A biblioteca do bloco de desenho '%s' foi excluída"
 
 #: eeschema/design_block_utils.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Exclui o footprint '%s' da biblioteca '%s'?"
+msgstr "Excluir o bloco de desenho '%s' na biblioteca '%s' do disco?"
 
 #: eeschema/design_block_utils.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "O footprint '%s' foi excluído da biblioteca '%s'"
+msgstr "O bloco de desenho '%s' foi excluído da biblioteca '%s'"
 
 #: eeschema/design_block_utils.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "Houve um erro ao carregar o símbolo %s da biblioteca '%s'."
+msgstr "Houve um erro ao carregar o bloco de desenho %s da biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -11266,7 +11259,7 @@ msgid ""
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Digite o comando para executar o SPICE\n"
+"Insira o comando para executar o SPICE\n"
 "Geralmente é '<o caminho para o binário do spice> \"%I\"'\n"
 "O %I será substituído pelo caminho da netlist"
 
@@ -11759,9 +11752,8 @@ msgid "Position"
 msgstr "Posição"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "Designador de referência padrão:"
+msgstr "Iniciar o designador de referência:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
@@ -11773,19 +11765,16 @@ msgstr ""
 "padrão do símbolo quando for carregado no esquema."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
-msgstr "Passo do incremento:"
+msgstr "Incrementar por:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "Adicionar folha"
+msgstr "Todas as folhas"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
-#, fuzzy
 msgid "Increment Annotations From"
-msgstr "Excluir a anotação"
+msgstr "Incrementar anotações de"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
@@ -13183,29 +13172,26 @@ msgstr "&Para trás"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "Sensível a maiúsculas"
+msgstr "Corresponder a &caixa"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Apenas &palavras inteiras"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
-#, fuzzy
 msgid "Wi&ldcards"
-msgstr "Curingas"
+msgstr "Cu&ringas"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
 msgstr "Busque pelo pin, pelos nomes e pelos números"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search &hidden fields"
-msgstr "Busque por campos ocultos"
+msgstr "Buscar por campos ocul&tos"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -14095,6 +14081,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Falha ao analisar:\n"
+"\n"
+"%s\n"
+"Usando um modelo SPICE genérico."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -16148,9 +16138,8 @@ msgid "Selection Filter"
 msgstr "Seleção do filtro"
 
 #: eeschema/eeschema_settings.cpp:134
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Regras de desenho"
+msgstr "Blocos de desenho"
 
 #: eeschema/erc/erc.cpp:76 eeschema/erc/erc.cpp:93
 msgid "Input Pin"
@@ -17227,9 +17216,8 @@ msgid "Symbols to New Library..."
 msgstr "Símbolos para nova biblioteca..."
 
 #: eeschema/menubar.cpp:204
-#, fuzzy
 msgid "Show Design Blocks"
-msgstr "Mostra as regras do design."
+msgstr "Mostrar os blocos de desenho"
 
 #: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:173
@@ -20469,9 +20457,8 @@ msgid "Errors during netlist generation."
 msgstr "Houveram erros durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:375 eeschema/tools/simulator_control.cpp:86
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Houveram erros durante a geração da netlist."
+msgstr "Avisos durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:385
 msgid "Simulator requires a fully annotated schematic."
@@ -21649,31 +21636,27 @@ msgstr "Seleciona uma conexão completa"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Sheet as Design Block..."
-msgstr ""
+msgstr "Salvar folha como um bloco de desenho..."
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "Cria um arquivo PNG a partir da exibição atual"
+msgstr "Criar um novo bloco de desenho a partir da folha atual"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Salvar a seleção como um bloco de desenho..."
 
 #: eeschema/tools/ee_actions.cpp:164
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "Cria uma regra da região a partir da seleção"
+msgstr "Criar um novo bloco de desenho a partir da seleção atual"
 
 #: eeschema/tools/ee_actions.cpp:170
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "Apagar Bloco"
+msgstr "Excluir o bloco de desenho"
 
 #: eeschema/tools/ee_actions.cpp:171
-#, fuzzy
 msgid "Remove the selected design block from its library"
-msgstr "Remove o símbolo que foi selecionado da respectiva biblioteca"
+msgstr "Remover o bloco de desenho selecionado da sua respectiva biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:181
 msgid "Save Library As..."
@@ -21888,13 +21871,12 @@ msgid "Place Power Symbols"
 msgstr "Posicionar símbolos de alimentação"
 
 #: eeschema/tools/ee_actions.cpp:428
-#, fuzzy
 msgid "Place Design Block"
-msgstr "Cancelar Bloco"
+msgstr "Posicionar o bloco de desenho"
 
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Adicionar o bloco de desenho selecionado à folha atual"
 
 #: eeschema/tools/ee_actions.cpp:440
 msgid "Place No Connect Flags"
@@ -21925,13 +21907,12 @@ msgid "Draw Hierarchical Sheets"
 msgstr "Folhas hierárquicas para desenhar"
 
 #: eeschema/tools/ee_actions.cpp:503
-#, fuzzy
 msgid "Draw Sheet Copy"
-msgstr "Folha de desenho"
+msgstr "Cópia da folha de desenho"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "Copiar a folha para o projeto e desenhar na folha atual"
 
 #: eeschema/tools/ee_actions.cpp:512
 msgid "Place Sheet Pins"
@@ -21942,14 +21923,12 @@ msgid "Sync Sheet Pins"
 msgstr "Sincronizar planilha de pinos"
 
 #: eeschema/tools/ee_actions.cpp:535
-#, fuzzy
 msgid "Import Sheet"
-msgstr "Importa pino da folha"
+msgstr "Importar folha"
 
 #: eeschema/tools/ee_actions.cpp:536
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "Importa pino da folha"
+msgstr "Importar a folha para o projeto"
 
 #: eeschema/tools/ee_actions.cpp:546
 msgid "Place Global Labels"
@@ -22395,17 +22374,15 @@ msgid "Fill in schematic symbol reference designators"
 msgstr "Preenche os designadores de referência dos símbolos do esquema"
 
 #: eeschema/tools/ee_actions.cpp:1040
-#, fuzzy
 msgid "Increment Annotations From..."
-msgstr "Excluir a anotação"
+msgstr "Incrementar as anotações de..."
 
 #: eeschema/tools/ee_actions.cpp:1041
-#, fuzzy
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
 msgstr ""
-"Exclua todos os designadores de referência em todos os símbolos que foram "
-"colados"
+"Incrementar um subconjunto de designadores de referência começando num "
+"símbolo específico"
 
 #: eeschema/tools/ee_actions.cpp:1046
 msgid "Schematic Setup..."
@@ -23000,18 +22977,16 @@ msgid "Place Symbol"
 msgstr "Posicionar símbolo"
 
 #: eeschema/tools/sch_drawing_tools.cpp:675
-#, fuzzy
 msgid "Add design block"
-msgstr "Adicione os sinais à plotagem"
+msgstr "Adicionar um bloco de desenho"
 
 #: eeschema/tools/sch_drawing_tools.cpp:676
 msgid "Import Schematic Sheet Content..."
 msgstr "Importar o conteúdo da folha do esquema..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:707
-#, fuzzy
 msgid "Choose Schematic"
-msgstr "Novo esquema"
+msgstr "Escolha o esquema"
 
 #: eeschema/tools/sch_drawing_tools.cpp:924 pcbnew/tools/drawing_tool.cpp:659
 msgid "Press <ESC> to cancel image creation."
@@ -23109,14 +23084,14 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "Pressione <ESC> para cancelar a criação da folha."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2852
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "O diretório '%s' não existe"
+msgstr "O arquivo '%s' não existe."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2861
-#, fuzzy, c-format
+#, c-format
 msgid "Could not import sheet from '%s'."
-msgstr "Não foi possível carregar a imagem de '%s'."
+msgstr "Não foi possível importar a folha de '%s'."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3023
 msgid "Modify sheet pin"
@@ -23279,9 +23254,8 @@ msgstr ""
 "editados."
 
 #: eeschema/tools/sch_editor_control.cpp:2301
-#, fuzzy
 msgid "Increment Annotations"
-msgstr "Excluir a anotação"
+msgstr "Incrementar as anotações"
 
 #: eeschema/tools/sch_editor_control.cpp:2706
 #: pcbnew/tools/board_editor_control.cpp:606
@@ -23466,29 +23440,28 @@ msgid "Repeat Pin"
 msgstr "Repetir o pino"
 
 #: eeschema/widgets/design_block_pane.cpp:41
-#, fuzzy
 msgid "Place as sheet"
-msgstr "Posicione um texto"
+msgstr "Posicionar como uma folha"
 
 #: eeschema/widgets/design_block_pane.cpp:42
-#, fuzzy
 msgid "Keep annotations"
-msgstr "Mantenhas as anotações existentes"
+msgstr "Manter as anotações"
 
 #: eeschema/widgets/design_block_pane.cpp:65
-#, fuzzy
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "Mantenha o símbolo selecionado para os cliques subsequentes."
+msgstr "Posicione as cópias do bloco de desenho nos cliques subsequentes."
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Coloque o bloco de desenho em uma nova folha."
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
+"Preserve os designadores de referência no esquema de origem. Caso contrário, "
+"limpe e anote novamente de acordo com as configurações."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -23521,14 +23494,12 @@ msgid "(page %s)"
 msgstr "(página %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Carregando a biblioteca dos símbolos"
+msgstr "Carregando a biblioteca do bloco de desenho"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:262
-#, fuzzy
 msgid "Updating Design Block Libraries"
-msgstr "Atualizando as bibliotecas de footprint"
+msgstr "Atualizando as bibliotecas do bloco de desenho"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:386
 #: eeschema/widgets/panel_symbol_chooser.cpp:169
@@ -25898,17 +25869,18 @@ msgstr ""
 "tabela?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
-"A pasta '%s' já existe. Deseja substituir alguns dos footprints já "
-"existentes?"
+"A pasta '%s' já existe. Deseja substituir qualquer um dos blocos de desenho "
+"já existentes?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Houve uma falha ao salvar o arquivo dos símbolos na biblioteca '%s'."
+msgstr ""
+"Houve uma falha ao salvar o arquivo do bloco de desenho na biblioteca '%s'."
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:920
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:948
@@ -26070,14 +26042,14 @@ msgstr ""
 "não parece ser um arquivo válido do projeto KiCad."
 
 #: kicad/kicad.cpp:367
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
-"Houve um erro ao tentar carregar os símbolos da tabela da biblioteca "
-"global.\n"
-"Edite este símbolo da tabela global da biblioteca no menu preferências."
+"Houve um erro ao tentar carregar a tabela da biblioteca global de blocos de "
+"desenho.\n"
+"Edite essa tabela da biblioteca global de blocos de desenho no menu "
+"Preferências."
 
 #: kicad/kicad_cli.cpp:113
 msgid "Export GLB (binary GLTF)"
@@ -26252,7 +26224,7 @@ msgstr "Adiciona um repositório padrão"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
-msgstr "Digite a url do repositório plenamente credenciada"
+msgstr "Insira a url do repositório plenamente credenciada"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
@@ -27257,9 +27229,8 @@ msgid "Application cannot start."
 msgstr "O aplicativo não pode ser iniciado."
 
 #: kicad/tools/kicad_manager_control.cpp:907
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Redefinir as bibliotecas"
+msgstr "Bibliotecas do bloco de desenho"
 
 #: kicad/update_manager.cpp:164
 msgid "Update Check"
@@ -33516,32 +33487,27 @@ msgstr "Procura por:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "En&voltório"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference &designators"
-msgstr "Procura por footprint do designador de referência"
+msgstr "Procura pelo footprint do &designador de referência"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint &values"
-msgstr "Valores de busca do footprint"
+msgstr "Procurar pelos &valores do footprint"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search &other text items"
-msgstr "Procure por outros itens de texto"
+msgstr "Procurar por &outros itens de texto"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC &markers"
-msgstr "Procure pelo marcadores DRC"
+msgstr "Procurar pelos &marcadores DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search &net names"
-msgstr "Procurar o nome das nets"
+msgstr "Procurar pelo nome das &nets"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
 msgid "Restart Search"
@@ -38355,9 +38321,8 @@ msgstr "Usuário1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid "Off-board, front"
-msgstr " Fora da placa, frente"
+msgstr "Fora da placa, frente"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -43841,9 +43806,9 @@ msgstr ""
 "compatível)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4342
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr "Justificativa de caixa de texto desconhecida %d, texto %s"
+msgstr "Justificativa desconhecida da caixa de texto %d, aText %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4498
 msgid "Loading rectangles..."
