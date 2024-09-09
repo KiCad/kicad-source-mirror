@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-08 17:09+0000\n"
+"PO-Revision-Date: 2024-09-09 09:54+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -1932,14 +1932,12 @@ msgid "No"
 msgstr "否"
 
 #: common/design_block_info_impl.cpp:116
-#, fuzzy
 msgid "Fetching design_block libraries..."
-msgstr "正在提取封装库..."
+msgstr "正在提取设计图块库..."
 
 #: common/design_block_info_impl.cpp:147
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "加载文件中..."
+msgstr "加载设计图块..."
 
 #: common/design_block_io.cpp:45 common/design_block_io.cpp:54
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -1954,9 +1952,8 @@ msgid "UNKNOWN (%d)"
 msgstr "未知 (%d)"
 
 #: common/design_block_io.cpp:132
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "KiCad 旧版工程文件"
+msgstr "KiCad 设计图块文件夹"
 
 #: common/design_block_io.cpp:153
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2996
@@ -1982,48 +1979,48 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "删除文件夹 '%s' 的权限不足。"
 
 #: common/design_block_io.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "库文件夹 '%s' 有意料外的子目录。"
+msgstr "库文件夹 '%s' 存在 '意外' 的子文件夹。"
 
 #: common/design_block_io.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "在库路径 '%s' 中找到了意料外的文件 '%s'。"
+msgstr "在库路径 '%s' 中找到了 '意外' 的文件 '%s'。"
 
 #: common/design_block_io.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "无法删除符号库 '%s'。"
+msgstr "无法删除设计图块库 '%s'。"
 
 #: common/design_block_io.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "无法创建文件 '%s'。"
+msgstr "无法读取设计图块元数据文件 '%s'。"
 
 #: common/design_block_io.cpp:323
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "设计图块缺少有效的库标识。"
 
 #: common/design_block_io.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "原理图文件 '%s' 已存在。"
+msgstr "原理图源文件 '%s' 不存在。"
 
 #: common/design_block_io.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "无法创建文件 '%s'。"
+msgstr "无法创建设计图块文件夹 '%s'。"
 
 #: common/design_block_io.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "原理图文件 '%s' 已存在。"
+msgstr "无法将原理图文件 '%s' 作为设计图块保存到 '%s'。"
 
 #: common/design_block_io.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "目录 '%s' 不存在"
+msgstr "设计图块 '%s' 不存在。"
 
 #: common/design_block_io.cpp:377
 #, fuzzy, c-format
@@ -2031,16 +2028,16 @@ msgid "Design block folder '%s' could not be deleted."
 msgstr "无法创建文件 '%s'。"
 
 #: common/design_block_lib_table.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "找到重复的库名称 '%s' 在符号库表文件行 %d 中"
+msgstr "在设计图块库表文件的行 %2$d 中出现了重复的库名称 '%1$s'"
 
 #: common/design_block_lib_table.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "fp-lib-table 文件中没有名为 '%s' 的库。"
+msgstr "design-block-lib-table 文件中没有名为 '%s' 的库。"
 
 #: common/design_block_lib_table.cpp:570 common/fp_lib_table.cpp:556
 #: eeschema/symbol_lib_table.cpp:609
@@ -5264,7 +5261,7 @@ msgstr "应为 '%s'"
 #: common/dsnlexer.cpp:347
 #, c-format
 msgid "Unexpected %s"
-msgstr "未预料的 %s"
+msgstr "'意外' 的 %s"
 
 #: common/dsnlexer.cpp:355
 #, c-format
@@ -5274,7 +5271,7 @@ msgstr "%s 是重复的"
 #: common/dsnlexer.cpp:363
 #, c-format
 msgid "Unexpected '%s'"
-msgstr "未预料的 '%s'"
+msgstr "'意外' 的 '%s'"
 
 #: common/dsnlexer.cpp:422
 #, c-format
@@ -6359,7 +6356,7 @@ msgstr "加载封装时出错:"
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "发现重复的库名称 '%s', 位于封装库表文件的行 %d。"
+msgstr "在封装库表文件的行 %2$d 中出现了重复的库名称 '%1$s'"
 
 #: common/gestfich.cpp:244
 #, c-format
@@ -7515,9 +7512,8 @@ msgid "Error loading project footprint library table."
 msgstr "加载工程封装库表时出错。"
 
 #: common/project.cpp:440 common/project.cpp:446
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "加载工程封装库表时出错。"
+msgstr "加载工程设计图块库表时出错。"
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
 msgid "This is the default net class."
@@ -8478,14 +8474,12 @@ msgid "Edit the global and project footprint library lists"
 msgstr "编辑全局和工程封装库列表"
 
 #: common/tool/actions.cpp:1110
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "管理符号库..."
+msgstr "管理设计图块库..."
 
 #: common/tool/actions.cpp:1111
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "编辑全局和工程符号库列表"
+msgstr "编辑全局和工程设计图块库列表"
 
 #: common/tool/actions.cpp:1117
 msgid "Getting Started with KiCad"
@@ -9213,12 +9207,11 @@ msgstr "KiCad 封装库路径"
 
 #: common/wildcards_and_files_ext.cpp:345
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad 设计图块路径"
 
 #: common/wildcards_and_files_ext.cpp:352
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "KiCad 封装库路径"
+msgstr "KiCad 设计图块库路径"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Drawing sheet files"
@@ -9579,7 +9572,7 @@ msgstr "封装变化时自动缩放"
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "封装 ID '%s' 无效。"
+msgstr "封装标识 '%s' 无效。"
 
 #: cvpcb/display_footprints_frame.cpp:421
 #, c-format
@@ -9872,9 +9865,9 @@ msgid "Documentation"
 msgstr "文档"
 
 #: eeschema/design_block_tree_model_adapter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "从库 %2$s 加载符号 '%1$s' 出错。"
+msgstr "从库 '%2$s' 加载设计图块 %1$s 时出错。"
 
 #: eeschema/design_block_utils.cpp:51 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -9921,9 +9914,8 @@ msgid "Library %s already exists."
 msgstr "库 %s 已存在。"
 
 #: eeschema/design_block_utils.cpp:217
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "库条目的编辑选项"
+msgstr "输入库描述:"
 
 #: eeschema/design_block_utils.cpp:218 eeschema/sch_symbol.cpp:2977
 #: pcbnew/footprint.cpp:3810 pcbnew/plot_board_layers.cpp:131
@@ -9931,23 +9923,20 @@ msgid "Library Description"
 msgstr "库描述"
 
 #: eeschema/design_block_utils.cpp:267 eeschema/design_block_utils.cpp:326
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "请选择一个符号库表文件。"
+msgstr "请选择一个保存设计图块的库。"
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
-#, fuzzy
 msgid "Enter a name for the design block:"
-msgstr "请输入仓库名称"
+msgstr "请输入设计图块名称:"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
-#, fuzzy
 msgid "Design Block Name"
-msgstr "设计规则"
+msgstr "设计图块名"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
 #, fuzzy
@@ -9958,12 +9947,11 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "请选择一些项目以另存为设计图块。"
 
 #: eeschema/design_block_utils.cpp:405
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "请选择一个符号库表文件。"
+msgstr "请选择要删除的库。"
 
 #: eeschema/design_block_utils.cpp:411 eeschema/design_block_utils.cpp:453
 #: pcbnew/footprint_libraries_utils.cpp:543
@@ -9979,12 +9967,12 @@ msgstr "'%s' 库为只读。"
 msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
-msgstr ""
+msgstr "从磁盘中删除设计图块库 '%s' ? 该操作将删除库中的所有设计图块。"
 
 #: eeschema/design_block_utils.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[没有选择库]"
+msgstr "设计图块库 '%s' 已删除"
 
 #: eeschema/design_block_utils.cpp:459
 #, fuzzy, c-format
@@ -9997,9 +9985,9 @@ msgid "Design block '%s' deleted from library '%s'"
 msgstr "封装 '%s' 删除来自库 '%s'"
 
 #: eeschema/design_block_utils.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "从库 %2$s 加载符号 '%1$s' 出错。"
+msgstr "从库 '%2$s' 加载设计图块 %1$s 出错。"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -10364,7 +10352,7 @@ msgstr "替换值与给定值相同的符号:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:97
 msgid "Change symbols matching library identifier:"
-msgstr "替换使用此库索引值的符号:"
+msgstr "替换使用此库标识的符号:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update Fields"
@@ -10469,11 +10457,11 @@ msgstr "更新值与给定值相同的符号:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:46
 msgid "Update symbols matching library identifier:"
-msgstr "更新使用此库索引值的符号:"
+msgstr "更新使用此库标识的符号:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:73
 msgid "New library identifier:"
-msgstr "新符号的库索引值:"
+msgstr "新的库标识:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -10626,7 +10614,7 @@ msgstr "数据库库设置"
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:547
 #, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "符号的库索引值 %s 无效。"
+msgstr "无效的符号库标识 %s。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:644
 #, c-format
@@ -10650,7 +10638,7 @@ msgstr "所有 %u 个链接已解决"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:692
 msgid "Invalid symbol library identifier"
-msgstr "符号的库索引值无效"
+msgstr "无效的符号库标识"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:743
 #, c-format
@@ -11344,7 +11332,7 @@ msgstr "按父级位号筛选项目:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "Filter items by parent symbol library id:"
-msgstr "按父级符号库索引值 筛选项目:"
+msgstr "按父级符号库标识 筛选项目:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Filter items by parent symbol type:"
@@ -11519,9 +11507,8 @@ msgid "Position"
 msgstr "坐标"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "默认位号:"
+msgstr "起始位号:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
@@ -12912,29 +12899,26 @@ msgstr "下一页 (&B)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "区分大小写"
+msgstr "区分大小写 (C)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "全字匹配 (W)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
-#, fuzzy
 msgid "Wi&ldcards"
-msgstr "使用通配符"
+msgstr "使用通配符 (L)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
 msgstr "包括搜索引脚名称和编号 (&N)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search &hidden fields"
-msgstr "包括搜索隐藏的字段"
+msgstr "包括搜索隐藏的字段 (H)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -13815,6 +13799,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"解析失败:\n"
+"\n"
+"%s\n"
+"使用通用 SPICE 模型。"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -14573,9 +14561,8 @@ msgid ""
 "Normally footprints are linked to their symbols via their Unique IDs.  "
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
-msgstr ""
-"通常情况下, 封装通过其唯一 ID 链接到其符号。仅当您想要根据参考位号重置封装链"
-"接时, 才选择此选项。"
+msgstr "通常情况下, 封装通过其唯一标识链接到其符号。"
+"仅当您想要根据参考位号重置封装链接时, 才选择此选项。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -15806,9 +15793,8 @@ msgid "Selection Filter"
 msgstr "选择筛选器"
 
 #: eeschema/eeschema_settings.cpp:134
-#, fuzzy
 msgid "Design Blocks"
-msgstr "设计规则"
+msgstr "设计图块"
 
 #: eeschema/erc/erc.cpp:76 eeschema/erc/erc.cpp:93
 msgid "Input Pin"
@@ -15949,7 +15935,7 @@ msgstr "符号 '%s' 与来源库 '%s' 中的符号存在差异"
 #: eeschema/erc/erc.cpp:1395
 #, c-format
 msgid "'%s' is not a valid footprint identifier."
-msgstr "'%s' 不是有效封装索引。"
+msgstr "'%s' 不是有效封装标识。"
 
 #: eeschema/erc/erc.cpp:1409
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:832
@@ -16836,9 +16822,8 @@ msgid "Symbols to New Library..."
 msgstr "符号到新库..."
 
 #: eeschema/menubar.cpp:204
-#, fuzzy
 msgid "Show Design Blocks"
-msgstr "显示设计规则。"
+msgstr "显示设计图块"
 
 #: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:173
@@ -17387,7 +17372,7 @@ msgstr "尚未支持空白。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4470
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "在 %2$s 中发现未知或意外记录 ID %1$d。"
+msgstr "在 %2$s 中发现 '未知' 或 '意外' 记录 ID %1$d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1180
 #, c-format
@@ -17397,19 +17382,19 @@ msgstr "符号 \"%s\"(位于图纸 \"%s\", 该图纸位于索引 %d) 被符号\"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1335
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3448
 msgid "Pin has unexpected orientation."
-msgstr "引脚方向不符预期。"
+msgstr "'意外' 的引脚方向。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1383
 msgid "Pin has unexpected electrical type."
-msgstr "引脚电气类型不符预期。"
+msgstr "'意外' 的引脚电气类型。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1388
 msgid "Pin has unexpected outer edge type."
-msgstr "引脚的外边缘类型出乎意料。"
+msgstr "引脚存在 '意外' 的外边缘类型。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1391
 msgid "Pin has unexpected inner edge type."
-msgstr "引脚的内边缘类型出乎意料。"
+msgstr "引脚存在 '意外' 的内边缘类型。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1803
 #, c-format
@@ -17593,25 +17578,22 @@ msgstr "符号 '%s' 引用在库中找不到的元件 '%s'。未加载符号"
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
-msgstr ""
-"符号 ID '%s' 引用库符号 '%s', 在库中找不到。您是否导出了设计的所有项目?"
+msgstr "符号标识 '%s' 引用库符号 '%s', 在库中找不到。您是否导出了设计的所有项目?"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:855
 #, c-format
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
-msgstr ""
-"符号 ID '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应为 1 个, 但实际"
-"找到了 %d 个。"
+msgstr "符号标识 '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应为 1 个, "
+"但实际找到了 %d 个。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:998
 #, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
-msgstr ""
-"符号 ID '%s' 的类型未知。它既不是符号也不是网络电源/符号。该符号未被加载。"
+msgstr "符号标识 '%s' 的类型未知。它既不是符号也不是网络电源/符号。该符号未被加载。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1014
 #, c-format
@@ -17628,7 +17610,7 @@ msgstr ""
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
-msgstr "文档符号 '%s' 是指库中不存在的符号定义 ID '%s'。未加载符号。"
+msgstr "文档符号 '%s' 是指库中不存在的符号定义标识 '%s'。未加载符号。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1587
 msgid "Text Variables could not be set as there is no project attached."
@@ -17649,7 +17631,7 @@ msgstr ""
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
-msgstr "符号 '%s' 引用图纸 ID '%s', 该符号在设计中不存在。未加载符号。"
+msgstr "符号 '%s' 引用图纸标识 '%s', 该符号在设计中不存在。未加载符号。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2274
 #, c-format
@@ -17665,8 +17647,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"原理图块 ID %s (块名称: \"%s\") 绘制在图纸\"%s\"上, 但未链接到工程中的另一张"
-"图纸。KiCad 要求将所有图纸符号都与图纸相关联, 因此未加载该图块。"
+"原理图块标识 %s (图块名称: \"%s\") 绘制在图纸\"%s\"上, "
+"但未链接到工程中的另一张图纸。KiCad 要求将所有图纸符号都与图纸相关联, "
+"因此未加载该图块。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2565
 #, c-format
@@ -17887,7 +17870,7 @@ msgstr "缺少 'EELAYER END'"
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:723
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:733
 msgid "unexpected end of file"
-msgstr "文件意外结束"
+msgstr "文件 '意外' 结束"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:596
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:78
@@ -17901,11 +17884,11 @@ msgstr "文件意外结束"
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:276
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:568
 msgid "unexpected end of line"
-msgstr "行意外结束"
+msgstr "行 '意外' 结束"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:686
 msgid "Unexpected end of file"
-msgstr "文件意外结束"
+msgstr "文件 '意外' 结束"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1080
 msgid "expected 'Italics' or '~'"
@@ -17943,7 +17926,7 @@ msgstr "找不到库文件 '%s'。"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:88
 msgid "Unexpected end of file."
-msgstr "文件意外结束。"
+msgstr "文件 '意外' 结束。"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:185
 #, c-format
@@ -17984,7 +17967,7 @@ msgstr "符号 %s 包含无效字符 '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:344
 msgid "Invalid library identifier"
-msgstr "无效的库索引值"
+msgstr "无效的库标识"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:405
 msgid "Invalid parent symbol name"
@@ -18088,7 +18071,7 @@ msgstr "符号的库名称无效"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2954
 msgid "Invalid symbol library ID"
-msgstr "符号的库索引值无效"
+msgstr "无效的符号的库标识"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:220
 #, c-format
@@ -18473,14 +18456,14 @@ msgstr "原理图规则区"
 #: eeschema/sch_screen.cpp:811 eeschema/sch_screen.cpp:903
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "正将原理图符号 '%s %s' 库索引值设置为 '%s'。"
+msgstr "正将原理图符号 '%s %s' 库标识设置为 '%s'。"
 
 #: eeschema/sch_screen.cpp:827
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
-msgstr "原理图符号引用 '%s' 库索引值无效。无法链接库符号。"
+msgstr "原理图符号引用 '%s' 库标识无效。无法链接库符号。"
 
 #: eeschema/sch_screen.cpp:843
 #, c-format
@@ -19422,7 +19405,7 @@ msgstr "无法打开文件 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "文件意外结束。缺少 [END] 吗?"
+msgstr "文件 '意外' 结束。缺少 [END] 吗?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
 msgid "Error on line "
@@ -20774,7 +20757,7 @@ msgstr "符号 '%s' 已存在于库 '%s' 中。"
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr "找到重复的库名称 '%s' 在符号库表文件行 %d 中"
+msgstr "在符号库表文件的行 %2$d 中出现了重复的库名称 '%1$s'"
 
 #: eeschema/symbol_library.cpp:597 eeschema/symbol_tree_model_adapter.cpp:219
 #, c-format
@@ -21083,26 +21066,23 @@ msgstr "选择完整的连接"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Sheet as Design Block..."
-msgstr ""
+msgstr "保存图纸为设计图块..."
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "从当前视图创建一个 PNG 文件"
+msgstr "从当前图纸创建新的设计图块"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "保存选区为设计图块..."
 
 #: eeschema/tools/ee_actions.cpp:164
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "从所选内容创建规则区"
+msgstr "从当前选区创建新的设计图块"
 
 #: eeschema/tools/ee_actions.cpp:170
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "删除块"
+msgstr "删除设计图块"
 
 #: eeschema/tools/ee_actions.cpp:171
 #, fuzzy
@@ -21317,13 +21297,12 @@ msgid "Place Power Symbols"
 msgstr "放置电源符号"
 
 #: eeschema/tools/ee_actions.cpp:428
-#, fuzzy
 msgid "Place Design Block"
-msgstr "取消块"
+msgstr "放置设计图块"
 
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "添加选中设计图块到当前图纸"
 
 #: eeschema/tools/ee_actions.cpp:440
 msgid "Place No Connect Flags"
@@ -21354,13 +21333,12 @@ msgid "Draw Hierarchical Sheets"
 msgstr "绘制层次图纸"
 
 #: eeschema/tools/ee_actions.cpp:503
-#, fuzzy
 msgid "Draw Sheet Copy"
-msgstr "图框"
+msgstr "绘制图纸副本"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "将图纸复制到工程中, 并绘制到当前图纸上"
 
 #: eeschema/tools/ee_actions.cpp:512
 msgid "Place Sheet Pins"
@@ -22403,18 +22381,16 @@ msgid "Place Symbol"
 msgstr "放置符号"
 
 #: eeschema/tools/sch_drawing_tools.cpp:675
-#, fuzzy
 msgid "Add design block"
-msgstr "添加信号到绘制"
+msgstr "添加设计图块"
 
 #: eeschema/tools/sch_drawing_tools.cpp:676
 msgid "Import Schematic Sheet Content..."
 msgstr "导入原理图图纸内容..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:707
-#, fuzzy
 msgid "Choose Schematic"
-msgstr "新建原理图"
+msgstr "选择原理图"
 
 #: eeschema/tools/sch_drawing_tools.cpp:924 pcbnew/tools/drawing_tool.cpp:659
 msgid "Press <ESC> to cancel image creation."
@@ -22512,14 +22488,14 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "按下 <ESC> 取消图纸创建。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2852
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "目录 '%s' 不存在"
+msgstr "文件 '%s' 不存在。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2861
-#, fuzzy, c-format
+#, c-format
 msgid "Could not import sheet from '%s'."
-msgstr "无法从 '%s' 加载图片。"
+msgstr "无法从 '%s' 导入图纸。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3023
 msgid "Modify sheet pin"
@@ -22686,7 +22662,7 @@ msgstr "删除批注"
 #: pcbnew/tools/footprint_editor_control.cpp:818
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr "已替换 %d 个重复 ID。\n"
+msgstr "已替换 %d 个重复标识。\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2713
 #: pcbnew/tools/board_editor_control.cpp:621
@@ -22862,12 +22838,10 @@ msgid "Repeat Pin"
 msgstr "复刻引脚"
 
 #: eeschema/widgets/design_block_pane.cpp:41
-#, fuzzy
 msgid "Place as sheet"
-msgstr "放置文本"
+msgstr "作为图纸放置"
 
 #: eeschema/widgets/design_block_pane.cpp:42
-#, fuzzy
 msgid "Keep annotations"
 msgstr "保留现有的批注"
 
@@ -22878,13 +22852,13 @@ msgstr "保持符号选中以便后续点击。"
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "放置该设计图块并作为一个新图纸。"
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
-msgstr ""
+msgstr "保留源图纸中的参考位号。 否则将先清除原有位号, 然后根据位号设置重新批注。"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -22917,14 +22891,12 @@ msgid "(page %s)"
 msgstr "(第 %s 页)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "加载符号库"
+msgstr "加载设计图块库"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:262
-#, fuzzy
 msgid "Updating Design Block Libraries"
-msgstr "更新封装库"
+msgstr "更新设计图块库"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:386
 #: eeschema/widgets/panel_symbol_chooser.cpp:169
@@ -23653,7 +23625,7 @@ msgstr "<b>Gerber job 文件无法作为绘制文件加载</b><i>%s</i>"
 
 #: gerbview/files.cpp:303
 msgid "Loading files..."
-msgstr "加载文件中..."
+msgstr "加载文件..."
 
 #: gerbview/files.cpp:306 gerbview/files.cpp:313
 #, c-format
@@ -31904,7 +31876,7 @@ msgstr "替换具有这个值的封装:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
 msgid "Change footprints with library id:"
-msgstr "替换具有此库索引值 的封装:"
+msgstr "替换具有此库标识 的封装:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
 msgid "Update text layers and visibilities"
@@ -31980,11 +31952,11 @@ msgstr "更新具有此值的封装:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:45
 msgid "Update footprints with library id:"
-msgstr "更新具有此库索引值 的封装:"
+msgstr "更新具有此库标识 的封装:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:74
 msgid "New footprint library id:"
-msgstr "新封装的库索引值:"
+msgstr "新封装的库标识:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Remove text items which are not in library footprint"
@@ -32655,29 +32627,24 @@ msgid "Wra&p"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference &designators"
-msgstr "搜索封装位号"
+msgstr "搜索封装位号 (D)"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint &values"
-msgstr "搜索封装值"
+msgstr "搜索封装值 (V)"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search &other text items"
-msgstr "搜索其他文本项目"
+msgstr "搜索其他文本项目 (O)"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC &markers"
-msgstr "搜索 DRC 标记"
+msgstr "搜索 DRC 标记 (M)"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search &net names"
-msgstr "搜索网络名称"
+msgstr "搜索网络名称 (N)"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
 msgid "Restart Search"
@@ -33006,7 +32973,7 @@ msgstr "间距重写和设置"
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
-msgstr "当前已经分配了库 ID 和封装 ID。使用 \"替换封装…\" 来分配不同的封装。"
+msgstr "当前已经分配了库标识和封装标识。使用 \"替换封装…\" 来分配不同的封装。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:127
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:117
@@ -33921,7 +33888,7 @@ msgstr "PCB标注项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:92
 msgid "Filter items by parent footprint library id:"
-msgstr "按父级封装库索引值 筛选项目:"
+msgstr "按父级封装库标识 筛选项目:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:119
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -34086,7 +34053,7 @@ msgstr "使用位号来匹配符号和封装。\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:246
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "使用 tstamp (独有 ID) 来匹配符号和封装。\n"
+msgstr "使用 tstamp (唯一 ID) 来匹配符号和封装。\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 msgid "Netlist file:"
@@ -34094,7 +34061,7 @@ msgstr "网表文件:"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr "使用元件时间戳 (唯一ID) 链接封装"
+msgstr "使用元件时间戳 (唯一 ID) 链接封装"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using reference designators"
@@ -34378,7 +34345,7 @@ msgstr "焊盘属性"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:214
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "添加焊盘工具的默认焊盘属性"
+msgstr "焊盘添加工具的默认焊盘属性"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:564
 #, c-format
@@ -35554,7 +35521,7 @@ msgstr "不要修改具有不同类型的焊盘"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
-msgstr "推挤焊盘属性"
+msgstr "推送焊盘属性"
 
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:87
 msgid ""
@@ -37327,9 +37294,8 @@ msgstr "用户 1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid "Off-board, front"
-msgstr " 离板, 顶层"
+msgstr "离板, 顶层"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -41613,7 +41579,7 @@ msgid ""
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"无效的封装 ID, 位于\n"
+"无效的封装标识, 位于\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
@@ -41674,7 +41640,7 @@ msgstr "%s的封装已改变: 电路板封装 '%s', 网表封装 '%s'。"
 #: pcbnew/netlist_reader/netlist.cpp:229
 #, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "%s 封装 ID '%s' 无效。"
+msgstr "%s 封装标识 '%s' 无效。"
 
 #: pcbnew/netlist_reader/netlist.cpp:246
 #, c-format
@@ -41689,7 +41655,7 @@ msgid ""
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"无效的封装 ID 在\n"
+"无效的封装标识位于\n"
 "文件: '%s'\n"
 "行: %d"
 
@@ -42249,7 +42215,7 @@ msgstr "未知得扩展基本元素信息类型: '%s'。"
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:869
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr "Pads6 stream 中的 subrecord 6 数据的长度非法: %d。"
+msgstr "Pads6 stream 存在 '意外' 的 subrecord 6 长度: %d。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:266
 #, c-format
@@ -42636,9 +42602,9 @@ msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "封装 %s 包含 Altium 层 %d 上的条形码 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4342
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr "未知的文本框对齐方式 %d, 文本 %s"
+msgstr "未知的文本框对齐方式 %d, aText %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4498
 msgid "Loading rectangles..."
@@ -42746,7 +42712,7 @@ msgstr "CADSTAR 设计文件中包含位于电路板表面之外的层 '%s'。�
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr "层堆栈中的意外层 '%s'。"
+msgstr "叠层 中的 '意外' 层 '%s'。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:745
 #, c-format
@@ -42844,7 +42810,7 @@ msgstr ""
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1543
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "错误的测量标注类型 (ID%s)。未被导入。"
+msgstr "'意外' 的测量标注类型 (ID %s)。未被导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1678
 #, c-format
@@ -42980,7 +42946,7 @@ msgstr ""
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
-msgstr "网络 '%s' 引用了不存在的元件 ID '%s'。这一点已经被忽略了。"
+msgstr "网络 '%s' 引用了不存在的元件 ID '%s'。已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2310
 #, c-format
@@ -43272,7 +43238,7 @@ msgstr "未知的焊盘形状名 '%s', 位于层 '%s' 的行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:977
 #, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
-msgstr "ID 字符串 '%s' 的无效格式, 位于自定义焊盘行 %zu。"
+msgstr "格式无效的 ID 字符串 '%s', 位于自定义焊盘行 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1019
 #, c-format
@@ -43374,12 +43340,12 @@ msgstr "元素标记包含 %d 个参数。"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3029
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "库文件夹 '%s' 有意料外的子目录。"
+msgstr "库文件夹 '%s' 存在 '意外' 的子文件夹。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1002
 #, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "在库 '%s' 中找到了意想不到的文件 '%s'。"
+msgstr "在库 '%s' 中找到了 '意外' 的文件 '%s'。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1021
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3263
@@ -43598,7 +43564,7 @@ msgstr "删除 '%s' 的权限不足。"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3048
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "在库路径 '%s' 中找到了意料外的文件 '%s'。"
+msgstr "在库路径 '%s' 中找到了 '意外' 的文件 '%s'。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:294
 msgid "KiCad footprint file"
@@ -43660,7 +43626,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"无效的网络 ID, 位于\n"
+"无效的网络标识, 位于\n"
 "文件: '%s'\n"
 "行: %d\n"
 "偏移: %d。"
@@ -43678,7 +43644,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"无效的封装 ID 在\n"
+"无效的封装标识, 位于\n"
 "文件: %s\n"
 "行: %d\n"
 "偏移: %d。"
@@ -43690,7 +43656,7 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"无效的网络 ID 在\n"
+"无效的网络标识, 位于\n"
 "文件: \"%s\"\n"
 "行: %d 偏移: %d"
 
@@ -43701,7 +43667,7 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"网络名称与网络 ID 不匹配, 后者位于\n"
+"网络名称与网络标识不匹配, 后者位于\n"
 "文件: %s\n"
 "行: %d 偏移: %d"
 
@@ -43726,7 +43692,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"无效的网络 ID, 位于\n"
+"无效的网络标识, 位于\n"
 "文件: %s\n"
 "行: %d\n"
 "偏移: %d。"
@@ -43739,7 +43705,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"无效的网络 ID, 位于\n"
+"无效的网络标识, 位于\n"
 "文件: %s\n"
 "行: %d\n"
 "偏移: %d"
@@ -43752,7 +43718,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"无效的网络 ID, 位于\n"
+"无效的网络标识, 位于\n"
 "文件: %s\n"
 "行: %d\n"
 "偏移: %d。"
@@ -45233,7 +45199,7 @@ msgstr "复制第一个对象的行宽"
 
 #: pcbnew/tools/convert_tool.cpp:260
 msgid "Create from Selection"
-msgstr "从选区创建"
+msgstr "根据选区创建"
 
 #: pcbnew/tools/convert_tool.cpp:444
 msgid "Resulting polygon would be empty"
@@ -45752,7 +45718,7 @@ msgstr ""
 
 #: pcbnew/tools/pad_tool.cpp:433 pcbnew/tools/pad_tool.cpp:536
 msgid "Renumber Pads"
-msgstr "焊盘重新编号"
+msgstr "为焊盘重新编号"
 
 #: pcbnew/tools/pad_tool.cpp:675
 msgid "Place pad"
@@ -45782,7 +45748,7 @@ msgstr "从所选内容创建图形多边形"
 
 #: pcbnew/tools/pcb_actions.cpp:60
 msgid "Create Zone from Selection..."
-msgstr "从选区创建域..."
+msgstr "根据选区创建域..."
 
 #: pcbnew/tools/pcb_actions.cpp:61
 msgid "Creates a copper zone from the selection"
@@ -46363,7 +46329,7 @@ msgstr "为微波应用创建指定长度的高频设计线"
 
 #: pcbnew/tools/pcb_actions.cpp:894
 msgid "Copy Pad Properties to Default"
-msgstr "将焊盘属性复制到默认值"
+msgstr "复制焊盘属性以做为默认值"
 
 #: pcbnew/tools/pcb_actions.cpp:895
 msgid "Copy current pad's properties"
@@ -46371,7 +46337,7 @@ msgstr "复制当前焊盘属性"
 
 #: pcbnew/tools/pcb_actions.cpp:901
 msgid "Paste Default Pad Properties to Selected"
-msgstr "将默认焊盘属性粘贴到选定项"
+msgstr "粘贴默认焊盘属性到选定项"
 
 #: pcbnew/tools/pcb_actions.cpp:902
 msgid "Replace the current pad's properties with those copied earlier"
@@ -46379,7 +46345,7 @@ msgstr "用之前复制的属性替换当前焊盘的属性"
 
 #: pcbnew/tools/pcb_actions.cpp:908
 msgid "Push Pad Properties to Other Pads..."
-msgstr "将焊盘属性推送到其他焊盘..."
+msgstr "推送焊盘属性到其他焊盘..."
 
 #: pcbnew/tools/pcb_actions.cpp:909
 msgid "Copy the current pad's properties to other pads"
@@ -46387,7 +46353,7 @@ msgstr "复制当前焊盘属性到其他焊盘"
 
 #: pcbnew/tools/pcb_actions.cpp:915
 msgid "Renumber Pads..."
-msgstr "焊盘重新编号..."
+msgstr "为焊盘重新编号..."
 
 #: pcbnew/tools/pcb_actions.cpp:916
 msgid "Renumber pads by clicking on them in the desired order"
@@ -46423,7 +46389,7 @@ msgstr "默认焊盘属性..."
 
 #: pcbnew/tools/pcb_actions.cpp:948
 msgid "Edit the pad properties used when creating new pads"
-msgstr "编辑创建新焊盘时使用的焊盘属性"
+msgstr "编辑创建新焊盘时所使用的焊盘属性"
 
 #: pcbnew/tools/pcb_actions.cpp:959
 msgid "Reveal Plugin Folder in Finder"
