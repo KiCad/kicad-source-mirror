@@ -510,15 +510,6 @@ void PANEL_FP_EDITOR_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
     if( selectedRows.empty() )
         return;
 
-    for( int row : selectedRows )
-    {
-        if( row < 2 )
-        {
-            DisplayError( nullptr, _( "Reference and value are mandatory." ) );
-            return;
-        }
-    }
-
     if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
         return;
 
@@ -547,5 +538,3 @@ void PANEL_FP_EDITOR_DEFAULTS::ResetPanel()
 
     loadFPSettings( &cfg );
 }
-
-
