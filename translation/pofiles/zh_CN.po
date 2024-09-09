@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-09 09:54+0000\n"
+"PO-Revision-Date: 2024-09-09 13:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -1962,13 +1962,13 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "无法覆盖库路径 '%s'。"
 
 #: common/design_block_io.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"无法创建目录 '%s'。\n"
+"无法创建库路径 '%s'。\n"
 "\n"
 "请确保你有写入权限并再次尝试。"
 
@@ -2023,16 +2023,16 @@ msgid "Design block '%s' does not exist."
 msgstr "设计图块 '%s' 不存在。"
 
 #: common/design_block_io.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "无法创建文件 '%s'。"
+msgstr "无法删除设计图块文件夹 '%s'。"
 
 #: common/design_block_lib_table.cpp:229
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "在设计图块库表文件的行 %2$d 中出现了重复的库名称 '%1$s'"
+msgstr "在设计图块库表文件的行 %2$d 中出现了重复的库名称 '%1$s'。"
 
 #: common/design_block_lib_table.cpp:339
 #, c-format
@@ -6356,7 +6356,7 @@ msgstr "加载封装时出错:"
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "在封装库表文件的行 %2$d 中出现了重复的库名称 '%1$s'"
+msgstr "在封装库表文件的行 %2$d 中出现了重复的库名称 '%1$s'。"
 
 #: common/gestfich.cpp:244
 #, c-format
@@ -9928,7 +9928,7 @@ msgstr "请选择一个保存设计图块的库。"
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "不支持带有嵌套图纸的设计图块。"
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
 msgid "Enter a name for the design block:"
@@ -9939,11 +9939,8 @@ msgid "Design Block Name"
 msgstr "设计图块名"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
-#, fuzzy
 msgid "Error saving temporary schematic file to create design block."
-msgstr ""
-"保存原理图文件 '%s' 出错。\n"
-"%s"
+msgstr "在保存临时原理图文件以创建设计图块时出错。"
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
@@ -9975,14 +9972,14 @@ msgid "Design block library '%s' deleted"
 msgstr "设计图块库 '%s' 已删除"
 
 #: eeschema/design_block_utils.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "删除封装 '%s' 来自库 '%s'?"
+msgstr "删除库 '%2$s' 的设计图块 '%1$s'?"
 
 #: eeschema/design_block_utils.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "封装 '%s' 删除来自库 '%s'"
+msgstr "库 '%2$s' 的设计图块 '%1$s' 已删除"
 
 #: eeschema/design_block_utils.cpp:501
 #, c-format
@@ -11520,18 +11517,16 @@ msgstr ""
 "加载时的默认符号值。"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
-msgstr "增量步长:"
+msgstr ""
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
 msgid "All sheets"
 msgstr "全部图纸"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
-#, fuzzy
 msgid "Increment Annotations From"
-msgstr "删除批注"
+msgstr ""
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
@@ -13169,7 +13164,7 @@ msgstr "保存原理图文件 '%s' 时出错。"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:589
 #, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "未能保存原理图 '%s'"
+msgstr "无法保存原理图 '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:684
 msgid "A sheet must have a name."
@@ -13903,7 +13898,7 @@ msgstr "放置副本"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:75
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "保持符号选中以便后续点击。"
+msgstr "在后续点击时保持符号的选中状态。"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:77
 msgid "Place all units"
@@ -15518,7 +15513,7 @@ msgstr "迁移库"
 #: eeschema/libarch.cpp:135
 #, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "符号库文件 '%s' 保存失败。"
+msgstr "无法保存符号库文件 '%s'。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1159
 msgid ""
@@ -16457,7 +16452,7 @@ msgstr ""
 #: eeschema/files-io.cpp:1078
 #, c-format
 msgid "Failed to save %s."
-msgstr "保存 %s 失败。"
+msgstr "无法保存 %s 。"
 
 #: eeschema/files-io.cpp:1080
 msgid "Locked File Warning"
@@ -19537,7 +19532,7 @@ msgstr "一个 [Package] 行需要正好 4 个元素。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2287
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr "无效的引脚条目: 6 个值来自只有 3 个的表格。"
+msgstr "无效的引脚条目: 需要 6 个数值, 但表中只有 3 个。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2297
 msgid "Can't read a R, L or C value for a pin."
@@ -19935,9 +19930,8 @@ msgid "Errors during netlist generation."
 msgstr "在生成网表过程中出现了错误。"
 
 #: eeschema/sim/simulator_frame.cpp:375 eeschema/tools/simulator_control.cpp:86
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "在生成网表过程中出现了错误。"
+msgstr "在生成网表过程中出现了警告。"
 
 #: eeschema/sim/simulator_frame.cpp:385
 msgid "Simulator requires a fully annotated schematic."
@@ -20532,7 +20526,7 @@ msgstr "正在加载 '%s' 库..."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1213
 #, c-format
 msgid "Failed to save backup to '%s'."
-msgstr "未能将备份保存到 '%s'。"
+msgstr "无法将将备份保存到 '%s'。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1450
 #, c-format
@@ -21085,9 +21079,8 @@ msgid "Delete Design Block"
 msgstr "删除设计图块"
 
 #: eeschema/tools/ee_actions.cpp:171
-#, fuzzy
 msgid "Remove the selected design block from its library"
-msgstr "从库中移除所选符号"
+msgstr "从库中移除所选设计图块"
 
 #: eeschema/tools/ee_actions.cpp:181
 msgid "Save Library As..."
@@ -21795,15 +21788,13 @@ msgid "Fill in schematic symbol reference designators"
 msgstr "填写原理图符号位号"
 
 #: eeschema/tools/ee_actions.cpp:1040
-#, fuzzy
 msgid "Increment Annotations From..."
-msgstr "删除批注"
+msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1041
-#, fuzzy
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
-msgstr "清除所有位号"
+msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1046
 msgid "Schematic Setup..."
@@ -22653,9 +22644,8 @@ msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "无法编辑有损坏的库符号链接的符号。"
 
 #: eeschema/tools/sch_editor_control.cpp:2301
-#, fuzzy
 msgid "Increment Annotations"
-msgstr "删除批注"
+msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:2706
 #: pcbnew/tools/board_editor_control.cpp:606
@@ -22846,9 +22836,8 @@ msgid "Keep annotations"
 msgstr "保留现有的批注"
 
 #: eeschema/widgets/design_block_pane.cpp:65
-#, fuzzy
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "保持符号选中以便后续点击。"
+msgstr "在后续点击时放置设计图块的副本。"
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
@@ -25160,15 +25149,15 @@ msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr "将 %d 个旧格式库另存为当前 KiCad 版本格式并替换表中的旧条目?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr "文件夹 '%s' 已存在, 是否覆盖现有封装?"
+msgstr "文件夹 '%s' 已存在, 是否覆盖现有设计图块?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "符号库文件 '%s' 保存失败。"
+msgstr "无法保存设计图块库文件 '%s'。"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:920
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:948
@@ -25320,13 +25309,12 @@ msgstr ""
 "似乎不是有效的 KiCad 工程文件。"
 
 #: kicad/kicad.cpp:367
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
-"加载全局符号库表时出错。\n"
-"请在偏好设置菜单中编辑此全局符号库表。"
+"加载全局设计图块库表时出错。\n"
+"请在偏好设置菜单中编辑此全局设计图块库表。"
 
 #: kicad/kicad_cli.cpp:113
 msgid "Export GLB (binary GLTF)"
@@ -26484,9 +26472,8 @@ msgid "Application cannot start."
 msgstr "应用程序无法启动。"
 
 #: kicad/tools/kicad_manager_control.cpp:907
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "重置库"
+msgstr "设计图块库"
 
 #: kicad/update_manager.cpp:164
 msgid "Update Check"
@@ -32624,7 +32611,7 @@ msgstr "搜索:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "循环 (P)"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference &designators"
@@ -36293,7 +36280,7 @@ msgstr "文件夹 '%s' 已存在, 是否覆盖现有封装?"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:906
 #, c-format
 msgid "Failed to save footprint library file '%s'."
-msgstr "未能保存封装库文件 '%s'。"
+msgstr "无法保存封装库文件 '%s'。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 msgid "Error adding 3D model"
@@ -40616,7 +40603,7 @@ msgstr "不是一个封装文件。"
 #: pcbnew/footprint_libraries_utils.cpp:183
 #, c-format
 msgid "Unable to load footprint '%s' from '%s'"
-msgstr "无法加载封装 '%s' 来自 '%s'"
+msgstr "无法加载 '%2$s' 的封装 '%1$s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:239
 msgid "Export Footprint"
@@ -40630,12 +40617,12 @@ msgstr "已导出封装到文件 '%s'。"
 #: pcbnew/footprint_libraries_utils.cpp:549
 #, c-format
 msgid "Delete footprint '%s' from library '%s'?"
-msgstr "删除封装 '%s' 来自库 '%s'?"
+msgstr "删除库 '%2$s' 的封装 '%1$s' ?"
 
 #: pcbnew/footprint_libraries_utils.cpp:566
 #, c-format
 msgid "Footprint '%s' deleted from library '%s'"
-msgstr "封装 '%s' 删除来自库 '%s'"
+msgstr "库 '%2$s' 的封装 '%1$s' 已删除"
 
 #: pcbnew/footprint_libraries_utils.cpp:581
 msgid "No footprints to export!"
