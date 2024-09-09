@@ -270,8 +270,6 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
     wxString      dbSchPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
     wxString      dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
 
-
-
     // Library name needs to be empty for when we fill it in with the correct library nickname
     // one layer above
     newDB->SetLibId( LIB_ID( wxEmptyString, aDesignBlockName ) );
@@ -363,7 +361,6 @@ void DESIGN_BLOCK_IO::DesignBlockDelete( const wxString& aLibPath, const wxStrin
 {
     wxFileName dbDir = wxFileName( aLibPath + wxFileName::GetPathSeparator() + aDesignBlockName
                                    + wxT( "." ) + FILEEXT::KiCadDesignBlockPathExtension );
-
 
     if( !dbDir.DirExists() )
     {

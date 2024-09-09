@@ -97,10 +97,13 @@ wxString SCH_EDIT_FRAME::createNewDesignBlockLibrary( const wxString&         aL
     if( aTable == nullptr )
         return wxEmptyString;
 
-    wxString   initialPath = aProposedName.IsEmpty() ? Prj().GetProjectPath() : aProposedName;
     wxFileName fn;
     bool       doAdd = false;
     bool       isGlobal = ( aTable == &GDesignBlockTable );
+    wxString   initialPath = aProposedName;
+
+    if( initialPath.IsEmpty() )
+        initialPath = isGlobal ? PATHS::GetDefaultUserDesignBlocksPath() : Prj().GetProjectPath();
 
     if( aLibName.IsEmpty() )
     {
@@ -108,7 +111,7 @@ wxString SCH_EDIT_FRAME::createNewDesignBlockLibrary( const wxString&         aL
 
         if( !LibraryFileBrowser( false, fn, FILEEXT::KiCadDesignBlockLibPathWildcard(),
                                  FILEEXT::KiCadDesignBlockLibPathExtension, false, isGlobal,
-                                 PATHS::GetDefaultUserFootprintsPath() ) )
+                                 initialPath ) )
         {
             return wxEmptyString;
         }
