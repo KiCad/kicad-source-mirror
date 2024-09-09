@@ -1723,6 +1723,14 @@ void PCB_EDIT_FRAME::OnModify()
 void PCB_EDIT_FRAME::HardRedraw()
 {
     Update3DView( true, true );
+
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = GetBoard()->GetConnectivity();
+    connectivity->RecalculateRatsnest( nullptr );
+    GetCanvas()->RedrawRatsnest();
+
+    std::vector<MSG_PANEL_ITEM> msg_list;
+    GetBoard()->GetMsgPanelInfo( this, msg_list );
+    SetMsgPanel( msg_list );
 }
 
 
