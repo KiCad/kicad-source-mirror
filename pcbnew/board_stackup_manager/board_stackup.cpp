@@ -604,7 +604,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
     // It will be used as this in files, and can be translated only in dialog
     // if aSettings == NULL, build a full stackup (with 32 copper layers)
     LSET enabledLayer = aSettings ? aSettings->GetEnabledLayers() : StackupAllowedBrdLayers();
-    int copperLayerCount = aSettings ? aSettings->GetCopperLayerCount() : B_Cu+1;
+    int copperLayerCount = aSettings ? aSettings->GetCopperLayerCount() : 32;
 
     // We need to calculate a suitable dielectric layer thickness.
     // If no settings, and if aActiveCopperLayersCount is given, use it
@@ -651,18 +651,15 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
     }
 
     // Add copper and dielectric layers
-    for( int ii = 0; ii < copperLayerCount; ii++ )
+    for( PCB_LAYER_ID layer : enabledLayer.CuStack() )
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_COPPER );
-        item->SetBrdLayerId( ( PCB_LAYER_ID )ii );
+        item->SetBrdLayerId( layer );
         item->SetTypeName( KEY_COPPER );
         Add( item );
 
-        if( ii == copperLayerCount-1 )
-        {
-            item->SetBrdLayerId( B_Cu );
+        if( layer == B_Cu )
             break;
-        }
 
         // Add the dielectric layer:
         item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_DIELECTRIC );

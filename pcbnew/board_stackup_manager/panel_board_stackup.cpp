@@ -1080,7 +1080,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreateInitialStackup
     {
         if( aCreateInitialStackup )
         {
-            // Creates a full BOARD_STACKUP with 32 copper layers.
+            // Creates a BOARD_STACKUP with 32 copper layers.
             // extra layers will be hidden later.
             // but if the number of layer is changed in the dialog, the corresponding
             // widgets will be available with their previous values.
