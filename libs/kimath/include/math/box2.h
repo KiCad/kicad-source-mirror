@@ -49,13 +49,13 @@ public:
     typedef VECTOR2<size_type>                     SizeVec;
     typedef std::numeric_limits<coord_type>        coord_limits;
 
-    BOX2() :
+    constexpr BOX2() :
         m_Pos( 0, 0 ),
         m_Size( 0, 0 ),
         m_init( false )
     {};
 
-    BOX2( const Vec& aPos, const SizeVec& aSize = SizeVec(0, 0) ) :
+    constexpr BOX2( const Vec& aPos, const SizeVec& aSize = SizeVec(0, 0) ) :
         m_Pos( aPos ),
         m_Size( aSize ),
         m_init( true )
@@ -67,12 +67,12 @@ public:
         Normalize();
     }
 
-    static BOX2<Vec> ByCorners( const Vec& aCorner1, const Vec& aCorner2 )
+    static constexpr BOX2<Vec> ByCorners( const Vec& aCorner1, const Vec& aCorner2 )
     {
         return BOX2( aCorner1, aCorner2 - aCorner1 );
     }
 
-    void SetMaximum()
+    constexpr void SetMaximum()
     {
         if constexpr( std::is_floating_point<coord_type>() )
         {
@@ -89,7 +89,7 @@ public:
         m_init = true;
     }
 
-    Vec Centre() const
+    constexpr Vec Centre() const
     {
         return Vec( KiCheckedCast<ecoord_type, coord_type>( ecoord_type( m_Pos.x ) + m_Size.x / 2 ),
                     KiCheckedCast<ecoord_type, coord_type>( ecoord_type( m_Pos.y ) + m_Size.y / 2 ) );
@@ -130,7 +130,7 @@ public:
      *
      * @param aMoveVector is a point that is the value to move this rectangle.
      */
-    void Move( const Vec& aMoveVector )
+    constexpr void Move( const Vec& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
@@ -138,7 +138,7 @@ public:
     /**
      * Ensure that the height and width are positive.
      */
-    BOX2<Vec>& Normalize()
+    constexpr BOX2<Vec>& Normalize()
     {
         if( m_Size.y < 0 )
         {
@@ -160,7 +160,7 @@ public:
      *
      * @return true if \a aPoint is inside the boundary box. A point on a edge is seen as inside.
      */
-    bool Contains( const Vec& aPoint ) const
+    constexpr bool Contains( const Vec& aPoint ) const
     {
         Vec rel_pos = aPoint - m_Pos;
         Vec size    = m_Size;
@@ -186,108 +186,115 @@ public:
      * @param y is the x coordinate of the point to test.
      * @return true if point is inside the boundary box. A point on a edge is seen as inside.
      */
-    bool Contains( coord_type x, coord_type y ) const { return Contains( Vec( x, y ) ); }
+    constexpr bool Contains( coord_type x, coord_type y ) const { return Contains( Vec( x, y ) ); }
 
     /**
      * @param aRect is the the area to test.
      *
      * @return true if \a aRect is contained. A common edge is seen as contained.
      */
-    bool Contains( const BOX2<Vec>& aRect ) const
+    constexpr bool Contains( const BOX2<Vec>& aRect ) const
     {
         return Contains( aRect.GetOrigin() ) && Contains( aRect.GetEnd() );
     }
 
-    const SizeVec& GetSize() const { return m_Size; }
-    coord_type GetX() const { return m_Pos.x; }
-    coord_type GetY() const { return m_Pos.y; }
+    constexpr const SizeVec& GetSize() const { return m_Size; }
+    constexpr coord_type GetX() const { return m_Pos.x; }
+    constexpr coord_type GetY() const { return m_Pos.y; }
 
-    const Vec& GetOrigin() const { return m_Pos; }
-    const Vec& GetPosition() const { return m_Pos; }
-    const Vec GetEnd() const { return Vec( GetRight(), GetBottom() ); }
+    constexpr const Vec& GetOrigin() const { return m_Pos; }
+    constexpr const Vec& GetPosition() const { return m_Pos; }
+    constexpr const Vec GetEnd() const { return Vec( GetRight(), GetBottom() ); }
 
-    size_type GetWidth() const { return m_Size.x; }
-    size_type GetHeight() const { return m_Size.y; }
+    constexpr size_type GetWidth() const { return m_Size.x; }
+    constexpr size_type GetHeight() const { return m_Size.y; }
 
-    coord_type GetRight() const
+    constexpr coord_type GetRight() const
     {
         return KiCheckedCast<ecoord_type, coord_type>( ecoord_type( m_Pos.x ) + m_Size.x );
     }
 
-    coord_type GetBottom() const
+    constexpr coord_type GetBottom() const
     {
         return KiCheckedCast<ecoord_type, coord_type>( ecoord_type( m_Pos.y ) + m_Size.y );
     }
 
     // Compatibility aliases
-    coord_type GetLeft() const { return GetX(); }
-    coord_type GetTop() const { return GetY(); }
-    const Vec GetCenter() const { return Centre(); }
+    constexpr coord_type GetLeft() const { return GetX(); }
+    constexpr coord_type GetTop() const { return GetY(); }
+    constexpr const Vec GetCenter() const { return Centre(); }
 
     /**
      * @return the width or height, whichever is greater.
      */
-    int GetSizeMax() const { return ( m_Size.x > m_Size.y ) ? m_Size.x : m_Size.y; }
+    constexpr int GetSizeMax() const { return ( m_Size.x > m_Size.y ) ? m_Size.x : m_Size.y; }
 
-    void SetOrigin( const Vec& pos )
+    constexpr void SetOrigin( const Vec& pos )
     {
         m_Pos = pos;
         m_init = true;
     }
 
-    void SetOrigin( coord_type x, coord_type y )
+    constexpr void SetOrigin( coord_type x, coord_type y )
     {
         SetOrigin( Vec( x, y ) );
     }
 
-    void SetSize( const SizeVec& size )
+    constexpr void SetSize( const SizeVec& size )
     {
         m_Size = size;
         m_init = true;
     }
 
-    void SetSize( size_type w, size_type h )
+    constexpr void SetSize( size_type w, size_type h )
     {
         SetSize( SizeVec( w, h ) );
     }
 
-    void Offset( coord_type dx, coord_type dy )
+    constexpr void Offset( coord_type dx, coord_type dy )
     {
         m_Pos.x += dx;
         m_Pos.y += dy;
     }
 
-    void Offset( const Vec& offset )
+    constexpr void Offset( const Vec& offset )
     {
         Offset( offset.x, offset.y );
     }
 
-    void SetX( coord_type val )
+    constexpr BOX2<Vec> GetWithOffset( const Vec& aMoveVector ) const
+    {
+        BOX2<Vec> ret( *this );
+        ret.Move( aMoveVector );
+        return ret;
+    }
+
+    constexpr void SetX( coord_type val )
     {
         SetOrigin( val, m_Pos.y );
     }
 
-    void SetY( coord_type val )
+    constexpr void SetY( coord_type val )
     {
         SetOrigin( m_Pos.x, val );
     }
 
-    void SetWidth( size_type val )
+    constexpr void SetWidth( size_type val )
     {
         SetSize( val, m_Size.y );
     }
 
-    void SetHeight( size_type val )
+    constexpr void SetHeight( size_type val )
     {
         SetSize( m_Size.x, val );
     }
 
-    void SetEnd( coord_type x, coord_type y )
+    constexpr void SetEnd( coord_type x, coord_type y )
     {
         SetEnd( Vec( x, y ) );
     }
 
-    void SetEnd( const Vec& pos )
+    constexpr void SetEnd( const Vec& pos )
     {
         SetSize( SizeVec( pos ) - m_Pos );
     }
@@ -296,7 +303,7 @@ public:
      * @return true if the argument rectangle intersects this rectangle.
      *         (i.e. if the 2 rectangles have at least a common point)
      */
-    bool Intersects( const BOX2<Vec>& aRect ) const
+    constexpr bool Intersects( const BOX2<Vec>& aRect ) const
     {
         // this logic taken from wxWidgets' geometry.cpp file:
         bool        rc;
@@ -332,7 +339,7 @@ public:
     /**
      * @return true if this rectangle intersects \a aRect.
      */
-    BOX2<Vec> Intersect( const BOX2<Vec>& aRect )
+    constexpr BOX2<Vec> Intersect( const BOX2<Vec>& aRect )
     {
         BOX2<Vec> me( *this );
         BOX2<Vec> rect( aRect );
@@ -543,7 +550,7 @@ public:
      * Inflates the rectangle horizontally by \a dx and vertically by \a dy. If \a dx
      * and/or \a dy is negative the rectangle is deflated.
      */
-    BOX2<Vec>& Inflate( coord_type dx, coord_type dy )
+    constexpr BOX2<Vec>& Inflate( coord_type dx, coord_type dy )
     {
         if( m_Size.x >= 0 )
         {
@@ -614,7 +621,7 @@ public:
      * Inflate the rectangle horizontally and vertically by \a aDelta. If \a aDelta
      * is negative the rectangle is deflated.
      */
-    BOX2<Vec>& Inflate( coord_type aDelta )
+    constexpr BOX2<Vec>& Inflate( coord_type aDelta )
     {
         Inflate( aDelta, aDelta );
         return *this;
@@ -623,7 +630,7 @@ public:
     /**
      * Get a new rectangle that is this one, inflated by \a aDx and \a aDy.
      */
-    BOX2<Vec> GetInflated( coord_type aDx, coord_type aDy ) const
+    constexpr BOX2<Vec> GetInflated( coord_type aDx, coord_type aDy ) const
     {
         BOX2<Vec> ret( *this );
         ret.Inflate( aDx, aDy );
@@ -633,7 +640,7 @@ public:
     /**
      * Get a new rectangle that is this one, inflated by \a aDelta.
      */
-    BOX2<Vec> GetInflated( coord_type aDelta ) const
+    constexpr BOX2<Vec> GetInflated( coord_type aDelta ) const
     {
         return GetInflated( aDelta, aDelta );
     }
@@ -643,7 +650,7 @@ public:
      *
      * @param aRect is the rectangle to merge with this rectangle.
      */
-    BOX2<Vec>& Merge( const BOX2<Vec>& aRect )
+    constexpr BOX2<Vec>& Merge( const BOX2<Vec>& aRect )
     {
         if( !m_init )
         {
@@ -677,7 +684,7 @@ public:
      *
      * @param aPoint is the point to merge with the rectangle.
      */
-    BOX2<Vec>& Merge( const Vec& aPoint )
+    constexpr BOX2<Vec>& Merge( const Vec& aPoint )
     {
         if( !m_init )
         {
@@ -746,7 +753,7 @@ public:
      *
      * @return The area of the rectangle.
      */
-    ecoord_type GetArea() const
+    constexpr ecoord_type GetArea() const
     {
         return (ecoord_type) GetWidth() * (ecoord_type) GetHeight();
     }
@@ -761,7 +768,17 @@ public:
         return m_Size.EuclideanNorm();
     }
 
-    ecoord_type SquaredDistance( const Vec& aP ) const
+    /**
+     * Return the square of the length of the diagonal of the rectangle.
+     *
+     * When all you need is a comparison, this is faster than Diagonal().
+     */
+    constexpr ecoord_type SquaredDiagonal() const
+    {
+        return m_Size.SquaredEuclideanNorm();
+    }
+
+    constexpr ecoord_type SquaredDistance( const Vec& aP ) const
     {
         ecoord_type x2 = m_Pos.x + m_Size.x;
         ecoord_type y2 = m_Pos.y + m_Size.y;
@@ -783,7 +800,7 @@ public:
      * @param aBox is the other box.
      * @return The distance squared from \a aBox.
      */
-    ecoord_type SquaredDistance( const BOX2<Vec>& aBox ) const
+    constexpr ecoord_type SquaredDistance( const BOX2<Vec>& aBox ) const
     {
         ecoord_type s = 0;
 
@@ -826,15 +843,15 @@ public:
     /**
      * Return the point in this rect that is closest to the provided point
      */
-    const Vec ClosestPointTo( const Vec& aPoint ) const
+    constexpr Vec ClosestPointTo( const Vec& aPoint ) const
     {
         BOX2<Vec> me( *this );
 
         me.Normalize(); // ensure size is >= 0
 
         // Determine closest point to the circle centre within this rect
-        coord_type nx = alg::clamp( me.GetLeft(), aPoint.x, me.GetRight() );
-        coord_type ny = alg::clamp( me.GetTop(), aPoint.y, me.GetBottom() );
+        const coord_type nx = std::clamp( me.GetLeft(), aPoint.x, me.GetRight() );
+        const coord_type ny = std::clamp( me.GetTop(), aPoint.y, me.GetBottom() );
 
         return Vec( nx, ny );
     }
@@ -842,7 +859,7 @@ public:
     /**
      * Return the point in this rect that is farthest from the provided point
      */
-    const Vec FarthestPointTo( const Vec& aPoint ) const
+    constexpr Vec FarthestPointTo( const Vec& aPoint ) const
     {
         BOX2<Vec> me( *this );
 
@@ -866,7 +883,7 @@ public:
         return Vec( fx, fy );
     }
 
-    bool operator==( const BOX2<Vec>& aOther ) const
+    constexpr bool operator==( const BOX2<Vec>& aOther ) const
     {
         auto t1 ( *this );
         auto t2 ( aOther );
@@ -875,7 +892,7 @@ public:
         return ( t1.m_Pos == t2.m_Pos && t1.m_Size == t2.m_Size );
     }
 
-    bool operator!=( const BOX2<Vec>& aOther ) const
+    constexpr bool operator!=( const BOX2<Vec>& aOther ) const
     {
         auto t1 ( *this );
         auto t2 ( aOther );
@@ -884,7 +901,7 @@ public:
         return ( t1.m_Pos != t2.m_Pos || t1.m_Size != t2.m_Size );
     }
 
-    bool IsValid() const
+    constexpr bool IsValid() const
     {
         return m_init;
     }
@@ -903,7 +920,7 @@ typedef BOX2<VECTOR2D>    BOX2D;
 typedef std::optional<BOX2I> OPT_BOX2I;
 
 
-inline BOX2I BOX2ISafe( const BOX2D& aInput )
+inline constexpr BOX2I BOX2ISafe( const BOX2D& aInput )
 {
     constexpr double high = std::numeric_limits<int>::max();
     constexpr double low = -std::numeric_limits<int>::max();
@@ -918,7 +935,7 @@ inline BOX2I BOX2ISafe( const BOX2D& aInput )
 }
 
 
-inline BOX2I BOX2ISafe( const VECTOR2D& aPos, const VECTOR2D& aSize )
+inline constexpr BOX2I BOX2ISafe( const VECTOR2D& aPos, const VECTOR2D& aSize )
 {
     constexpr double high = std::numeric_limits<int>::max();
     constexpr double low = -std::numeric_limits<int>::max();
@@ -934,7 +951,7 @@ inline BOX2I BOX2ISafe( const VECTOR2D& aPos, const VECTOR2D& aSize )
 
 
 template <typename S, std::enable_if_t<std::is_integral<S>::value, int> = 0>
-inline BOX2I BOX2ISafe( const VECTOR2I& aPos, const VECTOR2<S>& aSize )
+inline constexpr BOX2I BOX2ISafe( const VECTOR2I& aPos, const VECTOR2<S>& aSize )
 {
     constexpr int64_t high = std::numeric_limits<int>::max();
     constexpr int64_t low = -std::numeric_limits<int>::max();

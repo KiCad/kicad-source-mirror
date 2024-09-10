@@ -65,6 +65,24 @@ BOOST_AUTO_TEST_CASE( BasicInt )
     BOOST_TEST( inflated2 == inflated );
 }
 
+BOOST_AUTO_TEST_CASE( Constexpr )
+{
+    constexpr BOX2I box_1_2__3_4( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) );
+    static_assert( box_1_2__3_4.GetPosition() == VECTOR2I( 1, 2 ) );
+    static_assert( box_1_2__3_4.GetSize() == VECTOR2L( 3, 4 ) );
+
+    constexpr BOX2I box0_1__5_6 = box_1_2__3_4.GetInflated( 1 );
+    static_assert( box0_1__5_6.GetPosition() == VECTOR2I( 0, 1 ) );
+    static_assert( box0_1__5_6.GetSize() == VECTOR2L( 5, 6 ) );
+
+    static_assert( box_1_2__3_4.SquaredDiagonal() < box0_1__5_6.SquaredDiagonal() );
+
+    constexpr BOX2I box1_2__100_4 =
+            box_1_2__3_4.GetWithOffset( VECTOR2I( 100, 0 ) ).Merge( box_1_2__3_4 );
+    static_assert( box1_2__100_4.GetPosition() == VECTOR2I( 1, 2 ) );
+    static_assert( box1_2__100_4.GetSize() == VECTOR2L( 103, 4 ) );
+}
+
 BOOST_AUTO_TEST_CASE( BasicDouble )
 {
     const double tol = 0.000001;

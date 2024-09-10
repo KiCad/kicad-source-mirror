@@ -79,14 +79,14 @@ public:
     T x, y;
 
     /// Construct a 2D-vector with x, y = 0
-    VECTOR2();
+    constexpr VECTOR2();
 
     /// Construct a vector with given components x, y
-    VECTOR2( T x, T y );
+    constexpr VECTOR2( T x, T y );
 
     /// Initializes a vector from another specialization. Beware of rounding issues.
     template <typename CastingType>
-    VECTOR2( const VECTOR2<CastingType>& aVec )
+    constexpr VECTOR2( const VECTOR2<CastingType>& aVec )
     {
         if( std::is_floating_point<T>() )
         {
@@ -117,7 +117,7 @@ public:
     }
 
     /// Copy a vector
-    VECTOR2( const VECTOR2<T>& aVec )
+    constexpr VECTOR2( const VECTOR2<T>& aVec )
     {
         x = aVec.x;
         y = aVec.y;
@@ -125,7 +125,7 @@ public:
 
     /// Cast a vector to another specialized subclass. Beware of rounding issues.
     template <typename U>
-    VECTOR2<U> operator()() const
+    constexpr VECTOR2<U> operator()() const
     {
         if( std::is_floating_point<U>::value )
         {
@@ -173,7 +173,7 @@ public:
      *
      * @return Scalar, the euclidean norm
      */
-    extended_type SquaredEuclideanNorm() const;
+    constexpr extended_type SquaredEuclideanNorm() const;
 
 
     /**
@@ -181,7 +181,7 @@ public:
      *
      * @return Perpendicular vector
      */
-    VECTOR2<T> Perpendicular() const;
+    constexpr VECTOR2<T> Perpendicular() const;
 
     /**
      * Return a vector of the same direction, but length specified in \a aNewLength.
@@ -201,12 +201,12 @@ public:
     /**
      * Compute cross product of self with \a aVector.
      */
-    extended_type Cross( const VECTOR2<T>& aVector ) const;
+    constexpr extended_type Cross( const VECTOR2<T>& aVector ) const;
 
     /**
      * Compute dot product of self with \a aVector.
      */
-    extended_type Dot( const VECTOR2<T>& aVector ) const;
+    constexpr extended_type Dot( const VECTOR2<T>& aVector ) const;
 
     /**
      * Compute the distance between two vectors.  This is a double precision
@@ -222,44 +222,44 @@ public:
     // Operators
 
     /// Assignment operator
-    VECTOR2<T>& operator=( const VECTOR2<T>& aVector );
+    constexpr VECTOR2<T>& operator=( const VECTOR2<T>& aVector );
 
     /// Compound assignment operator
-    VECTOR2<T>& operator+=( const VECTOR2<T>& aVector );
+    constexpr VECTOR2<T>& operator+=( const VECTOR2<T>& aVector );
 
     /// Compound assignment operator
-    VECTOR2<T>& operator*=( const VECTOR2<T>& aVector );
+    constexpr VECTOR2<T>& operator*=( const VECTOR2<T>& aVector );
 
-    VECTOR2<T>& operator*=( const T& aScalar );
-
-    /// Compound assignment operator
-    VECTOR2<T>& operator+=( const T& aScalar );
+    constexpr VECTOR2<T>& operator*=( const T& aScalar );
 
     /// Compound assignment operator
-    VECTOR2<T>& operator-=( const VECTOR2<T>& aVector );
+    constexpr VECTOR2<T>& operator+=( const T& aScalar );
 
     /// Compound assignment operator
-    VECTOR2<T>& operator-=( const T& aScalar );
+    constexpr VECTOR2<T>& operator-=( const VECTOR2<T>& aVector );
+
+    /// Compound assignment operator
+    constexpr VECTOR2<T>& operator-=( const T& aScalar );
 
     /// Negate Vector operator
-    VECTOR2<T> operator-();
+    constexpr VECTOR2<T> operator-();
 
     /// Division with a factor
-    VECTOR2<T> operator/( double aFactor ) const;
+    constexpr VECTOR2<T> operator/( double aFactor ) const;
 
     /// Equality operator
-    bool operator==( const VECTOR2<T>& aVector ) const;
+    constexpr bool operator==( const VECTOR2<T>& aVector ) const;
 
     /// Not equality operator
-    bool operator!=( const VECTOR2<T>& aVector ) const;
+    constexpr bool operator!=( const VECTOR2<T>& aVector ) const;
 
     /// Smaller than operator
-    bool operator<( const VECTOR2<T>& aVector ) const;
-    bool operator<=( const VECTOR2<T>& aVector ) const;
+    constexpr bool operator<( const VECTOR2<T>& aVector ) const;
+    constexpr bool operator<=( const VECTOR2<T>& aVector ) const;
 
     /// Greater than operator
-    bool operator>( const VECTOR2<T>& aVector ) const;
-    bool operator>=( const VECTOR2<T>& aVector ) const;
+    constexpr bool operator>( const VECTOR2<T>& aVector ) const;
+    constexpr bool operator>=( const VECTOR2<T>& aVector ) const;
 };
 
 
@@ -268,13 +268,13 @@ public:
 // ----------------------
 
 template <class T>
-VECTOR2<T>::VECTOR2() : x{}, y{}
+constexpr VECTOR2<T>::VECTOR2() : x{}, y{}
 {
 }
 
 
 template <class T>
-VECTOR2<T>::VECTOR2( T aX, T aY )
+constexpr VECTOR2<T>::VECTOR2( T aX, T aY )
 {
     x = aX;
     y = aY;
@@ -306,14 +306,14 @@ T VECTOR2<T>::EuclideanNorm() const
 
 
 template <class T>
-typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
+constexpr typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
 {
     return (extended_type) x * x + (extended_type) y * y;
 }
 
 
 template <class T>
-VECTOR2<T> VECTOR2<T>::Perpendicular() const
+constexpr VECTOR2<T> VECTOR2<T>::Perpendicular() const
 {
     VECTOR2<T> perpendicular( -y, x );
     return perpendicular;
@@ -321,7 +321,7 @@ VECTOR2<T> VECTOR2<T>::Perpendicular() const
 
 
 template <class T>
-VECTOR2<T>& VECTOR2<T>::operator=( const VECTOR2<T>& aVector )
+constexpr VECTOR2<T>& VECTOR2<T>::operator=( const VECTOR2<T>& aVector )
 {
     x = aVector.x;
     y = aVector.y;
@@ -330,7 +330,7 @@ VECTOR2<T>& VECTOR2<T>::operator=( const VECTOR2<T>& aVector )
 
 
 template <class T>
-VECTOR2<T>& VECTOR2<T>::operator+=( const VECTOR2<T>& aVector )
+constexpr VECTOR2<T>& VECTOR2<T>::operator+=( const VECTOR2<T>& aVector )
 {
     x += aVector.x;
     y += aVector.y;
@@ -339,7 +339,7 @@ VECTOR2<T>& VECTOR2<T>::operator+=( const VECTOR2<T>& aVector )
 
 
 template <class T>
-VECTOR2<T>& VECTOR2<T>::operator*=( const VECTOR2<T>& aVector )
+constexpr VECTOR2<T>& VECTOR2<T>::operator*=( const VECTOR2<T>& aVector )
 {
     x *= aVector.x;
     y *= aVector.y;
@@ -348,7 +348,7 @@ VECTOR2<T>& VECTOR2<T>::operator*=( const VECTOR2<T>& aVector )
 
 
 template <class T>
-VECTOR2<T>& VECTOR2<T>::operator*=( const T& aScalar )
+constexpr VECTOR2<T>& VECTOR2<T>::operator*=( const T& aScalar )
 {
     x *= aScalar;
     y *= aScalar;
@@ -357,7 +357,7 @@ VECTOR2<T>& VECTOR2<T>::operator*=( const T& aScalar )
 
 
 template <class T>
-VECTOR2<T>& VECTOR2<T>::operator+=( const T& aScalar )
+constexpr VECTOR2<T>& VECTOR2<T>::operator+=( const T& aScalar )
 {
     x += aScalar;
     y += aScalar;
@@ -366,7 +366,7 @@ VECTOR2<T>& VECTOR2<T>::operator+=( const T& aScalar )
 
 
 template <class T>
-VECTOR2<T>& VECTOR2<T>::operator-=( const VECTOR2<T>& aVector )
+constexpr VECTOR2<T>& VECTOR2<T>::operator-=( const VECTOR2<T>& aVector )
 {
     x -= aVector.x;
     y -= aVector.y;
@@ -375,7 +375,7 @@ VECTOR2<T>& VECTOR2<T>::operator-=( const VECTOR2<T>& aVector )
 
 
 template <class T>
-VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
+constexpr VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
 {
     x -= aScalar;
     y -= aScalar;
@@ -440,63 +440,65 @@ concept Integral = std::is_integral<T>::value;
 
 
 template <class T, class U>
-VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
+constexpr VECTOR2<std::common_type_t<T, U>> operator+( const VECTOR2<T>& aLHS,
+                                                       const VECTOR2<U>& aRHS )
 {
     return VECTOR2<std::common_type_t<T, U>>( aLHS.x + aRHS.x, aLHS.y + aRHS.y );
 }
 
 
 template <FloatingPoint T, class U>
-VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
+constexpr VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<T>( aLHS.x + aScalar, aLHS.y + aScalar );
 }
 
 
 template <Integral T, Integral U>
-VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
+constexpr VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<T>( aLHS.x + aScalar, aLHS.y + aScalar );
 }
 
 
 template <Integral T, FloatingPoint U>
-VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
+constexpr VECTOR2<T> operator+( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<T>( KiROUND( aLHS.x + aScalar ), KiROUND( aLHS.y + aScalar ) );
 }
 
 
 template <class T, class U>
-VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
+constexpr VECTOR2<std::common_type_t<T, U>> operator-( const VECTOR2<T>& aLHS,
+                                                       const VECTOR2<U>& aRHS )
 {
     return VECTOR2<std::common_type_t<T, U>>( aLHS.x - aRHS.x, aLHS.y - aRHS.y );
 }
 
 
 template <FloatingPoint T, class U>
-VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
+constexpr VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
 {
     return VECTOR2<T>( aLHS.x - aScalar, aLHS.y - aScalar );
 }
 
 
 template <Integral T, Integral U>
-VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
+constexpr VECTOR2<T> operator-( const VECTOR2<T>& aLHS, U aScalar )
 {
     return VECTOR2<T>( aLHS.x - aScalar, aLHS.y - aScalar );
 }
 
 
 template <Integral T, FloatingPoint U>
-VECTOR2<T> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
+constexpr VECTOR2<T> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<T>( KiROUND( aLHS.x - aScalar ), KiROUND( aLHS.y - aScalar ) );
 }
 
 
 template <class T>
-VECTOR2<T> VECTOR2<T>::operator-()
+constexpr VECTOR2<T> VECTOR2<T>::operator-()
 {
     return VECTOR2<T> ( -x, -y );
 }
@@ -504,9 +506,9 @@ VECTOR2<T> VECTOR2<T>::operator-()
 
 template <class T, class U>
 #ifdef SWIG
-double operator*( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
+constexpr double operator*( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
 #else
-auto operator*( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
+constexpr auto operator*( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
 #endif
 {
     using extended_type = typename VECTOR2<std::common_type_t<T, U>>::extended_type;
@@ -515,21 +517,21 @@ auto operator*( const VECTOR2<T>& aLHS, const VECTOR2<U>& aRHS )
 
 
 template <class T, class U>
-VECTOR2<std::common_type_t<T, U>> operator*( const VECTOR2<T>& aLHS, const U& aScalar )
+constexpr VECTOR2<std::common_type_t<T, U>> operator*( const VECTOR2<T>& aLHS, const U& aScalar )
 {
     return VECTOR2<std::common_type_t<T, U>>( aLHS.x * aScalar, aLHS.y * aScalar );
 }
 
 
 template <class T, class U>
-VECTOR2<std::common_type_t<T, U>> operator*( const T& aScalar, const VECTOR2<U>& aVector )
+constexpr VECTOR2<std::common_type_t<T, U>> operator*( const T& aScalar, const VECTOR2<U>& aVector )
 {
     return VECTOR2<std::common_type_t<T, U>>( aScalar * aVector.x, aScalar * aVector.y );
 }
 
 
 template <class T>
-VECTOR2<T> VECTOR2<T>::operator/( double aFactor ) const
+constexpr VECTOR2<T> VECTOR2<T>::operator/( double aFactor ) const
 {
     if( std::is_integral<T>::value )
         return VECTOR2<T>( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );
@@ -539,7 +541,7 @@ VECTOR2<T> VECTOR2<T>::operator/( double aFactor ) const
 
 
 template <class T>
-typename VECTOR2<T>::extended_type VECTOR2<T>::Cross( const VECTOR2<T>& aVector ) const
+constexpr typename VECTOR2<T>::extended_type VECTOR2<T>::Cross( const VECTOR2<T>& aVector ) const
 {
     return (extended_type) x * (extended_type) aVector.y -
            (extended_type) y * (extended_type) aVector.x;
@@ -547,7 +549,7 @@ typename VECTOR2<T>::extended_type VECTOR2<T>::Cross( const VECTOR2<T>& aVector 
 
 
 template <class T>
-typename VECTOR2<T>::extended_type VECTOR2<T>::Dot( const VECTOR2<T>& aVector ) const
+constexpr typename VECTOR2<T>::extended_type VECTOR2<T>::Dot( const VECTOR2<T>& aVector ) const
 {
     return (extended_type) x * (extended_type) aVector.x +
            (extended_type) y * (extended_type) aVector.y;
@@ -571,49 +573,49 @@ VECTOR2<T>::SquaredDistance( const VECTOR2<T>& aVector ) const
 
 
 template <class T>
-bool VECTOR2<T>::operator<( const VECTOR2<T>& aVector ) const
+constexpr bool VECTOR2<T>::operator<( const VECTOR2<T>& aVector ) const
 {
     return ( *this * *this ) < ( aVector * aVector );
 }
 
 
 template <class T>
-bool VECTOR2<T>::operator<=( const VECTOR2<T>& aVector ) const
+constexpr bool VECTOR2<T>::operator<=( const VECTOR2<T>& aVector ) const
 {
     return ( *this * *this ) <= ( aVector * aVector );
 }
 
 
 template <class T>
-bool VECTOR2<T>::operator>( const VECTOR2<T>& aVector ) const
+constexpr bool VECTOR2<T>::operator>( const VECTOR2<T>& aVector ) const
 {
     return ( *this * *this ) > ( aVector * aVector );
 }
 
 
 template <class T>
-bool VECTOR2<T>::operator>=( const VECTOR2<T>& aVector ) const
+constexpr bool VECTOR2<T>::operator>=( const VECTOR2<T>& aVector ) const
 {
     return ( *this * *this ) >= ( aVector * aVector );
 }
 
 
 template <class T>
-bool VECTOR2<T>::operator==( VECTOR2<T> const& aVector ) const
+constexpr bool VECTOR2<T>::operator==( VECTOR2<T> const& aVector ) const
 {
     return ( aVector.x == x ) && ( aVector.y == y );
 }
 
 
 template <class T>
-bool VECTOR2<T>::operator!=( VECTOR2<T> const& aVector ) const
+constexpr bool VECTOR2<T>::operator!=( VECTOR2<T> const& aVector ) const
 {
     return ( aVector.x != x ) || ( aVector.y != y );
 }
 
 
 template <class T>
-const VECTOR2<T> LexicographicalMax( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
+constexpr const VECTOR2<T>& LexicographicalMax( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
 {
     if( aA.x > aB.x )
         return aA;
@@ -625,7 +627,7 @@ const VECTOR2<T> LexicographicalMax( const VECTOR2<T>& aA, const VECTOR2<T>& aB 
 
 
 template <class T>
-const VECTOR2<T> LexicographicalMin( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
+constexpr const VECTOR2<T>& LexicographicalMin( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
 {
     if( aA.x < aB.x )
         return aA;
@@ -637,7 +639,7 @@ const VECTOR2<T> LexicographicalMin( const VECTOR2<T>& aA, const VECTOR2<T>& aB 
 
 
 template <class T>
-int LexicographicalCompare( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
+constexpr int LexicographicalCompare( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
 {
     if( aA.x < aB.x )
         return -1;
@@ -657,6 +659,8 @@ int LexicographicalCompare( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
 
 /**
  * Template to compare two VECTOR2<T> values for equality within a required epsilon.
+ *
+ * Not constexpr until C++23 (without forgoing std::abs in equals)
  *
  * @param aFirst value to compare.
  * @param aSecond value to compare.
@@ -690,7 +694,7 @@ typedef VECTOR2<int32_t> VECTOR2I;
 typedef VECTOR2<int64_t> VECTOR2L;
 
 /* KiROUND specialization for vectors */
-inline VECTOR2I KiROUND( const VECTOR2D& vec )
+inline constexpr VECTOR2I KiROUND( const VECTOR2D& vec )
 {
     return VECTOR2I( KiROUND( vec.x ), KiROUND( vec.y ) );
 }

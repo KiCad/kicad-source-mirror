@@ -35,6 +35,45 @@
  */
 BOOST_AUTO_TEST_SUITE( VECTOR2TESTS )
 
+BOOST_AUTO_TEST_CASE( Constexpr )
+{
+    constexpr VECTOR2I vi_1_2{ 1, 2 };
+    // Something to test at runtime
+    BOOST_TEST( vi_1_2 == VECTOR2I( 1, 2 ) );
+    static_assert( vi_1_2.x == 1 );
+    static_assert( vi_1_2.y == 2 );
+
+    constexpr VECTOR2I vi_3_5 = vi_1_2 + VECTOR2I( 3, 4 ) - VECTOR2I( 1, 1 );
+
+    static_assert( vi_3_5 == VECTOR2I( 3, 5 ) );
+
+    static_assert( vi_3_5.SquaredEuclideanNorm() == 9 + 25 );
+    static_assert( vi_3_5 > vi_1_2 );
+    static_assert( vi_1_2 < vi_3_5 );
+    static_assert( vi_1_2 != vi_3_5 );
+    static_assert( vi_1_2 <= vi_1_2 );
+    static_assert( vi_1_2 >= vi_1_2 );
+
+    static_assert( vi_1_2.SquaredDistance( vi_3_5 ) == 4 + 9 );
+
+    static_assert( LexicographicalCompare( vi_1_2, vi_3_5 ) < 0 );
+    // Was the copy avoided?
+    static_assert( &LexicographicalMin( vi_1_2, vi_3_5 ) == &vi_1_2 );
+    static_assert( &LexicographicalMin( vi_1_2, vi_3_5 ) == &vi_1_2 );
+
+    constexpr VECTOR2D vd_1_2{ 1.0, 2.0 };
+    constexpr VECTOR2D vd_3_4{ 3.0, 4.0 };
+
+    static_assert( vd_1_2 == VECTOR2D( 1.0, 2.0 ) );
+    static_assert( vd_1_2 != vd_3_4 );
+    static_assert( vd_1_2 < vd_3_4 );
+    static_assert( vd_1_2 <= vd_3_4 );
+    static_assert( vd_3_4 > vd_1_2 );
+
+    // After C++23
+    //static_assert( equals( vd_1_2, vd_3_4, 2.0 ) );
+}
+
 BOOST_AUTO_TEST_CASE( test_cross_product, *boost::unit_test::tolerance( 0.000001 ) )
 {
     VECTOR2I v1(0, 1);

@@ -156,7 +156,7 @@ T rescale( T aNumerator, T aValue, T aDenominator )
 }
 
 template <typename T>
-int sign( T val )
+constexpr int sign( T val )
 {
     return ( T( 0 ) < val) - ( val < T( 0 ) );
 }
@@ -181,7 +181,7 @@ template <class T>
 typename std::enable_if<std::is_floating_point<T>::value, bool>::type
 equals( T aFirst, T aSecond, T aEpsilon = std::numeric_limits<T>::epsilon() )
 {
-    T diff = std::abs( aFirst - aSecond );
+    const T diff = std::abs( aFirst - aSecond );
 
     if( diff < aEpsilon )
     {
