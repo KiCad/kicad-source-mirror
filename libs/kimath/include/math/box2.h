@@ -614,7 +614,7 @@ public:
      * Inflate the rectangle horizontally and vertically by \a aDelta. If \a aDelta
      * is negative the rectangle is deflated.
      */
-    BOX2<Vec>& Inflate( int aDelta )
+    BOX2<Vec>& Inflate( coord_type aDelta )
     {
         Inflate( aDelta, aDelta );
         return *this;

@@ -26,6 +26,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/geometry/geometry.h>
 
 // Code under test
 #include <math/box2.h>
@@ -43,7 +44,7 @@ BOOST_AUTO_TEST_CASE( DefaultConstructor )
     BOOST_TEST( box.GetSize() == VECTOR2I( 0, 0 ) );
 }
 
-BOOST_AUTO_TEST_CASE( Basic )
+BOOST_AUTO_TEST_CASE( BasicInt )
 {
     const BOX2I box( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) );
 
@@ -57,6 +58,19 @@ BOOST_AUTO_TEST_CASE( Basic )
     const BOX2I inflated = BOX2I( box ).Inflate( 1 );
     BOOST_TEST( inflated.GetPosition() == VECTOR2I( 0, 1 ) );
     BOOST_TEST( inflated.GetSize() == VECTOR2I( 5, 6 ) );
+}
+
+BOOST_AUTO_TEST_CASE( BasicDouble )
+{
+    const double tol = 0.000001;
+    const BOX2D  box( VECTOR2D( 1.0, 2.0 ), VECTOR2D( 3.0, 4.0 ) );
+
+    // Inflate by non-integer amount
+    const BOX2D inflated = BOX2D( box ).Inflate( 1.5 );
+    BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
+                           ( inflated.GetPosition() )( VECTOR2D( -0.5, 0.5 ) )( tol ) );
+    BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
+                           ( inflated.GetSize() )( VECTOR2D( 6.0, 7.0 ) )( tol ) );
 }
 
 BOOST_AUTO_TEST_CASE( ByCorners )
