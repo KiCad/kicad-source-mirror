@@ -155,8 +155,6 @@ public:
         }
     }
 
-    // virtual ~VECTOR2();
-
     /**
      * Compute the Euclidean norm of the vector, which is defined as sqrt(x ** 2 + y ** 2).
      *
