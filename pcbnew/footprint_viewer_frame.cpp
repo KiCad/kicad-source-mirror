@@ -811,7 +811,7 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
     // Fetch display and grid settings from Footprint Editor
-    auto* fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fp_edit" );
+    auto* fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
     m_displayOptions = fpedit->m_Display;
     GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
 
@@ -861,7 +861,7 @@ WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* a
 
 COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fp_edit" );
+    auto* cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
     if( cfg )
         return Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
