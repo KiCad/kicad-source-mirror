@@ -22,8 +22,6 @@
  */
 
 #pragma once
-#ifndef LIBS_KIMATH_INCLUDE_HASH_H_
-#define LIBS_KIMATH_INCLUDE_HASH_H_
 
 #include <functional>
 
@@ -31,7 +29,9 @@
  * This is a dummy function to take the final case of hash_combine below
  * @param seed
  */
-static inline void hash_combine( std::size_t &seed ) {}
+static inline constexpr void hash_combine( std::size_t& seed )
+{
+}
 
 /**
  * Combine multiple hashes utilizing previous hash result.
@@ -40,19 +40,17 @@ static inline void hash_combine( std::size_t &seed ) {}
  * @param seed    A seed value input and output for the result.
  * @param val     A hashable object of type T
  */
-template< typename T, typename ... Types >
-static inline void hash_combine( std::size_t &seed, const T &val, const Types &... args )
+template <typename T, typename... Types>
+static inline constexpr void hash_combine( std::size_t& seed, const T& val, const Types&... args )
 {
     seed ^= std::hash<T>()( val ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
     hash_combine( seed, args... );
 }
 
 template <typename... Types>
-static inline std::size_t hash_val( const Types &... args )
+static inline constexpr std::size_t hash_val( const Types&... args )
 {
     std::size_t seed = 0xa82de1c0;
     hash_combine( seed, args... );
     return seed;
 }
-
-#endif /* LIBS_KIMATH_INCLUDE_HASH_H_ */
