@@ -965,5 +965,10 @@ inline constexpr BOX2I BOX2ISafe( const VECTOR2I& aPos, const VECTOR2<S>& aSize 
     return BOX2I( aPos, VECTOR2L( right - aPos.x, bottom - aPos.y ) );
 }
 
+/* KiROUND specialization for double -> int boxes */
+inline constexpr BOX2I KiROUND( const BOX2D& aBoxD )
+{
+    return BOX2I( KiROUND( aBoxD.GetOrigin() ), KiROUND( aBoxD.GetSize() ) );
+}
 
 #endif

@@ -80,8 +80,7 @@ void ANCHOR_DEBUG::ViewDraw( int, VIEW* aView ) const
 
     const COLOR4D textColor = settings.GetLayerColor( LAYER_AUX_ITEMS );
 
-    const BOX2D viewportD = aView->GetViewport();
-    const BOX2I viewport( KiROUND( viewportD.GetPosition() ), KiROUND( viewportD.GetSize() ) );
+    const BOX2I viewport = KiROUND( aView->GetViewport() );
 
     gal.SetIsFill( false );
     gal.SetIsStroke( true );
