@@ -734,21 +734,15 @@ BOX2I EDA_TEXT::GetTextBox( int aLine ) const
 
 bool EDA_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
-    BOX2I    rect = GetTextBox();
-    VECTOR2I location = aPoint;
-
-    rect.Inflate( aAccuracy );
-    RotatePoint( location, GetDrawPos(), -GetDrawRotation() );
-
+    const BOX2I    rect = GetTextBox().GetInflated( aAccuracy );
+    const VECTOR2I location = GetRotated( aPoint, GetDrawPos(), -GetDrawRotation() );
     return rect.Contains( location );
 }
 
 
 bool EDA_TEXT::TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy ) const
 {
-    BOX2I rect = aRect;
-
-    rect.Inflate( aAccuracy );
+    const BOX2I rect = aRect.GetInflated( aAccuracy );
 
     if( aContains )
         return rect.Contains( GetTextBox() );

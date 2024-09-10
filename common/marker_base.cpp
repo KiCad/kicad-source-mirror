@@ -89,8 +89,7 @@ MARKER_BASE::~MARKER_BASE()
 
 bool MARKER_BASE::HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) const
 {
-    BOX2I bbox = GetBoundingBoxMarker();
-    bbox.Inflate( aAccuracy );
+    const BOX2I bbox = GetBoundingBoxMarker().GetInflated( aAccuracy );
 
     // Fast hit test using boundary box. A finer test will be made if requested
     bool hit = bbox.Contains( aHitPosition );

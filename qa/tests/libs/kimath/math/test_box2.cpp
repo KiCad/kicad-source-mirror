@@ -54,10 +54,15 @@ BOOST_AUTO_TEST_CASE( BasicInt )
     // Check the equality operator
     BOOST_CHECK( box == BOX2I( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) ) );
 
-    // Inflate
-    const BOX2I inflated = BOX2I( box ).Inflate( 1 );
+    // Inflate in-place
+    BOX2I inflated = box;
+    inflated.Inflate( 1 );
     BOOST_TEST( inflated.GetPosition() == VECTOR2I( 0, 1 ) );
     BOOST_TEST( inflated.GetSize() == VECTOR2I( 5, 6 ) );
+
+    // GetInflated
+    const BOX2I inflated2 = box.GetInflated( 1 );
+    BOOST_TEST( inflated2 == inflated );
 }
 
 BOOST_AUTO_TEST_CASE( BasicDouble )

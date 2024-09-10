@@ -621,6 +621,24 @@ public:
     }
 
     /**
+     * Get a new rectangle that is this one, inflated by \a aDx and \a aDy.
+     */
+    BOX2<Vec> GetInflated( coord_type aDx, coord_type aDy ) const
+    {
+        BOX2<Vec> ret( *this );
+        ret.Inflate( aDx, aDy );
+        return ret;
+    }
+
+    /**
+     * Get a new rectangle that is this one, inflated by \a aDelta.
+     */
+    BOX2<Vec> GetInflated( coord_type aDelta ) const
+    {
+        return GetInflated( aDelta, aDelta );
+    }
+
+    /**
      * Modify the position and size of the rectangle in order to contain \a aRect.
      *
      * @param aRect is the rectangle to merge with this rectangle.
