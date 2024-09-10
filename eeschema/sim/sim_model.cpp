@@ -388,7 +388,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPOR
     std::string deviceTypeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_FIELD );
     std::string typeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_SUBTYPE_FIELD );
 
-    if( !typeFieldValue.empty() && !deviceTypeFieldValue.empty() )
+    if( !deviceTypeFieldValue.empty() )
     {
         for( TYPE type : TYPE_ITERATOR() )
         {
@@ -400,7 +400,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPOR
         }
     }
 
-    if( typeFieldValue.empty() || deviceTypeFieldValue.empty() )
+    if( typeFieldValue.empty() )
         return TYPE::NONE;
 
     if( aFields.size() > REFERENCE_FIELD )
@@ -556,10 +556,15 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     {
         NULL_REPORTER devnull;
         TYPE          type = aBaseModel->GetType();
+        TYPE          type_override = ReadTypeFromFields( aFields, devnull );
 
-        // No REPORTER here; we're just checking to see if we have an override
-        if( ReadTypeFromFields( aFields, devnull ) != TYPE::NONE )
-            type = ReadTypeFromFields( aFields, devnull );
+        // Check for an override in the case of IBIS models.
+        // The other models require type to be set from the base model.
+        if( dynamic_cast<const SIM_MODEL_IBIS*>( aBaseModel ) &&
+            type_override != TYPE::NONE )
+        {
+            type = type_override;
+        }
 
         if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( aBaseModel ) )
             model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
