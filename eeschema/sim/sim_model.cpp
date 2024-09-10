@@ -394,7 +394,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER& aRe
     std::string deviceTypeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_FIELD );
     std::string typeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_SUBTYPE_FIELD );
 
-    if( deviceTypeFieldValue != "" )
+    if( !typeFieldValue.empty() && !deviceTypeFieldValue.empty() )
     {
         for( TYPE type : TYPE_ITERATOR() )
         {
@@ -406,7 +406,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER& aRe
         }
     }
 
-    if( typeFieldValue != "" )
+    if( typeFieldValue.empty() || deviceTypeFieldValue.empty() )
         return TYPE::NONE;
 
     if( aFields.size() > REFERENCE_FIELD )
