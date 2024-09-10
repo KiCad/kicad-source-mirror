@@ -430,7 +430,7 @@ DESIGN_BLOCK_LIB_TABLE* PROJECT::DesignBlockLibs()
     {
         try
         {
-            tbl = new DESIGN_BLOCK_LIB_TABLE( &GDesignBlockTable );
+            tbl = new DESIGN_BLOCK_LIB_TABLE( &DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() );
             tbl->Load( DesignBlockLibTblName() );
 
             SetElem( ELEM::DESIGN_BLOCK_LIB_TABLE, tbl );

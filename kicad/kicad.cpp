@@ -357,7 +357,7 @@ bool PGM_KICAD::OnPgmInit()
 
     try
     {
-        DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( GDesignBlockTable );
+        DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -372,9 +372,9 @@ bool PGM_KICAD::OnPgmInit()
         DisplayErrorMessage( nullptr, msg, ioe.What() );
     }
 
-    if( managerFrame->IsProjectActive() && GDesignBlockList.GetCount() == 0 )
-        GDesignBlockList.ReadCacheFromFile( Prj().GetProjectPath()
-                                            + wxT( "design-block-info-cache" ) );
+    if( managerFrame->IsProjectActive() && DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetCount() == 0 )
+        DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadCacheFromFile(
+                Prj().GetProjectPath() + wxT( "design-block-info-cache" ) );
 
     frame->Show( true );
     frame->Raise();

@@ -266,6 +266,10 @@ public:
      */
     static bool LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable );
 
+    static DESIGN_BLOCK_LIB_TABLE& GetGlobalLibTable();
+
+    static DESIGN_BLOCK_LIST_IMPL& GetGlobalList();
+
     /**
      * @return the platform specific global design block library path and file name.
      */
@@ -284,8 +288,5 @@ public:
 private:
     friend class DESIGN_BLOCK_LIB_TABLE_GRID;
 };
-
-KICOMMON_API extern DESIGN_BLOCK_LIB_TABLE GDesignBlockTable;
-KICOMMON_API extern DESIGN_BLOCK_LIST_IMPL GDesignBlockList;
 
 #endif // DESIGN_BLOCK_LIB_TABLE_H_

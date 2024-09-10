@@ -44,7 +44,7 @@ DESIGN_BLOCK_LIB_TABLE* SCH_EDIT_FRAME::selectDesignBlockLibTable( bool aOptiona
     // If no project is loaded, always work with the global table
     if( Prj().IsNullProject() )
     {
-        DESIGN_BLOCK_LIB_TABLE* ret = &GDesignBlockTable;
+        DESIGN_BLOCK_LIB_TABLE* ret = &DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable();
 
         if( aOptional )
         {
@@ -76,7 +76,7 @@ DESIGN_BLOCK_LIB_TABLE* SCH_EDIT_FRAME::selectDesignBlockLibTable( bool aOptiona
 
     switch( dlg.GetSelection() )
     {
-    case 0: return &GDesignBlockTable;
+    case 0: return &DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable();
     case 1: return Prj().DesignBlockLibs();
     default: return nullptr;
     }
@@ -99,7 +99,7 @@ wxString SCH_EDIT_FRAME::createNewDesignBlockLibrary( const wxString&         aL
 
     wxFileName fn;
     bool       doAdd = false;
-    bool       isGlobal = ( aTable == &GDesignBlockTable );
+    bool       isGlobal = ( aTable == &DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() );
     wxString   initialPath = aProposedName;
 
     if( initialPath.IsEmpty() )
@@ -196,7 +196,7 @@ bool SCH_EDIT_FRAME::AddDesignBlockLibrary( const wxString&         aFilename,
     if( aTable == nullptr )
         return wxEmptyString;
 
-    bool isGlobal = ( aTable == &GDesignBlockTable );
+    bool isGlobal = ( aTable == &DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() );
 
     wxFileName fn( aFilename );
 
@@ -244,7 +244,8 @@ bool SCH_EDIT_FRAME::AddDesignBlockLibrary( const wxString&         aFilename,
         aTable->InsertRow( row );
 
         if( isGlobal )
-            GDesignBlockTable.Save( DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName() );
+            DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable().Save(
+                    DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName() );
         else
             Prj().DesignBlockLibs()->Save( Prj().DesignBlockLibTblName() );
     }

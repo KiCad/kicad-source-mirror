@@ -672,6 +672,18 @@ bool DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable )
 }
 
 
+DESIGN_BLOCK_LIB_TABLE& DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable()
+{
+    return GDesignBlockTable;
+}
+
+
+DESIGN_BLOCK_LIST_IMPL& DESIGN_BLOCK_LIB_TABLE::GetGlobalList()
+{
+    return GDesignBlockList;
+}
+
+
 wxString DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName()
 {
     wxFileName fn;

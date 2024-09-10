@@ -93,9 +93,9 @@ DESIGN_BLOCK_TREE_MODEL_ADAPTER::getDesignBlocks( EDA_BASE_FRAME* aParent,
 {
     std::vector<LIB_TREE_ITEM*> libList;
 
+    auto fullListStart = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetList().begin();
+    auto fullListEnd = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetList().end();
 
-    auto                               fullListStart = GDesignBlockList.GetList().begin();
-    auto                               fullListEnd = GDesignBlockList.GetList().end();
     std::unique_ptr<DESIGN_BLOCK_INFO> dummy =
             std::make_unique<DESIGN_BLOCK_INFO_IMPL>( aLibName, wxEmptyString );
 

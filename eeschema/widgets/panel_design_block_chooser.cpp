@@ -69,7 +69,7 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
     // Load design block files:
     WX_PROGRESS_REPORTER* progressReporter =
             new WX_PROGRESS_REPORTER( aParent, _( "Loading Design Block Libraries" ), 3 );
-    GDesignBlockList.ReadDesignBlockFiles( libs, nullptr, progressReporter );
+    DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( libs, nullptr, progressReporter );
 
     // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use
     // Destroy() followed by wxSafeYield() because on Windows, APP_PROGRESS_DIALOG and
@@ -78,7 +78,7 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
     // WX_PROGRESS_REPORTER results in incorrect modal or quasi modal behavior.
     delete progressReporter;
 
-    if( GDesignBlockList.GetErrorCount() )
+    if( DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetErrorCount() )
         displayErrors( aFrame );
 
     m_adapter = DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( m_frame, libs );
@@ -260,12 +260,13 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
     if( aProgress )
     {
         WX_PROGRESS_REPORTER progressReporter( this, _( "Updating Design Block Libraries" ), 2 );
-        GDesignBlockList.ReadDesignBlockFiles( fpTable, nullptr, &progressReporter );
+        DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( fpTable, nullptr,
+                                                                      &progressReporter );
         progressReporter.Show( false );
     }
     else
     {
-        GDesignBlockList.ReadDesignBlockFiles( fpTable, nullptr, nullptr );
+        DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( fpTable, nullptr, nullptr );
     }
 
     rebuildHistoryNode();
@@ -392,8 +393,8 @@ void PANEL_DESIGN_BLOCK_CHOOSER::rebuildHistoryNode()
 
     for( const LIB_ID& lib : m_historyList )
     {
-        LIB_TREE_ITEM* fp_info =
-                GDesignBlockList.GetDesignBlockInfo( lib.GetLibNickname(), lib.GetLibItemName() );
+        LIB_TREE_ITEM* fp_info = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetDesignBlockInfo(
+                lib.GetLibNickname(), lib.GetLibItemName() );
 
         // this can be null, for example, if the design block has been deleted from a library.
         if( fp_info != nullptr )
@@ -416,7 +417,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::displayErrors( wxTopLevelWindow* aWindow )
 
     wxString msg;
 
-    while( std::unique_ptr<IO_ERROR> error = GDesignBlockList.PopError() )
+    while( std::unique_ptr<IO_ERROR> error = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().PopError() )
     {
         wxString tmp = EscapeHTML( error->Problem() );
 

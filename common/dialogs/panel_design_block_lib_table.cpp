@@ -1157,7 +1157,7 @@ size_t PANEL_DESIGN_BLOCK_LIB_TABLE::m_pageNdx = 0;
 
 void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
-    DESIGN_BLOCK_LIB_TABLE* globalTable = &GDesignBlockTable;
+    DESIGN_BLOCK_LIB_TABLE* globalTable = &DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable();
     wxString                globalTablePath = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
     DESIGN_BLOCK_LIB_TABLE* projectTable = aKiway->Prj().DesignBlockLibs();
     wxString                projectTablePath = aKiway->Prj().DesignBlockLibTblName();
