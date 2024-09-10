@@ -123,7 +123,6 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &ACTIONS::showFootprintLibTable ) )
     {
-
         try     // Pcb frame was not available, try to start it
         {
             KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
@@ -136,6 +135,22 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
             // _pcbnew.kiface is not available: it contains the library table dialog.
             // Do nothing here.
             // A error message is displayed after trying to load _pcbnew.kiface.
+        }
+    }
+    else if( aEvent.IsAction( &ACTIONS::showDesignBlockLibTable ) )
+    {
+        try     // Kicad frame was not available, try to start it
+        {
+            KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
+
+            if( kiface )
+                kiface->CreateKiWindow( m_frame, DIALOG_DESIGN_BLOCK_LIBRARY_TABLE, &m_frame->Kiway() );
+        }
+        catch( ... )
+        {
+            // _eeschema.kiface is not available: it contains the library table dialog.
+            // Do nothing here.
+            // A error message is displayed after trying to load _eeschema.kiface.
         }
     }
 
@@ -342,6 +357,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ConfigurePaths,     ACTIONS::configurePaths.MakeEvent() );
     Go( &COMMON_CONTROL::ShowLibraryTable,   ACTIONS::showSymbolLibTable.MakeEvent() );
     Go( &COMMON_CONTROL::ShowLibraryTable,   ACTIONS::showFootprintLibTable.MakeEvent() );
+    Go( &COMMON_CONTROL::ShowLibraryTable,   ACTIONS::showDesignBlockLibTable.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showSymbolBrowser.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintBrowser.MakeEvent() );

@@ -40,6 +40,7 @@
 #include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_grid_settings.h>
 #include <dialogs/panel_simulator_preferences.h>
+#include <dialogs/panel_design_block_lib_table.h>
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
 #include <settings/settings_manager.h>
@@ -194,6 +195,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case DIALOG_SCH_LIBRARY_TABLE:
             InvokeSchEditSymbolLibTable( aKiway, aParent );
+            // Dialog has completed; nothing to return.
+            return nullptr;
+
+        case DIALOG_DESIGN_BLOCK_LIBRARY_TABLE:
+            InvokeEditDesignBlockLibTable( aKiway, aParent );
             // Dialog has completed; nothing to return.
             return nullptr;
 

@@ -337,6 +337,8 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showSymbolLibTable );
+    if( ADVANCED_CFG::GetCfg().m_EnableDesignBlocks )
+        prefsMenu->Add( ACTIONS::showDesignBlockLibTable );
     prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();

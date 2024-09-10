@@ -358,6 +358,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
+    dialogs/panel_design_block_lib_table_base.cpp
+    dialogs/panel_design_block_lib_table.cpp
     dialogs/panel_embedded_files.cpp
     dialogs/panel_embedded_files_base.cpp
     dialogs/panel_gal_display_options.cpp

@@ -103,4 +103,7 @@ private:
             m_supportedDesignBlockFiles;
 };
 
+
+void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent );
+
 #endif // PANEL_DESIGN_BLOCK_LIB_TABLE_H

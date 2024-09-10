@@ -1153,3 +1153,57 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
 
 
 size_t PANEL_DESIGN_BLOCK_LIB_TABLE::m_pageNdx = 0;
+
+
+void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
+{
+    DESIGN_BLOCK_LIB_TABLE* globalTable = &GDesignBlockTable;
+    wxString                globalTablePath = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
+    DESIGN_BLOCK_LIB_TABLE* projectTable = aKiway->Prj().DesignBlockLibs();
+    wxString                projectTablePath = aKiway->Prj().DesignBlockLibTblName();
+    wxString                msg;
+
+    DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Design Block Libraries" ) );
+
+    if( aKiway->Prj().IsNullProject() )
+        projectTable = nullptr;
+
+    dlg.InstallPanel( new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable, globalTablePath,
+                                                        projectTable, projectTablePath,
+                                                        aKiway->Prj().GetProjectPath() ) );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( dlg.m_GlobalTableChanged )
+    {
+        try
+        {
+            globalTable->Save( globalTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    if( projectTable && dlg.m_ProjectTableChanged )
+    {
+        try
+        {
+            projectTable->Save( projectTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    std::string payload = "";
+    aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );
+    aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );
+
+    return;
+}
