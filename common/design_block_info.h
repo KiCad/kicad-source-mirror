@@ -146,9 +146,6 @@ public:
 
     virtual ~DESIGN_BLOCK_LIST() {}
 
-    virtual void WriteCacheToFile( const wxString& aFilePath ){};
-    virtual void ReadCacheFromFile( const wxString& aFilePath ){};
-
     /**
      * @return the number of items stored in list
      */

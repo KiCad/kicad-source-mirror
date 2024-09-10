@@ -83,9 +83,6 @@ public:
     DESIGN_BLOCK_LIST_IMPL();
     virtual ~DESIGN_BLOCK_LIST_IMPL(){};
 
-    void WriteCacheToFile( const wxString& aFilePath ) override;
-    void ReadCacheFromFile( const wxString& aFilePath ) override;
-
     bool ReadDesignBlockFiles( DESIGN_BLOCK_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
                                PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 

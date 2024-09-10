@@ -326,6 +326,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_embed_files.cpp
     dialogs/dialog_global_lib_table_config.cpp
     dialogs/dialog_global_lib_table_config_base.cpp
+    dialogs/dialog_global_design_block_lib_table_config.cpp
     dialogs/dialog_grid_settings.cpp
     dialogs/dialog_grid_settings_base.cpp
     dialogs/dialog_hotkey_list.cpp

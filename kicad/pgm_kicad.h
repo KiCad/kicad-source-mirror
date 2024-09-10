@@ -28,9 +28,6 @@
 #include <pgm_base.h>
 #include <bin_mod.h>
 
-class DESIGN_BLOCK_LIB_TABLE;
-class DESIGN_BLOCK_LIST_IMPL;
-
 /**
  * PGM_KICAD
  * extends PGM_BASE to bring in FileHistory() and PdfBrowser() which were moved from EDA_APP

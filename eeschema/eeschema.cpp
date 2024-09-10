@@ -33,10 +33,12 @@
 #include "eeschema_helpers.h"
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
+#include <design_block_lib_table.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_chooser_frame.h>
 #include <symbol_lib_table.h>
+#include <dialogs/dialog_global_design_block_lib_table_config.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_grid_settings.h>
 #include <dialogs/panel_simulator_preferences.h>
@@ -346,6 +348,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
 private:
     bool loadGlobalLibTable();
+    bool loadGlobalDesignBlockLibTable();
 
     std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
 
@@ -386,7 +389,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
     start_common( aCtlBits );
 
-    if( !loadGlobalLibTable() )
+    if( !loadGlobalLibTable() || !loadGlobalDesignBlockLibTable() )
     {
         // we didnt get anywhere deregister the settings
         aProgram->GetSettingsManager().FlushAndRelease( symSettings, false );
@@ -447,6 +450,51 @@ bool IFACE::loadGlobalLibTable()
             wxString msg =
                     _( "An error occurred attempting to load the global symbol library table.\n"
                        "Please edit this global symbol library table in Preferences menu." );
+
+            DisplayErrorMessage( nullptr, msg, ioe.What() );
+        }
+    }
+
+    return true;
+}
+
+
+bool IFACE::loadGlobalDesignBlockLibTable()
+{
+    wxFileName fn = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
+
+    if( !fn.FileExists() )
+    {
+        if( !( m_start_flags & KFCTL_CLI ) )
+        {
+            // Ensure the splash screen does not hide the dialog:
+            Pgm().HideSplash();
+
+            DIALOG_GLOBAL_DESIGN_BLOCK_LIB_TABLE_CONFIG dbDialog( nullptr );
+
+            if( dbDialog.ShowModal() != wxID_OK )
+                return false;
+        }
+    }
+    else
+    {
+        try
+        {
+            // The global table is not related to a specific project.  All projects
+            // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+            // of avoiding anything project specific is not violated here.
+            if( !DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable(
+                        DESIGN_BLOCK_LIB_TABLE::GetGlobalLibTable() ) )
+                return false;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // if we are here, a incorrect global design block library table was found.
+            // Incorrect global design block library table is not a fatal error:
+            // the user just has to edit the (partially) loaded table.
+            wxString msg = _(
+                    "An error occurred attempting to load the global design block library table.\n"
+                    "Please edit this global design block library table in Preferences menu." );
 
             DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
