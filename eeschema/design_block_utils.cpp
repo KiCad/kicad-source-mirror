@@ -202,9 +202,9 @@ bool SCH_EDIT_FRAME::AddDesignBlockLibrary( const wxString&         aFilename,
 
     if( aFilename.IsEmpty() )
     {
-        if( !LibraryFileBrowser( true, fn, FILEEXT::KiCadFootprintLibPathWildcard(),
-                                 FILEEXT::KiCadFootprintLibPathExtension, true, isGlobal,
-                                 PATHS::GetDefaultUserFootprintsPath() ) )
+        if( !LibraryFileBrowser( true, fn, FILEEXT::KiCadDesignBlockLibPathWildcard(),
+                                 FILEEXT::KiCadDesignBlockLibPathExtension, true, isGlobal,
+                                 PATHS::GetDefaultUserDesignBlocksPath() ) )
         {
             return false;
         }

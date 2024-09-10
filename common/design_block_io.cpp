@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <common.h>
 #include <i18n_utility.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
@@ -136,12 +137,9 @@ const DESIGN_BLOCK_IO::IO_FILE_DESC DESIGN_BLOCK_IO::GetLibraryDesc() const
 
 long long DESIGN_BLOCK_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
-    wxFileName fn( aLibraryPath );
+    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadDesignBlockPathExtension );
 
-    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
-        return fn.GetModificationTime().GetValue().GetValue();
-    else
-        return wxDateTime( 0.0 ).GetValue().GetValue();
+    return TimestampDir( aLibraryPath, fileSpec );
 }
 
 
