@@ -381,7 +381,13 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
 
     fclose( fp );
     unsigned int digest[5];
-    dblock.get_digest( digest );
+    // V8 only
+    // Boost 1.86 and later changed digest_type from uchar[20] from int[5]
+    // But KiCad 8.99 and later use MurmurHash3 here, so just do a fairly ugly cast to keep
+    // this going for another few months.
+    static_assert( sizeof( digest ) == sizeof( boost::uuids::detail::sha1::digest_type& ),
+                   "SHA1 digest size mismatch" );
+    dblock.get_digest( reinterpret_cast<boost::uuids::detail::sha1::digest_type&>( digest ) );
 
     // ensure MSB order
     for( int i = 0; i < 5; ++i )
