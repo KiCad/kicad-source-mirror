@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-06-03 13:09+0000\n"
-"Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/"
-">\n"
+"PO-Revision-Date: 2024-09-12 01:09+0000\n"
+"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -490,7 +490,6 @@ msgid "Render CAD Colors"
 msgstr "Kết xuất màu CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
-#, fuzzy
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Sử dụng kiểu màu CAD dựa trên màu khuếch tán của vật liệu"
 
@@ -557,9 +556,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Ẩn/hiện trình quản lý giao diện"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Board Body"
-msgstr "Bo mạch"
+msgstr "Phần khối bo mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show board body"
@@ -578,17 +576,14 @@ msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Lớp đồng/chuẩn cho bề mặt bản mạch"
+msgstr "Hiển thị lớp đồng mạ / màu phủ bề mặt"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Adhesive"
 msgstr "Lớp keo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show adhesive"
 msgstr "Hiện lớp keo"
 
@@ -601,90 +596,76 @@ msgid "Show solder paste"
 msgstr "Hiện lớp kem hàn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "Lớp chữ mặt trên"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Lớp Front silk phía trước"
+msgstr "Hiển thị lớp in chữ trên cùng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "Lớp chữ mặt đáy"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Lớp Front silk phía trước"
+msgstr "Hiển thị lớp nền in chữ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Lớp solder mask phía trước"
+msgstr "Hiển thị lớp phủ che đồng trên cùng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Lớp solder mask phía trước"
+msgstr "Hiển thị lớp phủ che đồng dưới cùng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "User.Drawings"
-msgstr "User.Drawings"
+msgstr "Lớp vẽ ghi chú kỹ thuật"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Hiển thị các lớp nhận xét và bản vẽ"
+msgstr "Hiển thị các lớp vẽ ghi chú kỹ thuật"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Comments"
-msgstr "User.Comments"
+msgstr "Lớp vẽ ghi chú"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Hiển thị các lớp solder mask"
+msgstr "Hiển thị các lớp vẽ ghi chú"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "User.Eco1"
-msgstr "User.1"
+msgstr "Lớp vẽ đường phay rãnh 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Hiển thị các lớp ECO"
+msgstr "Hiển thị lớp vẽ phay rãnh 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "User.Eco2"
-msgstr "User.2"
+msgstr "Lớp vẽ phay rãnh 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Hiển thị các lớp ECO"
+msgstr "Hiển thị lớp vẽ phay rãnh 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Các Pad xuyên lỗ"
+msgstr "Các dạng mũi khoan xuyên lỗ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "SMD Models"
-msgstr "Mô hình SMD"
+msgstr "Các dạng linh kiện dán"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "Virtual Models"
@@ -692,16 +673,15 @@ msgstr "Mô hình ảo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Models not in POS File"
-msgstr "Mô hình không có trong tệp POS"
+msgstr "Mô hình không có trong tệp vị trí"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Models marked DNP"
-msgstr "Mô hình được đánh dấu DNP"
+msgstr "Phân loại đánh dấu không sử dụng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Hiện thị hộp bao khung"
+msgstr "Mẫu đường bao khung vuông"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -715,67 +695,60 @@ msgstr "Các giá trị"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show footprint values"
-msgstr "Hiện các giá trị footprint"
+msgstr "Hiện giá trị bản in của chân linh kiện"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "References"
-msgstr "Tham chiếu"
+msgstr "Tham khảo giá trị"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprint references"
-msgstr "Hiện footprint tham chiếu"
+msgstr "Hiện giá trị tham khảo bản in chân linh kiện"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Footprint Text"
-msgstr "Văn bản trên Footprint"
+msgstr "Chữ của bản in chân linh kiện"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show all footprint text"
-msgstr "Văn bản trên Footprint"
+msgstr "Hiển thị tất cả chữ trên bản in chân linh kiện"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "Lớp chữ ngoài rìa bo mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Do not clip silk layers to board outline"
-msgstr "Không kẹp các lớp lụa vào đường viền bo mạch"
+msgstr "Không để chạm lớp in chữ vào đường bao ngoài bo mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "3D Axis"
-msgstr "Hệ tọa độ trong không gian 3 chiều"
+msgstr "Trục 3 chiều"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background Start"
-msgstr "Nền"
+msgstr "Nền khởi đầu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Màu nền bắt đầu chuyển màu"
+msgstr "Màu đầu tiên để tô nền màu dạng sóng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Background End"
-msgstr "Nền"
+msgstr "Nền sau cùng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 msgid "Background gradient end color"
-msgstr "Lớp nền trên cùng"
+msgstr "Màu cuối để tô nền màu dạng sóng"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:207
 msgid "Use board stackup colors"
-msgstr "Sử dụng màu stackup lên bảng"
+msgstr "Tô màu cho định vị các lớp của bo mạch"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:141
 #, c-format
@@ -785,23 +758,23 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Lưu và khôi phục sự kết hợp màu sắc và khả năng hiển thị.\n"
-"Sử dụng %s+Tab để kích hoạt bộ chọn.\n"
-"Các Tab liên tiếp khi nhấn giữ %s sẽ chuyển qua các cài đặt trước trong cửa "
-"sổ bật lên."
+"Lưu và khôi phục phức hợp màu sắc và hiển thị,\n"
+"Sử dụng %s+Tab để kích hoạt lựa chọn.\n"
+"Nhấn Tab liên tiếp trong khi nhấn giữ %s sẽ di chuyển giữa những cài đặt có "
+"sẵn trong cửa sổ hiện ra."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Lưu và khôi phục hướng xem và thu phóng.\n"
+"Lưu và khôi phục vị trí nhìn và thu phóng.\n"
 "Sử dụng %s+Tab để kích hoạt bộ chọn.\n"
-"Các Tab liên tiếp trong khi nhấn giữ %s sẽ chuyển qua các khung nhìn trong "
-"cửa sổ bật lên."
+"Nhấn Tab liên tiếp trong khi nhấn giữ %s sẽ di chuyển giữa các khung nhìn "
+"trong cửa sổ hiện ra."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:469
 msgid "Left double click or middle click to change color"
@@ -809,7 +782,9 @@ msgstr "Nhấp đúp chuột trái hoặc nhấp chuột giữa để thay đổ
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:479
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr "Bỏ chọn 'Sử dụng màu xếp chồng bảng' để cho phép chỉnh sửa màu."
+msgstr ""
+"Bỏ chọn 'Sử dụng màu có sẵn cho định vị các lớp bo mạch' để cho phép chỉnh "
+"sửa màu khác."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:529
 #: pcbnew/widgets/appearance_controls.cpp:2176
@@ -819,7 +794,7 @@ msgstr "Hiện hoặc ẩn%s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:596
 #: pcbnew/widgets/appearance_controls.cpp:2519
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
 msgstr "Giá trị đặt trước (%s+Tab):"
 
@@ -827,29 +802,25 @@ msgstr "Giá trị đặt trước (%s+Tab):"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1480
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1901
 #: pcbnew/widgets/appearance_controls.cpp:2541
-#, fuzzy
 msgid "Save preset..."
-msgstr "Lưu với tên..."
+msgstr "Lưu giá trị đặt trước..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:611
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1481
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1902
 #: pcbnew/widgets/appearance_controls.cpp:2542
-#, fuzzy
 msgid "Delete preset..."
-msgstr "Xóa chế độ xem ..."
+msgstr "Xóa giá trị đặt trước ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:717
 #: pcbnew/widgets/appearance_controls.cpp:2647
-#, fuzzy
 msgid "Layer preset name:"
-msgstr "Tên thành viên:"
+msgstr "Tên các lớp đặt trước:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:2648
-#, fuzzy
 msgid "Save Layer Preset"
-msgstr "Di chuyển bo mạch lên trên"
+msgstr "Lưu các lớp đặt trước"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:733
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1643
@@ -869,34 +840,31 @@ msgstr "Cài đặt trước"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1680
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2081
 #: pcbnew/widgets/appearance_controls.cpp:2719
-#, fuzzy
 msgid "Delete Preset"
-msgstr "Xóa điểm đánh dấu"
+msgstr "Xóa cài đặt trước"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:769
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1681
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2082
 #: pcbnew/widgets/appearance_controls.cpp:2720
-#, fuzzy
 msgid "Select preset:"
-msgstr "net đã chọn:"
+msgstr "Lựa chọn cài đặt trước sẵn có:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:827
 #: pcbnew/widgets/appearance_controls.cpp:2818
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Chế độ xem (%s+Tab):"
+msgstr "Các khung nhìn (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2827
-#, fuzzy
 msgid "Save viewport..."
-msgstr "Lưu với tên..."
+msgstr "Lưu các khung nhìn..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:837
 #: pcbnew/widgets/appearance_controls.cpp:2828
 msgid "Delete viewport..."
-msgstr "Xóa chế độ xem ..."
+msgstr "Xóa các khung nhìn ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
 #: pcbnew/widgets/appearance_controls.cpp:2877
@@ -905,27 +873,23 @@ msgstr "Tên khung nhìn:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:869
 #: pcbnew/widgets/appearance_controls.cpp:2877
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Lưu Báo cáo vào Tệp tin"
+msgstr "Lưu khung nhìn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:908
 #: pcbnew/widgets/appearance_controls.cpp:2916
-#, fuzzy
 msgid "Viewports"
-msgstr "Báo cáo"
+msgstr "Các khung nhìn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:917
 #: pcbnew/widgets/appearance_controls.cpp:2925
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "Xóa điểm đánh dấu"
+msgstr "Xóa khung nhìn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:918
 #: pcbnew/widgets/appearance_controls.cpp:2926
-#, fuzzy
 msgid "Select viewport:"
-msgstr "net đã chọn:"
+msgstr "Lựa chọn khung nhìn:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
@@ -946,7 +910,7 @@ msgid "(unsaved)"
 msgstr "(chưa lưu)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "All supported files (%s)"
 msgstr "Tất cả các dạng tệp tin được hỗ trợ (%s)"
 
@@ -968,55 +932,48 @@ msgid "Render Options"
 msgstr "Các Tùy chọn Render"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Xén lớp silkscreen tại via annulus"
+msgstr "Xén lớp in chữ tại vòng đồng lỗ xuyên"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Xén lớp silkscreen tại via annulus"
+msgstr "Xén lớp in chữ tại rìa phần phủ che đồng"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
-msgstr "Hiển thị các khu vực đã lấp đầy trong các khu vực"
+msgstr "Hiển thị các chỗ đã lấp đầy trong các vùng phủ."
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "Sử dụng màu đồng trần cho lớp đồng không mạ"
+msgstr "Sử dụng màu đồng trần cho phần đồng không mạ (chậm)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "Sử dụng các màu khác nhau cho đồng mạ và đồng không mạ. (Chậm)"
+msgstr "Sử dụng các màu khác nhau cho phần đồng mạ và không mạ. (Chậm)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
 msgstr "Thuộc tính vật liệu:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "Realistic"
-msgstr "Chế độ thực tế"
+msgstr "Phong cách thực"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "Solid colors"
-msgstr "Màu sắc lựa chọn"
+msgstr "Màu sắc tô đầy"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "CAD colors"
-msgstr "Sao chép màu sắc"
+msgstr "Màu sắc vẽ CAD"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
-msgstr "Tùy chọn máy ảnh"
+msgstr "Tùy chọn góc nhìn"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Tăng xoay vòng:"
+msgstr "Góc xoay thêm:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:92
 #: pcb_calculator/widgets/unit_selector.cpp:130
@@ -1033,9 +990,8 @@ msgid "deg"
 msgstr "độ"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Trong khi di chuyển"
+msgstr "Vẽ lại trong khi di chuyển"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
@@ -1043,27 +999,24 @@ msgstr "Tốc độ vẽ lại:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Các Tùy chọn Render"
+msgstr "Lựa chọn cách tạo ảnh đồ họa"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Hiển thị các hộp giới hạn mô hình"
+msgstr "Hiển thị các đường hình hộp bao ngoài"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Hiển thị độ dày lớp đồng"
+msgstr "Hiển thị độ dày lớp đồng và kỹ thuật(rất chậm)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Phần tử được tô sáng"
+msgstr "Tô sáng những phần được cuộn ngang qua"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
-msgstr "Khử răng cưa:"
+msgstr "Khử bỏ răng cưa:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
@@ -1083,7 +1036,7 @@ msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr "3D-Viewer phải được đóng và mở lại để áp dụng cài đặt này"
+msgstr "Hiển thị 3D phải được đóng và mở lại để áp dụng cài đặt này"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -1103,34 +1056,28 @@ msgstr "Vô hiệu hóa dày"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
-msgstr "Vô hiệu hóa vias"
+msgstr "Vô hiệu hóa lỗ xuyên"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
 msgstr "Vô hiệu hóa các lỗ"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Kết cấu thủ tục"
+msgstr "Tiến trình tạo hoa văn (chậm)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
-#, fuzzy
 msgid "Add floor (slow)"
-msgstr "Thêm tầng"
+msgstr "Thêm tầng (chậm)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
 msgstr "Khử răng cưa"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
-"Áp dụng phản xạ Môi trường xung quanh không gian màn hình và Chiếu sáng toàn "
-"cục khi render cuối cùng (sẽ chậm hơn)"
+msgstr "Phản xạ ảnh chiếu không gian nền xung quanh và ánh sáng bao khỏa (chậm)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -1138,10 +1085,9 @@ msgstr "Số lượng mẫu"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
-msgstr "Hệ số chênh lệch%"
+msgstr "Yếu tố dàn trải%"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
-#, fuzzy
 msgid "Recursion Level"
 msgstr "Mức đệ quy"
 
@@ -1154,11 +1100,10 @@ msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
-"Số lượng tia sáng sẽ được truyền vào hướng ánh sáng, để đánh giá một điểm "
+"Số lượng tia sáng sẽ được truyền, đi về hướng ánh sáng, để đánh giá một điểm "
 "bóng"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
-#, fuzzy
 msgid "Reflections:"
 msgstr "Sự Phản chiếu"
 
@@ -1175,9 +1120,8 @@ msgstr ""
 "cao hơn sẽ cải thiện kết quả, đặc biệt là trên các bo mạch rất trong suốt)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
-#, fuzzy
 msgid "Refractions:"
-msgstr "Sự khúc xạ"
+msgstr "Sự khúc xạ:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:103
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -1188,13 +1132,12 @@ msgid "Number of bounces that a ray can hit reflective objects"
 msgstr "Số lần dội lại mà một tia có thể chạm vào các vật thể phản xạ"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
-#, fuzzy
 msgid "Lights Configuration"
 msgstr "Cấu hình ánh sáng"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
-msgstr "Ánh sáng camera xung quanh:"
+msgstr "Ánh sáng góc nhìn xung quanh:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:146
 msgid "Top light:"
@@ -1206,15 +1149,13 @@ msgstr "Ánh sáng phía dưới:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:184
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:201
-#, fuzzy
 msgid "Elevation (deg)"
-msgstr "Góc nâng (độ)"
+msgstr "Nâng thêm (độ)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:188
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:205
-#, fuzzy
 msgid "Azimuth (deg)"
-msgstr "Góc phương vị (độ)"
+msgstr "Phương vị (độ)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
@@ -1249,14 +1190,12 @@ msgid "Light 8:"
 msgstr "Ánh sáng 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:414
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Cài đặt Xem trước"
+msgstr "Cài đặt 3D Xem trước"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:414
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Độ dày lưới:"
+msgstr "Độ dày bo mạch:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:229
@@ -1330,7 +1269,7 @@ msgstr "Xoay"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr "Offset"
+msgstr "Cân chỉnh"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
@@ -1348,8 +1287,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
-"Ẩn hoặc hiện bo mạch\n"
-"Nếu bị ẩn, chỉ hiển thị các lớp đồng và màn lụa."
+"Ẩn hoặc hiện phần thân bo mạch\n"
+"Nếu bị ẩn, chỉ hiển thị các lớp đồng và lớp in chữ."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -1364,19 +1303,16 @@ msgstr "Chuyển đổi hình ảnh"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Bộ chuyển đổi Bitmap thành linh kiện"
+msgstr "Chuyển đổi hình ảnh KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:233
-#, fuzzy
 msgid "Image files"
 msgstr "Các file Ảnh"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
 #: pcbnew/menubar_pcb_editor.cpp:73
-#, fuzzy
 msgid "Open Recent"
 msgstr "Mở tài liệu hiện có"
 
@@ -1400,13 +1336,13 @@ msgstr "Các file Ảnh"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:445
 msgid "Create Drawing Sheet File"
-msgstr "Tạo tệp Trang vẽ"
+msgstr "Tạo tệp Trang vẽ kỹ thuật"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:462
 #: bitmap2component/bitmap2cmp_frame.cpp:498
 #: bitmap2component/bitmap2cmp_frame.cpp:533
 #: bitmap2component/bitmap2cmp_frame.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
 msgstr "Tệp \"%s\" không thể được tạo ra."
 
@@ -1416,11 +1352,11 @@ msgstr "Tạo Tệp PostScript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:518
 msgid "Create Symbol Library"
-msgstr "Tạo Thư viện Symbol"
+msgstr "Tạo Thư viện Biểu Tượng"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:553
 msgid "Create Footprint Library"
-msgstr "Tạo Thư viện Footprint"
+msgstr "Tạo Thư viện Kiểu Chân linh kiện"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
@@ -1580,7 +1516,7 @@ msgstr "Không thể xuất sang bộ nhớ tạm"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:540
 msgid "Error allocating memory for potrace bitmap"
-msgstr "Lỗi phân bổ bộ nhớ cho potrace bitmap"
+msgstr "Lỗi phân bổ bộ nhớ cho tô vẽ đường ảnh bitmap"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:567
 #: common/widgets/wx_html_report_panel_base.cpp:41
@@ -1601,14 +1537,12 @@ msgid "Greyscale Picture"
 msgstr "Ảnh màu xám"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
-#, fuzzy
 msgid "Black && White Picture"
-msgstr "Ảnh Đen Trắng"
+msgstr "Ảnh Đen và Trắng"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
-#, fuzzy
 msgid "Image Information"
-msgstr "Thông tin Bitmap"
+msgstr "Thông tin hình ảnh"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:45
 msgid "Image size:"
@@ -1646,19 +1580,16 @@ msgid "bits"
 msgstr "Bit"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Chọn Ảnh"
+msgstr "Chọn Ảnh nguồn"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
-#, fuzzy
 msgid "Output Size"
-msgstr "Đầu ra"
+msgstr "Kích cỡ đầu ra"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:107
-#, fuzzy
 msgid "Lock height / width ratio"
-msgstr "Khóa Tỷ lệ chiều cao/chiều rộng"
+msgstr "Khóa Tỷ lệ chiều cao / chiều rộng"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:113
 #: common/dialogs/dialog_page_settings_base.cpp:37
@@ -1686,12 +1617,10 @@ msgstr "300"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:25
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
-#, fuzzy
 msgid "Options"
 msgstr "Tuỳ chọn"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
-#, fuzzy
 msgid "Black / white threshold:"
 msgstr "Ngưỡng đen / trắng:"
 
@@ -1713,54 +1642,48 @@ msgstr "Lớp Pcb cho Đồ họa"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr "Lớp Front silk phía trước"
+msgstr "Lớp in chữ trên cùng"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr "Lớp solder mask phía trước"
+msgstr "Lớp che phủ đồng trên cùng"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Dưới"
+msgstr "Lớp trên cùng vị trí linh kiện"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
-msgstr "Lớp người dùng Eco1"
+msgstr "Lớp vẽ ghi chú kỹ thuật"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "Lớp người dùng Eco1"
+msgstr "Lớp vẽ ghi chú"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
-msgstr "Lớp người dùng Eco1"
+msgstr "Lớp vẽ đường phay 1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco2"
-msgstr "Lớp người dùng Eco2"
+msgstr "Lớp vẽ đường phay 2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Tô thân biểu tượng"
+msgstr "Biểu tượng (tệp .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (tệp .kicad_mod)"
+msgstr "Chân gắn linh kiện (tệp .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Postscript (.ps file)"
-msgstr "Postscript (tệp .ps)"
+msgstr "Xuất kiểu mã hóa (tệp .ps)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Biểu trưng cho khối tiêu đề (tệp .kicad_wks)"
+msgstr "Bản vẽ kỹ thuật (tệp .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:171
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
@@ -1777,9 +1700,8 @@ msgid "Export to Clipboard"
 msgstr "Xuất ra Bộ nhớ tạm"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "Nền"
+msgstr "Tác vụ chạy nền"
 
 #: common/common.cpp:290
 #, c-format
@@ -1788,26 +1710,24 @@ msgid ""
 msgstr "Không thể Mở rộng biến môi trường : thiếu '%c' ở vị trí %u trong '%s'."
 
 #: common/common.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Không thể làm cho đường dẫn '%s' tuyệt đối đối với '%s'."
 
 #: common/common.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
 msgstr "Thư mục đầu ra '%s' đã được tạo."
 
 #: common/common.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Không thể tạo thư mục đầu ra '%s'."
 
 #: common/common.cpp:697
-#, fuzzy
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
-"Windows 7 và củ hơn không còn được hỗ trợ bởi KiCad và các thành phần phụ "
-"thuộc của nó."
+"Phiên bản hệ điều hành không còn được hỗ trợ bởi KiCad và các tính năng phụ."
 
 #: common/common.cpp:699
 msgid "Unsupported Operating System"
@@ -1818,8 +1738,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
-"Không thể báo cáo bất kỳ sự cố nào với KiCad trên hệ thống này cho trình "
-"kiểm tra lỗi chính thức."
+"Bất kỳ sự cố với KiCad trên hệ thống này không thể được báo cáo với phân tìm "
+"kiếm chính thức vấn đề gây lỗi."
 
 #: common/confirm.cpp:58
 msgid "Do not show again"
@@ -1850,12 +1770,10 @@ msgid "Warning"
 msgstr "Cảnh báo"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Lỗi lưu tệp tin"
+msgstr "Cảnh báo mở tệp tin"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
-#, fuzzy
 msgid "Interleaved saves may produce very unexpected results."
 msgstr "Lưu xen kẽ có thể tạo ra kết quả không mong đợi."
 
@@ -1915,9 +1833,8 @@ msgid "OK"
 msgstr "Đồng ý"
 
 #: common/confirm.cpp:349
-#, fuzzy
 msgid "Information"
-msgstr "Xác nhận"
+msgstr "Thông tin"
 
 #: common/confirm.cpp:376 common/confirm.cpp:379
 #: eeschema/symbol_editor/symbol_editor.cpp:397
@@ -2010,11 +1927,11 @@ msgstr "Trình theo dõi lỗi"
 
 #: common/dialog_about/AboutDialog_main.cpp:155
 msgid "Report or examine bugs - "
-msgstr "Báo cáo hoặc kiểm tra lỗi - "
+msgstr "Báo cáo hoặc kiểm định vấn đề gây lỗi - "
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad users group and community"
-msgstr "Nhóm người dùng KiCad và cộng đồng"
+msgstr "Nhóm cho người dùng KiCad và cộng đồng"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 msgid "KiCad forum - "
@@ -2042,9 +1959,8 @@ msgid "Additional Contributions By"
 msgstr "Đóng góp bổ sung bởi"
 
 #: common/dialog_about/AboutDialog_main.cpp:1277
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Đội thư viện KiCad"
+msgstr "Nhóm thư viện KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:1353
 msgid "3D models by"
@@ -2063,9 +1979,8 @@ msgid "Icons by"
 msgstr "Icon bởi"
 
 #: common/dialog_about/AboutDialog_main.cpp:1404
-#, fuzzy
 msgid "Package Developers"
-msgstr "Các nhà Phát triển"
+msgstr "Phát triển đóng gói"
 
 #: common/dialog_about/dialog_about.cpp:119
 #, c-format
@@ -2137,7 +2052,7 @@ msgstr "Thông tin phiên bản được build"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "Thông tin phiên bản Lib"
+msgstr "Thông tin phiên bản thư viện"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
@@ -2149,7 +2064,7 @@ msgstr "Sao chép thông tin phiên bản KiCad vào bộ nhớ tạm"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "&Báo cáo Lỗi"
+msgstr "&Báo cáo vấn đề gây Lỗi"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:994
 msgid "Report a problem with KiCad"
@@ -2169,13 +2084,12 @@ msgid "&OK"
 msgstr "&OK"
 
 #: common/dialog_shim.cpp:747
-#, fuzzy
 msgid "&Cancel"
-msgstr "Hủy bỏ"
+msgstr "&Hủy bỏ"
 
 #: common/dialog_shim.cpp:748
 msgid "&Yes"
-msgstr "&Vâng"
+msgstr "&Đồng ý"
 
 #: common/dialog_shim.cpp:749
 msgid "&No"
@@ -2186,9 +2100,8 @@ msgid "&Apply"
 msgstr "&Áp dụng"
 
 #: common/dialog_shim.cpp:751
-#, fuzzy
 msgid "&Save"
-msgstr "Lưu lại"
+msgstr "&Lưu lại"
 
 #: common/dialog_shim.cpp:752 common/dialog_shim.cpp:753
 #: common/eda_base_frame.cpp:504 common/eda_base_frame.cpp:509
@@ -2202,30 +2115,28 @@ msgid "Report"
 msgstr "Báo cáo"
 
 #: common/dialogs/dialog_assign_netclass.cpp:109
-#, fuzzy
 msgid "<b>Currently matching nets:</b>"
-msgstr "<b> Các Net hiện đang khớp:</b>"
+msgstr "<b> Các đường tín hiệu hiện đang khớp:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Mẫu"
+msgstr "Họa tiết:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Lớp Net"
+msgstr "Lớp tín hiệu:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Ghi chú: lớp tín hiệu hoàn thành gán tên có thể được chỉnh sửa trong các "
+"thiết lập sơ đồ mạch > Dự án."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Chỉ định sơ đồ mạch"
+msgstr "Thêm tên gán lớp tính hiệu"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2252,12 +2163,10 @@ msgid "HSV"
 msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:91
-#, fuzzy
 msgid "Hue:"
-msgstr "Hue:"
+msgstr "Mức sáng màu:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
-#, fuzzy
 msgid "Saturation:"
 msgstr "Độ bão hòa:"
 
@@ -2323,9 +2232,9 @@ msgid ""
 "the external environment variable(s) from your system."
 msgstr ""
 "Lần sau khi KiCad được khởi chạy, bất kỳ đường dẫn nào đã\n"
-"được xác định là rõ ràng và bất kỳ cài đặt nào được xác định trong\n"
-"hộp thoại cấu hình đường dẫn bị bỏ qua.  Nếu bạn không có ý định\n"
-"hành vi này, hoặc đổi tên bất kỳ mục xung đột hoặc loại bỏ\n"
+"xác định rồi được giữ lại và bất kỳ cài đặt nào được xác định trong\n"
+"hộp thoại cấu hình đường dẫn bị bỏ qua.  Nếu bạn không có ý định cho\n"
+"tiến hành này, cũng nên đổi tên bất kỳ mục xung đột đã ghi vào hoặc loại bỏ\n"
 "biến môi trường bên ngoài từ hệ thống của bạn."
 
 #: common/dialogs/dialog_configure_paths.cpp:299
@@ -2406,7 +2315,7 @@ msgstr "Đường dẫn"
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "Cấu hình Bảng Thư viện Toàn cục %s"
+msgstr "Cấu hình Bảng Thư viện chung %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:44
 #, c-format
@@ -2419,14 +2328,14 @@ msgid ""
 msgstr ""
 "KiCad đã được chạy lần đầu tiên bằng cách sử dụng bảng thư viện %s mới cho\n"
 "truy cập thư viện.  Để KiCad truy cập thư viện %s,\n"
-"bạn phải cấu hình bảng thư viện toàn cục %s.  Vui lòng chọn từ một\n"
+"bạn phải cấu hình bảng thư viện chung %s.  Vui lòng chọn từ một\n"
 "các tùy chọn dưới đây.  Nếu bạn không chắc nên chọn tùy chọn nào, vui lòng\n"
 "sử dụng lựa chọn mặc định."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Sao chép bảng thư viện toàn cục %s mặc định ( được khuyến cáo)"
+msgstr "Sao chép bảng thư viện chung %s mặc định ( được khuyến cáo)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
@@ -2434,13 +2343,12 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
-"Chọn tùy chọn này nếu bạn không chắc chắn về cấu hình bảng thư viện toàn cục "
-"%s"
+"Chọn tùy chọn này nếu bạn không chắc chắn về cấu hình bảng thư viện chung %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "Sao chép bảng thư viện toàn cục %s tùy chỉnh"
+msgstr "Sao chép bảng thư viện chung %s tùy chỉnh"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:59
 #, c-format
@@ -2453,7 +2361,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Tạo bảng thư viện toàn cục %s trống"
+msgstr "Tạo bảng thư viện chung %s trống"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:65
 #, c-format
@@ -2466,7 +2374,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "Chọn tệp tin bảng thư viện toàn cục %s:"
+msgstr "Chọn tệp tin bảng thư viện chung %s:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2517,7 +2425,7 @@ msgstr "Chọn tệp tin bảng thư viện toàn cục %s:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:340
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:196
 msgid "dummy"
-msgstr "Dummy"
+msgstr "Thụ động"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
@@ -2525,7 +2433,7 @@ msgstr "Chọn một tệp tin"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
 msgid "Configure Global Library Table"
-msgstr "Cấu hình Bảng Thư viện Toàn cục"
+msgstr "Cấu hình Bảng Thư viện chung"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
 msgid "Grid size X out of range."
@@ -2634,7 +2542,7 @@ msgstr "đơn vị"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
 msgid "Linked"
-msgstr ""
+msgstr "Liên kết"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -2642,7 +2550,7 @@ msgstr "Cài đặt Lưới"
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
-msgstr "Danh sách phím nóng"
+msgstr "Danh sách phím tắt"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
 msgid "Project Name"
@@ -2666,7 +2574,7 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
-"Tệp dự án này chứa nhiều kết hợp PCB+Schematic.\n"
+"Tệp dự án này chứa nhiều kết hợp PCB+sơ đồ mạch.\n"
 "Chọn cái nào sẽ được nhập vào KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
@@ -2691,33 +2599,31 @@ msgid "The selection contains %d locked items."
 msgstr "Vùng chọn chứa %d đối tượng bị khóa."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
-#, fuzzy
 msgid "These items will be skipped unless you override the locks."
-msgstr "Các đối tượng này sẽ được bỏ qua trừ khi bạn ghi đè lên các ổ khóa."
+msgstr "Các đối tượng này sẽ được bỏ qua trừ khi bạn ghi đè lên phần khóa."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "Hãy nhớ quyết định cho phiên này."
+msgstr "Hãy nhớ quyết định cho phần này."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
-"Hãy nhớ tùy chọn đã chọn cho phần còn lại của phiên này.\n"
+"Hãy nhớ tùy chọn đã chọn cho phần còn lại của mục này.\n"
 "Hộp thoại này sẽ không hiển thị lại cho đến khi KiCad được khởi động lại."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
-#, fuzzy
 msgid "Override Locks"
-msgstr "Ghi đè ổ khóa"
+msgstr "Ghi đè phần khóa"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"Ghi đè các khóa và áp dụng thao tác trên tất cả các thành phần đã chọn.\n"
+"Ghi đè phần khóa và áp dụng thao tác trên tất cả các thành phần đã chọn.\n"
 "Mọi thành phần bị khóa sẽ vẫn bị khóa sau khi hoạt động hoàn tất."
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
@@ -2725,7 +2631,6 @@ msgid "Locked Items"
 msgstr "Đối tượng Bị khóa"
 
 #: common/dialogs/dialog_migrate_settings.cpp:33
-#, fuzzy
 msgid "Quit KiCad"
 msgstr "Thoát khỏi KiCad"
 
@@ -2753,7 +2658,7 @@ msgstr "Nhập cài đặt từ phiên bản trước tại:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr "Chọn một con đường khác"
+msgstr "Chọn một đường dẫn khác"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
@@ -2768,18 +2673,16 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"Khi được chọn, các bảng thư viện symbol và footprint từ phiên bản trước sẽ "
-"được nhập vào phiên bản này"
+"Khi được chọn, các bảng thư viện biểu tượng và chân linh kiện từ phiên bản "
+"trước sẽ được nhập vào phiên bản này"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Đặt lại về Cài đặt mặc định"
+msgstr "Khởi động với Cài đặt mặc định"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Cấu hình các Đường dẫn"
+msgstr "Cấu hình các Đường dẫn KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:59
 msgid "A5 148x210mm"
@@ -2827,18 +2730,17 @@ msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8.5x11in"
+msgstr "US giấy viết thư 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8.5x14in"
+msgstr "US giấy hành chính 8.5x14in"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "USLedger 11x17in"
-msgstr "USLedger 11x17in"
+msgstr "US giấy ghi 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:73
-#, fuzzy
 msgid "User (Custom)"
 msgstr "Người dùng (Tùy chỉnh)"
 
@@ -2848,10 +2750,9 @@ msgstr "Cài đặt Xem trước"
 
 #: common/dialogs/dialog_page_settings.cpp:106
 msgid "Preview Paper"
-msgstr "Xem trước trang giấy"
+msgstr "Xem trước trang in"
 
 #: common/dialogs/dialog_page_settings.cpp:107
-#, fuzzy
 msgid "Preview Title Block Data"
 msgstr "Xem trước Dữ liệu Khối Tiêu đề"
 
@@ -2878,25 +2779,21 @@ msgstr "Không tìm thấy tệp bản vẽ '%s'."
 
 #: common/dialogs/dialog_page_settings.cpp:707
 #: common/dialogs/dialog_page_settings_base.cpp:54
-#, fuzzy
 msgid "Portrait"
 msgstr "Dọc"
 
 #: common/dialogs/dialog_page_settings.cpp:709
 #: common/dialogs/dialog_page_settings_base.cpp:54
-#, fuzzy
 msgid "Landscape"
 msgstr "Ngang"
 
 #: common/dialogs/dialog_page_settings.cpp:795 pagelayout_editor/files.cpp:59
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "Worksheet"
+msgstr "Têp bản vẽ kỹ thuật"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
-#, fuzzy
 msgid "dummy text"
-msgstr "văn bản giả"
+msgstr "văn bản chữ không thực tế"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
@@ -2908,9 +2805,8 @@ msgstr "văn bản giả"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:138
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:233
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:181
-#, fuzzy
 msgid "Orientation:"
-msgstr "Hướng:"
+msgstr "Phương hướng:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:60
 msgid "Custom paper size:"
@@ -2921,7 +2817,6 @@ msgstr "Kích thước trang giấy tùy chỉnh:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:299
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:181
-#, fuzzy
 msgid "Height:"
 msgstr "Chiều cao:"
 
@@ -2940,7 +2835,6 @@ msgstr "Chiều cao trang giấy tùy chỉnh."
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:187
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:168
-#, fuzzy
 msgid "Width:"
 msgstr "Chiều rộng:"
 
@@ -2971,7 +2865,7 @@ msgstr "Xuất sang các trang khác"
 #: gerbview/widgets/gerbview_layer_widget.cpp:136 pcbnew/pcb_marker.cpp:214
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Drawing Sheet"
-msgstr "Bản vẽ"
+msgstr "Bản vẽ kỹ thuật"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:46
@@ -2983,12 +2877,11 @@ msgid "File:"
 msgstr "Tập tin:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:183
-#, fuzzy
 msgid "Title Block Parameters"
 msgstr "Tham số Khối Tiêu đề"
 
 #: common/dialogs/dialog_page_settings_base.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Number of sheets: %d"
 msgstr "Số tờ: %d"
 
@@ -2998,104 +2891,86 @@ msgid "Sheet number: %d"
 msgstr "Số trang: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
-#, fuzzy
 msgid "Issue Date:"
 msgstr "Ngày phát hành:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
-#, fuzzy
 msgid "<<<"
 msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
-#, fuzzy
 msgid "Revision:"
 msgstr "Phiên bản:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:252
 #: eeschema/dialogs/dialog_export_netlist.cpp:391
-#, fuzzy
 msgid "Title:"
 msgstr "Tiêu đề:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:264
-#, fuzzy
 msgid "Company:"
 msgstr "Công ty:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:276
-#, fuzzy
 msgid "Comment1:"
 msgstr "Chú thích1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:288
-#, fuzzy
 msgid "Comment2:"
 msgstr "Chú thích2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:300
-#, fuzzy
 msgid "Comment3:"
 msgstr "Chú thích3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:312
-#, fuzzy
 msgid "Comment4:"
 msgstr "Chú thích4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:324
-#, fuzzy
 msgid "Comment5:"
 msgstr "Chú thích5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:336
-#, fuzzy
 msgid "Comment6:"
 msgstr "Chú thích6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
-#, fuzzy
 msgid "Comment7:"
 msgstr "Chú thích7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:360
-#, fuzzy
 msgid "Comment8:"
 msgstr "Chú thích8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:372
-#, fuzzy
 msgid "Comment9:"
 msgstr "Chú thích9:"
 
 #: common/dialogs/dialog_paste_special.cpp:37
-#, fuzzy
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
-"Tìm bộ chỉ định tham chiếu có sẵn tiếp theo cho bất kỳ bộ chỉ định nào đã "
-"tồn tại trong thiết kế."
+"Tìm tên định danh linh kiện có sẵn kế tiếp cho bất kỳ tên linh kiện đã tồn "
+"tại trong thiết kế."
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Thay thế các chỉ định tham chiếu bằng'%s'."
+msgstr "Thay tên định danh linh kiện với'%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Gán cho các Net đã chọn"
+msgstr "Gán riêng biệt tên định danh cho biểu tượng linh kiện được dán"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Giữ các chỉ định tham chiếu hiện có, ngay cả khi chúng bị trùng lặp"
+msgstr "Giữ tên định danh linh kiện hiện có, ngay cả khi chúng bị trùng lặp"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Xóa chỉ định tham chiếu trên tất cả các biểu tượng được dán"
+msgstr "Xóa tên định danh linh kiện trên tất cả các biểu tượng được dán"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -3160,9 +3035,8 @@ msgid "Value"
 msgstr "Giá trị"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:78
-#, fuzzy
 msgid "Option Choices"
-msgstr "Tuỳ chọn"
+msgstr "Sự Tuỳ chọn"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
@@ -3246,17 +3120,14 @@ msgstr "Không có gì để in"
 
 #: common/dialogs/dialog_print_generic.cpp:284
 #: eeschema/printing/dialog_print_using_printer.cpp:307
-#, fuzzy
 msgid "Previous print job not yet complete."
-msgstr "Công việc in trước đó chưa hoàn tất."
+msgstr "Tác vụ in trước đó chưa hoàn tất."
 
 #: common/dialogs/dialog_print_generic.cpp:309
-#, fuzzy
 msgid "There was a problem printing."
 msgstr "Có vấn đề in ấn."
 
 #: common/dialogs/dialog_print_generic.cpp:351
-#, fuzzy
 msgid "An error occurred initializing the printer information."
 msgstr "Gặp lỗi khi khởi tạo thông tin máy in."
 
@@ -3265,7 +3136,6 @@ msgstr "Gặp lỗi khi khởi tạo thông tin máy in."
 #: eeschema/printing/dialog_print_using_printer_base.cpp:31
 #: pcbnew/dialogs/dialog_plot_base.cpp:377
 #: pcbnew/dialogs/dialog_plot_base.cpp:400
-#, fuzzy
 msgid "Output mode:"
 msgstr "Chế độ xuất:"
 
@@ -3287,7 +3157,6 @@ msgstr "Chế độ xuất:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
 #: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:687
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:270
-#, fuzzy
 msgid "Color"
 msgstr "Màu sắc"
 
@@ -3295,24 +3164,20 @@ msgstr "Màu sắc"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
 #: pcbnew/dialogs/dialog_plot_base.cpp:404
-#, fuzzy
 msgid "Black and white"
 msgstr "Đen trắng"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/printing/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
-msgstr "User.Drawings"
+msgstr "In bản vẽ kỹ thuật"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
-#, fuzzy
 msgid "Print Frame references."
 msgstr "In khung tài liệu tham khảo."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:124
-#, fuzzy
 msgid "1:1"
 msgstr "1:1"
 
@@ -3329,13 +3194,11 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Cài đặt điều chỉnh tỷ lệ X để bản vẽ tỷ lệ chính xác"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Tìm văn bản"
+msgstr "Văn bản tin"
 
 #: common/dialogs/dialog_print_generic_base.cpp:108
 #: eeschema/printing/dialog_print_using_printer_base.cpp:73
-#, fuzzy
 msgid "Page Setup..."
 msgstr "Thiết lập Trang..."
 
@@ -3346,23 +3209,20 @@ msgid "MyLabel"
 msgstr "Nhãn của tôi"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "Nhãn:"
+msgstr "Nhãn X:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "Nhãn:"
+msgstr "Nhãn Y:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
 msgid "Title"
 msgstr "Tiêu đề"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "Không tìm thấy Footprint"
+msgstr "Di chuyển điểm tới vị trí"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:206 common/widgets/lib_tree.cpp:274
@@ -3374,36 +3234,30 @@ msgstr "Không tìm thấy Footprint"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:77
 #: pcbnew/dialogs/dialog_copper_zones.cpp:244
 #: pcbnew/footprint_viewer_frame.cpp:141 pcbnew/footprint_viewer_frame.cpp:156
-#, fuzzy
 msgid "Filter"
 msgstr "Bộ lọc"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
-#, fuzzy
 msgid "Items:"
-msgstr "Mục:"
+msgstr "Phần tử:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:32
-#, fuzzy
 msgid "Available:"
-msgstr "Các Đường dẫn có sẵn:"
+msgstr "Phần có sẵn:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:39
-#, fuzzy
 msgid "Enabled:"
-msgstr "Đã bật:"
+msgstr "Đã cho phép:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:51
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
-#, fuzzy
 msgid ">"
-msgstr ">>"
+msgstr ">"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:54
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:64
-#, fuzzy
 msgid "<"
-msgstr "<<"
+msgstr "<"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:75
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:43
@@ -3431,16 +3285,14 @@ msgstr "Di chuyển xuống"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
-#, fuzzy
 msgid "View Preset Switcher"
 msgstr "Xem trình chuyển đổi cài đặt trước"
 
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Chiều rộng Track"
+msgstr "Kết nối dây"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
@@ -3464,14 +3316,12 @@ msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Vertical Justification"
+msgstr "Chứng thực"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Tên thành viên"
+msgstr "Tên người sử dụng"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:453
@@ -3479,14 +3329,12 @@ msgid "Password"
 msgstr "Mật khẩu"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Hoàn tác tất cả các thay đổi"
+msgstr "Xác nhận tất cả các thay đổi"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "Tên net"
+msgstr "Tên tệp tin"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3500,23 +3348,20 @@ msgid "Status"
 msgstr "Tình trạng"
 
 #: common/dialogs/git/dialog_git_commit.cpp:99
-#, fuzzy
 msgid "New"
-msgstr "Net"
+msgstr "Mới"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
 msgid "Modified"
 msgstr "Đã sửa đổi"
 
 #: common/dialogs/git/dialog_git_commit.cpp:111
-#, fuzzy
 msgid "Deleted"
 msgstr "Xóa bỏ"
 
 #: common/dialogs/git/dialog_git_commit.cpp:124
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Tin nhắn"
+msgstr "Xác nhận thông điệp:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:131
 msgid "Author:"
@@ -3524,12 +3369,11 @@ msgstr "Tác giả:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:152
 msgid "C&ommit"
-msgstr ""
+msgstr "C&Bỏ sót"
 
 #: common/dialogs/git/dialog_git_commit.cpp:169
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Tin nhắn cam kết không được để trống"
+msgstr "Tin nhắn xác nhận không được để trống"
 
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:382
@@ -3541,9 +3385,8 @@ msgid "Test connection"
 msgstr "Kiểm tra kết nối"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Connection successful"
-msgstr "Chiều rộng Track"
+msgstr "Kết nối thành công"
 
 #: common/dialogs/git/dialog_git_repository.cpp:341
 #, c-format
@@ -3556,9 +3399,8 @@ msgid "Could not open private key '%s'"
 msgstr "Không thể mở khóa riêng tư'%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:373
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Tên tín hiệu không hợp lệ"
+msgstr "Số SSH không hợp lệ"
 
 #: common/dialogs/git/dialog_git_repository.cpp:374
 msgid "The selected file is not a valid SSH private key"
@@ -3571,19 +3413,16 @@ msgstr "Không thể mở khóa công cộng '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:417
 #: common/dialogs/git/dialog_git_repository.cpp:424
-#, fuzzy
 msgid "Missing information"
-msgstr "Footprint"
+msgstr "Nhầm lẫn thông tin"
 
 #: common/dialogs/git/dialog_git_repository.cpp:418
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Không thể tạo tệp báo cáo '%s'"
+msgstr "Xin vui lòng nhập tên của vùng lưu trữ"
 
 #: common/dialogs/git/dialog_git_repository.cpp:425
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Không thể tạo tệp báo cáo '%s'"
+msgstr "Xin vui lòng nhập URL cho vùng lưu trữ"
 
 #: common/dialogs/git/dialog_git_repository.cpp:447
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
@@ -3591,14 +3430,12 @@ msgid "SSH Key Password"
 msgstr "Mật khẩu khóa SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Xoay"
+msgstr "Vị trí"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Chiều rộng Track"
+msgstr "Kiểu kết nối"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
@@ -6218,14 +6055,13 @@ msgstr ""
 "footprint %d."
 
 #: common/fp_lib_table.cpp:560 eeschema/symbol_lib_table.cpp:600
-#, fuzzy
 msgid "Added by Plugin and Content Manager"
-msgstr "Trình quản lý nội dung và plugin"
+msgstr "Được thêm vào bởi trình quản lý phụ trợ và nội dung"
 
 #: common/fp_lib_table.cpp:586 eeschema/symbol_lib_table.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
+msgstr "Không thể tạo đường dẫn bảng thư viện chung '%s'."
 
 #: common/gestfich.cpp:236
 #, c-format
@@ -7182,7 +7018,7 @@ msgstr "Tracks"
 
 #: common/layer_id.cpp:169
 msgid "Through vias"
-msgstr ""
+msgstr "Lỗ  xuyên các lớp"
 
 #: common/layer_id.cpp:170
 #, fuzzy
@@ -7190,9 +7026,8 @@ msgid "Blind/Buried vias"
 msgstr "Bl/Buried Via"
 
 #: common/layer_id.cpp:171
-#, fuzzy
 msgid "Micro-vias"
-msgstr "Micro Via"
+msgstr "Lỗ xuyên siêu nhỏ"
 
 #: common/layer_id.cpp:172
 #, fuzzy
@@ -15495,9 +15330,9 @@ msgstr "Lỗi tải bản vẽ."
 #: eeschema/eeschema_jobs_handler.cpp:115
 #: pagelayout_editor/pl_editor_frame.cpp:346
 #: pcbnew/pcbnew_jobs_handler.cpp:1355
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "Lỗi tải trang vẽ '%s'."
+msgstr "Lỗi tải trang bản vẽ kỹ thuật '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:146
 #: eeschema/eeschema_jobs_handler.cpp:245
@@ -18449,9 +18284,8 @@ msgid "Simulation"
 msgstr "Chỉnh sửa Mô hình Spice..."
 
 #: eeschema/sch_symbol.cpp:1940
-#, fuzzy
 msgid "BOM"
-msgstr "BOM"
+msgstr "Liệt kê linh kiện"
 
 #: eeschema/sch_symbol.cpp:1952 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
@@ -29483,9 +29317,8 @@ msgstr "Tên net"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
-#, fuzzy
 msgid "Teardrops"
-msgstr "Thêm Trường..."
+msgstr "Hình dạng giọt nước"
 
 #: pcbnew/board_connected_item.cpp:250
 #, fuzzy
@@ -29812,7 +29645,7 @@ msgstr "2"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr ""
+msgstr "Cân bằng trở kháng"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
@@ -30542,9 +30375,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:293
-#, fuzzy
 msgid "Reference Designators"
-msgstr "Reference Designators"
+msgstr "Tên định danh linh kiện"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:107
 msgid "Geographical Reannotation"
@@ -33794,9 +33626,8 @@ msgstr "Đường đồ họa"
 #: pcbnew/widgets/panel_selection_filter.cpp:186
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:80
-#, fuzzy
 msgid "Footprints"
-msgstr "Footprint"
+msgstr "Chân gắn linh kiện"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 #, fuzzy
@@ -39235,9 +39066,8 @@ msgid "Assertion failure"
 msgstr "Các hành động"
 
 #: pcbnew/drc/drc_item.cpp:209
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Mảnh đồng"
+msgstr "Độ mở đã chừa đồng"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Solder mask aperture bridges items with different nets"
@@ -43817,9 +43647,9 @@ msgid "Insufficient permissions to delete '%s'."
 msgstr "Không đủ quyền để xóa '%s'."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2775
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
+msgstr "Không thể ghi đè lên đường dẫn thư viện '%s'."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2827
 #, fuzzy, c-format
@@ -44044,7 +43874,7 @@ msgstr ""
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
 #, c-format
 msgid "UNKNOWN (%d)"
-msgstr ""
+msgstr "KHÔNG RÕ (%d)"
 
 #: pcbnew/pcb_layer_box_selector.cpp:62
 msgid "(not activated)"
@@ -45589,7 +45419,7 @@ msgstr "Độ dày"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Loss Tangent"
-msgstr ""
+msgstr "Tiếp tuyến cắt"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
 msgid "Dielectric"
