@@ -347,7 +347,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     BOX2I bbbox;
 
     if( m_board )
-        bbbox = m_board->ComputeBoundingBox( !m_board->IsFootprintHolder() && haveOutline, false );
+        bbbox = m_board->ComputeBoundingBox( !m_board->IsFootprintHolder() && haveOutline );
 
     // Gives a non null size to avoid issues in zoom / scale calculations
     if( ( bbbox.GetWidth() == 0 ) && ( bbbox.GetHeight() == 0 ) )

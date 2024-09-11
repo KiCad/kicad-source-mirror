@@ -69,7 +69,6 @@
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
         m_boundingBoxCacheTimeStamp( 0 ),
-        m_visibleBBoxCacheTimeStamp( 0 ),
         m_textExcludedBBoxCacheTimeStamp( 0 ),
         m_hullCacheTimeStamp( 0 ),
         m_initial_comments( nullptr )
@@ -127,8 +126,6 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     m_cachedBoundingBox              = aFootprint.m_cachedBoundingBox;
     m_boundingBoxCacheTimeStamp      = aFootprint.m_boundingBoxCacheTimeStamp;
-    m_cachedVisibleBBox              = aFootprint.m_cachedVisibleBBox;
-    m_visibleBBoxCacheTimeStamp      = aFootprint.m_visibleBBoxCacheTimeStamp;
     m_cachedTextExcludedBBox         = aFootprint.m_cachedTextExcludedBBox;
     m_textExcludedBBoxCacheTimeStamp = aFootprint.m_textExcludedBBoxCacheTimeStamp;
     m_cachedHull                     = aFootprint.m_cachedHull;
@@ -700,8 +697,6 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     m_cachedBoundingBox              = aOther.m_cachedBoundingBox;
     m_boundingBoxCacheTimeStamp      = aOther.m_boundingBoxCacheTimeStamp;
-    m_cachedVisibleBBox              = aOther.m_cachedVisibleBBox;
-    m_visibleBBoxCacheTimeStamp      = aOther.m_visibleBBoxCacheTimeStamp;
     m_cachedTextExcludedBBox         = aOther.m_cachedTextExcludedBBox;
     m_textExcludedBBoxCacheTimeStamp = aOther.m_textExcludedBBoxCacheTimeStamp;
     m_cachedHull                     = aOther.m_cachedHull;
@@ -794,8 +789,6 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     m_cachedBoundingBox              = aOther.m_cachedBoundingBox;
     m_boundingBoxCacheTimeStamp      = aOther.m_boundingBoxCacheTimeStamp;
-    m_cachedVisibleBBox              = aOther.m_cachedVisibleBBox;
-    m_visibleBBoxCacheTimeStamp      = aOther.m_visibleBBoxCacheTimeStamp;
     m_cachedTextExcludedBBox         = aOther.m_cachedTextExcludedBBox;
     m_textExcludedBBoxCacheTimeStamp = aOther.m_textExcludedBBoxCacheTimeStamp;
     m_cachedHull                     = aOther.m_cachedHull;
@@ -1137,7 +1130,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
 double FOOTPRINT::GetArea( int aPadding ) const
 {
-    BOX2I bbox = GetBoundingBox( false, false );
+    BOX2I bbox = GetBoundingBox( false );
 
     double w = std::abs( static_cast<double>( bbox.GetWidth() ) ) + aPadding;
     double h = std::abs( static_cast<double>( bbox.GetHeight() ) ) + aPadding;
@@ -1252,25 +1245,20 @@ bool FOOTPRINT::TextOnly() const
 
 const BOX2I FOOTPRINT::GetBoundingBox() const
 {
-    return GetBoundingBox( true, true );
+    return GetBoundingBox( true );
 }
 
 
-const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const
+const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
 {
     const BOARD* board = GetBoard();
 
     if( board )
     {
-        if( aIncludeText && aIncludeInvisibleText )
+        if( aIncludeText )
         {
             if( m_boundingBoxCacheTimeStamp >= board->GetTimeStamp() )
                 return m_cachedBoundingBox;
-        }
-        else if( aIncludeText )
-        {
-            if( m_visibleBBoxCacheTimeStamp >= board->GetTimeStamp() )
-                return m_cachedVisibleBBox;
         }
         else
         {
@@ -1347,7 +1335,7 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
             if( !isFPEdit && m_privateLayers.test( text->GetLayer() ) )
                 continue;
 
-            if( aIncludeInvisibleText || text->IsVisible() )
+            if( text->IsVisible() )
                 bbox.Merge( text->GetBoundingBox() );
         }
 
@@ -1372,16 +1360,12 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
         }
 
 
-        if( ( Value().IsVisible() && valueLayerIsVisible )
-                || aIncludeInvisibleText
-                || noDrawItems )
+        if( ( Value().IsVisible() && valueLayerIsVisible ) || noDrawItems )
         {
             bbox.Merge( Value().GetBoundingBox() );
         }
 
-        if( ( Reference().IsVisible() && refLayerIsVisible )
-                || aIncludeInvisibleText
-                || noDrawItems )
+        if( ( Reference().IsVisible() && refLayerIsVisible ) || noDrawItems )
         {
             bbox.Merge( Reference().GetBoundingBox() );
         }
@@ -1389,15 +1373,10 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
 
     if( board )
     {
-        if( ( aIncludeText && aIncludeInvisibleText ) || noDrawItems )
+        if( aIncludeText || noDrawItems )
         {
             m_boundingBoxCacheTimeStamp = board->GetTimeStamp();
             m_cachedBoundingBox = bbox;
-        }
-        else if( aIncludeText )
-        {
-            m_visibleBBoxCacheTimeStamp = board->GetTimeStamp();
-            m_cachedVisibleBBox = bbox;
         }
         else
         {
@@ -1749,7 +1728,7 @@ bool FOOTPRINT::HitTestOnLayer( const BOX2I& aRect, bool aContained, PCB_LAYER_I
 
 bool FOOTPRINT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    BOX2I rect = GetBoundingBox( false, false );
+    BOX2I rect = GetBoundingBox( false );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
@@ -1767,17 +1746,17 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 
     if( aContained )
     {
-        return arect.Contains( GetBoundingBox( false, false ) );
+        return arect.Contains( GetBoundingBox( false ) );
     }
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
-        if( !aRect.Intersects( GetBoundingBox( false, false ) ) )
+        if( !aRect.Intersects( GetBoundingBox( false ) ) )
             return false;
 
         // If there are no pads, zones, or drawings, allow intersection with text
         if( m_pads.empty() && m_zones.empty() && m_drawings.empty() )
-            return GetBoundingBox( true, false ).Intersects( arect );
+            return GetBoundingBox( true ).Intersects( arect );
 
         // Determine if any elements in the FOOTPRINT intersect the rect
         for( PAD* pad : m_pads )
@@ -2198,7 +2177,7 @@ double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I FOOTPRINT::ViewBBox() const
 {
-    BOX2I area = GetBoundingBox( true, true );
+    BOX2I area = GetBoundingBox( true );
 
     // Inflate in case clearance lines are drawn around pads, etc.
     if( const BOARD* board = GetBoard() )
@@ -2271,7 +2250,6 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     }
 
     m_boundingBoxCacheTimeStamp = 0;
-    m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
     m_hullCacheTimeStamp = 0;
 }
@@ -2336,7 +2314,6 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         Rotate( aCentre, ANGLE_180 );
 
     m_boundingBoxCacheTimeStamp = 0;
-    m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
 
     m_cachedHull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
@@ -2364,7 +2341,6 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
         item->Move( delta );
 
     m_cachedBoundingBox.Move( delta );
-    m_cachedVisibleBBox.Move( delta );
     m_cachedTextExcludedBBox.Move( delta );
     m_courtyard_cache_back.Move( delta );
     m_courtyard_cache_front.Move( delta );
@@ -2411,7 +2387,6 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
     }
 
     m_cachedBoundingBox.Move( moveVector );
-    m_cachedVisibleBBox.Move( moveVector );
     m_cachedTextExcludedBBox.Move( moveVector );
     m_cachedHull.Move( moveVector );
 }
@@ -2437,7 +2412,6 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
         item->Rotate( GetPosition(), angleChange );
 
     m_boundingBoxCacheTimeStamp = 0;
-    m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
 
     m_cachedHull.Rotate( angleChange, GetPosition() );
@@ -2609,7 +2583,7 @@ wxString FOOTPRINT::GetNextPadNumber( const wxString& aLastPadNumber ) const
 void FOOTPRINT::AutoPositionFields()
 {
     // Auto-position reference and value
-    BOX2I bbox = GetBoundingBox( false, false );
+    BOX2I bbox = GetBoundingBox( false );
     bbox.Inflate( pcbIUScale.mmToIU( 0.2 ) ); // Gap between graphics and text
 
     if( Reference().GetPosition() == VECTOR2I( 0, 0 ) )

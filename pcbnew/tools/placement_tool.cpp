@@ -104,8 +104,7 @@ std::vector<std::pair<BOARD_ITEM*, BOX2I>> GetBoundingBoxes( const T& aItems )
         if( boardItem->Type() == PCB_FOOTPRINT_T )
         {
             FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
-            rects.emplace_back( std::make_pair( footprint,
-                                                footprint->GetBoundingBox( false, false ) ) );
+            rects.emplace_back( std::make_pair( footprint, footprint->GetBoundingBox( false ) ) );
         }
         else
         {

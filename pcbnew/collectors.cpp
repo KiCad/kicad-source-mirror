@@ -236,11 +236,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         {
             PCB_LAYER_ID layer = text->GetLayer();
 
-            if( m_Guide->IgnoreHiddenFPText() )
-            {
-                if( !text->IsVisible() )
-                    return INSPECT_RESULT::CONTINUE;
-            }
+            if( !text->IsVisible() )
+                return INSPECT_RESULT::CONTINUE;
 
             if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( layer ) )
                 return INSPECT_RESULT::CONTINUE;

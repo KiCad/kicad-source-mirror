@@ -264,7 +264,7 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
     for( BOARD_ITEM* item : m_items )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
-            bbox.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true, false ) );
+            bbox.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true ) );
         else
             bbox.Merge( item->GetBoundingBox() );
     }

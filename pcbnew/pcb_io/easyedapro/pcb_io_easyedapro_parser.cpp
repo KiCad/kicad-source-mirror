@@ -1832,7 +1832,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         aBoard->Add( ptr.release(), ADD_MODE::APPEND );
 
     // Center the board
-    BOX2I     outlineBbox = aBoard->ComputeBoundingBox( true, false );
+    BOX2I     outlineBbox = aBoard->ComputeBoundingBox( true );
     PAGE_INFO pageInfo = aBoard->GetPageSettings();
 
     VECTOR2D pageCenter( pcbIUScale.MilsToIU( pageInfo.GetWidthMils() / 2 ),

@@ -197,7 +197,7 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
     {
         commit.Modify( item );
         item->SetFlags( IS_MOVING );
-        footprintsBbox.Merge( item->GetBoundingBox( false, false ) );
+        footprintsBbox.Merge( item->GetBoundingBox( false ) );
     }
 
     SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );

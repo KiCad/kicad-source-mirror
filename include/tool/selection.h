@@ -154,7 +154,7 @@ public:
         return GetBoundingBox().GetPosition();
     }
 
-    virtual BOX2I GetBoundingBox( bool aOnlyVisible = false ) const;
+    virtual BOX2I GetBoundingBox() const;
 
     virtual EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const
     {

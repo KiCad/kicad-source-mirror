@@ -137,7 +137,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
         wxString path =
                 aGroupBySheet ? footprint->GetPath().AsString().BeforeLast( '/' ) : wxString( wxS( "" ) );
 
-        VECTOR2I size = footprint->GetBoundingBox( false, false ).GetSize();
+        VECTOR2I size = footprint->GetBoundingBox( false ).GetSize();
         size.x += aComponentGap;
         size.y += aComponentGap;
 
@@ -212,10 +212,10 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
                     position.y += fpSize.y * ( i / optimalCountPerLine );
                 }
 
-                BOX2I old_fp_bbox = footprint->GetBoundingBox( false, false );
+                BOX2I old_fp_bbox = footprint->GetBoundingBox( false );
                 footprint->Move( position - old_fp_bbox.GetOrigin() );
 
-                BOX2I new_fp_bbox = footprint->GetBoundingBox( false, false );
+                BOX2I new_fp_bbox = footprint->GetBoundingBox( false );
                 new_fp_bbox.Inflate( aComponentGap / 2 );
                 block_bbox.Merge( new_fp_bbox );
             }
@@ -262,7 +262,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
             for( FOOTPRINT* footprint : footprints )
             {
                 footprint->Move( target_pos - src_bbox.GetPosition() );
-                sheet_bbox.Merge( footprint->GetBoundingBox( false, false ) );
+                sheet_bbox.Merge( footprint->GetBoundingBox( false ) );
             }
 
             block_i++;

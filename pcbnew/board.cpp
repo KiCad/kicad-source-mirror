@@ -1652,7 +1652,7 @@ unsigned BOARD::GetNodesCount( int aNet ) const
 }
 
 
-BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly, bool aIncludeHiddenText ) const
+BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
     BOX2I bbox;
     LSET  visible = GetVisibleLayers();
@@ -1688,7 +1688,7 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly, bool aIncludeHiddenText )
         }
         else if( ( footprint->GetLayerSet() & visible ).any() )
         {
-            bbox.Merge( footprint->GetBoundingBox( true, aIncludeHiddenText ) );
+            bbox.Merge( footprint->GetBoundingBox( true ) );
         }
     }
 
@@ -2390,7 +2390,7 @@ FOOTPRINT* BOARD::GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveL
         // Filter non visible footprints if requested
         if( !aVisibleOnly || IsFootprintLayerVisible( layer ) )
         {
-            BOX2I bb = candidate->GetBoundingBox( false, false );
+            BOX2I bb = candidate->GetBoundingBox( false );
 
             int offx = bb.GetX() + bb.GetWidth() / 2;
             int offy = bb.GetY() + bb.GetHeight() / 2;

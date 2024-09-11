@@ -140,14 +140,14 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
         VECTOR2I offset = -aPlotter->GetPlotOffsetUserUnits();
 
         // Use a footprint bbox without texts to create the hyperlink area
-        BOX2I bbox = fp->GetBoundingBox( false, false );
+        BOX2I bbox = fp->GetBoundingBox( false );
         bbox.Move( offset );
         aPlotter->HyperlinkMenu( bbox, properties );
 
         // Use a footprint bbox with visible texts only to create the bookmark area
         // which is the area to zoom on ft selection
         // However the bbox need to be inflated for a better look.
-        bbox = fp->GetBoundingBox( true, false );
+        bbox = fp->GetBoundingBox( true );
         bbox.Move( offset );
         bbox.Inflate( bbox.GetWidth() /2, bbox.GetHeight() /2 );
         aPlotter->Bookmark( bbox, fp->GetReference(), _( "Footprints" ) );
@@ -1075,7 +1075,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
         autocenter  = (aPlotOpts->GetScale() != 1.0);
     }
 
-    BOX2I    bbox = aBoard->ComputeBoundingBox( false, false );
+    BOX2I    bbox = aBoard->ComputeBoundingBox( false );
     VECTOR2I boardCenter = bbox.Centre();
     VECTOR2I boardSize = bbox.GetSize();
 
@@ -1278,7 +1278,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
             // done in the driver (if supported)
             if( aPlotOpts->GetNegative() )
             {
-                BOX2I bbox = aBoard->ComputeBoundingBox( false, false );
+                BOX2I bbox = aBoard->ComputeBoundingBox( false );
                 FillNegativeKnockout( plotter, bbox );
             }
 

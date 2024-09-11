@@ -1309,7 +1309,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             // If the cursor is not over a pad, snap to the anchor (if visible) or the center
             // (if markedly different from the anchor).
             VECTOR2I position = footprint->GetPosition();
-            VECTOR2I center = footprint->GetBoundingBox( false, false ).Centre();
+            VECTOR2I center = footprint->GetBoundingBox( false ).Centre();
             VECTOR2I grid( GetGrid() );
 
             if( view->IsLayerVisible( LAYER_ANCHOR ) )

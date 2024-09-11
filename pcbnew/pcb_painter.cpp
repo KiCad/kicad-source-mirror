@@ -2109,8 +2109,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
     wxString resolvedText( aText->GetShownText( true ) );
 
-    if( resolvedText.Length() == 0
-        || !( aText->GetAttributes().m_Visible || aLayer == LAYER_HIDDEN_TEXT ) )
+    if( resolvedText.Length() == 0 || !aText->GetAttributes().m_Visible )
         return;
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
@@ -2543,7 +2542,7 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         const SHAPE_POLY_SET& poly = aFootprint->GetBoundingHull();
         m_gal->DrawPolygon( poly );
 #else
-        BOX2I    bbox = aFootprint->GetBoundingBox( false, false );
+        BOX2I    bbox = aFootprint->GetBoundingBox( false );
         VECTOR2I topLeft = bbox.GetPosition();
         VECTOR2I botRight = bbox.GetPosition() + bbox.GetSize();
 

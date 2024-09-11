@@ -758,7 +758,6 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
                                     GetCanvas()->GetView() );
 
     // account for the globals
-    guide.SetIgnoreHiddenFPText( !m_pcb->IsElementVisible( LAYER_HIDDEN_TEXT ) );
     guide.SetIgnoreFPTextOnBack( !m_pcb->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFPTextOnFront( !m_pcb->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFootprintsOnBack( !m_pcb->IsElementVisible( LAYER_FOOTPRINTS_BK ) );

@@ -513,7 +513,7 @@ PCB_SELECTION& PCB_TOOL_BASE::selection()
     return sel;
 }
 
-BOX2I PCB_SELECTION::GetBoundingBox( bool aOnlyVisible ) const
+BOX2I PCB_SELECTION::GetBoundingBox() const
 {
     return BOX2I();
 }

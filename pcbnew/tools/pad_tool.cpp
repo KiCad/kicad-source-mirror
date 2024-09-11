@@ -310,7 +310,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     GENERAL_COLLECTOR        collector;
     GENERAL_COLLECTORS_GUIDE guide = frame()->GetCollectorsGuide();
-    guide.SetIgnoreHiddenFPText( true );
     guide.SetIgnoreFPTextOnBack( true );
     guide.SetIgnoreFPTextOnFront( true );
     guide.SetIgnoreFPValues( true );

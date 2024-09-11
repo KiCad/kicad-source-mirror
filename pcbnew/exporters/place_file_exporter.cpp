@@ -309,7 +309,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     buffer += "\n$BeginDESCRIPTION\n";
 
-    BOX2I bbbox = m_board->ComputeBoundingBox( false, false );
+    BOX2I bbbox = m_board->ComputeBoundingBox( false );
 
     buffer += "\n$BOARD\n";
 

@@ -199,7 +199,7 @@ enum GAL_LAYER_ID: int
     LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  4, ///< handle color for not plated holes (holes, not pads)
     LAYER_FP_TEXT            = GAL_LAYER_ID_START +  5,
 //  LAYER_MOD_TEXT_BK deprecated                  +  6,
-    LAYER_HIDDEN_TEXT        = GAL_LAYER_ID_START +  7, ///< text marked as invisible
+//  LAYER_HIDDEN_TEXT        = GAL_LAYER_ID_START +  7, ///< DEPRECATED, UNUSED SINCE 9.0. text marked as invisible
     LAYER_ANCHOR             = GAL_LAYER_ID_START +  8, ///< anchor of items having an anchor point (texts, footprints)
     LAYER_PADS_SMD_FR        = GAL_LAYER_ID_START +  9, ///< smd pads, front layer
     LAYER_PADS_SMD_BK        = GAL_LAYER_ID_START + 10, ///< smd pads, back layer

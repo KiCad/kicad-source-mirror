@@ -140,7 +140,7 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
 
     for( auto fp : aFootprints )
     {
-        auto bb = fp->GetBoundingBox( false, false );
+        auto bb = fp->GetBoundingBox( false );
         bb.Inflate( aMargin );
 
         bbCorners.push_back( VECTOR2I( bb.GetX(), bb.GetY() ) );
@@ -393,12 +393,12 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
             PCB_GROUP* grp = new PCB_GROUP( board() );
 
             grpCommit.Add( grp );
-            
+
             for( auto item : groupableItems )
             {
                 grpCommit.Stage( item, CHT_GROUP );
             }
-    
+
             grpCommit.Push( _( "Group components with their placement rule areas" ) );
         }
 
@@ -638,7 +638,7 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
             break;
     }
 
-    return (status == TMATCH::CONNECTION_GRAPH::ST_OK ); 
+    return ( status == TMATCH::CONNECTION_GRAPH::ST_OK );
 }
 
 

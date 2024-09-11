@@ -78,11 +78,6 @@ public:
     virtual bool IncludeSecondary() const = 0;
 
     /**
-     * @return true if footprint texts marked as "no show" should be ignored.
-     */
-    virtual bool IgnoreHiddenFPText() const = 0;
-
-    /**
      * @return true if should ignore footprint text on back layers
      */
     virtual bool IgnoreFPTextOnBack() const = 0;
@@ -347,7 +342,6 @@ public:
         m_includeSecondary          = true;
 #endif
 
-        m_ignoreHiddenFPText        = true; // g_ModuleTextNOVColor;
         m_ignoreFPTextOnBack        = true;
         m_ignoreFPTextOnFront       = false;
         m_ignoreFootprintsOnBack    = true; // !Show_footprints_Cmp;
@@ -402,12 +396,6 @@ public:
      */
     bool IncludeSecondary() const override { return m_includeSecondary; }
     void SetIncludeSecondary( bool include ) { m_includeSecondary = include; }
-
-    /**
-     * @return true if Fooptrint Text marked as "no show" should be ignored.
-     */
-    bool IgnoreHiddenFPText() const override { return m_ignoreHiddenFPText; }
-    void SetIgnoreHiddenFPText( bool ignore ) { m_ignoreHiddenFPText = ignore; }
 
     /**
      * @return true if should ignore Footprint Text on back layers
@@ -494,7 +482,6 @@ private:
     bool    m_ignoreLockedItems;
     bool    m_includeSecondary;
 
-    bool    m_ignoreHiddenFPText;
     bool    m_ignoreFPTextOnBack;
     bool    m_ignoreFPTextOnFront;
     bool    m_ignoreFootprintsOnBack;

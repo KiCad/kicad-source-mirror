@@ -903,11 +903,11 @@ public:
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
      * @return the board's bounding box.
      */
-    BOX2I ComputeBoundingBox( bool aBoardEdgesOnly = false, bool aIncludeHiddenText = false ) const;
+    BOX2I ComputeBoundingBox( bool aBoardEdgesOnly = false ) const;
 
     const BOX2I GetBoundingBox() const override
     {
-        return ComputeBoundingBox( false, IsElementVisible( LAYER_HIDDEN_TEXT ) );
+        return ComputeBoundingBox( false );
     }
 
     /**
@@ -921,7 +921,7 @@ public:
      */
     const BOX2I GetBoardEdgesBoundingBox() const
     {
-        return ComputeBoundingBox( true, false );
+        return ComputeBoundingBox( true );
     }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

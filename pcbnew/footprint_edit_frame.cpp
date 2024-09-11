@@ -731,7 +731,7 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) 
 
         if( hasGraphicalItem )
         {
-            return footprint->GetBoundingBox( false, false );
+            return footprint->GetBoundingBox( false );
         }
         else
         {

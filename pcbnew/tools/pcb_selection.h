@@ -33,7 +33,7 @@ class PCB_SELECTION : public SELECTION
 public:
     EDA_ITEM* GetTopLeftItem( bool aFootprintsOnly = false ) const override;
 
-    BOX2I GetBoundingBox( bool aOnlyVisible = false ) const override;
+    BOX2I GetBoundingBox() const override;
 
     const std::vector<KIGFX::VIEW_ITEM*> updateDrawList() const override;
 };

@@ -53,7 +53,6 @@ const GENERAL_COLLECTORS_GUIDE PCB_TEST_SELECTION_TOOL::getCollectorsGuide() con
     bool padsDisabled = !board()->IsElementVisible( LAYER_PADS );
 
     // account for the globals
-    guide.SetIgnoreHiddenFPText( !board()->IsElementVisible( LAYER_HIDDEN_TEXT ) );
     guide.SetIgnoreFPTextOnBack( !board()->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFPTextOnFront( !board()->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFootprintsOnBack( !board()->IsElementVisible( LAYER_FOOTPRINTS_BK ) );

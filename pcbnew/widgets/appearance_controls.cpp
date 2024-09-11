@@ -339,7 +339,6 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "Values" ),             LAYER_FP_VALUES,          _HKI( "Show footprint values" ) ),
     RR( _HKI( "References" ),         LAYER_FP_REFERENCES,      _HKI( "Show footprint references" ) ),
     RR( _HKI( "Footprint Text" ),     LAYER_FP_TEXT,            _HKI( "Show all footprint text" ) ),
-    RR( _HKI( "Hidden Text" ),        LAYER_HIDDEN_TEXT,        _HKI( "Show text marked as hidden" ) ),
     RR(),
     RR(),
     RR( _HKI( "Ratsnest" ),           LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
@@ -365,7 +364,6 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_FP_VALUES,
             LAYER_FP_REFERENCES,
             LAYER_FP_TEXT,
-            LAYER_HIDDEN_TEXT,
             LAYER_DRAW_BITMAPS,
             LAYER_GRID
         };

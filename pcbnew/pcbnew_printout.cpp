@@ -170,7 +170,6 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_FP_VALUES );
         setVisibility( LAYER_FP_REFERENCES );
         setVisibility( LAYER_FP_TEXT );
-        setVisibility( LAYER_HIDDEN_TEXT );
         setVisibility( LAYER_PADS );
         setVisibility( LAYER_PADS_SMD_FR );
         setVisibility( LAYER_PADS_SMD_BK );
@@ -290,10 +289,7 @@ void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 
 BOX2I PCBNEW_PRINTOUT::getBoundingBox()
 {
-    bool showHiddenText = m_pcbnewSettings.m_AsItemCheckboxes
-                            && m_board->IsElementVisible( LAYER_HIDDEN_TEXT );
-
-    return m_board->ComputeBoundingBox( false, showHiddenText );
+    return m_board->ComputeBoundingBox( false );
 }
 
 

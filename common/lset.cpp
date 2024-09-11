@@ -840,7 +840,7 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_VIA_MICROVIA,
         LAYER_VIA_BBLIND,
         LAYER_VIA_THROUGH,
-     // LAYER_HIDDEN_TEXT,    // Invisible text hidden by default
+     // LAYER_HIDDEN_TEXT,    // DEPCREATED SINCE 9.0. Invisible text hidden by default
         LAYER_ANCHOR,
         LAYER_PADS_SMD_FR,
         LAYER_PADS_SMD_BK,

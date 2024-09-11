@@ -189,7 +189,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( footprint )
     {
-        bbox = footprint->GetBoundingBox( true, false ); // No invisible text in bbox calc
+        bbox = footprint->GetBoundingBox( true );
 
         if( pad )
             m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, pad );

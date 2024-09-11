@@ -172,7 +172,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         if( !aStepJob->m_hasUserOrigin )
         {
-            BOX2I bbox = brd->ComputeBoundingBox( true, false );
+            BOX2I bbox = brd->ComputeBoundingBox( true );
             originX = pcbIUScale.IUTomm( bbox.GetCenter().x );
             originY = pcbIUScale.IUTomm( bbox.GetCenter().y );
         }

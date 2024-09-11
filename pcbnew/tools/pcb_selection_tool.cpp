@@ -744,7 +744,6 @@ const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
     bool padsDisabled = !board()->IsElementVisible( LAYER_PADS );
 
     // account for the globals
-    guide.SetIgnoreHiddenFPText( !board()->IsElementVisible( LAYER_HIDDEN_TEXT ) );
     guide.SetIgnoreFPTextOnBack( !board()->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFPTextOnFront( !board()->IsElementVisible( LAYER_FP_TEXT ) );
     guide.SetIgnoreFootprintsOnBack( !board()->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
@@ -2135,7 +2134,7 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
     if( aWithNets )
         selectConnections( aItems );
 
-    BOX2I bbox = m_selection.GetBoundingBox( true );
+    BOX2I bbox = m_selection.GetBoundingBox();
 
     if( bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
     {
@@ -2940,7 +2939,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         if( !text->IsVisible() )
         {
-            if( !m_isFootprintEditor || !view()->IsLayerVisible( LAYER_HIDDEN_TEXT ) )
+            if( !m_isFootprintEditor )
                 return false;
         }
 
@@ -3259,7 +3258,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     case PCB_FOOTPRINT_T:
     {
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
-        BOX2I      bbox = footprint->GetBoundingBox( false, false );
+        BOX2I      bbox = footprint->GetBoundingBox( false );
 
         try
         {

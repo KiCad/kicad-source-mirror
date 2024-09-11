@@ -39,7 +39,7 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
     {
         FOOTPRINT* fpB = m_FpInMove[i];
 
-        BOX2I bbox = fpB->GetBoundingBox( true, false );
+        BOX2I bbox = fpB->GetBoundingBox( true );
         movingBBox.Merge( bbox );
         fpBBBoxes[i] = bbox;
     }
@@ -51,7 +51,7 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
         if( fpA->IsSelected() )
             continue;
 
-        BOX2I fpABBox = fpA->GetBoundingBox( true, false );
+        BOX2I fpABBox = fpA->GetBoundingBox( true );
 
         if( !movingBBox.Intersects( fpABBox ) )
             continue;

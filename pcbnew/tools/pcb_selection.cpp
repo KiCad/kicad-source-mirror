@@ -109,7 +109,7 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
 }
 
 
-BOX2I PCB_SELECTION::GetBoundingBox( bool aOnlyVisible ) const
+BOX2I PCB_SELECTION::GetBoundingBox() const
 {
     BOX2I bbox;
 
@@ -119,7 +119,7 @@ BOX2I PCB_SELECTION::GetBoundingBox( bool aOnlyVisible ) const
         {
             FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
-            bbox.Merge( footprint->GetBoundingBox( true, !aOnlyVisible ) );
+            bbox.Merge( footprint->GetBoundingBox( true ) );
         }
         else
         {

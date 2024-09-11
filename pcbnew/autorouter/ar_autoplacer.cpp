@@ -511,7 +511,7 @@ int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSid
         side = AR_SIDE_BOTTOM; otherside = AR_SIDE_TOP;
     }
 
-    BOX2I fpBBox = aFootprint->GetBoundingBox( false, false );
+    BOX2I fpBBox = aFootprint->GetBoundingBox( false );
     fpBBox.Move( -1*aOffset );
 
     buildFpAreas( aFootprint, 0 );
@@ -548,7 +548,7 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
     lastPosOK = m_matrix.m_BrdBox.GetOrigin();
 
     VECTOR2I fpPos = aFootprint->GetPosition();
-    BOX2I    fpBBox  = aFootprint->GetBoundingBox( false, false );
+    BOX2I    fpBBox = aFootprint->GetBoundingBox( false );
 
     // Move fpBBox to have the footprint position at (0,0)
     fpBBox.Move( -fpPos );

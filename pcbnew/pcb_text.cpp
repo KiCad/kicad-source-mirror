@@ -254,10 +254,7 @@ const BOX2I PCB_TEXT::ViewBBox() const
 
 void PCB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    if( GetParentFootprint() == nullptr || IsVisible() )
-        aLayers[0] = GetLayer();
-    else
-        aLayers[0] = LAYER_HIDDEN_TEXT;
+    aLayers[0] = GetLayer();
 
     aCount = 1;
 
@@ -276,8 +273,6 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
-    // Hidden text gets put on the LAYER_HIDDEN_TEXT for rendering, but
-    // should only render if its native layer is visible.
     if( !aView->IsLayerVisible( GetLayer() ) )
         return HIDE;
 

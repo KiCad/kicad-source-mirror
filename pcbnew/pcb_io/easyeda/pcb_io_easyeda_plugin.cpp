@@ -245,7 +245,7 @@ BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         parser.ParseBoard( m_board, origin, m_loadedFootprints, doc.shape );
 
         // Center the board
-        BOX2I     outlineBbox = m_board->ComputeBoundingBox( true, false );
+        BOX2I     outlineBbox = m_board->ComputeBoundingBox( true );
         PAGE_INFO pageInfo = m_board->GetPageSettings();
 
         VECTOR2D pageCenter( pcbIUScale.MilsToIU( pageInfo.GetWidthMils() / 2 ),
