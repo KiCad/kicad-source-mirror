@@ -270,6 +270,14 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
                                              m_deleteDanglingViasOpt->GetValue(),
                                              m_reporter );
 
+    if( m_cbRefillZones->GetValue() == wxCHK_CHECKED && !aDryRun )
+    {
+        m_reporter->Report( _( "Refilling all zones..." ) );
+        wxSafeYield(); // Timeslice to update UI
+        m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( this );
+        wxSafeYield(); // Timeslice to close zone progress reporter
+    }
+
     if( aDryRun )
     {
         m_changesTreeModel->Update( std::make_shared<VECTOR_CLEANUP_ITEMS_PROVIDER>( &m_items ),

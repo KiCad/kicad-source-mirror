@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWind
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Actions") ), wxVERTICAL );
 
-	m_cbRefillZones = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Refill zones before running cleanup"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRefillZones = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Refill zones before and after cleanup"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer3->Add( m_cbRefillZones, 0, wxRIGHT|wxLEFT, 5 );
 
 
