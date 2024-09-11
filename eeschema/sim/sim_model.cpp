@@ -528,7 +528,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 
         // Check for an override in the case of IBIS models.
         // The other models require type to be set from the base model.
-        if( dynamic_cast<const SIM_MODEL_IBIS*>( aBaseModel ) &&
+        if( dynamic_cast<const SIM_MODEL_KIBIS*>( aBaseModel ) &&
             type_override != TYPE::NONE )
         {
             type = type_override;
