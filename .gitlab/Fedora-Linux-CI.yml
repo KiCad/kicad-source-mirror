@@ -6,7 +6,7 @@
 # Don't tag until we have separate CI for MRs
 #  tags:
 #    - kicad-fedora
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:40
+  image: $DEFAULT_FEDORA_IMAGE
   extends: .only_code
   interruptible: false
   cache:
@@ -144,7 +144,7 @@ fedora_report_metrics_public:
 # Run the code unit tests.
 ##########################################################################
 .fedora_qa:
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:40
+  image: $DEFAULT_FEDORA_IMAGE
   extends:
     - .unit_test
     - .only_code
