@@ -40,6 +40,9 @@ public:
     PCB_PICKER_TOOL();
     virtual ~PCB_PICKER_TOOL() = default;
 
+    ///< @copydoc TOOL_BASE::Init()
+    bool Init() override;
+
     ///< Main event loop.
     int Main( const TOOL_EVENT& aEvent );
 
