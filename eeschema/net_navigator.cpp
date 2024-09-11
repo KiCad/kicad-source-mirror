@@ -372,8 +372,8 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 
     if( GetCurrentSheet() != itemData->GetSheetPath() )
     {
-        Schematic().SetCurrentSheet( itemData->GetSheetPath() );
-        DisplayCurrentSheet();
+        GetToolManager()->RunAction<SCH_SHEET_PATH*>( EE_ACTIONS::changeSheet,
+                                                      &itemData->GetSheetPath() );
     }
 
     // Do not focus on item when a sheet tree node is selected.
