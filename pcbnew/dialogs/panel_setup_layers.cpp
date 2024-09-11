@@ -125,6 +125,14 @@ static LSEQ dlg_layers()
 }
 
 
+// returns a mask of existing layers in dialog list
+static LSET AllExistingLayersInDlgMask()
+{
+    static const LSET saved( dlg_layers() );
+    return saved;
+}
+
+
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_LAYERS_BASE( aParentWindow ),
         m_frame( aFrame ),
@@ -240,6 +248,8 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
 
     // Rescue may be enabled, but should not be shown in this dialog
     m_enabledLayers.reset( Rescue );
+
+    m_enabledLayers &= AllExistingLayersInDlgMask();
 
     setCopperLayerCheckBoxes( m_pcb->GetCopperLayerCount() );
 
