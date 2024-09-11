@@ -3015,14 +3015,30 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
 bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                                     const wxString& aCanceledMessage, VECTOR2I& aReferencePoint )
 {
-    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-    std::optional<VECTOR2I>    pickedPoint;
-    bool             done = false;
+    PCB_PICKER_TOOL*        picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
+    PCB_EDIT_FRAME&         editFrame = *getEditFrame<PCB_EDIT_FRAME>();
+    std::optional<VECTOR2I> pickedPoint;
+    bool                    done = false;
 
     m_statusPopup->SetText( aTooltip );
 
     /// This allow the option of snapping in the tool
     picker->SetSnapping( true );
+
+    const auto setPickerLayerSet = [&]()
+    {
+        MAGNETIC_SETTINGS& magSettings = *editFrame.GetMagneticItemsSettings();
+        LSET               layerFilter;
+        if( !magSettings.allLayers )
+            layerFilter = LSET( { editFrame.GetActiveLayer() } );
+        else
+            layerFilter = LSET::AllLayersMask();
+
+        picker->SetLayerSet( layerFilter );
+    };
+
+    // Initial set
+    setPickerLayerSet();
 
     picker->SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool
@@ -3078,7 +3094,15 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     {
         // Pass events unless we receive a null event, then we must shut down
         if( TOOL_EVENT* evt = Wait() )
+        {
+            if( evt->Matches( PCB_EVENTS::SnappingModeChangedByKeyEvent ) )
+            {
+                // Update the layer set when the snapping mode changes
+                setPickerLayerSet();
+            }
+
             evt->SetPassEvent();
+        }
         else
             break;
     }

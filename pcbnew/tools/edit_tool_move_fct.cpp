@@ -286,8 +286,8 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 
 bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit, bool aAutoStart )
 {
-    bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
-    bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );
+    const bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
+    const bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );
 
     PCB_BASE_EDIT_FRAME*               editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     PCBNEW_SETTINGS*                   cfg = editFrame->GetPcbNewSettings();

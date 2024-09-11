@@ -33,7 +33,7 @@
 
 PCB_PICKER_TOOL::PCB_PICKER_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractivePicker" ),
-        PICKER_TOOL_BASE()
+        PICKER_TOOL_BASE() // calls reset()
 {
 }
 
@@ -79,7 +79,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
             grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-            cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
+            cursorPos = grid.BestSnapAnchor( cursorPos, m_layerMask );
             controls->ForceCursorPosition( true, cursorPos );
         }
 
