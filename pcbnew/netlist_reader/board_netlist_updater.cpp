@@ -1061,6 +1061,15 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                     PCB_LAYER_ID layer = zone->GetLayer();
                     VECTOR2I     pos = zone->GetPosition();
 
+                    if( m_frame && m_frame->GetPcbNewSettings() )
+                    {
+                        if( m_frame->GetPcbNewSettings()->m_Display.m_DisplayInvertXAxis )
+                            pos.x *= -1;
+
+                        if( m_frame->GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis )
+                            pos.y *= -1;
+                    }
+
                     msg.Printf( _( "Copper zone on layer %s at (%s, %s) has no pads connected." ),
                                 m_board->GetLayerName( layer ),
                                 m_frame->MessageTextFromValue( pos.x ),
