@@ -6,7 +6,7 @@
 # Don't tag until we have separate CI for MRs
 #  tags:
 #    - kicad-fedora
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:38
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:40
   extends: .only_code
   interruptible: false
   cache:
@@ -59,7 +59,7 @@ fedora_build_linux_kicad:
   extends: .fedora_build_linux_base
   tags:
     - kicad-fedora
-  only:    
+  only:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
 
@@ -67,10 +67,10 @@ fedora_build_linux_public:
   extends: .fedora_build_linux_base
   tags:
     - saas-linux-medium-amd64
-  except:    
+  except:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
-  
+
 
 # Upload the compilation log in an easily downloadable form
 .fedora_report_build_warn:
@@ -94,7 +94,7 @@ fedora_report_build_warn_kicad:
   needs:
     - job: fedora_build_linux_kicad
       artifacts: true
-  only:    
+  only:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
 
@@ -103,10 +103,10 @@ fedora_report_build_warn_public:
   needs:
     - job: fedora_build_linux_public
       artifacts: true
-  except:    
+  except:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
-  
+
 
 # Report on the metrics of the code
 .fedora_report_metrics:
@@ -127,7 +127,7 @@ fedora_report_metrics_kicad:
   needs:
     - job: fedora_build_linux_kicad
       artifacts: true
-  only:    
+  only:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
 
@@ -136,7 +136,7 @@ fedora_report_metrics_public:
   needs:
     - job: fedora_build_linux_public
       artifacts: true
-  except:    
+  except:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
 
@@ -148,7 +148,7 @@ fedora_report_metrics_public:
   extends:
     - .unit_test
     - .only_code
-  before_script: 
+  before_script:
     - if [ "$TEST" == "cli" ] || [ "$TEST" == "python" ]; then python3 -m pip install -r qa/tests/requirements.txt; fi
     - if [ "$TEST" == "cli" ]; then sudo dnf -y install gerbv; fi
   parallel:
@@ -163,7 +163,7 @@ fedora_qa_kicad:
   needs:
     - job: fedora_build_linux_kicad
       artifacts: true
-  only:    
+  only:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
 
@@ -172,6 +172,6 @@ fedora_qa_public:
   needs:
     - job: fedora_build_linux_public
       artifacts: true
-  except:    
+  except:
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
