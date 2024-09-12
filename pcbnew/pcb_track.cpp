@@ -871,8 +871,8 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
     // Nice and simple, but raises its ugly head in performance profiles....
     return GetLayerSet().test( aLayer );
 #endif
-
-    if( LAYER_RANGE::Contains( Padstack().Drill().start, Padstack().Drill().end, aLayer ) )
+    if( IsCopperLayer( aLayer ) &&
+        LAYER_RANGE::Contains( Padstack().Drill().start, Padstack().Drill().end, aLayer ) )
         return true;
 
     if( aLayer == F_Mask )
