@@ -1487,6 +1487,9 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                                           annotateStartNum, false, false, reporter );
             }
 
+            // Annotation clears the selection so re-add the item
+            m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, newItem );
+
             restore_state = !m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit );
         }
 

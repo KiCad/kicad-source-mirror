@@ -2100,6 +2100,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 {
                     processPt( pin->GetPosition() );
                 }
+
+                // Symbols need to have their center point added since often users are trying to
+                // move parts from their center.
+                if( dynamic_cast<SCH_SYMBOL*>( item ) )
+                    processPt( item->GetPosition() );
             }
 
             // Only process other points if we didn't find any connection points
