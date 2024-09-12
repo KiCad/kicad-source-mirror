@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-12 01:09+0000\n"
+"PO-Revision-Date: 2024-09-12 17:35+0000\n"
 "Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -3655,36 +3655,30 @@ msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #: eeschema/widgets/search_handlers.cpp:438
-#, fuzzy
 msgid "Local"
-msgstr "Các tập tin thực thi ("
+msgstr "Nội bộ"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Tạo các lớp"
+msgstr "Số SSH cá nhân"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Chọn một tệp tin"
+msgstr "Chọn tệp tin số SSH cá nhân"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Tên net"
+msgstr "Tên người sử dụng"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Báo cáo"
+msgstr "Vùng lưu trữ trên Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:40
-#, fuzzy
 msgid "Git Branch Switch"
 msgstr "Chuyển đổi nhánh Git"
 
@@ -3698,19 +3692,17 @@ msgstr "Nhánh"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 msgid "Last Commit"
-msgstr ""
+msgstr "Xác nhận trước"
 
 #: common/dialogs/git/dialog_git_switch.cpp:56
-#, fuzzy
 msgid "Last Updated"
-msgstr "Đã cập nhật"
+msgstr "Cập nhật lúc trước"
 
 #: common/dialogs/git/dialog_git_switch.cpp:66
 #: common/dialogs/git/dialog_git_switch.cpp:147
 #: common/dialogs/git/dialog_git_switch.cpp:214
-#, fuzzy
 msgid "Switch"
-msgstr "Chuyển đổi đơn vị"
+msgstr "Chuyển đổi"
 
 #: common/dialogs/git/dialog_git_switch.cpp:219
 #: eeschema/design_block_utils.cpp:71 eeschema/sch_base_frame.cpp:293
@@ -3720,12 +3712,11 @@ msgstr "Thêm"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Xác nhận dữ liệu trên Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Giá trị mặc định"
+msgstr "Sử dụng giá trị mặc định"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
 msgid "Author name:"
@@ -3736,9 +3727,8 @@ msgid "Author e-mail:"
 msgstr "Email tác giả:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Báo cáo"
+msgstr "Vùng lưu trữ Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3748,38 +3738,32 @@ msgstr "Báo cáo"
 #: kicad/dialogs/panel_design_block_lib_table_base.cpp:93
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
-#, fuzzy
 msgid "Active"
-msgstr "Các hành động"
+msgstr "Thực thi"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Thêm tầng"
+msgstr "Thêm vùng lưu trữ mới"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Chỉnh sửa thuộc tính kho lưu trữ"
+msgstr "Chỉnh sửa thuộc tính vùng lưu trữ"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Báo cáo"
+msgstr "Loại bỏ vùng lưu trữ trên Git"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
 msgstr "Bộc lộ các Chủ đề trong Bộ tìm kiếm"
 
 #: common/dialogs/panel_color_settings.cpp:136
-#, fuzzy
 msgid "New theme name:"
-msgstr "Tên chủ đề mới:"
+msgstr "Tên giao diện mới:"
 
 #: common/dialogs/panel_color_settings.cpp:137
-#, fuzzy
 msgid "Add Color Theme"
-msgstr "Thêm chủ đề màu sắc"
+msgstr "Thêm giao diện màu sắc"
 
 #: common/dialogs/panel_color_settings.cpp:149
 msgid "Theme already exists!"
@@ -3815,26 +3799,22 @@ msgid "Override individual item colors"
 msgstr "Ghi đè màu sắc từng mục riêng lẻ"
 
 #: common/dialogs/panel_color_settings_base.cpp:36
-#, fuzzy
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
-"Hiển thị tất cả các mục bằng màu mặc định của chúng ngay cả khi chúng có các "
-"màu cụ thể được đặt trong thuộc tính của chúng."
+"Hiển thị tất cả các phần tử bằng màu mặc định của chúng ngay cả khi chúng có "
+"các màu cụ thể được đặt trong thuộc tính của chúng."
 
 #: common/dialogs/panel_color_settings_base.cpp:43
-#, fuzzy
 msgid "Open Theme Folder"
-msgstr "Mở thư mục chủ đề"
+msgstr "Mở thư mục giao diện"
 
 #: common/dialogs/panel_color_settings_base.cpp:44
-#, fuzzy
 msgid "Open the folder containing color themes"
-msgstr "Mở thư mục chứa các chủ đề màu sắc"
+msgstr "Mở thư mục chứa các giao diện màu sắc"
 
 #: common/dialogs/panel_common_settings.cpp:88
-#, fuzzy
 msgid ""
 "Set the scale for the canvas.\n"
 "\n"
@@ -3845,7 +3825,7 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"Đặt tỷ lệ cho canvas.\n"
+"Đặt tỷ lệ cho vùng hình vẽ.\n"
 "\n"
 "Trên màn hình DPI cao trên một số nền tảng, KiCad không thể xác định hệ số "
 "tỷ lệ. Trong trường hợp này, bạn có thể cần đặt giá trị này thành một giá "
@@ -3855,14 +3835,13 @@ msgstr ""
 "kích thước cửa sổ và vị trí con trỏ."
 
 #: common/dialogs/panel_common_settings.cpp:98
-#, fuzzy
 msgid ""
 "Use an automatic value for the canvas scale.\n"
 "\n"
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
-"Sử dụng một giá trị tự động cho tỷ lệ canvas.\n"
+"Sử dụng một giá trị tự động cho tỷ lệ vùng hình vẽ.\n"
 "\n"
 "Trên một số nền tảng, giá trị tự động không chính xác và phải được đặt theo "
 "cách thủ công."
@@ -3870,32 +3849,32 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Mặc định 'explorer.exe /n,/select,%F' cho hệ điều hành này."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Lệnh duyệt tệp tin\n"
+"ví dụ:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Lệnh duyệt tệp tin với hậu tố '%s' bắt buộc sau khi ký tự cuối được nhập vào."
 
 #: common/dialogs/panel_common_settings.cpp:374
-#, fuzzy
 msgid "Executable files ("
 msgstr "Các tập tin thực thi ("
 
 #: common/dialogs/panel_common_settings.cpp:381
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "Chọn trình duyệt PDF ưa thích"
+msgstr "Chọn trình xem PDF ưa thích"
 
 #: common/dialogs/panel_common_settings_base.cpp:22
-#, fuzzy
 msgid "Antialiasing"
 msgstr "Khử răng cưa"
 
@@ -3931,9 +3910,8 @@ msgid "Text editor:"
 msgstr "Trình soạn thảo văn bản:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Tên net"
+msgstr "Quản lý tệp tin:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -3952,9 +3930,8 @@ msgid "Show icons in menus"
 msgstr "Hiển thị các biểu tượng trong menu"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Hiển thị các biểu tượng trong menu"
+msgstr "Hiển thị thanh cuộn trong chỉnh sửa"
 
 #: common/dialogs/panel_common_settings_base.cpp:160
 msgid "This change takes effect when relaunching the editor."
@@ -3974,31 +3951,32 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:169
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "Hiển thị chỉ dẫn nổi khi bật tắt cài đặt với phím tắt"
 
 #: common/dialogs/panel_common_settings_base.cpp:170
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Khi được cho phép, vài phím tắt nào đó mà tiến hành giữa các cài đặt sẽ hiển "
+"thị cửa sổ chỉ dẫn nổi nhanh để chỉ rõ sự thay đổi trong cài đặt."
 
 #: common/dialogs/panel_common_settings_base.cpp:174
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Sử dụng luân phiên màu sắc cho dòng trong bảng"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "When enabled, use a different color for every other table row"
 msgstr ""
+"Khi được cho phép, sử dụng màu sắc khác nhau cho mỗi dòng khác nhau của bảng"
 
 #: common/dialogs/panel_common_settings_base.cpp:185
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Tỷ lệ biểu tượng:"
+msgstr "Hình đại diện của giao diện:"
 
 #: common/dialogs/panel_common_settings_base.cpp:189
-#, fuzzy
 msgid "Light"
-msgstr "Phải"
+msgstr "Ánh sáng"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Use icons designed for light window backgrounds"
@@ -4010,9 +3988,9 @@ msgid "Dark"
 msgstr "Tông màu tối"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
-#, fuzzy
 msgid "Use icons designed for dark window backgrounds"
-msgstr "Sử dụng các biểu tượng được thiết kế cho tông màu nền tối cửa sổ"
+msgstr ""
+"Sử dụng các biểu tượng được thiết kế cho tông màu nền tối của cửa sổ phần mềm"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 #: common/dialogs/panel_common_settings_base.cpp:245
@@ -4029,9 +4007,8 @@ msgid ""
 msgstr "Tự động chọn các biểu tượng sáng hoặc tối dựa trên chủ đề màu hệ thống"
 
 #: common/dialogs/panel_common_settings_base.cpp:211
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Kích thước trang giấy tùy chỉnh:"
+msgstr "Kích thước hình đại diện ở thanh công cụ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:215
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4051,7 +4028,6 @@ msgstr "Sử dụng các biểu tượng nhỏ gọn trên thanh công cụ"
 #: pcbnew/microwave/microwave_polygon.cpp:127 pcbnew/tools/pcb_control.cpp:345
 #: pcbnew/widgets/appearance_controls.cpp:640
 #: pcbnew/widgets/appearance_controls.cpp:1810
-#, fuzzy
 msgid "Normal"
 msgstr "Bình thường"
 
@@ -4061,9 +4037,8 @@ msgstr "Sử dụng kích thước biểu tượng KiCad mặc định trên tha
 
 #: common/dialogs/panel_common_settings_base.cpp:225
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#, fuzzy
 msgid "Large"
-msgstr "Mục tiêu"
+msgstr "Lớn"
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Use larger icons in the toolbars"
@@ -4135,39 +4110,35 @@ msgstr ""
 "ngay cả khi công cụ liên quan chưa được chọn trước đó."
 
 #: common/dialogs/panel_common_settings_base.cpp:312
-#, fuzzy
 msgid "Session"
-msgstr "Tác vụ"
+msgstr "Chu trình"
 
 #: common/dialogs/panel_common_settings_base.cpp:322
 msgid "Remember open files for next project launch"
 msgstr "Nhớ mở tệp cho lần khởi chạy dự án tiếp theo"
 
 #: common/dialogs/panel_common_settings_base.cpp:324
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Nếu được chọn, việc khởi chạy dự án cũng sẽ khởi chạy các công cụ như "
-"eeschema và pcbnew với các tệp đã mở trước đó"
+"Nếu được chọn, việc khởi chạy dự án cũng sẽ khởi chạy các công cụ như chỉnh "
+"sửa sơ đồ và bo mạch với các tệp đã mở trước đó"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
 msgid "&Auto save:"
 msgstr "&Tự động lưu:"
 
 #: common/dialogs/panel_common_settings_base.cpp:342
-#, fuzzy
 msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Trì hoãn sau lần thay đổi đầu tiên để tạo tệp sao lưu của bảng trên đĩa.\n"
+"Trì hoãn sau lần thay đổi đầu tiên để tạo tệp sao lưu của bo mạch trên đĩa.\n"
 "Nếu được đặt thành 0, tính năng tự động sao lưu sẽ bị tắt"
 
 #: common/dialogs/panel_common_settings_base.cpp:347
 #: common/dialogs/panel_common_settings_base.cpp:434
-#, fuzzy
 msgid "minutes"
 msgstr "Phút"
 
@@ -4180,13 +4151,12 @@ msgid "3D cache file duration:"
 msgstr "Thời lượng tồn tại tệp bộ nhớ cache 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:363
-#, fuzzy
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
-"Các tệp bộ nhớ cache 3D cũ hơn sẽ bị xóa.\n"
-"Nếu được đặt thành 0, tính năng xóa bộ nhớ cache sẽ bị tắt"
+"Các tệp bộ nhớ 3D cũ hơn sẽ bị xóa.\n"
+"Nếu được đặt thành 0, tính năng xóa bộ nhớ sẽ bị tắt"
 
 #: common/dialogs/panel_common_settings_base.cpp:367
 msgid "days"
@@ -4218,7 +4188,6 @@ msgstr ""
 "bản sao lưu sẽ chỉ được tạo khi bạn lưu tệp theo cách thủ công."
 
 #: common/dialogs/panel_common_settings_base.cpp:407
-#, fuzzy
 msgid "Maximum backups to keep:"
 msgstr "Số sao lưu tối đa để giữ lại:"
 
@@ -4236,7 +4205,6 @@ msgstr ""
 "Có bao nhiêu tệp sao lưu để giữ lại mỗi ngày (đặt thành 0 cho không giới hạn)"
 
 #: common/dialogs/panel_common_settings_base.cpp:425
-#, fuzzy
 msgid "Minimum time between backups:"
 msgstr "Thời gian tối thiểu giữa các lần sao lưu:"
 
@@ -4249,7 +4217,6 @@ msgstr ""
 "vào lần bạn lưu tiếp theo (đặt thành 0 cho không tối thiểu)"
 
 #: common/dialogs/panel_common_settings_base.cpp:438
-#, fuzzy
 msgid "Maximum total backup size:"
 msgstr "Tổng kích thước sao lưu tối đa:"
 
@@ -4266,7 +4233,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4283,8 +4249,9 @@ msgid ""
 "schematic or PCB are never shared in this process."
 msgstr ""
 "KiCad có thể báo cáo ẩn danh sự cố và dữ liệu sự kiện đặc biệt cho nhà phát "
-"triển để hỗ trợ xác định các lỗi nghiêm trọng trên cơ sở người dùng hiệu quả "
-"hơn và giúp chức năng hồ sơ hướng dẫn cải tiến.\n"
+"triển để hỗ trợ xác định các vấn đề gây ra lỗi nghiêm trọng thông qua nền "
+"tảng người dùng hiệu quả hơn và giúp đỡ chức năng hồ sơ thông tin cá nhân để "
+"hướng dẫn cải tiến.\n"
 "\n"
 "Để liên kết các báo cáo tự động từ cùng một bản cài đặt KiCad, một số nhận "
 "dạng duy nhất được tạo hoàn toàn ngẫu nhiên, nó chỉ được sử dụng cho mục "
@@ -4294,37 +4261,33 @@ msgstr ""
 "\n"
 "Nếu bạn chọn tự nguyện tham gia, KiCad sẽ tự động xử lý việc gửi các báo cáo "
 "đã nói khi xảy ra sự cố hoặc sự kiện. Các tệp thiết kế của bạn như sơ đồ "
-"hoặc PCB không được chia sẻ trong quá trình này."
+"mạch hoặc PCB không bao giờ được chia sẻ trong quá trình này."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
 msgstr "Tôi đồng ý cung cấp báo cáo ẩn danh"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Thiết lập góc nhìn mặc định"
+msgstr "Đặt trở lại góc nhìn duy nhất"
 
 #: common/dialogs/panel_embedded_files.cpp:87
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Tham chiếu"
+msgstr "Sao chép tham số đã được nhúng"
 
 #: common/dialogs/panel_embedded_files.cpp:159
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Chọn tất cả các phần tử trên màn hình"
+msgstr "Chọn một tệp để nhúng"
 
 #: common/dialogs/panel_embedded_files.cpp:160
-#, fuzzy
 msgid "All files|*.*"
-msgstr "Tất cả Tập tin"
+msgstr "Tất cả loại Tập tin|*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:169
 #: common/dialogs/panel_embedded_files.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "Tệp %s đã tồn tại."
+msgstr "Tệp '%s' đã tồn tại."
 
 #: common/dialogs/panel_embedded_files.cpp:174
 #: common/dialogs/panel_embedded_files.cpp:248
@@ -4339,19 +4302,17 @@ msgstr "Tệp %s đã tồn tại."
 #: pcbnew/footprint_libraries_utils.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1149
 #: pcbnew/tools/footprint_editor_control.cpp:444
-#, fuzzy
 msgid "Overwrite"
-msgstr "Ghi đè ổ khóa"
+msgstr "Ghi đè"
 
 #: common/dialogs/panel_embedded_files.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không tải được tệp tin '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:230
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Chọn một tệp tin"
+msgstr "Chọn một thư mục để xuất tệp tin"
 
 #: common/dialogs/panel_embedded_files.cpp:248
 #: common/dialogs/panel_embedded_files.cpp:270
@@ -4360,72 +4321,67 @@ msgstr "Chọn một tệp tin"
 #: kicad/dialogs/panel_design_block_lib_table.cpp:1000
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1027
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:572
-#, fuzzy
 msgid "Skip"
-msgstr "Đối tượng Bị khóa"
+msgstr "Tạm qua bước này"
 
 #: common/dialogs/panel_embedded_files.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "Thư viện biểu tượng '%s' không thể ghi được."
+msgstr "Thư mục '%s' không thể ghi được."
 
 #: common/dialogs/panel_embedded_files.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "Thư viện biểu tượng '%s' không thể ghi được."
+msgstr "Thư viện '%s' không thể ghi được."
 
 #: common/dialogs/panel_embedded_files.cpp:270
 msgid "Retry"
-msgstr ""
+msgstr "Thử lại"
 
 #: common/dialogs/panel_embedded_files.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không mở được tệp tin '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không viết được tệp tin '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "Tham chiếu"
+msgstr "Tham chiếu nội bộ"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Thêm tệp tin được nhúng"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Xuống"
+msgstr "Bỏ tệp tin được nhúng"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "&Export"
-msgstr "Xuất"
+msgstr "&Xuất"
 
 #: common/dialogs/panel_embedded_files_base.cpp:88
 msgid "Embed Fonts"
-msgstr ""
+msgstr "Dạng kiểu chữ nhúng"
 
 #: common/dialogs/panel_embedded_files_base.cpp:89
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Lưu trữ bản sao của tất cả dạng kiểu chữ được dùng"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #, fuzzy
 msgid "Footprints/pads:"
-msgstr "Footprint"
+msgstr "Chân gắn linh kiện/phần đồng ở chân"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:24
-#, fuzzy
 msgid "Tracks:"
-msgstr "Tracks"
+msgstr "Đường mạch:"
 
 #: common/dialogs/panel_grid_settings.cpp:138 common/tool/grid_menu.cpp:100
 #, c-format
@@ -4438,18 +4394,16 @@ msgid "Grid size '%s' already exists."
 msgstr "Kích thước lưới '%s' đã tồn tại."
 
 #: common/dialogs/panel_grid_settings.cpp:283
-#, fuzzy
 msgid "At least one grid size is required."
-msgstr "Lớp net mặc định là bắt buộc."
+msgstr "Yêu cầu Ít nhất một kích cỡ lưới."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
 msgid "Grids:"
 msgstr "Lưới:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Chuyển đổi nhanh"
+msgstr "Chuyển đổi nhanh lưới"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4465,14 +4419,12 @@ msgid "Grid 2:"
 msgstr "Lưới 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:861
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "Ghi đè ổ khóa"
+msgstr "Ghi đè lưới"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "Không kết nối"
+msgstr "Phần tử được kết nối:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
 msgid "Wires:"
@@ -4495,12 +4447,10 @@ msgid "Text:"
 msgstr "Văn bản:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
-#, fuzzy
 msgid "Graphics:"
-msgstr "Đường đồ họa"
+msgstr "Đồ họa:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
-#, fuzzy
 msgid "Type filter text"
 msgstr "Nhập văn bản được lọc"
 
@@ -4558,9 +4508,8 @@ msgid "PPI:"
 msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Ưu tiên lựa chọn để kéo"
+msgstr "Chuyển sang màu tông xám"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -4589,13 +4538,12 @@ msgid "Automatically pan while moving object"
 msgstr "Tự động xoay khi di chuyển đối tượng"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:44
-#, fuzzy
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"Khi vẽ một track hoặc di chuyển một phần tử, hãy xoay khi đến gần mép của "
-"màn hình."
+"Khi vẽ một đường mạch hoặc di chuyển một phần tử, hãy kéo khi tiến đến gần "
+"mép của màn hình."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:48
 msgid "Use zoom acceleration"
@@ -4626,19 +4574,16 @@ msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr "Pan nhanh như thế nào khi di chuyển một đối tượng ra khỏi mép màn hình"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Cử chỉ"
+msgstr "Kéo rê Cử chỉ"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
-#, fuzzy
 msgid "Left button drag:"
-msgstr "Kéo nút phải:"
+msgstr "Kéo rê nút trái:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Ưu tiên lựa chọn để kéo"
+msgstr "Vẽ hình vuông để lựa chọn"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
@@ -4699,9 +4644,8 @@ msgstr "Kéo nút phải:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:170
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:20
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "Cử chỉ"
+msgstr "Cử chỉ cuốn qua"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:186
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
@@ -4746,14 +4690,12 @@ msgid "Pan left/right:"
 msgstr "Xoay trái/phải:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
 msgstr "Trở lại"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr "Pan trái / phải bằng bàn di chuột ngang hoặc di chuyển con lăn"
+msgstr "Kéo qua lại trái / phải bằng di chuyển ngang"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:306
 msgid ""
@@ -4763,15 +4705,13 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:316
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:135
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Đặt lại về Mặc định"
+msgstr "Đặt lại con trỏ chuột về Mặc định"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:319
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:138
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Đặt lại về Mặc định"
+msgstr "Đặt lại bàn di chuột về Mặc định"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1202
@@ -4792,36 +4732,31 @@ msgid "General"
 msgstr "Tổng quan"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Xác nhận thay đổi"
+msgstr "Kiểm tra cập nhật KiCad khi khởi động"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
 #: kicad/pcm/dialogs/dialog_pcm.cpp:213
 #: kicad/tools/kicad_manager_actions.cpp:182
-#, fuzzy
 msgid "Plugin and Content Manager"
-msgstr "Trình quản lý nội dung và plugin"
+msgstr "Trình quản lý nội dung và phụ trợ"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:53
 msgid "Check for package updates on startup"
 msgstr "Kiểm tra cập nhật gói khi khởi động"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:63
-#, fuzzy
 msgid "Library package handling"
-msgstr "Thư Viện"
+msgstr "Xử lý Thư Viện kiểu đóng gói linh kiện"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr "Tự động xoay khi di chuyển đối tượng"
+msgstr "Tự động thêm thư viện đã được cài đặt vô bảng thư viện chung"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Tự động xoay khi di chuyển đối tượng"
+msgstr "Tự động loại bỏ thư viện đã gỡ bỏ"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:87
 msgid "Library nickname prefix:"
@@ -4956,9 +4891,8 @@ msgstr "Dấu ngang-Dấu chấm"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1065
 #: pcbnew/pcb_table.cpp:553 pcbnew/pcb_textbox.cpp:704
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "Dấu ngang-Dấu chấm"
+msgstr "Dấu ngang-Dấu chấm-Dấu chấm"
 
 #: common/dialogs/panel_setup_netclasses.cpp:182
 #, fuzzy
@@ -4970,6 +4904,8 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Lớp tín hiệu đã được thay đổi bên ngoài hội thoại thiết lập.\n"
+"Bạn có muốn tải lại?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:566
 msgid "Netclass must have a name."
@@ -4984,14 +4920,12 @@ msgid "Minimum copper clearance"
 msgstr "Clearance lớp đồng tối thiểu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:638
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Chiều rộng Track"
+msgstr "Chiều rộng đường mạch nhỏ nhất"
 
 #: common/dialogs/panel_setup_netclasses.cpp:639
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Tham số Đầu ra"
+msgstr "Đường kính phần chân đồng lỗ xuyên"
 
 #: common/dialogs/panel_setup_netclasses.cpp:640
 msgid "Via plated hole diameter"
@@ -5014,24 +4948,20 @@ msgid "Differential pair gap"
 msgstr "Khoảng cách cặp vi sai"
 
 #: common/dialogs/panel_setup_netclasses.cpp:645
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Đánh dấu Schematic"
+msgstr "Độ dày dây dẫn sơ đồ mạch"
 
 #: common/dialogs/panel_setup_netclasses.cpp:646
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Độ dày Bus"
+msgstr "Độ dày dây nối Bus"
 
 #: common/dialogs/panel_setup_netclasses.cpp:647
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Schematic Field"
+msgstr "Màu sắc dây dẫn sơ đồ mạch"
 
 #: common/dialogs/panel_setup_netclasses.cpp:648
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Đánh dấu Schematic"
+msgstr "Kiểu đường dây dẫn sơ đồ mạch"
 
 #: common/dialogs/panel_setup_netclasses.cpp:649
 #, fuzzy
@@ -5048,16 +4978,14 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b> Nets phù hợp với '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "Lớp Net"
+msgstr "Lớp tín hiệu:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:608
 #: pcbnew/tools/board_inspection_tool.cpp:1168 pcbnew/zone.cpp:1773
-#, fuzzy
 msgid "Clearance"
-msgstr "Clearance"
+msgstr "Khoảng rộng ngăn cách"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:173
@@ -5072,27 +5000,24 @@ msgid "Via Size"
 msgstr "kích thước Via"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
-#, fuzzy
 msgid "Via Hole"
-msgstr "Via Holes"
+msgstr "Lỗ xuyên thẳng"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
 msgstr "Kích thước uVia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Via Holes"
+msgstr "Lỗ xuyên siêu nhỏ"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
 msgid "DP Width"
 msgstr "Chiều rộng DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59
-#, fuzzy
 msgid "DP Gap"
-msgstr "DP Gap"
+msgstr "Khoảng DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 #, fuzzy
@@ -5100,12 +5025,10 @@ msgid "PCB Color"
 msgstr "Màu sắc"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
-#, fuzzy
 msgid "Wire Thickness"
-msgstr "Độ dày Wire"
+msgstr "Độ dày dây dẫn"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:62
-#, fuzzy
 msgid "Bus Thickness"
 msgstr "Độ dày Bus"
 
@@ -5114,7 +5037,6 @@ msgstr "Độ dày Bus"
 #: eeschema/sch_line.cpp:949 eeschema/sch_line.cpp:1074
 #: eeschema/sch_tablecell.cpp:197 pcbnew/pcb_tablecell.cpp:200
 #: pcbnew/pcb_textbox.cpp:722
-#, fuzzy
 msgid "Line Style"
 msgstr "Kiểu cách Đường thẳng"
 
@@ -5150,9 +5072,8 @@ msgid "Import colors from schematic"
 msgstr "Toàn bộ sơ đồ mạch"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Chỉ định sơ đồ mạch"
+msgstr "Gán lớp tín hiệu:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -5161,9 +5082,8 @@ msgstr "Mẫu"
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1262 eeschema/sch_label.cpp:259
 #: pcbnew/board_connected_item.cpp:206 pcbnew/pad.cpp:2550 pcbnew/zone.cpp:1681
-#, fuzzy
 msgid "Net Class"
-msgstr "Net Class"
+msgstr "Lớp tín hiệu"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
@@ -5173,15 +5093,16 @@ msgid "Ignore"
 msgstr "Bỏ qua"
 
 #: common/dialogs/panel_setup_severities.cpp:118
-#, fuzzy
 msgid "From Pin Conflicts Map"
-msgstr "From Pin Conflicts Map"
+msgstr "Từ bản đồ chân có xung đột"
 
 #: common/dialogs/panel_setup_severities.cpp:179
 msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Sự vi phạm nghiêm trọng đã được thay đổi bên ngoài hộp thoại thiết lập.\n"
+"Bạn có muốn tải lại?"
 
 #: common/dialogs/panel_text_variables.cpp:111
 msgid ""
