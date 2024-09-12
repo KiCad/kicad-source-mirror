@@ -99,6 +99,10 @@ public:
         Add( PCB_ACTIONS::zoneDuplicate );
         Add( PCB_ACTIONS::drawZoneCutout );
         Add( PCB_ACTIONS::drawSimilarZone );
+
+        AppendSeparator();
+
+        Add( PCB_ACTIONS::zonesManager );
     }
 
 protected:
