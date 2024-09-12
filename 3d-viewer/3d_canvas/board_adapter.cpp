@@ -97,8 +97,6 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::BOARD_ADAPTER" ) );
 
-    ReloadColorSettings();
-
     m_boardPos = VECTOR2I();
     m_boardSize = VECTOR2I();
     m_boardCenter = SFVEC3F( 0.0f );
@@ -148,6 +146,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_backPlatedPadAndGraphicPolys = nullptr;
     m_frontPlatedCopperPolys = nullptr;
     m_backPlatedCopperPolys = nullptr;
+
+    ReloadColorSettings();
 
     if( !g_ColorsLoaded )
     {
@@ -425,8 +425,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     // Init  Z position of each layer
     // calculate z position for each copper layer
-    // Zstart = -m_epoxyThickness / 2.0 is the z position of the back (bottom layer) (layer id = 31)
-    // Zstart = +m_epoxyThickness / 2.0 is the z position of the front (top layer) (layer id = 0)
+    // Zstart = -m_epoxyThickness / 2.0 is the z position of the back (bottom layer) (layer id = B_Cu)
+    // Zstart = +m_epoxyThickness / 2.0 is the z position of the front (top layer) (layer id = F_Cu)
 
     //  ____==__________==________==______ <- Bottom = +m_epoxyThickness / 2.0,
     // |                                  |   Top = Bottom + m_copperThickness
@@ -434,22 +434,30 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     //   ==         ==         ==     ==   <- Bottom = -m_epoxyThickness / 2.0,
     //                                        Top = Bottom - m_copperThickness
 
-    unsigned int layer;
-    LSET copperLayers = LSET::AllCuMask();
-
-    for( auto layer : LAYER_RANGE( F_Cu, B_Cu, m_copperLayersCount ) )
+    // Generate the Z position of copper layers
+    // A copper layer Z position has 2 values: its top Z position and its bottom Z position
+    for( auto layer_id : LAYER_RANGE( F_Cu, B_Cu, m_copperLayersCount ) )
     {
         // This approximates internal layer positions (because we're treating all the dielectric
         // layers as having the same thickness).  But we don't render them anyway so it doesn't
         // really matter.
-        m_layerZcoordBottom[layer] = m_boardBodyThickness3DU / 2.0f
-                                     - ( m_boardBodyThickness3DU * static_cast<int>( layer )
-                                         / ( 2 * ( m_copperLayersCount - 1 ) ) );
+        int layer_pos;      // the position of the copper layer from board top to bottom
 
-        if( layer < (m_copperLayersCount / 2) )
-            m_layerZcoordTop[layer] = m_layerZcoordBottom[layer] + m_frontCopperThickness3DU;
+        switch( layer_id )
+        {
+            case F_Cu: layer_pos = 0; break;
+            case B_Cu: layer_pos =  m_copperLayersCount - 1; break;
+            default: layer_pos = ( layer_id - B_Cu )/2; break;
+        };
+
+        m_layerZcoordBottom[layer_id] = m_boardBodyThickness3DU / 2.0
+                                        - ( m_boardBodyThickness3DU * layer_pos
+                                            / ( m_copperLayersCount - 1 ) );
+
+        if( layer_id < (m_copperLayersCount / 2) )
+            m_layerZcoordTop[layer_id] = m_layerZcoordBottom[layer_id] + m_frontCopperThickness3DU;
         else
-            m_layerZcoordTop[layer] = m_layerZcoordBottom[layer] - m_backCopperThickness3DU;
+            m_layerZcoordTop[layer_id] = m_layerZcoordBottom[layer_id] - m_backCopperThickness3DU;
     }
 
     #define layerThicknessMargin 1.1
@@ -506,9 +514,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
         case F_SilkS:
             zposBottom = zpos_copperTop_front + 1.0f * zpos_offset;
             zposTop    = zposBottom + m_nonCopperLayerThickness3DU;
-            break;
-
-        default:
             break;
         }
 
@@ -590,10 +595,17 @@ void BOARD_ADAPTER::GetBoardEditorCopperLayerColors( PCBNEW_SETTINGS* aCfg )
 {
     m_BoardEditorColors.clear();
 
+    if( m_copperLayersCount <= 0 )
+        return;
+
     COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings( aCfg->m_ColorTheme );
 
-    for( int layer = F_Cu; layer <= B_Cu; layer++ )
+    LSET copperLayers = LSET::AllCuMask();
+
+    for( auto layer : LAYER_RANGE( F_Cu, B_Cu, m_copperLayersCount ) )
+    {
         m_BoardEditorColors[ layer ] = settings->GetColor( layer );
+    }
 }
 
 

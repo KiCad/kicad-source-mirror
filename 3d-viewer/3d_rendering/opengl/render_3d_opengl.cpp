@@ -604,8 +604,10 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( layerFlags.test( LAYER_3D_BOARD ) && m_boardAdapter.m_BoardBodyColor.a > opacity_min )
         {
+            // generating internal copper layers is time consumming. so skip them
+            // if the board body is masking them (i.e. if the opacity is near 1.0)
             // B_Cu is layer 2 and all inner layers are higher values
-            if( layer > B_Cu )
+            if( layer > B_Cu && IsCopperLayer( layer ) )
                 continue;
         }
 
