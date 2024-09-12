@@ -91,6 +91,7 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
     m_grid2HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk2 ) ) );
 
     m_addGridButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_editGridButton->SetBitmap( KiBitmapBundle( BITMAPS::edit ) );
     m_removeGridButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_moveUpButton->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_moveDownButton->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
@@ -265,6 +266,53 @@ void PANEL_GRID_SETTINGS::OnAddGrid( wxCommandEvent& event )
     }
 
     gridCfg.grids.insert( gridCfg.grids.begin() + row, newGrid );
+    RebuildGridSizes();
+    m_currentGridCtrl->SetSelection( row );
+}
+
+
+void PANEL_GRID_SETTINGS::OnEditGrid( wxCommandEvent& event )
+{
+    onEditGrid();
+}
+
+
+void PANEL_GRID_SETTINGS::OnDoubleClick( wxMouseEvent& event )
+{
+    onEditGrid();
+}
+
+
+void PANEL_GRID_SETTINGS::onEditGrid()
+{
+    int row = m_currentGridCtrl->GetSelection();
+
+    if( row < 0 )
+        return;
+
+    GRID                 newGrid = m_cfg->m_Window.grid.grids[row];
+    DIALOG_GRID_SETTINGS dlg( wxGetTopLevelParent( this ), m_eventSource, m_unitsProvider,
+                              newGrid );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
+
+    for( GRID& g : gridCfg.grids )
+    {
+        if( newGrid == g )
+        {
+            wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+            DisplayError( topLevelParent,
+                          wxString::Format( _( "Grid size '%s' already exists." ),
+                                            g.UserUnitsMessageText( m_unitsProvider ) ) );
+            return;
+        }
+    }
+
+    gridCfg.grids[row] = newGrid;
     RebuildGridSizes();
     m_currentGridCtrl->SetSelection( row );
 }

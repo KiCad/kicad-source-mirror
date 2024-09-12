@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,8 +37,11 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_addGridButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerGridButtons->Add( m_addGridButton, 0, wxRIGHT|wxLEFT, 5 );
 
+	m_editGridButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerGridButtons->Add( m_editGridButton, 0, wxRIGHT, 5 );
+
 	m_moveUpButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerGridButtons->Add( m_moveUpButton, 0, wxRIGHT, 5 );
+	bSizerGridButtons->Add( m_moveUpButton, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_moveDownButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerGridButtons->Add( m_moveDownButton, 0, 0, 5 );
@@ -171,7 +174,9 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizerMain->Fit( this );
 
 	// Connect Events
+	m_currentGridCtrl->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( PANEL_GRID_SETTINGS_BASE::OnDoubleClick ), NULL, this );
 	m_addGridButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnAddGrid ), NULL, this );
+	m_editGridButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnEditGrid ), NULL, this );
 	m_moveUpButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridUp ), NULL, this );
 	m_moveDownButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridDown ), NULL, this );
 	m_removeGridButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnRemoveGrid ), NULL, this );
@@ -180,7 +185,9 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 PANEL_GRID_SETTINGS_BASE::~PANEL_GRID_SETTINGS_BASE()
 {
 	// Disconnect Events
+	m_currentGridCtrl->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( PANEL_GRID_SETTINGS_BASE::OnDoubleClick ), NULL, this );
 	m_addGridButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnAddGrid ), NULL, this );
+	m_editGridButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnEditGrid ), NULL, this );
 	m_moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridUp ), NULL, this );
 	m_moveDownButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridDown ), NULL, this );
 	m_removeGridButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnRemoveGrid ), NULL, this );

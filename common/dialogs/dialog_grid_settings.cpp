@@ -47,6 +47,21 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( wxWindow* aParent, wxWindow* aEventS
 
     Layout();
 
+    if( !aGrid.x.IsEmpty() )
+    {
+        bool     linked = ( aGrid.x == aGrid.y );
+        VECTOR2D grid = aGrid.ToDouble( aProvider->GetIuScale() );
+
+        m_textName->SetValue( aGrid.name );
+        m_checkLinked->SetValue( linked );
+        m_gridSizeX.SetDoubleValue( grid.x );
+
+        if( !linked )
+            m_gridSizeY.SetDoubleValue( grid.y );
+
+        m_textY->Enable( !linked );
+    }
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }

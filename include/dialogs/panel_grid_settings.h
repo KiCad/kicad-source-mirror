@@ -45,11 +45,15 @@ public:
 
 private:
     void OnAddGrid( wxCommandEvent& event ) override;
+    void OnEditGrid( wxCommandEvent& event ) override;
     void OnRemoveGrid( wxCommandEvent& event ) override;
     void OnMoveGridUp( wxCommandEvent& event ) override;
     void OnMoveGridDown( wxCommandEvent& event ) override;
+    void OnDoubleClick( wxMouseEvent& event ) override;
 
     void RebuildGridSizes();
+
+    void onEditGrid();
 
 private:
     UNITS_PROVIDER*    m_unitsProvider;
