@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-08 17:09+0000\n"
+"PO-Revision-Date: 2024-09-12 17:35+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -1933,14 +1933,12 @@ msgid "No"
 msgstr "Nej"
 
 #: common/design_block_info_impl.cpp:116
-#, fuzzy
 msgid "Fetching design_block libraries..."
-msgstr "Hämtar fotavtrycksbibliotek..."
+msgstr "Hämtar designblocksbibliotek..."
 
 #: common/design_block_info_impl.cpp:147
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "Läser in filer..."
+msgstr "Läser in designblock..."
 
 #: common/design_block_io.cpp:45 common/design_block_io.cpp:54
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -1955,9 +1953,8 @@ msgid "UNKNOWN (%d)"
 msgstr "Okänt (%d)"
 
 #: common/design_block_io.cpp:132
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "Äldre KiCad projektfiler"
+msgstr "Mappar för KiCad designblock"
 
 #: common/design_block_io.cpp:153
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2996
@@ -1966,13 +1963,13 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Kunde inte skriva över bibliotekssökvägen '%s'."
 
 #: common/design_block_io.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Katalogen '%s' kunde inte skapas.\n"
+"Bibliotekssökvägen '%s' kunde inte skapas.\n"
 "\n"
 "Se till att du har skrivbehörighet och försök igen."
 
@@ -1983,67 +1980,68 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Otillräckliga behörigheter för att radera filen '%s'."
 
 #: common/design_block_io.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "Biblioteksmappen '%s' har oväntade undermappar."
+msgstr "Biblioteksmappen '%s' innehåller oväntade filer."
 
 #: common/design_block_io.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "Oväntad fil '%s' hittades i bibliotekssökvägen '%s'."
+msgstr "Oväntad mapp '%s' hittades i bibliotekssökvägen '%s'."
 
 #: common/design_block_io.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "biblioteket '%s' kan inte raderas."
+msgstr "Designblocksbiblioteket '%s' kan inte raderas."
 
 #: common/design_block_io.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Filen '%s' kunde inte skapas."
+msgstr "Metadatafilen '%s' för designblock kunde inte läsas."
 
 #: common/design_block_io.cpp:323
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Designblocket har inte ett giltigt biblioteks-ID."
 
 #: common/design_block_io.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Kretsschemafil '%s' finns redan."
+msgstr "Källkretsschemafil '%s' finns inte."
 
 #: common/design_block_io.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Filen '%s' kunde inte skapas."
+msgstr "Designblocksmapp '%s' kunde inte skapas."
 
 #: common/design_block_io.cpp:355
 #, fuzzy, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Kretsschemafil '%s' finns redan."
+msgstr "Kretsschemafil '%s' kunde inte sparas som designblock på '%s'."
 
 #: common/design_block_io.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Katalog '%s' finns inte"
+msgstr "Designblock '%s' finns inte."
 
 #: common/design_block_io.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Filen '%s' kunde inte skapas."
+msgstr "Designblocksmapp '%s' kunde inte raderas."
 
 #: common/design_block_lib_table.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"Dubblett av biblioteks kortnamn '%s' hittades i symbolbibliotekets fil, rad "
-"%d"
+"Dubblett av biblioteks kortnamn '%s' hittades i designblocksbibliotekets "
+"fil, rad %d."
 
 #: common/design_block_lib_table.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "fp-lib-tabellfiler innehåller inget bibliotek med namnet '%s'."
+msgstr ""
+"design-block-lib-table filer innehåller inget bibliotek med namnet '%s'."
 
 #: common/design_block_lib_table.cpp:570 common/fp_lib_table.cpp:556
 #: eeschema/symbol_lib_table.cpp:609
@@ -7608,9 +7606,8 @@ msgid "Error loading project footprint library table."
 msgstr "Fel vid inläsning av bibliotekstabellen för projektets fotavtryck."
 
 #: common/project.cpp:440 common/project.cpp:446
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "Fel vid inläsning av bibliotekstabellen för projektets fotavtryck."
+msgstr "Fel vid inläsning av bibliotekstabellen för projektets designblock."
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
 msgid "This is the default net class."
@@ -8582,14 +8579,13 @@ msgstr ""
 "Redigera listorna över globala och projektspecifika bibliotek för fotavtryck"
 
 #: common/tool/actions.cpp:1110
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Hantera symbolbibliotek..."
+msgstr "Hantera designblocksbibliotek..."
 
 #: common/tool/actions.cpp:1111
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "Redigera listorna över globala och projektspecifika symbolbibliotek"
+msgstr ""
+"Redigera listorna över globala och projektspecifika designblocksbibliotek"
 
 #: common/tool/actions.cpp:1117
 msgid "Getting Started with KiCad"
@@ -9321,12 +9317,11 @@ msgstr "KiCad fotavtrycksbiblioteks sökvägar"
 
 #: common/wildcards_and_files_ext.cpp:345
 msgid "KiCad design block path"
-msgstr ""
+msgstr "Sökväg för KiCad designblock"
 
 #: common/wildcards_and_files_ext.cpp:352
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "KiCad fotavtrycksbiblioteks sökvägar"
+msgstr "KiCad designblocksbiblioteks sökvägar"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Drawing sheet files"
@@ -10007,9 +10002,9 @@ msgid "Documentation"
 msgstr "Dokumentation"
 
 #: eeschema/design_block_tree_model_adapter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Fel vid inläsning av symbol %s från bibliotek '%s'."
+msgstr "Fel vid inläsning av designblock %s från bibliotek '%s'."
 
 #: eeschema/design_block_utils.cpp:51 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -10056,9 +10051,8 @@ msgid "Library %s already exists."
 msgstr "Biblioteket %s finns redan."
 
 #: eeschema/design_block_utils.cpp:217
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Redigera alternativ för denna bibliotekspost"
+msgstr "Mata in en beskrivning för biblioteket:"
 
 #: eeschema/design_block_utils.cpp:218 eeschema/sch_symbol.cpp:2977
 #: pcbnew/footprint.cpp:3810 pcbnew/plot_board_layers.cpp:131
@@ -10066,39 +10060,32 @@ msgid "Library Description"
 msgstr "Biblioteksbeskrivning"
 
 #: eeschema/design_block_utils.cpp:267 eeschema/design_block_utils.cpp:326
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Välj en symbolbibliotekstabellfil."
+msgstr "Vänligen välj ett bibliotek där designblocket skall sparas."
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "Designblock med nästlade ark stöds ej."
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
-#, fuzzy
 msgid "Enter a name for the design block:"
-msgstr "Vänligen ange ett namn för Git-förvaret"
+msgstr "Ange ett namn för designblocket:"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
-#, fuzzy
 msgid "Design Block Name"
-msgstr "Designregler"
+msgstr "Designblockets namn"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
-#, fuzzy
 msgid "Error saving temporary schematic file to create design block."
-msgstr ""
-"Kunde inte spara kretsschemafil '%s'.\n"
-"%s"
+msgstr "Kunde inte spara temporär kretsschemafil för att skapa designblock."
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Vänligen välj några objekt att spara som ett designblock."
 
 #: eeschema/design_block_utils.cpp:405
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "Välj en symbolbibliotekstabellfil."
+msgstr "Vänligen välj ett bibliotek som ska raderas."
 
 #: eeschema/design_block_utils.cpp:411 eeschema/design_block_utils.cpp:453
 #: pcbnew/footprint_libraries_utils.cpp:543
@@ -10115,26 +10102,28 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Radera designblocksbibliotek '%s' från lagringsenheten? Detta kommer att "
+"radera alla designblock i biblioteket."
 
 #: eeschema/design_block_utils.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[inget bibliotek valt]"
+msgstr "Designblocksbibliotek '%s' har raderats"
 
 #: eeschema/design_block_utils.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Ta bort fotavtryck '%s' från biblioteket '%s'?"
+msgstr "Radera designblock '%s' i biblioteket '%s' från lagringsmediet?"
 
 #: eeschema/design_block_utils.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Fotavtryck '%s' raderat från biblioteket '%s'"
+msgstr "Designblock '%s' raderat från biblioteket '%s'"
 
 #: eeschema/design_block_utils.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "Fel vid inläsning av symbol %s från bibliotek '%s'."
+msgstr "Fel vid inläsning av designblock %s från bibliotek '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -11690,9 +11679,8 @@ msgid "Position"
 msgstr "Position"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "Standardreferensbeteckning:"
+msgstr "Referensbeteckning att börja från:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
@@ -11709,14 +11697,12 @@ msgid "Increment by:"
 msgstr "Ökningssteg:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "Spara allt"
+msgstr "Alla ark"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
-#, fuzzy
 msgid "Increment Annotations From"
-msgstr "Radera numrering"
+msgstr "Öka numrering från"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
@@ -13101,27 +13087,24 @@ msgstr "&Bakåt"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "Gör skillnad på gemener/VERSALER"
+msgstr "Gör skillnad på &gemener/VERSALER"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Endast &hela ord"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
-#, fuzzy
 msgid "Wi&ldcards"
-msgstr "Jokertecken"
+msgstr "Jo&kertecken"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
 msgstr "Sök efter stift&namn och -nummer"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search &hidden fields"
 msgstr "Genomsök &dolda fält"
 
@@ -13401,7 +13384,7 @@ msgid ""
 msgstr ""
 "Det här är användbart för att lägga till symboler kopplade till fotavtryck "
 "på mönsterkortet som man inte vill få\n"
-"med i komponentlistan för bestyckning (BOM), till exempel referenspunkter "
+"med i komponentlistan för bestyckning (BOM), till exempel optiska riktmärken "
 "(siktmärken) och logotyper"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
@@ -14013,6 +13996,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Lyckades inte tolka:\n"
+"\n"
+"%s\n"
+"Använder generisk SPICE modell."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -14991,9 +14978,8 @@ msgid "Color highlight thickness:"
 msgstr "Linjebredd för markering:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
-#, fuzzy
 msgid "Color highlight opacity:"
-msgstr "DRC-överträdelse: markera hinder"
+msgstr "Opacitet för markeringsfärg:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:166
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:120
@@ -16053,9 +16039,8 @@ msgid "Selection Filter"
 msgstr "Urvalsfilter"
 
 #: eeschema/eeschema_settings.cpp:134
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Designregler"
+msgstr "Designblock"
 
 #: eeschema/erc/erc.cpp:76 eeschema/erc/erc.cpp:93
 msgid "Input Pin"
@@ -17108,9 +17093,8 @@ msgid "Symbols to New Library..."
 msgstr "Symboler till nytt bibliotek..."
 
 #: eeschema/menubar.cpp:204
-#, fuzzy
 msgid "Show Design Blocks"
-msgstr "Visa designregler."
+msgstr "Visa designblock"
 
 #: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:173
@@ -20305,9 +20289,8 @@ msgid "Errors during netlist generation."
 msgstr "Fel vid generering av nätlista."
 
 #: eeschema/sim/simulator_frame.cpp:375 eeschema/tools/simulator_control.cpp:86
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Fel vid generering av nätlista."
+msgstr "Varningar vid generering av nätlista."
 
 #: eeschema/sim/simulator_frame.cpp:385
 msgid "Simulator requires a fully annotated schematic."
@@ -21472,31 +21455,27 @@ msgstr "Välj en fullständig anslutning"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Sheet as Design Block..."
-msgstr ""
+msgstr "Spara ark som designblock..."
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "Skapa en PNG-fil från den aktuella vyn"
+msgstr "Skapa ett nytt designblock från det aktuella arket"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Spara val som designblock..."
 
 #: eeschema/tools/ee_actions.cpp:164
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "Skapar ett regelområde från urvalet"
+msgstr "Skapa ett nytt desigblock från det aktuella urvalet"
 
 #: eeschema/tools/ee_actions.cpp:170
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "Radera block"
+msgstr "Radera designblock"
 
 #: eeschema/tools/ee_actions.cpp:171
-#, fuzzy
 msgid "Remove the selected design block from its library"
-msgstr "Ta bort den valda symbolen från biblioteket"
+msgstr "Ta bort det valda designblocket från dess biblioteket"
 
 #: eeschema/tools/ee_actions.cpp:181
 msgid "Save Library As..."
@@ -21712,13 +21691,12 @@ msgid "Place Power Symbols"
 msgstr "Placera strömförsörjningssymboler"
 
 #: eeschema/tools/ee_actions.cpp:428
-#, fuzzy
 msgid "Place Design Block"
-msgstr "Avbryt block"
+msgstr "Placera ut designblock"
 
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Lägg till valt designblock till aktuellt ark"
 
 #: eeschema/tools/ee_actions.cpp:440
 msgid "Place No Connect Flags"
@@ -21731,7 +21709,7 @@ msgstr "Placera knutpunkter"
 #: eeschema/tools/ee_actions.cpp:460
 #, fuzzy
 msgid "Place Wire to Bus Entries"
-msgstr "Lägg till tråd till busspost"
+msgstr "Lägg till ledning till busspost"
 
 #: eeschema/tools/ee_actions.cpp:470
 msgid "Place Net Labels"
@@ -21756,7 +21734,7 @@ msgstr "Ritningsark"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "Kopiera ark till projekt och rita på aktuellt ark"
 
 #: eeschema/tools/ee_actions.cpp:512
 msgid "Place Sheet Pins"
@@ -21767,14 +21745,12 @@ msgid "Sync Sheet Pins"
 msgstr "Synkronisera arkstift"
 
 #: eeschema/tools/ee_actions.cpp:535
-#, fuzzy
 msgid "Import Sheet"
-msgstr "Importera stift"
+msgstr "Importera ark"
 
 #: eeschema/tools/ee_actions.cpp:536
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "Importera stift"
+msgstr "Importera ark till projekt"
 
 #: eeschema/tools/ee_actions.cpp:546
 msgid "Place Global Labels"
@@ -22218,15 +22194,14 @@ msgid "Fill in schematic symbol reference designators"
 msgstr "Fyll i referensbeteckningar för kretsschemats symboler"
 
 #: eeschema/tools/ee_actions.cpp:1040
-#, fuzzy
 msgid "Increment Annotations From..."
-msgstr "Radera numrering"
+msgstr "Öka numrering från..."
 
 #: eeschema/tools/ee_actions.cpp:1041
-#, fuzzy
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
-msgstr "Rensa referensbeteckningarna för alla inklistrade symboler"
+msgstr ""
+"Öka en undergrupp av referensbeteckningarna med början vid en viss symbol"
 
 #: eeschema/tools/ee_actions.cpp:1046
 msgid "Schematic Setup..."
@@ -22821,18 +22796,16 @@ msgid "Place Symbol"
 msgstr "Placera symbol"
 
 #: eeschema/tools/sch_drawing_tools.cpp:675
-#, fuzzy
 msgid "Add design block"
-msgstr "Lägg till signaler att plotta"
+msgstr "Lägg till designblock"
 
 #: eeschema/tools/sch_drawing_tools.cpp:676
 msgid "Import Schematic Sheet Content..."
 msgstr "Importera innehåll från kretsschema-ark..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:707
-#, fuzzy
 msgid "Choose Schematic"
-msgstr "Nytt kretsschema"
+msgstr "Välj kretsschema"
 
 #: eeschema/tools/sch_drawing_tools.cpp:924 pcbnew/tools/drawing_tool.cpp:659
 msgid "Press <ESC> to cancel image creation."
@@ -22931,14 +22904,14 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "Tryck på <ESC> för att avbryta skapande av ritningsark."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2852
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Katalog '%s' finns inte"
+msgstr "Fil '%s' finns inte."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2861
-#, fuzzy, c-format
+#, c-format
 msgid "Could not import sheet from '%s'."
-msgstr "Det gick inte att ladda bilden från '%s'."
+msgstr "Det gick inte att importera ark från '%s'."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3023
 msgid "Modify sheet pin"
@@ -23100,9 +23073,8 @@ msgstr ""
 "Symboler som har trasiga länkar till symbolbibliotek kan inte redigeras."
 
 #: eeschema/tools/sch_editor_control.cpp:2301
-#, fuzzy
 msgid "Increment Annotations"
-msgstr "Radera numrering"
+msgstr "Öka numrering"
 
 #: eeschema/tools/sch_editor_control.cpp:2706
 #: pcbnew/tools/board_editor_control.cpp:606
@@ -23285,29 +23257,28 @@ msgid "Repeat Pin"
 msgstr "Repetera stift"
 
 #: eeschema/widgets/design_block_pane.cpp:41
-#, fuzzy
 msgid "Place as sheet"
-msgstr "Placera vid:"
+msgstr "Placera ut som ark"
 
 #: eeschema/widgets/design_block_pane.cpp:42
-#, fuzzy
 msgid "Keep annotations"
-msgstr "Behåll befintliga numreringar"
+msgstr "Behåll numreringar"
 
 #: eeschema/widgets/design_block_pane.cpp:65
-#, fuzzy
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "Håll symbolen vald för efterföljande klick."
+msgstr "Placera ut kopior av designblocket vid efterföljande klick."
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Lägg till designblocket som ett nytt ark."
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
+"Bevara referensbeteckningar i källkretsschemat. I annat fall, rensa och "
+"numrera om enligt inställningar."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -23340,14 +23311,12 @@ msgid "(page %s)"
 msgstr "(sida %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Laddar symbolbibliotek"
+msgstr "Läser in designblocksbibliotek"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:262
-#, fuzzy
 msgid "Updating Design Block Libraries"
-msgstr "Uppdaterar fotavtrycksbibliotek"
+msgstr "Uppdaterar designblocksbibliotek"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:386
 #: eeschema/widgets/panel_symbol_chooser.cpp:169
@@ -25687,17 +25656,17 @@ msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr "Spara %d bibliotek som aktuellt format och ersätt poster i tabellen?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
 "Katalog '%s' finns redan. Vill du skriva över eventuella existerande "
-"fotavtryck?"
+"designblock?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Det gick inte att spara symbolbiblioteksfil '%s'."
+msgstr "Det gick inte att spara designblocksbiblioteksfil '%s'."
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:920
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:948
@@ -25860,13 +25829,13 @@ msgstr ""
 "verkar inte vara en giltig KiCad projektfil."
 
 #: kicad/kicad.cpp:367
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
-"Ett fel uppstod vid försök att ladda den globala symbolbibliotekstabellen.\n"
-"Redigera denna globala symbolbibliotekstabell i inställningsmenyn."
+"Ett fel uppstod vid försök att ladda den globala "
+"designblocksbibliotekstabellen.\n"
+"Redigera denna globala designblocksbibliotekstabell i inställningsmenyn."
 
 #: kicad/kicad_cli.cpp:113
 msgid "Export GLB (binary GLTF)"
@@ -27046,9 +27015,8 @@ msgid "Application cannot start."
 msgstr "Programmet kan inte starta."
 
 #: kicad/tools/kicad_manager_control.cpp:907
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Bibliotek"
+msgstr "Designblocksbibliotek"
 
 #: kicad/update_manager.cpp:164
 msgid "Update Check"
@@ -33292,29 +33260,24 @@ msgid "Wra&p"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference &designators"
-msgstr "Sök referensbeteckningar för fotavtryck"
+msgstr "Sök referens&beteckningar för fotavtryck"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint &values"
-msgstr "Sök efter värden för fotavtryck"
+msgstr "Sök efter &värden för fotavtryck"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search &other text items"
-msgstr "Sök i andra textobjekt"
+msgstr "Sök i &andra textobjekt"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC &markers"
-msgstr "Sök efter DRC-markörer"
+msgstr "Sök efter DRC-&markörer"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search &net names"
-msgstr "Sök nätnamn"
+msgstr "Sök &nätnamn"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
 msgid "Restart Search"
@@ -35352,8 +35315,8 @@ msgstr ""
 "Valfri egenskap för att ange ett speciellt syfte eller begränsning i "
 "tillverkningsfiler:\n"
 "BGA-attributet är för lödytor i BGA-fotavtryck\n"
-"Lokal referenspunkt är en referenspunkt för det överordnade fotavtrycket\n"
-"Global referenspunkt är en referenspunkt för hela mönsterkortet\n"
+"Lokalt optiskt riktmärke är ett riktmärke för det överordnade fotavtrycket\n"
+"Globalt optiskt riktmärke är ett riktmärke för hela mönsterkortet\n"
 "Testpunkt specificerar en elektrisk testpunkt\n"
 "Kylelement anger en termisk lödyta\n"
 "Krenelerad specificerar ett hålmonteringshål (\"halvt hål\") på en "
@@ -35366,11 +35329,11 @@ msgstr "BGA-lödyta"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2488
 msgid "Fiducial, local to footprint"
-msgstr "Lokal referenspunkt för fotavtryck"
+msgstr "Lokalt optiskt riktmärke för fotavtryck"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2487
 msgid "Fiducial, global to board"
-msgstr "Global referenspunkt för mönsterkort"
+msgstr "Globalt optiskt riktmärke för mönsterkort"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2489
 msgid "Test point pad"
@@ -38082,9 +38045,8 @@ msgstr "Användare1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid "Off-board, front"
-msgstr " Utanför mönsterkortet, framsida"
+msgstr "Utanför mönsterkortet, framsida"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -42558,11 +42520,11 @@ msgstr "BGA"
 
 #: pcbnew/pad.cpp:1152
 msgid "Fiducial global"
-msgstr "Global referenspunkt"
+msgstr "Globalt optiskt riktmärke"
 
 #: pcbnew/pad.cpp:1153
 msgid "Fiducial local"
-msgstr "Lokal referenspunkt"
+msgstr "Lokalt optiskt riktmärke"
 
 #: pcbnew/pad.cpp:1154
 msgid "Test point"
@@ -42755,8 +42717,8 @@ msgstr "(ytmonteringslödyta har inga yttre lager)"
 #: pcbnew/pad.cpp:2224
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr ""
-"(referenspunkts-egenskapen är meningslös för lödytor med ej genompläterade "
-"hål (NPTH))"
+"(egenskapen optiskt riktmärke är meningslös för lödytor med ej "
+"genompläterade hål (NPTH))"
 
 #: pcbnew/pad.cpp:2228
 msgid "('testpoint' property makes no sense on NPTH pads)"
@@ -43521,7 +43483,7 @@ msgstr ""
 "Fotavtryck %s innehåller streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4342
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "Okänd justering av textruta %d, text %s"
 
