@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-08 17:09+0000\n"
+"PO-Revision-Date: 2024-09-13 02:09+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -13431,7 +13431,7 @@ msgid ""
 msgstr ""
 "Det här är användbart för att lägga till symboler kopplade till fotavtryck "
 "på mönsterkortet som man inte vill få\n"
-"med i komponentlistan för bestyckning (BOM), till exempel referenspunkter "
+"med i komponentlistan för bestyckning (BOM), till exempel optiska riktmärken "
 "(siktmärken) och logotyper"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
@@ -33538,11 +33538,11 @@ msgstr "BGA-lödyta"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2345
 msgid "Fiducial, local to footprint"
-msgstr "Lokal referenspunkt för fotavtryck"
+msgstr "Lokalt optiskt riktmärke för fotavtryck"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2344
 msgid "Fiducial, global to board"
-msgstr "Global referenspunkt för mönsterkort"
+msgstr "Globalt optiskt riktmärke för mönsterkort"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:2346
 msgid "Test point pad"
@@ -40571,11 +40571,11 @@ msgstr "BGA"
 
 #: pcbnew/pad.cpp:1073
 msgid "Fiducial global"
-msgstr "Global referenspunkt"
+msgstr "Globalt optiskt riktmärke"
 
 #: pcbnew/pad.cpp:1074
 msgid "Fiducial local"
-msgstr "Lokal referenspunkt"
+msgstr "Lokalt optiskt riktmärke"
 
 #: pcbnew/pad.cpp:1075
 msgid "Test point"
@@ -40750,8 +40750,8 @@ msgstr "(ytmonteringslödyta har inga yttre lager)"
 #: pcbnew/pad.cpp:2090
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr ""
-"(referenspunkts-egenskapen är meningslös för lödytor med ej genompläterade "
-"hål (NPTH))"
+"(egenskapen optiskt riktmärke är meningslös för lödytor med ej "
+"genompläterade hål (NPTH))"
 
 #: pcbnew/pad.cpp:2094
 msgid "('testpoint' property makes no sense on NPTH pads)"
@@ -41497,7 +41497,7 @@ msgstr ""
 "Fotavtryck %s innehåller streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "Okänd justering av textruta %d, text %s"
 
