@@ -24,6 +24,7 @@ set( KIMATH_SRCS
     src/geometry/line.cpp
     src/geometry/nearest.cpp
     src/geometry/oval.cpp
+    src/geometry/roundrect.cpp
     src/geometry/seg.cpp
     src/geometry/shape.cpp
     src/geometry/shape_arc.cpp

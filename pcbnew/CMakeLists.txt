@@ -119,6 +119,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_import_netlist_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
+    dialogs/dialog_outset_items.cpp
+    dialogs/dialog_outset_items_base.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
     dialogs/dialog_plot.cpp

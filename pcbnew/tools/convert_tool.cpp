@@ -35,6 +35,7 @@
 #include <collectors.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <dialogs/dialog_outset_items.h>
 #include <footprint.h>
 #include <footprint_edit_frame.h>
 #include <geometry/shape_compound.h>
@@ -231,7 +232,7 @@ private:
 
 
 CONVERT_TOOL::CONVERT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.Convert" ),
+    PCB_TOOL_BASE( "pcbnew.Convert" ),
     m_selectionTool( nullptr ),
     m_menu( nullptr ),
     m_frame( nullptr )
@@ -278,6 +279,7 @@ bool CONVERT_TOOL::Init()
     static const std::vector<KICAD_T> polyTypes =   { PCB_ZONE_T,
                                                       PCB_SHAPE_LOCATE_POLY_T,
                                                       PCB_SHAPE_LOCATE_RECT_T };
+    static const std::vector<KICAD_T> outsetTypes = { PCB_PAD_T, PCB_SHAPE_T };
 
     auto shapes          = S_C::OnlyTypes( shapeTypes ) && P_S_C::SameLayer();
     auto graphicToTrack  = S_C::OnlyTypes( toTrackTypes );
@@ -289,6 +291,8 @@ bool CONVERT_TOOL::Init()
     auto canCreateArray  = S_C::MoreThan( 0 );
     auto canCreatePoly   = shapes || anyPolys || anyTracks;
 
+    auto canCreateOutset = S_C::OnlyTypes( outsetTypes );
+
     if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
         canCreatePoly = shapes || anyPolys || anyTracks || anyPads;
 
@@ -298,7 +302,8 @@ bool CONVERT_TOOL::Init()
                                 || canCreateLines
                                 || canCreateTracks
                                 || canCreateArcs
-                                || canCreateArray;
+                                || canCreateArray
+                                || canCreateOutset;
 
     m_menu->AddItem( PCB_ACTIONS::convertToPoly, canCreatePoly );
 
@@ -307,7 +312,8 @@ bool CONVERT_TOOL::Init()
 
     m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePoly );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, canCreateLines );
-    m_menu->AppendSeparator();
+    m_menu->AddItem( PCB_ACTIONS::outsetItems, canCreateOutset );
+    m_menu->AddSeparator();
 
     // Currently the code exists, but tracks are not really existing in footprints
     // only segments on copper layers
@@ -316,7 +322,7 @@ bool CONVERT_TOOL::Init()
 
     m_menu->AddItem( PCB_ACTIONS::convertToArc, canCreateArcs );
 
-    m_menu->AppendSeparator();
+    m_menu->AddSeparator();
     m_menu->AddItem( PCB_ACTIONS::createArray, canCreateArray );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
@@ -1287,12 +1293,139 @@ std::optional<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
 }
 
 
+int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
+{
+    PCB_BASE_EDIT_FRAME& frame = *getEditFrame<PCB_BASE_EDIT_FRAME>();
+    PCB_SELECTION&       selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    // We've converted the polygon and rectangle to segments, so drop everything
+                    // that isn't a segment at this point
+                    if( !item->IsType( { PCB_PAD_T, PCB_SHAPE_T } ) )
+                    {
+                        aCollector.Remove( item );
+                    }
+                }
+            },
+            true /* prompt user regarding locked items */ );
+
+    BOARD_COMMIT commit( this );
+
+    for( EDA_ITEM* item : selection )
+        item->ClearFlags( STRUCT_DELETED );
+
+    // List of thing to select at the end of the operation
+    // (doing it as we go will invalidate the iterator)
+    std::vector<BOARD_ITEM*> items_to_select_on_success;
+
+    // Handle modifications to existing items by the routine
+    // How to deal with this depends on whether we're in the footprint editor or not
+    // and whether the item was conjured up by decomposing a polygon or rectangle
+    auto item_modification_handler = [&]( BOARD_ITEM& aItem )
+    {
+    };
+
+    bool any_items_created = false;
+    auto item_creation_handler = [&]( std::unique_ptr<BOARD_ITEM> aItem )
+    {
+        any_items_created = true;
+        items_to_select_on_success.push_back( aItem.get() );
+        commit.Add( aItem.release() );
+    };
+
+    auto item_removal_handler = [&]( BOARD_ITEM& aItem )
+    {
+        // If you do an outset on a FP pad, do you really want to delete
+        // the parent?
+        if( !aItem.GetParentFootprint() )
+        {
+            commit.Remove( &aItem );
+        }
+    };
+
+    // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
+    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
+            item_creation_handler, item_modification_handler, item_removal_handler );
+
+    // Persistent settings between dialog invocations
+    // Init with some sensible defaults
+    static OUTSET_ROUTINE::PARAMETERS outset_params_fp_edit{
+        pcbIUScale.mmToIU( 0.25 ), // A common outset value
+        false,
+        false,
+        true,
+        F_CrtYd,
+        frame.GetDesignSettings().GetLineThickness( F_CrtYd ),
+        pcbIUScale.mmToIU( 0.01 ),
+        false,
+    };
+
+    static OUTSET_ROUTINE::PARAMETERS outset_params_pcb_edit{
+        pcbIUScale.mmToIU( 1 ),
+        true,
+        true,
+        true,
+        Edge_Cuts, // Outsets often for slots?
+        frame.GetDesignSettings().GetLineThickness( Edge_Cuts ),
+        std::nullopt,
+        false,
+    };
+
+    OUTSET_ROUTINE::PARAMETERS& outset_params =
+            IsFootprintEditor() ? outset_params_fp_edit : outset_params_pcb_edit;
+
+    {
+        DIALOG_OUTSET_ITEMS dlg( frame, outset_params );
+        if( dlg.ShowModal() == wxID_CANCEL )
+        {
+            return 0;
+        }
+    }
+
+    OUTSET_ROUTINE outset_routine( frame.GetModel(), change_handler, outset_params );
+
+    for( EDA_ITEM* item : selection )
+    {
+        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+        outset_routine.ProcessItem( *board_item );
+    }
+
+    // Deselect all the original items
+    m_selectionTool->ClearSelection();
+
+    // Select added and modified items
+    for( BOARD_ITEM* item : items_to_select_on_success )
+        m_selectionTool->AddItemToSel( item, true );
+
+    if( any_items_created )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    // Notify other tools of the changes
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    commit.Push( outset_routine.GetCommitDescription() );
+
+    if( const std::optional<wxString> msg = outset_routine.GetStatusMessage() )
+        frame.ShowInfoBarMsg( *msg );
+
+    return 0;
+}
+
+
 void CONVERT_TOOL::setTransitions()
 {
+    // clang-format off
     Go( &CONVERT_TOOL::CreatePolys,    PCB_ACTIONS::convertToPoly.MakeEvent() );
     Go( &CONVERT_TOOL::CreatePolys,    PCB_ACTIONS::convertToZone.MakeEvent() );
     Go( &CONVERT_TOOL::CreatePolys,    PCB_ACTIONS::convertToKeepout.MakeEvent() );
     Go( &CONVERT_TOOL::CreateLines,    PCB_ACTIONS::convertToLines.MakeEvent() );
     Go( &CONVERT_TOOL::CreateLines,    PCB_ACTIONS::convertToTracks.MakeEvent() );
     Go( &CONVERT_TOOL::SegmentToArc,   PCB_ACTIONS::convertToArc.MakeEvent() );
+    Go( &CONVERT_TOOL::OutsetItems,    PCB_ACTIONS::outsetItems.MakeEvent() );
+    // clang-format on
 }

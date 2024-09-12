@@ -26,7 +26,7 @@
 #define CONVERT_TOOL_H_
 
 #include <geometry/shape_poly_set.h>
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool_base.h>
 #include <pcbnew_settings.h>
 
 class CONDITIONAL_MENU;
@@ -34,7 +34,7 @@ class PCB_SELECTION_TOOL;
 class PCB_BASE_FRAME;
 
 
-class CONVERT_TOOL : public TOOL_INTERACTIVE
+class CONVERT_TOOL : public PCB_TOOL_BASE
 {
 public:
     CONVERT_TOOL();
@@ -60,6 +60,11 @@ public:
      * Convert selected segment (graphic or track) to an arc of the same type
      */
     int SegmentToArc( const TOOL_EVENT& aEvent );
+
+    /**
+     * Convert selected items to outset versions of themselves.
+     */
+    int OutsetItems( const TOOL_EVENT& aEvent );
 
     ///< @copydoc TOOL_INTERACTIVE::setTransitions()
     void setTransitions() override;

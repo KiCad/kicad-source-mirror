@@ -166,6 +166,8 @@ public:
     static TOOL_ACTION extendLines;
     /// Simplify polygon outlines
     static TOOL_ACTION simplifyPolygons;
+    /// Create outset items from selection
+    static TOOL_ACTION outsetItems;
 
     /// Merge multiple polygons into a single polygon
     static TOOL_ACTION mergePolygons;

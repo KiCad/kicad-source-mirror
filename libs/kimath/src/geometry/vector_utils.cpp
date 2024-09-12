@@ -65,3 +65,36 @@ const VECTOR2I& KIGEOM::GetNearestEndpoint( const SEG& aSeg, const VECTOR2I& aPo
     const double distToCBEnd = aSeg.B.Distance( aPoint );
     return ( distToCBStart <= distToCBEnd ) ? aSeg.A : aSeg.B;
 }
+
+template <typename T>
+static constexpr T RoundNearest( T x, T g )
+{
+    return ( x + ( x < 0 ? -g / 2 : g / 2 ) ) / g * g;
+}
+
+template <typename T>
+static constexpr T RoundDown( T x, T g )
+{
+    return ( ( x < 0 ? ( x - g + 1 ) : x ) / g ) * g;
+}
+
+template <typename T>
+static constexpr T RoundUp( T x, T g )
+{
+    return ( ( x < 0 ? x : ( x + g - 1 ) ) / g ) * g;
+}
+
+VECTOR2I KIGEOM::RoundGrid( const VECTOR2I& aVec, int aGridSize )
+{
+    return VECTOR2I( RoundNearest( aVec.x, aGridSize ), RoundNearest( aVec.y, aGridSize ) );
+}
+
+VECTOR2I KIGEOM::RoundNW( const VECTOR2I& aVec, int aGridSize )
+{
+    return VECTOR2I( RoundDown( aVec.x, aGridSize ), RoundDown( aVec.y, aGridSize ) );
+}
+
+VECTOR2I KIGEOM::RoundSE( const VECTOR2I& aVec, int aGridSize )
+{
+    return VECTOR2I( RoundUp( aVec.x, aGridSize ), RoundUp( aVec.y, aGridSize ) );
+}

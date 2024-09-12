@@ -26,6 +26,7 @@
 #include <geometry/seg.h>
 #include <geometry/half_line.h>
 #include <geometry/line.h>
+#include <geometry/shape_rect.h>
 
 
 SEG KIGEOM::NormalisedSeg( const SEG& aSeg )
@@ -138,4 +139,94 @@ std::optional<SEG> KIGEOM::ClipLineToBox( const LINE& aLine, const BOX2I& aBox )
     }
 
     return std::nullopt;
+}
+
+
+SHAPE_ARC KIGEOM::MakeArcCw90( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Directions aDir )
+{
+    switch( aDir )
+    {
+    case DIRECTION_45::NW:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( -aRadius, 0 ),
+            ANGLE_90,
+        };
+    case DIRECTION_45::NE:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( 0, -aRadius ),
+            ANGLE_90,
+        };
+    case DIRECTION_45::SW:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( 0, aRadius ),
+            ANGLE_90,
+        };
+    case DIRECTION_45::SE:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( aRadius, 0 ),
+            ANGLE_90,
+        };
+    default: wxFAIL_MSG( "Invalid direction" ); return SHAPE_ARC();
+    }
+}
+
+
+SHAPE_ARC KIGEOM::MakeArcCw180( const VECTOR2I& aCenter, int aRadius,
+                                DIRECTION_45::Directions aDir )
+{
+    switch( aDir )
+    {
+    case DIRECTION_45::N:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( -aRadius, 0 ),
+            ANGLE_180,
+        };
+    case DIRECTION_45::E:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( 0, -aRadius ),
+            ANGLE_180,
+        };
+    case DIRECTION_45::S:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( aRadius, 0 ),
+            ANGLE_180,
+        };
+    case DIRECTION_45::W:
+        return SHAPE_ARC{
+            aCenter,
+            aCenter + VECTOR2I( 0, aRadius ),
+            ANGLE_180,
+        };
+    default: wxFAIL_MSG( "Invalid direction" );
+    }
+
+    return SHAPE_ARC();
+}
+
+
+VECTOR2I KIGEOM::GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir )
+{
+    const VECTOR2I nw = aRect.GetPosition();
+    switch( aDir )
+    {
+        // clang-format off
+    case DIRECTION_45::N:  return nw + VECTOR2I( aRect.GetWidth() / 2, 0 );
+    case DIRECTION_45::E:  return nw + VECTOR2I( aRect.GetWidth(),     aRect.GetHeight() / 2 );
+    case DIRECTION_45::S:  return nw + VECTOR2I( aRect.GetWidth() / 2, aRect.GetHeight() );
+    case DIRECTION_45::W:  return nw + VECTOR2I( 0,                    aRect.GetHeight() / 2 );
+    case DIRECTION_45::NW: return nw;
+    case DIRECTION_45::NE: return nw + VECTOR2I( aRect.GetWidth(),     0 );
+    case DIRECTION_45::SW: return nw + VECTOR2I( 0,                    aRect.GetHeight() );
+    case DIRECTION_45::SE: return nw + VECTOR2I( aRect.GetWidth(),     aRect.GetHeight() );
+    default: wxFAIL_MSG( "Invalid direction" );
+        // clang-format on
+    }
+    return VECTOR2I();
 }

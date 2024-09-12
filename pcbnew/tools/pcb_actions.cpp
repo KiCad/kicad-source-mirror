@@ -89,6 +89,12 @@ TOOL_ACTION PCB_ACTIONS::convertToTracks( TOOL_ACTION_ARGS()
         .Tooltip( _( "Creates tracks from the selected graphic lines" ) )
         .Icon( BITMAPS::add_tracks ) );
 
+TOOL_ACTION PCB_ACTIONS::outsetItems( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Convert.outsetItems" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Create Outsets from Selection" ) )
+        .Tooltip( _( "Create outset lines from the selected item" ) ) );
+
 
 // DRAWING_TOOL
 //

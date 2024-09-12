@@ -76,6 +76,7 @@ SHAPE_LINE_CHAIN KIGEOM::ConvertToChain( const OVAL& aOval )
     chain.Append( SHAPE_ARC( seg.A, seg.A - perp, ANGLE_180 ) );
     chain.Append( seg.B + perp );
     chain.Append( SHAPE_ARC( seg.B, seg.B + perp, ANGLE_180 ) );
+    chain.SetClosed( true );
     return chain;
 }
 

@@ -143,6 +143,11 @@ public:
     int SimplifyPolygons( const TOOL_EVENT& aEvent );
 
     /**
+     * Create outset items from selection
+     */
+    int OutsetItems( const TOOL_EVENT& aEvent );
+
+    /**
      * Modify selected polygons into a single polygon using boolean operations
      * such as merge (union) or subtract (difference)
      */

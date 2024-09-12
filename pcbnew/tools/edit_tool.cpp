@@ -1354,16 +1354,16 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     // List of thing to select at the end of the operation
     // (doing it as we go will invalidate the iterator)
-    std::vector<PCB_SHAPE*> items_to_select_on_success;
+    std::vector<BOARD_ITEM*> items_to_select_on_success;
 
     // And same for items to deselect
-    std::vector<PCB_SHAPE*> items_to_deselect_on_success;
+    std::vector<BOARD_ITEM*> items_to_deselect_on_success;
 
     // Handle modifications to existing items by the routine
     // How to deal with this depends on whether we're in the footprint editor or not
     // and whether the item was conjured up by decomposing a polygon or rectangle
     auto item_modification_handler =
-            [&]( PCB_SHAPE& aItem )
+            [&]( BOARD_ITEM& aItem )
             {
                 // If the item was "conjured up" it will be added later separately
                 if( !alg::contains( lines_to_add, &aItem ) )
@@ -1375,7 +1375,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     bool any_items_created = !lines_to_add.empty();
     auto item_creation_handler =
-            [&]( std::unique_ptr<PCB_SHAPE> aItem )
+            [&]( std::unique_ptr<BOARD_ITEM> aItem )
             {
                 any_items_created = true;
                 items_to_select_on_success.push_back( aItem.get() );
@@ -1384,7 +1384,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     bool any_items_removed = !items_to_remove.empty();
     auto item_removal_handler =
-            [&]( PCB_SHAPE& aItem )
+            [&]( BOARD_ITEM& aItem )
             {
                 aItem.SetFlags( STRUCT_DELETED );
                 any_items_removed = true;
@@ -1462,11 +1462,11 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
                         } );
 
     // Select added and modified items
-    for( PCB_SHAPE* item : items_to_select_on_success )
+    for( BOARD_ITEM* item : items_to_select_on_success )
         m_selectionTool->AddItemToSel( item, true );
 
     // Deselect removed items
-    for( PCB_SHAPE* item : items_to_deselect_on_success )
+    for( BOARD_ITEM* item : items_to_deselect_on_success )
         m_selectionTool->RemoveItemFromSel( item, true );
 
     if( any_items_removed )
@@ -1677,22 +1677,22 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
 
     // Handle modifications to existing items by the routine
     auto item_modification_handler =
-            [&]( PCB_SHAPE& aItem )
+            [&]( BOARD_ITEM& aItem )
             {
                 commit.Modify( &aItem );
             };
 
-    std::vector<PCB_SHAPE*> items_to_select_on_success;
+    std::vector<BOARD_ITEM*> items_to_select_on_success;
 
     auto item_creation_handler =
-            [&]( std::unique_ptr<PCB_SHAPE> aItem )
+            [&]( std::unique_ptr<BOARD_ITEM> aItem )
             {
                 items_to_select_on_success.push_back( aItem.get() );
                 commit.Add( aItem.release() );
             };
 
     auto item_removal_handler =
-            [&]( PCB_SHAPE& aItem )
+            [&]( BOARD_ITEM& aItem )
             {
                 commit.Remove( &aItem );
             };
@@ -1729,7 +1729,7 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
         boolean_routine->ProcessShape( *shape );
 
     // Select new items
-    for( PCB_SHAPE* item : items_to_select_on_success )
+    for( BOARD_ITEM* item : items_to_select_on_success )
         m_selectionTool->AddItemToSel( item, true );
 
     // Notify other tools of the changes
@@ -3254,9 +3254,11 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::SimplifyPolygons,      PCB_ACTIONS::simplifyPolygons.MakeEvent() );
     Go( &EDIT_TOOL::HealShapes,            PCB_ACTIONS::healShapes.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
+
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::mergePolygons.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::subtractPolygons.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::intersectPolygons.MakeEvent() );
+
     Go( &EDIT_TOOL::JustifyText,           ACTIONS::leftJustify.MakeEvent() );
     Go( &EDIT_TOOL::JustifyText,           ACTIONS::centerJustify.MakeEvent() );
     Go( &EDIT_TOOL::JustifyText,           ACTIONS::rightJustify.MakeEvent() );

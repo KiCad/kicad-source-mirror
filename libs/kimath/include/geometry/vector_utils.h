@@ -116,4 +116,23 @@ double GetProjectedPointLengthRatio( const VECTOR2I& aPoint, const SEG& aSeg );
  */
 const VECTOR2I& GetNearestEndpoint( const SEG& aSeg, const VECTOR2I& aPoint );
 
+/**
+ * Round a vector to the nearest grid point in any direction.
+ */
+VECTOR2I RoundGrid( const VECTOR2I& aVec, int aGridSize );
+
+/**
+ * Round a vector to the nearest grid point in the NW direction.
+ *
+ * This means x and y are both rounded downwards (regardless of sign).
+ */
+VECTOR2I RoundNW( const VECTOR2I& aVec, int aGridSize );
+
+/**
+ * Round a vector to the nearest grid point in the SE direction.
+ *
+ * This means x and y are both rounded upwards (regardless of sign).
+ */
+VECTOR2I RoundSE( const VECTOR2I& aVec, int aGridSize );
+
 } // namespace KIGEOM

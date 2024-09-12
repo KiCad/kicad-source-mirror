@@ -107,6 +107,19 @@ public:
     }
 
     /**
+     * Return a rectangle that is larger by aOffset in all directions,
+     * but still centered on the original rectangle.
+     */
+    SHAPE_RECT GetInflated( int aOffset ) const
+    {
+        return SHAPE_RECT{
+            m_p0 - VECTOR2I( aOffset, aOffset ),
+            m_w + 2 * aOffset,
+            m_h + 2 * aOffset,
+        };
+    }
+
+    /**
      * Return length of the diagonal of the rectangle.
      *
      * @return diagonal length
@@ -114,6 +127,16 @@ public:
     int Diagonal() const
     {
         return VECTOR2I( m_w, m_h ).EuclideanNorm();
+    }
+
+    int MajorDimension() const
+    {
+        return std::max( m_w, m_h );
+    }
+
+    int MinorDimension() const
+    {
+        return std::min( m_w, m_h );
     }
 
     bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override

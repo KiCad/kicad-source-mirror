@@ -25,6 +25,14 @@
 
 #include <geometry/geometry_utils.h>
 #include <geometry/circle.h>
+#include <geometry/oval.h>
+#include <geometry/roundrect.h>
+#include <geometry/shape_rect.h>
+#include <geometry/vector_utils.h>
+
+#include <pad.h>
+#include <pcb_track.h>
+#include <tools/pcb_tool_utils.h>
 
 namespace
 {
@@ -603,4 +611,358 @@ bool POLYGON_INTERSECT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& 
 
     GetWorkingPolygon()->SetPolyShape( working_copy );
     return true;
+}
+
+
+wxString OUTSET_ROUTINE::GetCommitDescription() const
+{
+    return _( "Outset items." );
+}
+
+std::optional<wxString> OUTSET_ROUTINE::GetStatusMessage() const
+{
+    if( GetSuccesses() == 0 )
+    {
+        return _( "Unable to outset the selected items." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        return _( "Some of the items could not be outset." );
+    }
+    return std::nullopt;
+}
+
+
+static SHAPE_RECT GetRectRoundedToGridOutwards( const SHAPE_RECT& aRect, int aGridSize )
+{
+    const VECTOR2I newPos = KIGEOM::RoundNW( aRect.GetPosition(), aGridSize );
+    const VECTOR2I newOpposite =
+            KIGEOM::RoundSE( aRect.GetPosition() + aRect.GetSize(), aGridSize );
+    return SHAPE_RECT( newPos, newOpposite );
+}
+
+
+void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
+{
+    /*
+     * This attempts to do exact outsetting, rather than punting to Clipper.
+     * So it can't do all shapes, but it can do the most obvious ones, which are probably
+     * the ones you want to outset anyway, most usually when making a courtyard for a footprint.
+     */
+
+    PCB_LAYER_ID layer = m_params.useSourceLayers ? aItem.GetLayer() : m_params.layer;
+
+    // Not all items have a width, even if the parameters want to copy it
+    // So fall back to the given width if we can't get one.
+    int width = m_params.lineWidth;
+    if( m_params.useSourceWidths )
+    {
+        std::optional<int> item_width = GetBoardItemWidth( aItem );
+
+        if( item_width.has_value() )
+        {
+            width = *item_width;
+        }
+    }
+
+    CHANGE_HANDLER& handler = GetHandler();
+
+    const auto addPolygonalChain = [&]( const SHAPE_LINE_CHAIN& aChain )
+    {
+        SHAPE_POLY_SET new_poly( aChain );
+
+        std::unique_ptr<PCB_SHAPE> new_shape =
+                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
+
+        new_shape->SetPolyShape( new_poly );
+        new_shape->SetLayer( layer );
+        new_shape->SetWidth( width );
+
+        handler.AddNewItem( std::move( new_shape ) );
+    };
+
+    // Iterate the SHAPE_LINE_CHAIN in the polygon, pulling out
+    // segments and arcs to create new PCB_SHAPE primitives.
+    const auto addChain = [&]( const SHAPE_LINE_CHAIN& aChain )
+    {
+        // Prefer to add a polygonal chain if there are no arcs
+        // as this permits boolean ops
+        if( aChain.ArcCount() == 0 )
+        {
+            addPolygonalChain( aChain );
+            return;
+        }
+
+        for( size_t si = 0; si < aChain.GetSegmentCount(); ++si )
+        {
+            const SEG seg = aChain.GetSegment( si );
+
+            if( seg.Length() == 0 )
+                continue;
+
+            if( aChain.IsArcSegment( si ) )
+                continue;
+
+            std::unique_ptr<PCB_SHAPE> new_shape =
+                    std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
+            new_shape->SetStart( seg.A );
+            new_shape->SetEnd( seg.B );
+            new_shape->SetLayer( layer );
+            new_shape->SetWidth( width );
+
+            handler.AddNewItem( std::move( new_shape ) );
+        }
+
+        for( size_t ai = 0; ai < aChain.ArcCount(); ++ai )
+        {
+            const SHAPE_ARC& arc = aChain.Arc( ai );
+
+            if( arc.GetRadius() == 0 || arc.GetP0() == arc.GetP1() )
+                continue;
+
+            std::unique_ptr<PCB_SHAPE> new_shape =
+                    std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::ARC );
+            new_shape->SetArcGeometry( arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
+            new_shape->SetLayer( layer );
+            new_shape->SetWidth( width );
+
+            handler.AddNewItem( std::move( new_shape ) );
+        }
+    };
+
+    const auto addPoly = [&]( const SHAPE_POLY_SET& aPoly )
+    {
+        for( int oi = 0; oi < aPoly.OutlineCount(); ++oi )
+        {
+            addChain( aPoly.Outline( oi ) );
+        }
+    };
+
+    const auto addRect = [&]( const SHAPE_RECT& aRect )
+    {
+        std::unique_ptr<PCB_SHAPE> new_shape =
+                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::RECTANGLE );
+
+        if( !m_params.gridRounding.has_value() )
+        {
+            new_shape->SetPosition( aRect.GetPosition() );
+            new_shape->SetRectangleWidth( aRect.GetWidth() );
+            new_shape->SetRectangleHeight( aRect.GetHeight() );
+        }
+        else
+        {
+            const SHAPE_RECT grid_rect =
+                    GetRectRoundedToGridOutwards( aRect, *m_params.gridRounding );
+            new_shape->SetPosition( grid_rect.GetPosition() );
+            new_shape->SetRectangleWidth( grid_rect.GetWidth() );
+            new_shape->SetRectangleHeight( grid_rect.GetHeight() );
+        }
+
+        new_shape->SetLayer( layer );
+        new_shape->SetWidth( width );
+
+        handler.AddNewItem( std::move( new_shape ) );
+    };
+
+    const auto addCircle = [&]( const CIRCLE& aCircle )
+    {
+        std::unique_ptr<PCB_SHAPE> new_shape =
+                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::CIRCLE );
+        new_shape->SetCenter( aCircle.Center );
+        new_shape->SetRadius( aCircle.Radius );
+        new_shape->SetLayer( layer );
+        new_shape->SetWidth( width );
+
+        handler.AddNewItem( std::move( new_shape ) );
+    };
+
+    const auto addCircleOrRect = [&]( const CIRCLE& aCircle )
+    {
+        if( m_params.roundCorners )
+        {
+            addCircle( aCircle );
+        }
+        else
+        {
+            const VECTOR2I   rVec{ aCircle.Radius, aCircle.Radius };
+            const SHAPE_RECT rect{ aCircle.Center - rVec, aCircle.Center + rVec };
+            addRect( rect );
+        }
+    };
+
+    switch( aItem.Type() )
+    {
+    case PCB_PAD_T:
+    {
+        const PAD& pad = static_cast<const PAD&>( aItem );
+
+        const PAD_SHAPE pad_shape = pad.GetShape();
+
+        switch( pad_shape )
+        {
+        case PAD_SHAPE::RECTANGLE:
+        case PAD_SHAPE::ROUNDRECT:
+        case PAD_SHAPE::OVAL:
+        {
+            const VECTOR2I pad_size = pad.GetSize();
+
+            BOX2I box{ pad.GetPosition() - pad_size / 2, pad_size };
+            box.Inflate( m_params.outsetDistance );
+
+            int radius = m_params.outsetDistance;
+            if( pad_shape == PAD_SHAPE::ROUNDRECT )
+            {
+                radius += pad.GetRoundRectCornerRadius();
+            }
+            else if( pad_shape == PAD_SHAPE::OVAL )
+            {
+                radius += std::min( pad_size.x, pad_size.y ) / 2;
+            }
+
+            radius = m_params.roundCorners ? radius : 0;
+
+            // No point doing a SHAPE_RECT as we may need to rotate it
+            ROUNDRECT      rrect( box, radius );
+            SHAPE_POLY_SET poly;
+            rrect.TransformToPolygon( poly, 0, ERROR_LOC::ERROR_OUTSIDE );
+
+            poly.Rotate( pad.GetOrientation(), pad.GetPosition() );
+            addPoly( poly );
+            AddSuccess();
+            break;
+        }
+        case PAD_SHAPE::CIRCLE:
+        {
+            const int    radius = pad.GetSize().x / 2 + m_params.outsetDistance;
+            const CIRCLE circle( pad.GetPosition(), radius );
+            addCircleOrRect( circle );
+            AddSuccess();
+            break;
+        }
+        case PAD_SHAPE::TRAPEZOID:
+        {
+            // Not handled yet, but could use a generic convex polygon outset method.
+            break;
+        }
+        default:
+            // Other pad shapes are not supported with exact outsets
+            break;
+        }
+        break;
+    }
+    case PCB_SHAPE_T:
+    {
+        const PCB_SHAPE& pcb_shape = static_cast<const PCB_SHAPE&>( aItem );
+
+        switch( pcb_shape.GetShape() )
+        {
+        case SHAPE_T::RECTANGLE:
+        {
+            BOX2I box{ pcb_shape.GetPosition(),
+                       VECTOR2I{ pcb_shape.GetRectangleWidth(), pcb_shape.GetRectangleHeight() } };
+            box.Inflate( m_params.outsetDistance );
+
+            SHAPE_RECT rect( box );
+            if( m_params.roundCorners )
+            {
+                ROUNDRECT      rrect( rect, m_params.outsetDistance );
+                SHAPE_POLY_SET poly;
+                rrect.TransformToPolygon( poly, 0, ERROR_LOC::ERROR_OUTSIDE );
+                addPoly( poly );
+            }
+            else
+            {
+                addRect( rect );
+            }
+            AddSuccess();
+            break;
+        }
+        case SHAPE_T::CIRCLE:
+        {
+            const CIRCLE circle( pcb_shape.GetCenter(),
+                                 pcb_shape.GetRadius() + m_params.outsetDistance );
+            addCircleOrRect( circle );
+            AddSuccess();
+            break;
+        }
+        case SHAPE_T::SEGMENT:
+        {
+            // For now just make the whole stadium shape and let the user delete the unwanted bits
+            const SEG seg( pcb_shape.GetStart(), pcb_shape.GetEnd() );
+
+            if( m_params.roundCorners )
+            {
+                const OVAL oval( seg, m_params.outsetDistance * 2 );
+                addChain( KIGEOM::ConvertToChain( oval ) );
+            }
+            else
+            {
+                SHAPE_LINE_CHAIN chain;
+                const VECTOR2I   ext = ( seg.B - seg.A ).Resize( m_params.outsetDistance );
+                const VECTOR2I   perp = GetRotated( ext, ANGLE_90 );
+
+                chain.Append( seg.A - ext + perp );
+                chain.Append( seg.A - ext - perp );
+                chain.Append( seg.B + ext - perp );
+                chain.Append( seg.B + ext + perp );
+                chain.SetClosed( true );
+                addChain( chain );
+            }
+
+            AddSuccess();
+            break;
+        }
+        case SHAPE_T::ARC:
+        {
+            // Not 100% sure what a sensible non-round outset of an arc is!
+            // (not sure it's that important in practice)
+
+            // Gets rather complicated if this isn't true
+            if( pcb_shape.GetRadius() >= m_params.outsetDistance )
+            {
+                // Again, include the endcaps and let the user delete the unwanted bits
+                const SHAPE_ARC arc{ pcb_shape.GetCenter(), pcb_shape.GetStart(),
+                                     pcb_shape.GetArcAngle(), 0 };
+
+                const VECTOR2I startNorm =
+                        VECTOR2I( arc.GetP0() - arc.GetCenter() ).Resize( m_params.outsetDistance );
+
+                const SHAPE_ARC inner{ arc.GetCenter(), arc.GetP0() - startNorm,
+                                       arc.GetCentralAngle(), 0 };
+                const SHAPE_ARC outer{ arc.GetCenter(), arc.GetP0() + startNorm,
+                                       arc.GetCentralAngle(), 0 };
+
+                SHAPE_LINE_CHAIN chain;
+                chain.Append( outer );
+                // End cap at the P1 end
+                chain.Append( SHAPE_ARC{ arc.GetP1(), outer.GetP1(), ANGLE_180 } );
+
+                if( inner.GetRadius() > 0 )
+                {
+                    chain.Append( inner.Reversed() );
+                }
+
+                // End cap at the P0 end back to the start
+                chain.Append( SHAPE_ARC{ arc.GetP0(), inner.GetP0(), ANGLE_180 } );
+                addChain( chain );
+                AddSuccess();
+                break;
+            }
+        }
+        default:
+            // Other shapes are not supported with exact outsets
+            // (convex) POLY shouldn't be too traumatic and it would bring trapezoids for free.
+            break;
+        }
+        break;
+    }
+    default:
+        // Other item types are not supported with exact outsets
+        break;
+    }
+
+    if( m_params.deleteSourceItems )
+    {
+        handler.DeleteItem( aItem );
+    }
 }

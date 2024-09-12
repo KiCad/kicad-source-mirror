@@ -39,9 +39,12 @@
 #include <math/vector2d.h>
 #include <math/box2.h>
 
+#include <geometry/direction45.h>
+
 class HALF_LINE;
 class LINE;
 class SEG;
+class SHAPE_RECT;
 
 namespace KIGEOM
 {
@@ -68,5 +71,40 @@ std::optional<SEG> ClipHalfLineToBox( const HALF_LINE& aRay, const BOX2I& aBox )
  * Get the segment of a line that is inside a box, if any.
  */
 std::optional<SEG> ClipLineToBox( const LINE& aLine, const BOX2I& aBox );
+
+
+/**
+ * Get a SHAPE_ARC representing a 90-degree arc in the clockwise direction with the
+ * midpoint in the given direction from the center.
+ *
+ *    _
+ *     \
+ *    + | <--- This is the NE arc from the + point.
+ *
+ * +-->x
+ * |     (So Southerly point are bigger in y)
+ * v y
+ *
+ * @param aCenter is the arc center.
+ * @param aRadius is the arc radius.
+ * @param aDir is the direction from the center to the midpoint (only NW, NE, SW, SE are valid).
+ */
+SHAPE_ARC MakeArcCw90( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Directions aDir );
+
+/**
+ * Get a SHAPE_ARC representing a 180-degree arc in the clockwise direction with the
+ * midpoint in the given direction from the center.
+ *
+ * @param aDir is the direction from the center to the midpoint (only N, E, S, W are valid).
+ */
+SHAPE_ARC MakeArcCw180( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Directions aDir );
+
+/**
+ * Get the point on a rectangle that corresponds to a given direction.
+ *
+ * For directions N, E, S, W, the point is the center of the side.
+ * For directions NW, NE, SW, SE, the point is the corner.
+ */
+VECTOR2I GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir );
 
 } // namespace KIGEOM
