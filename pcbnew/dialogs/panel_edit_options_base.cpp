@@ -80,8 +80,17 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_trackMouseDragCtrl->SetSelection( 0 );
 	m_sizerBoardEdit->Add( m_trackMouseDragCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items left/right (default is top/bottom)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerBoardEdit->Add( m_flipLeftRight, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+	m_sizerBoardEdit->Add( 0, 3, 1, wxEXPAND, 5 );
+
+	wxString m_boardItemsFlipChoices[] = { _("Left/right"), _("Top/bottom") };
+	int m_boardItemsFlipNChoices = sizeof( m_boardItemsFlipChoices ) / sizeof( wxString );
+	m_boardItemsFlip = new wxRadioBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Board items flip"), wxDefaultPosition, wxDefaultSize, m_boardItemsFlipNChoices, m_boardItemsFlipChoices, 1, wxRA_SPECIFY_ROWS );
+	m_boardItemsFlip->SetSelection( 0 );
+	m_sizerBoardEdit->Add( m_boardItemsFlip, 0, wxALL|wxEXPAND, 5 );
+
+
+	m_sizerBoardEdit->Add( 0, 3, 1, wxEXPAND, 5 );
 
 	m_allowFreePads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );

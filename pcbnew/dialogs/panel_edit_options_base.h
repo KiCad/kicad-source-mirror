@@ -21,9 +21,9 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/choice.h>
+#include <wx/radiobox.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
-#include <wx/radiobox.h>
 #include <wx/panel.h>
 #include <wx/spinctrl.h>
 #include <wx/simplebook.h>
@@ -47,7 +47,7 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxBoxSizer* m_sizerBoardEdit;
 		wxStaticText* m_trackMouseDragLabel;
 		wxChoice* m_trackMouseDragCtrl;
-		wxCheckBox* m_flipLeftRight;
+		wxRadioBox* m_boardItemsFlip;
 		wxCheckBox* m_allowFreePads;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;

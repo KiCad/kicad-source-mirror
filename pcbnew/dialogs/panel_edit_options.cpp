@@ -65,7 +65,9 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_arcEditMode->SetSelection( (int) aCfg->m_ArcEditMode );
     m_trackMouseDragCtrl->SetSelection( (int) aCfg->m_TrackDragAction );
-    m_flipLeftRight->SetValue( aCfg->m_FlipLeftRight );
+    FLIP_DIRECTION flipDirection =
+            aCfg->m_FlipLeftRight ? FLIP_DIRECTION::LEFT_RIGHT : FLIP_DIRECTION::TOP_BOTTOM;
+    m_boardItemsFlip->SetSelection( (int) flipDirection );
     m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
 
@@ -151,7 +153,8 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
         cfg->m_ArcEditMode = (ARC_EDIT_MODE) m_arcEditMode->GetSelection();
         cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();
-        cfg->m_FlipLeftRight = m_flipLeftRight->GetValue();
+        FLIP_DIRECTION flipDirection = (FLIP_DIRECTION) m_boardItemsFlip->GetSelection();
+        cfg->m_FlipLeftRight = ( flipDirection == FLIP_DIRECTION::LEFT_RIGHT );
         cfg->m_AllowFreePads = m_allowFreePads->GetValue();
         cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
 

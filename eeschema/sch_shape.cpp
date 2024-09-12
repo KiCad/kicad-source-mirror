@@ -95,13 +95,13 @@ void SCH_SHAPE::Normalize()
 
 void SCH_SHAPE::MirrorHorizontally( int aCenter )
 {
-    flip( VECTOR2I( aCenter, 0 ), true );
+    flip( VECTOR2I( aCenter, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
 }
 
 
 void SCH_SHAPE::MirrorVertically( int aCenter )
 {
-    flip( VECTOR2I( 0, aCenter ), false );
+    flip( VECTOR2I( 0, aCenter ), FLIP_DIRECTION::TOP_BOTTOM );
 }
 
 
