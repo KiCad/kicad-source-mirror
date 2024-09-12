@@ -55,16 +55,11 @@ void CHECK_COLLECTIONS_SAME_UNORDERED(const T& expected, const T& actual) {
     BOOST_CHECK_EQUAL( expected.size(), actual.size() );
 }
 
-struct OvalFixture
-{
-};
-
-BOOST_FIXTURE_TEST_SUITE( Oval, OvalFixture )
+BOOST_AUTO_TEST_SUITE( Oval )
 
 struct OVAL_POINTS_TEST_CASE
 {
-    VECTOR2I m_size;
-    EDA_ANGLE m_rotation;
+    OVAL                       m_oval;
     std::vector<TYPED_POINT2I> m_expected_points;
 };
 
@@ -75,8 +70,9 @@ void DoOvalPointTestChecks( const OVAL_POINTS_TEST_CASE& testcase )
     };
 
     std::vector<TYPED_POINT2I> expected_points = testcase.m_expected_points;
+
     std::vector<TYPED_POINT2I> actual_points =
-            GetOvalKeyPoints( testcase.m_size, testcase.m_rotation, OVAL_ALL_KEY_POINTS );
+            KIGEOM::GetOvalKeyPoints( testcase.m_oval, KIGEOM::OVAL_ALL_KEY_POINTS );
 
     CHECK_COLLECTIONS_SAME_UNORDERED( expected_points, actual_points );
 }
@@ -85,8 +81,10 @@ BOOST_AUTO_TEST_CASE( SimpleOvalVertical )
 {
     const OVAL_POINTS_TEST_CASE testcase
     {
-        { 1000, 3000 },
-        { 0, DEGREES_T },
+        {
+            SEG{ { 0, -1000 }, { 0, 1000 } },
+            1000,
+        },
         {
             { { 0, 0 }, PT_CENTER },
             // Main points
@@ -113,8 +111,10 @@ BOOST_AUTO_TEST_CASE( SimpleOvalHorizontal )
 {
     const OVAL_POINTS_TEST_CASE testcase
     {
-        { 3000, 1000 },
-        { 0, DEGREES_T },
+        {
+            SEG{ { -1000, 0 }, { 1000, 0 } },
+            1000,
+        },
         {
             { { 0, 0 }, PT_CENTER },
             // Main points
@@ -148,8 +148,10 @@ BOOST_AUTO_TEST_CASE( SimpleOval45Degrees )
 
     const OVAL_POINTS_TEST_CASE testcase
     {
-        { 4000, 1000 },
-        { 45, DEGREES_T },
+        {
+            SEG{ GetRotated( { -1500, 0 }, ANGLE_45 ), GetRotated( { 1500, 0 }, ANGLE_45 ) },
+            1000,
+        },
         {
             { { 0, 0 }, PT_CENTER },
             // Main points

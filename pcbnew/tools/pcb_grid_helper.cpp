@@ -1053,10 +1053,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             };
 
     // As defaults, these are probably reasonable to avoid spamming key points
-    const OVAL_KEY_POINT_FLAGS ovalKeyPointFlags = OVAL_CENTER
-                                                    | OVAL_CAP_TIPS
-                                                    | OVAL_SIDE_MIDPOINTS
-                                                    | OVAL_CARDINAL_EXTREMES;
+    const KIGEOM::OVAL_KEY_POINT_FLAGS ovalKeyPointFlags =
+            KIGEOM::OVAL_CENTER | KIGEOM::OVAL_CAP_TIPS | KIGEOM::OVAL_SIDE_MIDPOINTS
+            | KIGEOM::OVAL_CARDINAL_EXTREMES;
 
     // The key points of a circle centred around (0, 0) with the given radius
     auto getCircleKeyPoints = []( int radius, bool aIncludeCenter )
@@ -1094,15 +1093,15 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             break;
 
         case PAD_SHAPE::OVAL:
-            for( const TYPED_POINT2I& pt :
-                 GetOvalKeyPoints( aPad->GetSize(), aPad->GetOrientation(), ovalKeyPointFlags ) )
+        {
+            const OVAL oval( aPad->GetSize(), aPad->GetPosition(), aPad->GetOrientation() );
+            for( const TYPED_POINT2I& pt : KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags ) )
             {
-                // Transform to the pad positon
-                addAnchor( aPad->ShapePos() + pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
+                addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
             }
 
             break;
-
+        }
         case PAD_SHAPE::RECTANGLE:
         case PAD_SHAPE::TRAPEZOID:
         case PAD_SHAPE::ROUNDRECT:
@@ -1172,7 +1171,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 // For now there's no way to have an off-angle hole, so this is the
                 // same as the pad. In future, this may not be true:
                 // https://gitlab.com/kicad/code/kicad/-/issues/4124
-                snap_pts = GetOvalKeyPoints( hole_size, aPad->GetOrientation(), ovalKeyPointFlags );
+                const OVAL oval( hole_size, { 0, 0 }, aPad->GetOrientation() );
+                snap_pts = KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags );
             }
 
             for( const TYPED_POINT2I& snap_pt : snap_pts )
