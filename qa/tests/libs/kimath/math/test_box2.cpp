@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE( DefaultConstructor )
 {
     const BOX2I box;
     BOOST_TEST( box.GetPosition() == VECTOR2I( 0, 0 ) );
-    BOOST_TEST( box.GetSize() == VECTOR2I( 0, 0 ) );
+    BOOST_TEST( box.GetSize() == VECTOR2L( 0, 0 ) );
 }
 
 BOOST_AUTO_TEST_CASE( BasicInt )
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE( BasicInt )
     const BOX2I box( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) );
 
     BOOST_TEST( box.GetPosition() == VECTOR2I( 1, 2 ) );
-    BOOST_TEST( box.GetSize() == VECTOR2I( 3, 4 ) );
+    BOOST_TEST( box.GetSize() == VECTOR2L( 3, 4 ) );
 
     // Check the equality operator
     BOOST_CHECK( box == BOX2I( VECTOR2I( 1, 2 ), VECTOR2I( 3, 4 ) ) );
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE( BasicInt )
     BOX2I inflated = box;
     inflated.Inflate( 1 );
     BOOST_TEST( inflated.GetPosition() == VECTOR2I( 0, 1 ) );
-    BOOST_TEST( inflated.GetSize() == VECTOR2I( 5, 6 ) );
+    BOOST_TEST( inflated.GetSize() == VECTOR2L( 5, 6 ) );
 
     // GetInflated
     const BOX2I inflated2 = box.GetInflated( 1 );
