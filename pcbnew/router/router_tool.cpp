@@ -1689,6 +1689,9 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
         // Route them
         for( std::shared_ptr<const CN_ANCHOR> anchor : anchors )
         {
+            if( !anchor->Valid() )
+                continue;
+
             // Try to return to the original layer as indicating the user's preferred
             // layer for autorouting tracks. The layer can be changed by the user to
             // finish tracks that can't complete automatically, but should be changed
