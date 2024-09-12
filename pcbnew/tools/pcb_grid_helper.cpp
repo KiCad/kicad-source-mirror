@@ -622,6 +622,12 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
                 const auto shouldAcceptAnchor = [&]( const ANCHOR& aAnchor )
                 {
+                    // If no extension snaps are enabled, don't inhibit
+                    static const bool haveExtensions =
+                            ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps;
+                    if( !haveExtensions )
+                        return true;
+
                     // Check that any involved real items are 'active'
                     // (i.e. the user has moused over a key point previously)
                     // If any are not real (e.g. snap lines), they are allowed to be involved
