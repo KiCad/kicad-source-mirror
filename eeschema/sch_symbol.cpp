@@ -2311,6 +2311,16 @@ bool SCH_SYMBOL::HasConnectivityChanges( const SCH_ITEM* aItem,
     // Don't compare against a different SCH_ITEM.
     wxCHECK( symbol, false );
 
+    // The move algorithm marks any pins that are being moved without something attached
+    // (during the move) as dangling. We always need to recheck connectivity in this case
+    // or we will not notice changes when the user places the symbol back in the same position
+    // it started.
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        if( pin->IsDangling() )
+            return true;
+    }
+
     if( GetPosition() != symbol->GetPosition() )
         return true;
 
