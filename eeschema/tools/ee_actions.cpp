@@ -1319,7 +1319,7 @@ TOOL_ACTION EE_ACTIONS::showHierarchy( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorTool.showHierarchy" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + 'H' )
-        .FriendlyName( _( "Hierarchy Navigator" ) )
+        .FriendlyName( _( "Show Hierarchy Navigator" ) )
         .Tooltip( _( "Show or hide the schematic sheet hierarchy navigator" ) )
         .Icon( BITMAPS::hierarchy_nav ) );
 
