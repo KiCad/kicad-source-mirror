@@ -2050,7 +2050,12 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     }
     else
     {
-        wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ), m_board->GetFileName() );
+        wxFileName fileName( m_lib_path );
+
+        if( m_board)
+            wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ), m_board->GetFileName() );
+        else
+            wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ), fileName.GetFullName() );
     }
 }
 
