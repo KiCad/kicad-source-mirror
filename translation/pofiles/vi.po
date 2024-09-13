@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-12 17:35+0000\n"
+"PO-Revision-Date: 2024-09-14 01:09+0000\n"
 "Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -1126,9 +1126,8 @@ msgstr ""
 "bóng"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
-#, fuzzy
 msgid "Reflections:"
-msgstr "Sự Phản chiếu"
+msgstr "Sự Phản chiếu:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -4780,6 +4779,8 @@ msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Trình biên dịch Python được chọn thì vô giá trị; phụ trợ Python từ bên ngoài "
+"sẽ không thể có sẵn được"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
 #, c-format
@@ -4788,18 +4789,19 @@ msgstr "Tìm thấy %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Trình biên dịch Python 3 vô giá trị"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Khi KiCad API được cho phép, phần phụ trợ và các phần mềm khác đang chạy "
+"trên máy tính này có thể được kết nối với KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
@@ -4815,38 +4817,38 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Trình biên dịch Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Đường dẫn tới trình biên dịch Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "Select the path to a Python interpreter"
-msgstr ""
+msgstr "Lựa chọn đường dẫn tới trình biên dịch Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
 msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Chú thích Sơ đồ mạch"
+msgstr "Khám phá tự động"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Không có trình biên dịch Python được chọn; phần phụ trợ Python bên ngoài sẽ "
+"không có sẵn được"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Tình trạng trình biên dịch Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Không kết nối"
+msgstr "<Không xác định>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1977
 #: common/stroke_params.cpp:37
@@ -4895,9 +4897,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Dấu ngang-Dấu chấm-Dấu chấm"
 
 #: common/dialogs/panel_setup_netclasses.cpp:182
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "Đặt màu thành trong suốt để sử dụng màu mặc định của KiCad."
+msgstr "Đặt màu thành trong suốt để sử dụng là màu mặc định cho các lớp."
 
 #: common/dialogs/panel_setup_netclasses.cpp:413
 msgid ""
@@ -4964,9 +4965,8 @@ msgid "Schematic wire line style"
 msgstr "Kiểu đường dây dẫn sơ đồ mạch"
 
 #: common/dialogs/panel_setup_netclasses.cpp:649
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Màu sắc lớp Solder Mask"
+msgstr "Màu sắc lớp tín hiệu PCB"
 
 #: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "The default net class is required."
@@ -5020,9 +5020,8 @@ msgid "DP Gap"
 msgstr "Khoảng DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Màu sắc"
+msgstr "Màu sắc PCB"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -5067,9 +5066,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Đặt màu thành trong suốt để sử dụng màu mặc định của KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:111
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Toàn bộ sơ đồ mạch"
+msgstr "Nhập màu sắc từ sơ đồ mạch"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
 msgid "Netclass assignments:"
@@ -5109,6 +5107,8 @@ msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Các biến văn bản đã được thay đổi bên ngoài hộp thoại thiết lập.\n"
+"Bạn có muốn tải lại?"
 
 #: common/dialogs/panel_text_variables.cpp:165
 #: common/dialogs/panel_text_variables.cpp:193
@@ -5120,19 +5120,16 @@ msgid "Variable Name"
 msgstr "Tên biến"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
-#, fuzzy
 msgid "Text Substitution"
-msgstr "Thay thế văn bản"
+msgstr "Tráo đổi văn bản"
 
 #: common/draw_panel_gal.cpp:311 common/draw_panel_gal.cpp:498
-#, fuzzy
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr "Không thể sử dụng OpenGL, quay trở lại render phần mềm"
+msgstr "Không thể sử dụng OpenGL, quay trở lại phần mềm quét ảnh"
 
 #: common/draw_panel_gal.cpp:319
-#, fuzzy
 msgid "Graphics error"
-msgstr "Phong cách Đồ họa"
+msgstr "Lỗi đồ họa"
 
 #: common/draw_panel_gal.cpp:505
 msgid "Could not use OpenGL"
@@ -5141,30 +5138,26 @@ msgstr "Không thể dùng OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3321
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3207
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không tải được dữ liệu của ảnh."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:975
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:73
 #: pcbnew/dialogs/dialog_import_settings.cpp:128
-#, fuzzy
 msgid "File not found."
-msgstr "không tìm thấy tệp tin \"%s\"."
+msgstr "Không tìm thấy tệp tin."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:987
-#, fuzzy
 msgid "File could not be opened."
-msgstr "Tệp \"%s\" không thể được tạo ra."
+msgstr "Tệp tin không thể được mở ra."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1001
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "Bản vẽ '%s' chưa được đọc đầy đủ."
+msgstr "Bản vẽ kỹ thuật chưa được đọc đầy đủ."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1028
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Quá tải bộ nhớ."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:352
@@ -5191,7 +5184,6 @@ msgstr ""
 #: pcbnew/widgets/search_handlers.cpp:223
 #: pcbnew/widgets/search_handlers.cpp:226
 #: pcbnew/widgets/search_handlers.cpp:264
-#, fuzzy
 msgid "Text"
 msgstr "Văn bản"
 
@@ -5213,7 +5205,6 @@ msgstr "Dòng"
 #: eeschema/sch_label.cpp:2272
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2477
 #: pcbnew/pcb_dimension.cpp:1664
-#, fuzzy
 msgid "Rectangle"
 msgstr "Hình chữ nhật"
 
@@ -5228,24 +5219,21 @@ msgstr "Hình dạng đã được nhập"
 #: common/drawing_sheet/ds_draw_item.cpp:522 common/eda_item.cpp:406
 #: eeschema/dialogs/dialog_image_properties.cpp:39 eeschema/sch_bitmap.h:138
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:45
-#, fuzzy
 msgid "Image"
 msgstr "Hình ảnh"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:94
 #: common/drawing_sheet/ds_data_model_io.cpp:123
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi khi ghi vô tệp tin bản vẽ kỹ thuật"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
 msgstr "Chỉ trang đầu tiên"
 
 #: common/drawing_sheet/ds_draw_item.cpp:148
-#, fuzzy
 msgid "Subsequent Pages"
-msgstr "Subsequent Pages"
+msgstr "Trang theo sau"
 
 #: common/drawing_sheet/ds_draw_item.cpp:149
 msgid "All Pages"
@@ -5294,7 +5282,6 @@ msgid "Page Limits"
 msgstr "Giới hạn Trang"
 
 #: common/dsnlexer.cpp:34
-#, fuzzy
 msgid "clipboard"
 msgstr "Bộ nhớ tạm"
 
@@ -5309,7 +5296,7 @@ msgid "Expecting '%s'"
 msgstr "Đang đợi %s"
 
 #: common/dsnlexer.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected %s"
 msgstr "Không mong đợi %s"
 
@@ -5319,24 +5306,22 @@ msgid "%s is a duplicate"
 msgstr "%s là một bản sao"
 
 #: common/dsnlexer.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected '%s'"
 msgstr "Không mong đợi '%s'"
 
 #: common/dsnlexer.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "need a number for '%s'"
 msgstr "cần một số cho '%s'"
 
 #: common/dsnlexer.cpp:715 common/dsnlexer.cpp:776
-#, fuzzy
 msgid "Un-terminated delimited string"
-msgstr "Chuỗi phân cách không kết thúc"
+msgstr "Chuỗi giới hạn không kết thúc"
 
 #: common/dsnlexer.cpp:737
-#, fuzzy
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Dấu phân cách chuỗi phải là một ký tự duy nhất của ', \", hoặc $"
+msgstr "Giới hạn chuỗi phải là một ký tự đơn của ', \", hoặc $"
 
 #: common/dsnlexer.cpp:859
 #, c-format
@@ -5352,14 +5337,14 @@ msgstr ""
 "độ lệch: %d"
 
 #: common/dsnlexer.cpp:868
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Thiếu số dấu phẩy động trong\n"
+"Thiếu dấu cho số thập phân trong\n"
 "tập tin: '%s'\n"
 "dòng: %d\n"
 "độ lệch: %d"
@@ -5379,9 +5364,9 @@ msgid "Redo"
 msgstr "Làm lại"
 
 #: common/eda_base_frame.cpp:1027
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "không tìm thấy tệp tin \"%s\"."
+msgstr "Không tìm thấy tệp tin \"%s\"."
 
 #: common/eda_base_frame.cpp:1076
 msgid "Preferences"
@@ -5389,24 +5374,20 @@ msgstr "&Tùy chỉnh"
 
 #: common/eda_base_frame.cpp:1096 common/hotkey_store.cpp:75
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
-#, fuzzy
 msgid "Common"
 msgstr "Chung"
 
 #: common/eda_base_frame.cpp:1102
-#, fuzzy
 msgid "Mouse and Touchpad"
 msgstr "Chuột và Bàn di chuột"
 
 #: common/eda_base_frame.cpp:1104
-#, fuzzy
 msgid "Hotkeys"
-msgstr "Phím nóng"
+msgstr "Phím tắt"
 
 #: common/eda_base_frame.cpp:1114 kicad/project_tree_pane.cpp:993
-#, fuzzy
 msgid "Version Control"
-msgstr "Màu sắc lựa chọn"
+msgstr "Phiên bản điều khiển"
 
 #: common/eda_base_frame.cpp:1122
 msgid "Data Collection"
@@ -5428,7 +5409,6 @@ msgstr "Tùy chọn hiển thị"
 #: common/eda_base_frame.cpp:1181 common/eda_base_frame.cpp:1192
 #: common/eda_base_frame.cpp:1225 common/eda_base_frame.cpp:1246
 #: common/tool/common_tools.cpp:565
-#, fuzzy
 msgid "Grids"
 msgstr "Lưới"
 
@@ -5448,9 +5428,8 @@ msgstr "Màu sắc"
 #: common/eda_base_frame.cpp:1154 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:571 eeschema/menubar.cpp:136
 #: eeschema/sch_edit_frame.cpp:1726 kicad/tools/kicad_manager_actions.cpp:100
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Đánh dấu Schematic"
+msgstr "Trình chỉnh sửa sơ đồ mạch"
 
 #: common/eda_base_frame.cpp:1158
 msgid "Annotation Options"
@@ -5498,39 +5477,34 @@ msgid "Realtime Renderer"
 msgstr "Renderer thời gian thực"
 
 #: common/eda_base_frame.cpp:1204
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Tùy chọn Render Raytracing"
+msgstr "Trình quét ảnh theo tia"
 
 #: common/eda_base_frame.cpp:1222 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:576 gerbview/gerbview_frame.cpp:685
 #: gerbview/gerbview_frame.cpp:709 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:144
-#, fuzzy
 msgid "Gerber Viewer"
-msgstr "Các tệp tin Gerber"
+msgstr "Trình xem Gerber"
 
 #: common/eda_base_frame.cpp:1226
-#, fuzzy
 msgid "Excellon Options"
-msgstr "Các Tùy chọn Render"
+msgstr "Các Tùy chọn bảng tính"
 
 #: common/eda_base_frame.cpp:1244 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:575 kicad/tools/kicad_manager_actions.cpp:173
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:572
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Worksheet"
+msgstr "Trình chỉnh sửa bản vẽ kỹ thuật"
 
 #: common/eda_base_frame.cpp:1253
 msgid "Packages and Updates"
 msgstr "Gói và cập nhật"
 
 #: common/eda_base_frame.cpp:1260
-#, fuzzy
 msgid "Plugins"
-msgstr "Vi phạm (%d)"
+msgstr "Phần phụ trợ"
 
 #: common/eda_base_frame.cpp:1343
 #, c-format
@@ -5555,9 +5529,8 @@ msgstr ""
 "Thay vào đó, bạn có muốn mở tệp được lưu tự động không?"
 
 #: common/eda_base_frame.cpp:1404
-#, fuzzy
 msgid "The auto save file could not be renamed to the board file name."
-msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo mạch."
+msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp bo mạch."
 
 #: common/eda_base_frame.cpp:1644
 msgid "Set Language"
@@ -5568,26 +5541,25 @@ msgid "Documentation File"
 msgstr "Tệp Tài liệu"
 
 #: common/eda_doc.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "không tìm thấy tệp tin \"%s\"."
+msgstr "không tìm thấy tệp tin tài liệu '%s'."
 
 #: common/eda_doc.cpp:204
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Loại MIME không xác định cho tệp doc \"%s\""
+msgstr "Không hiểu Loại MIME cho tệp tin tài liệu\"%s\""
 
 #: common/eda_draw_frame.cpp:381 common/tool/actions.cpp:868
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "Chỉnh sửa Lưới Người dùng ..."
+msgstr "Chỉnh sửa Lưới..."
 
 #: common/eda_draw_frame.cpp:543
 msgid "Zoom Auto"
 msgstr "Tự động Thu phóng"
 
 #: common/eda_draw_frame.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Zoom %.2f"
 msgstr "Thu phóng %.2f"
 
@@ -5657,22 +5629,20 @@ msgstr "Thư viện mới"
 
 #: common/eda_draw_frame.cpp:1214 common/widgets/search_pane.cpp:42
 #: eeschema/sch_edit_frame.cpp:259 pcbnew/pcb_edit_frame.cpp:349
-#, fuzzy
 msgid "Search"
-msgstr "Tìm kiếm Văn bản"
+msgstr "Tìm kiếm"
 
 #: common/eda_draw_frame.cpp:1220 eeschema/eeschema_settings.cpp:92
 #: eeschema/sch_edit_frame.cpp:2179 pagelayout_editor/pl_editor_frame.cpp:195
 #: pcbnew/footprint_edit_frame.cpp:233 pcbnew/pcb_edit_frame.cpp:332
 #: pcbnew/pcb_edit_frame.cpp:1670
-#, fuzzy
 msgid "Properties"
-msgstr "Thuộc tính Văn bản"
+msgstr "Thuộc tính"
 
 #: common/eda_draw_frame.cpp:1226 pcbnew/pcb_edit_frame.cpp:342
 #: pcbnew/pcb_edit_frame.cpp:1671
 msgid "Net Inspector"
-msgstr ""
+msgstr "Khám phá tín hiệu"
 
 #: common/eda_item.cpp:345
 msgid "Screen"
@@ -5689,56 +5659,47 @@ msgstr "Footprint"
 
 #: common/eda_item.cpp:348 pcbnew/dialogs/dialog_board_statistics.cpp:514
 #: pcbnew/pad.cpp:1109
-#, fuzzy
 msgid "Pad"
-msgstr "Pad"
+msgstr "Chân đồng"
 
 #: common/eda_item.cpp:349 common/eda_item.cpp:379
-#, fuzzy
 msgid "Graphic"
-msgstr "Đường đồ họa"
+msgstr "Đồ họa"
 
 #: common/eda_item.cpp:350 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Tham chiếu"
+msgstr "Hình ảnh Tham chiếu"
 
 #: common/eda_item.cpp:351 pcbnew/pcb_generator.cpp:216
-#, fuzzy
 msgid "Generator"
-msgstr "Tạo"
+msgstr "Trình khởi tạo"
 
 #: common/eda_item.cpp:354 common/eda_item.cpp:382 eeschema/sch_textbox.cpp:422
 #: eeschema/sch_textbox.cpp:536 eeschema/widgets/search_handlers.cpp:368
 #: pcbnew/pcb_textbox.cpp:383 pcbnew/pcb_textbox.h:65
-#, fuzzy
 msgid "Text Box"
-msgstr "Văn bản"
+msgstr "Hộp Văn bản chữ"
 
 #: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:545
 #: pcbnew/pcb_table.cpp:396
-#, fuzzy
 msgid "Table"
-msgstr "Bảng pin"
+msgstr "Bảng"
 
 #: common/eda_item.cpp:356 common/eda_item.cpp:384
 #: eeschema/sch_tablecell.cpp:116 pcbnew/pcb_tablecell.cpp:100
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "kích thước Via"
+msgstr "Ô trong bảng"
 
 #: common/eda_item.cpp:357 common/eda_item.cpp:358 pcbnew/pcb_track.cpp:1312
-#, fuzzy
 msgid "Track"
-msgstr "Track"
+msgstr "Đường mạch"
 
 #: common/eda_item.cpp:359 pcbnew/dialogs/dialog_board_statistics.cpp:514
 #: pcbnew/pcb_track.cpp:1310 pcbnew/pcb_track.cpp:1386
-#, fuzzy
 msgid "Via"
-msgstr "Via"
+msgstr "Lỗ xuyên"
 
 #: common/eda_item.cpp:360 common/eda_item.cpp:372 eeschema/sch_marker.cpp:362
 #: pcbnew/pcb_marker.cpp:199
@@ -5753,12 +5714,10 @@ msgstr "Kích thước"
 
 #: common/eda_item.cpp:365 pcbnew/pcb_dimension.cpp:1082
 #: pcbnew/pcb_dimension.cpp:1209
-#, fuzzy
 msgid "Leader"
 msgstr "Lãnh đạo"
 
 #: common/eda_item.cpp:366 pcbnew/pcb_target.cpp:125
-#, fuzzy
 msgid "Target"
 msgstr "Mục tiêu"
 
@@ -5767,14 +5726,12 @@ msgid "Zone"
 msgstr "Zone"
 
 #: common/eda_item.cpp:368
-#, fuzzy
 msgid "ItemList"
-msgstr "Danh sách item"
+msgstr "Danh sách phần tử"
 
 #: common/eda_item.cpp:369
-#, fuzzy
 msgid "NetInfo"
-msgstr "Thông tin Net"
+msgstr "Thông tin tín hiệu"
 
 #: common/eda_item.cpp:370 pcbnew/pcb_group.cpp:383
 msgid "Group"
@@ -5782,58 +5739,48 @@ msgstr "Nhóm"
 
 #: common/eda_item.cpp:373 eeschema/sch_junction.cpp:306
 #: eeschema/sch_junction.h:102
-#, fuzzy
 msgid "Junction"
-msgstr "Junction"
+msgstr "Mối nối"
 
 #: common/eda_item.cpp:374
-#, fuzzy
 msgid "No-Connect Flag"
 msgstr "Cờ Không Kết nối"
 
 #: common/eda_item.cpp:375
-#, fuzzy
 msgid "Wire Entry"
-msgstr "Nhập dây nối"
+msgstr "Đầu vào dây nối"
 
 #: common/eda_item.cpp:376
-#, fuzzy
 msgid "Bus Entry"
-msgstr "Nhập bus"
+msgstr "Đầu vào đường bus"
 
 #: common/eda_item.cpp:378 eeschema/sch_bitmap.cpp:227
-#, fuzzy
 msgid "Bitmap"
 msgstr "Bitmap"
 
 #: common/eda_item.cpp:380 eeschema/sch_rule_area.cpp:50
 #: eeschema/sch_rule_area.cpp:370 pcbnew/zone.cpp:707
-#, fuzzy
 msgid "Rule Area"
-msgstr "Vùng Rule %s\t"
+msgstr "Vùng quy tắc"
 
 #: common/eda_item.cpp:385 eeschema/tools/sch_edit_tool.cpp:236
-#, fuzzy
 msgid "Net Label"
-msgstr "Net Label"
+msgstr "Nhãn tín hiệu"
 
 #: common/eda_item.cpp:386 eeschema/sch_label.cpp:1233
 #: eeschema/sch_label.cpp:1775
-#, fuzzy
 msgid "Directive Label"
-msgstr "Net Label"
+msgstr "Nhãn định hướng"
 
 #: common/eda_item.cpp:387 eeschema/sch_label.cpp:1234
 #: eeschema/tools/sch_edit_tool.cpp:238
-#, fuzzy
 msgid "Global Label"
-msgstr "Global Label"
+msgstr "Nhãn chung"
 
 #: common/eda_item.cpp:388 eeschema/sch_label.cpp:1235
 #: eeschema/tools/sch_edit_tool.cpp:237
-#, fuzzy
 msgid "Hierarchical Label"
-msgstr "Hierarchical Label"
+msgstr "Nhãn phân cấp"
 
 #: common/eda_item.cpp:389 eeschema/dialogs/dialog_symbol_fields_table.cpp:195
 #: eeschema/sch_field.h:98 eeschema/sch_label.cpp:261
@@ -5846,64 +5793,54 @@ msgid "Symbol"
 msgstr "Biểu tượng"
 
 #: common/eda_item.cpp:391 eeschema/sch_pin.cpp:1492 eeschema/sch_pin.h:77
-#, fuzzy
 msgid "Pin"
-msgstr "Pin"
+msgstr "Chân"
 
 #: common/eda_item.cpp:392
-#, fuzzy
 msgid "Sheet Pin"
-msgstr "Sheet Pin"
+msgstr "Chân của tờ trang"
 
 #: common/eda_item.cpp:393 eeschema/dialogs/dialog_migrate_buses.cpp:114
 #: pcbnew/tools/pcb_actions.cpp:2095
-#, fuzzy
 msgid "Sheet"
-msgstr "Sheet"
+msgstr "Tờ trang"
 
 #: common/eda_item.cpp:400
-#, fuzzy
 msgid "SCH Screen"
 msgstr "Màn hình SCH"
 
 #: common/eda_item.cpp:404
-#, fuzzy
 msgid "Gerber Layout"
-msgstr "Gerber Layout"
+msgstr "Trình vẽ Gerber"
 
 #: common/eda_item.cpp:405
-#, fuzzy
 msgid "Draw Item"
-msgstr "Draw Item"
+msgstr "Vẽ phần tử"
 
 #: common/eda_shape.cpp:68
 msgid "Thermal Spoke"
 msgstr "Nan hoa nhiệt"
 
 #: common/eda_shape.cpp:69 pcbnew/pcb_shape.cpp:1022
-#, fuzzy
 msgid "Number Box"
-msgstr "Số"
+msgstr "Hộp Số học"
 
 #: common/eda_shape.cpp:78 pcbnew/pad.cpp:1372
-#, fuzzy
 msgid "Rect"
-msgstr "Rect"
+msgstr "Tứ giác"
 
 #: common/eda_shape.cpp:79 common/eda_shape.cpp:739 common/eda_shape.cpp:1967
 #: gerbview/gerber_draw_item.cpp:230
-#, fuzzy
 msgid "Arc"
-msgstr "Arc"
+msgstr "Vòng cung"
 
 #: common/eda_shape.cpp:80 common/eda_shape.cpp:738 common/eda_shape.cpp:1968
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2270 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1370
 #: pcbnew/pad.cpp:2476 pcbnew/pcb_dimension.cpp:1665
-#, fuzzy
 msgid "Circle"
-msgstr "Circle"
+msgstr "Tròn"
 
 #: common/eda_shape.cpp:81
 msgid "Bezier Curve"
@@ -5914,14 +5851,12 @@ msgid "Polygon"
 msgstr "Đa giác"
 
 #: common/eda_shape.cpp:729
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Số"
+msgstr "Hộp đánh số chân đồng"
 
 #: common/eda_shape.cpp:730 pcbnew/pcb_shape.cpp:1029
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "Clearance"
+msgstr "Biểu Mẫu Ngăn tản nhiệt"
 
 #: common/eda_shape.cpp:731 common/eda_shape.cpp:744
 msgid "Unrecognized"
@@ -5987,7 +5922,6 @@ msgstr "Điểm"
 #: pcbnew/pcb_target.cpp:156 pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:353
 #: pcbnew/pcb_textbox.cpp:719 pcbnew/pcb_track.cpp:1328
 #: pcbnew/pcb_track.cpp:1752
-#, fuzzy
 msgid "Width"
 msgstr "Chiều rộng"
 
@@ -6002,19 +5936,16 @@ msgstr "Chiều rộng"
 #: pcbnew/pcb_fields_grid_table.cpp:174 pcbnew/pcb_reference_image.cpp:260
 #: pcbnew/pcb_tablecell.cpp:198 pcbnew/pcb_tablecell.cpp:205
 #: pcbnew/pcb_text.cpp:354 pcbnew/pcb_textbox.cpp:720
-#, fuzzy
 msgid "Height"
 msgstr "Chiều cao"
 
 #: common/eda_shape.cpp:1970
-#, fuzzy
 msgid "Bezier"
-msgstr "Bezier"
+msgstr "Đường cong Bezier"
 
 #: common/eda_shape.cpp:2014 eeschema/sch_shape.cpp:698
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Thuộc tính Văn bản"
+msgstr "Thuộc tính hình dạng"
 
 #: common/eda_shape.cpp:2020 eeschema/sch_table.cpp:604
 #: eeschema/sch_tablecell.cpp:190 pcbnew/pcb_table.cpp:564
@@ -6031,12 +5962,10 @@ msgid "Start Y"
 msgstr "Bắt đầu Y"
 
 #: common/eda_shape.cpp:2031
-#, fuzzy
 msgid "Center X"
 msgstr "Căn giữa X"
 
 #: common/eda_shape.cpp:2037
-#, fuzzy
 msgid "Center Y"
 msgstr "Căn giữa Y"
 
@@ -6061,20 +5990,17 @@ msgstr "Chiều rộng đường nét"
 
 #: common/eda_shape.cpp:2082 eeschema/sch_tablecell.cpp:198
 #: pcbnew/pcb_shape.cpp:963 pcbnew/pcb_tablecell.cpp:201
-#, fuzzy
 msgid "Line Color"
 msgstr "Màu sắc đường kẻ"
 
 #: common/eda_shape.cpp:2128 eeschema/sch_shape.cpp:691
 #: pcbnew/dialogs/dialog_plot_base.cpp:133 pcbnew/pcb_textbox.cpp:723
-#, fuzzy
 msgid "Filled"
-msgstr "Kiểu Tô"
+msgstr "Đã tô"
 
 #: common/eda_shape.cpp:2133 pcbnew/pcb_shape.cpp:964
-#, fuzzy
 msgid "Fill Color"
-msgstr "Màu sắc đường kẻ:"
+msgstr "Màu sắc đổ màu"
 
 #: common/eda_text.cpp:865 common/eda_text.cpp:1258
 #: eeschema/dialogs/dialog_field_properties_base.cpp:152
@@ -6099,9 +6025,8 @@ msgstr "Màu sắc đường kẻ:"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:177
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:53
 #: pcbnew/pcb_fields_grid_table.cpp:176
-#, fuzzy
 msgid "Italic"
-msgstr "In nghiêng"
+msgstr "Nghiêng"
 
 #: common/eda_text.cpp:866 common/eda_text.cpp:1262
 #: eeschema/dialogs/dialog_field_properties_base.cpp:147
@@ -6121,14 +6046,12 @@ msgstr "In nghiêng"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:199
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:122
-#, fuzzy
 msgid "Bold"
-msgstr "In Đậm"
+msgstr "Đậm"
 
 #: common/eda_text.cpp:867
-#, fuzzy
 msgid "Bold+Italic"
-msgstr "In đậm + Nghiêng"
+msgstr "Đậm + Nghiêng"
 
 #: common/eda_text.cpp:1220
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
@@ -6168,7 +6091,6 @@ msgstr "Phải"
 #: eeschema/fields_grid_table.cpp:287 eeschema/fields_grid_table.cpp:656
 #: eeschema/fields_grid_table.cpp:809 eeschema/sch_field.cpp:1144
 #: eeschema/sch_field.cpp:1713 eeschema/sch_text.cpp:656
-#, fuzzy
 msgid "Top"
 msgstr "Trên"
 
@@ -6177,7 +6099,6 @@ msgstr "Trên"
 #: eeschema/fields_grid_table.cpp:289 eeschema/fields_grid_table.cpp:658
 #: eeschema/fields_grid_table.cpp:813 eeschema/sch_field.cpp:1146
 #: eeschema/sch_field.cpp:1715 eeschema/sch_text.cpp:658
-#, fuzzy
 msgid "Bottom"
 msgstr "Dưới"
 
@@ -6238,9 +6159,8 @@ msgstr "Độ dày"
 #: common/eda_text.cpp:1265 eeschema/sch_field.cpp:1745
 #: eeschema/sch_text.cpp:771 pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:183
-#, fuzzy
 msgid "Mirrored"
-msgstr "Lật"
+msgstr "Lật đối xứng"
 
 #: common/eda_text.cpp:1268
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
@@ -6262,24 +6182,21 @@ msgstr "Lật"
 #: pcbnew/pcb_dimension.cpp:1685 pcbnew/pcb_dimension.cpp:1722
 #: pcbnew/pcb_tablecell.cpp:203 pcbnew/pcb_text.cpp:698
 #: pcbnew/pcb_textbox.cpp:724
-#, fuzzy
 msgid "Visible"
 msgstr "Hiển thị"
 
 #: common/eda_text.cpp:1282 eeschema/sch_field.cpp:1727
 #: eeschema/sch_field.cpp:1730 eeschema/sch_label.cpp:2295
-#, fuzzy
 msgid "Horizontal Justification"
-msgstr "Horizontal Justification"
+msgstr "Cân bằng chiều ngang"
 
 #: common/eda_text.cpp:1286 eeschema/sch_field.cpp:1732
 #: eeschema/sch_field.cpp:1735 eeschema/sch_label.cpp:2297
 #: pcbnew/pcb_dimension.cpp:1569 pcbnew/pcb_dimension.cpp:1605
 #: pcbnew/pcb_dimension.cpp:1646 pcbnew/pcb_dimension.cpp:1691
 #: pcbnew/pcb_dimension.cpp:1728
-#, fuzzy
 msgid "Vertical Justification"
-msgstr "Vertical Justification"
+msgstr "Cân bằng dọc"
 
 #: common/eda_text.cpp:1294 eeschema/sch_field.cpp:1743
 #: eeschema/sch_label.cpp:2256 eeschema/sch_tablecell.cpp:204
@@ -6287,9 +6204,8 @@ msgstr "Vertical Justification"
 #: pcbnew/pcb_dimension.cpp:1649 pcbnew/pcb_dimension.cpp:1694
 #: pcbnew/pcb_dimension.cpp:1731 pcbnew/pcb_field.cpp:278
 #: pcbnew/pcb_tablecell.cpp:208 pcbnew/pcb_text.cpp:704
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Siêu liên kết"
+msgstr "Dẫn liên kết"
 
 #: common/eda_units.cpp:487
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
@@ -6298,9 +6214,8 @@ msgid "min"
 msgstr "min"
 
 #: common/eda_units.cpp:495
-#, fuzzy
 msgid "opt"
-msgstr "Trên"
+msgstr "Lựa"
 
 #: common/eda_units.cpp:503
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
@@ -6309,25 +6224,22 @@ msgid "max"
 msgstr "max"
 
 #: common/env_vars.cpp:108
-#, fuzzy
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Đường dẫn cơ sở của các thư viện footprint trong hệ thống được cài đặt cục "
-"bộ (thư mục .pretty)."
+"Đường dẫn cơ sở của các thư viện chân gắn linh kiện trong hệ thống được cài "
+"đặt cục bộ (thư mục .pretty)."
 
 #: common/env_vars.cpp:111
-#, fuzzy
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr ""
-"Đường dẫn cơ sở của hình dạng 3D của footprint trong hệ thống (các thư "
-"mục .3Dshapes)."
+"Đường dẫn cơ sở của hình dạng 3D của chân gắn linh kiện trong hệ thống (các "
+"thư mục .3Dshapes)."
 
 #: common/env_vars.cpp:113
-#, fuzzy
 msgid "The base path of the locally installed symbol libraries."
-msgstr "Đường dẫn cơ sở của các thư viện ký hiệu được cài đặt cục bộ."
+msgstr "Đường dẫn cơ sở của các thư viện biểu tượng được cài đặt cục bộ."
 
 #: common/env_vars.cpp:115
 msgid "A directory containing project templates installed with KiCad."
@@ -6374,24 +6286,20 @@ msgstr ""
 "Thư mục chứa các tập lệnh dành riêng cho người dùng được cài đặt với KiCad"
 
 #: common/env_vars.cpp:135
-#, fuzzy
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Phiên bản KICAD_TEMPLATE_DIR không được dùng nữa."
 
 #: common/env_vars.cpp:137
-#, fuzzy
 msgid "Deprecated version of KICAD7_3DMODEL_DIR."
-msgstr "Phiên bản KICAD_TEMPLATE_DIR không được dùng nữa."
+msgstr "Phiên bản KICAD7_3DMODEL_DIR. không được dùng nữa."
 
 #: common/env_vars.cpp:139
-#, fuzzy
 msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
-msgstr "Phiên bản KICAD_TEMPLATE_DIR không được dùng nữa."
+msgstr "Phiên bản KICAD7_FOOTPRINT_DIR không được dùng nữa."
 
 #: common/env_vars.cpp:141
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "Phiên bản KICAD_TEMPLATE_DIR không được dùng nữa."
+msgstr "Phiên bản KICAD_SYMBOL_DIR không được dùng nữa."
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -6431,30 +6339,26 @@ msgid "Full error text:"
 msgstr "Văn bản lỗi đầy đủ:"
 
 #: common/file_history.cpp:155
-#, fuzzy
 msgid "No Files"
-msgstr "Không có tệp"
+msgstr "Không có tệp tin"
 
 #: common/filename_resolver.cpp:482
 msgid "The given path does not exist"
 msgstr "Đường dẫn đã cho không tồn tại"
 
 #: common/filename_resolver.cpp:510
-#, fuzzy
 msgid "Alias: "
-msgstr "Bí danh: "
+msgstr "Bí danh: . "
 
 #: common/filename_resolver.cpp:513
 msgid "This path:"
 msgstr "Đường dẫn này:"
 
 #: common/filename_resolver.cpp:516
-#, fuzzy
 msgid "Existing path:"
 msgstr "Đường dẫn hiện tại:"
 
 #: common/filename_resolver.cpp:518
-#, fuzzy
 msgid "Bad alias (duplicate name)"
 msgstr "Bí danh không hợp lệ (tên trùng lặp)"
 
@@ -6468,9 +6372,8 @@ msgstr "Bí danh không hợp lệ (tên trùng lặp)"
 #: eeschema/widgets/sch_properties_panel.cpp:252
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:109
-#, fuzzy
 msgid "Default Font"
-msgstr "Mặc định"
+msgstr "Kiểu chữ mặc định"
 
 #: common/font/fontconfig.cpp:353
 #, c-format
@@ -6522,26 +6425,26 @@ msgstr "Có sự cố trong khi chạy trình xem PDF '%s'."
 #: common/gestfich.cpp:314 eeschema/eeschema.cpp:596 eeschema/eeschema.cpp:631
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "Không thể sao chép tệp \"%s\"."
+msgstr "Không thể sao chép tệp tin \"%s\"."
 
 #: common/gestfich.cpp:335
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Tên thư mục vô giá trị, không thể xóa bỏ gốc thư mục"
 
 #: common/gestfich.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
 msgstr "Thư mục '%s' không tồn tại"
 
 #: common/gestfich.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "Tệp \"%s\" chưa được đọc đầy đủ"
+msgstr "'%s' không phải là thư mục"
 
 #: common/gestfich.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
 msgstr "Lỗi xóa thư mục '%s': %s"
 
@@ -6551,9 +6454,9 @@ msgid "Could not create directory '%s'"
 msgstr "Không thể tạo thư mục đầu ra '%s'"
 
 #: common/git/git_clone_handler.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Không thể sao chép kho lưu trữ '%s'"
+msgstr "Không thể sao chép vùng lưu trữ '%s'"
 
 #: common/git/git_pull_handler.cpp:46
 #, c-format
@@ -6575,54 +6478,47 @@ msgid "Could not read 'FETCH_HEAD'"
 msgstr "Không thể đọc 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:100
-#, fuzzy
 msgid "Could not lookup commit"
 msgstr "Không thể tra cứu cam kết"
 
 #: common/git/git_pull_handler.cpp:110
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Không thể phân tích việc hợp nhất"
+msgstr "Không thể phân tích hợp nhất"
 
 #: common/git/git_pull_handler.cpp:120
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "Đầu nguồn vô giá trị.  Không thể hợp lại."
 
 #: common/git/git_pull_handler.cpp:179
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Không thể có đầu nguồn vùng lưu trữ"
 
 #: common/git/git_pull_handler.cpp:189
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr ""
+msgstr "Không thể có OID tham chiếu cho tham chiếu '%s'"
 
 #: common/git/git_pull_handler.cpp:198 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Khổng thể thực hiện tiến trình tra xét khi xuất."
 
 #: common/git/git_pull_handler.cpp:215
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tìm kiếm ủy thác '{}'"
 
 #: common/git/git_pull_handler.cpp:255
-#, fuzzy
 msgid "Could not merge commits"
 msgstr "Không thể hợp nhất các cam kết"
 
 #: common/git/git_pull_handler.cpp:263
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể lấy ra mục lục vùng lưu trữ"
 
 #: common/git/git_pull_handler.cpp:271
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể lấy ra truy cập lặp xung đột"
 
 #: common/git/git_pull_handler.cpp:291 common/git/git_pull_handler.cpp:292
-#, fuzzy
 msgid "Changed"
 msgstr "Thay đổi"
 
@@ -6639,14 +6535,13 @@ msgid "Could not connect to remote"
 msgstr "Không thể kết nối với điều khiển từ xa"
 
 #: common/git/git_push_handler.cpp:70
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Không thể dùng OpenGL"
+msgstr "Không thể đẩy vô điều khiển từ xa"
 
 #: common/git/kicad_git_common.cpp:420
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Đã nhận đối tượng %u của %u"
 
 #: common/git/kicad_git_common.cpp:447
 #, c-format
@@ -6661,12 +6556,12 @@ msgstr "* [mới] %s %s"
 #: common/git/kicad_git_common.cpp:471
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "Ghi đối tượng: %d%% (%d/%d), %d bytes"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Lưới: %s (%s)"
+msgstr "* [từ chối] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:491
 #, c-format
@@ -6678,14 +6573,12 @@ msgid "Invalid repository."
 msgstr "Kho lưu trữ không hợp lệ."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không thể cam kết thay đổi."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không thể hợp nhất các nhánh dữ liệu."
 
 #: common/git/kicad_git_errors.cpp:44
 msgid "Failed to clone repository."
@@ -6697,34 +6590,31 @@ msgstr "Không tìm thấy kho lưu trữ từ xa."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Không thể chứng thực để điều khiển từ xa vùng lưu trữ."
 
 #: common/git/kicad_git_errors.cpp:49
-#, fuzzy
 msgid "Branch not found."
-msgstr "không tìm thấy tệp tin \"%s\"."
+msgstr "không tìm thấy nhánh dữ liệu."
 
 #: common/git/kicad_git_errors.cpp:50
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không thể tạo nhánh dữ liệu."
 
 #: common/git/kicad_git_errors.cpp:51
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không thể xóa nhánh dữ liệu."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Không tìm thấy tập tin trong suốt tiến trình kiểm trước khi xuất."
 
 #: common/git/kicad_git_errors.cpp:58
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Đụng phải xung đột khi hợp nhất."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Đụng phải xung đột khi thiết lập lại nền tảng."
 
 #: common/git/kicad_git_errors.cpp:62
 msgid "Failed to pull changes from remote repository."
@@ -18278,9 +18168,8 @@ msgid "Field %s '%s'"
 msgstr "Các Pad xuyên lỗ"
 
 #: eeschema/sch_field.cpp:1119
-#, fuzzy
 msgid "Symbol Field"
-msgstr "Symbol Field"
+msgstr "Phần của biểu tượng"
 
 #: eeschema/sch_field.cpp:1140 eeschema/sch_text.cpp:652
 #, fuzzy
