@@ -374,6 +374,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     if( !m_board || !m_board->IsFootprintHolder() )
         m_biuTo3Dunits *= 1.6f;
 
+    ReloadColorSettings();
+
     m_boardBodyThickness3DU        = DEFAULT_BOARD_THICKNESS      * m_biuTo3Dunits;
     m_frontCopperThickness3DU      = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
     m_backCopperThickness3DU       = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
@@ -467,7 +469,19 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     const float zpos_copperTop_back  = m_layerZcoordTop[B_Cu];
     const float zpos_copperTop_front = m_layerZcoordTop[F_Cu];
 
-    // calculate z position for each non copper layer
+    // Fill not copper layers zpos with a dummy position
+    // (m_layerZcoordTop[B_Cu]with a small margin)
+    // Some important layer position will be set later
+    for( int layer_id = 0; layer_id < PCB_LAYER_ID_COUNT; layer_id++ )
+    {
+        if( IsCopperLayer( (PCB_LAYER_ID)layer_id ) )
+            continue;
+
+        m_layerZcoordBottom[(PCB_LAYER_ID)layer_id] = zpos_copperTop_back - 2.0f * zpos_offset;
+        m_layerZcoordTop[(PCB_LAYER_ID)layer_id]    = m_layerZcoordBottom[(PCB_LAYER_ID)layer_id] - m_backCopperThickness3DU;
+    }
+
+    // calculate z position for each technical layer
     // Solder mask and Solder paste have the same Z position
     for( PCB_LAYER_ID layer_id : { B_Adhes, B_Mask, B_Paste, F_Adhes, F_Mask, F_Paste, B_SilkS, F_SilkS } )
     {

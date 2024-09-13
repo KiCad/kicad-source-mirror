@@ -218,7 +218,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     layer_ids.clear();
     layer_ids.reserve( m_copperLayersCount );
 
-    for( PCB_LAYER_ID layer : LAYER_RANGE( B_Cu, F_Cu, m_copperLayersCount ) )
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu,B_Cu, m_copperLayersCount) )
     {
         if( !Is3dLayerEnabled( layer, visibilityFlags ) ) // Skip non enabled layers
             continue;
