@@ -894,11 +894,42 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     commit.Modify( symbol, m_frame->GetScreen() );
 
-    EDA_ITEMS newItems;
+    std::vector<EDA_ITEM*> oldItems;
+    std::vector<EDA_ITEM*> newItems;
 
-    for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
+    std::copy( selection.begin(), selection.end(), std::back_inserter( oldItems ) );
+    std::sort( oldItems.begin(), oldItems.end(), []( EDA_ITEM* a, EDA_ITEM* b )
     {
-        SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+        int cmp;
+
+        if( a->Type() != b->Type() )
+            return a->Type() < b->Type();
+
+        // Create the new pins in the same order as the old pins
+        if( a->Type() == SCH_PIN_T )
+        {
+            const wxString& aNum = static_cast<SCH_PIN*>( a )->GetNumber();
+            const wxString& bNum = static_cast<SCH_PIN*>( b )->GetNumber();
+
+            cmp = StrNumCmp( aNum, bNum );
+
+            // If the pin numbers are not numeric, then just number them by their position
+            // on the screen.
+            if( aNum.IsNumber() && bNum.IsNumber() && cmp != 0 )
+                return cmp < 0;
+        }
+
+        cmp = LexicographicalCompare( a->GetPosition(), b->GetPosition() );
+
+        if( cmp != 0 )
+            return cmp < 0;
+
+        return a->m_Uuid < b->m_Uuid;
+    } );
+
+    for( EDA_ITEM* item : oldItems )
+    {
+        SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( item );
         SCH_ITEM* newItem = oldItem->Duplicate();
 
         if( newItem->Type() == SCH_PIN_T )
