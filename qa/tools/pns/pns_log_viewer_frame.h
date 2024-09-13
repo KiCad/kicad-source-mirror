@@ -81,7 +81,7 @@ public:
     PNS::RULE_RESOLVER* GetRuleResolver() override { return nullptr; }
     PNS::DEBUG_DECORATOR* GetDebugDecorator() override { return nullptr; }
 
-    int GetBoardLayerFromPNSLayer( int aLayer ) const override
+    PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const override
     {
         if( aLayer == 0 )
             return F_Cu;
@@ -89,11 +89,11 @@ public:
         if( aLayer == m_board->GetCopperLayerCount() - 1 )
             return B_Cu;
 
-        return ( aLayer + 1 ) * 2;
+        return ToLAYER_ID( ( aLayer + 1 ) * 2 );
     }
 
 
-    int GetPNSLayerFromBoardLayer( int aLayer ) const override
+    int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const override
     {
         if( aLayer == F_Cu )
             return 0;

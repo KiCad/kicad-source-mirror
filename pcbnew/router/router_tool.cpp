@@ -682,18 +682,19 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 }
 
 
-int ROUTER_TOOL::getStartLayer( const PNS::ITEM* aItem )
+PCB_LAYER_ID ROUTER_TOOL::getStartLayer( const PNS::ITEM* aItem )
 {
-    int tl = getView()->GetTopLayer();
+    PCB_LAYER_ID tl = static_cast<PCB_LAYER_ID>( getView()->GetTopLayer() );
 
     if( m_startItem )
     {
+        int startLayer = m_iface->GetPNSLayerFromBoardLayer( tl );
         const PNS_LAYER_RANGE& ls = m_startItem->Layers();
 
-        if( ls.Overlaps( tl ) )
+        if( ls.Overlaps( startLayer ) )
             return tl;
         else
-            return ls.Start();
+            return m_iface->GetBoardLayerFromPNSLayer( ls.Start() );
     }
 
     return tl;
@@ -714,9 +715,9 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
         newLayer = m_router->Sizes().GetLayerTop();
 
     m_router->SwitchLayer( *newLayer );
-    m_lastTargetLayer = *newLayer;
+    m_lastTargetLayer = m_iface->GetBoardLayerFromPNSLayer( *newLayer );
 
-    updateSizesAfterRouterEvent( ToLAYER_ID( *newLayer ), m_endSnapPoint );
+    updateSizesAfterRouterEvent( *newLayer, m_endSnapPoint );
     UpdateMessagePanel();
 }
 
@@ -730,7 +731,7 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
     BOARD_DESIGN_SETTINGS&       bds       = board()->GetDesignSettings();
     std::shared_ptr<DRC_ENGINE>& drcEngine = bds.m_DRCEngine;
     DRC_CONSTRAINT               constraint;
-    PCB_LAYER_ID                 targetLayer = m_iface->GetPCBLayerIDFromPNSLayer( aTargetLayer );
+    PCB_LAYER_ID                 targetLayer = m_iface->GetBoardLayerFromPNSLayer( aTargetLayer );
 
     PCB_TRACK dummyTrack( board() );
     dummyTrack.SetFlags( ROUTER_TRANSIENT );
@@ -856,7 +857,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     else
     {
         m_router->ToggleViaPlacement();
-        frame()->SetActiveLayer( static_cast<PCB_LAYER_ID>( m_router->GetCurrentLayer() ) );
+        frame()->SetActiveLayer(
+                m_iface->GetBoardLayerFromPNSLayer( m_router->GetCurrentLayer() ) );
         updateEndItem( aEvent );
         m_router->Move( m_endSnapPoint, m_endItem );
     }
@@ -879,17 +881,17 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     LSEQ         layers        = enabledLayers.Seq();
 
     // These layers are in Board Layer order not PNS layer order
-    PCB_LAYER_ID currentLayer = m_iface->GetPCBLayerIDFromPNSLayer( m_router->GetCurrentLayer() );
+    PCB_LAYER_ID currentLayer = m_iface->GetBoardLayerFromPNSLayer( m_router->GetCurrentLayer() );
     PCB_LAYER_ID targetLayer  = UNDEFINED_LAYER;
 
     if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
     {
         if( m_lastTargetLayer == UNDEFINED_LAYER )
-            m_lastTargetLayer = m_iface->GetPNSLayerFromBoardLayer( currentLayer );
+            m_lastTargetLayer = currentLayer;
 
         size_t idx = 0;
         size_t target_idx = 0;
-        PCB_LAYER_ID lastTargetLayer = m_iface->GetPCBLayerIDFromPNSLayer( m_lastTargetLayer );
+        PCB_LAYER_ID lastTargetLayer = m_lastTargetLayer;
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
@@ -905,7 +907,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         // idx + 1 layer may be invisible, switches to next visible layer
         for( size_t i = 0; i < layers.size() - 1; i++ )
         {
-            if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layers[target_idx] ) ) )
+            if( brd->IsLayerVisible( layers[target_idx] ) )
             {
                 targetLayer = layers[target_idx];
                 break;
@@ -931,7 +933,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         size_t idx = 0;
         size_t target_idx = 0;
-        PCB_LAYER_ID lastTargetLayer = m_iface->GetPCBLayerIDFromPNSLayer( m_lastTargetLayer );
+        PCB_LAYER_ID lastTargetLayer = m_lastTargetLayer;
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
@@ -946,7 +948,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         for( size_t i = 0; i < layers.size() - 1; i++ )
         {
-            if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layers[target_idx] ) ) )
+            if( brd->IsLayerVisible( layers[target_idx] ) )
             {
                 targetLayer = layers[target_idx];
                 break;
@@ -983,7 +985,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
     if( targetLayer != UNDEFINED_LAYER )
     {
-        m_lastTargetLayer = m_iface->GetPNSLayerFromBoardLayer( targetLayer );
+        m_lastTargetLayer = targetLayer;
 
         if( targetLayer == currentLayer )
             return 0;
@@ -1135,7 +1137,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     if( !m_router->IsPlacingVia() )
         m_router->ToggleViaPlacement();
 
-    m_lastTargetLayer = m_iface->GetPNSLayerFromBoardLayer( targetLayer );
+    m_lastTargetLayer = targetLayer;
 
     if( m_router->RoutingInProgress() )
     {
@@ -1154,26 +1156,27 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    int             routingLayer = getStartLayer( m_startItem );
+    PCB_LAYER_ID    pcbLayer = getStartLayer( m_startItem );
+    int             pnsLayer = m_iface->GetPNSLayerFromBoardLayer( pcbLayer );
 
-    if( !IsCopperLayer( routingLayer ) )
+    if( !IsCopperLayer( pcbLayer ) )
     {
         editFrame->ShowInfoBarError( _( "Tracks on Copper layers only." ) );
         return false;
     }
 
     m_originalActiveLayer = editFrame->GetActiveLayer();
-    editFrame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
+    editFrame->SetActiveLayer( pcbLayer );
 
-    if( !getView()->IsLayerVisible( routingLayer ) )
+    if( !getView()->IsLayerVisible( pcbLayer ) )
     {
-        editFrame->GetAppearancePanel()->SetLayerVisible( routingLayer, true );
+        editFrame->GetAppearancePanel()->SetLayerVisible( pcbLayer, true );
         editFrame->GetCanvas()->Refresh();
     }
 
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
-    m_iface->SetStartLayerFromPNS( routingLayer );
+    m_iface->SetStartLayerFromPCBNew( pcbLayer );
 
     frame()->GetBoard()->GetDesignSettings().m_TempOverrideTrackWidth = false;
     m_iface->ImportSizes( sizes, m_startItem, nullptr, aStartPosition );
@@ -1197,7 +1200,7 @@ bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
 
     controls()->SetAutoPan( true );
 
-    if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
+    if( !m_router->StartRouting( m_startSnapPoint, m_startItem, pnsLayer ) )
     {
         // It would make more sense to leave the net highlighted as the higher-contrast mode
         // makes the router clearances more visible.  However, since we just started routing
@@ -1232,7 +1235,7 @@ bool ROUTER_TOOL::finishInteractive()
     m_startItem = nullptr;
     m_endItem   = nullptr;
 
-    frame()->SetActiveLayer( m_iface->GetPCBLayerIDFromPNSLayer( m_originalActiveLayer ) );
+    frame()->SetActiveLayer( m_originalActiveLayer );
     UpdateMessagePanel();
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls()->SetAutoPan( false );
@@ -1260,14 +1263,15 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
     auto syncRouterAndFrameLayer =
             [&]()
             {
-                PCB_LAYER_ID    routingLayer = ToLAYER_ID( m_router->GetCurrentLayer() );
+                int             pnsLayer = m_router->GetCurrentLayer();
+                PCB_LAYER_ID    pcbLayer = m_iface->GetBoardLayerFromPNSLayer( pnsLayer );
                 PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
-                editFrame->SetActiveLayer( routingLayer );
+                editFrame->SetActiveLayer( pcbLayer );
 
-                if( !getView()->IsLayerVisible( routingLayer ) )
+                if( !getView()->IsLayerVisible( pcbLayer ) )
                 {
-                    editFrame->GetAppearancePanel()->SetLayerVisible( routingLayer, true );
+                    editFrame->GetAppearancePanel()->SetLayerVisible( pcbLayer, true );
                     editFrame->GetCanvas()->Refresh();
                 }
             };

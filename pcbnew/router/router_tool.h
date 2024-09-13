@@ -77,7 +77,9 @@ private:
     void handleCommonEvents( TOOL_EVENT& evt );
     int handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia );
 
-    int getStartLayer( const PNS::ITEM* aItem );
+    // Returns the board layer ID for the start layer of the router
+    PCB_LAYER_ID getStartLayer( const PNS::ITEM* aItem );
+
     void switchLayerOnViaPlacement();
     void updateSizesAfterRouterEvent( int targetLayer, const VECTOR2I& aPos );
 
@@ -93,8 +95,10 @@ private:
     std::shared_ptr<ACTION_MENU> m_diffPairMenu;
     std::shared_ptr<ACTION_MENU> m_trackViaMenu;
 
-    int                          m_lastTargetLayer;
-    int                          m_originalActiveLayer;
+    // Both of these are in board layer ID format and must be converted to PNS layer ID format
+    // when used with the PNS interface.
+    PCB_LAYER_ID                 m_lastTargetLayer;
+    PCB_LAYER_ID                 m_originalActiveLayer;
 
     bool                         m_inRouterTool;         // Re-entrancy guard
 };

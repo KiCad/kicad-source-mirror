@@ -116,8 +116,8 @@ enum DRAG_MODE
     virtual RULE_RESOLVER* GetRuleResolver() = 0;
     virtual DEBUG_DECORATOR* GetDebugDecorator() = 0;
 
-    virtual int GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
-    virtual int GetPNSLayerFromBoardLayer( int aLayer ) const = 0;
+    virtual PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
+    virtual int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const = 0;
 };
 
 class ROUTER

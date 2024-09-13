@@ -81,9 +81,8 @@ public:
 
     void SetDebugDecorator( PNS::DEBUG_DECORATOR* aDec );
 
-    int GetBoardLayerFromPNSLayer( int aLayer ) const override;
-    int GetPNSLayerFromBoardLayer( int aLayer ) const override;
-    PCB_LAYER_ID GetPCBLayerIDFromPNSLayer( int aLayer ) const;
+    PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const override;
+    int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const override;
 
     void SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer );
     void SetStartLayerFromPNS( int aLayer ) { m_startLayer = aLayer; }
