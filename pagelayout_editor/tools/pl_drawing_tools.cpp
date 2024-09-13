@@ -85,8 +85,18 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             {
                 if( item )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PLACE );
+                else if( isText )
+                {
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
+                }
+                else if( aEvent.IsAction( &PL_ACTIONS::placeImage ) )
+                {
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+                }
                 else
-                    m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
+                {
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+                }
             };
 
     auto cleanup =

@@ -578,7 +578,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
                 if( image )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
                 else
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
             };
 
     auto cleanup =
