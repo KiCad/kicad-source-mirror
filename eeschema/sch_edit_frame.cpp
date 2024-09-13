@@ -484,6 +484,18 @@ void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
 {
     aEvent.Skip();
 
+     // 1st Call: Handle the size update during the first resize event.
+    CaptureHierarchyPaneSize();
+
+    // Defer the second size capture
+    CallAfter([this]() {
+        CaptureHierarchyPaneSize();
+    });   
+}
+
+
+void SCH_EDIT_FRAME::CaptureHierarchyPaneSize()
+{
     // Called when resizing the Hierarchy Navigator panel
     // Store the current pane size
     // It allows to retrieve the last defined pane size when switching between

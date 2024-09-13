@@ -1069,6 +1069,8 @@ private:
 
     void onNetNavigatorSelChanging( wxTreeEvent& aEvent );
 
+    void CaptureHierarchyPaneSize();
+
 private:
     // The schematic editor control class should be able to access some internal
     // functions of the editor frame.
