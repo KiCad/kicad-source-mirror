@@ -228,7 +228,7 @@ public:
         const size_t m_index; /// <! Reference number of the package to be used in CMP.
         wxString     m_name;
 
-        size_t  m_pitch;
+        uint64_t  m_pitch;
         int64_t m_xmin, m_ymin, m_xmax, m_ymax; // Box points: leftlow, rightup
 
         std::list<std::unique_ptr<PKG_OUTLINE>> m_pkgOutlines;

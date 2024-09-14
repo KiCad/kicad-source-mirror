@@ -46,7 +46,7 @@ class PCB_VIA;
 class PROGRESS_REPORTER;
 class SHAPE_POLY_SET;
 class SHAPE_SEGMENT;
-class EDA_DATA::SUB_NET;
+class EDA_DATA;
 
 
 class PCB_IO_ODBPP : public PCB_IO
