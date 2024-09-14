@@ -71,8 +71,8 @@ public:
      */
     static const ADVANCED_CFG& GetCfg();
 
-///@{
-/// \ingroup advanced_config
+    ///@{
+    /// \ingroup advanced_config
 
     /**
      * Distance from an arc end point and the estimated end point, when rotating from the
@@ -659,6 +659,11 @@ public:
      * Default value: false
      */
     bool m_EnableSnapAnchorsDebug;
+
+    /**
+     * When true, enable output to odb++
+     */
+    bool m_EnableODB;
 
 ///@}
 

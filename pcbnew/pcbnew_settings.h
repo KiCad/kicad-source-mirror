@@ -201,6 +201,13 @@ public:
         bool   compress;
     };
 
+    struct DIALOG_EXPORT_ODBPP
+    {
+        int    precision;
+        int    units;
+        bool   compress;
+    };
+
     struct DIALOG_EXPORT_SVG
     {
         bool             black_and_white;
@@ -378,6 +385,8 @@ public:
     DIALOG_EXPORT_STEP m_ExportStep;
 
     DIALOG_EXPORT_2581 m_Export2581;
+
+    DIALOG_EXPORT_ODBPP m_ExportODBPP;
 
     DIALOG_EXPORT_SVG m_ExportSvg;
 

@@ -68,6 +68,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_export_idf.cpp
     dialogs/dialog_export_idf_base.cpp
     dialogs/dialog_export_step.cpp
+    dialogs/dialog_export_odbpp.cpp
+    dialogs/dialog_export_odbpp_base.cpp
     dialogs/dialog_export_step_base.cpp
     dialogs/dialog_export_step_process.cpp
     dialogs/dialog_export_step_process_base.cpp
@@ -633,8 +635,9 @@ add_subdirectory( pcb_io/easyeda )
 add_subdirectory( pcb_io/easyedapro )
 add_subdirectory( pcb_io/fabmaster )
 add_subdirectory( pcb_io/ipc2581 )
+add_subdirectory( pcb_io/odbpp )
 
-set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew cadstar2pcbnew easyeda easyedapro fabmaster ipc2581 CACHE INTERNAL "")
+set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew cadstar2pcbnew easyeda easyedapro fabmaster ipc2581 odbpp CACHE INTERNAL "")
 
 # a very small program launcher for pcbnew_kiface
 add_executable( pcbnew WIN32 MACOSX_BUNDLE

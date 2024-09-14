@@ -119,6 +119,7 @@ static const wxChar MinorSchematicGraphSize[] = wxT( "MinorSchematicGraphSize" )
 static const wxChar ResolveTextRecursionDepth[] = wxT( "ResolveTextRecursionDepth" );
 static const wxChar EnableExtensionSnaps[] = wxT( "EnableExtensionSnaps" );
 static const wxChar EnableSnapAnchorsDebug[] = wxT( "EnableSnapAnchorsDebug" );
+static const wxChar EnableODB[] = wxT( "EnableODB" );
 } // namespace KEYS
 
 
@@ -527,6 +528,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ResolveTextRecursionDepth,
                                                   &m_ResolveTextRecursionDepth,
                                                   m_ResolveTextRecursionDepth, 0, 10 ) );
+    
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableODB,
+                                            &m_EnableODB, m_EnableODB ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableExtensionSnaps,
                                                   &m_EnableExtensionSnaps,

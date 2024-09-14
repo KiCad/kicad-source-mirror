@@ -63,6 +63,7 @@
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_map_layers.h>
+#include <dialogs/dialog_export_odbpp.h>
 #include <dialogs/dialog_import_choose_project.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
@@ -80,6 +81,7 @@
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
+#include <wx/dir.h>
 
 #include "widgets/filedlg_hook_save_project.h"
 
@@ -1400,6 +1402,147 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
                          tempFile );
 
         SetMsgPanel( upperTxt, lowerTxt );
+    }
+
+    GetScreen()->SetContentModified( false );
+}
+
+
+void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
+{
+    DIALOG_EXPORT_ODBPP dlg( this );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    wxFileName pcbFileName = dlg.GetOutputPath();
+
+    // Write through symlinks, don't replace them
+    WX_FILENAME::ResolvePossibleSymlinks( pcbFileName );
+
+    if( !IsWritable( pcbFileName ) )
+    {
+        wxString msg = wxString::Format( _( "Insufficient permissions to write file '%s'." ),
+                                         pcbFileName.GetFullPath() );
+
+        DisplayErrorMessage( this, msg );
+        return;
+    }
+
+    if( !wxFileName::DirExists( pcbFileName.GetFullPath() ) )
+    {
+        // Make every directory provided when the provided path doesn't exist
+        if( !wxFileName::Mkdir( pcbFileName.GetFullPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            wxString msg;
+
+            msg.Printf( _( "Cannot create output directory '%s'." ), pcbFileName.GetFullPath() );
+
+            DisplayErrorMessage( this, msg );
+            return;
+        }
+    }
+
+    wxFileName tempFile( pcbFileName.GetFullPath(), "" );
+    tempFile.AppendDir( "odb" );
+
+    wxString                    upperTxt;
+    wxString                    lowerTxt;
+    std::map<std::string, UTF8> props;
+
+    props["units"] = dlg.GetUnitsString();
+    props["sigfig"] = dlg.GetPrecision();
+    WX_PROGRESS_REPORTER reporter( this, _( "Generating ODB++ output files" ), 5 );
+
+    auto saveFile = [&]() -> bool
+    {
+        try
+        {
+            IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::ODBPP ) );
+            pi->SetProgressReporter( &reporter );
+            pi->SaveBoard( pcbFileName.GetFullPath(), GetBoard(), &props );
+            return true;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( this, wxString::Format( _( "Error generating ODBPP files '%s'.\n%s" ),
+                                                  tempFile.GetFullPath(), ioe.What() ) );
+
+            lowerTxt.Printf( _( "Failed to create directory '%s'." ), tempFile.GetFullPath() );
+
+            SetMsgPanel( upperTxt, lowerTxt );
+
+            // In case we started a file but didn't fully write it, clean up
+            wxFileName::Rmdir( tempFile.GetFullPath() );
+            return false;
+        }
+    };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    auto         ret = tp.submit( saveFile );
+
+    std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+
+    while( status != std::future_status::ready )
+    {
+        reporter.KeepRefreshing();
+        status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+    }
+
+    try
+    {
+        if( !ret.get() )
+            return;
+    }
+    catch( const std::exception& e )
+    {
+        wxLogError( "Exception in ODB++ generation: %s", e.what() );
+        GetScreen()->SetContentModified( false );
+        return;
+    }
+
+    if( dlg.GetCompress() )
+    {
+        wxFileName zipFileName( pcbFileName.GetFullPath(), "odb.zip" );
+
+        wxFFileOutputStream fnout( zipFileName.GetFullPath() );
+        wxZipOutputStream   zipStream( fnout );
+
+        std::function<void( const wxString&, const wxString& )> addDirToZip =
+                [&]( const wxString& dirPath, const wxString& parentPath )
+        {
+            wxDir    dir( dirPath );
+            wxString fileName;
+
+            bool cont = dir.GetFirst( &fileName, wxEmptyString, wxDIR_DEFAULT );
+            while( cont )
+            {
+                wxFileName fileInZip( dirPath, fileName );
+                wxString   relativePath =
+                        parentPath.IsEmpty()
+                                  ? fileName
+                                  : parentPath + wxString( wxFileName::GetPathSeparator() )
+                                          + fileName;
+
+                if( wxFileName::DirExists( fileInZip.GetFullPath() ) )
+                {
+                    zipStream.PutNextDirEntry( relativePath );
+                    addDirToZip( fileInZip.GetFullPath(), relativePath );
+                }
+                else
+                {
+                    wxFFileInputStream fileStream( fileInZip.GetFullPath() );
+                    zipStream.PutNextEntry( relativePath );
+                    fileStream.Read( zipStream );
+                }
+                cont = dir.GetNext( &fileName );
+            }
+        };
+
+        addDirToZip( tempFile.GetFullPath(), wxEmptyString );
+
+        zipStream.Close();
+        fnout.Close();
     }
 
     GetScreen()->SetContentModified( false );

@@ -45,7 +45,10 @@
 #include <pcb_io/easyeda/pcb_io_easyeda_plugin.h>
 #include <pcb_io/easyedapro/pcb_io_easyedapro.h>
 #include <pcb_io/ipc2581/pcb_io_ipc2581.h>
+#include <pcb_io/odbpp/pcb_io_odbpp.h>
 #include <reporter.h>
+
+
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -328,4 +331,9 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerIPC2581Plugin(
         PCB_IO_MGR::IPC2581,
         wxT( "IPC-2581" ),
         []() -> PCB_IO* { return new PCB_IO_IPC2581; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerODBPPPlugin(
+        PCB_IO_MGR::ODBPP,
+        wxT( "ODB++" ),
+        []() -> PCB_IO* { return new PCB_IO_ODBPP; } );
 // clang-format on

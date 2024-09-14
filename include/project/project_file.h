@@ -57,6 +57,7 @@ enum LAST_PATH_TYPE : unsigned int
     LAST_PATH_SVG,
     LAST_PATH_PLOT,
     LAST_PATH_2581,
+    LAST_PATH_ODBPP,
 
     LAST_PATH_SIZE
 };

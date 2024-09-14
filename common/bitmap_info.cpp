@@ -647,6 +647,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_24.png" ), 24, wxT( "light" ) );
@@ -1063,6 +1064,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1479,6 +1481,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_16.png" ), 16, wxT( "light" ) );
@@ -1895,6 +1898,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2311,6 +2315,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_32.png" ), 32, wxT( "light" ) );
@@ -2727,6 +2732,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_dark_32.png" ), 32, wxT( "dark" ) );
@@ -3143,6 +3149,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_48.png" ), 48, wxT( "light" ) );
@@ -3559,6 +3566,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_dark_48.png" ), 48, wxT( "dark" ) );
@@ -3975,6 +3983,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_64.png" ), 64, wxT( "light" ) );
@@ -4391,6 +4400,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::post_gerber].emplace_back( BITMAPS::post_gerber, wxT( "post_gerber_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_rpt].emplace_back( BITMAPS::post_rpt, wxT( "post_rpt_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::post_xml].emplace_back( BITMAPS::post_xml, wxT( "post_xml_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::post_odb].emplace_back( BITMAPS::post_odb, wxT( "post_odb_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::preference].emplace_back( BITMAPS::preference, wxT( "preference_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::print_button].emplace_back( BITMAPS::print_button, wxT( "print_button_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::project].emplace_back( BITMAPS::project, wxT( "project_dark_64.png" ), 64, wxT( "dark" ) );

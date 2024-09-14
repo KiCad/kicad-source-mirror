@@ -1029,6 +1029,13 @@ TOOL_ACTION PCB_ACTIONS::generateIPC2581File( TOOL_ACTION_ARGS()
         .Tooltip( _( "Generate an IPC-2581 file" ) )
         .Icon( BITMAPS::post_xml ) );
 
+TOOL_ACTION PCB_ACTIONS::generateODBPPFile( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.generateODBPPFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "ODB++ Output File..." ) )
+        .Tooltip( _( "Generate ODB++ output files" ) )
+        .Icon( BITMAPS::post_odb ) );
+
 TOOL_ACTION PCB_ACTIONS::generateD356File( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.generateD356File" )
         .Scope( AS_GLOBAL )

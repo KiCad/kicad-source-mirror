@@ -447,6 +447,7 @@ set( BMAPS_MID
     post_gerber
     post_rpt
     post_xml
+    post_odb
     preference
     print_button
     project

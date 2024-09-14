@@ -69,6 +69,7 @@ public:
         PCAD,
         SOLIDWORKS_PCB,
         IPC2581,
+        ODBPP,
         // add your type here.
 
         // etc.
