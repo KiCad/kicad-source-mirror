@@ -873,7 +873,9 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
 #endif
     if( IsCopperLayer( aLayer ) &&
         LAYER_RANGE::Contains( Padstack().Drill().start, Padstack().Drill().end, aLayer ) )
+    {
         return true;
+    }
 
     if( aLayer == F_Mask )
         return !IsTented( F_Mask );
@@ -1012,6 +1014,10 @@ void PCB_VIA::SanitizeLayers()
     }
 
     if( Padstack().Drill().end < Padstack().Drill().start )
+        std::swap( Padstack().Drill().end, Padstack().Drill().start );
+
+    // Ensure B_Cu is never the first layer
+    if( Padstack().Drill().start == B_Cu )
         std::swap( Padstack().Drill().end, Padstack().Drill().start );
 }
 

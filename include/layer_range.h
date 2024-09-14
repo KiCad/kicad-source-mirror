@@ -121,15 +121,28 @@ public:
     }
 
     LAYER_RANGE_ITERATOR begin() const { return LAYER_RANGE_ITERATOR( m_start, m_stop, m_layer_count ); }
-    LAYER_RANGE_ITERATOR end() const { auto it = LAYER_RANGE_ITERATOR( m_stop, m_stop, m_layer_count ); return ++it; }
+    LAYER_RANGE_ITERATOR end() const
+    {
+        auto it = LAYER_RANGE_ITERATOR( m_stop, m_stop, m_layer_count );
+        return ++it;
+    }
 
     static bool Contains( int aStart_layer, int aEnd_layer, int aTest_layer )
     {
+        // B_Cu is the lowest copper layer for Z order copper layers
+        // F_cu = top, B_Cu = bottom
+        // So set the distance from top for B_Cu to INT_MAX
+        if( aTest_layer == B_Cu )
+            aTest_layer = INT_MAX;
+
         if( aStart_layer == B_Cu )
             aStart_layer = INT_MAX;
 
         if( aEnd_layer == B_Cu )
             aEnd_layer = INT_MAX;
+
+        if( aStart_layer > aEnd_layer )
+            std::swap( aStart_layer, aEnd_layer );
 
         return aTest_layer >= aStart_layer && aTest_layer <= aEnd_layer;
     }

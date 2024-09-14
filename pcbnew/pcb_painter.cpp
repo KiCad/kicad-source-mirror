@@ -982,8 +982,24 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         wxString netname = aVia->GetDisplayNetname();
 
-        int topLayer = aVia->TopLayer() + 1;
-        int bottomLayer = std::min( aVia->BottomLayer() + 1, board->GetCopperLayerCount() );
+        PCB_LAYER_ID topLayerId = aVia->TopLayer();
+        PCB_LAYER_ID bottomLayerId = aVia->BottomLayer();
+        int topLayer;       // The via top layer number (from 1 to copper layer count)
+        int bottomLayer;    // The via bottom layer number (from 1 to copper layer count)
+
+        switch( topLayerId )
+        {
+        case F_Cu: topLayer = 1; break;
+        case B_Cu: topLayer = board->GetCopperLayerCount(); break;
+        default: topLayer = (topLayerId - B_Cu)/2 + 1; break;
+        }
+
+        switch( bottomLayerId )
+        {
+        case F_Cu: bottomLayer = 1; break;
+        case B_Cu: bottomLayer = board->GetCopperLayerCount(); break;
+        default: bottomLayer = (bottomLayerId - B_Cu)/2 + 1; break;
+        }
 
         wxString layerIds;
 #if wxUSE_UNICODE_WCHAR
