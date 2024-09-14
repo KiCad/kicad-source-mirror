@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-09 18:09+0000\n"
+"PO-Revision-Date: 2024-09-15 10:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -10168,7 +10168,7 @@ msgstr "图纸文件名只能在图纸属性对话框中修改。"
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr "图纸间位号可见性由 原理图设置 > 通用 > 格式 进行全局控制"
+msgstr "图纸间位号可见性由 \"原理图设置 -> 通用 -> 格式\" 进行全局控制"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:78
 #, c-format
@@ -15014,7 +15014,7 @@ msgid ""
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
 "'%s' 不是一个 KiCad 原理图文件。\n"
-"请使用 '文件 -> 导入' 功能导入非KiCad原理图文件。"
+"请使用 \"文件 -> 导入\" 功能导入非KiCad原理图文件。"
 
 #: eeschema/files-io.cpp:275
 msgid "Root"
@@ -16365,7 +16365,7 @@ msgid ""
 msgstr ""
 "设计太大, 无法导入到 KiCad 中。\n"
 "请导航到以下位置以减小 CADSTAR 中的最大设计尺寸: \n"
-"设计选项卡 -> 属性 -> 设计选项 -> 最大设计尺寸。\n"
+"\"设计 -> 属性 -> 设计选项 -> 最大设计尺寸\"。\n"
 "当前设计大小: %.2f, %.2f 毫米。\n"
 "最大允许设计大小: %.2f, %.2f 毫米。\n"
 
@@ -22157,7 +22157,7 @@ msgstr "已跳过文件 '%s'(未知类型)。"
 #: gerbview/files.cpp:595
 #, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b>解压缩文件 %s 读取错误</b>"
+msgstr "<b>未解压文件 %s 读取错误</b>"
 
 #: gerbview/files.cpp:643
 msgid "Open Zip File"
@@ -40154,8 +40154,8 @@ msgstr "Eeschema 网表"
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
-msgstr ""
-"读取网表时收到一个错误。请使用\"帮助->报告错误\"菜单向 KiCad 团队报告此问题。"
+msgstr "读取网表时收到一个错误。请使用 \"帮助->报告错误\" 菜单向 KiCad "
+"团队报告此问题。"
 
 #: pcbnew/pcb_edit_frame.cpp:1924
 #, c-format
@@ -45507,9 +45507,8 @@ msgstr "不再显示"
 msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
-msgstr ""
-"不是所有的域都被填充。如你希望看到所有域都被填充, 请使用\"编辑\" > \"填充所有"
-"的域\"(%s)。"
+msgstr "存在没有被填充的域。如你希望所有的域都被填充, 请使用 \"编辑 -> 填充所有的域 "
+"(%s)\"。"
 
 #: pcbnew/tools/pcb_control.cpp:343
 msgid "Dimmed"
