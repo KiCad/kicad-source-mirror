@@ -544,6 +544,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         SCH_COMMIT dummy( this );
 
         RecalculateConnections( &dummy, GLOBAL_CLEANUP );
+
+        if( schematic.HasSymbolFieldNamesWithWhiteSpace() )
+        {
+            m_infoBar->QueueShowMessage( _( "This schematic contains symbols that have leading "
+                                            "and/or trailing white space field names." ),
+                                         wxICON_WARNING );
+        }
     }
 
     // Load any exclusions from the project file

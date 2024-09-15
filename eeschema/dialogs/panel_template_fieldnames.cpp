@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/msgdlg.h>
+
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
@@ -186,10 +188,41 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
 
     m_templateMgr->DeleteAllFieldNameTemplates( m_global );
 
-    for( const TEMPLATE_FIELDNAME& field : m_fields )
+    for( TEMPLATE_FIELDNAME& field : m_fields )
     {
         if( !field.m_Name.IsEmpty() )
+        {
+            wxString trimmedName = field.m_Name;
+
+            trimmedName.Trim();
+            trimmedName.Trim( false );
+
+            // Check if the field name contains leading and/or trailing white space.
+            if( field.m_Name != trimmedName )
+            {
+                wxString msg;
+
+                msg.Printf( _( "The field name \"%s\" contains trailing and/or leading white"
+                               "space." ), field.m_Name );
+
+                wxMessageDialog dlg( this, msg, _( "Warning" ),
+                                     wxOK | wxCANCEL | wxCENTER | wxICON_WARNING );
+
+                dlg.SetExtendedMessage( _( "This may result in what appears to be duplicate field "
+                                           "names but are actually unique names differing only by "
+                                           "white space characters.  Removing the white space "
+                                           "characters will have no effect on existing symbol "
+                                           "field names." ) );
+
+                dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Remove White Space" ) ),
+                                       wxMessageDialog::ButtonLabel( _( "Keep White Space" ) ) );
+
+                if( dlg.ShowModal() == wxID_OK )
+                    field.m_Name = trimmedName;
+            }
+
             m_templateMgr->AddTemplateFieldName( field, m_global );
+        }
     }
 
     if( m_global )

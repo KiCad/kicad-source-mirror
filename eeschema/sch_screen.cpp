@@ -1669,6 +1669,31 @@ void SCH_SCREEN::PruneOrphanedSheetInstances( const wxString& aProjectName,
 }
 
 
+bool SCH_SCREEN::HasSymbolFieldNamesWithWhiteSpace() const
+{
+    wxString trimmedFieldName;
+
+    for( const SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        for( const SCH_FIELD& field : symbol->GetFields() )
+        {
+            trimmedFieldName = field.GetName();
+            trimmedFieldName.Trim();
+            trimmedFieldName.Trim( false );
+
+            if( field.GetName() != trimmedFieldName )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
@@ -2086,4 +2111,16 @@ void SCH_SCREENS::PruneOrphanedSheetInstances( const wxString& aProjectName,
 
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->PruneOrphanedSheetInstances( aProjectName, aValidSheetPaths );
+}
+
+
+bool SCH_SCREENS::HasSymbolFieldNamesWithWhiteSpace() const
+{
+    for( const SCH_SCREEN* screen : m_screens )
+    {
+        if( screen->HasSymbolFieldNamesWithWhiteSpace() )
+            return true;
+    }
+
+    return false;
 }
