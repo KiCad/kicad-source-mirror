@@ -32,13 +32,14 @@
 # CloverGit <CloverGit@users.noreply.hosted.weblate.org>, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # zly20129 <zly20129@icloud.com>, 2024.
+# Wang <wang@plasma.ac.cn>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-14 10:53+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2024-09-16 08:28+0000\n"
+"Last-Translator: Wang <wang@plasma.ac.cn>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -11518,7 +11519,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
 msgid "Increment by:"
-msgstr ""
+msgstr "以增量（递增）:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
 msgid "All sheets"
@@ -45640,7 +45641,7 @@ msgstr "部分多边形无法相交。"
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
-msgstr ""
+msgstr "请选择一个参考规则区域进行复制。"
 
 #: pcbnew/tools/multichannel_tool.cpp:299
 msgid "No Rule Areas to repeat layout to have been found."
