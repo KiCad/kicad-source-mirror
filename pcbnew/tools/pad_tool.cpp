@@ -209,7 +209,8 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
 
         for( PAD* pad : footprint->Pads() )
         {
-            if( aPadShapeFilter && ( pad->GetShape() != aSrcPad.GetShape() ) )
+            // TODO(JE) padstacks
+            if( aPadShapeFilter && ( pad->GetShape( PADSTACK::ALL_LAYERS ) != aSrcPad.GetShape( PADSTACK::ALL_LAYERS ) ) )
                 continue;
 
             EDA_ANGLE padAngle = pad->GetOrientation() - footprint->GetOrientation();
@@ -594,6 +595,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
+            // TODO(JE) padstacks
             PAD* pad = new PAD( m_board->GetFirstFootprint() );
             PAD* master = m_frame->GetDesignSettings().m_Pad_Master.get();
 
@@ -608,7 +610,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
                 if( pad->GetProperty() != PAD_PROP::HEATSINK )
                 {
                     pad->SetAttribute( PAD_ATTRIB::SMD );
-                    pad->SetShape( PAD_SHAPE::ROUNDRECT );
+                    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
                     pad->SetSizeX( 1.5 * pad->GetSizeY() );
                     pad->SetLayerSet( PAD::SMDMask() );
                 }
@@ -617,8 +619,8 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
                     && master->GetAttribute() == PAD_ATTRIB::SMD )
             {
                 pad->SetAttribute( PAD_ATTRIB::PTH );
-                pad->SetShape( PAD_SHAPE::CIRCLE );
-                pad->SetSize( VECTOR2I( pad->GetSizeX(), pad->GetSizeX() ) );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pad->GetSizeX(), pad->GetSizeX() ) );
 
                 // Gives an acceptable drill size: it cannot be 0, but from pad master
                 // it is currently 0, therefore change it:
@@ -843,15 +845,16 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommi
     else
         *aLayer = aPad->GetLayerSet().UIOrder().front();
 
-    if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
+    // TODO(JE) padstacks
+    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM )
     {
-        for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
+        for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( PADSTACK::ALL_LAYERS ) )
         {
             PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( primitive->Duplicate() );
 
             shape->SetParent( board()->GetFirstFootprint() );
             shape->Rotate( VECTOR2I( 0, 0 ), aPad->GetOrientation() );
-            shape->Move( aPad->ShapePos() );
+            shape->Move( aPad->ShapePos( PADSTACK::ALL_LAYERS ) );
             shape->SetLayer( *aLayer );
 
             if( shape->IsProxyItem() && shape->GetShape() == SHAPE_T::SEGMENT )
@@ -865,7 +868,8 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommi
             aCommit.Add( shape );
         }
 
-        aPad->SetShape( aPad->GetAnchorPadShape() );
+        // TODO(JE) padstacks
+        aPad->SetShape( PADSTACK::ALL_LAYERS, aPad->GetAnchorPadShape( PADSTACK::ALL_LAYERS ) );
         aPad->DeletePrimitivesList();
     }
 

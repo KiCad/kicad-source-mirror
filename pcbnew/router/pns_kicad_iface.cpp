@@ -1120,14 +1120,15 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 }
 
 
-std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
+std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 {
+    std::vector<std::unique_ptr<PNS::SOLID>> solids;
     PNS_LAYER_RANGE layers( 0, aPad->BoardCopperLayerCount() );
     LSEQ lmsk = aPad->GetLayerSet().CuStack();
 
     // ignore non-copper pads except for those with holes
     if( lmsk.empty() && aPad->GetDrillSize().x == 0 )
-        return nullptr;
+        return solids;
 
     switch( aPad->GetAttribute() )
     {
@@ -1147,66 +1148,91 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
         }
 
         if( !is_copper )
-            return nullptr;
+            return solids;
 
         break;
     }
 
     default:
         wxLogTrace( wxT( "PNS" ), wxT( "unsupported pad type 0x%x" ), aPad->GetAttribute() );
-        return nullptr;
+        return solids;
     }
 
-    std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
+    // TODO(JE) padstacks - need to make multiple solids for custom padstack situations
+    auto makeSolidFromPadLayer =
+        [&]( PCB_LAYER_ID aLayer )
+        {
+            std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
-    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
-        solid->SetRoutable( false );
+            if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
+                solid->SetRoutable( false );
 
-    solid->SetLayers( layers );
-    solid->SetNet( aPad->GetNet() );
-    solid->SetParent( aPad );
-    solid->SetPadToDie( aPad->GetPadToDieLength() );
-    solid->SetOrientation( aPad->GetOrientation() );
+            if( aPad->Padstack().Mode() == PADSTACK::MODE::CUSTOM )
+            {
+                solid->SetLayers( GetPNSLayerFromBoardLayer( aLayer ) );
+            }
+            else if( aPad->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK )
+            {
+                if( aLayer == F_Cu || aLayer == B_Cu )
+                    solid->SetLayers( GetPNSLayerFromBoardLayer( aLayer ) );
+                else
+                    solid->SetLayers( PNS_LAYER_RANGE( 1, aPad->BoardCopperLayerCount() - 1 ) );
+            }
+            else
+            {
+                solid->SetLayers( layers );
+            }
 
-    if( aPad->IsFreePad() )
-        solid->SetIsFreePad();
+            solid->SetNet( aPad->GetNet() );
+            solid->SetParent( aPad );
+            solid->SetPadToDie( aPad->GetPadToDieLength() );
+            solid->SetOrientation( aPad->GetOrientation() );
 
-    VECTOR2I wx_c = aPad->ShapePos();
-    VECTOR2I offset = aPad->GetOffset();
+            if( aPad->IsFreePad() )
+                solid->SetIsFreePad();
 
-    VECTOR2I c( wx_c.x, wx_c.y );
+            VECTOR2I wx_c = aPad->ShapePos( aLayer );
+            VECTOR2I offset = aPad->GetOffset( aLayer );
 
-    RotatePoint( offset, aPad->GetOrientation() );
+            VECTOR2I c( wx_c.x, wx_c.y );
 
-    solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
-    solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
+            RotatePoint( offset, aPad->GetOrientation() );
 
-    if( aPad->GetDrillSize().x > 0 )
-        solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
+            solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
+            solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
-    // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and then
-    // perform layer-specific flashing tests internally.
-    const std::shared_ptr<SHAPE>& shape = aPad->GetEffectiveShape( UNDEFINED_LAYER,
-                                                                   FLASHING::ALWAYS_FLASHED );
+            if( aPad->GetDrillSize().x > 0 )
+                solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
 
-    if( shape->HasIndexableSubshapes() && shape->GetIndexableSubshapeCount() == 1 )
-    {
-        std::vector<const SHAPE*> subshapes;
-        shape->GetIndexableSubshapes( subshapes );
+            // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and
+            // then perform layer-specific flashing tests internally.
+            const std::shared_ptr<SHAPE>& shape =
+                    aPad->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
 
-        solid->SetShape( subshapes[0]->Clone() );
-    }
-    // For anything that's not a single shape we use a polygon.  Multiple shapes have a tendency
-    // to confuse the hull generator. https://gitlab.com/kicad/code/kicad/-/issues/15553
-    else
-    {
-        const std::shared_ptr<SHAPE_POLY_SET>& poly = aPad->GetEffectivePolygon( ERROR_OUTSIDE );
+            if( shape->HasIndexableSubshapes() && shape->GetIndexableSubshapeCount() == 1 )
+            {
+                std::vector<const SHAPE*> subshapes;
+                shape->GetIndexableSubshapes( subshapes );
 
-        if( poly->OutlineCount() )
-            solid->SetShape( new SHAPE_SIMPLE( poly->Outline( 0 ) ) );
-    }
+                solid->SetShape( subshapes[0]->Clone() );
+            }
+            // For anything that's not a single shape we use a polygon.  Multiple shapes have a tendency
+            // to confuse the hull generator. https://gitlab.com/kicad/code/kicad/-/issues/15553
+            else
+            {
+                const std::shared_ptr<SHAPE_POLY_SET>& poly =
+                        aPad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE );
 
-    return solid;
+                if( poly->OutlineCount() )
+                    solid->SetShape( new SHAPE_SIMPLE( poly->Outline( 0 ) ) );
+            }
+
+            solids.emplace_back( std::move( solid ) );
+        };
+
+    aPad->Padstack().ForEachUniqueLayer( makeSolidFromPadLayer );
+
+    return solids;
 }
 
 
@@ -1612,7 +1638,9 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( std::unique_ptr<PNS::SOLID> solid = syncPad( pad ) )
+            std::vector<std::unique_ptr<PNS::SOLID>> solids = syncPad( pad );
+
+            for( std::unique_ptr<PNS::SOLID>& solid : solids )
                 aWorld->Add( std::move( solid ) );
 
             std::optional<int> clearanceOverride = pad->GetClearanceOverrides( nullptr );

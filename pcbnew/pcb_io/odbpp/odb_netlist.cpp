@@ -109,13 +109,13 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
                 net_point.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
                 net_point.x_location = pad->GetPosition().x - origin.x;
                 net_point.y_location = origin.y - pad->GetPosition().y;
-                net_point.x_size = pad->GetSize().x;
+                net_point.x_size = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
 
                 // Rule: round pads have y = 0
-                if( pad->GetShape() == PAD_SHAPE::CIRCLE )
+                if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
                     net_point.y_size = net_point.x_size;
                 else
-                    net_point.y_size = pad->GetSize().y;
+                    net_point.y_size = pad->GetSize( PADSTACK::ALL_LAYERS ).y;
 
                 // net_point.rotation = ( ANGLE_360 - pad->GetOrientation() ).Normalize().AsDegrees();
 

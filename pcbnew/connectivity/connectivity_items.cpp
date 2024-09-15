@@ -150,8 +150,18 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
     if( !pad->IsOnCopperLayer() )
          return nullptr;
 
-     auto item = new CN_ITEM( pad, false, 1 );
-     item->AddAnchor( pad->ShapePos() );
+    auto item = new CN_ITEM( pad, false, 1 );
+
+    std::set<VECTOR2I> uniqueAnchors;
+    pad->Padstack().ForEachUniqueLayer(
+        [&]( PCB_LAYER_ID aLayer )
+        {
+            uniqueAnchors.insert( pad->ShapePos( aLayer ) );
+        } );
+
+    for( const VECTOR2I& anchor : uniqueAnchors )
+        item->AddAnchor( anchor );
+
      item->SetLayers( F_Cu, B_Cu );
 
      switch( pad->GetAttribute() )

@@ -2337,7 +2337,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack )
                     VECTOR2I loc;
 
                     // We may not collide even if we passed the bounding-box hit test
-                    if( pad->GetEffectivePolygon( ERROR_INSIDE )->Collide( trackSeg, 0, nullptr, &loc ) )
+                    if( pad->GetEffectivePolygon( track->GetLayer(), ERROR_INSIDE )->Collide( trackSeg, 0, nullptr, &loc ) )
                     {
                         // Part 1: length of the seg to the intersection with the pad poly
                         if( hitStart )

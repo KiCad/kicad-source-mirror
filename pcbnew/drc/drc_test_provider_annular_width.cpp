@@ -202,17 +202,18 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                 case PCB_PAD_T:
                 {
+                    // TODO(JE) padstacks
                     PAD* pad = static_cast<PAD*>( item );
 
                     if( !pad->HasHole() || pad->GetAttribute() != PAD_ATTRIB::PTH )
                         return 0;
 
-                    if( pad->GetOffset() == VECTOR2I( 0, 0 ) )
+                    if( pad->GetOffset( PADSTACK::ALL_LAYERS ) == VECTOR2I( 0, 0 ) )
                     {
-                        switch( pad->GetShape() )
+                        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
                         {
                         case PAD_SHAPE::CHAMFERED_RECT:
-                            if( pad->GetChamferRectRatio() > 0.30 )
+                            if( pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ) > 0.30 )
                                 break;
 
                             KI_FALLTHROUGH;
@@ -277,9 +278,9 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     if( fp )
                         sameNumPads = fp->GetPads( pad->GetNumber(), pad );
 
-                    if( pad->GetOffset() == VECTOR2I( 0, 0 ) )
+                    if( pad->GetOffset( PADSTACK::ALL_LAYERS ) == VECTOR2I( 0, 0 ) )
                     {
-                        switch( pad->GetShape() )
+                        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
                         {
                         case PAD_SHAPE::CIRCLE:
                             annularWidth = ( pad->GetSizeX() - pad->GetDrillSizeX() ) / 2;
@@ -292,7 +293,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                             break;
 
                         case PAD_SHAPE::CHAMFERED_RECT:
-                            if( pad->GetChamferRectRatio() > 0.30 )
+                            if( pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ) > 0.30 )
                                 break;
 
                             KI_FALLTHROUGH;
@@ -322,7 +323,8 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         SHAPE_POLY_SET padOutline;
                         std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
 
-                        pad->TransformShapeToPolygon( padOutline, UNDEFINED_LAYER, 0, maxError,
+                        // TODO(JE) padstacks
+                        pad->TransformShapeToPolygon( padOutline, PADSTACK::ALL_LAYERS, 0, maxError,
                                                       ERROR_INSIDE );
 
                         if( sameNumPads.empty() )
@@ -353,7 +355,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                             {
                                 // Construct the full pad with outline and hole.
                                 sameNumPad->TransformShapeToPolygon( otherPadOutline,
-                                                                     UNDEFINED_LAYER, 0, maxError,
+                                                                     PADSTACK::ALL_LAYERS, 0, maxError,
                                                                      ERROR_OUTSIDE );
 
                                 sameNumPad->TransformHoleToPolygon( otherPadOutline, 0, maxError,

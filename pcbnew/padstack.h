@@ -61,6 +61,7 @@ enum class PAD_SHAPE : int
  */
 enum class PAD_DRILL_SHAPE
 {
+    UNDEFINED,
     CIRCLE,
     OBLONG,
 };
@@ -125,12 +126,19 @@ public:
         MOUNTING    ///< A mounting hole (plated or unplated, not associated with a footprint)
     };
 
+    ///! Copper geometry mode: controls how many unique copper layer shapes this padstack has
     enum class MODE
     {
         NORMAL,           ///< Shape is the same on all layers
-        TOP_INNER_BOTTOM, ///< Up to three shapes can be defined (top, inner, bottom)
+        FRONT_INNER_BACK, ///< Up to three shapes can be defined (F_Cu, inner copper layers, B_Cu)
         CUSTOM            ///< Shapes can be defined on arbitrary layers
     };
+
+    ///! Temporary layer identifier to identify code that is not padstack-aware
+    static constexpr PCB_LAYER_ID ALL_LAYERS = F_Cu;
+
+    ///! The layer identifier to use for "inner layers" on top/inner/bottom padstacks
+    static constexpr PCB_LAYER_ID INNER_LAYERS = In1_Cu;
 
     ///! Whether or not to remove the copper shape for unconnected layers
     enum class UNCONNECTED_LAYER_MODE
@@ -243,6 +251,20 @@ public:
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
+    /**
+       * Compare two padstacks and return 0 if they are equal.
+       *
+       * @return less than 0 if left less than right, 0 if equal, or greater than 0 if left
+       *         greater than right.
+       */
+    static int Compare( const PADSTACK* aPadstackRef, const PADSTACK* aPadstackCmp );
+
+    /**
+     * Return a measure of how likely the other object is to represent the same
+     * object.  The scale runs from 0.0 (definitely different objects) to 1.0 (same)
+     */
+    double Similarity( const PADSTACK& aOther ) const;
+
     const LSET& LayerSet() const { return m_layerSet; }
     LSET& LayerSet() { return m_layerSet; }
     void SetLayerSet( const LSET& aSet ) { m_layerSet = aSet; }
@@ -251,7 +273,7 @@ public:
     PCB_LAYER_ID EndLayer() const;
 
     MODE Mode() const { return m_mode; }
-    void SetMode( MODE aMode ) { m_mode = aMode; }
+    void SetMode( MODE aMode );
 
     ///! Returns the name of this padstack in IPC-7351 format
     wxString Name() const;
@@ -272,8 +294,8 @@ public:
     UNCONNECTED_LAYER_MODE UnconnectedLayerMode() const { return m_unconnectedLayerMode; }
     void SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE aMode ) { m_unconnectedLayerMode = aMode; }
 
-    COPPER_LAYER_PROPS& CopperLayerDefaults() { return m_defaultCopperProps; }
-    const COPPER_LAYER_PROPS& CopperLayerDefaults() const { return m_defaultCopperProps; }
+    COPPER_LAYER_PROPS& CopperLayer( PCB_LAYER_ID aLayer );
+    const COPPER_LAYER_PROPS& CopperLayer( PCB_LAYER_ID aLayer ) const;
 
     MASK_LAYER_PROPS& FrontOuterLayers() { return m_frontMaskProps; }
     const MASK_LAYER_PROPS& FrontOuterLayers() const { return m_frontMaskProps; }
@@ -292,38 +314,57 @@ public:
     CUSTOM_SHAPE_ZONE_MODE CustomShapeInZoneMode() const { return m_customShapeInZoneMode; }
     void SetCustomShapeInZoneMode( CUSTOM_SHAPE_ZONE_MODE aM ) { m_customShapeInZoneMode = aM; }
 
+    /**
+     * Runs the given callable for each active unique copper layer in this padstack, meaning
+     * F_Cu for MODE::NORMAL; F_Cu, PADSTACK::INNER_LAYERS, and B_Cu for top/inner/bottom,
+     * and an arbitrary set of layers for full-custom padstacks.
+     * @param aMethod will be called once for each independent copper layer in the padstack
+     */
+    void ForEachUniqueLayer( const std::function<void( PCB_LAYER_ID )>& aMethod ) const;
+
+    /**
+     * Determines which geometry layer should be used for the given input layer.
+     * For example, for MODE::NORMAL, this will always be F_Cu, and for MODE::FRONT_INNER_BACK,
+     * this will be one of F_Cu, PADSTACK::INNER_LAYERS, and B_Cu depending on the input
+     * layer.
+     *
+     * @param aLayer is a valid board layer
+     * @return the layer that the padstack's geometry is stored on for the given input layer
+     */
+    PCB_LAYER_ID EffectiveLayerFor( PCB_LAYER_ID aLayer ) const;
+
     // The following section has convenience getters for the padstack properties on a given layer.
 
-    PAD_SHAPE Shape( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer = F_Cu );
+    PAD_SHAPE Shape( PCB_LAYER_ID aLayer ) const;
+    void SetShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer );
 
-    VECTOR2I& Size( PCB_LAYER_ID aLayer = F_Cu );
-    const VECTOR2I& Size( PCB_LAYER_ID aLayer = F_Cu ) const;
+    VECTOR2I& Size( PCB_LAYER_ID aLayer );
+    const VECTOR2I& Size( PCB_LAYER_ID aLayer ) const;
 
-    PAD_DRILL_SHAPE DrillShape( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetDrillShape( PAD_DRILL_SHAPE aShape, PCB_LAYER_ID aLayer = F_Cu );
+    PAD_DRILL_SHAPE DrillShape() const;
+    void SetDrillShape( PAD_DRILL_SHAPE aShape );
 
-    VECTOR2I& Offset( PCB_LAYER_ID aLayer = F_Cu );
-    const VECTOR2I& Offset( PCB_LAYER_ID aLayer = F_Cu ) const;
+    VECTOR2I& Offset( PCB_LAYER_ID aLayer );
+    const VECTOR2I& Offset( PCB_LAYER_ID aLayer ) const;
 
-    PAD_SHAPE AnchorShape( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetAnchorShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer = F_Cu );
+    PAD_SHAPE AnchorShape( PCB_LAYER_ID aLayer ) const;
+    void SetAnchorShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer );
 
-    VECTOR2I& TrapezoidDeltaSize( PCB_LAYER_ID aLayer = F_Cu );
-    const VECTOR2I& TrapezoidDeltaSize( PCB_LAYER_ID aLayer = F_Cu ) const;
+    VECTOR2I& TrapezoidDeltaSize( PCB_LAYER_ID aLayer );
+    const VECTOR2I& TrapezoidDeltaSize( PCB_LAYER_ID aLayer ) const;
 
-    double RoundRectRadiusRatio( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetRoundRectRadiusRatio( double aRatio, PCB_LAYER_ID aLayer = F_Cu );
+    double RoundRectRadiusRatio( PCB_LAYER_ID aLayer ) const;
+    void SetRoundRectRadiusRatio( double aRatio, PCB_LAYER_ID aLayer );
 
-    int RoundRectRadius( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetRoundRectRadius( double aRadius, PCB_LAYER_ID aLayer = F_Cu );
+    int RoundRectRadius( PCB_LAYER_ID aLayer ) const;
+    void SetRoundRectRadius( double aRadius, PCB_LAYER_ID aLayer );
 
-    double ChamferRatio( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetChamferRatio( double aRatio, PCB_LAYER_ID aLayer = F_Cu );
+    double ChamferRatio( PCB_LAYER_ID aLayer ) const;
+    void SetChamferRatio( double aRatio, PCB_LAYER_ID aLayer );
 
-    int& ChamferPositions( PCB_LAYER_ID aLayer = F_Cu );
-    const int& ChamferPositions( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetChamferPositions( int aPositions, PCB_LAYER_ID aLayer = F_Cu );
+    int& ChamferPositions( PCB_LAYER_ID aLayer );
+    const int& ChamferPositions( PCB_LAYER_ID aLayer ) const;
+    void SetChamferPositions( int aPositions, PCB_LAYER_ID aLayer );
 
     std::optional<int>& Clearance( PCB_LAYER_ID aLayer = F_Cu );
     const std::optional<int>& Clearance( PCB_LAYER_ID aLayer = F_Cu ) const;
@@ -350,15 +391,15 @@ public:
     EDA_ANGLE ThermalSpokeAngle( PCB_LAYER_ID aLayer = F_Cu ) const;
     void SetThermalSpokeAngle( EDA_ANGLE aAngle, PCB_LAYER_ID aLayer = F_Cu );
 
-    std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer = F_Cu );
-    const std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer = F_Cu ) const;
+    std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer );
+    const std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Adds a custom shape primitive to the padstack.
      * @param aShape is a shape to add as a custom primitive. Ownership is passed to this PADSTACK.
      * @param aLayer is the padstack layer to add to.
      */
-    void AddPrimitive( PCB_SHAPE* aShape, PCB_LAYER_ID aLayer = F_Cu );
+    void AddPrimitive( PCB_SHAPE* aShape, PCB_LAYER_ID aLayer );
 
     /**
      * Appends a copy of each shape in the given list to this padstack's custom shape list
@@ -366,7 +407,7 @@ public:
      * @param aLayer is the padstack layer to add to.
      */
     void AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
-                           PCB_LAYER_ID aLayer = F_Cu );
+                           PCB_LAYER_ID aLayer );
 
     /**
      * Clears the existing primitive list (freeing the owned shapes) and adds copies of the given
@@ -375,9 +416,9 @@ public:
      * @param aLayer is the padstack layer to add to.
      */
     void ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
-                            PCB_LAYER_ID aLayer = F_Cu );
+                            PCB_LAYER_ID aLayer );
 
-    void ClearPrimitives( PCB_LAYER_ID aLayer = F_Cu );
+    void ClearPrimitives( PCB_LAYER_ID aLayer );
 
 private:
     ///! The BOARD_ITEM this PADSTACK belongs to; will be used as the parent for owned shapes
@@ -396,7 +437,8 @@ private:
     EDA_ANGLE m_orientation;
 
     ///! The properties applied to copper layers if they aren't overridden
-    COPPER_LAYER_PROPS m_defaultCopperProps;
+    //COPPER_LAYER_PROPS m_defaultCopperProps;
+    std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> m_copperProps;
 
     ///! The overrides applied to front outer technical layers
     MASK_LAYER_PROPS m_frontMaskProps;
@@ -412,12 +454,6 @@ private:
      * CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL = use the convex hull of the pad shape
      */
     CUSTOM_SHAPE_ZONE_MODE m_customShapeInZoneMode;
-
-    ///! Any entries here override the copper layer settings on the given copper layer.
-    ///! If m_mode == MODE::TOP_INNER_BOTTOM, the inner layer setting is always In1_Cu and the only
-    ///!        keys in this map that are used are F_Cu, In1_Cu, and B_Cu.
-    ///! If m_mode == MODE::NORMAL, this map is ignored.
-    std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> m_copperOverrides;
 
     ///! The primary drill parameters, which also define the start and end layers for through-hole
     ///! vias and pads (F_Cu to B_Cu for normal holes; a subset of layers for blind/buried vias)

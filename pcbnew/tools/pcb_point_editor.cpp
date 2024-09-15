@@ -322,13 +322,15 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_PAD_T:
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
-        VECTOR2I   shapePos = pad->ShapePos();
-        VECTOR2I   halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+        // TODO(JE) padstacks
+        VECTOR2I   shapePos = pad->ShapePos( PADSTACK::ALL_LAYERS );
+        VECTOR2I   halfSize( pad->GetSize( PADSTACK::ALL_LAYERS ).x / 2,
+                             pad->GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
 
         if( !m_isFootprintEditor || pad->IsLocked() )
             break;
 
-        switch( pad->GetShape() )
+        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
         {
         case PAD_SHAPE::CIRCLE:
             points->AddPoint( VECTOR2I( shapePos.x + halfSize.x, shapePos.y ) );
@@ -1671,14 +1673,15 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
     {
         PAD* pad = static_cast<PAD*>( item );
 
-        switch( pad->GetShape() )
+        // TODO(JE) padstacks
+        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
         {
         case PAD_SHAPE::CIRCLE:
         {
             VECTOR2I end = m_editPoints->Point( 0 ).GetPosition();
             int      diameter = 2 * ( end - pad->GetPosition() ).EuclideanNorm();
 
-            pad->SetSize( VECTOR2I( diameter, diameter ) );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( diameter, diameter ) );
             break;
         }
 
@@ -1697,7 +1700,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
             pinEditedCorner( topLeft, topRight, botLeft, botRight, holeCenter, holeSize );
 
-            if( ( pad->GetOffset().x || pad->GetOffset().y )
+            if( ( pad->GetOffset( PADSTACK::ALL_LAYERS ).x || pad->GetOffset( PADSTACK::ALL_LAYERS ).y )
                     || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
             {
                 // Keep hole pinned at the current location; adjust the pad around the hole
@@ -1729,8 +1732,8 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
                 RotatePoint( deltaOffset, -pad->GetOrientation() );
 
-                pad->SetSize( padSize );
-                pad->SetOffset( -deltaOffset );
+                pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
+                pad->SetOffset( PADSTACK::ALL_LAYERS, -deltaOffset );
             }
             else
             {
@@ -1759,7 +1762,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
                 if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
                     std::swap( padSize.x, padSize.y );
 
-                pad->SetSize( padSize );
+                pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
                 pad->SetPosition( VECTOR2I( ( left + right ) / 2, ( top + bottom ) / 2 ) );
             }
             break;
@@ -2215,12 +2218,13 @@ void PCB_POINT_EDITOR::updatePoints()
 
     case PCB_PAD_T:
     {
+        // TODO(JE) padstacks
         const PAD* pad = static_cast<const PAD*>( item );
         bool       locked = pad->GetParent() && pad->IsLocked();
-        VECTOR2I   shapePos = pad->ShapePos();
-        VECTOR2I   halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+        VECTOR2I   shapePos = pad->ShapePos( PADSTACK::ALL_LAYERS );
+        VECTOR2I   halfSize( pad->GetSize( PADSTACK::ALL_LAYERS ).x / 2, pad->GetSize( PADSTACK::ALL_LAYERS ).y / 2 );
 
-        switch( pad->GetShape() )
+        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
         {
         case PAD_SHAPE::CIRCLE:
         {

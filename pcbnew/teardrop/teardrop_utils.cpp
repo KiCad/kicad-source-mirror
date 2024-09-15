@@ -71,8 +71,9 @@ int TEARDROP_MANAGER::GetWidth( BOARD_ITEM* aItem )
     }
     else if( aItem->Type() == PCB_PAD_T )
     {
+        // TODO(JE) padstacks
         PAD* pad = static_cast<PAD*>( aItem );
-        return std::min( pad->GetSize().x, pad->GetSize().y );
+        return std::min( pad->GetSize( PADSTACK::ALL_LAYERS ).x, pad->GetSize( PADSTACK::ALL_LAYERS ).y );
     }
     else if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
     {
@@ -90,8 +91,11 @@ bool TEARDROP_MANAGER::IsRound( BOARD_ITEM* aItem )
     {
         PAD* pad = static_cast<PAD*>( aItem );
 
-        return pad->GetShape() == PAD_SHAPE::CIRCLE
-               || ( pad->GetShape() == PAD_SHAPE::OVAL && pad->GetSize().x == pad->GetSize().y );
+        // TODO(JE) padstacks
+        return pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE
+               || ( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::OVAL
+                    && pad->GetSize( PADSTACK::ALL_LAYERS ).x
+                               == pad->GetSize( PADSTACK::ALL_LAYERS ).y );
     }
 
     return true;

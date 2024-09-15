@@ -206,12 +206,12 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
     if( !m_IsHolePlated && m_Hole )
     {
         // mechanical hole
-        pad->SetShape( PAD_SHAPE::CIRCLE );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
         pad->SetAttribute( PAD_ATTRIB::NPTH );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
         pad->SetDrillSize( VECTOR2I( m_Hole, m_Hole ) );
-        pad->SetSize( VECTOR2I( m_Hole, m_Hole ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( m_Hole, m_Hole ) );
 
         // Mounting Hole: Solder Mask Margin from Top Layer Width size.
         // Used the default zone clearance (simplify)
@@ -270,29 +270,29 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
             || padShapeName.IsSameAs( wxT( "MtHole" ), false ) )
         {
             if( width != height )
-                pad->SetShape( PAD_SHAPE::OVAL );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             else
-                pad->SetShape( PAD_SHAPE::CIRCLE );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
         }
         else if( padShapeName.IsSameAs( wxT( "Rect" ), false ) )
         {
-            pad->SetShape( PAD_SHAPE::RECTANGLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
         }
         else if(  padShapeName.IsSameAs( wxT( "RndRect" ), false ) )
         {
-            pad->SetShape( PAD_SHAPE::ROUNDRECT );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
         }
         else if( padShapeName.IsSameAs( wxT( "Polygon" ), false ) )
         {
-            pad->SetShape( PAD_SHAPE::RECTANGLE ); // approximation
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE ); // approximation
         }
 
-        pad->SetSize( VECTOR2I( width, height ) );
-        pad->SetDelta( VECTOR2I( 0, 0 ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( width, height ) );
+        pad->SetDelta( PADSTACK::ALL_LAYERS, VECTOR2I( 0, 0 ) );
         pad->SetOrientation( m_Rotation + aRotation );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-        pad->SetOffset( VECTOR2I( 0, 0 ) );
+        pad->SetOffset( PADSTACK::ALL_LAYERS, VECTOR2I( 0, 0 ) );
         pad->SetDrillSize( VECTOR2I( m_Hole, m_Hole ) );
 
         pad->SetAttribute( padType );

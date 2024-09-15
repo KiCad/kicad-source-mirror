@@ -203,9 +203,10 @@ static POINT mapPt( const VECTOR2I& pt, FOOTPRINT* aFootprint )
  */
 static bool isRoundKeepout( PAD* aPad )
 {
-    if( aPad->GetShape() == PAD_SHAPE::CIRCLE )
+    // TODO(JE) padstacks
+    if( aPad->GetShape( ::PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
     {
-        if( aPad->GetDrillSize().x >= aPad->GetSize().x )
+        if( aPad->GetDrillSize().x >= aPad->GetSize( ::PADSTACK::ALL_LAYERS ).x )
             return true;
 
         if( !( aPad->GetLayerSet() & LSET::AllCuMask() ).any() )
@@ -281,10 +282,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     POINT   dsnOffset;
 
-    if( aPad->GetOffset().x || aPad->GetOffset().y )
-    {
-        VECTOR2I offset( aPad->GetOffset().x, aPad->GetOffset().y );
+    // TODO(JE) padstacks
+    const VECTOR2I& padSize = aPad->GetSize( ::PADSTACK::ALL_LAYERS );
+    const VECTOR2I& offset = aPad->GetOffset( ::PADSTACK::ALL_LAYERS );
 
+    if( offset.x || offset.y )
+    {
         dsnOffset = mapPt( offset );
         // Using () would cause padstack name to be quoted, and {} locks freerouter, so use [].
         std::ostringstream oss;
@@ -294,11 +297,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         uniqifier += oss.str();
     }
 
-    switch( aPad->GetShape() )
+    switch( aPad->GetShape( ::PADSTACK::ALL_LAYERS ) )
     {
     case PAD_SHAPE::CIRCLE:
     {
-        double diameter = scale( aPad->GetSize().x );
+        double diameter = scale( padSize.x );
 
         for( int ndx = 0; ndx < reportedLayers; ++ndx )
         {
@@ -317,7 +320,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
         std::ostringstream oss;
         oss << "Round" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um(aPad->GetSize().x) << "_um";
+            << IU2um( padSize.x ) << "_um";
 
         padstack->SetPadstackId( oss.str().c_str() );
         break;
@@ -325,8 +328,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     case PAD_SHAPE::RECTANGLE:
     {
-        double dx = scale( aPad->GetSize().x ) / 2.0;
-        double dy = scale( aPad->GetSize().y ) / 2.0;
+        double dx = scale( padSize.x ) / 2.0;
+        double dy = scale( padSize.y ) / 2.0;
 
         POINT lowerLeft( -dx, -dy );
         POINT upperRight( dx, dy );
@@ -350,7 +353,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
         std::ostringstream oss;
         oss << "Rect" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um(aPad->GetSize().x) << "x" << IU2um(aPad->GetSize().y) << "_um";
+            << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_um";
 
         padstack->SetPadstackId( oss.str().c_str() );
         break;
@@ -358,8 +361,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     case PAD_SHAPE::OVAL:
     {
-        double dx = scale( aPad->GetSize().x ) / 2.0;
-        double dy = scale( aPad->GetSize().y ) / 2.0;
+        double dx = scale( padSize.x ) / 2.0;
+        double dy = scale( padSize.y ) / 2.0;
         double dr = dx - dy;
         double radius;
         POINT  pstart;
@@ -400,7 +403,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
         std::ostringstream oss;
         oss << "Oval" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um(aPad->GetSize().x) << "x" << IU2um(aPad->GetSize().y) << "_um";
+            << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_um";
 
         padstack->SetPadstackId( oss.str().c_str() );
         break;
@@ -408,11 +411,13 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     case PAD_SHAPE::TRAPEZOID:
     {
-        double dx = scale( aPad->GetSize().x ) / 2.0;
-        double dy = scale( aPad->GetSize().y ) / 2.0;
+        double dx = scale( padSize.x ) / 2.0;
+        double dy = scale( padSize.y ) / 2.0;
 
-        double ddx = scale( aPad->GetDelta().x ) / 2.0;
-        double ddy = scale( aPad->GetDelta().y ) / 2.0;
+        const VECTOR2I& delta = aPad->GetDelta( ::PADSTACK::ALL_LAYERS );
+
+        double ddx = scale( delta.x ) / 2.0;
+        double ddy = scale( delta.y ) / 2.0;
 
         // see class_pad_draw_functions.cpp which draws the trapezoid pad
         POINT lowerLeft( -dx - ddy, -dy - ddx );
@@ -447,9 +452,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         // this string _must_ be unique for a given physical shape
         std::ostringstream oss;
         oss << "Trapz" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um(aPad->GetSize().x) << "x" << IU2um(aPad->GetSize().y) << "_"
-            << (aPad->GetDelta().x < 0 ? "n" : "p") << std::abs(IU2um(aPad->GetDelta().x)) << "x"
-            << (aPad->GetDelta().y < 0 ? "n" : "p") << std::abs(IU2um(aPad->GetDelta().y)) << "_um";
+            << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_"
+            << ( delta.x < 0 ? "n" : "p") << std::abs( IU2um( delta.x ) ) << "x"
+            << ( delta.y < 0 ? "n" : "p") << std::abs( IU2um( delta.y ) ) << "_um";
 
         padstack->SetPadstackId( oss.str().c_str() );
         break;
@@ -460,7 +465,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     {
         // Export the shape as as polygon, round rect does not exist as primitive
         const int      circleToSegmentsCount = 36;
-        int            rradius = aPad->GetRoundRectCornerRadius();
+        int            rradius = aPad->GetRoundRectCornerRadius( ::PADSTACK::ALL_LAYERS );
         SHAPE_POLY_SET cornerBuffer;
 
         // Use a slightly bigger shape because the round corners are approximated by
@@ -473,17 +478,16 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
          */
         double correctionFactor = cos( M_PI / (double) circleToSegmentsCount );
         int    extra_clearance = KiROUND( rradius * ( 1.0 - correctionFactor ) );
-        VECTOR2I psize = aPad->GetSize();
+        VECTOR2I psize = padSize;
         psize.x += extra_clearance * 2;
         psize.y += extra_clearance * 2;
         rradius += extra_clearance;
-        bool doChamfer = aPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT;
+        bool doChamfer = aPad->GetShape( ::PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon( cornerBuffer, VECTOR2I( 0, 0 ), psize, ANGLE_0,
-                                              rradius, aPad->GetChamferRectRatio(),
-                                              doChamfer ? aPad->GetChamferPositions() : 0,
-                                              0, aBoard->GetDesignSettings().m_MaxError,
-                                              ERROR_INSIDE );
+                rradius, aPad->GetChamferRectRatio( ::PADSTACK::ALL_LAYERS ),
+                doChamfer ? aPad->GetChamferPositions( ::PADSTACK::ALL_LAYERS ) : 0,
+                0, aBoard->GetDesignSettings().m_MaxError, ERROR_INSIDE );
 
         SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
 
@@ -521,12 +525,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         std::ostringstream oss;
         oss << "RoundRect" << uniqifier << "Pad_"
             << std::fixed << std::setprecision(6)
-            << IU2um( aPad->GetSize().x ) << 'x'
-            << IU2um( aPad->GetSize().y ) << '_'
+            << IU2um( padSize.x ) << 'x'
+            << IU2um( padSize.y ) << '_'
             << IU2um( rradius ) << "_um_"
-            << ( doChamfer ? aPad->GetChamferRectRatio() : 0.0 ) << '_'
+            << ( doChamfer ? aPad->GetChamferRectRatio( ::PADSTACK::ALL_LAYERS ) : 0.0 ) << '_'
             << std::hex << std::uppercase
-            << ( doChamfer ? aPad->GetChamferPositions() : 0 );
+            << ( doChamfer ? aPad->GetChamferPositions( ::PADSTACK::ALL_LAYERS ) : 0 );
 
         padstack->SetPadstackId( oss.str().c_str() );
         break;
@@ -536,7 +540,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     {
         std::vector<VECTOR2I> polygonal_shape;
         SHAPE_POLY_SET       pad_shape;
-        aPad->MergePrimitivesAsPolygon( &pad_shape );
+        aPad->MergePrimitivesAsPolygon( ::PADSTACK::ALL_LAYERS, &pad_shape );
 
 #ifdef EXPORT_CUSTOM_PADS_CONVEX_HULL
         BuildConvexHull( polygonal_shape, pad_shape );
@@ -579,7 +583,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         std::ostringstream oss;
         oss << "Cust" << uniqifier << "Pad_"
             << std::fixed << std::setprecision(6)
-            << IU2um( aPad->GetSize().x ) << 'x' << IU2um( aPad->GetSize().y ) << '_'
+            << IU2um( padSize.x ) << 'x' << IU2um( padSize.y ) << '_'
             << IU2um( rect.GetWidth() ) << 'x' << IU2um( rect.GetHeight() ) << '_'
             << polygonal_shape.size() << "_um_"
             << hash.ToString();

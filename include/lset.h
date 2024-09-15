@@ -57,7 +57,7 @@ public:
      * @param aLayer is the layer to check
      * @return true if the layer is included
      */
-    bool Contains( PCB_LAYER_ID aLayer )
+    bool Contains( PCB_LAYER_ID aLayer ) const
     {
         // At the moment, LSET cannot store negative layers, but PCB_LAYER_ID can contain them
         if( aLayer < 0 )

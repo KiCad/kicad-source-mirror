@@ -232,6 +232,7 @@ private:
 
     // Parse only the (option ...) inside a pad description
     bool        parsePAD_option( PAD* aPad );
+    void        parsePadstack( PAD* aPad );
 
     PCB_ARC*    parseARC();
     PCB_TRACK*  parsePCB_TRACK();
@@ -317,6 +318,8 @@ private:
      * @throw PARSE_ERROR if the text syntax is not valid.
      */
     void parseRenderCache( EDA_TEXT* text );
+
+    void parseTenting( PADSTACK& aPadstack );
 
     FP_3DMODEL* parse3DModel();
 

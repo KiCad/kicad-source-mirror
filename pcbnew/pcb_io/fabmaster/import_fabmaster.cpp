@@ -2289,7 +2289,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         auto& pad = padstack->second;
 
-                        newpad->SetShape( pad.shape );
+                        newpad->SetShape( PADSTACK::ALL_LAYERS, pad.shape );
 
                         if( pad.shape == PAD_SHAPE::CUSTOM )
                         {
@@ -2297,7 +2297,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             // is fully hidden by the custom pad
                             int pad_size = std::min( pad.width, pad.height );
 
-                            newpad->SetSize( VECTOR2I( pad_size / 2, pad_size / 2 ) );
+                            newpad->SetSize( PADSTACK::ALL_LAYERS,
+                                             VECTOR2I( pad_size / 2, pad_size / 2 ) );
 
                             std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" +
                                                       pin->pin_number;
@@ -2359,7 +2360,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                     wxLogError( _( "Invalid custom pad '%s'. Replacing with "
                                                    "circular pad." ),
                                                 custom_name.c_str() );
-                                    newpad->SetShape( PAD_SHAPE::CIRCLE );
+                                    newpad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
                                 }
                                 else
                                 {
@@ -2380,18 +2381,18 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                                                         DEGREES_T ) );
                                     }
 
-                                    newpad->AddPrimitivePoly( poly_outline, 0, true );
+                                    newpad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, poly_outline, 0, true );
                                 }
 
                                 SHAPE_POLY_SET mergedPolygon;
-                                newpad->MergePrimitivesAsPolygon( &mergedPolygon );
+                                newpad->MergePrimitivesAsPolygon( PADSTACK::ALL_LAYERS, &mergedPolygon );
 
                                 if( mergedPolygon.OutlineCount() > 1 )
                                 {
                                     wxLogError( _( "Invalid custom pad '%s'. Replacing with "
                                                    "circular pad." ),
                                                 custom_name.c_str() );
-                                    newpad->SetShape( PAD_SHAPE::CIRCLE );
+                                    newpad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
                                 }
                             }
                             else
@@ -2402,7 +2403,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         }
                         else
                         {
-                            newpad->SetSize( VECTOR2I( pad.width, pad.height ) );
+                            newpad->SetSize( PADSTACK::ALL_LAYERS,
+                                             VECTOR2I( pad.width, pad.height ) );
                         }
 
                         if( pad.drill )

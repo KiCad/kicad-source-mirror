@@ -35,6 +35,8 @@
 #include <macros.h>
 #include <functional>
 
+#include <wx/log.h>
+
 using namespace std;
 
 // Common calculation part for all BOARD_ITEMs
@@ -96,9 +98,52 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
 
-        ret = hash<int>{}( static_cast<int>( pad->GetShape() ) );
+        // TODO(JE) Implement this
+        if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+            wxLogDebug( "Hashing pad with non-simple padstack; hash code needs to be expanded" );
 
-        hash_combine( ret, pad->GetAttribute() );
+        ret = hash<int>{}( static_cast<int>( pad->GetAttribute() ) );
+
+        auto hashPadLayer =
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                hash_combine( ret, pad->GetShape( aLayer ) );
+                hash_combine( ret, pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
+                hash_combine( ret, pad->GetOffset( aLayer ).x, pad->GetOffset( aLayer ).y );
+
+                switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
+                {
+                case PAD_SHAPE::CHAMFERED_RECT:
+                    hash_combine( ret, pad->GetChamferPositions( aLayer ) );
+                    hash_combine( ret, pad->GetChamferRectRatio( aLayer ) );
+                    break;
+
+                case PAD_SHAPE::ROUNDRECT:
+                    hash_combine( ret, pad->GetRoundRectCornerRadius( aLayer ) );
+                    break;
+
+                case PAD_SHAPE::TRAPEZOID:
+                    hash_combine( ret, pad->GetDelta( aLayer ).x, pad->GetDelta( aLayer ).y );
+                    break;
+
+                case PAD_SHAPE::CUSTOM:
+                {
+                    auto poly = pad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
+
+                    for( int ii = 0; ii < poly->VertexCount(); ++ii )
+                    {
+                        VECTOR2I point = poly->CVertex( ii ) - pad->GetPosition();
+                        hash_combine( ret, point.x, point.y );
+                    }
+
+                    break;
+                }
+                default:
+                    break;
+                }
+            };
+
+        pad->Padstack().ForEachUniqueLayer( hashPadLayer );
 
         if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
@@ -110,36 +155,6 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
                     {
                         hash_combine( ret, pad->FlashLayer( layer ) );
                     } );
-        }
-
-        hash_combine( ret, pad->GetSize().x, pad->GetSize().y );
-        hash_combine( ret, pad->GetOffset().x, pad->GetOffset().y );
-
-        switch( pad->GetShape() )
-        {
-        case PAD_SHAPE::CHAMFERED_RECT:
-            hash_combine( ret, pad->GetChamferPositions() );
-            hash_combine( ret, pad->GetChamferRectRatio() );
-            break;
-        case PAD_SHAPE::ROUNDRECT:
-            hash_combine( ret, pad->GetRoundRectCornerRadius() );
-            break;
-        case PAD_SHAPE::TRAPEZOID:
-            hash_combine( ret, pad->GetDelta().x, pad->GetDelta().y );
-            break;
-        case PAD_SHAPE::CUSTOM:
-        {
-            auto poly = pad->GetEffectivePolygon( ERROR_INSIDE );
-
-            for( int ii = 0; ii < poly->VertexCount(); ++ii )
-            {
-                VECTOR2I point = poly->CVertex( ii ) - pad->GetPosition();
-                hash_combine( ret, point.x, point.y );
-            }
-            break;
-        }
-        default:
-            break;
         }
 
         hash_combine( ret, hash_board_item( pad, aFlags ) );

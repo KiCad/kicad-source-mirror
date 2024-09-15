@@ -108,7 +108,7 @@ types::PadStackType ToProtoEnum( PADSTACK::MODE aValue )
     switch( aValue )
     {
     case PADSTACK::MODE::NORMAL:           return types::PadStackType::PST_NORMAL;
-    case PADSTACK::MODE::TOP_INNER_BOTTOM: return types::PadStackType::PST_TOP_INNER_BOTTOM;
+    case PADSTACK::MODE::FRONT_INNER_BACK: return types::PadStackType::PST_FRONT_INNER_BACK;
     case PADSTACK::MODE::CUSTOM:           return types::PadStackType::PST_CUSTOM;
 
     default:
@@ -124,7 +124,7 @@ PADSTACK::MODE FromProtoEnum( types::PadStackType aValue )
     switch( aValue )
     {
     case types::PadStackType::PST_NORMAL:           return PADSTACK::MODE::NORMAL;
-    case types::PadStackType::PST_TOP_INNER_BOTTOM: return PADSTACK::MODE::TOP_INNER_BOTTOM;
+    case types::PadStackType::PST_FRONT_INNER_BACK: return PADSTACK::MODE::FRONT_INNER_BACK;
     case types::PadStackType::PST_CUSTOM:           return PADSTACK::MODE::CUSTOM;
 
     default:

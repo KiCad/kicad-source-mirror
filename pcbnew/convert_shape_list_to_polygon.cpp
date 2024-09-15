@@ -157,21 +157,27 @@ static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape
 
     for( PAD* pad : aFootprint->Pads() )
     {
-        SHAPE_POLY_SET poly = aShape.CloneDropTriangulation();
+        pad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                SHAPE_POLY_SET poly = aShape.CloneDropTriangulation();
 
-        poly.ClearArcs();
+                poly.ClearArcs();
 
-        poly.BooleanIntersection( *pad->GetEffectivePolygon( ERROR_INSIDE ),
-                                  SHAPE_POLY_SET::PM_FAST );
+                poly.BooleanIntersection( *pad->GetEffectivePolygon( aLayer, ERROR_INSIDE ),
+                                          SHAPE_POLY_SET::PM_FAST );
 
-        if( poly.OutlineCount() == 0 )
-        {
-            VECTOR2I padPos = pad->GetPosition();
-            wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): outside" ),
-                        padPos.x, padPos.y );
-            padOutside = true;
+                if( poly.OutlineCount() == 0 )
+                {
+                    VECTOR2I padPos = pad->GetPosition();
+                    wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): outside" ),
+                                padPos.x, padPos.y );
+                    padOutside = true;
+                }
+            } );
+
+        if( padOutside )
             break;
-        }
 
         VECTOR2I padPos = pad->GetPosition();
         wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): not outside" ),

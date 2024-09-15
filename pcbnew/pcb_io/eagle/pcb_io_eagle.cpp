@@ -1988,25 +1988,25 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         switch( *e.shape )
         {
         case EPAD::ROUND:
-            pad->SetShape( PAD_SHAPE::CIRCLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
             break;
 
         case EPAD::OCTAGON:
-            pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
-            pad->SetChamferPositions( RECT_CHAMFER_ALL );
-            pad->SetChamferRectRatio( 1 - M_SQRT1_2 );    // Regular polygon
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
+            pad->SetChamferPositions( PADSTACK::ALL_LAYERS, RECT_CHAMFER_ALL );
+            pad->SetChamferRectRatio( PADSTACK::ALL_LAYERS, 1 - M_SQRT1_2 );    // Regular polygon
             break;
 
         case EPAD::LONG:
-            pad->SetShape( PAD_SHAPE::OVAL );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             break;
 
         case EPAD::SQUARE:
-            pad->SetShape( PAD_SHAPE::RECTANGLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             break;
 
         case EPAD::OFFSET:
-            pad->SetShape( PAD_SHAPE::OVAL );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             break;
         }
     }
@@ -2018,7 +2018,7 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     if( e.diameter && e.diameter->value > 0 )
     {
         int diameter = e.diameter->ToPcbUnits();
-        pad->SetSize( VECTOR2I( diameter, diameter ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( diameter, diameter ) );
     }
     else
     {
@@ -2026,20 +2026,20 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         double annulus = drillz * m_rules->rvPadTop;   // copper annulus, eagle "restring"
         annulus = eagleClamp( m_rules->rlMinPadTop, annulus, m_rules->rlMaxPadTop );
         int diameter = KiROUND( drillz + 2 * annulus );
-        pad->SetSize( VECTOR2I( KiROUND( diameter ), KiROUND( diameter ) ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( KiROUND( diameter ), KiROUND( diameter ) ) );
     }
 
-    if( pad->GetShape() == PAD_SHAPE::OVAL )
+    if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::OVAL )
     {
         // The Eagle "long" pad is wider than it is tall; m_elongation is percent elongation
-        VECTOR2I sz = pad->GetSize();
+        VECTOR2I sz = pad->GetSize( PADSTACK::ALL_LAYERS );
         sz.x = ( sz.x * ( 100 + m_rules->psElongationLong ) ) / 100;
-        pad->SetSize( sz );
+        pad->SetSize( PADSTACK::ALL_LAYERS, sz );
 
         if( e.shape && *e.shape == EPAD::OFFSET )
         {
             int offset = KiROUND( ( sz.x - sz.y ) / 2.0 );
-            pad->SetOffset( VECTOR2I( offset, 0 ) );
+            pad->SetOffset( PADSTACK::ALL_LAYERS, VECTOR2I( offset, 0 ) );
         }
     }
 
@@ -2464,7 +2464,7 @@ void PCB_IO_EAGLE::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
 
-    pad->SetShape( PAD_SHAPE::CIRCLE );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetAttribute( PAD_ATTRIB::NPTH );
 
     // Mechanical purpose only:
@@ -2487,7 +2487,7 @@ void PCB_IO_EAGLE::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     VECTOR2I sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
 
     pad->SetDrillSize( sz );
-    pad->SetSize( sz );
+    pad->SetSize( PADSTACK::ALL_LAYERS, sz );
 
     pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
 }
@@ -2505,11 +2505,11 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     aFootprint->Add( pad );
     transferPad( e, pad );
 
-    pad->SetShape( PAD_SHAPE::RECTANGLE );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
     pad->SetAttribute( PAD_ATTRIB::SMD );
 
     VECTOR2I padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );
-    pad->SetSize( padSize );
+    pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
     pad->SetLayer( layer );
 
     const LSET front( { F_Cu, F_Paste, F_Mask } );
@@ -2535,8 +2535,8 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         if( e.roundness )
             roundRatio = std::fmax( *e.roundness / 200.0, roundRatio );
 
-        pad->SetShape( PAD_SHAPE::ROUNDRECT );
-        pad->SetRoundRectRadiusRatio( roundRatio );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
+        pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, roundRatio );
     }
 
     if( e.rot )
@@ -2576,7 +2576,7 @@ void PCB_IO_EAGLE::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
     VECTOR2I padPos( kicad_x( aEaglePad.x ), kicad_y( aEaglePad.y ) );
 
     // Solder mask
-    const VECTOR2I& padSize( aPad->GetSize() );
+    const VECTOR2I& padSize( aPad->GetSize( PADSTACK::ALL_LAYERS ) );
 
     aPad->SetLocalSolderMaskMargin(
             eagleClamp( m_rules->mlMinStopFrame,

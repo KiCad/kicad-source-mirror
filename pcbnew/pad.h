@@ -181,16 +181,25 @@ public:
     /**
      * Set the new shape of this pad.
      */
-    void SetShape( PAD_SHAPE aShape )
+    void SetShape( PCB_LAYER_ID aLayer, PAD_SHAPE aShape )
     {
-        m_padStack.SetShape( aShape );
+        m_padStack.SetShape( aShape, aLayer );
         SetDirty();
     }
 
     /**
      * @return the shape of this pad.
      */
-    PAD_SHAPE GetShape() const { return m_padStack.Shape(); }
+    PAD_SHAPE GetShape( PCB_LAYER_ID aLayer ) const { return m_padStack.Shape( aLayer ); }
+
+    // Used for the properties panel, which does not support padstacks at the moment
+    void SetFrontShape( PAD_SHAPE aShape )
+    {
+        m_padStack.SetShape( aShape, F_Cu );
+        SetDirty();
+    }
+
+    PAD_SHAPE GetFrontShape() const { return m_padStack.Shape( F_Cu ); }
 
     void SetPosition( const VECTOR2I& aPos ) override
     {
@@ -203,9 +212,9 @@ public:
     /**
      * @return the shape of the anchor pad shape, for custom shaped pads.
      */
-    PAD_SHAPE GetAnchorPadShape() const
+    PAD_SHAPE GetAnchorPadShape( PCB_LAYER_ID aLayer ) const
     {
-        return m_padStack.AnchorShape();
+        return m_padStack.AnchorShape( aLayer );
     }
 
     /**
@@ -232,11 +241,12 @@ public:
      * @param aShape is the shape of the anchor pad shape( currently, only #PAD_SHAPE::RECTANGLE or
      *               #PAD_SHAPE::CIRCLE.
      */
-    void SetAnchorPadShape( PAD_SHAPE aShape )
+    void SetAnchorPadShape( PCB_LAYER_ID aLayer, PAD_SHAPE aShape )
     {
         m_padStack.SetAnchorShape( aShape == PAD_SHAPE::RECTANGLE
                                    ? PAD_SHAPE::RECTANGLE
-                                   : PAD_SHAPE::CIRCLE );
+                                   : PAD_SHAPE::CIRCLE,
+                                   aLayer );
         SetDirty();
     }
 
@@ -248,20 +258,33 @@ public:
     void SetY( int y )                          { m_pos.y = y; SetDirty(); }
     void SetX( int x )                          { m_pos.x = x; SetDirty(); }
 
-    void SetSize( const VECTOR2I& aSize )
+    void SetSize( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
     {
-        m_padStack.Size() = aSize;
+        m_padStack.Size( aLayer ) = aSize;
         SetDirty();
     }
-    const VECTOR2I& GetSize() const { return m_padStack.Size(); }
+    const VECTOR2I& GetSize( PCB_LAYER_ID aLayer ) const { return m_padStack.Size( aLayer ); }
 
-    void SetSizeX( const int aX ) { if( aX > 0 ) { m_padStack.Size().x = aX; SetDirty(); } }
-    int GetSizeX() const          { return m_padStack.Size().x; }
-    void SetSizeY( const int aY ) { if( aY > 0 ) { m_padStack.Size().y = aY; SetDirty(); } }
-    int GetSizeY() const          { return m_padStack.Size().y; }
+    // These accessors are for the properties panel, which does not have the ability to deal with
+    // custom padstacks where the properties can vary by layer.  The properties should be disabled
+    // in the GUI when the padstack mode is set to anything other than NORMAL, but so that the code
+    // compiles, these are set up to work with the front layer (in other words, assume the mode is
+    // NORMAL, where F_Cu stores the whole padstack data)
+    void SetSizeX( const int aX ) { if( aX > 0 ) { m_padStack.Size( PADSTACK::ALL_LAYERS ).x = aX; SetDirty(); } }
+    int GetSizeX() const          { return m_padStack.Size( PADSTACK::ALL_LAYERS ).x; }
+    void SetSizeY( const int aY ) { if( aY > 0 ) { m_padStack.Size( PADSTACK::ALL_LAYERS ).y = aY; SetDirty(); } }
+    int GetSizeY() const          { return m_padStack.Size( PADSTACK::ALL_LAYERS ).y; }
 
-    void SetDelta( const VECTOR2I& aSize ) { m_padStack.TrapezoidDeltaSize() = aSize; SetDirty(); }
-    const VECTOR2I& GetDelta() const       { return m_padStack.TrapezoidDeltaSize(); }
+    void SetDelta( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
+    {
+        m_padStack.TrapezoidDeltaSize( aLayer ) = aSize;
+        SetDirty();
+    }
+
+    const VECTOR2I& GetDelta( PCB_LAYER_ID aLayer ) const
+    {
+        return m_padStack.TrapezoidDeltaSize( aLayer );
+    }
 
     void SetDrillSize( const VECTOR2I& aSize )  { m_padStack.Drill().size = aSize; SetDirty(); }
     const VECTOR2I& GetDrillSize() const        { return m_padStack.Drill().size; }
@@ -270,8 +293,13 @@ public:
     void SetDrillSizeY( const int aY )          { m_padStack.Drill().size.y = aY; SetDirty(); }
     int GetDrillSizeY() const                   { return m_padStack.Drill().size.y; }
 
-    void SetOffset( const VECTOR2I& aOffset )    { m_padStack.Offset() = aOffset; SetDirty(); }
-    const VECTOR2I& GetOffset() const            { return m_padStack.Offset(); }
+    void SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
+    {
+        m_padStack.Offset( aLayer ) = aOffset;
+        SetDirty();
+    }
+
+    const VECTOR2I& GetOffset( PCB_LAYER_ID aLayer ) const { return m_padStack.Offset( aLayer ); }
 
     VECTOR2I GetCenter() const override          { return GetPosition(); }
 
@@ -290,34 +318,38 @@ public:
      *  - a arc
      *  - a bezier curve
      */
-    void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aFilled );
-    void AddPrimitivePoly( const std::vector<VECTOR2I>& aPoly, int aThickness, bool aFilled );
+    void AddPrimitivePoly( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPoly, int aThickness,
+                           bool aFilled );
+    void AddPrimitivePoly( PCB_LAYER_ID aLayer, const std::vector<VECTOR2I>& aPoly, int aThickness,
+                           bool aFilled );
 
     /**
      * Merge all basic shapes to a #SHAPE_POLY_SET.
      *
      * @note The results are relative to the pad position, orientation 0.
      *
+     * @param aLayer is the copper layer to merge shapes for
      * @param aMergedPolygon will store the final polygon
      * @param aErrorLoc is used when a circle (or arc) is approximated by segments
      *  = ERROR_INSIDE to build a polygon inside the arc/circle (usual shape to raw/plot)
      *  = ERROR_OUIDE to build a polygon outside the arc/circle
      * (for instance when building a clearance area)
      */
-    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon,
+    void MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon,
                                    ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     /**
      * Clear the basic shapes list.
+     * @param aLayer is the layer to clear, or UNDEFINED_LAYER to clear all layers
      */
-    void DeletePrimitivesList();
+    void DeletePrimitivesList( PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
     /**
      * Accessor to the basic shape list for custom-shaped pads.
      */
-    const std::vector<std::shared_ptr<PCB_SHAPE>>& GetPrimitives() const
+    const std::vector<std::shared_ptr<PCB_SHAPE>>& GetPrimitives( PCB_LAYER_ID aLayer ) const
     {
-        return m_padStack.Primitives();
+        return m_padStack.Primitives( aLayer );
     }
 
     void Flip( const VECTOR2I& VECTOR2I, FLIP_DIRECTION aFlipDirection ) override;
@@ -332,18 +364,20 @@ public:
      * Clear the current custom shape primitives list and import a new list.  Copies the input,
      * which is not altered.
      */
-    void ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
+    void ReplacePrimitives( PCB_LAYER_ID aLayer,
+                            const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
 
     /**
      * Import a custom shape primitive list (composed of basic shapes) and add items to the
      * current list.  Copies the input, which is not altered.
      */
-    void AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
+    void AppendPrimitives( PCB_LAYER_ID aLayer,
+                           const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
 
     /**
      * Add item to the custom shape primitives list
      */
-    void AddPrimitive( PCB_SHAPE* aPrimitive );
+    void AddPrimitive( PCB_LAYER_ID aLayer, PCB_SHAPE* aPrimitive );
 
     /**
      * Set the rotation angle of the pad.
@@ -476,17 +510,17 @@ public:
      * polygon), but should never contain a SHAPE_POLY_SET (a complex polygon consisting of
      * multiple outlines and/or holes).
      *
-     * @param aLayer optional parameter allowing a caller to specify a particular layer (default
-     *               is to return the pad's "natural" shape).
+     * @param aLayer determines which layer to query for shape
      * @param aFlash optional parameter allowing a caller to force the pad to be flashed (or not
      *               flashed) on the current layer (default is to honour the pad's setting and
      *               the current connections for the given layer).
      */
     virtual std::shared_ptr<SHAPE>
-    GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+    GetEffectiveShape( PCB_LAYER_ID aLayer,
                        FLASHING flashPTHPads = FLASHING::DEFAULT ) const override;
 
-    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
+    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( PCB_LAYER_ID aLayer,
+                                                                ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     /**
      * Return a SHAPE_SEGMENT object representing the pad's hole.
@@ -526,7 +560,7 @@ public:
      *  2 if 0, the parent footprint value
      *  3 if 0, the global value
      */
-    int GetSolderMaskExpansion() const;
+    int GetSolderMaskExpansion( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Usually < 0 (mask shape smaller than pad)because the margin can be dependent on the pad
@@ -539,7 +573,7 @@ public:
      *
      * @return the margin for the solder mask layer.
     */
-    VECTOR2I GetSolderPasteMargin() const;
+    VECTOR2I GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const;
 
     ZONE_CONNECTION GetZoneConnectionOverrides( wxString* aSource = nullptr ) const;
 
@@ -586,10 +620,10 @@ public:
      *
      * @return The radius of the rounded corners for this pad.
      */
-    void SetRoundRectCornerRadius( double aRadius );
-    int GetRoundRectCornerRadius() const;
+    void SetRoundRectCornerRadius( PCB_LAYER_ID aLayer, double aRadius );
+    int GetRoundRectCornerRadius( PCB_LAYER_ID aLayer ) const;
 
-    VECTOR2I ShapePos() const;
+    VECTOR2I ShapePos( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Has meaning only for rounded rectangle pads.
@@ -597,8 +631,18 @@ public:
      * Set the ratio between the smaller X or Y size and the rounded corner radius.
      * Cannot be > 0.5; the normalized IPC-7351C value is 0.25
      */
-    void SetRoundRectRadiusRatio( double aRadiusScale );
-    double GetRoundRectRadiusRatio() const { return m_padStack.RoundRectRadiusRatio(); }
+    void SetRoundRectRadiusRatio( PCB_LAYER_ID aLayer, double aRadiusScale );
+    double GetRoundRectRadiusRatio( PCB_LAYER_ID aLayer ) const
+    {
+        return m_padStack.RoundRectRadiusRatio( aLayer );
+    }
+
+    // For properties panel, which only supports normal padstacks
+    void SetFrontRoundRectRadiusRatio( double aRadiusScale );
+    double GetFrontRoundRectRadiusRatio() const
+    {
+       return m_padStack.RoundRectRadiusRatio( F_Cu );
+    }
 
     /**
      * Has meaning only for chamfered rectangular pads.
@@ -606,8 +650,11 @@ public:
      * Set the ratio between the smaller X or Y size and chamfered corner size.
      * Cannot be < 0.5.
      */
-    void SetChamferRectRatio( double aChamferScale );
-    double GetChamferRectRatio() const { return m_padStack.ChamferRatio(); }
+    void SetChamferRectRatio( PCB_LAYER_ID aLayer, double aChamferScale );
+    double GetChamferRectRatio( PCB_LAYER_ID aLayer ) const
+    {
+        return m_padStack.ChamferRatio( aLayer );
+    }
 
     /**
      * Has meaning only for chamfered rectangular pads.
@@ -616,8 +663,15 @@ public:
      *
      * @param aPositions a bit-set of #RECT_CHAMFER_POSITIONS.
      */
-    void SetChamferPositions( int aPositions ) { m_padStack.SetChamferPositions( aPositions ); }
-    int GetChamferPositions() const { return m_padStack.ChamferPositions(); }
+    void SetChamferPositions( PCB_LAYER_ID aLayer, int aPositions )
+    {
+        m_padStack.SetChamferPositions( aPositions, aLayer );
+    }
+
+    int GetChamferPositions( PCB_LAYER_ID aLayer ) const
+    {
+        return m_padStack.ChamferPositions( aLayer );
+    }
 
     /**
      * @return the netcode.
@@ -773,7 +827,7 @@ public:
     /**
      * @return the GUI-appropriate name of the shape.
      */
-    wxString ShowPadShape() const;
+    wxString ShowPadShape( PCB_LAYER_ID aLayer ) const;
 
     /**
      * @return the GUI-appropriate description of the pad type (attribute) : Std, SMD ...
@@ -796,7 +850,7 @@ public:
      * Rebuild the effective shape cache (and bounding box and radius) for the pad and clears
      * the dirty bit.
      */
-    void BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const;
+    void BuildEffectiveShapes() const;
     void BuildEffectivePolygon( ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -828,8 +882,14 @@ protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
 private:
-    void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
+    const SHAPE_COMPOUND& buildEffectiveShape( PCB_LAYER_ID aLayer ) const;
+
+    void addPadPrimitivesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon, int aError,
                                     ERROR_LOC aErrorLoc ) const;
+
+    void doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider,
+                     const std::function<void( int aErrorCode,
+                                               const wxString& aMsg )>& aErrorHandler ) const;
 
 private:
     wxString      m_number;             // Pad name (pin number in schematic)
@@ -841,15 +901,17 @@ private:
     PADSTACK      m_padStack;
 
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
+    typedef std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_COMPOUND>> LAYER_SHAPE_MAP;
     mutable bool                              m_shapesDirty;
     mutable std::mutex                        m_shapesBuildingLock;
     mutable BOX2I                             m_effectiveBoundingBox;
-    mutable std::shared_ptr<SHAPE_COMPOUND>   m_effectiveShape;
+    mutable LAYER_SHAPE_MAP                   m_effectiveShapes;
     mutable std::shared_ptr<SHAPE_SEGMENT>    m_effectiveHoleShape;
 
+    typedef std::map<PCB_LAYER_ID, std::array<std::shared_ptr<SHAPE_POLY_SET>, 2>> LAYER_POLYGON_MAP;
     mutable bool                              m_polyDirty[2];
     mutable std::mutex                        m_polyBuildingLock;
-    mutable std::shared_ptr<SHAPE_POLY_SET>   m_effectivePolygon[2];
+    mutable LAYER_POLYGON_MAP                 m_effectivePolygons;
     mutable int                               m_effectiveBoundingRadius;
 
     int               m_subRatsnest;        // Variable used to handle subnet (block) number in

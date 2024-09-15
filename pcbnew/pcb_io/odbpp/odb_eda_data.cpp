@@ -292,9 +292,10 @@ void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum )
     VECTOR2D relpos = aPad->GetFPRelativePosition();
 
     // TODO: is odb pkg pin center means center of pad hole or center of pad shape?
+    // TODO(JE) padstacks
 
-    if( aPad->GetOffset().x != 0 || aPad->GetOffset().y != 0 )
-        relpos += aPad->GetOffset();
+    if( aPad->GetOffset( PADSTACK::ALL_LAYERS ).x != 0 || aPad->GetOffset( PADSTACK::ALL_LAYERS ).y != 0 )
+        relpos += aPad->GetOffset( PADSTACK::ALL_LAYERS );
 
     pin->m_center = ODB::AddXY( relpos );
 
@@ -332,7 +333,8 @@ void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum )
         pin->mtype = PIN::MOUNT_TYPE::UNDEFINED;
     }
 
-    const std::shared_ptr<SHAPE_POLY_SET>& polygons = aPad->GetEffectivePolygon( ERROR_INSIDE );
+    const std::shared_ptr<SHAPE_POLY_SET>& polygons =
+        aPad->GetEffectivePolygon( PADSTACK::ALL_LAYERS, ERROR_INSIDE );
 
     // TODO: Here we put all pad shapes as polygonl, we should switch by pad shape
     // Note:pad only use polygons->Polygon(0),

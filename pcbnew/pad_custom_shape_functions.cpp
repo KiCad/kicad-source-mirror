@@ -37,7 +37,8 @@
  * the shape is a polygon (can be with thick outline), segment, circle or arc
  */
 
-void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aFilled )
+void PAD::AddPrimitivePoly( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPoly, int aThickness,
+                            bool aFilled )
 {
     // If aPoly has holes, convert it to a polygon with no holes.
     SHAPE_POLY_SET poly_no_hole;
@@ -57,71 +58,85 @@ void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aF
         item->SetPolyShape( poly_outline );
         item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
         item->SetParent( this );
-        m_padStack.AddPrimitive( item );
+        m_padStack.AddPrimitive( item, aLayer );
     }
 
     SetDirty();
 }
 
 
-void PAD::AddPrimitivePoly( const std::vector<VECTOR2I>& aPoly, int aThickness, bool aFilled )
+void PAD::AddPrimitivePoly( PCB_LAYER_ID aLayer, const std::vector<VECTOR2I>& aPoly, int aThickness,
+                            bool aFilled )
 {
     PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
     item->SetFilled( aFilled );
     item->SetPolyPoints( aPoly );
     item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
     item->SetParent( this );
-    m_padStack.AddPrimitive( item );
+    m_padStack.AddPrimitive( item, aLayer );
     SetDirty();
 }
 
 
-void PAD::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
+void PAD::ReplacePrimitives( PCB_LAYER_ID aLayer,
+                             const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
 {
     // clear old list
-    DeletePrimitivesList();
+    DeletePrimitivesList( aLayer );
 
     // Import to the given shape list
     if( aPrimitivesList.size() )
-        AppendPrimitives( aPrimitivesList );
+        AppendPrimitives( aLayer, aPrimitivesList );
 
     SetDirty();
 }
 
 
-void PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
+void PAD::AppendPrimitives( PCB_LAYER_ID aLayer,
+                            const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
 {
     // Add duplicates of aPrimitivesList to the pad primitives list:
     for( const std::shared_ptr<PCB_SHAPE>& prim : aPrimitivesList )
-        AddPrimitive( new PCB_SHAPE( *prim ) );
+        AddPrimitive( aLayer, new PCB_SHAPE( *prim ) );
 
     SetDirty();
 }
 
 
-void PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
+void PAD::AddPrimitive( PCB_LAYER_ID aLayer, PCB_SHAPE* aPrimitive )
 {
     aPrimitive->SetParent( this );
-    m_padStack.AddPrimitive( aPrimitive );
+    m_padStack.AddPrimitive( aPrimitive, aLayer );
 
     SetDirty();
 }
 
 
 // clear the basic shapes list and associated data
-void PAD::DeletePrimitivesList()
+void PAD::DeletePrimitivesList( PCB_LAYER_ID aLayer )
 {
-    m_padStack.ClearPrimitives();
+    if( aLayer == UNDEFINED_LAYER )
+    {
+        m_padStack.ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID l )
+            {
+                m_padStack.ClearPrimitives( l );
+            } );
+    }
+    else
+    {
+        m_padStack.ClearPrimitives( aLayer);
+    }
     SetDirty();
 }
 
 
-void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
-                                     ERROR_LOC aErrorLoc ) const
+void PAD::addPadPrimitivesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon,
+                                     int aError, ERROR_LOC aErrorLoc ) const
 {
     SHAPE_POLY_SET polyset;
 
-    for( const std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives() )
+    for( const std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives( aLayer ) )
     {
         if( !primitive->IsProxyItem() )
             primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, aError, aErrorLoc );
@@ -137,7 +152,8 @@ void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
     }
 }
 
-void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, ERROR_LOC aErrorLoc ) const
+void PAD::MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon,
+                                    ERROR_LOC aErrorLoc ) const
 {
     const BOARD* board = GetBoard();
     int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
@@ -146,21 +162,23 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, ERROR_LOC aE
 
     // Add the anchor pad shape in aMergedPolygon, others in aux_polyset:
     // The anchor pad is always at 0,0
-    switch( GetAnchorPadShape() )
+    VECTOR2I padSize = GetSize( aLayer );
+
+    switch( GetAnchorPadShape( aLayer ) )
     {
     case PAD_SHAPE::RECTANGLE:
     {
-        SHAPE_RECT rect( -GetSize().x / 2, -GetSize().y / 2, GetSize().x, GetSize().y );
+        SHAPE_RECT rect( -padSize.x / 2, -padSize.y / 2, padSize.x, padSize.y );
         aMergedPolygon->AddOutline( rect.Outline() );
     }
         break;
 
     default:
     case PAD_SHAPE::CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, VECTOR2I( 0, 0 ), GetSize().x / 2, maxError,
+        TransformCircleToPolygon( *aMergedPolygon, VECTOR2I( 0, 0 ), padSize.x / 2, maxError,
                                   aErrorLoc );
         break;
     }
 
-    addPadPrimitivesToPolygon( aMergedPolygon, maxError, aErrorLoc );
+    addPadPrimitivesToPolygon( aLayer, aMergedPolygon, maxError, aErrorLoc );
 }

@@ -2011,20 +2011,21 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
  */
 static void mirrorPad( PAD& aPad, const VECTOR2I& aMirrorPoint, FLIP_DIRECTION aFlipDirection )
 {
-    if( aPad.GetShape() == PAD_SHAPE::CUSTOM )
+    // TODO(JE) padstacks
+    if( aPad.GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM )
         aPad.FlipPrimitives( aFlipDirection );
 
     VECTOR2I tmpPt = aPad.GetPosition();
     MIRROR( tmpPt, aMirrorPoint, aFlipDirection );
     aPad.SetPosition( tmpPt );
 
-    tmpPt = aPad.GetOffset();
+    tmpPt = aPad.GetOffset( PADSTACK::ALL_LAYERS );
     MIRROR( tmpPt, VECTOR2I{ 0, 0 }, aFlipDirection );
-    aPad.SetOffset( tmpPt );
+    aPad.SetOffset( PADSTACK::ALL_LAYERS, tmpPt );
 
-    VECTOR2I tmpz = aPad.GetDelta();
+    VECTOR2I tmpz = aPad.GetDelta( PADSTACK::ALL_LAYERS );
     MIRROR( tmpz, VECTOR2I{ 0, 0 }, aFlipDirection );
-    aPad.SetDelta( tmpz );
+    aPad.SetDelta( PADSTACK::ALL_LAYERS, tmpz );
 
     aPad.SetOrientation( -aPad.GetOrientation() );
 }

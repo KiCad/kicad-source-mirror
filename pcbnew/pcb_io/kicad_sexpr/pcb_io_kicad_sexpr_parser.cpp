@@ -39,6 +39,7 @@
 #include <board_design_settings.h>
 #include <embedded_files.h>
 #include <font/fontconfig.h>
+#include <magic_enum.hpp>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_reference_image.h>
@@ -2350,7 +2351,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             VECTOR2I sz;
             sz.x = parseBoardUnits( "master pad width" );
             sz.y = parseBoardUnits( "master pad height" );
-            bds.m_Pad_Master->SetSize( sz );
+            bds.m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, sz );
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
@@ -4907,29 +4908,29 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     switch( token )
     {
     case T_circle:
-        pad->SetShape( PAD_SHAPE::CIRCLE );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
         break;
 
     case T_rect:
-        pad->SetShape( PAD_SHAPE::RECTANGLE );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
         break;
 
     case T_oval:
-        pad->SetShape( PAD_SHAPE::OVAL );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
         break;
 
     case T_trapezoid:
-        pad->SetShape( PAD_SHAPE::TRAPEZOID );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::TRAPEZOID );
         break;
 
     case T_roundrect:
         // Note: the shape can be PAD_SHAPE::ROUNDRECT or PAD_SHAPE::CHAMFERED_RECT
         // (if chamfer parameters are found later in pad descr.)
-        pad->SetShape( PAD_SHAPE::ROUNDRECT );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
         break;
 
     case T_custom:
-        pad->SetShape( PAD_SHAPE::CUSTOM );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
         break;
 
     default:
@@ -4956,7 +4957,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_size:
             sz.x = parseBoardUnits( "width value" );
             sz.y = parseBoardUnits( "height value" );
-            pad->SetSize( sz );
+            pad->SetSize( PADSTACK::ALL_LAYERS, sz );
             NeedRIGHT();
             break;
 
@@ -4983,7 +4984,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             VECTOR2I delta;
             delta.x = parseBoardUnits( "rectangle delta width" );
             delta.y = parseBoardUnits( "rectangle delta height" );
-            pad->SetDelta( delta );
+            pad->SetDelta( PADSTACK::ALL_LAYERS, delta );
             NeedRIGHT();
             break;
         }
@@ -5023,7 +5024,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_offset:
                     pt.x = parseBoardUnits( "drill offset x" );
                     pt.y = parseBoardUnits( "drill offset y" );
-                    pad->SetOffset( pt );
+                    pad->SetOffset( PADSTACK::ALL_LAYERS, pt );
                     NeedRIGHT();
                     break;
 
@@ -5167,15 +5168,16 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_roundrect_rratio:
-            pad->SetRoundRectRadiusRatio( parseDouble( "roundrect radius ratio" ) );
+            pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS,
+                                          parseDouble( "roundrect radius ratio" ) );
             NeedRIGHT();
             break;
 
         case T_chamfer_ratio:
-            pad->SetChamferRectRatio( parseDouble( "chamfer ratio" ) );
+            pad->SetChamferRectRatio( PADSTACK::ALL_LAYERS, parseDouble( "chamfer ratio" ) );
 
-            if( pad->GetChamferRectRatio() > 0 )
-                pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
+            if( pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ) > 0 )
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
 
             NeedRIGHT();
             break;
@@ -5208,7 +5210,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                     break;
 
                 case T_RIGHT:
-                    pad->SetChamferPositions( chamfers );
+                    pad->SetChamferPositions( PADSTACK::ALL_LAYERS, chamfers );
                     end_list = true;
                     break;
 
@@ -5218,8 +5220,8 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 }
             }
 
-            if( pad->GetChamferPositions() != RECT_NO_CHAMFER )
-                pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
+            if( pad->GetChamferPositions( PADSTACK::ALL_LAYERS ) != RECT_NO_CHAMFER )
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
 
             break;
         }
@@ -5256,6 +5258,10 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             parsePAD_option( pad.get() );
             break;
 
+        case T_padstack:
+            parsePadstack( pad.get() );
+            break;
+
         case T_primitives:
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
@@ -5270,14 +5276,14 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_rect:
                 case T_gr_poly:
                 case T_gr_curve:
-                    pad->AddPrimitive( parsePCB_SHAPE( nullptr ) );
+                    pad->AddPrimitive( PADSTACK::ALL_LAYERS, parsePCB_SHAPE( nullptr ) );
                     break;
 
                 case T_gr_bbox:
                 {
                     PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
                     numberBox->SetIsProxyItem();
-                    pad->AddPrimitive( numberBox );
+                    pad->AddPrimitive( PADSTACK::ALL_LAYERS, numberBox );
                     break;
                 }
 
@@ -5285,7 +5291,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 {
                     PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
                     spokeTemplate->SetIsProxyItem();
-                    pad->AddPrimitive( spokeTemplate );
+                    pad->AddPrimitive( PADSTACK::ALL_LAYERS, spokeTemplate );
                     break;
                 }
 
@@ -5348,7 +5354,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             Expecting( "at, locked, drill, layers, net, die_length, roundrect_rratio, "
                        "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, uuid, "
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
-                       "pinfunction, pintype, zone_connect, thermal_width, thermal_gap or "
+                       "pinfunction, pintype, zone_connect, thermal_width, thermal_gap, padstack or "
                        "teardrops" );
         }
     }
@@ -5366,12 +5372,12 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     else
     {
         // This is here because custom pad anchor shape isn't known before reading (options
-        if( pad->GetShape() == PAD_SHAPE::CIRCLE )
+        if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
         {
             pad->SetThermalSpokeAngle( ANGLE_45 );
         }
-        else if( pad->GetShape() == PAD_SHAPE::CUSTOM
-                 && pad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
+        else if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM
+                 && pad->GetAnchorPadShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
         {
             if( m_requiredVersion <= 20211014 ) // 6.0
                 pad->SetThermalSpokeAngle( ANGLE_90 );
@@ -5394,7 +5400,8 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     // Zero-sized pads are likely algorithmically unsafe.
     if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
     {
-        pad->SetSize( VECTOR2I( pcbIUScale.mmToIU( 0.001 ), pcbIUScale.mmToIU( 0.001 ) ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS,
+                      VECTOR2I( pcbIUScale.mmToIU( 0.001 ), pcbIUScale.mmToIU( 0.001 ) ) );
 
         wxLogWarning( _( "Invalid zero-sized pad pinned to %s in\nfile: %s\nline: %d\noffset: %d" ),
                       wxT( "1µm" ), CurSource(), CurLineNumber(), CurOffset() );
@@ -5428,7 +5435,7 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
                     break;
 
                 case T_rect:
-                    aPad->SetAnchorPadShape( PAD_SHAPE::RECTANGLE );
+                    aPad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
                     break;
 
                 default:
@@ -5473,6 +5480,353 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
     }
 
     return true;
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
+{
+    PADSTACK& padstack = aPad->Padstack();
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_mode:
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_front_inner_back:
+                padstack.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
+                break;
+
+            case T_custom:
+                padstack.SetMode( PADSTACK::MODE::CUSTOM );
+                break;
+
+            default:
+                Expecting( "front_inner_back or custom" );
+            }
+
+            NeedRIGHT();
+            break;
+
+        case T_layer:
+        {
+            NextTok();
+            PCB_LAYER_ID curLayer = UNDEFINED_LAYER;
+
+            if( curText == "Inner" )
+            {
+                if( padstack.Mode() != PADSTACK::MODE::FRONT_INNER_BACK )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "Invalid padstack layer in\nfile: %s\n"
+                                                         "line: %d\noffset: %d." ),
+                                                      CurSource(), CurLineNumber(), CurOffset() ) );
+                }
+
+                curLayer = PADSTACK::INNER_LAYERS;
+            }
+            else
+            {
+                curLayer = lookUpLayer( m_layerIndices );
+            }
+
+            if( !IsCopperLayer( curLayer ) )
+            {
+                wxString error;
+                error.Printf( _( "Invalid padstack layer '%s' in file '%s' at line %d, offset %d." ),
+                              curText, CurSource().GetData(), CurLineNumber(), CurOffset() );
+                THROW_IO_ERROR( error );
+            }
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_shape:
+                    token = NextTok();
+                    
+                    switch( token )
+                    {
+                    case T_circle:
+                        aPad->SetShape( curLayer, PAD_SHAPE::CIRCLE );
+                        break;
+
+                    case T_rect:
+                        aPad->SetShape( curLayer, PAD_SHAPE::RECTANGLE );
+                        break;
+
+                    case T_oval:
+                        aPad->SetShape( curLayer, PAD_SHAPE::OVAL );
+                        break;
+
+                    case T_trapezoid:
+                        aPad->SetShape( curLayer, PAD_SHAPE::TRAPEZOID );
+                        break;
+
+                    case T_roundrect:
+                        // Note: the shape can be PAD_SHAPE::ROUNDRECT or PAD_SHAPE::CHAMFERED_RECT
+                        // (if chamfer parameters are found later in pad descr.)
+                        aPad->SetShape( curLayer, PAD_SHAPE::ROUNDRECT );
+                        break;
+
+                    case T_custom:
+                        aPad->SetShape( curLayer, PAD_SHAPE::CUSTOM );
+                        break;
+
+                    default:
+                        Expecting( "circle, rectangle, roundrect, oval, trapezoid or custom" );
+                    }
+                    
+                    NeedRIGHT();
+                    break;
+
+                case T_size:
+                {
+                    VECTOR2I sz;
+                    sz.x = parseBoardUnits( "width value" );
+                    sz.y = parseBoardUnits( "height value" );
+                    aPad->SetSize( curLayer, sz );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_offset:
+                {
+                    VECTOR2I pt;
+                    pt.x = parseBoardUnits( "drill offset x" );
+                    pt.y = parseBoardUnits( "drill offset y" );
+                    aPad->SetOffset( curLayer, pt );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_rect_delta:
+                {
+                    VECTOR2I delta;
+                    delta.x = parseBoardUnits( "rectangle delta width" );
+                    delta.y = parseBoardUnits( "rectangle delta height" );
+                    aPad->SetDelta( curLayer, delta );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_roundrect_rratio:
+                    aPad->SetRoundRectRadiusRatio( curLayer,
+                                                   parseDouble( "roundrect radius ratio" ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_chamfer_ratio:
+                {
+                    double ratio = parseDouble( "chamfer ratio" );
+                    aPad->SetChamferRectRatio( curLayer, ratio );
+
+                    if( ratio > 0 )
+                        aPad->SetShape( curLayer, PAD_SHAPE::CHAMFERED_RECT );
+
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_chamfer:
+                {
+                    int  chamfers = 0;
+                    bool end_list = false;
+
+                    while( !end_list )
+                    {
+                        token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_top_left:
+                            chamfers |= RECT_CHAMFER_TOP_LEFT;
+                            break;
+
+                        case T_top_right:
+                            chamfers |= RECT_CHAMFER_TOP_RIGHT;
+                            break;
+
+                        case T_bottom_left:
+                            chamfers |= RECT_CHAMFER_BOTTOM_LEFT;
+                            break;
+
+                        case T_bottom_right:
+                            chamfers |= RECT_CHAMFER_BOTTOM_RIGHT;
+                            break;
+
+                        case T_RIGHT:
+                            aPad->SetChamferPositions( curLayer, chamfers );
+                            end_list = true;
+                            break;
+
+                        default:
+                            Expecting( "chamfer_top_left chamfer_top_right chamfer_bottom_left or "
+                                       "chamfer_bottom_right" );
+                        }
+                    }
+
+                    if( end_list && chamfers != RECT_NO_CHAMFER )
+                        aPad->SetShape( curLayer, PAD_SHAPE::CHAMFERED_RECT );
+
+                    break;
+                }
+
+                case T_thermal_bridge_width:
+                    padstack.ThermalSpokeWidth( curLayer ) =
+                            parseBoardUnits( "thermal relief spoke width" );
+                    NeedRIGHT();
+                    break;
+
+                case T_thermal_gap:
+                    padstack.ThermalGap( curLayer ) = parseBoardUnits( "thermal relief gap value" );
+                    NeedRIGHT();
+                    break;
+
+                case T_thermal_bridge_angle:
+                    padstack.SetThermalSpokeAngle(
+                            EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_zone_connect:
+                    padstack.ZoneConnection( curLayer ) = magic_enum::enum_cast<ZONE_CONNECTION>(
+                            parseInt( "zone connection value" ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_clearance:
+                    padstack.Clearance( curLayer ) = parseBoardUnits( "local clearance value" );
+                    NeedRIGHT();
+                    break;
+
+                case T_tenting:
+                    parseTenting( padstack );
+                    break;
+
+                // TODO: refactor parsePAD_options to work on padstacks too
+                case T_options:
+                {
+                     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                     {
+                         if( token != T_LEFT )
+                            Expecting( T_LEFT );
+
+                         token = NextTok();
+
+                         switch( token )
+                         {
+                         case T_anchor:
+                             token = NextTok();
+                             // Custom shaped pads have a "anchor pad", which is the reference
+                             // for connection calculations.
+                             // Because this is an anchor, only the 2 very basic shapes are managed:
+                             // circle and rect. The default is circle
+                             switch( token )
+                             {
+                             case T_circle: // default
+                                 break;
+
+                             case T_rect:
+                                 padstack.SetAnchorShape( PAD_SHAPE::RECTANGLE, curLayer );
+                                 break;
+
+                             default:
+                                 // Currently, because pad options is a moving target
+                                 // just skip unknown keywords
+                                 break;
+                             }
+                             NeedRIGHT();
+                             break;
+
+                         case T_clearance:
+                             token = NextTok();
+                             // TODO: m_customShapeInZoneMode is not per-layer at the moment
+                             NeedRIGHT();
+                             break;
+
+                         default:
+                             // Currently, because pad options is a moving target
+                             // just skip unknown keywords
+                             while( ( token = NextTok() ) != T_RIGHT )
+                             {
+                             }
+
+                             break;
+                         }
+                     }
+
+                     break;
+                }
+
+                // TODO: deduplicate with non-padstack parser
+                case T_primitives:
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_gr_arc:
+                        case T_gr_line:
+                        case T_gr_circle:
+                        case T_gr_rect:
+                        case T_gr_poly:
+                        case T_gr_curve:
+                            padstack.AddPrimitive( parsePCB_SHAPE( nullptr ), curLayer );
+                            break;
+
+                        case T_gr_bbox:
+                        {
+                            PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
+                            numberBox->SetIsProxyItem();
+                            padstack.AddPrimitive( numberBox, curLayer );
+                            break;
+                        }
+
+                        case T_gr_vector:
+                        {
+                            PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
+                            spokeTemplate->SetIsProxyItem();
+                           padstack.AddPrimitive( spokeTemplate, curLayer );
+                            break;
+                        }
+
+                        default:
+                            Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect, gr_bbox or gr_poly" );
+                            break;
+                        }
+                    }
+
+                    break;
+
+                default:
+                    // Not strict-parsing padstack layers yet
+                    continue;
+                }
+            }
+
+            break;
+        }
+
+        default:
+            Expecting( "mode or layer" );
+            break;
+        }
+    }
 }
 
 
@@ -5983,26 +6337,8 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             break;
 
         case T_tenting:
-        {
-            bool front = false;
-            bool back = false;
-
-            // If the via has a tenting token, it means this individual via has a tenting override
-            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-            {
-                if( token == T_front )
-                    front = true;
-                else if( token == T_back )
-                    back = true;
-                else if( token != T_none )
-                    Expecting( "front, back, or none" );
-            }
-
-            via->Padstack().FrontOuterLayers().has_solder_mask = front;
-            via->Padstack().BackOuterLayers().has_solder_mask = back;
-
+            parseTenting( via->Padstack() );
             break;
-        }
 
         case T_tstamp:
         case T_uuid:
@@ -6032,6 +6368,27 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
     }
 
     return via.release();
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseTenting( PADSTACK& aPadstack )
+{
+    bool front = false;
+    bool back = false;
+
+    // If there is a tenting token, it means this individual pad/via has a tenting override
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_front )
+            front = true;
+        else if( token == T_back )
+            back = true;
+        else if( token != T_none )
+            Expecting( "front, back, or none" );
+    }
+
+    aPadstack.FrontOuterLayers().has_solder_mask = front;
+    aPadstack.BackOuterLayers().has_solder_mask = back;
 }
 
 

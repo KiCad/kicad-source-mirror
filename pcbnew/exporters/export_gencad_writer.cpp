@@ -314,7 +314,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
     for( unsigned i = 0; i<pads.size(); ++i )
     {
         PAD* pad = pads[i];
-        const VECTOR2I& off = pad->GetOffset();
+        const VECTOR2I& off = pad->GetOffset( PADSTACK::ALL_LAYERS );
 
         pad->SetSubRatsnest( pad_name_number );
 
@@ -331,13 +331,13 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         fprintf( m_file, "PAD P%d", pad->GetSubRatsnest() );
 
         padstacks.push_back( pad ); // Will have its own padstack later
-        int dx = pad->GetSize().x / 2;
-        int dy = pad->GetSize().y / 2;
+        int dx = pad->GetSize( PADSTACK::ALL_LAYERS ).x / 2;
+        int dy = pad->GetSize( PADSTACK::ALL_LAYERS ).y / 2;
 
-        switch( pad->GetShape() )
+        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
         {
         default:
-            UNIMPLEMENTED_FOR( pad->ShowPadShape() );
+            UNIMPLEMENTED_FOR( pad->ShowPadShape( PADSTACK::ALL_LAYERS ) );
             KI_FALLTHROUGH;
 
         case PAD_SHAPE::CIRCLE:
@@ -348,7 +348,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
             fprintf( m_file, "CIRCLE %g %g %g\n",
                      off.x / SCALE_FACTOR,
                      -off.y / SCALE_FACTOR,
-                     pad->GetSize().x / (SCALE_FACTOR * 2) );
+                     pad->GetSize( PADSTACK::ALL_LAYERS ).x / (SCALE_FACTOR * 2) );
             break;
 
         case PAD_SHAPE::RECTANGLE:
@@ -365,12 +365,12 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::OVAL:
         {
-            const VECTOR2I& size = pad->GetSize();
+            const VECTOR2I& size = pad->GetSize( PADSTACK::ALL_LAYERS );
             int radius = std::min( size.x, size.y ) / 2;
 
-            if( pad->GetShape() == PAD_SHAPE::ROUNDRECT )
+            if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::ROUNDRECT )
             {
-                radius = pad->GetRoundRectCornerRadius();
+                radius = pad->GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS );
             }
 
             int lineX = size.x / 2 - radius;
@@ -455,8 +455,8 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         {
             fprintf( m_file, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
-            int  ddx = pad->GetDelta().x / 2;
-            int  ddy = pad->GetDelta().y / 2;
+            int  ddx = pad->GetDelta( PADSTACK::ALL_LAYERS ).x / 2;
+            int  ddy = pad->GetDelta( PADSTACK::ALL_LAYERS ).y / 2;
 
             VECTOR2I poly[4];
             poly[0] = VECTOR2I( -dx + ddy, dy + ddx );
@@ -485,12 +485,13 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
             int            maxError = m_board->GetDesignSettings().m_MaxError;
             VECTOR2I       padOffset( 0, 0 );
 
-            TransformRoundChamferedRectToPolygon( outline, padOffset, pad->GetSize(),
+            TransformRoundChamferedRectToPolygon( outline, padOffset,
+                                                  pad->GetSize( PADSTACK::ALL_LAYERS ),
                                                   pad->GetOrientation(),
-                                                  pad->GetRoundRectCornerRadius(),
-                                                  pad->GetChamferRectRatio(),
-                                                  pad->GetChamferPositions(), 0, maxError,
-                                                  ERROR_INSIDE );
+                                                  pad->GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ),
+                                                  pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
+                                                  pad->GetChamferPositions( PADSTACK::ALL_LAYERS ),
+                                                  0, maxError, ERROR_INSIDE );
 
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {
@@ -516,7 +517,7 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
             fprintf( m_file, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
             SHAPE_POLY_SET outline;
-            pad->MergePrimitivesAsPolygon( &outline );
+            pad->MergePrimitivesAsPolygon( F_Cu, &outline );
 
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {

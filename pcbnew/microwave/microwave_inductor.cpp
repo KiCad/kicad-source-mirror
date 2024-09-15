@@ -435,11 +435,12 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     pad->SetNumber( wxT( "1" ) );
     pad->SetPosition( aInductorPattern.m_End );
 
-    pad->SetSize( VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 
     pad->SetLayerSet( LSET( { footprint->GetLayer() } ) );
     pad->SetAttribute( PAD_ATTRIB::SMD );
-    pad->SetShape( PAD_SHAPE::CIRCLE );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
 
     PAD* newpad = new PAD( *pad );
     const_cast<KIID&>( newpad->m_Uuid ) = KIID();

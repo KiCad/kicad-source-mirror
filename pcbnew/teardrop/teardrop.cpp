@@ -199,7 +199,8 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
 
             TEARDROP_PARAMETERS& tdParams = pad->GetTeardropParams();
-            int                  annularWidth = std::min( pad->GetSize().x, pad->GetSize().y );
+            VECTOR2I padSize = pad->GetSize( track->GetLayer() );
+            int annularWidth = std::min( padSize.x, padSize.y );
 
             if( !tdParams.m_Enabled )
                 continue;

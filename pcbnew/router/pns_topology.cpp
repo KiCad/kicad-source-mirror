@@ -369,9 +369,9 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
         return initialPath;
 
     auto clipLineToPad =
-            []( SHAPE_LINE_CHAIN& aLine, PAD* aPad, bool aForward = true )
+            []( SHAPE_LINE_CHAIN& aLine, PAD* aPad, PCB_LAYER_ID aLayer, bool aForward = true )
             {
-                const auto& shape = aPad->GetEffectivePolygon( ERROR_INSIDE );
+                const auto& shape = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
 
                 int start = aForward ? 0 : aLine.PointCount() - 1;
                 int delta = aForward ? 1 : -1;
@@ -415,9 +415,9 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
             };
 
     auto processPad =
-            [&]( const JOINT* aJoint, PAD* aPad )
+            [&]( const JOINT* aJoint, PAD* aPad, PCB_LAYER_ID aLayer )
             {
-                const auto& shape = aPad->GetEffectivePolygon( ERROR_INSIDE );
+                const auto& shape = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
 
                 for( int idx = 0; idx < initialPath.Size(); idx++ )
                 {
@@ -435,19 +435,20 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
                         continue;
 
                     SHAPE_LINE_CHAIN& slc = line->Line();
+                    const PCB_LAYER_ID& layer = static_cast<PCB_LAYER_ID>( line->Layer() );
 
                     if( shape->Contains( slc.CPoint( 0 ) ) )
-                        clipLineToPad( slc, aPad, true );
+                        clipLineToPad( slc, aPad, layer, true );
                     else if( shape->Contains( slc.CPoint( -1 ) ) )
-                        clipLineToPad( slc, aPad, false );
+                        clipLineToPad( slc, aPad, layer, false );
                 }
             };
 
     if( padA )
-        processPad( joints.first, padA );
+        processPad( joints.first, padA, static_cast<PCB_LAYER_ID>( joints.first->Layer() ) );
 
     if( padB )
-        processPad( joints.second, padB );
+        processPad( joints.second, padB, static_cast<PCB_LAYER_ID>( joints.second->Layer() ) );
 
     return initialPath;
 }

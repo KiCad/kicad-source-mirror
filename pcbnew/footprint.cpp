@@ -1463,7 +1463,12 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
     for( PAD* pad : m_pads )
     {
-        pad->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+        pad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                pad->TransformShapeToPolygon( rawPolys, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+            } );
+
         // In case hole is larger than pad
         pad->TransformHoleToPolygon( rawPolys, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
@@ -2713,6 +2718,16 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         double width = static_cast<const PCB_TRACK*>( aItem )->GetWidth();
         return width * width;
     }
+    else if( aItem->Type() == PCB_PAD_T )
+    {
+        static_cast<const PAD*>( aItem )->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                SHAPE_POLY_SET padPoly;
+                aItem->TransformShapeToPolygon( padPoly, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+                poly.BooleanAdd( padPoly, SHAPE_POLY_SET::PM_FAST );
+            } );
+    }
     else
     {
         aItem->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
@@ -3120,8 +3135,9 @@ void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const P
                 if( pad->GetBoundingBox().Intersects( other->GetBoundingBox() ) )
                 {
                     VECTOR2I pos;
-                    SHAPE*   padShape = pad->GetEffectiveShape().get();
-                    SHAPE*   otherShape = other->GetEffectiveShape().get();
+                    // TODO(JE) padstacks - need to check complex against complex
+                    SHAPE*   padShape = pad->GetEffectiveShape( PADSTACK::ALL_LAYERS ).get();
+                    SHAPE*   otherShape = other->GetEffectiveShape( PADSTACK::ALL_LAYERS ).get();
 
                     if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
                         aErrorHandler( pad, other, DRCE_SHORTING_ITEMS, pos );
@@ -3465,13 +3481,31 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
     if( aFirst->GetFPRelativePosition().y != aSecond->GetFPRelativePosition().y )
         return aFirst->GetFPRelativePosition().y < aSecond->GetFPRelativePosition().y;
 
-    if( aFirst->GetSize().x != aSecond->GetSize().x )
-        return aFirst->GetSize().x < aSecond->GetSize().x;
-    if( aFirst->GetSize().y != aSecond->GetSize().y )
-        return aFirst->GetSize().y < aSecond->GetSize().y;
+    std::optional<bool> padCopperMatches;
 
-    if( aFirst->GetShape() != aSecond->GetShape() )
-        return aFirst->GetShape() < aSecond->GetShape();
+    // Pick the "most complex" padstack to iterate
+    const PAD* checkPad = aFirst;
+
+    if( aSecond->Padstack().Mode() == PADSTACK::MODE::CUSTOM
+        || ( aSecond->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK &&
+             aFirst->Padstack().Mode() == PADSTACK::MODE::NORMAL ) )
+    {
+        checkPad = aSecond;
+    }
+
+    checkPad->Padstack().ForEachUniqueLayer(
+        [&]( PCB_LAYER_ID aLayer )
+        {
+            if( aFirst->GetSize( aLayer ).x != aSecond->GetSize( aLayer ).x )
+                padCopperMatches = aFirst->GetSize( aLayer ).x < aSecond->GetSize( aLayer ).x;
+            else if( aFirst->GetSize( aLayer ).y != aSecond->GetSize( aLayer ).y )
+                padCopperMatches = aFirst->GetSize( aLayer ).y < aSecond->GetSize( aLayer ).y;
+            else if( aFirst->GetShape( aLayer ) != aSecond->GetShape( aLayer ) )
+                padCopperMatches = aFirst->GetShape( aLayer ) < aSecond->GetShape( aLayer );
+        } );
+
+    if( padCopperMatches.has_value() )
+        return *padCopperMatches;
 
     if( aFirst->GetLayerSet().Seq() != aSecond->GetLayerSet().Seq() )
         return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
@@ -3483,6 +3517,7 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
 }
 
 
+#if 0
 bool FOOTPRINT::cmp_padstack::operator()( const PAD* aFirst, const PAD* aSecond ) const
 {
     if( aFirst->GetSize().x != aSecond->GetSize().x )
@@ -3536,6 +3571,7 @@ bool FOOTPRINT::cmp_padstack::operator()( const PAD* aFirst, const PAD* aSecond 
 
     return false;
 }
+#endif
 
 
 bool FOOTPRINT::cmp_zones::operator()( const ZONE* aFirst, const ZONE* aSecond ) const
@@ -3569,69 +3605,87 @@ void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aL
                                         bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
                                         bool aSkipNonPlatedPads ) const
 {
+    auto processPad =
+        [&]( const PAD* pad, PCB_LAYER_ID padLayer )
+        {
+            VECTOR2I clearance( aClearance, aClearance );
+
+            switch( aLayer )
+            {
+            case F_Cu:
+                if( aSkipPlatedPads && pad->FlashLayer( F_Mask ) )
+                    return;
+
+                if( aSkipNonPlatedPads && !pad->FlashLayer( F_Mask ) )
+                    return;
+
+                break;
+
+            case B_Cu:
+                if( aSkipPlatedPads && pad->FlashLayer( B_Mask ) )
+                    return;
+
+                if( aSkipNonPlatedPads && !pad->FlashLayer( B_Mask ) )
+                    return;
+
+                break;
+
+            case F_Mask:
+            case B_Mask:
+                clearance.x += pad->GetSolderMaskExpansion( padLayer );
+                clearance.y += pad->GetSolderMaskExpansion( padLayer );
+                break;
+
+            case F_Paste:
+            case B_Paste:
+                clearance += pad->GetSolderPasteMargin( padLayer );
+                break;
+
+            default:
+                break;
+            }
+
+            // Our standard TransformShapeToPolygon() routines can't handle differing x:y clearance
+            // values (which get generated when a relative paste margin is used with an oblong pad).
+            // So we apply this huge hack and fake a larger pad to run the transform on.
+            // Of course being a hack it falls down when dealing with custom shape pads (where the
+            // size is only the size of the anchor), so for those we punt and just use clearance.x.
+
+            if( ( clearance.x < 0 || clearance.x != clearance.y )
+                    && pad->GetShape( padLayer ) != PAD_SHAPE::CUSTOM )
+            {
+                VECTOR2I dummySize = pad->GetSize( padLayer ) + clearance + clearance;
+
+                if( dummySize.x <= 0 || dummySize.y <= 0 )
+                    return;
+
+                PAD dummy( *pad );
+                dummy.SetSize( padLayer, dummySize );
+                dummy.TransformShapeToPolygon( aBuffer, padLayer, 0, aMaxError, aErrorLoc );
+            }
+            else
+            {
+                pad->TransformShapeToPolygon( aBuffer, padLayer, clearance.x, aMaxError,
+                                              aErrorLoc );
+            }
+        };
+
     for( const PAD* pad : m_pads )
     {
         if( !pad->FlashLayer( aLayer ) )
             continue;
 
-        VECTOR2I clearance( aClearance, aClearance );
-
-        switch( aLayer )
+        if( aLayer == UNDEFINED_LAYER )
         {
-        case F_Cu:
-            if( aSkipPlatedPads && pad->FlashLayer( F_Mask ) )
-                continue;
-
-            if( aSkipNonPlatedPads && !pad->FlashLayer( F_Mask ) )
-                continue;
-
-            break;
-
-        case B_Cu:
-            if( aSkipPlatedPads && pad->FlashLayer( B_Mask ) )
-                continue;
-
-            if( aSkipNonPlatedPads && !pad->FlashLayer( B_Mask ) )
-                continue;
-
-            break;
-
-        case F_Mask:
-        case B_Mask:
-            clearance.x += pad->GetSolderMaskExpansion();
-            clearance.y += pad->GetSolderMaskExpansion();
-            break;
-
-        case F_Paste:
-        case B_Paste:
-            clearance += pad->GetSolderPasteMargin();
-            break;
-
-        default:
-            break;
-        }
-
-        // Our standard TransformShapeToPolygon() routines can't handle differing x:y clearance
-        // values (which get generated when a relative paste margin is used with an oblong pad).
-        // So we apply this huge hack and fake a larger pad to run the transform on.
-        // Of course being a hack it falls down when dealing with custom shape pads (where the
-        // size is only the size of the anchor), so for those we punt and just use clearance.x.
-
-        if( ( clearance.x < 0 || clearance.x != clearance.y )
-                && pad->GetShape() != PAD_SHAPE::CUSTOM )
-        {
-            VECTOR2I dummySize = pad->GetSize() + clearance + clearance;
-
-            if( dummySize.x <= 0 || dummySize.y <= 0 )
-                continue;
-
-            PAD dummy( *pad );
-            dummy.SetSize( dummySize );
-            dummy.TransformShapeToPolygon( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID l )
+                    {
+                        processPad( pad, l );
+                    } );
         }
         else
         {
-            pad->TransformShapeToPolygon( aBuffer, aLayer, clearance.x, aMaxError, aErrorLoc );
+            processPad( pad, aLayer );
         }
     }
 }

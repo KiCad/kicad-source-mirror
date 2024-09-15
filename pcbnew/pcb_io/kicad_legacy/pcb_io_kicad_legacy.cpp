@@ -1099,7 +1099,7 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
             BIU x = biuParse( line + SZ( "PadSize" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_Pad_Master->SetSize( VECTOR2I( x, y ) );
+            bds.m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( x, y ) );
         }
         else if( TESTLINE( "PadDrill" ) )
         {
@@ -1444,9 +1444,9 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             // chances are both were ASCII, but why take chances?
 
             pad->SetNumber( padNumber );
-            pad->SetShape( static_cast<PAD_SHAPE>( padshape ) );
-            pad->SetSize( VECTOR2I( size_x, size_y ) );
-            pad->SetDelta( VECTOR2I( delta_x, delta_y ) );
+            pad->SetShape( PADSTACK::ALL_LAYERS, static_cast<PAD_SHAPE>( padshape ) );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( size_x, size_y ) );
+            pad->SetDelta( PADSTACK::ALL_LAYERS, VECTOR2I( delta_x, delta_y ) );
             pad->SetOrientation( orient );
         }
         else if( TESTLINE( "Dr" ) )         // (Dr)ill
@@ -1476,7 +1476,7 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             }
 
             pad->SetDrillShape( drShape );
-            pad->SetOffset( VECTOR2I( offs_x, offs_y ) );
+            pad->SetOffset( PADSTACK::ALL_LAYERS, VECTOR2I( offs_x, offs_y ) );
             pad->SetDrillSize( VECTOR2I( drill_x, drill_y ) );
         }
         else if( TESTLINE( "At" ) )         // (At)tribute

@@ -128,28 +128,29 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     switch( aFootprintShape )
     {
     case MICROWAVE_FOOTPRINT_SHAPE::GAP:     //Gap :
-        offsetX = -( gap_size + pad->GetSize().x ) / 2;
+        offsetX = -( gap_size + pad->GetSize( PADSTACK::ALL_LAYERS ).x ) / 2;
 
         pad->SetX( pad->GetPosition().x + offsetX );
 
         pad = *( it + 1 );
 
-        pad->SetX( pad->GetPosition().x + offsetX + gap_size + pad->GetSize().x );
+        pad->SetX( pad->GetPosition().x + offsetX + gap_size + pad->GetSize( PADSTACK::ALL_LAYERS ).x );
         break;
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB:     //Stub :
         pad->SetNumber( wxT( "1" ) );
-        offsetY = -( gap_size + pad->GetSize().y ) / 2;
+        offsetY = -( gap_size + pad->GetSize( PADSTACK::ALL_LAYERS ).y ) / 2;
 
         pad = *( it + 1 );
-        pad->SetSize( VECTOR2I( pad->GetSize().x, gap_size ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS,
+                      VECTOR2I( pad->GetSize( PADSTACK::ALL_LAYERS ).x, gap_size ) );
         pad->SetY( pad->GetPosition().y + offsetY );
         break;
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC:     // Arc Stub created by a polygonal approach:
     {
-        pad->SetShape( PAD_SHAPE::CUSTOM );
-        pad->SetAnchorPadShape( PAD_SHAPE::RECTANGLE );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+        pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
 
         int numPoints = ( angle.AsDegrees() / 5.0 ) + 3;
         std::vector<VECTOR2I> polyPoints;
@@ -174,7 +175,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         // Close the polygon:
         polyPoints.push_back( polyPoints[0] );
 
-        pad->AddPrimitivePoly( polyPoints, 0, true ); // add a polygonal basic shape
+        pad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, polyPoints, 0, true ); // add a polygonal basic shape
         break;
     }
 
@@ -217,10 +218,10 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
         footprint->Add( pad, ADD_MODE::INSERT );
 
         int tw = editFrame.GetDesignSettings().GetCurrentTrackWidth();
-        pad->SetSize( VECTOR2I( tw, tw ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( tw, tw ) );
 
         pad->SetPosition( footprint->GetPosition() );
-        pad->SetShape( PAD_SHAPE::RECTANGLE );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetLayerSet( { F_Cu } );
 

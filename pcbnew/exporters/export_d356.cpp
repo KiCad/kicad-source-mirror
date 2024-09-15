@@ -119,13 +119,14 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
                 rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
                 rk.x_location = pad->GetPosition().x - origin.x;
                 rk.y_location = origin.y - pad->GetPosition().y;
-                rk.x_size = pad->GetSize().x;
+                // TODO(JE) padstacks
+                rk.x_size = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
 
                 // Rule: round pads have y = 0
-                if( pad->GetShape() == PAD_SHAPE::CIRCLE )
+                if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
                     rk.y_size = 0;
                 else
-                    rk.y_size = pad->GetSize().y;
+                    rk.y_size = pad->GetSize( PADSTACK::ALL_LAYERS ).y;
 
                 rk.rotation = - pad->GetOrientation().AsDegrees();
 

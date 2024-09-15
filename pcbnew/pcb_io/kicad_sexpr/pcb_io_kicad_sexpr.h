@@ -49,6 +49,7 @@ class PCB_SHAPE;
 class PCB_REFERENCE_IMAGE;
 class PCB_TARGET;
 class PAD;
+class PADSTACK;
 class PCB_GROUP;
 class PCB_GENERATOR;
 class PCB_TRACK;
@@ -162,7 +163,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20240703  // User layer types
 //#define SEXPR_BOARD_FILE_VERSION    20240706  // Embedded Files
 //#define SEXPR_BOARD_FILE_VERSION    20240819  // Embedded Files - Update hash algorithm to Murmur3
-#define SEXPR_BOARD_FILE_VERSION      20240928  // Component classes
+//#define SEXPR_BOARD_FILE_VERSION    20240928  // Component classes
+#define SEXPR_BOARD_FILE_VERSION      20240929  // Complex padstacks
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -442,6 +444,8 @@ private:
     void formatLayer( PCB_LAYER_ID aLayer, bool aIsKnockout = false ) const;
 
     void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const;
+
+    void formatTenting( const PADSTACK& aPadstack ) const;
 
     friend class FP_CACHE;
 

@@ -267,7 +267,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         {
             if( pad->IsDirty() )
             {
-                pad->BuildEffectiveShapes( UNDEFINED_LAYER );
+                pad->BuildEffectiveShapes();
                 pad->BuildEffectivePolygon( ERROR_OUTSIDE );
             }
         }
@@ -910,7 +910,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
  */
 void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles )
 {
-    if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
+    if( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
     {
         SHAPE_POLY_SET poly;
         aPad->TransformShapeToPolygon( poly, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
@@ -1407,7 +1407,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 for( PAD* pad : allowedNetTiePads )
                 {
                     if( pad->GetBoundingBox().Intersects( itemBBox )
-                            && pad->GetEffectiveShape()->Collide( itemShape.get() ) )
+                            && pad->GetEffectiveShape( aLayer )->Collide( itemShape.get() ) )
                     {
                         skipItem = true;
                         break;
@@ -2025,7 +2025,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         // Spoke width should ideally be smaller than the pad minor axis.
         // Otherwise the thermal shape is not really a thermal relief,
         // and the algo to count the actual number of spokes can fail
-        int spoke_max_allowed_w = std::min( pad->GetSize().x, pad->GetSize().y );
+        int spoke_max_allowed_w = std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
 
         spoke_w = alg::clamp( constraint.Value().Min(), spoke_w, constraint.Value().Max() );
 
@@ -2047,9 +2047,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
         bool customSpokes = false;
 
-        if( pad->GetShape() == PAD_SHAPE::CUSTOM )
+        if( pad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
         {
-            for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives() )
+            for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives( aLayer ) )
             {
                 if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
                 {
@@ -2132,7 +2132,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             if( thermalPoly.OutlineCount() )
                 thermalOutline = thermalPoly.Outline( 0 );
 
-            for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives() )
+            for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives( aLayer ) )
             {
                 if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
                 {
@@ -2141,11 +2141,11 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
                     RotatePoint( seg.A, pad->GetOrientation() );
                     RotatePoint( seg.B, pad->GetOrientation() );
-                    seg.A += pad->ShapePos();
-                    seg.B += pad->ShapePos();
+                    seg.A += pad->ShapePos( aLayer );
+                    seg.B += pad->ShapePos( aLayer );
 
                     // Make sure seg.A is the origin
-                    if( !pad->GetEffectivePolygon( ERROR_OUTSIDE )->Contains( seg.A ) )
+                    if( !pad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE )->Contains( seg.A ) )
                         seg.Reverse();
 
                     // Trim seg.B to the thermal outline
@@ -2178,7 +2178,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             // Spokes are from center of pad shape, not from hole. So the dummy pad has no shape
             // offset and is at position 0,0
             dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
-            dummy_pad.SetOffset( VECTOR2I( 0, 0 ) );
+            dummy_pad.SetOffset( aLayer, VECTOR2I( 0, 0 ) );
 
             BOX2I spokesBox = dummy_pad.GetBoundingBox();
 
@@ -2189,8 +2189,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             // This is a touchy case because the bounding box for circles overshoots the mark
             // when rotated at 45 degrees.  So we just build spokes at 0 degrees and rotate
             // them later.
-            if( pad->GetShape() == PAD_SHAPE::CIRCLE
-                || ( pad->GetShape() == PAD_SHAPE::OVAL && pad->GetSizeX() == pad->GetSizeY() ) )
+            if( pad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE
+                || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL
+                     && pad->GetSizeX() == pad->GetSizeY() ) )
             {
                 buildSpokesFromOrigin( spokesBox, ANGLE_0 );
 
@@ -2211,7 +2212,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             for( int ii = 0; ii < 4; ++ii, ++spokeIter )
             {
                 spokeIter->Rotate( pad->GetOrientation() );
-                spokeIter->Move( pad->ShapePos() );
+                spokeIter->Move( pad->ShapePos( aLayer ) );
             }
 
             // Remove group membership from dummy item before deleting
@@ -2417,7 +2418,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                     // wide (and that the apron itself meets min_apron_radius.  But that would
                     // take a lot of code and math, and the following approximation is close
                     // enough.
-                    int pad_width = std::min( pad->GetSize().x, pad->GetSize().y );
+                    int pad_width = std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
                     int slot_width = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                     int min_annular_ring_width = ( pad_width - slot_width ) / 2;
                     int clearance = std::max( min_apron_radius - pad_width / 2,

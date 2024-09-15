@@ -65,18 +65,18 @@
 /*
  * This is used to draw pad outlines on silk layers.
  */
-void buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aBuffer, int aWidth, int aMaxError,
-                               ERROR_LOC aErrorLoc )
+void buildPadOutlineAsPolygon( const PAD* aPad, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aBuffer,
+                               int aWidth, int aMaxError, ERROR_LOC aErrorLoc )
 {
-    if( aPad->GetShape() == PAD_SHAPE::CIRCLE )    // Draw a ring
+    if( aPad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE )    // Draw a ring
     {
-        TransformRingToPolygon( aBuffer, aPad->ShapePos(), aPad->GetSize().x / 2, aWidth,
-                                aMaxError, aErrorLoc );
+        TransformRingToPolygon( aBuffer, aPad->ShapePos( aLayer ), aPad->GetSize( aLayer ).x / 2,
+                                aWidth, aMaxError, aErrorLoc );
     }
     else
     {
         // For other shapes, add outlines as thick segments in polygon buffer
-        const SHAPE_LINE_CHAIN& path = aPad->GetEffectivePolygon( ERROR_INSIDE )->COutline( 0 );
+        const SHAPE_LINE_CHAIN& path = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE )->COutline( 0 );
 
         for( int ii = 0; ii < path.PointCount(); ++ii )
         {
@@ -903,7 +903,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         if( !pad->IsOnLayer( layer ) )
                             continue;
 
-                        buildPadOutlineAsSegments( pad, layerContainer, linewidth );
+                        buildPadOutlineAsSegments( pad, layer, layerContainer, linewidth );
                     }
                 }
                 else
@@ -995,7 +995,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         if( pad->IsOnLayer( layer ) )
                         {
-                            buildPadOutlineAsPolygon( pad, *layerPoly, linewidth, maxError,
+                            buildPadOutlineAsPolygon( pad, layer, *layerPoly, linewidth, maxError,
                                                       ERROR_INSIDE );
                         }
                     }

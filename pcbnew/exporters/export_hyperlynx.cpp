@@ -212,9 +212,10 @@ private:
 
 HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 {
+    // TODO(JE) padstacks
     m_board = aBoard;
-    m_sx    = aPad->GetSize().x;
-    m_sy    = aPad->GetSize().y;
+    m_sx    = aPad->GetSize( PADSTACK::ALL_LAYERS ).x;
+    m_sy    = aPad->GetSize( PADSTACK::ALL_LAYERS ).y;
     m_angle = 180.0 - aPad->GetOrientation().AsDegrees();
 
     if( m_angle < 0.0 )
@@ -222,7 +223,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 
     m_layers = aPad->GetLayerSet();
     m_drill  = aPad->GetDrillSize().x;
-    m_shape  = aPad->GetShape();
+    m_shape  = aPad->GetShape( PADSTACK::ALL_LAYERS );
     m_type   = PAD_ATTRIB::PTH;
     m_id     = 0;
 }

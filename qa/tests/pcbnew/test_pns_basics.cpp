@@ -53,9 +53,10 @@ static bool isCopper( const PNS::ITEM* aItem )
         // round NPTH with a hole size >= pad size are not on a copper layer
         // All other NPTH are seen on copper layers
         // This is a basic criteria, but probably enough for a NPTH
-        if( pad->GetShape() == PAD_SHAPE::CIRCLE )
+        // TODO(JE) padstacks
+        if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
         {
-            if( pad->GetSize().x <= pad->GetDrillSize().x )
+            if( pad->GetSize( PADSTACK::ALL_LAYERS ).x <= pad->GetDrillSize().x )
                 return false;
         }
 

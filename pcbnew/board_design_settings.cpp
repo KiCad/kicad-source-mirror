@@ -825,8 +825,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             {
                 nlohmann::json ret =
                         {
-                            { "width",  pcbIUScale.IUTomm( m_Pad_Master->GetSize().x ) },
-                            { "height", pcbIUScale.IUTomm( m_Pad_Master->GetSize().y ) },
+                            { "width",  pcbIUScale.IUTomm( m_Pad_Master->GetSize( PADSTACK::ALL_LAYERS ).x ) },
+                            { "height", pcbIUScale.IUTomm( m_Pad_Master->GetSize( PADSTACK::ALL_LAYERS ).y ) },
                             { "drill",  pcbIUScale.IUTomm( m_Pad_Master->GetDrillSize().x ) }
                         };
 
@@ -841,7 +841,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     sz.x = pcbIUScale.mmToIU( aJson["width"].get<double>() );
                     sz.y = pcbIUScale.mmToIU( aJson["height"].get<double>() );
 
-                    m_Pad_Master->SetSize( sz );
+                    m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, sz );
 
                     int drill = pcbIUScale.mmToIU( aJson["drill"].get<double>() );
 
@@ -1498,7 +1498,8 @@ void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
     m_Pad_Master.get()->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
     m_Pad_Master.get()->SetDrillSize(
             VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ), 0 ) );
-    m_Pad_Master.get()->SetShape( PAD_SHAPE::ROUNDRECT );
+    m_Pad_Master.get()->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
     m_Pad_Master.get()->SetRoundRectCornerRadius(
+            PADSTACK::ALL_LAYERS,
             pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM / 100.0 * DEFAULT_PAD_REACT_RADIUS ) );
 }

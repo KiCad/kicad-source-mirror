@@ -1009,12 +1009,13 @@ public:
     {
         bool operator()( const PAD* aFirst, const PAD* aSecond ) const;
     };
-
+  // TODO(JE) padstacks -- this code isn't used anywhere though
+#if 0
     struct cmp_padstack
     {
         bool operator()( const PAD* aFirst, const PAD* aSecond ) const;
     };
-
+#endif
     struct cmp_zones
     {
         bool operator()( const ZONE* aFirst, const ZONE* aSecond ) const;

@@ -850,8 +850,8 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 pad->SetPosition( center );
                 pad->SetLayerSet( PAD::PTHMask() );
                 pad->SetAttribute( PAD_ATTRIB::PTH );
-                pad->SetShape( PAD_SHAPE::CIRCLE );
-                pad->SetSize( VECTOR2I( kdia, kdia ) );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( kdia, kdia ) );
                 pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
                 pad->SetDrillSize( VECTOR2I( kdrill, kdrill ) );
 
@@ -909,8 +909,8 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             pad->SetPosition( center );
             pad->SetLayerSet( PAD::UnplatedHoleMask() );
             pad->SetAttribute( PAD_ATTRIB::NPTH );
-            pad->SetShape( PAD_SHAPE::CIRCLE );
-            pad->SetSize( VECTOR2I( kdia, kdia ) );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( kdia, kdia ) );
             pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
             pad->SetDrillSize( VECTOR2I( kdia, kdia ) );
 
@@ -955,7 +955,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             pad->SetNet( getOrAddNetItem( arr[7] ) );
             pad->SetNumber( arr[8] );
             pad->SetPosition( center );
-            pad->SetSize( size );
+            pad->SetSize( PADSTACK::ALL_LAYERS, size );
             pad->SetOrientationDegrees( Convert( arr[11] ) );
             pad->SetThermalSpokeAngle( ANGLE_0 );
 
@@ -991,24 +991,24 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             wxString padType = arr[1];
             if( padType == wxS( "ELLIPSE" ) )
             {
-                pad->SetShape( PAD_SHAPE::OVAL );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             }
             else if( padType == wxS( "RECT" ) )
             {
-                pad->SetShape( PAD_SHAPE::RECTANGLE );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             }
             else if( padType == wxS( "OVAL" ) )
             {
                 if( pad->GetSizeX() == pad->GetSizeY() )
-                    pad->SetShape( PAD_SHAPE::CIRCLE );
+                    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
                 else
-                    pad->SetShape( PAD_SHAPE::OVAL );
+                    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             }
             else if( padType == wxS( "POLYGON" ) )
             {
-                pad->SetShape( PAD_SHAPE::CUSTOM );
-                pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-                pad->SetSize( { 1, 1 } );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+                pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, { 1, 1 } );
 
                 wxArrayString data = wxSplit( arr[10], ' ', '\0' );
 
@@ -1024,7 +1024,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                 chain.Move( -center );
                 chain.Rotate( -pad->GetOrientation() );
-                pad->AddPrimitivePoly( chain, 0, true );
+                pad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, chain, 0, true );
             }
 
             wxString holeDia = arr[9];

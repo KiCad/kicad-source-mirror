@@ -400,9 +400,10 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             if( pad->GetLayerSet()[F_Cu] )
                 layer |= 2;
 
+            // TODO(JE) padstacks
             static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
             snprintf( line, sizeof(line), "Shape %s Layer %s\n",
-                      TO_UTF8( pad->ShowPadShape() ),
+                      TO_UTF8( pad->ShowPadShape( PADSTACK::ALL_LAYERS ) ),
                       layer_name[layer] );
             buffer += line;
 
@@ -411,8 +412,8 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             snprintf( line, sizeof(line), "position %9.6f %9.6f  size %9.6f %9.6f  orientation %.2f\n",
                       padPos.x * conv_unit,
                       padPos.y * conv_unit,
-                      pad->GetSize().x * conv_unit,
-                      pad->GetSize().y * conv_unit,
+                      pad->GetSize( PADSTACK::ALL_LAYERS ).x * conv_unit,
+                      pad->GetSize( PADSTACK::ALL_LAYERS ).y * conv_unit,
                       ( pad->GetOrientation() - footprint->GetOrientation() ).AsDegrees() );
             buffer += line;
 
@@ -420,8 +421,8 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             buffer += line;
 
             snprintf( line, sizeof(line), "shape_offset %9.6f %9.6f\n",
-                      pad->GetOffset().x * conv_unit,
-                      pad->GetOffset().y * conv_unit );
+                      pad->GetOffset( PADSTACK::ALL_LAYERS ).x * conv_unit,
+                      pad->GetOffset( PADSTACK::ALL_LAYERS ).y * conv_unit );
             buffer += line;
 
             buffer += "$EndPAD\n";

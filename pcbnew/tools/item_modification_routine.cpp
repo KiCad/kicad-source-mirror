@@ -843,7 +843,8 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
     {
         const PAD& pad = static_cast<const PAD&>( aItem );
 
-        const PAD_SHAPE pad_shape = pad.GetShape();
+        // TODO(JE) padstacks
+        const PAD_SHAPE pad_shape = pad.GetShape( PADSTACK::ALL_LAYERS );
 
         switch( pad_shape )
         {
@@ -851,7 +852,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::OVAL:
         {
-            const VECTOR2I pad_size = pad.GetSize();
+            const VECTOR2I pad_size = pad.GetSize( PADSTACK::ALL_LAYERS );
 
             BOX2I box{ pad.GetPosition() - pad_size / 2, pad_size };
             box.Inflate( m_params.outsetDistance );
@@ -859,7 +860,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             int radius = m_params.outsetDistance;
             if( pad_shape == PAD_SHAPE::ROUNDRECT )
             {
-                radius += pad.GetRoundRectCornerRadius();
+                radius += pad.GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS );
             }
             else if( pad_shape == PAD_SHAPE::OVAL )
             {
@@ -880,7 +881,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         }
         case PAD_SHAPE::CIRCLE:
         {
-            const int    radius = pad.GetSize().x / 2 + m_params.outsetDistance;
+            const int radius = pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2 + m_params.outsetDistance;
             const CIRCLE circle( pad.GetPosition(), radius );
             addCircleOrRect( circle );
             AddSuccess();

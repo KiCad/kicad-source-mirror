@@ -1097,7 +1097,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             KIGEOM::OVAL_CENTER | KIGEOM::OVAL_CAP_TIPS | KIGEOM::OVAL_SIDE_MIDPOINTS
             | KIGEOM::OVAL_CARDINAL_EXTREMES;
 
-    auto handlePadShape = [&]( PAD* aPad )
+    auto handlePadShape = [&]( PAD* aPad, PCB_LAYER_ID aLayer )
     {
         addAnchor( aPad->GetPosition(), ORIGIN | SNAPPABLE, aPad, POINT_TYPE::PT_CENTER );
 
@@ -1105,11 +1105,12 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         if( aFrom )
             return;
 
-        switch( aPad->GetShape() )
+        switch( aPad->GetShape( aLayer ) )
         {
         case PAD_SHAPE::CIRCLE:
         {
-            const CIRCLE circle( aPad->ShapePos(), aPad->GetSizeX() / 2 );
+            const CIRCLE circle( aPad->ShapePos( aLayer ), aPad->GetSizeX() / 2 );
+
             for( const TYPED_POINT2I& pt : KIGEOM::GetCircleKeyPoints( circle, false ) )
             {
                 addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
@@ -1119,7 +1120,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
         case PAD_SHAPE::OVAL:
         {
-            const OVAL oval( aPad->GetSize(), aPad->GetPosition(), aPad->GetOrientation() );
+            const OVAL oval( aPad->GetSize( aLayer ), aPad->GetPosition(), aPad->GetOrientation() );
+
             for( const TYPED_POINT2I& pt : KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags ) )
             {
                 addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
@@ -1132,11 +1134,11 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::CHAMFERED_RECT:
         {
-            VECTOR2I half_size( aPad->GetSize() / 2 );
+            VECTOR2I half_size( aPad->GetSize( aLayer ) / 2 );
             VECTOR2I trap_delta( 0, 0 );
 
-            if( aPad->GetShape() == PAD_SHAPE::TRAPEZOID )
-                trap_delta = aPad->GetDelta() / 2;
+            if( aPad->GetShape( aLayer ) == PAD_SHAPE::TRAPEZOID )
+                trap_delta = aPad->GetDelta( aLayer ) / 2;
 
             SHAPE_LINE_CHAIN corners;
 
@@ -1147,7 +1149,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             corners.SetClosed( true );
 
             corners.Rotate( aPad->GetOrientation() );
-            corners.Move( aPad->ShapePos() );
+            corners.Move( aPad->ShapePos( aLayer ) );
 
             for( std::size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
             {
@@ -1164,7 +1166,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         default:
         {
-            const auto& outline = aPad->GetEffectivePolygon( ERROR_INSIDE );
+            const auto& outline = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
 
             if( !outline->IsEmpty() )
             {
@@ -1326,7 +1328,12 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 if( !pad->GetBoundingBox().Contains( aRefPos ) )
                     continue;
 
-                handlePadShape( pad );
+                pad->Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID aLayer )
+                        {
+                            if( activeLayers.count( aLayer ) )
+                                handlePadShape( pad, aLayer );
+                        } );
             }
 
             if( aFrom && aSelectionFilter && !aSelectionFilter->footprints )
@@ -1360,7 +1367,16 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             }
 
             if( checkVisibility( aItem ) )
-                handlePadShape( static_cast<PAD*>( aItem ) );
+            {
+                PAD* pad = static_cast<PAD*>( aItem );
+
+                pad->Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID aLayer )
+                        {
+                            if( activeLayers.count( aLayer ) )
+                                handlePadShape( pad, aLayer );
+                        } );
+            }
 
             break;
 

@@ -3298,6 +3298,19 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
         break;
     }
 
+    case PCB_PAD_T:
+    {
+        static_cast<PAD*>( aItem )->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                int layerDistance = INT_MAX;
+                aItem->GetEffectiveShape( aLayer )->Collide( loc, aMaxDistance, &layerDistance );
+                distance = std::min( distance, layerDistance );
+            } );
+
+        break;
+    }
+
     default:
         aItem->GetEffectiveShape()->Collide( loc, aMaxDistance, &distance );
         break;

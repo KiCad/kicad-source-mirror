@@ -206,9 +206,10 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
                         continue;
 
                     SHAPE_POLY_SET poly;
-
-                    pad->TransformShapeToPolygon( poly, pcblayer, pad->GetSolderMaskExpansion(),
-                                                  maxError, ERROR_INSIDE );
+                    PCB_LAYER_ID cuLayer = ( pcblayer == F_Mask ) ? F_Cu : B_Cu;
+                    pad->TransformShapeToPolygon( poly, cuLayer,
+                                                  pad->GetSolderMaskExpansion( cuLayer ), maxError,
+                                                  ERROR_INSIDE );
 
                     m_poly_shapes[pcblayer].Append( poly );
                 }
@@ -245,7 +246,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
                     if( !pad->IsOnLayer( pcblayer ) )
                         continue;
 
-                    std::shared_ptr<SHAPE_POLY_SET> padPoly = pad->GetEffectivePolygon();
+                    std::shared_ptr<SHAPE_POLY_SET> padPoly = pad->GetEffectivePolygon( pcblayer );
                     SHAPE_POLY_SET                  gfxPoly( poly );
 
                     if( padPoly->Collide( &gfxPoly ) )

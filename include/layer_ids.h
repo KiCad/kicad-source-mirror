@@ -740,6 +740,19 @@ inline bool IsNetCopperLayer( int aLayer )
     return IsCopperLayer( aLayer ) || netCopperLayers.count( aLayer );
 }
 
+///! Converts KiCad copper layer enum to an ordinal between the front and back layers
+inline size_t CopperLayerToOrdinal( PCB_LAYER_ID aLayer )
+{
+    wxCHECK( IsCopperLayer( aLayer ), 0 );
+
+    switch( aLayer )
+    {
+    case F_Cu:  return 0;
+    case B_Cu:  return MAX_CU_LAYERS - 1;
+    default:    return ( aLayer - B_Cu ) / 2;
+    }
+}
+
 
 KICOMMON_API PCB_LAYER_ID ToLAYER_ID( int aLayer );
 

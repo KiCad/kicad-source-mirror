@@ -1194,6 +1194,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
     const BOARD* board = aPad->GetBoard();
     COLOR4D      color = m_pcbSettings.GetColor( aPad, aLayer );
+    const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( aLayer );
 
     if( IsNetnameLayer( aLayer ) )
     {
@@ -1252,16 +1253,16 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 }
             }
         }
-        else if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
+        else if( aPad->GetShape( pcbLayer ) == PAD_SHAPE::CUSTOM )
         {
             // See if we have a number box
-            for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
+            for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( pcbLayer ) )
             {
                 if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::RECTANGLE )
                 {
                     position = primitive->GetCenter();
                     RotatePoint( position, aPad->GetOrientation() );
-                    position += aPad->ShapePos();
+                    position += aPad->ShapePos( pcbLayer );
 
                     padsize.x = abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
                     padsize.y = abs( primitive->GetBotRight().y - primitive->GetTopLeft().y );
@@ -1275,10 +1276,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             }
         }
 
-        if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
+        if( aPad->GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM )
         {
             // Don't allow a 45° rotation to bloat a pad's bounding box unnecessarily
-            double limit = std::min( aPad->GetSize().x, aPad->GetSize().y ) * 1.1;
+            double limit = std::min( aPad->GetSize( pcbLayer ).x,
+                                     aPad->GetSize( pcbLayer ).y ) * 1.1;
 
             if( padsize.x > limit && padsize.y > limit )
             {
@@ -1353,8 +1355,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
             // Round and oval pads have less room to display the net name than other
             // (i.e RECT) shapes, so reduce the text size for these shapes
-            if( aPad->GetShape() == PAD_SHAPE::CIRCLE || aPad->GetShape() == PAD_SHAPE::OVAL )
+            if( aPad->GetShape( pcbLayer ) == PAD_SHAPE::CIRCLE
+                || aPad->GetShape( pcbLayer ) == PAD_SHAPE::OVAL )
+            {
                 tsize *= 0.9;
+            }
 
             VECTOR2D namesize( tsize*Xscale_for_stroked_font, tsize );
             textpos.y = std::min( tsize * 1.4, double( Y_offset_netname ) );
@@ -1463,19 +1468,19 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
     if( drawShape )
     {
-        VECTOR2I pad_size = aPad->GetSize();
+        VECTOR2I pad_size = aPad->GetSize( pcbLayer );
         VECTOR2I margin;
 
         switch( aLayer )
         {
         case F_Mask:
         case B_Mask:
-            margin.x = margin.y = aPad->GetSolderMaskExpansion();
+            margin.x = margin.y = aPad->GetSolderMaskExpansion( pcbLayer );
             break;
 
         case F_Paste:
         case B_Paste:
-            margin = aPad->GetSolderPasteMargin();
+            margin = aPad->GetSolderPasteMargin( pcbLayer );
             break;
 
         default:
@@ -1491,8 +1496,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( simpleShapes )
         {
-            if( ( margin.x != margin.y && aPad->GetShape() != PAD_SHAPE::CUSTOM )
-                || ( aPad->GetShape() == PAD_SHAPE::ROUNDRECT && ( margin.x < 0 || margin.y < 0 ) ) )
+            if( ( margin.x != margin.y && aPad->GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM )
+                || ( aPad->GetShape( pcbLayer ) == PAD_SHAPE::ROUNDRECT
+                     && ( margin.x < 0 || margin.y < 0 ) ) )
             {
                 // Our algorithms below (polygon inflation in particular) can't handle differential
                 // inflation along separate axes.  So for those cases we build a dummy pad instead,
@@ -1508,27 +1514,30 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 if( dummyPad->GetParentGroup() )
                     dummyPad->GetParentGroup()->RemoveItem( dummyPad.get() );
 
-                int initial_radius = dummyPad->GetRoundRectCornerRadius();
+                int initial_radius = dummyPad->GetRoundRectCornerRadius( pcbLayer );
 
-                dummyPad->SetSize( pad_size + margin + margin );
+                dummyPad->SetSize( pcbLayer, pad_size + margin + margin );
 
-                if( dummyPad->GetShape() == PAD_SHAPE::ROUNDRECT )
+                if( dummyPad->GetShape( pcbLayer ) == PAD_SHAPE::ROUNDRECT )
                 {
                     // To keep the right margin around the corners, we need to modify the corner radius.
                     // We must have only one radius correction, so use the smallest absolute margin.
                     int radius_margin = std::max( margin.x, margin.y );     // radius_margin is < 0
-                    dummyPad->SetRoundRectCornerRadius( std::max( initial_radius + radius_margin, 0 ) );
+                    dummyPad->SetRoundRectCornerRadius(
+                            pcbLayer, std::max( initial_radius + radius_margin, 0 ) );
                 }
 
-                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( dummyPad->GetEffectiveShape() );
+                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>(
+                        dummyPad->GetEffectiveShape( pcbLayer ) );
                 margin.x = margin.y = 0;
             }
             else
             {
-                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>(
+                        aPad->GetEffectiveShape( pcbLayer ) );
             }
 
-            if( aPad->GetShape() == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
+            if( aPad->GetShape( pcbLayer ) == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
             {
                 // We can't draw as shapes because we don't know which edges are internal and which
                 // are external (so we don't know when to apply the margin and when not to).
@@ -1706,7 +1715,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
             if( aPad->FlashLayer( activeLayer ) && clearance > 0 )
             {
-                auto shape = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+                auto shape = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape( pcbLayer ) );
 
                 if( shape && shape->Size() == 1 && shape->Shapes()[0]->Type() == SH_SEGMENT )
                 {

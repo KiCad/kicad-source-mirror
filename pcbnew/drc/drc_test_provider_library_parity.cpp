@@ -298,7 +298,8 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
             return true;
     }
 
-    TEST( a->GetShape(), b->GetShape(),
+    // TOOD(JE) padstacks
+    TEST( a->GetShape( PADSTACK::ALL_LAYERS ), b->GetShape( PADSTACK::ALL_LAYERS ),
           wxString::Format( _( "%s pad shape type differs." ), PAD_DESC( a ) ) );
 
     TEST( a->GetAttribute(), b->GetAttribute(),
@@ -311,21 +312,24 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
             b->GetFPRelativeOrientation().Normalize().AsDegrees(),
             wxString::Format( _( "%s orientation differs." ), PAD_DESC( a ) ) );
 
-    TEST( a->GetSize(), b->GetSize(),
+    TEST( a->GetSize( PADSTACK::ALL_LAYERS ), b->GetSize( PADSTACK::ALL_LAYERS ),
           wxString::Format( _( "%s size differs." ), PAD_DESC( a ) ) );
-    TEST( a->GetDelta(), b->GetDelta(),
+    TEST( a->GetDelta( PADSTACK::ALL_LAYERS ), b->GetDelta( PADSTACK::ALL_LAYERS ),
           wxString::Format( _( "%s trapezoid delta differs." ), PAD_DESC( a ) ) );
 
-    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio(),
+    TEST_D( a->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS ),
+            b->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS ),
             wxString::Format( _( "%s rounded corners differ." ), PAD_DESC( a ) ) );
 
-    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio(),
+    TEST_D( a->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
+            b->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
             wxString::Format( _( "%s chamfered corner sizes differ." ), PAD_DESC( a ) ) );
 
-    TEST( a->GetChamferPositions(), b->GetChamferPositions(),
+    TEST( a->GetChamferPositions( PADSTACK::ALL_LAYERS ),
+          b->GetChamferPositions( PADSTACK::ALL_LAYERS ),
           wxString::Format( _( "%s chamfered corners differ." ), PAD_DESC( a ) ) );
 
-    TEST_PT( a->GetOffset(), b->GetOffset(),
+    TEST_PT( a->GetOffset( PADSTACK::ALL_LAYERS ), b->GetOffset( PADSTACK::ALL_LAYERS ),
              wxString::Format( _( "%s shape offset from hole differs." ), PAD_DESC( a ) ) );
 
     TEST( a->GetDrillShape(), b->GetDrillShape(),
@@ -348,15 +352,17 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
 
     bool primitivesDiffer = false;
 
-    if( a->GetPrimitives().size() != b->GetPrimitives().size() )
+    if( a->GetPrimitives( PADSTACK::ALL_LAYERS ).size() !=
+        b->GetPrimitives( PADSTACK::ALL_LAYERS ).size() )
     {
         primitivesDiffer = true;
     }
     else
     {
-        for( size_t ii = 0; ii < a->GetPrimitives().size(); ++ii )
+        for( size_t ii = 0; ii < a->GetPrimitives( PADSTACK::ALL_LAYERS ).size(); ++ii )
         {
-            if( primitiveNeedsUpdate( a->GetPrimitives()[ii], b->GetPrimitives()[ii] ) )
+            if( primitiveNeedsUpdate( a->GetPrimitives( PADSTACK::ALL_LAYERS )[ii],
+                                      b->GetPrimitives( PADSTACK::ALL_LAYERS )[ii] ) )
             {
                 primitivesDiffer = true;
                 break;

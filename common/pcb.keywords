@@ -145,6 +145,7 @@ fp_text
 fp_text_box
 free
 front
+front_inner_back
 full
 general
 generator
@@ -251,6 +252,7 @@ pad_prop_castellated
 pad_prop_testpoint
 pad_prop_heatsink
 pad_prop_mechanical
+padstack
 padvia
 prefer_zone_connections
 private_layers
@@ -292,6 +294,7 @@ segment
 segment_width
 separators
 setup
+shape
 sheetfile
 sheetname
 silk_line_width

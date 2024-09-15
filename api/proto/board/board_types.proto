@@ -141,7 +141,7 @@ enum PadStackType
   PST_NORMAL = 1;
 
   // The padstack uses up to three different shapes (F_Cu, inner layers, B_Cu)
-  PST_TOP_INNER_BOTTOM = 2;
+  PST_FRONT_INNER_BACK = 2;
 
   // The padstack's shape may differ on arbitrary copper layers
   PST_CUSTOM = 3;

@@ -879,7 +879,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
                 shape->SetFilled( true );
 
             shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
-                                            aStrategy == COPY_LINEWIDTH || aStrategy == CENTERLINE );
+                                            aStrategy == COPY_LINEWIDTH
+                                                    || aStrategy == CENTERLINE );
 
             if( aStrategy != BOUNDING_HULL )
                 shape->SetFillMode( wasFilled );

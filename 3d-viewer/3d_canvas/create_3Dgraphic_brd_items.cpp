@@ -366,22 +366,22 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
     // is only the size of the anchor), so for those we punt and just use aMargin.x.
 
     if( ( clearance.x < 0 || clearance.x != clearance.y )
-            && aPad->GetShape() != PAD_SHAPE::CUSTOM )
+            && aPad->GetShape( aLayer ) != PAD_SHAPE::CUSTOM )
     {
-        VECTOR2I dummySize = VECTOR2I( aPad->GetSize() ) + clearance + clearance;
+        VECTOR2I dummySize = VECTOR2I( aPad->GetSize( aLayer ) ) + clearance + clearance;
 
         if( dummySize.x <= 0 || dummySize.y <= 0 )
             return;
 
         PAD dummy( *aPad );
-        dummy.SetSize( VECTOR2I( dummySize.x, dummySize.y ) );
+        dummy.SetSize( aLayer, VECTOR2I( dummySize.x, dummySize.y ) );
         dummy.TransformShapeToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
         clearance = { 0, 0 };
 
         // Remove group membership from dummy item before deleting
         dummy.SetParentGroup( nullptr );
     }
-    else if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
+    else if( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
     {
         // A custom pad can have many complex subshape items. To avoid issues, use its
         // final polygon shape, not its basic shape set. One cannot apply the clearance
@@ -390,7 +390,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
     }
     else
     {
-        auto padShapes = std::static_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+        auto padShapes = std::static_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape( aLayer ) );
 
         for( const SHAPE* shape : padShapes->Shapes() )
         {
@@ -540,13 +540,13 @@ void BOARD_ADAPTER::addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aCo
 
         case F_Mask:
         case B_Mask:
-            margin.x += pad->GetSolderMaskExpansion();
-            margin.y += pad->GetSolderMaskExpansion();
+            margin.x += pad->GetSolderMaskExpansion( aLayerId );
+            margin.y += pad->GetSolderMaskExpansion( aLayerId );
             break;
 
         case F_Paste:
         case B_Paste:
-            margin += pad->GetSolderPasteMargin();
+            margin += pad->GetSolderPasteMargin( aLayerId );
             break;
 
         default:
@@ -747,8 +747,8 @@ void BOARD_ADAPTER::addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aC
     {
         SHAPE_POLY_SET polyList;
 
-        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
-                                                      ARC_HIGH_DEF, ERROR_INSIDE );
+        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
+                                                      ERROR_INSIDE );
 
         ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
     }
@@ -775,13 +775,13 @@ void BOARD_ADAPTER::addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* a
 }
 
 
-void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aContainer,
-                                               int aWidth )
+void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, PCB_LAYER_ID aLayer,
+                                               CONTAINER_2D_BASE* aContainer, int aWidth )
 {
-    if( aPad->GetShape() == PAD_SHAPE::CIRCLE )    // Draw a ring
+    if( aPad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE )    // Draw a ring
     {
-        const SFVEC2F center3DU = TO_SFVEC2F( aPad->ShapePos() );
-        const int     radius = aPad->GetSize().x / 2;
+        const SFVEC2F center3DU = TO_SFVEC2F( aPad->ShapePos( aLayer ) );
+        const int     radius = aPad->GetSize( aLayer ).x / 2;
         const float   inner_radius3DU = TO_3DU( radius - aWidth / 2.0 );
         const float   outer_radius3DU = TO_3DU( radius + aWidth / 2.0 );
 
@@ -790,7 +790,8 @@ void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BAS
     else
     {
         // For other shapes, add outlines as thick segments in polygon buffer
-        const std::shared_ptr<SHAPE_POLY_SET>& corners = aPad->GetEffectivePolygon( ERROR_INSIDE );
+        const std::shared_ptr<SHAPE_POLY_SET>& corners = aPad->GetEffectivePolygon( aLayer,
+                                                                                    ERROR_INSIDE );
         const SHAPE_LINE_CHAIN&                path = corners->COutline( 0 );
 
         for( int j = 0; j < path.PointCount(); j++ )

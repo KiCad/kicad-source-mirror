@@ -392,8 +392,8 @@ void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PAD& aPad, bool aR
     else
         pos = aPad.GetPosition();
 
-    if( aPad.GetOffset().x != 0 || aPad.GetOffset().y != 0 )
-        pos += aPad.GetOffset();
+    if( aPad.GetOffset( PADSTACK::ALL_LAYERS ).x != 0 || aPad.GetOffset( PADSTACK::ALL_LAYERS ).y != 0 )
+        pos += aPad.GetOffset( PADSTACK::ALL_LAYERS );
 
     addLocationNode( aNode, pos.x, pos.y );
 }
@@ -755,12 +755,12 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
     VECTOR2I expansion{ 0, 0 };
 
     if( LSET( { F_Mask, B_Mask } ).Contains( aLayer ) )
-        expansion.x = expansion.y = 2 * aPad.GetSolderMaskExpansion();
+        expansion.x = expansion.y = 2 * aPad.GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
 
     if( LSET( { F_Paste, B_Paste } ).Contains( aLayer ) )
-        expansion = 2 * aPad.GetSolderPasteMargin();
+        expansion = 2 * aPad.GetSolderPasteMargin( PADSTACK::ALL_LAYERS );
 
-    switch( aPad.GetShape() )
+    switch( aPad.GetShape( PADSTACK::ALL_LAYERS ) )
     {
     case PAD_SHAPE::CIRCLE:
     {
@@ -785,7 +785,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         addAttribute( entry_node,  "id", name );
 
         wxXmlNode* rect_node = appendNode( entry_node, "RectCenter" );
-        VECTOR2D pad_size = aPad.GetSize() + expansion;
+        VECTOR2D pad_size = aPad.GetSize( PADSTACK::ALL_LAYERS ) + expansion;
         addAttribute( rect_node,  "width", floatVal( m_scale * std::abs( pad_size.x ) ) );
         addAttribute( rect_node,  "height", floatVal( m_scale * std::abs( pad_size.y ) ) );
 
@@ -801,7 +801,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         addAttribute( entry_node,  "id", name );
 
         wxXmlNode* oval_node = appendNode( entry_node, "Oval" );
-        VECTOR2D pad_size = aPad.GetSize() + expansion;
+        VECTOR2D pad_size = aPad.GetSize( PADSTACK::ALL_LAYERS ) + expansion;
         addAttribute( oval_node,  "width", floatVal( m_scale * pad_size.x ) );
         addAttribute( oval_node,  "height", floatVal( m_scale * pad_size.y ) );
 
@@ -817,11 +817,11 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         addAttribute( entry_node,  "id", name );
 
         wxXmlNode* roundrect_node = appendNode( entry_node, "RectRound" );
-        VECTOR2D pad_size = aPad.GetSize() + expansion;
+        VECTOR2D pad_size = aPad.GetSize( PADSTACK::ALL_LAYERS ) + expansion;
         addAttribute( roundrect_node,  "width", floatVal( m_scale * pad_size.x ) );
         addAttribute( roundrect_node,  "height", floatVal( m_scale * pad_size.y ) );
         roundrect_node->AddAttribute( "radius",
-                                      floatVal( m_scale * aPad.GetRoundRectCornerRadius() ) );
+                                      floatVal( m_scale * aPad.GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ) ) );
         addAttribute( roundrect_node,  "upperRight", "true" );
         addAttribute( roundrect_node,  "upperLeft", "true" );
         addAttribute( roundrect_node,  "lowerRight", "true" );
@@ -839,16 +839,16 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         addAttribute( entry_node,  "id", name );
 
         wxXmlNode* chamfered_node = appendNode( entry_node, "RectCham" );
-        VECTOR2D pad_size = aPad.GetSize() + expansion;
+        VECTOR2D pad_size = aPad.GetSize( PADSTACK::ALL_LAYERS ) + expansion;
         addAttribute( chamfered_node,  "width", floatVal( m_scale * pad_size.x ) );
         addAttribute( chamfered_node,  "height", floatVal( m_scale * pad_size.y ) );
 
         int shorterSide = std::min( pad_size.x, pad_size.y );
-        int chamfer = std::max( 0, KiROUND( aPad.GetChamferRectRatio() * shorterSide ) );
+        int chamfer = std::max( 0, KiROUND( aPad.GetChamferRectRatio( PADSTACK::ALL_LAYERS ) * shorterSide ) );
 
         addAttribute( chamfered_node,  "chamfer", floatVal( m_scale * chamfer ) );
 
-        int positions = aPad.GetChamferPositions();
+        int positions = aPad.GetChamferPositions( PADSTACK::ALL_LAYERS );
 
         if( positions & RECT_CHAMFER_TOP_LEFT )
             addAttribute( chamfered_node,  "upperLeft", "true" );
@@ -870,8 +870,8 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         wxXmlNode* entry_node = appendNode( m_shape_std_node, "EntryStandard" );
         addAttribute( entry_node,  "id", name );
 
-        VECTOR2I       pad_size = aPad.GetSize();
-        VECTOR2I       trap_delta = aPad.GetDelta();
+        VECTOR2I       pad_size = aPad.GetSize( PADSTACK::ALL_LAYERS );
+        VECTOR2I       trap_delta = aPad.GetDelta( PADSTACK::ALL_LAYERS );
         SHAPE_POLY_SET outline;
         outline.NewOutline();
         int dx = pad_size.x / 2;
@@ -905,7 +905,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         addAttribute( entry_node,  "id", name );
 
         SHAPE_POLY_SET shape;
-        aPad.MergePrimitivesAsPolygon( &shape );
+        aPad.MergePrimitivesAsPolygon( PADSTACK::ALL_LAYERS, &shape );
 
         if( expansion != VECTOR2I( 0, 0 ) )
         {
@@ -1138,7 +1138,7 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
         addLocationNode( slotNode, 0.0, 0.0 );
 
     SHAPE_POLY_SET poly_set;
-    aPad.GetEffectiveShape()->TransformToPolygon( poly_set, 0, ERROR_INSIDE );
+    aPad.GetEffectiveShape( PADSTACK::ALL_LAYERS )->TransformToPolygon( poly_set, 0, ERROR_INSIDE );
 
     addOutlineNode( slotNode, poly_set );
 }
@@ -1671,7 +1671,7 @@ void PCB_IO_IPC2581::addVia( wxXmlNode* aContentNode, const PCB_VIA* aVia, PCB_L
     int hole = aVia->GetDrillValue();
     dummy.SetDrillSize( VECTOR2I( hole, hole ) );
     dummy.SetPosition( aVia->GetStart() );
-    dummy.SetSize( VECTOR2I( aVia->GetWidth(), aVia->GetWidth() ) );
+    dummy.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( aVia->GetWidth(), aVia->GetWidth() ) );
 
     addShape( padNode, dummy, aLayer );
 }
@@ -1709,7 +1709,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
                       aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
         addAttribute( padStackHoleNode,  "plusTol", "0.0" );
         addAttribute( padStackHoleNode,  "minusTol", "0.0" );
-        addXY( padStackHoleNode, aPad->GetOffset() );
+        addXY( padStackHoleNode, aPad->GetOffset( PADSTACK::ALL_LAYERS ) );
     }
 
     LSEQ layer_seq = aPad->GetLayerSet().Seq();
@@ -1724,12 +1724,12 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         wxXmlNode* padStackPadDefNode = appendNode( padStackDefNode, "PadstackPadDef" );
         addAttribute( padStackPadDefNode,  "layerRef", m_layer_name_map[layer] );
         addAttribute( padStackPadDefNode,  "padUse", "REGULAR" );
-        addLocationNode( padStackPadDefNode, aPad->GetOffset().x, aPad->GetOffset().y );
+        addLocationNode( padStackPadDefNode, aPad->GetOffset( PADSTACK::ALL_LAYERS ).x, aPad->GetOffset( PADSTACK::ALL_LAYERS ).y );
 
         if( aPad->HasHole() || !aPad->FlashLayer( layer ) )
         {
             PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
-            shape.SetStart( aPad->GetOffset() );
+            shape.SetStart( aPad->GetOffset( PADSTACK::ALL_LAYERS ) );
             shape.SetEnd( shape.GetStart() + aPad->GetDrillSize() / 2 );
             addShape( padStackPadDefNode, shape );
         }

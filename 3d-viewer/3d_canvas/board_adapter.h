@@ -408,7 +408,8 @@ private:
                                  const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount, int aWidth,
                                  CONTAINER_2D_BASE* aContainer, const BOARD_ITEM& aOwner );
 
-    void buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer, int aWidth );
+    void buildPadOutlineAsSegments( const PAD* aPad, PCB_LAYER_ID aLayer,
+                                    CONTAINER_2D_BASE* aDstContainer, int aWidth );
 
 public:
     static CUSTOM_COLORS_LIST   g_SilkColors;

@@ -62,7 +62,10 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
     for( PAD* pad : m_board->Footprints()[0]->Pads() )
     {
         if( pad->GetNumber() == "2" || pad->GetNumber() == "4" || pad->GetNumber() == "6" )
-            pad->SetSize( pad->GetSize() + VECTOR2I( delta, delta ) );
+        {
+            pad->SetSize( PADSTACK::ALL_LAYERS,
+                          pad->GetSize( PADSTACK::ALL_LAYERS ) + VECTOR2I( delta, delta ) );
+        }
     }
 
     int  ii = 0;

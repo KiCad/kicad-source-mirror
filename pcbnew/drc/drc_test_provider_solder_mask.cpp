@@ -134,7 +134,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
             if( aItem->IsOnLayer( layer ) )
             {
                 PAD* pad = static_cast<PAD*>( aItem );
-                int  clearance = ( m_webWidth / 2 ) + pad->GetSolderMaskExpansion();
+                int clearance = ( m_webWidth / 2 ) + pad->GetSolderMaskExpansion( layer );
 
                 aItem->TransformShapeToPolygon( *solderMask->GetFill( layer ), layer, clearance,
                                                 m_maxError, ERROR_OUTSIDE );
@@ -321,10 +321,12 @@ bool isNullAperture( BOARD_ITEM* aItem )
     {
         PAD* pad = static_cast<PAD*>( aItem );
 
+        // TODO(JE) padstacks
         if( pad->GetAttribute() == PAD_ATTRIB::NPTH
-                && ( pad->GetShape() == PAD_SHAPE::CIRCLE || pad->GetShape() == PAD_SHAPE::OVAL )
-                && pad->GetSize().x <= pad->GetDrillSize().x
-                && pad->GetSize().y <= pad->GetDrillSize().y )
+                && ( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE
+                     || pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::OVAL )
+                && pad->GetSize( PADSTACK::ALL_LAYERS ).x <= pad->GetDrillSize().x
+                && pad->GetSize( PADSTACK::ALL_LAYERS ).y <= pad->GetDrillSize().y )
         {
             return true;
         }
@@ -358,7 +360,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
                                                        PCB_LAYER_ID aTestLayer, int aTestNet,
                                                        BOARD_ITEM** aCollidingItem )
 {
-    if( aTestLayer == F_Mask && !aTestItem->IsOnLayer( F_Cu ) )
+    if( aTestLayer == F_Mask && !aTestItem->IsOnLayer( PADSTACK::ALL_LAYERS ) )
         return false;
 
     if( aTestLayer == B_Mask && !aTestItem->IsOnLayer( B_Cu ) )
@@ -557,12 +559,12 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                 }
 
                 if( pad )
-                    clearance += pad->GetSolderMaskExpansion();
+                    clearance += pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
                 else if( via && !via->IsTented( aRefLayer ) )
                     clearance += via->GetSolderMaskExpansion();
 
                 if( otherPad )
-                    clearance += otherPad->GetSolderMaskExpansion();
+                    clearance += otherPad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
                 else if( otherVia && !otherVia->IsTented( aRefLayer ) )
                     clearance += otherVia->GetSolderMaskExpansion();
 
@@ -644,7 +646,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
         int   clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
 
         if( aItem->Type() == PCB_PAD_T )
-            clearance += static_cast<PAD*>( aItem )->GetSolderMaskExpansion();
+            clearance += static_cast<PAD*>( aItem )->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
         else if( aItem->Type() == PCB_VIA_T )
             clearance += static_cast<PCB_VIA*>( aItem )->GetSolderMaskExpansion();
 
@@ -735,7 +737,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
                     // Test for aperture-to-zone collisions
                     testMaskItemAgainstZones( item, itemBBox, F_Mask, F_Cu );
                 }
-                else if( item->IsOnLayer( F_Cu ) )
+                else if( item->IsOnLayer( PADSTACK::ALL_LAYERS ) )
                 {
                     // Test for copper-item-to-aperture collisions
                     testItemAgainstItems( item, itemBBox, F_Cu, F_Mask );
@@ -777,7 +779,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
-            m_largestClearance = std::max( m_largestClearance, pad->GetSolderMaskExpansion() );
+            m_largestClearance = std::max( m_largestClearance, pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS ) );
     }
 
     // Order is important here: m_webWidth must be added in before m_largestCourtyardClearance is

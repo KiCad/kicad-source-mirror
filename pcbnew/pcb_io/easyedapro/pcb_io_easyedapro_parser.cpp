@@ -668,16 +668,16 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
         size.y = padShape.at( 2 );
         double cr_p = padShape.size() > 3 ? padShape.at( 3 ).get<double>() : 0;
 
-        pad->SetSize( ScaleSize( size ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, ScaleSize( size ) );
 
         if( cr_p == 0 )
         {
-            pad->SetShape( PAD_SHAPE::RECTANGLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
         }
         else
         {
-            pad->SetShape( PAD_SHAPE::ROUNDRECT );
-            pad->SetRoundRectRadiusRatio( cr_p / 100 );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
+            pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, cr_p / 100 );
         }
     }
     else if( padSh == wxS( "ELLIPSE" ) )
@@ -686,8 +686,8 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
         size.x = padShape.at( 1 );
         size.y = padShape.at( 2 );
 
-        pad->SetSize( ScaleSize( size ) );
-        pad->SetShape( PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, ScaleSize( size ) );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     }
     else if( padSh == wxS( "OVAL" ) )
     {
@@ -695,14 +695,14 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
         size.x = padShape.at( 1 );
         size.y = padShape.at( 2 );
 
-        pad->SetSize( ScaleSize( size ) );
-        pad->SetShape( PAD_SHAPE::OVAL );
+        pad->SetSize( PADSTACK::ALL_LAYERS, ScaleSize( size ) );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
     }
     else if( padSh == wxS( "POLY" ) )
     {
-        pad->SetShape( PAD_SHAPE::CUSTOM );
-        pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-        pad->SetSize( { 1, 1 } );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+        pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, { 1, 1 } );
 
         nlohmann::json polyData = padShape.at( 1 );
 
@@ -716,7 +716,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
 
             shape->Move( -pad->GetPosition() );
 
-            pad->AddPrimitive( shape.release() );
+            pad->AddPrimitive( PADSTACK::ALL_LAYERS, shape.release() );
         }
     }
 

@@ -100,7 +100,7 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     m_padStack.LayerSet().reset();
 
     // For now, vias are always circles
-    m_padStack.SetShape( PAD_SHAPE::CIRCLE );
+    m_padStack.SetShape( PAD_SHAPE::CIRCLE, PADSTACK::ALL_LAYERS );
 
     for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
         m_zoneLayerOverrides[layer] = ZLO_NONE;
@@ -311,13 +311,13 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
 
 void PCB_VIA::SetWidth( int aWidth )
 {
-    m_padStack.Size() = { aWidth, aWidth };
+    m_padStack.Size( PADSTACK::ALL_LAYERS ) = { aWidth, aWidth };
 }
 
 
 int PCB_VIA::GetWidth() const
 {
-    return m_padStack.Size().x;
+    return m_padStack.Size( PADSTACK::ALL_LAYERS ).x;
 }
 
 
@@ -447,7 +447,7 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
         return false;
 
     // We don't yet support complex padstacks for vias
-    SetWidth( m_padStack.Size().x );
+    SetWidth( m_padStack.Size( PADSTACK::ALL_LAYERS ).x );
     SetViaType( FromProtoEnum<VIATYPE>( via.type() ) );
     SetNetCode( via.net().code().value() );
     SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );

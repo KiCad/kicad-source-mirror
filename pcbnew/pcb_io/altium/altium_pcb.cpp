@@ -2670,26 +2670,26 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
 
     if( aLayer == F_Cu || aLayer == B_Cu )
     {
+        // TODO(JE) padstacks -- not sure what should happen here yet
         std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
 
         LSET padLayers;
         padLayers.set( aLayer );
 
         pad->SetAttribute( PAD_ATTRIB::SMD );
-        pad->SetShape( PAD_SHAPE::CUSTOM );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
         pad->SetThermalSpokeAngle( ANGLE_90 );
 
         int      anchorSize = 1;
         VECTOR2I anchorPos = linechain.CPoint( 0 );
 
-        pad->SetShape( PAD_SHAPE::CUSTOM );
-        pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-        pad->SetSize( { anchorSize, anchorSize } );
+        pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, { anchorSize, anchorSize } );
         pad->SetPosition( anchorPos );
 
         SHAPE_POLY_SET shapePolys = polySet;
         shapePolys.Move( -anchorPos );
-        pad->AddPrimitivePoly( shapePolys, 0, true );
+        pad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, shapePolys, 0, true );
 
         auto& map = m_extendedPrimitiveInformationMaps[ALTIUM_RECORD::REGION];
         auto  it = map.find( aPrimitiveIndex );
@@ -3120,21 +3120,24 @@ void ALTIUM_PCB::ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6
     pad->SetNetCode( GetNetCode( aElem.net ) );
 
     pad->SetPosition( aElem.position );
-    pad->SetSize( VECTOR2I( aElem.diameter, aElem.diameter ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( aElem.diameter, aElem.diameter ) );
     pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) );
     pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-    pad->SetShape( PAD_SHAPE::CIRCLE );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetAttribute( PAD_ATTRIB::PTH );
 
     // Pads are always through holes in KiCad
     pad->SetLayerSet( LSET().AllCuMask() );
 
     if( aElem.viamode == ALTIUM_PAD_MODE::SIMPLE )
+    {
         pad->Padstack().SetMode( PADSTACK::MODE::NORMAL );
+    }
     else if( aElem.viamode == ALTIUM_PAD_MODE::TOP_MIDDLE_BOTTOM )
     {
-        pad->Padstack().SetMode( PADSTACK::MODE::TOP_INNER_BOTTOM );
-        pad->Padstack().Size( In2_Cu ) = VECTOR2I( aElem.diameter_by_layer[1], aElem.diameter_by_layer[1] );
+        pad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
+        pad->Padstack().Size( PADSTACK::INNER_LAYERS ) =
+            VECTOR2I( aElem.diameter_by_layer[1], aElem.diameter_by_layer[1] );
     }
     else
     {
@@ -3375,7 +3378,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         }
 
         if( aElem.sizeAndShape )
-            pad->SetOffset( aElem.sizeAndShape->holeoffset[0] );
+            pad->SetOffset( PADSTACK::ALL_LAYERS, aElem.sizeAndShape->holeoffset[0] );
     }
 
     PADSTACK& ps = pad->Padstack();
@@ -3383,6 +3386,8 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     auto setCopperGeometry =
         [&]( PCB_LAYER_ID aLayer, ALTIUM_PAD_SHAPE aShape, const VECTOR2I& aSize )
         {
+            int altLayer = CopperLayerToOrdinal( aLayer );
+
             ps.Size( aLayer ) = aSize;
 
             switch( aShape )
@@ -3393,10 +3398,10 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
             case ALTIUM_PAD_SHAPE::CIRCLE:
                 if( aElem.sizeAndShape
-                    && aElem.sizeAndShape->alt_shape[0] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
+                    && aElem.sizeAndShape->alt_shape[altLayer] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
                 {
                     ps.SetShape( PAD_SHAPE::ROUNDRECT, aLayer ); // 100 = round, 0 = rectangular
-                    double ratio = aElem.sizeAndShape->cornerradius[0] / 200.;
+                    double ratio = aElem.sizeAndShape->cornerradius[altLayer] / 200.;
                     ps.SetRoundRectRadiusRatio( ratio, aLayer );
                 }
                 else if( aElem.topsize.x == aElem.topsize.y )
@@ -3450,42 +3455,33 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     {
     case ALTIUM_PAD_MODE::SIMPLE:
         ps.SetMode( PADSTACK::MODE::NORMAL );
-        setCopperGeometry( F_Cu, aElem.topshape, aElem.topsize );
+        setCopperGeometry( PADSTACK::ALL_LAYERS, aElem.topshape, aElem.topsize );
         break;
 
     case ALTIUM_PAD_MODE::TOP_MIDDLE_BOTTOM:
-        ps.SetMode( PADSTACK::MODE::TOP_INNER_BOTTOM );
+        ps.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
         setCopperGeometry( F_Cu, aElem.topshape, aElem.topsize );
-        setCopperGeometry( In1_Cu, aElem.midshape, aElem.midsize );
+        setCopperGeometry( PADSTACK::INNER_LAYERS, aElem.midshape, aElem.midsize );
         setCopperGeometry( B_Cu, aElem.botshape, aElem.botsize );
         break;
 
     case ALTIUM_PAD_MODE::FULL_STACK:
         ps.SetMode( PADSTACK::MODE::CUSTOM );
-        setCopperGeometry( F_Cu, aElem.topshape, aElem.topsize );
 
-        if( !m_footprintName.IsEmpty() )
+        setCopperGeometry( F_Cu, aElem.topshape, aElem.topsize );
+        setCopperGeometry( B_Cu, aElem.botshape, aElem.botsize );
+        setCopperGeometry( In1_Cu, aElem.midshape, aElem.midsize );
+
+        if( aElem.sizeAndShape )
         {
-            if( m_reporter )
+            size_t i = 0;
+
+            for( PCB_LAYER_ID layer : LAYER_RANGE( In2_Cu, In30_Cu, MAX_CU_LAYERS ) )
             {
-                wxString msg;
-                msg.Printf( _( "Error loading library '%s':\n"
-                           "Footprint %s pad %s uses a complex pad stack (not yet supported)." ),
-                        m_library,
-                        m_footprintName,
-                        aElem.name );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-            }
-        }
-        else
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Footprint %s pad %s uses a complex pad stack (not yet supported)." ),
-                        aFootprint->GetReference(),
-                        aElem.name );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
+                setCopperGeometry( layer, aElem.sizeAndShape->inner_shape[i],
+                                   VECTOR2I( aElem.sizeAndShape->inner_size[i].x,
+                                             aElem.sizeAndShape->inner_size[i].y ) );
+                i++;
             }
         }
 
@@ -3495,9 +3491,9 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->HasHole() )
     {
         // KiCad likes NPTH pads to be the same size & shape as their holes
-        pad->SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE ? PAD_SHAPE::CIRCLE
-                                                                       : PAD_SHAPE::OVAL );
-        pad->SetSize( pad->GetDrillSize() );
+        pad->SetShape( PADSTACK::ALL_LAYERS, pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE ? PAD_SHAPE::CIRCLE
+                                                                             : PAD_SHAPE::OVAL );
+        pad->SetSize( PADSTACK::ALL_LAYERS, pad->GetDrillSize() );
     }
 
     switch( aElem.layer )
@@ -4666,7 +4662,7 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         // Handle rotation multiples of 90 degrees
         if( rotation.IsCardinal() )
         {
-            pad->SetShape( PAD_SHAPE::RECTANGLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
 
             int width = std::abs( aElem.pos2.x - aElem.pos1.x );
             int height = std::abs( aElem.pos2.y - aElem.pos1.y );
@@ -4675,19 +4671,19 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
             if( rotation.IsCardinal90() )
                 std::swap( width, height );
 
-            pad->SetSize( { width, height } );
+            pad->SetSize( PADSTACK::ALL_LAYERS, { width, height } );
             pad->SetPosition( aElem.pos1 / 2 + aElem.pos2 / 2 );
         }
         else
         {
-            pad->SetShape( PAD_SHAPE::CUSTOM );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
 
             int      anchorSize = std::min( std::abs( aElem.pos2.x - aElem.pos1.x ),
                                             std::abs( aElem.pos2.y - aElem.pos1.y ) );
             VECTOR2I anchorPos = aElem.pos1;
 
-            pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-            pad->SetSize( { anchorSize, anchorSize } );
+            pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetSize( PADSTACK::ALL_LAYERS, { anchorSize, anchorSize } );
             pad->SetPosition( anchorPos );
 
             SHAPE_POLY_SET shapePolys;
@@ -4701,7 +4697,7 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
             VECTOR2I center( aElem.pos1.x / 2 + aElem.pos2.x / 2 - anchorPos.x,
                              aElem.pos1.y / 2 + aElem.pos2.y / 2 - anchorPos.y );
             shapePolys.Rotate( EDA_ANGLE( aElem.rotation, DEGREES_T ), center );
-            pad->AddPrimitivePoly( shapePolys, 0, true );
+            pad->AddPrimitivePoly( F_Cu, shapePolys, 0, true );
         }
 
         pad->SetThermalSpokeAngle( ANGLE_90 );
