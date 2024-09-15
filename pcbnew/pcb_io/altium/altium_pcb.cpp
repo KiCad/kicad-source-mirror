@@ -3205,7 +3205,6 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
     pad->SetPosition( aElem.position );
     pad->SetOrientationDegrees( aElem.direction );
-    pad->SetSize( aElem.topsize );
     pad->SetThermalSpokeAngle( ANGLE_90 );
 
     if( aElem.holesize == 0 )
@@ -3379,8 +3378,92 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
             pad->SetOffset( aElem.sizeAndShape->holeoffset[0] );
     }
 
-    if( aElem.padmode != ALTIUM_PAD_MODE::SIMPLE )
+    PADSTACK& ps = pad->Padstack();
+
+    auto setCopperGeometry =
+        [&]( PCB_LAYER_ID aLayer, ALTIUM_PAD_SHAPE aShape, const VECTOR2I& aSize )
+        {
+            ps.Size( aLayer ) = aSize;
+
+            switch( aShape )
+            {
+            case ALTIUM_PAD_SHAPE::RECT:
+                ps.SetShape( PAD_SHAPE::RECTANGLE, aLayer );
+                break;
+
+            case ALTIUM_PAD_SHAPE::CIRCLE:
+                if( aElem.sizeAndShape
+                    && aElem.sizeAndShape->alt_shape[0] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
+                {
+                    ps.SetShape( PAD_SHAPE::ROUNDRECT, aLayer ); // 100 = round, 0 = rectangular
+                    double ratio = aElem.sizeAndShape->cornerradius[0] / 200.;
+                    ps.SetRoundRectRadiusRatio( ratio, aLayer );
+                }
+                else if( aElem.topsize.x == aElem.topsize.y )
+                {
+                    ps.SetShape( PAD_SHAPE::CIRCLE, aLayer );
+                }
+                else
+                {
+                    ps.SetShape( PAD_SHAPE::OVAL, aLayer );
+                }
+
+                break;
+
+            case ALTIUM_PAD_SHAPE::OCTAGONAL:
+                ps.SetShape( PAD_SHAPE::CHAMFERED_RECT, aLayer );
+                ps.SetChamferPositions( RECT_CHAMFER_ALL, aLayer );
+                ps.SetChamferRatio( 0.25, aLayer );
+                break;
+
+            case ALTIUM_PAD_SHAPE::UNKNOWN:
+            default:
+                if( !m_footprintName.IsEmpty() )
+                {
+                    if( m_reporter )
+                    {
+                        wxString msg;
+                        msg.Printf( _( "Error loading library '%s':\n"
+                                   "Footprint %s pad %s uses an unknown pad-shape." ),
+                                m_library,
+                                m_footprintName,
+                                aElem.name );
+                        m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
+                    }
+                }
+                else
+                {
+                    if( m_reporter )
+                    {
+                        wxString msg;
+                        msg.Printf( _( "Footprint %s pad %s uses an unknown pad-shape." ),
+                                aFootprint->GetReference(),
+                                aElem.name );
+                        m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
+                    }
+                }
+                break;
+            }
+        };
+
+    switch( aElem.padmode )
     {
+    case ALTIUM_PAD_MODE::SIMPLE:
+        ps.SetMode( PADSTACK::MODE::NORMAL );
+        setCopperGeometry( F_Cu, aElem.topshape, aElem.topsize );
+        break;
+
+    case ALTIUM_PAD_MODE::TOP_MIDDLE_BOTTOM:
+        ps.SetMode( PADSTACK::MODE::TOP_INNER_BOTTOM );
+        setCopperGeometry( F_Cu, aElem.topshape, aElem.topsize );
+        setCopperGeometry( In1_Cu, aElem.midshape, aElem.midsize );
+        setCopperGeometry( B_Cu, aElem.botshape, aElem.botsize );
+        break;
+
+    case ALTIUM_PAD_MODE::FULL_STACK:
+        ps.SetMode( PADSTACK::MODE::CUSTOM );
+        setCopperGeometry( F_Cu, aElem.topshape, aElem.topsize );
+
         if( !m_footprintName.IsEmpty() )
         {
             if( m_reporter )
@@ -3405,65 +3488,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                 m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
             }
         }
-    }
 
-    switch( aElem.topshape )
-    {
-    case ALTIUM_PAD_SHAPE::RECT:
-        pad->SetShape( PAD_SHAPE::RECTANGLE );
-        break;
-
-    case ALTIUM_PAD_SHAPE::CIRCLE:
-        if( aElem.sizeAndShape
-            && aElem.sizeAndShape->alt_shape[0] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
-        {
-            pad->SetShape( PAD_SHAPE::ROUNDRECT ); // 100 = round, 0 = rectangular
-            double ratio = aElem.sizeAndShape->cornerradius[0] / 200.;
-            pad->SetRoundRectRadiusRatio( ratio );
-        }
-        else if( aElem.topsize.x == aElem.topsize.y )
-        {
-            pad->SetShape( PAD_SHAPE::CIRCLE );
-        }
-        else
-        {
-            pad->SetShape( PAD_SHAPE::OVAL );
-        }
-
-        break;
-
-    case ALTIUM_PAD_SHAPE::OCTAGONAL:
-        pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
-        pad->SetChamferPositions( RECT_CHAMFER_ALL );
-        pad->SetChamferRectRatio( 0.25 );
-        break;
-
-    case ALTIUM_PAD_SHAPE::UNKNOWN:
-    default:
-        if( !m_footprintName.IsEmpty() )
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Error loading library '%s':\n"
-                           "Footprint %s pad %s uses an unknown pad-shape." ),
-                        m_library,
-                        m_footprintName,
-                        aElem.name );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-            }
-        }
-        else
-        {
-            if( m_reporter )
-            {
-                wxString msg;
-                msg.Printf( _( "Footprint %s pad %s uses an unknown pad-shape." ),
-                        aFootprint->GetReference(),
-                        aElem.name );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
-            }
-        }
         break;
     }
 
