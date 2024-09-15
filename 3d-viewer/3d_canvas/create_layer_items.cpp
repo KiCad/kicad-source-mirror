@@ -186,8 +186,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
-         // Skip tracks (not vias that are on more than one layer ) on disabled layers
-        if( !track->Type() == PCB_VIA_T
+         // Skip tracks (not vias theyt are on more than one layer ) on disabled layers
+        if( track->Type() != PCB_VIA_T
             && !Is3dLayerEnabled( track->GetLayer(), visibilityFlags ) )
         {
             continue;
@@ -877,10 +877,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
 
+                // Only vias on a external copper layer can have a solder mask
                 for( PCB_TRACK* track : m_board->Tracks() )
                 {
+                    PCB_LAYER_ID copper_layer = layer == F_Mask ? F_Cu : B_Cu;
+
                     if( track->Type() == PCB_VIA_T
-                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )
+                            && static_cast<const PCB_VIA*>( track )->FlashLayer( copper_layer )
                             && !static_cast<const PCB_VIA*>( track )->IsTented( layer ) )
                     {
                         createViaWithMargin( track, layerContainer, maskExpansion );
