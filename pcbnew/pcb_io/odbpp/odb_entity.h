@@ -75,7 +75,7 @@ public:
 
     virtual ~ODB_MATRIX_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "matrix"; }
+    inline virtual std::string GetEntityName() override { return "matrix"; }
 
     struct MATRIX_LAYER
     {
@@ -95,8 +95,8 @@ public:
         }
     };
 
-    virtual void GenerateFiles( ODB_TREE_WRITER& writer );
-    virtual void InitEntityData();
+    virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
+    virtual void InitEntityData() override;
     void         InitMatrixLayerData();
 
     void AddStep( const wxString& aStepName );
@@ -117,12 +117,12 @@ class ODB_MISC_ENTITY : public ODB_ENTITY_BASE
 public:
     ODB_MISC_ENTITY();
     virtual ~ODB_MISC_ENTITY() = default;
-    inline virtual std::string GetEntityName() { return "misc"; }
+    inline virtual std::string GetEntityName() override { return "misc"; }
 
     //TODO
     // bool AddAttrList();
     // bool AddSysAttrFiles();
-    virtual void GenerateFiles( ODB_TREE_WRITER& writer );
+    virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
 
 private:
     std::map<wxString, wxString> m_info;
@@ -141,7 +141,7 @@ public:
 
     virtual ~ODB_STEP_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "pcb"; }
+    inline virtual std::string GetEntityName() override { return "pcb"; }
 
     void InitEdaData();
     void InitPackage();
@@ -151,16 +151,16 @@ public:
     bool AddProfile();
     bool AddStepHeader();
 
-    virtual bool CreateDirectiryTree( ODB_TREE_WRITER& writer );
+    virtual bool CreateDirectiryTree( ODB_TREE_WRITER& writer ) override;
 
-    virtual void InitEntityData();
+    virtual void InitEntityData() override;
     void         GenerateLayerFiles( ODB_TREE_WRITER& writer );
     void         GenerateEdaFiles( ODB_TREE_WRITER& writer );
     void         GenerateNetlistsFiles( ODB_TREE_WRITER& writer );
     void         GenerateProfileFile( ODB_TREE_WRITER& writer );
     void         GenerateStepHeaderFile( ODB_TREE_WRITER& writer );
 
-    virtual void GenerateFiles( ODB_TREE_WRITER& writer );
+    virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
 
 private:
     // ODB_ATTRLIST m_attrList;
@@ -182,8 +182,8 @@ public:
 
     virtual ~ODB_LAYER_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "layers"; }
-    virtual void               InitEntityData();
+    inline virtual std::string GetEntityName() override { return "layers"; }
+    virtual void               InitEntityData() override;
     void                       InitFeatureData();
     ODB_COMPONENT& InitComponentData( const FOOTPRINT* aFp, const EDA_DATA::PACKAGE& aPkg );
     void           InitDrillData();
@@ -197,7 +197,7 @@ public:
 
     void GenFeatures( ODB_TREE_WRITER& writer );
 
-    virtual void GenerateFiles( ODB_TREE_WRITER& writer );
+    virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
 
 private:
     std::map<int, std::vector<BOARD_ITEM*>> m_layerItems;
@@ -217,7 +217,7 @@ public:
 
     virtual ~ODB_SYMBOLS_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "symbols"; }
+    inline virtual std::string GetEntityName() override { return "symbols"; }
 
     //TODO
     // virtual void GenerateFiles( ODB_TREE_WRITER& writer );
@@ -229,9 +229,9 @@ public:
     ODB_FONTS_ENTITY() = default;
     virtual ~ODB_FONTS_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "fonts"; }
+    inline virtual std::string GetEntityName() override { return "fonts"; }
 
-    virtual void GenerateFiles( ODB_TREE_WRITER& writer );
+    virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
 };
 
 class ODB_WHEELS_ENTITY : public ODB_ENTITY_BASE
@@ -240,7 +240,7 @@ public:
     ODB_WHEELS_ENTITY() = default;
     virtual ~ODB_WHEELS_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "wheels"; }
+    inline virtual std::string GetEntityName() override { return "wheels"; }
 
     // TODO
     // virtual void GenerateFiles( ODB_TREE_WRITER& writer );
@@ -252,7 +252,7 @@ public:
     ODB_INPUT_ENTITY() = default;
     virtual ~ODB_INPUT_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "input"; }
+    inline virtual std::string GetEntityName() override { return "input"; }
 
     // TODO
     // virtual void GenerateFiles( ODB_TREE_WRITER &writer );
@@ -264,7 +264,7 @@ public:
     ODB_USER_ENTITY() = default;
     virtual ~ODB_USER_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() { return "user"; }
+    inline virtual std::string GetEntityName() override { return "user"; }
 
     // TODO
     // virtual void GenerateFiles( ODB_TREE_WRITER &writer );
