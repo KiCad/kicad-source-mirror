@@ -46,6 +46,7 @@
 #include <tools/edit_tool.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <tools/pcb_tool_utils.h>
 #include <trigo.h>
 #include <macros.h>
 #include <zone.h>
@@ -1085,8 +1086,11 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         if( handleGraphicSeg( item ) )
             continue;
 
+        BOARD_ITEM&      boardItem = static_cast<BOARD_ITEM&>( *item );
         SHAPE_POLY_SET   polySet = getPolySet( item );
         std::vector<SEG> segs    = getSegList( polySet );
+
+        std::optional<int> itemWidth = GetBoardItemWidth( boardItem );
 
         if( aEvent.IsAction( &PCB_ACTIONS::convertToLines ) )
         {
@@ -1097,6 +1101,11 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 graphic->SetLayer( targetLayer );
                 graphic->SetStart( VECTOR2I( seg.A ) );
                 graphic->SetEnd( VECTOR2I( seg.B ) );
+
+                // The width can exist but be 0 for filled, unstroked shapes
+                if( itemWidth && *itemWidth > 0 )
+                    graphic->SetWidth( *itemWidth );
+
                 commit.Add( graphic );
             }
         }
@@ -1113,6 +1122,10 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     graphic->SetLayer( targetLayer );
                     graphic->SetStart( VECTOR2I( seg.A ) );
                     graphic->SetEnd( VECTOR2I( seg.B ) );
+
+                    if( itemWidth )
+                        graphic->SetWidth( *itemWidth );
+
                     commit.Add( graphic );
                 }
             }

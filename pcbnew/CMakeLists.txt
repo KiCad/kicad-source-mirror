@@ -109,7 +109,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_import_settings.cpp
     dialogs/dialog_import_settings_base.cpp
     dialogs/dialog_imported_layers_base.cpp
-        dialogs/dialog_map_layers.cpp
+    dialogs/dialog_map_layers.cpp
     dialogs/dialog_rule_area_properties.cpp
     dialogs/dialog_rule_area_properties_base.cpp
     dialogs/dialog_layer_selection_base.cpp
@@ -371,7 +371,7 @@ set( PCBNEW_CLASS_SRCS
     tools/drc_tool.cpp
     tools/edit_tool.cpp
     tools/edit_tool_move_fct.cpp
-        tools/pcb_edit_table_tool.cpp
+    tools/pcb_edit_table_tool.cpp
     tools/global_edit_tool.cpp
     tools/group_tool.cpp
     tools/footprint_editor_control.cpp
@@ -385,6 +385,7 @@ set( PCBNEW_CLASS_SRCS
     tools/pcb_tool_base.cpp
     tools/placement_tool.cpp
     tools/pcb_point_editor.cpp
+    tools/pcb_tool_utils.cpp
     tools/position_relative_tool.cpp
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp
