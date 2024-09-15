@@ -359,6 +359,7 @@ set( PCBNEW_CLASS_SRCS
     tools/pcb_tool_base.cpp
     tools/placement_tool.cpp
     tools/pcb_point_editor.cpp
+    tools/pcb_tool_utils.cpp
     tools/position_relative_tool.cpp
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp
