@@ -542,6 +542,8 @@ public:
      */
     bool AllSymbolDefaultInstancesNotSet();
 
+    bool HasSymbolFieldNamesWithWhiteSpace() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -828,6 +830,8 @@ public:
 
     void PruneOrphanedSheetInstances( const wxString& aProjectName,
                                       const SCH_SHEET_LIST& aValidSheetPaths );
+
+    bool HasSymbolFieldNamesWithWhiteSpace() const;
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );
