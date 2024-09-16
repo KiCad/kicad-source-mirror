@@ -116,7 +116,6 @@ private:
     void onSelectSheetPath( wxTreeEvent& aEvent );
 
     void onTreeItemRightClick( wxTreeEvent& aEvent );
-    void onRightClick( wxMouseEvent& aEvent );
     void onRightClick( wxTreeItemId aItem );
     void onCharHook( wxKeyEvent& aKeyStroke );
     void onTreeRightClick( wxTreeEvent& event );

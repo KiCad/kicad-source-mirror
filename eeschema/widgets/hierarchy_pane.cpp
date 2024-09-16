@@ -108,7 +108,6 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
     Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
     Bind( wxEVT_CHAR_HOOK, &HIERARCHY_PANE::onCharHook, this );
     m_tree->Bind( wxEVT_TREE_END_LABEL_EDIT, &HIERARCHY_PANE::onTreeEditFinished, this );
-    m_tree->Bind( wxEVT_RIGHT_UP, &HIERARCHY_PANE::onRightClick, this );
     m_events_bound = true;
 }
 
@@ -120,7 +119,6 @@ HIERARCHY_PANE::~HIERARCHY_PANE()
     Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
     Unbind( wxEVT_CHAR_HOOK, &HIERARCHY_PANE::onCharHook, this );
     m_tree->Unbind( wxEVT_TREE_END_LABEL_EDIT, &HIERARCHY_PANE::onTreeEditFinished, this );
-    m_tree->Unbind( wxEVT_RIGHT_UP, &HIERARCHY_PANE::onRightClick, this );
 }
 
 
@@ -370,12 +368,6 @@ void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
 void HIERARCHY_PANE::onTreeItemRightClick( wxTreeEvent& aEvent )
 {
     onRightClick( aEvent.GetItem() );
-}
-
-
-void HIERARCHY_PANE::onRightClick( wxMouseEvent& aEvent )
-{
-    onRightClick( wxTreeItemId() );
 }
 
 
