@@ -37,6 +37,7 @@ public:
                           GRID& aGrid );
     ~DIALOG_GRID_SETTINGS() override = default;
 
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 protected:

@@ -61,7 +61,7 @@ VECTOR2D GRID::ToDouble( EDA_IU_SCALE aScale ) const
 
 bool GRID::operator==( const GRID& aOther ) const
 {
-    return x == aOther.x && y == aOther.y;
+    return x == aOther.x && y == aOther.y && name == aOther.name;
 }
 
 

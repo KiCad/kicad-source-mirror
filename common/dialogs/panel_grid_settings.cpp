@@ -47,7 +47,6 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
         m_eventSource( aEventSource )
 {
     m_currentGridCtrl->SetMinSize( FromDIP( m_currentGridCtrl->GetMinSize() ) );
-    RebuildGridSizes();
 
     if( m_frameType == FRAME_PCB_EDITOR || m_frameType == FRAME_FOOTPRINT_EDITOR )
     {
@@ -102,9 +101,8 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
 
 void PANEL_GRID_SETTINGS::ResetPanel()
 {
-    m_cfg->m_Window.grid.grids = m_cfg->DefaultGridSizeList();
+    m_grids = m_cfg->DefaultGridSizeList();
     RebuildGridSizes();
-    m_cfg->m_Window.grid.last_size_idx = m_currentGridCtrl->GetSelection();
 }
 
 
@@ -129,7 +127,7 @@ void PANEL_GRID_SETTINGS::RebuildGridSizes()
 
     m_unitsProvider->GetUnitPair( primaryUnit, secondaryUnit );
 
-    for( const struct GRID& grid : m_cfg->m_Window.grid.grids )
+    for( const struct GRID& grid : m_grids )
     {
         wxString name = grid.name;
 
@@ -184,6 +182,8 @@ bool PANEL_GRID_SETTINGS::TransferDataFromWindow()
     // Apply the new settings
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
 
+    gridCfg.grids = m_grids;
+
     gridCfg.last_size_idx = m_currentGridCtrl->GetSelection();
 
     gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();
@@ -209,15 +209,18 @@ bool PANEL_GRID_SETTINGS::TransferDataToWindow()
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
 
     // lambda that gives us a safe index into grids regardless of config idx
-    auto safeGrid = [&gridCfg]( int idx ) -> int
+    auto safeGrid = [this]( int idx ) -> int
     {
-        if( idx < 0 || idx >= (int) gridCfg.grids.size() )
+        if( idx < 0 || idx >= (int) m_grids.size() )
             return 0;
 
         return idx;
     };
 
     Layout();
+
+    m_grids = gridCfg.grids;
+    RebuildGridSizes();
 
     m_currentGridCtrl->SetSelection( safeGrid( gridCfg.last_size_idx ) );
 
@@ -230,11 +233,11 @@ bool PANEL_GRID_SETTINGS::TransferDataToWindow()
     m_gridOverrideTextChoice->SetSelection( safeGrid( gridCfg.override_text_idx ) );
     m_gridOverrideGraphicsChoice->SetSelection( safeGrid( gridCfg.override_graphics_idx ) );
 
-    m_checkGridOverrideConnected->SetValue( safeGrid( gridCfg.override_connected ) );
-    m_checkGridOverrideWires->SetValue( safeGrid( gridCfg.override_wires ) );
-    m_checkGridOverrideVias->SetValue( safeGrid( gridCfg.override_vias ) );
-    m_checkGridOverrideText->SetValue( safeGrid( gridCfg.override_text ) );
-    m_checkGridOverrideGraphics->SetValue( safeGrid( gridCfg.override_graphics ) );
+    m_checkGridOverrideConnected->SetValue( gridCfg.override_connected );
+    m_checkGridOverrideWires->SetValue( gridCfg.override_wires );
+    m_checkGridOverrideVias->SetValue( gridCfg.override_vias );
+    m_checkGridOverrideText->SetValue( gridCfg.override_text );
+    m_checkGridOverrideGraphics->SetValue( gridCfg.override_graphics );
 
     return RESETTABLE_PANEL::TransferDataToWindow();
 }
@@ -249,10 +252,9 @@ void PANEL_GRID_SETTINGS::OnAddGrid( wxCommandEvent& event )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    int            row = m_currentGridCtrl->GetSelection();
-    GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
+    int row = m_currentGridCtrl->GetSelection();
 
-    for( GRID& g : gridCfg.grids )
+    for( GRID& g : m_grids )
     {
         if( newGrid == g )
         {
@@ -265,19 +267,13 @@ void PANEL_GRID_SETTINGS::OnAddGrid( wxCommandEvent& event )
         }
     }
 
-    gridCfg.grids.insert( gridCfg.grids.begin() + row, newGrid );
+    m_grids.insert( m_grids.begin() + row, newGrid );
     RebuildGridSizes();
     m_currentGridCtrl->SetSelection( row );
 }
 
 
 void PANEL_GRID_SETTINGS::OnEditGrid( wxCommandEvent& event )
-{
-    onEditGrid();
-}
-
-
-void PANEL_GRID_SETTINGS::OnDoubleClick( wxMouseEvent& event )
 {
     onEditGrid();
 }
@@ -290,18 +286,21 @@ void PANEL_GRID_SETTINGS::onEditGrid()
     if( row < 0 )
         return;
 
-    GRID                 newGrid = m_cfg->m_Window.grid.grids[row];
+    GRID                 editGrid = m_grids[row];
     DIALOG_GRID_SETTINGS dlg( wxGetTopLevelParent( this ), m_eventSource, m_unitsProvider,
-                              newGrid );
+                              editGrid );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
+    // If the user just clicked OK without changing anything,
+    // then return or we'll trigger the same grid check
+    if( editGrid == m_grids[row] )
+        return;
 
-    for( GRID& g : gridCfg.grids )
+    for( GRID& g : m_grids )
     {
-        if( newGrid == g )
+        if( editGrid == g )
         {
             wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
@@ -312,7 +311,8 @@ void PANEL_GRID_SETTINGS::onEditGrid()
         }
     }
 
-    gridCfg.grids[row] = newGrid;
+    m_grids[row] = editGrid;
+
     RebuildGridSizes();
     m_currentGridCtrl->SetSelection( row );
 }
@@ -320,19 +320,12 @@ void PANEL_GRID_SETTINGS::onEditGrid()
 
 void PANEL_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
 {
-    GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
-    int            row = m_currentGridCtrl->GetSelection();
+    int row = m_currentGridCtrl->GetSelection();
 
-    if( gridCfg.grids.size() <= 1 )
-    {
-        wxWindow* topLevelParent = wxGetTopLevelParent( this );
-
-        DisplayError( topLevelParent,
-                      wxString::Format( _( "At least one grid size is required." ) ) );
+    if( m_grids.size() <= 1 )
         return;
-    }
 
-    gridCfg.grids.erase( gridCfg.grids.begin() + row );
+    m_grids.erase( m_grids.begin() + row );
     RebuildGridSizes();
 
     if( row != 0 )
@@ -342,13 +335,12 @@ void PANEL_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
 
 void PANEL_GRID_SETTINGS::OnMoveGridUp( wxCommandEvent& event )
 {
-    GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
-    int            row = m_currentGridCtrl->GetSelection();
+    int row = m_currentGridCtrl->GetSelection();
 
-    if( gridCfg.grids.size() <= 1 || row == 0 )
+    if( m_grids.size() <= 1 || row == 0 )
         return;
 
-    std::swap( gridCfg.grids[row], gridCfg.grids[row - 1] );
+    std::swap( m_grids[row], m_grids[row - 1] );
     RebuildGridSizes();
 
     if( row != 0 )
@@ -358,15 +350,48 @@ void PANEL_GRID_SETTINGS::OnMoveGridUp( wxCommandEvent& event )
 
 void PANEL_GRID_SETTINGS::OnMoveGridDown( wxCommandEvent& event )
 {
-    GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
-    int            row = m_currentGridCtrl->GetSelection();
+    int row = m_currentGridCtrl->GetSelection();
 
-    if( gridCfg.grids.size() <= 1 || row == ( (int) gridCfg.grids.size() - 1 ) )
+    if( m_grids.size() <= 1 || row == ( (int) m_grids.size() - 1 ) )
         return;
 
-    std::swap( gridCfg.grids[row], gridCfg.grids[row + 1] );
+    std::swap( m_grids[row], m_grids[row + 1] );
     RebuildGridSizes();
 
     if( row != 0 )
         m_currentGridCtrl->SetSelection( row + 1 );
+}
+
+
+void PANEL_GRID_SETTINGS::OnUpdateEditGrid( wxUpdateUIEvent& event )
+{
+    // Enable edit when there is a valid selection
+    event.Enable( m_currentGridCtrl->GetSelection() >= 0 );
+}
+
+
+void PANEL_GRID_SETTINGS::OnUpdateMoveUp( wxUpdateUIEvent& event )
+{
+    int curRow  = m_currentGridCtrl->GetSelection();
+    int numRows = (int) m_grids.size();
+
+    // Enable move up when there are multiple grids and it is not the first row
+    event.Enable( ( numRows > 1 ) && ( curRow > 0 ) );
+}
+
+
+void PANEL_GRID_SETTINGS::OnUpdateMoveDown( wxUpdateUIEvent& event )
+{
+    int curRow  = m_currentGridCtrl->GetSelection();
+    int numRows = (int) m_grids.size();
+
+    // Enable move down when there are multiple grids and it is not the last row
+    event.Enable( ( numRows > 1 ) && ( curRow < ( numRows - 1 ) ) );
+}
+
+
+void PANEL_GRID_SETTINGS::OnUpdateRemove( wxUpdateUIEvent& event )
+{
+    // Enable remove if there is more than 1 grid
+    event.Enable( m_grids.size() > 1 );
 }

@@ -47,12 +47,19 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( wxWindow* aParent, wxWindow* aEventS
 
     Layout();
 
-    if( !aGrid.x.IsEmpty() )
-    {
-        bool     linked = ( aGrid.x == aGrid.y );
-        VECTOR2D grid = aGrid.ToDouble( aProvider->GetIuScale() );
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    finishDialogSettings();
+}
 
-        m_textName->SetValue( aGrid.name );
+
+bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
+{
+    if( !m_grid.x.IsEmpty() )
+    {
+        bool     linked = ( m_grid.x == m_grid.y );
+        VECTOR2D grid = m_grid.ToDouble( m_unitsProvider->GetIuScale() );
+
+        m_textName->SetValue( m_grid.name );
         m_checkLinked->SetValue( linked );
         m_gridSizeX.SetDoubleValue( grid.x );
 
@@ -62,9 +69,9 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( wxWindow* aParent, wxWindow* aEventS
         m_textY->Enable( !linked );
     }
 
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    finishDialogSettings();
+    return true;
 }
+
 
 bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 {

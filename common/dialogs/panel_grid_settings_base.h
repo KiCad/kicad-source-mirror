@@ -71,12 +71,15 @@ class PANEL_GRID_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxChoice* m_gridOverrideGraphicsChoice;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnDoubleClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnAddGrid( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditGrid( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddGrid( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateEditGrid( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnMoveGridUp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateMoveUp( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnMoveGridDown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateMoveDown( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnRemoveGrid( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateRemove( wxUpdateUIEvent& event ) { event.Skip(); }
 
 
 	public:

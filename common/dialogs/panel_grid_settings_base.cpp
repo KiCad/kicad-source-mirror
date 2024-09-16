@@ -41,7 +41,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizerGridButtons->Add( m_editGridButton, 0, wxRIGHT, 5 );
 
 	m_moveUpButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerGridButtons->Add( m_moveUpButton, 0, wxLEFT|wxRIGHT, 5 );
+	bSizerGridButtons->Add( m_moveUpButton, 0, wxRIGHT, 5 );
 
 	m_moveDownButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerGridButtons->Add( m_moveDownButton, 0, 0, 5 );
@@ -114,7 +114,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizerRightCol->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxFlexGridSizer* fgGridOverrides;
-	fgGridOverrides = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgGridOverrides = new wxFlexGridSizer( 0, 2, 4, 0 );
 	fgGridOverrides->AddGrowableCol( 1 );
 	fgGridOverrides->SetFlexibleDirection( wxBOTH );
 	fgGridOverrides->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -125,7 +125,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideConnectedChoiceChoices;
 	m_gridOverrideConnectedChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideConnectedChoiceChoices, 0 );
 	m_gridOverrideConnectedChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideConnectedChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgGridOverrides->Add( m_gridOverrideConnectedChoice, 0, wxALL, 5 );
 
 	m_checkGridOverrideWires = new wxCheckBox( this, wxID_ANY, _("Wires:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideWires, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -133,7 +133,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideWiresChoiceChoices;
 	m_gridOverrideWiresChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideWiresChoiceChoices, 0 );
 	m_gridOverrideWiresChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideWiresChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgGridOverrides->Add( m_gridOverrideWiresChoice, 0, wxALL, 5 );
 
 	m_checkGridOverrideVias = new wxCheckBox( this, wxID_ANY, _("Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideVias, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -141,7 +141,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideViasChoiceChoices;
 	m_gridOverrideViasChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideViasChoiceChoices, 0 );
 	m_gridOverrideViasChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideViasChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgGridOverrides->Add( m_gridOverrideViasChoice, 0, wxALL, 5 );
 
 	m_checkGridOverrideText = new wxCheckBox( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideText, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -149,7 +149,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideTextChoiceChoices;
 	m_gridOverrideTextChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideTextChoiceChoices, 0 );
 	m_gridOverrideTextChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideTextChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgGridOverrides->Add( m_gridOverrideTextChoice, 0, wxALL, 5 );
 
 	m_checkGridOverrideGraphics = new wxCheckBox( this, wxID_ANY, _("Graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideGraphics, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -157,7 +157,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideGraphicsChoiceChoices;
 	m_gridOverrideGraphicsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideGraphicsChoiceChoices, 0 );
 	m_gridOverrideGraphicsChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideGraphicsChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgGridOverrides->Add( m_gridOverrideGraphicsChoice, 0, wxALL, 5 );
 
 
 	bSizerRightCol->Add( fgGridOverrides, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
@@ -174,22 +174,30 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizerMain->Fit( this );
 
 	// Connect Events
-	m_currentGridCtrl->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( PANEL_GRID_SETTINGS_BASE::OnDoubleClick ), NULL, this );
+	m_currentGridCtrl->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnEditGrid ), NULL, this );
 	m_addGridButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnAddGrid ), NULL, this );
 	m_editGridButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnEditGrid ), NULL, this );
+	m_editGridButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateEditGrid ), NULL, this );
 	m_moveUpButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridUp ), NULL, this );
+	m_moveUpButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateMoveUp ), NULL, this );
 	m_moveDownButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridDown ), NULL, this );
+	m_moveDownButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateMoveDown ), NULL, this );
 	m_removeGridButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnRemoveGrid ), NULL, this );
+	m_removeGridButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateRemove ), NULL, this );
 }
 
 PANEL_GRID_SETTINGS_BASE::~PANEL_GRID_SETTINGS_BASE()
 {
 	// Disconnect Events
-	m_currentGridCtrl->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( PANEL_GRID_SETTINGS_BASE::OnDoubleClick ), NULL, this );
+	m_currentGridCtrl->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnEditGrid ), NULL, this );
 	m_addGridButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnAddGrid ), NULL, this );
 	m_editGridButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnEditGrid ), NULL, this );
+	m_editGridButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateEditGrid ), NULL, this );
 	m_moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridUp ), NULL, this );
+	m_moveUpButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateMoveUp ), NULL, this );
 	m_moveDownButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnMoveGridDown ), NULL, this );
+	m_moveDownButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateMoveDown ), NULL, this );
 	m_removeGridButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_GRID_SETTINGS_BASE::OnRemoveGrid ), NULL, this );
+	m_removeGridButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GRID_SETTINGS_BASE::OnUpdateRemove ), NULL, this );
 
 }

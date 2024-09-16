@@ -29,6 +29,7 @@
 #include <frame_type.h>
 
 class APP_SETTINGS_BASE;
+struct GRID;
 
 
 class PANEL_GRID_SETTINGS : public PANEL_GRID_SETTINGS_BASE
@@ -49,7 +50,11 @@ private:
     void OnRemoveGrid( wxCommandEvent& event ) override;
     void OnMoveGridUp( wxCommandEvent& event ) override;
     void OnMoveGridDown( wxCommandEvent& event ) override;
-    void OnDoubleClick( wxMouseEvent& event ) override;
+
+    void OnUpdateEditGrid( wxUpdateUIEvent& event ) override;
+    void OnUpdateMoveUp( wxUpdateUIEvent& event ) override;
+    void OnUpdateMoveDown( wxUpdateUIEvent& event ) override;
+    void OnUpdateRemove( wxUpdateUIEvent& event ) override;
 
     void RebuildGridSizes();
 
@@ -60,6 +65,8 @@ private:
     APP_SETTINGS_BASE* m_cfg;
     FRAME_T            m_frameType;
     wxWindow*          m_eventSource;
+
+    std::vector<GRID> m_grids;
 };
 
 #endif // PANEL_GRID_SETTINGS_H

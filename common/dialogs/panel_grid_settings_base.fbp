@@ -200,7 +200,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
-                    <event name="OnLeftDClick">OnDoubleClick</event>
+                    <event name="OnListBoxDClick">OnEditGrid</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
@@ -360,11 +360,12 @@
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <event name="OnButtonClick">OnEditGrid</event>
+                        <event name="OnUpdateUI">OnUpdateEditGrid</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxLEFT|wxRIGHT</property>
+                      <property name="flag">wxRIGHT</property>
                       <property name="proportion">0</property>
                       <object class="wxBitmapButton" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -435,6 +436,7 @@
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <event name="OnButtonClick">OnMoveGridUp</event>
+                        <event name="OnUpdateUI">OnUpdateMoveUp</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
@@ -510,6 +512,7 @@
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <event name="OnButtonClick">OnMoveGridDown</event>
+                        <event name="OnUpdateUI">OnUpdateMoveDown</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -595,6 +598,7 @@
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <event name="OnButtonClick">OnRemoveGrid</event>
+                        <event name="OnUpdateUI">OnUpdateRemove</event>
                       </object>
                     </object>
                   </object>
@@ -1273,7 +1277,7 @@
                     <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                     <property name="permission">none</property>
                     <property name="rows">0</property>
-                    <property name="vgap">5</property>
+                    <property name="vgap">4</property>
                     <object class="sizeritem" expanded="false">
                       <property name="border">8</property>
                       <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT</property>
@@ -1341,7 +1345,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                      <property name="flag">wxALL</property>
                       <property name="proportion">0</property>
                       <object class="wxChoice" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -1471,7 +1475,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                      <property name="flag">wxALL</property>
                       <property name="proportion">0</property>
                       <object class="wxChoice" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -1601,7 +1605,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                      <property name="flag">wxALL</property>
                       <property name="proportion">0</property>
                       <object class="wxChoice" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -1731,7 +1735,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                      <property name="flag">wxALL</property>
                       <property name="proportion">0</property>
                       <object class="wxChoice" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -1861,7 +1865,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                      <property name="flag">wxALL</property>
                       <property name="proportion">0</property>
                       <object class="wxChoice" expanded="true">
                         <property name="BottomDockable">1</property>
