@@ -877,10 +877,12 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
         return true;
     }
 
+    // Test for via on mask layers: a via on on a mask layer if not tented and if
+    // it is on the corresponding external copper layer
     if( aLayer == F_Mask )
-        return !IsTented( F_Mask );
+        return Padstack().Drill().start == F_Cu && !IsTented( F_Mask );
     else if( aLayer == B_Mask )
-        return !IsTented( B_Mask );
+        return Padstack().Drill().end == B_Cu && !IsTented( B_Mask );
 
     return false;
 }
