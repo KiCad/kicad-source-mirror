@@ -456,7 +456,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                                         - ( m_boardBodyThickness3DU * layer_pos
                                             / ( m_copperLayersCount - 1 ) );
 
-        if( layer_id < (m_copperLayersCount / 2) )
+        if( layer_pos < (m_copperLayersCount / 2) )
             m_layerZcoordTop[layer_id] = m_layerZcoordBottom[layer_id] + m_frontCopperThickness3DU;
         else
             m_layerZcoordTop[layer_id] = m_layerZcoordBottom[layer_id] - m_backCopperThickness3DU;
