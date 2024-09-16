@@ -55,6 +55,12 @@ namespace CLI
 #define ARG_INCLUDE_BORDER_TITLE "--include-border-title"
 #define ARG_MIRROR "--mirror"
 
+#define ARG_FLIP_BOTTOM_PADS "--flip-bottom-pads"
+#define ARG_UNIQUE_PINS "--unique-pins"
+#define ARG_UNIQUE_FOOTPRINTS "--unique-footprints"
+#define ARG_USE_DRILL_ORIGIN "--use-drill-origin"
+#define ARG_STORE_ORIGIN_COORD "--store-origin-coord"
+
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
     PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputIsDir = false,

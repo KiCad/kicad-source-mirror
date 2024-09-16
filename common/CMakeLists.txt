@@ -69,6 +69,7 @@ set( KICOMMON_SRCS
     jobs/job_export_pcb_pdf.cpp
     jobs/job_export_pcb_pos.cpp
     jobs/job_export_pcb_svg.cpp
+    jobs/job_export_pcb_gencad.cpp
     jobs/job_export_pcb_3d.cpp
     jobs/job_export_sch_bom.cpp
     jobs/job_export_sch_netlist.cpp

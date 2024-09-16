@@ -49,6 +49,7 @@ set( KICAD_CLI_SRCS
     cli/command_pcb_export_dxf.cpp
     cli/command_pcb_export_gerber.cpp
     cli/command_pcb_export_gerbers.cpp
+    cli/command_pcb_export_gencad.cpp
     cli/command_pcb_export_ipc2581.cpp
     cli/command_pcb_export_pdf.cpp
     cli/command_pcb_export_pos.cpp

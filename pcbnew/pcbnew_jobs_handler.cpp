@@ -33,6 +33,7 @@
 #include <jobs/job_export_pcb_gerbers.h>
 #include <jobs/job_export_pcb_drill.h>
 #include <jobs/job_export_pcb_dxf.h>
+#include <jobs/job_export_pcb_gencad.h>
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_svg.h>
@@ -59,6 +60,7 @@
 #include <pcb_marker.h>
 #include <project/project_file.h>
 #include <exporters/export_svg.h>
+#include <exporters/export_gencad_writer.h>
 #include <kiface_ids.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/netlist_reader.h>
@@ -91,6 +93,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
     Register( "3d", std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ) );
     Register( "render", std::bind( &PCBNEW_JOBS_HANDLER::JobExportRender, this, std::placeholders::_1 ) );
     Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
+    Register( "gencad",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportGencad, this, std::placeholders::_1 ) );
     Register( "dxf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDxf, this, std::placeholders::_1 ) );
     Register( "pdf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPdf, this, std::placeholders::_1 ) );
     Register( "gerber",
@@ -574,9 +578,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     switch( aPdfJob->m_drillShapeOption )
     {
-        default:
+    default:
         case 0: plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
-        case 1: plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
+    case 1: plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
         case 2: plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
     }
 
@@ -724,7 +728,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         {
             m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
                                                   fn.GetFullPath() ),
-                                RPT_SEVERITY_ERROR );
+                    RPT_SEVERITY_ERROR );
             exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
 
@@ -739,6 +743,61 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     jobfile_writer.CreateJobFile( fn.GetFullPath() );
 
     return exitCode;
+}
+
+int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
+{
+    JOB_EXPORT_PCB_GENCAD* aGencadJob = dynamic_cast<JOB_EXPORT_PCB_GENCAD*>( aJob );
+
+    if( aGencadJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* aBoard = LoadBoard( aGencadJob->m_filename, true ); // Ensure m_board is of type BOARD*
+
+    if( aBoard == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    GENCAD_EXPORTER exporter( aBoard );
+
+    VECTOR2I GencadOffset;
+    VECTOR2I auxOrigin = aBoard->GetDesignSettings().GetAuxOrigin();
+    GencadOffset.x = aGencadJob->m_useDrillOrigin ? auxOrigin.x : 0;
+    GencadOffset.y = aGencadJob->m_useDrillOrigin ? auxOrigin.y : 0;
+
+    exporter.FlipBottomPads( aGencadJob->m_flipBottomPads );
+    exporter.UsePinNamesUnique( aGencadJob->m_useUniquePins );
+    exporter.UseIndividualShapes( aGencadJob->m_useIndividualShapes );
+    exporter.SetPlotOffet( GencadOffset );
+    exporter.StoreOriginCoordsInFile( aGencadJob->m_storeOriginCoords );
+
+    m_reporter->Report( aGencadJob->m_outputFile, RPT_SEVERITY_ERROR );
+
+    wxString outputFile = aGencadJob->m_outputFile;
+
+    if( outputFile.IsEmpty() )
+    {
+        wxFileName fn = aBoard->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( wxS( "cad" ) );
+
+        outputFile = fn.GetFullName();
+    }
+
+    if( !exporter.WriteFile( outputFile ) )
+    {
+        wxString msg;
+        msg.Printf( _( "Failed to create file '%s'.\n" ), outputFile );
+
+        if( aJob->IsCli() )
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    if( aJob->IsCli() )
+        m_reporter->Report( _( "Successfully created genCAD file\n" ), RPT_SEVERITY_INFO );
+
+    return CLI::EXIT_CODES::OK;
 }
 
 
@@ -827,7 +886,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     {
         m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
                                               aGerberJob->m_outputFile ),
-                            RPT_SEVERITY_ERROR );
+                RPT_SEVERITY_ERROR );
         exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
@@ -920,7 +979,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
             return CLI::EXIT_CODES::ERR_UNKNOWN;
 
         excellonWriter->SetFormat( aDrillJob->m_drillUnits
-                                          == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS,
+                                           == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS,
                                    zeroFmt, precision.m_Lhs, precision.m_Rhs );
         excellonWriter->SetOptions( aDrillJob->m_excellonMirrorY,
                                     aDrillJob->m_excellonMinimalHeader,
@@ -987,7 +1046,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     }
 
     if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII
-      || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
+        || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
     {
         FILE* file = nullptr;
         file = wxFopen( aPosJob->m_outputFile, wxS( "wt" ) );
@@ -1001,14 +1060,14 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
                          || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
 
         bool backSide = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
-                         || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+                        || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
 
         PLACE_FILE_EXPORTER exporter( brd,
                                       aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
                                       aPosJob->m_smdOnly, aPosJob->m_excludeFootprintsWithTh,
                                       aPosJob->m_excludeDNP,
                                       frontSide, backSide,
-                                      aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
                                       aPosJob->m_useDrillPlaceFileOrigin,
                                       aPosJob->m_negateBottomX );
         data = exporter.GenPositionData();
@@ -1057,7 +1116,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     else if( fileType != PCB_IO_MGR::KICAD_SEXP )
     {
         m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad libraries\n" ),
-                            RPT_SEVERITY_ERROR );
+                RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
@@ -1385,10 +1444,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
                                           markersProvider->GetCount() ),
-                        RPT_SEVERITY_INFO );
+            RPT_SEVERITY_INFO );
     m_reporter->Report( wxString::Format( _( "Found %d unconnected items\n" ),
                                           ratsnestProvider->GetCount() ),
-                        RPT_SEVERITY_INFO );
+            RPT_SEVERITY_INFO );
 
     if( drcJob->m_parity )
     {
@@ -1410,7 +1469,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     {
         m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ),
                                               drcJob->m_outputFile ),
-                            RPT_SEVERITY_INFO );
+                RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
@@ -1541,28 +1600,28 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
 
     auto loadSheet =
             [&]( const wxString& path ) -> bool
-            {
-                BASE_SCREEN::m_DrawingSheetFileName = path;
-                FILENAME_RESOLVER resolver;
-                resolver.SetProject( aBrd->GetProject() );
-                resolver.SetProgramBase( &Pgm() );
+    {
+        BASE_SCREEN::m_DrawingSheetFileName = path;
+        FILENAME_RESOLVER resolver;
+        resolver.SetProject( aBrd->GetProject() );
+        resolver.SetProgramBase( &Pgm() );
 
-                wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                          aBrd->GetProject()->GetProjectPath(),
-                                                          aBrd->GetEmbeddedFiles() );
-                wxString msg;
+        wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                  aBrd->GetProject()->GetProjectPath(),
+                                                  aBrd->GetEmbeddedFiles() );
+        wxString msg;
 
-                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
-                {
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
+        {
                     m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
                                                           path )
-                                            + wxS( "\n" ) + msg + wxS( "\n" ),
-                                        RPT_SEVERITY_ERROR );
-                    return false;
-                }
+                                        + wxS( "\n" ) + msg + wxS( "\n" ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
 
-                return true;
-            };
+        return true;
+    };
 
     if( loadSheet( aSheetPath ) )
         return;
