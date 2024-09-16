@@ -388,7 +388,7 @@ private:
                   const BOARD_ITEM* aOwner );
 
     void addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aContainer,
-                   const BOARD_ITEM* aOwner );
+                   const BOARD_ITEM* aOwner, PCB_LAYER_ID aLayer );
 
     void addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D_BASE* aDstContainer,
                    const BOARD_ITEM* aOwner );

@@ -611,7 +611,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
+                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item, layer );
                 break;
 
             case PCB_TEXT_T:
@@ -844,7 +844,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                    addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
+                    addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item, layer );
                     break;
 
                 case PCB_TEXT_T:

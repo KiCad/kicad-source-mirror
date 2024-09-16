@@ -260,8 +260,8 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
         {
             PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-            if( shape->GetLayer() == aLayerId )
-                addShape( shape, aContainer, aFootprint );
+            if( shape->IsOnLayer( aLayerId ) )
+                addShape( shape, aContainer, aFootprint, aLayerId );
 
             break;
         }
@@ -600,10 +600,22 @@ void BOARD_ADAPTER::createArcSegments( const VECTOR2I& aCentre, const VECTOR2I& 
 
 
 void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aContainer,
-                              const BOARD_ITEM* aOwner )
+                              const BOARD_ITEM* aOwner, PCB_LAYER_ID aLayer )
 {
     // The full width of the lines to create
-    const float    linewidth3DU = TO_3DU( aShape->GetWidth() );
+    int linewidth = aShape->GetWidth();
+    int margin = 0;
+
+    if( IsSolderMaskLayer( aLayer )
+        && aShape->HasSolderMask()
+        && IsExternalCopperLayer( aShape->GetLayer() ) )
+    {
+        margin = aShape->GetSolderMaskExpansion();
+        linewidth += margin * 2;
+    }
+
+    float linewidth3DU = TO_3DU( linewidth );
+
     LINE_STYLE     lineStyle = aShape->GetStroke().GetLineStyle();
 
     if( lineStyle <= LINE_STYLE::FIRST_TYPE )
@@ -634,6 +646,12 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
                 polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
+                if( margin != 0 )
+                {
+                    polyList.Inflate( margin, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                      GetBoard()->GetDesignSettings().m_MaxError );
+                }
+
                 ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
             }
             else
@@ -656,7 +674,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
 
             createArcSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
-                               segCount, aShape->GetWidth(), aContainer, *aOwner );
+                               segCount, linewidth, aContainer, *aOwner );
             break;
         }
 
@@ -680,6 +698,14 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
             if( polyList.IsEmpty() ) // Just for caution
                 break;
+
+            if( margin != 0 )
+            {
+                CORNER_STRATEGY cornerStr = margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS
+                                                        : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
+
+                polyList.Inflate( margin, cornerStr, GetBoard()->GetDesignSettings().m_MaxError );
+            }
 
             ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
             break;
@@ -733,7 +759,7 @@ void BOARD_ADAPTER::addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aC
 
     if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
     {
-        addShape( static_cast<const PCB_SHAPE*>( aTextBox ), aContainer, aOwner );
+        addShape( static_cast<const PCB_SHAPE*>( aTextBox ), aContainer, aOwner, UNDEFINED_LAYER );
     }
     else
     {

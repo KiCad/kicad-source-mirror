@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -253,12 +253,41 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
+	m_techLayersLabel = new wxStaticText( this, wxID_ANY, _("Technical Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_techLayersLabel->Wrap( -1 );
+	gbSizer2->Add( m_techLayersLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
+
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgSizer2->AddGrowableCol( 2 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_hasSolderMask = new wxCheckBox( this, wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_hasSolderMask, 0, wxALL, 5 );
+
+	m_solderMaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMarginLabel->Wrap( -1 );
+	fgSizer2->Add( m_solderMaskMarginLabel, 0, wxALL, 5 );
+
+	m_solderMaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMarginCtrl->SetToolTip( _("This is the local clearance between the shape and the solder mask opening.\nLeave blank to use the value defined in the Board Setup.") );
+
+	fgSizer2->Add( m_solderMaskMarginCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_solderMaskMarginUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMarginUnit->Wrap( -1 );
+	fgSizer2->Add( m_solderMaskMarginUnit, 0, wxALL, 5 );
+
+
+	gbSizer2->Add( fgSizer2, wxGBPosition( 8, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+
 	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netLabel->Wrap( -1 );
-	gbSizer2->Add( m_netLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer2->Add( m_netLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_netSelector = new NET_SELECTOR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_netSelector, wxGBPosition( 7, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_netSelector, wxGBPosition( 9, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	gbSizer2->AddGrowableCol( 1 );
@@ -285,6 +314,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	// Connect Events
 	m_filledCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 	m_LayerSelectionCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onLayerSelection ), NULL, this );
+	m_hasSolderMask->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onTechLayersChanged ), NULL, this );
 }
 
 DIALOG_SHAPE_PROPERTIES_BASE::~DIALOG_SHAPE_PROPERTIES_BASE()
@@ -292,5 +322,6 @@ DIALOG_SHAPE_PROPERTIES_BASE::~DIALOG_SHAPE_PROPERTIES_BASE()
 	// Disconnect Events
 	m_filledCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 	m_LayerSelectionCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onLayerSelection ), NULL, this );
+	m_hasSolderMask->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onTechLayersChanged ), NULL, this );
 
 }

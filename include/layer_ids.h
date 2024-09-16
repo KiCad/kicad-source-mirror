@@ -533,6 +533,17 @@ inline bool IsCopperLayer( int aLayerId )
 }
 
 /**
+ * Tests whether a layer is an external (F_Cu or B_Cu) copper layer.
+ *
+ * @param aLayerId = Layer  to test
+ * @return true if aLayer is a valid external copper layer
+ */
+inline bool IsExternalCopperLayer( int aLayerId )
+{
+    return aLayerId == F_Cu || aLayerId == B_Cu;
+}
+
+/**
  * Test whether a layer is a non copper layer.
  *
  * @param aLayerId = Layer to test

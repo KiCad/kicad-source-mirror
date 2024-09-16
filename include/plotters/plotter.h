@@ -301,8 +301,8 @@ public:
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData );
 
-    virtual void ThickArc( const EDA_SHAPE& aArcShape,
-                           OUTLINE_MODE aTraceMode, void* aData );
+    virtual void ThickArc( const EDA_SHAPE& aArcShape, OUTLINE_MODE aTraceMode, void* aData,
+                           int aWidth );
 
     virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStAngle,
                            const EDA_ANGLE& aAngle, double aRadius, int aWidth,

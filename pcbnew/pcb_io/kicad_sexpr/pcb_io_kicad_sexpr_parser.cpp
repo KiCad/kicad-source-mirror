@@ -3074,6 +3074,15 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
+        case T_layers:
+            shape->SetLayerSet( parseBoardItemLayersAsMask() );
+            break;
+
+        case T_solder_mask_margin:
+            shape->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
+            NeedRIGHT();
+            break;
+
         case T_width:       // legacy token
             stroke.SetWidth( parseBoardUnits( T_width ) );
             NeedRIGHT();
@@ -3149,7 +3158,8 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             break;
 
         default:
-            Expecting( "layer, width, fill, tstamp, uuid, locked, net or status" );
+            Expecting( "layer, width, fill, tstamp, uuid, locked, net, status, "
+                       "or solder_mask_margin" );
         }
     }
 

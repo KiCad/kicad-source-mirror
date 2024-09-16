@@ -1058,7 +1058,18 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         m_out->Print( 0, aShape->IsFilled() ? " (fill solid)" : " (fill none)" );
     }
 
-    formatLayer( aShape->GetLayer() );
+    if( aShape->GetLayerSet().count() > 1 )
+        formatLayers( aShape->GetLayerSet() );
+    else
+        formatLayer( aShape->GetLayer() );
+
+    if( aShape->HasSolderMask()
+        && aShape->GetLocalSolderMaskMargin().has_value()
+        && IsExternalCopperLayer( aShape->GetLayer() ) )
+    {
+        m_out->Print( 0, " (solder_mask_margin %s)",
+                      formatInternalUnits( aShape->GetLocalSolderMaskMargin().value() ).c_str() );
+    }
 
     if( aShape->GetNetCode() > 0 )
         m_out->Print( 0, " (net %d)", m_mapping->Translate( aShape->GetNetCode() ) );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,6 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SHAPE_PROPERTIES_BASE
@@ -94,6 +93,11 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapComboBox* m_lineStyleCombo;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
+		wxStaticText* m_techLayersLabel;
+		wxCheckBox* m_hasSolderMask;
+		wxStaticText* m_solderMaskMarginLabel;
+		wxTextCtrl* m_solderMaskMarginCtrl;
+		wxStaticText* m_solderMaskMarginUnit;
 		wxStaticText* m_netLabel;
 		NET_SELECTOR* m_netSelector;
 		wxStdDialogButtonSizer* m_StandardButtonsSizer;
@@ -103,6 +107,7 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onFilledCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLayerSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTechLayersChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

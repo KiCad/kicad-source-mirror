@@ -52,6 +52,7 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType
     BOARD_CONNECTED_ITEM( aParent, aItemType ),
     EDA_SHAPE( aShapeType, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL )
 {
+    m_hasSolderMask = false;
 }
 
 
@@ -59,6 +60,7 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, SHAPE_T shapetype ) :
     BOARD_CONNECTED_ITEM( aParent, PCB_SHAPE_T ),
     EDA_SHAPE( shapetype, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL )
 {
+    m_hasSolderMask = false;
 }
 
 
@@ -176,6 +178,8 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
         wxASSERT_MSG( false, "Unhandled shape in PCB_SHAPE::Serialize" );
     }
 
+    // TODO m_hasSolderMask and m_solderMaskMargin
+
     aContainer.PackFrom( msg );
 }
 
@@ -274,6 +278,8 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
         RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
     }
 
+    // TODO m_hasSolderMask and m_solderMaskMargin
+
     return true;
 }
 
@@ -323,6 +329,75 @@ void PCB_SHAPE::SetLayer( PCB_LAYER_ID aLayer )
 
     if( !IsOnCopperLayer() )
         SetNetCode( -1 );
+}
+
+
+int PCB_SHAPE::GetSolderMaskExpansion() const
+{
+    int margin = m_solderMaskMargin.value_or( 0 );
+
+    // If no local margin is set, get the board's solder mask expansion value
+    if( !m_solderMaskMargin.has_value() )
+    {
+        const BOARD* board = GetBoard();
+
+        if( board )
+            margin = board->GetDesignSettings().m_SolderMaskExpansion;
+    }
+
+    // Ensure the resulting mask opening has a non-negative size
+    if( margin < 0 && !IsFilled() )
+        margin = std::max( margin, -GetWidth() / 2 );
+
+    return margin;
+}
+
+
+bool PCB_SHAPE::IsOnLayer( PCB_LAYER_ID aLayer ) const
+{
+    if( aLayer == m_layer )
+    {
+        return true;
+    }
+
+    if( m_hasSolderMask
+        && ( ( aLayer == F_Mask && m_layer == F_Cu )
+               || ( aLayer == B_Mask && m_layer == B_Cu ) ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
+LSET PCB_SHAPE::GetLayerSet() const
+{
+    LSET layermask( { m_layer } );
+
+    if( m_hasSolderMask )
+    {
+        if( layermask.test( F_Cu ) )
+            layermask.set( F_Mask );
+
+        if( layermask.test( B_Cu ) )
+            layermask.set( B_Mask );
+    }
+
+    return layermask;
+}
+
+
+void PCB_SHAPE::SetLayerSet( const LSET& aLayerSet )
+{
+    aLayerSet.RunOnLayers(
+            [&]( PCB_LAYER_ID layer )
+            {
+                if( IsCopperLayer( layer ) )
+                    SetLayer( layer );
+                else if( IsSolderMaskLayer( layer ) )
+                    SetHasSolderMask( true );
+            } );
 }
 
 
@@ -693,6 +768,14 @@ void PCB_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         aLayers[1] = GetNetnameLayer( aLayers[0] );
         aCount = 2;
+
+        if( m_hasSolderMask )
+        {
+            if( m_layer == F_Cu )
+                aLayers[ aCount++ ] = F_Mask;
+            else if( m_layer == B_Cu )
+                aLayers[ aCount++ ] = B_Mask;
+        }
     }
     else
     {
@@ -817,6 +900,8 @@ void PCB_SHAPE::swapData( BOARD_ITEM* aImage )
     std::swap( m_parent, image->m_parent );
     std::swap( m_forceVisible, image->m_forceVisible );
     std::swap( m_netinfo, image->m_netinfo );
+    std::swap( m_hasSolderMask, image->m_hasSolderMask );
+    std::swap( m_solderMaskMargin, image->m_solderMaskMargin );
 }
 
 
@@ -886,6 +971,12 @@ bool PCB_SHAPE::operator==( const PCB_SHAPE& aOther ) const
     if( m_netinfo->GetNetCode() != other.m_netinfo->GetNetCode() )
         return false;
 
+    if( m_hasSolderMask != other.m_hasSolderMask )
+        return false;
+
+    if( m_solderMaskMargin != other.m_solderMaskMargin )
+        return false;
+
     return EDA_SHAPE::operator==( other );
 }
 
@@ -915,6 +1006,12 @@ double PCB_SHAPE::Similarity( const BOARD_ITEM& aOther ) const
         similarity *= 0.9;
 
     if( m_netinfo->GetNetCode() != other.m_netinfo->GetNetCode() )
+        similarity *= 0.9;
+
+    if( m_hasSolderMask != other.m_hasSolderMask )
+        similarity *= 0.9;
+
+    if( m_solderMaskMargin != other.m_solderMaskMargin )
         similarity *= 0.9;
 
     similarity *= EDA_SHAPE::Similarity( other );
@@ -1041,5 +1138,30 @@ static struct PCB_SHAPE_DESC
                              groupPadPrimitives )
                 .SetAvailableFunc( showSpokeTemplateProperty )
                 .SetIsHiddenFromRulesEditor();
+
+        const wxString groupTechLayers = _HKI( "Technical Layers" );
+
+        auto isExternalCuLayer =
+                []( INSPECTABLE* aItem )
+                {
+                    if( auto shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                        return IsExternalCopperLayer( shape->GetLayer() );
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Soldermask" ),
+                                                            &PCB_SHAPE::SetHasSolderMask,
+                                                            &PCB_SHAPE::HasSolderMask ),
+                             groupTechLayers )
+                .SetAvailableFunc( isExternalCuLayer );
+
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, std::optional<int>>(
+                                                            _HKI( "Soldermask Margin Override" ),
+                                                            &PCB_SHAPE::SetLocalSolderMaskMargin,
+                                                            &PCB_SHAPE::GetLocalSolderMaskMargin,
+                                                            PROPERTY_DISPLAY::PT_SIZE ),
+                             groupTechLayers )
+                .SetAvailableFunc( isExternalCuLayer );
     }
 } _PCB_SHAPE_DESC;

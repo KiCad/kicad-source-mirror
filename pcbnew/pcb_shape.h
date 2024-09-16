@@ -68,6 +68,11 @@ public:
     void SetLayer( PCB_LAYER_ID aLayer ) override;
     PCB_LAYER_ID GetLayer() const override { return m_layer; }
 
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
+
+    virtual LSET GetLayerSet() const override;
+    virtual void SetLayerSet( const LSET& aLayers ) override;
+
     void SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }
     VECTOR2I GetPosition() const override { return getPosition(); }
 
@@ -174,6 +179,14 @@ public:
     bool operator==( const PCB_SHAPE& aShape ) const;
     bool operator==( const BOARD_ITEM& aBoardItem ) const override;
 
+    void SetHasSolderMask( bool aVal ) { m_hasSolderMask = aVal; }
+    bool HasSolderMask() const         { return m_hasSolderMask; }
+
+    void SetLocalSolderMaskMargin( std::optional<int> aMargin ) { m_solderMaskMargin = aMargin; }
+    std::optional<int> GetLocalSolderMaskMargin() const         { return m_solderMaskMargin; }
+
+    int GetSolderMaskExpansion() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -185,4 +198,7 @@ protected:
     {
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
     };
+
+    bool               m_hasSolderMask;
+    std::optional<int> m_solderMaskMargin;
 };

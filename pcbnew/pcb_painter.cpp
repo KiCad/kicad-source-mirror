@@ -1763,6 +1763,13 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     int        thickness = getLineThickness( aShape->GetWidth() );
     LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
 
+    if( IsSolderMaskLayer( aLayer )
+        && aShape->HasSolderMask()
+        && IsExternalCopperLayer( aShape->GetLayer() ) )
+    {
+        thickness += aShape->GetSolderMaskExpansion() * 2;
+    }
+
     if( IsNetnameLayer( aLayer ) )
     {
         // Net names are shown only in board editor:
@@ -1892,6 +1899,12 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     for( const VECTOR2I& pt : pts )
                         poly.Append( pt );
 
+                    if( thickness < 0 )
+                    {
+                        poly.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                      m_maxError );
+                    }
+
                     m_gal->DrawPolygon( poly );
                 }
             }
@@ -1933,7 +1946,15 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 m_gal->SetIsStroke( thickness > 0 );
                 m_gal->SetLineWidth( thickness );
 
-                m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() );
+                int radius = aShape->GetRadius();
+
+                if( thickness < 0 )
+                {
+                    radius += thickness / 2;
+                    radius = std::max( radius, 0 );
+                }
+
+                m_gal->DrawCircle( aShape->GetStart(), radius );
             }
             break;
 
@@ -1969,7 +1990,18 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
                         shape.CacheTriangulation( true, true );
 
-                    m_gal->DrawPolygon( shape );
+
+                    if( thickness >= 0 )
+                    {
+                        m_gal->DrawPolygon( shape );
+                    }
+                    else
+                    {
+                        SHAPE_POLY_SET deflated_shape = shape;
+                        deflated_shape.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                                m_maxError );
+                        m_gal->DrawPolygon( deflated_shape );
+                    }
                 }
             }
 
@@ -2029,7 +2061,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
         for( SHAPE* shape : shapes )
         {
-            STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
+            STROKE_PARAMS::Stroke( shape, lineStyle, getLineThickness( aShape->GetWidth() ),
+                                   &m_pcbSettings,
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
                                        m_gal->DrawSegment( a, b, thickness );

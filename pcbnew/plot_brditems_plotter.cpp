@@ -621,7 +621,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
         if( aFootprint->IsDNP() && hideDNPItems( itemLayer ) )
             continue;
 
-        if( !m_layerMask[ itemLayer ] )
+        if( !( m_layerMask & item->GetLayerSet() ).any() )
             continue;
 
         switch( item->Type() )
@@ -831,12 +831,23 @@ void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
 void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 {
-    if( !m_layerMask[aShape->GetLayer()] )
+    if( !( m_layerMask & aShape->GetLayerSet() ).any() )
         return;
 
-    OUTLINE_MODE plotMode = GetPlotMode();
+    OUTLINE_MODE  plotMode = GetPlotMode();
     int          thickness = aShape->GetWidth();
+    int             margin = thickness; // unclamped thickness (can be negative)
     LINE_STYLE   lineStyle = aShape->GetStroke().GetLineStyle();
+    bool     onCopperLayer = ( LSET::AllCuMask() & m_layerMask ).any();
+    bool onSolderMaskLayer = ( LSET( { F_Mask, B_Mask } ) & m_layerMask ).any();
+
+    if( onSolderMaskLayer
+        && aShape->HasSolderMask()
+        && IsExternalCopperLayer( aShape->GetLayer() ) )
+    {
+        margin   += 2 * aShape->GetSolderMaskExpansion();
+        thickness = std::max( margin, 0 );
+    }
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
@@ -859,7 +870,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
     }
-    else if( IsCopperLayer( aShape->GetLayer() ) )
+    else if( onCopperLayer )
     {
         if( parentFP )
         {
@@ -894,8 +905,15 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         case SHAPE_T::CIRCLE:
             if( aShape->IsFilled() )
             {
-                m_plotter->FilledCircle( aShape->GetStart(), aShape->GetRadius() * 2 + thickness,
-                                         plotMode, &gbr_metadata );
+                int diameter = aShape->GetRadius() * 2 + thickness;
+
+                if( margin < 0 )
+                {
+                    diameter += margin;
+                    diameter = std::max( diameter, 0 );
+                }
+
+                m_plotter->FilledCircle( aShape->GetStart(), diameter, plotMode, &gbr_metadata );
             }
             else
             {
@@ -916,7 +934,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickArc( *aShape, plotMode, &gbr_metadata );
+                m_plotter->ThickArc( *aShape, plotMode, &gbr_metadata, thickness );
             }
 
             break;
@@ -949,6 +967,13 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     // from generating invalid Gerber files
                     SHAPE_POLY_SET tmpPoly = aShape->GetPolyShape().CloneDropTriangulation();
                     tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+                    if( margin < 0 )
+                    {
+                        tmpPoly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                         m_board->GetDesignSettings().m_MaxError );
+                    }
+
                     FILL_T fill = aShape->IsFilled() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
                     for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
@@ -988,23 +1013,33 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             }
             else
             {
-                SHAPE_LINE_CHAIN poly;
+                SHAPE_POLY_SET poly;
+                poly.NewOutline();
 
                 for( const VECTOR2I& pt : pts )
                     poly.Append( pt );
 
-                poly.Append( pts[0] );  // Close polygon.
+                if( margin < 0 )
+                {
+                    poly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                  m_board->GetDesignSettings().m_MaxError );
+                }
 
                 FILL_T fill_mode = aShape->IsFilled() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
-                if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                if( poly.OutlineCount() > 0 )
                 {
-                    GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
-                    gbr_plotter->PlotPolyAsRegion( poly, fill_mode, thickness, &gbr_metadata );
-                }
-                else
-                {
-                    m_plotter->PlotPoly( poly, fill_mode, thickness, &gbr_metadata );
+                    if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+                    {
+                        GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
+                        gbr_plotter->PlotPolyAsRegion( poly.COutline( 0 ), fill_mode, thickness,
+                                                       &gbr_metadata );
+                    }
+                    else
+                    {
+                        m_plotter->PlotPoly( poly.COutline( 0 ), fill_mode, thickness,
+                                             &gbr_metadata );
+                    }
                 }
             }
 
@@ -1021,7 +1056,8 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
         for( SHAPE* shape : shapes )
         {
-            STROKE_PARAMS::Stroke( shape, lineStyle, thickness, m_plotter->RenderSettings(),
+            STROKE_PARAMS::Stroke( shape, lineStyle, aShape->GetWidth(),
+                                   m_plotter->RenderSettings(),
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
                                        m_plotter->ThickSegment( a, b, thickness, plotMode,

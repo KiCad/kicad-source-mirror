@@ -56,6 +56,8 @@ private:
 
     void onLayerSelection( wxCommandEvent& event ) override;
 
+    void onTechLayersChanged( wxCommandEvent& event ) override;
+
     bool Validate() override;
 
     // Show/hide the widgets used in net selection (shown only for copper layers)
@@ -67,6 +69,19 @@ private:
         m_netLabel->Show( isCopper );
     }
 
+    void showHideTechLayers()
+    {
+        bool isExtCopper = IsExternalCopperLayer( m_LayerSelectionCtrl->GetLayerSelection() );
+
+        m_techLayersLabel->Enable( isExtCopper );
+        m_hasSolderMask->Enable( isExtCopper );
+
+        bool showMaskMargin = isExtCopper && m_hasSolderMask->GetValue();
+
+        m_solderMaskMarginLabel->Enable( showMaskMargin );
+        m_solderMaskMarginCtrl->Enable( showMaskMargin );
+        m_solderMaskMarginUnit->Enable( showMaskMargin );
+    }
 
 private:
     PCB_BASE_EDIT_FRAME*  m_parent;
@@ -82,6 +97,7 @@ private:
     UNIT_BINDER           m_rectangleWidth;
     UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
     UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
+    UNIT_BINDER           m_solderMaskMargin;
 
     bool                  m_flipStartEnd;
 };
@@ -104,10 +120,14 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     m_bezierCtrl1Y( aParent, m_BezierPointC1YLabel, m_BezierC1Y_Ctrl, m_BezierPointC1YUnit ),
     m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),
     m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
+    m_solderMaskMargin( aParent, m_solderMaskMarginLabel, m_solderMaskMarginCtrl, m_solderMaskMarginUnit ),
     m_flipStartEnd( false )
 {
     SetTitle( wxString::Format( GetTitle(), m_item->GetFriendlyName() ) );
     m_hash_key = TO_UTF8( GetTitle() );
+
+    wxFont infoFont = KIUI::GetInfoFont( this );
+    m_techLayersLabel->SetFont( infoFont );
 
     // Configure display origin transforms
     m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -240,6 +260,8 @@ void DIALOG_SHAPE_PROPERTIES::onLayerSelection( wxCommandEvent& event )
     {
         showHideNetInfo();
     }
+
+    showHideTechLayers();
 }
 
 
@@ -265,6 +287,13 @@ void DIALOG_SHAPE_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
         m_lineStyleCombo->Enable( true );
     }
 }
+
+
+void DIALOG_SHAPE_PROPERTIES::onTechLayersChanged( wxCommandEvent& event )
+{
+    showHideTechLayers();
+}
+
 
 bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
 {
@@ -340,7 +369,16 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
         wxFAIL_MSG( "Line type not found in the type lookup map" );
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
+
+    m_hasSolderMask->SetValue( m_item->HasSolderMask() );
+
+    if( m_item->GetLocalSolderMaskMargin().has_value() )
+        m_solderMaskMargin.SetValue( m_item->GetLocalSolderMaskMargin().value() );
+    else
+        m_solderMaskMargin.SetValue( wxEmptyString );
+
     showHideNetInfo();
+    showHideTechLayers();
 
     return DIALOG_SHAPE_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -518,6 +556,13 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     m_item->SetStroke( stroke );
 
     m_item->SetLayer( ToLAYER_ID( layer ) );
+
+    m_item->SetHasSolderMask( m_hasSolderMask->GetValue() );
+
+    if( m_solderMaskMargin.IsNull() )
+        m_item->SetLocalSolderMaskMargin( {} );
+    else
+        m_item->SetLocalSolderMaskMargin( m_solderMaskMargin.GetIntValue() );
 
     m_item->RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
 
