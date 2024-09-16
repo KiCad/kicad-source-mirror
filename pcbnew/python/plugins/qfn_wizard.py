@@ -161,8 +161,9 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
                 shape=pcbnew.PAD_SHAPE_RECT )
             epad = PA.PadMaker(self.module).SMDPad( epad_length, epad_width,
                     shape=pcbnew.PAD_SHAPE_RECT )
-            # set pad layers
-            layers = pcbnew.LSET(pcbnew.F_Mask)
+            # set exposed pad layers
+            layers = pcbnew.LSET()
+            layers.AddLayer(pcbnew.F_Mask)
             layers.AddLayer( pcbnew.F_Cu )
             epad.SetLayerSet( layers )
             epad.SetPosition( pcbnew.VECTOR2I(0,0) )
