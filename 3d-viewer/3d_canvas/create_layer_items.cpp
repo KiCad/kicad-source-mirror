@@ -186,7 +186,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     for( PCB_TRACK* track : m_board->Tracks() )
     {
         // Skip tracks (not vias that are on more than one layer ) on disabled layers
-        if( !track->Type() == PCB_VIA_T
+        if( track->Type() != PCB_VIA_T
             && !Is3dLayerEnabled( track->GetLayer(), visibilityFlags ) )
         {
             continue;
