@@ -120,8 +120,8 @@ public:
 
     ///< Save stored modifications using a plugin. aBuffer decides whether the changes
     ///< should be cached or stored directly to the disk (for SCH_IO_KICAD_LEGACY).
-    bool SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, const wxString& aFileName,
-                     SCH_IO* aPlugin, bool aBuffer );
+    bool SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileName, SCH_IO* aPlugin,
+                     bool aBuffer );
 
     ///< Return a symbol buffer with LIB_SYMBOL holding a symbolicular alias
     std::shared_ptr<SYMBOL_BUFFER> GetBuffer( const wxString& aAlias ) const;

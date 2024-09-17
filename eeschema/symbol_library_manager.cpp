@@ -189,7 +189,8 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
         for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : symbolBuffers )
         {
-            if( !libBuf.SaveBuffer( symbolBuf, aFileName, &*pi, true ) )
+            wxCHECK2( symbolBuf, continue );
+            if( !libBuf.SaveBuffer( *symbolBuf, aFileName, &*pi, true ) )
             {
                 // Something went wrong, but try to save other libraries
                 res = false;
@@ -985,10 +986,9 @@ bool LIB_BUFFER::DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf )
 }
 
 
-bool LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf,
-                             const wxString& aFileName, SCH_IO* aPlugin, bool aBuffer )
+bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileName, SCH_IO* aPlugin,
+                             bool aBuffer )
 {
-    wxCHECK( aSymbolBuf, false );
     wxCHECK( !aFileName.IsEmpty(), false );
 
     wxString errorMsg = _( "Error saving symbol %s to library '%s'." ) + wxS( "\n%s" );
@@ -997,11 +997,10 @@ bool LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf,
     std::map<std::string, UTF8> properties;
     properties.emplace( SCH_IO_KICAD_LEGACY::PropBuffering, "" );
 
-    std::shared_ptr<SYMBOL_BUFFER>& symbolBuf = aSymbolBuf;
-    LIB_SYMBOL&                     libSymbol = symbolBuf->GetSymbol();
+    LIB_SYMBOL& libSymbol = aSymbolBuf.GetSymbol();
 
     {
-        LIB_SYMBOL&    originalSymbol = symbolBuf->GetOriginal();
+        LIB_SYMBOL&    originalSymbol = aSymbolBuf.GetOriginal();
         const wxString originalName = originalSymbol.GetName();
 
         // Delete the original symbol if the symbol name has been changed.
@@ -1070,11 +1069,11 @@ bool LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf,
 
             auto        originalParent = std::make_unique<LIB_SYMBOL>( *bufferedParent.get() );
             LIB_SYMBOL& parentRef = *originalParent;
-            aSymbolBuf->SetOriginal( std::move( originalParent ) );
+            aSymbolBuf.SetOriginal( std::move( originalParent ) );
 
             auto newSymbol = std::make_unique<LIB_SYMBOL>( libSymbol );
             newSymbol->SetParent( &parentRef );
-            aSymbolBuf->SetOriginal( std::move( newSymbol ) );
+            aSymbolBuf.SetOriginal( std::move( newSymbol ) );
         }
         else
         {
@@ -1096,7 +1095,7 @@ bool LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf,
 
             auto newSymbol = std::make_unique<LIB_SYMBOL>( libSymbol );
             newSymbol->SetParent( &originalBufferedParent->GetSymbol() );
-            aSymbolBuf->SetOriginal( std::move( newSymbol ) );
+            aSymbolBuf.SetOriginal( std::move( newSymbol ) );
         }
     }
     else
@@ -1113,7 +1112,7 @@ bool LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf,
             return false;
         }
 
-        aSymbolBuf->SetOriginal( std::make_unique<LIB_SYMBOL>( libSymbol ) );
+        aSymbolBuf.SetOriginal( std::make_unique<LIB_SYMBOL>( libSymbol ) );
     }
 
     wxArrayString derivedSymbols;
