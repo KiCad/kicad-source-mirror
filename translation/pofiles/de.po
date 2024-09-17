@@ -22,21 +22,22 @@
 # "Pferd O." <frank.0228@ich-war-hier.de>, 2024.
 # tct123 <tct1234@protonmail.com>, 2024.
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
+# Frank Sonnenberg <frasoberg@web.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-08-27 13:51+0000\n"
-"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-09-18 16:42+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -845,8 +846,8 @@ msgstr "Doppelklick links oder Mittelklick, um Farbe zu ändern"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
-"Deaktivieren Sie \"Farben des Platinen-Lagenaufbaus verwenden\" um die Farbe "
-"ändern zu können."
+"Deaktivieren Sie \"Farben des Platinen-Lagenaufbaus verwenden\", um die "
+"Farbe ändern zu können."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:557
 #: pcbnew/widgets/appearance_controls.cpp:2204
