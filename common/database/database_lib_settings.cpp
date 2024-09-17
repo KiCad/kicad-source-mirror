@@ -106,6 +106,9 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
 
                     table.properties.exclude_from_board =
                             fetchOrDefault<std::string>( pj, "exclude_from_board" );
+
+                    table.properties.exclude_from_sim =
+                            fetchOrDefault<std::string>( pj, "exclude_from_sim" );
                 }
 
                 if( entry.contains( "fields" ) && entry["fields"].is_array() )
