@@ -42,6 +42,9 @@ public:
     DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings,
                                     CONVERT_SETTINGS* aConvertSettings );
 
+    ~DIALOG_NON_COPPER_ZONES_EDITOR()
+    { delete m_gap; }
+
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -61,6 +64,10 @@ private:
     UNIT_BINDER       m_hatchGap;
     int               m_cornerSmoothingType;
     UNIT_BINDER       m_cornerRadius;
+    wxStaticText*     m_gapLabel;
+    wxTextCtrl*       m_gapCtrl;
+    wxStaticText*     m_gapUnits;
+    UNIT_BINDER*      m_gap;
 
     CONVERT_SETTINGS* m_convertSettings;
     wxRadioButton*    m_rbCenterline;
@@ -113,6 +120,19 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
         m_rbEnvelope = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
         bConvertSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
 
+        m_gapLabel = new wxStaticText( this, wxID_ANY, _( "Gap:" ) );
+        m_gapCtrl = new wxTextCtrl( this, wxID_ANY );
+        m_gapUnits = new wxStaticText( this, wxID_ANY, _( "mm" ) );
+        m_gap = new UNIT_BINDER( m_parent, m_gapLabel, m_gapCtrl, m_gapUnits );
+        m_gap->SetValue( m_convertSettings->m_Gap );
+
+        wxBoxSizer* hullParamsSizer = new wxBoxSizer( wxHORIZONTAL );
+        hullParamsSizer->Add( m_gapLabel, 0, wxALIGN_CENTRE_VERTICAL|wxRIGHT, 5 );
+        hullParamsSizer->Add( m_gapCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 5 );
+        hullParamsSizer->Add( m_gapUnits, 0, wxALIGN_CENTRE_VERTICAL|wxLEFT, 5 );
+        bConvertSizer->AddSpacer( 2 );
+        bConvertSizer->Add( hullParamsSizer, 0, wxLEFT, 26 );
+
         bConvertSizer->AddSpacer( 6 );
         m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY,
                                               _( "Delete source objects after conversion" ) );
@@ -125,6 +145,13 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
         GetSizer()->Insert( 1, line, 0, wxLEFT|wxRIGHT|wxEXPAND, 10 );
 
         SetTitle( _( "Convert to Non Copper Zone" ) );
+    }
+    else
+    {
+        m_gapLabel = nullptr;
+        m_gapCtrl = nullptr;
+        m_gapUnits = nullptr;
+        m_gap = nullptr;
     }
 
     bool fpEditorMode = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
@@ -152,6 +179,9 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnUpdateUI( wxUpdateUIEvent& )
     }
 
     m_cornerRadiusCtrl->Enable(m_cornerSmoothingType > ZONE_SETTINGS::SMOOTHING_NONE );
+
+    if( m_gap )
+        m_gap->Enable( m_rbEnvelope->GetValue() );
 }
 
 
@@ -165,6 +195,8 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
             m_rbCenterline->SetValue( true );
 
         m_cbDeleteOriginals->SetValue( m_convertSettings->m_DeleteOriginals );
+
+        m_gap->Enable( m_rbEnvelope->GetValue() );
     }
 
     m_cornerSmoothingChoice->SetSelection( m_settings.GetCornerSmoothingType() );
@@ -262,6 +294,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
             m_convertSettings->m_Strategy = CENTERLINE;
 
         m_convertSettings->m_DeleteOriginals = m_cbDeleteOriginals->GetValue();
+        m_convertSettings->m_Gap = m_gap->GetIntValue();
     }
 
     m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
