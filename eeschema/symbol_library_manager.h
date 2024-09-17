@@ -57,22 +57,23 @@ enum class SYMBOL_NAME_FILTER
 class SYMBOL_BUFFER
 {
 public:
-    SYMBOL_BUFFER( LIB_SYMBOL* aSymbol = nullptr, std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
+    SYMBOL_BUFFER( std::unique_ptr<LIB_SYMBOL> aSymbol = nullptr,
+                   std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
     ~SYMBOL_BUFFER();
 
-    LIB_SYMBOL* GetSymbol() const { return m_symbol; }
-    void        SetSymbol( LIB_SYMBOL* aSymbol );
+    LIB_SYMBOL* GetSymbol() const { return m_symbol.get(); }
+    void        SetSymbol( std::unique_ptr<LIB_SYMBOL> aSymbol );
 
-    LIB_SYMBOL* GetOriginal() const { return m_original; }
-    void        SetOriginal( LIB_SYMBOL* aSymbol );
+    LIB_SYMBOL* GetOriginal() const { return m_original.get(); }
+    void        SetOriginal( std::unique_ptr<LIB_SYMBOL> aSymbol );
 
     bool        IsModified() const;
     SCH_SCREEN* GetScreen() const { return m_screen.get(); }
 
 private:
     std::unique_ptr<SCH_SCREEN> m_screen;
-    LIB_SYMBOL*                 m_symbol;   // Working copy
-    LIB_SYMBOL*                 m_original; // Initial state of the symbol
+    std::unique_ptr<LIB_SYMBOL> m_symbol;   // Working copy
+    std::unique_ptr<LIB_SYMBOL> m_original; // Initial state of the symbol
 };
 
 
@@ -105,7 +106,7 @@ public:
     LIB_SYMBOL* GetSymbol( const wxString& aAlias ) const;
 
     ///< Create a new buffer to store a symbol. LIB_BUFFER takes ownership of aCopy.
-    bool CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen );
+    bool CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen );
 
     ///< Update the buffered symbol with the contents of \a aCopy.
     bool UpdateBuffer( SYMBOL_BUFFER& aSymbolBuf, const LIB_SYMBOL& aCopy );
