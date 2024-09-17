@@ -364,10 +364,12 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
                 if( cfg.m_Strategy == BOUNDING_HULL )
                 {
-                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems(), cfg.m_Gap ) );
+                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems(), 0 ) );
 
                     polySet.ClearArcs();
                     polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+                    // Now inflate the bounding hull by cfg.m_Gap
                     polySet.Inflate( cfg.m_Gap, CORNER_STRATEGY::ROUND_ALL_CORNERS, bds.m_MaxError,
                                      ERROR_OUTSIDE );
                 }
