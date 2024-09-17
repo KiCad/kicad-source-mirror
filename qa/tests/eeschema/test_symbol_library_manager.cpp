@@ -53,8 +53,8 @@ BOOST_AUTO_TEST_CASE( SymbolBuffer )
     SYMBOL_BUFFER buffer( std::move( symbol ), std::move( screen ) );
 
     BOOST_CHECK( !buffer.IsModified() );
-    BOOST_CHECK( buffer.GetSymbol() == &symbolRef );
-    BOOST_CHECK( *buffer.GetOriginal() == symbolRef );
+    BOOST_CHECK( &buffer.GetSymbol() == &symbolRef );
+    BOOST_CHECK( buffer.GetOriginal() == symbolRef );
 
     buffer.GetScreen()->SetContentModified();
     BOOST_CHECK( buffer.IsModified() );
@@ -65,9 +65,9 @@ BOOST_AUTO_TEST_CASE( SymbolBuffer )
 
     buffer.SetOriginal( std::move( originalSymbol ) );
 
-    BOOST_CHECK( buffer.GetOriginal() == &originalSymbolRef );
-    BOOST_CHECK( *buffer.GetOriginal() == originalSymbolRef );
-    BOOST_CHECK( *buffer.GetSymbol() != *buffer.GetOriginal() );
+    BOOST_CHECK( &buffer.GetOriginal() == &originalSymbolRef );
+    BOOST_CHECK( buffer.GetOriginal() == originalSymbolRef );
+    BOOST_CHECK( &buffer.GetSymbol() != &buffer.GetOriginal() );
 }
 
 

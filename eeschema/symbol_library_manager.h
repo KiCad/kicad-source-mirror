@@ -61,10 +61,10 @@ public:
                    std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
     ~SYMBOL_BUFFER();
 
-    LIB_SYMBOL* GetSymbol() const { return m_symbol.get(); }
+    LIB_SYMBOL& GetSymbol() const { return *m_symbol; }
     void        SetSymbol( std::unique_ptr<LIB_SYMBOL> aSymbol );
 
-    LIB_SYMBOL* GetOriginal() const { return m_original.get(); }
+    LIB_SYMBOL& GetOriginal() const { return *m_original; }
     void        SetOriginal( std::unique_ptr<LIB_SYMBOL> aSymbol );
 
     bool        IsModified() const;
