@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-08-31 19:09+0000\n"
+"PO-Revision-Date: 2024-09-18 16:42+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1939,14 +1939,12 @@ msgid "No"
 msgstr "Ei"
 
 #: common/design_block_info_impl.cpp:116
-#, fuzzy
 msgid "Fetching design_block libraries..."
-msgstr "Noudetaan jalanjälkikirjastoja..."
+msgstr "Haetaan suunnittelulohkokirjastoja..."
 
 #: common/design_block_info_impl.cpp:147
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "Ladataan tiedostoja..."
+msgstr "Ladataan suunnittelulohkoja..."
 
 #: common/design_block_io.cpp:45 common/design_block_io.cpp:54
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -1961,9 +1959,8 @@ msgid "UNKNOWN (%d)"
 msgstr "TUNTEMATON (%d)"
 
 #: common/design_block_io.cpp:132
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "KiCadin vanhat projektitiedostot"
+msgstr "KiCad suunnittelulohkokansiot"
 
 #: common/design_block_io.cpp:153
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2996
@@ -1972,13 +1969,13 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Kirjastopolkua '%s' ei voi korvata."
 
 #: common/design_block_io.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Hakemistoa '%s' ei voitu luoda.\n"
+"Kirjastopolkua '%s' ei voitu luoda.\n"
 "\n"
 "Varmista, että sinulla on kirjoitusoikeudet ja yritä uudelleen."
 
@@ -1989,65 +1986,70 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Ei riittäviä oikeuksia kansion '%s' poistamiseen."
 
 #: common/design_block_io.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "Kirjastohakemistossa '%s' on odottamattomia alihakemistoja."
+msgstr "Kirjastohakemistossa '%s' on odottamattomia tiedostoja."
 
 #: common/design_block_io.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "Odottamaton tiedosto '%s' löytyi kirjastopolusta '%s'."
+msgstr "Odottamaton kansio '%s' löytyi kirjastopolusta '%s'."
 
 #: common/design_block_io.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "Symbolikirjastoa '%s' ei voi poistaa."
+msgstr "Suunnittelulohkokirjastoa '%s' ei voi poistaa."
 
 #: common/design_block_io.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Tiedostoa '%s' ei voitu luoda."
+msgstr "Suunnittelulohkon metatietotiedostoa '%s' ei voitu lukea."
 
 #: common/design_block_io.cpp:323
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Suunnittelulohkolla ei ole kelvollista kirjastotunnusta."
 
 #: common/design_block_io.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Kytkentäkaaviotiedosto '%s' on jo olemassa."
+msgstr "Kytkentäkaaviolähdetiedostoa '%s' ei ole olemassa."
 
 #: common/design_block_io.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Tiedostoa '%s' ei voitu luoda."
+msgstr "Suunnittelulohkokansiota %s ei voitu luoda."
 
 #: common/design_block_io.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Kytkentäkaaviotiedosto '%s' on jo olemassa."
+msgstr ""
+"Kytkentäkaaviotiedostoa '%s' ei voitu tallentaa suunnittelulohkoksi '%s'."
 
 #: common/design_block_io.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Hakemistoa '%s' ei ole olemassa"
+msgstr "Suunnittelulohkoa '%s' ei ole olemassa."
 
 #: common/design_block_io.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Tiedostoa '%s' ei voitu luoda."
+msgstr "Suunnittelulohkokansiota '%s' ei voitu poistaa."
 
 #: common/design_block_lib_table.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "Kirjaston lempinimi \"%s\" on jo symbolikirjastoluettelon rivillä %d"
+msgstr ""
+"Päällekkäinen kirjaston lempinimi '%s' löytyi "
+"suunnittelulohkokirjastotaulukon tiedostoriviltä %d."
 
 #: common/design_block_lib_table.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "fp-lib-taulukkotiedostot eivät sisällä kirjastoa nimellä '%s'."
+msgstr ""
+"suunnittelulohko-kirjasto-taulukko tiedostot eivät sisällä kirjastoa nimeltä "
+"'%s'."
 
 #: common/design_block_lib_table.cpp:570 common/fp_lib_table.cpp:556
 #: eeschema/symbol_lib_table.cpp:609
@@ -7613,9 +7615,8 @@ msgid "Error loading project footprint library table."
 msgstr "Virhe ladatessa projektin jalanjälkikirjastotaulua."
 
 #: common/project.cpp:440 common/project.cpp:446
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "Virhe ladatessa projektin jalanjälkikirjastotaulua."
+msgstr "Virhe ladattaessa projektin suunnittelulohkon kirjastotaulukkoa."
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
 msgid "This is the default net class."
@@ -8579,14 +8580,12 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Muokkaa yleisiä ja projektin jalanjälkikirjastoluetteloita"
 
 #: common/tool/actions.cpp:1110
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Hallitse symbolikirjastoja..."
+msgstr "Hallinnoi suunnittelulohkokirjastoja..."
 
 #: common/tool/actions.cpp:1111
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "Muokkaa globaalia ja projektisymbolikirjastoluetteloita"
+msgstr "Muokkaa globaaleja ja projektin suunnittelulohkokirjastojen luetteloita"
 
 #: common/tool/actions.cpp:1117
 msgid "Getting Started with KiCad"
@@ -9317,12 +9316,11 @@ msgstr "KiCadin jalanjälkikirjastopolut"
 
 #: common/wildcards_and_files_ext.cpp:345
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad-suunnittelulohkopolku"
 
 #: common/wildcards_and_files_ext.cpp:352
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "KiCadin jalanjälkikirjastopolut"
+msgstr "KiCad suunnittelulohkokirjastopolut"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Drawing sheet files"
@@ -10003,9 +10001,9 @@ msgid "Documentation"
 msgstr "Dokumentaatio"
 
 #: eeschema/design_block_tree_model_adapter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Virhe ladattaessa symbolia %s kirjastosta %s."
+msgstr "Virhe ladattaessa suunnittelulohkoa %s kirjastosta '%s'."
 
 #: eeschema/design_block_utils.cpp:51 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -10052,9 +10050,8 @@ msgid "Library %s already exists."
 msgstr "Kirjasto %s on jo olemassa."
 
 #: eeschema/design_block_utils.cpp:217
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Muokkaa tämän kirjastomerkinnän asetuksia"
+msgstr "Anna kirjaston kuvaus:"
 
 #: eeschema/design_block_utils.cpp:218 eeschema/sch_symbol.cpp:2977
 #: pcbnew/footprint.cpp:3810 pcbnew/plot_board_layers.cpp:131
@@ -10062,39 +10059,34 @@ msgid "Library Description"
 msgstr "Kirjastokuvaus"
 
 #: eeschema/design_block_utils.cpp:267 eeschema/design_block_utils.cpp:326
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Valitse symbolikirjastotaulukon tiedosto."
+msgstr "Valitse kirjasto, johon haluat tallentaa suunnittelulohkon."
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "Sisäkkäisiä arkkeja sisältäviä suunnittelulohkoja ei tueta."
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
-#, fuzzy
 msgid "Enter a name for the design block:"
-msgstr "Anna ohjelmistoarkiston nimi"
+msgstr "Anna suunnittelulohkolle nimi:"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
-#, fuzzy
 msgid "Design Block Name"
-msgstr "Suunnittelusäännöt"
+msgstr "Suunnittelulohkon nimi"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
-#, fuzzy
 msgid "Error saving temporary schematic file to create design block."
 msgstr ""
-"Virhe tallentaessa kytkentäkaaviotiedostoa '%s'.\n"
-"%s"
+"Virhe tallennettaessa väliaikaista kytkentäkaaviotiedostoa suunnittelulohkon "
+"luomiseksi."
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Valitse joitakin kohteita tallennettavaksi suunnittelulohkoksi."
 
 #: eeschema/design_block_utils.cpp:405
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "Valitse symbolikirjastotaulukon tiedosto."
+msgstr "Valitse poistettava kirjasto."
 
 #: eeschema/design_block_utils.cpp:411 eeschema/design_block_utils.cpp:453
 #: pcbnew/footprint_libraries_utils.cpp:543
@@ -10111,26 +10103,28 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Poistetaanko suunnittelulohkokirjasto '%s' levyltä? Tämä poistaa kaikki "
+"suunnittelulohkot kirjastosta."
 
 #: eeschema/design_block_utils.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[Kirjastoa ei ole valittu]"
+msgstr "Suunnittelulohkokirjasto '%s' poistettu"
 
 #: eeschema/design_block_utils.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Poistetaanko jalanjälki %s kirjastosta %s?"
+msgstr "Poistetaanko suunnittelulohko '%s' kirjastosta '%s' levyltä?"
 
 #: eeschema/design_block_utils.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Jalanjälki %s poistettu kirjastosta %s"
+msgstr "Suunnittelulohko '%s' poistettu kirjastosta '%s'"
 
 #: eeschema/design_block_utils.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "Virhe ladattaessa symbolia %s kirjastosta %s."
+msgstr "Virhe ladattaessa suunnittelulohkoa %s kirjastosta '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -11684,9 +11678,8 @@ msgid "Position"
 msgstr "Sijainti"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "Oletusviitetunnus:"
+msgstr "Aloitusviitteen tunniste:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
@@ -11698,19 +11691,16 @@ msgstr ""
 "symboliarvo, kun se ladataan kytkentäkaavioon."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
-msgstr "Lisäysaskel:"
+msgstr "Lisäys määrällä:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "Lisää lehti"
+msgstr "Kaikki arkit"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
-#, fuzzy
 msgid "Increment Annotations From"
-msgstr "Poista Huomautus"
+msgstr "Lisää huomautuksia alkaen"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
@@ -13099,29 +13089,26 @@ msgstr "&Takaperin"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "Sama kirjainkoko"
+msgstr "Vertaa &kirjainkoko"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Vain &kokonaiset sanat"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
-#, fuzzy
 msgid "Wi&ldcards"
-msgstr "Jokerimerkki"
+msgstr "Eri&koismerkit"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
 msgstr "Hae PIN-koodeja, nimiä ja numeroita"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search &hidden fields"
-msgstr "Etsi piilotettuja kenttiä"
+msgstr "Etsi &piilotetut kentät"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -14009,6 +13996,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Jäsentäminen epäonnistui:\n"
+"\n"
+"%s\n"
+"Käyttää yleistä SPICE-mallia."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -16043,9 +16034,8 @@ msgid "Selection Filter"
 msgstr "Valintasuodatin"
 
 #: eeschema/eeschema_settings.cpp:134
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Suunnittelusäännöt"
+msgstr "Suunnittelulohkot"
 
 #: eeschema/erc/erc.cpp:76 eeschema/erc/erc.cpp:93
 msgid "Input Pin"
@@ -17097,9 +17087,8 @@ msgid "Symbols to New Library..."
 msgstr "Symbolit uuteen kirjastoon..."
 
 #: eeschema/menubar.cpp:204
-#, fuzzy
 msgid "Show Design Blocks"
-msgstr "Näytä suunnittelusäännöt."
+msgstr "Näytä suunnittelulohkot"
 
 #: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:173
@@ -20295,9 +20284,8 @@ msgid "Errors during netlist generation."
 msgstr "Virheitä verkkolistan luomisen aikana."
 
 #: eeschema/sim/simulator_frame.cpp:375 eeschema/tools/simulator_control.cpp:86
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Virheitä verkkolistan luomisen aikana."
+msgstr "Varoituksia verkkolistan luomisen aikana."
 
 #: eeschema/sim/simulator_frame.cpp:385
 msgid "Simulator requires a fully annotated schematic."
@@ -21458,31 +21446,27 @@ msgstr "Valitse täydellinen yhteys"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Sheet as Design Block..."
-msgstr ""
+msgstr "Tallenna arkki suunnittelulohkona..."
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "Luo PNG-tiedosto nykyisestä näkymästä"
+msgstr "Luo uusi suunnittelulohko nykyisestä arkista"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Tallenna valinta suunnittelulohkona..."
 
 #: eeschema/tools/ee_actions.cpp:164
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "Luo säännön alueen valinnasta"
+msgstr "Luo uusi suunnittelulohko nykyisestä valinnasta"
 
 #: eeschema/tools/ee_actions.cpp:170
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "Poista valinta"
+msgstr "Poista suunnittelulohko"
 
 #: eeschema/tools/ee_actions.cpp:171
-#, fuzzy
 msgid "Remove the selected design block from its library"
-msgstr "Poista valittu symboli sen kirjastosta"
+msgstr "Poista valittu suunnittelulohko sen kirjastosta"
 
 #: eeschema/tools/ee_actions.cpp:181
 msgid "Save Library As..."
@@ -21694,13 +21678,12 @@ msgid "Place Power Symbols"
 msgstr "Aseta virtasymbolit"
 
 #: eeschema/tools/ee_actions.cpp:428
-#, fuzzy
 msgid "Place Design Block"
-msgstr "Peru valinta"
+msgstr "Aseta suunnittelulohko"
 
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Lisää valittu suunnittelulohko nykyiseen arkkiin"
 
 #: eeschema/tools/ee_actions.cpp:440
 msgid "Place No Connect Flags"
@@ -21731,13 +21714,12 @@ msgid "Draw Hierarchical Sheets"
 msgstr "Piirrä hierarkkisia sivuja"
 
 #: eeschema/tools/ee_actions.cpp:503
-#, fuzzy
 msgid "Draw Sheet Copy"
-msgstr "Piirustuslehti"
+msgstr "Piirrä arkin kopio"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "Kopioi arkki projektiin ja piirrä nykyiselle arkille"
 
 #: eeschema/tools/ee_actions.cpp:512
 msgid "Place Sheet Pins"
@@ -21748,14 +21730,12 @@ msgid "Sync Sheet Pins"
 msgstr "Synkronoi lehden nastat"
 
 #: eeschema/tools/ee_actions.cpp:535
-#, fuzzy
 msgid "Import Sheet"
-msgstr "Tuo Nasta Lehdeltä"
+msgstr "Tuo arkki"
 
 #: eeschema/tools/ee_actions.cpp:536
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "Tuo Nasta Lehdeltä"
+msgstr "Tuo arkki projektiin"
 
 #: eeschema/tools/ee_actions.cpp:546
 msgid "Place Global Labels"
@@ -22200,15 +22180,13 @@ msgid "Fill in schematic symbol reference designators"
 msgstr "Täytä kytkentäkaavion symboliviittaukset"
 
 #: eeschema/tools/ee_actions.cpp:1040
-#, fuzzy
 msgid "Increment Annotations From..."
-msgstr "Poista Huomautus"
+msgstr "Lisää huomatuksia alkaen..."
 
 #: eeschema/tools/ee_actions.cpp:1041
-#, fuzzy
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
-msgstr "Tyhjennä kaikkien liitettyjen symbolien viitetunnisteet"
+msgstr "Kasvata viitetunnusten osajoukkoa alkaen tietystä symbolista"
 
 #: eeschema/tools/ee_actions.cpp:1046
 msgid "Schematic Setup..."
@@ -22797,18 +22775,16 @@ msgid "Place Symbol"
 msgstr "Aseta symboli"
 
 #: eeschema/tools/sch_drawing_tools.cpp:675
-#, fuzzy
 msgid "Add design block"
-msgstr "Lisää signaaleja piirrettäväksi"
+msgstr "Lisää suunnittelulohko"
 
 #: eeschema/tools/sch_drawing_tools.cpp:676
 msgid "Import Schematic Sheet Content..."
 msgstr "Tuo Kytkentäkaaviosivun Sisältö..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:707
-#, fuzzy
 msgid "Choose Schematic"
-msgstr "Uusi kytkentäkaavio"
+msgstr "Valitse kytkentäkaavio"
 
 #: eeschema/tools/sch_drawing_tools.cpp:924 pcbnew/tools/drawing_tool.cpp:659
 msgid "Press <ESC> to cancel image creation."
@@ -22906,14 +22882,14 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "Paina <ESC> keskeyttääksesi lehden luonnin."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2852
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Hakemistoa '%s' ei ole olemassa"
+msgstr "Tiedostoa '%s' ei ole olemassa."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2861
-#, fuzzy, c-format
+#, c-format
 msgid "Could not import sheet from '%s'."
-msgstr "Ei voitu ladata kuvaa kohteesta '%s'."
+msgstr "Arkkia ei voitu tuoda kohteesta %s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3023
 msgid "Modify sheet pin"
@@ -23074,9 +23050,8 @@ msgstr ""
 "Symboleja, joissa on rikkinäiset kirjastosymbolilinkit, ei voi muokata."
 
 #: eeschema/tools/sch_editor_control.cpp:2301
-#, fuzzy
 msgid "Increment Annotations"
-msgstr "Poista Huomautus"
+msgstr "Lisää huomautuksia"
 
 #: eeschema/tools/sch_editor_control.cpp:2706
 #: pcbnew/tools/board_editor_control.cpp:606
@@ -23261,29 +23236,28 @@ msgid "Repeat Pin"
 msgstr "Toista Nasta"
 
 #: eeschema/widgets/design_block_pane.cpp:41
-#, fuzzy
 msgid "Place as sheet"
-msgstr "Aseta paikkaan:"
+msgstr "Aseta arkiksi"
 
 #: eeschema/widgets/design_block_pane.cpp:42
-#, fuzzy
 msgid "Keep annotations"
-msgstr "Säilytä olemassa olevat merkinnät"
+msgstr "Säilytä huomatukset"
 
 #: eeschema/widgets/design_block_pane.cpp:65
-#, fuzzy
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "Pidä symboli valittuna seuraavia napsautuksia varten."
+msgstr "Aseta kopiot suunnittelulohkosta seuraaviin napsautuksiin."
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Aseta suunnittelulohko uutena arkkina."
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
+"Säilytä viitemerkinnät lähdekytkentäkaaviossa. Muussa tapauksessa tyhjennä "
+"ja merkitse uudelleen asetusten mukaisesti."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -23316,14 +23290,12 @@ msgid "(page %s)"
 msgstr "(sivu %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Ladataan symbolikirjastoja"
+msgstr "Ladataan suunnittelulohkokirjastoja"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:262
-#, fuzzy
 msgid "Updating Design Block Libraries"
-msgstr "Päivitetään jalanjälkikirjastoja"
+msgstr "Päivitetään suunnittelulohkokirjastoja"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:386
 #: eeschema/widgets/panel_symbol_chooser.cpp:169
@@ -25679,16 +25651,17 @@ msgstr ""
 "merkinnät?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
-"Kansio '%s' on jo olemassa. Haluatko korvata olemassa olevat jalanjäljet?"
+"Kansio '%s' on jo olemassa. Haluatko korvata olemassa olevat "
+"suunnittelulohkot?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Symbolikirjaston tallentaminen tiedostoon \"%s\" epäonnistui."
+msgstr "Suunnittelulohkokirjastotiedoston '%s' tallentaminen epäonnistui."
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:920
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:948
@@ -25847,13 +25820,12 @@ msgstr ""
 "ei tunnistettu KiCad-projektitiedostoksi."
 
 #: kicad/kicad.cpp:367
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
-"Virhe yritettäessä ladata globaalia symbolikirjastotaulukkoa.\n"
-"Muokkaa tätä yleistä symbolikirjastotaulukkoa Asetukset-valikossa."
+"Virhe yritettäessä ladata yleistä suunnittelulohkokirjastotaulukkoa.\n"
+"Muokkaa tätä yleistä suunnittelulohkokirjastotaulukkoa Asetukset-valikossa."
 
 #: kicad/kicad_cli.cpp:113
 msgid "Export GLB (binary GLTF)"
@@ -27030,11 +27002,8 @@ msgid "Application cannot start."
 msgstr "Sovellusta ei voi käynnistää."
 
 #: kicad/tools/kicad_manager_control.cpp:907
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr ""
-"\n"
-"Tutkitaanko kaikki kirjastot?"
+msgstr "Suunnittelun lohkokirjastot"
 
 #: kicad/update_manager.cpp:164
 msgid "Update Check"
@@ -33255,32 +33224,27 @@ msgstr "Etsi:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "Pake&toi"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference &designators"
-msgstr "Etsi jalanjäljen viitetunnuksia"
+msgstr "Etsi jalanjälkiviittauksia &määrityksiä"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint &values"
-msgstr "Etsi jalanjäljen arvoja"
+msgstr "Etsi jalanjälki &arvot"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search &other text items"
-msgstr "Hae muita tekstikohteita"
+msgstr "Etsi &muita tekstikohteita"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC &markers"
-msgstr "Hae DRC-merkeistä"
+msgstr "Etsi DRC &merkkejä"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search &net names"
-msgstr "Etsi verkkonimiä"
+msgstr "Etsi &verkkonimiä"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
 msgid "Restart Search"
@@ -38055,9 +38019,8 @@ msgstr "Käyttäjä1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:797
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:811
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
-#, fuzzy
 msgid "Off-board, front"
-msgstr " Ulkopuolella, edestä"
+msgstr "Ulkopuolella, edestä"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -42190,7 +42153,7 @@ msgstr "(PTH-anturan reikä ei kokonaan kuparin sisäpuolella)"
 
 #: pcbnew/pad.cpp:2082
 msgid "(pad hole not inside pad shape)"
-msgstr "(anturareikä ei anturan muodon sisällä)"
+msgstr "(reikä ei ole anturan muodon sisällä)"
 
 #: pcbnew/pad.cpp:2087
 msgid "(negative local clearance values have no effect)"
@@ -43027,9 +42990,9 @@ msgstr ""
 "Jalanjälki %s sisältää viivakoodin Altium-kerroksessa %d (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4342
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr "Tuntematon tekstilaatikon perustelu %d, teksti %s"
+msgstr "Tuntematon tekstilaatikon tasaus %d, aTeksti %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4498
 msgid "Loading rectangles..."
