@@ -527,20 +527,48 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                 if( item->Type() == PCB_FOOTPRINT_T )
                     continue;
 
-                LSET        layers = item->GetLayerSet();
-
-                layers.reset( layer_id );
-                hasRemovedBoardItems = true;
-                modified = true;
-
-                if( layers.any() )
+                // Vias are also specific
+                // Note: vias are specific. They are only on copper layers,  and
+                // do not use a layer set, only store the copper top and the copper bottom.
+                // So reinit the layer set does not work with vias
+                if( item->Type() == PCB_VIA_T )
                 {
-                    item->SetLayerSet( layers );
+                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+                    if( via->GetViaType() == VIATYPE::THROUGH )
+                        continue;
+                    else
+                    {
+                        PCB_LAYER_ID top_layer;
+                        PCB_LAYER_ID bottom_layer;
+                        via->LayerPair( &top_layer, &bottom_layer );
+
+                        if( top_layer != layer_id && bottom_layer != layer_id )
+                            continue;
+                    }
+                    // blind/buried vias with a top or bottom layer on a removed layer
+                    // are removed. Perhaps one could just modify the top/bottom layer,
+                    // but I am not sure this is better.
+                    m_pcb->Remove( item );
+                    delete item;
                 }
                 else
                 {
-                    m_pcb->Remove( item );
-                    delete item;
+                    LSET        layers = item->GetLayerSet();
+
+                    layers.reset( layer_id );
+                    hasRemovedBoardItems = true;
+                    modified = true;
+
+                    if( layers.any() )
+                    {
+                        item->SetLayerSet( layers );
+                    }
+                    else
+                    {
+                        m_pcb->Remove( item );
+                        delete item;
+                    }
                 }
             }
         }
@@ -777,6 +805,26 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
 
                     if( item->Type() == PCB_FOOTPRINT_T || item->GetParentFootprint() )
                         continue;
+
+                    // Vias are on multiple adjacent layers, but only the top and
+                    // the bottom layers are stored. So there are issues only if one
+                    // is on a removed layer
+                    if( item->Type() == PCB_VIA_T )
+                    {
+                        PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+                        if( via->GetViaType() == VIATYPE::THROUGH )
+                            continue;
+                        else
+                        {
+                            PCB_LAYER_ID top_layer;
+                            PCB_LAYER_ID bottom_layer;
+                            via->LayerPair( &top_layer, &bottom_layer );
+
+                            if( top_layer != layer_id && bottom_layer != layer_id )
+                                continue;
+                        }
+                    }
 
                     removedLayers.push_back( layer_id );
                     break;
