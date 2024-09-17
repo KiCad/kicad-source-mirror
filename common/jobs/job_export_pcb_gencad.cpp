@@ -23,12 +23,10 @@
 
 JOB_EXPORT_PCB_GENCAD::JOB_EXPORT_PCB_GENCAD( bool aIsCli ) :
     JOB( "gencad", aIsCli ),
-    m_filename(),
-    m_outputFile(),
-    m_flipBottomPads(),
-    m_useUniquePins(),
-    m_useIndividualShapes(),
-    m_storeOriginCoords(),
-    m_useDrillOrigin()
+    m_flipBottomPads( false ),
+    m_useIndividualShapes( false ),
+    m_storeOriginCoords( false ),
+    m_useDrillOrigin( false ),
+    m_useUniquePins( false )
 {
 }
