@@ -716,9 +716,8 @@ wxString SYMBOL_LIBRARY_MANAGER::getLibraryName( const wxString& aFilePath )
 
 
 bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate,
-                                         SYMBOL_LIB_TABLE* aTable )
+                                         SYMBOL_LIB_TABLE& aTable )
 {
-    wxCHECK( aTable, false );
     wxString libName = getLibraryName( aFilePath );
     wxCHECK( !LibraryExists( libName ), false );  // either create or add an existing one
 
@@ -732,7 +731,7 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
 
     wxString typeName = SCH_IO_MGR::ShowType( schFileType );
     SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, relPath, typeName );
-    aTable->InsertRow( libRow );
+    aTable.InsertRow( libRow );
 
     if( aCreate )
     {
@@ -740,11 +739,11 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
 
         try
         {
-            aTable->CreateSymbolLib( libName );
+            aTable.CreateSymbolLib( libName );
         }
         catch( const IO_ERROR& )
         {
-            aTable->RemoveRow( libRow );
+            aTable.RemoveRow( libRow );
             return false;
         }
     }

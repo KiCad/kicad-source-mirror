@@ -215,7 +215,7 @@ public:
     /**
      * Create an empty library and adds it to the library table. The library file is created.
      */
-    bool CreateLibrary( const wxString& aFilePath, SYMBOL_LIB_TABLE* aTable )
+    bool CreateLibrary( const wxString& aFilePath, SYMBOL_LIB_TABLE& aTable )
     {
         return addLibrary( aFilePath, true, aTable );
     }
@@ -223,7 +223,7 @@ public:
     /**
      * Add an existing library. The library is added to the library table as well.
      */
-    bool AddLibrary( const wxString& aFilePath, SYMBOL_LIB_TABLE* aTable )
+    bool AddLibrary( const wxString& aFilePath, SYMBOL_LIB_TABLE& aTable )
     {
         return addLibrary( aFilePath, false, aTable );
     }
@@ -375,7 +375,7 @@ protected:
     static wxString getLibraryName( const wxString& aFilePath );
 
     ///< Helper function to add either existing or create new library
-    bool addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LIB_TABLE* aTable );
+    bool addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LIB_TABLE& aTable );
 
 
     ///< Return the current Symbol Library Table.

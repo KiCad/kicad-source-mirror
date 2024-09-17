@@ -989,7 +989,7 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 
     if( aCreateNew )
     {
-        if( !m_libMgr->CreateLibrary( fn.GetFullPath(), libTable ) )
+        if( !m_libMgr->CreateLibrary( fn.GetFullPath(), *libTable ) )
         {
             DisplayError( this, wxString::Format( _( "Could not create the library file '%s'.\n"
                                                      "Make sure you have write permissions and "
@@ -1000,7 +1000,7 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     }
     else
     {
-        if( !m_libMgr->AddLibrary( fn.GetFullPath(), libTable ) )
+        if( !m_libMgr->AddLibrary( fn.GetFullPath(), *libTable ) )
         {
             DisplayError( this, _( "Could not open the library file." ) );
             return wxEmptyString;
@@ -1038,7 +1038,7 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
         return;
     }
 
-    if( !m_libMgr->AddLibrary( fn.GetFullPath(), libTable ) )
+    if( !m_libMgr->AddLibrary( fn.GetFullPath(), *libTable ) )
     {
         DisplayError( this, _( "Could not open the library file." ) );
         return;
