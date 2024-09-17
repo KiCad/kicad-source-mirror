@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-08-31 18:09+0000\n"
+"PO-Revision-Date: 2024-09-18 16:40+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -28716,14 +28716,14 @@ msgid "(multiple board outlines not supported)"
 msgstr "(useita piirilevyn ääriviivoja ei tueta)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(Suorakaiteen koko on nolla tai erittäin pieni: %d nm)"
+msgstr "(suorakulmion koko on nolla tai erittäin pieni: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(Ympyrän säde on nolla tai hyvin pieni: %d nm)"
+msgstr "(ympyrän säde on nolla tai hyvin pieni: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
 #, fuzzy, c-format
@@ -40207,9 +40207,8 @@ msgid "(PTH pad hole non fully inside copper)"
 msgstr "(PTH-anturan reikä ei kokonaan kuparin sisäpuolella)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Anturan reikä ei ole anturan muodon sisällä."
+msgstr "(reikä ei ole anturan muodon sisällä)"
 
 #: pcbnew/pad.cpp:1953
 #, fuzzy
@@ -40233,13 +40232,12 @@ msgstr ""
 "luoda)"
 
 #: pcbnew/pad.cpp:2001
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Negatiivinen juotospastareunus on suurempi kuin antura; juotospastamaskia ei "
-"luoda"
+"(Negatiivinen juotospastareunus on suurempi kuin antura; juotospastamaskia "
+"ei luoda)"
 
 #: pcbnew/pad.cpp:2008
 msgid "(Pad has no layer)"
@@ -40272,9 +40270,8 @@ msgid "(SMD pad has copper on both sides of the board)"
 msgstr "SMD-anturassa on kuparia levyn molemmilla puolilla"
 
 #: pcbnew/pad.cpp:2056 pcbnew/pad.cpp:2069
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "SMD-anturassa on kupari- ja maskikerrokset levyn eri puolilla"
+msgstr "(SMD-anturassa on kupari- ja maskikerrokset levyn eri puolilla)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
@@ -40291,9 +40288,8 @@ msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr "Kriteeriarvot ei käy järkeen NPTH-anturoilla."
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "Testipisteominaisuus ei käy järkeen NPTH-anturoissa"
+msgstr "('Testipisteen' ominaisuus ei käy järkeen NPTH-anturoissa)"
 
 #: pcbnew/pad.cpp:2097
 #, fuzzy
@@ -40306,13 +40302,12 @@ msgid "('castellated' property is for PTH pads)"
 msgstr "Varoitus: Uritettu ominaisuus on PTH anturoille."
 
 #: pcbnew/pad.cpp:2103
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "Varoitus: BGA ominaisuus on SMD anturoille."
+msgstr "('BGA'-ominaisuus on SMD-anturoille)"
 
 #: pcbnew/pad.cpp:2108
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(negatiivinen kulman säde ei ole sallittu)"
 
 #: pcbnew/pad.cpp:2110
 #, fuzzy
@@ -40320,14 +40315,12 @@ msgid "(corner size will make pad circular)"
 msgstr "Varoitus: Kulman koko tekee anturasta pyöreän."
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "Lataus on liian suuri."
+msgstr "(negatiivinen kulman viiste ei ole sallittu)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "Lataus on liian suuri."
+msgstr "(kulmaviiste on liian suuri)"
 
 #: pcbnew/pad.cpp:2126
 #, fuzzy
@@ -41044,9 +41037,9 @@ msgstr ""
 "Jalanjälki %s sisältää viivakoodin Altium-kerroksessa %d (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr "Tuntematon tekstilaatikon perustelu %d, teksti %s"
+msgstr "Tuntematon tekstilaatikon tasaus %d, aTeksti %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 msgid "Loading rectangles..."
