@@ -111,13 +111,15 @@ TOOL_ACTION EE_ACTIONS::selectNode( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_ALT + '3' )
         .LegacyHotkeyName( "Select Node" )
+        .FriendlyName( _( "Select Node" ) )
         .Tooltip( _( "Select a connection item under the cursor" ) ) );
 
 TOOL_ACTION EE_ACTIONS::selectConnection( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveSelection.SelectConnection" )
         .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_ALT + '4' )
+        .DefaultHotkey( MD_CTRL + '4' )
         .LegacyHotkeyName( "Select Connection" )
+        .FriendlyName( _( "Select Connection" ) )
         .Tooltip( _( "Select a complete connection" ) )
         .Icon( BITMAPS::net_highlight_schematic ) );
 
