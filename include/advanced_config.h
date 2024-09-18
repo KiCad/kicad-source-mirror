@@ -453,7 +453,7 @@ public:
      *
      * Setting name: "IncrementalConnectivity"
      * Valid values: 0 or 1
-     * Default value: 0
+     * Default value: 1
      */
     bool m_IncrementalConnectivity;
 
@@ -525,7 +525,7 @@ public:
      *
      * Setting name: "EnableEeschemaPrintCairo"
      * Valid values: 0 or 1
-     * Default value: 0
+     * Default value: 1
      */
     bool m_EnableEeschemaPrintCairo;
 
