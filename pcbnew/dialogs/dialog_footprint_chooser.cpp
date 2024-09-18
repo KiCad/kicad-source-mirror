@@ -234,6 +234,8 @@ LIB_ID DIALOG_FOOTPRINT_CHOOSER::GetSelectedLibId() const
 
 void DIALOG_FOOTPRINT_CHOOSER::onFpChanged( wxCommandEvent& event )
 {
+    m_chooserPanel->GetViewerPanel()->Refresh();
+
     if( m_showFpMode )      // the 3D viewer is not activated
         return;
 
