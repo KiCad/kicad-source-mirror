@@ -59,6 +59,10 @@ public:
      */
     bool Contains( PCB_LAYER_ID aLayer )
     {
+        // At the moment, LSET cannot store negative layers, but PCB_LAYER_ID can contain them
+        if( aLayer < 0 )
+           return false;
+
         try
         {
             return test( aLayer );
