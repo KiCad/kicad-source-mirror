@@ -2021,9 +2021,9 @@ bool IbisParser::readModel()
                 if( readWord( subparam ) )
                 {
                     if( subparam == "Inverting" )
-                        m_currentModel->m_enable = IBIS_MODEL_ENABLE::ACTIVE_HIGH;
+                        m_currentModel->m_polarity = IBIS_MODEL_POLARITY::INVERTING;
                     else if( subparam == "Non-Inverting" )
-                        m_currentModel->m_enable = IBIS_MODEL_ENABLE::ACTIVE_LOW;
+                        m_currentModel->m_polarity = IBIS_MODEL_POLARITY::NON_INVERTING;
                     else
                     {
                         std::stringstream message;
