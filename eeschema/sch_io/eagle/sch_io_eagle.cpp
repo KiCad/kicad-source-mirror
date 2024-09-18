@@ -2255,7 +2255,7 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
     // Parse the circle properties
     SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
-    VECTOR2I   center( aCircle->x.ToSchUnits(), aCircle->y.ToSchUnits() );
+    VECTOR2I   center( aCircle->x.ToSchUnits(), -aCircle->y.ToSchUnits() );
 
     circle->SetParent( aSymbol.get() );
     circle->SetPosition( center );
