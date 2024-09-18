@@ -110,7 +110,10 @@ public:
     ///< Update the buffered symbol with the contents of \a aCopy.
     bool UpdateBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, LIB_SYMBOL* aCopy );
 
-    bool DeleteBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf );
+    /**
+     * Delete the given symbol buffer from the library buffer.
+     */
+    bool DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf );
 
     void ClearDeletedBuffer() { m_deleted.clear(); }
 
@@ -160,7 +163,7 @@ private:
      * @param aParent is the #SYMBOL_BUFFER to check against.
      * @return the count of #SYMBOL_BUFFER objects removed from the library.
      */
-    int removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER>& aSymbolBuf );
+    int removeChildSymbols( const SYMBOL_BUFFER& aSymbolBuf );
 
 private:
     std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_symbols;

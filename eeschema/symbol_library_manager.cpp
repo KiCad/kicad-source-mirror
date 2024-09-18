@@ -590,7 +590,7 @@ bool SYMBOL_LIBRARY_MANAGER::RemoveSymbol( const wxString& aAlias, const wxStrin
 
     bool retv = true;
 
-    retv &= libBuf.DeleteBuffer( symbolBuf );
+    retv &= libBuf.DeleteBuffer( *symbolBuf );
     OnDataChanged();
 
     return retv;
@@ -964,16 +964,21 @@ bool LIB_BUFFER::UpdateBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, LIB_SY
 }
 
 
-bool LIB_BUFFER::DeleteBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf )
+bool LIB_BUFFER::DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf )
 {
-    auto symbolBufIt = std::find( m_symbols.begin(), m_symbols.end(), aSymbolBuf );
+    const auto sameBufferPredicate = [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+    {
+        return aBuf.get() == &aSymbolBuf;
+    };
+
+    auto symbolBufIt = std::find_if( m_symbols.begin(), m_symbols.end(), sameBufferPredicate );
     wxCHECK( symbolBufIt != m_symbols.end(), false );
 
     bool retv = true;
 
     // Remove all derived symbols to prevent broken inheritance.
-    if( HasDerivedSymbols( aSymbolBuf->GetSymbol()->GetName() )
-            && ( removeChildSymbols( aSymbolBuf ) == 0 ) )
+    if( HasDerivedSymbols( aSymbolBuf.GetSymbol()->GetName() )
+        && ( removeChildSymbols( aSymbolBuf ) == 0 ) )
     {
         retv = false;
     }
@@ -1219,15 +1224,13 @@ size_t LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName, wxArraySt
 }
 
 
-int LIB_BUFFER::removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER>& aSymbolBuf )
+int LIB_BUFFER::removeChildSymbols( const SYMBOL_BUFFER& aSymbolBuf )
 {
-    wxCHECK( aSymbolBuf, 0 );
-
     int                                                  cnt = 0;
     wxArrayString                                        derivedSymbolNames;
     std::deque<std::shared_ptr<SYMBOL_BUFFER>>::iterator it;
 
-    if( GetDerivedSymbolNames( aSymbolBuf->GetSymbol()->GetName(), derivedSymbolNames ) )
+    if( GetDerivedSymbolNames( aSymbolBuf.GetSymbol()->GetName(), derivedSymbolNames ) )
     {
         for( const wxString& symbolName : derivedSymbolNames )
         {

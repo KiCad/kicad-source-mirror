@@ -133,7 +133,8 @@ BOOST_AUTO_TEST_CASE( LibBuffer )
     BOOST_CHECK_EQUAL( libBuffer.GetHash(), 4 );
     BOOST_CHECK( *libBuffer.GetSymbol( parentSymbol1->GetName() ) == *tmp );
 
-    libBuffer.DeleteBuffer( buf );
+    const bool deletedOk = libBuffer.DeleteBuffer( *buf );
+    BOOST_CHECK( deletedOk );
     BOOST_CHECK( libBuffer.GetBuffers().empty() );
 }
 
