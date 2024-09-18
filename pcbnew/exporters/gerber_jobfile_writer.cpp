@@ -713,10 +713,16 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                     }
                 }
 
-                PCB_LAYER_ID next_copper_layer = ( PCB_LAYER_ID )( last_copper_layer + 1 );
+                // Copper layers IDs use only even values like 0, 2, 4 ...
+                // and first layer = F_Cu = 0, last layer = B_Cu = 2
+                // inner layers Ids are 4, 6 , 8 ...
+                PCB_LAYER_ID next_copper_layer = ( PCB_LAYER_ID )( last_copper_layer + 2 );
+
+                if( last_copper_layer == F_Cu )
+                    next_copper_layer = In1_Cu;
 
                 // If the next_copper_layer is the last copper layer, the next layer id is B_Cu
-                if( next_copper_layer >= m_pcb->GetCopperLayerCount() - 1 )
+                if( next_copper_layer/2 >= m_pcb->GetCopperLayerCount() )
                     next_copper_layer = B_Cu;
 
                 wxString subLayerName;
