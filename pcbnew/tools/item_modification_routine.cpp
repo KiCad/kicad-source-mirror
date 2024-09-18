@@ -462,21 +462,13 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
         return;
     }
 
-    if( !m_workingPolygon )
+    if( m_firstPolygon )
     {
-        auto initial = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
-        initial->SetPolyShape( *poly );
+        m_width = aPcbShape.GetWidth();
+        m_layer = aPcbShape.GetLayer();
+        m_workingPolygons = std::move( *poly );
+        m_firstPolygon = false;
 
-        // Copy properties
-        initial->SetLayer( aPcbShape.GetLayer() );
-        initial->SetWidth( aPcbShape.GetWidth() );
-
-        // Keep the pointer
-        m_workingPolygon = initial.get();
-        // Hand over ownership
-        GetHandler().AddNewItem( std::move( initial ) );
-
-        // And remove the shape
         GetHandler().DeleteItem( aPcbShape );
     }
     else
@@ -491,6 +483,35 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
         {
             AddFailure();
         }
+    }
+}
+
+
+void POLYGON_BOOLEAN_ROUTINE::Finalize()
+{
+    if( m_workingPolygons.OutlineCount() == 0 || m_firstPolygon )
+    {
+        // Nothing to do (no polygons handled or nothing left?)
+        return;
+    }
+
+    CHANGE_HANDLER& handler = GetHandler();
+
+    // If we have disjoint polygons, we'll fix that now and create
+    // new PCB_SHAPEs for each outline
+    for( int i = 0; i < m_workingPolygons.OutlineCount(); ++i )
+    {
+        std::unique_ptr<PCB_SHAPE> new_poly_shape =
+                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
+
+        SHAPE_POLY_SET poly_set = m_workingPolygons.Outline( i );
+        new_poly_shape->SetPolyShape( poly_set );
+
+        // Copy properties from the source polygon
+        new_poly_shape->SetWidth( m_width );
+        new_poly_shape->SetLayer( m_layer );
+
+        handler.AddNewItem( std::move( new_poly_shape ) );
     }
 }
 
@@ -518,17 +539,7 @@ std::optional<wxString> POLYGON_MERGE_ROUTINE::GetStatusMessage() const
 bool POLYGON_MERGE_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
 {
     const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
-
-    SHAPE_POLY_SET working_copy = GetWorkingPolygon()->GetPolyShape();
-    working_copy.BooleanAdd( aPolygon, poly_mode );
-
-    // Check it's not disjoint - this doesn't work well in the UI
-    if( working_copy.OutlineCount() != 1 )
-    {
-        return false;
-    }
-
-    GetWorkingPolygon()->SetPolyShape( working_copy );
+    GetWorkingPolygons().BooleanAdd( aPolygon, poly_mode );
     return true;
 }
 
@@ -557,7 +568,8 @@ bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& a
 {
     const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
 
-    SHAPE_POLY_SET working_copy = GetWorkingPolygon()->GetPolyShape();
+    SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
+    SHAPE_POLY_SET  working_copy = working_copy;
     working_copy.BooleanSubtract( aPolygon, poly_mode );
 
     // Subtraction can create holes or delete the polygon
@@ -570,9 +582,10 @@ bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& a
         return false;
     }
 
-    GetWorkingPolygon()->SetPolyShape( working_copy );
+    working_polygons = std::move( working_copy );
     return true;
 }
+
 
 wxString POLYGON_INTERSECT_ROUTINE::GetCommitDescription() const
 {
@@ -598,7 +611,8 @@ bool POLYGON_INTERSECT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& 
 {
     const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
 
-    SHAPE_POLY_SET working_copy = GetWorkingPolygon()->GetPolyShape();
+    SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
+    SHAPE_POLY_SET  working_copy = working_polygons;
     working_copy.BooleanIntersection( aPolygon, poly_mode );
 
     // Is there anything left?
@@ -609,7 +623,7 @@ bool POLYGON_INTERSECT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& 
         return false;
     }
 
-    GetWorkingPolygon()->SetPolyShape( working_copy );
+    working_polygons = std::move( working_copy );
     return true;
 }
 

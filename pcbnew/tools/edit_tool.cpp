@@ -1728,6 +1728,8 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
     for( PCB_SHAPE* shape : items_to_process )
         boolean_routine->ProcessShape( *shape );
 
+    boolean_routine->Finalize();
+
     // Select new items
     for( BOARD_ITEM* item : items_to_select_on_success )
         m_selectionTool->AddItemToSel( item, true );

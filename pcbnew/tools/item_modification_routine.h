@@ -331,19 +331,29 @@ class POLYGON_BOOLEAN_ROUTINE : public ITEM_MODIFICATION_ROUTINE
 {
 public:
     POLYGON_BOOLEAN_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
-            ITEM_MODIFICATION_ROUTINE( aBoard, aHandler ), m_workingPolygon( nullptr )
+            ITEM_MODIFICATION_ROUTINE( aBoard, aHandler )
     {
     }
 
     void ProcessShape( PCB_SHAPE& aPcbShape );
 
+    /**
+     * Clear up any outstanding work
+     */
+    void Finalize();
+
 protected:
-    PCB_SHAPE* GetWorkingPolygon() const { return m_workingPolygon; }
+    SHAPE_POLY_SET& GetWorkingPolygons() { return m_workingPolygons; }
 
     virtual bool ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon ) = 0;
 
 private:
-    PCB_SHAPE* m_workingPolygon;
+    /// This can be disjoint, which will be fixed at the end
+    SHAPE_POLY_SET m_workingPolygons;
+
+    bool         m_firstPolygon = true;
+    int          m_width;
+    PCB_LAYER_ID m_layer;
 };
 
 class POLYGON_MERGE_ROUTINE : public POLYGON_BOOLEAN_ROUTINE
