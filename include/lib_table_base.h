@@ -59,6 +59,65 @@ KICOMMON_API LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow );
 
 
 /**
+ * LIB_TABLE_IO abstracts the file I/O operations for the library table
+ * loading and saving.
+ *
+ * Normally, this is file-based-reading, but that's not a requirement.
+ */
+class KICOMMON_API LIB_TABLE_IO
+{
+public:
+    virtual ~LIB_TABLE_IO() = default;
+
+    /**
+     * Create a reader for the given URI.
+     *
+     * This can return nullptr, for example if the URI is not a file or
+     * is not readable.
+     */
+    virtual std::unique_ptr<LINE_READER> GetReader( const wxString& aURI ) const = 0;
+
+    /**
+     * Check if the given URI is writable.
+     */
+    virtual bool CanSaveToUri( const wxString& aURI ) const = 0;
+
+    /**
+     * Compare two URIs for equivalence.
+     *
+     * For example, two URIs that point to the same file should be considered equivalent,
+     * even if they are not string-wise equal (e.g. symlinks)
+     */
+    virtual bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 ) const = 0;
+
+    /**
+     * Save the given table to the given URI.
+     */
+    virtual std::unique_ptr<OUTPUTFORMATTER> GetWriter( const wxString& aURI ) const = 0;
+};
+
+
+/**
+ * Implementations of LIB_TABLE_IO for file-based I/O.
+ *
+ * This is the default implementation for real usage.
+ */
+class KICOMMON_API FILE_LIB_TABLE_IO : public LIB_TABLE_IO
+{
+public:
+    FILE_LIB_TABLE_IO() = default;
+
+    std::unique_ptr<LINE_READER> GetReader( const wxString& aURI ) const override;
+
+    bool CanSaveToUri( const wxString& aURI ) const override;
+
+    bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 ) const override;
+
+    std::unique_ptr<OUTPUTFORMATTER> GetWriter( const wxString& aURI ) const override;
+};
+
+
+/**
  * Hold a record identifying a library accessed by the appropriate plug in object in the
  * #LIB_TABLE.  This is an abstract base class from which to derive library specific rows.
  */
@@ -328,8 +387,11 @@ public:
      * @param aFallBackTable is another LIB_TABLE which is searched only when
      *                       a row is not found in this table.  No ownership is
      *                       taken of aFallBackTable.
+     * @param aTableIo is the I/O object to use for the table data. nullptr
+     *                 means use the default file-based I/O.
      */
-    LIB_TABLE( LIB_TABLE* aFallBackTable = nullptr );
+    LIB_TABLE( LIB_TABLE*                    aFallBackTable = nullptr,
+               std::unique_ptr<LIB_TABLE_IO> aTableIo = nullptr );
 
     virtual ~LIB_TABLE();
 
@@ -560,6 +622,9 @@ protected:
     void reindex();
 
 protected:
+    // Injected I/O interface
+    std::unique_ptr<LIB_TABLE_IO> m_io;
+
     LIB_TABLE* m_fallBack;
 
     /// Versioning to handle importing old tables

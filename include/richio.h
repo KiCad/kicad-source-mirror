@@ -328,8 +328,6 @@ protected:
         quoteChar[1] = '\0';
     }
 
-    virtual ~OUTPUTFORMATTER() {}
-
     /**
      * Perform quote character need determination according to the Specctra DSN specification.
 
@@ -363,6 +361,11 @@ protected:
 #endif
 
 public:
+    /**
+     * This is a polymorphic class that can validly be handled by a pointer to the base class.
+     */
+    virtual ~OUTPUTFORMATTER() {}
+
     /**
      * Format and write text to the output stream.
      *

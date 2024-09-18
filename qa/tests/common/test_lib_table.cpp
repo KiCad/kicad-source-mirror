@@ -35,6 +35,40 @@
 // Code under test
 #include <lib_table_base.h>
 
+namespace
+{
+
+/**
+ * A very simple implementation of #LIB_TABLE_IO that does nothing.
+ *
+ * If needed, this could be extended to provide some basic functionality
+ * like providing test data to be read.
+ */
+class DUMMY_LIB_TABLE_IO : public LIB_TABLE_IO
+{
+public:
+    std::unique_ptr<LINE_READER> GetReader( const wxString& aURI ) const override
+    {
+        return std::make_unique<STRING_LINE_READER>( "", "DUMMY_LIB_TABLE_IO Data" );
+    }
+
+    bool CanSaveToUri( const wxString& aURI ) const override
+    {
+        // Always return true, it'll just write to a dummy string
+        return true;
+    }
+
+    bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 ) const override
+    {
+        return aURI1 == aURI2;
+    }
+
+    std::unique_ptr<OUTPUTFORMATTER> GetWriter( const wxString& aURI ) const override
+    {
+        return std::make_unique<STRING_FORMATTER>();
+    }
+};
+
 
 /**
  * A concrete implementation of #LIB_TABLE_ROW that implements
@@ -79,7 +113,8 @@ private:
 class TEST_LIB_TABLE : public LIB_TABLE
 {
 public:
-    TEST_LIB_TABLE( LIB_TABLE* aFallback = nullptr ) : LIB_TABLE( aFallback )
+    TEST_LIB_TABLE( LIB_TABLE* aFallback = nullptr ) :
+            LIB_TABLE( aFallback, std::make_unique<DUMMY_LIB_TABLE_IO>() )
     {
     }
 
@@ -198,6 +233,8 @@ struct LIB_TABLE_TEST_FIXTURE
     /// The table that m_mainTableWithFb falls back to.
     TEST_LIB_TABLE m_fallbackTable;
 };
+
+} // namespace
 
 /**
  * Declare the test suite
