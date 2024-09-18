@@ -244,20 +244,25 @@ size_t longest_common_subset( const _Container& __c1, const _Container& __c2 )
  *
  * Returns a negative value if the first container is less than the second,
  * zero if they are equal, and a positive value if the first container is
- * greater than the second.  This is a re-implementation of std::lexicographical_compare_3way
- * because it is not available in all compilers.
+ * greater than the second.  This is a re-implementation of
+ * std::lexicographical_compare_three_way because it is not available in all
+ * compilers.
  */
-template <class _Container1, class _Container2>
-int lexicographical_compare_3way( const _Container1& __c1, const _Container2& __c2 )
+template <class Container1Iter, class Container2Iter>
+int lexicographical_compare_three_way( Container1Iter aC1_first, Container1Iter aC1_last,
+                                       Container2Iter aC2_first, Container2Iter aC2_last )
 {
 #ifdef __cpp_lib_three_way_comparison // Check to see if we have an optimized version
-        auto retval = std::lexicographical_compare_three_way( __c1.begin(), __c1.end(), __c2.begin(), __c2.end() );
-        return retval == std::strong_ordering::equal ? 0 : ( retval == std::strong_ordering::less ? -1 : 1 );
+    auto retval =
+            std::lexicographical_compare_three_way( aC1_first, aC1_last, aC2_first, aC2_last );
+    return retval == std::strong_ordering::equal
+                   ? 0
+                   : ( retval == std::strong_ordering::less ? -1 : 1 );
 #else
-    auto it1 = __c1.begin();
-    auto it2 = __c2.begin();
+    Container1Iter it1 = aC1_first;
+    Container2Iter it2 = aC2_first;
 
-    while( it1 != __c1.end() && it2 != __c2.end() )
+    while( it1 != aC1_last && it2 != aC2_last )
     {
         if( *it1 < *it2 )
             return -1;
@@ -267,8 +272,8 @@ int lexicographical_compare_3way( const _Container1& __c1, const _Container2& __
         ++it2;
     }
 
-    if( it2 == __c2.end() )
-        return !( it1 == __c1.end() );
+    if( it2 == aC2_last )
+        return !( it1 == aC1_last );
     else
         return -1;
 #endif // __cpp_lib_three_way_comparison

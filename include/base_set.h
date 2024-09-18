@@ -211,7 +211,7 @@ public:
     // Define less-than operator for comparison
     bool operator<( const BASE_SET& other ) const
     {
-        return alg::lexicographical_compare( begin(), end(), other.begin(), other.end() ) < 0;
+        return alg::lexicographical_compare_three_way( begin(), end(), other.begin(), other.end() ) < 0;
     }
 
     // Custom iterator to iterate over set bits
