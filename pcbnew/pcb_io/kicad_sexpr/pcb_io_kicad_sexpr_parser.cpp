@@ -5456,8 +5456,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
     wxCHECK_RET( CurTok() == T_group,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GROUP." ) );
 
-    VECTOR2I pt;
-    T        token;
+    T token;
 
     m_groupInfos.push_back( GROUP_INFO() );
     GROUP_INFO& groupInfo = m_groupInfos.back();
@@ -6004,7 +6003,6 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     ZONE_BORDER_DISPLAY_STYLE hatchStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
 
     int      hatchPitch = ZONE::GetDefaultHatchPitch();
-    VECTOR2I pt;
     T        token;
     int      tmp;
     wxString netnameFromfile;    // the zone net name find in file

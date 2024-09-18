@@ -183,7 +183,10 @@ VECTOR2I GetShapePosition( const PCB_SHAPE& aShape )
     case SHAPE_T::POLY:
     case SHAPE_T::BEZIER:
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::ARC: pos = aShape.GetPosition(); break;
+    case SHAPE_T::ARC:
+    case SHAPE_T::UNDEFINED:
+        pos = aShape.GetPosition();
+        break;
     }
 
     return pos;

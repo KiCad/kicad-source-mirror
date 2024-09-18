@@ -845,7 +845,7 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
     v2 = p2 - aCenter;
     v3 = p3 - aCenter;
 
-    VECTOR2D u1, u2, u3;
+    VECTOR2D u1, u2;
 
     // A point cannot be both the center and on the arc.
     if( ( v1.EuclideanNorm() == 0 ) || ( v2.EuclideanNorm() == 0 ) )

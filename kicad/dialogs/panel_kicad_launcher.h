@@ -38,8 +38,6 @@ private:
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
     void onLauncherButtonClick( wxCommandEvent& aEvent );
 
-private:
-    TOOL_MANAGER* m_toolManager;
     KICAD_MANAGER_FRAME* m_frame;
 };
 

@@ -90,8 +90,6 @@ bool DIALOG_EXPORT_ODBPP::Init()
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    BOARD* board = m_parent->GetBoard();
-
     m_choiceUnits->SetSelection( cfg->m_ExportODBPP.units );
     m_precision->SetValue( cfg->m_ExportODBPP.precision );
     m_cbCompress->SetValue( cfg->m_ExportODBPP.compress );

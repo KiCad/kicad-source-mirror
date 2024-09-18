@@ -321,7 +321,6 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     // GPCB unit = 0.01 mils and Pcbnew 0.1.
     double                     conv_unit = NEW_GPCB_UNIT_CONV;
-    VECTOR2I                   textPos;
     wxString                   msg;
     wxArrayString              parameters;
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( nullptr );
