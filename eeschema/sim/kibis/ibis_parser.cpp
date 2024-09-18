@@ -306,8 +306,8 @@ std::string IBIS_ANY::doubleToString( double aNumber )
 }
 
 
-std::string IVtable::Spice( int aN, std::string aPort1, std::string aPort2, std::string aModelName,
-                         IBIS_CORNER aCorner )
+std::string IVtable::Spice( int aN, const std::string& aPort1, const std::string& aPort2,
+                            const std::string& aModelName, IBIS_CORNER aCorner ) const
 {
     std::string result = "";
 
@@ -331,14 +331,14 @@ std::string IVtable::Spice( int aN, std::string aPort1, std::string aPort2, std:
         result += aModelName;
         result += " pwl(\n+ x_array=[";
 
-        for( IVtableEntry& entry : m_entries )
+        for( const IVtableEntry& entry : m_entries )
         {
             result += doubleToString( entry.V );
             result += "\n+";
         }
         result += "]\n+ y_array=[";
 
-        for( IVtableEntry& entry : m_entries )
+        for( const IVtableEntry& entry : m_entries )
         {
             result += doubleToString( entry.I.value[aCorner] );
             result += "\n+";
@@ -348,7 +348,7 @@ std::string IVtable::Spice( int aN, std::string aPort1, std::string aPort2, std:
     return result;
 }
 
-double IVtable::InterpolatedI( double aV, IBIS_CORNER aCorner )
+double IVtable::InterpolatedI( double aV, IBIS_CORNER aCorner ) const
 {
     // @TODO change this algorithm
 
@@ -796,7 +796,7 @@ bool IbisPackageModel::Check()
 }
 
 
-bool IbisParser::ParseFile( std::string& aFileName )
+bool IbisParser::ParseFile( const std::string& aFileName )
 {
     std::stringstream err_msg;
 
@@ -1835,7 +1835,7 @@ bool IbisParser::readModelSelector()
     return status;
 }
 
-bool IbisParser::readNumericSubparam( std::string aSubparam, double& aDest )
+bool IbisParser::readNumericSubparam( const std::string& aSubparam, double& aDest )
 {
     std::string paramName;
     bool     status = true;
@@ -1900,7 +1900,7 @@ bool IbisParser::readTypMinMaxValue( TypMinMaxValue& aDest )
     return status;
 }
 
-bool IbisParser::readTypMinMaxValueSubparam( std::string aSubparam, TypMinMaxValue& aDest )
+bool IbisParser::readTypMinMaxValueSubparam( const std::string& aSubparam, TypMinMaxValue& aDest )
 {
     std::string paramName;
     bool     status = true;

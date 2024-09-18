@@ -111,7 +111,7 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PRO
 
     if( const SIM_MODEL::PARAM* vcc = m_model.FindParam( "vcc" ) )
         kparams.SetCornerFromString( kparams.m_supply, vcc->value );
-    
+
     if( const SIM_MODEL::PARAM* rpin = m_model.FindParam( "rpin" ) )
         kparams.SetCornerFromString( kparams.m_Rpin, rpin->value );
 
@@ -129,9 +129,9 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PRO
     {
     case SIM_MODEL::TYPE::KIBIS_DEVICE:
         if( diffMode )
-            kpin->writeSpiceDiffDevice( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDiffDevice( result, aItem.modelName, *kmodel, kparams );
         else
-            kpin->writeSpiceDevice( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDevice( result, aItem.modelName, *kmodel, kparams );
         break;
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
@@ -143,27 +143,27 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PRO
 
         if( paramValue == "hi-Z" )
         {
-            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_HIGH_Z( &kibis ) );
+            kparams.m_waveform = new KIBIS_WAVEFORM_HIGH_Z( kibis );
         }
         else if( paramValue == "low" )
         {
-            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_LOW( &kibis ) );
+            kparams.m_waveform = new KIBIS_WAVEFORM_STUCK_LOW( kibis );
         }
         else if( paramValue == "high" )
         {
-            kparams.m_waveform = static_cast<KIBIS_WAVEFORM*>( new KIBIS_WAVEFORM_STUCK_HIGH( &kibis ) );
+            kparams.m_waveform = new KIBIS_WAVEFORM_STUCK_HIGH( kibis );
         }
 
         if( diffMode )
-            kpin->writeSpiceDiffDriver( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDiffDriver( result, aItem.modelName, *kmodel, kparams );
         else
-            kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDriver( result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT:
     {
-        KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR( &kibis );
+        KIBIS_WAVEFORM_RECTANGULAR* waveform = new KIBIS_WAVEFORM_RECTANGULAR( kibis );
 
         if( const SIM_MODEL::PARAM* ton = m_model.FindParam( "ton" ) )
             waveform->m_ton = SIM_VALUE::ToDouble( ton->value, 0 );
@@ -180,15 +180,15 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PRO
         kparams.m_waveform = waveform;
 
         if( diffMode )
-            kpin->writeSpiceDiffDriver( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDiffDriver( result, aItem.modelName, *kmodel, kparams );
         else
-            kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDriver( result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS:
     {
-        KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS( &kibis );
+        KIBIS_WAVEFORM_PRBS* waveform = new KIBIS_WAVEFORM_PRBS( kibis );
 
         if( const SIM_MODEL::PARAM* f0 = m_model.FindParam( "f0" ) )
             waveform->m_bitrate = SIM_VALUE::ToDouble( f0->value, 0 );
@@ -197,14 +197,14 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PRO
             waveform->m_delay = SIM_VALUE::ToDouble( td->value, 0 );
 
         if( const SIM_MODEL::PARAM* n = m_model.FindParam( "n" ) )
-            waveform->m_bits = SIM_VALUE::ToInt( n->value, 0 );
+            waveform->SetBits( SIM_VALUE::ToInt( n->value, 0 ) );
 
         kparams.m_waveform = waveform;
 
         if( diffMode )
-            kpin->writeSpiceDiffDriver( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDiffDriver( result, aItem.modelName, *kmodel, kparams );
         else
-            kpin->writeSpiceDriver( &result, aItem.modelName, *kmodel, kparams );
+            kpin->writeSpiceDriver( result, aItem.modelName, *kmodel, kparams );
         break;
     }
 
@@ -283,19 +283,19 @@ SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType, const SIM_MODEL_IBIS& aSource ) :
 
     m_ibisPins = aSource.GetIbisPins();
     m_ibisModels = aSource.GetIbisModels();
-    
+
     m_enableDiff = aSource.CanDifferential();
 }
 
 
-bool SIM_MODEL_IBIS::ChangePin( const SIM_LIBRARY_IBIS& aLib, std::string aPinNumber )
+bool SIM_MODEL_IBIS::ChangePin( const SIM_LIBRARY_IBIS& aLib, const std::string& aPinNumber )
 {
     KIBIS_COMPONENT* kcomp = aLib.m_kibis.GetComponent( std::string( GetComponentName() ) );
 
     if( !kcomp )
         return false;
 
-    KIBIS_PIN* kpin = kcomp->GetPin( std::string( aPinNumber.c_str() ) );
+    KIBIS_PIN* kpin = kcomp->GetPin( aPinNumber );
 
     if( !kpin )
         return false;

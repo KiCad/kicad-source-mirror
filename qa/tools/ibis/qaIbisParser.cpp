@@ -45,11 +45,11 @@ int main( void )
 
     params.m_waveform = new KIBIS_WAVEFORM_RECTANGULAR();
 
-    pin2->writeSpiceDevice( tmp4, "device_typ", *( pin2->m_models.at( 0 ) ), params );
+    pin2->writeSpiceDevice( *tmp4, "device_typ", *( pin2->m_models.at( 0 ) ), params );
 
     KIBIS_MODEL* model1 = pin1->m_models.at( 0 );
     std::cout << "Model used for driver: " << model1->m_name << std::endl;
-    pin1->writeSpiceDiffDriver( tmp1, "driver_typ", *( model1 ), params );
+    pin1->writeSpiceDiffDriver( *tmp1, "driver_typ", *( model1 ), params );
 
     wxTextFile file( "output.sp" );
     if( file.Exists() )

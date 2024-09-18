@@ -71,22 +71,28 @@ enum class KIBIS_WAVEFORM_TYPE
 class KIBIS_WAVEFORM : public KIBIS_ANY
 {
 public:
-    KIBIS_WAVEFORM( KIBIS* aTopLevel ) : KIBIS_ANY{ aTopLevel } { m_valid = true; };
-    KIBIS_WAVEFORM_TYPE GetType() { return m_type; };
-    virtual double GetDuration() { return 1; };
+    KIBIS_WAVEFORM( KIBIS& aTopLevel ) : KIBIS_ANY{ &aTopLevel } { m_valid = true; };
+    KIBIS_WAVEFORM_TYPE GetType() const { return m_type; };
+    virtual double      GetDuration() const { return 1; };
     bool                inverted = false; // Used for differential drivers
-    virtual ~KIBIS_WAVEFORM(){};
+    virtual ~KIBIS_WAVEFORM() {};
 
-    virtual std::vector<std::pair<int, double>> GenerateBitSequence()
+    virtual std::vector<std::pair<int, double>> GenerateBitSequence() const
     {
         std::vector<std::pair<int, double>> bits;
         return bits;
     };
 
-    // Check fuction if using waveform data
-    virtual bool Check( IbisWaveform* aRisingWf, IbisWaveform* aFallingWf ) { return true; };
-    // Check fuction if using ramp data
-    virtual bool Check( dvdtTypMinMax aRisingRp, dvdtTypMinMax aFallingRp ) { return true; };
+    // Check function if using waveform data
+    virtual bool Check( const IbisWaveform* aRisingWf, const IbisWaveform* aFallingWf ) const
+    {
+        return true;
+    };
+    // Check function if using ramp data
+    virtual bool Check( const dvdtTypMinMax& aRisingRp, const dvdtTypMinMax& aFallingRp ) const
+    {
+        return true;
+    };
 
 protected:
     KIBIS_WAVEFORM_TYPE m_type = KIBIS_WAVEFORM_TYPE::NONE;
@@ -95,7 +101,7 @@ protected:
 class KIBIS_WAVEFORM_RECTANGULAR : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_RECTANGULAR( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_RECTANGULAR( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::RECTANGULAR;
     };
@@ -105,18 +111,18 @@ public:
     int    m_cycles = 1;
 
 
-    std::vector<std::pair<int, double>> GenerateBitSequence() override;
-    bool Check( IbisWaveform* aRisingWf, IbisWaveform* aFallingWf ) override;
-    bool Check( dvdtTypMinMax aRisingRp, dvdtTypMinMax aFallingRp ) override;
+    std::vector<std::pair<int, double>> GenerateBitSequence() const override;
+    bool Check( const IbisWaveform* aRisingWf, const IbisWaveform* aFallingWf ) const override;
+    bool Check( const dvdtTypMinMax& aRisingRp, const dvdtTypMinMax& aFallingRp ) const override;
 
-    double GetDuration() override { return ( m_ton + m_toff ) * m_cycles; };
+    double GetDuration() const override { return ( m_ton + m_toff ) * m_cycles; };
 };
 
 // For now, we only support PRBS7
 class KIBIS_WAVEFORM_PRBS : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_PRBS( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_PRBS( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::PRBS;
     };
@@ -124,41 +130,43 @@ public:
     double m_delay = 0;
     int m_bits = 10;
 
-    std::vector<std::pair<int, double>> GenerateBitSequence() override;
-    bool Check( IbisWaveform* aRisingWf, IbisWaveform* aFallingWf ) override;
-    bool Check( dvdtTypMinMax aRisingRp, dvdtTypMinMax aFallingRp ) override;
+    std::vector<std::pair<int, double>> GenerateBitSequence() const override;
+    bool Check( const IbisWaveform* aRisingWf, const IbisWaveform* aFallingWf ) const override;
+    bool Check( const dvdtTypMinMax& aRisingRp, const dvdtTypMinMax& aFallingRp ) const override;
 
-    double GetDuration() override { return m_bits / m_bitrate ; };
+    void SetBits( int aBits ) { m_bits = std::abs( aBits ); };
+
+    double GetDuration() const override { return m_bits / m_bitrate; };
 };
 
 class KIBIS_WAVEFORM_STUCK_HIGH : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_STUCK_HIGH( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_STUCK_HIGH( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::STUCK_HIGH;
     };
-    std::vector<std::pair<int, double>> GenerateBitSequence() override;
+    std::vector<std::pair<int, double>> GenerateBitSequence() const override;
 };
 
 class KIBIS_WAVEFORM_STUCK_LOW : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_STUCK_LOW( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_STUCK_LOW( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::STUCK_LOW;
     };
-    std::vector<std::pair<int, double>> GenerateBitSequence() override;
+    std::vector<std::pair<int, double>> GenerateBitSequence() const override;
 };
 
 class KIBIS_WAVEFORM_HIGH_Z : public KIBIS_WAVEFORM
 {
 public:
-    KIBIS_WAVEFORM_HIGH_Z( KIBIS* aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
+    KIBIS_WAVEFORM_HIGH_Z( KIBIS& aTopLevel ) : KIBIS_WAVEFORM( aTopLevel )
     {
         m_type = KIBIS_WAVEFORM_TYPE::HIGH_Z;
     };
-    std::vector<std::pair<int, double>> GenerateBitSequence() override;
+    std::vector<std::pair<int, double>> GenerateBitSequence() const override;
 };
 
 /** Accuracy level.
@@ -198,14 +206,14 @@ public:
     KIBIS_WAVEFORM* m_waveform = nullptr;
     KIBIS_ACCURACY m_accuracy = KIBIS_ACCURACY::LEVEL_2;
 
-    void SetCornerFromString( IBIS_CORNER& aCorner, std::string aString );
+    void SetCornerFromString( IBIS_CORNER& aCorner, const std::string& aString );
 };
 
 
 class KIBIS_FILE : KIBIS_ANY
 {
 public:
-    KIBIS_FILE( KIBIS* aTopLevel );
+    KIBIS_FILE( KIBIS& aTopLevel );
 
     std::string m_fileName;
     double      m_fileRev;
@@ -216,13 +224,13 @@ public:
     std::string m_disclaimer;
     std::string m_copyright;
 
-    bool Init( IbisParser& aParser );
+    bool Init( const IbisParser& aParser );
 };
 
 class KIBIS_MODEL : public KIBIS_ANY
 {
 public:
-    KIBIS_MODEL( KIBIS* aTopLevel, IbisModel& aSource, IbisParser& aParser );
+    KIBIS_MODEL( KIBIS& aTopLevel, const IbisModel& aSource, IbisParser& aParser );
 
     std::string        m_name;
     std::string        m_description;
@@ -259,13 +267,13 @@ public:
     IbisRamp                   m_ramp;
 
     /** @brief Return true if the model has a pulldown transistor */
-    bool HasPulldown();
+    bool HasPulldown() const;
     /** @brief Return true if the model has a pullup transistor */
-    bool HasPullup();
+    bool HasPullup() const;
     /** @brief Return true if the model has a clamp diode to the gnd net */
-    bool HasGNDClamp();
+    bool HasGNDClamp() const;
     /** @brief Return true if the model has a clamp diode to the power net */
-    bool HasPOWERClamp();
+    bool HasPOWERClamp() const;
 
     /** @brief Generate the spice directive to simulate the die
      *
@@ -273,7 +281,7 @@ public:
      *  @param aIndex Index used to offset spice nodes / directives
      *  @return A multiline string with spice directives
      */
-    std::string SpiceDie( KIBIS_PARAMETER& aParam, int aIndex );
+    std::string SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex ) const;
 
     /** @brief Create waveform pairs
      *
@@ -299,10 +307,10 @@ public:
      *  @param aParam Parameters
      *  @return A multiline string with spice directives
      */
-    std::string generateSquareWave( std::string aNode1, std::string aNode2,
-                                    std::vector<std::pair<int, double>>     aBits,
-                                    std::pair<IbisWaveform*, IbisWaveform*> aPair,
-                                    KIBIS_PARAMETER&                        aParam );
+    std::string generateSquareWave( const std::string& aNode1, const std::string& aNode2,
+                                    const std::vector<std::pair<int, double>>&     aBits,
+                                    const std::pair<IbisWaveform*, IbisWaveform*>& aPair,
+                                    const KIBIS_PARAMETER&                         aParam );
 
 
     /** @brief Copy a waveform, and substract the first value to all samples
@@ -311,13 +319,13 @@ public:
      * @param aIn Input waveform
      * @return Output waveform
      */
-    IbisWaveform TrimWaveform( IbisWaveform& aIn );
+    IbisWaveform TrimWaveform( const IbisWaveform& aIn ) const;
 };
 
 class KIBIS_PIN : public KIBIS_ANY
 {
 public:
-    KIBIS_PIN( KIBIS* aTopLevel, IbisComponentPin& aPin, IbisComponentPackage& aPackage,
+    KIBIS_PIN( KIBIS& aTopLevel, const IbisComponentPin& aPin, const IbisComponentPackage& aPackage,
                IbisParser& aParser, KIBIS_COMPONENT* aParent, std::vector<KIBIS_MODEL>& aModels );
     /** @brief Name of the pin
      *  Examples : "VCC", "GPIOA", "CLK", etc...
@@ -341,28 +349,29 @@ public:
 
     std::vector<KIBIS_MODEL*> m_models;
 
-    bool writeSpiceDriver( std::string* aDest, std::string aName, KIBIS_MODEL& aModel,
-                           KIBIS_PARAMETER& aParam );
-    bool writeSpiceDiffDriver( std::string* aDest, std::string aName, KIBIS_MODEL& aModel,
-                               KIBIS_PARAMETER& aParam );
-    bool writeSpiceDevice( std::string* aDest, std::string aName, KIBIS_MODEL& aModel,
-                           KIBIS_PARAMETER& aParam );
-    bool writeSpiceDiffDevice( std::string* aDest, std::string aName, KIBIS_MODEL& aModel,
-                               KIBIS_PARAMETER& aParam );
+    bool writeSpiceDriver( std::string& aDest, const std::string& aName, KIBIS_MODEL& aModel,
+                           const KIBIS_PARAMETER& aParam );
+    bool writeSpiceDiffDriver( std::string& aDest, const std::string& aName, KIBIS_MODEL& aModel,
+                               const KIBIS_PARAMETER& aParam );
+    bool writeSpiceDevice( std::string& aDest, const std::string& aName, KIBIS_MODEL& aModel,
+                           const KIBIS_PARAMETER& aParam );
+    bool writeSpiceDiffDevice( std::string& aDest, const std::string& aName, KIBIS_MODEL& aModel,
+                               const KIBIS_PARAMETER& aParam );
 
     /** @brief Update m_Ku, m_Kd using no falling / rising waveform inputs ( low accuracy )
      *  @param aModel Model to be used
      *  @param aParam Parameters
      */
-    void getKuKdNoWaveform( KIBIS_MODEL& aModel, KIBIS_PARAMETER& aParam );
+    void getKuKdNoWaveform( KIBIS_MODEL& aModel, const KIBIS_PARAMETER& aParam );
 
     /** @brief Update m_Ku, m_Kd using with a single waveform input
      *  @param aModel Model to be used
      *  @param aPair @see waveformPairs()
      *  @param aParam Parameters
      */
-    void getKuKdOneWaveform( KIBIS_MODEL& aModel, std::pair<IbisWaveform*, IbisWaveform*> aPair,
-                             KIBIS_PARAMETER& aParam );
+    void getKuKdOneWaveform( KIBIS_MODEL&                                   aModel,
+                             const std::pair<IbisWaveform*, IbisWaveform*>& aPair,
+                             const KIBIS_PARAMETER&                         aParam );
 
     /** @brief Update m_Ku, m_Kd using with two waveform inputs
      *
@@ -373,9 +382,10 @@ public:
      *  @param aParam Parameters
      *  @param aIndex Index for numbering spice .SUBCKT
      */
-    void getKuKdTwoWaveforms( KIBIS_MODEL& aModel, std::pair<IbisWaveform*, IbisWaveform*> aPair1,
-                              std::pair<IbisWaveform*, IbisWaveform*> aPair2,
-                              KIBIS_PARAMETER&                        aParam );
+    void getKuKdTwoWaveforms( KIBIS_MODEL&                                   aModel,
+                              const std::pair<IbisWaveform*, IbisWaveform*>& aPair1,
+                              const std::pair<IbisWaveform*, IbisWaveform*>& aPair2,
+                              const KIBIS_PARAMETER&                         aParam );
 
     /** @brief Update m_Ku, m_Kd using with two waveform inputs
      *
@@ -387,8 +397,9 @@ public:
      *
      *  @return A multiline string with spice directives
      */
-    std::string KuKdDriver( KIBIS_MODEL& aModel, std::pair<IbisWaveform*, IbisWaveform*> aPair,
-                            KIBIS_PARAMETER& aParam, int aIndex );
+    std::string KuKdDriver( KIBIS_MODEL&                                   aModel,
+                            const std::pair<IbisWaveform*, IbisWaveform*>& aPair,
+                            const KIBIS_PARAMETER& aParam, int aIndex );
 
     /** @brief Generate the spice directive to simulate the die for Ku/Kd estimation
      *
@@ -400,7 +411,7 @@ public:
      *  @param aIndex Index for numbering ports
      *  @return A multiline string with spice directives
      */
-    std::string addDie( KIBIS_MODEL& aModel, KIBIS_PARAMETER& aParam, int aIndex );
+    std::string addDie( KIBIS_MODEL& aModel, const KIBIS_PARAMETER& aParam, int aIndex );
 
 
     /** @brief Update m_Ku, m_Kd using with two waveform inputs
@@ -411,17 +422,17 @@ public:
      *
      * @param aSimul The simulation to run, multiline spice directives
      */
-    void     getKuKdFromFile( std::string* aSimul );
+    void getKuKdFromFile( const std::string& aSimul );
 
     KIBIS_PIN* m_complementaryPin = nullptr;
 
-    bool isDiffPin() { return m_complementaryPin != nullptr; };
+    bool isDiffPin() const { return m_complementaryPin != nullptr; };
 };
 
 class KIBIS_COMPONENT : public KIBIS_ANY
 {
 public:
-    KIBIS_COMPONENT( KIBIS* aToplevel, IbisComponent& aSource, IbisParser& aParser );
+    KIBIS_COMPONENT( KIBIS& aToplevel, const IbisComponent& aSource, IbisParser& aParser );
     /** @brief Name of the component */
     std::string m_name;
     /** @brief Name of the manufacturer */
@@ -434,16 +445,16 @@ public:
      *  @param aPinNumber pin number
      *  @return pointer to a KIBIS_PIN, or nullptr if there is no matching pin
      */
-    KIBIS_PIN* GetPin( std::string aPinNumber );
+    KIBIS_PIN* GetPin( const std::string& aPinNumber );
 };
 
 class KIBIS : public KIBIS_ANY
 {
 public:
     /** @brief Constructor for unitialized KIBIS members */
-    KIBIS() : KIBIS_ANY( this, nullptr ), m_file( this ) {};
+    KIBIS() : KIBIS_ANY( this, nullptr ), m_file( *this ) {};
 
-    KIBIS( std::string aFileName, REPORTER* aReporter = nullptr );
+    KIBIS( const std::string& aFileName, REPORTER* aReporter = nullptr );
 
     std::vector<KIBIS_COMPONENT> m_components;
     std::vector<KIBIS_MODEL>     m_models;
@@ -453,9 +464,9 @@ public:
     std::string m_cacheDir = "";
 
     /** @brief Return the model with name aName . Nullptr if not found */
-    KIBIS_MODEL* GetModel( std::string aName );
+    KIBIS_MODEL* GetModel( const std::string& aName );
     /** @brief Return the component with name aName . Nullptr if not found */
-    KIBIS_COMPONENT* GetComponent( std::string aName );
+    KIBIS_COMPONENT* GetComponent( const std::string& aName );
 };
 
 #endif

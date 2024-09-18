@@ -62,7 +62,7 @@ public:
      * @param aMsg Message
      * @param aSeverity Message sevirity
      */
-    void Report( std::string aMsg, SEVERITY aSeverity = RPT_SEVERITY_INFO )
+    void Report( std::string aMsg, SEVERITY aSeverity = RPT_SEVERITY_INFO ) const
     {
         if( m_reporter )
             m_reporter->Report( aMsg, aSeverity );
@@ -74,7 +74,7 @@ protected:
      * @param aNumber Number
      * @return Output string
      */
-    std::string doubleToString( double aNumber );
+    static std::string doubleToString( double aNumber );
 };
 
 
@@ -368,7 +368,7 @@ public:
      * @param aCorner Power supply corner
      * @return current
      */
-    double   InterpolatedI( double aV, IBIS_CORNER aCorner );
+    double InterpolatedI( double aV, IBIS_CORNER aCorner ) const;
 
     /** @brief Interpolate the IV table
      *
@@ -382,8 +382,8 @@ public:
      * @param aCorner Power supply corner
      * @return Multline spice directives
      */
-    std::string Spice( int aN, std::string aPort1, std::string aPort2, std::string aModelName,
-                       IBIS_CORNER aCorner );
+    std::string Spice( int aN, const std::string& aPort1, const std::string& aPort2,
+                       const std::string& aModelName, IBIS_CORNER aCorner ) const;
 
 private:
 };
@@ -684,7 +684,7 @@ public:
      * @param aFileName input file name
      * @return True in case of success
      */
-    bool ParseFile( std::string& aFileName );
+    bool ParseFile( const std::string& aFileName );
 
 private:
     std::string* m_continuingString = nullptr;
@@ -778,11 +778,11 @@ private:
     bool storeString( std::string& aDest, bool aMultiline );
     bool readTableLine( std::vector<std::string>& aDest );
 
-    bool readNumericSubparam( std::string aSubparam, double& aDest );
+    bool readNumericSubparam( const std::string& aSubparam, double& aDest );
     bool readIVtableEntry( IVtable& aTable );
     bool readVTtableEntry( VTtable& aTable );
     bool readTypMinMaxValue( TypMinMaxValue& aDest );
-    bool readTypMinMaxValueSubparam( std::string aSubparam, TypMinMaxValue& aDest );
+    bool readTypMinMaxValueSubparam( const std::string& aSubparam, TypMinMaxValue& aDest );
     //bool ReadDieSupplyPads();
 
     bool readPackage();

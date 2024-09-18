@@ -75,10 +75,10 @@ public:
         return m_params.at( aParamIndex );
     };
 
-    /** 
+    /**
      * @brief update the list of available models based on the pin number.
      */
-    bool ChangePin( const SIM_LIBRARY_IBIS& aLib, std::string aPinNumber );
+    bool ChangePin( const SIM_LIBRARY_IBIS& aLib, const std::string& aPinNumber );
 
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
