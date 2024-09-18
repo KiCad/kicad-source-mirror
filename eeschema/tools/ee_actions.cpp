@@ -677,7 +677,7 @@ TOOL_ACTION EE_ACTIONS::mirrorH( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::swap( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.swap" )
         .Scope( AS_GLOBAL )
-        .DefaultHotkey( 'S' )
+        .DefaultHotkey( MD_ALT + 'S' )
         .FriendlyName( _( "Swap" ) )
         .Tooltip( _( "Swap positions of selected items" ) )
         .Icon( BITMAPS::swap ) );
