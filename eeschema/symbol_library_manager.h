@@ -108,7 +108,7 @@ public:
     bool CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen );
 
     ///< Update the buffered symbol with the contents of \a aCopy.
-    bool UpdateBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, LIB_SYMBOL* aCopy );
+    bool UpdateBuffer( SYMBOL_BUFFER& aSymbolBuf, const LIB_SYMBOL& aCopy );
 
     /**
      * Delete the given symbol buffer from the library buffer.

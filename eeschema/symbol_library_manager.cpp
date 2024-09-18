@@ -507,9 +507,9 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const
     LIB_BUFFER&                    libBuf = getLibraryBuffer( aLibrary );
     std::shared_ptr<SYMBOL_BUFFER> symbolBuf = libBuf.GetBuffer( aOldName );
 
-    wxCHECK( symbolBuf, false );
+    wxCHECK( symbolBuf && aSymbol, false );
 
-    libBuf.UpdateBuffer( symbolBuf, aSymbol );
+    libBuf.UpdateBuffer( *symbolBuf, *aSymbol );
     OnDataChanged();
 
     return true;
@@ -949,15 +949,13 @@ bool LIB_BUFFER::CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen )
 }
 
 
-bool LIB_BUFFER::UpdateBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, LIB_SYMBOL* aCopy )
+bool LIB_BUFFER::UpdateBuffer( SYMBOL_BUFFER& aSymbolBuf, const LIB_SYMBOL& aCopy )
 {
-    wxCHECK( aCopy && aSymbolBuf, false );
-
-    LIB_SYMBOL* bufferedSymbol = aSymbolBuf->GetSymbol();
+    LIB_SYMBOL* bufferedSymbol = aSymbolBuf.GetSymbol();
 
     wxCHECK( bufferedSymbol, false );
 
-    *bufferedSymbol = *aCopy;
+    *bufferedSymbol = aCopy;
     ++m_hash;
 
     return true;

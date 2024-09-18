@@ -127,11 +127,13 @@ BOOST_AUTO_TEST_CASE( LibBuffer )
     BOOST_CHECK_EQUAL( symbolNames[0], childSymbol1->GetName() );
 
     std::shared_ptr<SYMBOL_BUFFER> buf = libBuffer.GetBuffer( parentSymbol1->GetName() );
-    LIB_SYMBOL* tmp = new LIB_SYMBOL( *parentSymbol1 );
-    tmp->GetDescriptionField().SetText( wxS( "Description" ) );
-    libBuffer.UpdateBuffer( buf, tmp );
+
+    LIB_SYMBOL tmp( *parentSymbol1 );
+    tmp.GetDescriptionField().SetText( wxS( "Description" ) );
+
+    libBuffer.UpdateBuffer( *buf, tmp );
     BOOST_CHECK_EQUAL( libBuffer.GetHash(), 4 );
-    BOOST_CHECK( *libBuffer.GetSymbol( parentSymbol1->GetName() ) == *tmp );
+    BOOST_CHECK( *libBuffer.GetSymbol( parentSymbol1->GetName() ) == tmp );
 
     const bool deletedOk = libBuffer.DeleteBuffer( *buf );
     BOOST_CHECK( deletedOk );
