@@ -63,12 +63,15 @@ std::vector<std::pair<int, double>> SimplifyBitSequence( std::vector<std::pair<i
     return result;
 }
 
-KIBIS_ANY::KIBIS_ANY( KIBIS* aTopLevel ) : IBIS_ANY( aTopLevel->m_reporter )
+
+KIBIS_ANY::KIBIS_ANY( KIBIS* aTopLevel ) : KIBIS_ANY( aTopLevel, aTopLevel->m_reporter )
 {
-    m_topLevel = aTopLevel;
-    m_valid = false;
 }
 
+KIBIS_ANY::KIBIS_ANY( KIBIS* aTopLevel, REPORTER* aReporter ) :
+        IBIS_ANY( aReporter ), m_topLevel( aTopLevel ), m_valid( false )
+{
+}
 
 IBIS_CORNER ReverseLogic( IBIS_CORNER aIn )
 {
@@ -87,9 +90,7 @@ IBIS_CORNER ReverseLogic( IBIS_CORNER aIn )
 }
 
 KIBIS::KIBIS( std::string aFileName, REPORTER* aReporter ) :
-        KIBIS_ANY( this ),
-        m_reporter( aReporter ),
-        m_file( this )
+        KIBIS_ANY( this, aReporter ), m_file( this )
 {
     IbisParser    parser( m_reporter );
     bool          status = true;

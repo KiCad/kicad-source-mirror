@@ -43,8 +43,16 @@ class KIBIS;
 
 class KIBIS_ANY : public IBIS_ANY
 {
-public:
+protected:
     KIBIS_ANY( KIBIS* aTopLevel );
+
+    /**
+     * Ctor for when a reporter is not available in the top level object
+     * (e.g. when the top level object itself is under construction)
+     */
+    KIBIS_ANY( KIBIS* aTopLevel, REPORTER* aReporter );
+
+public:
     KIBIS* m_topLevel;
     bool   m_valid;
 };
@@ -432,14 +440,11 @@ public:
 class KIBIS : public KIBIS_ANY
 {
 public:
-    KIBIS() : KIBIS_ANY( this ), m_file( this )
-    {
-        m_valid = false;
-    }; // Constructor for unitialized KIBIS members
+    /** @brief Constructor for unitialized KIBIS members */
+    KIBIS() : KIBIS_ANY( this, nullptr ), m_file( this ) {};
 
     KIBIS( std::string aFileName, REPORTER* aReporter = nullptr );
 
-    REPORTER*                    m_reporter;
     std::vector<KIBIS_COMPONENT> m_components;
     std::vector<KIBIS_MODEL>     m_models;
     KIBIS_FILE                   m_file;

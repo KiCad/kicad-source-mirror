@@ -60,6 +60,9 @@ set( QA_SPICE_SRCS
     test_sim_model_ngspice.cpp
     test_sim_regressions.cpp
 
+    # IBIS files
+    test_kibis.cpp
+
     test_ngspice_helpers.cpp
 )
 
