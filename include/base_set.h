@@ -205,14 +205,13 @@ public:
 
     int compare( const BASE_SET& other ) const
     {
-        auto result = std::lexicographical_compare_three_way( begin(), end(), other.begin(), other.end() );
-        return result == std::strong_ordering::equal ? 0 : ( result == std::strong_ordering::less ? -1 : 1 );
+        return alg::lexicographical_compare_three_way( begin(), end(), other.begin(), other.end() );
     }
 
     // Define less-than operator for comparison
     bool operator<( const BASE_SET& other ) const
     {
-        return std::lexicographical_compare( begin(), end(), other.begin(), other.end() );
+        return alg::lexicographical_compare( begin(), end(), other.begin(), other.end() ) < 0;
     }
 
     // Custom iterator to iterate over set bits
