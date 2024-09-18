@@ -242,17 +242,6 @@ void SCH_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-static struct SCH_BITMAP_DESC
-{
-    SCH_BITMAP_DESC()
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( SCH_BITMAP );
-        propMgr.InheritsAfter( TYPE_HASH( SCH_BITMAP ), TYPE_HASH( SCH_ITEM ) );
-    }
-} _SCH_BITMAP_DESC;
-
-
 bool SCH_BITMAP::operator==( const SCH_ITEM& aItem ) const
 {
     if( Type() != aItem.Type() )
@@ -293,3 +282,30 @@ double SCH_BITMAP::Similarity( const SCH_ITEM& aItem ) const
 
     return 1.0;
 }
+
+
+static struct SCH_BITMAP_DESC
+{
+    SCH_BITMAP_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_BITMAP );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_BITMAP ), TYPE_HASH( SCH_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Position X" ), &SCH_BITMAP::SetX,
+                                                            &SCH_BITMAP::GetX,
+                                                            PROPERTY_DISPLAY::PT_COORD ) );
+
+
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>( _HKI( "Position Y" ), &SCH_BITMAP::SetY,
+                                                            &SCH_BITMAP::GetY,
+                                                            PROPERTY_DISPLAY::PT_COORD ) );
+
+        const wxString groupBITMAP = _HKI( "Image Properties" );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, double>( _HKI( "Scale" ),
+                                                               &SCH_BITMAP::SetImageScale,
+                                                               &SCH_BITMAP::GetImageScale ),
+                             groupBITMAP );
+    }
+} _SCH_BITMAP_DESC;

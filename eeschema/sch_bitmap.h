@@ -58,6 +58,12 @@ public:
         return m_bitmapBase;
     }
 
+    int  GetX() const { return GetPosition().x; };
+    void SetX( int aX ) { SetPosition( VECTOR2I( aX, GetY() ) ); }
+
+    int  GetY() const { return GetPosition().y; }
+    void SetY( int aY ) { SetPosition( VECTOR2I( GetX(), aY ) ); }
+
     /**
      * @return the image "zoom" value.
      *  scale = 1.0 = original size of bitmap.
