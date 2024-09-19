@@ -1024,14 +1024,19 @@ void STEP_PCB_MODEL::getCopperLayerZPlacement( const PCB_LAYER_ID aLayer, double
 
             // Inner copper position is usually inside prepreg
             if( wasPrepreg && item->GetBrdLayerId() != F_Cu )
+            {
+                z += item->GetThickness();
                 thickness = -item->GetThickness();
+            }
             else
+            {
                 thickness = item->GetThickness();
+            }
 
             if( item->GetBrdLayerId() == aLayer )
                 break;
 
-            if( item->GetBrdLayerId() != B_Cu )
+            if( !wasPrepreg && item->GetBrdLayerId() != B_Cu )
                 z += item->GetThickness();
         }
         else if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
