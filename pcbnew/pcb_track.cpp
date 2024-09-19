@@ -983,7 +983,7 @@ void PCB_VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) c
         b_layer = Padstack().Drill().end;
         t_layer = Padstack().Drill().start;
 
-        if( b_layer < t_layer )
+        if( !IsCopperLayerLowerThan( b_layer, t_layer ) )
             std::swap( b_layer, t_layer );
     }
 
@@ -1015,11 +1015,7 @@ void PCB_VIA::SanitizeLayers()
         Padstack().Drill().end = B_Cu;
     }
 
-    if( Padstack().Drill().end < Padstack().Drill().start )
-        std::swap( Padstack().Drill().end, Padstack().Drill().start );
-
-    // Ensure B_Cu is never the first layer
-    if( Padstack().Drill().start == B_Cu )
+    if( !IsCopperLayerLowerThan( Padstack().Drill().end, Padstack().Drill().start) )
         std::swap( Padstack().Drill().end, Padstack().Drill().start );
 }
 

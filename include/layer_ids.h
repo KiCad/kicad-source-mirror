@@ -643,6 +643,24 @@ inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
 
 
 /**
+ * Returns true if copper aLayerA is placed lower than aLayerB, false otherwise.
+ */
+inline bool IsCopperLayerLowerThan( PCB_LAYER_ID aLayerA, PCB_LAYER_ID aLayerB )
+{
+    if( aLayerA == aLayerB )
+        return false;
+
+    if( aLayerA == B_Cu )
+        return true;
+
+    if( aLayerB == B_Cu )
+        return false;
+
+    return aLayerA > aLayerB;
+}
+
+
+/**
  * @return the layer number after flipping an item
  * some (not all) layers: external copper, and paired layers( Mask, Paste, solder ... )
  * are swapped between front and back sides
