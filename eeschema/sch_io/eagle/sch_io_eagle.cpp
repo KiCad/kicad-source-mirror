@@ -2087,15 +2087,24 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
             {
                 // If duplicate symbol names exist in multiple Eagle symbol libraries, prefix the
                 // Eagle symbol library name to the symbol which should ensure that it is unique.
-                if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), libName ) )
+                try
                 {
-                    libName = aEagleLibrary->name + wxT( "_" ) + libName;
-                    libName = EscapeString( libName, CTX_LIBID );
-                    libSymbol->SetName( libName );
-                }
+                    if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), libName ) )
+                    {
+                        libName = aEagleLibrary->name + wxT( "_" ) + libName;
+                        libName = EscapeString( libName, CTX_LIBID );
+                        libSymbol->SetName( libName );
+                    }
 
-                m_pi->SaveSymbol( getLibFileName().GetFullPath(),
-                                  new LIB_SYMBOL( *libSymbol.get() ), m_properties.get() );
+                    m_pi->SaveSymbol( getLibFileName().GetFullPath(),
+                                      new LIB_SYMBOL( *libSymbol.get() ), m_properties.get() );
+                }
+                catch(...)
+                {
+                    // A library symbol cannot be loaded for some reason.
+                    // Just skip this symbol creating an issue.
+                    // The issue will be reported later by the Reporter
+                }
             }
 
             aEagleLibrary->KiCadSymbols[ libName ] = std::move( libSymbol );
