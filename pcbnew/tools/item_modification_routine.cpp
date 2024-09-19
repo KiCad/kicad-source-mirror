@@ -569,7 +569,7 @@ bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& a
     const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
 
     SHAPE_POLY_SET& working_polygons = GetWorkingPolygons();
-    SHAPE_POLY_SET  working_copy = working_copy;
+    SHAPE_POLY_SET  working_copy = working_polygons;
     working_copy.BooleanSubtract( aPolygon, poly_mode );
 
     // Subtraction can create holes or delete the polygon
