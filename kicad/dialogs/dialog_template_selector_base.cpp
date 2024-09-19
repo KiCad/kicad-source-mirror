@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,7 +60,6 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 
 	this->SetSizer( bmainSizer );
 	this->Layout();
-	bmainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
@@ -85,21 +84,15 @@ TEMPLATE_SELECTION_PANEL_BASE::TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, 
 {
 	m_SizerBase = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizerMargins;
-	bSizerMargins = new wxBoxSizer( wxVERTICAL );
-
 	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxALWAYS_SHOW_SB|wxHSCROLL );
-	m_scrolledWindow->SetScrollRate( 5, 5 );
-	m_SizerChoice = new wxGridSizer( 1, 0, 0, 0 );
+	m_scrolledWindow->SetScrollRate( 100, 5 );
+	m_SizerChoice = new wxBoxSizer( wxHORIZONTAL );
 
 
 	m_scrolledWindow->SetSizer( m_SizerChoice );
 	m_scrolledWindow->Layout();
 	m_SizerChoice->Fit( m_scrolledWindow );
-	bSizerMargins->Add( m_scrolledWindow, 1, wxEXPAND|wxLEFT, 5 );
-
-
-	m_SizerBase->Add( bSizerMargins, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	m_SizerBase->Add( m_scrolledWindow, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( m_SizerBase );
