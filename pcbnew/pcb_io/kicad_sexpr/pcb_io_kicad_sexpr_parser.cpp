@@ -1944,9 +1944,13 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseLayers()
         // was flipped.  So we instead use position in the list.
         for( size_t i = 1; i < cu.size() - 1; i++ )
         {
-            int tmpLayer = LSET::NameToLayer( cu[i].m_name );
+            int tmpLayer = -1;
 
-            if( i < 0 )
+            // Older versions didn't have a dedicated user name field
+            if( m_requiredVersion >= 20200922 )
+                tmpLayer = LSET::NameToLayer( cu[i].m_name );
+
+            if( tmpLayer < 0 )
                 tmpLayer = ( i + 1 ) * 2;
 
             cu[i].m_number = tmpLayer;
