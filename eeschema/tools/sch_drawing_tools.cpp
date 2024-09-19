@@ -2840,32 +2840,25 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 else if( evt->IsDblClick( BUT_LEFT ) )
                 {
                     m_toolMgr->PostAction( EE_ACTIONS::enterSheet );
+                    m_frame->PopTool( aEvent );
                     break;
                 }
             }
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
+            if( isDrawSheetCopy && !wxFileExists( *filename ) )
+            {
+                wxMessageBox( wxString::Format( _( "File '%s' does not exist." ), *filename ) );
+                m_frame->PopTool( aEvent );
+                break;
+            }
+
+            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
+            sheet->SetScreen( nullptr );
+
             if( isDrawSheetCopy )
             {
-                if( !wxFileExists( *filename ) )
-                {
-                    wxMessageBox( wxString::Format( _( "File '%s' does not exist." ), *filename ) );
-                    m_frame->PopTool( aEvent );
-                    break;
-                }
-
-                sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
-
-                if( !m_frame->LoadSheetFromFile( sheet, &m_frame->GetCurrentSheet(), *filename ) )
-                {
-                    wxMessageBox( wxString::Format( _( "Could not import sheet from '%s'." ), *filename ) );
-                    delete sheet;
-                    sheet = nullptr;
-                    m_frame->PopTool( aEvent );
-                    break;
-                }
-
                 wxFileName fn( *filename );
 
                 sheet->GetFields()[SHEETNAME].SetText( wxT( "Imported Sheet" ) );
@@ -2874,8 +2867,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             }
             else
             {
-                sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
-                sheet->SetScreen( nullptr );
                 sheet->GetFields()[SHEETNAME].SetText( wxT( "Untitled Sheet" ) );
                 sheet->GetFields()[SHEETFILENAME].SetText( wxT( "untitled." )
                                                            + FILEEXT::KiCadSchematicFileExtension );
