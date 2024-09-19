@@ -2729,6 +2729,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
+    EESCHEMA_SETTINGS*    cfg = m_frame->eeconfig();
+    SCHEMATIC_SETTINGS&   schSettings = m_frame->Schematic().Settings();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
@@ -2824,8 +2826,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         }
         else if( !sheet && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) ) )
         {
-            EE_SELECTION&      selection = m_selectionTool->GetSelection();
-            EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+            EE_SELECTION& selection = m_selectionTool->GetSelection();
 
             if( selection.Size() == 1
                     && selection.Front()->Type() == SCH_SHEET_T
@@ -2918,11 +2919,31 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 SCH_COMMIT  tempCommit = SCH_COMMIT( m_toolMgr );
                 SCH_COMMIT& c = evt->Commit() ? *( (SCH_COMMIT*) evt->Commit() ) : tempCommit;
 
-                c.Add( sheet, m_frame->GetScreen() );
-                c.Push( isDrawSheetCopy ? "Import Sheet Copy" : "Draw Sheet" );
+                // We need to manually add the sheet to the screen otherwise annotation will not be able to find
+                // the sheet and its symbols to annotate.
+                m_frame->AddToScreen( sheet );
+                c.Added( sheet, m_frame->GetScreen() );
 
-                SCH_SHEET_PATH newPath = m_frame->GetCurrentSheet();
-                newPath.push_back( sheet );
+                // isDrawSheetCopy is only true when the sheet placement is coming from the design blocks
+                // placement. So, we need to respect the design block annotation options in that case.
+                if( !isDrawSheetCopy || !cfg->m_DesignBlockChooserPanel.keep_annotations )
+                {
+                    EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = cfg->m_AnnotatePanel;
+
+                    if( annotate.automatic )
+                    {
+                        // Annotation will remove this from selection, but we add it back later
+                        m_selectionTool->AddItemToSel( sheet );
+
+                        NULL_REPORTER reporter;
+                        m_frame->AnnotateSymbols(
+                                &c, ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
+                                (ANNOTATE_ALGO_T) annotate.method, true /* recursive */,
+                                schSettings.m_AnnotateStartNum, true, false, reporter );
+                    }
+                }
+
+                c.Push( isDrawSheetCopy ? "Import Sheet Copy" : "Draw Sheet" );
 
                 m_frame->UpdateHierarchyNavigator();
                 m_selectionTool->AddItemToSel( sheet );
