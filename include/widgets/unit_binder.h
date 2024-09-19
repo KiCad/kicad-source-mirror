@@ -26,6 +26,8 @@
 #ifndef __UNIT_BINDER_H_
 #define __UNIT_BINDER_H_
 
+#include <span>
+
 #include <base_units.h>
 #include <units_provider.h>
 #include <libeval/numeric_evaluator.h>
@@ -137,6 +139,15 @@ public:
     virtual EDA_ANGLE GetAngleValue();
 
     /**
+     * Set the list of options for a combobox control.
+     *
+     * Doesn't affect the value of the control.
+     */
+    virtual void SetOptionsList( std::span<const long long int> aOptions );
+    virtual void SetDoubleOptionsList( std::span<const double> aOptions );
+
+
+    /**
      * Return true if the control holds the indeterminate value (for instance, if it
      * represents a multiple selection of differing values).
      */
@@ -201,6 +212,7 @@ public:
 protected:
     void init( UNITS_PROVIDER* aProvider );
     void onClick( wxMouseEvent& aEvent );
+    void onComboBox( wxCommandEvent& aEvent );
 
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );
@@ -219,7 +231,10 @@ protected:
      * and set to false if aValue is a internal unit value.
      * @return the "rounded" value.
      */
-    double setPrecision( double aValue, bool aValueUsesUserUnits );
+    double setPrecision( double aValue, bool aValueUsesUserUnits ) const;
+
+    wxString getTextForValue( long long int aValue ) const;
+    wxString getTextForDoubleValue( double aValue ) const;
 
 protected:
     bool                m_bindFocusEvent;

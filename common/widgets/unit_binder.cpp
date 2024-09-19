@@ -24,6 +24,7 @@
  */
 
 #include <wx/clipbrd.h>
+#include <wx/combobox.h>
 #include <wx/stattext.h>
 #include <wx/textentry.h>
 #include <eda_units.h>
@@ -93,6 +94,8 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
                               nullptr, this );
         m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ),
                               nullptr, this );
+        m_valueCtrl->Connect( wxEVT_COMBOBOX, wxCommandEventHandler( UNIT_BINDER::onComboBox ),
+                              nullptr, this );
     }
 
     if( m_bindFocusEvent )
@@ -121,11 +124,13 @@ UNIT_BINDER::~UNIT_BINDER()
     if( m_valueCtrl )
     {
         m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
-                              nullptr, this );
+                                 nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
-                              nullptr, this );
+                                 nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ),
-                              nullptr, this );
+                                 nullptr, this );
+        m_valueCtrl->Disconnect( wxEVT_COMBOBOX, wxCommandEventHandler( UNIT_BINDER::onComboBox ),
+                                 nullptr, this );
     }
 }
 
@@ -176,8 +181,29 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
     {
         int temp = GetIntValue();
 
+        wxComboBox* const          combo = dynamic_cast<wxComboBox*>( m_valueCtrl );
+        std::vector<long long int> comboValues;
+
+        // Read out the current values
+        if( combo )
+        {
+            for( unsigned int i = 0; i < combo->GetCount(); i++ )
+            {
+                const wxString value = combo->GetString( i );
+                long long int  conv = EDA_UNIT_UTILS::UI::ValueFromString( *m_iuScale, m_units,
+                                                                           value, m_dataType );
+                comboValues.push_back( conv );
+            }
+        }
+
         SetUnits( provider->GetUserUnits() );
         m_iuScale = &provider->GetIuScale();
+
+        // Re-populate the combo box with updated values
+        if( combo )
+        {
+            SetOptionsList( comboValues );
+        }
 
         if( !IsIndeterminate() )
             SetValue( temp );
@@ -199,6 +225,21 @@ void UNIT_BINDER::onClick( wxMouseEvent& aEvent )
     }
 
     // Needed at least on Windows to avoid hanging
+    aEvent.Skip();
+}
+
+
+void UNIT_BINDER::onComboBox( wxCommandEvent& aEvent )
+{
+    wxComboBox* combo = dynamic_cast<wxComboBox*>( m_valueCtrl );
+    wxCHECK( combo, /*void*/ );
+
+    const wxString      value = combo->GetStringSelection();
+    const long long int conv =
+            EDA_UNIT_UTILS::UI::ValueFromString( *m_iuScale, m_units, value, m_dataType );
+
+    SetValue( conv );
+
     aEvent.Skip();
 }
 
@@ -411,31 +452,41 @@ void UNIT_BINDER::SetValue( const wxString& aValue )
 }
 
 
-void UNIT_BINDER::ChangeValue( int aValue )
+wxString UNIT_BINDER::getTextForValue( long long int aValue ) const
 {
-    double   displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
-    wxString textValue = EDA_UNIT_UTILS::UI::StringFromValue( *m_iuScale, m_units,
-                                                              setPrecision( displayValue, false ),
-                                                              false, m_dataType );
+    const double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    wxString     textValue = EDA_UNIT_UTILS::UI::StringFromValue(
+            *m_iuScale, m_units, setPrecision( aValue, false ), false, m_dataType );
 
     if( displayValue == 0 && m_negativeZero )
-        ChangeValue( wxT( "-" ) + textValue );
-    else
-        ChangeValue( textValue );
+        textValue = wxT( "-" ) + textValue;
+
+    return textValue;
+}
+
+
+wxString UNIT_BINDER::getTextForDoubleValue( double aValue ) const
+{
+    const double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    wxString     textValue = EDA_UNIT_UTILS::UI::StringFromValue(
+            *m_iuScale, m_units, setPrecision( displayValue, false ), false, m_dataType );
+
+    if( displayValue == 0 && !std::signbit( displayValue ) && m_negativeZero )
+        textValue = wxT( "-" ) + textValue;
+
+    return textValue;
+}
+
+
+void UNIT_BINDER::ChangeValue( int aValue )
+{
+    ChangeValue( getTextForValue( aValue ) );
 }
 
 
 void UNIT_BINDER::ChangeDoubleValue( double aValue )
 {
-    double   displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
-    wxString textValue = EDA_UNIT_UTILS::UI::StringFromValue( *m_iuScale, m_units,
-                                                              setPrecision( displayValue, false ),
-                                                              false, m_dataType );
-
-    if( displayValue == 0 && !std::signbit( displayValue ) && m_negativeZero )
-        ChangeValue( wxT( "-" ) + textValue );
-    else
-        ChangeValue( textValue );
+    ChangeValue( getTextForDoubleValue( aValue ) );
 }
 
 
@@ -503,7 +554,7 @@ long long int UNIT_BINDER::GetValue()
 }
 
 
-double UNIT_BINDER::setPrecision( double aValue, bool aValueUsesUserUnits )
+double UNIT_BINDER::setPrecision( double aValue, bool aValueUsesUserUnits ) const
 {
     if( m_precision > 1 )
     {
@@ -559,6 +610,34 @@ double UNIT_BINDER::GetDoubleValue()
 EDA_ANGLE UNIT_BINDER::GetAngleValue()
 {
     return EDA_ANGLE( GetDoubleValue(), DEGREES_T );
+}
+
+
+void UNIT_BINDER::SetOptionsList( std::span<const long long int> aOptions )
+{
+    wxComboBox* cb = dynamic_cast<wxComboBox*>( m_valueCtrl );
+    wxCHECK( cb, /* void */ );
+
+    cb->Clear();
+
+    for( long long int value : aOptions )
+    {
+        cb->Append( getTextForValue( value ) );
+    }
+}
+
+
+void UNIT_BINDER::SetDoubleOptionsList( std::span<const double> aOptions )
+{
+    wxComboBox* cb = dynamic_cast<wxComboBox*>( m_valueCtrl );
+    wxCHECK( cb, /* void */ );
+
+    cb->Clear();
+
+    for( double value : aOptions )
+    {
+        cb->Append( getTextForDoubleValue( value ) );
+    }
 }
 
 
