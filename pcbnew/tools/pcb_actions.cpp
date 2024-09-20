@@ -2188,13 +2188,13 @@ TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::generatePlacementRuleAreas( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Multichannel.generatePlacementRuleAreas" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( "Generate Placement Rule Areas" )
+        .FriendlyName( _( "Generate Placement Rule Areas" ) )
         .Tooltip( "Generates Placement Areas in easy way" ).Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION PCB_ACTIONS::repeatLayout( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Multichannel.repeatLayout" )
         .Scope( AS_GLOBAL )
-        .FriendlyName(  "Repeat Layout" )
+        .FriendlyName( _( "Repeat Layout" ) )
         .Tooltip(  "Clones placement & routing across multiple identical channels" ) );
 
 // ROUTER_TOOL

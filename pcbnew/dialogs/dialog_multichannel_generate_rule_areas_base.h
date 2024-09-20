@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,7 @@ class DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Multichannel Rule Areas"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Multichannel Rule Areas"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 548,328 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE();
 
