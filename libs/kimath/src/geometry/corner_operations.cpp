@@ -207,7 +207,8 @@ std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB
     if( aOtherPtB != *ptOnSegB )
         new_b = SEG{ aOtherPtB, *ptOnSegB };
 
-    const bool small_arc_mouth = arc.GetCentralAngle() > ANGLE_270;
+    const EDA_ANGLE epsilon( 1e-5, EDA_ANGLE_T::DEGREES_T );
+    const bool      small_arc_mouth = arc.GetCentralAngle().Normalize() > ( ANGLE_180 + epsilon );
 
     return DOGBONE_RESULT{
         arc, new_a, new_b, small_arc_mouth,
