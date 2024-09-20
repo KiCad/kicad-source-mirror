@@ -328,6 +328,7 @@ void PANEL_SETUP_NETCLASSES::loadNetclasses()
                     m_netclassGrid->SetReadOnly( aRow, GRID_NAME );
                     m_netclassGrid->SetReadOnly( aRow, GRID_PCB_COLOR );
                     m_netclassGrid->SetReadOnly( aRow, GRID_SCHEMATIC_COLOR );
+                    m_netclassGrid->SetReadOnly( aRow, GRID_LINESTYLE );
                 }
 
                 setNetclassRowNullableEditors( aRow, nc->IsDefault() );

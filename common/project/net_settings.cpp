@@ -995,37 +995,6 @@ bool NET_SETTINGS::addMissingDefaults( NETCLASS* nc ) const
         nc->SetBusWidthParent( m_defaultNetClass.get() );
     }
 
-    if( !nc->HasLineStyle() )
-    {
-        addedDefault = true;
-        nc->SetLineStyle( m_defaultNetClass->GetLineStyle() );
-        nc->SetLineStyleParent( m_defaultNetClass.get() );
-    }
-
-    COLOR4D pcbColor = nc->GetPcbColor();
-
-    if( pcbColor == COLOR4D::UNSPECIFIED )
-    {
-        if( m_defaultNetClass->GetPcbColor() != COLOR4D::UNSPECIFIED )
-        {
-            addedDefault = true;
-            nc->SetPcbColor( m_defaultNetClass->GetPcbColor() );
-            nc->SetPcbColorParent( m_defaultNetClass.get() );
-        }
-    }
-
-    COLOR4D schColor = nc->GetSchematicColor();
-
-    if( schColor == COLOR4D::UNSPECIFIED )
-    {
-        if( m_defaultNetClass->GetSchematicColor() != COLOR4D::UNSPECIFIED )
-        {
-            addedDefault = true;
-            nc->SetSchematicColor( m_defaultNetClass->GetSchematicColor() );
-            nc->SetSchematicColorParent( m_defaultNetClass.get() );
-        }
-    }
-
     return addedDefault;
 }
 
