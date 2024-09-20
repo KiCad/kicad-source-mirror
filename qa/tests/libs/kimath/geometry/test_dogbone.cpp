@@ -27,14 +27,10 @@
 
 #include "geom_test_utils.h"
 
-struct DogboneFixture
-{
-};
-
 /**
  * Declares the DogboneFixture struct as the boost test fixture.
  */
-BOOST_FIXTURE_TEST_SUITE( Dogbone, DogboneFixture )
+BOOST_AUTO_TEST_SUITE( Dogbone )
 
 struct TWO_LINE_CHAMFER_TEST_CASE
 {
@@ -58,12 +54,13 @@ static void DoDogboneTestChecks( const TWO_LINE_CHAMFER_TEST_CASE& aTestCase )
         const DOGBONE_RESULT& actual_result = dogbone_result.value();
 
         const SEG expected_arc_chord =
-                SEG( expected_result.m_arc_start, expected_result.m_arc_end );
-        const SEG actual_arc_chord = SEG( actual_result.m_arc_start, actual_result.m_arc_end );
+                SEG( expected_result.m_arc.GetP0(), expected_result.m_arc.GetP1() );
+        const SEG actual_arc_chord =
+                SEG( actual_result.m_arc.GetP0(), actual_result.m_arc.GetP1() );
 
         BOOST_CHECK_PREDICATE( GEOM_TEST::SegmentsHaveSameEndPoints,
                                (actual_arc_chord) ( expected_arc_chord ) );
-        BOOST_CHECK_EQUAL( actual_result.m_arc_mid, expected_result.m_arc_mid );
+        BOOST_CHECK_EQUAL( actual_result.m_arc.GetArcMid(), expected_result.m_arc.GetArcMid() );
 
         const auto check_updated_seg =
                 [&]( const std::optional<SEG>& updated_seg, const std::optional<SEG>& expected_seg )
@@ -96,18 +93,21 @@ BOOST_AUTO_TEST_CASE( SimpleRightAngleAtOrigin )
      */
 
     const TWO_LINE_CHAMFER_TEST_CASE testcase{
-        { VECTOR2I( 0, 0 ), VECTOR2I( 1000, 0 ) },
-        { VECTOR2I( 0, 0 ), VECTOR2I( 0, 1000 ) },
-        100,
+        { VECTOR2I( 0, 0 ), VECTOR2I( 100000, 0 ) },
+        { VECTOR2I( 0, 0 ), VECTOR2I( 0, 100000 ) },
+        10000,
         // A right angle is an easy one to see, because the end and center points are
         // all on 45 degree lines from the center
         {
                 {
-                        VECTOR2I( 141, 0 ),
-                        VECTOR2I( 0, 0 ),
-                        VECTOR2I( 0, 141 ),
-                        SEG( VECTOR2I( 141, 0 ), VECTOR2I( 1000, 0 ) ),
-                        SEG( VECTOR2I( 0, 141 ), VECTOR2I( 0, 1000 ) ),
+                        SHAPE_ARC{
+                                VECTOR2I( 14142, 0 ),
+                                VECTOR2I( 0, 0 ),
+                                VECTOR2I( 0, 14142 ),
+                                0,
+                        },
+                        SEG( VECTOR2I( 14142, 0 ), VECTOR2I( 100000, 0 ) ),
+                        SEG( VECTOR2I( 0, 14142 ), VECTOR2I( 0, 100000 ) ),
                         false,
                 },
 
