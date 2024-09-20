@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-12 17:34+0000\n"
+"PO-Revision-Date: 2024-09-21 14:40+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3186,7 +3186,6 @@ msgid "Reference Designators"
 msgstr "リファレンス指定子"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
 msgstr "クリアネット割り当て"
 
@@ -3868,7 +3867,6 @@ msgid "Default 'explorer.exe /n,/select,%F' for this OS."
 msgstr "この OS のデフォルトは 'explorer.exe /n,/select, %F ' です。"
 
 #: common/dialogs/panel_common_settings.cpp:356
-#, fuzzy
 msgid ""
 "File explorer command.\n"
 "example:"
@@ -4849,9 +4847,8 @@ msgid "*.*"
 msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "自動的にアノテーション"
+msgstr "自動的に検出"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
@@ -8168,7 +8165,6 @@ msgid "Zoom In Horizontally"
 msgstr "水平方向に拡大"
 
 #: common/tool/actions.cpp:578
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
 msgstr "プロットエリアを水平方向に拡大する"
 
@@ -9759,7 +9755,6 @@ msgid "Manage Footprint Association Files..."
 msgstr "フットプリント関連付けファイルを管理..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
@@ -9772,27 +9767,22 @@ msgid "Save to Schematic"
 msgstr "回路図へ保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
-msgstr ""
-"回路図シンボルのフットプリント フィールドと回路図ファイルにフットプリントの関"
-"連付けを保存"
+msgstr "回路図シンボルの「フットプリント」フィールドにフットプリントの割り当てを保存"
+"する"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
 msgstr "回路図とファイルへ保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
-msgstr ""
-"回路図シンボルのフットプリント フィールドと回路図ファイルにフットプリントの関"
-"連付けを保存"
+msgstr "回路図シンボルの「フットプリント」フィールドにフットプリントの割り当てを保存"
+"し、回路図ファイルを保存する"
 
 #: cvpcb/tools/cvpcb_actions.cpp:104
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
 msgstr "次の未割り当てのシンボルを選択"
 
@@ -9801,7 +9791,6 @@ msgid "Select next symbol with no footprint assignment"
 msgstr "次のフットプリントが割り当てられていないシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:113
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
 msgstr "前の未割り当てのシンボルを選択"
 
@@ -9810,12 +9799,10 @@ msgid "Select previous symbol with no footprint assignment"
 msgstr "前のフットプリントが割り当てられていないシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
-#, fuzzy
 msgid "Assign Footprint"
 msgstr "フットプリントを割り当て"
 
 #: cvpcb/tools/cvpcb_actions.cpp:131
-#, fuzzy
 msgid "Automatically Assign Footprints"
 msgstr "自動的にフットプリントを割り当て"
 
@@ -9824,14 +9811,12 @@ msgid "Assign footprints automatically using a footprint association file"
 msgstr "フットプリント関連付けファイルを使ってフットプリントを自動的に割り当てます"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "フットプリント割り当て"
+msgstr "フットプリント割り当ての削除"
 
 #: cvpcb/tools/cvpcb_actions.cpp:145
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "シンボル : フットプリント割り当て"
+msgstr "すべてのフットプリント割り当てを削除"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -9911,9 +9896,8 @@ msgid "Added items via API"
 msgstr "API からアイテムを追加しました"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
-#, fuzzy
 msgid "Created items via API"
-msgstr "線を作成"
+msgstr "API経由で作成されたアイテム"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -9943,9 +9927,8 @@ msgstr ""
 "ん"
 
 #: eeschema/connection_graph.cpp:3787 eeschema/erc/erc_item.cpp:232
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "未配線カウント:"
+msgstr "未接続の配線終端"
 
 #: eeschema/connection_graph.cpp:4130
 #, c-format
@@ -9989,9 +9972,9 @@ msgid "Documentation"
 msgstr "ドキュメント"
 
 #: eeschema/design_block_tree_model_adapter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "シンボル '%s' をライブラリ '%s' からロード中にエラーしました。"
+msgstr "デザイン ブロック%s をライブラリ ' %s ' からロード中にエラーが発生しました。"
 
 #: eeschema/design_block_utils.cpp:51 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -10047,22 +10030,20 @@ msgid "Library Description"
 msgstr "ライブラリの説明"
 
 #: eeschema/design_block_utils.cpp:267 eeschema/design_block_utils.cpp:326
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "シンボル ライブラリ テーブル ファイルを選択してください。"
+msgstr "デザイン ブロックを保存するライブラリを選択してください。"
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "ネストされたシートを含むデザイン ブロックはサポートされていません。"
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
 msgid "Enter a name for the design block:"
 msgstr "デザイン ブロックの名前を入力してください:"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
-#, fuzzy
 msgid "Design Block Name"
-msgstr "デザインルール"
+msgstr "デザインブロック名"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
 msgid "Error saving temporary schematic file to create design block."
@@ -10071,12 +10052,11 @@ msgstr "設計ブロックを作成するための一時的な回路図ファイ
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "デザイン ブロックとして保存する項目をいくつか選択してください。"
 
 #: eeschema/design_block_utils.cpp:405
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "シンボル ライブラリ テーブル ファイルを選択してください。"
+msgstr "削除するライブラリを選択してください。"
 
 #: eeschema/design_block_utils.cpp:411 eeschema/design_block_utils.cpp:453
 #: pcbnew/footprint_libraries_utils.cpp:543
@@ -10093,6 +10073,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"ディスクからデザイン ブロック ライブラリ ' %s ' を削除しますか? これにより、"
+"ライブラリ内のすべてのデザイン ブロックが削除されます。"
 
 #: eeschema/design_block_utils.cpp:434
 #, c-format
@@ -10100,19 +10082,20 @@ msgid "Design block library '%s' deleted"
 msgstr "デザイン ブロック ライブラリ ' %s ' が削除されました"
 
 #: eeschema/design_block_utils.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "フットプリント '%s' をライブラリ '%s' から削除しますか？"
+msgstr "デザインブロック '%s' がライブラリ ' %s' "
+"内にありますが、ディスクから削除しますか?"
 
 #: eeschema/design_block_utils.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "フットプリント '%s' はライブラリ '%s' から削除されました"
+msgstr "デザイン ブロック ' %s ' がライブラリ ' %s ' から削除されました"
 
 #: eeschema/design_block_utils.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "シンボル '%s' をライブラリ '%s' からロード中にエラーしました。"
+msgstr "デザインブロック%s をライブラリ ' %s ' からロード中にエラーが発生しました。"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -10619,9 +10602,8 @@ msgid "Update Options"
 msgstr "更新オプション"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "シンボル フィールドを更新"
+msgstr "シンボルの形状とピンを更新する"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:128
 msgid "Update keywords and footprint filters"
@@ -10652,9 +10634,8 @@ msgid "Update/reset field visibilities"
 msgstr "フィールドの可視性を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "フィールドのサイズとスタイルを更新/リセット"
+msgstr "フィールドテキストのサイズとスタイルを更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -10662,9 +10643,8 @@ msgid "Update/reset field positions"
 msgstr "フィールドの位置を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:163
-#, fuzzy
 msgid "Update/reset visibility of pin names/numbers"
-msgstr "フィールドの可視性を更新/リセット"
+msgstr "ピン名/番号の表示を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update/reset symbol attributes"
@@ -10898,9 +10878,8 @@ msgid "It will be placed back in the %s list"
 msgstr "%s リスト内に書き戻されます"
 
 #: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:665
-#, fuzzy
 msgid "Edit exclusion comment..."
-msgstr "シミュレーションモデルを編集..."
+msgstr "除外コメントを編集..."
 
 #: eeschema/dialogs/dialog_erc.cpp:654 pcbnew/dialogs/dialog_drc.cpp:678
 msgid "Exclude this violation"
@@ -10913,9 +10892,8 @@ msgid "It will be excluded from the %s list"
 msgstr "%s リストから除外されます"
 
 #: eeschema/dialogs/dialog_erc.cpp:658 pcbnew/dialogs/dialog_drc.cpp:682
-#, fuzzy
 msgid "Exclude with comment..."
-msgstr "シミュレーションモデルを編集..."
+msgstr "コメント付きで除外..."
 
 #: eeschema/dialogs/dialog_erc.cpp:677 pcbnew/dialogs/dialog_drc.cpp:704
 #, c-format
@@ -10960,9 +10938,8 @@ msgstr "接続グリッドの間隔を編集..."
 
 #: eeschema/dialogs/dialog_erc.cpp:724 eeschema/dialogs/dialog_erc.cpp:760
 #: pcbnew/dialogs/dialog_drc.cpp:734 pcbnew/dialogs/dialog_drc.cpp:787
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "除外"
+msgstr "除外コメント"
 
 #: eeschema/dialogs/dialog_erc.cpp:848
 #: eeschema/dialogs/dialog_schematic_setup.cpp:98
@@ -11080,29 +11057,24 @@ msgid "Electrical Rules Checker"
 msgstr "エレクトリカル ルール チェッカー(ERC)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:267
-#, fuzzy
 msgid "Export netlist in legacy KiCad format"
-msgstr "ネットリスト ファイルをエクスポート"
+msgstr "従来の KiCad 形式でネットリストをエクスポートする"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:272
-#, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Pcbnew フォーマットでデータのエクスポート"
+msgstr "OrcadPCB2形式でネットリストをエクスポート"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:277
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "ネットリスト ファイルをエクスポート"
+msgstr "Allegro形式でネットリストをエクスポート"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:282
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "GenCAD フォーマットでエクスポート"
+msgstr "PADS形式でネットリストをエクスポート"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:287
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "GenCAD フォーマットでエクスポート"
+msgstr "CadStar形式でネットリストをエクスポート"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:295
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
@@ -11110,9 +11082,8 @@ msgid "Export Netlist"
 msgstr "ネットリストをエクスポート"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:324
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "Pcbnew フォーマットでデータのエクスポート"
+msgstr "SPICE形式でネットリストをエクスポート"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:328
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
@@ -11155,13 +11126,14 @@ msgstr "すべての電流を保存する指示を書く (.probe p(<item>))"
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "すべてのデジタルイベントデータを保存する"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:353
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
-msgstr ""
+msgstr "設定されていない場合は、デジタルイベントデータの保存を防止するための指令を記"
+"載します（esave none）"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:359
 msgid "Run external simulator command:"
@@ -11223,7 +11195,7 @@ msgstr "このプラグインはすでに存在します。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:807
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "すでに最大数のプラグインがダイアログに追加済みです。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:838
 msgid "You must provide a netlist generator command string"
@@ -11234,24 +11206,20 @@ msgid "You must provide a netlist generator title"
 msgstr "ネットリスト ジェネレーターのタイトルを指定する必要があります"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:50
-#, fuzzy
 msgid "Add Exporter..."
-msgstr "エクスポート..."
+msgstr "エクスポータを追加..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:53
-#, fuzzy
 msgid "Remove Exporter"
-msgstr "角を削除"
+msgstr "エクスポーターを削除"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:101
-#, fuzzy
 msgid "Command line to run the exporter:"
-msgstr "ジェネレーター実行用コマンドライン:"
+msgstr "エクスポーターを実行するためのコマンドライン:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "ジェネレーターを参照..."
+msgstr "スクリプトを参照..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
@@ -11668,9 +11636,8 @@ msgid "Position"
 msgstr "位置"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "デフォルトのリファレンス指定子:"
+msgstr "参照指定子の開始:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
@@ -11684,17 +11651,16 @@ msgstr ""
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
 #, fuzzy
 msgid "Increment by:"
-msgstr "増分幅:"
+msgstr "増加量:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "シートを追加"
+msgstr "すべてのシート"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 #, fuzzy
 msgid "Increment Annotations From"
-msgstr "アノテーションを削除"
+msgstr "アノテーションの増分"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
@@ -13021,12 +12987,10 @@ msgid "Field name templates"
 msgstr "フィールド名テンプレート"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "BOM presets"
 msgstr "BOMプリセット"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM format presets"
 msgstr "BOMフォーマットのプリセット"
 
@@ -13045,12 +13009,10 @@ msgid "Net classes"
 msgstr "ネットクラス"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
-#, fuzzy
 msgid "Bus alias definitions"
 msgstr "バス エイリアス定義"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
-#, fuzzy
 msgid "Text variables"
 msgstr "テキスト変数"
 
@@ -13081,29 +13043,26 @@ msgstr "後へ (&B)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "大文字と小文字を区別"
+msgstr "大文字と小文字を区別(&C)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "単語全体のみ(&W)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
-#, fuzzy
 msgid "Wi&ldcards"
-msgstr "ワイルドカード"
+msgstr "ワイルドカード(&L)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
 msgstr "ピン名と番号を検索 (&n)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search &hidden fields"
-msgstr "非表示フィールドを検索"
+msgstr "非表示フィールドを検索(&H)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -13159,7 +13118,7 @@ msgstr "テキスト変数"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:128
 #, fuzzy
 msgid "Schematic Data"
-msgstr "回路図の等価性"
+msgstr "回路図データ"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:146
 msgid "Project is missing or read-only. Settings will not be editable."
@@ -13175,9 +13134,8 @@ msgstr ""
 "プロジェクト ファイル %s をロードできませんでした。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:257
-#, fuzzy
 msgid "Loading Bus Aliases"
-msgstr "バス エイリアス"
+msgstr "バスエイリアスの読み込み"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:268 eeschema/files-io.cpp:280
 msgid "Root"
@@ -13185,9 +13143,10 @@ msgstr "ルート"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:272
 #: eeschema/dialogs/dialog_schematic_setup.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Error fetching bus aliases.  Could not load schematic '%s'."
-msgstr "回路図ファイル '%s' のロード中にメモリー不足が発生しました。"
+msgstr "バス エイリアスの取得中にエラーが発生しました。回路図 ' %s ' "
+"を読み込めませんでした。"
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties.cpp:85
@@ -13256,9 +13215,8 @@ msgid "%s Properties"
 msgstr "%sのプロパティ"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
-#, fuzzy
 msgid "Edit Sheet Pin Properties"
-msgstr "シートピンのプロパティ"
+msgstr "シートピンのプロパティを編集する"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -13670,7 +13628,7 @@ msgstr "ノイズ電流相関行列を計算する"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
 #, fuzzy
 msgid "SPICE directives:"
-msgstr "Spice 指令:"
+msgstr "SPICE 指令:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
 msgid "Load directives from schematic"
@@ -13990,6 +13948,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"解析に失敗しました:\n"
+"\n"
+" %s\n"
+"汎用 SPICE モデルを使用します。"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -14167,9 +14129,9 @@ msgid "Rename Field"
 msgstr "フィールド名を変更"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "ファイル %s はすでに存在します。"
+msgstr "フィールド名 %s は既に存在します。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:852
 msgid "The Quantity column cannot be grouped by."
@@ -14258,9 +14220,8 @@ msgid "Exclude DNP"
 msgstr "未実装を除外"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
-#, fuzzy
 msgid "Show 'Exclude from BOM'"
-msgstr "部品表から除外"
+msgstr "「BOMから除外」を表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -14606,46 +14567,41 @@ msgstr "シンボルをリマップ"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr "コンテキスト:"
+msgstr "セルの内容:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
 #, fuzzy
 msgid "External border"
-msgstr "外部データ"
+msgstr "外部の境界"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
 #, fuzzy
 msgid "Header border"
-msgstr "シートの図枠"
+msgstr "ヘッダーの境界線"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
-#, fuzzy
 msgid "Row lines"
-msgstr "線を描く"
+msgstr "行のライン"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
-#, fuzzy
 msgid "Column lines"
-msgstr "列"
+msgstr "列のライン"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:611 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:575
-#, fuzzy
 msgid "Table Properties"
-msgstr "ラベルのプロパティ"
+msgstr "テーブルのプロパティ"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:322
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
-#, fuzzy
 msgid "Edit Table Cell Properties"
-msgstr "シンボル プロパティを編集"
+msgstr "テーブルセルのプロパティを編集する"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
@@ -14675,9 +14631,8 @@ msgstr "-- ミックスされた値 --"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
-#, fuzzy
 msgid "Set Color..."
-msgstr "ハンダ ペーストの色..."
+msgstr "色を設定..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:208
 msgid "Background fill:"
@@ -14685,27 +14640,23 @@ msgstr "背景塗りつぶし:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:264
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:191
-#, fuzzy
 msgid "Cell margins:"
-msgstr "マージン:"
+msgstr "セルの余白:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:305
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:229
-#, fuzzy
 msgid "Edit Table..."
-msgstr "値を編集..."
+msgstr "テーブルを編集..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:230
-#, fuzzy
 msgid "Edit table properties and cell contents"
-msgstr "ファイルとその内容を削除"
+msgstr "テーブルのプロパティとセルの内容を編集する"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.h:98
 #: pcbnew/dialogs/dialog_tablecell_properties_base.h:89
-#, fuzzy
 msgid "Table Cell Properties"
-msgstr "ラベルのプロパティ"
+msgstr "テーブルセルのプロパティ"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:101
