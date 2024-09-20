@@ -404,9 +404,11 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             case SHAPE_T::RECTANGLE:
             case SHAPE_T::CIRCLE:
             case SHAPE_T::ARC:
-                if( newStart == newEnd )
+                if( newStart == newEnd ||
+                    shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::ARC )
                 {
-                    // Don't collapse shape; just snap its position
+                    // For arc and circle, never modify the shape. just snap its position
+                    // For others, don't collapse shape; just snap its position
                     if( newStart != shape->GetStart() )
                         doMoveItem( shape, newStart - shape->GetStart() );
                 }
