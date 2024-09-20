@@ -117,13 +117,10 @@ void TUNER_SLIDER::ShowChangedLanguage()
 
 void TUNER_SLIDER::onESeries( wxCommandEvent& event )
 {
-    if( event.GetEventObject() != m_e24 )
+    for( BITMAP_BUTTON* btn : { m_e24, m_e48, m_e96, m_e192 } )
     {
-        for( BITMAP_BUTTON* btn : { m_e48, m_e96, m_e192 } )
-        {
-            if( btn != event.GetEventObject() )
-                btn->Check( false );
-        }
+        if( btn != event.GetEventObject() )
+            btn->Check( false );
     }
 
     wxString oldValue = m_valueText->GetValue();
@@ -340,7 +337,7 @@ void TUNER_SLIDER::onClose( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSave( wxCommandEvent& event )
 {
-    m_frame->UpdateTunerValue( m_sheetPath, m_symbol, GetSymbolRef(), m_value.ToOrigString() );
+    m_frame->UpdateTunerValue( m_sheetPath, m_symbol, GetSymbolRef(), m_valueText->GetValue() );
 }
 
 
