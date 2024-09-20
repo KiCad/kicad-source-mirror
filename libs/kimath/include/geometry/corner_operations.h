@@ -23,12 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __CHAMFER_H
-#define __CHAMFER_H
+#pragma once
 
 #include <optional>
 
 #include <geometry/seg.h>
+#include <geometry/shape_arc.h>
 
 /**
  * Parameters that define a simple chamfer operation.
@@ -60,11 +60,7 @@ std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG& aSegA, const SEG&
 
 struct DOGBONE_RESULT
 {
-    // For lack of a generic ARC class, we can just use the points
-    // that define the arc
-    VECTOR2I m_arc_start;
-    VECTOR2I m_arc_mid;
-    VECTOR2I m_arc_end;
+    SHAPE_ARC m_arc;
 
     // The updated original segments
     // These can be empty if the dogbone "consumed" the original segments
@@ -90,6 +86,3 @@ struct DOGBONE_RESULT
  */
 std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB,
                                               int aDogboneRadius );
-
-
-#endif

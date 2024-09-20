@@ -39,6 +39,12 @@ SEG KIGEOM::NormalisedSeg( const SEG& aSeg )
 }
 
 
+const VECTOR2I& KIGEOM::GetOtherEnd( const SEG& aSeg, const VECTOR2I& aPoint )
+{
+    return ( aSeg.A == aPoint ) ? aSeg.B : aSeg.A;
+}
+
+
 std::array<SEG, 4> KIGEOM::BoxToSegs( const BOX2I& aBox )
 {
     const std::array<VECTOR2I, 4> corners = {

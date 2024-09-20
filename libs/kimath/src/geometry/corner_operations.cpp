@@ -24,6 +24,8 @@
 #include "geometry/corner_operations.h"
 
 #include <geometry/circle.h>
+#include <geometry/shape_arc.h>
+#include <geometry/shape_utils.h>
 
 namespace
 {
@@ -44,14 +46,6 @@ std::optional<VECTOR2I> GetSharedEndpoint( const SEG& aSegA, const SEG& aSegB )
     }
 
     return std::nullopt;
-}
-
-/**
- * Get the end point of the segment that is _not_ the given point.
- */
-VECTOR2I GetOtherPoint( const SEG& aSeg, const VECTOR2I& aPoint )
-{
-    return ( aSeg.A == aPoint ) ? aSeg.B : aSeg.A;
 }
 
 
@@ -121,8 +115,8 @@ std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG& aSegA, const SEG&
     }
 
     // These are the other existing line points (the ones that are not the intersection)
-    const VECTOR2I a_end_pt = GetOtherPoint( aSegA, *corner );
-    const VECTOR2I b_end_pt = GetOtherPoint( aSegB, *corner );
+    const VECTOR2I& a_end_pt = KIGEOM::GetOtherEnd( aSegA, *corner );
+    const VECTOR2I& b_end_pt = KIGEOM::GetOtherEnd( aSegB, *corner );
 
     // Now, construct segment of the set-back lengths, that begins
     // at the intersection point and is parallel to each line segments
@@ -199,10 +193,10 @@ std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB
         return std::nullopt;
     }
 
-    const int mouth_width = SEG( *ptOnSegA, *ptOnSegB ).Length();
+    SHAPE_ARC arc( *ptOnSegA, *corner, *ptOnSegB, 0 );
 
-    const VECTOR2I aOtherPtA = GetOtherPoint( aSegA, *corner );
-    const VECTOR2I aOtherPtB = GetOtherPoint( aSegB, *corner );
+    const VECTOR2I& aOtherPtA = KIGEOM::GetOtherEnd( aSegA, *corner );
+    const VECTOR2I& aOtherPtB = KIGEOM::GetOtherEnd( aSegB, *corner );
 
     // See if we need to update the original segments
     // or if the dogbone consumed them
@@ -213,7 +207,9 @@ std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB
     if( aOtherPtB != *ptOnSegB )
         new_b = SEG{ aOtherPtB, *ptOnSegB };
 
+    const bool small_arc_mouth = arc.GetCentralAngle() > ANGLE_270;
+
     return DOGBONE_RESULT{
-        *ptOnSegA, *corner, *ptOnSegB, new_a, new_b, mouth_width < aDogboneRadius,
+        arc, new_a, new_b, small_arc_mouth,
     };
 }

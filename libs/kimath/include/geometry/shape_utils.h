@@ -56,6 +56,11 @@ namespace KIGEOM
 SEG NormalisedSeg( const SEG& aSeg );
 
 /**
+ * Get the end point of the segment that is _not_ the given point.
+ */
+const VECTOR2I& GetOtherEnd( const SEG& aSeg, const VECTOR2I& aPoint );
+
+/**
  * Decompose a BOX2 into four segments.
  *
  * Segments are returned in the order: Top, Right, Bottom, Left.

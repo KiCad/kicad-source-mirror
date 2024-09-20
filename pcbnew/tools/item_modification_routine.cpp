@@ -333,8 +333,8 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
 
     auto tArc = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::ARC );
 
-    tArc->SetArcGeometry( dogbone_result->m_arc_start, dogbone_result->m_arc_mid,
-                          dogbone_result->m_arc_end );
+    tArc->SetArcGeometry( dogbone_result->m_arc.GetP0(), dogbone_result->m_arc.GetArcMid(),
+                          dogbone_result->m_arc.GetP1() );
 
     // Copy properties from one of the source lines
     tArc->SetWidth( aLineA.GetWidth() );
