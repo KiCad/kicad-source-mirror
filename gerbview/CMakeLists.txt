@@ -136,12 +136,12 @@ target_link_libraries( gerbview_kiface_objects
         core
     )
 
-message( STATUS "Including 3Dconnexion SpaceMouse navigation support in gerbview" )
-add_subdirectory( navlib )
-
-target_link_libraries( gerbview_kiface_objects PUBLIC gerbview_navlib)
-
-add_dependencies( gerbview_kiface_objects gerbview_navlib )
+if( KICAD_ENABLE_3DMOUSE_GERBVIEW )
+    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in gerbview" )
+    add_subdirectory( navlib )
+    target_link_libraries( gerbview_kiface_objects PUBLIC gerbview_navlib)
+    add_dependencies( gerbview_kiface_objects gerbview_navlib )
+endif()
 
 # the main gerbview program, in DSO form.
 add_library( gerbview_kiface MODULE )

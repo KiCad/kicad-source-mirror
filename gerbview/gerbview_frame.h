@@ -531,8 +531,9 @@ private:
                                             // relative to the m_SelAperAttributesBox
     wxStaticText*       m_dcodeText;        // a message on the auxiliary toolbar,
                                             // relative to the m_DCodeSelector
-
+#ifdef KICAD_ENABLE_3DMOUSE_GERBVIEW
     std::unique_ptr<NL_GERBVIEW_PLUGIN> m_spaceMouse;
+#endif
 };
 
 #endif /* WX_GERBER_STRUCT_H */
