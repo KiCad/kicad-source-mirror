@@ -197,7 +197,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 {
                     m_frame->SaveCopyInUndoList();
                 }
-                catch( const fmt::v10::format_error& exc )
+                catch( const fmt::format_error& exc )
                 {
                     wxLogWarning( wxS( "Exception \"%s\" serializing string ocurred." ),
                                   exc.what() );
