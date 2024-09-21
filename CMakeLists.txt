@@ -86,10 +86,6 @@ endif()
 ####################################
 # Feature flags
 ####################################
-option( KICAD_ENABLE_3DMOUSE_GERBVIEW
-    "Build the 3D mouse connexion support in Gerbview. does not work yet on MSYS2 (link issue)"
-    ON )
-
 option( KICAD_SPICE_QA
     "Build software Quality assurance unit tests for spice (default ON)"
     ON )
@@ -308,10 +304,6 @@ endif()
 
 if( KICAD_IPC_API )
     add_definitions( -DKICAD_IPC_API )
-endif()
-
-if( KICAD_ENABLE_3DMOUSE_GERBVIEW )
-    add_definitions( -DKICAD_ENABLE_3DMOUSE_GERBVIEW )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds

@@ -1072,7 +1072,7 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
 
     ReCreateOptToolbar();
     ReCreateMenuBar();
-#ifdef KICAD_ENABLE_3DMOUSE_GERBVIEW
+
     try
     {
         if( !m_spaceMouse )
@@ -1084,7 +1084,6 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
     {
         wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
     }
-#endif
 }
 
 
@@ -1256,17 +1255,15 @@ void GERBVIEW_FRAME::ToggleLayerManager()
 void GERBVIEW_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleActivateEvent(aEvent);
-#ifdef KICAD_ENABLE_3DMOUSE_GERBVIEW
+
     if( m_spaceMouse )
         m_spaceMouse->SetFocus( aEvent.GetActive() );
-#endif
 }
 
 void GERBVIEW_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleIconizeEvent(aEvent);
-#ifdef KICAD_ENABLE_3DMOUSE_GERBVIEW
+
     if( m_spaceMouse )
         m_spaceMouse->SetFocus( false );
-#endif
 }
