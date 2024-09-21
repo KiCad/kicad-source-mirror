@@ -32,10 +32,13 @@
 #include "pl_editor_layout.h"
 #include "pl_draw_panel_gal.h"
 
+#include <memory>
+
 class PL_DRAW_PANEL_GAL;
 class PROPERTIES_FRAME;
 class DS_DATA_ITEM;
 class wxChoice;
+class NL_PL_EDITOR_PLUGIN;
 
 
 /**
@@ -265,6 +268,10 @@ protected:
 
     DECLARE_EVENT_TABLE();
 
+private:
+    void handleActivateEvent( wxActivateEvent& aEvent ) override;
+    void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
+
 protected:
     /// The last filename chosen to be proposed to the user
     PROPERTIES_FRAME* m_propertiesPagelayout;
@@ -281,6 +288,8 @@ private:
     wxString          m_mruImagePath;         // Most recently used path for placing a new image
                                               // only on page 1, not on page 1
     VECTOR2I          m_grid_origin;
+
+    std::unique_ptr<NL_PL_EDITOR_PLUGIN> m_spaceMouse;
 };
 
 #endif /* _PL_EDITOR_FRAME_H */
