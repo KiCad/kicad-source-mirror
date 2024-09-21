@@ -138,6 +138,9 @@ target_link_libraries( gerbview_kiface_objects
 
 message( STATUS "Including 3Dconnexion SpaceMouse navigation support in gerbview" )
 add_subdirectory( navlib )
+
+target_link_libraries( gerbview_kiface_objects PUBLIC gerbview_navlib)
+
 add_dependencies( gerbview_kiface_objects gerbview_navlib )
 
 # the main gerbview program, in DSO form.
@@ -159,7 +162,9 @@ target_link_libraries( gerbview_kiface
         ${wxWidgets_LIBRARIES}
     )
 
-target_link_libraries( gerbview_kiface PUBLIC gerbview_navlib)
+if( MINGW )
+    target_link_libraries( gerbview_kiface PUBLIC gerbview_navlib)
+endif()
 
 set_source_files_properties( gerbview.cpp PROPERTIES
     # The KIFACE is in gerbview.cpp, export it:
