@@ -996,7 +996,7 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
     for( ; it != stackup.GetList().end() && ( *it )->GetType() != BS_ITEM_TYPE_COPPER; ++it )
         ;
 
-    auto curLayer = static_cast<int>( F_Cu );
+    auto cuLayer = LAYER_RANGE( F_Cu, B_Cu, 32 ).begin();
 
     for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::TOP_LAYER );
             altiumLayerId < elem.stackup.size() && altiumLayerId != 0;
@@ -1025,8 +1025,8 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
             ++it;
         }
 
-        m_layermap.insert( { static_cast<ALTIUM_LAYER>( altiumLayerId ),
-                static_cast<PCB_LAYER_ID>( curLayer++ ) } );
+        m_layermap.insert( { static_cast<ALTIUM_LAYER>( altiumLayerId ), *cuLayer } );
+        ++cuLayer;
 
         if( ( *it )->GetType() != BS_ITEM_TYPE_COPPER )
             THROW_IO_ERROR( wxT( "Board6 stream, unexpected item while parsing stackup" ) );
@@ -1107,7 +1107,7 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
     std::vector<INPUT_LAYER_DESC> inputLayers;
     std::map<wxString, ALTIUM_LAYER>  altiumLayerNameMap;
 
-    for( size_t ii = 0; ii < aStackup.size(); ii++ )
+    for( size_t ii = 0; ii < aStackup.size(); )
     {
         ABOARD6_LAYER_STACKUP& curLayer = aStackup[ii];
         ALTIUM_LAYER           layer_num = static_cast<ALTIUM_LAYER>( ii + 1 );
@@ -1136,6 +1136,14 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         inputLayers.push_back( iLdesc );
         altiumLayerNameMap.insert( { curLayer.name, layer_num } );
         m_layerNames.insert( { layer_num, curLayer.name } );
+
+        // Within the copper stack, the nextId can be used to hop over unused layers in a particular
+        // Altium board.  The IDs start with ALTIUM_LAYER::UNKNOWN but the first copper layer in the
+        // array will be ALTIUM_LAYER::TOP_LAYER.
+        if( layer_num < ALTIUM_LAYER::BOTTOM_LAYER )
+            ii = curLayer.nextId - 1;
+        else
+            ++ii;
     }
 
     if( inputLayers.size() == 0 )
