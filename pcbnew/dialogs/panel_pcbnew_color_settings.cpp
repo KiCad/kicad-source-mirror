@@ -666,6 +666,7 @@ std::set<int> g_excludedLayers =
             LAYER_TRACKS,
             LAYER_FP_TEXT,
             GAL_LAYER_ID_START + 6,     // where LAYER_MOD_TEXT_BK (deprecated) used to be
+            GAL_LAYER_ID_START + 7,     // where LAYER_HIDDEN_TEXT (deprecated) used to be
             GAL_LAYER_ID_START + 14,    // where LAYER_NO_CONNECTS (deprecated) used to be
             LAYER_PAD_PLATEDHOLES,
             LAYER_PAD_HOLEWALLS,
