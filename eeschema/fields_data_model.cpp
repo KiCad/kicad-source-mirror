@@ -825,6 +825,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
     // Set columns that are present and shown
     for( BOM_FIELD field : aPreset.fieldsOrdered )
     {
+        // Ignore empty fields
+        if(!field.name)
+            continue;
+
         order.emplace_back( field.name );
 
         int col = GetFieldNameCol( field.name );
