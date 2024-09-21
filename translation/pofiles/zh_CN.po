@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-15 10:09+0000\n"
+"PO-Revision-Date: 2024-09-22 05:40+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -19761,7 +19761,7 @@ msgstr "选择完整的连接"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Library As..."
-msgstr "将库另存为 ......"
+msgstr "将库另存为..."
 
 #: eeschema/tools/ee_actions.cpp:157
 msgid "Save the current library to a new file."
@@ -24694,7 +24694,7 @@ msgstr "将位图图像转换为原理图或 PCB 元件"
 #: pcb_calculator/pcb_calculator_frame.cpp:215
 #: pcb_calculator/pcb_calculator_frame.cpp:242
 msgid "Calculator Tools"
-msgstr "计算器工具"
+msgstr "计算工具"
 
 #: kicad/tools/kicad_manager_actions.cpp:168
 msgid "Run component calculations, track width calculations, etc."
@@ -39604,7 +39604,7 @@ msgstr "将覆铜域从 %s 重新连接到了 %s。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1023
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "覆铜域 '%s' 没有与之连接的焊盘。"
+msgstr "覆铜域 '%s' 没有与之相连的焊盘。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1031
 #, c-format
