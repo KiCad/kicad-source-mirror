@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wxFormBuilder_Project>
-  <FileVersion major="1" minor="17"/>
+  <FileVersion major="1" minor="18"/>
   <object class="Project" expanded="true">
-    <property name="class_decoration"></property>
     <property name="code_generation">C++</property>
-    <property name="disconnect_events">1</property>
-    <property name="disconnect_mode">source_name</property>
-    <property name="disconnect_php_events">0</property>
-    <property name="disconnect_python_events">0</property>
+    <property name="cpp_class_decoration"></property>
+    <property name="cpp_disconnect_events">1</property>
+    <property name="cpp_event_generation">connect</property>
+    <property name="cpp_help_provider">none</property>
+    <property name="cpp_namespace"></property>
+    <property name="cpp_precompiled_header"></property>
+    <property name="cpp_use_array_enum">0</property>
+    <property name="cpp_use_enum">0</property>
     <property name="embedded_files_path">res</property>
     <property name="encoding">UTF-8</property>
-    <property name="event_generation">connect</property>
     <property name="file">dialog_update_notice_base</property>
     <property name="first_id">1000</property>
-    <property name="help_provider">none</property>
-    <property name="image_path_wrapper_function_name"></property>
-    <property name="indent_with_spaces"></property>
     <property name="internationalize">1</property>
+    <property name="lua_skip_events">1</property>
+    <property name="lua_ui_table">UI</property>
     <property name="name">dialog_update_notice</property>
-    <property name="namespace"></property>
     <property name="path">.</property>
-    <property name="precompiled_header"></property>
+    <property name="php_disconnect_events">0</property>
+    <property name="php_disconnect_mode">source_name</property>
+    <property name="php_skip_events">1</property>
+    <property name="python_disconnect_events">0</property>
+    <property name="python_disconnect_mode">source_name</property>
+    <property name="python_image_path_wrapper_function_name"></property>
+    <property name="python_indent_with_spaces"></property>
+    <property name="python_skip_events">1</property>
     <property name="relative_path">1</property>
-    <property name="skip_lua_events">1</property>
-    <property name="skip_php_events">1</property>
-    <property name="skip_python_events">1</property>
-    <property name="ui_table">UI</property>
-    <property name="use_array_enum">0</property>
-    <property name="use_enum">0</property>
     <property name="use_microsoft_bom">0</property>
+    <property name="use_native_eol">0</property>
     <object class="Dialog" expanded="true">
       <property name="aui_managed">0</property>
       <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
@@ -87,10 +89,10 @@
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
                 <property name="TopDockable">1</property>
-                <property name="aui_layer"></property>
+                <property name="aui_layer">0</property>
                 <property name="aui_name"></property>
-                <property name="aui_position"></property>
-                <property name="aui_row"></property>
+                <property name="aui_position">0</property>
+                <property name="aui_row">0</property>
                 <property name="best_size"></property>
                 <property name="bg"></property>
                 <property name="bitmap"></property>
@@ -155,10 +157,10 @@
                     <property name="LeftDockable">1</property>
                     <property name="RightDockable">1</property>
                     <property name="TopDockable">1</property>
-                    <property name="aui_layer"></property>
+                    <property name="aui_layer">0</property>
                     <property name="aui_name"></property>
-                    <property name="aui_position"></property>
-                    <property name="aui_row"></property>
+                    <property name="aui_position">0</property>
+                    <property name="aui_row">0</property>
                     <property name="best_size"></property>
                     <property name="bg"></property>
                     <property name="caption"></property>
@@ -217,10 +219,10 @@
                     <property name="LeftDockable">1</property>
                     <property name="RightDockable">1</property>
                     <property name="TopDockable">1</property>
-                    <property name="aui_layer"></property>
+                    <property name="aui_layer">0</property>
                     <property name="aui_name"></property>
-                    <property name="aui_position"></property>
-                    <property name="aui_row"></property>
+                    <property name="aui_position">0</property>
+                    <property name="aui_row">0</property>
                     <property name="best_size"></property>
                     <property name="bg"></property>
                     <property name="caption"></property>
@@ -295,17 +297,17 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxButton" expanded="false">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
                 <property name="TopDockable">1</property>
-                <property name="aui_layer"></property>
+                <property name="aui_layer">0</property>
                 <property name="aui_name"></property>
-                <property name="aui_position"></property>
-                <property name="aui_row"></property>
+                <property name="aui_position">0</property>
+                <property name="aui_row">0</property>
                 <property name="auth_needed">0</property>
                 <property name="best_size"></property>
                 <property name="bg"></property>
@@ -332,7 +334,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Skip this version</property>
+                <property name="label">&amp;Skip this version</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -380,17 +382,17 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxButton" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
                 <property name="TopDockable">1</property>
-                <property name="aui_layer"></property>
+                <property name="aui_layer">0</property>
                 <property name="aui_name"></property>
-                <property name="aui_position"></property>
-                <property name="aui_row"></property>
+                <property name="aui_position">0</property>
+                <property name="aui_row">0</property>
                 <property name="auth_needed">0</property>
                 <property name="best_size"></property>
                 <property name="bg"></property>
@@ -417,7 +419,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Remind me later</property>
+                <property name="label">&amp;Remind me later</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -455,17 +457,17 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxButton" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
                 <property name="TopDockable">1</property>
-                <property name="aui_layer"></property>
+                <property name="aui_layer">0</property>
                 <property name="aui_name"></property>
-                <property name="aui_position"></property>
-                <property name="aui_row"></property>
+                <property name="aui_position">0</property>
+                <property name="aui_row">0</property>
                 <property name="auth_needed">0</property>
                 <property name="best_size"></property>
                 <property name="bg"></property>
@@ -492,7 +494,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">View Details</property>
+                <property name="label">&amp;View Details</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -537,10 +539,10 @@
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
                 <property name="TopDockable">1</property>
-                <property name="aui_layer"></property>
+                <property name="aui_layer">0</property>
                 <property name="aui_name"></property>
-                <property name="aui_position"></property>
-                <property name="aui_row"></property>
+                <property name="aui_position">0</property>
+                <property name="aui_row">0</property>
                 <property name="auth_needed">0</property>
                 <property name="best_size"></property>
                 <property name="bg"></property>
@@ -567,7 +569,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Open Downloads Page</property>
+                <property name="label">Open &amp;Downloads Page</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
