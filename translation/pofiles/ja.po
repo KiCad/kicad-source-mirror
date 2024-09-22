@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-13 02:09+0000\n"
+"PO-Revision-Date: 2024-09-23 10:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -40519,9 +40519,8 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(PTHパッドの穴のサイズは %s より大きくなければなりません)"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(PTHパッドの穴は導体を残しません)"
+msgstr "(PTHパッドの穴には導体が残りません)"
 
 #: pcbnew/pad.cpp:1941
 msgid "(PTH pad hole non fully inside copper)"
@@ -44446,7 +44445,7 @@ msgstr ""
 
 #: pcbnew/tools/pad_tool.cpp:401 pcbnew/tools/pad_tool.cpp:504
 msgid "Renumber pads"
-msgstr "パッドをリナンバー"
+msgstr "パッドの番号を付け直す"
 
 #: pcbnew/tools/pad_tool.cpp:643
 msgid "Place pad"
