@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-21 14:40+0000\n"
+"PO-Revision-Date: 2024-09-22 15:40+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -13626,7 +13626,6 @@ msgid "Compute noise current correlation matrix"
 msgstr "ノイズ電流相関行列を計算する"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
-#, fuzzy
 msgid "SPICE directives:"
 msgstr "SPICE 指令:"
 
@@ -14163,7 +14162,6 @@ msgid "Unsaved data"
 msgstr "未保存データ"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1254
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "変更内容が未保存です。保存されていないデータをエクスポートしますか？"
 
@@ -14578,9 +14576,8 @@ msgstr "外部の境界"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
-#, fuzzy
 msgid "Header border"
-msgstr "ヘッダーの境界線"
+msgstr "ヘッダーの境界"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
@@ -14877,9 +14874,8 @@ msgid "Show ERC exclusions"
 msgstr "ERC 除外の表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "[シミュレーションから除外]の属性を削除"
+msgstr "シミュレーションから除外する項目をマークする"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:72
 msgid "Show OP voltages"
@@ -14919,14 +14915,12 @@ msgid "Highlight thickness:"
 msgstr "ハイライトの太さ:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:133
-#, fuzzy
 msgid "Highlight netclass colors"
-msgstr "ネットクラスをの色を設定"
+msgstr "ネットクラスの色を強調表示する"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
-#, fuzzy
 msgid "Color highlight thickness:"
-msgstr "ハイライトの太さ:"
+msgstr "カラーハイライトの太さ:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
 msgid "Color highlight opacity:"
@@ -15442,42 +15436,35 @@ msgstr "エラーを生成"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
-#, fuzzy
 msgid "No action"
-msgstr "未接続"
+msgstr "何もしない"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
-#, fuzzy
 msgid "Pan left/right"
-msgstr "左右にパン:"
+msgstr "左/右にパン"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:43
-#, fuzzy
 msgid "Pan right/left"
-msgstr "右にパン"
+msgstr "右/左にパン"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
-#, fuzzy
 msgid "Pan up/down"
-msgstr "上下にパン:"
+msgstr "上/下にパン"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
-#, fuzzy
 msgid "Zoom horizontally"
-msgstr "水平反転"
+msgstr "水平方向に拡大"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:47
-#, fuzzy
 msgid "Zoom vertically"
-msgstr "全てズーム"
+msgstr "垂直方向に拡大"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
-#, fuzzy
 msgid "Modifier"
-msgstr "変更"
+msgstr "修飾"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -15505,13 +15492,12 @@ msgid "Alt:"
 msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal touchpad movement:"
-msgstr "水平方向の数:"
+msgstr "タッチパッドの水平移動:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "どれでも："
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -15830,9 +15816,8 @@ msgstr "テーブルからライブラリを削除"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "ライブラリーを参照"
+msgstr "ライブラリをリセット"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: kicad/dialogs/panel_design_block_lib_table_base.cpp:156
@@ -15997,9 +15982,8 @@ msgid "Selection Filter"
 msgstr "フィルター選択"
 
 #: eeschema/eeschema_settings.cpp:134
-#, fuzzy
 msgid "Design Blocks"
-msgstr "デザインルール"
+msgstr "デザインブロック"
 
 #: eeschema/erc/erc.cpp:76 eeschema/erc/erc.cpp:93
 msgid "Input Pin"
@@ -16093,7 +16077,7 @@ msgstr "ネットクラス %s は定義されていません"
 #: eeschema/erc/erc.cpp:744
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "ラベルは%d 、 %dで複数の配線を接続します"
 
 #: eeschema/erc/erc.cpp:799
 #, c-format
@@ -16115,9 +16099,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "ピン %s が %s と %s の両方に接続されています"
 
 #: eeschema/erc/erc.cpp:1277
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "現在の設定には '%s' のライブラリは含まれません"
+msgstr "現在の構成にはシンボル ライブラリ '%s' が含まれていません"
 
 #: eeschema/erc/erc.cpp:1292
 #, c-format
@@ -16147,9 +16131,9 @@ msgstr "'%s' は有効なフットプリント識別子ではありません。"
 #: eeschema/erc/erc.cpp:1409
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:832
 #: pcbnew/footprint_editor_utils.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'."
-msgstr "現在の設定には '%s' のライブラリは含まれません。"
+msgstr "現在の構成にはフットプリント ライブラリ '%s' が含まれていません。"
 
 #: eeschema/erc/erc.cpp:1418
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:846
@@ -16287,11 +16271,11 @@ msgstr "階層ラベルとシートピンの不一致"
 
 #: eeschema/erc/erc_item.cpp:92
 msgid "Four connection points are joined together"
-msgstr ""
+msgstr "4つの接続ポイントが結合されます"
 
 #: eeschema/erc/erc_item.cpp:96
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "ラベルは複数のワイヤを接続します"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
@@ -16330,7 +16314,7 @@ msgstr "グローバル ラベルは回路図中のどこにも接続されて�
 
 #: eeschema/erc/erc_item.cpp:132
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "ローカルラベルとグローバルラベルが同じ名前です"
 
 #: eeschema/erc/erc_item.cpp:136
 msgid "Different footprint assigned in another unit of the symbol"
@@ -17188,7 +17172,8 @@ msgstr "基板ロード中のエラー '%s': %s"
 msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
-msgstr ""
+msgstr "モデル ' %s ' の解析中にエラーが発生しました。接続と比較した Sim.NodesFormat "
+"のノード数 '?' が間違っています"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:576
 #, c-format
@@ -18010,6 +17995,8 @@ msgid ""
 "No module instance '%s' found in schematic file:\n"
 "%s"
 msgstr ""
+"回路図ファイル内にモジュールインスタンス ' %s ' が見つかりません:\n"
+"%s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1719
 #, c-format
@@ -18940,7 +18927,7 @@ msgstr "ライブラリへのリンク"
 #: eeschema/sch_table.cpp:400 pcbnew/pcb_table.cpp:360
 #, c-format
 msgid "%d Column Table"
-msgstr ""
+msgstr "%d列テーブル"
 
 #: eeschema/sch_table.cpp:545 pcbnew/pcb_table.cpp:396
 #, c-format
@@ -18969,7 +18956,7 @@ msgstr "ジェネレーターを参照"
 
 #: eeschema/sch_table.cpp:638 pcbnew/pcb_table.cpp:602
 msgid "Cell Separators"
-msgstr ""
+msgstr "セルセパレータ"
 
 #: eeschema/sch_table.cpp:642 pcbnew/pcb_table.cpp:606
 #, fuzzy
@@ -21184,7 +21171,8 @@ msgstr "[ライブラリが未選択です]"
 msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
-msgstr ""
+msgstr "このダイアログで行った変更はすぐに反映されます。変更を元に戻すには、影響を受"
+"ける各ドキュメントで[元に戻す]を使用してください"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
 #: eeschema/tools/ee_actions.cpp:520 eeschema/tools/ee_actions.cpp:528
@@ -21230,7 +21218,7 @@ msgstr "階層ラベルをシートピンに変更します"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr ""
+msgstr "ブレークシートピンと階層ラベルの関連付け"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Display previous symbol"
@@ -21438,7 +21426,7 @@ msgstr "完全な接続を選択"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Sheet as Design Block..."
-msgstr ""
+msgstr "シートをデザイン ブロックとして保存..."
 
 #: eeschema/tools/ee_actions.cpp:157
 #, fuzzy
@@ -21447,7 +21435,7 @@ msgstr "現在のビューから PNG ファイルを作成します"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "選択内容をデザイン ブロックとして保存..."
 
 #: eeschema/tools/ee_actions.cpp:164
 #, fuzzy
@@ -21689,7 +21677,7 @@ msgstr "ブロックを配置"
 
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "選択したデザインブロックを現在のシートに追加"
 
 #: eeschema/tools/ee_actions.cpp:440
 #, fuzzy
@@ -21733,7 +21721,7 @@ msgstr "図面シート"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "シートをプロジェクトにコピーし、現在のシートに描画します"
 
 #: eeschema/tools/ee_actions.cpp:512
 #, fuzzy
@@ -22381,7 +22369,7 @@ msgstr "シミュレーションから除外"
 
 #: eeschema/tools/ee_actions.cpp:1183
 msgid "Draw 'X's over items which have been excluded from simulation"
-msgstr ""
+msgstr "シミュレーションから除外された項目に「X」を描画します"
 
 #: eeschema/tools/ee_actions.cpp:1188
 msgid "Show OP Voltages"
@@ -23173,7 +23161,8 @@ msgstr "シンボル ライブラリが選択されていません。"
 #: pcbnew/tools/footprint_editor_control.cpp:613
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
-msgstr ""
+msgstr "共通設定でファイル エクスプローラー引数 ' %F ' "
+"が見つからないか、形式が正しくありません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:332
 #: pcbnew/tools/footprint_editor_control.cpp:638
@@ -23229,7 +23218,7 @@ msgstr "非表示フィールドを表示"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:370
 msgid "Use the Symbol Properties dialog to remove fields."
-msgstr ""
+msgstr "フィールドを削除するには、シンボル プロパティ ダイアログを使用します。"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:665
 msgid "Edit Pins"
@@ -23286,13 +23275,14 @@ msgstr "以降のクリックのためにシンボルを選択したままにし
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "デザインブロックを新しいシートとして配置します。"
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
-msgstr ""
+msgstr "ソース回路図の参照指定子を保持します。それ以外の場合は、クリアしてから設定に"
+"従って再アノテーションします。"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -23747,7 +23737,8 @@ msgstr "フラッシュ アイテムをスケッチ モードで表示"
 msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
-msgstr ""
+msgstr "フラッシュされたアイテム（標準またはマクロ絞りを使用して描画されたアイテム）"
+"をアウトラインモードで表示します"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -23774,7 +23765,7 @@ msgstr "不透明度:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
+msgstr "強制不透明表示モードでの不透明度"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -24331,7 +24322,7 @@ msgstr "RS274X: コマンド KNOCKOUT は GerbViewで無視されます"
 
 #: gerbview/rs274x.cpp:680
 msgid "IPNEG Gerber command is deprecated since 2012. Skip it"
-msgstr ""
+msgstr "IPNEG Gerberコマンドは2012年以降非推奨です。スキップしてください"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
@@ -24946,7 +24937,8 @@ msgstr "'未実装'が指定されたコンポーネントの 3D モデルを除
 msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
-msgstr ""
+msgstr "この参照指定子のリストに一致するコンポーネント 3D モデルのみを含めます "
+"(カンマ区切り、ワイルドカードをサポート)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 #: pcbnew/dialogs/dialog_export_step_base.cpp:91
@@ -24974,20 +24966,22 @@ msgid "Export silkscreen graphics as a set of flat faces"
 msgstr "シルクスクリーン画像を平面のセットとしてエクスポートする"
 
 #: kicad/cli/command_pcb_export_3d.cpp:151
+#, fuzzy
 msgid "Export soldermask layers as a set of flat faces"
-msgstr ""
+msgstr "ソルダーマスクレイヤーを平面のセットとしてエクスポートする"
 
 #: kicad/cli/command_pcb_export_3d.cpp:155
 msgid "Fuse overlapping geometry together"
-msgstr ""
+msgstr "重なり合うジオメトリを融合する"
 
 #: kicad/cli/command_pcb_export_3d.cpp:161
 msgid "Minimum distance between points to treat them as separate ones"
 msgstr "別の点として扱う点間の最小距離"
 
 #: kicad/cli/command_pcb_export_3d.cpp:167
+#, fuzzy
 msgid "Only include copper items belonging to nets matching this wildcard"
-msgstr ""
+msgstr "このワイルドカードに一致するネットに属する銅アイテムのみを含めます"
 
 #: kicad/cli/command_pcb_export_3d.cpp:173
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -25311,7 +25305,7 @@ msgstr "図面シートを含めない"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "プリント基板を3D表示でPNGまたはJPEG画像にレンダリングします"
 
 #: kicad/cli/command_pcb_render.cpp:173
 #, fuzzy
@@ -25332,7 +25326,8 @@ msgstr "側面からレンダリングします。オプション: %s"
 msgid ""
 "Image background. Options: transparent, opaque. Default: transparent for "
 "PNG, opaque for JPEG"
-msgstr ""
+msgstr "画像の背景。オプション: 透明、不透明。デフォルト: PNG の場合は透明、JPEG "
+"の場合は不透明"
 
 #: kicad/cli/command_pcb_render.cpp:198
 #, c-format
@@ -25342,17 +25337,17 @@ msgstr "レンダリング品質。オプション: %s"
 #: kicad/cli/command_pcb_render.cpp:204
 #, c-format
 msgid "Color preset. Options: %s, %s, %s, ..."
-msgstr ""
+msgstr "カラープリセット。オプション: %s 、 %s 、 %s 、..."
 
 #: kicad/cli/command_pcb_render.cpp:210
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "preset"
-msgstr ""
+msgstr "品質プリセットで無効になっている場合でも、床、影、後処理を有効にします"
 
 #: kicad/cli/command_pcb_render.cpp:215
 msgid "Use perspective projection instead of orthogonal"
-msgstr ""
+msgstr "直交投影の代わりに透視投影を使用する"
 
 #: kicad/cli/command_pcb_render.cpp:221
 #, fuzzy
@@ -25361,17 +25356,18 @@ msgstr "カメラ オプション"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "カメラをパンします。形式は'X,Y,Z'です。例:'3,0,0'"
 
 #: kicad/cli/command_pcb_render.cpp:231
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
-msgstr ""
+msgstr "基板の中心を基準としたピボット ポイントをセンチメートル単位で設定します。"
+"形式は'X,Y,Z'です (例:'-10,2,0')"
 
 #: kicad/cli/command_pcb_render.cpp:238
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
-msgstr ""
+msgstr "基板を回転します。形式は'X,Y,Z'です。例: 等角投影ビューの場合は'-45,0,45'"
 
 #: kicad/cli/command_pcb_render.cpp:262
 msgid "Invalid background\n"
@@ -25480,7 +25476,7 @@ msgstr "PDFでプロパティのポップアップを生成しない"
 
 #: kicad/cli/command_sch_export_plot.cpp:85
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
-msgstr ""
+msgstr "AUTHOR および SUBJECT 変数から PDF メタデータを生成しないでください"
 
 #: kicad/cli/command_sch_export_plot.cpp:94
 msgid "Avoid setting a background color (regardless of theme)"
@@ -28601,7 +28597,7 @@ msgstr "Vref が 0 に設定されています！"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:414
 msgid "Vref must VrefMin < VrefTyp < VrefMax"
-msgstr ""
+msgstr "Vref は VrefMin < VrefTyp < VrefMax である必要があります"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:420
 msgid "Incorrect value for R1 R2"
@@ -28609,7 +28605,7 @@ msgstr "不正な値の R1 R2"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:435
 msgid "Iadj must IadjTyp < IadjMax"
-msgstr ""
+msgstr "Iadj は IadjTyp < IadjMax である必要があります"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
@@ -29199,7 +29195,7 @@ msgstr "データ ファイルのエラー."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (最小/標準/最大):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
@@ -29207,7 +29203,7 @@ msgstr "V"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
-msgstr ""
+msgstr "Iadj（標準/最大）:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -32798,7 +32794,7 @@ msgstr "すべてのファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:459
 msgid "BREP (OCCT) files"
-msgstr ""
+msgstr "BREP (OCCT) ファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:467
 #, fuzzy
@@ -32838,11 +32834,11 @@ msgstr "GLB (バイナリ GLTF)をエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
-msgstr ""
+msgstr "XAO"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "BREP (OCCT)"
-msgstr ""
+msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:55
 msgid "Export as Compound shape"
@@ -32883,7 +32879,8 @@ msgstr "フィルターに一致するコンポーネント:"
 msgid ""
 "A list of comma-selected reference designators to export (wildcards are "
 "supported)"
-msgstr ""
+msgstr "エクスポートするコンマで選択されたリファレンス指定子のリスト（ワイルドカード"
+"がサポートされています）"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:92
 #, fuzzy
@@ -32938,9 +32935,10 @@ msgid "Net filter (supports wildcards):"
 msgstr "ネットフィルター（ワイルドカードをサポート）:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:133
+#, fuzzy
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
-msgstr ""
+msgstr "このフィルターに一致するネットに属する銅アイテムのみがエクスポートされます。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Board outline chaining tolerance:"
@@ -33259,7 +33257,7 @@ msgstr "キーワード:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "包む(&P)"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 #, fuzzy
@@ -34539,9 +34537,8 @@ msgid "Footprint dimension items"
 msgstr "フットプリント 寸法線アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
-#, fuzzy
 msgid "Footprint text items not associated with a field"
-msgstr "フットプリント関連付けファイル:"
+msgstr "フィールドに関連付けられていないフットプリントテキスト項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "PCB graphic items"
@@ -34565,9 +34562,8 @@ msgid "Set to specified values:"
 msgstr "指定した値に設定:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "表示ネットフィルタ:"
+msgstr "表示    （テキストのみ）"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -34579,9 +34575,8 @@ msgid "Center on footprint"
 msgstr "フットプリントの中心"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:254
-#, fuzzy
 msgid "Move footprint texts to the center of their parent"
-msgstr "現在の基板からエディターへフットプリントをロードします"
+msgstr "フットプリントのテキストを親テキストの中央に移動する"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -34673,9 +34668,8 @@ msgid "Error loading footprint library table."
 msgstr "プロジェクトのフットプリント ライブラリ テーブルをロード中にエラー。"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:114
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "グループのプロパティ"
+msgstr "グループのプロパティを編集する"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -34765,9 +34759,8 @@ msgstr "ネットリスト中の指定でフットプリントを置換"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Delete/replace footprints even if locked"
-msgstr "フットプリント フィルターを削除"
+msgstr "ロックされていてもフットプリントを削除/置換する"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 msgid "Delete tracks shorting multiple nets"
@@ -34868,14 +34861,12 @@ msgid "Bottom/Back layer:"
 msgstr "下面/裏面レイヤー:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:209
-#, fuzzy
 msgid "Copper layer pair presets"
-msgstr "導体レイヤー:"
+msgstr "導体レイヤーペアのプリセット"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:227
-#, fuzzy
 msgid "Enabled"
-msgstr "有効化:"
+msgstr "有効にする"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:57
 msgid "Select Layer"
@@ -34961,53 +34952,46 @@ msgstr "アイテムを移動"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:60
 msgid "Replace existing placement rule areas"
-msgstr ""
+msgstr "既存の配置ルール領域を置き換える"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:63
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
 #: pcbnew/tools/multichannel_tool.cpp:402
 #: pcbnew/tools/multichannel_tool.cpp:804
-#, fuzzy
 msgid "Group components with their placement rule areas"
-msgstr "部品配置ファイル"
+msgstr "配置ルール領域でコンポーネントをグループ化する"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:51
-#, fuzzy
 msgid "Generate Multichannel Rule Areas"
-msgstr "線分をルールエリアに変換"
+msgstr "マルチチャンネルルール領域を生成する"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
-#, fuzzy
 msgid "Target areas:"
-msgstr "目標の遅延(スキュー):"
+msgstr "対象領域:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:61
-#, fuzzy
 msgid "Reference Rule Area:"
-msgstr "リファレンス区切り文字:"
+msgstr "リファレンスルール領域:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Copy placement"
-msgstr "配置"
+msgstr "コピーの配置"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
 msgid "Copy routing"
 msgstr "配線をコピー"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:86
-#, fuzzy
 msgid "Include locked components"
-msgstr "ロックされているフットプリントを含む (&l)"
+msgstr "ロックされたコンポーネントを含める"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:89
-#, fuzzy
 msgid "Include components outside the target area"
-msgstr "ピンがないコンポーネントを除外"
+msgstr "対象エリア外のコンポーネントを含める"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
-msgstr ""
+msgstr "マルチチャンネルレイアウトを繰り返す"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:129
 msgid "Convert to Non Copper Zone"
@@ -35067,9 +35051,8 @@ msgid "Pad Properties Warnings"
 msgstr "パッド プロパティ 警告"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1502
-#, fuzzy
 msgid "Edit Pad Properties"
-msgstr "ピンのプロパティを編集"
+msgstr "パッドのプロパティを編集"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1537
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
@@ -35440,10 +35423,9 @@ msgid "Clearance Overrides"
 msgstr "クリアランスのオーバーライド"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:931
-#, fuzzy
 msgid "Leave values blank to use parent footprint or netclass values."
-msgstr ""
-"値を 0 に設定すると、親のフットプリントまたはネットクラスの値を使用します。"
+msgstr "親フットプリントまたはネットクラスの値を使用するには、値を空白のままにします"
+"。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:935
 msgid ""
@@ -35599,14 +35581,12 @@ msgid "Include Layers"
 msgstr "含めるレイヤー"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
-#, fuzzy
 msgid "Indicate DNP on fabrication layers"
-msgstr "基板製造用レイヤーにパッドを描画する"
+msgstr "基板製造用レイヤーにDNPを表示する"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:81
-#, fuzzy
 msgid "Hide or cross-out DNP footprints on fabrication layers"
-msgstr "基板製造用レイヤーにパッドを描画する"
+msgstr "基板製造用レイヤーにあるDNPフットプリントを非表示または取り消し線で消す"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
 #: pcbnew/widgets/appearance_controls.cpp:656
@@ -35615,14 +35595,12 @@ msgid "Hide"
 msgstr "非表示"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
-#, fuzzy
 msgid "Hide the footprint text and graphics"
-msgstr "その他のフットプリント テキスト アイテム"
+msgstr "フットプリントのテキストと図形を非表示にする"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
-#, fuzzy
 msgid "Cross-out"
-msgstr "クロスプローブ"
+msgstr "取り消し線"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Force plotting of invisible values / refs"
@@ -35641,9 +35619,8 @@ msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "プロット時、F.Fab と B.Fab レイヤー上にパッド外形を含める"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
-#, fuzzy
 msgid "Include pad numbers"
-msgstr "含めるレイヤー"
+msgstr "パッド番号を含める"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:106
 msgid "Check zone fills before plotting"
@@ -36150,9 +36127,8 @@ msgstr ""
 "アンカー位置が選択したアイテムの位置となります。"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:45
-#, fuzzy
 msgid "Select Point..."
-msgstr "フットプリントを選択..."
+msgstr "ポイントを選択..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
@@ -36304,9 +36280,8 @@ msgid "Keepout"
 msgstr "キープアウト(禁止)"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:72
-#, fuzzy
 msgid "Rule type"
-msgstr "ソース タイプ:"
+msgstr "ルールタイプ"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:80
 msgid "Keep out tracks"
@@ -36351,18 +36326,16 @@ msgstr ""
 "せます"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
-#, fuzzy
 msgid "Condition:"
-msgstr "位置:"
+msgstr "条件："
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:204
 msgid "Center Point"
 msgstr "中心"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:530
-#, fuzzy
 msgid "Edit Shape Properties"
-msgstr "ゾーンプロパティを編集"
+msgstr "形状のプロパティを編集する"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:553
 msgid "Arc angle cannot be zero."
@@ -36440,9 +36413,8 @@ msgid "Swap Layers"
 msgstr "レイヤーを入れ替え"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
-#, fuzzy
 msgid "Edit Alignment Target"
-msgstr "層合わせターゲット (&y)"
+msgstr "アライメントターゲットを編集"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
@@ -36503,7 +36475,7 @@ msgstr "親のフットプリントの説明"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
 msgid "Update thickness according to text size "
-msgstr ""
+msgstr "テキストサイズに応じて太さを更新する "
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -36511,11 +36483,13 @@ msgid ""
 "Normal text: thickness is size/8\n"
 "Bold text: thickness is size/5"
 msgstr ""
+"テキストの幅と高さから最適なテキストの太さを設定します\n"
+"通常のテキスト: 太さはサイズ/8\n"
+"太字：太さはサイズ/5"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:382
-#, fuzzy
 msgid "Edit Text Box Properties"
-msgstr "テキスト ボックスのプロパティ"
+msgstr "テキストボックスのプロパティを編集する"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:194
 msgid "Border width:"
@@ -36559,14 +36533,12 @@ msgid "Via start layer and end layer cannot be the same"
 msgstr "ビアの開始レイヤーと終了レイヤーは同じにできません"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:761
-#, fuzzy
 msgid "Edit Track/Via Properties"
 msgstr "配線/ビアのプロパティを編集"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:826
-#, fuzzy
 msgid "Update Nets"
-msgstr "ネットリストを更新"
+msgstr "ネットの更新"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -36631,48 +36603,42 @@ msgid "End layer:"
 msgstr "終了レイヤー:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:326
-#, fuzzy
 msgid "Front tenting:"
-msgstr "表面のリファレンス接頭辞:"
+msgstr "表面のテンティング:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 #: pcbnew/pcb_track.cpp:1732
-#, fuzzy
 msgid "From design rules"
 msgstr "デザインルールより"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 #: pcbnew/pcb_track.cpp:1733
-#, fuzzy
 msgid "Tented"
-msgstr "中央"
+msgstr "テンティングした"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 #: pcbnew/pcb_track.cpp:1734
-#, fuzzy
 msgid "Not tented"
-msgstr "メッキなし"
+msgstr "テンティングしていない"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:334
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr ""
+msgstr "このビアを前面にテント（ソルダーマスクで覆う）するかどうか"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:340
-#, fuzzy
 msgid "Link front and back tenting settings"
-msgstr "差動ペア寸法設定"
+msgstr "表面と裏面のテンティング設定をリンクする"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:347
-#, fuzzy
 msgid "Back tenting:"
-msgstr "裏面のリファレンス接頭辞:"
+msgstr "裏面のテンティング："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr ""
+msgstr "このビアを裏側にテント（ソルダーマスクで覆う）するかどうか"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:405
 msgid "Add teardrops on via's track connections"
@@ -38011,7 +37977,7 @@ msgstr "マージン"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 #, fuzzy
 msgid "Board contour setback"
-msgstr "基板外形"
+msgstr "基板輪郭セットバック"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:666
 msgid "Eco1"
@@ -38068,7 +38034,7 @@ msgstr "User1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
 #, fuzzy
 msgid "Off-board, front"
-msgstr "Off-board、テスト用"
+msgstr "基板外、表面"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:713
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:727
@@ -38081,7 +38047,7 @@ msgstr "Off-board、テスト用"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:825
 #, fuzzy
 msgid "Off-board, back"
-msgstr "Off-board、テスト用"
+msgstr "基板外、裏面"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:717
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:731
@@ -38092,9 +38058,10 @@ msgstr "Off-board、テスト用"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:801
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:815
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:829
+#, fuzzy
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
-msgstr ""
+msgstr "補助レイヤーは基板側と反転しませんが、背面層と前面層は反転します。"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:724
 msgid "User2"
@@ -38149,9 +38116,8 @@ msgstr ""
 "この値は、フットプリントやパッドのローカル値で置き換えられます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
-#, fuzzy
 msgid "Solder mask settings:"
-msgstr "ハンダマスク表面:"
+msgstr "ハンダマスク設定:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
 msgid ""
@@ -38191,11 +38157,15 @@ msgid "Solder mask to copper clearance:"
 msgstr "ハンダマスクと導体間のクリアランス:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:92
+#, fuzzy
 msgid ""
 "For DRC tests:\n"
 "max distance between a solder mask opening and a copper item having a "
 "different net than the parent solder mask opening to create a DRC error"
 msgstr ""
+"DRC テストの場合:\n"
+"DRC エラーを発生させる、ハンダマスク開口部と、親ハンダマスク開口部とは異なる"
+"ネットを持つ銅アイテムとの間の最大距離"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -38209,6 +38179,9 @@ msgid ""
 "Disable DRC error type solder mask aperture bridge between pads of the same "
 "footprint (useful for net ties)"
 msgstr ""
+"DRC テストの場合:\n"
+"同じフットプリントのパッド間の DRC エラー タイプのハンダマスクアパーチャ "
+"ブリッジを無効にする (ネット タイに便利)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:111
 msgid "Tent vias:"
@@ -38226,9 +38199,8 @@ msgstr ""
 "(ハンダマスクはネガティブレイヤーです)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:128
-#, fuzzy
 msgid "Solder paste settings:"
-msgstr "ハンダ ペーストのクリアランス:"
+msgstr "ハンダ ペーストの設定:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 msgid ""
@@ -38300,7 +38272,6 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -38774,10 +38745,9 @@ msgid ""
 msgstr ""
 "### トップレベルの句\n"
 "\n"
-"    (version <number>)\n"
+"    (version 1)\n"
 "\n"
 "    (rule <rule_name> <rule_clause> ...)\n"
-"\n"
 "\n"
 "<br>\n"
 "\n"
@@ -38796,158 +38766,191 @@ msgstr ""
 "\n"
 "### 制約\n"
 "\n"
-"| 制約タイプ                | 引数タイ"
-"プ                                                                                                             "
-"| 説"
-"明                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
-"|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Checks the width of annular rings on vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Specifies the **electrical** clearance between copper objects of different "
+"| 制約タイプ                | 引数タイプ                                     "
+"                                                                        | 説"
+"明                                                                           "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                     |\n"
+"|---------------------------|------------------------------------------------"
+"-----------------------------------------------------------------------|-----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"--------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                       | "
+"Checks the width of annular rings on vias.<br>                               "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                      |\n"
+"| `assertion`               | \"&lt;expression>\"                            "
+"                                                                         | "
+"Checks the given expression.<br>                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                 |\n"
+"| `clearance`               | min                                            "
+"                                                                       | "
+"Specifies the **electrical** clearance between copper objects of different "
 "nets.  (See `physical_clearance` if you wish to specify clearance between "
 "objects regardless of net.)<br><br>To allow copper objects to overlap "
 "(collide), create a `clearance` constraint with the `min` value less than "
-"zero (for example, `-1`)."
-"<br>                                                                                                                      "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Checks the clearance between footprint courtyards and generates an error "
-"if any two courtyards are closer than the `min` distance.  If a footprint "
-"does not have a courtyard shape, no errors will be generated from this "
-"constraint."
-"<br>                                                                                                                                                                                                               "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Checks the gap between coupled tracks in a differential pair.  Coupled "
+"zero (for example, `-1`).<br>                                                "
+"                                                                     |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                       | "
+"Checks the clearance between footprint courtyards and generates an error if "
+"any two courtyards are closer than the `min` distance.  If a footprint does "
+"not have a courtyard shape, no errors will be generated from this constraint."
+"<br>                                                                         "
+"                                                                             "
+"                                                        |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                       | "
+"Checks the gap between coupled tracks in a differential pair.  Coupled "
 "tracks are segments that are parallel to each other.  Differential pair gap "
 "is not tested on uncoupled portions of a differential pair (for example, the "
-"fanout from a component)."
-"<br>                                                                                                                                                                                           "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Checks the distance that a differential pair track is routed uncoupled "
-"from the other polarity track in the pair (for example, where the pair fans "
-"out from a component, or becomes uncoupled to pass around another object "
-"such as a via)."
-"<br>                                                                                                                                                                                                         "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Specify one or more object types to disallow, separated by spaces.  For "
+"fanout from a component).<br>                                                "
+"                                                                             "
+"                                                             |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                       | "
+"Checks the distance that a differential pair track is routed uncoupled from "
+"the other polarity track in the pair (for example, where the pair fans out "
+"from a component, or becomes uncoupled to pass around another object such as "
+"a via).<br>                                                                  "
+"                                                                             "
+"                                                         |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Specify one or more object types to disallow, separated by spaces.  For "
 "example, `(constraint disallow track)` or `(constraint disallow track via "
 "pad)`.  If an object of this type matches the rule condition, a DRC error "
 "will be created.<br><br>This constraint is essentially the same as a keepout "
-"rule area, but can be used to create more specific keepout restrictions."
-"<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Checks the clearance between objects and the board edge.<br><br>This can "
+"rule area, but can be used to create more specific keepout restrictions.<br> "
+"                                                                 |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                       | "
+"Checks the clearance between objects and the board edge.<br><br>This can "
 "also be thought of as the \"milling tolerance\" as the board edge will "
 "include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
-"pad holes.  (See `physical_hole_clearance` for the drilling "
-"tolerance.)<br>                                                                                                                                                    "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Checks the total routed length for the nets that match the rule condition "
+"pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)<br>  "
+"                                                                             "
+"                                                                    |\n"
+"| `length`                  | min/max                                        "
+"                                                                       | "
+"Checks the total routed length for the nets that match the rule condition "
 "and generates an error for each net that is below the `min` value (if "
-"specified) or above the `max` value (if specified) of the constraint."
-"<br>                                                                                                                                                                                                                               "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
-"holes, the smaller (minor) diameter will be tested against the `min` value "
-"(if specified) and the larger (major) diameter will be tested against the "
-"`max` value (if specified)."
-"<br>                                                                                                                                                                                            "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Checks the clearance between a drilled hole in a pad or via and copper "
+"specified) or above the `max` value (if specified) of the constraint.<br>    "
+"                                                                             "
+"                                                                             "
+"                                                                |\n"
+"| `hole`                    | min/max                                        "
+"                                                                       | "
+"Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
+"holes, the smaller (minor) diameter will be tested against the `min` value ("
+"if specified) and the larger (major) diameter will be tested against the "
+"`max` value (if specified).<br>                                              "
+"                                                                             "
+"                                                                |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                       | "
+"Checks the clearance between a drilled hole in a pad or via and copper "
 "objects on a different net.  The clearance is measured from the diameter of "
-"the hole, not its center."
-"<br>                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Checks the clearance between mechanically-drilled holes in pads and vias.  "
+"the hole, not its center.<br>                                                "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                       | "
+"Checks the clearance between mechanically-drilled holes in pads and vias.  "
 "The clearance is measured between the diameters of the holes, not between "
 "their centers.<br><br>This constraint is soley for the protection of drill "
 "bits.  The clearance between **laser-drilled** (microvias) and other non-"
 "mechanically-drilled holes is not checked, nor is the clearance between "
 "**milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Checks the clearance between two objects on a given layer (including non-"
+"| `physical_clearance`      | min                                            "
+"                                                                       | "
+"Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
-"than `clearance`, it is much slower.  Use `clearance` where possible."
-"<br>                                                                                                                                                                                                                            "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Checks the clearance between a drilled hole in a pad or via and another "
+"than `clearance`, it is much slower.  Use `clearance` where possible.<br>    "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                       | "
+"Checks the clearance between a drilled hole in a pad or via and another "
 "object, regardless of net. The clearance is measured from the diameter of "
 "the hole, not its center.<br><br>This can also be thought of as the "
 "\"drilling tolerance\" as it only includes **round** holes (see "
-"`edge_clearance` for the milling tolerance)."
-"<br>                                                                                                                    "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Checks the clearance between objects on silkscreen layers and other "
-"objects."
-"<br>                                                                                                                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Checks the total skew for the nets that match the rule condition, that is, "
+"`edge_clearance` for the milling tolerance).<br>                             "
+"                                                                             "
+"         |\n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                       | "
+"Checks the clearance between objects on silkscreen layers and other objects.<"
+"br>                                                                          "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                      |\n"
+"| `skew`                    | max                                            "
+"                                                                       | "
+"Checks the total skew for the nets that match the rule condition, that is, "
 "the difference between the length of each net and the average of all the "
 "lengths of each net that is matched by the rule.  If the absolute value of "
 "the difference between that average and the length of any one net is above "
-"the constraint `max` value, an error will be generated."
-"<br>                                                                                   "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Specifies the width of the gap between a pad and a zone with a thermal-"
-"relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Specifies the width of the spokes connecting a pad to a zone with a "
-"thermal-relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Checks the width of track and arc segments.  An error will be generated "
-"for each segment that has a width below the `min` value (if specified) or "
-"above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                             "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Counts the number of vias on every net matched by the rule condition.  If "
+"the constraint `max` value, an error will be generated.<br>                  "
+"                                                                |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                       | "
+"Specifies the width of the gap between a pad and a zone with a thermal-"
+"relief connection.<br>                                                       "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                            |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                       | "
+"Specifies the width of the spokes connecting a pad to a zone with a thermal-"
+"relief connection.<br>                                                       "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                       | "
+"Checks the width of track and arc segments.  An error will be generated for "
+"each segment that has a width below the `min` value (if specified) or above "
+"the `max` value (if specified).<br>                                          "
+"                                                                             "
+"                                                                             "
+"                                                        |\n"
+"| `via_count`               | max                                            "
+"                                                                       | "
+"Counts the number of vias on every net matched by the rule condition.  If "
 "that number exceeds the constraint `max` value on any matched net, an error "
-"will be generated for that net."
-"<br>                                                                                                                                                                                                                                                               "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Specifies the connection to be made between a zone and a pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
-"|\n"
+"will be generated for that net.<br>                                          "
+"                                                                             "
+"                                                                             "
+"                                                          |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                       | "
+"Specifies the connection to be made between a zone and a pad.<br>            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                      |\n"
 "\n"
 "\n"
 "### アイテム\n"
@@ -39000,8 +39003,8 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"Version句は最初の句でなければなりません。  これはファイルの文法のバージョンを"
-"示し、\n"
+"Version句は最初の句でなければなりません。  "
+"これはファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的にアップデート可能にするためです。\n"
 "\"1\"を設定しなければなりません。\n"
 "\n"
@@ -39014,8 +39017,8 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
@@ -39040,14 +39043,14 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "`A` のすべてが指定されたゾーンのアウトライン内にある場合に真になります。\n"
 "\n"
-"注意: これは、`intersectsArea()`よりも高コストな呼び出しになる可能性がありま"
-"す。\n"
+"注意: "
+"これは、`intersectsArea()`よりも高コストな呼び出しになる可能性があります。\n"
 "可能であれば`intersectsArea()`を使用してください。\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
-"指定されたフィールドの値を取得します。 フィールドを持つのはフットプリントのみ"
-"であるため、\n"
+"指定されたフィールドの値を取得します。 "
+"フィールドを持つのはフットプリントのみであるため、\n"
 "`A`がフットプリントの場合にのみフィールドが返されます。\n"
 "<br><br>\n"
 "\n"
@@ -39057,24 +39060,26 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<net_name>')\n"
 "`A`が与えられた差動ペアのネットに属する場合、真になります。\n"
-"`<net_name>` は差動ペアのベース名です。例えば、`inDiffPair('CLK')`は\n"
-"`CKL_P`と`CLK_N`のネットにマッチします。\n"
+"`<net_name>` は差動ペアのベース名です。例えば、`inDiffPair('/CLK')`は\n"
+"`/CKL_P`と`/CLK_N`のネットにマッチします。\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
 "`A`と`B`が同じ差動ペアに属する場合、真になります。\n"
 "<br><br>\n"
 "\n"
-"    A.memberOf('<group_name>')\n"
-"`A`が指定されたグループ(ワイルドカードも使えます)に属する場合、真になりま"
-"す。\n"
+"    A.memberOfGroup('<group_name>')\n"
+"`A`が指定されたグループ(ワイルドカードも使えます)に属する場合、真になります。"
+"\n"
 "ネストされたメンバー関係も含みます。\n"
 "<br><br>\n"
 "\n"
-"    A.memberOfFootprint('<footprint_reference>')\n"
-"`A`が指定されたリファレンス指定子に一致するフットプリントのに属する場合は真に"
-"なります。 \n"
+"    A.memberOfFootprint('<footprint_reference>|<footprint_id>')\n"
+"`A`が指定されたリファレンス指定子に一致するフットプリントに属する場合は真にな"
+"ります。 \n"
 "リファレンス指定子にはワイルドカードを含めることができます。\n"
+"\n"
+"注意: フットプリントIDと一致させたい場合は、':'を含む必要があります。\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
@@ -39083,14 +39088,19 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"`A`が与えられたレイヤー状にある場合、真になります。\n"
+"`A`が与えられたレイヤー上にある場合、真になります。\n"
 "レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、\n"
 "正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
 "`A`がレイヤーにある場合に真を返します。\n"
 "後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
+"<br><br>\n"
+"\n"
+"    A.hasNetclass('<netclass_name>')\n"
+"`A` が明示的なネットクラスラベルまたはパターンマッチ割り当てによって、\n"
+"指定されたネットクラスを割り当てられている場合に真となります。\n"
 "<br><br>\n"
 "\n"
 "### さらなる例\n"
@@ -39114,13 +39124,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -39178,6 +39188,11 @@ msgstr ""
 "        (constraint thermal_spoke_width (min 12mil))\n"
 "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
 "\n"
+"    # コンデンサのコートヤードの下に導体塗りつぶしをしないようにする\n"
+"    (rule no_copper_under_caps\n"
+"        (constraint physical_clearance (min 0mm))\n"
+"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
+"\n"
 "\n"
 "    # SMDパッドからハンダが漏れるのを防ぐ\n"
 "    (rule holes_in_pads\n"
@@ -39208,16 +39223,24 @@ msgstr ""
 "    (rule \"Plated through-hole size\"\n"
 "        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
 "        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
-"\n"
 "    (rule \"Plated slot size\"\n"
 "        (constraint hole_size (min 0.5mm))\n"
 "        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
 "\n"
 "\n"
+"    # 工場でレーザードリルを使いマイクロビアを掘る前に、\n"
+"    # 機械的にブラインド/バリードビアホールを掘ることが分かっている場合、\n"
+"    # ブラインド/バリードビアからマイクロビアへのホール間違反を許可します。\n"
+"    (rule hole_to_hole_uvia_exclusion\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
+"        (constraint hole_to_hole)\n"
+"        (severity ignore))\n"
+"\n"
 "### ドキュメント\n"
 "\n"
-"ドキュメント全文は以下を参照してください。 [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"ドキュメント全文は以下を参照してください [https://docs.kicad."
+"org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
 "html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
@@ -39252,9 +39275,8 @@ msgstr "矩形の形状に対するデフォルト値:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:370
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:548
-#, fuzzy
 msgid "Allow teardrop to span track segments"
-msgstr "ティアドロップが2つの配線セグメントを跨ぐことを許容"
+msgstr "ティアドロップが配線セグメントにまたがることを許可する"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:385
 msgid "Properties for track-to-track teardrops:"
@@ -39866,9 +39888,8 @@ msgid "Footprint attributes don't match symbol"
 msgstr "フットプリントの属性がシンボルと一致しない"
 
 #: pcbnew/drc/drc_item.cpp:194
-#, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
-msgstr "フットプリントがライブラリのコピーと一致しない"
+msgstr "フットプリントがシンボルのフットプリント フィルターと一致しません"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Footprint not found in libraries"
@@ -40032,7 +40053,7 @@ msgstr "認識されない項目 '%s' | 引用符で囲まれた式が期待さ�
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "'layer' キーワードはすでに存在します。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:374
 #: pcbnew/drc/drc_rule_parser.cpp:387 pcbnew/drc/drc_rule_parser.cpp:406
@@ -40061,7 +40082,7 @@ msgstr "アサーションの式がありません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:488
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
+msgstr "制約タイプに対して、within_diff_pairs オプションが無効です。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:506
 msgid "Missing min value."
@@ -40559,7 +40580,6 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "ハンダペーストの絶対クリアランスをオーバーライドしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:646
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
 msgstr "ハンダペーストの相対クリアランスをオーバーライドしています。"
 
@@ -40969,7 +40989,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:645
 msgid "** Got problems while fusing shapes **\n"
-msgstr ""
+msgstr "** 図形を融合する際に問題が発生しました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
 #: pcbnew/exporters/step/step_pcb_model.cpp:1912
@@ -40983,12 +41003,12 @@ msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:674
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr ""
+msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1601
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
-msgstr ""
+msgstr "配線が完了していません (輪郭点 %d ): OCC エラー %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1605
 #: pcbnew/exporters/step/step_pcb_model.cpp:1618
@@ -41001,18 +41021,21 @@ msgid ""
 "\n"
 "Wire self-interference check failed\n"
 msgstr ""
+"\n"
+"配線の自己干渉チェックに失敗しました\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1638
 msgid "Using non-simplified polygon.\n"
-msgstr ""
+msgstr "単純化されていないポリゴンを使用します。\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1703
 msgid "Failed to create a prismatic shape\n"
 msgstr "多面体の形状を作成できませんでした\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1714
+#, fuzzy
 msgid "** Face skipped **\n"
-msgstr ""
+msgstr "** Face はスキップされました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1881
 #, c-format
@@ -41030,6 +41053,8 @@ msgid ""
 "\n"
 "** Got problems while cutting %s number %d **\n"
 msgstr ""
+"\n"
+"** %s 番号 %d 切断中に問題が発生しました **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1934
 msgid "shapes"
@@ -41040,9 +41065,8 @@ msgid "pads"
 msgstr "パッド"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1943
-#, fuzzy
 msgid "vias"
-msgstr "ビアなし"
+msgstr "ビア"
 
 #: pcbnew/files.cpp:149
 msgid "All KiCad Board Files"
@@ -41338,7 +41362,6 @@ msgid "Footprint Chooser"
 msgstr "フットプリント選択"
 
 #: pcbnew/footprint_chooser_frame.cpp:153
-#, fuzzy
 msgid "Show 3D viewer in own window"
 msgstr "3D ビューアー ウィンドウを表示"
 
@@ -41391,11 +41414,8 @@ msgid "Edit Zone"
 msgstr "ゾーンを編集"
 
 #: pcbnew/footprint_editor_utils.cpp:342 pcbnew/footprint_editor_utils.cpp:354
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr ""
-"現在の設定はフットプリント ライブラリ '%s' を含んでいません。設定を編集するに"
-"は フットプリント ライブラリの管理 を使用して下さい。"
+msgstr "フットプリント ライブラリの管理を使用して設定を編集します。"
 
 #: pcbnew/footprint_editor_utils.cpp:343
 msgid "Library not found in footprint library table."
@@ -41526,7 +41546,6 @@ msgid "Footprint '%s' added to '%s'"
 msgstr "フットプリント '%s' を '%s' に追加しました"
 
 #: pcbnew/footprint_libraries_utils.cpp:1232
-#, fuzzy
 msgid "Untitled"
 msgstr "名称未設定"
 
@@ -41915,12 +41934,11 @@ msgstr "IDF 3D ボード表示をエクスポート"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / GLB / BREP / XAO..."
-msgstr ""
+msgstr "STEP / GLB / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO 3D board representation"
-msgstr "STEP 3D ボード表示をエクスポート"
+msgstr "STEP / GLB / BREP / XAO 3D 基板表現のエクスポート"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -41975,7 +41993,7 @@ msgstr "製造用出力"
 #: pcbnew/menubar_pcb_editor.cpp:300
 #, fuzzy
 msgid "Draw Microwave Shapes"
-msgstr "マイクロ波用の形状を追加"
+msgstr "マイクロ波用の形状を描画"
 
 #: pcbnew/menubar_pcb_editor.cpp:322
 #, fuzzy
@@ -41988,7 +42006,7 @@ msgstr "フットプリントを自動配置"
 
 #: pcbnew/menubar_pcb_editor.cpp:438
 msgid "Multi-Channel"
-msgstr ""
+msgstr "マルチチャンネル"
 
 #: pcbnew/menubar_pcb_editor.cpp:447
 msgid "External Plugins"
@@ -42130,9 +42148,10 @@ msgid "Cannot update %s (footprint '%s' not found)."
 msgstr "%s を更新できません(フットプリント \"%s\" が見つかりません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "フットプリント %s を '%s' から '%s' に変更します。"
+msgstr "%s フットプリントを '%s' から '%s' に変更できません "
+"(フットプリントがロックされています)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
 #, c-format
@@ -42140,9 +42159,10 @@ msgid "Change %s footprint from '%s' to '%s'."
 msgstr "フットプリント %s を '%s' から '%s' に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "Could not change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "フットプリント %s を '%s' から '%s' に変更します。"
+msgstr "%s フットプリントを '%s' から '%s' に変更できませんでした "
+"(フットプリントはロックされています)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:273
 #, c-format
@@ -42381,16 +42401,16 @@ msgid "Multiple footprints found for '%s'."
 msgstr "重複したフットプリントが '%s' に見つかりました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1265
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
-msgstr ""
-"未使用のフットプリント %s を削除することができません(ロックされています)。"
+msgstr "未使用のフットプリント %s を削除できません "
+"(フットプリントはロックされています)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
-msgstr ""
-"未使用のフットプリント %s を削除することができません(ロックされています)。"
+msgstr "未使用のフットプリント %s を削除できませんでした "
+"(フットプリントはロックされています)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1283
 #, c-format
@@ -42408,7 +42428,6 @@ msgid "Removed unused net %s."
 msgstr "未使用のネット %s を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1329
-#, fuzzy
 msgid "Update Netlist"
 msgstr "ネットリストを更新"
 
@@ -42418,7 +42437,7 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "合計警告数: %d、エラー数: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -42588,9 +42607,8 @@ msgid "NPTH pad of %s"
 msgstr "%sのNPTHパッド"
 
 #: pcbnew/pad.cpp:1414
-#, fuzzy
 msgid "NPTH pad"
-msgstr "PTHパッド"
+msgstr "NPTHパッド"
 
 #: pcbnew/pad.cpp:1423
 #, c-format
@@ -42598,9 +42616,9 @@ msgid "Pad %s of %s on %s"
 msgstr "パッド %s - %s ( %s 上)"
 
 #: pcbnew/pad.cpp:1430
-#, fuzzy, c-format
+#, c-format
 msgid "Pad on %s"
-msgstr "パッド %s"
+msgstr "%s 上のパッド"
 
 #: pcbnew/pad.cpp:1438
 #, c-format
@@ -42608,7 +42626,6 @@ msgid "PTH pad %s of %s"
 msgstr "PTHパッド%s(%s)"
 
 #: pcbnew/pad.cpp:1444
-#, fuzzy
 msgid "PTH pad"
 msgstr "PTHパッド"
 
@@ -42618,9 +42635,9 @@ msgid "Pad %s %s of %s on %s"
 msgstr "パッド %s %s - %s ( %s 上)"
 
 #: pcbnew/pad.cpp:1462
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s on %s"
-msgstr "ビア %s (%s 上)"
+msgstr "パッド %s、%s 上"
 
 #: pcbnew/pad.cpp:1471
 #, c-format
@@ -42642,9 +42659,8 @@ msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(PTHパッドの穴のサイズは %s より大きくなければなりません)"
 
 #: pcbnew/pad.cpp:2067
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(PTHパッドの穴は導体を残しません)"
+msgstr "(PTHパッドの穴には導体が残りません)"
 
 #: pcbnew/pad.cpp:2075
 msgid "(PTH pad hole non fully inside copper)"
@@ -42784,18 +42800,16 @@ msgid "Castellated pad"
 msgstr "端面スルーホール パッド"
 
 #: pcbnew/pad.cpp:2492
-#, fuzzy
 msgid "Mechanical pad"
-msgstr "機構"
+msgstr "メカニカルパッド"
 
 #: pcbnew/pad.cpp:2496
 msgid "Oblong"
 msgstr "長方形"
 
 #: pcbnew/pad.cpp:2514
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "始点, 終点, および接続されたレイヤー"
+msgstr "前面、背面、接続されたレイヤー"
 
 #: pcbnew/pad.cpp:2554
 msgid "Pad Type"
@@ -42899,7 +42913,6 @@ msgid "Suppress Trailing Zeroes"
 msgstr "後方ゼロ省略 (トレイリング ゼロ サプレス)"
 
 #: pcbnew/pcb_dimension.cpp:1517
-#, fuzzy
 msgid "Keep Aligned with Dimension"
 msgstr "寸法線に沿って配置"
 
@@ -43012,24 +43025,24 @@ msgid "Reference field of %s"
 msgstr "%sのリファレンスフィールド"
 
 #: pcbnew/pcb_field.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Value field of %s (%s)"
-msgstr "値 '%s' (%s)"
+msgstr "%sの値フィールド ( %s )"
 
 #: pcbnew/pcb_field.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint field of %s (%s)"
-msgstr "フットプリント %s (%s),"
+msgstr "%s のフットプリント フィールド ( %s )"
 
 #: pcbnew/pcb_field.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet field of %s (%s)"
-msgstr "データシート '%s' (%s の)"
+msgstr "%s のデータシート フィールド ( %s )"
 
 #: pcbnew/pcb_field.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "Field of %s (%s)"
-msgstr "フィールド %s \"%s\""
+msgstr "%s のフィールド ( %s )"
 
 #: pcbnew/pcb_field.cpp:165
 #, c-format
@@ -44767,9 +44780,9 @@ msgid "Drawing"
 msgstr "図形"
 
 #: pcbnew/pcb_shape.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s of %s on %s"
-msgstr "パッド %s %s - %s ( %s 上)"
+msgstr "%s %s of %s 、%s 上"
 
 #: pcbnew/pcb_shape.cpp:739
 #, c-format
@@ -44777,9 +44790,9 @@ msgid "%s %s on %s"
 msgstr "%s %s (%s 上)"
 
 #: pcbnew/pcb_shape.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "%s of %s on %s"
-msgstr "%s %s (%s 上)"
+msgstr "%s of %s 、%s 上"
 
 #: pcbnew/pcb_shape.cpp:756
 #, c-format
@@ -44803,19 +44816,19 @@ msgid "Display"
 msgstr "表示"
 
 #: pcbnew/pcb_text.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint text of %s (%s)"
-msgstr "フットプリント %s (%s),"
+msgstr "%s のフットプリント テキスト ( %s )"
 
 #: pcbnew/pcb_text.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "PCB text '%s' on %s"
 msgstr "基板上のテキスト '%s' ( %s 上)"
 
 #: pcbnew/pcb_textbox.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box '%s' on %s"
-msgstr "基板上のテキスト '%s' ( %s 上)"
+msgstr "基板上のテキストボックス '%s' (%s 上)"
 
 #: pcbnew/pcb_textbox.cpp:727
 msgid "Border Properties"
@@ -44901,14 +44914,12 @@ msgid "Via Type"
 msgstr "ビア タイプ"
 
 #: pcbnew/pcb_track.cpp:1792
-#, fuzzy
 msgid "Front tenting"
-msgstr "フォーマット中"
+msgstr "表面のテンティング"
 
 #: pcbnew/pcb_track.cpp:1794
-#, fuzzy
 msgid "Back tenting"
-msgstr "配線の編集"
+msgstr "裏面のテンティング"
 
 #: pcbnew/pcbexpr_evaluator.cpp:430
 msgid "must be mm, in, or mil"
@@ -45013,14 +45024,12 @@ msgid "Actual image size: %dx%d"
 msgstr "実際の画像の大きさ: %dx%d"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:398
-#, fuzzy
 msgid "Successfully created 3D render image"
-msgstr "svgファイルの作成に成功しました"
+msgstr "3Dレンダリングイメージの作成に成功しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:401
-#, fuzzy
 msgid "Error creating 3D render image"
-msgstr "svg ファイルの作成中にエラーが発生しました"
+msgstr "3D レンダリング イメージの作成中にエラーが発生しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:441
 msgid "Successfully created svg file"
@@ -45128,7 +45137,6 @@ msgid "Unknown Method"
 msgstr "不明なメソッド"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:413
-#, fuzzy
 msgid "Apply Action Script"
 msgstr "アクション スクリプトを適用"
 
@@ -45429,10 +45437,8 @@ msgid "Save router log"
 msgstr "ルーターのログを保存"
 
 #: pcbnew/router/router_tool.cpp:1083
-#, fuzzy
 msgid "Via needs 2 different layers."
-msgstr ""
-"ブラインド/ベリード ビアは2つの異なるレイヤーに接続する必要があります。"
+msgstr "ビアには 2 つの異なるレイヤーが必要です。"
 
 #: pcbnew/router/router_tool.cpp:1154
 msgid "Tracks on Copper layers only."
@@ -45717,21 +45723,18 @@ msgstr ""
 "て、プロジェクトを作成しなければなりません。"
 
 #: pcbnew/tools/board_editor_control.cpp:752
-#, fuzzy
 msgid "Increase Track Width"
-msgstr "線幅を太く"
+msgstr "配線幅を広げる"
 
 #: pcbnew/tools/board_editor_control.cpp:834
-#, fuzzy
 msgid "Decrease Track Width"
-msgstr "線幅を細く"
+msgstr "配線幅を狭める"
 
 #: pcbnew/tools/board_editor_control.cpp:918 pcbnew/tools/pcb_actions.cpp:1068
 msgid "Increase Via Size"
 msgstr "ビア サイズを増加"
 
 #: pcbnew/tools/board_editor_control.cpp:1171
-#, fuzzy
 msgid "Place Footprint"
 msgstr "フットプリントを配置"
 
@@ -46427,23 +46430,20 @@ msgstr "線をフィレット"
 
 #: pcbnew/tools/edit_tool.cpp:1418
 #: pcbnew/tools/item_modification_routine.cpp:256
-#, fuzzy
 msgid "Dogbone Corners"
-msgstr "角を移動"
+msgstr "ドッグボーンコーナー"
 
 #: pcbnew/tools/edit_tool.cpp:1517
-#, fuzzy
 msgid "Simplify Shapes"
-msgstr "複雑な形状"
+msgstr "図形を単純化する"
 
 #: pcbnew/tools/edit_tool.cpp:1517 pcbnew/tools/edit_tool.cpp:1586
 msgid "Tolerance value:"
 msgstr "許容値:"
 
 #: pcbnew/tools/edit_tool.cpp:1551 pcbnew/tools/pcb_actions.cpp:611
-#, fuzzy
 msgid "Simplify Polygons"
-msgstr "F_Cu上のポリゴンを単純化"
+msgstr "ポリゴンを単純化する"
 
 #: pcbnew/tools/edit_tool.cpp:1586 pcbnew/tools/edit_tool.cpp:1623
 #: pcbnew/tools/pcb_actions.cpp:617
@@ -46456,7 +46456,7 @@ msgstr "配置面を変更/反転"
 
 #: pcbnew/tools/edit_tool.cpp:2579
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr ""
+msgstr "フィールドを削除するには、フットプリント プロパティ ダイアログを使用します。"
 
 #: pcbnew/tools/edit_tool.cpp:2738
 msgid "Move Exactly"
@@ -46480,9 +46480,8 @@ msgid "Copy canceled"
 msgstr "コピーはキャンセルされました"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:206
-#, fuzzy
 msgid "Pack Footprints"
-msgstr "フットプリントを詰める"
+msgstr "フットプリントをまとめる"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:334
 #, c-format
@@ -46537,9 +46536,8 @@ msgid "Regenerate Item"
 msgstr "アイテムを再生成"
 
 #: pcbnew/tools/global_edit_tool.cpp:253
-#, fuzzy
 msgid "Modify zones properties with zone manager"
-msgstr "ゾーンのプロパティを変更"
+msgstr "ゾーンマネージャーでゾーンのプロパティを変更する"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -46562,9 +46560,8 @@ msgid "Ungroup Items"
 msgstr "アイテムのグループ化を解除"
 
 #: pcbnew/tools/group_tool.cpp:348
-#, fuzzy
 msgid "Remove Group Items"
-msgstr "アイテムを削除"
+msgstr "グループアイテムを削除"
 
 #: pcbnew/tools/item_modification_routine.cpp:102
 msgid "Unable to fillet the selected lines."
@@ -46583,20 +46580,19 @@ msgid "Some of the lines could not be chamfered."
 msgstr "いくつかの線は面取りできません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:266
-#, fuzzy
 msgid "Unable to add dogbone corners to the selected lines."
-msgstr "選択した線は面取りできません。"
+msgstr "選択した線にドッグボーンコーナーを追加できません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:270
-#, fuzzy
 msgid "Some of the lines could not have dogbone corners added."
-msgstr "いくつかの線は面取りできません。"
+msgstr "一部の線にはドッグボーンコーナーを追加できませんでした。"
 
 #: pcbnew/tools/item_modification_routine.cpp:278
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
-msgstr ""
+msgstr "ドッグボーンのコーナーの一部は、指定された半径のカッターに適合するには狭すぎ"
+"ます。"
 
 #: pcbnew/tools/item_modification_routine.cpp:348
 #: pcbnew/tools/pcb_actions.cpp:624
@@ -46649,21 +46645,20 @@ msgstr "いくつかのポリゴンは交差することができません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
-msgstr ""
+msgstr "コピー元の参照ルール領域を 1 つ選択してください。"
 
 #: pcbnew/tools/multichannel_tool.cpp:299
 msgid "No Rule Areas to repeat layout to have been found."
-msgstr ""
+msgstr "レイアウトを繰り返すルール領域が見つかりません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:371
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
-msgstr ""
+msgstr "ルール領域 '%s' と '%s' 間のルール領域の内容のコピーに失敗しました。"
 
 #: pcbnew/tools/multichannel_tool.cpp:384
-#, fuzzy
 msgid "Repeat layout"
-msgstr "繰り返し回数"
+msgstr "配置を繰り返す"
 
 #: pcbnew/tools/multichannel_tool.cpp:410
 #, c-format
@@ -46672,7 +46667,7 @@ msgstr "%dルール領域にコピーしました。"
 
 #: pcbnew/tools/multichannel_tool.cpp:623
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "1 つまたは両方の領域にコンポーネントが割り当てられていません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:627
 msgid "Component count mismatch"
@@ -46680,22 +46675,22 @@ msgstr "コンポーネント数の不一致"
 
 #: pcbnew/tools/multichannel_tool.cpp:631
 msgid "Iteration count exceeded (timeout)"
-msgstr ""
+msgstr "反復回数を超えました（タイムアウト）"
 
 #: pcbnew/tools/multichannel_tool.cpp:635
 msgid "Topology mismatch"
-msgstr ""
+msgstr "トポロジの不一致"
 
 #: pcbnew/tools/multichannel_tool.cpp:685
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s)."
-msgstr ""
+msgstr "回路図に階層シートが 1 "
+"つしかないか、階層シートがないため、配置領域を自動生成できません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:767
-#, fuzzy
 msgid "Auto-generate placement rule areas"
-msgstr "部品配置ファイルを生成"
+msgstr "配置ルールエリアを自動生成"
 
 #: pcbnew/tools/pad_tool.cpp:164
 msgid "Paste Pad Properties"
@@ -46715,9 +46710,8 @@ msgstr ""
 "<ESC> ですべてキャンセル、ダブルクリックで確定します"
 
 #: pcbnew/tools/pad_tool.cpp:433 pcbnew/tools/pad_tool.cpp:536
-#, fuzzy
 msgid "Renumber Pads"
-msgstr "パッドをリナンバー"
+msgstr "パッドの番号を付け直す"
 
 #: pcbnew/tools/pad_tool.cpp:675
 msgid "Place pad"
@@ -46802,17 +46796,14 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "図形レイヤーに基板スタックアップの表を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:158
-#, fuzzy
 msgid "Place Reference Images"
-msgstr "参照画像"
+msgstr "参照画像を配置する"
 
 #: pcbnew/tools/pcb_actions.cpp:159
-#, fuzzy
 msgid ""
 "Add bitmap images to be used as reference (images will not be included in "
 "any output)"
-msgstr ""
-"参照として使用するビットマップ画像を追加します(出力に画像は含まれません)"
+msgstr "参照として使用するビットマップ画像を追加します(出力に画像は含まれません)"
 
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Increase Spacing"
@@ -46849,35 +46840,33 @@ msgstr "調整パターンの1ステップ振幅を小さくします。"
 #: pcbnew/tools/pcb_actions.cpp:228
 #, fuzzy
 msgid "Draw Aligned Dimensions"
-msgstr "寸法線"
+msgstr "アラインした寸法線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:235
 #, fuzzy
 msgid "Draw Center Dimensions"
-msgstr "中心マーク"
+msgstr "中心の寸法線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:242
 #, fuzzy
 msgid "Draw Radial Dimensions"
-msgstr "放射状寸法線を追加"
+msgstr "半径の寸法線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:250
 #, fuzzy
 msgid "Draw Orthogonal Dimensions"
-msgstr "直交寸法線"
+msgstr "直交寸法線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:257
 #, fuzzy
 msgid "Draw Leaders"
-msgstr "円弧を描く"
+msgstr "先頭を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:270
-#, fuzzy
 msgid "Draw Filled Zones"
-msgstr "塗りつぶしゾーンを追加"
+msgstr "塗りつぶしゾーンを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:280
-#, fuzzy
 msgid "Place Vias"
 msgstr "ビアを配置"
 
@@ -46891,9 +46880,8 @@ msgid "Add a Zone Cutout"
 msgstr "ゾーンの切り抜きを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:301
-#, fuzzy
 msgid "Add a cutout to an existing zone or rule area"
-msgstr "既存のゾーンに切り抜き領域を追加"
+msgstr "既存のゾーンまたはルール領域に切り抜きを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:311
 msgid "Add a Similar Zone"
@@ -47030,19 +47018,16 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "基板の反対側に選択したアイテムを裏返して配置します"
 
 #: pcbnew/tools/pcb_actions.cpp:542
-#, fuzzy
 msgid "Mirrors selected item(s) across the Y axis"
-msgstr "選択したアイテムをY軸に対して鏡写しに複製"
+msgstr "選択したアイテムをY軸対称に複製"
 
 #: pcbnew/tools/pcb_actions.cpp:549
-#, fuzzy
 msgid "Mirrors selected item(s) across the X axis"
-msgstr "選択したアイテムをX軸に対して鏡写しに複製"
+msgstr "選択したアイテムをX軸対称に複製"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Swap positiona of selected items"
-msgstr "ロックしたアイテムの選択を許可"
+msgstr "選択したアイテムの位置を入れ替える"
 
 #: pcbnew/tools/pcb_actions.cpp:564
 msgid "Pack and Move Footprints"
@@ -47055,9 +47040,8 @@ msgid ""
 msgstr "リファレンスでフットプリントを整列、サイズを基準に詰めて移動を開始する"
 
 #: pcbnew/tools/pcb_actions.cpp:573
-#, fuzzy
 msgid "Skip to next item"
-msgstr "このアイテムをスキップ"
+msgstr "次のアイテムへスキップ"
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Change Track Width"
@@ -47088,18 +47072,16 @@ msgid "Cut away corners between selected lines"
 msgstr "選択した線の間の角を切り取る"
 
 #: pcbnew/tools/pcb_actions.cpp:605
-#, fuzzy
 msgid "Dogbone Corners..."
-msgstr "角を移動..."
+msgstr "ドッグボーンコーナー..."
 
 #: pcbnew/tools/pcb_actions.cpp:606
-#, fuzzy
 msgid "Add dogbone corners to selected lines"
-msgstr "選択した線の間の角を切り取る"
+msgstr "選択した線にドッグボーンコーナーを追加する"
 
 #: pcbnew/tools/pcb_actions.cpp:612
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "ポリゴンのアウトラインを簡素化し、余分なポイントを削除します"
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid ""
@@ -47305,45 +47287,40 @@ msgid "Cleanup redundant items, etc."
 msgstr "冗長なアイテムなどをクリーンアップします。"
 
 #: pcbnew/tools/pcb_actions.cpp:847
-#, fuzzy
 msgid "Draw Microwave Gaps"
-msgstr "高周波用ギャップを作成"
+msgstr "マイクロ波用ギャップを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:848
 msgid "Create gap of specified length for microwave applications"
 msgstr "高周波基板用に指定長のギャップを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:856
-#, fuzzy
 msgid "Draw Microwave Stubs"
-msgstr "マイクロ波用のスタブを追加"
+msgstr "マイクロ波用のスタブを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:857
 msgid "Create stub of specified length for microwave applications"
 msgstr "高周波基板用に指定長のスタブを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Draw Microwave Arc Stubs"
-msgstr "マイクロ波用の円弧スタブを追加"
+msgstr "マイクロ波用の円弧スタブを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Create stub (arc) of specified size for microwave applications"
 msgstr "高周波基板用に指定長のスタブ (円弧) を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:874
-#, fuzzy
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "マイクロ波用のポリゴンを追加"
+msgstr "マイクロ波用のポリゴン形状を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:875
 msgid "Create a microwave polygonal shape from a list of vertices"
 msgstr "頂点のリストからマイクロ波用のポリゴンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:883
-#, fuzzy
 msgid "Draw Microwave Lines"
-msgstr "マイクロ波ラインを追加"
+msgstr "マイクロ波用の線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:884
 msgid "Create line of specified length for microwave applications"
@@ -47543,7 +47520,6 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "レイヤー上にゾーンを複製..."
 
 #: pcbnew/tools/pcb_actions.cpp:1107
-#, fuzzy
 msgid "Place Footprints"
 msgstr "フットプリントを配置"
 
@@ -47678,9 +47654,8 @@ msgid "Zone Manager"
 msgstr "ゾーン マネージャー"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
-#, fuzzy
 msgid "Show the zone manager dialog"
-msgstr "外観マネージャーの表示/非表示"
+msgstr "ゾーンマネージャダイアログを表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
 msgid "Flip Board View"
@@ -47696,7 +47671,7 @@ msgstr "ラッツネストを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "基板上の欠落した接続を表す線/円弧を表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Curved Ratsnest Lines"
@@ -47959,14 +47934,12 @@ msgid "Make the current layer more transparent"
 msgstr "現在のレイヤーの透明度を増加"
 
 #: pcbnew/tools/pcb_actions.cpp:1789
-#, fuzzy
 msgid "Cycle Layer Pair Presets"
-msgstr "レイヤー プリセットを保存"
+msgstr "レイヤーペアのプリセットを切り替える"
 
 #: pcbnew/tools/pcb_actions.cpp:1790
-#, fuzzy
 msgid "Cycle between preset layer pairs"
-msgstr "アクティブなレイヤー ペアの間でレイヤーを切り替え"
+msgstr "プリセットレイヤーペアを切り替える"
 
 #: pcbnew/tools/pcb_actions.cpp:1801
 msgid "Show Board Statistics"
@@ -48081,9 +48054,8 @@ msgid ""
 msgstr "選択したアイテムをカーソルのあるアイテムの水平中央に揃えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1902
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "水平方向に配置"
+msgstr "中央で水平に分割"
 
 #: pcbnew/tools/pcb_actions.cpp:1903
 #, fuzzy
@@ -48094,9 +48066,8 @@ msgstr ""
 "選択したアイテムを最も左のアイテムと最も右のアイテムの間に等間隔に配置します"
 
 #: pcbnew/tools/pcb_actions.cpp:1910
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "水平方向に配置"
+msgstr "均等な間隔で水平方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1911
 #, fuzzy
@@ -48107,9 +48078,8 @@ msgstr ""
 "選択したアイテムを最も左のアイテムと最も右のアイテムの間に等間隔に配置します"
 
 #: pcbnew/tools/pcb_actions.cpp:1918
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "垂直方向に配置"
+msgstr "均等な間隔で垂直方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1919
 #, fuzzy
@@ -48122,7 +48092,7 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:1926
 #, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "垂直方向に配置"
+msgstr "中心で垂直方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1927
 #, fuzzy
@@ -48538,7 +48508,7 @@ msgstr "非アクティブ レイヤーを表示"
 #: pcbnew/tools/pcb_control.cpp:640
 #, fuzzy
 msgid "Preset Layer Pairs"
-msgstr "レイヤー ペアを選択"
+msgstr "プリセットレイヤーペア"
 
 #: pcbnew/tools/pcb_control.cpp:730
 msgid "Item locked."
@@ -48618,9 +48588,8 @@ msgid "Selected Items"
 msgstr "選択アイテム"
 
 #: pcbnew/tools/pcb_point_editor.cpp:700
-#, fuzzy
 msgid "Resize Table Cells"
-msgstr "不正なセルを削除"
+msgstr "表のセルのサイズ変更"
 
 #: pcbnew/tools/pcb_point_editor.cpp:775
 msgid "Move Midpoint to Location"
@@ -48679,21 +48648,18 @@ msgid "Click on reference item..."
 msgstr "クリックしてリファレンス アイテムを選択..."
 
 #: pcbnew/tools/position_relative_tool.cpp:245
-#, fuzzy
 msgid "Click on reference point..."
-msgstr "クリックしてリファレンス アイテムを選択..."
+msgstr "リファレンスポイントをクリックします..."
 
 #: pcbnew/tools/zone_create_helper.cpp:198
 msgid "Add Zone Cutout"
 msgstr "ゾーンの切り抜きを追加"
 
 #: pcbnew/tools/zone_create_helper.cpp:230
-#, fuzzy
 msgid "Draw Zone"
-msgstr "線を描く"
+msgstr "ゾーンを描く"
 
 #: pcbnew/tools/zone_create_helper.cpp:252
-#, fuzzy
 msgid "Draw Polygon"
 msgstr "ポリゴンを描く"
 
@@ -48823,14 +48789,12 @@ msgid "Show copper zones"
 msgstr "導体ゾーンを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
-#, fuzzy
 msgid "Filled Shapes"
-msgstr "塗りつぶし"
+msgstr "図形を塗りつぶす"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
-#, fuzzy
 msgid "Opacity of filled shapes"
-msgstr "塗りつぶし"
+msgstr "塗りつぶされた図形の不透明度"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Show user images"
@@ -49315,14 +49279,12 @@ msgid "Set Netclass Color"
 msgstr "ネットクラスをの色を設定"
 
 #: pcbnew/widgets/appearance_controls.cpp:2377
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "回路図から基板を更新"
+msgstr "回路図の色を使用する"
 
 #: pcbnew/widgets/appearance_controls.cpp:2386
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "ネットの色をクリア"
+msgstr "ネットクラスの色をクリア"
 
 #: pcbnew/widgets/appearance_controls.cpp:2394
 #, c-format
@@ -49378,7 +49340,7 @@ msgstr "パスの前にフットプリントのUUIDを付けない。"
 #: pcbnew/widgets/net_inspector_panel.cpp:96
 #, fuzzy
 msgid "Configure netlist inspector"
-msgstr "ネットクラスを設定"
+msgstr "ネットリストインスペクタを構成する"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:340
 msgid "No footprint selected"
@@ -49396,7 +49358,6 @@ msgstr "寸法"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:123
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:693
-#, fuzzy
 msgid "Netclass"
 msgstr "ネットクラス"
 
@@ -49429,74 +49390,61 @@ msgid "Highlight Selected Net"
 msgstr "選択されたネットをハイライト表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1194
-#, fuzzy
 msgid "Rename Selected Net"
-msgstr "選択したアイテムを再生成"
+msgstr "選択したネットの名前を変更"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1198
-#, fuzzy
 msgid "Delete Selected Net"
-msgstr "選択したアイテムを削除"
+msgstr "選択したネットを削除"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1204
-#, fuzzy
 msgid "Add Net"
-msgstr "テキストを追加"
+msgstr "ネットを追加"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1218
-#, fuzzy
 msgid "Highlight Selected Nets"
 msgstr "選択されたネットをハイライト表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1220
-#, fuzzy
 msgid "Delete Selected Nets"
-msgstr "選択したアイテムを削除"
+msgstr "選択したネットを削除"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1227
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1360
-#, fuzzy
 msgid "Remove Selected Custom Group"
-msgstr "グループからアイテムを削除"
+msgstr "選択したカスタムグループを削除"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1252
-#, fuzzy
 msgid "Group name / pattern:"
-msgstr "グループ名:"
+msgstr "グループ名/パターン:"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1252
-#, fuzzy
 msgid "New Group"
-msgstr "グループ"
+msgstr "新しいグループ"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1254
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "(正規表現を表わす場合は /.../ を使用します)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1327
-#, fuzzy
 msgid "Filter by Net Name"
-msgstr "ネットをフィルター"
+msgstr "ネット名でフィルタリング"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1333
-#, fuzzy
 msgid "Filter by Netclass"
-msgstr "ネットクラスでフィルター:"
+msgstr "ネットクラスでフィルタリング"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1348
-#, fuzzy
 msgid "Group by Netclass"
-msgstr "ネットクラスによる"
+msgstr "ネットクラスによるグループ化"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1355
-#, fuzzy
 msgid "Add Custom Group"
-msgstr "カスタム ルール"
+msgstr "カスタムグループを追加"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
-#, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "グループからアイテムを削除"
+msgstr "すべてのカスタムグループを削除"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1376
 #, fuzzy
@@ -49504,24 +49452,22 @@ msgid "Show Zero Pad Nets"
 msgstr "パッドがないネットも表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1382
-#, fuzzy
 msgid "Show Unconnected Nets"
-msgstr "未配線"
+msgstr "未接続ネットを表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1391
 #, fuzzy
 msgid "Save Net Inspector Report"
-msgstr "ネット インスペクター"
+msgstr "ネット インスペクターレポートを保存"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1400
-#, fuzzy
 msgid "Show / Hide Columns"
-msgstr "非表示ピンを表示"
+msgstr "列の表示/非表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1549
 #, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "レポート ファイルを保存"
+msgstr "ネットインスペクターレポート ファイルを保存"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1550
 msgid "Report file"
@@ -49677,9 +49623,8 @@ msgid "Zone %s %s"
 msgstr "ゾーン %s %s"
 
 #: pcbnew/zone.cpp:1690
-#, fuzzy
 msgid "Rule Area Type"
-msgstr "ルールエリア"
+msgstr "ルールエリアの種類"
 
 #: pcbnew/zone.cpp:1720
 msgid "Cannot be less than zone minimum width"
@@ -49756,24 +49701,21 @@ msgstr ""
 "れます。"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:82
-#, fuzzy
 msgid "Refill zones"
-msgstr "%d ゾーンを塗り直し"
+msgstr "ゾーンを塗りつぶす"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
-#, fuzzy
 msgid "Refill zones after changes made on board"
-msgstr "ゾーンのプロパティ ダイアログを閉じたときに再塗りぶし"
+msgstr "基板上で変更を行った後でゾーンを塗りつぶす"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
-#, fuzzy
 msgid "Update Displayed Zones"
-msgstr "レイヤー表示オプション"
+msgstr "表示中のゾーンを更新する"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
-msgstr ""
+msgstr "新しい設定に従って、ダイアログに表示された塗りつぶされた領域を更新します"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
