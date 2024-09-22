@@ -307,8 +307,14 @@ public:
 class DOGBONE_CORNER_ROUTINE : public PAIRWISE_LINE_ROUTINE
 {
 public:
-    DOGBONE_CORNER_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler, int aDogboneRadiusIU ) :
-            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ), m_dogboneRadiusIU( aDogboneRadiusIU ),
+    struct PARAMETERS
+    {
+        int  DogboneRadiusIU;
+        bool AddSlots;
+    };
+
+    DOGBONE_CORNER_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler, PARAMETERS aParams ) :
+            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ), m_params( std::move( aParams ) ),
             m_haveNarrowMouths( false )
     {
     }
@@ -319,7 +325,7 @@ public:
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 
 private:
-    int m_dogboneRadiusIU;
+    PARAMETERS m_params;
     bool m_haveNarrowMouths;
 };
 

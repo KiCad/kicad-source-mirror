@@ -85,4 +85,4 @@ struct DOGBONE_RESULT
  *           | |
  */
 std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB,
-                                              int aDogboneRadius );
+                                              int aDogboneRadius, bool aAddSlots );

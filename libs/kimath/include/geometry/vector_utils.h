@@ -62,6 +62,19 @@ bool PointIsInDirection( const VECTOR2<T>& aPoint, const VECTOR2<T>& aDirection,
 
 
 /**
+ * Check that the two given points are in the same direction from some other point.
+ *
+ * I.e. the vectors from aFrom to aPointA and aFrom to aPointB are within 90 degrees.
+ */
+template <typename T>
+bool PointsAreInSameDirection( const VECTOR2<T>& aPointA, const VECTOR2<T>& aPointB,
+                               const VECTOR2<T>& aFrom )
+{
+    return PointIsInDirection( aPointB, aPointA - aFrom, aFrom );
+}
+
+
+/**
  * Determine if a segment's vector is within 90 degrees of a given direction.
  */
 bool SegIsInDirection( const SEG& aSeg, const VECTOR2I& aDirection );

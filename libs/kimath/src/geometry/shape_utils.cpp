@@ -45,6 +45,21 @@ const VECTOR2I& KIGEOM::GetOtherEnd( const SEG& aSeg, const VECTOR2I& aPoint )
 }
 
 
+OPT_VECTOR2I KIGEOM::GetSharedEndpoint( const SEG& aSegA, const SEG& aSegB )
+{
+    if( aSegA.A == aSegB.A || aSegA.A == aSegB.B )
+    {
+        return aSegA.A;
+    }
+    else if( aSegA.B == aSegB.A || aSegA.B == aSegB.B )
+    {
+        return aSegA.B;
+    }
+
+    return std::nullopt;
+}
+
+
 std::array<SEG, 4> KIGEOM::BoxToSegs( const BOX2I& aBox )
 {
     const std::array<VECTOR2I, 4> corners = {

@@ -24,30 +24,14 @@
 #include "geometry/corner_operations.h"
 
 #include <geometry/circle.h>
+#include <geometry/half_line.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_utils.h>
+#include <geometry/vector_utils.h>
+#include <trigo.h>
 
 namespace
 {
-
-/**
- * Get the shared endpoint of two segments, if it exists, or std::nullopt
- * if the segments are not connected end-to-end.
- */
-std::optional<VECTOR2I> GetSharedEndpoint( const SEG& aSegA, const SEG& aSegB )
-{
-    if( aSegA.A == aSegB.A || aSegA.A == aSegB.B )
-    {
-        return aSegA.A;
-    }
-    else if( aSegA.B == aSegB.A || aSegA.B == aSegB.B )
-    {
-        return aSegA.B;
-    }
-
-    return std::nullopt;
-}
-
 
 /**
  * Get the bisector of two segments that join at a corner.
@@ -57,7 +41,7 @@ SEG GetBisectorOfCornerSegments( const SEG& aSegA, const SEG& aSegB, int aLength
     // Use the "parallelogram" method to find the bisector
 
     // The intersection point of the two lines is the one that is shared by both segments
-    const std::optional<VECTOR2I> corner = GetSharedEndpoint( aSegA, aSegB );
+    const std::optional<VECTOR2I> corner = KIGEOM::GetSharedEndpoint( aSegA, aSegB );
 
     // Get the vector of a segment pointing away from a point
     const auto getSegVectorPointingAwayFrom = []( const SEG&      aSeg,
@@ -106,7 +90,7 @@ std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG& aSegA, const SEG&
     // otherwise we would need to decide which inside corner to chamfer
 
     // Figure out which end points are the ones at the intersection
-    const std::optional<VECTOR2I> corner = GetSharedEndpoint( aSegA, aSegB );
+    const std::optional<VECTOR2I> corner = KIGEOM::GetSharedEndpoint( aSegA, aSegB );
 
     if( !corner )
     {
@@ -143,9 +127,9 @@ std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG& aSegA, const SEG&
 
 
 std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB,
-                                              int aDogboneRadius )
+                                              int aDogboneRadius, bool aAddSlots )
 {
-    const std::optional<VECTOR2I> corner = GetSharedEndpoint( aSegA, aSegB );
+    const std::optional<VECTOR2I> corner = KIGEOM::GetSharedEndpoint( aSegA, aSegB );
 
     // Cannot handle parallel lines
     if( !corner || aSegA.Angle( aSegB ).IsHorizontal() )
@@ -198,19 +182,77 @@ std::optional<DOGBONE_RESULT> ComputeDogbone( const SEG& aSegA, const SEG& aSegB
     const VECTOR2I& aOtherPtA = KIGEOM::GetOtherEnd( aSegA, *corner );
     const VECTOR2I& aOtherPtB = KIGEOM::GetOtherEnd( aSegB, *corner );
 
-    // See if we need to update the original segments
-    // or if the dogbone consumed them
-    std::optional<SEG> new_a, new_b;
-    if( aOtherPtA != *ptOnSegA )
-        new_a = SEG{ aOtherPtA, *ptOnSegA };
+    const EDA_ANGLE angle_epsilon( 1e-3, EDA_ANGLE_T::DEGREES_T );
+    const bool small_arc_mouth = std::abs( arc.GetCentralAngle() ) > ( ANGLE_180 + angle_epsilon );
 
-    if( aOtherPtB != *ptOnSegB )
-        new_b = SEG{ aOtherPtB, *ptOnSegB };
+    {
+        // See if we need to update the original segments
+        // or if the dogbone consumed them
+        std::optional<SEG> new_a, new_b;
+        if( aOtherPtA != *ptOnSegA )
+            new_a = SEG{ aOtherPtA, *ptOnSegA };
 
-    const EDA_ANGLE epsilon( 1e-5, EDA_ANGLE_T::DEGREES_T );
-    const bool      small_arc_mouth = arc.GetCentralAngle().Normalize() > ( ANGLE_180 + epsilon );
+        if( aOtherPtB != *ptOnSegB )
+            new_b = SEG{ aOtherPtB, *ptOnSegB };
 
-    return DOGBONE_RESULT{
-        arc, new_a, new_b, small_arc_mouth,
+        // Nice and easy
+        if( !small_arc_mouth || !aAddSlots )
+        {
+            return DOGBONE_RESULT{
+                arc,
+                new_a,
+                new_b,
+                small_arc_mouth,
+            };
+        }
+    }
+
+    // If it's a small mouth, we can try to work out the minimal slot to allow
+
+    // First the arc will be pulled back to 180 degrees
+    SHAPE_ARC slotArc = SHAPE_ARC( GetRotated( *corner, dogboneCenter, ANGLE_90 ), *corner,
+                                   GetRotated( *corner, dogboneCenter, -ANGLE_90 ), 0 );
+
+    // Make sure P0 is still the 'A' end
+    if( !KIGEOM::PointsAreInSameDirection( slotArc.GetP0(), arc.GetP0(), dogboneCenter ) )
+    {
+        slotArc.Reverse();
+    }
+
+    // Take the bisector and glue it to the arc ends
+    const HALF_LINE arc_extension_a{
+        slotArc.GetP0(),
+        slotArc.GetP0() + ( dogboneCenter - *corner ),
     };
+    const HALF_LINE arc_extension_b{
+        slotArc.GetP1(),
+        slotArc.GetP1() + ( dogboneCenter - *corner ),
+    };
+
+    const OPT_VECTOR2I ext_a_intersect = arc_extension_a.Intersect( aSegA );
+    const OPT_VECTOR2I ext_b_intersect = arc_extension_b.Intersect( aSegB );
+
+    if( !ext_a_intersect || !ext_b_intersect )
+    {
+        // The arc extensions don't intersect the original segments
+        return std::nullopt;
+    }
+
+    {
+        // See if we need to update the original segments
+        // or if the dogbone consumed them
+        std::optional<SEG> new_a, new_b;
+        if( aOtherPtA != *ext_a_intersect )
+            new_a = SEG{ aOtherPtA, *ext_a_intersect };
+
+        if( aOtherPtB != *ext_b_intersect )
+            new_b = SEG{ aOtherPtB, *ext_b_intersect };
+
+        return DOGBONE_RESULT{
+            slotArc,
+            new_a,
+            new_b,
+            small_arc_mouth,
+        };
+    }
 }

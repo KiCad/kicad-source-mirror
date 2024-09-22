@@ -22,21 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#pragma once
+
+#include <dialogs/dialog_unit_entry_base.h>
+#include <widgets/unit_binder.h>
+
 
 /**
  * An extension of WX_TEXT_ENTRY_DIALOG that uses UNIT_BINDER to request a dimension
  * (e.g. mm, inches, etc) from the user according to the selected units
  */
-
-
-#ifndef _DIALOG_UNIT_ENTRY_H_
-#define _DIALOG_UNIT_ENTRY_H_
-
-
-#include <widgets/unit_binder.h>
-
-#include "../../common/dialogs/dialog_unit_entry_base.h"
-
 class WX_UNIT_ENTRY_DIALOG : public WX_UNIT_ENTRY_DIALOG_BASE
 {
 public:
@@ -68,5 +63,3 @@ private:
     UNIT_BINDER m_unit_binder_x;
     UNIT_BINDER m_unit_binder_y;
 };
-
-#endif  // _DIALOG_UNIT_ENTRY_H_

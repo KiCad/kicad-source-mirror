@@ -68,6 +68,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_tablecell_properties.h>
 #include <dialogs/dialog_table_properties.h>
+#include <dialogs/dialog_multi_unit_entry.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <pcb_reference_image.h>
 
@@ -1206,6 +1207,50 @@ static std::optional<int> GetRadiusParams( PCB_BASE_EDIT_FRAME& aFrame, const wx
 }
 
 
+static std::optional<DOGBONE_CORNER_ROUTINE::PARAMETERS>
+GetDogboneParams( PCB_BASE_EDIT_FRAME& aFrame )
+{
+    // Persistent parameters
+    static DOGBONE_CORNER_ROUTINE::PARAMETERS s_dogBoneParams{
+        pcbIUScale.mmToIU( 1 ),
+        true,
+    };
+
+    std::vector<WX_MULTI_ENTRY_DIALOG::ENTRY> entries{
+        {
+                _( "Arc radius:" ),
+                WX_MULTI_ENTRY_DIALOG::UNIT_BOUND{ s_dogBoneParams.DogboneRadiusIU },
+                wxEmptyString,
+        },
+        {
+                _( "Add slots in acute corners" ),
+                WX_MULTI_ENTRY_DIALOG::CHECKBOX{ s_dogBoneParams.AddSlots },
+                _( "Add slots in acute corners to allow access to a cutter of the given radius" ),
+        },
+    };
+
+    WX_MULTI_ENTRY_DIALOG dlg( &aFrame, _( "Dogbone Corner Settings" ), entries );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return std::nullopt;
+
+    std::vector<WX_MULTI_ENTRY_DIALOG::RESULT> results = dlg.GetValues();
+    wxCHECK( results.size() == 2, std::nullopt );
+
+    try
+    {
+        s_dogBoneParams.DogboneRadiusIU = std::get<long long int>( results[0] );
+        s_dogBoneParams.AddSlots = std::get<bool>( results[1] );
+    }
+    catch( const std::bad_variant_access& )
+    {
+        wxASSERT( false );
+        return std::nullopt;
+    }
+
+    return s_dogBoneParams;
+}
+
 /**
  * Prompt the user for chamfer parameters
  *
@@ -1413,14 +1458,13 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::dogboneCorners ) )
     {
-        static int         s_dogBoneRadius = pcbIUScale.mmToIU( 1 );
-        std::optional<int> radiusIU =
-                GetRadiusParams( *frame(), _( "Dogbone Corners" ), s_dogBoneRadius );
+        std::optional<DOGBONE_CORNER_ROUTINE::PARAMETERS> dogboneParams =
+                GetDogboneParams( *frame() );
 
-        if( radiusIU.has_value() )
+        if( dogboneParams.has_value() )
         {
             pairwise_line_routine = std::make_unique<DOGBONE_CORNER_ROUTINE>(
-                    frame()->GetModel(), change_handler, *radiusIU );
+                    frame()->GetModel(), change_handler, *dogboneParams );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::chamferLines ) )

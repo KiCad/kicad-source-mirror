@@ -61,6 +61,12 @@ SEG NormalisedSeg( const SEG& aSeg );
 const VECTOR2I& GetOtherEnd( const SEG& aSeg, const VECTOR2I& aPoint );
 
 /**
+ * Get the shared endpoint of two segments, if it exists, or std::nullopt
+ * if the segments are not connected end-to-end.
+ */
+OPT_VECTOR2I GetSharedEndpoint( const SEG& aSegA, const SEG& aSegB );
+
+/**
  * Decompose a BOX2 into four segments.
  *
  * Segments are returned in the order: Top, Right, Bottom, Left.

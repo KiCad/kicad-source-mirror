@@ -285,6 +285,11 @@ std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage() const
 
         msg += _( "Some of the dogbone corners are too narrow to fit a "
                   "cutter of the specified radius." );
+
+        if( !m_params.AddSlots )
+            msg += _( " Consider enabling the 'Add Slots' option." );
+        else
+            msg += _( " Slots were added." );
     }
 
     if( msg.empty() )
@@ -317,7 +322,7 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
     }
 
     std::optional<DOGBONE_RESULT> dogbone_result =
-            ComputeDogbone( seg_a, seg_b, m_dogboneRadiusIU );
+            ComputeDogbone( seg_a, seg_b, m_params.DogboneRadiusIU, m_params.AddSlots );
 
     if( !dogbone_result )
     {
@@ -331,17 +336,39 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
         m_haveNarrowMouths = true;
     }
 
+    CHANGE_HANDLER& handler = GetHandler();
+
     auto tArc = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::ARC );
+
+    const auto copyProps = [&]( PCB_SHAPE& aShape )
+    {
+        aShape.SetWidth( aLineA.GetWidth() );
+        aShape.SetLayer( aLineA.GetLayer() );
+        aShape.SetLocked( aLineA.IsLocked() );
+    };
+
+    const auto addSegment = [&]( const SEG& aSeg )
+    {
+        if( aSeg.Length() == 0 )
+            return;
+
+        auto tSegment = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
+        tSegment->SetStart( aSeg.A );
+        tSegment->SetEnd( aSeg.B );
+
+        copyProps( *tSegment );
+        handler.AddNewItem( std::move( tSegment ) );
+    };
 
     tArc->SetArcGeometry( dogbone_result->m_arc.GetP0(), dogbone_result->m_arc.GetArcMid(),
                           dogbone_result->m_arc.GetP1() );
 
     // Copy properties from one of the source lines
-    tArc->SetWidth( aLineA.GetWidth() );
-    tArc->SetLayer( aLineA.GetLayer() );
-    tArc->SetLocked( aLineA.IsLocked() );
+    copyProps( *tArc );
 
-    CHANGE_HANDLER& handler = GetHandler();
+    addSegment( SEG{ dogbone_result->m_arc.GetP0(), dogbone_result->m_updated_seg_a->B } );
+    addSegment( SEG{ dogbone_result->m_arc.GetP1(), dogbone_result->m_updated_seg_b->B } );
+
     handler.AddNewItem( std::move( tArc ) );
 
     ModifyLineOrDeleteIfZeroLength( aLineA, dogbone_result->m_updated_seg_a );
