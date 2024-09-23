@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-21 14:40+0000\n"
+"PO-Revision-Date: 2024-09-23 12:40+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -11519,7 +11519,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
 msgid "Increment by:"
-msgstr "以增量（递增）:"
+msgstr "增量:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
 msgid "All sheets"
@@ -11527,7 +11527,7 @@ msgstr "全部图纸"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 msgid "Increment Annotations From"
-msgstr ""
+msgstr "根据 ... 递增位号"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
@@ -21790,12 +21790,12 @@ msgstr "填写原理图符号位号"
 
 #: eeschema/tools/ee_actions.cpp:1040
 msgid "Increment Annotations From..."
-msgstr ""
+msgstr "根据 ... 递增位号"
 
 #: eeschema/tools/ee_actions.cpp:1041
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
-msgstr ""
+msgstr "从指定符号开始递增原理图位号"
 
 #: eeschema/tools/ee_actions.cpp:1046
 msgid "Schematic Setup..."
@@ -22646,7 +22646,7 @@ msgstr "无法编辑有损坏的库符号链接的符号。"
 
 #: eeschema/tools/sch_editor_control.cpp:2301
 msgid "Increment Annotations"
-msgstr ""
+msgstr "递增位号"
 
 #: eeschema/tools/sch_editor_control.cpp:2706
 #: pcbnew/tools/board_editor_control.cpp:606
@@ -22848,7 +22848,7 @@ msgstr "放置该设计图块并作为一个新图纸。"
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
-msgstr "保留源图纸中的参考位号。 否则将先清除原有位号, 然后根据位号设置重新批注。"
+msgstr "保留源图纸中的位号。 否则将先清除原有位号, 然后根据位号设置重新批注。"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -32247,7 +32247,7 @@ msgstr "元件匹配过滤器:"
 msgid ""
 "A list of comma-selected reference designators to export (wildcards are "
 "supported)"
-msgstr "用逗号选择的要导出的参考位号列表 (支持通配符)"
+msgstr "用逗号选择的要导出的位号列表 (支持通配符)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:92
 msgid "Export tracks and vias on external copper layers."
@@ -45641,7 +45641,7 @@ msgstr "部分多边形无法相交。"
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
-msgstr "请选择一个参考规则区域进行复制。"
+msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:299
 msgid "No Rule Areas to repeat layout to have been found."
