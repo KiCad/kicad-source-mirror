@@ -32,19 +32,20 @@
  */
 BOOST_AUTO_TEST_SUITE( Dogbone )
 
-struct TWO_LINE_CHAMFER_TEST_CASE
+struct DOGBONE_TEST_CASE
 {
     SEG                           m_seg_a;
     SEG                           m_seg_b;
     int                           m_radius;
+    bool                          m_add_slots;
     std::optional<DOGBONE_RESULT> m_expected_result;
 };
 
-static void DoDogboneTestChecks( const TWO_LINE_CHAMFER_TEST_CASE& aTestCase )
+static void DoDogboneTestChecks( const DOGBONE_TEST_CASE& aTestCase )
 {
     // Actally do the chamfer
-    const std::optional<DOGBONE_RESULT> dogbone_result =
-            ComputeDogbone( aTestCase.m_seg_a, aTestCase.m_seg_b, aTestCase.m_radius );
+    const std::optional<DOGBONE_RESULT> dogbone_result = ComputeDogbone(
+            aTestCase.m_seg_a, aTestCase.m_seg_b, aTestCase.m_radius, aTestCase.m_add_slots );
 
     BOOST_REQUIRE_EQUAL( dogbone_result.has_value(), aTestCase.m_expected_result.has_value() );
 
@@ -92,10 +93,11 @@ BOOST_AUTO_TEST_CASE( SimpleRightAngleAtOrigin )
      *      v
      */
 
-    const TWO_LINE_CHAMFER_TEST_CASE testcase{
+    const DOGBONE_TEST_CASE testcase{
         { VECTOR2I( 0, 0 ), VECTOR2I( 100000, 0 ) },
         { VECTOR2I( 0, 0 ), VECTOR2I( 0, 100000 ) },
         10000,
+        false,
         // A right angle is an easy one to see, because the end and center points are
         // all on 45 degree lines from the center
         {
