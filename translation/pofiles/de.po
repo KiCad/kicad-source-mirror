@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-23 12:40+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-09-24 16:15+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -2047,9 +2047,9 @@ msgid "Design block does not have a valid library ID."
 msgstr "Designblock hat keine gültige Bibliotheks-ID."
 
 #: common/design_block_io.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Die Schaltplandatei \"%s\" existiert bereits."
+msgstr "Die Schaltplandatei \"%s\" ist nicht vorhanden."
 
 #: common/design_block_io.cpp:342
 #, c-format
@@ -9961,9 +9961,8 @@ msgstr ""
 "Wählen Sie einen Footprint für einen Bericht über Footprintzuordnungen."
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Footprint-Zuweisungen"
+msgstr "Footprint-Zuweisung löschen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:145
 #, fuzzy
@@ -11845,9 +11844,8 @@ msgid "All sheets"
 msgstr "Schaltplan hinzufügen"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
-#, fuzzy
 msgid "Increment Annotations From"
-msgstr "Annotation löschen"
+msgstr "Annotationen inkrementieren ab"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
@@ -22039,9 +22037,8 @@ msgid "Place Global Labels"
 msgstr "Globaler Bezeichner"
 
 #: eeschema/tools/ee_actions.cpp:570 pcbnew/tools/pcb_actions.cpp:183
-#, fuzzy
 msgid "Draw Tables"
-msgstr "Tabelle zeichen"
+msgstr "Tabellen zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:577 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:117
@@ -22124,9 +22121,8 @@ msgid "Swap"
 msgstr "Tauschen"
 
 #: eeschema/tools/ee_actions.cpp:680
-#, fuzzy
 msgid "Swap positions of selected items"
-msgstr "Auswahl gesperrter Elemente zulassen"
+msgstr "Positionen ausgewählter Elemente tauschen"
 
 #: eeschema/tools/ee_actions.cpp:688 pcbnew/tools/pcb_actions.cpp:664
 msgid "Properties..."
@@ -22487,15 +22483,15 @@ msgid "Fill in schematic symbol reference designators"
 msgstr "Weist Referenzbezeichnern der Schaltplansymbole (neue) Werte zu"
 
 #: eeschema/tools/ee_actions.cpp:1040
-#, fuzzy
 msgid "Increment Annotations From..."
-msgstr "Annotation löschen"
+msgstr "Annotationen inkrementieren ab..."
 
 #: eeschema/tools/ee_actions.cpp:1041
-#, fuzzy
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
-msgstr "Referenzbezeichner von allen eingefügten Symbolen zurücksetzen"
+msgstr ""
+"Inkrementieren einer Teilmenge von Referenzbezeichnern beginnend mit einem "
+"bestimmten Symbol"
 
 #: eeschema/tools/ee_actions.cpp:1046
 msgid "Schematic Setup..."
@@ -23203,16 +23199,16 @@ msgstr "%s zeichnen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2630 pcbnew/tools/drawing_tool.cpp:1179
 msgid "Draw Table"
-msgstr "Tabelle zeichen"
+msgstr "Tabelle zeichnen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2805
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Drücken Sie <ESC>, um die Erzeugung des Schaltplanblatts abzubrechen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2852
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Verzeichnis \"%s\" existiert nicht"
+msgstr "Verzeichnis \"%s\" existiert nicht."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2861
 #, fuzzy, c-format
@@ -23381,9 +23377,8 @@ msgstr ""
 "werden."
 
 #: eeschema/tools/sch_editor_control.cpp:2301
-#, fuzzy
 msgid "Increment Annotations"
-msgstr "Annotation löschen"
+msgstr "Annotationen inkrementieren"
 
 #: eeschema/tools/sch_editor_control.cpp:2706
 #: pcbnew/tools/board_editor_control.cpp:606
@@ -23513,9 +23508,8 @@ msgid "SVG File Name"
 msgstr "SVG-Dateiname"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:291
-#, fuzzy
 msgid "Place Pin"
-msgstr "Via hinzufügen"
+msgstr "Pin platzieren"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:366
 #: pcbnew/tools/edit_tool.cpp:2575
@@ -27756,9 +27750,8 @@ msgstr ""
 "die nicht auf allen Seiten verwendet werden"
 
 #: pagelayout_editor/tools/pl_actions.cpp:69
-#, fuzzy
 msgid "Place Bitmaps"
-msgstr "Element platzieren"
+msgstr "Bitmaps platzieren"
 
 #: pagelayout_editor/tools/pl_actions.cpp:89
 msgid "Append Existing Drawing Sheet..."
@@ -31661,9 +31654,8 @@ msgid "Board Cleanup"
 msgstr "Platine bereinigen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
-#, fuzzy
 msgid "Refill zones before running cleanup"
-msgstr "Alle Zonen ausfüllen vor dem DRC"
+msgstr "Alle Zonen vor dem Aufräumen neu füllen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:33
 msgid "Delete &tracks connecting different nets"
@@ -33243,16 +33235,14 @@ msgid "Export components"
 msgstr "Bauteile exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:70
-#, fuzzy
 msgid "All components"
-msgstr "Bauteil"
+msgstr "Alle Bauteile"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:75
-#, fuzzy
 msgid "Export only the component models that are selected in the PCB editor"
 msgstr ""
-"Aktualisiert die Referenzen von Schaltplansymbolen, welche im "
-"Leiterplatteneditor geändert wurden."
+"Exportiert nur die Modelle von Bauteilen, welche im Leiterplatteneditor "
+"ausgewählt wurden."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:79
 msgid "Components matching filter:"
@@ -36572,9 +36562,8 @@ msgstr ""
 "Als Ankerposition wird dann die Position dieses Elementes benutzt."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:45
-#, fuzzy
 msgid "Select Point..."
-msgstr "Footprint auswählen..."
+msgstr "Punkt auswählen..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
@@ -38589,9 +38578,8 @@ msgstr ""
 "werden."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
-#, fuzzy
 msgid "Solder mask settings:"
-msgstr "Lötstoppmaske oben:"
+msgstr "Lötstoppmaskeneinstellungen:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
 msgid ""
@@ -38667,9 +38655,8 @@ msgstr ""
 "(Die Lötstoppmaske ist eine invertierte Lage)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:128
-#, fuzzy
 msgid "Solder paste settings:"
-msgstr "Freiraumverhältnis (relativ) für Lötpaste:"
+msgstr "Lötpasteneinstellungen:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 msgid ""
@@ -47444,9 +47431,8 @@ msgid "Decrease tuning pattern amplitude by one step."
 msgstr "Verringern der Abstimmungsmuster-Amplitude um eine Stufe."
 
 #: pcbnew/tools/pcb_actions.cpp:228
-#, fuzzy
 msgid "Draw Aligned Dimensions"
-msgstr "Ausgerichtete Bemaßung"
+msgstr "Ausgerichtete Bemaßung zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:235
 #, fuzzy
