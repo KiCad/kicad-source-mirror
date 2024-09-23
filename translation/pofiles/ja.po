@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-22 15:40+0000\n"
+"PO-Revision-Date: 2024-09-24 16:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -23068,9 +23068,8 @@ msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "ライブラリのシンボルへのリンクが壊れているシンボルは編集できません。"
 
 #: eeschema/tools/sch_editor_control.cpp:2301
-#, fuzzy
 msgid "Increment Annotations"
-msgstr "アノテーションを削除"
+msgstr "アノテーションをインクリメントする"
 
 #: eeschema/tools/sch_editor_control.cpp:2706
 #: pcbnew/tools/board_editor_control.cpp:606
@@ -23200,21 +23199,18 @@ msgid "SVG File Name"
 msgstr "SVGファイル名"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:291
-#, fuzzy
 msgid "Place Pin"
-msgstr "ビアを配置"
+msgstr "ピンを配置"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:366
 #: pcbnew/tools/edit_tool.cpp:2575
-#, fuzzy
 msgid "Hide Field"
-msgstr "フィールドを追加"
+msgstr "フィールドを非表示"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:368
 #: pcbnew/tools/edit_tool.cpp:2577
-#, fuzzy
 msgid "Hide Fields"
-msgstr "非表示フィールドを表示"
+msgstr "フィールドを非表示"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:370
 msgid "Use the Symbol Properties dialog to remove fields."
@@ -23259,19 +23255,16 @@ msgid "Repeat Pin"
 msgstr "ピンを繰り返し"
 
 #: eeschema/widgets/design_block_pane.cpp:41
-#, fuzzy
 msgid "Place as sheet"
-msgstr "テキストを配置"
+msgstr "シートとして配置"
 
 #: eeschema/widgets/design_block_pane.cpp:42
-#, fuzzy
 msgid "Keep annotations"
-msgstr "既存のアノテーションをキープ"
+msgstr "アノテーションをキープ"
 
 #: eeschema/widgets/design_block_pane.cpp:65
-#, fuzzy
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "以降のクリックのためにシンボルを選択したままにします。"
+msgstr "続くクリックでデザイン ブロックのコピーを配置します。"
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
@@ -23297,9 +23290,8 @@ msgid "Rename"
 msgstr "名前を変更"
 
 #: eeschema/widgets/hierarchy_pane.cpp:399
-#, fuzzy
 msgid "Change name of this sheet"
-msgstr "回路図のすべてのシンボルを変更"
+msgstr "このシートの名前を変更する"
 
 #: eeschema/widgets/hierarchy_pane.cpp:418
 #, c-format
@@ -23307,9 +23299,8 @@ msgid "Enter page number for sheet path %s"
 msgstr "シート パス %s のページ番号を入力します"
 
 #: eeschema/widgets/hierarchy_pane.cpp:489
-#, fuzzy
 msgid "Renaming sheet"
-msgstr "図面シート"
+msgstr "シート名の変更"
 
 #: eeschema/widgets/hierarchy_pane.cpp:552
 #, c-format
@@ -23317,14 +23308,12 @@ msgid "(page %s)"
 msgstr "(%s ページ)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "シンボル ライブラリをロード中"
+msgstr "デザインブロックライブラリのロード中"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:262
-#, fuzzy
 msgid "Updating Design Block Libraries"
-msgstr "フットプリント ライブラリを更新"
+msgstr "デザインブロックライブラリの更新中"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:386
 #: eeschema/widgets/panel_symbol_chooser.cpp:169
@@ -23749,19 +23738,16 @@ msgid "Sketch polygons"
 msgstr "ポリゴンをスケッチ モードで表示"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
 msgstr "アウトライン モードでポリゴンを表示"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
-#, fuzzy
 msgid "Forced Opacity Display Mode"
-msgstr "配線表示モード"
+msgstr "強制不透明度表示モード"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "不透明度:"
+msgstr "強制不透明度:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
@@ -24504,14 +24490,12 @@ msgid "Show dcode numbers"
 msgstr "Dコード番号を表示"
 
 #: gerbview/tools/gerbview_actions.cpp:228
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "タイトル ブロックを編集モードで表示"
+msgstr "強制不透明モードで表示"
 
 #: gerbview/tools/gerbview_actions.cpp:229
-#, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "スタック モードでレイヤーを表示"
+msgstr "不透明色強制モードを使用してレイヤーを表示する"
 
 #: gerbview/tools/gerbview_actions.cpp:235
 msgid "Show in XOR Mode"
@@ -24706,33 +24690,28 @@ msgid "Leave unchanged"
 msgstr "変更しないままにする"
 
 #: include/tool/edit_table_tool_base.h:390
-#, fuzzy
 msgid "Delete Rows"
-msgstr "バスを削除"
+msgstr "行を削除"
 
 #: include/tool/edit_table_tool_base.h:392
-#, fuzzy
 msgid "Delete Row"
-msgstr "削除ツール"
+msgstr "行を削除"
 
 #: include/tool/edit_table_tool_base.h:468
-#, fuzzy
 msgid "Delete Columns"
-msgstr "列を選択"
+msgstr "列を削除"
 
 #: include/tool/edit_table_tool_base.h:470
-#, fuzzy
 msgid "Delete Column"
-msgstr "列を選択"
+msgstr "列を削除"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
 msgid "Show import issues"
 msgstr "インポートの問題を表示"
 
 #: include/widgets/filedlg_open_embed_file.h:36
-#, fuzzy
 msgid "Embed File"
-msgstr "ファイルを編集"
+msgstr "ファイルを埋め込む"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -24890,9 +24869,8 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "エクスポート ユーティリティ (ガーバー、ドリル、部品配置ファイルなど)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:77
-#, fuzzy
 msgid "Output file format, options: step, brep, xao, glb (binary glTF)"
-msgstr "出力ファイルフォーマット, オプション: step, glb (バイナリglTF)"
+msgstr "出力ファイルフォーマット, オプション: step, brep, xao, glb (binary glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:81
 msgid "Overwrite output file"
@@ -24924,14 +24902,12 @@ msgid "Only generate a board with no components"
 msgstr "部品なしのボードのみを生成する"
 
 #: kicad/cli/command_pcb_export_3d.cpp:117
-#, fuzzy
 msgid "Exclude board body"
-msgstr "基板から除外"
+msgstr "基板本体を除外"
 
 #: kicad/cli/command_pcb_export_3d.cpp:121
-#, fuzzy
 msgid "Exclude 3D models for components"
-msgstr "'未実装'が指定されたコンポーネントの 3D モデルを除く"
+msgstr "コンポーネントの3Dモデルを除外する"
 
 #: kicad/cli/command_pcb_export_3d.cpp:125
 msgid ""
@@ -24942,15 +24918,13 @@ msgstr "この参照指定子のリストに一致するコンポーネント 3D
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 #: pcbnew/dialogs/dialog_export_step_base.cpp:91
-#, fuzzy
 msgid "Export tracks and vias"
-msgstr "配線とパッドとビアをエクスポート"
+msgstr "配線とビアをエクスポート"
 
 #: kicad/cli/command_pcb_export_3d.cpp:135
 #: pcbnew/dialogs/dialog_export_step_base.cpp:96
-#, fuzzy
 msgid "Export pads"
-msgstr "配線をエクスポート"
+msgstr "パッドをエクスポート"
 
 #: kicad/cli/command_pcb_export_3d.cpp:139
 #: pcbnew/dialogs/dialog_export_step_base.cpp:99
@@ -25308,14 +25282,12 @@ msgid "Renders the PCB in 3D view to PNG or JPEG image"
 msgstr "プリント基板を3D表示でPNGまたはJPEG画像にレンダリングします"
 
 #: kicad/cli/command_pcb_render.cpp:173
-#, fuzzy
 msgid "Image width"
-msgstr "ページの幅"
+msgstr "画像の幅"
 
 #: kicad/cli/command_pcb_render.cpp:179
-#, fuzzy
 msgid "Image height"
-msgstr "ページの高さ"
+msgstr "画像の高さ"
 
 #: kicad/cli/command_pcb_render.cpp:185
 #, c-format
@@ -25350,9 +25322,8 @@ msgid "Use perspective projection instead of orthogonal"
 msgstr "直交投影の代わりに透視投影を使用する"
 
 #: kicad/cli/command_pcb_render.cpp:221
-#, fuzzy
 msgid "Camera zoom"
-msgstr "カメラ オプション"
+msgstr "カメラズーム"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
@@ -25374,24 +25345,20 @@ msgid "Invalid background\n"
 msgstr "不正な背景です\n"
 
 #: kicad/cli/command_pcb_render.cpp:268
-#, fuzzy
 msgid "Invalid rotation format\n"
-msgstr "不正なレポート フォーマットです\n"
+msgstr "回転形式が無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:274
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "不正な フォーマットです\n"
+msgstr "パンの形式が無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:280
-#, fuzzy
 msgid "Invalid pivot format\n"
-msgstr "不正なレポート フォーマットです\n"
+msgstr "ピボットの形式が無効です\n"
 
 #: kicad/cli/command_pcb_render.cpp:295
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "不正な フォーマットです\n"
+msgstr "画像の形式が無効です\n"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -25673,16 +25640,15 @@ msgstr ""
 "えますか?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr ""
-"フォルダ '%s' はすでに存在します。既存のフットプリントを上書きしますか？"
+msgstr "フォルダ '%s' はすでに存在します。既存のデザインブロックを上書きしますか？"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "シンボル ライブラリ ファイル '%s' を保存できませんでした。"
+msgstr "デザイン ブロック ライブラリ ファイル '%s' を保存できませんでした。"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:920
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:948
@@ -25861,14 +25827,12 @@ msgid "Export STEP"
 msgstr "STEP をエクスポート"
 
 #: kicad/kicad_cli.cpp:115
-#, fuzzy
 msgid "Export BREP"
-msgstr "STEP をエクスポート"
+msgstr "BREP をエクスポート"
 
 #: kicad/kicad_cli.cpp:116
-#, fuzzy
 msgid "Export XAO"
-msgstr "DXFとしてエクスポート"
+msgstr "XAOをエクスポート"
 
 #: kicad/kicad_cli.cpp:117
 msgid "Export VRML"
@@ -26850,18 +26814,16 @@ msgid "New Project..."
 msgstr "新規プロジェクト..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new, blank project"
-msgstr "空のプロジェクトを作成します"
+msgstr "空のプロジェクトを新規作成します"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "New Project from Template..."
 msgstr "テンプレートから新規プロジェクトを作成..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "既存のシンボルから派生して新しいシンボルを作成"
+msgstr "既存のプロジェクトから派生して新しいプロジェクトを作成"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 msgid "Clone Project from Repository..."
@@ -26880,19 +26842,16 @@ msgid "Close Project"
 msgstr "プロジェクトを閉じる"
 
 #: kicad/tools/kicad_manager_actions.cpp:101
-#, fuzzy
 msgid "Edit schematic in schematic editor"
-msgstr "回路図を回路図エディターで開く"
+msgstr "回路図エディターで回路図を編集する"
 
 #: kicad/tools/kicad_manager_actions.cpp:123
-#, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "テキスト エディターで編集"
+msgstr "PCBエディタでPCBを編集する"
 
 #: kicad/tools/kicad_manager_actions.cpp:134
-#, fuzzy
 msgid "Create, delete and edit PCB footprints"
-msgstr "フットプリントを作成、削除、編集"
+msgstr "PCBフットプリントを作成、削除、編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:145
 msgid "Preview Gerber output files"
@@ -27039,9 +26998,8 @@ msgid "Application cannot start."
 msgstr "アプリケーションを起動できません。"
 
 #: kicad/tools/kicad_manager_control.cpp:907
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "全てのライブラリーを保存"
+msgstr "デザインブロックライブラリ"
 
 #: kicad/update_manager.cpp:164
 msgid "Update Check"
@@ -27424,9 +27382,8 @@ msgstr ""
 "１ページ目または他のページにシミュレートします"
 
 #: pagelayout_editor/tools/pl_actions.cpp:69
-#, fuzzy
 msgid "Place Bitmaps"
-msgstr "アイテムを配置"
+msgstr "ビットマップを配置する"
 
 #: pagelayout_editor/tools/pl_actions.cpp:89
 msgid "Append Existing Drawing Sheet..."
