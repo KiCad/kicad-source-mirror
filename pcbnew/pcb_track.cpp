@@ -932,23 +932,55 @@ LSET PCB_VIA::GetLayerSet() const
 
 void PCB_VIA::SetLayerSet( const LSET& aLayerSet )
 {
-    bool first = true;
+    // Vias do not use a LSET, just a top and bottom layer pair
+    // So we need to set these 2 layers according to the allowed layers in aLayerSet
 
-    aLayerSet.RunOnLayers(
-            [&]( PCB_LAYER_ID layer )
-            {
-                // m_layer and m_bottomLayer are copper layers, so consider only copper layers
-                if( IsCopperLayer( layer ) )
+    if( GetViaType() == VIATYPE::THROUGH )      // Only F_Cu and B_Cu are allowed
+    {
+        Padstack().Drill().start = F_Cu;
+        Padstack().Drill().end = B_Cu;
+        return;
+    }
+
+    // top and bottom layer are always copper layers:
+    LSET copperInnerLayerSet = aLayerSet & LSET::InternalCuMask();
+
+    // F_Cu and B_Cu layers are always allowed for vias.
+    // blind vias can have the start and/or end layers on other layers, so we need to
+    // recalculate the first and the last allowed layers if they are internal copper layers
+
+    // Fix start layer (first allowed layer)
+    if( Padstack().Drill().start != F_Cu )
+    {
+        bool found = false;
+
+        copperInnerLayerSet.RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
                 {
-                    if( first )
+                    // Start is the first allowed inner layer >= initial start layer
+                    if( !found && Padstack().Drill().start <= layer )
                     {
                         Padstack().Drill().start = layer;
-                        first = false;
+                        found = true;
                     }
+                } );
+    }
 
-                    Padstack().Drill().end = layer;
-                }
-            } );
+    // Fix end layer (last allowed layer)
+    if( Padstack().Drill().end != B_Cu )
+    {
+        int end_ly = Padstack().Drill().end;
+
+        copperInnerLayerSet.RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    // end is the last allowed inner layer <= initial end layer
+                    if( end_ly >= layer )
+                    {
+                        Padstack().Drill().end = layer;
+                    }
+                } );
+    }
 }
 
 
