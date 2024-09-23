@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-22 15:40+0000\n"
+"PO-Revision-Date: 2024-09-23 12:40+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -10177,9 +10177,8 @@ msgid "Library %s already exists."
 msgstr "Bibliothek \"%s\" existiert bereits."
 
 #: eeschema/design_block_utils.cpp:217
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Optionen für diesen Bibliothekseintrag bearbeiten"
+msgstr "Geben Sie eine Beschreibung für die Bibliothek ein:"
 
 #: eeschema/design_block_utils.cpp:218 eeschema/sch_symbol.cpp:2977
 #: pcbnew/footprint.cpp:3810 pcbnew/plot_board_layers.cpp:131
@@ -10196,9 +10195,8 @@ msgid "Design blocks with nested sheets are not supported."
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
-#, fuzzy
 msgid "Enter a name for the design block:"
-msgstr "Bitte geben Sie einen Namen für das Repository ein"
+msgstr "Geben Sie einen Namen für den Designblock ein:"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
 #, fuzzy
@@ -15146,9 +15144,8 @@ msgid "Color highlight thickness:"
 msgstr "Hervorhebungsdicke:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
-#, fuzzy
 msgid "Color highlight opacity:"
-msgstr "DRC-Verstoß: Hindernisse hervorheben"
+msgstr "Deckkraft der Hervorhebungsfarbe:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:166
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:120
@@ -31737,9 +31734,8 @@ msgid "Filter items by layer:"
 msgstr "Elemente nach Lagen filtern:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:160
-#, fuzzy
 msgid "Progress:"
-msgstr "Gesamtfortschritt"
+msgstr "Fortschritt:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:82
 msgid "Cleanup Tracks and Vias"
@@ -33259,9 +33255,8 @@ msgstr ""
 "Leiterplatteneditor geändert wurden."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:79
-#, fuzzy
 msgid "Components matching filter:"
-msgstr "Bauteilplatzierungsdateien"
+msgstr "Auf Filter passende Bauteile:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:84
 msgid ""
@@ -35276,14 +35271,12 @@ msgid "Bottom/Back layer:"
 msgstr "Unter-/Rückseite:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:209
-#, fuzzy
 msgid "Copper layer pair presets"
-msgstr "Kupferlagen:"
+msgstr "Kupferlagenpaar-Voreinstellungen"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:227
-#, fuzzy
 msgid "Enabled"
-msgstr "Aktiviert:"
+msgstr "Aktiviert"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:57
 msgid "Select Layer"
