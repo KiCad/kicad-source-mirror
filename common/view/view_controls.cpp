@@ -82,6 +82,7 @@ void VC_SETTINGS::Reset()
     m_lastKeyboardCursorPositionValid = false;
     m_lastKeyboardCursorPosition      = { 0.0, 0.0 };
     m_lastKeyboardCursorCommand       = ACTIONS::CURSOR_NONE;
+    m_scrollReverseZoom               = false;
     m_scrollReversePanH               = false;
 }
 

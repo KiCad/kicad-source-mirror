@@ -122,7 +122,11 @@ struct GAL_API VC_SETTINGS
     ///< Position of the above event.
     VECTOR2D m_lastKeyboardCursorPosition;
 
-    ///< Wether to invert the scroll wheel movement for horizontal pan
+
+    ///< Whether to invert the scroll wheel movement for zoom
+    bool m_scrollReverseZoom;
+
+    ///< Whether to invert the scroll wheel movement for horizontal pan
     bool m_scrollReversePanH;
 };
 

@@ -184,6 +184,7 @@ void WX_VIEW_CONTROLS::LoadSettings()
     m_settings.m_dragLeft              = cfg->m_Input.drag_left;
     m_settings.m_dragMiddle            = cfg->m_Input.drag_middle;
     m_settings.m_dragRight             = cfg->m_Input.drag_right;
+    m_settings.m_scrollReverseZoom     = cfg->m_Input.reverse_scroll_zoom;
     m_settings.m_scrollReversePanH     = cfg->m_Input.reverse_scroll_pan_h;
 
     m_zoomController.reset();
@@ -385,7 +386,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     // as vertical scroll events and confuse the user.
     if( modifiers == m_settings.m_scrollModifierZoom && axis == wxMOUSE_WHEEL_VERTICAL )
     {
-        const int    rotation  = aEvent.GetWheelRotation();
+        const int    rotation  = aEvent.GetWheelRotation() * ( m_settings.m_scrollReverseZoom ? -1 : 1 );
         const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
         if( IsCursorWarpingEnabled() )

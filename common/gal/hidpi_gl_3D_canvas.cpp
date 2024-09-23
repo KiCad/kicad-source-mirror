@@ -79,6 +79,7 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
 
     float delta_move     = m_delta_move_step_factor * m_camera.GetZoom();
     float horizontalSign = m_settings.m_scrollReversePanH ? -1 : 1;
+    float zoomSign       = m_settings.m_scrollReverseZoom ? -1 : 1;
 
     if( aPan )
         delta_move *= 0.01f * event.GetWheelRotation();
@@ -116,7 +117,8 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
     }
     else
     {
-        mouseActivity = m_camera.Zoom( event.GetWheelRotation() > 0 ? 1.1f : 1 / 1.1f );
+        mouseActivity =
+                m_camera.Zoom( ( event.GetWheelRotation() * zoomSign ) > 0 ? 1.1f : 1 / 1.1f );
     }
 
     // If it results on a camera movement

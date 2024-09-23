@@ -100,6 +100,7 @@ public:
         MOUSE_DRAG_ACTION drag_middle;
         MOUSE_DRAG_ACTION drag_right;
 
+        bool reverse_scroll_zoom;
         bool reverse_scroll_pan_h;
     };
 

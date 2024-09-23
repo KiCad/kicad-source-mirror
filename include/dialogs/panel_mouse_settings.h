@@ -33,6 +33,7 @@ struct SCROLL_MOD_SET
     int zoom;
     int panh;
     int panv;
+    bool zoomReverse;
     bool panHReverse;
 };
 

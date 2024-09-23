@@ -123,6 +123,7 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     cfg->m_Input.scroll_modifier_pan_h = m_currentScrollMod.panh;
     cfg->m_Input.scroll_modifier_pan_v = m_currentScrollMod.panv;
 
+    cfg->m_Input.reverse_scroll_zoom  = m_checkZoomReverse->GetValue();
     cfg->m_Input.reverse_scroll_pan_h = m_checkPanHReverse->GetValue();
 
     return true;
@@ -180,6 +181,7 @@ void PANEL_MOUSE_SETTINGS::applySettingsToPanel( const COMMON_SETTINGS& aSetting
     m_currentScrollMod.zoom        = aSettings.m_Input.scroll_modifier_zoom;
     m_currentScrollMod.panh        = aSettings.m_Input.scroll_modifier_pan_h;
     m_currentScrollMod.panv        = aSettings.m_Input.scroll_modifier_pan_v;
+    m_currentScrollMod.zoomReverse = aSettings.m_Input.reverse_scroll_zoom;
     m_currentScrollMod.panHReverse = aSettings.m_Input.reverse_scroll_pan_h;
 
     updateScrollModButtons();
@@ -260,6 +262,7 @@ void PANEL_MOUSE_SETTINGS::updateScrollModButtons()
     set_wheel_buttons( m_currentScrollMod.panv, m_rbPanVNone, m_rbPanVCtrl, m_rbPanVShift,
                        m_rbPanVAlt );
 
+    m_checkZoomReverse->SetValue( m_currentScrollMod.zoomReverse );
     m_checkPanHReverse->SetValue( m_currentScrollMod.panHReverse );
 }
 
@@ -269,6 +272,7 @@ void PANEL_MOUSE_SETTINGS::onMouseDefaults( wxCommandEvent& event )
     m_currentScrollMod.zoom              = 0;
     m_currentScrollMod.panh              = WXK_CONTROL;
     m_currentScrollMod.panv              = WXK_SHIFT;
+    m_currentScrollMod.zoomReverse       = false;
     m_currentScrollMod.panHReverse       = false;
 
     updateScrollModButtons();
@@ -282,6 +286,7 @@ void PANEL_MOUSE_SETTINGS::onTrackpadDefaults( wxCommandEvent& event )
     m_currentScrollMod.zoom              = WXK_CONTROL;
     m_currentScrollMod.panh              = WXK_SHIFT;
     m_currentScrollMod.panv              = 0;
+    m_currentScrollMod.zoomReverse       = false;
     m_currentScrollMod.panHReverse       = false;
 
     updateScrollModButtons();

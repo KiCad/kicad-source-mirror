@@ -708,6 +708,7 @@ KIGFX::VC_SETTINGS EDA_DRAW_PANEL_GAL::GetVcSettings()
     vcSettings.m_dragLeft = cfg->m_Input.drag_left;
     vcSettings.m_dragMiddle = cfg->m_Input.drag_middle;
     vcSettings.m_dragRight = cfg->m_Input.drag_right;
+    vcSettings.m_scrollReverseZoom = cfg->m_Input.reverse_scroll_zoom;
     vcSettings.m_scrollReversePanH = cfg->m_Input.reverse_scroll_pan_h;
 
     return vcSettings;
