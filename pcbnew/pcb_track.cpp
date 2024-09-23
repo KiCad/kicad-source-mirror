@@ -888,6 +888,28 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
+bool PCB_VIA::HasValidLayerPair( int aCopperLayerCount )
+{
+    // return true if top and bottom layers are valid, depending on the copper layer count
+    // aCopperLayerCount is expected >= 2
+
+    int layer_id = aCopperLayerCount*2;
+
+    if( Padstack().Drill().start > B_Cu )
+    {
+        if( Padstack().Drill().start > layer_id )
+            return false;
+    }
+    if( Padstack().Drill().end > B_Cu )
+    {
+        if( Padstack().Drill().end > layer_id )
+            return false;
+    }
+
+    return true;
+}
+
+
 PCB_LAYER_ID PCB_VIA::GetLayer() const
 {
     return Padstack().Drill().start;
@@ -915,9 +937,15 @@ LSET PCB_VIA::GetLayerSet() const
     {
         LAYER_RANGE range( Padstack().Drill().start, Padstack().Drill().end, BoardCopperLayerCount() );
 
+        int cnt = BoardCopperLayerCount();
         // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
         for( PCB_LAYER_ID id : range )
+        {
             layermask.set( id );
+
+            if( --cnt <= 0 )
+                break;
+        }
     }
 
     if( !IsTented( F_Mask ) && layermask.test( F_Cu ) )
@@ -935,52 +963,40 @@ void PCB_VIA::SetLayerSet( const LSET& aLayerSet )
     // Vias do not use a LSET, just a top and bottom layer pair
     // So we need to set these 2 layers according to the allowed layers in aLayerSet
 
-    if( GetViaType() == VIATYPE::THROUGH )      // Only F_Cu and B_Cu are allowed
+    // For via through, only F_Cu and B_Cu are allowed. aLayerSet is ignored
+    if( GetViaType() == VIATYPE::THROUGH )
     {
         Padstack().Drill().start = F_Cu;
         Padstack().Drill().end = B_Cu;
         return;
     }
 
-    // top and bottom layer are always copper layers:
-    LSET copperInnerLayerSet = aLayerSet & LSET::InternalCuMask();
+    // For blind buried vias, find the top and bottom layers
+    bool top_found = false;
+    bool bottom_found = false;
 
-    // F_Cu and B_Cu layers are always allowed for vias.
-    // blind vias can have the start and/or end layers on other layers, so we need to
-    // recalculate the first and the last allowed layers if they are internal copper layers
-
-    // Fix start layer (first allowed layer)
-    if( Padstack().Drill().start != F_Cu )
-    {
-        bool found = false;
-
-        copperInnerLayerSet.RunOnLayers(
-                [&]( PCB_LAYER_ID layer )
+    aLayerSet.RunOnLayers(
+            [&]( PCB_LAYER_ID layer )
+            {
+                // tpo layer and bottom Layer are copper layers, so consider only copper layers
+                if( IsCopperLayer( layer ) )
                 {
-                    // Start is the first allowed inner layer >= initial start layer
-                    if( !found && Padstack().Drill().start <= layer )
+                    // The top layer is the first layer found in list and
+                    // cannot the B_Cu
+                    if( !top_found && layer != B_Cu )
                     {
                         Padstack().Drill().start = layer;
-                        found = true;
+                        top_found = true;
                     }
-                } );
-    }
 
-    // Fix end layer (last allowed layer)
-    if( Padstack().Drill().end != B_Cu )
-    {
-        int end_ly = Padstack().Drill().end;
-
-        copperInnerLayerSet.RunOnLayers(
-                [&]( PCB_LAYER_ID layer )
-                {
-                    // end is the last allowed inner layer <= initial end layer
-                    if( end_ly >= layer )
-                    {
+                    // The bottom layer is the last layer found in list or B_Cu
+                    if( !bottom_found )
                         Padstack().Drill().end = layer;
-                    }
-                } );
-    }
+
+                    if( layer == B_Cu )
+                        bottom_found = true;
+                }
+            } );
 }
 
 

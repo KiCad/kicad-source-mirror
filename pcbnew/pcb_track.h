@@ -374,6 +374,11 @@ public:
         return false;
     }
 
+    /**
+     * @return true if top and bottom layers are valid, depending on the copper layer count
+     */
+    bool HasValidLayerPair( int aCopperLayerCount );
+
     VIATYPE GetViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 

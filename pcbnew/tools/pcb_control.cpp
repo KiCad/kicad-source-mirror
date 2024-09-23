@@ -926,8 +926,16 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
         else
         {
             LSET allowed = item->GetLayerSet() & enabledLayers;
+            bool item_valid = true;
 
-            if( allowed.any() )
+            // Ensure, for vias, the top and bottom layers are compatible with
+            // the current board copper layers.
+            // Otherwise they must be skipped, even is one layer is valid
+            if( item->Type() == PCB_VIA_T )
+                item_valid = static_cast<PCB_VIA*>( item )->HasValidLayerPair(
+                                    board()->GetCopperLayerCount() );
+
+            if( allowed.any() && item_valid )
             {
                 item->SetLayerSet( allowed );
                 returnItems.push_back( item );
