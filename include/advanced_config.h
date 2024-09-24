@@ -656,10 +656,37 @@ public:
     /**
      * Enable snap anchors based on item line extensions.
      *
+     * This should be removed when extension snaps are tuned up.
+     *
      * Setting name: "EnableExtensionSnaps"
      * Default value: false
      */
     bool m_EnableExtensionSnaps;
+
+    /**
+     * If extension snaps are enabled, this is the timeout in milliseconds
+     * before a hovered item gets extensions shown.
+     *
+     * This should be removed if a good value is agreed, or made configurable
+     * if there's no universal good value.
+     *
+     * Setting name: "EnableExtensionSnapsMs"
+     * Default value: 500
+     * Valid values: >0
+     */
+    int m_ExtensionSnapTimeoutMs;
+
+    /**
+     * If extension snaps are enabled, 'activate' items on
+     * hover, even if not near a snap point.
+     *
+     * This just to experiment with turning.  It should either
+     * be removed or made configurable when we know what feels best.
+     *
+     * Setting name: "ExtensionSnapActivateOnHover"
+     * Default value: false
+     */
+    bool m_ExtensionSnapActivateOnHover;
 
     /**
      * Enable snap anchors debug visualization.

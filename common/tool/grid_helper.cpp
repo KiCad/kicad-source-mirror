@@ -37,7 +37,7 @@
 
 
 GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
-        m_toolMgr( aToolMgr ), m_constructionManager( m_constructionGeomPreview )
+        m_toolMgr( aToolMgr ), m_snapManager( m_constructionGeomPreview )
 {
     m_maskTypes = ALL;
     m_enableSnap = true;
@@ -55,7 +55,7 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
     view->Add( &m_constructionGeomPreview );
     view->SetVisible( &m_constructionGeomPreview, false );
 
-    m_constructionManager.SetUpdateCallback(
+    m_snapManager.SetUpdateCallback(
             [view, this]( bool aAnythingShown )
             {
                 const bool currentlyVisible = view->IsVisible( &m_constructionGeomPreview );

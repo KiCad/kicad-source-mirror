@@ -172,7 +172,8 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
 
     showConstructionGeometry( m_enableSnap );
 
-    std::optional<VECTOR2I> snapLineOrigin = getConstructionManager().GetSnapLineOrigin();
+    SNAP_LINE_MANAGER&      snapLineManager = getSnapManager().GetSnapLineManager();
+    std::optional<VECTOR2I> snapLineOrigin = snapLineManager.GetSnapLineOrigin();
 
     if( m_enableSnapLine && m_snapItem && snapLineOrigin.has_value()
         && m_skipPoint != *snapLineOrigin )
@@ -236,14 +237,14 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
 
     if( snapLineX || snapLineY )
     {
-        getConstructionManager().SetSnapLineEnd( pt );
+        snapLineManager.SetSnapLineEnd( pt );
     }
     else if( snapPoint )
     {
         m_snapItem = *nearest;
         m_viewSnapPoint.SetPosition( pt );
 
-        getConstructionManager().SetSnapLineOrigin( pt );
+        snapLineManager.SetSnapLineOrigin( pt );
 
         if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )
             m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
@@ -252,7 +253,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
     }
     else
     {
-        getConstructionManager().ClearSnapLine();
+        snapLineManager.ClearSnapLine();
         m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
     }
 

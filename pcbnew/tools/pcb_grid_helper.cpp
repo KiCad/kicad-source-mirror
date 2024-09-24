@@ -277,12 +277,12 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
 
     if( referenceOnlyPoints.size() )
     {
-        getConstructionManager().SetReferenceOnlyPoints( std::move( referenceOnlyPoints ) );
+        getSnapManager().SetReferenceOnlyPoints( std::move( referenceOnlyPoints ) );
     }
 
     //  Let the manager handle it
-    getConstructionManager().AddConstructionItems( std::move( constructionItemsBatch ),
-                                                   aIsPersistent );
+    getSnapManager().GetConstructionManager().ProposeConstructionItems(
+            std::move( constructionItemsBatch ), aIsPersistent );
 }
 
 
@@ -535,28 +535,60 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     showConstructionGeometry( m_enableSnap );
 
-    CONSTRUCTION_MANAGER& constructionManager = getConstructionManager();
+    SNAP_MANAGER&      snapManager = getSnapManager();
+    SNAP_LINE_MANAGER& snapLineManager = snapManager.GetSnapLineManager();
 
     const auto ptIsReferenceOnly = [&]( const VECTOR2I& aPt )
     {
-        const std::vector<VECTOR2I>& referenceOnlyPoints =
-                constructionManager.GetReferenceOnlyPoints();
+        const std::vector<VECTOR2I>& referenceOnlyPoints = snapManager.GetReferenceOnlyPoints();
         return std::find( referenceOnlyPoints.begin(), referenceOnlyPoints.end(), aPt )
                != referenceOnlyPoints.end();
     };
+
+    const auto proposeConstructionForItems = [&]( const std::vector<EDA_ITEM*>& aItems )
+    {
+        // Add any involved item as a temporary construction item
+        // (de-duplication with existing construction items is handled later)
+        std::vector<BOARD_ITEM*> items;
+
+        for( EDA_ITEM* item : aItems )
+        {
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+            // Null items are allowed to arrive here as they represent geometry that isn't
+            // specifically tied to a board item. For example snap lines from some
+            // other anchor.
+            // But they don't produce new construction items.
+            if( boardItem )
+            {
+                if( m_magneticSettings->allLayers
+                    || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
+                {
+                    items.push_back( boardItem );
+                }
+            }
+        }
+
+        // Temporary construction items are not persistent and don't
+        // overlay the items themselves (as the items will not be moved)
+        AddConstructionItems( items, true, false );
+    };
+
+    bool snapValid = false;
 
     if( m_enableSnap )
     {
         // Existing snap lines need priority over new snaps
         if( m_enableSnapLine )
         {
-            OPT_VECTOR2I snapLineSnap = constructionManager.GetNearestSnapLinePoint(
+            OPT_VECTOR2I snapLineSnap = snapLineManager.GetNearestSnapLinePoint(
                     aOrigin, nearestGrid, snapDist, snapRange );
 
             // We found a better snap point that the nearest one
             if( snapLineSnap && m_skipPoint != *snapLineSnap )
             {
-                constructionManager.SetSnapLineEnd( *snapLineSnap );
+                snapLineManager.SetSnapLineEnd( *snapLineSnap );
+                snapValid = true;
 
                 // Don't show a snap point if we're snapping to a grid rather than an anchor
                 m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
@@ -572,7 +604,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             }
         }
 
-        // If there's a snap anchor within range, use it
+        // If there's a snap anchor within range, use it if we can
         if( nearest && nearest->Distance( aOrigin ) <= snapRange )
         {
             const bool anchorIsConstructed = nearest->flags & ANCHOR_FLAGS::CONSTRUCTED;
@@ -583,41 +615,18 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             {
                 // We can set the snap line origin, but don't mess with the
                 // accepted snap point
-                constructionManager.SetSnapLineOrigin( nearest->pos );
+                snapLineManager.SetSnapLineOrigin( nearest->pos );
             }
             else
             {
-                // Only 'intrinsic' points of items can trigger adding more construction items
-                // (so just mousing over the intersection of an item doesn't add a construction item
-                // for the second item). This is to make construction items less intrusive and more
+                // 'Intrinsic' points of items can trigger adding construction geometry
+                // for _that_ item by proximity. E.g. just mousing over the intersection
+                // of an item doesn't  add a construction item for the second item).
+                // This is to make construction items less intrusive and more
                 // a result of user intent.
                 if( !anchorIsConstructed )
                 {
-                    // Add any involved item as a temporary construction item
-                    // (de-duplication with existing construction items is handled later)
-                    std::vector<BOARD_ITEM*> items;
-
-                    for( EDA_ITEM* item : nearest->items )
-                    {
-                        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-
-                        // Null items are allowed to arrive here as they represent geometry that isn't
-                        // specifically tied to a board item. For example snap lines from some
-                        // other anchor.
-                        // But they don't produce new construction items.
-                        if( boardItem )
-                        {
-                            if( m_magneticSettings->allLayers
-                                || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
-                            {
-                                items.push_back( boardItem );
-                            }
-                        }
-                    }
-
-                    // Temporary construction items are not persistent and don't
-                    // overlay the items themselves (as the items will not be moved)
-                    AddConstructionItems( items, true, false );
+                    proposeConstructionForItems( nearest->items );
                 }
 
                 const auto shouldAcceptAnchor = [&]( const ANCHOR& aAnchor )
@@ -636,7 +645,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                     // as some users will think it's fiddly; without 'activation', others will
                     // think the snaps are intrusive.
                     bool allRealAreInvolved =
-                            constructionManager.InvolvesAllGivenRealItems( aAnchor.items );
+                            snapManager.GetConstructionManager().InvolvesAllGivenRealItems(
+                                    aAnchor.items );
                     return allRealAreInvolved;
                 };
 
@@ -645,11 +655,31 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                     m_snapItem = *nearest;
 
                     // Set the snap line origin or end as needed
-                    constructionManager.SetSnappedAnchor( m_snapItem->pos );
-                    // Show the right snap point marker
+                    snapLineManager.SetSnappedAnchor( m_snapItem->pos );
+                    // Show the correct snap point marker
                     updateSnapPoint( { m_snapItem->pos, m_snapItem->pointTypes } );
 
                     return m_snapItem->pos;
+                }
+            }
+
+            snapValid = true;
+        }
+        else
+        {
+            static const bool canActivateByHitTest =
+                    ADVANCED_CFG::GetCfg().m_ExtensionSnapActivateOnHover;
+            if( canActivateByHitTest )
+            {
+                // An exact hit on an item, even if not near
+                for( BOARD_ITEM* item : visibleItems )
+                {
+                    if( item->HitTest( aOrigin ) )
+                    {
+                        proposeConstructionForItems( { item } );
+                        snapValid = true;
+                        break;
+                    }
                 }
             }
         }
@@ -671,7 +701,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
                 // Clear the snap end, but keep the origin so touching another line
                 // doesn't kill a snap line
-                constructionManager.SetSnapLineEnd( std::nullopt );
+                snapLineManager.SetSnapLineEnd( std::nullopt );
                 return *nearestPointOnAnElement;
             }
         }
@@ -680,7 +710,17 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     // Completely failed to find any snap point, so snap to the grid
 
     m_snapItem = std::nullopt;
-    constructionManager.SetSnapLineEnd( std::nullopt );
+
+    if( !snapValid )
+    {
+        snapLineManager.ClearSnapLine();
+        snapManager.GetConstructionManager().CancelProposal();
+    }
+    else
+    {
+        snapLineManager.SetSnapLineEnd( std::nullopt );
+    }
+
     m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
 
     return nearestGrid;
@@ -926,7 +966,7 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
     }
 
     for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH& batch :
-         getConstructionManager().GetConstructionItems() )
+         getSnapManager().GetConstructionItems() )
     {
         for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM& constructionItem : batch )
         {
@@ -967,11 +1007,11 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
 
     if( computeIntersections )
     {
-        for( size_t ii = 0; ii < intersectables.size(); ++ii )
+        for( std::size_t ii = 0; ii < intersectables.size(); ++ii )
         {
             const PCB_INTERSECTABLE& intersectableA = intersectables[ii];
 
-            for( size_t jj = ii + 1; jj < intersectables.size(); ++jj )
+            for( std::size_t jj = ii + 1; jj < intersectables.size(); ++jj )
             {
                 const PCB_INTERSECTABLE& intersectableB = intersectables[jj];
 
@@ -1109,7 +1149,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             corners.Rotate( aPad->GetOrientation() );
             corners.Move( aPad->ShapePos() );
 
-            for( size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
+            for( std::size_t ii = 0; ii < corners.GetSegmentCount(); ++ii )
             {
                 const SEG& seg = corners.GetSegment( ii );
                 addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad, POINT_TYPE::PT_CORNER );

@@ -203,7 +203,7 @@ protected:
 protected:
     void showConstructionGeometry( bool aShow );
 
-    CONSTRUCTION_MANAGER& getConstructionManager() { return m_constructionManager; }
+    SNAP_MANAGER& getSnapManager() { return m_snapManager; }
 
     void updateSnapPoint( const TYPED_POINT2I& aPoint );
 
@@ -236,10 +236,9 @@ private:
     // (if any) on the canvas.
     KIGFX::CONSTRUCTION_GEOM m_constructionGeomPreview;
 
-    // Construction manager - this is what manages the construction geometry
-    // and deals with updating the construction helper as well as keeping
-    // track of what geometry is "active" for construction purposes.
-    CONSTRUCTION_MANAGER m_constructionManager;
+    // Snap manager - this is what manages the construction geometry,
+    // snap lines, reference points, etc.
+    SNAP_MANAGER m_snapManager;
 
     /// @brief  VIEW_ITEM for visualising anchor points, if enabled
     std::unique_ptr<KIGFX::ANCHOR_DEBUG> m_anchorDebug;
