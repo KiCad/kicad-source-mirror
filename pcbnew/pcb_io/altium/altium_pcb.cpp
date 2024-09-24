@@ -1151,7 +1151,6 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
 
     // Callback:
     std::map<wxString, PCB_LAYER_ID> reMappedLayers = m_layerMappingHandler( inputLayers );
-    enabledLayers = LSET();
     m_layermap.clear();
 
     for( std::pair<wxString, PCB_LAYER_ID> layerPair : reMappedLayers )
@@ -4372,7 +4371,7 @@ void ALTIUM_PCB::HelperSetTextAlignmentAndPos( const ATEXT6& aElem, EDA_TEXT* aT
     int rectHeight = aElem.height;
 
     if( aElem.isMirrored )
-        rectWidth = -rectWidth; 
+        rectWidth = -rectWidth;
 
     ALTIUM_TEXT_POSITION justification = aElem.isJustificationValid
                                                  ? aElem.textbox_rect_justification
