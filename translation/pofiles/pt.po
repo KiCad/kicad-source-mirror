@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-03 07:09+0000\n"
-"Last-Translator: Julio Dias <jcesardias@gmail.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v8/pt/"
-">\n"
+"PO-Revision-Date: 2024-09-25 17:15+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v8/pt/>"
+"\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -73,7 +73,6 @@ msgstr ""
 "uma análise completa."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
-#, fuzzy
 msgid "Create tracks and vias"
 msgstr "Criar trilhas e vias"
 
@@ -5508,9 +5507,8 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1974 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Propriedades da folha"
+msgstr "Propriedades da forma"
 
 #: common/eda_shape.cpp:1980 pcbnew/pcb_textbox.cpp:680
 #: pcbnew/pcb_track.cpp:1495
@@ -6277,19 +6275,16 @@ msgid "Select all cells"
 msgstr "Selecionar todas as células"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Anotação completa."
+msgstr "Aceitar o preenchimento automático"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Cancelar ferramenta atual"
+msgstr "Cancelar o preenchimento automático"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Alternar Bloqueio"
+msgstr "Alternar a caixa de seleção"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -9829,9 +9824,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Atualiza/redefine os atributos do símbolo"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Definir como símbolo de alimentação"
+msgstr "Redefinir os símbolos de energia personalizados"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10069,7 +10063,7 @@ msgstr "Será posto de volta na lista %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:612 pcbnew/dialogs/dialog_drc.cpp:638
 msgid "Exclude this violation"
-msgstr "Exclua esta violação"
+msgstr "Excluir esta violação"
 
 #: eeschema/dialogs/dialog_erc.cpp:613 pcbnew/dialogs/dialog_drc.cpp:639
 #, c-format
@@ -12398,9 +12392,8 @@ msgstr ""
 "em Preferências> Editor esquemático > Cores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Propriedades da folha"
+msgstr "Editar as propriedades da folha"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -15329,6 +15322,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' não é um ficheiro de esquema do KiCad.\n"
+"Use Ficheiro -> Importar para ficheiros esquemáticos que não sejam do KiCad."
 
 #: eeschema/files-io.cpp:275
 msgid "Root"
@@ -18146,9 +18141,9 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"As alterações da folha não podem ser feitas porque o destino da folha já tem "
-"a folha '%s' ou uma de suas sub-folhas como relacionadas em algum lugar na "
-"hierarquia do esquema."
+"As alterações na planilha não podem ser feitas porque a planilha de destino "
+"já tem a planilha '%s' ou existe uma das suas subplanilhas principais em "
+"algum lugar da hierarquia do esquema."
 
 #: eeschema/sheet.cpp:92
 #, c-format
@@ -19087,11 +19082,8 @@ msgid "Spice Simulator"
 msgstr "Simulador Spice"
 
 #: eeschema/sim/simulator_frame.cpp:356
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Houveram erros durante a geração da netlist.\n"
-"\n"
+msgstr "Houveram erros durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:364
 msgid "Simulator requires a fully annotated schematic."
@@ -19118,9 +19110,9 @@ msgid "Another simulation is already running."
 msgstr "Outra simulação já está em andamento."
 
 #: eeschema/sim/simulator_frame.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "Não foi possível carregar o ficheiro %s"
+msgstr "Não foi possível carregar ou analisar o ficheiro %s"
 
 #: eeschema/sim/simulator_frame.cpp:618
 msgid "Save changes to workbook?"
@@ -19171,9 +19163,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Realizar a análise Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Fase do sinal:"
+msgstr "Copiar o nome do sinal"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -22032,9 +22023,8 @@ msgid "Place Pin Anyway"
 msgstr "Posicionar Pino de Qualquer Maneira"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:448
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Folha do pino"
+msgstr "Repetir o pino"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -22125,24 +22115,20 @@ msgstr ""
 "ser ajustados"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ajustar para os valores especificados:"
+msgstr "Limite para os valores da série E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ajustar para os valores especificados:"
+msgstr "Limite para os valores da série E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ajustar para os valores especificados:"
+msgstr "Limite para os valores da série E96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ajustar para os valores especificados:"
+msgstr "Limite para os valores da série E192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -23339,9 +23325,8 @@ msgid "Leave unchanged"
 msgstr "Deixe inalterado"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Mostrar ou oculta %s"
+msgstr "Mostrar problemas de importação"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23815,13 +23800,12 @@ msgid "Generate Position File"
 msgstr "Gerar Ficheiro de Posicionamento"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Opções válidas: frente, costas, ambos. O formato Gerber suporta apenas "
-"\"ambos\"."
+"Opções válidas: frente, verso, ambos. O formato Gerber suporta apenas "
+"“frente” ou “verso”."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -24123,6 +24107,8 @@ msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
 msgstr ""
+"Ignora o aviso de atualização da nova versão anunciada. As notas de "
+"atualização adicionais serão exibidas para versões mais recentes."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
@@ -24133,10 +24119,12 @@ msgid ""
 "Close this update notice. The update notice will be shown again when you "
 "relaunch KiCad."
 msgstr ""
+"Feche este aviso de atualização. O aviso de atualização será exibido "
+"novamente quando reiniciar o KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr ""
+msgstr "Abra um navegador da Web na página de anúncios de lançamento."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open Downloads Page"
@@ -24144,7 +24132,7 @@ msgstr "Abrir a página de descargas"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Aceda a página de descargas apropriada para a plataforma."
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
 msgid "Update Available"
@@ -28923,24 +28911,24 @@ msgid "(multiple board outlines not supported)"
 msgstr "(diversos contornos da placa não são suportados)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "(rectangle has null or very small size: %d nm)"
-msgstr "(O retângulo tem tamanho nulo ou muito pequeno: %d nm)"
+msgstr "(O retângulo tem um tamanho nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:672
-#, fuzzy, c-format
+#, c-format
 msgid "(circle has null or very small radius: %d nm)"
-msgstr "(O círculo tem raio nulo ou muito pequeno: %d nm)"
+msgstr "(O círculo tem um raio nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "(segment has null or very small length: %d nm)"
-msgstr "(O segmento tem comprimento nulo ou muito pequeno: %d nm)"
+msgstr "(O segmento tem um comprimento nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "(arc has null or very small size: %d nm)"
-msgstr "(O arco tem tamanho nulo ou muito pequeno: %d nm)"
+msgstr "(O arco tem um tamanho nulo ou é muito pequeno: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_drc.cpp:257 pcbnew/pcb_edit_frame.cpp:2410
@@ -30945,9 +30933,8 @@ msgstr ""
 "biblioteca e deseja propagá-la novamente na PCI."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:305
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Trocar Footprints"
+msgstr "Trocar o footprint"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:358
 #, c-format
@@ -35398,9 +35385,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Propriedades padrão para novos itens gráficos:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "A biblioteca footprint não foi atualizada\n"
+msgstr "Ainda não há suporte para bibliotecas de footprint oculto."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:483
 #, c-format
@@ -37664,9 +37650,8 @@ msgid "Hole clearance violation"
 msgstr "Violação do isolamento do furo"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drilled hole too close to other hole"
-msgstr "Furos perfurados muito próximos"
+msgstr "Furo feito muito próximo de outro furo"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
@@ -38228,9 +38213,9 @@ msgid "%s rounded corners differ."
 msgstr "%s canto(s) arredondados diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s canto(s) chanfrados diferem."
+msgstr "%s canto(s) chanfrados diferem em tamanho."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -38430,7 +38415,7 @@ msgstr "O isolamento absoluto da pasta de solda substituído."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
 msgid "Solder paste relative clearance overridden."
-msgstr "O isolamento relativo da pasta de solda substituído."
+msgstr "Isolamento relativo da pasta de solda foi redefinido."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:590
 msgid "Zone connection overridden."
@@ -39564,9 +39549,8 @@ msgstr "Ajuste"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2404
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2420
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2446
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Selecione um valor a ser afinado"
+msgstr "Selecione uma faixa para ajustar primeiro."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2488
 msgid "Single track"
@@ -40482,156 +40466,133 @@ msgid "PTH pad %s %s of %s"
 msgstr "Ilha PTH %s %s de %s"
 
 #: pcbnew/pad.cpp:1898
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Erro: a ilha deve ter um tamanho positivo."
+msgstr "(A ilha deve ter um tamanho positivo)"
 
 #: pcbnew/pad.cpp:1909
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "O tamanho do furo da via deve ser menor que o diâmetro da via"
+msgstr "(O tamanho do orifício do bloco PTH deve ser maior que %s)"
 
 #: pcbnew/pad.cpp:1933
-#, fuzzy
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
+msgstr "(O furo da ilha PTH não deixa cobre)"
 
 #: pcbnew/pad.cpp:1941
-#, fuzzy
 msgid "(PTH pad hole non fully inside copper)"
-msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
+msgstr "(O furo da ilha PTH não está totalmente dentro do cobre)"
 
 #: pcbnew/pad.cpp:1948
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "Aviso: O furo da ilha não está dentro do formato da ilha."
+msgstr "(o furo da ilha não está dentro do formato da ilha)"
 
 #: pcbnew/pad.cpp:1953
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "Aviso: Os valores negativos do isolamento local não terão efeito."
+msgstr "(os valores negativos de liberação local não têm efeito)"
 
 #: pcbnew/pad.cpp:1972
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Aviso: os isolamento da máscara de solda negativa são maiores do que algumas "
-"formas primitivas. Os resultados podem ser surpreendentes."
+"(o isolamento negativo da máscara de solda é maior do que algumas formas "
+"primitivas; os resultados podem ser surpreendentes)"
 
 #: pcbnew/pad.cpp:1982
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Aviso: O isolamento negativo da máscara de solda é maior do que a ilha. "
-"Nenhuma máscara de solda será gerada."
+"(o isolamento negativo da máscara de solda é maior do que a ilha; nenhuma "
+"máscara de solda será gerada)"
 
 #: pcbnew/pad.cpp:2001
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Aviso: as margens negativas da pasta de solda são maiores que a ilha. "
-"Nenhuma máscara de pasta de solda será gerada."
+"(a margem negativa da pasta de solda é maior do que a ilha; nenhuma máscara "
+"para a pasta de solda será gerada)"
 
 #: pcbnew/pad.cpp:2008
-#, fuzzy
 msgid "(Pad has no layer)"
-msgstr "(A ilha PTH não possui camadas de cobre)"
+msgstr "(A ilha não possui camadas)"
 
 #: pcbnew/pad.cpp:2011
 msgid "(PTH pad has no copper layers)"
 msgstr "(A ilha PTH não possui camadas de cobre)"
 
 #: pcbnew/pad.cpp:2017
-#, fuzzy
 msgid "(plated through holes normally have a copper pad on at least one layer)"
 msgstr ""
-"Aviso: Os furos passantes geralmente devem ter uma ilha com cobre em pelo "
-"menos uma camada."
+"(os furos passantes metalizados geralmente devem ter uma ilha com cobre em "
+"pelo menos uma camada)"
 
 #: pcbnew/pad.cpp:2036
-#, fuzzy
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
-"Aviso: Os conectores das ilhas normalmente não têm pasta de solda. Em vez "
-"disso, use uma ilha SMD."
+"(os conectores das ilhas normalmente não têm pasta de solda. Em vez disso, "
+"use uma ilha SMD)"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Erro: A ilha SMD tem um furo."
+msgstr "(A ilha SMD tem um furo)"
 
 #: pcbnew/pad.cpp:2050
-#, fuzzy
 msgid "(SMD pad has copper on both sides of the board)"
-msgstr ""
-"Caso queira uma camada de pasta de solta para o lado da frente da placa"
+msgstr "(a ilha SMD tem cobre em ambos os lados da placa)"
 
 #: pcbnew/pad.cpp:2056 pcbnew/pad.cpp:2069
-#, fuzzy
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
-msgstr "(As camadas de cobre e a máscara da ilha SMD não correspondem)"
+msgstr ""
+"(a ilha SMD tem camadas de cobre e máscara em lados diferentes da placa)"
 
 #: pcbnew/pad.cpp:2061 pcbnew/pad.cpp:2074
-#, fuzzy
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr ""
-"Caso queira uma camada de pasta de solta para o lado da frente da placa"
+"(a ilha SMD tem camadas de cobre e de pasta em lados diferentes da placa)"
 
 #: pcbnew/pad.cpp:2080
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "Aviso: a ilha SMD não tem camadas externas."
+msgstr "(a ilha SMD não tem camadas externas)"
 
 #: pcbnew/pad.cpp:2090
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Aviso: A propriedade fiducial não faz sentido nas ilhas NPTH."
+msgstr "(a propriedade 'fiducial' não faz sentido nas ilhas NPTH)"
 
 #: pcbnew/pad.cpp:2094
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "Aviso: A propriedade Testpoint não faz sentido nas ilhas NPTH."
+msgstr "(a propriedade 'testpoint' não faz sentido nas ilhas NPTH)"
 
 #: pcbnew/pad.cpp:2097
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr ""
-"Aviso: A propriedade do dissipador de calor não faz sentido nas ilhas NPTH."
+"(a propriedade do dissipador de calor 'heatsink' não faz sentido nas ilhas "
+"NPTH)"
 
 #: pcbnew/pad.cpp:2100
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Aviso: A propriedade do castelamento são para ilhas PTH."
+msgstr "(a propriedade do castelamento 'castellated' são para ilhas PTH)"
 
 #: pcbnew/pad.cpp:2103
-#, fuzzy
 msgid "('BGA' property is for SMD pads)"
-msgstr "Aviso: A propriedade BGA são para ilhas SMD."
+msgstr "(a propriedade 'BGA' são para ilhas SMD)"
 
 #: pcbnew/pad.cpp:2108
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(não é permitido um raio com canto negativo)"
 
 #: pcbnew/pad.cpp:2110
-#, fuzzy
 msgid "(corner size will make pad circular)"
-msgstr "Aviso: O tamanho do canto tornará a ilha circular."
+msgstr "(o tamanho do canto tornará a ilha circular)"
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "O download é muito grande."
+msgstr "(chanfro de canto negativo não é permitido)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "O download é muito grande."
+msgstr "(o canto do chanfro é muito grande)"
 
 #: pcbnew/pad.cpp:2126
 #, fuzzy
@@ -40639,10 +40600,8 @@ msgid "(trapazoid delta is too large)"
 msgstr "Erro: O delta do trapezoide é muito grande."
 
 #: pcbnew/pad.cpp:2137
-#, fuzzy
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr ""
-"Erro: O formato do bloco personalizado deve ser resolvido num único polígono."
+msgstr "(a forma da ilha personalizada deve ser resolvida num único polígono)"
 
 #: pcbnew/pad.cpp:2329
 msgid "Edge connector"
@@ -40662,7 +40621,7 @@ msgstr "Ilha castelada"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
-msgstr ""
+msgstr "Oblongo"
 
 #: pcbnew/pad.cpp:2404
 msgid "Pad Type"
@@ -40689,9 +40648,8 @@ msgid "Corner Radius Ratio"
 msgstr "Proporção de curva do canto"
 
 #: pcbnew/pad.cpp:2452
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Forma do furo:"
+msgstr "Formato do furo"
 
 #: pcbnew/pad.cpp:2456
 msgid "Hole Size X"
@@ -41042,29 +41000,24 @@ msgid "Loading dimension drawings..."
 msgstr "Carregando os desenhos dimensionais..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1684
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "A dimensão do tipo %d foi ignorada (ainda não é compatível)."
+msgstr "Dimensão angular ignorada (ainda não suportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1698
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "A dimensão do tipo %d foi ignorada (ainda não é compatível)."
+msgstr "Dimensão de Datum ignorada (ainda não suportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1707
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "A dimensão do tipo %d foi ignorada (ainda não é compatível)."
+msgstr "Dimensão de linha de base ignorada (ainda sem suporte)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1718
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "A dimensão do tipo %d foi ignorada (ainda não é compatível)."
+msgstr "Dimensão linear ignorada (ainda sem suporte)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1726
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "A dimensão do tipo %d foi ignorada (ainda não é compatível)."
+msgstr "Dimensão radial ignorada (ainda não suportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1734
 #, c-format
@@ -41092,7 +41045,7 @@ msgstr "Carregando polígonos..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1927
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "A contagem do contorno do polígono é %d, 1 é esperado."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2053
 msgid "Loading rules..."
@@ -41359,7 +41312,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr ""
+msgstr "Justificativa desconhecida da caixa de texto %d, aText %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 msgid "Loading rectangles..."
@@ -44053,7 +44006,7 @@ msgstr "Cria a partir da seleção"
 
 #: pcbnew/tools/convert_tool.cpp:435
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "O polígono resultante estaria vazio"
 
 #: pcbnew/tools/convert_tool.cpp:437
 msgid "Objects must form a closed shape"
@@ -44296,9 +44249,8 @@ msgstr ""
 "estendidas."
 
 #: pcbnew/tools/edit_tool.cpp:1305
-#, fuzzy
 msgid "A shape with at least two lines must be selected."
-msgstr "Uma forma com pelo menos duas linhas deve ser selecionada."
+msgstr "Um formato com pelo menos duas linhas deve ser selecionado."
 
 #: pcbnew/tools/edit_tool.cpp:1477 pcbnew/tools/pcb_actions.cpp:620
 msgid "Heal Shapes"
@@ -46387,9 +46339,8 @@ msgid "Length Tuning Settings..."
 msgstr "Configurações de Ajuste de Comprimento..."
 
 #: pcbnew/tools/pcb_actions.cpp:2435
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Exibe a caixa de diálogo de propriedades do item"
+msgstr "Exibe a caixa de diálogo de propriedades do padrão de ajuste"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
@@ -47479,9 +47430,9 @@ msgid "thermal reliefs for PTH"
 msgstr "alívios térmicos para PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] o carregamento falhou: a linha de entrada é muito longa\n"
+msgstr "[INFO] o carregamento falhou: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
