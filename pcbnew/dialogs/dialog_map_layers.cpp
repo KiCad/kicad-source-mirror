@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -281,7 +281,7 @@ DIALOG_MAP_LAYERS::DIALOG_MAP_LAYERS( wxWindow* aParent,
 
     // Load the KiCad Layer names
     row = 0;
-    LSEQ kicadLayersSeq = kiCadLayers.Seq();
+    LSEQ kicadLayersSeq = kiCadLayers.UIOrder();
 
     for( PCB_LAYER_ID layer : kicadLayersSeq )
     {
