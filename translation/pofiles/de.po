@@ -29,7 +29,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
 "PO-Revision-Date: 2024-09-24 16:15+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -804,14 +804,12 @@ msgid "Use board stackup colors"
 msgstr "Farben des Platinen-Lagenaufbaus verwenden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:139
-#, fuzzy
 msgid "Use board editor copper colors"
-msgstr "Farben des Platinen-Lagenaufbaus verwenden"
+msgstr "Farben des Platineneditors verwenden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:142
-#, fuzzy
 msgid "Use the board editor copper colors (openGL only)"
-msgstr "Blanke Kupferfarbe für unbeschichtetes Kupfer verwenden (langsam)"
+msgstr "Kupferfarbe des Platineneditors verwenden (nur openGL)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:159
 #, c-format
@@ -1973,14 +1971,12 @@ msgid "No"
 msgstr "Nein"
 
 #: common/design_block_info_impl.cpp:116
-#, fuzzy
 msgid "Fetching design_block libraries..."
-msgstr "Footprintbibliotheken werden geladen..."
+msgstr "Designblock-Bibliotheken werden geladen..."
 
 #: common/design_block_info_impl.cpp:147
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "Dateien werden geladen ..."
+msgstr "Designblöcke werden geladen..."
 
 #: common/design_block_io.cpp:45 common/design_block_io.cpp:54
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -2005,15 +2001,16 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Kann Bibliothekspfad \"%s\" nicht überschreiben."
 
 #: common/design_block_io.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Ordner \"%s\" konnte nicht erstellt werden.\n"
+"Bibliothekspfad \"%s\" konnte nicht erstellt werden.\n"
 "\n"
-"Bitte Schreibrechte überprüfen und erneut versuchen."
+"Stellen Sie sicher, dass Sie Schreibrechte besitzen und versuchen Sie es "
+"erneut."
 
 #: common/design_block_io.cpp:182 pcbnew/pcb_io/geda/pcb_io_geda.cpp:975
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3021
@@ -2022,15 +2019,14 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Unzureichende Berechtigungen zum Löschen des Ordners \"%s\"."
 
 #: common/design_block_io.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr ""
-"Das Bibliotheksverzeichnis \"%s\" enthält unerwartete Unterverzeichnisse."
+msgstr "Das Bibliotheksverzeichnis \"%s\" enthält unerwartete Dateien."
 
 #: common/design_block_io.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "Unerwartete Datei \"%s\" im Bibliothekspfad \"%s\" gefunden."
+msgstr "Unerwartetes Verzeichnis \"%s\" im Bibliothekspfad \"%s\" gefunden."
 
 #: common/design_block_io.cpp:226
 #, c-format
@@ -2083,9 +2079,10 @@ msgstr ""
 "Bibliothekstabellendatei in Zeile %d gefunden."
 
 #: common/design_block_lib_table.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "fp-lib-table-Dateien enthalten keine Bibliothek mit dem Namen '%s'."
+msgstr ""
+"Designblock-lib-table-Dateien enthalten keine Bibliothek mit dem Namen '%s'."
 
 #: common/design_block_lib_table.cpp:570 common/fp_lib_table.cpp:556
 #: eeschema/symbol_lib_table.cpp:609
@@ -3376,27 +3373,26 @@ msgid "Close"
 msgstr "Schließen"
 
 #: common/dialogs/dialog_print_generic.cpp:155
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Warnung: Ungültiger Skalierungsfaktor"
+msgstr "Warnung: Ungültiger Skalierungsfaktor."
 
 #: common/dialogs/dialog_print_generic.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Warnung: Skalierungsfaktor hat einen sehr großen Wert.\n"
-" Begrenzt auf %f"
+"Er wird auf %f begrenzt."
 
 #: common/dialogs/dialog_print_generic.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Warnung: Skalierungsfaktor hat einen sehr kleinen Wert.\n"
-" Begrenzt auf %f"
+"Er wird auf %f begrenzt."
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
@@ -4953,9 +4949,8 @@ msgid "Python interpreter status"
 msgstr "Python-Interpreter Status"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Nicht abgedeckt"
+msgstr "<Nicht definiert>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1977
 #: common/stroke_params.cpp:37
@@ -6979,7 +6974,7 @@ msgstr "DXF-Bilder werden derzeit nicht unterstützt."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Importierte Graphik ist zu groß. Das Maximum ist %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
@@ -7341,9 +7336,8 @@ msgid "Selection highlight"
 msgstr "Hervorhebung Auswahl"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Hervorhebung Auswahl"
+msgstr "Netzhervorhebungsfarbe"
 
 #: common/layer_id.cpp:155 common/layer_id.cpp:186
 msgid "Drawing sheet"
@@ -7474,19 +7468,16 @@ msgid "Courtyard collision shadow"
 msgstr "Schatten kollidierender Abstandsflächen"
 
 #: common/layer_id.cpp:196
-#, fuzzy
 msgid "Track net names"
-msgstr "Netznamen durchsuchen"
+msgstr "Leiterbahn-Netznamen"
 
 #: common/layer_id.cpp:197
-#, fuzzy
 msgid "Pad net names"
-msgstr "Netznamen durchsuchen"
+msgstr "Pad-Netznamen"
 
 #: common/layer_id.cpp:198
-#, fuzzy
 msgid "Via net names"
-msgstr "Netznamen durchsuchen"
+msgstr "Via-Netznamen"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -7695,9 +7686,8 @@ msgid "Error loading project footprint library table."
 msgstr "Fehler beim Laden der Footprint-Bibliothekstabelle des Projekts."
 
 #: common/project.cpp:440 common/project.cpp:446
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "Fehler beim Laden der Footprint-Bibliothekstabelle des Projekts."
+msgstr "Fehler beim Laden der Designblock-Bibliothekstabelle des Projekts."
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
 msgid "This is the default net class."
@@ -8038,9 +8028,8 @@ msgid "Duplicates the selected item(s)"
 msgstr "Dupliziert gewählte Elemente"
 
 #: common/tool/actions.cpp:280
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Entfernt gewählte Elemente"
+msgstr "Lösche gewählte(s) Element(e)"
 
 #: common/tool/actions.cpp:287
 msgid "Interactive Delete Tool"
@@ -8596,9 +8585,8 @@ msgid "Symbol Library Browser"
 msgstr "Symbolbibliotheks-Browser"
 
 #: common/tool/actions.cpp:1032 kicad/tools/kicad_manager_actions.cpp:112
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Schaltplansymbole erstellen, löschen oder bearbeiten"
+msgstr "Schaltplansymbole erstellen, löschen und bearbeiten"
 
 #: common/tool/actions.cpp:1040 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1031
@@ -8606,9 +8594,8 @@ msgid "Footprint Library Browser"
 msgstr "Footprintbibliotheks-Browser"
 
 #: common/tool/actions.cpp:1049
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Footprints erstellen, löschen oder bearbeiten"
+msgstr "Footprints erstellen, löschen und bearbeiten"
 
 #: common/tool/actions.cpp:1057
 msgid "Show Properties Manager"
@@ -8672,15 +8659,13 @@ msgstr ""
 "Bibliothekstabellen"
 
 #: common/tool/actions.cpp:1110
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Symbolbibliotheken verwalten..."
+msgstr "Designblock-Bibliotheken verwalten..."
 
 #: common/tool/actions.cpp:1111
-#, fuzzy
 msgid "Edit the global and project design block library lists"
 msgstr ""
-"Bearbeiten der globalen und der projektspezifischen Symbol-"
+"Bearbeiten der globalen und der projektspezifischen Designblock-"
 "Bibliothekstabellen"
 
 #: common/tool/actions.cpp:1117
@@ -9422,9 +9407,8 @@ msgid "KiCad design block path"
 msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:352
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "KiCad Footprintbibliotheken Verzeichnisse"
+msgstr "KiCad Designblock-Bibliotheken Verzeichnisse"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Drawing sheet files"
@@ -9885,7 +9869,6 @@ msgid "Footprint Filters:"
 msgstr "Footprintfilter:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
 msgstr "Ausgewählten Footprint anzeigen"
 
@@ -9927,7 +9910,6 @@ msgstr ""
 "Schaltplansymbole und in Schaltplandateien"
 
 #: cvpcb/tools/cvpcb_actions.cpp:104
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
 msgstr "Nächstes nicht zugeordnetes Symbol auswählen"
 
@@ -9936,7 +9918,6 @@ msgid "Select next symbol with no footprint assignment"
 msgstr "Nächstes Symbol ohne Footprint-Zuordnung auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:113
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
 msgstr "Vorheriges nicht zugeordnetes Symbol auswählen"
 
@@ -9945,29 +9926,24 @@ msgid "Select previous symbol with no footprint assignment"
 msgstr "Vorheriges Symbol ohne Footprint-Zuordnung auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
-#, fuzzy
 msgid "Assign Footprint"
-msgstr "Bauteilfootprints zuweisen"
+msgstr "Footprint zuweisen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:131
-#, fuzzy
 msgid "Automatically Assign Footprints"
 msgstr "Footprints automatisch zuordnen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr ""
-"Wählen Sie einen Footprint für einen Bericht über Footprintzuordnungen."
+msgstr "Footprints mit einer Footprintzuordnungsdatei automatisch zuweisen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
 msgid "Delete Footprint Assignment"
 msgstr "Footprint-Zuweisung löschen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:145
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Symbol-Footprint-Zuordnungen"
+msgstr "Lösche alle Footprint-Zuordnungen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -10076,9 +10052,8 @@ msgstr ""
 "Netz %s ist grafisch mit Bus %s verbunden, gehört jedoch nicht zu diesem Bus"
 
 #: eeschema/connection_graph.cpp:3787 eeschema/erc/erc_item.cpp:232
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Unverbunden"
+msgstr "Unverbundenes Verbindungsende"
 
 #: eeschema/connection_graph.cpp:4130
 #, c-format
@@ -10126,9 +10101,9 @@ msgid "Documentation"
 msgstr "Dokumentation öffnen"
 
 #: eeschema/design_block_tree_model_adapter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Fehler beim Laden von Symbol %s aus Bibliothek \"%s\"."
+msgstr "Fehler beim Laden von Designblock %s aus Bibliothek \"%s\"."
 
 #: eeschema/design_block_utils.cpp:51 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -10185,9 +10160,10 @@ msgid "Library Description"
 msgstr "Bibliotheksbeschreibung"
 
 #: eeschema/design_block_utils.cpp:267 eeschema/design_block_utils.cpp:326
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Wähle Sie bitte eine Symbolbibliotheks-Tabellendatei."
+msgstr ""
+"Wählen Sie bitte eine Bibliothek in der der Designblock gespeichert werden "
+"soll."
 
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
@@ -10198,9 +10174,8 @@ msgid "Enter a name for the design block:"
 msgstr "Geben Sie einen Namen für den Designblock ein:"
 
 #: eeschema/design_block_utils.cpp:285 eeschema/design_block_utils.cpp:348
-#, fuzzy
 msgid "Design Block Name"
-msgstr "Designregeln"
+msgstr "Designblockname"
 
 #: eeschema/design_block_utils.cpp:294 eeschema/design_block_utils.cpp:371
 msgid "Error saving temporary schematic file to create design block."
@@ -10213,9 +10188,8 @@ msgid "Please select some items to save as a design block."
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:405
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "Wähle Sie bitte eine Symbolbibliotheks-Tabellendatei."
+msgstr "Wähle Sie bitte eine zu löschende Bibliothek."
 
 #: eeschema/design_block_utils.cpp:411 eeschema/design_block_utils.cpp:453
 #: pcbnew/footprint_libraries_utils.cpp:543
@@ -17290,9 +17264,8 @@ msgid "Symbols to New Library..."
 msgstr "Symbole zu neuer Bibliothek..."
 
 #: eeschema/menubar.cpp:204
-#, fuzzy
 msgid "Show Design Blocks"
-msgstr "Designregeln anzeigen."
+msgstr "Designblocks anzeigen"
 
 #: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:173
@@ -21742,9 +21715,8 @@ msgid "Save Library As..."
 msgstr "Bibliothek speichern unter..."
 
 #: eeschema/tools/ee_actions.cpp:182
-#, fuzzy
 msgid "Save the current library to a new file"
-msgstr "Die aktuelle Bibliothek in einer neuen Datei speichern."
+msgstr "Aktuelle Bibliothek in einer neuen Datei speichern"
 
 #: eeschema/tools/ee_actions.cpp:188
 msgid "New Symbol..."
@@ -21784,10 +21756,8 @@ msgid "Save Copy As..."
 msgstr "Kopie speichern als..."
 
 #: eeschema/tools/ee_actions.cpp:222
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library"
-msgstr ""
-"Eine Kopie des aktuellen Symbols in einer anderen Bibliothek speichern."
+msgstr "Kopie des aktuellen Symbols in einer anderen Bibliothek speichern"
 
 #: eeschema/tools/ee_actions.cpp:229
 msgid "Remove the selected symbol from its library"
@@ -45532,9 +45502,8 @@ msgid "Missing field name argument to %s."
 msgstr "Fehlendes Feldname-Argument für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1184
-#, fuzzy
 msgid "Missing netclass name argument to hasNetclass()"
-msgstr "Fehlendes Lagenname-Argument für %s."
+msgstr "Fehlendes Netzklassen-Argument für hasNetclass()"
 
 #: pcbnew/pcbnew.cpp:463
 msgid ""
@@ -47256,9 +47225,8 @@ msgid "One or both of the areas has no components assigned."
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:627
-#, fuzzy
 msgid "Component count mismatch"
-msgstr "Bauteilmenge: %d."
+msgstr "Anzahl der Bauteile stimmt nicht überein"
 
 #: pcbnew/tools/multichannel_tool.cpp:631
 msgid "Iteration count exceeded (timeout)"
@@ -49193,9 +49161,8 @@ msgid "Inactive Layer Display"
 msgstr "Anzeige zu inaktiven Lagen"
 
 #: pcbnew/tools/pcb_control.cpp:640
-#, fuzzy
 msgid "Preset Layer Pairs"
-msgstr "Lagenpaar setzen..."
+msgstr "Lagenpaarvoreinstellung"
 
 #: pcbnew/tools/pcb_control.cpp:730
 msgid "Item locked."
