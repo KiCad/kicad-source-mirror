@@ -2074,9 +2074,8 @@ static struct EDA_SHAPE_DESC
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ),
                     shapeProps );
 
-        void ( EDA_SHAPE::*lineStyleSetter )( LINE_STYLE ) = &EDA_SHAPE::SetLineStyle;
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_STYLE>( _HKI( "Line Style" ),
-                    lineStyleSetter, &EDA_SHAPE::GetLineStyle ),
+                    &EDA_SHAPE::SetLineStyle, &EDA_SHAPE::GetLineStyle ),
                     shapeProps );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Line Color" ),
@@ -2115,6 +2114,7 @@ static struct EDA_SHAPE_DESC
                         case SHAPE_T::POLY:
                         case SHAPE_T::RECTANGLE:
                         case SHAPE_T::CIRCLE:
+                        case SHAPE_T::BEZIER:
                             return true;
 
                         default:
