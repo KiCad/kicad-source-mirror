@@ -96,12 +96,9 @@ class BEZIER
 public:
     BEZIER() = default;
 
-    BEZIER( VECTOR2<NumericType> aStart, VECTOR2<NumericType> aC1, VECTOR2<NumericType> aC2,
-            VECTOR2<NumericType> aEnd ) :
-            Start( aStart ),
-            C1( aC1 ),
-            C2( aC2 ),
-            End( aEnd )
+    BEZIER( const VECTOR2<NumericType>& aStart, const VECTOR2<NumericType>& aC1,
+            const VECTOR2<NumericType>& aC2, const VECTOR2<NumericType>& aEnd ) :
+            Start( aStart ), C1( aC1 ), C2( aC2 ), End( aEnd )
     {}
 
     VECTOR2<NumericType> Start;
