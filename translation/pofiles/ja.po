@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-24 16:15+0000\n"
+"PO-Revision-Date: 2024-09-25 17:21+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -13116,7 +13116,6 @@ msgid "Text Variables"
 msgstr "テキスト変数"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:128
-#, fuzzy
 msgid "Schematic Data"
 msgstr "回路図データ"
 
@@ -21429,28 +21428,24 @@ msgid "Save Sheet as Design Block..."
 msgstr "シートをデザイン ブロックとして保存..."
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "現在のビューから PNG ファイルを作成します"
+msgstr "現在のシートから新しいデザインブロックを作成する"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
 msgstr "選択内容をデザイン ブロックとして保存..."
 
 #: eeschema/tools/ee_actions.cpp:164
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "選択対象からルールエリアを作成"
+msgstr "現在の選択箇所から新しいデザインブロックを作成する"
 
 #: eeschema/tools/ee_actions.cpp:170
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "ブロックを削除"
+msgstr "デザインブロックを削除"
 
 #: eeschema/tools/ee_actions.cpp:171
-#, fuzzy
 msgid "Remove the selected design block from its library"
-msgstr "ライブラリから選択したシンボルを削除"
+msgstr "選択したデザインブロックをライブラリから削除"
 
 #: eeschema/tools/ee_actions.cpp:181
 msgid "Save Library As..."
@@ -21465,9 +21460,8 @@ msgid "New Symbol..."
 msgstr "新規シンボル..."
 
 #: eeschema/tools/ee_actions.cpp:189
-#, fuzzy
 msgid "Create a new symbol in an existing library"
-msgstr "既存のシンボルから派生して新しいシンボルを作成"
+msgstr "既存のライブラリに新しいシンボルを作成する"
 
 #: eeschema/tools/ee_actions.cpp:195
 msgid "Derive from Existing Symbol"
@@ -21598,39 +21592,33 @@ msgid "Show Hidden Fields"
 msgstr "非表示フィールドを表示"
 
 #: eeschema/tools/ee_actions.cpp:334
-#, fuzzy
 msgid "Draw Pins"
-msgstr "描画オプション"
+msgstr "ピンを描画"
 
 #: eeschema/tools/ee_actions.cpp:342 eeschema/tools/ee_actions.cpp:555
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:297
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:974
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Draw Text"
-msgstr "テキスト ボックスを描画"
+msgstr "テキストを描画"
 
 #: eeschema/tools/ee_actions.cpp:350 eeschema/tools/ee_actions.cpp:562
 #: pcbnew/tools/pcb_actions.cpp:176
-#, fuzzy
 msgid "Draw Text Boxes"
 msgstr "テキスト ボックスを描画"
 
 #: eeschema/tools/ee_actions.cpp:357 eeschema/tools/ee_actions.cpp:1368
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:100
-#, fuzzy
 msgid "Draw Lines"
-msgstr "線を描く"
+msgstr "線を描画"
 
 #: eeschema/tools/ee_actions.cpp:358
-#, fuzzy
 msgid "Draw connected graphic lines"
-msgstr "つながった図形ラインを追加"
+msgstr "つながった図形ラインを描画"
 
 #: eeschema/tools/ee_actions.cpp:366 pcbnew/tools/pcb_actions.cpp:109
-#, fuzzy
 msgid "Draw Polygons"
-msgstr "ポリゴンを描く"
+msgstr "ポリゴンを描画"
 
 #: eeschema/tools/ee_actions.cpp:374
 msgid "Move Symbol Anchor"
@@ -21661,31 +21649,26 @@ msgid "Copy pin number size to other pins in symbol"
 msgstr "ピン番号のサイズをシンボルにある他のピンにコピー"
 
 #: eeschema/tools/ee_actions.cpp:409
-#, fuzzy
 msgid "Place Symbols"
-msgstr "シンボルを貼り付け"
+msgstr "シンボルを配置"
 
 #: eeschema/tools/ee_actions.cpp:419
-#, fuzzy
 msgid "Place Power Symbols"
-msgstr "電源シンボル"
+msgstr "電源シンボルを配置"
 
 #: eeschema/tools/ee_actions.cpp:428
-#, fuzzy
 msgid "Place Design Block"
-msgstr "ブロックを配置"
+msgstr "デザインブロックを配置"
 
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Add selected design block to current sheet"
 msgstr "選択したデザインブロックを現在のシートに追加"
 
 #: eeschema/tools/ee_actions.cpp:440
-#, fuzzy
 msgid "Place No Connect Flags"
-msgstr "空き端子フラグ (&N)"
+msgstr "空き端子フラグを配置"
 
 #: eeschema/tools/ee_actions.cpp:450
-#, fuzzy
 msgid "Place Junctions"
 msgstr "ジャンクション(接続点)を配置"
 
@@ -21695,7 +21678,6 @@ msgid "Place Wire to Bus Entries"
 msgstr "ワイヤー-バス エントリーを配置"
 
 #: eeschema/tools/ee_actions.cpp:470
-#, fuzzy
 msgid "Place Net Labels"
 msgstr "ネット ラベルを配置"
 
@@ -21705,78 +21687,65 @@ msgid "Place Net Class Directives"
 msgstr "ネットクラス指示を追加"
 
 #: eeschema/tools/ee_actions.cpp:486
-#, fuzzy
 msgid "Place Hierarchical Labels"
-msgstr "階層ラベル"
+msgstr "階層ラベルを配置"
 
 #: eeschema/tools/ee_actions.cpp:495
-#, fuzzy
 msgid "Draw Hierarchical Sheets"
-msgstr "階層シートを描く"
+msgstr "階層シートを描画"
 
 #: eeschema/tools/ee_actions.cpp:503
-#, fuzzy
 msgid "Draw Sheet Copy"
-msgstr "図面シート"
+msgstr "シートコピーを描画"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
 msgstr "シートをプロジェクトにコピーし、現在のシートに描画します"
 
 #: eeschema/tools/ee_actions.cpp:512
-#, fuzzy
 msgid "Place Sheet Pins"
-msgstr "シートピンをクリーンアップ"
+msgstr "シートピンを配置"
 
 #: eeschema/tools/ee_actions.cpp:519 eeschema/tools/ee_actions.cpp:527
 msgid "Sync Sheet Pins"
 msgstr "シートピンを同期"
 
 #: eeschema/tools/ee_actions.cpp:535
-#, fuzzy
 msgid "Import Sheet"
-msgstr "シートピンをインポート"
+msgstr "シートをインポート"
 
 #: eeschema/tools/ee_actions.cpp:536
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "シートピンをインポート"
+msgstr "シートをプロジェクトにインポート"
 
 #: eeschema/tools/ee_actions.cpp:546
-#, fuzzy
 msgid "Place Global Labels"
-msgstr "グローバル ラベル"
+msgstr "グローバル ラベルを配置"
 
 #: eeschema/tools/ee_actions.cpp:570 pcbnew/tools/pcb_actions.cpp:183
-#, fuzzy
 msgid "Draw Tables"
-msgstr "線を描画"
+msgstr "表を描画"
 
 #: eeschema/tools/ee_actions.cpp:577 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Draw Rectangles"
-msgstr "矩形を描く"
+msgstr "矩形を描画"
 
 #: eeschema/tools/ee_actions.cpp:585 pcbnew/tools/pcb_actions.cpp:126
-#, fuzzy
 msgid "Draw Circles"
-msgstr "円を描く"
+msgstr "円を描画"
 
 #: eeschema/tools/ee_actions.cpp:593 pcbnew/tools/pcb_actions.cpp:135
-#, fuzzy
 msgid "Draw Arcs"
-msgstr "円弧を描く"
+msgstr "円弧を描画"
 
 #: eeschema/tools/ee_actions.cpp:601
-#, fuzzy
 msgid "Place Images"
 msgstr "画像を配置"
 
 #: eeschema/tools/ee_actions.cpp:609 pcbnew/tools/pcb_actions.cpp:290
-#, fuzzy
 msgid "Draw Rule Areas"
-msgstr "ルールエリア"
+msgstr "ルールエリアを描画"
 
 #: eeschema/tools/ee_actions.cpp:617 pcbnew/tools/pcb_actions.cpp:382
 msgid "Delete Last Point"
@@ -21791,9 +21760,8 @@ msgid "Close Outline"
 msgstr "外枠を閉じる"
 
 #: eeschema/tools/ee_actions.cpp:625
-#, fuzzy
 msgid "Close the in-progress outline"
-msgstr "作成中の外形を閉じます"
+msgstr "作成中の外形を閉じる"
 
 #: eeschema/tools/ee_actions.cpp:640
 msgid "Repeat Last Item"
@@ -21833,9 +21801,8 @@ msgid "Swap"
 msgstr "交換"
 
 #: eeschema/tools/ee_actions.cpp:680
-#, fuzzy
 msgid "Swap positions of selected items"
-msgstr "ロックしたアイテムの選択を許可"
+msgstr "選択した項目の位置を入れ替え"
 
 #: eeschema/tools/ee_actions.cpp:688 pcbnew/tools/pcb_actions.cpp:664
 msgid "Properties..."
@@ -22363,9 +22330,8 @@ msgid "Show markers for excluded electrical rules checker violations"
 msgstr "除外したエレクトリカル ルール チェッカーの違反マーカーを表示"
 
 #: eeschema/tools/ee_actions.cpp:1182
-#, fuzzy
 msgid "Mark items excluded from simulation"
-msgstr "シミュレーションから除外"
+msgstr "シミュレーションから除外する項目をマークする"
 
 #: eeschema/tools/ee_actions.cpp:1183
 msgid "Draw 'X's over items which have been excluded from simulation"
@@ -22512,9 +22478,8 @@ msgid "Draw Wires"
 msgstr "ワイヤーをドラッグ"
 
 #: eeschema/tools/ee_actions.cpp:1346
-#, fuzzy
 msgid "Draw Buses"
-msgstr "%s を描画"
+msgstr "バスを描画"
 
 #: eeschema/tools/ee_actions.cpp:1356
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
@@ -22611,9 +22576,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "現在のプロットをCSVしてエクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:1483
-#, fuzzy
 msgid "Export Current Plot to Clipboard"
-msgstr "クリップボードに線画をエクスポート"
+msgstr "現在のプロットをクリップボードにエクスポート"
 
 #: eeschema/tools/ee_actions.cpp:1489
 msgid "Export Current Plot to Schematic"
@@ -22685,15 +22649,15 @@ msgstr "SPICE ネットリストを表示"
 
 #: eeschema/tools/ee_inspection_tool.cpp:218
 #: pcbnew/tools/board_inspection_tool.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Run %s > %s"
-msgstr "%s と %s 上"
+msgstr "%s を実行 > %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:225
 #: pcbnew/tools/board_inspection_tool.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Run %s"
-msgstr "%s 上"
+msgstr "%s を実行"
 
 #: eeschema/tools/ee_inspection_tool.cpp:312
 msgid "No symbol issues found."
@@ -22776,32 +22740,28 @@ msgid "Add Corner"
 msgstr "角を追加"
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
-#, fuzzy
 msgid "Draw Rule Area"
-msgstr "ルールエリア"
+msgstr "ルールエリアを描画"
 
 #: eeschema/tools/sch_drawing_tools.cpp:308
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "<ESC>を押すと、シンボルの作成をキャンセルします。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:422
-#, fuzzy
 msgid "Place Symbol"
-msgstr "シンボルを貼り付け"
+msgstr "シンボルを配置"
 
 #: eeschema/tools/sch_drawing_tools.cpp:675
-#, fuzzy
 msgid "Add design block"
-msgstr "プロットする信号を追加"
+msgstr "デザインブロックを追加"
 
 #: eeschema/tools/sch_drawing_tools.cpp:676
 msgid "Import Schematic Sheet Content..."
 msgstr "回路図シートの内容を挿入..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:707
-#, fuzzy
 msgid "Choose Schematic"
-msgstr "新規回路図"
+msgstr "回路図を選択"
 
 #: eeschema/tools/sch_drawing_tools.cpp:924 pcbnew/tools/drawing_tool.cpp:659
 msgid "Press <ESC> to cancel image creation."
@@ -22891,9 +22851,8 @@ msgid "Draw %s"
 msgstr "%s を描画"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2630 pcbnew/tools/drawing_tool.cpp:1179
-#, fuzzy
 msgid "Draw Table"
-msgstr "線を描画"
+msgstr "表を描画"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2805
 msgid "Press <ESC> to cancel sheet creation."
@@ -22905,19 +22864,17 @@ msgid "File '%s' does not exist."
 msgstr "ファイル '%s' は存在しません。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2861
-#, fuzzy, c-format
+#, c-format
 msgid "Could not import sheet from '%s'."
-msgstr "'%s' から画像をロードできません。"
+msgstr "'%s' からシートをインポートできませんでした。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3023
-#, fuzzy
 msgid "Modify sheet pin"
-msgstr "シート ピンを追加"
+msgstr "シートピンの変更"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3029
-#, fuzzy
 msgid "Modify schematic item"
-msgstr "変更"
+msgstr "回路図アイテムを変更"
 
 #: eeschema/tools/sch_edit_tool.cpp:74
 msgid "Symbol Unit"
@@ -24485,7 +24442,6 @@ msgid "Show DCodes"
 msgstr "Dコードを表示"
 
 #: gerbview/tools/gerbview_actions.cpp:222
-#, fuzzy
 msgid "Show dcode numbers"
 msgstr "Dコード番号を表示"
 
@@ -25570,7 +25526,6 @@ msgid "Skip this version"
 msgstr "このバージョンをスキップ"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
-#, fuzzy
 msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
@@ -27770,7 +27725,7 @@ msgid "Linear resistance:"
 msgstr "線形抵抗:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "100% の表皮深さの場合の周波数:"
 
