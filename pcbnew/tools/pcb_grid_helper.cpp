@@ -1057,22 +1057,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             KIGEOM::OVAL_CENTER | KIGEOM::OVAL_CAP_TIPS | KIGEOM::OVAL_SIDE_MIDPOINTS
             | KIGEOM::OVAL_CARDINAL_EXTREMES;
 
-    // The key points of a circle centred around (0, 0) with the given radius
-    auto getCircleKeyPoints = []( int radius, bool aIncludeCenter )
-    {
-        std::vector<TYPED_POINT2I> points = {
-            { { -radius, 0 }, POINT_TYPE::PT_QUADRANT },
-            { { radius, 0 }, POINT_TYPE::PT_QUADRANT },
-            { { 0, -radius }, POINT_TYPE::PT_QUADRANT },
-            { { 0, radius }, POINT_TYPE::PT_QUADRANT },
-        };
-
-        if( aIncludeCenter )
-            points.push_back( { { 0, 0 }, POINT_TYPE::PT_CENTER } );
-
-        return points;
-    };
-
     auto handlePadShape = [&]( PAD* aPad )
     {
         addAnchor( aPad->GetPosition(), ORIGIN | SNAPPABLE, aPad, POINT_TYPE::PT_CENTER );
@@ -1084,14 +1068,15 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         switch( aPad->GetShape() )
         {
         case PAD_SHAPE::CIRCLE:
-            for( const TYPED_POINT2I& pt : getCircleKeyPoints( aPad->GetSizeX() / 2, false ) )
+        {
+            const CIRCLE circle( aPad->ShapePos(), aPad->GetSizeX() / 2 );
+            for( const TYPED_POINT2I& pt : KIGEOM::GetCircleKeyPoints( circle, false ) )
             {
-                // Transform to the pad positon
-                addAnchor( aPad->ShapePos() + pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
+                addAnchor( pt.m_point, OUTLINE | SNAPPABLE, aPad, pt.m_types );
             }
 
             break;
-
+        }
         case PAD_SHAPE::OVAL:
         {
             const OVAL oval( aPad->GetSize(), aPad->GetPosition(), aPad->GetOrientation() );
@@ -1162,7 +1147,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             if( hole_size.x == hole_size.y )
             {
                 // Circle
-                snap_pts = getCircleKeyPoints( hole_size.x / 2, true );
+                const CIRCLE circle( hole_pos, hole_size.x / 2 );
+                snap_pts = KIGEOM::GetCircleKeyPoints( circle, true );
             }
             else
             {
@@ -1171,12 +1157,12 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 // For now there's no way to have an off-angle hole, so this is the
                 // same as the pad. In future, this may not be true:
                 // https://gitlab.com/kicad/code/kicad/-/issues/4124
-                const OVAL oval( hole_size, { 0, 0 }, aPad->GetOrientation() );
+                const OVAL oval( hole_size, hole_pos, aPad->GetOrientation() );
                 snap_pts = KIGEOM::GetOvalKeyPoints( oval, ovalKeyPointFlags );
             }
 
             for( const TYPED_POINT2I& snap_pt : snap_pts )
-                addAnchor( hole_pos + snap_pt.m_point, OUTLINE | SNAPPABLE, aPad, snap_pt.m_types );
+                addAnchor( snap_pt.m_point, OUTLINE | SNAPPABLE, aPad, snap_pt.m_types );
         }
     };
 

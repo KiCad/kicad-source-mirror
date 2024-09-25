@@ -23,9 +23,11 @@
 
 #include "geometry/shape_utils.h"
 
+#include <geometry/circle.h>
 #include <geometry/seg.h>
 #include <geometry/half_line.h>
 #include <geometry/line.h>
+#include <geometry/point_types.h>
 #include <geometry/shape_rect.h>
 
 
@@ -250,4 +252,28 @@ VECTOR2I KIGEOM::GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDi
         // clang-format on
     }
     return VECTOR2I();
+}
+
+
+std::vector<TYPED_POINT2I> KIGEOM::GetCircleKeyPoints( const CIRCLE& aCircle, bool aIncludeCenter )
+{
+    std::vector<TYPED_POINT2I> pts;
+
+    if( aIncludeCenter )
+    {
+        pts.emplace_back( VECTOR2I{ 0, 0 }, POINT_TYPE::PT_CENTER );
+    }
+
+    pts.emplace_back( VECTOR2I{ 0, aCircle.Radius }, POINT_TYPE::PT_QUADRANT );
+    pts.emplace_back( VECTOR2I{ aCircle.Radius, 0 }, POINT_TYPE::PT_QUADRANT );
+    pts.emplace_back( VECTOR2I{ 0, -aCircle.Radius }, POINT_TYPE::PT_QUADRANT );
+    pts.emplace_back( VECTOR2I{ -aCircle.Radius, 0 }, POINT_TYPE::PT_QUADRANT );
+
+    // Shift the points to the circle center
+    for( TYPED_POINT2I& pt : pts )
+    {
+        pt.m_point += aCircle.Center;
+    }
+
+    return pts;
 }

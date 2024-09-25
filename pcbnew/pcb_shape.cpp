@@ -37,7 +37,10 @@
 #include <lset.h>
 #include <pad.h>
 #include <base_units.h>
+#include <geometry/shape_circle.h>
 #include <geometry/shape_compound.h>
+#include <geometry/point_types.h>
+#include <geometry/shape_utils.h>
 #include <pcb_shape.h>
 #include <pcb_painter.h>
 #include <api/board/board_types.pb.h>
@@ -336,6 +339,15 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 
     switch( m_shape )
     {
+    case SHAPE_T::CIRCLE:
+    {
+        const CIRCLE circle( GetCenter(), GetRadius() );
+        for( const TYPED_POINT2I& pt : KIGEOM::GetCircleKeyPoints( circle, false ) )
+        {
+            ret.emplace_back( pt.m_point );
+        }
+        break;
+    }
     case SHAPE_T::ARC:
         ret.emplace_back( GetArcMid() );
         KI_FALLTHROUGH;
@@ -358,7 +370,8 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 
         break;
 
-    default:
+    case SHAPE_T::UNDEFINED:
+        // No default - handle all cases, even if just break
         break;
     }
 

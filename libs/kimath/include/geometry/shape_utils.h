@@ -41,10 +41,12 @@
 
 #include <geometry/direction45.h>
 
+class CIRCLE;
 class HALF_LINE;
 class LINE;
 class SEG;
 class SHAPE_RECT;
+struct TYPED_POINT2I;
 
 namespace KIGEOM
 {
@@ -117,5 +119,14 @@ SHAPE_ARC MakeArcCw180( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Dire
  * For directions NW, NE, SW, SE, the point is the corner.
  */
 VECTOR2I GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir );
+
+
+/**
+ * Get key points of an CIRCLE.
+ *
+ * - The four cardinal points
+ * - Optionally the center
+ */
+std::vector<TYPED_POINT2I> GetCircleKeyPoints( const CIRCLE& aCircle, bool aIncludeCenter );
 
 } // namespace KIGEOM
