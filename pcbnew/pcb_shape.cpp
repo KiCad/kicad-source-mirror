@@ -116,6 +116,16 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 
     switch( m_shape )
     {
+    case SHAPE_T::CIRCLE:
+    {
+        const VECTOR2I center = GetCenter();
+        const int      radius = GetRadius();
+        ret.emplace_back( center + VECTOR2I{ radius, 0 } );
+        ret.emplace_back( center + VECTOR2I{ 0, radius } );
+        ret.emplace_back( center + VECTOR2I{ -radius, 0 } );
+        ret.emplace_back( center + VECTOR2I{ 0, -radius } );
+        break;
+    }
     case SHAPE_T::ARC:
         ret.emplace_back( GetArcMid() );
         KI_FALLTHROUGH;
@@ -138,8 +148,7 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 
         break;
 
-    default:
-        break;
+        // No default - handle all cases, even if just break
     }
 
     return ret;
