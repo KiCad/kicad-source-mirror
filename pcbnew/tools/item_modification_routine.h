@@ -358,8 +358,8 @@ private:
     SHAPE_POLY_SET m_workingPolygons;
 
     bool         m_firstPolygon = true;
-    int          m_width;
-    PCB_LAYER_ID m_layer;
+    int          m_width = 0;
+    PCB_LAYER_ID m_layer = PCB_LAYER_ID::UNDEFINED_LAYER;
 };
 
 class POLYGON_MERGE_ROUTINE : public POLYGON_BOOLEAN_ROUTINE

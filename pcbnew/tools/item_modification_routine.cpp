@@ -528,6 +528,10 @@ void POLYGON_BOOLEAN_ROUTINE::Finalize()
     // new PCB_SHAPEs for each outline
     for( int i = 0; i < m_workingPolygons.OutlineCount(); ++i )
     {
+        // If we handled any polygons to get any outline,
+        // there must be a layer set by now.
+        wxASSERT( m_layer >= 0 );
+
         std::unique_ptr<PCB_SHAPE> new_poly_shape =
                 std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
 
