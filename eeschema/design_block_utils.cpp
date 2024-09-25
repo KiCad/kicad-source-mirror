@@ -38,6 +38,24 @@
 #include <confirm.h>
 #include <tool/tool_manager.h>
 #include <ee_selection_tool.h>
+#include <dialogs/dialog_design_block_properties.h>
+
+
+bool checkOverwrite( SCH_EDIT_FRAME* aFrame, wxString& libname, wxString& newName )
+{
+    wxString msg = wxString::Format( _( "Design block '%s' already exists in library '%s'." ),
+                                     newName.GetData(), libname.GetData() );
+
+    if( OKOrCancelDialog( aFrame, _( "Confirmation" ), msg, _( "Overwrite existing design block?" ),
+                          _( "Overwrite" ) )
+        != wxID_OK )
+    {
+        return false;
+    }
+
+    return true;
+}
+
 
 DESIGN_BLOCK_LIB_TABLE* SCH_EDIT_FRAME::selectDesignBlockLibTable( bool aOptional )
 {
@@ -282,13 +300,14 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName )
         return;
     }
 
-    // Ask the user for the design block name
-    wxFileName fn = wxFileNameFromPath( GetScreen()->GetFileName() );
+    DESIGN_BLOCK blk;
+    wxFileName   fn = wxFileNameFromPath( GetScreen()->GetFileName() );
 
-    wxString name = wxGetTextFromUser( _( "Enter a name for the design block:" ),
-                                       _( "Design Block Name" ), fn.GetName(), this );
+    blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
 
-    if( name.IsEmpty() )
+    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
+
+    if( dlg.ShowModal() != wxID_OK )
         return;
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
@@ -300,13 +319,17 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName )
         return;
     }
 
-
-    DESIGN_BLOCK blk;
     blk.SetSchematicFile( tempFile );
-    blk.SetLibId( LIB_ID( aLibraryName, name ) );
 
     try
     {
+        wxString libName = blk.GetLibId().GetLibNickname();
+        wxString newName = blk.GetLibId().GetLibItemName();
+
+        if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) )
+            if( !checkOverwrite( this, libName, newName ) )
+                return;
+
         Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk );
     }
     catch( const IO_ERROR& ioe )
@@ -347,11 +370,14 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         return;
     }
 
-    // Ask the user for the design block name
-    wxString name = wxGetTextFromUser( _( "Enter a name for the design block:" ),
-                                       _( "Design Block Name" ), wxEmptyString, this );
+    DESIGN_BLOCK blk;
+    wxFileName   fn = wxFileNameFromPath( GetScreen()->GetFileName() );
 
-    if( name.IsEmpty() )
+    blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
+
+    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
+
+    if( dlg.ShowModal() != wxID_OK )
         return;
 
     // Create a temperorary screen
@@ -377,14 +403,17 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         return;
     }
 
-    // Create a design block
-    DESIGN_BLOCK blk;
     blk.SetSchematicFile( tempFile );
-    blk.SetLibId( LIB_ID( aLibraryName, name ) );
 
     try
     {
-        // Actually save it to disk
+        wxString libName = blk.GetLibId().GetLibNickname();
+        wxString newName = blk.GetLibId().GetLibItemName();
+
+        if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) )
+            if( !checkOverwrite( this, libName, newName ) )
+                return;
+
         Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk );
     }
     catch( const IO_ERROR& ioe )
@@ -482,6 +511,61 @@ bool SCH_EDIT_FRAME::DeleteDesignBlockFromLibrary( const LIB_ID& aLibId, bool aC
     SetStatusText( msg );
 
     m_designBlocksPane->RefreshLibs();
+
+    return true;
+}
+
+
+bool SCH_EDIT_FRAME::EditDesignBlockProperties( const LIB_ID& aLibId )
+{
+    if( !aLibId.IsValid() )
+        return false;
+
+    wxString libname = aLibId.GetLibNickname();
+    wxString dbname = aLibId.GetLibItemName();
+
+    if( !Prj().DesignBlockLibs()->IsDesignBlockLibWritable( libname ) )
+    {
+        wxString msg = wxString::Format( _( "Library '%s' is read only." ), libname );
+        ShowInfoBarError( msg );
+        return false;
+    }
+
+    DESIGN_BLOCK* designBlock = GetDesignBlock( aLibId, true, true );
+
+    if( !designBlock )
+        return false;
+
+    wxString                       originalName = designBlock->GetLibId().GetLibItemName();
+    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, designBlock );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return false;
+
+    wxString newName = designBlock->GetLibId().GetLibItemName();
+
+    try
+    {
+        if( originalName != newName )
+        {
+            if( Prj().DesignBlockLibs()->DesignBlockExists( libname, newName ) )
+                if( !checkOverwrite( this, libname, newName ) )
+                    return false;
+
+            Prj().DesignBlockLibs()->DesignBlockSave( libname, designBlock );
+            Prj().DesignBlockLibs()->DesignBlockDelete( libname, originalName );
+        }
+        else
+            Prj().DesignBlockLibs()->DesignBlockSave( libname, designBlock );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayError( this, ioe.What() );
+        return false;
+    }
+
+    m_designBlocksPane->RefreshLibs();
+    m_designBlocksPane->SelectLibId( designBlock->GetLibId() );
 
     return true;
 }

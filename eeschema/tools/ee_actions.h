@@ -89,7 +89,8 @@ public:
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierLabel;
     static TOOL_ACTION drawSheet;
-    static TOOL_ACTION drawSheetCopy;
+    static TOOL_ACTION drawSheetFromFile;
+    static TOOL_ACTION drawSheetFromDesignBlock;
     static TOOL_ACTION placeSheetPin;
     static TOOL_ACTION importSheet;
     // Sync sheet pins for selected sheet symbol
@@ -204,6 +205,7 @@ public:
     static TOOL_ACTION saveSheetAsDesignBlock;
     static TOOL_ACTION saveSelectionAsDesignBlock;
     static TOOL_ACTION deleteDesignBlock;
+    static TOOL_ACTION editDesignBlockProperties;
 
     // Library management
     static TOOL_ACTION saveLibraryAs;

@@ -174,6 +174,13 @@ TOOL_ACTION EE_ACTIONS::deleteDesignBlock( TOOL_ACTION_ARGS()
         .Tooltip( _( "Remove the selected design block from its library" ) )
         .Icon( BITMAPS::trash ) );
 
+TOOL_ACTION EE_ACTIONS::editDesignBlockProperties( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.editDesignBlockProperties" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Properties..." ) )
+        .Tooltip( _( "Edit properies of design block" ) )
+        .Icon( BITMAPS::edit ) );
+
 // SYMBOL_EDITOR_CONTROL
 //
 TOOL_ACTION EE_ACTIONS::saveLibraryAs( TOOL_ACTION_ARGS()
@@ -500,14 +507,23 @@ TOOL_ACTION EE_ACTIONS::drawSheet( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SCH_SHEET_T ) );
 
-TOOL_ACTION EE_ACTIONS::drawSheetCopy( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawing.drawSheetCopy" )
+TOOL_ACTION EE_ACTIONS::drawSheetFromFile( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawSheetFromFile" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Draw Sheet Copy" ) )
+        .FriendlyName( _( "Draw Sheet from File" ) )
         .Tooltip( _( "Copy sheet into project and draw on current sheet" ) )
         .Icon( BITMAPS::add_hierarchical_subsheet )
         .Flags( AF_ACTIVATE )
         .Parameter<wxString*> ( nullptr ) );
+
+TOOL_ACTION EE_ACTIONS::drawSheetFromDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawSheetFromDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Sheet from Design Block" ) )
+        .Tooltip( _( "Copy design block into project as a sheet on current sheet" ) )
+        .Icon( BITMAPS::add_hierarchical_subsheet )
+        .Flags( AF_ACTIVATE )
+        .Parameter<DESIGN_BLOCK*> ( nullptr ) );
 
 TOOL_ACTION EE_ACTIONS::placeSheetPin( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeSheetPin" )

@@ -97,6 +97,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_change_symbols_base.cpp
     dialogs/dialog_database_lib_settings_base.cpp
     dialogs/dialog_database_lib_settings.cpp
+    dialogs/dialog_design_block_properties_base.cpp
+    dialogs/dialog_design_block_properties.cpp
     dialogs/dialog_edit_symbols_libid.cpp
     dialogs/dialog_edit_symbols_libid_base.cpp
     dialogs/dialog_eeschema_page_settings.cpp

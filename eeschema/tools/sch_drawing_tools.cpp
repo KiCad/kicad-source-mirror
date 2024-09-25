@@ -547,20 +547,30 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 {
     bool          placingDesignBlock = aEvent.IsAction( &EE_ACTIONS::placeDesignBlock );
-    DESIGN_BLOCK* designBlock =
-            placingDesignBlock && m_frame->GetDesignBlockPane()->GetSelectedLibId().IsValid()
-                    ? m_frame->GetDesignBlock( m_frame->GetDesignBlockPane()->GetSelectedLibId() )
-                    : nullptr;
-    wxString*     importSourceFile = !placingDesignBlock ? aEvent.Parameter<wxString*>() : nullptr;
+
+    DESIGN_BLOCK* designBlock = nullptr;
     wxString      sheetFileName = wxEmptyString;
 
-    if( !placingDesignBlock )
+    if( placingDesignBlock )
     {
+        if( m_frame->GetDesignBlockPane()->GetSelectedLibId().IsValid() )
+        {
+            designBlock =
+                    m_frame->GetDesignBlock( m_frame->GetDesignBlockPane()->GetSelectedLibId() );
+
+            if( !designBlock )
+                return 0;
+
+            sheetFileName = designBlock->GetSchematicFile();
+        }
+    }
+    else
+    {
+        wxString* importSourceFile = aEvent.Parameter<wxString*>();
+
         if( importSourceFile != nullptr )
             sheetFileName = *importSourceFile;
     }
-    else if( designBlock )
-        sheetFileName = designBlock->GetSchematicFile();
 
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
     EESCHEMA_SETTINGS*          cfg = m_frame->eeconfig();
@@ -776,8 +786,15 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
-            wxString* tempFileName = new wxString( sheetFileName );
-            m_toolMgr->PostAction( EE_ACTIONS::drawSheetCopy, tempFileName );
+            if( placingDesignBlock )
+                m_toolMgr->PostAction( EE_ACTIONS::drawSheetFromDesignBlock, designBlock );
+            else
+            {
+                // drawSheet must delete
+                m_toolMgr->PostAction( EE_ACTIONS::drawSheetFromFile,
+                                       new wxString( sheetFileName ) );
+            }
+
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -2717,12 +2734,34 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
-    bool       isDrawSheetCopy   = aEvent.IsAction( &EE_ACTIONS::drawSheetCopy );
-    wxString*  filename          = isDrawSheetCopy ? aEvent.Parameter<wxString*>() : nullptr;
-    SCH_SHEET* sheet             = nullptr;
+    bool isDrawSheetCopy = aEvent.IsAction( &EE_ACTIONS::drawSheetFromFile );
+    bool isDrawSheetFromDesignBlock = aEvent.IsAction( &EE_ACTIONS::drawSheetFromDesignBlock );
 
-    // Make sure we've been passed a filename if we're importing a sheet
-    wxCHECK( !isDrawSheetCopy || filename, 0 );
+    DESIGN_BLOCK* designBlock = nullptr;
+    SCH_SHEET*    sheet = nullptr;
+    wxString      filename;
+
+    if( isDrawSheetCopy )
+    {
+        wxString* ptr = aEvent.Parameter<wxString*>();
+        wxCHECK( ptr, 0 );
+
+        // We own the string if we're importing a sheet
+        filename = *ptr;
+        delete ptr;
+    }
+    else if( isDrawSheetFromDesignBlock )
+    {
+        designBlock = aEvent.Parameter<DESIGN_BLOCK*>();
+        wxCHECK( designBlock, 0 );
+        filename = designBlock->GetSchematicFile();
+    }
+
+    if( ( isDrawSheetCopy || isDrawSheetFromDesignBlock ) && !wxFileExists( filename ) )
+    {
+        wxMessageBox( wxString::Format( _( "File '%s' does not exist." ), filename ) );
+        return 0;
+    }
 
     if( m_inDrawingTool )
         return 0;
@@ -2762,7 +2801,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    if( aEvent.HasPosition() && !isDrawSheetCopy )
+    if( aEvent.HasPosition() && !( isDrawSheetCopy || isDrawSheetFromDesignBlock ) )
         m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
@@ -2847,23 +2886,33 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
-            if( isDrawSheetCopy && !wxFileExists( *filename ) )
-            {
-                wxMessageBox( wxString::Format( _( "File '%s' does not exist." ), *filename ) );
-                m_frame->PopTool( aEvent );
-                break;
-            }
-
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
             sheet->SetScreen( nullptr );
 
             if( isDrawSheetCopy )
             {
-                wxFileName fn( *filename );
+                wxFileName fn( filename );
 
-                sheet->GetFields()[SHEETNAME].SetText( wxT( "Imported Sheet" ) );
+                sheet->GetFields()[SHEETNAME].SetText( fn.GetName() );
                 sheet->GetFields()[SHEETFILENAME].SetText( fn.GetName() + wxT( "." )
                                                            + FILEEXT::KiCadSchematicFileExtension );
+            }
+            else if( isDrawSheetFromDesignBlock )
+            {
+                sheet->GetFields()[SHEETNAME].SetText( designBlock->GetLibId().GetLibItemName() );
+                sheet->GetFields()[SHEETFILENAME].SetText( designBlock->GetSchematicFile() );
+
+                std::vector<SCH_FIELD>& sheetFields = sheet->GetFields();
+
+                // Copy default fields into the sheet
+                for( const auto& field : designBlock->GetFields() )
+                {
+                    SCH_FIELD newField( sheet, sheetFields.size(), field.first );
+                    newField.SetText( field.second );
+                    newField.SetVisible( false );
+
+                    sheetFields.emplace_back( newField );
+                }
             }
             else
             {
@@ -2915,23 +2964,22 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 m_frame->AddToScreen( sheet );
                 c.Added( sheet, m_frame->GetScreen() );
 
-                // isDrawSheetCopy is only true when the sheet placement is coming from the design blocks
-                // placement. So, we need to respect the design block annotation options in that case.
-                if( !isDrawSheetCopy || !cfg->m_DesignBlockChooserPanel.keep_annotations )
+                // This convoluted logic means we always annotate unless we are drawing a copy/design block
+                // and the user has explicitly requested we keep the annotations via checkbox
+                EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = cfg->m_AnnotatePanel;
+
+                if( annotate.automatic
+                    && !( ( isDrawSheetCopy || isDrawSheetFromDesignBlock )
+                          && cfg->m_DesignBlockChooserPanel.keep_annotations ) )
                 {
-                    EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = cfg->m_AnnotatePanel;
+                    // Annotation will remove this from selection, but we add it back later
+                    m_selectionTool->AddItemToSel( sheet );
 
-                    if( annotate.automatic )
-                    {
-                        // Annotation will remove this from selection, but we add it back later
-                        m_selectionTool->AddItemToSel( sheet );
-
-                        NULL_REPORTER reporter;
-                        m_frame->AnnotateSymbols(
-                                &c, ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
-                                (ANNOTATE_ALGO_T) annotate.method, true /* recursive */,
-                                schSettings.m_AnnotateStartNum, true, false, reporter );
-                    }
+                    NULL_REPORTER reporter;
+                    m_frame->AnnotateSymbols(
+                            &c, ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
+                            (ANNOTATE_ALGO_T) annotate.method, true /* recursive */,
+                            schSettings.m_AnnotateStartNum, true, false, reporter );
                 }
 
                 c.Push( isDrawSheetCopy ? "Import Sheet Copy" : "Draw Sheet" );
@@ -2994,9 +3042,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     getViewControls()->SetAutoPan( false );
     getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-
-    // We own the string if we're importing a sheet
-    delete filename;
 
     return 0;
 }
@@ -3164,7 +3209,8 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeHierLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeGlobalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheet.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheetCopy.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheetFromFile.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheetFromDesignBlock.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::ImportSheet,         EE_ACTIONS::placeDesignBlock.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::ImportSheet,         EE_ACTIONS::importSheet.MakeEvent() );

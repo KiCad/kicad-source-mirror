@@ -772,6 +772,8 @@ public:
 
     bool DeleteDesignBlockFromLibrary( const LIB_ID& aLibId, bool aConfirm );
 
+    bool EditDesignBlockProperties( const LIB_ID& aLibId );
+
 
     /**
      * Load design block from design block library table.

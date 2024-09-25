@@ -23,6 +23,7 @@
  */
 #include <kicommon.h>
 #include <lib_id.h>
+#include <nlohmann/json.hpp>
 
 
 class DESIGN_BLOCK
@@ -31,24 +32,26 @@ public:
     void          SetLibId( const LIB_ID& aName ) { m_lib_id = aName; }
     const LIB_ID& GetLibId() const { return m_lib_id; }
 
-    wxString GetLibIdAsString() const { return m_lib_id.Format(); }
+    const wxString& GetLibDescription() const { return m_libDescription; }
+    void            SetLibDescription( const wxString& aDesc ) { m_libDescription = aDesc; }
 
-    wxString GetLibDescription() const { return m_libDescription; }
-    void     SetLibDescription( const wxString& aDesc ) { m_libDescription = aDesc; }
+    const wxString& GetKeywords() const { return m_keywords; }
+    void            SetKeywords( const wxString& aKeywords ) { m_keywords = aKeywords; }
 
-    wxString GetKeywords() const { return m_keywords; }
-    void     SetKeywords( const wxString& aKeywords ) { m_keywords = aKeywords; }
+    const wxString& GetSchematicFile() const { return m_schematicFile; }
+    void            SetSchematicFile( const wxString& aFile ) { m_schematicFile = aFile; }
 
-    wxString GetDocumentationUrl() const { return m_doc_url; }
-    void     SetDocumentationUrl( const wxString& aDocumentationUrl ) { m_doc_url = aDocumentationUrl; }
-
-    wxString GetSchematicFile() const { return m_schematicFile; }
-    void     SetSchematicFile( const wxString& aFile ) { m_schematicFile = aFile; }
+    void SetFields( nlohmann::ordered_map<wxString, wxString>& aFields )
+    {
+        m_fields = std::move( aFields );
+    }
+    const nlohmann::ordered_map<wxString, wxString>& GetFields() const { return m_fields; }
 
 private:
     LIB_ID m_lib_id;
     wxString m_schematicFile;  // File name and path for schematic symbol.
     wxString m_libDescription; // File name and path for documentation file.
     wxString m_keywords;       // Search keywords to find footprint in library.
-    wxString m_doc_url;        // URL of external documentation
+
+    nlohmann::ordered_map<wxString, wxString> m_fields;
 };

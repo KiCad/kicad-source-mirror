@@ -25,6 +25,7 @@
 #include <common.h>
 #include <i18n_utility.h>
 #include <wx/dir.h>
+#include <wx/ffile.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/translation.h>
@@ -137,9 +138,28 @@ const DESIGN_BLOCK_IO::IO_FILE_DESC DESIGN_BLOCK_IO::GetLibraryDesc() const
 
 long long DESIGN_BLOCK_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
-    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadDesignBlockPathExtension );
+    wxDir libDir( aLibraryPath );
 
-    return TimestampDir( aLibraryPath, fileSpec );
+    if( !libDir.IsOpened() )
+        return 0;
+
+    long long ts = 0;
+
+    wxString filename;
+    bool     hasMoreFiles = libDir.GetFirst( &filename, wxEmptyString, wxDIR_DIRS );
+
+    while( hasMoreFiles )
+    {
+        wxFileName blockDir( aLibraryPath, filename );
+
+        // Check if the directory ends with ".block", if so hash all the files in it
+        if( blockDir.GetFullName().EndsWith( FILEEXT::KiCadDesignBlockPathExtension ) )
+            ts += TimestampDir( blockDir.GetFullPath(), wxT( "*" ) );
+
+        hasMoreFiles = libDir.GetNext( &filename );
+    }
+
+    return ts;
 }
 
 
@@ -284,8 +304,9 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
     {
         try
         {
-            nlohmann::json dbMetadata;
-            std::ifstream  dbMetadataFile( dbMetadataPath.fn_str() );
+            nlohmann::ordered_json dbMetadata;
+            std::ifstream          dbMetadataFile( dbMetadataPath.fn_str() );
+
             dbMetadataFile >> dbMetadata;
 
             if( dbMetadata.contains( "description" ) )
@@ -294,8 +315,21 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
             if( dbMetadata.contains( "keywords" ) )
                 newDB->SetKeywords( dbMetadata["keywords"] );
 
-            if( dbMetadata.contains( "documentation_url" ) )
-                newDB->SetDocumentationUrl( dbMetadata["documentation_url"] );
+            nlohmann::ordered_map<wxString, wxString> fields;
+
+            // Read the "fields" object from the JSON
+            if( dbMetadata.contains( "fields" ) )
+            {
+                for( auto& item : dbMetadata["fields"].items() )
+                {
+                    wxString name = wxString::FromUTF8( item.key() );
+                    wxString value = wxString::FromUTF8( item.value().get<std::string>() );
+
+                    fields[name] = value;
+                }
+
+                newDB->SetFields( fields );
+            }
         }
         catch( ... )
         {
@@ -303,6 +337,8 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
                     _( "Design block metadata file '%s' could not be read." ), dbMetadataPath ) );
         }
     }
+    else
+        return nullptr;
 
 
     return newDB;
@@ -344,12 +380,49 @@ void DESIGN_BLOCK_IO::DesignBlockSave( const wxString&                    aLibra
     wxString dbSchematicFile = dbFolder.GetFullPath() + aDesignBlock->GetLibId().GetLibItemName()
                                + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
 
-    // Copy the source sheet file to the design block folder, under the design block name
-    if( !wxCopyFile( aDesignBlock->GetSchematicFile(), dbSchematicFile ) )
+    // If the source and destination files are the same, then we don't need to copy the file
+    // as we are just updating the metadata
+    if( aDesignBlock->GetSchematicFile() != dbSchematicFile )
+    {
+        // Copy the source sheet file to the design block folder, under the design block name
+        if( !wxCopyFile( aDesignBlock->GetSchematicFile(), dbSchematicFile ) )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    _( "Schematic file '%s' could not be saved as design block at '%s'." ),
+                    aDesignBlock->GetSchematicFile().GetData(), dbSchematicFile ) );
+        }
+    }
+
+
+    wxString dbMetadataFile = dbFolder.GetFullPath() + aDesignBlock->GetLibId().GetLibItemName()
+                              + wxT( "." ) + FILEEXT::JsonFileExtension;
+
+    // Write the metadata file
+    nlohmann::ordered_json dbMetadata;
+    dbMetadata["description"] = aDesignBlock->GetLibDescription();
+    dbMetadata["keywords"] = aDesignBlock->GetKeywords();
+    dbMetadata["fields"] = aDesignBlock->GetFields();
+
+    bool success = false;
+
+    try
+    {
+        wxFFile mdFile( dbMetadataFile, wxT( "wb" ) );
+
+        if( mdFile.IsOpened() )
+            success = mdFile.Write( dbMetadata.dump( 0 ) );
+
+        // wxFFile dtor will close the file
+    }
+    catch( ... )
+    {
+        success = false;
+    }
+
+    if( !success )
     {
         THROW_IO_ERROR( wxString::Format(
-                _( "Schematic file '%s' could not be saved as design block at '%s'." ),
-                aDesignBlock->GetSchematicFile().GetData(), dbSchematicFile ) );
+                _( "Design block metadata file '%s' could not be saved." ), dbMetadataFile ) );
     }
 }
 

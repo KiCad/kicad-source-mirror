@@ -78,6 +78,8 @@ public:
         return m_doc;
     }
 
+    void SetDesc( const wxString& aDesc ) { m_doc = aDesc; }
+
     wxString GetKeywords()
     {
         ensure_loaded();

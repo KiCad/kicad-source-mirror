@@ -48,6 +48,7 @@ public:
     int SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent );
     int SaveSelectionAsDesignBlock( const TOOL_EVENT& aEvent );
     int DeleteDesignBlock( const TOOL_EVENT& aEvent );
+    int EditDesignBlockProperties( const TOOL_EVENT& aEvent );
 
     int HideLibraryTree( const TOOL_EVENT& aEvent );
 

@@ -162,7 +162,41 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
         wxString name = aLibId.GetLibItemName();
         wxString desc = db->GetLibDescription();
         wxString keywords = db->GetKeywords();
-        wxString doc = db->GetDocumentationUrl();
+        wxString doc;
+
+        // It is currently common practice to store a documentation link in the description.
+        size_t idx = desc.find( wxT( "http:" ) );
+
+        if( idx == wxString::npos )
+            idx = desc.find( wxT( "https:" ) );
+
+        if( idx != wxString::npos )
+        {
+            int nesting = 0;
+
+            for( auto chit = desc.begin() + idx; chit != desc.end(); ++chit )
+            {
+                int ch = *chit;
+
+                // Break on invalid URI characters
+                if( ch <= 0x20 || ch >= 0x7F || ch == '"' )
+                    break;
+
+                // Check for nesting parentheses, e.g. (Body style from: https://this.url/part.pdf)
+                if( ch == '(' )
+                    ++nesting;
+                else if( ch == ')' && --nesting < 0 )
+                    break;
+
+                doc += ch;
+            }
+
+            // Trim trailing punctuation
+            static wxString punct = wxS( ".,:;" );
+
+            if( punct.find( doc.Last() ) != wxString::npos )
+                doc = doc.Left( doc.Length() - 1 );
+        }
 
         wxString esc_desc = EscapeHTML( UnescapeString( desc ) );
 

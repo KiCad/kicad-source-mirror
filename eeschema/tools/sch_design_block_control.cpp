@@ -30,6 +30,7 @@
 #include <sch_design_block_control.h>
 #include <design_block_pane.h>
 #include <panel_design_block_chooser.h>
+#include <dialog_design_block_properties.h>
 #include <ee_actions.h>
 
 bool SCH_DESIGN_BLOCK_CONTROL::Init()
@@ -77,6 +78,7 @@ bool SCH_DESIGN_BLOCK_CONTROL::Init()
     ctxMenu.AddItem( ACTIONS::unpinLibrary, pinnedLib, 1 );
     ctxMenu.AddSeparator( 1 );
 
+    ctxMenu.AddItem( EE_ACTIONS::editDesignBlockProperties,     isDesignBlock, 10 );
     ctxMenu.AddItem( ACTIONS::newLibrary,                       SELECTION_CONDITIONS::ShowAlways, 10 );
     ctxMenu.AddItem( EE_ACTIONS::saveSheetAsDesignBlock,        isInLibrary, 10 );
     ctxMenu.AddItem( EE_ACTIONS::saveSelectionAsDesignBlock,    isInLibrary, 10 );
@@ -161,6 +163,20 @@ int SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties( const TOOL_EVENT& aEvent )
+{
+    LIB_TREE_NODE* current = getCurrentTreeNode();
+
+    if( !current )
+        return -1;
+
+    if( m_editFrame->EditDesignBlockProperties( current->m_LibId ) )
+        return 0;
+
+    return -1;
+}
+
+
 int SCH_DESIGN_BLOCK_CONTROL::HideLibraryTree( const TOOL_EVENT& aEvent )
 {
     m_editFrame->ToggleLibraryTree();
@@ -178,6 +194,7 @@ void SCH_DESIGN_BLOCK_CONTROL::setTransitions()
     Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock,      EE_ACTIONS::saveSheetAsDesignBlock.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  EE_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           EE_ACTIONS::deleteDesignBlock.MakeEvent() );
+    Go( &SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   EE_ACTIONS::editDesignBlockProperties.MakeEvent() );
 
     Go( &SCH_DESIGN_BLOCK_CONTROL::HideLibraryTree,             ACTIONS::hideLibraryTree.MakeEvent() );
 }

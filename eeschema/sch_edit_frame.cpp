@@ -799,7 +799,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::drawSheet );
     CURRENT_TOOL( EE_ACTIONS::placeSheetPin );
     CURRENT_TOOL( EE_ACTIONS::syncSheetPins );
-    CURRENT_TOOL( EE_ACTIONS::drawSheetCopy );
+    CURRENT_TOOL( EE_ACTIONS::drawSheetFromFile );
+    CURRENT_TOOL( EE_ACTIONS::drawSheetFromDesignBlock );
     CURRENT_TOOL( EE_ACTIONS::drawRectangle );
     CURRENT_TOOL( EE_ACTIONS::drawCircle );
     CURRENT_TOOL( EE_ACTIONS::drawArc );
