@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-24 16:15+0000\n"
+"PO-Revision-Date: 2024-09-26 20:16+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -5852,7 +5852,7 @@ msgstr "Knotenpunkt"
 
 #: common/eda_item.cpp:374
 msgid "No-Connect Flag"
-msgstr "Keine-Verbindung-Kennzeichnung"
+msgstr "'keine Verbindung'-Kennzeichnung"
 
 #: common/eda_item.cpp:375
 msgid "Wire Entry"
@@ -9404,7 +9404,7 @@ msgstr "KiCad Footprintbibliotheken Verzeichnisse"
 
 #: common/wildcards_and_files_ext.cpp:345
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad Designblock-Verzeichnis"
 
 #: common/wildcards_and_files_ext.cpp:352
 msgid "KiCad design block library paths"
@@ -9877,37 +9877,33 @@ msgid "Manage Footprint Association Files..."
 msgstr "Footprint-Zuweisungsdateien verwalten..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
 "Liste der Footprint-Zuordnungsdateien bearbeiten.  Diese Dateien werden "
-"verwendet, um automatisch Footprintnamen mittels Symbolwerten zuzuordnen."
+"verwendet, um mittels Symbolwerten automatisch Footprints zuzuordnen."
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
 msgid "Save to Schematic"
 msgstr "In Schaltplan speichern"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
 msgstr ""
-"Speichert die Footprintzuordnungen in den Footprintfeldern der "
-"Schaltplansymbole und in Schaltplandateien"
+"Footprintzuordnungen im 'footprint'-Feldern der Schaltplansymbole speichern"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
 msgstr "In Schaltplan und Datei speichern"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Speichert die Footprintzuordnungen in den Footprintfeldern der "
-"Schaltplansymbole und in Schaltplandateien"
+"Footprintzuordnungen im 'footprint'-Feldern der Schaltplansymbole speichern "
+"und dann Schaltplandateien speichern"
 
 #: cvpcb/tools/cvpcb_actions.cpp:104
 msgid "Select Next Unassigned Symbol"
@@ -10168,6 +10164,7 @@ msgstr ""
 #: eeschema/design_block_utils.cpp:277 eeschema/design_block_utils.cpp:342
 msgid "Design blocks with nested sheets are not supported."
 msgstr ""
+"Designblocks mit verschachtelten Schaltplanseiten werden nicht unterstützt."
 
 #: eeschema/design_block_utils.cpp:284 eeschema/design_block_utils.cpp:347
 msgid "Enter a name for the design block:"
@@ -10185,7 +10182,7 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:335
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Bitte einige Elemente auswählen um sie als Designblock zu speichern."
 
 #: eeschema/design_block_utils.cpp:405
 msgid "Please select a library to delete."
@@ -10206,6 +10203,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Designblock-Bibliothek \"%s\" von der Festplatte löschen? Damit werden alle "
+"Designblöcke der Bibliothek gelöscht."
 
 #: eeschema/design_block_utils.cpp:434
 #, c-format
@@ -10213,19 +10212,19 @@ msgid "Design block library '%s' deleted"
 msgstr "Designblock-Bibliothek \"%s\" gelöscht"
 
 #: eeschema/design_block_utils.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Footprint '%s' aus Bibliothek '%s' löschen?"
+msgstr "Designblock \"%s\" aus Bibliothek \"%s\" von der Festplatte löschen?"
 
 #: eeschema/design_block_utils.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Footprint \"%s\" aus Bibliothek \"%s\" gelöscht"
+msgstr "Designblock \"%s\" aus Bibliothek \"%s\" gelöscht"
 
 #: eeschema/design_block_utils.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "Fehler beim Laden von Symbol %s aus Bibliothek \"%s\"."
+msgstr "Fehler beim Laden von Designblock %s aus Bibliothek \"%s\"."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -11350,7 +11349,7 @@ msgstr "Dieses Plugin existiert bereits."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:807
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "Maximalanzahl von Plugins bereits zum Dialog hinzugefügt."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:838
 msgid "You must provide a netlist generator command string"
@@ -11808,14 +11807,12 @@ msgstr ""
 "Symbolwert für die Verwendung im Schaltplan."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
 msgstr "Schrittweite:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "Schaltplan hinzufügen"
+msgstr "Alle Schaltplanseiten"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 msgid "Increment Annotations From"
@@ -13159,14 +13156,12 @@ msgid "Field name templates"
 msgstr "Feldnamen-Vorlagen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "BOM presets"
-msgstr "Stückliste-Voreinstellungen"
+msgstr "Stücklistenvoreinstellungen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM format presets"
-msgstr "Stückliste-Formatvoreinstellungen"
+msgstr "Stücklistenformatvoreinstellungen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
@@ -13183,12 +13178,10 @@ msgid "Net classes"
 msgstr "Netzklassen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
-#, fuzzy
 msgid "Bus alias definitions"
-msgstr "Bus-Aliase"
+msgstr "Bus-Alias-Definitionen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
-#, fuzzy
 msgid "Text variables"
 msgstr "Textvariablen"
 
@@ -13219,29 +13212,26 @@ msgstr "&Rückwärts"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "Groß-/Kleinschreibung beachten"
+msgstr "Groß-/Kleins&chreibung beachten"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Nur ganze &Wörter"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
-#, fuzzy
 msgid "Wi&ldcards"
-msgstr "Platzhalter"
+msgstr "Platzha&lter"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
 msgstr "Pin&namen und -nummern durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search &hidden fields"
-msgstr "&Verborgene Felder durchsuchen"
+msgstr "Verborgene Felder durc&hsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -13314,9 +13304,8 @@ msgstr ""
 "Projektdatei %s konnte nicht geladen werden."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:257
-#, fuzzy
 msgid "Loading Bus Aliases"
-msgstr "Bus-Aliase"
+msgstr "Lade Bus-Aliase"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:268 eeschema/files-io.cpp:280
 msgid "Root"
@@ -14134,6 +14123,11 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Konnte\n"
+"%s\n"
+"nicht parsen.\n"
+"\n"
+"Nutzer generisches SPICE-Modell."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -15111,9 +15105,8 @@ msgid "Highlight netclass colors"
 msgstr "Leiterplatten-Netzklassenfarbe"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
-#, fuzzy
 msgid "Color highlight thickness:"
-msgstr "Hervorhebungsdicke:"
+msgstr "Farb-Hervorhebungsdicke:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
 msgid "Color highlight opacity:"
@@ -16188,9 +16181,8 @@ msgid "Selection Filter"
 msgstr "Auswahlfilter"
 
 #: eeschema/eeschema_settings.cpp:134
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Designregeln"
+msgstr "Designblöcke"
 
 #: eeschema/erc/erc.cpp:76 eeschema/erc/erc.cpp:93
 msgid "Input Pin"
@@ -16412,9 +16404,8 @@ msgid "Checking for footprint link issues..."
 msgstr "Prüfe auf Probleme mit Footprintverlinkungen..."
 
 #: eeschema/erc/erc.cpp:1756
-#, fuzzy
 msgid "Checking footprint assignments against footprint filters..."
-msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
+msgstr "Prüfe Footprintzuweisungen gegen Footprintfilter..."
 
 #: eeschema/erc/erc.cpp:1764
 msgid "Checking for off grid pins and wires..."
@@ -16484,11 +16475,11 @@ msgstr "Bezeichner verbindet mehr als eine Verbindung"
 
 #: eeschema/erc/erc_item.cpp:100
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "Ein Pin mit einer Keine-Verbindung-Kennzeichnung ist verbunden"
+msgstr "Ein Pin mit einer 'keine Verbindung'-Kennzeichnung ist verbunden"
 
 #: eeschema/erc/erc_item.cpp:104
 msgid "Unconnected \"no connection\" flag"
-msgstr "Unverbundene Keine-Verbindung-Kennzeichnung"
+msgstr "Unverbundene 'keine Verbindung'-Kennzeichnung"
 
 #: eeschema/erc/erc_item.cpp:108
 msgid "Label not connected to anything"
@@ -16519,7 +16510,7 @@ msgstr "Globaler Bezeichner ist nur einmal Schaltplan vorhanden"
 
 #: eeschema/erc/erc_item.cpp:132
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "Lokale und globale Bezeichner haben denselben Namen"
 
 #: eeschema/erc/erc_item.cpp:136
 msgid "Different footprint assigned in another unit of the symbol"
@@ -16585,9 +16576,8 @@ msgid "Footprint link issue"
 msgstr "Problem mit Footprintverlinkung"
 
 #: eeschema/erc/erc_item.cpp:192
-#, fuzzy
 msgid "Assigned footprint doesn't match footprint filters"
-msgstr "Footprint stimmt nicht mit Kopie in Bibliothek überein"
+msgstr "Zugewiesener Footprint stimmt nicht mit Footprintfilter überein"
 
 #: eeschema/erc/erc_item.cpp:196
 msgid "Symbol is not annotated"
@@ -20500,9 +20490,8 @@ msgid "Errors during netlist generation."
 msgstr "Bei der Netzlistenerzeugung sind Fehler aufgetreten."
 
 #: eeschema/sim/simulator_frame.cpp:375 eeschema/tools/simulator_control.cpp:86
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Bei der Netzlistenerzeugung sind Fehler aufgetreten."
+msgstr "Bei der Netzlistenerzeugung sind Warnungen aufgetreten."
 
 #: eeschema/sim/simulator_frame.cpp:385
 msgid "Simulator requires a fully annotated schematic."
@@ -21634,9 +21623,8 @@ msgid "Add label '%s' to %s pin %s net."
 msgstr "Füge den Bezeichner \"%s\" zu %s Pin %s Netz hinzu."
 
 #: eeschema/tools/ee_actions.cpp:47
-#, fuzzy
 msgid "Show the electrical rules checker window"
-msgstr "Öffnet das Fenster für die Überprüfung der Designregeln (DRC)"
+msgstr "Fenster für die Elektrischen Regeln (DRC)"
 
 #: eeschema/tools/ee_actions.cpp:53
 msgid "Symbol Checker"
@@ -21662,7 +21650,6 @@ msgstr ""
 "Simulationsfenster für laufende SPICE- oder IBIS-Simulationen anzeigen."
 
 #: eeschema/tools/ee_actions.cpp:83
-#, fuzzy
 msgid "Open the datasheet in a browser"
 msgstr "Datenblatt in einem Webbrowser öffnen"
 
@@ -21685,30 +21672,27 @@ msgstr "Komplette Verbindung auswählen"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Sheet as Design Block..."
-msgstr ""
+msgstr "Schaltplanseite als Designblock speichern..."
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "Eine PNG-Datei von aktueller Ansicht erstellen"
+msgstr "Neuen Designblock aus aktueller Schaltplanseite erstellen"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Auswahl als Designblock speichern..."
 
 #: eeschema/tools/ee_actions.cpp:164
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "Erzeugt einen Regelbereich aus der Auswahl"
+msgstr "Neuen Designblock aus aktueller Auswahl erstellen"
 
 #: eeschema/tools/ee_actions.cpp:170
 msgid "Delete Design Block"
 msgstr "Designblock löschen"
 
 #: eeschema/tools/ee_actions.cpp:171
-#, fuzzy
 msgid "Remove the selected design block from its library"
-msgstr "Entfernt das ausgewählte Symbol aus seiner Bibliothek"
+msgstr "Entferne ausgewählten Designblick aus seiner Bibliothek"
 
 #: eeschema/tools/ee_actions.cpp:181
 msgid "Save Library As..."
@@ -21723,9 +21707,8 @@ msgid "New Symbol..."
 msgstr "Neues Symbol..."
 
 #: eeschema/tools/ee_actions.cpp:189
-#, fuzzy
 msgid "Create a new symbol in an existing library"
-msgstr "Neues Symbol erstellen, abgeleitet von einem existierenden Symbol"
+msgstr "Neues Symbol in existierender Bibliothek erstellen"
 
 #: eeschema/tools/ee_actions.cpp:195
 msgid "Derive from Existing Symbol"
@@ -21790,9 +21773,9 @@ msgid "Set Unit Display Name..."
 msgstr "Anzeigename der Einheit festlegen..."
 
 #: eeschema/tools/ee_actions.cpp:268
-#, fuzzy
 msgid "Set the display name for a particular unit in a multi-unit symbol"
-msgstr "Festlegen des Anzeigenamens für eine Einheit"
+msgstr ""
+"Anzeigename für eine Einheit eines Symbols mit mehreren Einheiten festlegen"
 
 #: eeschema/tools/ee_actions.cpp:273
 msgid "Add Symbol to Schematic"
@@ -21858,37 +21841,31 @@ msgid "Show Hidden Fields"
 msgstr "Verborgene Felder anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:334
-#, fuzzy
 msgid "Draw Pins"
-msgstr "Zeichnungen"
+msgstr "Pins zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:342 eeschema/tools/ee_actions.cpp:555
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:297
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:974
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Draw Text"
-msgstr "Textfeld zeichnen"
+msgstr "Text zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:350 eeschema/tools/ee_actions.cpp:562
 #: pcbnew/tools/pcb_actions.cpp:176
-#, fuzzy
 msgid "Draw Text Boxes"
-msgstr "Textfeld zeichnen"
+msgstr "Textfelder zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:357 eeschema/tools/ee_actions.cpp:1368
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:100
-#, fuzzy
 msgid "Draw Lines"
-msgstr "Linie zeichnen"
+msgstr "Linien zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:358
-#, fuzzy
 msgid "Draw connected graphic lines"
-msgstr "Verbundene grafische Linien hinzufügen"
+msgstr "Verbundene graphische Linien zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:366 pcbnew/tools/pcb_actions.cpp:109
-#, fuzzy
 msgid "Draw Polygons"
 msgstr "Polygone zeichnen"
 
@@ -21921,55 +21898,46 @@ msgid "Copy pin number size to other pins in symbol"
 msgstr "Größe der Pinnummer zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:409
-#, fuzzy
 msgid "Place Symbols"
-msgstr "Symbol einfügen"
+msgstr "Symbole einfügen"
 
 #: eeschema/tools/ee_actions.cpp:419
-#, fuzzy
 msgid "Place Power Symbols"
-msgstr "Spannungssymbol"
+msgstr "Spannungssymbole einfügen"
 
 #: eeschema/tools/ee_actions.cpp:428
 msgid "Place Design Block"
-msgstr ""
+msgstr "Designblock hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Gewählten Designblock auf aktueller Schaltplanseite einfügen"
 
 #: eeschema/tools/ee_actions.cpp:440
-#, fuzzy
 msgid "Place No Connect Flags"
-msgstr "Keine-Verbindung-Kennzeichnung hinzufügen"
+msgstr "'keine Verbindung'-Kennzeichnungen einfügen"
 
 #: eeschema/tools/ee_actions.cpp:450
-#, fuzzy
 msgid "Place Junctions"
-msgstr "Knotenpunkt hinzufügen"
+msgstr "Knotenpunkte einfügen"
 
 #: eeschema/tools/ee_actions.cpp:460
-#, fuzzy
 msgid "Place Wire to Bus Entries"
-msgstr "Elektr. Verbindung an Buseingang führen"
+msgstr "Elektr. Verbindung zu Buseingang einfügen"
 
 #: eeschema/tools/ee_actions.cpp:470
-#, fuzzy
 msgid "Place Net Labels"
-msgstr "Netzlabel hinzufügen"
+msgstr "Netzbezeichner einfügen"
 
 #: eeschema/tools/ee_actions.cpp:477
-#, fuzzy
 msgid "Place Net Class Directives"
-msgstr "Netzklassenanweisung hinzufügen"
+msgstr "Netzklassenanweisungen einfügen"
 
 #: eeschema/tools/ee_actions.cpp:486
-#, fuzzy
 msgid "Place Hierarchical Labels"
-msgstr "Hierarchische Bezeichner"
+msgstr "Hierarchische Bezeichner einfügen"
 
 #: eeschema/tools/ee_actions.cpp:495
-#, fuzzy
 msgid "Draw Hierarchical Sheets"
 msgstr "Hierarchische Schaltpläne zeichnen"
 
@@ -21980,31 +21948,27 @@ msgstr "Zeichenblatt"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "Schaltplanseite in Projekt kopieren und auf aktueller Seiten zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:512
-#, fuzzy
 msgid "Place Sheet Pins"
-msgstr "Schaltplanpins löschen"
+msgstr "Schaltplanpins einfügen"
 
 #: eeschema/tools/ee_actions.cpp:519 eeschema/tools/ee_actions.cpp:527
 msgid "Sync Sheet Pins"
 msgstr "Schaltplanpins synchronisieren"
 
 #: eeschema/tools/ee_actions.cpp:535
-#, fuzzy
 msgid "Import Sheet"
-msgstr "Schaltplanpin importieren"
+msgstr "Schaltplanseite importieren"
 
 #: eeschema/tools/ee_actions.cpp:536
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "Schaltplanpin importieren"
+msgstr "Schaltplanseite in Projekt importieren"
 
 #: eeschema/tools/ee_actions.cpp:546
-#, fuzzy
 msgid "Place Global Labels"
-msgstr "Globaler Bezeichner"
+msgstr "Globale Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:570 pcbnew/tools/pcb_actions.cpp:183
 msgid "Draw Tables"
@@ -22012,19 +21976,16 @@ msgstr "Tabellen zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:577 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Draw Rectangles"
-msgstr "Rechteck zeichnen"
+msgstr "Rechtecke zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:585 pcbnew/tools/pcb_actions.cpp:126
-#, fuzzy
 msgid "Draw Circles"
-msgstr "Kreis zeichnen"
+msgstr "Kreise zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:593 pcbnew/tools/pcb_actions.cpp:135
-#, fuzzy
 msgid "Draw Arcs"
-msgstr "Kreisbogen zeichnen"
+msgstr "Kreisbögen zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:601
 #, fuzzy
@@ -22826,7 +22787,7 @@ msgstr "Ziehen"
 
 #: eeschema/tools/ee_actions.cpp:1407
 msgid "Move items while keeping their connections"
-msgstr ""
+msgstr "Elemente mit Verbindungen verschieben"
 
 #: eeschema/tools/ee_actions.cpp:1414 eeschema/tools/sch_move_tool.cpp:1808
 msgid "Align Items to Grid"
@@ -23108,7 +23069,7 @@ msgstr "Grafik importieren"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1258
 msgid "Add No Connect Flag"
-msgstr "Keine-Verbindung-Kennzeichnung hinzufügen"
+msgstr "'keine Verbindung'-Kennzeichnung hinzufügen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1265
 msgid "Add Junction"
@@ -23551,13 +23512,15 @@ msgstr "Lässt das Symbol für nachfolgende Klicks ausgewählt."
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Designblock als neue Schaltplanseite einfügen."
 
 #: eeschema/widgets/design_block_pane.cpp:71
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
+"Referenzbezeichner aus Quellenschaltplan erhalten. Andererseits diese "
+"zurücksetzen und nach Einstellungen neu annotiertieren."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -24591,7 +24554,7 @@ msgstr "RS274X: KNOCKOUT-Befehl wurde von GerbView ignoriert"
 
 #: gerbview/rs274x.cpp:680
 msgid "IPNEG Gerber command is deprecated since 2012. Skip it"
-msgstr ""
+msgstr "IPNEG Gerberkommando ist seit 2012 veraltet. Es wird übersprungen"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
@@ -25205,6 +25168,9 @@ msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
 msgstr ""
+"Nur 3D-Komponentenmodelle einbeziehen, die dieser Liste von "
+"Referenzbezeichnern entsprechen (durch Kommata getrennt, Platzhalter werden "
+"unterstützt)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 #: pcbnew/dialogs/dialog_export_step_base.cpp:91
@@ -33223,6 +33189,8 @@ msgid ""
 "A list of comma-selected reference designators to export (wildcards are "
 "supported)"
 msgstr ""
+"Eine Liste von durch Komma getrennten Referenzbezeichnern, die exportiert "
+"werden sollen (Platzhalter werden unterstützt)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:92
 msgid "Export tracks and vias on external copper layers."
