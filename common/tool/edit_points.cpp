@@ -315,7 +315,19 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         drawPoint( point );
 
     for( const EDIT_LINE& line : m_lines )
-        drawPoint( line, true );
+    {
+        if( line.HasCenterPoint() )
+        {
+            drawPoint( line.GetPosition(), true );
+        }
+
+        if( line.DrawLine() )
+        {
+            gal->SetLineWidth( borderSize );
+            gal->SetStrokeColor( borderColor );
+            gal->DrawLine( line.GetOrigin().GetPosition(), line.GetEnd().GetPosition() );
+        }
+    }
 
     gal->PopDepth();
 }

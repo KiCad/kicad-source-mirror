@@ -267,6 +267,9 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( shape->GetArcMid() );
             points->AddPoint( shape->GetEnd() );
             points->AddPoint( shape->GetCenter() );
+
+            points->AddIndicatorLine( points->Point( ARC_CENTER ), points->Point( ARC_START ) );
+            points->AddIndicatorLine( points->Point( ARC_CENTER ), points->Point( ARC_END ) );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -283,6 +286,11 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( shape->GetBezierC1() );
             points->AddPoint( shape->GetBezierC2() );
             points->AddPoint( shape->GetEnd() );
+
+            points->AddIndicatorLine( points->Point( BEZIER_START ),
+                                      points->Point( BEZIER_CTRL_PT1 ) );
+            points->AddIndicatorLine( points->Point( BEZIER_CTRL_PT2 ),
+                                      points->Point( BEZIER_END ) );
             break;
 
         default:        // suppress warnings

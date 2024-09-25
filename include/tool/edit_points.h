@@ -304,6 +304,26 @@ public:
         return m_end;
     }
 
+    /**
+     * Is the center-point of the line useful to be shown?
+     */
+    bool HasCenterPoint() const { return m_hasCenterPoint; }
+
+    /**
+     * Set if the center-point of the line should be shown.
+     */
+    void SetHasCenterPoint( bool aHasCenterPoint ) { m_hasCenterPoint = aHasCenterPoint; }
+
+    /**
+     * Should the line itself be drawn, or just the end and/or center points?
+     */
+    bool DrawLine() const { return m_showLine; }
+
+    /**
+     * Set if the line itself should be drawn.
+     */
+    void SetDrawLine( bool aShowLine ) { m_showLine = aShowLine; }
+
     bool operator==( const EDIT_POINT& aOther ) const
     {
         return GetPosition() == aOther.GetPosition();
@@ -317,6 +337,9 @@ public:
 private:
     EDIT_POINT& m_origin;           ///< Origin point for a line
     EDIT_POINT& m_end;              ///< End point for a line
+
+    bool m_hasCenterPoint = true; ///< True if the line has a (useful) center point
+    bool m_showLine = false;      ///< True if the line itself should be drawn
 
     ///< Constraint for the point, NULL if none
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_LINE> > m_constraint;
@@ -389,6 +412,22 @@ public:
     {
         m_lines.emplace_back( aOrigin, aEnd );
     }
+
+    /**
+     * Adds an EDIT_LINE that is shown as an indicator,
+     * rather than an editable line (no center point drag,
+     * show the line itself).
+     *
+     * @param aOrigin is the origin for a new line.
+     * @param aEnd is the end for a new line.
+     */
+    void AddIndicatorLine( EDIT_POINT& aOrigin, EDIT_POINT& aEnd )
+    {
+        EDIT_LINE& line = m_lines.emplace_back( aOrigin, aEnd );
+        line.SetHasCenterPoint( false );
+        line.SetDrawLine( true );
+    }
+
 
     /**
      * Adds a break, indicating the end of a contour.

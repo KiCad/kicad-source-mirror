@@ -118,6 +118,9 @@ public:
                 points->AddPoint( shape->GetStart() );
                 points->AddPoint( shape->GetEnd() );
                 points->AddPoint( shape->GetPosition() );
+
+                points->AddIndicatorLine( points->Point( ARC_CENTER ), points->Point( ARC_START ) );
+                points->AddIndicatorLine( points->Point( ARC_CENTER ), points->Point( ARC_END ) );
                 break;
 
             case SHAPE_T::CIRCLE:
@@ -160,6 +163,11 @@ public:
                 points->AddPoint( shape->GetBezierC1() );
                 points->AddPoint( shape->GetBezierC2() );
                 points->AddPoint( shape->GetEnd() );
+
+                points->AddIndicatorLine( points->Point( BEZIER_START ),
+                                          points->Point( BEZIER_CTRL_PT1 ) );
+                points->AddIndicatorLine( points->Point( BEZIER_END ),
+                                          points->Point( BEZIER_CTRL_PT2 ) );
                 break;
 
             default:
