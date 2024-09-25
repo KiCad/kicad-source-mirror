@@ -68,7 +68,7 @@ class THROWING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
     }
 };
 
-
+#include <locale_io.h>
 PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
                                         std::function<void( int )> aAvailableUpdateCallback ) :
         m_dialog( nullptr ),
@@ -86,6 +86,12 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
 
     try
     {
+        // For some obscure reason on MINGW, using UCRT option,
+        // m_schema_validator.set_root_schema() hangs without switching to locale "C"
+        #if defined(__MINGW32__) && defined(_UCRT)
+        LOCALE_IO dummy;
+        #endif
+
         schema_stream >> schema;
         m_schema_validator.set_root_schema( schema );
     }
