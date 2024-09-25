@@ -263,6 +263,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( EE_ACTIONS::drawRectangle );
     placeMenu->Add( EE_ACTIONS::drawCircle );
     placeMenu->Add( EE_ACTIONS::drawArc );
+    placeMenu->Add( EE_ACTIONS::drawBezier );
     placeMenu->Add( EE_ACTIONS::drawLines );
     placeMenu->Add( EE_ACTIONS::placeImage );
 

@@ -163,6 +163,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     }
 
     // Set up toolbar
+    // clang-format off
     m_drawToolBar->Add( ACTIONS::selectionTool,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::highlightNetTool,       ACTION_TOOLBAR::TOGGLE );
 
@@ -190,9 +191,11 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::drawRectangle,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawCircle,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawArc,                ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawBezier,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::deleteTool,                ACTION_TOOLBAR::TOGGLE );
+    // clang-format on
 
     m_drawToolBar->KiRealize();
 }

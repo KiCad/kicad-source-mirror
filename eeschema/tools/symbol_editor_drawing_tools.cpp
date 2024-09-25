@@ -863,15 +863,18 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
 void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
 {
+    // clang-format off
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     EE_ACTIONS::placeSymbolPin.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     EE_ACTIONS::placeSymbolText.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawRectangle.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawCircle.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawArc.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawBezier.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolLines.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolPolygon.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox, EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,       EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics,    EE_ACTIONS::importGraphics.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem,    EE_ACTIONS::repeatDrawItem.MakeEvent() );
+    // clang-format on
 }

@@ -490,7 +490,7 @@ void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
     // Defer the second size capture
     CallAfter([this]() {
         CaptureHierarchyPaneSize();
-    });   
+    });
 }
 
 
@@ -803,6 +803,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::drawRectangle );
     CURRENT_TOOL( EE_ACTIONS::drawCircle );
     CURRENT_TOOL( EE_ACTIONS::drawArc );
+    CURRENT_TOOL( EE_ACTIONS::drawBezier );
     CURRENT_TOOL( EE_ACTIONS::drawLines );
     CURRENT_TOOL( EE_ACTIONS::placeSchematicText );
     CURRENT_TOOL( EE_ACTIONS::drawTextBox );

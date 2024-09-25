@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2023 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EESCHEMA_ACTIONS_H
-#define EESCHEMA_ACTIONS_H
+#pragma once
 
 #include <tool/tool_action.h>
 #include <tool/actions.h>
@@ -103,6 +102,7 @@ public:
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawCircle;
     static TOOL_ACTION drawArc;
+    static TOOL_ACTION drawBezier;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
     static TOOL_ACTION undoLastSegment;
@@ -306,5 +306,3 @@ public:
     // Drag and drop
     static TOOL_ACTION ddAppendFile;
 };
-
-#endif

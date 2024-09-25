@@ -3153,6 +3153,7 @@ int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
 
 void SCH_DRAWING_TOOLS::setTransitions()
 {
+    // clang-format off
     Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placeSymbol.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placePower.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeNoConnect.MakeEvent() );
@@ -3171,6 +3172,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawRectangle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawBezier.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawTextBox.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawRuleArea,        EE_ACTIONS::drawRuleArea.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawTable,           EE_ACTIONS::drawTable.MakeEvent() );
@@ -3178,4 +3180,5 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::ImportGraphics,      EE_ACTIONS::importGraphics.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SyncSheetsPins,      EE_ACTIONS::syncSheetPins.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SyncAllSheetsPins,   EE_ACTIONS::syncAllSheetsPins.MakeEvent() );
+    // clang-format on
 }

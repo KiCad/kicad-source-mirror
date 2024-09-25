@@ -22,12 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tools/ee_actions.h"
+
 #include <bitmaps.h>
 #include <core/typeinfo.h>
 #include <layer_ids.h>
 #include <sch_bitmap.h>
 #include <sch_line_wire_bus_tool.h>
-#include <tools/ee_actions.h>
 #include <tool/tool_action.h>
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -596,6 +597,14 @@ TOOL_ACTION EE_ACTIONS::drawArc( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_arc )
         .Flags( AF_ACTIVATE )
         .Parameter( SHAPE_T::ARC ) );
+
+TOOL_ACTION EE_ACTIONS::drawBezier( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawBezier" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Bezier Curve" ) )
+        .Icon( BITMAPS::add_bezier )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::BEZIER ) );
 
 TOOL_ACTION EE_ACTIONS::placeImage( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeImage" )
