@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-24 16:15+0000\n"
+"PO-Revision-Date: 2024-09-25 17:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -23856,7 +23856,6 @@ msgid "Skip this version"
 msgstr "このバージョンをスキップ"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
-#, fuzzy
 msgid ""
 "Ignores the update notice for the announced new version. Additional update "
 "notes will be displayed for newer versions."
@@ -26022,7 +26021,7 @@ msgid "Linear resistance:"
 msgstr "線形抵抗:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "100% の表皮深さの場合の周波数:"
 
