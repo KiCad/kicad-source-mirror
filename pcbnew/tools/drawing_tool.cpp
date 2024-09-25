@@ -37,6 +37,8 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <import_gfx/dialog_import_graphics.h>
+#include <preview_items/arc_assistant.h>
+#include <preview_items/bezier_assistant.h>
 #include <preview_items/two_point_assistant.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <ratsnest/ratsnest_data.h>
@@ -72,7 +74,6 @@
 #include <pcb_tablecell.h>
 #include <pcb_dimension.h>
 #include <pcbnew_id.h>
-#include <preview_items/arc_assistant.h>
 #include <scoped_set_reset.h>
 #include <string_utils.h>
 #include <zone.h>
@@ -537,6 +538,45 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         arc->SetFlags( IS_NEW );
 
         startingPoint = std::nullopt;
+    }
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
+{
+    if( m_isFootprintEditor && !m_frame->GetModel() )
+        return 0;
+
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    BOARD_COMMIT            commit( m_frame );
+    SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::BEZIER );
+    OPT_VECTOR2I            startingPoint, startingC1;
+
+    m_frame->PushTool( aEvent );
+    Activate();
+
+    if( aEvent.HasPosition() )
+        startingPoint = aEvent.Position();
+
+    while( std::unique_ptr<PCB_SHAPE> bezier = drawOneBezier( aEvent, startingPoint, startingC1 ) )
+    {
+        PCB_SHAPE& bezierRef = *bezier;
+        commit.Add( bezier.release() );
+        commit.Push( _( "Draw Bezier" ) );
+
+        startingPoint = bezierRef.GetEnd();
+
+        // Mirror the control point across the starting point to get
+        // a tangent control point
+        startingC1 = *startingPoint - ( bezierRef.GetBezierC2() - *startingPoint );
+
+        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, &bezierRef );
     }
 
     return 0;
@@ -2746,6 +2786,333 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 }
 
 
+/**
+ * Update a bezier PCB_SHAPE from the current state of a Bezier Geometry Manager.
+ */
+static void updateBezierFromConstructionMgr( const KIGFX::PREVIEW::BEZIER_GEOM_MANAGER& aMgr,
+                                             PCB_SHAPE&                                 aBezier )
+{
+    VECTOR2I vec = aMgr.GetStart();
+
+    aBezier.SetStart( vec );
+    aBezier.SetBezierC1( aMgr.GetControlC1() );
+    aBezier.SetEnd( aMgr.GetEnd() );
+    aBezier.SetBezierC2( aMgr.GetControlC2() );
+
+    // Need this for the length preview to work
+    aBezier.RebuildBezierToSegmentsPointsList( ARC_HIGH_DEF );
+}
+
+
+std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aTool,
+                                                        const OPT_VECTOR2I& aStartingPoint,
+                                                        const OPT_VECTOR2I& aStartingControl1Point )
+{
+    std::unique_ptr<PCB_SHAPE> bezier = std::make_unique<PCB_SHAPE>( m_frame->GetModel() );
+    bezier->SetShape( SHAPE_T::BEZIER );
+    bezier->SetFlags( IS_NEW );
+
+    if( m_layer != m_frame->GetActiveLayer() )
+    {
+        m_layer = m_frame->GetActiveLayer();
+        m_stroke.SetWidth( m_frame->GetDesignSettings().GetLineThickness( m_layer ) );
+        m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+        m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+    }
+
+    // Turn shapes on if they are off, so that the created object will be visible after completion
+    m_frame->SetObjectVisible( LAYER_SHAPES );
+
+    // Arc geometric construction manager
+    KIGFX::PREVIEW::BEZIER_GEOM_MANAGER bezierManager;
+
+    // Arc drawing assistant overlay
+    KIGFX::PREVIEW::BEZIER_ASSISTANT bezierAsst( bezierManager, pcbIUScale,
+                                                 m_frame->GetUserUnits() );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    PCB_SELECTION preview;
+    m_view->Add( &preview );
+    m_view->Add( &bezierAsst );
+    PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+
+    auto setCursor = [&]()
+    {
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+    };
+
+    auto cleanup = [&]()
+    {
+        preview.Clear();
+        bezier.reset();
+    };
+
+    m_controls->ShowCursor( true );
+    m_controls->ForceCursorPosition( false );
+    // Set initial cursor
+    setCursor();
+
+    // We need to know when the bezier manager has started actually adding points
+    // but which point it started with depends on whether we were passed a starting point
+    KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::BEZIER_STEPS startedAfterStep =
+            KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_START;
+    const auto started = [&]()
+    {
+        return bezierManager.GetStep() > startedAfterStep;
+    };
+    bool cancelled = false;
+    bool priming = false;
+
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
+
+    // Load in one or two points if they were passed in
+    if( aStartingPoint )
+    {
+        priming = true;
+        if( aStartingControl1Point )
+        {
+            bezierManager.AddPoint( *aStartingPoint, true );
+            bezierManager.AddPoint( *aStartingControl1Point, true );
+            m_toolMgr->PrimeTool( *aStartingControl1Point );
+            startedAfterStep = KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END;
+        }
+        else
+        {
+            m_toolMgr->PrimeTool( *aStartingPoint );
+            startedAfterStep = KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_CONTROL1;
+        }
+    }
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        if( started() )
+            m_frame->SetMsgPanel( bezier.get() );
+
+        setCursor();
+
+        bezier->SetLayer( m_layer );
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        VECTOR2I cursorPos = GetClampedCoords(
+                grid.BestSnapAnchor( m_controls->GetMousePosition(), bezier.get(), GRID_GRAPHICS ),
+                COORDS_PADDING );
+        m_controls->ForceCursorPosition( true, cursorPos );
+
+        if( evt->IsCancelInteractive() || ( started() && evt->IsAction( &ACTIONS::undo ) ) )
+        {
+            cleanup();
+
+            if( !started() )
+            {
+                // We've handled the cancel event.  Don't cancel other tools
+                evt->SetPassEvent( false );
+                m_frame->PopTool( aTool );
+                cancelled = true;
+            }
+
+            break;
+        }
+        else if( evt->IsActivate() )
+        {
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                cleanup();
+                // leave ourselves on the stack so we come back after the move
+                cancelled = true;
+                break;
+            }
+            else
+            {
+                cleanup();
+                m_frame->PopTool( aTool );
+                cancelled = true;
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !started() )
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+
+                m_controls->SetAutoPan( true );
+                m_controls->CaptureCursor( true );
+
+                // Init the new item attributes
+                // (non-geometric, those are handled by the manager)
+                bezier->SetShape( SHAPE_T::BEZIER );
+                bezier->SetStroke( m_stroke );
+
+                if( !m_view->IsLayerVisible( m_layer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
+
+                frame()->SetMsgPanel( bezier.get() );
+            }
+
+            if( !priming )
+                bezierManager.AddPoint( cursorPos, true );
+            else
+                priming = false;
+
+            if( bezierManager.GetStep() == KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
+            {
+                preview.Add( bezier.get() );
+            }
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
+        {
+            bezierManager.RemoveLastPoint();
+
+            if( bezierManager.GetStep() < KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
+            {
+                preview.Remove( bezier.get() );
+            }
+        }
+        else if( evt->IsMotion() )
+        {
+            // set angle snap
+            // bezierManager.SetAngleSnap( Is45Limited() );
+
+            // update, but don't step the manager state
+            bezierManager.AddPoint( cursorPos, false );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
+        {
+            if( m_layer != m_frame->GetActiveLayer() )
+            {
+                m_layer = m_frame->GetActiveLayer();
+                m_stroke.SetWidth( m_frame->GetDesignSettings().GetLineThickness( m_layer ) );
+                m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
+                m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+            }
+
+            if( bezier )
+            {
+                if( !m_view->IsLayerVisible( m_layer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
+
+                bezier->SetLayer( m_layer );
+                bezier->SetStroke( m_stroke );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( bezier.get() );
+            }
+            else
+            {
+                evt->SetPassEvent();
+            }
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            // Don't show the edit panel if we can't represent the arc with it
+            if( ( bezierManager.GetStep() >= KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END ) )
+            {
+                frame()->OnEditItemRequest( bezier.get() );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( bezier.get() );
+                break;
+            }
+            else
+            {
+                evt->SetPassEvent();
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            if( !bezier )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu->ShowContextMenu( selection() );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
+        {
+            m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
+
+            if( bezier )
+            {
+                bezier->SetStroke( m_stroke );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( bezier.get() );
+            }
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
+        {
+            if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
+            {
+                m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
+
+                if( bezier )
+                {
+                    bezier->SetStroke( m_stroke );
+                    m_view->Update( &preview );
+                    frame()->SetMsgPanel( bezier.get() );
+                }
+            }
+        }
+        else if( evt->IsAction( &ACTIONS::updateUnits ) )
+        {
+            bezierAsst.SetUnits( frame()->GetUserUnits() );
+            m_view->Update( &bezierAsst );
+            evt->SetPassEvent();
+        }
+        else if( started()
+                 && ( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                      || evt->IsAction( &ACTIONS::redo ) ) )
+        {
+            wxBell();
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+
+        if( bezierManager.IsComplete() )
+        {
+            break;
+        }
+        else if( bezierManager.HasGeometryChanged() )
+        {
+            updateBezierFromConstructionMgr( bezierManager, *bezier );
+            m_view->Update( &preview );
+            m_view->Update( &bezierAsst );
+
+            // Once we are receiving end points, we can show the bezier in the preview
+            if( bezierManager.GetStep() >= KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
+                frame()->SetMsgPanel( bezier.get() );
+            else
+                frame()->SetMsgPanel( board() );
+        }
+    }
+
+    preview.Remove( bezier.get() );
+    m_view->Remove( &bezierAsst );
+    m_view->Remove( &preview );
+
+    if( selection().Empty() )
+        m_frame->SetMsgPanel( board() );
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
+    m_controls->ForceCursorPosition( false );
+
+    if( cancelled )
+        return nullptr;
+
+    return bezier;
+};
+
 bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
 {
     bool clearSelection = false;
@@ -3681,7 +4048,7 @@ const unsigned int DRAWING_TOOL::WIDTH_STEP = pcbIUScale.mmToIU( 0.1 );
 
 void DRAWING_TOOL::setTransitions()
 {
-
+    // clang-format off
     Go( &DRAWING_TOOL::PlaceStackup,          PCB_ACTIONS::placeStackup.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceCharacteristics,  PCB_ACTIONS::placeCharacteristics.MakeEvent() );
     Go( &DRAWING_TOOL::DrawLine,              PCB_ACTIONS::drawLine.MakeEvent() );
@@ -3689,6 +4056,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawRectangle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle,            PCB_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArc.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawBezier,            PCB_ACTIONS::drawBezier.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawAlignedDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawOrthogonalDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawCenterDimension.MakeEvent() );
@@ -3711,4 +4079,5 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSingleTrack.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneDiffPair.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSkew.MakeEvent() );
+    // clang-format on
 }

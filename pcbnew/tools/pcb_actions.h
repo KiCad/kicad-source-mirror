@@ -203,6 +203,7 @@ public:
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawCircle;
     static TOOL_ACTION drawArc;
+    static TOOL_ACTION drawBezier;
     static TOOL_ACTION placeReferenceImage;
     static TOOL_ACTION placeText;
     static TOOL_ACTION drawTextBox;

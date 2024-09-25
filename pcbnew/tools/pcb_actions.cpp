@@ -142,6 +142,14 @@ TOOL_ACTION PCB_ACTIONS::drawArc( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_arc )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::drawBezier( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.bezier" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'B' )
+        .FriendlyName( _( "Draw Bezier Curve" ) )
+        .Icon( BITMAPS::add_bezier )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION PCB_ACTIONS::placeCharacteristics( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.placeCharacteristics" )
         .Scope( AS_GLOBAL )

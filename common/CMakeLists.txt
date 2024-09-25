@@ -459,6 +459,8 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/anchor_debug.cpp
     preview_items/arc_assistant.cpp
     preview_items/arc_geom_manager.cpp
+    preview_items/bezier_assistant.cpp
+    preview_items/bezier_geom_manager.cpp
     preview_items/centreline_rect_item.cpp
     preview_items/construction_geom.cpp
     preview_items/draw_context.cpp
