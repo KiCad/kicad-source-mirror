@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-22 05:40+0000\n"
+"PO-Revision-Date: 2024-09-27 02:15+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -23798,7 +23798,7 @@ msgstr "在\"访达\"中显示工程文件夹"
 
 #: kicad/menubar.cpp:277
 msgid "Open project directory in file explorer"
-msgstr "在文件资源管理器中打开工程目录"
+msgstr "在文件管理器中打开工程目录"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
@@ -24375,7 +24375,7 @@ msgstr "在\"访达\"窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:859
 msgid "Open Directory in File Explorer"
-msgstr "在文件资源管理器中打开目录"
+msgstr "在文件管理器中打开目录"
 
 #: kicad/project_tree_pane.cpp:860 pcbnew/tools/pcb_actions.cpp:988
 msgid "Opens the directory in the default system file manager"
@@ -24387,7 +24387,7 @@ msgstr "在\"访达\"窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:869
 msgid "Open Directories in File Explorer"
-msgstr "在文件资源管理器中打开目录"
+msgstr "在文件管理器中打开目录"
 
 #: kicad/project_tree_pane.cpp:870
 msgid "Opens the directories in the default system file manager"
