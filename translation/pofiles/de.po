@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-23 10:15+0000\n"
+"PO-Revision-Date: 2024-09-27 02:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -5340,7 +5340,7 @@ msgstr "Knotenpunkt"
 
 #: common/eda_item.cpp:369
 msgid "No-Connect Flag"
-msgstr "Keine-Verbindung-Kennzeichnung"
+msgstr "'keine Verbindung'-Kennzeichnung"
 
 #: common/eda_item.cpp:370
 msgid "Wire Entry"
@@ -15197,11 +15197,11 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:79
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "Ein Pin mit einer Keine-Verbindung-Kennzeichnung ist verbunden"
+msgstr "Ein Pin mit einer 'keine Verbindung'-Kennzeichnung ist verbunden"
 
 #: eeschema/erc_item.cpp:83
 msgid "Unconnected \"no connection\" flag"
-msgstr "Unverbundene Keine-Verbindung-Kennzeichnung"
+msgstr "Unverbundene 'keine Verbindung'-Kennzeichnung"
 
 #: eeschema/erc_item.cpp:87
 msgid "Label not connected to anything"
@@ -20613,7 +20613,7 @@ msgstr "Spannungssymbole hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:434 eeschema/tools/sch_drawing_tools.cpp:966
 msgid "Add No Connect Flag"
-msgstr "Keine-Verbindung-Kennzeichnung hinzufügen"
+msgstr "'keine Verbindung'-Kennzeichnung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:435
 msgid "Draw no-connection flags"
