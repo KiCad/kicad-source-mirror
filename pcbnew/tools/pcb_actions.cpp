@@ -93,7 +93,8 @@ TOOL_ACTION PCB_ACTIONS::outsetItems( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Convert.outsetItems" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Create Outsets from Selection" ) )
-        .Tooltip( _( "Create outset lines from the selected item" ) ) );
+        .Tooltip( _( "Create outset lines from the selected item" ) )
+        .Icon( BITMAPS::outset_from_selection ) );
 
 
 // DRAWING_TOOL
