@@ -2502,7 +2502,9 @@ bool PCB_POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
     if( type == PCB_SHAPE_T )
     {
         const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
-        return shape.GetShape() == SHAPE_T::SEGMENT || shape.GetShape() == SHAPE_T::POLY;
+        const SHAPE_T    shapeType = shape.GetShape();
+        return shapeType == SHAPE_T::SEGMENT || shapeType == SHAPE_T::POLY
+               || shapeType == SHAPE_T::ARC;
     }
 
     return false;
@@ -2675,28 +2677,59 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_ZONE_T )
             static_cast<ZONE*>( item )->HatchBorder();
 
-
         commit.Push( _( "Add Zone Corner" ) );
     }
-    else if( graphicItem && graphicItem->GetShape() == SHAPE_T::SEGMENT )
+    else if( graphicItem )
     {
-        commit.Modify( graphicItem );
+        switch( graphicItem->GetShape() )
+        {
+        case SHAPE_T::SEGMENT:
+        {
+            commit.Modify( graphicItem );
 
-        SEG      seg( graphicItem->GetStart(), graphicItem->GetEnd() );
-        VECTOR2I nearestPoint = seg.NearestPoint( cursorPos );
+            SEG      seg( graphicItem->GetStart(), graphicItem->GetEnd() );
+            VECTOR2I nearestPoint = seg.NearestPoint( cursorPos );
 
-        // Move the end of the line to the break point..
-        graphicItem->SetEnd( VECTOR2I( nearestPoint.x, nearestPoint.y ) );
+            // Move the end of the line to the break point..
+            graphicItem->SetEnd( nearestPoint );
 
-        // and add another one starting from the break point
-        PCB_SHAPE* newSegment = new PCB_SHAPE( *graphicItem );
+            // and add another one starting from the break point
+            auto newSegment = std::make_unique<PCB_SHAPE>( *graphicItem );
 
-        newSegment->ClearSelected();
-        newSegment->SetStart( VECTOR2I( nearestPoint.x, nearestPoint.y ) );
-        newSegment->SetEnd( VECTOR2I( seg.B.x, seg.B.y ) );
+            newSegment->ClearSelected();
+            newSegment->SetStart( nearestPoint );
+            newSegment->SetEnd( VECTOR2I( seg.B.x, seg.B.y ) );
 
-        commit.Add( newSegment );
-        commit.Push( _( "Split Segment" ) );
+            commit.Add( newSegment.release() );
+            commit.Push( _( "Split Segment" ) );
+            break;
+        }
+        case SHAPE_T::ARC:
+        {
+            commit.Modify( graphicItem );
+
+            const SHAPE_ARC arc( graphicItem->GetStart(), graphicItem->GetArcMid(),
+                                 graphicItem->GetEnd(), 0 );
+            const VECTOR2I  nearestPoint = arc.NearestPoint( cursorPos );
+
+            // Move the end of the arc to the break point..
+            graphicItem->SetEnd( nearestPoint );
+
+            // and add another one starting from the break point
+            auto newArc = std::make_unique<PCB_SHAPE>( *graphicItem );
+
+            newArc->ClearSelected();
+            newArc->SetEnd( arc.GetP1() );
+            newArc->SetStart( nearestPoint );
+
+            commit.Add( newArc.release() );
+            commit.Push( _( "Split Arc" ) );
+            break;
+        }
+        default:
+            // No split implemented for other shapes
+            break;
+        }
     }
 
     updatePoints();
