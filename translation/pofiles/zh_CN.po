@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-23 12:40+0000\n"
+"PO-Revision-Date: 2024-09-26 20:16+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -3850,14 +3850,14 @@ msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
-"文件资源管理器命令\n"
+"文件管理器命令\n"
 "例:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
-msgstr "文件资源管理器命令, 在输入的最后必须加上后缀 '%s'。"
+msgstr "文件管理器命令, 在输入的最后必须加上后缀 '%s'。"
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -7734,11 +7734,11 @@ msgstr "使用文本编辑器打开库文件"
 
 #: common/tool/actions.cpp:82
 msgid "Open in file explorer..."
-msgstr "在文件资源管理器中打开文件..."
+msgstr "在文件管理器中打开文件..."
 
 #: common/tool/actions.cpp:83
 msgid "Open a library file with system file explorer"
-msgstr "使用系统文件资源管理器打开库文件"
+msgstr "使用系统文件管理器打开库文件"
 
 #: common/tool/actions.cpp:92
 msgid "Save changes"
@@ -22737,7 +22737,7 @@ msgstr "未选中符号库。"
 #: pcbnew/tools/footprint_editor_control.cpp:613
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
-msgstr "通用设置中文件资源管理器的参数 '%F' 缺失/不完整。"
+msgstr "通用设置中文件管理器的参数 '%F' 缺失/不完整。"
 
 #: eeschema/tools/symbol_editor_control.cpp:332
 #: pcbnew/tools/footprint_editor_control.cpp:638
@@ -25482,7 +25482,7 @@ msgstr "在\"访达\"中显示工程文件夹"
 
 #: kicad/menubar.cpp:279
 msgid "Open project directory in file explorer"
-msgstr "在文件资源管理器中打开工程目录"
+msgstr "在文件管理器中打开工程目录"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
@@ -26046,7 +26046,7 @@ msgstr "在\"访达\"窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:862
 msgid "Open Directory in File Explorer"
-msgstr "在文件资源管理器中打开目录"
+msgstr "在文件管理器中打开目录"
 
 #: kicad/project_tree_pane.cpp:863 pcbnew/tools/pcb_actions.cpp:963
 msgid "Opens the directory in the default system file manager"
@@ -26058,7 +26058,7 @@ msgstr "在\"访达\"窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:872
 msgid "Open Directories in File Explorer"
-msgstr "在文件资源管理器中打开目录"
+msgstr "在文件管理器中打开目录"
 
 #: kicad/project_tree_pane.cpp:873
 msgid "Opens the directories in the default system file manager"
