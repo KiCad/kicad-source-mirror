@@ -686,7 +686,19 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
                         "sheet path '%s'.",
                         symbol->m_Uuid.AsString(), PathHumanReadable( false ) );
 
-            symbolInstance.m_Reference = UTIL::GetRefDesUnannotated( symbol->GetPrefix() );
+            // Legacy schematics that are not shared do not contain separate instance data.
+            // The symbol refrence and unit are saved in the reference field and unit entries.
+            if( ( LastScreen()->GetRefCount() <= 1 ) &&
+                ( LastScreen()->GetFileFormatVersionAtLoad() <= 20200310 ) )
+            {
+                symbolInstance.m_Reference =
+                        symbol->GetField( REFERENCE_FIELD )->GetShownText( this, true );
+            }
+            else
+            {
+                symbolInstance.m_Reference = UTIL::GetRefDesUnannotated( symbol->GetPrefix() );
+            }
+
             symbolInstance.m_ProjectName = aProjectName;
             symbolInstance.m_Path = Path();
             symbol->AddHierarchicalReference( symbolInstance );
