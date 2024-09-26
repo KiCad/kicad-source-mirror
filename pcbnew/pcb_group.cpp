@@ -27,6 +27,7 @@
 #include <board.h>
 #include <board_item.h>
 #include <footprint.h>
+#include <pcb_generator.h>
 #include <pcb_group.h>
 #include <confirm.h>
 #include <widgets/msgpanel.h>
@@ -210,6 +211,8 @@ PCB_GROUP* PCB_GROUP::DeepClone() const
     {
         if( member->Type() == PCB_GROUP_T )
             newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepClone() );
+        else if( member->Type() == PCB_GENERATOR_T )
+            newGroup->AddItem( static_cast<PCB_GENERATOR*>( member )->DeepClone() );
         else
             newGroup->AddItem( static_cast<BOARD_ITEM*>( member->Clone() ) );
     }
@@ -415,7 +418,7 @@ void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
         {
             aFunction( item );
 
-            if( item->Type() == PCB_GROUP_T )
+            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
                 item->RunOnDescendants( aFunction, aDepth + 1 );
         }
     }
