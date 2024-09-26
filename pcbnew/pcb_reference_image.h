@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 jean-pierre.charras
  * Copyright (C) 2022 Mike Williams
- * Copyright (C) 2011-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_REFERENCE_IMAGE_H
-#define PCB_REFERENCE_IMAGE_H
-
+#pragma once
 
 #include <board_item.h>
 #include <bitmap_base.h>
@@ -42,7 +40,7 @@ public:
 
     PCB_REFERENCE_IMAGE( const PCB_REFERENCE_IMAGE& aPcbBitmap );
 
-    ~PCB_REFERENCE_IMAGE() { delete m_bitmapBase; }
+    ~PCB_REFERENCE_IMAGE();
 
     PCB_REFERENCE_IMAGE& operator=( const BOARD_ITEM& aItem );
 
@@ -132,6 +130,12 @@ public:
     VECTOR2I GetPosition() const override { return m_pos; }
     void     SetPosition( const VECTOR2I& aPosition ) override { m_pos = aPosition; }
 
+    /**
+     * Get the center of scaling, etc, relative to the image center (GetPosition()).
+     */
+    VECTOR2I GetTransformOriginOffset() const { return m_transformOriginOffset; }
+    void SetTransformOriginOffset( const VECTOR2I& aCenter ) { m_transformOriginOffset = aCenter; }
+
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
@@ -146,12 +150,18 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
+    // Property manager interfaces
+    int  GetTransformOriginOffsetX() const { return m_transformOriginOffset.x; }
+    void SetTransformOriginOffsetX( int aX ) { m_transformOriginOffset.x = aX; }
+    int  GetTransformOriginOffsetY() const { return m_transformOriginOffset.y; }
+    void SetTransformOriginOffsetY( int aY ) { m_transformOriginOffset.y = aY; }
+
 protected:
     void swapData( BOARD_ITEM* aItem ) override;
 
 private:
-    VECTOR2I     m_pos;   // XY coordinates of center of the bitmap
+    VECTOR2I m_pos; // XY coordinates of center of the bitmap
+    ///< Center of scaling, etc, relative to the image center
+    VECTOR2I     m_transformOriginOffset;
     BITMAP_BASE* m_bitmapBase; // the BITMAP_BASE item
 };
-
-#endif // PCB_REFERENCE_IMAGE_H

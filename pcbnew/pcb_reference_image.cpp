@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 jean-pierre.charras
  * Copyright (C) 2022 Mike Williams
- * Copyright (C) 2011-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcb_reference_image.h"
+
 #include <pcb_draw_panel_gal.h>
 #include <plotters/plotter.h>
 #include <settings/color_settings.h>
@@ -33,7 +35,6 @@
 #include <eda_draw_frame.h>
 #include <core/mirror.h>
 #include <board.h>
-#include <pcb_reference_image.h>
 #include <trigo.h>
 #include <geometry/shape_rect.h>
 
@@ -43,23 +44,28 @@ using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
 
 
-
-PCB_REFERENCE_IMAGE::PCB_REFERENCE_IMAGE( BOARD_ITEM* aParent, const VECTOR2I& pos,
+PCB_REFERENCE_IMAGE::PCB_REFERENCE_IMAGE( BOARD_ITEM* aParent, const VECTOR2I& aPos,
                                           PCB_LAYER_ID aLayer ) :
-        BOARD_ITEM( aParent, PCB_REFERENCE_IMAGE_T, aLayer )
+        BOARD_ITEM( aParent, PCB_REFERENCE_IMAGE_T, aLayer ), m_pos( aPos ),
+        m_transformOriginOffset( 0, 0 )
 {
-    m_pos = pos;
     m_bitmapBase = new BITMAP_BASE();
     m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
 }
 
 
 PCB_REFERENCE_IMAGE::PCB_REFERENCE_IMAGE( const PCB_REFERENCE_IMAGE& aPCBBitmap ) :
-        BOARD_ITEM( aPCBBitmap )
+        BOARD_ITEM( aPCBBitmap ), m_pos( aPCBBitmap.m_pos ),
+        m_transformOriginOffset( aPCBBitmap.m_transformOriginOffset )
 {
-    m_pos = aPCBBitmap.m_pos;
     m_bitmapBase = new BITMAP_BASE( *aPCBBitmap.m_bitmapBase );
     m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
+}
+
+
+PCB_REFERENCE_IMAGE::~PCB_REFERENCE_IMAGE()
+{
+    delete m_bitmapBase;
 }
 
 
@@ -350,6 +356,20 @@ static struct PCB_REFERENCE_IMAGE_DESC
         propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, double>( _HKI( "Scale" ),
                              &PCB_REFERENCE_IMAGE::SetImageScale,
                              &PCB_REFERENCE_IMAGE::GetImageScale ),
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
+                                     _HKI( "Transform Offset X" ),
+                                     &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetX,
+                                     &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetX,
+                                     PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
+                                     _HKI( "Transform Offset Y" ),
+                                     &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetY,
+                                     &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetY,
+                                     PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                              groupImage );
 
         // For future use
