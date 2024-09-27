@@ -70,8 +70,11 @@ public:
         if( row < 0 || col < 0 || col >= 2 )
             return;
 
-        if( row >= m_layerCount )
-            m_layers.resize( row + 1 );
+        // Ensure there is room in m_layers to store value
+        while( row >= (int)m_layers.size() )
+        {
+            m_layers.emplace_back( F_Cu, F_Cu );
+        }
 
         col == 0 ? m_layers[row].first = ToLAYER_ID( value )
                  : m_layers[row].second = ToLAYER_ID( value );
@@ -123,7 +126,6 @@ bool DIALOG_SWAP_LAYERS::TransferDataToWindow()
             attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_parent ) );
             attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_parent, LSET::AllNonCuMask() ) );
             m_grid->SetAttr( row, 1, attr );
-
             m_grid->GetTable()->SetValueAsLong( row, 0, (long) layer );
             m_grid->GetTable()->SetValueAsLong( row, 1, (long) layer );
 
