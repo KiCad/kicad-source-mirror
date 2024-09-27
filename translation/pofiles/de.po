@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-26 20:16+0000\n"
+"PO-Revision-Date: 2024-09-28 08:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -11793,9 +11793,8 @@ msgid "Position"
 msgstr "Position"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "Voreingestellter Referenzbezeichner:"
+msgstr "Start Referenzbezeichner:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
@@ -13313,9 +13312,11 @@ msgstr "Stammblatt"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:272
 #: eeschema/dialogs/dialog_schematic_setup.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Error fetching bus aliases.  Could not load schematic '%s'."
-msgstr "Zu wenig Speicher zum Laden der Schaltplandatei \"%s\"."
+msgstr ""
+"Fehler beim Abrufen der Busaliase.  Konnte Schaltplandatei \"%s\" nicht "
+"laden."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties.cpp:85
@@ -21942,9 +21943,8 @@ msgid "Draw Hierarchical Sheets"
 msgstr "Hierarchische Schaltpläne zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:503
-#, fuzzy
 msgid "Draw Sheet Copy"
-msgstr "Zeichenblatt"
+msgstr "Zeichenblattkopie zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:504
 msgid "Copy sheet into project and draw on current sheet"
@@ -21968,7 +21968,7 @@ msgstr "Schaltplanseite in Projekt importieren"
 
 #: eeschema/tools/ee_actions.cpp:546
 msgid "Place Global Labels"
-msgstr "Globale Bezeichner hinzufügen"
+msgstr "Globale Bezeichner einzufügen"
 
 #: eeschema/tools/ee_actions.cpp:570 pcbnew/tools/pcb_actions.cpp:183
 msgid "Draw Tables"
@@ -21988,14 +21988,12 @@ msgid "Draw Arcs"
 msgstr "Kreisbögen zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:601
-#, fuzzy
 msgid "Place Images"
-msgstr "Bild hinzufügen"
+msgstr "Bilder einzufügen"
 
 #: eeschema/tools/ee_actions.cpp:609 pcbnew/tools/pcb_actions.cpp:290
-#, fuzzy
 msgid "Draw Rule Areas"
-msgstr "Regelbereich zeichnen"
+msgstr "Regelbereiche zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:617 pcbnew/tools/pcb_actions.cpp:382
 msgid "Delete Last Point"
@@ -22010,9 +22008,8 @@ msgid "Close Outline"
 msgstr "Umriss schließen"
 
 #: eeschema/tools/ee_actions.cpp:625
-#, fuzzy
 msgid "Close the in-progress outline"
-msgstr "Schließen des in Bearbeitung befindlichen Umrisses"
+msgstr "In Bearbeitung befindlichen Umriss schließen"
 
 #: eeschema/tools/ee_actions.cpp:640
 msgid "Repeat Last Item"
@@ -22743,9 +22740,8 @@ msgid "Draw Wires"
 msgstr "Verbindungen zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:1346
-#, fuzzy
 msgid "Draw Buses"
-msgstr "%s zeichnen"
+msgstr "Busse zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:1356
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
@@ -23021,23 +23017,20 @@ msgid "Press <ESC> to cancel symbol creation."
 msgstr "Drücken Sie <ESC>, um die Erzeugung des Symbols abzubrechen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:422
-#, fuzzy
 msgid "Place Symbol"
 msgstr "Symbol einfügen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:675
-#, fuzzy
 msgid "Add design block"
-msgstr "Signale dem Plot hinzufügen"
+msgstr "Designblock einzufügen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:676
 msgid "Import Schematic Sheet Content..."
 msgstr "Schaltplanblattinhalt importieren..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:707
-#, fuzzy
 msgid "Choose Schematic"
-msgstr "Neuer Schaltplan"
+msgstr "Schaltplan auswählen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:924 pcbnew/tools/drawing_tool.cpp:659
 msgid "Press <ESC> to cancel image creation."
@@ -23142,9 +23135,9 @@ msgid "File '%s' does not exist."
 msgstr "Verzeichnis \"%s\" existiert nicht."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2861
-#, fuzzy, c-format
+#, c-format
 msgid "Could not import sheet from '%s'."
-msgstr "Konnte keine Bilddatei von \"%s\" laden."
+msgstr "Konnte Zeichenblatt von \"%s\" nicht importieren."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3023
 msgid "Modify sheet pin"
@@ -23496,14 +23489,12 @@ msgid "Repeat Pin"
 msgstr "Pin wiederholen"
 
 #: eeschema/widgets/design_block_pane.cpp:41
-#, fuzzy
 msgid "Place as sheet"
-msgstr "Einen Text hinzufügen"
+msgstr "Als Zeichenblatt einfügen"
 
 #: eeschema/widgets/design_block_pane.cpp:42
-#, fuzzy
 msgid "Keep annotations"
-msgstr "Bestehende Annotationen beibehalten"
+msgstr "Annotationen beibehalten"
 
 #: eeschema/widgets/design_block_pane.cpp:65
 #, fuzzy
@@ -23553,14 +23544,12 @@ msgid "(page %s)"
 msgstr "(Seite %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:71
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Symbolbibliotheken laden"
+msgstr "Lade Designblock-Bibliotheken"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:262
-#, fuzzy
 msgid "Updating Design Block Libraries"
-msgstr "Aktualisiere Footprintbibliotheken"
+msgstr "Aktualisiere Designblock-Bibliotheken"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:386
 #: eeschema/widgets/panel_symbol_chooser.cpp:169
@@ -24731,9 +24720,8 @@ msgid "Show DCodes"
 msgstr "DCodes anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:222
-#, fuzzy
 msgid "Show dcode numbers"
-msgstr "DCode-Nummern anzeigen"
+msgstr "dcode-Nummern anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:228
 msgid "Show with Forced Opacity Mode"
@@ -25932,9 +25920,9 @@ msgstr ""
 "Footprints überschreiben?"
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Fehler beim Speichern der Symbolbibliotheksdatei \"%s\"."
+msgstr "Fehler beim Speichern der Designblock-Bibliotheksdatei \"%s\"."
 
 #: kicad/dialogs/panel_design_block_lib_table.cpp:920
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:948
@@ -27104,7 +27092,6 @@ msgid "New Project..."
 msgstr "Neues Projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new, blank project"
 msgstr "Neues leeres Projekt erstellen"
 
@@ -27113,9 +27100,8 @@ msgid "New Project from Template..."
 msgstr "Neues Projekt aus einer Vorlage..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "Neues Symbol erstellen, abgeleitet von einem existierenden Symbol"
+msgstr "Neues, von einem vorhandenen Projekt abgeleitetes, Projekt erstellen"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 msgid "Clone Project from Repository..."
@@ -27134,19 +27120,16 @@ msgid "Close Project"
 msgstr "Projekt schließen"
 
 #: kicad/tools/kicad_manager_actions.cpp:101
-#, fuzzy
 msgid "Edit schematic in schematic editor"
-msgstr "Schaltplan im Schaltplan-Editor öffnen"
+msgstr "Schaltplan im Schaltplan-Editor bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:123
-#, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "Mit Texteditor bearbeiten"
+msgstr "Leiterplatte in Leiterplatteneditor bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:134
-#, fuzzy
 msgid "Create, delete and edit PCB footprints"
-msgstr "Footprints erstellen, löschen oder bearbeiten"
+msgstr "Footprints erstellen, löschen und bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:145
 msgid "Preview Gerber output files"
@@ -27297,9 +27280,8 @@ msgid "Application cannot start."
 msgstr "Anwendung kann nicht starten."
 
 #: kicad/tools/kicad_manager_control.cpp:907
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Bibliotheken zurücksetzen"
+msgstr "Designblock-Bibliotheken"
 
 #: kicad/update_manager.cpp:164
 msgid "Update Check"
@@ -27694,9 +27676,8 @@ msgid "Append Existing Drawing Sheet..."
 msgstr "Bestehendes Zeichnungsblatt hinzufügen..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:90
-#, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
-msgstr "Bestehendes Zeichnungsblatt in die aktuelle Datei einfügen"
+msgstr "Bestehendes Zeichnungsblatt an aktuelle Datei anhängen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid "Show Design Inspector"
@@ -33567,27 +33548,22 @@ msgid "Wra&p"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference &designators"
-msgstr "Footprint-Referenzbezeichner durchsuchen"
+msgstr "Footprint-Referenzbezeichner &durchsuchen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint &values"
 msgstr "Footprint-Werte durchsuchen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search &other text items"
 msgstr "Andere Textelemente durchsuchen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC &markers"
 msgstr "DRC-Marker durchsuchen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search &net names"
 msgstr "Netznamen durchsuchen"
 
@@ -35303,38 +35279,32 @@ msgid "Group components with their placement rule areas"
 msgstr "Bauteilplatzierungsdateien"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:51
-#, fuzzy
 msgid "Generate Multichannel Rule Areas"
-msgstr "In Regelbereich konvertieren"
+msgstr "Mehrkanal-Regelbereiche erzeugen"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
-#, fuzzy
 msgid "Target areas:"
-msgstr "Zielversatz:"
+msgstr "Zielfläche:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:61
-#, fuzzy
 msgid "Reference Rule Area:"
-msgstr "Referenz-Trennzeichen:"
+msgstr "Referenz-Regelbereich:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Copy placement"
-msgstr "Platzierung"
+msgstr "Platzierung kopieren"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
 msgid "Copy routing"
 msgstr "Routing kopieren"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:86
-#, fuzzy
 msgid "Include locked components"
-msgstr "Ge&sperrte Footprints einbeziehen"
+msgstr "Gesperrte Bauteile einbeziehen"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:89
-#, fuzzy
 msgid "Include components outside the target area"
-msgstr "Bauteile ohne Pins ausschließen"
+msgstr "Bauteile außerhalb der Zielfläche einbeziehen"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
