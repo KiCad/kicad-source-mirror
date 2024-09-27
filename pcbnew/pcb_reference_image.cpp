@@ -180,6 +180,20 @@ std::shared_ptr<SHAPE> PCB_REFERENCE_IMAGE::GetEffectiveShape( PCB_LAYER_ID aLay
 }
 
 
+void PCB_REFERENCE_IMAGE::SetImageScale( double aScale )
+{
+    const double ratio = aScale / m_bitmapBase->GetScale();
+
+    m_bitmapBase->SetScale( aScale );
+
+    const VECTOR2I currentOrigin = m_pos + m_transformOriginOffset;
+    const VECTOR2I newOffset = m_transformOriginOffset * ratio;
+
+    SetTransformOriginOffset( newOffset );
+    SetPosition( currentOrigin - newOffset );
+}
+
+
 const VECTOR2I PCB_REFERENCE_IMAGE::GetSize() const
 {
     return m_bitmapBase->GetSize();

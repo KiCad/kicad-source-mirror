@@ -67,7 +67,13 @@ public:
      */
     double GetImageScale() const { return m_bitmapBase->GetScale(); }
 
-    void SetImageScale( double aScale ) { m_bitmapBase->SetScale( aScale ); }
+    /**
+     * Set the image "zoom" value.
+     *
+     * The image is scaled such that the position of the image's
+     * transform origin is unchanged.
+     */
+    void SetImageScale( double aScale );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {

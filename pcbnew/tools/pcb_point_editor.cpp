@@ -1427,13 +1427,8 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
                 double newHeight = std::max( newSize.y, EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 50 ) );
                 ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
 
-                // What we need to do here is to scale the image by the ratio, but then
-                // also move the image so that the transform origin is in the same place
+                // Also handles the origin offset
                 bitmap->SetImageScale( bitmap->GetImageScale() * ratio );
-
-                const VECTOR2I newOffset = bitmap->GetTransformOriginOffset() * ratio;
-                bitmap->SetTransformOriginOffset( newOffset );
-                bitmap->SetPosition( xfrmOrigin - newOffset );
             }
         }
 
