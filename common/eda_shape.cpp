@@ -840,10 +840,10 @@ const BOX2I EDA_SHAPE::getBoundingBox() const
         break;
 
     case SHAPE_T::BEZIER:
-        bbox.SetOrigin( GetStart() );
-        bbox.Merge( GetBezierC1() );
-        bbox.Merge( GetBezierC2() );
-        bbox.Merge( GetEnd() );
+        // Bezier BBoxes are not trivial to compute, so we approximate it by
+        // using the bounding box of the curve (not control!) points.
+        for( const VECTOR2I& pt : m_bezierPoints )
+            bbox.Merge( pt );
         break;
 
     default:
