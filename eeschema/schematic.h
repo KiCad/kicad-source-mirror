@@ -315,6 +315,14 @@ public:
     void EmbedFonts() override;
 
     /**
+     * Return a list of schematic files in the current project that contain instance data for
+     * multiple projects.
+     *
+     * @return all of the #SCH_SCREEN objects that contain instance data for multiple projects.
+     */
+    std::set<const SCH_SCREEN*> GetSchematicsSharedByMultipleProjects() const;
+
+    /**
      * True if a SCHEMATIC exists, false if not
      */
     static bool m_IsSchematicExists;

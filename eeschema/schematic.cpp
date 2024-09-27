@@ -905,3 +905,38 @@ void SCHEMATIC::EmbedFonts()
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
     }
 }
+
+
+std::set<const SCH_SCREEN*> SCHEMATIC::GetSchematicsSharedByMultipleProjects() const
+{
+    std::set<const SCH_SCREEN*> retv;
+
+    wxCHECK( m_rootSheet, retv );
+
+    SCH_SHEET_LIST hierarchy( m_rootSheet );
+    SCH_SCREENS screens( m_rootSheet );
+
+    for( const SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( const SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
+
+            const std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = symbol->GetInstances();
+
+            for( const SCH_SYMBOL_INSTANCE& instance : symbolInstances )
+            {
+                if( !hierarchy.HasPath( instance.m_Path ) )
+                {
+                    retv.insert( screen );
+                    break;
+                }
+            }
+
+            if( retv.count( screen ) )
+                break;
+        }
+    }
+
+    return retv;
+}
