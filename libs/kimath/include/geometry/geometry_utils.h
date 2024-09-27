@@ -175,6 +175,19 @@ VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aP
 
 
 /**
+ * Check if both coordinates of a vector are within the limits of the integer type.
+ */
+template <typename T>
+inline bool IsVec2SafeXY( const VECTOR2<T>& aVec )
+{
+    constexpr T min = std::numeric_limits<int>::min();
+    constexpr T max = std::numeric_limits<int>::max();
+
+    return aVec.x > min && aVec.x < max && aVec.y > min && aVec.y < max;
+}
+
+
+/**
  * Test if any part of a line falls within the bounds of a rectangle.
  *
  * Please note that this is only accurate for lines that are one pixel wide.

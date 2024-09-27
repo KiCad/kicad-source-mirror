@@ -36,6 +36,7 @@
 #include <core/mirror.h>
 #include <board.h>
 #include <trigo.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/shape_rect.h>
 
 #include <wx/mstream.h>
@@ -165,32 +166,65 @@ double PCB_REFERENCE_IMAGE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 const BOX2I PCB_REFERENCE_IMAGE::GetBoundingBox() const
 {
     // Bitmaps are center origin, BOX2Is need top-left origin
-    VECTOR2I size = m_bitmapBase->GetSize();
-    VECTOR2I topLeft = { m_pos.x - size.x / 2, m_pos.y - size.y / 2 };
+    const VECTOR2I size = m_bitmapBase->GetSize();
+    const VECTOR2I topLeft{ m_pos.x - size.x / 2, m_pos.y - size.y / 2 };
 
-    return BOX2I( topLeft, size );
+    return BOX2I{ topLeft, size };
 }
 
 
 std::shared_ptr<SHAPE> PCB_REFERENCE_IMAGE::GetEffectiveShape( PCB_LAYER_ID aLayer,
                                                                FLASHING aFlash ) const
 {
-    BOX2I box = GetBoundingBox();
+    const BOX2I box = GetBoundingBox();
     return std::make_shared<SHAPE_RECT>( box.GetPosition(), box.GetWidth(), box.GetHeight() );
+}
+
+
+void PCB_REFERENCE_IMAGE::SetPosition( const VECTOR2I& aPos )
+{
+    const BOX2D newBox = BOX2D::ByCenter( aPos, m_bitmapBase->GetSize() );
+
+    if( !IsBOX2Safe( newBox ) )
+        return;
+
+    m_pos = aPos;
+}
+
+
+void PCB_REFERENCE_IMAGE::Move( const VECTOR2I& aMoveVector )
+{
+    // Defer to SetPosition to check the new position overflow
+    SetPosition( m_pos + aMoveVector );
 }
 
 
 void PCB_REFERENCE_IMAGE::SetImageScale( double aScale )
 {
+    if( aScale < 0 )
+        return;
+
     const double ratio = aScale / m_bitmapBase->GetScale();
 
+    const VECTOR2D currentOrigin = m_pos + m_transformOriginOffset;
+    const VECTOR2D newOffset = m_transformOriginOffset * ratio;
+    const VECTOR2D newCenter = currentOrigin - newOffset;
+    const VECTOR2D newSize = m_bitmapBase->GetSize() * ratio;
+
+    // The span of the image is limited to the size of the coordinate system
+    if( !IsVec2SafeXY( newSize ) )
+        return;
+
+    const BOX2D newBox = BOX2D::ByCenter( newCenter, newSize );
+
+    // Any overflow, just reject the call
+    if( !IsBOX2Safe( newBox ) )
+        return;
+
     m_bitmapBase->SetScale( aScale );
-
-    const VECTOR2I currentOrigin = m_pos + m_transformOriginOffset;
-    const VECTOR2I newOffset = m_transformOriginOffset * ratio;
-
-    SetTransformOriginOffset( newOffset );
-    SetPosition( currentOrigin - newOffset );
+    SetTransformOriginOffset( KiROUND( newOffset ) );
+    // Don't need to recheck the box, we just did that
+    m_pos = KiROUND( newCenter );
 }
 
 
@@ -202,7 +236,15 @@ const VECTOR2I PCB_REFERENCE_IMAGE::GetSize() const
 
 void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    MIRROR( m_pos, aCentre, aFlipDirection );
+    VECTOR2I newPos = m_pos;
+    MIRROR( newPos, aCentre, aFlipDirection );
+
+    const BOX2D newBox = BOX2D::ByCenter( newPos, m_bitmapBase->GetSize() );
+
+    if( !IsBOX2Safe( newBox ) )
+        return;
+
+    m_pos = newPos;
     m_bitmapBase->Mirror( aFlipDirection );
 }
 

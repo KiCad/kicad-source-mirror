@@ -72,6 +72,9 @@ public:
      *
      * The image is scaled such that the position of the image's
      * transform origin is unchanged.
+     *
+     * If the scale is negaive or the image would overflow the
+     * the coordinate system, nothing is updated.
      */
     void SetImageScale( double aScale );
 
@@ -119,7 +122,7 @@ public:
      */
     bool ReadImageFile( wxMemoryBuffer& aBuf );
 
-    void Move( const VECTOR2I& aMoveVector ) override { m_pos += aMoveVector; }
+    void Move( const VECTOR2I& aMoveVector ) override;
 
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
     void Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle ) override;
@@ -133,8 +136,17 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    /**
+     * Get the position of the image (this is the center of the image).
+     */
     VECTOR2I GetPosition() const override { return m_pos; }
-    void     SetPosition( const VECTOR2I& aPosition ) override { m_pos = aPosition; }
+
+    /**
+     * Set the position of the image.
+     *
+     * If this results in the image overflowing the coordinate system, nothing is updated.
+     */
+    void SetPosition( const VECTOR2I& aPosition ) override;
 
     /**
      * Get the center of scaling, etc, relative to the image center (GetPosition()).

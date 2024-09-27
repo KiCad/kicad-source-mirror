@@ -104,6 +104,14 @@ BOOST_AUTO_TEST_CASE( ByCorners )
     BOOST_CHECK( boxByCorners == boxByPosSize );
 }
 
+BOOST_AUTO_TEST_CASE( ByCentre )
+{
+    const BOX2I boxByCenter = BOX2I::ByCenter( VECTOR2I( 100, 100 ), VECTOR2I( 20, 20 ) );
+    const BOX2I boxByPosSize = BOX2I( VECTOR2I( 90, 90 ), VECTOR2I( 20, 20 ) );
+
+    BOOST_CHECK( boxByCenter == boxByPosSize );
+}
+
 BOOST_AUTO_TEST_CASE( test_closest_point_to, *boost::unit_test::tolerance( 0.000001 ) )
 {
     BOX2D box( VECTOR2D( 1, 2 ), VECTOR2D( 3, 4 ) );

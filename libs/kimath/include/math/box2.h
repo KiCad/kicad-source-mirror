@@ -72,6 +72,11 @@ public:
         return BOX2( aCorner1, aCorner2 - aCorner1 );
     }
 
+    static constexpr BOX2<Vec> ByCenter( const Vec& aCenter, const SizeVec& aSize )
+    {
+        return BOX2( aCenter - aSize / 2, aSize );
+    }
+
     constexpr void SetMaximum()
     {
         if constexpr( std::is_floating_point<coord_type>() )
@@ -916,6 +921,7 @@ private:
 /* Default specializations */
 typedef BOX2<VECTOR2I>    BOX2I;
 typedef BOX2<VECTOR2D>    BOX2D;
+typedef BOX2<VECTOR2L>    BOX2L;
 
 typedef std::optional<BOX2I> OPT_BOX2I;
 
@@ -932,6 +938,21 @@ inline constexpr BOX2I BOX2ISafe( const BOX2D& aInput )
     int64_t bottom = (int64_t) std::clamp( aInput.GetBottom(), low, high );
 
     return BOX2I( VECTOR2I( left, top ), VECTOR2L( right - left, bottom - top ) );
+}
+
+
+/**
+ * Check if a BOX2 is safe for use with BOX2D
+ * (probably BOX2D or BOX2L)
+ */
+template <typename Vec>
+inline constexpr bool IsBOX2Safe( const BOX2<Vec>& aInput )
+{
+    constexpr double high = std::numeric_limits<int>::max();
+    constexpr double low = -std::numeric_limits<int>::max();
+
+    return ( aInput.GetLeft() >= low && aInput.GetTop() >= low &&
+             aInput.GetRight() <= high && aInput.GetBottom() <= high );
 }
 
 
