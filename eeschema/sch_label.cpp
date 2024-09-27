@@ -1002,7 +1002,7 @@ const BOX2I SCH_LABEL_BASE::GetBoundingBox() const
 
     for( const SCH_FIELD& field : m_fields )
     {
-        if( field.IsVisible() )
+        if( field.IsVisible() && field.GetText() != wxEmptyString )
         {
             BOX2I fieldBBox = field.GetBoundingBox();
 
@@ -1734,6 +1734,9 @@ void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
     for( SCH_FIELD& field : m_fields )
     {
+        if( field.GetText() == wxEmptyString )
+            continue;
+
         switch( GetSpinStyle() )
         {
         default:

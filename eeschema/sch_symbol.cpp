@@ -40,6 +40,7 @@
 #include <settings/settings_manager.h>
 #include <sch_plotter.h>
 #include <string_utils.h>
+#include <sch_rule_area.h>
 
 #include <utility>
 
@@ -2869,6 +2870,38 @@ bool SCH_SYMBOL::IsNormal() const
     wxCHECK( m_part, false );
 
     return m_part->IsNormal();
+}
+
+
+std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const
+{
+    std::unordered_set<wxString> componentClass;
+
+    auto getComponentClassFields = [&]( const auto& fields )
+    {
+        for( const SCH_FIELD& field : fields )
+        {
+            if( field.GetCanonicalName() == wxT( "Component Class" ) )
+            {
+                if( field.GetShownText( aPath, false ) != wxEmptyString )
+                    componentClass.insert( field.GetShownText( aPath, false ) );
+            }
+        }
+    };
+
+    // First get component classes set on the symbol itself
+    getComponentClassFields( m_fields );
+
+    // Now get component classes set on any enclosing rule areas
+    for( const SCH_RULE_AREA* ruleArea : m_rule_areas_cache )
+    {
+        for( const SCH_DIRECTIVE_LABEL* label : ruleArea->GetDirectives() )
+        {
+            getComponentClassFields( label->GetFields() );
+        }
+    }
+
+    return componentClass;
 }
 
 

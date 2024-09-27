@@ -133,6 +133,14 @@ protected:
     void addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheet,
                           const SCH_SHEET_LIST& aSheetList);
 
+    /**
+     * Finds all component class names attached to any sub-unit of a given symbol
+     */
+    std::vector<wxString>
+    getComponentClassNamesForAllSymbolUnits( SCH_SYMBOL*           aSymbol,
+                                             const SCH_SHEET_PATH& aSymbolSheet,
+                                             const SCH_SHEET_LIST& aSheetList );
+
     bool                m_resolveTextVars;   // Export textVar references resolved
 
 private:

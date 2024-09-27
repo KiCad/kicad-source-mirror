@@ -481,12 +481,13 @@ TOOL_ACTION EE_ACTIONS::placeLabel( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_label )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::placeClassLabel( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawing.placeClassLabel" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Place Net Class Directives" ) )
-        .Icon( BITMAPS::add_class_flag )
-        .Flags( AF_ACTIVATE ) );
+TOOL_ACTION
+        EE_ACTIONS::placeClassLabel( TOOL_ACTION_ARGS()
+                                             .Name( "eeschema.InteractiveDrawing.placeClassLabel" )
+                                             .Scope( AS_GLOBAL )
+                                             .FriendlyName( _( "Place Directive Labels" ) )
+                                             .Icon( BITMAPS::add_class_flag )
+                                             .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::placeHierLabel( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeHierarchicalLabel" )

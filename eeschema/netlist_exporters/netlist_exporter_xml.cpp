@@ -414,6 +414,21 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             xsheetpath->AddAttribute( wxT( "names" ), sheet.PathHumanReadable() );
             xsheetpath->AddAttribute( wxT( "tstamps" ), sheet.PathAsString() );
 
+            // Node for component class
+            std::vector<wxString> compClassNames =
+                    getComponentClassNamesForAllSymbolUnits( symbol, sheet, sheetList );
+
+            if( compClassNames.size() > 0 )
+            {
+                XNODE* xcompclasslist;
+                xcomp->AddChild( xcompclasslist = node( wxT( "component_classes" ) ) );
+
+                for( const wxString& compClass : compClassNames )
+                {
+                    xcompclasslist->AddChild( node( wxT( "class" ), UnescapeString( compClass ) ) );
+                }
+            }
+
             XNODE* xunits; // Node for extra units
             xcomp->AddChild( xunits = node( wxT( "tstamps" ) ) );
 
@@ -442,6 +457,49 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     m_schematic->SetCurrentSheet( currentSheet );
 
     return xcomps;
+}
+
+
+std::vector<wxString> NETLIST_EXPORTER_XML::getComponentClassNamesForAllSymbolUnits(
+        SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSymbolSheet, const SCH_SHEET_LIST& aSheetList )
+{
+    std::unordered_set<wxString> compClassNames = aSymbol->GetComponentClassNames( &aSymbolSheet );
+    int                          primaryUnit = aSymbol->GetUnitSelection( &aSymbolSheet );
+
+    if( aSymbol->GetUnitCount() > 1 )
+    {
+        wxString ref = aSymbol->GetRef( &aSymbolSheet );
+
+        for( const SCH_SHEET_PATH& sheet : aSheetList )
+        {
+            for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                SCH_SYMBOL* symbol2 = static_cast<SCH_SYMBOL*>( item );
+
+                wxString ref2 = symbol2->GetRef( &sheet );
+                int      otherUnit = symbol2->GetUnitSelection( &sheet );
+
+                if( ref2.CmpNoCase( ref ) != 0 )
+                    continue;
+
+                if( otherUnit == primaryUnit )
+                    continue;
+
+                std::unordered_set<wxString> otherClassNames =
+                        symbol2->GetComponentClassNames( &sheet );
+                compClassNames.insert( otherClassNames.begin(), otherClassNames.end() );
+            }
+        }
+    }
+
+    std::vector<wxString> sortedCompClassNames( compClassNames.begin(), compClassNames.end() );
+    std::sort( sortedCompClassNames.begin(), sortedCompClassNames.end(),
+               []( const wxString& str1, const wxString& str2 )
+               {
+                   return str1.Cmp( str2 ) < 0;
+               } );
+
+    return sortedCompClassNames;
 }
 
 

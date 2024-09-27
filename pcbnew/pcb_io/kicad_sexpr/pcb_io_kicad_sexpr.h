@@ -161,7 +161,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20240617  // Table angles
 //#define SEXPR_BOARD_FILE_VERSION    20240703  // User layer types
 //#define SEXPR_BOARD_FILE_VERSION    20240706  // Embedded Files
-#define SEXPR_BOARD_FILE_VERSION      20240819  // Embedded Files - Update hash algorithm to Murmur3
+//#define SEXPR_BOARD_FILE_VERSION    20240819  // Embedded Files - Update hash algorithm to Murmur3
+#define SEXPR_BOARD_FILE_VERSION      20240928  // Component classes
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

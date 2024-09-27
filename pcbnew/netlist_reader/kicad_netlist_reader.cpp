@@ -280,13 +280,14 @@ void KICAD_NETLIST_PARSER::parseNet()
 
 void KICAD_NETLIST_PARSER::parseComponent()
 {
-   /* Parses a section like
+    /* Parses a section like
      * (comp (ref P1)
      *   (value DB25FEMALE)
      *   (footprint DB25FC)
      *   (libsource (lib conn) (part DB25))
      *   (property (name PINCOUNT) (value 25))
      *   (sheetpath (names /) (tstamps /))
+     *   (component_classes (class (name "CLASS")))
      *   (tstamp 68183921-93a5-49ac-91b0-49d05a0e1647))
      *
      * other fields (unused) are skipped
@@ -305,6 +306,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     std::vector<KIID>            uuids;
     std::map<wxString, wxString> properties;
     nlohmann::ordered_map<wxString, wxString> fields;
+    std::unordered_set<wxString>              componentClasses;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok() ) != T_RIGHT )
@@ -469,6 +471,24 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
             break;
 
+        case T_component_classes:
+        {
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                if( ( token = NextTok() ) != T_class )
+                    Expecting( T_class );
+
+                NeedSYMBOLorNUMBER();
+                componentClasses.insert( From_UTF8( CurText() ) );
+                NeedRIGHT();
+            }
+
+            break;
+        }
+
         default:
             // Skip not used data (i.e all other tokens)
             skipCurrent();
@@ -491,6 +511,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     component->SetProperties( properties );
     component->SetFields( fields );
     component->SetHumanReadablePath( humanSheetPath );
+    component->SetComponentClassNames( componentClasses );
     m_netlist->AddComponent( component );
 }
 

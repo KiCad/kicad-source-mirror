@@ -1214,6 +1214,22 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, int aNestLevel ) c
         m_out->Print( aNestLevel + 1, ")\n" );
     }
 
+    if( const COMPONENT_CLASS* compClass = aFootprint->GetComponentClass() )
+    {
+        if( !compClass->IsEmpty() )
+        {
+            m_out->Print( aNestLevel + 1, "(component_classes\n" );
+
+            for( const COMPONENT_CLASS* constituent : compClass->GetConstituentClasses() )
+            {
+                m_out->Print( aNestLevel + 2, "(class %s)\n",
+                              m_out->Quotew( constituent->GetFullName() ).c_str() );
+            }
+
+            m_out->Print( aNestLevel + 1, ")\n" );
+        }
+    }
+
     if( !aFootprint->GetFilters().empty() )
     {
         m_out->Print( aNestLevel + 1, "(property ki_fp_filters %s)\n",

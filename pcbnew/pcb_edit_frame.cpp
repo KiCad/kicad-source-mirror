@@ -2484,6 +2484,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     aNew->SetSheetfile( aExisting->GetSheetfile() );
     aNew->SetSheetname( aExisting->GetSheetname() );
     aNew->SetFilters( aExisting->GetFilters() );
+    aNew->SetComponentClass( aExisting->GetComponentClass() );
 
     aCommit.Remove( aExisting );
     aCommit.Add( aNew );

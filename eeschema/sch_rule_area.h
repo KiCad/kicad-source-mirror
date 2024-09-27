@@ -89,7 +89,7 @@ public:
     const std::unordered_set<SCH_ITEM*>& GetContainedItems() const;
 
     /// @brief Returns the set of all directive labels attached to the rule area border
-    const std::unordered_set<SCH_DIRECTIVE_LABEL*> GetDirectives() const;
+    const std::unordered_set<SCH_DIRECTIVE_LABEL*>& GetDirectives() const;
 
     /// @brief Resolves the netclass of this rule area from connected directive labels
     /// @returns The resolved netclass (if any), and the SCH_ITEM providing the declaration

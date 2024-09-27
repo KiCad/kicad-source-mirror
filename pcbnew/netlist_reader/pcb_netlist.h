@@ -29,6 +29,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/arrstr.h>
 #include <nlohmann/json.hpp>
+#include <unordered_set>
 
 #include <lib_id.h>
 #include <footprint.h>
@@ -175,6 +176,13 @@ public:
     void SetHumanReadablePath( const wxString& aPath ) { m_humanReadablePath = aPath; }
     const wxString& GetHumanReadablePath() const { return m_humanReadablePath; }
 
+    void SetComponentClassNames( const std::unordered_set<wxString>& aClassNames )
+    {
+        m_componentClassNames = aClassNames;
+    }
+
+    std::unordered_set<wxString>& GetComponentClassNames() { return m_componentClassNames; }
+
 private:
     std::vector<COMPONENT_NET>   m_nets;  ///< list of nets shared by the component pins
 
@@ -214,6 +222,9 @@ private:
 
     /// Component-specific user fields found in the netlist.
     nlohmann::ordered_map<wxString, wxString> m_fields;
+
+    /// Component classes for this footprint
+    std::unordered_set<wxString> m_componentClassNames;
 
     static COMPONENT_NET         m_emptyNet;
 };

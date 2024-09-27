@@ -316,6 +316,7 @@ set( PCBNEW_CLASS_SRCS
     array_pad_number_provider.cpp
     build_BOM_from_board.cpp
     cleanup_item.cpp
+    component_class_manager.cpp
     convert_shape_list_to_polygon.cpp
     cross-probing.cpp
     edit.cpp

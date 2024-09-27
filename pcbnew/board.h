@@ -27,6 +27,7 @@
 
 #include <board_item_container.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <component_class_manager.h>
 #include <embedded_files.h>
 #include <common.h> // Needed for stl hash extensions
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
@@ -1262,6 +1263,11 @@ public:
     */
     void EmbedFonts() override;
 
+    /**
+     * Gets the component class manager
+     */
+    COMPONENT_CLASS_MANAGER& GetComponentClassManager() { return m_componentClassManager; }
+
     // --------- Item order comparators ---------
 
     struct cmp_items
@@ -1377,6 +1383,8 @@ private:
     std::vector<BOARD_LISTENER*> m_listeners;
 
     bool                         m_embedFonts;
+
+    COMPONENT_CLASS_MANAGER m_componentClassManager;
 };
 
 

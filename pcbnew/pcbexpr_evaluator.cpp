@@ -165,6 +165,65 @@ protected:
 };
 
 
+class PCBEXPR_COMPONENT_CLASS_VALUE : public LIBEVAL::VALUE
+{
+public:
+    PCBEXPR_COMPONENT_CLASS_VALUE( BOARD_ITEM* aItem ) :
+            LIBEVAL::VALUE( wxEmptyString ), m_item( aItem ){};
+
+    const wxString& AsString() const override
+    {
+        const COMPONENT_CLASS* compClass = m_item->GetComponentClass();
+
+        if( compClass )
+        {
+            const_cast<PCBEXPR_COMPONENT_CLASS_VALUE*>( this )->Set( compClass->GetFullName() );
+        }
+
+        return LIBEVAL::VALUE::AsString();
+    }
+
+    bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
+    {
+        if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue =
+                    dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
+        {
+            const COMPONENT_CLASS* aClass = m_item->GetComponentClass();
+            const COMPONENT_CLASS* bClass = bValue->m_item->GetComponentClass();
+
+            // Note this depends on COMPONENT_CLASS_MANAGER maintaining ownership
+            // of all unique component class objects
+            return aClass == bClass;
+        }
+        else
+        {
+            return LIBEVAL::VALUE::EqualTo( aCtx, b );
+        }
+    }
+
+    bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
+    {
+        if( const PCBEXPR_COMPONENT_CLASS_VALUE* bValue =
+                    dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
+        {
+            const COMPONENT_CLASS* aClass = m_item->GetComponentClass();
+            const COMPONENT_CLASS* bClass = bValue->m_item->GetComponentClass();
+
+            // Note this depends on COMPONENT_CLASS_MANAGER maintaining ownership
+            // of all unique component class objects
+            return aClass != bClass;
+        }
+        else
+        {
+            return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
+        }
+    }
+
+protected:
+    BOARD_ITEM* m_item;
+};
+
+
 class PCBEXPR_NET_VALUE : public LIBEVAL::VALUE
 {
 public:
@@ -279,6 +338,17 @@ LIBEVAL::VALUE* PCBEXPR_NETCLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 }
 
 
+LIBEVAL::VALUE* PCBEXPR_COMPONENT_CLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+{
+    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( GetObject( aCtx ) );
+
+    if( !item || item->Type() != PCB_FOOTPRINT_T )
+        return new LIBEVAL::VALUE();
+
+    return new PCBEXPR_COMPONENT_CLASS_VALUE( item );
+}
+
+
 LIBEVAL::VALUE* PCBEXPR_NETNAME_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( GetObject( aCtx ) );
@@ -323,6 +393,15 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
             return std::make_unique<PCBEXPR_NETCLASS_REF>( 0 );
         else if( aVar == wxT( "B" ) )
             return std::make_unique<PCBEXPR_NETCLASS_REF>( 1 );
+        else
+            return nullptr;
+    }
+    else if( aField.CmpNoCase( wxT( "ComponentClass" ) ) == 0 )
+    {
+        if( aVar == wxT( "A" ) )
+            return std::make_unique<PCBEXPR_COMPONENT_CLASS_REF>( 0 );
+        else if( aVar == wxT( "B" ) )
+            return std::make_unique<PCBEXPR_COMPONENT_CLASS_REF>( 1 );
         else
             return nullptr;
     }

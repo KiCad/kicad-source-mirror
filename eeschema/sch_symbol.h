@@ -901,6 +901,9 @@ public:
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
+    /// Returns the component classes this symbol belongs in
+    std::unordered_set<wxString> GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const;
+
     bool operator==( const SCH_ITEM& aOther ) const override;
 
 private:

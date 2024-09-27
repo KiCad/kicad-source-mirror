@@ -127,6 +127,19 @@ public:
 };
 
 
+// "Object code" version of a component class reference (for performance).
+class PCBEXPR_COMPONENT_CLASS_REF : public PCBEXPR_VAR_REF
+{
+public:
+    PCBEXPR_COMPONENT_CLASS_REF( int aItemIndex ) : PCBEXPR_VAR_REF( aItemIndex )
+    {
+        SetType( LIBEVAL::VT_STRING );
+    }
+
+    LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+};
+
+
 // "Object code" version of a netname reference (for performance).
 class PCBEXPR_NETNAME_REF : public PCBEXPR_VAR_REF
 {

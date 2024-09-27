@@ -147,6 +147,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
     }
 
     FOOTPRINT* footprint = m_frame->LoadFootprint( aComponent->GetFPID() );
+    footprint->SetComponentClass( m_board->GetComponentClassManager().GetNoneComponentClass() );
 
     if( footprint == nullptr )
     {
@@ -198,6 +199,40 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     m_newFootprintsCount++;
     return footprint;
+}
+
+
+void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent )
+{
+    // Get the existing component class
+    wxString curClassName;
+
+    if( const COMPONENT_CLASS* curClass = aFootprint->GetComponentClass() )
+        curClassName = curClass->GetFullName();
+
+    // Calculate the new component class
+    COMPONENT_CLASS* newClass = m_board->GetComponentClassManager().GetEffectiveComponentClass(
+            aNewComponent->GetComponentClassNames() );
+    wxString newClassName = newClass->GetFullName();
+
+    if( curClassName == newClassName )
+        return;
+
+    wxString msg;
+
+    if( m_isDryRun )
+    {
+        msg.Printf( _( "Change %s component class from %s to %s." ), aFootprint->GetReference(),
+                    curClassName, newClassName );
+    }
+    else
+    {
+        aFootprint->SetComponentClass( newClass );
+        msg.Printf( _( "Changed %s component class from %s to %s." ), aFootprint->GetReference(),
+                    curClassName, newClassName );
+    }
+
+    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 }
 
 
@@ -395,8 +430,11 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     for( PCB_FIELD* field : aPcbFootprint->GetFields() )
     {
         // These fields are individually checked above
-        if( field->IsReference() || field->IsValue() || field->IsFootprint() )
+        if( field->IsReference() || field->IsValue() || field->IsFootprint()
+            || field->IsComponentClass() )
+        {
             continue;
+        }
 
         fpFieldsAsMap[field->GetName()] = field->GetText();
     }
@@ -406,6 +444,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     compFields.erase( GetCanonicalFieldName( REFERENCE_FIELD ) );
     compFields.erase( GetCanonicalFieldName( VALUE_FIELD ) );
     compFields.erase( GetCanonicalFieldName( FOOTPRINT_FIELD ) );
+
+    // Remove any component class fields - these are not editable in the pcb editor
+    compFields.erase( wxT( "Component Class" ) );
 
     // Fields are stored as an ordered map, but we don't (yet) support reordering
     // the footprint fields to match the symbol, so we manually check the fields
@@ -1214,6 +1255,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
                     updateFootprintParameters( tmp, component );
                     updateComponentPadConnections( tmp, component );
+                    updateComponentClass( tmp, component );
                 }
 
                 matchCount++;
@@ -1236,6 +1278,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
                 updateFootprintParameters( footprint, component );
                 updateComponentPadConnections( footprint, component );
+                updateComponentClass( footprint, component );
             }
         }
         else if( matchCount > 1 )

@@ -1208,6 +1208,42 @@ static void hasNetclassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
             } );
 }
 
+static void hasComponentClassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg || arg->AsString().IsEmpty() )
+    {
+        if( aCtx->HasErrorCallback() )
+            aCtx->ReportError(
+                    _( "Missing component class name argument to hasComponentClass()" ) );
+
+        return;
+    }
+
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> double
+            {
+                BOARD_ITEM*            boardItem = static_cast<BOARD_ITEM*>( item );
+                const COMPONENT_CLASS* compClass = boardItem->GetComponentClass();
+
+                if( compClass && compClass->ContainsClassName( arg->AsString() ) )
+                    return 1.0;
+
+                return 0.0;
+            } );
+}
+
 
 PCBEXPR_BUILTIN_FUNCTIONS::PCBEXPR_BUILTIN_FUNCTIONS()
 {
@@ -1249,4 +1285,5 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "getField('x')" ), getFieldFunc );
 
     RegisterFunc( wxT( "hasNetclass('x')" ), hasNetclassFunc );
+    RegisterFunc( wxT( "hasComponentClass('x')" ), hasComponentClassFunc );
 }

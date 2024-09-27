@@ -4281,6 +4281,11 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
     footprint->SetInitialComments( aInitialComments );
 
+    if( m_board )
+    {
+        footprint->SetComponentClass( m_board->GetComponentClassManager().GetNoneComponentClass() );
+    }
+
     token = NextTok();
 
     if( !IsSymbol( token ) && token != T_NUMBER )
@@ -4773,13 +4778,41 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             break;
         }
 
+        case T_component_classes:
+        {
+            std::unordered_set<wxString> componentClassNames;
+
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                if( ( token = NextTok() ) != T_class )
+                    Expecting( T_class );
+
+                NeedSYMBOLorNUMBER();
+                componentClassNames.insert( From_UTF8( CurText() ) );
+                NeedRIGHT();
+            }
+
+            if( m_board )
+            {
+                const COMPONENT_CLASS* componentClass =
+                        m_board->GetComponentClassManager().GetEffectiveComponentClass(
+                                componentClassNames );
+                footprint->SetComponentClass( componentClass );
+            }
+
+            break;
+        }
+
         default:
             Expecting( "at, descr, locked, placed, tedit, tstamp, uuid, "
                        "autoplace_cost90, autoplace_cost180, attr, clearance, "
                        "embedded_files, fp_arc, fp_circle, fp_curve, fp_line, fp_poly, "
                        "fp_rect, fp_text, pad, group, generator, model, path, solder_mask_margin, "
                        "solder_paste_margin, solder_paste_margin_ratio, tags, thermal_gap, "
-                       "version, zone, or zone_connect" );
+                       "version, zone, zone_connect, or component_classes" );
         }
     }
 

@@ -1546,6 +1546,8 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         labelItem = new SCH_DIRECTIVE_LABEL( aPosition );
         labelItem->SetShape( m_lastNetClassFlagShape );
         labelItem->GetFields().emplace_back( SCH_FIELD( {0,0}, 0, labelItem, wxT( "Netclass" ) ) );
+        labelItem->GetFields().emplace_back(
+                SCH_FIELD( { 0, 0 }, 0, labelItem, wxT( "Component Class" ) ) );
         labelItem->GetFields().back().SetItalic( true );
         labelItem->GetFields().back().SetVisible( true );
         textItem = labelItem;

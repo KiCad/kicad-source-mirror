@@ -65,6 +65,7 @@ center
 chamfer
 chamfer_ratio
 circle
+class
 clearance
 clearance_min
 color
@@ -73,6 +74,7 @@ column_count
 column_widths
 comment
 company
+component_classes
 connect
 connect_pads
 copperpour

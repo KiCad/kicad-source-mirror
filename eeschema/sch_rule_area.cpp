@@ -267,6 +267,10 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives(
                 addContainedItem( areaItem );
             }
         }
+        else if( areaItem->IsType( { SCH_SYMBOL_T } ) )
+        {
+            addContainedItem( areaItem );
+        }
     }
 }
 
@@ -316,7 +320,7 @@ const std::unordered_set<SCH_ITEM*>& SCH_RULE_AREA::GetContainedItems() const
 }
 
 
-const std::unordered_set<SCH_DIRECTIVE_LABEL*> SCH_RULE_AREA::GetDirectives() const
+const std::unordered_set<SCH_DIRECTIVE_LABEL*>& SCH_RULE_AREA::GetDirectives() const
 {
     return m_directives;
 }

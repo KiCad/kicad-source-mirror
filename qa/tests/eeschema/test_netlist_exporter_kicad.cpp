@@ -87,6 +87,10 @@ public:
                 BOOST_REQUIRE_EQUAL( goldenNet.GetPinName(), testNet.GetPinName() );
                 BOOST_REQUIRE_EQUAL( goldenNet.GetPinType(), testNet.GetPinType() );
             }
+
+            // And the the resolved component class is the same
+            BOOST_REQUIRE( goldenComp->GetComponentClassNames()
+                           == refComp->GetComponentClassNames() );
         }
     }
 };
@@ -207,6 +211,11 @@ BOOST_AUTO_TEST_CASE( Issue16003 )
 BOOST_AUTO_TEST_CASE( Issue16439 )
 {
     TestNetlist( "issue16439" );
+}
+
+BOOST_AUTO_TEST_CASE( ComponentClasses )
+{
+    TestNetlist( "component_classes" );
 }
 
 

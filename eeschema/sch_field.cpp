@@ -183,12 +183,19 @@ void SCH_FIELD::SetId( int aId )
         // We can't use defined IDs for labels because there can be multiple net class
         // assignments.
 
-        if( GetCanonicalName() == wxT( "Netclass" ) )
+        if( GetCanonicalName() == wxT( "Netclass" )
+            || GetCanonicalName() == wxT( "Component Class" ) )
+        {
             SetLayer( LAYER_NETCLASS_REFS );
+        }
         else if( GetCanonicalName() == wxT( "Intersheetrefs" ) )
+        {
             SetLayer( LAYER_INTERSHEET_REFS );
+        }
         else
+        {
             SetLayer( LAYER_FIELDS );
+        }
     }
 }
 
