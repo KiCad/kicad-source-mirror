@@ -456,7 +456,7 @@ wxString UNIT_BINDER::getTextForValue( long long int aValue ) const
 {
     const double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
     wxString     textValue = EDA_UNIT_UTILS::UI::StringFromValue(
-            *m_iuScale, m_units, setPrecision( aValue, false ), false, m_dataType );
+            *m_iuScale, m_units, setPrecision( displayValue, false ), false, m_dataType );
 
     if( displayValue == 0 && m_negativeZero )
         textValue = wxT( "-" ) + textValue;
