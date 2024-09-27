@@ -409,7 +409,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                     if( footprint->GetLayer() != F_Cu )
                     {
                         // footprint is on copper layer (back)
-                        footprint->Flip( footprint->GetPosition(), false );
+                        footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
                     }
 
                     footprint->SetOrientation( orientation );
@@ -421,7 +421,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                     if( footprint->GetLayer() != B_Cu )
                     {
                         // footprint is on component layer (front)
-                        footprint->Flip( footprint->GetPosition(), false );
+                        footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
                     }
 
                     footprint->SetOrientation( orientation );

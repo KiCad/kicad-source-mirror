@@ -740,9 +740,9 @@ void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    Mirror( aCentre, aFlipLeftRight );
+    Mirror( aCentre, aFlipDirection );
 
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> fillsCopy;
 
@@ -761,14 +761,14 @@ void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
-void ZONE::Mirror( const VECTOR2I& aMirrorRef, bool aMirrorLeftRight )
+void ZONE::Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection )
 {
-    m_Poly->Mirror( aMirrorLeftRight, !aMirrorLeftRight, aMirrorRef );
+    m_Poly->Mirror( aMirrorRef, aFlipDirection );
 
     HatchBorder();
 
     for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
-        pair.second->Mirror( aMirrorLeftRight, !aMirrorLeftRight, aMirrorRef );
+        pair.second->Mirror( aMirrorRef, aFlipDirection );
 }
 
 

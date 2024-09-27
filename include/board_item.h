@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wandadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef BOARD_ITEM_STRUCT_H
-#define BOARD_ITEM_STRUCT_H
+#pragma once
 
 
+#include <core/mirror.h>
 #include <eda_item.h>
+#include <geometry/approximation.h>
 #include <layer_ids.h>
 #include <lseq.h>
 #include <lset.h>
-#include <geometry/approximation.h>
 #include <stroke_params.h>
 #include <geometry/eda_angle.h>
 
@@ -358,9 +358,9 @@ public:
      * Flip this object, i.e. change the board side for this object.
      *
      * @param aCentre the rotation point.
-     * @param aFlipLeftRight mirror across Y axis instead of X (the default).
+     * @param aFlipDirection the flip direction
      */
-    virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight );
+    virtual void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 
     /**
      * Perform any normalization required after a user rotate and/or flip.
@@ -489,6 +489,3 @@ public:
     void Show( int , std::ostream& ) const override {}
 #endif
 };
-
-
-#endif /* BOARD_ITEM_STRUCT_H */

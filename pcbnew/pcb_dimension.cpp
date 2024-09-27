@@ -31,7 +31,6 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <font/font.h>
 #include <board.h>
-#include <core/mirror.h>
 #include <pcb_dimension.h>
 #include <pcb_text.h>
 #include <geometry/shape_compound.h>
@@ -366,38 +365,27 @@ void PCB_DIMENSION_BASE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aA
 }
 
 
-void PCB_DIMENSION_BASE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_DIMENSION_BASE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    Mirror( aCentre );
+    Mirror( aCentre, aFlipDirection );
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
 
 
-void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
+void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection )
 {
     VECTOR2I newPos = GetTextPos();
 
-    if( aMirrorLeftRight )
-        MIRROR( newPos.x, axis_pos.x );
-    else
-        MIRROR( newPos.y, axis_pos.y );
+    MIRROR( newPos, axis_pos, aFlipDirection );
 
     SetTextPos( newPos );
 
     // invert angle
     SetTextAngle( -GetTextAngle() );
 
-    if( aMirrorLeftRight )
-    {
-        MIRROR( m_start.x, axis_pos.x );
-        MIRROR( m_end.x, axis_pos.x );
-    }
-    else
-    {
-        MIRROR( m_start.y, axis_pos.y );
-        MIRROR( m_end.y, axis_pos.y );
-    }
+    MIRROR( m_start, axis_pos, aFlipDirection );
+    MIRROR( m_end, axis_pos, aFlipDirection );
 
     if( IsSideSpecific() )
         SetMirrored( !IsMirrored() );
@@ -694,11 +682,11 @@ void PCB_DIM_ALIGNED::swapData( BOARD_ITEM* aImage )
 }
 
 
-void PCB_DIM_ALIGNED::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
+void PCB_DIM_ALIGNED::Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection )
 {
     m_height = -m_height;
     // Call this last for the Update()
-    PCB_DIMENSION_BASE::Mirror( axis_pos, aMirrorLeftRight );
+    PCB_DIMENSION_BASE::Mirror( axis_pos, aFlipDirection );
 }
 
 
@@ -886,16 +874,16 @@ void PCB_DIM_ORTHOGONAL::swapData( BOARD_ITEM* aImage )
 }
 
 
-void PCB_DIM_ORTHOGONAL::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
+void PCB_DIM_ORTHOGONAL::Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection )
 {
     // Only reverse the height if the height is aligned with the flip
-    if( m_orientation == DIR::HORIZONTAL && !aMirrorLeftRight )
+    if( m_orientation == DIR::HORIZONTAL && aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
         m_height = -m_height;
-    else if( m_orientation == DIR::VERTICAL && aMirrorLeftRight )
+    else if( m_orientation == DIR::VERTICAL && aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         m_height = -m_height;
 
     // Call this last, as we need the Update()
-    PCB_DIMENSION_BASE::Mirror( axis_pos, aMirrorLeftRight );
+    PCB_DIMENSION_BASE::Mirror( axis_pos, aFlipDirection );
 }
 
 

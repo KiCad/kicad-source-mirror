@@ -18,8 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "footprint_editor_settings.h"
+
 #include <common.h>
-#include <footprint_editor_settings.h>
 #include <layer_ids.h>
 #include <lset.h>
 #include <pgm_base.h>

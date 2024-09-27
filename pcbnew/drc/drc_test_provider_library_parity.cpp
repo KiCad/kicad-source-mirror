@@ -553,7 +553,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     temp->SetParent( GetBoard() );  // Needed to know the copper layer count;
 
     if( IsFlipped() != temp->IsFlipped() )
-        temp->Flip( { 0, 0 }, false );
+        temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
 
     if( GetOrientation() != temp->GetOrientation() )
         temp->SetOrientation( GetOrientation() );

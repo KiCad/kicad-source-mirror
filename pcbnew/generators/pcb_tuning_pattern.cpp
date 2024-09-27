@@ -332,22 +332,19 @@ public:
         }
     }
 
-    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override
     {
         if( !this->HasFlag( IN_EDIT ) )
         {
-            PCB_GENERATOR::Flip( aCentre, aFlipLeftRight );
+            PCB_GENERATOR::Flip( aCentre, aFlipDirection );
 
-            if( aFlipLeftRight )
-                MIRROR( m_end.x, aCentre.x );
-            else
-                MIRROR( m_end.y, aCentre.y );
+            MIRROR( m_end, aCentre, aFlipDirection );
 
             if( m_baseLine )
-                m_baseLine->Mirror( aFlipLeftRight, !aFlipLeftRight, aCentre );
+                m_baseLine->Mirror( aCentre, aFlipDirection );
 
             if( m_baseLineCoupled )
-                m_baseLineCoupled->Mirror( aFlipLeftRight, !aFlipLeftRight, aCentre );
+                m_baseLineCoupled->Mirror( aCentre, aFlipDirection );
         }
     }
 

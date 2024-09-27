@@ -1391,7 +1391,12 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 shape->Rotate( ScalePos( start ), EDA_ANGLE( angle, DEGREES_T ) );
 
                 if( IsBackLayer( klayer ) ^ !!mirror )
-                    shape->Mirror( ScalePos( start ), !IsBackLayer( klayer ) );
+                {
+                    FLIP_DIRECTION flipDirection = IsBackLayer( klayer )
+                                                           ? FLIP_DIRECTION::TOP_BOTTOM
+                                                           : FLIP_DIRECTION::LEFT_RIGHT;
+                    shape->Mirror( ScalePos( start ), flipDirection );
+                }
 
                 if( group )
                     group->AddItem( shape.get() );
@@ -1479,7 +1484,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                         MIRROR( x, KiROUND( kstart.x ) );
                         bitmap->SetX( x );
 
-                        bitmap->MutableImage()->Mirror( false );
+                        bitmap->MutableImage()->Mirror( FLIP_DIRECTION::LEFT_RIGHT );
                     }
 
                     aBoard->Add( bitmap.release(), ADD_MODE::APPEND );
@@ -1653,7 +1658,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 //std::map<wxString, wxString> props = line.at( 7 );
 
                 if( klayer == B_Cu )
-                    footprint->Flip( footprint->GetPosition(), false );
+                    footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
 
                 footprint->SetOrientationDegrees( orient );
                 footprint->SetPosition( ScalePos( center ) );

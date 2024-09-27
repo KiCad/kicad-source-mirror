@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE( Empty )
 
     // can do this on an empty image
     empty.Rotate( true );
-    empty.Mirror( true );
+    empty.Mirror( FLIP_DIRECTION::TOP_BOTTOM );
 }
 
 
@@ -223,7 +223,7 @@ BOOST_AUTO_TEST_CASE( RotateImage )
  */
 BOOST_AUTO_TEST_CASE( MirrorImage )
 {
-    m_4tile.Mirror( true );
+    m_4tile.Mirror( FLIP_DIRECTION::TOP_BOTTOM );
 
     const wxImage* img_data = m_4tile.GetImageData();
     BOOST_REQUIRE_NE( img_data, nullptr );

@@ -439,23 +439,23 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void PCB_TEXTBOX::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
+void PCB_TEXTBOX::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     // the position and angle are mirrored, but not the text (or its justification)
-    PCB_SHAPE::Mirror( aCentre, aMirrorAroundXAxis );
+    PCB_SHAPE::Mirror( aCentre, aFlipDirection );
 
-    if( aMirrorAroundXAxis )
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
     else
         EDA_TEXT::SetTextAngle( -GetTextAngle() );
 }
 
 
-void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    PCB_SHAPE::Flip( aCentre, aFlipLeftRight );
+    PCB_SHAPE::Flip( aCentre, aFlipDirection );
 
-    if( aFlipLeftRight )
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         EDA_TEXT::SetTextAngle( -GetTextAngle() );
     else
         EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );

@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_generator.h>
-#include <core/mirror.h>
+#include "pcb_generator.h"
+
 #include <board.h>
 
 
@@ -135,16 +135,13 @@ void PCB_GENERATOR::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle 
     PCB_GROUP::Rotate( aRotCentre, aAngle );
 }
 
-void PCB_GENERATOR::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_GENERATOR::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( aFlipLeftRight )
-        MIRROR( m_origin.x, aCentre.x );
-    else
-        MIRROR( m_origin.y, aCentre.y );
+    MIRROR( m_origin, aCentre, aFlipDirection );
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 
-    PCB_GROUP::Flip( aCentre, aFlipLeftRight );
+    PCB_GROUP::Flip( aCentre, aFlipDirection );
 }
 
 bool PCB_GENERATOR::AddItem( BOARD_ITEM* aItem )

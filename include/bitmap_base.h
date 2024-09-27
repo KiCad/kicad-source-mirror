@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 jean-pierre.charras jp.charras at wanadoo.fr
- * Copyright (C) 2013-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef BITMAP_BASE_H
-#define BITMAP_BASE_H
+#pragma once
 
 #include <wx/bitmap.h>
 #include <wx/image.h>
+
+#include <core/mirror.h>
 #include <kiid.h>
 #include <math/box2.h>
 #include <gal/color4d.h>
@@ -194,9 +195,9 @@ public:
     /**
      * Mirror image vertically (i.e. relative to its horizontal X axis ) or horizontally (i.e
      * relative to its vertical Y axis).
-     * @param aVertically false to mirror horizontally or true to mirror vertically.
+     * @param aFlipDirection the direction to flip the image.
      */
-    void Mirror( bool aVertically );
+    void Mirror( FLIP_DIRECTION aFlipDirection );
 
     /**
      * Rotate image CW or CCW.
@@ -274,6 +275,3 @@ private:
     bool      m_isMirroredY;        // Used for OpenGL rendering only
     EDA_ANGLE m_rotation;           // Used for OpenGL rendering only
 };
-
-
-#endif    // BITMAP_BASE_H

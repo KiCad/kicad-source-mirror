@@ -211,10 +211,10 @@ void PCB_TABLE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void PCB_TABLE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     for( PCB_TABLECELL* cell : m_cells )
-        cell->Flip( aCentre, aFlipLeftRight );
+        cell->Flip( aCentre, aFlipDirection );
 
     std::vector<PCB_TABLECELL*> oldCells = m_cells;
     int                         rowOffset = 0;

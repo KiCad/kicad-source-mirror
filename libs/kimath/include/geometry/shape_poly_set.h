@@ -41,6 +41,7 @@
 
 #include <clipper.hpp>                  // for ClipType, PolyTree (ptr only)
 #include <clipper2/clipper.h>
+#include <core/mirror.h>                // for FLIP_DIRECTION
 #include <geometry/corner_strategy.h>
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape.h>
@@ -1140,11 +1141,10 @@ public:
     /**
      * Mirror the line points about y or x (or both)
      *
-     * @param aX If true, mirror about the y axis (flip x coordinate)
-     * @param aY If true, mirror about the x axis
      * @param aRef sets the reference point about which to mirror
+     * @param aFlipDirection is the direction to mirror the points.
      */
-    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } );
+    void Mirror( const VECTOR2I& aRef, FLIP_DIRECTION aFlipDirection );
 
     /**
      * Rotate all vertices by a given angle.

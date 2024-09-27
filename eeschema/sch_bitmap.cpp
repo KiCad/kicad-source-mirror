@@ -152,14 +152,14 @@ VECTOR2I SCH_BITMAP::GetSize() const
 void SCH_BITMAP::MirrorVertically( int aCenter )
 {
     MIRROR( m_pos.y, aCenter );
-    m_bitmapBase->Mirror( true );
+    m_bitmapBase->Mirror( FLIP_DIRECTION::TOP_BOTTOM );
 }
 
 
 void SCH_BITMAP::MirrorHorizontally( int aCenter )
 {
     MIRROR( m_pos.x, aCenter );
-    m_bitmapBase->Mirror( false );
+    m_bitmapBase->Mirror( FLIP_DIRECTION::LEFT_RIGHT );
 }
 
 

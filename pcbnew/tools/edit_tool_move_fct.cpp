@@ -126,8 +126,8 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
             // Flip both if needed
             if( aFP->IsFlipped() != bFP->IsFlipped() )
             {
-                aFP->Flip( aPos, false );
-                bFP->Flip( bPos, false );
+                aFP->Flip( aPos, FLIP_DIRECTION::TOP_BOTTOM );
+                bFP->Flip( bPos, FLIP_DIRECTION::TOP_BOTTOM );
             }
 
             // Set orientation

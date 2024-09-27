@@ -104,9 +104,9 @@ public:
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
-    virtual void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
+    virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 
-    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     void SetPosition( const VECTOR2I& aPos ) override { m_Start = aPos; }
     VECTOR2I GetPosition() const override             { return m_Start; }
@@ -273,9 +273,9 @@ public:
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
-    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis ) override;
+    void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
-    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     void SetMid( const VECTOR2I& aMid ) { m_Mid = aMid; }
     const VECTOR2I& GetMid() const      { return m_Mid; }
@@ -477,7 +477,7 @@ public:
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
 #if defined (DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

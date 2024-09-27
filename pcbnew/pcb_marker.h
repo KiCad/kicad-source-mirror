@@ -63,7 +63,7 @@ public:
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
-    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     VECTOR2I GetPosition() const override { return m_Pos; }
     void     SetPosition( const VECTOR2I& aPos ) override { m_Pos = aPos; }

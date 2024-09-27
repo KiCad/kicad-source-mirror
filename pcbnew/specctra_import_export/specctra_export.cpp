@@ -1808,7 +1808,7 @@ void SPECCTRA_DB::FlipFOOTPRINTs( BOARD* aBoard )
 
         if( footprint->GetLayer() == B_Cu )
         {
-            footprint->Flip( footprint->GetPosition(), false );
+            footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
             footprint->SetFlag( 1 );
         }
     }
@@ -1829,7 +1829,7 @@ void SPECCTRA_DB::RevertFOOTPRINTs( BOARD* aBoard )
     {
         if( footprint->GetFlag() )
         {
-            footprint->Flip( footprint->GetPosition(), false );
+            footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
             footprint->SetFlag( 0 );
         }
     }

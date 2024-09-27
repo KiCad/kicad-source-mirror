@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,6 +21,7 @@
 #ifndef PCBNEW_SETTINGS_H_
 #define PCBNEW_SETTINGS_H_
 
+#include <core/mirror.h> // for FLIP_DIRECTION
 #include <geometry/eda_angle.h>
 #include <settings/app_settings.h>
 #include <pcb_display_options.h>
@@ -426,7 +427,7 @@ public:
 
     bool m_Use45DegreeLimit;            // True to constrain tool actions to horizontal,
                                         // vertical and 45deg
-    bool m_FlipLeftRight;               // True: Flip footprints across Y axis
+    FLIP_DIRECTION m_FlipDirection;
 
     bool m_ESCClearsNetHighlight;
 

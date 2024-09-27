@@ -22,14 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EDA_SHAPE_H
-#define EDA_SHAPE_H
+#pragma once
 
-#include <trigo.h>
+#include <core/mirror.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/approximation.h>
 #include <properties/property.h>
 #include <stroke_params.h>
+#include <trigo.h>
 
 class LINE_READER;
 class EDA_DRAW_FRAME;
@@ -375,7 +375,7 @@ protected:
 
     void move( const VECTOR2I& aMoveVector );
     void rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );
-    void flip( const VECTOR2I& aCentre, bool aFlipLeftRight );
+    void flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
     void scale( double aScale );
 
     const BOX2I getBoundingBox() const;
@@ -443,5 +443,3 @@ protected:
 DECLARE_ENUM_TO_WXANY( SHAPE_T );
 DECLARE_ENUM_TO_WXANY( LINE_STYLE );
 #endif
-
-#endif  // EDA_SHAPE_H

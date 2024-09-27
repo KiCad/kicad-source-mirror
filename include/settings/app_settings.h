@@ -55,15 +55,6 @@ enum class ARC_EDIT_MODE
 };
 
 /**
-* Settings for board items flip. Used by pcbnew
-*/
-enum class FLIP_DIRECTION
-{
-    LEFT_RIGHT,
-    TOP_BOTTOM
-};
-
-/**
 * Stores the window positioning/state
 */
 struct KICOMMON_API WINDOW_STATE

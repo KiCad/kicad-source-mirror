@@ -195,7 +195,7 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
     fp->SetPosition( { 0, 0 } );
 
     if( fp->GetLayer() != F_Cu )
-        fp->Flip( fp->GetPosition(), false );
+        fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
 
     fp->SetOrientation( ANGLE_0 );
 

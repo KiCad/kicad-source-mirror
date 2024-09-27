@@ -2740,12 +2740,12 @@ void SHAPE_POLY_SET::Move( const VECTOR2I& aVector )
 }
 
 
-void SHAPE_POLY_SET::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
+void SHAPE_POLY_SET::Mirror( const VECTOR2I& aRef, FLIP_DIRECTION aFlipDirection )
 {
     for( POLYGON& poly : m_polys )
     {
         for( SHAPE_LINE_CHAIN& path : poly )
-            path.Mirror( aX, aY, aRef );
+            path.Mirror( aRef, aFlipDirection );
     }
 
     if( m_triangulationValid )

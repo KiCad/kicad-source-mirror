@@ -359,10 +359,10 @@ void PCB_GROUP::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void PCB_GROUP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_GROUP::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     for( BOARD_ITEM* item : m_items )
-        item->Flip( aCentre, aFlipLeftRight );
+        item->Flip( aCentre, aFlipDirection );
 }
 
 

@@ -553,7 +553,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
             if( footprint->IsFlipped() )
             {
                 // flip pad (up/down) around its position
-                m_previewPad->Flip( m_previewPad->GetPosition(), false );
+                m_previewPad->Flip( m_previewPad->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
                 relPos.y = - relPos.y;
             }
 
@@ -1489,7 +1489,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( m_currentPad->GetParentFootprint() && m_currentPad->GetParentFootprint()->IsFlipped() )
     {
         // flip pad (up/down) around its position
-        m_currentPad->Flip( m_currentPad->GetPosition(), false );
+        m_currentPad->Flip( m_currentPad->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
     }
 
     m_currentPad->SetPosition( m_masterPad->GetPosition() );

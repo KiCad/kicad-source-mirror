@@ -25,7 +25,6 @@
 
 #include <base_units.h>
 #include <bitmaps.h>
-#include <core/mirror.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_draw_frame.h>
 #include <geometry/shape_circle.h>
@@ -829,20 +828,11 @@ EDA_ANGLE PAD::GetFPRelativeOrientation() const
 }
 
 
-void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PAD::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( aFlipLeftRight )
-    {
-        MIRROR( m_pos.x, aCentre.x );
-        MIRROR( m_padStack.Offset().x, 0 );
-        MIRROR( m_padStack.TrapezoidDeltaSize().x, 0 );
-    }
-    else
-    {
-        MIRROR( m_pos.y, aCentre.y );
-        MIRROR( m_padStack.Offset().y, 0 );
-        MIRROR( m_padStack.TrapezoidDeltaSize().y, 0 );
-    }
+    MIRROR( m_pos, aCentre, aFlipDirection );
+    MIRROR( m_padStack.Offset(), VECTOR2I{ 0, 0 }, aFlipDirection );
+    MIRROR( m_padStack.TrapezoidDeltaSize(), VECTOR2I{ 0, 0 }, aFlipDirection );
 
     SetFPRelativeOrientation( -GetFPRelativeOrientation() );
 
@@ -861,7 +851,7 @@ void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
                                   aBitfield &= ~b;
                           };
 
-    if( aFlipLeftRight )
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
     {
         mirrorBitFlags( m_padStack.ChamferPositions(), RECT_CHAMFER_TOP_LEFT,
                         RECT_CHAMFER_TOP_RIGHT );
@@ -884,16 +874,16 @@ void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     SetLayerSet( layerSet.Flip() );
 
     // Flip the basic shapes, in custom pads
-    FlipPrimitives( aFlipLeftRight );
+    FlipPrimitives( aFlipDirection );
 
     SetDirty();
 }
 
 
-void PAD::FlipPrimitives( bool aFlipLeftRight )
+void PAD::FlipPrimitives( FLIP_DIRECTION aFlipDirection )
 {
     for( std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives() )
-        primitive->Flip( VECTOR2I( 0, 0 ), aFlipLeftRight );
+        primitive->Flip( VECTOR2I( 0, 0 ), aFlipDirection );
 
     SetDirty();
 }

@@ -71,7 +71,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
           m_CtrlClickHighlight( false ),
           m_Use45DegreeLimit( false ),
-          m_FlipLeftRight( false ),
+          m_FlipDirection( FLIP_DIRECTION::TOP_BOTTOM ),
           m_ESCClearsNetHighlight( true ),
           m_PolarCoords( false ),
           m_RotationAngle( ANGLE_90 ),
@@ -154,7 +154,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_FootprintChooser.use_fp_filters, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right",
-            &m_FlipLeftRight, true ) );
+            reinterpret_cast<bool*>( &m_FlipDirection ),
+            static_cast<bool>( FLIP_DIRECTION::LEFT_RIGHT ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.esc_clears_net_highlight",
             &m_ESCClearsNetHighlight, true ) );
@@ -1003,7 +1004,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 //{
 //    py::class_<PCBNEW_SETTINGS>( m, "settings" )
 //            .def_readwrite( "Use45DegreeGraphicSegments", &PCBNEW_SETTINGS::m_Use45DegreeGraphicSegments )
-//            .def_readwrite( "FlipLeftRight", &PCBNEW_SETTINGS::m_FlipLeftRight )
+//            .def_readwrite( "FlipLeftRight", &PCBNEW_SETTINGS::m_FlipDirection )
 //            .def_readwrite( "AddUnlockedPads", &PCBNEW_SETTINGS::m_AddUnlockedPads)
 //            .def_readwrite( "UsePolarCoords", &PCBNEW_SETTINGS::m_PolarCoords)
 //            .def_readwrite( "RotationAngle", &PCBNEW_SETTINGS::m_RotationAngle)

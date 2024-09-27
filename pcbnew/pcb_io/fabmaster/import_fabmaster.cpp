@@ -2155,7 +2155,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
 
                         if( src->mirror )
-                            circle->Flip( circle->GetCenter(), false );
+                            circle->Flip( circle->GetCenter(), FLIP_DIRECTION::TOP_BOTTOM );
 
                         fp->Add( circle, ADD_MODE::APPEND );
                         break;
@@ -2176,7 +2176,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             arc->SetStroke( defaultStroke );
 
                         if( src->mirror )
-                            arc->Flip( arc->GetCenter(), false );
+                            arc->Flip( arc->GetCenter(), FLIP_DIRECTION::TOP_BOTTOM );
 
                         fp->Add( arc, ADD_MODE::APPEND );
                         break;
@@ -2369,8 +2369,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                                     if( src->mirror )
                                     {
-                                        poly_outline.Mirror( false, true,
-                                                             VECTOR2I( 0, ( pin->pin_y - src->y ) ) );
+                                        poly_outline.Mirror( VECTOR2I( 0, ( pin->pin_y - src->y ) ),
+                                                             FLIP_DIRECTION::TOP_BOTTOM );
                                         poly_outline.Rotate( EDA_ANGLE( src->rotate - pin->rotation,
                                                                         DEGREES_T ) );
                                     }
@@ -2458,7 +2458,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             if( src->mirror )
             {
                 fp->SetOrientationDegrees( 180.0 - src->rotate );
-                fp->Flip( fp->GetPosition(), true );
+                fp->Flip( fp->GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
             }
 
             aBoard->Add( fp, ADD_MODE::APPEND );

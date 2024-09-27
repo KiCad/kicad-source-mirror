@@ -1158,7 +1158,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 // Put it on FRONT layer,
                 // (Can be stored flipped if the lib is an archive built from a board)
                 if( fp->IsFlipped() )
-                    fp->Flip( fp->GetPosition(), m_frame->GetPcbNewSettings()->m_FlipLeftRight );
+                    fp->Flip( fp->GetPosition(), m_frame->GetPcbNewSettings()->m_FlipDirection );
 
                 fp->SetOrientation( ANGLE_0 );
                 fp->SetPosition( cursorPos );

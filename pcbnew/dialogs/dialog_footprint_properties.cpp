@@ -611,7 +611,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
         change_layer = true;
 
     if( change_layer )
-        m_footprint->Flip( m_footprint->GetPosition(), m_frame->GetPcbNewSettings()->m_FlipLeftRight );
+    {
+        m_footprint->Flip( m_footprint->GetPosition(),
+                           m_frame->GetPcbNewSettings()->m_FlipDirection );
+    }
 
     // Copy the models from the panel to the footprint
     std::vector<FP_3DMODEL>& panelList = m_3dPanel->GetModelList();

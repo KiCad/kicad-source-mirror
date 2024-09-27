@@ -642,16 +642,15 @@ void SHAPE_ARC::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
 }
 
 
-void SHAPE_ARC::Mirror( bool aX, bool aY, const VECTOR2I& aVector )
+void SHAPE_ARC::Mirror( const VECTOR2I& aVector, FLIP_DIRECTION aFlipDirection )
 {
-    if( aX )
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
     {
         m_start.x = -m_start.x + 2 * aVector.x;
         m_end.x = -m_end.x + 2 * aVector.x;
         m_mid.x = -m_mid.x + 2 * aVector.x;
     }
-
-    if( aY )
+    else
     {
         m_start.y = -m_start.y + 2 * aVector.y;
         m_end.y = -m_end.y + 2 * aVector.y;

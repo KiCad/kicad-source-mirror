@@ -117,7 +117,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     // Ensure the footprint is shown like in Fp editor: rot 0, not flipped
     // to avoid mistakes when setting the3D shape position/rotation
     if( m_dummyFootprint->IsFlipped() )
-        m_dummyFootprint->Flip( m_dummyFootprint->GetPosition(), false );
+        m_dummyFootprint->Flip( m_dummyFootprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
 
     m_dummyFootprint->SetOrientation( ANGLE_0 );
 

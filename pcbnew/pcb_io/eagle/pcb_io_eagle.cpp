@@ -1665,7 +1665,7 @@ void PCB_IO_EAGLE::orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT
         if( e.rot->mirror )
         {
             aFootprint->SetOrientation( EDA_ANGLE( e.rot->degrees + 180.0, DEGREES_T ) );
-            aFootprint->Flip( aFootprint->GetPosition(), false );
+            aFootprint->Flip( aFootprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
         }
         else
         {

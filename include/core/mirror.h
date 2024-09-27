@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef MIRROR_H
-#define MIRROR_H
+#pragma once
+
+enum class FLIP_DIRECTION
+{
+    LEFT_RIGHT, ///< Flip left to right (around the Y axis)
+    TOP_BOTTOM  ///< Flip top to bottom (around the X axis)
+};
 
 /**
  *  Returns the mirror of aPoint relative to the aMirrorRef.
  */
 template <typename T>
-T MIRRORVAL( T aPoint, T aMirrorRef )
+constexpr T MIRRORVAL( T aPoint, T aMirrorRef )
 {
     return -( aPoint - aMirrorRef ) + aMirrorRef;
 }
@@ -37,9 +42,21 @@ T MIRRORVAL( T aPoint, T aMirrorRef )
  *  Updates aPoint with the mirror of aPoint relative to the aMirrorRef.
  */
 template <typename T>
-void MIRROR( T& aPoint, const T& aMirrorRef )
+constexpr void MIRROR( T& aPoint, const T& aMirrorRef )
 {
     aPoint = MIRRORVAL( aPoint, aMirrorRef );
 }
 
-#endif /* MIRROR_H */
+
+/**
+ * Updates aPoint with the mirror of aPoint relative to the aMirrorRef,
+ * in the specified direction.
+ */
+template <typename VT>
+constexpr void MIRROR( VT& aPoint, const VT& aMirrorRef, FLIP_DIRECTION aFlipDirection )
+{
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+        MIRROR( aPoint.x, aMirrorRef.x );
+    else
+        MIRROR( aPoint.y, aMirrorRef.y );
+}

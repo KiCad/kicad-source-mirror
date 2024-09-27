@@ -55,7 +55,7 @@
 #include <tools/pcb_grid_helper.h>
 #include <tools/pad_tool.h>
 #include <view/view_controls.h>
-#include <connectivity/connectivity_algo.h>
+#include <connectivity/connectivity_algo.h>`
 #include <core/kicad_algo.h>
 #include <fix_board_shape.h>
 #include <bitmaps.h>
@@ -2007,75 +2007,23 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 
 /**
- * Mirror a point about the vertical axis passing through another point.
+ * Mirror a pad in the H/V axis passing through a point
  */
-static VECTOR2I mirrorPointX( const VECTOR2I& aPoint, const VECTOR2I& aMirrorPoint )
-{
-    VECTOR2I mirrored = aPoint;
-
-    mirrored.x -= aMirrorPoint.x;
-    mirrored.x = -mirrored.x;
-    mirrored.x += aMirrorPoint.x;
-
-    return mirrored;
-}
-
-
-/**
- * Mirror a point about the vertical axis passing through another point.
- */
-static VECTOR2I mirrorPointY( const VECTOR2I& aPoint, const VECTOR2I& aMirrorPoint )
-{
-    VECTOR2I mirrored = aPoint;
-
-    mirrored.y -= aMirrorPoint.y;
-    mirrored.y = -mirrored.y;
-    mirrored.y += aMirrorPoint.y;
-
-    return mirrored;
-}
-
-
-/**
- * Mirror a pad in the vertical axis passing through a point (mirror left to right).
- */
-static void mirrorPadX( PAD& aPad, const VECTOR2I& aMirrorPoint )
+static void mirrorPad( PAD& aPad, const VECTOR2I& aMirrorPoint, FLIP_DIRECTION aFlipDirection )
 {
     if( aPad.GetShape() == PAD_SHAPE::CUSTOM )
-        aPad.FlipPrimitives( true );  // mirror primitives left to right
+        aPad.FlipPrimitives( aFlipDirection );
 
-    VECTOR2I tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
+    VECTOR2I tmpPt = aPad.GetPosition();
+    MIRROR( tmpPt, aMirrorPoint, aFlipDirection );
     aPad.SetPosition( tmpPt );
 
     tmpPt = aPad.GetOffset();
-    tmpPt.x = -tmpPt.x;
+    MIRROR( tmpPt, VECTOR2I{ 0, 0 }, aFlipDirection );
     aPad.SetOffset( tmpPt );
 
-    auto tmpz = aPad.GetDelta();
-    tmpz.x = -tmpz.x;
-    aPad.SetDelta( tmpz );
-
-    aPad.SetOrientation( -aPad.GetOrientation() );
-}
-
-
-/**
- * Mirror a pad in the vertical axis passing through a point (mirror left to right).
- */
-static void mirrorPadY( PAD& aPad, const VECTOR2I& aMirrorPoint )
-{
-    if( aPad.GetShape() == PAD_SHAPE::CUSTOM )
-        aPad.FlipPrimitives( false );  // mirror primitives top to bottom
-
-    VECTOR2I tmpPt = mirrorPointY( aPad.GetPosition(), aMirrorPoint );
-    aPad.SetPosition( tmpPt );
-
-    tmpPt = aPad.GetOffset();
-    tmpPt.y = -tmpPt.y;
-    aPad.SetOffset( tmpPt );
-
-    auto tmpz = aPad.GetDelta();
-    tmpz.y = -tmpz.y;
+    VECTOR2I tmpz = aPad.GetDelta();
+    MIRROR( tmpz, VECTOR2I{ 0, 0 }, aFlipDirection );
     aPad.SetDelta( tmpz );
 
     aPad.SetOrientation( -aPad.GetOrientation() );
@@ -2123,17 +2071,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     updateModificationPoint( selection );
     VECTOR2I mirrorPoint = selection.GetReferencePoint();
 
-    // Set the mirroring options.
-    // Unfortunately, the mirror function do not have the same parameter for all items
-    // So we need these 2 parameters to avoid mistakes
-    bool mirrorLeftRight = true;
-    bool mirrorAroundXaxis = false;
-
-    if( aEvent.IsAction( &PCB_ACTIONS::mirrorV ) )
-    {
-        mirrorLeftRight = false;
-        mirrorAroundXaxis = true;
-    }
+    FLIP_DIRECTION flipDirection = aEvent.IsAction( &PCB_ACTIONS::mirrorV )
+                                           ? FLIP_DIRECTION::TOP_BOTTOM
+                                           : FLIP_DIRECTION::LEFT_RIGHT;
 
     std::vector<EDA_ITEM*> items;
 
@@ -2165,20 +2105,20 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
-            static_cast<PCB_SHAPE*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
+            static_cast<PCB_SHAPE*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
         case PCB_ZONE_T:
-            static_cast<ZONE*>( item )->Mirror( mirrorPoint, mirrorLeftRight );
+            static_cast<ZONE*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
         case PCB_FIELD_T:
         case PCB_TEXT_T:
-            static_cast<PCB_TEXT*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
+            static_cast<PCB_TEXT*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
         case PCB_TEXTBOX_T:
-            static_cast<PCB_TEXTBOX*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
+            static_cast<PCB_TEXTBOX*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
         case PCB_TABLE_T:
@@ -2186,17 +2126,13 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
 
         case PCB_PAD_T:
-            if( mirrorLeftRight )
-                mirrorPadX( *static_cast<PAD*>( item ), mirrorPoint );
-            else
-                mirrorPadY( *static_cast<PAD*>( item ), mirrorPoint );
-
+            mirrorPad( *static_cast<PAD*>( item ), mirrorPoint, flipDirection );
             break;
 
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
-            static_cast<PCB_TRACK*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
+            static_cast<PCB_TRACK*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
         default:
@@ -2337,7 +2273,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
         refPt = selection.GetReferencePoint();
 
-    bool leftRight = frame()->GetPcbNewSettings()->m_FlipLeftRight;
+    const FLIP_DIRECTION flipDirection = frame()->GetPcbNewSettings()->m_FlipDirection;
 
     for( EDA_ITEM* item : selection )
     {
@@ -2349,7 +2285,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         if( !boardItem->IsNew() && !boardItem->IsMoving() )
             commit->Modify( boardItem );
 
-        boardItem->Flip( refPt, leftRight );
+        boardItem->Flip( refPt, flipDirection );
         boardItem->Normalize();
     }
 

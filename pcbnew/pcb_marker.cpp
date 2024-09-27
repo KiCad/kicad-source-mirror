@@ -251,7 +251,7 @@ void PCB_MARKER::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void PCB_MARKER::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_MARKER::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     // Marker geometry isn't user-editable
 }

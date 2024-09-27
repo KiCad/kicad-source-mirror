@@ -1848,7 +1848,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
             EDA_ANGLE mirroredAngle = - getAngle( comp.OrientAngle );
             mirroredAngle.Normalize180();
             footprint->SetOrientation( mirroredAngle );
-            footprint->Flip( getKiCadPoint( comp.Origin ), true );
+            footprint->Flip( getKiCadPoint( comp.Origin ), FLIP_DIRECTION::LEFT_RIGHT );
         }
 
         loadComponentAttributes( comp, footprint );
@@ -2709,7 +2709,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
     }
 
     if( aMirrorInvert )
-        txt->Flip( aTransformCentre, true );
+        txt->Flip( aTransformCentre, FLIP_DIRECTION::LEFT_RIGHT );
 
     //scale it after flipping:
     if( aScalingFactor != 1.0 )
@@ -2975,7 +2975,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
 
     //Apply transforms
     if( aMirrorInvert )
-        shape->Flip( aTransformCentre, true );
+        shape->Flip( aTransformCentre, FLIP_DIRECTION::LEFT_RIGHT );
 
     if( aScalingFactor != 1.0 )
     {

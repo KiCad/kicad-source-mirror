@@ -235,7 +235,7 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
         // built from a board)
         if( aFootprint->IsFlipped() )
-            aFootprint->Flip( aFootprint->GetPosition(), GetPcbNewSettings()->m_FlipLeftRight );
+            aFootprint->Flip( aFootprint->GetPosition(), GetPcbNewSettings()->m_FlipDirection );
 
         // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
         // it might be stored in another orientation if the lib is an archive built from a board)

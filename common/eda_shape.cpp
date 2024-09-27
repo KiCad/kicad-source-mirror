@@ -428,73 +428,38 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void EDA_SHAPE::flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void EDA_SHAPE::flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     switch ( m_shape )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECTANGLE:
-        if( aFlipLeftRight )
-        {
-            m_start.x = aCentre.x - ( m_start.x - aCentre.x );
-            m_end.x   = aCentre.x - ( m_end.x - aCentre.x );
-        }
-        else
-        {
-            m_start.y = aCentre.y - ( m_start.y - aCentre.y );
-            m_end.y   = aCentre.y - ( m_end.y - aCentre.y );
-        }
+        MIRROR( m_start, aCentre, aFlipDirection );
+        MIRROR( m_end, aCentre, aFlipDirection );
         break;
 
     case SHAPE_T::CIRCLE:
-        if( aFlipLeftRight )
-        {
-            m_start.x = aCentre.x - ( m_start.x - aCentre.x );
-            m_end.x   = aCentre.x - ( m_end.x - aCentre.x );
-        }
-        else
-        {
-            m_start.y = aCentre.y - ( m_start.y - aCentre.y );
-            m_end.y   = aCentre.y - ( m_end.y - aCentre.y );
-        }
+        MIRROR( m_start, aCentre, aFlipDirection );
+        MIRROR( m_end, aCentre, aFlipDirection );
         break;
 
     case SHAPE_T::ARC:
-        if( aFlipLeftRight )
-        {
-            m_start.x     = aCentre.x - ( m_start.x - aCentre.x );
-            m_end.x       = aCentre.x - ( m_end.x - aCentre.x );
-            m_arcCenter.x = aCentre.x - ( m_arcCenter.x - aCentre.x );
-        }
-        else
-        {
-            m_start.y     = aCentre.y - ( m_start.y - aCentre.y );
-            m_end.y       = aCentre.y - ( m_end.y - aCentre.y );
-            m_arcCenter.y = aCentre.y - ( m_arcCenter.y - aCentre.y );
-        }
+        MIRROR( m_start, aCentre, aFlipDirection );
+        MIRROR( m_end, aCentre, aFlipDirection );
+        MIRROR( m_arcCenter, aCentre, aFlipDirection );
 
         std::swap( m_start, m_end );
         break;
 
     case SHAPE_T::POLY:
-        m_poly.Mirror( aFlipLeftRight, !aFlipLeftRight, aCentre );
+        m_poly.Mirror( aCentre, aFlipDirection );
         break;
 
     case SHAPE_T::BEZIER:
-        if( aFlipLeftRight )
-        {
-            m_start.x    = aCentre.x - ( m_start.x - aCentre.x );
-            m_end.x      = aCentre.x - ( m_end.x - aCentre.x );
-            m_bezierC1.x = aCentre.x - ( m_bezierC1.x - aCentre.x );
-            m_bezierC2.x = aCentre.x - ( m_bezierC2.x - aCentre.x );
-        }
-        else
-        {
-            m_start.y    = aCentre.y - ( m_start.y - aCentre.y );
-            m_end.y      = aCentre.y - ( m_end.y - aCentre.y );
-            m_bezierC1.y = aCentre.y - ( m_bezierC1.y - aCentre.y );
-            m_bezierC2.y = aCentre.y - ( m_bezierC2.y - aCentre.y );
-        }
+        MIRROR( m_start, aCentre, aFlipDirection );
+        MIRROR( m_end, aCentre, aFlipDirection );
+        MIRROR( m_bezierC1, aCentre, aFlipDirection );
+        MIRROR( m_bezierC2, aCentre, aFlipDirection );
 
         RebuildBezierToSegmentsPointsList( m_stroke.GetWidth() / 2 );
         break;

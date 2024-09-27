@@ -27,15 +27,17 @@
 
 #include <mutex>
 #include <array>
-#include <zones.h>
+
 #include <board_connected_item.h>
+#include <core/arraydim.h>
+#include <core/mirror.h>
+#include <geometry/eda_angle.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_compound.h>
 #include <lset.h>
 #include <padstack.h>
-#include <geometry/eda_angle.h>
-#include <geometry/geometry_utils.h>
-#include <core/arraydim.h>
+#include <zones.h>
 
 class PCB_SHAPE;
 class SHAPE;
@@ -320,13 +322,13 @@ public:
         return m_padStack.Primitives();
     }
 
-    void Flip( const VECTOR2I& VECTOR2I, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& VECTOR2I, FLIP_DIRECTION aFlipDirection ) override;
 
     /**
      * Flip (mirror) the primitives left to right or top to bottom, around the anchor position
      * in custom pads.
      */
-    void FlipPrimitives( bool aFlipLeftRight );
+    void FlipPrimitives( FLIP_DIRECTION aFlipDirection );
 
     /**
      * Clear the current custom shape primitives list and import a new list.  Copies the input,

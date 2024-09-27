@@ -90,9 +90,9 @@ void PCB_TARGET::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void PCB_TARGET::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_TARGET::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( aFlipLeftRight )
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         m_pos.x = aCentre.x - ( m_pos.x - aCentre.x );
     else
         m_pos.y = aCentre.y - ( m_pos.y - aCentre.y );

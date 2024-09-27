@@ -33,7 +33,6 @@
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <convert_shape_list_to_polygon.h>
-#include <core/mirror.h>
 #include <drc/drc_item.h>
 #include <embedded_files.h>
 #include <font/font.h>
@@ -1215,7 +1214,7 @@ BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
     dummy.SetOrientation( ANGLE_0 );
 
     if( dummy.IsFlipped() )
-        dummy.Flip( VECTOR2I( 0, 0 ), false );
+        dummy.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::TOP_BOTTOM );
 
     for( PAD* pad : dummy.Pads() )
         bbox.Merge( pad->GetBoundingBox() );
@@ -2260,11 +2259,11 @@ void FOOTPRINT::SetLayerAndFlip( PCB_LAYER_ID aLayer )
     wxASSERT( aLayer == F_Cu || aLayer == B_Cu );
 
     if( aLayer != GetLayer() )
-        Flip( GetPosition(), true );
+        Flip( GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
 }
 
 
-void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     // Move footprint to its final position:
     VECTOR2I finalPos = m_pos;
@@ -2292,31 +2291,31 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     // Mirror fields to other side of board.
     for( PCB_FIELD* field : m_fields )
-        field->Flip( m_pos, false );
+        field->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
     // Mirror pads to other side of board.
     for( PAD* pad : m_pads )
-        pad->Flip( m_pos, false );
+        pad->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
     // Now set the new orientation.
     m_orient = newOrientation;
 
     // Mirror zones to other side of board.
     for( ZONE* zone : m_zones )
-        zone->Flip( m_pos, false );
+        zone->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
     // Reverse mirror footprint graphics and texts.
     for( BOARD_ITEM* item : m_drawings )
-        item->Flip( m_pos, false );
+        item->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
     // Now rotate 180 deg if required
-    if( aFlipLeftRight )
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         Rotate( aCentre, ANGLE_180 );
 
     m_boundingBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
 
-    m_cachedHull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
+    m_cachedHull.Mirror( m_pos, aFlipDirection );
 
     std::swap( m_courtyard_cache_front, m_courtyard_cache_back );
 }

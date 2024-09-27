@@ -117,7 +117,7 @@ public:
 
     void Move( const VECTOR2I& aMoveVector ) override { m_pos += aMoveVector; }
 
-    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
     void Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle ) override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override

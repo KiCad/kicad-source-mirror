@@ -627,7 +627,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const
 
     // Create final polygon:
     if( change )
-        aPolygon->Mirror( false, true );
+        aPolygon->Mirror( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
 
     aPolygon->Move( VECTOR2I( start ) );
 }

@@ -183,7 +183,7 @@ bool GENCAD_EXPORTER::WriteFile( wxString& aFullFileName )
 
         if( footprint->GetLayer() == B_Cu )
         {
-            footprint->Flip( footprint->GetPosition(), false );
+            footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
             footprint->SetFlag( 1 );
         }
     }
@@ -217,7 +217,7 @@ bool GENCAD_EXPORTER::WriteFile( wxString& aFullFileName )
     {
         if( footprint->GetFlag() )
         {
-            footprint->Flip( footprint->GetPosition(), false );
+            footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
             footprint->SetFlag( 0 );
         }
     }

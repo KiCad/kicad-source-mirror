@@ -359,7 +359,7 @@ void BOARD_ITEM::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void BOARD_ITEM::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void BOARD_ITEM::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
 }

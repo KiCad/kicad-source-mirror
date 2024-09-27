@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 jean-pierre.charras
- * Copyright (C) 2011-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <bitmap_base.h>
+#include "bitmap_base.h"
+
 #include <gr_basic.h>
 #include <math/util.h>    // for KiROUND
 #include <memory>         // for make_unique, unique_ptr
@@ -408,7 +409,7 @@ VECTOR2I BITMAP_BASE::GetSize() const
 }
 
 
-void BITMAP_BASE::Mirror( bool aVertically )
+void BITMAP_BASE::Mirror( FLIP_DIRECTION aFlipDirection )
 {
     if( m_image )
     {
@@ -420,13 +421,13 @@ void BITMAP_BASE::Mirror( bool aVertically )
         int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
         int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
 
-        *m_image = m_image->Mirror( not aVertically );
+        *m_image = m_image->Mirror( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT );
 
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONUNIT , unit);
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX);
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY);
 
-        if( aVertically )
+        if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
             m_isMirroredY = !m_isMirroredY;
         else
             m_isMirroredX = !m_isMirroredX;

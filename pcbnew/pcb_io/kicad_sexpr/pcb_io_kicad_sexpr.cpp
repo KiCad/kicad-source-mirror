@@ -2917,9 +2917,9 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
         PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
         if( cfg )
-            footprint->Flip( footprint->GetPosition(), cfg->m_FlipLeftRight );
+            footprint->Flip( footprint->GetPosition(), cfg->m_FlipDirection );
         else
-            footprint->Flip( footprint->GetPosition(), false );
+            footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
     }
 
     // Detach it from the board and its group

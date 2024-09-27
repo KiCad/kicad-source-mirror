@@ -254,7 +254,7 @@ public:
 
     void Move( const VECTOR2I& offset ) override;
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
-    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     /**
      * Mirror the dimension relative to a given horizontal axis.
@@ -264,7 +264,7 @@ public:
      *
      * @param axis_pos is the vertical axis position to mirror around.
      */
-    virtual void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false );
+    virtual void Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection );
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -399,7 +399,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false ) override;
+    void Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection ) override;
 
     BITMAPS GetMenuImage() const override;
 
@@ -497,7 +497,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false ) override;
+    void Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection ) override;
 
     BITMAPS GetMenuImage() const override;
 

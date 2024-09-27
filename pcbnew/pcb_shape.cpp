@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcb_shape.h"
+
 #include <google/protobuf/any.pb.h>
 #include <magic_enum.hpp>
 
 #include <bitmaps.h>
-#include <core/mirror.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
@@ -41,7 +42,6 @@
 #include <geometry/shape_compound.h>
 #include <geometry/point_types.h>
 #include <geometry/shape_utils.h>
-#include <pcb_shape.h>
 #include <pcb_painter.h>
 #include <api/board/board_types.pb.h>
 #include <api/api_enums.h>
@@ -557,15 +557,15 @@ void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
-void PCB_SHAPE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    flip( aCentre, aFlipLeftRight );
+    flip( aCentre, aFlipDirection );
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
 
 
-void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
+void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     // Mirror an edge of the footprint. the layer is not modified
     // This is a footprint shape modification.
@@ -577,22 +577,11 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
     case SHAPE_T::RECTANGLE:
     case SHAPE_T::CIRCLE:
     case SHAPE_T::BEZIER:
-        if( aMirrorAroundXAxis )
-        {
-            MIRROR( m_start.y, aCentre.y );
-            MIRROR( m_end.y, aCentre.y );
-            MIRROR( m_arcCenter.y, aCentre.y );
-            MIRROR( m_bezierC1.y, aCentre.y );
-            MIRROR( m_bezierC2.y, aCentre.y );
-        }
-        else
-        {
-            MIRROR( m_start.x, aCentre.x );
-            MIRROR( m_end.x, aCentre.x );
-            MIRROR( m_arcCenter.x, aCentre.x );
-            MIRROR( m_bezierC1.x, aCentre.x );
-            MIRROR( m_bezierC2.x, aCentre.x );
-        }
+        MIRROR( m_start, aCentre, aFlipDirection );
+        MIRROR( m_end, aCentre, aFlipDirection );
+        MIRROR( m_arcCenter, aCentre, aFlipDirection );
+        MIRROR( m_bezierC1, aCentre, aFlipDirection );
+        MIRROR( m_bezierC2, aCentre, aFlipDirection );
 
         if( GetShape() == SHAPE_T::ARC )
             std::swap( m_start, m_end );
@@ -603,7 +592,7 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
         break;
 
     case SHAPE_T::POLY:
-        m_poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis, aCentre );
+        m_poly.Mirror( aCentre, aFlipDirection );
         break;
 
     default:

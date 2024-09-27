@@ -779,7 +779,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)
         if( newFootprint->IsFlipped() )
-            newFootprint->Flip( newFootprint->GetPosition(), cfg->m_FlipLeftRight );
+            newFootprint->Flip( newFootprint->GetPosition(), cfg->m_FlipDirection );
 
         KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetCanvas()->GetViewControls();
         VECTOR2D              cursorPos = viewControls->GetCursorPosition();

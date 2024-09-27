@@ -23,9 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SHAPE_ARC_H
-#define __SHAPE_ARC_H
+#pragma once
 
+#include <core/mirror.h>     // for FLIP_DIRECTION
 #include <geometry/shape.h>
 #include <base_units.h>
 #include <math/vector2d.h>   // for VECTOR2I
@@ -185,7 +185,7 @@ public:
      */
     void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter ) override;
 
-    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } );
+    void Mirror( const VECTOR2I& aRef, FLIP_DIRECTION aFlipDirection );
 
     void Mirror( const SEG& axis );
 
@@ -290,5 +290,3 @@ private:
 
 // Required for Boost Test BOOST_CHECK_EQUAL:
 std::ostream& operator<<( std::ostream& aStream, const SHAPE_ARC& aArc );
-
-#endif

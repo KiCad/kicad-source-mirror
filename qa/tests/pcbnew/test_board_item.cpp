@@ -272,8 +272,8 @@ BOOST_AUTO_TEST_CASE( FlipLeftRight )
 
                         // Two equivalent flips are an identity.
 
-                        item->Flip( aRef, true );
-                        item->Flip( aRef, true );
+                        item->Flip( aRef, FLIP_DIRECTION::LEFT_RIGHT );
+                        item->Flip( aRef, FLIP_DIRECTION::LEFT_RIGHT );
 
                         CompareItems( item.get(), aOriginalItem );
                     } );
@@ -311,8 +311,8 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
 
                         // Two equivalent flips are an identity.
 
-                        item->Flip( aRef, false );
-                        item->Flip( aRef, false );
+                        item->Flip( aRef, FLIP_DIRECTION::TOP_BOTTOM );
+                        item->Flip( aRef, FLIP_DIRECTION::TOP_BOTTOM );
 
                         CompareItems( item.get(), aOriginalItem );
                     } );

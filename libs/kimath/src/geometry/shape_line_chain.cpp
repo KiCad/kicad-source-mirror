@@ -1018,19 +1018,18 @@ long long int SHAPE_LINE_CHAIN::Length() const
 }
 
 
-void SHAPE_LINE_CHAIN::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
+void SHAPE_LINE_CHAIN::Mirror( const VECTOR2I& aRef, FLIP_DIRECTION aFlipDirection )
 {
     for( auto& pt : m_points )
     {
-        if( aX )
+        if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
             pt.x = -pt.x + 2 * aRef.x;
-
-        if( aY )
+        else
             pt.y = -pt.y + 2 * aRef.y;
     }
 
     for( auto& arc : m_arcs )
-        arc.Mirror( aX, aY, aRef );
+        arc.Mirror( aRef, aFlipDirection );
 }
 
 

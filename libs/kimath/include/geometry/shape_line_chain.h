@@ -758,11 +758,10 @@ public:
     /**
      * Mirror the line points about y or x (or both).
      *
-     * @param aX If true, mirror about the y axis (flip X coordinate).
-     * @param aY If true, mirror about the x axis (flip Y coordinate).
      * @param aRef sets the reference point about which to mirror.
+     * @param aFlipDirection is the direction to mirror.
      */
-    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } );
+    void Mirror( const VECTOR2I& aRef, FLIP_DIRECTION aFlipDirection );
 
     /**
      * Mirror the line points using an given axis.

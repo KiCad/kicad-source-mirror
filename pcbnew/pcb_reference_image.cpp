@@ -180,18 +180,10 @@ const VECTOR2I PCB_REFERENCE_IMAGE::GetSize() const
 }
 
 
-void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( aFlipLeftRight )
-    {
-        MIRROR( m_pos.x, aCentre.x );
-        m_bitmapBase->Mirror( false );
-    }
-    else
-    {
-        MIRROR( m_pos.y, aCentre.y );
-        m_bitmapBase->Mirror( true );
-    }
+    MIRROR( m_pos, aCentre, aFlipDirection );
+    m_bitmapBase->Mirror( aFlipDirection );
 }
 
 void PCB_REFERENCE_IMAGE::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )

@@ -490,16 +490,17 @@ public:
      * (like Mirror() but changes layer).
      *
      * @param aCentre is the rotation point.
+     * @param aFlipDirection is the direction of the flip.
      */
-    virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    virtual void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     /**
      * Mirror the outlines relative to a given horizontal axis the layer is not changed.
      *
      * @param aMirrorRef is axis position
-     * @param aMirrorLeftRight mirror across Y axis (otherwise mirror across X)
+     * @param aFlipDirection is the direction of the flip.
      */
-    void Mirror( const VECTOR2I& aMirrorRef, bool aMirrorLeftRight );
+    void Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection );
 
     /**
      * @return the class name.
