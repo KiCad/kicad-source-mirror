@@ -55,7 +55,7 @@
 #include <tools/pcb_grid_helper.h>
 #include <tools/pad_tool.h>
 #include <view/view_controls.h>
-#include <connectivity/connectivity_algo.h>`
+#include <connectivity/connectivity_algo.h>
 #include <core/kicad_algo.h>
 #include <fix_board_shape.h>
 #include <bitmaps.h>
