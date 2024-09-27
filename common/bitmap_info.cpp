@@ -668,6 +668,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_24.png" ), 24, wxT( "light" ) );
@@ -1086,6 +1087,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1504,6 +1506,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_16.png" ), 16, wxT( "light" ) );
@@ -1922,6 +1925,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2340,6 +2344,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_32.png" ), 32, wxT( "light" ) );
@@ -2758,6 +2763,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_dark_32.png" ), 32, wxT( "dark" ) );
@@ -3176,6 +3182,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_48.png" ), 48, wxT( "light" ) );
@@ -3594,6 +3601,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_dark_48.png" ), 48, wxT( "dark" ) );
@@ -4012,6 +4020,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_64.png" ), 64, wxT( "light" ) );
@@ -4430,6 +4439,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::reload].emplace_back( BITMAPS::reload, wxT( "reload_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::render_mode].emplace_back( BITMAPS::render_mode, wxT( "render_mode_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::rescue].emplace_back( BITMAPS::rescue, wxT( "rescue_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::restore_from_file].emplace_back( BITMAPS::restore_from_file, wxT( "restore_from_file_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::right].emplace_back( BITMAPS::right, wxT( "right_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner].emplace_back( BITMAPS::router_len_tuner, wxT( "router_len_tuner_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::router_len_tuner_setup].emplace_back( BITMAPS::router_len_tuner_setup, wxT( "router_len_tuner_setup_dark_64.png" ), 64, wxT( "dark" ) );

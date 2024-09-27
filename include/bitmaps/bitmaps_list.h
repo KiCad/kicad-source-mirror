@@ -503,6 +503,7 @@ enum class BITMAPS : unsigned int
     repaint,
     rescue,
     resize_sheet,
+    restore_from_file,
     right,
     rotate_ccw,
     rotate_ccw_x,

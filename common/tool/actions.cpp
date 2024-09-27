@@ -119,7 +119,9 @@ TOOL_ACTION ACTIONS::revert( TOOL_ACTION_ARGS()
         .Name( "common.Control.revert" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Revert" ) )
-        .Tooltip( _( "Throw away changes" ) ) );
+        .Tooltip( _( "Throw away changes" ) )
+        .Icon( BITMAPS::restore_from_file )
+        );
 
 TOOL_ACTION ACTIONS::pageSettings( TOOL_ACTION_ARGS()
         .Name( "common.Control.pageSettings" )

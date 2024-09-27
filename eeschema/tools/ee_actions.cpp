@@ -1137,6 +1137,7 @@ TOOL_ACTION EE_ACTIONS::generateBOMLegacy( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Generate Legacy Bill of Materials..." ) )
         .Tooltip( _( "Generate a bill of materials for the current schematic (Legacy Generator)" ) )
+        .Icon( BITMAPS::file_bom )
         );
 
 TOOL_ACTION EE_ACTIONS::generateBOMExternal( TOOL_ACTION_ARGS()

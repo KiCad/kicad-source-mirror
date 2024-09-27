@@ -468,6 +468,7 @@ set( BMAPS_MID
     reload
     render_mode
     rescue
+    restore_from_file
     right
     router_len_tuner
     router_len_tuner_setup
