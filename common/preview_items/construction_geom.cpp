@@ -66,7 +66,7 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
     gal.SetIsStroke( true );
     gal.SetLineWidth( 1 );
 
-    const BOX2I viewport = KiROUND( aView->GetViewport() );
+    const BOX2I viewport = BOX2ISafe( aView->GetViewport() );
 
     const bool haveSnapLine = m_snapLine && m_snapLine->Length() != 0;
 

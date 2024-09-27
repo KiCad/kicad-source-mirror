@@ -80,7 +80,7 @@ void ANCHOR_DEBUG::ViewDraw( int, VIEW* aView ) const
 
     const COLOR4D textColor = settings.GetLayerColor( LAYER_AUX_ITEMS );
 
-    const BOX2I viewport = KiROUND( aView->GetViewport() );
+    const BOX2I viewport = BOX2ISafe( aView->GetViewport() );
 
     gal.SetIsFill( false );
     gal.SetIsStroke( true );
@@ -99,7 +99,7 @@ void ANCHOR_DEBUG::ViewDraw( int, VIEW* aView ) const
     const KIFONT::METRICS& fontMetrics = KIFONT::METRICS::Default();
     const KIFONT::FONT&    font = *KIFONT::FONT::GetFont();
 
-    size_t total = 0;
+    std::size_t total = 0;
     for( const auto& [anchor, count] : m_anchors )
     {
         if( m_nearest && *m_nearest == anchor )
