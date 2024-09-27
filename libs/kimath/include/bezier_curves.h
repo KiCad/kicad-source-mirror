@@ -96,10 +96,32 @@ class BEZIER
 public:
     BEZIER() = default;
 
-    BEZIER( const VECTOR2<NumericType>& aStart, const VECTOR2<NumericType>& aC1,
-            const VECTOR2<NumericType>& aC2, const VECTOR2<NumericType>& aEnd ) :
+    constexpr BEZIER( const VECTOR2<NumericType>& aStart, const VECTOR2<NumericType>& aC1,
+                      const VECTOR2<NumericType>& aC2, const VECTOR2<NumericType>& aEnd ) :
             Start( aStart ), C1( aC1 ), C2( aC2 ), End( aEnd )
-    {}
+    {
+    }
+
+    /**
+     * Evaluate the Bezier curve at a given t value
+     *
+     * aT doesn't have to be in the range [0, 1], but if it's not, the
+     * point will not be on the curve.
+     *
+     * @param aT the t value to evaluate the curve at (0 = start, 1 = end)
+     * @return the point on the curve at t (0 <= t <= 1)
+     */
+    constexpr VECTOR2<NumericType> PointAt( double aT ) const
+    {
+        const double t2 = aT * aT;
+        const double t3 = t2 * aT;
+        const double t_m1 = 1.0 - aT;
+        const double t_m1_2 = t_m1 * t_m1;
+        const double t_m1_3 = t_m1_2 * t_m1;
+
+        return ( t_m1_3 * Start ) + ( 3.0 * aT * t_m1_2 * C1 ) + ( 3.0 * t2 * t_m1 * C2 )
+               + ( t3 * End );
+    }
 
     VECTOR2<NumericType> Start;
     VECTOR2<NumericType> C1;
