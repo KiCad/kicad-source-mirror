@@ -1,13 +1,13 @@
 # boonchai k. <kicadthai@gmail.com>, 2021, 2022, 2023.
-# "boonchai k." <kicadthai@gmail.com>, 2023.
+# "boonchai k." <kicadthai@gmail.com>, 2023, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2024-09-28 08:15+0000\n"
+"Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
 "Language: th\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -129,9 +129,9 @@ msgid "Load OpenGL: layers"
 msgstr "อ่าน OpenGL: เลเยอร์"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "อ่าน OpenGL เลเยอร์ %d"
+msgstr "อ่าน OpenGL เลเยอร์ %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:660
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -299,9 +299,8 @@ msgstr "การตั้งค่าตัวกรอง"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:583
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:660
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:848
-#, fuzzy
 msgid "legacy colors"
-msgstr "ใช้สี:"
+msgstr "สีในรูปแบบเดิม"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:719
 msgid "3D Image File Name"
@@ -579,9 +578,8 @@ msgid "Show/hide the appearance manager"
 msgstr "แสดง/ซ่อนตัวจัดการลักษณะที่ปรากฏ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Board Body"
-msgstr "ตัวบอร์ด:"
+msgstr "ตัวบอร์ด"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show board body"
@@ -592,18 +590,16 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "ทองแดง/ผิวหน้า สำเร็จ:"
+msgstr "แสดงสี ทองแดงด้านหน้า/สีพื้นผิวสำเร็จ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "ทองแดง/ผิวหน้า สำเร็จ:"
+msgstr "แสดงสี ทองแดงด้านหลัง/สีพื้นผิวสำเร็จ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
