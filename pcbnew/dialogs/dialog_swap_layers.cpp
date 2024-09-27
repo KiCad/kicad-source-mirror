@@ -112,25 +112,24 @@ bool DIALOG_SWAP_LAYERS::TransferDataToWindow()
     LSET enabledCopperLayers = LSET::AllCuMask( m_parent->GetBoard()->GetCopperLayerCount() );
     int row = 0;
 
-    for( size_t layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    LSEQ enabledCopperLayerUIList = enabledCopperLayers.UIOrder();
+
+    for( PCB_LAYER_ID layer : enabledCopperLayerUIList )
     {
-        if( enabledCopperLayers.test( layer ) )
-        {
-            auto attr = new wxGridCellAttr;
-            attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_parent ) );
-            attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
-            attr->SetReadOnly();
-            m_grid->SetAttr( row, 0, attr );
+        auto attr = new wxGridCellAttr;
+        attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_parent ) );
+        attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+        attr->SetReadOnly();
+        m_grid->SetAttr( row, 0, attr );
 
-            attr = new wxGridCellAttr;
-            attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_parent ) );
-            attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_parent, LSET::AllNonCuMask() ) );
-            m_grid->SetAttr( row, 1, attr );
-            m_grid->GetTable()->SetValueAsLong( row, 0, (long) layer );
-            m_grid->GetTable()->SetValueAsLong( row, 1, (long) layer );
+        attr = new wxGridCellAttr;
+        attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_parent ) );
+        attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_parent, LSET::AllNonCuMask() ) );
+        m_grid->SetAttr( row, 1, attr );
+        m_grid->GetTable()->SetValueAsLong( row, 0, (long) layer );
+        m_grid->GetTable()->SetValueAsLong( row, 1, (long) layer );
 
-            ++row;
-        }
+        ++row;
     }
 
     return true;
@@ -146,15 +145,14 @@ bool DIALOG_SWAP_LAYERS::TransferDataFromWindow()
     wxGridTableBase* table = m_grid->GetTable();
     int row = 0;
 
-    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
-    {
-        if( enabledCopperLayers.test( layer ) )
-        {
-            int dest = table->GetValueAsLong( row++, 1 );
+    LSEQ enabledCopperLayerUIList = enabledCopperLayers.UIOrder();
 
-            if( dest >= 0 && dest < PCB_LAYER_ID_COUNT && enabledCopperLayers.test( dest ) )
-                m_layerMap[ ToLAYER_ID( layer ) ] = ToLAYER_ID( dest );
-        }
+    for( PCB_LAYER_ID layer : enabledCopperLayerUIList )
+    {
+        int dest = table->GetValueAsLong( row++, 1 );
+
+        if( dest >= 0 && dest < PCB_LAYER_ID_COUNT && enabledCopperLayers.test( dest ) )
+            m_layerMap[ layer ] = ToLAYER_ID( dest );
     }
 
     return true;
