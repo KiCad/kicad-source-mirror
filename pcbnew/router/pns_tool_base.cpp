@@ -110,7 +110,9 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aLayer,
                                  bool aIgnorePads, const std::vector<ITEM*> aAvoidItems )
 {
-    int tl = aLayer > 0 ? aLayer : getView()->GetTopLayer();
+    int tl = aLayer > 0 ? aLayer
+                        : m_router->GetInterface()->GetPNSLayerFromBoardLayer(
+                                  static_cast<PCB_LAYER_ID>( getView()->GetTopLayer() ) );
     int maxSlopRadius = std::max( m_gridHelper->GetGrid().x, m_gridHelper->GetGrid().y );
 
     static const int candidateCount = 5;
@@ -144,7 +146,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
             if( !item->IsRoutable() )
                 continue;
 
-            if( !IsCopperLayer( item->Layers().Start() ) )
+            if( !m_iface->IsCopperLayer( item->Layers().Start() ) )
                 continue;
 
             if( !m_iface->IsAnyLayerVisible( item->Layers() ) )
@@ -328,7 +330,8 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
 
 void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 {
-    int      tl = getView()->GetTopLayer();
+    int tl = m_router->GetInterface()->GetPNSLayerFromBoardLayer(
+            static_cast<PCB_LAYER_ID>( getView()->GetTopLayer() ) );
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
     VECTOR2I pos = aEvent.HasPosition() ? (VECTOR2I) aEvent.Position() : m_startSnapPoint;
 

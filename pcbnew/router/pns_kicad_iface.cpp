@@ -1436,6 +1436,11 @@ void PNS_KICAD_IFACE_BASE::SetBoard( BOARD* aBoard )
     wxLogTrace( wxT( "PNS" ), wxT( "m_board = %p" ), m_board );
 }
 
+bool PNS_KICAD_IFACE_BASE::IsCopperLayer( int aLayer ) const
+{
+    return ::IsCopperLayer( GetBoardLayerFromPNSLayer( aLayer ) );
+}
+
 
 bool PNS_KICAD_IFACE::IsAnyLayerVisible( const PNS_LAYER_RANGE& aLayer ) const
 {
