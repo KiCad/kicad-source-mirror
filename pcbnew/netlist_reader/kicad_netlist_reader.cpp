@@ -443,7 +443,6 @@ void KICAD_NETLIST_PARSER::parseComponent()
                 {
                     NeedSYMBOLorNUMBER();
                     humanSheetPath = From_UTF8( CurText() );
-                    printf("SPath '%s'\n", humanSheetPath.c_str().AsChar() );
                     NeedRIGHT();
                 }
                 if( token == T_tstamps )
