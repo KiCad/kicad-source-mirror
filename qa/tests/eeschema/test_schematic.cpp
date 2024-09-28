@@ -38,7 +38,6 @@ protected:
 wxFileName TEST_SCHEMATIC_FIXTURE::GetSchematicPath( const wxString& aRelativePath )
 {
     wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
-    fn.AppendDir( "schematic_object_tests" );
 
     wxString path = fn.GetFullPath();
     path += aRelativePath + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
@@ -50,23 +49,32 @@ wxFileName TEST_SCHEMATIC_FIXTURE::GetSchematicPath( const wxString& aRelativePa
 BOOST_FIXTURE_TEST_SUITE( Schematic, TEST_SCHEMATIC_FIXTURE )
 
 
-BOOST_AUTO_TEST_CASE( TestSchematicNotSharedByMultipleProjects )
+BOOST_AUTO_TEST_CASE( TestSchematicSharedByMultipleProjects )
 {
-    LoadSchematic( "not_shared_by_multiple_projects/not_shared_by_multiple_projects" );
+    LoadSchematic( "schematic_object_tests/not_shared_by_multiple_projects/"
+                   "not_shared_by_multiple_projects" );
 
     std::set<const SCH_SCREEN*> sharedScreens = m_schematic.GetSchematicsSharedByMultipleProjects();
 
     BOOST_CHECK( sharedScreens.empty() );
+
+    LoadSchematic( "schematic_object_tests/shared_by_multiple_projects/project_a/project_a" );
+
+    sharedScreens = m_schematic.GetSchematicsSharedByMultipleProjects();
+
+    BOOST_CHECK( !sharedScreens.empty() );
 }
 
 
-BOOST_AUTO_TEST_CASE( TestSchematicSharedByMultipleProjects )
+BOOST_AUTO_TEST_CASE( TestSchematicIsComplexHierarchy )
 {
-    LoadSchematic( "shared_by_multiple_projects/project_a/project_a" );
+    LoadSchematic( "netlists/group_bus_matching/group_bus_matching" );
 
-    std::set<const SCH_SCREEN*> sharedScreens = m_schematic.GetSchematicsSharedByMultipleProjects();
+    BOOST_CHECK( !m_schematic.IsComplexHierarchy() );
 
-    BOOST_CHECK( !sharedScreens.empty() );
+    LoadSchematic( "netlists/complex_hierarchy/complex_hierarchy" );
+
+    BOOST_CHECK( m_schematic.IsComplexHierarchy() );
 }
 
 

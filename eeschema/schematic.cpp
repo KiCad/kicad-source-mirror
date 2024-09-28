@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -939,4 +939,22 @@ std::set<const SCH_SCREEN*> SCHEMATIC::GetSchematicsSharedByMultipleProjects() c
     }
 
     return retv;
+}
+
+
+bool SCHEMATIC::IsComplexHierarchy() const
+{
+    wxCHECK( m_rootSheet, false );
+
+    SCH_SCREENS screens( m_rootSheet );
+
+    for( const SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        wxCHECK2( screen, continue );
+
+        if( screen->GetRefCount() > 1 )
+            return true;
+    }
+
+    return false;
 }

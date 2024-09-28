@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -321,6 +321,13 @@ public:
      * @return all of the #SCH_SCREEN objects that contain instance data for multiple projects.
      */
     std::set<const SCH_SCREEN*> GetSchematicsSharedByMultipleProjects() const;
+
+    /**
+     * Test if the schematic is a complex hierarchy.
+     *
+     * @return true if the schematic is a complex hierarchy or false if it's a simple hierarchy.
+     */
+    bool IsComplexHierarchy() const;
 
     /**
      * True if a SCHEMATIC exists, false if not
