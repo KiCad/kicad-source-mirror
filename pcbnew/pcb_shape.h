@@ -123,6 +123,13 @@ public:
 
     void Normalize() override;
 
+    /**
+     * Normalize coordinates to compare 2 similar PCB_SHAPES
+     * similat to Normalize(), but also normalize SEGMENT end points
+     * needed only for graphic comparisons
+     */
+    void NormalizeForCompare() override;
+
     void Move( const VECTOR2I& aMoveVector ) override;
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;

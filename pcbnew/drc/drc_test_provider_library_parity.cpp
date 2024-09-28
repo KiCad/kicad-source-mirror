@@ -521,7 +521,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
         temp->SetPosition( GetPosition() );
 
     for( BOARD_ITEM* item : temp->GraphicalItems() )
-        item->Normalize();
+        item->NormalizeForCompare();
 
     // This temporary footprint must not have a parent when it goes out of scope because it
     // must not trigger the IncrementTimestamp call in ~FOOTPRINT.
@@ -625,7 +625,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     dummy.SetParent( nullptr );
 
     for( BOARD_ITEM* item : dummy.GraphicalItems() )
-        item->Normalize();
+        item->NormalizeForCompare();
 
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> aShapes;
     std::copy_if( dummy.GraphicalItems().begin(), dummy.GraphicalItems().end(),

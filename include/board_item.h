@@ -337,6 +337,13 @@ public:
     virtual void Normalize() {}
 
     /**
+     * Perform any normalization required to compare 2 graphics, especially
+     * if the can be rotated and/or flipped.
+     * Similar to Normalize(), but more changes can be made
+     */
+    virtual void NormalizeForCompare() { Normalize(); }
+
+    /**
      * Return the #BOARD in which this #BOARD_ITEM resides, or NULL if none.
      */
     virtual const BOARD* GetBoard() const;
