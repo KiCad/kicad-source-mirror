@@ -2275,15 +2275,10 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // So using the center of the shape is better (the shape does not move)
     if( selection.GetSize() == 1 )
     {
-        EDA_ITEM* item = static_cast<EDA_ITEM*>( selection.GetItem( 0 ) );
+        PCB_SHAPE* item = dynamic_cast<PCB_SHAPE*>( selection.GetItem( 0 ) );
 
-        if( item->IsBOARD_ITEM() )
-        {
-            EDA_SHAPE* boardItem = dynamic_cast<EDA_SHAPE*>( item );
-
-            if( !boardItem || boardItem->GetShape() != SHAPE_T::RECTANGLE )
-                refPt = selection.GetReferencePoint();
-        }
+        if( !item || item->GetShape() != SHAPE_T::RECTANGLE )
+            refPt = selection.GetReferencePoint();
     }
 
     const FLIP_DIRECTION flipDirection = frame()->GetPcbNewSettings()->m_FlipDirection;
