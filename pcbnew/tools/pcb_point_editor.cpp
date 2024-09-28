@@ -32,6 +32,7 @@ using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/seg.h>
 #include <geometry/vector_utils.h>
 #include <confirm.h>

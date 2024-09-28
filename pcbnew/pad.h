@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PAD_H
-#define PAD_H
+#pragma once
 
 #include <mutex>
 #include <array>
@@ -32,7 +31,6 @@
 #include <core/arraydim.h>
 #include <core/mirror.h>
 #include <geometry/eda_angle.h>
-#include <geometry/geometry_utils.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_compound.h>
 #include <lset.h>
@@ -866,5 +864,3 @@ private:
     std::mutex                                  m_zoneLayerOverridesMutex;
     std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> m_zoneLayerOverrides;
 };
-
-#endif  // PAD_H

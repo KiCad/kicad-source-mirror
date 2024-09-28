@@ -30,6 +30,7 @@
 #include <pcb_shape.h>
 #include <zone.h>
 #include <advanced_config.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_engine.h>

@@ -62,6 +62,7 @@ Load() TODO's
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <font/fontconfig.h>
+#include <geometry/geometry_utils.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <trigo.h>
