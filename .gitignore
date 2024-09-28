@@ -56,6 +56,7 @@ qa/tests/output/**
 demos/**/*-bak
 demos/**/_autosave-*
 demos/**/fp-info-cache
+demos/**/~*.lck
 
 # MacOS package info created by CMake
 bitmap2component/Info.plist
