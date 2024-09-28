@@ -2270,8 +2270,21 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     // If only one item selected, flip around the selection or item anchor point (instead
     // of the bounding box center) to avoid moving the item anchor
+    // but only if the item is not a PCB_SHAPE with SHAPE_T::RECTANGLE shape, because
+    // for this shape the flip transform swap start and end coordinates and move the shape.
+    // So using the center of the shape is better (the shape does not move)
     if( selection.GetSize() == 1 )
-        refPt = selection.GetReferencePoint();
+    {
+        EDA_ITEM* item = static_cast<EDA_ITEM*>( selection.GetItem( 0 ) );
+
+        if( item->IsBOARD_ITEM() )
+        {
+            EDA_SHAPE* boardItem = dynamic_cast<EDA_SHAPE*>( item );
+
+            if( !boardItem || boardItem->GetShape() != SHAPE_T::RECTANGLE )
+                refPt = selection.GetReferencePoint();
+        }
+    }
 
     const FLIP_DIRECTION flipDirection = frame()->GetPcbNewSettings()->m_FlipDirection;
 
