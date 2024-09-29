@@ -277,6 +277,16 @@ private:
      */
     LSET parseBoardItemLayersAsMask();
 
+     /**
+     * Parse the layers definition of a #BOARD_ITEM object
+     * that has a single copper layer and optional soldermask layer.
+     *
+     * @return The mask of layers the parsed #BOARD_ITEM is on.
+     * @throw IO_ERROR if any of the layers is not valid.
+     * @throw PARSE_ERROR if the layers syntax is incorrect.
+     */
+    LSET parseLayersForCuItemWithSoldermask();
+
     /**
      * Parse a coordinate pair (xy X Y) in board units (mm).
      *

@@ -280,7 +280,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // Add object item to layer container
-            createTrack( track, layerContainer );
+            createTrackWithMargin( track, layerContainer );
         }
     }
 
@@ -872,22 +872,23 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 }
             }
 
-            // Add via tech layers
-            if( ( layer == F_Mask || layer == B_Mask ) )
+            // Add track, via and arc tech layers
+            if( IsSolderMaskLayer( layer ) )
             {
-                int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
-
-                // Only vias on a external copper layer can have a solder mask
                 for( PCB_TRACK* track : m_board->Tracks() )
                 {
+                    if( !track->IsOnLayer( layer ) )
+                        continue;
+
+                    // Only vias on a external copper layer can have a solder mask
                     PCB_LAYER_ID copper_layer = layer == F_Mask ? F_Cu : B_Cu;
 
                     if( track->Type() == PCB_VIA_T
-                            && static_cast<const PCB_VIA*>( track )->FlashLayer( copper_layer )
-                            && !static_cast<const PCB_VIA*>( track )->IsTented( layer ) )
-                    {
-                        createViaWithMargin( track, layerContainer, maskExpansion );
-                    }
+                            && !static_cast<const PCB_VIA*>( track )->FlashLayer( copper_layer ) )
+                        continue;
+
+                    int maskExpansion = track->GetSolderMaskExpansion();
+                    createTrackWithMargin( track, layerContainer, maskExpansion );
                 }
             }
 

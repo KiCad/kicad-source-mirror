@@ -2109,6 +2109,30 @@ LSET PCB_IO_KICAD_SEXPR_PARSER::parseBoardItemLayersAsMask()
 }
 
 
+LSET PCB_IO_KICAD_SEXPR_PARSER::parseLayersForCuItemWithSoldermask()
+{
+    LSET layerMask = parseBoardItemLayersAsMask();
+
+    if( ( layerMask & LSET::AllCuMask() ).count() != 1 )
+          Expecting( "single copper layer" );
+
+    if( ( layerMask & LSET( { F_Mask, B_Mask } ) ).count() > 1 )
+          Expecting( "max one soldermask layer" );
+
+    if( ( ( layerMask & LSET::InternalCuMask() ).any()
+              && ( layerMask & LSET( { F_Mask, B_Mask } ) ).any() ) )
+                   Expecting( "no mask layer when track is on internal layer" );
+
+    if( ( layerMask & LSET( { F_Cu, B_Mask } ) ).count() > 1 )
+          Expecting( "copper and mask on the same side" );
+
+    if( ( layerMask & LSET( { B_Cu, F_Mask } ) ).count() > 1 )
+          Expecting( "copper and mask on the same side" );
+
+    return layerMask;
+}
+
+
 void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 {
     wxCHECK_RET( CurTok() == T_setup,
@@ -6098,6 +6122,15 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
             NeedRIGHT();
             break;
 
+        case T_layers:
+            arc->SetLayerSet( parseLayersForCuItemWithSoldermask() );
+            break;
+
+        case T_solder_mask_margin:
+            arc->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
+            NeedRIGHT();
+            break;
+
         case T_net:
             if( !arc->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
             {
@@ -6125,7 +6158,8 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
             break;
 
         default:
-            Expecting( "start, mid, end, width, layer, net, tstamp, uuid, or status" );
+            Expecting( "start, mid, end, width, layer, solder_mask_margin, net, tstamp, uuid, "
+                       "or status" );
         }
     }
 
@@ -6183,6 +6217,15 @@ PCB_TRACK* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TRACK()
             NeedRIGHT();
             break;
 
+        case T_layers:
+            track->SetLayerSet( parseLayersForCuItemWithSoldermask() );
+            break;
+
+        case T_solder_mask_margin:
+            track->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
+            NeedRIGHT();
+            break;
+
         case T_net:
             if( !track->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
             {
@@ -6210,7 +6253,8 @@ PCB_TRACK* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TRACK()
             break;
 
         default:
-            Expecting( "start, end, width, layer, net, tstamp, uuid, or locked" );
+            Expecting( "start, end, width, layer, solder_mask_margin, net, tstamp, uuid, "
+                       "or locked" );
         }
     }
 

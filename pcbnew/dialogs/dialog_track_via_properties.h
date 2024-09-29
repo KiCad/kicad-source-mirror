@@ -50,6 +50,7 @@ private:
     void onViaEdit( wxCommandEvent& aEvent ) override;
     void onTentingLinkToggle( wxCommandEvent& event ) override;
     void onFrontTentingChanged( wxCommandEvent& event ) override;
+    void onTrackEdit( wxCommandEvent& aEvent ) override;
 
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
@@ -65,6 +66,7 @@ private:
     UNIT_BINDER          m_trackStartX, m_trackStartY;
     UNIT_BINDER          m_trackEndX, m_trackEndY;
     UNIT_BINDER          m_trackWidth;
+    UNIT_BINDER          m_trackMaskMargin;
 
     UNIT_BINDER          m_viaX, m_viaY;
     UNIT_BINDER          m_viaDiameter, m_viaDrill;

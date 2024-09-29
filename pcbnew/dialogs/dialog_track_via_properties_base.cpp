@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -153,6 +153,9 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_sbTrackSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 
+	wxBoxSizer* bSizerTrackRightControl;
+	bSizerTrackRightControl = new wxBoxSizer( wxVERTICAL );
+
 	wxFlexGridSizer* fgTrackRightSizer;
 	fgTrackRightSizer = new wxFlexGridSizer( 1, 3, 3, 5 );
 	fgTrackRightSizer->AddGrowableCol( 2 );
@@ -170,7 +173,48 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
-	m_sbTrackSizer->Add( fgTrackRightSizer, 1, 0, 3 );
+	bSizerTrackRightControl->Add( fgTrackRightSizer, 0, wxEXPAND|wxRIGHT, 3 );
+
+	wxBoxSizer* bSizerTrackRemoveSoldermask;
+	bSizerTrackRemoveSoldermask = new wxBoxSizer( wxVERTICAL );
+
+
+	bSizerTrackRemoveSoldermask->Add( 0, 15, 0, wxEXPAND, 5 );
+
+	m_techLayersLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Technical Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_techLayersLabel->Wrap( -1 );
+	bSizerTrackRemoveSoldermask->Add( m_techLayersLabel, 0, wxALL, 5 );
+
+	wxFlexGridSizer* fgSizerTrackMaskMargin;
+	fgSizerTrackMaskMargin = new wxFlexGridSizer( 0, 4, 3, 5 );
+	fgSizerTrackMaskMargin->AddGrowableCol( 2 );
+	fgSizerTrackMaskMargin->SetFlexibleDirection( wxBOTH );
+	fgSizerTrackMaskMargin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_trackHasSolderMask = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Solder mask"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+	fgSizerTrackMaskMargin->Add( m_trackHasSolderMask, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_trackMaskMarginLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackMaskMarginLabel->Wrap( -1 );
+	fgSizerTrackMaskMargin->Add( m_trackMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_trackMaskMarginCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackMaskMarginCtrl->SetToolTip( _("This is the local clearance between the track and the solder mask opening.\nLeave blank to use the value defined in the Board Setup.") );
+
+	fgSizerTrackMaskMargin->Add( m_trackMaskMarginCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_trackMaskMarginUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackMaskMarginUnit->Wrap( -1 );
+	fgSizerTrackMaskMargin->Add( m_trackMaskMarginUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	bSizerTrackRemoveSoldermask->Add( fgSizerTrackMaskMargin, 1, wxEXPAND, 3 );
+
+
+	bSizerTrackRightControl->Add( bSizerTrackRemoveSoldermask, 1, wxEXPAND, 3 );
+
+
+	m_sbTrackSizer->Add( bSizerTrackRightControl, 1, wxEXPAND, 5 );
 
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -615,6 +659,8 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_viaNotFree->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNotFreeClicked ), NULL, this );
 	m_predefinedTrackWidthsCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthSelect ), NULL, this );
 	m_TrackWidthCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthEdit ), NULL, this );
+	m_TrackLayerCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackEdit ), NULL, this );
+	m_trackHasSolderMask->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackEdit ), NULL, this );
 	m_predefinedViaSizesCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaSelect ), NULL, this );
 	m_ViaDiameterCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaDrillCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
@@ -655,6 +701,8 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::~DIALOG_TRACK_VIA_PROPERTIES_BASE()
 	m_viaNotFree->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNotFreeClicked ), NULL, this );
 	m_predefinedTrackWidthsCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthSelect ), NULL, this );
 	m_TrackWidthCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthEdit ), NULL, this );
+	m_TrackLayerCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackEdit ), NULL, this );
+	m_trackHasSolderMask->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackEdit ), NULL, this );
 	m_predefinedViaSizesCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaSelect ), NULL, this );
 	m_ViaDiameterCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaDrillCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );

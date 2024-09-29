@@ -368,10 +368,8 @@ private:
     void destroyLayers();
 
     // Helper functions to create the board
-    void createViaWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
-                              int aMargin );
-
-    void createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer );
+    void createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
+                                int aMargin = 0 );
 
     void createPadWithMargin( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayer, const VECTOR2I& aMargin ) const;

@@ -599,13 +599,10 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 
     // Plot vias on copper layers, and if aPlotOpt.GetPlotViaOnMaskLayer() is true,
-    // plot them on solder mask
 
     GBR_METADATA gbr_metadata;
 
-    bool isOnCopperLayer = ( aLayerMask & LSET::AllCuMask() ).any();
-
-    if( isOnCopperLayer )
+    if( onCopperLayer )
     {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIAPAD );
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET );
@@ -629,7 +626,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         int via_margin = 0;
         double width_adj = 0;
 
-        if( aLayerMask[B_Mask] || aLayerMask[F_Mask] )
+        if( onSolderMaskLayer )
             via_margin = via->GetSolderMaskExpansion();
 
         if( ( aLayerMask & LSET::AllCuMask() ).any() )
@@ -663,7 +660,18 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     aPlotter->EndBlock( nullptr );
     aPlotter->StartBlock( nullptr );
-    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+
+    if( onCopperLayer )
+    {
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+        gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET );
+    }
+    else
+    {
+        // Reset attributes if non-copper (soldermask) layer
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONE );
+        gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_UNSPECIFIED );
+    }
 
     // Plot tracks (not vias) :
     for( const PCB_TRACK* track : aBoard->Tracks() )
@@ -671,7 +679,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( track->Type() == PCB_VIA_T )
             continue;
 
-        if( !aLayerMask[track->GetLayer()] )
+        if( !( aLayerMask & track->GetLayerSet() ).any() )
             continue;
 
         // Some track segments can be not connected (no net).
@@ -679,7 +687,14 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         gbr_metadata.m_NetlistMetadata.m_NotInNet = track->GetNetname().IsEmpty();
 
         gbr_metadata.SetNetName( track->GetNetname() );
-        int width = track->GetWidth() + itemplotter.getFineWidthAdj();
+
+        int margin = 0;
+
+        if( onSolderMaskLayer )
+            margin = track->GetSolderMaskExpansion();
+
+        int width = track->GetWidth() + 2 * margin + itemplotter.getFineWidthAdj();
+
         aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
 
         if( track->Type() == PCB_ARC_T )

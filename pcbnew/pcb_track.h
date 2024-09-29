@@ -136,7 +136,20 @@ public:
             return m_End;
     }
 
+    void SetHasSolderMask( bool aVal )      { m_hasSolderMask = aVal; }
+    bool HasSolderMask() const              { return m_hasSolderMask; }
+
+    void SetLocalSolderMaskMargin( std::optional<int> aMargin ) { m_solderMaskMargin = aMargin; }
+    std::optional<int> GetLocalSolderMaskMargin() const         { return m_solderMaskMargin; }
+
+    int GetSolderMaskExpansion() const;
+
     // Virtual function
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
+
+    virtual LSET GetLayerSet() const override;
+    virtual void SetLayerSet( const LSET& aLayers ) override;
+
     const BOX2I GetBoundingBox() const override;
 
     /**
@@ -247,6 +260,9 @@ protected:
     int      m_Width;        ///< Thickness of track
     VECTOR2I m_Start;        ///< Line start point
     VECTOR2I m_End;          ///< Line end point
+
+    bool               m_hasSolderMask;
+    std::optional<int> m_solderMaskMargin;
 };
 
 

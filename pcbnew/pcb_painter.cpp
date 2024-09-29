@@ -719,7 +719,8 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         renderNetNameForSegment( trackShape, color, aTrack->GetDisplayNetname() );
         return;
     }
-    else if( IsCopperLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    else if( IsCopperLayer( aLayer ) || IsSolderMaskLayer( aLayer )
+                 || aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Draw a regular track
         bool outline_mode = pcbconfig()
@@ -730,6 +731,9 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         m_gal->SetIsStroke( outline_mode );
         m_gal->SetIsFill( not outline_mode );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+
+        if( IsSolderMaskLayer( aLayer ) )
+            track_width = track_width + aTrack->GetSolderMaskExpansion() * 2;
 
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
             track_width = track_width + m_lockedShadowMargin;
@@ -851,7 +855,8 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         // Ummm, yeah.  Anyone fancy implementing text on a path?
         return;
     }
-    else if( IsCopperLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    else if( IsCopperLayer( aLayer ) || IsSolderMaskLayer( aLayer )
+                 || aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Draw a regular track
         bool outline_mode = pcbconfig()
@@ -862,6 +867,9 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetIsStroke( outline_mode );
         m_gal->SetIsFill( not outline_mode );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+
+        if( IsSolderMaskLayer( aLayer ) )
+            width = width + aArc->GetSolderMaskExpansion() * 2;
 
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
             width = width + m_lockedShadowMargin;

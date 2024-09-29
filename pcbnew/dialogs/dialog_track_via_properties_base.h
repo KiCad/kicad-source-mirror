@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,7 +37,6 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_TRACK_VIA_PROPERTIES_BASE
@@ -79,6 +78,11 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackWidthUnit;
 		wxStaticText* m_TrackLayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_TrackLayerCtrl;
+		wxStaticText* m_techLayersLabel;
+		wxCheckBox* m_trackHasSolderMask;
+		wxStaticText* m_trackMaskMarginLabel;
+		wxTextCtrl* m_trackMaskMarginCtrl;
+		wxStaticText* m_trackMaskMarginUnit;
 		wxStaticBoxSizer* m_sbViaSizer;
 		wxStaticText* m_ViaXLabel;
 		wxTextCtrl* m_ViaXCtrl;
@@ -138,6 +142,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onViaNotFreeClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthEdit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTrackEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFrontTentingChanged( wxCommandEvent& event ) { event.Skip(); }

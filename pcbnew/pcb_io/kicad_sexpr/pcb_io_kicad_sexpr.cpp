@@ -2532,32 +2532,41 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             formatTeardropParameters( via->GetTeardropParams(), aNestLevel+1 );
         }
     }
-    else if( aTrack->Type() == PCB_ARC_T )
-    {
-        const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
-
-        m_out->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s) (width %s)",
-                      formatInternalUnits( arc->GetStart() ).c_str(),
-                      formatInternalUnits( arc->GetMid() ).c_str(),
-                      formatInternalUnits( arc->GetEnd() ).c_str(),
-                      formatInternalUnits( arc->GetWidth() ).c_str() );
-
-        if( arc->IsLocked() )
-            KICAD_FORMAT::FormatBool( m_out, 0, "locked", arc->IsLocked() );
-
-        m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( arc->GetLayer() ) ).c_str() );
-    }
     else
     {
-        m_out->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
-                      formatInternalUnits( aTrack->GetStart() ).c_str(),
-                      formatInternalUnits( aTrack->GetEnd() ).c_str(),
-                      formatInternalUnits( aTrack->GetWidth() ).c_str() );
+        if( aTrack->Type() == PCB_ARC_T )
+        {
+            const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
+
+            m_out->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s) (width %s)",
+                          formatInternalUnits( arc->GetStart() ).c_str(),
+                          formatInternalUnits( arc->GetMid() ).c_str(),
+                          formatInternalUnits( arc->GetEnd() ).c_str(),
+                          formatInternalUnits( arc->GetWidth() ).c_str() );
+        }
+        else
+        {
+            m_out->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
+                          formatInternalUnits( aTrack->GetStart() ).c_str(),
+                          formatInternalUnits( aTrack->GetEnd() ).c_str(),
+                          formatInternalUnits( aTrack->GetWidth() ).c_str() );
+        }
 
         if( aTrack->IsLocked() )
             KICAD_FORMAT::FormatBool( m_out, 0, "locked", aTrack->IsLocked() );
 
-        m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( aTrack->GetLayer() ) ).c_str() );
+        if( aTrack->GetLayerSet().count() > 1 )
+            formatLayers( aTrack->GetLayerSet() );
+        else
+            formatLayer( aTrack->GetLayer() );
+
+        if( aTrack->HasSolderMask() 
+                && aTrack->GetLocalSolderMaskMargin().has_value()
+                && ( aTrack->IsOnLayer( F_Cu ) || aTrack->IsOnLayer( B_Cu ) ) )
+        {
+            m_out->Print( 0, " (solder_mask_margin %s)",
+                          formatInternalUnits( aTrack->GetLocalSolderMaskMargin().value() ).c_str() );
+        }
     }
 
     m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );

@@ -61,6 +61,7 @@ PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
     m_Width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
+    m_hasSolderMask = false;
 }
 
 
@@ -178,7 +179,9 @@ bool PCB_TRACK::operator==( const PCB_TRACK& aOther ) const
     return m_Start == aOther.m_Start
             && m_End == aOther.m_End
             && m_layer == aOther.m_layer
-            && m_Width == aOther.m_Width;
+            && m_Width == aOther.m_Width
+            && m_hasSolderMask == aOther.m_hasSolderMask
+            && m_solderMaskMargin == aOther.m_solderMaskMargin;
 }
 
 
@@ -203,6 +206,12 @@ double PCB_TRACK::Similarity( const BOARD_ITEM& aOther ) const
     if( m_End != other.m_End )
         similarity *= 0.9;
 
+    if( m_hasSolderMask != other.m_hasSolderMask )
+        similarity *= 0.9;
+
+    if( m_solderMaskMargin != other.m_solderMaskMargin )
+        similarity *= 0.9;
+
     return similarity;
 }
 
@@ -224,7 +233,9 @@ bool PCB_ARC::operator==( const PCB_ARC& aOther ) const
             && m_End == aOther.m_End
             && m_Mid == aOther.m_Mid
             && m_layer == aOther.m_layer
-            && m_Width == aOther.m_Width;
+            && m_Width == aOther.m_Width
+            && m_hasSolderMask == aOther.m_hasSolderMask
+            && m_solderMaskMargin == aOther.m_solderMaskMargin;
 }
 
 
@@ -250,6 +261,12 @@ double PCB_ARC::Similarity( const BOARD_ITEM& aOther ) const
         similarity *= 0.9;
 
     if( m_Mid != other.m_Mid )
+        similarity *= 0.9;
+
+    if( m_hasSolderMask != other.m_hasSolderMask )
+        similarity *= 0.9;
+
+    if( m_solderMaskMargin != other.m_solderMaskMargin )
         similarity *= 0.9;
 
     return similarity;
@@ -352,6 +369,7 @@ void PCB_TRACK::Serialize( google::protobuf::Any &aContainer ) const
                                  : kiapi::common::types::LockedState::LS_UNLOCKED );
     track.mutable_net()->mutable_code()->set_value( GetNetCode() );
     track.mutable_net()->set_name( GetNetname() );
+    // TODO m_hasSolderMask and m_solderMaskMargin
 
     aContainer.PackFrom( track );
 }
@@ -371,6 +389,7 @@ bool PCB_TRACK::Deserialize( const google::protobuf::Any &aContainer )
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( track.layer() ) );
     SetNetCode( track.net().code().value() );
     SetLocked( track.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    // TODO m_hasSolderMask and m_solderMaskMargin
 
     return true;
 }
@@ -393,6 +412,7 @@ void PCB_ARC::Serialize( google::protobuf::Any &aContainer ) const
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
     arc.mutable_net()->mutable_code()->set_value( GetNetCode() );
     arc.mutable_net()->set_name( GetNetname() );
+    // TODO m_hasSolderMask and m_solderMaskMargin
 
     aContainer.PackFrom( arc );
 }
@@ -413,6 +433,7 @@ bool PCB_ARC::Deserialize( const google::protobuf::Any &aContainer )
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( arc.layer() ) );
     SetNetCode( arc.net().code().value() );
     SetLocked( arc.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    // TODO m_hasSolderMask and m_solderMaskMargin
 
     return true;
 }
@@ -864,6 +885,45 @@ int PCB_VIA::GetSolderMaskExpansion() const
 }
 
 
+int PCB_TRACK::GetSolderMaskExpansion() const
+{
+    int margin = m_solderMaskMargin.value_or( 0 );
+
+    // If no local margin is set, get the board's solder mask expansion value
+    if( !m_solderMaskMargin.has_value() )
+    {
+        const BOARD* board = GetBoard();
+
+        if( board )
+            margin = board->GetDesignSettings().m_SolderMaskExpansion;
+    }
+
+    // Ensure the resulting mask opening has a non-negative size
+    if( margin < 0 )
+        margin = std::max( margin, -m_Width / 2 );
+
+    return margin;
+}
+
+
+bool PCB_TRACK::IsOnLayer( PCB_LAYER_ID aLayer ) const
+{
+    if( aLayer == m_layer )
+    {
+        return true;
+    }
+
+    if( m_hasSolderMask
+            && ( ( aLayer == F_Mask && m_layer == F_Cu )
+                       || ( aLayer == B_Mask && m_layer == B_Cu ) ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
 bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
 #if 0
@@ -918,6 +978,35 @@ PCB_LAYER_ID PCB_VIA::GetLayer() const
 void PCB_VIA::SetLayer( PCB_LAYER_ID aLayer )
 {
      Padstack().Drill().start = aLayer;
+}
+
+
+void PCB_TRACK::SetLayerSet( const LSET& aLayerSet )
+{
+    aLayerSet.RunOnLayers(
+            [&]( PCB_LAYER_ID layer )
+            {
+                if( IsCopperLayer( layer ) )
+                    SetLayer( layer );
+                else if( IsSolderMaskLayer( layer ) )
+                    SetHasSolderMask( true );
+            } );
+}
+
+
+LSET PCB_TRACK::GetLayerSet() const
+{
+    LSET layermask( { m_layer } );
+
+    if( m_hasSolderMask )
+    {
+        if( layermask.test( F_Cu ) )
+            layermask.set( F_Mask );
+        else if( layermask.test( B_Cu ) )
+            layermask.set( B_Mask );
+    }
+
+    return layermask;
 }
 
 
@@ -1191,6 +1280,14 @@ void PCB_TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[0] = GetLayer();
     aLayers[1] = GetNetnameLayer( aLayers[0] );
     aCount = 2;
+
+    if( m_hasSolderMask )
+    {
+        if( m_layer == F_Cu )
+            aLayers[ aCount++ ] = F_Mask;
+        else if( m_layer == B_Cu )
+            aLayers[ aCount++ ] = B_Mask;
+    }
 
     if( IsLocked() )
         aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
@@ -1772,7 +1869,12 @@ bool PCB_TRACK::cmp_tracks::operator() ( const PCB_TRACK* a, const PCB_TRACK* b 
 
 std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    return std::make_shared<SHAPE_SEGMENT>( m_Start, m_End, m_Width );
+    int width = m_Width;
+
+    if( IsSolderMaskLayer( aLayer ) )
+        width += 2 * GetSolderMaskExpansion();
+
+    return std::make_shared<SHAPE_SEGMENT>( m_Start, m_End, width );
 }
 
 
@@ -1793,7 +1895,12 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
 
 std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    return std::make_shared<SHAPE_ARC>( GetStart(), GetMid(), GetEnd(), GetWidth() );
+    int width = GetWidth();
+
+    if( IsSolderMaskLayer( aLayer ) )
+        width += 2 * GetSolderMaskExpansion();
+
+    return std::make_shared<SHAPE_ARC>( GetStart(), GetMid(), GetEnd(), width );
 }
 
 
@@ -1818,6 +1925,9 @@ void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
         const PCB_ARC* arc = static_cast<const PCB_ARC*>( this );
         int            width = m_Width + ( 2 * aClearance );
 
+        if( IsSolderMaskLayer( aLayer ) )
+            width += 2 * GetSolderMaskExpansion();
+
         TransformArcToPolygon( aBuffer, arc->GetStart(), arc->GetMid(), arc->GetEnd(), width,
                                aError, aErrorLoc );
         break;
@@ -1827,7 +1937,11 @@ void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
     {
         int width = m_Width + ( 2 * aClearance );
 
+        if( IsSolderMaskLayer( aLayer ) )
+            width += 2 * GetSolderMaskExpansion();
+
         TransformOvalToPolygon( aBuffer, m_Start, m_End, width, aError, aErrorLoc );
+
         break;
     }
     }
@@ -1882,6 +1996,14 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End Y" ),
             &PCB_TRACK::SetEndY, &PCB_TRACK::GetEndY, PROPERTY_DISPLAY::PT_COORD,
             ORIGIN_TRANSFORMS::ABS_Y_COORD) );
+
+        const wxString groupTechLayers = _HKI( "Technical Layers" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, bool>( _HKI( "Soldermask" ),
+            &PCB_TRACK::SetHasSolderMask, &PCB_TRACK::HasSolderMask ), groupTechLayers );
+        propMgr.AddProperty( new PROPERTY<PCB_TRACK, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
+            &PCB_TRACK::SetLocalSolderMaskMargin, &PCB_TRACK::GetLocalSolderMaskMargin,
+            PROPERTY_DISPLAY::PT_SIZE ), groupTechLayers );
 
         // Arc
         REGISTER_TYPE( PCB_ARC );

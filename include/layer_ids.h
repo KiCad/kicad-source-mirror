@@ -575,6 +575,11 @@ inline bool IsHoleLayer( int aLayer )
             || aLayer == LAYER_NON_PLATEDHOLES;
 }
 
+inline bool IsSolderMaskLayer( int aLayer )
+{
+    return aLayer == F_Mask || aLayer == B_Mask;
+}
+
 /**
  * Test whether a layer is a non copper and a non tech layer.
  *

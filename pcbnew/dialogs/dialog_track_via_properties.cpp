@@ -46,6 +46,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, nullptr ),
         m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
         m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit ),
+        m_trackMaskMargin( aParent, m_trackMaskMarginLabel, m_trackMaskMarginCtrl, m_trackMaskMarginUnit ),
         m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, nullptr ),
         m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
         m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit ),
@@ -102,6 +103,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_btnLinkTenting->SetValue( true );
     m_tentingBackCtrl->Disable();
     m_tentingBackLabel->Disable();
+
+    wxFont infoFont = KIUI::GetInfoFont( this );
+    m_techLayersLabel->SetFont( infoFont );
 
     bool nets = false;
     int  net = 0;
@@ -173,6 +177,13 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_trackEndY.SetValue( t->GetEnd().y );
                     m_trackWidth.SetValue( t->GetWidth() );
                     track_selection_layer = t->GetLayer();
+                    m_trackHasSolderMask->SetValue ( t->HasSolderMask() );
+
+                    if( t->GetLocalSolderMaskMargin().has_value() )
+                        m_trackMaskMargin.SetValue( t->GetLocalSolderMaskMargin().value() );
+                    else
+                        m_trackMaskMargin.SetValue( wxEmptyString );
+
                     m_tracks = true;
                 }
                 else        // check if values are the same for every selected track
@@ -194,6 +205,12 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                     if( track_selection_layer != t->GetLayer() )
                         track_selection_layer = UNDEFINED_LAYER;
+
+                    if( m_trackHasSolderMask->GetValue() != t->HasSolderMask() )
+                        m_trackHasSolderMask->Set3StateValue( wxCHK_UNDETERMINED );
+
+                    if( m_trackMaskMargin.GetValue() != t->GetLocalSolderMaskMargin() )
+                        m_trackMaskMargin.SetValue( INDETERMINATE_STATE );
                 }
 
                 if( t->IsLocked() )
@@ -433,6 +450,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_predefinedTrackWidthsCtrl->SetSelection( widthSelection );
         m_predefinedTrackWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+
+        wxCommandEvent event;
+        onTrackEdit( event );
     }
     else
     {
@@ -627,6 +647,17 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if( layer != UNDEFINED_LAYER )
                     t->SetLayer( (PCB_LAYER_ID) layer );
+
+                if ( m_trackHasSolderMask->Get3StateValue() != wxCHK_UNDETERMINED )
+                    t->SetHasSolderMask( m_trackHasSolderMask->GetValue() );
+
+                if( !m_trackMaskMargin.IsIndeterminate() )
+                {
+                    if( m_trackMaskMargin.IsNull() )
+                        t->SetLocalSolderMaskMargin( {} );
+                    else
+                        t->SetLocalSolderMaskMargin( m_trackMaskMargin.GetIntValue() );
+                }
 
                 if( changeLock )
                     t->SetLocked( setLock );
@@ -932,6 +963,22 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTentingLinkToggle( wxCommandEvent& event )
         m_tentingBackCtrl->SetSelection( m_tentingFrontCtrl->GetSelection() );
 
     event.Skip();
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onTrackEdit( wxCommandEvent& aEvent )
+{
+    bool externalCuLayer = m_TrackLayerCtrl->GetLayerSelection() == F_Cu
+                               || m_TrackLayerCtrl->GetLayerSelection() == B_Cu;
+
+    m_techLayersLabel->Enable( externalCuLayer );
+    m_trackHasSolderMask->Enable( externalCuLayer );
+
+    bool showMaskMargin = externalCuLayer && m_trackHasSolderMask->GetValue();
+
+    m_trackMaskMarginCtrl->Enable( showMaskMargin );
+    m_trackMaskMarginLabel->Enable( showMaskMargin );
+    m_trackMaskMarginUnit->Enable( showMaskMargin );
 }
 
 

@@ -658,6 +658,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                     track->SetLayer( theArc->GetLayer() );
                     track->SetWidth( theArc->GetWidth() );
                     track->SetLocked( theArc->IsLocked() );
+                    track->SetHasSolderMask( theArc->HasSolderMask() );
+                    track->SetLocalSolderMaskMargin( theArc->GetLocalSolderMaskMargin() );
                     track->SetFlags( IS_NEW );
                     getView()->Add( track );
                     addedTracks.insert( track );
@@ -1150,6 +1152,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
             tArc->SetWidth( track1->GetWidth() );
             tArc->SetNet( track1->GetNet() );
             tArc->SetLocked( track1->IsLocked() );
+            tArc->SetHasSolderMask( track1->HasSolderMask() );
+            tArc->SetLocalSolderMaskMargin( track1->GetLocalSolderMaskMargin() );
             commit.Add( tArc );
             itemsToAddToSelection.push_back( tArc );
 
