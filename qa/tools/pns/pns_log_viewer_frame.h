@@ -59,7 +59,7 @@ public:
     bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override { return false; };
     bool IsFlashedOnLayer( const PNS::ITEM* aItem, const PNS_LAYER_RANGE& aLayer ) const override { return false; };
     bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; };
-    bool IsCopperLayer( int aLayer ) const override { return false; };
+    bool IsPNSCopperLayer( int aLayer ) const override { return false; };
     void HideItem( PNS::ITEM* aItem ) override {}
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
                       int aFlags = 0 ) override {}
