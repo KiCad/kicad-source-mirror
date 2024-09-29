@@ -46,7 +46,6 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
-#include <geometry/approximation.h>
 %}
 
 %shared_ptr(SHAPE)
@@ -74,7 +73,6 @@
 %include <geometry/shape_rect.h>
 %include <geometry/shape_segment.h>
 %include <geometry/shape_simple.h>
-%include <geometry/approximation.h>
 
 %template(VECTOR_SHAPEPTR) std::vector<std::shared_ptr<SHAPE>>;
 
