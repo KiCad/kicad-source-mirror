@@ -1072,7 +1072,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLe
 {
     wxCHECK_RET( aBitmap != nullptr && m_out != nullptr, "" );
 
-    const wxImage* image = aBitmap->GetImage()->GetImageData();
+    const REFERENCE_IMAGE& refImage = aBitmap->GetReferenceImage();
+
+    const wxImage* image = refImage.GetImage().GetImageData();
 
     wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
 
@@ -1082,15 +1084,15 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLe
 
     formatLayer( aBitmap->GetLayer() );
 
-    if( aBitmap->GetImage()->GetScale() != 1.0 )
-        m_out->Print( 0, "(scale %g)", aBitmap->GetImage()->GetScale() );
+    if( refImage.GetImageScale() != 1.0 )
+        m_out->Print( 0, "(scale %g)", refImage.GetImageScale() );
 
     if( const bool locked = aBitmap->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, 0, "locked", locked );
 
     m_out->Print( aNestLevel + 1, "(data" );
 
-    wxString out = wxBase64Encode( aBitmap->GetImage()->GetImageDataBuffer() );
+    wxString out = wxBase64Encode( refImage.GetImage().GetImageDataBuffer() );
 
     // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
     // so use it in a vain attempt to be standard like.

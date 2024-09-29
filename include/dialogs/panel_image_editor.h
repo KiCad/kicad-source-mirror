@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2018 jean-pierre.charras
- * Copyright (C) 2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,22 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANEL_IMAGE_EDITOR_H
-#define PANEL_IMAGE_EDITOR_H
+#pragma once
 
-#include <bitmap_base.h>
 #include <panel_image_editor_base.h>
+
+#include <memory>
+
+class BITMAP_BASE;
 
 
 class PANEL_IMAGE_EDITOR : public PANEL_IMAGE_EDITOR_BASE
 {
-private:
-    BITMAP_BASE* m_workingImage; // The copy of BITMAP_BASE to be edited
-
 public:
-    PANEL_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem );
-    ~PANEL_IMAGE_EDITOR() { delete m_workingImage; }
-
+    PANEL_IMAGE_EDITOR( wxWindow* aParent, const BITMAP_BASE& aItem );
+    ~PANEL_IMAGE_EDITOR();
 
 public:
     bool TransferDataFromWindow() override;
@@ -46,13 +44,14 @@ public:
      * Function TransferToImage
      * copy edited image to aItem
      */
-    void TransferToImage( BITMAP_BASE* aItem );
+    void TransferToImage( BITMAP_BASE& aItem );
 
 private:
     void OnGreyScaleConvert( wxCommandEvent& event ) override;
     void OnRedrawPanel( wxPaintEvent& event ) override;
 
     bool CheckValues();
-};
 
-#endif
+    // A copy of BITMAP_BASE to be edited
+    std::unique_ptr<BITMAP_BASE> m_workingImage;
+};

@@ -3195,14 +3195,16 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
             break;
 
         case T_scale:
-            bitmap->SetImageScale( parseDouble( "image scale factor" ) );
+        {
+            REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
+            refImage.SetImageScale( parseDouble( "image scale factor" ) );
 
-            if( !std::isnormal( bitmap->GetImage()->GetScale() ) )
-                bitmap->SetImageScale( 1.0 );
+            if( !std::isnormal( refImage.GetImageScale() ) )
+                refImage.SetImageScale( 1.0 );
 
             NeedRIGHT();
             break;
-
+        }
         case T_data:
         {
             token = NextTok();
@@ -3222,9 +3224,10 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
                 token = NextTok();
             }
 
-            wxMemoryBuffer       buffer = wxBase64Decode( data );
+            wxMemoryBuffer buffer = wxBase64Decode( data );
 
-            if( !bitmap->ReadImageFile( buffer ) )
+            REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
+            if( !refImage.ReadImageFile( buffer ) )
                 THROW_IO_ERROR( _( "Failed to read image data." ) );
 
             break;

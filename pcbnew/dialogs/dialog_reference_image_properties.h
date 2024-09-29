@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_REFERENCE_IMAGE_PROPERTIES_H
-#define DIALOG_REFERENCE_IMAGE_PROPERTIES_H
+#pragma once
 
 #include <dialogs/dialog_reference_image_properties_base.h>
 #include <widgets/unit_binder.h>
@@ -36,7 +35,7 @@ class PANEL_IMAGE_EDITOR;
 class DIALOG_REFERENCE_IMAGE_PROPERTIES : public DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE
 {
 public:
-    DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_REFERENCE_IMAGE* aBitmap );
+    DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_REFERENCE_IMAGE& aBitmap );
     ~DIALOG_REFERENCE_IMAGE_PROPERTIES() override {}
 
 private:
@@ -45,11 +44,10 @@ private:
 
 private:
     PCB_BASE_FRAME*      m_frame;
-    PCB_REFERENCE_IMAGE* m_bitmap;
+    ///< The reference image being edited
+    PCB_REFERENCE_IMAGE& m_bitmap;
     PANEL_IMAGE_EDITOR*  m_imageEditor;
 
     UNIT_BINDER          m_posX;
     UNIT_BINDER          m_posY;
 };
-
-#endif  // DIALOG_REFERENCE_IMAGE_PROPERTIES_H

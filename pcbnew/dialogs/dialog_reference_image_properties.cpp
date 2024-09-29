@@ -33,7 +33,7 @@
 
 
 DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent,
-                                                                      PCB_REFERENCE_IMAGE* aBitmap ) :
+                                                                      PCB_REFERENCE_IMAGE& aBitmap ) :
         DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
         m_bitmap( aBitmap ),
@@ -41,14 +41,15 @@ DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_F
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
 {
     // Create the image editor page
-    m_imageEditor = new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap->MutableImage() );
+    m_imageEditor =
+            new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap.GetReferenceImage().MutableImage() );
     m_Notebook->AddPage( m_imageEditor, _( "Image" ), false );
 
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     // Only show unactivated board layers if the bitmap is on one of them
-    if( !m_frame->GetBoard()->IsLayerEnabled( m_bitmap->GetLayer() ) )
+    if( !m_frame->GetBoard()->IsLayerEnabled( m_bitmap.GetLayer() ) )
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
@@ -63,7 +64,7 @@ DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_F
 
 void PCB_BASE_EDIT_FRAME::ShowReferenceImagePropertiesDialog( BOARD_ITEM* aBitmap )
 {
-    PCB_REFERENCE_IMAGE*              bitmap = static_cast<PCB_REFERENCE_IMAGE*>( aBitmap );
+    PCB_REFERENCE_IMAGE&              bitmap = static_cast<PCB_REFERENCE_IMAGE&>( *aBitmap );
     DIALOG_REFERENCE_IMAGE_PROPERTIES dlg( this, bitmap );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -78,12 +79,12 @@ void PCB_BASE_EDIT_FRAME::ShowReferenceImagePropertiesDialog( BOARD_ITEM* aBitma
 
 bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataToWindow()
 {
-    m_posX.SetValue( m_bitmap->GetPosition().x );
-    m_posY.SetValue( m_bitmap->GetPosition().y );
+    m_posX.SetValue( m_bitmap.GetPosition().x );
+    m_posY.SetValue( m_bitmap.GetPosition().y );
 
-    m_LayerSelectionCtrl->SetLayerSelection( m_bitmap->GetLayer() );
+    m_LayerSelectionCtrl->SetLayerSelection( m_bitmap.GetLayer() );
 
-    m_cbLocked->SetValue( m_bitmap->IsLocked() );
+    m_cbLocked->SetValue( m_bitmap.IsLocked() );
     m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas "
                                "and can only be selected when the 'Locked items' checkbox is "
                                "checked in the selection filter." ) );
@@ -97,16 +98,16 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataFromWindow()
     if( m_imageEditor->TransferDataFromWindow() )
     {
         // Save old image in undo list if not already in edit
-        if( m_bitmap->GetEditFlags() == 0 )
-            m_frame->SaveCopyInUndoList( m_bitmap, UNDO_REDO::CHANGED );
+        if( m_bitmap.GetEditFlags() == 0 )
+            m_frame->SaveCopyInUndoList( &m_bitmap, UNDO_REDO::CHANGED );
 
         // Update our bitmap from the editor
-        m_imageEditor->TransferToImage( m_bitmap->MutableImage() );
+        m_imageEditor->TransferToImage( m_bitmap.GetReferenceImage().MutableImage() );
 
         // Set position, etc.
-        m_bitmap->SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
-        m_bitmap->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
-        m_bitmap->SetLocked( m_cbLocked->GetValue() );
+        m_bitmap.SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
+        m_bitmap.SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+        m_bitmap.SetLocked( m_cbLocked->GetValue() );
 
         return true;
     }

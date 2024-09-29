@@ -35,17 +35,21 @@
 #include <algorithm>
 
 
-PANEL_IMAGE_EDITOR::PANEL_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem ) :
-        PANEL_IMAGE_EDITOR_BASE( aParent )
+PANEL_IMAGE_EDITOR::PANEL_IMAGE_EDITOR( wxWindow* aParent, const BITMAP_BASE& aItem ) :
+        PANEL_IMAGE_EDITOR_BASE( aParent ),
+        m_workingImage( std::make_unique<BITMAP_BASE>( aItem ) )
 {
-    m_workingImage = new BITMAP_BASE( *aItem );
-
     wxString msg;
     msg.Printf( wxT( "%f" ), m_workingImage->GetScale() );
     m_textCtrlScale->SetValue( msg );
 
     msg.Printf( wxT( "%d" ), m_workingImage->GetPPI() );
     m_stPPI_Value->SetLabel( msg );
+}
+
+
+PANEL_IMAGE_EDITOR::~PANEL_IMAGE_EDITOR()
+{
 }
 
 
@@ -132,11 +136,11 @@ void PANEL_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 }
 
 
-void PANEL_IMAGE_EDITOR::TransferToImage( BITMAP_BASE* aItem )
+void PANEL_IMAGE_EDITOR::TransferToImage( BITMAP_BASE& aItem )
 {
     wxString msg = m_textCtrlScale->GetValue();
     double   scale = 1.0;
     msg.ToDouble( &scale );
     m_workingImage->SetScale( scale );
-    aItem->ImportData( m_workingImage );
+    aItem.ImportData( *m_workingImage );
 }

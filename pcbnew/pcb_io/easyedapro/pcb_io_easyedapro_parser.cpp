@@ -1466,14 +1466,15 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                 std::unique_ptr<PCB_REFERENCE_IMAGE> bitmap =
                         std::make_unique<PCB_REFERENCE_IMAGE>( aBoard, kcenter, klayer );
+                REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
 
                 wxImage::SetDefaultLoadFlags( wxImage::GetDefaultLoadFlags()
                                               & ~wxImage::Load_Verbose );
 
-                if( bitmap->ReadImageFile( buf ) )
+                if( refImage.ReadImageFile( buf ) )
                 {
-                    double scaleFactor = ScaleSize( size.x ) / bitmap->GetSize().x;
-                    bitmap->SetImageScale( scaleFactor );
+                    double scaleFactor = ScaleSize( size.x ) / refImage.GetSize().x;
+                    refImage.SetImageScale( scaleFactor );
 
                     // TODO: support non-90-deg angles
                     bitmap->Rotate( kstart, EDA_ANGLE( angle, DEGREES_T ) );
@@ -1484,7 +1485,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                         MIRROR( x, KiROUND( kstart.x ) );
                         bitmap->SetX( x );
 
-                        bitmap->MutableImage()->Mirror( FLIP_DIRECTION::LEFT_RIGHT );
+                        refImage.MutableImage().Mirror( FLIP_DIRECTION::LEFT_RIGHT );
                     }
 
                     aBoard->Add( bitmap.release(), ADD_MODE::APPEND );

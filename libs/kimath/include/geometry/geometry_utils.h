@@ -27,8 +27,7 @@
  * @brief a few functions useful in geometry calculations.
  */
 
-#ifndef GEOMETRY_UTILS_H
-#define GEOMETRY_UTILS_H
+#pragma once
 
 #include <algorithm>
 #include <math.h>           // for copysign
@@ -203,4 +202,26 @@ inline bool IsVec2SafeXY( const VECTOR2<T>& aVec )
 bool ClipLine( const BOX2I *aClipBox, int &x1, int &y1, int &x2, int &y2 );
 
 
-#endif  // #ifndef GEOMETRY_UTILS_H
+namespace KIGEOM
+{
+/**
+ * Perform a point-to-box hit test.
+ *
+ * @param aHitPoint - The point that is hitting the box
+ * @param aHittee - The box that is tested for hit.
+ * @param aAccuracy - The accuracy of the hit test.
+ */
+bool BoxHitTest( const VECTOR2I& aHitPoint, const BOX2I& aHittee, int aAccuracy );
+
+/**
+ * Perform a box-to-box hit test.
+ *
+ * @param aHitter - The box that is either hitting or containing the hittee.
+ * @param aHittee - The box that is either being hit or contained by the hitter
+ *                  (this is possibly an object's bounding box).
+ * @param aHitteeContained - True if the hittee is tested for total containment,
+ *                           false if it is tested for intersection.
+ * @param aAccuracy - The accuracy of the hit test.
+ */
+bool BoxHitTest( const BOX2I& aHitter, const BOX2I& aHittee, bool aHitteeContained, int aAccuracy );
+}; // namespace KIGEOM

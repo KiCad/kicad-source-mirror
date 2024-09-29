@@ -198,3 +198,21 @@ bool ClipLine( const BOX2I *aClipBox, int &x1, int &y1, int &x2, int &y2 )
     return false;
 }
 
+
+bool KIGEOM::BoxHitTest( const VECTOR2I& aHitter, const BOX2I& aHittee, int aAccuracy )
+{
+    const BOX2I hittee = aHittee.GetInflated( aAccuracy );
+    return hittee.Contains( aHitter );
+}
+
+
+bool KIGEOM::BoxHitTest( const BOX2I& aHitter, const BOX2I& aHittee, bool aHitteeContained,
+                         int aAccuracy )
+{
+    const BOX2I hitter = aHitter.GetInflated( aAccuracy );
+
+    if( aHitteeContained )
+        return hitter.Contains( aHittee );
+
+    return hitter.Intersects( aHittee );
+}

@@ -2062,11 +2062,13 @@ void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2I& aPosition,
 void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
 {
     m_gal->Save();
-    m_gal->Translate( aBitmap->GetPosition() );
+
+    const REFERENCE_IMAGE& refImg = aBitmap->GetReferenceImage();
+    m_gal->Translate( refImg.GetPosition() );
 
     // When the image scale factor is not 1.0, we need to modify the actual as the image scale
     // factor is similar to a local zoom
-    double img_scale = aBitmap->GetImageScale();
+    const double img_scale = refImg.GetImageScale();
 
     if( img_scale != 1.0 )
         m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
@@ -2080,7 +2082,7 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
         m_gal->SetIsFill( false );
 
         // Draws a bounding box.
-        VECTOR2D bm_size( aBitmap->GetSize() );
+        VECTOR2D bm_size( refImg.GetSize() );
         // bm_size is the actual image size in UI.
         // but m_gal scale was previously set to img_scale
         // so recalculate size relative to this image size.
@@ -2094,12 +2096,11 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
         // Hard code reference images as opaque when selected. Otherwise cached layers will
         // not be rendered under the selected image because cached layers are rendered after
         // non-cached layers (e.g. bitmaps), which will have a closer Z order.
-        m_gal->DrawBitmap( *aBitmap->GetImage(), 1.0 );
+        m_gal->DrawBitmap( refImg.GetImage(), 1.0 );
     }
     else
-        m_gal->DrawBitmap( *aBitmap->GetImage(),
+        m_gal->DrawBitmap( refImg.GetImage(),
                            m_pcbSettings.GetColor( aBitmap, aBitmap->GetLayer() ).a );
-
 
     m_gal->Restore();
 }

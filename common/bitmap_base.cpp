@@ -107,20 +107,20 @@ void BITMAP_BASE::updatePPI()
 }
 
 
-void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
+void BITMAP_BASE::ImportData( BITMAP_BASE& aItem )
 {
-    *m_image  = *aItem->m_image;
-    *m_bitmap = *aItem->m_bitmap;
-    *m_originalImage = *aItem->m_originalImage;
-    m_imageId = aItem->m_imageId;
-    m_scale   = aItem->m_scale;
-    m_ppi     = aItem->m_ppi;
-    m_pixelSizeIu = aItem->m_pixelSizeIu;
-    m_isMirroredX = aItem->m_isMirroredX;
-    m_isMirroredY = aItem->m_isMirroredY;
-    m_rotation = aItem->m_rotation;
-    m_imageType = aItem->m_imageType;
-    m_imageData = aItem->m_imageData;
+    *m_image = *aItem.m_image;
+    *m_bitmap = *aItem.m_bitmap;
+    *m_originalImage = *aItem.m_originalImage;
+    m_imageId = aItem.m_imageId;
+    m_scale = aItem.m_scale;
+    m_ppi = aItem.m_ppi;
+    m_pixelSizeIu = aItem.m_pixelSizeIu;
+    m_isMirroredX = aItem.m_isMirroredX;
+    m_isMirroredY = aItem.m_isMirroredY;
+    m_rotation = aItem.m_rotation;
+    m_imageType = aItem.m_imageType;
+    m_imageData = aItem.m_imageData;
 }
 
 

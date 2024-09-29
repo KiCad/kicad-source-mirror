@@ -214,16 +214,18 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     {
     case PCB_REFERENCE_IMAGE_T:
     {
-        const PCB_REFERENCE_IMAGE* refImage = static_cast<const PCB_REFERENCE_IMAGE*>( aItem );
-        const VECTOR2I             topLeft = refImage->GetPosition() - refImage->GetSize() / 2;
-        const VECTOR2I             botRight = refImage->GetPosition() + refImage->GetSize() / 2;
+        const REFERENCE_IMAGE& refImage =
+                static_cast<const PCB_REFERENCE_IMAGE&>( *aItem ).GetReferenceImage();
+
+        const VECTOR2I topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
+        const VECTOR2I botRight = refImage.GetPosition() + refImage.GetSize() / 2;
 
         points->AddPoint( topLeft );
         points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
         points->AddPoint( botRight );
         points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
 
-        points->AddPoint( refImage->GetPosition() + refImage->GetTransformOriginOffset() );
+        points->AddPoint( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
 
         break;
     }
@@ -1361,7 +1363,8 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
     {
     case PCB_REFERENCE_IMAGE_T:
     {
-        PCB_REFERENCE_IMAGE* bitmap = static_cast<PCB_REFERENCE_IMAGE*>( item );
+        PCB_REFERENCE_IMAGE& bitmap = static_cast<PCB_REFERENCE_IMAGE&>( *item );
+        REFERENCE_IMAGE&     refImg = bitmap.GetReferenceImage();
         const VECTOR2I       topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
         const VECTOR2I       topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
         const VECTOR2I       botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
@@ -1373,52 +1376,53 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
             // Moving the transform origin
             // As the other points didn't move, we can get the image extent from them
             const VECTOR2I newOffset = xfrmOrigin - ( topLeft + botRight ) / 2;
-            bitmap->SetTransformOriginOffset( newOffset );
+            refImg.SetTransformOriginOffset( newOffset );
         }
         else
         {
-            const VECTOR2I oldOrigin = bitmap->GetPosition() + bitmap->GetTransformOriginOffset();
-            const VECTOR2I oldSize = bitmap->GetSize();
+            const VECTOR2I oldOrigin = refImg.GetPosition() + refImg.GetTransformOriginOffset();
+            const VECTOR2I oldSize = refImg.GetSize();
+            const VECTOR2I pos = refImg.GetPosition();
 
             OPT_VECTOR2I newCorner;
-            OPT_VECTOR2I oldCorner;
+            VECTOR2I     oldCorner = pos;
 
             if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
             {
                 newCorner = topLeft;
-                oldCorner = ( bitmap->GetPosition() - oldSize / 2 );
+                oldCorner -= oldSize / 2;
             }
             else if( isModified( m_editPoints->Point( RECT_TOP_RIGHT ) ) )
             {
                 newCorner = topRight;
-                oldCorner = ( bitmap->GetPosition() - VECTOR2I( -oldSize.x, oldSize.y ) / 2 );
+                oldCorner -= VECTOR2I( -oldSize.x, oldSize.y ) / 2;
             }
             else if( isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
             {
                 newCorner = botLeft;
-                oldCorner = ( bitmap->GetPosition() - VECTOR2I( oldSize.x, -oldSize.y ) / 2 );
+                oldCorner -= VECTOR2I( oldSize.x, -oldSize.y ) / 2;
             }
             else if( isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
             {
                 newCorner = botRight;
-                oldCorner = ( bitmap->GetPosition() + oldSize / 2 );
+                oldCorner += oldSize / 2;
             }
 
-            if( newCorner && oldCorner )
+            if( newCorner )
             {
                 // Turn in the respective vectors from the origin
                 *newCorner -= xfrmOrigin;
-                *oldCorner -= oldOrigin;
+                oldCorner -= oldOrigin;
 
                 // If we tried to cross the origin, clamp it to stop it
-                if( sign( newCorner->x ) != sign( oldCorner->x )
-                    || sign( newCorner->y ) != sign( oldCorner->y ) )
+                if( sign( newCorner->x ) != sign( oldCorner.x )
+                    || sign( newCorner->y ) != sign( oldCorner.y ) )
                 {
                     *newCorner = VECTOR2I( 0, 0 );
                 }
 
                 const double newLength = newCorner->EuclideanNorm();
-                const double oldLength = oldCorner->EuclideanNorm();
+                const double oldLength = oldCorner.EuclideanNorm();
 
                 double ratio = oldLength > 0 ? ( newLength / oldLength ) : 1.0;
 
@@ -1429,7 +1433,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
                 ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
 
                 // Also handles the origin offset
-                bitmap->SetImageScale( bitmap->GetImageScale() * ratio );
+                refImg.SetImageScale( refImg.GetImageScale() * ratio );
             }
         }
 
@@ -2064,9 +2068,10 @@ void PCB_POINT_EDITOR::updatePoints()
     {
     case PCB_REFERENCE_IMAGE_T:
     {
-        const PCB_REFERENCE_IMAGE* bitmap = static_cast<const PCB_REFERENCE_IMAGE*>( item );
-        const VECTOR2I             topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
-        const VECTOR2I             botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+        const REFERENCE_IMAGE& refImg =
+                static_cast<const PCB_REFERENCE_IMAGE&>( *item ).GetReferenceImage();
+        const VECTOR2I topLeft = refImg.GetPosition() - refImg.GetSize() / 2;
+        const VECTOR2I botRight = refImg.GetPosition() + refImg.GetSize() / 2;
 
         m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( topLeft );
         m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( botRight.x, topLeft.y );
@@ -2074,7 +2079,7 @@ void PCB_POINT_EDITOR::updatePoints()
         m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( botRight );
 
         m_editPoints->Point( REFIMG_ORIGIN )
-                .SetPosition( bitmap->GetPosition() + bitmap->GetTransformOriginOffset() );
+                .SetPosition( refImg.GetPosition() + refImg.GetTransformOriginOffset() );
 
         break;
     }

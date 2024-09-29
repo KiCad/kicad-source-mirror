@@ -78,7 +78,7 @@ public:
     /**
      * Copy aItem image to this object and update #m_bitmap.
      */
-    void ImportData( BITMAP_BASE* aItem );
+    void ImportData( BITMAP_BASE& aItem );
 
     /**
      * This scaling factor depends on #m_pixelSizeIu and #m_scale.

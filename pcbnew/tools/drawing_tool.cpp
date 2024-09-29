@@ -746,7 +746,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
                 if( wxFileExists( fullFilename ) )
                     image = new PCB_REFERENCE_IMAGE( m_frame->GetModel(), cursorPos );
 
-                if( !image || !image->ReadImageFile( fullFilename ) )
+                if( !image || !image->GetReferenceImage().ReadImageFile( fullFilename ) )
                 {
                     wxMessageBox( wxString::Format(_( "Could not load image from '%s'." ), fullFilename ) );
                     delete image;

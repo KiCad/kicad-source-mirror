@@ -25,19 +25,19 @@
 
 #include "pcb_reference_image.h"
 
-#include <pcb_draw_panel_gal.h>
-#include <plotters/plotter.h>
-#include <settings/color_settings.h>
-#include <pcb_painter.h>
-#include <bitmaps.h>
 #include <base_units.h>
-#include <common.h>
-#include <eda_draw_frame.h>
-#include <core/mirror.h>
+#include <bitmaps.h>
 #include <board.h>
-#include <trigo.h>
+#include <common.h>
+#include <core/mirror.h>
+#include <eda_draw_frame.h>
+#include <pcb_draw_panel_gal.h>
+#include <pcb_painter.h>
+#include <plotters/plotter.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_rect.h>
+#include <settings/color_settings.h>
+#include <trigo.h>
 
 #include <wx/mstream.h>
 
@@ -47,26 +47,20 @@ using KIGFX::PCB_RENDER_SETTINGS;
 
 PCB_REFERENCE_IMAGE::PCB_REFERENCE_IMAGE( BOARD_ITEM* aParent, const VECTOR2I& aPos,
                                           PCB_LAYER_ID aLayer ) :
-        BOARD_ITEM( aParent, PCB_REFERENCE_IMAGE_T, aLayer ), m_pos( aPos ),
-        m_transformOriginOffset( 0, 0 )
+        BOARD_ITEM( aParent, PCB_REFERENCE_IMAGE_T, aLayer ), m_referenceImage( pcbIUScale )
 {
-    m_bitmapBase = new BITMAP_BASE();
-    m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
+    m_referenceImage.SetPosition( aPos );
 }
 
 
 PCB_REFERENCE_IMAGE::PCB_REFERENCE_IMAGE( const PCB_REFERENCE_IMAGE& aPCBBitmap ) :
-        BOARD_ITEM( aPCBBitmap ), m_pos( aPCBBitmap.m_pos ),
-        m_transformOriginOffset( aPCBBitmap.m_transformOriginOffset )
+        BOARD_ITEM( aPCBBitmap ), m_referenceImage( aPCBBitmap.m_referenceImage )
 {
-    m_bitmapBase = new BITMAP_BASE( *aPCBBitmap.m_bitmapBase );
-    m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
 }
 
 
 PCB_REFERENCE_IMAGE::~PCB_REFERENCE_IMAGE()
 {
-    delete m_bitmapBase;
 }
 
 
@@ -79,40 +73,11 @@ PCB_REFERENCE_IMAGE& PCB_REFERENCE_IMAGE::operator=( const BOARD_ITEM& aItem )
     if( &aItem != this )
     {
         BOARD_ITEM::operator=( aItem );
-
-        PCB_REFERENCE_IMAGE* bitmap = (PCB_REFERENCE_IMAGE*) &aItem;
-
-        delete m_bitmapBase;
-        m_bitmapBase = new BITMAP_BASE( *bitmap->m_bitmapBase );
-        m_pos = bitmap->m_pos;
-        m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
+        const PCB_REFERENCE_IMAGE& refImg = static_cast<const PCB_REFERENCE_IMAGE&>( aItem );
+        m_referenceImage = refImg.m_referenceImage;
     }
 
     return *this;
-}
-
-
-bool PCB_REFERENCE_IMAGE::ReadImageFile( const wxString& aFullFilename )
-{
-    if( m_bitmapBase->ReadImageFile( aFullFilename ) )
-    {
-        m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
-        return true;
-    }
-
-    return false;
-}
-
-
-bool PCB_REFERENCE_IMAGE::ReadImageFile( wxMemoryBuffer& aBuffer )
-{
-    if( m_bitmapBase->ReadImageFile( aBuffer ) )
-    {
-        m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
-        return true;
-    }
-
-    return false;
 }
 
 
@@ -135,8 +100,7 @@ void PCB_REFERENCE_IMAGE::swapData( BOARD_ITEM* aItem )
     std::swap( m_flags, item->m_flags );
     std::swap( m_parent, item->m_parent );
     std::swap( m_forceVisible, item->m_forceVisible );
-    std::swap( m_pos, item->m_pos );
-    std::swap( m_bitmapBase, item->m_bitmapBase );
+    m_referenceImage.SwapData( item->m_referenceImage );
 }
 
 
@@ -165,11 +129,7 @@ double PCB_REFERENCE_IMAGE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I PCB_REFERENCE_IMAGE::GetBoundingBox() const
 {
-    // Bitmaps are center origin, BOX2Is need top-left origin
-    const VECTOR2I size = m_bitmapBase->GetSize();
-    const VECTOR2I topLeft{ m_pos.x - size.x / 2, m_pos.y - size.y / 2 };
-
-    return BOX2I{ topLeft, size };
+    return m_referenceImage.GetBoundingBox();
 }
 
 
@@ -181,84 +141,33 @@ std::shared_ptr<SHAPE> PCB_REFERENCE_IMAGE::GetEffectiveShape( PCB_LAYER_ID aLay
 }
 
 
+VECTOR2I PCB_REFERENCE_IMAGE::GetPosition() const
+{
+    return m_referenceImage.GetPosition();
+}
+
+
 void PCB_REFERENCE_IMAGE::SetPosition( const VECTOR2I& aPos )
 {
-    const BOX2D newBox = BOX2D::ByCenter( aPos, m_bitmapBase->GetSize() );
-
-    if( !IsBOX2Safe( newBox ) )
-        return;
-
-    m_pos = aPos;
+    m_referenceImage.SetPosition( aPos );
 }
 
 
 void PCB_REFERENCE_IMAGE::Move( const VECTOR2I& aMoveVector )
 {
     // Defer to SetPosition to check the new position overflow
-    SetPosition( m_pos + aMoveVector );
-}
-
-
-void PCB_REFERENCE_IMAGE::SetImageScale( double aScale )
-{
-    if( aScale < 0 )
-        return;
-
-    const double ratio = aScale / m_bitmapBase->GetScale();
-
-    const VECTOR2D currentOrigin = m_pos + m_transformOriginOffset;
-    const VECTOR2D newOffset = m_transformOriginOffset * ratio;
-    const VECTOR2D newCenter = currentOrigin - newOffset;
-    const VECTOR2D newSize = m_bitmapBase->GetSize() * ratio;
-
-    // The span of the image is limited to the size of the coordinate system
-    if( !IsVec2SafeXY( newSize ) )
-        return;
-
-    const BOX2D newBox = BOX2D::ByCenter( newCenter, newSize );
-
-    // Any overflow, just reject the call
-    if( !IsBOX2Safe( newBox ) )
-        return;
-
-    m_bitmapBase->SetScale( aScale );
-    SetTransformOriginOffset( KiROUND( newOffset ) );
-    // Don't need to recheck the box, we just did that
-    m_pos = KiROUND( newCenter );
-}
-
-
-const VECTOR2I PCB_REFERENCE_IMAGE::GetSize() const
-{
-    return m_bitmapBase->GetSize();
+    SetPosition( GetPosition() + aMoveVector );
 }
 
 
 void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    VECTOR2I newPos = m_pos;
-    MIRROR( newPos, aCentre, aFlipDirection );
-
-    const BOX2D newBox = BOX2D::ByCenter( newPos, m_bitmapBase->GetSize() );
-
-    if( !IsBOX2Safe( newBox ) )
-        return;
-
-    m_pos = newPos;
-    m_bitmapBase->Mirror( aFlipDirection );
+    m_referenceImage.Flip( aCentre, aFlipDirection );
 }
 
 void PCB_REFERENCE_IMAGE::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 {
-    EDA_ANGLE norm( aAngle.AsDegrees(), DEGREES_T );
-
-    RotatePoint( m_pos, aCenter, aAngle );
-
-    norm.Normalize();
-
-    // each call to m_bitmapBase->Rotate() rotates 90 degrees CCW
-    for( double ang = 45.0; ang < norm.AsDegrees(); ang += 90.0 )
-        m_bitmapBase->Rotate( false );
+    m_referenceImage.Rotate( aCenter, aAngle );
 }
 
 
@@ -268,31 +177,21 @@ void PCB_REFERENCE_IMAGE::Show( int nestLevel, std::ostream& os ) const
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_pos << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_referenceImage.GetPosition()
+                                 << "/>\n";
 }
 #endif
 
 
 bool PCB_REFERENCE_IMAGE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    BOX2I rect = GetBoundingBox();
-
-    rect.Inflate( aAccuracy );
-
-    return rect.Contains( aPosition );
+    return KIGEOM::BoxHitTest( aPosition, GetBoundingBox(), aAccuracy );
 }
 
 
 bool PCB_REFERENCE_IMAGE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    BOX2I rect = aRect;
-
-    rect.Inflate( aAccuracy );
-
-    if( aContained )
-        return rect.Contains( GetBoundingBox() );
-
-    return rect.Intersects( GetBoundingBox() );
+    return KIGEOM::BoxHitTest( aRect, GetBoundingBox(), aContained, aAccuracy );
 }
 
 
@@ -302,16 +201,20 @@ BITMAPS PCB_REFERENCE_IMAGE::GetMenuImage() const
 }
 
 
-void PCB_REFERENCE_IMAGE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+void PCB_REFERENCE_IMAGE::GetMsgPanelInfo( EDA_DRAW_FRAME*              aFrame,
                                            std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Reference Image" ), wxEmptyString );
 
-    aList.emplace_back( _( "PPI" ), wxString::Format( wxT( "%d "), GetImage()->GetPPI() ) );
-    aList.emplace_back( _( "Scale" ), wxString::Format( wxT( "%f "), GetImageScale() ) );
+    aList.emplace_back( _( "PPI" ),
+                        wxString::Format( wxT( "%d " ), m_referenceImage.GetImage().GetPPI() ) );
+    aList.emplace_back( _( "Scale" ),
+                        wxString::Format( wxT( "%f " ), m_referenceImage.GetImageScale() ) );
 
-    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetSize().x ) );
-    aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( GetSize().y ) );
+    aList.emplace_back( _( "Width" ),
+                        aFrame->MessageTextFromValue( m_referenceImage.GetSize().x ) );
+    aList.emplace_back( _( "Height" ),
+                        aFrame->MessageTextFromValue( m_referenceImage.GetSize().y ) );
     aList.emplace_back( _( "Layer" ), LayerName( m_layer ) );
 }
 
@@ -339,22 +242,7 @@ bool PCB_REFERENCE_IMAGE::operator==( const PCB_REFERENCE_IMAGE& aOther ) const
     if( m_layer != aOther.m_layer )
         return false;
 
-    if( m_pos != aOther.m_pos )
-        return false;
-
-    if( m_bitmapBase->GetSize() != aOther.m_bitmapBase->GetSize() )
-        return false;
-
-    if( m_bitmapBase->GetPPI() != aOther.m_bitmapBase->GetPPI() )
-        return false;
-
-    if( m_bitmapBase->GetScale() != aOther.m_bitmapBase->GetScale() )
-        return false;
-
-    if( m_bitmapBase->GetImageID() != aOther.m_bitmapBase->GetImageID() )
-        return false;
-
-    if( m_bitmapBase->GetImageData() != aOther.m_bitmapBase->GetImageData() )
+    if( m_referenceImage != aOther.m_referenceImage )
         return false;
 
     return true;
@@ -373,25 +261,49 @@ double PCB_REFERENCE_IMAGE::Similarity( const BOARD_ITEM& aOther ) const
     if( m_layer != other.m_layer )
         similarity *= 0.9;
 
-    if( m_pos != other.m_pos )
-        similarity *= 0.9;
-
-    if( m_bitmapBase->GetSize() != other.m_bitmapBase->GetSize() )
-        similarity *= 0.9;
-
-    if( m_bitmapBase->GetPPI() != other.m_bitmapBase->GetPPI() )
-        similarity *= 0.9;
-
-    if( m_bitmapBase->GetScale() != other.m_bitmapBase->GetScale() )
-        similarity *= 0.9;
-
-    if( m_bitmapBase->GetImageID() != other.m_bitmapBase->GetImageID() )
-        similarity *= 0.9;
-
-    if( m_bitmapBase->GetImageData() != other.m_bitmapBase->GetImageData() )
-        similarity *= 0.9;
+    similarity *= m_referenceImage.Similarity( other.m_referenceImage );
 
     return similarity;
+}
+
+
+int PCB_REFERENCE_IMAGE::GetTransformOriginOffsetX() const
+{
+    return m_referenceImage.GetTransformOriginOffset().x;
+}
+
+
+void PCB_REFERENCE_IMAGE::SetTransformOriginOffsetX( int aX )
+{
+    VECTOR2I offset = m_referenceImage.GetTransformOriginOffset();
+    offset.x = aX;
+    m_referenceImage.SetTransformOriginOffset( offset );
+}
+
+
+int PCB_REFERENCE_IMAGE::GetTransformOriginOffsetY() const
+{
+    return m_referenceImage.GetTransformOriginOffset().y;
+}
+
+
+void PCB_REFERENCE_IMAGE::SetTransformOriginOffsetY( int aY )
+{
+    VECTOR2I offset = m_referenceImage.GetTransformOriginOffset();
+    offset.y = aY;
+    m_referenceImage.SetTransformOriginOffset( offset );
+}
+
+
+double PCB_REFERENCE_IMAGE::GetImageScale() const
+{
+    return m_referenceImage.GetImageScale();
+}
+
+
+void PCB_REFERENCE_IMAGE::SetImageScale( double aScale )
+{
+    m_referenceImage.SetImageScale( aScale );
 }
 
 

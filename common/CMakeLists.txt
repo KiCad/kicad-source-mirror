@@ -586,6 +586,7 @@ set( COMMON_SRCS
     ptree.cpp
     rc_item.cpp
     refdes_utils.cpp
+    reference_image.cpp
     render_settings.cpp
     scintilla_tricks.cpp
     status_popup.cpp

@@ -105,18 +105,15 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImageLoading, REFERENCE_IMAGE_LOAD_TEST_FIXTUR
                 const auto& image =
                         static_cast<PCB_REFERENCE_IMAGE&>( KI_TEST::RequireBoardItemWithTypeAndId(
                                 aBoard, PCB_REFERENCE_IMAGE_T, imageTestCase.m_imageUuid ) );
+                const REFERENCE_IMAGE& refImage = image.GetReferenceImage();
 
                 BOOST_CHECK_EQUAL( image.IsLocked(), imageTestCase.m_expectedLocked );
                 BOOST_CHECK_EQUAL( image.GetPosition(), imageTestCase.m_expectedPos * 1000000 );
-                BOOST_CHECK_CLOSE( image.GetImageScale(), imageTestCase.m_expectedScale, 1e-6 );
+                BOOST_CHECK_CLOSE( refImage.GetImageScale(), imageTestCase.m_expectedScale, 1e-6 );
 
-                const BITMAP_BASE* bitmap = image.GetImage();
+                const BITMAP_BASE& bitmap = refImage.GetImage();
 
-                BOOST_REQUIRE( bitmap );
-
-                BOOST_TEST_MESSAGE( "Got underlying image" );
-
-                BOOST_CHECK_EQUAL( bitmap->GetSizePixels(), imageTestCase.m_expectedPixelSize );
+                BOOST_CHECK_EQUAL( bitmap.GetSizePixels(), imageTestCase.m_expectedPixelSize );
             }
         };
 

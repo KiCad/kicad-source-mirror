@@ -3580,8 +3580,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         }
         else if( item->Type() == PCB_REFERENCE_IMAGE_T )
         {
-            VECTOR2D size = static_cast<const PCB_REFERENCE_IMAGE*>( item )->GetSize();
-            area = size.x * size.y;
+            BOX2I box = item->GetBoundingBox();
+            area = (double) box.GetWidth() * box.GetHeight();
         }
         else
         {
