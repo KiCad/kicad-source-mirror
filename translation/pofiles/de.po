@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:08-0700\n"
-"PO-Revision-Date: 2024-09-28 08:15+0000\n"
+"PO-Revision-Date: 2024-09-30 14:39+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -6980,6 +6980,8 @@ msgstr "Importierte Graphik ist zu groß. Das Maximum ist %f"
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Importoffset auf (%f, %f) angepasst, um innerhalb der numerischen Grenzen zu "
+"liegen"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -33545,7 +33547,7 @@ msgstr "Suchen nach:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "Zeilenumbruch"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference &designators"
@@ -34045,7 +34047,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
-msgstr "Netzverbunde"
+msgstr "Netzverbinder"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:344
 msgid "Pad groups allowed to short different nets:"
@@ -35268,7 +35270,7 @@ msgstr "Element verschieben"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:60
 msgid "Replace existing placement rule areas"
-msgstr ""
+msgstr "Bestehender Platzierungs-Regelbereiche ersetzen"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:63
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
@@ -35308,7 +35310,7 @@ msgstr "Bauteile außerhalb der Zielfläche einbeziehen"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
-msgstr ""
+msgstr "Mehrkanallayout wiederholen"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:129
 msgid "Convert to Non Copper Zone"
@@ -36819,7 +36821,7 @@ msgstr "Beschreibung Footprint Elternelement"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
 msgid "Update thickness according to text size "
-msgstr ""
+msgstr "Dicke entsprechend der Textgröße aktualisieren "
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -36827,6 +36829,9 @@ msgid ""
 "Normal text: thickness is size/8\n"
 "Bold text: thickness is size/5"
 msgstr ""
+"Optimale Textdicke anhand von Textbreite und -höhe einstellen\n"
+"Normaler Text: Dicke entspr. Größe/8\n"
+"Fettgedruckter Text: Dicke entspr. Größe/5"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:382
 msgid "Edit Text Box Properties"
@@ -38532,6 +38537,10 @@ msgid ""
 "max distance between a solder mask opening and a copper item having a "
 "different net than the parent solder mask opening to create a DRC error"
 msgstr ""
+"Für Design-Rule-Check (DRC) Tests:\n"
+"Maximaler Abstand zwischen einer Lötmaskenöffnung und einem Kupferelement, "
+"das ein anderes Netz als die übergeordnete Lötmaskenöffnung hat, um einen "
+"DRC-Fehler zu erzeugen"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -38544,6 +38553,9 @@ msgid ""
 "Disable DRC error type solder mask aperture bridge between pads of the same "
 "footprint (useful for net ties)"
 msgstr ""
+"Für Design-Rule-Check (DRC) Tests:\n"
+"DRC-Fehlertyp \"Lötstoppöffnung über Elementen mit verschiedenen Netzen\" "
+"deaktivieren (nützlich für Netzverbinder)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:111
 msgid "Tent vias:"
@@ -40467,7 +40479,7 @@ msgstr "Fehlender Zusicherungsausdruck."
 
 #: pcbnew/drc/drc_rule_parser.cpp:488
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
+msgstr "within_diff_pairs-Option ist für den Einschränkungstyp ungültig."
 
 #: pcbnew/drc/drc_rule_parser.cpp:506
 msgid "Missing min value."
@@ -42418,7 +42430,7 @@ msgstr "Footprints automatisch platzieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:438
 msgid "Multi-Channel"
-msgstr ""
+msgstr "Mehrkanal"
 
 #: pcbnew/menubar_pcb_editor.cpp:447
 msgid "External Plugins"
@@ -46919,9 +46931,8 @@ msgstr "Linien abrunden"
 
 #: pcbnew/tools/edit_tool.cpp:1418
 #: pcbnew/tools/item_modification_routine.cpp:256
-#, fuzzy
 msgid "Dogbone Corners"
-msgstr "Ecke verschieben"
+msgstr "Dogbone-Ecken"
 
 #: pcbnew/tools/edit_tool.cpp:1517
 msgid "Simplify Shapes"
@@ -47070,20 +47081,20 @@ msgid "Some of the lines could not be chamfered."
 msgstr "Manche Linien können nicht angefast werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:266
-#, fuzzy
 msgid "Unable to add dogbone corners to the selected lines."
-msgstr "Die ausgewählten Linien können nicht angefast werden."
+msgstr "Zu ausgewählten Linien konnten keine Dogbone-Ecken hinzugefügt werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:270
-#, fuzzy
 msgid "Some of the lines could not have dogbone corners added."
-msgstr "Manche Linien können nicht angefast werden."
+msgstr "Zu manchen Linien konnten keine Dogbone-Ecken hinzugefügt werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:278
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
 msgstr ""
+"Einige der Dogbone-Ecken sind zu schmal für ein Werkzeug mit dem angegebenen "
+"Radius."
 
 #: pcbnew/tools/item_modification_routine.cpp:348
 #: pcbnew/tools/pcb_actions.cpp:624
@@ -47137,16 +47148,18 @@ msgstr "Manche Polygone konnten nicht geschnitten werden."
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
-msgstr ""
+msgstr "Bitte einen Referenz-Regelbereich auswählen, der kopiert werden soll."
 
 #: pcbnew/tools/multichannel_tool.cpp:299
 msgid "No Rule Areas to repeat layout to have been found."
-msgstr ""
+msgstr "Keinen Regelbereich gefunden, zu dem das Layout übertragen werden kann."
 
 #: pcbnew/tools/multichannel_tool.cpp:371
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
+"Kopieren von Regelbereichsinhalten zwischen Regelbereichen \"%s\" und \"%s\" "
+"fehlgeschlagen."
 
 #: pcbnew/tools/multichannel_tool.cpp:384
 #, fuzzy
@@ -47160,7 +47173,7 @@ msgstr "In %d Regelbereiche kopiert."
 
 #: pcbnew/tools/multichannel_tool.cpp:623
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "Einem oder beiden Bereichen sind keine Bauteile zugeordnet."
 
 #: pcbnew/tools/multichannel_tool.cpp:627
 msgid "Component count mismatch"
@@ -47168,17 +47181,19 @@ msgstr "Anzahl der Bauteile stimmt nicht überein"
 
 #: pcbnew/tools/multichannel_tool.cpp:631
 msgid "Iteration count exceeded (timeout)"
-msgstr ""
+msgstr "Anzahl der Iterationen überschritten (Timeout)"
 
 #: pcbnew/tools/multichannel_tool.cpp:635
 msgid "Topology mismatch"
-msgstr ""
+msgstr "Topologie stimmt nicht überein"
 
 #: pcbnew/tools/multichannel_tool.cpp:685
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s)."
 msgstr ""
+"Platzierungsbereiche können nicht automatisch generiert werden, da der "
+"Schaltplan nur eine oder keine hierarchische Seite hat."
 
 #: pcbnew/tools/multichannel_tool.cpp:767
 #, fuzzy
@@ -47591,9 +47606,8 @@ msgid "Cut away corners between selected lines"
 msgstr "Ecken zwischen ausgewählten Linien wegschneiden"
 
 #: pcbnew/tools/pcb_actions.cpp:605
-#, fuzzy
 msgid "Dogbone Corners..."
-msgstr "Ecke verschieben..."
+msgstr "Dogbone-Ecken..."
 
 #: pcbnew/tools/pcb_actions.cpp:606
 #, fuzzy
@@ -48222,7 +48236,7 @@ msgstr "Netzlinien anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "Fehlende Verbindungen als Linien/Bögen auf der Platine darstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Curved Ratsnest Lines"
