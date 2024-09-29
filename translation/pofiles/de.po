@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 09:03-0700\n"
-"PO-Revision-Date: 2024-09-27 02:15+0000\n"
+"PO-Revision-Date: 2024-09-30 14:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -32196,7 +32196,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
-msgstr "Netzverbunde"
+msgstr "Netzverbinder"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:344
 msgid "Pad groups allowed to short different nets:"
