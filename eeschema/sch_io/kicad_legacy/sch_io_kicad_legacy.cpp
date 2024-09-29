@@ -33,6 +33,7 @@
 #include <wx/tokenzr.h>
 #include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
 
+#include <bitmap_base.h>
 #include <kiway.h>
 #include <string_utils.h>
 #include <locale_io.h>
@@ -646,6 +647,7 @@ SCH_SHEET* SCH_IO_KICAD_LEGACY::loadSheet( LINE_READER& aReader )
 SCH_BITMAP* SCH_IO_KICAD_LEGACY::loadBitmap( LINE_READER& aReader )
 {
     std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>();
+    REFERENCE_IMAGE&            refImage = bitmap->GetReferenceImage();
 
     const char* line = aReader.Line();
 
@@ -674,7 +676,7 @@ SCH_BITMAP* SCH_IO_KICAD_LEGACY::loadBitmap( LINE_READER& aReader )
             if( !std::isnormal( scalefactor ) )
                 scalefactor = 1.0;
 
-            bitmap->GetImage()->SetScale( scalefactor );
+            refImage.SetImageScale( scalefactor );
         }
         else if( strCompare( "Data", line, &line ) )
         {
@@ -690,12 +692,12 @@ SCH_BITMAP* SCH_IO_KICAD_LEGACY::loadBitmap( LINE_READER& aReader )
                 if( strCompare( "EndData", line ) )
                 {
                     // all the PNG date is read.
-                    bitmap->GetImage()->ReadImageFile( buffer );
+                    refImage.ReadImageFile( buffer );
 
                     // Legacy file formats assumed 300 image PPI at load.
-                    BITMAP_BASE* bitmapImage = bitmap->GetImage();
-                    bitmapImage->SetScale( bitmapImage->GetScale() * bitmapImage->GetPPI()
-                                           / 300.0 );
+                    const BITMAP_BASE& bitmapImage = refImage.GetImage();
+                    refImage.SetImageScale( refImage.GetImageScale() * bitmapImage.GetPPI()
+                                            / 300.0 );
                     break;
                 }
 
@@ -1592,7 +1594,7 @@ void SCH_IO_KICAD_LEGACY::Format( SCH_SHEET* aSheet )
             saveSymbol( static_cast<SCH_SYMBOL*>( item ) );
             break;
         case SCH_BITMAP_T:
-            saveBitmap( static_cast<SCH_BITMAP*>( item ) );
+            saveBitmap( static_cast<const SCH_BITMAP&>( *item ) );
             break;
         case SCH_SHEET_T:
             saveSheet( static_cast<SCH_SHEET*>( item ) );
@@ -1639,7 +1641,7 @@ void SCH_IO_KICAD_LEGACY::Format( SELECTION* aSelection, OUTPUTFORMATTER* aForma
             saveSymbol( static_cast< SCH_SYMBOL* >( item ) );
             break;
         case SCH_BITMAP_T:
-            saveBitmap( static_cast< SCH_BITMAP* >( item ) );
+            saveBitmap( static_cast< const SCH_BITMAP& >( *item ) );
             break;
         case SCH_SHEET_T:
             saveSheet( static_cast< SCH_SHEET* >( item ) );
@@ -1812,19 +1814,19 @@ void SCH_IO_KICAD_LEGACY::saveField( SCH_FIELD* aField )
 }
 
 
-void SCH_IO_KICAD_LEGACY::saveBitmap( SCH_BITMAP* aBitmap )
+void SCH_IO_KICAD_LEGACY::saveBitmap( const SCH_BITMAP& aBitmap )
 {
-    wxCHECK_RET( aBitmap != nullptr, "SCH_BITMAP* is NULL" );
+    const REFERENCE_IMAGE& refImage = aBitmap.GetReferenceImage();
 
-    const wxImage* image = aBitmap->GetImage()->GetImageData();
+    const wxImage* image = refImage.GetImage().GetImageData();
 
     wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
 
     m_out->Print( 0, "$Bitmap\n" );
     m_out->Print( 0, "Pos %-4d %-4d\n",
-                  schIUScale.IUToMils( aBitmap->GetPosition().x ),
-                  schIUScale.IUToMils( aBitmap->GetPosition().y ) );
-    m_out->Print( 0, "Scale %f\n", aBitmap->GetImage()->GetScale() );
+                  schIUScale.IUToMils( aBitmap.GetPosition().x ),
+                  schIUScale.IUToMils( aBitmap.GetPosition().y ) );
+    m_out->Print( 0, "Scale %f\n", refImage.GetImageScale() );
     m_out->Print( 0, "Data\n" );
 
     wxMemoryOutputStream stream;

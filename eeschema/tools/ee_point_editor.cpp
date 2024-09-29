@@ -75,6 +75,13 @@ enum RECTANGLE_LINES
     RECT_TOP, RECT_RIGHT, RECT_BOT, RECT_LEFT
 };
 
+
+enum REFIMAGE_POINTS
+{
+    REFIMG_ORIGIN = RECT_BOTRIGHT + 1
+};
+
+
 enum TABLECELL_POINTS
 {
     COL_WIDTH, ROW_HEIGHT
@@ -246,14 +253,17 @@ public:
 
         case SCH_BITMAP_T:
         {
-            SCH_BITMAP* bitmap = (SCH_BITMAP*) aItem;
-            VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
-            VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+            const SCH_BITMAP&      bitmap = static_cast<const SCH_BITMAP&>( *aItem );
+            const REFERENCE_IMAGE& refImage = bitmap.GetReferenceImage();
+            const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
+            const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
 
             points->AddPoint( topLeft );
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
             points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
             points->AddPoint( botRight );
+
+            points->AddPoint( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
             break;
         }
 
@@ -844,30 +854,81 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
     case SCH_BITMAP_T:
     {
-        EE_GRID_HELPER gridHelper( m_toolMgr );
-        SCH_BITMAP*    bitmap = (SCH_BITMAP*) item;
-        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+        SCH_BITMAP&      bitmap = static_cast<SCH_BITMAP&>( *item );
+        REFERENCE_IMAGE& refImg = bitmap.GetReferenceImage();
+        const VECTOR2I   topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+        const VECTOR2I   topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+        const VECTOR2I   botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+        const VECTOR2I   botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+        const VECTOR2I   xfrmOrigin = m_editPoints->Point( REFIMG_ORIGIN ).GetPosition();
 
-        gridHelper.SetSnap( aSnapToGrid );
+        if( isModified( m_editPoints->Point( REFIMG_ORIGIN ) ) )
+        {
+            // Moving the transform origin
+            // As the other points didn't move, we can get the image extent from them
+            const VECTOR2I newOffset = xfrmOrigin - ( topLeft + botRight ) / 2;
+            refImg.SetTransformOriginOffset( newOffset );
+        }
+        else
+        {
+            const VECTOR2I oldOrigin = refImg.GetPosition() + refImg.GetTransformOriginOffset();
+            const VECTOR2I oldSize = refImg.GetSize();
+            const VECTOR2I pos = refImg.GetPosition();
 
-        pinEditedCorner( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ), topLeft, topRight,
-                         botLeft, botRight, &gridHelper );
+            OPT_VECTOR2I newCorner;
+            VECTOR2I     oldCorner = pos;
 
-        double oldWidth = bitmap->GetSize().x;
-        double newWidth = topRight.x - topLeft.x;
-        double widthRatio = newWidth / oldWidth;
+            if( isModified( m_editPoints->Point( RECT_TOPLEFT ) ) )
+            {
+                newCorner = topLeft;
+                oldCorner -= oldSize / 2;
+            }
+            else if( isModified( m_editPoints->Point( RECT_TOPRIGHT ) ) )
+            {
+                newCorner = topRight;
+                oldCorner -= VECTOR2I( -oldSize.x, oldSize.y ) / 2;
+            }
+            else if( isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
+            {
+                newCorner = botLeft;
+                oldCorner -= VECTOR2I( oldSize.x, -oldSize.y ) / 2;
+            }
+            else if( isModified( m_editPoints->Point( RECT_BOTRIGHT ) ) )
+            {
+                newCorner = botRight;
+                oldCorner += oldSize / 2;
+            }
 
-        double oldHeight = bitmap->GetSize().y;
-        double newHeight = botLeft.y - topLeft.y;
-        double heightRatio = newHeight / oldHeight;
+            if( newCorner )
+            {
+                // Turn in the respective vectors from the origin
+                *newCorner -= xfrmOrigin;
+                oldCorner -= oldOrigin;
 
-        bitmap->SetImageScale( bitmap->GetImageScale() * std::min( widthRatio, heightRatio ) );
+                // If we tried to cross the origin, clamp it to stop it
+                if( sign( newCorner->x ) != sign( oldCorner.x )
+                    || sign( newCorner->y ) != sign( oldCorner.y ) )
+                {
+                    *newCorner = VECTOR2I( 0, 0 );
+                }
+
+                const double newLength = newCorner->EuclideanNorm();
+                const double oldLength = oldCorner.EuclideanNorm();
+
+                double ratio = oldLength > 0 ? ( newLength / oldLength ) : 1.0;
+
+                // Clamp the scaling to a minimum of 50 mils
+                VECTOR2I newSize = oldSize * ratio;
+                double newWidth = std::max( newSize.x, EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 50 ) );
+                double newHeight = std::max( newSize.y, EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 50 ) );
+                ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
+
+                // Also handles the origin offset
+                refImg.SetImageScale( refImg.GetImageScale() * ratio );
+            }
+        }
         break;
     }
-
     case SCH_SHEET_T:
     {
         SCH_SHEET*     sheet = (SCH_SHEET*) item;
@@ -1099,14 +1160,18 @@ void EE_POINT_EDITOR::updatePoints()
 
     case SCH_BITMAP_T:
     {
-        SCH_BITMAP* bitmap = (SCH_BITMAP*) item;
-        VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
-        VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+        const SCH_BITMAP&      bitmap = static_cast<SCH_BITMAP&>( *item );
+        const REFERENCE_IMAGE& refImage = bitmap.GetReferenceImage();
+        const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
+        const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
 
         m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
         m_editPoints->Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
         m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
+
+        m_editPoints->Point( REFIMG_ORIGIN )
+                .SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
         break;
     }
 

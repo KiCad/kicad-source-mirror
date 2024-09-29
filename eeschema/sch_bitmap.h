@@ -26,12 +26,11 @@
  * @file sch_bitmap.h
  */
 
-#ifndef _SCH_BITMAP_H_
-#define _SCH_BITMAP_H_
+#pragma once
 
 
 #include <sch_item.h>
-#include <bitmap_base.h>
+#include <reference_image.h>
 
 
 /**
@@ -44,41 +43,19 @@ public:
 
     SCH_BITMAP( const SCH_BITMAP& aSchBitmap );
 
-    ~SCH_BITMAP()
-    {
-        delete m_bitmapBase;
-    }
-
     SCH_BITMAP& operator=( const SCH_ITEM& aItem );
 
-    BITMAP_BASE* GetImage() const
-    {
-        wxCHECK_MSG( m_bitmapBase != nullptr, nullptr,
-                     "Invalid SCH_BITMAP init, m_bitmapBase is NULL." );
-        return m_bitmapBase;
-    }
+    /**
+     * @return the underlying reference image object.
+     */
+    REFERENCE_IMAGE&       GetReferenceImage() { return m_referenceImage; }
+    const REFERENCE_IMAGE& GetReferenceImage() const { return m_referenceImage; }
 
     int  GetX() const { return GetPosition().x; };
     void SetX( int aX ) { SetPosition( VECTOR2I( aX, GetY() ) ); }
 
     int  GetY() const { return GetPosition().y; }
     void SetY( int aY ) { SetPosition( VECTOR2I( GetX(), aY ) ); }
-
-    /**
-     * @return the image "zoom" value.
-     *  scale = 1.0 = original size of bitmap.
-     *  scale < 1.0 = the bitmap is drawn smaller than its original size.
-     *  scale > 1.0 = the bitmap is drawn bigger than its original size.
-     */
-    double GetImageScale() const
-    {
-        return m_bitmapBase->GetScale();
-    }
-
-    void SetImageScale( double aScale )
-    {
-        m_bitmapBase->SetScale( aScale );
-    }
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -90,11 +67,6 @@ public:
         return wxT( "SCH_BITMAP" );
     }
 
-    /**
-     * @return the actual size (in user units, not in pixels) of the image.
-     */
-    VECTOR2I GetSize() const;
-
     const BOX2I GetBoundingBox() const override;
 
     void SwapData( SCH_ITEM* aItem ) override;
@@ -102,30 +74,7 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-   /**
-     * Read and store an image file.
-     *
-     * Initialize the bitmap used to draw this item format.
-     *
-     * @param aFullFilename is the full filename of the image file to read.
-     * @return true if success reading else false.
-     */
-    bool ReadImageFile( const wxString& aFullFilename );
-
-    /**
-     * Read and store an image file.
-     *
-     * Initialize the bitmap used to draw this item format.
-     *
-     * @param aBuf is the memory buffer containing the image file to read.
-     * @return true if success reading else false.
-     */
-    bool ReadImageFile( wxMemoryBuffer& aBuf );
-
-    void Move( const VECTOR2I& aMoveVector ) override
-    {
-        m_pos += aMoveVector;
-    }
+    void Move( const VECTOR2I& aMoveVector ) override;
 
     /**
      * Return true for items which are moved with the anchor point at mouse cursor and false
@@ -148,8 +97,8 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    VECTOR2I GetPosition() const override { return m_pos; }
-    void     SetPosition( const VECTOR2I& aPosition ) override { m_pos = aPosition; }
+    VECTOR2I GetPosition() const override;
+    void     SetPosition( const VECTOR2I& aPosition ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -171,9 +120,16 @@ public:
 #endif
 
 private:
-    VECTOR2I     m_pos;                 // XY coordinates of center of the bitmap
-    BITMAP_BASE* m_bitmapBase;          // the BITMAP_BASE item
+    friend struct SCH_BITMAP_DESC;
+
+    // Property manager interfaces
+    int  GetTransformOriginOffsetX() const;
+    void SetTransformOriginOffsetX( int aX );
+    int  GetTransformOriginOffsetY() const;
+    void SetTransformOriginOffsetY( int aY );
+
+    double GetImageScale() const;
+    void   SetImageScale( double aScale );
+
+    REFERENCE_IMAGE m_referenceImage;
 };
-
-
-#endif    // _SCH_BITMAP_H_

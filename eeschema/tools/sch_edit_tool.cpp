@@ -2197,7 +2197,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_BITMAP_T:
     {
-        SCH_BITMAP*             bitmap = static_cast<SCH_BITMAP*>( curr_item );
+        SCH_BITMAP&             bitmap = static_cast<SCH_BITMAP&>( *curr_item );
         DIALOG_IMAGE_PROPERTIES dlg( m_frame, bitmap );
 
         if( dlg.ShowModal() == wxID_OK )

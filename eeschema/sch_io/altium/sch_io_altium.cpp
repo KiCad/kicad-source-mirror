@@ -3750,6 +3750,7 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
     VECTOR2I                    center = ( elem.location + elem.corner ) / 2 + m_sheetOffset;
     std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>( center );
+    REFERENCE_IMAGE&            refImage = bitmap->GetReferenceImage();
 
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
@@ -3775,7 +3776,7 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
         outputStream.Write( zlibInputStream );
         outputStream.Close();
 
-        if( !bitmap->ReadImageFile( storagePath ) )
+        if( !refImage.ReadImageFile( storagePath ) )
         {
             m_reporter->Report( wxString::Format( _( "Error reading image %s." ), storagePath ),
                                 RPT_SEVERITY_ERROR );
@@ -3794,7 +3795,7 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
             return;
         }
 
-        if( !bitmap->ReadImageFile( elem.filename ) )
+        if( !refImage.ReadImageFile( elem.filename ) )
         {
             m_reporter->Report( wxString::Format( _( "Error reading image %s." ), elem.filename ),
                                 RPT_SEVERITY_ERROR );
@@ -3803,11 +3804,13 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
     }
 
     // we only support one scale, thus we need to select one in case it does not keep aspect ratio
-    VECTOR2I currentImageSize = bitmap->GetSize();
-    VECTOR2I expectedImageSize = elem.location - elem.corner;
-    double   scaleX = std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
-    double   scaleY = std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
-    bitmap->SetImageScale( std::min( scaleX, scaleY ) );
+    const VECTOR2I currentImageSize = refImage.GetSize();
+    const VECTOR2I expectedImageSize = elem.location - elem.corner;
+    const double   scaleX =
+            std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
+    const double scaleY =
+            std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
+    refImage.SetImageScale( std::min( scaleX, scaleY ) );
 
     bitmap->SetFlags( IS_NEW );
     screen->Append( bitmap.release() );

@@ -1594,16 +1594,17 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
                     else
                     {
                         std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>();
+                        REFERENCE_IMAGE&            refImage = bitmap->GetReferenceImage();
 
                         wxImage::SetDefaultLoadFlags( wxImage::GetDefaultLoadFlags()
                                                       & ~wxImage::Load_Verbose );
 
-                        if( bitmap->ReadImageFile( buf ) )
+                        if( refImage.ReadImageFile( buf ) )
                         {
                             VECTOR2D kcenter = kstart + ksize / 2;
 
-                            double scaleFactor = ScaleSize( size.x ) / bitmap->GetSize().x;
-                            bitmap->SetImageScale( scaleFactor );
+                            double scaleFactor = ScaleSize( size.x ) / refImage.GetSize().x;
+                            refImage.SetImageScale( scaleFactor );
                             bitmap->SetPosition( kcenter );
 
                             applyTransform( bitmap.get() );

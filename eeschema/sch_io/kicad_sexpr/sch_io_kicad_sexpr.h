@@ -145,7 +145,7 @@ private:
                      const SCH_SHEET_LIST& aSheetList, int aNestLevel,
                      bool aForClipboard, const SCH_SHEET_PATH* aRelativePath = nullptr );
     void saveField( SCH_FIELD* aField, int aNestLevel );
-    void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );
+    void saveBitmap( const SCH_BITMAP& aBitmap, int aNestLevel );
     void saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSheetList, int aNestLevel );
     void saveJunction( SCH_JUNCTION* aJunction, int aNestLevel );
     void saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLevel );

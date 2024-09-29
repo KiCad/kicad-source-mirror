@@ -159,7 +159,7 @@ private:
 
     void saveSymbol( SCH_SYMBOL* aSymbol );
     void saveField( SCH_FIELD* aField );
-    void saveBitmap( SCH_BITMAP* aBitmap );
+    void saveBitmap( const SCH_BITMAP& aBitmap );
     void saveSheet( SCH_SHEET* aSheet );
     void saveJunction( SCH_JUNCTION* aJunction );
     void saveNoConnect( SCH_NO_CONNECT* aNoConnect );

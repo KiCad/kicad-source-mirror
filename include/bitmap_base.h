@@ -130,7 +130,7 @@ public:
     const BOX2I GetBoundingBox() const;
 
     void DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
-                     const KIGFX::COLOR4D& aBackgroundColor = KIGFX::COLOR4D::UNSPECIFIED );
+                     const KIGFX::COLOR4D& aBackgroundColor = KIGFX::COLOR4D::UNSPECIFIED ) const;
 
     /**
      * Reads and stores in memory an image file.

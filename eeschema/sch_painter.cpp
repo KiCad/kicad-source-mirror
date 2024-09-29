@@ -26,6 +26,7 @@
 
 
 #include <trigo.h>
+#include <bitmap_base.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <callback_gal.h>
@@ -2953,37 +2954,39 @@ void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
 
+    const REFERENCE_IMAGE& refImage = aBitmap->GetReferenceImage();
+
     // When the image scale factor is not 1.0, we need to modify the actual as the image scale
     // factor is similar to a local zoom
-    double img_scale = aBitmap->GetImageScale();
+    const double img_scale = refImage.GetImageScale();
 
     if( img_scale != 1.0 )
         m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
 
     if( aLayer == LAYER_DRAW_BITMAPS )
     {
-        m_gal->DrawBitmap( *aBitmap->GetImage() );
+        m_gal->DrawBitmap( refImage.GetImage() );
     }
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
         if( aBitmap->IsSelected() || aBitmap->IsBrightened() )
         {
-            COLOR4D color = getRenderColor( aBitmap, LAYER_DRAW_BITMAPS, true );
+            const COLOR4D color = getRenderColor( aBitmap, LAYER_DRAW_BITMAPS, true );
             m_gal->SetIsStroke( true );
             m_gal->SetStrokeColor( color );
             m_gal->SetLineWidth ( getShadowWidth( aBitmap->IsBrightened() ) );
             m_gal->SetIsFill( false );
 
             // Draws a bounding box.
-            VECTOR2D bm_size( aBitmap->GetSize() );
+            VECTOR2D bm_size( refImage.GetSize() );
             // bm_size is the actual image size in UI.
             // but m_gal scale was previously set to img_scale
             // so recalculate size relative to this image size.
             bm_size.x /= img_scale;
             bm_size.y /= img_scale;
-            VECTOR2D origin( -bm_size.x / 2.0, -bm_size.y / 2.0 );
-            VECTOR2D end = origin + bm_size;
+            const VECTOR2D origin( -bm_size.x / 2.0, -bm_size.y / 2.0 );
+            const VECTOR2D end = origin + bm_size;
 
             m_gal->DrawRectangle( origin, end );
         }

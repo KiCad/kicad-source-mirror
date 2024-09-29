@@ -29,13 +29,14 @@
 #include <sch_commit.h>
 
 
-DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_BITMAP* aBitmap ) :
+DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_BITMAP& aBitmap ) :
         DIALOG_IMAGE_PROPERTIES_BASE( aParent ), m_frame( aParent ), m_bitmap( aBitmap ),
         m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
 {
     // Create the image editor page
-    m_imageEditor = new PANEL_IMAGE_EDITOR( m_Notebook, aBitmap->GetImage() );
+    const REFERENCE_IMAGE& refImage = aBitmap.GetReferenceImage();
+    m_imageEditor = new PANEL_IMAGE_EDITOR( m_Notebook, refImage.GetImage() );
     m_Notebook->AddPage( m_imageEditor, _( "Image" ), false );
 
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -49,8 +50,8 @@ DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_B
 
 bool DIALOG_IMAGE_PROPERTIES::TransferDataToWindow()
 {
-    m_posX.SetValue( m_bitmap->GetPosition().x );
-    m_posY.SetValue( m_bitmap->GetPosition().y );
+    m_posX.SetValue( m_bitmap.GetPosition().x );
+    m_posY.SetValue( m_bitmap.GetPosition().y );
 
     return true;
 }
@@ -58,18 +59,19 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
 {
+    REFERENCE_IMAGE& refImage = m_bitmap.GetReferenceImage();
     if( m_imageEditor->TransferDataFromWindow() )
     {
         SCH_COMMIT commit( m_frame );
 
         // Save old image in undo list if not already in edit
-        if( m_bitmap->GetEditFlags() == 0 )
-            commit.Modify( m_bitmap, m_frame->GetScreen() );
+        if( m_bitmap.GetEditFlags() == 0 )
+            commit.Modify( &m_bitmap, m_frame->GetScreen() );
 
         // Update our bitmap from the editor
-        m_imageEditor->TransferToImage( m_bitmap->GetImage() );
+        m_imageEditor->TransferToImage( refImage.MutableImage() );
 
-        m_bitmap->SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
+        m_bitmap.SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
 
         if( !commit.Empty() )
             commit.Push( _( "Image Properties" ) );

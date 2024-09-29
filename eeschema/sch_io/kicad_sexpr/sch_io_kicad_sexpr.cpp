@@ -32,6 +32,7 @@
 
 #include <advanced_config.h>
 #include <base_units.h>
+#include <bitmap_base.h>
 #include <build_version.h>
 #include <ee_selection.h>
 #include <font/fontconfig.h>
@@ -444,7 +445,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
             break;
 
         case SCH_BITMAP_T:
-            saveBitmap( static_cast<SCH_BITMAP*>( item ), 1 );
+            saveBitmap( static_cast<SCH_BITMAP&>( *item ), 1 );
             break;
 
         case SCH_SHEET_T:
@@ -597,7 +598,7 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
             break;
 
         case SCH_BITMAP_T:
-            saveBitmap( static_cast< SCH_BITMAP* >( item ), 0 );
+            saveBitmap( static_cast< SCH_BITMAP& >( *item ), 0 );
             break;
 
         case SCH_SHEET_T:
@@ -964,28 +965,30 @@ void SCH_IO_KICAD_SEXPR::saveField( SCH_FIELD* aField, int aNestLevel )
 }
 
 
-void SCH_IO_KICAD_SEXPR::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
+void SCH_IO_KICAD_SEXPR::saveBitmap( const SCH_BITMAP& aBitmap, int aNestLevel )
 {
-    wxCHECK_RET( aBitmap != nullptr && m_out != nullptr, "" );
+    wxCHECK_RET( m_out != nullptr, "" );
 
-    const wxImage* image = aBitmap->GetImage()->GetImageData();
+    const REFERENCE_IMAGE& refImage = aBitmap.GetReferenceImage();
+    const BITMAP_BASE&     bitmapBase = refImage.GetImage();
+
+    const wxImage* image = bitmapBase.GetImageData();
 
     wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
 
     m_out->Print( aNestLevel, "(image (at %s %s)",
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                       aBitmap->GetPosition().x ).c_str(),
+                                                       refImage.GetPosition().x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                       aBitmap->GetPosition().y ).c_str() );
+                                                       refImage.GetPosition().y ).c_str() );
 
-    double scale = aBitmap->GetImage()->GetScale();
+    double scale = refImage.GetImageScale();
 
     // 20230121 or older file format versions assumed 300 image PPI at load/save.
     // Let's keep compatibility by changing image scale.
     if( SEXPR_SCHEMATIC_FILE_VERSION <= 20230121 )
     {
-        BITMAP_BASE* bm_image = aBitmap->GetImage();
-        scale = scale * 300.0 / bm_image->GetPPI();
+        scale = scale * 300.0 / bitmapBase.GetPPI();
     }
 
     if( scale != 1.0 )
@@ -993,11 +996,11 @@ void SCH_IO_KICAD_SEXPR::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
 
     m_out->Print( 0, "\n" );
 
-    KICAD_FORMAT::FormatUuid( m_out, aBitmap->m_Uuid );
+    KICAD_FORMAT::FormatUuid( m_out, aBitmap.m_Uuid );
 
     m_out->Print( aNestLevel + 1, "(data" );
 
-    wxString out = wxBase64Encode( aBitmap->GetImage()->GetImageDataBuffer() );
+    wxString out = wxBase64Encode( bitmapBase.GetImageDataBuffer() );
 
     // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
     // so use it in a vein attempt to be standard like.

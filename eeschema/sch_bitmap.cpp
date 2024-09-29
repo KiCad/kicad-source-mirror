@@ -25,38 +25,37 @@
 /**
  * @file sch_bitmap.cpp
  */
+#include "sch_bitmap.h"
 
-#include <sch_draw_panel.h>
-#include <plotters/plotter.h>
-#include <settings/color_settings.h>
+#include <bitmap_base.h>
 #include <bitmaps.h>
 #include <base_units.h>
 #include <common.h>
-#include <eda_draw_frame.h>
 #include <core/mirror.h>
-#include <sch_bitmap.h>
+#include <eda_draw_frame.h>
+#include <geometry/geometry_utils.h>
+#include <plotters/plotter.h>
+#include <sch_draw_panel.h>
+#include <settings/color_settings.h>
 #include <trigo.h>
 
 #include <wx/mstream.h>
 
 
 SCH_BITMAP::SCH_BITMAP( const VECTOR2I& pos ) :
-    SCH_ITEM( nullptr, SCH_BITMAP_T )
+    SCH_ITEM( nullptr, SCH_BITMAP_T ),
+    m_referenceImage( schIUScale)
 {
-    m_pos   = pos;
+    m_referenceImage.SetPosition( pos );
     m_layer = LAYER_NOTES;              // used only to draw/plot a rectangle,
                                         // when a bitmap cannot be drawn or plotted
-    m_bitmapBase = new BITMAP_BASE();
-    m_bitmapBase->SetPixelSizeIu( (double) schIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
 }
 
 
 SCH_BITMAP::SCH_BITMAP( const SCH_BITMAP& aSchBitmap ) :
-    SCH_ITEM( aSchBitmap )
+    SCH_ITEM( aSchBitmap ),
+    m_referenceImage( aSchBitmap.m_referenceImage )
 {
-    m_pos   = aSchBitmap.m_pos;
-    m_layer = aSchBitmap.m_layer;
-    m_bitmapBase = new BITMAP_BASE( *aSchBitmap.m_bitmapBase );
 }
 
 
@@ -70,38 +69,11 @@ SCH_BITMAP& SCH_BITMAP::operator=( const SCH_ITEM& aItem )
     {
         SCH_ITEM::operator=( aItem );
 
-        SCH_BITMAP* bitmap = (SCH_BITMAP*) &aItem;
-
-        delete m_bitmapBase;
-        m_bitmapBase = new BITMAP_BASE( *bitmap->m_bitmapBase );
-        m_pos = bitmap->m_pos;
+        const SCH_BITMAP& bitmap = static_cast<const SCH_BITMAP&>( aItem );
+        m_referenceImage = bitmap.m_referenceImage;
     }
 
     return *this;
-}
-
-
-bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
-{
-    if( m_bitmapBase->ReadImageFile( aFullFilename ) )
-    {
-        m_bitmapBase->SetPixelSizeIu( (double) schIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
-        return true;
-    }
-
-    return false;
-}
-
-
-bool SCH_BITMAP::ReadImageFile( wxMemoryBuffer& aBuffer )
-{
-    if( m_bitmapBase->ReadImageFile( aBuffer ) )
-    {
-        m_bitmapBase->SetPixelSizeIu( (double) schIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
-        return true;
-    }
-
-    return false;
 }
 
 
@@ -120,53 +92,59 @@ void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
                                    aItem->GetClass() ) );
 
     SCH_BITMAP* item = (SCH_BITMAP*) aItem;
-    std::swap( m_pos, item->m_pos );
-    std::swap( m_bitmapBase, item->m_bitmapBase );
+    m_referenceImage.SwapData( item->m_referenceImage );
 }
 
 
 const BOX2I SCH_BITMAP::GetBoundingBox() const
 {
-    BOX2I bbox = m_bitmapBase->GetBoundingBox();
-    bbox.Move( m_pos );
-
-    return bbox;
+    return m_referenceImage.GetBoundingBox();
 }
 
 
 void SCH_BITMAP::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                         const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
-    VECTOR2I pos = m_pos + aOffset;
+    VECTOR2I pos = GetPosition() + aOffset;
 
-    m_bitmapBase->DrawBitmap( aSettings->GetPrintDC(), pos, aSettings->GetBackgroundColor() );
+    m_referenceImage.GetImage().DrawBitmap( aSettings->GetPrintDC(), pos,
+                                            aSettings->GetBackgroundColor() );
 }
 
 
-VECTOR2I SCH_BITMAP::GetSize() const
+VECTOR2I SCH_BITMAP::GetPosition() const
 {
-    return m_bitmapBase->GetSize();
+    return m_referenceImage.GetPosition();
+}
+
+
+void SCH_BITMAP::SetPosition( const VECTOR2I& aPosition )
+{
+    m_referenceImage.SetPosition( aPosition );
+}
+
+
+void SCH_BITMAP::Move( const VECTOR2I& aMoveVector )
+{
+    SetPosition( GetPosition() + aMoveVector );
 }
 
 
 void SCH_BITMAP::MirrorVertically( int aCenter )
 {
-    MIRROR( m_pos.y, aCenter );
-    m_bitmapBase->Mirror( FLIP_DIRECTION::TOP_BOTTOM );
+    m_referenceImage.Flip( VECTOR2I( 0, aCenter ), FLIP_DIRECTION::TOP_BOTTOM );
 }
 
 
 void SCH_BITMAP::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_pos.x, aCenter );
-    m_bitmapBase->Mirror( FLIP_DIRECTION::LEFT_RIGHT );
+    m_referenceImage.Flip( VECTOR2I( aCenter, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
 }
 
 
 void SCH_BITMAP::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
-    m_bitmapBase->Rotate( aRotateCCW );
+    m_referenceImage.Rotate( aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
 }
 
 
@@ -176,31 +154,20 @@ void SCH_BITMAP::Show( int nestLevel, std::ostream& os ) const
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_pos << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << GetPosition() << "/>\n";
 }
 #endif
 
 
 bool SCH_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    BOX2I rect = GetBoundingBox();
-
-    rect.Inflate( aAccuracy );
-
-    return rect.Contains( aPosition );
+    return KIGEOM::BoxHitTest( aPosition, GetBoundingBox(), aAccuracy );
 }
 
 
 bool SCH_BITMAP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    BOX2I rect = aRect;
-
-    rect.Inflate( aAccuracy );
-
-    if( aContained )
-        return rect.Contains( GetBoundingBox() );
-
-    return rect.Intersects( GetBoundingBox() );
+    return KIGEOM::BoxHitTest( aRect, GetBoundingBox(), aContained, aAccuracy );
 }
 
 
@@ -209,9 +176,9 @@ void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 {
     if( aBackground )
     {
-        m_bitmapBase->PlotImage( aPlotter, m_pos,
-                                 aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
-                                 aPlotter->RenderSettings()->GetDefaultPenWidth() );
+        m_referenceImage.GetImage().PlotImage(
+                aPlotter, GetPosition(), aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
+                aPlotter->RenderSettings()->GetDefaultPenWidth() );
     }
 }
 
@@ -226,11 +193,15 @@ void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 {
     aList.emplace_back( _( "Bitmap" ), wxEmptyString );
 
-    aList.emplace_back( _( "PPI" ), wxString::Format( wxT( "%d "), GetImage()->GetPPI() ) );
-    aList.emplace_back( _( "Scale" ), wxString::Format( wxT( "%f "), GetImageScale() ) );
+    aList.emplace_back( _( "PPI" ),
+                        wxString::Format( wxT( "%d " ), m_referenceImage.GetImage().GetPPI() ) );
+    aList.emplace_back( _( "Scale" ),
+                        wxString::Format( wxT( "%f " ), m_referenceImage.GetImageScale() ) );
 
-    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetSize().x ) );
-    aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( GetSize().y ) );
+    aList.emplace_back( _( "Width" ),
+                        aFrame->MessageTextFromValue( m_referenceImage.GetSize().x ) );
+    aList.emplace_back( _( "Height" ),
+                        aFrame->MessageTextFromValue( m_referenceImage.GetSize().y ) );
 }
 
 
@@ -247,18 +218,8 @@ bool SCH_BITMAP::operator==( const SCH_ITEM& aItem ) const
     if( Type() != aItem.Type() )
         return false;
 
-    const SCH_BITMAP* bitmap = static_cast<const SCH_BITMAP*>( &aItem );
-
-    if( GetPosition() != bitmap->GetPosition() )
-        return false;
-
-    if( GetSize() != bitmap->GetSize() )
-        return false;
-
-    if( GetImage() != bitmap->GetImage() )
-        return false;
-
-    return true;
+    const SCH_BITMAP& bitmap = static_cast<const SCH_BITMAP&>( aItem );
+    return m_referenceImage == bitmap.m_referenceImage;
 }
 
 
@@ -270,17 +231,48 @@ double SCH_BITMAP::Similarity( const SCH_ITEM& aItem ) const
     if( m_Uuid == aItem.m_Uuid )
         return 1.0;
 
-    const SCH_BITMAP* bitmap = static_cast<const SCH_BITMAP*>( &aItem );
+    const SCH_BITMAP& bitmap = static_cast<const SCH_BITMAP&>( aItem );
+    return m_referenceImage.Similarity( bitmap.m_referenceImage );
+}
 
-    if( GetImage() != bitmap->GetImage() )
-        return 0.0;
 
-    // If it is the same image but a different UUID and a different size,
-    // then it _might be different_.
-    if( GetSize() != bitmap->GetSize() )
-        return 0.5;
+int SCH_BITMAP::GetTransformOriginOffsetX() const
+{
+    return m_referenceImage.GetTransformOriginOffset().x;
+}
 
-    return 1.0;
+
+void SCH_BITMAP::SetTransformOriginOffsetX( int aX )
+{
+    VECTOR2I offset = m_referenceImage.GetTransformOriginOffset();
+    offset.x = aX;
+    m_referenceImage.SetTransformOriginOffset( offset );
+}
+
+
+int SCH_BITMAP::GetTransformOriginOffsetY() const
+{
+    return m_referenceImage.GetTransformOriginOffset().y;
+}
+
+
+void SCH_BITMAP::SetTransformOriginOffsetY( int aY )
+{
+    VECTOR2I offset = m_referenceImage.GetTransformOriginOffset();
+    offset.y = aY;
+    m_referenceImage.SetTransformOriginOffset( offset );
+}
+
+
+double SCH_BITMAP::GetImageScale() const
+{
+    return m_referenceImage.GetImageScale();
+}
+
+
+void SCH_BITMAP::SetImageScale( double aScale )
+{
+    m_referenceImage.SetImageScale( aScale );
 }
 
 
@@ -301,11 +293,25 @@ static struct SCH_BITMAP_DESC
                                                             &SCH_BITMAP::GetY,
                                                             PROPERTY_DISPLAY::PT_COORD ) );
 
-        const wxString groupBITMAP = _HKI( "Image Properties" );
+        const wxString groupImage = _HKI( "Image Properties" );
 
         propMgr.AddProperty( new PROPERTY<SCH_BITMAP, double>( _HKI( "Scale" ),
                                                                &SCH_BITMAP::SetImageScale,
                                                                &SCH_BITMAP::GetImageScale ),
-                             groupBITMAP );
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
+                                     _HKI( "Transform Offset X" ),
+                                     &SCH_BITMAP::SetTransformOriginOffsetX,
+                                     &SCH_BITMAP::GetTransformOriginOffsetX,
+                                     PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
+                                     _HKI( "Transform Offset Y" ),
+                                     &SCH_BITMAP::SetTransformOriginOffsetY,
+                                     &SCH_BITMAP::GetTransformOriginOffsetY,
+                                     PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                             groupImage );
     }
 } _SCH_BITMAP_DESC;

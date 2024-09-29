@@ -36,6 +36,7 @@
 #include <wx/tokenzr.h>
 
 #include <base_units.h>
+#include <bitmap_base.h>
 #include <lib_id.h>
 #include <sch_pin.h>
 #include <math/util.h>                           // KiROUND
@@ -3266,6 +3267,7 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
 
     T                           token;
     std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>();
+    REFERENCE_IMAGE&            refImage = bitmap->GetReferenceImage();
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -3282,14 +3284,13 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
             break;
 
         case T_scale:
-            bitmap->GetImage()->SetScale( parseDouble( "image scale factor" ) );
-
-            if( !std::isnormal( bitmap->GetImage()->GetScale() ) )
-                bitmap->GetImage()->SetScale( 1.0 );
+        {
+            const double scale = parseDouble( "image scale factor" );
+            refImage.SetImageScale( std::isnormal( scale ) ? scale : 1.0 );
 
             NeedRIGHT();
             break;
-
+        }
         case T_uuid:
             NeedSYMBOL();
             const_cast<KIID&>( bitmap->m_Uuid ) = parseKIID();
@@ -3317,7 +3318,7 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
 
             wxMemoryBuffer       buffer = wxBase64Decode( data );
 
-            if( !bitmap->GetImage()->ReadImageFile( buffer ) )
+            if( !refImage.ReadImageFile( buffer ) )
                 THROW_IO_ERROR( _( "Failed to read image data." ) );
 
             break;
@@ -3328,15 +3329,13 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
         }
     }
 
-    // Adjust the image pixel size in iu
-    BITMAP_BASE* image = bitmap->GetImage();
-    image->SetPixelSizeIu( (double) schIUScale.MilsToIU( 1000 ) / image->GetPPI() );
+    // The image will be scaled by PPI in ReadImageFile.
 
     // 20230121 or older file format versions assumed 300 image PPI at load/save.
     // Let's keep compatibility by changing image scale.
     if( m_requiredVersion <= 20230121 )
     {
-        image->SetScale( image->GetScale() * image->GetPPI() / 300.0 );
+        refImage.SetImageScale( refImage.GetImageScale() * refImage.GetImage().GetPPI() / 300.0 );
     }
 
     return bitmap.release();

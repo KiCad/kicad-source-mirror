@@ -987,7 +987,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 if( wxFileExists( fullFilename ) )
                     image = new SCH_BITMAP( cursorPos );
 
-                if( !image || !image->ReadImageFile( fullFilename ) )
+                if( !image || !image->GetReferenceImage().ReadImageFile( fullFilename ) )
                 {
                     wxMessageBox( wxString::Format( _( "Could not load image from '%s'." ), fullFilename ) );
                     delete image;

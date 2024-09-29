@@ -36,7 +36,7 @@ class PANEL_IMAGE_EDITOR;
 class DIALOG_IMAGE_PROPERTIES : public DIALOG_IMAGE_PROPERTIES_BASE
 {
 public:
-    DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_BITMAP* aBitmap );
+    DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_BITMAP& aBitmap );
     ~DIALOG_IMAGE_PROPERTIES() override {}
 
 private:
@@ -45,7 +45,7 @@ private:
 
 private:
     SCH_EDIT_FRAME*     m_frame;
-    SCH_BITMAP*         m_bitmap;
+    SCH_BITMAP&         m_bitmap;
     PANEL_IMAGE_EDITOR* m_imageEditor;
 
     UNIT_BINDER m_posX;

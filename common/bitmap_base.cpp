@@ -276,7 +276,7 @@ const BOX2I BITMAP_BASE::GetBoundingBox() const
 
 
 void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
-                              const KIGFX::COLOR4D& aBackgroundColor )
+                              const KIGFX::COLOR4D& aBackgroundColor ) const
 {
     if( m_bitmap == nullptr )
         return;
