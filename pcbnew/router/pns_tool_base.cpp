@@ -146,7 +146,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
             if( !item->IsRoutable() )
                 continue;
 
-            if( !m_iface->IsCopperLayer( item->Layers().Start() ) )
+            if( !m_iface->IsPNSCopperLayer( item->Layers().Start() ) )
                 continue;
 
             if( !m_iface->IsAnyLayerVisible( item->Layers() ) )

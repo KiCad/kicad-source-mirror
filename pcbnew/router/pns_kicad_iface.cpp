@@ -1350,7 +1350,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
 
 bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB_LAYER_ID aLayer )
 {
-    if( !IsCopperLayer( aLayer ) )
+    if( !IsKicadCopperLayer( aLayer ) )
         return false;
 
     std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
@@ -1383,7 +1383,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
 {
     if( aItem->GetLayer() == Edge_Cuts
             || aItem->GetLayer() == Margin
-            || IsCopperLayer( aItem->GetLayer() ) )
+            || IsKicadCopperLayer( aItem->GetLayer() ) )
     {
         std::vector<SHAPE*> shapes = aItem->MakeEffectiveShapes();
 
@@ -1436,9 +1436,17 @@ void PNS_KICAD_IFACE_BASE::SetBoard( BOARD* aBoard )
     wxLogTrace( wxT( "PNS" ), wxT( "m_board = %p" ), m_board );
 }
 
-bool PNS_KICAD_IFACE_BASE::IsCopperLayer( int aLayer ) const
+
+bool PNS_KICAD_IFACE_BASE::IsPNSCopperLayer( int aPNSLayer ) const
 {
-    return ::IsCopperLayer( GetBoardLayerFromPNSLayer( aLayer ) );
+    return ::IsCopperLayer( GetBoardLayerFromPNSLayer( aPNSLayer ) );
+}
+
+
+
+bool PNS_KICAD_IFACE_BASE::IsKicadCopperLayer( PCB_LAYER_ID aKicadLayer ) const
+{
+    return ::IsCopperLayer( aKicadLayer );
 }
 
 

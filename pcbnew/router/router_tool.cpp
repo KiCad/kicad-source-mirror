@@ -1160,7 +1160,7 @@ bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
     PCB_LAYER_ID    pcbLayer = getStartLayer( m_startItem );
     int             pnsLayer = m_iface->GetPNSLayerFromBoardLayer( pcbLayer );
 
-    if( !IsCopperLayer( pcbLayer ) )
+    if( !::IsCopperLayer( pcbLayer ) )
     {
         editFrame->ShowInfoBarError( _( "Tracks on Copper layers only." ) );
         return false;
