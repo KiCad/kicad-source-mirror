@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -307,19 +307,19 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bSizerLeft->Add( m_checkEnablePanH, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bMargins->Add( bSizerLeft, 0, wxEXPAND|wxLEFT, 5 );
+	bMargins->Add( bSizerLeft, 1, wxEXPAND|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
 	m_mouseDefaults = new wxButton( this, wxID_ANY, _("Reset to Mouse Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_mouseDefaults, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( m_mouseDefaults, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_trackpadDefaults = new wxButton( this, wxID_ANY, _("Reset to Trackpad Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_trackpadDefaults, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( m_trackpadDefaults, 0, wxEXPAND|wxALL, 5 );
 
 
-	bMargins->Add( bSizerRight, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
+	bMargins->Add( bSizerRight, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	bSizer1->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );

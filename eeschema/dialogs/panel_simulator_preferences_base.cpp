@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,13 +32,13 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 
 	m_lblVScrollMovement = new wxStaticText( this, wxID_ANY, _("Vertical touchpad or scroll wheel movement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblVScrollMovement->Wrap( -1 );
-	bScrollSizerLeft->Add( m_lblVScrollMovement, 0, wxLEFT|wxRIGHT, 5 );
+	bScrollSizerLeft->Add( m_lblVScrollMovement, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bScrollSizerLeft->Add( 0, 10, 0, wxEXPAND, 5 );
+	bScrollSizerLeft->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgVScroll;
-	fgVScroll = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgVScroll = new wxFlexGridSizer( 0, 2, 5, 0 );
 	fgVScroll->AddGrowableCol( 0 );
 	fgVScroll->SetFlexibleDirection( wxBOTH );
 	fgVScroll->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -58,7 +58,7 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 	wxArrayString m_choiceVScrollUnmodifiedChoices;
 	m_choiceVScrollUnmodified = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVScrollUnmodifiedChoices, 0 );
 	m_choiceVScrollUnmodified->SetSelection( 0 );
-	fgVScroll->Add( m_choiceVScrollUnmodified, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgVScroll->Add( m_choiceVScrollUnmodified, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_lblVScrollCtrl = new wxStaticText( this, wxID_ANY, _("Ctrl:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblVScrollCtrl->Wrap( -1 );
@@ -67,7 +67,7 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 	wxArrayString m_choiceVScrollCtrlChoices;
 	m_choiceVScrollCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVScrollCtrlChoices, 0 );
 	m_choiceVScrollCtrl->SetSelection( 0 );
-	fgVScroll->Add( m_choiceVScrollCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgVScroll->Add( m_choiceVScrollCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_lblVScrollShift = new wxStaticText( this, wxID_ANY, _("Shift:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblVScrollShift->Wrap( -1 );
@@ -76,7 +76,7 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 	wxArrayString m_choiceVScrollShiftChoices;
 	m_choiceVScrollShift = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVScrollShiftChoices, 0 );
 	m_choiceVScrollShift->SetSelection( 0 );
-	fgVScroll->Add( m_choiceVScrollShift, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgVScroll->Add( m_choiceVScrollShift, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_lblVScrollAlt = new wxStaticText( this, wxID_ANY, _("Alt:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblVScrollAlt->Wrap( -1 );
@@ -85,20 +85,20 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 	wxArrayString m_choiceVScrollAltChoices;
 	m_choiceVScrollAlt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVScrollAltChoices, 0 );
 	m_choiceVScrollAlt->SetSelection( 0 );
-	fgVScroll->Add( m_choiceVScrollAlt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgVScroll->Add( m_choiceVScrollAlt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bScrollSizerLeft->Add( fgVScroll, 0, wxRIGHT|wxLEFT, 24 );
 
 
-	bScrollSizerLeft->Add( 0, 10, 0, wxEXPAND, 5 );
+	bScrollSizerLeft->Add( 0, 20, 0, wxEXPAND, 5 );
 
 	m_lblHScrollMovement = new wxStaticText( this, wxID_ANY, _("Horizontal touchpad movement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblHScrollMovement->Wrap( -1 );
 	bScrollSizerLeft->Add( m_lblHScrollMovement, 0, wxALL, 5 );
 
 
-	bScrollSizerLeft->Add( 0, 10, 0, wxEXPAND, 5 );
+	bScrollSizerLeft->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgHScroll;
 	fgHScroll = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -127,25 +127,25 @@ PANEL_SIMULATOR_PREFERENCES_BASE::PANEL_SIMULATOR_PREFERENCES_BASE( wxWindow* pa
 	bScrollSizerLeft->Add( fgHScroll, 0, wxRIGHT|wxLEFT, 24 );
 
 
-	bScrollMargins->Add( bScrollSizerLeft, 0, wxEXPAND|wxLEFT, 5 );
+	bScrollMargins->Add( bScrollSizerLeft, 1, wxEXPAND|wxLEFT, 5 );
 
 	wxBoxSizer* bScrollSizerRight;
 	bScrollSizerRight = new wxBoxSizer( wxVERTICAL );
 
 	m_btnMouseDefaults = new wxButton( this, wxID_ANY, _("Reset to Mouse Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bScrollSizerRight->Add( m_btnMouseDefaults, 0, wxALL|wxEXPAND, 5 );
+	bScrollSizerRight->Add( m_btnMouseDefaults, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 	m_btnTrackpadDefaults = new wxButton( this, wxID_ANY, _("Reset to Trackpad Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bScrollSizerRight->Add( m_btnTrackpadDefaults, 0, wxALL|wxEXPAND, 5 );
+	bScrollSizerRight->Add( m_btnTrackpadDefaults, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	bScrollMargins->Add( bScrollSizerRight, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
+	bScrollMargins->Add( bScrollSizerRight, 0, wxEXPAND|wxLEFT, 50 );
 
 
 	bScrollSizer->Add( bScrollMargins, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );
 
 
-	bMainSizer->Add( bScrollSizer, 1, 0, 5 );
+	bMainSizer->Add( bScrollSizer, 1, wxEXPAND|wxRIGHT, 10 );
 
 
 	this->SetSizer( bMainSizer );

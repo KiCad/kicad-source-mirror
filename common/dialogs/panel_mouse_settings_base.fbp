@@ -1506,7 +1506,7 @@
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
                   <property name="flag">wxEXPAND|wxLEFT</property>
-                  <property name="proportion">0</property>
+                  <property name="proportion">1</property>
                   <object class="wxBoxSizer" expanded="true">
                     <property name="minimum_size"></property>
                     <property name="name">bSizerLeft</property>
@@ -3321,18 +3321,18 @@
                     </object>
                   </object>
                 </object>
-                <object class="sizeritem" expanded="false">
+                <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxTOP|wxLEFT|wxEXPAND</property>
+                  <property name="flag">wxEXPAND|wxLEFT</property>
                   <property name="proportion">0</property>
-                  <object class="wxBoxSizer" expanded="false">
+                  <object class="wxBoxSizer" expanded="true">
                     <property name="minimum_size"></property>
                     <property name="name">bSizerRight</property>
                     <property name="orient">wxVERTICAL</property>
                     <property name="permission">none</property>
                     <object class="sizeritem" expanded="false">
                       <property name="border">5</property>
-                      <property name="flag">wxALL|wxEXPAND</property>
+                      <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxButton" expanded="false">
                         <property name="BottomDockable">1</property>
@@ -3407,7 +3407,7 @@
                     </object>
                     <object class="sizeritem" expanded="false">
                       <property name="border">5</property>
-                      <property name="flag">wxALL|wxEXPAND</property>
+                      <property name="flag">wxEXPAND|wxALL</property>
                       <property name="proportion">0</property>
                       <object class="wxButton" expanded="false">
                         <property name="BottomDockable">1</property>
