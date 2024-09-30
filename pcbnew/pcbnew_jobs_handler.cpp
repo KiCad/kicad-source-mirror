@@ -664,7 +664,10 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
             aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection;
     }
 
-    for( PCB_LAYER_ID layer : LSET( { aGerberJob->m_printMaskLayer } ).UIOrder() )
+    // Ensure layers to plot are restricted to enabled layers of the board to plot
+    LSET layersToPlot = LSET( { aGerberJob->m_printMaskLayer } ) & brd->GetEnabledLayers();
+
+    for( PCB_LAYER_ID layer : layersToPlot.UIOrder() )
     {
         LSEQ plotSequence;
 
