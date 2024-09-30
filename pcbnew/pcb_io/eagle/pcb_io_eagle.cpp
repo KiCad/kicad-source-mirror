@@ -985,8 +985,12 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
 
             FOOTPRINT* footprint = new FOOTPRINT( m_board );
             m_board->Add( footprint, ADD_MODE::APPEND );
-            footprint->SetReference( wxString::Format( wxT( "UNK_HOLE_%d" ), m_hole_count++ ) );
+            int hole_count = m_hole_count++;
+            footprint->SetReference( wxString::Format( wxT( "UNK_HOLE_%d" ), hole_count ) );
             footprint->Reference().SetVisible( false );
+            // Mandatory: gives a dummy but valid LIB_ID
+            LIB_ID fpid( wxEmptyString, wxString::Format( wxT( "dummyfp%d" ), hole_count ) );
+            footprint->SetFPID( fpid );
 
             packageHole( footprint, gr, true );
 
