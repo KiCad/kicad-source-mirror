@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 09:03-0700\n"
+"POT-Creation-Date: 2024-09-30 08:42-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -12677,6 +12677,9 @@ msgstr "Spice Simulator"
 msgid "Errors during netlist generation."
 msgstr "Errors during netlist generation."
 
+msgid "Warnings during netlist generation."
+msgstr "Warnings during netlist generation."
+
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator requires a fully annotated schematic."
 
@@ -14754,13 +14757,6 @@ msgstr "Press <ESC> to cancel move."
 #, c-format
 msgid "Page '%s' not found."
 msgstr "Page '%s' not found."
-
-msgid ""
-"Errors during netlist generation.\n"
-"\n"
-msgstr ""
-"Errors during netlist generation.\n"
-"\n"
 
 msgid "Open Simulation Workbook"
 msgstr "Open Simulation Workbook"
@@ -20533,6 +20529,9 @@ msgstr "Use centerlines"
 msgid "Create bounding hull"
 msgstr "Create bounding hull"
 
+msgid "Gap:"
+msgstr "Gap:"
+
 msgid "Delete source objects after conversion"
 msgstr "Delete source objects after conversion"
 
@@ -23939,9 +23938,6 @@ msgstr "Associated layer:"
 msgid "Reference Image Properties"
 msgstr "Reference Image Properties"
 
-msgid "Gap:"
-msgstr "Gap:"
-
 msgid "Convert to Rule Area"
 msgstr "Convert to Rule Area"
 
@@ -24416,9 +24412,6 @@ msgstr ""
 
 msgid "Parameter error"
 msgstr "Parameter error"
-
-msgid "Reference and value are mandatory."
-msgstr "Reference and value are mandatory."
 
 msgid "Default field properties for new footprints:"
 msgstr "Default field properties for new footprints:"
@@ -29331,8 +29324,8 @@ msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 
 #, c-format
-msgid "Unknown textbox justification %d, aText %s"
-msgstr "Unknown textbox justification %d, aText %s"
+msgid "Unknown textbox justification %d, text %s"
+msgstr "Unknown textbox justification %d, text %s"
 
 msgid "Loading rectangles..."
 msgstr "Loading rectangles..."
@@ -30163,10 +30156,14 @@ msgstr "Cannot interpret date code %d"
 #, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
-"Do you wish to rescue them to the %s layer?"
+"Do you wish to rescue them to the %s layer?\n"
+"\n"
+"Zones will need to be refilled."
 msgstr ""
 "Items found on undefined layers (%s).\n"
-"Do you wish to rescue them to the %s layer?"
+"Do you wish to rescue them to the %s layer?\n"
+"\n"
+"Zones will need to be refilled."
 
 msgid "Undefined Layers Warning"
 msgstr "Undefined Layers Warning"
@@ -34039,9 +34036,27 @@ msgstr "KiCad Schematic Symbol"
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
 
+#~ msgid ""
+#~ "Errors during netlist generation.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Errors during netlist generation.\n"
+#~ "\n"
+
+#~ msgid "Reference and value are mandatory."
+#~ msgstr "Reference and value are mandatory."
+
 #, c-format
-#~ msgid "Unknown textbox justification %d, text %s"
-#~ msgstr "Unknown textbox justification %d, text %s"
+#~ msgid "Unknown textbox justification %d, aText %s"
+#~ msgstr "Unknown textbox justification %d, aText %s"
+
+#, c-format
+#~ msgid ""
+#~ "Items found on undefined layers (%s).\n"
+#~ "Do you wish to rescue them to the %s layer?"
+#~ msgstr ""
+#~ "Items found on undefined layers (%s).\n"
+#~ "Do you wish to rescue them to the %s layer?"
 
 #, c-format
 #~ msgid "Error loading simulation model library '%s': %s"

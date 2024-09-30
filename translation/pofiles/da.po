@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 09:03-0700\n"
+"POT-Creation-Date: 2024-09-30 08:42-0700\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -50,42 +50,42 @@ msgstr ""
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr "Print omrids mangler eller er forkert. Kør DRC for en fuld analyse."
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:260
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:264
 msgid "Create tracks and vias"
 msgstr "Opret baer og via's"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:701
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:705
 msgid "Create zones"
 msgstr "Opret zoner"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:785
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:789
 msgid "Build Tech layers"
 msgstr "Opret tekniske lag"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:817
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:821
 #, fuzzy, c-format
 msgid "Build Tech layer %d"
 msgstr "Opret tekniske lag"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1037
 #, fuzzy
 msgid "Simplifying copper layer polygons"
 msgstr "Forenkling af kobberlagets polygoner"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1038
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1042
 msgid "Calculating plated copper"
 msgstr ""
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1124
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1128
 #, fuzzy, c-format
 msgid "Simplifying %d copper layers"
 msgstr "Forenkling af kobberlagets polygoner"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1167
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1171
 msgid "Simplify holes contours"
 msgstr "Forenkle hulkonturer"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1187
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1191
 msgid "Build BVH for holes and vias"
 msgstr "Byg BVH til huller og vias"
 
@@ -1322,7 +1322,7 @@ msgstr "Skalér"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:118
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:754
+#: pcbnew/tools/pcb_point_editor.cpp:757
 msgid "X:"
 msgstr "X:"
 
@@ -1350,7 +1350,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:200
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:754
+#: pcbnew/tools/pcb_point_editor.cpp:757
 msgid "Y:"
 msgstr "Y:"
 
@@ -1510,6 +1510,7 @@ msgstr "Opret Fodaftryks Bibliotek"
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:278
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:294
 #: pcb_calculator/widgets/unit_selector.cpp:34
+#: pcbnew/dialogs/dialog_copper_zones.cpp:236
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:147
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:171
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:206
@@ -1538,6 +1539,7 @@ msgstr "Opret Fodaftryks Bibliotek"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:31
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:45
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:125
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:66
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:77
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:121
@@ -1623,7 +1625,7 @@ msgstr "Fejl ved tildeling af hukommelse til potrace bitmap"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:567
 #: common/widgets/wx_html_report_panel_base.cpp:41
-#: eeschema/dialogs/dialog_erc_base.cpp:136 gerbview/files.cpp:404
+#: eeschema/dialogs/dialog_erc_base.cpp:136 gerbview/files.cpp:403
 #: gerbview/readgerb.cpp:77
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1268
 #: pcbnew/dialogs/dialog_drc_base.cpp:186
@@ -1974,8 +1976,8 @@ msgstr "Bekræftelse"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:520
 #: pcbnew/footprint_libraries_utils.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1148
-#: pcbnew/footprint_libraries_utils.cpp:1288 pcbnew/router/router_tool.cpp:1885
-#: pcbnew/router/router_tool.cpp:2568
+#: pcbnew/footprint_libraries_utils.cpp:1288 pcbnew/router/router_tool.cpp:1892
+#: pcbnew/router/router_tool.cpp:2575
 #: pcbnew/tools/footprint_editor_control.cpp:453 pcbnew/zone_filler.cpp:731
 msgid "Confirmation"
 msgstr "Bekræftelse"
@@ -2430,11 +2432,11 @@ msgstr "miljøvariabler"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:986
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:429
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38
-#: pcbnew/fp_text_grid_table.cpp:137 pcbnew/pcb_group.cpp:491
+#: pcbnew/fp_text_grid_table.cpp:137 pcbnew/pcb_group.cpp:494
 #: pcbnew/widgets/search_handlers.cpp:140
 #: pcbnew/widgets/search_handlers.cpp:273
-#: pcbnew/widgets/search_handlers.cpp:352 pcbnew/zone.cpp:626
-#: pcbnew/zone.cpp:1639
+#: pcbnew/widgets/search_handlers.cpp:352 pcbnew/zone.cpp:640
+#: pcbnew/zone.cpp:1653
 msgid "Name"
 msgstr "Navn"
 
@@ -3159,7 +3161,7 @@ msgstr "Indstilling"
 #: eeschema/fields_grid_table.cpp:383 eeschema/sch_symbol.cpp:1972
 #: eeschema/sch_symbol.cpp:2022 eeschema/sch_symbol.cpp:2824
 #: eeschema/sim/simulator_frame_ui.cpp:616
-#: eeschema/sim/simulator_frame_ui.cpp:2612
+#: eeschema/sim/simulator_frame_ui.cpp:2613
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
 #: eeschema/widgets/search_handlers.cpp:131
@@ -3297,7 +3299,7 @@ msgstr "Output-tilstand:"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
 #: pcbnew/dialogs/dialog_plot_base.cpp:404 pcbnew/pcb_field.cpp:231
-#: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:687
+#: pcbnew/pcb_text.cpp:564 pcbnew/pcb_textbox.cpp:688
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Color"
 msgstr "Farve"
@@ -3380,7 +3382,7 @@ msgstr "fodaftryk placering"
 #: eeschema/sim/simulator_frame_ui.cpp:605 eeschema/symbol_diff_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:153 eeschema/symbol_viewer_frame.cpp:168
 #: kicad/pcm/dialogs/panel_packages_view.cpp:77
-#: pcbnew/dialogs/dialog_copper_zones.cpp:244
+#: pcbnew/dialogs/dialog_copper_zones.cpp:272
 #: pcbnew/footprint_viewer_frame.cpp:141 pcbnew/footprint_viewer_frame.cpp:156
 msgid "Filter"
 msgstr "Filter"
@@ -3495,9 +3497,9 @@ msgstr "Fil &navn:"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:116
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1057
-#: pcbnew/pcb_dimension.cpp:460 pcbnew/pcb_group.cpp:386
-#: pcbnew/pcb_shape.cpp:474 pcbnew/pcb_text.cpp:232 pcbnew/pcb_textbox.cpp:371
-#: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:592
+#: pcbnew/pcb_dimension.cpp:460 pcbnew/pcb_group.cpp:389
+#: pcbnew/pcb_shape.cpp:505 pcbnew/pcb_text.cpp:232 pcbnew/pcb_textbox.cpp:371
+#: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:606
 msgid "Status"
 msgstr "Status"
 
@@ -4472,7 +4474,7 @@ msgstr "Zoom"
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
 #: pcbnew/widgets/appearance_controls.cpp:2488
-#: pcbnew/widgets/appearance_controls.cpp:2507 pcbnew/zone.cpp:1550
+#: pcbnew/widgets/appearance_controls.cpp:2507 pcbnew/zone.cpp:1564
 msgid "None"
 msgstr "Ingen"
 
@@ -4618,8 +4620,8 @@ msgstr "Bibliotekets kaldenavnsfejl"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3452
-#: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:630
-#: pcbnew/zone.cpp:1552
+#: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:644
+#: pcbnew/zone.cpp:1566
 msgid "Solid"
 msgstr "Massiv"
 
@@ -4746,7 +4748,7 @@ msgstr "Netklasser"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:539
-#: pcbnew/tools/board_inspection_tool.cpp:1106 pcbnew/zone.cpp:1719
+#: pcbnew/tools/board_inspection_tool.cpp:1106 pcbnew/zone.cpp:1733
 msgid "Clearance"
 msgstr "Klarering"
 
@@ -4805,7 +4807,7 @@ msgstr "Linjetype"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
 #: eeschema/dialogs/dialog_junction_props.cpp:47
 #: eeschema/dialogs/dialog_line_properties.cpp:57
-#: eeschema/dialogs/dialog_sim_model.cpp:610
+#: eeschema/dialogs/dialog_sim_model.cpp:609
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:261
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:60
@@ -4838,7 +4840,7 @@ msgstr "Hatch mønster"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:1080 eeschema/sch_label.cpp:251
-#: pcbnew/board_connected_item.cpp:199 pcbnew/pad.cpp:2400 pcbnew/zone.cpp:1633
+#: pcbnew/board_connected_item.cpp:199 pcbnew/pad.cpp:2400 pcbnew/zone.cpp:1647
 msgid "Net Class"
 msgstr "Nettoklasse"
 
@@ -4891,7 +4893,7 @@ msgstr "Kunne ikke bruge OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3217
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3104
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3115
 #, fuzzy
 msgid "Failed to read image data."
 msgstr "Kunne ikke indlæse \"%s\""
@@ -5408,7 +5410,7 @@ msgstr "Skærm"
 #: eeschema/widgets/search_handlers.cpp:132 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:289 pcbnew/pad.cpp:1038
-#: pcbnew/pcb_shape.cpp:468 pcbnew/pcb_text.cpp:220
+#: pcbnew/pcb_shape.cpp:499 pcbnew/pcb_text.cpp:220
 #: pcbnew/plot_board_layers.cpp:109
 msgid "Footprint"
 msgstr "Fodaftryk"
@@ -5484,7 +5486,7 @@ msgstr "Vareliste"
 msgid "NetInfo"
 msgstr "Netinfo"
 
-#: common/eda_item.cpp:365 pcbnew/pcb_group.cpp:382
+#: common/eda_item.cpp:365 pcbnew/pcb_group.cpp:385
 msgid "Group"
 msgstr "Gruppe"
 
@@ -5575,7 +5577,7 @@ msgstr "Tegn element"
 msgid "Thermal Spoke"
 msgstr "Termisk egerbredde"
 
-#: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:747
+#: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:778
 #, fuzzy
 msgid "Number Box"
 msgstr "Nummer"
@@ -5610,7 +5612,7 @@ msgstr "Polygon"
 msgid "Pad Number Box"
 msgstr "Pad nummer"
 
-#: common/eda_shape.cpp:704 pcbnew/pcb_shape.cpp:754
+#: common/eda_shape.cpp:704 pcbnew/pcb_shape.cpp:785
 #, fuzzy
 msgid "Thermal Spoke Template"
 msgstr "Termisk egerbredde"
@@ -5741,17 +5743,17 @@ msgstr "Afslut Y"
 msgid "Line Width"
 msgstr "Linjebredde"
 
-#: common/eda_shape.cpp:2030 pcbnew/pcb_shape.cpp:688
+#: common/eda_shape.cpp:2030 pcbnew/pcb_shape.cpp:719
 #, fuzzy
 msgid "Line Color"
 msgstr "Liniefarve:"
 
 #: common/eda_shape.cpp:2068 eeschema/lib_shape.cpp:587
-#: pcbnew/dialogs/dialog_plot_base.cpp:134
+#: pcbnew/dialogs/dialog_plot_base.cpp:134 pcbnew/pcb_textbox.cpp:686
 msgid "Filled"
 msgstr "Udfyldt"
 
-#: common/eda_shape.cpp:2073 pcbnew/pcb_shape.cpp:689
+#: common/eda_shape.cpp:2073 pcbnew/pcb_shape.cpp:720
 #, fuzzy
 msgid "Fill Color"
 msgstr "Liniefarve:"
@@ -5874,7 +5876,7 @@ msgstr "Bunden"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:3482 pcbnew/fp_text_grid_table.cpp:145
-#: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1649
+#: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1663
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -5939,7 +5941,7 @@ msgstr "Spejlet"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94 pcbnew/pcb_dimension.cpp:1518
 #: pcbnew/pcb_dimension.cpp:1554 pcbnew/pcb_dimension.cpp:1595
 #: pcbnew/pcb_dimension.cpp:1640 pcbnew/pcb_dimension.cpp:1677
-#: pcbnew/pcb_text.cpp:584 pcbnew/pcb_textbox.cpp:686
+#: pcbnew/pcb_text.cpp:584 pcbnew/pcb_textbox.cpp:687
 msgid "Visible"
 msgstr "Synlig"
 
@@ -6124,7 +6126,7 @@ msgstr "Eksisterende sti:"
 msgid "Bad alias (duplicate name)"
 msgstr "Dårligt alias (duplikatnavn)"
 
-#: common/font/font.cpp:174 common/widgets/font_choice.cpp:49
+#: common/font/font.cpp:175 common/widgets/font_choice.cpp:49
 #: eeschema/dialogs/dialog_field_properties_base.cpp:123
 #: eeschema/dialogs/dialog_label_properties_base.cpp:195
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
@@ -6460,7 +6462,7 @@ msgstr "fejl"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:200
 #: eeschema/tools/ee_actions.cpp:212 pcbnew/dialogs/panel_setup_rules.cpp:128
-#: pcbnew/tools/edit_tool.cpp:2304
+#: pcbnew/tools/edit_tool.cpp:2312
 msgid "Cut"
 msgstr "Klip"
 
@@ -6478,7 +6480,7 @@ msgid "Copy selected cells to clipboard"
 msgstr "Kopier valgte celler til udklipsholderen"
 
 #: common/grid_tricks.cpp:358 common/tool/actions.cpp:222
-#: eeschema/tools/sch_editor_control.cpp:2172
+#: eeschema/tools/sch_editor_control.cpp:2171
 #: eeschema/tools/symbol_editor_edit_tool.cpp:861
 #: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/pcb_control.cpp:1033
 msgid "Paste"
@@ -6492,7 +6494,7 @@ msgstr "Indsæt udklipsholderceller i matrix ved den aktuelle celle"
 #: eeschema/tools/sch_edit_tool.cpp:1439
 #: eeschema/tools/symbol_editor_edit_tool.cpp:357
 #: kicad/project_tree_pane.cpp:923 pcbnew/dialogs/panel_setup_rules.cpp:131
-#: pcbnew/tools/edit_tool.cpp:2306
+#: pcbnew/tools/edit_tool.cpp:2314
 msgid "Delete"
 msgstr "Slet"
 
@@ -6853,7 +6855,7 @@ msgid "undefined"
 msgstr "udefineret"
 
 #: common/layer_id.cpp:107
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1096
 msgid "Rescue"
 msgstr "Redde"
 
@@ -7001,7 +7003,7 @@ msgid "Helper items"
 msgstr "Hjælpeartikler"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:187 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2625
+#: eeschema/tools/sch_editor_control.cpp:2624
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:102
 #: gerbview/widgets/gerbview_layer_widget.cpp:134
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -7226,7 +7228,7 @@ msgstr "Bibliotekets placering: %s"
 #: common/lib_tree_model.cpp:149
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:609 eeschema/lib_item.cpp:78
+#: eeschema/dialogs/dialog_sim_model.cpp:608 eeschema/lib_item.cpp:78
 #: eeschema/lib_item.cpp:222 eeschema/sch_pin.cpp:245
 #: eeschema/sch_symbol.cpp:2815 eeschema/symbol_editor/symbol_editor.cpp:1278
 msgid "Unit"
@@ -7707,7 +7709,7 @@ msgid "Paste item(s) from clipboard with annotation options"
 msgstr "Indsæt element (er) fra udklipsholderen med valgmuligheder"
 
 #: common/tool/actions.cpp:254 eeschema/tools/symbol_editor_edit_tool.cpp:911
-#: pcbnew/tools/edit_tool.cpp:2620
+#: pcbnew/tools/edit_tool.cpp:2628
 msgid "Duplicate"
 msgstr "Duplikér"
 
@@ -8550,7 +8552,7 @@ msgstr "Snap til gitter:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
-#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1570
+#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1584
 msgid "Always"
 msgstr "Altid"
 
@@ -8562,7 +8564,7 @@ msgstr "Når gitter vises"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
-#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1571
+#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1585
 msgid "Never"
 msgstr "Aldrig"
 
@@ -8628,8 +8630,8 @@ msgid "Set plot view to show all items"
 msgstr "Indstil plotvisning for at vise alle elementer"
 
 #: common/widgets/net_selector.cpp:58 gerbview/gerber_draw_item.cpp:751
-#: pcbnew/dialogs/dialog_copper_zones.cpp:372
-#: pcbnew/dialogs/dialog_copper_zones.cpp:734
+#: pcbnew/dialogs/dialog_copper_zones.cpp:401
+#: pcbnew/dialogs/dialog_copper_zones.cpp:767
 msgid "<no net>"
 msgstr "<intet net>"
 
@@ -9235,7 +9237,7 @@ msgid "Project file: '%s'"
 msgstr "Projektfil: \"%s\""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:93
-#: eeschema/dialogs/dialog_bom.cpp:453
+#: eeschema/dialogs/dialog_bom.cpp:452
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:1004
 msgid "No text editor selected in KiCad.  Please choose one."
@@ -9602,8 +9604,8 @@ msgstr "%s fundet, men pin %s blev ikke fundet"
 msgid "%s found"
 msgstr "%s fundet"
 
-#: eeschema/cross-probing.cpp:166 eeschema/sim/simulator_frame_ui.cpp:1435
-#: eeschema/sim/simulator_frame_ui.cpp:1850
+#: eeschema/cross-probing.cpp:166 eeschema/sim/simulator_frame_ui.cpp:1437
+#: eeschema/sim/simulator_frame_ui.cpp:1851
 #: eeschema/widgets/tuner_slider.cpp:56
 #, c-format
 msgid "%s not found"
@@ -9728,41 +9730,41 @@ msgid ""
 "\t%s"
 msgstr ""
 
-#: eeschema/dialogs/dialog_bom.cpp:347
+#: eeschema/dialogs/dialog_bom.cpp:346
 #, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
 "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
-#: eeschema/dialogs/dialog_bom.cpp:351
+#: eeschema/dialogs/dialog_bom.cpp:350
 #, fuzzy
 msgid "Failed to create file."
 msgstr "Kunne ikke oprette filen \"%s\""
 
-#: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
+#: eeschema/dialogs/dialog_bom.cpp:386 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
 msgstr "Generator kaldenavn:"
 
-#: eeschema/dialogs/dialog_bom.cpp:387
+#: eeschema/dialogs/dialog_bom.cpp:386
 msgid "Add Generator"
 msgstr "Tilføj generator"
 
-#: eeschema/dialogs/dialog_bom.cpp:396
+#: eeschema/dialogs/dialog_bom.cpp:395
 #, fuzzy, c-format
 msgid "Nickname '%s' already in use."
 msgstr "Kælenavn \"%s\" er allerede i brug."
 
-#: eeschema/dialogs/dialog_bom.cpp:425
+#: eeschema/dialogs/dialog_bom.cpp:424
 #: eeschema/dialogs/dialog_export_netlist.cpp:822
 #, fuzzy
 msgid "Generator File"
 msgstr "Generatorfiler:"
 
-#: eeschema/dialogs/dialog_bom.cpp:444
+#: eeschema/dialogs/dialog_bom.cpp:443
 msgid "Generator file name not found."
 msgstr "Generatorfilnavn blev ikke fundet."
 
-#: eeschema/dialogs/dialog_bom.cpp:465
+#: eeschema/dialogs/dialog_bom.cpp:464
 #, fuzzy
 msgid "Bill of Materials Generation Help"
 msgstr "Bill of Material Generation Help"
@@ -11598,7 +11600,7 @@ msgstr "Bemærk: Varefarver tilsidesættes i det aktuelle farvetema."
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:39
 #: eeschema/dialogs/dialog_text_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:152
-#: pcbnew/pcb_textbox.cpp:694
+#: pcbnew/pcb_textbox.cpp:695
 #, fuzzy
 msgid "Border"
 msgstr "Rækkefølge"
@@ -11609,7 +11611,7 @@ msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr "Skift til skematisk editor"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:111
-#: pcbnew/zone.cpp:1642
+#: pcbnew/zone.cpp:1656
 msgid "Fill Style"
 msgstr "Udfyld stil"
 
@@ -13276,35 +13278,35 @@ msgid "Simulation Analysis"
 msgstr "Simuleringsindstillinger"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:36
-#: eeschema/sim/sim_plot_tab.cpp:655
+#: eeschema/sim/sim_plot_tab.cpp:660
 msgid "Voltage"
 msgstr "Spænding"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:41
-#: eeschema/sim/sim_plot_tab.cpp:656 eeschema/sim/sim_plot_tab.cpp:776
+#: eeschema/sim/sim_plot_tab.cpp:661 eeschema/sim/sim_plot_tab.cpp:781
 msgid "Current"
 msgstr "Nuværende"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:46
-#: eeschema/sim/sim_plot_tab.cpp:654 eeschema/sim/simulator_frame_ui.cpp:615
+#: eeschema/sim/sim_plot_tab.cpp:659 eeschema/sim/simulator_frame_ui.cpp:615
 #: eeschema/sim/simulator_frame_ui_base.cpp:169
 msgid "Time"
 msgstr "Tid"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:51
-#: eeschema/sim/sim_plot_tab.cpp:559 eeschema/sim/sim_plot_tab.cpp:581
-#: eeschema/sim/sim_plot_tab.cpp:611 eeschema/sim/sim_plot_tab.cpp:633
+#: eeschema/sim/sim_plot_tab.cpp:564 eeschema/sim/sim_plot_tab.cpp:586
+#: eeschema/sim/sim_plot_tab.cpp:616 eeschema/sim/sim_plot_tab.cpp:638
 #: pcb_calculator/transline_ident.cpp:109
 msgid "Frequency"
 msgstr "Frekvens"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:56
-#: eeschema/sim/sim_plot_tab.cpp:560
+#: eeschema/sim/sim_plot_tab.cpp:565
 msgid "Gain"
 msgstr "Forstærkning"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:61
-#: eeschema/sim/sim_plot_tab.cpp:561 eeschema/sim/sim_plot_tab.cpp:583
+#: eeschema/sim/sim_plot_tab.cpp:566 eeschema/sim/sim_plot_tab.cpp:588
 msgid "Phase"
 msgstr "Fase"
 
@@ -13373,46 +13375,46 @@ msgstr "Pin"
 msgid "Format %s"
 msgstr "Format"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:232
+#: eeschema/dialogs/dialog_sim_model.cpp:231
 #, fuzzy
 msgid "<unknown>"
 msgstr "<Ukendt>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:242
+#: eeschema/dialogs/dialog_sim_model.cpp:241
 #, fuzzy, c-format
 msgid "No model named '%s' in library."
 msgstr "Netnavnet '%s' er allerede i brug."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:324
+#: eeschema/dialogs/dialog_sim_model.cpp:323
 #, fuzzy
 msgid "Failed to read simulation model from fields."
 msgstr "Kunne ikke oprette symbolbiblioteksfilen \"%s\""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:520
+#: eeschema/dialogs/dialog_sim_model.cpp:519
 #, fuzzy
 msgid "Component:"
 msgstr "Komponent"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:520
+#: eeschema/dialogs/dialog_sim_model.cpp:519
 #: eeschema/dialogs/dialog_sim_model_base.cpp:62
 msgid "Model:"
 msgstr "Model:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:583
+#: eeschema/dialogs/dialog_sim_model.cpp:582
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:591
+#: eeschema/dialogs/dialog_sim_model.cpp:590
 msgid "Save primary parameter in Value field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_model.cpp:608
+#: eeschema/dialogs/dialog_sim_model.cpp:607
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "Parameter"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:611 eeschema/lib_item.cpp:73
+#: eeschema/dialogs/dialog_sim_model.cpp:610 eeschema/lib_item.cpp:73
 #: eeschema/lib_pin.cpp:1193 eeschema/sch_label.cpp:1267
 #: eeschema/sch_pin.cpp:237 eeschema/sch_pin.cpp:258
 #: eeschema/symbol_editor/symbol_editor.cpp:1294
@@ -13422,19 +13424,19 @@ msgstr "Parameter"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2022 pcbnew/pcb_marker.cpp:194
-#: pcbnew/pcb_shape.cpp:471 pcbnew/pcb_text.cpp:229 pcbnew/pcb_track.cpp:1065
+#: pcbnew/pcb_shape.cpp:502 pcbnew/pcb_text.cpp:229 pcbnew/pcb_track.cpp:1065
 #: pcbnew/pcb_track.cpp:1132 pcbnew/tools/drawing_stackup_table_tool.cpp:250
-#: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:550
+#: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:564
 msgid "Type"
 msgstr "Type"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:739
-#: eeschema/dialogs/dialog_sim_model.cpp:776
+#: eeschema/dialogs/dialog_sim_model.cpp:738
+#: eeschema/dialogs/dialog_sim_model.cpp:775
 #, fuzzy
 msgid "Not Connected"
 msgstr "Ingen forbindelse"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1221
+#: eeschema/dialogs/dialog_sim_model.cpp:1219
 #, fuzzy
 msgid "Browse Models"
 msgstr "Model"
@@ -16151,7 +16153,7 @@ msgid "Error loading symbol %s from library '%s'."
 msgstr "Fejl ved indlæsning af symbolet '%s' fra biblioteket '%s'."
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
-#: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:632
+#: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:646
 msgid "Unknown"
 msgstr "Ukendt"
 
@@ -16167,7 +16169,7 @@ msgstr "Fødder"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
-#: pcbnew/tools/drawing_tool.cpp:1583 pcbnew/tools/drawing_tool.cpp:1672
+#: pcbnew/tools/drawing_tool.cpp:1584 pcbnew/tools/drawing_tool.cpp:1673
 #, fuzzy
 msgid "Import Graphics"
 msgstr "& Importer grafik ..."
@@ -16367,15 +16369,15 @@ msgstr "Pin-navn"
 
 #: eeschema/lib_pin.cpp:1681 eeschema/lib_shape.cpp:583
 #: eeschema/sch_shape.cpp:554 eeschema/sch_symbol.cpp:2773
-#: pcbnew/board_item.cpp:334 pcbnew/pcb_group.cpp:485 pcbnew/pcb_shape.cpp:684
-#: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1580 pcbnew/zone.cpp:1592
+#: pcbnew/board_item.cpp:334 pcbnew/pcb_group.cpp:488 pcbnew/pcb_shape.cpp:715
+#: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1594 pcbnew/zone.cpp:1606
 msgid "Position X"
 msgstr "Position X"
 
 #: eeschema/lib_pin.cpp:1684 eeschema/lib_shape.cpp:585
 #: eeschema/sch_shape.cpp:556 eeschema/sch_symbol.cpp:2776
-#: pcbnew/board_item.cpp:337 pcbnew/pcb_group.cpp:486 pcbnew/pcb_shape.cpp:686
-#: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1586 pcbnew/zone.cpp:1593
+#: pcbnew/board_item.cpp:337 pcbnew/pcb_group.cpp:489 pcbnew/pcb_shape.cpp:717
+#: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1600 pcbnew/zone.cpp:1607
 msgid "Position Y"
 msgstr "Position Y"
 
@@ -16719,12 +16721,12 @@ msgstr "Kunne ikke oprette biblioteket \"%s\""
 msgid "Failed to create file '%s'.\n"
 msgstr "Kunne ikke oprette filen \"%s\""
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:475
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:483
 #, fuzzy, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:530
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:538
 #, fuzzy, c-format
 msgid "Could not find library file '%s'"
 msgstr "Kunne ikke finde biblioteksfilen %s"
@@ -16936,7 +16938,7 @@ msgstr "Busindgangstype"
 #: eeschema/sch_label.cpp:1299 eeschema/sch_line.cpp:992
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2061 pcbnew/pad.cpp:1053
 #: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1677
-#: pcbnew/zone.cpp:580
+#: pcbnew/zone.cpp:594
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "Tildelt netklasse"
@@ -17009,13 +17011,13 @@ msgstr ""
 msgid "Could not open CvPcb"
 msgstr "Kunne ikke åbne CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1648 eeschema/sim/simulator_frame.cpp:332
+#: eeschema/sch_edit_frame.cpp:1648 eeschema/sim/simulator_frame.cpp:331
 #: kicad/kicad_manager_frame.cpp:840 pcbnew/footprint_edit_frame.cpp:974
 #: pcbnew/pcb_edit_frame.cpp:1661
 msgid "[Read Only]"
 msgstr "[Læs kun]"
 
-#: eeschema/sch_edit_frame.cpp:1651 eeschema/sim/simulator_frame.cpp:335
+#: eeschema/sch_edit_frame.cpp:1651 eeschema/sim/simulator_frame.cpp:334
 #: pcbnew/footprint_edit_frame.cpp:983 pcbnew/pcb_edit_frame.cpp:1664
 msgid "[Unsaved]"
 msgstr "[Ikke gemt]"
@@ -17194,25 +17196,25 @@ msgstr "Altium-skematiske filer"
 msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium-skematiske filer"
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:72
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:92
 #, fuzzy
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
 msgstr "Filen \"%s\" ser ikke ud til at være en gyldig skematisk fil."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:117
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:137
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:132
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:152
 #, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:367
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:387
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
@@ -17221,7 +17223,7 @@ msgstr ""
 "CADSTAR-designet indeholder varianter, der ikke har nogen KiCad-ækvivalent. "
 "Kun mastervarianten ('%s') blev indlæst."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:376
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:396
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
@@ -17229,7 +17231,7 @@ msgstr ""
 "CADSTAR-designet indeholder grupperede genstande, der ikke har nogen KiCad-"
 "ækvivalent. Alle grupperede elementer er blevet grupperet."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:383
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:403
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
@@ -17238,14 +17240,14 @@ msgstr ""
 "CADSTAR-designet indeholder genbrugsblokke, der ikke har nogen KiCad-"
 "ækvivalent. Oplysninger om genbrugsblok er blevet kasseret under importen."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:497
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:517
 msgid ""
 "CADSTAR fonts are different to the ones in KiCad. This will likely result in "
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:502
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:522
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:169
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
@@ -17254,7 +17256,7 @@ msgstr ""
 "CADSTAR-designet er importeret med succes.\n"
 "Gennemgå importfejlene og advarslerne (hvis sådanne findes)."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:521
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:541
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:73
 #, c-format
 msgid ""
@@ -17271,17 +17273,17 @@ msgstr ""
 "Nuværende designstørrelse: %.2f, %.2f millimeter.\n"
 "Maksimal tilladt designstørrelse: %.2f, %.2f millimeter.\n"
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:582
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:602
 msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:587
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:607
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
 msgstr "CADSTAR-skemaet kan være korrupt: der er ikke noget rodark."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:661
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:681
 #, c-format
 msgid ""
 "Part definition '%s' references symbol '%s' (alternate '%s') which could not "
@@ -17291,7 +17293,7 @@ msgstr ""
 "Deldefinition '%s' henviser til symbol '%s' (alternativt '%s'), som ikke "
 "kunne findes i symbolbiblioteket. Delen er ikke indlæst i KiCad-biblioteket."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:687
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:707
 #, fuzzy, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
@@ -17300,7 +17302,7 @@ msgstr ""
 "Deldefinition '%s' henviser til symbol '%s' (alternativt '%s'), som ikke "
 "kunne findes i symbolbiblioteket. Delen er ikke indlæst i KiCad-biblioteket."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:719
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:739
 #, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
@@ -17309,7 +17311,7 @@ msgstr ""
 "Symbolet '%s' henviser til del '%s', som ikke kunne findes i biblioteket. "
 "Symbolet blev ikke indlæst"
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:827
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:847
 #, c-format
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
@@ -17318,7 +17320,7 @@ msgstr ""
 "Symbol-ID '%s' henviser til bibliotekssymbolet '%s', som ikke kunne findes i "
 "biblioteket. Eksporterede du alle elementerne i designet?"
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:837
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:857
 #, c-format
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
@@ -17327,7 +17329,7 @@ msgstr ""
 "Symbol-ID '%s' er en signalreference eller et globalt signal, men det har "
 "for mange ben. Det forventede antal ben er 1, men %d blev fundet."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:977
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:997
 #, fuzzy, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
@@ -17336,7 +17338,7 @@ msgstr ""
 "Symbol-ID '%s' er af en ukendt type. Det er hverken en komponent eller et "
 "nettoeffekt / symbol. Symbolet blev ikke indlæst."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:993
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1013
 #, fuzzy, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
@@ -17347,7 +17349,7 @@ msgstr ""
 "ikke i KiCad. Symbolet var fyldt med skala 1: 1 og kan kræve manuel "
 "fastsættelse."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1468
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1488
 #, c-format
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
@@ -17356,11 +17358,11 @@ msgstr ""
 "Dokumentationssymbol '%s' henviser til symboldefinitions-ID '%s', som ikke "
 "findes i biblioteket. Symbolet blev ikke indlæst."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1577
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1597
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2114
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2137
 #, c-format
 msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
@@ -17371,7 +17373,7 @@ msgstr ""
 "design, men KiCad understøtter kun rotationsvinkler multipler på 90 grader. "
 "Forbindelsesledningerne skal manuelt fastgøres."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2128
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2151
 #, c-format
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
@@ -17380,7 +17382,7 @@ msgstr ""
 "Symbolet '%s' referenceark ID '%s', som ikke findes i designet. Symbolet "
 "blev ikke indlæst."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2265
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2288
 #, c-format
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
@@ -17389,7 +17391,7 @@ msgstr ""
 "Net %s referencer ukendt netelement %s. Netet var ikke korrekt ilagt og kan "
 "kræve manuel fastgørelse."
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2532
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2555
 #, c-format
 msgid ""
 "The block ID %s (Block name: '%s') is drawn on sheet '%s' but is not linked "
@@ -17397,7 +17399,7 @@ msgid ""
 "associated to a sheet, so the block was not loaded."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2557
+#: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2580
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
@@ -17406,21 +17408,21 @@ msgstr ""
 "CADSTAR-skemaet kan være ødelagt: Blok %s refererer til et underordnet ark, "
 "men har ingen figur defineret."
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:241
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:230
 msgid ""
 "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:246
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:235
 msgid ""
 "Name of the footprint library related to the symbols in this library. You "
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
 
-#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:293
+#: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:282
 #, fuzzy, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
 msgstr "Kan ikke oprette sti til fodaftrykbibliotek \"%s\""
@@ -17943,10 +17945,10 @@ msgstr "Ukendt SCH_FILE_T-værdi: %d"
 #: pcbnew/fp_text_grid_table.cpp:144
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2063 pcbnew/pad.cpp:1061
 #: pcbnew/pad.cpp:2370 pcbnew/pcb_dimension.cpp:462
-#: pcbnew/pcb_dimension.cpp:1197 pcbnew/pcb_group.cpp:487
+#: pcbnew/pcb_dimension.cpp:1197 pcbnew/pcb_group.cpp:490
 #: pcbnew/pcb_marker.cpp:361 pcbnew/pcb_reference_image.cpp:261
-#: pcbnew/pcb_reference_image.cpp:346 pcbnew/pcb_shape.cpp:478
-#: pcbnew/pcb_shape.cpp:668 pcbnew/pcb_shape.cpp:670 pcbnew/pcb_target.cpp:153
+#: pcbnew/pcb_reference_image.cpp:346 pcbnew/pcb_shape.cpp:509
+#: pcbnew/pcb_shape.cpp:699 pcbnew/pcb_shape.cpp:701 pcbnew/pcb_target.cpp:153
 #: pcbnew/pcb_text.cpp:237 pcbnew/pcb_textbox.cpp:373 pcbnew/pcb_track.cpp:1069
 #: pcbnew/pcb_track.cpp:1136 pcbnew/pcb_track.cpp:1520
 #: pcbnew/pcb_track.cpp:1527 pcbnew/tools/board_inspection_tool.cpp:236
@@ -17956,8 +17958,8 @@ msgstr "Ukendt SCH_FILE_T-værdi: %d"
 #: pcbnew/widgets/pcb_properties_panel.cpp:250
 #: pcbnew/widgets/pcb_properties_panel.cpp:254
 #: pcbnew/widgets/search_handlers.cpp:84 pcbnew/widgets/search_handlers.cpp:142
-#: pcbnew/widgets/search_handlers.cpp:207 pcbnew/zone.cpp:623
-#: pcbnew/zone.cpp:1624 pcbnew/zone.cpp:1625
+#: pcbnew/widgets/search_handlers.cpp:207 pcbnew/zone.cpp:637
+#: pcbnew/zone.cpp:1638 pcbnew/zone.cpp:1639
 msgid "Layer"
 msgstr "Lag"
 
@@ -17973,9 +17975,9 @@ msgstr "Lag"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
 #: pcbnew/footprint.cpp:1310 pcbnew/pad.cpp:1057 pcbnew/pcb_dimension.cpp:460
-#: pcbnew/pcb_group.cpp:386 pcbnew/pcb_marker.cpp:364 pcbnew/pcb_shape.cpp:474
+#: pcbnew/pcb_group.cpp:389 pcbnew/pcb_marker.cpp:364 pcbnew/pcb_shape.cpp:505
 #: pcbnew/pcb_text.cpp:232 pcbnew/pcb_textbox.cpp:371 pcbnew/pcb_track.cpp:1178
-#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:592
+#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:606
 msgid "Locked"
 msgstr "Låst"
 
@@ -18009,11 +18011,11 @@ msgstr "Begrundelse:"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:984
 #: pcbnew/generators/pcb_tuning_pattern.cpp:463
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2057 pcbnew/pad.cpp:1051
-#: pcbnew/pad.cpp:2398 pcbnew/pcb_shape.cpp:701 pcbnew/pcb_track.cpp:1158
+#: pcbnew/pad.cpp:2398 pcbnew/pcb_shape.cpp:732 pcbnew/pcb_track.cpp:1158
 #: pcbnew/tools/pcb_control.cpp:1674
 #: pcbnew/widgets/pcb_properties_panel.cpp:274
-#: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:578
-#: pcbnew/zone.cpp:1631
+#: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:592
+#: pcbnew/zone.cpp:1645
 msgid "Net"
 msgstr "Net"
 
@@ -18262,7 +18264,7 @@ msgstr "Filnavn"
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarkisk ark %s"
 
-#: eeschema/sch_sheet.cpp:1529 pcbnew/pcb_textbox.cpp:704
+#: eeschema/sch_sheet.cpp:1529 pcbnew/pcb_textbox.cpp:705
 #, fuzzy
 msgid "Border Width"
 msgstr "Kantbredde:"
@@ -18277,7 +18279,7 @@ msgstr "Kantfarve:"
 msgid "Background Color"
 msgstr "Baggrundsfarve, top"
 
-#: eeschema/sch_sheet_path.cpp:58 include/board_item.h:420
+#: eeschema/sch_sheet_path.cpp:58 include/board_item.h:427
 msgid "(Deleted Item)"
 msgstr "(Slettet vare)"
 
@@ -19446,59 +19448,59 @@ msgstr ""
 msgid "Bitrate could be too high for rising / falling edges"
 msgstr ""
 
-#: eeschema/sim/legacy_workbook.cpp:118
+#: eeschema/sim/legacy_workbook.cpp:117
 #, fuzzy, c-format
 msgid "Error loading workbook: line %d: %s."
 msgstr ""
 "Fejl ved indlæsning af kortfil:\n"
 "%s"
 
-#: eeschema/sim/legacy_workbook.cpp:133
+#: eeschema/sim/legacy_workbook.cpp:132
 #, fuzzy
 msgid "expecting version"
 msgstr "Forventer %s"
 
-#: eeschema/sim/legacy_workbook.cpp:150
+#: eeschema/sim/legacy_workbook.cpp:149
 #, fuzzy
 msgid "expecting simulation tab count"
 msgstr "Ekstern simulatorkommando:"
 
-#: eeschema/sim/legacy_workbook.cpp:164
+#: eeschema/sim/legacy_workbook.cpp:163
 #, fuzzy
 msgid "expecting simulation tab type"
 msgstr "Åbn simulation-projektmappe"
 
-#: eeschema/sim/legacy_workbook.cpp:210
+#: eeschema/sim/legacy_workbook.cpp:209
 #, fuzzy
 msgid "expecting trace count"
 msgstr "Når du opretter spor"
 
-#: eeschema/sim/legacy_workbook.cpp:226
+#: eeschema/sim/legacy_workbook.cpp:225
 #, fuzzy
 msgid "expecting trace type"
 msgstr "Når du opretter spor"
 
-#: eeschema/sim/legacy_workbook.cpp:236
+#: eeschema/sim/legacy_workbook.cpp:235
 #, fuzzy
 msgid "expecting trace name"
 msgstr "Forventer %s"
 
-#: eeschema/sim/legacy_workbook.cpp:246
+#: eeschema/sim/legacy_workbook.cpp:245
 #, fuzzy
 msgid "expecting trace color"
 msgstr "Markeringsfarver"
 
-#: eeschema/sim/legacy_workbook.cpp:262
+#: eeschema/sim/legacy_workbook.cpp:261
 #, fuzzy
 msgid "expecting measurement count"
 msgstr "Slet markør"
 
-#: eeschema/sim/legacy_workbook.cpp:274
+#: eeschema/sim/legacy_workbook.cpp:273
 #, fuzzy
 msgid "expecting measurement definition"
 msgstr "Board's perimeter definition"
 
-#: eeschema/sim/legacy_workbook.cpp:284
+#: eeschema/sim/legacy_workbook.cpp:283
 msgid "expecting measurement format definition"
 msgstr ""
 
@@ -19543,7 +19545,7 @@ msgid ""
 "'%s'"
 msgstr "Fejl ved indlæsning af symbolet '%s' fra biblioteket '%s'."
 
-#: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:83
+#: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:82
 #, fuzzy, c-format
 msgid "Invalid IBIS file '%s'"
 msgstr "Ugyldig symbolbiblioteksidentifikator"
@@ -19561,7 +19563,7 @@ msgstr ""
 msgid "No simulation model definition found."
 msgstr "Spice Model Editor"
 
-#: eeschema/sim/sim_model.cpp:553 eeschema/sim/sim_model.cpp:612
+#: eeschema/sim/sim_model.cpp:558 eeschema/sim/sim_model.cpp:617
 #, fuzzy, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
@@ -19571,91 +19573,91 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/sim/sim_model.cpp:790
+#: eeschema/sim/sim_model.cpp:795
 #, fuzzy, c-format
 msgid "Unknown simulation model pin '%s'"
 msgstr "Ukendt knude '%s' i '%s'"
 
-#: eeschema/sim/sim_model_kibis.cpp:88
+#: eeschema/sim/sim_model_kibis.cpp:87
 #, fuzzy, c-format
 msgid "Could not find IBIS component '%s'"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: eeschema/sim/sim_model_kibis.cpp:94
+#: eeschema/sim/sim_model_kibis.cpp:93
 #, fuzzy, c-format
 msgid "Invalid IBIS component '%s'"
 msgstr "Ugyldig symbolbiblioteksidentifikator"
 
-#: eeschema/sim/sim_model_kibis.cpp:98
+#: eeschema/sim/sim_model_kibis.cpp:97
 #, fuzzy, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: eeschema/sim/sim_model_kibis.cpp:105
+#: eeschema/sim/sim_model_kibis.cpp:104
 #, fuzzy, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
 msgstr "Ugyldig symbolbiblioteksidentifikator"
 
-#: eeschema/sim/sim_model_kibis.cpp:113
+#: eeschema/sim/sim_model_kibis.cpp:112
 #, fuzzy, c-format
 msgid "Could not find IBIS model '%s'"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: eeschema/sim/sim_model_kibis.cpp:116
+#: eeschema/sim/sim_model_kibis.cpp:115
 #, fuzzy, c-format
 msgid "Invalid IBIS model '%s'"
 msgstr "Ugyldig symbolbiblioteksidentifikator"
 
-#: eeschema/sim/sim_model_kibis.cpp:340
+#: eeschema/sim/sim_model_kibis.cpp:339
 #, fuzzy
 msgid "Power supply"
 msgstr "Power symbol"
 
-#: eeschema/sim/sim_model_kibis.cpp:350
+#: eeschema/sim/sim_model_kibis.cpp:349
 #, fuzzy
 msgid "Parasitic pin resistance"
 msgstr "Specifik modstand"
 
-#: eeschema/sim/sim_model_kibis.cpp:360
+#: eeschema/sim/sim_model_kibis.cpp:359
 #, fuzzy
 msgid "Parasitic pin inductance"
 msgstr "Specifik modstand"
 
-#: eeschema/sim/sim_model_kibis.cpp:370
+#: eeschema/sim/sim_model_kibis.cpp:369
 #, fuzzy
 msgid "Parasitic pin capacitance"
 msgstr "Specifik modstand"
 
-#: eeschema/sim/sim_model_kibis.cpp:414
+#: eeschema/sim/sim_model_kibis.cpp:413
 #, fuzzy
 msgid "DC Value"
 msgstr "Værdi"
 
-#: eeschema/sim/sim_model_kibis.cpp:432
+#: eeschema/sim/sim_model_kibis.cpp:431
 #, fuzzy
 msgid "ON time"
 msgstr "Falltid:"
 
-#: eeschema/sim/sim_model_kibis.cpp:440
+#: eeschema/sim/sim_model_kibis.cpp:439
 #, fuzzy
 msgid "OFF time"
 msgstr "Falltid:"
 
-#: eeschema/sim/sim_model_kibis.cpp:448 eeschema/sim/sim_model_kibis.cpp:481
+#: eeschema/sim/sim_model_kibis.cpp:447 eeschema/sim/sim_model_kibis.cpp:480
 #, fuzzy
 msgid "Delay"
 msgstr "Forsinke:"
 
-#: eeschema/sim/sim_model_kibis.cpp:456
+#: eeschema/sim/sim_model_kibis.cpp:455
 #, fuzzy
 msgid "Number of cycles"
 msgstr "Antal prøver"
 
-#: eeschema/sim/sim_model_kibis.cpp:473
+#: eeschema/sim/sim_model_kibis.cpp:472
 msgid "Bitrate"
 msgstr ""
 
-#: eeschema/sim/sim_model_kibis.cpp:489
+#: eeschema/sim/sim_model_kibis.cpp:488
 #, fuzzy
 msgid "Number of bits"
 msgstr "Antal enheder:"
@@ -19665,69 +19667,69 @@ msgstr "Antal enheder:"
 msgid "%d"
 msgstr "%"
 
-#: eeschema/sim/sim_plot_tab.cpp:582
+#: eeschema/sim/sim_plot_tab.cpp:587
 #, fuzzy
 msgid "Amplitude"
 msgstr "Amplitude:"
 
-#: eeschema/sim/sim_plot_tab.cpp:614
+#: eeschema/sim/sim_plot_tab.cpp:619
 msgid "Noise (V/√Hz)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_tab.cpp:617
+#: eeschema/sim/sim_plot_tab.cpp:622
 msgid "Noise (A/√Hz)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_tab.cpp:634
+#: eeschema/sim/sim_plot_tab.cpp:639
 #, fuzzy
 msgid "Intensity"
 msgstr "Nuværende nøgle:"
 
-#: eeschema/sim/sim_plot_tab.cpp:669 eeschema/sim/sim_plot_tab.cpp:782
+#: eeschema/sim/sim_plot_tab.cpp:674 eeschema/sim/sim_plot_tab.cpp:787
 #, fuzzy
 msgid "Power"
 msgstr "Tilføj strøm"
 
-#: eeschema/sim/sim_plot_tab.cpp:724
+#: eeschema/sim/sim_plot_tab.cpp:729
 msgid "Voltage (swept)"
 msgstr "Spænding (fejet)"
 
-#: eeschema/sim/sim_plot_tab.cpp:735
+#: eeschema/sim/sim_plot_tab.cpp:740
 #, fuzzy
 msgid "Current (swept)"
 msgstr "Nuværende nøgle:"
 
-#: eeschema/sim/sim_plot_tab.cpp:746
+#: eeschema/sim/sim_plot_tab.cpp:751
 #, fuzzy
 msgid "Resistance (swept)"
 msgstr "Modstand:"
 
-#: eeschema/sim/sim_plot_tab.cpp:757
+#: eeschema/sim/sim_plot_tab.cpp:762
 #, fuzzy
 msgid "Temperature (swept)"
 msgstr "Temperaturstigning:"
 
-#: eeschema/sim/sim_plot_tab.cpp:775
+#: eeschema/sim/sim_plot_tab.cpp:780
 msgid "Voltage (measured)"
 msgstr "Spænding (målt)"
 
 #: eeschema/sim/sim_plot_tab.h:146 eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:744
-#: eeschema/sim/simulator_frame_ui.cpp:848
-#: eeschema/sim/simulator_frame_ui.cpp:1019
-#: eeschema/sim/simulator_frame_ui.cpp:2172
+#: eeschema/sim/simulator_frame_ui.cpp:850
+#: eeschema/sim/simulator_frame_ui.cpp:1021
 #: eeschema/sim/simulator_frame_ui.cpp:2173
+#: eeschema/sim/simulator_frame_ui.cpp:2174
 msgid " (gain)"
 msgstr ""
 
 #: eeschema/sim/sim_plot_tab.h:148 eeschema/sim/simulator_frame_ui.cpp:213
 #: eeschema/sim/simulator_frame_ui.cpp:745
 #: eeschema/sim/simulator_frame_ui.cpp:750
-#: eeschema/sim/simulator_frame_ui.cpp:849
-#: eeschema/sim/simulator_frame_ui.cpp:854
-#: eeschema/sim/simulator_frame_ui.cpp:1020
-#: eeschema/sim/simulator_frame_ui.cpp:2170
+#: eeschema/sim/simulator_frame_ui.cpp:851
+#: eeschema/sim/simulator_frame_ui.cpp:856
+#: eeschema/sim/simulator_frame_ui.cpp:1022
 #: eeschema/sim/simulator_frame_ui.cpp:2171
+#: eeschema/sim/simulator_frame_ui.cpp:2172
 #, fuzzy
 msgid " (phase)"
 msgstr "AC-fase:"
@@ -19738,51 +19740,56 @@ msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr "Denne simulering giver ingen plot. Se konsolvinduet for resultater"
 
-#: eeschema/sim/simulator_frame.cpp:116
+#: eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
 #: eeschema/tools/ee_actions.cpp:67
 #, fuzzy
 msgid "Simulator"
 msgstr "Simulator ..."
 
-#: eeschema/sim/simulator_frame.cpp:337
+#: eeschema/sim/simulator_frame.cpp:336
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
-#: eeschema/sim/simulator_frame.cpp:356
+#: eeschema/sim/simulator_frame.cpp:360 eeschema/tools/simulator_control.cpp:75
 #, fuzzy
 msgid "Errors during netlist generation."
 msgstr "Der var fejl under netlisteksporten, afbrudt."
 
-#: eeschema/sim/simulator_frame.cpp:364
+#: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
+#, fuzzy
+msgid "Warnings during netlist generation."
+msgstr "Der var fejl under netlisteksporten, afbrudt."
+
+#: eeschema/sim/simulator_frame.cpp:375
 #, fuzzy
 msgid "Simulator requires a fully annotated schematic."
 msgstr ""
 "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
-#: eeschema/sim/simulator_frame.cpp:411
+#: eeschema/sim/simulator_frame.cpp:419
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
 msgstr ""
 
-#: eeschema/sim/simulator_frame.cpp:443
+#: eeschema/sim/simulator_frame.cpp:451
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
 
-#: eeschema/sim/simulator_frame.cpp:471 eeschema/sim/simulator_frame.cpp:815
+#: eeschema/sim/simulator_frame.cpp:479 eeschema/sim/simulator_frame.cpp:822
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "%s kører allerede. Blive ved?"
 
-#: eeschema/sim/simulator_frame.cpp:546
+#: eeschema/sim/simulator_frame.cpp:554
 #, fuzzy, c-format
 msgid "Unable to load or parse file %s"
 msgstr "Kunne ikke indlæse %s filen"
 
-#: eeschema/sim/simulator_frame.cpp:618
+#: eeschema/sim/simulator_frame.cpp:625
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Gem ændringer i biblioteket"
@@ -19848,8 +19855,8 @@ msgstr "Signalfase:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
-#: eeschema/sim/simulator_frame_ui.cpp:853
-#: eeschema/sim/simulator_frame_ui.cpp:1018
+#: eeschema/sim/simulator_frame_ui.cpp:855
+#: eeschema/sim/simulator_frame_ui.cpp:1020
 #, fuzzy
 msgid " (amplitude)"
 msgstr "Amplitude:"
@@ -19884,7 +19891,7 @@ msgid "Delete Measurement"
 msgstr "Slet markør"
 
 #: eeschema/sim/simulator_frame_ui.cpp:600
-#: eeschema/sim/simulator_frame_ui.cpp:974
+#: eeschema/sim/simulator_frame_ui.cpp:976
 #, c-format
 msgid "Analysis %u - "
 msgstr ""
@@ -19914,42 +19921,42 @@ msgstr "cursoren"
 msgid "Cursor 2"
 msgstr "cursoren"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1169
-#: eeschema/sim/simulator_frame_ui.cpp:2603
+#: eeschema/sim/simulator_frame_ui.cpp:1171
+#: eeschema/sim/simulator_frame_ui.cpp:2604
 #, fuzzy
 msgid "Diff"
 msgstr "Differentialpar"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1434
-#: eeschema/sim/simulator_frame_ui.cpp:1447
-#: eeschema/sim/simulator_frame_ui.cpp:1868
+#: eeschema/sim/simulator_frame_ui.cpp:1436
+#: eeschema/sim/simulator_frame_ui.cpp:1449
+#: eeschema/sim/simulator_frame_ui.cpp:1869
 msgid "Could not apply tuned value(s):"
 msgstr ""
 
-#: eeschema/sim/simulator_frame_ui.cpp:1448
-#: eeschema/sim/simulator_frame_ui.cpp:1858
+#: eeschema/sim/simulator_frame_ui.cpp:1450
+#: eeschema/sim/simulator_frame_ui.cpp:1859
 #, fuzzy, c-format
 msgid "%s is not tunable"
 msgstr "Directory \"%s\" er ikke skrivbar."
 
-#: eeschema/sim/simulator_frame_ui.cpp:1532
+#: eeschema/sim/simulator_frame_ui.cpp:1534
 #, fuzzy
 msgid "Error: no current simulation.\n"
 msgstr "Brud på hulklarering"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1541
+#: eeschema/sim/simulator_frame_ui.cpp:1543
 #, fuzzy
 msgid "Error: simulation type not defined.\n"
 msgstr "Fejl: simulationstype ikke defineret!\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:1547
+#: eeschema/sim/simulator_frame_ui.cpp:1549
 #, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Fejl: simulationstype understøtter ikke tegning!\n"
 
-#: eeschema/sim/simulator_frame_ui.cpp:2709
-#: eeschema/sim/simulator_frame_ui.cpp:2824
-#: eeschema/sim/simulator_frame_ui.cpp:2867
+#: eeschema/sim/simulator_frame_ui.cpp:2710
+#: eeschema/sim/simulator_frame_ui.cpp:2825
+#: eeschema/sim/simulator_frame_ui.cpp:2868
 msgid ""
 "\n"
 "\n"
@@ -22492,7 +22499,7 @@ msgstr "Kunne ikke indlæse billedet fra \"%s\""
 
 #: eeschema/tools/sch_drawing_tools.cpp:797
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:684
-#: pcbnew/tools/drawing_tool.cpp:1504
+#: pcbnew/tools/drawing_tool.cpp:1505
 #, fuzzy
 msgid "No graphic items found in file."
 msgstr "Ingen grafiske genstande fundet i filen at importere"
@@ -22669,20 +22676,20 @@ msgstr "Kunne ikke finde biblioteksfilen %s"
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Opdater fodspor, så de inkluderer ændringer fra biblioteket"
 
-#: eeschema/tools/sch_editor_control.cpp:806
+#: eeschema/tools/sch_editor_control.cpp:805
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Fejl: duplikat af underarknavne fundet i det aktuelle ark."
 
-#: eeschema/tools/sch_editor_control.cpp:913
+#: eeschema/tools/sch_editor_control.cpp:912
 #, fuzzy
 msgid "No net selected."
 msgstr "Intet lag valgt."
 
-#: eeschema/tools/sch_editor_control.cpp:939
+#: eeschema/tools/sch_editor_control.cpp:938
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net skal mærkes for at tildele en netklasse."
 
-#: eeschema/tools/sch_editor_control.cpp:1729
+#: eeschema/tools/sch_editor_control.cpp:1728
 #, fuzzy, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -22693,26 +22700,26 @@ msgstr ""
 "blev droppet, fordi destinationen allerede har arket eller et af dets "
 "underark som forælder."
 
-#: eeschema/tools/sch_editor_control.cpp:2205
+#: eeschema/tools/sch_editor_control.cpp:2204
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "biblioteket \"%s\" kan ikke slettes"
 
-#: eeschema/tools/sch_editor_control.cpp:2585
+#: eeschema/tools/sch_editor_control.cpp:2584
 #: pcbnew/tools/board_editor_control.cpp:603
 #: pcbnew/tools/footprint_editor_control.cpp:749
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplikerede id'er udskiftet.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2592
+#: eeschema/tools/sch_editor_control.cpp:2591
 #: pcbnew/tools/board_editor_control.cpp:618
 #: pcbnew/tools/footprint_editor_control.cpp:764
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potentielle problemer repareret."
 
-#: eeschema/tools/sch_editor_control.cpp:2599
+#: eeschema/tools/sch_editor_control.cpp:2598
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ingen fejl fundet."
@@ -22760,36 +22767,29 @@ msgstr ""
 msgid "Page '%s' not found."
 msgstr "Fil '%s' blev ikke fundet."
 
-#: eeschema/tools/simulator_control.cpp:75
-#, fuzzy
-msgid ""
-"Errors during netlist generation.\n"
-"\n"
-msgstr "Der var fejl under netlisteksporten, afbrudt."
-
-#: eeschema/tools/simulator_control.cpp:94
+#: eeschema/tools/simulator_control.cpp:100
 #, fuzzy
 msgid "Open Simulation Workbook"
 msgstr "Åbn simulation-projektmappe"
 
-#: eeschema/tools/simulator_control.cpp:113
+#: eeschema/tools/simulator_control.cpp:119
 msgid "noname"
 msgstr "intet navn"
 
-#: eeschema/tools/simulator_control.cpp:146
+#: eeschema/tools/simulator_control.cpp:152
 #, fuzzy
 msgid "Save Simulation Workbook As"
 msgstr "Gem simuleringsarbejdsbog"
 
-#: eeschema/tools/simulator_control.cpp:166
+#: eeschema/tools/simulator_control.cpp:172
 msgid "Save Plot as Image"
 msgstr "Gem plot som billede"
 
-#: eeschema/tools/simulator_control.cpp:191
+#: eeschema/tools/simulator_control.cpp:197
 msgid "Save Plot Data"
 msgstr "Gem plotdata"
 
-#: eeschema/tools/simulator_control.cpp:406
+#: eeschema/tools/simulator_control.cpp:412
 #, fuzzy
 msgid "SPICE Netlist"
 msgstr "SPICE netlist-fil"
@@ -22854,7 +22854,7 @@ msgstr "Indtast sidenummer for arkstien %s"
 msgid "Set Unit Display Name"
 msgstr ""
 
-#: eeschema/tools/symbol_editor_move_tool.cpp:505
+#: eeschema/tools/symbol_editor_move_tool.cpp:507
 #, fuzzy
 msgid "Align"
 msgstr "H Juster"
@@ -23554,55 +23554,55 @@ msgstr "Åbn Gerber-fil (er)"
 msgid "Open NC (Excellon) Drill File(s)"
 msgstr "Åbn borefil (er) for NC (Excellon)"
 
-#: gerbview/files.cpp:279
+#: gerbview/files.cpp:278
 msgid "File not found:"
 msgstr "Filen blev ikke fundet:"
 
-#: gerbview/files.cpp:290
+#: gerbview/files.cpp:289
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr "<b> En gerber-jobfil kan ikke indlæses som en plotfil </b> <i> %s </i>"
 
-#: gerbview/files.cpp:303
+#: gerbview/files.cpp:302
 #, fuzzy
 msgid "Loading files..."
 msgstr "Indlæser Gerber-filer ..."
 
-#: gerbview/files.cpp:306 gerbview/files.cpp:313
+#: gerbview/files.cpp:305 gerbview/files.cpp:312
 #, fuzzy, c-format
 msgid "Loading %u/%zu %s..."
 msgstr "Indlæser %u / %zu %s"
 
-#: gerbview/files.cpp:444
+#: gerbview/files.cpp:443
 #, fuzzy, c-format
 msgid "Zip file '%s' cannot be opened."
 msgstr "Zip-filen \"%s\" kan ikke åbnes"
 
-#: gerbview/files.cpp:486
+#: gerbview/files.cpp:485
 #, fuzzy, c-format
 msgid "Skipped file '%s' (gerber job file)."
 msgstr "Info: spring fil \"%s\" over (gerber jobfil)\n"
 
-#: gerbview/files.cpp:531
+#: gerbview/files.cpp:530
 #, fuzzy, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b> Den midlertidige fil \"%s\" </b> kunne ikke oprettes\n"
 
-#: gerbview/files.cpp:556
+#: gerbview/files.cpp:555
 #, fuzzy, c-format
 msgid "Skipped file '%s' (unknown type)."
 msgstr "Info: spring fil \"%s\" (ukendt type) over\n"
 
-#: gerbview/files.cpp:595
+#: gerbview/files.cpp:594
 #, fuzzy, c-format
 msgid "<b>unzipped file %s read error</b>"
 msgstr "<b> udpakket fil %s læsefejl </b>\n"
 
-#: gerbview/files.cpp:643
+#: gerbview/files.cpp:642
 msgid "Open Zip File"
 msgstr "Åbn zip-fil"
 
-#: gerbview/files.cpp:678 gerbview/job_file_reader.cpp:242
+#: gerbview/files.cpp:676 gerbview/job_file_reader.cpp:241
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:164
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:204
@@ -24109,7 +24109,7 @@ msgstr "Fremhæv %s"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:288
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:350
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:45
-#: pcbnew/dialogs/panel_setup_layers.cpp:847
+#: pcbnew/dialogs/panel_setup_layers.cpp:895
 #: pcbnew/widgets/appearance_controls.cpp:1025
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
@@ -29629,7 +29629,7 @@ msgid "Add Dielectric Layer"
 msgstr "Tilføj dielektrisk lag"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:328
-#: pcbnew/dialogs/panel_setup_layers.cpp:874
+#: pcbnew/dialogs/panel_setup_layers.cpp:922
 #, fuzzy
 msgid "Select layer to add:"
 msgstr "Vælg lag"
@@ -30876,80 +30876,87 @@ msgstr "Slet spor, der har både start- og slutposition inde i en pad"
 msgid "Cleanup Tracks and Vias"
 msgstr "Oprydningsspor og Vias"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:202
+#: pcbnew/dialogs/dialog_copper_zones.cpp:210
 #, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
 msgstr "Spor & Via egenskaber"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:206
+#: pcbnew/dialogs/dialog_copper_zones.cpp:214
 #, fuzzy
 msgid "Teardrop on Tracks Properties"
 msgstr "Indstil spor og via egenskaber"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:210
+#: pcbnew/dialogs/dialog_copper_zones.cpp:218
 #, fuzzy
 msgid "Teardrop Properties"
 msgstr "Gruppeegenskaber"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:216
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
+#: pcbnew/dialogs/dialog_copper_zones.cpp:224
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:113
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:101
 #: pcbnew/tools/convert_tool.cpp:62
 #, fuzzy
 msgid "Conversion Settings"
 msgstr "Indstillinger for pad-optælling"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:219
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
+#: pcbnew/dialogs/dialog_copper_zones.cpp:227
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:116
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:104
 #: pcbnew/tools/convert_tool.cpp:84
 #, fuzzy
 msgid "Use centerlines"
 msgstr "Brug inches"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:223
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:113
+#: pcbnew/dialogs/dialog_copper_zones.cpp:231
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:120
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:108
 #: pcbnew/tools/convert_tool.cpp:96
 #, fuzzy
 msgid "Create bounding hull"
 msgstr "Opret logofil"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:227
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
+#: pcbnew/dialogs/dialog_copper_zones.cpp:234
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:123
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
+#: pcbnew/tools/convert_tool.cpp:98
+msgid "Gap:"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:248
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:138
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/convert_tool.cpp:134
 #, fuzzy
 msgid "Delete source objects after conversion"
 msgstr "Slet filerne og deres indhold"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:236
+#: pcbnew/dialogs/dialog_copper_zones.cpp:257
 #, fuzzy
 msgid "Convert to Copper Zone"
 msgstr "Forbindelse til kobberzoner"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:401
+#: pcbnew/dialogs/dialog_copper_zones.cpp:430
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:149
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:176
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:97
 msgid "Chamfer distance:"
 msgstr "Afkørselsafstand:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:403
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:151
+#: pcbnew/dialogs/dialog_copper_zones.cpp:432
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:178
 msgid "Fillet radius:"
 msgstr "Filetradius:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:544
+#: pcbnew/dialogs/dialog_copper_zones.cpp:577
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Termisk egerbredde kan ikke være mindre end minimumsbredden."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:564
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:326
+#: pcbnew/dialogs/dialog_copper_zones.cpp:597
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:359
 msgid "No layer selected."
 msgstr "Intet lag valgt."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:819
+#: pcbnew/dialogs/dialog_copper_zones.cpp:852
 #, fuzzy
 msgid "<no net> will result in an isolated copper island."
 msgstr ""
@@ -31007,7 +31014,7 @@ msgstr "Kontur display:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120 pcbnew/zone.cpp:631
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120 pcbnew/zone.cpp:645
 msgid "Hatched"
 msgstr "Udklækket"
 
@@ -31078,7 +31085,7 @@ msgstr ""
 "Denne indstilling kan tilsidesættes af lokale pad-indstillinger"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3451
-#: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1551
+#: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1565
 msgid "Thermal reliefs"
 msgstr "Termiske relieffer"
 
@@ -31115,14 +31122,14 @@ msgstr "Udfyldningstype:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1561
+#: pcbnew/zone.cpp:1575
 #, fuzzy
 msgid "Solid fill"
 msgstr "Massiv"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1562
+#: pcbnew/zone.cpp:1576
 msgid "Hatch pattern"
 msgstr "Hatch mønster"
 
@@ -31180,7 +31187,7 @@ msgstr "Fjern øer:"
 msgid "Choose what to do with unconnected copper islands"
 msgstr "Vælg hvad du skal gøre med ikke-tilsluttede kobberøer"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1572
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1586
 msgid "Below area limit"
 msgstr "Under arealgrænsen"
 
@@ -34209,7 +34216,7 @@ msgstr ""
 msgid "Group members:"
 msgstr "Gruppemedlemmer:"
 
-#: pcbnew/dialogs/dialog_group_properties_base.h:64 pcbnew/pcb_group.cpp:489
+#: pcbnew/dialogs/dialog_group_properties_base.h:64 pcbnew/pcb_group.cpp:492
 msgid "Group Properties"
 msgstr "Gruppeegenskaber"
 
@@ -34591,7 +34598,7 @@ msgstr "Opret rapport ..."
 msgid "Net Inspector"
 msgstr "Netinspektør"
 
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:127
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:147
 #, fuzzy
 msgid "Convert to Non Copper Zone"
 msgstr "Forbindelse til kobberzoner"
@@ -34649,7 +34656,7 @@ msgstr "%s, %s og forbundne lag"
 msgid "Connected layers only"
 msgstr "Kun forbundne lag"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:915 pcbnew/zone.cpp:604
+#: pcbnew/dialogs/dialog_pad_properties.cpp:915 pcbnew/zone.cpp:618
 #, c-format
 msgid "%s and %s"
 msgstr "%s og %s"
@@ -35539,8 +35546,8 @@ msgstr "Sporafstand skal være større end 0."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
-#: pcbnew/router/pns_kicad_iface.cpp:716 pcbnew/router/pns_kicad_iface.cpp:811
-#: pcbnew/router/pns_kicad_iface.cpp:812
+#: pcbnew/router/pns_kicad_iface.cpp:735 pcbnew/router/pns_kicad_iface.cpp:830
+#: pcbnew/router/pns_kicad_iface.cpp:831
 #, fuzzy
 msgid "user choice"
 msgstr "Store valg"
@@ -35563,12 +35570,12 @@ msgid "Differential Pair Dimensions"
 msgstr "Differentialpar-dimensioner"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
-#: pcbnew/router/router_tool.cpp:2712
+#: pcbnew/router/router_tool.cpp:2719
 msgid "Mode"
 msgstr "Tilstand"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
-#: pcbnew/router/router_tool.cpp:2706
+#: pcbnew/router/router_tool.cpp:2713
 msgid "Highlight collisions"
 msgstr "Fremhæv kollisioner"
 
@@ -35590,7 +35597,7 @@ msgstr ""
 "selvom det overtræder DRC-reglerne."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
-#: pcbnew/router/router_tool.cpp:2708
+#: pcbnew/router/router_tool.cpp:2715
 msgid "Shove"
 msgstr "Puffe"
 
@@ -35620,7 +35627,7 @@ msgstr ""
 "tilbage"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
-#: pcbnew/router/router_tool.cpp:2707
+#: pcbnew/router/router_tool.cpp:2714
 msgid "Walk around"
 msgstr "Gå rundt"
 
@@ -35889,11 +35896,6 @@ msgstr "Ikke-aktive lag:"
 #, fuzzy
 msgid "Reference Image Properties"
 msgstr "Målegenskaber"
-
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
-#: pcbnew/tools/convert_tool.cpp:98
-msgid "Gap:"
-msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:135
 msgid "Convert to Rule Area"
@@ -36295,11 +36297,11 @@ msgstr "Skæv mål:"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2145 pcbnew/pad.cpp:1134
 #: pcbnew/pcb_track.cpp:1107 pcbnew/pcb_track.cpp:1115
 #: pcbnew/pcb_track.cpp:1145 pcbnew/pcb_track.cpp:1151
-#: pcbnew/router/router_tool.cpp:2720 pcbnew/router/router_tool.cpp:2725
-#: pcbnew/router/router_tool.cpp:2730 pcbnew/router/router_tool.cpp:2741
-#: pcbnew/router/router_tool.cpp:2749 pcbnew/router/router_tool.cpp:2754
+#: pcbnew/router/router_tool.cpp:2727 pcbnew/router/router_tool.cpp:2732
+#: pcbnew/router/router_tool.cpp:2737 pcbnew/router/router_tool.cpp:2748
+#: pcbnew/router/router_tool.cpp:2756 pcbnew/router/router_tool.cpp:2761
 #: pcbnew/tools/pcb_control.cpp:1506 pcbnew/tools/pcb_control.cpp:1516
-#: pcbnew/zone.cpp:647
+#: pcbnew/zone.cpp:661
 #, c-format
 msgid "(from %s)"
 msgstr "(fra %s)"
@@ -36623,10 +36625,6 @@ msgstr ""
 #, fuzzy
 msgid "Parameter error"
 msgstr "Parameter"
-
-#: pcbnew/dialogs/panel_fp_editor_defaults.cpp:518
-msgid "Reference and value are mandatory."
-msgstr "Reference og værdi er obligatorisk."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:23
 #, fuzzy
@@ -37163,25 +37161,25 @@ msgstr ""
 "fra fjernede lag og kan ikke fortrydes.\n"
 "Ønsker du at fortsætte?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:688
+#: pcbnew/dialogs/panel_setup_layers.cpp:716
 msgid "Layer must have a name."
 msgstr "Lag skal have et navn."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:694
+#: pcbnew/dialogs/panel_setup_layers.cpp:722
 #, fuzzy, c-format
 msgid "%s are forbidden in layer names."
 msgstr "\"%s\" er forbudt i lagnavne."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:701
+#: pcbnew/dialogs/panel_setup_layers.cpp:729
 msgid "Layer name \"signal\" is reserved."
 msgstr "Lagnavnet \"signal\" er reserveret."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:710
+#: pcbnew/dialogs/panel_setup_layers.cpp:738
 #, fuzzy, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Lagnavnet \"%s\" er allerede i brug."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:824
+#: pcbnew/dialogs/panel_setup_layers.cpp:872
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -37194,15 +37192,15 @@ msgstr ""
 "\n"
 "Fortsætte og slette de ekstra indre kobberlag fra det aktuelle bord?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:833
+#: pcbnew/dialogs/panel_setup_layers.cpp:881
 msgid "Inner Layers To Be Deleted"
 msgstr "Indvendige lag, der skal slettes"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:868
+#: pcbnew/dialogs/panel_setup_layers.cpp:916
 msgid "All user-defined layers have already been added."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:872
+#: pcbnew/dialogs/panel_setup_layers.cpp:920
 #, fuzzy
 msgid "Add User-defined Layer"
 msgstr "Tilføj brugerdefineret lag"
@@ -38824,7 +38822,7 @@ msgid "%s pad connection: %s."
 msgstr "Zone forbindelsestype: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1444 pcbnew/drc/drc_engine.cpp:1461
-#: pcbnew/drc/drc_engine.cpp:1478 pcbnew/zone.cpp:385 pcbnew/zone.cpp:496
+#: pcbnew/drc/drc_engine.cpp:1478 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
 msgid "zone"
 msgstr "zone"
 
@@ -38843,7 +38841,7 @@ msgstr "Termisk egerbredde:"
 msgid "Checking rule assertion \"%s\"."
 msgstr "Kontrollerer regelbetingelse \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:1717
+#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:1731
 msgid "Electrical"
 msgstr "Elektrisk"
 
@@ -40453,11 +40451,11 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3449 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1549
+#: pcbnew/footprint.cpp:3449 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1563
 msgid "Inherited"
 msgstr "Arvet"
 
-#: pcbnew/footprint.cpp:3453 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1553
+#: pcbnew/footprint.cpp:3453 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1567
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Termiske relieffer"
@@ -41582,63 +41580,63 @@ msgstr "Tilslut kobberzone igen fra %s til %s."
 msgid "Copper zone '%s' has no pads connected."
 msgstr "Kobberzone (%s) har ingen puder forbundet."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1031
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1040
 #, fuzzy, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "Kobberzone (%s) har ingen puder forbundet."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1072
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1081
 #, fuzzy, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr "Ændringer af symbol til fodaftryk er ikke gemt"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1082
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s pad %s ikke fundet i %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1132
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1141
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "Behandlingssymbol '%s: %s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1201
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1210
 #, fuzzy, c-format
 msgid "Multiple footprints found for '%s'."
 msgstr "Flere fodspor fundet til \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1232
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1241
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Kan ikke fjerne ubrugt fodaftryk %s (låst)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1237
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1246
 #, fuzzy, c-format
 msgid "Could not remove unused footprint %s (locked)."
 msgstr "Kan ikke fjerne ubrugt fodaftryk %s (låst)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1250
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "Fjern ubrugt fodaftryk %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1258
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1267
 #, fuzzy, c-format
 msgid "Removed unused footprint %s."
 msgstr "Fjern ubrugt fodaftryk %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1285
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1294
 #, fuzzy, c-format
 msgid "Removed unused net %s."
 msgstr "Fjern ubrugt net \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1296
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1305
 msgid "Update netlist"
 msgstr "Opdater netliste"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1317
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1326
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Advarsler i alt: %d, fejl: %d."
@@ -41779,8 +41777,8 @@ msgid "Hole X / Y"
 msgstr "Bor X / Y"
 
 #: pcbnew/pad.cpp:1132 pcbnew/pcb_track.cpp:1105 pcbnew/pcb_track.cpp:1143
-#: pcbnew/router/router_tool.cpp:2723 pcbnew/router/router_tool.cpp:2752
-#: pcbnew/zone.cpp:645
+#: pcbnew/router/router_tool.cpp:2730 pcbnew/router/router_tool.cpp:2759
+#: pcbnew/zone.cpp:659
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Min. Frihøjde: %s"
@@ -42061,7 +42059,7 @@ msgstr "Fabrikationsejendom"
 msgid "Soldermask Margin Override"
 msgstr "Lokal loddemaskemargin"
 
-#: pcbnew/pad.cpp:2510 pcbnew/zone.cpp:1744
+#: pcbnew/pad.cpp:2510 pcbnew/zone.cpp:1758
 #, fuzzy
 msgid "Thermal Relief Spoke Width"
 msgstr "Bredde på termisk aflastning"
@@ -42071,7 +42069,7 @@ msgstr "Bredde på termisk aflastning"
 msgid "Thermal Relief Spoke Angle"
 msgstr "Termisk lindring"
 
-#: pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1738
+#: pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1752
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Termisk lindring"
@@ -42281,21 +42279,21 @@ msgstr "Opdateret"
 msgid "Generator Properties"
 msgstr "Script Generator Egenskaber"
 
-#: pcbnew/pcb_group.cpp:368
+#: pcbnew/pcb_group.cpp:371
 #, c-format
 msgid "Unnamed Group, %zu members"
 msgstr "Navnlig gruppe, %zu medlemmer"
 
-#: pcbnew/pcb_group.cpp:370
+#: pcbnew/pcb_group.cpp:373
 #, fuzzy, c-format
 msgid "Group '%s', %zu members"
 msgstr "Gruppe \"%s\", %zu medlemmer"
 
-#: pcbnew/pcb_group.cpp:382
+#: pcbnew/pcb_group.cpp:385
 msgid "<unnamed>"
 msgstr "<navn>"
 
-#: pcbnew/pcb_group.cpp:383
+#: pcbnew/pcb_group.cpp:386
 msgid "Members"
 msgstr "Medlemmer"
 
@@ -42749,7 +42747,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
 #, c-format
-msgid "Unknown textbox justification %d, aText %s"
+msgid "Unknown textbox justification %d, text %s"
 msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
@@ -43629,7 +43627,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Dårlig ZSmoothing for CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6155
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6166
 #, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
@@ -43786,43 +43784,45 @@ msgstr "Kan ikke tolke datakode %d"
 #, fuzzy, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
-"Do you wish to rescue them to the %s layer?"
+"Do you wish to rescue them to the %s layer?\n"
+"\n"
+"Zones will need to be refilled."
 msgstr ""
 "Varer fundet på udefinerede lag. Ønsker du det\n"
 "redde dem til User.Comments-laget?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1094
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 #, fuzzy
 msgid "Undefined Layers Warning"
 msgstr "Udefinerede lag:"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1213
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1224
 #, fuzzy, c-format
 msgid "Cannot create generated object of type '%s'"
 msgstr "Kan ikke oprette outputmappe \"%s\".\n"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1350
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1361
 #, fuzzy, c-format
 msgid "Page type '%s' is not valid."
 msgstr "Sidetype \"%s\" er ikke gyldig "
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1904
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1915
 #, fuzzy, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr "Lag \"%s\" i fil \"%s\" på linje %d er ikke i hash med fast lag"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1941
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1952
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d er ikke et gyldigt lagantal"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2615
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2626
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Kopier NETCLASS-navnet \"%s\" i filen \"%s\" på linje %d, forskudt %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2995
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5380
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3006
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5391
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43835,12 +43835,12 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3163
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3174
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Kan ikke håndtere fodaftryks teksttype %s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3937
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3948
 #, fuzzy, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -43853,7 +43853,7 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4624
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4635
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43865,7 +43865,7 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4643
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4654
 #, fuzzy, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -43877,7 +43877,7 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4944
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4955
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -43890,7 +43890,7 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5295
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5306
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43903,7 +43903,7 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5481
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5492
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43916,7 +43916,7 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5611
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5622
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43929,7 +43929,7 @@ msgstr ""
 "linje: %d\n"
 "forskydning: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6124
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6135
 #, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
@@ -44038,21 +44038,21 @@ msgstr "Ikke-aktive lag:"
 msgid "Greyscale"
 msgstr "Gråtone-billede"
 
-#: pcbnew/pcb_shape.cpp:471
+#: pcbnew/pcb_shape.cpp:502
 msgid "Drawing"
 msgstr "Tegning"
 
-#: pcbnew/pcb_shape.cpp:486
+#: pcbnew/pcb_shape.cpp:517
 #, fuzzy, c-format
 msgid "%s %s on %s"
 msgstr "%s på %s"
 
-#: pcbnew/pcb_shape.cpp:493
+#: pcbnew/pcb_shape.cpp:524
 #, c-format
 msgid "%s on %s"
 msgstr "%s på %s"
 
-#: pcbnew/pcb_shape.cpp:745
+#: pcbnew/pcb_shape.cpp:776
 #, fuzzy
 msgid "Pad Primitives"
 msgstr "Tilføj Primitive"
@@ -44085,12 +44085,12 @@ msgstr "PCB-tekst '%s' på %s"
 msgid "PCB Text Box on %s"
 msgstr "PCB-tekst '%s' på %s"
 
-#: pcbnew/pcb_textbox.cpp:689
+#: pcbnew/pcb_textbox.cpp:690
 #, fuzzy
 msgid "Border Properties"
 msgstr "Cirkelegenskaber"
 
-#: pcbnew/pcb_textbox.cpp:699
+#: pcbnew/pcb_textbox.cpp:700
 #, fuzzy
 msgid "Border Style"
 msgstr "Geringsstil:"
@@ -44433,34 +44433,34 @@ msgstr ""
 "Sørg for, at navnene på netene, der hører til et differentielt par, slutter "
 "med enten _N / _P eller +/-."
 
-#: pcbnew/router/pns_kicad_iface.cpp:659 pcbnew/router/pns_kicad_iface.cpp:762
+#: pcbnew/router/pns_kicad_iface.cpp:659 pcbnew/router/pns_kicad_iface.cpp:781
 #: pcbnew/router/router_tool.cpp:748 pcbnew/router/router_tool.cpp:812
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Mindste clearance:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:681 pcbnew/router/pns_kicad_iface.cpp:761
+#: pcbnew/router/pns_kicad_iface.cpp:700 pcbnew/router/pns_kicad_iface.cpp:780
 #: pcbnew/router/router_tool.cpp:774 pcbnew/router/router_tool.cpp:799
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Minimum bredde:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:688 pcbnew/router/router_tool.cpp:776
+#: pcbnew/router/pns_kicad_iface.cpp:707 pcbnew/router/router_tool.cpp:776
 #, fuzzy
 msgid "existing track"
 msgstr "Når du opretter spor"
 
-#: pcbnew/router/pns_kicad_iface.cpp:714
+#: pcbnew/router/pns_kicad_iface.cpp:733
 #, fuzzy
 msgid "netclass 'Default'"
 msgstr "netklasse '%s'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1291
+#: pcbnew/router/pns_kicad_iface.cpp:1310
 #, c-format
 msgid "%s is malformed."
 msgstr "%s er forkert formet."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1294
+#: pcbnew/router/pns_kicad_iface.cpp:1313
 #, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
@@ -44469,7 +44469,7 @@ msgstr ""
 "Denne zone kan ikke håndteres af sporlayoutværktøjet.\n"
 "Kontroller, at det ikke er en selvskærende polygon."
 
-#: pcbnew/router/pns_kicad_iface.cpp:2037
+#: pcbnew/router/pns_kicad_iface.cpp:2056
 #, fuzzy
 msgid "Routing"
 msgstr "Rute enkelt spor"
@@ -44710,94 +44710,94 @@ msgstr "Du må ikke ændre puder med forskellige lag"
 msgid "Tracks on Copper layers only."
 msgstr "Spor kun på kobberlag"
 
-#: pcbnew/router/router_tool.cpp:1885 pcbnew/router/router_tool.cpp:2568
+#: pcbnew/router/router_tool.cpp:1892 pcbnew/router/router_tool.cpp:2575
 msgid "The selected item is locked."
 msgstr "Det valgte element er låst."
 
-#: pcbnew/router/router_tool.cpp:1887
+#: pcbnew/router/router_tool.cpp:1894
 msgid "Drag Anyway"
 msgstr "Træk alligevel"
 
-#: pcbnew/router/router_tool.cpp:1945 pcbnew/router/router_tool.cpp:2428
+#: pcbnew/router/router_tool.cpp:1952 pcbnew/router/router_tool.cpp:2435
 #, c-format
 msgid "(%s to commit anyway.)"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1949 pcbnew/router/router_tool.cpp:2432
+#: pcbnew/router/router_tool.cpp:1956 pcbnew/router/router_tool.cpp:2439
 #, fuzzy
 msgid "Track violates DRC."
 msgstr "Ruteplanens startpunkt overtræder DRC."
 
-#: pcbnew/router/router_tool.cpp:2570 pcbnew/tools/pcb_actions.cpp:2347
+#: pcbnew/router/router_tool.cpp:2577 pcbnew/tools/pcb_actions.cpp:2347
 msgid "Break Track"
 msgstr "Break Track"
 
-#: pcbnew/router/router_tool.cpp:2651
+#: pcbnew/router/router_tool.cpp:2658
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Rute Differentialpar"
 
-#: pcbnew/router/router_tool.cpp:2663 pcbnew/router/router_tool.cpp:2673
+#: pcbnew/router/router_tool.cpp:2670 pcbnew/router/router_tool.cpp:2680
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Løst clearance: %s."
 
-#: pcbnew/router/router_tool.cpp:2670
+#: pcbnew/router/router_tool.cpp:2677
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Rute enkelt spor"
 
-#: pcbnew/router/router_tool.cpp:2678
+#: pcbnew/router/router_tool.cpp:2685
 #, fuzzy
 msgid "Routing Track"
 msgstr "Rute enkelt spor"
 
-#: pcbnew/router/router_tool.cpp:2679
+#: pcbnew/router/router_tool.cpp:2686
 #, fuzzy
 msgid "(no net)"
 msgstr "<intet net>"
 
-#: pcbnew/router/router_tool.cpp:2688
+#: pcbnew/router/router_tool.cpp:2695
 #, fuzzy
 msgid "Free-angle"
 msgstr "vinkel"
 
-#: pcbnew/router/router_tool.cpp:2694
+#: pcbnew/router/router_tool.cpp:2701
 #, fuzzy
 msgid "45-degree"
 msgstr "45 grader"
 
-#: pcbnew/router/router_tool.cpp:2695
+#: pcbnew/router/router_tool.cpp:2702
 #, fuzzy
 msgid "45-degree rounded"
 msgstr "Træk (45 graders tilstand)"
 
-#: pcbnew/router/router_tool.cpp:2696
+#: pcbnew/router/router_tool.cpp:2703
 #, fuzzy
 msgid "90-degree"
 msgstr "grad"
 
-#: pcbnew/router/router_tool.cpp:2697
+#: pcbnew/router/router_tool.cpp:2704
 #, fuzzy
 msgid "90-degree rounded"
 msgstr "Træk (45 graders tilstand)"
 
-#: pcbnew/router/router_tool.cpp:2702
+#: pcbnew/router/router_tool.cpp:2709
 #, fuzzy
 msgid "Corner Style"
 msgstr "Linjetype"
 
-#: pcbnew/router/router_tool.cpp:2718 pcbnew/router/router_tool.cpp:2747
+#: pcbnew/router/router_tool.cpp:2725 pcbnew/router/router_tool.cpp:2754
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Sporvidde"
 
-#: pcbnew/router/router_tool.cpp:2728
+#: pcbnew/router/router_tool.cpp:2735
 #, fuzzy, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Differentialpar"
 
-#: pcbnew/router/router_tool.cpp:2739 pcbnew/tools/pcb_control.cpp:1515
+#: pcbnew/router/router_tool.cpp:2746 pcbnew/tools/pcb_control.cpp:1515
 #, fuzzy, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Fjern ubrugt net \"%s\"."
@@ -45505,45 +45505,45 @@ msgstr ""
 msgid "Create from Selection"
 msgstr "Fjern fra markering"
 
-#: pcbnew/tools/convert_tool.cpp:435
+#: pcbnew/tools/convert_tool.cpp:437
 msgid "Resulting polygon would be empty"
 msgstr ""
 
-#: pcbnew/tools/convert_tool.cpp:437
+#: pcbnew/tools/convert_tool.cpp:439
 #, fuzzy
 msgid "Objects must form a closed shape"
 msgstr "(ikke en lukket form)"
 
-#: pcbnew/tools/convert_tool.cpp:439
+#: pcbnew/tools/convert_tool.cpp:441
 #, fuzzy
 msgid "Could not convert selection"
 msgstr "Kunne ikke åbne arkivfilen\n"
 
-#: pcbnew/tools/convert_tool.cpp:552
+#: pcbnew/tools/convert_tool.cpp:554
 msgid "Convert to Polygon"
 msgstr "Konverter til polygon"
 
-#: pcbnew/tools/convert_tool.cpp:554
+#: pcbnew/tools/convert_tool.cpp:556
 #, fuzzy
 msgid "Create Polygon"
 msgstr "Opret zoner"
 
-#: pcbnew/tools/convert_tool.cpp:559
+#: pcbnew/tools/convert_tool.cpp:561
 #, fuzzy
 msgid "Convert to Zone"
 msgstr "Konverter til linjer"
 
-#: pcbnew/tools/convert_tool.cpp:561
+#: pcbnew/tools/convert_tool.cpp:563
 #, fuzzy
 msgid "Create Zone"
 msgstr "Opret zoner"
 
-#: pcbnew/tools/convert_tool.cpp:1133
+#: pcbnew/tools/convert_tool.cpp:1135
 #, fuzzy
 msgid "Create Lines"
 msgstr "Opret zoner"
 
-#: pcbnew/tools/convert_tool.cpp:1220
+#: pcbnew/tools/convert_tool.cpp:1222
 #, fuzzy
 msgid "Create Arc"
 msgstr "Opret Array"
@@ -45646,7 +45646,7 @@ msgstr "Ja, skrå"
 msgid "Select Via Size"
 msgstr "Vælg Via størrelse"
 
-#: pcbnew/tools/drawing_tool.cpp:363 pcbnew/tools/drawing_tool.cpp:2051
+#: pcbnew/tools/drawing_tool.cpp:363 pcbnew/tools/drawing_tool.cpp:2052
 #: pcbnew/tools/pcb_actions.cpp:100
 msgid "Draw Line"
 msgstr "Tegn linje"
@@ -45678,27 +45678,27 @@ msgstr "Placer via"
 msgid "Place Text"
 msgstr "Placer en tekst"
 
-#: pcbnew/tools/drawing_tool.cpp:1295
+#: pcbnew/tools/drawing_tool.cpp:1296
 #, fuzzy
 msgid "Draw Dimension"
 msgstr "Tegn en dimension"
 
-#: pcbnew/tools/drawing_tool.cpp:1754
+#: pcbnew/tools/drawing_tool.cpp:1755
 #, fuzzy
 msgid "Move Footprint Anchor"
 msgstr "Anbring fodaftrykankeren"
 
-#: pcbnew/tools/drawing_tool.cpp:3095
+#: pcbnew/tools/drawing_tool.cpp:3096
 #, fuzzy
 msgid "Select Net:"
 msgstr "Valgt net:"
 
-#: pcbnew/tools/drawing_tool.cpp:3337
+#: pcbnew/tools/drawing_tool.cpp:3338
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Ruteplanens startpunkt overtræder DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:3546
+#: pcbnew/tools/drawing_tool.cpp:3547
 msgid "Place via"
 msgstr "Placer via"
 
@@ -45807,29 +45807,29 @@ msgstr "Tolerance:"
 msgid "Heal shapes"
 msgstr "Hulform:"
 
-#: pcbnew/tools/edit_tool.cpp:2083 pcbnew/tools/pcb_actions.cpp:549
+#: pcbnew/tools/edit_tool.cpp:2091 pcbnew/tools/pcb_actions.cpp:549
 #, fuzzy
 msgid "Change Side / Flip"
 msgstr "Skift til tekst"
 
-#: pcbnew/tools/edit_tool.cpp:2458
+#: pcbnew/tools/edit_tool.cpp:2466
 msgid "Move exact"
 msgstr "Flyt nøjagtigt"
 
-#: pcbnew/tools/edit_tool.cpp:2615
+#: pcbnew/tools/edit_tool.cpp:2623
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Kopieret %d vare (r)"
 
-#: pcbnew/tools/edit_tool.cpp:2859
+#: pcbnew/tools/edit_tool.cpp:2867
 msgid "Select reference point for the copy..."
 msgstr "Vælg referencepunkt for kopien ..."
 
-#: pcbnew/tools/edit_tool.cpp:2860 pcbnew/tools/edit_tool.cpp:2877
+#: pcbnew/tools/edit_tool.cpp:2868 pcbnew/tools/edit_tool.cpp:2885
 msgid "Selection copied"
 msgstr "Valg kopieret"
 
-#: pcbnew/tools/edit_tool.cpp:2861
+#: pcbnew/tools/edit_tool.cpp:2869
 #, fuzzy
 msgid "Copy canceled"
 msgstr "Kopi annulleret"
@@ -48136,42 +48136,42 @@ msgstr "Valgte emner"
 msgid "Drag Corner"
 msgstr "Træk et hjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:745
+#: pcbnew/tools/pcb_point_editor.cpp:748
 #, fuzzy
 msgid "Move Midpoint to Location"
 msgstr "fodaftryk placering"
 
-#: pcbnew/tools/pcb_point_editor.cpp:746
+#: pcbnew/tools/pcb_point_editor.cpp:749
 #, fuzzy
 msgid "Move Midpoint"
 msgstr "Flyt ned"
 
-#: pcbnew/tools/pcb_point_editor.cpp:750
+#: pcbnew/tools/pcb_point_editor.cpp:753
 #, fuzzy
 msgid "Move Corner to Location"
 msgstr "fodaftryk placering"
 
-#: pcbnew/tools/pcb_point_editor.cpp:751
+#: pcbnew/tools/pcb_point_editor.cpp:754
 #, fuzzy
 msgid "Move Corner"
 msgstr "Fjern hjørnet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2404
+#: pcbnew/tools/pcb_point_editor.cpp:2408
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "Tilføj et zonehjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2424
+#: pcbnew/tools/pcb_point_editor.cpp:2428
 #, fuzzy
 msgid "Split Segment"
 msgstr "Split segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2496
+#: pcbnew/tools/pcb_point_editor.cpp:2500
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "Fjern hjørnet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2498
+#: pcbnew/tools/pcb_point_editor.cpp:2502
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "Fjern et zone / polygonhjørne"
@@ -48939,8 +48939,8 @@ msgstr "Dimensioner"
 msgid "Other items"
 msgstr "Andre genstande"
 
-#: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:585
-#: pcbnew/zone.cpp:1635
+#: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:599
+#: pcbnew/zone.cpp:1649
 msgid "Priority"
 msgstr "Prioritet"
 
@@ -48961,163 +48961,163 @@ msgstr "Klasse 1"
 msgid "No Net"
 msgstr "Nyt net"
 
-#: pcbnew/zone.cpp:548
+#: pcbnew/zone.cpp:562
 msgid "Cutout"
 msgstr "Skåret ud"
 
-#: pcbnew/zone.cpp:557
+#: pcbnew/zone.cpp:571
 msgid "No vias"
 msgstr "Ingen vias"
 
-#: pcbnew/zone.cpp:560
+#: pcbnew/zone.cpp:574
 msgid "No tracks"
 msgstr "Ingen spor"
 
-#: pcbnew/zone.cpp:563
+#: pcbnew/zone.cpp:577
 msgid "No pads"
 msgstr "Ingen puder"
 
-#: pcbnew/zone.cpp:566
+#: pcbnew/zone.cpp:580
 msgid "No copper zones"
 msgstr "Ingen kobberzoner"
 
-#: pcbnew/zone.cpp:569
+#: pcbnew/zone.cpp:583
 msgid "No footprints"
 msgstr "Ingen fodspor"
 
-#: pcbnew/zone.cpp:572
+#: pcbnew/zone.cpp:586
 msgid "Restrictions"
 msgstr "Begrænsninger"
 
-#: pcbnew/zone.cpp:600
+#: pcbnew/zone.cpp:614
 #, fuzzy, c-format
 msgid "%s"
 msgstr "%"
 
-#: pcbnew/zone.cpp:610
+#: pcbnew/zone.cpp:624
 #, fuzzy, c-format
 msgid "%s, %s and %s"
 msgstr "%s og %s"
 
-#: pcbnew/zone.cpp:617
+#: pcbnew/zone.cpp:631
 #, fuzzy, c-format
 msgid "%s, %s and %d more"
 msgstr "%s og %d mere"
 
-#: pcbnew/zone.cpp:635 pcbnew/zone.cpp:1644
+#: pcbnew/zone.cpp:649 pcbnew/zone.cpp:1658
 msgid "Fill Mode"
 msgstr "Udfyldningstype"
 
-#: pcbnew/zone.cpp:637
+#: pcbnew/zone.cpp:651
 msgid "Filled Area"
 msgstr "Udfyldt område"
 
-#: pcbnew/zone.cpp:658
+#: pcbnew/zone.cpp:672
 msgid "Corner Count"
 msgstr "Hjørnetælling"
 
-#: pcbnew/zone.cpp:693
+#: pcbnew/zone.cpp:707
 msgid "Rule Area"
 msgstr "Regelområde"
 
-#: pcbnew/zone.cpp:695
+#: pcbnew/zone.cpp:709
 #, fuzzy
 msgid "Teardrop Area"
 msgstr "Gitterindstillinger"
 
-#: pcbnew/zone.cpp:697
+#: pcbnew/zone.cpp:711
 msgid "Copper Zone"
 msgstr "Kobberzone"
 
-#: pcbnew/zone.cpp:699
+#: pcbnew/zone.cpp:713
 msgid "Non-copper Zone"
 msgstr "Ikke-kobber zone"
 
-#: pcbnew/zone.cpp:834
+#: pcbnew/zone.cpp:848
 #, fuzzy, c-format
 msgid "on %s"
 msgstr "%s på %s"
 
-#: pcbnew/zone.cpp:838
+#: pcbnew/zone.cpp:852
 #, fuzzy, c-format
 msgid "on %s and %s"
 msgstr "%s og %s"
 
-#: pcbnew/zone.cpp:844
+#: pcbnew/zone.cpp:858
 #, fuzzy, c-format
 msgid "on %s, %s and %s"
 msgstr "(net %s og %s)"
 
-#: pcbnew/zone.cpp:851
+#: pcbnew/zone.cpp:865
 #, fuzzy, c-format
 msgid "on %s, %s and %zu more"
 msgstr "%s og %d mere"
 
-#: pcbnew/zone.cpp:861
+#: pcbnew/zone.cpp:875
 #, fuzzy, c-format
 msgid "Rule Area Cutout %s"
 msgstr "Regelarealskæring på %s"
 
-#: pcbnew/zone.cpp:863
+#: pcbnew/zone.cpp:877
 #, fuzzy, c-format
 msgid "Zone Cutout %s"
 msgstr "Zoneudskæring på %s"
 
-#: pcbnew/zone.cpp:868
+#: pcbnew/zone.cpp:882
 #, fuzzy, c-format
 msgid "Rule Area %s"
 msgstr "Regelområder"
 
-#: pcbnew/zone.cpp:870
+#: pcbnew/zone.cpp:884
 #, fuzzy, c-format
 msgid "Zone %s %s"
 msgstr "Zone %s på %s"
 
-#: pcbnew/zone.cpp:1666
+#: pcbnew/zone.cpp:1680
 #, fuzzy
 msgid "Cannot be less than zone minimum width"
 msgstr "Termisk egerbredde kan ikke være mindre end minimumsbredden."
 
-#: pcbnew/zone.cpp:1672
+#: pcbnew/zone.cpp:1686
 #, fuzzy
 msgid "Hatch Width"
 msgstr "Hatch bredde:"
 
-#: pcbnew/zone.cpp:1679
+#: pcbnew/zone.cpp:1693
 #, fuzzy
 msgid "Hatch Gap"
 msgstr "Hatch kløft:"
 
-#: pcbnew/zone.cpp:1686
+#: pcbnew/zone.cpp:1700
 msgid "Hatch Minimum Hole Ratio"
 msgstr ""
 
-#: pcbnew/zone.cpp:1694
+#: pcbnew/zone.cpp:1708
 #, fuzzy
 msgid "Smoothing Effort"
 msgstr "Udjævning indsats:"
 
-#: pcbnew/zone.cpp:1700
+#: pcbnew/zone.cpp:1714
 #, fuzzy
 msgid "Smoothing Amount"
 msgstr "Udjævnningsmængde:"
 
-#: pcbnew/zone.cpp:1706
+#: pcbnew/zone.cpp:1720
 #, fuzzy
 msgid "Remove Islands"
 msgstr "Fjern øer:"
 
-#: pcbnew/zone.cpp:1711
+#: pcbnew/zone.cpp:1725
 #, fuzzy
 msgid "Minimum Island Area"
 msgstr "Minimum ø størrelse:"
 
-#: pcbnew/zone.cpp:1726
+#: pcbnew/zone.cpp:1740
 #, fuzzy
 msgid "Minimum Width"
 msgstr "Minimum bredde:"
 
-#: pcbnew/zone.cpp:1734
+#: pcbnew/zone.cpp:1748
 msgid "Pad Connections"
 msgstr "Padforbindelser"
 
@@ -49338,6 +49338,15 @@ msgstr "Rediger skematiske symboler"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Arbejdsark"
+
+#, fuzzy
+#~ msgid ""
+#~ "Errors during netlist generation.\n"
+#~ "\n"
+#~ msgstr "Der var fejl under netlisteksporten, afbrudt."
+
+#~ msgid "Reference and value are mandatory."
+#~ msgstr "Reference og værdi er obligatorisk."
 
 #, fuzzy, c-format
 #~ msgid "Error loading simulation model library '%s': %s"
