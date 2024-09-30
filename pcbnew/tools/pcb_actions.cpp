@@ -2198,13 +2198,17 @@ TOOL_ACTION PCB_ACTIONS::generatePlacementRuleAreas( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Multichannel.generatePlacementRuleAreas" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Generate Placement Rule Areas" ) )
-        .Tooltip( "Generates Placement Areas in easy way" ).Flags( AF_ACTIVATE ) );
+        .Tooltip( "Generates Placement Areas in easy way" )
+        .Icon( BITMAPS::add_keepout_area )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION PCB_ACTIONS::repeatLayout( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Multichannel.repeatLayout" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Repeat Layout" ) )
-        .Tooltip(  "Clones placement & routing across multiple identical channels" ) );
+        .Tooltip(  "Clones placement & routing across multiple identical channels" )
+        .Icon( BITMAPS::copy )
+        );
 
 // ROUTER_TOOL
 //
