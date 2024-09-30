@@ -919,8 +919,8 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
                 // Clamp the scaling to a minimum of 50 mils
                 VECTOR2I newSize = oldSize * ratio;
-                double newWidth = std::max( newSize.x, EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 50 ) );
-                double newHeight = std::max( newSize.y, EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 50 ) );
+                double newWidth = std::max( newSize.x, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
+                double newHeight = std::max( newSize.y, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
                 ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
 
                 // Also handles the origin offset
