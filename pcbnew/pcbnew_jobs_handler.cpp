@@ -466,7 +466,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     // Ensure layers to plot are restricted to enabled layers of the board to plot
     LSET layersToPlot = LSET( { aGerberJob->m_printMaskLayer } ) & brd->GetEnabledLayers();
 
-    for( PCB_LAYER_ID layer : layersToPlot.UIOrder() )
+    for( LSEQ seq = layersToPlot.UIOrder(); seq; ++seq )
     {
         LSEQ plotSequence;
 
