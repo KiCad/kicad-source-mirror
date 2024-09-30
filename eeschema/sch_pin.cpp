@@ -202,6 +202,7 @@ SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         m_hidden( aPin.m_hidden ),
         m_numTextSize( aPin.m_numTextSize ),
         m_nameTextSize( aPin.m_nameTextSize ),
+        m_alt( aPin.m_alt ),
         m_isDangling( aPin.m_isDangling )
 {
     SetName( aPin.m_name );

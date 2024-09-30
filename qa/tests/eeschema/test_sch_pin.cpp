@@ -113,6 +113,13 @@ BOOST_AUTO_TEST_CASE( Copy )
 
     BOOST_CHECK_EQUAL( copied.GetParentSymbol(), m_parent_symbol );
     BOOST_CHECK_EQUAL( copied.GetNumber(), m_lib_pin->GetNumber() );
+    BOOST_CHECK_EQUAL( copied.GetAlt(), wxEmptyString );
+
+    // Set some non-default values
+    copied.SetAlt( "alt" );
+
+    SCH_PIN copied2( copied );
+    BOOST_CHECK_EQUAL( copied2.GetAlt(), "alt" );
 }
 
 /**
