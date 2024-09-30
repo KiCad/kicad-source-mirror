@@ -981,11 +981,11 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
             m_xpath->push( "hole" );
 
             // Fabricate a FOOTPRINT with a single PAD_ATTRIB::NPTH pad.
-            // Use m_hole_count to gen up a unique name.
+            // Use m_hole_count to gen up a unique reference designator.
 
             FOOTPRINT* footprint = new FOOTPRINT( m_board );
             m_board->Add( footprint, ADD_MODE::APPEND );
-            footprint->SetReference( wxString::Format( wxT( "@HOLE%d" ), m_hole_count++ ) );
+            footprint->SetReference( wxString::Format( wxT( "UNK_HOLE_%d" ), m_hole_count++ ) );
             footprint->Reference().SetVisible( false );
 
             packageHole( footprint, gr, true );
