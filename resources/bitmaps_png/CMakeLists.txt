@@ -203,6 +203,7 @@ set( BMAPS_MID
     align_items_center
     align_items_middle
     anchor
+    annotate_increment
     annotate_down_right
     annotate_right_down
     annotate

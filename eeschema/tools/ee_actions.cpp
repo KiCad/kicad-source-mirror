@@ -1065,7 +1065,9 @@ TOOL_ACTION EE_ACTIONS::incrementAnnotations( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.incrementAnnotations" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Increment Annotations From..." ) )
-        .Tooltip( _( "Increment a subset of reference designators starting at a particular symbol" ) ) );
+        .Tooltip( _( "Increment a subset of reference designators starting at a particular symbol" ) )
+        .Icon( BITMAPS::annotate_increment )
+        );
 
 TOOL_ACTION EE_ACTIONS::schematicSetup( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.schematicSetup" )

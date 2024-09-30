@@ -88,6 +88,7 @@ enum class BITMAPS : unsigned int
     align_items_top,
     anchor,
     annotate,
+    annotate_increment,
     annotate_down_right,
     annotate_right_down,
     apply_pad_settings,

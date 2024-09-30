@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="annotate_increment.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     id="namedview965"
+     showgrid="true"
+     inkscape:zoom="39.543586"
+     inkscape:cx="4.817469"
+     inkscape:cy="16.766309"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1552" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>annotate</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs946">
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="2"
+       markerHeight="2.5"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="none">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker4900"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill:#f2647e;fill-opacity:1;fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path4898" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker4866"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path3042" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleInS"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.2)"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1701" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2212"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Sstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.3) translate(-2.3,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#f2647e;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
+         id="path2210" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Sstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Sstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.3) translate(-2.3,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#f2647e;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
+         id="path1592" />
+    </marker>
+    <style
+       id="style944">.cls-1{fill:none;stroke:#f2647e;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#f2647e;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#DED3DD;}</style>
+  </defs>
+  <title
+     id="title948">annotate</title>
+  <rect
+     class="cls-3"
+     x="0.99999994"
+     y="14"
+     width="22"
+     height="10"
+     id="rect1554"
+     style="fill:#1381b1;fill-opacity:1;stroke-width:1" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:condensed;font-size:11.2px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Condensed';letter-spacing:0px;word-spacing:0px"
+     x="11.968635"
+     y="23.022593"
+     id="text1558"><tspan
+       sodipodi:role="line"
+       id="tspan1556"
+       x="11.968635"
+       y="23.022593"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:semi-condensed;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">R15</tspan></text>
+  <path
+     id="line950"
+     style="fill:none;stroke:#58d87e;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#TriangleStart);stroke-opacity:1"
+     d="M 12,13 V 10"
+     sodipodi:nodetypes="cc" />
+  <rect
+     class="cls-3"
+     x="1"
+     y="-1.0290528e-08"
+     width="22"
+     height="10"
+     id="rect954-4"
+     style="fill:#DED3DD;fill-opacity:1;stroke-width:1" />
+  <text
+     xml:space="preserve"
+     style="font-size:11.2px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#545454;fill-opacity:1;stroke-width:1"
+     x="11.513285"
+     y="8.9973688"
+     id="text1530"><tspan
+   id="tspan5085"
+   style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#545454;fill-opacity:1;stroke-width:1">R5</tspan> </text>
+</svg>

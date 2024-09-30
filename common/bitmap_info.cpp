@@ -403,6 +403,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_24.png" ), 24, wxT( "light" ) );
@@ -822,6 +823,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1241,6 +1243,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_16.png" ), 16, wxT( "light" ) );
@@ -1660,6 +1663,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2079,6 +2083,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_32.png" ), 32, wxT( "light" ) );
@@ -2498,6 +2503,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_dark_32.png" ), 32, wxT( "dark" ) );
@@ -2917,6 +2923,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_48.png" ), 48, wxT( "light" ) );
@@ -3336,6 +3343,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_dark_48.png" ), 48, wxT( "dark" ) );
@@ -3755,6 +3763,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_64.png" ), 64, wxT( "light" ) );
@@ -4174,6 +4183,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::align_items_center].emplace_back( BITMAPS::align_items_center, wxT( "align_items_center_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::align_items_middle].emplace_back( BITMAPS::align_items_middle, wxT( "align_items_middle_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::anchor].emplace_back( BITMAPS::anchor, wxT( "anchor_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::annotate_increment].emplace_back( BITMAPS::annotate_increment, wxT( "annotate_increment_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_down_right].emplace_back( BITMAPS::annotate_down_right, wxT( "annotate_down_right_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate_right_down].emplace_back( BITMAPS::annotate_right_down, wxT( "annotate_right_down_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::annotate].emplace_back( BITMAPS::annotate, wxT( "annotate_dark_64.png" ), 64, wxT( "dark" ) );
