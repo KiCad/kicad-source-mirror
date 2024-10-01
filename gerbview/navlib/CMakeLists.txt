@@ -20,6 +20,7 @@ target_include_directories(gerbview_navlib PRIVATE
     $<TARGET_PROPERTY:gerbview_kiface_objects,INCLUDE_DIRECTORIES>
 )
 target_link_libraries(gerbview_navlib
+    kiplatform # Needs kiplatform to check versioning
     $<TARGET_PROPERTY:3DxWare::Navlib,INTERFACE_LINK_LIBRARIES>
     3DxWare::Navlib
 )

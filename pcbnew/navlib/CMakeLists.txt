@@ -20,6 +20,7 @@ target_include_directories(pcbnew_navlib PRIVATE
     $<TARGET_PROPERTY:pcbnew_kiface_objects,INCLUDE_DIRECTORIES>
 )
 target_link_libraries(pcbnew_navlib
+    kiplatform # Needs kiplatform to check versioning
     $<TARGET_PROPERTY:3DxWare::Navlib,INTERFACE_LINK_LIBRARIES>
     3DxWare::Navlib
 )
