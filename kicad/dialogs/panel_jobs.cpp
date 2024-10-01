@@ -46,7 +46,7 @@
 struct JOB_TYPE_INFO
 {
     wxString              name;
-    enum class BITMAPS    bitmap;
+    enum BITMAPS          bitmap;
     bool                  outputPathIsFolder;
     wxString              fileWildcard;
 };
