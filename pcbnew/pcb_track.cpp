@@ -1257,20 +1257,23 @@ const BOX2I PCB_TRACK::ViewBBox() const
 
 void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
+    // Blind/buried vias (and microvias) use a different net name layer
+    PCB_LAYER_ID layerTop, layerBottom;
+    LayerPair( &layerTop, &layerBottom );
+
+    bool isBlindBuried =
+            m_viaType == VIATYPE::BLIND_BURIED
+            || ( m_viaType == VIATYPE::MICROVIA && ( layerTop != F_Cu || layerBottom != B_Cu ) );
+
     aLayers[0] = LAYER_VIA_HOLES;
     aLayers[1] = LAYER_VIA_HOLEWALLS;
-    aLayers[2] = LAYER_VIA_NETNAMES;
+    aLayers[2] = isBlindBuried ? NETNAMES_LAYER_ID_START : LAYER_VIA_NETNAMES;
+    aCount = 3;
 
-    // Just show it on common via & via holes layers
-    switch( GetViaType() )
-    {
-    case VIATYPE::THROUGH:      aLayers[3] = LAYER_VIA_THROUGH;  break;
-    case VIATYPE::BLIND_BURIED: aLayers[3] = LAYER_VIA_BBLIND;   break;
-    case VIATYPE::MICROVIA:     aLayers[3] = LAYER_VIA_MICROVIA; break;
-    default:                    aLayers[3] = LAYER_GP_OVERLAY;   break;
-    }
+    LAYER_RANGE layers( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS );
 
-    aCount = 4;
+    for( PCB_LAYER_ID layer : layers )
+        aLayers[aCount++] = layer;
 
     if( IsLocked() )
         aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
@@ -1318,8 +1321,8 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
         if( GetViaType() != VIATYPE::THROUGH )
         {
-            if( highContrastLayer < Padstack().Drill().start
-                || highContrastLayer > Padstack().Drill().end )
+            if( IsCopperLayerLowerThan( Padstack().Drill().start, highContrastLayer  )
+                || IsCopperLayerLowerThan( highContrastLayer, Padstack().Drill().end ) )
             {
                 return HIDE;
             }
@@ -1363,10 +1366,10 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return width == 0 ? HIDE : ( (double)pcbIUScale.mmToIU( 10 ) / width );
     }
 
-    if( IsCopperLayer( aLayer ) )
-        return (double) pcbIUScale.mmToIU( 1 ) / width;
-    else
+    if( !IsCopperLayer( aLayer ) )
         return (double) pcbIUScale.mmToIU( 0.6 ) / width;
+
+    return 0.0;
 }
 
 

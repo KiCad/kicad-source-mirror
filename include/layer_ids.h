@@ -717,29 +717,6 @@ inline bool IsDCodeLayer( int aLayer )
 }
 
 
-/**
- * Checks if the given layer is "net copper", meaning it is eligible for net coloring.
- *
- * @param aLayer is the layer to test
- * @return true if the layer is one that participates in net coloring
- */
-inline bool IsNetCopperLayer( int aLayer )
-{
-    static std::set<int> netCopperLayers =
-            {
-                LAYER_PADS_SMD_FR,
-                LAYER_PADS_SMD_BK,
-                LAYER_PADS_TH,
-                LAYER_PAD_HOLEWALLS,
-                LAYER_VIA_THROUGH,
-                LAYER_VIA_BBLIND,
-                LAYER_VIA_MICROVIA,
-                LAYER_VIA_HOLEWALLS
-            };
-
-    return IsCopperLayer( aLayer ) || netCopperLayers.count( aLayer );
-}
-
 ///! Converts KiCad copper layer enum to an ordinal between the front and back layers
 inline size_t CopperLayerToOrdinal( PCB_LAYER_ID aLayer )
 {

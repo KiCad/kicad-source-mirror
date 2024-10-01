@@ -220,11 +220,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
         if( pad && pad->GetAttribute() == PAD_ATTRIB::PTH )
             annularRingLayer = LAYER_PADS_TH;
-        else if( via && via->GetViaType() == VIATYPE::MICROVIA )
-            annularRingLayer = LAYER_VIA_MICROVIA;
-        else if( via && via->GetViaType() == VIATYPE::BLIND_BURIED )
-            annularRingLayer = LAYER_VIA_BBLIND;
-        else if( via && via->GetViaType() == VIATYPE::THROUGH )
+        else if( via )
             annularRingLayer = LAYER_VIA_THROUGH;
 
         if( annularRingLayer != UNDEFINED_LAYER
@@ -297,7 +293,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     bool selected    = aItem->IsSelected();
 
     // Apply net color overrides
-    if( conItem && m_netColorMode == NET_COLOR_MODE::ALL && IsNetCopperLayer( aLayer ) )
+    if( conItem && m_netColorMode == NET_COLOR_MODE::ALL && IsCopperLayer( aLayer ) )
     {
         COLOR4D netColor = COLOR4D::UNSPECIFIED;
 
@@ -940,6 +936,14 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     if( color == COLOR4D::CLEAR )
         return;
 
+    PCB_LAYER_ID layerTop, layerBottom;
+    aVia->LayerPair( &layerTop, &layerBottom );
+
+    // Blind/buried vias (and microvias) will use different hole and label rendering
+    bool isBlindBuried = aVia->GetViaType() == VIATYPE::BLIND_BURIED
+            || ( aVia->GetViaType() == VIATYPE::MICROVIA
+                 && ( layerTop != F_Cu || layerBottom != B_Cu ) );
+
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
     {
@@ -971,7 +975,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetFontItalic( false );
         m_gal->SetFontUnderlined( false );
         m_gal->SetTextMirrored( false );
-        m_gal->SetStrokeColor( m_pcbSettings.GetColor( nullptr, aLayer ) );
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, aLayer ) );
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
 
@@ -1022,8 +1026,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         VECTOR2D namesize( tsize, tsize );
 
         // For 2 lines, adjust the text pos (move it a small amount to the bottom)
-        if( showLayers )
-            textpos.y += tsize/5;
+        if( showLayers && showNets )
+            textpos.y += ( tsize * 1.3 )/ 2;
 
         m_gal->SetGlyphSize( namesize );
         m_gal->SetLineWidth( namesize.x / 10.0 );
@@ -1068,9 +1072,14 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
     else if( aLayer == LAYER_VIA_HOLES )
     {
+        double radius = getViaDrillSize( aVia ) / 2.0;
+
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
-        m_gal->DrawCircle( center, getViaDrillSize( aVia ) / 2.0 );
+
+        // Blind/buried vias have their hole rendered on the copper layers below
+        if( !isBlindBuried || m_pcbSettings.IsPrinting() )
+            m_gal->DrawCircle( center, radius );
     }
     else if( ( aLayer == F_Mask && aVia->IsOnLayer( F_Mask ) )
              || ( aLayer == B_Mask && aVia->IsOnLayer( B_Mask ) ) )
@@ -1083,7 +1092,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetLineWidth( margin );
         m_gal->DrawCircle( center, aVia->GetWidth() / 2.0 + margin );
     }
-    else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.IsPrinting() )
+    else if( m_pcbSettings.IsPrinting() || IsCopperLayer( aLayer ) )
     {
         int    annular_width = ( aVia->GetWidth() - getViaDrillSize( aVia ) ) / 2.0;
         double radius = aVia->GetWidth() / 2.0;
@@ -1093,16 +1102,17 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         {
             draw = aVia->FlashLayer( m_pcbSettings.GetPrintLayers() );
         }
+        else if( aVia->IsSelected() )
+        {
+            draw = true;
+        }
         else if( aVia->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
         {
             draw = true;
         }
-        else if( aVia->IsSelected() )
-        {
-            draw = true;
-            outline_mode = true;
-            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        }
+
+        if( !aVia->FlashLayer( aLayer ) )
+            draw = false;
 
         if( !outline_mode )
         {
@@ -1112,43 +1122,20 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         if( draw )
             m_gal->DrawCircle( center, radius );
-    }
-    else if( aLayer == LAYER_VIA_BBLIND || aLayer == LAYER_VIA_MICROVIA )
-    {
-        int    annular_width = ( aVia->GetWidth() - getViaDrillSize( aVia ) ) / 2.0;
-        double radius = aVia->GetWidth() / 2.0;
 
-        // Outer circles of blind/buried and micro-vias are drawn in a special way to indicate the
-        // top and bottom layers
-        PCB_LAYER_ID layerTop, layerBottom;
-        aVia->LayerPair( &layerTop, &layerBottom );
-
-        if( !outline_mode )
+        // Also draw the inner portion for blind/buried vias, because this will be in the copper
+        // color and needs to be in the same draw group so that its color can get updated in the
+        // view later
+        if( isBlindBuried && !m_pcbSettings.IsPrinting()
+            && ( aLayer == layerTop || aLayer == layerBottom ) )
         {
+            radius = ( getViaDrillSize( aVia ) + m_holePlatingThickness ) / 2.0;
+
             m_gal->SetIsStroke( false );
             m_gal->SetIsFill( true );
+            m_gal->DrawArc( center, radius, EDA_ANGLE( aLayer == layerTop ? 180 : 0, DEGREES_T ),
+                            EDA_ANGLE( 180, DEGREES_T ) );
         }
-
-        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
-        m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
-        m_gal->DrawArc( center, radius, EDA_ANGLE( 240, DEGREES_T ), EDA_ANGLE( 60, DEGREES_T ) );
-
-        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
-        m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
-        m_gal->DrawArc( center, radius, EDA_ANGLE( 60, DEGREES_T ), EDA_ANGLE( 60, DEGREES_T ) );
-
-        m_gal->SetStrokeColor( color );
-        m_gal->SetFillColor( color );
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( false );
-
-        if( !outline_mode )
-        {
-            m_gal->SetLineWidth( annular_width );
-            radius -= annular_width / 2.0;
-        }
-
-        m_gal->DrawCircle( center, radius );
     }
     else if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // draw a ring around the via
     {
@@ -1536,6 +1523,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>(
                         aPad->GetEffectiveShape( pcbLayer ) );
             }
+
+            // The dynamic cast above will fail if the pad returned the hole shape or a null shape
+            // instead of a SHAPE_COMPOUND, which happens if we're on a copper layer and the pad has
+            // no shape on that layer.
+            if( !shapes )
+                return;
 
             if( aPad->GetShape( pcbLayer ) == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
             {
