@@ -70,6 +70,8 @@ public:
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
     int ToggleHiddenFields( const TOOL_EVENT& aEvent );
 
+    int ChangeUnit( const TOOL_EVENT& aEvent );
+
     int DdAddLibrary( const TOOL_EVENT& aEvent );
 
 private:

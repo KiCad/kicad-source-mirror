@@ -763,17 +763,10 @@ void SYMBOL_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 {
     int i = event.GetSelection();
 
-    if( ( i == wxNOT_FOUND ) || ( ( i + 1 ) == m_unit ) )
+    if( i == wxNOT_FOUND )
         return;
 
-    m_toolManager->RunAction( ACTIONS::cancelInteractive );
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
-
-    m_unit = i + 1;
-
-    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    RebuildView();
-    UpdateSymbolMsgPanelInfo();
+    SetUnit( i + 1 );
 }
 
 
@@ -950,6 +943,27 @@ void SYMBOL_EDIT_FRAME::OnModify()
 
     if( !GetTitle().StartsWith( "*" ) )
         UpdateTitle();
+}
+
+
+void SYMBOL_EDIT_FRAME::SetUnit( int aUnit )
+{
+    wxCHECK( aUnit > 0 && aUnit <= GetCurSymbol()->GetUnitCount(), /* void*/ );
+
+    if( m_unit == aUnit )
+        return;
+
+    m_toolManager->RunAction( ACTIONS::cancelInteractive );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
+
+    m_unit = aUnit;
+
+    if( m_unitSelectBox->GetSelection() != ( m_unit - 1 ) )
+        m_unitSelectBox->SetSelection( m_unit - 1 );
+
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    RebuildView();
+    UpdateSymbolMsgPanelInfo();
 }
 
 

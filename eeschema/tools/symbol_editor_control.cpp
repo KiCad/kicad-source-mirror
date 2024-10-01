@@ -759,8 +759,26 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::ChangeUnit( const TOOL_EVENT& aEvent )
+{
+    if( !m_isSymbolEditor )
+        return 0;
+
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    const int          deltaUnit = aEvent.Parameter<int>();
+
+    const int nUnits = editFrame->GetCurSymbol()->GetUnitCount();
+    const int newUnit = ( ( editFrame->GetUnit() - 1 + deltaUnit + nUnits ) % nUnits ) + 1;
+
+    editFrame->SetUnit( newUnit );
+
+    return 0;
+}
+
+
 void SYMBOL_EDITOR_CONTROL::setTransitions()
 {
+    // clang-format off
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::addLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
@@ -800,4 +818,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::showHiddenPins.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::showHiddenFields.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            EE_ACTIONS::previousUnit.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            EE_ACTIONS::nextUnit.MakeEvent() );
+    // clang-format on
 }

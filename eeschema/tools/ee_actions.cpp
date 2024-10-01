@@ -1272,6 +1272,20 @@ TOOL_ACTION EE_ACTIONS::repairSchematic( TOOL_ACTION_ARGS()
         .Tooltip( _( "Run various diagnostics and attempt to repair schematic" ) )
         .Icon( BITMAPS::rescue ) );
 
+TOOL_ACTION EE_ACTIONS::previousUnit( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.previousUnit" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Previous Unit" ) )
+        .Tooltip( _( "Open the previous unit of the symbol" ) )
+        .Parameter<int>( -1 ) );
+
+TOOL_ACTION EE_ACTIONS::nextUnit( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.nextUnit" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Next Unit" ) )
+        .Tooltip( _( "Open the next unit of the symbol" ) )
+        .Parameter<int>( 1 ) );
+
 // Python Console
 TOOL_ACTION EE_ACTIONS::showPythonConsole( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showPythonConsole" )

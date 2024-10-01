@@ -267,6 +267,8 @@ public:
     static TOOL_ACTION exportSymbolAsSVG;
     static TOOL_ACTION showPythonConsole;
     static TOOL_ACTION repairSchematic;
+    static TOOL_ACTION previousUnit;
+    static TOOL_ACTION nextUnit;
 
     // Line modes
     static TOOL_ACTION lineModeFree;

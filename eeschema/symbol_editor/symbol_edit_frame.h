@@ -233,7 +233,7 @@ public:
     void OnModify() override;
 
     int GetUnit() const { return m_unit; }
-    void SetUnit( int aUnit ) { m_unit = aUnit; }
+    void SetUnit( int aUnit );
 
     int  GetBodyStyle() const { return m_bodyStyle; }
     void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
