@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -139,6 +139,25 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 
 
 	p1mainSizer->Add( leftColumn, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* rightColumn;
+	rightColumn = new wxBoxSizer( wxVERTICAL );
+
+	m_generalOption = new wxStaticText( this, wxID_ANY, _("General editing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_generalOption->Wrap( -1 );
+	rightColumn->Add( m_generalOption, 0, wxLEFT|wxTOP, 13 );
+
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	rightColumn->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+
+	m_dragPinsWithEdges = new wxCheckBox( this, wxID_ANY, _("Keep pins attached when dragging edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	rightColumn->Add( m_dragPinsWithEdges, 0, wxBOTTOM|wxLEFT, 10 );
+
+
+	rightColumn->Add( 0, 15, 1, wxEXPAND, 5 );
+
+
+	p1mainSizer->Add( rightColumn, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( p1mainSizer );

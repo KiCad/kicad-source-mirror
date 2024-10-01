@@ -76,6 +76,15 @@ OPT_VECTOR2I GetSharedEndpoint( const SEG& aSegA, const SEG& aSegB );
 std::array<SEG, 4> BoxToSegs( const BOX2I& aBox );
 
 /**
+ * Get the segments of a box that are in the given direction.
+ *
+ * N,E,S,W are the sides of the box.
+ * NE,SE,SW,NW are the corners of the box, which return the two segments that meet at the corner,
+ * in the order of the direction (e.g. NW = N, then W).
+ */
+std::vector<SEG> GetSegsInDirection( const BOX2I& aBox, DIRECTION_45::Directions aDir );
+
+/**
  * Get the segment of a half-line that is inside a box, if any.
  */
 std::optional<SEG> ClipHalfLineToBox( const HALF_LINE& aRay, const BOX2I& aBox );

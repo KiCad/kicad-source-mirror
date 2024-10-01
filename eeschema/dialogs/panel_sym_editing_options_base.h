@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,7 +26,6 @@
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SYM_EDITING_OPTIONS_BASE
@@ -62,6 +61,9 @@ class PANEL_SYM_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_pinPitchUnits;
 		wxStaticText* m_labelIncrementLabel1;
 		wxSpinCtrl* m_spinRepeatLabel;
+		wxStaticText* m_generalOption;
+		wxStaticLine* m_staticline3;
+		wxCheckBox* m_dragPinsWithEdges;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onKillFocusPinPitch( wxFocusEvent& event ) { event.Skip(); }

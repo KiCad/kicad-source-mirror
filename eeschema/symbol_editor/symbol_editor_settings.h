@@ -21,8 +21,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#ifndef SYMBOL_EDITOR_SETTINGS_H
-#define SYMBOL_EDITOR_SETTINGS_H
+#pragma once
 
 #include <settings/app_settings.h>
 #include <project/sch_project_settings.h>
@@ -84,6 +83,9 @@ public:
     bool m_ShowHiddenPins;
     bool m_ShowHiddenFields;
 
+    ///< When true, dragging an outline edge will drag pins rooted on it
+    bool m_dragPinsAlongWithEdges;
+
     int m_LibWidth;
 
     int m_LibrarySortMode;
@@ -100,5 +102,3 @@ protected:
 
     virtual std::string getLegacyFrameName() const override { return "LibeditFrame"; }
 };
-
-#endif

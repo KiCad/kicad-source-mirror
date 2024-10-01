@@ -32,6 +32,7 @@ using namespace std::placeholders;
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/seg.h>
+#include <geometry/shape_utils.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 #include <sch_edit_frame.h>
@@ -40,6 +41,7 @@ using namespace std::placeholders;
 #include <sch_sheet.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
+#include <symbol_editor/symbol_editor_settings.h>
 
 
 static const std::vector<KICAD_T> pointEditorTypes = { SCH_SHAPE_T,
@@ -489,7 +491,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
             m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 
-            updateParentItem( snap );
+            updateParentItem( snap, commit );
             updatePoints();
         }
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
@@ -650,7 +652,76 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
 }
 
 
-void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
+void EE_POINT_EDITOR::dragPinsOnEdge( const std::vector<SEG>&      aOldEdges,
+                                      const std::vector<VECTOR2I>& aMoveVecs, int aEdgeUnit,
+                                      SCH_COMMIT& aCommit ) const
+{
+    wxCHECK( aOldEdges.size() == aMoveVecs.size(), /* void */ );
+
+    // This only make sense in the symbol editor
+    if( !m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        return;
+
+    SYMBOL_EDIT_FRAME& editor = static_cast<SYMBOL_EDIT_FRAME&>( *m_frame );
+
+    // And only if the setting is enabled
+    if( !editor.GetSettings()->m_dragPinsAlongWithEdges )
+        return;
+
+    // Adjuting pins on a different unit to a unit-limited shape
+    // seems suspect.
+    wxCHECK( aEdgeUnit == 0 || aEdgeUnit == editor.GetUnit(), /* void */ );
+
+    /*
+     * Get a list of pins on a line segment
+     */
+    const auto getPinsOnSeg = []( LIB_SYMBOL& aSymbol, int aUnit, const SEG& aSeg,
+                                  bool aIncludeEnds ) -> std::vector<SCH_PIN*>
+    {
+        // const BOX2I     segBox = BOX2I::ByCorners( aSeg.A, aSeg.B ).GetInflated( 1 );
+        // const EE_RTREE& rtree = m_frame->GetScreen()->Items().Overlapping( SCH_PIN_T, segBox );
+
+        std::vector<SCH_PIN*> pins;
+
+        for( SCH_PIN* pin : aSymbol.GetPins( aUnit ) )
+        {
+            // Figure out if the pin "connects" to the line
+            const VECTOR2I pinRootPos = pin->GetPinRoot();
+
+            if( aSeg.Contains( pinRootPos ) )
+            {
+                if( aIncludeEnds || ( pinRootPos != aSeg.A && pinRootPos != aSeg.B ) )
+                {
+                    pins.push_back( pin );
+                }
+            }
+        }
+
+        return pins;
+    };
+
+    LIB_SYMBOL* const symbol = editor.GetCurSymbol();
+
+    for( std::size_t i = 0; i < aOldEdges.size(); ++i )
+    {
+        if( aMoveVecs[i] == VECTOR2I( 0, 0 ) || !symbol )
+            continue;
+
+        const std::vector<SCH_PIN*> pins = getPinsOnSeg( *symbol, aEdgeUnit, aOldEdges[i], false );
+
+        for( SCH_PIN* pin : pins )
+        {
+            // Move the pin
+            aCommit.Modify( pin, m_frame->GetScreen() );
+            pin->Move( aMoveVecs[i] );
+
+            updateItem( pin, true );
+        }
+    }
+}
+
+
+void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -714,30 +785,48 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
             pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
                              botLeft, botRight, &gridHelper );
 
+            const BOX2I           oldBox = BOX2I::ByCorners( shape->GetStart(), shape->GetEnd() );
+            std::vector<SEG>      oldSegs;
+            std::vector<VECTOR2I> moveVecs;
+
             if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
                     || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
                     || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
                     || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
             {
+                // Corner drags don't update pins. Not only is it an escape hatch to avoid
+                // moving pins, it also avoids tricky problems when the pins "fall off"
+                // the ends of one of the two segments and get either left behind or
+                // "swept up" into the corner.
                 shape->SetPosition( topLeft );
                 shape->SetEnd( botRight );
             }
             else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
             {
+                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::N );
+                moveVecs.emplace_back( 0, topLeft.y - oldBox.GetTop() );
                 shape->SetStartY( topLeft.y );
             }
             else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
             {
+                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::W );
+                moveVecs.emplace_back( topLeft.x - oldBox.GetLeft(), 0 );
                 shape->SetStartX( topLeft.x );
             }
             else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
             {
+                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::S );
+                moveVecs.emplace_back( 0, botRight.y - oldBox.GetBottom() );
                 shape->SetEndY( botRight.y );
             }
             else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
             {
+                oldSegs = KIGEOM::GetSegsInDirection( oldBox, DIRECTION_45::Directions::E );
+                moveVecs.emplace_back( botRight.x - oldBox.GetRight(), 0 );
                 shape->SetEndX( botRight.x );
             }
+
+            dragPinsOnEdge( oldSegs, moveVecs, shape->GetUnit(), aCommit );
 
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
             {

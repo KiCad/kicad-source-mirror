@@ -80,6 +80,53 @@ std::array<SEG, 4> KIGEOM::BoxToSegs( const BOX2I& aBox )
 }
 
 
+std::vector<SEG> KIGEOM::GetSegsInDirection( const BOX2I& aBox, DIRECTION_45::Directions aDir )
+{
+    // clang-format off
+    switch( aDir )
+    {
+    case DIRECTION_45::Directions::N:
+        return { SEG{ { aBox.GetLeft(), aBox.GetTop() },
+                      { aBox.GetRight(), aBox.GetTop() } } };
+    case DIRECTION_45::Directions::E:
+        return { SEG{ { aBox.GetRight(), aBox.GetTop() },
+                      { aBox.GetRight(), aBox.GetBottom() } } };
+    case DIRECTION_45::Directions::S:
+        return { SEG{ { aBox.GetLeft(), aBox.GetBottom() },
+                      { aBox.GetRight(), aBox.GetBottom() } } };
+    case DIRECTION_45::Directions::W:
+        return { SEG{ { aBox.GetLeft(), aBox.GetTop() },
+                      { aBox.GetLeft(), aBox.GetBottom() } } };
+    case DIRECTION_45::Directions::NE:
+        return { SEG{ { aBox.GetLeft(), aBox.GetTop() },
+                      { aBox.GetRight(), aBox.GetTop() } },
+                 SEG{ { aBox.GetRight(), aBox.GetTop() },
+                      { aBox.GetRight(), aBox.GetBottom() } } };
+    case DIRECTION_45::Directions::SE:
+        return { SEG{ { aBox.GetLeft(), aBox.GetBottom() },
+                      { aBox.GetRight(), aBox.GetBottom() } },
+                 SEG{ { aBox.GetRight(), aBox.GetTop() },
+                      { aBox.GetRight(), aBox.GetBottom() } } };
+    case DIRECTION_45::Directions::SW:
+        return { SEG{ { aBox.GetLeft(), aBox.GetBottom() },
+                      { aBox.GetRight(), aBox.GetBottom() } },
+                 SEG{ { aBox.GetLeft(), aBox.GetTop() },
+                      { aBox.GetLeft(), aBox.GetBottom() } } };
+    case DIRECTION_45::Directions::NW:
+        return { SEG{ { aBox.GetLeft(), aBox.GetTop() },
+                      { aBox.GetRight(), aBox.GetTop() } },
+                 SEG{ { aBox.GetLeft(), aBox.GetTop() },
+                      { aBox.GetLeft(), aBox.GetBottom() } } };
+    case DIRECTION_45::Directions::LAST:
+    case DIRECTION_45::Directions::UNDEFINED: break;
+    }
+    // clang-format on
+
+    wxASSERT( false );
+    return {};
+};
+
+
 std::optional<SEG> KIGEOM::ClipHalfLineToBox( const HALF_LINE& aRay, const BOX2I& aBox )
 {
     // Do the naive implementation - if this really is done in a tight loop,

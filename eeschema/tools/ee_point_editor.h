@@ -31,6 +31,7 @@
 
 class EE_SELECTION_TOOL;
 class SCH_BASE_FRAME;
+class SCH_COMMIT;
 
 /**
  * Tool that displays edit points allowing to modify items by dragging the points.
@@ -59,7 +60,11 @@ public:
 
 private:
     ///< Update item's points with edit points.
-    void updateParentItem( bool aSnapToGrid ) const;
+    void updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) const;
+
+    ///< When dragging a graphics edge, update pins too.
+    void dragPinsOnEdge( const std::vector<SEG>& aOldEdges, const std::vector<VECTOR2I>& aMoveVecs,
+                         int aUnit, SCH_COMMIT& aCommit ) const;
 
     ///< Update edit points with item's points.
     void updatePoints();
