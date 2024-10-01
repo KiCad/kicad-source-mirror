@@ -29,7 +29,7 @@
 
 struct KICOMMON_API JOBSET_JOB
 {
-    JOBSET_JOB() {}
+    JOBSET_JOB() : m_job( nullptr ) {}
 
     JOBSET_JOB( wxString id, wxString type, JOB* job ) : m_id( id ), m_type( type ), m_job( job ) {}
 
@@ -48,7 +48,9 @@ enum class JOBSET_OUTPUT_TYPE
 
 struct KICOMMON_API JOBSET_OUTPUT
 {
-    JOBSET_OUTPUT() {}
+    JOBSET_OUTPUT() :
+            m_type( JOBSET_OUTPUT_TYPE::FOLDER ), m_outputHandler( nullptr )
+            {}
 
     JOBSET_OUTPUT( wxString id, JOBSET_OUTPUT_TYPE type, JOBS_OUTPUT_HANDLER* outputHandler ) :
             m_id( id ), m_type( type ), m_outputHandler( outputHandler )

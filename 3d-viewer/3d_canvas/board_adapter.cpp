@@ -485,8 +485,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     // Solder mask and Solder paste have the same Z position
     for( PCB_LAYER_ID layer_id : { B_Adhes, B_Mask, B_Paste, F_Adhes, F_Mask, F_Paste, B_SilkS, F_SilkS } )
     {
-        float zposTop;
-        float zposBottom;
+        float zposTop = 0.0;
+        float zposBottom = 0.0;
 
         switch( layer_id )
         {

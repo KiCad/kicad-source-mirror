@@ -45,10 +45,10 @@
 
 struct JOB_TYPE_INFO
 {
-    wxString              name;
-    enum BITMAPS          bitmap;
-    bool                  outputPathIsFolder;
-    wxString              fileWildcard;
+    wxString    name;
+    BITMAPS     bitmap;
+    bool        outputPathIsFolder;
+    wxString    fileWildcard;
 };
 
 
@@ -434,7 +434,7 @@ void PANEL_JOBS::OnAddJobClick( wxCommandEvent& aEvent )
 
     const JOB_REGISTRY::REGISTRY_MAP_T& jobMap =  JOB_REGISTRY::GetRegistry();
 
-    for( const std::pair<wxString, JOB_REGISTRY_ENTRY>& entry : jobMap )
+    for( const std::pair<const wxString, JOB_REGISTRY_ENTRY>& entry : jobMap )
     {
         wxArrayString item;
         item.Add( wxGetTranslation( entry.second.title ) );
@@ -451,7 +451,7 @@ void PANEL_JOBS::OnAddJobClick( wxCommandEvent& aEvent )
         wxString jobKey;
         if( !selectedString.IsEmpty() )
         {
-            for( const std::pair<wxString, JOB_REGISTRY_ENTRY>& entry : jobMap )
+            for( const std::pair<const wxString, JOB_REGISTRY_ENTRY>& entry : jobMap )
             {
                 if( wxGetTranslation( entry.second.title ) == selectedString )
                 {
@@ -479,7 +479,7 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
 
     headers.Add( _( "Job Types" ) );
 
-    for( const std::pair<JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& jobType : jobTypeInfos )
+    for( const std::pair<const JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& jobType : jobTypeInfos )
     {
         wxArrayString item;
         item.Add( wxGetTranslation( jobType.second.name ) );
@@ -494,7 +494,7 @@ void PANEL_JOBS::OnAddOutputClick( wxCommandEvent& aEvent )
     {
         wxString selectedString = dlg.GetTextSelection();
 
-        for( const std::pair<JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& jobType : jobTypeInfos )
+        for( const std::pair<const JOBSET_OUTPUT_TYPE, JOB_TYPE_INFO>& jobType : jobTypeInfos )
         {
             if( wxGetTranslation( jobType.second.name ) == selectedString )
             {

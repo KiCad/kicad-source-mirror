@@ -221,7 +221,11 @@ public:
     {
     public:
         PACKAGE( const size_t aIndex, const wxString& afpName ) :
-                m_index( aIndex ), m_name( afpName )
+                m_index( aIndex ), m_name( afpName ),
+                m_pitch( 0 ),
+                m_xmin( 0 ), m_ymin( 0 ),
+                m_xmax( 0 ), m_ymax( 0 )
+
         {
         }
 
