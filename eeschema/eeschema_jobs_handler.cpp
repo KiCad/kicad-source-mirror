@@ -77,7 +77,7 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
 {
     Register( "bom",
                 std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
-                [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+                []( JOB* job, wxWindow* aParent ) -> bool
                 {
 	                JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
 

@@ -65,6 +65,10 @@ protected:
 
 struct KICOMMON_API JOB_OUTPUT
 {
+    JOB_OUTPUT(){};
+
+    JOB_OUTPUT( wxString outputPath ) { m_outputPath = outputPath; }
+
     wxString m_outputPath;
 };
 
