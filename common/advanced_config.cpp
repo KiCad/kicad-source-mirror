@@ -287,9 +287,9 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_ResolveTextRecursionDepth = 3;
 
-    m_EnableExtensionSnaps = false;
+    m_EnableExtensionSnaps = true;
     m_ExtensionSnapTimeoutMs = 500;
-    m_ExtensionSnapActivateOnHover = false;
+    m_ExtensionSnapActivateOnHover = true;
     m_EnableSnapAnchorsDebug = false;
 
     loadFromConfigFile();

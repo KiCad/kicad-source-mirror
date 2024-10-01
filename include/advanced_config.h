@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef ADVANCED_CFG__H
-#define ADVANCED_CFG__H
+#pragma once
 
 #include <kicommon.h>
 
@@ -659,7 +658,7 @@ public:
      * This should be removed when extension snaps are tuned up.
      *
      * Setting name: "EnableExtensionSnaps"
-     * Default value: false
+     * Default value: true
      */
     bool m_EnableExtensionSnaps;
 
@@ -680,11 +679,11 @@ public:
      * If extension snaps are enabled, 'activate' items on
      * hover, even if not near a snap point.
      *
-     * This just to experiment with turning.  It should either
+     * This just to experiment with tuning.  It should either
      * be removed or made configurable when we know what feels best.
      *
      * Setting name: "ExtensionSnapActivateOnHover"
-     * Default value: false
+     * Default value: true
      */
     bool m_ExtensionSnapActivateOnHover;
 
@@ -716,5 +715,3 @@ private:
      */
     void loadSettings( wxConfigBase& aCfg );
 };
-
-#endif // ADVANCED_CFG__H
