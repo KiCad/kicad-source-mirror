@@ -20,9 +20,9 @@
 #include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
-#include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,6 @@ class PANEL_SYM_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_pinNameSizeLabel;
 		wxTextCtrl* m_pinNameSizeCtrl;
 		wxStaticText* m_pinNameSizeUnits;
-		wxCheckBox* m_cbShowPinElectricalType;
 		wxStaticText* m_repeatLabel;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_pinPitchLabel;
@@ -61,8 +60,8 @@ class PANEL_SYM_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_pinPitchUnits;
 		wxStaticText* m_labelIncrementLabel1;
 		wxSpinCtrl* m_spinRepeatLabel;
-		wxStaticText* m_generalOption;
-		wxStaticLine* m_staticline3;
+		wxStaticText* m_generalOption1;
+		wxStaticLine* m_staticline4;
 		wxCheckBox* m_dragPinsWithEdges;
 
 		// Virtual event handlers, override them in your derived class

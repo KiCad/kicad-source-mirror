@@ -31,6 +31,7 @@
 #include <tools/ee_actions.h>
 #include <tools/symbol_editor_control.h>
 #include <lib_symbol_library_manager.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
@@ -580,12 +581,14 @@ int SYMBOL_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
     if( !m_isSymbolEditor )
         return 0;
 
-    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    editFrame->GetRenderSettings()->m_ShowHiddenPins =
-                    !editFrame->GetRenderSettings()->m_ShowHiddenPins;
+    SYMBOL_EDITOR_SETTINGS* cfg = m_frame->libeditconfig();
+    cfg->m_ShowHiddenPins = !cfg->m_ShowHiddenPins;
+
+    getEditFrame<SYMBOL_EDIT_FRAME>()->GetRenderSettings()->m_ShowHiddenPins =
+            cfg->m_ShowHiddenPins;
 
     getView()->UpdateAllItems( KIGFX::REPAINT );
-    editFrame->GetCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
     return 0;
 }
 
@@ -595,12 +598,15 @@ int SYMBOL_EDITOR_CONTROL::ToggleHiddenFields( const TOOL_EVENT& aEvent )
     if( !m_isSymbolEditor )
         return 0;
 
-    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    editFrame->GetRenderSettings()->m_ShowHiddenFields =
-                    !editFrame->GetRenderSettings()->m_ShowHiddenFields;
+    SYMBOL_EDITOR_SETTINGS* cfg = m_frame->libeditconfig();
+    cfg->m_ShowHiddenFields = !cfg->m_ShowHiddenFields;
+
+    // TODO: Why is this needed in symbol edit and not in schematic edit?
+    getEditFrame<SYMBOL_EDIT_FRAME>()->GetRenderSettings()->m_ShowHiddenFields =
+            cfg->m_ShowHiddenFields;
 
     getView()->UpdateAllItems( KIGFX::REPAINT );
-    editFrame->GetCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
     return 0;
 }
 

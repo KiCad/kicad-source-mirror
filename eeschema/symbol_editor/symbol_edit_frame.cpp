@@ -38,7 +38,7 @@
 #include <kiway_express.h>
 #include <symbol_edit_frame.h>
 #include <lib_symbol_library_manager.h>
-#include <symbol_editor_settings.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <project_sch.h>
@@ -506,19 +506,19 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto pinTypeCond =
             [this]( const SELECTION& )
             {
-                return GetRenderSettings() && GetRenderSettings()->m_ShowPinsElectricalType;
+                return libeditconfig()->m_ShowPinElectricalType;
             };
 
     auto hiddenPinCond =
             [this]( const SELECTION& )
             {
-                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenPins;
+                return libeditconfig()->m_ShowHiddenPins;
             };
 
     auto hiddenFieldCond =
             [this]( const SELECTION& )
             {
-                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenFields;
+                return libeditconfig()->m_ShowHiddenFields;
             };
 
     auto showLibraryTreeCond =
@@ -1904,12 +1904,12 @@ void SYMBOL_EDIT_FRAME::updateSelectionFilterVisbility()
 bool SYMBOL_EDIT_FRAME::GetShowInvisibleFields()
 {
     // Returns the current render option for invisible fields
-    return  GetRenderSettings()->m_ShowHiddenFields;
+    return libeditconfig()->m_ShowHiddenFields;
 }
 
 
 bool SYMBOL_EDIT_FRAME::GetShowInvisiblePins()
 {
     // Returns the current render option for invisible pins
-    return  GetRenderSettings()->m_ShowHiddenPins;
+    return libeditconfig()->m_ShowHiddenPins;
 }

@@ -95,9 +95,6 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 
 	leftColumn->Add( gbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_cbShowPinElectricalType = new wxCheckBox( this, wxID_ANY, _("Show pin &electrical type"), wxDefaultPosition, wxDefaultSize, 0 );
-	leftColumn->Add( m_cbShowPinElectricalType, 0, wxBOTTOM|wxLEFT, 10 );
-
 
 	leftColumn->Add( 0, 15, 0, wxEXPAND, 5 );
 
@@ -143,12 +140,12 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	wxBoxSizer* rightColumn;
 	rightColumn = new wxBoxSizer( wxVERTICAL );
 
-	m_generalOption = new wxStaticText( this, wxID_ANY, _("General editing"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_generalOption->Wrap( -1 );
-	rightColumn->Add( m_generalOption, 0, wxLEFT|wxTOP, 13 );
+	m_generalOption1 = new wxStaticText( this, wxID_ANY, _("General editing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_generalOption1->Wrap( -1 );
+	rightColumn->Add( m_generalOption1, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
-	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightColumn->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	rightColumn->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
 
 	m_dragPinsWithEdges = new wxCheckBox( this, wxID_ANY, _("Keep pins attached when dragging edges"), wxDefaultPosition, wxDefaultSize, 0 );
 	rightColumn->Add( m_dragPinsWithEdges, 0, wxBOTTOM|wxLEFT, 10 );
@@ -157,7 +154,7 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	rightColumn->Add( 0, 15, 1, wxEXPAND, 5 );
 
 
-	p1mainSizer->Add( rightColumn, 1, wxEXPAND, 5 );
+	p1mainSizer->Add( rightColumn, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( p1mainSizer );

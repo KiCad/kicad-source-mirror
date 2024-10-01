@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,33 +21,39 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "panel_sym_display_options.h"
+
+#include <pgm_base.h>
 #include <settings/settings_manager.h>
-#include <symbol_editor_settings.h>
-#include <panel_sym_display_options.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <widgets/gal_options_panel.h>
-#include <widgets/ui_common.h>
-#include <wx/sizer.h>
 
 
-PANEL_SYM_DISPLAY_OPTIONS::PANEL_SYM_DISPLAY_OPTIONS( wxWindow* aParent,
+PANEL_SYM_DISPLAY_OPTIONS::PANEL_SYM_DISPLAY_OPTIONS( wxWindow*          aParent,
                                                       APP_SETTINGS_BASE* aAppSettings ) :
-        RESETTABLE_PANEL( aParent )
+        PANEL_SYM_DISPLAY_OPTIONS_BASE( aParent )
 {
-    wxBoxSizer* bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
-    wxBoxSizer* bLeftCol = new wxBoxSizer( wxVERTICAL );
-
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
-    bLeftCol->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 15 );
 
-    bPanelSizer->Add( bLeftCol, 0, wxLEFT, 5 );
+    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND | wxRIGHT, 15 );
+}
 
-    this->SetSizerAndFit( bPanelSizer );
-    this->Layout();
+
+void PANEL_SYM_DISPLAY_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* cfg )
+{
+    m_checkShowHiddenPins->SetValue( cfg->m_ShowHiddenPins );
+    m_checkShowHiddenFields->SetValue( cfg->m_ShowHiddenFields );
+    m_showPinElectricalTypes->SetValue( cfg->m_ShowPinElectricalType );
 }
 
 
 bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataToWindow()
 {
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
+    loadSymEditorSettings( cfg );
+
     m_galOptsPanel->TransferDataToWindow();
 
     return true;
@@ -56,6 +62,12 @@ bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
+    cfg->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
+    cfg->m_ShowHiddenFields = m_checkShowHiddenFields->GetValue();
+    cfg->m_ShowPinElectricalType = m_showPinElectricalTypes->GetValue();
     m_galOptsPanel->TransferDataFromWindow();
 
     return true;
@@ -65,9 +77,9 @@ bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataFromWindow()
 void PANEL_SYM_DISPLAY_OPTIONS::ResetPanel()
 {
     SYMBOL_EDITOR_SETTINGS cfg;
-    cfg.Load();                     // Loading without a file will init to defaults
+    cfg.Load(); // Loading without a file will init to defaults
+
+    loadSymEditorSettings( &cfg );
 
     m_galOptsPanel->ResetPanel( &cfg );
 }
-
-

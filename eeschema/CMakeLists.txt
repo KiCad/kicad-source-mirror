@@ -186,6 +186,7 @@ set( EESCHEMA_DLGS
     dialogs/panel_sym_color_settings.cpp
     dialogs/panel_sym_color_settings_base.cpp
     dialogs/panel_sym_display_options.cpp
+    dialogs/panel_sym_display_options_base.cpp
     dialogs/panel_sym_editing_options.cpp
     dialogs/panel_sym_editing_options_base.cpp
     dialogs/panel_sym_lib_table.cpp

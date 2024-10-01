@@ -55,7 +55,6 @@ void PANEL_SYM_EDITING_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* a
     m_pinNameSize.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.pin_name_size ) );
     m_pinPitch.SetValue( schIUScale.MilsToIU( aCfg->m_Repeat.pin_step ) );
     m_spinRepeatLabel->SetValue( aCfg->m_Repeat.label_delta );
-    m_cbShowPinElectricalType->SetValue( aCfg->m_ShowPinElectricalType );
     m_dragPinsWithEdges->SetValue( aCfg->m_dragPinsAlongWithEdges );
 }
 
@@ -83,7 +82,6 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
     settings->m_Defaults.pin_name_size = schIUScale.IUToMils( m_pinNameSize.GetIntValue() );
     settings->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
     settings->m_Repeat.pin_step = schIUScale.IUToMils( m_pinPitch.GetIntValue() );
-    settings->m_ShowPinElectricalType = m_cbShowPinElectricalType->GetValue();
     settings->m_dragPinsAlongWithEdges = m_dragPinsWithEdges->GetValue();
 
     // Force pin_step to a grid multiple

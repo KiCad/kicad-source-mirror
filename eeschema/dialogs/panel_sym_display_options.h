@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,17 +17,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_SYM_DISPLAY_OPTIONS_H
-#define PANEL_SYM_DISPLAY_OPTIONS_H
+#pragma once
 
-#include <widgets/resettable_panel.h>
-
+#include "panel_sym_display_options_base.h"
 
 class APP_SETTINGS_BASE;
 class GAL_OPTIONS_PANEL;
+class SYMBOL_EDITOR_SETTINGS;
 
 
-class PANEL_SYM_DISPLAY_OPTIONS : public RESETTABLE_PANEL
+class PANEL_SYM_DISPLAY_OPTIONS : public PANEL_SYM_DISPLAY_OPTIONS_BASE
 {
 public:
     PANEL_SYM_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
@@ -38,8 +37,8 @@ public:
     void ResetPanel() override;
 
 private:
+    void loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* aCfg );
+
+private:
     GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
-
-
-#endif // PANEL_SYM_DISPLAY_OPTIONS_H
