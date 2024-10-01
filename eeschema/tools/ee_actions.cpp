@@ -156,7 +156,7 @@ TOOL_ACTION EE_ACTIONS::syncSelection( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::saveSheetAsDesignBlock( TOOL_ACTION_ARGS()
         .Name( "eeschema.SchDesignBlockControl.saveSheetAsDesignBlock" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Save Sheet as Design Block..." ) )
+        .FriendlyName( _( "Save Current Sheet as Design Block..." ) )
         .Tooltip( _( "Create a new design block from the current sheet" ) )
         .Icon( BITMAPS::new_component ) );
 

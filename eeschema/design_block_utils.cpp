@@ -39,6 +39,7 @@
 #include <tool/tool_manager.h>
 #include <ee_selection_tool.h>
 #include <dialogs/dialog_design_block_properties.h>
+#include <nlohmann/json.hpp>
 
 
 bool checkOverwrite( SCH_EDIT_FRAME* aFrame, wxString& libname, wxString& newName )
@@ -302,9 +303,23 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName,
     }
 
     DESIGN_BLOCK blk;
-    wxFileName   fn = wxFileNameFromPath( aSheetPath.LastScreen()->GetFileName() );
+    wxFileName   fn = wxFileNameFromPath( aSheetPath.Last()->GetName() );
 
     blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
+
+    // Copy all fields from the sheet to the design block
+    std::vector<SCH_FIELD>& shFields = aSheetPath.Last()->GetFields();
+    nlohmann::ordered_map<wxString, wxString> dbFields;
+
+    for( int i = 0; i < (int) shFields.size(); i++ )
+    {
+        if( i == SHEETNAME || i == SHEETFILENAME )
+            continue;
+
+        dbFields[shFields[i].GetCanonicalName()] = shFields[i].GetText();
+    }
+
+    blk.SetFields( dbFields );
 
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
 
