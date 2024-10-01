@@ -28,10 +28,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-09-30 14:39+0000\n"
+"PO-Revision-Date: 2024-10-01 19:16+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11234,9 +11234,8 @@ msgid "Untitled Field"
 msgstr "Unbenanntes Feld"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:233
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "Blinde/Vergrabene Durchkontaktierung: Nicht erlaubt"
+msgstr "Doppelte Felder sind nicht erlaubt."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:547
 #, c-format
@@ -16182,9 +16181,9 @@ msgid "Global field name templates:"
 msgstr "Globale Feldnamenvorlagen:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "Eintrag enthält Leerzeichen am Ende."
+msgstr "Der Feldname \"%s\" enthält Leerzeichen am Anfang oder Ende."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -21896,9 +21895,8 @@ msgid "Properties..."
 msgstr "Eigenschaften..."
 
 #: eeschema/tools/ee_actions.cpp:181
-#, fuzzy
 msgid "Edit properies of design block"
-msgstr "Geben Sie einen Namen für den Designblock ein:"
+msgstr "Designblock-Eigenschaften bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Save Library As..."
@@ -22157,9 +22155,8 @@ msgid "Copy sheet into project and draw on current sheet"
 msgstr "Schaltplanseite in Projekt kopieren und auf aktueller Seiten zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:522
-#, fuzzy
 msgid "Draw Sheet from Design Block"
-msgstr "Schaltplanseite als Designblock speichern..."
+msgstr "Schaltplanseite aus Designblock erzeugen"
 
 #: eeschema/tools/ee_actions.cpp:523
 #, fuzzy
@@ -35504,9 +35501,8 @@ msgid "Non Copper Zone Properties"
 msgstr "Nicht-Kupfer-Zonen-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
-#, fuzzy
 msgid "Outset:"
-msgstr "Außen"
+msgstr "Außenlinien:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -35520,7 +35516,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "Dies ist nur für rechteckige Außenlinien möglich."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
@@ -35536,9 +35532,8 @@ msgid "0.01"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
-#, fuzzy
 msgid "Copy item layers"
-msgstr "Kupferlagen:"
+msgstr "Elementlagen kopieren"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:70
 #, fuzzy
@@ -35558,14 +35553,12 @@ msgid "Layer default"
 msgstr "Voreinstellung"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
-#, fuzzy
 msgid "Delete source items after outset"
-msgstr "Quellobjekte nach der Konvertierung löschen"
+msgstr "Quellobjekte nach Erstellung der Außenlinien löschen"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
-#, fuzzy
 msgid "Outset Items"
-msgstr "Textelemente"
+msgstr "Außenlinienelemente"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:206
 #: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2575
@@ -37489,9 +37482,8 @@ msgid "When routing tracks"
 msgstr "Beim Anlegen von Leiterbahnen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:314
-#, fuzzy
 msgid "Snap to tracks and vias:"
-msgstr "Leiterbahnen und Durchkontaktierungen erstellen"
+msgstr "Auf Leiterbahnen und Vias einrasten:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:316
 #: pcbnew/dialogs/panel_edit_options_base.cpp:324
@@ -41873,9 +41865,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory '%s'."
-msgstr "Verzeichnis 'devices' konnte nicht erstellt werden."
+msgstr "Verzeichnis \"%s\" konnte nicht erstellt werden."
 
 #: pcbnew/footprint.cpp:1201
 msgid "Other"
@@ -45401,9 +45393,8 @@ msgstr ""
 "Zonenfüllungen werden bestmöglich umgewandelt."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:685
-#, fuzzy
 msgid "Failed to add component data"
-msgstr "Fehler beim Lesen von Bilddaten."
+msgstr "Konnte Bauteildaten nicht hinzufügen"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
 #, fuzzy
@@ -45781,9 +45772,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Fehler beim Plotten von \"%s\".\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:798
-#, fuzzy
 msgid "Successfully created genCAD file\n"
-msgstr "SVG-Datei erfolgreich erstellt"
+msgstr "genCAD-Datei erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:919
 msgid "Failed to create output directory\n"
@@ -47186,9 +47176,8 @@ msgid "Some of the track segments could not be filleted."
 msgstr "Manche Leiterbahnsegmente konnten nicht abgerundet werden."
 
 #: pcbnew/tools/edit_tool.cpp:1221
-#, fuzzy
 msgid "Arc radius:"
-msgstr "Bogen, Radius %s"
+msgstr "Bogenradius:"
 
 #: pcbnew/tools/edit_tool.cpp:1226
 #, fuzzy
@@ -47196,12 +47185,11 @@ msgid "Add slots in acute corners"
 msgstr "Ecke zur Zone hinzufügen"
 
 #: pcbnew/tools/edit_tool.cpp:1228
-#, fuzzy
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
 msgstr ""
-"Einige der Dogbone-Ecken sind zu schmal für ein Werkzeug mit dem angegebenen "
-"Radius."
+"Slots in Ecken einfügen, damit diese mit einem Werkzeug mit gegebenem "
+"Radius' herstellbar sind"
 
 #: pcbnew/tools/edit_tool.cpp:1232
 #, fuzzy
@@ -47455,19 +47443,16 @@ msgid "Some of the polygons could not be intersected."
 msgstr "Manche Polygone konnten nicht geschnitten werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:666
-#, fuzzy
 msgid "Outset items."
-msgstr "Sonstiges"
+msgstr "Außenlinien um Elemente erstellen."
 
 #: pcbnew/tools/item_modification_routine.cpp:673
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "Die ausgewählten Linien können nicht abgerundet werden."
+msgstr "Außenlinien um gewählte Elemente konnten nicht erstellen werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:677
-#, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "Manche Linien konnten nicht abgerundet werden."
+msgstr "Um manche Elementen konnten keinen Außenlinien erstellt werden."
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
@@ -47613,14 +47598,12 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Erzeugt Leiterbahnen aus den ausgewählten Grafiklinien"
 
 #: pcbnew/tools/pcb_actions.cpp:95
-#, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "Aus Auswahl erzeugen"
+msgstr "Außenlinien für Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:96
-#, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "Erzeugt grafische Linien aus der Auswahl"
+msgstr "Außenlinien um gewähltes Element erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:158
 msgid "Add Board Characteristics"
@@ -48359,9 +48342,8 @@ msgid "Generate an IPC-2581 file"
 msgstr "Eine IPC-2581-Datei erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1050
-#, fuzzy
 msgid "ODB++ Output File..."
-msgstr "Stückliste-Ausgabedatei"
+msgstr "ODB++ Ausgabedatei..."
 
 #: pcbnew/tools/pcb_actions.cpp:1051
 #, fuzzy
