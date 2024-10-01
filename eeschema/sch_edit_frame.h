@@ -764,7 +764,7 @@ public:
      */
     bool AddDesignBlockLibrary( const wxString& aFilename, DESIGN_BLOCK_LIB_TABLE* aTable );
 
-    void SaveSheetAsDesignBlock( const wxString& aLibraryName );
+    void SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_SHEET_PATH& aSheetPath );
 
     void SaveSelectionAsDesignBlock( const wxString& aLibraryName );
 

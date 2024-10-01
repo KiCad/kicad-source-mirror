@@ -134,8 +134,11 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
-    if( current )
-        m_editFrame->SaveSheetAsDesignBlock( current->m_LibId.GetLibNickname() );
+    if( !current )
+        return -1;
+
+    m_editFrame->SaveSheetAsDesignBlock( current->m_LibId.GetLibNickname(),
+                                         m_editFrame->GetCurrentSheet() );
 
     return 0;
 }
@@ -145,8 +148,10 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
-    if( current )
-        m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() );
+    if( !current )
+        return -1;
+
+    m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() );
 
     return 0;
 }
@@ -156,8 +161,10 @@ int SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
-    if( current )
-        m_editFrame->DeleteDesignBlockFromLibrary( current->m_LibId, true );
+    if( !current )
+        return -1;
+
+    m_editFrame->DeleteDesignBlockFromLibrary( current->m_LibId, true );
 
     return 0;
 }

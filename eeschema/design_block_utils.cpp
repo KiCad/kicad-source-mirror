@@ -281,7 +281,8 @@ bool SCH_EDIT_FRAME::AddDesignBlockLibrary( const wxString&         aFilename,
 }
 
 
-void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName )
+void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName,
+                                             SCH_SHEET_PATH& aSheetPath )
 {
     // Make sure the user has selected a library to save into
     if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
@@ -292,7 +293,7 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName )
 
     // Just block all attempts to create design blocks with nested sheets at this point
     std::vector<SCH_ITEM*> sheets;
-    GetScreen()->GetSheets( &sheets );
+    aSheetPath.LastScreen()->GetSheets( &sheets );
 
     if( !sheets.empty() )
     {
@@ -301,7 +302,7 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName )
     }
 
     DESIGN_BLOCK blk;
-    wxFileName   fn = wxFileNameFromPath( GetScreen()->GetFileName() );
+    wxFileName   fn = wxFileNameFromPath( aSheetPath.LastScreen()->GetFileName() );
 
     blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
 
@@ -312,7 +313,7 @@ void SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName )
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
-    if( !saveSchematicFile( GetCurrentSheet().Last(), tempFile ) )
+    if( !saveSchematicFile( aSheetPath.Last(), tempFile ) )
     {
         DisplayError( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
@@ -366,7 +367,17 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     // Just block all attempts to create design blocks with nested sheets at this point
     if( selection.HasType( SCH_SHEET_T ) )
     {
-        DisplayError( this, _( "Design blocks with nested sheets are not supported." ) );
+        if( selection.Size() == 1 )
+        {
+            SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( selection.Front() );
+            SCH_SHEET_PATH curPath = GetCurrentSheet();
+
+            curPath.push_back( sheet );
+            SaveSheetAsDesignBlock( aLibraryName, curPath );
+        }
+        else
+            DisplayError( this, _( "Design blocks with nested sheets are not supported." ) );
+
         return;
     }
 
@@ -380,7 +391,7 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    // Create a temperorary screen
+    // Create a temporary screen
     SCH_SCREEN* tempScreen = new SCH_SCREEN( m_schematic );
 
     // Copy the selected items to the temporary screen
