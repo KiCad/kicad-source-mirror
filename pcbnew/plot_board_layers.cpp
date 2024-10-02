@@ -367,210 +367,218 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     itemplotter.PlotPadNumber( pad, color );
             }
 
-            VECTOR2I margin;
-            int width_adj = 0;
-
-            if( onCopperLayer )
-                width_adj = itemplotter.getFineWidthAdj();
-
-            if( onSolderMaskLayer )
-                margin.x = margin.y = pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
-
-            if( onSolderPasteLayer )
-                margin = pad->GetSolderPasteMargin( PADSTACK::ALL_LAYERS );
-
-            // not all shapes can have a different margin for x and y axis
-            // in fact only oval and rect shapes can have different values.
-            // Round shape have always the same x,y margin
-            // so define a unique value for other shapes that do not support different values
-            int mask_clearance = margin.x;
-
-            // Now offset the pad size by margin + width_adj
-            VECTOR2I padPlotsSize = pad->GetSize( PADSTACK::ALL_LAYERS ) + margin * 2 + VECTOR2I( width_adj, width_adj );
-
-            // Store these parameters that can be modified to plot inflated/deflated pads shape
-            PAD_SHAPE padShape = pad->GetShape( PADSTACK::ALL_LAYERS );
-            VECTOR2I  padSize = pad->GetSize( PADSTACK::ALL_LAYERS );
-            VECTOR2I  padDelta = pad->GetDelta( PADSTACK::ALL_LAYERS ); // has meaning only for trapezoidal pads
-            // CornerRadius and CornerRadiusRatio can be modified
-            // the radius is built from the ratio, so saving/restoring the ratio is enough
-            double    padCornerRadiusRatio = pad->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS );
-
-            // Don't draw a 0 sized pad.
-            // Note: a custom pad can have its pad anchor with size = 0
-            if( pad->GetShape( PADSTACK::ALL_LAYERS ) != PAD_SHAPE::CUSTOM
-                && ( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 ) )
-            {
-                continue;
-            }
-
-            switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
-            {
-            case PAD_SHAPE::CIRCLE:
-            case PAD_SHAPE::OVAL:
-                pad->SetSize( PADSTACK::ALL_LAYERS, padPlotsSize );
-
-                if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
-                    ( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::NO_DRILL_SHAPE ) &&
-                    ( pad->GetSize( PADSTACK::ALL_LAYERS ) == pad->GetDrillSize() ) &&
-                    ( pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
+            auto plotPadLayer =
+                [&]( PCB_LAYER_ID aLayer )
                 {
-                    break;
-                }
+                    VECTOR2I margin;
+                    int width_adj = 0;
 
-                itemplotter.PlotPad( pad, color, padPlotMode );
-                break;
+                    if( onCopperLayer )
+                        width_adj = itemplotter.getFineWidthAdj();
 
-            case PAD_SHAPE::RECTANGLE:
-                pad->SetSize( PADSTACK::ALL_LAYERS, padPlotsSize );
+                    if( onSolderMaskLayer )
+                        margin.x = margin.y = pad->GetSolderMaskExpansion( aLayer );
 
-                if( mask_clearance > 0 )
-                {
-                    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-                    pad->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, mask_clearance );
-                }
+                    if( onSolderPasteLayer )
+                        margin = pad->GetSolderPasteMargin( aLayer );
 
-                itemplotter.PlotPad( pad, color, padPlotMode );
-                break;
+                    // not all shapes can have a different margin for x and y axis
+                    // in fact only oval and rect shapes can have different values.
+                    // Round shape have always the same x,y margin
+                    // so define a unique value for other shapes that do not support different values
+                    int mask_clearance = margin.x;
 
-            case PAD_SHAPE::TRAPEZOID:
-                // inflate/deflate a trapezoid is a bit complex.
-                // so if the margin is not null, build a similar polygonal pad shape,
-                // and inflate/deflate the polygonal shape
-                // because inflating/deflating using different values for y and y
-                // we are using only margin.x as inflate/deflate value
-                if( mask_clearance == 0 )
-                {
-                    itemplotter.PlotPad( pad, color, padPlotMode );
-                }
-                else
-                {
-                    PAD dummy( *pad );
-                    dummy.SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-                    dummy.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
-                    SHAPE_POLY_SET outline;
-                    outline.NewOutline();
-                    int dx = padSize.x / 2;
-                    int dy = padSize.y / 2;
-                    int ddx = padDelta.x / 2;
-                    int ddy = padDelta.y / 2;
+                    // Now offset the pad size by margin + width_adj
+                    VECTOR2I padPlotsSize =
+                            pad->GetSize( aLayer ) + margin * 2 + VECTOR2I( width_adj, width_adj );
 
-                    outline.Append( -dx - ddy,  dy + ddx );
-                    outline.Append(  dx + ddy,  dy - ddx );
-                    outline.Append(  dx - ddy, -dy + ddx );
-                    outline.Append( -dx + ddy, -dy - ddx );
+                    // Store these parameters that can be modified to plot inflated/deflated pads shape
+                    PAD_SHAPE padShape = pad->GetShape( aLayer );
+                    VECTOR2I  padSize = pad->GetSize( aLayer );
+                    VECTOR2I  padDelta = pad->GetDelta( aLayer ); // has meaning only for trapezoidal pads
+                    // CornerRadius and CornerRadiusRatio can be modified
+                    // the radius is built from the ratio, so saving/restoring the ratio is enough
+                    double    padCornerRadiusRatio = pad->GetRoundRectRadiusRatio( aLayer );
 
-                    // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
-                    // which can create bad shapes if margin.x is < 0
-                    outline.InflateWithLinkedHoles( mask_clearance,
-                                                    CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
-                                                    SHAPE_POLY_SET::PM_FAST );
-                    dummy.DeletePrimitivesList();
-                    dummy.AddPrimitivePoly( PADSTACK::ALL_LAYERS, outline, 0, true );
+                    // Don't draw a 0 sized pad.
+                    // Note: a custom pad can have its pad anchor with size = 0
+                    if( padShape != PAD_SHAPE::CUSTOM
+                        && ( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 ) )
+                    {
+                        return;
+                    }
 
-                    // Be sure the anchor pad is not bigger than the deflated shape because this
-                    // anchor will be added to the pad shape when plotting the pad. So now the
-                    // polygonal shape is built, we can clamp the anchor size
-                    dummy.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 0, 0 ) );
+                    switch( padShape )
+                    {
+                    case PAD_SHAPE::CIRCLE:
+                    case PAD_SHAPE::OVAL:
+                        pad->SetSize( aLayer, padPlotsSize );
 
-                    itemplotter.PlotPad( &dummy, color, padPlotMode );
-                }
+                        if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
+                            ( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::NO_DRILL_SHAPE ) &&
+                            ( pad->GetSize(aLayer ) == pad->GetDrillSize() ) &&
+                            ( pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
+                        {
+                            break;
+                        }
 
-                break;
+                        itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        break;
 
-            case PAD_SHAPE::ROUNDRECT:
-            {
-                // rounding is stored as a percent, but we have to update this ratio
-                // to force recalculation of other values after size changing (we do not
-                // really change the rounding percent value)
-                double radius_ratio = pad->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS );
-                pad->SetSize( PADSTACK::ALL_LAYERS, padPlotsSize );
-                pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, radius_ratio );
+                    case PAD_SHAPE::RECTANGLE:
+                        pad->SetSize( aLayer, padPlotsSize );
 
-                itemplotter.PlotPad( pad, color, padPlotMode );
-                break;
-            }
+                        if( mask_clearance > 0 )
+                        {
+                            pad->SetShape( aLayer, PAD_SHAPE::ROUNDRECT );
+                            pad->SetRoundRectCornerRadius( aLayer, mask_clearance );
+                        }
 
-            case PAD_SHAPE::CHAMFERED_RECT:
-                if( mask_clearance == 0 )
-                {
-                    // the size can be slightly inflated by width_adj (PS/PDF only)
-                    pad->SetSize( PADSTACK::ALL_LAYERS, padPlotsSize );
-                    itemplotter.PlotPad( pad, color, padPlotMode );
-                }
-                else
-                {
-                    // Due to the polygonal shape of a CHAMFERED_RECT pad, the best way is to
-                    // convert the pad shape to a full polygon, inflate/deflate the polygon
-                    // and use a dummy  CUSTOM pad to plot the final shape.
-                    PAD dummy( *pad );
-                    // Build the dummy pad outline with coordinates relative to the pad position
-                    // pad offset and orientation 0. The actual pos, offset and rotation will be
-                    // taken in account later by the plot function
-                    dummy.SetPosition( VECTOR2I( 0, 0 ) );
-                    dummy.SetOffset( PADSTACK::ALL_LAYERS, VECTOR2I( 0, 0 ) );
-                    dummy.SetOrientation( ANGLE_0 );
-                    SHAPE_POLY_SET outline;
-                    dummy.TransformShapeToPolygon( outline, UNDEFINED_LAYER, 0, maxError,
-                                                   ERROR_INSIDE );
-                    outline.InflateWithLinkedHoles( mask_clearance,
-                                                    CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
-                                                    SHAPE_POLY_SET::PM_FAST );
+                        itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        break;
 
-                    // Initialize the dummy pad shape:
-                    dummy.SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-                    dummy.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
-                    dummy.DeletePrimitivesList();
-                    dummy.AddPrimitivePoly( PADSTACK::ALL_LAYERS, outline, 0, true );
+                    case PAD_SHAPE::TRAPEZOID:
+                        // inflate/deflate a trapezoid is a bit complex.
+                        // so if the margin is not null, build a similar polygonal pad shape,
+                        // and inflate/deflate the polygonal shape
+                        // because inflating/deflating using different values for y and y
+                        // we are using only margin.x as inflate/deflate value
+                        if( mask_clearance == 0 )
+                        {
+                            itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        }
+                        else
+                        {
+                            PAD dummy( *pad );
+                            dummy.SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );
+                            dummy.SetShape( aLayer, PAD_SHAPE::CUSTOM );
+                            SHAPE_POLY_SET outline;
+                            outline.NewOutline();
+                            int dx = padSize.x / 2;
+                            int dy = padSize.y / 2;
+                            int ddx = padDelta.x / 2;
+                            int ddy = padDelta.y / 2;
 
-                    // Be sure the anchor pad is not bigger than the deflated shape because this
-                    // anchor will be added to the pad shape when plotting the pad.
-                    // So we set the anchor size to 0
-                    dummy.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 0, 0 ) );
-                    // Restore pad position and offset
-                    dummy.SetPosition( pad->GetPosition() );
-                    dummy.SetOffset( PADSTACK::ALL_LAYERS, pad->GetOffset( PADSTACK::ALL_LAYERS ) );
-                    dummy.SetOrientation( pad->GetOrientation() );
+                            outline.Append( -dx - ddy,  dy + ddx );
+                            outline.Append(  dx + ddy,  dy - ddx );
+                            outline.Append(  dx - ddy, -dy + ddx );
+                            outline.Append( -dx + ddy, -dy - ddx );
 
-                    itemplotter.PlotPad( &dummy, color, padPlotMode );
-                }
+                            // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
+                            // which can create bad shapes if margin.x is < 0
+                            outline.InflateWithLinkedHoles( mask_clearance,
+                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
+                                                            SHAPE_POLY_SET::PM_FAST );
+                            dummy.DeletePrimitivesList();
+                            dummy.AddPrimitivePoly( aLayer, outline, 0, true );
 
-                break;
+                            // Be sure the anchor pad is not bigger than the deflated shape because this
+                            // anchor will be added to the pad shape when plotting the pad. So now the
+                            // polygonal shape is built, we can clamp the anchor size
+                            dummy.SetSize( aLayer, VECTOR2I( 0, 0 ) );
 
-            case PAD_SHAPE::CUSTOM:
-            {
-                // inflate/deflate a custom shape is a bit complex.
-                // so build a similar pad shape, and inflate/deflate the polygonal shape
-                PAD dummy( *pad );
-                dummy.SetParentGroup( nullptr );
+                            itemplotter.PlotPad( &dummy, aLayer, color, padPlotMode );
+                        }
 
-                SHAPE_POLY_SET shape;
-                pad->MergePrimitivesAsPolygon( PADSTACK::ALL_LAYERS, &shape );
+                        break;
 
-                // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
-                // which can create bad shapes if margin.x is < 0
-                shape.InflateWithLinkedHoles( mask_clearance,
-                                              CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
-                                              SHAPE_POLY_SET::PM_FAST );
-                dummy.DeletePrimitivesList();
-                dummy.AddPrimitivePoly( PADSTACK::ALL_LAYERS, shape, 0, true );
+                    case PAD_SHAPE::ROUNDRECT:
+                    {
+                        // rounding is stored as a percent, but we have to update this ratio
+                        // to force recalculation of other values after size changing (we do not
+                        // really change the rounding percent value)
+                        double radius_ratio = pad->GetRoundRectRadiusRatio( aLayer );
+                        pad->SetSize( aLayer, padPlotsSize );
+                        pad->SetRoundRectRadiusRatio( aLayer, radius_ratio );
 
-                // Be sure the anchor pad is not bigger than the deflated shape because this
-                // anchor will be added to the pad shape when plotting the pad. So now the
-                // polygonal shape is built, we can clamp the anchor size
-                if( mask_clearance < 0 )  // we expect margin.x = margin.y for custom pads
-                    dummy.SetSize( PADSTACK::ALL_LAYERS, padPlotsSize );
+                        itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        break;
+                    }
 
-                itemplotter.PlotPad( &dummy, color, padPlotMode );
-                break;
-            }
-            }
+                    case PAD_SHAPE::CHAMFERED_RECT:
+                        if( mask_clearance == 0 )
+                        {
+                            // the size can be slightly inflated by width_adj (PS/PDF only)
+                            pad->SetSize( aLayer, padPlotsSize );
+                            itemplotter.PlotPad( pad, aLayer, color, padPlotMode );
+                        }
+                        else
+                        {
+                            // Due to the polygonal shape of a CHAMFERED_RECT pad, the best way is to
+                            // convert the pad shape to a full polygon, inflate/deflate the polygon
+                            // and use a dummy  CUSTOM pad to plot the final shape.
+                            PAD dummy( *pad );
+                            // Build the dummy pad outline with coordinates relative to the pad position
+                            // pad offset and orientation 0. The actual pos, offset and rotation will be
+                            // taken in account later by the plot function
+                            dummy.SetPosition( VECTOR2I( 0, 0 ) );
+                            dummy.SetOffset( aLayer, VECTOR2I( 0, 0 ) );
+                            dummy.SetOrientation( ANGLE_0 );
+                            SHAPE_POLY_SET outline;
+                            dummy.TransformShapeToPolygon( outline, UNDEFINED_LAYER, 0, maxError,
+                                                           ERROR_INSIDE );
+                            outline.InflateWithLinkedHoles( mask_clearance,
+                                                            CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
+                                                            SHAPE_POLY_SET::PM_FAST );
 
-            // Restore the pad parameters modified by the plot code
-            pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
-            pad->SetDelta( PADSTACK::ALL_LAYERS, padDelta );
-            pad->SetShape( PADSTACK::ALL_LAYERS, padShape );
-            pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, padCornerRadiusRatio );
+                            // Initialize the dummy pad shape:
+                            dummy.SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );
+                            dummy.SetShape( aLayer, PAD_SHAPE::CUSTOM );
+                            dummy.DeletePrimitivesList();
+                            dummy.AddPrimitivePoly( aLayer, outline, 0, true );
+
+                            // Be sure the anchor pad is not bigger than the deflated shape because this
+                            // anchor will be added to the pad shape when plotting the pad.
+                            // So we set the anchor size to 0
+                            dummy.SetSize( aLayer, VECTOR2I( 0, 0 ) );
+                            // Restore pad position and offset
+                            dummy.SetPosition( pad->GetPosition() );
+                            dummy.SetOffset( aLayer, pad->GetOffset( aLayer ) );
+                            dummy.SetOrientation( pad->GetOrientation() );
+
+                            itemplotter.PlotPad( &dummy, aLayer, color, padPlotMode );
+                        }
+
+                        break;
+
+                    case PAD_SHAPE::CUSTOM:
+                    {
+                        // inflate/deflate a custom shape is a bit complex.
+                        // so build a similar pad shape, and inflate/deflate the polygonal shape
+                        PAD dummy( *pad );
+                        dummy.SetParentGroup( nullptr );
+
+                        SHAPE_POLY_SET shape;
+                        pad->MergePrimitivesAsPolygon( aLayer, &shape );
+
+                        // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
+                        // which can create bad shapes if margin.x is < 0
+                        shape.InflateWithLinkedHoles( mask_clearance,
+                                                      CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError,
+                                                      SHAPE_POLY_SET::PM_FAST );
+                        dummy.DeletePrimitivesList();
+                        dummy.AddPrimitivePoly( aLayer, shape, 0, true );
+
+                        // Be sure the anchor pad is not bigger than the deflated shape because this
+                        // anchor will be added to the pad shape when plotting the pad. So now the
+                        // polygonal shape is built, we can clamp the anchor size
+                        if( mask_clearance < 0 )  // we expect margin.x = margin.y for custom pads
+                            dummy.SetSize( aLayer, padPlotsSize );
+
+                        itemplotter.PlotPad( &dummy, aLayer, color, padPlotMode );
+                        break;
+                    }
+                    }
+
+                    // Restore the pad parameters modified by the plot code
+                    pad->SetSize( aLayer, padSize );
+                    pad->SetDelta( aLayer, padDelta );
+                    pad->SetShape( aLayer, padShape );
+                    pad->SetRoundRectRadiusRatio( aLayer, padCornerRadiusRatio );
+                };
+
+            for( PCB_LAYER_ID layer : aLayerMask.SeqStackupForPlotting() )
+                plotPadLayer( layer );
         }
 
         if( footprint->IsDNP()

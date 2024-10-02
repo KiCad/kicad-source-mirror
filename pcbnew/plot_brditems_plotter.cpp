@@ -142,9 +142,10 @@ void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_MODE aPlotMode )
+void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLOR4D& aColor,
+                                OUTLINE_MODE aPlotMode )
 {
-    VECTOR2I     shape_pos = aPad->ShapePos( PADSTACK::ALL_LAYERS );
+    VECTOR2I     shape_pos = aPad->ShapePos( aLayer );
     GBR_METADATA metadata;
 
     bool plotOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
@@ -269,31 +270,31 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen
-    m_plotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY);
+    m_plotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY );
 
     if( aPlotMode == SKETCH )
         m_plotter->SetCurrentLineWidth( GetSketchPadLineWidth(), &metadata );
 
-    switch( aPad->GetShape( PADSTACK::ALL_LAYERS ) )
+    switch( aPad->GetShape( aLayer ) )
     {
     case PAD_SHAPE::CIRCLE:
-        m_plotter->FlashPadCircle( shape_pos, aPad->GetSize( PADSTACK::ALL_LAYERS ).x,
+        m_plotter->FlashPadCircle( shape_pos, aPad->GetSize( aLayer ).x,
                                    aPlotMode, &metadata );
         break;
 
     case PAD_SHAPE::OVAL:
-        m_plotter->FlashPadOval( shape_pos, aPad->GetSize( PADSTACK::ALL_LAYERS ),
+        m_plotter->FlashPadOval( shape_pos, aPad->GetSize( aLayer ),
                                  aPad->GetOrientation(), aPlotMode, &metadata );
         break;
 
     case PAD_SHAPE::RECTANGLE:
-        m_plotter->FlashPadRect( shape_pos, aPad->GetSize( PADSTACK::ALL_LAYERS ),
+        m_plotter->FlashPadRect( shape_pos, aPad->GetSize( aLayer ),
                                  aPad->GetOrientation(), aPlotMode, &metadata );
         break;
 
     case PAD_SHAPE::ROUNDRECT:
-        m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize( PADSTACK::ALL_LAYERS ),
-                                      aPad->GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ),
+        m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize( aLayer ),
+                                      aPad->GetRoundRectCornerRadius( aLayer ),
                                       aPad->GetOrientation(), aPlotMode, &metadata );
         break;
 
@@ -305,8 +306,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         VECTOR2I coord[4];
 
         // Order is lower left, lower right, upper right, upper left.
-        VECTOR2I half_size = aPad->GetSize( PADSTACK::ALL_LAYERS ) / 2;
-        VECTOR2I trap_delta = aPad->GetDelta( PADSTACK::ALL_LAYERS ) / 2;
+        VECTOR2I half_size = aPad->GetSize( aLayer ) / 2;
+        VECTOR2I trap_delta = aPad->GetDelta( aLayer ) / 2;
 
         coord[0] = VECTOR2I( -half_size.x - trap_delta.y, half_size.y + trap_delta.x );
         coord[1] = VECTOR2I( half_size.x + trap_delta.y, half_size.y - trap_delta.x );
@@ -323,10 +324,10 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
             GERBER_PLOTTER* gerberPlotter = static_cast<GERBER_PLOTTER*>( m_plotter );
 
             gerberPlotter->FlashPadChamferRoundRect( shape_pos,
-                    aPad->GetSize( PADSTACK::ALL_LAYERS ),
-                    aPad->GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ),
-                    aPad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
-                    aPad->GetChamferPositions( PADSTACK::ALL_LAYERS ), aPad->GetOrientation(),
+                    aPad->GetSize( aLayer ),
+                    aPad->GetRoundRectCornerRadius( aLayer ),
+                    aPad->GetChamferRectRatio( aLayer ),
+                    aPad->GetChamferPositions( aLayer ), aPad->GetOrientation(),
                     aPlotMode, &metadata );
             break;
         }
@@ -337,11 +338,11 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
     case PAD_SHAPE::CUSTOM:
     {
         const std::shared_ptr<SHAPE_POLY_SET>& polygons =
-            aPad->GetEffectivePolygon( PADSTACK::ALL_LAYERS, ERROR_INSIDE );
+            aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
 
         if( polygons->OutlineCount() )
         {
-            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize( PADSTACK::ALL_LAYERS ), aPad->GetOrientation(),
+            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize( aLayer ), aPad->GetOrientation(),
                                        polygons.get(), aPlotMode, &metadata );
         }
     }
