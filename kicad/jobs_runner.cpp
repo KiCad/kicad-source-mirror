@@ -108,7 +108,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         {
             msg = wxT( "|--------------------------------\n" );
             msg += wxString::Format( wxT( "| Running job %d, %s" ), jobNum, job.m_job->GetDescription() );
-            msg += _( "\n" );
+            msg += wxT( "\n" );
             msg += wxT( "|--------------------------------\n" );
 
             m_reporter->Report( msg, RPT_SEVERITY_INFO );
@@ -135,7 +135,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
                 failCount++;
             }
 
-            msg += _( "\n\n" );
+            msg += wxT( "\n\n" );
             m_reporter->Report( msg, RPT_SEVERITY_INFO );
         }
 

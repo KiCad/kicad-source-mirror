@@ -84,13 +84,12 @@ enum PANEL_NETLIST_INDEX
 
 std::map<JOB_EXPORT_SCH_NETLIST::FORMAT, wxString> jobNetlistNameLookup =
 {
-	{ JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR,      _( "KiCad" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2, _( "OrcadPCB2" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO, _( "Allegro" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::PADS, _( "PADS" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::CADSTAR, _( "CadStar" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE, _( "SPICE" ) },
-    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL, _( "SPICE Model" ) }
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR, wxT( "KiCad" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2, wxT( "OrcadPCB2" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO, wxT( "Allegro" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::PADS, wxT( "CadStar" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE, wxT( "SPICE" ) },
+    { JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL, wxT( "SPICE Model" ) }
 };
 
 /* wxPanels for creating the NoteBook pages for each netlist format: */
@@ -279,8 +278,9 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
 
         // custom netlist (external invokes, not supported)
         auto it = jobNetlistNameLookup.find( m_job->format );
+
         if( it != jobNetlistNameLookup.end() )
-			selectedPageFormatName = it->second;
+            selectedPageFormatName = it->second;
 
         m_buttonAddGenerator->Hide();
         m_buttonDelGenerator->Hide();
