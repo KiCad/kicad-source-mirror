@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-10-01 19:16+0000\n"
+"PO-Revision-Date: 2024-10-03 07:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -16191,6 +16191,9 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Dies kann zu scheinbar doppelten Feldnamen führen, die aber in Wirklichkeit "
+"eindeutig sind und sich nur durch Leerzeichen unterscheiden.  Das Entfernen "
+"der Leerzeichen hat keine Auswirkung auf bestehende Symbolfeldnamen."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
 #, fuzzy
@@ -16965,6 +16968,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
+"Schaltplan enthält Symbole, die Leerzeichen am Anfang/Ende von Feldnamen "
+"haben."
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
@@ -35512,7 +35517,7 @@ msgstr ".1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
+msgstr "Auf Raster abrunden (wenn möglich)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -35520,7 +35525,7 @@ msgstr "Dies ist nur für rechteckige Außenlinien möglich."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr ""
+msgstr "Ecken abrunden (wenn möglich)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 #, fuzzy
@@ -35529,7 +35534,7 @@ msgstr "&Rastergröße:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
 msgid "Copy item layers"
@@ -35546,6 +35551,8 @@ msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
 msgstr ""
+"Dies ist für Elemente wie Pads unmöglich. Diese werden weiterhin den "
+"untenstehenden Wert nutzen."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 #, fuzzy
@@ -47386,11 +47393,11 @@ msgstr ""
 
 #: pcbnew/tools/item_modification_routine.cpp:290
 msgid " Consider enabling the 'Add Slots' option."
-msgstr ""
+msgstr " Prüfen Sie die Aktivierung der Option \"Slots hinzufügen\"."
 
 #: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Slots were added."
-msgstr ""
+msgstr " Slots hinzugefügt."
 
 #: pcbnew/tools/item_modification_routine.cpp:383
 #: pcbnew/tools/pcb_actions.cpp:639
@@ -49554,7 +49561,7 @@ msgstr "Segment teilen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2731
 msgid "Split Arc"
-msgstr ""
+msgstr "Bogen teilen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2808
 msgid "Remove Zone Corner"
