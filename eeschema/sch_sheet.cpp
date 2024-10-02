@@ -1532,6 +1532,59 @@ void SCH_SHEET::setPageNumber( const KIID_PATH& aPath, const wxString& aPageNumb
 }
 
 
+bool SCH_SHEET::HasPageNumberChanges( const SCH_SHEET& aOther ) const
+{
+    // Avoid self comparison.
+    if( &aOther == this )
+        return false;
+
+    // A difference in the instance data count implies a page numbering change.
+    if( GetInstances().size() != aOther.GetInstances().size() )
+        return true;
+
+    std::vector<SCH_SHEET_INSTANCE> instances = GetInstances();
+    std::vector<SCH_SHEET_INSTANCE> otherInstances = aOther.GetInstances();
+
+    // Sorting may not be necessary but there is no guaratee that sheet
+    // instance data will be in the correct KIID_PATH order.  We should
+    // probably use a std::map instead of a std::vector to store the sheet
+    // instance data.
+    std::sort( instances.begin(), instances.end(),
+               []( const SCH_SHEET_INSTANCE& aLhs, const SCH_SHEET_INSTANCE& aRhs )
+               {
+                   if( aLhs.m_Path > aRhs.m_Path )
+                       return true;
+
+                   return false;
+               } );
+    std::sort( otherInstances.begin(), otherInstances.end(),
+               []( const SCH_SHEET_INSTANCE& aLhs, const SCH_SHEET_INSTANCE& aRhs )
+               {
+                   if( aLhs.m_Path > aRhs.m_Path )
+                       return true;
+
+                   return false;
+               } );
+
+    auto itThis = instances.begin();
+    auto itOther = otherInstances.begin();
+
+    while( itThis != instances.end() )
+    {
+        if( ( itThis->m_Path == itOther->m_Path )
+          && ( itThis->m_PageNumber != itOther->m_PageNumber ) )
+        {
+            return true;
+        }
+
+        itThis++;
+        itOther++;
+    }
+
+    return false;
+}
+
+
 int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString& aPageNumberB )
 {
     if( aPageNumberA == aPageNumberB )

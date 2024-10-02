@@ -410,7 +410,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             }
 
             if( schItem )
+            {
+                updateConnectivityFlag();
                 AddCopyForRepeatItem( schItem );
+
+                if( schItem->Type() == SCH_SHEET_T )
+                    rebuildHierarchyNavigator = true;
+            }
         }
         else if( schItem )
         {
@@ -437,7 +443,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     wxCHECK2( origSheet && copySheet, continue );
 
                     if( ( origSheet->GetName() != copySheet->GetName() )
-                      || ( origSheet->GetFileName() != copySheet->GetFileName() ) )
+                      || ( origSheet->GetFileName() != copySheet->GetFileName() )
+                      || origSheet->HasPageNumberChanges( *copySheet ) )
                     {
                         rebuildHierarchyNavigator = true;
                     }
@@ -507,15 +514,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
         RecalculateConnections( &localCommit, connectivityCleanUp );
 
-        // Update the hierarchy navigator when there are sheet changes.
         if( connectivityCleanUp == GLOBAL_CLEANUP )
-        {
             SetSheetNumberAndCount();
-
-            if( rebuildHierarchyNavigator )
-                UpdateHierarchyNavigator();
-        }
     }
+
+    // Update the hierarchy navigator when there are sheet changes.
+    if( rebuildHierarchyNavigator )
+        UpdateHierarchyNavigator();
 }
 
 

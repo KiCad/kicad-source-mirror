@@ -442,6 +442,14 @@ public:
     void AddInstance( const SCH_SHEET_INSTANCE& aInstance );
 
     /**
+     * Check if the instance data of this sheet has any changes compared to \a aOther.
+     *
+     * @param aOther is the sheet to compare against.
+     * @return true if there are page number changes with \a aOther otherwise false.
+     */
+    bool HasPageNumberChanges( const SCH_SHEET& aOther ) const;
+
+    /**
      * Compares page numbers of schematic sheets.
      *
      * @return 0 if the page numbers are equal, -1 if aPageNumberA < aPageNumberB, 1 otherwise

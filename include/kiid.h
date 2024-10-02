@@ -191,6 +191,23 @@ public:
         return false;
     }
 
+    bool operator>( KIID_PATH const& rhs ) const
+    {
+        if( size() != rhs.size() )
+            return size() > rhs.size();
+
+        for( size_t i = 0; i < size(); ++i )
+        {
+            if( at( i ) > rhs.at( i ) )
+                return true;
+
+            if( at( i ) != rhs.at( i ) )
+                return false;
+        }
+
+        return false;
+    }
+
     KIID_PATH& operator+=( const KIID_PATH& aRhs )
     {
         for( const KIID& kiid : aRhs )
