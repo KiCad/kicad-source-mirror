@@ -519,7 +519,6 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
     size_t   groupLen = aGroup.length();
     size_t   i = 0;
     wxString ret;
-    int      braceNesting = 0;
 
     // Parse prefix
     //
@@ -527,13 +526,11 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
     {
         if( isSuperSubOverbar( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
         {
-            braceNesting++;
             i++;
             continue;
         }
         else if( aGroup[i] == '}' )
         {
-            braceNesting--;
             continue;
         }
 
@@ -551,13 +548,11 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
     {
         if( isSuperSubOverbar( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
         {
-            braceNesting++;
             i++;
             continue;
         }
         else if( aGroup[i] == '}' )
         {
-            braceNesting--;
             continue;
         }
 

@@ -190,7 +190,8 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave )
         if( aSave )
             ( *it )->SaveToFile( GetPathForSettingsFile( it->get() ) );
 
-        size_t typeHash = typeid( *it->get() ).hash_code();
+        JSON_SETTINGS* tmp = it->get(); // We use a temporary to surpress a Clang warning
+        size_t         typeHash = typeid( *tmp ).hash_code();
 
         if( m_app_settings_cache.count( typeHash ) )
             m_app_settings_cache.erase( typeHash );

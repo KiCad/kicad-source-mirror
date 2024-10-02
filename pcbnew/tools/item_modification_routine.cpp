@@ -994,14 +994,17 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                 chain.Append( SHAPE_ARC{ arc.GetP0(), inner.GetP0(), ANGLE_180 } );
                 addChain( chain );
                 AddSuccess();
-                break;
             }
+
+            break;
         }
+
         default:
             // Other shapes are not supported with exact outsets
             // (convex) POLY shouldn't be too traumatic and it would bring trapezoids for free.
             break;
         }
+
         break;
     }
     default:
