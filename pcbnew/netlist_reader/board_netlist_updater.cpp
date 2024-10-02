@@ -147,7 +147,6 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
     }
 
     FOOTPRINT* footprint = m_frame->LoadFootprint( aComponent->GetFPID() );
-    footprint->SetComponentClass( m_board->GetComponentClassManager().GetNoneComponentClass() );
 
     if( footprint == nullptr )
     {
@@ -158,6 +157,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
         ++m_errorCount;
         return nullptr;
     }
+
+    footprint->SetComponentClass( m_board->GetComponentClassManager().GetNoneComponentClass() );
 
     if( m_isDryRun )
     {
