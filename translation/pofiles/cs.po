@@ -15,21 +15,22 @@
 # René Široký <siroky.rene@wideservis.cz>, 2023.
 # Andrej Valek <andy@skyrain.eu>, 2024.
 # ivit VT <st17ivito@gmail.com>, 2024.
+# Petr Pazourek <petr.pazourek.brno@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-08-30 18:09+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2024-10-03 07:15+0000\n"
+"Last-Translator: Petr Pazourek <petr.pazourek.brno@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -2006,7 +2007,7 @@ msgstr "Soubor '%s' nelze vytvořit."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Blok návrhu nemá platné ID knihovny."
 
 #: common/design_block_io.cpp:360
 #, fuzzy, c-format
@@ -2019,9 +2020,9 @@ msgid "Design block folder '%s' could not be created."
 msgstr "Soubor '%s' nelze vytvořit."
 
 #: common/design_block_io.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "Soubor schématu '%s' již existuje."
+msgstr "Soubor schématu '%s' nelze uložit jako blok návrhu na '%s'."
 
 #: common/design_block_io.cpp:425
 #, fuzzy, c-format
@@ -2029,9 +2030,9 @@ msgid "Design block metadata file '%s' could not be saved."
 msgstr "Soubor '%s' nelze vytvořit."
 
 #: common/design_block_io.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Adresář '%s' neexistuje"
+msgstr "Návrhový blok '%s' neexistuje."
 
 #: common/design_block_io.cpp:445
 #, fuzzy, c-format
@@ -2039,13 +2040,13 @@ msgid "Design block folder '%s' could not be deleted."
 msgstr "Soubor '%s' nelze vytvořit."
 
 #: common/design_block_lib_table.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"Nalezena duplicitní přezdívka '%s' knihovny v souboru tabulky knihoven "
-"symbolů na řádku %d"
+"Nalezen duplicitní alias '%s' knihovny v souboru tabulky knihoven navrhových "
+"bloků na řádku %d."
 
 #: common/design_block_lib_table.cpp:339
 #, fuzzy, c-format
@@ -3381,27 +3382,26 @@ msgid "Close"
 msgstr "Zavřít"
 
 #: common/dialogs/dialog_print_generic.cpp:155
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Varování: Špatné číslo stupnice"
+msgstr "Varování: Měřítko není číslem."
 
 #: common/dialogs/dialog_print_generic.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Varování: Měřítko je nastaveno na velmi velkou hodnotu.\n"
-" Omezeno na %f"
+"Omezeno na %f."
 
 #: common/dialogs/dialog_print_generic.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
 "Varování: Měřítko je nastaveno na velmi malou hodnotu.\n"
-" Omezeno na %f"
+"Omezeno na %f."
 
 #: common/dialogs/dialog_print_generic.cpp:243
 #: common/dialogs/dialog_print_generic.cpp:294
@@ -4357,9 +4357,9 @@ msgstr "Obnovení jedinečného ID"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:458
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "folder with %s files"
-msgstr "Křivka s %d bodů"
+msgstr "Složka s %s soubory"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:534
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
@@ -7225,12 +7225,12 @@ msgstr "Obrázky DXF nejsou aktuálně podporovány."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Importovaná grafika je příliš velká. Maximální měřítko je %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr ""
+msgstr "Importovaný posun upraven na (%f, %f), aby byl v povoleném limitu"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:121
 #, c-format
@@ -7840,14 +7840,14 @@ msgid "%s and %s"
 msgstr "%s a %s"
 
 #: common/netclass.cpp:166 pcbnew/zone.cpp:624
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s a %s"
+msgstr "%s, %s a %s"
 
 #: common/netclass.cpp:171 pcbnew/zone.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s a %d více"
+msgstr "%s, %s a %d více"
 
 #: common/notifications_manager.cpp:90
 msgid "View Details"
@@ -10162,9 +10162,8 @@ msgid "Automatically Assign Footprints"
 msgstr "Automaticky přiřadit pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Spusťte nástroj pro rozlišení izolační mezery..."
+msgstr "Přiřadit pouzdra automaticky pomocí souboru pouzder"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
 #, fuzzy
@@ -10281,9 +10280,8 @@ msgstr ""
 "Síť %s je graficky připojena ke sběrnici %s, ale není členem této sběrnice"
 
 #: eeschema/connection_graph.cpp:3787 eeschema/erc/erc_item.cpp:232
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Počet nezapojených:"
+msgstr "Nepřipojený konec vodiče"
 
 #: eeschema/connection_graph.cpp:4130
 #, c-format
@@ -10387,9 +10385,8 @@ msgid "Library %s already exists."
 msgstr "Knihovna %s již existuje."
 
 #: eeschema/design_block_utils.cpp:238
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Upravit možnosti této položky knihovny"
+msgstr "Upravit možnosti této položky knihovny:"
 
 #: eeschema/design_block_utils.cpp:239 eeschema/sch_symbol.cpp:2987
 #: pcbnew/footprint.cpp:3783 pcbnew/plot_board_layers.cpp:131
@@ -10404,18 +10401,16 @@ msgstr "Prosím vyberte soubor tabulky knihoven symbolů."
 
 #: eeschema/design_block_utils.cpp:299 eeschema/design_block_utils.cpp:369
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "Návrhové bloky s vnořenými listy nejsou podporovány."
 
 #: eeschema/design_block_utils.cpp:317 eeschema/design_block_utils.cpp:401
-#, fuzzy
 msgid "Error saving temporary schematic file to create design block."
 msgstr ""
-"Chyba uložení souboru schématu '%s'.\n"
-"%s"
+"Chyba při ukládání dočasného souboru schématu pro vytvoření bloku návrhu."
 
 #: eeschema/design_block_utils.cpp:362
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Vyberte položky, které chcete uložit jako návrhový blok."
 
 #: eeschema/design_block_utils.cpp:438
 #, fuzzy
@@ -10439,9 +10434,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[nevybrána žádná knihovna]"
+msgstr "Knihovna návrhových bloků '%s' byla smazána"
 
 #: eeschema/design_block_utils.cpp:492
 #, fuzzy, c-format
@@ -14540,9 +14535,8 @@ msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1278
-#, fuzzy
 msgid "No output file specified in Export tab."
-msgstr "Nezadaný název souboru v exportéru"
+msgstr "V záložce Export není zadán výstupní soubor."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1292
 #, c-format
@@ -14562,7 +14556,7 @@ msgstr "Nelze zapsat výstup BOM '%s'."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1316
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Zapisován výstup BOM do '%s'."
+msgstr "Výstup z BOM zapsán do '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2034
@@ -14931,9 +14925,8 @@ msgstr "Přemapovat Symboly"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr "&Obsah"
+msgstr "Obsah buňky:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
@@ -14980,9 +14973,8 @@ msgstr "Zarovnat horizontálně:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:41
-#, fuzzy
 msgid "Horizontal alignment"
-msgstr "Zarovnat horizontálně:"
+msgstr "Zarovnat horizontálně"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:66
@@ -14992,9 +14984,8 @@ msgstr "Zarovnat vertikálně:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:68
-#, fuzzy
 msgid "Vertical alignment"
-msgstr "Zarovnat vertikálně:"
+msgstr "Zarovnat vertikálně"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
@@ -15014,9 +15005,8 @@ msgstr "Pozadí výplně:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:264
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:191
-#, fuzzy
 msgid "Cell margins:"
-msgstr "Margin"
+msgstr "Okraje buněk:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:305
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:229
@@ -15253,9 +15243,8 @@ msgid "Show ERC exclusions"
 msgstr "Zobrazit ERC vyloučení"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
+msgstr "Označte položky, které jsou vyloučeny ze simulace"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:72
 msgid "Show OP voltages"
@@ -15305,9 +15294,8 @@ msgid "Color highlight thickness:"
 msgstr "Zvýraznit tloušťku:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:149
-#, fuzzy
 msgid "Color highlight opacity:"
-msgstr "DRC porušení: zvýraznění překážek"
+msgstr "Průhlednost barevného zvýraznění:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:166
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:120
@@ -15828,9 +15816,8 @@ msgstr "Nezapojeno"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
-#, fuzzy
 msgid "Pan left/right"
-msgstr "Posun vlevo/vpravo:"
+msgstr "Posun vlevo/vpravo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:43
 #, fuzzy
@@ -15838,9 +15825,8 @@ msgid "Pan right/left"
 msgstr "Posun vpravo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
-#, fuzzy
 msgid "Pan up/down"
-msgstr "Posun nahoru/dolů:"
+msgstr "Posun nahoru/dolů"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
@@ -15869,19 +15855,16 @@ msgid "Action"
 msgstr "Akce"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
-#, fuzzy
 msgid "None:"
-msgstr "Žádné"
+msgstr "Žádné:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Shift"
+msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
@@ -15968,14 +15951,12 @@ msgstr "Varování: Zdvojené jméno"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:851
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1089
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Tato operace nevratně změní aktuální očíslování."
+"Tato akce resetuje vaši globální tabulku knihoven na disku a nelze ji vrátit "
+"zpět."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:920
 msgid ""
@@ -16047,9 +16028,9 @@ msgid "Global field name templates:"
 msgstr "Šablony názvů globálních polí:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "Záznam obsahuje koncové prázdné místo."
+msgstr "Název pole \"%s\" obsahuje počáteční nebo koncové mezery."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -16312,9 +16293,9 @@ msgid "Label connects more than one wire at %d, %d"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:799
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Nemohu se připojit k '%s' "
+msgstr "Čtyři položky spojeny v %d, %d"
 
 #: eeschema/erc/erc.cpp:871
 msgid "Pin with 'no connection' type is connected"
@@ -16346,15 +16327,14 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbol '%s' nenalezen v knihovně '%s'"
 
 #: eeschema/erc/erc.cpp:1336
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr ""
-"Symbol %s má vstupní napájecí vývody na jednotkách %s, které nejsou umístěny."
+msgstr "Symbol '%s' má více pinů se stejným číslem"
 
 #: eeschema/erc/erc.cpp:1346
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "Pouzdro '%s' se neshoduje s kopií v knihovně '%s'."
+msgstr "Pouzdro '%s' se neshoduje s kopií v knihovně '%s'"
 
 #: eeschema/erc/erc.cpp:1395
 #, fuzzy, c-format
@@ -17272,9 +17252,8 @@ msgid "Symbols to New Library..."
 msgstr "Symboly do nové knihovny..."
 
 #: eeschema/menubar.cpp:204
-#, fuzzy
 msgid "Show Design Blocks"
-msgstr "Zobrazit pravidla návrhu."
+msgstr "Zobrazit bloky návrhu"
 
 #: eeschema/menubar.cpp:354
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:174
@@ -17347,9 +17326,9 @@ msgid "Junction at %s, %s"
 msgstr "Propojení na %s, %s"
 
 #: eeschema/net_navigator.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Nezapojené"
+msgstr "Nezapojeno na %s, %s"
 
 #: eeschema/net_navigator.cpp:154
 #, c-format
@@ -17398,11 +17377,9 @@ msgid "Could not open file '%s' to write IBIS model"
 msgstr "Nelze otevřít soubor '%s' pro zápis modelu IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid "Error in parsing model '%s', error: '%s'"
-msgstr ""
-"Chyba při načítání desky.\n"
-"%s"
+msgstr "Chyba při parsování modelu '%s', chyba: '%s'"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:540
 #, c-format
@@ -17950,9 +17927,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Knihovny schématu Altium nebo integrované knihovny"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "Soubor '%s' se nezdá jako platný soubor schématu."
+msgstr "Soubor se nezdá být knihovnou součástek pro CADSTAR"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -19082,9 +19058,8 @@ msgstr "Vyloučit z rozpisky materiálu"
 
 #: eeschema/sch_sheet.cpp:1683 eeschema/sch_symbol.cpp:1123
 #: eeschema/sch_symbol.cpp:3031 pcbnew/footprint.cpp:3800
-#, fuzzy
 msgid "Do not Populate"
-msgstr "Neobsazený"
+msgstr "Neosazovat"
 
 #: eeschema/sch_sheet_path.cpp:58 include/board_item.h:458
 msgid "(Deleted Item)"
@@ -19147,9 +19122,9 @@ msgid "%d Column Table"
 msgstr ""
 
 #: eeschema/sch_table.cpp:545 pcbnew/pcb_table.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "%d Columns"
-msgstr "Sloupce"
+msgstr "%d sloupce"
 
 #: eeschema/sch_table.cpp:613 pcbnew/pcb_table.cpp:577
 #, fuzzy
@@ -19163,9 +19138,8 @@ msgstr "Ohraničení stránky"
 
 #: eeschema/sch_table.cpp:626 pcbnew/pcb_table.cpp:590
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:736
-#, fuzzy
 msgid "Border Style"
-msgstr "Styl okraje:"
+msgstr "Styl ohraničení"
 
 #: eeschema/sch_table.cpp:634 pcbnew/pcb_table.cpp:598
 #, fuzzy
@@ -19192,9 +19166,9 @@ msgid "Separators Color"
 msgstr "Vyčistit barvu"
 
 #: eeschema/sch_tablecell.cpp:52 pcbnew/pcb_tablecell.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Table Cell %s"
-msgstr "Umístit buňky"
+msgstr "Buňka tabulky %s"
 
 #: eeschema/sch_tablecell.cpp:121 pcbnew/pcb_tablecell.cpp:111
 #, fuzzy
@@ -20616,9 +20590,8 @@ msgstr "Kurzor 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1197
 #: eeschema/sim/simulator_frame_ui.cpp:2633
-#, fuzzy
 msgid "Diff"
-msgstr "Rozdíl"
+msgstr "Rozdíly"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1462
 #: eeschema/sim/simulator_frame_ui.cpp:1475
@@ -20633,17 +20606,14 @@ msgid "%s is not tunable"
 msgstr "%s není laditelné"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1560
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "Chyba: žádná aktuální simulace.\n"
+msgstr "Chyba: žádná aktivní simulace.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1569
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
 msgstr "Chyba: typ simulace není definován.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1575
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Chyba: typ simulace nepodporuje vykreslování.\n"
 
@@ -23795,7 +23765,7 @@ msgstr "Otočit proti směru hodinových ručiček:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 msgid "Active layer"
-msgstr "Aktivní vrstva:"
+msgstr "Aktivní vrstva"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
@@ -26969,9 +26939,8 @@ msgid "Local path: monitoring folder changes"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1574
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "Vybraný soubor není platný nebo může být poškozen!"
+msgstr "Vybraný adresář je již součástí git projektu."
 
 #: kicad/project_tree_pane.cpp:1590
 msgid "Failed to initialize git project."
@@ -29578,7 +29547,6 @@ msgstr ""
 "Ukončit a vzdát se svých změn?"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -29595,23 +29563,12 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Série E definovaná v IEC 60063.\n"
-"\n"
-"Dostupné hodnoty jsou přibližně stejně rozmístěny v logaritmickém měřítku.\n"
-"\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
-"\n"
 "- Tato kalkulačka najde kombinace řady E (mezi 10Ω a 1MΩ) k vytvoření "
 "libovolných hodnot.\n"
 "- Můžete zadat požadovaný odpor od 0,0025 do 4000 kΩ.\n"
 "- Zadaná řešení používají maximálně 4 komponenty.\n"
 "\n"
-"Požadovaná hodnota je vždy vyloučena ze sady řešení.<br>\n"
+"Požadovaná hodnota je vždy vyloučena ze sady pro řešení.<br>\n"
 "Volitelně až dvě další hodnoty mohou být vyloučeny v případě problémů s "
 "dostupností součástek.\n"
 "\n"
@@ -34819,9 +34776,8 @@ msgid "Filter vias by size:"
 msgstr "Filtrovat položky podle sítě:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "-- nechat beze změny --"
+msgstr "-- nechat beze změny --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #, fuzzy
@@ -41319,11 +41275,8 @@ msgid "Edit Zone"
 msgstr "Upravit zónu"
 
 #: pcbnew/footprint_editor_utils.cpp:342 pcbnew/footprint_editor_utils.cpp:354
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr ""
-"Aktuální konfigurace neobsahuje knihovnu '%s'.  K úpravě konfigurace "
-"použijte Spravovat knihovny pouzder."
+msgstr "K úpravě konfigurace použijte „Spravovat knihovny pouzder“."
 
 #: pcbnew/footprint_editor_utils.cpp:343
 msgid "Library not found in footprint library table."
@@ -50101,9 +50054,8 @@ msgid "[INFO] load failed: %s"
 msgstr "[INFO] načtení se nezdařilo: vstupní řádek je moc dlouhý\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Konvertor bitmapy na součástky"
+msgstr "bitmap2component;Bitmap;Converter;Konvertor bitmapy na součástky"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
