@@ -1257,6 +1257,8 @@ const BOX2I PCB_TRACK::ViewBBox() const
 
 void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
+    // TODO(JE) Rendering order issue
+#if 0
     // Blind/buried vias (and microvias) use a different net name layer
     PCB_LAYER_ID layerTop, layerBottom;
     LayerPair( &layerTop, &layerBottom );
@@ -1264,10 +1266,11 @@ void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
     bool isBlindBuried =
             m_viaType == VIATYPE::BLIND_BURIED
             || ( m_viaType == VIATYPE::MICROVIA && ( layerTop != F_Cu || layerBottom != B_Cu ) );
+#endif
 
     aLayers[0] = LAYER_VIA_HOLES;
     aLayers[1] = LAYER_VIA_HOLEWALLS;
-    aLayers[2] = isBlindBuried ? NETNAMES_LAYER_ID_START : LAYER_VIA_NETNAMES;
+    aLayers[2] = LAYER_VIA_NETNAMES;
     aCount = 3;
 
     LAYER_RANGE layers( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS );

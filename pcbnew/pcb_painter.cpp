@@ -1077,9 +1077,25 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
 
-        // Blind/buried vias have their hole rendered on the copper layers below
-        if( !isBlindBuried || m_pcbSettings.IsPrinting() )
+        if( isBlindBuried && !m_pcbSettings.IsPrinting() )
+        {
+            radius += m_holePlatingThickness / 2.0;
+
+            m_gal->SetIsStroke( false );
+            m_gal->SetIsFill( true );
+
+            m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
+            m_gal->DrawArc( center, radius, EDA_ANGLE( 180, DEGREES_T ),
+                            EDA_ANGLE( 180, DEGREES_T ) );
+
+            m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
+            m_gal->DrawArc( center, radius, EDA_ANGLE( 0, DEGREES_T ),
+                            EDA_ANGLE( 180, DEGREES_T ) );
+        }
+        else
+        {
             m_gal->DrawCircle( center, radius );
+        }
     }
     else if( ( aLayer == F_Mask && aVia->IsOnLayer( F_Mask ) )
              || ( aLayer == B_Mask && aVia->IsOnLayer( B_Mask ) ) )
@@ -1122,20 +1138,6 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         if( draw )
             m_gal->DrawCircle( center, radius );
-
-        // Also draw the inner portion for blind/buried vias, because this will be in the copper
-        // color and needs to be in the same draw group so that its color can get updated in the
-        // view later
-        if( isBlindBuried && !m_pcbSettings.IsPrinting()
-            && ( aLayer == layerTop || aLayer == layerBottom ) )
-        {
-            radius = ( getViaDrillSize( aVia ) + m_holePlatingThickness ) / 2.0;
-
-            m_gal->SetIsStroke( false );
-            m_gal->SetIsFill( true );
-            m_gal->DrawArc( center, radius, EDA_ANGLE( aLayer == layerTop ? 180 : 0, DEGREES_T ),
-                            EDA_ANGLE( 180, DEGREES_T ) );
-        }
     }
     else if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // draw a ring around the via
     {
