@@ -57,11 +57,11 @@
     },
     {
       "name": "wxpython",
-      "version": "4.2.0#16"
+      "version": "4.2.2"
     },
     {
       "name": "ngspice",
-      "version": "42"
+      "version": "43"
     }
   ]
 }
