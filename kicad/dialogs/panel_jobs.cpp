@@ -68,6 +68,11 @@ public:
     {
         SetAffirmativeId( wxID_SAVE );
 
+        // prevent someone from failing to add the type info in the future
+        wxASSERT( jobTypeInfos.contains( m_output->m_type ) );
+
+        SetTitle( wxString::Format( _( "%s Output Options" ), jobTypeInfos[m_output->m_type].name ) );
+
         if( m_output->m_type != JOBSET_OUTPUT_TYPE::ARCHIVE )
         {
             m_textArchiveFormat->Hide();
@@ -82,11 +87,8 @@ public:
     {
         bool isFolder = false;
         wxString fileWildcard = "";
-        if( jobTypeInfos.contains( m_output->m_type ) )
-        {
-            isFolder = jobTypeInfos[m_output->m_type].outputPathIsFolder;
-            fileWildcard = jobTypeInfos[m_output->m_type].fileWildcard;
-        }
+        isFolder = jobTypeInfos[m_output->m_type].outputPathIsFolder;
+        fileWildcard = jobTypeInfos[m_output->m_type].fileWildcard;
 
         if( isFolder )
         {
