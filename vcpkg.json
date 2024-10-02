@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "kicad",
-  "version": "7.99",
+  "version": "8.99",
   "license": "GPL-2.0+",
   "dependencies": [
     "boost-algorithm",
@@ -62,11 +62,11 @@
     },
     {
       "name": "wxpython",
-      "version": "4.2.0#16"
+      "version": "4.2.2"
     },
     {
       "name": "ngspice",
-      "version": "42"
+      "version": "43"
     },
     {
       "name": "liblzma",
