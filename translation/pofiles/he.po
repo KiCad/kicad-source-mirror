@@ -1,24 +1,32 @@
+# "G.B" <glbarak@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
+"PO-Revision-Date: 2024-10-03 07:15+0000\n"
+"Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
+"master-source/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr ""
+msgstr "כל הקבצים"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:333
 msgid "Build board outline"
-msgstr ""
+msgstr "בנה קו מתאר של הלוח"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:560
 msgid "Create layers"
-msgstr ""
+msgstr "צור שכבות"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:947
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
@@ -41,7 +49,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:709
 msgid "Create zones"
-msgstr ""
+msgstr "צור אזורים מלאים"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:793
 msgid "Build Tech layers"
@@ -47072,7 +47080,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "צור רכיב מתמונת סיביות לשימוש על ידי KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -47080,7 +47088,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
-msgstr ""
+msgstr "כלי שרטוט סכימתי"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
@@ -47088,15 +47096,15 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
-msgstr ""
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
-msgstr ""
+msgstr "כלי צפייה בקבצי גרבר"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
-msgstr ""
+msgstr "צפה בקבצי גרבר"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
@@ -47116,19 +47124,19 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
-msgstr ""
+msgstr "מחשבון PCB KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
-msgstr ""
+msgstr "מחשבון; PCB ;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
-msgstr ""
+msgstr "מחשבון PCB"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "מחשבון עבור חישובים אלקטרונים שונים"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
@@ -47140,7 +47148,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
-msgstr ""
+msgstr "עורך מעגלים"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
@@ -47156,7 +47164,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Circuit board"
-msgstr ""
+msgstr "מעגל מודפס"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -47167,6 +47175,11 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad היא חבילה חינמית וקוד פתוח לעיצוב אלקטרוניקה (EDA). היא כוללת שרטוט "
+"סכימטי, סימולציית מעגלים משולבים, עריכת מעגלים מודפסים (PCB), רינדור תלת "
+"מימד, ותכנון/ייצוא נתונים לפורמטים רבים. KiCad כולל גם ספריית רכיבים איכותית "
+"הכוללת אלפי סמלים, טביעות רגל ודגמי תלת מימד. ל-KiCad דרישות מערכת מינימליות "
+"והוא פועל על לינוקס, חלונות ו-macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad PCB Layout Editor"
@@ -47178,7 +47191,7 @@ msgstr ""
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
-msgstr ""
+msgstr "קובץ גרבר"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
 msgid "Excellon drill file"
