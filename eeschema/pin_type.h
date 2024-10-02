@@ -74,10 +74,34 @@ enum class GRAPHIC_PINSHAPE
 /**
  *  The symbol library pin object orientations.
  */
-enum class PIN_ORIENTATION {
+enum class PIN_ORIENTATION
+{
+    /**
+     * The pin extends rightwards from the connection point.
+     * Probably on the left side of the symbol.
+     * x---|
+     */
     PIN_RIGHT,
+    /**
+     * The pin extends leftwards from the connection point:
+     * Probably on the right side of the symbol.
+     * |---x
+     */
     PIN_LEFT,
+    /**
+     * The pin extends upwards from the connection point:
+     * Probably on the bottom side of the symbol.
+     *  ___
+     *   |
+     *   x
+     */
     PIN_UP,
+    /**
+     * The pin extends downwards from the connection:
+     * Probably on the top side of the symbol.
+     *   x
+     *  _|_
+     */
     PIN_DOWN,
     INHERIT
 };
