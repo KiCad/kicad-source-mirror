@@ -184,6 +184,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     bool                itemsDeselected = false;
     bool                selectedModified = false;
     bool                dirtyConnectivity = false;
+    bool                refreshHierarchy = false;
     SCH_CLEANUP_FLAGS   connectivityCleanUp = NO_CLEANUP;
 
     if( Empty() )
@@ -261,6 +262,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             bulkAddedItems.push_back( schItem );
 
+            if( schItem->Type() == SCH_SHEET_T )
+                refreshHierarchy = true;
+
             break;
         }
 
@@ -298,6 +302,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             bulkRemovedItems.push_back( schItem );
 
+            if( schItem->Type() == SCH_SHEET_T )
+                refreshHierarchy = true;
+
             break;
         }
 
@@ -320,6 +327,17 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
                 if( itemCopy->HasConnectivityChanges( schItem, &currentSheet ) )
                     updateConnectivityFlag();
+
+
+                if( schItem->Type() == SCH_SHEET_T )
+                {
+                    const SCH_SHEET* modifiedSheet = static_cast<const SCH_SHEET*>( schItem );
+                    const SCH_SHEET* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
+                    wxCHECK2( modifiedSheet && originalSheet, continue );
+
+                    if( originalSheet->HasPageNumberChanges( *modifiedSheet ) )
+                        refreshHierarchy = true;
+                }
 
                 undoList.PushItem( itemWrapper );
                 ent.m_copy = nullptr;   // We've transferred ownership to the undo list
@@ -361,6 +379,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
         if( itemsChanged.size() > 0 )
             schematic->OnItemsChanged( itemsChanged );
+
+        if( frame && refreshHierarchy )
+            frame->UpdateHierarchyNavigator();
     }
 
     if( !( aCommitFlags & SKIP_UNDO ) )
