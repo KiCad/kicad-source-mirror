@@ -627,7 +627,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::showHierarchy,    CHECK( hierarchyNavigatorCond ) );
     mgr->SetConditions( EE_ACTIONS::showNetNavigator, CHECK( netNavigatorCond ) );
     mgr->SetConditions( ACTIONS::showProperties,      CHECK( propertiesCond ) );
-    mgr->SetConditions( ACTIONS::showLibraryTree,     CHECK( designBlockCond ) );
+    mgr->SetConditions( EE_ACTIONS::showDesignBlockPanel,     CHECK( designBlockCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );

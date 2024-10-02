@@ -535,7 +535,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
-    mgr->SetConditions( ACTIONS::showLibraryTree,        CHECK( showLibraryTreeCond ) );
+    mgr->SetConditions( EE_ACTIONS::showDesignBlockPanel,        CHECK( showLibraryTreeCond ) );
     mgr->SetConditions( ACTIONS::showProperties,         CHECK( propertiesCond ) );
     mgr->SetConditions( EE_ACTIONS::showHiddenPins,      CHECK( hiddenPinCond ) );
     mgr->SetConditions( EE_ACTIONS::showHiddenFields,    CHECK( hiddenFieldCond ) );

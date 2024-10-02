@@ -192,23 +192,25 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    viewMenu->Add( ACTIONS::showSymbolBrowser );
-    viewMenu->Add( ACTIONS::showSearch, ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
-    viewMenu->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
-
-    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-        viewMenu->Add( EE_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
-
-    if( ADVANCED_CFG::GetCfg().m_EnableDesignBlocks )
-        viewMenu->Add( ACTIONS::showLibraryTree, ACTION_MENU::CHECK, _( "Show Design Blocks" ) );
+    // Show / Hide Panels submenu
+    ACTION_MENU* showHidePanels = new ACTION_MENU( false, selTool );
+    showHidePanels->SetTitle( _( "Show / Hide Panels" ) );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::navigateBack );
-    viewMenu->Add( EE_ACTIONS::navigateUp );
-    viewMenu->Add( EE_ACTIONS::navigateForward );
-    viewMenu->Add( EE_ACTIONS::navigatePrevious );
-    viewMenu->Add( EE_ACTIONS::navigateNext );
+    showHidePanels->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
+    showHidePanels->Add( ACTIONS::showSearch, ACTION_MENU::CHECK );
+    showHidePanels->Add( EE_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
+
+    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+        showHidePanels->Add( EE_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
+
+    if( ADVANCED_CFG::GetCfg().m_EnableDesignBlocks )
+        showHidePanels->Add( EE_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK, _( "Design Blocks" ) );
+
+    viewMenu->Add( showHidePanels );
+
+    viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::showSymbolBrowser );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );
@@ -217,6 +219,15 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomFitObjects );
     viewMenu->Add( ACTIONS::zoomTool );
     viewMenu->Add( ACTIONS::zoomRedraw );
+
+    viewMenu->AppendSeparator();
+    viewMenu->Add( EE_ACTIONS::navigateBack );
+    viewMenu->Add( EE_ACTIONS::navigateUp );
+    viewMenu->Add( EE_ACTIONS::navigateForward );
+    viewMenu->Add( EE_ACTIONS::navigatePrevious );
+    viewMenu->Add( EE_ACTIONS::navigateNext );
+
+
 
     viewMenu->AppendSeparator();
     viewMenu->Add( EE_ACTIONS::toggleHiddenPins,      ACTION_MENU::CHECK );

@@ -1316,13 +1316,15 @@ TOOL_ACTION PCB_ACTIONS::showPythonConsole( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::showLayersManager( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.showLayersManager" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Appearance Manager" ) )
+        .FriendlyName( _( "Appearance" ) )
+        .Tooltip( _( "Show/hide the appearance manager" ) )
         .Icon( BITMAPS::layers_manager ) );
 
 TOOL_ACTION PCB_ACTIONS::showNetInspector( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.showNetInspector" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Net Inspector" ) )
+        .FriendlyName( _( "Net Inspector" ) )
+        .Tooltip( _( "Show/hide the net inspector" ) )
         .Icon( BITMAPS::tools ) );
 
 TOOL_ACTION PCB_ACTIONS::zonesManager( "pcbnew.Control.zonesManager",

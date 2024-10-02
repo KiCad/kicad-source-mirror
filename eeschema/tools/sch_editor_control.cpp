@@ -2820,8 +2820,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ShowHierarchy,         EE_ACTIONS::showHierarchy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowNetNavigator,      EE_ACTIONS::showNetNavigator.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,     ACTIONS::hideLibraryTree.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,     ACTIONS::showLibraryTree.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,     EE_ACTIONS::showDesignBlockPanel.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,     EE_ACTIONS::showDesignBlockPanel.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::toggleHiddenPins.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::toggleHiddenFields.MakeEvent() );

@@ -232,6 +232,15 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
+    ACTION_MENU* showHidePanels = new ACTION_MENU( false, selTool );
+    showHidePanels->SetTitle( _( "Show / Hide Panels" ) );
+    showHidePanels->Add( ACTIONS::showProperties,                 ACTION_MENU::CHECK );
+    showHidePanels->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
+    showHidePanels->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
+    showHidePanels->Add( PCB_ACTIONS::showNetInspector,           ACTION_MENU::CHECK );
+    viewMenu->Add( showHidePanels );
+
+    viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::showFootprintBrowser );
     viewMenu->Add( ACTIONS::show3DViewer );
 
@@ -280,12 +289,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( contrastModeSubMenu );
 
     viewMenu->Add( PCB_ACTIONS::flipBoard,                  ACTION_MENU::CHECK );
-
-    viewMenu->AppendSeparator();
-    viewMenu->Add( ACTIONS::showProperties,                 ACTION_MENU::CHECK );
-    viewMenu->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
-    viewMenu->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
-    viewMenu->Add( PCB_ACTIONS::showNetInspector,           ACTION_MENU::CHECK );
 
 #ifdef __APPLE__
     viewMenu->AppendSeparator();

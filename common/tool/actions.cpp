@@ -424,7 +424,7 @@ TOOL_ACTION ACTIONS::showSearch( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + 'G' )
         .LegacyHotkeyName( "Search" )
-        .FriendlyName( _( "Show Search Panel" ) )
+        .FriendlyName( _( "Search" ) )
         .Tooltip( _( "Show/hide the search panel" ) )
         .Icon( BITMAPS::find ) );
 
@@ -1056,7 +1056,7 @@ TOOL_ACTION ACTIONS::showFootprintEditor( TOOL_ACTION_ARGS()
 TOOL_ACTION ACTIONS::showProperties( TOOL_ACTION_ARGS()
         .Name( "common.Control.showProperties" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Properties Manager" ) )
+        .FriendlyName( _( "Properties" ) )
         .Tooltip( _( "Show/hide the properties manager" ) )
         .Icon( BITMAPS::tools ) );
 

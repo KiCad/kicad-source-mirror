@@ -153,6 +153,13 @@ TOOL_ACTION EE_ACTIONS::syncSelection( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL ) );
 
 // SCH_DESIGN_BLOCK_CONTROL
+TOOL_ACTION EE_ACTIONS::showDesignBlockPanel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.showDesignBlockPanel" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Design Blocks" ) )
+        .Tooltip( _( "Show/hide design blocks library" ) )
+        .Icon( BITMAPS::search_tree ) );
+
 TOOL_ACTION EE_ACTIONS::saveSheetAsDesignBlock( TOOL_ACTION_ARGS()
         .Name( "eeschema.SchDesignBlockControl.saveSheetAsDesignBlock" )
         .Scope( AS_GLOBAL )
@@ -935,7 +942,8 @@ TOOL_ACTION EE_ACTIONS::highlightNetTool( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::showNetNavigator( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showNetNavigator" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Net Navigator" ) ) );
+        .FriendlyName( _( "Net Navigator" ) )
+        .Tooltip( _( "Show/hide the net navigator" ) ) );
 
 TOOL_ACTION EE_ACTIONS::editWithLibEdit( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.editWithSymbolEditor" )
@@ -1364,8 +1372,8 @@ TOOL_ACTION EE_ACTIONS::showHierarchy( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorTool.showHierarchy" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + 'H' )
-        .FriendlyName( _( "Show Hierarchy Navigator" ) )
-        .Tooltip( _( "Show or hide the schematic sheet hierarchy navigator" ) )
+        .FriendlyName( _( "Hierarchy Navigator" ) )
+        .Tooltip( _( "Show/hide the schematic sheet hierarchy navigator" ) )
         .Icon( BITMAPS::hierarchy_nav ) );
 
 

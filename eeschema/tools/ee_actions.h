@@ -202,6 +202,7 @@ public:
     static TOOL_ACTION toggleDNP;
 
     // Design Block management
+    static TOOL_ACTION showDesignBlockPanel;
     static TOOL_ACTION saveSheetAsDesignBlock;
     static TOOL_ACTION saveSelectionAsDesignBlock;
     static TOOL_ACTION deleteDesignBlock;
