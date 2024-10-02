@@ -1106,7 +1106,7 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
         return VECTOR2I( 0, 0 );
 
     if( IsFrontLayer( aLayer ) )
-        aLayer = F_Mask;
+        aLayer = F_Paste;
     else if( IsBackLayer( aLayer ) )
         aLayer = B_Paste;
     else
@@ -1139,7 +1139,7 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
             mratio = board->GetDesignSettings().m_SolderPasteMarginRatio;
     }
 
-    PCB_LAYER_ID cuLayer = ( aLayer == B_Mask ) ? B_Cu : F_Cu;
+    PCB_LAYER_ID cuLayer = ( aLayer == B_Paste ) ? B_Cu : F_Cu;
     VECTOR2I padSize = m_padStack.Size( cuLayer );
 
     VECTOR2I pad_margin;
