@@ -233,7 +233,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
     ACTION_MENU* showHidePanels = new ACTION_MENU( false, selTool );
-    showHidePanels->SetTitle( _( "Show / Hide Panels" ) );
+    showHidePanels->SetTitle( _( "Panels" ) );
     showHidePanels->Add( ACTIONS::showProperties,                 ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
