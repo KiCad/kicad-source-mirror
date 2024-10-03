@@ -431,6 +431,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     }
     else
     {
+        if( m_updateHierarchyNavigator )
+            *m_updateHierarchyNavigator = true;
+
         // If we are renaming files, the undo/redo list becomes invalid and must be cleared.
         m_frame->ClearUndoRedoList();
         m_frame->OnModify();
