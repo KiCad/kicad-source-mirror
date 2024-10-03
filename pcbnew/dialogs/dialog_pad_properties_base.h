@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,8 +24,8 @@ class TEXT_CTRL_EVAL;
 #include <widgets/net_selector.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
-#include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/panel.h>
 #include <wx/checkbox.h>
 #include <wx/simplebook.h>
 #include <wx/combobox.h>
@@ -52,7 +52,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		enum
 		{
 			wxID_DIALOG_EDIT_PAD = 1000,
-			wxID_PADNUMCTRL
+			wxID_PADNUMCTRL,
 		};
 
 		wxBoxSizer* m_MainSizer;
@@ -72,6 +72,11 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_posYCtrl;
 		wxStaticText* m_posYUnits;
 		wxStaticLine* m_staticline5;
+		wxBoxSizer* m_padstackControls;
+		wxStaticText* m_staticText891;
+		wxChoice* m_cbPadstackMode;
+		wxStaticText* m_staticText90;
+		wxChoice* m_cbEditLayer;
 		wxStaticText* m_shapeLabel;
 		wxChoice* m_PadShapeSelector;
 		wxSimplebook* m_shapePropsBook;
@@ -122,16 +127,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxComboBox* m_cb_padrotation;
 		wxStaticText* m_orientationUnits;
 		wxStaticLine* m_staticline6;
-		wxGridBagSizer* m_gbSizerHole;
-		wxStaticText* m_holeShapeLabel;
-		wxChoice* m_holeShapeCtrl;
-		wxStaticText* m_holeXLabel;
-		wxTextCtrl* m_holeXCtrl;
-		wxStaticText* m_holeXUnits;
-		wxStaticText* m_holeYLabel;
-		wxTextCtrl* m_holeYCtrl;
-		wxStaticText* m_holeYUnits;
-		wxStaticLine* m_staticline7;
 		wxCheckBox* m_offsetShapeOpt;
 		wxStaticText* m_offsetShapeOptLabel;
 		wxFlexGridSizer* m_offsetCtrls;
@@ -141,6 +136,16 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_offsetYLabel;
 		wxTextCtrl* m_offsetYCtrl;
 		wxStaticText* m_offsetYUnits;
+		wxStaticLine* m_staticline7;
+		wxGridBagSizer* m_gbSizerHole;
+		wxStaticText* m_holeShapeLabel;
+		wxChoice* m_holeShapeCtrl;
+		wxStaticText* m_holeXLabel;
+		wxTextCtrl* m_holeXCtrl;
+		wxStaticText* m_holeXUnits;
+		wxStaticText* m_holeYLabel;
+		wxTextCtrl* m_holeYCtrl;
+		wxStaticText* m_holeYUnits;
 		wxStaticLine* m_staticline71;
 		wxCheckBox* m_padToDieOpt;
 		wxStaticText* m_padToDieLabel;
@@ -264,13 +269,15 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadstackModeChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditLayerChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerRadiusChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOffsetCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadToDieCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetCopperLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModify( wxCommandEvent& event ) { event.Skip(); }

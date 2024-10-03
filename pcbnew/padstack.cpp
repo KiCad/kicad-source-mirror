@@ -26,6 +26,7 @@
 #include <api/board/board_types.pb.h>
 #include <layer_range.h>
 #include <magic_enum.hpp>
+#include <pad.h>
 #include <pcb_shape.h>
 
 
@@ -71,6 +72,26 @@ PADSTACK& PADSTACK::operator=( const PADSTACK &aOther )
     m_customShapeInZoneMode = aOther.m_customShapeInZoneMode;
     m_drill                 = aOther.m_drill;
     m_secondaryDrill        = aOther.m_secondaryDrill;
+
+    // Data consistency enforcement logic that used to live in the pad properties dialog
+    // TODO(JE) Should these move to individual property setters, so that they are always
+    // enforced even through the properties panel and API?
+
+    ForEachUniqueLayer(
+        [this]( PCB_LAYER_ID aLayer )
+        {
+            PAD_SHAPE shape = Shape( aLayer );
+
+            // Make sure leftover primitives don't stick around
+            if( shape != PAD_SHAPE::CUSTOM )
+                ClearPrimitives( aLayer );
+
+            // rounded rect pads with radius ratio = 0 are in fact rect pads.
+            // So set the right shape (and perhaps issues with a radius = 0)
+            if( shape == PAD_SHAPE::ROUNDRECT && RoundRectRadiusRatio( aLayer ) == 0.0 )
+                SetShape( PAD_SHAPE::RECTANGLE, aLayer );
+        } );
+
     return *this;
 }
 
@@ -704,6 +725,9 @@ bool PADSTACK::DRILL_PROPS::operator==( const DRILL_PROPS& aOther ) const
 
 void PADSTACK::SetMode( MODE aMode )
 {
+    if( m_mode == aMode )
+        return;
+
     m_mode = aMode;
 
     switch( m_mode )
@@ -728,6 +752,11 @@ void PADSTACK::SetMode( MODE aMode )
 
         break;
     }
+
+    // Changing mode invalidates cached shapes
+    // TODO(JE) clean this up -- maybe PADSTACK should own shape caches
+    if( PAD* parentPad = dynamic_cast<PAD*>( m_parent ) )
+        parentPad->SetDirty();
 }
 
 
