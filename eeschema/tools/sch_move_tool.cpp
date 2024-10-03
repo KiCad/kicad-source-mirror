@@ -457,6 +457,25 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     REENTRANCY_GUARD guard( &m_inMoveTool );
 
+    EE_SELECTION& userSelection = m_selectionTool->GetSelection();
+
+    // If a single pin is selected, promote the move selection to its parent symbol
+    if( userSelection.GetSize() == 1 )
+    {
+        EDA_ITEM* selItem = userSelection.Front();
+
+        if( selItem->Type() == SCH_PIN_T )
+        {
+            SCH_ITEM* parent = static_cast<SCH_ITEM*>( selItem->GetParent() );
+
+            if( parent->Type() == SCH_SYMBOL_T )
+            {
+                m_selectionTool->ClearSelection();
+                m_selectionTool->AddItemToSel( parent );
+            }
+        }
+    }
+
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems,
