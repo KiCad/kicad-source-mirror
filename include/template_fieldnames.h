@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifndef _TEMPLATE_FIELDNAME_H_
-#define _TEMPLATE_FIELDNAME_H_
+#pragma once
 
 #include <richio.h>
-#include <template_fieldnames_lexer.h>
 
 class TEMPLATE_FIELDNAMES_LEXER;
 
@@ -196,5 +193,3 @@ private:
     TEMPLATE_FIELDNAMES     m_resolved;
     bool                    m_resolvedDirty;
 };
-
-#endif // _TEMPLATE_FIELDNAME_H_

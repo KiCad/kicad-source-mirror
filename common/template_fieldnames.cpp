@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "template_fieldnames.h"
+
 #include <mutex>
 
-#include <template_fieldnames.h>
+#include <template_fieldnames_lexer.h>
 #include <pgm_base.h>
 #include <string_utils.h>
 
