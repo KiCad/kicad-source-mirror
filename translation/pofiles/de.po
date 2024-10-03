@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-09-30 14:15+0000\n"
+"PO-Revision-Date: 2024-10-04 05:16+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -5538,7 +5538,7 @@ msgstr "Höhe"
 
 #: common/eda_shape.cpp:1939
 msgid "Bezier"
-msgstr "Bezierkurve"
+msgstr "Bézierkurve"
 
 #: common/eda_shape.cpp:1974 eeschema/lib_shape.cpp:604
 msgid "Shape Properties"
@@ -16651,7 +16651,7 @@ msgstr "Pin hat unerwarteten inner edge type."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1732
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "Bezier hat %d Stützstellen. Mindestens 2 werden erwartet."
+msgstr "Bézierkurve hat %d Stützstellen. Mindestens 2 werden erwartet."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2878
 #, c-format
@@ -17767,7 +17767,7 @@ msgstr "Linienzug, %d Punkte"
 #: eeschema/sch_shape.cpp:454
 #, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Bezierkurve, %d Punkte"
+msgstr "Bézierkurve, %d Punkte"
 
 #: eeschema/sch_sheet.cpp:804 eeschema/sch_sheet.cpp:1526
 msgid "Sheet Name"
@@ -34917,7 +34917,7 @@ msgstr "Endpunkt"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:114
 msgid "Bezier Control Point"
-msgstr "Bezier-Stützstelle"
+msgstr "Bézier-Stützstelle"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:198
 msgid "Arc angle:"
