@@ -315,8 +315,18 @@ PANEL_JOBS::PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
     m_buttonDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_buttonOutputAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
 
+    m_jobList->Connect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOBS::onJobListMenu ),
+                                nullptr, this );
+
     rebuildJobList();
     buildOutputList();
+}
+
+
+PANEL_JOBS::~PANEL_JOBS()
+{
+    m_jobList->Disconnect( wxEVT_MENU, wxCommandEventHandler( PANEL_JOBS::onJobListMenu ),
+                            nullptr, this );
 }
 
 
@@ -396,17 +406,65 @@ void PANEL_JOBS::buildOutputList()
 }
 
 
-void PANEL_JOBS::OnJobListDoubleClicked( wxListEvent& aEvent )
+void PANEL_JOBS::openJobOptionsForListItem( size_t aItemIndex )
 {
     EnsurePcbSchFramesOpen();
 
-    long               item = aEvent.GetIndex();
-
-    JOBSET_JOB& job = m_jobsFile->GetJobs()[item];
+    JOBSET_JOB& job = m_jobsFile->GetJobs()[aItemIndex];
 
     KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
 
     m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job, m_frame );
+}
+
+
+void PANEL_JOBS::OnJobListDoubleClicked( wxListEvent& aEvent )
+{
+    long item = aEvent.GetIndex();
+
+    openJobOptionsForListItem( item );
+}
+
+
+void PANEL_JOBS::OnJobListItemRightClick( wxListEvent& event )
+{
+    wxMenu menu;
+    menu.Append( wxID_EDIT, _( "Edit..." ) );
+    menu.Append( wxID_DELETE, _( "Delete" ) );
+
+    m_jobList->PopupMenu( &menu, event.GetPoint() );
+}
+
+
+void PANEL_JOBS::onJobListMenu( wxCommandEvent& aEvent )
+{
+    switch( aEvent.GetId() )
+    {
+    case wxID_EDIT:
+    {
+        long item = m_jobList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+
+        if( item == -1 )
+            return;
+
+        openJobOptionsForListItem( item );
+    }
+    break;
+
+    case wxID_DELETE:
+    {
+        long item = m_jobList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+
+        if( item == -1 )
+            return;
+
+        m_jobsFile->RemoveJob( item );
+        rebuildJobList();
+        break;
+    }
+
+    default: wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
+    }
 }
 
 

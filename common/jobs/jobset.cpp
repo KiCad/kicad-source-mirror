@@ -173,6 +173,13 @@ void JOBSET::MoveJobDown( size_t aJobIdx )
 }
 
 
+void JOBSET::RemoveJob( size_t aJobIdx )
+{
+	m_jobs.erase( m_jobs.begin() + aJobIdx );
+	SetDirty();
+}
+
+
 bool JOBSET::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     bool success = JSON_SETTINGS::SaveToFile( aDirectory, aForce );

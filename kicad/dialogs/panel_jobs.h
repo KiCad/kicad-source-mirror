@@ -35,6 +35,8 @@ public:
     PANEL_JOBS( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
                 std::unique_ptr<JOBSET> aJobsFile );
 
+    ~PANEL_JOBS();
+
     void RemoveOutput( JOBSET_OUTPUT* aOutput );
 
     void EnsurePcbSchFramesOpen();
@@ -43,6 +45,7 @@ protected:
     virtual void OnAddJobClick( wxCommandEvent& aEvent ) override;
     virtual void OnAddOutputClick( wxCommandEvent& aEvent ) override;
     virtual void OnJobListDoubleClicked( wxListEvent& aEvent ) override;
+    virtual void OnJobListItemRightClick( wxListEvent& event ) override;
     virtual void OnSaveButtonClick( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonUp( wxCommandEvent& aEvent ) override;
     virtual void OnJobButtonDown( wxCommandEvent& aEvent ) override;
@@ -54,6 +57,8 @@ private:
     void updateTitle();
     void buildOutputList();
     void addJobOutputPanel( JOBSET_OUTPUT* aOutput );
+    void onJobListMenu( wxCommandEvent& aEvent );
+    void openJobOptionsForListItem( size_t aItemIndex );
 
     wxAuiNotebook*             m_parentBook;
     KICAD_MANAGER_FRAME*       m_frame;

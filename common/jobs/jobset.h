@@ -97,6 +97,7 @@ public:
     void RemoveOutput( JOBSET_OUTPUT* aOutput );
     void MoveJobUp( size_t aJobIdx );
     void MoveJobDown( size_t aJobIdx );
+    void RemoveJob( size_t aJobIdx );
 
 protected:
     wxString getFileExt() const override;
