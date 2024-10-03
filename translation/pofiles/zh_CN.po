@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-09-27 02:15+0000\n"
+"PO-Revision-Date: 2024-10-03 10:15+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -16353,7 +16353,7 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
-"已成功导入 CADSTAR 设计。\n"
+"成功导入 CADSTAR 设计。\n"
 "请查看导入错误和警告 (如果有)。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:541
@@ -42108,7 +42108,7 @@ msgstr "导出 VRML 出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:243
 msgid "Successfully created svg file"
-msgstr "已成功创建 svg 文件"
+msgstr "成功创建 svg 文件"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:245 pcbnew/pcbnew_jobs_handler.cpp:1062
 msgid "Error creating svg file"
