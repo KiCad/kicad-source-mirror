@@ -122,15 +122,17 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
         if( m_reporter )
         {
+            wxString msg_fmt = wxT( "\033[32;1m%s\033[0m\n" );
+
             if( result == 0 )
             {
-                msg = _( "\033[32;1mJob successful\033[0m\n" );
+                msg = wxString::Format( msg_fmt, _( "Job successful" ) );
 
                 successCount++;
             }
             else
             {
-                msg = _(  "\033[31;1mJob failed\033[0m\n" );
+                msg = wxString::Format( msg_fmt, _( "Job failed" ) );
 
                 failCount++;
             }
@@ -159,8 +161,11 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
     if( m_reporter )
     {
-        msg = wxString::Format( _( "\n\n\033[33;1m%d jobs succeeded, %d job failed\033[0m\n" ),
-                                successCount, failCount );
+        msg = wxString::Format( wxT( "\n\n\033[33;1m%d %s, %d %s\033[0m\n" ),
+                                successCount,
+                                wxT( "jobs succeeded" ),
+                                failCount,
+                                wxT( "job failed" ) );
 
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
     }

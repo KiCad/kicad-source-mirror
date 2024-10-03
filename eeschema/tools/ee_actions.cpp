@@ -1284,14 +1284,14 @@ TOOL_ACTION EE_ACTIONS::repairSchematic( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::previousUnit( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.previousUnit" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Previous Unit" ) )
+        .FriendlyName( _( "Previous Symbol Unit" ) )
         .Tooltip( _( "Open the previous unit of the symbol" ) )
         .Parameter<int>( -1 ) );
 
 TOOL_ACTION EE_ACTIONS::nextUnit( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.nextUnit" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Next Unit" ) )
+        .FriendlyName( _( "Next Symbol Unit" ) )
         .Tooltip( _( "Open the next unit of the symbol" ) )
         .Parameter<int>( 1 ) );
 
