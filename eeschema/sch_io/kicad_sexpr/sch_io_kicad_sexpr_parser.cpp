@@ -371,13 +371,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             break;
 
         case T_pin_numbers:
-            token = NextTok();
-
-            if( token != T_hide )
-                Expecting( "hide" );
-
-            symbol->SetShowPinNumbers( false );
-            NeedRIGHT();
+            parsePinNumbers( symbol );
             break;
 
         case T_exclude_from_sim:
@@ -860,29 +854,88 @@ void SCH_IO_KICAD_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSym
     wxCHECK_RET( CurTok() == T_pin_names,
                  "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_name token." );
 
-    T token = NextTok();
+    /**
+     * (pin_names
+     *    (offset 123)  ; optional
+     *    (hide yes/no) ; optional
+     *    hide          ; optional, pre-20241004
+     * )
+     */
 
-    if( token == T_LEFT )
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
+        // Pre-20241004 format - bare 'hide' keyword
+        if( token == T_hide )
+        {
+            aSymbol->SetShowPinNames( false );
+            continue;
+        }
+
+        if( token != T_LEFT )
+        {
+            Expecting( T_LEFT );
+        }
+
         token = NextTok();
 
-        if( token != T_offset )
-            Expecting( "offset" );
+        switch( token )
+        {
+        case T_offset:
+            aSymbol->SetPinNameOffset( parseInternalUnits( "pin name offset" ) );
+            NeedRIGHT();
+            break;
 
-        aSymbol->SetPinNameOffset( parseInternalUnits( "pin name offset" ) );
-        NeedRIGHT();
-        token = NextTok();  // Either ) or hide
-    }
+        case T_hide:
+            aSymbol->SetShowPinNames( !parseBool() );
+            NeedRIGHT();
+            break;
 
-    if( token == T_hide )
-    {
-        aSymbol->SetShowPinNames( false );
-        NeedRIGHT();
+        default:
+            Expecting( "offset or hide" );
+        }
     }
-    else if( token != T_RIGHT )
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parsePinNumbers( std::unique_ptr<LIB_SYMBOL>& aSymbol )
+{
+    wxCHECK_RET( CurTok() == T_pin_numbers,
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_number token." );
+
+    /**
+     * (pin_numbers
+     *    (hide yes/no) ; optional
+     *    hide          ; optional (pre-20241004)
+     * )
+     */
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
-        THROW_PARSE_ERROR( _( "Invalid pin names definition" ), CurSource(), CurLine(),
-                           CurLineNumber(), CurOffset() );
+        // Pre-20241004 format - bare 'hide' keyword
+        if( token == T_hide )
+        {
+            aSymbol->SetShowPinNumbers( false );
+            continue;
+        }
+
+        if( token != T_LEFT )
+        {
+            Expecting( T_LEFT );
+        }
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_hide:
+            aSymbol->SetShowPinNumbers( !parseBool() );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "hide" );
+            break;
+        }
     }
 }
 
@@ -1497,6 +1550,7 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
+        // Pre-2024104 format (bare 'hide' keyword)
         if( token == T_hide )
         {
             pin->SetVisible( false );
@@ -1527,6 +1581,11 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
 
         case T_length:
             pin->SetLength( parseInternalUnits( "pin length" ) );
+            NeedRIGHT();
+            break;
+
+        case T_hide:
+            pin->SetVisible( !parseBool() );
             NeedRIGHT();
             break;
 
@@ -1629,7 +1688,7 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
         }
 
         default:
-            Expecting( "at, name, number, length, or alternate" );
+            Expecting( "at, name, number, hide, length, or alternate" );
         }
     }
 

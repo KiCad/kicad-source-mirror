@@ -192,6 +192,7 @@ private:
     void parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax,
                         bool aEnforceMinTextSize = true );
     void parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol );
+    void parsePinNumbers( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 
     SCH_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 

@@ -175,7 +175,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
         // TODO: add anchor position token here.
 
         if( !aSymbol->GetShowPinNumbers() )
-            aFormatter.Print( 0, " (pin_numbers hide)" );
+            aFormatter.Print( 0, " (pin_numbers (hide yes))" );
 
         if( aSymbol->GetPinNameOffset() != schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET )
           || !aSymbol->GetShowPinNames() )
@@ -190,7 +190,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
             }
 
             if( !aSymbol->GetShowPinNames() )
-                aFormatter.Print( 0, " hide" );
+                aFormatter.Print( 0, " (hide yes)" );
 
             aFormatter.Print( 0, ")" );
         }
@@ -455,7 +455,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( SCH_PIN* aPin, OUTPUTFORMATTER& aFor
                                                            aPin->GetLength() ).c_str() );
 
     if( !aPin->IsVisible() )
-        aFormatter.Print( 0, " hide\n" );
+        aFormatter.Print( 0, " (hide yes)\n" );
     else
         aFormatter.Print( 0, "\n" );
 

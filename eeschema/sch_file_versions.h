@@ -110,4 +110,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240620  // Embedded Files
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240716  // Multiple netclass assignments
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20240812  // Netclass color highlighting
-#define SEXPR_SCHEMATIC_FILE_VERSION 20240819    // Embedded Files - Update hash algorithm to Murmur3
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20240819  // Embedded Files - Update hash algorithm to Murmur3
+#define SEXPR_SCHEMATIC_FILE_VERSION 20241004    // Use booleans for 'hide' in symbols
