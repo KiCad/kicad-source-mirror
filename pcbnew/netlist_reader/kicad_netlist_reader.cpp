@@ -28,6 +28,7 @@
 
 #include "pcb_netlist.h"
 #include "netlist_reader.h"
+#include "kicad_netlist_parser.h"
 
 using namespace NL_T;
 

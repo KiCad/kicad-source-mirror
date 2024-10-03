@@ -23,15 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef NETLIST_READER_H
-#define NETLIST_READER_H
+#pragma once
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <macros.h>
 #include <lib_id.h>
-
-#include <netlist_lexer.h>    // netlist_lexer is common to Eeschema and Pcbnew
 
 
 class NETLIST;
@@ -264,85 +261,6 @@ public:
 
 
 /**
- * The parser for reading the KiCad s-expression netlist format.
- */
-class KICAD_NETLIST_PARSER : public NETLIST_LEXER
-{
-public:
-    KICAD_NETLIST_PARSER( LINE_READER* aReader, NETLIST* aNetlist );
-
-    /**
-     * Function Parse
-     * parse the full netlist
-     */
-    void Parse();
-
-    // Useful for debug only:
-    const char* getTokenName( NL_T::T aTok )
-    {
-        return NETLIST_LEXER::TokenName( aTok );
-    }
-
-private:
-    /**
-     * Skip the current token level, i.e
-     * search for the RIGHT parenthesis which closes the current description.
-     */
-    void skipCurrent();
-
-    /**
-     * Parse a component description:
-     * (comp (ref P1)
-     *   (value DB25FEMELLE)
-     *   (footprint DB25FC)
-     *   (libsource (lib conn) (part DB25))
-     *   (property (name PINCOUNT) (value 25))
-     *   (sheetpath (names /) (tstamps /))
-     *   (tstamp 3256759C))
-     */
-    void parseComponent();
-
-    /**
-     * Parse a net section
-     * (net (code 20) (name /PC-A0)
-     *   (node (ref BUS1) (pin 62))
-     *   (node (ref U3) (pin 3))
-     *   (node (ref U9) (pin M6)))
-     *
-     * and set the corresponding pads netnames
-     */
-    void parseNet();
-
-    /**
-     * Read the section "libparts" in the netlist:
-     * (libparts
-     *   (libpart (lib device) (part C)
-     *     (description "Condensateur non polarise")
-     *     (footprints
-     *       (fp SM*)
-     *       (fp C?)
-     *       (fp C1-1))
-     *     (fields
-     *       (field (name Reference) C)
-     *       (field (name Value) C))
-     *     (pins
-     *       (pin (num 1) (name ~) (type passive))
-     *       (pin (num 2) (name ~) (type passive))))
-     *
-     *  And add the strings giving the footprint filter (subsection footprints) of the
-     *  corresponding footprint info
-     *  <p>This section is used by CvPcb, and is not useful in Pcbnew, therefore it it not
-     *  always read </p>
-     */
-    void parseLibPartList();
-
-    NL_T::T      token;
-    LINE_READER* m_lineReader;  ///< The line reader used to parse the netlist.  Not owned.
-    NETLIST*     m_netlist;     ///< The netlist to parse into.  Not owned.
-};
-
-
-/**
  * Read the new s-expression based KiCad netlist format.
  */
 class KICAD_NETLIST_READER : public NETLIST_READER
@@ -359,6 +277,3 @@ public:
 
     virtual void LoadNetlist() override;
 };
-
-
-#endif   // NETLIST_READER_H
