@@ -311,7 +311,7 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
 
 void PCB_VIA::SetWidth( int aWidth )
 {
-    m_padStack.Size( PADSTACK::ALL_LAYERS ) = { aWidth, aWidth };
+    m_padStack.SetSize( { aWidth, aWidth }, PADSTACK::ALL_LAYERS );
 }
 
 

@@ -3136,17 +3136,19 @@ void ALTIUM_PCB::ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6
     else if( aElem.viamode == ALTIUM_PAD_MODE::TOP_MIDDLE_BOTTOM )
     {
         pad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
-        pad->Padstack().Size( PADSTACK::INNER_LAYERS ) =
-            VECTOR2I( aElem.diameter_by_layer[1], aElem.diameter_by_layer[1] );
+        pad->Padstack().SetSize( VECTOR2I( aElem.diameter_by_layer[1], aElem.diameter_by_layer[1] ),
+                                 PADSTACK::INNER_LAYERS );
     }
     else
     {
         pad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
+        int altiumIdx = 0;
 
-        for( int ii = 0; ii < 32; ++ii )
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, 32 ) )
         {
-            VECTOR2I size( aElem.diameter_by_layer[ii], aElem.diameter_by_layer[ii] );
-            pad->Padstack().Size( static_cast<PCB_LAYER_ID>( F_Cu + ii ) ) = size;
+            pad->Padstack().SetSize( VECTOR2I( aElem.diameter_by_layer[altiumIdx],
+                                               aElem.diameter_by_layer[altiumIdx] ), layer );
+            altiumIdx++;
         }
     }
 
@@ -3388,7 +3390,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         {
             int altLayer = CopperLayerToOrdinal( aLayer );
 
-            ps.Size( aLayer ) = aSize;
+            ps.SetSize( aSize, aLayer );
 
             switch( aShape )
             {

@@ -338,7 +338,8 @@ public:
     PAD_SHAPE Shape( PCB_LAYER_ID aLayer ) const;
     void SetShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer );
 
-    VECTOR2I& Size( PCB_LAYER_ID aLayer );
+    // Setter rather than direct access to enforce only positive sizes
+    void SetSize( const VECTOR2I& aSize, PCB_LAYER_ID aLayer );
     const VECTOR2I& Size( PCB_LAYER_ID aLayer ) const;
 
     PAD_DRILL_SHAPE DrillShape() const;

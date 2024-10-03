@@ -260,7 +260,7 @@ public:
 
     void SetSize( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
     {
-        m_padStack.Size( aLayer ) = aSize;
+        m_padStack.SetSize( aSize, aLayer );
         SetDirty();
     }
     const VECTOR2I& GetSize( PCB_LAYER_ID aLayer ) const { return m_padStack.Size( aLayer ); }
@@ -270,10 +270,27 @@ public:
     // in the GUI when the padstack mode is set to anything other than NORMAL, but so that the code
     // compiles, these are set up to work with the front layer (in other words, assume the mode is
     // NORMAL, where F_Cu stores the whole padstack data)
-    void SetSizeX( const int aX ) { if( aX > 0 ) { m_padStack.Size( PADSTACK::ALL_LAYERS ).x = aX; SetDirty(); } }
-    int GetSizeX() const          { return m_padStack.Size( PADSTACK::ALL_LAYERS ).x; }
-    void SetSizeY( const int aY ) { if( aY > 0 ) { m_padStack.Size( PADSTACK::ALL_LAYERS ).y = aY; SetDirty(); } }
-    int GetSizeY() const          { return m_padStack.Size( PADSTACK::ALL_LAYERS ).y; }
+    void SetSizeX( const int aX )
+    {
+        if( aX > 0 )
+        {
+            m_padStack.SetSize( { aX, m_padStack.Size( PADSTACK::ALL_LAYERS ).y }, PADSTACK::ALL_LAYERS );
+            SetDirty();
+        }
+    }
+
+    int GetSizeX() const { return m_padStack.Size( PADSTACK::ALL_LAYERS ).x; }
+
+    void SetSizeY( const int aY )
+    {
+        if( aY > 0 )
+        {
+            m_padStack.SetSize( { m_padStack.Size( PADSTACK::ALL_LAYERS ).x, aY }, PADSTACK::ALL_LAYERS );
+            SetDirty();
+        }
+    }
+
+    int GetSizeY() const { return m_padStack.Size( PADSTACK::ALL_LAYERS ).y; }
 
     void SetDelta( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
     {

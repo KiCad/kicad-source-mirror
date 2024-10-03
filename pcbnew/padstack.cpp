@@ -144,7 +144,7 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
     if( padstack.layers_size() == 1 )
     {
         const PadStackLayer& layer = padstack.layers( 0 );
-        Size( ALL_LAYERS ) = kiapi::common::UnpackVector2( layer.size() );
+        SetSize( kiapi::common::UnpackVector2( layer.size() ), ALL_LAYERS );
         SetLayerSet( kiapi::board::UnpackLayerSet( layer.layers() ) );
         SetShape( FromProtoEnum<PAD_SHAPE>( layer.shape() ), F_Cu );
         SetAnchorShape( FromProtoEnum<PAD_SHAPE>( layer.custom_anchor_shape() ), F_Cu );
@@ -836,9 +836,12 @@ void PADSTACK::SetShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer )
 }
 
 
-VECTOR2I& PADSTACK::Size( PCB_LAYER_ID aLayer )
+void PADSTACK::SetSize( const VECTOR2I& aSize, PCB_LAYER_ID aLayer )
 {
-    return CopperLayer( aLayer ).shape.size;
+    // File formats do not enforce that sizes are always positive, but KiCad requires it
+    VECTOR2I& size = CopperLayer( aLayer ).shape.size;
+    size.x = std::abs( aSize.x );
+    size.y = std::abs( aSize.y );
 }
 
 

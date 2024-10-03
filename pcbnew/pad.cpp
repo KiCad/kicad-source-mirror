@@ -72,8 +72,9 @@ PAD::PAD( FOOTPRINT* parent ) :
     m_padStack( this )
 {
     VECTOR2I& drill = m_padStack.Drill().size;
-    VECTOR2I& size = m_padStack.Size( PADSTACK::ALL_LAYERS );
-    size.x = size.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ); // Default pad size 60 mils.
+    m_padStack.SetSize( { EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ),
+                          EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ) },
+                        PADSTACK::ALL_LAYERS );
     drill.x = drill.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 30 );       // Default drill size 30 mils.
     m_lengthPadToDie      = 0;
 
