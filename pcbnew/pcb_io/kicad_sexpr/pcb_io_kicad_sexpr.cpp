@@ -2020,6 +2020,9 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
         {
             for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, board->GetCopperLayerCount() ) )
             {
+                if( layer == F_Cu )
+                    continue;
+
                 m_out->Print( 0, "(layer %s", m_out->Quotew( LSET::Name( layer ) ).c_str() );
                 formatPadLayer( layer );
                 m_out->Print( 0, ")" );
