@@ -37,6 +37,7 @@
 
 #include <base_units.h>
 #include <bitmap_base.h>
+#include <embedded_files_parser.h>
 #include <lib_id.h>
 #include <sch_pin.h>
 #include <math/util.h>                           // KiROUND

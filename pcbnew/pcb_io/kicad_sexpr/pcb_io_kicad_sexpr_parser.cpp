@@ -37,7 +37,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
-#include <embedded_files.h>
+#include <embedded_files_parser.h>
 #include <font/fontconfig.h>
 #include <magic_enum.hpp>
 #include <pcb_dimension.h>

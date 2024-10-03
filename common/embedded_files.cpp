@@ -17,6 +17,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "embedded_files.h"
+#include "embedded_files_parser.h"
+
 #include <wx/base64.h>
 #include <wx/debug.h>
 #include <wx/file.h>
@@ -31,7 +34,6 @@
 
 #include <zstd.h>
 
-#include <embedded_files.h>
 #include <kiid.h>
 #include <mmh3_hash.h>
 #include <paths.h>

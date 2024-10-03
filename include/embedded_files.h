@@ -17,15 +17,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EMBEDDED_FILES_H
-#define EMBEDDED_FILES_H
+#pragma once
 
 #include <map>
 
 #include <wx/string.h>
 #include <wx/filename.h>
 
-#include <embedded_files_lexer.h>
 #include <mmh3_hash.h>
 #include <picosha2.h>
 #include <richio.h>
@@ -242,18 +240,3 @@ protected:
                                // Otherwise, font files embedded in the element will be
                                // removed on save
 };
-
-
-
-class EMBEDDED_FILES_PARSER : public EMBEDDED_FILES_LEXER
-{
-public:
-    EMBEDDED_FILES_PARSER( LINE_READER* aReader ) :
-            EMBEDDED_FILES_LEXER( aReader )
-    {
-    }
-
-    void ParseEmbedded( EMBEDDED_FILES* aFiles );
-
-};
-#endif // EMBEDDED_FILES_H
