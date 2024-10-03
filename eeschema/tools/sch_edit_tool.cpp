@@ -1971,7 +1971,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // If a single pin is selected, promote to its parent symbol
     if( ( selection.GetSize() == 1 ) && ( curr_item->Type() == SCH_PIN_T ) )
     {
-        SCH_ITEM* parent = static_cast<SCH_ITEM*>( curr_item->GetParent() );
+        EDA_ITEM* parent = curr_item->GetParent();
 
         if( parent->Type() == SCH_SYMBOL_T )
             curr_item = parent;

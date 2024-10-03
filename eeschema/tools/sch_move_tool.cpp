@@ -466,7 +466,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
         if( selItem->Type() == SCH_PIN_T )
         {
-            SCH_ITEM* parent = static_cast<SCH_ITEM*>( selItem->GetParent() );
+            EDA_ITEM* parent = selItem->GetParent();
 
             if( parent->Type() == SCH_SYMBOL_T )
             {
