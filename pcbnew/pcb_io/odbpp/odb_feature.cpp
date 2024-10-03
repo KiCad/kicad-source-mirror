@@ -231,24 +231,22 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
 
     VECTOR2I expansion{ 0, 0 };
 
-    // TODO(JE) padstacks
-
     if( aLayer != UNDEFINED_LAYER && LSET( { F_Mask, B_Mask } ).Contains( aLayer ) )
-        expansion.x = expansion.y = aPad.GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
+        expansion.x = expansion.y = aPad.GetSolderMaskExpansion( aLayer );
 
     if( aLayer != UNDEFINED_LAYER && LSET( { F_Paste, B_Paste } ).Contains( aLayer ) )
-        expansion = aPad.GetSolderPasteMargin( PADSTACK::ALL_LAYERS );
+        expansion = aPad.GetSolderPasteMargin( aLayer );
 
     int mask_clearance = expansion.x;
 
-    VECTOR2I plotSize = aPad.GetSize( PADSTACK::ALL_LAYERS ) + 2 * expansion;
+    VECTOR2I plotSize = aPad.GetSize( aLayer ) + 2 * expansion;
 
-    VECTOR2I center = aPad.ShapePos( PADSTACK::ALL_LAYERS );
+    VECTOR2I center = aPad.ShapePos( aLayer );
 
     wxString width = ODB::SymDouble2String( std::abs( plotSize.x ) );
     wxString height = ODB::SymDouble2String( std::abs( plotSize.y ) );
 
-    switch( aPad.GetShape( PADSTACK::ALL_LAYERS ) )
+    switch( aPad.GetShape( aLayer ) )
     {
     case PAD_SHAPE::CIRCLE:
     {
@@ -284,7 +282,7 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
     }
     case PAD_SHAPE::ROUNDRECT:
     {
-        wxString rad = ODB::SymDouble2String( aPad.GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ) );
+        wxString rad = ODB::SymDouble2String( aPad.GetRoundRectCornerRadius( aLayer ) );
 
         AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundRectSymbol( width, height, rad ),
                              aPad.GetOrientation(), mirror );
@@ -295,9 +293,9 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
     {
         int shorterSide = std::min( plotSize.x, plotSize.y );
         int chamfer = std::max(
-                0, KiROUND( aPad.GetChamferRectRatio( PADSTACK::ALL_LAYERS ) * shorterSide ) );
+                0, KiROUND( aPad.GetChamferRectRatio( aLayer ) * shorterSide ) );
         wxString rad = ODB::SymDouble2String( chamfer );
-        int      positions = aPad.GetChamferPositions( PADSTACK::ALL_LAYERS );
+        int      positions = aPad.GetChamferPositions( aLayer );
 
         AddFeature<ODB_PAD>( ODB::AddXY( center ),
                              AddChamferRectSymbol( width, height, rad, positions ),
@@ -328,7 +326,7 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
     case PAD_SHAPE::CUSTOM:
     {
         SHAPE_POLY_SET shape;
-        aPad.MergePrimitivesAsPolygon( PADSTACK::ALL_LAYERS, &shape );
+        aPad.MergePrimitivesAsPolygon( aLayer, &shape );
 
         // as for custome shape, odb++ don't rotate the polygon,
         // so we rotate the polygon in kicad anticlockwise
@@ -693,6 +691,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             {
                 // here we exchange round hole or slot hole into pad to draw in drill layer
                 PAD dummy( *pad );
+                dummy.Padstack().SetMode( PADSTACK::MODE::NORMAL );
 
                 if( pad->GetDrillSizeX() == pad->GetDrillSizeY() )
                     dummy.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE ); // round hole shape
@@ -773,10 +772,8 @@ void FEATURES_MANAGER::AddVia( const PCB_VIA* aVia, PCB_LAYER_ID aLayer )
         return;
 
     PAD dummy( nullptr ); // default pad shape is circle
-    int hole = aVia->GetDrillValue();
-    dummy.SetDrillSize( VECTOR2I( hole, hole ) );
+    dummy.SetPadstack( aVia->Padstack() );
     dummy.SetPosition( aVia->GetStart() );
-    dummy.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( aVia->GetWidth(), aVia->GetWidth() ) );
 
     AddPadShape( dummy, aLayer );
 }
