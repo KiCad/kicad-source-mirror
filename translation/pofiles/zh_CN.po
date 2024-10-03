@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-09-26 20:16+0000\n"
+"PO-Revision-Date: 2024-10-04 05:19+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -2512,9 +2512,8 @@ msgid "Path"
 msgstr "路径"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "添加设计图块"
+msgstr "设计图块"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
 #, fuzzy, c-format
@@ -10204,9 +10203,8 @@ msgid "Design block '%s' already exists in library '%s'."
 msgstr "符号 '%s' 已存在于库 '%s' 中。"
 
 #: eeschema/design_block_utils.cpp:49
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "覆盖已有预设?"
+msgstr "覆盖已有设计图块?"
 
 #: eeschema/design_block_utils.cpp:69 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -15797,14 +15795,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
-#, fuzzy
 msgid "Remove White Space"
-msgstr "移除重复的走线"
+msgstr "移除空白区域"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "禁止放置焊盘"
+msgstr "保留空白区域"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -17703,7 +17699,7 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
-"已成功导入 CADSTAR 设计。\n"
+"成功导入 CADSTAR 设计。\n"
 "请查看导入错误和警告 (如果有)。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:538
@@ -25319,9 +25315,8 @@ msgid "A new version of KiCad is available!"
 msgstr "KiCad 新版本已发布!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip this version"
-msgstr "跳过此版本"
+msgstr "跳过此版本 (&S)"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
 msgid ""
@@ -25330,9 +25325,8 @@ msgid ""
 msgstr "忽略新版本发布的更新通知。 将显示额外的更新说明。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind me later"
-msgstr "稍后提醒我"
+msgstr "稍后提醒我 (&R)"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:61
 msgid ""
@@ -25341,18 +25335,16 @@ msgid ""
 msgstr "关闭更新通知。 重新启动 KiCad 后将再次显示更新通知。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
-#, fuzzy
 msgid "&View Details"
-msgstr "查看详情"
+msgstr "查看详情 (&V)"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
 msgstr "在浏览器中打开发布公告页面。"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
-#, fuzzy
 msgid "Open &Downloads Page"
-msgstr "打开下载页面"
+msgstr "打开下载页面 (&D)"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
@@ -32326,14 +32318,12 @@ msgid "Export IDFv3"
 msgstr "导出 IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:72
-#, fuzzy
 msgid "Export ODB++ File"
-msgstr "导出到文件"
+msgstr "导出 ODB++ 文件"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:67
-#, fuzzy
 msgid "Export ODB++"
-msgstr "导出 XAO"
+msgstr "导出 ODB++"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:191
 msgid "Non-unity scaled models:"
@@ -34509,9 +34499,8 @@ msgstr "外部"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
-#, fuzzy
 msgid "0.1"
-msgstr ".1"
+msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
@@ -34526,13 +34515,12 @@ msgid "Round corners (when possible)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
-#, fuzzy
 msgid "Grid size:"
-msgstr "网格尺寸 (&G)："
+msgstr "栅格尺寸:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
 #, fuzzy
@@ -36342,14 +36330,12 @@ msgid "Drag (free angle)"
 msgstr "拖动 (自由角度)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
-#, fuzzy
 msgid "Left/right"
-msgstr "左/右平移"
+msgstr "左/右"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
-#, fuzzy
 msgid "Top/bottom"
-msgstr "向下"
+msgstr "上/下"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:88
 #, fuzzy
@@ -44341,7 +44327,7 @@ msgstr "实际图像大小: %dx%d"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:402
 msgid "Successfully created 3D render image"
-msgstr "已成功创建 3D 渲染图像"
+msgstr "成功创建 3D 渲染图像"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:405
 msgid "Error creating 3D render image"
@@ -44349,7 +44335,7 @@ msgstr "成功创建 3D 渲染图像出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:445
 msgid "Successfully created svg file"
-msgstr "已成功创建 svg 文件"
+msgstr "成功创建 svg 文件"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:447 pcbnew/pcbnew_jobs_handler.cpp:1319
 msgid "Error creating svg file"
@@ -44361,9 +44347,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "无法绘制到 '%s'。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:798
-#, fuzzy
 msgid "Successfully created genCAD file\n"
-msgstr "已成功创建 svg 文件"
+msgstr "成功创建 genCAD 文件\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:919
 msgid "Failed to create output directory\n"
@@ -46816,9 +46801,8 @@ msgid "Generate an IPC-2581 file"
 msgstr "生成 IPC-2581 文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1050
-#, fuzzy
 msgid "ODB++ Output File..."
-msgstr "BOM 输出文件"
+msgstr "ODB++ 输出文件..."
 
 #: pcbnew/tools/pcb_actions.cpp:1051
 #, fuzzy
@@ -47617,7 +47601,6 @@ msgid "Generate Placement Rule Areas"
 msgstr "生成放置文件"
 
 #: pcbnew/tools/pcb_actions.cpp:2206
-#, fuzzy
 msgid "Repeat Layout"
 msgstr "复刻布局"
 
