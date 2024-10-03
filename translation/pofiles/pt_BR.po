@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-09-09 09:54+0000\n"
+"PO-Revision-Date: 2024-10-04 05:19+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -2046,9 +2046,9 @@ msgstr ""
 "O arquivo esquemático '%s' não pôde ser salvo como bloco de desenho em '%s'."
 
 #: common/design_block_io.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Não foi possível ler o arquivo de metadados do bloco de desenho '%s'."
+msgstr "Não foi possível salvar o arquivo de metadados do bloco de design '%s'."
 
 #: common/design_block_io.cpp:439
 #, c-format
@@ -2545,23 +2545,21 @@ msgid "Path"
 msgstr "Caminho"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "Adicionar um bloco de desenho"
+msgstr "bloco de desenho"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Houve um erro ao criar a tabela de símbolos da biblioteca '%s'.\n"
+"Houve um erro ao criar a tabela do bloco de desenho da biblioteca '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "Selecione um arquivo do símbolos da tabela da biblioteca."
+msgstr "Selecione um arquivo do bloco de desenho na tabela da biblioteca."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2572,12 +2570,12 @@ msgid "File '%s' not found."
 msgstr "O arquivo '%s' não foi encontrado."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Houve um erro ao ler a tabela de símbolos da biblioteca '%s'.\n"
+"Houve um erro ao ler o bloco de desenho da biblioteca '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:111
@@ -2587,11 +2585,11 @@ msgid "Cannot create global library table '%s'."
 msgstr "Não é possível criar tabela de símbolos da biblioteca '%s'."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
 msgstr ""
-"Houve um erro ao copiar a tabela global de símbolos da biblioteca '%s' para "
-"'%s'."
+"Houve um erro ao copiar a tabela global da biblioteca do blocos de desenho "
+"'%s' para '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -7807,9 +7805,9 @@ msgid "Illegal character found in library nickname"
 msgstr "Um caractere ilegal foi encontrado no apelido da biblioteca"
 
 #: common/lib_table_base.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "Houve uma falha ao fazer o registro na árvore: %s"
+msgstr "Houve uma falha ao obter o escritor para %s"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -10420,14 +10418,13 @@ msgid "Error loading design block %s from library '%s'."
 msgstr "Houve um erro ao carregar o bloco de desenho %s da biblioteca '%s'."
 
 #: eeschema/design_block_utils.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "O símbolo '%s' já existe na biblioteca '%s'."
+msgstr "O bloco de desenho '%s' já existe na biblioteca '%s'."
 
 #: eeschema/design_block_utils.cpp:49
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "Substituir a predefinição existente?"
+msgstr "Substituir o bloco de desenho já existente?"
 
 #: eeschema/design_block_utils.cpp:69 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -11195,9 +11192,8 @@ msgid "Untitled Field"
 msgstr "Campo sem título"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:233
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "Vias Encobertas: não permitido"
+msgstr "Não são permitidos campos duplicados."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:547
 #, c-format
@@ -16137,9 +16133,10 @@ msgid "Global field name templates:"
 msgstr "Modelos de nome global do campo:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "A entrada contém espaço em branco à direita."
+msgstr ""
+"O nome do campo \"%s\" contém espaços em branco à direita e/ou à esquerda."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -16147,16 +16144,18 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Isso pode resultar no que parece ser nomes duplicados no campo, mas que, na "
+"verdade, são nomes exclusivos, diferenciados apenas por caracteres de espaço "
+"em branco.  A remoção dos caracteres de espaço em branco não afetará os "
+"nomes dos campos com símbolos já existentes."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Remove a trilha duplicada"
+msgstr "Remover o espaço em branco"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "Afasta ilhas"
+msgstr "Manter o espaço em branco"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -16931,6 +16930,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
+"Este esquema contém símbolos que apresentam campos com espaço em branco à "
+"esquerda e/ou à direita nos nomes."
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
@@ -17773,14 +17774,12 @@ msgid "Position Y"
 msgstr "Posição Y"
 
 #: eeschema/sch_bitmap.cpp:304 pcbnew/pcb_reference_image.cpp:330
-#, fuzzy
 msgid "Transform Offset X"
-msgstr "Transformar seleção"
+msgstr "Transformar o deslocamento X"
 
 #: eeschema/sch_bitmap.cpp:311 pcbnew/pcb_reference_image.cpp:337
-#, fuzzy
 msgid "Transform Offset Y"
-msgstr "Transformar seleção"
+msgstr "Transformar o deslocamento Y"
 
 #: eeschema/sch_bus_entry.cpp:449
 msgid "Bus to Wire Entry"
@@ -20644,7 +20643,7 @@ msgstr "Houveram erros durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:375 eeschema/tools/simulator_control.cpp:86
 msgid "Warnings during netlist generation."
-msgstr "Avisos durante a geração da netlist."
+msgstr "Houveram alertas durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:385
 msgid "Simulator requires a fully annotated schematic."
@@ -21858,9 +21857,8 @@ msgid "Properties..."
 msgstr "Propriedades..."
 
 #: eeschema/tools/ee_actions.cpp:181
-#, fuzzy
 msgid "Edit properies of design block"
-msgstr "Insira um nome para o bloco de desenho:"
+msgstr "Editar as propriedades para o bloco de desenho"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Save Library As..."
@@ -22111,23 +22109,20 @@ msgid "Draw Hierarchical Sheets"
 msgstr "Folhas hierárquicas para desenhar"
 
 #: eeschema/tools/ee_actions.cpp:513
-#, fuzzy
 msgid "Draw Sheet from File"
-msgstr "Arquivo da folha do desenho"
+msgstr "Desenhar folha a partir do arquivo"
 
 #: eeschema/tools/ee_actions.cpp:514
 msgid "Copy sheet into project and draw on current sheet"
 msgstr "Copiar a folha para o projeto e desenhar na folha atual"
 
 #: eeschema/tools/ee_actions.cpp:522
-#, fuzzy
 msgid "Draw Sheet from Design Block"
-msgstr "Salvar folha como um bloco de desenho..."
+msgstr "Desenhar folha a partir do bloco de desenho"
 
 #: eeschema/tools/ee_actions.cpp:523
-#, fuzzy
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "Copiar a folha para o projeto e desenhar na folha atual"
+msgstr "Copiar o bloco de desenho para o projeto e desenhar na folha atual"
 
 #: eeschema/tools/ee_actions.cpp:531
 msgid "Place Sheet Pins"
@@ -22167,9 +22162,8 @@ msgid "Draw Arcs"
 msgstr "Desenhar arcos"
 
 #: eeschema/tools/ee_actions.cpp:620 pcbnew/tools/pcb_actions.cpp:150
-#, fuzzy
 msgid "Draw Bezier Curve"
-msgstr "Curva Bezier"
+msgstr "Desenhar curva Bezier"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Place Images"
@@ -22900,9 +22894,8 @@ msgid "Move to next sheet by number"
 msgstr "Move para a próxima folha por número"
 
 #: eeschema/tools/ee_actions.cpp:1352
-#, fuzzy
 msgid "Show Hierarchy Navigator"
-msgstr "Navegador hierárquico"
+msgstr "Mostrar o navegador de hierarquia"
 
 #: eeschema/tools/ee_actions.cpp:1353
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -25545,9 +25538,8 @@ msgid "Board file does not exist or is not accessible\n"
 msgstr "O arquivo da placa não existe ou não está acessível\n"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
-#, fuzzy
 msgid "Generate Gencad from a list of layers"
-msgstr "Gerar um DXF a partir de uma lista de camadas"
+msgstr "Gerar um Gencad a partir de uma lista de camadas"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:45
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -26038,9 +26030,8 @@ msgid "A new version of KiCad is available!"
 msgstr "Uma nova versão do KiCad está disponível!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip this version"
-msgstr "Ignorar esta versão"
+msgstr "I&gnorar esta versão"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
 msgid ""
@@ -26051,9 +26042,8 @@ msgstr ""
 "atualização adicionais serão exibidas para versões mais recentes."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind me later"
-msgstr "Me lembrar depois"
+msgstr "Me lembra&r depois"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:61
 msgid ""
@@ -26064,18 +26054,16 @@ msgstr ""
 "novamente quando você reiniciar o KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
-#, fuzzy
 msgid "&View Details"
-msgstr "Ver os detalhes"
+msgstr "&Ver os detalhes"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
 msgstr "Abra um navegador da Web na página de anúncios de lançamento."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
-#, fuzzy
 msgid "Open &Downloads Page"
-msgstr "Abrir a página de download"
+msgstr "Abrir a página de &downloads"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
@@ -31688,9 +31676,8 @@ msgid "Board Cleanup"
 msgstr "Limpeza da placa"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
-#, fuzzy
 msgid "Refill zones before and after cleanup"
-msgstr "Preencha todas as regiões antes de executar a limpeza"
+msgstr "Preencha todas as regiões antes e após a limpeza"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:33
 msgid "Delete &tracks connecting different nets"
@@ -33181,14 +33168,12 @@ msgid "Export IDFv3"
 msgstr "Exportar IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:72
-#, fuzzy
 msgid "Export ODB++ File"
-msgstr "Exportar para arquivo"
+msgstr "Exportar arquivo ODB++"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:67
-#, fuzzy
 msgid "Export ODB++"
-msgstr "Exportar XAO"
+msgstr "Exportar ODB++"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:191
 msgid "Non-unity scaled models:"
@@ -35434,46 +35419,41 @@ msgid "Non Copper Zone Properties"
 msgstr "Propriedades das zonas não cobreadas"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
-#, fuzzy
 msgid "Outset:"
-msgstr "Lado de fora"
+msgstr "Geração:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
-#, fuzzy
 msgid "0.1"
-msgstr ".1"
+msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
+msgstr "Arredondar para fora em múltiplos da grade (quando for possível)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "Isso apenas é possível com saídas retangulares."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr ""
+msgstr "Cantos arredondados (quando for possível)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
-#, fuzzy
 msgid "Grid size:"
-msgstr "Tamanho da &grade:"
+msgstr "Tamanho da grade:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
-#, fuzzy
 msgid "Copy item layers"
-msgstr "Camadas com cobre:"
+msgstr "Copiar camadas do item"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:70
-#, fuzzy
 msgid "Copy item widths (if possible)"
-msgstr "Copia a largura da linha do primeiro objeto"
+msgstr "Copie as larguras dos itens (se for possível)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:71
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:93
@@ -35481,21 +35461,19 @@ msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
 msgstr ""
+"Isso não é possível para itens como ilhas, que ainda usarão o valor abaixo."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer default"
-msgstr "padrão"
+msgstr "Camada padrão"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
-#, fuzzy
 msgid "Delete source items after outset"
-msgstr "Exclua os objetos da origem após a conversão"
+msgstr "Eliminar os itens originais após a geração"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
-#, fuzzy
 msgid "Outset Items"
-msgstr "Itens de texto"
+msgstr "Itens gerados"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:206
 #: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2575
@@ -37351,19 +37329,16 @@ msgid "Drag (free angle)"
 msgstr "Arrasta (ângulo livre)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
-#, fuzzy
 msgid "Left/right"
-msgstr "Desloque à esquerda/direita"
+msgstr "Esquerda/direita"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
-#, fuzzy
 msgid "Top/bottom"
-msgstr "Abaixo"
+msgstr "Cima/abaixo"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:88
-#, fuzzy
 msgid "Board items flip"
-msgstr "Itens suspensos"
+msgstr "Inverter os itens da placa"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:95
 msgid "Allow free pads"
@@ -37410,14 +37385,12 @@ msgstr "Captura o cursor quando o mouse entrar numa região da ilha"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 #: pcbnew/dialogs/panel_edit_options_base.cpp:320
-#, fuzzy
 msgid "When routing tracks"
-msgstr "Ao criar as trilhas"
+msgstr "Ao rotear as trilhas"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:314
-#, fuzzy
 msgid "Snap to tracks and vias:"
-msgstr "Criar trilhas e vias"
+msgstr "Encaixar nas trilhas e nas vias:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:316
 #: pcbnew/dialogs/panel_edit_options_base.cpp:324
@@ -40766,15 +40739,15 @@ msgstr "Verificando os furos das micro-vias..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s mín %s; atual %s)"
+msgstr "(%s furo mín %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s altura máx %s; atual %s)"
+msgstr "(%s furo máx %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -41758,23 +41731,22 @@ msgstr ""
 "Houve uma falha ao renomear o arquivo temporário '%s."
 
 #: pcbnew/files.cpp:1455
-#, fuzzy
 msgid "Generating ODB++ output files"
-msgstr "Gerando o arquivo IPC2581"
+msgstr "Gerando os arquivos ODB++"
 
 #: pcbnew/files.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr ""
-"Houve um erro ao gerar o arquivo IPC2581 '%s'.\n"
+"Houve um erro ao gerar os arquivos ODBPP '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory '%s'."
-msgstr "Houve uma falha ao criar o diretório 'dispositivos'."
+msgstr "Houve uma falha ao criar o diretório '%s'."
 
 #: pcbnew/footprint.cpp:1201
 msgid "Other"
@@ -45135,7 +45107,7 @@ msgid ""
 "\n"
 "Zones will need to be refilled."
 msgstr ""
-"Itens encontrados em camadas indefinidas (%s).\n"
+"Itens foram encontrados em camadas indefinidas (%s).\n"
 "Deseja resgatá-los para a camada %s?\n"
 "\n"
 "As regiões precisarão ser preenchidas novamente."
@@ -45285,29 +45257,24 @@ msgstr ""
 "O preenchimento da região será convertido com base no melhor esforço."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:685
-#, fuzzy
 msgid "Failed to add component data"
-msgstr "Houve uma falha ao ler os dados da imagem."
+msgstr "Houve uma falha ao adicionar os dados do componente"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating Entities"
-msgstr "Anotações de rascunho"
+msgstr "Criando entidades"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:108
-#, fuzzy
 msgid "Init Entity Data"
-msgstr "Dados de commit do Git"
+msgstr "Dados iniciais da entidade"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:119
-#, fuzzy
 msgid "Generating Entities Files"
-msgstr "Gera o arquivo de posicionamento"
+msgstr "Gerando os arquivos das entidades"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
-#, fuzzy
 msgid "ODB++ Production File"
-msgstr "Arquivo de produção IPC-2581"
+msgstr "Arquivo de produção ODB++"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -45662,9 +45629,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Houve uma falha ao plotar para '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:798
-#, fuzzy
 msgid "Successfully created genCAD file\n"
-msgstr "O arquivo svg foi criado com sucesso"
+msgstr "O arquivo genCAD foi criado com sucesso\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:919
 msgid "Failed to create output directory\n"
@@ -46976,9 +46942,8 @@ msgid "Draw Arc"
 msgstr "Desenha arco"
 
 #: pcbnew/tools/drawing_tool.cpp:571
-#, fuzzy
 msgid "Draw Bezier"
-msgstr "Bézier"
+msgstr "Desenhar Bezier"
 
 #: pcbnew/tools/drawing_tool.cpp:1565
 msgid "Draw Dimension"
@@ -47048,27 +47013,23 @@ msgid "Some of the track segments could not be filleted."
 msgstr "Alguns dos segmentos da trilha não puderam ser filetados."
 
 #: pcbnew/tools/edit_tool.cpp:1221
-#, fuzzy
 msgid "Arc radius:"
-msgstr "Arco, raio %s"
+msgstr "Raio do arco:"
 
 #: pcbnew/tools/edit_tool.cpp:1226
-#, fuzzy
 msgid "Add slots in acute corners"
-msgstr "Adicionar um canto na região"
+msgstr "Adicionar fendas em cantos agudos"
 
 #: pcbnew/tools/edit_tool.cpp:1228
-#, fuzzy
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
 msgstr ""
-"Alguns dos cantos dogbone são muito estreitos para encaixar um cortador com "
-"o raio especificado."
+"Adicione fendas em cantos agudos para permitir o acesso a um cortador com o "
+"raio especificado"
 
 #: pcbnew/tools/edit_tool.cpp:1232
-#, fuzzy
 msgid "Dogbone Corner Settings"
-msgstr "Cantos dogbone"
+msgstr "Configurações dos cantos dogbone"
 
 #: pcbnew/tools/edit_tool.cpp:1269
 #: pcbnew/tools/item_modification_routine.cpp:197
@@ -47262,11 +47223,11 @@ msgstr ""
 
 #: pcbnew/tools/item_modification_routine.cpp:290
 msgid " Consider enabling the 'Add Slots' option."
-msgstr ""
+msgstr " Considerar ativar o a opção 'Adicionar fendas'."
 
 #: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Slots were added."
-msgstr ""
+msgstr " Fendas foram adicionadas."
 
 #: pcbnew/tools/item_modification_routine.cpp:383
 #: pcbnew/tools/pcb_actions.cpp:639
@@ -47319,19 +47280,16 @@ msgid "Some of the polygons could not be intersected."
 msgstr "Alguns dos polígonos não puderam ser interseccionados."
 
 #: pcbnew/tools/item_modification_routine.cpp:666
-#, fuzzy
 msgid "Outset items."
-msgstr "Outros itens"
+msgstr "Itens gerados."
 
 #: pcbnew/tools/item_modification_routine.cpp:673
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "Não é possível filetar as linhas selecionadas."
+msgstr "Não é possível gerar os itens selecionados."
 
 #: pcbnew/tools/item_modification_routine.cpp:677
-#, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "Algumas das linhas não puderam ser filetadas."
+msgstr "Alguns dos itens não puderam ser gerados."
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
@@ -47473,14 +47431,12 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Cria trilhas a partir das linhas gráficas que forem selecionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:95
-#, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "Cria a partir da seleção"
+msgstr "Gerar a partir da seleção"
 
 #: pcbnew/tools/pcb_actions.cpp:96
-#, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "Cria linhas gráficas a partir da seleção"
+msgstr "Gerar linhas a partir dos itens selecionados"
 
 #: pcbnew/tools/pcb_actions.cpp:158
 msgid "Add Board Characteristics"
@@ -48196,14 +48152,12 @@ msgid "Generate an IPC-2581 file"
 msgstr "Gera um arquivo IPC-2581"
 
 #: pcbnew/tools/pcb_actions.cpp:1050
-#, fuzzy
 msgid "ODB++ Output File..."
-msgstr "Arquivo BOM gerado"
+msgstr "Arquivo ODB++ criado..."
 
 #: pcbnew/tools/pcb_actions.cpp:1051
-#, fuzzy
 msgid "Generate ODB++ output files"
-msgstr "Sobrescrever o arquivo de saída"
+msgstr "Gerar arquivos ODB++"
 
 #: pcbnew/tools/pcb_actions.cpp:1057
 msgid "IPC-D-356 Netlist File..."
@@ -49034,14 +48988,12 @@ msgstr ""
 "placa"
 
 #: pcbnew/tools/pcb_actions.cpp:2200
-#, fuzzy
 msgid "Generate Placement Rule Areas"
-msgstr "Gera os arquivos de posicionamento"
+msgstr "Gerar regras da região para posicionamento"
 
 #: pcbnew/tools/pcb_actions.cpp:2206
-#, fuzzy
 msgid "Repeat Layout"
-msgstr "Repitir a disposição"
+msgstr "Repetir a disposição"
 
 #: pcbnew/tools/pcb_actions.cpp:2216
 msgid "Route Single Track"
@@ -49391,7 +49343,7 @@ msgstr "Dividir o segmento"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2731
 msgid "Split Arc"
-msgstr ""
+msgstr "Dividir o arco"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2808
 msgid "Remove Zone Corner"
