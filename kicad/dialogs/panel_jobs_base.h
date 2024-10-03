@@ -60,6 +60,8 @@ class PANEL_JOBS_BASE : public PANEL_NOTEBOOK_BASE
 		virtual void OnJobListDoubleClicked( wxListEvent& event ) { event.Skip(); }
 		virtual void OnJobListItemRightClick( wxListEvent& event ) { event.Skip(); }
 		virtual void OnAddJobClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnJobButtonUp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnJobButtonDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddOutputClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRunAllJobsClick( wxCommandEvent& event ) { event.Skip(); }

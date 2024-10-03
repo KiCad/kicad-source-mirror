@@ -193,16 +193,6 @@ public:
         m_choiceArchiveformat->AppendString( _( "Zip" ) );
         m_choiceArchiveformat->SetSelection( 0 );
 
-        if( m_output->m_type == JOBSET_OUTPUT_TYPE::ARCHIVE )
-        {
-            JOBS_OUTPUT_ARCHIVE* archive = static_cast<JOBS_OUTPUT_ARCHIVE*>( m_output->m_outputHandler );
-        }
-        else
-        {
-            JOBS_OUTPUT_FOLDER* folder =
-                    static_cast<JOBS_OUTPUT_FOLDER*>( m_output->m_outputHandler );
-        }
-
         return true;
     }
 
@@ -416,7 +406,7 @@ void PANEL_JOBS::OnJobListDoubleClicked( wxListEvent& aEvent )
 
     KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
 
-    int result = m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job, m_frame );
+    m_frame->Kiway().ProcessJobConfigDialog( iface, job.m_job, m_frame );
 }
 
 
@@ -568,4 +558,40 @@ void PANEL_JOBS::EnsurePcbSchFramesOpen()
 
         frame->OpenProjectFiles( std::vector<wxString>( 1, schFn.GetFullPath() ) );
     }
+}
+
+
+void PANEL_JOBS::OnJobButtonUp( wxCommandEvent& aEvent )
+{
+    long item = m_jobList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+
+    if( item == -1 )
+        return;
+
+    if( item == 0 )
+        return;
+
+    m_jobsFile->MoveJobUp( item );
+
+    rebuildJobList();
+
+    m_jobList->SetItemState( item - 1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+}
+
+
+void PANEL_JOBS::OnJobButtonDown( wxCommandEvent& aEvent )
+{
+    long item = m_jobList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+
+    if( item == -1 )
+        return;
+
+    if( item == m_jobList->GetItemCount() - 1 )
+        return;
+
+    m_jobsFile->MoveJobDown( item );
+
+    rebuildJobList();
+
+    m_jobList->SetItemState( item + 1, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 }

@@ -44,6 +44,8 @@ protected:
     virtual void OnAddOutputClick( wxCommandEvent& aEvent ) override;
     virtual void OnJobListDoubleClicked( wxListEvent& aEvent ) override;
     virtual void OnSaveButtonClick( wxCommandEvent& aEvent ) override;
+    virtual void OnJobButtonUp( wxCommandEvent& aEvent ) override;
+    virtual void OnJobButtonDown( wxCommandEvent& aEvent ) override;
 
     bool GetCanClose() override;
 

@@ -153,6 +153,26 @@ void JOBSET::RemoveOutput( JOBSET_OUTPUT* aOutput )
 }
 
 
+void JOBSET::MoveJobUp( size_t aJobIdx )
+{
+    if( aJobIdx > 0 )
+    {
+        std::swap( m_jobs[aJobIdx], m_jobs[aJobIdx - 1] );
+        SetDirty();
+    }
+}
+
+
+void JOBSET::MoveJobDown( size_t aJobIdx )
+{
+    if( aJobIdx < m_jobs.size() - 1 )
+    {
+        std::swap( m_jobs[aJobIdx], m_jobs[aJobIdx + 1] );
+        SetDirty();
+    }
+}
+
+
 bool JOBSET::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     bool success = JSON_SETTINGS::SaveToFile( aDirectory, aForce );
