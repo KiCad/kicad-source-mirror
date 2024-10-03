@@ -98,10 +98,6 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
 
-        // TODO(JE) Implement this
-        if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
-            wxLogDebug( "Hashing pad with non-simple padstack; hash code needs to be expanded" );
-
         ret = hash<int>{}( static_cast<int>( pad->GetAttribute() ) );
 
         auto hashPadLayer =
