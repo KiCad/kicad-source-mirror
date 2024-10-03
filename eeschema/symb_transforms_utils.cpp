@@ -17,9 +17,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "lib_symbol.h"
-#include "sch_symbol.h"
-#include "sch_pin.h"
+
+#include "symb_transforms_utils.h"
+
+#include <lib_symbol.h>
+#include <sch_symbol.h>
 
 struct ORIENT_MIRROR
 {
@@ -104,4 +106,124 @@ void RotateAndMirrorPin( SCH_PIN& aPin, int aOrientMirror )
 
     if( o.mirror_y )
         aPin.MirrorHorizontallyPin( 0 );
+}
+
+SPIN_STYLE GetPinSpinStyle( const SCH_PIN& aPin, const SCH_SYMBOL& aSymbol )
+{
+    SPIN_STYLE ret = SPIN_STYLE::UP;
+
+    if( aPin.GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
+        ret = SPIN_STYLE::LEFT;
+    else if( aPin.GetOrientation() == PIN_ORIENTATION::PIN_LEFT )
+        ret = SPIN_STYLE::RIGHT;
+    else if( aPin.GetOrientation() == PIN_ORIENTATION::PIN_UP )
+        ret = SPIN_STYLE::BOTTOM;
+    else if( aPin.GetOrientation() == PIN_ORIENTATION::PIN_DOWN )
+        ret = SPIN_STYLE::UP;
+
+    switch( static_cast<SYMBOL_ORIENTATION_T>( aSymbol.GetOrientation()
+                                               & ( ~( SYM_MIRROR_X | SYM_MIRROR_Y ) ) ) )
+    {
+    case SYM_ROTATE_CLOCKWISE:
+    case SYM_ORIENT_90:
+        if( ret == SPIN_STYLE::UP )
+            ret = SPIN_STYLE::LEFT;
+        else if( ret == SPIN_STYLE::BOTTOM )
+            ret = SPIN_STYLE::RIGHT;
+        else if( ret == SPIN_STYLE::LEFT )
+            ret = SPIN_STYLE::BOTTOM;
+        else if( ret == SPIN_STYLE::RIGHT )
+            ret = SPIN_STYLE::UP;
+
+        if( aSymbol.GetOrientation() & SYM_MIRROR_X )
+        {
+            if( ret == SPIN_STYLE::UP )
+                ret = SPIN_STYLE::BOTTOM;
+            else if( ret == SPIN_STYLE::BOTTOM )
+                ret = SPIN_STYLE::UP;
+        }
+
+        if( aSymbol.GetOrientation() & SYM_MIRROR_Y )
+        {
+            if( ret == SPIN_STYLE::LEFT )
+                ret = SPIN_STYLE::RIGHT;
+            else if( ret == SPIN_STYLE::RIGHT )
+                ret = SPIN_STYLE::LEFT;
+        }
+        break;
+    case SYM_ROTATE_COUNTERCLOCKWISE:
+    case SYM_ORIENT_270:
+        if( ret == SPIN_STYLE::UP )
+            ret = SPIN_STYLE::RIGHT;
+        else if( ret == SPIN_STYLE::BOTTOM )
+            ret = SPIN_STYLE::LEFT;
+        else if( ret == SPIN_STYLE::LEFT )
+            ret = SPIN_STYLE::UP;
+        else if( ret == SPIN_STYLE::RIGHT )
+            ret = SPIN_STYLE::BOTTOM;
+
+        if( aSymbol.GetOrientation() & SYM_MIRROR_X )
+        {
+            if( ret == SPIN_STYLE::UP )
+                ret = SPIN_STYLE::BOTTOM;
+            else if( ret == SPIN_STYLE::BOTTOM )
+                ret = SPIN_STYLE::UP;
+        }
+
+        if( aSymbol.GetOrientation() & SYM_MIRROR_Y )
+        {
+            if( ret == SPIN_STYLE::LEFT )
+                ret = SPIN_STYLE::RIGHT;
+            else if( ret == SPIN_STYLE::RIGHT )
+                ret = SPIN_STYLE::LEFT;
+        }
+        break;
+    case SYM_ORIENT_180:
+        if( ret == SPIN_STYLE::UP )
+            ret = SPIN_STYLE::BOTTOM;
+        else if( ret == SPIN_STYLE::BOTTOM )
+            ret = SPIN_STYLE::UP;
+        else if( ret == SPIN_STYLE::LEFT )
+            ret = SPIN_STYLE::RIGHT;
+        else if( ret == SPIN_STYLE::RIGHT )
+            ret = SPIN_STYLE::LEFT;
+
+        if( aSymbol.GetOrientation() & SYM_MIRROR_X )
+        {
+            if( ret == SPIN_STYLE::UP )
+                ret = SPIN_STYLE::BOTTOM;
+            else if( ret == SPIN_STYLE::BOTTOM )
+                ret = SPIN_STYLE::UP;
+        }
+
+        if( aSymbol.GetOrientation() & SYM_MIRROR_Y )
+        {
+            if( ret == SPIN_STYLE::LEFT )
+                ret = SPIN_STYLE::RIGHT;
+            else if( ret == SPIN_STYLE::RIGHT )
+                ret = SPIN_STYLE::LEFT;
+        }
+        break;
+    case SYM_ORIENT_0:
+    case SYM_NORMAL:
+    default:
+        if( aSymbol.GetOrientation() & SYM_MIRROR_X )
+        {
+            if( ret == SPIN_STYLE::UP )
+                ret = SPIN_STYLE::BOTTOM;
+            else if( ret == SPIN_STYLE::BOTTOM )
+                ret = SPIN_STYLE::UP;
+        }
+
+        if( aSymbol.GetOrientation() & SYM_MIRROR_Y )
+        {
+            if( ret == SPIN_STYLE::LEFT )
+                ret = SPIN_STYLE::RIGHT;
+            else if( ret == SPIN_STYLE::RIGHT )
+                ret = SPIN_STYLE::LEFT;
+        }
+        break;
+    }
+
+    return ret;
 }

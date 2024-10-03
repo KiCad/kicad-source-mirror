@@ -53,6 +53,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <schematic.h>
+#include <symb_transforms_utils.h>
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
 #include <sim/sim_model.h> // For V6 to V7 simulation model migration.
@@ -584,119 +585,7 @@ SPIN_STYLE SCH_SCREEN::GetLabelOrientationForPoint( const VECTOR2I&       aPosit
             {
                 if( pin->GetPosition() == aPosition )
                 {
-                    if( pin->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
-                        ret = SPIN_STYLE::LEFT;
-                    else if( pin->GetOrientation() == PIN_ORIENTATION::PIN_LEFT )
-                        ret = SPIN_STYLE::RIGHT;
-                    else if( pin->GetOrientation() == PIN_ORIENTATION::PIN_UP )
-                        ret = SPIN_STYLE::BOTTOM;
-                    else if( pin->GetOrientation() == PIN_ORIENTATION::PIN_DOWN )
-                        ret = SPIN_STYLE::UP;
-
-                    switch( static_cast<SYMBOL_ORIENTATION_T>(
-                            symbol->GetOrientation() & ( ~( SYM_MIRROR_X | SYM_MIRROR_Y ) ) ) )
-                    {
-                    case SYM_ROTATE_CLOCKWISE:
-                    case SYM_ORIENT_90:
-                        if( ret == SPIN_STYLE::UP )
-                            ret = SPIN_STYLE::LEFT;
-                        else if( ret == SPIN_STYLE::BOTTOM )
-                            ret = SPIN_STYLE::RIGHT;
-                        else if( ret == SPIN_STYLE::LEFT )
-                            ret = SPIN_STYLE::BOTTOM;
-                        else if( ret == SPIN_STYLE::RIGHT )
-                            ret = SPIN_STYLE::UP;
-
-                        if( symbol->GetOrientation() & SYM_MIRROR_X )
-                        {
-                            if( ret == SPIN_STYLE::UP )
-                                ret = SPIN_STYLE::BOTTOM;
-                            else if( ret == SPIN_STYLE::BOTTOM )
-                                ret = SPIN_STYLE::UP;
-                        }
-
-                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
-                        {
-                            if( ret == SPIN_STYLE::LEFT )
-                                ret = SPIN_STYLE::RIGHT;
-                            else if( ret == SPIN_STYLE::RIGHT )
-                                ret = SPIN_STYLE::LEFT;
-                        }
-                        break;
-                    case SYM_ROTATE_COUNTERCLOCKWISE:
-                    case SYM_ORIENT_270:
-                        if( ret == SPIN_STYLE::UP )
-                            ret = SPIN_STYLE::RIGHT;
-                        else if( ret == SPIN_STYLE::BOTTOM )
-                            ret = SPIN_STYLE::LEFT;
-                        else if( ret == SPIN_STYLE::LEFT )
-                            ret = SPIN_STYLE::UP;
-                        else if( ret == SPIN_STYLE::RIGHT )
-                            ret = SPIN_STYLE::BOTTOM;
-
-                        if( symbol->GetOrientation() & SYM_MIRROR_X )
-                        {
-                            if( ret == SPIN_STYLE::UP )
-                                ret = SPIN_STYLE::BOTTOM;
-                            else if( ret == SPIN_STYLE::BOTTOM )
-                                ret = SPIN_STYLE::UP;
-                        }
-
-                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
-                        {
-                            if( ret == SPIN_STYLE::LEFT )
-                                ret = SPIN_STYLE::RIGHT;
-                            else if( ret == SPIN_STYLE::RIGHT )
-                                ret = SPIN_STYLE::LEFT;
-                        }
-                        break;
-                    case SYM_ORIENT_180:
-                        if( ret == SPIN_STYLE::UP )
-                            ret = SPIN_STYLE::BOTTOM;
-                        else if( ret == SPIN_STYLE::BOTTOM )
-                            ret = SPIN_STYLE::UP;
-                        else if( ret == SPIN_STYLE::LEFT )
-                            ret = SPIN_STYLE::RIGHT;
-                        else if( ret == SPIN_STYLE::RIGHT )
-                            ret = SPIN_STYLE::LEFT;
-
-                        if( symbol->GetOrientation() & SYM_MIRROR_X )
-                        {
-                            if( ret == SPIN_STYLE::UP )
-                                ret = SPIN_STYLE::BOTTOM;
-                            else if( ret == SPIN_STYLE::BOTTOM )
-                                ret = SPIN_STYLE::UP;
-                        }
-
-                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
-                        {
-                            if( ret == SPIN_STYLE::LEFT )
-                                ret = SPIN_STYLE::RIGHT;
-                            else if( ret == SPIN_STYLE::RIGHT )
-                                ret = SPIN_STYLE::LEFT;
-                        }
-                        break;
-                    case SYM_ORIENT_0:
-                    case SYM_NORMAL:
-                    default:
-                        if( symbol->GetOrientation() & SYM_MIRROR_X )
-                        {
-                            if( ret == SPIN_STYLE::UP )
-                                ret = SPIN_STYLE::BOTTOM;
-                            else if( ret == SPIN_STYLE::BOTTOM )
-                                ret = SPIN_STYLE::UP;
-                        }
-
-                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
-                        {
-                            if( ret == SPIN_STYLE::LEFT )
-                                ret = SPIN_STYLE::RIGHT;
-                            else if( ret == SPIN_STYLE::RIGHT )
-                                ret = SPIN_STYLE::LEFT;
-                        }
-                        break;
-                    }
-
+                    ret = GetPinSpinStyle( *pin, *symbol );
                     break;
                 }
             }
