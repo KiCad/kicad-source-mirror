@@ -66,6 +66,7 @@
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
 #include <math/util.h>                           // KiROUND, Clamp
 #include <string_utils.h>
+#include <stroke_params_parser.h>
 #include <wx/log.h>
 #include <progress_reporter.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
@@ -5556,7 +5557,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                 {
                 case T_shape:
                     token = NextTok();
-                    
+
                     switch( token )
                     {
                     case T_circle:
@@ -5588,7 +5589,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     default:
                         Expecting( "circle, rectangle, roundrect, oval, trapezoid or custom" );
                     }
-                    
+
                     NeedRIGHT();
                     break;
 

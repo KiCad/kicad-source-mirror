@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef STROKE_PARAMS_H
-#define STROKE_PARAMS_H
+#pragma once
 
 #include <map>
 #include <bitmaps.h>
@@ -30,8 +29,8 @@
 #include <gal/color4d.h>
 #include <wx/translation.h>
 #include <geometry/shape.h>
-#include <stroke_params_lexer.h>
 
+class OUTPUTFORMATTER;
 class STROKE_PARAMS_LEXER;
 class MSG_PANEL_ITEM;
 
@@ -122,26 +121,3 @@ private:
     LINE_STYLE     m_lineStyle;
     KIGFX::COLOR4D m_color;
 };
-
-
-class STROKE_PARAMS_PARSER : public STROKE_PARAMS_LEXER
-{
-public:
-    STROKE_PARAMS_PARSER( LINE_READER* aReader, int iuPerMM ) :
-            STROKE_PARAMS_LEXER( aReader ),
-            m_iuPerMM( iuPerMM )
-    {
-    }
-
-    void ParseStroke( STROKE_PARAMS& aStroke );
-
-private:
-    int parseInt( const char* aText );
-    double parseDouble( const char* aText );
-
-private:
-    int  m_iuPerMM;
-};
-
-
-#endif  // STROKE_PARAMS_H

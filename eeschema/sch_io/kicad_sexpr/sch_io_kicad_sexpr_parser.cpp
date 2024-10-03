@@ -59,12 +59,13 @@
 #include <sch_junction.h>
 #include <sch_no_connect.h>
 #include <sch_screen.h>
+#include <sch_shape.h>
 #include <sch_sheet_pin.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.h>
+#include <stroke_params_parser.h>
 #include <template_fieldnames.h>
 #include <trigo.h>
 #include <progress_reporter.h>
-#include <sch_shape.h>
 #include <sim/sim_model.h>
 
 

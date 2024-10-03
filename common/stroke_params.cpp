@@ -16,19 +16,22 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <macros.h>
+
+#include "stroke_params.h"
+#include "stroke_params_parser.h"
+
 #include <base_units.h>
 #include <charconv>
 #include <string_utils.h>
 #include <render_settings.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/shape.h>
+#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
-#include <geometry/geometry_utils.h>
-#include <stroke_params.h>
+#include <macros.h>
 #include <trigo.h>
 #include <widgets/msgpanel.h>
-#include "geometry/shape_rect.h"
 
 using namespace STROKEPARAMS_T;
 
