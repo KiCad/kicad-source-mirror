@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-09-09 18:09+0000\n"
+"PO-Revision-Date: 2024-10-04 05:16+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -19119,9 +19119,8 @@ msgid "Errors during netlist generation."
 msgstr "Houveram erros durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "Houveram erros durante a geração da netlist."
+msgstr "Houveram alertas durante a geração da netlist."
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -41783,9 +41782,9 @@ msgstr ""
 "compatível)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr "Justificativa desconhecida da caixa de texto %d, aText %s"
+msgstr "Justificativa desconhecida da caixa de texto %d, texto %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 msgid "Loading rectangles..."
@@ -42841,15 +42840,17 @@ msgid "Cannot interpret date code %d"
 msgstr "Não foi possível interpretar o código de data %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
 "\n"
 "Zones will need to be refilled."
 msgstr ""
-"Itens encontrados nas camadas sem definição (%s).\n"
-"Deseja resgatá-los para a camada %s?"
+"Itens foram encontrados em camadas indefinidas (%s).\n"
+"Deseja resgatá-los para a camada %s?\n"
+"\n"
+"As regiões precisarão ser preenchidas novamente."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
