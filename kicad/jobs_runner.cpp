@@ -122,16 +122,16 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
         if( m_reporter )
         {
-            wxString msg_fmt = wxT( "\033[32;1m%s\033[0m\n" );
-
             if( result == 0 )
             {
+                wxString msg_fmt = wxT( "\033[32;1m%s\033[0m\n" );
                 msg = wxString::Format( msg_fmt, _( "Job successful" ) );
 
                 successCount++;
             }
             else
             {
+                wxString msg_fmt = wxT( "\033[31;1m%s\033[0m\n" );
                 msg = wxString::Format( msg_fmt, _( "Job failed" ) );
 
                 failCount++;
