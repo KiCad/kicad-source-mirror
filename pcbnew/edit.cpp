@@ -106,7 +106,7 @@ void PCB_EDIT_FRAME::SwitchLayer( PCB_LAYER_ID layer )
         // also capable of being selected.
         else
         {
-            if( layer != B_Cu && layer != F_Cu && layer >= GetBoard()->GetCopperLayerCount() - 1 )
+            if( layer != B_Cu && layer != F_Cu && layer >= GetBoard()->GetCopperLayerCount()*2 )
                 return;
         }
     }
