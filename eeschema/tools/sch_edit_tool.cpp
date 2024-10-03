@@ -2078,6 +2078,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             if( isUndoable )
                 commit.Push( _( "Edit Sheet Properties" ) );
+            else
+                m_frame->UpdateHierarchyNavigator();
         }
         else
         {
