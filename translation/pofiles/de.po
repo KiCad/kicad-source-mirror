@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-10-03 07:15+0000\n"
+"PO-Revision-Date: 2024-10-04 05:19+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -2067,9 +2067,9 @@ msgstr ""
 "gespeichert werden."
 
 #: common/design_block_io.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Designblock Metadatendatei \"%s\" konnte nicht gelesen werden."
+msgstr "Designblock Metadatendatei \"%s\" konnte nicht gespeichert werden."
 
 #: common/design_block_io.cpp:439
 #, c-format
@@ -2566,23 +2566,21 @@ msgid "Path"
 msgstr "Pfad"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "Designblock einzufügen"
+msgstr "Designblock"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Erstellen der Symbolbibliothekstabelle \"%s\".\n"
+"Fehler beim Erstellen der Designblock-Bibliothekstabelle \"%s\".\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "Wähle Sie bitte eine Symbolbibliotheks-Tabellendatei."
+msgstr "Wähle Sie bitte eine Designblock-Bibliothekstabellendatei."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2593,12 +2591,12 @@ msgid "File '%s' not found."
 msgstr "Datei '%s' nicht gefunden."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Lesen der Symbolbibliothekstabelle \"%s\".\n"
+"Fehler beim Lesen der Designblock-Bibliothekstabelle \"%s\".\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:111
@@ -2608,10 +2606,10 @@ msgid "Cannot create global library table '%s'."
 msgstr "Globale Bibliothekstabelle '%s' kann nicht erstellt werden."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
 msgstr ""
-"Fehler beim Kopieren der globalen Symbolbibliothekstabelle \"%s\" nach "
+"Fehler beim Kopieren der globalen Designblock-Bibliothekstabelle \"%s\" nach "
 "\"%s\"."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
@@ -4536,12 +4534,12 @@ msgid "Library '%s' not found."
 msgstr "Bibliothek \"%s\" wurde nicht gefunden."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
 "Das Verzeichnis \"%s\" existiert bereits. Möchten Sie bereits vorhandene "
-"Footprints überschreiben?"
+"Designblöcke überschreiben?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:853
 #: eeschema/dialogs/panel_sym_lib_table.cpp:968
@@ -6423,7 +6421,7 @@ msgstr "Höhe"
 
 #: common/eda_shape.cpp:1935
 msgid "Bezier"
-msgstr "Bezierkurve"
+msgstr "Bézierkurve"
 
 #: common/eda_shape.cpp:1979 eeschema/sch_shape.cpp:698
 msgid "Shape Properties"
@@ -7833,9 +7831,9 @@ msgid "Illegal character found in library nickname"
 msgstr "Unzulässiges Zeichen im Bibliotheks-Aliasnamen gefunden"
 
 #: common/lib_table_base.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "Konnte Baum nicht schreiben: %s"
+msgstr "Konnte keinen Writer für %s ermitteln"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -10449,14 +10447,13 @@ msgid "Error loading design block %s from library '%s'."
 msgstr "Fehler beim Laden von Designblock %s aus Bibliothek \"%s\"."
 
 #: eeschema/design_block_utils.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "Symbol \"%s\" existiert bereits in Bibliothek \"%s\"."
+msgstr "Designblock \"%s\" existiert in Bibliothek \"%s\" bereits."
 
 #: eeschema/design_block_utils.cpp:49
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "Bestehende Voreinstellung überschreiben?"
+msgstr "Bestehenden Designblock überschreiben?"
 
 #: eeschema/design_block_utils.cpp:69 eeschema/sch_base_frame.cpp:273
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -15441,9 +15438,8 @@ msgid "Highlight thickness:"
 msgstr "Hervorhebungsdicke:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:133
-#, fuzzy
 msgid "Highlight netclass colors"
-msgstr "Leiterplatten-Netzklassenfarbe"
+msgstr "Netzklassenfarbe hervorheben"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
 msgid "Color highlight thickness:"
@@ -16196,14 +16192,12 @@ msgstr ""
 "der Leerzeichen hat keine Auswirkung auf bestehende Symbolfeldnamen."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Entferne redundante Leiterbahnen"
+msgstr "Leerzeichen entfernen"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "Pads fernhalten"
+msgstr "Leerzeichen beibehalten"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -16224,14 +16218,14 @@ msgstr ""
 "Bitte die globale Symbol-Bibliothekstabelle im Menü 'Einstellungen' anpassen."
 
 #: eeschema/eeschema.cpp:496
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
-"Beim Laden der globalen Symbol-Bibliothekstabelle ist ein Fehler "
+"Beim Laden der globalen Designblock-Bibliothekstabelle ist ein Fehler "
 "aufgetreten.\n"
-"Bitte die globale Symbol-Bibliothekstabelle im Menü 'Einstellungen' anpassen."
+"Die globale Designblock-Bibliothekstabelle bitte in den Einstellung "
+"bearbeiten."
 
 #: eeschema/eeschema.cpp:556
 #, c-format
@@ -17813,14 +17807,12 @@ msgid "Position Y"
 msgstr "Position Y"
 
 #: eeschema/sch_bitmap.cpp:304 pcbnew/pcb_reference_image.cpp:330
-#, fuzzy
 msgid "Transform Offset X"
-msgstr "Auswahl transformieren"
+msgstr "Offset X transformieren"
 
 #: eeschema/sch_bitmap.cpp:311 pcbnew/pcb_reference_image.cpp:337
-#, fuzzy
 msgid "Transform Offset Y"
-msgstr "Auswahl transformieren"
+msgstr "Offset Y transformieren"
 
 #: eeschema/sch_bus_entry.cpp:449
 msgid "Bus to Wire Entry"
@@ -18051,7 +18043,7 @@ msgstr "Pin hat unerwarteten inner edge type."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1803
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "Bezier hat %d Stützstellen. Mindestens 2 werden erwartet."
+msgstr "Bézierkurve hat %d Stützstellen. Mindestens 2 werden erwartet."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2947
 #, c-format
@@ -19214,7 +19206,7 @@ msgstr "Linienzug, %d Punkte"
 #: eeschema/sch_shape.cpp:532
 #, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Bezierkurve, %d Punkte"
+msgstr "Bézierkurve, %d Punkte"
 
 #: eeschema/sch_shape.cpp:644
 msgid "Body outline color"
@@ -22151,9 +22143,8 @@ msgid "Draw Hierarchical Sheets"
 msgstr "Hierarchische Schaltpläne zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:513
-#, fuzzy
 msgid "Draw Sheet from File"
-msgstr "Zeichnungsblatt-Datei"
+msgstr "Zeichnungsblatt aus Datei zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:514
 msgid "Copy sheet into project and draw on current sheet"
@@ -22164,9 +22155,8 @@ msgid "Draw Sheet from Design Block"
 msgstr "Schaltplanseite aus Designblock erzeugen"
 
 #: eeschema/tools/ee_actions.cpp:523
-#, fuzzy
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "Schaltplanseite in Projekt kopieren und auf aktueller Seiten zeichnen"
+msgstr "Designblock in Projekt kopieren und auf aktueller Seiten zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:531
 msgid "Place Sheet Pins"
@@ -22206,9 +22196,8 @@ msgid "Draw Arcs"
 msgstr "Kreisbögen zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:620 pcbnew/tools/pcb_actions.cpp:150
-#, fuzzy
 msgid "Draw Bezier Curve"
-msgstr "Bezierkurve"
+msgstr "Bézierkurve zeichnen"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Place Images"
@@ -22293,12 +22282,11 @@ msgid "Autoplace Fields"
 msgstr "Felder automatisch anordnen"
 
 #: eeschema/tools/ee_actions.cpp:748
-#, fuzzy
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
 msgstr ""
-"Führt den automatischen Platzierungsalgorithmus für Symbol- oder "
-"Schaltplanfelder aus"
+"Automatischen Platzierungsalgorithmus für Symbol- oder Schaltplanfelder "
+"ausführen"
 
 #: eeschema/tools/ee_actions.cpp:754
 msgid "Change Symbols..."
@@ -22946,9 +22934,8 @@ msgid "Move to next sheet by number"
 msgstr "Zum nächsten Blatt nach Nummer wechseln"
 
 #: eeschema/tools/ee_actions.cpp:1352
-#, fuzzy
 msgid "Show Hierarchy Navigator"
-msgstr "Hierarchie-Navigator"
+msgstr "Hierarchie-Navigator zeigen"
 
 #: eeschema/tools/ee_actions.cpp:1353
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -23712,9 +23699,8 @@ msgid "Keep annotations"
 msgstr "Annotationen beibehalten"
 
 #: eeschema/widgets/design_block_pane.cpp:65
-#, fuzzy
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "Lässt das Symbol für nachfolgende Klicks ausgewählt."
+msgstr "Kopien des Designblocks mit Folgeklicks platzieren."
 
 #: eeschema/widgets/design_block_pane.cpp:68
 msgid "Place the design block as a new sheet."
@@ -25595,9 +25581,8 @@ msgid "Board file does not exist or is not accessible\n"
 msgstr "Platinendatei existiert nicht oder ist nicht zugreifbar\n"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
-#, fuzzy
 msgid "Generate Gencad from a list of layers"
-msgstr "Ein DXF anhand einer Liste von Lagen erstellen"
+msgstr "Gencad aus Liste von Lagen erstellen"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:45
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -26085,9 +26070,8 @@ msgid "A new version of KiCad is available!"
 msgstr "Eine neue Version von KiCad ist verfügbar!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip this version"
-msgstr "Diese Version überspringen"
+msgstr "Diese Version über&springen"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
 msgid ""
@@ -26098,9 +26082,8 @@ msgstr ""
 "neuere Versionen werden zusätzliche Aktualisierungshinweise angezeigt."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind me later"
-msgstr "Später erinnern"
+msgstr "Später e&rinnern"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:61
 msgid ""
@@ -26111,7 +26094,6 @@ msgstr ""
 "wenn KiCad neugestartet wird."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
-#, fuzzy
 msgid "&View Details"
 msgstr "Details anzeigen"
 
@@ -26120,9 +26102,8 @@ msgid "Launch a web browser to the release announcements page."
 msgstr "Die Seite mit den Versionsankündigungen in einem Webbrowser aufrufen."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
-#, fuzzy
 msgid "Open &Downloads Page"
-msgstr "Download-Seite öffnen"
+msgstr "&Download-Seite öffnen"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
@@ -31746,9 +31727,8 @@ msgid "Board Cleanup"
 msgstr "Platine bereinigen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
-#, fuzzy
 msgid "Refill zones before and after cleanup"
-msgstr "Alle Zonen vor dem Aufräumen neu füllen"
+msgstr "Zonen vor und nach Aufräumen erneut füllen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:33
 msgid "Delete &tracks connecting different nets"
@@ -33244,14 +33224,12 @@ msgid "Export IDFv3"
 msgstr "Exportiere IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:72
-#, fuzzy
 msgid "Export ODB++ File"
-msgstr "Export in Datei"
+msgstr "ODB++ Datei exportieren"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:67
-#, fuzzy
 msgid "Export ODB++"
-msgstr "XAO exportieren"
+msgstr "ODB++ exportieren"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:191
 msgid "Non-unity scaled models:"
@@ -35057,9 +35035,8 @@ msgid "Center on footprint"
 msgstr "Auf Footprint zentrieren"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:254
-#, fuzzy
 msgid "Move footprint texts to the center of their parent"
-msgstr "Laden eines Footprint von aktueller Platine in den Editor"
+msgstr "Footprinttexte zum Mittelpunkt ihres übergeordneten Texts verschieben"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -35453,9 +35430,8 @@ msgstr "Bestehender Platzierungs-Regelbereiche ersetzen"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
 #: pcbnew/tools/multichannel_tool.cpp:402
 #: pcbnew/tools/multichannel_tool.cpp:804
-#, fuzzy
 msgid "Group components with their placement rule areas"
-msgstr "Bauteilplatzierungsdateien"
+msgstr "Komponenten mit Platzierungsregelbereichen gruppieren"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:50
 msgid "Generate Multichannel Rule Areas"
@@ -35511,9 +35487,8 @@ msgstr "Außenlinien:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
-#, fuzzy
 msgid "0.1"
-msgstr ".1"
+msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
@@ -35528,9 +35503,8 @@ msgid "Round corners (when possible)"
 msgstr "Ecken abrunden (wenn möglich)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
-#, fuzzy
 msgid "Grid size:"
-msgstr "&Rastergröße:"
+msgstr "Rastergröße:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
@@ -35541,9 +35515,8 @@ msgid "Copy item layers"
 msgstr "Elementlagen kopieren"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:70
-#, fuzzy
 msgid "Copy item widths (if possible)"
-msgstr "Linienbreite des ersten Objekts kopieren"
+msgstr "Elementbreiten kopieren (wenn möglich)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:71
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:93
@@ -35555,9 +35528,8 @@ msgstr ""
 "untenstehenden Wert nutzen."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer default"
-msgstr "Voreinstellung"
+msgstr "Lagenvoreinstellung"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 msgid "Delete source items after outset"
@@ -36152,14 +36124,14 @@ msgid "Include Layers"
 msgstr "Lagenauswahl"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
-#, fuzzy
 msgid "Indicate DNP on fabrication layers"
-msgstr "Pads auf Fabrikationslagen skizzieren"
+msgstr "Nicht zu bestückende Bauteile Fabrikationslagen markieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:81
-#, fuzzy
 msgid "Hide or cross-out DNP footprints on fabrication layers"
-msgstr "Pads auf Fabrikationslagen skizzieren"
+msgstr ""
+"Nicht zu bestückende Bauteile auf Fabrikationslagen verstecken oder "
+"durchstreichen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
 #: pcbnew/widgets/appearance_controls.cpp:654
@@ -36168,14 +36140,12 @@ msgid "Hide"
 msgstr "Verbergen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
-#, fuzzy
 msgid "Hide the footprint text and graphics"
-msgstr "Weitere Footprint-Textelemente"
+msgstr "Footprinttexte und -graphikelemente verstecken"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
-#, fuzzy
 msgid "Cross-out"
-msgstr "Kreuzreferenzierung"
+msgstr "Durchstreichen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Force plotting of invisible values / refs"
@@ -36855,14 +36825,12 @@ msgstr ""
 "Ein eindeutiger Name für diesen Regelbereich zur Verwendung in DRC-Regeln"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:70 pcbnew/zone.cpp:1600
-#, fuzzy
 msgid "Keepout"
 msgstr "Sperrflächen"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:72
-#, fuzzy
 msgid "Rule type"
-msgstr "Regelbereich"
+msgstr "Regeltyp"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:80
 msgid "Keep out tracks"
@@ -36907,9 +36875,8 @@ msgstr ""
 "überlappt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
-#, fuzzy
 msgid "Condition:"
-msgstr "Position:"
+msgstr "Bedingung:"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:204
 msgid "Center Point"
@@ -36973,7 +36940,7 @@ msgstr "Endpunkt"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:114
 msgid "Bezier Control Point"
-msgstr "Bezier-Stützstelle"
+msgstr "Bézier-Stützstelle"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:198
 msgid "Arc angle:"
@@ -37425,19 +37392,16 @@ msgid "Drag (free angle)"
 msgstr "Ziehen (freier Winkel)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
-#, fuzzy
 msgid "Left/right"
-msgstr "Links/rechts schwenken"
+msgstr "Links/rechts"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
-#, fuzzy
 msgid "Top/bottom"
-msgstr "Unten"
+msgstr "Oben/unten"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:88
-#, fuzzy
 msgid "Board items flip"
-msgstr "Schwebende Elemente"
+msgstr "Platinenelemente umdrehen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:95
 msgid "Allow free pads"
@@ -37484,7 +37448,6 @@ msgstr "Zeiger fangen wenn er sich in einen Pad-Bereich begibt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 #: pcbnew/dialogs/panel_edit_options_base.cpp:320
-#, fuzzy
 msgid "When routing tracks"
 msgstr "Beim Anlegen von Leiterbahnen"
 
@@ -40501,9 +40464,8 @@ msgid "Footprint attributes don't match symbol"
 msgstr "Footprintattribute stimmen nicht mit denen des Symbols überein"
 
 #: pcbnew/drc/drc_item.cpp:194
-#, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
-msgstr "Footprint stimmt nicht mit Kopie in Bibliothek überein"
+msgstr "Footprint stimmt nicht mit Footprintfiltern des Symbols überein"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Footprint not found in libraries"
@@ -40870,15 +40832,15 @@ msgstr "Prüfe Mikro-Via-Löcher ..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s min %s; tatsächlich %s)"
+msgstr "(%s min. Loch %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s max. Breite %s; tatsächlich %s)"
+msgstr "(%s max. Loch %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -41858,17 +41820,16 @@ msgstr ""
 "Konnte temporäre Datei \"%s\" nicht umbenennen."
 
 #: pcbnew/files.cpp:1455
-#, fuzzy
 msgid "Generating ODB++ output files"
-msgstr "Erzeuge IPC2581-Datei"
+msgstr "Erzeuge ODB++-Ausgabedatei"
 
 #: pcbnew/files.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Erzeugen der IPC2581-Datei \"%s\".\n"
+"Fehler beim Erzeugen der ODBPP-Datei \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:1471
@@ -42660,14 +42621,12 @@ msgid "Fabrication Outputs"
 msgstr "Fertigungsdaten"
 
 #: pcbnew/menubar_pcb_editor.cpp:304
-#, fuzzy
 msgid "Draw Microwave Shapes"
-msgstr "Mikrowellenform hinzufügen"
+msgstr "Mikrowellenformen zeichnen"
 
 #: pcbnew/menubar_pcb_editor.cpp:327
-#, fuzzy
 msgid "Draw Dimensions"
-msgstr "Bemaßung zeichnen"
+msgstr "Bemaßungen zeichnen"
 
 #: pcbnew/menubar_pcb_editor.cpp:348
 msgid "Auto-Place Footprints"
@@ -43106,7 +43065,7 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Warnungen insgesamt: %d, Fehler insgesamt: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -43454,7 +43413,6 @@ msgid "(corner chamfer is too large)"
 msgstr "(Eckfase ist zu groß.)"
 
 #: pcbnew/pad.cpp:2286
-#, fuzzy
 msgid "(trapezoid delta is too large)"
 msgstr "(Trapez-Delta ist zu groß)"
 
@@ -45404,24 +45362,20 @@ msgid "Failed to add component data"
 msgstr "Konnte Bauteildaten nicht hinzufügen"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating Entities"
-msgstr "Entwurfsnotizen"
+msgstr "Erstelle Objekte"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:108
-#, fuzzy
 msgid "Init Entity Data"
-msgstr "Git Daten committen"
+msgstr "Objektdaten initialisieren"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:119
-#, fuzzy
 msgid "Generating Entities Files"
-msgstr "Positionsdatei generieren"
+msgstr "Erzeuge Objektdateien"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
-#, fuzzy
 msgid "ODB++ Production File"
-msgstr "IPC-2581 Produktionsdatei"
+msgstr "ODB++ Produktionsdatei"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -46194,9 +46148,8 @@ msgid "Save router log"
 msgstr "Router-Protokoll speichern"
 
 #: pcbnew/router/router_tool.cpp:1092
-#, fuzzy
 msgid "Via needs 2 different layers."
-msgstr "Blindes/vergrabenes Via benötigt zwei verschiedene Lagen."
+msgstr "Via benötigt zwei verschiedene Lagen."
 
 #: pcbnew/router/router_tool.cpp:1165
 msgid "Tracks on Copper layers only."
@@ -46499,7 +46452,6 @@ msgid "Increase Via Size"
 msgstr "Via-Größe erhöhen"
 
 #: pcbnew/tools/board_editor_control.cpp:1177
-#, fuzzy
 msgid "Place Footprint"
 msgstr "Footprint platzieren"
 
@@ -47110,9 +47062,8 @@ msgid "Draw Arc"
 msgstr "Kreisbogen zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:571
-#, fuzzy
 msgid "Draw Bezier"
-msgstr "Bezierkurve"
+msgstr "Bézierkurve zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:1565
 msgid "Draw Dimension"
@@ -47187,9 +47138,8 @@ msgid "Arc radius:"
 msgstr "Bogenradius:"
 
 #: pcbnew/tools/edit_tool.cpp:1226
-#, fuzzy
 msgid "Add slots in acute corners"
-msgstr "Ecke zur Zone hinzufügen"
+msgstr "In spitzen Ecken Slots einfügen"
 
 #: pcbnew/tools/edit_tool.cpp:1228
 msgid ""
@@ -47199,9 +47149,8 @@ msgstr ""
 "Radius' herstellbar sind"
 
 #: pcbnew/tools/edit_tool.cpp:1232
-#, fuzzy
 msgid "Dogbone Corner Settings"
-msgstr "Dogbone-Ecken"
+msgstr "Dogbone-Ecken-Einstellungen"
 
 #: pcbnew/tools/edit_tool.cpp:1269
 #: pcbnew/tools/item_modification_routine.cpp:197
@@ -47478,9 +47427,8 @@ msgstr ""
 "fehlgeschlagen."
 
 #: pcbnew/tools/multichannel_tool.cpp:384
-#, fuzzy
 msgid "Repeat layout"
-msgstr "Anzahl Wiederholungen"
+msgstr "Layout wiederholen"
 
 #: pcbnew/tools/multichannel_tool.cpp:410
 #, c-format
@@ -47512,9 +47460,8 @@ msgstr ""
 "Schaltplan nur eine oder keine hierarchische Seite hat."
 
 #: pcbnew/tools/multichannel_tool.cpp:767
-#, fuzzy
 msgid "Auto-generate placement rule areas"
-msgstr "Platzierungsdateien generieren"
+msgstr "Platzierungsregelflächen automatisch erzeugen"
 
 #: pcbnew/tools/pad_tool.cpp:164
 msgid "Paste Pad Properties"
@@ -47630,17 +47577,15 @@ msgstr ""
 "Auf einer Grafiklage eine Tabelle mit dem Lagenaufbau der Platine hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:173
-#, fuzzy
 msgid "Place Reference Images"
-msgstr "Referenzbild"
+msgstr "Referenzbilder einfügen"
 
 #: pcbnew/tools/pcb_actions.cpp:174
-#, fuzzy
 msgid ""
 "Add bitmap images to be used as reference (images will not be included in "
 "any output)"
 msgstr ""
-"Eine Bitmap-Grafik als Referenzgrafik hinzufügen (wird in keiner Ausgabe "
+"Bitmapgraphik als Referenz hinzufügen (Graphiken werden in keiner Ausgabe "
 "enthalten sein)"
 
 #: pcbnew/tools/pcb_actions.cpp:207
@@ -47680,48 +47625,40 @@ msgid "Draw Aligned Dimensions"
 msgstr "Ausgerichtete Bemaßung zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:250
-#, fuzzy
 msgid "Draw Center Dimensions"
-msgstr "Mittige Bemaßung"
+msgstr "Mittige Bemaßung zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:257
-#, fuzzy
 msgid "Draw Radial Dimensions"
-msgstr "Radiale Bemaßung hinzufügen"
+msgstr "Radialbemaßungen zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:265
-#, fuzzy
 msgid "Draw Orthogonal Dimensions"
-msgstr "Orthogonale Bemaßung"
+msgstr "Orthogonale Bemaßungen zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:272
-#, fuzzy
 msgid "Draw Leaders"
-msgstr "Kreisbögen zeichnen"
+msgstr "Hinweislinien zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:285
-#, fuzzy
 msgid "Draw Filled Zones"
-msgstr "Gefüllte Zone hinzufügen"
+msgstr "Gefüllte Zonen zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:295
-#, fuzzy
 msgid "Place Vias"
-msgstr "Via hinzufügen"
+msgstr "Via platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:296
-#, fuzzy
 msgid "Place free-standing vias"
-msgstr "Freistehende Vias hinzufügen"
+msgstr "Freistehende Vias platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Add a Zone Cutout"
 msgstr "Zonenaussparung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:316
-#, fuzzy
 msgid "Add a cutout to an existing zone or rule area"
-msgstr "Einen Aussparungsbereich zu einer bestehenden Zone hinzufügen"
+msgstr "Aussparung zu bestehender/-m Zone oder Regelbereich hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:326
 msgid "Add a Similar Zone"
@@ -47869,14 +47806,12 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "Ausgewählte Elemente der gegenüberliegenden Seite zuweisen"
 
 #: pcbnew/tools/pcb_actions.cpp:557
-#, fuzzy
 msgid "Mirrors selected item(s) across the Y axis"
-msgstr "Spiegelt das ausgewählte Element an der Y-Achse"
+msgstr "Ausgewählte(s) Element(e) an Y-Achse spiegeln"
 
 #: pcbnew/tools/pcb_actions.cpp:564
-#, fuzzy
 msgid "Mirrors selected item(s) across the X axis"
-msgstr "Spiegelt das ausgewählte Element an der X-Achse"
+msgstr "Ausgewählte(s) Element(e) an X-Achse spiegeln"
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Pack and Move Footprints"
@@ -47891,7 +47826,6 @@ msgstr ""
 "an und startet eine Bewegung"
 
 #: pcbnew/tools/pcb_actions.cpp:588
-#, fuzzy
 msgid "Skip to next item"
 msgstr "Element überspringen"
 
@@ -47929,9 +47863,8 @@ msgid "Dogbone Corners..."
 msgstr "Dogbone-Ecken..."
 
 #: pcbnew/tools/pcb_actions.cpp:621
-#, fuzzy
 msgid "Add dogbone corners to selected lines"
-msgstr "Ecken zwischen ausgewählten Linien wegschneiden"
+msgstr "Dogbone-Ecken zu gewählten Linien hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:627
 msgid "Simplify polygon outlines, removing superfluous points"
@@ -48149,27 +48082,24 @@ msgid "Cleanup redundant items, etc."
 msgstr "Bereinigen Sie redundante Elemente usw."
 
 #: pcbnew/tools/pcb_actions.cpp:862
-#, fuzzy
 msgid "Draw Microwave Gaps"
-msgstr "Mikrowellen-Spalt hinzufügen"
+msgstr "Mikrowellen-Spalte zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:863
 msgid "Create gap of specified length for microwave applications"
 msgstr "Spalt spezifischer Länge für Mikrowellen-Applikationen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:871
-#, fuzzy
 msgid "Draw Microwave Stubs"
-msgstr "Mikrowellen-Stich hinzufügen"
+msgstr "Mikrowellen-Stiche zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:872
 msgid "Create stub of specified length for microwave applications"
 msgstr "Stich spezifischer Länge für Mikrowellen-Applikationen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:880
-#, fuzzy
 msgid "Draw Microwave Arc Stubs"
-msgstr "Mikrowellen-Stich (Kreisbogen) hinzufügen"
+msgstr "Mikrowellenbogen-Stiche zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:881
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -48177,9 +48107,8 @@ msgstr ""
 "Stich (Kreisbogen) spezifischer Größe für Mikrowellen-Applikationen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:889
-#, fuzzy
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "Polygonale Mikrowellenform hinzufügen"
+msgstr "Polygonale Mikrowellenformen zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:890
 msgid "Create a microwave polygonal shape from a list of vertices"
@@ -48187,9 +48116,8 @@ msgstr ""
 "Erstellt eine polygonale Mikrowellenform aus der Liste der Scheitelpunkte"
 
 #: pcbnew/tools/pcb_actions.cpp:898
-#, fuzzy
 msgid "Draw Microwave Lines"
-msgstr "Mikrowellen-Linie hinzufügen"
+msgstr "Mikrowellen-Linien zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:899
 msgid "Create line of specified length for microwave applications"
@@ -48353,9 +48281,8 @@ msgid "ODB++ Output File..."
 msgstr "ODB++ Ausgabedatei..."
 
 #: pcbnew/tools/pcb_actions.cpp:1051
-#, fuzzy
 msgid "Generate ODB++ output files"
-msgstr "Ausgabedatei überschreiben"
+msgstr "ODB++-Ausgabedateien erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:1057
 msgid "IPC-D-356 Netlist File..."
@@ -48406,9 +48333,8 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Zone auf Lage duplizieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:1129
-#, fuzzy
 msgid "Place Footprints"
-msgstr "Footprint platzieren"
+msgstr "Footprints platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 msgid "Drill/Place File Origin"
@@ -48830,14 +48756,12 @@ msgid "Make the current layer more transparent"
 msgstr "Erhöht die Transparenz der aktuellen Lage"
 
 #: pcbnew/tools/pcb_actions.cpp:1811
-#, fuzzy
 msgid "Cycle Layer Pair Presets"
-msgstr "Lagen-Voreinstellung speichern"
+msgstr "Zwischen Lagenpaar-Voreinstellungen umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:1812
-#, fuzzy
 msgid "Cycle between preset layer pairs"
-msgstr "Zwischen Lagen im aktiven Lagen-Paar wechseln"
+msgstr "Zwischen voreingestellten Lagenpaaren umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:1823
 msgid "Show Board Statistics"
@@ -49197,14 +49121,12 @@ msgstr ""
 "Platinenbereichs aus"
 
 #: pcbnew/tools/pcb_actions.cpp:2200
-#, fuzzy
 msgid "Generate Placement Rule Areas"
-msgstr "Platzierungsdateien generieren"
+msgstr "Platzierungregelflächen erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:2206
-#, fuzzy
 msgid "Repeat Layout"
-msgstr "Anzahl Wiederholungen"
+msgstr "Layout wiederholen"
 
 #: pcbnew/tools/pcb_actions.cpp:2216
 msgid "Route Single Track"
@@ -49596,23 +49518,20 @@ msgid "Click on reference item..."
 msgstr "Bezugselement anklicken ..."
 
 #: pcbnew/tools/position_relative_tool.cpp:245
-#, fuzzy
 msgid "Click on reference point..."
-msgstr "Bezugselement anklicken ..."
+msgstr "Bezugspunkt anklicken..."
 
 #: pcbnew/tools/zone_create_helper.cpp:198
 msgid "Add Zone Cutout"
 msgstr "Zonenaussparung hinzufügen"
 
 #: pcbnew/tools/zone_create_helper.cpp:230
-#, fuzzy
 msgid "Draw Zone"
-msgstr "Linie zeichnen"
+msgstr "Zone zeichnen"
 
 #: pcbnew/tools/zone_create_helper.cpp:252
-#, fuzzy
 msgid "Draw Polygon"
-msgstr "Polygone zeichnen"
+msgstr "Polygon zeichnen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
 msgid "Checking Zones"
@@ -50567,9 +50486,8 @@ msgid "Zone %s %s"
 msgstr "Zone %s %s"
 
 #: pcbnew/zone.cpp:1690
-#, fuzzy
 msgid "Rule Area Type"
-msgstr "Regelbereich"
+msgstr "Regelbereichstyp"
 
 #: pcbnew/zone.cpp:1720
 msgid "Cannot be less than zone minimum width"
