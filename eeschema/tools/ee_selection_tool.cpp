@@ -313,7 +313,7 @@ bool EE_SELECTION_TOOL::Init()
 
     menu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 150 );
     menu.AddItem( EE_ACTIONS::selectOnPCB,
-                  crossProbingSelection && EE_CONDITIONS::Idle, 150 );
+                  crossProbingSelection && schEditCondition && EE_CONDITIONS::Idle, 150 );
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 150 );
 
     menu.AddSeparator( 200 );
