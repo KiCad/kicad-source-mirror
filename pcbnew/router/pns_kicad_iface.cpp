@@ -1483,7 +1483,7 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const PNS_LAYER_RANGE& aLayer ) const
 
     for( int i = aLayer.Start(); i <= aLayer.End(); i++ )
     {
-        if( m_view->IsLayerVisible( i ) )
+        if( m_view->IsLayerVisible( GetBoardLayerFromPNSLayer( i ) ) )
             return true;
     }
 
