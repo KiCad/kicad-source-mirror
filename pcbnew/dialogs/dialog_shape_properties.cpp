@@ -172,7 +172,14 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     }
 
     if( m_item->GetShape() == SHAPE_T::POLY )
+    {
         m_sizerStartEnd->Show( false );
+        SetInitialFocus( m_filledCtrl ); // Or Esc key won't work
+    }
+    else
+    {
+        SetInitialFocus( m_startXCtrl );
+    }
 
     // Only a Bezeier curve has control points. So do not show these parameters for other shapes
     if( m_item->GetShape() != SHAPE_T::BEZIER )
@@ -209,7 +216,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_endY.Show( false );
     }
 
-    SetInitialFocus( m_startXCtrl );
     SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
