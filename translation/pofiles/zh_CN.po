@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-10-04 05:16+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2024-10-04 07:41+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18634,9 +18634,8 @@ msgid "Errors during netlist generation."
 msgstr "在生成网表过程中出现了错误。"
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "在生成网表过程中出现了错误。"
+msgstr "在生成网表过程中出现了警告。"
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -33254,7 +33253,7 @@ msgstr "负片绘制"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:165
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
-msgstr "全局阻焊最小宽度 (或) 边距未设置为 0。 "
+msgstr "全局阻焊最小宽度/边距未设置为 0。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid ""
@@ -40663,9 +40662,9 @@ msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "封装 %s 包含 Altium 层 %d 上的条形码 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, text %s"
-msgstr "未知的文本框对齐方式 %d, aText %s"
+msgstr "未知的文本框对齐方式 %d, text %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4315
 msgid "Loading rectangles..."
@@ -41648,7 +41647,7 @@ msgid "Cannot interpret date code %d"
 msgstr "无法解释日期代码 %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -41656,7 +41655,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "在未定义的层 (%s) 上发现项目。\n"
-"要将其复到 %s 层上吗?"
+"要将其复制到 %s 层上吗?\n"
+"\n"
+"域需要重新填充。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
