@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-09-25 17:15+0000\n"
+"PO-Revision-Date: 2024-10-05 10:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -14918,35 +14918,35 @@ msgstr "シンボル '%s' はライブラリ '%s' で変更されています"
 
 #: eeschema/erc.cpp:1144
 msgid "Checking sheet names..."
-msgstr "シート名をチェック..."
+msgstr "シート名をチェック中..."
 
 #: eeschema/erc.cpp:1152
 msgid "Checking bus conflicts..."
-msgstr "バスの競合をチェック..."
+msgstr "バスの競合をチェック中..."
 
 #: eeschema/erc.cpp:1159
 msgid "Checking conflicts..."
-msgstr "競合をチェック..."
+msgstr "競合をチェック中..."
 
 #: eeschema/erc.cpp:1173
 msgid "Checking units..."
-msgstr "単位をチェック..."
+msgstr "単位をチェック中..."
 
 #: eeschema/erc.cpp:1179 pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
-msgstr "フットプリントをチェック..."
+msgstr "フットプリントをチェック中..."
 
 #: eeschema/erc.cpp:1193
 msgid "Checking pins..."
-msgstr "ピンをチェック..."
+msgstr "ピンをチェック中..."
 
 #: eeschema/erc.cpp:1211
 msgid "Checking labels..."
-msgstr "ラベルをチェック..."
+msgstr "ラベルをチェック中..."
 
 #: eeschema/erc.cpp:1219
 msgid "Checking for unresolved variables..."
-msgstr "未解決の変数をチェック..."
+msgstr "未解決の変数をチェック中..."
 
 #: eeschema/erc.cpp:1227
 msgid "Checking SPICE models..."
@@ -14954,19 +14954,19 @@ msgstr "SPICEモデルをチェック中..."
 
 #: eeschema/erc.cpp:1235
 msgid "Checking no connect pins for connections..."
-msgstr "未接続ピンへの接続をチェック..."
+msgstr "未接続ピンへの接続をチェック中..."
 
 #: eeschema/erc.cpp:1243
 msgid "Checking for library symbol issues..."
-msgstr "ライブラリ シンボルの問題をチェック..."
+msgstr "ライブラリ シンボルの問題をチェック中..."
 
 #: eeschema/erc.cpp:1251
 msgid "Checking for off grid pins and wires..."
-msgstr "グリッドから外れているピンと配線をチェック..."
+msgstr "グリッドから外れているピンと配線をチェック中..."
 
 #: eeschema/erc.cpp:1259
 msgid "Checking for undefined netclasses..."
-msgstr "未定義のネットクラスをチェック..."
+msgstr "未定義のネットクラスをチェック中..."
 
 #: eeschema/erc_item.cpp:43
 msgid "Conflicts"
@@ -15011,7 +15011,7 @@ msgstr "\"未接続\" フラグが付いたピンが接続されている"
 
 #: eeschema/erc_item.cpp:83
 msgid "Unconnected \"no connection\" flag"
-msgstr "未接続フラグが接続されていない"
+msgstr "\"未接続\"フラグが接続されていない"
 
 #: eeschema/erc_item.cpp:87
 msgid "Label not connected to anything"
@@ -17975,8 +17975,8 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"シートの変更ができません。保存先のシートは、すでにシート '%s' を持っている"
-"か、階層のどこかで親シートとしてサブシートの一つに持っています。"
+"シートの変更ができません。保存先のシートは、回路図の階層のどこかに既にシート "
+"'%s' を持っているか、そのサブシートの一つを親として持っています。"
 
 #: eeschema/sheet.cpp:92
 #, c-format
@@ -18917,9 +18917,8 @@ msgid "Errors during netlist generation."
 msgstr "ネットリストの生成中にエラーが発生しました。"
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "ネットリストの生成中にエラーが発生しました。"
+msgstr "ネットリストの生成中に警告が発生しました。"
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -41331,7 +41330,7 @@ msgstr ""
 "ポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4159
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, text %s"
 msgstr "不明なテキストボックスの位置合わせ%d 、テキストは %s"
 
@@ -42370,15 +42369,17 @@ msgid "Cannot interpret date code %d"
 msgstr "日付コード %d を解釈できません"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
 "\n"
 "Zones will need to be refilled."
 msgstr ""
-"アイテムが未定義レイヤー (%s) 上に見つかりました。\n"
-"%s レイヤーにレスキューしますか?"
+"未定義のレイヤー ( %s ) にアイテムが見つかりました。\n"
+"これらを%sレイヤーに救出しますか?\n"
+"\n"
+"ゾーンを再度塗りつぶす必要があります。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
