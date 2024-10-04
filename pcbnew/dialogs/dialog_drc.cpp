@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1125,9 +1125,20 @@ void DIALOG_DRC::NextMarker()
 
 void DIALOG_DRC::SelectMarker( const PCB_MARKER* aMarker )
 {
+    wxLogDebug( wxS( "DRC marker select type: %d, severity %d, error code: %d exclude: %s." ),
+                aMarker->GetMarkerType(), aMarker->GetSeverity(),
+                aMarker->GetRCItem()->GetErrorCode(),
+                ( aMarker->IsExcluded() ) ? wxS( "yes" ) : wxS( "no" ) );
+
     if( m_Notebook->IsShown() )
     {
-        m_Notebook->SetSelection( 0 );
+        enum MARKER_BASE::MARKER_T markerType = aMarker->GetMarkerType();
+
+        if( markerType == MARKER_BASE::MARKER_DRC )
+            m_Notebook->SetSelection( 0 );
+        else if( markerType == MARKER_BASE::MARKER_PARITY )
+            m_Notebook->SetSelection( 2 );
+
         m_markersTreeModel->SelectMarker( aMarker );
 
         CallAfter(
