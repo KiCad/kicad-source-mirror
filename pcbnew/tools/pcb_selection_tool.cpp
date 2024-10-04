@@ -430,7 +430,14 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( collector.GetCount() )
             {
-                selectTableCells( static_cast<PCB_TABLE*>( collector[0]->GetParent() ) );
+                if( m_selection.GetSize() == 1 && dynamic_cast<PCB_TABLE*>( m_selection.GetItem( 0 ) ) )
+                {
+                    m_toolMgr->RunAction( PCB_ACTIONS::move );
+                }
+                else
+                {
+                    selectTableCells( static_cast<PCB_TABLE*>( collector[0]->GetParent() ) );
+                }
             }
             else if( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
             {
