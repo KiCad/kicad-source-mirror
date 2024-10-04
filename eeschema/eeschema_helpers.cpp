@@ -21,16 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eeschema_helpers.h>
+#include "eeschema_helpers.h"
+
+#include <connection_graph.h>
+#include <locale_io.h>
+#include <schematic.h>
 #include <sch_edit_frame.h>
+#include <sch_label.h>
+#include <sch_io/sch_io.h>
+#include <sch_io/sch_io_mgr.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
-#include <schematic.h>
-#include <sch_io/sch_io_mgr.h>
-#include <locale_io.h>
+
 #include <wx/app.h>
-#include <sch_label.h>
-#include <connection_graph.h>
+
 
 SCH_EDIT_FRAME*   EESCHEMA_HELPERS::s_SchEditFrame = nullptr;
 SETTINGS_MANAGER* EESCHEMA_HELPERS::s_SettingsManager = nullptr;

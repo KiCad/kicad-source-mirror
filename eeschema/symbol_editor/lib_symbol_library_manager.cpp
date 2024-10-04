@@ -20,6 +20,7 @@
 #include <lib_logger.h>
 #include <lib_symbol_library_manager.h>
 #include <symbol_edit_frame.h>
+#include <symbol_lib_table.h>
 
 
 LIB_SYMBOL_LIBRARY_MANAGER::LIB_SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :

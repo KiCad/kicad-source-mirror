@@ -19,6 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "symbol_tree_model_adapter.h"
+
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 #include <wx/window.h>
@@ -31,7 +33,7 @@
 #include <sch_base_frame.h>
 #include <locale_io.h>
 #include <symbol_async_loader.h>
-#include <symbol_tree_model_adapter.h>
+#include <symbol_lib_table.h>
 #include <string_utils.h>
 
 bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;

@@ -29,6 +29,7 @@
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
+#include <symbol_lib_table.h>
 #include <kiplatform/environment.h>
 
 #include <fstream>

@@ -23,10 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <symbol_library_manager.h>
+#include "symbol_library_manager.h"
+
 #include <symbol_library.h>
 #include <dialogs/html_message_box.h>
 #include <symbol_edit_frame.h>
+#include <symbol_lib_table.h>
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <project_sch.h>

@@ -50,6 +50,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_textbox.h>
+#include <symbol_lib_table.h>
 
 #include <bezier_curves.h>
 #include <compoundfilereader.h>

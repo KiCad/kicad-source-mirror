@@ -46,7 +46,6 @@
 #include <sch_field.h>
 #include <sch_pin.h>
 #include <sch_sheet_path.h>    // SCH_SYMBOL_INSTANCE
-#include <symbol_lib_table.h>
 #include <transform.h>
 
 struct PICKED_SYMBOL;
@@ -60,7 +59,6 @@ class SYMBOL_LIBS;
 class EE_COLLECTOR;
 class SCH_SCREEN;
 class SCH_COMMIT;
-class SYMBOL_LIB_TABLE;
 
 
 /// A container for several SCH_FIELD items

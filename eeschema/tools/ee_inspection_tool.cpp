@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tools/ee_inspection_tool.h"
+
 #include <sch_symbol.h>
 #include <id.h>
 #include <kiway.h>
@@ -32,13 +34,13 @@
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
 #include <tools/ee_actions.h>
-#include <tools/ee_inspection_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_selection.h>
 #include <sim/simulator_frame.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
+#include <symbol_lib_table.h>
 #include <eda_doc.h>
 #include <sch_marker.h>
 #include <project.h>

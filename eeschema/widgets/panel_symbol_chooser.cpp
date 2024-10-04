@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "panel_symbol_chooser.h"
+
 #include <pgm_base.h>
-#include <symbol_library.h>         // For SYMBOL_LIBRARY_FILTER
-#include <panel_symbol_chooser.h>
 #include <kiface_base.h>
 #include <sch_base_frame.h>
 #include <project_sch.h>
@@ -36,6 +36,8 @@
 #include <project/project_file.h>
 #include <eeschema_settings.h>
 #include <symbol_editor_settings.h>
+#include <symbol_library.h>         // For SYMBOL_LIBRARY_FILTER
+#include <symbol_lib_table.h>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
 #include <wx/panel.h>

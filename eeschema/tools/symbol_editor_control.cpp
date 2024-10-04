@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tools/symbol_editor_control.h"
+
 #include <advanced_config.h>
 #include <kiway.h>
 #include <pgm_base.h>
@@ -29,11 +31,11 @@
 #include <tool/tool_manager.h>
 #include <tool/library_editor_control.h>
 #include <tools/ee_actions.h>
-#include <tools/symbol_editor_control.h>
 #include <lib_symbol_library_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_tree_model_adapter.h>
+#include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>

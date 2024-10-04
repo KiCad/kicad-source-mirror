@@ -22,7 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_sheet_properties.h>
+#include "dialog_sheet_properties.h"
+
 #include <kiface_base.h>
 #include <wx/string.h>
 #include <wx/log.h>
@@ -37,6 +38,7 @@
 #include <kiplatform/ui.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
+#include <sch_io/sch_io.h>
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <bitmaps.h>

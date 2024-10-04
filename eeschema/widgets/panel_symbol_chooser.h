@@ -33,6 +33,7 @@ class wxPanel;
 class wxTimer;
 class wxSplitterWindow;
 
+class SYMBOL_LIBRARY_FILTER;
 class SYMBOL_PREVIEW_WIDGET;
 class FOOTPRINT_PREVIEW_WIDGET;
 class FOOTPRINT_SELECT_WIDGET;

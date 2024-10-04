@@ -33,6 +33,7 @@
 #include <panel_embedded_files.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <sch_io/sch_io.h>
 #include <settings/settings_manager.h>
 #include <widgets/wx_progress_reporters.h>
 #include "dialog_schematic_setup.h"

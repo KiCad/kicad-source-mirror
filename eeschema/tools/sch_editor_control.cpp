@@ -22,7 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <symbol_library.h>
+#include "tools/sch_editor_control.h"
+
 #include <confirm.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_symbol_fields_table.h>
@@ -55,6 +56,8 @@
 #include <sch_sheet_pin.h>
 #include <sch_commit.h>
 #include <sim/simulator_frame.h>
+#include <symbol_lib_table.h>
+#include <symbol_library.h>
 #include <symbol_library_manager.h>
 #include <symbol_viewer_frame.h>
 #include <tool/picker_tool.h>
@@ -62,7 +65,6 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
-#include <tools/sch_editor_control.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <eda_list_dialog.h>
 #include <view/view_controls.h>
