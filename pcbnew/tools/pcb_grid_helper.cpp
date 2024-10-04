@@ -671,10 +671,13 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                     ADVANCED_CFG::GetCfg().m_ExtensionSnapActivateOnHover;
             if( canActivateByHitTest )
             {
-                // An exact hit on an item, even if not near
+                // An exact hit on an item, even if not near a snap point
+                // If it's tool hard to hit by hover, this can be increased
+                // to make it non-exact.
+                const int hoverAccuracy = 0;
                 for( BOARD_ITEM* item : visibleItems )
                 {
-                    if( item->HitTest( aOrigin ) )
+                    if( item->HitTest( aOrigin, hoverAccuracy ) )
                     {
                         proposeConstructionForItems( { item } );
                         snapValid = true;
