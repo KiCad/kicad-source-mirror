@@ -38,8 +38,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-10-04 05:19+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2024-10-04 06:59+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2026,9 +2026,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "无法将原理图文件 '%s' 作为设计图块保存到 '%s'。"
 
 #: common/design_block_io.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "无法读取设计图块元数据文件 '%s'。"
+msgstr "无法保存设计图块元数据文件 '%s'。"
 
 #: common/design_block_io.cpp:439
 #, c-format
@@ -2516,18 +2516,17 @@ msgid "design block"
 msgstr "设计图块"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"创建符号库表 '%s' 时出错。\n"
+"创建设计图块库表 '%s' 时出错。\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
-msgstr "请选择一个符号库表文件。"
+msgstr "请选择一个设计图块库表文件。"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2538,12 +2537,12 @@ msgid "File '%s' not found."
 msgstr "找不到文件 '%s'。"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"读取符号库表 '%s'出错。\n"
+"读取设计图块库表 '%s' 时出错。\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:111
@@ -2553,9 +2552,9 @@ msgid "Cannot create global library table '%s'."
 msgstr "无法创建全局库表 '%s'。"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr "将全局符号库表 '%s' 复制到 '%s' 时出错。"
+msgstr "将全局设计图块库表 '%s' 复制到 '%s' 时出错。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -7643,9 +7642,9 @@ msgid "Illegal character found in library nickname"
 msgstr "库名称中包含非法字符"
 
 #: common/lib_table_base.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "无法写入结构树: %s"
+msgstr ""
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -10198,9 +10197,9 @@ msgid "Error loading design block %s from library '%s'."
 msgstr "从库 '%2$s' 加载设计图块 %1$s 时出错。"
 
 #: eeschema/design_block_utils.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "符号 '%s' 已存在于库 '%s' 中。"
+msgstr "设计图块 '%s' 已存在于库 '%s' 中。"
 
 #: eeschema/design_block_utils.cpp:49
 msgid "Overwrite existing design block?"
@@ -10943,9 +10942,8 @@ msgid "Untitled Field"
 msgstr "无标题字段"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:233
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "不允许埋孔"
+msgstr "不允许重复的字段。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:547
 #, c-format
@@ -15783,9 +15781,9 @@ msgid "Global field name templates:"
 msgstr "全局字段名称模板:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "条目包含尾随空格。"
+msgstr "字段名称 \"%s \" 包含尾随空格/前导空格。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -16527,7 +16525,7 @@ msgstr "此文件由较旧版本的 KiCad 创建, 保存文件时将转换为新
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
+msgstr "原理图中存在包含了尾随空格/前导空格的字段名称的符号。"
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
@@ -17350,14 +17348,12 @@ msgid "Position Y"
 msgstr "位置 Y"
 
 #: eeschema/sch_bitmap.cpp:304 pcbnew/pcb_reference_image.cpp:330
-#, fuzzy
 msgid "Transform Offset X"
-msgstr "旋转和镜像"
+msgstr ""
 
 #: eeschema/sch_bitmap.cpp:311 pcbnew/pcb_reference_image.cpp:337
-#, fuzzy
 msgid "Transform Offset Y"
-msgstr "旋转和镜像"
+msgstr ""
 
 #: eeschema/sch_bus_entry.cpp:449
 msgid "Bus to Wire Entry"
@@ -21269,9 +21265,8 @@ msgid "Properties..."
 msgstr "属性..."
 
 #: eeschema/tools/ee_actions.cpp:181
-#, fuzzy
 msgid "Edit properies of design block"
-msgstr "请输入设计图块名称:"
+msgstr "编辑设计图块属性"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Save Library As..."
@@ -21517,23 +21512,20 @@ msgid "Draw Hierarchical Sheets"
 msgstr "绘制层次图纸"
 
 #: eeschema/tools/ee_actions.cpp:513
-#, fuzzy
 msgid "Draw Sheet from File"
-msgstr "图框文件"
+msgstr "从文件绘制图纸"
 
 #: eeschema/tools/ee_actions.cpp:514
 msgid "Copy sheet into project and draw on current sheet"
 msgstr "将图纸复制到工程中, 并绘制到当前图纸上"
 
 #: eeschema/tools/ee_actions.cpp:522
-#, fuzzy
 msgid "Draw Sheet from Design Block"
-msgstr "保存图纸为设计图块..."
+msgstr "从设计图块绘制图纸"
 
 #: eeschema/tools/ee_actions.cpp:523
-#, fuzzy
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "将图纸复制到工程中, 并绘制到当前图纸上"
+msgstr "将设计图块复制到工程中, 并作为当前图纸的子图纸"
 
 #: eeschema/tools/ee_actions.cpp:531
 msgid "Place Sheet Pins"
@@ -21573,9 +21565,8 @@ msgid "Draw Arcs"
 msgstr "绘制弧线"
 
 #: eeschema/tools/ee_actions.cpp:620 pcbnew/tools/pcb_actions.cpp:150
-#, fuzzy
 msgid "Draw Bezier Curve"
-msgstr "贝塞尔曲线"
+msgstr "绘制贝塞尔曲线"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Place Images"
@@ -22288,7 +22279,6 @@ msgid "Move to next sheet by number"
 msgstr "移动到下一编号图纸"
 
 #: eeschema/tools/ee_actions.cpp:1352
-#, fuzzy
 msgid "Show Hierarchy Navigator"
 msgstr "显示层次导航"
 
@@ -24868,9 +24858,8 @@ msgid "Board file does not exist or is not accessible\n"
 msgstr "电路板文件不存在或无法访问\n"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
-#, fuzzy
 msgid "Generate Gencad from a list of layers"
-msgstr "从层列表生成 DXF"
+msgstr "从层列表生成 Gencad"
 
 # Padstack  焊盘槽/孔
 #: kicad/cli/command_pcb_export_gencad.cpp:45
@@ -30856,9 +30845,8 @@ msgid "Board Cleanup"
 msgstr "清理电路板"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
-#, fuzzy
 msgid "Refill zones before and after cleanup"
-msgstr "在执行清理之前重新填充所有域"
+msgstr "在执行清理前后重新填充所有域"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:33
 msgid "Delete &tracks connecting different nets"
@@ -34441,8 +34429,9 @@ msgstr "替换现有的放置规则区"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
 #: pcbnew/tools/multichannel_tool.cpp:402
 #: pcbnew/tools/multichannel_tool.cpp:804
+#, fuzzy
 msgid "Group components with their placement rule areas"
-msgstr ""
+msgstr "根据布局规则区对元件进行分组"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:50
 msgid "Generate Multichannel Rule Areas"
@@ -34457,12 +34446,14 @@ msgid "Reference Rule Area:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
+#, fuzzy
 msgid "Copy placement"
-msgstr ""
+msgstr "复制布局"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
+#, fuzzy
 msgid "Copy routing"
-msgstr ""
+msgstr "复制走线"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:86
 msgid "Include locked components"
@@ -34493,9 +34484,8 @@ msgid "Non Copper Zone Properties"
 msgstr "非覆铜域属性"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
-#, fuzzy
 msgid "Outset:"
-msgstr "外部"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -34523,14 +34513,12 @@ msgid "0.01"
 msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
-#, fuzzy
 msgid "Copy item layers"
-msgstr "铜层:"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:70
-#, fuzzy
 msgid "Copy item widths (if possible)"
-msgstr "复制第一个对象的行宽"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:71
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:93
@@ -34540,19 +34528,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer default"
-msgstr "默认"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
-#, fuzzy
 msgid "Delete source items after outset"
-msgstr "转换后删除源对象"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
-#, fuzzy
 msgid "Outset Items"
-msgstr "文本项目"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:206
 #: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2575
@@ -35208,7 +35193,7 @@ msgstr "负片绘制"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:164
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
-msgstr "全局阻焊最小宽度 (或) 边距未设置为 0。 "
+msgstr "全局阻焊最小宽度/边距未设置为 0。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:168
 msgid ""
@@ -36338,9 +36323,8 @@ msgid "Top/bottom"
 msgstr "上/下"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:88
-#, fuzzy
 msgid "Board items flip"
-msgstr "悬停项目"
+msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:95
 msgid "Allow free pads"
@@ -36385,14 +36369,12 @@ msgstr "当鼠标进入焊盘区时捕获光标"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 #: pcbnew/dialogs/panel_edit_options_base.cpp:320
-#, fuzzy
 msgid "When routing tracks"
-msgstr "创建新走线时启用"
+msgstr "在布线时"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:314
-#, fuzzy
 msgid "Snap to tracks and vias:"
-msgstr "生成走线和过孔"
+msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:316
 #: pcbnew/dialogs/panel_edit_options_base.cpp:324
@@ -39629,15 +39611,15 @@ msgstr "正在检查微孔孔洞..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s 最小 %s; 实际 %s)"
+msgstr "(%s 最小孔径 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s 最大高度 %s; 实际 %s)"
+msgstr "(%s 最大孔径 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -40606,23 +40588,22 @@ msgstr ""
 "重命名临时文件 '%s' 失败。"
 
 #: pcbnew/files.cpp:1455
-#, fuzzy
 msgid "Generating ODB++ output files"
-msgstr "生成 IPC2581 文件"
+msgstr "生成 ODB++ 文件"
 
 #: pcbnew/files.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr ""
-"生成 IPC2581 文件 '%s' 时出错。\n"
+"生成 ODB++ 文件 '%s' 时出错。\n"
 "%s"
 
 #: pcbnew/files.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory '%s'."
-msgstr "创建目录 'devices' 失败。"
+msgstr "创建目录 '%s' 失败。"
 
 #: pcbnew/footprint.cpp:1201
 msgid "Other"
@@ -43834,7 +43815,7 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "在未定义的层 (%s) 上发现项目。\n"
-"要将其复到 %s 层上吗?\n"
+"要将其复制到 %s 层上吗?\n"
 "\n"
 "域需要重新填充。"
 
@@ -43982,29 +43963,24 @@ msgstr ""
 "域填充将尽可能的进行转换。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:685
-#, fuzzy
 msgid "Failed to add component data"
-msgstr "图像数据读取失败。"
+msgstr "元件数据添加失败"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating Entities"
-msgstr "说明"
+msgstr "创建实体"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:108
-#, fuzzy
 msgid "Init Entity Data"
-msgstr "Git 提交数据"
+msgstr "初始化实体数据"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:119
-#, fuzzy
 msgid "Generating Entities Files"
-msgstr "生成定位文件"
+msgstr "生成实体文件"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
-#, fuzzy
 msgid "ODB++ Production File"
-msgstr "IPC-2581 生产文件"
+msgstr "ODB++ 生产文件"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -45625,9 +45601,8 @@ msgid "Draw Arc"
 msgstr "绘制弧线"
 
 #: pcbnew/tools/drawing_tool.cpp:571
-#, fuzzy
 msgid "Draw Bezier"
-msgstr "贝塞尔曲线"
+msgstr "绘制贝塞尔曲线"
 
 #: pcbnew/tools/drawing_tool.cpp:1565
 msgid "Draw Dimension"
@@ -45696,25 +45671,21 @@ msgid "Some of the track segments could not be filleted."
 msgstr "某些走线无法进行圆角处理。"
 
 #: pcbnew/tools/edit_tool.cpp:1221
-#, fuzzy
 msgid "Arc radius:"
-msgstr "弧线, 半径 %s"
+msgstr "弧线, 半径:"
 
 #: pcbnew/tools/edit_tool.cpp:1226
-#, fuzzy
 msgid "Add slots in acute corners"
-msgstr "添加敷铜拐角"
+msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1228
-#, fuzzy
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
-msgstr "部分狗骨角过小, 没有适合其半径的铣刀。"
+msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1232
-#, fuzzy
 msgid "Dogbone Corner Settings"
-msgstr "狗骨角"
+msgstr "狗骨角设置"
 
 #: pcbnew/tools/edit_tool.cpp:1269
 #: pcbnew/tools/item_modification_routine.cpp:197
@@ -45960,23 +45931,21 @@ msgid "Some of the polygons could not be intersected."
 msgstr "部分多边形无法相交。"
 
 #: pcbnew/tools/item_modification_routine.cpp:666
-#, fuzzy
 msgid "Outset items."
-msgstr "其他项目"
+msgstr ""
 
 #: pcbnew/tools/item_modification_routine.cpp:673
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "无法对选定的线段进行圆角处理。"
+msgstr ""
 
 #: pcbnew/tools/item_modification_routine.cpp:677
-#, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "部分线段无法进行圆角处理。"
+msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:285
+#, fuzzy
 msgid "Please select a single reference Rule Area to copy from."
-msgstr ""
+msgstr "请选择一个要复制的参考规则区。"
 
 #: pcbnew/tools/multichannel_tool.cpp:299
 msgid "No Rule Areas to repeat layout to have been found."
@@ -46110,14 +46079,12 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "将选中的图线转换为走线"
 
 #: pcbnew/tools/pcb_actions.cpp:95
-#, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "根据选区创建"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:96
-#, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "从所选内容创建图线"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:158
 msgid "Add Board Characteristics"
@@ -46805,9 +46772,8 @@ msgid "ODB++ Output File..."
 msgstr "ODB++ 输出文件..."
 
 #: pcbnew/tools/pcb_actions.cpp:1051
-#, fuzzy
 msgid "Generate ODB++ output files"
-msgstr "覆盖输出文件"
+msgstr "生成 ODB++ 文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1057
 msgid "IPC-D-356 Netlist File..."
@@ -47598,7 +47564,7 @@ msgstr "在板外区执行元件的自动放置"
 #: pcbnew/tools/pcb_actions.cpp:2200
 #, fuzzy
 msgid "Generate Placement Rule Areas"
-msgstr "生成放置文件"
+msgstr "生成布局规则区"
 
 #: pcbnew/tools/pcb_actions.cpp:2206
 msgid "Repeat Layout"
