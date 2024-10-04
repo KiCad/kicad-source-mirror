@@ -876,6 +876,10 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     if( !IsToolActive() )
         return 0;
 
+    // Ensure PNS_KICAD_IFACE (m_iface) m_board member is up to date
+    // For some reason, this is not always the case
+    m_iface->SetBoard( board() );
+
     // First see if this is one of the switch layer commands
     BOARD*       brd           = board();
     LSET         enabledLayers = LSET::AllCuMask( brd->GetDesignSettings().GetCopperLayerCount() );
