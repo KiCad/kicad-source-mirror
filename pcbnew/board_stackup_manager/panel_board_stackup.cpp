@@ -48,6 +48,7 @@
 
 #include <locale_io.h>
 #include <eda_list_dialog.h>
+#include <richio.h>
 #include <string_utils.h>               // for UIDouble2Str()
 
 

@@ -26,6 +26,7 @@
 #include <pcad/pcad_via.h>
 #include <pcad/pcad_via_shape.h>
 
+#include <richio.h>
 #include <xnode.h>
 
 #include <wx/string.h>

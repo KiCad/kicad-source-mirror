@@ -22,10 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_model_ngspice.h>
+#include "sim/sim_model_ngspice.h"
 
 #include <boost/algorithm/string.hpp>
 #include <fmt/core.h>
+#include <ki_exception.h>
 
 
 std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM& aItem ) const

@@ -23,8 +23,11 @@
  */
 
 
-#include <xnode.h>
+#include "xnode.h"
+
+#include <richio.h>
 #include <string_utils.h>
+
 
 typedef wxXmlAttribute   XATTR;
 

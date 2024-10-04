@@ -49,17 +49,9 @@ namespace KI_TEST
 class SCHEMATIC_TEST_FIXTURE
 {
 public:
-    SCHEMATIC_TEST_FIXTURE()
-        : m_schematic( nullptr ),
-          m_pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) ),
-          m_manager( true )
-    { }
+    SCHEMATIC_TEST_FIXTURE();
 
-    virtual ~SCHEMATIC_TEST_FIXTURE()
-    {
-        m_schematic.Reset();
-        m_pi.reset();
-    }
+    ~SCHEMATIC_TEST_FIXTURE();
 
 protected:
     virtual void LoadSchematic( const wxString& aRelativePath );

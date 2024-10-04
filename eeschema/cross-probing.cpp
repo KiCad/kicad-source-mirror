@@ -34,6 +34,7 @@
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <richio.h>
 #include <tools/ee_actions.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>

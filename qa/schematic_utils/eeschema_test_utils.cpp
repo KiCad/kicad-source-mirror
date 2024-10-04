@@ -22,17 +22,35 @@
  */
 
 #include "eeschema_test_utils.h"
+
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <sch_io/sch_io.h>
 #include <wildcards_and_files_ext.h>
 
 #include <cstdlib>
 #include <memory>
 
+#include <eeschema/sch_io/sch_io.h>
 #include <eeschema/sch_io/sch_io_mgr.h>
 #include <eeschema/sch_screen.h>
 #include <eeschema/schematic.h>
 #include <eeschema/connection_graph.h>
 #include <eeschema/sch_rule_area.h>
+
+
+KI_TEST::SCHEMATIC_TEST_FIXTURE::SCHEMATIC_TEST_FIXTURE() :
+        m_schematic( nullptr ),
+        m_pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) ),
+        m_manager( true )
+{
+}
+
+
+KI_TEST::SCHEMATIC_TEST_FIXTURE::~SCHEMATIC_TEST_FIXTURE()
+{
+    m_schematic.Reset();
+    m_pi.reset();
+}
 
 
 void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )

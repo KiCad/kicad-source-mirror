@@ -25,8 +25,6 @@
 #ifndef XNODE_H_
 #define XNODE_H_
 
-#include <richio.h>
-
 // quiet the deprecated warnings with 3 lines:
 #include <wx/defs.h>
 #undef wxDEPRECATED
@@ -34,6 +32,7 @@
 
 #include <wx/xml/xml.h>
 
+class OUTPUTFORMATTER;
 
 /**
  * Hold an XML or S-expression element.

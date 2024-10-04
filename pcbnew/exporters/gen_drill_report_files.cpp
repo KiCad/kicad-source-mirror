@@ -28,6 +28,7 @@
 #include <eda_item.h>
 #include <font/font.h>
 #include <confirm.h>
+#include <richio.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>

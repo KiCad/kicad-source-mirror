@@ -23,12 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "board_editor_control.h"
+
 #include <functional>
 #include <memory>
 
 #include <pgm_base.h>
 #include <advanced_config.h>
-#include "board_editor_control.h"
 #include <bitmaps.h>
 #include <pcb_painter.h>
 #include <board.h>
@@ -64,6 +65,7 @@
 #include <tools/edit_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_filler_tool.h>
+#include <richio.h>
 #include <router/router_tool.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
@@ -430,7 +432,7 @@ int BOARD_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 {
     wxCHECK( m_frame, 0 );
-     
+
     wxFileName fn = m_frame->Prj().GetProjectFullName();
 
     // Use a different file extension for the board netlist so the schematic netlist file

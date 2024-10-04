@@ -23,13 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "netlist_exporter_kicad.h"
 
 #include <algorithm>
 #include <confirm.h>
 
-#include <xnode.h>
 #include <connection_graph.h>
-#include "netlist_exporter_kicad.h"
+#include <richio.h>
+#include <xnode.h>
 
 
 bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,

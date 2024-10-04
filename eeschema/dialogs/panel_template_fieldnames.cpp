@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "panel_template_fieldnames.h"
+
 #include <wx/msgdlg.h>
 
 #include <pgm_base.h>
@@ -31,8 +33,8 @@
 #include <template_fieldnames.h>
 #include <grid_tricks.h>
 #include <bitmaps.h>
+#include <richio.h>
 #include <string_utils.h>
-#include <panel_template_fieldnames.h>
 
 PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
                                                       TEMPLATES* aProjectTemplateMgr ) :

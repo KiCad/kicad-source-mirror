@@ -22,10 +22,14 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#include <ki_exception.h>
 #include <lib_symbol.h>
 #include <sch_symbol.h>
 #include <string_utils.h>
 #include <wx/regex.h>
+
+#include <iterator>
 
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
@@ -47,7 +51,7 @@
 #include <fmt/core.h>
 #include <pegtl/contrib/parse_tree.hpp>
 
-#include <iterator>
+
 #include "sim_model_spice_fallback.h"
 
 using TYPE = SIM_MODEL::TYPE;

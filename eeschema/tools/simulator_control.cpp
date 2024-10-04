@@ -20,6 +20,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#include "tools/simulator_control.h"
+
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
 
@@ -38,13 +41,13 @@
 #include <sim/sim_plot_tab.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
-#include <tools/simulator_control.h>
 #include <scintilla_tricks.h>
 #include <sim/spice_circuit_model.h>
 #include <dialogs/dialog_user_defined_signals.h>
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
 #include <wx/mstream.h>
+#include <richio.h>
 #include <string_utils.h>
 
 

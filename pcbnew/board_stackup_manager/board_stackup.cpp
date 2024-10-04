@@ -27,6 +27,7 @@
 #include <board.h>
 #include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
+#include <richio.h>
 #include <google/protobuf/any.pb.h>
 #include <api/board/board.pb.h>
 #include <api/api_enums.h>

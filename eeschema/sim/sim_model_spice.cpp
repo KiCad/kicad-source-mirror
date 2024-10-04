@@ -29,6 +29,7 @@
 #include <sim/sim_library_spice.h>
 
 #include <boost/algorithm/string/trim.hpp>
+#include <ki_exception.h>
 
 
 std::string SPICE_GENERATOR_SPICE::Preview( const SPICE_ITEM& aItem ) const

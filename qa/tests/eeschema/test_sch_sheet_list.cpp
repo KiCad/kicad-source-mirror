@@ -20,6 +20,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
+#include <sch_io/sch_io.h>
 #include <sch_sheet_path.h>
 #include <wildcards_and_files_ext.h>
 

@@ -21,7 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_model_spice_fallback.h>
+#include "sim/sim_model_spice_fallback.h"
+
+#include <ki_exception.h>
 #include <fmt/format.h>
 
 

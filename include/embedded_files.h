@@ -26,8 +26,9 @@
 
 #include <mmh3_hash.h>
 #include <picosha2.h>
-#include <richio.h>
 #include <wildcards_and_files_ext.h>
+
+class OUTPUTFORMATTER;
 
 class EMBEDDED_FILES
 {

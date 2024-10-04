@@ -26,7 +26,7 @@
 
 #include <core/ignore.h>
 #include <kiway.h>
-#include <sch_io/sch_io_mgr.h>
+#include <sch_io/sch_io.h>
 
 #include "eeschema_test_utils.h"
 

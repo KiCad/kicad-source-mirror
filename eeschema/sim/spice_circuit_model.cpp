@@ -24,11 +24,13 @@
  */
 
 #include "spice_circuit_model.h"
-#include <string_utils.h>
+
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
-#include <locale_io.h>
 
+#include <locale_io.h>
+#include <richio.h>
+#include <string_utils.h>
 
 SIM_TRACE_TYPE SPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
                                                     wxString& aSignal ) const

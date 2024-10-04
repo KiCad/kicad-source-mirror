@@ -25,6 +25,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <richio.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <hash_eda.h>

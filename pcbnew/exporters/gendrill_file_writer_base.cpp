@@ -29,6 +29,7 @@
 #include <pcb_track.h>
 #include <collectors.h>
 #include <reporter.h>
+#include <richio.h>
 
 #include <gendrill_file_writer_base.h>
 

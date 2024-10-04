@@ -32,6 +32,7 @@
 #include <confirm.h>
 #include <pgm_base.h>
 #include <env_paths.h>
+#include <richio.h>
 #include <sim/sim_library_ibis.h>
 #include <sim/sim_xspice_parser.h>
 #include <sch_screen.h>
@@ -488,7 +489,7 @@ void NETLIST_EXPORTER_SPICE::getNodePattern( SPICE_ITEM&               aItem,
                                              std::vector<std::string>& aModifiers )
 {
     std::string input = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_NODES_FORMAT_FIELD, true );
-    
+
     if( input == "" )
         return;
 

@@ -30,6 +30,7 @@
 #include <locale_io.h>
 #include <fmt/core.h>
 #include <paths.h>
+#include <richio.h>
 
 #include "spice_circuit_model.h"
 #include "ngspice.h"

@@ -23,8 +23,11 @@
  */
 
 #include "netlist_exporter_spice_model.h"
+
 #include <sch_screen.h>
 #include <string_utils.h>
+#include <project.h>
+#include <richio.h>
 
 
 void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,

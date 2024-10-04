@@ -23,7 +23,8 @@
  * @brief Loads the asc file and asy files.
  */
 
-#include <sch_io/ltspice/ltspice_schematic.h>
+#include "sch_io/ltspice/ltspice_schematic.h"
+
 #include <sch_io/ltspice/sch_io_ltspice_parser.h>
 #include <sch_screen.h>
 #include <wx/log.h>
@@ -31,6 +32,8 @@
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet.h>
 #include <schematic.h>
+#include <project.h>
+#include <richio.h>
 
 
 void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,

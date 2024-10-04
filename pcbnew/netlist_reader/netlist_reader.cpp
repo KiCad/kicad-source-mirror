@@ -30,6 +30,7 @@
 
 #include <string_utils.h>
 #include <reporter.h>
+#include <richio.h>
 
 #include "pcb_netlist.h"
 #include "netlist_reader.h"
@@ -109,6 +110,16 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
     }
 
     return nullptr;
+}
+
+
+CMP_READER::~CMP_READER()
+{
+    if( m_lineReader )
+    {
+        delete m_lineReader;
+        m_lineReader = nullptr;
+    }
 }
 
 

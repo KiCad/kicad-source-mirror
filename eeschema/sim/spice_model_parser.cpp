@@ -23,6 +23,8 @@
  */
 
 #include <wx/log.h>
+
+#include <ki_exception.h>
 #include <sim/spice_model_parser.h>
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>

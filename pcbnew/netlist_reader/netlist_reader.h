@@ -31,8 +31,9 @@
 #include <lib_id.h>
 
 
-class NETLIST;
 class COMPONENT;
+class NETLIST;
+class LINE_READER;
 
 
 /**
@@ -51,14 +52,7 @@ public:
         m_lineReader = aLineReader;
     }
 
-    ~CMP_READER()
-    {
-        if( m_lineReader )
-        {
-            delete m_lineReader;
-            m_lineReader = nullptr;
-        }
-    }
+    ~CMP_READER();
 
     /**
      * Read the *.cmp file format contains the component footprint assignments created by CvPcb

@@ -33,6 +33,7 @@
 #include <confirm.h>
 #include <kiway.h>
 #include <erc/erc.h>
+#include <richio.h>
 
 #include <netlist.h>
 #include <netlist_exporter_base.h>

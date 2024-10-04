@@ -24,8 +24,9 @@
 
 #pragma once
 
-#include <richio.h>
+#include <wx/string.h>
 
+class OUTPUTFORMATTER;
 class TEMPLATE_FIELDNAMES_LEXER;
 
 

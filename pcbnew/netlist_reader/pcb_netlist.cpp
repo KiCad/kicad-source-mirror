@@ -24,9 +24,11 @@
  */
 
 
-#include <string_utils.h>
 #include "pcb_netlist.h"
+
 #include <footprint.h>
+#include <richio.h>
+#include <string_utils.h>
 
 
 int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )

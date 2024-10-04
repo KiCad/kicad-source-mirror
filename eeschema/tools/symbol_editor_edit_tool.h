@@ -22,12 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SYMBOL_EDITOR_EDIT_TOOL_H
-#define SYMBOL_EDITOR_EDIT_TOOL_H
+#pragma once
 
 #include <tools/ee_tool_base.h>
 
 
+class SCH_PIN;
+class SCH_SHAPE;
 class SYMBOL_EDIT_FRAME;
 
 
@@ -77,5 +78,3 @@ private:
 
     EDA_ITEM* m_pickerItem;
 };
-
-#endif // SYMBOL_EDITOR_EDIT_TOOL_H

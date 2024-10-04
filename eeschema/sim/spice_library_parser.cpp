@@ -22,16 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/spice_library_parser.h>
+#include "sim/spice_library_parser.h"
+
+#include <utility>
+
+#include <core/thread_pool.h>
+#include <ki_exception.h>
 #include <sim/sim_library_spice.h>
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
-#include <ki_exception.h>
+#include <richio.h>
 
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <utility>
-#include <core/thread_pool.h>
 
 
 namespace SIM_LIBRARY_SPICE_PARSER
