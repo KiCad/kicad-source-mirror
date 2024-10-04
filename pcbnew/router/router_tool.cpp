@@ -879,9 +879,9 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     // First see if this is one of the switch layer commands
     BOARD*       brd           = board();
     LSET         enabledLayers = LSET::AllCuMask( brd->GetDesignSettings().GetCopperLayerCount() );
-    LSEQ         layers        = enabledLayers.Seq();
+    LSEQ         layers        = enabledLayers.UIOrder();
 
-    // These layers are in Board Layer order not PNS layer order
+    // These layers are in Board Layer UI order not PNS layer order
     PCB_LAYER_ID currentLayer = m_iface->GetBoardLayerFromPNSLayer( m_router->GetCurrentLayer() );
     PCB_LAYER_ID targetLayer  = UNDEFINED_LAYER;
 
