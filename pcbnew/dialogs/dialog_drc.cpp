@@ -1026,11 +1026,6 @@ void DIALOG_DRC::NextMarker()
 
 void DIALOG_DRC::SelectMarker( const PCB_MARKER* aMarker )
 {
-    wxLogDebug( wxS( "DRC marker select type: %d, severity %d, error code: %d exclude: %s." ),
-                aMarker->GetMarkerType(), aMarker->GetSeverity(),
-                aMarker->GetRCItem()->GetErrorCode(),
-                ( aMarker->IsExcluded() ) ? wxS( "yes" ) : wxS( "no" ) );
-
     if( m_Notebook->IsShown() )
     {
         enum MARKER_BASE::MARKER_T markerType = aMarker->GetMarkerType();
