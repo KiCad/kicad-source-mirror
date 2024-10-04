@@ -68,7 +68,11 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
 
     const BOX2I viewport = BOX2ISafe( aView->GetViewport() );
 
-    const bool haveSnapLine = m_snapLine && m_snapLine->Length() != 0;
+    // Prevents extremely short snap lines from inhibiting drawing
+    // These can happen due to rounding in intersections, etc.
+    // (usually it is length 1 IU)
+    const int  minSnapLineLength = 10;
+    const bool haveSnapLine = m_snapLine && m_snapLine->Length() >= minSnapLineLength;
 
     // Avoid fighting with the snap line
     const auto drawLineIfNotAlsoSnapLine = [&]( const SEG& aLine )
