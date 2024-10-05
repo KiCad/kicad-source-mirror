@@ -20,25 +20,19 @@
 
 #pragma once
 
-class JOBSET;
-struct JOBSET_OUTPUT;
-struct JOBSET_JOB;
-class KIWAY;
-class REPORTER;
+#include <kicommon.h>
+#include <wx/string.h>
+#include <jobs/job.h>
 
-class JOBS_RUNNER
+class KICOMMON_API JOB_SPECIAL_EXECUTE : public JOB
 {
 public:
-    JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, REPORTER* aReporter = nullptr );
+    JOB_SPECIAL_EXECUTE( bool aIsCli );
 
-    bool RunJobsAllOutputs( bool aBail = false );
-    bool RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail = false );
+    wxString GetDescription() override;
 
-private:
-    int runSpecialExecute( JOBSET_JOB* aJob );
+    wxString m_command;
 
-private:
-    KIWAY*     m_kiway;
-    JOBSET*         m_jobsFile;
-    REPORTER*          m_reporter;
+    bool     m_ignoreExitcode;
+    bool     m_recordOutput;
 };

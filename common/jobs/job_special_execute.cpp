@@ -18,27 +18,26 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include <jobs/job_special_execute.h>
+#include <jobs/job_registry.h>
+#include <i18n_utility.h>
 
-class JOBSET;
-struct JOBSET_OUTPUT;
-struct JOBSET_JOB;
-class KIWAY;
-class REPORTER;
-
-class JOBS_RUNNER
+JOB_SPECIAL_EXECUTE::JOB_SPECIAL_EXECUTE( bool aIsCli ) :
+        JOB( "special_execute", false, aIsCli ),
+        m_command(),
+        m_ignoreExitcode( false ),
+        m_recordOutput( true )
 {
-public:
-    JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, REPORTER* aReporter = nullptr );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "command", &m_command, m_command ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "command", &m_ignoreExitcode, m_ignoreExitcode ) );
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "record_output", &m_recordOutput, m_recordOutput ) );
+}
 
-    bool RunJobsAllOutputs( bool aBail = false );
-    bool RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail = false );
+wxString JOB_SPECIAL_EXECUTE::GetDescription()
+{
+	return wxString( "Execute command: " ) + m_command;
+}
 
-private:
-    int runSpecialExecute( JOBSET_JOB* aJob );
-
-private:
-    KIWAY*     m_kiway;
-    JOBSET*         m_jobsFile;
-    REPORTER*          m_reporter;
-};
+REGISTER_JOB( special_execute, _HKI( "Execute Command" ), KIWAY::KIWAY_FACE_COUNT,
+              JOB_SPECIAL_EXECUTE );

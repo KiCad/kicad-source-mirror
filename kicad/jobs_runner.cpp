@@ -21,9 +21,14 @@
 #include <jobs_runner.h>
 #include <jobs/job_registry.h>
 #include <jobs/jobset.h>
+#include <jobs/job_special_execute.h>
 #include <kiway.h>
 #include <kiway_express.h>
 #include <reporter.h>
+#include <wx/process.h>
+#include <wx/txtstrm.h>
+#include <wx/sstream.h>
+#include <wx/wfstream.h>
 
 JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile,
                           REPORTER* aReporter ) :
@@ -48,6 +53,38 @@ bool JOBS_RUNNER::RunJobsAllOutputs( bool aBail )
     }
 
     return success;
+}
+
+
+int JOBS_RUNNER::runSpecialExecute( JOBSET_JOB* aJob )
+{
+    JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job );
+
+    // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
+    wxProcess process;
+    process.Redirect();
+
+    int result = static_cast<int>( wxExecute( specialJob->m_command, wxEXEC_SYNC, &process ) );
+
+    wxString output;
+
+    if( specialJob->m_recordOutput )
+    {
+        wxFFileOutputStream procOutput( specialJob->GetFullOutputPath() );
+        wxInputStream*      inputStream = process.GetInputStream();
+        if( inputStream )
+        {
+            inputStream->Read( procOutput );
+        }
+        procOutput.Close();
+    }
+
+    if( specialJob->m_ignoreExitcode )
+    {
+        return 0;
+    }
+
+    return result;
 }
 
 
@@ -118,7 +155,21 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
         job.m_job->SetTempOutputDirectory( tempDirPath );
 
-        int result = m_kiway->ProcessJob( iface, job.m_job );
+        int result = 0;
+        if( iface < KIWAY::KIWAY_FACE_COUNT )
+        {
+            result = m_kiway->ProcessJob( iface, job.m_job );
+        }
+        else
+        {
+            // special jobs
+            if( job.m_job->GetType() == "special_execute" )
+			{
+				JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job );
+                // static cast requried because wx used `long` which is 64-bit on linux but 32-bit on windows
+                result = static_cast<int>( wxExecute( specialJob->m_command ) );
+			}
+        }
 
         if( m_reporter )
         {
