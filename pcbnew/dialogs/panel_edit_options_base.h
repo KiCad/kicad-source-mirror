@@ -49,6 +49,7 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxChoice* m_trackMouseDragCtrl;
 		wxRadioBox* m_boardItemsFlip;
 		wxCheckBox* m_allowFreePads;
+		wxCheckBox* m_overrideLocks;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;
 		wxRadioBox* m_rbCtrlClickAction;

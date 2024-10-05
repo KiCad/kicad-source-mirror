@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_LOCKED_ITEMS_QUERY_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,6 +53,7 @@ class DIALOG_LOCKED_ITEMS_QUERY_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Locked Items"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LOCKED_ITEMS_QUERY_BASE();
 
 };

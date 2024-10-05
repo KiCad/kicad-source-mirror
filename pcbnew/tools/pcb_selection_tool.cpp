@@ -714,9 +714,11 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
                 lockedItems.push_back( boardItem );
         }
 
-        if( !lockedItems.empty() )
+        PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
+        if( !lockedItems.empty() && !settings->m_LockingOptions.m_sessionSkipPrompts )
         {
-            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), (int) lockedItems.size() );
+            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), lockedItems.size(),
+                                           settings->m_LockingOptions );
 
             switch( dlg.ShowModal() )
             {

@@ -67,6 +67,7 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_trackMouseDragCtrl->SetSelection( (int) aCfg->m_TrackDragAction );
     m_boardItemsFlip->SetSelection( static_cast<int>( aCfg->m_FlipDirection ) );
     m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
+    m_overrideLocks->SetValue( aCfg->m_LockingOptions.m_sessionSkipPrompts );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
 
     m_magneticPadChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.pads ) );
@@ -153,6 +154,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();
         cfg->m_FlipDirection = static_cast<FLIP_DIRECTION>( m_boardItemsFlip->GetSelection() );
         cfg->m_AllowFreePads = m_allowFreePads->GetValue();
+        cfg->m_LockingOptions.m_sessionSkipPrompts = m_overrideLocks->GetValue();
         cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
 
         cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );

@@ -21,22 +21,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_LOCKED_ITEMS_QUERY_H
-#define DIALOG_LOCKED_ITEMS_QUERY_H
+#pragma once
 
 #include <dialog_locked_items_query_base.h>
+#include <pcbnew_settings.h>
 
 
 class DIALOG_LOCKED_ITEMS_QUERY : public DIALOG_LOCKED_ITEMS_QUERY_BASE
 {
 public:
     /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
-    DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLockedItemCount );
+    DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, std::size_t aLockedItemCount,
+                               PCBNEW_SETTINGS::LOCKING_OPTIONS& aLockingOptions );
 
     int ShowModal() override;
 
 private:
     void onOverrideLocks( wxCommandEvent& event ) override;
-};
 
-#endif // DIALOG_LOCKED_ITEMS_QUERY_H
+    PCBNEW_SETTINGS::LOCKING_OPTIONS& m_lockingOptions;
+};

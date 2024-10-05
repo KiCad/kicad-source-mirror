@@ -90,6 +90,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_MagneticItems.graphics  = false;
     m_MagneticItems.allLayers = false;
 
+    m_LockingOptions.m_sessionSkipPrompts = false;
+
     m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
             &m_AuiPanels.show_layer_manager, true ) );
 

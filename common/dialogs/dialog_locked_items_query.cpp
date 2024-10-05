@@ -25,8 +25,10 @@
 #include <bitmaps.h>
 
 
-DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLockedItemCount ) :
-    DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent )
+DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, std::size_t aLockedItemCount,
+                                                      PCBNEW_SETTINGS::LOCKING_OPTIONS& aLockingOptions ) :
+    DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent ),
+    m_lockingOptions( aLockingOptions )
 {
     m_icon->SetBitmap( KiBitmapBundle( BITMAPS::locked ) );
 
@@ -35,6 +37,9 @@ DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLo
     SetupStandardButtons( { { wxID_OK, _( "Skip Locked Items" ) } } );
     m_sdbSizerOK->SetToolTip( _( "Remove locked items from the selection and only apply the "
                                  "operation to the unlocked items (if any)." ) );
+
+    m_doNotShowBtn->SetToolTip( _( "Do not show this dialog again until KiCad restarts. "
+                                   "You can re-enable this dialog in Pcbnew preferences." ) );
 
     SetInitialFocus( m_sdbSizerOK );
 
@@ -54,18 +59,13 @@ void DIALOG_LOCKED_ITEMS_QUERY::onOverrideLocks( wxCommandEvent& event )
 
 int DIALOG_LOCKED_ITEMS_QUERY::ShowModal()
 {
-    static int doNotShowValue = wxID_ANY;
-
-    if( doNotShowValue != wxID_ANY )
-        return doNotShowValue;
-
     int ret = DIALOG_SHIM::ShowModal();
 
     // Has the user asked not to show the dialog again this session?
     if( m_doNotShowBtn->IsChecked() && ret != wxID_CANCEL )
-        doNotShowValue = ret;
+    {
+        m_lockingOptions.m_sessionSkipPrompts = true;
+    }
 
     return ret;
 }
-
-
