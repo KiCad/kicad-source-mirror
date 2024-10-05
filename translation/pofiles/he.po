@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
-"PO-Revision-Date: 2024-10-03 07:15+0000\n"
+"PO-Revision-Date: 2024-10-05 10:15+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -31,47 +31,47 @@ msgstr "צור שכבות"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:947
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr ""
+msgstr "לא נטענה תצורת רכיב."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:964
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr ""
+msgstr "קו מתאר של תצורת רכיב חסר או פגום. הרץ בודק קו מתאר לבדיקה מלאה."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:973
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "קו מתאר של הלוח חסר או פגום. הרץ DRC לבדיקה מלאה."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "צור מוליכים וקדחי מעבר"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:709
 msgid "Create zones"
-msgstr "צור אזורים מלאים"
+msgstr "צור אזורי מילוי"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:793
 msgid "Build Tech layers"
-msgstr ""
+msgstr "בנה שכבות טכניות"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:825
 #, c-format
 msgid "Build Tech layer %d"
-msgstr ""
+msgstr "בנה שכבה טכנית %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Simplifying copper layer polygons"
-msgstr ""
+msgstr "מפשט מצולעים בשכבת נחושת"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1059
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "מחשב ציפוי נחושת"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1145
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr ""
+msgstr "מפשט %d שכבות נחושת"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1188
 msgid "Simplify holes contours"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:429
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr ""
+msgstr "גרסת OpenGL שלך אינה נתמכת. המינימום הנדרש הוא 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:563
 #, c-format
@@ -102,7 +102,7 @@ msgstr ""
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:763
 #, c-format
 msgid "Pad %s\t"
-msgstr ""
+msgstr "פד %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:794
 #, c-format
@@ -112,7 +112,7 @@ msgstr ""
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:796
 #, c-format
 msgid "Zone %s\t"
-msgstr ""
+msgstr "איזור %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
