@@ -24,8 +24,9 @@
  */
 #pragma once
 
-#include <vector>
 #include <deque>
+#include <mutex>
+#include <vector>
 
 #include <preview_items/construction_geom.h>
 
@@ -206,6 +207,9 @@ private:
     std::set<EDA_ITEM*> m_involvedItems;
 
     std::unique_ptr<ACTIVATION_HELPER<PENDING_BATCH>> m_activationHelper;
+
+    // Protects the persistent and temporary construction batches
+    mutable std::mutex m_batchesMutex;
 };
 
 

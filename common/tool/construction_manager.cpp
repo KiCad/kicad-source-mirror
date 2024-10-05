@@ -232,56 +232,13 @@ void CONSTRUCTION_MANAGER::ProposeConstructionItems( CONSTRUCTION_ITEM_BATCH aBa
 
 void CONSTRUCTION_MANAGER::CancelProposal()
 {
-    // static int i = 0;
-    // std::cout << "Cancelling proposal " << i++ << std::endl;
     m_activationHelper->CancelProposal();
 }
 
 
 void CONSTRUCTION_MANAGER::acceptConstructionItems( PENDING_BATCH&& aAcceptedBatch )
 {
-    if( aAcceptedBatch.IsPersistent )
-    {
-        // We only keep one previous persistent batch for the moment
-        m_persistentConstructionBatch = std::move( aAcceptedBatch.Batch );
-    }
-    else
-    {
-        bool anyNewItems = false;
-        for( CONSTRUCTION_ITEM& item : aAcceptedBatch.Batch )
-        {
-            if( m_involvedItems.count( item.Item ) == 0 )
-            {
-                anyNewItems = true;
-                break;
-            }
-        }
-
-        // If there are no new items involved, don't bother adding the batch
-        if( !anyNewItems )
-        {
-            return;
-        }
-
-        // We only keep up to one previous temporary batch and the current one
-        // we could make this a setting if we want to keep more, but it gets cluttered
-        const int maxTempItems = 2;
-
-        while( m_temporaryConstructionBatches.size() >= maxTempItems )
-        {
-            m_temporaryConstructionBatches.pop_front();
-        }
-
-        m_temporaryConstructionBatches.emplace_back( std::move( aAcceptedBatch.Batch ) );
-    }
-
-    // Refresh what items are drawn
-
-    KIGFX::CONSTRUCTION_GEOM& geom = m_viewHandler.GetViewItem();
-    geom.ClearDrawables();
-    m_involvedItems.clear();
-
-    const auto addBatchItems = [&]( const CONSTRUCTION_ITEM_BATCH& aBatchToAdd, bool aPersistent )
+    const auto getInvolved = [&]( const CONSTRUCTION_ITEM_BATCH& aBatchToAdd )
     {
         for( const CONSTRUCTION_ITEM& item : aBatchToAdd )
         {
@@ -290,24 +247,85 @@ void CONSTRUCTION_MANAGER::acceptConstructionItems( PENDING_BATCH&& aAcceptedBat
             if( m_involvedItems.count( item.Item ) == 0 )
             {
                 m_involvedItems.insert( item.Item );
+            }
+        }
+    };
 
-                for( const KIGFX::CONSTRUCTION_GEOM::DRAWABLE& construction : item.Constructions )
+    // Copies for use outside the lock
+    std::vector<CONSTRUCTION_ITEM_BATCH> persistentBatches, temporaryBatches;
+    {
+        std::lock_guard<std::mutex> lock( m_batchesMutex );
+
+        if( aAcceptedBatch.IsPersistent )
+        {
+            // We only keep one previous persistent batch for the moment
+            m_persistentConstructionBatch = std::move( aAcceptedBatch.Batch );
+        }
+        else
+        {
+            bool anyNewItems = false;
+            for( CONSTRUCTION_ITEM& item : aAcceptedBatch.Batch )
+            {
+                if( m_involvedItems.count( item.Item ) == 0 )
                 {
-                    geom.AddDrawable( construction, aPersistent );
+                    anyNewItems = true;
+                    break;
+                }
+            }
+
+            // If there are no new items involved, don't bother adding the batch
+            if( !anyNewItems )
+            {
+                return;
+            }
+
+            // We only keep up to one previous temporary batch and the current one
+            // we could make this a setting if we want to keep more, but it gets cluttered
+            const int maxTempItems = 2;
+
+            while( m_temporaryConstructionBatches.size() >= maxTempItems )
+            {
+                m_temporaryConstructionBatches.pop_front();
+            }
+
+            m_temporaryConstructionBatches.emplace_back( std::move( aAcceptedBatch.Batch ) );
+        }
+
+        m_involvedItems.clear();
+
+        // Copy the batches for use outside the lock
+        if( m_persistentConstructionBatch )
+        {
+            getInvolved( *m_persistentConstructionBatch );
+            persistentBatches.push_back( *m_persistentConstructionBatch );
+        }
+
+        for( const CONSTRUCTION_ITEM_BATCH& batch : m_temporaryConstructionBatches )
+        {
+            getInvolved( batch );
+            temporaryBatches.push_back( batch );
+        }
+    }
+
+    KIGFX::CONSTRUCTION_GEOM& geom = m_viewHandler.GetViewItem();
+
+    const auto addDrawables =
+            [&]( const std::vector<CONSTRUCTION_ITEM_BATCH>& aBatches, bool aIsPersistent )
+    {
+        for( const CONSTRUCTION_ITEM_BATCH& batch : aBatches )
+        {
+            for( const CONSTRUCTION_ITEM& item : batch )
+            {
+                for( const KIGFX::CONSTRUCTION_GEOM::DRAWABLE& drawable : item.Constructions )
+                {
+                    geom.AddDrawable( drawable, aIsPersistent );
                 }
             }
         }
     };
 
-    if( m_persistentConstructionBatch )
-    {
-        addBatchItems( *m_persistentConstructionBatch, true );
-    }
-
-    for( const CONSTRUCTION_ITEM_BATCH& batch : m_temporaryConstructionBatches )
-    {
-        addBatchItems( batch, false );
-    }
+    addDrawables( persistentBatches, true );
+    addDrawables( temporaryBatches, false );
 
     m_viewHandler.updateView();
 }
@@ -329,6 +347,7 @@ bool CONSTRUCTION_MANAGER::InvolvesAllGivenRealItems( const std::vector<EDA_ITEM
 void CONSTRUCTION_MANAGER::GetConstructionItems(
         std::vector<CONSTRUCTION_ITEM_BATCH>& aToExtend ) const
 {
+    std::lock_guard<std::mutex> lock( m_batchesMutex );
     if( m_persistentConstructionBatch )
     {
         aToExtend.push_back( *m_persistentConstructionBatch );
@@ -342,6 +361,7 @@ void CONSTRUCTION_MANAGER::GetConstructionItems(
 
 bool CONSTRUCTION_MANAGER::HasActiveConstruction() const
 {
+    std::lock_guard<std::mutex> lock( m_batchesMutex );
     return m_persistentConstructionBatch.has_value() || !m_temporaryConstructionBatches.empty();
 }
 
