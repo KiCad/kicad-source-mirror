@@ -212,6 +212,13 @@ HashConstructionBatchSources( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATC
 void CONSTRUCTION_MANAGER::ProposeConstructionItems( CONSTRUCTION_ITEM_BATCH aBatch,
                                                      bool                    aIsPersistent )
 {
+    if( aBatch.empty() )
+    {
+        // There's no point in proposing an empty batch
+        // It would just clear existing construction items for nothing new
+        return;
+    }
+
     const std::size_t hash = HashConstructionBatchSources( aBatch, aIsPersistent );
 
     m_activationHelper->ProposeActivation(

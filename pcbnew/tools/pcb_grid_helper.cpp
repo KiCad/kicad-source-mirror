@@ -270,9 +270,14 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
             }
         }
 
+        // At this point, constructionDrawables can be empty, which is fine
+        // (it means there's no additional construction geometry to draw, but
+        // the item is still going to be proposed for activation)
         constructionItemsBatch.emplace_back( CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM{
-                CONSTRUCTION_MANAGER::SOURCE::FROM_ITEMS, item,
-                std::move( constructionDrawables ) } );
+                CONSTRUCTION_MANAGER::SOURCE::FROM_ITEMS,
+                item,
+                std::move( constructionDrawables ),
+        } );
     }
 
     if( referenceOnlyPoints.size() )
