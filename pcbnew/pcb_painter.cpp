@@ -936,6 +936,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     if( color == COLOR4D::CLEAR )
         return;
 
+    PCB_LAYER_ID currentLayer = ToLAYER_ID( aLayer );
     PCB_LAYER_ID layerTop, layerBottom;
     aVia->LayerPair( &layerTop, &layerBottom );
 
@@ -958,7 +959,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
             return;
 
         double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
-        double size = aVia->GetWidth();
+        double size = aVia->GetWidth( currentLayer );
 
         // Font size limits
         if( size > maxSize )
@@ -1106,12 +1107,12 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsStroke( false );
 
         m_gal->SetLineWidth( margin );
-        m_gal->DrawCircle( center, aVia->GetWidth() / 2.0 + margin );
+        m_gal->DrawCircle( center, aVia->GetWidth( currentLayer ) / 2.0 + margin );
     }
     else if( m_pcbSettings.IsPrinting() || IsCopperLayer( aLayer ) )
     {
-        int    annular_width = ( aVia->GetWidth() - getViaDrillSize( aVia ) ) / 2.0;
-        double radius = aVia->GetWidth() / 2.0;
+        int    annular_width = ( aVia->GetWidth( currentLayer ) - getViaDrillSize( aVia ) ) / 2.0;
+        double radius = aVia->GetWidth( currentLayer ) / 2.0;
         bool   draw = false;
 
         if( m_pcbSettings.IsPrinting() )
@@ -1143,7 +1144,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     {
         m_gal->SetLineWidth( m_lockedShadowMargin );
 
-        m_gal->DrawCircle( center, ( aVia->GetWidth() + m_lockedShadowMargin ) / 2.0 );
+        m_gal->DrawCircle( center,
+                           ( aVia->GetWidth( currentLayer ) + m_lockedShadowMargin ) / 2.0 );
     }
 
     // Clearance lines
@@ -1165,7 +1167,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
             double radius;
 
             if( aVia->FlashLayer( activeLayer ) )
-                radius = aVia->GetWidth() / 2.0;
+                radius = aVia->GetWidth( activeLayer ) / 2.0;
             else
                 radius = getViaDrillSize( aVia ) / 2.0 + m_holePlatingThickness;
 

@@ -1158,7 +1158,6 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
         return solids;
     }
 
-    // TODO(JE) padstacks - need to make multiple solids for custom padstack situations
     auto makeSolidFromPadLayer =
         [&]( PCB_LAYER_ID aLayer )
         {
@@ -1280,33 +1279,40 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
 }
 
 
-std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
+std::vector<std::unique_ptr<PNS::VIA>> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 {
+    std::vector<std::unique_ptr<PNS::VIA>> vias;
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
 
-    auto via = std::make_unique<PNS::VIA>( aVia->GetPosition(),
+    aVia->Padstack().ForEachUniqueLayer(
+        [&]( PCB_LAYER_ID aLayer )
+        {
+            auto via = std::make_unique<PNS::VIA>( aVia->GetPosition(),
                                            SetLayersFromPCBNew( aVia->TopLayer(), aVia->BottomLayer() ),
-                                           aVia->GetWidth(),
+                                           aVia->GetWidth( aLayer ),
                                            aVia->GetDrillValue(),
                                            aVia->GetNet(),
                                            aVia->GetViaType() );
 
-    via->SetParent( aVia );
+            via->SetParent( aVia );
 
-    if( aVia->IsLocked() )
-        via->Mark( PNS::MK_LOCKED );
+            if( aVia->IsLocked() )
+                via->Mark( PNS::MK_LOCKED );
 
-    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
-    {
-        if( !generator->HasFlag( IN_EDIT ) )
-            via->Mark( PNS::MK_LOCKED );
-    }
+            if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
+            {
+                if( !generator->HasFlag( IN_EDIT ) )
+                    via->Mark( PNS::MK_LOCKED );
+            }
 
-    via->SetIsFree( aVia->GetIsFree() );
-    via->SetHole( PNS::HOLE::MakeCircularHole( aVia->GetPosition(), aVia->GetDrillValue() / 2 ) );
+            via->SetIsFree( aVia->GetIsFree() );
+            via->SetHole( PNS::HOLE::MakeCircularHole( aVia->GetPosition(),
+                                                       aVia->GetDrillValue() / 2 ) );
+            vias.emplace_back( std::move( via ) );
+        } );
 
-    return via;
+    return vias;
 }
 
 
@@ -1694,7 +1700,9 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
         else if( type == PCB_VIA_T )
         {
-            if( std::unique_ptr<PNS::VIA> via = syncVia( static_cast<PCB_VIA*>( t ) ) )
+            std::vector<std::unique_ptr<PNS::VIA>> vias = syncVia( static_cast<PCB_VIA*>( t ) );
+
+            for( std::unique_ptr<PNS::VIA>& via : vias )
                 aWorld->Add( std::move( via ) );
         }
     }
@@ -1946,7 +1954,7 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         m_commit->Modify( via_board );
 
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
-        via_board->SetWidth( via->Diameter() );
+        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter() );
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
@@ -2026,7 +2034,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         PCB_VIA*  via_board = new PCB_VIA( m_board );
         PNS::VIA* via = static_cast<PNS::VIA*>( aItem );
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
-        via_board->SetWidth( via->Diameter() );
+        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter() );
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( net );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()

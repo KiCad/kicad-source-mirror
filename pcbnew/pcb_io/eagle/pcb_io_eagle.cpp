@@ -2812,7 +2812,7 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                     if( v.diam )
                     {
                         kidiam = v.diam->ToPcbUnits();
-                        via->SetWidth( kidiam );
+                        via->SetWidth( PADSTACK::ALL_LAYERS, kidiam );
                     }
                     else
                     {
@@ -2820,20 +2820,21 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                         annulus = eagleClamp( m_rules->rlMinViaOuter, annulus,
                                               m_rules->rlMaxViaOuter );
                         kidiam = KiROUND( drillz + 2 * annulus );
-                        via->SetWidth( kidiam );
+                        via->SetWidth( PADSTACK::ALL_LAYERS, kidiam );
                     }
 
                     via->SetDrill( drillz );
 
                     // make sure the via diameter respects the restring rules
 
-                    if( !v.diam || via->GetWidth() <= via->GetDrill() )
+                    if( !v.diam || via->GetWidth( PADSTACK::ALL_LAYERS ) <= via->GetDrill() )
                     {
-                        double annulus =
-                                eagleClamp( m_rules->rlMinViaOuter,
-                                            (double) ( via->GetWidth() / 2 - via->GetDrill() ),
-                                            m_rules->rlMaxViaOuter );
-                        via->SetWidth( drillz + 2 * annulus );
+                        double annulus = eagleClamp(
+                                m_rules->rlMinViaOuter,
+                                static_cast<double>( via->GetWidth( PADSTACK::ALL_LAYERS ) / 2
+                                                     - via->GetDrill() ),
+                                m_rules->rlMaxViaOuter );
+                        via->SetWidth( PADSTACK::ALL_LAYERS, drillz + 2 * annulus );
                     }
 
                     if( kidiam < m_min_via )

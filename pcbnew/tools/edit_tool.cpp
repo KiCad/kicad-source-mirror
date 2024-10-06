@@ -960,7 +960,8 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             }
 
             via->SetDrill( new_drill );
-            via->SetWidth( new_width );
+            // TODO(JE) padstacks - is this correct behavior already?  If so, also change stack mode
+            via->SetWidth( PADSTACK::ALL_LAYERS, new_width );
         }
         else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
         {

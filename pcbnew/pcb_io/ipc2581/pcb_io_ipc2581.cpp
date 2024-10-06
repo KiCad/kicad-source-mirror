@@ -1671,7 +1671,7 @@ void PCB_IO_IPC2581::addVia( wxXmlNode* aContentNode, const PCB_VIA* aVia, PCB_L
     int hole = aVia->GetDrillValue();
     dummy.SetDrillSize( VECTOR2I( hole, hole ) );
     dummy.SetPosition( aVia->GetStart() );
-    dummy.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( aVia->GetWidth(), aVia->GetWidth() ) );
+    dummy.SetSize( aLayer, VECTOR2I( aVia->GetWidth( aLayer ), aVia->GetWidth( aLayer ) ) );
 
     addShape( padNode, dummy, aLayer );
 }
@@ -1777,7 +1777,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 
         PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
 
-        shape.SetEnd( { KiROUND( aVia->GetWidth() / 2.0 ), 0 } );
+        shape.SetEnd( { KiROUND( aVia->GetWidth( layer ) / 2.0 ), 0 } );
 
         wxXmlNode* padStackPadDefNode = appendNode( padStackDefNode, "PadstackPadDef" );
         addAttribute( padStackPadDefNode, "layerRef", m_layer_name_map[layer] );

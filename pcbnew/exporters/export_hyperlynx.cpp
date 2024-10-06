@@ -233,8 +233,8 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PCB_VIA* aVia )
 {
     m_board  = aBoard;
-    m_sx     = aVia->GetWidth();
-    m_sy     = aVia->GetWidth();
+    // TODO(JE) padstacks
+    m_sx = m_sy = aVia->GetWidth( PADSTACK::ALL_LAYERS );
     m_angle  = 0;
     m_layers = aVia->GetLayerSet();
     m_drill  = aVia->GetDrillValue();

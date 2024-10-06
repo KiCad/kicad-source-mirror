@@ -1345,11 +1345,11 @@ bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID l )
             {
-                if( GetEffectivePolygon( l, ERROR_INSIDE )->Contains( aPosition, -1, aAccuracy ) )
-                {
-                    contains = true;
+                if( contains )
                     return;
-                }
+
+                if( GetEffectivePolygon( l, ERROR_INSIDE )->Contains( aPosition, -1, aAccuracy ) )
+                    contains = true;
             } );
 
     return contains;
@@ -1380,6 +1380,9 @@ bool PAD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
         Padstack().ForEachUniqueLayer(
                 [&]( PCB_LAYER_ID aLayer )
                 {
+                    if( hit )
+                        return;
+
                     const std::shared_ptr<SHAPE_POLY_SET>& poly =
                             GetEffectivePolygon( aLayer, ERROR_INSIDE );
 

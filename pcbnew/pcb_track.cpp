@@ -308,16 +308,33 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
     return similarity;
 }
 
-
+#if 0
 void PCB_VIA::SetWidth( int aWidth )
 {
+    // This is present because of the parent class.  It should never be actually called on a via.
+    wxASSERT_MSG( false, "Warning: PCB_VIA::SetWidth called without a layer argument" );
     m_padStack.SetSize( { aWidth, aWidth }, PADSTACK::ALL_LAYERS );
 }
 
 
 int PCB_VIA::GetWidth() const
 {
+    // This is present because of the parent class.  It should never be actually called on a via.
+    wxASSERT_MSG( false, "Warning: PCB_VIA::GetWidth called without a layer argument" );
     return m_padStack.Size( PADSTACK::ALL_LAYERS ).x;
+}
+#endif
+
+
+void PCB_VIA::SetWidth( PCB_LAYER_ID aLayer, int aWidth )
+{
+    m_padStack.SetSize( { aWidth, aWidth }, aLayer );
+}
+
+
+int PCB_VIA::GetWidth( PCB_LAYER_ID aLayer ) const
+{
+    return m_padStack.Size( aLayer ).x;
 }
 
 
@@ -447,7 +464,7 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
         return false;
 
     // We don't yet support complex padstacks for vias
-    SetWidth( m_padStack.Size( PADSTACK::ALL_LAYERS ).x );
+    SetWidth( PADSTACK::ALL_LAYERS, m_padStack.Size( PADSTACK::ALL_LAYERS ).x );
     SetViaType( FromProtoEnum<VIATYPE>( via.type() ) );
     SetNetCode( via.net().code().value() );
     SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );
@@ -1307,7 +1324,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( const BOARD* board = GetBoard() )
         visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
-    int width = GetWidth();
+    int width = GetWidth( ToLAYER_ID( aLayer ) );
 
     // In high contrast mode don't show vias that don't cross the high-contrast layer
     if( renderSettings->GetHighContrast() )
@@ -1465,7 +1482,9 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
-    aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( GetWidth() ) );
+    // TODO(JE) padstacks
+    aList.emplace_back( _( "Diameter" ),
+                        aFrame->MessageTextFromValue( GetWidth( PADSTACK::ALL_LAYERS ) ) );
     aList.emplace_back( _( "Hole" ), aFrame->MessageTextFromValue( GetDrillValue() ) );
 
     wxString  source;
@@ -1565,12 +1584,25 @@ bool PCB_ARC::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 bool PCB_VIA::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    int max_dist = aAccuracy + ( GetWidth() / 2 );
+    bool hit = false;
 
-    // rel_pos is aPosition relative to m_Start (or the center of the via)
-    VECTOR2I rel_pos = aPosition - m_Start;
-    double dist = (double) rel_pos.x * rel_pos.x + (double) rel_pos.y * rel_pos.y;
-    return  dist <= (double) max_dist * max_dist;
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                if( hit )
+                    return;
+
+                int max_dist = aAccuracy + ( GetWidth( aLayer ) / 2 );
+
+                // rel_pos is aPosition relative to m_Start (or the center of the via)
+                VECTOR2D rel_pos = aPosition - m_Start;
+                double dist = rel_pos.x * rel_pos.x + rel_pos.y * rel_pos.y;
+
+                if( dist <= static_cast<double>( max_dist ) * max_dist )
+                    hit = true;
+            } );
+
+    return hit;
 }
 
 
@@ -1609,13 +1641,24 @@ bool PCB_VIA::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) cons
     BOX2I arect = aRect;
     arect.Inflate( aAccuracy );
 
-    BOX2I box( GetStart() );
-    box.Inflate( GetWidth() / 2 );
+    bool hit = false;
 
-    if( aContained )
-        return arect.Contains( box );
-    else
-        return arect.IntersectsCircle( GetStart(), GetWidth() / 2 );
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                if( hit )
+                    return;
+
+                BOX2I box( GetStart() );
+                box.Inflate( GetWidth( aLayer ) / 2 );
+
+                if( aContained )
+                    hit = arect.Contains( box );
+                else
+                    hit = arect.IntersectsCircle( GetStart(), GetWidth( aLayer ) / 2 );
+            } );
+
+    return hit;
 }
 
 
@@ -1739,7 +1782,8 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
     if( aFlash == FLASHING::ALWAYS_FLASHED
             || ( aFlash == FLASHING::DEFAULT && FlashLayer( aLayer ) ) )
     {
-        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetWidth() / 2 );
+        PCB_LAYER_ID cuLayer = m_padStack.EffectiveLayerFor( aLayer );
+        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetWidth( cuLayer ) / 2 );
     }
     else
     {
@@ -1765,7 +1809,7 @@ void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
     {
     case PCB_VIA_T:
     {
-        int radius = ( static_cast<const PCB_VIA*>( this )->GetWidth() / 2 ) + aClearance;
+        int radius = ( static_cast<const PCB_VIA*>( this )->GetWidth( aLayer ) / 2 ) + aClearance;
         TransformCircleToPolygon( aBuffer, m_Start, radius, aError, aErrorLoc );
         break;
     }
@@ -1854,7 +1898,7 @@ static struct TRACK_VIA_DESC
         propMgr.Mask( TYPE_HASH( PCB_VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Diameter" ),
-            &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
+            &PCB_VIA::SetFrontWidth, &PCB_VIA::GetFrontWidth, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
             &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Top" ),

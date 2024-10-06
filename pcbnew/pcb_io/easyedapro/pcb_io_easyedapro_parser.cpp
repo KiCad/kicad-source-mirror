@@ -1063,7 +1063,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                 via->SetPosition( ScalePos( center ) );
                 via->SetDrill( ScaleSize( drill ) );
-                via->SetWidth( ScaleSize( dia ) );
+                via->SetWidth( PADSTACK::ALL_LAYERS, ScaleSize( dia ) );
 
                 via->SetNet( aBoard->FindNet( netname ) );
 

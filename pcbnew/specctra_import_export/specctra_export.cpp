@@ -1028,7 +1028,9 @@ PADSTACK* SPECCTRA_DB::makeVia( const PCB_VIA* aVia )
     if( topLayer > botLayer )
         std::swap( topLayer, botLayer );
 
-    return makeVia( aVia->GetWidth(), aVia->GetDrillValue(), topLayer, botLayer );
+    // TODO(JE) padstacks
+    return makeVia( aVia->GetWidth( ::PADSTACK::ALL_LAYERS ), aVia->GetDrillValue(),
+                    topLayer, botLayer );
 }
 
 

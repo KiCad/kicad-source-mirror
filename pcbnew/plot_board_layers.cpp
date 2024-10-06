@@ -635,7 +635,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( ( aLayerMask & LSET::AllCuMask() ).any() )
             width_adj = itemplotter.getFineWidthAdj();
 
-        int diameter = via->GetWidth() + 2 * via_margin + width_adj;
+        // TODO(JE) padstacks
+        int diameter = via->GetWidth( PADSTACK::ALL_LAYERS ) + 2 * via_margin + width_adj;
 
         /// Vias not connected to copper are optionally not drawn
         if( onCopperLayer && !via->FlashLayer( aLayerMask ) )

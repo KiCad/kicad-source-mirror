@@ -80,14 +80,15 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     case PCB_VIA_T:
     {
         const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
-        ret = hash_val( via->GetWidth() );
-        hash_combine( ret, via->GetDrillValue() );
+
+        ret = hash<int>{}( via->GetDrillValue() );
         hash_combine( ret, via->TopLayer() );
         hash_combine( ret, via->BottomLayer() );
 
         via->GetLayerSet().RunOnLayers(
                 [&]( PCB_LAYER_ID layer )
                 {
+                    hash_combine( ret, via->GetWidth( layer ) );
                     hash_combine( ret, via->FlashLayer( layer ) );
                 } );
 

@@ -237,6 +237,7 @@ private:
     PCB_ARC*    parseARC();
     PCB_TRACK*  parsePCB_TRACK();
     PCB_VIA*    parsePCB_VIA();
+    void        parseViastack( PCB_VIA* aVia );
     ZONE*       parseZONE( BOARD_ITEM_CONTAINER* aParent );
     PCB_TARGET* parsePCB_TARGET();
     BOARD*      parseBOARD();

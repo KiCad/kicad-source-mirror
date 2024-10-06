@@ -66,8 +66,9 @@ int TEARDROP_MANAGER::GetWidth( BOARD_ITEM* aItem )
 {
     if( aItem->Type() == PCB_VIA_T )
     {
+        // TODO(JE) padstacks
         PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-        return via->GetWidth();
+        return via->GetWidth( PADSTACK::ALL_LAYERS );
     }
     else if( aItem->Type() == PCB_PAD_T )
     {

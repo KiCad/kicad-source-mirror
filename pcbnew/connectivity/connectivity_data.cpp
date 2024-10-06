@@ -485,8 +485,9 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
 
                     if( zone->IsFilled() )
                     {
-                        const SHAPE_POLY_SET* zoneFill = zone->GetFill( ToLAYER_ID( aLayer ) );
-                        SHAPE_CIRCLE          viaHull( via->GetCenter(), via->GetWidth() / 2 );
+                        PCB_LAYER_ID lyr = ToLAYER_ID( aLayer );
+                        const SHAPE_POLY_SET* zoneFill = zone->GetFill( lyr );
+                        SHAPE_CIRCLE          viaHull( via->GetCenter(), via->GetWidth( lyr ) / 2 );
 
                         for( const VECTOR2I& pt : zoneFill->COutline( islandIdx ).CPoints() )
                         {

@@ -241,7 +241,7 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
 
             TEARDROP_PARAMETERS tdParams = via->GetTeardropParams();
-            int                 annularWidth = via->GetWidth();
+            int                 annularWidth = via->GetWidth( track->GetLayer() );
 
             if( !tdParams.m_Enabled )
                 continue;

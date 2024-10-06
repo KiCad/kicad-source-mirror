@@ -91,7 +91,8 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 bool fail_min = false;
                 bool fail_max = false;
                 int  constraintDiameter = 0;
-                int  actual = via->GetWidth();
+                // TODO(JE) padstacks
+                int  actual = via->GetWidth( PADSTACK::ALL_LAYERS );
 
                 if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {

@@ -259,7 +259,8 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 case PCB_VIA_T:
                 {
                     PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                    annularWidth = ( via->GetWidth() - via->GetDrillValue() ) / 2;
+                    // TODO(JE) padstacks
+                    annularWidth = ( via->GetWidth( PADSTACK::ALL_LAYERS ) - via->GetDrillValue() ) / 2;
                     break;
                 }
 

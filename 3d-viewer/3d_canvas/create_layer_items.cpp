@@ -303,7 +303,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 const PCB_VIA* via               = static_cast<const PCB_VIA*>( track );
                 const VIATYPE  viatype           = via->GetViaType();
                 const double   holediameter      = via->GetDrillValue() * BiuTo3dUnits();
-                const double   viasize           = via->GetWidth() * BiuTo3dUnits();
+                const double   viasize           = via->GetWidth( layer ) * BiuTo3dUnits();
                 const double   plating           = GetHolePlatingThickness() * BiuTo3dUnits();
 
                 // holes and layer copper extend half info cylinder wall to hide transition
@@ -428,7 +428,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     const int holediameter = via->GetDrillValue();
                     const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
-                    const int hole_outer_ring_radius = KiROUND( via->GetWidth() / 2.0 );
+                    const int hole_outer_ring_radius = KiROUND( via->GetWidth( layer ) / 2.0 );
 
                     // Add through hole contours
                     TransformCircleToPolygon( m_TH_ODPolys, via->GetStart(), hole_outer_radius,

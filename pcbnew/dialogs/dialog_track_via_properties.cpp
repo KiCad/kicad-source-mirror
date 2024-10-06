@@ -212,7 +212,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 {
                     m_viaX.SetValue( v->GetPosition().x );
                     m_viaY.SetValue( v->GetPosition().y );
-                    m_viaDiameter.SetValue( v->GetWidth() );
+                    // TODO(JE) padstacks
+                    m_viaDiameter.SetValue( v->GetWidth( PADSTACK::ALL_LAYERS ) );
                     m_viaDrill.SetValue( v->GetDrillValue() );
                     m_vias = true;
                     viaType = v->GetViaType();
@@ -249,7 +250,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( m_viaY.GetValue() != v->GetPosition().y )
                         m_viaY.SetValue( INDETERMINATE_STATE );
 
-                    if( m_viaDiameter.GetValue() != v->GetWidth() )
+                    if( m_viaDiameter.GetValue() != v->GetWidth( PADSTACK::ALL_LAYERS ) )
                         m_viaDiameter.SetValue( INDETERMINATE_STATE );
 
                     if( m_viaDrill.GetValue() != v->GetDrillValue() )
@@ -709,7 +710,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 v->SanitizeLayers();
 
                 if( !m_viaDiameter.IsIndeterminate() )
-                    v->SetWidth( m_viaDiameter.GetIntValue() );
+                    v->SetWidth( PADSTACK::ALL_LAYERS, m_viaDiameter.GetIntValue() );
 
                 if( !m_viaDrill.IsIndeterminate() )
                     v->SetDrill( m_viaDrill.GetIntValue() );

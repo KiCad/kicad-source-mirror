@@ -912,10 +912,11 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
                     if( i> 0 )
                         dims = bds.m_ViasDimensionsList[ i ];
 
-                    if( dims.m_Diameter > via->GetWidth() )
+                    // TODO(JE) padstacks
+                    if( dims.m_Diameter > via->GetWidth( PADSTACK::ALL_LAYERS ) )
                     {
                         commit.Modify( via );
-                        via->SetWidth( dims.m_Diameter );
+                        via->SetWidth( PADSTACK::ALL_LAYERS, dims.m_Diameter );
                         via->SetDrill( dims.m_Drill );
                         break;
                     }
@@ -967,10 +968,11 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
                     if( i > 0 )
                         dims = bds.m_ViasDimensionsList[ i ];
 
-                    if( dims.m_Diameter < via->GetWidth() )
+                    // TODO(JE) padstacks
+                    if( dims.m_Diameter < via->GetWidth( PADSTACK::ALL_LAYERS ) )
                     {
                         commit.Modify( via );
-                        via->SetWidth( dims.m_Diameter );
+                        via->SetWidth( PADSTACK::ALL_LAYERS, dims.m_Diameter );
                         via->SetDrill( dims.m_Drill );
                         break;
                     }

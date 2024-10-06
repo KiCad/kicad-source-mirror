@@ -406,7 +406,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                     AddFeatureAttribute(
                             *m_featuresList.back(),
                             ODB_ATTR::GEOMETRY{ "VIA_RoundD"
-                                                + std::to_string( via->GetWidth() ) } );
+                                                + std::to_string( via->GetWidth( aLayer ) ) } );
                 }
             }
             else
@@ -428,7 +428,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                         AddFeatureAttribute(
                                 *m_featuresList.back(),
                                 ODB_ATTR::GEOMETRY{ "VIA_RoundD"
-                                                    + std::to_string( via->GetWidth() ) } );
+                                                    + std::to_string( via->GetWidth( aLayer ) ) } );
                     }
                 }
             }

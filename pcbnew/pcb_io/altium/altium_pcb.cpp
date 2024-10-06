@@ -3829,7 +3829,8 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
         via->SetPosition( elem.position );
-        via->SetWidth( elem.diameter );
+        // TODO(JE) padstacks
+        via->SetWidth( PADSTACK::ALL_LAYERS, elem.diameter );
         via->SetDrill( elem.holesize );
         via->SetNetCode( GetNetCode( elem.net ) );
         via->SetLocked( elem.is_locked );

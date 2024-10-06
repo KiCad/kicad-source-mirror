@@ -3467,7 +3467,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
                     if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
-                                        ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
+                                        ( track->GetWidth()
+                                            + aVia->GetWidth( track->GetLayer() ) ) / 2 ) )
                     {
                         possible_tracks.push_back( track );
                     }
@@ -3476,7 +3477,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     PCB_ARC* arc = static_cast<PCB_ARC*>( item );
 
-                    if( arc->HitTest( position, aVia->GetWidth() / 2 ) )
+                    if( arc->HitTest( position, aVia->GetWidth( arc->GetLayer() ) / 2 ) )
                         possible_tracks.push_back( arc );
                 }
             }
@@ -3501,6 +3502,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         bool hasDRCViolation( PCB_VIA* aVia, BOARD_ITEM* aOther )
         {
+            PCB_LAYER_ID activeLayer = m_frame->GetActiveLayer();
+
             DRC_CONSTRAINT        constraint;
             int                   clearance;
             BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );
@@ -3509,7 +3512,24 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             if( zone && zone->GetIsRuleArea() )
             {
                 if( zone->GetDoNotAllowVias() )
-                    return zone->Outline()->Collide( aVia->GetPosition(), aVia->GetWidth() / 2 );
+                {
+                    bool hit = false;
+
+                    aVia->Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID aLayer )
+                        {
+                            if( hit )
+                                return;
+
+                            if( zone->Outline()->Collide( aVia->GetPosition(),
+                                                          aVia->GetWidth( aLayer ) / 2 ) )
+                            {
+                                hit = true;
+                            }
+                        } );
+
+                    return hit;
+                }
 
                 return false;
             }
@@ -3638,6 +3658,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
+            PCB_LAYER_ID activeLayer = m_frame->GetActiveLayer();
             std::vector<PCB_SHAPE*> possible_shapes;
 
             view->Query( bbox, items );
@@ -3653,7 +3674,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-                    if( shape->HitTest( position, aVia->GetWidth() / 2 ) )
+                    if( shape->HitTest( position, aVia->GetWidth( activeLayer ) / 2 ) )
                         possible_shapes.push_back( shape );
                 }
             }
@@ -4020,12 +4041,13 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( via->GetViaType() == VIATYPE::MICROVIA )
             {
-                via->SetWidth( via->GetEffectiveNetClass()->GetuViaDiameter() );
+                via->SetWidth( PADSTACK::ALL_LAYERS,
+                               via->GetEffectiveNetClass()->GetuViaDiameter() );
                 via->SetDrill( via->GetEffectiveNetClass()->GetuViaDrill() );
             }
             else
             {
-                via->SetWidth( bds.GetCurrentViaSize() );
+                via->SetWidth( PADSTACK::ALL_LAYERS, bds.GetCurrentViaSize() );
                 via->SetDrill( bds.GetCurrentViaDrill() );
             }
 

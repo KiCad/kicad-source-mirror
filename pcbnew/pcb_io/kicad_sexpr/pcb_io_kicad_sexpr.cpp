@@ -2489,7 +2489,42 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             m_out->Print( 0, ")" );
         }
 
-        formatTenting( via->Padstack() );
+        const PADSTACK& padstack = via->Padstack();
+
+        formatTenting( padstack );
+
+        if( padstack.Mode() != PADSTACK::MODE::NORMAL )
+        {
+            std::string mode =
+                    padstack.Mode() == PADSTACK::MODE::CUSTOM ? "custom" : "front_inner_back";
+            m_out->Print( 0, "(padstack (mode %s)", mode.c_str() );
+
+            if( padstack.Mode() == PADSTACK::MODE::FRONT_INNER_BACK )
+            {
+                m_out->Print( 0, "(layer \"Inner\"" );
+                m_out->Print( 0, " (size %s)",
+                        formatInternalUnits( padstack.Size( PADSTACK::INNER_LAYERS ).x ).c_str() );
+                m_out->Print( 0, ")(layer \"B.Cu\"" );
+                m_out->Print( 0, " (size %s)",
+                        formatInternalUnits( padstack.Size( B_Cu ).x ).c_str() );
+                m_out->Print( 0, ")" );
+            }
+            else
+            {
+                for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, board->GetCopperLayerCount() ) )
+                {
+                    if( layer == F_Cu )
+                        continue;
+
+                    m_out->Print( 0, "(layer %s", m_out->Quotew( LSET::Name( layer ) ).c_str() );
+                    m_out->Print( 0, " (size %s)",
+                          formatInternalUnits( padstack.Size( layer ).x ).c_str() );
+                    m_out->Print( 0, ")" );
+                }
+            }
+
+            m_out->Print( 0, ")" );
+        }
 
         if( !isDefaultTeardropParameters( via->GetTeardropParams() ) )
         {

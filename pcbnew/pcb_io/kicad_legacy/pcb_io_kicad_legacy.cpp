@@ -2231,12 +2231,11 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
         newTrack->SetPosition( VECTOR2I( start_x, start_y ) );
         newTrack->SetEnd( VECTOR2I( end_x, end_y ) );
 
-        newTrack->SetWidth( width );
-
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
         {
             PCB_VIA *via = static_cast<PCB_VIA*>( newTrack );
             via->SetViaType( viatype );
+            via->SetWidth( PADSTACK::ALL_LAYERS, width );
 
             if( drill < 0 )
                 via->SetDrillDefault();
@@ -2266,6 +2265,8 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
         }
         else
         {
+            newTrack->SetWidth( width );
+
             // A few legacy boards can have tracks on non existent layers, because
             // reducing the number of layers does not remove tracks on removed layers
             // If happens, skip them

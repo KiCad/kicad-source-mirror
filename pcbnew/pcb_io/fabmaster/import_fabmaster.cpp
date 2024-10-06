@@ -2526,19 +2526,19 @@ bool FABMASTER::loadVias( BOARD* aBoard )
 
             if( !ds.m_ViasDimensionsList.empty() )
             {
-                new_via->SetWidth( ds.m_ViasDimensionsList[0].m_Diameter );
+                new_via->SetWidth( PADSTACK::ALL_LAYERS, ds.m_ViasDimensionsList[0].m_Diameter );
                 new_via->SetDrill( ds.m_ViasDimensionsList[0].m_Drill );
             }
             else
             {
                 new_via->SetDrillDefault();
-                new_via->SetWidth( ds.m_ViasMinSize );
+                new_via->SetWidth( PADSTACK::ALL_LAYERS, ds.m_ViasMinSize );
             }
         }
         else
         {
             new_via->SetDrill( padstack->second.drill_size_x );
-            new_via->SetWidth( padstack->second.width );
+            new_via->SetWidth( PADSTACK::ALL_LAYERS, padstack->second.width );
         }
 
         aBoard->Add( new_via, ADD_MODE::APPEND );

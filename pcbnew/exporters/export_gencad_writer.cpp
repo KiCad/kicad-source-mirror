@@ -233,8 +233,8 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
 // Sort vias for uniqueness
 static bool ViaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
 {
-    if( aPadref->GetWidth() != aPadcmp->GetWidth() )
-        return aPadref->GetWidth() < aPadcmp->GetWidth();
+    if( aPadref->GetWidth( PADSTACK::ALL_LAYERS ) != aPadcmp->GetWidth( PADSTACK::ALL_LAYERS ) )
+        return aPadref->GetWidth( PADSTACK::ALL_LAYERS ) < aPadcmp->GetWidth( PADSTACK::ALL_LAYERS );
 
     if( aPadref->GetDrillValue() != aPadcmp->GetDrillValue() )
         return aPadref->GetDrillValue() < aPadcmp->GetDrillValue();
@@ -302,10 +302,10 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
     {
         viastacks.push_back( via );
         fprintf( m_file, "PAD V%d.%d.%s ROUND %g\nCIRCLE 0 0 %g\n",
-                 via->GetWidth(), via->GetDrillValue(),
+                 via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
                  fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
                  via->GetDrillValue() / SCALE_FACTOR,
-                 via->GetWidth() / (SCALE_FACTOR * 2) );
+                 via->GetWidth( PADSTACK::ALL_LAYERS ) / (SCALE_FACTOR * 2) );
     }
 
     // Emit component pads
@@ -554,14 +554,14 @@ void GENCAD_EXPORTER::CreatePadsShapesSection()
         LSET mask = via->GetLayerSet() & master_layermask;
 
         fprintf( m_file, "PADSTACK VIA%d.%d.%s %g\n",
-                 via->GetWidth(), via->GetDrillValue(),
+                 via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
                  fmt_mask( mask ).c_str(),
                  via->GetDrillValue() / SCALE_FACTOR );
 
         for( PCB_LAYER_ID layer : mask.Seq( gc_seq ) )
         {
             fprintf( m_file, "PAD V%d.%d.%s %s 0 0\n",
-                    via->GetWidth(), via->GetDrillValue(),
+                    via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
                     fmt_mask( mask ).c_str(),
                     GenCADLayerName( cu_count, layer ).c_str() );
         }
@@ -984,7 +984,7 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             LSET vset = via->GetLayerSet() & master_layermask;
 
             fprintf( m_file, "VIA VIA%d.%d.%s %g %g ALL %g via%d\n",
-                     via->GetWidth(), via->GetDrillValue(),
+                     via->GetWidth( PADSTACK::ALL_LAYERS ), via->GetDrillValue(),
                      fmt_mask( vset ).c_str(),
                      MapXTo( via->GetStart().x ), MapYTo( via->GetStart().y ),
                      via->GetDrillValue() / SCALE_FACTOR, vianum++ );

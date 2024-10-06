@@ -204,7 +204,8 @@ static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             rk.access = via_access_code( aPcb, top_layer, bottom_layer );
             rk.x_location = via->GetPosition().x - origin.x;
             rk.y_location = origin.y - via->GetPosition().y;
-            rk.x_size = via->GetWidth();
+            // TODO(JE) padstacks
+            rk.x_size = via->GetWidth( PADSTACK::ALL_LAYERS );
             rk.y_size = 0; // Round so height = 0
             rk.rotation = 0;
             rk.soldermask = 3; // XXX always tented?

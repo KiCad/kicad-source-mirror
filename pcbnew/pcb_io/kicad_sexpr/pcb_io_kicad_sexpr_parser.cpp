@@ -6262,7 +6262,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             break;
 
         case T_size:
-            via->SetWidth( parseBoardUnits( "via width" ) );
+            via->SetWidth( PADSTACK::ALL_LAYERS, parseBoardUnits( "via width" ) );
             NeedRIGHT();
             break;
 
@@ -6333,6 +6333,10 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
         }
             break;
 
+        case T_padstack:
+            parseViastack( via.get() );
+            break;
+
         case T_teardrops:
             parseTEARDROP_PARAMETERS( &via->GetTeardropParams() );
             break;
@@ -6390,6 +6394,103 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTenting( PADSTACK& aPadstack )
 
     aPadstack.FrontOuterLayers().has_solder_mask = front;
     aPadstack.BackOuterLayers().has_solder_mask = back;
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseViastack( PCB_VIA* aVia )
+{
+    PADSTACK& padstack = aVia->Padstack();
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_mode:
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_front_inner_back:
+                padstack.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
+                break;
+
+            case T_custom:
+                padstack.SetMode( PADSTACK::MODE::CUSTOM );
+                break;
+
+            default:
+                Expecting( "front_inner_back or custom" );
+            }
+
+            NeedRIGHT();
+            break;
+
+        case T_layer:
+        {
+            NextTok();
+            PCB_LAYER_ID curLayer = UNDEFINED_LAYER;
+
+            if( curText == "Inner" )
+            {
+                if( padstack.Mode() != PADSTACK::MODE::FRONT_INNER_BACK )
+                {
+                    THROW_IO_ERROR( wxString::Format( _( "Invalid padstack layer in\nfile: %s\n"
+                                                         "line: %d\noffset: %d." ),
+                                                      CurSource(), CurLineNumber(), CurOffset() ) );
+                }
+
+                curLayer = PADSTACK::INNER_LAYERS;
+            }
+            else
+            {
+                curLayer = lookUpLayer( m_layerIndices );
+            }
+
+            if( !IsCopperLayer( curLayer ) )
+            {
+                wxString error;
+                error.Printf( _( "Invalid padstack layer '%s' in file '%s' at line %d, offset %d." ),
+                              curText, CurSource().GetData(), CurLineNumber(), CurOffset() );
+                THROW_IO_ERROR( error );
+            }
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+
+                case T_size:
+                {
+                    int diameter = parseBoardUnits( "via width" );
+                    padstack.SetSize( { diameter, diameter }, curLayer );
+                    NeedRIGHT();
+                    break;
+                }
+
+                default:
+                    // Currently only supporting custom via diameter per layer, not other properties
+                    Expecting( "size" );
+                }
+            }
+
+            break;
+        }
+
+        default:
+            Expecting( "mode or layer" );
+            break;
+        }
+    }
 }
 
 

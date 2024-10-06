@@ -228,7 +228,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
         via->SetPosition( mapPt( aPoint, m_routeResolution ) );
         via->SetDrill( drill_diam_iu );
         via->SetViaType( VIATYPE::THROUGH );
-        via->SetWidth( viaDiam );
+        via->SetWidth( ::PADSTACK::ALL_LAYERS, viaDiam );
         via->SetLayerPair( F_Cu, B_Cu );
     }
     else if( shapeCount == copperLayerCount )
@@ -249,7 +249,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
         via->SetPosition( mapPt( aPoint, m_routeResolution ) );
         via->SetDrill( drill_diam_iu );
         via->SetViaType( VIATYPE::THROUGH );
-        via->SetWidth( viaDiam );
+        via->SetWidth( ::PADSTACK::ALL_LAYERS, viaDiam );
         via->SetLayerPair( F_Cu, B_Cu );
     }
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
@@ -304,7 +304,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
             via->SetViaType( VIATYPE::BLIND_BURIED );
         }
 
-        via->SetWidth( viaDiam );
+        via->SetWidth( ::PADSTACK::ALL_LAYERS, viaDiam );
         via->SetLayerPair( m_pcbLayer2kicad[ topLayerNdx ], m_pcbLayer2kicad[ botLayerNdx ] );
     }
 

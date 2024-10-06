@@ -863,7 +863,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                 via->SetPosition( center );
 
-                via->SetWidth( kdia );
+                via->SetWidth( PADSTACK::ALL_LAYERS, kdia );
                 via->SetNet( getOrAddNetItem( arr[4] ) );
                 via->SetDrill( kdrill );
 

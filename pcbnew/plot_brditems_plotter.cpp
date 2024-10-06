@@ -1201,7 +1201,8 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
                 continue;
 
             plotOneDrillMark( PAD_DRILL_SHAPE::CIRCLE, via->GetStart(),
-                              VECTOR2I( via->GetDrillValue(), 0 ), VECTOR2I( via->GetWidth(), 0 ),
+                              VECTOR2I( via->GetDrillValue(), 0 ),
+                              VECTOR2I( via->GetWidth( PADSTACK::ALL_LAYERS ), 0 ),
                               ANGLE_0, smallDrill );
         }
     }

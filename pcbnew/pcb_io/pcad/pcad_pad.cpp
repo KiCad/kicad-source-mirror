@@ -359,7 +359,7 @@ void PCAD_PAD::AddToBoard( FOOTPRINT* aFootprint )
             via->SetPosition( VECTOR2I( m_PositionX, m_PositionY ) );
             via->SetEnd( VECTOR2I( m_PositionX, m_PositionY ) );
 
-            via->SetWidth( height );
+            via->SetWidth( PADSTACK::ALL_LAYERS, height );
             via->SetViaType( VIATYPE::THROUGH );
             via->SetLayerPair( F_Cu, B_Cu );
             via->SetDrill( m_Hole );

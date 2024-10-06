@@ -2603,7 +2603,7 @@ int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
                     (double) ( (double) getKiCadLength( csViaCode.Shape.Size ) / 1E6 ) );
     }
 
-    via->SetWidth( getKiCadLength( csViaCode.Shape.Size ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, getKiCadLength( csViaCode.Shape.Size ) );
 
     bool start_layer_outside =
             csLayerPair.PhysicalLayerStart == 1
@@ -2630,7 +2630,7 @@ int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
     via->SetNet( getKiCadNet( aCadstarNetID ) );
     ///todo add netcode to the via
 
-    return via->GetWidth();
+    return via->GetWidth( PADSTACK::ALL_LAYERS );
 }
 
 
