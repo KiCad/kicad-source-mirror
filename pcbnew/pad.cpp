@@ -2463,6 +2463,7 @@ static struct PAD_DESC
         propMgr.InheritsAfter( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
         propMgr.Mask( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) );
+        propMgr.Mask( TYPE_HASH( PAD ), TYPE_HASH( BOARD_ITEM ), _HKI( "Locked" ) );
 
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Orientation" ),
                     &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees,

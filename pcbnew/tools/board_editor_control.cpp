@@ -1272,8 +1272,14 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
         if( !item->IsBOARD_ITEM() )
             continue;
 
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-        PCB_GROUP*  parent_group = board_item->GetParentGroup();
+        BOARD_ITEM* const board_item = static_cast<BOARD_ITEM*>( item );
+
+        // Disallow locking free pads - it's confusing and not persisted
+        // through save/load anyway.
+        if( board_item->Type() == PCB_PAD_T )
+            continue;
+
+        PCB_GROUP* parent_group = board_item->GetParentGroup();
 
         if( parent_group && parent_group->Type() == PCB_GENERATOR_T )
         {
