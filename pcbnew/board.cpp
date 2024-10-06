@@ -745,6 +745,19 @@ void BOARD::SetCopperLayerCount( int aCount )
 }
 
 
+PCB_LAYER_ID BOARD::GetCopperLayerStackMaxId() const
+{
+    int imax = GetCopperLayerCount();
+
+    // layers IDs are F_Cu, B_Cu, and even IDs values (imax values)
+    if( imax <= 2 )     // at least 2 layers are expected
+        return B_Cu;
+
+    // For a 4 layer, last ID is In2_Cu = 6 (IDs are 0, 2, 4, 6)
+    return static_cast<PCB_LAYER_ID>( (imax-1) * 2 );
+}
+
+
 int BOARD::LayerDepth( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer ) const
 {
     if( aStartLayer > aEndLayer )

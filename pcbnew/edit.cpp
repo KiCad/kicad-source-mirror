@@ -94,21 +94,8 @@ void PCB_EDIT_FRAME::SwitchLayer( PCB_LAYER_ID layer )
     // enabled needs to be checked.
     if( IsCopperLayer( layer ) )
     {
-        // If only one copper layer is enabled, the only such layer that can be selected to is
-        // the "Back" layer (so the selection of any other copper layer is disregarded).
-        if( GetBoard()->GetCopperLayerCount() < 2 )
-        {
-            if( layer != B_Cu )
-                return;
-        }
-        // If more than one copper layer is enabled, the "Copper" and "Component" layers can be
-        // selected, but the total number of copper layers determines which internal layers are
-        // also capable of being selected.
-        else
-        {
-            if( layer != B_Cu && layer != F_Cu && layer >= GetBoard()->GetCopperLayerCount()*2 )
-                return;
-        }
+        if( layer > GetBoard()->GetCopperLayerStackMaxId() )
+            return;
     }
 
     // Is yet more checking required? E.g. when the layer to be selected is a non-copper layer,
