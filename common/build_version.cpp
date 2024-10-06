@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
@@ -337,6 +337,34 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
              << wxString::Format( "%d%s%.1f", 1,
                                   locale->GetInfo( wxLocaleInfo::wxLOCALE_THOUSANDS_SEP ), 234.5 )
              << eol;
+
+        wxString testStr( wxS( "кΩ丈" ) );
+        wxString expectedUtf8Hex( wxS( "D0BACEA9E4B888" ) );
+        wxString sysHex, utf8Hex;
+        {
+            const char* asChar = testStr.c_str().AsChar();
+            size_t      length = strlen( asChar );
+
+            for( size_t i = 0; i < length; i++ )
+                sysHex << wxString::Format( "%02X", (unsigned int) (uint8_t) asChar[i] );
+        }
+        {
+            const char* asChar = testStr.utf8_str().data();
+            size_t      length = strlen( asChar );
+
+            for( size_t i = 0; i < length; i++ )
+                utf8Hex << wxString::Format( "%02X", (unsigned int) (uint8_t) asChar[i] );
+        }
+
+        aMsg << indent4 << "Encoded " << testStr << ": " << sysHex << " (sys), " << utf8Hex
+             << " (utf8)" << eol;
+
+        wxASSERT_MSG( utf8Hex == expectedUtf8Hex,
+                      wxString::Format( "utf8_str string %s encoding bad result: %s, expected "
+                                        "%s, system enc %s, lang %s",
+                                        testStr, utf8Hex, expectedUtf8Hex,
+                                        locale->GetSystemEncodingName(),
+                                        locale->GetCanonicalName() ) );
     }
 
     return aMsg;
