@@ -781,7 +781,8 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 
 bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia )
 {
-    bool success = true;
+    bool                      success = true;
+    std::vector<TopoDS_Shape> padShapes;
 
     for( PCB_LAYER_ID pcb_layer : aPad->GetLayerSet().Seq() )
     {
@@ -812,8 +813,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         SHAPE_POLY_SET polySet;
         aPad->TransformShapeToPolygon( polySet, pcb_layer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
-        success &= MakeShapes( m_board_copper_pads, polySet, m_simplifyShapes, thickness, Zpos,
-                               aOrigin );
+        success &= MakeShapes( padShapes, polySet, m_simplifyShapes, thickness, Zpos, aOrigin );
 
         if( testShape.IsNull() )
         {
@@ -867,7 +867,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         if( MakeShapeAsThickSegment( plating, seg_hole->GetSeg().A, seg_hole->GetSeg().B, width,
                                      ( top - bottom ), bottom, aOrigin ) )
         {
-            m_board_copper_pads.push_back( plating );
+            padShapes.push_back( plating );
         }
         else
         {
@@ -875,8 +875,24 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         }
     }
 
-    if( !success )  // Error
+    if( !success ) // Error
         ReportMessage( wxT( "OCC error adding pad/via polygon.\n" ) );
+
+    // Fuse pad shapes here before fusing them with tracks because OCCT sometimes has trouble
+    if( m_fuseShapes )
+    {
+        TopTools_ListOfShape padShapesList;
+
+        for( const TopoDS_Shape& shape : padShapes )
+            padShapesList.Append( shape );
+
+        m_board_copper_pads.push_back( fuseShapesOrCompound( padShapesList ) );
+    }
+    else
+    {
+        for( const TopoDS_Shape& shape : padShapes )
+            m_board_copper_pads.push_back( shape );
+    }
 
     return success;
 }
