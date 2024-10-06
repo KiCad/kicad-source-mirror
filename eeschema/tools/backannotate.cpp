@@ -185,13 +185,13 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
                         continue;
 
                     // Fields are of the format "(field (name "name") "12345")
-                    const auto& fieldName = field.second.get_child_optional( "name" );
-                    const auto& fieldValue = field.second.back().first;
+                    const auto&        fieldName = field.second.get_child_optional( "name" );
+                    const std::string& fieldValue = field.second.back().first;
 
                     if( !fieldName )
                         continue;
 
-                    fieldsMap[getStr( fieldName.get() )] = fieldValue;
+                    fieldsMap[getStr( fieldName.get() )] = wxString::FromUTF8( fieldValue );
                 }
             }
 
