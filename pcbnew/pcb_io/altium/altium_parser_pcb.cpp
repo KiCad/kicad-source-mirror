@@ -1054,11 +1054,13 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     textbox_rect_justification = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
     text_offset_width = aReader.ReadKicadUnit(); // "Text Offset"
 
-    if( aReader.GetRemainingSubrecordBytes() >= 115 )
+    int remaining = aReader.GetRemainingSubrecordBytes();
+
+    if( remaining >= 103 )
     {
         aReader.Skip( 24 ); // Unknown data
         aReader.Skip( 64 ); // 2nd font name
-        aReader.Skip( 5 ); // Unknown flags
+        aReader.Skip( 5 );  // Unknown flags
 
         // "Frame" text type flag
         isFrame = aReader.Read<uint8_t>() != 0;
@@ -1067,7 +1069,15 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
         isOffsetBorder = aReader.Read<uint8_t>() != 0;
 
         aReader.Skip( 8 ); // Unknown data
+    }
+    else
+    {
+        isFrame = textbox_rect_height != 0 && textbox_rect_width != 0;
+        isOffsetBorder = false;
+    }
 
+    if( remaining >= 115 )
+    {
         // textbox_rect_justification will be wrong (5) when this flag is unset,
         // in that case, we should always use the left bottom justification.
         isJustificationValid = aReader.Read<uint8_t>() != 0;
@@ -1077,8 +1087,6 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     }
     else
     {
-        isFrame = textbox_rect_height != 0 && textbox_rect_width != 0;
-        isOffsetBorder = false;
         isJustificationValid = false;
     }
 
