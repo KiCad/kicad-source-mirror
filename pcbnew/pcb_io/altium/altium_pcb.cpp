@@ -4130,7 +4130,7 @@ void ALTIUM_PCB::HelperSetTextboxAlignmentAndPos( const ATEXT6& aElem, PCB_TEXTB
 
     ALTIUM_TEXT_POSITION justification = aElem.isJustificationValid
                                                  ? aElem.textbox_rect_justification
-                                                 : ALTIUM_TEXT_POSITION::CENTER_CENTER;
+                                                 : ALTIUM_TEXT_POSITION::LEFT_BOTTOM;
 
     switch( justification )
     {
