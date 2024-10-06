@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
-"PO-Revision-Date: 2024-10-05 10:15+0000\n"
+"PO-Revision-Date: 2024-10-07 18:15+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -156,13 +156,13 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2635
 #, c-format
 msgid "Loading %s..."
-msgstr ""
+msgstr "טוען %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:488
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:106
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
 msgid "Loading..."
-msgstr ""
+msgstr "טוען..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
 msgid "Load Raytracing: board"
@@ -188,11 +188,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:51
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "יצא מבט נוכחי כ PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:56
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "יצא מבט נוכחי כ JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:655
@@ -200,11 +200,11 @@ msgstr ""
 #: common/tool/actions.cpp:1018 pcbnew/footprint_chooser_frame.cpp:277
 #: pcbnew/footprint_viewer_frame.cpp:978 pcbnew/pcb_base_frame.cpp:686
 msgid "3D Viewer"
-msgstr ""
+msgstr "תצוגת תלת מימד"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:70
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "העתק תמונת תלת מימד"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:87
 msgid "3D Grid"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "אפס לערכי ברירת מחדל"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:308 cvpcb/menubar.cpp:78
@@ -228,7 +228,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:236 pcbnew/menubar_pcb_editor.cpp:480
 #: pcbnew/toolbars_footprint_viewer.cpp:193
 msgid "&File"
-msgstr ""
+msgstr "&קובץ"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:79
 #: eeschema/menubar.cpp:352
@@ -236,7 +236,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:237
 #: pcbnew/menubar_pcb_editor.cpp:481
 msgid "&Edit"
-msgstr ""
+msgstr "&ערוך"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:353
 #: eeschema/sim/toolbars_simulator_frame.cpp:172
@@ -246,22 +246,22 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:238 pcbnew/menubar_pcb_editor.cpp:482
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr ""
+msgstr "&הצג"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 #: bitmap2component/bitmap2cmp_frame.cpp:309 cvpcb/menubar.cpp:80
 #: eeschema/sim/toolbars_simulator_frame.cpp:174 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:227 pcb_calculator/pcb_calculator_frame.cpp:230
 msgid "&Preferences"
-msgstr ""
+msgstr "&העדפות"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:58
 msgid "Reload board"
-msgstr ""
+msgstr "טען לוח מחדש"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "העתק תמונת תלת מימד ללוח הכתיבה"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 msgid "Render current view using Raytracing"
@@ -270,7 +270,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:103
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad 3D Viewer"
-msgstr ""
+msgstr "מציג תת מימד KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:165
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
@@ -300,13 +300,13 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:719
 msgid "3D Image File Name"
-msgstr ""
+msgstr "שם קובץ תמונת תלת מימד"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:740
 #: common/eda_base_frame.cpp:1347 common/eda_base_frame.cpp:1351
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
+msgstr "אין מספיק הרשאות לשמירת קובץ '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:741 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
@@ -341,15 +341,15 @@ msgstr ""
 #: pcbnew/drc/drc_item.cpp:218 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2730
 msgid "Error"
-msgstr ""
+msgstr "שגיאה"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:781
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "העתקת תמונה ללוח הכתיבה נכשלה"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:792
 msgid "Can't save file"
-msgstr ""
+msgstr "לא ניתן לשמור את הקובץ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 msgid "Set Pivot"
@@ -357,51 +357,51 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr ""
+msgstr "מקם את הנקודה שסביבה הלוח יסובב (לחיצת עכבר אמצעית)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "סובב X עם כוון השעון"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "סובב X נגד כוון השעון"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "סובב Y עם כוון השעון"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "סובב Y נגד כוון השעון"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:87
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "סובב Z עם כוון השעון"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:95
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "סובב Z נגד כוון השעון"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
 msgid "Move Board Left"
-msgstr ""
+msgstr "הזז לוח שמאלה"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:113
 msgid "Move Board Right"
-msgstr ""
+msgstr "הזז לוח ימינה"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:122
 msgid "Move Board Up"
-msgstr ""
+msgstr "הזז לוח למעלה"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:131
 msgid "Move Board Down"
-msgstr ""
+msgstr "הזז לוח למטה"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
 msgid "Home View"
-msgstr ""
+msgstr "מבט בית"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
@@ -409,11 +409,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
-msgstr ""
+msgstr "הפוך לוח"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "Flip the board view"
-msgstr ""
+msgstr "הפוך את תצוגת הלוח"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:158
 msgid "Toggle Orthographic Projection"
@@ -426,27 +426,27 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "View Front"
-msgstr ""
+msgstr "מבט חזית"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:175
 msgid "View Back"
-msgstr ""
+msgstr "מבט מאחור"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:184
 msgid "View Left"
-msgstr ""
+msgstr "מבט משמאל"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
 msgid "View Right"
-msgstr ""
+msgstr "מבט מימין"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "View Top"
-msgstr ""
+msgstr "מבט על"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:211
 msgid "View Bottom"
-msgstr ""
+msgstr "מבט מלמטה"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "No 3D Grid"
@@ -474,7 +474,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
-msgstr ""
+msgstr "השתמש בכל תכונות החומר מכל קובץ מודל תלת מימד"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
 msgid "Render Solid Colors"
@@ -563,7 +563,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "F.Cu"
-msgstr ""
+msgstr "עליונה.נחושת"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show front copper / surface finish color"
@@ -571,7 +571,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "B.Cu"
-msgstr ""
+msgstr "תחתונה.נחושת"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show back copper / surface finish color"
@@ -579,67 +579,67 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr ""
+msgstr "הדבקה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
-msgstr ""
+msgstr "הצג הדבקה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr ""
+msgstr "משחת בדיל"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
-msgstr ""
+msgstr "הצג משחת בדיל"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "F.Silkscreen"
-msgstr ""
+msgstr "עליונה.הדפסת משי"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
-msgstr ""
+msgstr "הצג הדפסת משי עליונה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
-msgstr ""
+msgstr "תחתונה.הדפסת משי"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
-msgstr ""
+msgstr "הצג הדפסת משי תחתונה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "F.Mask"
-msgstr ""
+msgstr "עליונה.מסיכה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
-msgstr ""
+msgstr "הצג מסיכת בדיל עליונה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "B.Mask"
-msgstr ""
+msgstr "תחתונה.מסיכה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show back solder mask"
-msgstr ""
+msgstr "הצג מסיכת בדיל תחתונה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Drawings"
-msgstr ""
+msgstr "משתמש.שרטוט"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user drawings layer"
-msgstr ""
+msgstr "הצג שכבת שרטוט משתמש"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Comments"
-msgstr ""
+msgstr "משתמש.הערות"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "Show user comments layer"
-msgstr ""
+msgstr "הצג שכבת הערות משתמש"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "User.Eco1"
@@ -688,12 +688,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Values"
-msgstr ""
+msgstr "ערכים"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprint values"
-msgstr ""
+msgstr "הצג ערכי תצורת רכיב"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:340
@@ -708,7 +708,7 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprint Text"
-msgstr ""
+msgstr "טקסט תצורת רכיב"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:341
@@ -764,6 +764,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"שמור ושחזר שילובי צבעים ונראות.\n"
+"השתמש ב-%s+Tab כדי להפעיל את הבורר.\n"
+"כרטיסיות עוקבות תוך כדי החזקת %s לחוץ יעברו דרך הגדרות קבועות מראש בחלון "
+"הקופץ."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:167
 #, c-format
@@ -773,10 +777,13 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"שמור ושחזר את מיקום המצלמה וזום.\n"
+"השתמש ב-%s+Tab כדי להפעיל את הבורר.\n"
+"כרטיסיות עוקבות בזמן החזקת %s למטה יעברו דרך יציאות התצוגה בחלון הקופץ."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:498
 msgid "Left double click or middle click to change color"
-msgstr ""
+msgstr "לחץ לחיצה כפולה שמאלית או לחיצה אמצעית כדי לשנות צבע"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:508
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
@@ -786,7 +793,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:2202
 #, c-format
 msgid "Show or hide %s"
-msgstr ""
+msgstr "הצג או הסתר %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
 #: pcbnew/widgets/appearance_controls.cpp:2575
@@ -799,52 +806,52 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1925
 #: pcbnew/widgets/appearance_controls.cpp:2597
 msgid "Save preset..."
-msgstr ""
+msgstr "שמור הגדרה מראש..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:642
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1494
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1926
 #: pcbnew/widgets/appearance_controls.cpp:2598
 msgid "Delete preset..."
-msgstr ""
+msgstr "מחק הגדרה מראש..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:748
 #: pcbnew/widgets/appearance_controls.cpp:2703
 msgid "Layer preset name:"
-msgstr ""
+msgstr "שם הגדרה מראש של השכבה:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:749
 #: pcbnew/widgets/appearance_controls.cpp:2704
 msgid "Save Layer Preset"
-msgstr ""
+msgstr "שמור הגדרה מראש של השכבה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1666
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2068
 #: pcbnew/widgets/appearance_controls.cpp:2737
 msgid "Overwrite existing preset?"
-msgstr ""
+msgstr "האם לכתוב על הגדרה מראש קיימת?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1691
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2093
 #: pcbnew/widgets/appearance_controls.cpp:2763
 msgid "Presets"
-msgstr ""
+msgstr "הגדרות מראש"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:799
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1703
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2105
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Delete Preset"
-msgstr ""
+msgstr "מחק הגדרה מראש"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:800
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1704
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2106
 #: pcbnew/widgets/appearance_controls.cpp:2776
 msgid "Select preset:"
-msgstr ""
+msgstr "בחר הגדרה מראש:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
 #: pcbnew/widgets/appearance_controls.cpp:2874
@@ -855,47 +862,47 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
 #: pcbnew/widgets/appearance_controls.cpp:2883
 msgid "Save viewport..."
-msgstr ""
+msgstr "שמור נקודת מבט..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:868
 #: pcbnew/widgets/appearance_controls.cpp:2884
 msgid "Delete viewport..."
-msgstr ""
+msgstr "מחק נקודת מבט..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:899
 #: pcbnew/widgets/appearance_controls.cpp:2933
 msgid "Viewport name:"
-msgstr ""
+msgstr "שם נקודת מבט:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:900
 #: pcbnew/widgets/appearance_controls.cpp:2933
 msgid "Save Viewport"
-msgstr ""
+msgstr "שמור נקודת מבט"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:939
 #: pcbnew/widgets/appearance_controls.cpp:2972
 msgid "Viewports"
-msgstr ""
+msgstr "נקודות מבט"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:948
 #: pcbnew/widgets/appearance_controls.cpp:2981
 msgid "Delete Viewport"
-msgstr ""
+msgstr "מחק נקודת מבט"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:949
 #: pcbnew/widgets/appearance_controls.cpp:2982
 msgid "Select viewport:"
-msgstr ""
+msgstr "בחר נקודת מבט:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
-msgstr ""
+msgstr "הגדרות מראש (Ctrl+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "Viewports (Alt+Tab):"
-msgstr ""
+msgstr "נקודת מבט (Alt+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
@@ -903,21 +910,21 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/widgets/appearance_controls_base.cpp:184
 msgid "(unsaved)"
-msgstr ""
+msgstr "(לא נשמר)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "כל הקבצים הנתמכים (%s)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:64
 msgid "Available paths:"
-msgstr ""
+msgstr "נתיבים זמינים:"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:73
 #: common/dialogs/dialog_configure_paths_base.h:60
 msgid "Configure Paths"
-msgstr ""
+msgstr "הגדרת נתיבים"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
 msgid "Embed Model"
@@ -925,7 +932,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
-msgstr ""
+msgstr "בחר מודל תלת מימד"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
@@ -941,23 +948,23 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "הצג שטחים מלאים באיזורי מילוי"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr ""
+msgstr "השתמש בצבע נחושת חשופה עבור נחושת לא מצופה (איטי)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "השתמש בצבעים שונים עבור נחושת מצופה וחשופה (איטי)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
-msgstr ""
+msgstr "תכונות החומר:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Realistic"
-msgstr ""
+msgstr "ריאליסטי"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Solid colors"
@@ -969,7 +976,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
-msgstr ""
+msgstr "אפשרויות מצלמה"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
 msgid "Rotation increment:"
@@ -988,15 +995,15 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:228
 msgid "deg"
-msgstr ""
+msgstr "מעלות"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
 msgid "Redraw while moving"
-msgstr ""
+msgstr "צייר מחדש תוך כדי תנועה"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
-msgstr ""
+msgstr "מהירות ציור מחדש:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -1021,23 +1028,23 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
-msgstr ""
+msgstr "מושבת"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "8x"
-msgstr ""
+msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
+msgstr "יש לסגור ולפתוח מחדש תצוגת תלת מימד על מנת להחיל הגדרה זו"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -1045,7 +1052,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
-msgstr ""
+msgstr "תוך כדי תנועה"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
@@ -1082,7 +1089,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
-msgstr ""
+msgstr "מספר הדגימות"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
@@ -1130,76 +1137,76 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
 msgid "Lights Configuration"
-msgstr ""
+msgstr "הגדרת תאורה"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
-msgstr ""
+msgstr "תאורת סביבה למצלמה:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:146
 msgid "Top light:"
-msgstr ""
+msgstr "תאורה עילית:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:158
 msgid "Bottom light:"
-msgstr ""
+msgstr "תאורה תחתית:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:184
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:201
 msgid "Elevation (deg)"
-msgstr ""
+msgstr "הגבהה (מעלות)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:188
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:205
 msgid "Azimuth (deg)"
-msgstr ""
+msgstr "אזימוט (מעלות)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
-msgstr ""
+msgstr "תאורה 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:227
 msgid "Light 5:"
-msgstr ""
+msgstr "תאורה 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:242
 msgid "Light 2:"
-msgstr ""
+msgstr "תאורה 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:260
 msgid "Light 6:"
-msgstr ""
+msgstr "תאורה 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:275
 msgid "Light 3:"
-msgstr ""
+msgstr "תאורה 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
 msgid "Light 7:"
-msgstr ""
+msgstr "תאורה 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:308
 msgid "Light 4:"
-msgstr ""
+msgstr "תאורה 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:326
 msgid "Light 8:"
-msgstr ""
+msgstr "תאורה 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:416
 msgid "3D Preview Options"
-msgstr ""
+msgstr "אפשרויות תצוגת תלת מימד מקדימה"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:416
 msgid "Board thickness:"
-msgstr ""
+msgstr "עובי לוח:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:23
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:198
 #: eeschema/sch_bitmap.cpp:298 pcbnew/pcb_reference_image.cpp:211
 #: pcbnew/pcb_reference_image.cpp:324
 msgid "Scale"
-msgstr ""
+msgstr "קנה מידה"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:31
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
@@ -1221,7 +1228,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:144
 #: pcbnew/tools/pcb_point_editor.cpp:815
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:41
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:86
@@ -1249,7 +1256,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:153
 #: pcbnew/tools/pcb_point_editor.cpp:815
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:51
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:96
@@ -1257,82 +1264,84 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:328
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:340
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1584
 #: pcbnew/pad.cpp:1205
 msgid "Rotation"
-msgstr ""
+msgstr "סיבסוב"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:113
 msgid "Offset"
-msgstr ""
+msgstr "היסט"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:158
 msgid "Opacity"
-msgstr ""
+msgstr "אטימות"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:175
 #: common/dialogs/dialog_page_settings_base.cpp:123
 #: eeschema/printing/dialog_print_using_printer.cpp:269
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:253
 msgid "Preview"
-msgstr ""
+msgstr "תצוגה מקדימה"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:204
 msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"הצג או הסתר את גוף הלוח\n"
+"אם מוסתר, הצג רק שכבות נחושת והדפסת משי."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:233
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "טען מחדש לוח ומודלים תלת מימדים"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:151
 #: bitmap2component/bitmap2cmp_frame.cpp:294
 #: bitmap2component/bitmap2cmp_frame.cpp:357
 #: kicad/tools/kicad_manager_actions.cpp:154
 msgid "Image Converter"
-msgstr ""
+msgstr "ממיר תמונה"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
-msgstr ""
+msgstr "ממיר תמונה KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:233
 msgid "Image files"
-msgstr ""
+msgstr "קבצי תמונה"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
 #: pcbnew/menubar_pcb_editor.cpp:73
 msgid "Open Recent"
-msgstr ""
+msgstr "פתח אחרונים"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:284 eeschema/menubar.cpp:72
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 msgid "Clear Recent Files"
-msgstr ""
+msgstr "נקה קבצים אחרונים"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:401
 #: eeschema/tools/sch_drawing_tools.cpp:963
 #: pagelayout_editor/pl_editor_frame.cpp:878 pcbnew/tools/drawing_tool.cpp:721
 msgid "Choose Image"
-msgstr ""
+msgstr "בחר תמונה"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
 #: eeschema/tools/sch_drawing_tools.cpp:964
 #: pagelayout_editor/pl_editor_frame.cpp:879 pcbnew/tools/drawing_tool.cpp:722
 msgid "Image Files"
-msgstr ""
+msgstr "קבצי תמונה"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:445
 msgid "Create Drawing Sheet File"
-msgstr ""
+msgstr "צור קובץ דף שרטוט"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:462
 #: bitmap2component/bitmap2cmp_frame.cpp:498
@@ -1340,19 +1349,19 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_frame.cpp:568
 #, c-format
 msgid "File '%s' could not be created."
-msgstr ""
+msgstr "לא ניתן לייצר קובץ '%s' ."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:482
 msgid "Create PostScript File"
-msgstr ""
+msgstr "צור קובץ PostScript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:518
 msgid "Create Symbol Library"
-msgstr ""
+msgstr "צור ספרית סמלים"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:553
 msgid "Create Footprint Library"
-msgstr ""
+msgstr "צור ספריית תצורות רכיבים"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:649
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
@@ -1512,20 +1521,20 @@ msgstr ""
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:250
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:300
 msgid "mm"
-msgstr ""
+msgstr "ממ"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
-msgstr ""
+msgstr "אינץ'"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50
 msgid "DPI"
-msgstr ""
+msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:513
 msgid "Unable to export to the Clipboard"
-msgstr ""
+msgstr "לא ניתן לייצא ללוח הכתיבה"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:540
 msgid "Error allocating memory for potrace bitmap"
@@ -1539,27 +1548,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
-msgstr ""
+msgstr "שגיאות"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
-msgstr ""
+msgstr "תמונה מקורית"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:25
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "תמונת גווני אפור"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
 msgid "Black && White Picture"
-msgstr ""
+msgstr "תמונת שחור-לבן"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
 msgid "Image Information"
-msgstr ""
+msgstr "מידע תמונה"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:45
 msgid "Image size:"
-msgstr ""
+msgstr "גודל התמונה:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:49
 #: bitmap2component/bitmap2cmp_panel_base.cpp:53
@@ -1567,13 +1576,13 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_panel_base.cpp:69
 #: bitmap2component/bitmap2cmp_panel_base.cpp:81
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:57
 #: common/widgets/gal_options_panel_base.cpp:87
 #: common/widgets/gal_options_panel_base.cpp:98
 msgid "pixels"
-msgstr ""
+msgstr "פיקסלים"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
 msgid "Image PPI:"
@@ -1590,31 +1599,31 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:85
 msgid "bits"
-msgstr ""
+msgstr "ביטים"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
 msgid "Load Source Image"
-msgstr ""
+msgstr "טען תמונת מקור"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
-msgstr ""
+msgstr "גודל הפלט"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:107
 msgid "Lock height / width ratio"
-msgstr ""
+msgstr "נעל יחס גובה/רוחב"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:113
 #: common/dialogs/dialog_page_settings_base.cpp:37
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:135
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
-msgstr ""
+msgstr "גודל:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:117
 #: bitmap2component/bitmap2cmp_panel_base.cpp:122
 msgid "300"
-msgstr ""
+msgstr "300"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:141
 #: common/dialogs/dialog_print_generic_base.cpp:24
@@ -1634,22 +1643,22 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 msgid "Options"
-msgstr ""
+msgstr "אפשרויות"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 msgid "Black / white threshold:"
-msgstr ""
+msgstr "ערך סף שחור/לבן:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:148
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr ""
+msgstr "כוונן את הרמה כדי להמיר את התמונה בגווני אפור לתמונה בשחור-לבן."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:357
 msgid "Negative"
-msgstr ""
+msgstr "נגטיב"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
 msgid "Pcb Layer for Graphics"
@@ -1658,24 +1667,24 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr ""
+msgstr "הדפסת משי קדמית"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr ""
+msgstr "מסיכת בדיל קדמית"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "Front Fab layer"
-msgstr ""
+msgstr "שכבת ייצור קדמית"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer drawings"
-msgstr ""
+msgstr "שרטוטי שכבת משתמש"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer comments"
-msgstr ""
+msgstr "הערות שכבת משתמש"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -1687,28 +1696,28 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Symbol (.kicad_sym file)"
-msgstr ""
+msgstr "סמל (.kicad_sym file)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr ""
+msgstr "תצורת רכיב (.kicad_mod file)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "Postscript (.ps file)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr ""
+msgstr "דף שרטוט (.kicad_wks file)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:171
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
 msgid "Output Format"
-msgstr ""
+msgstr "פורמט פלט"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 msgid "Export to File"
-msgstr ""
+msgstr "ייצא לקובץ"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:178
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -2136,33 +2145,33 @@ msgstr ""
 #: common/dialog_about/dialog_about.cpp:135
 #: common/dialog_about/dialog_about_base.h:58
 msgid "About"
-msgstr ""
+msgstr "אודות"
 
 #: common/dialog_about/dialog_about.cpp:140
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:90
 msgid "Version"
-msgstr ""
+msgstr "גרסה"
 
 #: common/dialog_about/dialog_about.cpp:142
 msgid "Developers"
-msgstr ""
+msgstr "מפתחים"
 
 #: common/dialog_about/dialog_about.cpp:144
 msgid "Doc Writers"
-msgstr ""
+msgstr "כותבי תיעוד"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Librarians"
-msgstr ""
+msgstr "ספרנים"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "Artists"
-msgstr ""
+msgstr "אמנים"
 
 #: common/dialog_about/dialog_about.cpp:152
 msgid "Translators"
-msgstr ""
+msgstr "מתרגמים"
 
 #: common/dialog_about/dialog_about.cpp:154
 msgid "Packagers"
@@ -2170,35 +2179,35 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:157
 msgid "License"
-msgstr ""
+msgstr "רשיון"
 
 #: common/dialog_about/dialog_about.cpp:258
 msgid "Could not open clipboard to write version information."
-msgstr ""
+msgstr "לא ניתן היה לפתוח את הלוח כדי לכתוב מידע על הגרסה."
 
 #: common/dialog_about/dialog_about.cpp:259
 msgid "Clipboard Error"
-msgstr ""
+msgstr "שגיאת לוח כתיבה"
 
 #: common/dialog_about/dialog_about.cpp:268
 msgid "Copied..."
-msgstr ""
+msgstr "הועתק..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "כותרת אפליקציה"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
-msgstr ""
+msgstr "מידע זכויות יוצרים"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr ""
+msgstr "מידע גרסת בנייה"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr ""
+msgstr "מידע גרסת ספריות"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
@@ -2206,24 +2215,24 @@ msgstr ""
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr ""
+msgstr "העתק את פרטי גרסת KiCad ללוח"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr ""
+msgstr "&דווח על באג"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1163
 msgid "Report a problem with KiCad"
-msgstr ""
+msgstr "דווח על בעיה עם KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:68 common/tool/actions.cpp:1156
 msgid "Donate"
-msgstr ""
+msgstr "תרומה"
 
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:327
 msgid "Donate to KiCad"
-msgstr ""
+msgstr "תרומה ל-KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:753
 msgid "&OK"
@@ -2231,15 +2240,15 @@ msgstr ""
 
 #: common/dialog_shim.cpp:754
 msgid "&Cancel"
-msgstr ""
+msgstr "&בטל"
 
 #: common/dialog_shim.cpp:755
 msgid "&Yes"
-msgstr ""
+msgstr "&כן"
 
 #: common/dialog_shim.cpp:756
 msgid "&No"
-msgstr ""
+msgstr "&לא"
 
 #: common/dialog_shim.cpp:757
 msgid "&Apply"
@@ -2247,13 +2256,13 @@ msgstr ""
 
 #: common/dialog_shim.cpp:758
 msgid "&Save"
-msgstr ""
+msgstr "&שמור"
 
 #: common/dialog_shim.cpp:759 common/dialog_shim.cpp:760
 #: common/eda_base_frame.cpp:510 common/eda_base_frame.cpp:515
 #: common/eda_base_frame.cpp:536 common/eda_base_frame.cpp:540
 msgid "&Help"
-msgstr ""
+msgstr "&עזרה"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 #: common/dialogs/dialog_book_reporter_base.h:45
@@ -2284,62 +2293,62 @@ msgstr ""
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
-msgstr ""
+msgstr "נקה צבע"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:49
 msgid "Red:"
-msgstr ""
+msgstr "אדום:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:53
 msgid "Green:"
-msgstr ""
+msgstr "ירוק:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:57
 msgid "Blue:"
-msgstr ""
+msgstr "כחול:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:77
 msgid "HSV"
-msgstr ""
+msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:94
 msgid "Hue:"
-msgstr ""
+msgstr "צבע:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:98
 msgid "Saturation:"
-msgstr ""
+msgstr "רוויה:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:117
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:113
 msgid "Value:"
-msgstr ""
+msgstr "ערך:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:95
 msgid "Color Picker"
-msgstr ""
+msgstr "בוחר צבעים"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
-msgstr ""
+msgstr "צבעים מוגדרים"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr ""
+msgstr "אֲטִימוּת:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:179
 msgid "Preview (old/new):"
-msgstr ""
+msgstr "תצוגה מקדימה (ישן/חדש):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:201
 msgid "Reset to Default"
-msgstr ""
+msgstr "אפס לברירת מחדל"
 
 #: common/dialogs/dialog_configure_paths.cpp:203
 #: common/dialogs/dialog_configure_paths.cpp:261
@@ -10954,7 +10963,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
 #: pcbnew/dialogs/dialog_generators_base.cpp:31
 msgid "Click on items to highlight them on the board."
-msgstr ""
+msgstr "לחץ על פריטים כדי להדגיש אותם על הלוח."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:90
 #: pcbnew/dialogs/dialog_drc_base.cpp:110
@@ -25785,29 +25794,29 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:184
 msgid "No project files were found in the repository."
-msgstr ""
+msgstr "לא נמצאו קבצי פרויקט במאגר."
 
 #: kicad/tools/kicad_manager_control.cpp:221
 msgid "System Templates"
-msgstr ""
+msgstr "תבניות מערכת"
 
 #: kicad/tools/kicad_manager_control.cpp:230
 msgid "User Templates"
-msgstr ""
+msgstr "תבניות משתמש"
 
 #: kicad/tools/kicad_manager_control.cpp:239
 msgid "No project template was selected.  Cannot generate new project."
-msgstr ""
+msgstr "לא נבחרה תבנית פרויקט. לא ניתן ליצור פרויקט חדש."
 
 #: kicad/tools/kicad_manager_control.cpp:247
 msgid "New Project Folder"
-msgstr ""
+msgstr "תיקיית פרויקט חדש"
 
 #: kicad/tools/kicad_manager_control.cpp:296
 #: kicad/tools/kicad_manager_control.cpp:665
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
+msgstr "אין הרשאות מספיקות לכתיבה לתיקיה '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:317
 msgid "Overwriting files:"
@@ -47183,7 +47192,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad PCB Layout Editor"
-msgstr ""
+msgstr "עורך המעגלים KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:80
 msgid "The KiCad Developers"
@@ -47195,28 +47204,28 @@ msgstr "קובץ גרבר"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
 msgid "Excellon drill file"
-msgstr ""
+msgstr "קובץ קידוח Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
-msgstr ""
+msgstr "פרויקט KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
-msgstr ""
+msgstr "סכימת KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
-msgstr ""
+msgstr "מעגל מודפס KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
 msgid "KiCad Footprint"
-msgstr ""
+msgstr "תצורת רכיב KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
 msgid "KiCad Schematic Symbol"
-msgstr ""
+msgstr "סימן סכימטי KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
-msgstr ""
+msgstr "גליון שרטוט KiCad"
