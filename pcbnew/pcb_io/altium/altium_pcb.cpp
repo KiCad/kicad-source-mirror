@@ -108,14 +108,33 @@ void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
             VECTOR2I arcStart = vertex.center + arcStartOffset;
             VECTOR2I arcEnd   = vertex.center + arcEndOffset;
 
+            bool isShort = GetLineLength( arcStart, arcEnd ) < pcbIUScale.mmToIU( 0.001 )
+                           || angle.AsDegrees() < 0.2;
+
             if( GetLineLength( arcStart, vertex.position )
-                    < GetLineLength( arcEnd, vertex.position ) )
+                < GetLineLength( arcEnd, vertex.position ) )
             {
-                aLine.Append( SHAPE_ARC( vertex.center, arcStart, -angle ) );
+                if( !isShort )
+                {
+                    aLine.Append( SHAPE_ARC( vertex.center, arcStart, -angle ) );
+                }
+                else
+                {
+                    aLine.Append( arcStart );
+                    aLine.Append( arcEnd );
+                }
             }
             else
             {
-                aLine.Append( SHAPE_ARC( vertex.center, arcEnd, angle ) );
+                if( !isShort )
+                {
+                    aLine.Append( SHAPE_ARC( vertex.center, arcEnd, angle ) );
+                }
+                else
+                {
+                    aLine.Append( arcEnd );
+                    aLine.Append( arcStart );
+                }
             }
         }
         else
