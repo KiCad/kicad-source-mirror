@@ -504,9 +504,9 @@ protected:
 
     bool initBaseLines( PNS::ROUTER* aRouter, int aPNSLayer, BOARD* aBoard );
 
-    bool removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& aBaseLine );
+    bool removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer, SHAPE_LINE_CHAIN& aBaseLine );
 
-    bool resetToBaseline( GENERATOR_TOOL* aTool, int aLayer, SHAPE_LINE_CHAIN& aBaseLine,
+    bool resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer, SHAPE_LINE_CHAIN& aBaseLine,
                           bool aPrimary );
 
     SHAPE_LINE_CHAIN getOutline() const;
@@ -1029,13 +1029,13 @@ bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aPNSLayer, BOA
     return true;
 }
 
-bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
+bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer,
                                            SHAPE_LINE_CHAIN& aBaseLine )
 {
     VECTOR2I startSnapPoint, endSnapPoint;
 
     std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
-                                                   aRouter, aLayer, startSnapPoint, endSnapPoint );
+                                                   aRouter, aPNSLayer, startSnapPoint, endSnapPoint );
 
     wxCHECK( pnsLine, false );
 
@@ -1073,7 +1073,7 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     aTool->Router()->SyncWorld();
 
     PNS::ROUTER* router = aTool->Router();
-    int          layer = GetLayer();
+    PNS_KICAD_IFACE* iface = aTool->GetInterface();
 
     // Ungroup first so that undo works
     if( !GetItems().empty() )
@@ -1090,14 +1090,17 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 
     aTool->ClearRouterChanges();
 
+    // PNS layers and PCB layers have different coding. so convert PCB layer to PNS layer
+    int pnslayer = iface->GetPNSLayerFromBoardLayer( GetLayer() );
+
     if( baselineValid() )
     {
         bool success = true;
 
-        success &= removeToBaseline( router, layer, *m_baseLine );
+        success &= removeToBaseline( router, pnslayer, *m_baseLine );
 
         if( m_tuningMode == DIFF_PAIR )
-            success &= removeToBaseline( router, layer, *m_baseLineCoupled );
+            success &= removeToBaseline( router, pnslayer, *m_baseLineCoupled );
 
         if( !success )
             recoverBaseline( router );
@@ -1202,7 +1205,7 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 }
 
 
-bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
+bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer,
                                           SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
 {
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
@@ -1211,7 +1214,7 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
     VECTOR2I         startSnapPoint, endSnapPoint;
 
     std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
-                                                   router, aLayer, startSnapPoint, endSnapPoint );
+                                                   router, aPNSLayer, startSnapPoint, endSnapPoint );
 
     if( !pnsLine )
     {
