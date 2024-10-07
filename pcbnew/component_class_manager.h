@@ -73,10 +73,25 @@ private:
     std::vector<COMPONENT_CLASS*> m_constituentClasses;
 };
 
+/*
+ * A class to manage Component Classes in a board context
+ *
+ * This manager owns generated COMPONENT_CLASS objects, and guarantees that pointers to managed
+ * objects are valid for the duration of the board lifetime. Note that, in order to maintain this
+ * guarantee, there are two methods that must be called when updating the board from the netlist
+ * (InitNetlistUpdate and FinishNetlistUpdate).
+ */
 class COMPONENT_CLASS_MANAGER
 {
 public:
     COMPONENT_CLASS_MANAGER();
+
+    /// @brief Gets the full effective class name for the given set of constituent classes
+    static wxString GetFullClassNameForConstituents( std::unordered_set<wxString>& classNames );
+
+    /// @brief Gets the full effective class name for the given set of constituent classes
+    /// @param classNames a sorted vector of consituent class names
+    static wxString GetFullClassNameForConstituents( std::vector<wxString>& classNames );
 
     /// @brief Gets an effective component class for the given constituent class names
     /// @param classes The names of the constituent component classes
@@ -86,12 +101,30 @@ public:
     /// Returns the unassigned component class
     const COMPONENT_CLASS* GetNoneComponentClass() const { return m_noneClass.get(); }
 
+    /// Prepare the manager for a board update
+    /// Must be called prior to updating the PCB from the netlist
+    void InitNetlistUpdate();
+
+    /// Cleans up the manager after a board update
+    /// Must be called after updating the PCB from the netlist
+    void FinishNetlistUpdate();
+
+    /// Resets the contents of the manager
+    // All pointers to COMPONENT_CLASS objects will being invalid
+    void Reset();
+
 protected:
     /// All individual component classes
     std::unordered_map<wxString, std::unique_ptr<COMPONENT_CLASS>> m_classes;
 
     /// Generated effective component classes
     std::unordered_map<wxString, std::unique_ptr<COMPONENT_CLASS>> m_effectiveClasses;
+
+    /// Cache of all individual component classes (for netlist updating)
+    std::unordered_map<wxString, std::unique_ptr<COMPONENT_CLASS>> m_classesCache;
+
+    /// Cache of all generated effective component classes (for netlist updating)
+    std::unordered_map<wxString, std::unique_ptr<COMPONENT_CLASS>> m_effectiveClassesCache;
 
     /// The class to represent an unassigned component class
     std::unique_ptr<COMPONENT_CLASS> m_noneClass;

@@ -205,16 +205,24 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
 
 void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent )
 {
-    // Get the existing component class
-    wxString curClassName;
+    wxString         curClassName, newClassName;
+    COMPONENT_CLASS* newClass = nullptr;
 
     if( const COMPONENT_CLASS* curClass = aFootprint->GetComponentClass() )
         curClassName = curClass->GetFullName();
 
     // Calculate the new component class
-    COMPONENT_CLASS* newClass = m_board->GetComponentClassManager().GetEffectiveComponentClass(
-            aNewComponent->GetComponentClassNames() );
-    wxString newClassName = newClass->GetFullName();
+    if( m_isDryRun )
+    {
+        newClassName = COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents(
+                aNewComponent->GetComponentClassNames() );
+    }
+    else
+    {
+        newClass = m_board->GetComponentClassManager().GetEffectiveComponentClass(
+                aNewComponent->GetComponentClassNames() );
+        newClassName = newClass->GetFullName();
+    }
 
     if( curClassName == newClassName )
         return;
@@ -228,6 +236,8 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     }
     else
     {
+        wxASSERT_MSG( newClass != nullptr, "Component class should not be nullptr" );
+
         aFootprint->SetComponentClass( newClass );
         msg.Printf( _( "Changed %s component class from %s to %s." ), aFootprint->GetReference(),
                     curClassName, newClassName );
@@ -1195,12 +1205,14 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     cacheCopperZoneConnections();
 
     // First mark all nets (except <no net>) as stale; we'll update those which are current
-    // in the following two loops.
+    // in the following two loops. Also prepare the component class manager for updates.
     //
     if( !m_isDryRun )
     {
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             net->SetIsCurrent( net->GetNetCode() == 0 );
+
+        m_board->GetComponentClassManager().InitNetlistUpdate();
     }
 
     // Next go through the netlist updating all board footprints which have matching component
@@ -1361,6 +1373,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     if( !m_isDryRun )
     {
+        // Finalise the component class manager
+        m_board->GetComponentClassManager().FinishNetlistUpdate();
+
         m_board->BuildConnectivity();
         testConnectivity( aNetlist, footprintMap );
 

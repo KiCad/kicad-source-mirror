@@ -95,9 +95,17 @@ COMPONENT_CLASS_MANAGER::GetEffectiveComponentClass( std::unordered_set<wxString
     if( classNames.size() == 0 )
         return m_noneClass.get();
 
+    // Lambda to handle finding constituent component classes. This first checks the cache,
+    // and if found moves the class to the primary classes map. If not found, it either returns
+    // an existing class in the primary list or creates a new class.
     auto getOrCreateClass = [this]( const wxString& className )
     {
-        if( !m_classes.count( className ) )
+        if( m_classesCache.count( className ) )
+        {
+            auto existingClass = m_classesCache.extract( className );
+            m_classes.insert( std::move( existingClass ) );
+        }
+        else if( !m_classes.count( className ) )
         {
             std::unique_ptr<COMPONENT_CLASS> newClass =
                     std::make_unique<COMPONENT_CLASS>( className );
@@ -108,11 +116,11 @@ COMPONENT_CLASS_MANAGER::GetEffectiveComponentClass( std::unordered_set<wxString
         return m_classes[className].get();
     };
 
+    // Handle single-assignment component classes
     if( classNames.size() == 1 )
-    {
         return getOrCreateClass( *classNames.begin() );
-    }
 
+    // Handle composite component classes
     std::vector<wxString> sortedClassNames( classNames.begin(), classNames.end() );
 
     std::sort( sortedClassNames.begin(), sortedClassNames.end(),
@@ -121,25 +129,82 @@ COMPONENT_CLASS_MANAGER::GetEffectiveComponentClass( std::unordered_set<wxString
                    return str1.Cmp( str2 ) < 0;
                } );
 
-    wxString fullName = sortedClassNames[0];
+    wxString fullName = GetFullClassNameForConstituents( sortedClassNames );
 
-    for( std::size_t i = 1; i < sortedClassNames.size(); ++i )
+    if( m_effectiveClassesCache.count( fullName ) )
     {
-        fullName += ",";
-        fullName += sortedClassNames[i];
+        // The effective class was previously constructed - copy it across to the new live map
+        auto             existingClass = m_effectiveClassesCache.extract( fullName );
+        COMPONENT_CLASS* effClass = existingClass.mapped().get();
+        m_effectiveClasses.insert( std::move( existingClass ) );
+
+        // Ensure that all constituent component classes are copied to the live map
+        for( COMPONENT_CLASS* constClass : effClass->GetConstituentClasses() )
+        {
+            if( m_classesCache.count( constClass->GetFullName() ) )
+            {
+                auto constClassNode = m_classesCache.extract( constClass->GetFullName() );
+                m_classes.insert( std::move( constClassNode ) );
+            }
+        }
     }
-
-    if( !m_effectiveClasses.count( fullName ) )
+    else if( !m_effectiveClasses.count( fullName ) )
     {
+        // The effective class was not previously constructed
         std::unique_ptr<COMPONENT_CLASS> effClass = std::make_unique<COMPONENT_CLASS>( fullName );
 
         for( const wxString& className : sortedClassNames )
-        {
             effClass->AddConstituentClass( getOrCreateClass( className ) );
-        }
 
         m_effectiveClasses[fullName] = std::move( effClass );
     }
 
     return m_effectiveClasses[fullName].get();
+}
+
+
+void COMPONENT_CLASS_MANAGER::InitNetlistUpdate()
+{
+    m_classesCache = std::move( m_classes );
+    m_effectiveClassesCache = std::move( m_effectiveClasses );
+}
+
+
+void COMPONENT_CLASS_MANAGER::FinishNetlistUpdate()
+{
+    m_classesCache.clear();
+    m_effectiveClassesCache.clear();
+}
+
+
+wxString
+COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents( std::unordered_set<wxString>& classNames )
+{
+    std::vector<wxString> sortedClassNames( classNames.begin(), classNames.end() );
+
+    std::sort( sortedClassNames.begin(), sortedClassNames.end(),
+               []( const wxString& str1, const wxString& str2 )
+               {
+                   return str1.Cmp( str2 ) < 0;
+               } );
+
+    return GetFullClassNameForConstituents( sortedClassNames );
+}
+
+
+wxString
+COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents( std::vector<wxString>& classNames )
+{
+    if( classNames.size() == 0 )
+        return wxEmptyString;
+
+    wxString fullName = classNames[0];
+
+    for( std::size_t i = 1; i < classNames.size(); ++i )
+    {
+        fullName += ",";
+        fullName += classNames[i];
+    }
+
+    return fullName;
 }
