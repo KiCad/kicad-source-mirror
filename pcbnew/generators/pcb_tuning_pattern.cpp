@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -498,11 +498,11 @@ protected:
 
     bool baselineValid();
 
-    bool initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard, VECTOR2I& aStart,
+    bool initBaseLine( PNS::ROUTER* aRouter, int aPNSLayer, BOARD* aBoard, VECTOR2I& aStart,
                        VECTOR2I& aEnd, NETINFO_ITEM* aNet,
                        std::optional<SHAPE_LINE_CHAIN>& aBaseLine );
 
-    bool initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard );
+    bool initBaseLines( PNS::ROUTER* aRouter, int aPNSLayer, BOARD* aBoard );
 
     bool removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& aBaseLine );
 
@@ -956,7 +956,7 @@ static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR
 }
 
 
-bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard,
+bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aPNSLayer, BOARD* aBoard,
                                        VECTOR2I& aStart, VECTOR2I& aEnd, NETINFO_ITEM* aNet,
                                        std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
 {
@@ -967,8 +967,8 @@ bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* 
 
     VECTOR2I startSnapPoint, endSnapPoint;
 
-    PNS::LINKED_ITEM* startItem = pickSegment( aRouter, aStart, aLayer, startSnapPoint );
-    PNS::LINKED_ITEM* endItem = pickSegment( aRouter, aEnd, aLayer, endSnapPoint );
+    PNS::LINKED_ITEM* startItem = pickSegment( aRouter, aStart, aPNSLayer, startSnapPoint );
+    PNS::LINKED_ITEM* endItem = pickSegment( aRouter, aEnd, aPNSLayer, endSnapPoint );
 
     wxASSERT( startItem );
     wxASSERT( endItem );
@@ -996,7 +996,7 @@ bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* 
 }
 
 
-bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard )
+bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aPNSLayer, BOARD* aBoard )
 {
     m_baseLineCoupled.reset();
 
@@ -1007,7 +1007,7 @@ bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD*
 
     NETINFO_ITEM* net = track->GetNet();
 
-    if( !initBaseLine( aRouter, aLayer, aBoard, m_origin, m_end, net, m_baseLine ) )
+    if( !initBaseLine( aRouter, aPNSLayer, aBoard, m_origin, m_end, net, m_baseLine ) )
         return false;
 
     // Generate both baselines even if we're skewing.  We need the coupled baseline to run the
@@ -1019,7 +1019,7 @@ bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD*
             VECTOR2I coupledStart = snapToNearestTrack( m_origin, aBoard, coupledNet, nullptr );
             VECTOR2I coupledEnd = snapToNearestTrack( m_end, aBoard, coupledNet, nullptr );
 
-            return initBaseLine( aRouter, aLayer, aBoard, coupledStart, coupledEnd, coupledNet,
+            return initBaseLine( aRouter, aPNSLayer, aBoard, coupledStart, coupledEnd, coupledNet,
                                  m_baseLineCoupled );
         }
 
@@ -1298,7 +1298,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     KIGFX::VIEW*     view = aTool->GetManager()->GetView();
     PNS::ROUTER*     router = aTool->Router();
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
-    PCB_LAYER_ID     layer = GetLayer();
+    PCB_LAYER_ID     pcblayer = GetLayer();
 
     auto hideRemovedItems = [&]( bool aHide )
     {
@@ -1315,20 +1315,27 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
         }
     };
 
-    iface->SetStartLayerFromPCBNew( layer );
+    iface->SetStartLayerFromPCBNew( pcblayer );
 
     if( router->RoutingInProgress() )
     {
         router->StopRouting();
     }
 
+    // PNS layers and PCB layers have different coding. so convert PCB layer
+    // to PNS layer
+    int pnslayer;
+    if( pcblayer == F_Cu ) pnslayer = 0;
+    else if( pcblayer == B_Cu ) pnslayer = aBoard->GetCopperLayerCount() - 1;
+    else pnslayer = pcblayer/2 -1;
+
     if( !baselineValid() )
     {
-        initBaseLines( router, layer, aBoard );
+        initBaseLines( router, pnslayer, aBoard );
     }
     else
     {
-        if( resetToBaseline( aTool, layer, *m_baseLine, true ) )
+        if( resetToBaseline( aTool, pnslayer, *m_baseLine, true ) )
         {
             m_origin = m_baseLine->CPoint( 0 );
             m_end = m_baseLine->CPoint( -1 );
@@ -1341,9 +1348,9 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 
         if( m_tuningMode == DIFF_PAIR )
         {
-            if( !resetToBaseline( aTool, layer, *m_baseLineCoupled, false ) )
+            if( !resetToBaseline( aTool, pnslayer, *m_baseLineCoupled, false ) )
             {
-                initBaseLines( router, layer, aBoard );
+                initBaseLines( router, pnslayer, aBoard );
                 return false;
             }
         }
@@ -1355,8 +1362,8 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 
     wxCHECK( m_baseLine, false );
 
-    PNS::LINKED_ITEM* startItem = pickSegment( router, m_origin, layer, startSnapPoint, *m_baseLine);
-    PNS::LINKED_ITEM* endItem = pickSegment( router, m_end, layer, endSnapPoint, *m_baseLine );
+    PNS::LINKED_ITEM* startItem = pickSegment( router, m_origin, pnslayer, startSnapPoint, *m_baseLine);
+    PNS::LINKED_ITEM* endItem = pickSegment( router, m_end, pnslayer, endSnapPoint, *m_baseLine );
 
     wxASSERT( startItem );
     wxASSERT( endItem );
@@ -1366,7 +1373,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 
     router->SetMode( GetPNSMode() );
 
-    if( !router->StartRouting( startSnapPoint, startItem, layer ) )
+    if( !router->StartRouting( startSnapPoint, startItem, pnslayer ) )
     {
         //recoverBaseline( router );
         return false;
@@ -2239,6 +2246,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
+
                     m_preview.FreeItems();
                     m_view->Update( &m_preview );
                 }
