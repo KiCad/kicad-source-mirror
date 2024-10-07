@@ -2303,11 +2303,9 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
             return;
         }
 
-        git_oid           oid;
+        git_oid oid;
 
-#if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8                                              \
-     && ( LIBGIT2_VER_REVISION == 0 || LIBGIT2_VER_REVISION == 1 ) )
-
+#if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8 && LIBGIT2_VER_REVISION < 2 )
         // For libgit2 versions 1.8.0, 1.8.1.
         // This change was reverted for 1.8.2+
         git_commit* const parents[1] = { parent };
