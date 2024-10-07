@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-10-04 05:16+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-10-08 16:16+0000\n"
+"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -637,7 +637,7 @@ msgstr "Lötpaste anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "Siebdruck vorne"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
@@ -645,7 +645,7 @@ msgstr "Vorderen Bestückungsdruck anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "Siebdruck hinten"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
@@ -4703,7 +4703,7 @@ msgstr "Netzklassen-Zuweisungen:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
-msgstr "Ausdruck"
+msgstr "Muster"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:1080 eeschema/sch_label.cpp:251
@@ -12547,7 +12547,7 @@ msgstr "Hintergrundfüllung:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:178
 msgid "Page number:"
-msgstr "Seitenzahl:"
+msgstr "Seitennummer:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:193
 msgid "Hierarchical path:"
