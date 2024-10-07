@@ -1322,12 +1322,8 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
         router->StopRouting();
     }
 
-    // PNS layers and PCB layers have different coding. so convert PCB layer
-    // to PNS layer
-    int pnslayer;
-    if( pcblayer == F_Cu ) pnslayer = 0;
-    else if( pcblayer == B_Cu ) pnslayer = aBoard->GetCopperLayerCount() - 1;
-    else pnslayer = pcblayer/2 -1;
+    // PNS layers and PCB layers have different coding. so convert PCB layer to PNS layer
+    int pnslayer = iface->GetPNSLayerFromBoardLayer( pcblayer );
 
     if( !baselineValid() )
     {
