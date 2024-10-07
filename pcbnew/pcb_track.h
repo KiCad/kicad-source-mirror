@@ -385,10 +385,10 @@ public:
     const PADSTACK& Padstack() const              { return m_padStack; }
     PADSTACK& Padstack()                          { return m_padStack; }
     void SetPadstack( const PADSTACK& aPadstack ) { m_padStack = aPadstack; }
-#if 0
+
     void SetWidth( int aWidth ) override;
     int GetWidth() const override;
-#endif
+
     void SetWidth( PCB_LAYER_ID aLayer, int aWidth );
     int GetWidth( PCB_LAYER_ID aLayer ) const;
 

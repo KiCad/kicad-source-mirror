@@ -308,7 +308,7 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
     return similarity;
 }
 
-#if 0
+
 void PCB_VIA::SetWidth( int aWidth )
 {
     // This is present because of the parent class.  It should never be actually called on a via.
@@ -323,7 +323,6 @@ int PCB_VIA::GetWidth() const
     wxASSERT_MSG( false, "Warning: PCB_VIA::GetWidth called without a layer argument" );
     return m_padStack.Size( PADSTACK::ALL_LAYERS ).x;
 }
-#endif
 
 
 void PCB_VIA::SetWidth( PCB_LAYER_ID aLayer, int aWidth )
