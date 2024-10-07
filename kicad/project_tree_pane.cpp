@@ -2239,10 +2239,11 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
             return;
         }
 
-        git_oid           oid;
-        // Check if the libgit2 library version is 1.8.0 or higher
-#if( LIBGIT2_VER_MAJOR > 1 ) || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 8 )
-        // For libgit2 version 1.8.0 and above
+        git_oid oid;
+
+#if( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR == 8 && LIBGIT2_VER_REVISION < 2 )
+        // For libgit2 versions 1.8.0, 1.8.1.
+        // This change was reverted for 1.8.2+
         git_commit* const parents[1] = { parent };
 #else
         // For libgit2 versions older than 1.8.0
