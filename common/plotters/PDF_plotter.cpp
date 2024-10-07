@@ -401,12 +401,12 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     SetCurrentLineWidth( aWidth );
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
-    fprintf( m_workFile, "%g %g m\n", pos.x, pos.y );
+    fprintf( m_workFile, "%f %f m\n", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fprintf( m_workFile, "%g %g l\n", pos.x, pos.y );
+        fprintf( m_workFile, "%f %f l\n", pos.x, pos.y );
     }
 
     // Close path and stroke and/or fill
@@ -439,7 +439,7 @@ void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     if( m_penState != plume || pos != m_penLastpos )
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
-        fprintf( m_workFile, "%g %g %c\n",
+        fprintf( m_workFile, "%f %f %c\n",
                  pos_dev.x, pos_dev.y,
                  ( plume=='D' ) ? 'l' : 'm' );
     }
@@ -1639,7 +1639,7 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
            coordinate system will be used for the overlining. Also the %f
            for the trig part of the matrix to avoid %g going in exponential
            format (which is not supported) */
-        fprintf( m_workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
+        fprintf( m_workFile, "q %f %f %f %f %f %f cm BT %s %g Tf %d Tr %g Tz ",
                  ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
                  fontname, heightFactor, render_mode, wideningFactor * 100 );
 
