@@ -870,7 +870,7 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxALL</property>
+                  <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxCheckBox" expanded="true">
                     <property name="BottomDockable">1</property>

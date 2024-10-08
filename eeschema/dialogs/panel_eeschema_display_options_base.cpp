@@ -76,7 +76,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bAppearanceSizer->Add( m_checkShowOPCurrents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkShowPinAltModeIcons = new wxCheckBox( this, wxID_ANY, _("Show pin alternate mode indicator icons"), wxDefaultPosition, wxDefaultSize, 0 );
-	bAppearanceSizer->Add( m_checkShowPinAltModeIcons, 0, wxALL, 5 );
+	bAppearanceSizer->Add( m_checkShowPinAltModeIcons, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_checkPageLimits = new wxCheckBox( this, wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkPageLimits->SetValue(true);
