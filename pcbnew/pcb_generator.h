@@ -88,6 +88,8 @@ public:
 
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aMirrorDirection ) override;
+
     bool AddItem( BOARD_ITEM* aItem ) override;
 
     LSET GetLayerSet() const override;
@@ -131,6 +133,8 @@ protected:
 #endif
 
     friend class GENERATORS_MGR;
+
+    void baseMirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 };
 
 #endif /* GENERATOR_H_ */

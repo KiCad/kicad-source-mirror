@@ -137,11 +137,26 @@ void PCB_GENERATOR::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle 
 
 void PCB_GENERATOR::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    MIRROR( m_origin, aCentre, aFlipDirection );
+    baseMirror( aCentre, aFlipDirection );
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 
     PCB_GROUP::Flip( aCentre, aFlipDirection );
+}
+
+void PCB_GENERATOR::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+{
+    baseMirror( aCentre, aFlipDirection );
+
+    PCB_GROUP::Mirror( aCentre, aFlipDirection );
+}
+
+void PCB_GENERATOR::baseMirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+{
+    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
+        MIRROR( m_origin.y, aCentre.y );
+    else
+        MIRROR( m_origin.x, aCentre.x );
 }
 
 bool PCB_GENERATOR::AddItem( BOARD_ITEM* aItem )

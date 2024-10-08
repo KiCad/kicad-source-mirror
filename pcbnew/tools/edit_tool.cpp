@@ -2062,6 +2062,7 @@ const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
         PCB_TRACE_T,
         PCB_ARC_T,
         PCB_VIA_T,
+        PCB_GENERATOR_T,
 };
 
 int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
@@ -2155,6 +2156,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case PCB_ARC_T:
         case PCB_VIA_T:
             static_cast<PCB_TRACK*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
+
+        case PCB_GENERATOR_T:
+            static_cast<PCB_GENERATOR*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
         default:

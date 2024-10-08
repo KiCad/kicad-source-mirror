@@ -338,13 +338,17 @@ public:
         {
             PCB_GENERATOR::Flip( aCentre, aFlipDirection );
 
-            MIRROR( m_end, aCentre, aFlipDirection );
+            baseMirror( aCentre, aFlipDirection );
+        }
+    }
 
-            if( m_baseLine )
-                m_baseLine->Mirror( aCentre, aFlipDirection );
+    void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override
+    {
+        if( !this->HasFlag( IN_EDIT ) )
+        {
+            PCB_GENERATOR::Mirror( aCentre, aFlipDirection );
 
-            if( m_baseLineCoupled )
-                m_baseLineCoupled->Mirror( aCentre, aFlipDirection );
+            baseMirror( aCentre, aFlipDirection );
         }
     }
 
@@ -510,6 +514,26 @@ protected:
                           bool aPrimary );
 
     SHAPE_LINE_CHAIN getOutline() const;
+
+    void baseMirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+    {
+        PCB_GENERATOR::baseMirror( aCentre, aFlipDirection );
+
+        if( m_baseLine )
+        {
+            m_baseLine->Mirror( aCentre, aFlipDirection );
+            m_origin = m_baseLine->CPoint( 0 );
+            m_end = m_baseLine->CPoint( -1 );
+        }
+
+        if( m_baseLineCoupled )
+            m_baseLineCoupled->Mirror( aCentre, aFlipDirection );
+
+        if( m_settings.m_initialSide == PNS::MEANDER_SIDE_RIGHT )
+            m_settings.m_initialSide = PNS::MEANDER_SIDE_LEFT;
+        else
+            m_settings.m_initialSide = PNS::MEANDER_SIDE_RIGHT;
+    }
 
 protected:
     VECTOR2I              m_end;

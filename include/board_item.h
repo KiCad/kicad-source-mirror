@@ -361,6 +361,14 @@ public:
     virtual void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 
     /**
+     * Mirror this object relative to a given horizontal axis the layer is not changed.
+     *
+     * @param aCentre the mirror point.
+     * @param aMirrorAroundXAxis mirror across X axis instead of Y (the default).
+     */
+    virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
+
+    /**
      * Perform any normalization required after a user rotate and/or flip.
      */
     virtual void Normalize() {}

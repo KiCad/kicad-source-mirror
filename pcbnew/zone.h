@@ -500,7 +500,7 @@ public:
      * @param aMirrorRef is axis position
      * @param aFlipDirection is the direction of the flip.
      */
-    void Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection );
+    void Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection ) override;
 
     /**
      * @return the class name.

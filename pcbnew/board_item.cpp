@@ -365,6 +365,12 @@ void BOARD_ITEM::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 }
 
 
+void BOARD_ITEM::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+{
+    wxMessageBox( wxT( "virtual BOARD_ITEM::Mirror used, should not occur" ), GetClass() );
+}
+
+
 wxString BOARD_ITEM::GetParentAsString() const
 {
     if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( m_parent ) )

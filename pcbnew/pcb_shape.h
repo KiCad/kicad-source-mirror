@@ -143,7 +143,7 @@ public:
 
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
-    virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
+    virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     void Scale( double aScale );
 

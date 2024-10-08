@@ -264,7 +264,7 @@ public:
      *
      * @param axis_pos is the vertical axis position to mirror around.
      */
-    virtual void Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection );
+    virtual void Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
