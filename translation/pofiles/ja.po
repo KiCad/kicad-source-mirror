@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-10-05 10:15+0000\n"
+"PO-Revision-Date: 2024-10-08 16:16+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -34856,7 +34856,7 @@ msgstr "自由なパッドの移動を許可"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr "チェックすろと、パッドをフットプリントから移動することができます。"
+msgstr "チェックすると、パッドをフットプリントから移動することができます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
@@ -46383,7 +46383,7 @@ msgstr "中点を指定の位置に移動"
 
 #: pcbnew/tools/pcb_point_editor.cpp:749
 msgid "Move Midpoint"
-msgstr "中天を移動"
+msgstr "中点を移動"
 
 #: pcbnew/tools/pcb_point_editor.cpp:753
 msgid "Move Corner to Location"
