@@ -87,8 +87,8 @@ public:
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
-        return ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_WIRE ) ||
-                 aItem->Type() == SCH_SYMBOL_T;
+        return ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_WIRE )
+               || aItem->Type() == SCH_SYMBOL_T || aItem->Type() == SCH_SHEET_T;
     }
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;

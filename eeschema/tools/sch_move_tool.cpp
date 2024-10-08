@@ -1281,7 +1281,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
         // and skip unconnectable items
         if( item == aSelectedItem || ( item->Type() != SCH_LINE_T && item->IsSelected() )
             || !item->CanConnect( aSelectedItem ) )
-        {
+            // Need to check
             continue;
         }
 
