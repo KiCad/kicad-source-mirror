@@ -513,7 +513,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
             }
 
             if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::finishInteractive )
-                    || !item->ContinueEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) ) )
+                || !item->ContinueEdit( VECTOR2I( cursorPos.x, cursorPos.y ) ) )
             {
                 if( toolType == SHAPE_T::POLY )
                 {
