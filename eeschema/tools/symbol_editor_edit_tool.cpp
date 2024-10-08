@@ -97,6 +97,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::mirrorV,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::mirrorH,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
 
+        moveMenu.AddItem( EE_ACTIONS::swap,         canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200);
         moveMenu.AddItem( EE_ACTIONS::properties,   canEdit && EE_CONDITIONS::Count( 1 ), 200 );
 
         moveMenu.AddSeparator( 300 );
@@ -129,6 +130,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::mirrorV,       canEdit && EE_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorH,       canEdit && EE_CONDITIONS::NotEmpty, 200 );
 
+    selToolMenu.AddItem( EE_ACTIONS::swap,          canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
     selToolMenu.AddItem( EE_ACTIONS::properties,    canEdit && EE_CONDITIONS::Count( 1 ), 200 );
 
     selToolMenu.AddSeparator( 300 );
@@ -258,6 +260,88 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( item->IsMoving() )
     {
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    }
+    else
+    {
+        if( selection.IsHover() )
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+        m_frame->OnModify();
+    }
+
+    return 0;
+}
+
+
+const std::vector<KICAD_T> swappableItems = {
+    LIB_SYMBOL_T, // Allows swapping the anchor
+    SCH_PIN_T,
+    SCH_SHAPE_T,
+    SCH_TEXT_T,
+    SCH_TEXTBOX_T,
+    SCH_FIELD_T,
+};
+
+
+int SYMBOL_EDITOR_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION&          selection = m_selectionTool->RequestSelection( swappableItems );
+    std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
+
+    if( selection.Size() < 2 )
+        return 0;
+
+    EDA_ITEM* front = selection.Front();
+    bool      isMoving = front->IsMoving();
+
+    // Save copy for undo if not in edit (edit command already handle the save copy)
+    if( front->GetEditFlags() == 0 )
+        saveCopyInUndoList( front->GetParent(), UNDO_REDO::LIBEDIT );
+
+    for( size_t i = 0; i < sorted.size() - 1; i++ )
+    {
+        SCH_ITEM* a = static_cast<SCH_ITEM*>( sorted[i] );
+        SCH_ITEM* b = static_cast<SCH_ITEM*>( sorted[( i + 1 ) % sorted.size()] );
+
+        VECTOR2I aPos = a->GetPosition(), bPos = b->GetPosition();
+        std::swap( aPos, bPos );
+
+        a->SetPosition( aPos );
+        b->SetPosition( bPos );
+
+        // Special case some common swaps
+        if( a->Type() == b->Type() )
+        {
+            switch( a->Type() )
+            {
+            case SCH_PIN_T:
+            {
+                SCH_PIN* aPin = static_cast<SCH_PIN*>( a );
+                SCH_PIN* bBpin = static_cast<SCH_PIN*>( b );
+
+                PIN_ORIENTATION aOrient = aPin->GetOrientation();
+                PIN_ORIENTATION bOrient = bBpin->GetOrientation();
+
+                aPin->SetOrientation( bOrient );
+                bBpin->SetOrientation( aOrient );
+
+                break;
+            }
+            default: break;
+            }
+        }
+
+        m_frame->UpdateItem( a, false, true );
+        m_frame->UpdateItem( b, false, true );
+    }
+
+    // Update R-Tree for modified items
+    for( EDA_ITEM* selected : selection )
+        updateItem( selected, true );
+
+    if( isMoving )
+    {
+        m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
     else
     {
@@ -978,6 +1062,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorV.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorH.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Swap,               EE_ACTIONS::swap.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 
