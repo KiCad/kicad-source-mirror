@@ -57,8 +57,64 @@ enum GR_TEXT_V_ALIGN_T
 };
 
 
-#define TO_HJUSTIFY( x ) static_cast<GR_TEXT_H_ALIGN_T>( x )
-#define TO_VJUSTIFY( x ) static_cast<GR_TEXT_V_ALIGN_T>( x )
+/**
+ * Get the reverse alignment: left-right are swapped,
+ * others are unchanged.
+ */
+constexpr GR_TEXT_H_ALIGN_T GetFlippedAlignment( GR_TEXT_H_ALIGN_T aAlign )
+{
+    // Could use the -1/1 promise of the enum too.
+    switch( aAlign )
+    {
+    case GR_TEXT_H_ALIGN_LEFT:
+        return GR_TEXT_H_ALIGN_RIGHT;
+    case GR_TEXT_H_ALIGN_RIGHT:
+        return GR_TEXT_H_ALIGN_LEFT;
+    case GR_TEXT_H_ALIGN_CENTER:
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        break;
+    }
+    return aAlign;
+};
+
+
+/**
+ * Get the reverse alignment: top-bottom are swapped,
+ * others are unchanged.
+ */
+constexpr GR_TEXT_V_ALIGN_T GetFlippedAlignment( GR_TEXT_V_ALIGN_T aAlign )
+{
+    switch( aAlign )
+    {
+    case GR_TEXT_V_ALIGN_BOTTOM:
+        return GR_TEXT_V_ALIGN_TOP;
+    case GR_TEXT_V_ALIGN_TOP:
+        return GR_TEXT_V_ALIGN_BOTTOM;
+    case GR_TEXT_V_ALIGN_CENTER:
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        break;
+    }
+    return aAlign;
+};
+
+
+/**
+ * Convert an integral value to horizontal alignment.
+ *
+ *  * x < 0: Left align
+ *  * x == 0: Center
+ *  * x > 0: Right align
+ */
+constexpr GR_TEXT_H_ALIGN_T ToHAlignment( int x )
+{
+    if( x < 0 )
+
+        return GR_TEXT_H_ALIGN_LEFT;
+    else if( x > 0 )
+        return GR_TEXT_H_ALIGN_RIGHT;
+
+    return GR_TEXT_H_ALIGN_CENTER;
+}
 
 
 class GAL_API TEXT_ATTRIBUTES

@@ -1037,9 +1037,9 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
             if( vertical )
-                field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
+                field->SetVertJustify( GetFlippedAlignment( field->GetVertJustify() ) );
             else
-                field->SetHorizJustify( TO_HJUSTIFY( -field->GetHorizJustify() ) );
+                field->SetHorizJustify( GetFlippedAlignment( field->GetHorizJustify() ) );
 
             // Now that we're re-justifying a field, they're no longer autoplaced.
             static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
@@ -1116,9 +1116,9 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
                 if( vertical )
-                    field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
+                    field->SetVertJustify( GetFlippedAlignment( field->GetVertJustify() ) );
                 else
-                    field->SetHorizJustify( TO_HJUSTIFY( -field->GetHorizJustify() ) );
+                    field->SetHorizJustify( GetFlippedAlignment( field->GetHorizJustify() ) );
 
                 // Now that we're re-justifying a field, they're no longer autoplaced.
                 static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();

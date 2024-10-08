@@ -221,9 +221,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
             if( xAxis )
-                field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
+                field->SetVertJustify( GetFlippedAlignment( field->GetVertJustify() ) );
             else
-                field->SetHorizJustify( TO_HJUSTIFY( -field->GetHorizJustify() ) );
+                field->SetHorizJustify( GetFlippedAlignment( field->GetHorizJustify() ) );
 
             break;
         }

@@ -519,9 +519,10 @@ protected:
     void justifyField( SCH_FIELD* aField, SIDE aFieldSide )
     {
         // Justification is set twice to allow IsHorizJustifyFlipped() to work correctly.
-        aField->SetHorizJustify( TO_HJUSTIFY( -aFieldSide.x ) );
-        aField->SetHorizJustify( TO_HJUSTIFY( -aFieldSide.x
-                                                 * ( aField->IsHorizJustifyFlipped() ? -1 : 1 ) ) );
+        aField->SetHorizJustify( ToHAlignment( -aFieldSide.x ) );
+        if( aField->IsHorizJustifyFlipped() )
+            aField->SetHorizJustify( GetFlippedAlignment( aField->GetHorizJustify() ) );
+
         aField->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
     }
 
