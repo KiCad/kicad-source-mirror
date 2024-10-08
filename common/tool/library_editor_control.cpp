@@ -20,6 +20,7 @@
 #include <eda_draw_frame.h>
 #include <widgets/lib_tree.h>
 #include <project.h>
+#include <kiway.h>
 #include "wx/generic/textdlgg.h"
 #include "library_editor_control.h"
 
@@ -82,8 +83,19 @@ int LIBRARY_EDITOR_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 
     if( current && !current->m_Pinned )
     {
-        m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(),
-                                   PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
+        switch( KIWAY::KifaceType( m_frame->GetFrameType() ) )
+        {
+        case KIWAY::FACE_SCH:
+            m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(),
+                                       PROJECT::LIB_TYPE_T::SYMBOL_LIB );
+            break;
+        case KIWAY::FACE_PCB:
+            m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(),
+                                       PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
+            break;
+        default: wxFAIL_MSG( wxT( "Unsupported frame type for library pinning." ) ); break;
+        }
+
         current->m_Pinned = true;
         regenerateLibraryTree();
     }
@@ -99,8 +111,19 @@ int LIBRARY_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 
     if( current && current->m_Pinned )
     {
-        m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(),
-                                     PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
+        switch( KIWAY::KifaceType( m_frame->GetFrameType() ) )
+        {
+        case KIWAY::FACE_SCH:
+            m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(),
+                                         PROJECT::LIB_TYPE_T::SYMBOL_LIB );
+            break;
+        case KIWAY::FACE_PCB:
+            m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(),
+                                         PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
+            break;
+        default: wxFAIL_MSG( wxT( "Unsupported frame type for library pinning." ) ); break;
+        }
+
         current->m_Pinned = false;
         regenerateLibraryTree();
     }

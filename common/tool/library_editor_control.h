@@ -19,6 +19,7 @@
 #define LIBRARY_EDITOR_CONTROL_H
 
 #include <tool/tool_interactive.h>
+#include <project.h>
 
 
 class EDA_DRAW_FRAME;
