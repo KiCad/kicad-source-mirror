@@ -1656,7 +1656,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     EDA_ITEMS              loadedItems;
     std::vector<SCH_ITEM*> sortedLoadedItems;
     bool                   sheetsPasted = false;
-    SCH_SHEET_LIST         hierarchy = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST         hierarchy = m_frame->Schematic().Hierarchy();
     SCH_SHEET_PATH&        pasteRoot = m_frame->GetCurrentSheet();
     wxFileName             destFn = pasteRoot.Last()->GetFileName();
 
@@ -1818,7 +1818,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             // Update hierarchy to include any other sheets we already added, avoiding
             // duplicate sheet names
-            hierarchy = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
+            hierarchy = m_frame->Schematic().Hierarchy();
 
             //@todo: it might be better to just iterate through the sheet names
             // in this screen instead of the whole hierarchy.
@@ -1968,7 +1968,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         // Get a version with correct sheet numbers since we've pasted sheets,
         // we'll need this when annotating next
-        hierarchy = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
+        hierarchy = m_frame->Schematic().Hierarchy();
     }
 
     std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST> annotatedSymbols;
@@ -2057,7 +2057,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // schematic file.
     prunePastedSymbolInstances();
 
-    SCH_SHEET_LIST sheets = m_frame->Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheets = m_frame->Schematic().Hierarchy();
     SCH_SCREENS    allScreens( m_frame->Schematic().Root() );
 
     allScreens.PruneOrphanedSymbolInstances( m_frame->Prj().GetProjectName(), sheets );
@@ -2278,7 +2278,7 @@ int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
         SCH_REFERENCE_LIST references;
 
         if( dlg.m_AllSheets->GetValue() )
-            schematic->BuildSheetListSortedByPageNumbers().GetSymbols( references );
+            schematic->Hierarchy().GetSymbols( references );
         else
             schematic->CurrentSheet().GetSymbols( references );
 
@@ -2665,7 +2665,7 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
     std::map<KIID, EDA_ITEM*> ids;
     int                       duplicates = 0;
 
-    SCH_SHEET_LIST sheets = m_frame->Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheets = m_frame->Schematic().Hierarchy();
 
     auto processItem =
             [&]( EDA_ITEM* aItem )

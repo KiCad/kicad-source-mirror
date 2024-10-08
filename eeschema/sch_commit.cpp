@@ -383,8 +383,13 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         if( itemsChanged.size() > 0 )
             schematic->OnItemsChanged( itemsChanged );
 
-        if( frame && refreshHierarchy )
-            frame->UpdateHierarchyNavigator();
+        if( refreshHierarchy )
+        {
+            schematic->RefreshHierarchy();
+
+            if( frame )
+                frame->UpdateHierarchyNavigator();
+        }
     }
 
     if( !( aCommitFlags & SKIP_UNDO ) )
@@ -588,7 +593,7 @@ void SCH_COMMIT::Revert()
                 {
                     // Lazy eval of sheet list; this is expensive even when unsorted
                     if( sheets.empty() )
-                        sheets = schematic->BuildUnorderedSheetList();
+                        sheets = schematic->Hierarchy();
 
                     SCH_SHEET_PATH sheet = sheets.FindSheetForScreen( screen );
                     symbol->SetRef( &sheet, field->GetText() );

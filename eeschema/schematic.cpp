@@ -78,7 +78,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
                 int      unit = symbol->GetUnit();
                 LIB_ID   libId = symbol->GetLibId();
 
-                for( SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
+                for( SCH_SHEET_PATH& sheet : Hierarchy() )
                 {
                     std::vector<SCH_SYMBOL*> otherUnits;
 
@@ -200,6 +200,7 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
     m_currentSheet->clear();
     m_currentSheet->push_back( m_rootSheet );
 
+    m_hierarchy = BuildSheetListSortedByPageNumbers();
     m_connectionGraph->Reset();
 }
 
@@ -207,6 +208,22 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
 SCH_SCREEN* SCHEMATIC::RootScreen() const
 {
     return IsValid() ? m_rootSheet->GetScreen() : nullptr;
+}
+
+
+SCH_SHEET_LIST SCHEMATIC::Hierarchy() const
+{
+    wxCHECK( !m_hierarchy.empty(), m_hierarchy );
+
+    return m_hierarchy;
+}
+
+
+void SCHEMATIC::RefreshHierarchy()
+{
+    wxLogDebug( wxS( "Refreshing schematic heirarchy." ) );
+
+    m_hierarchy = SCH_SHEET_LIST( m_rootSheet );
 }
 
 
@@ -310,7 +327,7 @@ ERC_SETTINGS& SCHEMATIC::ErcSettings() const
 
 std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 {
-    SCH_SHEET_LIST sheetList = BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheetList = Hierarchy();
     ERC_SETTINGS&  settings  = ErcSettings();
 
     // Migrate legacy marker exclusions to new format to ensure exclusion matching functions across
@@ -392,7 +409,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
 std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) const
 {
-    for( const SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
+    for( const SCH_SHEET_PATH& sheet : Hierarchy() )
     {
         for( const std::shared_ptr<BUS_ALIAS>& alias : sheet.LastScreen()->GetBusAliases() )
         {
@@ -462,7 +479,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetNamesMap() const
 {
     std::map<int, wxString> namesMap;
 
-    for( const SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
+    for( const SCH_SHEET_PATH& sheet : Hierarchy() )
     {
         if( sheet.size() == 1 )
             namesMap[sheet.GetVirtualPageNumber()] = _( "<root sheet>" );
@@ -478,7 +495,7 @@ std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetPagesMap() const
 {
     std::map<int, wxString> pagesMap;
 
-    for( const SCH_SHEET_PATH& sheet : BuildUnorderedSheetList() )
+    for( const SCH_SHEET_PATH& sheet : Hierarchy() )
         pagesMap[sheet.GetVirtualPageNumber()] = sheet.GetPageNumber();
 
     return pagesMap;
@@ -526,7 +543,7 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
                 wxString           ref = token.BeforeFirst( ':', &remainder );
                 SCH_REFERENCE_LIST references;
 
-                BuildUnorderedSheetList().GetSymbols( references );
+                Hierarchy().GetSymbols( references );
 
                 for( size_t jj = 0; jj < references.GetCount(); jj++ )
                 {
@@ -602,17 +619,6 @@ wxString SCHEMATIC::ConvertKIIDsToRefs( const wxString& aSource ) const
 }
 
 
-SCH_SHEET_LIST& SCHEMATIC::GetFullHierarchy() const
-{
-    static SCH_SHEET_LIST hierarchy;
-
-    hierarchy.clear();
-    hierarchy.BuildSheetList( m_rootSheet, false );
-
-    return hierarchy;
-}
-
-
 void SCHEMATIC::SetLegacySymbolInstanceData()
 {
     SCH_SCREENS screens( m_rootSheet );
@@ -649,7 +655,7 @@ void SCHEMATIC::SetSheetNumberAndCount()
 
     // @todo Remove all pseudo page number system is left over from prior to real page number
     //       implementation.
-    for( const SCH_SHEET_PATH& sheet : BuildSheetListSortedByPageNumbers() )
+    for( const SCH_SHEET_PATH& sheet : Hierarchy() )
     {
         if( sheet.Path() == current_sheetpath ) // Current sheet path found
             break;
@@ -672,7 +678,7 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
 
     pageRefsMap.clear();
 
-    for( const SCH_SHEET_PATH& sheet : BuildSheetListSortedByPageNumbers() )
+    for( const SCH_SHEET_PATH& sheet : Hierarchy() )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
         {
@@ -811,7 +817,7 @@ void SCHEMATIC::RemoveAllListeners()
 void SCHEMATIC::RecordERCExclusions()
 {
     // Use a sorted sheetList to reduce file churn
-    SCH_SHEET_LIST sheetList = BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheetList = Hierarchy();
     ERC_SETTINGS&  ercSettings = ErcSettings();
 
     ercSettings.m_ErcExclusions.clear();
@@ -836,7 +842,7 @@ void SCHEMATIC::RecordERCExclusions()
 
 void SCHEMATIC::ResolveERCExclusionsPostUpdate()
 {
-    SCH_SHEET_LIST sheetList = BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheetList = Hierarchy();
 
     for( SCH_MARKER* marker : ResolveERCExclusions() )
     {
@@ -867,7 +873,7 @@ void SCHEMATIC::EmbedFonts()
 {
     std::set<KIFONT::OUTLINE_FONT*> fonts;
 
-    SCH_SHEET_LIST sheetList = BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheetList = Hierarchy();
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {

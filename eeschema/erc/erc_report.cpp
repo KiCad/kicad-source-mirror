@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -121,7 +121,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     reportHead.kicad_version = GetMajorMinorPatchVersion();
     reportHead.coordinate_units = EDA_UNIT_UTILS::GetLabel( m_reportUnits );
 
-    SCH_SHEET_LIST sheetList = m_sch->BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheetList = m_sch->Hierarchy();
     sheetList.FillItemMap( itemMap );
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();

@@ -1142,7 +1142,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
     {
         wxString ref = GetRef( &aSourceSheet );
 
-        for( SCH_SHEET_PATH& sheet : Schematic()->BuildUnorderedSheetList() )
+        for( SCH_SHEET_PATH& sheet : Schematic()->Hierarchy() )
         {
             SCH_SCREEN*              screen = sheet.LastScreen();
             std::vector<SCH_SYMBOL*> otherUnits;

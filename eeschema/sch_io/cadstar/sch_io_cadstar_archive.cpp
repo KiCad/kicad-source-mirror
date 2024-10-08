@@ -145,7 +145,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     sch_plugin->SaveLibrary( libFileName.GetFullPath() );
 
     // Link up all symbols in the design to the newly created library
-    for( SCH_SHEET_PATH& sheet : aSchematic->BuildUnorderedSheetList() )
+    for( SCH_SHEET_PATH& sheet : aSchematic->Hierarchy() )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {

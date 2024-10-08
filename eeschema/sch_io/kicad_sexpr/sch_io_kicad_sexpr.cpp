@@ -368,7 +368,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET* object." );
     wxCHECK_RET( m_schematic != nullptr, "NULL SCHEMATIC* object." );
 
-    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheets = m_schematic->Hierarchy();
     SCH_SCREEN* screen = aSheet->GetScreen();
 
     wxCHECK( screen, /* void */ );
@@ -538,7 +538,7 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
     wxCHECK( aSelection && aSelectionPath && aFormatter, /* void */ );
 
     LOCALE_IO toggle;
-    SCH_SHEET_LIST sheets = aSchematic.BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheets = aSchematic.Hierarchy();
 
     m_schematic = &aSchematic;
     m_out = aFormatter;

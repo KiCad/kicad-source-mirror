@@ -53,7 +53,7 @@ bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
     wxASSERT( aSheet && aCurrentSheet );
 
     wxString msg;
-    SCH_SHEET_LIST schematicSheets = Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST schematicSheets = Schematic().Hierarchy();
     SCH_SHEET_LIST loadedSheets( aSheet );  // This is the schematicSheets of the loaded file.
 
     wxString destFilePath = aCurrentSheet->LastScreen()->GetFileName();
@@ -282,7 +282,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     }
 
     SCH_SHEET_LIST loadedSheets( tmpSheet.get() );
-    SCH_SHEET_LIST schematicSheets = Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST schematicSheets = Schematic().Hierarchy();
 
     // Make sure any new sheet changes do not cause any recursion issues.
     if( !aSkipRecursionCheck && CheckSheetForRecursion( tmpSheet.get(), aCurrentSheet ) )
@@ -699,7 +699,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aOldName, const wxString& aSchematicFileName )
 {
     wxString       msg;
-    SCH_SHEET_LIST sheets = Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheets = Schematic().Hierarchy();
     wxFileName     fn = aSchematicFileName;
 
     wxCHECK( fn.IsAbsolute(), false );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@
 void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
     SCH_REFERENCE_LIST references;
-    Schematic().BuildUnorderedSheetList().GetSymbols( references );
+    Schematic().Hierarchy().GetSymbols( references );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
@@ -61,7 +61,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
                                        REPORTER& aReporter )
 {
 
-    SCH_SHEET_LIST sheets = Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheets = Schematic().Hierarchy();
     SCH_SCREEN*    screen = GetScreen();
     SCH_SHEET_PATH currentSheet = GetCurrentSheet();
     SCH_COMMIT     commit( this );
@@ -219,7 +219,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
 
     SCH_REFERENCE_LIST references;
     SCH_SCREENS        screens( Schematic().Root() );
-    SCH_SHEET_LIST     sheets = Schematic().BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST     sheets = Schematic().Hierarchy();
     SCH_SHEET_PATH     currentSheet = GetCurrentSheet();
 
 
@@ -463,7 +463,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
 {
     SCH_REFERENCE_LIST  referenceList;
     constexpr bool      includePowerSymbols = false;
-    SCH_SHEET_LIST      sheets = Schematic().BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST      sheets = Schematic().Hierarchy();
     SCH_SHEET_PATH      currentSheet = GetCurrentSheet();
 
     // Build the list of symbols

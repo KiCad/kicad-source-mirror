@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
     if( !aSearchHierarchy )
         sheetList.push_back( m_frame->GetCurrentSheet() );
     else
-        sheetList = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
+        sheetList = m_frame->Schematic().Hierarchy();
 
     for( SCH_SHEET_PATH& sheet : sheetList )
     {
@@ -620,7 +620,7 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
     std::optional<std::pair<wxString, wxString>>               focusPin;
     std::unordered_map<SCH_SHEET_PATH, std::vector<SCH_ITEM*>> focusItemResults;
 
-    const SCH_SHEET_LIST allSheetsList = aSchematic.BuildUnorderedSheetList();
+    const SCH_SHEET_LIST allSheetsList = aSchematic.Hierarchy();
 
     // In orderedSheets, the current sheet comes first.
     std::vector<SCH_SHEET_PATH> orderedSheets;

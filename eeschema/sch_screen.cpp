@@ -1696,7 +1696,7 @@ void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetP
 
     // Search for new sheet paths, not existing in aInitialSheetPathList
     // and existing in sheetpathList
-    for( SCH_SHEET_PATH& sheetpath : sch->BuildSheetListSortedByPageNumbers() )
+    for( SCH_SHEET_PATH& sheetpath : sch->Hierarchy() )
     {
         bool path_exists = false;
 
@@ -1836,7 +1836,7 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
 
     wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::UpdateSymbolLinks" );
 
-    SCH_SHEET_LIST sheets = sch->BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheets = sch->Hierarchy();
 
     // All of the library symbols have been replaced with copies so the connection graph
     // pointers are stale.
@@ -1935,7 +1935,7 @@ void SCH_SCREENS::BuildClientSheetPathList()
     for( SCH_SCREEN* curr_screen = GetFirst(); curr_screen; curr_screen = GetNext() )
         curr_screen->GetClientSheetPaths().clear();
 
-    for( SCH_SHEET_PATH& sheetpath : sch->BuildSheetListSortedByPageNumbers() )
+    for( SCH_SHEET_PATH& sheetpath : sch->Hierarchy() )
     {
         SCH_SCREEN* used_screen = sheetpath.LastScreen();
 

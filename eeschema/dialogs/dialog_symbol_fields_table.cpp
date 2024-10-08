@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,7 +176,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         m_schSettings( parent->Schematic().Settings() )
 {
     // Get all symbols from the list of schematic sheets
-    m_parent->Schematic().BuildUnorderedSheetList().GetSymbols( m_symbolsList, false );
+    m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, false );
 
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_bRefreshPreview->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
@@ -2217,7 +2217,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
                                                   std::vector<SCH_ITEM*>& aSchItem )
 {
     SCH_REFERENCE_LIST allRefs;
-    m_parent->Schematic().BuildUnorderedSheetList().GetSymbols( allRefs );
+    m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
 
     for( SCH_ITEM* item : aSchItem )
     {
@@ -2286,7 +2286,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
                                                     std::vector<SCH_ITEM*>& aSchItem )
 {
     SCH_REFERENCE_LIST allRefs;
-    m_parent->Schematic().BuildUnorderedSheetList().GetSymbols( allRefs );
+    m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
 
     for( SCH_ITEM* item : aSchItem )
     {
@@ -2383,7 +2383,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL*         aSymbol,
 
 SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHEET& aSheet )
 {
-    SCH_SHEET_LIST     allSheets = m_parent->Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().Hierarchy();
     SCH_REFERENCE_LIST sheetRefs;
 
     // We need to operate on all instances of the sheet

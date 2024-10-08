@@ -166,7 +166,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
     {
         const SCHEMATIC& schematic = schematicEditor->Schematic();
 
-        for( const SCH_SHEET_PATH& sheet : schematic.BuildSheetListSortedByPageNumbers() )
+        for( const SCH_SHEET_PATH& sheet : schematic.Hierarchy() )
         {
             wxString sheetPageNum = sheet.GetPageNumber();
             wxString sheetName = sheet.size() == 1 ? _( "<root sheet>" )
@@ -230,7 +230,7 @@ void DIALOG_TEXT_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
         if( schematic )
         {
             SCH_REFERENCE_LIST refs;
-            schematic->BuildUnorderedSheetList().GetSymbols( refs );
+            schematic->Hierarchy().GetSymbols( refs );
 
             for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
             {

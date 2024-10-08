@@ -55,7 +55,7 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
     // Create netlist footprints section
     m_referencesAlreadyFound.Clear();
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->BuildSheetListSortedByPageNumbers() )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {

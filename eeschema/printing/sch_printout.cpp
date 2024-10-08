@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -71,7 +71,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
 
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
-    SCH_SHEET_LIST sheetList = m_parent->Schematic().BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheetList = m_parent->Schematic().Hierarchy();
     sheetList.SortByPageNumbers( false );
 
     wxCHECK_MSG( page >= 1 && page <= (int)sheetList.size(), false,

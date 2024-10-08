@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
     bool               isChanged = false;
     bool               appendToUndoList = false;
 
-    m_frame->Schematic().BuildUnorderedSheetList().GetSymbols( refs, false );
+    m_frame->Schematic().Hierarchy().GetSymbols( refs, false );
 
     DSNLEXER lexer( aChangedSetOfReferences, From_UTF8( __func__ ) );
     PTREE    doc;
@@ -128,7 +128,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
 {
     // Build a flat list of symbols in schematic:
     SCH_REFERENCE_LIST referencesList;
-    m_frame->Schematic().BuildUnorderedSheetList().GetSymbols( referencesList, false );
+    m_frame->Schematic().Hierarchy().GetSymbols( referencesList, false );
 
     FILE* cmpFile = wxFopen( aFullFilename, wxT( "rt" ) );
 

@@ -94,7 +94,7 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->UpdateLocalLibSymbolLinks();
 
-    SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheets = schematic->Hierarchy();
 
     // Restore all of the loaded symbol instances from the root sheet screen.
     sheets.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances() );

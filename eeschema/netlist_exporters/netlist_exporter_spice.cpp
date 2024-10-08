@@ -706,7 +706,7 @@ SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::BuildSheetList( unsigned aNetlistOptions 
     if( aNetlistOptions & OPTION_CUR_SHEET_AS_ROOT )
         sheets = SCH_SHEET_LIST( m_schematic->CurrentSheet().Last() );
     else
-        sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+        sheets = m_schematic->Hierarchy();
 
     alg::delete_if( sheets,
                     [&]( const SCH_SHEET_PATH& sheet )

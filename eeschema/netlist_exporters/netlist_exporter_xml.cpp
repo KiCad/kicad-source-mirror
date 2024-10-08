@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -247,7 +247,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     m_libParts.clear();
 
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
-    SCH_SHEET_LIST sheetList = m_schematic->BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
 
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
@@ -535,7 +535,7 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
      */
     unsigned sheetIndex = 1;     // Human readable index
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->BuildSheetListSortedByPageNumbers() )
+    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
     {
         screen = sheet.LastScreen();
 

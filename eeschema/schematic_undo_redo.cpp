@@ -285,6 +285,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     std::set<SCH_TABLE*>   changedTables;
     bool                   dirtyConnectivity = false;
     bool                   rebuildHierarchyNavigator = false;
+    bool                   refreshHierarchy = false;
     SCH_CLEANUP_FLAGS      connectivityCleanUp = NO_CLEANUP;
     SCH_SHEET_LIST         sheets;
     bool                   clearedRepeatItems = false;
@@ -357,6 +358,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( eda_item->Type() == SCH_SHEET_T )
             {
                 rebuildHierarchyNavigator = true;
+                refreshHierarchy = true;
 
                 if( static_cast<SCH_SHEET*>( eda_item )->GetScreen() == GetScreen() )
                     GetToolManager()->PostAction( EE_ACTIONS::leaveSheet );
@@ -370,7 +372,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         else if( status == UNDO_REDO::DELETED )
         {
             if( eda_item->Type() == SCH_SHEET_T )
+            {
                 rebuildHierarchyNavigator = true;
+                refreshHierarchy = true;
+            }
 
             if( schItem )
                 updateConnectivityFlag();
@@ -385,7 +390,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             // Lazy eval of sheet list; this is expensive even when unsorted
             if( sheets.empty() )
-                sheets = m_schematic->BuildUnorderedSheetList();
+                sheets = m_schematic->Hierarchy();
 
             SCH_SHEET_PATH undoSheet = sheets.FindSheetForScreen( screen );
 
@@ -415,7 +420,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 AddCopyForRepeatItem( schItem );
 
                 if( schItem->Type() == SCH_SHEET_T )
+                {
                     rebuildHierarchyNavigator = true;
+                    refreshHierarchy = true;
+                }
             }
         }
         else if( schItem )
@@ -448,6 +456,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     {
                         rebuildHierarchyNavigator = true;
                     }
+
+                    // Sheet name changes do not require rebuilding the hiearchy.
+                    if( ( origSheet->GetFileName() != copySheet->GetFileName() )
+                      || origSheet->HasPageNumberChanges( *copySheet ) )
+                    {
+                        refreshHierarchy = true;
+                    }
                 }
 
                 schItem->SwapData( itemCopy );
@@ -464,7 +479,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     {
                         // Lazy eval of sheet list; this is expensive even when unsorted
                         if( sheets.empty() )
-                            sheets = m_schematic->BuildUnorderedSheetList();
+                            sheets = m_schematic->Hierarchy();
 
                         SCH_SHEET_PATH sheet = sheets.FindSheetForScreen( screen );
                         symbol->SetRef( &sheet, field->GetText() );
@@ -503,6 +518,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     if( bulkChangedItems.size() > 0 )
         Schematic().OnItemsChanged( bulkChangedItems );
+
+    if( refreshHierarchy )
+        Schematic().RefreshHierarchy();
 
     if( dirtyConnectivity )
     {

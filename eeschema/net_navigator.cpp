@@ -260,7 +260,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     if( !m_netNavigator->IsShown() )
         return;
 
-    bool   singleSheetSchematic = m_schematic->BuildUnorderedSheetList().size() == 1;
+    bool   singleSheetSchematic = m_schematic->Hierarchy().size() == 1;
     size_t nodeCnt = 0;
 
     m_netNavigator->Freeze();

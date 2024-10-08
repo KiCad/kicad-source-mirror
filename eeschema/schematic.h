@@ -49,6 +49,7 @@ public:
     virtual SCH_SHEET_PATH& CurrentSheet() const = 0;
     virtual wxString GetFileName() const = 0;
     virtual PROJECT& Prj() const = 0;
+    virtual SCH_SHEET_LIST Hierarchy() const = 0;
 };
 
 class SCHEMATIC;
@@ -104,6 +105,13 @@ public:
         sheets.BuildSheetList( m_rootSheet, false );
         return sheets;
     }
+
+    /**
+     * Return the full schematic flattened hierarchical sheet list.
+     */
+    SCH_SHEET_LIST Hierarchy() const override;
+
+    void RefreshHierarchy();
 
     SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr ) const
     {
@@ -192,11 +200,6 @@ public:
 
     wxString ConvertRefsToKIIDs( const wxString& aSource ) const;
     wxString ConvertKIIDsToRefs( const wxString& aSource ) const;
-
-    /**
-     * Return the full schematic flattened hierarchical sheet list.
-     */
-    SCH_SHEET_LIST& GetFullHierarchy() const;
 
     /**
      * Update the symbol value and footprint instance data for legacy designs.
@@ -379,6 +382,11 @@ private:
      * Simulation operating points for text variable substitution.
      */
     std::map<wxString, double>        m_operatingPoints;
+
+    /**
+     * Cache of the entire schematic hierarchy sorted by sheet page number.
+     */
+    SCH_SHEET_LIST m_hierarchy;
 
     /**
      * Currently installed listeners

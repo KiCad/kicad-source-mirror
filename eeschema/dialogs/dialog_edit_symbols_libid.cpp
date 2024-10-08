@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright 1992-2022, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -395,9 +395,9 @@ void DIALOG_EDIT_SYMBOLS_LIBID::initDlg()
 
     // build the full list of symbols including symbol having no symbol in loaded libs
     // (orphan symbols)
-    GetParent()->Schematic().BuildUnorderedSheetList().GetSymbols( references,
-                                                                   true /* include power symbols */,
-                                                                   true /* include orphan symbols */ );
+    GetParent()->Schematic().Hierarchy().GetSymbols( references,
+                                                     true /* include power symbols */,
+                                                     true /* include orphan symbols */ );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {

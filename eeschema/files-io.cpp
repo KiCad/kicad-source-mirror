@@ -334,7 +334,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // It's possible the schematic parser fixed errors due to bugs so warn the user
         // that the schematic has been fixed (modified).
-        SCH_SHEET_LIST sheetList = Schematic().BuildSheetListSortedByPageNumbers();
+        SCH_SHEET_LIST sheetList = Schematic().Hierarchy();
 
         if( sheetList.IsModified() )
         {
@@ -1022,7 +1022,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         }
 
         // Attempt to make sheet file name paths relative to the new root schematic path.
-        for( SCH_SHEET_PATH& sheet : Schematic().BuildUnorderedSheetList() )
+        for( SCH_SHEET_PATH& sheet : Schematic().Hierarchy() )
         {
             if( !sheet.Last()->IsRootSheet() )
                 sheet.MakeFilePathRelativeToParentSheet();
@@ -1185,7 +1185,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     std::vector<FILE_INFO_PAIR>& sheets = Prj().GetProjectFile().GetSheets();
     sheets.clear();
 
-    for( SCH_SHEET_PATH& sheetPath : Schematic().BuildUnorderedSheetList() )
+    for( SCH_SHEET_PATH& sheetPath : Schematic().Hierarchy() )
     {
         SCH_SHEET* sheet = sheetPath.Last();
 

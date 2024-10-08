@@ -1050,7 +1050,7 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SCH_EDIT_FRAME::doCloseWindow()
 {
-    SCH_SHEET_LIST sheetlist = Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheetlist = Schematic().Hierarchy();
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -1763,7 +1763,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     wxString            highlightedConn = GetHighlightedConnection();
     bool                hasHighlightedConn = !highlightedConn.IsEmpty();
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
-    SCH_SHEET_LIST      list = Schematic().BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST      list = Schematic().Hierarchy();
     SCH_COMMIT          localCommit( m_toolManager );
 
     if( !aCommit )
@@ -2275,7 +2275,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 
 bool SCH_EDIT_FRAME::IsContentModified() const
 {
-    return Schematic().BuildUnorderedSheetList().IsModified();
+    return Schematic().Hierarchy().IsModified();
 }
 
 
@@ -2347,7 +2347,7 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                                             const KIID& aSchematicSymbolUUID )
 {
     SCH_SHEET_PATH principalPath;
-    SCH_SHEET_LIST sheets = Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheets = Schematic().Hierarchy();
     SCH_ITEM*      item = sheets.GetItem( aSchematicSymbolUUID, &principalPath );
     SCH_SYMBOL*    principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
     SCH_COMMIT     commit( m_toolManager );

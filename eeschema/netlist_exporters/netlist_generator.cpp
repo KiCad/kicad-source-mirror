@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021, 2024 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
                                        unsigned aNetlistOptions, REPORTER* aReporter )
 {
     // Ensure all power symbols have a valid reference
-    Schematic().BuildSheetListSortedByPageNumbers().AnnotatePowerSymbols();
+    Schematic().Hierarchy().AnnotatePowerSymbols();
 
     if( !ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
         return false;
@@ -193,7 +193,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage )
 {
     // Ensure all power symbols have a valid reference
-    Schematic().BuildSheetListSortedByPageNumbers().AnnotatePowerSymbols();
+    Schematic().Hierarchy().AnnotatePowerSymbols();
 
     // Symbols must be annotated
     if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )

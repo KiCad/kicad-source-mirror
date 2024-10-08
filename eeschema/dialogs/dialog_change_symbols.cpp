@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -289,7 +289,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
     std::vector<SCH_FIELD*> libFields;
     std::set<wxString>      fieldNames;
 
-    for( SCH_SHEET_PATH& instance : frame->Schematic().BuildUnorderedSheetList() )
+    for( SCH_SHEET_PATH& instance : frame->Schematic().Hierarchy() )
     {
         SCH_SCREEN* screen = instance.LastScreen();
 
@@ -495,7 +495,7 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCH_COMMIT* aCommit )
 
     std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO> symbols;
 
-    for( SCH_SHEET_PATH& instance : frame->Schematic().BuildSheetListSortedByPageNumbers() )
+    for( SCH_SHEET_PATH& instance : frame->Schematic().Hierarchy() )
     {
         SCH_SCREEN* screen = instance.LastScreen();
 
@@ -796,7 +796,7 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol,
 
     wxCHECK( parent, msg );
 
-    SCH_SHEET_LIST sheets = parent->Schematic().BuildUnorderedSheetList();
+    SCH_SHEET_LIST sheets = parent->Schematic().Hierarchy();
 
     for( const SCH_SYMBOL_INSTANCE& instance : aSymbol.GetInstances() )
     {

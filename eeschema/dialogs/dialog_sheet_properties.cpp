@@ -437,7 +437,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     // Sheet file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.  Screen file names are always absolute.
     SCHEMATIC&     schematic = m_frame->Schematic();
-    SCH_SHEET_LIST fullHierarchy = schematic.GetFullHierarchy();
+    SCH_SHEET_LIST fullHierarchy = schematic.Hierarchy();
     wxFileName     screenFileName( sheetFileName );
     wxFileName     tmp( sheetFileName );
     SCH_SCREEN*    currentScreen = m_frame->GetCurrentSheet().LastScreen();

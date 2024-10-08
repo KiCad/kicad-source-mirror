@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -348,7 +348,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->BuildUnorderedSheetList().GetSymbols( referenceList );
+    sch->Hierarchy().GetSymbols( referenceList );
 
     if( referenceList.GetCount() > 0 )
     {
@@ -458,7 +458,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->BuildUnorderedSheetList().GetSymbols( referenceList, false, false );
+    sch->Hierarchy().GetSymbols( referenceList, false, false );
 
     if( referenceList.GetCount() > 0 )
     {
@@ -711,7 +711,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->BuildUnorderedSheetList().GetSymbols( referenceList );
+    sch->Hierarchy().GetSymbols( referenceList );
 
     if( referenceList.GetCount() > 0 )
     {
