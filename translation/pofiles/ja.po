@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-10-05 10:15+0000\n"
+"PO-Revision-Date: 2024-10-09 10:16+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -12000,7 +12000,6 @@ msgstr ""
 "また、回路図にロードされる時のデフォルトのシンボルの値です。"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
 msgstr "増加量:"
 
@@ -12009,7 +12008,6 @@ msgid "All sheets"
 msgstr "すべてのシート"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
-#, fuzzy
 msgid "Increment Annotations From"
 msgstr "アノテーションの増分"
 
@@ -21704,9 +21702,8 @@ msgid "Set Unit Display Name..."
 msgstr "ユニットの表示名を設定..."
 
 #: eeschema/tools/ee_actions.cpp:278
-#, fuzzy
 msgid "Set the display name for a particular unit in a multi-unit symbol"
-msgstr "ユニットの表示名を設定"
+msgstr "複数単位シンボル内の特定の単位の表示名を設定する"
 
 #: eeschema/tools/ee_actions.cpp:283
 msgid "Add Symbol to Schematic"
@@ -22349,10 +22346,9 @@ msgid "Increment Annotations From..."
 msgstr "アノテーションの増分..."
 
 #: eeschema/tools/ee_actions.cpp:1068
-#, fuzzy
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
-msgstr "貼り付けるシンボルのリファレンス指定子をクリアする"
+msgstr "特定のシンボルから始まるリファレンス指定子のサブセットを増やす"
 
 #: eeschema/tools/ee_actions.cpp:1075
 msgid "Schematic Setup..."
@@ -25081,9 +25077,8 @@ msgid "Export silkscreen graphics as a set of flat faces"
 msgstr "シルクスクリーン画像を平面のセットとしてエクスポートする"
 
 #: kicad/cli/command_pcb_export_3d.cpp:151
-#, fuzzy
 msgid "Export soldermask layers as a set of flat faces"
-msgstr "ソルダーマスクレイヤーを平面のセットとしてエクスポートする"
+msgstr "ハンダマスクレイヤーを平面のセットとしてエクスポートする"
 
 #: kicad/cli/command_pcb_export_3d.cpp:155
 msgid "Fuse overlapping geometry together"
@@ -25094,9 +25089,8 @@ msgid "Minimum distance between points to treat them as separate ones"
 msgstr "別の点として扱う点間の最小距離"
 
 #: kicad/cli/command_pcb_export_3d.cpp:167
-#, fuzzy
 msgid "Only include copper items belonging to nets matching this wildcard"
-msgstr "このワイルドカードに一致するネットに属する銅アイテムのみを含めます"
+msgstr "このワイルドカードに一致するネットに属する導体アイテムのみを含めます"
 
 #: kicad/cli/command_pcb_export_3d.cpp:173
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -32950,18 +32944,16 @@ msgid "Export silkscreen"
 msgstr "シルクスクリーンをエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:108
-#, fuzzy
 msgid "Export silkscreen graphics as a set of flat faces."
-msgstr "シルクスクリーンのグラフィックスをエクスポート."
+msgstr "シルクスクリーン画像を平面のセットとしてエクスポートします。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:112
 msgid "Export solder mask"
 msgstr "ハンダマスクをエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:113
-#, fuzzy
 msgid "Export solder mask layers as a set of flat faces."
-msgstr "ハンダマスクのグラフィックスをエクスポート."
+msgstr "ハンダマスクのレイヤーを平面のセットとしてエクスポートします。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:117
 msgid "Fuse shapes (time consuming)"
@@ -32984,11 +32976,10 @@ msgid "Net filter (supports wildcards):"
 msgstr "ネットフィルター（ワイルドカードをサポート）:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:133
-#, fuzzy
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
-msgstr ""
-"このフィルターに一致するネットに属する銅アイテムのみがエクスポートされます。"
+msgstr "このフィルターに一致するネットに属する導体アイテムのみがエクスポートされます"
+"。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Board outline chaining tolerance:"
@@ -35029,7 +35020,7 @@ msgstr "非導体ゾーンのプロパティ"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
-msgstr "外側:"
+msgstr "最初:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -35042,11 +35033,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "これは矩形の最初ではないため不可能です."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr ""
+msgstr "角を丸める(可能な場合)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 msgid "Grid size:"
@@ -35081,9 +35072,8 @@ msgid "Delete source items after outset"
 msgstr "変換後に元のオブジェクトを削除する"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
-#, fuzzy
 msgid "Outset Items"
-msgstr "テキスト アイテム"
+msgstr "最初のアイテム"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:206
 #: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2575
@@ -36931,7 +36921,7 @@ msgstr "自由なパッドの移動を許可"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:96
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr "チェックすろと、パッドをフットプリントから移動することができます。"
+msgstr "チェックすると、パッドをフットプリントから移動することができます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:166
 #: pcbnew/dialogs/panel_edit_options_base.cpp:238
@@ -44778,9 +44768,8 @@ msgid "Failed to add component data"
 msgstr "コンポーネントデータの追加に失敗しました"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating Entities"
-msgstr "注釈"
+msgstr "実体を生成する"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:108
 #, fuzzy
@@ -44788,9 +44777,8 @@ msgid "Init Entity Data"
 msgstr "Git コミットデータ"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:119
-#, fuzzy
 msgid "Generating Entities Files"
-msgstr "部品配置ファイルを生成"
+msgstr "実体ファイルを生成"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
 msgid "ODB++ Production File"
@@ -46520,12 +46508,9 @@ msgid "Add slots in acute corners"
 msgstr "ゾーンの角を追加"
 
 #: pcbnew/tools/edit_tool.cpp:1228
-#, fuzzy
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
-msgstr ""
-"ドッグボーンのコーナーの一部は、指定された半径のカッターに適合するには狭すぎ"
-"ます。"
+msgstr "鋭角にスロットを追加し、指定された半径のカッターがアクセスできるようにする"
 
 #: pcbnew/tools/edit_tool.cpp:1232
 msgid "Dogbone Corner Settings"
@@ -46778,19 +46763,16 @@ msgid "Some of the polygons could not be intersected."
 msgstr "いくつかのポリゴンは交差することができません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:666
-#, fuzzy
 msgid "Outset items."
-msgstr "その他のアイテム"
+msgstr "最初のアイテム."
 
 #: pcbnew/tools/item_modification_routine.cpp:673
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "選択した配線をフィレットできません。"
+msgstr "選択した配線を最初にすることができません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:677
-#, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "いくつかの線にフィレットをかけられません。"
+msgstr "いくつかのアイテムを最初にすることができません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:285
 msgid "Please select a single reference Rule Area to copy from."
@@ -46930,14 +46912,12 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "選択した図形ラインから配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:95
-#, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "選択対象から作成"
+msgstr "選択対象から最初を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:96
-#, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "選択対象から図形ラインを作成"
+msgstr "選択アイテムから最初のラインを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:158
 msgid "Add Board Characteristics"
@@ -48765,7 +48745,7 @@ msgstr "中点を指定の位置に移動"
 
 #: pcbnew/tools/pcb_point_editor.cpp:807
 msgid "Move Midpoint"
-msgstr "中天を移動"
+msgstr "中点を移動"
 
 #: pcbnew/tools/pcb_point_editor.cpp:811
 msgid "Move Corner to Location"
@@ -48785,7 +48765,7 @@ msgstr "セグメントを分割"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2731
 msgid "Split Arc"
-msgstr ""
+msgstr "円弧を分割"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2808
 msgid "Remove Zone Corner"
