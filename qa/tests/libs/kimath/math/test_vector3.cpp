@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE( test_cross_product, *boost::unit_test::tolerance( 0.000001
     VECTOR3I v1( 0, 1, 2 );
     VECTOR3I v2( 2, 1, 0 );
 
-    BOOST_CHECK( v1.Cross( v2 ) == VECTOR3I(-2, 4 ,-2) );
+    BOOST_TEST( v1.Cross( v2 ) == VECTOR3I( -2, 4, -2 ) );
 }
 
 BOOST_AUTO_TEST_CASE( test_dot_product, *boost::unit_test::tolerance( 0.000001 ) )
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE( test_dot_product, *boost::unit_test::tolerance( 0.000001 )
     VECTOR3I v1( 0, 1, 2 );
     VECTOR3I v2( 2, 1, 0 );
 
-    BOOST_CHECK( v1.Dot( v2 ) == 1 );
+    BOOST_TEST( v1.Dot( v2 ) == 1 );
 }
 
 BOOST_AUTO_TEST_CASE( test_equality_ops, *boost::unit_test::tolerance( 0.000001 ) )
@@ -57,8 +57,8 @@ BOOST_AUTO_TEST_CASE( test_equality_ops, *boost::unit_test::tolerance( 0.000001 
     VECTOR3I v2( 2, 2, 2 );
     VECTOR3I v3( 1, 1, 1 );
 
-    BOOST_CHECK( v1 == v3 );
-    BOOST_CHECK( v1 != v2 );
+    BOOST_TEST( v1 == v3 );
+    BOOST_TEST( v1 != v2 );
 }
 
 BOOST_AUTO_TEST_CASE( test_scalar_multiply, *boost::unit_test::tolerance( 0.000001 ) )
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( test_scalar_multiply, *boost::unit_test::tolerance( 0.0000
 
     v1 *= 5;
 
-    BOOST_CHECK( v1 == VECTOR3( 5, 5, 5 ) );
+    BOOST_TEST( v1 == VECTOR3( 5, 5, 5 ) );
 }
 
 BOOST_AUTO_TEST_CASE( test_scalar_divide, *boost::unit_test::tolerance( 0.000001 ) )
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE( test_scalar_divide, *boost::unit_test::tolerance( 0.000001
 
     v1 /= 5;
 
-    BOOST_CHECK( v1 == VECTOR3( 1, 1, 1 ) );
+    BOOST_TEST( v1 == VECTOR3( 1, 1, 1 ) );
 }
 
 

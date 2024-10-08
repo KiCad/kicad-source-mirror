@@ -42,10 +42,10 @@ BOOST_AUTO_TEST_CASE( SingleLayer )
 
     zone.SetLayer( F_Cu );
 
-    BOOST_CHECK( zone.GetLayer() == F_Cu );
-    BOOST_CHECK( zone.GetLayer() == zone.GetFirstLayer() );
+    BOOST_TEST( zone.GetLayer() == F_Cu );
+    BOOST_TEST( zone.GetLayer() == zone.GetFirstLayer() );
 
-    BOOST_CHECK( zone.IsOnCopperLayer() == true );
+    BOOST_TEST( zone.IsOnCopperLayer() == true );
 }
 
 BOOST_AUTO_TEST_CASE( MultipleLayers )
@@ -55,11 +55,11 @@ BOOST_AUTO_TEST_CASE( MultipleLayers )
     zone.SetLayerSet( { F_Cu, B_Cu } );
 
     // There is no "the" layer in a multi-layer zone
-    BOOST_CHECK( zone.GetLayer() == UNDEFINED_LAYER );
+    BOOST_TEST( zone.GetLayer() == UNDEFINED_LAYER );
     // ... but there is a first layer
-    BOOST_CHECK( zone.GetFirstLayer() == F_Cu );
+    BOOST_TEST( zone.GetFirstLayer() == F_Cu );
 
-    BOOST_CHECK( zone.IsOnCopperLayer() == true );
+    BOOST_TEST( zone.IsOnCopperLayer() == true );
 }
 
 /**
@@ -74,10 +74,10 @@ BOOST_AUTO_TEST_CASE( RescuedLayers )
 
     zone.SetLayer( Rescue );
 
-    BOOST_CHECK( zone.GetLayer() == Rescue );
-    BOOST_CHECK( zone.GetLayer() == zone.GetFirstLayer() );
+    BOOST_TEST( zone.GetLayer() == Rescue );
+    BOOST_TEST( zone.GetLayer() == zone.GetFirstLayer() );
 
-    BOOST_CHECK( zone.IsOnCopperLayer() == false );
+    BOOST_TEST( zone.IsOnCopperLayer() == false );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE( Collide_LineToLine )
     bool     collided = static_cast<SHAPE*>( &lineA )->Collide( &lineB, 0, &actual, &location );
 
     BOOST_CHECK( collided );
-    BOOST_CHECK( actual == 0 );
+    BOOST_TEST( actual == 0 );
     BOOST_CHECK_MESSAGE( location == VECTOR2I( 5, 0 ), "Expected: " << VECTOR2I( 5, 0 ) << " Actual: " << location );
 }
 
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE( Collide_LineToArc )
     bool     collided = static_cast<SHAPE*>( &lineA )->Collide( &arcB, 0, &actual, &location );
 
     BOOST_CHECK( collided );
-    BOOST_CHECK( actual == 0 );
+    BOOST_TEST( actual == 0 );
     BOOST_CHECK_MESSAGE( location == VECTOR2I( 7, 0 ), "Expected: " << VECTOR2I( 7, 0 ) << " Actual: " << location );
 }
 
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE( Collide_ArcToArc )
     bool     collided = static_cast<SHAPE*>( &arcA )->Collide( &arcB, 0, &actual, &location );
 
     BOOST_CHECK( collided );
-    BOOST_CHECK( actual == 0 );
+    BOOST_TEST( actual == 0 );
     BOOST_CHECK_MESSAGE( location == VECTOR2I( 5, 5 ), "Expected: " << VECTOR2I( 5, 5 ) << " Actual: " << location );
 }
 

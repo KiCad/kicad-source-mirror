@@ -88,13 +88,13 @@ BOOST_AUTO_TEST_CASE( ShapeCompoundCollide )
     int actual;
     // Check points on corners
     BOOST_CHECK( compoundA->Collide( compoundB, 0, &actual ) );
-    BOOST_CHECK( actual == 0 );
+    BOOST_TEST( actual == 0 );
 
     BOOST_CHECK( !compoundA->Collide( compoundC, 0, &actual ) );
-    BOOST_CHECK( actual == 0 );
+    BOOST_TEST( actual == 0 );
 
     BOOST_CHECK( compoundA->Collide( compoundC, 100, &actual ) );
-    BOOST_CHECK( actual == 80 );
+    BOOST_TEST( actual == 80 );
 
     BOOST_CHECK( shapesA[0]->Collide( compoundB, 0 ) );
     BOOST_CHECK( shapesA[1]->Collide( compoundB, 0 ) );
@@ -117,13 +117,13 @@ BOOST_AUTO_TEST_CASE( ShapeCompoundCollide )
     BOOST_CHECK( ! compoundC->Collide( shapesA[1], 0 ) );
 
     BOOST_CHECK( shapesC[0]->Collide( compoundA, 100, &actual ) );
-    BOOST_CHECK( actual == 80 );
+    BOOST_TEST( actual == 80 );
     BOOST_CHECK( shapesC[1]->Collide( compoundA, 100, &actual ) );
-    BOOST_CHECK( actual == 80 );
+    BOOST_TEST( actual == 80 );
     BOOST_CHECK( compoundA->Collide( shapesC[0], 100, &actual ) );
-    BOOST_CHECK( actual == 80 );
+    BOOST_TEST( actual == 80 );
     BOOST_CHECK( compoundA->Collide( shapesC[1], 100, &actual ) );
-    BOOST_CHECK( actual == 80 );
+    BOOST_TEST( actual == 80 );
 }
 
 

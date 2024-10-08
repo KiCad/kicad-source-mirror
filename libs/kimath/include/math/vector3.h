@@ -20,6 +20,7 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+#include <iostream>
 #include <stdint.h>
 #include <limits>
 #include <wx/debug.h>
@@ -198,6 +199,14 @@ VECTOR3<T>& VECTOR3<T>::operator/=( T aScalar )
     z = z / aScalar;
 
     return *this;
+}
+
+
+template <class T>
+std::ostream& operator<<( std::ostream& aStream, const VECTOR3<T>& aVector )
+{
+    aStream << "[ " << aVector.x << " | " << aVector.y << " | " << aVector.z << " ]";
+    return aStream;
 }
 
 
