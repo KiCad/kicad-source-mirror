@@ -1999,11 +1999,22 @@ static struct TRACK_VIA_DESC
 
         const wxString groupTechLayers = _HKI( "Technical Layers" );
 
+        auto isExternalLayerTrack =
+            []( INSPECTABLE* aItem )
+            {
+                if( auto track = dynamic_cast<PCB_TRACK*>( aItem ) )
+                    return track->GetLayer() == F_Cu || track->GetLayer() == B_Cu;
+
+                return false;
+            };
+
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, bool>( _HKI( "Soldermask" ),
-            &PCB_TRACK::SetHasSolderMask, &PCB_TRACK::HasSolderMask ), groupTechLayers );
+            &PCB_TRACK::SetHasSolderMask, &PCB_TRACK::HasSolderMask ), groupTechLayers )
+            .SetAvailableFunc( isExternalLayerTrack );
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
             &PCB_TRACK::SetLocalSolderMaskMargin, &PCB_TRACK::GetLocalSolderMaskMargin,
-            PROPERTY_DISPLAY::PT_SIZE ), groupTechLayers );
+            PROPERTY_DISPLAY::PT_SIZE ), groupTechLayers )
+            .SetAvailableFunc( isExternalLayerTrack );
 
         // Arc
         REGISTER_TYPE( PCB_ARC );
