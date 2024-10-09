@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
-"PO-Revision-Date: 2024-10-07 18:15+0000\n"
+"PO-Revision-Date: 2024-10-09 10:16+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -2353,26 +2353,28 @@ msgstr "אפס לברירת מחדל"
 #: common/dialogs/dialog_configure_paths.cpp:203
 #: common/dialogs/dialog_configure_paths.cpp:261
 msgid "Environment variable name cannot be empty."
-msgstr ""
+msgstr "שם משתנה הסביבה לא יכול להיות ריק."
 
 #: common/dialogs/dialog_configure_paths.cpp:211
 #: common/dialogs/dialog_configure_paths.cpp:263
 msgid "Environment variable path cannot be empty."
-msgstr ""
+msgstr "נתיב משתנה סביבה לא יכול להיות ריק."
 
 #: common/dialogs/dialog_configure_paths.cpp:268
 msgid "3D search path alias cannot be empty."
-msgstr ""
+msgstr "כינוי נתיב חיפוש תלת-ממד לא יכול להיות ריק."
 
 #: common/dialogs/dialog_configure_paths.cpp:270
 msgid "3D search path cannot be empty."
-msgstr ""
+msgstr "נתיב חיפוש תלת-ממד לא יכול להיות ריק."
 
 #: common/dialogs/dialog_configure_paths.cpp:285
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
+"נתיב זה הוגדר באופן חיצוני לתהליך הריצה ו\n"
+"יוחלף באופן זמני בלבד."
 
 #: common/dialogs/dialog_configure_paths.cpp:287
 msgid ""
@@ -2382,11 +2384,16 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
+"בפעם הבאה ש-KiCad תושק, כל נתיבים שכבר היו\n"
+"שהוגדרו מתכבדים וכל ההגדרות שהוגדרו בנתיב\n"
+"תיבת דו-שיח של תצורה מתעלמת. אם לא התכוונת\n"
+"התנהגות זו, שנה את שם הערכים המתנגשים או הסר\n"
+"משתני הסביבה החיצוניים מהמערכת שלך."
 
 #: common/dialogs/dialog_configure_paths.cpp:305
 #, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr ""
+msgstr "השם %s שמור ולא ניתן להשתמש בו."
 
 #: common/dialogs/dialog_configure_paths.cpp:387
 msgid ""
@@ -2396,6 +2403,9 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
+"הזן את השם והערך עבור כל משתנה סביבה. ערכים אפורים הם שמות שהוגדרו חיצונית "
+"ברמת המערכת או המשתמש. משתני סביבה המוגדרים ברמת המערכת או המשתמש מקבלים "
+"עדיפות על פני אלה המוגדרים בטבלה זו. המשמעות היא שהערכים בטבלה זו מתעלמים."
 
 #: common/dialogs/dialog_configure_paths.cpp:393
 msgid ""
@@ -2403,10 +2413,12 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
+"כדי להבטיח ששמות משתני סביבה תקפים בכל הפלטפורמות, שדה השם יקבל רק אותיות "
+"רישיות, ספרות ותווי קו תחתון."
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
-msgstr ""
+msgstr "משתני סביבה"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/git/dialog_git_auth.cpp:56
@@ -2446,13 +2458,13 @@ msgstr ""
 #: pcbnew/zone.cpp:1687 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
 #: pcbnew/zone_manager/model_zones_overview_table.h:75
 msgid "Name"
-msgstr ""
+msgstr "שם"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 #: common/dialogs/git/panel_git_repos_base.cpp:99
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
-msgstr ""
+msgstr "נתיב"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
@@ -2475,7 +2487,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:140
 #, c-format
 msgid "File '%s' not found."
-msgstr ""
+msgstr "הקובץ '%s' לא נמצא."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:99
 #, c-format
@@ -2488,17 +2500,17 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #, c-format
 msgid "Cannot create global library table '%s'."
-msgstr ""
+msgstr "לא ניתן ליצור את טבלת הספרייה הגלובלית '%s'."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:121
 #, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr ""
+msgstr "שגיאה בהעתקת טבלת ספריית העיצוב הגלובלית '%s' אל '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr ""
+msgstr "הגדר את טבלת הספרייה העולמית %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:44
 #, c-format
@@ -2509,45 +2521,50 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
+"KiCad הופעל לראשונה באמצעות טבלת הספרייה החדשה %s עבור\n"
+"גישה לספריות. כדי ל-KiCad לגשת לספריות %s,\n"
+"עליך להגדיר את טבלת ספריית %s הגלובלית שלך. אנא בחר מתוך אחד\n"
+"מבין האפשרויות למטה. אם אינך בטוח באיזו אפשרות לבחור, בבקשה\n"
+"השתמש בבחירת ברירת המחדל."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr ""
+msgstr "העתק ברירת המחדל של טבלת הספרייה הגלובלית %s (מומלץ)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
-msgstr ""
+msgstr "בחר באפשרות זו אם אינך בטוח לגבי הגדרת טבלת הספרייה הגלובלית %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr ""
+msgstr "העתק טבלת ספריית %s גלובלית מותאמת אישית"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:59
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr ""
+msgstr "בחר באפשרות זו כדי להעתיק קובץ טבלת ספריית %s שאינו ברירת המחדל"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr ""
+msgstr "צור טבלת ספריית %s גלובלית ריקה"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:65
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
-msgstr ""
+msgstr "בחר באפשרות זו כדי להגדיר ספריות %s בטבלאות ספריות ספציפיות לפרויקט"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
-msgstr ""
+msgstr "בחר קובץ טבלה גלובלי של ספריית %s:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2598,23 +2615,23 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:340
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:196
 msgid "dummy"
-msgstr ""
+msgstr "דמה"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr ""
+msgstr "בחר קובץ"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
 msgid "Configure Global Library Table"
-msgstr ""
+msgstr "הגדר את טבלת הספרייה הגלובלית"
 
 #: common/dialogs/dialog_grid_settings.cpp:82
 msgid "Grid size X out of range."
-msgstr ""
+msgstr "גודל הרשת X מחוץ לטווח."
 
 #: common/dialogs/dialog_grid_settings.cpp:89
 msgid "Grid size Y out of range."
-msgstr ""
+msgstr "גודל הרשת Y מחוץ לטווח."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:94
@@ -2624,11 +2641,11 @@ msgstr ""
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1039
 msgid "Name:"
-msgstr ""
+msgstr "שם:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
 msgid "(optional)"
-msgstr ""
+msgstr "(אופציונלי)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2715,46 +2732,48 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:320
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:336
 msgid "unit"
-msgstr ""
+msgstr "יחידה"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
 msgid "Linked"
-msgstr ""
+msgstr "מצומד"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr ""
+msgstr "הגדרות רשת"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
-msgstr ""
+msgstr "רשימת מקשי קיצור"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
 msgid "Project Name"
-msgstr ""
+msgstr "שם הפרויקט"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1312
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
-msgstr ""
+msgstr "מעגל מודפס"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1329 eeschema/sch_plotter.cpp:1019
 #: eeschema/widgets/symbol_diff_widget.cpp:39
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
-msgstr ""
+msgstr "סכימה"
 
 #: common/dialogs/dialog_import_choose_project_base.cpp:18
 msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"קובץ פרויקט זה מכיל מספר שילובים של מעגלים מדפסים + שרטוטים סכמטיים.\n"
+"בחר איזה מהם יש לייבא ל-KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
-msgstr ""
+msgstr "בחר פרויקט ליבוא"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
