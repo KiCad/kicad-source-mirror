@@ -855,8 +855,8 @@ public:
         me.Normalize(); // ensure size is >= 0
 
         // Determine closest point to the circle centre within this rect
-        const coord_type nx = std::clamp( me.GetLeft(), aPoint.x, me.GetRight() );
-        const coord_type ny = std::clamp( me.GetTop(), aPoint.y, me.GetBottom() );
+        const coord_type nx = std::clamp( aPoint.x, me.GetLeft(), me.GetRight() );
+        const coord_type ny = std::clamp( aPoint.y, me.GetTop(), me.GetBottom() );
 
         return Vec( nx, ny );
     }
