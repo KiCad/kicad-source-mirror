@@ -329,7 +329,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             if( !zone->GetIsRuleArea() )
                 continue;
 
-            if( zone->GetRuleAreaType() != RULE_AREA_TYPE::KEEPOUT )
+            if( !zone->HasKeepoutParametersSet() )
                 continue;
 
             if( !zone->GetDoNotAllowCopperPour() )
@@ -1919,7 +1919,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         if( !keepout->GetIsRuleArea() )
             continue;
 
-        if( keepout->GetRuleAreaType() != RULE_AREA_TYPE::KEEPOUT )
+        if( !keepout->HasKeepoutParametersSet() )
             continue;
 
         if( keepout->GetDoNotAllowCopperPour() && keepout->IsOnLayer( aLayer ) )

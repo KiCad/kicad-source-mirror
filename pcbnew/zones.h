@@ -70,6 +70,7 @@ inline wxString PrintZoneConnection( ZONE_CONNECTION aConnection )
 class ZONE;
 class ZONE_SETTINGS;
 class PCB_BASE_FRAME;
+class BOARD;
 
 /**
  * Function InvokeNonCopperZonesEditor
@@ -105,6 +106,6 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
  * @return int - tells if user aborted, changed only one zone, or all of them.
  */
 int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
-                          CONVERT_SETTINGS* aConvertSettings = nullptr );
+                          BOARD* aBoard = nullptr, CONVERT_SETTINGS* aConvertSettings = nullptr );
 
 #endif  // ZONES_H_

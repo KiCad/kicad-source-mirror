@@ -113,6 +113,12 @@ public:
     // All pointers to COMPONENT_CLASS objects will being invalid
     void Reset();
 
+    /// @brief Fetches a read-only map of the fundamental component classes
+    const std::unordered_map<wxString, std::unique_ptr<COMPONENT_CLASS>>& GetClasses() const
+    {
+        return m_classes;
+    }
+
 protected:
     /// All individual component classes
     std::unordered_map<wxString, std::unique_ptr<COMPONENT_CLASS>> m_classes;

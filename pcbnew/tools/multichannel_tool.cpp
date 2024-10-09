@@ -97,8 +97,10 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
                 wxT( "A.memberOfSheet('" ) + aRuleArea->GetRuleAreaPlacementSource() + wxT( "')" );
         break;
     }
-    default:
-        wxFAIL_MSG( "RULE_AREA_PLACEMENT_SOURCE_TYPE not yet implemented" );
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
+        ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->GetRuleAreaPlacementSource()
+                   + wxT( "')" );
+        break;
     }
 
     auto ok = compiler.Compile( ruleText, &ucode, &preflightCtx );
@@ -226,7 +228,7 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
     {
         if( !zone->GetIsRuleArea() )
             continue;
-        if( zone->GetRuleAreaType() != RULE_AREA_TYPE::PLACEMENT )
+        if( !zone->GetRuleAreaPlacementEnabled() )
             continue;
 
         RULE_AREA area;
@@ -270,7 +272,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
           ZONE* zone = static_cast<ZONE*>( aItem );
             if( !zone->GetIsRuleArea() )
                 return nullptr;
-            if( zone->GetRuleAreaType() != RULE_AREA_TYPE::PLACEMENT )
+            if( !zone->GetRuleAreaPlacementEnabled() )
                 return nullptr;
         return zone;
     };
@@ -714,7 +716,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
     {
         if( !zone->GetIsRuleArea() )
             continue;
-        if( zone->GetRuleAreaType() != RULE_AREA_TYPE::PLACEMENT )
+        if( !zone->GetRuleAreaPlacementEnabled() )
             continue;
 
         std::set<FOOTPRINT*> components;
@@ -762,7 +764,12 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
         newZone->SetIsRuleArea( true );
         newZone->SetLayerSet( LSET::AllCuMask() );
-        newZone->SetRuleAreaType( RULE_AREA_TYPE::PLACEMENT );
+        newZone->SetRuleAreaPlacementEnabled( true );
+        newZone->SetDoNotAllowCopperPour( false );
+        newZone->SetDoNotAllowVias( false );
+        newZone->SetDoNotAllowTracks( false );
+        newZone->SetDoNotAllowPads( false );
+        newZone->SetDoNotAllowFootprints( false );
         newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
         newZone->SetRuleAreaPlacementSource( ra.m_sheetPath );
         newZone->AddPolygon( raOutline );

@@ -122,7 +122,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
         int dialogResult;
 
         if( m_params.m_keepout )
-            dialogResult = InvokeRuleAreaEditor( frame, &zoneInfo );
+            dialogResult = InvokeRuleAreaEditor( frame, &zoneInfo, m_tool.board() );
         else if( ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
             dialogResult = InvokeCopperZonesEditor( frame, &zoneInfo );
         else

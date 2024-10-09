@@ -23,13 +23,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <kiface_base.h>
 #include <confirm.h>
 #include <board.h>
+#include <footprint.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <zone_settings.h>
 #include <dialog_rule_area_properties_base.h>
+#include <panel_rule_area_properties_keepout_base.h>
+#include <panel_rule_area_properties_placement_base.h>
 #include <widgets/unit_binder.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
@@ -45,16 +49,21 @@ class DIALOG_RULE_AREA_PROPERTIES : public DIALOG_RULE_AREA_PROPERTIES_BASE
 {
 public:
     DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings,
-                                 CONVERT_SETTINGS* aConvertSettings );
+                                 CONVERT_SETTINGS* aConvertSettings, BOARD* aBoard );
+    ~DIALOG_RULE_AREA_PROPERTIES();
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void PopulatePlacementSourceList( RULE_AREA_PLACEMENT_SOURCE_TYPE placementType );
+
     void OnLayerSelection( wxDataViewEvent& event ) override;
-    void OnRuleTypeSelect( wxCommandEvent& event ) override;
+    void OnSheetNameRbClicked( wxCommandEvent& event );
+    void OnComponentClassRbClicked( wxCommandEvent& event );
 
 private:
+    BOARD*            m_board;
     UNIT_BINDER       m_outlineHatchPitch;
     PCB_BASE_FRAME*   m_parent;
     ZONE_SETTINGS     m_zonesettings;    ///< the working copy of zone settings
@@ -69,33 +78,61 @@ private:
     wxStaticText*     m_gapUnits;
     UNIT_BINDER*      m_gap;
     wxCheckBox*       m_cbDeleteOriginals;
+
+    // The name of a rule area source that is not now found on the board (e.g. after a netlist
+    // update). This is used to re-populate the zone settings if the selection is not changed.
+    wxString m_notFoundPlacementSourceName;
+
+    PANEL_RULE_AREA_PROPERTIES_KEEPOUT_BASE*   m_keepoutProperties;
+    PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE* m_placementProperties;
+    RULE_AREA_PLACEMENT_SOURCE_TYPE            m_currentKeepoutSource;
+
+    std::set<wxString> m_sheetNames;
+    std::set<wxString> m_componentClasses;
 };
 
 
-int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aZoneSettings,
+int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aZoneSettings, BOARD* aBoard,
                           CONVERT_SETTINGS* aConvertSettings )
 {
-    DIALOG_RULE_AREA_PROPERTIES dlg( aCaller, aZoneSettings, aConvertSettings );
+    DIALOG_RULE_AREA_PROPERTIES dlg( aCaller, aZoneSettings, aConvertSettings, aBoard );
 
     return dlg.ShowModal();
 }
 
 
-DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParent,
-                                                          ZONE_SETTINGS* aSettings,
-                                                          CONVERT_SETTINGS* aConvertSettings ) :
+DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME*   aParent,
+                                                          ZONE_SETTINGS*    aSettings,
+                                                          CONVERT_SETTINGS* aConvertSettings,
+                                                          BOARD*            aBoard ) :
         DIALOG_RULE_AREA_PROPERTIES_BASE( aParent ),
-        m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
-                             m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
-        m_convertSettings( aConvertSettings ),
-        m_rbCenterline( nullptr ),
-        m_rbBoundingHull( nullptr ),
-        m_cbDeleteOriginals( nullptr )
+        m_board( aBoard ), m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
+                                                m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
+        m_convertSettings( aConvertSettings ), m_rbCenterline( nullptr ),
+        m_rbBoundingHull( nullptr ), m_cbDeleteOriginals( nullptr )
 {
     m_parent = aParent;
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
+
+    m_keepoutProperties = new PANEL_RULE_AREA_PROPERTIES_KEEPOUT_BASE( m_areaPropertiesNb );
+    m_areaPropertiesNb->AddPage( m_keepoutProperties, _( "Keepout" ), true );
+
+    if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
+    {
+        m_placementProperties = new PANEL_RULE_AREA_PROPERTIES_PLACEMENT_BASE( m_areaPropertiesNb );
+        m_areaPropertiesNb->AddPage( m_placementProperties, _( "Placement" ) );
+
+        m_placementProperties->m_sourceSheetnameRb->Connect(
+                wxEVT_RADIOBUTTON,
+                wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnSheetNameRbClicked ), NULL,
+                this );
+        m_placementProperties->m_sourceComponentClassRb->Connect(
+                wxEVT_RADIOBUTTON,
+                wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnComponentClassRbClicked ),
+                NULL, this );
+    }
 
     if( aConvertSettings )
     {
@@ -150,6 +187,89 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
 }
 
 
+DIALOG_RULE_AREA_PROPERTIES::~DIALOG_RULE_AREA_PROPERTIES()
+{
+    if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
+    {
+        m_placementProperties->m_sourceSheetnameRb->Disconnect(
+                wxEVT_RADIOBUTTON,
+                wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnSheetNameRbClicked ), NULL,
+                this );
+        m_placementProperties->m_sourceComponentClassRb->Disconnect(
+                wxEVT_RADIOBUTTON,
+                wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES::OnComponentClassRbClicked ),
+                NULL, this );
+    }
+}
+
+
+void DIALOG_RULE_AREA_PROPERTIES::OnSheetNameRbClicked( wxCommandEvent& event )
+{
+    if( m_currentKeepoutSource == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+        return;
+
+    m_zonesettings.SetRuleAreaPlacementSource( wxEmptyString );
+    m_zonesettings.SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+    PopulatePlacementSourceList( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+    m_currentKeepoutSource = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
+}
+
+
+void DIALOG_RULE_AREA_PROPERTIES::OnComponentClassRbClicked( wxCommandEvent& event )
+{
+    if( m_currentKeepoutSource == RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS )
+        return;
+
+    m_zonesettings.SetRuleAreaPlacementSource( wxEmptyString );
+    m_zonesettings.SetRuleAreaPlacementSourceType(
+            RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+    PopulatePlacementSourceList( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+    m_currentKeepoutSource = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+}
+
+
+void DIALOG_RULE_AREA_PROPERTIES::PopulatePlacementSourceList(
+        RULE_AREA_PLACEMENT_SOURCE_TYPE placementType )
+{
+    m_placementProperties->m_sourceObjectNameCb->Clear();
+
+    std::set<wxString>* sourceStrings;
+
+    switch( placementType )
+    {
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
+        sourceStrings = &m_sheetNames;
+        break;
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
+        sourceStrings = &m_componentClasses;
+        break;
+    }
+
+    int             curSourceIdx = -1;
+    const wxString& curSourceName = m_zonesettings.GetRuleAreaPlacementSource();
+
+    for( const wxString& sourceName : *sourceStrings )
+    {
+        if( curSourceName == sourceName )
+            curSourceIdx = m_placementProperties->m_sourceObjectNameCb->GetCount();
+
+        m_placementProperties->m_sourceObjectNameCb->Append( sourceName );
+    }
+
+    if( curSourceIdx != -1 )
+    {
+        m_placementProperties->m_sourceObjectNameCb->Select( curSourceIdx );
+    }
+    else if( curSourceName != wxEmptyString )
+    {
+        m_notFoundPlacementSourceName = curSourceName;
+        wxString notFoundDisplayName = _( "Not found on board: " ) + curSourceName;
+        m_placementProperties->m_sourceObjectNameCb->Insert( notFoundDisplayName, 0 );
+        m_placementProperties->m_sourceObjectNameCb->Select( 0 );
+    }
+}
+
+
 bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 {
     if( m_convertSettings )
@@ -163,26 +283,56 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     }
 
     // Init keepout parameters:
-    m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
-    m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
-    m_cbPadsCtrl->SetValue( m_zonesettings.GetDoNotAllowPads() );
-    m_cbFootprintsCtrl->SetValue( m_zonesettings.GetDoNotAllowFootprints() );
-    m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
+    m_keepoutProperties->m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
+    m_keepoutProperties->m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
+    m_keepoutProperties->m_cbPadsCtrl->SetValue( m_zonesettings.GetDoNotAllowPads() );
+    m_keepoutProperties->m_cbFootprintsCtrl->SetValue( m_zonesettings.GetDoNotAllowFootprints() );
+    m_keepoutProperties->m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
 
     // Init placement parameters:
-    m_ruleText->SetText( m_zonesettings.GetRuleAreaPlacementSource() );
+    if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
+    {
+        m_placementProperties->m_enabled->SetValue( m_zonesettings.GetRuleAreaPlacementEnabled() );
 
-    if( m_zonesettings.GetRuleAreaType() == RULE_AREA_TYPE::KEEPOUT )
-    {
-        m_rbRuleType->Select( 0 );
-        m_placementRuleSizer->Show( false );
-        m_keepoutRuleSizer->Show( true );
-    }
-    else
-    {
-        m_rbRuleType->Select( 1 );
-        m_placementRuleSizer->Show( true );
-        m_keepoutRuleSizer->Show( false );
+        // Load schematic sheet and component class lists
+        if( m_board )
+        {
+            // Fetch component classes
+            const std::unordered_map<wxString, std::unique_ptr<COMPONENT_CLASS>>& classes =
+                    m_board->GetComponentClassManager().GetClasses();
+
+            for( const auto& [k, v] : classes )
+                m_componentClasses.insert( k );
+
+            // Fetch sheet names
+            for( FOOTPRINT* fp : m_board->Footprints() )
+                m_sheetNames.insert( fp->GetSheetname() );
+            
+            if( m_zonesettings.GetRuleAreaPlacementSourceType()
+                == RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME )
+            {
+                m_placementProperties->m_sourceComponentClassRb->SetValue( false );
+                m_placementProperties->m_sourceSheetnameRb->SetValue( true );
+                PopulatePlacementSourceList( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+                m_currentKeepoutSource = RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME;
+            }
+            else
+            {
+                m_placementProperties->m_sourceSheetnameRb->SetValue( false );
+                m_placementProperties->m_sourceComponentClassRb->SetValue( true );
+                PopulatePlacementSourceList( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+                m_currentKeepoutSource = RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS;
+            }
+        }
+
+        // Handle most-useful notebook page selection
+        m_areaPropertiesNb->SetSelection( 0 );
+
+        if( !m_zonesettings.HasKeepoutParametersSet()
+            && m_zonesettings.GetRuleAreaPlacementEnabled() )
+        {
+            m_areaPropertiesNb->SetSelection( 1 );
+        }
     }
 
     m_cbLocked->SetValue( m_zonesettings.m_Locked );
@@ -202,25 +352,6 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     Layout();
 
     return true;
-}
-
-
-void DIALOG_RULE_AREA_PROPERTIES::OnRuleTypeSelect( wxCommandEvent& event )
-{
-    if( m_rbRuleType->GetSelection() == 0 )
-    {
-        m_zonesettings.SetRuleAreaType( RULE_AREA_TYPE::KEEPOUT );
-        m_placementRuleSizer->Show( false );
-        m_keepoutRuleSizer->Show( true );
-        Layout();
-    }
-    else
-    {
-        m_zonesettings.SetRuleAreaType( RULE_AREA_TYPE::PLACEMENT );
-        m_placementRuleSizer->Show( true );
-        m_keepoutRuleSizer->Show( false );
-        Layout();
-    }
 }
 
 
@@ -269,15 +400,49 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     }
 
     // Init keepout parameters:
-    m_zonesettings.SetRuleAreaType( m_rbRuleType->GetSelection() == 0 ? RULE_AREA_TYPE::KEEPOUT : RULE_AREA_TYPE::PLACEMENT );
-    m_zonesettings.SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
-    m_zonesettings.SetRuleAreaPlacementSource( m_ruleText->GetText() );
     m_zonesettings.SetIsRuleArea( true );
-    m_zonesettings.SetDoNotAllowTracks( m_cbTracksCtrl->GetValue() );
-    m_zonesettings.SetDoNotAllowVias( m_cbViasCtrl->GetValue() );
-    m_zonesettings.SetDoNotAllowCopperPour( m_cbCopperPourCtrl->GetValue() );
-    m_zonesettings.SetDoNotAllowPads( m_cbPadsCtrl->GetValue() );
-    m_zonesettings.SetDoNotAllowFootprints( m_cbFootprintsCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowTracks( m_keepoutProperties->m_cbTracksCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowVias( m_keepoutProperties->m_cbViasCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowCopperPour( m_keepoutProperties->m_cbCopperPourCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowPads( m_keepoutProperties->m_cbPadsCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowFootprints( m_keepoutProperties->m_cbFootprintsCtrl->GetValue() );
+
+    // Init placement parameters
+    if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
+    {
+        m_zonesettings.SetRuleAreaPlacementEnabled( m_placementProperties->m_enabled->GetValue() );
+
+        if( m_placementProperties->m_sourceSheetnameRb->GetValue() )
+        {
+            m_zonesettings.SetRuleAreaPlacementSourceType(
+                    RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+        }
+        else
+        {
+            m_zonesettings.SetRuleAreaPlacementSourceType(
+                    RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+        }
+
+        int selectedSourceIdx = m_placementProperties->m_sourceObjectNameCb->GetSelection();
+
+        if( selectedSourceIdx != wxNOT_FOUND )
+        {
+            if( selectedSourceIdx == 0 && m_notFoundPlacementSourceName != wxEmptyString )
+            {
+                m_zonesettings.SetRuleAreaPlacementSource( m_notFoundPlacementSourceName );
+            }
+            else
+            {
+                m_zonesettings.SetRuleAreaPlacementSource(
+                        m_placementProperties->m_sourceObjectNameCb->GetString(
+                                selectedSourceIdx ) );
+            }
+        }
+        else
+        {
+            m_zonesettings.SetRuleAreaPlacementSource( wxEmptyString );
+        }
+    }
 
     if( m_zonesettings.m_Layers.count() == 0 )
     {

@@ -6857,7 +6857,6 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         case T_placement:
             zone->SetIsRuleArea( true );
-            zone->SetRuleAreaType( RULE_AREA_TYPE::PLACEMENT );
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
@@ -6910,7 +6909,6 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         case T_keepout:
             // "keepout" now means rule area, but the file token stays the same
             zone->SetIsRuleArea( true );
-            zone->SetRuleAreaType( RULE_AREA_TYPE::KEEPOUT );
 
             // Initialize these two because their tokens won't appear in older files:
             zone->SetDoNotAllowPads( false );

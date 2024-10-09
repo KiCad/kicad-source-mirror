@@ -76,7 +76,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_minIslandArea = 10 * pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM;
 
     SetIsRuleArea( false );
-    SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+    SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
     SetDoNotAllowCopperPour( false );
     SetDoNotAllowVias( true );
     SetDoNotAllowTracks( true );
@@ -84,7 +84,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     SetDoNotAllowFootprints( false );
 
     m_TeardropType = TEARDROP_TYPE::TD_NONE;
-    m_ruleAreaType = RULE_AREA_TYPE::KEEPOUT; // for backwards compatibility
+    m_ruleAreaPlacementEnabled = false;
 }
 
 
@@ -111,7 +111,8 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_cornerSmoothingType         != aOther.m_cornerSmoothingType ) return false;
     if( m_cornerRadius                != aOther.m_cornerRadius ) return false;
     if( m_isRuleArea                  != aOther.m_isRuleArea ) return false;
-    if( m_ruleAreaType                != aOther.m_ruleAreaType ) return false;
+    if( m_ruleAreaPlacementEnabled != aOther.m_ruleAreaPlacementEnabled )
+        return false;
     if( m_ruleAreaPlacementSourceType != aOther.m_ruleAreaPlacementSourceType ) return false;
     if( m_ruleAreaPlacementSource     != aOther.m_ruleAreaPlacementSource ) return false;
     if( m_keepoutDoNotAllowCopperPour != aOther.m_keepoutDoNotAllowCopperPour ) return false;
@@ -157,7 +158,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();
     m_isRuleArea                  = aSource.GetIsRuleArea();
-    m_ruleAreaType                = aSource.GetRuleAreaType();
+    m_ruleAreaPlacementEnabled = aSource.GetRuleAreaPlacementEnabled();
     m_ruleAreaPlacementSourceType = aSource.GetRuleAreaPlacementSourceType();
     m_ruleAreaPlacementSource     = aSource.GetRuleAreaPlacementSource();
     m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
@@ -198,7 +199,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );
     aTarget.SetIsRuleArea( GetIsRuleArea() );
-    aTarget.SetRuleAreaType( GetRuleAreaType() );
+    aTarget.SetRuleAreaPlacementEnabled( GetRuleAreaPlacementEnabled() );
     aTarget.SetRuleAreaPlacementSourceType( GetRuleAreaPlacementSourceType() );
     aTarget.SetRuleAreaPlacementSource( GetRuleAreaPlacementSource() );
     aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );

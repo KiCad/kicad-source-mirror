@@ -62,12 +62,6 @@ enum class ISLAND_REMOVAL_MODE
     AREA
 };
 
-enum class RULE_AREA_TYPE
-{
-    KEEPOUT = 0,
-    PLACEMENT
-};
-
 enum class RULE_AREA_PLACEMENT_SOURCE_TYPE
 {
     SHEETNAME = 0,
@@ -137,11 +131,10 @@ private:
      */
     bool m_isRuleArea;
 
-    RULE_AREA_TYPE m_ruleAreaType;
-
     /**
      * Placement rule area data
      */
+    bool                            m_ruleAreaPlacementEnabled;
     RULE_AREA_PLACEMENT_SOURCE_TYPE m_ruleAreaPlacementSourceType;
     wxString                        m_ruleAreaPlacementSource;
 
@@ -204,10 +197,19 @@ public:
     void SetPadConnection( ZONE_CONNECTION aPadConnection ) { m_padConnection = aPadConnection; }
 
     /**
+     * Accessor to determine if any keepout parameters are set
+     */
+    bool HasKeepoutParametersSet() const
+    {
+        return m_keepoutDoNotAllowTracks || m_keepoutDoNotAllowVias || m_keepoutDoNotAllowPads
+               || m_keepoutDoNotAllowFootprints || m_keepoutDoNotAllowCopperPour;
+    }
+
+    /**
      * Accessors to parameters used in Rule Area zones:
      */
     bool GetIsRuleArea() const { return m_isRuleArea; }
-    RULE_AREA_TYPE GetRuleAreaType() const { return m_ruleAreaType; }
+    bool GetRuleAreaPlacementEnabled() const { return m_ruleAreaPlacementEnabled; }
     RULE_AREA_PLACEMENT_SOURCE_TYPE GetRuleAreaPlacementSourceType() const
     {
         return m_ruleAreaPlacementSourceType;
@@ -220,7 +222,7 @@ public:
     bool GetDoNotAllowFootprints() const { return m_keepoutDoNotAllowFootprints; }
 
     void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
-    void SetRuleAreaType( RULE_AREA_TYPE aType ) { m_ruleAreaType = aType; }
+    void SetRuleAreaPlacementEnabled( bool aEnabled ) { m_ruleAreaPlacementEnabled = aEnabled; }
     void SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE aType )
     {
         m_ruleAreaPlacementSourceType = aType;

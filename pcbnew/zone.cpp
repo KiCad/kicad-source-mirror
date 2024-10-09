@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_null.h>
@@ -51,6 +52,7 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         m_priority( 0 ),
         m_isRuleArea( false ),
         m_ruleAreaPlacementEnabled( false ),
+        m_ruleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME ),
         m_teardropType( TEARDROP_TYPE::TD_NONE ),
         m_PadConnection( ZONE_CONNECTION::NONE ),
         m_ZoneClearance( 0 ),
@@ -132,7 +134,7 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_zoneName                = aZone.m_zoneName;
     m_priority                = aZone.m_priority;
     m_isRuleArea              = aZone.m_isRuleArea;
-    m_ruleAreaType = aZone.m_ruleAreaType;
+    m_ruleAreaPlacementEnabled = aZone.m_ruleAreaPlacementEnabled;
     m_ruleAreaPlacementSourceType = aZone.m_ruleAreaPlacementSourceType;
     m_ruleAreaPlacementSource = aZone.m_ruleAreaPlacementSource;
     SetLayerSet( aZone.GetLayerSet() );
@@ -583,7 +585,6 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     {
         msg.Empty();
 
-// fixme placement
         if( GetDoNotAllowVias() )
             AccumulateDescription( msg, _( "No vias" ) );
 
@@ -601,6 +602,12 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
         if( !msg.IsEmpty() )
             aList.emplace_back( _( "Restrictions" ), msg );
+
+        if( GetRuleAreaPlacementEnabled() )
+        {
+            aList.emplace_back( _( "Placement source" ),
+                                UnescapeString( GetRuleAreaPlacementSource() ) );
+        }
     }
     else if( IsOnCopperLayer() )
     {
@@ -1447,30 +1454,29 @@ bool ZONE::operator==( const ZONE& aOther ) const
 
      if( GetIsRuleArea() )
      {
-        if( GetRuleAreaType() != other.GetRuleAreaType() )
-            return false;
+         if( GetDoNotAllowCopperPour() != other.GetDoNotAllowCopperPour() )
+             return false;
 
-        if( GetRuleAreaType() == RULE_AREA_TYPE::KEEPOUT )
-        {
-            if( GetDoNotAllowCopperPour() != other.GetDoNotAllowCopperPour() )
-                return false;
-            if( GetDoNotAllowTracks() != other.GetDoNotAllowTracks() )
-                return false;
-            if( GetDoNotAllowVias() != other.GetDoNotAllowVias() )
-                return false;
-            if( GetDoNotAllowFootprints() != other.GetDoNotAllowFootprints() )
-                return false;
-            if( GetDoNotAllowPads() != other.GetDoNotAllowPads() )
-                return false;
-        }
-        else if ( GetRuleAreaType() == RULE_AREA_TYPE::PLACEMENT )
-        {
-            if( GetRuleAreaPlacementSourceType() != other.GetRuleAreaPlacementSourceType() )
-                return false;
+         if( GetDoNotAllowTracks() != other.GetDoNotAllowTracks() )
+             return false;
 
-            if( GetRuleAreaPlacementSource() != other.GetRuleAreaPlacementSource() )
-                return false;
-        }
+         if( GetDoNotAllowVias() != other.GetDoNotAllowVias() )
+             return false;
+
+         if( GetDoNotAllowFootprints() != other.GetDoNotAllowFootprints() )
+             return false;
+
+         if( GetDoNotAllowPads() != other.GetDoNotAllowPads() )
+             return false;
+
+         if( GetRuleAreaPlacementEnabled() != other.GetRuleAreaPlacementEnabled() )
+             return false;
+
+         if( GetRuleAreaPlacementSourceType() != other.GetRuleAreaPlacementSourceType() )
+             return false;
+
+         if( GetRuleAreaPlacementSource() != other.GetRuleAreaPlacementSource() )
+             return false;
     }
     else
     {
@@ -1612,15 +1618,6 @@ static struct ZONE_DESC
                   .Map( ZONE_FILL_MODE::HATCH_PATTERN, _HKI( "Hatch pattern" ) );
         }
 
-        ENUM_MAP<RULE_AREA_TYPE>& raTypeMap = ENUM_MAP<RULE_AREA_TYPE>::Instance();
-
-        if( raTypeMap.Choices().GetCount() == 0 )
-        {
-            raTypeMap.Undefined( RULE_AREA_TYPE::KEEPOUT );
-            raTypeMap.Map( RULE_AREA_TYPE::KEEPOUT, _HKI( "Keepout" ) )
-                  .Map( RULE_AREA_TYPE::PLACEMENT, _HKI( "Placement" ) );
-        }
-
         ENUM_MAP<ISLAND_REMOVAL_MODE>& irmMap = ENUM_MAP<ISLAND_REMOVAL_MODE>::Instance();
 
         if( irmMap.Choices().GetCount() == 0 )
@@ -1629,6 +1626,17 @@ static struct ZONE_DESC
             irmMap.Map( ISLAND_REMOVAL_MODE::ALWAYS, _HKI( "Always" ) )
                   .Map( ISLAND_REMOVAL_MODE::NEVER,  _HKI( "Never" ) )
                   .Map( ISLAND_REMOVAL_MODE::AREA,   _HKI( "Below area limit" ) );
+        }
+
+        ENUM_MAP<RULE_AREA_PLACEMENT_SOURCE_TYPE>& rapstMap =
+                ENUM_MAP<RULE_AREA_PLACEMENT_SOURCE_TYPE>::Instance();
+
+        if( rapstMap.Choices().GetCount() == 0 )
+        {
+            rapstMap.Undefined( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+            rapstMap.Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME, _HKI( "Sheet Name" ) )
+                    .Map( RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS,
+                          _HKI( "Component Class" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -1707,10 +1715,61 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, RULE_AREA_TYPE>( _HKI( "Rule Area Type" ),
-                                                           &ZONE::SetRuleAreaType,
-                                                           &ZONE::GetRuleAreaType ) )
+        const wxString groupKeepout = _HKI( "Keepout" );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Tracks" ),
+                                                       &ZONE::SetDoNotAllowTracks,
+                                                       &ZONE::GetDoNotAllowTracks ),
+                             groupKeepout )
                 .SetAvailableFunc( isRuleArea );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Vias" ),
+                                                       &ZONE::SetDoNotAllowVias,
+                                                       &ZONE::GetDoNotAllowVias ),
+                             groupKeepout )
+                .SetAvailableFunc( isRuleArea );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Pads" ),
+                                                       &ZONE::SetDoNotAllowPads,
+                                                       &ZONE::GetDoNotAllowPads ),
+                             groupKeepout )
+                .SetAvailableFunc( isRuleArea );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Copper Pours" ),
+                                                       &ZONE::SetDoNotAllowCopperPour,
+                                                       &ZONE::GetDoNotAllowCopperPour ),
+                             groupKeepout )
+                .SetAvailableFunc( isRuleArea );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Footprints" ),
+                                                       &ZONE::SetDoNotAllowFootprints,
+                                                       &ZONE::GetDoNotAllowFootprints ),
+                             groupKeepout )
+                .SetAvailableFunc( isRuleArea );
+
+        if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
+        {
+            const wxString groupPlacement = _HKI( "Placement" );
+
+            propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Enable" ),
+                                                           &ZONE::SetRuleAreaPlacementEnabled,
+                                                           &ZONE::GetRuleAreaPlacementEnabled ),
+                                 groupPlacement )
+                    .SetAvailableFunc( isRuleArea );
+
+            propMgr.AddProperty( new PROPERTY_ENUM<ZONE, RULE_AREA_PLACEMENT_SOURCE_TYPE>(
+                                         _HKI( "Source Type" ),
+                                         &ZONE::SetRuleAreaPlacementSourceType,
+                                         &ZONE::GetRuleAreaPlacementSourceType ),
+                                 groupPlacement )
+                    .SetAvailableFunc( isRuleArea );
+
+            propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Source Name" ),
+                                                               &ZONE::SetRuleAreaPlacementSource,
+                                                               &ZONE::GetRuleAreaPlacementSource ),
+                                 groupPlacement )
+                    .SetAvailableFunc( isRuleArea );
+        }
 
         const wxString groupFill = _HKI( "Fill Style" );
 
@@ -1829,7 +1888,7 @@ static struct ZONE_DESC
     }
 } _ZONE_DESC;
 
+IMPLEMENT_ENUM_TO_WXANY( RULE_AREA_PLACEMENT_SOURCE_TYPE )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_CONNECTION )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_FILL_MODE )
 IMPLEMENT_ENUM_TO_WXANY( ISLAND_REMOVAL_MODE )
-IMPLEMENT_ENUM_TO_WXANY( RULE_AREA_TYPE )

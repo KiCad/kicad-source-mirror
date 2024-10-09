@@ -21,8 +21,7 @@
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
-#include <wx/radiobox.h>
-#include <wx/stc/stc.h>
+#include <wx/notebook.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/button.h>
@@ -36,6 +35,7 @@
 class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
+		wxBoxSizer* bMainSizer;
 
 	protected:
 		wxStaticText* m_staticTextLayerSelection;
@@ -43,16 +43,8 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_tcName;
 		wxCheckBox* m_cbLocked;
-		wxRadioBox* m_rbRuleType;
-		wxFlexGridSizer* m_keepoutRuleSizer;
-		wxCheckBox* m_cbTracksCtrl;
-		wxCheckBox* m_cbViasCtrl;
-		wxCheckBox* m_cbPadsCtrl;
-		wxCheckBox* m_cbCopperPourCtrl;
-		wxCheckBox* m_cbFootprintsCtrl;
-		wxFlexGridSizer* m_placementRuleSizer;
-		wxStaticText* m_staticText31;
-		wxStyledTextCtrl* m_ruleText;
+		wxStaticText* m_staticText7;
+		wxNotebook* m_areaPropertiesNb;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticText* m_stBorderHatchPitchText;
@@ -66,7 +58,6 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onLayerListRightDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnSizeLayersList( wxSizeEvent& event ) { event.Skip(); }
-		virtual void OnRuleTypeSelect( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

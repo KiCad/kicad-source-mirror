@@ -67,29 +67,29 @@ bool ZONE::IsSame( const ZONE& aZoneToCompare )
     if( GetIsRuleArea() != aZoneToCompare.GetIsRuleArea() )
         return false;
 
-    if( GetIsRuleArea() && GetRuleAreaType() == RULE_AREA_TYPE::KEEPOUT )
-    {
-        if(  GetDoNotAllowCopperPour() != aZoneToCompare.GetDoNotAllowCopperPour() )
-            return false;
+    if( GetDoNotAllowCopperPour() != aZoneToCompare.GetDoNotAllowCopperPour() )
+        return false;
 
-        if(  GetDoNotAllowVias() != aZoneToCompare.GetDoNotAllowVias() )
-            return false;
+    if( GetDoNotAllowVias() != aZoneToCompare.GetDoNotAllowVias() )
+        return false;
 
-        if(  GetDoNotAllowTracks() != aZoneToCompare.GetDoNotAllowTracks() )
-            return false;
+    if( GetDoNotAllowTracks() != aZoneToCompare.GetDoNotAllowTracks() )
+        return false;
 
-        if(  GetDoNotAllowPads() != aZoneToCompare.GetDoNotAllowPads() )
-            return false;
+    if( GetDoNotAllowPads() != aZoneToCompare.GetDoNotAllowPads() )
+        return false;
 
-        if(  GetDoNotAllowFootprints() != aZoneToCompare.GetDoNotAllowFootprints() )
-            return false;
-    }
+    if( GetDoNotAllowFootprints() != aZoneToCompare.GetDoNotAllowFootprints() )
+        return false;
 
-    if( GetIsRuleArea() && GetRuleAreaType() == RULE_AREA_TYPE::PLACEMENT )
-    {
-        if( GetRuleAreaExpression() != aZoneToCompare.GetRuleAreaExpression() )
-            return false;
-    }
+    if( GetRuleAreaPlacementEnabled() != aZoneToCompare.GetRuleAreaPlacementEnabled() )
+        return false;
+
+    if( GetRuleAreaPlacementSourceType() != aZoneToCompare.GetRuleAreaPlacementSourceType() )
+        return false;
+
+    if( GetRuleAreaPlacementSource() != aZoneToCompare.GetRuleAreaPlacementSource() )
+        return false;
 
     if( m_ZoneClearance != aZoneToCompare.m_ZoneClearance )
         return false;

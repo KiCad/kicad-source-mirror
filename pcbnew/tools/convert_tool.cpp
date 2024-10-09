@@ -522,7 +522,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         if( aEvent.IsAction( &PCB_ACTIONS::convertToKeepout ) )
         {
             zoneInfo.SetIsRuleArea( true );
-            ret = InvokeRuleAreaEditor( frame, &zoneInfo, &m_userSettings );
+            ret = InvokeRuleAreaEditor( frame, &zoneInfo, board(), &m_userSettings );
         }
         else if( nonCopper )
         {

@@ -707,10 +707,18 @@ public:
     TEARDROP_TYPE GetTeardropAreaType() const { return m_teardropType; }
 
     /**
+     * Accessor to determine if any keepout parameters are set
+     */
+    bool HasKeepoutParametersSet() const
+    {
+        return m_doNotAllowTracks || m_doNotAllowVias || m_doNotAllowPads || m_doNotAllowFootprints
+               || m_doNotAllowCopperPour;
+    }
+
+    /**
      * Accessors to parameters used in Rule Area zones:
      */
-    bool GetIsRuleArea() const           { return m_isRuleArea; }
-    RULE_AREA_TYPE GetRuleAreaType() const { return m_ruleAreaType; }
+    bool GetIsRuleArea() const { return m_isRuleArea; }
     bool GetRuleAreaPlacementEnabled() const { return m_ruleAreaPlacementEnabled ; }
     RULE_AREA_PLACEMENT_SOURCE_TYPE GetRuleAreaPlacementSourceType() const
     {
@@ -723,8 +731,7 @@ public:
     bool GetDoNotAllowPads() const       { return m_doNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_doNotAllowFootprints; }
 
-    void SetIsRuleArea( bool aEnable )           { m_isRuleArea = aEnable; }
-    void SetRuleAreaType( RULE_AREA_TYPE aType ) { m_ruleAreaType = aType; }
+    void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
     void SetRuleAreaPlacementEnabled( bool aEnabled ) { m_ruleAreaPlacementEnabled = aEnabled; }
     void SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE aType )
     {
@@ -841,8 +848,7 @@ protected:
     /* A zone outline can be a keepout zone.
      * It will be never filled, and DRC should test for pads, tracks and vias
      */
-    bool           m_isRuleArea;
-    RULE_AREA_TYPE m_ruleAreaType;
+    bool m_isRuleArea;
 
     /**
      * Placement rule area data
@@ -952,7 +958,7 @@ protected:
 DECLARE_ENUM_TO_WXANY( ZONE_CONNECTION )
 DECLARE_ENUM_TO_WXANY( ZONE_FILL_MODE )
 DECLARE_ENUM_TO_WXANY( ISLAND_REMOVAL_MODE )
-DECLARE_ENUM_TO_WXANY( RULE_AREA_TYPE )
+DECLARE_ENUM_TO_WXANY( RULE_AREA_PLACEMENT_SOURCE_TYPE )
 #endif
 
 #endif  // ZONE_H

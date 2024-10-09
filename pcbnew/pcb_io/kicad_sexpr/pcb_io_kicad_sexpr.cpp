@@ -2590,12 +2590,6 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
 void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
 {
-    // temporary safeguard for the multichannel tool (and placement area/room support). When the tool is off
-    // (default), KiCad will not write any placement info in the RAs (and won't break file format compatibility)
-
-    if( ! ADVANCED_CFG::GetCfg().m_EnableMultichannelTool && aZone->GetIsRuleArea() && aZone->GetRuleAreaType() == RULE_AREA_TYPE::PLACEMENT )
-        return;
-
     // Save the NET info.
     // For keepout and non copper zones, net code and net name are irrelevant
     // so be sure a dummy value is stored, just for ZONE compatibility
@@ -2703,21 +2697,18 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
 
     if( aZone->GetIsRuleArea() )
     {
-        switch( aZone->GetRuleAreaType() )
-        {
-        case RULE_AREA_TYPE::KEEPOUT:
-        {
-            m_out->Print( aNestLevel + 1,
-                          "(keepout (tracks %s) (vias %s) (pads %s) (copperpour %s) "
-                          "(footprints %s))\n",
-                          aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
-                          aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
-                          aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
-                          aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
-                          aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
-            break;
-        }
-        case RULE_AREA_TYPE::PLACEMENT:
+        // Keepout settings
+        m_out->Print( aNestLevel + 1,
+                      "(keepout (tracks %s) (vias %s) (pads %s) (copperpour %s) "
+                      "(footprints %s))\n",
+                      aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
+
+        // Multichannel settings
+        if( ADVANCED_CFG::GetCfg().m_EnableMultichannelTool )
         {
             m_out->Print( aNestLevel + 1, "(placement" );
             m_out->Print( aNestLevel + 2, "(enabled " );
@@ -2740,10 +2731,6 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
             }
 
             m_out->Print( aNestLevel + 1, ")" );
-            break;
-        }
-        default:
-            break;
         }
     }
 

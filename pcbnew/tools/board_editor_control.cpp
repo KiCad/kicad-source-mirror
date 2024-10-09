@@ -1460,7 +1460,7 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     int dialogResult;
 
     if( oldZone->GetIsRuleArea() )
-        dialogResult = InvokeRuleAreaEditor( m_frame, &zoneSettings );
+        dialogResult = InvokeRuleAreaEditor( m_frame, &zoneSettings, board() );
     else if( oldZone->IsOnCopperLayer() )
         dialogResult = InvokeCopperZonesEditor( m_frame, &zoneSettings );
     else

@@ -251,7 +251,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             {
                 ZONE* zone = static_cast<ZONE*>( parent );
 
-                if( zone->GetRuleAreaType() != RULE_AREA_TYPE::KEEPOUT )
+                if( !zone->HasKeepoutParametersSet() )
                     break;
 
                 if( !zone->GetZoneName().IsEmpty() )
