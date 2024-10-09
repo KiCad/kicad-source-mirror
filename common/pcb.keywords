@@ -74,6 +74,7 @@ column_count
 column_widths
 comment
 company
+component_class
 component_classes
 connect
 connect_pads
@@ -115,7 +116,6 @@ end
 epsilon_r
 exclude_from_pos_files
 exclude_from_bom
-expr
 extension_height
 extension_offset
 external

@@ -68,6 +68,12 @@ enum class RULE_AREA_TYPE
     PLACEMENT
 };
 
+enum class RULE_AREA_PLACEMENT_SOURCE_TYPE
+{
+    SHEETNAME = 0,
+    COMPONENT_CLASS
+};
+
 /**
  * ZONE_SETTINGS
  * handles zones parameters.
@@ -133,12 +139,17 @@ private:
 
     RULE_AREA_TYPE m_ruleAreaType;
 
+    /**
+     * Placement rule area data
+     */
+    RULE_AREA_PLACEMENT_SOURCE_TYPE m_ruleAreaPlacementSourceType;
+    wxString                        m_ruleAreaPlacementSource;
+
     bool            m_keepoutDoNotAllowCopperPour;
     bool            m_keepoutDoNotAllowVias;
     bool            m_keepoutDoNotAllowTracks;
     bool            m_keepoutDoNotAllowPads;
     bool            m_keepoutDoNotAllowFootprints;
-    wxString            m_ruleAreaExpression;
 
     ISLAND_REMOVAL_MODE m_removeIslands;
     long long int       m_minIslandArea;
@@ -197,7 +208,11 @@ public:
      */
     bool GetIsRuleArea() const { return m_isRuleArea; }
     RULE_AREA_TYPE GetRuleAreaType() const { return m_ruleAreaType; }
-    const wxString& GetRuleAreaExpression( ) const { return m_ruleAreaExpression; }
+    RULE_AREA_PLACEMENT_SOURCE_TYPE GetRuleAreaPlacementSourceType() const
+    {
+        return m_ruleAreaPlacementSourceType;
+    }
+    wxString GetRuleAreaPlacementSource() const { return m_ruleAreaPlacementSource; }
     bool GetDoNotAllowCopperPour() const { return m_keepoutDoNotAllowCopperPour; }
     bool GetDoNotAllowVias() const { return m_keepoutDoNotAllowVias; }
     bool GetDoNotAllowTracks() const { return m_keepoutDoNotAllowTracks; }
@@ -206,7 +221,14 @@ public:
 
     void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
     void SetRuleAreaType( RULE_AREA_TYPE aType ) { m_ruleAreaType = aType; }
-    void SetRuleAreaExpression( const wxString& aExpr ) { m_ruleAreaExpression = aExpr; }
+    void SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE aType )
+    {
+        m_ruleAreaPlacementSourceType = aType;
+    }
+    void SetRuleAreaPlacementSource( const wxString& aSource )
+    {
+        m_ruleAreaPlacementSource = aSource;
+    }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_keepoutDoNotAllowCopperPour = aEnable; }
     void SetDoNotAllowVias( bool aEnable ) { m_keepoutDoNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable ) { m_keepoutDoNotAllowTracks = aEnable; }

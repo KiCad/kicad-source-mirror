@@ -110,6 +110,9 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_cornerSmoothingType         != aOther.m_cornerSmoothingType ) return false;
     if( m_cornerRadius                != aOther.m_cornerRadius ) return false;
     if( m_isRuleArea                  != aOther.m_isRuleArea ) return false;
+    if( m_ruleAreaType != aOther.m_ruleAreaType ) return false;
+    if( m_ruleAreaPlacementSourceType != aOther.m_ruleAreaPlacementSourceType ) return false;
+    if( m_ruleAreaPlacementSource != aOther.m_ruleAreaPlacementSource ) return false;
     if( m_keepoutDoNotAllowCopperPour != aOther.m_keepoutDoNotAllowCopperPour ) return false;
     if( m_keepoutDoNotAllowVias       != aOther.m_keepoutDoNotAllowVias ) return false;
     if( m_keepoutDoNotAllowTracks     != aOther.m_keepoutDoNotAllowTracks ) return false;
@@ -153,8 +156,9 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();
     m_isRuleArea                  = aSource.GetIsRuleArea();
-    m_ruleAreaExpression = aSource.GetRuleAreaExpression();
     m_ruleAreaType = aSource.GetRuleAreaType();
+    m_ruleAreaPlacementSourceType = aSource.GetRuleAreaPlacementSourceType();
+    m_ruleAreaPlacementSource = aSource.GetRuleAreaPlacementSource();
     m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
     m_keepoutDoNotAllowVias       = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks     = aSource.GetDoNotAllowTracks();
@@ -194,7 +198,8 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetCornerRadius( m_cornerRadius );
     aTarget.SetIsRuleArea( GetIsRuleArea() );
     aTarget.SetRuleAreaType( GetRuleAreaType() );
-    aTarget.SetRuleAreaExpression( GetRuleAreaExpression() );
+    aTarget.SetRuleAreaPlacementSourceType( GetRuleAreaPlacementSourceType() );
+    aTarget.SetRuleAreaPlacementSource( GetRuleAreaPlacementSource() );
     aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );
     aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );

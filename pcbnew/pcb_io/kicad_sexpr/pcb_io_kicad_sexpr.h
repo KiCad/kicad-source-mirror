@@ -166,7 +166,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20240928  // Component classes
 //#define SEXPR_BOARD_FILE_VERSION    20240929  // Complex padstacks
 //#define SEXPR_BOARD_FILE_VERSION    20241006  // Via stacks
-#define SEXPR_BOARD_FILE_VERSION      20241007  // Tracks can have soldermask layer and margin
+//#define SEXPR_BOARD_FILE_VERSION    20241007  // Tracks can have soldermask layer and margin
+#define SEXPR_BOARD_FILE_VERSION      20241009 // Evolve placement rule areas file format
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

@@ -113,7 +113,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	m_placementRuleSizer->SetFlexibleDirection( wxBOTH );
 	m_placementRuleSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText31 = new wxStaticText( this, wxID_ANY, _("Condition:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText31 = new wxStaticText( this, wxID_ANY, _("Schematic Sheetname:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText31->Wrap( -1 );
 	m_staticText31->SetToolTip( _("A unique name for this rule area for use in DRC rules") );
 

@@ -6854,10 +6854,42 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 if( token == T_LEFT )
                     token = NextTok();
 
-                if( token == T_expr )
+                switch( token )
+                {
+                case T_sheetname:
+                {
+                    zone->SetRuleAreaPlacementSourceType(
+                            RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+                    NeedSYMBOL();
+                    zone->SetRuleAreaPlacementSource( FromUTF8() );
+                    break;
+                }
+                case T_component_class:
+                {
+                    zone->SetRuleAreaPlacementSourceType(
+                            RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS );
+                    NeedSYMBOL();
+                    zone->SetRuleAreaPlacementSource( FromUTF8() );
+                    break;
+                }
+                case T_enabled:
                 {
                     token = NextTok();
-                    zone->SetRuleAreaExpression( FromUTF8() );
+
+                    if( token == T_yes )
+                        zone->SetRuleAreaPlacementEnabled( true );
+                    else if( token == T_no )
+                        zone->SetRuleAreaPlacementEnabled( false );
+                    else
+                        Expecting( "yes or no" );
+
+                    break;
+                }
+                default:
+                {
+                    Expecting( "enabled, sheetname or component_class" );
+                    break;
+                }
                 }
 
                 NeedRIGHT();

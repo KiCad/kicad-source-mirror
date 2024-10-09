@@ -87,7 +87,21 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
 
     wxLogTrace( traceMultichannelTool, wxT( "rule area '%s'"), aRuleArea->GetZoneName() );
 
-    auto ok = compiler.Compile( aRuleArea->GetRuleAreaExpression(), &ucode, &preflightCtx );
+    wxString ruleText;
+
+    switch( aRuleArea->GetRuleAreaPlacementSourceType() )
+    {
+    case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
+    {
+        ruleText =
+                wxT( "A.memberOfSheet('" ) + aRuleArea->GetRuleAreaPlacementSource() + wxT( "')" );
+        break;
+    }
+    default:
+        wxFAIL_MSG( "RULE_AREA_PLACEMENT_SOURCE_TYPE not yet implemented" );
+    }
+
+    auto ok = compiler.Compile( ruleText, &ucode, &preflightCtx );
 
     if( !ok )
     {
@@ -749,8 +763,8 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->SetIsRuleArea( true );
         newZone->SetLayerSet( LSET::AllCuMask() );
         newZone->SetRuleAreaType( RULE_AREA_TYPE::PLACEMENT );
-        newZone->SetRuleAreaExpression(
-                wxString::Format( wxT( "A.memberOfSheet('%s')" ), ra.m_sheetPath ) );
+        newZone->SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
+        newZone->SetRuleAreaPlacementSource( ra.m_sheetPath );
         newZone->AddPolygon( raOutline );
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
 

@@ -2694,24 +2694,45 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
     {
         switch( aZone->GetRuleAreaType() )
         {
-            case RULE_AREA_TYPE::KEEPOUT:
-                m_out->Print( aNestLevel + 1,
-                            "(keepout (tracks %s) (vias %s) (pads %s) (copperpour %s) "
-                            "(footprints %s))\n",
-                            aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
-                            aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
-                            aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
-                            aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
-                            aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
-                break;
+        case RULE_AREA_TYPE::KEEPOUT:
+        {
+            m_out->Print( aNestLevel + 1,
+                          "(keepout (tracks %s) (vias %s) (pads %s) (copperpour %s) "
+                          "(footprints %s))\n",
+                          aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
+                          aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
+                          aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
+                          aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
+                          aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
+            break;
+        }
+        case RULE_AREA_TYPE::PLACEMENT:
+        {
+            m_out->Print( aNestLevel + 1, "(placement" );
+            m_out->Print( aNestLevel + 2, "(enabled " );
 
-            case RULE_AREA_TYPE::PLACEMENT:
-                m_out->Print( aNestLevel + 1,
-                            "(placement (expr %s))", m_out->Quotew( aZone->GetRuleAreaExpression() ).c_str() );
-                break;
+            if( aZone->GetRuleAreaPlacementEnabled() )
+                m_out->Print( aNestLevel + 2, "yes)" );
+            else
+                m_out->Print( aNestLevel + 2, "no)" );
 
-            default:
+            switch( aZone->GetRuleAreaPlacementSourceType() )
+            {
+            case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
+                m_out->Print( aNestLevel + 2, "(sheetname %s)",
+                              m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
                 break;
+            case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
+                m_out->Print( aNestLevel + 2, "(component_class %s)",
+                              m_out->Quotew( aZone->GetRuleAreaPlacementSource() ).c_str() );
+                break;
+            }
+
+            m_out->Print( aNestLevel + 1, ")" );
+            break;
+        }
+        default:
+            break;
         }
     }
 

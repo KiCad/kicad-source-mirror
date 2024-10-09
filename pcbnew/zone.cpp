@@ -50,6 +50,7 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         m_cornerRadius( 0 ),
         m_priority( 0 ),
         m_isRuleArea( false ),
+        m_ruleAreaPlacementEnabled( false ),
         m_teardropType( TEARDROP_TYPE::TD_NONE ),
         m_PadConnection( ZONE_CONNECTION::NONE ),
         m_ZoneClearance( 0 ),
@@ -131,8 +132,9 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_zoneName                = aZone.m_zoneName;
     m_priority                = aZone.m_priority;
     m_isRuleArea              = aZone.m_isRuleArea;
-    m_ruleAreaExpression = aZone.m_ruleAreaExpression;
     m_ruleAreaType = aZone.m_ruleAreaType;
+    m_ruleAreaPlacementSourceType = aZone.m_ruleAreaPlacementSourceType;
+    m_ruleAreaPlacementSource = aZone.m_ruleAreaPlacementSource;
     SetLayerSet( aZone.GetLayerSet() );
 
     m_doNotAllowCopperPour    = aZone.m_doNotAllowCopperPour;
@@ -1463,7 +1465,10 @@ bool ZONE::operator==( const ZONE& aOther ) const
         }
         else if ( GetRuleAreaType() == RULE_AREA_TYPE::PLACEMENT )
         {
-            if( GetRuleAreaExpression() != other.GetRuleAreaExpression() )
+            if( GetRuleAreaPlacementSourceType() != other.GetRuleAreaPlacementSourceType() )
+                return false;
+
+            if( GetRuleAreaPlacementSource() != other.GetRuleAreaPlacementSource() )
                 return false;
         }
     }
