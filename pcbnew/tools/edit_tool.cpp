@@ -2990,6 +2990,10 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         {
         case PCB_PAD_T:
         {
+            // Only increment pad numbers in the footprint editor
+            if( !m_isFootprintEditor )
+                break;
+
             PAD& pad = static_cast<PAD&>( *item );
 
             if( !pad.CanHaveNumber() )

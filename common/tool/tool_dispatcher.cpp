@@ -497,6 +497,14 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
                 evt->SetMousePosition( pos );
             }
         }
+
+        // We only get wheel events that aren't consumed by the view controls
+        // (probably, mods has 2 or more bits set)
+        if( !evt && me->GetWheelRotation() != 0 )
+        {
+            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_WHEEL, mods );
+            evt->SetParameter<int>( me->GetWheelRotation() );
+        }
     }
     else if( type == wxEVT_CHAR_HOOK || type == wxEVT_CHAR )
     {

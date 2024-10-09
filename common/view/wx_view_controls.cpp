@@ -377,66 +377,90 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         return;
 
     // Pick the modifier, if any.  Shift beats control beats alt, we don't support more than one.
-    int modifiers =
-            aEvent.ShiftDown() ? WXK_SHIFT :
-            ( aEvent.ControlDown() ? WXK_CONTROL : ( aEvent.AltDown() ? WXK_ALT : 0 ) );
-
-    // Restrict zoom handling to the vertical axis, otherwise horizontal
-    // scrolling events (e.g. touchpads and some mice) end up interpreted
-    // as vertical scroll events and confuse the user.
-    if( modifiers == m_settings.m_scrollModifierZoom && axis == wxMOUSE_WHEEL_VERTICAL )
+    int nMods = 0;
+    int modifiers = 0;
+    if( aEvent.ShiftDown() )
     {
-        const int    rotation  = aEvent.GetWheelRotation() * ( m_settings.m_scrollReverseZoom ? -1 : 1 );
-        const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
+        nMods += 1;
+        modifiers = WXK_SHIFT;
+    }
+    if( aEvent.ControlDown() )
+    {
+        nMods += 1;
+        modifiers = modifiers == 0 ? WXK_CONTROL : modifiers;
+    }
+    if( aEvent.AltDown() )
+    {
+        nMods += 1;
+        modifiers = modifiers == 0 ? WXK_ALT : modifiers;
+    }
 
-        if( IsCursorWarpingEnabled() )
+    // Zero or one modifier is view control
+    if( nMods <= 1 )
+    {
+        // Restrict zoom handling to the vertical axis, otherwise horizontal
+        // scrolling events (e.g. touchpads and some mice) end up interpreted
+        // as vertical scroll events and confuse the user.
+        if( modifiers == m_settings.m_scrollModifierZoom && axis == wxMOUSE_WHEEL_VERTICAL )
         {
-            CenterOnCursor();
-            m_view->SetScale( m_view->GetScale() * zoomScale );
+            const int rotation =
+                    aEvent.GetWheelRotation() * ( m_settings.m_scrollReverseZoom ? -1 : 1 );
+            const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
+
+            if( IsCursorWarpingEnabled() )
+            {
+                CenterOnCursor();
+                m_view->SetScale( m_view->GetScale() * zoomScale );
+            }
+            else
+            {
+                const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
+                m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+            }
+
+            // Refresh the zoom level and mouse position on message panel
+            // (mouse position has not changed, only the zoom level has changed):
+            refreshMouse( true );
         }
         else
         {
-            const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-            m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+            // Scrolling
+            VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false )
+                                 * ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
+            double scrollX = 0.0;
+            double scrollY = 0.0;
+            bool   hReverse = false;
+
+            if( axis != wxMOUSE_WHEEL_HORIZONTAL )
+                hReverse = m_settings.m_scrollReversePanH;
+
+            if( axis == wxMOUSE_WHEEL_HORIZONTAL || modifiers == m_settings.m_scrollModifierPanH )
+            {
+                if( hReverse )
+                    scrollX = scrollVec.x;
+                else
+                    scrollX = ( axis == wxMOUSE_WHEEL_HORIZONTAL ) ? scrollVec.x : -scrollVec.x;
+            }
+            else
+            {
+                scrollY = -scrollVec.y;
+            }
+
+            VECTOR2D delta( scrollX, scrollY );
+
+            m_view->SetCenter( m_view->GetCenter() + delta );
+            refreshMouse( true );
         }
 
-        // Refresh the zoom level and mouse position on message panel
-        // (mouse position has not changed, only the zoom level has changed):
-        refreshMouse( true );
+        // Do not skip this event, otherwise wxWidgets will fire
+        // 3 wxEVT_SCROLLWIN_LINEUP or wxEVT_SCROLLWIN_LINEDOWN (normal wxWidgets behavior)
+        // and we do not want that.
     }
     else
     {
-        // Scrolling
-        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
-                             ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
-        double scrollX  = 0.0;
-        double scrollY  = 0.0;
-        bool   hReverse = false;
-
-        if( axis != wxMOUSE_WHEEL_HORIZONTAL )
-            hReverse = m_settings.m_scrollReversePanH;
-
-        if( axis == wxMOUSE_WHEEL_HORIZONTAL || modifiers == m_settings.m_scrollModifierPanH )
-        {
-            if( hReverse )
-                scrollX = scrollVec.x;
-            else
-                scrollX = ( axis == wxMOUSE_WHEEL_HORIZONTAL ) ? scrollVec.x : -scrollVec.x;
-        }
-        else
-        {
-            scrollY = -scrollVec.y;
-        }
-
-        VECTOR2D delta( scrollX, scrollY );
-
-        m_view->SetCenter( m_view->GetCenter() + delta );
-        refreshMouse( true );
+        // When we have muliple mods, forward it for tool handling
+        aEvent.Skip();
     }
-
-    // Do not skip this event, otherwise wxWidgets will fire
-    // 3 wxEVT_SCROLLWIN_LINEUP or wxEVT_SCROLLWIN_LINEDOWN (normal wxWidgets behavior)
-    // and we do not want that.
 }
 
 

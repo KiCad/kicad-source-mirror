@@ -396,6 +396,27 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else
                 m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
         }
+        else if( evt->Action() == TA_MOUSE_WHEEL )
+        {
+            int field = -1;
+
+            if( evt->Modifier() == ( MD_SHIFT | MD_ALT ) )
+                field = 0;
+            else if( evt->Modifier() == ( MD_CTRL | MD_ALT ) )
+                field = 1;
+            // any more?
+
+            if( field >= 0 )
+            {
+                const int          delta = evt->Parameter<int>();
+                ACTIONS::INCREMENT incParams{
+                    delta > 0 ? 1 : -1,
+                    field,
+                };
+
+                m_toolMgr->RunAction( ACTIONS::increment, incParams );
+            }
+        }
         else if( evt->IsDrag( BUT_LEFT ) )
         {
             m_disambiguateTimer.Stop();
