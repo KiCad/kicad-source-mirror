@@ -583,6 +583,7 @@ set( COMMON_SRCS
     grid_tricks.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
+    increment.cpp
     kiface_base.cpp
     kiway_player.cpp
     lib_table_grid_tricks.cpp

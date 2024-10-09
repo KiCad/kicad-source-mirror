@@ -22,17 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "symbol_editor_pin_tool.h"
+
 #include <tools/ee_selection_tool.h>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
 #include <kidialog.h>
 #include <ee_actions.h>
 #include <dialogs/dialog_pin_properties.h>
+#include <increment.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <pgm_base.h>
 #include <wx/debug.h>
-#include "symbol_editor_pin_tool.h"
 
 
 static ELECTRICAL_PINTYPE g_LastPinType            = ELECTRICAL_PINTYPE::PT_INPUT;
@@ -79,9 +81,6 @@ static int GetLastPinNumSize()
 
     return g_LastPinNumSize;
 }
-
-
-extern bool IncrementLabelMember( wxString& name, int aIncrement );
 
 
 SYMBOL_EDITOR_PIN_TOOL::SYMBOL_EDITOR_PIN_TOOL() :
@@ -434,11 +433,11 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
     pin->Move( step );
 
     wxString nextName = pin->GetName();
-    IncrementLabelMember( nextName, settings->m_Repeat.label_delta );
+    IncrementString( nextName, settings->m_Repeat.label_delta );
     pin->SetName( nextName );
 
     wxString nextNumber = pin->GetNumber();
-    IncrementLabelMember( nextNumber, settings->m_Repeat.label_delta );
+    IncrementString( nextNumber, settings->m_Repeat.label_delta );
     pin->SetNumber( nextNumber );
 
     if( m_frame->SynchronizePins() )

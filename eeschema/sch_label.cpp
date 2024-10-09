@@ -25,6 +25,7 @@
 
 #include <advanced_config.h>
 #include <base_units.h>
+#include <increment.h>
 #include <pgm_base.h>
 #include <sch_edit_frame.h>
 #include <sch_plotter.h>
@@ -47,58 +48,6 @@
 #include <magic_enum.hpp>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
-
-
-bool IncrementLabelMember( wxString& name, int aIncrement )
-{
-    if( name.IsEmpty() )
-        return true;
-
-    wxString suffix;
-    wxString digits;
-    wxString outputFormat;
-    wxString outputNumber;
-    int      ii     = name.Len() - 1;
-    int      dCount = 0;
-
-    while( ii >= 0 && !wxIsdigit( name.GetChar( ii ) ) )
-    {
-        suffix = name.GetChar( ii ) + suffix;
-        ii--;
-    }
-
-    while( ii >= 0 && wxIsdigit( name.GetChar( ii ) ) )
-    {
-        digits = name.GetChar( ii ) + digits;
-        ii--;
-        dCount++;
-    }
-
-    if( digits.IsEmpty() )
-        return true;
-
-    long number = 0;
-
-    if( digits.ToLong( &number ) )
-    {
-        number += aIncrement;
-
-        // Don't let result go below zero
-
-        if( number > -1 )
-        {
-            name.Remove( ii + 1 );
-            //write out a format string with correct number of leading zeroes
-            outputFormat.Printf( wxS( "%%0%dld" ), dCount );
-            //write out the number using the format string
-            outputNumber.Printf( outputFormat, number );
-            name << outputNumber << suffix;
-            return true;
-        }
-    }
-
-    return false;
-}
 
 
 /* Coding polygons for global symbol graphic shapes.
@@ -538,7 +487,7 @@ bool SCH_LABEL_BASE::IncrementLabel( int aIncrement )
 {
     wxString text = GetText();
 
-    if( IncrementLabelMember( text, aIncrement ) )
+    if( IncrementString( text, aIncrement ) )
     {
         SetText( text );
         return true;
