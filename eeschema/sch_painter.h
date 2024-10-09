@@ -125,15 +125,7 @@ private:
 
     int getOperatingPointTextSize() const;
 
-    void triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
-    void strokeText( const wxString& aText, const VECTOR2D& aPosition,
-                     const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
-    void bitmapText( const wxString& aText, const VECTOR2D& aPosition,
-                     const TEXT_ATTRIBUTES& aAttrs );
-    void knockoutText( const wxString& aText, const VECTOR2D& aPosition,
-                       const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
-    void boxText( const wxString& aText, const VECTOR2D& aPosition,
-                  const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
+    void triLine( const VECTOR2D& a, const VECTOR2D& b, const VECTOR2D& c );
 
     wxString expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext );
 

@@ -50,6 +50,7 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_cbMarkSimExclusions;
 		wxCheckBox* m_checkShowOPVoltages;
 		wxCheckBox* m_checkShowOPCurrents;
+		wxCheckBox* m_checkShowPinAltModeIcons;
 		wxCheckBox* m_checkPageLimits;
 		wxStaticText* m_selectionLabel;
 		wxStaticLine* m_staticline2;

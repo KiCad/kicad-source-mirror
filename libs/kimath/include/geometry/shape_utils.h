@@ -126,8 +126,12 @@ SHAPE_ARC MakeArcCw180( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Dire
  *
  * For directions N, E, S, W, the point is the center of the side.
  * For directions NW, NE, SW, SE, the point is the corner.
+ *
+ * @param aOutset is a distance to move the point outwards from the rectangle,
+ *                in the direction of the corner (i.e. perpendicular to the side,
+ *                or 45 degrees from the corner).
  */
-VECTOR2I GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir );
+VECTOR2I GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir, int aOutset = 0 );
 
 
 /**

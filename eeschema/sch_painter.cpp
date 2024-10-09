@@ -32,6 +32,7 @@
 #include <callback_gal.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_utils.h>
 #include <gr_text.h>
 #include <sch_pin.h>
 #include <math/util.h>
@@ -168,7 +169,7 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         m_gal->SetStrokeColor( COLOR4D( LIGHTRED ) );
         m_gal->SetLineWidth( Mils2ui( 2 ) );
         m_gal->SetGlyphSize( VECTOR2D( Mils2ui( 20 ), Mils2ui( 20 ) ) );
-        m_gal->StrokeText( conn->Name( true ), pos, 0.0, 0 );
+        m_gal->StrokeText( *m_gal, conn->Name( true ), pos, 0.0, 0 );
     }
 
 #endif
@@ -562,9 +563,39 @@ static bool isFieldsLayer( int aLayer )
 }
 
 
-void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
-                              const TEXT_ATTRIBUTES& aAttrs,
-                              const KIFONT::METRICS& aFontMetrics )
+static BOX2I GetTextExtents( const wxString& aText, const VECTOR2D& aPosition, KIFONT::FONT& aFont,
+                             const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+{
+    const VECTOR2I extents =
+            aFont.StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth, aAttrs.m_Bold,
+                                        aAttrs.m_Italic, aFontMetrics );
+    BOX2I box( aPosition, VECTOR2I( extents.x, aAttrs.m_Size.y ) );
+
+    switch( aAttrs.m_Halign )
+    {
+    case GR_TEXT_H_ALIGN_LEFT: break;
+    case GR_TEXT_H_ALIGN_CENTER: box.SetX( box.GetX() - box.GetWidth() / 2 ); break;
+    case GR_TEXT_H_ALIGN_RIGHT: box.SetX( box.GetX() - box.GetWidth() ); break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) ); break;
+    }
+
+    switch( aAttrs.m_Valign )
+    {
+    case GR_TEXT_V_ALIGN_TOP: break;
+    case GR_TEXT_V_ALIGN_CENTER: box.SetY( box.GetY() - box.GetHeight() / 2 ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: box.SetY( box.GetY() - box.GetHeight() ); break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) ); break;
+    }
+
+    box.Normalize(); // Make h and v sizes always >= 0
+    box = box.GetBoundingBoxRotated( aPosition, aAttrs.m_Angle );
+
+    return box;
+}
+
+
+static void strokeText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                        const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
 
@@ -574,30 +605,30 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
                                       aAttrs.m_Italic );
     }
 
-    m_gal->SetIsFill( font->IsOutline() );
-    m_gal->SetIsStroke( font->IsStroke() );
+    aGal.SetIsFill( font->IsOutline() );
+    aGal.SetIsStroke( font->IsStroke() );
 
-    font->Draw( m_gal, aText, aPosition, aAttrs, aFontMetrics );
+    font->Draw( &aGal, aText, aPosition, aAttrs, aFontMetrics );
 }
 
 
-void SCH_PAINTER::bitmapText( const wxString& aText, const VECTOR2D& aPosition,
-                              const TEXT_ATTRIBUTES& aAttrs )
+static void bitmapText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                        const TEXT_ATTRIBUTES& aAttrs )
 {
     // Bitmap font has different metrics from the stroke font so we compensate a bit before
     // stroking
-    m_gal->SetGlyphSize( VECTOR2I( aAttrs.m_Size.x, KiROUND( aAttrs.m_Size.y * 1.05 ) ) );
-    m_gal->SetLineWidth( (float) aAttrs.m_StrokeWidth * 1.35f );
+    aGal.SetGlyphSize( VECTOR2I( aAttrs.m_Size.x, KiROUND( aAttrs.m_Size.y * 1.05 ) ) );
+    aGal.SetLineWidth( (float) aAttrs.m_StrokeWidth * 1.35f );
 
-    m_gal->SetHorizontalJustify( aAttrs.m_Halign );
-    m_gal->SetVerticalJustify( aAttrs.m_Valign );
+    aGal.SetHorizontalJustify( aAttrs.m_Halign );
+    aGal.SetVerticalJustify( aAttrs.m_Valign );
 
-    m_gal->BitmapText( aText, aPosition, aAttrs.m_Angle );
+    aGal.BitmapText( aText, aPosition, aAttrs.m_Angle );
 }
 
 
-void SCH_PAINTER::knockoutText( const wxString& aText, const VECTOR2D& aPosition,
-                                const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+static void knockoutText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                          const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
     TEXT_ATTRIBUTES attrs( aAttrs );
     KIFONT::FONT*   font = aAttrs.m_Font;
@@ -635,15 +666,15 @@ void SCH_PAINTER::knockoutText( const wxString& aText, const VECTOR2D& aPosition
     finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
     finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    m_gal->SetIsStroke( false );
-    m_gal->SetIsFill( true );
-    m_gal->SetFillColor( attrs.m_Color );
-    m_gal->DrawPolygon( finalPoly );
+    aGal.SetIsStroke( false );
+    aGal.SetIsFill( true );
+    aGal.SetFillColor( attrs.m_Color );
+    aGal.DrawPolygon( finalPoly );
 }
 
 
-void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
-                           const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+static void boxText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                     const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
 
@@ -653,39 +684,18 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
                                       aAttrs.m_Italic );
     }
 
-    VECTOR2I extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
-                                                   aAttrs.m_Bold, aAttrs.m_Italic, aFontMetrics );
-    BOX2I box( aPosition, VECTOR2I( extents.x, aAttrs.m_Size.y ) );
-
-    switch( aAttrs.m_Halign )
-    {
-    case GR_TEXT_H_ALIGN_LEFT:                                                         break;
-    case GR_TEXT_H_ALIGN_CENTER:        box.SetX( box.GetX() - box.GetWidth() / 2 );   break;
-    case GR_TEXT_H_ALIGN_RIGHT:         box.SetX( box.GetX() - box.GetWidth() );       break;
-    case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) );  break;
-    }
-
-    switch(  aAttrs.m_Valign )
-    {
-    case GR_TEXT_V_ALIGN_TOP:                                                          break;
-    case GR_TEXT_V_ALIGN_CENTER:        box.SetY( box.GetY() - box.GetHeight() / 2 );  break;
-    case GR_TEXT_V_ALIGN_BOTTOM:        box.SetY( box.GetY() - box.GetHeight() );      break;
-    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) );  break;
-    }
+    BOX2I box = GetTextExtents( aText, aPosition, *font, aAttrs, aFontMetrics );
 
     // Give the highlight a bit of margin.
     box.Inflate( 0, aAttrs.m_StrokeWidth * 2 );
 
-    box.Normalize();       // Make h and v sizes always >= 0
-    box = box.GetBoundingBoxRotated( aPosition, aAttrs.m_Angle );
-
-    m_gal->SetIsFill( true );
-    m_gal->SetIsStroke( false );
-    m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
+    aGal.SetIsFill( true );
+    aGal.SetIsStroke( false );
+    aGal.DrawRectangle( box.GetOrigin(), box.GetEnd() );
 }
 
 
-void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c )
+void SCH_PAINTER::triLine( const VECTOR2D& a, const VECTOR2D& b, const VECTOR2D& c )
 {
     m_gal->DrawLine( a, b );
     m_gal->DrawLine( b, c );
@@ -783,6 +793,396 @@ void SCH_PAINTER::drawPinDanglingIndicator( const VECTOR2I& aPos, const COLOR4D&
 }
 
 
+/**
+ * Draw an alternate pin mode indicator icon.
+ */
+static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, bool aBaseSelected,
+                                 bool aRotate, int aExtraLineWidth, const COLOR4D& aColor )
+{
+    aGal.Save();
+
+    aGal.Translate( aPos );
+    if( aRotate )
+    {
+        aGal.Rotate( ANGLE_270.AsRadians() );
+    }
+
+    aGal.SetIsFill( false );
+    aGal.SetIsStroke( true );
+    aGal.SetLineWidth( KiROUND( aSize / 10.0 + aExtraLineWidth ) );
+    aGal.SetStrokeColor( aColor );
+
+    /*
+     *  ----------->
+     *      + <--center
+     *     \------->
+     *
+     * or
+     *
+     *  -----  ---->
+     *     \
+     *      \------>
+     */
+
+    const double lineYOffset = aSize / 4;
+    const double arrowHead = aSize / 8;
+
+    const VECTOR2D topLineREnd = VECTOR2D{ aSize / 2, -lineYOffset };
+    const VECTOR2D btmLineREnd = VECTOR2D{ aSize / 2, lineYOffset };
+
+    // Top line and arrowhead
+    if( aBaseSelected )
+    {
+        // Full top line
+        aGal.DrawLine( topLineREnd, topLineREnd - VECTOR2D{ aSize, 0 } );
+    }
+    else
+    {
+        // Line with a gap
+        aGal.DrawLine( topLineREnd, topLineREnd - VECTOR2D{ aSize / 2, 0 } );
+        aGal.DrawLine( topLineREnd - VECTOR2D{ aSize, 0 },
+                       topLineREnd - VECTOR2D{ aSize * 0.7, 0 } );
+    }
+    aGal.DrawLine( topLineREnd, topLineREnd - VECTOR2D{ arrowHead * 1.2, arrowHead } );
+    aGal.DrawLine( topLineREnd, topLineREnd - VECTOR2D{ arrowHead * 1.2, -arrowHead } );
+
+    // Bottom line and arrowhead
+    aGal.DrawLine( btmLineREnd, btmLineREnd - VECTOR2D{ aSize / 2, 0 } );
+    aGal.DrawLine( btmLineREnd, btmLineREnd - VECTOR2D{ arrowHead * 1.2, arrowHead } );
+    aGal.DrawLine( btmLineREnd, btmLineREnd - VECTOR2D{ arrowHead * 1.2, -arrowHead } );
+
+    // Top and bottom 'S' arcs
+    if( !aBaseSelected )
+    {
+        aGal.DrawArc( topLineREnd - VECTOR2D{ aSize, -lineYOffset },
+                        lineYOffset, ANGLE_0, -ANGLE_90 );
+    }
+    aGal.DrawArc( topLineREnd - VECTOR2D{ aSize - lineYOffset * 2, -lineYOffset },
+                    lineYOffset, ANGLE_180, -ANGLE_90 );
+
+    aGal.Restore();
+};
+
+
+/**
+ * Small helper class to figure out the layout of text and text-adjacent icons,
+ * including text shadows and offsets.
+ */
+class TEXT_AND_ICON_LAYOUT
+{
+public:
+
+    /**
+     * Create a new layout helper.
+     */
+    TEXT_AND_ICON_LAYOUT( KIGFX::GAL& aGal, const TEXT_ATTRIBUTES& aAttrs,
+                          const KIFONT::METRICS& aFontMetrics, const double aShadowWidth,
+                          const double aIconSize = 0 ) :
+            m_gal( aGal ), m_attrs( aAttrs ), m_fontMetrics( aFontMetrics ),
+            m_iconSize( aIconSize ), m_iconGap( aIconSize / 4.0 ), m_shadowWidth( aShadowWidth )
+    {
+        // Due to the fact a shadow text in position INSIDE or OUTSIDE is drawn left or right aligned,
+        // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
+        // texts drawn as GR_TEXT_H_ALIGN_CENTER do not need a specific offset.
+        // this offset is shadowWidth/2 but for some reason we need to slightly modify this offset
+        // for a better look (better alignment of shadow shape), for KiCad font only
+        if( !KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font )->IsOutline() )
+        {
+            const float adjust = 1.2f; // Value chosen after tests
+            m_shadowOffset = m_shadowWidth / 2.0f * adjust;
+        }
+    }
+
+    struct LOCATIONS
+    {
+        // Adjusted text pos to include shadow offsets
+        VECTOR2D              NormalPos;
+        VECTOR2D              ShadowPos;
+        std::vector<VECTOR2I> IconPos;
+    };
+
+    /**
+     * Get the layout of text and icons for a given text string at a position.
+     *
+     * It will return the position of the text and the icons, as well as the computed shadow
+     * text position.
+     */
+    LOCATIONS getTextLayout( const wxString& aText, const VECTOR2I& aPos,
+                             GR_TEXT_H_ALIGN_T aIconSide, std::size_t aNIcons, bool aDrawShadow )
+    {
+        LOCATIONS locs{
+            aPos,
+            aPos,
+            {},
+        };
+
+        BOX2I extents = GetTextExtents( aText, aPos, *m_attrs.m_Font, m_attrs, m_fontMetrics );
+
+        DIRECTION_45::Directions iconDir = DIRECTION_45::N;
+
+        if( m_attrs.m_Angle == ANGLE_HORIZONTAL )
+        {
+            if( aIconSide == GR_TEXT_H_ALIGN_LEFT )
+                iconDir = DIRECTION_45::W;
+            else
+                iconDir = DIRECTION_45::E;
+        }
+        else
+        {
+            if( aIconSide == GR_TEXT_H_ALIGN_LEFT )
+                iconDir = DIRECTION_45::S;
+            else
+                iconDir = DIRECTION_45::N;
+        }
+
+        int offset = m_iconSize / 2 + m_iconGap;
+        for( std::size_t i = 0; i < aNIcons; ++i )
+        {
+            locs.IconPos.push_back( KIGEOM::GetPoint( extents, iconDir, offset ) );
+            offset += m_iconGap + m_iconSize;
+        }
+
+        // Apply shadow offsets
+        if( m_attrs.m_Halign != GR_TEXT_H_ALIGN_CENTER )
+        {
+            if( m_attrs.m_Angle == ANGLE_HORIZONTAL )
+            {
+                locs.ShadowPos.x -=
+                        m_shadowOffset * ( m_attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT ? 1 : -1 );
+            }
+            else
+            {
+                locs.ShadowPos.y +=
+                        m_shadowOffset * ( m_attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT ? 1 : -1 );
+            }
+        }
+
+        return locs;
+    }
+
+private:
+    KIGFX::GAL&            m_gal;
+    const TEXT_ATTRIBUTES& m_attrs;
+    const KIFONT::METRICS& m_fontMetrics;
+    double                 m_iconSize;
+    double                 m_iconGap;
+    double                 m_shadowWidth;
+    double                 m_shadowOffset;
+};
+
+
+/**
+ * Helper class to gather logic relating to the positioning
+ * of text in the four pin "slots":
+ *
+ *            above
+ *  inside  |--------x   outside
+ *            below
+ */
+class PIN_TEXTS
+{
+public:
+    enum SLOT_ID
+    {
+        INSIDE = 0,
+        OUTSIDE,
+        ABOVE,
+        BELOW,
+    };
+
+    enum class SLOT_ROLE
+    {
+        NAME = 0,
+        NUMBER,
+        ELECTRICAL_TYPE,
+    };
+
+    // Information about the placement of a single text label for a pin
+    // This is independent of the actual text content.
+    struct TEXT_PLACEMENT
+    {
+        // Nominal text anchor position
+        VECTOR2D Pos;
+        // Text alignment relative to anchor
+        GR_TEXT_H_ALIGN_T HAlign;
+        GR_TEXT_V_ALIGN_T VAlign;
+        // H/V text?
+        EDA_ANGLE Angle;
+        // Is the icon on the left or right (in the text axis)?
+        GR_TEXT_H_ALIGN_T IconSide;
+    };
+
+    struct SLOT
+    {
+        SLOT() :
+            size( 0 ),
+            thickness( 0 ),
+            colour( COLOR4D::UNSPECIFIED ),
+            role( SLOT_ROLE::NAME )
+        {
+        }
+
+        const bool ShouldDraw() const
+        {
+            return size > 0 && colour != COLOR4D::UNSPECIFIED && !text.IsEmpty();
+        }
+
+        int       size;
+        float     thickness;
+        COLOR4D   colour;
+        wxString  text;
+        SLOT_ROLE role;
+    };
+
+    PIN_TEXTS( const SCH_PIN& aPin, float aPenWidth, float aPinTextMargin ) :
+            m_pin( aPin ), m_offsets{ 0, 0, 0, 0 }, m_penWidth( aPenWidth ),
+            m_pinTextMargin( aPinTextMargin )
+    {
+    }
+
+    // Const slot iterator
+    using const_iterator = std::array<SLOT, 4>::const_iterator;
+
+    const_iterator begin() const { return m_slots.begin(); }
+
+    const_iterator end() const { return m_slots.end(); }
+
+    SLOT&       GetSlot( SLOT_ID aSlot ) { return m_slots[aSlot]; }
+    const SLOT& GetSlot( SLOT_ID aSlot ) const { return m_slots[aSlot]; }
+
+    const void ComputeOffsets()
+    {
+        float textOffset = m_pin.GetParentSymbol()->GetPinNameOffset();
+
+        m_offsets[INSIDE] = textOffset - m_slots[INSIDE].thickness / 2.0;
+        m_offsets[OUTSIDE] = m_pinTextMargin + TARGET_PIN_RADIUS - m_slots[OUTSIDE].thickness / 2.0;
+        m_offsets[ABOVE] = m_pinTextMargin + m_penWidth / 2.0 + m_slots[ABOVE].thickness / 2.0;
+        m_offsets[BELOW] = m_pinTextMargin + m_penWidth / 2.0 + m_slots[BELOW].thickness / 2.0;
+
+        if( m_pin.IsDangling() )
+            m_offsets[OUTSIDE] += TARGET_PIN_RADIUS / 2.0f;
+    }
+
+    bool SlotRendersAsBitmap( const SLOT& aSlot, KIGFX::GAL& aGal ) const
+    {
+        // Rendering text is expensive (particularly when using outline fonts).  At small effective
+        // sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
+        // bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
+        // performance gain becomes more significant.
+        static const float BITMAP_FONT_SIZE_THRESHOLD = 3.5;
+
+        // Any text non bitmappable?
+        return aSlot.size * aGal.GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
+    }
+
+    /**
+     * Replace all slot colours with a new colour.
+     */
+    void SetColorOverride( const COLOR4D& aColor )
+    {
+        for( SLOT& slot : m_slots )
+        {
+            slot.colour = aColor;
+        }
+    }
+
+    TEXT_PLACEMENT GetTextPlacement( const PIN_TEXTS::SLOT& aSlot,
+                                     PIN_ORIENTATION        aPinOrientation ) const
+    {
+        // Work out which slot it is
+        SLOT_ID slotId = INSIDE;
+        for( int i = 0; i < 4; ++i )
+        {
+            if( &aSlot == &m_slots[i] )
+            {
+                slotId = static_cast<SLOT_ID>( i );
+                break;
+            }
+            // Should not pass a slot that isn't in the list
+            wxASSERT( i < 4 );
+        }
+
+        TEXT_PLACEMENT placement;
+        const float    len = m_pin.GetLength();
+
+        // For PIN_LEFT
+        switch( slotId )
+        {
+        case PIN_TEXTS::SLOT_ID::INSIDE:
+            placement = {
+                VECTOR2D( -m_offsets[INSIDE] - len, 0 ),
+                GR_TEXT_H_ALIGN_RIGHT,
+                GR_TEXT_V_ALIGN_CENTER,
+                ANGLE_HORIZONTAL,
+                GR_TEXT_H_ALIGN_LEFT,
+            };
+            break;
+        case PIN_TEXTS::SLOT_ID::OUTSIDE:
+            placement = {
+                VECTOR2D( m_offsets[OUTSIDE], 0 ),
+                GR_TEXT_H_ALIGN_LEFT,
+                GR_TEXT_V_ALIGN_CENTER,
+                ANGLE_HORIZONTAL,
+                GR_TEXT_H_ALIGN_RIGHT,
+            };
+            break;
+        case PIN_TEXTS::SLOT_ID::ABOVE:
+            placement = {
+                VECTOR2D( -len / 2.0, -m_offsets[ABOVE] ),
+                GR_TEXT_H_ALIGN_CENTER,
+                GR_TEXT_V_ALIGN_BOTTOM,
+                ANGLE_HORIZONTAL,
+                GR_TEXT_H_ALIGN_RIGHT,
+            };
+            break;
+        case PIN_TEXTS::SLOT_ID::BELOW:
+            placement = {
+                VECTOR2D( -len / 2.0, m_offsets[BELOW] ),
+                GR_TEXT_H_ALIGN_CENTER,
+                GR_TEXT_V_ALIGN_TOP,
+                ANGLE_HORIZONTAL,
+                GR_TEXT_H_ALIGN_RIGHT,
+            };
+            break;
+        }
+
+        switch( aPinOrientation )
+        {
+        case PIN_ORIENTATION::PIN_LEFT:
+            break;
+        case PIN_ORIENTATION::PIN_RIGHT:
+            placement.Pos = { -placement.Pos.x, placement.Pos.y };
+            placement.HAlign = GetFlippedAlignment( placement.HAlign );
+            placement.IconSide = GetFlippedAlignment( placement.IconSide );
+            break;
+        case PIN_ORIENTATION::PIN_UP:
+            placement.Pos = { placement.Pos.y, placement.Pos.x };
+            placement.Angle = ANGLE_VERTICAL;
+            placement.HAlign = GetFlippedAlignment( placement.HAlign );
+            placement.IconSide = GetFlippedAlignment( placement.IconSide );
+            break;
+        case PIN_ORIENTATION::PIN_DOWN:
+            placement.Pos = { placement.Pos.y, -placement.Pos.x };
+            placement.Angle = ANGLE_VERTICAL;
+            break;
+        case PIN_ORIENTATION::INHERIT:
+            wxFAIL_MSG( "Unknown pin orientation" );
+            break;
+        }
+
+        placement.Pos += m_pin.GetPosition();
+        return placement;
+    };
+
+private:
+    const SCH_PIN&      m_pin;
+    std::array<SLOT, 4> m_slots;
+    std::array<int, 4>  m_offsets;
+    const float         m_penWidth;
+    const float         m_pinTextMargin;
+};
+
+
 void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 {
     // Don't draw pins from a selection view-group.  Pins in a schematic must always be drawn
@@ -793,19 +1193,19 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     if( !isUnitAndConversionShown( aPin ) )
         return;
 
-    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    const bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;
 
-    bool drawingDangling = aLayer == LAYER_DANGLING;
-    bool drawingOP = aLayer == LAYER_OP_CURRENTS;
-    bool isDangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
+    const bool drawingDangling = aLayer == LAYER_DANGLING;
+    const bool drawingOP = aLayer == LAYER_OP_CURRENTS;
+    const bool isDangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
 
     if( drawingShadows && !( aPin->IsBrightened() || aPin->IsSelected() ) )
         return;
 
-    VECTOR2I pos = aPin->GetPosition();
+    const VECTOR2I pos = aPin->GetPosition();
     COLOR4D  color = getRenderColor( aPin, LAYER_PIN, drawingShadows, aDimmed );
 
     if( !aPin->IsVisible() )
@@ -840,9 +1240,9 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     if( m_schSettings.GetDrawBoundingBoxes() )
         drawItemBoundingBox( aPin );
 
-    VECTOR2I p0 = aPin->GetPinRoot();
-    VECTOR2I dir( sign( pos.x - p0.x ), sign( pos.y - p0.y ) );
-    int      len = aPin->GetLength();
+    const VECTOR2I p0 = aPin->GetPinRoot();
+    const VECTOR2I dir( sign( pos.x - p0.x ), sign( pos.y - p0.y ) );
+    const int      len = aPin->GetLength();
 
     if( drawingOP && !aPin->GetOperatingPoint().IsEmpty() )
     {
@@ -872,7 +1272,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
             attrs.m_StrokeWidth = GetPenSizeForDemiBold( textSize );
             attrs.m_Color = m_schSettings.GetLayerColor( LAYER_OP_CURRENTS );
 
-            knockoutText( aPin->GetOperatingPoint(), mid, attrs, aPin->GetFontMetrics() );
+            knockoutText( *m_gal, aPin->GetOperatingPoint(), mid, attrs, aPin->GetFontMetrics() );
         }
     }
 
@@ -1011,7 +1411,6 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     // Draw the labels
     const SYMBOL* symbol = aPin->GetParentSymbol();
     float         penWidth = (float) m_schSettings.GetDefaultPenWidth();
-    int           textOffset = symbol->GetPinNameOffset();
     float         nameStrokeWidth = getLineWidth( aPin, false );
     float         numStrokeWidth = getLineWidth( aPin, false );
     bool          showPinNames = symbol->GetShowPinNames();
@@ -1022,243 +1421,151 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
     float PIN_TEXT_MARGIN = schIUScale.MilsToIU( KiROUND( 24 * m_schSettings.m_TextOffsetRatio ) );
 
-    // Four locations around a pin where text can be drawn
-    enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
-    int      size[4] = { 0, 0, 0, 0 };
-    float    thickness[4] = { numStrokeWidth, numStrokeWidth, numStrokeWidth, numStrokeWidth };
-    COLOR4D  colour[4];
-    wxString text[4];
+    PIN_TEXTS pinTexts( *aPin, penWidth, PIN_TEXT_MARGIN );
+
+    const auto assignNameToSlot = [&]( PIN_TEXTS::SLOT_ID aSlot )
+    {
+        PIN_TEXTS::SLOT& slot = pinTexts.GetSlot( aSlot );
+        slot.size = aPin->GetNameTextSize();
+        slot.thickness = nameStrokeWidth;
+        slot.colour = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
+        slot.text = aPin->GetShownName();
+        slot.role = PIN_TEXTS::SLOT_ROLE::NAME;
+    };
+
+    const auto assignNumberToSlot = [&]( PIN_TEXTS::SLOT_ID aSlot )
+    {
+        PIN_TEXTS::SLOT& slot = pinTexts.GetSlot( aSlot );
+        slot.size = aPin->GetNumberTextSize();
+        slot.thickness = numStrokeWidth;
+        slot.colour = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
+        slot.text = aPin->GetShownNumber();
+        slot.role = PIN_TEXTS::SLOT_ROLE::NUMBER;
+    };
 
     // TextOffset > 0 means pin NAMES on inside, pin NUMBERS above and nothing below
-    if( textOffset )
+    if( symbol->GetPinNameOffset() > 0 )
     {
-        size     [INSIDE] = showPinNames ? aPin->GetNameTextSize() : 0;
-        thickness[INSIDE] = nameStrokeWidth;
-        colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
-        text     [INSIDE] = aPin->GetShownName();
-
-        size     [ABOVE] = showPinNumbers ? aPin->GetNumberTextSize() : 0;
-        thickness[ABOVE] = numStrokeWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
-        text     [ABOVE] = aPin->GetShownNumber();
+        if( showPinNames )
+            assignNameToSlot( PIN_TEXTS::SLOT_ID::INSIDE );
+        if( showPinNumbers )
+            assignNumberToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
     }
     // Otherwise if both are shown pin NAMES go above and pin NUMBERS go below
     else if( showPinNames && showPinNumbers )
     {
-        size     [ABOVE] = aPin->GetNameTextSize();
-        thickness[ABOVE] = nameStrokeWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
-        text     [ABOVE] = aPin->GetShownName();
-
-        size     [BELOW] = aPin->GetNumberTextSize();
-        thickness[BELOW] = numStrokeWidth;
-        colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
-        text     [BELOW] = aPin->GetShownNumber();
+        assignNameToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
+        assignNumberToSlot( PIN_TEXTS::SLOT_ID::BELOW );
     }
     else if( showPinNames )
     {
-        size     [ABOVE] = aPin->GetNameTextSize();
-        thickness[ABOVE] = nameStrokeWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
-        text     [ABOVE] = aPin->GetShownName();
+        assignNameToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
     }
     else if( showPinNumbers )
     {
-        size     [ABOVE] = aPin->GetNumberTextSize();
-        thickness[ABOVE] = numStrokeWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
-        text     [ABOVE] = aPin->GetShownNumber();
+        assignNumberToSlot( PIN_TEXTS::SLOT_ID::ABOVE );
     }
 
     if( m_schSettings.m_ShowPinsElectricalType )
     {
-        size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
-        thickness[OUTSIDE] = float( size[OUTSIDE] ) / 8.0f;
-        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows, aDimmed );
-        text     [OUTSIDE] = aPin->GetElectricalTypeName();
+        PIN_TEXTS::SLOT& outside = pinTexts.GetSlot( PIN_TEXTS::SLOT_ID::OUTSIDE );
+        outside.size = std::max( aPin->GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
+        outside.thickness = float( outside.size ) / 8.0f;
+        outside.colour = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows, aDimmed );
+        outside.text = aPin->GetElectricalTypeName();
+        outside.role = PIN_TEXTS::SLOT_ROLE::ELECTRICAL_TYPE;
     }
 
-    // Rendering text is expensive (particularly when using outline fonts).  At small effective
-    // sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
-    // bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
-    // performance gain becomes more significant.
-    #define BITMAP_FONT_SIZE_THRESHOLD 3.5
-
-    bool renderTextAsBitmap = size[0] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD
-                           && size[1] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD
-                           && size[2] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD
-                           && size[3] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
+    // Now we have set the slot content, we can compute things
+    pinTexts.ComputeOffsets();
 
     if( !aPin->IsVisible() )
     {
-        for( COLOR4D& c : colour )
-            c = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
+        pinTexts.SetColorOverride( getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed ) );
     }
 
-    float insideOffset  = (float) textOffset                  - thickness[INSIDE]  / 2.0f;
-    float outsideOffset = PIN_TEXT_MARGIN + TARGET_PIN_RADIUS - thickness[OUTSIDE] / 2.0f;
-    float aboveOffset   = PIN_TEXT_MARGIN + penWidth / 2.0f   + thickness[ABOVE]   / 2.0f;
-    float belowOffset   = PIN_TEXT_MARGIN + penWidth / 2.0f   + thickness[BELOW]   / 2.0f;
-
-    if( isDangling )
-        outsideOffset += TARGET_PIN_RADIUS / 2.0f;
+    float shadowWidth = 0.0f;
 
     if( drawingShadows )
     {
-        float shadowWidth = getShadowWidth( aPin->IsBrightened() );
-
-        for( float& t : thickness )
-            t += shadowWidth;
-
-        // Due to the fact a shadow text in position INSIDE or OUTSIDE is drawn left or right aligned,
-        // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
-        // texts drawn as GR_TEXT_H_ALIGN_CENTER do not need a specific offset.
-        // this offset is shadowWidth/2 but for some reason we need to slightly modify this offset
-        // for a better look (better alignment of shadow shape), for KiCad font only
-        if( !KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font )->IsOutline() )
-        {
-            const float adjust = 1.2f;      // Value chosen after tests
-            float shadowOffset = shadowWidth/2.0f * adjust;
-            insideOffset -= shadowOffset;
-            outsideOffset -= shadowOffset;
-        }
+        shadowWidth = getShadowWidth( aPin->IsBrightened() );
     }
 
-    auto drawText =
-            [&]( int i, const VECTOR2D& aPos, GR_TEXT_H_ALIGN_T hAlign, GR_TEXT_V_ALIGN_T vAlign,
-                 const EDA_ANGLE& aAngle )
-            {
-                if( text[i].IsEmpty() )
-                    return;
-
-                // Which of these gets used depends on the font technology, so set both
-                m_gal->SetStrokeColor( colour[i] );
-                m_gal->SetFillColor( colour[i] );
-
-                TEXT_ATTRIBUTES attrs;
-                attrs.m_Font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
-                attrs.m_Size = VECTOR2I( size[i], size[i] );
-                attrs.m_Halign = hAlign;
-                attrs.m_Valign = vAlign;
-                attrs.m_Angle = aAngle;
-                attrs.m_StrokeWidth = KiROUND( thickness[i] );
-
-                if( drawingShadows && !attrs.m_Font->IsOutline() )
-                {
-                    strokeText( text[i], aPos, attrs, aPin->GetFontMetrics() );
-                }
-                else if( drawingShadows )
-                {
-                    boxText( text[i], aPos, attrs, aPin->GetFontMetrics() );
-                }
-                else if( nonCached( aPin ) && renderTextAsBitmap )
-                {
-                    bitmapText( text[i], aPos, attrs );
-                    const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
-                }
-                else
-                {
-                    strokeText( text[i], aPos, attrs, aPin->GetFontMetrics() );
-                    const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
-                }
-            };
-
-    switch( aPin->GetOrientation() )
+    // Draw one text slot, either "real" or the shadow
+    const auto drawText = [&]( const PIN_TEXTS::SLOT& slot )
     {
-    case PIN_ORIENTATION::PIN_LEFT:
-        if( size[INSIDE] )
-        {
-            drawText( INSIDE, pos + VECTOR2D( -insideOffset - (float) len, 0 ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
-        }
-        if( size[OUTSIDE] )
-        {
-            drawText( OUTSIDE, pos + VECTOR2D( outsideOffset, 0 ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
-        }
-        if( size[ABOVE] )
-        {
-            drawText( ABOVE, pos + VECTOR2D( -len / 2.0, -aboveOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_HORIZONTAL );
-        }
-        if( size[BELOW] )
-        {
-            drawText( BELOW, pos + VECTOR2D( -len / 2.0, belowOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_HORIZONTAL );
-        }
-        break;
+        if( !slot.ShouldDraw() )
+            return;
 
-    case PIN_ORIENTATION::PIN_RIGHT:
-        if( size[INSIDE] )
-        {
-            drawText( INSIDE, pos + VECTOR2D( insideOffset + (float) len, 0 ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
-        }
-        if( size[OUTSIDE] )
-        {
-            drawText( OUTSIDE, pos + VECTOR2D( -outsideOffset, 0 ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
-        }
-        if( size[ABOVE] )
-        {
-            drawText( ABOVE, pos + VECTOR2D( len / 2.0, -aboveOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_HORIZONTAL );
-        }
-        if( size[BELOW] )
-        {
-            drawText( BELOW, pos + VECTOR2D( len / 2.0, belowOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_HORIZONTAL );
-        }
-        break;
+        const double iconSize = std::min( aPin->GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
+        const bool   renderTextAsBitmap = pinTexts.SlotRendersAsBitmap( slot, *m_gal );
 
-    case PIN_ORIENTATION::PIN_DOWN:
-        if( size[INSIDE] )
-        {
-            drawText( INSIDE, pos + VECTOR2D( 0, insideOffset + (float) len ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
-        }
-        if( size[OUTSIDE] )
-        {
-            drawText( OUTSIDE, pos + VECTOR2D( 0, -outsideOffset ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
-        }
-        if( size[ABOVE] )
-        {
-            drawText( ABOVE, pos + VECTOR2D( -aboveOffset, len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_VERTICAL );
-        }
-        if( size[BELOW] )
-        {
-            drawText( BELOW, pos + VECTOR2D( belowOffset, len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_VERTICAL );
-        }
-        break;
+        const PIN_TEXTS::TEXT_PLACEMENT placement =
+                pinTexts.GetTextPlacement( slot, aPin->GetOrientation() );
 
-    case PIN_ORIENTATION::PIN_UP:
-        if( size[INSIDE] )
-        {
-            drawText( INSIDE, pos + VECTOR2D( 0, -insideOffset - (float) len ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
-        }
-        if( size[OUTSIDE] )
-        {
-            drawText( OUTSIDE, pos + VECTOR2D( 0, outsideOffset ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
-        }
-        if( size[ABOVE] )
-        {
-            drawText( ABOVE, pos + VECTOR2D( -aboveOffset, -len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_VERTICAL );
-        }
-        if( size[BELOW] )
-        {
-            drawText( BELOW, pos + VECTOR2D( belowOffset, -len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_VERTICAL );
-        }
-        break;
+        // Which of these gets used depends on the font technology, so set both
+        m_gal->SetStrokeColor( slot.colour );
+        m_gal->SetFillColor( slot.colour );
 
-    default:
-        wxFAIL_MSG( "Unknown pin orientation" );
+        TEXT_ATTRIBUTES attrs;
+        attrs.m_Font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
+        attrs.m_Size = VECTOR2I( slot.size, slot.size );
+        attrs.m_Halign = placement.HAlign;
+        attrs.m_Valign = placement.VAlign;
+        attrs.m_Angle = placement.Angle;
+        attrs.m_StrokeWidth = KiROUND( slot.thickness );
+
+        // This object (and a quite lot of other code here) could actually be
+        // re-used - probably many pins will use these exact parameters. But pin
+        // paints are already cached, so it's unlikely to be much help.
+        TEXT_AND_ICON_LAYOUT tiLayout( *m_gal, attrs, aPin->GetFontMetrics(), shadowWidth,
+                                       iconSize );
+
+        TEXT_AND_ICON_LAYOUT::LOCATIONS locs = tiLayout.getTextLayout(
+                slot.text, placement.Pos, placement.IconSide, 1, drawingShadows );
+
+        if( drawingShadows )
+        {
+            attrs.m_StrokeWidth += KiROUND( shadowWidth );
+
+            if( !attrs.m_Font->IsOutline() )
+            {
+                strokeText( *m_gal, slot.text, locs.ShadowPos, attrs, aPin->GetFontMetrics() );
+            }
+            else
+            {
+                boxText( *m_gal, slot.text, locs.ShadowPos, attrs, aPin->GetFontMetrics() );
+            }
+        }
+        else if( nonCached( aPin ) && renderTextAsBitmap )
+        {
+            bitmapText( *m_gal, slot.text, locs.NormalPos, attrs );
+            const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
+        }
+        else
+        {
+            strokeText( *m_gal, slot.text, locs.NormalPos, attrs, aPin->GetFontMetrics() );
+            const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
+        }
+
+        const bool hasAltIcon =
+                ( slot.role == PIN_TEXTS::SLOT_ROLE::NAME ) && !aPin->GetAlternates().empty()
+                && eeconfig()->m_Appearance.show_pin_alt_icons && !renderTextAsBitmap;
+
+        if( hasAltIcon )
+        {
+            wxASSERT( locs.IconPos.size() >= 1 );
+
+            drawAltPinModesIcon( *m_gal, locs.IconPos[0], iconSize,
+                                 // TODO: doesn't work due to the tempPin having no alt
+                                 aPin->GetShownName() == aPin->GetBaseName(),
+                                 placement.Angle == ANGLE_VERTICAL, shadowWidth, slot.colour );
+        }
+    };
+
+    for( const PIN_TEXTS::SLOT& slot : pinTexts )
+    {
+        drawText( slot );
     }
 }
 
@@ -1473,7 +1780,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         attrs.m_StrokeWidth = GetPenSizeForDemiBold( textSize );
         attrs.m_Color = m_schSettings.GetLayerColor( LAYER_OP_VOLTAGES );
 
-        knockoutText( aLine->GetOperatingPoint(), pos, attrs, aLine->GetFontMetrics() );
+        knockoutText( *m_gal, aLine->GetOperatingPoint(), pos, attrs, aLine->GetFontMetrics() );
     }
 
     if( drawingOP )
@@ -1820,7 +2127,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         // vertically centered.
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
-        strokeText( shownText, pos, attrs, aText->GetFontMetrics() );
+        strokeText( *m_gal, shownText, pos, attrs, aText->GetFontMetrics() );
     }
     else if( drawingShadows )
     {
@@ -1843,7 +2150,8 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         else if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_90 )
             text_offset.y += fudge;
 
-        strokeText( shownText, aText->GetDrawPos() + text_offset, attrs, aText->GetFontMetrics() );
+        strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs,
+                    aText->GetFontMetrics() );
     }
     else
     {
@@ -1871,7 +2179,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
                 && aText->RenderAsBitmap( m_gal->GetWorldScale() )
                 && !shownText.Contains( wxT( "\n" ) ) )
         {
-            bitmapText( shownText, aText->GetDrawPos() + text_offset, attrs );
+            bitmapText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs );
             const_cast<SCH_TEXT*>( aText )->SetFlags( IS_SHOWN_AS_BITMAP );
         }
         else
@@ -1888,7 +2196,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             }
             else
             {
-                strokeText( shownText, aText->GetDrawPos() + text_offset, attrs,
+                strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs,
                             aText->GetFontMetrics() );
             }
 
@@ -1985,7 +2293,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 }
                 else
                 {
-                    strokeText( shownText, aTextBox->GetDrawPos(), attrs,
+                    strokeText( *m_gal, shownText, aTextBox->GetDrawPos(), attrs,
                                 aTextBox->GetFontMetrics() );
                 }
             };
@@ -2472,7 +2780,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 
         if( nonCached( aField ) && aField->RenderAsBitmap( m_gal->GetWorldScale() ) )
         {
-            bitmapText( shownText, textpos, attributes );
+            bitmapText( *m_gal, shownText, textpos, attributes );
             const_cast<SCH_FIELD*>( aField )->SetFlags( IS_SHOWN_AS_BITMAP );
         }
         else
@@ -2489,7 +2797,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             }
             else
             {
-                strokeText( shownText, textpos, attributes, aField->GetFontMetrics() );
+                strokeText( *m_gal, shownText, textpos, attributes, aField->GetFontMetrics() );
             }
 
             const_cast<SCH_FIELD*>( aField )->ClearFlags( IS_SHOWN_AS_BITMAP );

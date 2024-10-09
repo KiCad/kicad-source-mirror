@@ -2591,6 +2591,18 @@ int SCH_EDITOR_CONTROL::ToggleOPCurrents( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::TogglePinAltIcons( const TOOL_EVENT& aEvent )
+{
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    cfg->m_Appearance.show_pin_alt_icons = !cfg->m_Appearance.show_pin_alt_icons;
+
+    getView()->UpdateAllItems( KIGFX::REPAINT );
+    m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
 {
     m_frame->eeconfig()->m_Drawing.line_mode = aEvent.Parameter<LINE_MODE>();
@@ -2834,6 +2846,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::MarkSimExclusions,     EE_ACTIONS::markSimExclusions.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleOPVoltages,      EE_ACTIONS::toggleOPVoltages.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleOPCurrents,      EE_ACTIONS::toggleOPCurrents.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::TogglePinAltIcons,     EE_ACTIONS::togglePinAltIcons.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineModeFree.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineMode90.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineMode45.MakeEvent() );

@@ -1233,6 +1233,12 @@ TOOL_ACTION EE_ACTIONS::toggleOPCurrents( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Show OP Currents" ) )
         .Tooltip( _( "Show operating point current data from simulation" ) ) );
 
+TOOL_ACTION EE_ACTIONS::togglePinAltIcons( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.togglePinAltIcons" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Pin Alternate Icons" ) )
+        .Tooltip( _( "Show indicator icons for pins with alternate modes" ) ) );
+
 TOOL_ACTION EE_ACTIONS::lineModeFree( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.lineModeFree" )
         .Scope( AS_GLOBAL )

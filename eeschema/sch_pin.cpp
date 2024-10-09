@@ -355,8 +355,15 @@ const wxString& SCH_PIN::GetName() const
 {
     if( !m_alt.IsEmpty() )
         return m_alt;
-    else if( m_libPin )
-        return m_libPin->GetName();
+
+    return GetBaseName();
+}
+
+
+const wxString& SCH_PIN::GetBaseName() const
+{
+    if( m_libPin )
+        return m_libPin->GetBaseName();
 
     return m_name;
 }

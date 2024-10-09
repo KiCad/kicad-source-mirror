@@ -107,6 +107,10 @@ public:
     const wxString& GetName() const;
     wxString GetShownName() const;
     void SetName( const wxString& aName );
+    /**
+     * Get the name without any alternates
+     */
+    const wxString& GetBaseName() const;
 
     const wxString& GetNumber() const { return m_number; }
     wxString GetShownNumber() const;
@@ -118,12 +122,18 @@ public:
     int GetNumberTextSize() const;
     void SetNumberTextSize( int aSize );
 
-    std::map<wxString, ALT>& GetAlternates()
+    const std::map<wxString, ALT>& GetAlternates() const
     {
         if( m_libPin )
             return m_libPin->GetAlternates();
 
         return m_alternates;
+    }
+
+    std::map<wxString, ALT>& GetAlternates()
+    {
+        return const_cast<std::map<wxString, ALT>&>(
+                static_cast<const SCH_PIN*>( this )->GetAlternates() );
     }
 
     ALT GetAlt( const wxString& aAlt )

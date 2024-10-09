@@ -281,21 +281,30 @@ SHAPE_ARC KIGEOM::MakeArcCw180( const VECTOR2I& aCenter, int aRadius,
 }
 
 
-VECTOR2I KIGEOM::GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir )
+VECTOR2I KIGEOM::GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir, int aOutset )
 {
     const VECTOR2I nw = aRect.GetPosition();
     switch( aDir )
     {
         // clang-format off
-    case DIRECTION_45::N:  return nw + VECTOR2I( aRect.GetWidth() / 2, 0 );
-    case DIRECTION_45::E:  return nw + VECTOR2I( aRect.GetWidth(),     aRect.GetHeight() / 2 );
-    case DIRECTION_45::S:  return nw + VECTOR2I( aRect.GetWidth() / 2, aRect.GetHeight() );
-    case DIRECTION_45::W:  return nw + VECTOR2I( 0,                    aRect.GetHeight() / 2 );
-    case DIRECTION_45::NW: return nw;
-    case DIRECTION_45::NE: return nw + VECTOR2I( aRect.GetWidth(),     0 );
-    case DIRECTION_45::SW: return nw + VECTOR2I( 0,                    aRect.GetHeight() );
-    case DIRECTION_45::SE: return nw + VECTOR2I( aRect.GetWidth(),     aRect.GetHeight() );
-    default: wxFAIL_MSG( "Invalid direction" );
+    case DIRECTION_45::N:
+        return nw + VECTOR2I( aRect.GetWidth() / 2, -aOutset );
+    case DIRECTION_45::E:
+        return nw + VECTOR2I( aRect.GetWidth() + aOutset, aRect.GetHeight() / 2 );
+    case DIRECTION_45::S:
+        return nw + VECTOR2I( aRect.GetWidth() / 2, aRect.GetHeight() + aOutset );
+    case DIRECTION_45::W:
+        return nw + VECTOR2I( -aOutset, aRect.GetHeight() / 2 );
+    case DIRECTION_45::NW:
+        return nw + VECTOR2I( -aOutset, -aOutset );
+    case DIRECTION_45::NE:
+        return nw + VECTOR2I( aRect.GetWidth() + aOutset, -aOutset );
+    case DIRECTION_45::SW:
+        return nw + VECTOR2I( -aOutset, aRect.GetHeight() + aOutset );
+    case DIRECTION_45::SE:
+        return nw + VECTOR2I( aRect.GetWidth() + aOutset, aRect.GetHeight() + aOutset );
+    default:
+        wxFAIL_MSG( "Invalid direction" );
         // clang-format on
     }
     return VECTOR2I();

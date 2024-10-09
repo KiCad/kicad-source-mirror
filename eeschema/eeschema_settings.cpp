@@ -234,6 +234,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_op_currents",
             &m_Appearance.show_op_currents, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_pin_alt_icons",
+            &m_Appearance.show_pin_alt_icons, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_illegal_symbol_lib_dialog",
             &m_Appearance.show_illegal_symbol_lib_dialog, true ) );
 

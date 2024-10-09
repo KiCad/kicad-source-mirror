@@ -141,6 +141,7 @@ public:
     int MarkSimExclusions( const TOOL_EVENT& aEvent );
     int ToggleOPVoltages( const TOOL_EVENT& aEvent );
     int ToggleOPCurrents( const TOOL_EVENT& aEvent );
+    int TogglePinAltIcons( const TOOL_EVENT& aEvent );
     int ChangeLineMode( const TOOL_EVENT& aEvent );
     int NextLineMode( const TOOL_EVENT& aEvent );
     int ToggleAnnotateAuto( const TOOL_EVENT& aEvent );

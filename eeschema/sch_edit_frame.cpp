@@ -730,6 +730,13 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return cfg && cfg->m_Appearance.show_op_currents;
             };
 
+    auto showPinAltModeIconsCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_pin_alt_icons;
+            };
+
     auto showAnnotateAutomaticallyCond =
             [this]( const SELECTION& )
             {
@@ -773,6 +780,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::markSimExclusions,     CHECK( markSimExclusionsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleOPVoltages,      CHECK( showOPVoltagesCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleOPCurrents,      CHECK( showOPCurrentsCond ) );
+    mgr->SetConditions( EE_ACTIONS::togglePinAltIcons,     CHECK( showPinAltModeIconsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleAnnotateAuto,    CHECK( showAnnotateAutomaticallyCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,      CHECK( cond.BoundingBoxes() ) );
 

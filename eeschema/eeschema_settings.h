@@ -76,6 +76,7 @@ public:
         bool show_erc_exclusions;
         bool show_op_voltages;
         bool show_op_currents;
+        bool show_pin_alt_icons;
         bool show_illegal_symbol_lib_dialog;
         bool show_page_limits;
         bool show_sexpr_file_convert_warning;

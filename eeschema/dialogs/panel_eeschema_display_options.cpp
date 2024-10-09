@@ -60,7 +60,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
     m_checkShowERCExclusions->SetValue( cfg->m_Appearance.show_erc_exclusions );
     m_cbMarkSimExclusions->SetValue( cfg->m_Appearance.mark_sim_exclusions );
     m_checkShowOPVoltages->SetValue( cfg->m_Appearance.show_op_voltages );
-    m_checkShowOPCurrents->SetValue( cfg->m_Appearance.show_op_currents );
+    m_checkShowPinAltModeIcons->SetValue( cfg->m_Appearance.show_op_currents );
     m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
 
     m_checkSelDrawChildItems->SetValue( cfg->m_Selection.draw_selected_children );
@@ -107,6 +107,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Appearance.mark_sim_exclusions = m_cbMarkSimExclusions->GetValue();
     cfg->m_Appearance.show_op_voltages = m_checkShowOPVoltages->GetValue();
     cfg->m_Appearance.show_op_currents = m_checkShowOPCurrents->GetValue();
+    cfg->m_Appearance.show_pin_alt_icons = m_checkShowPinAltModeIcons->GetValue();
     cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
 
     cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();

@@ -253,6 +253,7 @@ public:
     static TOOL_ACTION markSimExclusions;
     static TOOL_ACTION toggleOPVoltages;
     static TOOL_ACTION toggleOPCurrents;
+    static TOOL_ACTION togglePinAltIcons;
     static TOOL_ACTION toggleSyncedPinsMode;
     static TOOL_ACTION restartMove;
     static TOOL_ACTION selectOnPCB;

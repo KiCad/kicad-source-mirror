@@ -239,6 +239,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( EE_ACTIONS::markSimExclusions,     ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleOPVoltages,      ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleOPCurrents,      ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::togglePinAltIcons,     ACTION_MENU::CHECK );
 
 #ifdef __APPLE__
     viewMenu->AppendSeparator();
