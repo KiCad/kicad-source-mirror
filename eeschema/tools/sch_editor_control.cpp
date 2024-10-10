@@ -1923,6 +1923,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( sheetsPasted )
     {
+        // The full schematic hierarchy need to be update before assigning new annotation and
+        // page numbers.
+        m_frame->Schematic().RefreshHierarchy();
+
         // Update page numbers: Find next free numeric page number
         for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
         {
