@@ -21,8 +21,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCH_PIN_H
-#define SCH_PIN_H
+#pragma once
+
+#include <memory>
 
 #include <pin_type.h>
 #include <sch_item.h>
@@ -30,6 +31,7 @@
 
 class LIB_SYMBOL;
 class SCH_SYMBOL;
+class PIN_LAYOUT_CACHE;
 
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   schIUScale.MilsToIU( 15 )
@@ -58,7 +60,7 @@ public:
 
     SCH_PIN( const SCH_PIN& aPin );
 
-    ~SCH_PIN() override { }
+    ~SCH_PIN();
 
     SCH_PIN& operator=( const SCH_PIN& aPin );
 
@@ -297,6 +299,15 @@ public:
 
     bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
 
+    /**
+     * Get the layout cache associated with this pin.
+     *
+     * If you need more information about how elements of the pin are physically
+     * laid out than just the bounding box, you can use this. The SCH_PAINTER,
+     * for example, can use this to avoid having to duplicate text extent calcs.
+     */
+    PIN_LAYOUT_CACHE& GetLayoutCache() const { return *m_layoutCache; }
+
 protected:
     wxString getItemDescription( ALT* aAlt ) const;
 
@@ -376,15 +387,15 @@ protected:
 
     wxString                m_operatingPoint;
 
-    mutable EXTENTS_CACHE   m_numExtentsCache;
-    mutable EXTENTS_CACHE   m_nameExtentsCache;
-
     bool                    m_isDangling;
+
+    /**
+     * The layout cache for this pin.
+     * SCH_PIN doesn't *have* to own this, it could be part a central cache.
+     */
+    mutable std::unique_ptr<PIN_LAYOUT_CACHE> m_layoutCache;
 
     /// The name that this pin connection will drive onto a net.
     std::recursive_mutex                                      m_netmap_mutex;
     std::map<const SCH_SHEET_PATH, std::pair<wxString, bool>> m_net_name_map;
 };
-
-
-#endif  //  SCH_PIN_H

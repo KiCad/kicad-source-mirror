@@ -25,17 +25,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "sch_pin.h"
+
 #include <base_units.h>
 #include <pgm_base.h>
+#include <pin_layout_cache.h>
+#include <plotters/plotter.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
-#include <sch_pin.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <trigo.h>
 #include <string_utils.h>
-#include <plotters/plotter.h>
 
 
 // small margin in internal units between the pin text and the pin line
@@ -103,7 +105,8 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol ) :
         m_shape( GRAPHIC_PINSHAPE::LINE ),
         m_type( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
         m_hidden( false ),
-        m_isDangling( true )
+        m_isDangling( true ),
+        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
 {
     // Use the application settings for pin sizes if exists.
     // pgm can be nullptr when running a shared lib from a script, not from a kicad appl
@@ -141,7 +144,8 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol, const wxString& aName, const wxStri
         m_hidden( false ),
         m_numTextSize( aNumTextSize ),
         m_nameTextSize( aNameTextSize ),
-        m_isDangling( true )
+        m_isDangling( true ),
+        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
 {
     SetName( aName );
     SetNumber( aNumber );
@@ -156,7 +160,8 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin ) :
         m_orientation( PIN_ORIENTATION::INHERIT ),
         m_shape( GRAPHIC_PINSHAPE::INHERIT ),
         m_type( ELECTRICAL_PINTYPE::PT_INHERIT ),
-        m_isDangling( true )
+        m_isDangling( true ),
+        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
 {
     wxASSERT( aParentSymbol );
 
@@ -181,7 +186,8 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxSt
         m_type( ELECTRICAL_PINTYPE::PT_INHERIT ),
         m_number( aNumber ),
         m_alt( aAlt ),
-        m_isDangling( true )
+        m_isDangling( true ),
+        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
 {
     wxASSERT( aParentSymbol );
 
@@ -203,12 +209,18 @@ SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         m_numTextSize( aPin.m_numTextSize ),
         m_nameTextSize( aPin.m_nameTextSize ),
         m_alt( aPin.m_alt ),
-        m_isDangling( aPin.m_isDangling )
+        m_isDangling( aPin.m_isDangling ),
+        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
 {
     SetName( aPin.m_name );
     SetNumber( aPin.m_number );
 
     m_layer = aPin.m_layer;
+}
+
+
+SCH_PIN::~SCH_PIN()
+{
 }
 
 
@@ -371,11 +383,14 @@ const wxString& SCH_PIN::GetBaseName() const
 
 void SCH_PIN::SetName( const wxString& aName )
 {
-    m_name = aName;
+    if( m_name == aName )
+        return;
 
+    m_name = aName;
     // pin name string does not support spaces
     m_name.Replace( wxT( " " ), wxT( "_" ) );
-    m_nameExtentsCache.m_Extents = VECTOR2I();
+
+    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NAME );
 }
 
 
@@ -474,11 +489,14 @@ wxString SCH_PIN::GetShownNumber() const
 
 void SCH_PIN::SetNumber( const wxString& aNumber )
 {
-    m_number = aNumber;
+    if( m_number == aNumber )
+        return;
 
+    m_number = aNumber;
     // pin number string does not support spaces
     m_number.Replace( wxT( " " ), wxT( "_" ) );
-    m_numExtentsCache.m_Extents = VECTOR2I();
+
+    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NUMBER );
 }
 
 
@@ -499,8 +517,11 @@ int SCH_PIN::GetNameTextSize() const
 
 void SCH_PIN::SetNameTextSize( int aSize )
 {
+    if( aSize == m_nameTextSize )
+        return;
+
     m_nameTextSize = aSize;
-    m_nameExtentsCache.m_Extents = VECTOR2I();
+    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NAME );
 }
 
 
@@ -521,8 +542,11 @@ int SCH_PIN::GetNumberTextSize() const
 
 void SCH_PIN::SetNumberTextSize( int aSize )
 {
+    if( aSize == m_numTextSize )
+        return;
+
     m_numTextSize = aSize;
-    m_numExtentsCache.m_Extents = VECTOR2I();
+    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NUMBER );
 }
 
 
@@ -1700,147 +1724,9 @@ void SCH_PIN::validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxStri
 BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
                                bool aIncludeElectricalType ) const
 {
-    if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
-    {
-        wxCHECK( m_libPin, BOX2I() );
-
-        BOX2I r = m_libPin->GetBoundingBox( aIncludeLabelsOnInvisiblePins, aIncludeNameAndNumber,
-                                            aIncludeElectricalType );
-
-        r = symbol->GetTransform().TransformCoordinate( r );
-        r.Offset( symbol->GetPosition() );
-        r.Normalize();
-
-        return r;
-    }
-
-    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-    KIFONT::FONT*      font = KIFONT::FONT::GetFont( cfg->m_Appearance.default_font );
-
-    BOX2I    bbox;
-    VECTOR2I begin;
-    VECTOR2I end;
-    int      pinNameOffset = 0;
-    int      nameTextLength = 0;
-    int      nameTextHeight = 0;
-    int      numberTextLength = 0;
-    int      numberTextHeight = 0;
-    int      typeTextLength = 0;
-    bool     includeName = aIncludeNameAndNumber && !GetShownName().IsEmpty();
-    bool     includeNumber = aIncludeNameAndNumber && !GetShownNumber().IsEmpty();
-    bool     includeType = aIncludeElectricalType;
-    int      minsizeV = TARGET_PIN_RADIUS;
-
-    if( !aIncludeLabelsOnInvisiblePins && !IsVisible() )
-    {
-        includeName = false;
-        includeNumber = false;
-        includeType = false;
-    }
-
-    if( const SYMBOL* parentSymbol = GetParentSymbol() )
-    {
-        if( parentSymbol->GetShowPinNames() )
-            pinNameOffset = parentSymbol->GetPinNameOffset();
-        else
-            includeName = false;
-
-        if( !parentSymbol->GetShowPinNumbers() )
-            includeNumber = false;
-    }
-
-    if( includeNumber )
-    {
-        validateExtentsCache( font, GetNumberTextSize(), GetShownNumber(), &m_numExtentsCache );
-        numberTextLength = m_numExtentsCache.m_Extents.x;
-        numberTextHeight = m_numExtentsCache.m_Extents.y;
-    }
-
-    if( includeName )
-    {
-        validateExtentsCache( font, GetNameTextSize(), GetShownName(), &m_nameExtentsCache );
-        nameTextLength = m_nameExtentsCache.m_Extents.x + pinNameOffset;
-        nameTextHeight = m_nameExtentsCache.m_Extents.y + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
-    }
-
-    if( includeType )
-    {
-        double   fontSize = std::max( GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
-        double   stroke = fontSize / 8.0;
-        VECTOR2I typeTextSize = font->StringBoundaryLimits( GetElectricalTypeName(),
-                                                            VECTOR2D( fontSize, fontSize ),
-                                                            KiROUND( stroke ), false, false,
-                                                            GetFontMetrics() );
-
-        typeTextLength = typeTextSize.x + schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS;
-        minsizeV = std::max( minsizeV, typeTextSize.y / 2 );
-    }
-
-    // First, calculate boundary box corners position
-    if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
-        minsizeV = std::max( TARGET_PIN_RADIUS, externalPinDecoSize( nullptr, *this ) );
-
-    // Calculate topLeft & bottomRight corner positions for the default pin orientation (PIN_RIGHT)
-    if( pinNameOffset || !includeName )
-    {
-        // pin name is inside the body (or invisible)
-        // pin number is above the line
-        begin.y = std::min( -minsizeV, -numberTextHeight );
-        begin.x = std::min( -typeTextLength, GetLength() - ( numberTextLength / 2 ) );
-
-        end.x = GetLength() + nameTextLength;
-        end.y = std::max( minsizeV, nameTextHeight / 2 );
-    }
-    else
-    {
-        // pin name is above pin line
-        // pin number is below line
-        begin.y = std::min( -minsizeV, -nameTextHeight );
-        begin.x = -typeTextLength;
-        begin.x = std::min( begin.x, ( GetLength() - numberTextLength ) / 2 );
-        begin.x = std::min( begin.x, ( GetLength() - nameTextLength ) / 2 );
-
-        end.x = GetLength();
-        end.x = std::max( end.x, ( GetLength() + nameTextLength ) / 2 );
-        end.x = std::max( end.x, ( GetLength() + numberTextLength ) / 2 );
-        end.y = std::max( minsizeV, numberTextHeight );
-    }
-
-    // Now, calculate boundary box corners position for the actual pin orientation
-    switch( PinDrawOrient( DefaultTransform ) )
-    {
-    case PIN_ORIENTATION::PIN_UP:
-        // Pin is rotated and texts positions are mirrored
-        RotatePoint( begin, VECTOR2I( 0, 0 ), ANGLE_90 );
-        RotatePoint( end, VECTOR2I( 0, 0 ), ANGLE_90 );
-        break;
-
-    case PIN_ORIENTATION::PIN_DOWN:
-        RotatePoint( begin, VECTOR2I( 0, 0 ), -ANGLE_90 );
-        RotatePoint( end, VECTOR2I( 0, 0 ), -ANGLE_90 );
-        begin.x = -begin.x;
-        end.x = -end.x;
-        break;
-
-    case PIN_ORIENTATION::PIN_LEFT:
-        begin.x = -begin.x;
-        end.x = -end.x;
-        break;
-
-    default:
-    case PIN_ORIENTATION::PIN_RIGHT:
-        break;
-    }
-
-    begin += m_position;
-    end += m_position;
-
-    bbox.SetOrigin( begin );
-    bbox.SetEnd( end );
-    bbox.Normalize();
-    bbox.Inflate( ( GetPenWidth() / 2 ) + 1 );
-
-    return bbox;
+    // Just defer to the cache
+    return m_layoutCache->GetPinBoundingBox( aIncludeLabelsOnInvisiblePins, aIncludeNameAndNumber,
+                                             aIncludeElectricalType );
 }
 
 
