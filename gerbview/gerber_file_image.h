@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,9 +99,13 @@ public:
                                         // and the actual coordinates calculation must handle this
 };
 
-// size of a single line of text from a gerber file.
-// warning: some files can have *very long* lines, so the buffer must be large.
-#define GERBER_BUFZ 1000000
+// Currently, the Gerber file is parsed line by line.
+// This is most of time OK
+// GERBER_BUFZ is the max size of a single line of text from a gerber file.
+// But warning: in rare cases some files can have *very long* lines,
+// so the buffer must be very large.
+// I saw a file using only one line of 1,400,000 chars
+#define GERBER_BUFZ 5000000
 
 /**
  * Hold the image data and parameters for one gerber file and layer parameters.
