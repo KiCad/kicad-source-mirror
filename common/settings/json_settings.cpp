@@ -138,7 +138,7 @@ void JSON_SETTINGS::Load()
     {
         try
         {
-            param->Load( this, m_resetParamsIfMissing );
+            param->Load( *this, m_resetParamsIfMissing );
         }
         catch( ... )
         {
@@ -375,7 +375,7 @@ bool JSON_SETTINGS::Store()
 
     for( PARAM_BASE* param : m_params )
     {
-        modified |= !param->MatchesFile( this );
+        modified |= !param->MatchesFile( *this );
         param->Store( this );
     }
 

@@ -36,9 +36,9 @@ void PARAM_PATH_LIST::Store( JSON_SETTINGS* aSettings ) const
 }
 
 
-bool PARAM_PATH_LIST::MatchesFile( JSON_SETTINGS* aSettings ) const
+bool PARAM_PATH_LIST::MatchesFile( const JSON_SETTINGS& aSettings ) const
 {
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+    if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
     {
         if( js->is_array() )
         {
@@ -55,12 +55,12 @@ bool PARAM_PATH_LIST::MatchesFile( JSON_SETTINGS* aSettings ) const
 }
 
 
-void PARAM_WXSTRING_MAP::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
+void PARAM_WXSTRING_MAP::Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing ) const
 {
     if( m_readOnly )
         return;
 
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+    if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
     {
         if( js->is_object() )
         {
@@ -91,9 +91,9 @@ void PARAM_WXSTRING_MAP::Store( JSON_SETTINGS* aSettings ) const
 }
 
 
-bool PARAM_WXSTRING_MAP::MatchesFile( JSON_SETTINGS* aSettings ) const
+bool PARAM_WXSTRING_MAP::MatchesFile( const JSON_SETTINGS& aSettings ) const
 {
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+    if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
     {
         if( js->is_object() )
         {

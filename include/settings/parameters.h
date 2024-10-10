@@ -48,7 +48,7 @@ public:
      * @param aSettings is the JSON_SETTINGS object to load from.
      * @param aResetIfMissing if true will set the parameter to its default value if load fails
      */
-    virtual void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const = 0;
+    virtual void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const = 0;
 
     /**
      * Stores the value of this parameter to the given JSON_SETTINGS object
@@ -63,7 +63,7 @@ public:
      * @param aSettings is a JSON_SETTINGS to check the JSON file contents of
      * @return true if the parameter in memory matches its value in the file
      */
-    virtual bool MatchesFile( JSON_SETTINGS* aSettings ) const = 0;
+    virtual bool MatchesFile( const JSON_SETTINGS& aSettings ) const = 0;
 
     /**
      * @return the path name of the parameter used to store it in the json file
@@ -110,12 +110,12 @@ public:
             m_default( std::move( aDefault ) )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+        if( std::optional<ValueType> optval = aSettings.Get<ValueType>( m_path ) )
         {
             ValueType val = *optval;
 
@@ -148,9 +148,9 @@ public:
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
-        if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+        if( std::optional<ValueType> optval = aSettings.Get<ValueType>( m_path ) )
             return *optval == *m_ptr;
 
         return false;
@@ -177,7 +177,7 @@ public:
             PARAM( aJsonPath, aPtr, aDefault, aReadOnly )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
@@ -192,9 +192,9 @@ public:
         aSettings->Set<wxString>( m_path, toFileFormat( *m_ptr ) );
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
-        if( std::optional<wxString> optval = aSettings->Get<wxString>( m_path ) )
+        if( std::optional<wxString> optval = aSettings.Get<wxString>( m_path ) )
             return fromFileFormat( *optval ) == *m_ptr;
 
         return false;
@@ -235,12 +235,12 @@ public:
     {
     }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        if( std::optional<int> val = aSettings->Get<int>( m_path ) )
+        if( std::optional<int> val = aSettings.Get<int>( m_path ) )
         {
             if( *val >= static_cast<int>( m_min ) && *val <= static_cast<int>( m_max ) )
                 *m_ptr = static_cast<EnumType>( *val );
@@ -269,9 +269,9 @@ public:
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
-        if( std::optional<int> val = aSettings->Get<int>( m_path ) )
+        if( std::optional<int> val = aSettings.Get<int>( m_path ) )
             return *val == static_cast<int>( *m_ptr );
 
         return false;
@@ -302,21 +302,21 @@ public:
     {
     }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
         if( std::is_same<ValueType, nlohmann::json>::value )
         {
-            if( std::optional<nlohmann::json> optval = aSettings->GetJson( m_path ) )
+            if( std::optional<nlohmann::json> optval = aSettings.GetJson( m_path ) )
                 m_setter( *optval );
             else
                 m_setter( m_default );
         }
         else
         {
-            if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+            if( std::optional<ValueType> optval = aSettings.Get<ValueType>( m_path ) )
                 m_setter( *optval );
             else
                 m_setter( m_default );
@@ -344,16 +344,16 @@ public:
         m_setter( m_default );
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
         if( std::is_same<ValueType, nlohmann::json>::value )
         {
-            if( std::optional<nlohmann::json> optval = aSettings->GetJson( m_path ) )
+            if( std::optional<nlohmann::json> optval = aSettings.GetJson( m_path ) )
                 return *optval == m_getter();
         }
         else
         {
-            if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+            if( std::optional<ValueType> optval = aSettings.Get<ValueType>( m_path ) )
                 return *optval == m_getter();
         }
 
@@ -413,14 +413,14 @@ public:
             m_invScale( 1.0 / aScale )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
         double dval = m_default / m_invScale;
 
-        if( std::optional<double> optval = aSettings->Get<double>( m_path ) )
+        if( std::optional<double> optval = aSettings.Get<double>( m_path ) )
             dval = *optval;
         else if( !aResetIfMissing )
             return;
@@ -451,9 +451,9 @@ public:
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
-        if( std::optional<double> optval = aSettings->Get<double>( m_path ) )
+        if( std::optional<double> optval = aSettings.Get<double>( m_path ) )
             return *optval == ( *m_ptr / m_invScale );
 
         return false;
@@ -487,12 +487,12 @@ public:
             m_default( std::move( aDefault ) )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
         {
             std::vector<Type> val;
 
@@ -523,9 +523,9 @@ public:
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
-        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
         {
             if( js->is_array() )
             {
@@ -591,12 +591,12 @@ public:
             m_default( aDefault )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
         {
             std::set<Type> val;
 
@@ -628,9 +628,9 @@ public:
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
-        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
         {
             if( js->is_array() )
             {
@@ -674,7 +674,7 @@ public:
             PARAM_LIST( aJsonPath, aPtr, aDefault, aReadOnly )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
@@ -687,7 +687,7 @@ public:
 
     void Store( JSON_SETTINGS* aSettings) const override;
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override;
 
 private:
     wxString toFileFormat( const wxString& aString ) const
@@ -731,12 +731,12 @@ public:
             m_default( aDefault )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
         if( m_readOnly )
             return;
 
-        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
         {
             if( js->is_object() )
             {
@@ -765,9 +765,9 @@ public:
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override
     {
-        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        if( std::optional<nlohmann::json> js = aSettings.GetJson( m_path ) )
         {
             if( js->is_object() )
             {
@@ -819,7 +819,7 @@ public:
         m_clearUnknownKeys = aArrayBehavior;
     }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override;
 
     void Store( JSON_SETTINGS* aSettings) const override;
 
@@ -828,7 +828,7 @@ public:
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
+    bool MatchesFile( const JSON_SETTINGS& aSettings ) const override;
 
 private:
     std::map<wxString, wxString>* m_ptr;
