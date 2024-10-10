@@ -39,17 +39,6 @@
 
 #include <qa_utils/wx_utils/wx_assert.h>
 
-/*
- * Simple function to handle a WX assertion and throw a real exception.
- *
- * This is useful when you want to check assertions fire in unit tests.
- */
-void wxAssertThrower( const wxString& aFile, int aLine, const wxString& aFunc,
-        const wxString& aCond, const wxString& aMsg )
-{
-    throw KI_TEST::WX_ASSERT_ERROR( aFile, aLine, aFunc, aCond, aMsg );
-}
-
 
 bool init_unit_test()
 {
@@ -62,7 +51,7 @@ bool init_unit_test()
     bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,
                             boost::unit_test::framework::master_test_suite().argv );
 
-    wxSetAssertHandler( &wxAssertThrower );
+    wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 
     Pgm().InitPgm( true, true, true );
     Pgm().GetSettingsManager().RegisterSettings( new EESCHEMA_SETTINGS, false );

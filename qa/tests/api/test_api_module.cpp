@@ -22,13 +22,6 @@
 #include <qa_utils/wx_utils/wx_assert.h>
 
 
-void wxAssertThrower( const wxString& aFile, int aLine, const wxString& aFunc,
-                      const wxString& aCond, const wxString& aMsg )
-{
-    throw KI_TEST::WX_ASSERT_ERROR( aFile, aLine, aFunc, aCond, aMsg );
-}
-
-
 bool init_unit_test()
 {
     boost::unit_test::framework::master_test_suite().p_name.value = "IPC API tests";
@@ -38,7 +31,7 @@ bool init_unit_test()
     bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,
                             boost::unit_test::framework::master_test_suite().argv );
 
-    wxSetAssertHandler( &wxAssertThrower );
+    wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 
     return ok;
 }
