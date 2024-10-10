@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jean-pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,7 +377,9 @@ void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSort
         if( aHierarchy )
         {
             SCH_SHEET_PATH* path = aHierarchy->FindSheetForPath( &ref.GetSheetPath() );
-            wxASSERT_MSG( path, wxT( "Attempting to annotate item on sheet not part of the hierarchy?" ) );
+            wxCHECK2_MSG( path, continue,
+                          wxS( "Attempting to annotate item on sheet not part of the "
+                               "hierarchy?" ) );
 
             ref.SetSheetNumber( path->GetVirtualPageNumber() );
         }
