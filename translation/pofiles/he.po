@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
-"PO-Revision-Date: 2024-10-09 10:16+0000\n"
+"PO-Revision-Date: 2024-10-10 06:58+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -1799,30 +1799,30 @@ msgstr ""
 
 #: common/confirm.cpp:72 common/confirm.cpp:110
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "אם לא תשמור, כל השינויים שלך יאבדו לצמיתות."
 
 #: common/confirm.cpp:74 common/confirm.cpp:111 common/tool/actions.cpp:91
 #: eeschema/symbol_editor/symbol_editor.cpp:610
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1035
 msgid "Save"
-msgstr ""
+msgstr "שמור"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
 msgid "Discard Changes"
-msgstr ""
+msgstr "בטל שינויים"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
 msgid "Apply to all"
-msgstr ""
+msgstr "החל על כולם"
 
 #: common/confirm.cpp:123
 msgid "Your current changes will be permanently lost."
-msgstr ""
+msgstr "השינויים הנוכחיים שלך יאבדו לצמיתות."
 
 #: common/confirm.cpp:124 common/tool/actions.cpp:121
 msgid "Revert"
-msgstr ""
+msgstr "חזור"
 
 #: common/confirm.cpp:150 common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:142
@@ -1830,8 +1830,9 @@ msgstr ""
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
 #: pcbnew/tools/multichannel_tool.cpp:619
+#, fuzzy
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
 #: common/kidialog.cpp:125 eeschema/dialogs/dialog_erc.cpp:876
@@ -1851,11 +1852,11 @@ msgstr ""
 #: pcbnew/drc/drc_item.cpp:214 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
 msgid "Warning"
-msgstr ""
+msgstr "אזהרה"
 
 #: common/confirm.cpp:239
 msgid "Information"
-msgstr ""
+msgstr "מידע"
 
 #: common/confirm.cpp:266 common/confirm.cpp:269
 #: common/dialogs/panel_embedded_files.cpp:172
@@ -1875,7 +1876,7 @@ msgstr ""
 #: pcbnew/router/router_tool.cpp:2524
 #: pcbnew/tools/footprint_editor_control.cpp:442 pcbnew/zone_filler.cpp:879
 msgid "Confirmation"
-msgstr ""
+msgstr "אישור"
 
 #: common/confirm.cpp:273 eeschema/sch_field.cpp:1124 eeschema/sch_pin.cpp:1515
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
@@ -1886,7 +1887,7 @@ msgstr ""
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:497
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:508
 msgid "Yes"
-msgstr ""
+msgstr "כן"
 
 #: common/confirm.cpp:273 eeschema/sch_field.cpp:1124 eeschema/sch_pin.cpp:1515
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
@@ -1896,7 +1897,7 @@ msgstr ""
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:497
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:507
 msgid "No"
-msgstr ""
+msgstr "לא"
 
 #: common/design_block_info_impl.cpp:116
 msgid "Fetching design_block libraries..."
@@ -1910,13 +1911,14 @@ msgstr ""
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
+#, fuzzy
 msgid "KiCad"
-msgstr ""
+msgstr "KiCad"
 
 #: common/design_block_io.cpp:48 pcbnew/pcb_io/pcb_io_mgr.cpp:90
 #, c-format
 msgid "UNKNOWN (%d)"
-msgstr ""
+msgstr "לא ידוע (%d)"
 
 #: common/design_block_io.cpp:134
 msgid "KiCad Design Block folders"
@@ -1926,7 +1928,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2968
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr ""
+msgstr "לא ניתן להחליף את נתיב הספרייה '%s'."
 
 #: common/design_block_io.cpp:181
 #, c-format
@@ -1935,22 +1937,25 @@ msgid ""
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
+"לא ניתן ליצור את נתיב הספרייה '%s'.\n"
+"\n"
+"ודא שיש לך הרשאות כתיבה ונסה שוב."
 
 #: common/design_block_io.cpp:200 pcbnew/pcb_io/geda/pcb_io_geda.cpp:974
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2993
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
+msgstr "אין הרשאות מספיקות למחיקת התיקייה '%s'."
 
 #: common/design_block_io.cpp:209
 #, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr ""
+msgstr "בתיקיית הספרייה '%s' יש קבצים לא צפויים."
 
 #: common/design_block_io.cpp:227
 #, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr ""
+msgstr "נמצאה תיקייה לא צפויה '%s' בנתיב הספרייה '%s'."
 
 #: common/design_block_io.cpp:244
 #, c-format
@@ -1969,7 +1974,7 @@ msgstr ""
 #: common/design_block_io.cpp:360
 #, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr ""
+msgstr "קובץ מקור סכמטי '%s' אינו קיים."
 
 #: common/design_block_io.cpp:374
 #, c-format
@@ -2011,13 +2016,13 @@ msgstr ""
 #: common/design_block_lib_table.cpp:570 common/fp_lib_table.cpp:556
 #: eeschema/symbol_lib_table.cpp:609
 msgid "Added by Plugin and Content Manager"
-msgstr ""
+msgstr "נוסף על ידי מנהל תוספים ותוכן"
 
 #: common/design_block_lib_table.cpp:596 common/fp_lib_table.cpp:582
 #: eeschema/symbol_lib_table.cpp:637
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr ""
+msgstr "לא ניתן ליצור נתיב לטבלת ספרייה גלובלית '%s'."
 
 #: common/dialog_about/AboutDialog_main.cpp:115
 #: common/dialogs/panel_design_block_lib_table_base.cpp:50
@@ -2038,77 +2043,79 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1005
 #: pcbnew/footprint_libraries_utils.cpp:1333
 msgid "Description"
-msgstr ""
+msgstr "תיאור"
 
 #: common/dialog_about/AboutDialog_main.cpp:119
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
+"חבילת KiCad EDA היא קבוצה של יישומי קוד פתוח ליצירת סכמות אלקטרוניות ומעגלים "
+"מודפסים."
 
 #: common/dialog_about/AboutDialog_main.cpp:127
 msgid "KiCad on the web"
-msgstr ""
+msgstr "KiCad באינטרנט"
 
 #: common/dialog_about/AboutDialog_main.cpp:133
 msgid "The official KiCad website - "
-msgstr ""
+msgstr "האתר הרשמי של KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:137
 msgid "Developer website - "
-msgstr ""
+msgstr "אתר למפתחים - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 msgid "Official KiCad library repositories - "
-msgstr ""
+msgstr "מאגרי ספריית KiCad הרשמיים - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Bug tracker"
-msgstr ""
+msgstr "עוקב אחר באגים"
 
 #: common/dialog_about/AboutDialog_main.cpp:155
 msgid "Report or examine bugs - "
-msgstr ""
+msgstr "דווח או בחן באגים - "
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad users group and community"
-msgstr ""
+msgstr "קבוצה וקהילה של משתמשי KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 msgid "KiCad forum - "
-msgstr ""
+msgstr "פורום KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:180
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr ""
+msgstr "חבילת KiCad EDA השלמה משוחררת תחת ה"
 
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr ""
+msgstr "GNU General Public License (GPL) גרסה 3 או כל גרסה מאוחרת יותר"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Lead Development Team"
-msgstr ""
+msgstr "צוות פיתוח מוביל"
 
 #: common/dialog_about/AboutDialog_main.cpp:203
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "בוגרי מובילי פיתוח"
 
 #: common/dialog_about/AboutDialog_main.cpp:204
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "תרומות נוספות מאת"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
 msgid "Documentation Team"
-msgstr ""
+msgstr "צוות תיעוד"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
-msgstr ""
+msgstr "צוות ספרנים"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
 msgid "3D models"
-msgstr ""
+msgstr "מודלים תלת מימדיים"
 
 #: common/dialog_about/AboutDialog_main.cpp:844
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
@@ -2118,7 +2125,7 @@ msgstr ""
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:144
 msgid "Symbols"
-msgstr ""
+msgstr "סמלים"
 
 #: common/dialog_about/AboutDialog_main.cpp:845
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
@@ -2135,12 +2142,12 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
-msgstr ""
+msgstr "מפתחי חבילות"
 
 #: common/dialog_about/dialog_about.cpp:115
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "‬אודות %s"
 
 #: common/dialog_about/dialog_about.cpp:135
 #: common/dialog_about/dialog_about_base.h:58
@@ -47023,35 +47030,35 @@ msgstr ""
 
 #: pcbnew/zone.cpp:1780
 msgid "Minimum Width"
-msgstr ""
+msgstr "רוחב מינימלי"
 
 #: pcbnew/zone.cpp:1788
 msgid "Pad Connections"
-msgstr ""
+msgstr "חיבורי פדים"
 
 #: pcbnew/zone_filler.cpp:248
 msgid "Checking zone fills..."
-msgstr ""
+msgstr "בודק מילוי אזורים..."
 
 #: pcbnew/zone_filler.cpp:249
 msgid "Building zone fills..."
-msgstr ""
+msgstr "בונה מילוי אזורים..."
 
 #: pcbnew/zone_filler.cpp:666
 msgid "Removing isolated copper islands..."
-msgstr ""
+msgstr "מסיר איי נחושת מנותקים..."
 
 #: pcbnew/zone_filler.cpp:878
 msgid "Zone fills are out-of-date. Refill?"
-msgstr ""
+msgstr "מילוי אזורים לא מעודכן. למלא מחדש?"
 
 #: pcbnew/zone_filler.cpp:880
 msgid "Refill"
-msgstr ""
+msgstr "למלא מחדש"
 
 #: pcbnew/zone_filler.cpp:880
 msgid "Continue without Refill"
-msgstr ""
+msgstr "המשך ללא מילוי מחדש"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:57
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:62
@@ -47059,10 +47066,12 @@ msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
+"לאזור העליון יש את העדיפות הגבוהה ביותר. כאשר אזור נמצא בתוך אזור אחר, אם "
+"העדיפות שלו גבוהה יותר, קווי המתאר שלו מוסרים מהאזור השני."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:82
 msgid "Refill zones"
-msgstr ""
+msgstr "מלא מחדש אזורים"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
 msgid "Refill zones after changes made on board"
@@ -47083,7 +47092,7 @@ msgstr ""
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
-msgstr ""
+msgstr "שחרורים תרמים"
 
 #: pcbnew/zones.h:64
 msgid "solid"
@@ -47104,7 +47113,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
-msgstr ""
+msgstr "ממיר תמונת סיביות לרכיב"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
@@ -47112,7 +47121,7 @@ msgstr "צור רכיב מתמונת סיביות לשימוש על ידי KiCad
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr ""
+msgstr "עורך סכמטי של KiCad (עצמאי)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
@@ -47120,7 +47129,7 @@ msgstr "כלי שרטוט סכימתי"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "עורך סכמטי עצמאי עבור סכימות KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
@@ -47136,11 +47145,11 @@ msgstr "צפה בקבצי גרבר"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
-msgstr ""
+msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
-msgstr ""
+msgstr "מנהל פרויקט;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -47215,7 +47224,7 @@ msgstr "עורך המעגלים KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:80
 msgid "The KiCad Developers"
-msgstr ""
+msgstr "מפתחי KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
