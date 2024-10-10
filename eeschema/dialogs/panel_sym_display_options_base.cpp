@@ -42,6 +42,10 @@ PANEL_SYM_DISPLAY_OPTIONS_BASE::PANEL_SYM_DISPLAY_OPTIONS_BASE( wxWindow* parent
 	m_showPinElectricalTypes->SetValue(true);
 	bAppearanceSizer->Add( m_showPinElectricalTypes, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_checkShowPinAltModeIcons = new wxCheckBox( this, wxID_ANY, _("Show pin &alternate mode indicator icons"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowPinAltModeIcons->SetValue(true);
+	bAppearanceSizer->Add( m_checkShowPinAltModeIcons, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
 
 	bRightColumn->Add( bAppearanceSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 

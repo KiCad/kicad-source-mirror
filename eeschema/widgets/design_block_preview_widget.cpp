@@ -92,6 +92,7 @@ DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, boo
     settings->m_ShowPinNumbers = false;
     settings->m_ShowHiddenPins = false;
     settings->m_ShowHiddenFields = false;
+    settings->m_ShowPinAltIcons = false;
 
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
 

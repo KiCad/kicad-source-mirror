@@ -103,6 +103,9 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "show_pin_electrical_type",
                                             &m_ShowPinElectricalType, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "show_pin_alt_icons",
+                                            &m_ShowPinAltIcons, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "show_hidden_lib_fields",
                                             &m_ShowHiddenFields, true ) );
 

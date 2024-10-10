@@ -250,6 +250,7 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
     GetRenderSettings()->m_ShowPinNumbers = false;
+    GetRenderSettings()->m_ShowPinAltIcons = cfg->m_Appearance.show_pin_alt_icons;
     GetRenderSettings()->SetDefaultFont( cfg->m_Appearance.default_font );
 }
 

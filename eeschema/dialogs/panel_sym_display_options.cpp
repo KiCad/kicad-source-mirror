@@ -44,6 +44,7 @@ void PANEL_SYM_DISPLAY_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* c
     m_checkShowHiddenPins->SetValue( cfg->m_ShowHiddenPins );
     m_checkShowHiddenFields->SetValue( cfg->m_ShowHiddenFields );
     m_showPinElectricalTypes->SetValue( cfg->m_ShowPinElectricalType );
+    m_checkShowPinAltModeIcons->SetValue( cfg->m_ShowPinAltIcons );
 }
 
 
@@ -68,6 +69,7 @@ bool PANEL_SYM_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
     cfg->m_ShowHiddenFields = m_checkShowHiddenFields->GetValue();
     cfg->m_ShowPinElectricalType = m_showPinElectricalTypes->GetValue();
+    cfg->m_ShowPinAltIcons = m_checkShowPinAltModeIcons->GetValue();
     m_galOptsPanel->TransferDataFromWindow();
 
     return true;

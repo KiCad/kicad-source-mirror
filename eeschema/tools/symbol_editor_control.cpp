@@ -613,6 +613,22 @@ int SYMBOL_EDITOR_CONTROL::ToggleHiddenFields( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::TogglePinAltIcons( const TOOL_EVENT& aEvent )
+{
+    if( !m_isSymbolEditor )
+        return 0;
+
+    SYMBOL_EDITOR_SETTINGS& cfg = *m_frame->libeditconfig();
+    cfg.m_ShowPinAltIcons = !cfg.m_ShowPinAltIcons;
+
+    m_frame->GetRenderSettings()->m_ShowPinAltIcons = cfg.m_ShowPinAltIcons;
+
+    getView()->UpdateAllItems( KIGFX::REPAINT );
+    m_frame->GetCanvas()->Refresh();
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
@@ -826,6 +842,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::showHiddenPins.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::showHiddenFields.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::TogglePinAltIcons,     EE_ACTIONS::togglePinAltIcons.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            EE_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            EE_ACTIONS::nextUnit.MakeEvent() );

@@ -127,6 +127,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::showLibraryTree,     ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::showHiddenPins,   ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::showHiddenFields, ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::togglePinAltIcons,ACTION_MENU::CHECK );
 
 
     //-- Place menu -----------------------------------------------

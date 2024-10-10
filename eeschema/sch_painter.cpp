@@ -1550,15 +1550,16 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
         const bool hasAltIcon =
                 ( slot.role == PIN_TEXTS::SLOT_ROLE::NAME ) && !aPin->GetAlternates().empty()
-                && eeconfig()->m_Appearance.show_pin_alt_icons && !renderTextAsBitmap;
+                && GetSettings()->m_ShowPinAltIcons && !renderTextAsBitmap;
 
         if( hasAltIcon )
         {
             wxASSERT( locs.IconPos.size() >= 1 );
 
             drawAltPinModesIcon( *m_gal, locs.IconPos[0], iconSize,
-                                 // TODO: doesn't work due to the tempPin having no alt
-                                 aPin->GetShownName() == aPin->GetBaseName(),
+                                 // Icon style doesn't work due to the tempPin having no alt
+                                 // but maybe it's better with just one style anyway.
+                                 true,
                                  placement.Angle == ANGLE_VERTICAL, shadowWidth, slot.colour );
         }
     };

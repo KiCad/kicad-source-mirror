@@ -327,6 +327,7 @@ void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GetRenderSettings()->m_ShowPinsElectricalType = m_settings->m_ShowPinElectricalType;
     GetRenderSettings()->m_ShowHiddenPins = m_settings->m_ShowHiddenPins;
     GetRenderSettings()->m_ShowHiddenFields = m_settings->m_ShowHiddenFields;
+    GetRenderSettings()->m_ShowPinAltIcons = m_settings->m_ShowPinAltIcons;
     GetRenderSettings()->SetDefaultFont( wxEmptyString );
 }
 
@@ -342,6 +343,7 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;
     m_settings->m_ShowHiddenPins = GetRenderSettings()->m_ShowHiddenPins;
     m_settings->m_ShowHiddenFields = GetRenderSettings()->m_ShowHiddenFields;
+    m_settings->m_ShowPinAltIcons = GetRenderSettings()->m_ShowPinAltIcons;
 
     m_settings->m_LibWidth = m_treePane->GetSize().x;
 
@@ -522,6 +524,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return libeditconfig()->m_ShowHiddenFields;
             };
 
+    auto showPinAltIconsCond =
+            [this]( const SELECTION& )
+            {
+                return libeditconfig()->m_ShowPinAltIcons;
+            };
+
     auto showLibraryTreeCond =
             [this]( const SELECTION& )
             {
@@ -540,6 +548,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::showProperties,         CHECK( propertiesCond ) );
     mgr->SetConditions( EE_ACTIONS::showHiddenPins,      CHECK( hiddenPinCond ) );
     mgr->SetConditions( EE_ACTIONS::showHiddenFields,    CHECK( hiddenFieldCond ) );
+    mgr->SetConditions( EE_ACTIONS::togglePinAltIcons,   CHECK( showPinAltIconsCond ) );
 
     auto demorganCond =
             [this]( const SELECTION& )
@@ -1276,6 +1285,7 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_ShowPinElectricalType;
     GetRenderSettings()->m_ShowHiddenPins = cfg->m_ShowHiddenPins;
     GetRenderSettings()->m_ShowHiddenFields = cfg->m_ShowHiddenFields;
+    GetRenderSettings()->m_ShowPinAltIcons = cfg->m_ShowPinAltIcons;
 
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 

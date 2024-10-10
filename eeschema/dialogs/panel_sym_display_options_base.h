@@ -38,6 +38,7 @@ class PANEL_SYM_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkShowHiddenFields;
 		wxCheckBox* m_showPinElectricalTypes;
+		wxCheckBox* m_checkShowPinAltModeIcons;
 
 	public:
 

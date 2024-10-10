@@ -82,6 +82,7 @@ public:
     bool m_ShowPinElectricalType;
     bool m_ShowHiddenPins;
     bool m_ShowHiddenFields;
+    bool m_ShowPinAltIcons;
 
     ///< When true, dragging an outline edge will drag pins rooted on it
     bool m_dragPinsAlongWithEdges;

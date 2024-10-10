@@ -87,6 +87,7 @@ public:
     bool   m_ShowPinNumbers;         // Force showing of pin numbers (normally symbol-specific)
     bool   m_ShowPinNames;           // Force showing of pin names (normally symbol-specific)
     bool   m_ShowPinElectricalTypes;
+    bool   m_ShowPinAltIcons;
     bool   m_ShowDisabled;
     bool   m_ShowGraphicsDisabled;
     bool   m_ShowConnectionPoints;

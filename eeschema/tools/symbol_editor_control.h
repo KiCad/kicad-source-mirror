@@ -69,6 +69,7 @@ public:
 
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
     int ToggleHiddenFields( const TOOL_EVENT& aEvent );
+    int TogglePinAltIcons( const TOOL_EVENT& aEvent );
 
     int ChangeUnit( const TOOL_EVENT& aEvent );
 
