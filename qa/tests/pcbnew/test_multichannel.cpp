@@ -64,7 +64,7 @@ RULE_AREA* findRuleAreaByPartialName( MULTICHANNEL_TOOL* aTool, const wxString& 
     return nullptr;
 }
 
-/* TODO: FIX THIS FOR NEW MULTICHANNEL TOOL FILE FORMAT
+
 BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE )
 {
     using TMATCH::CONNECTION_GRAPH;
@@ -219,6 +219,6 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
         BOOST_ASSERT( result >= 0 );
     }
 }
-*/
+
 
 BOOST_AUTO_TEST_SUITE_END()
