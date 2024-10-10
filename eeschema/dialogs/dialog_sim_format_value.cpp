@@ -89,7 +89,7 @@ DIALOG_SIM_FORMAT_VALUE::DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, SPICE_VALUE
 
 bool DIALOG_SIM_FORMAT_VALUE::TransferDataFromWindow()
 {
-    m_format->Precision = alg::clamp( 1, m_precisionCtrl->GetValue(), 9 );
+    m_format->Precision = std::clamp( m_precisionCtrl->GetValue(), 1, 9 );
 
     if( m_rangeCtrl->GetSelection() == 0 )
         m_format->Range = wxS( "~" ) + m_units;

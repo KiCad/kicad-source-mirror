@@ -450,7 +450,7 @@ void PAD::SetRoundRectCornerRadius( PCB_LAYER_ID aLayer, double aRadius )
 
 void PAD::SetRoundRectRadiusRatio( PCB_LAYER_ID aLayer, double aRadiusScale )
 {
-    m_padStack.SetRoundRectRadiusRatio( alg::clamp( 0.0, aRadiusScale, 0.5 ), aLayer );
+    m_padStack.SetRoundRectRadiusRatio( std::clamp( aRadiusScale, 0.0, 0.5 ), aLayer );
 
     SetDirty();
 }
@@ -458,14 +458,14 @@ void PAD::SetRoundRectRadiusRatio( PCB_LAYER_ID aLayer, double aRadiusScale )
 
 void PAD::SetFrontRoundRectRadiusRatio( double aRadiusScale )
 {
-    m_padStack.SetRoundRectRadiusRatio( alg::clamp( 0.0, aRadiusScale, 0.5 ), F_Cu );
+    m_padStack.SetRoundRectRadiusRatio( std::clamp( aRadiusScale, 0.0, 0.5 ), F_Cu );
     SetDirty();
 }
 
 
 void PAD::SetChamferRectRatio( PCB_LAYER_ID aLayer, double aChamferScale )
 {
-    m_padStack.SetChamferRatio( alg::clamp( 0.0, aChamferScale, 0.5 ), aLayer );
+    m_padStack.SetChamferRatio( std::clamp( aChamferScale, 0.0, 0.5 ), aLayer );
 
     SetDirty();
 }

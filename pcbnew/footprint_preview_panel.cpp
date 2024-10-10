@@ -277,7 +277,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     panel->GetGAL()->SetGridVisibility( gridCfg.show );
 
     //Bounds checking cannot include number of elements as an index!
-    int    gridIdx = alg::clamp( 0, gridCfg.last_size_idx, (int) gridCfg.grids.size() - 1 );
+    int    gridIdx = std::clamp( gridCfg.last_size_idx, 0, (int) gridCfg.grids.size() - 1 );
     double gridSizeX = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
                                                                   gridCfg.grids[gridIdx].x );
     double gridSizeY = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,

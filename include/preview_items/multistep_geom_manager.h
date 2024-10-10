@@ -171,7 +171,7 @@ private:
         m_step += aForward ? 1 : -1;
 
         // clamp to allowed values
-        m_step = alg::clamp( 0, m_step, getMaxStep() );
+        m_step = std::clamp( m_step, 0, getMaxStep() );
     }
 
     ///< Has the geometry changed such that a client should redraw?

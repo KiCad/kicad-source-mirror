@@ -413,8 +413,8 @@ void EDA_TEXT::SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize )
         int min = m_IuScale.get().mmToIU( TEXT_MIN_SIZE_MM );
         int max = m_IuScale.get().mmToIU( TEXT_MAX_SIZE_MM );
 
-        aNewSize = VECTOR2I( alg::clamp( min, aNewSize.x, max ),
-                             alg::clamp( min, aNewSize.y, max ) );
+        aNewSize = VECTOR2I( std::clamp( aNewSize.x, min, max ),
+                             std::clamp( aNewSize.y, min, max ) );
     }
 
     m_attributes.m_Size = aNewSize;
@@ -429,7 +429,7 @@ void EDA_TEXT::SetTextWidth( int aWidth )
     int min = m_IuScale.get().mmToIU( TEXT_MIN_SIZE_MM );
     int max = m_IuScale.get().mmToIU( TEXT_MAX_SIZE_MM );
 
-    m_attributes.m_Size.x = alg::clamp( min, aWidth, max );
+    m_attributes.m_Size.x = std::clamp( aWidth, min, max );
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
 }
@@ -440,7 +440,7 @@ void EDA_TEXT::SetTextHeight( int aHeight )
     int min = m_IuScale.get().mmToIU( TEXT_MIN_SIZE_MM );
     int max = m_IuScale.get().mmToIU( TEXT_MAX_SIZE_MM );
 
-    m_attributes.m_Size.y = alg::clamp( min, aHeight, max );
+    m_attributes.m_Size.y = std::clamp( aHeight, min, max );
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
 }

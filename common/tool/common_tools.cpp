@@ -483,7 +483,7 @@ int COMMON_TOOLS::GridPreset( int idx, bool aFromHotkey )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    currentGrid = alg::clamp( 0, idx, (int) m_grids.size() - 1 );
+    currentGrid = std::clamp( idx, 0, (int) m_grids.size() - 1 );
 
     return OnGridChanged( aFromHotkey );
 }

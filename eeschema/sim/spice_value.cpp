@@ -57,7 +57,7 @@ void SPICE_VALUE_FORMAT::FromString( const wxString& aString )
 
 wxString SPICE_VALUE_FORMAT::ToString() const
 {
-    return wxString::Format( wxS( "%d%s" ), alg::clamp( 0, Precision, 9 ), Range );
+    return wxString::Format( wxS( "%d%s" ), std::clamp( Precision, 0, 9 ), Range );
 }
 
 

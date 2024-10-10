@@ -2027,7 +2027,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         // and the algo to count the actual number of spokes can fail
         int spoke_max_allowed_w = std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
 
-        spoke_w = alg::clamp( constraint.Value().Min(), spoke_w, constraint.Value().Max() );
+        spoke_w = std::clamp( spoke_w, constraint.Value().Min(), constraint.Value().Max() );
 
         // ensure the spoke width is smaller than the pad minor size
         spoke_w = std::min( spoke_w, spoke_max_allowed_w );

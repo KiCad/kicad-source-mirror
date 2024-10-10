@@ -576,10 +576,10 @@ EDA_COLOR_T COLOR4D::FindNearestLegacyColor( int aR, int aG, int aB )
 
 COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
 {
-    r = alg::clamp( 0, aRed, 255 ) / 255.0;
-    g = alg::clamp( 0, aGreen, 255 ) / 255.0;
-    b = alg::clamp( 0, aBlue, 255 ) / 255.0;
-    a = alg::clamp( 0.0, aAlpha, 1.0 );
+    r = std::clamp( aRed, 0, 255 ) / 255.0;
+    g = std::clamp( aGreen, 0, 255 ) / 255.0;
+    b = std::clamp( aBlue, 0, 255 ) / 255.0;
+    a = std::clamp( aAlpha, 0.0, 1.0 );
 
     return *this;
 }

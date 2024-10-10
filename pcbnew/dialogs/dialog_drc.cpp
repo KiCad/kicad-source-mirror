@@ -223,7 +223,7 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 
 bool DIALOG_DRC::updateUI()
 {
-    double cur = alg::clamp( 0.0, (double) m_progress.load() / m_maxProgress, 1.0 );
+    double cur = std::clamp( (double) m_progress.load() / m_maxProgress, 0.0, 1.0 );
 
     int newValue = KiROUND( cur * 1000.0 );
     m_gauge->SetValue( newValue );

@@ -322,7 +322,7 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
         else
         {
             circlesegcount = KiROUND( arcsegcount * 360.0 / std::abs( arc_angle.AsDegrees() ) );
-            circlesegcount = alg::clamp( 1, circlesegcount, 128 );
+            circlesegcount = std::clamp( circlesegcount, 1, 128 );
         }
 
         createArcSegments( center, arc->GetStart(), arc_angle, circlesegcount,

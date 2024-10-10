@@ -3991,7 +3991,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
             if( dim->Type() == PCB_DIM_ORTHOGONAL_T )
             {
                 PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dim.get() );
-                orientation = alg::clamp( 0, orientation, 1 );
+                orientation = std::clamp( orientation, 0, 1 );
                 ortho->SetOrientation( static_cast<PCB_DIM_ORTHOGONAL::DIR>( orientation ) );
             }
 
@@ -4031,7 +4031,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                 case T_units_format:
                 {
                     int format = parseInt( "dimension units format" );
-                    format = alg::clamp( 0, format, 3 );
+                    format = std::clamp( format, 0, 3 );
                     dim->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( format ) );
                     NeedRIGHT();
                     break;
@@ -4118,7 +4118,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                     PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( dim.get() );
 
                     int textFrame = parseInt( "text frame mode" );
-                    textFrame = alg::clamp( 0, textFrame, 3 );
+                    textFrame = std::clamp( textFrame, 0, 3 );
                     leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( textFrame ));
                     NeedRIGHT();
                     break;

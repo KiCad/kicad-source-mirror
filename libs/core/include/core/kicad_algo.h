@@ -201,12 +201,6 @@ bool signbit( T v )
 }
 
 
-template <typename T>
-T clamp( T min, T value, T max )
-{
-    return std::max( min, std::min( value, max ) );
-}
-
 /**
  * @brief Returns the length of the longest common subset of values between two containers.
 */
