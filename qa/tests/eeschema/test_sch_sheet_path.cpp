@@ -28,10 +28,14 @@
 
 #include <qa_utils/uuid_test_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include "eeschema_test_utils.h"
 
 // Code under test
 #include <sch_sheet_path.h>
 
+#include <wildcards_and_files_ext.h>
+#include <eeschema_helpers.h>
+#include <sch_screen.h>
 #include <sch_sheet.h>
 
 #include <sstream>
@@ -126,6 +130,35 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK( m_empty_path == otherEmpty );
 
     BOOST_CHECK( m_empty_path != m_linear );
+}
+
+
+BOOST_AUTO_TEST_CASE( SheetListGetOrdinalPath )
+{
+    // The "complex_hierarchy" test project has a root sheet with two sheets that reference the
+    // same file.
+    std::unique_ptr<SCHEMATIC> schematic;
+    wxFileName fn( KI_TEST::GetEeschemaTestDataDir() + wxS( "netlists/complex_hierarchy" ),
+                   wxS( "complex_hierarchy" ), FILEEXT::ProjectFileExtension );
+
+    schematic.reset( EESCHEMA_HELPERS::LoadSchematic( fn.GetFullPath(), false, false, nullptr ) );
+
+    SCH_SHEET_LIST hierarchy = schematic->Hierarchy();
+    BOOST_CHECK_EQUAL( hierarchy.size(), 3 );
+
+    // A null pointer should always result in an empty return value.
+    BOOST_CHECK( !hierarchy.GetOrdinalPath( nullptr ) );
+
+    // The root sheet is a single instance.  It's always ordinal.
+    BOOST_CHECK( hierarchy.GetOrdinalPath( schematic->RootScreen() ).value() == hierarchy.at( 0 ) );
+
+    // The shared schematic with the lowest page number is the ordinal sheet path.
+    SCH_SHEET* sheet = hierarchy.at( 1 ).Last();
+    BOOST_CHECK( hierarchy.GetOrdinalPath( sheet->GetScreen() ).value() == hierarchy.at( 1 ) );
+
+    // The shared sheet with a higher page number is not the ordinal sheet path.
+    sheet = hierarchy.at( 2 ).Last();
+    BOOST_CHECK( hierarchy.GetOrdinalPath( sheet->GetScreen() ).value() == hierarchy.at( 1 ) );
 }
 
 

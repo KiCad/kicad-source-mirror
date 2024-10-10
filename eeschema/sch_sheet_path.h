@@ -696,6 +696,17 @@ public:
 
     bool ContainsSheet( const SCH_SHEET* aSheet ) const;
 
+    /**
+     * Return the ordinal sheet path of \a aScreen.
+     *
+     * @warning In order for this method to work correctly, the sheet list must be sorted by page
+     *          number.
+     *
+     * @return an optional #SCH_SHEET_PATH for the ordinal path of \a aScreen or an empty value
+     *         if \a aScreen has no ordinal sheet path in the list.
+     */
+    std::optional<SCH_SHEET_PATH> GetOrdinalPath( const SCH_SCREEN* aScreen ) const;
+
 private:
     SCH_SHEET_PATH  m_currentSheetPath;
 };

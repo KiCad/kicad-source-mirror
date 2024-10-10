@@ -1456,3 +1456,19 @@ bool SCH_SHEET_LIST::ContainsSheet( const SCH_SHEET* aSheet ) const
 
     return false;
 }
+
+
+std::optional<SCH_SHEET_PATH> SCH_SHEET_LIST::GetOrdinalPath( const SCH_SCREEN* aScreen ) const
+{
+    // Sheet paths with sheets that do not have a screen object are not valid.
+    if( !aScreen )
+        return std::nullopt;
+
+    for( const SCH_SHEET_PATH& path: *this )
+    {
+        if( path.LastScreen() == aScreen )
+            return std::optional<SCH_SHEET_PATH>( path );
+    }
+
+    return std::nullopt;
+}
