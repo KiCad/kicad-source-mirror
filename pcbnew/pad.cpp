@@ -936,7 +936,12 @@ void PAD::FlipPrimitives( FLIP_DIRECTION aFlipDirection )
         [&]( PCB_LAYER_ID aLayer )
         {
             for( std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives( aLayer ) )
+            {
+                // Ensure the primitive parent is up to date. Flip uses GetBoard() that
+                // imply primitive parent is valid
+                primitive->SetParent(this);
                 primitive->Flip( VECTOR2I( 0, 0 ), aFlipDirection );
+            }
         } );
 
     SetDirty();
@@ -1566,7 +1571,19 @@ BITMAPS PAD::GetMenuImage() const
 
 EDA_ITEM* PAD::Clone() const
 {
-    return new PAD( *this );
+    PAD* cloned = new PAD( *this );
+
+    // Ensure the cloned primitives of the pad stack have the right parent
+    cloned->Padstack().ForEachUniqueLayer(
+    [&]( PCB_LAYER_ID aLayer )
+    {
+        for( std::shared_ptr<PCB_SHAPE>& primitive : cloned->m_padStack.Primitives( aLayer ) )
+        {
+            primitive->SetParent(cloned);
+        }
+    } );
+
+    return cloned;
 }
 
 
@@ -2203,7 +2220,6 @@ void PAD::doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider,
                       const std::function<void( int aErrorCode,
                                                 const wxString& aMsg )>& aErrorHandler ) const
 {
-    VECTOR2I drill_size = GetDrillSize();
     wxString msg;
 
     VECTOR2I pad_size = GetSize( aLayer );
