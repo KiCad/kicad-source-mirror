@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
-"PO-Revision-Date: 2024-10-10 06:58+0000\n"
+"PO-Revision-Date: 2024-10-10 10:52+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -2853,117 +2853,118 @@ msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr ""
+msgstr "בחר נתיב שונה"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "הנתיב שנבחר אינו מכיל הגדרות תקפות של KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr ""
+msgstr "ייבא תצורת ספרייה מגרסה קודמת"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"כאשר מסומן, טבלאות ספריית הסמלים ותצורות הרכיב מהגרסה הקודמת ייובאו לגרסה זו"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
-msgstr ""
+msgstr "התחל עם הגדרות ברירת המחדל"
 
 #: common/dialogs/dialog_migrate_settings_base.h:69
 msgid "Configure KiCad Settings Path"
-msgstr ""
+msgstr "הגדר נתיב הגדרות KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "A4 210x297mm"
-msgstr ""
+msgstr "A4 210x297mm"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "A3 297x420mm"
-msgstr ""
+msgstr "A3 297x420mm"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "A2 420x594mm"
-msgstr ""
+msgstr "A2 420x594mm"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "A1 594x841mm"
-msgstr ""
+msgstr "A1 594x841mm"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "A0 841x1189mm"
-msgstr ""
+msgstr "A0 841x1189mm"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "A 8.5x11in"
-msgstr ""
+msgstr "A 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "B 11x17in"
-msgstr ""
+msgstr "B 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "C 17x22in"
-msgstr ""
+msgstr "C 17x22in"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "D 22x34in"
-msgstr ""
+msgstr "D 22x34in"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "E 34x44in"
-msgstr ""
+msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:74
 msgid "USLetter 8.5x11in"
-msgstr ""
+msgstr "USLetter 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:75
 msgid "USLegal 8.5x14in"
-msgstr ""
+msgstr "USLegal 8.5x14in"
 
 #: common/dialogs/dialog_page_settings.cpp:76
 msgid "USLedger 11x17in"
-msgstr ""
+msgstr "USLedger 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:77
 msgid "User (Custom)"
-msgstr ""
+msgstr "משתמש (מותאם אישית)"
 
 #: common/dialogs/dialog_page_settings.cpp:110
 msgid "Preview Settings"
-msgstr ""
+msgstr "תצוגה מקדימה של הגדרות"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Preview Paper"
-msgstr ""
+msgstr "תצוגה מקדימה של הנייר"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Preview Title Block Data"
-msgstr ""
+msgstr "תצוגה מקדימה של נתוני מסגרת הכותרת"
 
 #: common/dialogs/dialog_page_settings.cpp:116
 #: common/dialogs/dialog_page_settings_base.h:146
 #: eeschema/tools/sch_editor_control.cpp:191
 #: pcbnew/tools/board_editor_control.cpp:302
 msgid "Page Settings"
-msgstr ""
+msgstr "הגדרות עמוד"
 
 #: common/dialogs/dialog_page_settings.cpp:117
 #: common/dialogs/dialog_page_settings_base.cpp:27
 msgid "Paper"
-msgstr ""
+msgstr "נייר"
 
 #: common/dialogs/dialog_page_settings.cpp:118
 msgid "Title Block"
-msgstr ""
+msgstr "מסגרת הכותרת"
 
 #: common/dialogs/dialog_page_settings.cpp:486
 #: eeschema/eeschema_jobs_handler.cpp:126 pagelayout_editor/files.cpp:243
@@ -2971,21 +2972,21 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:1616
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr ""
+msgstr "שגיאה בטעינת גיליון השרטוט '%s'."
 
 #: common/dialogs/dialog_page_settings.cpp:717
 #: common/dialogs/dialog_page_settings_base.cpp:54
 msgid "Portrait"
-msgstr ""
+msgstr "לאורך"
 
 #: common/dialogs/dialog_page_settings.cpp:719
 #: common/dialogs/dialog_page_settings_base.cpp:54
 msgid "Landscape"
-msgstr ""
+msgstr "לרוחב"
 
 #: common/dialogs/dialog_page_settings.cpp:807 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
-msgstr ""
+msgstr "קובץ גיליון שרטוט"
 
 #: common/dialogs/dialog_page_settings.cpp:845
 #, c-format
@@ -2993,10 +2994,12 @@ msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
 msgstr ""
+"שגיאה בטעינת גיליון השרטוט '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
-msgstr ""
+msgstr "טקסט דמה"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
@@ -3014,7 +3017,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:60
 msgid "Custom paper size:"
-msgstr ""
+msgstr "גודל נייר מותאם אישית:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:72
 #: pcbnew/dialogs/dialog_board_statistics.cpp:105
@@ -3022,11 +3025,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:181
 msgid "Height:"
-msgstr ""
+msgstr "גובה:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:85
 msgid "Custom paper height."
-msgstr ""
+msgstr "גובה נייר מותאם אישית."
 
 #: common/dialogs/dialog_page_settings_base.cpp:93
 #: eeschema/dialogs/dialog_line_properties_base.cpp:30
@@ -3043,11 +3046,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:168
 msgid "Width:"
-msgstr ""
+msgstr "רוחב:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:106
 msgid "Custom paper width."
-msgstr ""
+msgstr "רוחב נייר מותאם אישית."
 
 #: common/dialogs/dialog_page_settings_base.cpp:117
 #: common/dialogs/dialog_page_settings_base.cpp:237
@@ -3064,7 +3067,7 @@ msgstr ""
 #: common/dialogs/dialog_page_settings_base.cpp:369
 #: common/dialogs/dialog_page_settings_base.cpp:381
 msgid "Export to other sheets"
-msgstr ""
+msgstr "יצצא לגליונות אחרים"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
 #: eeschema/erc/erc_item.cpp:426 eeschema/sch_marker.cpp:382
@@ -3072,7 +3075,7 @@ msgstr ""
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Drawing Sheet"
-msgstr ""
+msgstr "גליון שרטוט"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:46
@@ -3082,25 +3085,25 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:25
 msgid "File:"
-msgstr ""
+msgstr "קובץ:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:183
 msgid "Title Block Parameters"
-msgstr ""
+msgstr "פרמטרים של מסגרת הכותרת"
 
 #: common/dialogs/dialog_page_settings_base.cpp:196
 #, c-format
 msgid "Number of sheets: %d"
-msgstr ""
+msgstr "מספר גיליונות: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:203
 #, c-format
 msgid "Sheet number: %d"
-msgstr ""
+msgstr "מספר גיליון: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
 msgid "Issue Date:"
-msgstr ""
+msgstr "תאריך הנפקה:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
 msgid "<<<"
@@ -3108,52 +3111,52 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
 msgid "Revision:"
-msgstr ""
+msgstr "עדכון:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:252
 #: eeschema/dialogs/dialog_export_netlist.cpp:363
 msgid "Title:"
-msgstr ""
+msgstr "כותרת:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:264
 msgid "Company:"
-msgstr ""
+msgstr "חברה:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:276
 msgid "Comment1:"
-msgstr ""
+msgstr "הערה 1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:288
 msgid "Comment2:"
-msgstr ""
+msgstr "הערה 2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:300
 msgid "Comment3:"
-msgstr ""
+msgstr "הערה 3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:312
 msgid "Comment4:"
-msgstr ""
+msgstr "הערה 4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:324
 msgid "Comment5:"
-msgstr ""
+msgstr "הערה 5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:336
 msgid "Comment6:"
-msgstr ""
+msgstr "הערה 6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Comment7:"
-msgstr ""
+msgstr "הערה 7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:360
 msgid "Comment8:"
-msgstr ""
+msgstr "הערה 8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:372
 msgid "Comment9:"
-msgstr ""
+msgstr "הערה 9:"
 
 #: common/dialogs/dialog_paste_special.cpp:37
 msgid ""
@@ -4215,6 +4218,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
+"KiCad יכולה לדווח באופן אנונימי על קריסות ונתוני אירועים מיוחדים למפתחים על "
+"מנת לסייע בזיהוי באגים קריטיים ברחבי בסיס המשתמשים בצורה יעילה יותר ולסייע "
+"בפרופיל הפונקציונליות כדי להנחות שיפורים.\n"
+"\n"
+"כדי לקשר דוחות אוטומטיים מאותה התקנת KiCad, נוצר מזהה ייחודי שהוא אקראי "
+"לחלוטין, ומשמש רק למטרות דיווח על קריסה. אין מידע אישי מזהה (PII) כולל כתובת "
+"IP מאוחסן או מחובר למזהה זה. אתה יכול לאפס את המזהה הזה בכל עת באמצעות "
+"הכפתור שסופק.\n"
+"\n"
+"אם תבחר להשתתף בהתנדבות, KiCad תטפל אוטומטית בשליחת הדוחות האמורים כאשר "
+"מתרחשים קריסות או אירועים. קובצי העיצוב שלך כגון סכימה או PCB לעולם אינם "
+"משותפים בתהליך זה."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -14306,6 +14321,12 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
+"סכימה זו משתמשת כעת בשיטת חיפוש רשימת סמלים של פרויקט לטעינת סמלי ספרייה. "
+"KiCad תנסה למפות את הסמלים הקיימים כדי להשתמש בטבלת ספריית הסמלים החדשה. "
+"מיפוי מחדש ישנה חלק מקבצי הפרויקט וייתכן שהסכמים לא יהיו תואמים לגרסאות "
+"ישנות יותר של KiCad. כל הקבצים שישתנו יגובו לתיקיית \"הצלה-גיבוי\" בתיקיית "
+"הפרויקט אם תצטרך לבטל שינויים כלשהם. אם תבחר לדלג על שלב זה, תהיה אחראי "
+"למיפוי מחדש של הסמלים באופן ידני."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:216
 #, c-format
@@ -18668,6 +18689,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"ישנם גיליונות היררכיים בקובץ הסכמטי הנטען מגירסת קובץ ישנה יותר וכתוצאה מכך "
+"חסרים נתוני מופע סמלים. זה יגרום לכך שכל הסמלים בסכמה הנטענת ישתמשו בהגדרת "
+"ברירת המחדל של המופע או יחזרו להגדרות סמל הספרייה. טעינת הפרויקט שמשתמש "
+"בקובץ סכמטי זה ושמירה בגרסת הקובץ האחרונה תפתור בעיה זו.\n"
+"\n"
+"האם ברצונך להמשיך?"
 
 #: eeschema/sheet.cpp:320 eeschema/sheet.cpp:348 eeschema/sheet.cpp:389
 #: eeschema/sheet.cpp:438 eeschema/sheet.cpp:499
@@ -27967,6 +27994,20 @@ msgid ""
 "\n"
 "The value 0 is a special case and is not present in any series."
 msgstr ""
+"רכיבים פסיביים מיוצרים בדרך כלל עם ערכי סדרה E המתאימים לדיוק שלהם.\n"
+"קבלים משתמשים בדרך כלל בערכי E12. נגדים של 10% ו-5% משתמשים בדרך כלל בערכי "
+"E24. 1%\n"
+"נגדים משתמשים בערכי E96. סדרות אחרות אינן בשימוש נפוץ.\n"
+"\n"
+"כדי לבחור ערך התחל בערך היעד המחושב ולאחר מכן עיגל אותו ל-2\n"
+"נתונים משמעותיים עבור E24 ומטה או 3 נתונים משמעותיים עבור E48 ומעלה.\n"
+"לאחר מכן מצא את הערך בטבלה הקרוב ביותר למספרים המשמעותיים\n"
+"נשארים והחליפו אותו בנתונים האלה.\n"
+"\n"
+"לדוגמה, אם ערך היעד המחושב הוא 16,834.2Ω, זה מתעגל ל-16,800Ω.\n"
+"הערך הקרוב ביותר ל-168 הוא 169 והערך הנבחר של E96 הוא 16.9kΩ.\n"
+"\n"
+"הערך 0 הוא מקרה מיוחד ואינו קיים באף סדרה."
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -27997,6 +28038,16 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
+"טבלה זו מציגה את ההבדל בפוטנציאל האלקטרוכימי בין מתכות וסגסוגות שונות. "
+"קורוזיה גלוונית משפיעה על מתכות שונות במגע ובתנאים מסוימים.<br>\n"
+"האנודה של זוג אלקטרוכימיים מתחמצנת ונאכלת, בעוד שהקתודה מקבלת מתכות מומסות "
+"מצופה עליה אך נשארת מוגנת.<br>\n"
+"מספר חיובי מציין שהשורה היא אנודית (-) והעמודה היא קתודית (+), גווני צביעה "
+"קרים וחמים מציינים גם הם את הפוטנציאל של השורות.<br>\n"
+"EN 50310 מציע הפרש מתח מתחת ל-300mV. פרקטיקות ידועות עושות שימוש במתכת ממשק "
+"שלישית בין הצמד הראשי (כלומר גימור פני השטח ENIG).<br>\n"
+"תאים נבחרים מוצגים עם בחירת הצביעה של מערכת ברירת המחדל לאחר מילוי מחדש של "
+"השולחן.\n"
 
 #: pcb_calculator/iec60664_help.h:2
 msgid ""
@@ -28014,6 +28065,17 @@ msgid ""
 "- Insulations trough liquids, compressed air or gases other than air are not "
 "in the scope of IEC60664"
 msgstr ""
+"המטרה של IEC60664-1 היא לספק הנחיות לגבי תכנון בידוד למוצרים שיש להם חיבור "
+"לאספקת החשמל.\n"
+"\n"
+"עם זאת, חלק מהמקרים אינם מכוסים על ידי מחשבון זה:\n"
+"\n"
+"- עבור תדרים גבוהים מ-30kHz, הביצועים הדיאלקטריים יורדים. IEC60664-4 מכסה את "
+"המקרים הללו\n"
+"- בעת שימוש בציפוי קונפורמי או בעציץ על מנת להגן מפני זיהום, אם מתקיימים כל "
+"התנאים המפורטים ב-IEC60664-3, ניתן להפחית את מרחקי המרווח והזחילה. מסכת "
+"הלחמה בדרך כלל אינה נחשבת כציפוי קונפורמי.\n"
+"- בידודים של נוזלים, אוויר דחוס או גזים שאינם אוויר אינם בגדר IEC60664"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 msgid "KiCad Calculator Tools"
@@ -28117,6 +28179,19 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"- מחשבון זה מוצא שילובים של סדרת E סטנדרטית (בין 10Ω ל-1MΩ) ליצירת ערכים "
+"שרירותיים.\n"
+"- ניתן להזין את ההתנגדות הנדרשת מ-0.0025 עד 4000 kΩ.\n"
+"- ניתנים פתרונות המשתמשים בעד 4 רכיבים.\n"
+"\n"
+"הערך המבוקש אינו נכלל תמיד מערך הפתרונות.<br>\n"
+"ניתן לא לכלול עד שני ערכים נוספים במקרה של בעיות זמינות רכיבים.\n"
+"\n"
+"הפתרונות ניתנים בפורמטים הבאים:\n"
+"\n"
+"\tנגדי R1 + R2 +...+ Rn בסדרות\n"
+"\tR1 | R2 |...| נגדי Rn במקביל\n"
+"\tR1 + (R2|R3)... כל שילוב של האמור לעיל\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -32051,6 +32126,12 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
+"זהו יחס המרווח המקומי המיושם כאחוז מרוחב וגובה הפד עבור טביעת הרגל הזו.\n"
+"ערך של 10 פירושו שערך המרווח האופקי הוא 10% מרוחב הפד, וערך המרווח האנכי הוא "
+"10% מגובה הרפידה.\n"
+"ערך זה יכול להיות מוחלף על ידי ערך מקומי של משטח.\n"
+"ערך הפינוי הסופי הוא הסכום של ערך זה וערך הפינוי המוחלט.\n"
+"ערך שלילי פירושו גודל צמצם סטנסיל קטן יותר מגודל פד."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -32200,6 +32281,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
+"זהו יחס המרווח המקומי המיושם כאחוז מרוחב וגובה הרפידה עבור טביעת הרגל הזו.\n"
+"ערך של 10 פירושו שערך המרווח האופקי הוא 10% מרוחב הרפידה, וערך המרווח האנכי "
+"הוא 10% מגובה הרפידה.\n"
+"ערך הפינוי הסופי הוא הסכום של ערך זה וערך הפינוי המוחלט.\n"
+"ערך שלילי פירושו גודל צמצם סטנסיל קטן יותר מגודל רפידה.\n"
+"ניתן לעקוף ערך זה על בסיס פנקס אחר פנקס בלשונית אישור והגדרות מקומיים של "
+"מאפייני משטח."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
