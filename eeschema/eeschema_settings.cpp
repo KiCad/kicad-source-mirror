@@ -650,6 +650,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "symbol_chooser.place_all_units",
             &m_SymChooserPanel.place_all_units, true ) );
 
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.sash_pos_h",
+            &m_DesignBlockChooserPanel.sash_pos_h, -1 ) );
+
     m_params.emplace_back( new PARAM<int>( "design_block_chooser.sash_pos_v",
             &m_DesignBlockChooserPanel.sash_pos_v, -1 ) );
 
@@ -667,6 +670,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "design_block_chooser.place_as_sheet",
             &m_DesignBlockChooserPanel.place_as_sheet, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_block_chooser.keep_annotations",
+            &m_DesignBlockChooserPanel.keep_annotations, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );
