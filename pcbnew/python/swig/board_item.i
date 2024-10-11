@@ -64,6 +64,7 @@ class PCB_VIA;
 class PCB_ARC;
 class ZONE;
 class PCB_TARGET;
+class PCB_TABLE;
 class PCB_REFERENCE_IMAGE;
 
 // Anything targeted to the %wrapper section is extern "C" whereas code targeted
@@ -90,6 +91,7 @@ static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
+static PCB_TABLE*            Cast_to_PCB_TABLE( BOARD_ITEM* );
 static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* );
 
 #ifdef __cplusplus
@@ -116,6 +118,7 @@ static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
+static PCB_TABLE*            Cast_to_PCB_TABLE( BOARD_ITEM* );
 static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* );
 
 
@@ -159,6 +162,8 @@ static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* );
             return Cast_to_PCB_ARC(self)
         elif ct=="PCB_TARGET":
             return Cast_to_PCB_TARGET(self)
+        elif ct=="PCB_TABLE":
+            return Cast_to_PCB_TABLE(self)
         elif ct=="PCB_REFERENCE_IMAGE":
             return Cast_to_PCB_REFERENCE_IMAGE(self)
         elif ct=="ZONE":
@@ -212,5 +217,6 @@ static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* self )              { 
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* self )              { return dynamic_cast<PCB_ARC *>(self);             }
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>(self);                 }
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* self )           { return dynamic_cast<PCB_TARGET*>(self);           }
+static PCB_TABLE*            Cast_to_PCB_TABLE( BOARD_ITEM* self )            { return dynamic_cast<PCB_TABLE*>(self);            }
 static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* self )  { return dynamic_cast<PCB_REFERENCE_IMAGE*>(self);  }
 %}
