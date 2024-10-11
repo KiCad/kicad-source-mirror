@@ -99,7 +99,7 @@ public:
     void ChangeLength( int aLength );
 
     ELECTRICAL_PINTYPE GetType() const;
-    void SetType( ELECTRICAL_PINTYPE aType ) { m_type = aType; }
+    void SetType( ELECTRICAL_PINTYPE aType );
     wxString GetCanonicalElectricalTypeName() const;
     wxString GetElectricalTypeName() const;
 

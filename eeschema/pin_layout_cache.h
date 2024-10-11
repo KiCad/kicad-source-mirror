@@ -31,6 +31,8 @@
 #include <sch_pin.h>
 
 
+class SCHEMATIC_SETTINGS;
+
 /**
  * A pin layout helper is a class that manages the layout of the parts of
  * a pin on a schematic symbol:
@@ -52,10 +54,11 @@ public:
 
     enum DIRTY_FLAGS
     {
-        NAME      = 1,
-        NUMBER    = 2,
+        NAME = 1,
+        NUMBER = 2,
+        ELEC_TYPE = 4,
 
-        ALL       = NAME | NUMBER,
+        ALL = NAME | NUMBER | ELEC_TYPE,
     };
 
     /**
@@ -68,6 +71,16 @@ public:
      */
     BOX2I GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
                              bool aIncludeElectricalType );
+
+    /**
+     * Get the bounding box of the pin name, if there is one.
+     */
+    OPT_BOX2I GetPinNameBBox();
+
+    /**
+     * Get the bounding box of the pin number, if there is one.
+     */
+    OPT_BOX2I GetPinNumberBBox();
 
     /**
      * Gets the dangling indicator geometry for this pin, if the
@@ -101,12 +114,38 @@ private:
                                        const wxString& aText, const KIFONT::METRICS& aFontMetrics,
                                        TEXT_EXTENTS_CACHE& aCache );
 
+    /**
+     * Recompute all the caches that have become dirty.
+     */
+    void recomputeCaches();
+
+    /**
+     * Transform a box (in-place) to the pin's orientation.
+     */
+    void transformBoxForPin( BOX2I& aBox ) const;
+
+    /**
+     * Get the untransformd text box in the default orientation
+     *
+     * This will have to be offset and rotated.
+     */
+    OPT_BOX2I getUntransformedPinNameBox() const;
+    OPT_BOX2I getUntransformedPinNumberBox( bool aIncludeName ) const;
+    BOX2I     getUntransformedPinTypeBox() const;
+
+    ///< Pin type decoration if any
+    OPT_BOX2I getUntransformedDecorationBox() const;
+
     /// The pin in question
     const SCH_PIN& m_pin;
+
+    // The schematic settings if there are any
+    const SCHEMATIC_SETTINGS* m_schSettings;
 
     int m_dirtyFlags;
 
     // Various cache members
     TEXT_EXTENTS_CACHE m_numExtentsCache;
     TEXT_EXTENTS_CACHE m_nameExtentsCache;
+    TEXT_EXTENTS_CACHE m_typeExtentsCache;
 };

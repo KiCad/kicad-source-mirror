@@ -321,6 +321,15 @@ ELECTRICAL_PINTYPE SCH_PIN::GetType() const
     return m_type;
 }
 
+void SCH_PIN::SetType( ELECTRICAL_PINTYPE aType )
+{
+    if( aType == m_type )
+        return;
+
+    m_type = aType;
+    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::ELEC_TYPE );
+}
+
 
 wxString SCH_PIN::GetCanonicalElectricalTypeName() const
 {
