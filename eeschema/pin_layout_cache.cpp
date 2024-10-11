@@ -234,8 +234,30 @@ BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
 
     BOX2I bbox = BOX2I::ByCorners( begin, end );
     bbox.Move( m_pin.GetPosition() );
+
+    if( m_pin.IsDangling() )
+    {
+        // Not much point caching this
+        const CIRCLE c = GetDanglingIndicator();
+
+        BOX2I cBox = BOX2I::ByCenter( c.Center, { c.Radius * 2, c.Radius * 2 } );
+        // TODO: need some way to find the thickness...?
+        // cBox.Inflate( ??? );
+
+        bbox.Merge( cBox );
+    }
+
     bbox.Normalize();
     bbox.Inflate( ( m_pin.GetPenWidth() / 2 ) + 1 );
 
     return bbox;
+}
+
+
+CIRCLE PIN_LAYOUT_CACHE::GetDanglingIndicator() const
+{
+    return CIRCLE{
+        m_pin.GetPosition(),
+        TARGET_PIN_RADIUS,
+    };
 }

@@ -269,15 +269,8 @@ public:
     void ClearDefaultNetName( const SCH_SHEET_PATH* aPath );
     wxString GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoConnect = false );
 
-    bool IsDangling() const override
-    {
-        if( GetType() == ELECTRICAL_PINTYPE::PT_NC || GetType() == ELECTRICAL_PINTYPE::PT_NIC )
-            return false;
-
-        return m_isDangling;
-    }
-
-    void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
+    bool IsDangling() const override;
+    void SetIsDangling( bool aIsDangling );
 
     /**
      * @param aPin Comparison Pin

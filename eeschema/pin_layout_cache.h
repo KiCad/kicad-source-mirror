@@ -23,7 +23,10 @@
 
 #pragma once
 
+#include <optional>
 
+#include <geometry/circle.h>
+#include <geometry/seg.h>
 #include <math/box2.h>
 #include <sch_pin.h>
 
@@ -65,6 +68,12 @@ public:
      */
     BOX2I GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
                              bool aIncludeElectricalType );
+
+    /**
+     * Gets the dangling indicator geometry for this pin, if the
+     * pin were to be dangling.
+     */
+    CIRCLE GetDanglingIndicator() const;
 
 private:
 

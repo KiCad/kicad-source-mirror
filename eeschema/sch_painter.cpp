@@ -36,6 +36,7 @@
 #include <gr_text.h>
 #include <sch_pin.h>
 #include <math/util.h>
+#include <pin_layout_cache.h>
 #include <pgm_base.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -777,19 +778,23 @@ int SCH_PAINTER::externalPinDecoSize( const SCH_PIN &aPin )
 
 
 // Draw the target (an open circle) for a pin which has no connection or is being moved.
-void SCH_PAINTER::drawPinDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor,
+void SCH_PAINTER::drawPinDanglingIndicator( const SCH_PIN& aPin, const COLOR4D& aColor,
                                             bool aDrawingShadows, bool aBrightened )
 {
+    const PIN_LAYOUT_CACHE& plc = aPin.GetLayoutCache();
+    const CIRCLE            c = plc.GetDanglingIndicator();
+
+    float lineWidth = aDrawingShadows ? getShadowWidth( aBrightened )
+                                      : m_schSettings.GetDanglingIndicatorThickness();
+
     // Dangling symbols must be drawn in a slightly different colour so they can be seen when
     // they overlap with a junction dot.
     m_gal->SetStrokeColor( aColor.Brightened( 0.3 ) );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth( aBrightened )
-                                         : m_schSettings.GetDanglingIndicatorThickness() );
-
-    m_gal->DrawCircle( aPos, TARGET_PIN_RADIUS );
+    m_gal->SetLineWidth( lineWidth );
+    m_gal->DrawCircle( c.Center, c.Radius );
 }
 
 
@@ -1226,7 +1231,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         else
         {
             if( drawingDangling && isDangling && aPin->IsGlobalPower() )
-                drawPinDanglingIndicator( pos, color, drawingShadows, aPin->IsBrightened() );
+                drawPinDanglingIndicator( *aPin, color, drawingShadows, aPin->IsBrightened() );
 
             return;
         }
@@ -1235,7 +1240,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     if( drawingDangling )
     {
         if( isDangling )
-            drawPinDanglingIndicator( pos, color, drawingShadows, aPin->IsBrightened() );
+            drawPinDanglingIndicator( *aPin, color, drawingShadows, aPin->IsBrightened() );
 
         return;
     }

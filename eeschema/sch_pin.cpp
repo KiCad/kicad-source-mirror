@@ -394,6 +394,21 @@ void SCH_PIN::SetName( const wxString& aName )
 }
 
 
+bool SCH_PIN::IsDangling() const
+{
+    if( GetType() == ELECTRICAL_PINTYPE::PT_NC || GetType() == ELECTRICAL_PINTYPE::PT_NIC )
+        return false;
+
+    return m_isDangling;
+}
+
+
+void SCH_PIN::SetIsDangling( bool aIsDangling )
+{
+    m_isDangling = aIsDangling;
+}
+
+
 bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
 {
     bool isConnectableType_a = GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE

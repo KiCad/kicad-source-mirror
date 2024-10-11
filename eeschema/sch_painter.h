@@ -101,8 +101,8 @@ private:
     void draw( const SCH_LINE* aLine, int aLayer );
     void draw( const SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
-    void drawPinDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor,
-                                   bool aDrawingShadows, bool aBrightened );
+    void drawPinDanglingIndicator( const SCH_PIN& aPin, const COLOR4D& aColor, bool aDrawingShadows,
+                                   bool aBrightened );
     void drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                 bool aDangling, bool aDrawingShadows, bool aBrightened );
     void drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows );
