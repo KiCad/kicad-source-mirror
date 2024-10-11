@@ -3296,7 +3296,7 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
 }
 
 
-PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
+PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEXT* aBaseText )
 {
     wxCHECK_MSG( CurTok() == T_gr_text || CurTok() == T_fp_text, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TEXT." ) );
@@ -3306,7 +3306,12 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
 
     T token = NextTok();
 
-    if( parentFP )
+    // If a base text is provided, we have a derived text already parsed and just need to update it
+    if( aBaseText )
+    {
+        text = std::unique_ptr<PCB_TEXT>( aBaseText );
+    }
+    else if( parentFP )
     {
         switch( token )
         {
@@ -3930,24 +3935,18 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
 
         case T_gr_text:
         {
-            PCB_TEXT* text = parsePCB_TEXT( m_board );
-
-            dim->EDA_TEXT::operator=( *text );
-
-            // Fetch other dim properties out of the text item
-            dim->SetTextPos( text->GetTextPos() );
+            parsePCB_TEXT( m_board, dim.get() );
 
             if( isLegacyDimension )
             {
                 EDA_UNITS units = EDA_UNITS::MILLIMETRES;
 
-                if( !EDA_UNIT_UTILS::FetchUnitsFromString( text->GetText(), units ) )
+                if( !EDA_UNIT_UTILS::FetchUnitsFromString( dim->GetText(), units ) )
                     dim->SetAutoUnits( true ); //Not determined => use automatic units
 
                 dim->SetUnits( units );
             }
 
-            delete text;
             break;
         }
 
@@ -4503,7 +4502,12 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 // with no text effects, but will also handle parsing the text effects. We just drop the effects
                 // if they're present.
                 PCB_FIELD ignored = PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName );
+
                 parsePCB_TEXT_effects( &ignored );
+
+                // This doesn't currently happen, but if it does, we don't want to leave a dangling pointer in the map
+                if( auto it = m_fontTextMap.find( &ignored ); it != m_fontTextMap.end() )
+                    m_fontTextMap.erase( it );
 
                 break;
             }

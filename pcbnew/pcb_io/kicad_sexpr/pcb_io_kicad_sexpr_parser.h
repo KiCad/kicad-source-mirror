@@ -217,7 +217,7 @@ private:
     void parseTextBoxContent( PCB_TEXTBOX* aTextBox );
 
     PCB_SHAPE*           parsePCB_SHAPE( BOARD_ITEM* aParent );
-    PCB_TEXT*            parsePCB_TEXT( BOARD_ITEM* aParent );
+    PCB_TEXT*            parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEXT* aBaseText = nullptr );
     void                 parsePCB_TEXT_effects( PCB_TEXT* aText );
     PCB_REFERENCE_IMAGE* parsePCB_REFERENCE_IMAGE( BOARD_ITEM* aParent );
     PCB_TEXTBOX*         parsePCB_TEXTBOX( BOARD_ITEM* aParent );
