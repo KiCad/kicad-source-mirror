@@ -3,21 +3,22 @@
 # István Farkas <sakrafi1963@gmail.com>, 2023.
 # Hajdu Norbert <norbert.hajdu.biz@gmail.com>, 2024.
 # Balázs Meskó <meskobalazs@mailbox.org>, 2024.
+# Flórián Fuszkó <florianf47@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-08-24 14:09+0000\n"
-"Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"PO-Revision-Date: 2024-10-12 18:15+0000\n"
+"Last-Translator: Flórián Fuszkó <florianf47@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -84,14 +85,12 @@ msgid "Simplify holes contours"
 msgstr "Furatkontúrok egyszerűsítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1208
-#, fuzzy
 msgid "Build BVH for holes and vias"
-msgstr "Zsák/eltemetett viák és furatok felépítése"
+msgstr "BVH építése furatokhoz és viákhoz"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:398
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "OpenGL kontextus létrehozási hiba"
+msgstr "Hiba az OpenGL kontextus létrehozásában"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:429
 #, fuzzy
@@ -507,18 +506,16 @@ msgid "Show Through Hole 3D Models"
 msgstr "Furatszerelt 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Furatszerelt 3D modellek megjelenítése/elrejtése"
+msgstr "Átmenő furatok 3D modeljeinek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:288
 msgid "Show SMD 3D Models"
 msgstr "SMD 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Felületszerelt 3D modellek megjelenítése/elrejtése"
+msgstr "Felületszerelt 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
 msgid "Show Unspecified 3D Models"
@@ -529,19 +526,16 @@ msgid "Show 3D models for 'unspecified' type footprints"
 msgstr "Nem specifikus 3D modellek megjelenítése/elrejtése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Virtuális 3D modellek megjelenítése/elrejtése"
+msgstr "POS fájlban nem szereplő 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:307
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Virtuális 3D modellek megjelenítése/elrejtése"
+msgstr ".pos fájlban sem szereplő 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "3D modellek betöltése"
+msgstr "DNP-vel jelölt 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 #, fuzzy
@@ -660,9 +654,8 @@ msgid "Show user comments layer"
 msgstr "Felhasználó megjegyzések rétegének megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "User.Eco1"
-msgstr "Felhasználói Eco1 réteg"
+msgstr "Felhasználó.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 #, fuzzy
