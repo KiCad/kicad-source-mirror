@@ -61,7 +61,106 @@ BOOST_AUTO_TEST_CASE( RemoveNullSegments )
 
     BOOST_CHECK_EQUAL( removed, 4 );
     BOOST_CHECK_EQUAL( base_set.VertexCount(), 4 );
+}
 
+BOOST_AUTO_TEST_CASE( GetNeighbourIndexes )
+{
+    SHAPE_POLY_SET base_set;
+
+    base_set.NewOutline();
+    base_set.Append( 0, 0, -1, -1, true );
+    base_set.Append( 0, 10, -1, -1, true );
+    base_set.Append( 10, 10, -1, -1, true );
+    base_set.Append( 10, 0, -1, -1, true );
+
+    // Check we're testing what we think
+    BOOST_REQUIRE( base_set.OutlineCount() == 1 );
+    BOOST_REQUIRE( base_set.FullPointCount() == 4 );
+
+    int  prev = 0;
+    int  next = 0;
+    bool ok = false;
+
+    ok = base_set.GetNeighbourIndexes( 0, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 3 );
+    BOOST_TEST( next == 1 );
+
+    ok = base_set.GetNeighbourIndexes( 1, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 0 );
+    BOOST_TEST( next == 2 );
+
+    ok = base_set.GetNeighbourIndexes( 2, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 1 );
+    BOOST_TEST( next == 3 );
+
+    ok = base_set.GetNeighbourIndexes( 3, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 2 );
+    BOOST_TEST( next == 0 );
+
+    ok = base_set.GetNeighbourIndexes( 4, &prev, &next );
+    BOOST_TEST( !ok );
+
+    ok = base_set.GetNeighbourIndexes( -1, &prev, &next );
+    BOOST_TEST( !ok );
+}
+
+BOOST_AUTO_TEST_CASE( GetNeighbourIndexes_MultiOutline )
+{
+    SHAPE_POLY_SET base_set;
+
+    base_set.NewOutline();
+    base_set.Append( 0, 0, -1, -1, true );
+    base_set.Append( 0, 10, -1, -1, true );
+    base_set.Append( 10, 10, -1, -1, true );
+    base_set.Append( 10, 0, -1, -1, true );
+
+    base_set.NewOutline();
+    base_set.Append( 20, 0, -1, -1, true );
+    base_set.Append( 20, 10, -1, -1, true );
+    base_set.Append( 30, 10, -1, -1, true );
+    base_set.Append( 30, 0, -1, -1, true );
+
+    // Check we're testing what we think
+    BOOST_TEST_REQUIRE( base_set.OutlineCount() == 2 );
+    BOOST_TEST_REQUIRE( base_set.FullPointCount() == 8 );
+
+    int  next = 0;
+    int  prev = 0;
+    bool ok = false;
+
+    // Can we still get outline 0?
+    ok = base_set.GetNeighbourIndexes( 0, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 3 );
+    BOOST_TEST( next == 1 );
+
+    // End out outline 0
+    ok = base_set.GetNeighbourIndexes( 3, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 2 );
+    BOOST_TEST( next == 0 );
+
+    // Check outline 1
+    ok = base_set.GetNeighbourIndexes( 4, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 7 );
+    BOOST_TEST( next == 5 );
+
+    // End out outline 1
+    ok = base_set.GetNeighbourIndexes( 7, &prev, &next );
+    BOOST_TEST( ok );
+    BOOST_TEST( prev == 6 );
+    BOOST_TEST( next == 4 );
+
+    // Bad indexes
+    ok = base_set.GetNeighbourIndexes( 8, &prev, &next );
+    BOOST_TEST( !ok );
+    ok = base_set.GetNeighbourIndexes( -1, &prev, &next );
+    BOOST_TEST( !ok );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

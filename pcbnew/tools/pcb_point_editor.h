@@ -126,6 +126,7 @@ private:
     int movePoint( const TOOL_EVENT& aEvent );
     int addCorner( const TOOL_EVENT& aEvent );
     int removeCorner( const TOOL_EVENT& aEvent );
+    int chamferCorner( const TOOL_EVENT& aEvent );
     int modifiedSelection( const TOOL_EVENT& aEvent );
 
     /**

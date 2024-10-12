@@ -439,8 +439,8 @@ bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int*
 
     if( index.m_vertex == 0 )
     {
-        index.m_vertex  = lastpoint;
-        inext.m_vertex  = 1;
+        index.m_vertex = lastpoint - 1;
+        inext.m_vertex = 1;
     }
     else if( index.m_vertex == lastpoint )
     {
@@ -451,6 +451,9 @@ bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int*
     {
         inext.m_vertex++;
         index.m_vertex--;
+
+        if( inext.m_vertex == lastpoint )
+            inext.m_vertex = 0;
     }
 
     if( aPrevious )

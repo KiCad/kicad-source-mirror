@@ -1973,6 +1973,13 @@ TOOL_ACTION PCB_ACTIONS::pointEditorRemoveCorner( TOOL_ACTION_ARGS()
         .Tooltip( _( "Remove corner" ) )
         .Icon( BITMAPS::delete_cursor ) );
 
+TOOL_ACTION PCB_ACTIONS::pointEditorChamferCorner( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PointEditor.chamferCorner" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Chamfer Corner" ) )
+        .Tooltip( _( "Chamfer corner" ) )
+        .Icon( BITMAPS::chamfer ) );
+
 TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepCenter( TOOL_ACTION_ARGS()
         .Name( "pcbnew.PointEditor.arcKeepCenter" )
         .Scope( AS_GLOBAL )

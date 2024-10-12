@@ -294,6 +294,7 @@ public:
     // Point Editor
     static TOOL_ACTION pointEditorAddCorner;
     static TOOL_ACTION pointEditorRemoveCorner;
+    static TOOL_ACTION pointEditorChamferCorner;
 
     static TOOL_ACTION pointEditorArcKeepCenter;
     static TOOL_ACTION pointEditorArcKeepEndpoint;

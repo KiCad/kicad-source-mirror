@@ -32,6 +32,7 @@ using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/corner_operations.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/seg.h>
 #include <geometry/vector_utils.h>
@@ -154,6 +155,7 @@ bool PCB_POINT_EDITOR::Init()
     menu.AddItem( PCB_ACTIONS::pointEditorAddCorner, PCB_POINT_EDITOR::addCornerCondition );
     menu.AddItem( PCB_ACTIONS::pointEditorRemoveCorner,
                   std::bind( &PCB_POINT_EDITOR::removeCornerCondition, this, _1 ) );
+    menu.AddItem( PCB_ACTIONS::pointEditorChamferCorner, PCB_POINT_EDITOR::addCornerCondition );
 
     return true;
 }
@@ -2824,6 +2826,105 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_POINT_EDITOR::chamferCorner( const TOOL_EVENT& aEvent )
+{
+    if( !m_editPoints || !m_editedPoint )
+        return 0;
+
+    EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( !item )
+        return 0;
+
+    SHAPE_POLY_SET* polygon = nullptr;
+
+    if( item->Type() == PCB_ZONE_T )
+    {
+        ZONE* zone = static_cast<ZONE*>( item );
+        polygon = zone->Outline();
+        zone->SetNeedRefill( true );
+    }
+    else if( item->Type() == PCB_SHAPE_T )
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+        if( shape->GetShape() == SHAPE_T::POLY )
+            polygon = &shape->GetPolyShape();
+    }
+
+    if( !polygon )
+        return 0;
+
+    // Search the best outline corner to break
+
+    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+    BOARD_COMMIT    commit( frame );
+    const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
+
+    unsigned int nearestIdx = 0;
+    unsigned int nearestDist = INT_MAX;
+
+    int curr_idx = 0;
+    // Object to iterate through the corners of the outlines (main contour and its holes)
+    SHAPE_POLY_SET::ITERATOR iterator = polygon->Iterate( 0, polygon->OutlineCount() - 1,
+                                                          /* IterateHoles */ true );
+
+    // Iterate through all the corners of the outlines and search the best segment
+    for( ; iterator; iterator++, curr_idx++ )
+    {
+        unsigned int distance = polygon->CVertex( curr_idx ).Distance( cursorPos );
+
+        if( distance < nearestDist )
+        {
+            nearestDist = distance;
+            nearestIdx = curr_idx;
+        }
+    }
+
+    int prevIdx, nextIdx;
+    if( polygon->GetNeighbourIndexes( nearestIdx, &prevIdx, &nextIdx ) )
+    {
+        const SEG segA{ polygon->CVertex( prevIdx ), polygon->CVertex( nearestIdx ) };
+        const SEG segB{ polygon->CVertex( nextIdx ), polygon->CVertex( nearestIdx ) };
+
+        // A plausible setback that won't consume a whole edge
+        int setback = pcbIUScale.mmToIU( 5 );
+        setback = std::min( setback, (int) ( segA.Length() * 0.8 ) );
+        setback = std::min( setback, (int) ( segB.Length() * 0.8 ) );
+
+        CHAMFER_PARAMS chamferParams{ setback, setback };
+
+        std::optional<CHAMFER_RESULT> chamferResult =
+                ComputeChamferPoints( segA, segB, chamferParams );
+
+        if( chamferResult && chamferResult->m_updated_seg_a && chamferResult->m_updated_seg_b )
+        {
+            commit.Modify( item );
+            polygon->RemoveVertex( nearestIdx );
+
+            // The two end points of the chamfer are the new corners
+            polygon->InsertVertex( nearestIdx, chamferResult->m_updated_seg_b->B );
+            polygon->InsertVertex( nearestIdx, chamferResult->m_updated_seg_a->B );
+        }
+    }
+
+    setEditedPoint( nullptr );
+
+    if( item->Type() == PCB_ZONE_T )
+        commit.Push( _( "Break Zone Corner" ) );
+    else
+        commit.Push( _( "Break Polygon Corner" ) );
+
+    // Refresh zone hatching
+    if( item->Type() == PCB_ZONE_T )
+        static_cast<ZONE*>( item )->HatchBorder();
+
+    updatePoints();
+
+    return 0;
+}
+
+
 int PCB_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
     updatePoints();
@@ -2873,6 +2974,7 @@ void PCB_POINT_EDITOR::setTransitions()
     Go( &PCB_POINT_EDITOR::movePoint,         PCB_ACTIONS::pointEditorMoveMidpoint.MakeEvent() );
     Go( &PCB_POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::chamferCorner,     PCB_ACTIONS::pointEditorChamferCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepCenter.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepEndpoint.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, ACTIONS::cycleArcEditMode.MakeEvent() );
