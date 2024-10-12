@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:42-0700\n"
-"PO-Revision-Date: 2024-07-02 19:09+0000\n"
+"PO-Revision-Date: 2024-10-13 19:15+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -144,9 +144,9 @@ msgid "Load OpenGL: layers"
 msgstr "Càrrega OpenGL: capes"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Carrega capa OpenGL %d"
+msgstr "Carrega capa OpenGL %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:660
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -877,9 +877,9 @@ msgstr "Mostra o amaga %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:627
 #: pcbnew/widgets/appearance_controls.cpp:2575
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Restableix"
+msgstr "Ajustaments per defecte (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1493
@@ -939,9 +939,9 @@ msgstr "Selecciona predefinició:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:858
 #: pcbnew/widgets/appearance_controls.cpp:2874
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Vistes (Shift+Tab):"
+msgstr "Vistes (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
 #: pcbnew/widgets/appearance_controls.cpp:2883
@@ -3166,11 +3166,13 @@ msgid "Drawing Sheet File"
 msgstr "Dibuix"
 
 #: common/dialogs/dialog_page_settings.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
-msgstr "Error en carregar la fulla de dibuix '%s'."
+msgstr ""
+"Error en carregar la fulla de dibuix '%s'.\n"
+"%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -3820,9 +3822,9 @@ msgid "Could not connect to '%s' "
 msgstr "No s'ha pogut connectar a '%s "
 
 #: common/dialogs/git/dialog_git_repository.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "No s'ha pogut obrir el fitxer d'arxiu."
+msgstr "No s'ha pogut obrir la clau privada '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:374
 #, fuzzy
@@ -4513,9 +4515,9 @@ msgstr "Restableix l'Id únic"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:458
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "folder with %s files"
-msgstr "Polilínia, %d punts"
+msgstr "carpeta amb %s fitxers"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:534
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
@@ -4949,9 +4951,9 @@ msgid "Tracks:"
 msgstr "Pistes"
 
 #: common/dialogs/panel_grid_settings.cpp:137 common/tool/grid_menu.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Ves a la pàgina %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:264
 #: common/dialogs/panel_grid_settings.cpp:308
@@ -5561,9 +5563,9 @@ msgid "The default net class is required."
 msgstr "Es necessita la classe de xarxa predeterminada."
 
 #: common/dialogs/panel_setup_netclasses.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr "<b>Xarxes coincidents actualment:</b>"
+msgstr "<b>Xarxes coincidents amb '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 #, fuzzy
@@ -7038,9 +7040,9 @@ msgid "'%s' is not a directory"
 msgstr "La zona de coure (nom de la xarxa %s): la xarxa no té pads connectats."
 
 #: common/gestfich.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "S'està traient la carpeta %s"
+msgstr "Error en eliminar la carpeta '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, fuzzy, c-format
@@ -7167,9 +7169,9 @@ msgid "* [rejected] %s (%s)"
 msgstr "Quadrícula: %s (%s)"
 
 #: common/git/kicad_git_common.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Actualitzat"
+msgstr "[actualitzat] %s"
 
 #: common/git/kicad_git_errors.cpp:39
 #, fuzzy
@@ -7415,9 +7417,9 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:161
 #: common/http_lib/http_lib_connection.cpp:293
 #: common/http_lib/http_lib_connection.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Error: "
+msgstr "Error: %s"
 
 #: common/http_lib/http_lib_connection.cpp:89
 #: common/http_lib/http_lib_connection.cpp:161
@@ -7443,9 +7445,9 @@ msgid "Invalid spline definition encountered"
 msgstr "Definició dels noms dels pins invàlida"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "Delimitacions de la placa"
+msgstr "No s'admet %s."
 
 #: common/import_gfx/dxf_import_plugin.h:460
 #: common/import_gfx/dxf_import_plugin.h:464
@@ -7587,15 +7589,15 @@ msgstr "es necessita un número per '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:171
 #: common/io/easyedapro/easyedapro_import_utils.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Error al llegir la imatge %s."
+msgstr "Error de JSON en llegir '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:175
 #: common/io/easyedapro/easyedapro_import_utils.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Error al llegir la imatge %s."
+msgstr "Error en llegir '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:194
 #, fuzzy, c-format
