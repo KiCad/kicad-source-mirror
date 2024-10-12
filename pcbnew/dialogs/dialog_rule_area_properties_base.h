@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,6 +29,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_RULE_AREA_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,10 +41,9 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextLayerSelection;
 		wxDataViewListCtrl* m_layers;
-		wxStaticText* m_staticText3;
+		wxStaticText* m_nameLabel;
 		wxTextCtrl* m_tcName;
 		wxCheckBox* m_cbLocked;
-		wxStaticText* m_staticText7;
 		wxNotebook* m_areaPropertiesNb;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineDisplayCtrl;

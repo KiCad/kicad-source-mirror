@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,11 +41,11 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Area name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	m_staticText3->SetToolTip( _("A unique name for this rule area for use in DRC rules") );
+	m_nameLabel = new wxStaticText( this, wxID_ANY, _("Area name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_nameLabel->Wrap( -1 );
+	m_nameLabel->SetToolTip( _("A unique name for this rule area for use in DRC rules") );
 
-	bSizer6->Add( m_staticText3, 0, wxRIGHT|wxLEFT, 5 );
+	bSizer6->Add( m_nameLabel, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer6->Add( 0, 2, 0, 0, 5 );
@@ -59,15 +59,11 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bSizer6->Add( m_cbLocked, 0, wxALL, 5 );
 
 
-	bSizerRight->Add( bSizer6, 0, wxBOTTOM|wxEXPAND, 5 );
-
-	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Area properties:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	bSizerRight->Add( m_staticText7, 0, wxALL, 5 );
+	bSizerRight->Add( bSizer6, 0, wxEXPAND, 5 );
 
 	m_areaPropertiesNb = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	bSizerRight->Add( m_areaPropertiesNb, 1, wxEXPAND | wxALL, 5 );
+	bSizerRight->Add( m_areaPropertiesNb, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 3, 3 );
@@ -99,10 +95,10 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	gbSizer1->Add( m_outlineHatchUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerRight->Add( gbSizer1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerRight->Add( gbSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizerRight->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerRight->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
 	bUpperSizer->Add( bSizerRight, 1, wxEXPAND|wxALL, 5 );
