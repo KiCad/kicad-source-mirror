@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,7 +218,7 @@ private:
 
     PCB_SHAPE*           parsePCB_SHAPE( BOARD_ITEM* aParent );
     PCB_TEXT*            parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEXT* aBaseText = nullptr );
-    void                 parsePCB_TEXT_effects( PCB_TEXT* aText );
+    void                 parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT* aBaseText = nullptr );
     PCB_REFERENCE_IMAGE* parsePCB_REFERENCE_IMAGE( BOARD_ITEM* aParent );
     PCB_TEXTBOX*         parsePCB_TEXTBOX( BOARD_ITEM* aParent );
     PCB_TABLECELL*       parsePCB_TABLECELL( BOARD_ITEM* aParent );

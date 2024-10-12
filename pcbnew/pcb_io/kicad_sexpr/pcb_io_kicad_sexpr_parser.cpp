@@ -3356,13 +3356,13 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEX
 
     NeedLEFT();
 
-    parsePCB_TEXT_effects( text.get() );
+    parsePCB_TEXT_effects( text.get(), aBaseText );
 
     return text.release();
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
+void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT* aBaseText )
 {
     FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aText->GetParent() );
     bool hasAngle       = false;    // Old files do not have a angle specified.
@@ -3483,10 +3483,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
     if( !hasAngle )
         aText->SetTextAngle( ANGLE_0 );
 
-    if( parentFP )
+    if( parentFP && !dynamic_cast<PCB_DIMENSION_BASE*>( aBaseText ) )
     {
         // make PCB_TEXT rotation relative to the parent footprint.
         // It was read as absolute rotation from file
+        // Note: this is not rue for PCB_DIMENSION items that use the board
+        // coordinates
         aText->SetTextAngle( aText->GetTextAngle() - parentFP->GetOrientation() );
 
         // Move and rotate the text to its board coordinates
