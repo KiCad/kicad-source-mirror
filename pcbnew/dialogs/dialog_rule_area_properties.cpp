@@ -80,7 +80,7 @@ private:
     // The name of a rule area source that is not now found on the board (e.g. after a netlist
     // update). This is used to re-populate the zone settings if the selection is not changed.
     bool                            m_notFoundPlacementSource;
-    wxString m_notFoundPlacementSourceName;
+    wxString                        m_notFoundPlacementSourceName;
     RULE_AREA_PLACEMENT_SOURCE_TYPE m_originalPlacementSourceType;
     RULE_AREA_PLACEMENT_SOURCE_TYPE m_lastPlacementSourceType;
 
