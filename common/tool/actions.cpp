@@ -333,6 +333,42 @@ TOOL_ACTION ACTIONS::collapseAll( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Collapse All" ) )
         .Icon( BITMAPS::down ) );   // JEY TODO: need icon
 
+// This is the generic increment action, and will need the parameter
+// to be filled in by the event producer.
+TOOL_ACTION ACTIONS::increment( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Interactive.increment" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Increment" ) )
+        .Tooltip( _( "Increment the selected item(s)" ) ) );
+
+TOOL_ACTION ACTIONS::incrementPrimary( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Interactive.incrementPrimary" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Increment Primary" ) )
+        .Tooltip( _( "Increment the primary field of the selected item(s)" ) )
+        .Parameter( ACTIONS::INCREMENT{ 1, 0 } ) );
+
+TOOL_ACTION ACTIONS::decrementPrimary( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Interactive.decrementPrimary" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Decrement Primary" ) )
+        .Tooltip( _( "Decrement the primary field of the selected item(s)" ) )
+        .Parameter( ACTIONS::INCREMENT{ -1, 0 } ) );
+
+TOOL_ACTION ACTIONS::incrementSecondary( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Interactive.incrementSecondary" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Increment Secondary" ) )
+        .Tooltip( _( "Increment the secondary field of the selected item(s)" ) )
+        .Parameter( ACTIONS::INCREMENT{ 1, 1 } ) );
+
+TOOL_ACTION ACTIONS::decrementSecondary( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Interactive.decrementSecondary" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Decrement Secondary" ) )
+        .Tooltip( _( "Decrement the secondary field of the selected item(s)" ) )
+        .Parameter( ACTIONS::INCREMENT{ -1, 1 } ) );
+
 TOOL_ACTION ACTIONS::selectColumns( TOOL_ACTION_ARGS()
         .Name( "common.InteractiveSelection.SelectColumns" )
         .Scope( AS_GLOBAL )

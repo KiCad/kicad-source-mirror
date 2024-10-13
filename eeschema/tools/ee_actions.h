@@ -311,4 +311,10 @@ public:
 
     // Drag and drop
     static TOOL_ACTION ddAppendFile;
+
+    enum PIN_INCREMENT
+    {
+        NUMBER = 0,
+        NAME,
+    };
 };

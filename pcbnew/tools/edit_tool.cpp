@@ -33,6 +33,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <increment.h>
 #include <pcb_shape.h>
 #include <pcb_group.h>
 #include <pcb_target.h>
@@ -2961,6 +2962,73 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
+{
+    const auto incrementableFilter =
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+    {
+        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+        {
+            if( aCollector[i]->Type() != PCB_PAD_T )
+                aCollector.Remove( i );
+        }
+    };
+
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            incrementableFilter, true /* prompt user regarding locked items */ );
+
+    if( selection.Empty() )
+        return 0;
+
+    const ACTIONS::INCREMENT incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
+
+    BOARD_COMMIT commit( this );
+
+    for( EDA_ITEM* item : selection )
+    {
+        switch( item->Type() )
+        {
+        case PCB_PAD_T:
+        {
+            PAD& pad = static_cast<PAD&>( *item );
+
+            if( !pad.CanHaveNumber() )
+                continue;
+
+            // Increment only handled for pad numbers
+            if( incParam.Index == PCB_ACTIONS::PAD_INCREMENT::NUMBER )
+            {
+                wxString padNumber = pad.GetNumber();
+                IncrementString( padNumber, incParam.Delta );
+
+                commit.Modify( &pad );
+                pad.SetNumber( padNumber );
+            }
+            break;
+        }
+        case PCB_TEXT_T:
+        {
+            PCB_TEXT& text = static_cast<PCB_TEXT&>( *item );
+
+            wxString content = text.GetText();
+            IncrementString( content, incParam.Delta );
+
+            commit.Modify( &text );
+            text.SetText( content );
+        }
+        default:
+        {
+            break;
+        }
+        }
+    }
+
+    commit.Push( _( "Increment" ) );
+
+    return 0;
+}
+
+
 void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
                            PCB_SELECTION_TOOL* sTool )
 {
@@ -3367,6 +3435,12 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::SimplifyPolygons,      PCB_ACTIONS::simplifyPolygons.MakeEvent() );
     Go( &EDIT_TOOL::HealShapes,            PCB_ACTIONS::healShapes.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
+
+    Go( &EDIT_TOOL::Increment,             ACTIONS::increment.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,             ACTIONS::incrementPrimary.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,             ACTIONS::decrementPrimary.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,             ACTIONS::incrementSecondary.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,             ACTIONS::decrementSecondary.MakeEvent() );
 
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::mergePolygons.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::subtractPolygons.MakeEvent() );

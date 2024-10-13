@@ -32,6 +32,7 @@
 #include <tools/symbol_editor_move_tool.h>
 #include <clipboard.h>
 #include <ee_actions.h>
+#include <increment.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
@@ -1079,6 +1080,93 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
+{
+    const ACTIONS::INCREMENT incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
+    EE_SELECTION&            selection = m_selectionTool->RequestSelection( { SCH_PIN_T } );
+
+    if( selection.Empty() )
+        return 0;
+
+    KICAD_T type = selection.Front()->Type();
+    bool    allSameType = true;
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() != type )
+        {
+            allSameType = false;
+            break;
+        }
+    }
+
+    // Incrementing multiple types at once seems confusing
+    // though it would work.
+    if( !allSameType )
+        return 0;
+
+    SCH_COMMIT commit( m_frame );
+
+    for( EDA_ITEM* item : selection )
+    {
+        switch( item->Type() )
+        {
+        case SCH_PIN_T:
+        {
+            SCH_PIN& pin = static_cast<SCH_PIN&>( *item );
+
+            // This is is a bit annoying, as it severely limits the number of scroll
+            // actions. It would be better if we could figure out which field the user
+            // wanted to increment from the cursor position. Then we could use the
+            // index to choose, say, to increment different bits of the pin.
+            switch( incParam.Index )
+            {
+            case EE_ACTIONS::PIN_INCREMENT::NUMBER:
+            {
+                wxString nextNumber = pin.GetNumber();
+                IncrementString( nextNumber, incParam.Delta );
+
+                commit.Modify( &pin );
+                pin.SetNumber( nextNumber );
+                break;
+            }
+            case EE_ACTIONS::PIN_INCREMENT::NAME:
+            {
+                wxString nextName = pin.GetName();
+                IncrementString( nextName, incParam.Delta );
+
+                commit.Modify( &pin );
+                pin.SetName( nextName );
+                break;
+            }
+            default:
+                // Only handle number and name for now
+                break;
+            }
+            break;
+        }
+        case SCH_TEXT_T:
+        {
+            SCH_TEXT& text = static_cast<SCH_TEXT&>( *item );
+
+            wxString nextText = text.GetText();
+            IncrementString( nextText, incParam.Delta );
+
+            commit.Modify( &text );
+            text.SetText( nextText );
+            break;
+        }
+        default:
+            // No increment for other items
+            break;
+        }
+    }
+
+    commit.Push( _( "Increment" ) );
+
+    return 0;
+}
+
+
 void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
 {
     // clang-format off
@@ -1097,6 +1185,12 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Swap,               EE_ACTIONS::swap.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Increment,          ACTIONS::increment.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Increment,          ACTIONS::incrementPrimary.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Increment,          ACTIONS::decrementPrimary.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Increment,          ACTIONS::incrementSecondary.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Increment,          ACTIONS::decrementSecondary.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );

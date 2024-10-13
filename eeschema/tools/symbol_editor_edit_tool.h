@@ -59,6 +59,8 @@ public:
     int CopyAsText( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
 
+    int Increment( const TOOL_EVENT& aEvent );
+
     /**
      * Delete the selected items, or the item under the cursor.
      */

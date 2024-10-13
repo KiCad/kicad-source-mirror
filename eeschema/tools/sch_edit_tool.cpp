@@ -31,6 +31,7 @@
 #include <tools/sch_drawing_tools.h>
 #include <ee_actions.h>
 #include <confirm.h>
+#include <increment.h>
 #include <string_utils.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -2957,6 +2958,68 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
+{
+    const ACTIONS::INCREMENT          incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
+    static const std::vector<KICAD_T> incrementable = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T,
+                                                        SCH_HIER_LABEL_T, SCH_TEXT_T };
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( incrementable );
+
+    if( selection.Empty() )
+        return 0;
+
+    KICAD_T type = selection.Front()->Type();
+    bool    allSameType = true;
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() != type )
+        {
+            allSameType = false;
+            break;
+        }
+    }
+
+    // Incrementing multiple types at once seems confusing
+    // though it would work.
+    if( !allSameType )
+        return 0;
+
+    SCH_COMMIT commit( m_frame );
+
+    for( EDA_ITEM* item : selection )
+    {
+        switch( item->Type() )
+        {
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_TEXT_T:
+        {
+            // Only support the first index for now
+            if( incParam.Index == 0 )
+            {
+                SCH_TEXT& label = static_cast<SCH_TEXT&>( *item );
+
+                wxString nextLabel = label.GetText();
+                IncrementString( nextLabel, incParam.Delta );
+
+                commit.Modify( &label, m_frame->GetScreen() );
+                label.SetText( nextLabel );
+            }
+            break;
+        }
+        default:
+            // No increment for other items (yet)
+            break;
+        }
+    }
+
+    commit.Push( _( "Increment" ) );
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
 {
     return m_toolMgr->RunAction( EE_ACTIONS::importSheet, aEvent.Parameter<wxString*>() );
@@ -3077,6 +3140,7 @@ int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::setTransitions()
 {
+    // clang-format off
     Go( &SCH_EDIT_TOOL::RepeatDrawItem,     EE_ACTIONS::repeatDrawItem.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
@@ -3085,6 +3149,12 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Swap,               EE_ACTIONS::swap.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
+
+    Go( &SCH_EDIT_TOOL::Increment,          ACTIONS::increment.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Increment,          ACTIONS::incrementPrimary.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Increment,          ACTIONS::decrementPrimary.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Increment,          ACTIONS::incrementSecondary.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Increment,          ACTIONS::decrementSecondary.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editReference.MakeEvent() );
@@ -3129,4 +3199,5 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditPageNumber,     EE_ACTIONS::editPageNumber.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::DdAppendFile,       EE_ACTIONS::ddAppendFile.MakeEvent() );
+    // clang-format on
 }

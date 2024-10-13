@@ -176,6 +176,11 @@ public:
     int CreateArray( const TOOL_EVENT& aEvent );
 
     /**
+     * Increment some aspect of the selected items.q
+     */
+    int Increment( const TOOL_EVENT& aEvent );
+
+    /**
      * A selection filter which prunes the selection to contain only items of type #PCB_MODULE_T.
      */
     static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,

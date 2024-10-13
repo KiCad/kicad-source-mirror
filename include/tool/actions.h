@@ -83,6 +83,13 @@ public:
     static TOOL_ACTION expandAll;
     static TOOL_ACTION collapseAll;
 
+    // Incrementing
+    static TOOL_ACTION increment;
+    static TOOL_ACTION incrementPrimary;
+    static TOOL_ACTION decrementPrimary;
+    static TOOL_ACTION incrementSecondary;
+    static TOOL_ACTION decrementSecondary;
+
     // Tables
     static TOOL_ACTION selectRows;
     static TOOL_ACTION selectColumns;
@@ -259,6 +266,16 @@ public:
         NORMAL = 0x00,
         ALT    = 0x01,
         CUT    = 0x02
+    };
+
+    ///< Increment event parameters
+    struct INCREMENT
+    {
+        // Amount to increment
+        int Delta;
+        // Which "thing" to increment
+        // (what this is depends on the action - a pin might be number, then name)
+        int Index;
     };
 };
 

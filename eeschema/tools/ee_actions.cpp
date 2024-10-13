@@ -90,7 +90,6 @@ TOOL_ACTION EE_ACTIONS::pointEditorRemoveCorner( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Remove Corner" ) )
         .Icon( BITMAPS::delete_cursor ) );
 
-
 // EE_SELECTION_TOOL
 //
 TOOL_ACTION EE_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()

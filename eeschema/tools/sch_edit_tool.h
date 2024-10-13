@@ -58,6 +58,11 @@ public:
     int EditPageNumber( const TOOL_EVENT& aEvent );
 
     /**
+     * Increment/decrement something about an item.
+     */
+    int Increment( const TOOL_EVENT& aEvent );
+
+    /**
      * Change a text type to another one.
      *
      * The new text, label, hierarchical label, or global label is created from the old text

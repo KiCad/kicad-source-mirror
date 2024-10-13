@@ -588,6 +588,11 @@ public:
 
     static TOOL_ACTION repeatLayout;
     static TOOL_ACTION generatePlacementRuleAreas;
+
+    enum PAD_INCREMENT
+    {
+        NUMBER = 0,
+    };
 };
 
 class PCB_EVENTS
