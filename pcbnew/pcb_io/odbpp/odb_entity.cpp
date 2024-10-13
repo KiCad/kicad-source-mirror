@@ -84,8 +84,7 @@ ODB_MISC_ENTITY::ODB_MISC_ENTITY()
                { wxS( "CREATION_DATE" ), wxDateTime::Now().FormatISOCombined() },
                { wxS( "SAVE_DATE" ), wxDateTime::Now().FormatISOCombined() },
                { wxS( "SAVE_APP" ), wxS( "Pcbnew" ) },
-               { wxS( "SAVE_USER" ), wxS( "" ) },
-               { wxS( "MAX_UID" ), wxS( "" ) } };
+               { wxS( "SAVE_USER" ), wxS( "" ) } };
 }
 
 
@@ -399,7 +398,7 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
             twriter.WriteEquationLine( "START_NAME", wxEmptyString );
             twriter.WriteEquationLine( "END_NAME", wxEmptyString );
         }
-        twriter.WriteEquationLine( "COLOR", wxEmptyString );
+        twriter.WriteEquationLine( "COLOR", "0" );
     }
 }
 
