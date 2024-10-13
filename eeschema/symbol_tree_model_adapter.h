@@ -41,7 +41,7 @@ public:
      *
      * @param aLibs library set from which parts will be loaded
      */
-    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( EDA_BASE_FRAME* aParent,
+    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( SCH_BASE_FRAME* aParent,
                                                            LIB_TABLE* aLibs );
 
     /**
@@ -62,7 +62,7 @@ protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
-    SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
+    SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::SYMBOL_LIB; }
 
