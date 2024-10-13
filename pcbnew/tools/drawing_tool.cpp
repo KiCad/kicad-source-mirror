@@ -3502,8 +3502,6 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         bool hasDRCViolation( PCB_VIA* aVia, BOARD_ITEM* aOther )
         {
-            PCB_LAYER_ID activeLayer = m_frame->GetActiveLayer();
-
             DRC_CONSTRAINT        constraint;
             int                   clearance;
             BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );

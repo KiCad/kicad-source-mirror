@@ -878,8 +878,13 @@ public:
     TEXT_AND_ICON_LAYOUT( KIGFX::GAL& aGal, const TEXT_ATTRIBUTES& aAttrs,
                           const KIFONT::METRICS& aFontMetrics, const double aShadowWidth,
                           const double aIconSize = 0 ) :
-            m_gal( aGal ), m_attrs( aAttrs ), m_fontMetrics( aFontMetrics ),
-            m_iconSize( aIconSize ), m_iconGap( aIconSize / 4.0 ), m_shadowWidth( aShadowWidth )
+            m_gal( aGal ),
+            m_attrs( aAttrs ),
+            m_fontMetrics( aFontMetrics ),
+            m_iconSize( aIconSize ),
+            m_iconGap( aIconSize / 4.0 ),
+            m_shadowWidth( aShadowWidth ),
+            m_shadowOffset( 0.0 )
     {
         // Due to the fact a shadow text in position INSIDE or OUTSIDE is drawn left or right aligned,
         // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
