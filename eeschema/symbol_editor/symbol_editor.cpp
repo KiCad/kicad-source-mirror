@@ -974,6 +974,15 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
             return wxID_CANCEL;
         }
 
+        if( m_libMgr->IsLibraryReadOnly( newLib ) )
+        {
+            msg = wxString::Format( _( "Library '%s' is read-only. Choose a "
+                                       "different library to save the symbol '%s' to." ),
+                                    newLib, newName );
+            wxMessageBox( msg );
+            return wxID_CANCEL;
+        }
+
         /**
          * If we save over a symbol that is in the inheritance chain of the symbol we're saving,
          * we'll end up with a circular inheritance chain, which is bad.
