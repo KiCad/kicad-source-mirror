@@ -472,6 +472,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::saveAll,             ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::save,                ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( EE_ACTIONS::saveLibraryAs,    ENABLE( libSelectedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveSymbolAs,     ENABLE( saveSymbolAsCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveSymbolCopyAs, ENABLE( saveSymbolAsCondition ) );
     mgr->SetConditions( EE_ACTIONS::newSymbol,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( EE_ACTIONS::importSymbol,     ENABLE( SELECTION_CONDITIONS::ShowAlways ) );

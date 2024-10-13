@@ -210,6 +210,7 @@ public:
 
     // Library management
     static TOOL_ACTION saveLibraryAs;
+    static TOOL_ACTION saveSymbolAs;
     static TOOL_ACTION saveSymbolCopyAs;
     static TOOL_ACTION newSymbol;
     static TOOL_ACTION deriveFromExistingSymbol;

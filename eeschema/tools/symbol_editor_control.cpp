@@ -137,6 +137,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddSeparator( 10 );
         ctxMenu.AddItem( ACTIONS::save,                   symbolSelectedCondition || libInferredCondition, 10 );
         ctxMenu.AddItem( EE_ACTIONS::saveLibraryAs,       libSelectedCondition, 10 );
+        ctxMenu.AddItem( EE_ACTIONS::saveSymbolAs,        symbolSelectedCondition, 10 );
         ctxMenu.AddItem( EE_ACTIONS::saveSymbolCopyAs,    symbolSelectedCondition, 10 );
         ctxMenu.AddItem( ACTIONS::revert,                 symbolSelectedCondition || libInferredCondition, 10 );
 
@@ -253,8 +254,10 @@ int SYMBOL_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvt )
         editFrame->Save();
     else if( aEvt.IsAction( &EE_ACTIONS::saveLibraryAs ) )
         editFrame->SaveLibraryAs();
+    else if( aEvt.IsAction( &EE_ACTIONS::saveSymbolAs ) )
+        editFrame->SaveSymbolCopyAs( true );
     else if( aEvt.IsAction( &EE_ACTIONS::saveSymbolCopyAs ) )
-        editFrame->SaveSymbolCopyAs();
+        editFrame->SaveSymbolCopyAs( false );
     else if( aEvt.IsAction( &EE_ACTIONS::saveAll ) )
         editFrame->SaveAll();
 
@@ -814,6 +817,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
 
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveLibraryAs.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveSymbolAs.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveSymbolCopyAs.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );

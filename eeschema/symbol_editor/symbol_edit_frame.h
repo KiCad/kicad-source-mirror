@@ -149,7 +149,7 @@ public:
     /**
      * Save the currently selected symbol to a new name and/or location.
      */
-    void SaveSymbolCopyAs();
+    void SaveSymbolCopyAs( bool aOpenCopy );
 
     /**
      * Save the currently selected library to a new file.
@@ -421,7 +421,7 @@ private:
     // Set up the tool framework
     void setupTools();
 
-    void saveSymbolCopyAs();
+    void saveSymbolCopyAs( bool aOpenCopy );
 
     /**
      * Save the changes to the current library.

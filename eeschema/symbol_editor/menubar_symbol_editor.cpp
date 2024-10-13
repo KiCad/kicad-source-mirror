@@ -52,6 +52,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
 
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::save );
+    fileMenu->Add( EE_ACTIONS::saveSymbolAs );
     fileMenu->Add( EE_ACTIONS::saveSymbolCopyAs );
 
     if( !IsSymbolFromSchematic() )

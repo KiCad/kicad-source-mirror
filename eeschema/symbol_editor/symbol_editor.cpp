@@ -550,9 +550,9 @@ void SYMBOL_EDIT_FRAME::SaveLibraryAs()
 }
 
 
-void SYMBOL_EDIT_FRAME::SaveSymbolCopyAs()
+void SYMBOL_EDIT_FRAME::SaveSymbolCopyAs( bool aOpenCopy )
 {
-    saveSymbolCopyAs();
+    saveSymbolCopyAs( aOpenCopy );
 
     m_treePane->GetLibTree()->RefreshLibTree();
 }
@@ -664,7 +664,7 @@ private:
 };
 
 
-void SYMBOL_EDIT_FRAME::saveSymbolCopyAs()
+void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
 {
     LIB_SYMBOL* symbol = getTargetSymbol();
 
@@ -747,6 +747,9 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs()
 
     m_libMgr->UpdateSymbol( &new_symbol, libraryName );
     SyncLibraries( false );
+
+    if( aOpenCopy )
+        LoadSymbol( symbolName, libraryName, 1 );
 }
 
 
