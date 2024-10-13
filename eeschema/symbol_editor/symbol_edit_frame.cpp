@@ -865,34 +865,32 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 
     GetCanvas()->Refresh();
 
-    WX_INFOBAR* infobar = GetInfoBar();
+    WX_INFOBAR& infobar = *GetInfoBar();
+    infobar.RemoveAllButtons();
+
+    wxArrayString msgs;
+    int           infobarFlags = wxICON_INFORMATION;
 
     if( IsSymbolFromSchematic() )
     {
-        wxString msg;
-        msg.Printf( _( "Editing symbol %s from schematic.  Saving will update the schematic "
-                       "only." ), m_reference );
-
-        infobar->RemoveAllButtons();
-        infobar->ShowMessage( msg, wxICON_INFORMATION );
+        msgs.push_back( wxString::Format(
+                _( "Editing symbol %s from schematic.  Saving will update the schematic "
+                   "only." ),
+                m_reference ) );
     }
     else if( IsSymbolFromLegacyLibrary() )
     {
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                       _( "Manage symbol libraries" ),
-                                                       wxEmptyString );
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl(
+                &infobar, wxID_ANY, _( "Manage symbol libraries" ), wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [this]( wxHyperlinkEvent& aEvent )
                 {
                     InvokeSchEditSymbolLibTable( &Kiway(), this );
                 } ) );
-
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
-        infobar->ShowMessage( _( "Symbols in legacy libraries are not editable.  Use Manage "
-                                 "Symbol Libraries to migrate to current format." ),
-                              wxICON_INFORMATION );
+        infobar.AddButton( button );
+        msgs.push_back( _( "Symbols in legacy libraries are not editable.  Use Manage "
+                           "Symbol Libraries to migrate to current format." ) );
     }
     else if( IsSymbolAlias() )
     {
@@ -911,25 +909,35 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         wxString msg;
         wxString link;
 
-        msg.Printf( _( "Symbol %s is a derived symbol.  Symbol graphics will not be editable." ),
-                    UnescapeString( symbolName ) );
+        msgs.push_back( wxString::Format( _( "Symbol %s is a derived symbol. "
+                                             "Symbol graphics will not be editable." ),
+                                          UnescapeString( symbolName ) ) );
 
         link.Printf( _( "Open %s" ), UnescapeString( rootSymbolName ) );
 
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [this, rootSymbolName, unit, bodyStyle]( wxHyperlinkEvent& aEvent )
                 {
                     LoadSymbolFromCurrentLib( rootSymbolName, unit, bodyStyle );
                 } ) );
-
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
-        infobar->ShowMessage( msg, wxICON_INFORMATION );
+        infobar.AddButton( button );
     }
+
+    if( m_symbol && !IsSymbolFromSchematic()
+        && m_libMgr->IsLibraryReadOnly( m_symbol->GetLibId().GetFullLibraryName() ) )
+    {
+        msgs.push_back(
+                _( "This library is read-only.  Changes cannot be saved to this library." ) );
+        infobarFlags = wxICON_INFORMATION;
+    }
+
+    if( msgs.empty() )
+        infobar.Dismiss();
     else
     {
-        infobar->Dismiss();
+        wxString msg = wxJoin( msgs, '\n', '\0' );
+        infobar.ShowMessage( msg, infobarFlags );
     }
 }
 
