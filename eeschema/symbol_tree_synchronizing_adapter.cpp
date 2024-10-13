@@ -290,7 +290,15 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
             valueStr.Replace( wxS( "\n" ), wxS( " " ) ); // Clear line breaks
 
-            aVariant = valueStr;
+            if( !aVariant.GetString().IsEmpty() )
+            {
+                if( !valueStr.IsEmpty() )
+                    aVariant = valueStr + wxS( " - " ) + aVariant.GetString();
+            }
+            else
+            {
+                aVariant = valueStr;
+            }
         }
         break;
     }
