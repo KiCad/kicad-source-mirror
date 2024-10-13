@@ -170,7 +170,10 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIBRARY_MANAGER::GetLibrary( const wxString& aLibra
 bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
                                           SCH_IO_MGR::SCH_FILE_T aFileType )
 {
-    wxCHECK( aFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY && LibraryExists( aLibrary ), false );
+    wxCHECK( aFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
+    wxCHECK_MSG( LibraryExists( aLibrary ), false,
+                 wxString::Format( "Library missing: %s", aLibrary ) );
+
     wxFileName fn( aFileName );
     wxCHECK( !fn.FileExists() || fn.IsFileWritable(), false );
 
@@ -348,7 +351,8 @@ bool SYMBOL_LIBRARY_MANAGER::ClearSymbolModified( const wxString& aAlias,
 
 bool SYMBOL_LIBRARY_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
-    wxCHECK( LibraryExists( aLibrary ), true );
+    wxCHECK_MSG( LibraryExists( aLibrary ), true,
+                 wxString::Format( "Library missing: %s", aLibrary ) );
 
     return !symTable()->IsSymbolLibWritable( aLibrary );
 }
@@ -356,7 +360,8 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 
 bool SYMBOL_LIBRARY_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
 {
-    wxCHECK( LibraryExists( aLibrary ), false );
+    wxCHECK_MSG( LibraryExists( aLibrary ), false,
+                 wxString::Format( "Library missing: %s", aLibrary ) );
 
     return symTable()->IsSymbolLibLoaded( aLibrary );
 }
@@ -365,7 +370,8 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
 std::list<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::GetAliases( const wxString& aLibrary ) const
 {
     std::list<LIB_SYMBOL*> ret;
-    wxCHECK( LibraryExists( aLibrary ), ret );
+    wxCHECK_MSG( LibraryExists( aLibrary ), ret,
+                 wxString::Format( "Library missing: %s", aLibrary ) );
 
     auto libIt = m_libs.find( aLibrary );
 
@@ -397,7 +403,8 @@ std::list<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::GetAliases( const wxString& aLibr
 LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aAlias,
                                                        const wxString& aLibrary )
 {
-    wxCHECK( LibraryExists( aLibrary ), nullptr );
+    wxCHECK_MSG( LibraryExists( aLibrary ), nullptr,
+                 wxString::Format( "Library missing: %s, for alias %s", aLibrary, aAlias ) );
 
     // try the library buffers first
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
@@ -458,8 +465,10 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aAlias,
 
 SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aAlias, const wxString& aLibrary )
 {
-    wxCHECK( LibraryExists( aLibrary ), nullptr );
-    wxCHECK( !aAlias.IsEmpty(), nullptr );
+    wxCHECK_MSG( LibraryExists( aLibrary ), nullptr,
+                 wxString::Format( "Library missing: %s, for alias %s", aLibrary, aAlias ) );
+    wxCHECK_MSG( !aAlias.IsEmpty(), nullptr,
+                 wxString::Format( "Alias missing in library: %s", aLibrary ) );
     auto it = m_libs.find( aLibrary );
     wxCHECK( it != m_libs.end(), nullptr );
 
@@ -472,8 +481,10 @@ SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aAlias, const wxS
 
 bool SYMBOL_LIBRARY_MANAGER::UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& aLibrary )
 {
-    wxCHECK( LibraryExists( aLibrary ), false );
-    wxCHECK( aSymbol, false );
+    wxCHECK_MSG( aSymbol, false, wxString::Format( "Null symbol in library: %s", aLibrary ) );
+    wxCHECK_MSG( LibraryExists( aLibrary ), false,
+                 wxString::Format( "Library missing: %s, for smybol %s", aLibrary,
+                                   aSymbol->GetName() ) );
 
     LIB_BUFFER&                    libBuf = getLibraryBuffer( aLibrary );
     std::shared_ptr<SYMBOL_BUFFER> symbolBuf = libBuf.GetBuffer( aSymbol->GetName() );
