@@ -877,6 +877,24 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
                 _( "Editing symbol %s from schematic.  Saving will update the schematic "
                    "only." ),
                 m_reference ) );
+        const LIB_ID&  libId = m_symbol->GetLibId();
+        const wxString libName = UnescapeString( libId.GetLibNickname() );
+
+        wxString link = wxString::Format( _( "Open in library '%s'" ), libName );
+
+        const auto openSymbolInLib = [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
+        {
+            bool ok = LoadSymbol( m_symbol->GetLibId(), GetUnit(), GetBodyStyle() );
+
+            if( !ok )
+                DisplayError( this,
+                              wxString::Format( _( "Failed to load symbol '%s' in library '%s'." ),
+                                                symbolName, libName ) );
+        };
+
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
+        button->Bind( wxEVT_COMMAND_HYPERLINK, openSymbolInLib );
+        infobar.AddButton( button );
     }
     else if( IsSymbolFromLegacyLibrary() )
     {
