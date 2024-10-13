@@ -69,6 +69,7 @@ public:
     static TOOL_ACTION redo;
     static TOOL_ACTION cut;
     static TOOL_ACTION copy;
+    static TOOL_ACTION copyAsText;
     static TOOL_ACTION paste;
     static TOOL_ACTION pasteSpecial;
     static TOOL_ACTION selectAll;

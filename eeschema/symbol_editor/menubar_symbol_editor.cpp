@@ -96,6 +96,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::cut );
     editMenu->Add( ACTIONS::copy );
+    editMenu->Add( ACTIONS::copyAsText );
     editMenu->Add( ACTIONS::paste );
     editMenu->Add( ACTIONS::doDelete );
     editMenu->Add( ACTIONS::duplicate );

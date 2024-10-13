@@ -587,6 +587,20 @@ bool SCH_EDIT_TOOL::Init()
                 return menu;
             };
 
+    const auto canCopyText = EE_CONDITIONS::OnlyTypes( {
+            SCH_TEXT_T,
+            SCH_TEXTBOX_T,
+            SCH_FIELD_T,
+            SCH_LABEL_T,
+            SCH_HIER_LABEL_T,
+            SCH_GLOBAL_LABEL_T,
+            SCH_DIRECTIVE_LABEL_T,
+            SCH_SHEET_PIN_T,
+            SCH_PIN_T,
+            SCH_TABLE_T,
+            SCH_TABLECELL_T,
+    } );
+
     //
     // Add edit actions to the move tool menu
     //
@@ -605,6 +619,7 @@ bool SCH_EDIT_TOOL::Init()
     moveMenu.AddSeparator();
     moveMenu.AddItem( ACTIONS::cut,                   E_C::IdleSelection );
     moveMenu.AddItem( ACTIONS::copy,                  E_C::IdleSelection );
+    moveMenu.AddItem( ACTIONS::copyAsText,            canCopyText && E_C::IdleSelection );
     moveMenu.AddItem( ACTIONS::doDelete,              E_C::NotEmpty );
     moveMenu.AddItem( ACTIONS::duplicate,             duplicateCondition );
 
@@ -665,6 +680,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddSeparator( 300 );
     selToolMenu.AddItem( ACTIONS::cut,                 E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::copy,                E_C::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copyAsText,          canCopyText && E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::pasteSpecial,        E_C::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::doDelete,            E_C::NotEmpty, 300 );

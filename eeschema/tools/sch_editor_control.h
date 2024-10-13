@@ -108,6 +108,7 @@ public:
     ///< Clipboard support.
     int Cut( const TOOL_EVENT& aEvent );
     int Copy( const TOOL_EVENT& aEvent );
+    int CopyAsText( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
     int Duplicate( const TOOL_EVENT& aEvent );
 

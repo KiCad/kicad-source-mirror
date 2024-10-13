@@ -65,6 +65,7 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
+#include <tools/ee_tool_utils.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <eda_list_dialog.h>
 #include <view/view_controls.h>
@@ -1394,6 +1395,23 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
     doCopy();
 
     return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::CopyAsText( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    EE_SELECTION&      selection = selTool->RequestSelection();
+
+    if( selection.Empty() )
+        return false;
+
+    wxString itemsAsText = GetSelectedItemsAsText( selection );
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    return m_toolMgr->SaveClipboard( itemsAsText.ToStdString() );
 }
 
 
@@ -2812,6 +2830,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Redo,                  ACTIONS::redo.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Cut,                   ACTIONS::cut.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Copy,                  ACTIONS::copy.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::CopyAsText,            ACTIONS::copyAsText.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::pasteSpecial.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Duplicate,             ACTIONS::duplicate.MakeEvent() );

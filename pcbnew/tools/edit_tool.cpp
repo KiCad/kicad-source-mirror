@@ -326,6 +326,20 @@ bool EDIT_TOOL::Init()
                 return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
             };
 
+    const auto canCopyAsText = SELECTION_CONDITIONS::NotEmpty
+                               && SELECTION_CONDITIONS::OnlyTypes( {
+                                       PCB_FIELD_T,
+                                       PCB_TEXT_T,
+                                       PCB_TEXTBOX_T,
+                                       PCB_DIM_ALIGNED_T,
+                                       PCB_DIM_LEADER_T,
+                                       PCB_DIM_CENTER_T,
+                                       PCB_DIM_RADIAL_T,
+                                       PCB_DIM_ORTHOGONAL_T,
+                                       PCB_TABLE_T,
+                                       PCB_TABLECELL_T,
+                               } );
+
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
@@ -378,6 +392,7 @@ bool EDIT_TOOL::Init()
     menu.AddSeparator( 150 );
     menu.AddItem( ACTIONS::cut,                   SELECTION_CONDITIONS::NotEmpty, 150 );
     menu.AddItem( ACTIONS::copy,                  SELECTION_CONDITIONS::NotEmpty, 150 );
+    menu.AddItem( ACTIONS::copyAsText,            canCopyAsText, 150 );
 
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
@@ -3195,6 +3210,102 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                // Anything unsupported will just be ignored
+            },
+            // No prompt for locked items
+            false );
+
+    if( selection.IsHover() )
+        m_selectionTool->ClearSelection();
+
+    const auto getItemText = [&]( const BOARD_ITEM& aItem ) -> wxString
+    {
+        switch( aItem.Type() )
+        {
+        case PCB_TEXT_T:
+        case PCB_FIELD_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        {
+            // These can all go via the PCB_TEXT class
+            const PCB_TEXT& text = static_cast<const PCB_TEXT&>( aItem );
+            return text.GetShownText( true );
+        }
+        case PCB_TEXTBOX_T:
+        case PCB_TABLECELL_T:
+        {
+            // This one goes via EDA_TEXT
+            const PCB_TEXTBOX& textBox = static_cast<const PCB_TEXTBOX&>( aItem );
+            return textBox.GetShownText( true );
+        }
+        case PCB_TABLE_T:
+        {
+            const PCB_TABLE& table = static_cast<const PCB_TABLE&>( aItem );
+            wxString         s;
+
+            for( int row = 0; row < table.GetRowCount(); ++row )
+            {
+                for( int col = 0; col < table.GetColCount(); ++col )
+                {
+                    const PCB_TABLECELL* cell = table.GetCell( row, col );
+                    s << cell->GetShownText( true );
+
+                    if( col < table.GetColCount() - 1 )
+                    {
+                        s << '\t';
+                    }
+                }
+
+                if( row < table.GetRowCount() - 1 )
+                {
+                    s << '\n';
+                }
+            }
+            return s;
+        }
+        default:
+            // No string representation for this item type
+            break;
+        }
+        return wxEmptyString;
+    };
+
+    wxArrayString itemTexts;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->IsBOARD_ITEM() )
+        {
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+            wxString    itemText = getItemText( *boardItem );
+
+            itemText.Trim( false ).Trim( true );
+
+            if( !itemText.IsEmpty() )
+            {
+                itemTexts.Add( std::move( itemText ) );
+            }
+        }
+    }
+
+    // Send the text to the clipboard
+    if( !itemTexts.empty() )
+    {
+        m_toolMgr->SaveClipboard( wxJoin( itemTexts, '\n', '\0' ).ToStdString() );
+    }
+
+    return 0;
+}
+
+
 int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 {
     if( !copyToClipboard( aEvent ) )
@@ -3261,6 +3372,7 @@ void EDIT_TOOL::setTransitions()
 
     Go( &EDIT_TOOL::copyToClipboard,       ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboardAsText, ACTIONS::copyAsText.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,        ACTIONS::cut.MakeEvent() );
 }
 // clang-format on

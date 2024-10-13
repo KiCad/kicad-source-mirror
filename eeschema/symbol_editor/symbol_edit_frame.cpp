@@ -490,6 +490,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::copyAsText,          ENABLE( haveSymbolCond ) );
     mgr->SetConditions( ACTIONS::paste,               ENABLE( isEditableCond &&
                                                               SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( isEditableCond ) );

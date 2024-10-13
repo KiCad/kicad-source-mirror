@@ -26,6 +26,7 @@
 
 #include <tool/picker_tool.h>
 #include <tools/ee_selection_tool.h>
+#include <tools/ee_tool_utils.h>
 #include <tools/symbol_editor_pin_tool.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_move_tool.h>
@@ -86,6 +87,15 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
                 return true;
             };
 
+    const auto canCopyText = EE_CONDITIONS::OnlyTypes( {
+            SCH_TEXT_T,
+            SCH_TEXTBOX_T,
+            SCH_FIELD_T,
+            SCH_PIN_T,
+            SCH_TABLE_T,
+            SCH_TABLECELL_T,
+    } );
+
     // Add edit actions to the move tool menu
     if( moveTool )
     {
@@ -103,6 +113,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
         moveMenu.AddSeparator( 300 );
         moveMenu.AddItem( ACTIONS::cut,             EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::copy,            EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::copyAsText,      canCopyText && EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::duplicate,       canEdit && EE_CONDITIONS::NotEmpty, 300 );
         moveMenu.AddItem( ACTIONS::doDelete,        canEdit && EE_CONDITIONS::NotEmpty, 200 );
 
@@ -136,6 +147,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     selToolMenu.AddSeparator( 300 );
     selToolMenu.AddItem( ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copyAsText,       canCopyText && EE_CONDITIONS::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,            canEdit && EE_CONDITIONS::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::duplicate,        canEdit && EE_CONDITIONS::NotEmpty, 300 );
     selToolMenu.AddItem( ACTIONS::doDelete,         canEdit && EE_CONDITIONS::NotEmpty, 300 );
@@ -898,6 +910,23 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_EDIT_TOOL::CopyAsText( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    EE_SELECTION&      selection = selTool->RequestSelection();
+
+    if( selection.Empty() )
+        return 0;
+
+    wxString itemsAsText = GetSelectedItemsAsText( selection );
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    return m_toolMgr->SaveClipboard( itemsAsText.ToStdString() );
+}
+
+
 int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
     LIB_SYMBOL* symbol  = m_frame->GetCurSymbol();
@@ -1051,10 +1080,12 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
 void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
 {
+    // clang-format off
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Undo,               ACTIONS::undo.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Redo,               ACTIONS::redo.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Cut,                ACTIONS::cut.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Copy,               ACTIONS::copy.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::CopyAsText,         ACTIONS::copyAsText.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Paste,              ACTIONS::paste.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
 
@@ -1071,4 +1102,5 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields, EE_ACTIONS::updateSymbolFields.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName, EE_ACTIONS::setUnitDisplayName.MakeEvent() );
+    // clang-format on
 }

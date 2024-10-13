@@ -447,6 +447,7 @@ set( EESCHEMA_SRCS
     tools/ee_point_editor.cpp
     tools/ee_selection.cpp
     tools/ee_selection_tool.cpp
+    tools/ee_tool_utils.cpp
     tools/rule_area_create_helper.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_design_block_control.cpp

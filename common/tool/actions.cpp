@@ -228,6 +228,15 @@ TOOL_ACTION ACTIONS::copy( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .UIId( wxID_COPY ) );
 
+TOOL_ACTION ACTIONS::copyAsText( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.copyAsText" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'C' )
+        .FriendlyName( _( "Copy as Text" ) )
+        .Tooltip( _( "Copy selected item(s) to clipboard as text" ) )
+        .Icon( BITMAPS::copy )
+        .Flags( AF_NONE ) );
+
 TOOL_ACTION ACTIONS::paste( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.paste" )
         .Scope( AS_GLOBAL )
