@@ -487,15 +487,24 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
 {
     if( aLayer == Edge_Cuts )
     {
+        std::shared_ptr<SHAPE_COMPOUND> effective_compund = std::make_shared<SHAPE_COMPOUND>();
+
         if( GetAttribute() == PAD_ATTRIB::PTH || GetAttribute() == PAD_ATTRIB::NPTH )
-            return GetEffectiveHoleShape();
+        {
+            effective_compund->AddShape( GetEffectiveHoleShape() );
+            return effective_compund;
+        }
         else
-            return std::make_shared<SHAPE_NULL>();
+        {
+            effective_compund->AddShape( std::make_shared<SHAPE_NULL>() );
+            return effective_compund;
+        }
     }
 
     if( GetAttribute() == PAD_ATTRIB::PTH )
     {
         bool flash;
+        std::shared_ptr<SHAPE_COMPOUND> effective_compund = std::make_shared<SHAPE_COMPOUND>();
 
         if( flashPTHPads == FLASHING::NEVER_FLASHED )
             flash = false;
@@ -507,9 +516,15 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
         if( !flash )
         {
             if( GetAttribute() == PAD_ATTRIB::PTH )
-                return GetEffectiveHoleShape();
+            {
+                effective_compund->AddShape( GetEffectiveHoleShape() );
+                return effective_compund;
+            }
             else
-                return std::make_shared<SHAPE_NULL>();
+            {
+                effective_compund->AddShape( std::make_shared<SHAPE_NULL>() );
+                return effective_compund;
+            }
         }
     }
 
