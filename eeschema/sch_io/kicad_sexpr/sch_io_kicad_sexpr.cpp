@@ -1806,7 +1806,10 @@ bool SCH_IO_KICAD_SEXPR::IsLibraryWritable( const wxString& aLibraryPath )
 {
     wxFileName fn( aLibraryPath );
 
-    return ( fn.FileExists() && fn.IsFileWritable() ) || fn.IsDirWritable();
+    if( fn.FileExists() )
+        return fn.IsFileWritable();
+
+    return fn.IsDirWritable();
 }
 
 
