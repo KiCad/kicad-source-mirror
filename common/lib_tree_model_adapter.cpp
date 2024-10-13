@@ -126,9 +126,11 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 
 
 LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
-                                                const wxString& aPinnedKey ) :
+                                                const wxString& aPinnedKey,
+                                                APP_SETTINGS_BASE* aCfg ) :
         m_widget( nullptr ),
         m_parent( aParent ),
+        m_cfg( aCfg ),
         m_sort_mode( BEST_MATCH ),
         m_show_units( true ),
         m_preselect_unit( 0 ),
@@ -141,12 +143,10 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
 
     m_availableColumns = { _HKI( "Item" ), _HKI( "Description" ) };
 
-    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
-
-    for( const std::pair<const wxString, int>& pair : cfg->m_LibTree.column_widths )
+    for( const std::pair<const wxString, int>& pair : m_cfg->m_LibTree.column_widths )
         m_colWidths[pair.first] = pair.second;
 
-    m_shownColumns = cfg->m_LibTree.columns;
+    m_shownColumns = m_cfg->m_LibTree.columns;
 
     if( m_shownColumns.empty() )
         m_shownColumns = {  _HKI( "Item" ), _HKI( "Description" ) };
@@ -196,15 +196,13 @@ void LIB_TREE_MODEL_ADAPTER::SaveSettings()
 {
     if( m_widget )
     {
-        APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
-
-        cfg->m_LibTree.columns = GetShownColumns();
-        cfg->m_LibTree.column_widths.clear();
+        m_cfg->m_LibTree.columns = GetShownColumns();
+        m_cfg->m_LibTree.column_widths.clear();
 
         for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
-            cfg->m_LibTree.column_widths[pair.first] = pair.second->GetWidth();
+            m_cfg->m_LibTree.column_widths[pair.first] = pair.second->GetWidth();
 
-        cfg->m_LibTree.open_libs = GetOpenLibs();
+        m_cfg->m_LibTree.open_libs = GetOpenLibs();
     }
 }
 

@@ -1060,6 +1060,7 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
         {
             return;
         }
+
         case wxID_OK: // No conflicts
         case ID_OVERWRITE_CONFLICTS:
         case ID_RENAME_CONFLICTS:
@@ -1073,12 +1074,16 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
             done = true;
             break;
         }
+
         case ID_MAKE_NEW_LIBRARY:
         {
             wxFileName newLibrary( AddLibraryFile( true ) );
             libraryName = newLibrary.GetName();
+            break;
         }
-        default: break;
+
+        default:
+            break;
         }
     }
 

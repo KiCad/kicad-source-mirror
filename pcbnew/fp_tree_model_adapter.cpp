@@ -18,31 +18,31 @@
  */
 
 #include <pgm_base.h>
-#include <eda_base_frame.h>
+#include <pcb_base_frame.h>
 #include <core/kicad_algo.h>
 #include <settings/common_settings.h>
+#include <pcbnew_settings.h>
 #include <project/project_file.h>
 #include <wx/tokenzr.h>
 #include <string_utils.h>
-#include <eda_pattern_match.h>
 #include <fp_lib_table.h>
 #include <footprint_info.h>
 #include <footprint_info_impl.h>
 #include <generate_footprint_info.h>
-#include <wx/settings.h>
 
 #include "fp_tree_model_adapter.h"
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
-FP_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs )
+FP_TREE_MODEL_ADAPTER::Create( PCB_BASE_FRAME* aParent, LIB_TABLE* aLibs )
 {
     auto* adapter = new FP_TREE_MODEL_ADAPTER( aParent, aLibs );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
-FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_footprint_libs" ) ),
+FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( PCB_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
+        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_footprint_libs" ),
+                                aParent->GetViewerSettingsBase() ),
         m_libs( (FP_LIB_TABLE*) aLibs )
 {}
 

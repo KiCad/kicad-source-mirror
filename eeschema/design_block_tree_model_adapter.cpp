@@ -18,6 +18,7 @@
  */
 
 #include <pgm_base.h>
+#include <kiface_base.h>
 #include <eda_base_frame.h>
 #include <core/kicad_algo.h>
 #include <settings/common_settings.h>
@@ -29,9 +30,6 @@
 #include <design_block.h>
 #include <design_block_lib_table.h>
 #include <design_block_info.h>
-#include <footprint_info.h>
-#include <wx/settings.h>
-
 #include <design_block_tree_model_adapter.h>
 #include <tools/sch_design_block_control.h>
 
@@ -46,7 +44,8 @@ DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLi
 
 DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
                                                                   LIB_TABLE*      aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ) ),
+        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ),
+                                Kiface().KifaceSettings() ),
         m_libs( (DESIGN_BLOCK_LIB_TABLE*) aLibs )
 {
 }

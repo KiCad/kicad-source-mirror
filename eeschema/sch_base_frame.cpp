@@ -147,6 +147,22 @@ SYMBOL_EDITOR_SETTINGS* SCH_BASE_FRAME::libeditconfig() const
 }
 
 
+APP_SETTINGS_BASE* SCH_BASE_FRAME::GetViewerSettingsBase() const
+{
+    switch( GetFrameType() )
+    {
+    case FRAME_SCH:
+    default:
+        return Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+    case FRAME_SCH_SYMBOL_EDITOR:
+    case FRAME_SCH_VIEWER:
+    case FRAME_SYMBOL_CHOOSER:
+        return Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+    }
+}
+
+
 void SCH_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     GetScreen()->SetPageSettings( aPageSettings );

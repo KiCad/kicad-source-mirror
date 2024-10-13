@@ -338,8 +338,10 @@ protected:
      *
      * @param aParent is the parent frame
      * @param aPinnedKey is the key to load the pinned libraries list from the project file
+     * @param aCfg app settings for the specific editor
      */
-    LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey );
+    LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey,
+                            APP_SETTINGS_BASE* aCfg );
 
     LIB_TREE_NODE_LIBRARY& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc,
                                              bool pinned );
@@ -424,6 +426,7 @@ protected:
 
 private:
     EDA_BASE_FRAME*              m_parent;
+    APP_SETTINGS_BASE*           m_cfg;
 
     SORT_MODE                    m_sort_mode;
     bool                         m_show_units;

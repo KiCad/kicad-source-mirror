@@ -118,6 +118,8 @@ public:
 
     SYMBOL_EDITOR_SETTINGS* libeditconfig() const;
 
+    APP_SETTINGS_BASE* GetViewerSettingsBase() const;
+
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
