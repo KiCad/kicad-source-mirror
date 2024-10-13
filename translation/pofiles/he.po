@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
-"PO-Revision-Date: 2024-10-10 10:52+0000\n"
+"PO-Revision-Date: 2024-10-13 19:15+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -75,11 +75,11 @@ msgstr "מפשט %d שכבות נחושת"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1188
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "פשט קווי מתאר של חורים"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1208
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "בנה קדחים עוורים עבור חורים וקדחי מעבר"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:398
 msgid "OpenGL context creation error"
