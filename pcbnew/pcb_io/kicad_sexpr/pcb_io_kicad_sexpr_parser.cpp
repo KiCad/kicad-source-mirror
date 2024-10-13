@@ -3937,6 +3937,12 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
 
         case T_gr_text:
         {
+            // when parsing the text we do not yet know if the text is kept aligned
+            // or not.
+            // Leave the text not aligned for now to read the text angle.
+            // It will be set aligned (or not) later
+            bool is_aligned = dim->GetKeepTextAligned();
+            dim->SetKeepTextAligned( false );
             parsePCB_TEXT( m_board, dim.get() );
 
             if( isLegacyDimension )
@@ -3949,6 +3955,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                 dim->SetUnits( units );
             }
 
+            dim->SetKeepTextAligned( is_aligned );
             break;
         }
 
