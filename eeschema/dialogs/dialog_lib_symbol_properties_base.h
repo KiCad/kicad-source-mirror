@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,7 +39,7 @@ class WX_GRID;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_LIBEDIT_NOTEBOOK 1000
+#define ID_LIBEDIT_NOTEBOOK 6000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_LIB_SYMBOL_PROPERTIES_BASE
@@ -104,10 +104,9 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnSpinCtrlText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPowerCheckBox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFilterDClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnFpFilterDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnEditFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 

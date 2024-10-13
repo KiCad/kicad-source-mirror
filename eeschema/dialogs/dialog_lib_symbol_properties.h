@@ -22,8 +22,9 @@
  */
 
 
-#ifndef DIALOG_LIB_SYMBOL_PROPERTIES_H
-#define DIALOG_LIB_SYMBOL_PROPERTIES_H
+#pragma once
+
+#include <memory>
 
 #include <fields_grid_table.h>
 #include <widgets/unit_binder.h>
@@ -32,6 +33,7 @@
 
 class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL;
+class LISTBOX_TRICKS;
 class PANEL_EMBEDDED_FILES;
 class WX_GRID;
 
@@ -63,15 +65,14 @@ private:
     void OnSymbolNameKillFocus( wxFocusEvent& event ) override;
     void OnSymbolNameText( wxCommandEvent& event ) override;
     void OnAddFootprintFilter( wxCommandEvent& event ) override;
-    void OnDeleteFootprintFilter( wxCommandEvent& event ) override;
     void OnEditFootprintFilter( wxCommandEvent& event ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
-    void OnFilterDClick( wxMouseEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnPageChanging( wxNotebookEvent& event ) override;
+    void OnFpFilterDClick( wxMouseEvent& event ) override;
 
     void adjustGridColumns();
     void syncControlStates( bool aIsAlias );
@@ -107,6 +108,6 @@ private:
     };
 
     static LAST_LAYOUT m_lastLayout;
-};
 
-#endif // DIALOG_LIB_SYMBOL_PROPERTIES_H
+    std::unique_ptr<LISTBOX_TRICKS> m_fpFilterTricks;
+};

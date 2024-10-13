@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "dialog_lib_symbol_properties.h"
+
 #include <pgm_base.h>
 #include <eeschema_settings.h>
 #include <bitmaps.h>
@@ -41,9 +43,11 @@
 #include <dialog_sim_model.h>
 
 #include <panel_embedded_files.h>
-#include <dialog_lib_symbol_properties.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
+#include <widgets/listbox_tricks.h>
+
+#include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
 
 
@@ -62,7 +66,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_delayedFocusGrid( nullptr ),
     m_delayedFocusRow( -1 ),
     m_delayedFocusColumn( -1 ),
-    m_delayedFocusPage( -1 )
+    m_delayedFocusPage( -1 ),
+    m_fpFilterTricks( std::make_unique<LISTBOX_TRICKS>( *this, *m_FootprintFilterListBox ) )
 {
     m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
@@ -110,6 +115,21 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
                      wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
                      nullptr, this );
+
+    // Forward the delete button to the tricks
+    m_deleteFilterButton->Bind( wxEVT_BUTTON,
+                                [&]( wxCommandEvent& aEvent )
+                                {
+                                    wxCommandEvent cmdEvent( EDA_EVT_LISTBOX_DELETE );
+                                    m_fpFilterTricks->ProcessEvent( cmdEvent );
+                                } );
+
+    // When the filter tricks modifies something, update outselves
+    m_FootprintFilterListBox->Bind( EDA_EVT_LISTBOX_CHANGED,
+                                    [&]( wxCommandEvent& aEvent )
+                                    {
+                                        OnModify();
+                                    } );
 
     if( m_lastLayout != DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::NONE )
     {
@@ -740,9 +760,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnFilterDClick( wxMouseEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnFpFilterDClick( wxMouseEvent& event )
 {
-    int idx = m_FootprintFilterListBox->HitTest( event.GetPosition() );
+    int            idx = m_FootprintFilterListBox->HitTest( event.GetPosition() );
     wxCommandEvent dummy;
 
     if( idx >= 0 )
@@ -780,31 +800,16 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddFootprintFilter( wxCommandEvent& event )
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteFootprintFilter( wxCommandEvent& event )
-{
-    int ii = m_FootprintFilterListBox->GetSelection();
-
-    if( ii >= 0 )
-    {
-        m_FootprintFilterListBox->Delete( (unsigned) ii );
-
-        if( m_FootprintFilterListBox->GetCount() == 0 )
-            m_FootprintFilterListBox->SetSelection( wxNOT_FOUND );
-        else
-            m_FootprintFilterListBox->SetSelection( std::max( 0, ii - 1 ) );
-    }
-
-    OnModify();
-}
-
-
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditFootprintFilter( wxCommandEvent& event )
 {
-    int idx = m_FootprintFilterListBox->GetSelection();
+    wxArrayInt selections;
+    int n = m_FootprintFilterListBox->GetSelections( selections );
 
-    if( idx >= 0 )
+    if( n > 0 )
     {
-        wxString filter = m_FootprintFilterListBox->GetStringSelection();
+        // Just edit the first one
+        int idx = selections[0];
+        wxString filter = m_FootprintFilterListBox->GetString( idx );
 
         WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Edit Footprint Filter" ), filter );
 

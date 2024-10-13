@@ -419,6 +419,7 @@ set( COMMON_WIDGET_SRCS
     widgets/layer_box_selector.cpp
     widgets/layer_presentation.cpp
     widgets/lib_tree.cpp
+    widgets/listbox_tricks.cpp
     widgets/mathplot.cpp
     widgets/msgpanel.cpp
     widgets/paged_dialog.cpp
