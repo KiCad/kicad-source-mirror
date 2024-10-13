@@ -259,6 +259,18 @@ bool REFERENCE_IMAGE::ReadImageFile( wxMemoryBuffer& aBuffer )
 }
 
 
+bool REFERENCE_IMAGE::SetImage( const wxImage& aImage )
+{
+    if( m_bitmapBase->SetImage( aImage ) )
+    {
+        updatePixelSizeInIU();
+        return true;
+    }
+
+    return false;
+}
+
+
 const BITMAP_BASE& REFERENCE_IMAGE::GetImage() const
 {
     // This cannot be null after construction

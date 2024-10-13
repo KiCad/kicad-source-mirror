@@ -489,25 +489,6 @@ public:
     void ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger );
 
     /**
-     * Store information to the system clipboard.
-     *
-     * @param aText is the information to be stored, expected UTF8 encoding.  The text will be
-     *              stored as Unicode string (not stored as UTF8 string).
-     * @return False if error occurred.
-     */
-    bool SaveClipboard( const std::string& aTextUTF8 );
-
-    /**
-     * Return the information currently stored in the system clipboard.
-     *
-     * If data stored in the clipboard is in non-text format, empty string is returned.
-     *
-     * @note The clipboard is expected containing Unicode chars, not only ASCII7 chars.
-     *       The returned string is UTF8 encoded
-     */
-    std::string GetClipboardUTF8() const;
-
-    /**
      * Return the view controls settings for the current tool or the general settings if there is
      * no active tool.
      */

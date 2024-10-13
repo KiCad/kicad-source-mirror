@@ -139,18 +139,7 @@ bool BITMAP_BASE::ReadImageFile( wxInputStream& aInStream )
     if( !new_image->LoadFile( mem_stream ) )
         return false;
 
-    delete m_image;
-    m_imageType = new_image->GetType();
-    m_image = new_image.release();
-
-    // Create a new wxImage object from m_image
-    delete m_originalImage;
-    m_originalImage = new wxImage( *m_image );
-
-    rebuildBitmap();
-    updatePPI();
-
-    return true;
+    return SetImage( *new_image );
 }
 
 
@@ -167,18 +156,7 @@ bool BITMAP_BASE::ReadImageFile( wxMemoryBuffer& aBuf )
     if( !new_image->LoadFile( mem_stream ) )
         return false;
 
-    delete m_image;
-    m_imageType = new_image->GetType();
-    m_image = new_image.release();
-
-    // Create a new wxImage object from m_image
-    delete m_originalImage;
-    m_originalImage = new wxImage( *m_image );
-
-    rebuildBitmap();
-    updatePPI();
-
-    return true;
+    return SetImage( *new_image );
 }
 
 
@@ -191,6 +169,25 @@ bool BITMAP_BASE::ReadImageFile(const wxString& aFullFilename)
         return false;
 
     return ReadImageFile(file_stream);
+}
+
+
+bool BITMAP_BASE::SetImage( const wxImage& aImage )
+{
+    if( !aImage.IsOk() || aImage.GetWidth() == 0 || aImage.GetHeight() == 0 )
+        return false;
+
+    delete m_image;
+    m_image = new wxImage( aImage );
+
+    // Create a new wxImage object from m_image
+    delete m_originalImage;
+    m_originalImage = new wxImage( *m_image );
+
+    rebuildBitmap();
+    updatePPI();
+
+    return true;
 }
 
 

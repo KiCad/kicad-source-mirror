@@ -32,6 +32,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <bitmaps.h>
+#include <clipboard.h>
 #include <confirm.h>
 #include <eda_item.h>
 #include <macros.h>
@@ -532,7 +533,7 @@ int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
         wxMessageBox( ioe.What(), _( "Error writing objects to clipboard" ) );
     }
 
-    if( m_toolMgr->SaveClipboard( TO_UTF8( sexpr ) ) )
+    if( SaveClipboard( TO_UTF8( sexpr ) ) )
         return 0;
     else
         return -1;
@@ -543,11 +544,29 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION&  selection = m_selectionTool->GetSelection();
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
-    std::string    sexpr = m_toolMgr->GetClipboardUTF8();
+    bool           createdAnything = false;
 
-    m_selectionTool->ClearSelection();
+    if( std::unique_ptr<wxImage> clipImg = GetImageFromClipboard() )
+    {
+        auto image = std::make_unique<BITMAP_BASE>();
+        image->SetImage( *clipImg );
+        auto dataItem = std::make_unique<DS_DATA_ITEM_BITMAP>( image.release() );
+        model.Append( dataItem.release() );
 
-    model.SetPageLayout( sexpr.c_str(), true, wxT( "clipboard" ) );
+        createdAnything = true;
+    }
+    else
+    {
+        m_selectionTool->ClearSelection();
+
+        const std::string clipText = GetClipboardUTF8();
+        model.SetPageLayout( clipText.c_str(), true, wxT( "clipboard" ) );
+        createdAnything = true;
+    }
+
+    // Nothing pasteable
+    if( !createdAnything )
+        return 0;
 
     // Build out draw items and select the first of each data item
     for( DS_DATA_ITEM* dataItem : model.GetItems() )

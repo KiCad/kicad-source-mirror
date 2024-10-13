@@ -26,6 +26,7 @@
 
 #include <macros.h>
 #include <advanced_config.h>
+#include <clipboard.h>
 #include <limits>
 #include <kiplatform/ui.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -3299,7 +3300,7 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
     // Send the text to the clipboard
     if( !itemTexts.empty() )
     {
-        m_toolMgr->SaveClipboard( wxJoin( itemTexts, '\n', '\0' ).ToStdString() );
+        SaveClipboard( wxJoin( itemTexts, '\n', '\0' ).ToStdString() );
     }
 
     return 0;

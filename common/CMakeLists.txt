@@ -555,6 +555,7 @@ set( COMMON_SRCS
     bin_mod.cpp
     bitmap_base.cpp
     board_printout.cpp
+    clipboard.cpp
     cli_progress_reporter.cpp
     commit.cpp
     draw_panel_gal.cpp

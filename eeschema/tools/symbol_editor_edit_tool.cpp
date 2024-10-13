@@ -30,6 +30,7 @@
 #include <tools/symbol_editor_pin_tool.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_move_tool.h>
+#include <clipboard.h>
 #include <ee_actions.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
@@ -903,7 +904,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     for( SCH_ITEM& item : symbol->GetDrawItems() )
         item.ClearFlags( STRUCT_DELETED );
 
-    if( m_toolMgr->SaveClipboard( formatter.GetString() ) )
+    if( SaveClipboard( formatter.GetString() ) )
         return 0;
     else
         return -1;
@@ -923,7 +924,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::CopyAsText( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
-    return m_toolMgr->SaveClipboard( itemsAsText.ToStdString() );
+    return SaveClipboard( itemsAsText.ToStdString() );
 }
 
 
@@ -935,7 +936,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !symbol || symbol->IsAlias() )
         return 0;
 
-    std::string clipboardData = m_toolMgr->GetClipboardUTF8();
+    std::string clipboardData = GetClipboardUTF8();
 
     try
     {

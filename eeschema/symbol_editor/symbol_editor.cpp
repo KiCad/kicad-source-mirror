@@ -24,6 +24,7 @@
  */
 
 #include <pgm_base.h>
+#include <clipboard.h>
 #include <confirm.h>
 #include <kidialog.h>
 #include <kiway.h>
@@ -1227,7 +1228,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
 
     if( aFromClipboard )
     {
-        std::string clipboardData = m_toolManager->GetClipboardUTF8();
+        std::string clipboardData = GetClipboardUTF8();
 
         try
         {

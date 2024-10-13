@@ -38,6 +38,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_item.h>
+#include <clipboard.h>
 #include <dialogs/dialog_paste_special.h>
 #include <pcb_dimension.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -45,6 +46,7 @@
 #include <layer_pairs.h>
 #include <pcb_group.h>
 #include <pcb_layer_presentation.h>
+#include <pcb_reference_image.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <pcb_generator.h>
@@ -1024,23 +1026,32 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( !clipItem )
     {
-        // When the clipboard doesn't parse, create a PCB textual item with the clipboard contents
-        const wxString clipText = m_toolMgr->GetClipboardUTF8();
+        // When the clipboard doesn't parse, create a PCB item with the clipboard contents
+        std::vector<BOARD_ITEM*> newItems;
 
-        if( clipText.empty() )
-            return 0;
+        if( std::unique_ptr<wxImage> clipImg = GetImageFromClipboard() )
+        {
+            auto refImg = std::make_unique<PCB_REFERENCE_IMAGE>( m_frame->GetModel() );
 
-        std::unique_ptr<PCB_TEXT> item;
+            if( refImg->GetReferenceImage().SetImage( *clipImg ) )
+                newItems.push_back( refImg.release() );
+        }
+        else
+        {
+            const wxString clipText = GetClipboardUTF8();
 
-        item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
-        item->SetText( clipText );
-        item->SetPosition( getViewControls()->GetCursorPosition() );
+            if( clipText.empty() )
+                return 0;
 
-        std::vector<BOARD_ITEM*> items{
-            item.release(),
-        };
+            std::unique_ptr<PCB_TEXT> item;
 
-        bool cancelled = !placeBoardItems( &commit, items, true, false, false );
+            item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
+            item->SetText( clipText );
+
+            newItems.push_back( item.release() );
+        }
+
+        bool cancelled = !placeBoardItems( &commit, newItems, true, false, false );
 
         if( cancelled )
             commit.Revert();

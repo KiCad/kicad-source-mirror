@@ -1050,52 +1050,6 @@ void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu,
 }
 
 
-bool TOOL_MANAGER::SaveClipboard( const std::string& aTextUTF8 )
-{
-    wxLogNull doNotLog; // disable logging of failed clipboard actions
-
-    if( wxTheClipboard->Open() )
-    {
-        // Store the UTF8 string as Unicode string in clipboard:
-        wxTheClipboard->SetData( new wxTextDataObject( wxString( aTextUTF8.c_str(),
-                                                                 wxConvUTF8 ) ) );
-
-        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
-        wxTheClipboard->Close();
-
-        return true;
-    }
-
-    return false;
-}
-
-
-std::string TOOL_MANAGER::GetClipboardUTF8() const
-{
-    std::string result;
-
-    wxLogNull doNotLog; // disable logging of failed clipboard actions
-
-    if( wxTheClipboard->Open() )
-    {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT )
-                || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
-        {
-            wxTextDataObject data;
-            wxTheClipboard->GetData( data );
-
-            // The clipboard is expected containing a Unicode string, so return it
-            // as UTF8 string
-            result = data.GetText().utf8_str();
-        }
-
-        wxTheClipboard->Close();
-    }
-
-    return result;
-}
-
-
 const KIGFX::VC_SETTINGS& TOOL_MANAGER::GetCurrentToolVC() const
 {
     if( TOOL_STATE* active = GetCurrentToolState() )

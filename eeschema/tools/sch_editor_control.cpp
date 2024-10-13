@@ -24,6 +24,7 @@
 
 #include "tools/sch_editor_control.h"
 
+#include <clipboard.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_symbol_fields_table.h>
@@ -48,6 +49,7 @@
 #include <project_sch.h>
 #include <sch_edit_frame.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <sch_bitmap.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
@@ -1339,7 +1341,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
         return true;
     }
 
-    return m_toolMgr->SaveClipboard( formatter.GetString() );
+    return SaveClipboard( formatter.GetString() );
 }
 
 
@@ -1411,7 +1413,7 @@ int SCH_EDITOR_CONTROL::CopyAsText( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
-    return m_toolMgr->SaveClipboard( itemsAsText.ToStdString() );
+    return SaveClipboard( itemsAsText.ToStdString() );
 }
 
 
@@ -1613,38 +1615,46 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     std::string        content;
     VECTOR2I           eventPos;
 
-    if( aEvent.IsAction( &ACTIONS::duplicate ) )
-        content = m_duplicateClipboard;
-    else
-        content = m_toolMgr->GetClipboardUTF8();
+    SCH_SHEET   tempSheet;
+    SCH_SCREEN* tempScreen = new SCH_SCREEN( &m_frame->Schematic() );
 
-    if( content.empty() )
-        return 0;
-
-    if( aEvent.IsAction( &ACTIONS::duplicate ) )
-        eventPos = getViewControls()->GetCursorPosition( false );
-
-    STRING_LINE_READER reader( content, "Clipboard" );
-    SCH_IO_KICAD_SEXPR plugin;
-
-    SCH_SHEET          tempSheet;
-    SCH_SCREEN*        tempScreen = new SCH_SCREEN( &m_frame->Schematic() );
-
-    EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
-    int annotateStartNum = m_frame->Schematic().Settings().m_AnnotateStartNum;
-
-    // Screen object on heap is owned by the sheet.
-    tempSheet.SetScreen( tempScreen );
-
-    try
+    if( std::unique_ptr<wxImage> clipImg = GetImageFromClipboard() )
     {
-        plugin.LoadContent( reader, &tempSheet );
+        // Just image data
+        auto bitmap = std::make_unique<SCH_BITMAP>();
+        bitmap->GetReferenceImage().SetImage( *clipImg );
+
+        tempScreen->Append( bitmap.release() );
     }
-    catch( IO_ERROR& )
+    else
     {
-        // If it wasn't content, then paste as text object.
-        SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
-        tempScreen->Append( text_item );
+        if( aEvent.IsAction( &ACTIONS::duplicate ) )
+            content = m_duplicateClipboard;
+        else
+            content = GetClipboardUTF8();
+
+        if( content.empty() )
+            return 0;
+
+        if( aEvent.IsAction( &ACTIONS::duplicate ) )
+            eventPos = getViewControls()->GetCursorPosition( false );
+
+        STRING_LINE_READER reader( content, "Clipboard" );
+        SCH_IO_KICAD_SEXPR plugin;
+
+        // Screen object on heap is owned by the sheet.
+        tempSheet.SetScreen( tempScreen );
+
+        try
+        {
+            plugin.LoadContent( reader, &tempSheet );
+        }
+        catch( IO_ERROR& )
+        {
+            // If it wasn't content, then paste as a text object.
+            SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
+            tempScreen->Append( text_item );
+        }
     }
 
     m_pastedSymbols.clear();
@@ -1654,6 +1664,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     setPastedSymbolInstances( tempScreen );
 
     tempScreen->MigrateSimModels();
+
+    EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
+    int annotateStartNum = m_frame->Schematic().Settings().m_AnnotateStartNum;
 
     PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS
                                               : PASTE_MODE::REMOVE_ANNOTATIONS;

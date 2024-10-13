@@ -171,6 +171,11 @@ public:
     bool ReadImageFile( wxMemoryBuffer& aBuf );
 
     /**
+     * Set the image from an existing wxImage.
+     */
+    bool SetImage( const wxImage& aImage );
+
+    /**
     * Write the bitmap data to \a aOutStream.
     *
     * This writes binary data, not hexadecimal strings
