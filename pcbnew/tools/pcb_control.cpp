@@ -1008,15 +1008,48 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 
 int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
+    // The viewer frames cannot paste
+    if( !frame()->IsType( FRAME_FOOTPRINT_EDITOR ) && !frame()->IsType( FRAME_PCB_EDITOR ) )
+        return 0;
+
+    bool isFootprintEditor = m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
+    // The clipboard can contain two different things, an entire kicad_pcb or a single footprint
+    if( isFootprintEditor && ( !board() || !footprint() ) )
+        return 0;
+
+    BOARD_COMMIT commit( frame() );
+
     CLIPBOARD_IO pi;
     BOARD_ITEM*  clipItem = pi.Parse();
 
     if( !clipItem )
-        return 0;
+    {
+        // When the clipboard doesn't parse, create a PCB textual item with the clipboard contents
+        const wxString clipText = m_toolMgr->GetClipboardUTF8();
 
-    // The viewer frames cannot paste
-    if( !frame()->IsType( FRAME_FOOTPRINT_EDITOR ) && !frame()->IsType( FRAME_PCB_EDITOR ) )
+        if( clipText.empty() )
+            return 0;
+
+        std::unique_ptr<PCB_TEXT> item;
+
+        item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
+        item->SetText( clipText );
+        item->SetPosition( getViewControls()->GetCursorPosition() );
+
+        std::vector<BOARD_ITEM*> items{
+            item.release(),
+        };
+
+        bool cancelled = !placeBoardItems( &commit, items, true, false, false );
+
+        if( cancelled )
+            commit.Revert();
+        else
+            commit.Push( _( "Paste Text" ) );
         return 0;
+    }
+
+    // If we get here, we have a parsed board/FP to paste
 
     PASTE_MODE     mode = PASTE_MODE::KEEP_ANNOTATIONS;
     bool           clear_nets = false;
@@ -1035,8 +1068,6 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
         clear_nets = dlg.GetClearNets();
     }
 
-    bool isFootprintEditor = m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
-
     if( clipItem->Type() == PCB_T )
     {
         BOARD* clipBoard = static_cast<BOARD*>( clipItem );
@@ -1052,12 +1083,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
     }
 
-    // The clipboard can contain two different things, an entire kicad_pcb or a single footprint
-    if( isFootprintEditor && ( !board() || !footprint() ) )
-        return 0;
-
-    BOARD_COMMIT commit( frame() );
-    bool         cancelled = false;
+    bool cancelled = false;
 
     switch( clipItem->Type() )
     {
