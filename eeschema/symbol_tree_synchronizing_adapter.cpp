@@ -270,6 +270,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
                 if( !m_libMgr->IsLibraryLoaded( node->m_Name ) )
                     aVariant = _( "(failed to load)" ) + wxS( " " ) + aVariant.GetString();
+                else if( m_libMgr->IsLibraryReadOnly( node->m_Name ) )
+                    aVariant = _( "(read-only)" ) + wxS( " " ) + aVariant.GetString();
             }
 
             const wxString& key = m_colIdxMap.at( aCol );
