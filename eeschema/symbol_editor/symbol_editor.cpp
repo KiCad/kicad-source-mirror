@@ -579,8 +579,74 @@ static std::vector<LIB_SYMBOL_SPTR> GetParentChain( const LIB_SYMBOL& aSymbol )
 
 
 /**
+ * Check if a planned overwrite would put a symbol into it's own inheritance chain.
+ * This causes infinite loops and other unpleasantness and makes not sense - inheritance
+ * must be acyclic.
+ *
+ * Returns a pair of bools:
+ *   - first: true if the symbol would be saved into it's own ancestry
+ *   - second: true if the symbol would be saved into it's own descendents
+ */
+static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_MANAGER& aLibMgr,
+                                                            LIB_SYMBOL&                 aSymbol,
+                                                            const wxString& aNewSymbolName,
+                                                            const wxString& aNewLibraryName )
+{
+    const wxString& oldLibraryName = aSymbol.GetLibId().GetLibNickname();
+
+    // Cannot be intersecting if in different libs
+    if( aNewLibraryName != oldLibraryName )
+        return { false, false };
+
+    // Or if the target symbol doesn't exist
+    if( !aLibMgr.SymbolExists( aNewSymbolName, aNewLibraryName ) )
+        return { false, false };
+
+    bool inAncestry = false;
+    bool inDescendents = false;
+
+    {
+        const std::vector<LIB_SYMBOL_SPTR> parentChainFromUs = GetParentChain( aSymbol );
+
+        // Ignore the leaf symbol (0) - that must match
+        for( size_t i = 1; i < parentChainFromUs.size(); ++i )
+        {
+            // Attempting to overwrite a symbol in the parental chain
+            if( parentChainFromUs[i]->GetName() == aNewSymbolName )
+            {
+                inAncestry = true;
+                break;
+            }
+        }
+    }
+
+    {
+        LIB_SYMBOL* targetSymbol = aLibMgr.GetAlias( aNewSymbolName, aNewLibraryName );
+        const std::vector<LIB_SYMBOL_SPTR> parentChainFromTarget = GetParentChain( *targetSymbol );
+        const wxString                     oldSymbolName = aSymbol.GetName();
+
+        // Ignore the leaf symbol - it'll match if we're saving the symbol
+        // to the same name, and that would be OK
+        for( size_t i = 1; i < parentChainFromTarget.size(); ++i )
+        {
+            if( parentChainFromTarget[i]->GetName() == oldSymbolName )
+            {
+                inDescendents = true;
+                break;
+            }
+        }
+    }
+
+    return { inAncestry, inDescendents };
+}
+
+
+/**
  * Get a list of all the symbols in the parental chain of a symbol that have conflicts
- * in a different library.
+ * when transposed to a different library.
+ *
+ * This doesn't check for dangerous conflicts like saving into a symbol's own inheritance,
+ * this is just about which symbols will get overwritten if saved with these names.
  */
 static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_MANAGER& aLibMgr,
                                                              LIB_SYMBOL&                 aSymbol,
@@ -588,7 +654,7 @@ static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_
                                                              const wxString& newLibraryName )
 {
     std::vector<wxString> conflicts;
-    const wxString        oldLibraryName = aSymbol.GetLibId().GetLibNickname();
+    const wxString&       oldLibraryName = aSymbol.GetLibId().GetLibNickname();
 
     if( newLibraryName == oldLibraryName )
     {
@@ -904,6 +970,31 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
         if( newName.IsEmpty() )
         {
             wxMessageBox( _( "Symbol must have a name." ) );
+            return wxID_CANCEL;
+        }
+
+        /**
+         * If we save over a symbol that is in the inheritance chain of the symbol we're saving,
+         * we'll end up with a circular inheritance chain, which is bad.
+         */
+        const auto& [inAncestry, inDescendents] =
+                CheckSavingIntoOwnInheritance( *m_libMgr, *symbol, newName, newLib );
+
+        if( inAncestry )
+        {
+            msg = wxString::Format( _( "Symbol '%s' cannot replace another symbol '%s' that it "
+                                       "descends from" ),
+                                    symbolName, newName );
+            wxMessageBox( msg );
+            return wxID_CANCEL;
+        }
+
+        if( inDescendents )
+        {
+            msg = wxString::Format( _( "Symbol '%s' cannot replace another symbol '%s' that is "
+                                       "a descendent of it." ),
+                                    symbolName, newName );
+            wxMessageBox( msg );
             return wxID_CANCEL;
         }
 
