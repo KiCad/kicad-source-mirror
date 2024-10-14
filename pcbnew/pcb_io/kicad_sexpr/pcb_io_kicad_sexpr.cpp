@@ -931,8 +931,6 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DIMENSION_BASE* aDimension, int aNest
 
     if( !center )
     {
-        format( static_cast<const PCB_TEXT*>( aDimension ), aNestLevel + 1 );
-
         m_out->Print( aNestLevel + 1, "(format (prefix %s) (suffix %s) (units %d) (units_format %d) (precision %d)",
                       m_out->Quotew( aDimension->GetPrefix() ).c_str(),
                       m_out->Quotew( aDimension->GetSuffix() ).c_str(),
@@ -973,6 +971,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DIMENSION_BASE* aDimension, int aNest
         m_out->Print( 0, " keep_text_aligned" );
 
     m_out->Print( 0, ")\n" );
+
+    // Write dimension text after all other options to be sure the
+    // text options are known when reading the file
+    if( !center )
+        format( static_cast<const PCB_TEXT*>( aDimension ), aNestLevel + 1 );
 
     m_out->Print( aNestLevel, ")\n" );
 }
@@ -1533,11 +1536,11 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
             case PAD_SHAPE::CHAMFERED_RECT:
             case PAD_SHAPE::ROUNDRECT:       return "roundrect";
             case PAD_SHAPE::CUSTOM:          return "custom";
-        
+
             default:
                 THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"),
                                 aPad->GetShape( aLayer ) ) );
-            }  
+            }
         };
 
     const char* type;
@@ -1689,7 +1692,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
             }
 
         };
-    
+
     // For normal padstacks, this is the one and only set of properties.  For complex ones, this
     // will represent the front layer properties, and other layers will be formatted below
     formatCornerProperties( PADSTACK::ALL_LAYERS );
@@ -2571,7 +2574,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
         else
             formatLayer( aTrack->GetLayer() );
 
-        if( aTrack->HasSolderMask() 
+        if( aTrack->HasSolderMask()
                 && aTrack->GetLocalSolderMaskMargin().has_value()
                 && ( aTrack->IsOnLayer( F_Cu ) || aTrack->IsOnLayer( B_Cu ) ) )
         {

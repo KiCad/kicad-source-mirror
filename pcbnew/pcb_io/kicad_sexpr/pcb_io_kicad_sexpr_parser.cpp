@@ -3886,6 +3886,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
     token = NextTok();
 
     bool isLegacyDimension = false;
+    bool isStyleKnown = false;
 
     // Old format
     if( token == T_width )
@@ -3937,12 +3938,20 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
 
         case T_gr_text:
         {
-            // when parsing the text we do not yet know if the text is kept aligned
-            // or not.
-            // Leave the text not aligned for now to read the text angle.
+            // In old pcb files, when parsing the text we do not yet know
+            // if the text is kept aligned or not, and its DIM_TEXT_POSITION option.
+            // Leave the text not aligned for now to read the text angle, and no
+            // constraint for DIM_TEXT_POSITION in this case.
             // It will be set aligned (or not) later
             bool is_aligned = dim->GetKeepTextAligned();
-            dim->SetKeepTextAligned( false );
+            DIM_TEXT_POSITION t_dim_pos = dim->GetTextPositionMode();
+
+            if( !isStyleKnown )
+            {
+                dim->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
+                dim->SetKeepTextAligned( false );
+            }
+
             parsePCB_TEXT( m_board, dim.get() );
 
             if( isLegacyDimension )
@@ -3955,7 +3964,11 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                 dim->SetUnits( units );
             }
 
-            dim->SetKeepTextAligned( is_aligned );
+            if( !isStyleKnown )
+            {
+                dim->SetKeepTextAligned( is_aligned );
+                dim->SetTextPositionMode( t_dim_pos );
+            }
             break;
         }
 
@@ -4081,6 +4094,8 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
 
         case T_style:
         {
+            isStyleKnown = true;
+
             // new format: default to keep text aligned off unless token is present
             dim->SetKeepTextAligned( false );
 
