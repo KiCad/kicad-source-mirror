@@ -1919,7 +1919,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
-            frame()->GetPcbNewSettings()->m_AllowFreePads && !m_isFootprintEditor );
+            !m_dragging && frame()->GetPcbNewSettings()->m_AllowFreePads && !m_isFootprintEditor );
 
     if( selection.Empty() )
         return 0;
@@ -1943,7 +1943,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForFreePads( aCollector );
                     sTool->FilterCollectorForTableCells( aCollector );
                 },
-                true /* prompt user regarding locked items */ );
+                !m_dragging /* prompt user regarding locked items */ );
     }
 
     // Did we filter everything out?  If so, don't try to operate further
