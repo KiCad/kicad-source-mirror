@@ -151,7 +151,6 @@ public:
     static TOOL_ACTION pointEditorRemoveCorner;
 
     /// Inspection and Editing
-    static TOOL_ACTION showDatasheet;
     static TOOL_ACTION runERC;
     static TOOL_ACTION annotate;
     static TOOL_ACTION incrementAnnotations;

@@ -151,7 +151,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
-    inspectMenu->Add( EE_ACTIONS::showDatasheet );
+    inspectMenu->Add( ACTIONS::showDatasheet );
 
     inspectMenu->AppendSeparator();
     inspectMenu->Add( EE_ACTIONS::checkSymbol );

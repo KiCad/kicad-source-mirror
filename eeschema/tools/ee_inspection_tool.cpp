@@ -69,7 +69,7 @@ bool EE_INSPECTION_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::excludeMarker, EE_CONDITIONS::SingleNonExcludedMarker, 100 );
 
-    selToolMenu.AddItem( EE_ACTIONS::showDatasheet,
+    selToolMenu.AddItem( ACTIONS::showDatasheet,
                          EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
 
     return true;
@@ -600,7 +600,7 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::showSimulator.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::ShowBusSyntaxHelp,   EE_ACTIONS::showBusSyntaxHelp.MakeEvent() );
 
-    Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::ShowDatasheet,       ACTIONS::showDatasheet.MakeEvent() );
 
     // Note 1: tUpdateMessagePanel is called by CrossProbe. So uncomment this line if
     // call to CrossProbe is modifiied

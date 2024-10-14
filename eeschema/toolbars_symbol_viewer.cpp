@@ -76,7 +76,7 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_unitChoice );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
+    m_mainToolBar->Add( ACTIONS::showDatasheet );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );

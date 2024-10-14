@@ -18,13 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GENERATE_FOOTPRINT_INFO_H
-#define GENERATE_FOOTPRINT_INFO_H
+#pragma once
+
+#include <optional>
 
 #include <wx/string.h>
 
-class LIB_ID;
 class FP_LIB_TABLE;
+class FOOTPRINT;
+class LIB_ID;
 
 /**
  * Return an HTML page describing a #LIB_ID in a #FP_LIB_TABLE. This is suitable for inclusion
@@ -32,4 +34,12 @@ class FP_LIB_TABLE;
  */
 wxString GenerateFootprintInfo( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId );
 
-#endif // GENERATE_FOOTPRINT_INFO_H
+/**
+ * Get a URL to the documentation for a #LIB_ID in a #FP_LIB_TABLE. This is suitable for opening
+ * in a web browser. Currently, for want of a proper home in the format, this is usually
+ * found in the "description" field of the footprint.
+ *
+ * @return The URL, or std::nullopt if no URL is available.
+ */
+std::optional<wxString> GetFootprintDocumentationURL( const FOOTPRINT& aFootprint );
+

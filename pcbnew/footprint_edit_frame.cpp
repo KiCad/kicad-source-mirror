@@ -1286,6 +1286,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::checkFootprint,        ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::repairFootprint,       ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::cleanupGraphics,       ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( ACTIONS::showDatasheet,             ENABLE( haveFootprintCond ) );
 
     auto isArcKeepCenterMode =
             [this]( const SELECTION& )

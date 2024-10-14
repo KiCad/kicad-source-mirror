@@ -1069,6 +1069,15 @@ TOOL_ACTION ACTIONS::showProperties( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show/hide the properties manager" ) )
         .Icon( BITMAPS::tools ) );
 
+TOOL_ACTION ACTIONS::showDatasheet( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showDatasheet" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'D' )
+        .LegacyHotkeyName( "Show Datasheet" )
+        .FriendlyName( _( "Show Datasheet" ) )
+        .Tooltip( _( "Open the datasheet in a browser" ) )
+        .Icon( BITMAPS::datasheet ) );
+
 TOOL_ACTION ACTIONS::updatePcbFromSchematic( TOOL_ACTION_ARGS()
         .Name( "common.Control.updatePcbFromSchematic" )
         .Scope( AS_GLOBAL )

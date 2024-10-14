@@ -205,6 +205,7 @@ public:
     static TOOL_ACTION updatePcbFromSchematic;
     static TOOL_ACTION updateSchematicFromPcb;
     static TOOL_ACTION showProperties;
+    static TOOL_ACTION showDatasheet;
 
     // Internal
     static TOOL_ACTION updateMenu;

@@ -200,6 +200,9 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     inspectMenu->AppendSeparator();
     inspectMenu->Add( PCB_ACTIONS::checkFootprint );
 
+    inspectMenu->AppendSeparator();
+    inspectMenu->Add( PCB_ACTIONS::showDatasheet );
+
 
     //-- Tools menu --------------------------------------------------------
     //

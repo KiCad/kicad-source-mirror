@@ -394,7 +394,7 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
                 return symbol && !symbol->GetDatasheetField().GetText().IsEmpty();
             };
 
-    mgr->SetConditions( EE_ACTIONS::showDatasheet,       ENABLE( haveDatasheetCond ) );
+    mgr->SetConditions( ACTIONS::showDatasheet,       ENABLE( haveDatasheetCond ) );
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( electricalTypesShownCondition ) );
     mgr->SetConditions( EE_ACTIONS::showPinNumbers,      CHECK( pinNumbersShownCondition ) );
 

@@ -45,6 +45,52 @@ static const wxString DocFormat = wxT(
         "</tr>" );
 
 
+std::optional<wxString> GetFootprintDocumentationURL( const FOOTPRINT& aFootprint )
+{
+    wxString desc = aFootprint.GetLibDescription();
+
+    wxString url;
+
+    // It is currently common practice to store a documentation link in the description.
+    size_t idx = desc.find( wxT( "http:" ) );
+
+    if( idx == wxString::npos )
+        idx = desc.find( wxT( "https:" ) );
+
+    if( idx == wxString::npos )
+        return std::nullopt;
+
+    int nesting = 0;
+
+    for( auto chit = desc.begin() + idx; chit != desc.end(); ++chit )
+    {
+        int ch = *chit;
+
+        // Break on invalid URI characters
+        if( ch <= 0x20 || ch >= 0x7F || ch == '"' )
+            break;
+
+        // Check for nesting parentheses, e.g. (Body style from: https://this.url/part.pdf)
+        if( ch == '(' )
+            ++nesting;
+        else if( ch == ')' && --nesting < 0 )
+            break;
+
+        url += ch;
+    }
+
+    // Trim trailing punctuation
+    static wxString punct = wxS( ".,:;" );
+
+    if( punct.find( url.Last() ) != wxString::npos )
+        url = url.Left( url.Length() - 1 );
+
+    if( url.IsEmpty() )
+        return std::nullopt;
+    return url;
+}
+
+
 class FOOTPRINT_INFO_GENERATOR
 {
     wxString      m_html;
@@ -92,39 +138,8 @@ public:
             wxString keywords = m_footprint->GetKeywords();
             wxString doc;
 
-            // It is currently common practice to store a documentation link in the description.
-            size_t idx = desc.find( wxT( "http:" ) );
-
-            if( idx == wxString::npos )
-                idx = desc.find( wxT( "https:" ) );
-
-            if( idx != wxString::npos )
-            {
-                int nesting = 0;
-
-                for( auto chit = desc.begin() + idx; chit != desc.end(); ++chit )
-                {
-                    int ch = *chit;
-
-                    // Break on invalid URI characters
-                    if( ch <= 0x20 || ch >= 0x7F || ch == '"' )
-                        break;
-
-                    // Check for nesting parentheses, e.g. (Body style from: https://this.url/part.pdf)
-                    if( ch == '(' )
-                        ++nesting;
-                    else if( ch == ')' && --nesting < 0 )
-                        break;
-
-                    doc += ch;
-                }
-
-                // Trim trailing punctuation
-                static wxString punct = wxS( ".,:;" );
-
-                if( punct.find( doc.Last() ) != wxString::npos )
-                    doc = doc.Left( doc.Length() - 1 );
-            }
+            if( std::optional<wxString> url = GetFootprintDocumentationURL( *m_footprint ) )
+                doc = *url;
 
             wxString esc_desc = EscapeHTML( UnescapeString( desc ) );
 

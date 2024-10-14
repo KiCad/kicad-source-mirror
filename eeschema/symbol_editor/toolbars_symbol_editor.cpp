@@ -122,7 +122,7 @@ void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::pinTable );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
+    m_mainToolBar->Add( ACTIONS::showDatasheet );
     m_mainToolBar->Add( EE_ACTIONS::checkSymbol );
 
     m_mainToolBar->AddScaledSeparator( this );

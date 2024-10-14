@@ -75,15 +75,6 @@ TOOL_ACTION EE_ACTIONS::showSimulator( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show simulation window for running SPICE or IBIS simulations." ) )
         .Icon( BITMAPS::simulator ) );
 
-TOOL_ACTION EE_ACTIONS::showDatasheet( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InspectionTool.showDatasheet" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( 'D' )
-        .LegacyHotkeyName( "Show Datasheet" )
-        .FriendlyName( _( "Show Datasheet" ) )
-        .Tooltip( _( "Open the datasheet in a browser" ) )
-        .Icon( BITMAPS::datasheet ) );
-
 
 // EE_POINT_EDITOR
 //

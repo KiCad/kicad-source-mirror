@@ -29,7 +29,9 @@
 #include <tool/tool_manager.h>
 #include <tool/library_editor_control.h>
 #include <tools/pcb_actions.h>
+#include <eda_doc.h>
 #include <footprint_edit_frame.h>
+#include <generate_footprint_info.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
 #include <kidialog.h>
@@ -678,6 +680,27 @@ int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::ShowDatasheet( const TOOL_EVENT& aEvent )
+{
+    if( FOOTPRINT* footprint = m_frame->GetBoard()->GetFirstFootprint() )
+    {
+        std::optional<wxString> url = GetFootprintDocumentationURL( *footprint );
+
+        if( !url.has_value() )
+        {
+            frame()->ShowInfoBarMsg( _( "No datasheet found in the footprint." ) );
+        }
+        else
+        {
+            // Only absolute URLs are supported
+            SEARCH_STACK* searchStack = nullptr;
+            GetAssociatedDocument( m_frame, *url, &m_frame->Prj(), searchStack, footprint );
+        }
+    }
+    return 0;
+}
+
+
 int FOOTPRINT_EDITOR_CONTROL::EditFootprint( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadFootprintFromLibrary( m_frame->GetLibTree()->GetSelectedLibId() );
@@ -855,6 +878,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor,   ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::OpenDirectory,        ACTIONS::openDirectory.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ShowDatasheet,        ACTIONS::showDatasheet.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::EditTextAndGraphics,  PCB_ACTIONS::editTextAndGraphics.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );

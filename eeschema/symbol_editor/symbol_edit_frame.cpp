@@ -595,7 +595,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return m_symbol && !m_symbol->GetDatasheetField().GetText().IsEmpty();
             };
 
-    mgr->SetConditions( EE_ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
+    mgr->SetConditions( ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
     mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( canEditProperties && haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
