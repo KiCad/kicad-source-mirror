@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-30 08:45-0700\n"
-"PO-Revision-Date: 2024-10-13 19:15+0000\n"
+"PO-Revision-Date: 2024-10-14 09:32+0000\n"
 "Last-Translator: \"G.B\" <glbarak@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/"
 "master-source/he/>\n"
@@ -454,23 +454,23 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:226
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "רשת תלת מימד 10ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "רשת תלת מימד 5 ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "רשת תלת מימד 2.5 ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:247
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "רשת תלת מימד 1 ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:254
 msgid "Render Realistic Materials"
-msgstr ""
+msgstr "רינדור חומרים טבעיים"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
@@ -478,7 +478,7 @@ msgstr "השתמש בכל תכונות החומר מכל קובץ מודל תל�
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
 msgid "Render Solid Colors"
-msgstr ""
+msgstr "רינדור צבעים אטומים"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Use only the diffuse color property from 3D model file"
@@ -486,7 +486,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Render CAD Colors"
-msgstr ""
+msgstr "רינדור צבעי CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -494,27 +494,27 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:279
 msgid "Show Through Hole 3D Models"
-msgstr ""
+msgstr "הצג חורים עוברים במודל תלת מימד"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr ""
+msgstr "הצג מודל תלת מימד עבור רכיבים עם תצורת רכיב של חורים עוברים"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:288
 msgid "Show SMD 3D Models"
-msgstr ""
+msgstr "הצג מודל תלת מימד עבור רכיבי SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr ""
+msgstr "הצג מודל תלת מימד עבור תצורת רכיבים מסוג 'השמת שטח'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
 msgid "Show Unspecified 3D Models"
-msgstr ""
+msgstr "הצג מודלים תלת מימד ללא אפיון"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:298
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr ""
+msgstr "הצג מודל תלת מימד עבור רכיבים עם תצורת רכיב מסוג 'לא מוגדר'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
 msgid "Show 3D Models not in POS File"
@@ -534,32 +534,32 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "הצג תיבה חוסמת של מודל תלת מימד"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr ""
+msgstr "הצג גבולות מודל תלת מימד ברינדור בזמן אמת"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
-msgstr ""
+msgstr "הצג צירי תלת מימד"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 #: pcbnew/tools/pcb_actions.cpp:1319
 msgid "Show Appearance Manager"
-msgstr ""
+msgstr "הצג את מנהל התצוגה"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 msgid "Show/hide the appearance manager"
-msgstr ""
+msgstr "הצג/סתר את מנהל התצוגה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Board Body"
-msgstr ""
+msgstr "גוף הלוח"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show board body"
-msgstr ""
+msgstr "הצג את גוף הלוח"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "F.Cu"
@@ -567,7 +567,7 @@ msgstr "עליונה.נחושת"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show front copper / surface finish color"
-msgstr ""
+msgstr "הצג צבע נחושת/משטח קדמי"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "B.Cu"
@@ -575,7 +575,7 @@ msgstr "תחתונה.נחושת"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show back copper / surface finish color"
-msgstr ""
+msgstr "הצג צבע נחשת/משטח אחורי"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
@@ -643,19 +643,19 @@ msgstr "הצג שכבת הערות משתמש"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "User.Eco1"
-msgstr ""
+msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "Show user ECO1 layer"
-msgstr ""
+msgstr "הצג שכבת משתמש ECO1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "User.Eco2"
-msgstr ""
+msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
 msgid "Show user ECO2 layer"
-msgstr ""
+msgstr "הצג שכבת משתמש ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "Through-hole Models"
@@ -1755,25 +1755,25 @@ msgstr ""
 
 #: common/common.cpp:703
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
+msgstr "מערכת הפעלה זו אינה נתמכת על ידי KiCad והתלויות שלה."
 
 #: common/common.cpp:705
 msgid "Unsupported Operating System"
-msgstr ""
+msgstr "מערכת הפעלה לא נתמכת"
 
 #: common/common.cpp:708
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
-msgstr ""
+msgstr "לא ניתן לדווח על בעיות עם KiCad במערכת זו למעקב לאתר הבאגים הרשמי."
 
 #: common/confirm.cpp:50 common/confirm.cpp:56
 msgid "File Open Warning"
-msgstr ""
+msgstr "אזהרת קובץ פתוח"
 
 #: common/confirm.cpp:52 common/confirm.cpp:58
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "שמירות משולבות עשויות להניב תוצאות מאוד לא צפויות."
 
 #: common/confirm.cpp:54 common/confirm.cpp:59 common/confirm.cpp:124
 #: common/confirm.cpp:151 common/dialogs/git/dialog_git_auth.cpp:54
@@ -1787,15 +1787,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:347
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
-msgstr ""
+msgstr "בטל"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
 msgid "Open Anyway"
-msgstr ""
+msgstr "פתח בכל זאת"
 
 #: common/confirm.cpp:70 common/confirm.cpp:108
 msgid "Save Changes?"
-msgstr ""
+msgstr "לשמור שינויים?"
 
 #: common/confirm.cpp:72 common/confirm.cpp:110
 msgid "If you don't save, all your changes will be permanently lost."
@@ -47188,7 +47188,7 @@ msgstr ""
 
 #: pcbnew/zones.h:65
 msgid "thermal reliefs for PTH"
-msgstr ""
+msgstr "שחרור תרמי לחורים עוברים מצופים"
 
 #: plugins/3d/vrml/vrml.cpp:239
 #, c-format
@@ -47269,7 +47269,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
-msgstr ""
+msgstr "עורך מעגלים של KiCad (עצמאי)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
