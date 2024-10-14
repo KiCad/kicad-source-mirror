@@ -73,8 +73,10 @@
 #include <widgets/pcb_properties_panel.h>
 #include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/filedlg.h>
 #include <widgets/wx_aui_utils.h>
+
+#include <wx/filedlg.h>
+#include <wx/hyperlink.h>
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseFootprintEditor )
@@ -541,6 +543,30 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
         if( WX_INFOBAR* infobar = GetInfoBar() )
         {
             infobar->RemoveAllButtons();
+            infobar->AddCloseButton();
+            infobar->ShowMessage( msg, wxICON_INFORMATION );
+        }
+    }
+    else if( !PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable(
+                     aFootprint->GetFPID().GetLibNickname() ) )
+    {
+        wxString msg = wxString::Format( _( "Editing footprint from read-only library '%s'." ),
+                                         UnescapeString( aFootprint->GetFPID().GetLibNickname() ) );
+
+        if( WX_INFOBAR* infobar = GetInfoBar() )
+        {
+            wxString link = _( "Save as editable copy" );
+
+            const auto saveAsEditableCopy = [this, aFootprint]( wxHyperlinkEvent& aEvent )
+            {
+                SaveFootprintAs( aFootprint );
+            };
+
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
+            button->Bind( wxEVT_COMMAND_HYPERLINK, saveAsEditableCopy );
+
+            infobar->RemoveAllButtons();
+            infobar->AddButton( button );
             infobar->AddCloseButton();
             infobar->ShowMessage( msg, wxICON_INFORMATION );
         }
