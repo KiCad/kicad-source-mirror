@@ -83,6 +83,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, int aLayer )
 {
     wxString attrib;
 
+
     switch( aLayer )
     {
     case F_Adhes:
@@ -160,7 +161,12 @@ const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, int aLayer )
 
     default:
         if( IsCopperLayer( aLayer ) )
-            attrib.Printf( wxT( "Copper,L%d,Inr" ), aLayer+1 );
+        {
+            // aLayer use even values, and the first internal layer
+            // is B_Cu + 2. And in gerber file, layer id is 2 (1 is F_Cu)
+            int ly_id = ( ( aLayer - B_Cu ) / 2 ) + 1;
+            attrib.Printf( wxT( "Copper,L%d,Inr" ), ly_id );
+        }
         else
             attrib.Printf( wxT( "Other,User" ), aLayer+1 );
         break;

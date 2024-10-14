@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,7 +252,11 @@ const std::string GENDRILL_WRITER_BASE::layerName( PCB_LAYER_ID aLayer ) const
     case B_Cu:
         return "back";
     default:
-        return StrPrintf( "in%d", aLayer );
+    {
+        // aLayer use even values, and the first internal layer (In1) is B_Cu + 2.
+        int ly_id = ( aLayer - B_Cu ) / 2;
+        return StrPrintf( "in%d", ly_id );
+    }
     }
 }
 
@@ -386,12 +390,18 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
     // In Gerber files, layers num are 1 to copper layer count instead of F_Cu to B_Cu
     // (0 to copper layer count-1)
     // Note also for a n copper layers board, gerber layers num are 1 ... n
-    layer1 += 1;
+    //
+    // Copper layers use even values, so the layer id in file is
+    // (Copper layer id) /2 + 1 if layer is not B_Cu
+    if( layer1 == F_Cu )
+        layer1 = 1;
+    else
+        layer1 = ( ( layer1 - B_Cu ) / 2 ) + 1;
 
     if( layer2 == B_Cu )
         layer2 = m_pcb->GetCopperLayerCount();
     else
-        layer2 += 1;
+        layer2 = ( ( layer2 - B_Cu ) / 2) + 1;
 
     text << layer1 << wxT( "," ) << layer2;
 
