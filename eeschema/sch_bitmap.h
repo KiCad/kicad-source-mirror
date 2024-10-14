@@ -123,6 +123,10 @@ private:
     friend struct SCH_BITMAP_DESC;
 
     // Property manager interfaces
+    int  GetWidth() const;
+    void SetWidth( int aWidth );
+    int  GetHeight() const;
+    void SetHeight( int aHeight );
     int  GetTransformOriginOffsetX() const;
     void SetTransformOriginOffsetX( int aX );
     int  GetTransformOriginOffsetY() const;

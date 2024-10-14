@@ -307,6 +307,30 @@ void PCB_REFERENCE_IMAGE::SetImageScale( double aScale )
 }
 
 
+int PCB_REFERENCE_IMAGE::GetWidth() const
+{
+    return m_referenceImage.GetImage().GetSize().x;
+}
+
+
+void PCB_REFERENCE_IMAGE::SetWidth( int aWidth )
+{
+    m_referenceImage.SetWidth( aWidth );
+}
+
+
+int PCB_REFERENCE_IMAGE::GetHeight() const
+{
+    return m_referenceImage.GetImage().GetSize().y;
+}
+
+
+void PCB_REFERENCE_IMAGE::SetHeight( int aHeight )
+{
+    m_referenceImage.SetHeight( aHeight );
+}
+
+
 static struct PCB_REFERENCE_IMAGE_DESC
 {
     PCB_REFERENCE_IMAGE_DESC()
@@ -338,6 +362,20 @@ static struct PCB_REFERENCE_IMAGE_DESC
                                      &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetY,
                                      &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetY,
                                      PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
+                                     _HKI( "Width" ),
+                                     &PCB_REFERENCE_IMAGE::SetWidth,
+                                     &PCB_REFERENCE_IMAGE::GetWidth,
+                                     PROPERTY_DISPLAY::PT_COORD ),
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>(
+                                     _HKI( "Height" ),
+                                     &PCB_REFERENCE_IMAGE::SetHeight,
+                                     &PCB_REFERENCE_IMAGE::GetHeight,
+                                     PROPERTY_DISPLAY::PT_COORD ),
                              groupImage );
 
         // For future use

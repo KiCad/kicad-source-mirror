@@ -171,6 +171,26 @@ VECTOR2I REFERENCE_IMAGE::GetSize() const
 }
 
 
+void REFERENCE_IMAGE::SetWidth( int aWidth )
+{
+    if( aWidth <= 0 )
+        return;
+
+    const double ratio = aWidth / (double) m_bitmapBase->GetSize().x;
+    scaleBy( ratio );
+}
+
+
+void REFERENCE_IMAGE::SetHeight( int aHeight )
+{
+    if( aHeight <= 0 )
+        return;
+
+    const double ratio = aHeight / (double) m_bitmapBase->GetSize().y;
+    scaleBy( ratio );
+}
+
+
 double REFERENCE_IMAGE::GetImageScale() const
 {
     return m_bitmapBase->GetScale();
@@ -179,15 +199,23 @@ double REFERENCE_IMAGE::GetImageScale() const
 
 void REFERENCE_IMAGE::SetImageScale( double aScale )
 {
-    if( aScale < 0 )
+    if( aScale <= 0 )
         return;
 
     const double ratio = aScale / m_bitmapBase->GetScale();
+    scaleBy( ratio );
+}
+
+
+void REFERENCE_IMAGE::scaleBy( double aRatio )
+{
+    if( aRatio <= 0 )
+        return;
 
     const VECTOR2D currentOrigin = m_pos + m_transformOriginOffset;
-    const VECTOR2D newOffset = m_transformOriginOffset * ratio;
+    const VECTOR2D newOffset = m_transformOriginOffset * aRatio;
     const VECTOR2D newCenter = currentOrigin - newOffset;
-    const VECTOR2D newSize = m_bitmapBase->GetSize() * ratio;
+    const VECTOR2D newSize = m_bitmapBase->GetSize() * aRatio;
 
     // The span of the image is limited to the size of the coordinate system
     if( !IsVec2SafeXY( newSize ) )
@@ -199,7 +227,7 @@ void REFERENCE_IMAGE::SetImageScale( double aScale )
     if( !IsBOX2Safe( newBox ) )
         return;
 
-    m_bitmapBase->SetScale( aScale );
+    m_bitmapBase->SetScale( m_bitmapBase->GetScale() * aRatio );
     SetTransformOriginOffset( KiROUND( newOffset ) );
     // Don't need to recheck the box, we just did that
     m_pos = KiROUND( newCenter );

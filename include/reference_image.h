@@ -80,6 +80,9 @@ public:
      */
     void SetImageScale( double aScale );
 
+    void SetWidth( int aWidth );
+    void SetHeight( int aHeight );
+
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 
     void Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle );
@@ -131,6 +134,8 @@ public:
     void     SetTransformOriginOffset( const VECTOR2I& aCenter );
 
 private:
+    void scaleBy( double ratio );
+
     void updatePixelSizeInIU();
 
     const EDA_IU_SCALE& m_iuScale;

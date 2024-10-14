@@ -276,6 +276,30 @@ void SCH_BITMAP::SetImageScale( double aScale )
 }
 
 
+int SCH_BITMAP::GetWidth() const
+{
+    return m_referenceImage.GetImage().GetSize().x;
+}
+
+
+void SCH_BITMAP::SetWidth( int aWidth )
+{
+    m_referenceImage.SetWidth( aWidth );
+}
+
+
+int SCH_BITMAP::GetHeight() const
+{
+    return m_referenceImage.GetImage().GetSize().y;
+}
+
+
+void SCH_BITMAP::SetHeight( int aHeight )
+{
+    m_referenceImage.SetHeight( aHeight );
+}
+
+
 static struct SCH_BITMAP_DESC
 {
     SCH_BITMAP_DESC()
@@ -312,6 +336,20 @@ static struct SCH_BITMAP_DESC
                                      &SCH_BITMAP::SetTransformOriginOffsetY,
                                      &SCH_BITMAP::GetTransformOriginOffsetY,
                                      PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
+                                     _HKI( "Width" ),
+                                     &SCH_BITMAP::SetWidth,
+                                     &SCH_BITMAP::GetWidth,
+                                     PROPERTY_DISPLAY::PT_COORD ),
+                             groupImage );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BITMAP, int>(
+                                     _HKI( "Height" ),
+                                     &SCH_BITMAP::SetHeight,
+                                     &SCH_BITMAP::GetHeight,
+                                     PROPERTY_DISPLAY::PT_COORD ),
                              groupImage );
     }
 } _SCH_BITMAP_DESC;
