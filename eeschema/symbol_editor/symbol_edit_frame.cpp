@@ -33,6 +33,7 @@
 #include <eeschema_settings.h>
 #include <env_paths.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <kidialog.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
@@ -843,6 +844,8 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         GetLibTree()->Unselect();
 
     wxString symbolName = m_symbol ? m_symbol->GetName() : wxString();
+    const LIB_ID&  libId = m_symbol->GetLibId();
+    const wxString libName = UnescapeString( libId.GetLibNickname() );
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_SYMBOL, symbolName );
@@ -877,8 +880,6 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
                 _( "Editing symbol %s from schematic.  Saving will update the schematic "
                    "only." ),
                 m_reference ) );
-        const LIB_ID&  libId = m_symbol->GetLibId();
-        const wxString libName = UnescapeString( libId.GetLibNickname() );
 
         wxString link = wxString::Format( _( "Open in library '%s'" ), libName );
 
@@ -947,7 +948,41 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     {
         msgs.push_back(
                 _( "This library is read-only.  Changes cannot be saved to this library." ) );
-        infobarFlags = wxICON_INFORMATION;
+
+
+        wxString link = wxString::Format( _( "Save an editable copy" ) );
+
+        const auto saveAsEditableCopy = [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
+        {
+            wxString choiceMsg =
+                    wxString::Format( _( "Create an editable copy of the symbol '%s' "
+                                         "in another library, or the entire library '%s'?" ),
+                                      symbolName, libName );
+
+            KIDIALOG errorDlg( this, choiceMsg, _( "Select type of item to save" ),
+                               wxYES_NO | wxCANCEL | wxICON_QUESTION );
+            // These buttons are in a weird order(?)
+            errorDlg.SetYesNoCancelLabels( _( "Copy symbol" ), _( "Cancel" ), _( "Copy library" ) );
+
+            int choice = errorDlg.ShowModal();
+
+            switch( choice )
+            {
+            case wxID_YES:
+                SaveSymbolCopyAs( true );
+                break;
+            case wxID_CANCEL:
+                SaveLibraryAs();
+                break;
+            default:
+                // Do nothing
+                break;
+            }
+        };
+
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
+        button->Bind( wxEVT_COMMAND_HYPERLINK, saveAsEditableCopy );
+        infobar.AddButton( button );
     }
 
     if( msgs.empty() )
