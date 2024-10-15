@@ -760,7 +760,13 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                             DRC_CONSTRAINT c = m_drcEngine->EvalRules( CONNECTION_WIDTH_CONSTRAINT,
                                                                        item1, item2, aLayer );
 
-                            if( c.Value().Min() == aMinWidth + board->GetDesignSettings().GetDRCEpsilon() )
+                            int            epsilon = board->GetDesignSettings().GetDRCEpsilon();
+
+                            // A neck in a zone fill will be DRCEpsilon smaller on *each* side
+                            if( item1 && item1->Type() == PCB_ZONE_T )
+                                epsilon *= 2;
+
+                            if( c.Value().Min() == aMinWidth + epsilon )
                             {
                                 auto     drce = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
                                 wxString msg;
