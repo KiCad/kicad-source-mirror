@@ -236,6 +236,17 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::buildFilterLists()
 
 bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataToWindow()
 {
+    BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
+
+    g_vias = bds.m_TeardropParamsList.m_TargetVias;
+    g_pthPads = bds.m_TeardropParamsList.m_TargetPTHPads;
+    g_smdPads = bds.m_TeardropParamsList.m_TargetSMDPads;
+    g_trackToTrack = bds.m_TeardropParamsList.m_TargetTrack2Track;
+
+    #if 0   // I am not sure this is useful
+    g_filterRoundPads = bds.m_TeardropParamsList.m_UseRoundShapesOnly;
+    #endif
+
     PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     m_selection                 = selTool->GetSelection();
     BOARD_CONNECTED_ITEM* item  = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_selection.Front() );
@@ -433,6 +444,15 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
 
     BOARD_COMMIT commit( m_parent );
     wxBusyCursor dummy;
+
+    // Save some dialog options
+    BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
+
+    bds.m_TeardropParamsList.m_TargetVias = m_vias->GetValue();
+    bds.m_TeardropParamsList.m_TargetPTHPads = m_pthPads->GetValue();;
+    bds.m_TeardropParamsList.m_TargetSMDPads = m_smdPads->GetValue();
+    bds.m_TeardropParamsList.m_TargetTrack2Track = m_trackToTrack->GetValue();
+    bds.m_TeardropParamsList.m_UseRoundShapesOnly = m_roundPadsFilter->GetValue();
 
     if( m_vias->GetValue() )
     {

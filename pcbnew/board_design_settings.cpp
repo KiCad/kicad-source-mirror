@@ -488,8 +488,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 nlohmann::json js = nlohmann::json::array();
                 nlohmann::json entry = {};
 
-                entry["td_onviapad"]  = m_TeardropParamsList.m_TargetViasPads;
-                entry["td_onpadsmd"]  = m_TeardropParamsList.m_TargetPadsWithNoHole;
+                entry["td_onvia"]  = m_TeardropParamsList.m_TargetVias;
+                entry["td_onpthpad"]  = m_TeardropParamsList.m_TargetPTHPads;
+                entry["td_onsmdpad"]  = m_TeardropParamsList.m_TargetSMDPads;
                 entry["td_ontrackend"]  = m_TeardropParamsList.m_TargetTrack2Track;
                 entry["td_onroundshapesonly"]  = m_TeardropParamsList.m_UseRoundShapesOnly;
 
@@ -507,11 +508,14 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     if( entry.empty() || !entry.is_object() )
                         continue;
 
-                    if( entry.contains( "td_onviapad" ) )
-                        m_TeardropParamsList.m_TargetViasPads = entry["td_onviapad"].get<bool>();
+                    if( entry.contains( "td_onvia" ) )
+                        m_TeardropParamsList.m_TargetVias = entry["td_onvia"].get<bool>();
 
-                    if( entry.contains( "td_onpadsmd" ) )
-                        m_TeardropParamsList.m_TargetPadsWithNoHole = entry["td_onpadsmd"].get<bool>();
+                    if( entry.contains( "td_onpthpad" ) )
+                        m_TeardropParamsList.m_TargetPTHPads = entry["td_onpthpad"].get<bool>();
+
+                    if( entry.contains( "td_onsmdpad" ) )
+                        m_TeardropParamsList.m_TargetSMDPads = entry["td_onsmdpad"].get<bool>();
 
                     if( entry.contains( "td_ontrackend" ) )
                         m_TeardropParamsList.m_TargetTrack2Track = entry["td_ontrackend"].get<bool>();

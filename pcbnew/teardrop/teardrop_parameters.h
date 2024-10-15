@@ -143,10 +143,12 @@ class TEARDROP_PARAMETERS_LIST
     std::vector<TEARDROP_PARAMETERS> m_params_list;
 
 public:
-    /// True to create teardrops for vias and pads with holes
-    bool     m_TargetViasPads;
-    /// True to create teardrops for pads without holes (SMD and others
-    bool     m_TargetPadsWithNoHole;
+    /// True to create teardrops for vias
+    bool     m_TargetVias;
+    /// True to create teardrops for pads with holes
+    bool     m_TargetPTHPads;
+    /// True to create teardrops for pads SMD, edge connectors,
+    bool     m_TargetSMDPads;
     /// True to create teardrops at the end of a track connected to the end of
     /// another track having a different width
     bool     m_TargetTrack2Track;
@@ -155,8 +157,9 @@ public:
 
 public:
     TEARDROP_PARAMETERS_LIST() :
-            m_TargetViasPads( true ),
-            m_TargetPadsWithNoHole( true ),
+            m_TargetVias( true ),
+            m_TargetPTHPads( true ),
+            m_TargetSMDPads( true ),
             m_TargetTrack2Track( false ),
             m_UseRoundShapesOnly( false )
     {
