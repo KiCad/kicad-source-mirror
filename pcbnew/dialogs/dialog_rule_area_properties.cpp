@@ -267,6 +267,9 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 
         auto setupCurrentSourceSelection = [&]( wxComboBox* cb )
         {
+            if( curSourceName == wxEmptyString )
+                return;
+
             if( !cb->SetStringSelection( curSourceName ) )
             {
                 m_notFoundPlacementSource = true;
