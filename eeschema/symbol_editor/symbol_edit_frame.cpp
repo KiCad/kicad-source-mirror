@@ -843,9 +843,14 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     else
         GetLibTree()->Unselect();
 
-    wxString symbolName = m_symbol ? m_symbol->GetName() : wxString();
-    const LIB_ID&  libId = m_symbol->GetLibId();
-    const wxString libName = UnescapeString( libId.GetLibNickname() );
+    wxString symbolName;
+    wxString libName;
+
+    if( m_symbol )
+    {
+        symbolName = m_symbol->GetName();
+        libName = UnescapeString( m_symbol->GetLibId().GetLibNickname() );
+    }
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_SYMBOL, symbolName );
