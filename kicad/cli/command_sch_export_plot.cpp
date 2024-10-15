@@ -36,6 +36,7 @@
 #define ARG_HPGL_ORIGIN "--origin"
 #define ARG_PAGES "--pages"
 #define ARG_EXCLUDE_PDF_PROPERTY_POPUPS "--exclude-pdf-property-popups"
+#define ARG_EXCLUDE_PDF_HIERARCHICAL_LINKS "--exclude-pdf-hierarchical-links"
 #define ARG_EXCLUDE_PDF_METADATA "--exclude-pdf-metadata"
 
 const JOB_HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
@@ -79,6 +80,11 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
     {
         m_argParser.add_argument( ARG_EXCLUDE_PDF_PROPERTY_POPUPS )
                 .help( UTF8STDSTR( _( "Do not generate property popups in PDF" ) ) )
+                .flag();
+
+        m_argParser.add_argument( ARG_EXCLUDE_PDF_HIERARCHICAL_LINKS )
+                .help( UTF8STDSTR( _( "Do not generate clickable links for hierarchical elements "
+                                      "in PDF" ) ) )
                 .flag();
 
         m_argParser.add_argument( ARG_EXCLUDE_PDF_METADATA )
@@ -184,6 +190,8 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     else if( m_plotFormat == SCH_PLOT_FORMAT::PDF )
     {
         plotJob->m_PDFPropertyPopups = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_PROPERTY_POPUPS );
+        plotJob->m_PDFHierarchicalLinks =
+                !m_argParser.get<bool>( ARG_EXCLUDE_PDF_HIERARCHICAL_LINKS );
         plotJob->m_PDFMetadata = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_METADATA );
     }
 

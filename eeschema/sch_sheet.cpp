@@ -32,6 +32,7 @@
 #include <trigo.h>
 #include <sch_edit_frame.h>
 #include <plotters/plotter.h>
+#include <sch_plotter.h>
 #include <string_utils.h>
 #include <widgets/msgpanel.h>
 #include <math/util.h>      // for KiROUND
@@ -1247,18 +1248,25 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     }
 
     // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)
-    std::vector<wxString> properties;
-
-    properties.emplace_back( EDA_TEXT::GotoPageHref( findSelf().GetPageNumber() ) );
-
-    for( const SCH_FIELD& field : GetFields() )
+    if( aPlotOpts.m_PDFHierarchicalLinks )
     {
-        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                   field.GetName(),
-                                                   field.GetShownText( false ) ) );
+        aPlotter->HyperlinkBox( GetBoundingBox(),
+                                EDA_TEXT::GotoPageHref( findSelf().GetPageNumber() ) );
     }
+    else if( aPlotOpts.m_PDFPropertyPopups )
+    {
+        std::vector<wxString> properties;
 
-    aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
+        properties.emplace_back( EDA_TEXT::GotoPageHref( findSelf().GetPageNumber() ) );
+
+        for( const SCH_FIELD& field : GetFields() )
+        {
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), field.GetName(),
+                                                       field.GetShownText( false ) ) );
+        }
+
+        aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
+    }
 
     // Plot sheet pins
     for( SCH_SHEET_PIN* sheetPin : m_pins )

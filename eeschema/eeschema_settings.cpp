@@ -546,6 +546,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "plot.pdf_property_popups",
             &m_PlotPanel.pdf_property_popups, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "plot.pdf_hierarchical_links",
+            &m_PlotPanel.pdf_hierarchical_links, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "plot.pdf_metadata",
             &m_PlotPanel.pdf_metadata, true ) );
 

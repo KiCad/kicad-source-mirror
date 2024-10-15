@@ -131,6 +131,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
             setOpenFileAfterPlot( cfg->m_PlotPanel.open_file_after_plot );
 
             m_plotPDFPropertyPopups->SetValue( cfg->m_PlotPanel.pdf_property_popups );
+            m_plotPDFHierarchicalLinks->SetValue( cfg->m_PlotPanel.pdf_hierarchical_links );
             m_plotPDFMetadata->SetValue( cfg->m_PlotPanel.pdf_metadata );
 
             // HPGL plot origin and unit system configuration
@@ -177,15 +178,16 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     else if( m_job )
     {
         m_plotFormatOpt->SetSelection( static_cast<int>( m_job->m_plotFormat ) );
-		m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
-		m_penWidth.SetValue( m_job->m_HPGLPenSize );
+        m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
+        m_penWidth.SetValue( m_job->m_HPGLPenSize );
         m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_job->m_HPGLPaperSizeSelect );
-		m_plotPDFPropertyPopups->SetValue( m_job->m_PDFPropertyPopups );
-		m_plotPDFMetadata->SetValue( m_job->m_PDFMetadata );
-		m_colorTheme->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
-		m_ModeColorOption->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
-		m_plotOriginOpt->SetSelection( static_cast<int>( m_job->m_HPGLPlotOrigin ) );
-		m_pageSizeSelect = static_cast<int>( m_job->m_pageSizeSelect );
+        m_plotPDFPropertyPopups->SetValue( m_job->m_PDFPropertyPopups );
+        m_plotPDFHierarchicalLinks->SetValue( m_job->m_PDFHierarchicalLinks );
+        m_plotPDFMetadata->SetValue( m_job->m_PDFMetadata );
+        m_colorTheme->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
+        m_ModeColorOption->Enable( m_job->m_plotFormat != SCH_PLOT_FORMAT::HPGL );
+        m_plotOriginOpt->SetSelection( static_cast<int>( m_job->m_HPGLPlotOrigin ) );
+        m_pageSizeSelect = static_cast<int>( m_job->m_pageSizeSelect );
 
         // Set the plot format
         switch( m_job->m_plotFormat )
@@ -320,6 +322,7 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 
         m_openFileAfterPlot->Enable( fmt == PLOT_FORMAT::PDF );
         m_plotPDFPropertyPopups->Enable( fmt == PLOT_FORMAT::PDF );
+        m_plotPDFHierarchicalLinks->Enable( fmt == PLOT_FORMAT::PDF );
         m_plotPDFMetadata->Enable( fmt == PLOT_FORMAT::PDF );
 
         m_paperSizeOption->Set( paperSizes );
@@ -359,9 +362,10 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
         cfg->m_PlotPanel.format           = static_cast<int>( GetPlotFileFormat() );
         cfg->m_PlotPanel.hpgl_origin      = m_plotOriginOpt->GetSelection();
         cfg->m_PlotPanel.hpgl_paper_size  = static_cast<int>( m_HPGLPaperSizeSelect );
-        cfg->m_PlotPanel.pdf_property_popups  = m_plotPDFPropertyPopups->GetValue();
-        cfg->m_PlotPanel.pdf_metadata         = m_plotPDFMetadata->GetValue();
-        cfg->m_PlotPanel.open_file_after_plot = getOpenFileAfterPlot();
+        cfg->m_PlotPanel.pdf_property_popups    = m_plotPDFPropertyPopups->GetValue();
+        cfg->m_PlotPanel.pdf_hierarchical_links = m_plotPDFHierarchicalLinks->GetValue();
+        cfg->m_PlotPanel.pdf_metadata           = m_plotPDFMetadata->GetValue();
+        cfg->m_PlotPanel.open_file_after_plot   = getOpenFileAfterPlot();
 
         // HPGL Pen Size is stored in mm in config
         cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / schIUScale.IU_PER_MM;
@@ -437,6 +441,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotOpts.m_useBackgroundColor = m_plotBackgroundColor->GetValue();
     plotOpts.m_theme = colors->GetFilename();
     plotOpts.m_PDFPropertyPopups = m_plotPDFPropertyPopups->GetValue();
+    plotOpts.m_PDFHierarchicalLinks = m_plotPDFHierarchicalLinks->GetValue();
     plotOpts.m_PDFMetadata = m_plotPDFMetadata->GetValue();
     plotOpts.m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_HPGLPaperSizeSelect );
     plotOpts.m_HPGLPlotOrigin =

@@ -318,6 +318,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_HPGLPenSize = aPlotJob->m_HPGLPenSize;
     plotOpts.m_HPGLPlotOrigin = hpglOrigin;
     plotOpts.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
+    plotOpts.m_PDFHierarchicalLinks = aPlotJob->m_PDFHierarchicalLinks;
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
     plotOpts.m_outputDirectory = aPlotJob->m_outputDirectory;
     plotOpts.m_outputFile = aPlotJob->m_outputFile;

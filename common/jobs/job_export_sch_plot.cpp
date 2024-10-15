@@ -76,6 +76,7 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aIsCli ) :
         m_HPGLPenSize( 1.0 ),
         m_HPGLPaperSizeSelect( JOB_HPGL_PAGE_SIZE::DEFAULT ),
         m_PDFPropertyPopups( true ),
+        m_PDFHierarchicalLinks( true ),
         m_PDFMetadata( true ),
         m_theme(),
         m_outputDirectory(),
@@ -101,6 +102,8 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aIsCli ) :
             "hpgl_page_size", &m_HPGLPaperSizeSelect, m_HPGLPaperSizeSelect ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "pdf_property_popups", &m_PDFPropertyPopups,
                                                 m_PDFPropertyPopups ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "pdf_hierarchical_links", &m_PDFHierarchicalLinks,
+                                                m_PDFHierarchicalLinks ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "pdf_metadata", &m_PDFMetadata, m_PDFMetadata ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_theme, m_theme ) );
     m_params.emplace_back(

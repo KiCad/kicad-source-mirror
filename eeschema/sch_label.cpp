@@ -1344,8 +1344,34 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
                 aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
         }
 
+        // Make sheet pins and hierarchical labels clickable hyperlinks
+        bool linkAlreadyPlotted = false;
+        if( aPlotOpts.m_PDFHierarchicalLinks )
+        {
+            if( Type() == SCH_HIER_LABEL_T )
+            {
+                if( sheet->size() >= 2 )
+                {
+                    SCH_SHEET_PATH path = *sheet;
+                    path.pop_back();
+                    aPlotter->HyperlinkBox( GetBodyBoundingBox(),
+                                            EDA_TEXT::GotoPageHref( path.GetPageNumber() ) );
+                    linkAlreadyPlotted = true;
+                }
+            }
+            else if( Type() == SCH_SHEET_PIN_T )
+            {
+                SCH_SHEET_PATH path = *sheet;
+                SCH_SHEET*     parent = static_cast<SCH_SHEET*>( m_parent );
+                path.push_back( parent );
+                aPlotter->HyperlinkBox( GetBodyBoundingBox(),
+                                        EDA_TEXT::GotoPageHref( path.GetPageNumber() ) );
+                linkAlreadyPlotted = true;
+            }
+        }
+
         // Plot attributes to a hypertext menu
-        if( aPlotOpts.m_PDFPropertyPopups )
+        if( aPlotOpts.m_PDFPropertyPopups && !linkAlreadyPlotted )
         {
             std::vector<wxString> properties;
 
