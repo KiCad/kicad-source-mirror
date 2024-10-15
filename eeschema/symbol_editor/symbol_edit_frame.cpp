@@ -881,117 +881,120 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 
     if( IsSymbolFromSchematic() )
     {
-        msgs.push_back( wxString::Format(
-                _( "Editing symbol %s from schematic.  Saving will update the schematic "
-                   "only." ),
-                m_reference ) );
+        msgs.push_back( wxString::Format( _( "Editing symbol %s from schematic.  Saving will "
+                                             "update the schematic only." ),
+                                          m_reference ) );
 
-        wxString link = wxString::Format( _( "Open in library '%s'" ), libName );
-
-        const auto openSymbolInLib = [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
-        {
-            bool ok = LoadSymbol( m_symbol->GetLibId(), GetUnit(), GetBodyStyle() );
-
-            if( !ok )
-                DisplayError( this,
-                              wxString::Format( _( "Failed to load symbol '%s' in library '%s'." ),
-                                                symbolName, libName ) );
-        };
-
+        wxString         link = wxString::Format( _( "Open symbol from library %s" ), libName );
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
-        button->Bind( wxEVT_COMMAND_HYPERLINK, openSymbolInLib );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
+                {
+                    if( LoadSymbol( m_symbol->GetLibId(), GetUnit(), GetBodyStyle() ) )
+                    {
+                        if( !IsLibraryTreeShown() )
+                            ToggleLibraryTree();
+                    }
+                    else
+                    {
+                        DisplayError( this, wxString::Format( _( "Failed to load symbol %s from "
+                                                                 "library %s." ),
+                                                              symbolName,
+                                                              libName ) );
+                    }
+                } ) );
+
         infobar.AddButton( button );
     }
     else if( IsSymbolFromLegacyLibrary() )
     {
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl(
-                &infobar, wxID_ANY, _( "Manage symbol libraries" ), wxEmptyString );
+        msgs.push_back( _( "Symbols in legacy libraries are not editable.  Use Manage Symbol "
+                           "Libraries to migrate to current format." ) );
+
+        wxString         link = _( "Manage symbol libraries" );
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [this]( wxHyperlinkEvent& aEvent )
                 {
                     InvokeSchEditSymbolLibTable( &Kiway(), this );
                 } ) );
+
         infobar.AddButton( button );
-        msgs.push_back( _( "Symbols in legacy libraries are not editable.  Use Manage "
-                           "Symbol Libraries to migrate to current format." ) );
     }
     else if( IsSymbolAlias() )
     {
-        wxString rootSymbolName;
+        msgs.push_back( wxString::Format( _( "Symbol %s is a derived symbol. Symbol graphics will "
+                                             "not be editable." ),
+                                          UnescapeString( symbolName ) ) );
 
         // Don't assume the parent symbol shared pointer is still valid.
         if( std::shared_ptr<LIB_SYMBOL> rootSymbol = m_symbol->GetRootSymbol() )
-            rootSymbolName = rootSymbol->GetName();
-        else
         {
-            wxCHECK( false, /* void */ );
+            int      unit = GetUnit();
+            int      bodyStyle = GetBodyStyle();
+            wxString rootSymbolName = rootSymbol->GetName();
+            wxString link = wxString::Format( _( "Open %s" ), UnescapeString( rootSymbolName ) );
+
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link,
+                                                           wxEmptyString );
+
+            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    [this, rootSymbolName, unit, bodyStyle]( wxHyperlinkEvent& aEvent )
+                    {
+                        LoadSymbolFromCurrentLib( rootSymbolName, unit, bodyStyle );
+                    } ) );
+
+            infobar.AddButton( button );
         }
-
-        int      unit = GetUnit();
-        int      bodyStyle = GetBodyStyle();
-        wxString msg;
-        wxString link;
-
-        msgs.push_back( wxString::Format( _( "Symbol %s is a derived symbol. "
-                                             "Symbol graphics will not be editable." ),
-                                          UnescapeString( symbolName ) ) );
-
-        link.Printf( _( "Open %s" ), UnescapeString( rootSymbolName ) );
-
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                [this, rootSymbolName, unit, bodyStyle]( wxHyperlinkEvent& aEvent )
-                {
-                    LoadSymbolFromCurrentLib( rootSymbolName, unit, bodyStyle );
-                } ) );
-        infobar.AddButton( button );
     }
 
-    if( m_symbol && !IsSymbolFromSchematic()
-        && m_libMgr->IsLibraryReadOnly( m_symbol->GetLibId().GetFullLibraryName() ) )
+    if( m_symbol
+            && !IsSymbolFromSchematic()
+            && m_libMgr->IsLibraryReadOnly( m_symbol->GetLibId().GetFullLibraryName() ) )
     {
-        msgs.push_back(
-                _( "This library is read-only.  Changes cannot be saved to this library." ) );
+        msgs.push_back( _( "Library is read-only.  Changes cannot be saved to this library." ) );
 
-
-        wxString link = wxString::Format( _( "Save an editable copy" ) );
-
-        const auto saveAsEditableCopy = [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
-        {
-            wxString choiceMsg =
-                    wxString::Format( _( "Create an editable copy of the symbol '%s' "
-                                         "in another library, or the entire library '%s'?" ),
-                                      symbolName, libName );
-
-            KIDIALOG errorDlg( this, choiceMsg, _( "Select type of item to save" ),
-                               wxYES_NO | wxCANCEL | wxICON_QUESTION );
-            // These buttons are in a weird order(?)
-            errorDlg.SetYesNoCancelLabels( _( "Copy symbol" ), _( "Cancel" ), _( "Copy library" ) );
-
-            int choice = errorDlg.ShowModal();
-
-            switch( choice )
-            {
-            case wxID_YES:
-                SaveSymbolCopyAs( true );
-                break;
-            case wxID_CANCEL:
-                SaveLibraryAs();
-                break;
-            default:
-                // Do nothing
-                break;
-            }
-        };
-
+        wxString         link = wxString::Format( _( "Create an editable copy" ) );
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
-        button->Bind( wxEVT_COMMAND_HYPERLINK, saveAsEditableCopy );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
+                {
+                    wxString msg = wxString::Format( _( "Create an editable copy of the symbol or "
+                                                        "the entire library (%s)?" ),
+                                                     libName );
+
+                    KIDIALOG errorDlg( this, msg, _( "Select type of item to save" ),
+                                       wxYES_NO | wxCANCEL | wxICON_QUESTION );
+                    // These buttons are in a weird order(?)
+                    errorDlg.SetYesNoCancelLabels( _( "Copy symbol" ), _( "Cancel" ),
+                                                   _( "Copy library" ) );
+
+                    int choice = errorDlg.ShowModal();
+
+                    switch( choice )
+                    {
+                    case wxID_YES:
+                        SaveSymbolCopyAs( true );
+                        break;
+                    case wxID_CANCEL:
+                        SaveLibraryAs();
+                        break;
+                    default:
+                        // Do nothing
+                        break;
+                    }
+                } ) );
+
         infobar.AddButton( button );
     }
 
     if( msgs.empty() )
+    {
         infobar.Dismiss();
+    }
     else
     {
         wxString msg = wxJoin( msgs, '\n', '\0' );
@@ -1734,6 +1737,8 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 {
     std::unique_ptr<LIB_SYMBOL> symbol = aSymbol->GetLibSymbolRef()->Flatten();
     wxCHECK( symbol, /* void */ );
+
+    symbol->SetLibId( aSymbol->GetLibId() );
 
     // Take in account the symbol orientation and mirroring. to calculate the field
     // positions in symbol editor (i.e. no rotation, no mirroring)
