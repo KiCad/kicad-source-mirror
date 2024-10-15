@@ -231,16 +231,43 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
 
     if( m_isDryRun )
     {
-        msg.Printf( _( "Change %s component class from %s to %s." ), aFootprint->GetReference(),
-                    curClassName, newClassName );
+        if( curClassName == wxEmptyString && newClassName != wxEmptyString )
+        {
+            msg.Printf( _( "Change %s component class to %s." ), aFootprint->GetReference(),
+                        newClassName );
+        }
+        else if( curClassName != wxEmptyString && newClassName == wxEmptyString )
+        {
+            msg.Printf( _( "Remove %s component class (currently %s)." ),
+                        aFootprint->GetReference(), curClassName );
+        }
+        else
+        {
+            msg.Printf( _( "Change %s component class from %s to %s." ), aFootprint->GetReference(),
+                        curClassName, newClassName );
+        }
     }
     else
     {
         wxASSERT_MSG( newClass != nullptr, "Component class should not be nullptr" );
 
         aFootprint->SetComponentClass( newClass );
-        msg.Printf( _( "Changed %s component class from %s to %s." ), aFootprint->GetReference(),
-                    curClassName, newClassName );
+
+        if( curClassName == wxEmptyString && newClassName != wxEmptyString )
+        {
+            msg.Printf( _( "Changed %s component class to %s." ), aFootprint->GetReference(),
+                        newClassName );
+        }
+        else if( curClassName != wxEmptyString && newClassName == wxEmptyString )
+        {
+            msg.Printf( _( "Removed %s component class (was %s)." ), aFootprint->GetReference(),
+                        curClassName );
+        }
+        else
+        {
+            msg.Printf( _( "Changed %s component class from %s to %s." ),
+                        aFootprint->GetReference(), curClassName, newClassName );
+        }
     }
 
     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
