@@ -26,6 +26,7 @@
 #define DRC_TEST_PROVIDER__H
 
 #include <board.h>
+#include <board_commit.h>
 #include <pcb_marker.h>
 
 #include <functional>
@@ -99,6 +100,9 @@ public:
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
+    BOARD_COMMIT* GetCommit() const { return m_commit; };
+    void          SetCommit( BOARD_COMMIT* aCommit ) { m_commit = aCommit; };
+
 protected:
     int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
@@ -133,6 +137,7 @@ protected:
     std::unordered_map<const DRC_RULE*, int> m_stats;
     bool        m_isRuleDriven = true;
     std::mutex  m_statsMutex;
+    BOARD_COMMIT*                            m_commit;
 };
 
 #endif // DRC_TEST_PROVIDER__H

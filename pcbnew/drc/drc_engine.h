@@ -34,6 +34,7 @@
 #include <drc/drc_rule.h>
 
 
+class BOARD_COMMIT;
 class BOARD_DESIGN_SETTINGS;
 class DRC_TEST_PROVIDER;
 class PCB_EDIT_FRAME;
@@ -142,7 +143,8 @@ public:
     /**
      * Run the DRC tests.
      */
-    void RunTests( EDA_UNITS aUnits,  bool aReportAllTrackErrors, bool aTestFootprints );
+    void RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints,
+                   BOARD_COMMIT* aCommit = nullptr );
 
     bool IsErrorLimitExceeded( int error_code );
 

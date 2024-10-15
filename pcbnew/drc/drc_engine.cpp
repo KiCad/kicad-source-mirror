@@ -593,7 +593,8 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 }
 
 
-void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints )
+void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints,
+                           BOARD_COMMIT* aCommit )
 {
     SetUserUnits( aUnits );
 
@@ -625,6 +626,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
+        provider->SetCommit( aCommit );
 
         if( !provider->RunTests( aUnits ) )
             break;
@@ -906,7 +908,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                               EscapeHTML( c->constraint.GetName() ),
                                               MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
                     break;
-
+                case CREEPAGE_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s creepage: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
+                    break;
                 case MAX_UNCOUPLED_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s max uncoupled length: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),

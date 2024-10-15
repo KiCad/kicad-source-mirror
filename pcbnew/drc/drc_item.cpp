@@ -70,6 +70,10 @@ DRC_ITEM DRC_ITEM::clearance( DRCE_CLEARANCE,
         _( "Clearance violation" ),
         wxT( "clearance" ) );
 
+DRC_ITEM DRC_ITEM::creepage( DRCE_CREEPAGE,
+        _( "Creepage violation" ),
+        wxT( "creepage" ) );
+
 DRC_ITEM DRC_ITEM::tracksCrossing( DRCE_TRACKS_CROSSING,
         _( "Tracks crossing" ),
         wxT( "tracks_crossing" ) );
@@ -286,6 +290,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::shortingItems,
             DRC_ITEM::tracksCrossing,
             DRC_ITEM::clearance,
+            DRC_ITEM::creepage,
             DRC_ITEM::viaDangling,
             DRC_ITEM::trackDangling,
             DRC_ITEM::starvedThermal,
@@ -363,6 +368,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_ALLOWED_ITEMS:            return std::make_shared<DRC_ITEM>( itemsNotAllowed );
     case DRCE_TEXT_ON_EDGECUTS:         return std::make_shared<DRC_ITEM>( textOnEdgeCuts );
     case DRCE_CLEARANCE:                return std::make_shared<DRC_ITEM>( clearance );
+    case DRCE_CREEPAGE:                 return std::make_shared<DRC_ITEM>( creepage );
     case DRCE_TRACKS_CROSSING:          return std::make_shared<DRC_ITEM>( tracksCrossing );
     case DRCE_EDGE_CLEARANCE:           return std::make_shared<DRC_ITEM>( edgeClearance );
     case DRCE_ZONES_INTERSECT:          return std::make_shared<DRC_ITEM>( zonesIntersect );

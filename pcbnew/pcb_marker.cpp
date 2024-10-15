@@ -348,7 +348,12 @@ void PCB_MARKER::SetZoom( double aZoomFactor )
 
 const BOX2I PCB_MARKER::GetBoundingBox() const
 {
-    return GetBoundingBoxMarker();
+    BOX2I box = GetBoundingBoxMarker();
+
+    for( auto& s : m_shapes )
+        box.Merge( s.GetBoundingBox() );
+
+    return box;
 }
 
 

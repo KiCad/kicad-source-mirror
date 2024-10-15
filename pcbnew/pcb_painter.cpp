@@ -2943,6 +2943,31 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 
     m_gal->DrawPolygon( polygon );
     m_gal->Restore();
+
+    if( isShadow || ( aMarker->GetShapes().size() <= 0 ) )
+        return; // Don't add shadow to shapes
+
+    // Show pat
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetLineWidth( aMarker->MarkerScale() );
+
+    for( auto& shape : aMarker->GetShapes() )
+    {
+        switch( shape.GetShape() )
+        {
+        case SHAPE_T::SEGMENT: m_gal->DrawSegment( shape.GetStart(), shape.GetEnd(), 0 ); break;
+        case SHAPE_T::ARC:
+        {
+            EDA_ANGLE startAngle, endAngle;
+            shape.CalcArcAngles( startAngle, endAngle );
+            m_gal->DrawArc( shape.GetCenter(), shape.GetRadius(), startAngle, shape.GetArcAngle() );
+            break;
+        }
+        default: break;
+        }
+    }
 }
 
 

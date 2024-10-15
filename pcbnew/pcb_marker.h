@@ -27,6 +27,7 @@
 
 
 #include <board_item.h>
+#include <pcb_shape.h>
 #include <rc_item.h>
 #include <marker_base.h>
 
@@ -134,8 +135,14 @@ public:
         return wxT( "PCB_MARKER" );
     }
 
+    std::vector<PCB_SHAPE> GetShapes() const { return m_shapes; };
+
+    void SetShapes( const std::vector<PCB_SHAPE>& aShapes ) { m_shapes = aShapes; };
+
+
 protected:
     KIGFX::COLOR4D getColor() const override;
+    std::vector<PCB_SHAPE> m_shapes;
 };
 
 #endif      //  PCB_MARKER_H

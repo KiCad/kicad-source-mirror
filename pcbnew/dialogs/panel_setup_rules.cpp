@@ -461,6 +461,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                           "clearance|"
                           "connection_width|"
                           "courtyard_clearance|"
+                          "creepage|"
                           "diff_pair_gap|"
                           "diff_pair_uncoupled|"
                           "disallow|"

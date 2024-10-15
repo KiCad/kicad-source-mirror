@@ -306,6 +306,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     {
     case T_assertion:                 c.m_Type = ASSERTION_CONSTRAINT;                 break;
     case T_clearance:                 c.m_Type = CLEARANCE_CONSTRAINT;                 break;
+    case T_creepage:                  c.m_Type = CREEPAGE_CONSTRAINT;                  break;
     case T_hole_clearance:            c.m_Type = HOLE_CLEARANCE_CONSTRAINT;            break;
     case T_edge_clearance:            c.m_Type = EDGE_CLEARANCE_CONSTRAINT;            break;
     case T_hole_size:                 c.m_Type = HOLE_SIZE_CONSTRAINT;                 break;

@@ -41,6 +41,7 @@ enum PCB_DRC_CODE {
     DRCE_ALLOWED_ITEMS,                  // a disallowed item has been used
     DRCE_TEXT_ON_EDGECUTS,               // text or dimension on Edge.Cuts layer
     DRCE_CLEARANCE,                      // items are too close together
+    DRCE_CREEPAGE,                       // items are too close together ( creepage )
     DRCE_TRACKS_CROSSING,                // tracks are crossing
     DRCE_EDGE_CLEARANCE,                 // a copper item is too close to the board edge
     DRCE_ZONES_INTERSECT,                // copper zone outlines intersect
@@ -178,6 +179,7 @@ private:
     static DRC_ITEM itemsNotAllowed;
     static DRC_ITEM textOnEdgeCuts;
     static DRC_ITEM clearance;
+    static DRC_ITEM creepage;
     static DRC_ITEM tracksCrossing;
     static DRC_ITEM edgeClearance;
     static DRC_ITEM zonesIntersect;

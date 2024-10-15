@@ -64,6 +64,7 @@ namespace AC_KEYS
 static const wxChar IncrementalConnectivity[] = wxT( "IncrementalConnectivity" );
 static const wxChar Use3DConnexionDriver[] = wxT( "3DConnexionDriver" );
 static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
+static const wxChar EnableCreepageDRC[] = wxT( "EnableCreepageDRC" );
 static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
 static const wxChar DRCSliverWidthTolerance[] = wxT( "DRCSliverWidthTolerance" );
 static const wxChar DRCSliverMinimumLength[] = wxT( "DRCSliverMinimumLength" );
@@ -222,6 +223,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DrawTriangulationOutlines = false;
 
     m_ExtraClearance            = 0.0005;
+    m_EnableCreepageDRC         = false;
     m_DRCEpsilon                = 0.0005;   // 0.5um is small enough not to materially violate
                                             // any constraints.
     m_SliverWidthTolerance      = 0.08;
@@ -337,6 +339,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
                                                   &m_ExtraClearance,
                                                   m_ExtraClearance, 0.0, 1.0 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableCreepageDRC,
+                                                  &m_EnableCreepageDRC, m_EnableCreepageDRC ) );
+
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
                                                   &m_DRCEpsilon, m_DRCEpsilon, 0.0, 1.0 ) );

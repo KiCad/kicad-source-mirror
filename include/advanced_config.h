@@ -125,6 +125,14 @@ public:
     double m_ExtraClearance;
 
     /**
+     * Enable the DRC creepage check
+     *
+     * Setting name: "EnableCreepageDRC"
+     * Default value: false
+     */
+    bool m_EnableCreepageDRC;
+
+    /**
      * Epsilon for DRC tests.
      *
      * @note Fo zone tests this is essentially additive with #m_ExtraClearance.  Units are mm.

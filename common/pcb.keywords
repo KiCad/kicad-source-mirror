@@ -88,6 +88,7 @@ convexhull
 copper_line_width
 copper_text_dims
 courtyard_line_width
+creepage
 data
 date
 defaults
