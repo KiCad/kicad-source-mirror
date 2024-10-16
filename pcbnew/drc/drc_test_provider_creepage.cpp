@@ -41,10 +41,11 @@
 #include <geometry/shape_circle.h>
 
 
-extern bool SegmentIntersectsBoard( VECTOR2I aP1, VECTOR2I aP2, std::vector<BOARD_ITEM*> aBe,
-                                    std::vector<const BOARD_ITEM*> aDontTestAgainst );
-bool        segmentIntersectsArc( VECTOR2I p1, VECTOR2I p2, VECTOR2I center, double radius,
-                                  double startAngle, double endAngle );
+extern bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
+                                    const std::vector<BOARD_ITEM*>&       aBe,
+                                    const std::vector<const BOARD_ITEM*>& aDontTestAgainst );
+bool        segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2I& center,
+                                  double radius, double startAngle, double endAngle );
 
 struct path_connection
 {
@@ -61,9 +62,10 @@ struct path_connection
      *  
      * Check if a paths intersects the board edge or a track
      */
-    bool isValid( BOARD& aBoard, PCB_LAYER_ID aLayer, std::vector<BOARD_ITEM*> aBoardEdges,
-                  std::vector<const BOARD_ITEM*> aIgnoreForTest, SHAPE_POLY_SET* aOutline,
-                  std::pair<bool, bool> aTestLocalConcavity )
+    bool isValid( const BOARD& aBoard, PCB_LAYER_ID aLayer,
+                  const std::vector<BOARD_ITEM*>&       aBoardEdges,
+                  const std::vector<const BOARD_ITEM*>& aIgnoreForTest, SHAPE_POLY_SET* aOutline,
+                  const std::pair<bool, bool>& aTestLocalConcavity )
     {
         if( !aOutline )
             return true; // We keep the segment if there is a problem
@@ -516,7 +518,8 @@ public:
 class GraphConnection
 {
 public:
-    GraphConnection( GraphNode* aN1, GraphNode* aN2, path_connection aPc ) : n1( aN1 ), n2( aN2 )
+    GraphConnection( GraphNode* aN1, GraphNode* aN2, const path_connection& aPc ) :
+            n1( aN1 ), n2( aN2 )
     {
         m_path = aPc;
     };
@@ -1130,7 +1133,7 @@ public:
     GraphNode*       AddNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent = nullptr,
                               VECTOR2I aPos = VECTOR2I() );
     GraphNode*       AddNodeVirtual();
-    GraphConnection* AddConnection( GraphNode* aN1, GraphNode* aN2, path_connection aPc );
+    GraphConnection* AddConnection( GraphNode* aN1, GraphNode* aN2, const path_connection& aPc );
     GraphConnection* AddConnection( GraphNode* aN1, GraphNode* aN2 );
     GraphNode*       FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos );
 
@@ -1397,8 +1400,8 @@ void CreepageGraph::SetTarget( double aTarget )
     m_creepageTargetSquared = aTarget * aTarget;
 }
 
-bool segmentIntersectsArc( VECTOR2I p1, VECTOR2I p2, VECTOR2I center, double radius,
-                           double startAngle, double endAngle )
+bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2I& center,
+                           double radius, double startAngle, double endAngle )
 {
     // Vector from p1 to p2
     VECTOR2I D = p2 - p1;
@@ -1719,7 +1722,7 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_CIRCLE& aS2, do
 
     CU_SHAPE_CIRCLE csc( this->GetPos(), this->GetRadius() + this->GetWidth() / 2 );
 
-    for( auto pc : this->Paths( csc, aMaxWeight, aMaxSquaredWeight ) )
+    for( auto& pc : this->Paths( csc, aMaxWeight, aMaxSquaredWeight ) )
     {
         EDA_ANGLE testAngle = this->AngleBetweenStartAndEnd( pc.a2 );
 
@@ -1734,10 +1737,10 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_CIRCLE& aS2, do
             CU_SHAPE_CIRCLE csc1( this->GetStartPoint(), this->GetWidth() / 2 );
             CU_SHAPE_CIRCLE csc2( this->GetEndPoint(), this->GetWidth() / 2 );
 
-            for ( auto pc : this->Paths( csc1, aMaxWeight, aMaxSquaredWeight) )
+            for( auto& pc : this->Paths( csc1, aMaxWeight, aMaxSquaredWeight ) )
                 result.push_back( pc );
-            
-            for ( auto pc : this->Paths( csc2, aMaxWeight, aMaxSquaredWeight) )
+
+            for( auto& pc : this->Paths( csc2, aMaxWeight, aMaxSquaredWeight ) )
                 result.push_back( pc );
         }
 
@@ -2359,8 +2362,9 @@ bool segmentIntersectsCircle( VECTOR2I p1, VECTOR2I p2, VECTOR2I center, double 
     }
 }
 
-bool SegmentIntersectsBoard( VECTOR2I aP1, VECTOR2I aP2, std::vector<BOARD_ITEM*> aBe,
-                             std::vector<const BOARD_ITEM*> aDontTestAgainst )
+bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
+                             const std::vector<BOARD_ITEM*>&       aBe,
+                             const std::vector<const BOARD_ITEM*>& aDontTestAgainst )
 {
     for( BOARD_ITEM* be : aBe )
     {
@@ -2964,7 +2968,8 @@ GraphNode* CreepageGraph::AddNodeVirtual()
 }
 
 
-GraphConnection* CreepageGraph::AddConnection( GraphNode* aN1, GraphNode* aN2, path_connection aPc )
+GraphConnection* CreepageGraph::AddConnection( GraphNode* aN1, GraphNode* aN2,
+                                               const path_connection& aPc )
 {
     if( !aN1 || !aN2 )
         return nullptr;
@@ -3313,8 +3318,8 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         return -1;
 
     const DRAWINGS            drawings = m_board->Drawings();
-    std::vector<BOARD_ITEM*>  boardEdges;
     CreepageGraph             graph( *m_board );
+    std::vector<BOARD_ITEM*>* boardEdges = &( graph.m_boardEdge );
     graph.m_boardOutline = &outline;
     std::vector<CREEP_SHAPE*>* graphShapes = &( graph.m_shapeCollection );
 
@@ -3326,7 +3331,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
         if( drawing->IsOnLayer( Edge_Cuts ) )
         {
-            boardEdges.push_back( drawing );
+            boardEdges->push_back( drawing );
         }
     }
 
@@ -3342,7 +3347,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
             if( drawing->IsOnLayer( Edge_Cuts ) )
             {
-                boardEdges.push_back( drawing );
+                boardEdges->push_back( drawing );
             }
         }
     }
@@ -3359,10 +3364,10 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         PCB_SHAPE* s = new PCB_SHAPE( NULL, SHAPE_T::CIRCLE );
         s->SetRadius( p->GetDrillSize().x / 2 );
         s->SetPosition( p->GetPosition() );
-        boardEdges.push_back( s );
+        boardEdges->push_back( s );
     }
 
-    for( BOARD_ITEM* drawing : boardEdges )
+    for( BOARD_ITEM* drawing : *boardEdges )
     {
         PCB_SHAPE* d = dynamic_cast<PCB_SHAPE*>( drawing );
 
@@ -3469,8 +3474,6 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         default: break;
         }
     }
-
-    graph.m_boardEdge = boardEdges;
 
     // Create a virtual node to connect all conductive element net / net group A
     NETCODES_MAP nets = m_board->GetNetInfo().NetsByNetcode();
