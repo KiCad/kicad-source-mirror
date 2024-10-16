@@ -534,7 +534,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     // ("old" footprints can have null uuids that create issues in fp editor)
     aFootprint->FixUuids();
 
-    const libName = aFootprint->GetFPID().GetLibNickname();
+    const wxString libName = aFootprint->GetFPID().GetLibNickname();
 
     if( IsCurrentFPFromBoard() )
     {
