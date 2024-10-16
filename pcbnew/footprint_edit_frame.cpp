@@ -534,6 +534,8 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     // ("old" footprints can have null uuids that create issues in fp editor)
     aFootprint->FixUuids();
 
+    const libName = aFootprint->GetFPID().GetLibNickname();
+
     if( IsCurrentFPFromBoard() )
     {
         wxString msg;
@@ -547,11 +549,13 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
             infobar->ShowMessage( msg, wxICON_INFORMATION );
         }
     }
-    else if( !PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable(
-                     aFootprint->GetFPID().GetLibNickname() ) )
+    // An empty libname is OK - you get that when creating a new footprint from the main menu
+    // In that case. treat is as editable, and the user will be prompted for save-as when saving.
+    else if( !libName.empty()
+             && !PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable( libName ) )
     {
         wxString msg = wxString::Format( _( "Editing footprint from read-only library '%s'." ),
-                                         UnescapeString( aFootprint->GetFPID().GetLibNickname() ) );
+                                         UnescapeString( libName ) );
 
         if( WX_INFOBAR* infobar = GetInfoBar() )
         {
