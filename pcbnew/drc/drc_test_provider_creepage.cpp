@@ -2480,28 +2480,6 @@ std::vector<path_connection> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, doubl
     if( cusegment1 && cusegment2 )
         return cusegment1->Paths( *cusegment2, maxWeight, maxWeightSquared );
 
-    //Reversed
-
-
-    if( cuarc2 && cuarc1 )
-        return cuarc1->Paths( *cuarc2, maxWeight, maxWeightSquared );
-    if( cuarc2 && cucircle1 )
-        return cucircle1->Paths( *cuarc2, maxWeight, maxWeightSquared );
-    if( cuarc2 && cusegment1 )
-        return cusegment1->Paths( *cuarc2, maxWeight, maxWeightSquared );
-    if( cucircle2 && cuarc1 )
-        return cuarc1->Paths( *cucircle2, maxWeight, maxWeightSquared );
-    if( cucircle2 && cucircle1 )
-        return cucircle1->Paths( *cucircle2, maxWeight, maxWeightSquared );
-    if( cucircle2 && cusegment1 )
-        return cusegment1->Paths( *cucircle2, maxWeight, maxWeightSquared );
-    if( cusegment2 && cuarc1 )
-        return cuarc1->Paths( *cusegment2, maxWeight, maxWeightSquared );
-    if( cusegment2 && cucircle1 )
-        return cucircle1->Paths( *cusegment2, maxWeight, maxWeightSquared );
-    if( cusegment2 && cusegment1 )
-        return cusegment1->Paths( *cusegment2, maxWeight, maxWeightSquared );
-
 
     // Cu to Be
 
@@ -2527,11 +2505,11 @@ std::vector<path_connection> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, doubl
     // Reversed
 
 
-    if( bearc2 && bearc1 )
+    if( cuarc2 && bearc1 )
         return bearc1->Paths( *bearc2, maxWeight, maxWeightSquared );
-    if( bearc2 && becircle1 )
+    if( cuarc2 && becircle1 )
         return becircle1->Paths( *bearc2, maxWeight, maxWeightSquared );
-    if( bearc2 && bepoint1 )
+    if( cuarc2 && bepoint1 )
         return bepoint1->Paths( *bearc2, maxWeight, maxWeightSquared );
     if( cucircle2 && bearc1 )
         return bearc1->Paths( *cucircle2, maxWeight, maxWeightSquared );
@@ -2566,28 +2544,6 @@ std::vector<path_connection> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, doubl
     if( bepoint1 && becircle2 )
         return bepoint1->Paths( *becircle2, maxWeight, maxWeightSquared );
     if( bepoint1 && bepoint2 )
-        return bepoint1->Paths( *bepoint2, maxWeight, maxWeightSquared );
-
-    // Reversed
-
-
-    if( bearc2 && bearc1 )
-        return bearc1->Paths( *bearc2, maxWeight, maxWeightSquared );
-    if( bearc2 && becircle1 )
-        return becircle1->Paths( *bearc2, maxWeight, maxWeightSquared );
-    if( bearc2 && bepoint1 )
-        return bepoint1->Paths( *bearc2, maxWeight, maxWeightSquared );
-    if( becircle2 && bearc1 )
-        return bearc1->Paths( *becircle2, maxWeight, maxWeightSquared );
-    if( becircle2 && becircle1 )
-        return becircle1->Paths( *becircle2, maxWeight, maxWeightSquared );
-    if( becircle2 && bepoint1 )
-        return bepoint1->Paths( *becircle2, maxWeight, maxWeightSquared );
-    if( bepoint2 && bearc1 )
-        return bearc1->Paths( *bepoint2, maxWeight, maxWeightSquared );
-    if( bepoint2 && becircle1 )
-        return becircle1->Paths( *bepoint2, maxWeight, maxWeightSquared );
-    if( bepoint2 && bepoint1 )
         return bepoint1->Paths( *bepoint2, maxWeight, maxWeightSquared );
 
     return result;
