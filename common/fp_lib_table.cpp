@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -444,9 +444,18 @@ void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& a
 
 bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( row->plugin );
-    return row->plugin->IsLibraryWritable( row->GetFullURI( true ) );
+    try
+    {
+        const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
+        wxCHECK2( row->plugin, false );
+        return row->plugin->IsLibraryWritable( row->GetFullURI( true ) );
+    }
+    catch( ... )
+    {
+    }
+
+    // aNickname not found, so the library is not writable
+    return false;
 }
 
 
