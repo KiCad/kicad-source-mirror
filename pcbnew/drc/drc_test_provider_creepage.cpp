@@ -725,9 +725,6 @@ public:
         return angle;
     }
 
-    bool m_lastStartIsTangent;
-    bool m_lastEndIsTangent;
-
     std::pair<bool, bool> IsThereATangentPassingThroughPoint( const BE_SHAPE_POINT aPoint ) const;
 
 protected:
@@ -1207,6 +1204,20 @@ std::vector<PCB_SHAPE> GraphConnection::GetShapes()
              && n1->m_parent->GetType() == CREEP_SHAPE::TYPE::ARC )
     {
         BE_SHAPE_ARC* arc = dynamic_cast<BE_SHAPE_ARC*>( n1->m_parent );
+
+        if( !arc )
+        {
+            PCB_SHAPE s;
+            s.SetStart( m_path.a1 );
+            s.SetEnd( m_path.a2 );
+
+            s.SetWidth( lineWidth );
+
+            s.SetLayer( Eco1_User );
+
+            shapes.push_back( s );
+            return shapes;
+        }
 
         VECTOR2I  center = arc->GetPos();
         VECTOR2I  R1 = n1->m_pos - center;
