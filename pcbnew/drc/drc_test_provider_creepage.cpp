@@ -224,6 +224,8 @@ public:
     };
     CREEP_SHAPE() {};
 
+    virtual ~CREEP_SHAPE() {}
+
 
     virtual int       GetRadius() const { return 0; };
     virtual EDA_ANGLE GetStartAngle() const { return EDA_ANGLE( 0 ); };
@@ -1050,7 +1052,6 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
         path_connection pc;
         pc.weight = sqrt( weightSquared1 );
 
-        VECTOR2D point;
         pc.a1 = p1 + direction1 * R1 * ratio1 + direction2 * R1 * ratio2;
         pc.a2 = p2 + direction1 * R2 * ratio1 + direction2 * R2 * ratio2;
 
@@ -1075,7 +1076,6 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
         path_connection pc;
         pc.weight = sqrt( weightSquared2 );
 
-        VECTOR2D point;
         pc.a1 = p1 + direction1 * R1 * ratio1 + direction2 * R1 * ratio2;
         pc.a2 = p2 - direction1 * R2 * ratio1 - direction2 * R2 * ratio2;
 
