@@ -366,3 +366,19 @@ wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxSt
 
     return wxString::Format( aFormatString, aSource, constraint_str, actual_str );
 }
+
+wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource,
+                                       const EDA_ANGLE& aConstraint, const EDA_ANGLE& aActual )
+{
+    wxString constraint_str = MessageTextFromValue( aConstraint );
+    wxString actual_str = MessageTextFromValue( aActual );
+
+    if( constraint_str == actual_str )
+    {
+        // Use more precise formatting if the message-text strings were equal.
+        constraint_str = StringFromValue( aConstraint, true );
+        actual_str = StringFromValue( aActual, true );
+    }
+
+    return wxString::Format( aFormatString, aSource, constraint_str, actual_str );
+}

@@ -309,6 +309,7 @@ wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<R
             || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
             || aDRCItem->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
             || aDRCItem->GetErrorCode() == DRCE_TRACK_WIDTH
+            || aDRCItem->GetErrorCode() == DRCE_TRACK_ANGLE
             || aDRCItem->GetErrorCode() == DRCE_VIA_DIAMETER
             || aDRCItem->GetErrorCode() == DRCE_ANNULAR_WIDTH
             || aDRCItem->GetErrorCode() == DRCE_DRILL_OUT_OF_RANGE
@@ -437,6 +438,21 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved width constraints: min %s; max %s." ),
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
+        break;
+    
+    case DRCE_TRACK_ANGLE:
+        r = dialog->AddHTMLPage( _( "Track Angle" ) );
+        reportHeader( _( "Track Angle resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine->EvalRules( TRACK_ANGLE_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved angle constraints: min %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
         break;

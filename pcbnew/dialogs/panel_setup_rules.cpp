@@ -264,6 +264,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                     || token == wxT( "thermal_relief_gap" )
                     || token == wxT( "thermal_spoke_width" )
                     || token == wxT( "track_width" )
+                    || token == wxT( "track_angle" )
                     || token == wxT( "via_count" )
                     || token == wxT( "via_diameter" )
                     || token == wxT( "zone_connection" );
@@ -480,6 +481,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                           "thermal_relief_gap|"
                           "thermal_spoke_width|"
                           "track_width|"
+                          "track_angle|"
                           "via_count|"
                           "via_diameter|"
                           "zone_connection" );

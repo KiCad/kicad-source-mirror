@@ -125,6 +125,8 @@ protected:
 
     wxString formatMsg( const wxString& aFormatString, const wxString& aSource, double aConstraint,
                         double aActual );
+    wxString formatMsg( const wxString& aFormatString, const wxString& aSource,
+                        const EDA_ANGLE& aConstraint, const EDA_ANGLE& aActual );
 
     // List of basic (ie: non-compound) geometry items
     static std::vector<KICAD_T> s_allBasicItems;

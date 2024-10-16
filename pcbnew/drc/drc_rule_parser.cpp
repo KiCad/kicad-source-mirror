@@ -316,6 +316,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_text_height:               c.m_Type = TEXT_HEIGHT_CONSTRAINT;               break;
     case T_text_thickness:            c.m_Type = TEXT_THICKNESS_CONSTRAINT;            break;
     case T_track_width:               c.m_Type = TRACK_WIDTH_CONSTRAINT;               break;
+    case T_track_angle:               c.m_Type = TRACK_ANGLE_CONSTRAINT;               break;
     case T_connection_width:          c.m_Type = CONNECTION_WIDTH_CONSTRAINT;          break;
     case T_annular_width:             c.m_Type = ANNULAR_WIDTH_CONSTRAINT;             break;
     case T_via_diameter:              c.m_Type = VIA_DIAMETER_CONSTRAINT;              break;
@@ -335,7 +336,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     wxT( "assertion, clearance, hole_clearance, edge_clearance, "
                          "physical_clearance, physical_hole_clearance, courtyard_clearance, "
-                         "silk_clearance, hole_size, hole_to_hole, track_width, annular_width, "
+                         "silk_clearance, hole_size, hole_to_hole, track_width, track_angle, annular_width, "
                          "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
                          "min_resolved_spokes, length, skew, via_count, via_diameter, "
                          "diff_pair_gap or diff_pair_uncoupled" ) );
@@ -349,7 +350,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     }
 
     bool unitless = c.m_Type == VIA_COUNT_CONSTRAINT
-                    || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT;
+                    || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT
+                    || c.m_Type == TRACK_ANGLE_CONSTRAINT;
 
     if( c.m_Type == DISALLOW_CONSTRAINT )
     {

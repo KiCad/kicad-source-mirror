@@ -50,6 +50,7 @@ thermal_reliefs
 thermal_relief_gap
 thermal_spoke_width
 track
+track_angle
 track_width
 version
 via
