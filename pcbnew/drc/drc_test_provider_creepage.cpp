@@ -1097,7 +1097,7 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
 class CreepageGraph
 {
 public:
-    CreepageGraph( BOARD& aBoard ) : m_board( aBoard ) {};
+    CreepageGraph( BOARD& aBoard ) : m_board( aBoard ) { m_boardOutline = nullptr; };
     ~CreepageGraph()
     {
         for( GraphConnection* gc : m_connections )
@@ -2746,7 +2746,7 @@ void CreepageGraph::Addshape( const SHAPE& aShape, GraphNode* aConnectTo, BOARD_
     if( !newshape )
         return;
 
-    GraphNode* gnShape;
+    GraphNode* gnShape = nullptr;
 
     newshape->SetParent( aParent );
 
