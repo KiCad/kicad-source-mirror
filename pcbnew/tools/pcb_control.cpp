@@ -868,16 +868,7 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 
 int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
-    // The viewer frames cannot paste
-    if( !frame()->IsType( FRAME_FOOTPRINT_EDITOR ) && !frame()->IsType( FRAME_PCB_EDITOR ) )
-        return 0;
-
-    bool isFootprintEditor = m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
-    // The clipboard can contain two different things, an entire kicad_pcb or a single footprint
-    if( isFootprintEditor && ( !board() || !footprint() ) )
-        return 0;
-
-    // We should never get here if a modal dialog is up... but we do.
+    // We should never get here if a modal dialog is up... but we do on MacOS.
     // https://gitlab.com/kicad/code/kicad/-/issues/18912
 #ifdef __WXMAC__
     if( wxDialog::OSXHasModalDialogsOpen() )
@@ -885,18 +876,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
         wxBell();
         return 0;
     }
-#else
-    for( wxWindow* window : frame()->GetChildren() )
-    {
-        if( dynamic_cast<wxRichMessageDialog*>( window ) )
-        {
-            wxBell();
-            return 0;
-        }
-    }
 #endif
-
-    BOARD_COMMIT commit( frame() );
 
     CLIPBOARD_IO pi;
     BOARD_ITEM*  clipItem = pi.Parse();
