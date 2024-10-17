@@ -1019,22 +1019,13 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( isFootprintEditor && ( !board() || !footprint() ) )
         return 0;
 
-    // We should never get here if a modal dialog is up... but we do.
+    // We should never get here if a modal dialog is up... but we do on MacOS.
     // https://gitlab.com/kicad/code/kicad/-/issues/18912
 #ifdef __WXMAC__
     if( wxDialog::OSXHasModalDialogsOpen() )
     {
         wxBell();
         return 0;
-    }
-#else
-    for( wxWindow* window : frame()->GetChildren() )
-    {
-        if( dynamic_cast<wxRichMessageDialog*>( window ) )
-        {
-            wxBell();
-            return 0;
-        }
     }
 #endif
 
