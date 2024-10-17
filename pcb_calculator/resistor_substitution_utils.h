@@ -47,10 +47,7 @@ struct RESISTANCE
     double      value;
     std::string name;
 
-    RESISTANCE( double aValue = 0.0, std::string aName = "" ) :
-            value( aValue ), name( std::move( aName ) )
-    {
-    }
+    RESISTANCE( double aValue, const std::string& aName ) : value( aValue ), name( aName ) {}
 };
 
 
