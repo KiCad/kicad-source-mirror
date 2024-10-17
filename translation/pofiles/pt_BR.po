@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-10-04 05:16+0000\n"
+"PO-Revision-Date: 2024-10-18 02:15+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -1319,7 +1319,7 @@ msgid ""
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
 "Mostrar ou ocultar o corpo da placa\n"
-"Se escondido, mostre apenas as camadas de cobre e da serigrafia."
+"Se escondido, mostrar apenas as camadas de cobre e da serigrafia."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -1780,7 +1780,7 @@ msgstr ""
 
 #: common/confirm.cpp:58
 msgid "Do not show again"
-msgstr "Não mostre novamente"
+msgstr "Não mostrar novamente"
 
 #: common/confirm.cpp:128
 msgid "Message"
@@ -14512,7 +14512,7 @@ msgstr "T&amanho padrão do nome do pino:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Show pin &electrical type"
-msgstr "Exiba o tipo &elétrico do pino"
+msgstr "Exibir o tipo &elétrico do pino"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:119
 msgid "&Pitch of repeated pins:"
@@ -15414,7 +15414,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:408
 msgid "Do not show this dialog again."
-msgstr "Não mostre esta caixa de diálogo novamente."
+msgstr "Não mostrar esta caixa de diálogo novamente."
 
 #: eeschema/files-io.cpp:437
 #, c-format
@@ -18318,7 +18318,7 @@ msgstr ""
 
 #: eeschema/sheet.cpp:744
 msgid "Do not show this message again."
-msgstr "Não mostre esta mensagem novamente."
+msgstr "Não mostrar esta mensagem novamente."
 
 #: eeschema/sheet.cpp:745
 msgid "Create New Sheet"
@@ -21412,7 +21412,7 @@ msgstr "Move para a próxima folha por número"
 
 #: eeschema/tools/ee_actions.cpp:1267
 msgid "Hierarchy Navigator"
-msgstr "Navegador hierárquico"
+msgstr "Navegador de hierarquia"
 
 #: eeschema/tools/ee_actions.cpp:1268
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -35322,7 +35322,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 msgid "Always show selected ratsnest"
-msgstr "Sempre mostre o ratnest selecionado"
+msgstr "Sempre mostrar o ratnest selecionado"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:1357
@@ -35503,7 +35503,7 @@ msgstr "Nomes Net:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Do not show"
-msgstr "Não exiba"
+msgstr "Não exibir"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Show on pads"
@@ -46831,7 +46831,7 @@ msgstr "Exibe a caixa de diálogo de propriedades do padrão de ajuste"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
-msgstr "Não mostre novamente"
+msgstr "Não mostrar novamente"
 
 #: pcbnew/tools/pcb_control.cpp:248
 #, c-format
