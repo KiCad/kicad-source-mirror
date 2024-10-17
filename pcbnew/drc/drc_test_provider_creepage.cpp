@@ -1097,7 +1097,12 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
 class CreepageGraph
 {
 public:
-    CreepageGraph( BOARD& aBoard ) : m_board( aBoard ) { m_boardOutline = nullptr; };
+    CreepageGraph( BOARD& aBoard ) : m_board( aBoard )
+    {
+        m_boardOutline = nullptr;
+        m_creepageTarget = -1;
+        m_creepageTargetSquared = -1;
+    };
     ~CreepageGraph()
     {
         for( GraphConnection* gc : m_connections )
@@ -1129,6 +1134,10 @@ public:
     std::vector<GraphNode*>                       m_nodes;
     std::vector<GraphConnection*>                 m_connections;
 
+
+    void TransformEdgeToCreepShapes();
+    void TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aShapes );
+    void RemoveDuplicatedShapes();
     // Add a node to the graph. If an equivalent node exists, returns the pointer of the existing node instead
     GraphNode*       AddNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent = nullptr,
                               VECTOR2I aPos = VECTOR2I() );
@@ -1157,6 +1166,118 @@ private:
     double m_creepageTarget;
     double m_creepageTargetSquared;
 };
+
+void CreepageGraph::TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aShapes )
+{
+    for( CREEP_SHAPE* p1 : aShapes )
+    {
+        if( !p1 )
+            continue;
+
+        switch( p1->GetType() )
+        {
+        case CREEP_SHAPE::TYPE::POINT: AddNode( GraphNode::TYPE::POINT, p1, p1->GetPos() ); break;
+        case CREEP_SHAPE::TYPE::CIRCLE: AddNode( GraphNode::TYPE::CIRCLE, p1, p1->GetPos() ); break;
+        case CREEP_SHAPE::TYPE::ARC: AddNode( GraphNode::TYPE::ARC, p1, p1->GetPos() ); break;
+        default: break;
+        }
+    }
+}
+
+void CreepageGraph::RemoveDuplicatedShapes()
+{
+    // Sort the vector
+    sort( m_shapeCollection.begin(), m_shapeCollection.end(), compareShapes );
+
+    // Use unique to identify the range of duplicates
+    auto uniqueEnd = unique( m_shapeCollection.begin(), m_shapeCollection.end(), areEquivalent );
+
+    // First, delete the duplicate elements
+    for( auto it = uniqueEnd; it != m_shapeCollection.end(); ++it )
+    {
+        delete *it;
+    }
+
+    // Then, erase the elements from the vector
+    m_shapeCollection.erase( uniqueEnd, m_shapeCollection.end() );
+
+    // Finally, shrink the vector to free unused memory
+    m_shapeCollection.shrink_to_fit();
+}
+
+void CreepageGraph::TransformEdgeToCreepShapes()
+{
+    for( BOARD_ITEM* drawing : m_boardEdge )
+    {
+        PCB_SHAPE* d = dynamic_cast<PCB_SHAPE*>( drawing );
+
+        if( !d )
+            continue;
+
+        switch( d->GetShape() )
+        {
+        case SHAPE_T::SEGMENT:
+        {
+            BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
+            m_shapeCollection.push_back( a );
+            a = new BE_SHAPE_POINT( d->GetEnd() );
+            m_shapeCollection.push_back( a );
+            break;
+        }
+        case SHAPE_T::RECTANGLE:
+        {
+            BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
+            m_shapeCollection.push_back( a );
+            a = new BE_SHAPE_POINT( d->GetEnd() );
+            m_shapeCollection.push_back( a );
+            a = new BE_SHAPE_POINT( VECTOR2I( d->GetEnd().x, d->GetStart().y ) );
+            m_shapeCollection.push_back( a );
+            a = new BE_SHAPE_POINT( VECTOR2I( d->GetStart().x, d->GetEnd().y ) );
+            m_shapeCollection.push_back( a );
+            break;
+        }
+        case SHAPE_T::POLY:
+        {
+            std::vector<VECTOR2I> points;
+            d->DupPolyPointsList( points );
+
+            for( auto p : points )
+            {
+                BE_SHAPE_POINT* a = new BE_SHAPE_POINT( p );
+                m_shapeCollection.push_back( a );
+            }
+            break;
+        }
+        case SHAPE_T::CIRCLE:
+        {
+            BE_SHAPE_CIRCLE* a = new BE_SHAPE_CIRCLE( d->GetCenter(), d->GetRadius() );
+            a->SetParent( d );
+            m_shapeCollection.push_back( a );
+            break;
+        }
+
+        case SHAPE_T::ARC:
+        {
+            // If the arc is not locally convex, only use the endpoints
+            double   tolerance = 10;
+            VECTOR2D center( double( d->GetCenter().x ), double( d->GetCenter().y ) );
+            VECTOR2D mid( double( d->GetArcMid().x ), double( d->GetArcMid().y ) );
+            VECTOR2D dir( mid - center );
+            dir = dir / d->GetRadius() * ( d->GetRadius() - tolerance );
+
+            EDA_ANGLE alpha, beta;
+            d->CalcArcAngles( alpha, beta );
+            BE_SHAPE_ARC* a = new BE_SHAPE_ARC( d->GetCenter(), d->GetRadius(), alpha, beta,
+                                                d->GetStart(), d->GetEnd() );
+            a->SetParent( d );
+
+            m_shapeCollection.push_back( a );
+            break;
+        }
+        default: break;
+        }
+    }
+}
 
 
 std::vector<PCB_SHAPE> GraphConnection::GetShapes()
@@ -1641,7 +1762,7 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_ARC& aS2, d
 
     BE_SHAPE_CIRCLE bsc( aS2.GetPos(), aS2.GetRadius() );
 
-    for( auto pc : this->Paths( bsc, aMaxWeight, aMaxSquaredWeight ) )
+    for( auto& pc : this->Paths( bsc, aMaxWeight, aMaxSquaredWeight ) )
     {
         EDA_ANGLE testAngle = aS2.AngleBetweenStartAndEnd( pc.a2 );
 
@@ -1661,12 +1782,12 @@ std::vector<path_connection> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_ARC& aS2, d
         EDA_ANGLE beArcStartAngle = aS2.GetStartAngle();
         EDA_ANGLE beArcEndAngle = aS2.GetEndAngle();
 
-        for( auto pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
+        for( auto& pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius,
                                        beArcStartAngle.AsDegrees(), beArcEndAngle.AsDegrees() ) )
                 result.push_back( pc );
 
-        for( auto pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
+        for( auto& pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius,
                                        beArcStartAngle.AsDegrees(), beArcEndAngle.AsDegrees() ) )
                 result.push_back( pc );
@@ -1687,7 +1808,7 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
 
     BE_SHAPE_CIRCLE bsc( beArcPos, beArcRadius );
 
-    for( auto pc : this->Paths( bsc, aMaxWeight, aMaxSquaredWeight ) )
+    for( auto& pc : this->Paths( bsc, aMaxWeight, aMaxSquaredWeight ) )
     {
         EDA_ANGLE testAngle = aS2.AngleBetweenStartAndEnd( pc.a2 );
 
@@ -1702,12 +1823,12 @@ std::vector<path_connection> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
         BE_SHAPE_POINT bsp1( aS2.GetStartPoint() );
         BE_SHAPE_POINT bsp2( aS2.GetEndPoint() );
 
-        for( auto pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
+        for( auto& pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius,
                                        beArcStartAngle.AsDegrees(), beArcEndAngle.AsDegrees() ) )
                 result.push_back( pc );
 
-        for( auto pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
+        for( auto& pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius,
                                        beArcStartAngle.AsDegrees(), beArcEndAngle.AsDegrees() ) )
                 result.push_back( pc );
@@ -1759,7 +1880,7 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
 
     BE_SHAPE_CIRCLE bsc( aS2.GetPos(), aS2.GetRadius() );
 
-    for( auto pc : this->Paths( bsc, aMaxWeight, aMaxSquaredWeight ) )
+    for( auto& pc : this->Paths( bsc, aMaxWeight, aMaxSquaredWeight ) )
     {
         EDA_ANGLE testAngle = aS2.AngleBetweenStartAndEnd( pc.a2 );
 
@@ -1774,12 +1895,12 @@ std::vector<path_connection> CU_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
         BE_SHAPE_POINT bsp1( aS2.GetStartPoint() );
         BE_SHAPE_POINT bsp2( aS2.GetEndPoint() );
 
-        for( auto pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
+        for( auto& pc : this->Paths( bsp1, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius,
                                        beArcStartAngle.AsDegrees(), beArcEndAngle.AsDegrees() ) )
                 result.push_back( pc );
 
-        for( auto pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
+        for( auto& pc : this->Paths( bsp2, aMaxWeight, aMaxSquaredWeight ) )
             if( !segmentIntersectsArc( pc.a1, pc.a2, beArcPos, beArcRadius,
                                        beArcStartAngle.AsDegrees(), beArcEndAngle.AsDegrees() ) )
                 result.push_back( pc );
@@ -3033,6 +3154,9 @@ private:
     int testCreepage();
     int testCreepage( CreepageGraph& aGraph, int aNetCodeA, int aNetCodeB, PCB_LAYER_ID aLayer );
 
+    void CollectBoardEdges( std::vector<BOARD_ITEM*>& aVector );
+    void CollectNetCodes( std::vector<int>& aVector );
+
 private:
     DRC_RTREE m_itemTree;
 };
@@ -3307,31 +3431,29 @@ double DRC_TEST_PROVIDER_CREEPAGE::GetMaxConstraint( const std::vector<int>& aNe
     return maxConstraint;
 }
 
-int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
+void DRC_TEST_PROVIDER_CREEPAGE::CollectNetCodes( std::vector<int>& aVector )
+{
+    NETCODES_MAP nets = m_board->GetNetInfo().NetsByNetcode();
+
+    for( auto it = nets.begin(); it != nets.end(); it++ )
+    {
+        aVector.push_back( it->first );
+    }
+}
+
+void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aVector )
 {
     if( !m_board )
-        return -1;
+        return;
 
-    SHAPE_POLY_SET outline;
-
-    if( !m_board->GetBoardPolygonOutlines( outline ) )
-        return -1;
-
-    const DRAWINGS            drawings = m_board->Drawings();
-    CreepageGraph             graph( *m_board );
-    std::vector<BOARD_ITEM*>* boardEdges = &( graph.m_boardEdge );
-    graph.m_boardOutline = &outline;
-    std::vector<CREEP_SHAPE*>* graphShapes = &( graph.m_shapeCollection );
-
-    // Add points
-    for( BOARD_ITEM* drawing : drawings )
+    for( BOARD_ITEM* drawing : m_board->Drawings() )
     {
         if( !drawing )
             continue;
 
         if( drawing->IsOnLayer( Edge_Cuts ) )
         {
-            boardEdges->push_back( drawing );
+            aVector.push_back( drawing );
         }
     }
 
@@ -3347,7 +3469,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
             if( drawing->IsOnLayer( Edge_Cuts ) )
             {
-                boardEdges->push_back( drawing );
+                aVector.push_back( drawing );
             }
         }
     }
@@ -3364,137 +3486,45 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         PCB_SHAPE* s = new PCB_SHAPE( NULL, SHAPE_T::CIRCLE );
         s->SetRadius( p->GetDrillSize().x / 2 );
         s->SetPosition( p->GetPosition() );
-        boardEdges->push_back( s );
+        aVector.push_back( s );
     }
+}
 
-    for( BOARD_ITEM* drawing : *boardEdges )
-    {
-        PCB_SHAPE* d = dynamic_cast<PCB_SHAPE*>( drawing );
-
-        if( !d )
-            continue;
-
-        switch( d->GetShape() )
-        {
-        case SHAPE_T::SEGMENT:
-        {
-            BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
-            graphShapes->push_back( a );
-            a = new BE_SHAPE_POINT( d->GetEnd() );
-            graphShapes->push_back( a );
-            break;
-            }
-        case SHAPE_T::RECTANGLE:
-        {
-            BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
-            graphShapes->push_back( a );
-            a = new BE_SHAPE_POINT( d->GetEnd() );
-            graphShapes->push_back( a );
-            a = new BE_SHAPE_POINT( VECTOR2I( d->GetEnd().x, d->GetStart().y ) );
-            graphShapes->push_back( a );
-            a = new BE_SHAPE_POINT( VECTOR2I( d->GetStart().x, d->GetEnd().y ) );
-            graphShapes->push_back( a );
-            break;
-        }
-        case SHAPE_T::POLY:
-        {
-            std::vector<VECTOR2I> points;
-            d->DupPolyPointsList( points );
-
-            for ( auto p : points )
-            {
-                BE_SHAPE_POINT* a = new BE_SHAPE_POINT( p );
-                graphShapes->push_back( a );
-            }
-            break;
-        }
-        case SHAPE_T::CIRCLE:
-        {
-            BE_SHAPE_CIRCLE* a = new BE_SHAPE_CIRCLE( d->GetCenter(), d->GetRadius() );
-            a->SetParent( d );
-            graphShapes->push_back( a );
-            break;
-        }
-
-        case SHAPE_T::ARC:
-        {
-            // If the arc is not locally convex, only use the endpoints
-            double   tolerance = 10;
-            VECTOR2D center( double( d->GetCenter().x ), double( d->GetCenter().y ) );
-            VECTOR2D mid( double( d->GetArcMid().x ), double( d->GetArcMid().y ) );
-            VECTOR2D dir( mid - center );
-            dir = dir / d->GetRadius() * ( d->GetRadius() - tolerance );
-
-            EDA_ANGLE alpha, beta;
-            d->CalcArcAngles( alpha, beta );
-            BE_SHAPE_ARC* a = new BE_SHAPE_ARC( d->GetCenter(), d->GetRadius(), alpha, beta,
-                                                d->GetStart(), d->GetEnd() );
-            a->SetParent( d );
-
-            graphShapes->push_back( a );
-            break;
-        }
-        default: break;
-        }
-    }
-
-    // Sort the vector
-    sort( graphShapes->begin(), graphShapes->end(), compareShapes );
-
-    // Use unique to identify the range of duplicates
-    auto uniqueEnd = unique( graphShapes->begin(), graphShapes->end(), areEquivalent );
-
-    // First, delete the duplicate elements
-    for( auto it = uniqueEnd; it != graphShapes->end(); ++it )
-    {
-        delete *it;
-    }
-
-    // Then, erase the elements from the vector
-    graphShapes->erase( uniqueEnd, graphShapes->end() );
-
-    // Finally, shrink the vector to free unused memory
-    graphShapes->shrink_to_fit();
-
-
-    for( CREEP_SHAPE* p1 : *graphShapes )
-    {
-        if( !p1 )
-            continue;
-
-        switch( p1->GetType() )
-        {
-        case CREEP_SHAPE::TYPE::POINT:
-            graph.AddNode( GraphNode::TYPE::POINT, p1, p1->GetPos() );
-            break;
-        case CREEP_SHAPE::TYPE::CIRCLE:
-            graph.AddNode( GraphNode::TYPE::CIRCLE, p1, p1->GetPos() );
-            break;
-        case CREEP_SHAPE::TYPE::ARC: graph.AddNode( GraphNode::TYPE::ARC, p1, p1->GetPos() ); break;
-        default: break;
-        }
-    }
-
-    // Create a virtual node to connect all conductive element net / net group A
-    NETCODES_MAP nets = m_board->GetNetInfo().NetsByNetcode();
+int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
+{
+    if( !m_board )
+        return -1;
 
     std::vector<int> netcodes;
 
-    for( auto it = nets.begin(); it != nets.end(); it++ )
-    {
-        netcodes.push_back( it->first );
-    }
-
-    int    beNodeSize = graph.m_nodes.size();
-    int    beConnectionsSize = graph.m_connections.size();
+    this->CollectNetCodes( netcodes );
     double maxConstraint = GetMaxConstraint( netcodes );
 
     if( maxConstraint <= 0 )
         return 0;
 
+    SHAPE_POLY_SET outline;
+
+    if( !m_board->GetBoardPolygonOutlines( outline ) )
+        return -1;
+
+    const DRAWINGS drawings = m_board->Drawings();
+    CreepageGraph  graph( *m_board );
+    graph.m_boardOutline = &outline;
+    std::vector<CREEP_SHAPE*>* graphShapes = &( graph.m_shapeCollection );
+
+    this->CollectBoardEdges( graph.m_boardEdge );
+    graph.TransformEdgeToCreepShapes();
+    graph.RemoveDuplicatedShapes();
+    graph.TransformCreepShapesToNodes( graph.m_shapeCollection );
+
     graph.GeneratePaths( maxConstraint, Edge_Cuts );
 
+
+    int    beNodeSize = graph.m_nodes.size();
+    int    beConnectionsSize = graph.m_connections.size();
     bool prevTestChangedGraph = false;
+
     alg::for_all_pairs( netcodes.begin(), netcodes.end(),
                         [&]( int aNet1, int aNet2 )
                         {
