@@ -40,7 +40,7 @@
 #include "tools/pl_selection_tool.h"
 
 #include <dialogs/html_message_box.h>
-
+#include <wx/wupdlock.h>
 
 /**
  * Minimum drawing sheet text default size in millmeters from #PROPERTIES_FRAME.
@@ -235,6 +235,9 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
         m_SizerItemProperties->Show( false );
         return;
     }
+
+    // No not update display during rebuild:
+    wxWindowUpdateLocker noUpdates( this );
 
     wxString msg;
 
