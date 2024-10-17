@@ -788,7 +788,7 @@ std::vector<path_connection> BE_SHAPE_POINT::Paths( const BE_SHAPE_CIRCLE& aS2, 
     }
 
     double pointToCenterDistanceSquared = ( pointPos - circleCenter ).SquaredEuclideanNorm();
-    double weightSquared = pointToCenterDistanceSquared - radius * radius;
+    double weightSquared = pointToCenterDistanceSquared - (float) radius * (float) radius;
 
     if( weightSquared > aMaxSquaredWeight )
         return result;
@@ -1479,11 +1479,13 @@ void BE_SHAPE_CIRCLE::ConnectChildren( GraphNode* a1, GraphNode* a2, CreepageGra
     if( !a1 || !a2 )
         return;
 
+    if( m_radius == 0 )
+        return;
+
     VECTOR2D distI( a1->m_pos - a2->m_pos );
     VECTOR2D distD( double( distI.x ), double( distI.y ) );
-    double   weight = distD.EuclideanNorm();
 
-    weight = m_radius * 2 * atan2( weight, 2.0 * m_radius );
+    double weight = m_radius * 2 * asin( distD.EuclideanNorm() / ( 2.0 * m_radius ) );
 
     if( ( weight > aG.GetTarget() ) )
         return;
