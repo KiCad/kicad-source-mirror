@@ -3515,7 +3515,6 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
     this->CollectBoardEdges( graph.m_boardEdge );
     graph.TransformEdgeToCreepShapes();
-    graph.RemoveDuplicatedShapes();
     graph.TransformCreepShapesToNodes( graph.m_shapeCollection );
 
     graph.GeneratePaths( maxConstraint, Edge_Cuts );
