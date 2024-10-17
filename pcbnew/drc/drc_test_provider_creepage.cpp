@@ -1160,7 +1160,7 @@ public:
     GraphConnection* AddConnection( GraphNode* aN1, GraphNode* aN2 );
     GraphNode*       FindNode( GraphNode::TYPE aType, CREEP_SHAPE* aParent, VECTOR2I aPos );
 
-    void RemoveConnection( GraphConnection* );
+    void RemoveConnection( GraphConnection*, bool aDelete = false );
     void Trim( double aWeightLimit );
     void Addshape( const SHAPE& aShape, GraphNode* aConnectTo = nullptr,
                    BOARD_ITEM* aParent = nullptr );
@@ -3058,7 +3058,7 @@ void CreepageGraph::Trim( double aWeightLimit )
     }
 }
 
-void CreepageGraph::RemoveConnection( GraphConnection* aGc )
+void CreepageGraph::RemoveConnection( GraphConnection* aGc, bool aDelete )
 {
     if( !aGc )
         return;
@@ -3070,7 +3070,7 @@ void CreepageGraph::RemoveConnection( GraphConnection* aGc )
             auto& nConns = gn->m_connections;
             nConns.erase( std::remove( nConns.begin(), nConns.end(), aGc ), nConns.end() );
 
-            if( nConns.empty() )
+            if( nConns.empty() && aDelete )
             {
                 auto it = std::find_if( m_nodes.begin(), m_nodes.end(),
                                         [&gn]( const GraphNode* node )
@@ -3080,15 +3080,19 @@ void CreepageGraph::RemoveConnection( GraphConnection* aGc )
                 if( it != m_nodes.end() )
                 {
                     m_nodes.erase( it );
+                    delete *it;
                 }
             }
         }
     }
 
-
-    // Remove the connection from the graph's connections
-    m_connections.erase( std::remove( m_connections.begin(), m_connections.end(), aGc ),
-                         m_connections.end() );
+    if( aDelete )
+    {
+        // Remove the connection from the graph's connections
+        m_connections.erase( std::remove( m_connections.begin(), m_connections.end(), aGc ),
+                             m_connections.end() );
+        delete aGc;
+    }
 }
 
 
@@ -3561,25 +3565,25 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
                                 if ( prevTestChangedGraph )
                                 {
-                                    int vectorSize = graph.m_nodes.size();
+                                    int vectorSize = graph.m_connections.size();
+
+                                    for( int i = beConnectionsSize; i < vectorSize; i++ )
+                                    {
+                                        // We need to remove the connection from its endpoints' lists.
+                                        graph.RemoveConnection( graph.m_connections[i], false );
+                                        delete graph.m_connections[i];
+                                        graph.m_connections[i] = nullptr;
+                                    }
+                                    graph.m_connections.resize( beConnectionsSize );
+
+                                    vectorSize = graph.m_nodes.size();
 
                                     for( int i = beNodeSize; i < vectorSize; i++ )
                                     {
                                         delete graph.m_nodes[i];
                                         graph.m_nodes[i] = nullptr;
                                     }
-
                                     graph.m_nodes.resize( beNodeSize );
-
-                                    vectorSize = graph.m_connections.size();
-
-                                    for( int i = beConnectionsSize; i < vectorSize; i++ )
-                                    {
-                                        delete graph.m_connections[i];
-                                        graph.m_connections[i] = nullptr;
-                                    }
-
-                                    graph.m_connections.resize( beConnectionsSize );
                                 }
 
                                 prevTestChangedGraph = testCreepage( graph, aNet1, aNet2, layer );
