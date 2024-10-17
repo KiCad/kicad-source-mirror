@@ -2452,7 +2452,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
         m_out->Print( 0, " (at %s) (size %s)",
                       formatInternalUnits( aTrack->GetStart() ).c_str(),
-                      formatInternalUnits( aTrack->GetWidth() ).c_str() );
+                      formatInternalUnits( via->GetWidth( F_Cu ) ).c_str() );
 
         // Old boards were using UNDEFINED_DRILL_DIAMETER value in file for via drill when
         // via drill was the netclass value.
