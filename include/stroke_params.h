@@ -31,7 +31,6 @@
 #include <geometry/shape.h>
 
 class OUTPUTFORMATTER;
-class STROKE_PARAMS_LEXER;
 class MSG_PANEL_ITEM;
 
 namespace KIGFX
