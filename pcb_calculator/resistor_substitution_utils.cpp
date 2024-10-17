@@ -87,8 +87,8 @@ private:
      * @param aResultFunc is a function calculating final result (RESISTANCE instance)
      * for this combination
      */
-    void addSolution( double aValue, RESISTANCE *aFound,
-                      std::function<RESISTANCE( RESISTANCE& )> aResultFunc )
+    void addSolution( double aValue, RESISTANCE* aFound,
+                      std::function<RESISTANCE( RESISTANCE& )>& aResultFunc )
     {
         double deviation = std::abs( aValue - m_target );
         if( deviation < m_best_deviation )
