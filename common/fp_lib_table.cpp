@@ -447,7 +447,10 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
     try
     {
         const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-        wxCHECK2( row->plugin, false );
+
+        if( !row || !row->plugin )
+            return false;
+
         return row->plugin->IsLibraryWritable( row->GetFullURI( true ) );
     }
     catch( ... )
