@@ -537,29 +537,43 @@ public:
 
 bool compareShapes( const CREEP_SHAPE* a, const CREEP_SHAPE* b )
 {
+    if( !a )
+        return true;
+    if( !b )
+        return false;
+
     if( a->GetType() != b->GetType() )
     {
         return a->GetType() < b->GetType();
     }
-    if( a->GetType() == CREEP_SHAPE::TYPE::POINT || a->GetType() == CREEP_SHAPE::TYPE::CIRCLE )
-    {
-        auto posA = a->GetPos();
-        auto posB = b->GetPos();
 
-        if( posA != posB )
-        {
-            return posA < posB;
-        }
-        if( a->GetType() == CREEP_SHAPE::TYPE::CIRCLE )
-        {
-            return a->GetRadius() < b->GetRadius();
-        }
+    if( a->GetType() == CREEP_SHAPE::TYPE::UNDEFINED )
+        return true;
+
+    auto posA = a->GetPos();
+    auto posB = b->GetPos();
+
+    if( posA != posB )
+    {
+        return posA < posB;
+    }
+    if( a->GetType() == CREEP_SHAPE::TYPE::CIRCLE )
+    {
+        return a->GetRadius() < b->GetRadius();
     }
     return false;
 }
 
 bool areEquivalent( const CREEP_SHAPE* a, const CREEP_SHAPE* b )
 {
+    if( !a && !b )
+    {
+        return true;
+    }
+    if( ( !a && b ) || ( a && !b ) )
+    {
+        return false;
+    }
     if( a->GetType() != b->GetType() )
     {
         return false;
@@ -1188,21 +1202,30 @@ void CreepageGraph::RemoveDuplicatedShapes()
 {
     // Sort the vector
     sort( m_shapeCollection.begin(), m_shapeCollection.end(), compareShapes );
+    std::vector<CREEP_SHAPE*> newVector;
 
-    // Use unique to identify the range of duplicates
-    auto uniqueEnd = unique( m_shapeCollection.begin(), m_shapeCollection.end(), areEquivalent );
+    int i = 0;
 
-    // First, delete the duplicate elements
-    for( auto it = uniqueEnd; it != m_shapeCollection.end(); ++it )
+    for( i = 0; i < m_shapeCollection.size() - 1; i++ )
     {
-        delete *it;
+        if( m_shapeCollection[i] == nullptr )
+            continue;
+
+        if( areEquivalent( m_shapeCollection[i], m_shapeCollection[i + 1] ) )
+        {
+            delete m_shapeCollection[i];
+            m_shapeCollection[i] = nullptr;
+        }
+        else
+        {
+            newVector.push_back( m_shapeCollection[i] );
+        }
     }
 
-    // Then, erase the elements from the vector
-    m_shapeCollection.erase( uniqueEnd, m_shapeCollection.end() );
+    if( m_shapeCollection[i] )
+        newVector.push_back( m_shapeCollection[i] );
 
-    // Finally, shrink the vector to free unused memory
-    m_shapeCollection.shrink_to_fit();
+    std::swap( m_shapeCollection, newVector );
 }
 
 void CreepageGraph::TransformEdgeToCreepShapes()
@@ -3515,6 +3538,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
     this->CollectBoardEdges( graph.m_boardEdge );
     graph.TransformEdgeToCreepShapes();
+    graph.RemoveDuplicatedShapes();
     graph.TransformCreepShapesToNodes( graph.m_shapeCollection );
 
     graph.GeneratePaths( maxConstraint, Edge_Cuts );
