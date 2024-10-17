@@ -13,22 +13,23 @@
 # alevtina-karashokova <karashokovaaa@basealt.ru>, 2024.
 # Alex Life <life.alex.v@gmail.com>, 2024.
 # Free_squire <danil_pyankov_2004@mail.ru>, 2024.
+# sergio <sergio+it@outerface.net>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-08-30 18:09+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2024-10-18 02:15+0000\n"
+"Last-Translator: sergio <sergio+it@outerface.net>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2895,15 +2896,17 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Не показывать этот диалог до перезапуска KiCad. Его снова можно включить в "
+"настройках Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "Выделение содержит %d заблокированных элементов."
+msgstr "Выделение содержит %lu заблокированных элементов."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "Эти элементы будут игнорироваться пока их не разблокируют."
+msgstr "Эти элементы будут пропущены до переопределения блокировок."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
@@ -6913,14 +6916,14 @@ msgid "Could not create destination directory: %s"
 msgstr "Не удалось создать каталог '%s'"
 
 #: common/gestfich.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Не удалось подключиться к '%s' "
+msgstr "Не удалось скопировать файл: %s в %s"
 
 #: common/gestfich.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Не удалось прочитать файл "
+msgstr "Не удалось прочитать файл %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -7454,14 +7457,12 @@ msgid "Loading file canceled by user."
 msgstr "Загрузка файла отменена пользователем."
 
 #: common/jobs/job_export_pcb_3d.cpp:131
-#, fuzzy
 msgid "3D model export"
-msgstr "Не экспортировать"
+msgstr "экспортировать 3D модель"
 
 #: common/jobs/job_export_pcb_3d.cpp:134
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Экспорт 3D модели"
+msgstr "Печатная плата: экспортировать 3D модель"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
 #, fuzzy
