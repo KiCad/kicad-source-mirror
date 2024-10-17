@@ -32,9 +32,8 @@ extern double DoubleFromString( const wxString& TextValue );
 // The default current density in ampere by mm2 (3A/mm2 is common to make transformers)
 #define AMP_DENSITY_BY_MM2 3.0
 
-CABLE_SIZE_ENTRY::CABLE_SIZE_ENTRY( wxString aName, double aRadius_meter ) :
-    m_Name( aName ),
-    m_Radius( aRadius_meter )
+CABLE_SIZE_ENTRY::CABLE_SIZE_ENTRY( const wxString& aName, double aRadius_meter ) :
+        m_Name( aName ), m_Radius( aRadius_meter )
 {
 }
 
