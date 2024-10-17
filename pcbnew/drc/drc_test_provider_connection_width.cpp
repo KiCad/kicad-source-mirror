@@ -625,9 +625,13 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     if( !reportPhase( _( "Checking nets for minimum connection width..." ) ) )
         return false;   // DRC cancelled
 
-    LSET          copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
-    LSEQ          copperLayers = copperLayerSet.Seq();
-    BOARD*        board = m_drcEngine->GetBoard();
+    LSET   copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
+    LSEQ   copperLayers = copperLayerSet.Seq();
+    BOARD* board = m_drcEngine->GetBoard();
+    int    epsilon = board->GetDesignSettings().GetDRCEpsilon();
+
+    // A neck in a zone fill will be DRCEpsilon smaller on *each* side
+    epsilon *= 2;
 
     /*
      * Build a set of distinct minWidths specified by various DRC rules.  We'll run a test for
@@ -704,7 +708,9 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                POLYGON_TEST test( aMinWidth );
+                int testWidth = aMinWidth - epsilon;
+
+                POLYGON_TEST test( testWidth );
 
                 for( int ii = 0; ii < aItemsPoly.Poly.OutlineCount(); ++ii )
                 {
@@ -760,13 +766,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                             DRC_CONSTRAINT c = m_drcEngine->EvalRules( CONNECTION_WIDTH_CONSTRAINT,
                                                                        item1, item2, aLayer );
 
-                            int            epsilon = board->GetDesignSettings().GetDRCEpsilon();
-
-                            // A neck in a zone fill will be DRCEpsilon smaller on *each* side
-                            if( item1 && item1->Type() == PCB_ZONE_T )
-                                epsilon *= 2;
-
-                            if( c.Value().Min() == aMinWidth + epsilon )
+                            if( c.Value().Min() == aMinWidth )
                             {
                                 auto     drce = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
                                 wxString msg;
@@ -857,13 +857,12 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
     returns.clear();
     returns.reserve( dataset.size() * distinctMinWidths.size() );
-    int epsilon = board->GetDesignSettings().GetDRCEpsilon();
 
     for( const auto& [ netLayer, itemsPoly ] : dataset )
     {
         for( int minWidth : distinctMinWidths )
         {
-            if( ( minWidth -= epsilon ) <= 0 )
+            if( minWidth - epsilon <= 0 )
                 continue;
 
             returns.emplace_back( tp.submit( min_checker, itemsPoly, netLayer.Layer, minWidth ) );
