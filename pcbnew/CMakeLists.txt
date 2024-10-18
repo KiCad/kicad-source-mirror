@@ -272,6 +272,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_text_dims.cpp
     drc/drc_test_provider_track_angle.cpp
     drc/drc_test_provider_track_width.cpp
+    drc/drc_test_provider_track_segment_length.cpp
     drc/drc_test_provider_zone_connections.cpp
     drc/drc_test_provider_via_diameter.cpp
     drc/drc_test_provider_solder_mask.cpp

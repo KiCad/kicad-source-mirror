@@ -310,6 +310,7 @@ wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<R
             || aDRCItem->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
             || aDRCItem->GetErrorCode() == DRCE_TRACK_WIDTH
             || aDRCItem->GetErrorCode() == DRCE_TRACK_ANGLE
+            || aDRCItem->GetErrorCode() == DRCE_TRACK_SEGMENT_LENGTH
             || aDRCItem->GetErrorCode() == DRCE_VIA_DIAMETER
             || aDRCItem->GetErrorCode() == DRCE_ANNULAR_WIDTH
             || aDRCItem->GetErrorCode() == DRCE_DRILL_OUT_OF_RANGE
@@ -453,6 +454,21 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved angle constraints: min %s; max %s." ),
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
+        break;
+
+    case DRCE_TRACK_SEGMENT_LENGTH:
+        r = dialog->AddHTMLPage( _( "Track Segment Length" ) );
+        reportHeader( _( "Track segment length resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine->EvalRules( TRACK_SEGMENT_LENGTH_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved segment length constraints: min %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
         break;

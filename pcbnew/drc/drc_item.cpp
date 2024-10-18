@@ -126,6 +126,10 @@ DRC_ITEM DRC_ITEM::trackAngle( DRCE_TRACK_ANGLE,
         _( "Track angle" ),
         wxT( "track_angle" ) );
 
+DRC_ITEM DRC_ITEM::trackSegmentLength( DRCE_TRACK_SEGMENT_LENGTH,
+        _( "Track segment length" ),
+        wxT( "track_segment_length" ) );
+
 DRC_ITEM DRC_ITEM::annularWidth( DRCE_ANNULAR_WIDTH,
         _( "Annular width" ),
         wxT( "annular_width" ) );
@@ -306,6 +310,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
             DRC_ITEM::holesCoLocated,
             DRC_ITEM::trackWidth,
             DRC_ITEM::trackAngle,
+            DRC_ITEM::trackSegmentLength,
             DRC_ITEM::annularWidth,
             DRC_ITEM::drillTooSmall,
             DRC_ITEM::microviaDrillTooSmall,
@@ -387,6 +392,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_CONNECTION_WIDTH:         return std::make_shared<DRC_ITEM>( connectionWidth );
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
     case DRCE_TRACK_ANGLE:              return std::make_shared<DRC_ITEM>( trackAngle );
+    case DRCE_TRACK_SEGMENT_LENGTH:     return std::make_shared<DRC_ITEM>( trackSegmentLength );
     case DRCE_ANNULAR_WIDTH:            return std::make_shared<DRC_ITEM>( annularWidth );
     case DRCE_DRILL_OUT_OF_RANGE:       return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );

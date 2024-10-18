@@ -52,6 +52,7 @@ thermal_spoke_width
 track
 track_angle
 track_width
+track_segment_length
 version
 via
 via_count
