@@ -3406,29 +3406,31 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
         if( shortestPath.size() >= 4 && shortestPath[1]->n1 && shortestPath[1]->n2 )
             drce->SetItems( shortestPath[1]->n1->m_parent->GetParent(),
                             shortestPath[shortestPath.size() - 2]->n2->m_parent->GetParent() );
-        BOARD_COMMIT* aCommit =
-                m_commit; // m_commit is protected and cannot be sent to the lambda function
+
+        // m_commit is protected and cannot be sent to the lambda function
+        BOARD_COMMIT* aCommit = m_commit;
+
+        std::vector<PCB_SHAPE> shortestPathShapes;
+
+        for( GraphConnection* gc : shortestPath )
+        {
+            if( !gc )
+                continue;
+
+            for( PCB_SHAPE sh : gc->GetShapes() )
+                shortestPathShapes.push_back( sh );
+        }
+
         m_drcEngine->SetViolationHandler(
-                [&aCommit, shortestPath]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos,
-                                          int aReportLayer )
+                [aCommit, shortestPathShapes]( const std::shared_ptr<DRC_ITEM>& aItem,
+                                               VECTOR2I aPos, int aReportLayer )
                 {
                     PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aReportLayer );
 
                     if( !aCommit )
                         return;
 
-                    std::vector<PCB_SHAPE> shapes;
-
-                    for( GraphConnection* gc : shortestPath )
-                    {
-                        if( !gc )
-                            continue;
-
-                        for( PCB_SHAPE sh : gc->GetShapes() )
-                            shapes.push_back( sh );
-                    }
-
-                    marker->SetShapes( shapes );
+                    marker->SetShapes( std::move( shortestPathShapes ) );
                     aCommit->Add( marker );
                 } );
 
