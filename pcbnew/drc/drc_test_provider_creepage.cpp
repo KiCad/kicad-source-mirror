@@ -1204,7 +1204,7 @@ void CreepageGraph::RemoveDuplicatedShapes()
     sort( m_shapeCollection.begin(), m_shapeCollection.end(), compareShapes );
     std::vector<CREEP_SHAPE*> newVector;
 
-    int i = 0;
+    size_t i = 0;
 
     for( i = 0; i < m_shapeCollection.size() - 1; i++ )
     {
@@ -2726,6 +2726,8 @@ CreepageGraph::Solve( GraphNode* aFrom, GraphNode* aTo,
 
     auto cmp = [&distances]( GraphNode* left, GraphNode* right )
     {
+        if( distances[left] == distances[right] )
+            return left > right; // Compare addresses to avoid ties.
         return distances[left] > distances[right];
     };
     std::priority_queue<GraphNode*, std::vector<GraphNode*>, decltype( cmp )> pq( cmp );
@@ -2733,9 +2735,11 @@ CreepageGraph::Solve( GraphNode* aFrom, GraphNode* aTo,
     // Initialize distances to infinity for all nodes except the starting node
     for( GraphNode* node : m_nodes )
     {
-        distances[node] = std::numeric_limits<double>::infinity();
+        if( node != nullptr )
+            distances[node] = std::numeric_limits<double>::infinity(); // Set to infinity
     }
     distances[aFrom] = 0.0;
+    distances[aTo] = std::numeric_limits<double>::infinity();
     pq.push( aFrom );
 
     // Dijkstra's main loop
@@ -2753,8 +2757,13 @@ CreepageGraph::Solve( GraphNode* aFrom, GraphNode* aTo,
         for( GraphConnection* connection : current->m_connections )
         {
             GraphNode* neighbor = connection->n1 == current ? connection->n2 : connection->n1;
+
+            if( !neighbor )
+                continue;
+
             double alt = distances[current]
                          + connection->m_path.weight; // Calculate alternative path cost
+
             if( alt < distances[neighbor] )
             {
                 distances[neighbor] = alt;
@@ -3540,7 +3549,6 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
     const DRAWINGS drawings = m_board->Drawings();
     CreepageGraph  graph( *m_board );
     graph.m_boardOutline = &outline;
-    std::vector<CREEP_SHAPE*>* graphShapes = &( graph.m_shapeCollection );
 
     this->CollectBoardEdges( graph.m_boardEdge );
     graph.TransformEdgeToCreepShapes();
@@ -3567,9 +3575,9 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
                                 if ( prevTestChangedGraph )
                                 {
-                                    int vectorSize = graph.m_connections.size();
+                                    size_t vectorSize = graph.m_connections.size();
 
-                                    for( int i = beConnectionsSize; i < vectorSize; i++ )
+                                    for( size_t i = beConnectionsSize; i < vectorSize; i++ )
                                     {
                                         // We need to remove the connection from its endpoints' lists.
                                         graph.RemoveConnection( graph.m_connections[i], false );
@@ -3580,7 +3588,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
                                     vectorSize = graph.m_nodes.size();
 
-                                    for( int i = beNodeSize; i < vectorSize; i++ )
+                                    for( size_t i = beNodeSize; i < vectorSize; i++ )
                                     {
                                         delete graph.m_nodes[i];
                                         graph.m_nodes[i] = nullptr;
