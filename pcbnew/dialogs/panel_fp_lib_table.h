@@ -60,6 +60,7 @@ private:
     void moveDownHandler( wxCommandEvent& event ) override;
     void onMigrateLibraries( wxCommandEvent& event ) override;
     void onSizeGrid( wxSizeEvent& event ) override;
+    void onGridCellLeftClickHandler( wxGridEvent& event );
 
     void onPageChange( wxBookCtrlEvent& event ) override;
     void onReset( wxCommandEvent& event ) override;

@@ -423,6 +423,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     {
         m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProjectTable ), true );
         setupGrid( m_project_grid );
+        m_project_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler, this );
     }
     else
     {
@@ -519,7 +520,10 @@ PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
     m_global_grid->PopEventHandler( true );
 
     if( m_project_grid )
+    {
         m_project_grid->PopEventHandler( true );
+        m_project_grid->Unbind( wxEVT_GRID_CELL_LEFT_CLICK, &PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler, this );
+    }       
 
     m_path_subs_grid->PopEventHandler( true );
 }
@@ -1220,6 +1224,29 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
     m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 2 );
 
     adjustPathSubsGridColumns( m_path_subs_grid->GetRect().GetWidth() );
+}
+
+
+void PANEL_FP_LIB_TABLE::onGridCellLeftClickHandler( wxGridEvent& event )
+{
+    int row = event.GetRow();
+    int col = event.GetCol();
+
+    if( m_project_grid )
+    {
+        // Get the cell renderer for the clicked cell
+        wxGridCellRenderer* renderer = m_project_grid->GetCellRenderer( row, col );
+
+        // Check if the renderer is a wxGridCellBoolRenderer using dynamic_cast
+        if( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) )
+        {
+            // Set the grid cursor to the clicked boolean cell
+            m_project_grid->SetGridCursor( row, col );
+        }
+    }    
+
+    // Allow the default behavior to continue (toggle the bool)
+    event.Skip();
 }
 
 //-----</event handlers>---------------------------------
