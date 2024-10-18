@@ -72,6 +72,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aPare
 {
     m_pcbEditFrame = aPcbEditFrame;
     m_board  = m_pcbEditFrame->GetBoard();
+    m_job = nullptr;
     m_plotOpts = m_pcbEditFrame->GetPlotSettings();
 
     SetupStandardButtons( { { wxID_OK,     _( "Generate Drill File" ) },
