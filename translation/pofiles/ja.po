@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-09 10:16+0000\n"
+"PO-Revision-Date: 2024-10-19 06:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2870,12 +2870,13 @@ msgstr ""
 msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
-msgstr ""
+msgstr "このダイアログはKiCadをリスタートするまで再度表示しません。pcbnew "
+"の設定でこのダイアログを再び有効にすることが可能です。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "選択対象に%d個のロックしたアイテムが含まれています。"
+msgstr "選択対象に%lu 個のロックしたアイテムが含まれています。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6845,27 +6846,27 @@ msgstr "'%s' はディレクトリーではありません"
 #: common/gestfich.cpp:369
 #, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "ディレクトリ '%s' を削除中にエラーしました: %s"
+msgstr "ディレクトリ '%s' を削除中にエラー: %s"
 
 #: common/gestfich.cpp:382 common/gestfich.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "ディレクトリ '%s' を作成できませんでした"
+msgstr "元のディレクトリ %s をオープンできませんでした"
 
 #: common/gestfich.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "ディレクトリ '%s' を作成できませんでした"
+msgstr "出力先ディレクトリ %s を作成できませんでした"
 
 #: common/gestfich.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "’%s’ に接続できません "
+msgstr "%s から %s にファイルをコピーできません"
 
 #: common/gestfich.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "ファイル \"%s\" を作成できません "
+msgstr "ファイル %s を読み込めません"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -7401,162 +7402,136 @@ msgid "Loading file canceled by user."
 msgstr "ユーザーによってファイルの読み込みがキャンセルされました。"
 
 #: common/jobs/job_export_pcb_3d.cpp:131
-#, fuzzy
 msgid "3D model export"
-msgstr "エクスポートできません"
+msgstr "3Dモデルとしてエクスポート"
 
 #: common/jobs/job_export_pcb_3d.cpp:134
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "3D モデルをエクスポート"
+msgstr "PCB: 3D モデルとしてエクスポート"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Drill data export"
-msgstr "エクスポートできません"
+msgstr "ドリルデータとしてエクスポート"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "PCB: ドリルデータとしてエクスポート"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
-#, fuzzy
 msgid "PCB DXF export"
-msgstr "STEP でエクスポート"
+msgstr "PCB DXFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_dxf.cpp:61
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "DXFとしてエクスポート"
+msgstr "PCB: DXFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 msgid "Single gerber export"
-msgstr ""
+msgstr "単独のガーバーとしてエクスポート"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:45
 msgid "Multi gerber export"
-msgstr ""
+msgstr "複数のガーバーとしてエクスポート"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: ガーバーとしてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "IPC2581 export"
-msgstr "STEP でエクスポート"
+msgstr "IPC2581 としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "IPC-2581にエクスポート"
+msgstr "PCB: IPC-2581 としてエクスポート"
 
 #: common/jobs/job_export_pcb_pdf.cpp:53
-#, fuzzy
 msgid "PCB PDF export"
-msgstr "STEP でエクスポート"
+msgstr "PCB PDFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pdf.cpp:57
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "PDFとしてエクスポート"
+msgstr "PCB: PDFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:91
-#, fuzzy
 msgid "Placement data export"
-msgstr "配置タイプ"
+msgstr "配置データとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "PCB: 位置データとしてエクスポート"
 
 #: common/jobs/job_export_pcb_svg.cpp:53
-#, fuzzy
 msgid "PCB SVG export"
-msgstr "STEP でエクスポート"
+msgstr "PCB SVGとしてエクスポート"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "SVGとしてエクスポート"
+msgstr "PCB: SVGとしてエクスポート"
 
 #: common/jobs/job_export_sch_bom.cpp:86
-#, fuzzy
 msgid "Schematic BOM export"
-msgstr "回路図テキスト"
+msgstr "回路図BOM(部品表)としてエクスポート"
 
 #: common/jobs/job_export_sch_bom.cpp:89
-#, fuzzy
 msgid "Schematic: Export BOM"
-msgstr "回路図エディター"
+msgstr "回路図: BOM(部品表)としてエクスポート"
 
 #: common/jobs/job_export_sch_netlist.cpp:61
-#, fuzzy
 msgid "Schematic Netlist Export"
-msgstr "回路図エディター"
+msgstr "回路図のネットリストとしてエクスポート"
 
 #: common/jobs/job_export_sch_netlist.cpp:65
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "ネットリストをエクスポート"
+msgstr "回路図: ネットリストとしてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:118
-#, fuzzy
 msgid "Schematic plot export"
-msgstr "回路図テキスト"
+msgstr "回路図プロットとしてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:157
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "回路図エディター"
+msgstr "回路図: SVGとしてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:159
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "回路図エディター"
+msgstr "回路図: HPGL としてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:161
-#, fuzzy
 msgid "Schematic: Export PS"
-msgstr "回路図エディター"
+msgstr "回路図: PS としてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:163
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "回路図エディター"
+msgstr "回路図: DXF としてエクスポート"
 
 #: common/jobs/job_export_sch_plot.cpp:165
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "回路図エディター"
+msgstr "回路図: PDF としてエクスポート"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "回路図テキスト"
+msgstr "回路図 PythonBOM としてエクスポート"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:39
-#, fuzzy
 msgid "Schematic: Export PythonBOM"
-msgstr "回路図エディター オプション"
+msgstr "回路図: PythonBOM としてエクスポート"
 
 #: common/jobs/job_pcb_drc.cpp:58
 msgid "Perform PCB DRC"
-msgstr ""
+msgstr "PCB の DRC を実行"
 
 #: common/jobs/job_pcb_drc.cpp:62
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "PCB: DRC を実行"
 
 #: common/jobs/job_sch_erc.cpp:54
-#, fuzzy
 msgid "Perform Schematic ERC"
-msgstr "回路図の色を使用する"
+msgstr "回路図の ERC を実行"
 
 #: common/jobs/job_sch_erc.cpp:58
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "回路図プロパティ:"
+msgstr "回路図: ERC を実行"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -8462,14 +8437,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "選択したアイテムをクリップボードにコピー"
 
 #: common/tool/actions.cpp:235
-#, fuzzy
 msgid "Copy as Text"
-msgstr "基板テキスト"
+msgstr "テキストとしてコピー"
 
 #: common/tool/actions.cpp:236
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "選択したアイテムをクリップボードにコピー"
+msgstr "選択したアイテムをクリップボードにテキストとしてコピー"
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard"
@@ -9999,9 +9972,8 @@ msgid "Hotkey file"
 msgstr "ホットキー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:555
-#, fuzzy
 msgid "KiCad jobset files"
-msgstr "KiCad プロジェクト ファイル"
+msgstr "KiCad ジョブセットファイル"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -11806,9 +11778,8 @@ msgid "You must provide a netlist generator title"
 msgstr "ネットリスト ジェネレーターのタイトルを指定する必要があります"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:33
-#, fuzzy
 msgid "Output Path:"
-msgstr "出力フォーマット:"
+msgstr "出力パス:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:65
 msgid "Add Exporter..."
@@ -15468,9 +15439,8 @@ msgid "Show OP currents"
 msgstr "動作点の電流を表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
-#, fuzzy
 msgid "Show pin alternate mode indicator icons"
-msgstr "ネット未接続パッドのインジケータを表示"
+msgstr "ピン代替モードのインジケータアイコンを表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:81
 msgid "Show page limi&ts"
@@ -16099,9 +16069,8 @@ msgid "Show pin &electrical type"
 msgstr "ピンのエレクトリカル タイプを表示 (&e)"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:45
-#, fuzzy
 msgid "Show pin &alternate mode indicator icons"
-msgstr "ネット未接続パッドのインジケータを表示"
+msgstr "ピン代替モードのインジケータを表示(&a)"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:36
 msgid "&Default line width:"
@@ -16138,7 +16107,7 @@ msgstr "一般設定"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
-msgstr ""
+msgstr "エッジのドラッグ中にピンを追従させます"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
 #, c-format
@@ -16309,14 +16278,12 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:168
 #: eeschema/eeschema_jobs_handler.cpp:176
-#, fuzzy
 msgid "Loading schematic\n"
-msgstr "回路図をロード中"
+msgstr "回路図をロード中\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "回路図 \"%s\" のロードに失敗しました\n"
+msgstr "回路図のロードに失敗しました\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:362
 #: eeschema/eeschema_jobs_handler.cpp:476
@@ -17480,7 +17447,7 @@ msgstr "シンボルから新しいライブラリへ..."
 
 #: eeschema/menubar.cpp:198 pcbnew/menubar_pcb_editor.cpp:236
 msgid "Panels"
-msgstr ""
+msgstr "パネル"
 
 #: eeschema/menubar.cpp:367
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:177
@@ -21261,14 +21228,14 @@ msgstr ""
 "回路図のシンボル %s を編集します。保存すると、回路図のみが更新されます。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:888
-#, fuzzy, c-format
+#, c-format
 msgid "Open symbol from library %s"
-msgstr "ライブラリからシンボルを更新"
+msgstr "ライブラリ %s からシンボルを開く"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:901
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr "シンボル %s をライブラリ ファイル '%s' に追加できませんでした。"
+msgstr "シンボル %s をライブラリ %s からロード中に失敗しました。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:912
 msgid ""
@@ -21283,20 +21250,17 @@ msgid "Manage symbol libraries"
 msgstr "シンボル ライブラリを管理"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:928
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr ""
-"シンボル %s は派生シンボルです。シンボルのグラフィックは編集できません。"
+msgstr "シンボル %s は派生シンボルです。シンボルのグラフィックは編集できません。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:957
-#, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
-msgstr "ライブラリ \"%s\" はフットプリント ライブラリ テーブル内にありません。"
+msgstr "ライブラリは読み込み専用です。    このライブラリには保存できません。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:959
-#, fuzzy
 msgid "Create an editable copy"
-msgstr "新規ディレクトリを作成"
+msgstr "編集可能なコピーを作成"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 #, fuzzy, c-format
@@ -21310,14 +21274,12 @@ msgid "Select type of item to save"
 msgstr "削除するレイヤーを選択:"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:972
-#, fuzzy
 msgid "Copy symbol"
 msgstr "シンボルをコピー"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:973
-#, fuzzy
 msgid "Copy library"
-msgstr "ライブラリー"
+msgstr "ライブラリーをコピー"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1082
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1133
@@ -21467,7 +21429,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:1017
 #, fuzzy, c-format
 msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
-msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。"
+msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。上書きしますか？"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1032
 #, fuzzy, c-format
