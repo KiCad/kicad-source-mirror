@@ -33,7 +33,6 @@
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_engine.h>
-#include <drc/drc_rtree.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
@@ -3194,9 +3193,6 @@ private:
 
     void CollectBoardEdges( std::vector<BOARD_ITEM*>& aVector );
     void CollectNetCodes( std::vector<int>& aVector );
-
-private:
-    DRC_RTREE m_itemTree;
 };
 
 
@@ -3208,7 +3204,6 @@ bool DRC_TEST_PROVIDER_CREEPAGE::Run()
     }
 
     m_board = m_drcEngine->GetBoard();
-    m_itemTree.clear();
 
     //int errorMax = m_board->GetDesignSettings().m_MaxError;
 
