@@ -1027,7 +1027,7 @@ public:
         {
         }
 
-        const bool ShouldDraw() const
+        bool ShouldDraw() const
         {
             return size > 0 && colour != COLOR4D::UNSPECIFIED && !text.IsEmpty();
         }
@@ -1040,7 +1040,7 @@ public:
     };
 
     PIN_TEXTS( const SCH_PIN& aPin, float aPenWidth, float aPinTextMargin ) :
-            m_pin( aPin ), m_offsets{ 0, 0, 0, 0 }, m_penWidth( aPenWidth ),
+            m_pin( aPin ), m_offsets( { { 0, 0, 0, 0 } } ), m_penWidth( aPenWidth ),
             m_pinTextMargin( aPinTextMargin )
     {
     }
@@ -1055,7 +1055,7 @@ public:
     SLOT&       GetSlot( SLOT_ID aSlot ) { return m_slots[aSlot]; }
     const SLOT& GetSlot( SLOT_ID aSlot ) const { return m_slots[aSlot]; }
 
-    const void ComputeOffsets()
+    void ComputeOffsets()
     {
         float textOffset = m_pin.GetParentSymbol()->GetPinNameOffset();
 

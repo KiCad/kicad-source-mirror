@@ -1808,7 +1808,7 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor, wxOrienta
 
 void mpWindow::ZoomRect( wxPoint p0, wxPoint p1 )
 {
-    pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+    pushZoomUndo( { { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } } );
 
     // Constrain given rectangle to plot area
     const int pMinX = m_marginLeft;
@@ -1869,7 +1869,7 @@ void mpWindow::ZoomUndo()
 {
     if( m_undoZoomStack.size() )
     {
-        m_redoZoomStack.push( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+        m_redoZoomStack.push( { { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } } );
 
         std::array<double, 4> zoom = m_undoZoomStack.top();
         m_undoZoomStack.pop();
@@ -1884,7 +1884,7 @@ void mpWindow::ZoomRedo()
 {
     if( m_redoZoomStack.size() )
     {
-        m_undoZoomStack.push( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+        m_undoZoomStack.push( { { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } } );
 
         std::array<double, 4> zoom = m_redoZoomStack.top();
         m_redoZoomStack.pop();
@@ -1909,7 +1909,7 @@ void mpWindow::OnShowPopupMenu( wxMouseEvent& event )
 
 void mpWindow::OnFit( wxCommandEvent& WXUNUSED( event ) )
 {
-    pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+    pushZoomUndo( { { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } } );
 
     Fit();
 }
@@ -2093,7 +2093,7 @@ void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor, wxOrientat
     const bool horizontally = ( directions & wxHORIZONTAL ) != 0;
     const bool vertically   = ( directions & wxVERTICAL )   != 0;
 
-    pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+    pushZoomUndo( { { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } } );
 
     // Preserve the position of the clicked point:
     wxPoint c( centerPoint );
