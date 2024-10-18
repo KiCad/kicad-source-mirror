@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:32-0700\n"
-"PO-Revision-Date: 2024-10-08 16:16+0000\n"
+"PO-Revision-Date: 2024-10-19 13:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5954,7 +5954,7 @@ msgstr "'%s' はディレクトリーではありません"
 #: common/gestfich.cpp:357
 #, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "ディレクトリ '%s' を削除中にエラーしました: %s"
+msgstr "ディレクトリ '%s' を削除中にエラー: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
