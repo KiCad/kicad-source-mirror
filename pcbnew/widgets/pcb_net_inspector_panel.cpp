@@ -705,15 +705,18 @@ unsigned int PCB_NET_INSPECTOR_PANEL::calculateViaLength( const PCB_TRACK* aTrac
     {
         PCB_LAYER_ID top_layer = UNDEFINED_LAYER;
         PCB_LAYER_ID bottom_layer = UNDEFINED_LAYER;
+        LSET layers = bds.GetEnabledLayers();
 
-        for( int layer = via->TopLayer(); layer <= via->BottomLayer(); ++layer )
+        for( auto layer_it = layers.copper_layers_begin();
+                  layer_it != layers.copper_layers_end();
+                  ++layer_it )
         {
-            if( m_brd->GetConnectivity()->IsConnectedOnLayer( via, layer, traceAndPadTypes ) )
+            if( m_brd->GetConnectivity()->IsConnectedOnLayer( via, *layer_it, traceAndPadTypes ) )
             {
                 if( top_layer == UNDEFINED_LAYER )
-                    top_layer = PCB_LAYER_ID( layer );
+                    top_layer = PCB_LAYER_ID( *layer_it );
                 else
-                    bottom_layer = PCB_LAYER_ID( layer );
+                    bottom_layer = PCB_LAYER_ID( *layer_it );
             }
         }
 

@@ -820,7 +820,8 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
     if( aFirstLayer == aSecondLayer )
         return 0;
 
-    if( aSecondLayer < aFirstLayer )
+    // B_Cu is always the last copper layer but doesn't have the last numerical value
+    if( aSecondLayer != B_Cu && ( aSecondLayer < aFirstLayer || aFirstLayer == B_Cu ) )
         std::swap( aFirstLayer, aSecondLayer );
 
     int total = 0;
@@ -836,7 +837,7 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
             continue;   // Silk/mask layer
 
         // Reached the start copper layer?  Start counting the next dielectric after it
-        if( !start && ( layer != UNDEFINED_LAYER && layer >= aFirstLayer ) )
+        if( !start && ( layer != UNDEFINED_LAYER && layer == aFirstLayer ) )
         {
             start = true;
             half = true;
@@ -845,7 +846,7 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
             continue;
 
         // Reached the stop copper layer?  we're done
-        if( start && ( layer != UNDEFINED_LAYER && layer >= aSecondLayer ) )
+        if( start && ( layer != UNDEFINED_LAYER && layer == aSecondLayer ) )
             half = true;
 
         for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
@@ -856,7 +857,7 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
 
         half = false;
 
-        if( layer != UNDEFINED_LAYER && layer >= aSecondLayer )
+        if( layer != UNDEFINED_LAYER && layer == aSecondLayer )
             break;
     }
 
