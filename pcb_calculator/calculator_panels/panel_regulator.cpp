@@ -97,8 +97,8 @@ void PANEL_REGULATOR::OnRegulatorResetButtonClick( wxCommandEvent& event )
 
     m_choiceRegType->SetSelection( 1 );
     m_rbRegulR1->SetValue( false );
-    m_rbRegulR2->SetValue( true );
-    m_rbRegulVout->SetValue( false );
+    m_rbRegulR2->SetValue( false );
+    m_rbRegulVout->SetValue( true );
     RegulatorPageUpdate();
 }
 
@@ -364,7 +364,7 @@ void PANEL_REGULATOR::RegulatorsSolve()
     double r1min, r1typ, r1max;
     double r2min, r2typ, r2max;
     double vrefmin, vreftyp, vrefmax;
-    double voutmin, vouttyp, voutmax, voutnom;
+    double voutmin, vouttyp, voutmax;
     double toltotalmin, toltotalmax;
 
     wxString txt;
@@ -394,7 +394,6 @@ void PANEL_REGULATOR::RegulatorsSolve()
 
     txt = m_voutTypVal->GetValue();
     vouttyp = DoubleFromString( txt );
-    voutnom = vouttyp;
 
     // Some tests:
     if( ( vouttyp < vrefmin || vouttyp < vreftyp || vouttyp < vrefmax ) && id != 2 )
@@ -455,7 +454,6 @@ void PANEL_REGULATOR::RegulatorsSolve()
         case 2:
             // typical formula
             vouttyp = vreftyp * ( r1typ + r2typ ) / r1typ;
-            voutnom = vouttyp;
             vouttyp += r2typ * iadjtyp;
             break;
         }
@@ -470,7 +468,7 @@ void PANEL_REGULATOR::RegulatorsSolve()
         voutmin += r2min * iadjtyp;
 
         voutmax = vrefmax * ( r1min + r2max ) / r1min;
-        voutmax += r2typ * iadjmax;
+        voutmax += r2max * iadjmax;
     }
     else
     {   // Standard 4 terminal regulator
@@ -489,7 +487,6 @@ void PANEL_REGULATOR::RegulatorsSolve()
         case 2:
             // typical formula
             vouttyp = vreftyp * ( r1typ + r2typ ) / r2typ;
-            voutnom = vouttyp;
             break;
         }
 
@@ -503,8 +500,8 @@ void PANEL_REGULATOR::RegulatorsSolve()
         voutmax = vrefmax * ( r1max + r2min ) / r2min;
     }
 
-    toltotalmin = voutmin / voutnom * 100.0 - 100.0;
-    toltotalmax = voutmax / voutnom * 100.0 - 100.0;
+    toltotalmin = ( voutmin - vouttyp ) / vouttyp * 100.0;
+    toltotalmax = ( voutmax - vouttyp ) / voutmax * 100.0;
 
     // write values to panel:
     txt.Printf( wxT( "%g" ), round_to( r1min / r1scale ) );
@@ -533,7 +530,7 @@ void PANEL_REGULATOR::RegulatorsSolve()
     txt.Printf( wxT( "%g" ), round_to( toltotalmax, 0.01 ) );
     m_TolTotalMax->SetValue( txt );
 
-    txt = wxString::Format( "%gV [%gV .. %gV]", round_to( vouttyp, 0.01 ),
+    txt = wxString::Format( "%gV [%gV ... %gV]", round_to( vouttyp, 0.01 ),
                             round_to( voutmin, 0.01 ), round_to( voutmax, 0.01 ) );
     m_textPowerComment->SetValue( txt );
 }
