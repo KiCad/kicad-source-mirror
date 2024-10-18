@@ -397,7 +397,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
         return false;
     }
 
-    if( fp && fp->IsNetTie() && aTestItem->GetParentFootprint() == fp )
+    if( fp && aTestItem->GetParentFootprint() == fp )
     {
         std::map<wxString, int> padToNetTieGroupMap = fp->MapPadNumbersToNetTieGroups();
         PAD*                    padA = nullptr;
@@ -409,13 +409,9 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
         if( aTestItem->Type() == PCB_PAD_T )
             padB = static_cast<PAD*>( aTestItem );
 
-        if( padA && padB )
+        if( padA && padB && ( padA->SameLogicalPadAs( padB ) || padA->SharesNetTieGroup( padB ) ) )
         {
-            int netTieGroupA = padToNetTieGroupMap[padA->GetNumber()];
-            int netTieGroupB = padToNetTieGroupMap[padB->GetNumber()];
-
-            if( netTieGroupA >= 0 && netTieGroupA == netTieGroupB )
-                return false;
+            return false;
         }
         else if( padA && aTestItem->Type() == PCB_SHAPE_T )
         {
