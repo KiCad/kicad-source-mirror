@@ -722,6 +722,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     connectivity
     pcbcommon
     pnsrouter
+    kicommon
     kiplatform
     common
     gal
