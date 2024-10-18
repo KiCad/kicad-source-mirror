@@ -17,17 +17,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-01 19:16+0000\n"
+"PO-Revision-Date: 2024-10-19 06:15+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2881,11 +2881,13 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Nie pokazuj tego okna do czasu ponownego uruchomienia programu KiCad. Można "
+"go włączyć ponownie w ustawieniach programu Pcbnew."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "W wybranych elementach istnieje %d zablokowanych elementów."
+msgstr "W wybranych elementach istnieje %lu zablokowanych elementów."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -6903,14 +6905,14 @@ msgid "Could not create destination directory: %s"
 msgstr "Nie można utworzyć folderu '%s'"
 
 #: common/gestfich.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Nie można połączyć się z '%s' "
+msgstr "Nie można skopiować: %s do %s"
 
 #: common/gestfich.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Nie można odczytać pliku "
+msgstr "Nie można odczytać pliku: %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, c-format
@@ -7462,7 +7464,7 @@ msgstr "Nie eksportuj"
 
 #: common/jobs/job_export_pcb_drill.cpp:126
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "PCB: Eksport danych o wierceniach"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #, fuzzy
@@ -7476,19 +7478,19 @@ msgstr "Eksportuj DXF"
 
 #: common/jobs/job_export_pcb_gerber.cpp:82
 msgid "Single gerber export"
-msgstr ""
+msgstr "Pojedynczy eksport plików Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:45
 msgid "Multi gerber export"
-msgstr ""
+msgstr "Wielokrotny eksport plików Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:49
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: Eksport plików Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 msgid "IPC2581 export"
-msgstr ""
+msgstr "Eksport IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:85
 #, fuzzy
@@ -7512,7 +7514,7 @@ msgstr "Rozmieszczenie"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "PCB: Eksport danych o pozycjach"
 
 #: common/jobs/job_export_pcb_svg.cpp:53
 #, fuzzy
@@ -7586,11 +7588,11 @@ msgstr "Edytor Schematów"
 
 #: common/jobs/job_pcb_drc.cpp:58
 msgid "Perform PCB DRC"
-msgstr ""
+msgstr "Przeprowadź kontrolę DRC PCB"
 
 #: common/jobs/job_pcb_drc.cpp:62
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "PCB: Przeprowadź kontrolę DRC"
 
 #: common/jobs/job_sch_erc.cpp:54
 #, fuzzy
@@ -16197,7 +16199,7 @@ msgstr "Pokaż typ elektryczny pinu"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:45
 msgid "Show pin &alternate mode indicator icons"
-msgstr ""
+msgstr "Pokaż ikony wskaźnika trybu alternatywnego pinów"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:36
 msgid "&Default line width:"
@@ -16235,7 +16237,7 @@ msgstr "Opcje główne"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
-msgstr ""
+msgstr "Zachowaj piny na pozycjach w czasie przeciągania krawędzi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
 #, c-format
@@ -16405,9 +16407,8 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:168
 #: eeschema/eeschema_jobs_handler.cpp:176
-#, fuzzy
 msgid "Loading schematic\n"
-msgstr "Ładowanie schematu"
+msgstr "Wczytywanie schematu\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:182
 #, fuzzy
@@ -17592,7 +17593,7 @@ msgstr "Symbole do nowej biblioteki..."
 
 #: eeschema/menubar.cpp:198 pcbnew/menubar_pcb_editor.cpp:236
 msgid "Panels"
-msgstr ""
+msgstr "Panele"
 
 #: eeschema/menubar.cpp:367
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:177
@@ -21402,9 +21403,9 @@ msgstr ""
 "schemat."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:888
-#, fuzzy, c-format
+#, c-format
 msgid "Open symbol from library %s"
-msgstr "Uaktualnij symbole z biblioteki"
+msgstr "Otwórz symbol z biblioteki %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:901
 #, fuzzy, c-format
@@ -21424,11 +21425,10 @@ msgid "Manage symbol libraries"
 msgstr "Zarządzaj bibliotekami symboli"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:928
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
 msgstr ""
-"Symbol %s pochodzi innego symbolu.  Grafiki symbolu nie będzie można "
-"edytować."
+"Symbol %s pochodzi innego symbolu. Grafiki symbolu nie będzie można edytować."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:957
 #, fuzzy
@@ -21443,14 +21443,13 @@ msgid "Create an editable copy"
 msgstr "Tworzy nowy folder"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "Skasować oraz ponumerować na nowo wszystkie symbole w całym schemacie?"
+msgstr "Utworzyć edytowalną kopię symbolu lub kopię całej biblioteki (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:969
-#, fuzzy
 msgid "Select type of item to save"
-msgstr "Wybierz warstwę do usunięcia:"
+msgstr "Wybierz typ elementu by zapisać"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:972
 #, fuzzy
@@ -21592,42 +21591,47 @@ msgid "A library must be specified."
 msgstr "Biblioteka musi zostać określona."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"Biblioteka \"%s\" jest tylko do odczytu i musi zostać zapisana jako inna "
-"biblioteka."
+"Biblioteka '%s' jest tylko do odczytu. Wybierz inną bibliotekę by zapisać "
+"symbol '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
-msgstr ""
+msgstr "Symbol '%s' nie może zastąpić innego symbolu '%s' z którego pochodzi"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1004
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
+"Symbol '%s' nie może zastąpić innego symbolu '%s', którego jest potomkiem."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
-msgstr "Symbol '%s' istnieje już w bibliotece '%s'."
+msgstr "Symbol '%s' istnieje już w bibliotece '%s'. Czy chcesz go nadpisać?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "Symbol '%s' istnieje już w bibliotece '%s'"
+msgstr ""
+"Następujące symbole w łańcuchu dziedziczenia '%s' istnieją już w bibliotece "
+"'%s':\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1039
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
+"\n"
+"Czy nadpisać wszystkie, czy zmienić nazwy dla nowych symboli?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
 #, fuzzy
@@ -23053,7 +23057,7 @@ msgstr "Pokaż nazwy pinów"
 
 #: eeschema/tools/ee_actions.cpp:1238
 msgid "Show indicator icons for pins with alternate modes"
-msgstr ""
+msgstr "Pokazuje ikony wskaźnika trybu dla pinów z trybami alternatywnymi"
 
 #: eeschema/tools/ee_actions.cpp:1243 eeschema/tools/ee_actions.cpp:1252
 #: eeschema/tools/ee_actions.cpp:1261 eeschema/tools/ee_actions.cpp:1271
@@ -23103,9 +23107,8 @@ msgid "Previous Symbol Unit"
 msgstr "Składnik symbolu"
 
 #: eeschema/tools/ee_actions.cpp:1292
-#, fuzzy
 msgid "Open the previous unit of the symbol"
-msgstr "Umieszczaj sekwencyjnie poszczególne części składowe symbolu."
+msgstr "Otwórz poprzednią część składową symbolu"
 
 #: eeschema/tools/ee_actions.cpp:1298
 #, fuzzy
@@ -23113,9 +23116,8 @@ msgid "Next Symbol Unit"
 msgstr "Składnik symbolu"
 
 #: eeschema/tools/ee_actions.cpp:1299
-#, fuzzy
 msgid "Open the next unit of the symbol"
-msgstr "Usunąć dodatkowe części z symbolu?"
+msgstr "Otwórz następną jednostkę symbolu"
 
 #: eeschema/tools/ee_actions.cpp:1306 pcbnew/tools/pcb_actions.cpp:1312
 msgid "Scripting Console"
@@ -23190,9 +23192,8 @@ msgid "Move to next sheet by number"
 msgstr "Przenosi się na następny arkusz z uwzględnieniem ich numeracji"
 
 #: eeschema/tools/ee_actions.cpp:1379
-#, fuzzy
 msgid "Hierarchy Navigator"
-msgstr "Pokaż nawigatora hierarchii"
+msgstr "Nawigator hierarchii"
 
 #: eeschema/tools/ee_actions.cpp:1380
 #, fuzzy
@@ -25488,7 +25489,7 @@ msgstr "Wymusza ponowne zapisanie biblioteki footprintów niezależnie od wersji
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "Zestaw poleceń"
 
 #: kicad/cli/command_jobset_run.cpp:45
 #, fuzzy
@@ -25500,6 +25501,8 @@ msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
 msgstr ""
+"Zatrzymuje przetwarzanie dalszych zadań wykonywanych sekwencyjnie po "
+"pierwszej awarii zadania"
 
 #: kicad/cli/command_jobset_run.cpp:53
 #, fuzzy
@@ -25511,6 +25514,8 @@ msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
 msgstr ""
+"Plik wyjściowy zestawu poleceń do wygenerowania. Pozostaw puste dla "
+"wszystkich wyników zdefiniowanych w zestawie poleceń"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -26382,18 +26387,17 @@ msgid "Update Available"
 msgstr "Dostępne aktualizacje"
 
 #: kicad/dialogs/panel_jobs.cpp:57
-#, fuzzy
 msgid "Folder"
-msgstr "Folder:"
+msgstr "Folder"
 
 #: kicad/dialogs/panel_jobs.cpp:59
 msgid "Archive"
 msgstr ""
 
 #: kicad/dialogs/panel_jobs.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s Output Options"
-msgstr "Opcje PostScript"
+msgstr "%s opcji wyjściowych"
 
 #: kicad/dialogs/panel_jobs.cpp:112
 #, fuzzy
@@ -26441,9 +26445,8 @@ msgid "Add New Output"
 msgstr "Dodaj obszar odcięty"
 
 #: kicad/dialogs/panel_jobs.cpp:540
-#, fuzzy
 msgid "Select output type:"
-msgstr "Wybierz folder wyjściowy"
+msgstr "Wybierz typ wyjściowy:"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:145
 msgid "Edit the project schematic"
@@ -37255,9 +37258,8 @@ msgstr "Pasta lutownicza"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:269
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
-#, fuzzy
 msgid "Expansion:"
-msgstr "Wykluczenia"
+msgstr "Rozszerzenie:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:274
 #, fuzzy
@@ -37344,9 +37346,8 @@ msgid "Parent footprint description"
 msgstr "Opis footprintu nadrzędnego"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:268
-#, fuzzy
 msgid "Update thickness according to text size"
-msgstr "Uaktualnij grubość odpowiednio do rozmiaru tekstu "
+msgstr "Uaktualnij grubość odpowiednio do rozmiaru tekstu"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:269
 msgid ""
@@ -38151,9 +38152,8 @@ msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "Zgłoś błąd DRC jeśli pole zajętości footprintu nachodzi na ten obszar"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
-#, fuzzy
 msgid "Place items from sheet:"
-msgstr "Umieść jako arkusz"
+msgstr "Umieść elementy z arkusza:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:29
 #, fuzzy
@@ -40801,9 +40801,8 @@ msgid "Track width"
 msgstr "Szerokość ścieżki"
 
 #: pcbnew/drc/drc_item.cpp:126
-#, fuzzy
 msgid "Track angle"
-msgstr "Kąt łuku:"
+msgstr "Kąt ścieżki"
 
 #: pcbnew/drc/drc_item.cpp:130
 msgid "Annular width"
@@ -42436,9 +42435,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Edycja %s z płytki.  Zapis spowoduje wyłącznie zapisanie płytki."
 
 #: pcbnew/footprint_edit_frame.cpp:557
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library '%s'."
-msgstr "Wystąpił błąd podczas ładowania footprintu %s z biblioteki '%s'."
+msgstr "Edycja footprintu z biblioteki tylko do odczytu '%s'."
 
 #: pcbnew/footprint_edit_frame.cpp:562
 msgid "Save as editable copy"
@@ -43194,9 +43193,9 @@ msgid "Added %s (footprint '%s')."
 msgstr "Dodano %s (footprint '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class to %s."
-msgstr "Zmieniam wartość %s z %s na %s."
+msgstr "Zmieniam %s klasy komponentu na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
 #, c-format
@@ -43204,14 +43203,14 @@ msgid "Remove %s component class (currently %s)."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class from %s to %s."
-msgstr "Zmieniam etykietę dla %s pin %s z '%s' na '%s'."
+msgstr "Zmieniam %s klasy komponentu z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class to %s."
-msgstr "Zmieniono wartość %s z %s na %s."
+msgstr "Zmieniono %s klas komponentu na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
@@ -45946,9 +45945,8 @@ msgid "Pad Primitives"
 msgstr "Prymitywy pól"
 
 #: pcbnew/pcb_shape.cpp:1142 pcbnew/pcb_track.cpp:2000
-#, fuzzy
 msgid "Technical Layers"
-msgstr "Warstwy techniczne:"
+msgstr "Warstwy techniczne"
 
 #: pcbnew/pcb_shape.cpp:1153 pcbnew/pcb_track.cpp:2011
 #, fuzzy
@@ -46159,9 +46157,8 @@ msgid "Loading board\n"
 msgstr "Wczytywanie danych płytki\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:279
-#, fuzzy
 msgid "Failed to load board\n"
-msgstr "Nie można odczytać wartości typu word."
+msgstr "Nie można wczytać obwodu drukowanego\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:358
 #, c-format
@@ -49402,14 +49399,12 @@ msgid "Remove corner"
 msgstr "Usuń narożnik"
 
 #: pcbnew/tools/pcb_actions.cpp:1979
-#, fuzzy
 msgid "Chamfer Corner"
-msgstr "Pozycje ścięcia:"
+msgstr "Pozycje ścięcia"
 
 #: pcbnew/tools/pcb_actions.cpp:1980
-#, fuzzy
 msgid "Chamfer corner"
-msgstr "Pozycje ścięcia:"
+msgstr "Pozycje ścięcia"
 
 #: pcbnew/tools/pcb_actions.cpp:1986
 msgid "Keep Arc Center, Adjust Radius"
