@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,9 +38,6 @@ class PCB_LAYER_BOX_SELECTOR;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_SPECIFIED_NET_TO_NETCLASS_VALUES 1000
-#define ID_SPECIFIED_NET_TO_SPECIFIED_VALUES 1001
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,6 +66,7 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_existingFilter;
 		wxCheckBox* m_selectedItemsFilter;
 		wxRadioButton* m_removeTeardrops;
+		wxRadioButton* m_removeAllTeardrops;
 		wxRadioButton* m_addTeardrops;
 		wxHyperlinkCtrl* m_boardSetupLink;
 		wxRadioButton* m_specifiedValues;

@@ -38,6 +38,13 @@
 #include <tools/global_edit_tool.h>
 #include "dialog_global_edit_teardrops_base.h"
 
+enum TEARDROP_ACTION
+{
+    REMOVE_TEARDROP_IN_SCOPE,
+    REMOVE_ALL_TEARDROPS,
+    ADD_TEARDROPS_DEFAULT,
+    ADD_TEARDROPS_WITH_SPEC_VALUES
+};
 
 // Globals to remember control settings during a session
 static bool         g_vias = true;
@@ -52,7 +59,7 @@ static bool         g_filterByLayer;
 static int          g_layerFilter;
 static bool         g_filterRoundPads = false;
 static bool         g_filterSelected = false;
-static int          g_action = 1;
+static int          g_action = ADD_TEARDROPS_DEFAULT;
 
 
 class DIALOG_GLOBAL_EDIT_TEARDROPS : public DIALOG_GLOBAL_EDIT_TEARDROPS_BASE
@@ -192,11 +199,13 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::~DIALOG_GLOBAL_EDIT_TEARDROPS()
     g_filterSelected = m_selectedItemsFilter->GetValue();
 
     if( m_removeTeardrops->GetValue() )
-        g_action = 0;
+        g_action = REMOVE_TEARDROP_IN_SCOPE;
+    else if( m_removeAllTeardrops->GetValue() )
+        g_action = REMOVE_ALL_TEARDROPS;
     else if( m_specifiedValues->GetValue() )
-        g_action = 2;
+        g_action = ADD_TEARDROPS_WITH_SPEC_VALUES;
     else
-        g_action = 1;
+        g_action = ADD_TEARDROPS_DEFAULT;
 
     m_netFilter->Disconnect( NET_SELECTED,
                              wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS::OnNetFilterSelect ),
@@ -287,11 +296,13 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataToWindow()
     m_roundPadsFilter->SetValue( g_filterRoundPads );
     m_selectedItemsFilter->SetValue( g_filterSelected );
 
-    if( g_action == 0 )
+    if( g_action == REMOVE_TEARDROP_IN_SCOPE )
         m_removeTeardrops->SetValue( true );
-    else if( g_action == 1 )
+    else if( g_action == REMOVE_ALL_TEARDROPS )
+        m_removeAllTeardrops->SetValue( true );
+    else if( g_action == ADD_TEARDROPS_DEFAULT )
         m_addTeardrops->SetValue( true );
-    else
+    else    //ADD_TEARDROPS_WITH_SPEC_VALUES
         m_specifiedValues->SetValue( true );
 
     m_cbPreferZoneConnection->Set3StateValue( wxCHK_UNDETERMINED );
@@ -354,7 +365,7 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::processItem( BOARD_COMMIT* aCommit, BOARD_CON
 
     aCommit->Stage( aItem, CHT_MODIFY );
 
-    if( m_removeTeardrops->GetValue() )
+    if( m_removeTeardrops->GetValue() || m_removeAllTeardrops->GetValue() )
     {
         targetParams->m_Enabled = false;
     }
@@ -487,7 +498,7 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
 
         teardropManager.DeleteTrackToTrackTeardrops( commit );
 
-        if( m_removeTeardrops->GetValue() )
+        if( m_removeTeardrops->GetValue() || m_removeAllTeardrops->GetValue() )
         {
             targetParams->m_Enabled = false;    // JEY TODO: how does this get undone/redone?
         }
