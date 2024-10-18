@@ -52,7 +52,8 @@ HOTKEY_CYCLE_POPUP::HOTKEY_CYCLE_POPUP( EDA_DRAW_FRAME* aParent ) :
     m_listBox->SetName( KIUI::s_FocusStealableInputName );
 
 #ifdef __WXOSX__
-    m_listBox->Bind( wxEVT_CHAR_HOOK, [=]( wxKeyEvent& aEvent )
+    m_listBox->Bind( wxEVT_CHAR_HOOK,
+                     [=, this]( wxKeyEvent& aEvent )
                      {
                          aEvent.SetEventType( wxEVT_CHAR );
                          m_drawFrame->GetCanvas()->SetFocus();

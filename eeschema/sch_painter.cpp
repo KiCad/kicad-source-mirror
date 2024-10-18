@@ -878,7 +878,6 @@ public:
     TEXT_AND_ICON_LAYOUT( KIGFX::GAL& aGal, const TEXT_ATTRIBUTES& aAttrs,
                           const KIFONT::METRICS& aFontMetrics, const double aShadowWidth,
                           const double aIconSize = 0 ) :
-            m_gal( aGal ),
             m_attrs( aAttrs ),
             m_fontMetrics( aFontMetrics ),
             m_iconSize( aIconSize ),
@@ -966,7 +965,6 @@ public:
     }
 
 private:
-    KIGFX::GAL&            m_gal;
     const TEXT_ATTRIBUTES& m_attrs;
     const KIFONT::METRICS& m_fontMetrics;
     double                 m_iconSize;
