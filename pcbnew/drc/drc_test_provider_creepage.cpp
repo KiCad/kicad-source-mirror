@@ -3406,13 +3406,15 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
         if( shortestPath.size() >= 4 && shortestPath[1]->n1 && shortestPath[1]->n2 )
             drce->SetItems( shortestPath[1]->n1->m_parent->GetParent(),
                             shortestPath[shortestPath.size() - 2]->n2->m_parent->GetParent() );
-
+        BOARD_COMMIT* aCommit =
+                m_commit; // m_commit is protected and cannot be sent to the lambda function
         m_drcEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aReportLayer )
+                [&aCommit, shortestPath]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos,
+                                          int aReportLayer )
                 {
                     PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aReportLayer );
 
-                    if( !m_commit )
+                    if( !aCommit )
                         return;
 
                     std::vector<PCB_SHAPE> shapes;
@@ -3427,12 +3429,13 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
                     }
 
                     marker->SetShapes( shapes );
-                    m_commit->Add( marker );
+                    aCommit->Add( marker );
                 } );
 
         reportViolation( drce, shortestPath[1]->m_path.a2, aLayer );
         
     }
+    shortestPath.clear();
 
     return 1;
 }
