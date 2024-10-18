@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -446,8 +446,15 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
         {
             CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected );
 
+            // lyIdx is compatible with StartLayer() and EndLayer() notation in CN_ITEM
+            // items, where B_Cu is set to INT_MAX (std::numeric_limits<int>::max())
+            int lyIdx = aLayer;
+
+            if( aLayer == B_Cu )
+                lyIdx = std::numeric_limits<int>::max();
+
             if( connected->Valid()
-                    && connected->StartLayer() <= aLayer && connected->EndLayer() >= aLayer
+                    && connected->StartLayer() <= lyIdx && connected->EndLayer() >= lyIdx
                     && matchType( connected->Parent()->Type() )
                     && connected->Net() == aItem->GetNetCode() )
             {
