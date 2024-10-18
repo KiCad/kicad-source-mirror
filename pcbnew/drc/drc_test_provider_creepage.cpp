@@ -57,8 +57,8 @@ struct path_connection
     bool m_forceA2concavityCheck = false;
 
 
-    /** @brief Test if a path is valid 
-     *  
+    /** @brief Test if a path is valid
+     *
      * Check if a paths intersects the board edge or a track
      */
     bool isValid( const BOARD& aBoard, PCB_LAYER_ID aLayer,
@@ -208,7 +208,7 @@ class CU_SHAPE_CIRCLE;
 class CU_SHAPE_ARC;
 
 /** @class CREEP_SHAPE
- * 
+ *
  *  @brief A class used to represent the shapes for creepage calculation
  */
 class CREEP_SHAPE
@@ -308,7 +308,7 @@ protected:
 
 
 /** @class CU_SHAPE
- * 
+ *
  *  @brief Creepage: a conductive shape
  */
 class CU_SHAPE : public CREEP_SHAPE
@@ -318,7 +318,7 @@ public:
 };
 
 /** @class BE_SHAPE
- * 
+ *
  *  @brief Creepage: a board edge shape
  */
 class BE_SHAPE : public CREEP_SHAPE
@@ -328,7 +328,7 @@ public:
 };
 
 /** @class CU_SHAPE_SEGMENT
- * 
+ *
  *  @brief Creepage: a conductive segment
  */
 class CU_SHAPE_SEGMENT : public CU_SHAPE
@@ -366,7 +366,7 @@ private:
 };
 
 /** @class CU_SHAPE_CIRCLE
- * 
+ *
  *  @brief Creepage: a conductive circle
  */
 class CU_SHAPE_CIRCLE : public CU_SHAPE
@@ -404,7 +404,7 @@ private:
 };
 
 /** @class CU_SHAPE_ARC
- * 
+ *
  *  @brief Creepage: a conductive arc
  */
 class CU_SHAPE_ARC : public CU_SHAPE_CIRCLE
@@ -473,7 +473,7 @@ private:
 };
 
 /** @class Graphnode
- * 
+ *
  *  @brief a node in a @class CreepageGraph
  */
 class GraphNode
@@ -513,7 +513,7 @@ public:
 };
 
 /** @class GraphConnection
- * 
+ *
  *  @brief a connection in a @class CreepageGraph
  */
 class GraphConnection
@@ -590,7 +590,7 @@ bool areEquivalent( const CREEP_SHAPE* a, const CREEP_SHAPE* b )
 
 
 /** @class BE_SHAPE_POINT
- * 
+ *
  *  @brief Creepage: a board edge point
  */
 class BE_SHAPE_POINT : public BE_SHAPE
@@ -629,7 +629,7 @@ public:
 };
 
 /** @class BE_SHAPE_CIRCLE
- * 
+ *
  *  @brief Creepage: a board edge circle
  */
 class BE_SHAPE_CIRCLE : public BE_SHAPE
@@ -674,7 +674,7 @@ protected:
 };
 
 /** @class BE_SHAPE_ARC
- * 
+ *
  *  @brief Creepage: a board edge arc
  */
 class BE_SHAPE_ARC : public BE_SHAPE_CIRCLE
@@ -1104,7 +1104,7 @@ std::vector<path_connection> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
 }
 
 /** @class CreepageGraph
- * 
+ *
  *  @brief A graph with nodes and connections for creepage calculation
  */
 class CreepageGraph
@@ -1205,7 +1205,7 @@ void CreepageGraph::RemoveDuplicatedShapes()
 
     size_t i = 0;
 
-    for( i = 0; i < m_shapeCollection.size() - 1; i++ )
+    for( i = 0; i < (int)m_shapeCollection.size() - 1; i++ )
     {
         if( m_shapeCollection[i] == nullptr )
             continue;
@@ -2861,7 +2861,7 @@ void CreepageGraph::Addshape( const SHAPE& aShape, GraphNode* aConnectTo, BOARD_
         {
             if( subshape )
             {
-                // We don't want to add shape for the inner rectangle of rounded rectangles 
+                // We don't want to add shape for the inner rectangle of rounded rectangles
                 if ( !( ( subshape->Type() == SH_RECT ) && ( nbShapes == 5 ) ))
                     Addshape( *subshape, aConnectTo, aParent );
             }
@@ -3333,7 +3333,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
     if( creepageValue <= 0 )
         return 0;
 
-    // Let's make a quick "clearance test" 
+    // Let's make a quick "clearance test"
     NETINFO_ITEM* netA = m_board->FindNet( aNetCodeA );
     NETINFO_ITEM* netB = m_board->FindNet( aNetCodeB );
 
@@ -3430,7 +3430,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CreepageGraph& aGraph, int aNetCod
                 } );
 
         reportViolation( drce, shortestPath[1]->m_path.a2, aLayer );
-        
+
     }
     shortestPath.clear();
 

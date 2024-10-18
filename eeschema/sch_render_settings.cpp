@@ -41,6 +41,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowPinNumbers( false ),
         m_ShowPinNames( false ),
         m_ShowPinElectricalTypes( false ),
+        m_ShowPinAltIcons( false ),
         m_ShowDisabled( false ),
         m_ShowGraphicsDisabled( false ),
         m_ShowConnectionPoints( false ),

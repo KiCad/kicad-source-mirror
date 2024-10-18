@@ -1634,7 +1634,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             content = GetClipboardUTF8();
 
         if( content.empty() )
+        {
+            delete tempScreen;
             return 0;
+        }
 
         if( aEvent.IsAction( &ACTIONS::duplicate ) )
             eventPos = getViewControls()->GetCursorPosition( false );
