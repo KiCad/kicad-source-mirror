@@ -88,6 +88,11 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
+    /**
+     * Try to save the footprint in the library, if it is valid and writable.
+     */
+    void tryToSaveFootprintInLibrary( FOOTPRINT& aFootprint, const LIB_ID& aLibId );
+
     FOOTPRINT_EDIT_FRAME*      m_frame;
     DIALOG_FOOTPRINT_CHECKER*  m_checkerDialog;
 

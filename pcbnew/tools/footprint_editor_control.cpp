@@ -162,11 +162,51 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 }
 
 
+void FOOTPRINT_EDITOR_CONTROL::tryToSaveFootprintInLibrary( FOOTPRINT&    aFootprint,
+                                                            const LIB_ID& aTargetLib )
+{
+    const wxString libraryName = aTargetLib.GetUniStringLibNickname();
+
+    if( aTargetLib.GetLibNickname().empty() )
+    {
+        // Do nothing - the footprint will need to be saved manually to assign
+        // to a library.
+    }
+    else
+    {
+        FP_LIB_TABLE& libTable = *PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
+
+        if( !libTable.IsFootprintLibWritable( libraryName ) )
+        {
+            // If the library is not writeable, we'll give the user a
+            // footprint not in a library. But add a warning to let them know
+            // they didn't quite get what they wanted.
+            m_frame->ShowInfoBarWarning(
+                    wxString::Format(
+                            _( "The footprint could not be added to the selected library ('%s') "
+                               "because the library read-only." ),
+                            libraryName ),
+                    false );
+            // And the footprint will need to be saved manually
+        }
+        else
+        {
+            // Go ahead and save it to the library
+            LIB_ID fpid = aFootprint.GetFPID();
+            fpid.SetLibNickname( aTargetLib.GetLibNickname() );
+            aFootprint.SetFPID( fpid );
+            m_frame->SaveFootprint( &aFootprint );
+            m_frame->ClearModify();
+        }
+    }
+}
+
+
 int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 {
-    LIB_ID     selected = m_frame->GetTargetFPID();
-    wxString   libraryName = selected.GetUniStringLibNickname();
-    FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName );
+    const LIB_ID   selected = m_frame->GetTargetFPID();
+    const wxString libraryName = selected.GetUniStringLibNickname();
+    FOOTPRINT*     newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName );
 
     if( !newFootprint )
         return 0;
@@ -186,15 +226,7 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
     m_frame->Zoom_Automatique( false );
     m_frame->GetScreen()->SetContentModified();
 
-    // If selected from the library tree then go ahead and save it there
-    if( !selected.GetLibNickname().empty() )
-    {
-        LIB_ID fpid = newFootprint->GetFPID();
-        fpid.SetLibNickname( selected.GetLibNickname() );
-        newFootprint->SetFPID( fpid );
-        m_frame->SaveFootprint( newFootprint );
-        m_frame->ClearModify();
-    }
+    tryToSaveFootprintInLibrary( *newFootprint, selected );
 
     m_frame->UpdateView();
     m_frame->Update3DView( true, true );
@@ -207,6 +239,7 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID selected = m_frame->GetLibTree()->GetSelectedLibId();
+    wxString libraryName = selected.GetUniStringLibNickname();
 
     if( m_frame->IsContentModified() )
     {
@@ -248,15 +281,7 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
                 m_frame->GetScreen()->SetContentModified();
                 m_frame->OnModify();
 
-                // If selected from the library tree then go ahead and save it there
-                if( !selected.GetLibNickname().empty() )
-                {
-                    LIB_ID fpid = newFootprint->GetFPID();
-                    fpid.SetLibNickname( selected.GetLibNickname() );
-                    newFootprint->SetFPID( fpid );
-                    m_frame->SaveFootprint( newFootprint );
-                    m_frame->ClearModify();
-                }
+                tryToSaveFootprintInLibrary( *newFootprint, selected );
 
                 m_frame->UpdateView();
                 canvas()->Refresh();
