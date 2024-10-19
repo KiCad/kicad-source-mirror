@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-16 15:33-0700\n"
-"PO-Revision-Date: 2024-10-19 06:15+0000\n"
+"PO-Revision-Date: 2024-10-19 17:16+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -16101,9 +16101,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "繰り返しピンのピッチ (&P):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:143
-#, fuzzy
 msgid "General editing"
-msgstr "一般設定"
+msgstr "一般編集"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:150
 msgid "Keep pins attached when dragging edges"
@@ -21263,15 +21262,13 @@ msgid "Create an editable copy"
 msgstr "編集可能なコピーを作成"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr ""
-"全回路図のシンボルすべてについて、アノテーションをクリアしてやり直しますか？"
+msgstr "編集可能なシンボルのコピーか、ライブラリ全て(%s)を作成しますか？"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:969
-#, fuzzy
 msgid "Select type of item to save"
-msgstr "削除するレイヤーを選択:"
+msgstr "保存するアイテムのタイプを選択"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:972
 msgid "Copy symbol"
@@ -21409,51 +21406,54 @@ msgid "A library must be specified."
 msgstr "ライブラリを指定する必要があります。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
-msgstr "ライブラリ \"%s\" はフットプリント ライブラリ テーブル内にありません。"
+msgstr "ライブラリ '%s' 読み込み専用です。シンボル '%s' "
+"を保存先として別のライブラリを選んでください。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
-msgstr ""
+msgstr "シンボル '%s' は、それが由来する別のシンボル '%s' "
+"を置き換えることはできません"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1004
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
-msgstr ""
+msgstr "シンボル '%s' は、その子孫である別のシンボル '%s' "
+"を置き換えることはできません。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
 msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。上書きしますか？"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "シンボル '%s' はライブラリ '%s' 内にすでに存在します"
+msgstr "シンボル '%s' はライブラリ '%s' 内にすでに存在します:\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1039
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
-msgstr "転送先フォルダーにあるファイルを本当に上書きしても宜しいですか?"
+msgstr ""
+"\n"
+"これらを全て上書きしてもよろしいですか?それとも新しいシンボル名に変更しますか"
+"？"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Overwrite All"
-msgstr "上書き"
+msgstr "全てを上書き"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1043
-#, fuzzy
 msgid "Rename All"
-msgstr "ファイル名を変更"
+msgstr "全てをリネーム"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1121
 #, c-format
@@ -21895,14 +21895,12 @@ msgid "Select a complete connection"
 msgstr "完全な接続を選択"
 
 #: eeschema/tools/ee_actions.cpp:151
-#, fuzzy
 msgid "Show/hide design blocks library"
-msgstr "KiCad デザインブロック ライブラリ パス"
+msgstr "デザインブロックライブラリを表示/非表示"
 
 #: eeschema/tools/ee_actions.cpp:157
-#, fuzzy
 msgid "Save Current Sheet as Design Block..."
-msgstr "シートをデザイン ブロックとして保存..."
+msgstr "現在のシートをデザイン ブロックとして保存..."
 
 #: eeschema/tools/ee_actions.cpp:158
 msgid "Create a new design block from the current sheet"
@@ -21974,18 +21972,16 @@ msgid "Rename Symbol..."
 msgstr "シンボル名の変更..."
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Save the current symbol to a different library or name"
-msgstr "現在のシンボルのコピーを別のライブラリに保存します"
+msgstr "現在のシンボルを別のライブラリに保存するか、名前を付ける"
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Save Copy As..."
 msgstr "名前を付けてコピーを保存..."
 
 #: eeschema/tools/ee_actions.cpp:237
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
-msgstr "現在のシンボルのコピーを別のライブラリに保存します"
+msgstr "現在のシンボルのコピーを別のライブラリに保存するか、名前を付ける"
 
 #: eeschema/tools/ee_actions.cpp:244
 msgid "Remove the selected symbol from its library"
@@ -22502,9 +22498,8 @@ msgid "Highlight wires and pins of a net"
 msgstr "ネットのワイヤーとピンをハイライト表示"
 
 #: eeschema/tools/ee_actions.cpp:944
-#, fuzzy
 msgid "Show/hide the net navigator"
-msgstr "ネット インスペクターの表示を切り替え"
+msgstr "ネット ナビゲーターの表示を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:951
 msgid "Edit with Symbol Editor"
@@ -22851,13 +22846,12 @@ msgid "Show operating point current data from simulation"
 msgstr "シミュレーションで得られた動作点の電流を表示"
 
 #: eeschema/tools/ee_actions.cpp:1237
-#, fuzzy
 msgid "Show Pin Alternate Icons"
-msgstr "ピン名を表示"
+msgstr "ピンの代替アイコンを表示"
 
 #: eeschema/tools/ee_actions.cpp:1238
 msgid "Show indicator icons for pins with alternate modes"
-msgstr ""
+msgstr "代替モードのピン用インジケータアイコンを表示"
 
 #: eeschema/tools/ee_actions.cpp:1243 eeschema/tools/ee_actions.cpp:1252
 #: eeschema/tools/ee_actions.cpp:1261 eeschema/tools/ee_actions.cpp:1271
@@ -22899,24 +22893,20 @@ msgid "Run various diagnostics and attempt to repair schematic"
 msgstr "各種診断を実行し、回路図の修復を試みます"
 
 #: eeschema/tools/ee_actions.cpp:1291
-#, fuzzy
 msgid "Previous Symbol Unit"
-msgstr "シンボル ユニット"
+msgstr "前のシンボル ユニット"
 
 #: eeschema/tools/ee_actions.cpp:1292
-#, fuzzy
 msgid "Open the previous unit of the symbol"
-msgstr "前の関連付けされていないシンボルを選択"
+msgstr "前のシンボルのユニットを開く"
 
 #: eeschema/tools/ee_actions.cpp:1298
-#, fuzzy
 msgid "Next Symbol Unit"
-msgstr "シンボル ユニット"
+msgstr "次のシンボル ユニット"
 
 #: eeschema/tools/ee_actions.cpp:1299
-#, fuzzy
 msgid "Open the next unit of the symbol"
-msgstr "シンボルから余計なユニットを削除しますか？"
+msgstr "次のシンボルのユニットを開く"
 
 #: eeschema/tools/ee_actions.cpp:1306 pcbnew/tools/pcb_actions.cpp:1312
 msgid "Scripting Console"
@@ -22991,14 +22981,12 @@ msgid "Move to next sheet by number"
 msgstr "シート番号の順で次のシートに移動"
 
 #: eeschema/tools/ee_actions.cpp:1379
-#, fuzzy
 msgid "Hierarchy Navigator"
-msgstr "階層ナビゲーターを表示"
+msgstr "階層ナビゲーター"
 
 #: eeschema/tools/ee_actions.cpp:1380
-#, fuzzy
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "回路図の階層ナビゲーターを表示または非表示"
+msgstr "回路図の階層ナビゲーターの表示を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:1392
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1274
@@ -25282,12 +25270,11 @@ msgstr "バージョンに関係なくフットプリント ライブラリを�
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "ジョブセット"
 
 #: kicad/cli/command_jobset_run.cpp:45
-#, fuzzy
 msgid "Runs a jobset file"
-msgstr "ファイル名を変更"
+msgstr "ジョブセットファイルを実行"
 
 #: kicad/cli/command_jobset_run.cpp:49
 msgid ""
@@ -25296,9 +25283,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_jobset_run.cpp:53
-#, fuzzy
 msgid "Jobset file to be run"
-msgstr "埋め込むファイルを選択"
+msgstr "実行するジョブセットファイル"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
@@ -26151,68 +26137,57 @@ msgid "Update Available"
 msgstr "更新が利用可能です"
 
 #: kicad/dialogs/panel_jobs.cpp:57
-#, fuzzy
 msgid "Folder"
-msgstr "フォルダー:"
+msgstr "フォルダー"
 
 #: kicad/dialogs/panel_jobs.cpp:59
 msgid "Archive"
-msgstr ""
+msgstr "アーカイブ"
 
 #: kicad/dialogs/panel_jobs.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s Output Options"
-msgstr "PostScriptオプション"
+msgstr "%s 出力オプション"
 
 #: kicad/dialogs/panel_jobs.cpp:112
-#, fuzzy
 msgid "Select output path"
-msgstr "パスを選択"
+msgstr "出力パスを選択"
 
 #: kicad/dialogs/panel_jobs.cpp:193
-#, fuzzy
 msgid "Zip"
-msgstr "Zin"
+msgstr "Zip"
 
 #: kicad/dialogs/panel_jobs.cpp:254
-#, fuzzy
 msgid "Running jobs"
-msgstr "調整モード"
+msgstr "実行中のジョブ"
 
 #: kicad/dialogs/panel_jobs.cpp:308
-#, fuzzy
 msgid "No."
-msgstr "いいえ"
+msgstr "いいえ。"
 
 #: kicad/dialogs/panel_jobs.cpp:309
-#, fuzzy
 msgid "Job Description"
-msgstr "説明"
+msgstr "ジョブの説明"
 
 #: kicad/dialogs/panel_jobs.cpp:483 kicad/dialogs/panel_jobs.cpp:530
-#, fuzzy
 msgid "Job Types"
-msgstr "ジョブ ファイル"
+msgstr "ジョブの種類"
 
 #: kicad/dialogs/panel_jobs.cpp:494
-#, fuzzy
 msgid "Add New Job"
-msgstr "新規配線を追加"
+msgstr "新規ジョブを追加"
 
 #: kicad/dialogs/panel_jobs.cpp:495
-#, fuzzy
 msgid "Select job type:"
-msgstr "形状タイプを選択:"
+msgstr "ジョブのタイプを選択:"
 
 #: kicad/dialogs/panel_jobs.cpp:539
-#, fuzzy
 msgid "Add New Output"
-msgstr "ゾーンの切り抜きを追加"
+msgstr "新しい出力を追加"
 
 #: kicad/dialogs/panel_jobs.cpp:540
-#, fuzzy
 msgid "Select output type:"
-msgstr "形状タイプを選択:"
+msgstr "出力タイプを選択:"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:145
 msgid "Edit the project schematic"
@@ -26340,14 +26315,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro プロジェクトをインポート"
 
 #: kicad/jobs_runner.cpp:128
-#, fuzzy
 msgid "Job successful"
-msgstr "接続に成功しました"
+msgstr "ジョブが成功しました"
 
 #: kicad/jobs_runner.cpp:135
-#, fuzzy
 msgid "Job failed"
-msgstr "ジョブ ファイル"
+msgstr "ジョブが失敗しました"
 
 #: kicad/kicad.cpp:314
 #, c-format
@@ -27138,9 +27111,8 @@ msgid "Edit in a Text Editor"
 msgstr "テキスト エディターで編集"
 
 #: kicad/project_tree_pane.cpp:903
-#, fuzzy
 msgid "Run Jobs"
-msgstr "%s を実行"
+msgstr "ジョブを実行"
 
 #: kicad/project_tree_pane.cpp:911
 msgid "Rename File..."
@@ -27375,9 +27347,8 @@ msgid "Clone Project from Repository..."
 msgstr "リポジトリからプロジェクトをクローン..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "プロジェクト ファイルを保存 (&S)..."
+msgstr "新しいジョブセットファイル..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -27468,9 +27439,8 @@ msgid "No project files were found in the repository."
 msgstr "リポジトリにプロジェクト ファイルがありません。"
 
 #: kicad/tools/kicad_manager_control.cpp:211
-#, fuzzy
 msgid "Create New Jobset"
-msgstr "新規プロジェクトを作成"
+msgstr "新規ジョブセットを作成"
 
 #: kicad/tools/kicad_manager_control.cpp:239
 msgid "System Templates"
@@ -30485,9 +30455,8 @@ msgid "no layers"
 msgstr "レイヤーなし"
 
 #: pcbnew/board_item.cpp:436
-#, fuzzy
 msgid "ComponentClass"
-msgstr "コンポーネント"
+msgstr "コンポーネントクラス"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:343
 #, c-format
@@ -35570,7 +35539,6 @@ msgstr "表面"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:878
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:106
-#, fuzzy
 msgid "Inner Layers"
 msgstr "内層"
 
@@ -35648,18 +35616,16 @@ msgid "Net name:"
 msgstr "ネット名:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
-#, fuzzy
 msgid "Padstack mode:"
-msgstr "パッド スケッチ モード"
+msgstr "パッドスタックモード:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
-#, fuzzy
 msgid "Edit layer:"
-msgstr "終了レイヤー:"
+msgstr "レイヤーを編集:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
 msgid "Pad shape:"
@@ -36813,9 +36779,8 @@ msgid "Convert to Rule Area"
 msgstr "線分をルールエリアに変換"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:277
-#, fuzzy
 msgid "Not found on board: "
-msgstr "基板外形がないため、基板サイズが不明です！"
+msgstr "基板上に見つかりません: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:436
 msgid "No layers selected."
@@ -36907,21 +36872,18 @@ msgstr "円弧の角度:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:256
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
-#, fuzzy
 msgid "Technical Layers:"
-msgstr "テクニカル レイヤー"
+msgstr "テクニカル レイヤー:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
-#, fuzzy
 msgid "Solder mask"
-msgstr "ハンダペースト レイヤー"
+msgstr "ハンダマスク"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:269
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
-#, fuzzy
 msgid "Expansion:"
-msgstr "除外"
+msgstr "拡張:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:274
 #, fuzzy
@@ -38880,7 +38842,6 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -39387,170 +39348,211 @@ msgstr ""
 "\n"
 "### 制約\n"
 "\n"
-"| 制約タイプ                | 引数タイ"
-"プ                                                                                                             "
-"| 説"
-"明                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
-"|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                           "
-"| Checks the width of annular rings on vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
-"|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| Checks the given expression."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                   "
-"| Specifies the **electrical** clearance between copper objects of different "
+"| 制約タイプ                | 引数タイプ                                     "
+"                                                                        | 説"
+"明                                                                           "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                     |\n"
+"|---------------------------|------------------------------------------------"
+"-----------------------------------------------------------------------|-----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"--------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                       | "
+"Checks the width of annular rings on vias.<br>                               "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                      |\n"
+"| `assertion`               | \"&lt;expression>\"                            "
+"                                                                         | "
+"Checks the given expression.<br>                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                 |\n"
+"| `clearance`               | min                                            "
+"                                                                       | "
+"Specifies the **electrical** clearance between copper objects of different "
 "nets.  (See `physical_clearance` if you wish to specify clearance between "
 "objects regardless of net.)<br><br>To allow copper objects to overlap "
 "(collide), create a `clearance` constraint with the `min` value less than "
-"zero (for example, `-1`)."
-"<br>                                                                                                                     "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                   "
-"| Checks the clearance between footprint courtyards and generates an error "
-"if any two courtyards are closer than the `min` distance.  If a footprint "
-"does not have a courtyard shape, no errors will be generated from this "
-"constraint."
-"<br>                                                                                                                                                                                                              "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
-"| Checks the gap between coupled tracks in a differential pair.  Coupled "
+"zero (for example, `-1`).<br>                                                "
+"                                                                     |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                       | "
+"Checks the clearance between footprint courtyards and generates an error if "
+"any two courtyards are closer than the `min` distance.  If a footprint does "
+"not have a courtyard shape, no errors will be generated from this constraint."
+"<br>                                                                         "
+"                                                                             "
+"                                                        |\n"
+"<!-- | `creepage`               | min                                        "
+"                                                                           | "
+"Specifies the **electrical** creepage between copper objects of different "
+"nets.<br> -->                                                                "
+"                                     \n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                       | "
+"Checks the gap between coupled tracks in a differential pair.  Coupled "
 "tracks are segments that are parallel to each other.  Differential pair gap "
 "is not tested on uncoupled portions of a differential pair (for example, the "
-"fanout from a component)."
-"<br>                                                                                                                                                                                          "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
-"| Checks the distance that a differential pair track is routed uncoupled "
-"from the other polarity track in the pair (for example, where the pair fans "
-"out from a component, or becomes uncoupled to pass around another object "
-"such as a via)."
-"<br>                                                                                                                                                                                                        "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Specify one or more object types to disallow, separated by spaces.  For "
+"fanout from a component).<br>                                                "
+"                                                                             "
+"                                                             |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                       | "
+"Checks the distance that a differential pair track is routed uncoupled from "
+"the other polarity track in the pair (for example, where the pair fans out "
+"from a component, or becomes uncoupled to pass around another object such as "
+"a via).<br>                                                                  "
+"                                                                             "
+"                                                         |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Specify one or more object types to disallow, separated by spaces.  For "
 "example, `(constraint disallow track)` or `(constraint disallow track via "
 "pad)`.  If an object of this type matches the rule condition, a DRC error "
 "will be created.<br><br>This constraint is essentially the same as a keepout "
-"rule area, but can be used to create more specific keepout restrictions."
-"<br>                                                                  |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                           "
-"| Checks the clearance between objects and the board edge.<br><br>This can "
+"rule area, but can be used to create more specific keepout restrictions.<br> "
+"                                                                 |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                       | "
+"Checks the clearance between objects and the board edge.<br><br>This can "
 "also be thought of as the \"milling tolerance\" as the board edge will "
 "include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
-"pad holes.  (See `physical_hole_clearance` for the drilling "
-"tolerance.)<br>                                                                                                                                                   "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                               "
-"| Checks the total routed length for the nets that match the rule condition "
+"pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)<br>  "
+"                                                                             "
+"                                                                    |\n"
+"| `length`                  | min/max                                        "
+"                                                                       | "
+"Checks the total routed length for the nets that match the rule condition "
 "and generates an error for each net that is below the `min` value (if "
-"specified) or above the `max` value (if specified) of the constraint."
-"<br>                                                                                                                                                                                                                              "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                               "
-"| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
-"holes, the smaller (minor) diameter will be tested against the `min` value "
-"(if specified) and the larger (major) diameter will be tested against the "
-"`max` value (if specified)."
-"<br>                                                                                                                                                                                           "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                   "
-"| Checks the clearance between a drilled hole in a pad or via and copper "
+"specified) or above the `max` value (if specified) of the constraint.<br>    "
+"                                                                             "
+"                                                                             "
+"                                                                |\n"
+"| `hole`                    | min/max                                        "
+"                                                                       | "
+"Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
+"holes, the smaller (minor) diameter will be tested against the `min` value ("
+"if specified) and the larger (major) diameter will be tested against the "
+"`max` value (if specified).<br>                                              "
+"                                                                             "
+"                                                                |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                       | "
+"Checks the clearance between a drilled hole in a pad or via and copper "
 "objects on a different net.  The clearance is measured from the diameter of "
-"the hole, not its center."
-"<br>                                                                                                                                                                                                                                                                       "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                   "
-"| Checks the clearance between mechanically-drilled holes in pads and vias.  "
+"the hole, not its center.<br>                                                "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                       | "
+"Checks the clearance between mechanically-drilled holes in pads and vias.  "
 "The clearance is measured between the diameters of the holes, not between "
 "their centers.<br><br>This constraint is soley for the protection of drill "
 "bits.  The clearance between **laser-drilled** (microvias) and other non-"
 "mechanically-drilled holes is not checked, nor is the clearance between "
 "**milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                   "
-"| Checks the clearance between two objects on a given layer (including non-"
+"| `physical_clearance`      | min                                            "
+"                                                                       | "
+"Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
-"than `clearance`, it is much slower.  Use `clearance` where possible."
-"<br>                                                                                                                                                                                                                           "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                   "
-"| Checks the clearance between a drilled hole in a pad or via and another "
+"than `clearance`, it is much slower.  Use `clearance` where possible.<br>    "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                       | "
+"Checks the clearance between a drilled hole in a pad or via and another "
 "object, regardless of net. The clearance is measured from the diameter of "
 "the hole, not its center.<br><br>This can also be thought of as the "
 "\"drilling tolerance\" as it only includes **round** holes (see "
-"`edge_clearance` for the milling tolerance)."
-"<br>                                                                                                                   "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                           "
-"| Checks the clearance between objects on silkscreen layers and other "
-"objects."
-"<br>                                                                                                                                                                                                                                                                                                                                                                       "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                   "
-"| Checks the total skew for the nets that match the rule condition, that is, "
+"`edge_clearance` for the milling tolerance).<br>                             "
+"                                                                             "
+"         |\n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                       | "
+"Checks the clearance between objects on silkscreen layers and other objects.<"
+"br>                                                                          "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                      |\n"
+"| `skew`                    | max                                            "
+"                                                                       | "
+"Checks the total skew for the nets that match the rule condition, that is, "
 "the difference between the length of each net and the average of all the "
 "lengths of each net that is matched by the rule.  If the absolute value of "
 "the difference between that average and the length of any one net is above "
-"the constraint `max` value, an error will be generated."
-"<br>                                                                                  "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                   "
-"| Specifies the width of the gap between a pad and a zone with a thermal-"
-"relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                          "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
-"| Specifies the width of the spokes connecting a pad to a zone with a "
-"thermal-relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                     "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                           "
-"| Checks the width of track and arc segments.  An error will be generated "
-"for each segment that has a width below the `min` value (if specified) or "
-"above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                            "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                   "
-"| Counts the number of vias on every net matched by the rule condition.  If "
+"the constraint `max` value, an error will be generated.<br>                  "
+"                                                                |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                       | "
+"Specifies the width of the gap between a pad and a zone with a thermal-"
+"relief connection.<br>                                                       "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                            |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                       | "
+"Specifies the width of the spokes connecting a pad to a zone with a thermal-"
+"relief connection.<br>                                                       "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                       | "
+"Checks the width of track and arc segments.  An error will be generated for "
+"each segment that has a width below the `min` value (if specified) or above "
+"the `max` value (if specified).<br>                                          "
+"                                                                             "
+"                                                                             "
+"                                                        |\n"
+"| `track_angle`             | min/opt/max                                    "
+"                                                                       | "
+"Checks the angle between two connected track segments.  An error will be "
+"generated for each connected pair with an angle below the `min` value (if "
+"specified) or above the `max` value (if specified).<br>                      "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `via_count`               | max                                            "
+"                                                                       | "
+"Counts the number of vias on every net matched by the rule condition.  If "
 "that number exceeds the constraint `max` value on any matched net, an error "
-"will be generated for that net."
-"<br>                                                                                                                                                                                                                                                              "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Specifies the connection to be made between a zone and a pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
+"will be generated for that net.<br>                                          "
+"                                                                             "
+"                                                                             "
+"                                                          |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                       | "
+"Specifies the connection to be made between a zone and a pad.<br>            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                      |\n"
 "\n"
 "\n"
 "### アイテム\n"
 "\n"
-" * `A` &nbsp;&nbsp; _評価の初めの(もしくは唯一の)アイテム_\n"
-" * `B` &nbsp;&nbsp; _評価の２つ目のアイテム(バイナリテスト用)_\n"
-" * `L` &nbsp;&nbsp; _評価の現在のレイヤー_\n"
+" * `A` &nbsp;&nbsp; _評価中の初めの(もしくは唯一の)アイテム_\n"
+" * `B` &nbsp;&nbsp; _評価中の２つ目のアイテム(バイナリテスト用)_\n"
+" * `L` &nbsp;&nbsp; _評価中の現在のレイヤー_\n"
 "\n"
 "<br>\n"
 "\n"
@@ -39596,8 +39598,8 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"Version句は最初の句でなければなりません。  これはファイルの文法のバージョンを"
-"示し、\n"
+"Version句は最初の句でなければなりません。  "
+"これはファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的にアップデート可能にするためです。\n"
 "\"1\"を設定しなければなりません。\n"
 "\n"
@@ -39610,8 +39612,8 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
@@ -39636,14 +39638,14 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "`A` のすべてが指定されたゾーンのアウトライン内にある場合に真になります。\n"
 "\n"
-"注意: これは、`intersectsArea()`よりも高コストな呼び出しになる可能性がありま"
-"す。\n"
+"注意: "
+"これは、`intersectsArea()`よりも高コストな呼び出しになる可能性があります。\n"
 "可能であれば`intersectsArea()`を使用してください。\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
-"指定されたフィールドの値を取得します。 フィールドを持つのはフットプリントのみ"
-"であるため、\n"
+"指定されたフィールドの値を取得します。 "
+"フィールドを持つのはフットプリントのみであるため、\n"
 "`A`がフットプリントの場合にのみフィールドが返されます。\n"
 "<br><br>\n"
 "\n"
@@ -39662,15 +39664,15 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfGroup('<group_name>')\n"
-"`A`が指定されたグループ(ワイルドカードも使えます)に属する場合、真になりま"
-"す。\n"
+"`A`が指定されたグループ(ワイルドカードも使えます)に属する場合、真になります。"
+"\n"
 "ネストされたメンバー関係も含みます。\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>|<footprint_id>')\n"
-"`A`が指定されたリファレンス指定子に一致するフットプリントに属する場合は真にな"
-"ります。 \n"
-"リファレンス指定子にはワイルドカードを含めることができます。\n"
+"`A`が指定されたリファレンス指定子に一致するフットプリントに属する場合とフット"
+"プリントIDが一致する場合は真になります。 \n"
+"パラメータにはワイルドカードを含めることができます。\n"
 "\n"
 "注意: フットプリントIDと一致させたい場合は、':'を含む必要があります。\n"
 "<br><br>\n"
@@ -39685,8 +39687,8 @@ msgstr ""
 "レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、\n"
 "正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
 "`A`がレイヤーにある場合に真を返します。\n"
 "後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
 "<br><br>\n"
@@ -39717,13 +39719,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -39825,15 +39827,15 @@ msgstr ""
 "    # 機械的にブラインド/バリードビアホールを掘ることが分かっている場合、\n"
 "    # ブラインド/バリードビアからマイクロビアへのホール間違反を許可します。\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
 "### ドキュメント\n"
 "\n"
-"ドキュメント全文は以下を参照してください [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"ドキュメント全文は以下を参照してください [https://docs.kicad."
+"org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
 "html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
@@ -40426,9 +40428,8 @@ msgid "Track width"
 msgstr "トラック幅"
 
 #: pcbnew/drc/drc_item.cpp:126
-#, fuzzy
 msgid "Track angle"
-msgstr "円弧の角度:"
+msgstr "配線の角度"
 
 #: pcbnew/drc/drc_item.cpp:130
 msgid "Annular width"
@@ -41436,19 +41437,18 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s 最大幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
-#, fuzzy
 msgid "Checking track angles..."
-msgstr "パッド内の配線をチェック..."
+msgstr "配線の角度をチェック..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min angle %s; actual %s)"
-msgstr "(%s 最小のホール %s; 現状 %s)"
+msgstr "(%s 最小の角度 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max angle %s; actual %s)"
-msgstr "(%s 最大のホール %s; 現状 %s)"
+msgstr "(%s 最大の角度 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
@@ -41940,9 +41940,8 @@ msgid "Attributes:"
 msgstr "属性:"
 
 #: pcbnew/footprint.cpp:1594 pcbnew/zone.cpp:1639
-#, fuzzy
 msgid "Component Class"
-msgstr "コンポーネント"
+msgstr "コンポーネントクラス"
 
 #: pcbnew/footprint.cpp:1598
 #, c-format
@@ -42059,14 +42058,13 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "基板の %s を編集します。 保存するとボードのみが更新されます。"
 
 #: pcbnew/footprint_edit_frame.cpp:557
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library '%s'."
-msgstr "フットプリント %s をライブラリ %s からのロード中にエラーしました。"
+msgstr "読み込み専用のライブラリ '%s' からフットプリントを編集します"
 
 #: pcbnew/footprint_edit_frame.cpp:562
-#, fuzzy
 msgid "Save as editable copy"
-msgstr "ローカルの保存先:"
+msgstr "編集可能なコピーとして保存"
 
 #: pcbnew/footprint_edit_frame.cpp:975
 #, c-format
@@ -42812,34 +42810,34 @@ msgid "Added %s (footprint '%s')."
 msgstr "%s (フットプリント '%s')を追加します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class to %s."
-msgstr "コンポーネントのパス \"%s:%s\" を \"%s\" に変更しています。"
+msgstr "コンポーネントクラス %s を %s に変更しています。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
 #, c-format
 msgid "Remove %s component class (currently %s)."
-msgstr ""
+msgstr "コンポーネントクラス %s を削除します(現在は %s)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class from %s to %s."
-msgstr "%s のピン %s のネットのラベルを '%s' から '%s' に変更します。"
+msgstr "コンポーネントクラス %s を %sから %s に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class to %s."
-msgstr "コンポーネントのパス \"%s:%s\" を \"%s\" に変更しています。"
+msgstr "コンポーネントクラス %s を %s に変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
 msgid "Removed %s component class (was %s)."
-msgstr ""
+msgstr "コンポーネントクラス %s を削除しました(%s でした)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class from %s to %s."
-msgstr "%s の値を %s から %s に変更しました。"
+msgstr "コンポーネントクラス %s を %s から %s に変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:284
 #, c-format
@@ -45342,14 +45340,14 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5591
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6524
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid padstack layer in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"不正な net ID \n"
+"不正な パッドスタックレイヤー \n"
 "ファイル: %s\n"
 "行: %d\n"
 "オフセット: %d."
@@ -45545,9 +45543,8 @@ msgid "Technical Layers"
 msgstr "テクニカル レイヤー"
 
 #: pcbnew/pcb_shape.cpp:1153 pcbnew/pcb_track.cpp:2011
-#, fuzzy
 msgid "Soldermask"
-msgstr "ハンダペースト レイヤー"
+msgstr "ハンダマスク"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -45756,9 +45753,8 @@ msgid "Loading board\n"
 msgstr "基板をロード中\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:279
-#, fuzzy
 msgid "Failed to load board\n"
-msgstr "word の読み取りに失敗しました。"
+msgstr "基板の読み取りに失敗しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:358
 #, c-format
@@ -46596,14 +46592,12 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "幅の制約: 最小 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:446
-#, fuzzy
 msgid "Track Angle"
-msgstr "配線長"
+msgstr "配線の角度"
 
 #: pcbnew/tools/board_inspection_tool.cpp:447
-#, fuzzy
 msgid "Track Angle resolution for:"
-msgstr "配線幅の解決:"
+msgstr "配線の角度の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:455
 #, fuzzy, c-format
@@ -47291,9 +47285,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "フットプリント '%s' はライブラリ'%s' に存在しています。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:691
-#, fuzzy
 msgid "No datasheet found in the footprint."
-msgstr "データシートが定義されていません。"
+msgstr "フットプリントにデータシートが見つかりません。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:853
 msgid "No footprint problems found."
@@ -48927,14 +48920,12 @@ msgid "Remove corner"
 msgstr "角を削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1979
-#, fuzzy
 msgid "Chamfer Corner"
-msgstr "面取りされた角:"
+msgstr "面取りされた角"
 
 #: pcbnew/tools/pcb_actions.cpp:1980
-#, fuzzy
 msgid "Chamfer corner"
-msgstr "面取りされた角:"
+msgstr "面取りされた角"
 
 #: pcbnew/tools/pcb_actions.cpp:1986
 msgid "Keep Arc Center, Adjust Radius"
@@ -49358,9 +49349,8 @@ msgstr ""
 "これらのアイテムを貼り付けることができませんでした。\n"
 
 #: pcbnew/tools/pcb_control.cpp:1059
-#, fuzzy
 msgid "Paste Text"
-msgstr "テキストを配置"
+msgstr "テキストを貼り付け"
 
 #: pcbnew/tools/pcb_control.cpp:1216
 msgid "Invalid clipboard contents"
@@ -49466,14 +49456,12 @@ msgid "Remove Polygon Corner"
 msgstr "ポリゴンの角を削除"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2914
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "ゾーンの角を追加"
+msgstr "ゾーンの角を切断"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2916
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "ポリゴンの角を削除"
+msgstr "ポリゴンの角を切断"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1408
 msgid "Select/Expand Connection..."
@@ -50472,17 +50460,14 @@ msgid "Keepout"
 msgstr "キープアウト(禁止)"
 
 #: pcbnew/zone.cpp:1720
-#, fuzzy
 msgid "Keep Out Tracks"
 msgstr "配線を禁止"
 
 #: pcbnew/zone.cpp:1726
-#, fuzzy
 msgid "Keep Out Vias"
 msgstr "ビアの配置を禁止"
 
 #: pcbnew/zone.cpp:1732
-#, fuzzy
 msgid "Keep Out Pads"
 msgstr "パッドの配置を禁止"
 
@@ -50492,7 +50477,6 @@ msgid "Keep Out Copper Pours"
 msgstr "銅箔塗りつぶし禁止"
 
 #: pcbnew/zone.cpp:1744
-#, fuzzy
 msgid "Keep Out Footprints"
 msgstr "フットプリントの配置を禁止"
 
@@ -50505,9 +50489,8 @@ msgid "Source Type"
 msgstr "ソース タイプ"
 
 #: pcbnew/zone.cpp:1767
-#, fuzzy
 msgid "Source Name"
-msgstr "ソース2"
+msgstr "ソース名"
 
 #: pcbnew/zone.cpp:1799
 msgid "Cannot be less than zone minimum width"
