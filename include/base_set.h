@@ -27,7 +27,7 @@
 #include <dynamic_bitset.h>
 
 #include <core/kicad_algo.h>
-#include <import_export.h>
+#include <kicommon.h>
 
 #if defined( _MSC_VER )
 // ssize_t is a POSIX extension
@@ -37,10 +37,10 @@
 typedef SSIZE_T ssize_t;
 #endif
 
-class APIEXPORT BASE_SET : public sul::dynamic_bitset<uint64_t>
+class KICOMMON_API BASE_SET : public sul::dynamic_bitset<uint64_t>
 {
 public:
-    class iterator
+    class KICOMMON_API iterator
     {
     public:
         using iterator_category = std::random_access_iterator_tag;
@@ -71,7 +71,7 @@ public:
         size_t    m_pos;
     };
 
-    class const_iterator
+    class KICOMMON_API const_iterator
     {
     public:
         using iterator_category = std::random_access_iterator_tag;
@@ -215,7 +215,7 @@ public:
     }
 
     // Custom iterator to iterate over set bits
-    class set_bits_iterator
+    class KICOMMON_API set_bits_iterator
     {
     public:
         using iterator_category = std::forward_iterator_tag;
@@ -255,7 +255,7 @@ public:
     };
 
     // Custom reverse iterator to iterate over set bits in reverse order
-    class set_bits_reverse_iterator
+    class KICOMMON_API set_bits_reverse_iterator
     {
     public:
         using iterator_category = std::bidirectional_iterator_tag;

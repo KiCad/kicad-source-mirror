@@ -292,7 +292,7 @@ public:
 
 #ifndef SWIG
     // Custom iterator to iterate over all set bits
-    class all_set_layers_iterator : public BASE_SET::set_bits_iterator
+    class KICOMMON_API all_set_layers_iterator : public BASE_SET::set_bits_iterator
     {
     public:
         all_set_layers_iterator( const BASE_SET& set, size_t index ) :
@@ -313,7 +313,7 @@ public:
     all_set_layers_iterator end() const { return all_set_layers_iterator( *this, size() ); }
 
     // Custom iterators for Copper and Non-Copper layers
-    class copper_layers_iterator : public BASE_SET::set_bits_iterator
+    class KICOMMON_API copper_layers_iterator : public BASE_SET::set_bits_iterator
     {
     public:
         copper_layers_iterator( const BASE_SET& set, size_t index );
@@ -325,7 +325,7 @@ public:
         void next_copper_layer();
     };
 
-    class non_copper_layers_iterator : public BASE_SET::set_bits_iterator
+    class KICOMMON_API non_copper_layers_iterator : public BASE_SET::set_bits_iterator
     {
     public:
         non_copper_layers_iterator( const BASE_SET& set, size_t index );
