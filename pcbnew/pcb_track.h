@@ -112,8 +112,8 @@ public:
     VECTOR2I GetPosition() const override             { return m_Start; }
     const VECTOR2I GetFocusPosition() const override  { return ( m_Start + m_End ) / 2; }
 
-    virtual void SetWidth( int aWidth )             { m_Width = aWidth; }
-    virtual int GetWidth() const                    { return m_Width; }
+    virtual void SetWidth( int aWidth )             { m_width = aWidth; }
+    virtual int GetWidth() const                    { return m_width; }
 
     void SetEnd( const VECTOR2I& aEnd )     { m_End = aEnd; }
     const VECTOR2I& GetEnd() const          { return m_End; }
@@ -257,12 +257,14 @@ protected:
                                      std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 protected:
-    int      m_Width;        ///< Thickness of track
     VECTOR2I m_Start;        ///< Line start point
     VECTOR2I m_End;          ///< Line end point
 
     bool               m_hasSolderMask;
     std::optional<int> m_solderMaskMargin;
+
+private:
+    int      m_width;        ///< Thickness of track (or arc) -- no longer the width of a via
 };
 
 
@@ -401,6 +403,8 @@ public:
     const PADSTACK& Padstack() const              { return m_padStack; }
     PADSTACK& Padstack()                          { return m_padStack; }
     void SetPadstack( const PADSTACK& aPadstack ) { m_padStack = aPadstack; }
+
+    const BOX2I GetBoundingBox() const override;
 
     void SetWidth( int aWidth ) override;
     int GetWidth() const override;

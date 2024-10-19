@@ -60,7 +60,7 @@ using KIGFX::PCB_RENDER_SETTINGS;
 PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
-    m_Width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
+    m_width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
     m_hasSolderMask = false;
 }
 
@@ -179,7 +179,7 @@ bool PCB_TRACK::operator==( const PCB_TRACK& aOther ) const
     return m_Start == aOther.m_Start
             && m_End == aOther.m_End
             && m_layer == aOther.m_layer
-            && m_Width == aOther.m_Width
+            && m_width == aOther.m_width
             && m_hasSolderMask == aOther.m_hasSolderMask
             && m_solderMaskMargin == aOther.m_solderMaskMargin;
 }
@@ -197,7 +197,7 @@ double PCB_TRACK::Similarity( const BOARD_ITEM& aOther ) const
     if( m_layer != other.m_layer )
         similarity *= 0.9;
 
-    if( m_Width != other.m_Width )
+    if( m_width != other.m_width )
         similarity *= 0.9;
 
     if( m_Start != other.m_Start )
@@ -233,7 +233,7 @@ bool PCB_ARC::operator==( const PCB_ARC& aOther ) const
             && m_End == aOther.m_End
             && m_Mid == aOther.m_Mid
             && m_layer == aOther.m_layer
-            && m_Width == aOther.m_Width
+            && GetWidth() == aOther.GetWidth()
             && m_hasSolderMask == aOther.m_hasSolderMask
             && m_solderMaskMargin == aOther.m_solderMaskMargin;
 }
@@ -251,7 +251,7 @@ double PCB_ARC::Similarity( const BOARD_ITEM& aOther ) const
     if( m_layer != other.m_layer )
         similarity *= 0.9;
 
-    if( m_Width != other.m_Width )
+    if( GetWidth() != other.GetWidth() )
         similarity *= 0.9;
 
     if( m_Start != other.m_Start )
@@ -606,7 +606,7 @@ EDA_ITEM_FLAGS PCB_TRACK::IsPointOnEnds( const VECTOR2I& point, int min_dist ) c
     EDA_ITEM_FLAGS result = 0;
 
     if( min_dist < 0 )
-        min_dist = m_Width / 2;
+        min_dist = m_width / 2;
 
     if( min_dist == 0 )
     {
@@ -636,7 +636,7 @@ EDA_ITEM_FLAGS PCB_TRACK::IsPointOnEnds( const VECTOR2I& point, int min_dist ) c
 const BOX2I PCB_TRACK::GetBoundingBox() const
 {
     // end of track is round, this is its radius, rounded up
-    int radius = ( m_Width + 1 ) / 2;
+    int radius = ( m_width + 1 ) / 2;
     int ymax, xmax, ymin, xmin;
 
     if( Type() == PCB_VIA_T )
@@ -671,6 +671,31 @@ const BOX2I PCB_TRACK::GetBoundingBox() const
 
     ymin -= radius;
     xmin -= radius;
+
+    // return a rectangle which is [pos,dim) in nature.  therefore the +1
+    return BOX2ISafe( VECTOR2I( xmin, ymin ),
+                      VECTOR2L( (int64_t) xmax - xmin + 1, (int64_t) ymax - ymin + 1 ) );
+}
+
+
+const BOX2I PCB_VIA::GetBoundingBox() const
+{
+    int radius = 0;
+
+    Padstack().ForEachUniqueLayer(
+        [&]( PCB_LAYER_ID aLayer )
+        {
+            radius = std::max( radius, GetWidth( aLayer ) );
+        } );
+
+    // via is round, this is its radius, rounded up
+    radius = ( radius + 1 ) / 2;
+
+    int ymax = m_Start.y + radius;
+    int xmax = m_Start.x + radius;
+
+    int ymin = m_Start.y - radius;
+    int xmin = m_Start.x - radius;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
     return BOX2ISafe( VECTOR2I( xmin, ymin ),
@@ -900,7 +925,7 @@ int PCB_TRACK::GetSolderMaskExpansion() const
 
     // Ensure the resulting mask opening has a non-negative size
     if( margin < 0 )
-        margin = std::max( margin, -m_Width / 2 );
+        margin = std::max( margin, -m_width / 2 );
 
     return margin;
 }
@@ -1333,7 +1358,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             return HIDE;
 
         // Netnames will be shown only if zoom is appropriate
-        return ( double ) pcbIUScale.mmToIU( 4 ) / ( m_Width + 1 );
+        return ( double ) pcbIUScale.mmToIU( 4 ) / ( m_width + 1 );
     }
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
@@ -1512,7 +1537,7 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
-    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( m_Width ) );
+    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( m_width ) );
 
     if( Type() == PCB_ARC_T )
     {
@@ -1639,13 +1664,13 @@ wxString PCB_VIA::layerMaskDescribe() const
 
 bool PCB_TRACK::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    return TestSegmentHit( aPosition, m_Start, m_End, aAccuracy + ( m_Width / 2 ) );
+    return TestSegmentHit( aPosition, m_Start, m_End, aAccuracy + ( m_width / 2 ) );
 }
 
 
 bool PCB_ARC::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    double max_dist = aAccuracy + ( m_Width / 2.0 );
+    double max_dist = aAccuracy + ( GetWidth() / 2.0 );
 
     // Short-circuit common cases where the arc is connected to a track or via at an endpoint
     if( GetStart().Distance( aPosition ) <= max_dist || GetEnd().Distance( aPosition ) <= max_dist )
@@ -1869,7 +1894,7 @@ bool PCB_TRACK::cmp_tracks::operator() ( const PCB_TRACK* a, const PCB_TRACK* b 
 
 std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    int width = m_Width;
+    int width = m_width;
 
     if( IsSolderMaskLayer( aLayer ) )
         width += 2 * GetSolderMaskExpansion();
@@ -1923,7 +1948,7 @@ void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
     case PCB_ARC_T:
     {
         const PCB_ARC* arc = static_cast<const PCB_ARC*>( this );
-        int            width = m_Width + ( 2 * aClearance );
+        int            width = m_width + ( 2 * aClearance );
 
         if( IsSolderMaskLayer( aLayer ) )
             width += 2 * GetSolderMaskExpansion();
@@ -1935,7 +1960,7 @@ void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
 
     default:
     {
-        int width = m_Width + ( 2 * aClearance );
+        int width = m_width + ( 2 * aClearance );
 
         if( IsSolderMaskLayer( aLayer ) )
             width += 2 * GetSolderMaskExpansion();
