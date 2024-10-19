@@ -1908,8 +1908,25 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
     if( aFlash == FLASHING::ALWAYS_FLASHED
             || ( aFlash == FLASHING::DEFAULT && FlashLayer( aLayer ) ) )
     {
-        PCB_LAYER_ID cuLayer = m_padStack.EffectiveLayerFor( aLayer );
-        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetWidth( cuLayer ) / 2 );
+        int width = 0;
+
+        if( aLayer == UNDEFINED_LAYER )
+        {
+            Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    width = std::max( width, GetWidth( layer ) );
+                } );
+
+            width /= 2;
+        }
+        else
+        {
+            PCB_LAYER_ID cuLayer = m_padStack.EffectiveLayerFor( aLayer );
+            width = GetWidth( cuLayer ) / 2;
+        }
+
+        return std::make_shared<SHAPE_CIRCLE>( m_Start, width );
     }
     else
     {
